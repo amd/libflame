@@ -247,7 +247,7 @@ void prepare_gecon_run(integer datatype, char *norm, integer n, void *A, integer
 
     create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &A_save, lda);
 
-    /* Workspace size calculations for complex datatype */
+    /* Workspace size calculations for scomplex datatype */
     if(datatype == COMPLEX && datatype == DOUBLE_COMPLEX)
     {
         lwork = 2 * n;

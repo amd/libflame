@@ -113,19 +113,35 @@
 /* > \ingroup auxOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void dlasq6_(integer *i0, integer *n0, doublereal *z__, integer *pp, doublereal *dmin__,
+/** Generated wrapper function */
+void dlasq6_(aocl_int_t *i0, aocl_int_t *n0, doublereal *z__, aocl_int_t *pp, doublereal *dmin__,
              doublereal *dmin1, doublereal *dmin2, doublereal *dn, doublereal *dnm1,
              doublereal *dnm2)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_dlasq6(i0, n0, z__, pp, dmin__, dmin1, dmin2, dn, dnm1, dnm2);
+#else
+    aocl_int64_t i0_64 = *i0;
+    aocl_int64_t n0_64 = *n0;
+    aocl_int64_t pp_64 = *pp;
+
+    aocl_lapack_dlasq6(&i0_64, &n0_64, z__, &pp_64, dmin__, dmin1, dmin2, dn, dnm1, dnm2);
+#endif
+}
+
+void aocl_lapack_dlasq6(aocl_int64_t *i0, aocl_int64_t *n0, doublereal *z__, aocl_int64_t *pp,
+                        doublereal *dmin__, doublereal *dmin1, doublereal *dmin2, doublereal *dn,
+                        doublereal *dnm1, doublereal *dnm2)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dlasq6 inputs: i0 %" FLA_IS ", n0 %" FLA_IS ", pp %" FLA_IS "", *i0, *n0,
                       *pp);
     /* System generated locals */
-    integer i__1;
+    aocl_int64_t i__1;
     doublereal d__1, d__2;
     /* Local variables */
     doublereal d__;
-    integer j4, j4p2;
+    aocl_int64_t j4, j4p2;
     doublereal emin, temp;
     extern doublereal dlamch_(char *);
     doublereal safmin;

@@ -34,26 +34,154 @@
   completed.
 */
 
-extern int spotrf_check(char *uplo, integer *n, float *a, integer *lda, integer *info);
-extern int dpotrf_check(char *uplo, integer *n, double *a, integer *lda, integer *info);
-extern int cpotrf_check(char *uplo, integer *n, scomplex *a, integer *lda, integer *info);
-extern int zpotrf_check(char *uplo, integer *n, dcomplex *a, integer *lda, integer *info);
-extern int lapack_spotrf(char *uplo, integer *n, float *a, integer *lda, integer *info);
-extern int lapack_dpotrf(char *uplo, integer *n, double *a, integer *lda, integer *info);
-extern int spotf2_check(char *uplo, integer *n, float *a, integer *lda, integer *info);
-extern int dpotf2_check(char *uplo, integer *n, double *a, integer *lda, integer *info);
-extern int cpotf2_check(char *uplo, integer *n, scomplex *a, integer *lda, integer *info);
-extern int zpotf2_check(char *uplo, integer *n, dcomplex *a, integer *lda, integer *info);
-extern int lapack_spotf2(char *uplo, integer *n, float *a, integer *lda, integer *info);
-extern int lapack_dpotf2(char *uplo, integer *n, double *a, integer *lda, integer *info);
-extern int lapack_dpotrf_var1(char *uplo, integer *n, double *a, integer *lda, integer *info);
+extern int spotrf_check(char *uplo, aocl_int64_t *n, float *a, aocl_int64_t *lda, aocl_int64_t *info);
+extern int dpotrf_check(char *uplo, aocl_int64_t *n, double *a, aocl_int64_t *lda, aocl_int64_t *info);
+extern int cpotrf_check(char *uplo, aocl_int64_t *n, scomplex *a, aocl_int64_t *lda, aocl_int64_t *info);
+extern int zpotrf_check(char *uplo, aocl_int64_t *n, dcomplex *a, aocl_int64_t *lda, aocl_int64_t *info);
+extern int lapack_spotrf(char *uplo, aocl_int64_t *n, float *a, aocl_int64_t *lda, aocl_int64_t *info);
+extern int lapack_dpotrf(char *uplo, aocl_int64_t *n, double *a, aocl_int64_t *lda, aocl_int64_t *info);
+extern int spotf2_check(char *uplo, aocl_int64_t *n, float *a, aocl_int64_t *lda, aocl_int64_t *info);
+extern int dpotf2_check(char *uplo, aocl_int64_t *n, double *a, aocl_int64_t *lda, aocl_int64_t *info);
+extern int cpotf2_check(char *uplo, aocl_int64_t *n, scomplex *a, aocl_int64_t *lda, aocl_int64_t *info);
+extern int zpotf2_check(char *uplo, aocl_int64_t *n, dcomplex *a, aocl_int64_t *lda, aocl_int64_t *info);
+extern int lapack_spotf2(char *uplo, aocl_int64_t *n, float *a, aocl_int64_t *lda, aocl_int64_t *info);
+extern int lapack_dpotf2(char *uplo, aocl_int64_t *n, double *a, aocl_int64_t *lda, aocl_int64_t *info);
+extern int lapack_dpotrf_var1(char *uplo, aocl_int64_t *n, double *a, aocl_int64_t *lda, aocl_int64_t *info);
 
 extern void DTL_Trace(uint8 ui8LogLevel, uint8 ui8LogType, const int8 *pi8FileName,
                       const int8 *pi8FunctionName, uint32 ui32LineNumber, const int8 *pi8Message);
 
+/** Generated wrapper function */
+void spotrf_(char *uplo, aocl_int_t *n, real *buff_A, aocl_int_t *ldim_A, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_spotrf(uplo, n, buff_A, ldim_A, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t ldim_A_64 = *ldim_A;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_spotrf(uplo, &n_64, buff_A, &ldim_A_64, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+/** Generated wrapper function */
+void dpotrf_(char *uplo, aocl_int_t *n, doublereal *buff_A, aocl_int_t *ldim_A, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_dpotrf(uplo, n, buff_A, ldim_A, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t ldim_A_64 = *ldim_A;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_dpotrf(uplo, &n_64, buff_A, &ldim_A_64, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+/** Generated wrapper function */
+void cpotrf_(char *uplo, aocl_int_t *n, scomplex *buff_A, aocl_int_t *ldim_A, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_cpotrf(uplo, n, buff_A, ldim_A, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t ldim_A_64 = *ldim_A;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_cpotrf(uplo, &n_64, buff_A, &ldim_A_64, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+/** Generated wrapper function */
+void zpotrf_(char *uplo, aocl_int_t *n, dcomplex *buff_A, aocl_int_t *ldim_A, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_zpotrf(uplo, n, buff_A, ldim_A, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t ldim_A_64 = *ldim_A;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_zpotrf(uplo, &n_64, buff_A, &ldim_A_64, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+/** Generated wrapper function */
+void spotf2_(char *uplo, aocl_int_t *n, real *buff_A, aocl_int_t *ldim_A, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_spotf2(uplo, n, buff_A, ldim_A, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t ldim_A_64 = *ldim_A;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_spotf2(uplo, &n_64, buff_A, &ldim_A_64, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+/** Generated wrapper function */
+void dpotf2_(char *uplo, aocl_int_t *n, doublereal *buff_A, aocl_int_t *ldim_A, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_dpotf2(uplo, n, buff_A, ldim_A, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t ldim_A_64 = *ldim_A;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_dpotf2(uplo, &n_64, buff_A, &ldim_A_64, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+/** Generated wrapper function */
+void cpotf2_(char *uplo, aocl_int_t *n, scomplex *buff_A, aocl_int_t *ldim_A, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_cpotf2(uplo, n, buff_A, ldim_A, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t ldim_A_64 = *ldim_A;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_cpotf2(uplo, &n_64, buff_A, &ldim_A_64, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+/** Generated wrapper function */
+void zpotf2_(char *uplo, aocl_int_t *n, dcomplex *buff_A, aocl_int_t *ldim_A, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_zpotf2(uplo, n, buff_A, ldim_A, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t ldim_A_64 = *ldim_A;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_zpotf2(uplo, &n_64, buff_A, &ldim_A_64, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
 #define LAPACK_potrf(prefix)                                                                 \
-    void F77_##prefix##potrf(char *uplo, integer *n, PREFIX2LAPACK_TYPEDEF(prefix) * buff_A, \
-                             integer * ldim_A, integer * info)
+    void aocl_lapack_##prefix##potrf(char *uplo, aocl_int64_t *n, PREFIX2LAPACK_TYPEDEF(prefix) * buff_A, \
+                             aocl_int64_t * ldim_A, aocl_int64_t * info)
 
 #if FLA_ENABLE_AMD_OPT
 #define LAPACK_potrf_body_s(prefix)                   \
@@ -204,8 +332,8 @@ LAPACK_potrf(z)
 }
 
 #define LAPACK_potf2(prefix)                                                                 \
-    void F77_##prefix##potf2(char *uplo, integer *n, PREFIX2LAPACK_TYPEDEF(prefix) * buff_A, \
-                             integer * ldim_A, integer * info)
+    void aocl_lapack_##prefix##potf2(char *uplo, aocl_int64_t *n, PREFIX2LAPACK_TYPEDEF(prefix) * buff_A, \
+                             aocl_int64_t * ldim_A, aocl_int64_t * info)
 
 LAPACK_potf2(s)
 {

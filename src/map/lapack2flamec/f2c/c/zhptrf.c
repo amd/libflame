@@ -5,8 +5,8 @@
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 
 /*
-*     Modifications Copyright (c) 2024 Advanced Micro Devices, Inc.  All rights reserved.
-*/
+ *     Modifications Copyright (c) 2024 Advanced Micro Devices, Inc.  All rights reserved.
+ */
 
 #include "FLA_f2c.h" /* Table of constant values */
 static aocl_int64_t c__1 = 1;
@@ -161,7 +161,23 @@ static aocl_int64_t c__1 = 1;
 /* > J. Lewis, Boeing Computer Services Company */
 /* ===================================================================== */
 /* Subroutine */
-void zhptrf_(char *uplo, integer *n, doublecomplex *ap, integer *ipiv, integer *info)
+/** Generated wrapper function */
+void zhptrf_(char *uplo, aocl_int_t *n, dcomplex *ap, aocl_int_t *ipiv, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_zhptrf(uplo, n, ap, ipiv, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_zhptrf(uplo, &n_64, ap, ipiv, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_zhptrf(char *uplo, aocl_int64_t *n, dcomplex *ap, aocl_int_t *ipiv,
+                        aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zhptrf inputs: uplo %c, n %" FLA_IS "", *uplo, *n);
@@ -184,27 +200,15 @@ void zhptrf_(char *uplo, integer *n, doublecomplex *ap, integer *ipiv, integer *
     dcomplex wk;
     aocl_int64_t kx;
     doublereal tt;
-    integer knc, kpc, npp;
-    doublecomplex wkm1, wkp1;
-    integer imax, jmax;
-    extern /* Subroutine */
-        void
-        zhpr_(char *, integer *, doublereal *, doublecomplex *, integer *, doublecomplex *);
+    aocl_int64_t knc, kpc, npp;
+    dcomplex wkm1, wkp1;
+    aocl_int64_t imax, jmax;
     doublereal alpha;
-    extern logical lsame_(char *, char *, integer, integer);
-    integer kstep;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    aocl_int64_t kstep;
     logical upper;
-    extern /* Subroutine */
-        void
-        zswap_(integer *, doublecomplex *, integer *, doublecomplex *, integer *);
     extern doublereal dlapy2_(doublereal *, doublereal *);
     doublereal absakk;
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    extern /* Subroutine */
-        void
-        zdscal_(integer *, doublereal *, doublecomplex *, integer *);
     doublereal colmax;
     doublereal rowmax;
     /* -- LAPACK computational routine (version 3.4.0) -- */
@@ -252,7 +256,7 @@ void zhptrf_(char *uplo, integer *n, doublecomplex *ap, integer *ipiv, integer *
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("ZHPTRF", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("ZHPTRF", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }

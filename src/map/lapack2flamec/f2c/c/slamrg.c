@@ -94,7 +94,24 @@
 /* > \ingroup auxOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void slamrg_(integer *n1, integer *n2, real *a, integer *strd1, integer *strd2, integer *index)
+/** Generated wrapper function */
+void slamrg_(aocl_int_t *n1, aocl_int_t *n2, real *a, aocl_int_t *strd1, aocl_int_t *strd2,
+             aocl_int_t *index)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_slamrg(n1, n2, a, strd1, strd2, index);
+#else
+    aocl_int64_t n1_64 = *n1;
+    aocl_int64_t n2_64 = *n2;
+    aocl_int64_t strd1_64 = *strd1;
+    aocl_int64_t strd2_64 = *strd2;
+
+    aocl_lapack_slamrg(&n1_64, &n2_64, a, &strd1_64, &strd2_64, index);
+#endif
+}
+
+void aocl_lapack_slamrg(aocl_int64_t *n1, aocl_int64_t *n2, real *a, aocl_int64_t *strd1,
+                        aocl_int64_t *strd2, aocl_int_t *index)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("slamrg inputs: n1 %" FLA_IS ", n2 %" FLA_IS ", strd1 %" FLA_IS

@@ -96,8 +96,23 @@
 /* > \ingroup doubleOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void dla_lin_berr_(integer *n, integer *nz, integer *nrhs, doublereal *res, doublereal *ayb,
-                   doublereal *berr)
+/** Generated wrapper function */
+void dla_lin_berr_(aocl_int_t *n, aocl_int_t *nz, aocl_int_t *nrhs, doublereal *res,
+                   doublereal *ayb, doublereal *berr)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_dla_lin_berr(n, nz, nrhs, res, ayb, berr);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t nz_64 = *nz;
+    aocl_int64_t nrhs_64 = *nrhs;
+
+    aocl_lapack_dla_lin_berr(&n_64, &nz_64, &nrhs_64, res, ayb, berr);
+#endif
+}
+
+void aocl_lapack_dla_lin_berr(aocl_int64_t *n, aocl_int64_t *nz, aocl_int64_t *nrhs,
+                              doublereal *res, doublereal *ayb, doublereal *berr)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dla_lin_berr inputs: n %" FLA_IS ", nz %" FLA_IS ", nrhs %" FLA_IS "", *n,

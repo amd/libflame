@@ -3,7 +3,7 @@
 /* Table of constant values */
 static dcomplex c_b1 =
 {
-    {1., 0.}
+    {{1.}, {0.}}
 }
 ;
 /* Subroutine */

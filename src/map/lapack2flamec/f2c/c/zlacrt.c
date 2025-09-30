@@ -3,7 +3,7 @@
  on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
-#include "FLA_f2c.h" /* > \brief \b ZLACRT performs a linear transformation of a pair of complex vectors. */
+#include "FLA_f2c.h" /* > \brief \b ZLACRT performs a linear transformation of a pair of scomplex vectors. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
@@ -100,8 +100,23 @@
 /* > \ingroup complex16OTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-void zlacrt_(integer *n, doublecomplex *cx, integer *incx, doublecomplex *cy, integer *incy,
-             doublecomplex *c__, doublecomplex *s)
+/** Generated wrapper function */
+void zlacrt_(aocl_int_t *n, dcomplex *cx, aocl_int_t *incx, dcomplex *cy,
+             aocl_int_t *incy, dcomplex *c__, dcomplex *s)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_zlacrt(n, cx, incx, cy, incy, c__, s);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t incx_64 = *incx;
+    aocl_int64_t incy_64 = *incy;
+
+    aocl_lapack_zlacrt(&n_64, cx, &incx_64, cy, &incy_64, c__, s);
+#endif
+}
+
+void aocl_lapack_zlacrt(aocl_int64_t *n, dcomplex *cx, aocl_int64_t *incx, dcomplex *cy,
+                        aocl_int64_t *incy, dcomplex *c__, dcomplex *s)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zlacrt inputs: n %" FLA_IS ", incx %" FLA_IS ", incy %" FLA_IS "", *n, *incx,

@@ -4,7 +4,7 @@
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
  /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__0 = 0;
+static aocl_int64_t c__0 = 0;
 /* > \brief \b SLAMSWLQ */
 /* Definition: */
 /* =========== */
@@ -194,9 +194,36 @@ the routine */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void slamswlq_(char *side, char *trans, integer *m, integer *n, integer *k, integer *mb,
-               integer *nb, real *a, integer *lda, real *t, integer *ldt, real *c__, integer *ldc,
-               real *work, integer *lwork, integer *info)
+/** Generated wrapper function */
+void slamswlq_(char *side, char *trans, aocl_int_t *m, aocl_int_t *n, aocl_int_t *k, aocl_int_t *mb,
+               aocl_int_t *nb, real *a, aocl_int_t *lda, real *t, aocl_int_t *ldt, real *c__,
+               aocl_int_t *ldc, real *work, aocl_int_t *lwork, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_slamswlq(side, trans, m, n, k, mb, nb, a, lda, t, ldt, c__, ldc, work, lwork, info);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t k_64 = *k;
+    aocl_int64_t mb_64 = *mb;
+    aocl_int64_t nb_64 = *nb;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t ldt_64 = *ldt;
+    aocl_int64_t ldc_64 = *ldc;
+    aocl_int64_t lwork_64 = *lwork;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_slamswlq(side, trans, &m_64, &n_64, &k_64, &mb_64, &nb_64, a, &lda_64, t, &ldt_64,
+                         c__, &ldc_64, work, &lwork_64, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_slamswlq(char *side, char *trans, aocl_int64_t *m, aocl_int64_t *n,
+                          aocl_int64_t *k, aocl_int64_t *mb, aocl_int64_t *nb, real *a,
+                          aocl_int64_t *lda, real *t, aocl_int64_t *ldt, real *c__,
+                          aocl_int64_t *ldc, real *work, aocl_int64_t *lwork, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("slamswlq inputs: side %c, trans %c, m %" FLA_IS ", n %" FLA_IS ", k %" FLA_IS
@@ -204,23 +231,13 @@ void slamswlq_(char *side, char *trans, integer *m, integer *n, integer *k, inte
                       ", ldc %" FLA_IS ", lwork %" FLA_IS "",
                       *side, *trans, *m, *n, *k, *mb, *nb, *lda, *ldt, *ldc, *lwork);
     /* System generated locals */
-    integer a_dim1, a_offset, c_dim1, c_offset, t_dim1, t_offset, i__1, i__2, i__3;
+    aocl_int64_t a_dim1, a_offset, c_dim1, c_offset, t_dim1, t_offset, i__1, i__2, i__3;
     /* Local variables */
-    integer i__, ii, kk, lw, ctr;
+    aocl_int64_t i__, ii, kk, lw, ctr;
     logical left, tran;
-    extern logical lsame_(char *, char *, integer, integer);
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     logical right;
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical notran, lquery;
-    extern /* Subroutine */
-        void
-        sgemlqt_(char *, char *, integer *, integer *, integer *, integer *, real *, integer *,
-                 real *, integer *, real *, integer *, real *, integer *),
-        stpmlqt_(char *, char *, integer *, integer *, integer *, integer *, integer *, real *,
-                 integer *, real *, integer *, real *, integer *, real *, integer *, real *,
-                 integer *);
     /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -306,7 +323,7 @@ void slamswlq_(char *side, char *trans, integer *m, integer *n, integer *k, inte
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("SLAMSWLQ", &i__1, (ftnlen)8);
+        aocl_blas_xerbla("SLAMSWLQ", &i__1, (ftnlen)8);
         work[1] = (real)lw;
         AOCL_DTL_TRACE_LOG_EXIT
         return;
@@ -329,8 +346,8 @@ void slamswlq_(char *side, char *trans, integer *m, integer *n, integer *k, inte
     i__1 = fla_max(*m, *n);
     if(*nb <= *k || *nb >= fla_max(i__1, *k))
     {
-        sgemlqt_(side, trans, m, n, k, mb, &a[a_offset], lda, &t[t_offset], ldt, &c__[c_offset],
-                 ldc, &work[1], info);
+        aocl_lapack_sgemlqt(side, trans, m, n, k, mb, &a[a_offset], lda, &t[t_offset], ldt,
+                            &c__[c_offset], ldc, &work[1], info);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -342,9 +359,9 @@ void slamswlq_(char *side, char *trans, integer *m, integer *n, integer *k, inte
         if(kk > 0)
         {
             ii = *m - kk + 1;
-            stpmlqt_("L", "T", &kk, n, k, &c__0, mb, &a[ii * a_dim1 + 1], lda,
-                     &t[(ctr * *k + 1) * t_dim1 + 1], ldt, &c__[c_dim1 + 1], ldc, &c__[ii + c_dim1],
-                     ldc, &work[1], info);
+            aocl_lapack_stpmlqt("L", "T", &kk, n, k, &c__0, mb, &a[ii * a_dim1 + 1], lda,
+                                &t[(ctr * *k + 1) * t_dim1 + 1], ldt, &c__[c_dim1 + 1], ldc,
+                                &c__[ii + c_dim1], ldc, &work[1], info);
         }
         else
         {
@@ -357,13 +374,13 @@ void slamswlq_(char *side, char *trans, integer *m, integer *n, integer *k, inte
             /* Multiply Q to the current block of C (1:M,I:I+NB) */
             --ctr;
             i__3 = *nb - *k;
-            stpmlqt_("L", "T", &i__3, n, k, &c__0, mb, &a[i__ * a_dim1 + 1], lda,
-                     &t[(ctr * *k + 1) * t_dim1 + 1], ldt, &c__[c_dim1 + 1], ldc,
-                     &c__[i__ + c_dim1], ldc, &work[1], info);
+            aocl_lapack_stpmlqt("L", "T", &i__3, n, k, &c__0, mb, &a[i__ * a_dim1 + 1], lda,
+                                &t[(ctr * *k + 1) * t_dim1 + 1], ldt, &c__[c_dim1 + 1], ldc,
+                                &c__[i__ + c_dim1], ldc, &work[1], info);
         }
         /* Multiply Q to the first block of C (1:M,1:NB) */
-        sgemlqt_("L", "T", nb, n, k, mb, &a[a_dim1 + 1], lda, &t[t_offset], ldt, &c__[c_dim1 + 1],
-                 ldc, &work[1], info);
+        aocl_lapack_sgemlqt("L", "T", nb, n, k, mb, &a[a_dim1 + 1], lda, &t[t_offset], ldt,
+                            &c__[c_dim1 + 1], ldc, &work[1], info);
     }
     else if(left && notran)
     {
@@ -371,25 +388,25 @@ void slamswlq_(char *side, char *trans, integer *m, integer *n, integer *k, inte
         kk = (*m - *k) % (*nb - *k);
         ii = *m - kk + 1;
         ctr = 1;
-        sgemlqt_("L", "N", nb, n, k, mb, &a[a_dim1 + 1], lda, &t[t_offset], ldt, &c__[c_dim1 + 1],
-                 ldc, &work[1], info);
+        aocl_lapack_sgemlqt("L", "N", nb, n, k, mb, &a[a_dim1 + 1], lda, &t[t_offset], ldt,
+                            &c__[c_dim1 + 1], ldc, &work[1], info);
         i__2 = ii - *nb + *k;
         i__1 = *nb - *k;
         for(i__ = *nb + 1; i__1 < 0 ? i__ >= i__2 : i__ <= i__2; i__ += i__1)
         {
             /* Multiply Q to the current block of C (I:I+NB,1:N) */
             i__3 = *nb - *k;
-            stpmlqt_("L", "N", &i__3, n, k, &c__0, mb, &a[i__ * a_dim1 + 1], lda,
-                     &t[(ctr * *k + 1) * t_dim1 + 1], ldt, &c__[c_dim1 + 1], ldc,
-                     &c__[i__ + c_dim1], ldc, &work[1], info);
+            aocl_lapack_stpmlqt("L", "N", &i__3, n, k, &c__0, mb, &a[i__ * a_dim1 + 1], lda,
+                                &t[(ctr * *k + 1) * t_dim1 + 1], ldt, &c__[c_dim1 + 1], ldc,
+                                &c__[i__ + c_dim1], ldc, &work[1], info);
             ++ctr;
         }
         if(ii <= *m)
         {
             /* Multiply Q to the last block of C */
-            stpmlqt_("L", "N", &kk, n, k, &c__0, mb, &a[ii * a_dim1 + 1], lda,
-                     &t[(ctr * *k + 1) * t_dim1 + 1], ldt, &c__[c_dim1 + 1], ldc, &c__[ii + c_dim1],
-                     ldc, &work[1], info);
+            aocl_lapack_stpmlqt("L", "N", &kk, n, k, &c__0, mb, &a[ii * a_dim1 + 1], lda,
+                                &t[(ctr * *k + 1) * t_dim1 + 1], ldt, &c__[c_dim1 + 1], ldc,
+                                &c__[ii + c_dim1], ldc, &work[1], info);
         }
     }
     else if(right && notran)
@@ -400,9 +417,9 @@ void slamswlq_(char *side, char *trans, integer *m, integer *n, integer *k, inte
         if(kk > 0)
         {
             ii = *n - kk + 1;
-            stpmlqt_("R", "N", m, &kk, k, &c__0, mb, &a[ii * a_dim1 + 1], lda,
-                     &t[(ctr * *k + 1) * t_dim1 + 1], ldt, &c__[c_dim1 + 1], ldc,
-                     &c__[ii * c_dim1 + 1], ldc, &work[1], info);
+            aocl_lapack_stpmlqt("R", "N", m, &kk, k, &c__0, mb, &a[ii * a_dim1 + 1], lda,
+                                &t[(ctr * *k + 1) * t_dim1 + 1], ldt, &c__[c_dim1 + 1], ldc,
+                                &c__[ii * c_dim1 + 1], ldc, &work[1], info);
         }
         else
         {
@@ -415,13 +432,13 @@ void slamswlq_(char *side, char *trans, integer *m, integer *n, integer *k, inte
             /* Multiply Q to the current block of C (1:M,I:I+MB) */
             --ctr;
             i__3 = *nb - *k;
-            stpmlqt_("R", "N", m, &i__3, k, &c__0, mb, &a[i__ * a_dim1 + 1], lda,
-                     &t[(ctr * *k + 1) * t_dim1 + 1], ldt, &c__[c_dim1 + 1], ldc,
-                     &c__[i__ * c_dim1 + 1], ldc, &work[1], info);
+            aocl_lapack_stpmlqt("R", "N", m, &i__3, k, &c__0, mb, &a[i__ * a_dim1 + 1], lda,
+                                &t[(ctr * *k + 1) * t_dim1 + 1], ldt, &c__[c_dim1 + 1], ldc,
+                                &c__[i__ * c_dim1 + 1], ldc, &work[1], info);
         }
         /* Multiply Q to the first block of C (1:M,1:MB) */
-        sgemlqt_("R", "N", m, nb, k, mb, &a[a_dim1 + 1], lda, &t[t_offset], ldt, &c__[c_dim1 + 1],
-                 ldc, &work[1], info);
+        aocl_lapack_sgemlqt("R", "N", m, nb, k, mb, &a[a_dim1 + 1], lda, &t[t_offset], ldt,
+                            &c__[c_dim1 + 1], ldc, &work[1], info);
     }
     else if(right && tran)
     {
@@ -429,25 +446,25 @@ void slamswlq_(char *side, char *trans, integer *m, integer *n, integer *k, inte
         kk = (*n - *k) % (*nb - *k);
         ii = *n - kk + 1;
         ctr = 1;
-        sgemlqt_("R", "T", m, nb, k, mb, &a[a_dim1 + 1], lda, &t[t_offset], ldt, &c__[c_dim1 + 1],
-                 ldc, &work[1], info);
+        aocl_lapack_sgemlqt("R", "T", m, nb, k, mb, &a[a_dim1 + 1], lda, &t[t_offset], ldt,
+                            &c__[c_dim1 + 1], ldc, &work[1], info);
         i__2 = ii - *nb + *k;
         i__1 = *nb - *k;
         for(i__ = *nb + 1; i__1 < 0 ? i__ >= i__2 : i__ <= i__2; i__ += i__1)
         {
             /* Multiply Q to the current block of C (1:M,I:I+MB) */
             i__3 = *nb - *k;
-            stpmlqt_("R", "T", m, &i__3, k, &c__0, mb, &a[i__ * a_dim1 + 1], lda,
-                     &t[(ctr * *k + 1) * t_dim1 + 1], ldt, &c__[c_dim1 + 1], ldc,
-                     &c__[i__ * c_dim1 + 1], ldc, &work[1], info);
+            aocl_lapack_stpmlqt("R", "T", m, &i__3, k, &c__0, mb, &a[i__ * a_dim1 + 1], lda,
+                                &t[(ctr * *k + 1) * t_dim1 + 1], ldt, &c__[c_dim1 + 1], ldc,
+                                &c__[i__ * c_dim1 + 1], ldc, &work[1], info);
             ++ctr;
         }
         if(ii <= *n)
         {
             /* Multiply Q to the last block of C */
-            stpmlqt_("R", "T", m, &kk, k, &c__0, mb, &a[ii * a_dim1 + 1], lda,
-                     &t[(ctr * *k + 1) * t_dim1 + 1], ldt, &c__[c_dim1 + 1], ldc,
-                     &c__[ii * c_dim1 + 1], ldc, &work[1], info);
+            aocl_lapack_stpmlqt("R", "T", m, &kk, k, &c__0, mb, &a[ii * a_dim1 + 1], lda,
+                                &t[(ctr * *k + 1) * t_dim1 + 1], ldt, &c__[c_dim1 + 1], ldc,
+                                &c__[ii * c_dim1 + 1], ldc, &work[1], info);
         }
     }
     work[1] = (real)lw;

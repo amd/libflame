@@ -18,38 +18,38 @@
    y = y + alpha3 * x3;
 */
 
-void bl1_saxpyv3b( integer       n,
+void bl1_saxpyv3b( fla_dim_t       n,
                    float*    alpha1,
                    float*    alpha2,
                    float*    alpha3,
-                   float*    x1, integer inc_x1,
-                   float*    x2, integer inc_x2,
-                   float*    x3, integer inc_x3,
-                   float*    y,  integer inc_y )
+                   float*    x1, fla_dim_t inc_x1,
+                   float*    x2, fla_dim_t inc_x2,
+                   float*    x3, fla_dim_t inc_x3,
+                   float*    y,  fla_dim_t inc_y )
 {
 	bl1_abort();
 }
 
 
-void bl1_daxpyv3b( integer       n,
+void bl1_daxpyv3b( fla_dim_t       n,
                    double*   alpha1,
                    double*   alpha2,
                    double*   alpha3,
-                   double*   x1, integer inc_x1,
-                   double*   x2, integer inc_x2,
-                   double*   x3, integer inc_x3,
-                   double*   y,  integer inc_y )
+                   double*   x1, fla_dim_t inc_x1,
+                   double*   x2, fla_dim_t inc_x2,
+                   double*   x3, fla_dim_t inc_x3,
+                   double*   y,  fla_dim_t inc_y )
 #if BLIS1_VECTOR_INTRINSIC_TYPE == BLIS1_SSE_INTRINSICS
 {
 	double*   restrict chi1;
 	double*   restrict chi2;
 	double*   restrict chi3;
 	double*   restrict psi1;
-	integer       i;
+	fla_dim_t       i;
 
-	integer       n_pre;
-	integer       n_run;
-	integer       n_left;
+	fla_dim_t       n_pre;
+	fla_dim_t       n_run;
+	fla_dim_t       n_left;
 
 	v2df_t    a1v, a2v, a3v;
 	v2df_t    x11v, x12v, x13v;
@@ -157,13 +157,13 @@ void bl1_daxpyv3b( integer       n,
 	double    alpha2_c;
 	double    temp1;
 	double    temp2;
-	integer       i;
+	fla_dim_t       i;
 
-	integer       n_run  = n / 2;
-	integer       n_left = n % 2;
-	integer       twoinc_x1 = 2*inc_x1;
-	integer       twoinc_x2 = 2*inc_x2;
-	integer       twoinc_y  = 2*inc_y;
+	fla_dim_t       n_run  = n / 2;
+	fla_dim_t       n_left = n % 2;
+	fla_dim_t       twoinc_x1 = 2*inc_x1;
+	fla_dim_t       twoinc_x2 = 2*inc_x2;
+	fla_dim_t       twoinc_y  = 2*inc_y;
 
 	chi1 = x1;
 	chi2 = x2;
@@ -208,27 +208,27 @@ void bl1_daxpyv3b( integer       n,
 #endif
 
 
-void bl1_caxpyv3b( integer       n,
+void bl1_caxpyv3b( fla_dim_t       n,
                    scomplex* alpha1,
                    scomplex* alpha2,
                    scomplex* alpha3,
-                   scomplex* x1, integer inc_x1,
-                   scomplex* x2, integer inc_x2,
-                   scomplex* x3, integer inc_x3,
-                   scomplex* y,  integer inc_y )
+                   scomplex* x1, fla_dim_t inc_x1,
+                   scomplex* x2, fla_dim_t inc_x2,
+                   scomplex* x3, fla_dim_t inc_x3,
+                   scomplex* y,  fla_dim_t inc_y )
 {
 	bl1_abort();
 }
 
 
-void bl1_zaxpyv3b( integer       n,
+void bl1_zaxpyv3b( fla_dim_t       n,
                    dcomplex* alpha1,
                    dcomplex* alpha2,
                    dcomplex* alpha3,
-                   dcomplex* x1, integer inc_x1,
-                   dcomplex* x2, integer inc_x2,
-                   dcomplex* x3, integer inc_x3,
-                   dcomplex* y,  integer inc_y )
+                   dcomplex* x1, fla_dim_t inc_x1,
+                   dcomplex* x2, fla_dim_t inc_x2,
+                   dcomplex* x3, fla_dim_t inc_x3,
+                   dcomplex* y,  fla_dim_t inc_y )
 {
 	bl1_abort();
 }

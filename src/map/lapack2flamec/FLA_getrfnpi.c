@@ -43,10 +43,82 @@
 extern void DTL_Trace(uint8 ui8LogLevel, uint8 ui8LogType, const int8 *pi8FileName,
                       const int8 *pi8FunctionName, uint32 ui32LineNumber, const int8 *pi8Message);
 
+/** Generated wrapper function */
+void sgetrfnpi_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *nfact, real *buff_A, aocl_int_t *ldim_A, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_sgetrfnpi(m, n, nfact, buff_A, ldim_A, info);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t nfact_64 = *nfact;
+    aocl_int64_t ldim_A_64 = *ldim_A;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_sgetrfnpi(&m_64, &n_64, &nfact_64, buff_A, &ldim_A_64, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+/** Generated wrapper function */
+void dgetrfnpi_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *nfact, doublereal *buff_A, aocl_int_t *ldim_A, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_dgetrfnpi(m, n, nfact, buff_A, ldim_A, info);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t nfact_64 = *nfact;
+    aocl_int64_t ldim_A_64 = *ldim_A;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_dgetrfnpi(&m_64, &n_64, &nfact_64, buff_A, &ldim_A_64, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+/** Generated wrapper function */
+void cgetrfnpi_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *nfact, scomplex *buff_A, aocl_int_t *ldim_A, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_cgetrfnpi(m, n, nfact, buff_A, ldim_A, info);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t nfact_64 = *nfact;
+    aocl_int64_t ldim_A_64 = *ldim_A;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_cgetrfnpi(&m_64, &n_64, &nfact_64, buff_A, &ldim_A_64, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+/** Generated wrapper function */
+void zgetrfnpi_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *nfact, dcomplex *buff_A, aocl_int_t *ldim_A, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_zgetrfnpi(m, n, nfact, buff_A, ldim_A, info);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t nfact_64 = *nfact;
+    aocl_int64_t ldim_A_64 = *ldim_A;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_zgetrfnpi(&m_64, &n_64, &nfact_64, buff_A, &ldim_A_64, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
 #define LAPACK_getrfnpi(prefix)                                                           \
-    void F77_##prefix##getrfnpi(integer *m, integer *n, integer *nfact,                   \
-                                PREFIX2LAPACK_TYPEDEF(prefix) * buff_A, integer * ldim_A, \
-                                integer * info)
+    void aocl_lapack_##prefix##getrfnpi(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *nfact,                   \
+                                PREFIX2LAPACK_TYPEDEF(prefix) * buff_A, aocl_int64_t * ldim_A, \
+                                aocl_int64_t * info)
 
 #define LAPACK_getrfnpi_body(prefix)                                                               \
     FLA_Datatype datatype = PREFIX2FLAME_DATATYPE(prefix);                                         \

@@ -4,8 +4,8 @@
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
  /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static doublecomplex c_b1 = {1., 0.};
-static integer c__1 = 1;
+static dcomplex c_b1 = {{1.}, {0.}};
+static aocl_int64_t c__1 = 1;
 /* > \brief \b ZHEGS2 reduces a Hermitian definite generalized eigenproblem to standard form, using
  * the factor ization results obtained from cpotrf (unblocked algorithm). */
 /* =========== DOCUMENTATION =========== */
@@ -41,7 +41,7 @@ static integer c__1 = 1;
 /* > */
 /* > \verbatim */
 /* > */
-/* > ZHEGS2 reduces a complex Hermitian-definite generalized */
+/* > ZHEGS2 reduces a scomplex Hermitian-definite generalized */
 /* > eigenproblem to standard form. */
 /* > */
 /* > If ITYPE = 1, the problem is A*x = lambda*B*x, */
@@ -127,33 +127,19 @@ static integer c__1 = 1;
 /* > \ingroup complex16HEcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void zhegs2_fla(integer *itype, char *uplo, integer *n, doublecomplex *a, integer *lda,
-                doublecomplex *b, integer *ldb, integer *info)
+void zhegs2_fla(aocl_int64_t *itype, char *uplo, aocl_int64_t *n, dcomplex *a,
+                aocl_int64_t *lda, dcomplex *b, aocl_int64_t *ldb, aocl_int64_t *info)
 {
     /* System generated locals */
-    integer a_dim1, a_offset, b_dim1, b_offset, i__1, i__2;
+    aocl_int64_t a_dim1, a_offset, b_dim1, b_offset, i__1, i__2;
     doublereal d__1, d__2;
-    doublecomplex z__1;
+    dcomplex z__1;
     /* Local variables */
-    integer k;
-    doublecomplex ct;
+    aocl_int64_t k;
+    dcomplex ct;
     doublereal akk, bkk;
-    extern /* Subroutine */
-        void
-        zher2_(char *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *,
-               integer *, doublecomplex *, integer *);
-    extern logical lsame_(char *, char *, integer, integer);
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     logical upper;
-    extern /* Subroutine */
-        void
-        zaxpy_(integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *),
-        ztrmv_(char *, char *, char *, integer *, doublecomplex *, integer *, doublecomplex *,
-               integer *),
-        ztrsv_(char *, char *, char *, integer *, doublecomplex *, integer *, doublecomplex *,
-               integer *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
-        zdscal_(integer *, doublereal *, doublecomplex *, integer *),
-        zlacgv_(integer *, doublecomplex *, integer *);
     /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -207,7 +193,7 @@ void zhegs2_fla(integer *itype, char *uplo, integer *n, doublecomplex *a, intege
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("ZHEGS2", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("ZHEGS2", &i__1, (ftnlen)6);
         return;
     }
     if(*itype == 1)
@@ -233,32 +219,34 @@ void zhegs2_fla(integer *itype, char *uplo, integer *n, doublecomplex *a, intege
                 {
                     i__2 = *n - k;
                     d__1 = 1. / bkk;
-                    zdscal_(&i__2, &d__1, &a[k + (k + 1) * a_dim1], lda);
+                    aocl_blas_zdscal(&i__2, &d__1, &a[k + (k + 1) * a_dim1], lda);
                     d__1 = akk * -.5;
                     ct.r = d__1;
                     ct.i = 0.; // , expr subst
                     i__2 = *n - k;
-                    zlacgv_(&i__2, &a[k + (k + 1) * a_dim1], lda);
+                    aocl_lapack_zlacgv(&i__2, &a[k + (k + 1) * a_dim1], lda);
                     i__2 = *n - k;
-                    zlacgv_(&i__2, &b[k + (k + 1) * b_dim1], ldb);
+                    aocl_lapack_zlacgv(&i__2, &b[k + (k + 1) * b_dim1], ldb);
                     i__2 = *n - k;
-                    zaxpy_(&i__2, &ct, &b[k + (k + 1) * b_dim1], ldb, &a[k + (k + 1) * a_dim1],
-                           lda);
+                    aocl_blas_zaxpy(&i__2, &ct, &b[k + (k + 1) * b_dim1], ldb,
+                                    &a[k + (k + 1) * a_dim1], lda);
                     i__2 = *n - k;
                     z__1.r = -1.;
                     z__1.i = -0.; // , expr subst
-                    zher2_(uplo, &i__2, &z__1, &a[k + (k + 1) * a_dim1], lda,
-                           &b[k + (k + 1) * b_dim1], ldb, &a[k + 1 + (k + 1) * a_dim1], lda);
+                    aocl_blas_zher2(uplo, &i__2, &z__1, &a[k + (k + 1) * a_dim1], lda,
+                                    &b[k + (k + 1) * b_dim1], ldb, &a[k + 1 + (k + 1) * a_dim1],
+                                    lda);
                     i__2 = *n - k;
-                    zaxpy_(&i__2, &ct, &b[k + (k + 1) * b_dim1], ldb, &a[k + (k + 1) * a_dim1],
-                           lda);
+                    aocl_blas_zaxpy(&i__2, &ct, &b[k + (k + 1) * b_dim1], ldb,
+                                    &a[k + (k + 1) * a_dim1], lda);
                     i__2 = *n - k;
-                    zlacgv_(&i__2, &b[k + (k + 1) * b_dim1], ldb);
+                    aocl_lapack_zlacgv(&i__2, &b[k + (k + 1) * b_dim1], ldb);
                     i__2 = *n - k;
-                    ztrsv_(uplo, "Conjugate transpose", "Non-unit", &i__2,
-                           &b[k + 1 + (k + 1) * b_dim1], ldb, &a[k + (k + 1) * a_dim1], lda);
+                    aocl_blas_ztrsv(uplo, "Conjugate transpose", "Non-unit", &i__2,
+                                    &b[k + 1 + (k + 1) * b_dim1], ldb, &a[k + (k + 1) * a_dim1],
+                                    lda);
                     i__2 = *n - k;
-                    zlacgv_(&i__2, &a[k + (k + 1) * a_dim1], lda);
+                    aocl_lapack_zlacgv(&i__2, &a[k + (k + 1) * a_dim1], lda);
                 }
                 /* L10: */
             }
@@ -284,24 +272,26 @@ void zhegs2_fla(integer *itype, char *uplo, integer *n, doublecomplex *a, intege
                 {
                     i__2 = *n - k;
                     d__1 = 1. / bkk;
-                    zdscal_(&i__2, &d__1, &a[k + 1 + k * a_dim1], &c__1);
+                    aocl_blas_zdscal(&i__2, &d__1, &a[k + 1 + k * a_dim1], &c__1);
                     d__1 = akk * -.5;
                     ct.r = d__1;
                     ct.i = 0.; // , expr subst
                     i__2 = *n - k;
-                    zaxpy_(&i__2, &ct, &b[k + 1 + k * b_dim1], &c__1, &a[k + 1 + k * a_dim1],
-                           &c__1);
+                    aocl_blas_zaxpy(&i__2, &ct, &b[k + 1 + k * b_dim1], &c__1,
+                                    &a[k + 1 + k * a_dim1], &c__1);
                     i__2 = *n - k;
                     z__1.r = -1.;
                     z__1.i = -0.; // , expr subst
-                    zher2_(uplo, &i__2, &z__1, &a[k + 1 + k * a_dim1], &c__1,
-                           &b[k + 1 + k * b_dim1], &c__1, &a[k + 1 + (k + 1) * a_dim1], lda);
+                    aocl_blas_zher2(uplo, &i__2, &z__1, &a[k + 1 + k * a_dim1], &c__1,
+                                    &b[k + 1 + k * b_dim1], &c__1, &a[k + 1 + (k + 1) * a_dim1],
+                                    lda);
                     i__2 = *n - k;
-                    zaxpy_(&i__2, &ct, &b[k + 1 + k * b_dim1], &c__1, &a[k + 1 + k * a_dim1],
-                           &c__1);
+                    aocl_blas_zaxpy(&i__2, &ct, &b[k + 1 + k * b_dim1], &c__1,
+                                    &a[k + 1 + k * a_dim1], &c__1);
                     i__2 = *n - k;
-                    ztrsv_(uplo, "No transpose", "Non-unit", &i__2, &b[k + 1 + (k + 1) * b_dim1],
-                           ldb, &a[k + 1 + k * a_dim1], &c__1);
+                    aocl_blas_ztrsv(uplo, "No transpose", "Non-unit", &i__2,
+                                    &b[k + 1 + (k + 1) * b_dim1], ldb, &a[k + 1 + k * a_dim1],
+                                    &c__1);
                 }
                 /* L20: */
             }
@@ -321,20 +311,20 @@ void zhegs2_fla(integer *itype, char *uplo, integer *n, doublecomplex *a, intege
                 i__2 = k + k * b_dim1;
                 bkk = b[i__2].r;
                 i__2 = k - 1;
-                ztrmv_(uplo, "No transpose", "Non-unit", &i__2, &b[b_offset], ldb,
-                       &a[k * a_dim1 + 1], &c__1);
+                aocl_blas_ztrmv(uplo, "No transpose", "Non-unit", &i__2, &b[b_offset], ldb,
+                                &a[k * a_dim1 + 1], &c__1);
                 d__1 = akk * .5;
                 ct.r = d__1;
                 ct.i = 0.; // , expr subst
                 i__2 = k - 1;
-                zaxpy_(&i__2, &ct, &b[k * b_dim1 + 1], &c__1, &a[k * a_dim1 + 1], &c__1);
+                aocl_blas_zaxpy(&i__2, &ct, &b[k * b_dim1 + 1], &c__1, &a[k * a_dim1 + 1], &c__1);
                 i__2 = k - 1;
-                zher2_(uplo, &i__2, &c_b1, &a[k * a_dim1 + 1], &c__1, &b[k * b_dim1 + 1], &c__1,
-                       &a[a_offset], lda);
+                aocl_blas_zher2(uplo, &i__2, &c_b1, &a[k * a_dim1 + 1], &c__1, &b[k * b_dim1 + 1],
+                                &c__1, &a[a_offset], lda);
                 i__2 = k - 1;
-                zaxpy_(&i__2, &ct, &b[k * b_dim1 + 1], &c__1, &a[k * a_dim1 + 1], &c__1);
+                aocl_blas_zaxpy(&i__2, &ct, &b[k * b_dim1 + 1], &c__1, &a[k * a_dim1 + 1], &c__1);
                 i__2 = k - 1;
-                zdscal_(&i__2, &bkk, &a[k * a_dim1 + 1], &c__1);
+                aocl_blas_zdscal(&i__2, &bkk, &a[k * a_dim1 + 1], &c__1);
                 i__2 = k + k * a_dim1;
                 /* Computing 2nd power */
                 d__2 = bkk;
@@ -356,28 +346,28 @@ void zhegs2_fla(integer *itype, char *uplo, integer *n, doublecomplex *a, intege
                 i__2 = k + k * b_dim1;
                 bkk = b[i__2].r;
                 i__2 = k - 1;
-                zlacgv_(&i__2, &a[k + a_dim1], lda);
+                aocl_lapack_zlacgv(&i__2, &a[k + a_dim1], lda);
                 i__2 = k - 1;
-                ztrmv_(uplo, "Conjugate transpose", "Non-unit", &i__2, &b[b_offset], ldb,
-                       &a[k + a_dim1], lda);
+                aocl_blas_ztrmv(uplo, "Conjugate transpose", "Non-unit", &i__2, &b[b_offset], ldb,
+                                &a[k + a_dim1], lda);
                 d__1 = akk * .5;
                 ct.r = d__1;
                 ct.i = 0.; // , expr subst
                 i__2 = k - 1;
-                zlacgv_(&i__2, &b[k + b_dim1], ldb);
+                aocl_lapack_zlacgv(&i__2, &b[k + b_dim1], ldb);
                 i__2 = k - 1;
-                zaxpy_(&i__2, &ct, &b[k + b_dim1], ldb, &a[k + a_dim1], lda);
+                aocl_blas_zaxpy(&i__2, &ct, &b[k + b_dim1], ldb, &a[k + a_dim1], lda);
                 i__2 = k - 1;
-                zher2_(uplo, &i__2, &c_b1, &a[k + a_dim1], lda, &b[k + b_dim1], ldb, &a[a_offset],
-                       lda);
+                aocl_blas_zher2(uplo, &i__2, &c_b1, &a[k + a_dim1], lda, &b[k + b_dim1], ldb,
+                                &a[a_offset], lda);
                 i__2 = k - 1;
-                zaxpy_(&i__2, &ct, &b[k + b_dim1], ldb, &a[k + a_dim1], lda);
+                aocl_blas_zaxpy(&i__2, &ct, &b[k + b_dim1], ldb, &a[k + a_dim1], lda);
                 i__2 = k - 1;
-                zlacgv_(&i__2, &b[k + b_dim1], ldb);
+                aocl_lapack_zlacgv(&i__2, &b[k + b_dim1], ldb);
                 i__2 = k - 1;
-                zdscal_(&i__2, &bkk, &a[k + a_dim1], lda);
+                aocl_blas_zdscal(&i__2, &bkk, &a[k + a_dim1], lda);
                 i__2 = k - 1;
-                zlacgv_(&i__2, &a[k + a_dim1], lda);
+                aocl_lapack_zlacgv(&i__2, &a[k + a_dim1], lda);
                 i__2 = k + k * a_dim1;
                 /* Computing 2nd power */
                 d__2 = bkk;

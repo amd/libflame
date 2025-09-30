@@ -31,9 +31,9 @@ FLA_Error FLA_Apply_G_rf_asm_var1( FLA_Obj G, FLA_Obj A )
 */
 {
 	FLA_Datatype datatype;
-	integer          k_G, m_A, n_A;
-	integer          rs_G, cs_G;
-	integer          rs_A, cs_A;
+	fla_dim_t          k_G, m_A, n_A;
+	fla_dim_t          rs_G, cs_G;
+	fla_dim_t          rs_A, cs_A;
 
 	datatype = FLA_Obj_datatype( A );
 
@@ -110,16 +110,16 @@ FLA_Error FLA_Apply_G_rf_asm_var1( FLA_Obj G, FLA_Obj A )
 }
 
 
-FLA_Error FLA_Apply_G_rf_ass_var1( integer       k_G,
-                                   integer       m_A,
-                                   integer       n_A,
-                                   scomplex* buff_G, integer rs_G, integer cs_G,
-                                   float*    buff_A, integer rs_A, integer cs_A )
+FLA_Error FLA_Apply_G_rf_ass_var1( fla_dim_t       k_G,
+                                   fla_dim_t       m_A,
+                                   fla_dim_t       n_A,
+                                   scomplex* buff_G, fla_dim_t rs_G, fla_dim_t cs_G,
+                                   float*    buff_A, fla_dim_t rs_A, fla_dim_t cs_A )
 {
 	float     one    = bl1_s1();
 	float     zero   = bl1_s0();
-	integer       nG_app = n_A - 1;
-	integer       l, j;
+	fla_dim_t       nG_app = n_A - 1;
+	fla_dim_t       l, j;
 	float     gamma;
 	float     sigma;
 	float*    a1;
@@ -161,16 +161,16 @@ FLA_Error FLA_Apply_G_rf_ass_var1( integer       k_G,
 	return FLA_SUCCESS;
 }
 
-FLA_Error FLA_Apply_G_rf_asd_var1( integer       k_G,
-                                   integer       m_A,
-                                   integer       n_A,
-                                   dcomplex* buff_G, integer rs_G, integer cs_G,
-                                   double*   buff_A, integer rs_A, integer cs_A )
+FLA_Error FLA_Apply_G_rf_asd_var1( fla_dim_t       k_G,
+                                   fla_dim_t       m_A,
+                                   fla_dim_t       n_A,
+                                   dcomplex* buff_G, fla_dim_t rs_G, fla_dim_t cs_G,
+                                   double*   buff_A, fla_dim_t rs_A, fla_dim_t cs_A )
 {
 	double    one    = bl1_d1();
 	double    zero   = bl1_d0();
-	integer       nG_app = n_A - 1;
-	integer       l, j;
+	fla_dim_t       nG_app = n_A - 1;
+	fla_dim_t       l, j;
 	double    gamma;
 	double    sigma;
 	double*   a1;
@@ -212,16 +212,16 @@ FLA_Error FLA_Apply_G_rf_asd_var1( integer       k_G,
 	return FLA_SUCCESS;
 }
 
-FLA_Error FLA_Apply_G_rf_asc_var1( integer       k_G,
-                                   integer       m_A,
-                                   integer       n_A,
-                                   scomplex* buff_G, integer rs_G, integer cs_G,
-                                   scomplex* buff_A, integer rs_A, integer cs_A )
+FLA_Error FLA_Apply_G_rf_asc_var1( fla_dim_t       k_G,
+                                   fla_dim_t       m_A,
+                                   fla_dim_t       n_A,
+                                   scomplex* buff_G, fla_dim_t rs_G, fla_dim_t cs_G,
+                                   scomplex* buff_A, fla_dim_t rs_A, fla_dim_t cs_A )
 {
 	float     one    = bl1_s1();
 	float     zero   = bl1_s0();
-	integer       nG_app = n_A - 1;
-	integer       l, j;
+	fla_dim_t       nG_app = n_A - 1;
+	fla_dim_t       l, j;
 	float     gamma;
 	float     sigma;
 	scomplex* a1;
@@ -264,16 +264,16 @@ FLA_Error FLA_Apply_G_rf_asc_var1( integer       k_G,
 }
 
 
-FLA_Error FLA_Apply_G_rf_asz_var1( integer       k_G,
-                                   integer       m_A,
-                                   integer       n_A,
-                                   dcomplex* buff_G, integer rs_G, integer cs_G,
-                                   dcomplex* buff_A, integer rs_A, integer cs_A )
+FLA_Error FLA_Apply_G_rf_asz_var1( fla_dim_t       k_G,
+                                   fla_dim_t       m_A,
+                                   fla_dim_t       n_A,
+                                   dcomplex* buff_G, fla_dim_t rs_G, fla_dim_t cs_G,
+                                   dcomplex* buff_A, fla_dim_t rs_A, fla_dim_t cs_A )
 {
 	double    one    = bl1_d1();
 	double    zero   = bl1_d0();
-	integer       nG_app = n_A - 1;
-	integer       l, j;
+	fla_dim_t       nG_app = n_A - 1;
+	fla_dim_t       l, j;
 	double    gamma;
 	double    sigma;
 	dcomplex* a1;

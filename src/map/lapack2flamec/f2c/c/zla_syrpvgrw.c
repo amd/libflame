@@ -117,23 +117,41 @@
 /* > \date December 2016 */
 /* > \ingroup complex16SYcomputational */
 /* ===================================================================== */
-doublereal zla_syrpvgrw_(char *uplo, integer *n, integer *info, doublecomplex *a, integer *lda,
-                         doublecomplex *af, integer *ldaf, integer *ipiv, doublereal *work)
+/** Generated wrapper function */
+doublereal zla_syrpvgrw_(char *uplo, aocl_int_t *n, aocl_int_t *info, dcomplex *a,
+                         aocl_int_t *lda, dcomplex *af, aocl_int_t *ldaf, aocl_int_t *ipiv,
+                         doublereal *work)
+{
+#if FLA_ENABLE_ILP64
+    return aocl_lapack_zla_syrpvgrw(uplo, n, info, a, lda, af, ldaf, ipiv, work);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t info_64 = *info;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t ldaf_64 = *ldaf;
+
+    return aocl_lapack_zla_syrpvgrw(uplo, &n_64, &info_64, a, &lda_64, af, &ldaf_64, ipiv, work);
+#endif
+}
+
+doublereal aocl_lapack_zla_syrpvgrw(char *uplo, aocl_int64_t *n, aocl_int64_t *info,
+                                    dcomplex *a, aocl_int64_t *lda, dcomplex *af,
+                                    aocl_int64_t *ldaf, aocl_int_t *ipiv, doublereal *work)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zla_syrpvgrw inputs: uplo %c, n %" FLA_IS ", lda %" FLA_IS ", ldaf %" FLA_IS
                       "",
                       *uplo, *n, *lda, *ldaf);
     /* System generated locals */
-    integer a_dim1, a_offset, af_dim1, af_offset, i__1, i__2, i__3;
+    aocl_int64_t a_dim1, a_offset, af_dim1, af_offset, i__1, i__2, i__3;
     doublereal ret_val, d__1, d__2, d__3, d__4;
     /* Builtin functions */
-    double d_imag(doublecomplex *);
+    double d_imag(dcomplex *);
     /* Local variables */
-    integer i__, j, k, kp;
+    aocl_int64_t i__, j, k, kp;
     doublereal tmp, amax, umax;
-    extern logical lsame_(char *, char *, integer, integer);
-    integer ncols;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    aocl_int64_t ncols;
     logical upper;
     doublereal rpvgrw;
     /* -- LAPACK computational routine (version 3.7.0) -- */

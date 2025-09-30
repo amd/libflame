@@ -19,14 +19,14 @@
 
 
 void time_Bidiag_UT_u(
-               integer variant, integer type, integer n_repeats, integer m, integer n, integer nb_alg,
+               aocl_int64_t variant, aocl_int64_t type, aocl_int64_t n_repeats, aocl_int64_t m, aocl_int64_t n, aocl_int64_t nb_alg,
                FLA_Obj A, FLA_Obj TU, FLA_Obj TV, FLA_Obj TTU, FLA_Obj TTV, FLA_Obj tu, FLA_Obj tv,
                double *dtime, double *diff, double *gflops );
 
 
 int main(int argc, char *argv[])
 {
-  integer 
+  aocl_int64_t 
     m_input, n_input,
     m, n,
     min_m_n,

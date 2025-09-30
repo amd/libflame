@@ -25,29 +25,29 @@
      w    = w + kappa2 * a2;
 */
 
-void bl1_sdotv2axpyv2b( integer       n,
-                        float*    a1, integer inc_a1,
-                        float*    a2, integer inc_a2,
-                        float*    x,  integer inc_x,
+void bl1_sdotv2axpyv2b( fla_dim_t       n,
+                        float*    a1, fla_dim_t inc_a1,
+                        float*    a2, fla_dim_t inc_a2,
+                        float*    x,  fla_dim_t inc_x,
                         float*    kappa1,
                         float*    kappa2,
                         float*    rho1,
                         float*    rho2,
-                        float*    w, integer inc_w )
+                        float*    w, fla_dim_t inc_w )
 {
 	bl1_abort();
 }
 
 
-void bl1_ddotv2axpyv2b( integer       n,
-                        double*   a1, integer inc_a1,
-                        double*   a2, integer inc_a2,
-                        double*   x,  integer inc_x,
+void bl1_ddotv2axpyv2b( fla_dim_t       n,
+                        double*   a1, fla_dim_t inc_a1,
+                        double*   a2, fla_dim_t inc_a2,
+                        double*   x,  fla_dim_t inc_x,
                         double*   kappa1,
                         double*   kappa2,
                         double*   rho1,
                         double*   rho2,
-                        double*   w, integer inc_w )
+                        double*   w, fla_dim_t inc_w )
 #if BLIS1_VECTOR_INTRINSIC_TYPE == BLIS1_SSE_INTRINSICS
 {
 	double*   restrict alpha1;
@@ -56,11 +56,11 @@ void bl1_ddotv2axpyv2b( integer       n,
 	double*   restrict omega1;
 	double             rho1_c;
 	double             rho2_c;
-	integer                i;
+	fla_dim_t                i;
 
-	integer                n_pre;
-	integer                n_run;
-	integer                n_left;
+	fla_dim_t                n_pre;
+	fla_dim_t                n_run;
+	fla_dim_t                n_left;
 	
 	v2df_t    k1v, rho1v;
 	v2df_t    k2v, rho2v;
@@ -198,11 +198,11 @@ void bl1_ddotv2axpyv2b( integer       n,
 	double             kappa2_c;
 	double             rho1_c;
 	double             rho2_c;
-	integer                i;
+	fla_dim_t                i;
 
-	integer                n_pre;
-	integer                n_run;
-	integer                n_left;
+	fla_dim_t                n_pre;
+	fla_dim_t                n_run;
+	fla_dim_t                n_left;
 	
 	if ( inc_a1 != 1 ||
 	     inc_a2 != 1 ||
@@ -320,36 +320,36 @@ void bl1_ddotv2axpyv2b( integer       n,
 #endif
 
 
-void bl1_cdotv2axpyv2b( integer       n,
-                        scomplex* a1, integer inc_a1,
-                        scomplex* a2, integer inc_a2,
-                        scomplex* x,  integer inc_x,
+void bl1_cdotv2axpyv2b( fla_dim_t       n,
+                        scomplex* a1, fla_dim_t inc_a1,
+                        scomplex* a2, fla_dim_t inc_a2,
+                        scomplex* x,  fla_dim_t inc_x,
                         scomplex* kappa1,
                         scomplex* kappa2,
                         scomplex* rho1,
                         scomplex* rho2,
-                        scomplex* w, integer inc_w )
+                        scomplex* w, fla_dim_t inc_w )
 {
 	bl1_abort();
 }
 
 
-void bl1_zdotv2axpyv2b( integer       n,
-                        dcomplex* a1, integer inc_a1,
-                        dcomplex* a2, integer inc_a2,
-                        dcomplex* x,  integer inc_x,
+void bl1_zdotv2axpyv2b( fla_dim_t       n,
+                        dcomplex* a1, fla_dim_t inc_a1,
+                        dcomplex* a2, fla_dim_t inc_a2,
+                        dcomplex* x,  fla_dim_t inc_x,
                         dcomplex* kappa1,
                         dcomplex* kappa2,
                         dcomplex* rho1,
                         dcomplex* rho2,
-                        dcomplex* w, integer inc_w )
+                        dcomplex* w, fla_dim_t inc_w )
 #if BLIS1_VECTOR_INTRINSIC_TYPE == BLIS1_SSE_INTRINSICS
 {
 	dcomplex* restrict alpha1;
 	dcomplex* restrict alpha2;
 	dcomplex* restrict chi1;
 	dcomplex* restrict omega1;
-	integer                i;
+	fla_dim_t                i;
 
 	v2df_t    kappa1v, kappa1rv;
 	v2df_t    kappa2v, kappa2rv;
@@ -457,7 +457,7 @@ void bl1_zdotv2axpyv2b( integer       n,
 	dcomplex           rho2_c;
 	dcomplex           kappa1_c;
 	dcomplex           kappa2_c;
-	integer                i;
+	fla_dim_t                i;
 
 	alpha1   = a1;
 	alpha2   = a2;

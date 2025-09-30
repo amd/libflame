@@ -169,9 +169,29 @@
 /* > \ingroup complex16GEcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void zla_geamv_(integer *trans, integer *m, integer *n, doublereal *alpha, doublecomplex *a,
-                integer *lda, doublecomplex *x, integer *incx, doublereal *beta, doublereal *y,
-                integer *incy)
+/** Generated wrapper function */
+void zla_geamv_(aocl_int_t *trans, aocl_int_t *m, aocl_int_t *n, doublereal *alpha,
+                dcomplex *a, aocl_int_t *lda, dcomplex *x, aocl_int_t *incx,
+                doublereal *beta, doublereal *y, aocl_int_t *incy)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_zla_geamv(trans, m, n, alpha, a, lda, x, incx, beta, y, incy);
+#else
+    aocl_int64_t trans_64 = *trans;
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t incx_64 = *incx;
+    aocl_int64_t incy_64 = *incy;
+
+    aocl_lapack_zla_geamv(&trans_64, &m_64, &n_64, alpha, a, &lda_64, x, &incx_64, beta, y,
+                          &incy_64);
+#endif
+}
+
+void aocl_lapack_zla_geamv(aocl_int64_t *trans, aocl_int64_t *m, aocl_int64_t *n, doublereal *alpha,
+                           dcomplex *a, aocl_int64_t *lda, dcomplex *x,
+                           aocl_int64_t *incx, doublereal *beta, doublereal *y, aocl_int64_t *incy)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zla_geamv inputs: trans %" FLA_IS ", m %" FLA_IS ", n %" FLA_IS
@@ -191,9 +211,6 @@ void zla_geamv_(integer *trans, integer *m, integer *n, doublereal *alpha, doubl
     aocl_int64_t lenx, leny;
     doublereal safe1;
     extern doublereal dlamch_(char *);
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -253,7 +270,7 @@ void zla_geamv_(integer *trans, integer *m, integer *n, doublereal *alpha, doubl
     }
     if(info != 0)
     {
-        xerbla_("ZLA_GEAMV ", &info, (ftnlen)10);
+        aocl_blas_xerbla("ZLA_GEAMV ", &info, (ftnlen)10);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }

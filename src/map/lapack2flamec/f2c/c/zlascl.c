@@ -140,8 +140,29 @@
 /* > \ingroup complex16OTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-void zlascl_(char *type__, integer *kl, integer *ku, doublereal *cfrom, doublereal *cto, integer *m,
-             integer *n, doublecomplex *a, integer *lda, integer *info)
+/** Generated wrapper function */
+void zlascl_(char *type__, aocl_int_t *kl, aocl_int_t *ku, doublereal *cfrom, doublereal *cto,
+             aocl_int_t *m, aocl_int_t *n, dcomplex *a, aocl_int_t *lda, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_zlascl(type__, kl, ku, cfrom, cto, m, n, a, lda, info);
+#else
+    aocl_int64_t kl_64 = *kl;
+    aocl_int64_t ku_64 = *ku;
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_zlascl(type__, &kl_64, &ku_64, cfrom, cto, &m_64, &n_64, a, &lda_64, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_zlascl(char *type__, aocl_int64_t *kl, aocl_int64_t *ku, doublereal *cfrom,
+                        doublereal *cto, aocl_int64_t *m, aocl_int64_t *n, dcomplex *a,
+                        aocl_int64_t *lda, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zlascl inputs: type__ %c, kl %" FLA_IS ", ku %" FLA_IS
@@ -155,15 +176,12 @@ void zlascl_(char *type__, integer *kl, integer *ku, doublereal *cfrom, doublere
     doublereal mul, cto1;
     logical done;
     doublereal ctoc;
-    extern logical lsame_(char *, char *, integer, integer);
-    integer itype;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    aocl_int64_t itype;
     doublereal cfrom1;
     extern doublereal dlamch_(char *);
     doublereal cfromc;
     extern logical disnan_(doublereal *);
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal bignum, smlnum;
     /* -- LAPACK auxiliary routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -273,7 +291,7 @@ void zlascl_(char *type__, integer *kl, integer *ku, doublereal *cfrom, doublere
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("ZLASCL", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("ZLASCL", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }

@@ -16,14 +16,14 @@
 #include "blis.h"
 #endif
 
-void bl1_sapdiagmv( side1_t side, conj1_t conj, integer m, integer n, float* x, integer incx, float* a, integer a_rs, integer a_cs )
+void bl1_sapdiagmv( side1_t side, conj1_t conj, fla_dim_t m, fla_dim_t n, float* x, fla_dim_t incx, float* a, fla_dim_t a_rs, fla_dim_t a_cs )
 {
 	float*    chi;
 	float*    a_begin;
-	integer       inca, lda;
-	integer       n_iter;
-	integer       n_elem;
-	integer       j;
+	fla_dim_t       inca, lda;
+	fla_dim_t       n_iter;
+	fla_dim_t       n_elem;
+	fla_dim_t       j;
 
 	// Return early if possible.
 	if ( bl1_zero_dim2( m, n ) ) return;
@@ -71,14 +71,14 @@ void bl1_sapdiagmv( side1_t side, conj1_t conj, integer m, integer n, float* x, 
 	}
 }
 
-void bl1_dapdiagmv( side1_t side, conj1_t conj, integer m, integer n, double* x, integer incx, double* a, integer a_rs, integer a_cs )
+void bl1_dapdiagmv( side1_t side, conj1_t conj, fla_dim_t m, fla_dim_t n, double* x, fla_dim_t incx, double* a, fla_dim_t a_rs, fla_dim_t a_cs )
 {
 	double*   chi;
 	double*   a_begin;
-	integer       inca, lda;
-	integer       n_iter;
-	integer       n_elem;
-	integer       j;
+	fla_dim_t       inca, lda;
+	fla_dim_t       n_iter;
+	fla_dim_t       n_elem;
+	fla_dim_t       j;
 
 	// Return early if possible.
 	if ( bl1_zero_dim2( m, n ) ) return;
@@ -126,14 +126,14 @@ void bl1_dapdiagmv( side1_t side, conj1_t conj, integer m, integer n, double* x,
 	}
 }
 
-void bl1_csapdiagmv( side1_t side, conj1_t conj, integer m, integer n, float* x, integer incx, scomplex* a, integer a_rs, integer a_cs )
+void bl1_csapdiagmv( side1_t side, conj1_t conj, fla_dim_t m, fla_dim_t n, float* x, fla_dim_t incx, scomplex* a, fla_dim_t a_rs, fla_dim_t a_cs )
 {
 	float*    chi;
 	scomplex* a_begin;
-	integer       inca, lda;
-	integer       n_iter;
-	integer       n_elem;
-	integer       j;
+	fla_dim_t       inca, lda;
+	fla_dim_t       n_iter;
+	fla_dim_t       n_elem;
+	fla_dim_t       j;
 
 	// Return early if possible.
 	if ( bl1_zero_dim2( m, n ) ) return;
@@ -181,14 +181,14 @@ void bl1_csapdiagmv( side1_t side, conj1_t conj, integer m, integer n, float* x,
 	}
 }
 
-void bl1_capdiagmv( side1_t side, conj1_t conj, integer m, integer n, scomplex* x, integer incx, scomplex* a, integer a_rs, integer a_cs )
+void bl1_capdiagmv( side1_t side, conj1_t conj, fla_dim_t m, fla_dim_t n, scomplex* x, fla_dim_t incx, scomplex* a, fla_dim_t a_rs, fla_dim_t a_cs )
 {
 	scomplex* chi;
 	scomplex* a_begin;
-	integer       inca, lda;
-	integer       n_iter;
-	integer       n_elem;
-	integer       j;
+	fla_dim_t       inca, lda;
+	fla_dim_t       n_iter;
+	fla_dim_t       n_elem;
+	fla_dim_t       j;
 
 	// Return early if possible.
 	if ( bl1_zero_dim2( m, n ) ) return;
@@ -236,14 +236,14 @@ void bl1_capdiagmv( side1_t side, conj1_t conj, integer m, integer n, scomplex* 
 	}
 }
 
-void bl1_zdapdiagmv( side1_t side, conj1_t conj, integer m, integer n, double* x, integer incx, dcomplex* a, integer a_rs, integer a_cs )
+void bl1_zdapdiagmv( side1_t side, conj1_t conj, fla_dim_t m, fla_dim_t n, double* x, fla_dim_t incx, dcomplex* a, fla_dim_t a_rs, fla_dim_t a_cs )
 {
 	double*   chi;
 	dcomplex* a_begin;
-	integer       inca, lda;
-	integer       n_iter;
-	integer       n_elem;
-	integer       j;
+	fla_dim_t       inca, lda;
+	fla_dim_t       n_iter;
+	fla_dim_t       n_elem;
+	fla_dim_t       j;
 
 	// Return early if possible.
 	if ( bl1_zero_dim2( m, n ) ) return;
@@ -291,14 +291,14 @@ void bl1_zdapdiagmv( side1_t side, conj1_t conj, integer m, integer n, double* x
 	}
 }
 
-void bl1_zapdiagmv( side1_t side, conj1_t conj, integer m, integer n, dcomplex* x, integer incx, dcomplex* a, integer a_rs, integer a_cs )
+void bl1_zapdiagmv( side1_t side, conj1_t conj, fla_dim_t m, fla_dim_t n, dcomplex* x, fla_dim_t incx, dcomplex* a, fla_dim_t a_rs, fla_dim_t a_cs )
 {
 	dcomplex* chi;
 	dcomplex* a_begin;
-	integer       inca, lda;
-	integer       n_iter;
-	integer       n_elem;
-	integer       j;
+	fla_dim_t       inca, lda;
+	fla_dim_t       n_iter;
+	fla_dim_t       n_elem;
+	fla_dim_t       j;
 
 	// Return early if possible.
 	if ( bl1_zero_dim2( m, n ) ) return;

@@ -121,8 +121,24 @@ IPIV(i) = i indicates a row interchange was not */
 /* > \ingroup complex16GTcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void zgttrf_(integer *n, doublecomplex *dl, doublecomplex *d__, doublecomplex *du,
-             doublecomplex *du2, integer *ipiv, integer *info)
+/** Generated wrapper function */
+void zgttrf_(aocl_int_t *n, dcomplex *dl, dcomplex *d__, dcomplex *du,
+             dcomplex *du2, aocl_int_t *ipiv, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_zgttrf(n, dl, d__, du, du2, ipiv, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_zgttrf(&n_64, dl, d__, du, du2, ipiv, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_zgttrf(aocl_int64_t *n, dcomplex *dl, dcomplex *d__, dcomplex *du,
+                        dcomplex *du2, aocl_int_t *ipiv, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zgttrf inputs: n %" FLA_IS "", *n);
@@ -135,11 +151,8 @@ void zgttrf_(integer *n, doublecomplex *dl, doublecomplex *d__, doublecomplex *d
     double d_imag(dcomplex *);
     void z_div(dcomplex *, dcomplex *, dcomplex *);
     /* Local variables */
-    integer i__;
-    doublecomplex fact, temp;
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    aocl_int64_t i__;
+    dcomplex fact, temp;
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -174,7 +187,7 @@ void zgttrf_(integer *n, doublecomplex *dl, doublecomplex *d__, doublecomplex *d
     {
         *info = -1;
         i__1 = -(*info);
-        xerbla_("ZGTTRF", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("ZGTTRF", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -265,10 +278,10 @@ void zgttrf_(integer *n, doublecomplex *dl, doublecomplex *d__, doublecomplex *d
             z__2.real = -fact.real;
             z__2.imag = -fact.imag; // , expr subst
             i__3 = i__ + 1;
-            z__1.real = z__2.real * du[i__3].real - z__2.imag * du[i__3].imag;
-            z__1.imag = z__2.real * du[i__3].imag + z__2.imag * du[i__3].real; // , expr subst
-            du[i__2].real = z__1.real;
-            du[i__2].imag = z__1.imag; // , expr subst
+            z__1.r = z__2.r * du[i__3].r - z__2.i * du[i__3].i;
+            z__1.i = z__2.r * du[i__3].i + z__2.i * du[i__3].r; // , expr subst
+            du[i__2].r = z__1.r;
+            du[i__2].i = z__1.i; // , expr subst
             ipiv[i__] = (aocl_int_t)(i__ + 1);
         }
         /* L30: */
@@ -323,12 +336,12 @@ void zgttrf_(integer *n, doublecomplex *dl, doublecomplex *d__, doublecomplex *d
             du[i__1].imag = d__[i__2].imag; // , expr subst
             i__1 = i__ + 1;
             i__2 = i__ + 1;
-            z__2.real = fact.real * d__[i__2].real - fact.imag * d__[i__2].imag;
-            z__2.imag = fact.real * d__[i__2].imag + fact.imag * d__[i__2].real; // , expr subst
-            z__1.real = temp.real - z__2.real;
-            z__1.imag = temp.imag - z__2.imag; // , expr subst
-            d__[i__1].real = z__1.real;
-            d__[i__1].imag = z__1.imag; // , expr subst
+            z__2.r = fact.r * d__[i__2].r - fact.i * d__[i__2].i;
+            z__2.i = fact.r * d__[i__2].i + fact.i * d__[i__2].r; // , expr subst
+            z__1.r = temp.r - z__2.r;
+            z__1.i = temp.i - z__2.i; // , expr subst
+            d__[i__1].r = z__1.r;
+            d__[i__1].i = z__1.i; // , expr subst
             ipiv[i__] = (aocl_int_t)(i__ + 1);
         }
     }

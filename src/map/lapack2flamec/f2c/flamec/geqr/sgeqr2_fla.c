@@ -1,7 +1,7 @@
 /* sgeqr2.f -- translated by f2c (version 20000121). You must link the resulting object file with
  * the libraries: -lf2c -lm (in that order) */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
+static aocl_int64_t c__1 = 1;
 /* > \brief \b SGEQR2 computes the QR factorization of a general rectangular matrix using an
  * unblocked algorit hm. */
 /* =========== DOCUMENTATION =========== */
@@ -128,17 +128,13 @@ v(i+1:m) is stored on exit in A(i+1:m,i), */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void sgeqr2_fla(integer *m, integer *n, real *a, integer *lda, real *tau, real *work, integer *info)
+void sgeqr2_fla(aocl_int64_t *m, aocl_int64_t *n, real *a, aocl_int64_t *lda, real *tau, real *work,
+                aocl_int64_t *info)
 {
     /* System generated locals */
-    integer a_dim1, a_offset, i__1, i__2, i__3;
+    aocl_int64_t a_dim1, a_offset, i__1, i__2, i__3;
     /* Local variables */
-    integer i__, k;
-    extern /* Subroutine */
-        void
-        slarf_(char *, integer *, integer *, real *, integer *, real *, real *, integer *, real *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
-        slarfg_(integer *, real *, real *, integer *, real *);
+    aocl_int64_t i__, k;
     real aii;
     /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -181,7 +177,7 @@ void sgeqr2_fla(integer *m, integer *n, real *a, integer *lda, real *tau, real *
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("SGEQR2", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("SGEQR2", &i__1, (ftnlen)6);
         return;
     }
     k = fla_min(*m, *n);
@@ -192,8 +188,8 @@ void sgeqr2_fla(integer *m, integer *n, real *a, integer *lda, real *tau, real *
         i__2 = *m - i__ + 1;
         /* Computing MIN */
         i__3 = i__ + 1;
-        slarfg_(&i__2, &a[i__ + i__ * a_dim1], &a[fla_min(i__3, *m) + i__ * a_dim1], &c__1,
-                &tau[i__]);
+        aocl_lapack_slarfg(&i__2, &a[i__ + i__ * a_dim1], &a[fla_min(i__3, *m) + i__ * a_dim1],
+                           &c__1, &tau[i__]);
         if(i__ < *n)
         {
             /* Apply H(i) to A(i:m,i+1:n) from the left */
@@ -201,8 +197,8 @@ void sgeqr2_fla(integer *m, integer *n, real *a, integer *lda, real *tau, real *
             a[i__ + i__ * a_dim1] = 1.f;
             i__2 = *m - i__ + 1;
             i__3 = *n - i__;
-            slarf_("Left", &i__2, &i__3, &a[i__ + i__ * a_dim1], &c__1, &tau[i__],
-                   &a[i__ + (i__ + 1) * a_dim1], lda, &work[1]);
+            aocl_lapack_slarf("Left", &i__2, &i__3, &a[i__ + i__ * a_dim1], &c__1, &tau[i__],
+                              &a[i__ + (i__ + 1) * a_dim1], lda, &work[1]);
             a[i__ + i__ * a_dim1] = aii;
         }
         /* L10: */

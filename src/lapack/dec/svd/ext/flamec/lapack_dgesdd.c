@@ -7,10 +7,10 @@
  *     Copyright (c) 2022-2025 Advanced Micro Devices, Inc.  All rights reserved.
  */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c_n1 = -1;
-static integer c__0 = 0;
+static aocl_int64_t c_n1 = -1;
+static aocl_int64_t c__0 = 0;
 static doublereal c_b63 = 0.;
-static integer c__1 = 1;
+static aocl_int64_t c__1 = 1;
 static doublereal c_b84 = 1.;
 /* > \brief \b DGESDD */
 /* =========== DOCUMENTATION =========== */
@@ -232,75 +232,48 @@ see comments inside code. */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int lapack_dgesdd(char *jobz, integer *m, integer *n, doublereal *a, integer *lda, doublereal *s,
-                   doublereal *u, integer *ldu, doublereal *vt, integer *ldvt, doublereal *work,
-                   integer *lwork, integer *iwork, integer *info)
+int lapack_dgesdd(char *jobz, aocl_int64_t *m, aocl_int64_t *n, doublereal *a, aocl_int64_t *lda,
+                  doublereal *s, doublereal *u, aocl_int64_t *ldu, doublereal *vt,
+                  aocl_int64_t *ldvt, doublereal *work, aocl_int64_t *lwork, aocl_int_t *iwork,
+                  aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dgesdd inputs: jobz %c, m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS
                       ", ldu %" FLA_IS ", ldvt %" FLA_IS ", lwork %" FLA_IS "",
                       *jobz, *m, *n, *lda, *ldu, *ldvt, *lwork);
     /* System generated locals */
-    integer a_dim1, a_offset, u_dim1, u_offset, vt_dim1, vt_offset, i__1, i__2, i__3;
+    aocl_int64_t a_dim1, a_offset, u_dim1, u_offset, vt_dim1, vt_offset, i__1, i__2, i__3;
     /* Builtin functions */
     double sqrt(doublereal);
     /* Local variables */
-    integer lwork_dorglq_mn__, lwork_dorglq_nn__, lwork_dorgqr_mm__, lwork_dorgqr_mn__, i__, ie, il,
-        ir, iu, blk;
+    aocl_int64_t lwork_dorglq_mn__, lwork_dorglq_nn__, lwork_dorgqr_mm__, lwork_dorgqr_mn__, i__,
+        ie, il, ir, iu, blk;
     doublereal dum[1], eps;
-    integer ivt, iscl;
+    aocl_int64_t ivt, iscl;
     doublereal anrm;
-    integer idum[1], ierr, itau, lwork_dormbr_qln_mm__, lwork_dormbr_qln_mn__,
+    aocl_int64_t ierr, itau, lwork_dormbr_qln_mm__, lwork_dormbr_qln_mn__,
         lwork_dormbr_qln_nn__, lwork_dormbr_prt_mm__, lwork_dormbr_prt_mn__, lwork_dormbr_prt_nn__;
-    extern /* Subroutine */
-        void
-        dgemm_(char *, char *, integer *, integer *, integer *, doublereal *, doublereal *,
-               integer *, doublereal *, integer *, doublereal *, doublereal *, integer *);
-    extern logical lsame_(char *, char *, integer, integer);
-    integer chunk, minmn, wrkbl, itaup, itauq, mnthr;
+    aocl_int_t idum[1];
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    aocl_int64_t chunk, minmn, wrkbl, itaup, itauq, mnthr;
     logical wntqa;
-    integer nwork;
+    aocl_int64_t nwork;
     logical wntqn, wntqo, wntqs;
-    extern /* Subroutine */
-        void
-        dbdsdc_(char *, char *, integer *, doublereal *, doublereal *, doublereal *, integer *,
-                doublereal *, integer *, doublereal *, integer *, doublereal *, integer *,
-                integer *);
-    extern int lapack_dgebrd(integer *, integer *, doublereal *, integer *, doublereal *,
-                             doublereal *, doublereal *, doublereal *, doublereal *, integer *,
-                             integer *);
-    extern doublereal dlamch_(char *),
-        dlange_(char *, integer *, integer *, doublereal *, integer *, doublereal *);
-    integer bdspac;
-    extern /* Subroutine */
-        void
-        dgelqf_(integer *, integer *, doublereal *, integer *, doublereal *, doublereal *,
-                integer *, integer *),
-        dlascl_(char *, integer *, integer *, doublereal *, doublereal *, integer *, integer *,
-                doublereal *, integer *, integer *),
-        dgeqrf_(integer *, integer *, doublereal *, integer *, doublereal *, doublereal *,
-                integer *, integer *),
-        dlacpy_(char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *),
-        dlaset_(char *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
-        dorgbr_(char *, integer *, integer *, integer *, doublereal *, integer *, doublereal *,
-                doublereal *, integer *, integer *);
+    extern int lapack_dgebrd(aocl_int64_t *, aocl_int64_t *, doublereal *, aocl_int64_t *,
+                             doublereal *, doublereal *, doublereal *, doublereal *, doublereal *,
+                             aocl_int64_t *, aocl_int64_t *);
+    extern int lapack_dormbr(char *vect, char *side, char *trans, aocl_int64_t *m, aocl_int64_t *n,
+                  aocl_int64_t *k, doublereal *a, aocl_int64_t *lda, doublereal *tau,
+                  doublereal *c__, aocl_int64_t *ldc, doublereal *work, aocl_int64_t *lwork,
+                  aocl_int64_t *info);
+    extern doublereal dlamch_(char *);
+    aocl_int64_t bdspac;
     extern logical disnan_(doublereal *);
     doublereal bignum;
-    extern /* Subroutine */
-        int
-        lapack_dormbr(char *, char *, char *, integer *, integer *, integer *, doublereal *,
-                      integer *, doublereal *, doublereal *, integer *, doublereal *, integer *,
-                      integer *),
-        dorglq_(integer *, integer *, integer *, doublereal *, integer *, doublereal *,
-                doublereal *, integer *, integer *),
-        dorgqr_(integer *, integer *, integer *, doublereal *, integer *, doublereal *,
-                doublereal *, integer *, integer *);
-    integer ldwrkl, ldwrkr, minwrk, ldwrku, maxwrk, ldwkvt;
+    aocl_int64_t ldwrkl, ldwrkr, minwrk, ldwrku, maxwrk, ldwkvt;
     doublereal smlnum;
     logical wntqas, lquery;
-    extern doublereal droundup_lwork(integer *);
-    integer lwork_dgebrd_mm__, lwork_dgebrd_mn__, lwork_dgebrd_nn__, lwork_dgelqf_mn__,
+    aocl_int64_t lwork_dgebrd_mm__, lwork_dgebrd_mn__, lwork_dgebrd_nn__, lwork_dgelqf_mn__,
         lwork_dgeqrf_mn__;
     /* -- LAPACK driver routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -382,7 +355,7 @@ int lapack_dgesdd(char *jobz, integer *m, integer *n, doublereal *a, integer *ld
         minwrk = 1;
         maxwrk = 1;
         bdspac = 0;
-        mnthr = (integer)(minmn * 11. / 6.);
+        mnthr = (aocl_int64_t)(minmn * 11. / 6.);
         if(*m >= *n && minmn > 0)
         {
             /* Compute space needed for DBDSDC */
@@ -398,24 +371,24 @@ int lapack_dgesdd(char *jobz, integer *m, integer *n, doublereal *a, integer *ld
             }
             /* Compute space preferred for each routine */
             lapack_dgebrd(m, n, dum, m, dum, dum, dum, dum, dum, &c_n1, &ierr);
-            lwork_dgebrd_mn__ = (integer)dum[0];
+            lwork_dgebrd_mn__ = (aocl_int64_t)dum[0];
             lapack_dgebrd(n, n, dum, n, dum, dum, dum, dum, dum, &c_n1, &ierr);
-            lwork_dgebrd_nn__ = (integer)dum[0];
-            dgeqrf_(m, n, dum, m, dum, dum, &c_n1, &ierr);
-            lwork_dgeqrf_mn__ = (integer)dum[0];
-            dorgbr_("Q", n, n, n, dum, n, dum, dum, &c_n1, &ierr);
-            dorgqr_(m, m, n, dum, m, dum, dum, &c_n1, &ierr);
-            lwork_dorgqr_mm__ = (integer)dum[0];
-            dorgqr_(m, n, n, dum, m, dum, dum, &c_n1, &ierr);
-            lwork_dorgqr_mn__ = (integer)dum[0];
+            lwork_dgebrd_nn__ = (aocl_int64_t)dum[0];
+            aocl_lapack_dgeqrf(m, n, dum, m, dum, dum, &c_n1, &ierr);
+            lwork_dgeqrf_mn__ = (aocl_int64_t)dum[0];
+            aocl_lapack_dorgbr("Q", n, n, n, dum, n, dum, dum, &c_n1, &ierr);
+            aocl_lapack_dorgqr(m, m, n, dum, m, dum, dum, &c_n1, &ierr);
+            lwork_dorgqr_mm__ = (aocl_int64_t)dum[0];
+            aocl_lapack_dorgqr(m, n, n, dum, m, dum, dum, &c_n1, &ierr);
+            lwork_dorgqr_mn__ = (aocl_int64_t)dum[0];
             lapack_dormbr("P", "R", "T", n, n, n, dum, n, dum, dum, n, dum, &c_n1, &ierr);
-            lwork_dormbr_prt_nn__ = (integer)dum[0];
+            lwork_dormbr_prt_nn__ = (aocl_int64_t)dum[0];
             lapack_dormbr("Q", "L", "N", n, n, n, dum, n, dum, dum, n, dum, &c_n1, &ierr);
-            lwork_dormbr_qln_nn__ = (integer)dum[0];
+            lwork_dormbr_qln_nn__ = (aocl_int64_t)dum[0];
             lapack_dormbr("Q", "L", "N", m, n, n, dum, m, dum, dum, m, dum, &c_n1, &ierr);
-            lwork_dormbr_qln_mn__ = (integer)dum[0];
+            lwork_dormbr_qln_mn__ = (aocl_int64_t)dum[0];
             lapack_dormbr("Q", "L", "N", m, m, n, dum, m, dum, dum, m, dum, &c_n1, &ierr);
-            lwork_dormbr_qln_mm__ = (integer)dum[0];
+            lwork_dormbr_qln_mm__ = (aocl_int64_t)dum[0];
             if(*m >= mnthr)
             {
                 if(wntqn)
@@ -602,24 +575,24 @@ int lapack_dgesdd(char *jobz, integer *m, integer *n, doublereal *a, integer *ld
             }
             /* Compute space preferred for each routine */
             lapack_dgebrd(m, n, dum, m, dum, dum, dum, dum, dum, &c_n1, &ierr);
-            lwork_dgebrd_mn__ = (integer)dum[0];
+            lwork_dgebrd_mn__ = (aocl_int64_t)dum[0];
             lapack_dgebrd(m, m, &a[a_offset], m, &s[1], dum, dum, dum, dum, &c_n1, &ierr);
-            lwork_dgebrd_mm__ = (integer)dum[0];
-            dgelqf_(m, n, &a[a_offset], m, dum, dum, &c_n1, &ierr);
-            lwork_dgelqf_mn__ = (integer)dum[0];
-            dorglq_(n, n, m, dum, n, dum, dum, &c_n1, &ierr);
-            lwork_dorglq_nn__ = (integer)dum[0];
-            dorglq_(m, n, m, &a[a_offset], m, dum, dum, &c_n1, &ierr);
-            lwork_dorglq_mn__ = (integer)dum[0];
-            dorgbr_("P", m, m, m, &a[a_offset], n, dum, dum, &c_n1, &ierr);
+            lwork_dgebrd_mm__ = (aocl_int64_t)dum[0];
+            aocl_lapack_dgelqf(m, n, &a[a_offset], m, dum, dum, &c_n1, &ierr);
+            lwork_dgelqf_mn__ = (aocl_int64_t)dum[0];
+            aocl_lapack_dorglq(n, n, m, dum, n, dum, dum, &c_n1, &ierr);
+            lwork_dorglq_nn__ = (aocl_int64_t)dum[0];
+            aocl_lapack_dorglq(m, n, m, &a[a_offset], m, dum, dum, &c_n1, &ierr);
+            lwork_dorglq_mn__ = (aocl_int64_t)dum[0];
+            aocl_lapack_dorgbr("P", m, m, m, &a[a_offset], n, dum, dum, &c_n1, &ierr);
             lapack_dormbr("P", "R", "T", m, m, m, dum, m, dum, dum, m, dum, &c_n1, &ierr);
-            lwork_dormbr_prt_mm__ = (integer)dum[0];
+            lwork_dormbr_prt_mm__ = (aocl_int64_t)dum[0];
             lapack_dormbr("P", "R", "T", m, n, m, dum, m, dum, dum, m, dum, &c_n1, &ierr);
-            lwork_dormbr_prt_mn__ = (integer)dum[0];
+            lwork_dormbr_prt_mn__ = (aocl_int64_t)dum[0];
             lapack_dormbr("P", "R", "T", n, n, m, dum, n, dum, dum, n, dum, &c_n1, &ierr);
-            lwork_dormbr_prt_nn__ = (integer)dum[0];
+            lwork_dormbr_prt_nn__ = (aocl_int64_t)dum[0];
             lapack_dormbr("Q", "L", "N", m, m, m, dum, m, dum, dum, m, dum, &c_n1, &ierr);
-            lwork_dormbr_qln_mm__ = (integer)dum[0];
+            lwork_dormbr_qln_mm__ = (aocl_int64_t)dum[0];
             if(*n >= mnthr)
             {
                 if(wntqn)
@@ -792,7 +765,7 @@ int lapack_dgesdd(char *jobz, integer *m, integer *n, doublereal *a, integer *ld
             }
         }
         maxwrk = fla_max(maxwrk, minwrk);
-        work[1] = droundup_lwork(&maxwrk);
+        work[1] = aocl_lapack_droundup_lwork(&maxwrk);
         if(*lwork < minwrk && !lquery)
         {
             *info = -12;
@@ -801,7 +774,7 @@ int lapack_dgesdd(char *jobz, integer *m, integer *n, doublereal *a, integer *ld
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("DGESDD", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("DGESDD", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return 0;
     }
@@ -821,7 +794,7 @@ int lapack_dgesdd(char *jobz, integer *m, integer *n, doublereal *a, integer *ld
     smlnum = sqrt(dlamch_("S")) / eps;
     bignum = 1. / smlnum;
     /* Scale A if max element outside range [SMLNUM,BIGNUM] */
-    anrm = dlange_("M", m, n, &a[a_offset], lda, dum);
+    anrm = aocl_lapack_dlange("M", m, n, &a[a_offset], lda, dum);
     if(disnan_(&anrm))
     {
         *info = -4;
@@ -832,12 +805,12 @@ int lapack_dgesdd(char *jobz, integer *m, integer *n, doublereal *a, integer *ld
     if(anrm > 0. && anrm < smlnum)
     {
         iscl = 1;
-        dlascl_("G", &c__0, &c__0, &anrm, &smlnum, m, n, &a[a_offset], lda, &ierr);
+        aocl_lapack_dlascl("G", &c__0, &c__0, &anrm, &smlnum, m, n, &a[a_offset], lda, &ierr);
     }
     else if(anrm > bignum)
     {
         iscl = 1;
-        dlascl_("G", &c__0, &c__0, &anrm, &bignum, m, n, &a[a_offset], lda, &ierr);
+        aocl_lapack_dlascl("G", &c__0, &c__0, &anrm, &bignum, m, n, &a[a_offset], lda, &ierr);
     }
     if(*m >= *n)
     {
@@ -856,11 +829,12 @@ int lapack_dgesdd(char *jobz, integer *m, integer *n, doublereal *a, integer *ld
                 /* Workspace: need N [tau] + N [work] */
                 /* Workspace: prefer N [tau] + N*NB [work] */
                 i__1 = *lwork - nwork + 1;
-                dgeqrf_(m, n, &a[a_offset], lda, &work[itau], &work[nwork], &i__1, &ierr);
+                aocl_lapack_dgeqrf(m, n, &a[a_offset], lda, &work[itau], &work[nwork], &i__1,
+                                   &ierr);
                 /* Zero out below R */
                 i__1 = *n - 1;
                 i__2 = *n - 1;
-                dlaset_("L", &i__1, &i__2, &c_b63, &c_b63, &a[a_dim1 + 2], lda);
+                aocl_lapack_dlaset("L", &i__1, &i__2, &c_b63, &c_b63, &a[a_dim1 + 2], lda);
                 ie = 1;
                 itauq = ie + *n;
                 itaup = itauq + *n;
@@ -874,8 +848,8 @@ int lapack_dgesdd(char *jobz, integer *m, integer *n, doublereal *a, integer *ld
                 nwork = ie + *n;
                 /* Perform bidiagonal SVD, computing singular values only */
                 /* Workspace: need N [e] + BDSPAC */
-                dbdsdc_("U", "N", n, &s[1], &work[ie], dum, &c__1, dum, &c__1, dum, idum,
-                        &work[nwork], &iwork[1], info);
+                aocl_lapack_dbdsdc("U", "N", n, &s[1], &work[ie], dum, &c__1, dum, &c__1, dum, idum,
+                                   &work[nwork], &iwork[1], info);
             }
             else if(wntqo)
             {
@@ -898,17 +872,19 @@ int lapack_dgesdd(char *jobz, integer *m, integer *n, doublereal *a, integer *ld
                 /* Workspace: need N*N [R] + N [tau] + N [work] */
                 /* Workspace: prefer N*N [R] + N [tau] + N*NB [work] */
                 i__1 = *lwork - nwork + 1;
-                dgeqrf_(m, n, &a[a_offset], lda, &work[itau], &work[nwork], &i__1, &ierr);
+                aocl_lapack_dgeqrf(m, n, &a[a_offset], lda, &work[itau], &work[nwork], &i__1,
+                                   &ierr);
                 /* Copy R to WORK(IR), zeroing out below it */
-                dlacpy_("U", n, n, &a[a_offset], lda, &work[ir], &ldwrkr);
+                aocl_lapack_dlacpy("U", n, n, &a[a_offset], lda, &work[ir], &ldwrkr);
                 i__1 = *n - 1;
                 i__2 = *n - 1;
-                dlaset_("L", &i__1, &i__2, &c_b63, &c_b63, &work[ir + 1], &ldwrkr);
+                aocl_lapack_dlaset("L", &i__1, &i__2, &c_b63, &c_b63, &work[ir + 1], &ldwrkr);
                 /* Generate Q in A */
                 /* Workspace: need N*N [R] + N [tau] + N [work] */
                 /* Workspace: prefer N*N [R] + N [tau] + N*NB [work] */
                 i__1 = *lwork - nwork + 1;
-                dorgqr_(m, n, n, &a[a_offset], lda, &work[itau], &work[nwork], &i__1, &ierr);
+                aocl_lapack_dorgqr(m, n, n, &a[a_offset], lda, &work[itau], &work[nwork], &i__1,
+                                   &ierr);
                 ie = itau;
                 itauq = ie + *n;
                 itaup = itauq + *n;
@@ -926,8 +902,8 @@ int lapack_dgesdd(char *jobz, integer *m, integer *n, doublereal *a, integer *ld
                 /* of bidiagonal matrix in WORK(IU) and computing right */
                 /* singular vectors of bidiagonal matrix in VT */
                 /* Workspace: need N*N [R] + 3*N [e, tauq, taup] + N*N [U] + BDSPAC */
-                dbdsdc_("U", "I", n, &s[1], &work[ie], &work[iu], n, &vt[vt_offset], ldvt, dum,
-                        idum, &work[nwork], &iwork[1], info);
+                aocl_lapack_dbdsdc("U", "I", n, &s[1], &work[ie], &work[iu], n, &vt[vt_offset],
+                                   ldvt, dum, idum, &work[nwork], &iwork[1], info);
                 /* Overwrite WORK(IU) by left singular vectors of R */
                 /* and VT by right singular vectors of R */
                 /* Workspace: need N*N [R] + 3*N [e, tauq, taup] + N*N [U] + N [work] */
@@ -949,9 +925,9 @@ int lapack_dgesdd(char *jobz, integer *m, integer *n, doublereal *a, integer *ld
                     /* Computing MIN */
                     i__3 = *m - i__ + 1;
                     chunk = fla_min(i__3, ldwrkr);
-                    dgemm_("N", "N", &chunk, n, n, &c_b84, &a[i__ + a_dim1], lda, &work[iu], n,
-                           &c_b63, &work[ir], &ldwrkr);
-                    dlacpy_("F", &chunk, n, &work[ir], &ldwrkr, &a[i__ + a_dim1], lda);
+                    aocl_blas_dgemm("N", "N", &chunk, n, n, &c_b84, &a[i__ + a_dim1], lda,
+                                    &work[iu], n, &c_b63, &work[ir], &ldwrkr);
+                    aocl_lapack_dlacpy("F", &chunk, n, &work[ir], &ldwrkr, &a[i__ + a_dim1], lda);
                     /* L10: */
                 }
             }
@@ -969,17 +945,19 @@ int lapack_dgesdd(char *jobz, integer *m, integer *n, doublereal *a, integer *ld
                 /* Workspace: need N*N [R] + N [tau] + N [work] */
                 /* Workspace: prefer N*N [R] + N [tau] + N*NB [work] */
                 i__2 = *lwork - nwork + 1;
-                dgeqrf_(m, n, &a[a_offset], lda, &work[itau], &work[nwork], &i__2, &ierr);
+                aocl_lapack_dgeqrf(m, n, &a[a_offset], lda, &work[itau], &work[nwork], &i__2,
+                                   &ierr);
                 /* Copy R to WORK(IR), zeroing out below it */
-                dlacpy_("U", n, n, &a[a_offset], lda, &work[ir], &ldwrkr);
+                aocl_lapack_dlacpy("U", n, n, &a[a_offset], lda, &work[ir], &ldwrkr);
                 i__2 = *n - 1;
                 i__1 = *n - 1;
-                dlaset_("L", &i__2, &i__1, &c_b63, &c_b63, &work[ir + 1], &ldwrkr);
+                aocl_lapack_dlaset("L", &i__2, &i__1, &c_b63, &c_b63, &work[ir + 1], &ldwrkr);
                 /* Generate Q in A */
                 /* Workspace: need N*N [R] + N [tau] + N [work] */
                 /* Workspace: prefer N*N [R] + N [tau] + N*NB [work] */
                 i__2 = *lwork - nwork + 1;
-                dorgqr_(m, n, n, &a[a_offset], lda, &work[itau], &work[nwork], &i__2, &ierr);
+                aocl_lapack_dorgqr(m, n, n, &a[a_offset], lda, &work[itau], &work[nwork], &i__2,
+                                   &ierr);
                 ie = itau;
                 itauq = ie + *n;
                 itaup = itauq + *n;
@@ -994,8 +972,8 @@ int lapack_dgesdd(char *jobz, integer *m, integer *n, doublereal *a, integer *ld
                 /* of bidiagoal matrix in U and computing right singular */
                 /* vectors of bidiagonal matrix in VT */
                 /* Workspace: need N*N [R] + 3*N [e, tauq, taup] + BDSPAC */
-                dbdsdc_("U", "I", n, &s[1], &work[ie], &u[u_offset], ldu, &vt[vt_offset], ldvt, dum,
-                        idum, &work[nwork], &iwork[1], info);
+                aocl_lapack_dbdsdc("U", "I", n, &s[1], &work[ie], &u[u_offset], ldu, &vt[vt_offset],
+                                   ldvt, dum, idum, &work[nwork], &iwork[1], info);
                 /* Overwrite U by left singular vectors of R and VT */
                 /* by right singular vectors of R */
                 /* Workspace: need N*N [R] + 3*N [e, tauq, taup] + N [work] */
@@ -1009,9 +987,9 @@ int lapack_dgesdd(char *jobz, integer *m, integer *n, doublereal *a, integer *ld
                 /* Multiply Q in A by left singular vectors of R in */
                 /* WORK(IR), storing result in U */
                 /* Workspace: need N*N [R] */
-                dlacpy_("F", n, n, &u[u_offset], ldu, &work[ir], &ldwrkr);
-                dgemm_("N", "N", m, n, n, &c_b84, &a[a_offset], lda, &work[ir], &ldwrkr, &c_b63,
-                       &u[u_offset], ldu);
+                aocl_lapack_dlacpy("F", n, n, &u[u_offset], ldu, &work[ir], &ldwrkr);
+                aocl_blas_dgemm("N", "N", m, n, n, &c_b84, &a[a_offset], lda, &work[ir], &ldwrkr,
+                                &c_b63, &u[u_offset], ldu);
             }
             else if(wntqa)
             {
@@ -1027,17 +1005,19 @@ int lapack_dgesdd(char *jobz, integer *m, integer *n, doublereal *a, integer *ld
                 /* Workspace: need N*N [U] + N [tau] + N [work] */
                 /* Workspace: prefer N*N [U] + N [tau] + N*NB [work] */
                 i__2 = *lwork - nwork + 1;
-                dgeqrf_(m, n, &a[a_offset], lda, &work[itau], &work[nwork], &i__2, &ierr);
-                dlacpy_("L", m, n, &a[a_offset], lda, &u[u_offset], ldu);
+                aocl_lapack_dgeqrf(m, n, &a[a_offset], lda, &work[itau], &work[nwork], &i__2,
+                                   &ierr);
+                aocl_lapack_dlacpy("L", m, n, &a[a_offset], lda, &u[u_offset], ldu);
                 /* Generate Q in U */
                 /* Workspace: need N*N [U] + N [tau] + M [work] */
                 /* Workspace: prefer N*N [U] + N [tau] + M*NB [work] */
                 i__2 = *lwork - nwork + 1;
-                dorgqr_(m, m, n, &u[u_offset], ldu, &work[itau], &work[nwork], &i__2, &ierr);
+                aocl_lapack_dorgqr(m, m, n, &u[u_offset], ldu, &work[itau], &work[nwork], &i__2,
+                                   &ierr);
                 /* Produce R in A, zeroing out other entries */
                 i__2 = *n - 1;
                 i__1 = *n - 1;
-                dlaset_("L", &i__2, &i__1, &c_b63, &c_b63, &a[a_dim1 + 2], lda);
+                aocl_lapack_dlaset("L", &i__2, &i__1, &c_b63, &c_b63, &a[a_dim1 + 2], lda);
                 ie = itau;
                 itauq = ie + *n;
                 itaup = itauq + *n;
@@ -1052,8 +1032,8 @@ int lapack_dgesdd(char *jobz, integer *m, integer *n, doublereal *a, integer *ld
                 /* of bidiagonal matrix in WORK(IU) and computing right */
                 /* singular vectors of bidiagonal matrix in VT */
                 /* Workspace: need N*N [U] + 3*N [e, tauq, taup] + BDSPAC */
-                dbdsdc_("U", "I", n, &s[1], &work[ie], &work[iu], n, &vt[vt_offset], ldvt, dum,
-                        idum, &work[nwork], &iwork[1], info);
+                aocl_lapack_dbdsdc("U", "I", n, &s[1], &work[ie], &work[iu], n, &vt[vt_offset],
+                                   ldvt, dum, idum, &work[nwork], &iwork[1], info);
                 /* Overwrite WORK(IU) by left singular vectors of R and VT */
                 /* by right singular vectors of R */
                 /* Workspace: need N*N [U] + 3*N [e, tauq, taup] + N [work] */
@@ -1067,10 +1047,10 @@ int lapack_dgesdd(char *jobz, integer *m, integer *n, doublereal *a, integer *ld
                 /* Multiply Q in U by left singular vectors of R in */
                 /* WORK(IU), storing result in A */
                 /* Workspace: need N*N [U] */
-                dgemm_("N", "N", m, n, n, &c_b84, &u[u_offset], ldu, &work[iu], &ldwrku, &c_b63,
-                       &a[a_offset], lda);
+                aocl_blas_dgemm("N", "N", m, n, n, &c_b84, &u[u_offset], ldu, &work[iu], &ldwrku,
+                                &c_b63, &a[a_offset], lda);
                 /* Copy left singular vectors of A from A to U */
-                dlacpy_("F", m, n, &a[a_offset], lda, &u[u_offset], ldu);
+                aocl_lapack_dlacpy("F", m, n, &a[a_offset], lda, &u[u_offset], ldu);
             }
         }
         else
@@ -1093,8 +1073,8 @@ int lapack_dgesdd(char *jobz, integer *m, integer *n, doublereal *a, integer *ld
                 /* Path 5n (M >= N, JOBZ='N') */
                 /* Perform bidiagonal SVD, only computing singular values */
                 /* Workspace: need 3*N [e, tauq, taup] + BDSPAC */
-                dbdsdc_("U", "N", n, &s[1], &work[ie], dum, &c__1, dum, &c__1, dum, idum,
-                        &work[nwork], &iwork[1], info);
+                aocl_lapack_dbdsdc("U", "N", n, &s[1], &work[ie], dum, &c__1, dum, &c__1, dum, idum,
+                                   &work[nwork], &iwork[1], info);
             }
             else if(wntqo)
             {
@@ -1105,7 +1085,7 @@ int lapack_dgesdd(char *jobz, integer *m, integer *n, doublereal *a, integer *ld
                     /* WORK( IU ) is M by N */
                     ldwrku = *m;
                     nwork = iu + ldwrku * *n;
-                    dlaset_("F", m, n, &c_b63, &c_b63, &work[iu], &ldwrku);
+                    aocl_lapack_dlaset("F", m, n, &c_b63, &c_b63, &work[iu], &ldwrku);
                     /* IR is unused;
                     silence compile warnings */
                     ir = -1;
@@ -1124,8 +1104,8 @@ int lapack_dgesdd(char *jobz, integer *m, integer *n, doublereal *a, integer *ld
                 /* of bidiagonal matrix in WORK(IU) and computing right */
                 /* singular vectors of bidiagonal matrix in VT */
                 /* Workspace: need 3*N [e, tauq, taup] + N*N [U] + BDSPAC */
-                dbdsdc_("U", "I", n, &s[1], &work[ie], &work[iu], &ldwrku, &vt[vt_offset], ldvt,
-                        dum, idum, &work[nwork], &iwork[1], info);
+                aocl_lapack_dbdsdc("U", "I", n, &s[1], &work[ie], &work[iu], &ldwrku,
+                                   &vt[vt_offset], ldvt, dum, idum, &work[nwork], &iwork[1], info);
                 /* Overwrite VT by right singular vectors of A */
                 /* Workspace: need 3*N [e, tauq, taup] + N*N [U] + N [work] */
                 /* Workspace: prefer 3*N [e, tauq, taup] + N*N [U] + N*NB [work] */
@@ -1142,7 +1122,7 @@ int lapack_dgesdd(char *jobz, integer *m, integer *n, doublereal *a, integer *ld
                     lapack_dormbr("Q", "L", "N", m, n, n, &a[a_offset], lda, &work[itauq],
                                   &work[iu], &ldwrku, &work[nwork], &i__2, &ierr);
                     /* Copy left singular vectors of A from WORK(IU) to A */
-                    dlacpy_("F", m, n, &work[iu], &ldwrku, &a[a_offset], lda);
+                    aocl_lapack_dlacpy("F", m, n, &work[iu], &ldwrku, &a[a_offset], lda);
                 }
                 else
                 {
@@ -1151,8 +1131,8 @@ int lapack_dgesdd(char *jobz, integer *m, integer *n, doublereal *a, integer *ld
                     /* Workspace: need 3*N [e, tauq, taup] + N*N [U] + N [work] */
                     /* Workspace: prefer 3*N [e, tauq, taup] + N*N [U] + N*NB [work] */
                     i__2 = *lwork - nwork + 1;
-                    dorgbr_("Q", m, n, n, &a[a_offset], lda, &work[itauq], &work[nwork], &i__2,
-                            &ierr);
+                    aocl_lapack_dorgbr("Q", m, n, n, &a[a_offset], lda, &work[itauq], &work[nwork],
+                                       &i__2, &ierr);
                     /* Multiply Q in A by left singular vectors of */
                     /* bidiagonal matrix in WORK(IU), storing result in */
                     /* WORK(IR) and copying to A */
@@ -1165,9 +1145,10 @@ int lapack_dgesdd(char *jobz, integer *m, integer *n, doublereal *a, integer *ld
                         /* Computing MIN */
                         i__3 = *m - i__ + 1;
                         chunk = fla_min(i__3, ldwrkr);
-                        dgemm_("N", "N", &chunk, n, n, &c_b84, &a[i__ + a_dim1], lda, &work[iu],
-                               &ldwrku, &c_b63, &work[ir], &ldwrkr);
-                        dlacpy_("F", &chunk, n, &work[ir], &ldwrkr, &a[i__ + a_dim1], lda);
+                        aocl_blas_dgemm("N", "N", &chunk, n, n, &c_b84, &a[i__ + a_dim1], lda,
+                                        &work[iu], &ldwrku, &c_b63, &work[ir], &ldwrkr);
+                        aocl_lapack_dlacpy("F", &chunk, n, &work[ir], &ldwrkr, &a[i__ + a_dim1],
+                                           lda);
                         /* L20: */
                     }
                 }
@@ -1179,9 +1160,9 @@ int lapack_dgesdd(char *jobz, integer *m, integer *n, doublereal *a, integer *ld
                 /* of bidiagonal matrix in U and computing right singular */
                 /* vectors of bidiagonal matrix in VT */
                 /* Workspace: need 3*N [e, tauq, taup] + BDSPAC */
-                dlaset_("F", m, n, &c_b63, &c_b63, &u[u_offset], ldu);
-                dbdsdc_("U", "I", n, &s[1], &work[ie], &u[u_offset], ldu, &vt[vt_offset], ldvt, dum,
-                        idum, &work[nwork], &iwork[1], info);
+                aocl_lapack_dlaset("F", m, n, &c_b63, &c_b63, &u[u_offset], ldu);
+                aocl_lapack_dbdsdc("U", "I", n, &s[1], &work[ie], &u[u_offset], ldu, &vt[vt_offset],
+                                   ldvt, dum, idum, &work[nwork], &iwork[1], info);
                 /* Overwrite U by left singular vectors of A and VT */
                 /* by right singular vectors of A */
                 /* Workspace: need 3*N [e, tauq, taup] + N [work] */
@@ -1200,15 +1181,16 @@ int lapack_dgesdd(char *jobz, integer *m, integer *n, doublereal *a, integer *ld
                 /* of bidiagonal matrix in U and computing right singular */
                 /* vectors of bidiagonal matrix in VT */
                 /* Workspace: need 3*N [e, tauq, taup] + BDSPAC */
-                dlaset_("F", m, m, &c_b63, &c_b63, &u[u_offset], ldu);
-                dbdsdc_("U", "I", n, &s[1], &work[ie], &u[u_offset], ldu, &vt[vt_offset], ldvt, dum,
-                        idum, &work[nwork], &iwork[1], info);
+                aocl_lapack_dlaset("F", m, m, &c_b63, &c_b63, &u[u_offset], ldu);
+                aocl_lapack_dbdsdc("U", "I", n, &s[1], &work[ie], &u[u_offset], ldu, &vt[vt_offset],
+                                   ldvt, dum, idum, &work[nwork], &iwork[1], info);
                 /* Set the right corner of U to identity matrix */
                 if(*m > *n)
                 {
                     i__1 = *m - *n;
                     i__2 = *m - *n;
-                    dlaset_("F", &i__1, &i__2, &c_b63, &c_b84, &u[*n + 1 + (*n + 1) * u_dim1], ldu);
+                    aocl_lapack_dlaset("F", &i__1, &i__2, &c_b63, &c_b84,
+                                       &u[*n + 1 + (*n + 1) * u_dim1], ldu);
                 }
                 /* Overwrite U by left singular vectors of A and VT */
                 /* by right singular vectors of A */
@@ -1240,11 +1222,12 @@ int lapack_dgesdd(char *jobz, integer *m, integer *n, doublereal *a, integer *ld
                 /* Workspace: need M [tau] + M [work] */
                 /* Workspace: prefer M [tau] + M*NB [work] */
                 i__1 = *lwork - nwork + 1;
-                dgelqf_(m, n, &a[a_offset], lda, &work[itau], &work[nwork], &i__1, &ierr);
+                aocl_lapack_dgelqf(m, n, &a[a_offset], lda, &work[itau], &work[nwork], &i__1,
+                                   &ierr);
                 /* Zero out above L */
                 i__1 = *m - 1;
                 i__2 = *m - 1;
-                dlaset_("U", &i__1, &i__2, &c_b63, &c_b63, &a[(a_dim1 << 1) + 1], lda);
+                aocl_lapack_dlaset("U", &i__1, &i__2, &c_b63, &c_b63, &a[(a_dim1 << 1) + 1], lda);
                 ie = 1;
                 itauq = ie + *m;
                 itaup = itauq + *m;
@@ -1258,8 +1241,8 @@ int lapack_dgesdd(char *jobz, integer *m, integer *n, doublereal *a, integer *ld
                 nwork = ie + *m;
                 /* Perform bidiagonal SVD, computing singular values only */
                 /* Workspace: need M [e] + BDSPAC */
-                dbdsdc_("U", "N", m, &s[1], &work[ie], dum, &c__1, dum, &c__1, dum, idum,
-                        &work[nwork], &iwork[1], info);
+                aocl_lapack_dbdsdc("U", "N", m, &s[1], &work[ie], dum, &c__1, dum, &c__1, dum, idum,
+                                   &work[nwork], &iwork[1], info);
             }
             else if(wntqo)
             {
@@ -1287,17 +1270,19 @@ int lapack_dgesdd(char *jobz, integer *m, integer *n, doublereal *a, integer *ld
                 /* Workspace: need M*M [VT] + M*M [L] + M [tau] + M [work] */
                 /* Workspace: prefer M*M [VT] + M*M [L] + M [tau] + M*NB [work] */
                 i__1 = *lwork - nwork + 1;
-                dgelqf_(m, n, &a[a_offset], lda, &work[itau], &work[nwork], &i__1, &ierr);
+                aocl_lapack_dgelqf(m, n, &a[a_offset], lda, &work[itau], &work[nwork], &i__1,
+                                   &ierr);
                 /* Copy L to WORK(IL), zeroing about above it */
-                dlacpy_("L", m, m, &a[a_offset], lda, &work[il], &ldwrkl);
+                aocl_lapack_dlacpy("L", m, m, &a[a_offset], lda, &work[il], &ldwrkl);
                 i__1 = *m - 1;
                 i__2 = *m - 1;
-                dlaset_("U", &i__1, &i__2, &c_b63, &c_b63, &work[il + ldwrkl], &ldwrkl);
+                aocl_lapack_dlaset("U", &i__1, &i__2, &c_b63, &c_b63, &work[il + ldwrkl], &ldwrkl);
                 /* Generate Q in A */
                 /* Workspace: need M*M [VT] + M*M [L] + M [tau] + M [work] */
                 /* Workspace: prefer M*M [VT] + M*M [L] + M [tau] + M*NB [work] */
                 i__1 = *lwork - nwork + 1;
-                dorglq_(m, n, m, &a[a_offset], lda, &work[itau], &work[nwork], &i__1, &ierr);
+                aocl_lapack_dorglq(m, n, m, &a[a_offset], lda, &work[itau], &work[nwork], &i__1,
+                                   &ierr);
                 ie = itau;
                 itauq = ie + *m;
                 itaup = itauq + *m;
@@ -1312,8 +1297,8 @@ int lapack_dgesdd(char *jobz, integer *m, integer *n, doublereal *a, integer *ld
                 /* of bidiagonal matrix in U, and computing right singular */
                 /* vectors of bidiagonal matrix in WORK(IVT) */
                 /* Workspace: need M*M [VT] + M*M [L] + 3*M [e, tauq, taup] + BDSPAC */
-                dbdsdc_("U", "I", m, &s[1], &work[ie], &u[u_offset], ldu, &work[ivt], m, dum, idum,
-                        &work[nwork], &iwork[1], info);
+                aocl_lapack_dbdsdc("U", "I", m, &s[1], &work[ie], &u[u_offset], ldu, &work[ivt], m,
+                                   dum, idum, &work[nwork], &iwork[1], info);
                 /* Overwrite U by left singular vectors of L and WORK(IVT) */
                 /* by right singular vectors of L */
                 /* Workspace: need M*M [VT] + M*M [L] + 3*M [e, tauq, taup] + M [work] */
@@ -1336,9 +1321,9 @@ int lapack_dgesdd(char *jobz, integer *m, integer *n, doublereal *a, integer *ld
                     /* Computing MIN */
                     i__3 = *n - i__ + 1;
                     blk = fla_min(i__3, chunk);
-                    dgemm_("N", "N", m, &blk, m, &c_b84, &work[ivt], m, &a[i__ * a_dim1 + 1], lda,
-                           &c_b63, &work[il], &ldwrkl);
-                    dlacpy_("F", m, &blk, &work[il], &ldwrkl, &a[i__ * a_dim1 + 1], lda);
+                    aocl_blas_dgemm("N", "N", m, &blk, m, &c_b84, &work[ivt], m,
+                                    &a[i__ * a_dim1 + 1], lda, &c_b63, &work[il], &ldwrkl);
+                    aocl_lapack_dlacpy("F", m, &blk, &work[il], &ldwrkl, &a[i__ * a_dim1 + 1], lda);
                     /* L30: */
                 }
             }
@@ -1356,17 +1341,19 @@ int lapack_dgesdd(char *jobz, integer *m, integer *n, doublereal *a, integer *ld
                 /* Workspace: need M*M [L] + M [tau] + M [work] */
                 /* Workspace: prefer M*M [L] + M [tau] + M*NB [work] */
                 i__2 = *lwork - nwork + 1;
-                dgelqf_(m, n, &a[a_offset], lda, &work[itau], &work[nwork], &i__2, &ierr);
+                aocl_lapack_dgelqf(m, n, &a[a_offset], lda, &work[itau], &work[nwork], &i__2,
+                                   &ierr);
                 /* Copy L to WORK(IL), zeroing out above it */
-                dlacpy_("L", m, m, &a[a_offset], lda, &work[il], &ldwrkl);
+                aocl_lapack_dlacpy("L", m, m, &a[a_offset], lda, &work[il], &ldwrkl);
                 i__2 = *m - 1;
                 i__1 = *m - 1;
-                dlaset_("U", &i__2, &i__1, &c_b63, &c_b63, &work[il + ldwrkl], &ldwrkl);
+                aocl_lapack_dlaset("U", &i__2, &i__1, &c_b63, &c_b63, &work[il + ldwrkl], &ldwrkl);
                 /* Generate Q in A */
                 /* Workspace: need M*M [L] + M [tau] + M [work] */
                 /* Workspace: prefer M*M [L] + M [tau] + M*NB [work] */
                 i__2 = *lwork - nwork + 1;
-                dorglq_(m, n, m, &a[a_offset], lda, &work[itau], &work[nwork], &i__2, &ierr);
+                aocl_lapack_dorglq(m, n, m, &a[a_offset], lda, &work[itau], &work[nwork], &i__2,
+                                   &ierr);
                 ie = itau;
                 itauq = ie + *m;
                 itaup = itauq + *m;
@@ -1381,8 +1368,8 @@ int lapack_dgesdd(char *jobz, integer *m, integer *n, doublereal *a, integer *ld
                 /* of bidiagonal matrix in U and computing right singular */
                 /* vectors of bidiagonal matrix in VT */
                 /* Workspace: need M*M [L] + 3*M [e, tauq, taup] + BDSPAC */
-                dbdsdc_("U", "I", m, &s[1], &work[ie], &u[u_offset], ldu, &vt[vt_offset], ldvt, dum,
-                        idum, &work[nwork], &iwork[1], info);
+                aocl_lapack_dbdsdc("U", "I", m, &s[1], &work[ie], &u[u_offset], ldu, &vt[vt_offset],
+                                   ldvt, dum, idum, &work[nwork], &iwork[1], info);
                 /* Overwrite U by left singular vectors of L and VT */
                 /* by right singular vectors of L */
                 /* Workspace: need M*M [L] + 3*M [e, tauq, taup] + M [work] */
@@ -1396,9 +1383,9 @@ int lapack_dgesdd(char *jobz, integer *m, integer *n, doublereal *a, integer *ld
                 /* Multiply right singular vectors of L in WORK(IL) by */
                 /* Q in A, storing result in VT */
                 /* Workspace: need M*M [L] */
-                dlacpy_("F", m, m, &vt[vt_offset], ldvt, &work[il], &ldwrkl);
-                dgemm_("N", "N", m, n, m, &c_b84, &work[il], &ldwrkl, &a[a_offset], lda, &c_b63,
-                       &vt[vt_offset], ldvt);
+                aocl_lapack_dlacpy("F", m, m, &vt[vt_offset], ldvt, &work[il], &ldwrkl);
+                aocl_blas_dgemm("N", "N", m, n, m, &c_b84, &work[il], &ldwrkl, &a[a_offset], lda,
+                                &c_b63, &vt[vt_offset], ldvt);
             }
             else if(wntqa)
             {
@@ -1414,17 +1401,19 @@ int lapack_dgesdd(char *jobz, integer *m, integer *n, doublereal *a, integer *ld
                 /* Workspace: need M*M [VT] + M [tau] + M [work] */
                 /* Workspace: prefer M*M [VT] + M [tau] + M*NB [work] */
                 i__2 = *lwork - nwork + 1;
-                dgelqf_(m, n, &a[a_offset], lda, &work[itau], &work[nwork], &i__2, &ierr);
-                dlacpy_("U", m, n, &a[a_offset], lda, &vt[vt_offset], ldvt);
+                aocl_lapack_dgelqf(m, n, &a[a_offset], lda, &work[itau], &work[nwork], &i__2,
+                                   &ierr);
+                aocl_lapack_dlacpy("U", m, n, &a[a_offset], lda, &vt[vt_offset], ldvt);
                 /* Generate Q in VT */
                 /* Workspace: need M*M [VT] + M [tau] + N [work] */
                 /* Workspace: prefer M*M [VT] + M [tau] + N*NB [work] */
                 i__2 = *lwork - nwork + 1;
-                dorglq_(n, n, m, &vt[vt_offset], ldvt, &work[itau], &work[nwork], &i__2, &ierr);
+                aocl_lapack_dorglq(n, n, m, &vt[vt_offset], ldvt, &work[itau], &work[nwork], &i__2,
+                                   &ierr);
                 /* Produce L in A, zeroing out other entries */
                 i__2 = *m - 1;
                 i__1 = *m - 1;
-                dlaset_("U", &i__2, &i__1, &c_b63, &c_b63, &a[(a_dim1 << 1) + 1], lda);
+                aocl_lapack_dlaset("U", &i__2, &i__1, &c_b63, &c_b63, &a[(a_dim1 << 1) + 1], lda);
                 ie = itau;
                 itauq = ie + *m;
                 itaup = itauq + *m;
@@ -1439,8 +1428,8 @@ int lapack_dgesdd(char *jobz, integer *m, integer *n, doublereal *a, integer *ld
                 /* of bidiagonal matrix in U and computing right singular */
                 /* vectors of bidiagonal matrix in WORK(IVT) */
                 /* Workspace: need M*M [VT] + 3*M [e, tauq, taup] + BDSPAC */
-                dbdsdc_("U", "I", m, &s[1], &work[ie], &u[u_offset], ldu, &work[ivt], &ldwkvt, dum,
-                        idum, &work[nwork], &iwork[1], info);
+                aocl_lapack_dbdsdc("U", "I", m, &s[1], &work[ie], &u[u_offset], ldu, &work[ivt],
+                                   &ldwkvt, dum, idum, &work[nwork], &iwork[1], info);
                 /* Overwrite U by left singular vectors of L and WORK(IVT) */
                 /* by right singular vectors of L */
                 /* Workspace: need M*M [VT] + 3*M [e, tauq, taup]+ M [work] */
@@ -1454,10 +1443,10 @@ int lapack_dgesdd(char *jobz, integer *m, integer *n, doublereal *a, integer *ld
                 /* Multiply right singular vectors of L in WORK(IVT) by */
                 /* Q in VT, storing result in A */
                 /* Workspace: need M*M [VT] */
-                dgemm_("N", "N", m, n, m, &c_b84, &work[ivt], &ldwkvt, &vt[vt_offset], ldvt, &c_b63,
-                       &a[a_offset], lda);
+                aocl_blas_dgemm("N", "N", m, n, m, &c_b84, &work[ivt], &ldwkvt, &vt[vt_offset],
+                                ldvt, &c_b63, &a[a_offset], lda);
                 /* Copy right singular vectors of A from A to VT */
-                dlacpy_("F", m, n, &a[a_offset], lda, &vt[vt_offset], ldvt);
+                aocl_lapack_dlacpy("F", m, n, &a[a_offset], lda, &vt[vt_offset], ldvt);
             }
         }
         else
@@ -1480,8 +1469,8 @@ int lapack_dgesdd(char *jobz, integer *m, integer *n, doublereal *a, integer *ld
                 /* Path 5tn (N > M, JOBZ='N') */
                 /* Perform bidiagonal SVD, only computing singular values */
                 /* Workspace: need 3*M [e, tauq, taup] + BDSPAC */
-                dbdsdc_("L", "N", m, &s[1], &work[ie], dum, &c__1, dum, &c__1, dum, idum,
-                        &work[nwork], &iwork[1], info);
+                aocl_lapack_dbdsdc("L", "N", m, &s[1], &work[ie], dum, &c__1, dum, &c__1, dum, idum,
+                                   &work[nwork], &iwork[1], info);
             }
             else if(wntqo)
             {
@@ -1491,7 +1480,7 @@ int lapack_dgesdd(char *jobz, integer *m, integer *n, doublereal *a, integer *ld
                 if(*lwork >= *m * *n + *m * 3 + bdspac)
                 {
                     /* WORK( IVT ) is M by N */
-                    dlaset_("F", m, n, &c_b63, &c_b63, &work[ivt], &ldwkvt);
+                    aocl_lapack_dlaset("F", m, n, &c_b63, &c_b63, &work[ivt], &ldwkvt);
                     nwork = ivt + ldwkvt * *n;
                     /* IL is unused;
                     silence compile warnings */
@@ -1509,8 +1498,8 @@ int lapack_dgesdd(char *jobz, integer *m, integer *n, doublereal *a, integer *ld
                 /* of bidiagonal matrix in U and computing right singular */
                 /* vectors of bidiagonal matrix in WORK(IVT) */
                 /* Workspace: need 3*M [e, tauq, taup] + M*M [VT] + BDSPAC */
-                dbdsdc_("L", "I", m, &s[1], &work[ie], &u[u_offset], ldu, &work[ivt], &ldwkvt, dum,
-                        idum, &work[nwork], &iwork[1], info);
+                aocl_lapack_dbdsdc("L", "I", m, &s[1], &work[ie], &u[u_offset], ldu, &work[ivt],
+                                   &ldwkvt, dum, idum, &work[nwork], &iwork[1], info);
                 /* Overwrite U by left singular vectors of A */
                 /* Workspace: need 3*M [e, tauq, taup] + M*M [VT] + M [work] */
                 /* Workspace: prefer 3*M [e, tauq, taup] + M*M [VT] + M*NB [work] */
@@ -1527,7 +1516,7 @@ int lapack_dgesdd(char *jobz, integer *m, integer *n, doublereal *a, integer *ld
                     lapack_dormbr("P", "R", "T", m, n, m, &a[a_offset], lda, &work[itaup],
                                   &work[ivt], &ldwkvt, &work[nwork], &i__2, &ierr);
                     /* Copy right singular vectors of A from WORK(IVT) to A */
-                    dlacpy_("F", m, n, &work[ivt], &ldwkvt, &a[a_offset], lda);
+                    aocl_lapack_dlacpy("F", m, n, &work[ivt], &ldwkvt, &a[a_offset], lda);
                 }
                 else
                 {
@@ -1536,8 +1525,8 @@ int lapack_dgesdd(char *jobz, integer *m, integer *n, doublereal *a, integer *ld
                     /* Workspace: need 3*M [e, tauq, taup] + M*M [VT] + M [work] */
                     /* Workspace: prefer 3*M [e, tauq, taup] + M*M [VT] + M*NB [work] */
                     i__2 = *lwork - nwork + 1;
-                    dorgbr_("P", m, n, m, &a[a_offset], lda, &work[itaup], &work[nwork], &i__2,
-                            &ierr);
+                    aocl_lapack_dorgbr("P", m, n, m, &a[a_offset], lda, &work[itaup], &work[nwork],
+                                       &i__2, &ierr);
                     /* Multiply Q in A by right singular vectors of */
                     /* bidiagonal matrix in WORK(IVT), storing result in */
                     /* WORK(IL) and copying to A */
@@ -1550,9 +1539,9 @@ int lapack_dgesdd(char *jobz, integer *m, integer *n, doublereal *a, integer *ld
                         /* Computing MIN */
                         i__3 = *n - i__ + 1;
                         blk = fla_min(i__3, chunk);
-                        dgemm_("N", "N", m, &blk, m, &c_b84, &work[ivt], &ldwkvt,
-                               &a[i__ * a_dim1 + 1], lda, &c_b63, &work[il], m);
-                        dlacpy_("F", m, &blk, &work[il], m, &a[i__ * a_dim1 + 1], lda);
+                        aocl_blas_dgemm("N", "N", m, &blk, m, &c_b84, &work[ivt], &ldwkvt,
+                                        &a[i__ * a_dim1 + 1], lda, &c_b63, &work[il], m);
+                        aocl_lapack_dlacpy("F", m, &blk, &work[il], m, &a[i__ * a_dim1 + 1], lda);
                         /* L40: */
                     }
                 }
@@ -1564,9 +1553,9 @@ int lapack_dgesdd(char *jobz, integer *m, integer *n, doublereal *a, integer *ld
                 /* of bidiagonal matrix in U and computing right singular */
                 /* vectors of bidiagonal matrix in VT */
                 /* Workspace: need 3*M [e, tauq, taup] + BDSPAC */
-                dlaset_("F", m, n, &c_b63, &c_b63, &vt[vt_offset], ldvt);
-                dbdsdc_("L", "I", m, &s[1], &work[ie], &u[u_offset], ldu, &vt[vt_offset], ldvt, dum,
-                        idum, &work[nwork], &iwork[1], info);
+                aocl_lapack_dlaset("F", m, n, &c_b63, &c_b63, &vt[vt_offset], ldvt);
+                aocl_lapack_dbdsdc("L", "I", m, &s[1], &work[ie], &u[u_offset], ldu, &vt[vt_offset],
+                                   ldvt, dum, idum, &work[nwork], &iwork[1], info);
                 /* Overwrite U by left singular vectors of A and VT */
                 /* by right singular vectors of A */
                 /* Workspace: need 3*M [e, tauq, taup] + M [work] */
@@ -1585,16 +1574,16 @@ int lapack_dgesdd(char *jobz, integer *m, integer *n, doublereal *a, integer *ld
                 /* of bidiagonal matrix in U and computing right singular */
                 /* vectors of bidiagonal matrix in VT */
                 /* Workspace: need 3*M [e, tauq, taup] + BDSPAC */
-                dlaset_("F", n, n, &c_b63, &c_b63, &vt[vt_offset], ldvt);
-                dbdsdc_("L", "I", m, &s[1], &work[ie], &u[u_offset], ldu, &vt[vt_offset], ldvt, dum,
-                        idum, &work[nwork], &iwork[1], info);
+                aocl_lapack_dlaset("F", n, n, &c_b63, &c_b63, &vt[vt_offset], ldvt);
+                aocl_lapack_dbdsdc("L", "I", m, &s[1], &work[ie], &u[u_offset], ldu, &vt[vt_offset],
+                                   ldvt, dum, idum, &work[nwork], &iwork[1], info);
                 /* Set the right corner of VT to identity matrix */
                 if(*n > *m)
                 {
                     i__1 = *n - *m;
                     i__2 = *n - *m;
-                    dlaset_("F", &i__1, &i__2, &c_b63, &c_b84, &vt[*m + 1 + (*m + 1) * vt_dim1],
-                            ldvt);
+                    aocl_lapack_dlaset("F", &i__1, &i__2, &c_b63, &c_b84,
+                                       &vt[*m + 1 + (*m + 1) * vt_dim1], ldvt);
                 }
                 /* Overwrite U by left singular vectors of A and VT */
                 /* by right singular vectors of A */
@@ -1614,15 +1603,17 @@ int lapack_dgesdd(char *jobz, integer *m, integer *n, doublereal *a, integer *ld
     {
         if(anrm > bignum)
         {
-            dlascl_("G", &c__0, &c__0, &bignum, &anrm, &minmn, &c__1, &s[1], &minmn, &ierr);
+            aocl_lapack_dlascl("G", &c__0, &c__0, &bignum, &anrm, &minmn, &c__1, &s[1], &minmn,
+                               &ierr);
         }
         if(anrm < smlnum)
         {
-            dlascl_("G", &c__0, &c__0, &smlnum, &anrm, &minmn, &c__1, &s[1], &minmn, &ierr);
+            aocl_lapack_dlascl("G", &c__0, &c__0, &smlnum, &anrm, &minmn, &c__1, &s[1], &minmn,
+                               &ierr);
         }
     }
     /* Return optimal workspace in WORK(1) */
-    work[1] = droundup_lwork(&maxwrk);
+    work[1] = aocl_lapack_droundup_lwork(&maxwrk);
     AOCL_DTL_TRACE_LOG_EXIT
     return 0;
     /* End of DGESDD */

@@ -1,26 +1,35 @@
-/* dormqr.f -- translated by f2c (version 20160102). You must link the resulting object file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* dormqr.f -- translated by f2c (version 20160102). You must link the resulting object file with
+ libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
+ .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
+ order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
+ /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 /*
  *  Copyright (c) 2021-2025 Advanced Micro Devices, Inc.  All rights reserved.
  */
 #include "FLA_f2c.h" /* Table of constant values */
 
-static integer c__1 = 1;
-static integer c_n1 = -1;
-static integer c__2 = 2;
-static integer c__65 = 65;
-static int get_opt_threads_dormqr(integer m, integer n);
+static aocl_int64_t c__1 = 1;
+static aocl_int64_t c_n1 = -1;
+static aocl_int64_t c__2 = 2;
+static aocl_int64_t c__65 = 65;
+static int get_opt_threads_dormqr(aocl_int64_t m, aocl_int64_t n);
 /* > \brief \b DORMQR */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download DORMQR + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dormqr. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/dormqr.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dormqr. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/dormqr.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dormqr. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/dormqr.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -59,7 +68,7 @@ static int get_opt_threads_dormqr(integer m, integer n);
 /* > \verbatim */
 /* > SIDE is CHARACTER*1 */
 /* > = 'L': apply Q or Q**T from the Left;
-*/
+ */
 /* > = 'R': apply Q or Q**T from the Right. */
 /* > \endverbatim */
 /* > */
@@ -67,7 +76,7 @@ static int get_opt_threads_dormqr(integer m, integer n);
 /* > \verbatim */
 /* > TRANS is CHARACTER*1 */
 /* > = 'N': No transpose, apply Q;
-*/
+ */
 /* > = 'T': Transpose, apply Q**T. */
 /* > \endverbatim */
 /* > */
@@ -89,7 +98,7 @@ static int get_opt_threads_dormqr(integer m, integer n);
 /* > The number of elementary reflectors whose product defines */
 /* > the matrix Q. */
 /* > If SIDE = 'L', M >= K >= 0;
-*/
+ */
 /* > if SIDE = 'R', N >= K >= 0. */
 /* > \endverbatim */
 /* > */
@@ -106,7 +115,7 @@ static int get_opt_threads_dormqr(integer m, integer n);
 /* > LDA is INTEGER */
 /* > The leading dimension of the array A. */
 /* > If SIDE = 'L', LDA >= fla_max(1,M);
-*/
+ */
 /* > if SIDE = 'R', LDA >= fla_max(1,N). */
 /* > \endverbatim */
 /* > */
@@ -141,7 +150,7 @@ static int get_opt_threads_dormqr(integer m, integer n);
 /* > LWORK is INTEGER */
 /* > The dimension of the array WORK. */
 /* > If SIDE = 'L', LWORK >= fla_max(1,N);
-*/
+ */
 /* > if SIDE = 'R', LWORK >= fla_max(1,M). */
 /* > For good performance, LWORK should generally be larger. */
 /* > */
@@ -167,29 +176,30 @@ the routine */
 /* > \ingroup doubleOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int lapack_dormqr(char *side, char *trans, integer *m, integer *n, integer *k, doublereal *a, integer *lda, doublereal *tau, doublereal * c__, integer *ldc, doublereal *work, integer *lwork, integer *info) {
+int lapack_dormqr(char *side, char *trans, aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *k,
+                  doublereal *a, aocl_int64_t *lda, doublereal *tau, doublereal *c__,
+                  aocl_int64_t *ldc, doublereal *work, aocl_int64_t *lwork, aocl_int64_t *info)
+{
     /* System generated locals */
-    integer a_dim1, a_offset, c_dim1, c_offset, i__1, i__2, i__4, i__5;
+    aocl_int64_t a_dim1, a_offset, c_dim1, c_offset, i__1, i__2, i__4, i__5;
     char ch__1[2];
     /* Builtin functions */
     /* Subroutine */
 
     /* Local variables */
-    integer i__, i1, i2, i3, ib, ic, jc, nb, mi, ni, nq, nw, iwt;
+    aocl_int64_t i__, i1, i2, i3, ib, ic, jc, nb, mi, ni, nq, nw, iwt;
     logical left;
-    extern logical lsame_(char *, char *, integer, integer);
-    integer nbmin, iinfo;
-    extern /* Subroutine */
-    void dlarfb_(char *, char *, char *, char *, integer *, integer *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *), dlarft_(char *, char *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    extern
-    int lapack_dorm2r(char *, char *, integer *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *); 
-    extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    aocl_int64_t nbmin, iinfo;
+    extern int lapack_dorm2r(char *, char *, aocl_int64_t *, aocl_int64_t *, aocl_int64_t *,
+                             doublereal *, aocl_int64_t *, doublereal *, doublereal *,
+                             aocl_int64_t *, doublereal *, aocl_int64_t *);
     logical notran;
-    integer ldwork, lwkopt;
+    aocl_int64_t ldwork, lwkopt;
     logical lquery;
 #if FLA_OPENMP_MULTITHREADING
     int thread_id, actual_num_threads;
-    integer index, mi_sub, ni_sub;
+    aocl_int64_t index, mi_sub, ni_sub;
 #endif
     /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -230,93 +240,116 @@ int lapack_dormqr(char *side, char *trans, integer *m, integer *n, integer *k, d
     notran = lsame_(trans, "N", 1, 1);
     lquery = *lwork == -1;
     /* NQ is the order of Q and NW is the minimum dimension of WORK */
-    if (left) {
+    if(left)
+    {
         nq = *m;
-        nw = fla_max(1,*n);
+        nw = fla_max(1, *n);
     }
-    else {
+    else
+    {
         nq = *n;
-        nw = fla_max(1,*m);
+        nw = fla_max(1, *m);
     }
-    if (! left && ! lsame_(side, "R", 1, 1)) {
+    if(!left && !lsame_(side, "R", 1, 1))
+    {
         *info = -1;
     }
-    else if (! notran && ! lsame_(trans, "T", 1, 1)) {
+    else if(!notran && !lsame_(trans, "T", 1, 1))
+    {
         *info = -2;
     }
-    else if (*m < 0) {
+    else if(*m < 0)
+    {
         *info = -3;
     }
-    else if (*n < 0) {
+    else if(*n < 0)
+    {
         *info = -4;
     }
-    else if (*k < 0 || *k > nq) {
+    else if(*k < 0 || *k > nq)
+    {
         *info = -5;
     }
-    else if (*lda < fla_max(1,nq)) {
+    else if(*lda < fla_max(1, nq))
+    {
         *info = -7;
     }
-    else if (*ldc < fla_max(1,*m)) {
+    else if(*ldc < fla_max(1, *m))
+    {
         *info = -10;
     }
-    else if (*lwork < nw && ! lquery) {
+    else if(*lwork < nw && !lquery)
+    {
         *info = -12;
     }
-    if (*info == 0) {
+    if(*info == 0)
+    {
         /* Compute the workspace requirements */
         /* Computing MIN */
         i__1 = 64;
-        i__2 = ilaenv_(&c__1, "DORMQR", ch__1, m, n, k, &c_n1); // , expr subst
-        nb = fla_min(i__1,i__2);
+        i__2 = aocl_lapack_ilaenv(&c__1, "DORMQR", ch__1, m, n, k, &c_n1); // , expr subst
+        nb = fla_min(i__1, i__2);
         lwkopt = nw * nb + 4160;
-        work[1] = (doublereal) lwkopt;
+        work[1] = (doublereal)lwkopt;
     }
-    if (*info != 0) {
+    if(*info != 0)
+    {
         i__1 = -(*info);
-        xerbla_("DORMQR", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("DORMQR", &i__1, (ftnlen)6);
         return 0;
     }
-    else if (lquery) {
+    else if(lquery)
+    {
         return 0;
     }
     /* Quick return if possible */
-    if (*m == 0 || *n == 0 || *k == 0) {
+    if(*m == 0 || *n == 0 || *k == 0)
+    {
         work[1] = 1.;
         return 0;
     }
     nbmin = 2;
     ldwork = nw;
-    if (nb > 1 && nb < *k) {
-        if (*lwork < lwkopt) {
+    if(nb > 1 && nb < *k)
+    {
+        if(*lwork < lwkopt)
+        {
             nb = (*lwork - 4160) / ldwork;
             /* Computing MAX */
             i__1 = 2;
-            i__2 = ilaenv_(&c__2, "DORMQR", ch__1, m, n, k, &c_n1); // , expr subst
-            nbmin = fla_max(i__1,i__2);
+            i__2 = aocl_lapack_ilaenv(&c__2, "DORMQR", ch__1, m, n, k, &c_n1); // , expr subst
+            nbmin = fla_max(i__1, i__2);
         }
     }
-    if (nb < nbmin || nb >= *k) {
+    if(nb < nbmin || nb >= *k)
+    {
         /* Use unblocked code */
-        lapack_dorm2r(side, trans, m, n, k, &a[a_offset], lda, &tau[1], &c__[ c_offset], ldc, &work[1], &iinfo);
+        lapack_dorm2r(side, trans, m, n, k, &a[a_offset], lda, &tau[1], &c__[c_offset], ldc,
+                      &work[1], &iinfo);
     }
-    else {
+    else
+    {
         /* Use blocked code */
         iwt = nw * nb + 1;
-        if (left && ! notran || ! left && notran) {
+        if(left && !notran || !left && notran)
+        {
             i1 = 1;
             i2 = *k;
             i3 = nb;
         }
-        else {
+        else
+        {
             i1 = (*k - 1) / nb * nb + 1;
             i2 = 1;
             i3 = -nb;
         }
-        if (left) {
+        if(left)
+        {
             ni = *n;
             jc = 1;
         }
-        else {
+        else
+        {
             mi = *m;
             ic = 1;
         }
@@ -326,32 +359,33 @@ int lapack_dormqr(char *side, char *trans, integer *m, integer *n, integer *k, d
 #ifdef FLA_OPENMP_MULTITHREADING
         /* Get optimum thread number for DORMQR*/
         actual_num_threads = get_opt_threads_dormqr(*m, *n);
-        #pragma omp parallel num_threads(actual_num_threads) private(i__, thread_id, mi_sub, ni_sub, index)
+#pragma omp parallel num_threads(actual_num_threads) private(i__, thread_id, mi_sub, ni_sub, index)
         {
             thread_id = omp_get_thread_num();
 #else
         {
 #endif
-            for (i__ = i1;
-                    i__2 < 0 ? i__ >= i__1 : i__ <= i__1;
-                    i__ += i__2) {
+            for(i__ = i1; i__2 < 0 ? i__ >= i__1 : i__ <= i__1; i__ += i__2)
+            {
 
                 /* Computing MIN */
 #ifdef FLA_OPENMP_MULTITHREADING
-                /* Compute triangular factor of the block reflector in a single thread */
-                #pragma omp single
+/* Compute triangular factor of the block reflector in a single thread */
+#pragma omp single
 #endif
                 {
                     i__4 = nb;
                     i__5 = *k - i__ + 1; // , expr subst
-                    ib = fla_min(i__4,i__5);
+                    ib = fla_min(i__4, i__5);
                     /* Form the triangular factor of the block reflector */
                     /* H = H(i) H(i+1) . . . H(i+ib-1) */
                     i__4 = nq - i__ + 1;
-                    dlarft_("Forward", "Columnwise", &i__4, &ib, &a[i__ + i__ * a_dim1], lda, &tau[i__], &work[iwt], &c__65);
+                    aocl_lapack_dlarft("Forward", "Columnwise", &i__4, &ib, &a[i__ + i__ * a_dim1],
+                                       lda, &tau[i__], &work[iwt], &c__65);
                 }
 
-                if (left) {
+                if(left)
+                {
                     /* H or H**T is applied to C(i:m,1:n) */
                     mi = *m - i__ + 1;
                     ic = i__;
@@ -361,7 +395,8 @@ int lapack_dormqr(char *side, char *trans, integer *m, integer *n, integer *k, d
                     mi_sub = mi;
 #endif
                 }
-                else {
+                else
+                {
                     /* H or H**T is applied to C(1:m,i:n) */
                     ni = *n - i__ + 1;
                     jc = i__;
@@ -375,18 +410,26 @@ int lapack_dormqr(char *side, char *trans, integer *m, integer *n, integer *k, d
                 /* Apply H or H**T */
 #ifdef FLA_OPENMP_MULTITHREADING
                 if(left)
-                    dlarfb_(side, trans, "Forward", "Columnwise", &mi_sub, &ni_sub, &ib, &a[ i__ + i__ * a_dim1], lda, &work[iwt], &c__65, &c__[ic + (index + jc) * c_dim1], ldc, &work[1 + index], &ldwork);
+                    aocl_lapack_dlarfb(side, trans, "Forward", "Columnwise", &mi_sub, &ni_sub, &ib,
+                                       &a[i__ + i__ * a_dim1], lda, &work[iwt], &c__65,
+                                       &c__[ic + (index + jc) * c_dim1], ldc, &work[1 + index],
+                                       &ldwork);
                 else
-                    dlarfb_(side, trans, "Forward", "Columnwise", &mi_sub, &ni_sub, &ib, &a[ i__ + i__ * a_dim1], lda, &work[iwt], &c__65, &c__[index + ic + jc * c_dim1], ldc, &work[1 + index], &ldwork);
-                #pragma omp barrier
+                    aocl_lapack_dlarfb(side, trans, "Forward", "Columnwise", &mi_sub, &ni_sub, &ib,
+                                       &a[i__ + i__ * a_dim1], lda, &work[iwt], &c__65,
+                                       &c__[index + ic + jc * c_dim1], ldc, &work[1 + index],
+                                       &ldwork);
+#pragma omp barrier
 #else
-                dlarfb_(side, trans, "Forward", "Columnwise", &mi, &ni, &ib, &a[ i__ + i__ * a_dim1], lda, &work[iwt], &c__65, &c__[ic + jc * c_dim1], ldc, &work[1], &ldwork);
+                aocl_lapack_dlarfb(side, trans, "Forward", "Columnwise", &mi, &ni, &ib,
+                                   &a[i__ + i__ * a_dim1], lda, &work[iwt], &c__65,
+                                   &c__[ic + jc * c_dim1], ldc, &work[1], &ldwork);
 #endif
                 /* L10: */
             }
         }
     }
-    work[1] = (doublereal) lwkopt;
+    work[1] = (doublereal)lwkopt;
     return 0;
     /* End of DORMQR */
 }
@@ -399,9 +442,9 @@ int lapack_dormqr(char *side, char *trans, integer *m, integer *n, integer *k, d
 #define FLA_DORMQR_THREADS_THRESH2 (5000)
 
 extern int fla_thread_get_num_threads();
-static int get_opt_threads_dormqr(integer m, integer n)
+static int get_opt_threads_dormqr(aocl_int64_t m, aocl_int64_t n)
 {
-    integer min_m_n = fla_min(m, n);
+    aocl_int64_t min_m_n = fla_min(m, n);
     int num_threads;
 
     if(min_m_n < FLA_DORMQR_THREADS_THRESH0)

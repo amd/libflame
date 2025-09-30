@@ -9,17 +9,16 @@
 #include "blis.h"
 #endif
 #if FLA_ENABLE_AMD_OPT
-int fla_dpotrf_small_avx2(char *uplo, integer *n, doublereal *a, integer *lda, integer *info);
+int fla_dpotrf_small_avx2(char *uplo, aocl_int64_t *n, doublereal *a, aocl_int64_t *lda, aocl_int64_t *info);
 #endif
 
 /* Threshold values used for tuning thread binding and workload partitioning.*/
 #define PROC_BIND_CLOSE_THREADS 96
 #define PROC_BIND_CLOSE_SIZE 9760
 
-void xerbla_(const char *srname, const integer *info, ftnlen srname_len);
 extern int fla_thread_get_num_threads();
 
-void dpotrf_auto_tune_params(integer n, int *num_threads, integer *block_size)
+void dpotrf_auto_tune_params(aocl_int64_t n, int *num_threads, aocl_int64_t *block_size)
 {
     *block_size = FLA_POTRF_BLOCK_SIZE; // Default block size
 
@@ -63,25 +62,25 @@ void dpotrf_auto_tune_params(integer n, int *num_threads, integer *block_size)
 }
 
 /* Table of constant values */
-static integer c__1 = 1;
-static integer c_n1 = -1;
+static aocl_int64_t c__1 = 1;
+static aocl_int64_t c_n1 = -1;
 static doublereal c_b13 = -1.;
 static doublereal c_b14 = 1.;
 
-/* Subroutine */ int lapack_dpotrf(char *uplo, integer *n, doublereal *a, integer *lda,
-                                   integer *info)
+/* Subroutine */ int lapack_dpotrf(char *uplo, aocl_int64_t *n, doublereal *a, aocl_int64_t *lda,
+                                   aocl_int64_t *info)
 {
     /* System generated locals */
-    integer a_dim1, a_offset, i__1, i__2, i__3, i__4;
+    aocl_int64_t a_dim1, a_offset, i__1, i__2, i__3, i__4;
 
     /* Local variables */
-    integer j, jb, nb;
+    aocl_int64_t j, jb, nb;
     logical upper;
 
 #ifndef FLA_ENABLE_AOCL_BLAS
-    logical lsame_(char *ca, char *cb, integer a, integer b);
+    logical lsame_(char *ca, char *cb, aocl_int64_t a, aocl_int64_t b);
 #endif
-    int lapack_dpotf2(char *uplo, integer *n, doublereal *a, integer *lda, integer *info);
+    int lapack_dpotf2(char *uplo, aocl_int64_t *n, doublereal *a, aocl_int64_t *lda, aocl_int64_t *info);
 
     /*  DPOTRF computes the Cholesky factorization of a real symmetric */
     /*  positive definite matrix A. */
@@ -159,7 +158,7 @@ static doublereal c_b14 = 1.;
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("DPOTRF", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("DPOTRF", &i__1, (ftnlen)6);
         return 0;
     }
 
@@ -172,7 +171,7 @@ static doublereal c_b14 = 1.;
 
     /*     Determine the block size for this environment. */
 
-    nb = ilaenv_(&c__1, "DPOTRF", uplo, n, &c_n1, &c_n1, &c_n1);
+    nb = aocl_lapack_ilaenv(&c__1, "DPOTRF", uplo, n, &c_n1, &c_n1, &c_n1);
     if(nb <= 1 || nb >= *n)
     {
 
@@ -214,7 +213,7 @@ static doublereal c_b14 = 1.;
                 }
 #endif
 #endif
-                dsyrk_("Upper", "Transpose", &jb, &i__3, &c_b13, &a[j * a_dim1 + 1], lda, &c_b14,
+                aocl_blas_dsyrk("Upper", "Transpose", &jb, &i__3, &c_b13, &a[j * a_dim1 + 1], lda, &c_b14,
                        &a[j + j * a_dim1], lda);
 #if FLA_ENABLE_AMD_OPT
                 fla_dpotrf_small_avx2("Upper", &jb, &a[j + j * a_dim1], lda, info);
@@ -233,12 +232,12 @@ static doublereal c_b14 = 1.;
                     i__3 = *n - j - jb + 1;
                     i__4 = j - 1;
 
-                    dgemm_("Transpose", "No transpose", &jb, &i__3, &i__4, &c_b13,
+                    aocl_blas_dgemm("Transpose", "No transpose", &jb, &i__3, &i__4, &c_b13,
                            &a[j * a_dim1 + 1], lda, &a[(j + jb) * a_dim1 + 1], lda, &c_b14,
                            &a[j + (j + jb) * a_dim1], lda);
                     i__3 = *n - j - jb + 1;
 
-                    dtrsm_("Left", "Upper", "Transpose", "Non-unit", &jb, &i__3, &c_b14,
+                    aocl_blas_dtrsm("Left", "Upper", "Transpose", "Non-unit", &jb, &i__3, &c_b14,
                            &a[j + j * a_dim1], lda, &a[j + (j + jb) * a_dim1], lda);
                 }
                 /* L10: */
@@ -272,7 +271,7 @@ static doublereal c_b14 = 1.;
                 }
 #endif
 #endif
-                dsyrk_("Lower", "No transpose", &jb, &i__3, &c_b13, &a[j + a_dim1], lda, &c_b14,
+                aocl_blas_dsyrk("Lower", "No transpose", &jb, &i__3, &c_b13, &a[j + a_dim1], lda, &c_b14,
                        &a[j + j * a_dim1], lda);
 #if FLA_ENABLE_AMD_OPT
                 fla_dpotrf_small_avx2("Lower", &jb, &a[j + j * a_dim1], lda, info);
@@ -290,11 +289,11 @@ static doublereal c_b14 = 1.;
 
                     i__3 = *n - j - jb + 1;
                     i__4 = j - 1;
-                    dgemm_("No transpose", "Transpose", &i__3, &jb, &i__4, &c_b13,
+                    aocl_blas_dgemm("No transpose", "Transpose", &i__3, &jb, &i__4, &c_b13,
                            &a[j + jb + a_dim1], lda, &a[j + a_dim1], lda, &c_b14,
                            &a[j + jb + j * a_dim1], lda);
                     i__3 = *n - j - jb + 1;
-                    dtrsm_("Right", "Lower", "Transpose", "Non-unit", &i__3, &jb, &c_b14,
+                    aocl_blas_dtrsm("Right", "Lower", "Transpose", "Non-unit", &i__3, &jb, &c_b14,
                            &a[j + j * a_dim1], lda, &a[j + jb + j * a_dim1], lda);
                 }
                 /* L20: */
@@ -322,7 +321,7 @@ static size_t A22;
 #define A(m, n, gm, gn, mb, nb, uplo) \
     (double *)get_tile_addr_triangle(A, gm, m, n, gm, gn, mb, nb, uplo)
 
-static inline integer get_tile_lda(integer mb, integer gm, integer k)
+static inline aocl_int64_t get_tile_lda(aocl_int64_t mb, aocl_int64_t gm, aocl_int64_t k)
 {
     if(k < gm / mb)
         return mb;
@@ -330,13 +329,13 @@ static inline integer get_tile_lda(integer mb, integer gm, integer k)
         return gm % mb;
 }
 
-static inline void *get_tile_addr_triangle(double *A, integer N, integer m, integer n, integer gm,
-                                           integer gn, integer mb, integer nb, char *uplo)
+static inline void *get_tile_addr_triangle(double *A, aocl_int64_t N, aocl_int64_t m, aocl_int64_t n, aocl_int64_t gm,
+                                           aocl_int64_t gn, aocl_int64_t mb, aocl_int64_t nb, char *uplo)
 {
     size_t eltsize = sizeof(double);
     size_t offset = 0;
-    integer lm1 = N / mb;
-    integer ln1 = N / nb;
+    aocl_int64_t lm1 = N / mb;
+    aocl_int64_t ln1 = N / nb;
     if(m < lm1)
     {
         if(n < ln1)
@@ -369,7 +368,7 @@ static inline void *get_tile_addr_triangle(double *A, integer N, integer m, inte
     return (void *)((char *)A + (offset * eltsize));
 }
 
-static inline integer get_tile_rows(integer mt, integer mb, integer m, integer k)
+static inline aocl_int64_t get_tile_rows(aocl_int64_t mt, aocl_int64_t mb, aocl_int64_t m, aocl_int64_t k)
 {
     if(k < mt - 1)
         return mb;
@@ -379,11 +378,11 @@ static inline integer get_tile_rows(integer mt, integer mb, integer m, integer k
         return (m) % mb;
 }
 
-void dpotrf_tile(char *uplo, integer n, double *A, integer lda, integer *iinfo
+void dpotrf_tile(char *uplo, aocl_int64_t n, double *A, aocl_int64_t lda, aocl_int64_t *iinfo
 #if AOCL_FLA_PROGRESS_H
                  ,
-                 aocl_fla_progress_callback aocl_fla_progress_ptr, integer progress_step_count,
-                 integer progress_total_threads
+                 aocl_fla_progress_callback aocl_fla_progress_ptr, aocl_int64_t progress_step_count,
+                 aocl_int64_t progress_total_threads
 #endif
 )
 {
@@ -391,7 +390,7 @@ void dpotrf_tile(char *uplo, integer n, double *A, integer lda, integer *iinfo
     {
         __builtin_prefetch(A, 1, 3);
 #if AOCL_FLA_PROGRESS_H
-        integer thread_id = omp_get_thread_num();
+        aocl_int64_t thread_id = omp_get_thread_num();
         if(aocl_fla_progress_ptr)
         {
             AOCL_FLA_PROGRESS_FUNC_PTR("DPOTRF", 6, &progress_step_count, &thread_id,
@@ -402,10 +401,10 @@ void dpotrf_tile(char *uplo, integer n, double *A, integer lda, integer *iinfo
     }
 }
 
-void dtrsm_tile(char *side, char *uplo, char *transa, char *diag, integer m, integer n,
-                double *alpha, double *A, integer lda, double *B, integer ldb)
+void dtrsm_tile(char *side, char *uplo, char *transa, char *diag, aocl_int64_t m, aocl_int64_t n,
+                double *alpha, double *A, aocl_int64_t lda, double *B, aocl_int64_t ldb)
 {
-    integer ak;
+    aocl_int64_t ak;
     if(*side == 'L')
         ak = m;
     else
@@ -413,14 +412,14 @@ void dtrsm_tile(char *side, char *uplo, char *transa, char *diag, integer m, int
 #pragma omp task depend(in : A[0 : (lda) * ak]) depend(inout : B[0 : (ldb) * (n)])
     {
         __builtin_prefetch(B, 1, 3);
-        dtrsm_(side, uplo, transa, diag, &m, &n, alpha, A, &lda, B, &ldb);
+        aocl_blas_dtrsm(side, uplo, transa, diag, &m, &n, alpha, A, &lda, B, &ldb);
     }
 }
 
-void dsyrk_tile(char *uplo, char *trans, integer n, integer k, double *alpha, double *A,
-                integer lda, double *beta, double *C, integer ldc)
+void dsyrk_tile(char *uplo, char *trans, aocl_int64_t n, aocl_int64_t k, double *alpha, double *A,
+                aocl_int64_t lda, double *beta, double *C, aocl_int64_t ldc)
 {
-    integer ak;
+    aocl_int64_t ak;
     if(*trans == 'N')
         ak = k;
     else
@@ -428,21 +427,21 @@ void dsyrk_tile(char *uplo, char *trans, integer n, integer k, double *alpha, do
 #pragma omp task depend(in : A[0 : (lda) * ak]) depend(inout : C[0 : (ldc) * (n)])
     {
         __builtin_prefetch(A, 1, 3);
-        dsyrk_(uplo, trans, &n, &k, alpha, A, &lda, beta, C, &ldc);
+        aocl_blas_dsyrk(uplo, trans, &n, &k, alpha, A, &lda, beta, C, &ldc);
     }
 }
 
-void dgemm_tile(char *transa, char *transb, integer m, integer n, integer k, double *alpha,
-                double *A, integer lda, double *B, integer ldb, double *beta, double *C,
-                integer ldc)
+void dgemm_tile(char *transa, char *transb, aocl_int64_t m, aocl_int64_t n, aocl_int64_t k, double *alpha,
+                double *A, aocl_int64_t lda, double *B, aocl_int64_t ldb, double *beta, double *C,
+                aocl_int64_t ldc)
 {
-    integer ak;
+    aocl_int64_t ak;
     if(*transa == 'N')
         ak = k;
     else
         ak = m;
 
-    integer bk;
+    aocl_int64_t bk;
     if(*transb == 'N')
         bk = n;
     else
@@ -451,12 +450,12 @@ void dgemm_tile(char *transa, char *transb, integer m, integer n, integer k, dou
     depend(inout : C[0 : (ldc) * (n)])
     {
         __builtin_prefetch(C, 1, 3);
-        dgemm_(transa, transb, &m, &n, &k, alpha, A, &lda, B, &ldb, beta, C, &ldc);
+        aocl_blas_dgemm(transa, transb, &m, &n, &k, alpha, A, &lda, B, &ldb, beta, C, &ldc);
     }
 }
 
-void omp_dpotrf(char *uplo, double *A, integer *n, integer *lda, integer mt, integer mb, integer nb,
-                integer gm, integer gn, integer *info)
+void omp_dpotrf(char *uplo, double *A, aocl_int64_t *n, aocl_int64_t *lda, aocl_int64_t mt, aocl_int64_t mb, aocl_int64_t nb,
+                aocl_int64_t gm, aocl_int64_t gn, aocl_int64_t *info)
 {
 #if AOCL_FLA_PROGRESS_H
     AOCL_FLA_PROGRESS_VAR;
@@ -489,10 +488,10 @@ void omp_dpotrf(char *uplo, double *A, integer *n, integer *lda, integer mt, int
          *      [L30] [L31] [L32] <- dtrsm(L22, L32)
          */
 
-        for(integer k = 0; k < mt; k++)
+        for(aocl_int64_t k = 0; k < mt; k++)
         {
-            integer mvak = get_tile_rows(mt, mb, *n, k);
-            integer ldak = get_tile_lda(mb, gm, k);
+            aocl_int64_t mvak = get_tile_rows(mt, mb, *n, k);
+            aocl_int64_t ldak = get_tile_lda(mb, gm, k);
 #if AOCL_FLA_PROGRESS_H
             progress_step_count += mvak;
 #endif
@@ -504,28 +503,28 @@ void omp_dpotrf(char *uplo, double *A, integer *n, integer *lda, integer mt, int
 #endif
             );
             // Update column tiles below diagonal: A(m,k) = L(m,k) where m > k
-            for(integer m = k + 1; m < mt; m++)
+            for(aocl_int64_t m = k + 1; m < mt; m++)
             {
-                integer mvam = get_tile_rows(mt, mb, *n, m);
-                integer ldam = get_tile_lda(mb, gm, m);
+                aocl_int64_t mvam = get_tile_rows(mt, mb, *n, m);
+                aocl_int64_t ldam = get_tile_lda(mb, gm, m);
                 dtrsm_tile("R", "L", "T", "N", mvam, mb, &c_b14, A(k, k, gm, gn, mb, nb, uplo),
                            ldak, A(m, k, gm, gn, mb, nb, uplo), ldam);
             }
 
             // Update trailing submatrix: A(m,n) -= L(m,k) * L(n,k)^T
-            for(integer m = k + 1; m < mt; m++)
+            for(aocl_int64_t m = k + 1; m < mt; m++)
             {
-                integer mvam = get_tile_rows(mt, mb, *n, m);
-                integer ldam = get_tile_lda(mb, gm, m);
+                aocl_int64_t mvam = get_tile_rows(mt, mb, *n, m);
+                aocl_int64_t ldam = get_tile_lda(mb, gm, m);
 
                 // Update diagonal tile: A(m,m) -= L(m,k) * L(m,k)^T
                 dsyrk_tile("L", "N", mvam, mb, &c_b13, A(m, k, gm, gn, mb, nb, uplo), ldam, &c_b14,
                            A(m, m, gm, gn, mb, nb, uplo), ldam);
 
                 // Update off-diagonal tiles: A(m,n) -= L(m,k) * L(n,k)^T
-                for(integer n = k + 1; n < m; n++)
+                for(aocl_int64_t n = k + 1; n < m; n++)
                 {
-                    integer ldan = get_tile_lda(mb, gm, n);
+                    aocl_int64_t ldan = get_tile_lda(mb, gm, n);
                     dgemm_tile("N", "Transpose", mvam, mb, mb, &c_b13,
                                A(m, k, gm, gn, mb, nb, uplo), ldam, A(n, k, gm, gn, mb, nb, uplo),
                                ldan, &c_b14, A(m, n, gm, gn, mb, nb, uplo), ldam);
@@ -559,10 +558,10 @@ void omp_dpotrf(char *uplo, double *A, integer *n, integer *lda, integer mt, int
          *      U22 = dpotrf(A22 - U02^T*U02 - U12^T*U12), U23 solved via dtrsm
          */
 
-        for(integer k = 0; k < mt; k++)
+        for(aocl_int64_t k = 0; k < mt; k++)
         {
-            integer nvak = get_tile_rows(mt, mb, *n, k);
-            integer ldak = get_tile_lda(mb, gm, k);
+            aocl_int64_t nvak = get_tile_rows(mt, mb, *n, k);
+            aocl_int64_t ldak = get_tile_lda(mb, gm, k);
 
             // Factorize diagonal tile: A(k,k) = U(k,k)^T * U(k,k)
             dpotrf_tile(uplo, nvak, A(k, k, gm, gn, mb, nb, uplo), ldak, info
@@ -580,27 +579,27 @@ void omp_dpotrf(char *uplo, double *A, integer *n, integer *lda, integer mt, int
             }
 #endif
             // Update row tiles to the right of diagonal: A(k,m) = U(k,m) where m > k
-            for(integer m = k + 1; m < mt; m++)
+            for(aocl_int64_t m = k + 1; m < mt; m++)
             {
-                integer nvam = get_tile_rows(mt, mb, *n, m);
+                aocl_int64_t nvam = get_tile_rows(mt, mb, *n, m);
                 dtrsm_tile("L", "U", "T", "N", mb, nvam, &c_b14, A(k, k, gm, gn, mb, nb, uplo),
                            ldak, A(k, m, gm, gn, mb, nb, uplo), ldak);
             }
 
             // Update trailing submatrix: A(n,m) -= U(k,n)^T * U(k,m)
-            for(integer m = k + 1; m < mt; m++)
+            for(aocl_int64_t m = k + 1; m < mt; m++)
             {
-                integer nvam = get_tile_rows(mt, mb, *n, m);
-                integer ldam = get_tile_lda(mb, gm, m);
+                aocl_int64_t nvam = get_tile_rows(mt, mb, *n, m);
+                aocl_int64_t ldam = get_tile_lda(mb, gm, m);
 
                 // Update diagonal tile: A(m,m) -= U(k,m)^T * U(k,m)
                 dsyrk_tile("U", "T", nvam, mb, &c_b13, A(k, m, gm, gn, mb, nb, uplo), ldak, &c_b14,
                            A(m, m, gm, gn, mb, nb, uplo), ldam);
 
                 // Update off-diagonal tiles: A(n,m) -= U(k,n)^T * U(k,m)
-                for(integer n = k + 1; n < m; n++)
+                for(aocl_int64_t n = k + 1; n < m; n++)
                 {
-                    integer ldan = get_tile_lda(mb, gm, n);
+                    aocl_int64_t ldan = get_tile_lda(mb, gm, n);
                     dgemm_tile("T", "N", mb, nvam, mb, &c_b13, A(k, n, gm, gn, mb, nb, uplo), ldak,
                                A(k, m, gm, gn, mb, nb, uplo), ldak, &c_b14,
                                A(n, m, gm, gn, mb, nb, uplo), ldan);
@@ -610,29 +609,29 @@ void omp_dpotrf(char *uplo, double *A, integer *n, integer *lda, integer mt, int
     }
 }
 
-void dlacpy_tile(integer m, integer n, double *A, integer lda, double *B, integer ldb)
+void dlacpy_tile(aocl_int64_t m, aocl_int64_t n, double *A, aocl_int64_t lda, double *B, aocl_int64_t ldb)
 {
 #pragma omp task depend(in : A[0 : (lda) * (n)]) depend(out : B[0 : (ldb) * (n)])
     {
-        dlacpy_("Full", &m, &n, A, &lda, B, &ldb);
+        aocl_lapack_dlacpy("Full", &m, &n, A, &lda, B, &ldb);
     }
 }
 
 /* Convert column-major (CM) matrix layout to tiled (CCRB).*/
-void matrix_tile(double *pA, integer lda, double *A, integer nb, integer mb, char *uplo, integer mt,
-                 integer nt, integer gm, integer gn, integer N)
+void matrix_tile(double *pA, aocl_int64_t lda, double *A, aocl_int64_t nb, aocl_int64_t mb, char *uplo, aocl_int64_t mt,
+                 aocl_int64_t nt, aocl_int64_t gm, aocl_int64_t gn, aocl_int64_t N)
 {
-    for(integer m = 0; m < mt; m++)
+    for(aocl_int64_t m = 0; m < mt; m++)
     {
-        integer ldt = get_tile_lda(mb, gm, m);
-        integer n_start = (*uplo == 'U' ? m : 0);
-        integer n_end = (*uplo == 'U' ? nt : m + 1);
-        for(integer n = n_start; n < n_end; n++)
+        aocl_int64_t ldt = get_tile_lda(mb, gm, m);
+        aocl_int64_t n_start = (*uplo == 'U' ? m : 0);
+        aocl_int64_t n_end = (*uplo == 'U' ? nt : m + 1);
+        for(aocl_int64_t n = n_start; n < n_end; n++)
         {
-            integer x1 = 0;
-            integer y1 = 0;
-            integer x2 = n == nt - 1 ? (N - 1) % nb + 1 : nb;
-            integer y2 = m == mt - 1 ? (N - 1) % mb + 1 : mb;
+            aocl_int64_t x1 = 0;
+            aocl_int64_t y1 = 0;
+            aocl_int64_t x2 = n == nt - 1 ? (N - 1) % nb + 1 : nb;
+            aocl_int64_t y2 = m == mt - 1 ? (N - 1) % mb + 1 : mb;
 
             double *f77 = &pA[(size_t)nb * lda * n + (size_t)mb * m];
             double *bdl = (double *)get_tile_addr_triangle(A, N, m, n, gm, gn, nb, nb, uplo);
@@ -642,20 +641,20 @@ void matrix_tile(double *pA, integer lda, double *A, integer nb, integer mb, cha
 }
 /* Convert tiled (CCRB) to column-major (CM) matrix layout.
    Out-of-place. */
-void matrix_untile(double *pA, integer lda, double *A, integer nb, integer mb, char *uplo,
-                   integer mt, integer nt, integer gm, integer gn, integer N)
+void matrix_untile(double *pA, aocl_int64_t lda, double *A, aocl_int64_t nb, aocl_int64_t mb, char *uplo,
+                   aocl_int64_t mt, aocl_int64_t nt, aocl_int64_t gm, aocl_int64_t gn, aocl_int64_t N)
 {
-    for(integer m = 0; m < mt; m++)
+    for(aocl_int64_t m = 0; m < mt; m++)
     {
-        integer ldt = get_tile_lda(mb, gm, m);
-        integer n_start = (*uplo == 'U' ? m : 0);
-        integer n_end = (*uplo == 'U' ? nt : m + 1);
-        for(integer n = n_start; n < n_end; n++)
+        aocl_int64_t ldt = get_tile_lda(mb, gm, m);
+        aocl_int64_t n_start = (*uplo == 'U' ? m : 0);
+        aocl_int64_t n_end = (*uplo == 'U' ? nt : m + 1);
+        for(aocl_int64_t n = n_start; n < n_end; n++)
         {
-            integer x1 = 0;
-            integer y1 = 0;
-            integer x2 = n == nt - 1 ? (N - 1) % nb + 1 : nb;
-            integer y2 = m == mt - 1 ? (N - 1) % mb + 1 : mb;
+            aocl_int64_t x1 = 0;
+            aocl_int64_t y1 = 0;
+            aocl_int64_t x2 = n == nt - 1 ? (N - 1) % nb + 1 : nb;
+            aocl_int64_t y2 = m == mt - 1 ? (N - 1) % mb + 1 : mb;
             double *f77 = &pA[(size_t)nb * lda * n + (size_t)mb * m];
             double *bdl = (double *)get_tile_addr_triangle(A, N, m, n, gm, gn, nb, nb, uplo);
 
@@ -695,7 +694,7 @@ void matrix_untile(double *pA, integer lda, double *A, integer nb, integer mb, c
  *  multicore architectures. Parallel Computing, 35(1), 38-53"
  *  by "Buttari, A., Langou, J., Kurzak, J., & Dongarra, J"
  */
-void lapack_dpotrf_var1(char *uplo, integer *n, doublereal *A, integer *lda, integer *info)
+void lapack_dpotrf_var1(char *uplo, aocl_int64_t *n, doublereal *A, aocl_int64_t *lda, aocl_int64_t *info)
 {
     *info = 0;
     if(!(*uplo == 'U' || *uplo == 'u' || *uplo == 'L' || *uplo == 'l'))
@@ -712,8 +711,8 @@ void lapack_dpotrf_var1(char *uplo, integer *n, doublereal *A, integer *lda, int
     }
     if(*info != 0)
     {
-        integer i__1 = -(*info);
-        xerbla_("DPOTRF", &i__1, (ftnlen)6);
+        aocl_int64_t i__1 = -(*info);
+        aocl_blas_xerbla("DPOTRF", &i__1, (ftnlen)6);
         return;
     }
     // Quick return if possible
@@ -724,17 +723,17 @@ void lapack_dpotrf_var1(char *uplo, integer *n, doublereal *A, integer *lda, int
 
     // Auto-tune parameters based on problem size
     int auto_num_threads;
-    integer auto_block_size;
+    aocl_int64_t auto_block_size;
 
     dpotrf_auto_tune_params(*n, &auto_num_threads, &auto_block_size);
 
-    integer nb = auto_block_size;
-    integer mb = auto_block_size;
-    integer mt = (*n == 0) ? 0 : (*n - 1) / nb + 1;
-    integer nt = (*n == 0) ? 0 : (*n - 1) / nb + 1;
-    integer lm1 = *n / mb;
-    integer ln1 = *n / nb;
-    integer mnt = (ln1 * (1 + lm1)) / 2;
+    aocl_int64_t nb = auto_block_size;
+    aocl_int64_t mb = auto_block_size;
+    aocl_int64_t mt = (*n == 0) ? 0 : (*n - 1) / nb + 1;
+    aocl_int64_t nt = (*n == 0) ? 0 : (*n - 1) / nb + 1;
+    aocl_int64_t lm1 = *n / mb;
+    aocl_int64_t ln1 = *n / nb;
+    aocl_int64_t mnt = (ln1 * (1 + lm1)) / 2;
     size_t size = (size_t)(mnt * mb * nb + (*n * (*n % nb))) * sizeof(double);
     double *temp_A = malloc(size);
     A21 = (size_t)(mb * nb) * mnt;

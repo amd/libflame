@@ -13,17 +13,17 @@
  * All the computations are done inline without using
  * corresponding BLAS APIs to reduce function overheads.
  */
-integer fla_sgetrf_small_avx512(integer *m, integer *n, real *a, integer *lda, integer *ipiv,
-                                integer *info)
+aocl_int64_t fla_sgetrf_small_avx512(aocl_int64_t *m, aocl_int64_t *n, real *a, aocl_int64_t *lda, aocl_int_t *ipiv,
+                                     aocl_int64_t *info)
 {
-    integer mi, ni;
-    integer i, j, i_1, lda_t, b_off, y_off;
+    aocl_int64_t mi, ni;
+    aocl_int64_t i, j, i_1, lda_t, b_off, y_off;
 
     real p_val, max_val, t_val;
     real *acur, *apiv, *asrc;
-    integer p_idx;
+    aocl_int64_t p_idx;
     __m512 result[8], tempY[8], tempb[8], tempx, p_val4;
-    integer min_m_n = fla_min(*m, *n);
+    aocl_int64_t min_m_n = fla_min(*m, *n);
     lda_t = *lda;
 
     for(i = 0; i < min_m_n; i++)
@@ -49,7 +49,7 @@ integer fla_sgetrf_small_avx512(integer *m, integer *n, real *a, integer *lda, i
 
         apiv = a + p_idx;
         asrc = a + i;
-        ipiv[i] = p_idx + 1;
+        ipiv[i] = (aocl_int_t)(p_idx + 1);
 
         /* Swap rows and calculate a column of L */
         if(max_val != 0.0)

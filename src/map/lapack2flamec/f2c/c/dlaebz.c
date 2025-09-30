@@ -312,11 +312,40 @@
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void dlaebz_(integer *ijob, integer *nitmax, integer *n, integer *mmax, integer *minp,
-             integer *nbmin, doublereal *abstol, doublereal *reltol, doublereal *pivmin,
-             doublereal *d__, doublereal *e, doublereal *e2, integer *nval, doublereal *ab,
-             doublereal *c__, integer *mout, integer *nab, doublereal *work, integer *iwork,
-             integer *info)
+/** Generated wrapper function */
+void dlaebz_(aocl_int_t *ijob, aocl_int_t *nitmax, aocl_int_t *n, aocl_int_t *mmax,
+             aocl_int_t *minp, aocl_int_t *nbmin, doublereal *abstol, doublereal *reltol,
+             doublereal *pivmin, doublereal *d__, doublereal *e, doublereal *e2, aocl_int_t *nval,
+             doublereal *ab, doublereal *c__, aocl_int_t *mout, aocl_int_t *nab, doublereal *work,
+             aocl_int_t *iwork, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_dlaebz(ijob, nitmax, n, mmax, minp, nbmin, abstol, reltol, pivmin, d__, e, e2, nval,
+                       ab, c__, mout, nab, work, iwork, info);
+#else
+    aocl_int64_t ijob_64 = *ijob;
+    aocl_int64_t nitmax_64 = *nitmax;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t mmax_64 = *mmax;
+    aocl_int64_t minp_64 = *minp;
+    aocl_int64_t nbmin_64 = *nbmin;
+    aocl_int64_t mout_64 = *mout;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_dlaebz(&ijob_64, &nitmax_64, &n_64, &mmax_64, &minp_64, &nbmin_64, abstol, reltol,
+                       pivmin, d__, e, e2, nval, ab, c__, &mout_64, nab, work, iwork, &info_64);
+
+    *mout = (aocl_int_t)mout_64;
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_dlaebz(aocl_int64_t *ijob, aocl_int64_t *nitmax, aocl_int64_t *n,
+                        aocl_int64_t *mmax, aocl_int64_t *minp, aocl_int64_t *nbmin,
+                        doublereal *abstol, doublereal *reltol, doublereal *pivmin, doublereal *d__,
+                        doublereal *e, doublereal *e2, aocl_int_t *nval, doublereal *ab,
+                        doublereal *c__, aocl_int64_t *mout, aocl_int_t *nab, doublereal *work,
+                        aocl_int_t *iwork, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dlaebz inputs: ijob %" FLA_IS ", nitmax %" FLA_IS ", n %" FLA_IS
@@ -668,8 +697,8 @@ void dlaebz_(integer *ijob, integer *nitmax, integer *n, integer *mmax, integer 
                     nab[ji + (nab_dim1 << 1)] = nab[kfnew + (nab_dim1 << 1)];
                     ab[kfnew + ab_dim1] = tmp1;
                     ab[kfnew + (ab_dim1 << 1)] = tmp2;
-                    nab[kfnew + nab_dim1] = itmp1;
-                    nab[kfnew + (nab_dim1 << 1)] = itmp2;
+                    nab[kfnew + nab_dim1] = (aocl_int_t)(itmp1);
+                    nab[kfnew + (nab_dim1 << 1)] = (aocl_int_t)(itmp2);
                     if(*ijob == 3)
                     {
                         itmp1 = nval[ji];

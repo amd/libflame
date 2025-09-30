@@ -4,8 +4,8 @@
  -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for
  libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c_n1 = -1;
-static integer c__1 = 1;
+static aocl_int64_t c_n1 = -1;
+static aocl_int64_t c__1 = 1;
 /* > \brief <b> ZGGSVD3 computes the singular value decomposition (SVD) for OTHER matrices</b> */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -46,7 +46,7 @@ static integer c__1 = 1;
 /* > \verbatim */
 /* > */
 /* > ZGGSVD3 computes the generalized singular value decomposition (GSVD) */
-/* > of an M-by-N complex matrix A and P-by-N complex matrix B: */
+/* > of an M-by-N scomplex matrix A and P-by-N scomplex matrix B: */
 /* > */
 /* > U**H*A*Q = D1*( 0 R ), V**H*B*Q = D2*( 0 R ) */
 /* > */
@@ -355,11 +355,48 @@ the routine */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void zggsvd3_(char *jobu, char *jobv, char *jobq, integer *m, integer *n, integer *p, integer *k,
-              integer *l, doublecomplex *a, integer *lda, doublecomplex *b, integer *ldb,
-              doublereal *alpha, doublereal *beta, doublecomplex *u, integer *ldu, doublecomplex *v,
-              integer *ldv, doublecomplex *q, integer *ldq, doublecomplex *work, integer *lwork,
-              doublereal *rwork, integer *iwork, integer *info)
+/** Generated wrapper function */
+void zggsvd3_(char *jobu, char *jobv, char *jobq, aocl_int_t *m, aocl_int_t *n, aocl_int_t *p,
+              aocl_int_t *k, aocl_int_t *l, dcomplex *a, aocl_int_t *lda, dcomplex *b,
+              aocl_int_t *ldb, doublereal *alpha, doublereal *beta, dcomplex *u,
+              aocl_int_t *ldu, dcomplex *v, aocl_int_t *ldv, dcomplex *q, aocl_int_t *ldq,
+              dcomplex *work, aocl_int_t *lwork, doublereal *rwork, aocl_int_t *iwork,
+              aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_zggsvd3(jobu, jobv, jobq, m, n, p, k, l, a, lda, b, ldb, alpha, beta, u, ldu, v,
+                        ldv, q, ldq, work, lwork, rwork, iwork, info);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t p_64 = *p;
+    aocl_int64_t k_64 = *k;
+    aocl_int64_t l_64 = *l;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t ldb_64 = *ldb;
+    aocl_int64_t ldu_64 = *ldu;
+    aocl_int64_t ldv_64 = *ldv;
+    aocl_int64_t ldq_64 = *ldq;
+    aocl_int64_t lwork_64 = *lwork;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_zggsvd3(jobu, jobv, jobq, &m_64, &n_64, &p_64, &k_64, &l_64, a, &lda_64, b, &ldb_64,
+                        alpha, beta, u, &ldu_64, v, &ldv_64, q, &ldq_64, work, &lwork_64, rwork,
+                        iwork, &info_64);
+
+    *k = (aocl_int_t)k_64;
+    *l = (aocl_int_t)l_64;
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_zggsvd3(char *jobu, char *jobv, char *jobq, aocl_int64_t *m, aocl_int64_t *n,
+                         aocl_int64_t *p, aocl_int64_t *k, aocl_int64_t *l, dcomplex *a,
+                         aocl_int64_t *lda, dcomplex *b, aocl_int64_t *ldb, doublereal *alpha,
+                         doublereal *beta, dcomplex *u, aocl_int64_t *ldu, dcomplex *v,
+                         aocl_int64_t *ldv, dcomplex *q, aocl_int64_t *ldq,
+                         dcomplex *work, aocl_int64_t *lwork, doublereal *rwork,
+                         aocl_int_t *iwork, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zggsvd3 inputs: jobu %c, jobv %c, jobq %c, m %" FLA_IS ", n %" FLA_IS
@@ -367,44 +404,23 @@ void zggsvd3_(char *jobu, char *jobv, char *jobq, integer *m, integer *n, intege
                       ", ldu %" FLA_IS ", ldv %" FLA_IS ", ldq %" FLA_IS "",
                       *jobu, *jobv, *jobq, *m, *n, *p, *k, *l, *lda, *ldb, *ldu, *ldv, *ldq);
     /* System generated locals */
-    integer a_dim1, a_offset, b_dim1, b_offset, q_dim1, q_offset, u_dim1, u_offset, v_dim1,
+    aocl_int64_t a_dim1, a_offset, b_dim1, b_offset, q_dim1, q_offset, u_dim1, u_offset, v_dim1,
         v_offset, i__1, i__2;
-    doublecomplex z__1;
+    dcomplex z__1;
     /* Local variables */
-    integer i__, j;
+    aocl_int64_t i__, j;
     doublereal ulp;
-    integer ibnd;
+    aocl_int64_t ibnd;
     doublereal tola;
-    integer isub;
+    aocl_int64_t isub;
     doublereal tolb, unfl, temp, smax;
-    extern logical lsame_(char *, char *, integer, integer);
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     doublereal anorm, bnorm;
-    extern /* Subroutine */
-        void
-        dcopy_(integer *, doublereal *, integer *, doublereal *, integer *);
     logical wantq, wantu, wantv;
     extern doublereal dlamch_(char *);
-    integer ncycle;
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    extern doublereal zlange_(char *, integer *, integer *, doublecomplex *, integer *,
-                              doublereal *);
-    extern /* Subroutine */
-        void
-        ztgsja_(char *, char *, char *, integer *, integer *, integer *, integer *, integer *,
-                doublecomplex *, integer *, doublecomplex *, integer *, doublereal *, doublereal *,
-                doublereal *, doublereal *, doublecomplex *, integer *, doublecomplex *, integer *,
-                doublecomplex *, integer *, doublecomplex *, integer *, integer *);
-    integer lwkopt;
+    aocl_int64_t ncycle;
+    aocl_int64_t lwkopt;
     logical lquery;
-    extern /* Subroutine */
-        void
-        zggsvp3_(char *, char *, char *, integer *, integer *, integer *, doublecomplex *,
-                 integer *, doublecomplex *, integer *, doublereal *, doublereal *, integer *,
-                 integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *,
-                 integer *, integer *, doublereal *, doublecomplex *, doublecomplex *, integer *,
-                 integer *);
     /* -- LAPACK driver routine (version 3.7.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -504,9 +520,9 @@ void zggsvd3_(char *jobu, char *jobv, char *jobq, integer *m, integer *n, intege
     /* Compute workspace */
     if(*info == 0)
     {
-        zggsvp3_(jobu, jobv, jobq, m, p, n, &a[a_offset], lda, &b[b_offset], ldb, &tola, &tolb, k,
-                 l, &u[u_offset], ldu, &v[v_offset], ldv, &q[q_offset], ldq, &iwork[1], &rwork[1],
-                 &work[1], &work[1], &c_n1, info);
+        aocl_lapack_zggsvp3(jobu, jobv, jobq, m, p, n, &a[a_offset], lda, &b[b_offset], ldb, &tola,
+                            &tolb, k, l, &u[u_offset], ldu, &v[v_offset], ldv, &q[q_offset], ldq,
+                            &iwork[1], &rwork[1], &work[1], &work[1], &c_n1, info);
         lwkopt = *n + (integer)work[1].r;
         /* Computing MAX */
         i__1 = *n << 1;
@@ -520,7 +536,7 @@ void zggsvd3_(char *jobu, char *jobv, char *jobq, integer *m, integer *n, intege
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("ZGGSVD3", &i__1, (ftnlen)7);
+        aocl_blas_xerbla("ZGGSVD3", &i__1, (ftnlen)7);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -530,8 +546,8 @@ void zggsvd3_(char *jobu, char *jobv, char *jobq, integer *m, integer *n, intege
         return;
     }
     /* Compute the Frobenius norm of matrices A and B */
-    anorm = zlange_("1", m, n, &a[a_offset], lda, &rwork[1]);
-    bnorm = zlange_("1", p, n, &b[b_offset], ldb, &rwork[1]);
+    anorm = aocl_lapack_zlange("1", m, n, &a[a_offset], lda, &rwork[1]);
+    bnorm = aocl_lapack_zlange("1", p, n, &b[b_offset], ldb, &rwork[1]);
     /* Get machine precision and set up threshold for determining */
     /* the effective numerical rank of the matrices A and B. */
     ulp = dlamch_("Precision");
@@ -539,16 +555,16 @@ void zggsvd3_(char *jobu, char *jobv, char *jobq, integer *m, integer *n, intege
     tola = fla_max(*m, *n) * fla_max(anorm, unfl) * ulp;
     tolb = fla_max(*p, *n) * fla_max(bnorm, unfl) * ulp;
     i__1 = *lwork - *n;
-    zggsvp3_(jobu, jobv, jobq, m, p, n, &a[a_offset], lda, &b[b_offset], ldb, &tola, &tolb, k, l,
-             &u[u_offset], ldu, &v[v_offset], ldv, &q[q_offset], ldq, &iwork[1], &rwork[1],
-             &work[1], &work[*n + 1], &i__1, info);
+    aocl_lapack_zggsvp3(jobu, jobv, jobq, m, p, n, &a[a_offset], lda, &b[b_offset], ldb, &tola,
+                        &tolb, k, l, &u[u_offset], ldu, &v[v_offset], ldv, &q[q_offset], ldq,
+                        &iwork[1], &rwork[1], &work[1], &work[*n + 1], &i__1, info);
     /* Compute the GSVD of two upper "triangular" matrices */
-    ztgsja_(jobu, jobv, jobq, m, p, n, k, l, &a[a_offset], lda, &b[b_offset], ldb, &tola, &tolb,
-            &alpha[1], &beta[1], &u[u_offset], ldu, &v[v_offset], ldv, &q[q_offset], ldq, &work[1],
-            &ncycle, info);
+    aocl_lapack_ztgsja(jobu, jobv, jobq, m, p, n, k, l, &a[a_offset], lda, &b[b_offset], ldb, &tola,
+                       &tolb, &alpha[1], &beta[1], &u[u_offset], ldu, &v[v_offset], ldv,
+                       &q[q_offset], ldq, &work[1], &ncycle, info);
     /* Sort the singular values and store the pivot indices in IWORK */
     /* Copy ALPHA to RWORK, then sort ALPHA in RWORK */
-    dcopy_(n, &alpha[1], &c__1, &rwork[1], &c__1);
+    aocl_blas_dcopy(n, &alpha[1], &c__1, &rwork[1], &c__1);
     /* Computing MIN */
     i__1 = *l;
     i__2 = *m - *k; // , expr subst
@@ -574,11 +590,11 @@ void zggsvd3_(char *jobu, char *jobv, char *jobq, integer *m, integer *n, intege
         {
             rwork[*k + isub] = rwork[*k + i__];
             rwork[*k + i__] = smax;
-            iwork[*k + i__] = *k + isub;
+            iwork[*k + i__] = (aocl_int_t)(*k + isub);
         }
         else
         {
-            iwork[*k + i__] = *k + i__;
+            iwork[*k + i__] = (aocl_int_t)(*k + i__);
         }
         /* L20: */
     }

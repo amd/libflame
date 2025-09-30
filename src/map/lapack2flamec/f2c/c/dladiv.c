@@ -3,7 +3,7 @@
  on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
-#include "FLA_f2c.h" /* > \brief \b DLADIV performs complex division in real arithmetic, avoiding unnecessary overflow. */
+#include "FLA_f2c.h" /* > \brief \b DLADIV performs scomplex division in real arithmetic, avoiding unnecessary overflow. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
@@ -33,7 +33,7 @@
 /* > */
 /* > \verbatim */
 /* > */
-/* > DLADIV performs complex division in real arithmetic */
+/* > DLADIV performs scomplex division in real arithmetic */
 /* > */
 /* > a + i*b */
 /* > p + i*q = --------- */

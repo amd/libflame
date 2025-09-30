@@ -133,14 +133,14 @@ TLS_CLASS_SPEC fla_dim_t __attribute__((unused)) fla_req_id = -1;
 TLS_CLASS_SPEC fla_arch_t fla_arch_id = -1;
 
 // Keep track if AOCL_ENABLE_INSTRUCTIONS environment variable was set.
-TLS_CLASS_SPEC bool __attribute__((unused)) fla_aocl_e_i = FALSE;
+TLS_CLASS_SPEC integer __attribute__((unused)) fla_aocl_e_i = FALSE;
 
 // A mutex to allow synchronous access to global_thread.
 TLS_CLASS_SPEC fla_pthread_mutex_t fla_global_thread_mutex = FLA_PTHREAD_MUTEX_INITIALIZER;
 
 /********************************************************************************
  * \brief fla_env_get_var is a function used to query the environment
- * variable and convert the string into integer and return the same
+ * variable and convert the string into fla_dim_t and return the same
  ********************************************************************************/
 int fla_env_get_var(const char *env, int fallback)
 {
@@ -153,8 +153,8 @@ int fla_env_get_var(const char *env, int fallback)
     // Set the return value based on the string obtained from getenv().
     if(str != NULL)
     {
-        // If there was no error, convert the string to an integer and
-        // prepare to return that integer.
+        // If there was no error, convert the string to an fla_dim_t and
+        // prepare to return that fla_dim_t.
         r_val = (int)strtol(str, NULL, 10);
     }
     else
@@ -175,7 +175,7 @@ int fla_env_get_var_arch_type(const char *env, int fallback)
 
     if(str != NULL)
     {
-        // If there was no error, convert the string to an integer
+        // If there was no error, convert the string to an fla_dim_t
         r_val = (int)strtol(str, NULL, 10);
 
         if(r_val == 0)
@@ -242,7 +242,7 @@ fla_arch_t fla_arch_query_id(void)
 }
 
 /* Return boolean that indicates if AOCL_ENABLE_INSTRUCTIONS environment variable has been set */
-bool fla_aocl_enable_instruction_query(void)
+integer fla_aocl_enable_instruction_query(void)
 {
     return fla_aocl_e_i;
 }
@@ -359,7 +359,7 @@ void fla_isa_init(fla_context *context)
     const char* const flags_array[] = {"avx2", "avx512f"};
     au_cpu_num_t cpu_num = AU_CURRENT_CPU_NUM;
 
-    bool cpu_supports_isa = au_cpuid_has_flags(cpu_num, flags_array, 1);
+    integer cpu_supports_isa = au_cpuid_has_flags(cpu_num, flags_array, 1);
 
     // Check if the target supports AVX2/AVX512
     if(cpu_supports_isa)

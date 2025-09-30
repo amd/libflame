@@ -25,23 +25,23 @@ double d_abs(doublereal *x)
 
 #ifdef _WIN32
 /* Complex */
-double c_abs(complex *z)
+double c_abs(scomplex *z)
 {
     _Fcomplex z_ = {z->r, z->i};
     return (cabsf(z_));
 }
-double z_abs(doublecomplex *z)
+double z_abs(dcomplex *z)
 {
     _Dcomplex z_ = {z->r, z->i};
     return (cabs(z_));
 }
 #else
 /* Complex */
-double c_abs(complex *z)
+double c_abs(scomplex *z)
 {
     return (cabs(z->r + I * z->i));
 }
-double z_abs(doublecomplex *z)
+double z_abs(dcomplex *z)
 {
     return (cabs(z->r + I * z->i));
 }

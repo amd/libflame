@@ -319,7 +319,7 @@ double prepare_lapacke_hetrf_run(integer datatype, integer layout, char uplo, in
 
 /*
 HETRF_API calls LAPACK interface for factorization
-of a complex hermitian matrix A using the
+of a scomplex hermitian matrix A using the
 Bunch-Kaufman diagonal pivoting method
 (A = L*D*L**H or A = U*D*U**H)
 */

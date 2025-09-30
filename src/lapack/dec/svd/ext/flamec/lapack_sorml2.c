@@ -1,15 +1,22 @@
-/* ../netlib/sorml2.f -- translated by f2c (version 20000121). You must link the resulting object file with the libraries: -lf2c -lm (in that order) */
+/* ../netlib/sorml2.f -- translated by f2c (version 20000121). You must link the resulting object
+ * file with the libraries: -lf2c -lm (in that order) */
 #include "FLA_f2c.h" /* > \brief \b SORML2 multiplies a general matrix by the orthogonal matrix from a LQ factorization determined by sgelqf (unblocked algorithm). */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download SORML2 + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/sorml2. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/sorml2.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/sorml2. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/sorml2.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sorml2. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sorml2.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -80,7 +87,7 @@
 /* > The number of elementary reflectors whose product defines */
 /* > the matrix Q. */
 /* > If SIDE = 'L', M >= K >= 0;
-*/
+ */
 /* > if SIDE = 'R', N >= K >= 0. */
 /* > \endverbatim */
 /* > */
@@ -143,19 +150,17 @@
 /* > \ingroup realOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int lapack_sorml2(char *side, char *trans, integer *m, integer *n, integer *k, real *a, integer *lda, real *tau, real *c__, integer *ldc, real *work, integer *info)
+int lapack_sorml2(char *side, char *trans, aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *k,
+                  real *a, aocl_int64_t *lda, real *tau, real *c__, aocl_int64_t *ldc, real *work,
+                  aocl_int64_t *info)
 {
     /* System generated locals */
-    integer a_dim1, a_offset, c_dim1, c_offset, i__1, i__2;
+    aocl_int64_t a_dim1, a_offset, c_dim1, c_offset, i__1, i__2;
     /* Local variables */
     logical left;
-    integer i__;
-    extern logical lsame_(char *, char *, integer, integer);
-    extern /* Subroutine */
-    void slarf_(char *, integer *, integer *, real *, integer *, real *, real *, integer *, real *);
-    integer i1, i2, i3, ic, jc, mi, ni, nq;
-    extern /* Subroutine */
-    void xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    aocl_int64_t i__;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    aocl_int64_t i1, i2, i3, ic, jc, mi, ni, nq;
     logical notran;
     real aii;
     /* -- LAPACK computational routine -- */
@@ -192,7 +197,7 @@ int lapack_sorml2(char *side, char *trans, integer *m, integer *n, integer *k, r
     left = lsame_(side, "L", 1, 1);
     notran = lsame_(trans, "N", 1, 1);
     /* NQ is the order of Q */
-    if (left)
+    if(left)
     {
         nq = *m;
     }
@@ -200,46 +205,46 @@ int lapack_sorml2(char *side, char *trans, integer *m, integer *n, integer *k, r
     {
         nq = *n;
     }
-    if (! left && ! lsame_(side, "R", 1, 1))
+    if(!left && !lsame_(side, "R", 1, 1))
     {
         *info = -1;
     }
-    else if (! notran && ! lsame_(trans, "T", 1, 1))
+    else if(!notran && !lsame_(trans, "T", 1, 1))
     {
         *info = -2;
     }
-    else if (*m < 0)
+    else if(*m < 0)
     {
         *info = -3;
     }
-    else if (*n < 0)
+    else if(*n < 0)
     {
         *info = -4;
     }
-    else if (*k < 0 || *k > nq)
+    else if(*k < 0 || *k > nq)
     {
         *info = -5;
     }
-    else if (*lda < fla_max(1,*k))
+    else if(*lda < fla_max(1, *k))
     {
         *info = -7;
     }
-    else if (*ldc < fla_max(1,*m))
+    else if(*ldc < fla_max(1, *m))
     {
         *info = -10;
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("SORML2", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("SORML2", &i__1, (ftnlen)6);
         return 0;
     }
     /* Quick return if possible */
-    if (*m == 0 || *n == 0 || *k == 0)
+    if(*m == 0 || *n == 0 || *k == 0)
     {
         return 0;
     }
-    if (left && notran || ! left && ! notran)
+    if(left && notran || !left && !notran)
     {
         i1 = 1;
         i2 = *k;
@@ -251,7 +256,7 @@ int lapack_sorml2(char *side, char *trans, integer *m, integer *n, integer *k, r
         i2 = 1;
         i3 = -1;
     }
-    if (left)
+    if(left)
     {
         ni = *n;
         jc = 1;
@@ -263,11 +268,9 @@ int lapack_sorml2(char *side, char *trans, integer *m, integer *n, integer *k, r
     }
     i__1 = i2;
     i__2 = i3;
-    for (i__ = i1;
-            i__2 < 0 ? i__ >= i__1 : i__ <= i__1;
-            i__ += i__2)
+    for(i__ = i1; i__2 < 0 ? i__ >= i__1 : i__ <= i__1; i__ += i__2)
     {
-        if (left)
+        if(left)
         {
             /* H(i) is applied to C(i:m,1:n) */
             mi = *m - i__ + 1;
@@ -282,7 +285,8 @@ int lapack_sorml2(char *side, char *trans, integer *m, integer *n, integer *k, r
         /* Apply H(i) */
         aii = a[i__ + i__ * a_dim1];
         a[i__ + i__ * a_dim1] = 1.f;
-        slarf_(side, &mi, &ni, &a[i__ + i__ * a_dim1], lda, &tau[i__], &c__[ ic + jc * c_dim1], ldc, &work[1]);
+        aocl_lapack_slarf(side, &mi, &ni, &a[i__ + i__ * a_dim1], lda, &tau[i__],
+                          &c__[ic + jc * c_dim1], ldc, &work[1]);
         a[i__ + i__ * a_dim1] = aii;
         /* L10: */
     }

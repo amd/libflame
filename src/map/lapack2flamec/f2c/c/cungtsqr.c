@@ -4,9 +4,9 @@
  -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for
  libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static complex c_b1 = {1.f, 0.f};
-static complex c_b2 = {0.f, 0.f};
-static integer c__1 = 1;
+static scomplex c_b1 = {{1.f}, {0.f}};
+static scomplex c_b2 = {{0.f}, {0.f}};
+static aocl_int64_t c__1 = 1;
 /* > \brief \b CUNGTSQR */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -41,7 +41,7 @@ static integer c__1 = 1;
 /* > */
 /* > \verbatim */
 /* > */
-/* > CUNGTSQR generates an M-by-N complex matrix Q_out with orthonormal */
+/* > CUNGTSQR generates an M-by-N scomplex matrix Q_out with orthonormal */
 /* > columns, which are the first N columns of a product of comlpex unitary */
 /* > matrices of order M which are returned by CLATSQR */
 /* > */
@@ -174,8 +174,33 @@ static integer c__1 = 1;
 /* > \endverbatim */
 /* ===================================================================== */
 /* Subroutine */
-void cungtsqr_(integer *m, integer *n, integer *mb, integer *nb, complex *a, integer *lda,
-               complex *t, integer *ldt, complex *work, integer *lwork, integer *info)
+/** Generated wrapper function */
+void cungtsqr_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *mb, aocl_int_t *nb, scomplex *a,
+               aocl_int_t *lda, scomplex *t, aocl_int_t *ldt, scomplex *work, aocl_int_t *lwork,
+               aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_cungtsqr(m, n, mb, nb, a, lda, t, ldt, work, lwork, info);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t mb_64 = *mb;
+    aocl_int64_t nb_64 = *nb;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t ldt_64 = *ldt;
+    aocl_int64_t lwork_64 = *lwork;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_cungtsqr(&m_64, &n_64, &mb_64, &nb_64, a, &lda_64, t, &ldt_64, work, &lwork_64,
+                         &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_cungtsqr(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *mb, aocl_int64_t *nb,
+                          scomplex *a, aocl_int64_t *lda, scomplex *t, aocl_int64_t *ldt,
+                          scomplex *work, aocl_int64_t *lwork, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -187,22 +212,12 @@ void cungtsqr_(integer *m, integer *n, integer *mb, integer *nb, complex *a, int
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
-    integer a_dim1, a_offset, t_dim1, t_offset, i__1, i__2;
-    complex q__1;
+    aocl_int64_t a_dim1, a_offset, t_dim1, t_offset, i__1, i__2;
+    scomplex q__1;
     /* Local variables */
-    extern /* Subroutine */
-        void
-        clamtsqr_(char *, char *, integer *, integer *, integer *, integer *, integer *, complex *,
-                  integer *, complex *, integer *, complex *, integer *, complex *, integer *,
-                  integer *);
-    integer lworkopt, j, lc, lw, ldc, iinfo;
-    extern /* Subroutine */
-        void
-        ccopy_(integer *, complex *, integer *, complex *, integer *),
-        claset_(char *, integer *, integer *, complex *, complex *, complex *, integer *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    aocl_int64_t lworkopt, j, lc, lw, ldc, iinfo;
     logical lquery;
-    integer nblocal;
+    aocl_int64_t nblocal;
     /* -- LAPACK computational routine (version 3.9.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -293,7 +308,7 @@ void cungtsqr_(integer *m, integer *n, integer *mb, integer *nb, complex *a, int
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("CUNGTSQR", &i__1, (ftnlen)8);
+        aocl_blas_xerbla("CUNGTSQR", &i__1, (ftnlen)8);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
@@ -324,20 +339,20 @@ void cungtsqr_(integer *m, integer *n, integer *mb, integer *nb, complex *a, int
     /* ( 0 ) 0 is a (M-N)-by-N zero matrix. */
     /* (1a) Form M-by-N matrix in the array WORK(1:LDC*N) with ones */
     /* on the diagonal and zeros elsewhere. */
-    claset_("F", m, n, &c_b2, &c_b1, &work[1], &ldc);
+    aocl_lapack_claset("F", m, n, &c_b2, &c_b1, &work[1], &ldc);
     /* (1b) On input, WORK(1:LDC*N) stores ( I );
      */
     /* ( 0 ) */
     /* On output, WORK(1:LDC*N) stores Q1_in. */
-    clamtsqr_("L", "N", m, n, n, mb, &nblocal, &a[a_offset], lda, &t[t_offset], ldt, &work[1], &ldc,
-              &work[lc + 1], &lw, &iinfo);
+    aocl_lapack_clamtsqr("L", "N", m, n, n, mb, &nblocal, &a[a_offset], lda, &t[t_offset], ldt,
+                         &work[1], &ldc, &work[lc + 1], &lw, &iinfo);
     /* (2) Copy the result from the part of the work array (1:M,1:N) */
     /* with the leading dimension LDC that starts at WORK(1) into */
     /* the output array A(1:M,1:N) column-by-column. */
     i__1 = *n;
     for(j = 1; j <= i__1; ++j)
     {
-        ccopy_(m, &work[(j - 1) * ldc + 1], &c__1, &a[j * a_dim1 + 1], &c__1);
+        aocl_blas_ccopy(m, &work[(j - 1) * ldc + 1], &c__1, &a[j * a_dim1 + 1], &c__1);
     }
     q__1.r = (real)lworkopt;
     q__1.i = 0.f; // , expr subst

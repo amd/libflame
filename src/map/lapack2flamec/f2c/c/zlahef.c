@@ -4,9 +4,9 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static doublecomplex c_b1 = {1., 0.};
-static integer c__1 = 1;
-/* > \brief \b ZLAHEF computes a partial factorization of a complex Hermitian indefinite matrix
+static dcomplex c_b1 = {{1.}, {0.}};
+static aocl_int64_t c__1 = 1;
+/* > \brief \b ZLAHEF computes a partial factorization of a scomplex Hermitian indefinite matrix
  * using the Bunc h-Kaufman diagonal pivoting method (blocked algorithm, calling Level 3 BLAS). */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -175,8 +175,30 @@ static integer c__1 = 1;
 /* > \endverbatim */
 /* ===================================================================== */
 /* Subroutine */
-void zlahef_(char *uplo, integer *n, integer *nb, integer *kb, doublecomplex *a, integer *lda,
-             integer *ipiv, doublecomplex *w, integer *ldw, integer *info)
+/** Generated wrapper function */
+void zlahef_(char *uplo, aocl_int_t *n, aocl_int_t *nb, aocl_int_t *kb, dcomplex *a,
+             aocl_int_t *lda, aocl_int_t *ipiv, dcomplex *w, aocl_int_t *ldw, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_zlahef(uplo, n, nb, kb, a, lda, ipiv, w, ldw, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t nb_64 = *nb;
+    aocl_int64_t kb_64 = *kb;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t ldw_64 = *ldw;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_zlahef(uplo, &n_64, &nb_64, &kb_64, a, &lda_64, ipiv, w, &ldw_64, &info_64);
+
+    *kb = (aocl_int_t)kb_64;
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_zlahef(char *uplo, aocl_int64_t *n, aocl_int64_t *nb, aocl_int64_t *kb,
+                        dcomplex *a, aocl_int64_t *lda, aocl_int_t *ipiv, dcomplex *w,
+                        aocl_int64_t *ldw, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zlahef inputs: uplo %c, n %" FLA_IS ", nb %" FLA_IS ", kb %" FLA_IS
@@ -187,36 +209,19 @@ void zlahef_(char *uplo, integer *n, integer *nb, integer *kb, doublecomplex *a,
     doublereal d__1, d__2, d__3, d__4;
     dcomplex z__1, z__2, z__3, z__4;
     /* Builtin functions */
-    double sqrt(doublereal), d_imag(doublecomplex *);
-    void d_cnjg(doublecomplex *, doublecomplex *),
-        z_div(doublecomplex *, doublecomplex *, doublecomplex *);
+    double sqrt(doublereal), d_imag(dcomplex *);
+    void d_cnjg(dcomplex *, dcomplex *),
+        z_div(dcomplex *, dcomplex *, dcomplex *);
     /* Local variables */
     aocl_int64_t j, k;
     doublereal t, r1;
     dcomplex d11, d21, d22;
     aocl_int64_t jb, jj, kk, jp, kp, kw, kkw, imax, jmax;
     doublereal alpha;
-    extern logical lsame_(char *, char *, integer, integer);
-    extern /* Subroutine */
-        void
-        zgemm_(char *, char *, integer *, integer *, integer *, doublecomplex *, doublecomplex *,
-               integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *);
-    integer kstep;
-    extern /* Subroutine */
-        void
-        zgemv_(char *, integer *, integer *, doublecomplex *, doublecomplex *, integer *,
-               doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *),
-        zcopy_(integer *, doublecomplex *, integer *, doublecomplex *, integer *),
-        zswap_(integer *, doublecomplex *, integer *, doublecomplex *, integer *);
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    aocl_int64_t kstep;
     doublereal absakk;
-    extern /* Subroutine */
-        void
-        zdscal_(integer *, doublereal *, doublecomplex *, integer *);
     doublereal colmax;
-    extern /* Subroutine */
-        void
-        zlacgv_(integer *, doublecomplex *, integer *);
-    extern integer izamax_(integer *, doublecomplex *, integer *);
     doublereal rowmax;
     /* -- LAPACK computational routine (version 3.5.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -284,8 +289,8 @@ void zlahef_(char *uplo, integer *n, integer *nb, integer *kb, doublecomplex *a,
             i__1 = *n - k;
             z__1.r = -1.;
             z__1.i = -0.; // , expr subst
-            zgemv_("No transpose", &k, &i__1, &z__1, &a[(k + 1) * a_dim1 + 1], lda,
-                   &w[k + (kw + 1) * w_dim1], ldw, &c_b1, &w[kw * w_dim1 + 1], &c__1);
+            aocl_blas_zgemv("No transpose", &k, &i__1, &z__1, &a[(k + 1) * a_dim1 + 1], lda,
+                            &w[k + (kw + 1) * w_dim1], ldw, &c_b1, &w[kw * w_dim1 + 1], &c__1);
             i__1 = k + kw * w_dim1;
             i__2 = k + kw * w_dim1;
             d__1 = w[i__2].real;
@@ -348,18 +353,18 @@ void zlahef_(char *uplo, integer *n, integer *nb, integer *kb, doublecomplex *a,
                 w[i__1].real = d__1;
                 w[i__1].imag = 0.; // , expr subst
                 i__1 = k - imax;
-                zcopy_(&i__1, &a[imax + (imax + 1) * a_dim1], lda, &w[imax + 1 + (kw - 1) * w_dim1],
-                       &c__1);
+                aocl_blas_zcopy(&i__1, &a[imax + (imax + 1) * a_dim1], lda,
+                                &w[imax + 1 + (kw - 1) * w_dim1], &c__1);
                 i__1 = k - imax;
-                zlacgv_(&i__1, &w[imax + 1 + (kw - 1) * w_dim1], &c__1);
+                aocl_lapack_zlacgv(&i__1, &w[imax + 1 + (kw - 1) * w_dim1], &c__1);
                 if(k < *n)
                 {
                     i__1 = *n - k;
                     z__1.r = -1.;
                     z__1.i = -0.; // , expr subst
-                    zgemv_("No transpose", &k, &i__1, &z__1, &a[(k + 1) * a_dim1 + 1], lda,
-                           &w[imax + (kw + 1) * w_dim1], ldw, &c_b1, &w[(kw - 1) * w_dim1 + 1],
-                           &c__1);
+                    aocl_blas_zgemv("No transpose", &k, &i__1, &z__1, &a[(k + 1) * a_dim1 + 1], lda,
+                                    &w[imax + (kw + 1) * w_dim1], ldw, &c_b1,
+                                    &w[(kw - 1) * w_dim1 + 1], &c__1);
                     i__1 = imax + (kw - 1) * w_dim1;
                     i__2 = imax + (kw - 1) * w_dim1;
                     d__1 = w[i__2].real;
@@ -439,7 +444,7 @@ void zlahef_(char *uplo, integer *n, integer *nb, integer *kb, doublecomplex *a,
                 aocl_blas_zcopy(&i__1, &a[kp + 1 + kk * a_dim1], &c__1, &a[kp + (kp + 1) * a_dim1],
                                 lda);
                 i__1 = kk - 1 - kp;
-                zlacgv_(&i__1, &a[kp + (kp + 1) * a_dim1], lda);
+                aocl_lapack_zlacgv(&i__1, &a[kp + (kp + 1) * a_dim1], lda);
                 if(kp > 1)
                 {
                     i__1 = kp - 1;
@@ -472,7 +477,7 @@ void zlahef_(char *uplo, integer *n, integer *nb, integer *kb, doublecomplex *a,
                 /* (NOTE: No need to use for Hermitian matrix */
                 /* A( K, K ) = DBLE( W( K, K) ) to separately copy diagonal */
                 /* element D(k,k) from W (potentially saves only one load)) */
-                zcopy_(&k, &w[kw * w_dim1 + 1], &c__1, &a[k * a_dim1 + 1], &c__1);
+                aocl_blas_zcopy(&k, &w[kw * w_dim1 + 1], &c__1, &a[k * a_dim1 + 1], &c__1);
                 if(k > 1)
                 {
                     /* (NOTE: No need to check if A(k,k) is NOT ZERO, */
@@ -640,8 +645,8 @@ void zlahef_(char *uplo, integer *n, integer *nb, integer *kb, doublecomplex *a,
                 i__4 = *n - k;
                 z__1.r = -1.;
                 z__1.i = -0.; // , expr subst
-                zgemv_("No transpose", &i__3, &i__4, &z__1, &a[j + (k + 1) * a_dim1], lda,
-                       &w[jj + (kw + 1) * w_dim1], ldw, &c_b1, &a[j + jj * a_dim1], &c__1);
+                aocl_blas_zgemv("No transpose", &i__3, &i__4, &z__1, &a[j + (k + 1) * a_dim1], lda,
+                                &w[jj + (kw + 1) * w_dim1], ldw, &c_b1, &a[j + jj * a_dim1], &c__1);
                 i__3 = jj + jj * a_dim1;
                 i__4 = jj + jj * a_dim1;
                 d__1 = a[i__4].real;
@@ -654,8 +659,9 @@ void zlahef_(char *uplo, integer *n, integer *nb, integer *kb, doublecomplex *a,
             i__3 = *n - k;
             z__1.r = -1.;
             z__1.i = -0.; // , expr subst
-            zgemm_("No transpose", "Transpose", &i__2, &jb, &i__3, &z__1, &a[(k + 1) * a_dim1 + 1],
-                   lda, &w[j + (kw + 1) * w_dim1], ldw, &c_b1, &a[j * a_dim1 + 1], lda);
+            aocl_blas_zgemm("No transpose", "Transpose", &i__2, &jb, &i__3, &z__1,
+                            &a[(k + 1) * a_dim1 + 1], lda, &w[j + (kw + 1) * w_dim1], ldw, &c_b1,
+                            &a[j * a_dim1 + 1], lda);
             /* L50: */
         }
         /* Put U12 in standard form by partially undoing the interchanges */
@@ -715,8 +721,8 @@ void zlahef_(char *uplo, integer *n, integer *nb, integer *kb, doublecomplex *a,
         i__2 = k - 1;
         z__1.r = -1.;
         z__1.i = -0.; // , expr subst
-        zgemv_("No transpose", &i__1, &i__2, &z__1, &a[k + a_dim1], lda, &w[k + w_dim1], ldw, &c_b1,
-               &w[k + k * w_dim1], &c__1);
+        aocl_blas_zgemv("No transpose", &i__1, &i__2, &z__1, &a[k + a_dim1], lda, &w[k + w_dim1],
+                        ldw, &c_b1, &w[k + k * w_dim1], &c__1);
         i__1 = k + k * w_dim1;
         i__2 = k + k * w_dim1;
         d__1 = w[i__2].real;
@@ -781,15 +787,15 @@ void zlahef_(char *uplo, integer *n, integer *nb, integer *kb, doublecomplex *a,
                 if(imax < *n)
                 {
                     i__1 = *n - imax;
-                    zcopy_(&i__1, &a[imax + 1 + imax * a_dim1], &c__1,
-                           &w[imax + 1 + (k + 1) * w_dim1], &c__1);
+                    aocl_blas_zcopy(&i__1, &a[imax + 1 + imax * a_dim1], &c__1,
+                                    &w[imax + 1 + (k + 1) * w_dim1], &c__1);
                 }
                 i__1 = *n - k + 1;
                 i__2 = k - 1;
                 z__1.r = -1.;
                 z__1.i = -0.; // , expr subst
-                zgemv_("No transpose", &i__1, &i__2, &z__1, &a[k + a_dim1], lda, &w[imax + w_dim1],
-                       ldw, &c_b1, &w[k + (k + 1) * w_dim1], &c__1);
+                aocl_blas_zgemv("No transpose", &i__1, &i__2, &z__1, &a[k + a_dim1], lda,
+                                &w[imax + w_dim1], ldw, &c_b1, &w[k + (k + 1) * w_dim1], &c__1);
                 i__1 = imax + (k + 1) * w_dim1;
                 i__2 = imax + (k + 1) * w_dim1;
                 d__1 = w[i__2].real;
@@ -799,7 +805,7 @@ void zlahef_(char *uplo, integer *n, integer *nb, integer *kb, doublecomplex *a,
                 /* element in row IMAX, and ROWMAX is its absolute value. */
                 /* Determine only ROWMAX. */
                 i__1 = imax - k;
-                jmax = k - 1 + izamax_(&i__1, &w[k + (k + 1) * w_dim1], &c__1);
+                jmax = k - 1 + aocl_blas_izamax(&i__1, &w[k + (k + 1) * w_dim1], &c__1);
                 i__1 = jmax + (k + 1) * w_dim1;
                 rowmax = (d__1 = w[i__1].r, f2c_dabs(d__1))
                          + (d__2 = d_imag(&w[jmax + (k + 1) * w_dim1]), f2c_dabs(d__2));
@@ -867,7 +873,7 @@ void zlahef_(char *uplo, integer *n, integer *nb, integer *kb, doublecomplex *a,
                 aocl_blas_zcopy(&i__1, &a[kk + 1 + kk * a_dim1], &c__1, &a[kp + (kk + 1) * a_dim1],
                                 lda);
                 i__1 = kp - kk - 1;
-                zlacgv_(&i__1, &a[kp + (kk + 1) * a_dim1], lda);
+                aocl_lapack_zlacgv(&i__1, &a[kp + (kk + 1) * a_dim1], lda);
                 if(kp < *n)
                 {
                     i__1 = *n - kp;
@@ -900,7 +906,7 @@ void zlahef_(char *uplo, integer *n, integer *nb, integer *kb, doublecomplex *a,
                 /* A( K, K ) = DBLE( W( K, K) ) to separately copy diagonal */
                 /* element D(k,k) from W (potentially saves only one load)) */
                 i__1 = *n - k + 1;
-                zcopy_(&i__1, &w[k + k * w_dim1], &c__1, &a[k + k * a_dim1], &c__1);
+                aocl_blas_zcopy(&i__1, &w[k + k * w_dim1], &c__1, &a[k + k * a_dim1], &c__1);
                 if(k < *n)
                 {
                     /* (NOTE: No need to check if A(k,k) is NOT ZERO, */
@@ -1069,8 +1075,8 @@ void zlahef_(char *uplo, integer *n, integer *nb, integer *kb, doublecomplex *a,
                 i__5 = k - 1;
                 z__1.r = -1.;
                 z__1.i = -0.; // , expr subst
-                zgemv_("No transpose", &i__4, &i__5, &z__1, &a[jj + a_dim1], lda, &w[jj + w_dim1],
-                       ldw, &c_b1, &a[jj + jj * a_dim1], &c__1);
+                aocl_blas_zgemv("No transpose", &i__4, &i__5, &z__1, &a[jj + a_dim1], lda,
+                                &w[jj + w_dim1], ldw, &c_b1, &a[jj + jj * a_dim1], &c__1);
                 i__4 = jj + jj * a_dim1;
                 i__5 = jj + jj * a_dim1;
                 d__1 = a[i__5].real;
@@ -1085,8 +1091,9 @@ void zlahef_(char *uplo, integer *n, integer *nb, integer *kb, doublecomplex *a,
                 i__4 = k - 1;
                 z__1.r = -1.;
                 z__1.i = -0.; // , expr subst
-                zgemm_("No transpose", "Transpose", &i__3, &jb, &i__4, &z__1, &a[j + jb + a_dim1],
-                       lda, &w[j + w_dim1], ldw, &c_b1, &a[j + jb + j * a_dim1], lda);
+                aocl_blas_zgemm("No transpose", "Transpose", &i__3, &jb, &i__4, &z__1,
+                                &a[j + jb + a_dim1], lda, &w[j + w_dim1], ldw, &c_b1,
+                                &a[j + jb + j * a_dim1], lda);
             }
             /* L110: */
         }

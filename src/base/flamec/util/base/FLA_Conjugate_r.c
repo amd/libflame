@@ -13,8 +13,8 @@
 FLA_Error FLA_Conjugate_r( FLA_Uplo uplo, FLA_Obj A )
 {
   FLA_Datatype datatype;
-  integer          m_A, n_A;
-  integer          rs_A, cs_A;
+  fla_dim_t          m_A, n_A;
+  fla_dim_t          rs_A, cs_A;
   uplo1_t       blis_uplo;
 
   if ( FLA_Check_error_level() >= FLA_MIN_ERROR_CHECKING )

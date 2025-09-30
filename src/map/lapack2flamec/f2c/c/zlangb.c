@@ -4,7 +4,7 @@
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
  /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
+static aocl_int64_t c__1 = 1;
 /* > \brief \b ZLANGB returns the value of the 1-norm, Frobenius norm, infinity-norm, or the largest
  * absolute value of any element of general band matrix. */
 /* =========== DOCUMENTATION =========== */
@@ -121,27 +121,40 @@ otherwise, WORK is not */
 /* > \author NAG Ltd. */
 /* > \ingroup complex16GBauxiliary */
 /* ===================================================================== */
-doublereal zlangb_(char *norm, integer *n, integer *kl, integer *ku, doublecomplex *ab,
-                   integer *ldab, doublereal *work)
+/** Generated wrapper function */
+doublereal zlangb_(char *norm, aocl_int_t *n, aocl_int_t *kl, aocl_int_t *ku, dcomplex *ab,
+                   aocl_int_t *ldab, doublereal *work)
+{
+#if FLA_ENABLE_ILP64
+    return aocl_lapack_zlangb(norm, n, kl, ku, ab, ldab, work);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t kl_64 = *kl;
+    aocl_int64_t ku_64 = *ku;
+    aocl_int64_t ldab_64 = *ldab;
+
+    return aocl_lapack_zlangb(norm, &n_64, &kl_64, &ku_64, ab, &ldab_64, work);
+#endif
+}
+
+doublereal aocl_lapack_zlangb(char *norm, aocl_int64_t *n, aocl_int64_t *kl, aocl_int64_t *ku,
+                              dcomplex *ab, aocl_int64_t *ldab, doublereal *work)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zlangb inputs: norm %c, n %" FLA_IS ", kl %" FLA_IS ", ku %" FLA_IS
                       ", ldab %" FLA_IS "",
                       *norm, *n, *kl, *ku, *ldab);
     /* System generated locals */
-    integer ab_dim1, ab_offset, i__1, i__2, i__3, i__4, i__5, i__6;
+    aocl_int64_t ab_dim1, ab_offset, i__1, i__2, i__3, i__4, i__5, i__6;
     doublereal ret_val;
     /* Builtin functions */
-    double z_abs(doublecomplex *), sqrt(doublereal);
+    double z_abs(dcomplex *), sqrt(doublereal);
     /* Local variables */
-    integer i__, j, k, l;
+    aocl_int64_t i__, j, k, l;
     doublereal sum, temp, scale;
-    extern logical lsame_(char *, char *, integer, integer);
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     doublereal value;
     extern logical disnan_(doublereal *);
-    extern /* Subroutine */
-        void
-        zlassq_(integer *, doublecomplex *, integer *, doublereal *, doublereal *);
     /* -- LAPACK auxiliary routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -279,7 +292,7 @@ doublereal zlangb_(char *norm, integer *n, integer *kl, integer *ku, doublecompl
             i__2 = *n;
             i__3 = j + *kl; // , expr subst
             i__4 = fla_min(i__2, i__3) - l + 1;
-            zlassq_(&i__4, &ab[k + j * ab_dim1], &c__1, &scale, &sum);
+            aocl_lapack_zlassq(&i__4, &ab[k + j * ab_dim1], &c__1, &scale, &sum);
             /* L90: */
         }
         value = scale * sqrt(sum);

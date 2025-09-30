@@ -446,10 +446,10 @@ defaults */
 /* ===================================================================== */
 /* Subroutine */
 void cgbrfsx_(char *trans, char *equed, integer *n, integer *kl, integer *ku, integer *nrhs,
-              complex *ab, integer *ldab, complex *afb, integer *ldafb, integer *ipiv, real *r__,
-              real *c__, complex *b, integer *ldb, complex *x, integer *ldx, real *rcond,
+              scomplex *ab, integer *ldab, scomplex *afb, integer *ldafb, integer *ipiv, real *r__,
+              real *c__, scomplex *b, integer *ldb, scomplex *x, integer *ldx, real *rcond,
               real *berr, integer *n_err_bnds__, real *err_bnds_norm__, real *err_bnds_comp__,
-              integer *nparams, real *params, complex *work, real *rwork, integer *info)
+              integer *nparams, real *params, scomplex *work, real *rwork, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -486,25 +486,25 @@ void cgbrfsx_(char *trans, char *equed, integer *n, integer *kl, integer *ku, in
     extern /* Subroutine */
         void
         cla_gbrfsx_extended_(integer *, integer *, integer *, integer *, integer *, integer *,
-                             complex *, integer *, complex *, integer *, integer *, logical *,
-                             real *, complex *, integer *, complex *, integer *, real *, integer *,
-                             real *, real *, complex *, real *, complex *, real *, real *,
+                             scomplex *, integer *, scomplex *, integer *, integer *, logical *,
+                             real *, scomplex *, integer *, scomplex *, integer *, real *, integer *,
+                             real *, real *, scomplex *, real *, scomplex *, real *, real *,
                              integer *, real *, real *, logical *, integer *);
     char norm[1];
     logical ignore_cwise__;
-    extern real cla_gbrcond_c_(char *, integer *, integer *, integer *, complex *, integer *,
-                               complex *, integer *, integer *, real *, logical *, integer *,
-                               complex *, real *);
+    extern real cla_gbrcond_c_(char *, integer *, integer *, integer *, scomplex *, integer *,
+                               scomplex *, integer *, integer *, real *, logical *, integer *,
+                               scomplex *, real *);
     extern logical lsame_(char *, char *, integer, integer);
     real anorm;
-    extern real cla_gbrcond_x_(char *, integer *, integer *, integer *, complex *, integer *,
-                               complex *, integer *, integer *, complex *, integer *, complex *,
+    extern real cla_gbrcond_x_(char *, integer *, integer *, integer *, scomplex *, integer *,
+                               scomplex *, integer *, integer *, scomplex *, integer *, scomplex *,
                                real *),
-        clangb_(char *, integer *, integer *, integer *, complex *, integer *, real *);
+        clangb_(char *, integer *, integer *, integer *, scomplex *, integer *, real *);
     extern /* Subroutine */
         void
-        cgbcon_(char *, integer *, integer *, integer *, complex *, integer *, integer *, real *,
-                real *, complex *, real *, integer *);
+        cgbcon_(char *, integer *, integer *, integer *, scomplex *, integer *, integer *, real *,
+                real *, scomplex *, real *, integer *);
     extern real slamch_(char *);
     extern /* Subroutine */
         void

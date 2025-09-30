@@ -145,22 +145,44 @@
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void dlasq4_(integer *i0, integer *n0, doublereal *z__, integer *pp, integer *n0in,
+/** Generated wrapper function */
+void dlasq4_(aocl_int_t *i0, aocl_int_t *n0, doublereal *z__, aocl_int_t *pp, aocl_int_t *n0in,
              doublereal *dmin__, doublereal *dmin1, doublereal *dmin2, doublereal *dn,
-             doublereal *dn1, doublereal *dn2, doublereal *tau, integer *ttype, doublereal *g)
+             doublereal *dn1, doublereal *dn2, doublereal *tau, aocl_int_t *ttype, doublereal *g)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_dlasq4(i0, n0, z__, pp, n0in, dmin__, dmin1, dmin2, dn, dn1, dn2, tau, ttype, g);
+#else
+    aocl_int64_t i0_64 = *i0;
+    aocl_int64_t n0_64 = *n0;
+    aocl_int64_t pp_64 = *pp;
+    aocl_int64_t n0in_64 = *n0in;
+    aocl_int64_t ttype_64 = *ttype;
+
+    aocl_lapack_dlasq4(&i0_64, &n0_64, z__, &pp_64, &n0in_64, dmin__, dmin1, dmin2, dn, dn1, dn2,
+                       tau, &ttype_64, g);
+
+    *ttype = (aocl_int_t)ttype_64;
+#endif
+}
+
+void aocl_lapack_dlasq4(aocl_int64_t *i0, aocl_int64_t *n0, doublereal *z__, aocl_int64_t *pp,
+                        aocl_int64_t *n0in, doublereal *dmin__, doublereal *dmin1,
+                        doublereal *dmin2, doublereal *dn, doublereal *dn1, doublereal *dn2,
+                        doublereal *tau, aocl_int64_t *ttype, doublereal *g)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dlasq4 inputs: i0 %" FLA_IS ", n0 %" FLA_IS ", pp %" FLA_IS ", n0in %" FLA_IS
                       "",
                       *i0, *n0, *pp, *n0in);
     /* System generated locals */
-    integer i__1;
+    aocl_int64_t i__1;
     doublereal d__1, d__2;
     /* Builtin functions */
     double sqrt(doublereal);
     /* Local variables */
     doublereal s, a2, b1, b2;
-    integer i4, nn, np;
+    aocl_int64_t i4, nn, np;
     doublereal gam, gap1, gap2;
     /* -- LAPACK computational routine (version 3.7.1) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */

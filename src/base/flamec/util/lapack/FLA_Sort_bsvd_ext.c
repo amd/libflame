@@ -180,88 +180,88 @@ FLA_Error FLA_Sort_bsvd_ext( FLA_Direct direct, FLA_Obj s,
 }
 
 // single
-FLA_Error FLA_Sort_bsvd_ext_f_ops( integer m_s, float* s, integer inc_s,
-                                   integer m_U, float* U, integer rs_U, integer cs_U,
-                                   integer m_V, float* V, integer rs_V, integer cs_V,
-                                   integer n_C, float* C, integer rs_C, integer cs_C )
+FLA_Error FLA_Sort_bsvd_ext_f_ops( fla_dim_t m_s, float* s, fla_dim_t inc_s,
+                                   fla_dim_t m_U, float* U, fla_dim_t rs_U, fla_dim_t cs_U,
+                                   fla_dim_t m_V, float* V, fla_dim_t rs_V, fla_dim_t cs_V,
+                                   fla_dim_t n_C, float* C, fla_dim_t rs_C, fla_dim_t cs_C )
 {
-    integer    i, ii, j, k;
+    fla_dim_t    i, ii, j, k;
     float  p;
     FLA_SORT_BSVD_EXT_BODY( FORWARD, bl1_sswapv );
     return FLA_SUCCESS;
 }
-FLA_Error FLA_Sort_bsvd_ext_b_ops( integer m_s, float* s, integer inc_s,
-                                   integer m_U, float* U, integer rs_U, integer cs_U,
-                                   integer m_V, float* V, integer rs_V, integer cs_V,
-                                   integer n_C, float* C, integer rs_C, integer cs_C )
+FLA_Error FLA_Sort_bsvd_ext_b_ops( fla_dim_t m_s, float* s, fla_dim_t inc_s,
+                                   fla_dim_t m_U, float* U, fla_dim_t rs_U, fla_dim_t cs_U,
+                                   fla_dim_t m_V, float* V, fla_dim_t rs_V, fla_dim_t cs_V,
+                                   fla_dim_t n_C, float* C, fla_dim_t rs_C, fla_dim_t cs_C )
 {
-    integer    i, ii, j, k;
+    fla_dim_t    i, ii, j, k;
     float  p;
     FLA_SORT_BSVD_EXT_BODY( BACKWARD, bl1_sswapv );
     return FLA_SUCCESS;
 }
 
 // double
-FLA_Error FLA_Sort_bsvd_ext_f_opd( integer m_s, double* s, integer inc_s,
-                                   integer m_U, double* U, integer rs_U, integer cs_U,
-                                   integer m_V, double* V, integer rs_V, integer cs_V,
-                                   integer n_C, double* C, integer rs_C, integer cs_C )
+FLA_Error FLA_Sort_bsvd_ext_f_opd( fla_dim_t m_s, double* s, fla_dim_t inc_s,
+                                   fla_dim_t m_U, double* U, fla_dim_t rs_U, fla_dim_t cs_U,
+                                   fla_dim_t m_V, double* V, fla_dim_t rs_V, fla_dim_t cs_V,
+                                   fla_dim_t n_C, double* C, fla_dim_t rs_C, fla_dim_t cs_C )
 {
-    integer    i, ii, j, k;
+    fla_dim_t    i, ii, j, k;
     float  p;
     FLA_SORT_BSVD_EXT_BODY( FORWARD, bl1_dswapv );
     return FLA_SUCCESS;
 }
-FLA_Error FLA_Sort_bsvd_ext_b_opd( integer m_s, double* s, integer inc_s,
-                                   integer m_U, double* U, integer rs_U, integer cs_U,
-                                   integer m_V, double* V, integer rs_V, integer cs_V,
-                                   integer n_C, double* C, integer rs_C, integer cs_C )
+FLA_Error FLA_Sort_bsvd_ext_b_opd( fla_dim_t m_s, double* s, fla_dim_t inc_s,
+                                   fla_dim_t m_U, double* U, fla_dim_t rs_U, fla_dim_t cs_U,
+                                   fla_dim_t m_V, double* V, fla_dim_t rs_V, fla_dim_t cs_V,
+                                   fla_dim_t n_C, double* C, fla_dim_t rs_C, fla_dim_t cs_C )
 {
-    integer    i, ii, j, k;
+    fla_dim_t    i, ii, j, k;
     double p;
     FLA_SORT_BSVD_EXT_BODY( BACKWARD, bl1_dswapv );
     return FLA_SUCCESS;
 }
 
 // scomplex
-FLA_Error FLA_Sort_bsvd_ext_f_opc( integer m_s, float*    s, integer inc_s,
-                                   integer m_U, scomplex* U, integer rs_U, integer cs_U,
-                                   integer m_V, scomplex* V, integer rs_V, integer cs_V,
-                                   integer n_C, scomplex* C, integer rs_C, integer cs_C )
+FLA_Error FLA_Sort_bsvd_ext_f_opc( fla_dim_t m_s, float*    s, fla_dim_t inc_s,
+                                   fla_dim_t m_U, scomplex* U, fla_dim_t rs_U, fla_dim_t cs_U,
+                                   fla_dim_t m_V, scomplex* V, fla_dim_t rs_V, fla_dim_t cs_V,
+                                   fla_dim_t n_C, scomplex* C, fla_dim_t rs_C, fla_dim_t cs_C )
 {
-    integer    i, ii, j, k;
+    fla_dim_t    i, ii, j, k;
     float  p;
     FLA_SORT_BSVD_EXT_BODY( FORWARD, bl1_cswapv );
     return FLA_SUCCESS;
 }
-FLA_Error FLA_Sort_bsvd_ext_b_opc( integer m_s, float*    s, integer inc_s,
-                                   integer m_U, scomplex* U, integer rs_U, integer cs_U,
-                                   integer m_V, scomplex* V, integer rs_V, integer cs_V,
-                                   integer n_C, scomplex* C, integer rs_C, integer cs_C )
+FLA_Error FLA_Sort_bsvd_ext_b_opc( fla_dim_t m_s, float*    s, fla_dim_t inc_s,
+                                   fla_dim_t m_U, scomplex* U, fla_dim_t rs_U, fla_dim_t cs_U,
+                                   fla_dim_t m_V, scomplex* V, fla_dim_t rs_V, fla_dim_t cs_V,
+                                   fla_dim_t n_C, scomplex* C, fla_dim_t rs_C, fla_dim_t cs_C )
 {
-    integer    i, ii, j, k;
+    fla_dim_t    i, ii, j, k;
     float  p;
     FLA_SORT_BSVD_EXT_BODY( BACKWARD, bl1_cswapv );
     return FLA_SUCCESS;
 }
 
 // dcomplex
-FLA_Error FLA_Sort_bsvd_ext_f_opz( integer m_s, double*   s, integer inc_s,
-                                   integer m_U, dcomplex* U, integer rs_U, integer cs_U,
-                                   integer m_V, dcomplex* V, integer rs_V, integer cs_V,
-                                   integer n_C, dcomplex* C, integer rs_C, integer cs_C )
+FLA_Error FLA_Sort_bsvd_ext_f_opz( fla_dim_t m_s, double*   s, fla_dim_t inc_s,
+                                   fla_dim_t m_U, dcomplex* U, fla_dim_t rs_U, fla_dim_t cs_U,
+                                   fla_dim_t m_V, dcomplex* V, fla_dim_t rs_V, fla_dim_t cs_V,
+                                   fla_dim_t n_C, dcomplex* C, fla_dim_t rs_C, fla_dim_t cs_C )
 {
-    integer    i, ii, j, k;
+    fla_dim_t    i, ii, j, k;
     double p;
     FLA_SORT_BSVD_EXT_BODY( FORWARD, bl1_zswapv );
     return FLA_SUCCESS;
 }
-FLA_Error FLA_Sort_bsvd_ext_b_opz( integer m_s, double*   s, integer inc_s,
-                                   integer m_U, dcomplex* U, integer rs_U, integer cs_U,
-                                   integer m_V, dcomplex* V, integer rs_V, integer cs_V,
-                                   integer n_C, dcomplex* C, integer rs_C, integer cs_C )
+FLA_Error FLA_Sort_bsvd_ext_b_opz( fla_dim_t m_s, double*   s, fla_dim_t inc_s,
+                                   fla_dim_t m_U, dcomplex* U, fla_dim_t rs_U, fla_dim_t cs_U,
+                                   fla_dim_t m_V, dcomplex* V, fla_dim_t rs_V, fla_dim_t cs_V,
+                                   fla_dim_t n_C, dcomplex* C, fla_dim_t rs_C, fla_dim_t cs_C )
 {
-    integer    i, ii, j, k;
+    fla_dim_t    i, ii, j, k;
     double p;
     FLA_SORT_BSVD_EXT_BODY( BACKWARD, bl1_zswapv );
     return FLA_SUCCESS;

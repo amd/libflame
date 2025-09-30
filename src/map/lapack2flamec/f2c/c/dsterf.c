@@ -4,8 +4,8 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__0 = 0;
-static integer c__1 = 1;
+static aocl_int64_t c__0 = 0;
+static aocl_int64_t c__1 = 1;
 static doublereal c_b33 = 1.;
 /* > \brief \b DSTERF */
 /* =========== DOCUMENTATION =========== */
@@ -86,47 +86,51 @@ if INFO = i, then i */
 /* > \ingroup auxOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void dsterf_(integer *n, doublereal *d__, doublereal *e, integer *info)
+/** Generated wrapper function */
+void dsterf_(aocl_int_t *n, doublereal *d__, doublereal *e, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_dsterf(n, d__, e, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_dsterf(&n_64, d__, e, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_dsterf(aocl_int64_t *n, doublereal *d__, doublereal *e, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dsterf inputs: n %" FLA_IS "", *n);
     /* System generated locals */
-    integer i__1;
+    aocl_int64_t i__1;
     doublereal d__1, d__2, d__3;
     /* Builtin functions */
     double sqrt(doublereal), d_sign(doublereal *, doublereal *);
     /* Local variables */
     doublereal c__;
-    integer i__, l, m;
+    aocl_int64_t i__, l, m;
     doublereal p, r__, s;
-    integer l1;
+    aocl_int64_t l1;
     doublereal bb, rt1, rt2, eps, rte;
-    integer lsv;
+    aocl_int64_t lsv;
     doublereal eps2, oldc;
-    integer lend;
-    integer jtot;
+    aocl_int64_t lend;
+    aocl_int64_t jtot;
     extern /* Subroutine */
         void
         dlae2_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *);
     doublereal gamma, alpha, sigma, anorm;
     extern doublereal dlapy2_(doublereal *, doublereal *), dlamch_(char *);
-    integer iscale;
-    extern /* Subroutine */
-        void
-        dlascl_(char *, integer *, integer *, doublereal *, doublereal *, integer *, integer *,
-                doublereal *, integer *, integer *);
+    aocl_int64_t iscale;
     doublereal oldgam, safmin;
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal safmax;
-    extern doublereal dlanst_(char *, integer *, doublereal *, doublereal *);
-    extern /* Subroutine */
-        void
-        dlasrt_(char *, integer *, doublereal *, integer *);
-    integer lendsv;
+    aocl_int64_t lendsv;
     doublereal ssfmin;
-    integer nmaxit;
+    aocl_int64_t nmaxit;
     doublereal ssfmax;
     /* -- LAPACK computational routine (version 3.7.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -159,7 +163,7 @@ void dsterf_(integer *n, doublereal *d__, doublereal *e, integer *info)
     {
         *info = -1;
         i__1 = -(*info);
-        xerbla_("DSTERF", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("DSTERF", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -218,7 +222,7 @@ L30:
     }
     /* Scale submatrix in rows and columns L to LEND */
     i__1 = lend - l + 1;
-    anorm = dlanst_("M", &i__1, &d__[l], &e[l]);
+    anorm = aocl_lapack_dlanst("M", &i__1, &d__[l], &e[l]);
     iscale = 0;
     if(anorm == 0.)
     {
@@ -228,17 +232,17 @@ L30:
     {
         iscale = 1;
         i__1 = lend - l + 1;
-        dlascl_("G", &c__0, &c__0, &anorm, &ssfmax, &i__1, &c__1, &d__[l], n, info);
+        aocl_lapack_dlascl("G", &c__0, &c__0, &anorm, &ssfmax, &i__1, &c__1, &d__[l], n, info);
         i__1 = lend - l;
-        dlascl_("G", &c__0, &c__0, &anorm, &ssfmax, &i__1, &c__1, &e[l], n, info);
+        aocl_lapack_dlascl("G", &c__0, &c__0, &anorm, &ssfmax, &i__1, &c__1, &e[l], n, info);
     }
     else if(anorm < ssfmin)
     {
         iscale = 2;
         i__1 = lend - l + 1;
-        dlascl_("G", &c__0, &c__0, &anorm, &ssfmin, &i__1, &c__1, &d__[l], n, info);
+        aocl_lapack_dlascl("G", &c__0, &c__0, &anorm, &ssfmin, &i__1, &c__1, &d__[l], n, info);
         i__1 = lend - l;
-        dlascl_("G", &c__0, &c__0, &anorm, &ssfmin, &i__1, &c__1, &e[l], n, info);
+        aocl_lapack_dlascl("G", &c__0, &c__0, &anorm, &ssfmin, &i__1, &c__1, &e[l], n, info);
     }
     i__1 = lend - 1;
     for(i__ = l; i__ <= i__1; ++i__)
@@ -454,12 +458,12 @@ L150:
     if(iscale == 1)
     {
         i__1 = lendsv - lsv + 1;
-        dlascl_("G", &c__0, &c__0, &ssfmax, &anorm, &i__1, &c__1, &d__[lsv], n, info);
+        aocl_lapack_dlascl("G", &c__0, &c__0, &ssfmax, &anorm, &i__1, &c__1, &d__[lsv], n, info);
     }
     if(iscale == 2)
     {
         i__1 = lendsv - lsv + 1;
-        dlascl_("G", &c__0, &c__0, &ssfmin, &anorm, &i__1, &c__1, &d__[lsv], n, info);
+        aocl_lapack_dlascl("G", &c__0, &c__0, &ssfmin, &anorm, &i__1, &c__1, &d__[lsv], n, info);
     }
     /* Check for no convergence to an eigenvalue after a total */
     /* of N*MAXIT iterations. */
@@ -479,7 +483,7 @@ L150:
     goto L180;
     /* Sort eigenvalues in increasing order. */
 L170:
-    dlasrt_("I", n, &d__[1], info);
+    aocl_lapack_dlasrt("I", n, &d__[1], info);
     AOCL_DTL_TRACE_LOG_EXIT
 L180:
     return;

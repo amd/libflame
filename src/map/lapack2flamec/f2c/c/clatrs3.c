@@ -4,9 +4,9 @@
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
  /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static complex c_b2 = {1.f, 0.f};
-static integer c__1 = 1;
-static integer c_n1 = -1;
+static scomplex c_b2 = {{1.f}, {0.f}};
+static aocl_int64_t c__1 = 1;
+static aocl_int64_t c_n1 = -1;
 /* > \brief \b CLATRS3 solves a triangular system of equations with the scale factors set to prevent
  * overflow. */
 /* Definition: */
@@ -222,54 +222,62 @@ the routine */
 /* Angelika Schwarz, Umea University, Sweden. */
 /* ===================================================================== */
 /* Subroutine */
-void clatrs3_(char *uplo, char *trans, char *diag, char *normin, integer *n, integer *nrhs,
-              complex *a, integer *lda, complex *x, integer *ldx, real *scale, real *cnorm,
-              real *work, integer *lwork, integer *info)
+/** Generated wrapper function */
+void clatrs3_(char *uplo, char *trans, char *diag, char *normin, aocl_int_t *n, aocl_int_t *nrhs,
+              scomplex *a, aocl_int_t *lda, scomplex *x, aocl_int_t *ldx, real *scale, real *cnorm,
+              real *work, aocl_int_t *lwork, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_clatrs3(uplo, trans, diag, normin, n, nrhs, a, lda, x, ldx, scale, cnorm, work,
+                        lwork, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t nrhs_64 = *nrhs;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t ldx_64 = *ldx;
+    aocl_int64_t lwork_64 = *lwork;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_clatrs3(uplo, trans, diag, normin, &n_64, &nrhs_64, a, &lda_64, x, &ldx_64, scale,
+                        cnorm, work, &lwork_64, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_clatrs3(char *uplo, char *trans, char *diag, char *normin, aocl_int64_t *n,
+                         aocl_int64_t *nrhs, scomplex *a, aocl_int64_t *lda, scomplex *x,
+                         aocl_int64_t *ldx, real *scale, real *cnorm, real *work,
+                         aocl_int64_t *lwork, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("clatrs3 inputs: uplo %c, trans %c, diag %c, normin %c, n %" FLA_IS
                       ", nrhs %" FLA_IS ", lda %" FLA_IS ", ldx %" FLA_IS "",
                       *uplo, *trans, *diag, *normin, *n, *nrhs, *lda, *ldx);
     /* System generated locals */
-    integer a_dim1, a_offset, x_dim1, x_offset, i__1, i__2, i__3, i__4, i__5, i__6, i__7, i__8;
+    aocl_int64_t a_dim1, a_offset, x_dim1, x_offset, i__1, i__2, i__3, i__4, i__5, i__6, i__7, i__8;
     real r__1, r__2;
-    complex q__1;
+    scomplex q__1;
     /* Local variables */
-    integer i__, j, k;
+    aocl_int64_t i__, j, k;
     real w[64];
-    integer i1, i2, j1, j2, k1, k2, nb, ii, kk, nba, lds, nbx, rhs, iinc, jinc;
+    aocl_int64_t i1, i2, j1, j2, k1, k2, nb, ii, kk, nba, lds, nbx, rhs, iinc, jinc;
     real scal, anrm, bnrm;
-    integer awrk;
+    aocl_int64_t awrk;
     real tmax, xnrm[32];
-    extern /* Subroutine */
-        void
-        cgemm_(char *, char *, integer *, integer *, integer *, complex *, complex *, integer *,
-               complex *, integer *, complex *, complex *, integer *);
-    extern logical lsame_(char *, char *, integer, integer);
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     real rscal;
-    integer lanrm, ilast, jlast;
+    aocl_int64_t lanrm, ilast, jlast;
     logical upper;
-    extern real clange_(char *, integer *, integer *, complex *, integer *, real *);
-    integer lscale;
+    aocl_int64_t lscale;
     real scaloc;
     extern real slamch_(char *);
-    extern /* Subroutine */
-        void
-        csscal_(integer *, real *, complex *, integer *);
     real scamin;
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     real bignum;
-    extern /* Subroutine */
-        void
-        clatrs_(char *, char *, char *, char *, integer *, complex *, integer *, complex *, real *,
-                real *, integer *);
     extern real slarmm_(real *, real *, real *);
-    integer ifirst;
+    aocl_int64_t ifirst;
     logical notran;
-    integer jfirst;
+    aocl_int64_t jfirst;
     real smlnum;
     logical nounit, lquery;
     /* .. Scalar Arguments .. */
@@ -309,7 +317,7 @@ void clatrs3_(char *uplo, char *trans, char *diag, char *normin, integer *n, int
     /* Partition A and X into blocks. */
     /* Computing fla_max */
     i__1 = 8;
-    i__2 = ilaenv_(&c__1, "CLATRS", "", n, n, &c_n1, &c_n1); // , expr subst
+    i__2 = aocl_lapack_ilaenv(&c__1, "CLATRS", "", n, n, &c_n1, &c_n1); // , expr subst
     nb = fla_max(i__1, i__2);
     nb = fla_min(64, nb);
     /* Computing fla_max */
@@ -379,7 +387,7 @@ void clatrs3_(char *uplo, char *trans, char *diag, char *normin, integer *n, int
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("CLATRS3", &i__1, (ftnlen)7);
+        aocl_blas_xerbla("CLATRS3", &i__1, (ftnlen)7);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -406,13 +414,13 @@ void clatrs3_(char *uplo, char *trans, char *diag, char *normin, integer *n, int
     /* Use unblocked code for small problems */
     if(*nrhs < 2)
     {
-        clatrs_(uplo, trans, diag, normin, n, &a[a_offset], lda, &x[x_dim1 + 1], &scale[1],
-                &cnorm[1], info);
+        aocl_lapack_clatrs(uplo, trans, diag, normin, n, &a[a_offset], lda, &x[x_dim1 + 1],
+                           &scale[1], &cnorm[1], info);
         i__1 = *nrhs;
         for(k = 2; k <= i__1; ++k)
         {
-            clatrs_(uplo, trans, diag, "Y", n, &a[a_offset], lda, &x[k * x_dim1 + 1], &scale[k],
-                    &cnorm[1], info);
+            aocl_lapack_clatrs(uplo, trans, diag, "Y", n, &a[a_offset], lda, &x[k * x_dim1 + 1],
+                               &scale[k], &cnorm[1], info);
         }
         AOCL_DTL_TRACE_LOG_EXIT
         return;
@@ -449,14 +457,14 @@ void clatrs3_(char *uplo, char *trans, char *diag, char *normin, integer *n, int
             {
                 i__3 = i2 - i1;
                 i__4 = j2 - j1;
-                anrm = clange_("I", &i__3, &i__4, &a[i1 + j1 * a_dim1], lda, w);
+                anrm = aocl_lapack_clange("I", &i__3, &i__4, &a[i1 + j1 * a_dim1], lda, w);
                 work[awrk + i__ + (j - 1) * nba] = anrm;
             }
             else
             {
                 i__3 = i2 - i1;
                 i__4 = j2 - j1;
-                anrm = clange_("1", &i__3, &i__4, &a[i1 + j1 * a_dim1], lda, w);
+                anrm = aocl_lapack_clange("1", &i__3, &i__4, &a[i1 + j1 * a_dim1], lda, w);
                 work[awrk + j + (i__ - 1) * nba] = anrm;
             }
             tmax = fla_max(tmax, anrm);
@@ -473,8 +481,8 @@ void clatrs3_(char *uplo, char *trans, char *diag, char *normin, integer *n, int
         i__1 = *nrhs;
         for(k = 1; k <= i__1; ++k)
         {
-            clatrs_(uplo, trans, diag, "N", n, &a[a_offset], lda, &x[k * x_dim1 + 1], &scale[k],
-                    &cnorm[1], info);
+            aocl_lapack_clatrs(uplo, trans, diag, "N", n, &a[a_offset], lda, &x[k * x_dim1 + 1],
+                               &scale[k], &cnorm[1], info);
         }
         AOCL_DTL_TRACE_LOG_EXIT
         return;
@@ -557,20 +565,20 @@ void clatrs3_(char *uplo, char *trans, char *diag, char *normin, integer *n, int
                 if(kk == 1)
                 {
                     i__5 = j2 - j1;
-                    clatrs_(uplo, trans, diag, "N", &i__5, &a[j1 + j1 * a_dim1], lda,
-                            &x[j1 + rhs * x_dim1], &scaloc, &cnorm[1], info);
+                    aocl_lapack_clatrs(uplo, trans, diag, "N", &i__5, &a[j1 + j1 * a_dim1], lda,
+                                       &x[j1 + rhs * x_dim1], &scaloc, &cnorm[1], info);
                 }
                 else
                 {
                     i__5 = j2 - j1;
-                    clatrs_(uplo, trans, diag, "Y", &i__5, &a[j1 + j1 * a_dim1], lda,
-                            &x[j1 + rhs * x_dim1], &scaloc, &cnorm[1], info);
+                    aocl_lapack_clatrs(uplo, trans, diag, "Y", &i__5, &a[j1 + j1 * a_dim1], lda,
+                                       &x[j1 + rhs * x_dim1], &scaloc, &cnorm[1], info);
                 }
                 /* Find largest absolute value entry in the vector segment */
                 /* X( J1:J2-1, RHS ) as an upper bound for the worst case */
                 /* growth in the linear updates. */
                 i__5 = j2 - j1;
-                xnrm[kk - 1] = clange_("I", &i__5, &c__1, &x[j1 + rhs * x_dim1], ldx, w);
+                xnrm[kk - 1] = aocl_lapack_clange("I", &i__5, &c__1, &x[j1 + rhs * x_dim1], ldx, w);
                 if(scaloc == 0.f)
                 {
                     /* LATRS found that A is singular through A(j,j) = 0. */
@@ -618,7 +626,7 @@ void clatrs3_(char *uplo, char *trans, char *diag, char *normin, integer *n, int
                     {
                         xnrm[kk - 1] *= rscal;
                         i__5 = j2 - j1;
-                        csscal_(&i__5, &rscal, &x[j1 + rhs * x_dim1], &c__1);
+                        aocl_blas_csscal(&i__5, &rscal, &x[j1 + rhs * x_dim1], &c__1);
                         scaloc = 1.f;
                     }
                     else
@@ -707,7 +715,7 @@ void clatrs3_(char *uplo, char *trans, char *diag, char *normin, integer *n, int
                     /* Compute scaling factor to survive the linear update */
                     /* simulating consistent scaling. */
                     i__7 = i2 - i1;
-                    bnrm = clange_("I", &i__7, &c__1, &x[i1 + rhs * x_dim1], ldx, w);
+                    bnrm = aocl_lapack_clange("I", &i__7, &c__1, &x[i1 + rhs * x_dim1], ldx, w);
                     bnrm *= scamin / work[i__ + kk * lds];
                     xnrm[kk - 1] *= scamin / work[j + kk * lds];
                     anrm = work[awrk + i__ + (j - 1) * nba];
@@ -718,14 +726,14 @@ void clatrs3_(char *uplo, char *trans, char *diag, char *normin, integer *n, int
                     if(scal != 1.f)
                     {
                         i__7 = i2 - i1;
-                        csscal_(&i__7, &scal, &x[i1 + rhs * x_dim1], &c__1);
+                        aocl_blas_csscal(&i__7, &scal, &x[i1 + rhs * x_dim1], &c__1);
                         work[i__ + kk * lds] = scamin * scaloc;
                     }
                     scal = scamin / work[j + kk * lds] * scaloc;
                     if(scal != 1.f)
                     {
                         i__7 = j2 - j1;
-                        csscal_(&i__7, &scal, &x[j1 + rhs * x_dim1], &c__1);
+                        aocl_blas_csscal(&i__7, &scal, &x[j1 + rhs * x_dim1], &c__1);
                         work[j + kk * lds] = scamin * scaloc;
                     }
                 }
@@ -737,8 +745,8 @@ void clatrs3_(char *uplo, char *trans, char *diag, char *normin, integer *n, int
                     i__8 = j2 - j1;
                     q__1.r = -1.f;
                     q__1.i = -0.f; // , expr subst
-                    cgemm_("N", "N", &i__6, &i__7, &i__8, &q__1, &a[i1 + j1 * a_dim1], lda,
-                           &x[j1 + k1 * x_dim1], ldx, &c_b2, &x[i1 + k1 * x_dim1], ldx);
+                    aocl_blas_cgemm("N", "N", &i__6, &i__7, &i__8, &q__1, &a[i1 + j1 * a_dim1], lda,
+                                    &x[j1 + k1 * x_dim1], ldx, &c_b2, &x[i1 + k1 * x_dim1], ldx);
                 }
                 else if(lsame_(trans, "T", 1, 1))
                 {
@@ -748,8 +756,8 @@ void clatrs3_(char *uplo, char *trans, char *diag, char *normin, integer *n, int
                     i__8 = j2 - j1;
                     q__1.r = -1.f;
                     q__1.i = -0.f; // , expr subst
-                    cgemm_("T", "N", &i__6, &i__7, &i__8, &q__1, &a[j1 + i1 * a_dim1], lda,
-                           &x[j1 + k1 * x_dim1], ldx, &c_b2, &x[i1 + k1 * x_dim1], ldx);
+                    aocl_blas_cgemm("T", "N", &i__6, &i__7, &i__8, &q__1, &a[j1 + i1 * a_dim1], lda,
+                                    &x[j1 + k1 * x_dim1], ldx, &c_b2, &x[i1 + k1 * x_dim1], ldx);
                 }
                 else
                 {
@@ -759,8 +767,8 @@ void clatrs3_(char *uplo, char *trans, char *diag, char *normin, integer *n, int
                     i__8 = j2 - j1;
                     q__1.r = -1.f;
                     q__1.i = -0.f; // , expr subst
-                    cgemm_("C", "N", &i__6, &i__7, &i__8, &q__1, &a[j1 + i1 * a_dim1], lda,
-                           &x[j1 + k1 * x_dim1], ldx, &c_b2, &x[i1 + k1 * x_dim1], ldx);
+                    aocl_blas_cgemm("C", "N", &i__6, &i__7, &i__8, &q__1, &a[j1 + i1 * a_dim1], lda,
+                                    &x[j1 + k1 * x_dim1], ldx, &c_b2, &x[i1 + k1 * x_dim1], ldx);
                 }
             }
         }
@@ -796,7 +804,7 @@ void clatrs3_(char *uplo, char *trans, char *diag, char *normin, integer *n, int
                     if(scal != 1.f)
                     {
                         i__5 = i2 - i1;
-                        csscal_(&i__5, &scal, &x[i1 + rhs * x_dim1], &c__1);
+                        aocl_blas_csscal(&i__5, &scal, &x[i1 + rhs * x_dim1], &c__1);
                     }
                 }
             }

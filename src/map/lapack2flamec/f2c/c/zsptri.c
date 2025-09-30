@@ -4,9 +4,9 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static doublecomplex c_b1 = {1., 0.};
-static doublecomplex c_b2 = {0., 0.};
-static integer c__1 = 1;
+static dcomplex c_b1 = {{1.}, {0.}};
+static dcomplex c_b2 = {{0.}, {0.}};
+static aocl_int64_t c__1 = 1;
 /* > \brief \b ZSPTRI */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -111,8 +111,24 @@ the matrix is singular and its */
 /* > \ingroup complex16OTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void zsptri_(char *uplo, integer *n, doublecomplex *ap, integer *ipiv, doublecomplex *work,
-             integer *info)
+/** Generated wrapper function */
+void zsptri_(char *uplo, aocl_int_t *n, dcomplex *ap, aocl_int_t *ipiv, dcomplex *work,
+             aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_zsptri(uplo, n, ap, ipiv, work, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_zsptri(uplo, &n_64, ap, ipiv, work, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_zsptri(char *uplo, aocl_int64_t *n, dcomplex *ap, aocl_int_t *ipiv,
+                        dcomplex *work, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zsptri inputs: uplo %c, n %" FLA_IS "", *uplo, *n);
@@ -123,28 +139,15 @@ void zsptri_(char *uplo, integer *n, doublecomplex *ap, integer *ipiv, doublecom
     /* Builtin functions */
     void z_div(dcomplex *, dcomplex *, dcomplex *);
     /* Local variables */
-    doublecomplex d__;
-    integer j, k;
-    doublecomplex t, ak;
-    integer kc, kp, kx, kpc, npp;
-    doublecomplex akp1, temp, akkp1;
-    extern logical lsame_(char *, char *, integer, integer);
-    integer kstep;
+    dcomplex d__;
+    aocl_int64_t j, k;
+    dcomplex t, ak;
+    aocl_int64_t kc, kp, kx, kpc, npp;
+    dcomplex akp1, temp, akkp1;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    aocl_int64_t kstep;
     logical upper;
-    extern /* Subroutine */
-        void
-        zcopy_(integer *, doublecomplex *, integer *, doublecomplex *, integer *);
-    extern /* Double Complex */
-        VOID
-        zdotu_f2c_(doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *,
-                   integer *);
-    extern /* Subroutine */
-        void
-        zswap_(integer *, doublecomplex *, integer *, doublecomplex *, integer *),
-        zspmv_(char *, integer *, doublecomplex *, doublecomplex *, doublecomplex *, integer *,
-               doublecomplex *, doublecomplex *, integer *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    integer kcnext;
+    aocl_int64_t kcnext;
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -184,7 +187,7 @@ void zsptri_(char *uplo, integer *n, doublecomplex *ap, integer *ipiv, doublecom
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("ZSPTRI", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("ZSPTRI", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -258,15 +261,16 @@ void zsptri_(char *uplo, integer *n, doublecomplex *ap, integer *ipiv, doublecom
                 i__1 = k - 1;
                 z__1.r = -1.;
                 z__1.i = -0.; // , expr subst
-                zspmv_(uplo, &i__1, &z__1, &ap[1], &work[1], &c__1, &c_b2, &ap[kc], &c__1);
+                aocl_lapack_zspmv(uplo, &i__1, &z__1, &ap[1], &work[1], &c__1, &c_b2, &ap[kc],
+                                  &c__1);
                 i__1 = kc + k - 1;
                 i__2 = kc + k - 1;
                 i__3 = k - 1;
                 aocl_lapack_zdotu_f2c(&z__2, &i__3, &work[1], &c__1, &ap[kc], &c__1);
-                z__1.real = ap[i__2].real - z__2.real;
-                z__1.imag = ap[i__2].imag - z__2.imag; // , expr subst
-                ap[i__1].real = z__1.real;
-                ap[i__1].imag = z__1.imag; // , expr subst
+                z__1.r = ap[i__2].r - z__2.r;
+                z__1.i = ap[i__2].i - z__2.i; // , expr subst
+                ap[i__1].r = z__1.r;
+                ap[i__1].i = z__1.i; // , expr subst
             }
             kstep = 1;
         }
@@ -316,37 +320,39 @@ void zsptri_(char *uplo, integer *n, doublecomplex *ap, integer *ipiv, doublecom
                 i__1 = k - 1;
                 z__1.r = -1.;
                 z__1.i = -0.; // , expr subst
-                zspmv_(uplo, &i__1, &z__1, &ap[1], &work[1], &c__1, &c_b2, &ap[kc], &c__1);
+                aocl_lapack_zspmv(uplo, &i__1, &z__1, &ap[1], &work[1], &c__1, &c_b2, &ap[kc],
+                                  &c__1);
                 i__1 = kc + k - 1;
                 i__2 = kc + k - 1;
                 i__3 = k - 1;
                 aocl_lapack_zdotu_f2c(&z__2, &i__3, &work[1], &c__1, &ap[kc], &c__1);
-                z__1.real = ap[i__2].real - z__2.real;
-                z__1.imag = ap[i__2].imag - z__2.imag; // , expr subst
-                ap[i__1].real = z__1.real;
-                ap[i__1].imag = z__1.imag; // , expr subst
+                z__1.r = ap[i__2].r - z__2.r;
+                z__1.i = ap[i__2].i - z__2.i; // , expr subst
+                ap[i__1].r = z__1.r;
+                ap[i__1].i = z__1.i; // , expr subst
                 i__1 = kcnext + k - 1;
                 i__2 = kcnext + k - 1;
                 i__3 = k - 1;
                 aocl_lapack_zdotu_f2c(&z__2, &i__3, &ap[kc], &c__1, &ap[kcnext], &c__1);
-                z__1.real = ap[i__2].real - z__2.real;
-                z__1.imag = ap[i__2].imag - z__2.imag; // , expr subst
-                ap[i__1].real = z__1.real;
-                ap[i__1].imag = z__1.imag; // , expr subst
+                z__1.r = ap[i__2].r - z__2.r;
+                z__1.i = ap[i__2].i - z__2.i; // , expr subst
+                ap[i__1].r = z__1.r;
+                ap[i__1].i = z__1.i; // , expr subst
                 i__1 = k - 1;
                 aocl_blas_zcopy(&i__1, &ap[kcnext], &c__1, &work[1], &c__1);
                 i__1 = k - 1;
                 z__1.r = -1.;
                 z__1.i = -0.; // , expr subst
-                zspmv_(uplo, &i__1, &z__1, &ap[1], &work[1], &c__1, &c_b2, &ap[kcnext], &c__1);
+                aocl_lapack_zspmv(uplo, &i__1, &z__1, &ap[1], &work[1], &c__1, &c_b2, &ap[kcnext],
+                                  &c__1);
                 i__1 = kcnext + k;
                 i__2 = kcnext + k;
                 i__3 = k - 1;
                 aocl_lapack_zdotu_f2c(&z__2, &i__3, &work[1], &c__1, &ap[kcnext], &c__1);
-                z__1.real = ap[i__2].real - z__2.real;
-                z__1.imag = ap[i__2].imag - z__2.imag; // , expr subst
-                ap[i__1].real = z__1.real;
-                ap[i__1].imag = z__1.imag; // , expr subst
+                z__1.r = ap[i__2].r - z__2.r;
+                z__1.i = ap[i__2].i - z__2.i; // , expr subst
+                ap[i__1].r = z__1.r;
+                ap[i__1].i = z__1.i; // , expr subst
             }
             kstep = 2;
             kcnext = kcnext + k + 1;
@@ -435,16 +441,16 @@ void zsptri_(char *uplo, integer *n, doublecomplex *ap, integer *ipiv, doublecom
                 i__1 = *n - k;
                 z__1.r = -1.;
                 z__1.i = -0.; // , expr subst
-                zspmv_(uplo, &i__1, &z__1, &ap[kc + *n - k + 1], &work[1], &c__1, &c_b2,
-                       &ap[kc + 1], &c__1);
+                aocl_lapack_zspmv(uplo, &i__1, &z__1, &ap[kc + *n - k + 1], &work[1], &c__1, &c_b2,
+                                  &ap[kc + 1], &c__1);
                 i__1 = kc;
                 i__2 = kc;
                 i__3 = *n - k;
                 aocl_lapack_zdotu_f2c(&z__2, &i__3, &work[1], &c__1, &ap[kc + 1], &c__1);
-                z__1.real = ap[i__2].real - z__2.real;
-                z__1.imag = ap[i__2].imag - z__2.imag; // , expr subst
-                ap[i__1].real = z__1.real;
-                ap[i__1].imag = z__1.imag; // , expr subst
+                z__1.r = ap[i__2].r - z__2.r;
+                z__1.i = ap[i__2].i - z__2.i; // , expr subst
+                ap[i__1].r = z__1.r;
+                ap[i__1].i = z__1.i; // , expr subst
             }
             kstep = 1;
         }
@@ -494,20 +500,20 @@ void zsptri_(char *uplo, integer *n, doublecomplex *ap, integer *ipiv, doublecom
                 i__1 = *n - k;
                 z__1.r = -1.;
                 z__1.i = -0.; // , expr subst
-                zspmv_(uplo, &i__1, &z__1, &ap[kc + (*n - k + 1)], &work[1], &c__1, &c_b2,
-                       &ap[kc + 1], &c__1);
+                aocl_lapack_zspmv(uplo, &i__1, &z__1, &ap[kc + (*n - k + 1)], &work[1], &c__1,
+                                  &c_b2, &ap[kc + 1], &c__1);
                 i__1 = kc;
                 i__2 = kc;
                 i__3 = *n - k;
                 aocl_lapack_zdotu_f2c(&z__2, &i__3, &work[1], &c__1, &ap[kc + 1], &c__1);
-                z__1.real = ap[i__2].real - z__2.real;
-                z__1.imag = ap[i__2].imag - z__2.imag; // , expr subst
-                ap[i__1].real = z__1.real;
-                ap[i__1].imag = z__1.imag; // , expr subst
+                z__1.r = ap[i__2].r - z__2.r;
+                z__1.i = ap[i__2].i - z__2.i; // , expr subst
+                ap[i__1].r = z__1.r;
+                ap[i__1].i = z__1.i; // , expr subst
                 i__1 = kcnext + 1;
                 i__2 = kcnext + 1;
                 i__3 = *n - k;
-                zdotu_f2c_(&z__2, &i__3, &ap[kc + 1], &c__1, &ap[kcnext + 2], &c__1);
+                aocl_lapack_zdotu_f2c(&z__2, &i__3, &ap[kc + 1], &c__1, &ap[kcnext + 2], &c__1);
                 z__1.r = ap[i__2].r - z__2.r;
                 z__1.i = ap[i__2].i - z__2.i; // , expr subst
                 ap[i__1].r = z__1.r;
@@ -517,16 +523,16 @@ void zsptri_(char *uplo, integer *n, doublecomplex *ap, integer *ipiv, doublecom
                 i__1 = *n - k;
                 z__1.r = -1.;
                 z__1.i = -0.; // , expr subst
-                zspmv_(uplo, &i__1, &z__1, &ap[kc + (*n - k + 1)], &work[1], &c__1, &c_b2,
-                       &ap[kcnext + 2], &c__1);
+                aocl_lapack_zspmv(uplo, &i__1, &z__1, &ap[kc + (*n - k + 1)], &work[1], &c__1,
+                                  &c_b2, &ap[kcnext + 2], &c__1);
                 i__1 = kcnext;
                 i__2 = kcnext;
                 i__3 = *n - k;
                 aocl_lapack_zdotu_f2c(&z__2, &i__3, &work[1], &c__1, &ap[kcnext + 2], &c__1);
-                z__1.real = ap[i__2].real - z__2.real;
-                z__1.imag = ap[i__2].imag - z__2.imag; // , expr subst
-                ap[i__1].real = z__1.real;
-                ap[i__1].imag = z__1.imag; // , expr subst
+                z__1.r = ap[i__2].r - z__2.r;
+                z__1.i = ap[i__2].i - z__2.i; // , expr subst
+                ap[i__1].r = z__1.r;
+                ap[i__1].i = z__1.i; // , expr subst
             }
             kstep = 2;
             kcnext -= *n - k + 3;
@@ -540,7 +546,7 @@ void zsptri_(char *uplo, integer *n, doublecomplex *ap, integer *ipiv, doublecom
             if(kp < *n)
             {
                 i__1 = *n - kp;
-                zswap_(&i__1, &ap[kc + kp - k + 1], &c__1, &ap[kpc + 1], &c__1);
+                aocl_blas_zswap(&i__1, &ap[kc + kp - k + 1], &c__1, &ap[kpc + 1], &c__1);
             }
             kx = kc + kp - k;
             i__1 = kp - 1;

@@ -152,8 +152,28 @@
 /* > \ingroup realGBauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-void slaqgb_(integer *m, integer *n, integer *kl, integer *ku, real *ab, integer *ldab, real *r__,
-             real *c__, real *rowcnd, real *colcnd, real *amax, char *equed)
+/** Generated wrapper function */
+void slaqgb_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *kl, aocl_int_t *ku, real *ab,
+             aocl_int_t *ldab, real *r__, real *c__, real *rowcnd, real *colcnd, real *amax,
+             char *equed)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_slaqgb(m, n, kl, ku, ab, ldab, r__, c__, rowcnd, colcnd, amax, equed);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t kl_64 = *kl;
+    aocl_int64_t ku_64 = *ku;
+    aocl_int64_t ldab_64 = *ldab;
+
+    aocl_lapack_slaqgb(&m_64, &n_64, &kl_64, &ku_64, ab, &ldab_64, r__, c__, rowcnd, colcnd, amax,
+                       equed);
+#endif
+}
+
+void aocl_lapack_slaqgb(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *kl, aocl_int64_t *ku,
+                        real *ab, aocl_int64_t *ldab, real *r__, real *c__, real *rowcnd,
+                        real *colcnd, real *amax, char *equed)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("slaqgb inputs: m %" FLA_IS ", n %" FLA_IS ", kl %" FLA_IS ", ku %" FLA_IS
@@ -162,7 +182,7 @@ void slaqgb_(integer *m, integer *n, integer *kl, integer *ku, real *ab, integer
     /* System generated locals */
     aocl_int64_t ab_dim1, ab_offset, i__1, i__2, i__3, i__4, i__5, i__6;
     /* Local variables */
-    integer i__, j;
+    aocl_int64_t i__, j;
     real cj, large, small_val;
     extern real slamch_(char *);
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */

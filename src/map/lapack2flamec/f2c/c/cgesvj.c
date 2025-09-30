@@ -4,12 +4,12 @@
  -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for
  libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static complex c_b1 = {0.f, 0.f};
-static complex c_b2 = {1.f, 0.f};
-static integer c__1 = 1;
-static integer c__0 = 0;
+static scomplex c_b1 = {{0.f}, {0.f}};
+static scomplex c_b2 = {{1.f}, {0.f}};
+static aocl_int64_t c__1 = 1;
+static aocl_int64_t c__0 = 0;
 static real c_b41 = 1.f;
-static integer c__2 = 2;
+static aocl_int64_t c__2 = 2;
 /* > \brief <b> CGESVJ </b> */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -46,7 +46,7 @@ static integer c__2 = 2;
 /* > */
 /* > \verbatim */
 /* > */
-/* > CGESVJ computes the singular value decomposition (SVD) of a complex */
+/* > CGESVJ computes the singular value decomposition (SVD) of a scomplex */
 /* > M-by-N matrix A, where M >= N. The SVD of A is written as */
 /* > [++] [xx] [x0] [xx] */
 /* > A = U * SIGMA * V^*, [++] = [xx] * [ox] * [xx] */
@@ -361,9 +361,35 @@ kappa(A*D), where kappa(.) is the */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void cgesvj_(char *joba, char *jobu, char *jobv, integer *m, integer *n, complex *a, integer *lda,
-             real *sva, integer *mv, complex *v, integer *ldv, complex *cwork, integer *lwork,
-             real *rwork, integer *lrwork, integer *info)
+/** Generated wrapper function */
+void cgesvj_(char *joba, char *jobu, char *jobv, aocl_int_t *m, aocl_int_t *n, scomplex *a,
+             aocl_int_t *lda, real *sva, aocl_int_t *mv, scomplex *v, aocl_int_t *ldv,
+             scomplex *cwork, aocl_int_t *lwork, real *rwork, aocl_int_t *lrwork, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_cgesvj(joba, jobu, jobv, m, n, a, lda, sva, mv, v, ldv, cwork, lwork, rwork, lrwork,
+                       info);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t mv_64 = *mv;
+    aocl_int64_t ldv_64 = *ldv;
+    aocl_int64_t lwork_64 = *lwork;
+    aocl_int64_t lrwork_64 = *lrwork;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_cgesvj(joba, jobu, jobv, &m_64, &n_64, a, &lda_64, sva, &mv_64, v, &ldv_64, cwork,
+                       &lwork_64, rwork, &lrwork_64, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_cgesvj(char *joba, char *jobu, char *jobv, aocl_int64_t *m, aocl_int64_t *n,
+                        scomplex *a, aocl_int64_t *lda, real *sva, aocl_int64_t *mv, scomplex *v,
+                        aocl_int64_t *ldv, scomplex *cwork, aocl_int64_t *lwork, real *rwork,
+                        aocl_int64_t *lrwork, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -382,88 +408,49 @@ void cgesvj_(char *joba, char *jobu, char *jobv, integer *m, integer *n, complex
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
-    integer a_dim1, a_offset, v_dim1, v_offset, i__1, i__2, i__3, i__4, i__5, i__6;
+    aocl_int64_t a_dim1, a_offset, v_dim1, v_offset, i__1, i__2, i__3, i__4, i__5, i__6;
     real r__1, r__2;
-    complex q__1, q__2, q__3;
+    scomplex q__1, q__2, q__3;
     /* Builtin functions */
-    double sqrt(doublereal), c_abs(complex *);
-    void r_cnjg(complex *, complex *);
+    double sqrt(doublereal), c_abs(scomplex *);
+    void r_cnjg(scomplex *, scomplex *);
     double r_sign(real *, real *);
     /* Local variables */
     real bigtheta;
-    integer pskipped, i__, p, q;
+    aocl_int64_t pskipped, i__, p, q;
     real t;
-    integer n2, n4;
+    aocl_int64_t n2, n4;
     real rootsfmin;
-    integer n34;
+    aocl_int64_t n34;
     real cs, sn;
-    integer ir1, jbc;
+    aocl_int64_t ir1, jbc;
     real big;
-    integer kbl, igl, ibr, jgl, nbl;
+    aocl_int64_t kbl, igl, ibr, jgl, nbl;
     real skl, tol;
-    integer mvl;
+    aocl_int64_t mvl;
     real aapp;
-    complex aapq;
+    scomplex aapq;
     real aaqq, ctol;
-    integer ierr;
-    extern /* Subroutine */
-        void
-        crot_(integer *, complex *, integer *, complex *, integer *, real *, complex *);
-    complex ompq;
+    aocl_int64_t ierr;
+    scomplex ompq;
     real aapp0, aapq1, temp1;
-    extern /* Complex */
-        VOID
-        cdotc_f2c_(complex *, integer *, complex *, integer *, complex *, integer *);
     real apoaq, aqoap;
-    extern logical lsame_(char *, char *, integer, integer);
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     real theta, small_val, sfmin;
     logical lsvec;
-    extern /* Subroutine */
-        void
-        ccopy_(integer *, complex *, integer *, complex *, integer *),
-        cswap_(integer *, complex *, integer *, complex *, integer *);
     real epsln;
     logical applv, rsvec, uctol;
-    extern /* Subroutine */
-        void
-        caxpy_(integer *, complex *, complex *, integer *, complex *, integer *);
     logical lower, upper, rotok;
-    extern /* Subroutine */
-        void
-        cgsvj0_(char *, integer *, integer *, complex *, integer *, complex *, real *, integer *,
-                complex *, integer *, real *, real *, real *, integer *, complex *, integer *,
-                integer *),
-        cgsvj1_(char *, integer *, integer *, integer *, complex *, integer *, complex *, real *,
-                integer *, complex *, integer *, real *, real *, real *, integer *, complex *,
-                integer *, integer *);
-    extern real scnrm2_(integer *, complex *, integer *);
-    extern /* Subroutine */
-        void
-        clascl_(char *, integer *, integer *, real *, real *, integer *, integer *, complex *,
-                integer *, integer *);
     extern real slamch_(char *);
-    extern /* Subroutine */
-        void
-        csscal_(integer *, real *, complex *, integer *),
-        claset_(char *, integer *, integer *, complex *, complex *, complex *, integer *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    integer ijblsk, swband;
-    extern integer isamax_(integer *, real *, integer *);
-    extern /* Subroutine */
-        void
-        slascl_(char *, integer *, integer *, real *, real *, integer *, integer *, real *,
-                integer *, integer *);
-    integer blskip;
-    extern /* Subroutine */
-        void
-        classq_(integer *, complex *, integer *, real *, real *);
+    aocl_int64_t ijblsk, swband;
+    aocl_int64_t blskip;
     real mxaapq, thsign, mxsinj;
-    integer emptsw;
+    aocl_int64_t emptsw;
     logical lquery;
-    integer notrot, iswrot, lkahead;
+    aocl_int64_t notrot, iswrot, lkahead;
     logical goscale, noscale;
     real rootbig, rooteps;
-    integer rowskip;
+    aocl_int64_t rowskip;
     real roottol;
     /* -- LAPACK computational routine (version 3.8.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -563,7 +550,7 @@ void cgesvj_(char *joba, char *jobu, char *jobv, integer *m, integer *n, complex
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("CGESVJ", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("CGESVJ", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
@@ -623,7 +610,7 @@ void cgesvj_(char *joba, char *jobu, char *jobv, integer *m, integer *n, complex
     {
         *info = -4;
         i__1 = -(*info);
-        xerbla_("CGESVJ", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("CGESVJ", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
@@ -631,7 +618,7 @@ void cgesvj_(char *joba, char *jobu, char *jobv, integer *m, integer *n, complex
     if(rsvec)
     {
         mvl = *n;
-        claset_("A", &mvl, n, &c_b1, &c_b2, &v[v_offset], ldv);
+        aocl_lapack_claset("A", &mvl, n, &c_b1, &c_b2, &v[v_offset], ldv);
     }
     else if(applv)
     {
@@ -658,12 +645,12 @@ void cgesvj_(char *joba, char *jobu, char *jobv, integer *m, integer *n, complex
             aapp = 0.f;
             aaqq = 1.f;
             i__2 = *m - p + 1;
-            classq_(&i__2, &a[p + p * a_dim1], &c__1, &aapp, &aaqq);
+            aocl_lapack_classq(&i__2, &a[p + p * a_dim1], &c__1, &aapp, &aaqq);
             if(aapp > big)
             {
                 *info = -6;
                 i__2 = -(*info);
-                xerbla_("CGESVJ", &i__2, (ftnlen)6);
+                aocl_blas_xerbla("CGESVJ", &i__2, (ftnlen)6);
                 AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
                 return;
             }
@@ -698,12 +685,12 @@ void cgesvj_(char *joba, char *jobu, char *jobv, integer *m, integer *n, complex
         {
             aapp = 0.f;
             aaqq = 1.f;
-            classq_(&p, &a[p * a_dim1 + 1], &c__1, &aapp, &aaqq);
+            aocl_lapack_classq(&p, &a[p * a_dim1 + 1], &c__1, &aapp, &aaqq);
             if(aapp > big)
             {
                 *info = -6;
                 i__2 = -(*info);
-                xerbla_("CGESVJ", &i__2, (ftnlen)6);
+                aocl_blas_xerbla("CGESVJ", &i__2, (ftnlen)6);
                 AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
                 return;
             }
@@ -738,12 +725,12 @@ void cgesvj_(char *joba, char *jobu, char *jobv, integer *m, integer *n, complex
         {
             aapp = 0.f;
             aaqq = 1.f;
-            classq_(m, &a[p * a_dim1 + 1], &c__1, &aapp, &aaqq);
+            aocl_lapack_classq(m, &a[p * a_dim1 + 1], &c__1, &aapp, &aaqq);
             if(aapp > big)
             {
                 *info = -6;
                 i__2 = -(*info);
-                xerbla_("CGESVJ", &i__2, (ftnlen)6);
+                aocl_blas_xerbla("CGESVJ", &i__2, (ftnlen)6);
                 AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
                 return;
             }
@@ -800,7 +787,7 @@ void cgesvj_(char *joba, char *jobu, char *jobv, integer *m, integer *n, complex
     {
         if(lsvec)
         {
-            claset_("G", m, n, &c_b1, &c_b2, &a[a_offset], lda);
+            aocl_lapack_claset("G", m, n, &c_b1, &c_b2, &a[a_offset], lda);
         }
         rwork[1] = 1.f;
         rwork[2] = 0.f;
@@ -816,7 +803,8 @@ void cgesvj_(char *joba, char *jobu, char *jobv, integer *m, integer *n, complex
     {
         if(lsvec)
         {
-            clascl_("G", &c__0, &c__0, &sva[1], &skl, m, &c__1, &a[a_dim1 + 1], lda, &ierr);
+            aocl_lapack_clascl("G", &c__0, &c__0, &sva[1], &skl, m, &c__1, &a[a_dim1 + 1], lda,
+                               &ierr);
         }
         rwork[1] = 1.f / skl;
         if(sva[1] >= sfmin)
@@ -881,12 +869,12 @@ void cgesvj_(char *joba, char *jobu, char *jobv, integer *m, integer *n, complex
     /* Scale, if necessary */
     if(temp1 != 1.f)
     {
-        slascl_("G", &c__0, &c__0, &c_b41, &temp1, n, &c__1, &sva[1], n, &ierr);
+        aocl_lapack_slascl("G", &c__0, &c__0, &c_b41, &temp1, n, &c__1, &sva[1], n, &ierr);
     }
     skl = temp1 * skl;
     if(skl != 1.f)
     {
-        clascl_(joba, &c__0, &c__0, &c_b41, &skl, m, n, &a[a_offset], lda, &ierr);
+        aocl_lapack_clascl(joba, &c__0, &c__0, &c_b41, &skl, m, n, &a[a_offset], lda, &ierr);
         skl = 1.f / skl;
     }
     /* Row-cyclic Jacobi SVD algorithm with column pivoting */
@@ -959,51 +947,59 @@ void cgesvj_(char *joba, char *jobu, char *jobv, integer *m, integer *n, complex
             i__1 = *m - n34;
             i__2 = *n - n34;
             i__3 = *lwork - *n;
-            cgsvj0_(jobv, &i__1, &i__2, &a[n34 + 1 + (n34 + 1) * a_dim1], lda, &cwork[n34 + 1],
-                    &sva[n34 + 1], &mvl, &v[n34 * q + 1 + (n34 + 1) * v_dim1], ldv, &epsln, &sfmin,
-                    &tol, &c__2, &cwork[*n + 1], &i__3, &ierr);
+            aocl_lapack_cgsvj0(jobv, &i__1, &i__2, &a[n34 + 1 + (n34 + 1) * a_dim1], lda,
+                               &cwork[n34 + 1], &sva[n34 + 1], &mvl,
+                               &v[n34 * q + 1 + (n34 + 1) * v_dim1], ldv, &epsln, &sfmin, &tol,
+                               &c__2, &cwork[*n + 1], &i__3, &ierr);
             i__1 = *m - n2;
             i__2 = n34 - n2;
             i__3 = *lwork - *n;
-            cgsvj0_(jobv, &i__1, &i__2, &a[n2 + 1 + (n2 + 1) * a_dim1], lda, &cwork[n2 + 1],
-                    &sva[n2 + 1], &mvl, &v[n2 * q + 1 + (n2 + 1) * v_dim1], ldv, &epsln, &sfmin,
-                    &tol, &c__2, &cwork[*n + 1], &i__3, &ierr);
+            aocl_lapack_cgsvj0(jobv, &i__1, &i__2, &a[n2 + 1 + (n2 + 1) * a_dim1], lda,
+                               &cwork[n2 + 1], &sva[n2 + 1], &mvl,
+                               &v[n2 * q + 1 + (n2 + 1) * v_dim1], ldv, &epsln, &sfmin, &tol, &c__2,
+                               &cwork[*n + 1], &i__3, &ierr);
             i__1 = *m - n2;
             i__2 = *n - n2;
             i__3 = *lwork - *n;
-            cgsvj1_(jobv, &i__1, &i__2, &n4, &a[n2 + 1 + (n2 + 1) * a_dim1], lda, &cwork[n2 + 1],
-                    &sva[n2 + 1], &mvl, &v[n2 * q + 1 + (n2 + 1) * v_dim1], ldv, &epsln, &sfmin,
-                    &tol, &c__1, &cwork[*n + 1], &i__3, &ierr);
+            aocl_lapack_cgsvj1(jobv, &i__1, &i__2, &n4, &a[n2 + 1 + (n2 + 1) * a_dim1], lda,
+                               &cwork[n2 + 1], &sva[n2 + 1], &mvl,
+                               &v[n2 * q + 1 + (n2 + 1) * v_dim1], ldv, &epsln, &sfmin, &tol, &c__1,
+                               &cwork[*n + 1], &i__3, &ierr);
             i__1 = *m - n4;
             i__2 = n2 - n4;
             i__3 = *lwork - *n;
-            cgsvj0_(jobv, &i__1, &i__2, &a[n4 + 1 + (n4 + 1) * a_dim1], lda, &cwork[n4 + 1],
-                    &sva[n4 + 1], &mvl, &v[n4 * q + 1 + (n4 + 1) * v_dim1], ldv, &epsln, &sfmin,
-                    &tol, &c__1, &cwork[*n + 1], &i__3, &ierr);
+            aocl_lapack_cgsvj0(jobv, &i__1, &i__2, &a[n4 + 1 + (n4 + 1) * a_dim1], lda,
+                               &cwork[n4 + 1], &sva[n4 + 1], &mvl,
+                               &v[n4 * q + 1 + (n4 + 1) * v_dim1], ldv, &epsln, &sfmin, &tol, &c__1,
+                               &cwork[*n + 1], &i__3, &ierr);
             i__1 = *lwork - *n;
-            cgsvj0_(jobv, m, &n4, &a[a_offset], lda, &cwork[1], &sva[1], &mvl, &v[v_offset], ldv,
-                    &epsln, &sfmin, &tol, &c__1, &cwork[*n + 1], &i__1, &ierr);
+            aocl_lapack_cgsvj0(jobv, m, &n4, &a[a_offset], lda, &cwork[1], &sva[1], &mvl,
+                               &v[v_offset], ldv, &epsln, &sfmin, &tol, &c__1, &cwork[*n + 1],
+                               &i__1, &ierr);
             i__1 = *lwork - *n;
-            cgsvj1_(jobv, m, &n2, &n4, &a[a_offset], lda, &cwork[1], &sva[1], &mvl, &v[v_offset],
-                    ldv, &epsln, &sfmin, &tol, &c__1, &cwork[*n + 1], &i__1, &ierr);
+            aocl_lapack_cgsvj1(jobv, m, &n2, &n4, &a[a_offset], lda, &cwork[1], &sva[1], &mvl,
+                               &v[v_offset], ldv, &epsln, &sfmin, &tol, &c__1, &cwork[*n + 1],
+                               &i__1, &ierr);
         }
         else if(upper)
         {
             i__1 = *lwork - *n;
-            cgsvj0_(jobv, &n4, &n4, &a[a_offset], lda, &cwork[1], &sva[1], &mvl, &v[v_offset], ldv,
-                    &epsln, &sfmin, &tol, &c__2, &cwork[*n + 1], &i__1, &ierr);
+            aocl_lapack_cgsvj0(jobv, &n4, &n4, &a[a_offset], lda, &cwork[1], &sva[1], &mvl,
+                               &v[v_offset], ldv, &epsln, &sfmin, &tol, &c__2, &cwork[*n + 1],
+                               &i__1, &ierr);
             i__1 = *lwork - *n;
-            cgsvj0_(jobv, &n2, &n4, &a[(n4 + 1) * a_dim1 + 1], lda, &cwork[n4 + 1], &sva[n4 + 1],
-                    &mvl, &v[n4 * q + 1 + (n4 + 1) * v_dim1], ldv, &epsln, &sfmin, &tol, &c__1,
-                    &cwork[*n + 1], &i__1, &ierr);
+            aocl_lapack_cgsvj0(jobv, &n2, &n4, &a[(n4 + 1) * a_dim1 + 1], lda, &cwork[n4 + 1],
+                               &sva[n4 + 1], &mvl, &v[n4 * q + 1 + (n4 + 1) * v_dim1], ldv, &epsln,
+                               &sfmin, &tol, &c__1, &cwork[*n + 1], &i__1, &ierr);
             i__1 = *lwork - *n;
-            cgsvj1_(jobv, &n2, &n2, &n4, &a[a_offset], lda, &cwork[1], &sva[1], &mvl, &v[v_offset],
-                    ldv, &epsln, &sfmin, &tol, &c__1, &cwork[*n + 1], &i__1, &ierr);
+            aocl_lapack_cgsvj1(jobv, &n2, &n2, &n4, &a[a_offset], lda, &cwork[1], &sva[1], &mvl,
+                               &v[v_offset], ldv, &epsln, &sfmin, &tol, &c__1, &cwork[*n + 1],
+                               &i__1, &ierr);
             i__1 = n2 + n4;
             i__2 = *lwork - *n;
-            cgsvj0_(jobv, &i__1, &n4, &a[(n2 + 1) * a_dim1 + 1], lda, &cwork[n2 + 1], &sva[n2 + 1],
-                    &mvl, &v[n2 * q + 1 + (n2 + 1) * v_dim1], ldv, &epsln, &sfmin, &tol, &c__1,
-                    &cwork[*n + 1], &i__2, &ierr);
+            aocl_lapack_cgsvj0(jobv, &i__1, &n4, &a[(n2 + 1) * a_dim1 + 1], lda, &cwork[n2 + 1],
+                               &sva[n2 + 1], &mvl, &v[n2 * q + 1 + (n2 + 1) * v_dim1], ldv, &epsln,
+                               &sfmin, &tol, &c__1, &cwork[*n + 1], &i__2, &ierr);
         }
     }
     /* .. Row-cyclic pivot strategy with de Rijk's pivoting .. */
@@ -1038,13 +1034,14 @@ void cgesvj_(char *joba, char *jobu, char *jobv, integer *m, integer *n, complex
                 {
                     /* .. de Rijk's pivoting */
                     i__4 = *n - p + 1;
-                    q = isamax_(&i__4, &sva[p], &c__1) + p - 1;
+                    q = aocl_blas_isamax(&i__4, &sva[p], &c__1) + p - 1;
                     if(p != q)
                     {
-                        cswap_(m, &a[p * a_dim1 + 1], &c__1, &a[q * a_dim1 + 1], &c__1);
+                        aocl_blas_cswap(m, &a[p * a_dim1 + 1], &c__1, &a[q * a_dim1 + 1], &c__1);
                         if(rsvec)
                         {
-                            cswap_(&mvl, &v[p * v_dim1 + 1], &c__1, &v[q * v_dim1 + 1], &c__1);
+                            aocl_blas_cswap(&mvl, &v[p * v_dim1 + 1], &c__1, &v[q * v_dim1 + 1],
+                                            &c__1);
                         }
                         temp1 = sva[p];
                         sva[p] = sva[q];
@@ -1075,13 +1072,13 @@ void cgesvj_(char *joba, char *jobu, char *jobv, integer *m, integer *n, complex
                         /* below should be replaced with "AAPP = SCNRM2( M, A(1,p), 1 )". */
                         if(sva[p] < rootbig && sva[p] > rootsfmin)
                         {
-                            sva[p] = scnrm2_(m, &a[p * a_dim1 + 1], &c__1);
+                            sva[p] = aocl_blas_scnrm2(m, &a[p * a_dim1 + 1], &c__1);
                         }
                         else
                         {
                             temp1 = 0.f;
                             aapp = 1.f;
-                            classq_(m, &a[p * a_dim1 + 1], &c__1, &temp1, &aapp);
+                            aocl_lapack_classq(m, &a[p * a_dim1 + 1], &c__1, &temp1, &aapp);
                             sva[p] = temp1 * sqrt(aapp);
                         }
                         aapp = sva[p];
@@ -1107,7 +1104,7 @@ void cgesvj_(char *joba, char *jobu, char *jobv, integer *m, integer *n, complex
                                     rotok = small_val * aapp <= aaqq;
                                     if(aapp < big / aaqq)
                                     {
-                                        cdotc_f2c_(&q__3, m, &a[p * a_dim1 + 1], &c__1,
+                                        aocl_lapack_cdotc_f2c(&q__3, m, &a[p * a_dim1 + 1], &c__1,
                                                    &a[q * a_dim1 + 1], &c__1);
                                         q__2.r = q__3.r / aaqq;
                                         q__2.i = q__3.i / aaqq; // , expr subst
@@ -1118,10 +1115,11 @@ void cgesvj_(char *joba, char *jobu, char *jobv, integer *m, integer *n, complex
                                     }
                                     else
                                     {
-                                        ccopy_(m, &a[p * a_dim1 + 1], &c__1, &cwork[*n + 1], &c__1);
-                                        clascl_("G", &c__0, &c__0, &aapp, &c_b41, m, &c__1,
-                                                &cwork[*n + 1], lda, &ierr);
-                                        cdotc_f2c_(&q__2, m, &cwork[*n + 1], &c__1,
+                                        aocl_blas_ccopy(m, &a[p * a_dim1 + 1], &c__1,
+                                                        &cwork[*n + 1], &c__1);
+                                        aocl_lapack_clascl("G", &c__0, &c__0, &aapp, &c_b41, m,
+                                                           &c__1, &cwork[*n + 1], lda, &ierr);
+                                        aocl_lapack_cdotc_f2c(&q__2, m, &cwork[*n + 1], &c__1,
                                                    &a[q * a_dim1 + 1], &c__1);
                                         q__1.r = q__2.r / aaqq;
                                         q__1.i = q__2.i / aaqq; // , expr subst
@@ -1134,7 +1132,7 @@ void cgesvj_(char *joba, char *jobu, char *jobv, integer *m, integer *n, complex
                                     rotok = aapp <= aaqq / small_val;
                                     if(aapp > small_val / aaqq)
                                     {
-                                        cdotc_f2c_(&q__3, m, &a[p * a_dim1 + 1], &c__1,
+                                        aocl_lapack_cdotc_f2c(&q__3, m, &a[p * a_dim1 + 1], &c__1,
                                                    &a[q * a_dim1 + 1], &c__1);
                                         q__2.r = q__3.r / aapp;
                                         q__2.i = q__3.i / aapp; // , expr subst
@@ -1145,10 +1143,11 @@ void cgesvj_(char *joba, char *jobu, char *jobv, integer *m, integer *n, complex
                                     }
                                     else
                                     {
-                                        ccopy_(m, &a[q * a_dim1 + 1], &c__1, &cwork[*n + 1], &c__1);
-                                        clascl_("G", &c__0, &c__0, &aaqq, &c_b41, m, &c__1,
-                                                &cwork[*n + 1], lda, &ierr);
-                                        cdotc_f2c_(&q__2, m, &a[p * a_dim1 + 1], &c__1,
+                                        aocl_blas_ccopy(m, &a[q * a_dim1 + 1], &c__1,
+                                                        &cwork[*n + 1], &c__1);
+                                        aocl_lapack_clascl("G", &c__0, &c__0, &aaqq, &c_b41, m,
+                                                           &c__1, &cwork[*n + 1], lda, &ierr);
+                                        aocl_lapack_cdotc_f2c(&q__2, m, &a[p * a_dim1 + 1], &c__1,
                                                    &cwork[*n + 1], &c__1);
                                         q__1.r = q__2.r / aapp;
                                         q__1.i = q__2.i / aapp; // , expr subst
@@ -1191,15 +1190,16 @@ void cgesvj_(char *joba, char *jobu, char *jobv, integer *m, integer *n, complex
                                             r_cnjg(&q__2, &ompq);
                                             q__1.r = t * q__2.r;
                                             q__1.i = t * q__2.i; // , expr subst
-                                            crot_(m, &a[p * a_dim1 + 1], &c__1, &a[q * a_dim1 + 1],
-                                                  &c__1, &cs, &q__1);
+                                            aocl_lapack_crot(m, &a[p * a_dim1 + 1], &c__1,
+                                                             &a[q * a_dim1 + 1], &c__1, &cs, &q__1);
                                             if(rsvec)
                                             {
                                                 r_cnjg(&q__2, &ompq);
                                                 q__1.r = t * q__2.r;
                                                 q__1.i = t * q__2.i; // , expr subst
-                                                crot_(&mvl, &v[p * v_dim1 + 1], &c__1,
-                                                      &v[q * v_dim1 + 1], &c__1, &cs, &q__1);
+                                                aocl_lapack_crot(&mvl, &v[p * v_dim1 + 1], &c__1,
+                                                                 &v[q * v_dim1 + 1], &c__1, &cs,
+                                                                 &q__1);
                                             }
                                             /* Computing MAX */
                                             r__1 = 0.f;
@@ -1236,15 +1236,16 @@ void cgesvj_(char *joba, char *jobu, char *jobv, integer *m, integer *n, complex
                                             r_cnjg(&q__2, &ompq);
                                             q__1.r = sn * q__2.r;
                                             q__1.i = sn * q__2.i; // , expr subst
-                                            crot_(m, &a[p * a_dim1 + 1], &c__1, &a[q * a_dim1 + 1],
-                                                  &c__1, &cs, &q__1);
+                                            aocl_lapack_crot(m, &a[p * a_dim1 + 1], &c__1,
+                                                             &a[q * a_dim1 + 1], &c__1, &cs, &q__1);
                                             if(rsvec)
                                             {
                                                 r_cnjg(&q__2, &ompq);
                                                 q__1.r = sn * q__2.r;
                                                 q__1.i = sn * q__2.i; // , expr subst
-                                                crot_(&mvl, &v[p * v_dim1 + 1], &c__1,
-                                                      &v[q * v_dim1 + 1], &c__1, &cs, &q__1);
+                                                aocl_lapack_crot(&mvl, &v[p * v_dim1 + 1], &c__1,
+                                                                 &v[q * v_dim1 + 1], &c__1, &cs,
+                                                                 &q__1);
                                             }
                                         }
                                         i__5 = p;
@@ -1260,17 +1261,18 @@ void cgesvj_(char *joba, char *jobu, char *jobv, integer *m, integer *n, complex
                                     {
                                         /* .. have to use modified Gram-Schmidt like transformation
                                          */
-                                        ccopy_(m, &a[p * a_dim1 + 1], &c__1, &cwork[*n + 1], &c__1);
-                                        clascl_("G", &c__0, &c__0, &aapp, &c_b41, m, &c__1,
-                                                &cwork[*n + 1], lda, &ierr);
-                                        clascl_("G", &c__0, &c__0, &aaqq, &c_b41, m, &c__1,
-                                                &a[q * a_dim1 + 1], lda, &ierr);
+                                        aocl_blas_ccopy(m, &a[p * a_dim1 + 1], &c__1,
+                                                        &cwork[*n + 1], &c__1);
+                                        aocl_lapack_clascl("G", &c__0, &c__0, &aapp, &c_b41, m,
+                                                           &c__1, &cwork[*n + 1], lda, &ierr);
+                                        aocl_lapack_clascl("G", &c__0, &c__0, &aaqq, &c_b41, m,
+                                                           &c__1, &a[q * a_dim1 + 1], lda, &ierr);
                                         q__1.r = -aapq.r;
                                         q__1.i = -aapq.i; // , expr subst
-                                        caxpy_(m, &q__1, &cwork[*n + 1], &c__1, &a[q * a_dim1 + 1],
-                                               &c__1);
-                                        clascl_("G", &c__0, &c__0, &c_b41, &aaqq, m, &c__1,
-                                                &a[q * a_dim1 + 1], lda, &ierr);
+                                        aocl_blas_caxpy(m, &q__1, &cwork[*n + 1], &c__1,
+                                                        &a[q * a_dim1 + 1], &c__1);
+                                        aocl_lapack_clascl("G", &c__0, &c__0, &c_b41, &aaqq, m,
+                                                           &c__1, &a[q * a_dim1 + 1], lda, &ierr);
                                         /* Computing MAX */
                                         r__1 = 0.f;
                                         r__2 = 1.f - aapq1 * aapq1; // , expr subst
@@ -1286,13 +1288,13 @@ void cgesvj_(char *joba, char *jobu, char *jobv, integer *m, integer *n, complex
                                     {
                                         if(aaqq < rootbig && aaqq > rootsfmin)
                                         {
-                                            sva[q] = scnrm2_(m, &a[q * a_dim1 + 1], &c__1);
+                                            sva[q] = aocl_blas_scnrm2(m, &a[q * a_dim1 + 1], &c__1);
                                         }
                                         else
                                         {
                                             t = 0.f;
                                             aaqq = 1.f;
-                                            classq_(m, &a[q * a_dim1 + 1], &c__1, &t, &aaqq);
+                                            aocl_lapack_classq(m, &a[q * a_dim1 + 1], &c__1, &t, &aaqq);
                                             sva[q] = t * sqrt(aaqq);
                                         }
                                     }
@@ -1300,13 +1302,13 @@ void cgesvj_(char *joba, char *jobu, char *jobv, integer *m, integer *n, complex
                                     {
                                         if(aapp < rootbig && aapp > rootsfmin)
                                         {
-                                            aapp = scnrm2_(m, &a[p * a_dim1 + 1], &c__1);
+                                            aapp = aocl_blas_scnrm2(m, &a[p * a_dim1 + 1], &c__1);
                                         }
                                         else
                                         {
                                             t = 0.f;
                                             aapp = 1.f;
-                                            classq_(m, &a[p * a_dim1 + 1], &c__1, &t, &aapp);
+                                            aocl_lapack_classq(m, &a[p * a_dim1 + 1], &c__1, &t, &aapp);
                                             aapp = t * sqrt(aapp);
                                         }
                                         sva[p] = aapp;
@@ -1404,7 +1406,7 @@ void cgesvj_(char *joba, char *jobu, char *jobv, integer *m, integer *n, complex
                                     }
                                     if(aapp < big / aaqq)
                                     {
-                                        cdotc_f2c_(&q__3, m, &a[p * a_dim1 + 1], &c__1,
+                                        aocl_lapack_cdotc_f2c(&q__3, m, &a[p * a_dim1 + 1], &c__1,
                                                    &a[q * a_dim1 + 1], &c__1);
                                         q__2.r = q__3.r / aaqq;
                                         q__2.i = q__3.i / aaqq; // , expr subst
@@ -1415,10 +1417,11 @@ void cgesvj_(char *joba, char *jobu, char *jobv, integer *m, integer *n, complex
                                     }
                                     else
                                     {
-                                        ccopy_(m, &a[p * a_dim1 + 1], &c__1, &cwork[*n + 1], &c__1);
-                                        clascl_("G", &c__0, &c__0, &aapp, &c_b41, m, &c__1,
-                                                &cwork[*n + 1], lda, &ierr);
-                                        cdotc_f2c_(&q__2, m, &cwork[*n + 1], &c__1,
+                                        aocl_blas_ccopy(m, &a[p * a_dim1 + 1], &c__1,
+                                                        &cwork[*n + 1], &c__1);
+                                        aocl_lapack_clascl("G", &c__0, &c__0, &aapp, &c_b41, m,
+                                                           &c__1, &cwork[*n + 1], lda, &ierr);
+                                        aocl_lapack_cdotc_f2c(&q__2, m, &cwork[*n + 1], &c__1,
                                                    &a[q * a_dim1 + 1], &c__1);
                                         q__1.r = q__2.r / aaqq;
                                         q__1.i = q__2.i / aaqq; // , expr subst
@@ -1438,7 +1441,7 @@ void cgesvj_(char *joba, char *jobu, char *jobv, integer *m, integer *n, complex
                                     }
                                     if(aapp > small_val / aaqq)
                                     {
-                                        cdotc_f2c_(&q__3, m, &a[p * a_dim1 + 1], &c__1,
+                                        aocl_lapack_cdotc_f2c(&q__3, m, &a[p * a_dim1 + 1], &c__1,
                                                    &a[q * a_dim1 + 1], &c__1);
                                         r__1 = fla_max(aaqq, aapp);
                                         q__2.r = q__3.r / r__1;
@@ -1451,10 +1454,11 @@ void cgesvj_(char *joba, char *jobu, char *jobv, integer *m, integer *n, complex
                                     }
                                     else
                                     {
-                                        ccopy_(m, &a[q * a_dim1 + 1], &c__1, &cwork[*n + 1], &c__1);
-                                        clascl_("G", &c__0, &c__0, &aaqq, &c_b41, m, &c__1,
-                                                &cwork[*n + 1], lda, &ierr);
-                                        cdotc_f2c_(&q__2, m, &a[p * a_dim1 + 1], &c__1,
+                                        aocl_blas_ccopy(m, &a[q * a_dim1 + 1], &c__1,
+                                                        &cwork[*n + 1], &c__1);
+                                        aocl_lapack_clascl("G", &c__0, &c__0, &aaqq, &c_b41, m,
+                                                           &c__1, &cwork[*n + 1], lda, &ierr);
+                                        aocl_lapack_cdotc_f2c(&q__2, m, &a[p * a_dim1 + 1], &c__1,
                                                    &cwork[*n + 1], &c__1);
                                         q__1.r = q__2.r / aapp;
                                         q__1.i = q__2.i / aapp; // , expr subst
@@ -1497,15 +1501,16 @@ void cgesvj_(char *joba, char *jobu, char *jobv, integer *m, integer *n, complex
                                             r_cnjg(&q__2, &ompq);
                                             q__1.r = t * q__2.r;
                                             q__1.i = t * q__2.i; // , expr subst
-                                            crot_(m, &a[p * a_dim1 + 1], &c__1, &a[q * a_dim1 + 1],
-                                                  &c__1, &cs, &q__1);
+                                            aocl_lapack_crot(m, &a[p * a_dim1 + 1], &c__1,
+                                                             &a[q * a_dim1 + 1], &c__1, &cs, &q__1);
                                             if(rsvec)
                                             {
                                                 r_cnjg(&q__2, &ompq);
                                                 q__1.r = t * q__2.r;
                                                 q__1.i = t * q__2.i; // , expr subst
-                                                crot_(&mvl, &v[p * v_dim1 + 1], &c__1,
-                                                      &v[q * v_dim1 + 1], &c__1, &cs, &q__1);
+                                                aocl_lapack_crot(&mvl, &v[p * v_dim1 + 1], &c__1,
+                                                                 &v[q * v_dim1 + 1], &c__1, &cs,
+                                                                 &q__1);
                                             }
                                             /* Computing MAX */
                                             r__1 = 0.f;
@@ -1546,15 +1551,16 @@ void cgesvj_(char *joba, char *jobu, char *jobv, integer *m, integer *n, complex
                                             r_cnjg(&q__2, &ompq);
                                             q__1.r = sn * q__2.r;
                                             q__1.i = sn * q__2.i; // , expr subst
-                                            crot_(m, &a[p * a_dim1 + 1], &c__1, &a[q * a_dim1 + 1],
-                                                  &c__1, &cs, &q__1);
+                                            aocl_lapack_crot(m, &a[p * a_dim1 + 1], &c__1,
+                                                             &a[q * a_dim1 + 1], &c__1, &cs, &q__1);
                                             if(rsvec)
                                             {
                                                 r_cnjg(&q__2, &ompq);
                                                 q__1.r = sn * q__2.r;
                                                 q__1.i = sn * q__2.i; // , expr subst
-                                                crot_(&mvl, &v[p * v_dim1 + 1], &c__1,
-                                                      &v[q * v_dim1 + 1], &c__1, &cs, &q__1);
+                                                aocl_lapack_crot(&mvl, &v[p * v_dim1 + 1], &c__1,
+                                                                 &v[q * v_dim1 + 1], &c__1, &cs,
+                                                                 &q__1);
                                             }
                                         }
                                         i__5 = p;
@@ -1572,18 +1578,20 @@ void cgesvj_(char *joba, char *jobu, char *jobv, integer *m, integer *n, complex
                                          */
                                         if(aapp > aaqq)
                                         {
-                                            ccopy_(m, &a[p * a_dim1 + 1], &c__1, &cwork[*n + 1],
-                                                   &c__1);
-                                            clascl_("G", &c__0, &c__0, &aapp, &c_b41, m, &c__1,
-                                                    &cwork[*n + 1], lda, &ierr);
-                                            clascl_("G", &c__0, &c__0, &aaqq, &c_b41, m, &c__1,
-                                                    &a[q * a_dim1 + 1], lda, &ierr);
+                                            aocl_blas_ccopy(m, &a[p * a_dim1 + 1], &c__1,
+                                                            &cwork[*n + 1], &c__1);
+                                            aocl_lapack_clascl("G", &c__0, &c__0, &aapp, &c_b41, m,
+                                                               &c__1, &cwork[*n + 1], lda, &ierr);
+                                            aocl_lapack_clascl("G", &c__0, &c__0, &aaqq, &c_b41, m,
+                                                               &c__1, &a[q * a_dim1 + 1], lda,
+                                                               &ierr);
                                             q__1.r = -aapq.r;
                                             q__1.i = -aapq.i; // , expr subst
-                                            caxpy_(m, &q__1, &cwork[*n + 1], &c__1,
-                                                   &a[q * a_dim1 + 1], &c__1);
-                                            clascl_("G", &c__0, &c__0, &c_b41, &aaqq, m, &c__1,
-                                                    &a[q * a_dim1 + 1], lda, &ierr);
+                                            aocl_blas_caxpy(m, &q__1, &cwork[*n + 1], &c__1,
+                                                            &a[q * a_dim1 + 1], &c__1);
+                                            aocl_lapack_clascl("G", &c__0, &c__0, &c_b41, &aaqq, m,
+                                                               &c__1, &a[q * a_dim1 + 1], lda,
+                                                               &ierr);
                                             /* Computing MAX */
                                             r__1 = 0.f;
                                             r__2 = 1.f - aapq1 * aapq1; // , expr subst
@@ -1592,19 +1600,21 @@ void cgesvj_(char *joba, char *jobu, char *jobv, integer *m, integer *n, complex
                                         }
                                         else
                                         {
-                                            ccopy_(m, &a[q * a_dim1 + 1], &c__1, &cwork[*n + 1],
-                                                   &c__1);
-                                            clascl_("G", &c__0, &c__0, &aaqq, &c_b41, m, &c__1,
-                                                    &cwork[*n + 1], lda, &ierr);
-                                            clascl_("G", &c__0, &c__0, &aapp, &c_b41, m, &c__1,
-                                                    &a[p * a_dim1 + 1], lda, &ierr);
+                                            aocl_blas_ccopy(m, &a[q * a_dim1 + 1], &c__1,
+                                                            &cwork[*n + 1], &c__1);
+                                            aocl_lapack_clascl("G", &c__0, &c__0, &aaqq, &c_b41, m,
+                                                               &c__1, &cwork[*n + 1], lda, &ierr);
+                                            aocl_lapack_clascl("G", &c__0, &c__0, &aapp, &c_b41, m,
+                                                               &c__1, &a[p * a_dim1 + 1], lda,
+                                                               &ierr);
                                             r_cnjg(&q__2, &aapq);
                                             q__1.r = -q__2.r;
                                             q__1.i = -q__2.i; // , expr subst
-                                            caxpy_(m, &q__1, &cwork[*n + 1], &c__1,
-                                                   &a[p * a_dim1 + 1], &c__1);
-                                            clascl_("G", &c__0, &c__0, &c_b41, &aapp, m, &c__1,
-                                                    &a[p * a_dim1 + 1], lda, &ierr);
+                                            aocl_blas_caxpy(m, &q__1, &cwork[*n + 1], &c__1,
+                                                            &a[p * a_dim1 + 1], &c__1);
+                                            aocl_lapack_clascl("G", &c__0, &c__0, &c_b41, &aapp, m,
+                                                               &c__1, &a[p * a_dim1 + 1], lda,
+                                                               &ierr);
                                             /* Computing MAX */
                                             r__1 = 0.f;
                                             r__2 = 1.f - aapq1 * aapq1; // , expr subst
@@ -1621,13 +1631,13 @@ void cgesvj_(char *joba, char *jobu, char *jobv, integer *m, integer *n, complex
                                     {
                                         if(aaqq < rootbig && aaqq > rootsfmin)
                                         {
-                                            sva[q] = scnrm2_(m, &a[q * a_dim1 + 1], &c__1);
+                                            sva[q] = aocl_blas_scnrm2(m, &a[q * a_dim1 + 1], &c__1);
                                         }
                                         else
                                         {
                                             t = 0.f;
                                             aaqq = 1.f;
-                                            classq_(m, &a[q * a_dim1 + 1], &c__1, &t, &aaqq);
+                                            aocl_lapack_classq(m, &a[q * a_dim1 + 1], &c__1, &t, &aaqq);
                                             sva[q] = t * sqrt(aaqq);
                                         }
                                     }
@@ -1637,13 +1647,13 @@ void cgesvj_(char *joba, char *jobu, char *jobv, integer *m, integer *n, complex
                                     {
                                         if(aapp < rootbig && aapp > rootsfmin)
                                         {
-                                            aapp = scnrm2_(m, &a[p * a_dim1 + 1], &c__1);
+                                            aapp = aocl_blas_scnrm2(m, &a[p * a_dim1 + 1], &c__1);
                                         }
                                         else
                                         {
                                             t = 0.f;
                                             aapp = 1.f;
-                                            classq_(m, &a[p * a_dim1 + 1], &c__1, &t, &aapp);
+                                            aocl_lapack_classq(m, &a[p * a_dim1 + 1], &c__1, &t, &aapp);
                                             aapp = t * sqrt(aapp);
                                         }
                                         sva[p] = aapp;
@@ -1717,13 +1727,13 @@ void cgesvj_(char *joba, char *jobu, char *jobv, integer *m, integer *n, complex
         /* .. update SVA(N) */
         if(sva[*n] < rootbig && sva[*n] > rootsfmin)
         {
-            sva[*n] = scnrm2_(m, &a[*n * a_dim1 + 1], &c__1);
+            sva[*n] = aocl_blas_scnrm2(m, &a[*n * a_dim1 + 1], &c__1);
         }
         else
         {
             t = 0.f;
             aapp = 1.f;
-            classq_(m, &a[*n * a_dim1 + 1], &c__1, &t, &aapp);
+            aocl_lapack_classq(m, &a[*n * a_dim1 + 1], &c__1, &t, &aapp);
             sva[*n] = t * sqrt(aapp);
         }
         /* Additional steering devices */
@@ -1758,16 +1768,16 @@ L1995: /* Sort the singular values and find how many are above */
     for(p = 1; p <= i__1; ++p)
     {
         i__2 = *n - p + 1;
-        q = isamax_(&i__2, &sva[p], &c__1) + p - 1;
+        q = aocl_blas_isamax(&i__2, &sva[p], &c__1) + p - 1;
         if(p != q)
         {
             temp1 = sva[p];
             sva[p] = sva[q];
             sva[q] = temp1;
-            cswap_(m, &a[p * a_dim1 + 1], &c__1, &a[q * a_dim1 + 1], &c__1);
+            aocl_blas_cswap(m, &a[p * a_dim1 + 1], &c__1, &a[q * a_dim1 + 1], &c__1);
             if(rsvec)
             {
-                cswap_(&mvl, &v[p * v_dim1 + 1], &c__1, &v[q * v_dim1 + 1], &c__1);
+                aocl_blas_cswap(&mvl, &v[p * v_dim1 + 1], &c__1, &v[q * v_dim1 + 1], &c__1);
             }
         }
         if(sva[p] != 0.f)
@@ -1795,7 +1805,8 @@ L1995: /* Sort the singular values and find how many are above */
         for(p = 1; p <= i__1; ++p)
         {
             /* CALL CSSCAL( M, ONE / SVA( p ), A( 1, p ), 1 ) */
-            clascl_("G", &c__0, &c__0, &sva[p], &c_b41, m, &c__1, &a[p * a_dim1 + 1], m, &ierr);
+            aocl_lapack_clascl("G", &c__0, &c__0, &sva[p], &c_b41, m, &c__1, &a[p * a_dim1 + 1], m,
+                               &ierr);
             /* L1998: */
         }
     }
@@ -1805,8 +1816,8 @@ L1995: /* Sort the singular values and find how many are above */
         i__1 = *n;
         for(p = 1; p <= i__1; ++p)
         {
-            temp1 = 1.f / scnrm2_(&mvl, &v[p * v_dim1 + 1], &c__1);
-            csscal_(&mvl, &temp1, &v[p * v_dim1 + 1], &c__1);
+            temp1 = 1.f / aocl_blas_scnrm2(&mvl, &v[p * v_dim1 + 1], &c__1);
+            aocl_blas_csscal(&mvl, &temp1, &v[p * v_dim1 + 1], &c__1);
             /* L2399: */
         }
     }

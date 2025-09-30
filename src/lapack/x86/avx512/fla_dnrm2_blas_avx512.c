@@ -17,7 +17,7 @@ typedef union
     double d[8] __attribute__((aligned(64)));
 } v8df_t;
 /* dnrm2 for small sizes */
-doublereal fla_dnrm2_blas_avx512(integer *sd, doublereal *a, integer *incx)
+doublereal fla_dnrm2_blas_avx512(aocl_int64_t *sd, doublereal *a, aocl_int64_t *incx)
 {
     // Local variables and pointers used for the computation
     double sumsq = 0;
@@ -47,7 +47,7 @@ doublereal fla_dnrm2_blas_avx512(integer *sd, doublereal *a, integer *incx)
     int isbig = FALSE;
 
     // Iterator
-    integer i = 0;
+    aocl_int64_t i = 0;
 
     // In case of unit-strided input
     if(*incx == 1)

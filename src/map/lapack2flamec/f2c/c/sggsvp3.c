@@ -4,7 +4,7 @@
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
  /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c_n1 = -1;
+static aocl_int64_t c_n1 = -1;
 static real c_b14 = 0.f;
 static real c_b24 = 1.f;
 /* > \brief \b SGGSVP3 */
@@ -278,10 +278,46 @@ the routine */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void sggsvp3_(char *jobu, char *jobv, char *jobq, integer *m, integer *p, integer *n, real *a,
-              integer *lda, real *b, integer *ldb, real *tola, real *tolb, integer *k, integer *l,
-              real *u, integer *ldu, real *v, integer *ldv, real *q, integer *ldq, integer *iwork,
-              real *tau, real *work, integer *lwork, integer *info)
+/** Generated wrapper function */
+void sggsvp3_(char *jobu, char *jobv, char *jobq, aocl_int_t *m, aocl_int_t *p, aocl_int_t *n,
+              real *a, aocl_int_t *lda, real *b, aocl_int_t *ldb, real *tola, real *tolb,
+              aocl_int_t *k, aocl_int_t *l, real *u, aocl_int_t *ldu, real *v, aocl_int_t *ldv,
+              real *q, aocl_int_t *ldq, aocl_int_t *iwork, real *tau, real *work, aocl_int_t *lwork,
+              aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_sggsvp3(jobu, jobv, jobq, m, p, n, a, lda, b, ldb, tola, tolb, k, l, u, ldu, v, ldv,
+                        q, ldq, iwork, tau, work, lwork, info);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t p_64 = *p;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t ldb_64 = *ldb;
+    aocl_int64_t k_64 = *k;
+    aocl_int64_t l_64 = *l;
+    aocl_int64_t ldu_64 = *ldu;
+    aocl_int64_t ldv_64 = *ldv;
+    aocl_int64_t ldq_64 = *ldq;
+    aocl_int64_t lwork_64 = *lwork;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_sggsvp3(jobu, jobv, jobq, &m_64, &p_64, &n_64, a, &lda_64, b, &ldb_64, tola, tolb,
+                        &k_64, &l_64, u, &ldu_64, v, &ldv_64, q, &ldq_64, iwork, tau, work,
+                        &lwork_64, &info_64);
+
+    *k = (aocl_int_t)k_64;
+    *l = (aocl_int_t)l_64;
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_sggsvp3(char *jobu, char *jobv, char *jobq, aocl_int64_t *m, aocl_int64_t *p,
+                         aocl_int64_t *n, real *a, aocl_int64_t *lda, real *b, aocl_int64_t *ldb,
+                         real *tola, real *tolb, aocl_int64_t *k, aocl_int64_t *l, real *u,
+                         aocl_int64_t *ldu, real *v, aocl_int64_t *ldv, real *q, aocl_int64_t *ldq,
+                         aocl_int_t *iwork, real *tau, real *work, aocl_int64_t *lwork,
+                         aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("sggsvp3 inputs: jobu %c ,jobv %c ,jobq %c ,m %" FLA_IS ",p %" FLA_IS
@@ -289,32 +325,16 @@ void sggsvp3_(char *jobu, char *jobv, char *jobq, integer *m, integer *p, intege
                       ",ldv %" FLA_IS ",ldq %" FLA_IS ",lwork %" FLA_IS "",
                       *jobu, *jobv, *jobq, *m, *p, *n, *lda, *ldb, *l, *ldu, *ldv, *ldq, *lwork);
     /* System generated locals */
-    integer a_dim1, a_offset, b_dim1, b_offset, q_dim1, q_offset, u_dim1, u_offset, v_dim1,
+    aocl_int64_t a_dim1, a_offset, b_dim1, b_offset, q_dim1, q_offset, u_dim1, u_offset, v_dim1,
         v_offset, i__1, i__2, i__3;
     real r__1;
     /* Local variables */
-    integer i__, j;
-    extern logical lsame_(char *, char *, integer, integer);
+    aocl_int64_t i__, j;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     logical wantq, wantu, wantv;
-    extern /* Subroutine */
-        void
-        sgeqp3_(integer *, integer *, real *, integer *, integer *, real *, real *, integer *,
-                integer *),
-        sgeqr2_(integer *, integer *, real *, integer *, real *, real *, integer *),
-        sgerq2_(integer *, integer *, real *, integer *, real *, real *, integer *),
-        sorg2r_(integer *, integer *, integer *, real *, integer *, real *, real *, integer *),
-        sorm2r_(char *, char *, integer *, integer *, integer *, real *, integer *, real *, real *,
-                integer *, real *, integer *),
-        sormr2_(char *, char *, integer *, integer *, integer *, real *, integer *, real *, real *,
-                integer *, real *, integer *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
-        slacpy_(char *, integer *, integer *, real *, integer *, real *, integer *),
-        slaset_(char *, integer *, integer *, real *, real *, real *, integer *),
-        slapmt_(logical *, integer *, integer *, real *, integer *, integer *);
     logical forwrd;
-    integer lwkopt;
+    aocl_int64_t lwkopt;
     logical lquery;
-    extern real sroundup_lwork(integer *);
     /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -414,7 +434,7 @@ void sggsvp3_(char *jobu, char *jobv, char *jobq, integer *m, integer *p, intege
     /* Compute workspace */
     if(*info == 0)
     {
-        sgeqp3_(p, n, &b[b_offset], ldb, &iwork[1], &tau[1], &work[1], &c_n1, info);
+        aocl_lapack_sgeqp3(p, n, &b[b_offset], ldb, &iwork[1], &tau[1], &work[1], &c_n1, info);
         lwkopt = (integer)work[1];
         if(wantv)
         {
@@ -429,18 +449,18 @@ void sggsvp3_(char *jobu, char *jobv, char *jobq, integer *m, integer *p, intege
         {
             lwkopt = fla_max(lwkopt, *n);
         }
-        sgeqp3_(m, n, &a[a_offset], lda, &iwork[1], &tau[1], &work[1], &c_n1, info);
+        aocl_lapack_sgeqp3(m, n, &a[a_offset], lda, &iwork[1], &tau[1], &work[1], &c_n1, info);
         /* Computing MAX */
         i__1 = lwkopt;
         i__2 = (integer)work[1]; // , expr subst
         lwkopt = fla_max(i__1, i__2);
         lwkopt = fla_max(1, lwkopt);
-        work[1] = sroundup_lwork(&lwkopt);
+        work[1] = aocl_lapack_sroundup_lwork(&lwkopt);
     }
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("SGGSVP3", &i__1, (ftnlen)7);
+        aocl_blas_xerbla("SGGSVP3", &i__1, (ftnlen)7);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -457,9 +477,9 @@ void sggsvp3_(char *jobu, char *jobv, char *jobq, integer *m, integer *p, intege
         iwork[i__] = 0;
         /* L10: */
     }
-    sgeqp3_(p, n, &b[b_offset], ldb, &iwork[1], &tau[1], &work[1], lwork, info);
+    aocl_lapack_sgeqp3(p, n, &b[b_offset], ldb, &iwork[1], &tau[1], &work[1], lwork, info);
     /* Update A := A*P */
-    slapmt_(&forwrd, m, n, &a[a_offset], lda, &iwork[1]);
+    aocl_lapack_slapmt(&forwrd, m, n, &a[a_offset], lda, &iwork[1]);
     /* Determine the effective rank of matrix B. */
     *l = 0;
     i__1 = fla_min(*p, *n);
@@ -474,14 +494,14 @@ void sggsvp3_(char *jobu, char *jobv, char *jobq, integer *m, integer *p, intege
     if(wantv)
     {
         /* Copy the details of V, and form V. */
-        slaset_("Full", p, p, &c_b14, &c_b14, &v[v_offset], ldv);
+        aocl_lapack_slaset("Full", p, p, &c_b14, &c_b14, &v[v_offset], ldv);
         if(*p > 1)
         {
             i__1 = *p - 1;
-            slacpy_("Lower", &i__1, n, &b[b_dim1 + 2], ldb, &v[v_dim1 + 2], ldv);
+            aocl_lapack_slacpy("Lower", &i__1, n, &b[b_dim1 + 2], ldb, &v[v_dim1 + 2], ldv);
         }
         i__1 = fla_min(*p, *n);
-        sorg2r_(p, p, &i__1, &v[v_offset], ldv, &tau[1], &work[1], info);
+        aocl_lapack_sorg2r(p, p, &i__1, &v[v_offset], ldv, &tau[1], &work[1], info);
     }
     /* Clean up B */
     i__1 = *l - 1;
@@ -498,30 +518,30 @@ void sggsvp3_(char *jobu, char *jobv, char *jobq, integer *m, integer *p, intege
     if(*p > *l)
     {
         i__1 = *p - *l;
-        slaset_("Full", &i__1, n, &c_b14, &c_b14, &b[*l + 1 + b_dim1], ldb);
+        aocl_lapack_slaset("Full", &i__1, n, &c_b14, &c_b14, &b[*l + 1 + b_dim1], ldb);
     }
     if(wantq)
     {
         /* Set Q = I and Update Q := Q*P */
-        slaset_("Full", n, n, &c_b14, &c_b24, &q[q_offset], ldq);
-        slapmt_(&forwrd, n, n, &q[q_offset], ldq, &iwork[1]);
+        aocl_lapack_slaset("Full", n, n, &c_b14, &c_b24, &q[q_offset], ldq);
+        aocl_lapack_slapmt(&forwrd, n, n, &q[q_offset], ldq, &iwork[1]);
     }
     if(*p >= *l && *n != *l)
     {
         /* RQ factorization of (S11 S12): ( S11 S12 ) = ( 0 S12 )*Z */
-        sgerq2_(l, n, &b[b_offset], ldb, &tau[1], &work[1], info);
+        aocl_lapack_sgerq2(l, n, &b[b_offset], ldb, &tau[1], &work[1], info);
         /* Update A := A*Z**T */
-        sormr2_("Right", "Transpose", m, n, l, &b[b_offset], ldb, &tau[1], &a[a_offset], lda,
-                &work[1], info);
+        aocl_lapack_sormr2("Right", "Transpose", m, n, l, &b[b_offset], ldb, &tau[1], &a[a_offset],
+                           lda, &work[1], info);
         if(wantq)
         {
             /* Update Q := Q*Z**T */
-            sormr2_("Right", "Transpose", n, n, l, &b[b_offset], ldb, &tau[1], &q[q_offset], ldq,
-                    &work[1], info);
+            aocl_lapack_sormr2("Right", "Transpose", n, n, l, &b[b_offset], ldb, &tau[1],
+                               &q[q_offset], ldq, &work[1], info);
         }
         /* Clean up B */
         i__1 = *n - *l;
-        slaset_("Full", l, &i__1, &c_b14, &c_b14, &b[b_offset], ldb);
+        aocl_lapack_slaset("Full", l, &i__1, &c_b14, &c_b14, &b[b_offset], ldb);
         i__1 = *n;
         for(j = *n - *l + 1; j <= i__1; ++j)
         {
@@ -546,7 +566,7 @@ void sggsvp3_(char *jobu, char *jobv, char *jobq, integer *m, integer *p, intege
         /* L70: */
     }
     i__1 = *n - *l;
-    sgeqp3_(m, &i__1, &a[a_offset], lda, &iwork[1], &tau[1], &work[1], lwork, info);
+    aocl_lapack_sgeqp3(m, &i__1, &a[a_offset], lda, &iwork[1], &tau[1], &work[1], lwork, info);
     /* Determine the effective rank of A11 */
     *k = 0;
     /* Computing MIN */
@@ -566,29 +586,29 @@ void sggsvp3_(char *jobu, char *jobv, char *jobq, integer *m, integer *p, intege
     i__2 = *m;
     i__3 = *n - *l; // , expr subst
     i__1 = fla_min(i__2, i__3);
-    sorm2r_("Left", "Transpose", m, l, &i__1, &a[a_offset], lda, &tau[1],
-            &a[(*n - *l + 1) * a_dim1 + 1], lda, &work[1], info);
+    aocl_lapack_sorm2r("Left", "Transpose", m, l, &i__1, &a[a_offset], lda, &tau[1],
+                       &a[(*n - *l + 1) * a_dim1 + 1], lda, &work[1], info);
     if(wantu)
     {
         /* Copy the details of U, and form U */
-        slaset_("Full", m, m, &c_b14, &c_b14, &u[u_offset], ldu);
+        aocl_lapack_slaset("Full", m, m, &c_b14, &c_b14, &u[u_offset], ldu);
         if(*m > 1)
         {
             i__1 = *m - 1;
             i__2 = *n - *l;
-            slacpy_("Lower", &i__1, &i__2, &a[a_dim1 + 2], lda, &u[u_dim1 + 2], ldu);
+            aocl_lapack_slacpy("Lower", &i__1, &i__2, &a[a_dim1 + 2], lda, &u[u_dim1 + 2], ldu);
         }
         /* Computing MIN */
         i__2 = *m;
         i__3 = *n - *l; // , expr subst
         i__1 = fla_min(i__2, i__3);
-        sorg2r_(m, m, &i__1, &u[u_offset], ldu, &tau[1], &work[1], info);
+        aocl_lapack_sorg2r(m, m, &i__1, &u[u_offset], ldu, &tau[1], &work[1], info);
     }
     if(wantq)
     {
         /* Update Q( 1:N, 1:N-L ) = Q( 1:N, 1:N-L )*P1 */
         i__1 = *n - *l;
-        slapmt_(&forwrd, n, &i__1, &q[q_offset], ldq, &iwork[1]);
+        aocl_lapack_slapmt(&forwrd, n, &i__1, &q[q_offset], ldq, &iwork[1]);
     }
     /* Clean up A: set the strictly lower triangular part of */
     /* A(1:K, 1:K) = 0, and A( K+1:M, 1:N-L ) = 0. */
@@ -607,23 +627,23 @@ void sggsvp3_(char *jobu, char *jobv, char *jobq, integer *m, integer *p, intege
     {
         i__1 = *m - *k;
         i__2 = *n - *l;
-        slaset_("Full", &i__1, &i__2, &c_b14, &c_b14, &a[*k + 1 + a_dim1], lda);
+        aocl_lapack_slaset("Full", &i__1, &i__2, &c_b14, &c_b14, &a[*k + 1 + a_dim1], lda);
     }
     if(*n - *l > *k)
     {
         /* RQ factorization of ( T11 T12 ) = ( 0 T12 )*Z1 */
         i__1 = *n - *l;
-        sgerq2_(k, &i__1, &a[a_offset], lda, &tau[1], &work[1], info);
+        aocl_lapack_sgerq2(k, &i__1, &a[a_offset], lda, &tau[1], &work[1], info);
         if(wantq)
         {
             /* Update Q( 1:N,1:N-L ) = Q( 1:N,1:N-L )*Z1**T */
             i__1 = *n - *l;
-            sormr2_("Right", "Transpose", n, &i__1, k, &a[a_offset], lda, &tau[1], &q[q_offset],
-                    ldq, &work[1], info);
+            aocl_lapack_sormr2("Right", "Transpose", n, &i__1, k, &a[a_offset], lda, &tau[1],
+                               &q[q_offset], ldq, &work[1], info);
         }
         /* Clean up A */
         i__1 = *n - *l - *k;
-        slaset_("Full", k, &i__1, &c_b14, &c_b14, &a[a_offset], lda);
+        aocl_lapack_slaset("Full", k, &i__1, &c_b14, &c_b14, &a[a_offset], lda);
         i__1 = *n - *l;
         for(j = *n - *l - *k + 1; j <= i__1; ++j)
         {
@@ -640,7 +660,8 @@ void sggsvp3_(char *jobu, char *jobv, char *jobq, integer *m, integer *p, intege
     {
         /* QR factorization of A( K+1:M,N-L+1:N ) */
         i__1 = *m - *k;
-        sgeqr2_(&i__1, l, &a[*k + 1 + (*n - *l + 1) * a_dim1], lda, &tau[1], &work[1], info);
+        aocl_lapack_sgeqr2(&i__1, l, &a[*k + 1 + (*n - *l + 1) * a_dim1], lda, &tau[1], &work[1],
+                           info);
         if(wantu)
         {
             /* Update U(:,K+1:M) := U(:,K+1:M)*U1 */
@@ -648,8 +669,9 @@ void sggsvp3_(char *jobu, char *jobv, char *jobq, integer *m, integer *p, intege
             /* Computing MIN */
             i__3 = *m - *k;
             i__2 = fla_min(i__3, *l);
-            sorm2r_("Right", "No transpose", m, &i__1, &i__2, &a[*k + 1 + (*n - *l + 1) * a_dim1],
-                    lda, &tau[1], &u[(*k + 1) * u_dim1 + 1], ldu, &work[1], info);
+            aocl_lapack_sorm2r("Right", "No transpose", m, &i__1, &i__2,
+                               &a[*k + 1 + (*n - *l + 1) * a_dim1], lda, &tau[1],
+                               &u[(*k + 1) * u_dim1 + 1], ldu, &work[1], info);
         }
         /* Clean up */
         i__1 = *n;
@@ -664,7 +686,7 @@ void sggsvp3_(char *jobu, char *jobv, char *jobq, integer *m, integer *p, intege
             /* L140: */
         }
     }
-    work[1] = sroundup_lwork(&lwkopt);
+    work[1] = aocl_lapack_sroundup_lwork(&lwkopt);
     AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SGGSVP3 */

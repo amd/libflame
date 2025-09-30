@@ -12,23 +12,23 @@
  * All the computations are done inline without using
  * corresponding BLAS APIs to reduce function overheads.
  */
-int fla_zgetrf_small_avx512(integer *m, integer *n, dcomplex *a, integer *lda, integer *ipiv,
-                            integer *info)
+int fla_zgetrf_small_avx512(aocl_int64_t *m, aocl_int64_t *n, dcomplex *a, aocl_int64_t *lda, aocl_int_t *ipiv,
+                            aocl_int64_t *info)
 {
-    integer mi, ni;
-    integer i, j, i_1, i_2, i_3, i_4, i_5, i_6, i_7;
+    aocl_int64_t mi, ni;
+    aocl_int64_t i, j, i_1, i_2, i_3, i_4, i_5, i_6, i_7;
     doublereal max_val, t_val, z_val;
     dcomplex *acur, *apiv, *asrc;
     dcomplex z__1;
-    integer p_idx;
-    integer min_m_n = fla_min(*m, *n);
+    aocl_int64_t p_idx;
+    aocl_int64_t min_m_n = fla_min(*m, *n);
     __m512d alpha_real, alpha_img, x_real[2], x_img[2];
     __m512d bv[2], bv_p[2], xv0[2], xv1[2], yv0[2], yv1[2];
 
 #ifndef _WIN32
     double _Complex pinv;
 #else
-    dcomplex y__1 = {1, 0};
+    dcomplex y__1 = {{1}, {0}};
 #endif
 
     *info = 0;
@@ -73,7 +73,7 @@ int fla_zgetrf_small_avx512(integer *m, integer *n, dcomplex *a, integer *lda, i
 
         apiv = a + p_idx;
         asrc = a + i;
-        ipiv[i] = p_idx + 1;
+        ipiv[i] = (aocl_int_t)(p_idx + 1);
 
         // Swap rows
         if(apiv[*lda * i].real != 0. || apiv[*lda * i].imag != 0.)

@@ -112,8 +112,22 @@
 /* > Jason Riedy, University of California, Berkeley, USA \n */
 /* > */
 /* ===================================================================== */
-integer dlaneg_(integer *n, doublereal *d__, doublereal *lld, doublereal *sigma, doublereal *pivmin,
-                integer *r__)
+/** Generated wrapper function */
+aocl_int_t dlaneg_(aocl_int_t *n, doublereal *d__, doublereal *lld, doublereal *sigma,
+                   doublereal *pivmin, aocl_int_t *r__)
+{
+#if FLA_ENABLE_ILP64
+    return aocl_lapack_dlaneg(n, d__, lld, sigma, pivmin, r__);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t r___64 = *r__;
+
+    return aocl_lapack_dlaneg(&n_64, d__, lld, sigma, pivmin, &r___64);
+#endif
+}
+
+aocl_int64_t aocl_lapack_dlaneg(aocl_int64_t *n, doublereal *d__, doublereal *lld,
+                                doublereal *sigma, doublereal *pivmin, aocl_int64_t *r__)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dlaneg inputs: n %" FLA_IS ", r__ %" FLA_IS "", *n, *r__);

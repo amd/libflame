@@ -132,8 +132,23 @@ static aocl_int64_t c__1 = 1;
 /* > \ingroup complex16OTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-void zlaic1_(integer *job, integer *j, doublecomplex *x, doublereal *sest, doublecomplex *w,
-             doublecomplex *gamma, doublereal *sestpr, doublecomplex *s, doublecomplex *c__)
+/** Generated wrapper function */
+void zlaic1_(aocl_int_t *job, aocl_int_t *j, dcomplex *x, doublereal *sest, dcomplex *w,
+             dcomplex *gamma, doublereal *sestpr, dcomplex *s, dcomplex *c__)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_zlaic1(job, j, x, sest, w, gamma, sestpr, s, c__);
+#else
+    aocl_int64_t job_64 = *job;
+    aocl_int64_t j_64 = *j;
+
+    aocl_lapack_zlaic1(&job_64, &j_64, x, sest, w, gamma, sestpr, s, c__);
+#endif
+}
+
+void aocl_lapack_zlaic1(aocl_int64_t *job, aocl_int64_t *j, dcomplex *x, doublereal *sest,
+                        dcomplex *w, dcomplex *gamma, doublereal *sestpr,
+                        dcomplex *s, dcomplex *c__)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zlaic1 inputs: job %" FLA_IS ", j %" FLA_IS "", *job, *j);
@@ -141,8 +156,8 @@ void zlaic1_(integer *job, integer *j, doublecomplex *x, doublereal *sest, doubl
     doublereal d__1, d__2;
     dcomplex z__1, z__2, z__3, z__4, z__5, z__6;
     /* Builtin functions */
-    double z_abs(doublecomplex *);
-    void d_cnjg(doublecomplex *, doublecomplex *), z_sqrt(doublecomplex *, doublecomplex *);
+    double z_abs(dcomplex *);
+    void d_cnjg(dcomplex *, dcomplex *), z_sqrt(dcomplex *, dcomplex *);
     double sqrt(doublereal);
     void z_div(dcomplex *, dcomplex *, dcomplex *);
     /* Local variables */
@@ -151,10 +166,6 @@ void zlaic1_(integer *job, integer *j, doublecomplex *x, doublereal *sest, doubl
     doublereal test, zeta1, zeta2;
     dcomplex alpha;
     doublereal norma;
-    extern /* Double Complex */
-        VOID
-        zdotc_f2c_(doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *,
-                   integer *);
     extern doublereal dlamch_(char *);
     doublereal absgam, absalp;
     dcomplex cosine;
@@ -182,7 +193,7 @@ void zlaic1_(integer *job, integer *j, doublecomplex *x, doublereal *sest, doubl
     --x;
     /* Function Body */
     eps = dlamch_("Epsilon");
-    zdotc_f2c_(&z__1, j, &x[1], &c__1, &w[1], &c__1);
+    aocl_lapack_zdotc_f2c(&z__1, j, &x[1], &c__1, &w[1], &c__1);
     alpha.r = z__1.r;
     alpha.i = z__1.i; // , expr subst
     absalp = z_abs(&alpha);

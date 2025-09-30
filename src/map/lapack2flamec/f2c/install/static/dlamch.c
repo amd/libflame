@@ -20,7 +20,7 @@ doublereal dlamch_(char *cmach)
     static TLS_CLASS_SPEC doublereal eps, sfmin, base, prec, t, rnd, emin, rmin, emax, rmax;
     doublereal rmach, small_val;
 
-    extern logical lsame_(char *, char *, integer, integer);
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
 
     /*  Purpose */
     /*  ======= */

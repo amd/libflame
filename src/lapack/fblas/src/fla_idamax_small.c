@@ -11,13 +11,12 @@
 #ifdef FLA_ENABLE_AMD_OPT
 
 /* IDAMAX for small sizes */
-integer fla_idamax_small(integer *n, doublereal *dx, integer *incx)
+fla_dim_t fla_idamax_small(fla_dim_t *n, doublereal *dx, fla_dim_t *incx)
 {
     /* System generated locals */
-    integer ret_val, i__1;
+    fla_dim_t ret_val, i__1;
     --dx;
     /* Builtin functions */
-    extern integer idamax_(integer *, doublereal *, integer *);
     /* Function Body */
     ret_val = 0;
     if (*n < 1 || *incx <= 0)
@@ -36,7 +35,7 @@ integer fla_idamax_small(integer *n, doublereal *dx, integer *incx)
         doublereal dmax = f2c_dabs(dx[1]);
 
         /* index of the first element having maximum absolute value */
-        for(integer i = 2; i<= i__1; i++ )
+        for(fla_dim_t i = 2; i<= i__1; i++ )
         {
             temp = f2c_dabs(dx[i]);
             if(temp > dmax)
@@ -48,7 +47,7 @@ integer fla_idamax_small(integer *n, doublereal *dx, integer *incx)
     }
     else
     {
-        idamax_(n, dx, incx);
+        aocl_blas_idamax(n, dx, incx);
     }
     
     return ret_val;

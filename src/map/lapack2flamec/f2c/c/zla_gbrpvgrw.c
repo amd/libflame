@@ -110,8 +110,27 @@
 /* > \date September 2012 */
 /* > \ingroup complex16GBcomputational */
 /* ===================================================================== */
-doublereal zla_gbrpvgrw_(integer *n, integer *kl, integer *ku, integer *ncols, doublecomplex *ab,
-                         integer *ldab, doublecomplex *afb, integer *ldafb)
+/** Generated wrapper function */
+doublereal zla_gbrpvgrw_(aocl_int_t *n, aocl_int_t *kl, aocl_int_t *ku, aocl_int_t *ncols,
+                         dcomplex *ab, aocl_int_t *ldab, dcomplex *afb, aocl_int_t *ldafb)
+{
+#if FLA_ENABLE_ILP64
+    return aocl_lapack_zla_gbrpvgrw(n, kl, ku, ncols, ab, ldab, afb, ldafb);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t kl_64 = *kl;
+    aocl_int64_t ku_64 = *ku;
+    aocl_int64_t ncols_64 = *ncols;
+    aocl_int64_t ldab_64 = *ldab;
+    aocl_int64_t ldafb_64 = *ldafb;
+
+    return aocl_lapack_zla_gbrpvgrw(&n_64, &kl_64, &ku_64, &ncols_64, ab, &ldab_64, afb, &ldafb_64);
+#endif
+}
+
+doublereal aocl_lapack_zla_gbrpvgrw(aocl_int64_t *n, aocl_int64_t *kl, aocl_int64_t *ku,
+                                    aocl_int64_t *ncols, dcomplex *ab, aocl_int64_t *ldab,
+                                    dcomplex *afb, aocl_int64_t *ldafb)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zla_gbrpvgrw inputs: n %" FLA_IS ", kl %" FLA_IS ", ku %" FLA_IS

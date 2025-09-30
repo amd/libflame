@@ -5,8 +5,8 @@
  /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static logical c_true = TRUE_;
-static integer c_n1 = -1;
-static integer c__1 = 1;
+static aocl_int64_t c_n1 = -1;
+static aocl_int64_t c__1 = 1;
 static real c_b16 = 0.f;
 static real c_b17 = 1.f;
 /* > \brief \b SLAQZ3 */
@@ -163,7 +163,7 @@ static real c_b17 = 1.f;
 /* > If ALPHAI(j) is zero, then the j-th eigenvalue is real;
 if */
 /* > positive, then the j-th and (j+1)-st eigenvalues are a */
-/* > complex conjugate pair, with ALPHAI(j+1) = -ALPHAI(j). */
+/* > scomplex conjugate pair, with ALPHAI(j+1) = -ALPHAI(j). */
 /* > \endverbatim */
 /* > */
 /* > \param[out] BETA */
@@ -236,11 +236,50 @@ the routine */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void slaqz3_(logical *ilschur, logical *ilq, logical *ilz, integer *n, integer *ilo, integer *ihi,
-             integer *nw, real *a, integer *lda, real *b, integer *ldb, real *q, integer *ldq,
-             real *z__, integer *ldz, integer *ns, integer *nd, real *alphar, real *alphai,
-             real *beta, real *qc, integer *ldqc, real *zc, integer *ldzc, real *work,
-             integer *lwork, integer *rec, integer *info)
+/** Generated wrapper function */
+void slaqz3_(logical *ilschur, logical *ilq, logical *ilz, aocl_int_t *n, aocl_int_t *ilo,
+             aocl_int_t *ihi, aocl_int_t *nw, real *a, aocl_int_t *lda, real *b, aocl_int_t *ldb,
+             real *q, aocl_int_t *ldq, real *z__, aocl_int_t *ldz, aocl_int_t *ns, aocl_int_t *nd,
+             real *alphar, real *alphai, real *beta, real *qc, aocl_int_t *ldqc, real *zc,
+             aocl_int_t *ldzc, real *work, aocl_int_t *lwork, aocl_int_t *rec, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_slaqz3(ilschur, ilq, ilz, n, ilo, ihi, nw, a, lda, b, ldb, q, ldq, z__, ldz, ns, nd,
+                       alphar, alphai, beta, qc, ldqc, zc, ldzc, work, lwork, rec, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t ilo_64 = *ilo;
+    aocl_int64_t ihi_64 = *ihi;
+    aocl_int64_t nw_64 = *nw;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t ldb_64 = *ldb;
+    aocl_int64_t ldq_64 = *ldq;
+    aocl_int64_t ldz_64 = *ldz;
+    aocl_int64_t ns_64 = *ns;
+    aocl_int64_t nd_64 = *nd;
+    aocl_int64_t ldqc_64 = *ldqc;
+    aocl_int64_t ldzc_64 = *ldzc;
+    aocl_int64_t lwork_64 = *lwork;
+    aocl_int64_t rec_64 = *rec;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_slaqz3(ilschur, ilq, ilz, &n_64, &ilo_64, &ihi_64, &nw_64, a, &lda_64, b, &ldb_64,
+                       q, &ldq_64, z__, &ldz_64, &ns_64, &nd_64, alphar, alphai, beta, qc, &ldqc_64,
+                       zc, &ldzc_64, work, &lwork_64, &rec_64, &info_64);
+
+    *ns = (aocl_int_t)ns_64;
+    *nd = (aocl_int_t)nd_64;
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_slaqz3(logical *ilschur, logical *ilq, logical *ilz, aocl_int64_t *n,
+                        aocl_int64_t *ilo, aocl_int64_t *ihi, aocl_int64_t *nw, real *a,
+                        aocl_int64_t *lda, real *b, aocl_int64_t *ldb, real *q, aocl_int64_t *ldq,
+                        real *z__, aocl_int64_t *ldz, aocl_int64_t *ns, aocl_int64_t *nd,
+                        real *alphar, real *alphai, real *beta, real *qc, aocl_int64_t *ldqc,
+                        real *zc, aocl_int64_t *ldzc, real *work, aocl_int64_t *lwork,
+                        aocl_int64_t *rec, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("slaqz3 inputs: n %" FLA_IS ", ilo %" FLA_IS ", ihi %" FLA_IS ", nw %" FLA_IS
@@ -249,57 +288,30 @@ void slaqz3_(logical *ilschur, logical *ilq, logical *ilz, integer *n, integer *
                       ", rec %" FLA_IS "",
                       *n, *ilo, *ihi, *nw, *lda, *ldb, *ldq, *ldz, *ns, *nd, *ldqc, *ldzc, *rec);
     /* System generated locals */
-    integer a_dim1, a_offset, b_dim1, b_offset, q_dim1, q_offset, z_dim1, z_offset, qc_dim1,
+    aocl_int64_t a_dim1, a_offset, b_dim1, b_offset, q_dim1, q_offset, z_dim1, z_offset, qc_dim1,
         qc_offset, zc_dim1, zc_offset, i__1, i__2, i__3, i__4;
     real r__1, r__2, r__3, r__4, r__5, r__6;
     /* Builtin functions */
     double sqrt(doublereal);
     /* Local variables */
-    integer lworkreq, i__, j, k;
+    aocl_int64_t lworkreq, i__, j, k;
     real s, c1;
-    integer k2;
+    aocl_int64_t k2;
     real s1;
-    integer jw;
+    aocl_int64_t jw;
     real ulp;
-    integer stgexc_info__, ifst;
+    aocl_int64_t stgexc_info__, ifst;
     real temp;
-    integer ilst;
-    extern /* Subroutine */
-        void
-        srot_(integer *, real *, integer *, real *, integer *, real *, real *),
-        slag2_(real *, integer *, real *, integer *, real *, real *, real *, real *, real *,
-               real *);
+    aocl_int64_t ilst;
     logical bulge;
     real atemp;
-    extern /* Subroutine */
-        void
-        sgemm_(char *, char *, integer *, integer *, integer *, real *, real *, integer *, real *,
-               integer *, real *, real *, integer *);
-    integer kwbot, kwtop, qz_small_info__;
-    extern /* Subroutine */
-        void
-        slaqz0_(char *, char *, char *, integer *, integer *, integer *, real *, integer *, real *,
-                integer *, real *, real *, real *, real *, integer *, real *, integer *, real *,
-                integer *, integer *, integer *),
-        slaqz2_(logical *, logical *, integer *, integer *, integer *, integer *, real *, integer *,
-                real *, integer *, integer *, integer *, real *, integer *, integer *, integer *,
-                real *, integer *);
+    aocl_int64_t kwbot, kwtop, qz_small_info__;
     extern real slamch_(char *);
     real safmin;
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    extern /* Subroutine */
-        void
-        slacpy_(char *, integer *, integer *, real *, integer *, real *, integer *),
-        slaset_(char *, integer *, integer *, real *, real *, real *, integer *),
-        stgexc_(logical *, logical *, integer *, real *, integer *, real *, integer *, real *,
-                integer *, real *, integer *, integer *, integer *, real *, integer *, integer *),
-        slartg_(real *, real *, real *, real *, real *);
-    integer istopm;
+    extern void slartg_(real *, real *, real *, real *, real *);
+    aocl_int64_t istopm;
     real smlnum;
-    extern real sroundup_lwork(integer *);
-    integer istartm;
+    aocl_int64_t istartm;
     /* Arguments */
     /* Parameters */
     /* Local Scalars */
@@ -346,13 +358,14 @@ void slaqz3_(logical *ilschur, logical *ilq, logical *ilz, integer *n, integer *
     /* Determine required workspace */
     ifst = 1;
     ilst = jw;
-    stgexc_(&c_true, &c_true, &jw, &a[a_offset], lda, &b[b_offset], ldb, &qc[qc_offset], ldqc,
-            &zc[zc_offset], ldzc, &ifst, &ilst, &work[1], &c_n1, &stgexc_info__);
+    aocl_lapack_stgexc(&c_true, &c_true, &jw, &a[a_offset], lda, &b[b_offset], ldb, &qc[qc_offset],
+                       ldqc, &zc[zc_offset], ldzc, &ifst, &ilst, &work[1], &c_n1, &stgexc_info__);
     lworkreq = (integer)work[1];
     i__1 = *rec + 1;
-    slaqz0_("S", "V", "V", &jw, &c__1, &jw, &a[kwtop + kwtop * a_dim1], lda,
-            &b[kwtop + kwtop * b_dim1], ldb, &alphar[1], &alphai[1], &beta[1], &qc[qc_offset], ldqc,
-            &zc[zc_offset], ldzc, &work[1], &c_n1, &i__1, &qz_small_info__);
+    aocl_lapack_slaqz0("S", "V", "V", &jw, &c__1, &jw, &a[kwtop + kwtop * a_dim1], lda,
+                       &b[kwtop + kwtop * b_dim1], ldb, &alphar[1], &alphai[1], &beta[1],
+                       &qc[qc_offset], ldqc, &zc[zc_offset], ldzc, &work[1], &c_n1, &i__1,
+                       &qz_small_info__);
     /* Computing MAX */
     /* Computing 2nd power */
     i__3 = jw;
@@ -369,7 +382,7 @@ void slaqz3_(logical *ilschur, logical *ilq, logical *ilz, integer *n, integer *
     if(*lwork == -1)
     {
         /* workspace query, quick return */
-        work[1] = sroundup_lwork(&lworkreq);
+        work[1] = aocl_lapack_sroundup_lwork(&lworkreq);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -380,7 +393,7 @@ void slaqz3_(logical *ilschur, logical *ilq, logical *ilz, integer *n, integer *
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("SLAQZ3", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("SLAQZ3", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -410,31 +423,34 @@ void slaqz3_(logical *ilschur, logical *ilq, logical *ilz, integer *n, integer *
         }
     }
     /* Store window in case of convergence failure */
-    slacpy_("ALL", &jw, &jw, &a[kwtop + kwtop * a_dim1], lda, &work[1], &jw);
+    aocl_lapack_slacpy("ALL", &jw, &jw, &a[kwtop + kwtop * a_dim1], lda, &work[1], &jw);
     /* Computing 2nd power */
     i__1 = jw;
-    slacpy_("ALL", &jw, &jw, &b[kwtop + kwtop * b_dim1], ldb, &work[i__1 * i__1 + 1], &jw);
+    aocl_lapack_slacpy("ALL", &jw, &jw, &b[kwtop + kwtop * b_dim1], ldb, &work[i__1 * i__1 + 1],
+                       &jw);
     /* Transform window to real schur form */
-    slaset_("FULL", &jw, &jw, &c_b16, &c_b17, &qc[qc_offset], ldqc);
-    slaset_("FULL", &jw, &jw, &c_b16, &c_b17, &zc[zc_offset], ldzc);
+    aocl_lapack_slaset("FULL", &jw, &jw, &c_b16, &c_b17, &qc[qc_offset], ldqc);
+    aocl_lapack_slaset("FULL", &jw, &jw, &c_b16, &c_b17, &zc[zc_offset], ldzc);
     /* Computing 2nd power */
     i__1 = jw;
     /* Computing 2nd power */
     i__3 = jw;
     i__2 = *lwork - (i__3 * i__3 << 1);
     i__4 = *rec + 1;
-    slaqz0_("S", "V", "V", &jw, &c__1, &jw, &a[kwtop + kwtop * a_dim1], lda,
-            &b[kwtop + kwtop * b_dim1], ldb, &alphar[1], &alphai[1], &beta[1], &qc[qc_offset], ldqc,
-            &zc[zc_offset], ldzc, &work[(i__1 * i__1 << 1) + 1], &i__2, &i__4, &qz_small_info__);
+    aocl_lapack_slaqz0("S", "V", "V", &jw, &c__1, &jw, &a[kwtop + kwtop * a_dim1], lda,
+                       &b[kwtop + kwtop * b_dim1], ldb, &alphar[1], &alphai[1], &beta[1],
+                       &qc[qc_offset], ldqc, &zc[zc_offset], ldzc, &work[(i__1 * i__1 << 1) + 1],
+                       &i__2, &i__4, &qz_small_info__);
     if(qz_small_info__ != 0)
     {
         /* Convergence failure, restore the window and exit */
         *nd = 0;
         *ns = jw - qz_small_info__;
-        slacpy_("ALL", &jw, &jw, &work[1], &jw, &a[kwtop + kwtop * a_dim1], lda);
+        aocl_lapack_slacpy("ALL", &jw, &jw, &work[1], &jw, &a[kwtop + kwtop * a_dim1], lda);
         /* Computing 2nd power */
         i__1 = jw;
-        slacpy_("ALL", &jw, &jw, &work[i__1 * i__1 + 1], &jw, &b[kwtop + kwtop * b_dim1], ldb);
+        aocl_lapack_slacpy("ALL", &jw, &jw, &work[i__1 * i__1 + 1], &jw, &b[kwtop + kwtop * b_dim1],
+                           ldb);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -457,7 +473,7 @@ void slaqz3_(logical *ilschur, logical *ilq, logical *ilz, integer *n, integer *
             }
             if(bulge)
             {
-                /* Try to deflate complex conjugate eigenvalue pair */
+                /* Try to deflate scomplex conjugate eigenvalue pair */
                 temp = (r__3 = a[kwbot + kwbot * a_dim1], f2c_abs(r__3))
                        + sqrt((r__1 = a[kwbot + (kwbot - 1) * a_dim1], f2c_abs(r__1)))
                              * sqrt((r__2 = a[kwbot - 1 + kwbot * a_dim1], f2c_abs(r__2)));
@@ -482,9 +498,10 @@ void slaqz3_(logical *ilschur, logical *ilq, logical *ilz, integer *n, integer *
                     /* Not deflatable, move out of the way */
                     ifst = kwbot - kwtop + 1;
                     ilst = k2;
-                    stgexc_(&c_true, &c_true, &jw, &a[kwtop + kwtop * a_dim1], lda,
-                            &b[kwtop + kwtop * b_dim1], ldb, &qc[qc_offset], ldqc, &zc[zc_offset],
-                            ldzc, &ifst, &ilst, &work[1], lwork, &stgexc_info__);
+                    aocl_lapack_stgexc(&c_true, &c_true, &jw, &a[kwtop + kwtop * a_dim1], lda,
+                                       &b[kwtop + kwtop * b_dim1], ldb, &qc[qc_offset], ldqc,
+                                       &zc[zc_offset], ldzc, &ifst, &ilst, &work[1], lwork,
+                                       &stgexc_info__);
                     k2 += 2;
                 }
                 k += 2;
@@ -510,9 +527,10 @@ void slaqz3_(logical *ilschur, logical *ilq, logical *ilz, integer *n, integer *
                     /* Not deflatable, move out of the way */
                     ifst = kwbot - kwtop + 1;
                     ilst = k2;
-                    stgexc_(&c_true, &c_true, &jw, &a[kwtop + kwtop * a_dim1], lda,
-                            &b[kwtop + kwtop * b_dim1], ldb, &qc[qc_offset], ldqc, &zc[zc_offset],
-                            ldzc, &ifst, &ilst, &work[1], lwork, &stgexc_info__);
+                    aocl_lapack_stgexc(&c_true, &c_true, &jw, &a[kwtop + kwtop * a_dim1], lda,
+                                       &b[kwtop + kwtop * b_dim1], ldb, &qc[qc_offset], ldqc,
+                                       &zc[zc_offset], ldzc, &ifst, &ilst, &work[1], lwork,
+                                       &stgexc_info__);
                     ++k2;
                 }
                 ++k;
@@ -536,8 +554,8 @@ void slaqz3_(logical *ilschur, logical *ilq, logical *ilz, integer *n, integer *
         if(bulge)
         {
             /* 2x2 eigenvalue block */
-            slag2_(&a[k + k * a_dim1], lda, &b[k + k * b_dim1], ldb, &safmin, &beta[k],
-                   &beta[k + 1], &alphar[k], &alphar[k + 1], &alphai[k]);
+            aocl_lapack_slag2(&a[k + k * a_dim1], lda, &b[k + k * b_dim1], ldb, &safmin, &beta[k],
+                              &beta[k + 1], &alphar[k], &alphar[k + 1], &alphai[k]);
             alphai[k + 1] = -alphai[k];
             k += 2;
         }
@@ -575,12 +593,12 @@ void slaqz3_(logical *ilschur, logical *ilq, logical *ilz, integer *n, integer *
             i__3 = k - 1; // , expr subst
             k2 = fla_max(i__2, i__3);
             i__2 = *ihi - k2 + 1;
-            srot_(&i__2, &a[k + k2 * a_dim1], lda, &a[k + 1 + k2 * a_dim1], lda, &c1, &s1);
+            aocl_blas_srot(&i__2, &a[k + k2 * a_dim1], lda, &a[k + 1 + k2 * a_dim1], lda, &c1, &s1);
             i__2 = *ihi - (k - 1) + 1;
-            srot_(&i__2, &b[k + (k - 1) * b_dim1], ldb, &b[k + 1 + (k - 1) * b_dim1], ldb, &c1,
-                  &s1);
-            srot_(&jw, &qc[(k - kwtop + 1) * qc_dim1 + 1], &c__1,
-                  &qc[(k + 1 - kwtop + 1) * qc_dim1 + 1], &c__1, &c1, &s1);
+            aocl_blas_srot(&i__2, &b[k + (k - 1) * b_dim1], ldb, &b[k + 1 + (k - 1) * b_dim1], ldb,
+                           &c1, &s1);
+            aocl_blas_srot(&jw, &qc[(k - kwtop + 1) * qc_dim1 + 1], &c__1,
+                           &qc[(k + 1 - kwtop + 1) * qc_dim1 + 1], &c__1, &c1, &s1);
         }
         /* Chase bulges down */
         istartm = kwtop;
@@ -595,9 +613,9 @@ void slaqz3_(logical *ilschur, logical *ilq, logical *ilz, integer *n, integer *
                 for(k2 = k - 1; k2 <= i__1; ++k2)
                 {
                     i__2 = kwtop + jw - 1;
-                    slaqz2_(&c_true, &c_true, &k2, &kwtop, &i__2, &kwbot, &a[a_offset], lda,
-                            &b[b_offset], ldb, &jw, &kwtop, &qc[qc_offset], ldqc, &jw, &kwtop,
-                            &zc[zc_offset], ldzc);
+                    aocl_lapack_slaqz2(&c_true, &c_true, &k2, &kwtop, &i__2, &kwbot, &a[a_offset],
+                                       lda, &b[b_offset], ldb, &jw, &kwtop, &qc[qc_offset], ldqc,
+                                       &jw, &kwtop, &zc[zc_offset], ldzc);
                 }
                 k += -2;
             }
@@ -613,24 +631,24 @@ void slaqz3_(logical *ilschur, logical *ilq, logical *ilz, integer *n, integer *
                     b[k2 + 1 + (k2 + 1) * b_dim1] = temp;
                     b[k2 + 1 + k2 * b_dim1] = 0.f;
                     i__2 = k2 + 2 - istartm + 1;
-                    srot_(&i__2, &a[istartm + (k2 + 1) * a_dim1], &c__1, &a[istartm + k2 * a_dim1],
-                          &c__1, &c1, &s1);
+                    aocl_blas_srot(&i__2, &a[istartm + (k2 + 1) * a_dim1], &c__1,
+                                   &a[istartm + k2 * a_dim1], &c__1, &c1, &s1);
                     i__2 = k2 - istartm + 1;
-                    srot_(&i__2, &b[istartm + (k2 + 1) * b_dim1], &c__1, &b[istartm + k2 * b_dim1],
-                          &c__1, &c1, &s1);
-                    srot_(&jw, &zc[(k2 + 1 - kwtop + 1) * zc_dim1 + 1], &c__1,
-                          &zc[(k2 - kwtop + 1) * zc_dim1 + 1], &c__1, &c1, &s1);
+                    aocl_blas_srot(&i__2, &b[istartm + (k2 + 1) * b_dim1], &c__1,
+                                   &b[istartm + k2 * b_dim1], &c__1, &c1, &s1);
+                    aocl_blas_srot(&jw, &zc[(k2 + 1 - kwtop + 1) * zc_dim1 + 1], &c__1,
+                                   &zc[(k2 - kwtop + 1) * zc_dim1 + 1], &c__1, &c1, &s1);
                     slartg_(&a[k2 + 1 + k2 * a_dim1], &a[k2 + 2 + k2 * a_dim1], &c1, &s1, &temp);
                     a[k2 + 1 + k2 * a_dim1] = temp;
                     a[k2 + 2 + k2 * a_dim1] = 0.f;
                     i__2 = istopm - k2;
-                    srot_(&i__2, &a[k2 + 1 + (k2 + 1) * a_dim1], lda,
-                          &a[k2 + 2 + (k2 + 1) * a_dim1], lda, &c1, &s1);
+                    aocl_blas_srot(&i__2, &a[k2 + 1 + (k2 + 1) * a_dim1], lda,
+                                   &a[k2 + 2 + (k2 + 1) * a_dim1], lda, &c1, &s1);
                     i__2 = istopm - k2;
-                    srot_(&i__2, &b[k2 + 1 + (k2 + 1) * b_dim1], ldb,
-                          &b[k2 + 2 + (k2 + 1) * b_dim1], ldb, &c1, &s1);
-                    srot_(&jw, &qc[(k2 + 1 - kwtop + 1) * qc_dim1 + 1], &c__1,
-                          &qc[(k2 + 2 - kwtop + 1) * qc_dim1 + 1], &c__1, &c1, &s1);
+                    aocl_blas_srot(&i__2, &b[k2 + 1 + (k2 + 1) * b_dim1], ldb,
+                                   &b[k2 + 2 + (k2 + 1) * b_dim1], ldb, &c1, &s1);
+                    aocl_blas_srot(&jw, &qc[(k2 + 1 - kwtop + 1) * qc_dim1 + 1], &c__1,
+                                   &qc[(k2 + 2 - kwtop + 1) * qc_dim1 + 1], &c__1, &c1, &s1);
                 }
                 /* Remove the shift */
                 slartg_(&b[kwbot + kwbot * b_dim1], &b[kwbot + (kwbot - 1) * b_dim1], &c1, &s1,
@@ -638,13 +656,13 @@ void slaqz3_(logical *ilschur, logical *ilq, logical *ilz, integer *n, integer *
                 b[kwbot + kwbot * b_dim1] = temp;
                 b[kwbot + (kwbot - 1) * b_dim1] = 0.f;
                 i__1 = kwbot - istartm;
-                srot_(&i__1, &b[istartm + kwbot * b_dim1], &c__1,
-                      &b[istartm + (kwbot - 1) * b_dim1], &c__1, &c1, &s1);
+                aocl_blas_srot(&i__1, &b[istartm + kwbot * b_dim1], &c__1,
+                               &b[istartm + (kwbot - 1) * b_dim1], &c__1, &c1, &s1);
                 i__1 = kwbot - istartm + 1;
-                srot_(&i__1, &a[istartm + kwbot * a_dim1], &c__1,
-                      &a[istartm + (kwbot - 1) * a_dim1], &c__1, &c1, &s1);
-                srot_(&jw, &zc[(kwbot - kwtop + 1) * zc_dim1 + 1], &c__1,
-                      &zc[(kwbot - 1 - kwtop + 1) * zc_dim1 + 1], &c__1, &c1, &s1);
+                aocl_blas_srot(&i__1, &a[istartm + kwbot * a_dim1], &c__1,
+                               &a[istartm + (kwbot - 1) * a_dim1], &c__1, &c1, &s1);
+                aocl_blas_srot(&jw, &zc[(kwbot - kwtop + 1) * zc_dim1 + 1], &c__1,
+                               &zc[(kwbot - 1 - kwtop + 1) * zc_dim1 + 1], &c__1, &c1, &s1);
                 --k;
             }
         }
@@ -663,44 +681,44 @@ void slaqz3_(logical *ilschur, logical *ilq, logical *ilz, integer *n, integer *
     if(istopm - *ihi > 0)
     {
         i__1 = istopm - *ihi;
-        sgemm_("T", "N", &jw, &i__1, &jw, &c_b17, &qc[qc_offset], ldqc,
-               &a[kwtop + (*ihi + 1) * a_dim1], lda, &c_b16, &work[1], &jw);
+        aocl_blas_sgemm("T", "N", &jw, &i__1, &jw, &c_b17, &qc[qc_offset], ldqc,
+                        &a[kwtop + (*ihi + 1) * a_dim1], lda, &c_b16, &work[1], &jw);
         i__1 = istopm - *ihi;
-        slacpy_("ALL", &jw, &i__1, &work[1], &jw, &a[kwtop + (*ihi + 1) * a_dim1], lda);
+        aocl_lapack_slacpy("ALL", &jw, &i__1, &work[1], &jw, &a[kwtop + (*ihi + 1) * a_dim1], lda);
         i__1 = istopm - *ihi;
-        sgemm_("T", "N", &jw, &i__1, &jw, &c_b17, &qc[qc_offset], ldqc,
-               &b[kwtop + (*ihi + 1) * b_dim1], ldb, &c_b16, &work[1], &jw);
+        aocl_blas_sgemm("T", "N", &jw, &i__1, &jw, &c_b17, &qc[qc_offset], ldqc,
+                        &b[kwtop + (*ihi + 1) * b_dim1], ldb, &c_b16, &work[1], &jw);
         i__1 = istopm - *ihi;
-        slacpy_("ALL", &jw, &i__1, &work[1], &jw, &b[kwtop + (*ihi + 1) * b_dim1], ldb);
+        aocl_lapack_slacpy("ALL", &jw, &i__1, &work[1], &jw, &b[kwtop + (*ihi + 1) * b_dim1], ldb);
     }
     if(*ilq)
     {
-        sgemm_("N", "N", n, &jw, &jw, &c_b17, &q[kwtop * q_dim1 + 1], ldq, &qc[qc_offset], ldqc,
-               &c_b16, &work[1], n);
-        slacpy_("ALL", n, &jw, &work[1], n, &q[kwtop * q_dim1 + 1], ldq);
+        aocl_blas_sgemm("N", "N", n, &jw, &jw, &c_b17, &q[kwtop * q_dim1 + 1], ldq, &qc[qc_offset],
+                        ldqc, &c_b16, &work[1], n);
+        aocl_lapack_slacpy("ALL", n, &jw, &work[1], n, &q[kwtop * q_dim1 + 1], ldq);
     }
     if(kwtop - 1 - istartm + 1 > 0)
     {
         i__1 = kwtop - istartm;
         i__2 = kwtop - istartm;
-        sgemm_("N", "N", &i__1, &jw, &jw, &c_b17, &a[istartm + kwtop * a_dim1], lda, &zc[zc_offset],
-               ldzc, &c_b16, &work[1], &i__2);
+        aocl_blas_sgemm("N", "N", &i__1, &jw, &jw, &c_b17, &a[istartm + kwtop * a_dim1], lda,
+                        &zc[zc_offset], ldzc, &c_b16, &work[1], &i__2);
         i__1 = kwtop - istartm;
         i__2 = kwtop - istartm;
-        slacpy_("ALL", &i__1, &jw, &work[1], &i__2, &a[istartm + kwtop * a_dim1], lda);
+        aocl_lapack_slacpy("ALL", &i__1, &jw, &work[1], &i__2, &a[istartm + kwtop * a_dim1], lda);
         i__1 = kwtop - istartm;
         i__2 = kwtop - istartm;
-        sgemm_("N", "N", &i__1, &jw, &jw, &c_b17, &b[istartm + kwtop * b_dim1], ldb, &zc[zc_offset],
-               ldzc, &c_b16, &work[1], &i__2);
+        aocl_blas_sgemm("N", "N", &i__1, &jw, &jw, &c_b17, &b[istartm + kwtop * b_dim1], ldb,
+                        &zc[zc_offset], ldzc, &c_b16, &work[1], &i__2);
         i__1 = kwtop - istartm;
         i__2 = kwtop - istartm;
-        slacpy_("ALL", &i__1, &jw, &work[1], &i__2, &b[istartm + kwtop * b_dim1], ldb);
+        aocl_lapack_slacpy("ALL", &i__1, &jw, &work[1], &i__2, &b[istartm + kwtop * b_dim1], ldb);
     }
     if(*ilz)
     {
-        sgemm_("N", "N", n, &jw, &jw, &c_b17, &z__[kwtop * z_dim1 + 1], ldz, &zc[zc_offset], ldzc,
-               &c_b16, &work[1], n);
-        slacpy_("ALL", n, &jw, &work[1], n, &z__[kwtop * z_dim1 + 1], ldz);
+        aocl_blas_sgemm("N", "N", n, &jw, &jw, &c_b17, &z__[kwtop * z_dim1 + 1], ldz,
+                        &zc[zc_offset], ldzc, &c_b16, &work[1], n);
+        aocl_lapack_slacpy("ALL", n, &jw, &work[1], n, &z__[kwtop * z_dim1 + 1], ldz);
     }
     AOCL_DTL_TRACE_LOG_EXIT
     return;

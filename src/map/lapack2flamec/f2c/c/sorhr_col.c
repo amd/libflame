@@ -5,7 +5,7 @@
  libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static real c_b7 = 1.f;
-static integer c__1 = 1;
+static aocl_int64_t c__1 = 1;
 static real c_b10 = -1.f;
 /* > \brief \b SORHR_COL */
 /* =========== DOCUMENTATION =========== */
@@ -269,29 +269,40 @@ INB-by-M}
 /* > \endverbatim */
 /* ===================================================================== */
 /* Subroutine */
-void sorhr_col_(integer *m, integer *n, integer *nb, real *a, integer *lda, real *t, integer *ldt,
-                real *d__, integer *info)
+/** Generated wrapper function */
+void sorhr_col_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *nb, real *a, aocl_int_t *lda, real *t,
+                aocl_int_t *ldt, real *d__, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_sorhr_col(m, n, nb, a, lda, t, ldt, d__, info);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t nb_64 = *nb;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t ldt_64 = *ldt;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_sorhr_col(&m_64, &n_64, &nb_64, a, &lda_64, t, &ldt_64, d__, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_sorhr_col(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *nb, real *a,
+                           aocl_int64_t *lda, real *t, aocl_int64_t *ldt, real *d__,
+                           aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("sorhr_col inputs: m %" FLA_IS ", n %" FLA_IS ", nb %" FLA_IS ", lda %" FLA_IS
                       ", ldt %" FLA_IS "",
                       *m, *n, *nb, *lda, *ldt);
     /* System generated locals */
-    integer a_dim1, a_offset, t_dim1, t_offset, i__1, i__2, i__3, i__4;
+    aocl_int64_t a_dim1, a_offset, t_dim1, t_offset, i__1, i__2, i__3, i__4;
     /* Local variables */
-    integer nplusone, i__, j, jb, jnb;
-    extern /* Subroutine */
-        void
-        slaorhr_col_getrfnp_(integer *, integer *, real *, integer *, real *, integer *);
-    integer iinfo;
-    extern /* Subroutine */
-        void
-        sscal_(integer *, real *, real *, integer *),
-        scopy_(integer *, real *, integer *, real *, integer *),
-        strsm_(char *, char *, char *, char *, integer *, integer *, real *, real *, integer *,
-               real *, integer *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    integer jbtemp1, jbtemp2;
+    aocl_int64_t nplusone, i__, j, jb, jnb;
+    aocl_int64_t iinfo;
+    aocl_int64_t jbtemp1, jbtemp2;
     /* -- LAPACK computational routine (version 3.9.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -351,7 +362,7 @@ void sorhr_col_(integer *m, integer *n, integer *nb, real *a, integer *lda, real
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("SORHR_COL", &i__1, (ftnlen)9);
+        aocl_blas_xerbla("SORHR_COL", &i__1, (ftnlen)9);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -369,12 +380,13 @@ void sorhr_col_(integer *m, integer *n, integer *nb, real *a, integer *lda, real
     /* ( 0 ) ( V2 ) */
     /* where 0 is an (M-N)-by-N zero matrix. */
     /* (1-1) Factor V1 and U. */
-    slaorhr_col_getrfnp_(n, n, &a[a_offset], lda, &d__[1], &iinfo);
+    aocl_lapack_slaorhr_col_getrfnp(n, n, &a[a_offset], lda, &d__[1], &iinfo);
     /* (1-2) Solve for V2. */
     if(*m > *n)
     {
         i__1 = *m - *n;
-        strsm_("R", "U", "N", "N", &i__1, n, &c_b7, &a[a_offset], lda, &a[*n + 1 + a_dim1], lda);
+        aocl_blas_strsm("R", "U", "N", "N", &i__1, n, &c_b7, &a[a_offset], lda, &a[*n + 1 + a_dim1],
+                        lda);
     }
     /* (2) Reconstruct the block reflector T stored in T(1:NB, 1:N) */
     /* as a sequence of upper-triangular blocks with NB-size column */
@@ -401,7 +413,7 @@ void sorhr_col_(integer *m, integer *n, integer *nb, real *a, integer *lda, real
         for(j = jb; j <= i__3; ++j)
         {
             i__4 = j - jbtemp1;
-            scopy_(&i__4, &a[jb + j * a_dim1], &c__1, &t[j * t_dim1 + 1], &c__1);
+            aocl_blas_scopy(&i__4, &a[jb + j * a_dim1], &c__1, &t[j * t_dim1 + 1], &c__1);
         }
         /* (2-2) Perform on the upper-triangular part of the current */
         /* JNB-by-JNB diagonal block U(JB) (of the N-by-N matrix U) stored */
@@ -419,7 +431,7 @@ void sorhr_col_(integer *m, integer *n, integer *nb, real *a, integer *lda, real
             if(d__[j] == 1.f)
             {
                 i__4 = j - jbtemp1;
-                sscal_(&i__4, &c_b10, &t[j * t_dim1 + 1], &c__1);
+                aocl_blas_sscal(&i__4, &c_b10, &t[j * t_dim1 + 1], &c__1);
             }
         }
         /* (2-3) Perform the triangular solve for the current block */
@@ -462,8 +474,8 @@ void sorhr_col_(integer *m, integer *n, integer *nb, real *a, integer *lda, real
             }
         }
         /* (2-3b) Perform the triangular solve. */
-        strsm_("R", "L", "T", "U", &jnb, &jnb, &c_b7, &a[jb + jb * a_dim1], lda,
-               &t[jb * t_dim1 + 1], ldt);
+        aocl_blas_strsm("R", "L", "T", "U", &jnb, &jnb, &c_b7, &a[jb + jb * a_dim1], lda,
+                        &t[jb * t_dim1 + 1], ldt);
     }
     AOCL_DTL_TRACE_LOG_EXIT
     return;

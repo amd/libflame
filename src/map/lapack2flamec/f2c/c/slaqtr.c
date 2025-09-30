@@ -10,7 +10,7 @@ static aocl_int64_t c__2 = 2;
 static real c_b21 = 1.f;
 static real c_b25 = 0.f;
 static logical c_true = TRUE_;
-/* > \brief \b SLAQTR solves a real quasi-triangular system of equations, or a complex
+/* > \brief \b SLAQTR solves a real quasi-triangular system of equations, or a scomplex
  * quasi-triangular system of special form, in real arithmetic. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -167,8 +167,25 @@ static logical c_true = TRUE_;
 /* > \ingroup realOTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-void slaqtr_(logical *ltran, logical *lreal, integer *n, real *t, integer *ldt, real *b, real *w,
-             real *scale, real *x, real *work, integer *info)
+/** Generated wrapper function */
+void slaqtr_(logical *ltran, logical *lreal, aocl_int_t *n, real *t, aocl_int_t *ldt, real *b,
+             real *w, real *scale, real *x, real *work, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_slaqtr(ltran, lreal, n, t, ldt, b, w, scale, x, work, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t ldt_64 = *ldt;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_slaqtr(ltran, lreal, &n_64, t, &ldt_64, b, w, scale, x, work, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_slaqtr(logical *ltran, logical *lreal, aocl_int64_t *n, real *t, aocl_int64_t *ldt,
+                        real *b, real *w, real *scale, real *x, real *work, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("slaqtr inputs: n %" FLA_IS ",ldt %" FLA_IS "", *n, *ldt);
@@ -178,26 +195,17 @@ void slaqtr_(logical *ltran, logical *lreal, integer *n, real *t, integer *ldt, 
     /* Local variables */
     real d__[4] /* was [2][2] */
         ;
-    integer i__, j, k;
+    aocl_int64_t i__, j, k;
     real v[4] /* was [2][2] */
         ,
         z__;
-    integer j1, j2, n1, n2;
+    aocl_int64_t j1, j2, n1, n2;
     real si, xj, sr, rec, eps, tjj, tmp;
     aocl_int64_t ierr;
     real smin;
     real xmax;
-    extern /* Subroutine */
-        void
-        sscal_(integer *, real *, real *, integer *);
-    integer jnext;
-    extern real sasum_(integer *, real *, integer *);
+    aocl_int64_t jnext;
     real sminw, xnorm;
-    extern /* Subroutine */
-        void
-        saxpy_(integer *, real *, real *, integer *, real *, integer *),
-        slaln2_(logical *, integer *, integer *, real *, real *, real *, integer *, real *, real *,
-                real *, integer *, real *, real *, real *, integer *, real *, real *, integer *);
     real scaloc;
     real bignum;
     extern /* Subroutine */
@@ -248,13 +256,13 @@ void slaqtr_(logical *ltran, logical *lreal, integer *n, real *t, integer *ldt, 
     eps = slamch_("P");
     smlnum = slamch_("S") / eps;
     bignum = 1.f / smlnum;
-    xnorm = slange_("M", n, n, &t[t_offset], ldt, d__);
+    xnorm = aocl_lapack_slange("M", n, n, &t[t_offset], ldt, d__);
     if(!(*lreal))
     {
         /* Computing MAX */
         r__1 = xnorm, r__2 = f2c_abs(*w);
         r__1 = fla_max(r__1, r__2);
-        r__2 = slange_("M", n, &c__1, &b[1], n, d__); // ; expr subst
+        r__2 = aocl_lapack_slange("M", n, &c__1, &b[1], n, d__); // ; expr subst
         xnorm = fla_max(r__1, r__2);
     }
     /* Computing MAX */
@@ -286,7 +294,7 @@ void slaqtr_(logical *ltran, logical *lreal, integer *n, real *t, integer *ldt, 
     {
         n1 = n2;
     }
-    k = isamax_(&n1, &x[1], &c__1);
+    k = aocl_blas_isamax(&n1, &x[1], &c__1);
     xmax = (r__1 = x[k], f2c_abs(r__1));
     *scale = 1.f;
     if(xmax > bignum)
@@ -363,9 +371,9 @@ void slaqtr_(logical *ltran, logical *lreal, integer *n, real *t, integer *ldt, 
                     {
                         i__1 = j1 - 1;
                         r__1 = -x[j1];
-                        saxpy_(&i__1, &r__1, &t[j1 * t_dim1 + 1], &c__1, &x[1], &c__1);
+                        aocl_blas_saxpy(&i__1, &r__1, &t[j1 * t_dim1 + 1], &c__1, &x[1], &c__1);
                         i__1 = j1 - 1;
-                        k = isamax_(&i__1, &x[1], &c__1);
+                        k = aocl_blas_isamax(&i__1, &x[1], &c__1);
                         xmax = (r__1 = x[k], f2c_abs(r__1));
                     }
                 }
@@ -376,9 +384,9 @@ void slaqtr_(logical *ltran, logical *lreal, integer *n, real *t, integer *ldt, 
                     /* care of possible overflow by scaling factor. */
                     d__[0] = x[j1];
                     d__[1] = x[j2];
-                    slaln2_(&c_false, &c__2, &c__1, &smin, &c_b21, &t[j1 + j1 * t_dim1], ldt,
-                            &c_b21, &c_b21, d__, &c__2, &c_b25, &c_b25, v, &c__2, &scaloc, &xnorm,
-                            &ierr);
+                    aocl_lapack_slaln2(&c_false, &c__2, &c__1, &smin, &c_b21, &t[j1 + j1 * t_dim1],
+                                       ldt, &c_b21, &c_b21, d__, &c__2, &c_b25, &c_b25, v, &c__2,
+                                       &scaloc, &xnorm, &ierr);
                     if(ierr != 0)
                     {
                         *info = 2;
@@ -413,12 +421,12 @@ void slaqtr_(logical *ltran, logical *lreal, integer *n, real *t, integer *ldt, 
                     {
                         i__1 = j1 - 1;
                         r__1 = -x[j1];
-                        saxpy_(&i__1, &r__1, &t[j1 * t_dim1 + 1], &c__1, &x[1], &c__1);
+                        aocl_blas_saxpy(&i__1, &r__1, &t[j1 * t_dim1 + 1], &c__1, &x[1], &c__1);
                         i__1 = j1 - 1;
                         r__1 = -x[j2];
-                        saxpy_(&i__1, &r__1, &t[j2 * t_dim1 + 1], &c__1, &x[1], &c__1);
+                        aocl_blas_saxpy(&i__1, &r__1, &t[j2 * t_dim1 + 1], &c__1, &x[1], &c__1);
                         i__1 = j1 - 1;
-                        k = isamax_(&i__1, &x[1], &c__1);
+                        k = aocl_blas_isamax(&i__1, &x[1], &c__1);
                         xmax = (r__1 = x[k], f2c_abs(r__1));
                     }
                 }
@@ -464,7 +472,7 @@ void slaqtr_(logical *ltran, logical *lreal, integer *n, real *t, integer *ldt, 
                         }
                     }
                     i__2 = j1 - 1;
-                    x[j1] -= sdot_(&i__2, &t[j1 * t_dim1 + 1], &c__1, &x[1], &c__1);
+                    x[j1] -= aocl_blas_sdot(&i__2, &t[j1 * t_dim1 + 1], &c__1, &x[1], &c__1);
                     xj = (r__1 = x[j1], f2c_abs(r__1));
                     tjj = (r__1 = t[j1 + j1 * t_dim1], f2c_abs(r__1));
                     tmp = t[j1 + j1 * t_dim1];
@@ -516,9 +524,11 @@ void slaqtr_(logical *ltran, logical *lreal, integer *n, real *t, integer *ldt, 
                     d__[0]
                         = x[j1] - aocl_blas_sdot(&i__2, &t[j1 * t_dim1 + 1], &c__1, &x[1], &c__1);
                     i__2 = j1 - 1;
-                    d__[1] = x[j2] - sdot_(&i__2, &t[j2 * t_dim1 + 1], &c__1, &x[1], &c__1);
-                    slaln2_(&c_true, &c__2, &c__1, &smin, &c_b21, &t[j1 + j1 * t_dim1], ldt, &c_b21,
-                            &c_b21, d__, &c__2, &c_b25, &c_b25, v, &c__2, &scaloc, &xnorm, &ierr);
+                    d__[1]
+                        = x[j2] - aocl_blas_sdot(&i__2, &t[j2 * t_dim1 + 1], &c__1, &x[1], &c__1);
+                    aocl_lapack_slaln2(&c_true, &c__2, &c__1, &smin, &c_b21, &t[j1 + j1 * t_dim1],
+                                       ldt, &c_b21, &c_b21, d__, &c__2, &c_b25, &c_b25, v, &c__2,
+                                       &scaloc, &xnorm, &ierr);
                     if(ierr != 0)
                     {
                         *info = 2;
@@ -617,10 +627,11 @@ void slaqtr_(logical *ltran, logical *lreal, integer *n, real *t, integer *ldt, 
                     {
                         i__1 = j1 - 1;
                         r__1 = -x[j1];
-                        saxpy_(&i__1, &r__1, &t[j1 * t_dim1 + 1], &c__1, &x[1], &c__1);
+                        aocl_blas_saxpy(&i__1, &r__1, &t[j1 * t_dim1 + 1], &c__1, &x[1], &c__1);
                         i__1 = j1 - 1;
                         r__1 = -x[*n + j1];
-                        saxpy_(&i__1, &r__1, &t[j1 * t_dim1 + 1], &c__1, &x[*n + 1], &c__1);
+                        aocl_blas_saxpy(&i__1, &r__1, &t[j1 * t_dim1 + 1], &c__1, &x[*n + 1],
+                                        &c__1);
                         x[1] += b[j1] * x[*n + j1];
                         x[*n + 1] -= b[j1] * x[j1];
                         xmax = 0.f;
@@ -644,9 +655,9 @@ void slaqtr_(logical *ltran, logical *lreal, integer *n, real *t, integer *ldt, 
                     d__[2] = x[*n + j1];
                     d__[3] = x[*n + j2];
                     r__1 = -(*w);
-                    slaln2_(&c_false, &c__2, &c__2, &sminw, &c_b21, &t[j1 + j1 * t_dim1], ldt,
-                            &c_b21, &c_b21, d__, &c__2, &c_b25, &r__1, v, &c__2, &scaloc, &xnorm,
-                            &ierr);
+                    aocl_lapack_slaln2(&c_false, &c__2, &c__2, &sminw, &c_b21, &t[j1 + j1 * t_dim1],
+                                       ldt, &c_b21, &c_b21, d__, &c__2, &c_b25, &r__1, v, &c__2,
+                                       &scaloc, &xnorm, &ierr);
                     if(ierr != 0)
                     {
                         *info = 2;
@@ -684,16 +695,18 @@ void slaqtr_(logical *ltran, logical *lreal, integer *n, real *t, integer *ldt, 
                     {
                         i__1 = j1 - 1;
                         r__1 = -x[j1];
-                        saxpy_(&i__1, &r__1, &t[j1 * t_dim1 + 1], &c__1, &x[1], &c__1);
+                        aocl_blas_saxpy(&i__1, &r__1, &t[j1 * t_dim1 + 1], &c__1, &x[1], &c__1);
                         i__1 = j1 - 1;
                         r__1 = -x[j2];
-                        saxpy_(&i__1, &r__1, &t[j2 * t_dim1 + 1], &c__1, &x[1], &c__1);
+                        aocl_blas_saxpy(&i__1, &r__1, &t[j2 * t_dim1 + 1], &c__1, &x[1], &c__1);
                         i__1 = j1 - 1;
                         r__1 = -x[*n + j1];
-                        saxpy_(&i__1, &r__1, &t[j1 * t_dim1 + 1], &c__1, &x[*n + 1], &c__1);
+                        aocl_blas_saxpy(&i__1, &r__1, &t[j1 * t_dim1 + 1], &c__1, &x[*n + 1],
+                                        &c__1);
                         i__1 = j1 - 1;
                         r__1 = -x[*n + j2];
-                        saxpy_(&i__1, &r__1, &t[j2 * t_dim1 + 1], &c__1, &x[*n + 1], &c__1);
+                        aocl_blas_saxpy(&i__1, &r__1, &t[j2 * t_dim1 + 1], &c__1, &x[*n + 1],
+                                        &c__1);
                         x[1] = x[1] + b[j1] * x[*n + j1] + b[j2] * x[*n + j2];
                         x[*n + 1] = x[*n + 1] - b[j1] * x[j1] - b[j2] * x[j2];
                         xmax = 0.f;
@@ -749,9 +762,10 @@ void slaqtr_(logical *ltran, logical *lreal, integer *n, real *t, integer *ldt, 
                         }
                     }
                     i__2 = j1 - 1;
-                    x[j1] -= sdot_(&i__2, &t[j1 * t_dim1 + 1], &c__1, &x[1], &c__1);
+                    x[j1] -= aocl_blas_sdot(&i__2, &t[j1 * t_dim1 + 1], &c__1, &x[1], &c__1);
                     i__2 = j1 - 1;
-                    x[*n + j1] -= sdot_(&i__2, &t[j1 * t_dim1 + 1], &c__1, &x[*n + 1], &c__1);
+                    x[*n + j1]
+                        -= aocl_blas_sdot(&i__2, &t[j1 * t_dim1 + 1], &c__1, &x[*n + 1], &c__1);
                     if(j1 > 1)
                     {
                         x[j1] -= b[j1] * x[*n + 1];
@@ -764,7 +778,7 @@ void slaqtr_(logical *ltran, logical *lreal, integer *n, real *t, integer *ldt, 
                         z__ = b[1];
                     }
                     /* Scale if necessary to avoid overflow in */
-                    /* complex division */
+                    /* scomplex division */
                     tjj = (r__1 = t[j1 + j1 * t_dim1], f2c_abs(r__1)) + f2c_abs(z__);
                     tmp = t[j1 + j1 * t_dim1];
                     if(tjj < sminw)
@@ -821,18 +835,18 @@ void slaqtr_(logical *ltran, logical *lreal, integer *n, real *t, integer *ldt, 
                     d__[1]
                         = x[j2] - aocl_blas_sdot(&i__2, &t[j2 * t_dim1 + 1], &c__1, &x[1], &c__1);
                     i__2 = j1 - 1;
-                    d__[2]
-                        = x[*n + j1] - sdot_(&i__2, &t[j1 * t_dim1 + 1], &c__1, &x[*n + 1], &c__1);
+                    d__[2] = x[*n + j1]
+                             - aocl_blas_sdot(&i__2, &t[j1 * t_dim1 + 1], &c__1, &x[*n + 1], &c__1);
                     i__2 = j1 - 1;
-                    d__[3]
-                        = x[*n + j2] - sdot_(&i__2, &t[j2 * t_dim1 + 1], &c__1, &x[*n + 1], &c__1);
+                    d__[3] = x[*n + j2]
+                             - aocl_blas_sdot(&i__2, &t[j2 * t_dim1 + 1], &c__1, &x[*n + 1], &c__1);
                     d__[0] -= b[j1] * x[*n + 1];
                     d__[1] -= b[j2] * x[*n + 1];
                     d__[2] += b[j1] * x[1];
                     d__[3] += b[j2] * x[1];
-                    slaln2_(&c_true, &c__2, &c__2, &sminw, &c_b21, &t[j1 + j1 * t_dim1], ldt,
-                            &c_b21, &c_b21, d__, &c__2, &c_b25, w, v, &c__2, &scaloc, &xnorm,
-                            &ierr);
+                    aocl_lapack_slaln2(&c_true, &c__2, &c__2, &sminw, &c_b21, &t[j1 + j1 * t_dim1],
+                                       ldt, &c_b21, &c_b21, d__, &c__2, &c_b25, w, v, &c__2,
+                                       &scaloc, &xnorm, &ierr);
                     if(ierr != 0)
                     {
                         *info = 2;

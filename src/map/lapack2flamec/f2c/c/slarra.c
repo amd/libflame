@@ -130,18 +130,36 @@ E(N) need not be set. */
 /* > Christof Voemel, University of California, Berkeley, USA */
 /* ===================================================================== */
 /* Subroutine */
-void slarra_(integer *n, real *d__, real *e, real *e2, real *spltol, real *tnrm, integer *nsplit,
-             integer *isplit, integer *info)
+/** Generated wrapper function */
+void slarra_(aocl_int_t *n, real *d__, real *e, real *e2, real *spltol, real *tnrm,
+             aocl_int_t *nsplit, aocl_int_t *isplit, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_slarra(n, d__, e, e2, spltol, tnrm, nsplit, isplit, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t nsplit_64 = *nsplit;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_slarra(&n_64, d__, e, e2, spltol, tnrm, &nsplit_64, isplit, &info_64);
+
+    *nsplit = (aocl_int_t)nsplit_64;
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_slarra(aocl_int64_t *n, real *d__, real *e, real *e2, real *spltol, real *tnrm,
+                        aocl_int64_t *nsplit, aocl_int_t *isplit, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("slarra inputs: n %" FLA_IS "", *n);
     /* System generated locals */
-    integer i__1;
+    aocl_int64_t i__1;
     real r__1, r__2;
     /* Builtin functions */
     double sqrt(doublereal);
     /* Local variables */
-    integer i__;
+    aocl_int64_t i__;
     real tmp1, eabs;
     /* -- LAPACK auxiliary routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -185,7 +203,7 @@ void slarra_(integer *n, real *d__, real *e, real *e2, real *spltol, real *tnrm,
             {
                 e[i__] = 0.f;
                 e2[i__] = 0.f;
-                isplit[*nsplit] = i__;
+                isplit[*nsplit] = (aocl_int_t)(i__);
                 ++(*nsplit);
             }
             /* L9: */
@@ -203,13 +221,13 @@ void slarra_(integer *n, real *d__, real *e, real *e2, real *spltol, real *tnrm,
             {
                 e[i__] = 0.f;
                 e2[i__] = 0.f;
-                isplit[*nsplit] = i__;
+                isplit[*nsplit] = (aocl_int_t)(i__);
                 ++(*nsplit);
             }
             /* L10: */
         }
     }
-    isplit[*nsplit] = *n;
+    isplit[*nsplit] = (aocl_int_t)(*n);
     AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SLARRA */

@@ -69,8 +69,8 @@ fla_stat_info_t AVAILABLE_STATS[FLA_NUM_STATS]
 int fla_check_cmd_config_dir(int argc, char **argv);
 
 #if AOCL_FLA_SET_PROGRESS_ENABLE == 1
-int aocl_fla_progress(const char *const api, const integer lenapi, const integer *const progress,
-                      const integer *const current_thread, const integer *const total_threads)
+int aocl_fla_progress(const char *const api, const aocl_int64_t lenapi, const aocl_int64_t *const progress,
+                      const aocl_int64_t *const current_thread, const aocl_int64_t *const total_threads)
 {
     printf("In AOCL FLA  Progress thread  %" FT_IS ", at API  %s, progress  %" FT_IS
            " total threads= %" FT_IS "\n",
@@ -80,8 +80,8 @@ int aocl_fla_progress(const char *const api, const integer lenapi, const integer
 #endif
 
 #if AOCL_FLA_SET_PROGRESS_ENABLE == 2
-int test_progress(const char *const api, const integer lenapi, const integer *const progress,
-                  const integer *const current_thread, const integer *const total_threads)
+int test_progress(const char *const api, const aocl_int64_t lenapi, const aocl_int64_t *const progress,
+                  const aocl_int64_t *const current_thread, const aocl_int64_t *const total_threads)
 {
     printf("In AOCL Progress thread  %" FT_IS ", at API  %s, progress %" FT_IS
            " total threads= %" FT_IS " \n",
@@ -1497,7 +1497,7 @@ void fla_test_op_driver(char *func_str, integer sqr_inp, test_params_t *params, 
         {
             datatype = params->datatype[dt];
             datatype_char = params->datatype_char[dt];
-            /* Skip complex and double complex tests of not supported APIs */
+            /* Skip scomplex and double scomplex tests of not supported APIs */
             if(!FLA_SKIP_TEST(datatype_char, func_str))
             {
                 /* Loop over the requested problem sizes */

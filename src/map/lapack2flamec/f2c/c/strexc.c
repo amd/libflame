@@ -4,8 +4,8 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
-static integer c__2 = 2;
+static aocl_int64_t c__1 = 1;
+static aocl_int64_t c__2 = 2;
 /* > \brief \b STREXC */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -150,27 +150,43 @@ T may have been partially */
 /* > \ingroup realOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void strexc_(char *compq, integer *n, real *t, integer *ldt, real *q, integer *ldq, integer *ifst,
-             integer *ilst, real *work, integer *info)
+/** Generated wrapper function */
+void strexc_(char *compq, aocl_int_t *n, real *t, aocl_int_t *ldt, real *q, aocl_int_t *ldq,
+             aocl_int_t *ifst, aocl_int_t *ilst, real *work, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_strexc(compq, n, t, ldt, q, ldq, ifst, ilst, work, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t ldt_64 = *ldt;
+    aocl_int64_t ldq_64 = *ldq;
+    aocl_int64_t ifst_64 = *ifst;
+    aocl_int64_t ilst_64 = *ilst;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_strexc(compq, &n_64, t, &ldt_64, q, &ldq_64, &ifst_64, &ilst_64, work, &info_64);
+
+    *ifst = (aocl_int_t)ifst_64;
+    *ilst = (aocl_int_t)ilst_64;
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_strexc(char *compq, aocl_int64_t *n, real *t, aocl_int64_t *ldt, real *q,
+                        aocl_int64_t *ldq, aocl_int64_t *ifst, aocl_int64_t *ilst, real *work,
+                        aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("strexc inputs: compq %c, n %" FLA_IS ", ldt %" FLA_IS ", ldq %" FLA_IS
                       ", ifst %" FLA_IS ", ilst %" FLA_IS "",
                       *compq, *n, *ldt, *ldq, *ifst, *ilst);
     /* System generated locals */
-    integer q_dim1, q_offset, t_dim1, t_offset, i__1;
+    aocl_int64_t q_dim1, q_offset, t_dim1, t_offset, i__1;
     /* Local variables */
-    integer nbf, nbl, here;
-    extern logical lsame_(char *, char *, integer, integer);
+    aocl_int64_t nbf, nbl, here;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     logical wantq;
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    extern /* Subroutine */
-        void
-        slaexc_(logical *, integer *, real *, integer *, real *, integer *, integer *, integer *,
-                integer *, real *, integer *);
-    integer nbnext;
+    aocl_int64_t nbnext;
     /* -- LAPACK computational routine (version 3.7.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -230,7 +246,7 @@ void strexc_(char *compq, integer *n, real *t, integer *ldt, real *q, integer *l
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("STREXC", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("STREXC", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -303,8 +319,8 @@ void strexc_(char *compq, integer *n, real *t, integer *ldt, real *q, integer *l
                     nbnext = 2;
                 }
             }
-            slaexc_(&wantq, n, &t[t_offset], ldt, &q[q_offset], ldq, &here, &nbf, &nbnext, &work[1],
-                    info);
+            aocl_lapack_slaexc(&wantq, n, &t[t_offset], ldt, &q[q_offset], ldq, &here, &nbf,
+                               &nbnext, &work[1], info);
             if(*info != 0)
             {
                 *ilst = here;
@@ -334,8 +350,8 @@ void strexc_(char *compq, integer *n, real *t, integer *ldt, real *q, integer *l
                 }
             }
             i__1 = here + 1;
-            slaexc_(&wantq, n, &t[t_offset], ldt, &q[q_offset], ldq, &i__1, &c__1, &nbnext,
-                    &work[1], info);
+            aocl_lapack_slaexc(&wantq, n, &t[t_offset], ldt, &q[q_offset], ldq, &i__1, &c__1,
+                               &nbnext, &work[1], info);
             if(*info != 0)
             {
                 *ilst = here;
@@ -345,8 +361,8 @@ void strexc_(char *compq, integer *n, real *t, integer *ldt, real *q, integer *l
             if(nbnext == 1)
             {
                 /* Swap two 1 by 1 blocks, no problems possible */
-                slaexc_(&wantq, n, &t[t_offset], ldt, &q[q_offset], ldq, &here, &c__1, &nbnext,
-                        &work[1], info);
+                aocl_lapack_slaexc(&wantq, n, &t[t_offset], ldt, &q[q_offset], ldq, &here, &c__1,
+                                   &nbnext, &work[1], info);
                 ++here;
             }
             else
@@ -359,8 +375,8 @@ void strexc_(char *compq, integer *n, real *t, integer *ldt, real *q, integer *l
                 if(nbnext == 2)
                 {
                     /* 2 by 2 Block did not split */
-                    slaexc_(&wantq, n, &t[t_offset], ldt, &q[q_offset], ldq, &here, &c__1, &nbnext,
-                            &work[1], info);
+                    aocl_lapack_slaexc(&wantq, n, &t[t_offset], ldt, &q[q_offset], ldq, &here,
+                                       &c__1, &nbnext, &work[1], info);
                     if(*info != 0)
                     {
                         *ilst = here;
@@ -372,11 +388,11 @@ void strexc_(char *compq, integer *n, real *t, integer *ldt, real *q, integer *l
                 else
                 {
                     /* 2 by 2 Block did split */
-                    slaexc_(&wantq, n, &t[t_offset], ldt, &q[q_offset], ldq, &here, &c__1, &c__1,
-                            &work[1], info);
+                    aocl_lapack_slaexc(&wantq, n, &t[t_offset], ldt, &q[q_offset], ldq, &here,
+                                       &c__1, &c__1, &work[1], info);
                     i__1 = here + 1;
-                    slaexc_(&wantq, n, &t[t_offset], ldt, &q[q_offset], ldq, &i__1, &c__1, &c__1,
-                            &work[1], info);
+                    aocl_lapack_slaexc(&wantq, n, &t[t_offset], ldt, &q[q_offset], ldq, &i__1,
+                                       &c__1, &c__1, &work[1], info);
                     here += 2;
                 }
             }
@@ -402,8 +418,8 @@ void strexc_(char *compq, integer *n, real *t, integer *ldt, real *q, integer *l
                 }
             }
             i__1 = here - nbnext;
-            slaexc_(&wantq, n, &t[t_offset], ldt, &q[q_offset], ldq, &i__1, &nbnext, &nbf, &work[1],
-                    info);
+            aocl_lapack_slaexc(&wantq, n, &t[t_offset], ldt, &q[q_offset], ldq, &i__1, &nbnext,
+                               &nbf, &work[1], info);
             if(*info != 0)
             {
                 *ilst = here;
@@ -433,8 +449,8 @@ void strexc_(char *compq, integer *n, real *t, integer *ldt, real *q, integer *l
                 }
             }
             i__1 = here - nbnext;
-            slaexc_(&wantq, n, &t[t_offset], ldt, &q[q_offset], ldq, &i__1, &nbnext, &c__1,
-                    &work[1], info);
+            aocl_lapack_slaexc(&wantq, n, &t[t_offset], ldt, &q[q_offset], ldq, &i__1, &nbnext,
+                               &c__1, &work[1], info);
             if(*info != 0)
             {
                 *ilst = here;
@@ -444,8 +460,8 @@ void strexc_(char *compq, integer *n, real *t, integer *ldt, real *q, integer *l
             if(nbnext == 1)
             {
                 /* Swap two 1 by 1 blocks, no problems possible */
-                slaexc_(&wantq, n, &t[t_offset], ldt, &q[q_offset], ldq, &here, &nbnext, &c__1,
-                        &work[1], info);
+                aocl_lapack_slaexc(&wantq, n, &t[t_offset], ldt, &q[q_offset], ldq, &here, &nbnext,
+                                   &c__1, &work[1], info);
                 --here;
             }
             else
@@ -459,8 +475,8 @@ void strexc_(char *compq, integer *n, real *t, integer *ldt, real *q, integer *l
                 {
                     /* 2 by 2 Block did not split */
                     i__1 = here - 1;
-                    slaexc_(&wantq, n, &t[t_offset], ldt, &q[q_offset], ldq, &i__1, &c__2, &c__1,
-                            &work[1], info);
+                    aocl_lapack_slaexc(&wantq, n, &t[t_offset], ldt, &q[q_offset], ldq, &i__1,
+                                       &c__2, &c__1, &work[1], info);
                     if(*info != 0)
                     {
                         *ilst = here;
@@ -472,11 +488,11 @@ void strexc_(char *compq, integer *n, real *t, integer *ldt, real *q, integer *l
                 else
                 {
                     /* 2 by 2 Block did split */
-                    slaexc_(&wantq, n, &t[t_offset], ldt, &q[q_offset], ldq, &here, &c__1, &c__1,
-                            &work[1], info);
+                    aocl_lapack_slaexc(&wantq, n, &t[t_offset], ldt, &q[q_offset], ldq, &here,
+                                       &c__1, &c__1, &work[1], info);
                     i__1 = here - 1;
-                    slaexc_(&wantq, n, &t[t_offset], ldt, &q[q_offset], ldq, &i__1, &c__1, &c__1,
-                            &work[1], info);
+                    aocl_lapack_slaexc(&wantq, n, &t[t_offset], ldt, &q[q_offset], ldq, &i__1,
+                                       &c__1, &c__1, &work[1], info);
                     here += -2;
                 }
             }

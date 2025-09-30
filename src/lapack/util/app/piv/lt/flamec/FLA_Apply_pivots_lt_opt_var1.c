@@ -13,10 +13,10 @@
 FLA_Error FLA_Apply_pivots_lt_opt_var1( FLA_Obj p, FLA_Obj A )
 {
   FLA_Datatype datatype;
-  integer          n_A;
-  integer          rs_A, cs_A;
-  integer          inc_p;
-  integer          k1_0, k2_0;
+  fla_dim_t          n_A;
+  fla_dim_t          rs_A, cs_A;
+  fla_dim_t          inc_p;
+  fla_dim_t          k1_0, k2_0;
 
   datatype = FLA_Obj_datatype( A );
 
@@ -30,14 +30,14 @@ FLA_Error FLA_Apply_pivots_lt_opt_var1( FLA_Obj p, FLA_Obj A )
 
   // Use zero-based indices.
   k1_0     = 0;
-  k2_0     = ( integer ) FLA_Obj_vector_dim( p ) - 1;
+  k2_0     = ( fla_dim_t ) FLA_Obj_vector_dim( p ) - 1;
 
   switch ( datatype )
   {
     case FLA_INT:
     {
-      integer*   buff_A = FLA_INT_PTR( A );
-      integer*   buff_p = FLA_INT_PTR( p );
+      fla_dim_t*   buff_A = FLA_INT_PTR( A );
+      fla_dim_t*   buff_p = FLA_INT_PTR( p );
 
       FLA_Apply_pivots_ln_opi_var1( n_A,
                                     buff_A, rs_A, cs_A,
@@ -51,7 +51,7 @@ FLA_Error FLA_Apply_pivots_lt_opt_var1( FLA_Obj p, FLA_Obj A )
     case FLA_FLOAT:
     {
       float* buff_A = FLA_FLOAT_PTR( A );
-      integer*   buff_p = FLA_INT_PTR( p );
+      fla_dim_t*   buff_p = FLA_INT_PTR( p );
 
       FLA_Apply_pivots_ln_ops_var1( n_A,
                                     buff_A, rs_A, cs_A,
@@ -65,7 +65,7 @@ FLA_Error FLA_Apply_pivots_lt_opt_var1( FLA_Obj p, FLA_Obj A )
     case FLA_DOUBLE:
     {
       double* buff_A = FLA_DOUBLE_PTR( A );
-      integer*    buff_p = FLA_INT_PTR( p );
+      fla_dim_t*    buff_p = FLA_INT_PTR( p );
 
       FLA_Apply_pivots_ln_opd_var1( n_A,
                                     buff_A, rs_A, cs_A,
@@ -79,7 +79,7 @@ FLA_Error FLA_Apply_pivots_lt_opt_var1( FLA_Obj p, FLA_Obj A )
     case FLA_COMPLEX:
     {
       scomplex* buff_A = FLA_COMPLEX_PTR( A );
-      integer*      buff_p = FLA_INT_PTR( p );
+      fla_dim_t*      buff_p = FLA_INT_PTR( p );
 
       FLA_Apply_pivots_ln_opc_var1( n_A,
                                     buff_A, rs_A, cs_A,
@@ -93,7 +93,7 @@ FLA_Error FLA_Apply_pivots_lt_opt_var1( FLA_Obj p, FLA_Obj A )
     case FLA_DOUBLE_COMPLEX:
     {
       dcomplex* buff_A = FLA_DOUBLE_COMPLEX_PTR( A );
-      integer*      buff_p = FLA_INT_PTR( p );
+      fla_dim_t*      buff_p = FLA_INT_PTR( p );
 
       FLA_Apply_pivots_ln_opz_var1( n_A,
                                     buff_A, rs_A, cs_A,

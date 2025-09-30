@@ -4,10 +4,10 @@
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
  /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static complex c_b1 = {0.f, 0.f};
-static complex c_b2 = {1.f, 0.f};
+static scomplex c_b1 = {{0.f}, {0.f}};
+static scomplex c_b2 = {{1.f}, {0.f}};
 static real c_b13 = 1.f;
-static integer c__1 = 1;
+static aocl_int64_t c__1 = 1;
 /* > \brief <b> CHBEVD computes the eigenvalues and, optionally, the left and/or right eigenvectors
  * for OTHER matrices</b> */
 /* =========== DOCUMENTATION =========== */
@@ -47,7 +47,7 @@ static integer c__1 = 1;
 /* > \verbatim */
 /* > */
 /* > CHBEVD computes all the eigenvalues and, optionally, eigenvectors of */
-/* > a complex Hermitian band matrix A. If eigenvectors are desired, it */
+/* > a scomplex Hermitian band matrix A. If eigenvectors are desired, it */
 /* > uses a divide and conquer algorithm. */
 /* > */
 /* > \endverbatim */
@@ -215,9 +215,35 @@ i */
 /* > \ingroup hbevd */
 /* ===================================================================== */
 /* Subroutine */
-void chbevd_(char *jobz, char *uplo, integer *n, integer *kd, complex *ab, integer *ldab, real *w,
-             complex *z__, integer *ldz, complex *work, integer *lwork, real *rwork,
-             integer *lrwork, integer *iwork, integer *liwork, integer *info)
+/** Generated wrapper function */
+void chbevd_(char *jobz, char *uplo, aocl_int_t *n, aocl_int_t *kd, scomplex *ab, aocl_int_t *ldab,
+             real *w, scomplex *z__, aocl_int_t *ldz, scomplex *work, aocl_int_t *lwork, real *rwork,
+             aocl_int_t *lrwork, aocl_int_t *iwork, aocl_int_t *liwork, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_chbevd(jobz, uplo, n, kd, ab, ldab, w, z__, ldz, work, lwork, rwork, lrwork, iwork,
+                       liwork, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t kd_64 = *kd;
+    aocl_int64_t ldab_64 = *ldab;
+    aocl_int64_t ldz_64 = *ldz;
+    aocl_int64_t lwork_64 = *lwork;
+    aocl_int64_t lrwork_64 = *lrwork;
+    aocl_int64_t liwork_64 = *liwork;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_chbevd(jobz, uplo, &n_64, &kd_64, ab, &ldab_64, w, z__, &ldz_64, work, &lwork_64,
+                       rwork, &lrwork_64, iwork, &liwork_64, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_chbevd(char *jobz, char *uplo, aocl_int64_t *n, aocl_int64_t *kd, scomplex *ab,
+                        aocl_int64_t *ldab, real *w, scomplex *z__, aocl_int64_t *ldz, scomplex *work,
+                        aocl_int64_t *lwork, real *rwork, aocl_int64_t *lrwork, aocl_int_t *iwork,
+                        aocl_int64_t *liwork, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -236,59 +262,33 @@ void chbevd_(char *jobz, char *uplo, integer *n, integer *kd, complex *ab, integ
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
-    integer ab_dim1, ab_offset, z_dim1, z_offset, i__1;
+    aocl_int64_t ab_dim1, ab_offset, z_dim1, z_offset, i__1;
     real r__1;
     /* Builtin functions */
     double sqrt(doublereal);
     /* Local variables */
     real eps;
-    integer inde;
+    aocl_int64_t inde;
     real anrm;
-    integer imax;
+    aocl_int64_t imax;
     real rmin, rmax;
-    integer llwk2;
-    extern /* Subroutine */
-        void
-        cgemm_(char *, char *, integer *, integer *, integer *, complex *, complex *, integer *,
-               complex *, integer *, complex *, complex *, integer *);
+    aocl_int64_t llwk2;
     real sigma;
-    extern logical lsame_(char *, char *, integer, integer);
-    integer iinfo;
-    extern /* Subroutine */
-        void
-        sscal_(integer *, real *, real *, integer *);
-    integer lwmin;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    aocl_int64_t iinfo;
+    aocl_int64_t lwmin;
     logical lower;
-    integer llrwk;
+    aocl_int64_t llrwk;
     logical wantz;
-    integer indwk2;
-    extern real clanhb_(char *, char *, integer *, integer *, complex *, integer *, real *);
-    integer iscale;
-    extern /* Subroutine */
-        void
-        clascl_(char *, integer *, integer *, real *, real *, integer *, integer *, complex *,
-                integer *, integer *),
-        cstedc_(char *, integer *, real *, real *, complex *, integer *, complex *, integer *,
-                real *, integer *, integer *, integer *, integer *),
-        chbtrd_(char *, char *, integer *, integer *, complex *, integer *, real *, real *,
-                complex *, integer *, complex *, integer *);
+    aocl_int64_t indwk2;
+    aocl_int64_t iscale;
     extern real slamch_(char *);
-    extern /* Subroutine */
-        void
-        clacpy_(char *, integer *, integer *, complex *, integer *, complex *, integer *);
     real safmin;
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real bignum;
-    integer indwrk, liwmin;
-    extern /* Subroutine */
-        void
-        ssterf_(integer *, real *, real *, integer *);
-    integer lrwmin;
+    aocl_int64_t indwrk, liwmin;
+    aocl_int64_t lrwmin;
     real smlnum;
     logical lquery;
-    extern real sroundup_lwork(integer *);
     /* -- LAPACK driver routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -376,11 +376,11 @@ void chbevd_(char *jobz, char *uplo, integer *n, integer *kd, complex *ab, integ
     }
     if(*info == 0)
     {
-        r__1 = sroundup_lwork(&lwmin);
+        r__1 = aocl_lapack_sroundup_lwork(&lwmin);
         work[1].r = r__1;
         work[1].i = 0.f; // , expr subst
         rwork[1] = (real)lrwmin;
-        iwork[1] = liwmin;
+        iwork[1] = (aocl_int_t)(liwmin);
         if(*lwork < lwmin && !lquery)
         {
             *info = -11;
@@ -397,7 +397,7 @@ void chbevd_(char *jobz, char *uplo, integer *n, integer *kd, complex *ab, integ
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("CHBEVD", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("CHBEVD", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
@@ -433,7 +433,7 @@ void chbevd_(char *jobz, char *uplo, integer *n, integer *kd, complex *ab, integ
     rmin = sqrt(smlnum);
     rmax = sqrt(bignum);
     /* Scale matrix to allowable range, if necessary. */
-    anrm = clanhb_("M", uplo, n, kd, &ab[ab_offset], ldab, &rwork[1]);
+    anrm = aocl_lapack_clanhb("M", uplo, n, kd, &ab[ab_offset], ldab, &rwork[1]);
     iscale = 0;
     if(anrm > 0.f && anrm < rmin)
     {
@@ -449,11 +449,11 @@ void chbevd_(char *jobz, char *uplo, integer *n, integer *kd, complex *ab, integ
     {
         if(lower)
         {
-            clascl_("B", kd, kd, &c_b13, &sigma, n, n, &ab[ab_offset], ldab, info);
+            aocl_lapack_clascl("B", kd, kd, &c_b13, &sigma, n, n, &ab[ab_offset], ldab, info);
         }
         else
         {
-            clascl_("Q", kd, kd, &c_b13, &sigma, n, n, &ab[ab_offset], ldab, info);
+            aocl_lapack_clascl("Q", kd, kd, &c_b13, &sigma, n, n, &ab[ab_offset], ldab, info);
         }
     }
     /* Call CHBTRD to reduce Hermitian band matrix to tridiagonal form. */
@@ -462,19 +462,20 @@ void chbevd_(char *jobz, char *uplo, integer *n, integer *kd, complex *ab, integ
     indwk2 = *n * *n + 1;
     llwk2 = *lwork - indwk2 + 1;
     llrwk = *lrwork - indwrk + 1;
-    chbtrd_(jobz, uplo, n, kd, &ab[ab_offset], ldab, &w[1], &rwork[inde], &z__[z_offset], ldz,
-            &work[1], &iinfo);
+    aocl_lapack_chbtrd(jobz, uplo, n, kd, &ab[ab_offset], ldab, &w[1], &rwork[inde], &z__[z_offset],
+                       ldz, &work[1], &iinfo);
     /* For eigenvalues only, call SSTERF. For eigenvectors, call CSTEDC. */
     if(!wantz)
     {
-        ssterf_(n, &w[1], &rwork[inde], info);
+        aocl_lapack_ssterf(n, &w[1], &rwork[inde], info);
     }
     else
     {
-        cstedc_("I", n, &w[1], &rwork[inde], &work[1], n, &work[indwk2], &llwk2, &rwork[indwrk],
-                &llrwk, &iwork[1], liwork, info);
-        cgemm_("N", "N", n, n, n, &c_b2, &z__[z_offset], ldz, &work[1], n, &c_b1, &work[indwk2], n);
-        clacpy_("A", n, n, &work[indwk2], n, &z__[z_offset], ldz);
+        aocl_lapack_cstedc("I", n, &w[1], &rwork[inde], &work[1], n, &work[indwk2], &llwk2,
+                           &rwork[indwrk], &llrwk, &iwork[1], liwork, info);
+        aocl_blas_cgemm("N", "N", n, n, n, &c_b2, &z__[z_offset], ldz, &work[1], n, &c_b1,
+                        &work[indwk2], n);
+        aocl_lapack_clacpy("A", n, n, &work[indwk2], n, &z__[z_offset], ldz);
     }
     /* If matrix was scaled, then rescale eigenvalues appropriately. */
     if(iscale == 1)
@@ -488,13 +489,13 @@ void chbevd_(char *jobz, char *uplo, integer *n, integer *kd, complex *ab, integ
             imax = *info - 1;
         }
         r__1 = 1.f / sigma;
-        sscal_(&imax, &r__1, &w[1], &c__1);
+        aocl_blas_sscal(&imax, &r__1, &w[1], &c__1);
     }
-    r__1 = sroundup_lwork(&lwmin);
+    r__1 = aocl_lapack_sroundup_lwork(&lwmin);
     work[1].r = r__1;
     work[1].i = 0.f; // , expr subst
     rwork[1] = (real)lrwmin;
-    iwork[1] = liwmin;
+    iwork[1] = (aocl_int_t)(liwmin);
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
     return;
     /* End of CHBEVD */

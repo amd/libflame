@@ -4,9 +4,9 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static complex c_b1 = {1.f, 0.f};
+static scomplex c_b1 = {{1.f}, {0.f}};
 static real c_b4 = 1.f;
-static integer c__1 = 1;
+static aocl_int64_t c__1 = 1;
 /* > \brief \b CLAUNHR_COL_GETRFNP2 */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -41,7 +41,7 @@ static integer c__1 = 1;
 /* > \verbatim */
 /* > */
 /* > CLAUNHR_COL_GETRFNP2 computes the modified LU factorization without */
-/* > pivoting of a complex general M-by-N matrix A. The factorization has */
+/* > pivoting of a scomplex general M-by-N matrix A. The factorization has */
 /* > the form: */
 /* > */
 /* > A - S = L * U, */
@@ -169,8 +169,26 @@ the unit diagonal elements of L are not stored. */
 /* > \endverbatim */
 /* ===================================================================== */
 /* Subroutine */
-void claunhr_col_getrfnp2_(integer *m, integer *n, complex *a, integer *lda, complex *d__,
-                           integer *info)
+/** Generated wrapper function */
+void claunhr_col_getrfnp2_(aocl_int_t *m, aocl_int_t *n, scomplex *a, aocl_int_t *lda, scomplex *d__,
+                           aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_claunhr_col_getrfnp2(m, n, a, lda, d__, info);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_claunhr_col_getrfnp2(&m_64, &n_64, a, &lda_64, d__, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_claunhr_col_getrfnp2(aocl_int64_t *m, aocl_int64_t *n, scomplex *a,
+                                      aocl_int64_t *lda, scomplex *d__, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -183,29 +201,17 @@ void claunhr_col_getrfnp2_(integer *m, integer *n, complex *a, integer *lda, com
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
-    integer a_dim1, a_offset, i__1, i__2;
+    aocl_int64_t a_dim1, a_offset, i__1, i__2;
     real r__1, r__2;
-    complex q__1;
+    scomplex q__1;
     /* Builtin functions */
-    double r_sign(real *, real *), r_imag(complex *);
-    void c_div(complex *, complex *, complex *);
+    double r_sign(real *, real *), r_imag(scomplex *);
+    void c_div(scomplex *, scomplex *, scomplex *);
     /* Local variables */
-    integer i__, n1, n2;
-    extern /* Subroutine */
-        void
-        cscal_(integer *, complex *, complex *, integer *),
-        cgemm_(char *, char *, integer *, integer *, integer *, complex *, complex *, integer *,
-               complex *, integer *, complex *, complex *, integer *);
-    integer iinfo;
+    aocl_int64_t i__, n1, n2;
+    aocl_int64_t iinfo;
     real sfmin;
-    extern /* Subroutine */
-        void
-        ctrsm_(char *, char *, char *, char *, integer *, integer *, complex *, complex *,
-               integer *, complex *, integer *);
     extern real slamch_(char *);
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.9.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -253,7 +259,7 @@ void claunhr_col_getrfnp2_(integer *m, integer *n, complex *a, integer *lda, com
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("CLAUNHR_COL_GETRFNP2", &i__1, (ftnlen)20);
+        aocl_blas_xerbla("CLAUNHR_COL_GETRFNP2", &i__1, (ftnlen)20);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
@@ -313,7 +319,7 @@ void claunhr_col_getrfnp2_(integer *m, integer *n, complex *a, integer *lda, com
         {
             i__1 = *m - 1;
             c_div(&q__1, &c_b1, &a[a_dim1 + 1]);
-            cscal_(&i__1, &q__1, &a[a_dim1 + 2], &c__1);
+            aocl_blas_cscal(&i__1, &q__1, &a[a_dim1 + 2], &c__1);
         }
         else
         {
@@ -333,24 +339,25 @@ void claunhr_col_getrfnp2_(integer *m, integer *n, complex *a, integer *lda, com
         n1 = fla_min(*m, *n) / 2;
         n2 = *n - n1;
         /* Factor B11, recursive call */
-        claunhr_col_getrfnp2_(&n1, &n1, &a[a_offset], lda, &d__[1], &iinfo);
+        aocl_lapack_claunhr_col_getrfnp2(&n1, &n1, &a[a_offset], lda, &d__[1], &iinfo);
         /* Solve for B21 */
         i__1 = *m - n1;
-        ctrsm_("R", "U", "N", "N", &i__1, &n1, &c_b1, &a[a_offset], lda, &a[n1 + 1 + a_dim1], lda);
+        aocl_blas_ctrsm("R", "U", "N", "N", &i__1, &n1, &c_b1, &a[a_offset], lda,
+                        &a[n1 + 1 + a_dim1], lda);
         /* Solve for B12 */
-        ctrsm_("L", "L", "N", "U", &n1, &n2, &c_b1, &a[a_offset], lda, &a[(n1 + 1) * a_dim1 + 1],
-               lda);
+        aocl_blas_ctrsm("L", "L", "N", "U", &n1, &n2, &c_b1, &a[a_offset], lda,
+                        &a[(n1 + 1) * a_dim1 + 1], lda);
         /* Update B22, i.e. compute the Schur complement */
         /* B22 := B22 - B21*B12 */
         i__1 = *m - n1;
         q__1.r = -1.f;
         q__1.i = -0.f; // , expr subst
-        cgemm_("N", "N", &i__1, &n2, &n1, &q__1, &a[n1 + 1 + a_dim1], lda,
-               &a[(n1 + 1) * a_dim1 + 1], lda, &c_b1, &a[n1 + 1 + (n1 + 1) * a_dim1], lda);
+        aocl_blas_cgemm("N", "N", &i__1, &n2, &n1, &q__1, &a[n1 + 1 + a_dim1], lda,
+                        &a[(n1 + 1) * a_dim1 + 1], lda, &c_b1, &a[n1 + 1 + (n1 + 1) * a_dim1], lda);
         /* Factor B22, recursive call */
         i__1 = *m - n1;
-        claunhr_col_getrfnp2_(&i__1, &n2, &a[n1 + 1 + (n1 + 1) * a_dim1], lda, &d__[n1 + 1],
-                              &iinfo);
+        aocl_lapack_claunhr_col_getrfnp2(&i__1, &n2, &a[n1 + 1 + (n1 + 1) * a_dim1], lda,
+                                         &d__[n1 + 1], &iinfo);
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
     return;

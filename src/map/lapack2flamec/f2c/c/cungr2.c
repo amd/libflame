@@ -109,8 +109,27 @@
 /* > \ingroup complexOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void cungr2_(integer *m, integer *n, integer *k, complex *a, integer *lda, complex *tau,
-             complex *work, integer *info)
+/** Generated wrapper function */
+void cungr2_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *k, scomplex *a, aocl_int_t *lda, scomplex *tau,
+             scomplex *work, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_cungr2(m, n, k, a, lda, tau, work, info);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t k_64 = *k;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_cungr2(&m_64, &n_64, &k_64, a, &lda_64, tau, work, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_cungr2(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *k, scomplex *a,
+                        aocl_int64_t *lda, scomplex *tau, scomplex *work, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -126,14 +145,7 @@ void cungr2_(integer *m, integer *n, integer *k, complex *a, integer *lda, compl
     /* Builtin functions */
     void r_cnjg(scomplex *, scomplex *);
     /* Local variables */
-    integer i__, j, l, ii;
-    extern /* Subroutine */
-        void
-        cscal_(integer *, complex *, complex *, integer *),
-        clarf_(char *, integer *, integer *, complex *, integer *, complex *, complex *, integer *,
-               complex *),
-        clacgv_(integer *, complex *, integer *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    aocl_int64_t i__, j, l, ii;
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -180,7 +192,7 @@ void cungr2_(integer *m, integer *n, integer *k, complex *a, integer *lda, compl
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("CUNGR2", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("CUNGR2", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
@@ -226,11 +238,12 @@ void cungr2_(integer *m, integer *n, integer *k, complex *a, integer *lda, compl
         i__2 = ii - 1;
         i__3 = *n - *m + ii;
         r_cnjg(&q__1, &tau[i__]);
-        clarf_("Right", &i__2, &i__3, &a[ii + a_dim1], lda, &q__1, &a[a_offset], lda, &work[1]);
+        aocl_lapack_clarf("Right", &i__2, &i__3, &a[ii + a_dim1], lda, &q__1, &a[a_offset], lda,
+                          &work[1]);
         i__2 = *n - *m + ii - 1;
         i__3 = i__;
-        q__1.real = -tau[i__3].real;
-        q__1.imag = -tau[i__3].imag; // , expr subst
+        q__1.r = -tau[i__3].r;
+        q__1.i = -tau[i__3].i; // , expr subst
         aocl_blas_cscal(&i__2, &q__1, &a[ii + a_dim1], lda);
         i__2 = *n - *m + ii - 1;
         aocl_lapack_clacgv(&i__2, &a[ii + a_dim1], lda);

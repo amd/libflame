@@ -4,12 +4,12 @@
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
  /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static complex c_b1 = {0.f, 0.f};
-static complex c_b2 = {1.f, 0.f};
-static integer c__1 = 1;
-static integer c_n1 = -1;
-static integer c__0 = 0;
-static integer c__2 = 2;
+static scomplex c_b1 = {{0.f}, {0.f}};
+static scomplex c_b2 = {{1.f}, {0.f}};
+static aocl_int64_t c__1 = 1;
+static aocl_int64_t c_n1 = -1;
+static aocl_int64_t c__0 = 0;
+static aocl_int64_t c__2 = 2;
 /* > \brief <b> CGELSY solves overdetermined or underdetermined systems for GE matrices</b> */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -214,9 +214,35 @@ the routine */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void cgelsy_(integer *m, integer *n, integer *nrhs, complex *a, integer *lda, complex *b,
-             integer *ldb, integer *jpvt, real *rcond, integer *rank, complex *work, integer *lwork,
-             real *rwork, integer *info)
+/** Generated wrapper function */
+void cgelsy_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *nrhs, scomplex *a, aocl_int_t *lda,
+             scomplex *b, aocl_int_t *ldb, aocl_int_t *jpvt, real *rcond, aocl_int_t *rank,
+             scomplex *work, aocl_int_t *lwork, real *rwork, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_cgelsy(m, n, nrhs, a, lda, b, ldb, jpvt, rcond, rank, work, lwork, rwork, info);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t nrhs_64 = *nrhs;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t ldb_64 = *ldb;
+    aocl_int64_t rank_64 = *rank;
+    aocl_int64_t lwork_64 = *lwork;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_cgelsy(&m_64, &n_64, &nrhs_64, a, &lda_64, b, &ldb_64, jpvt, rcond, &rank_64, work,
+                       &lwork_64, rwork, &info_64);
+
+    *rank = (aocl_int_t)rank_64;
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_cgelsy(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *nrhs, scomplex *a,
+                        aocl_int64_t *lda, scomplex *b, aocl_int64_t *ldb, aocl_int_t *jpvt,
+                        real *rcond, aocl_int64_t *rank, scomplex *work, aocl_int64_t *lwork,
+                        real *rwork, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -236,55 +262,20 @@ void cgelsy_(integer *m, integer *n, integer *nrhs, complex *a, integer *lda, co
     real r__1, r__2;
     scomplex q__1;
     /* Builtin functions */
-    double c_abs(complex *);
+    double c_abs(scomplex *);
     /* Local variables */
     aocl_int64_t i__, j;
     scomplex c1, c2, s1, s2;
     aocl_int64_t nb, mn, nb1, nb2, nb3, nb4;
     real anrm, bnrm, smin, smax;
-    integer iascl, ibscl;
-    extern /* Subroutine */
-        void
-        ccopy_(integer *, complex *, integer *, complex *, integer *);
-    integer ismin, ismax;
-    extern /* Subroutine */
-        void
-        ctrsm_(char *, char *, char *, char *, integer *, integer *, complex *, complex *,
-               integer *, complex *, integer *),
-        claic1_(integer *, integer *, complex *, real *, complex *, complex *, real *, complex *,
-                complex *);
+    aocl_int64_t iascl, ibscl;
+    aocl_int64_t ismin, ismax;
     real wsize;
-    extern /* Subroutine */
-        void
-        cgeqp3_(integer *, integer *, complex *, integer *, integer *, complex *, complex *,
-                integer *, real *, integer *);
-    extern real clange_(char *, integer *, integer *, complex *, integer *, real *);
-    extern /* Subroutine */
-        void
-        clascl_(char *, integer *, integer *, real *, real *, integer *, integer *, complex *,
-                integer *, integer *);
     extern real slamch_(char *);
-    extern /* Subroutine */
-        void
-        claset_(char *, integer *, integer *, complex *, complex *, complex *, integer *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     real bignum;
-    extern /* Subroutine */
-        void
-        cunmqr_(char *, char *, integer *, integer *, integer *, complex *, integer *, complex *,
-                complex *, integer *, complex *, integer *, integer *);
     real sminpr, smaxpr, smlnum;
-    extern /* Subroutine */
-        void
-        cunmrz_(char *, char *, integer *, integer *, integer *, integer *, complex *, integer *,
-                complex *, complex *, integer *, complex *, integer *, integer *);
-    integer lwkopt;
+    aocl_int64_t lwkopt;
     logical lquery;
-    extern /* Subroutine */
-        void
-        ctzrzf_(integer *, integer *, complex *, integer *, complex *, complex *, integer *,
-                integer *);
     /* -- LAPACK driver routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -377,7 +368,7 @@ void cgelsy_(integer *m, integer *n, integer *nrhs, complex *a, integer *lda, co
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("CGELSY", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("CGELSY", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
@@ -417,7 +408,7 @@ void cgelsy_(integer *m, integer *n, integer *nrhs, complex *a, integer *lda, co
     {
         /* Matrix all zero. Return zero solution. */
         i__1 = fla_max(*m, *n);
-        claset_("F", &i__1, nrhs, &c_b1, &c_b1, &b[b_offset], ldb);
+        aocl_lapack_claset("F", &i__1, nrhs, &c_b1, &c_b1, &b[b_offset], ldb);
         *rank = 0;
         goto L70;
     }
@@ -441,7 +432,7 @@ void cgelsy_(integer *m, integer *n, integer *nrhs, complex *a, integer *lda, co
     aocl_lapack_cgeqp3(m, n, &a[a_offset], lda, &jpvt[1], &work[1], &work[mn + 1], &i__1, &rwork[1],
                        info);
     i__1 = mn + 1;
-    wsize = mn + work[i__1].real;
+    wsize = mn + work[i__1].r;
     /* scomplex workspace: MN+NB*(N+1). real workspace 2*N. */
     /* Details of Householder rotations stored in WORK(1:MN). */
     /* Determine RANK using incremental condition estimation */
@@ -457,7 +448,7 @@ void cgelsy_(integer *m, integer *n, integer *nrhs, complex *a, integer *lda, co
     {
         *rank = 0;
         i__1 = fla_max(*m, *n);
-        claset_("F", &i__1, nrhs, &c_b1, &c_b1, &b[b_offset], ldb);
+        aocl_lapack_claset("F", &i__1, nrhs, &c_b1, &c_b1, &b[b_offset], ldb);
         goto L70;
     }
     else
@@ -468,10 +459,10 @@ L10:
     if(*rank < mn)
     {
         i__ = *rank + 1;
-        claic1_(&c__2, rank, &work[ismin], &smin, &a[i__ * a_dim1 + 1], &a[i__ + i__ * a_dim1],
-                &sminpr, &s1, &c1);
-        claic1_(&c__1, rank, &work[ismax], &smax, &a[i__ * a_dim1 + 1], &a[i__ + i__ * a_dim1],
-                &smaxpr, &s2, &c2);
+        aocl_lapack_claic1(&c__2, rank, &work[ismin], &smin, &a[i__ * a_dim1 + 1],
+                           &a[i__ + i__ * a_dim1], &sminpr, &s1, &c1);
+        aocl_lapack_claic1(&c__1, rank, &work[ismax], &smax, &a[i__ * a_dim1 + 1],
+                           &a[i__ + i__ * a_dim1], &smaxpr, &s2, &c2);
         if(smaxpr * *rcond <= sminpr)
         {
             i__1 = *rank;
@@ -518,17 +509,17 @@ L10:
     /* Details of Householder rotations stored in WORK(MN+1:2*MN) */
     /* B(1:M,1:NRHS) := Q**H * B(1:M,1:NRHS) */
     i__1 = *lwork - (mn << 1);
-    cunmqr_("Left", "Conjugate transpose", m, nrhs, &mn, &a[a_offset], lda, &work[1], &b[b_offset],
-            ldb, &work[(mn << 1) + 1], &i__1, info);
+    aocl_lapack_cunmqr("Left", "Conjugate transpose", m, nrhs, &mn, &a[a_offset], lda, &work[1],
+                       &b[b_offset], ldb, &work[(mn << 1) + 1], &i__1, info);
     /* Computing MAX */
     i__1 = (mn << 1) + 1;
     r__1 = wsize;
     r__2 = (mn << 1) + work[i__1].r; // , expr subst
     wsize = fla_max(r__1, r__2);
-    /* complex workspace: 2*MN+NB*NRHS. */
+    /* scomplex workspace: 2*MN+NB*NRHS. */
     /* B(1:RANK,1:NRHS) := inv(T11) * B(1:RANK,1:NRHS) */
-    ctrsm_("Left", "Upper", "No transpose", "Non-unit", rank, nrhs, &c_b2, &a[a_offset], lda,
-           &b[b_offset], ldb);
+    aocl_blas_ctrsm("Left", "Upper", "No transpose", "Non-unit", rank, nrhs, &c_b2, &a[a_offset],
+                    lda, &b[b_offset], ldb);
     i__1 = *nrhs;
     for(j = 1; j <= i__1; ++j)
     {
@@ -547,8 +538,8 @@ L10:
     {
         i__1 = *n - *rank;
         i__2 = *lwork - (mn << 1);
-        cunmrz_("Left", "Conjugate transpose", n, nrhs, rank, &i__1, &a[a_offset], lda,
-                &work[mn + 1], &b[b_offset], ldb, &work[(mn << 1) + 1], &i__2, info);
+        aocl_lapack_cunmrz("Left", "Conjugate transpose", n, nrhs, rank, &i__1, &a[a_offset], lda,
+                           &work[mn + 1], &b[b_offset], ldb, &work[(mn << 1) + 1], &i__2, info);
     }
     /* scomplex workspace: 2*MN+NRHS. */
     /* B(1:N,1:NRHS) := P * B(1:N,1:NRHS) */

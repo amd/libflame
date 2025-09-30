@@ -100,31 +100,37 @@ static doublereal c_b11 = -1.;
 /* > \ingroup doublePOcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void dpotrf2_(char *uplo, integer *n, doublereal *a, integer *lda, integer *info)
+/** Generated wrapper function */
+void dpotrf2_(char *uplo, aocl_int_t *n, doublereal *a, aocl_int_t *lda, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_dpotrf2(uplo, n, a, lda, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_dpotrf2(uplo, &n_64, a, &lda_64, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_dpotrf2(char *uplo, aocl_int64_t *n, doublereal *a, aocl_int64_t *lda,
+                         aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dpotrf2 inputs: uplo %c, n %" FLA_IS ", lda %" FLA_IS "", *uplo, *n, *lda);
     /* System generated locals */
-    integer a_dim1, a_offset, i__1;
+    aocl_int64_t a_dim1, a_offset, i__1;
     /* Builtin functions */
     double sqrt(doublereal);
     /* Local variables */
-    integer n1, n2;
-    extern logical lsame_(char *, char *, integer, integer);
-    integer iinfo;
-    extern /* Subroutine */
-        void
-        dtrsm_(char *, char *, char *, char *, integer *, integer *, doublereal *, doublereal *,
-               integer *, doublereal *, integer *);
+    aocl_int64_t n1, n2;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    aocl_int64_t iinfo;
     logical upper;
-    extern /* Subroutine */
-        void
-        dsyrk_(char *, char *, integer *, integer *, doublereal *, doublereal *, integer *,
-               doublereal *, doublereal *, integer *);
     extern logical disnan_(doublereal *);
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.7.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -168,7 +174,7 @@ void dpotrf2_(char *uplo, integer *n, doublereal *a, integer *lda, integer *info
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("DPOTRF2", &i__1, (ftnlen)7);
+        aocl_blas_xerbla("DPOTRF2", &i__1, (ftnlen)7);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -197,7 +203,7 @@ void dpotrf2_(char *uplo, integer *n, doublereal *a, integer *lda, integer *info
         n1 = *n / 2;
         n2 = *n - n1;
         /* Factor A11 */
-        dpotrf2_(uplo, &n1, &a[a_dim1 + 1], lda, &iinfo);
+        aocl_lapack_dpotrf2(uplo, &n1, &a[a_dim1 + 1], lda, &iinfo);
         if(iinfo != 0)
         {
             *info = iinfo;
@@ -208,12 +214,12 @@ void dpotrf2_(char *uplo, integer *n, doublereal *a, integer *lda, integer *info
         if(upper)
         {
             /* Update and scale A12 */
-            dtrsm_("L", "U", "T", "N", &n1, &n2, &c_b9, &a[a_dim1 + 1], lda,
-                   &a[(n1 + 1) * a_dim1 + 1], lda);
+            aocl_blas_dtrsm("L", "U", "T", "N", &n1, &n2, &c_b9, &a[a_dim1 + 1], lda,
+                            &a[(n1 + 1) * a_dim1 + 1], lda);
             /* Update and factor A22 */
-            dsyrk_(uplo, "T", &n2, &n1, &c_b11, &a[(n1 + 1) * a_dim1 + 1], lda, &c_b9,
-                   &a[n1 + 1 + (n1 + 1) * a_dim1], lda);
-            dpotrf2_(uplo, &n2, &a[n1 + 1 + (n1 + 1) * a_dim1], lda, &iinfo);
+            aocl_blas_dsyrk(uplo, "T", &n2, &n1, &c_b11, &a[(n1 + 1) * a_dim1 + 1], lda, &c_b9,
+                            &a[n1 + 1 + (n1 + 1) * a_dim1], lda);
+            aocl_lapack_dpotrf2(uplo, &n2, &a[n1 + 1 + (n1 + 1) * a_dim1], lda, &iinfo);
             if(iinfo != 0)
             {
                 *info = iinfo + n1;
@@ -225,12 +231,12 @@ void dpotrf2_(char *uplo, integer *n, doublereal *a, integer *lda, integer *info
         else
         {
             /* Update and scale A21 */
-            dtrsm_("R", "L", "T", "N", &n2, &n1, &c_b9, &a[a_dim1 + 1], lda, &a[n1 + 1 + a_dim1],
-                   lda);
+            aocl_blas_dtrsm("R", "L", "T", "N", &n2, &n1, &c_b9, &a[a_dim1 + 1], lda,
+                            &a[n1 + 1 + a_dim1], lda);
             /* Update and factor A22 */
-            dsyrk_(uplo, "N", &n2, &n1, &c_b11, &a[n1 + 1 + a_dim1], lda, &c_b9,
-                   &a[n1 + 1 + (n1 + 1) * a_dim1], lda);
-            dpotrf2_(uplo, &n2, &a[n1 + 1 + (n1 + 1) * a_dim1], lda, &iinfo);
+            aocl_blas_dsyrk(uplo, "N", &n2, &n1, &c_b11, &a[n1 + 1 + a_dim1], lda, &c_b9,
+                            &a[n1 + 1 + (n1 + 1) * a_dim1], lda);
+            aocl_lapack_dpotrf2(uplo, &n2, &a[n1 + 1 + (n1 + 1) * a_dim1], lda, &iinfo);
             if(iinfo != 0)
             {
                 *info = iinfo + n1;

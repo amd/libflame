@@ -4,7 +4,7 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
+static aocl_int64_t c__1 = 1;
 /* > \brief \b DLANST returns the value of the 1-norm, or the Frobenius norm, or the infinity norm,
  * or the ele ment of largest absolute value of a real symmetric tridiagonal matrix. */
 /* =========== DOCUMENTATION =========== */
@@ -100,6 +100,17 @@ static integer c__1 = 1;
 /** Generated wrapper function */
 doublereal dlanst_(char *norm, aocl_int_t *n, doublereal *d__, doublereal *e)
 {
+#if FLA_ENABLE_ILP64
+    return aocl_lapack_dlanst(norm, n, d__, e);
+#else
+    aocl_int64_t n_64 = *n;
+
+    return aocl_lapack_dlanst(norm, &n_64, d__, e);
+#endif
+}
+
+doublereal aocl_lapack_dlanst(char *norm, aocl_int64_t *n, doublereal *d__, doublereal *e)
+{
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dlanst inputs: norm %c, n %" FLA_IS "", *norm, *n);
     /* System generated locals */
@@ -110,12 +121,9 @@ doublereal dlanst_(char *norm, aocl_int_t *n, doublereal *d__, doublereal *e)
     /* Local variables */
     aocl_int64_t i__;
     doublereal sum, scale;
-    extern logical lsame_(char *, char *, integer, integer);
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     doublereal anorm;
     extern logical disnan_(doublereal *);
-    extern /* Subroutine */
-        void
-        dlassq_(integer *, doublereal *, integer *, doublereal *, doublereal *);
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */

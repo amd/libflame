@@ -4,10 +4,10 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__0 = 0;
+static aocl_int64_t c__0 = 0;
 static doublereal c_b7 = 1.;
-static integer c__1 = 1;
-static integer c_n1 = -1;
+static aocl_int64_t c__1 = 1;
+static aocl_int64_t c_n1 = -1;
 /* > \brief \b DLASD6 computes the SVD of an updated upper bidiagonal matrix obtained by merging two
  * smaller o nes by appending a row. Used by sbdsdc. */
 /* =========== DOCUMENTATION =========== */
@@ -314,12 +314,47 @@ and VL(NL+2:M) */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void dlasd6_(integer *icompq, integer *nl, integer *nr, integer *sqre, doublereal *d__,
-             doublereal *vf, doublereal *vl, doublereal *alpha, doublereal *beta, integer *idxq,
-             integer *perm, integer *givptr, integer *givcol, integer *ldgcol, doublereal *givnum,
-             integer *ldgnum, doublereal *poles, doublereal *difl, doublereal *difr,
-             doublereal *z__, integer *k, doublereal *c__, doublereal *s, doublereal *work,
-             integer *iwork, integer *info)
+/** Generated wrapper function */
+void dlasd6_(aocl_int_t *icompq, aocl_int_t *nl, aocl_int_t *nr, aocl_int_t *sqre, doublereal *d__,
+             doublereal *vf, doublereal *vl, doublereal *alpha, doublereal *beta, aocl_int_t *idxq,
+             aocl_int_t *perm, aocl_int_t *givptr, aocl_int_t *givcol, aocl_int_t *ldgcol,
+             doublereal *givnum, aocl_int_t *ldgnum, doublereal *poles, doublereal *difl,
+             doublereal *difr, doublereal *z__, aocl_int_t *k, doublereal *c__, doublereal *s,
+             doublereal *work, aocl_int_t *iwork, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_dlasd6(icompq, nl, nr, sqre, d__, vf, vl, alpha, beta, idxq, perm, givptr, givcol,
+                       ldgcol, givnum, ldgnum, poles, difl, difr, z__, k, c__, s, work, iwork,
+                       info);
+#else
+    aocl_int64_t icompq_64 = *icompq;
+    aocl_int64_t nl_64 = *nl;
+    aocl_int64_t nr_64 = *nr;
+    aocl_int64_t sqre_64 = *sqre;
+    aocl_int64_t givptr_64 = *givptr;
+    aocl_int64_t ldgcol_64 = *ldgcol;
+    aocl_int64_t ldgnum_64 = *ldgnum;
+    aocl_int64_t k_64 = *k;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_dlasd6(&icompq_64, &nl_64, &nr_64, &sqre_64, d__, vf, vl, alpha, beta, idxq, perm,
+                       &givptr_64, givcol, &ldgcol_64, givnum, &ldgnum_64, poles, difl, difr, z__,
+                       &k_64, c__, s, work, iwork, &info_64);
+
+    *givptr = (aocl_int_t)givptr_64;
+    *k = (aocl_int_t)k_64;
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_dlasd6(aocl_int64_t *icompq, aocl_int64_t *nl, aocl_int64_t *nr,
+                        aocl_int64_t *sqre, doublereal *d__, doublereal *vf, doublereal *vl,
+                        doublereal *alpha, doublereal *beta, aocl_int_t *idxq, aocl_int_t *perm,
+                        aocl_int64_t *givptr, aocl_int_t *givcol, aocl_int64_t *ldgcol,
+                        doublereal *givnum, aocl_int64_t *ldgnum, doublereal *poles,
+                        doublereal *difl, doublereal *difr, doublereal *z__, aocl_int64_t *k,
+                        doublereal *c__, doublereal *s, doublereal *work, aocl_int_t *iwork,
+                        aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dlasd6 inputs: icompq %" FLA_IS ", nl %" FLA_IS ", nr %" FLA_IS
@@ -327,27 +362,12 @@ void dlasd6_(integer *icompq, integer *nl, integer *nr, integer *sqre, doublerea
                       "",
                       *icompq, *nl, *nr, *sqre, *idxq, *ldgcol, *ldgnum);
     /* System generated locals */
-    integer givcol_dim1, givcol_offset, givnum_dim1, givnum_offset, poles_dim1, poles_offset, i__1;
+    aocl_int64_t givcol_dim1, givcol_offset, givnum_dim1, givnum_offset, poles_dim1, poles_offset,
+        i__1;
     doublereal d__1, d__2;
     /* Local variables */
-    integer i__, m, n, n1, n2, iw, idx, idxc, idxp, ivfw, ivlw;
-    extern /* Subroutine */
-        void
-        dcopy_(integer *, doublereal *, integer *, doublereal *, integer *),
-        dlasd7_(integer *, integer *, integer *, integer *, integer *, doublereal *, doublereal *,
-                doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *,
-                doublereal *, doublereal *, integer *, integer *, integer *, integer *, integer *,
-                integer *, integer *, doublereal *, integer *, doublereal *, doublereal *,
-                integer *),
-        dlasd8_(integer *, integer *, doublereal *, doublereal *, doublereal *, doublereal *,
-                doublereal *, doublereal *, integer *, doublereal *, doublereal *, integer *),
-        dlascl_(char *, integer *, integer *, doublereal *, doublereal *, integer *, integer *,
-                doublereal *, integer *, integer *),
-        dlamrg_(integer *, integer *, doublereal *, integer *, integer *, integer *);
-    integer isigma;
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    aocl_int64_t i__, m, n, n1, n2, iw, idx, idxc, idxp, ivfw, ivlw;
+    aocl_int64_t isigma;
     doublereal orgnrm;
     /* -- LAPACK auxiliary routine (version 3.7.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -419,7 +439,7 @@ void dlasd6_(integer *icompq, integer *nl, integer *nr, integer *sqre, doublerea
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("DLASD6", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("DLASD6", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -448,16 +468,17 @@ void dlasd6_(integer *icompq, integer *nl, integer *nr, integer *sqre, doublerea
         }
         /* L10: */
     }
-    dlascl_("G", &c__0, &c__0, &orgnrm, &c_b7, &n, &c__1, &d__[1], &n, info);
+    aocl_lapack_dlascl("G", &c__0, &c__0, &orgnrm, &c_b7, &n, &c__1, &d__[1], &n, info);
     *alpha /= orgnrm;
     *beta /= orgnrm;
     /* Sort and Deflate singular values. */
-    dlasd7_(icompq, nl, nr, sqre, k, &d__[1], &z__[1], &work[iw], &vf[1], &work[ivfw], &vl[1],
-            &work[ivlw], alpha, beta, &work[isigma], &iwork[idx], &iwork[idxp], &idxq[1], &perm[1],
-            givptr, &givcol[givcol_offset], ldgcol, &givnum[givnum_offset], ldgnum, c__, s, info);
+    aocl_lapack_dlasd7(icompq, nl, nr, sqre, k, &d__[1], &z__[1], &work[iw], &vf[1], &work[ivfw],
+                       &vl[1], &work[ivlw], alpha, beta, &work[isigma], &iwork[idx], &iwork[idxp],
+                       &idxq[1], &perm[1], givptr, &givcol[givcol_offset], ldgcol,
+                       &givnum[givnum_offset], ldgnum, c__, s, info);
     /* Solve Secular Equation, compute DIFL, DIFR, and update VF, VL. */
-    dlasd8_(icompq, k, &d__[1], &z__[1], &vf[1], &vl[1], &difl[1], &difr[1], ldgnum, &work[isigma],
-            &work[iw], info);
+    aocl_lapack_dlasd8(icompq, k, &d__[1], &z__[1], &vf[1], &vl[1], &difl[1], &difr[1], ldgnum,
+                       &work[isigma], &work[iw], info);
     /* Report the possible convergence failure. */
     if(*info != 0)
     {
@@ -467,15 +488,15 @@ void dlasd6_(integer *icompq, integer *nl, integer *nr, integer *sqre, doublerea
     /* Save the poles if ICOMPQ = 1. */
     if(*icompq == 1)
     {
-        dcopy_(k, &d__[1], &c__1, &poles[poles_dim1 + 1], &c__1);
-        dcopy_(k, &work[isigma], &c__1, &poles[(poles_dim1 << 1) + 1], &c__1);
+        aocl_blas_dcopy(k, &d__[1], &c__1, &poles[poles_dim1 + 1], &c__1);
+        aocl_blas_dcopy(k, &work[isigma], &c__1, &poles[(poles_dim1 << 1) + 1], &c__1);
     }
     /* Unscale. */
-    dlascl_("G", &c__0, &c__0, &c_b7, &orgnrm, &n, &c__1, &d__[1], &n, info);
+    aocl_lapack_dlascl("G", &c__0, &c__0, &c_b7, &orgnrm, &n, &c__1, &d__[1], &n, info);
     /* Prepare the IDXQ sorting permutation. */
     n1 = *k;
     n2 = n - *k;
-    dlamrg_(&n1, &n2, &d__[1], &c__1, &c_n1, &idxq[1]);
+    aocl_lapack_dlamrg(&n1, &n2, &d__[1], &c__1, &c_n1, &idxq[1]);
     AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of DLASD6 */

@@ -1,10 +1,10 @@
 #include "FLA_f2c.h"
 #include "FLA_lapack2flame_return_defs.h"
 
-int zpotrf_check(char *uplo, integer *n, dcomplex *a, integer *lda, integer *info)
+int zpotrf_check(char *uplo, aocl_int64_t *n, dcomplex *a, aocl_int64_t *lda, aocl_int64_t *info)
 {
     /* System generated locals */
-    integer a_dim1, a_offset, i__1;
+    aocl_int64_t a_dim1, a_offset, i__1;
     /* Local variables */
     logical upper;
 
@@ -30,7 +30,7 @@ int zpotrf_check(char *uplo, integer *n, dcomplex *a, integer *lda, integer *inf
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("ZPOTRF", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("ZPOTRF", &i__1, (ftnlen)6);
         return LAPACK_FAILURE;
     }
     /* Quick return if possible */

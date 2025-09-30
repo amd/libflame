@@ -42,6 +42,6 @@ void set_identity_d( double *A, integer M, integer N, integer LDA );
 void set_identity_c( scomplex *A, integer M, integer N, integer LDA );
 void set_identity_z( dcomplex *A, integer M, integer N, integer LDA );
 
-/* Division of complex types */
+/* Division of scomplex types */
 void c_div_t(scomplex *cp, scomplex *ap, scomplex *bp);
 void z_div_t(dcomplex *cp, dcomplex *ap, dcomplex *bp);

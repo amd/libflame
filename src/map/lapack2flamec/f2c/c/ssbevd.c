@@ -6,7 +6,7 @@
 #include "FLA_f2c.h" /* Table of constant values */
 static real c_b11 = 1.f;
 static real c_b18 = 0.f;
-static integer c__1 = 1;
+static aocl_int64_t c__1 = 1;
 /* > \brief <b> SSBEVD computes the eigenvalues and, optionally, the left and/or right eigenvectors
  * for OTHER matrices</b> */
 /* =========== DOCUMENTATION =========== */
@@ -191,57 +191,58 @@ i */
 /* > \ingroup hbevd */
 /* ===================================================================== */
 /* Subroutine */
-void ssbevd_(char *jobz, char *uplo, integer *n, integer *kd, real *ab, integer *ldab, real *w,
-             real *z__, integer *ldz, real *work, integer *lwork, integer *iwork, integer *liwork,
-             integer *info)
+/** Generated wrapper function */
+void ssbevd_(char *jobz, char *uplo, aocl_int_t *n, aocl_int_t *kd, real *ab, aocl_int_t *ldab,
+             real *w, real *z__, aocl_int_t *ldz, real *work, aocl_int_t *lwork, aocl_int_t *iwork,
+             aocl_int_t *liwork, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_ssbevd(jobz, uplo, n, kd, ab, ldab, w, z__, ldz, work, lwork, iwork, liwork, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t kd_64 = *kd;
+    aocl_int64_t ldab_64 = *ldab;
+    aocl_int64_t ldz_64 = *ldz;
+    aocl_int64_t lwork_64 = *lwork;
+    aocl_int64_t liwork_64 = *liwork;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_ssbevd(jobz, uplo, &n_64, &kd_64, ab, &ldab_64, w, z__, &ldz_64, work, &lwork_64,
+                       iwork, &liwork_64, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_ssbevd(char *jobz, char *uplo, aocl_int64_t *n, aocl_int64_t *kd, real *ab,
+                        aocl_int64_t *ldab, real *w, real *z__, aocl_int64_t *ldz, real *work,
+                        aocl_int64_t *lwork, aocl_int_t *iwork, aocl_int64_t *liwork,
+                        aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF(
-             "ssbevd inputs: jobz %c, uplo %c, n %" FLA_IS ", kd %" FLA_IS ", ldab %" FLA_IS
-             ", ldz %" FLA_IS ", liwork %" FLA_IS "",
-             *jobz, *uplo, *n, *kd, *ldab, *ldz, *liwork);
+    AOCL_DTL_SNPRINTF("ssbevd inputs: jobz %c, uplo %c, n %" FLA_IS ", kd %" FLA_IS
+                      ", ldab %" FLA_IS ", ldz %" FLA_IS ", liwork %" FLA_IS "",
+                      *jobz, *uplo, *n, *kd, *ldab, *ldz, *liwork);
     /* System generated locals */
-    integer ab_dim1, ab_offset, z_dim1, z_offset, i__1;
+    aocl_int64_t ab_dim1, ab_offset, z_dim1, z_offset, i__1;
     real r__1;
     /* Builtin functions */
     double sqrt(doublereal);
     /* Local variables */
     real eps;
-    integer inde;
+    aocl_int64_t inde;
     real anrm, rmin, rmax, sigma;
-    extern logical lsame_(char *, char *, integer, integer);
-    integer iinfo;
-    extern /* Subroutine */
-        void
-        sscal_(integer *, real *, real *, integer *),
-        sgemm_(char *, char *, integer *, integer *, integer *, real *, real *, integer *, real *,
-               integer *, real *, real *, integer *);
-    integer lwmin;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    aocl_int64_t iinfo;
+    aocl_int64_t lwmin;
     logical lower, wantz;
-    integer indwk2, llwrk2, iscale;
+    aocl_int64_t indwk2, llwrk2, iscale;
     extern real slamch_(char *);
     real safmin;
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real bignum;
-    extern real slansb_(char *, char *, integer *, integer *, real *, integer *, real *);
-    extern /* Subroutine */
-        void
-        slascl_(char *, integer *, integer *, real *, real *, integer *, integer *, real *,
-                integer *, integer *),
-        sstedc_(char *, integer *, real *, real *, real *, integer *, real *, integer *, integer *,
-                integer *, integer *),
-        slacpy_(char *, integer *, integer *, real *, integer *, real *, integer *);
-    integer indwrk, liwmin;
-    extern /* Subroutine */
-        void
-        ssbtrd_(char *, char *, integer *, integer *, real *, integer *, real *, real *, real *,
-                integer *, real *, integer *),
-        ssterf_(integer *, real *, real *, integer *);
+    aocl_int64_t indwrk, liwmin;
     real smlnum;
     logical lquery;
-    extern real sroundup_lwork(integer *);
     /* -- LAPACK driver routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -323,8 +324,8 @@ void ssbevd_(char *jobz, char *uplo, integer *n, integer *kd, real *ab, integer 
     }
     if(*info == 0)
     {
-        work[1] = sroundup_lwork(&lwmin);
-        iwork[1] = liwmin;
+        work[1] = aocl_lapack_sroundup_lwork(&lwmin);
+        iwork[1] = (aocl_int_t)(liwmin);
         if(*lwork < lwmin && !lquery)
         {
             *info = -11;
@@ -337,7 +338,7 @@ void ssbevd_(char *jobz, char *uplo, integer *n, integer *kd, real *ab, integer 
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("SSBEVD", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("SSBEVD", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -370,7 +371,7 @@ void ssbevd_(char *jobz, char *uplo, integer *n, integer *kd, real *ab, integer 
     rmin = sqrt(smlnum);
     rmax = sqrt(bignum);
     /* Scale matrix to allowable range, if necessary. */
-    anrm = slansb_("M", uplo, n, kd, &ab[ab_offset], ldab, &work[1]);
+    anrm = aocl_lapack_slansb("M", uplo, n, kd, &ab[ab_offset], ldab, &work[1]);
     iscale = 0;
     if(anrm > 0.f && anrm < rmin)
     {
@@ -386,11 +387,11 @@ void ssbevd_(char *jobz, char *uplo, integer *n, integer *kd, real *ab, integer 
     {
         if(lower)
         {
-            slascl_("B", kd, kd, &c_b11, &sigma, n, n, &ab[ab_offset], ldab, info);
+            aocl_lapack_slascl("B", kd, kd, &c_b11, &sigma, n, n, &ab[ab_offset], ldab, info);
         }
         else
         {
-            slascl_("Q", kd, kd, &c_b11, &sigma, n, n, &ab[ab_offset], ldab, info);
+            aocl_lapack_slascl("Q", kd, kd, &c_b11, &sigma, n, n, &ab[ab_offset], ldab, info);
         }
     }
     /* Call SSBTRD to reduce symmetric band matrix to tridiagonal form. */
@@ -398,29 +399,29 @@ void ssbevd_(char *jobz, char *uplo, integer *n, integer *kd, real *ab, integer 
     indwrk = inde + *n;
     indwk2 = indwrk + *n * *n;
     llwrk2 = *lwork - indwk2 + 1;
-    ssbtrd_(jobz, uplo, n, kd, &ab[ab_offset], ldab, &w[1], &work[inde], &z__[z_offset], ldz,
-            &work[indwrk], &iinfo);
+    aocl_lapack_ssbtrd(jobz, uplo, n, kd, &ab[ab_offset], ldab, &w[1], &work[inde], &z__[z_offset],
+                       ldz, &work[indwrk], &iinfo);
     /* For eigenvalues only, call SSTERF. For eigenvectors, call SSTEDC. */
     if(!wantz)
     {
-        ssterf_(n, &w[1], &work[inde], info);
+        aocl_lapack_ssterf(n, &w[1], &work[inde], info);
     }
     else
     {
-        sstedc_("I", n, &w[1], &work[inde], &work[indwrk], n, &work[indwk2], &llwrk2, &iwork[1],
-                liwork, info);
-        sgemm_("N", "N", n, n, n, &c_b11, &z__[z_offset], ldz, &work[indwrk], n, &c_b18,
-               &work[indwk2], n);
-        slacpy_("A", n, n, &work[indwk2], n, &z__[z_offset], ldz);
+        aocl_lapack_sstedc("I", n, &w[1], &work[inde], &work[indwrk], n, &work[indwk2], &llwrk2,
+                           &iwork[1], liwork, info);
+        aocl_blas_sgemm("N", "N", n, n, n, &c_b11, &z__[z_offset], ldz, &work[indwrk], n, &c_b18,
+                        &work[indwk2], n);
+        aocl_lapack_slacpy("A", n, n, &work[indwk2], n, &z__[z_offset], ldz);
     }
     /* If matrix was scaled, then rescale eigenvalues appropriately. */
     if(iscale == 1)
     {
         r__1 = 1.f / sigma;
-        sscal_(n, &r__1, &w[1], &c__1);
+        aocl_blas_sscal(n, &r__1, &w[1], &c__1);
     }
-    work[1] = sroundup_lwork(&lwmin);
-    iwork[1] = liwmin;
+    work[1] = aocl_lapack_sroundup_lwork(&lwmin);
+    iwork[1] = (aocl_int_t)(liwmin);
     AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SSBEVD */

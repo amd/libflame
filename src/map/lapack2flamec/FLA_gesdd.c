@@ -38,21 +38,60 @@
   At this moment, this routine is redirected to GESVD.
 */
 
-extern void xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-extern int lapack_sgesvd(char *jobu, char *jobvt, integer *m, integer *n, real *a, integer *lda,
-                         real *s, real *u, integer *ldu, real *vt, integer *ldvt, real *work,
-                         integer *lwork, integer *info);
-extern int lapack_dgesvd(char *jobu, char *jobvt, integer *m, integer *n, doublereal *a,
-                         integer *lda, doublereal *s, doublereal *u, integer *ldu, doublereal *vt,
-                         integer *ldvt, doublereal *work, integer *lwork, integer *info);
+/** Generated wrapper function */
+void sgesdd_(char *jobz, aocl_int_t *m, aocl_int_t *n, real *buff_A, aocl_int_t *ldim_A, real *buff_s, real *buff_U, aocl_int_t *ldim_U, real *buff_Vh, aocl_int_t *ldim_Vh, real *buff_w, aocl_int_t *lwork, aocl_int_t *buff_i, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_sgesdd(jobz, m, n, buff_A, ldim_A, buff_s, buff_U, ldim_U, buff_Vh, ldim_Vh, buff_w, lwork, buff_i, info);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t ldim_A_64 = *ldim_A;
+    aocl_int64_t ldim_U_64 = *ldim_U;
+    aocl_int64_t ldim_Vh_64 = *ldim_Vh;
+    aocl_int64_t lwork_64 = *lwork;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_sgesdd(jobz, &m_64, &n_64, buff_A, &ldim_A_64, buff_s, buff_U, &ldim_U_64, buff_Vh, &ldim_Vh_64, buff_w, &lwork_64, buff_i, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+/** Generated wrapper function */
+void dgesdd_(char *jobz, aocl_int_t *m, aocl_int_t *n, doublereal *buff_A, aocl_int_t *ldim_A, doublereal *buff_s, doublereal *buff_U, aocl_int_t *ldim_U, doublereal *buff_Vh, aocl_int_t *ldim_Vh, doublereal *buff_w, aocl_int_t *lwork, aocl_int_t *buff_i, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_dgesdd(jobz, m, n, buff_A, ldim_A, buff_s, buff_U, ldim_U, buff_Vh, ldim_Vh, buff_w, lwork, buff_i, info);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t ldim_A_64 = *ldim_A;
+    aocl_int64_t ldim_U_64 = *ldim_U;
+    aocl_int64_t ldim_Vh_64 = *ldim_Vh;
+    aocl_int64_t lwork_64 = *lwork;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_dgesdd(jobz, &m_64, &n_64, buff_A, &ldim_A_64, buff_s, buff_U, &ldim_U_64, buff_Vh, &ldim_Vh_64, buff_w, &lwork_64, buff_i, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+extern int lapack_sgesvd(char *jobu, char *jobvt, aocl_int64_t *m, aocl_int64_t *n, real *a, aocl_int64_t *lda,
+                         real *s, real *u, aocl_int64_t *ldu, real *vt, aocl_int64_t *ldvt, real *work,
+                         aocl_int64_t *lwork, aocl_int64_t *info);
+extern int lapack_dgesvd(char *jobu, char *jobvt, aocl_int64_t *m, aocl_int64_t *n, doublereal *a,
+                         aocl_int64_t *lda, doublereal *s, doublereal *u, aocl_int64_t *ldu, doublereal *vt,
+                         aocl_int64_t *ldvt, doublereal *work, aocl_int64_t *lwork, aocl_int64_t *info);
 
 #define LAPACK_gesdd_real(prefix)                                                   \
-    void F77_##prefix##gesdd(                                                       \
-        char *jobz, integer *m, integer *n, PREFIX2LAPACK_TYPEDEF(prefix) * buff_A, \
-        integer * ldim_A, PREFIX2LAPACK_REALDEF(prefix) * buff_s,                   \
-        PREFIX2LAPACK_TYPEDEF(prefix) * buff_U, integer * ldim_U,                   \
-        PREFIX2LAPACK_TYPEDEF(prefix) * buff_Vh, integer * ldim_Vh,                 \
-        PREFIX2LAPACK_TYPEDEF(prefix) * buff_w, integer * lwork, integer * buff_i, integer * info)
+    void aocl_lapack_##prefix##gesdd(                                                       \
+        char *jobz, aocl_int64_t *m, aocl_int64_t *n, PREFIX2LAPACK_TYPEDEF(prefix) * buff_A, \
+        aocl_int64_t * ldim_A, PREFIX2LAPACK_REALDEF(prefix) * buff_s,                   \
+        PREFIX2LAPACK_TYPEDEF(prefix) * buff_U, aocl_int64_t * ldim_U,                   \
+        PREFIX2LAPACK_TYPEDEF(prefix) * buff_Vh, aocl_int64_t * ldim_Vh,                 \
+        PREFIX2LAPACK_TYPEDEF(prefix) * buff_w, aocl_int64_t * lwork, aocl_int_t * buff_i, aocl_int64_t * info)
 
 #define LAPACK_gesdd_complex(prefix)                                                \
     void F77_##prefix##gesdd(                                                       \
@@ -99,12 +138,12 @@ LAPACK_gesdd_real(s)
     AOCL_DTL_SNPRINTF("sgesdd inputs: jobz %c, m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS
                       ", ldu %" FLA_IS ", ldvt %" FLA_IS ", lwork %" FLA_IS "",
                       *jobz, *m, *n, *ldim_A, *ldim_U, *ldim_Vh, *lwork);
-    extern int sgesdd_fla_check(char *jobu, char *jobvt, integer *m, integer *n, float *a,
-                                integer *lda, float *s, float *u, integer *ldu, float *vt,
-                                integer *ldvt, float *work, integer *lwork, integer *info);
-    extern int lapack_sgesdd(char *jobz, integer *m, integer *n, real *a, integer *lda, real *s,
-                             real *u, integer *ldu, real *vt, integer *ldvt, real *work,
-                             integer *lwork, integer *iwork, integer *info);
+    extern int sgesdd_fla_check(char *jobu, char *jobvt, aocl_int64_t *m, aocl_int64_t *n, float *a,
+                                aocl_int64_t *lda, float *s, float *u, aocl_int64_t *ldu, float *vt,
+                                aocl_int64_t *ldvt, float *work, aocl_int64_t *lwork, aocl_int64_t *info);
+    extern int lapack_sgesdd(char *jobz, aocl_int64_t *m, aocl_int64_t *n, real *a, aocl_int64_t *lda, real *s,
+                             real *u, aocl_int64_t *ldu, real *vt, aocl_int64_t *ldvt, real *work,
+                             aocl_int64_t *lwork, aocl_int_t *iwork, aocl_int64_t *info);
 
 #if FLA_ENABLE_AMD_OPT
     {
@@ -157,20 +196,18 @@ LAPACK_gesdd_real(d)
     AOCL_DTL_SNPRINTF("dgesdd inputs: jobz %c, m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS
                       ", ldu %" FLA_IS ", ldvt %" FLA_IS ", lwork %" FLA_IS "",
                       *jobz, *m, *n, *ldim_A, *ldim_U, *ldim_Vh, *lwork);
-    extern int lapack_dgesdd(char *jobz, integer *m, integer *n, doublereal *a, integer *lda,
-                             doublereal *s, doublereal *u, integer *ldu, doublereal *vt,
-                             integer *ldvt, doublereal *work, integer *lwork, integer *iwork,
-                             integer *info);
+    extern int lapack_dgesdd(char *jobz, aocl_int64_t *m, aocl_int64_t *n, doublereal *a, aocl_int64_t *lda,
+                             doublereal *s, doublereal *u, aocl_int64_t *ldu, doublereal *vt,
+                             aocl_int64_t *ldvt, doublereal *work, aocl_int64_t *lwork, aocl_int_t *iwork,
+                             aocl_int64_t *info);
 
 #if FLA_ENABLE_AMD_OPT
     if(*m < FLA_SVD_SMALL_SIZE_THRESH2 && *n < FLA_SVD_SMALL_SIZE_THRESH2)
     {
         /* Path for small sizes making use of optimized DGESVD */
-        integer i__1;
+        aocl_int64_t i__1;
         char jobu[1], jobv[1];
         doublereal anrm;
-        extern doublereal dlange_(char *norm, integer *m, integer *n,
-                                  doublereal *a, integer *lda, doublereal *work);
 
         *info = 0;
         if(lsame_(jobz, "O", 1, 1))
@@ -210,7 +247,7 @@ LAPACK_gesdd_real(d)
         if(*lwork != -1 && *info == 0)
         {
             /* DLANGE call with "M" to get max absolute value */
-            anrm = dlange_("M", m, n, buff_A, ldim_A, NULL);
+            anrm = aocl_lapack_dlange("M", m, n, buff_A, ldim_A, NULL);
             if(anrm != anrm)
             {
                 *info = -4;
@@ -222,7 +259,7 @@ LAPACK_gesdd_real(d)
             /* If the info is set to a negative value, it means that the
              * input parameters are invalid, so return. */
             i__1 = -(*info);
-            xerbla_("DGESDD", &i__1, (ftnlen)6);
+            aocl_blas_xerbla("DGESDD", &i__1, (ftnlen)6);
             AOCL_DTL_TRACE_LOG_EXIT
             return;
         }
@@ -250,7 +287,7 @@ LAPACK_gesdd_real(d)
             /* If the info is set to a negative value, it means that the
              * input parameters are invalid, so return. */
             i__1 = -(*info);
-            xerbla_("DGESDD", &i__1, (ftnlen)6);
+            aocl_blas_xerbla("DGESDD", &i__1, (ftnlen)6);
             AOCL_DTL_TRACE_LOG_EXIT
             return;
         }

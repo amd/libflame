@@ -4,12 +4,12 @@
  -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for
  libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static doublecomplex c_b1 = {0., 0.};
-static doublecomplex c_b2 = {1., 0.};
-static integer c_n1 = -1;
-static integer c__1 = 1;
+static dcomplex c_b1 = {{0.}, {0.}};
+static dcomplex c_b2 = {{1.}, {0.}};
+static aocl_int64_t c_n1 = -1;
+static aocl_int64_t c__1 = 1;
 static doublereal c_b74 = 0.;
-static integer c__0 = 0;
+static aocl_int64_t c__0 = 0;
 static doublereal c_b87 = 1.;
 static logical c_false = FALSE_;
 /* > \brief <b> ZGESVDQ computes the singular value decomposition (SVD) with a QR-Preconditioned QR
@@ -53,7 +53,7 @@ static logical c_false = FALSE_;
 /* > */
 /* > \verbatim */
 /* > */
-/* ZCGESVDQ computes the singular value decomposition (SVD) of a complex */
+/* ZCGESVDQ computes the singular value decomposition (SVD) of a scomplex */
 /* > M-by-N matrix A, where M >= N. The SVD of A is written as */
 /* > [++] [xx] [x0] [xx] */
 /* > A = U * SIGMA * V^*, [++] = [xx] * [ox] * [xx] */
@@ -427,11 +427,43 @@ the routine */
 /* > \ingroup complex16GEsing */
 /* ===================================================================== */
 /* Subroutine */
-void zgesvdq_(char *joba, char *jobp, char *jobr, char *jobu, char *jobv, integer *m, integer *n,
-              doublecomplex *a, integer *lda, doublereal *s, doublecomplex *u, integer *ldu,
-              doublecomplex *v, integer *ldv, integer *numrank, integer *iwork, integer *liwork,
-              doublecomplex *cwork, integer *lcwork, doublereal *rwork, integer *lrwork,
-              integer *info)
+/** Generated wrapper function */
+void zgesvdq_(char *joba, char *jobp, char *jobr, char *jobu, char *jobv, aocl_int_t *m,
+              aocl_int_t *n, dcomplex *a, aocl_int_t *lda, doublereal *s, dcomplex *u,
+              aocl_int_t *ldu, dcomplex *v, aocl_int_t *ldv, aocl_int_t *numrank,
+              aocl_int_t *iwork, aocl_int_t *liwork, dcomplex *cwork, aocl_int_t *lcwork,
+              doublereal *rwork, aocl_int_t *lrwork, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_zgesvdq(joba, jobp, jobr, jobu, jobv, m, n, a, lda, s, u, ldu, v, ldv, numrank,
+                        iwork, liwork, cwork, lcwork, rwork, lrwork, info);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t ldu_64 = *ldu;
+    aocl_int64_t ldv_64 = *ldv;
+    aocl_int64_t numrank_64 = *numrank;
+    aocl_int64_t liwork_64 = *liwork;
+    aocl_int64_t lcwork_64 = *lcwork;
+    aocl_int64_t lrwork_64 = *lrwork;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_zgesvdq(joba, jobp, jobr, jobu, jobv, &m_64, &n_64, a, &lda_64, s, u, &ldu_64, v,
+                        &ldv_64, &numrank_64, iwork, &liwork_64, cwork, &lcwork_64, rwork,
+                        &lrwork_64, &info_64);
+
+    *numrank = (aocl_int_t)numrank_64;
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_zgesvdq(char *joba, char *jobp, char *jobr, char *jobu, char *jobv,
+                         aocl_int64_t *m, aocl_int64_t *n, dcomplex *a, aocl_int64_t *lda,
+                         doublereal *s, dcomplex *u, aocl_int64_t *ldu, dcomplex *v,
+                         aocl_int64_t *ldv, aocl_int64_t *numrank, aocl_int_t *iwork,
+                         aocl_int64_t *liwork, dcomplex *cwork, aocl_int64_t *lcwork,
+                         doublereal *rwork, aocl_int64_t *lrwork, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zgesvdq inputs: joba %c, jobp %c, jobr %c, jobu %c, jobv %c, m %" FLA_IS
@@ -439,97 +471,49 @@ void zgesvdq_(char *joba, char *jobp, char *jobr, char *jobu, char *jobv, intege
                       ", numrank %" FLA_IS "",
                       *joba, *jobp, *jobr, *jobu, *jobv, *m, *n, *lda, *ldu, *ldv, *numrank);
     /* System generated locals */
-    integer a_dim1, a_offset, u_dim1, u_offset, v_dim1, v_offset, i__1, i__2, i__3;
+    aocl_int64_t a_dim1, a_offset, u_dim1, u_offset, v_dim1, v_offset, i__1, i__2, i__3;
     doublereal d__1;
-    doublecomplex z__1;
+    dcomplex z__1;
     /* Builtin functions */
-    double sqrt(doublereal), z_abs(doublecomplex *);
-    void d_cnjg(doublecomplex *, doublecomplex *);
+    double sqrt(doublereal), z_abs(dcomplex *);
+    void d_cnjg(dcomplex *, dcomplex *);
     /* Local variables */
-    integer optratio, p, q, n1, nr;
+    aocl_int64_t optratio, p, q, n1, nr;
     doublereal big;
-    integer lwrk_zgeqp3__, lwrk_zgelqf__, lwrk_zgeqrf__, lwrk_zgesvd__, lwrk_zunmlq__,
+    aocl_int64_t lwrk_zgeqp3__, lwrk_zgelqf__, lwrk_zgeqrf__, lwrk_zgesvd__, lwrk_zunmlq__,
         lwrk_zunmqr__, ierr;
-    doublecomplex ctmp;
-    integer lwrk_zgesvd2__;
+    dcomplex ctmp;
+    aocl_int64_t lwrk_zgesvd2__;
     doublereal rtmp;
-    integer lwrk_zunmqr2__;
+    aocl_int64_t lwrk_zunmqr2__;
     logical lsvc0, accla;
-    integer lwqp3;
+    aocl_int64_t lwqp3;
     logical acclh, acclm, conda;
-    extern logical lsame_(char *, char *, integer, integer);
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     logical lsvec;
     doublereal sfmin, epsln;
-    integer lwcon;
+    aocl_int64_t lwcon;
     logical rsvec;
-    integer lwlqf, lwqrf;
+    aocl_int64_t lwlqf, lwqrf;
     logical wntua;
-    integer lwsvd;
+    aocl_int64_t lwsvd;
     logical wntva, dntwu, dntwv, wntuf;
-    integer lwunq;
+    aocl_int64_t lwunq;
     logical wntur, wntus, wntvr;
-    extern /* Subroutine */
-        void
-        zgeqp3_(integer *, integer *, doublecomplex *, integer *, integer *, doublecomplex *,
-                doublecomplex *, integer *, doublereal *, integer *);
-    extern doublereal dznrm2_(integer *, doublecomplex *, integer *);
-    integer lwsvd2, lwunq2;
+    aocl_int64_t lwsvd2, lwunq2;
     extern doublereal dlamch_(char *);
-    extern /* Subroutine */
-        void
-        dlascl_(char *, integer *, integer *, doublereal *, doublereal *, integer *, integer *,
-                doublereal *, integer *, integer *);
-    extern integer idamax_(integer *, doublereal *, integer *);
     doublereal sconda;
-    extern /* Subroutine */
-        void
-        dlaset_(char *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
-        zdscal_(integer *, doublereal *, doublecomplex *, integer *);
-    extern doublereal zlange_(char *, integer *, integer *, doublecomplex *, integer *,
-                              doublereal *);
-    extern /* Subroutine */
-        void
-        zgelqf_(integer *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *,
-                integer *, integer *),
-        zlascl_(char *, integer *, integer *, doublereal *, doublereal *, integer *, integer *,
-                doublecomplex *, integer *, integer *);
-    doublecomplex cdummy[1];
-    extern /* Subroutine */
-        void
-        zgeqrf_(integer *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *,
-                integer *, integer *),
-        zgesvd_(char *, char *, integer *, integer *, doublecomplex *, integer *, doublereal *,
-                doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *,
-                doublereal *, integer *),
-        zlacpy_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *,
-                integer *),
-        zlaset_(char *, integer *, integer *, doublecomplex *, doublecomplex *, doublecomplex *,
-                integer *);
-    integer minwrk;
+    dcomplex cdummy[1];
+    aocl_int64_t minwrk;
     logical rtrans;
-    extern /* Subroutine */
-        void
-        zlapmt_(logical *, integer *, integer *, doublecomplex *, integer *, integer *),
-        zpocon_(char *, integer *, doublecomplex *, integer *, doublereal *, doublereal *,
-                doublecomplex *, doublereal *, integer *);
     doublereal rdummy[1];
     logical lquery;
-    integer lwunlq;
-    extern /* Subroutine */
-        void
-        zlaswp_(integer *, doublecomplex *, integer *, integer *, integer *, integer *, integer *);
-    integer optwrk;
+    aocl_int64_t lwunlq;
+    aocl_int64_t optwrk;
     logical rowprm;
-    extern /* Subroutine */
-        void
-        zunmlq_(char *, char *, integer *, integer *, integer *, doublecomplex *, integer *,
-                doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, integer *),
-        zunmqr_(char *, char *, integer *, integer *, integer *, doublecomplex *, integer *,
-                doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, integer *);
-    integer minwrk2;
+    aocl_int64_t minwrk2;
     logical ascaled;
-    integer optwrk2, iminwrk, rminwrk;
+    aocl_int64_t optwrk2, iminwrk, rminwrk;
     /* .. Scalar Arguments .. */
     /* .. */
     /* .. Array Arguments .. */
@@ -679,18 +663,19 @@ void zgesvdq_(char *joba, char *jobp, char *jobr, char *jobu, char *jobv, intege
         lwsvd = fla_max(i__1, 1);
         if(lquery)
         {
-            zgeqp3_(m, n, &a[a_offset], lda, &iwork[1], cdummy, cdummy, &c_n1, rdummy, &ierr);
+            aocl_lapack_zgeqp3(m, n, &a[a_offset], lda, &iwork[1], cdummy, cdummy, &c_n1, rdummy,
+                               &ierr);
             lwrk_zgeqp3__ = (integer)cdummy[0].r;
             if(wntus || wntur)
             {
-                zunmqr_("L", "N", m, n, n, &a[a_offset], lda, cdummy, &u[u_offset], ldu, cdummy,
-                        &c_n1, &ierr);
+                aocl_lapack_zunmqr("L", "N", m, n, n, &a[a_offset], lda, cdummy, &u[u_offset], ldu,
+                                   cdummy, &c_n1, &ierr);
                 lwrk_zunmqr__ = (integer)cdummy[0].r;
             }
             else if(wntua)
             {
-                zunmqr_("L", "N", m, m, n, &a[a_offset], lda, cdummy, &u[u_offset], ldu, cdummy,
-                        &c_n1, &ierr);
+                aocl_lapack_zunmqr("L", "N", m, m, n, &a[a_offset], lda, cdummy, &u[u_offset], ldu,
+                                   cdummy, &c_n1, &ierr);
                 lwrk_zunmqr__ = (integer)cdummy[0].r;
             }
             else
@@ -702,7 +687,7 @@ void zgesvdq_(char *joba, char *jobp, char *jobr, char *jobu, char *jobv, intege
         optwrk = 2;
         if(!(lsvec || rsvec))
         {
-            /* .. minimal and optimal sizes of the complex workspace if */
+            /* .. minimal and optimal sizes of the scomplex workspace if */
             /* only the singular values are requested */
             if(conda)
             {
@@ -719,8 +704,8 @@ void zgesvdq_(char *joba, char *jobp, char *jobr, char *jobu, char *jobv, intege
             }
             if(lquery)
             {
-                zgesvd_("N", "N", n, n, &a[a_offset], lda, &s[1], &u[u_offset], ldu, &v[v_offset],
-                        ldv, cdummy, &c_n1, rdummy, &ierr);
+                aocl_lapack_zgesvd("N", "N", n, n, &a[a_offset], lda, &s[1], &u[u_offset], ldu,
+                                   &v[v_offset], ldv, cdummy, &c_n1, rdummy, &ierr);
                 lwrk_zgesvd__ = (integer)cdummy[0].r;
                 if(conda)
                 {
@@ -740,7 +725,7 @@ void zgesvdq_(char *joba, char *jobp, char *jobr, char *jobu, char *jobv, intege
         }
         else if(lsvec && !rsvec)
         {
-            /* .. minimal and optimal sizes of the complex workspace if the */
+            /* .. minimal and optimal sizes of the scomplex workspace if the */
             /* singular values and the left singular vectors are requested */
             if(conda)
             {
@@ -759,13 +744,13 @@ void zgesvdq_(char *joba, char *jobp, char *jobr, char *jobu, char *jobv, intege
             {
                 if(rtrans)
                 {
-                    zgesvd_("N", "O", n, n, &a[a_offset], lda, &s[1], &u[u_offset], ldu,
-                            &v[v_offset], ldv, cdummy, &c_n1, rdummy, &ierr);
+                    aocl_lapack_zgesvd("N", "O", n, n, &a[a_offset], lda, &s[1], &u[u_offset], ldu,
+                                       &v[v_offset], ldv, cdummy, &c_n1, rdummy, &ierr);
                 }
                 else
                 {
-                    zgesvd_("O", "N", n, n, &a[a_offset], lda, &s[1], &u[u_offset], ldu,
-                            &v[v_offset], ldv, cdummy, &c_n1, rdummy, &ierr);
+                    aocl_lapack_zgesvd("O", "N", n, n, &a[a_offset], lda, &s[1], &u[u_offset], ldu,
+                                       &v[v_offset], ldv, cdummy, &c_n1, rdummy, &ierr);
                 }
                 lwrk_zgesvd__ = (integer)cdummy[0].r;
                 if(conda)
@@ -785,7 +770,7 @@ void zgesvdq_(char *joba, char *jobp, char *jobr, char *jobu, char *jobv, intege
         }
         else if(rsvec && !lsvec)
         {
-            /* .. minimal and optimal sizes of the complex workspace if the */
+            /* .. minimal and optimal sizes of the scomplex workspace if the */
             /* singular values and the right singular vectors are requested */
             if(conda)
             {
@@ -801,13 +786,13 @@ void zgesvdq_(char *joba, char *jobp, char *jobr, char *jobu, char *jobv, intege
             {
                 if(rtrans)
                 {
-                    zgesvd_("O", "N", n, n, &a[a_offset], lda, &s[1], &u[u_offset], ldu,
-                            &v[v_offset], ldv, cdummy, &c_n1, rdummy, &ierr);
+                    aocl_lapack_zgesvd("O", "N", n, n, &a[a_offset], lda, &s[1], &u[u_offset], ldu,
+                                       &v[v_offset], ldv, cdummy, &c_n1, rdummy, &ierr);
                 }
                 else
                 {
-                    zgesvd_("N", "O", n, n, &a[a_offset], lda, &s[1], &u[u_offset], ldu,
-                            &v[v_offset], ldv, cdummy, &c_n1, rdummy, &ierr);
+                    aocl_lapack_zgesvd("N", "O", n, n, &a[a_offset], lda, &s[1], &u[u_offset], ldu,
+                                       &v[v_offset], ldv, cdummy, &c_n1, rdummy, &ierr);
                 }
                 lwrk_zgesvd__ = (integer)cdummy[0].r;
                 if(conda)
@@ -824,7 +809,7 @@ void zgesvdq_(char *joba, char *jobp, char *jobr, char *jobu, char *jobv, intege
         }
         else
         {
-            /* .. minimal and optimal sizes of the complex workspace if the */
+            /* .. minimal and optimal sizes of the scomplex workspace if the */
             /* full SVD is requested */
             if(rtrans)
             {
@@ -899,8 +884,8 @@ void zgesvdq_(char *joba, char *jobp, char *jobr, char *jobu, char *jobv, intege
             {
                 if(rtrans)
                 {
-                    zgesvd_("O", "A", n, n, &a[a_offset], lda, &s[1], &u[u_offset], ldu,
-                            &v[v_offset], ldv, cdummy, &c_n1, rdummy, &ierr);
+                    aocl_lapack_zgesvd("O", "A", n, n, &a[a_offset], lda, &s[1], &u[u_offset], ldu,
+                                       &v[v_offset], ldv, cdummy, &c_n1, rdummy, &ierr);
                     lwrk_zgesvd__ = (integer)cdummy[0].r;
                     /* Computing MAX */
                     i__1 = fla_max(lwrk_zgeqp3__, lwrk_zgesvd__);
@@ -913,16 +898,18 @@ void zgesvdq_(char *joba, char *jobp, char *jobr, char *jobu, char *jobv, intege
                     if(wntva)
                     {
                         i__1 = *n / 2;
-                        zgeqrf_(n, &i__1, &u[u_offset], ldu, cdummy, cdummy, &c_n1, &ierr);
+                        aocl_lapack_zgeqrf(n, &i__1, &u[u_offset], ldu, cdummy, cdummy, &c_n1,
+                                           &ierr);
                         lwrk_zgeqrf__ = (integer)cdummy[0].r;
                         i__1 = *n / 2;
                         i__2 = *n / 2;
-                        zgesvd_("S", "O", &i__1, &i__2, &v[v_offset], ldv, &s[1], &u[u_offset], ldu,
-                                &v[v_offset], ldv, cdummy, &c_n1, rdummy, &ierr);
+                        aocl_lapack_zgesvd("S", "O", &i__1, &i__2, &v[v_offset], ldv, &s[1],
+                                           &u[u_offset], ldu, &v[v_offset], ldv, cdummy, &c_n1,
+                                           rdummy, &ierr);
                         lwrk_zgesvd2__ = (integer)cdummy[0].r;
                         i__1 = *n / 2;
-                        zunmqr_("R", "C", n, n, &i__1, &u[u_offset], ldu, cdummy, &v[v_offset], ldv,
-                                cdummy, &c_n1, &ierr);
+                        aocl_lapack_zunmqr("R", "C", n, n, &i__1, &u[u_offset], ldu, cdummy,
+                                           &v[v_offset], ldv, cdummy, &c_n1, &ierr);
                         lwrk_zunmqr2__ = (integer)cdummy[0].r;
                         /* Computing MAX */
                         i__1 = lwrk_zgeqp3__, i__2 = *n / 2 + lwrk_zgeqrf__,
@@ -940,8 +927,8 @@ void zgesvdq_(char *joba, char *jobp, char *jobr, char *jobu, char *jobv, intege
                 }
                 else
                 {
-                    zgesvd_("S", "O", n, n, &a[a_offset], lda, &s[1], &u[u_offset], ldu,
-                            &v[v_offset], ldv, cdummy, &c_n1, rdummy, &ierr);
+                    aocl_lapack_zgesvd("S", "O", n, n, &a[a_offset], lda, &s[1], &u[u_offset], ldu,
+                                       &v[v_offset], ldv, cdummy, &c_n1, rdummy, &ierr);
                     lwrk_zgesvd__ = (integer)cdummy[0].r;
                     /* Computing MAX */
                     i__1 = fla_max(lwrk_zgeqp3__, lwrk_zgesvd__);
@@ -954,16 +941,18 @@ void zgesvdq_(char *joba, char *jobp, char *jobr, char *jobu, char *jobv, intege
                     if(wntva)
                     {
                         i__1 = *n / 2;
-                        zgelqf_(&i__1, n, &u[u_offset], ldu, cdummy, cdummy, &c_n1, &ierr);
+                        aocl_lapack_zgelqf(&i__1, n, &u[u_offset], ldu, cdummy, cdummy, &c_n1,
+                                           &ierr);
                         lwrk_zgelqf__ = (integer)cdummy[0].r;
                         i__1 = *n / 2;
                         i__2 = *n / 2;
-                        zgesvd_("S", "O", &i__1, &i__2, &v[v_offset], ldv, &s[1], &u[u_offset], ldu,
-                                &v[v_offset], ldv, cdummy, &c_n1, rdummy, &ierr);
+                        aocl_lapack_zgesvd("S", "O", &i__1, &i__2, &v[v_offset], ldv, &s[1],
+                                           &u[u_offset], ldu, &v[v_offset], ldv, cdummy, &c_n1,
+                                           rdummy, &ierr);
                         lwrk_zgesvd2__ = (integer)cdummy[0].r;
                         i__1 = *n / 2;
-                        zunmlq_("R", "N", n, n, &i__1, &u[u_offset], ldu, cdummy, &v[v_offset], ldv,
-                                cdummy, &c_n1, &ierr);
+                        aocl_lapack_zunmlq("R", "N", n, n, &i__1, &u[u_offset], ldu, cdummy,
+                                           &v[v_offset], ldv, cdummy, &c_n1, &ierr);
                         lwrk_zunmlq__ = (integer)cdummy[0].r;
                         /* Computing MAX */
                         i__1 = lwrk_zgeqp3__, i__2 = *n / 2 + lwrk_zgelqf__,
@@ -995,14 +984,14 @@ void zgesvdq_(char *joba, char *jobp, char *jobr, char *jobu, char *jobv, intege
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("ZGESVDQ", &i__1, (ftnlen)7);
+        aocl_blas_xerbla("ZGESVDQ", &i__1, (ftnlen)7);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     else if(lquery)
     {
         /* Return optimal workspace */
-        iwork[1] = iminwrk;
+        iwork[1] = (aocl_int_t)(iminwrk);
         cwork[1].r = (doublereal)optwrk;
         cwork[1].i = 0.; // , expr subst
         cwork[2].r = (doublereal)minwrk;
@@ -1030,13 +1019,13 @@ void zgesvdq_(char *joba, char *jobp, char *jobr, char *jobu, char *jobv, intege
         {
             /* RWORK(p) = ABS( A(p,IZAMAX(N,A(p,1),LDA)) ) */
             /* [[ZLANGE will return NaN if an entry of the p-th row is Nan]] */
-            rwork[p] = zlange_("M", &c__1, n, &a[p + a_dim1], lda, rdummy);
+            rwork[p] = aocl_lapack_zlange("M", &c__1, n, &a[p + a_dim1], lda, rdummy);
             /* .. check for NaN's and Inf's */
             if(rwork[p] != rwork[p] || rwork[p] * 0. != 0.)
             {
                 *info = -8;
                 i__2 = -(*info);
-                xerbla_("ZGESVDQ", &i__2, (ftnlen)7);
+                aocl_blas_xerbla("ZGESVDQ", &i__2, (ftnlen)7);
                 AOCL_DTL_TRACE_LOG_EXIT
                 return;
             }
@@ -1046,8 +1035,8 @@ void zgesvdq_(char *joba, char *jobp, char *jobr, char *jobu, char *jobv, intege
         for(p = 1; p <= i__1; ++p)
         {
             i__2 = *m - p + 1;
-            q = idamax_(&i__2, &rwork[p], &c__1) + p - 1;
-            iwork[*n + p] = q;
+            q = aocl_blas_idamax(&i__2, &rwork[p], &c__1) + p - 1;
+            iwork[*n + p] = (aocl_int_t)(q);
             if(p != q)
             {
                 rtmp = rwork[p];
@@ -1060,28 +1049,28 @@ void zgesvdq_(char *joba, char *jobp, char *jobr, char *jobu, char *jobv, intege
         {
             /* Quick return: A is the M x N zero matrix. */
             *numrank = 0;
-            dlaset_("G", n, &c__1, &c_b74, &c_b74, &s[1], n);
+            aocl_lapack_dlaset("G", n, &c__1, &c_b74, &c_b74, &s[1], n);
             if(wntus)
             {
-                zlaset_("G", m, n, &c_b1, &c_b2, &u[u_offset], ldu);
+                aocl_lapack_zlaset("G", m, n, &c_b1, &c_b2, &u[u_offset], ldu);
             }
             if(wntua)
             {
-                zlaset_("G", m, m, &c_b1, &c_b2, &u[u_offset], ldu);
+                aocl_lapack_zlaset("G", m, m, &c_b1, &c_b2, &u[u_offset], ldu);
             }
             if(wntva)
             {
-                zlaset_("G", n, n, &c_b1, &c_b2, &v[v_offset], ldv);
+                aocl_lapack_zlaset("G", n, n, &c_b1, &c_b2, &v[v_offset], ldv);
             }
             if(wntuf)
             {
-                zlaset_("G", n, &c__1, &c_b1, &c_b1, &cwork[1], n);
-                zlaset_("G", m, n, &c_b1, &c_b2, &u[u_offset], ldu);
+                aocl_lapack_zlaset("G", n, &c__1, &c_b1, &c_b1, &cwork[1], n);
+                aocl_lapack_zlaset("G", m, n, &c_b1, &c_b2, &u[u_offset], ldu);
             }
             i__1 = *n;
             for(p = 1; p <= i__1; ++p)
             {
-                iwork[p] = p;
+                iwork[p] = (aocl_int_t)(p);
                 /* L5001: */
             }
             if(rowprm)
@@ -1089,7 +1078,7 @@ void zgesvdq_(char *joba, char *jobp, char *jobr, char *jobu, char *jobv, intege
                 i__1 = *n + *m - 1;
                 for(p = *n + 1; p <= i__1; ++p)
                 {
-                    iwork[p] = p - *n;
+                    iwork[p] = (aocl_int_t)(p - *n);
                     /* L5002: */
                 }
             }
@@ -1106,11 +1095,11 @@ void zgesvdq_(char *joba, char *jobp, char *jobr, char *jobu, char *jobv, intege
             /* .. to prevent overflow in the QR factorization, scale the */
             /* matrix by 1/sqrt(M) if too large entry detected */
             d__1 = sqrt((doublereal)(*m));
-            zlascl_("G", &c__0, &c__0, &d__1, &c_b87, m, n, &a[a_offset], lda, &ierr);
+            aocl_lapack_zlascl("G", &c__0, &c__0, &d__1, &c_b87, m, n, &a[a_offset], lda, &ierr);
             ascaled = TRUE_;
         }
         i__1 = *m - 1;
-        zlaswp_(n, &a[a_offset], lda, &c__1, &i__1, &iwork[*n + 1], &c__1);
+        aocl_lapack_zlaswp(n, &a[a_offset], lda, &c__1, &i__1, &iwork[*n + 1], &c__1);
     }
     /* .. At this stage, preemptive scaling is done only to avoid column */
     /* norms overflows during the QR factorization. The SVD procedure should */
@@ -1118,12 +1107,12 @@ void zgesvdq_(char *joba, char *jobp, char *jobr, char *jobu, char *jobv, intege
     /* underflows. That depends on the SVD procedure. */
     if(!rowprm)
     {
-        rtmp = zlange_("M", m, n, &a[a_offset], lda, &rwork[1]);
+        rtmp = aocl_lapack_zlange("M", m, n, &a[a_offset], lda, &rwork[1]);
         if(rtmp != rtmp || rtmp * 0. != 0.)
         {
             *info = -8;
             i__1 = -(*info);
-            xerbla_("ZGESVDQ", &i__1, (ftnlen)7);
+            aocl_blas_xerbla("ZGESVDQ", &i__1, (ftnlen)7);
             AOCL_DTL_TRACE_LOG_EXIT
             return;
         }
@@ -1132,7 +1121,7 @@ void zgesvdq_(char *joba, char *jobp, char *jobr, char *jobu, char *jobv, intege
             /* .. to prevent overflow in the QR factorization, scale the */
             /* matrix by 1/sqrt(M) if too large entry detected */
             d__1 = sqrt((doublereal)(*m));
-            zlascl_("G", &c__0, &c__0, &d__1, &c_b87, m, n, &a[a_offset], lda, &ierr);
+            aocl_lapack_zlascl("G", &c__0, &c__0, &d__1, &c_b87, m, n, &a[a_offset], lda, &ierr);
             ascaled = TRUE_;
         }
     }
@@ -1147,7 +1136,8 @@ void zgesvdq_(char *joba, char *jobp, char *jobr, char *jobu, char *jobv, intege
         /* L1963: */
     }
     i__1 = *lcwork - *n;
-    zgeqp3_(m, n, &a[a_offset], lda, &iwork[1], &cwork[1], &cwork[*n + 1], &i__1, &rwork[1], &ierr);
+    aocl_lapack_zgeqp3(m, n, &a[a_offset], lda, &iwork[1], &cwork[1], &cwork[*n + 1], &i__1,
+                       &rwork[1], &ierr);
     /* If the user requested accuracy level allows truncation in the */
     /* computed upper triangular factor, the matrix R is examined and, */
     /* if possible, replaced with its leading upper trapezoidal part. */
@@ -1221,7 +1211,7 @@ void zgesvdq_(char *joba, char *jobp, char *jobr, char *jobu, char *jobv, intege
             /* Estimate the scaled condition number of A. Use the fact that it is */
             /* the same as the scaled condition number of R. */
             /* .. V is used as workspace */
-            zlacpy_("U", n, n, &a[a_offset], lda, &v[v_offset], ldv);
+            aocl_lapack_zlacpy("U", n, n, &a[a_offset], lda, &v[v_offset], ldv);
             /* Only the leading NR x NR submatrix of the triangular factor */
             /* is considered. Only if NR=N will this give a reliable error */
             /* bound. However, even for NR < N, this can be used on an */
@@ -1230,19 +1220,20 @@ void zgesvdq_(char *joba, char *jobp, char *jobr, char *jobu, char *jobv, intege
             i__1 = nr;
             for(p = 1; p <= i__1; ++p)
             {
-                rtmp = dznrm2_(&p, &v[p * v_dim1 + 1], &c__1);
+                rtmp = aocl_blas_dznrm2(&p, &v[p * v_dim1 + 1], &c__1);
                 d__1 = 1. / rtmp;
-                zdscal_(&p, &d__1, &v[p * v_dim1 + 1], &c__1);
+                aocl_blas_zdscal(&p, &d__1, &v[p * v_dim1 + 1], &c__1);
                 /* L3053: */
             }
             if(!(lsvec || rsvec))
             {
-                zpocon_("U", &nr, &v[v_offset], ldv, &c_b87, &rtmp, &cwork[1], &rwork[1], &ierr);
+                aocl_lapack_zpocon("U", &nr, &v[v_offset], ldv, &c_b87, &rtmp, &cwork[1], &rwork[1],
+                                   &ierr);
             }
             else
             {
-                zpocon_("U", &nr, &v[v_offset], ldv, &c_b87, &rtmp, &cwork[*n + 1], &rwork[1],
-                        &ierr);
+                aocl_lapack_zpocon("U", &nr, &v[v_offset], ldv, &c_b87, &rtmp, &cwork[*n + 1],
+                                   &rwork[1], &ierr);
             }
             sconda = 1. / sqrt(rtmp);
             /* For NR=N, SCONDA is an estimate of SQRT(||(R^* * R)^(-1)||_1), */
@@ -1296,8 +1287,8 @@ void zgesvdq_(char *joba, char *jobp, char *jobr, char *jobu, char *jobv, intege
                 }
                 /* L1146: */
             }
-            zgesvd_("N", "N", n, &nr, &a[a_offset], lda, &s[1], &u[u_offset], ldu, &v[v_offset],
-                    ldv, &cwork[1], lcwork, &rwork[1], info);
+            aocl_lapack_zgesvd("N", "N", n, &nr, &a[a_offset], lda, &s[1], &u[u_offset], ldu,
+                               &v[v_offset], ldv, &cwork[1], lcwork, &rwork[1], info);
         }
         else
         {
@@ -1306,10 +1297,10 @@ void zgesvdq_(char *joba, char *jobp, char *jobr, char *jobu, char *jobv, intege
             {
                 i__1 = nr - 1;
                 i__2 = nr - 1;
-                zlaset_("L", &i__1, &i__2, &c_b1, &c_b1, &a[a_dim1 + 2], lda);
+                aocl_lapack_zlaset("L", &i__1, &i__2, &c_b1, &c_b1, &a[a_dim1 + 2], lda);
             }
-            zgesvd_("N", "N", &nr, n, &a[a_offset], lda, &s[1], &u[u_offset], ldu, &v[v_offset],
-                    ldv, &cwork[1], lcwork, &rwork[1], info);
+            aocl_lapack_zgesvd("N", "N", &nr, n, &a[a_offset], lda, &s[1], &u[u_offset], ldu,
+                               &v[v_offset], ldv, &cwork[1], lcwork, &rwork[1], info);
         }
     }
     else if(lsvec && !rsvec)
@@ -1340,14 +1331,14 @@ void zgesvdq_(char *joba, char *jobp, char *jobr, char *jobu, char *jobv, intege
             {
                 i__1 = nr - 1;
                 i__2 = nr - 1;
-                zlaset_("U", &i__1, &i__2, &c_b1, &c_b1, &u[(u_dim1 << 1) + 1], ldu);
+                aocl_lapack_zlaset("U", &i__1, &i__2, &c_b1, &c_b1, &u[(u_dim1 << 1) + 1], ldu);
             }
             /* .. the left singular vectors not computed, the NR right singular */
             /* vectors overwrite [U](1:NR,1:NR) as conjugate transposed. These */
             /* will be pre-multiplied by Q to build the left singular vectors of A. */
             i__1 = *lcwork - *n;
-            zgesvd_("N", "O", n, &nr, &u[u_offset], ldu, &s[1], &u[u_offset], ldu, &u[u_offset],
-                    ldu, &cwork[*n + 1], &i__1, &rwork[1], info);
+            aocl_lapack_zgesvd("N", "O", n, &nr, &u[u_offset], ldu, &s[1], &u[u_offset], ldu,
+                               &u[u_offset], ldu, &cwork[*n + 1], &i__1, &rwork[1], info);
             i__1 = nr;
             for(p = 1; p <= i__1; ++p)
             {
@@ -1377,18 +1368,18 @@ void zgesvdq_(char *joba, char *jobp, char *jobr, char *jobu, char *jobv, intege
         {
             /* .. apply ZGESVD to R */
             /* .. copy R into [U] and overwrite [U] with the left singular vectors */
-            zlacpy_("U", &nr, n, &a[a_offset], lda, &u[u_offset], ldu);
+            aocl_lapack_zlacpy("U", &nr, n, &a[a_offset], lda, &u[u_offset], ldu);
             if(nr > 1)
             {
                 i__1 = nr - 1;
                 i__2 = nr - 1;
-                zlaset_("L", &i__1, &i__2, &c_b1, &c_b1, &u[u_dim1 + 2], ldu);
+                aocl_lapack_zlaset("L", &i__1, &i__2, &c_b1, &c_b1, &u[u_dim1 + 2], ldu);
             }
             /* .. the right singular vectors not computed, the NR left singular */
             /* vectors overwrite [U](1:NR,1:NR) */
             i__1 = *lcwork - *n;
-            zgesvd_("O", "N", &nr, n, &u[u_offset], ldu, &s[1], &u[u_offset], ldu, &v[v_offset],
-                    ldv, &cwork[*n + 1], &i__1, &rwork[1], info);
+            aocl_lapack_zgesvd("O", "N", &nr, n, &u[u_offset], ldu, &s[1], &u[u_offset], ldu,
+                               &v[v_offset], ldv, &cwork[*n + 1], &i__1, &rwork[1], info);
             /* .. now [U](1:NR,1:NR) contains the NR left singular vectors of */
             /* R. These will be pre-multiplied by Q to build the left singular */
             /* vectors of A. */
@@ -1398,14 +1389,15 @@ void zgesvdq_(char *joba, char *jobp, char *jobr, char *jobu, char *jobv, intege
         if(nr < *m && !wntuf)
         {
             i__1 = *m - nr;
-            zlaset_("A", &i__1, &nr, &c_b1, &c_b1, &u[nr + 1 + u_dim1], ldu);
+            aocl_lapack_zlaset("A", &i__1, &nr, &c_b1, &c_b1, &u[nr + 1 + u_dim1], ldu);
             if(nr < n1)
             {
                 i__1 = n1 - nr;
-                zlaset_("A", &nr, &i__1, &c_b1, &c_b1, &u[(nr + 1) * u_dim1 + 1], ldu);
+                aocl_lapack_zlaset("A", &nr, &i__1, &c_b1, &c_b1, &u[(nr + 1) * u_dim1 + 1], ldu);
                 i__1 = *m - nr;
                 i__2 = n1 - nr;
-                zlaset_("A", &i__1, &i__2, &c_b1, &c_b2, &u[nr + 1 + (nr + 1) * u_dim1], ldu);
+                aocl_lapack_zlaset("A", &i__1, &i__2, &c_b1, &c_b2, &u[nr + 1 + (nr + 1) * u_dim1],
+                                   ldu);
             }
         }
         /* The Q matrix from the first QRF is built into the left singular */
@@ -1413,13 +1405,13 @@ void zgesvdq_(char *joba, char *jobp, char *jobr, char *jobu, char *jobv, intege
         if(!wntuf)
         {
             i__1 = *lcwork - *n;
-            zunmqr_("L", "N", m, &n1, n, &a[a_offset], lda, &cwork[1], &u[u_offset], ldu,
-                    &cwork[*n + 1], &i__1, &ierr);
+            aocl_lapack_zunmqr("L", "N", m, &n1, n, &a[a_offset], lda, &cwork[1], &u[u_offset], ldu,
+                               &cwork[*n + 1], &i__1, &ierr);
         }
         if(rowprm && !wntuf)
         {
             i__1 = *m - 1;
-            zlaswp_(&n1, &u[u_offset], ldu, &c__1, &i__1, &iwork[*n + 1], &c_n1);
+            aocl_lapack_zlaswp(&n1, &u[u_offset], ldu, &c__1, &i__1, &iwork[*n + 1], &c_n1);
         }
     }
     else if(rsvec && !lsvec)
@@ -1449,15 +1441,15 @@ void zgesvdq_(char *joba, char *jobp, char *jobr, char *jobu, char *jobv, intege
             {
                 i__1 = nr - 1;
                 i__2 = nr - 1;
-                zlaset_("U", &i__1, &i__2, &c_b1, &c_b1, &v[(v_dim1 << 1) + 1], ldv);
+                aocl_lapack_zlaset("U", &i__1, &i__2, &c_b1, &c_b1, &v[(v_dim1 << 1) + 1], ldv);
             }
             /* .. the left singular vectors of R**H overwrite V, the right singular */
             /* vectors not computed */
             if(wntvr || nr == *n)
             {
                 i__1 = *lcwork - *n;
-                zgesvd_("O", "N", n, &nr, &v[v_offset], ldv, &s[1], &u[u_offset], ldu, &u[u_offset],
-                        ldu, &cwork[*n + 1], &i__1, &rwork[1], info);
+                aocl_lapack_zgesvd("O", "N", n, &nr, &v[v_offset], ldv, &s[1], &u[u_offset], ldu,
+                                   &u[u_offset], ldu, &cwork[*n + 1], &i__1, &rwork[1], info);
                 i__1 = nr;
                 for(p = 1; p <= i__1; ++p)
                 {
@@ -1499,7 +1491,7 @@ void zgesvdq_(char *joba, char *jobp, char *jobr, char *jobu, char *jobv, intege
                         /* L1103: */
                     }
                 }
-                zlapmt_(&c_false, &nr, n, &v[v_offset], ldv, &iwork[1]);
+                aocl_lapack_zlapmt(&c_false, &nr, n, &v[v_offset], ldv, &iwork[1]);
             }
             else
             {
@@ -1509,10 +1501,10 @@ void zgesvdq_(char *joba, char *jobp, char *jobr, char *jobu, char *jobv, intege
                 /* way is to first use the QR factorization. For more details */
                 /* how to implement this, see the " FULL SVD " branch. */
                 i__1 = *n - nr;
-                zlaset_("G", n, &i__1, &c_b1, &c_b1, &v[(nr + 1) * v_dim1 + 1], ldv);
+                aocl_lapack_zlaset("G", n, &i__1, &c_b1, &c_b1, &v[(nr + 1) * v_dim1 + 1], ldv);
                 i__1 = *lcwork - *n;
-                zgesvd_("O", "N", n, n, &v[v_offset], ldv, &s[1], &u[u_offset], ldu, &u[u_offset],
-                        ldu, &cwork[*n + 1], &i__1, &rwork[1], info);
+                aocl_lapack_zgesvd("O", "N", n, n, &v[v_offset], ldv, &s[1], &u[u_offset], ldu,
+                                   &u[u_offset], ldu, &cwork[*n + 1], &i__1, &rwork[1], info);
                 i__1 = *n;
                 for(p = 1; p <= i__1; ++p)
                 {
@@ -1537,28 +1529,28 @@ void zgesvdq_(char *joba, char *jobp, char *jobr, char *jobu, char *jobv, intege
                     }
                     /* L1123: */
                 }
-                zlapmt_(&c_false, n, n, &v[v_offset], ldv, &iwork[1]);
+                aocl_lapack_zlapmt(&c_false, n, n, &v[v_offset], ldv, &iwork[1]);
             }
         }
         else
         {
             /* .. aply ZGESVD to R */
             /* .. copy R into V and overwrite V with the right singular vectors */
-            zlacpy_("U", &nr, n, &a[a_offset], lda, &v[v_offset], ldv);
+            aocl_lapack_zlacpy("U", &nr, n, &a[a_offset], lda, &v[v_offset], ldv);
             if(nr > 1)
             {
                 i__1 = nr - 1;
                 i__2 = nr - 1;
-                zlaset_("L", &i__1, &i__2, &c_b1, &c_b1, &v[v_dim1 + 2], ldv);
+                aocl_lapack_zlaset("L", &i__1, &i__2, &c_b1, &c_b1, &v[v_dim1 + 2], ldv);
             }
             /* .. the right singular vectors overwrite V, the NR left singular */
             /* vectors stored in U(1:NR,1:NR) */
             if(wntvr || nr == *n)
             {
                 i__1 = *lcwork - *n;
-                zgesvd_("N", "O", &nr, n, &v[v_offset], ldv, &s[1], &u[u_offset], ldu, &v[v_offset],
-                        ldv, &cwork[*n + 1], &i__1, &rwork[1], info);
-                zlapmt_(&c_false, &nr, n, &v[v_offset], ldv, &iwork[1]);
+                aocl_lapack_zgesvd("N", "O", &nr, n, &v[v_offset], ldv, &s[1], &u[u_offset], ldu,
+                                   &v[v_offset], ldv, &cwork[*n + 1], &i__1, &rwork[1], info);
+                aocl_lapack_zlapmt(&c_false, &nr, n, &v[v_offset], ldv, &iwork[1]);
                 /* .. now [V](1:NR,1:N) contains V(1:N,1:NR)**H */
             }
             else
@@ -1569,11 +1561,11 @@ void zgesvdq_(char *joba, char *jobp, char *jobr, char *jobu, char *jobv, intege
                 /* way is to first use the LQ factorization. For more details */
                 /* how to implement this, see the " FULL SVD " branch. */
                 i__1 = *n - nr;
-                zlaset_("G", &i__1, n, &c_b1, &c_b1, &v[nr + 1 + v_dim1], ldv);
+                aocl_lapack_zlaset("G", &i__1, n, &c_b1, &c_b1, &v[nr + 1 + v_dim1], ldv);
                 i__1 = *lcwork - *n;
-                zgesvd_("N", "O", n, n, &v[v_offset], ldv, &s[1], &u[u_offset], ldu, &v[v_offset],
-                        ldv, &cwork[*n + 1], &i__1, &rwork[1], info);
-                zlapmt_(&c_false, n, n, &v[v_offset], ldv, &iwork[1]);
+                aocl_lapack_zgesvd("N", "O", n, n, &v[v_offset], ldv, &s[1], &u[u_offset], ldu,
+                                   &v[v_offset], ldv, &cwork[*n + 1], &i__1, &rwork[1], info);
+                aocl_lapack_zlapmt(&c_false, n, n, &v[v_offset], ldv, &iwork[1]);
             }
             /* .. now [V] contains the adjoint of the matrix of the right singular */
             /* vectors of A. */
@@ -1609,14 +1601,14 @@ void zgesvdq_(char *joba, char *jobp, char *jobr, char *jobu, char *jobv, intege
                 {
                     i__1 = nr - 1;
                     i__2 = nr - 1;
-                    zlaset_("U", &i__1, &i__2, &c_b1, &c_b1, &v[(v_dim1 << 1) + 1], ldv);
+                    aocl_lapack_zlaset("U", &i__1, &i__2, &c_b1, &c_b1, &v[(v_dim1 << 1) + 1], ldv);
                 }
                 /* .. the left singular vectors of R**H overwrite [V], the NR right */
                 /* singular vectors of R**H stored in [U](1:NR,1:NR) as conjugate */
                 /* transposed */
                 i__1 = *lcwork - *n;
-                zgesvd_("O", "A", n, &nr, &v[v_offset], ldv, &s[1], &v[v_offset], ldv, &u[u_offset],
-                        ldu, &cwork[*n + 1], &i__1, &rwork[1], info);
+                aocl_lapack_zgesvd("O", "A", n, &nr, &v[v_offset], ldv, &s[1], &v[v_offset], ldv,
+                                   &u[u_offset], ldu, &cwork[*n + 1], &i__1, &rwork[1], info);
                 /* .. assemble V */
                 i__1 = nr;
                 for(p = 1; p <= i__1; ++p)
@@ -1659,7 +1651,7 @@ void zgesvdq_(char *joba, char *jobp, char *jobr, char *jobu, char *jobv, intege
                         /* L1101: */
                     }
                 }
-                zlapmt_(&c_false, &nr, n, &v[v_offset], ldv, &iwork[1]);
+                aocl_lapack_zlapmt(&c_false, &nr, n, &v[v_offset], ldv, &iwork[1]);
                 i__1 = nr;
                 for(p = 1; p <= i__1; ++p)
                 {
@@ -1687,15 +1679,16 @@ void zgesvdq_(char *joba, char *jobp, char *jobr, char *jobu, char *jobv, intege
                 if(nr < *m && !wntuf)
                 {
                     i__1 = *m - nr;
-                    zlaset_("A", &i__1, &nr, &c_b1, &c_b1, &u[nr + 1 + u_dim1], ldu);
+                    aocl_lapack_zlaset("A", &i__1, &nr, &c_b1, &c_b1, &u[nr + 1 + u_dim1], ldu);
                     if(nr < n1)
                     {
                         i__1 = n1 - nr;
-                        zlaset_("A", &nr, &i__1, &c_b1, &c_b1, &u[(nr + 1) * u_dim1 + 1], ldu);
+                        aocl_lapack_zlaset("A", &nr, &i__1, &c_b1, &c_b1, &u[(nr + 1) * u_dim1 + 1],
+                                           ldu);
                         i__1 = *m - nr;
                         i__2 = n1 - nr;
-                        zlaset_("A", &i__1, &i__2, &c_b1, &c_b2, &u[nr + 1 + (nr + 1) * u_dim1],
-                                ldu);
+                        aocl_lapack_zlaset("A", &i__1, &i__2, &c_b1, &c_b2,
+                                           &u[nr + 1 + (nr + 1) * u_dim1], ldu);
                     }
                 }
             }
@@ -1731,13 +1724,14 @@ void zgesvdq_(char *joba, char *jobp, char *jobr, char *jobu, char *jobv, intege
                     {
                         i__1 = nr - 1;
                         i__2 = nr - 1;
-                        zlaset_("U", &i__1, &i__2, &c_b1, &c_b1, &v[(v_dim1 << 1) + 1], ldv);
+                        aocl_lapack_zlaset("U", &i__1, &i__2, &c_b1, &c_b1, &v[(v_dim1 << 1) + 1],
+                                           ldv);
                     }
                     i__1 = *n - nr;
-                    zlaset_("A", n, &i__1, &c_b1, &c_b1, &v[(nr + 1) * v_dim1 + 1], ldv);
+                    aocl_lapack_zlaset("A", n, &i__1, &c_b1, &c_b1, &v[(nr + 1) * v_dim1 + 1], ldv);
                     i__1 = *lcwork - *n;
-                    zgesvd_("O", "A", n, n, &v[v_offset], ldv, &s[1], &v[v_offset], ldv,
-                            &u[u_offset], ldu, &cwork[*n + 1], &i__1, &rwork[1], info);
+                    aocl_lapack_zgesvd("O", "A", n, n, &v[v_offset], ldv, &s[1], &v[v_offset], ldv,
+                                       &u[u_offset], ldu, &cwork[*n + 1], &i__1, &rwork[1], info);
                     i__1 = *n;
                     for(p = 1; p <= i__1; ++p)
                     {
@@ -1762,7 +1756,7 @@ void zgesvdq_(char *joba, char *jobp, char *jobr, char *jobu, char *jobv, intege
                         }
                         /* L1113: */
                     }
-                    zlapmt_(&c_false, n, n, &v[v_offset], ldv, &iwork[1]);
+                    aocl_lapack_zlapmt(&c_false, n, n, &v[v_offset], ldv, &iwork[1]);
                     /* .. assemble the left singular vector matrix U of dimensions */
                     /* (M x N1), i.e. (M x N) or (M x M). */
                     i__1 = *n;
@@ -1792,15 +1786,16 @@ void zgesvdq_(char *joba, char *jobp, char *jobr, char *jobu, char *jobv, intege
                     if(*n < *m && !wntuf)
                     {
                         i__1 = *m - *n;
-                        zlaset_("A", &i__1, n, &c_b1, &c_b1, &u[*n + 1 + u_dim1], ldu);
+                        aocl_lapack_zlaset("A", &i__1, n, &c_b1, &c_b1, &u[*n + 1 + u_dim1], ldu);
                         if(*n < n1)
                         {
                             i__1 = n1 - *n;
-                            zlaset_("A", n, &i__1, &c_b1, &c_b1, &u[(*n + 1) * u_dim1 + 1], ldu);
+                            aocl_lapack_zlaset("A", n, &i__1, &c_b1, &c_b1,
+                                               &u[(*n + 1) * u_dim1 + 1], ldu);
                             i__1 = *m - *n;
                             i__2 = n1 - *n;
-                            zlaset_("A", &i__1, &i__2, &c_b1, &c_b2, &u[*n + 1 + (*n + 1) * u_dim1],
-                                    ldu);
+                            aocl_lapack_zlaset("A", &i__1, &i__2, &c_b1, &c_b2,
+                                               &u[*n + 1 + (*n + 1) * u_dim1], ldu);
                         }
                     }
                 }
@@ -1826,11 +1821,12 @@ void zgesvdq_(char *joba, char *jobp, char *jobr, char *jobu, char *jobv, intege
                     {
                         i__1 = nr - 1;
                         i__2 = nr - 1;
-                        zlaset_("U", &i__1, &i__2, &c_b1, &c_b1, &u[(nr + 2) * u_dim1 + 1], ldu);
+                        aocl_lapack_zlaset("U", &i__1, &i__2, &c_b1, &c_b1,
+                                           &u[(nr + 2) * u_dim1 + 1], ldu);
                     }
                     i__1 = *lcwork - *n - nr;
-                    zgeqrf_(n, &nr, &u[(nr + 1) * u_dim1 + 1], ldu, &cwork[*n + 1],
-                            &cwork[*n + nr + 1], &i__1, &ierr);
+                    aocl_lapack_zgeqrf(n, &nr, &u[(nr + 1) * u_dim1 + 1], ldu, &cwork[*n + 1],
+                                       &cwork[*n + nr + 1], &i__1, &ierr);
                     i__1 = nr;
                     for(p = 1; p <= i__1; ++p)
                     {
@@ -1847,35 +1843,40 @@ void zgesvdq_(char *joba, char *jobp, char *jobr, char *jobu, char *jobv, intege
                     }
                     i__1 = nr - 1;
                     i__2 = nr - 1;
-                    zlaset_("U", &i__1, &i__2, &c_b1, &c_b1, &v[(v_dim1 << 1) + 1], ldv);
+                    aocl_lapack_zlaset("U", &i__1, &i__2, &c_b1, &c_b1, &v[(v_dim1 << 1) + 1], ldv);
                     i__1 = *lcwork - *n - nr;
-                    zgesvd_("S", "O", &nr, &nr, &v[v_offset], ldv, &s[1], &u[u_offset], ldu,
-                            &v[v_offset], ldv, &cwork[*n + nr + 1], &i__1, &rwork[1], info);
+                    aocl_lapack_zgesvd("S", "O", &nr, &nr, &v[v_offset], ldv, &s[1], &u[u_offset],
+                                       ldu, &v[v_offset], ldv, &cwork[*n + nr + 1], &i__1,
+                                       &rwork[1], info);
                     i__1 = *n - nr;
-                    zlaset_("A", &i__1, &nr, &c_b1, &c_b1, &v[nr + 1 + v_dim1], ldv);
+                    aocl_lapack_zlaset("A", &i__1, &nr, &c_b1, &c_b1, &v[nr + 1 + v_dim1], ldv);
                     i__1 = *n - nr;
-                    zlaset_("A", &nr, &i__1, &c_b1, &c_b1, &v[(nr + 1) * v_dim1 + 1], ldv);
+                    aocl_lapack_zlaset("A", &nr, &i__1, &c_b1, &c_b1, &v[(nr + 1) * v_dim1 + 1],
+                                       ldv);
                     i__1 = *n - nr;
                     i__2 = *n - nr;
-                    zlaset_("A", &i__1, &i__2, &c_b1, &c_b2, &v[nr + 1 + (nr + 1) * v_dim1], ldv);
+                    aocl_lapack_zlaset("A", &i__1, &i__2, &c_b1, &c_b2,
+                                       &v[nr + 1 + (nr + 1) * v_dim1], ldv);
                     i__1 = *lcwork - *n - nr;
-                    zunmqr_("R", "C", n, n, &nr, &u[(nr + 1) * u_dim1 + 1], ldu, &cwork[*n + 1],
-                            &v[v_offset], ldv, &cwork[*n + nr + 1], &i__1, &ierr);
-                    zlapmt_(&c_false, n, n, &v[v_offset], ldv, &iwork[1]);
+                    aocl_lapack_zunmqr("R", "C", n, n, &nr, &u[(nr + 1) * u_dim1 + 1], ldu,
+                                       &cwork[*n + 1], &v[v_offset], ldv, &cwork[*n + nr + 1],
+                                       &i__1, &ierr);
+                    aocl_lapack_zlapmt(&c_false, n, n, &v[v_offset], ldv, &iwork[1]);
                     /* .. assemble the left singular vector matrix U of dimensions */
                     /* (M x NR) or (M x N) or (M x M). */
                     if(nr < *m && !wntuf)
                     {
                         i__1 = *m - nr;
-                        zlaset_("A", &i__1, &nr, &c_b1, &c_b1, &u[nr + 1 + u_dim1], ldu);
+                        aocl_lapack_zlaset("A", &i__1, &nr, &c_b1, &c_b1, &u[nr + 1 + u_dim1], ldu);
                         if(nr < n1)
                         {
                             i__1 = n1 - nr;
-                            zlaset_("A", &nr, &i__1, &c_b1, &c_b1, &u[(nr + 1) * u_dim1 + 1], ldu);
+                            aocl_lapack_zlaset("A", &nr, &i__1, &c_b1, &c_b1,
+                                               &u[(nr + 1) * u_dim1 + 1], ldu);
                             i__1 = *m - nr;
                             i__2 = n1 - nr;
-                            zlaset_("A", &i__1, &i__2, &c_b1, &c_b2, &u[nr + 1 + (nr + 1) * u_dim1],
-                                    ldu);
+                            aocl_lapack_zlaset("A", &i__1, &i__2, &c_b1, &c_b2,
+                                               &u[nr + 1 + (nr + 1) * u_dim1], ldu);
                         }
                     }
                 }
@@ -1887,34 +1888,35 @@ void zgesvdq_(char *joba, char *jobp, char *jobr, char *jobu, char *jobv, intege
             if(wntvr || nr == *n)
             {
                 /* .. copy R into [V] and overwrite V with the right singular vectors */
-                zlacpy_("U", &nr, n, &a[a_offset], lda, &v[v_offset], ldv);
+                aocl_lapack_zlacpy("U", &nr, n, &a[a_offset], lda, &v[v_offset], ldv);
                 if(nr > 1)
                 {
                     i__1 = nr - 1;
                     i__2 = nr - 1;
-                    zlaset_("L", &i__1, &i__2, &c_b1, &c_b1, &v[v_dim1 + 2], ldv);
+                    aocl_lapack_zlaset("L", &i__1, &i__2, &c_b1, &c_b1, &v[v_dim1 + 2], ldv);
                 }
                 /* .. the right singular vectors of R overwrite [V], the NR left */
                 /* singular vectors of R stored in [U](1:NR,1:NR) */
                 i__1 = *lcwork - *n;
-                zgesvd_("S", "O", &nr, n, &v[v_offset], ldv, &s[1], &u[u_offset], ldu, &v[v_offset],
-                        ldv, &cwork[*n + 1], &i__1, &rwork[1], info);
-                zlapmt_(&c_false, &nr, n, &v[v_offset], ldv, &iwork[1]);
+                aocl_lapack_zgesvd("S", "O", &nr, n, &v[v_offset], ldv, &s[1], &u[u_offset], ldu,
+                                   &v[v_offset], ldv, &cwork[*n + 1], &i__1, &rwork[1], info);
+                aocl_lapack_zlapmt(&c_false, &nr, n, &v[v_offset], ldv, &iwork[1]);
                 /* .. now [V](1:NR,1:N) contains V(1:N,1:NR)**H */
                 /* .. assemble the left singular vector matrix U of dimensions */
                 /* (M x NR) or (M x N) or (M x M). */
                 if(nr < *m && !wntuf)
                 {
                     i__1 = *m - nr;
-                    zlaset_("A", &i__1, &nr, &c_b1, &c_b1, &u[nr + 1 + u_dim1], ldu);
+                    aocl_lapack_zlaset("A", &i__1, &nr, &c_b1, &c_b1, &u[nr + 1 + u_dim1], ldu);
                     if(nr < n1)
                     {
                         i__1 = n1 - nr;
-                        zlaset_("A", &nr, &i__1, &c_b1, &c_b1, &u[(nr + 1) * u_dim1 + 1], ldu);
+                        aocl_lapack_zlaset("A", &nr, &i__1, &c_b1, &c_b1, &u[(nr + 1) * u_dim1 + 1],
+                                           ldu);
                         i__1 = *m - nr;
                         i__2 = n1 - nr;
-                        zlaset_("A", &i__1, &i__2, &c_b1, &c_b2, &u[nr + 1 + (nr + 1) * u_dim1],
-                                ldu);
+                        aocl_lapack_zlaset("A", &i__1, &i__2, &c_b1, &c_b2,
+                                           &u[nr + 1 + (nr + 1) * u_dim1], ldu);
                     }
                 }
             }
@@ -1932,21 +1934,21 @@ void zgesvdq_(char *joba, char *jobp, char *jobr, char *jobu, char *jobv, intege
                 optratio = 2;
                 if(optratio * nr > *n)
                 {
-                    zlacpy_("U", &nr, n, &a[a_offset], lda, &v[v_offset], ldv);
+                    aocl_lapack_zlacpy("U", &nr, n, &a[a_offset], lda, &v[v_offset], ldv);
                     if(nr > 1)
                     {
                         i__1 = nr - 1;
                         i__2 = nr - 1;
-                        zlaset_("L", &i__1, &i__2, &c_b1, &c_b1, &v[v_dim1 + 2], ldv);
+                        aocl_lapack_zlaset("L", &i__1, &i__2, &c_b1, &c_b1, &v[v_dim1 + 2], ldv);
                     }
                     /* .. the right singular vectors of R overwrite [V], the NR left */
                     /* singular vectors of R stored in [U](1:NR,1:NR) */
                     i__1 = *n - nr;
-                    zlaset_("A", &i__1, n, &c_b1, &c_b1, &v[nr + 1 + v_dim1], ldv);
+                    aocl_lapack_zlaset("A", &i__1, n, &c_b1, &c_b1, &v[nr + 1 + v_dim1], ldv);
                     i__1 = *lcwork - *n;
-                    zgesvd_("S", "O", n, n, &v[v_offset], ldv, &s[1], &u[u_offset], ldu,
-                            &v[v_offset], ldv, &cwork[*n + 1], &i__1, &rwork[1], info);
-                    zlapmt_(&c_false, n, n, &v[v_offset], ldv, &iwork[1]);
+                    aocl_lapack_zgesvd("S", "O", n, n, &v[v_offset], ldv, &s[1], &u[u_offset], ldu,
+                                       &v[v_offset], ldv, &cwork[*n + 1], &i__1, &rwork[1], info);
+                    aocl_lapack_zlapmt(&c_false, n, n, &v[v_offset], ldv, &iwork[1]);
                     /* .. now [V] contains the adjoint of the matrix of the right */
                     /* singular vectors of A. The leading N left singular vectors */
                     /* are in [U](1:N,1:N) */
@@ -1955,65 +1957,73 @@ void zgesvdq_(char *joba, char *jobp, char *jobr, char *jobu, char *jobv, intege
                     if(*n < *m && !wntuf)
                     {
                         i__1 = *m - *n;
-                        zlaset_("A", &i__1, n, &c_b1, &c_b1, &u[*n + 1 + u_dim1], ldu);
+                        aocl_lapack_zlaset("A", &i__1, n, &c_b1, &c_b1, &u[*n + 1 + u_dim1], ldu);
                         if(*n < n1)
                         {
                             i__1 = n1 - *n;
-                            zlaset_("A", n, &i__1, &c_b1, &c_b1, &u[(*n + 1) * u_dim1 + 1], ldu);
+                            aocl_lapack_zlaset("A", n, &i__1, &c_b1, &c_b1,
+                                               &u[(*n + 1) * u_dim1 + 1], ldu);
                             i__1 = *m - *n;
                             i__2 = n1 - *n;
-                            zlaset_("A", &i__1, &i__2, &c_b1, &c_b2, &u[*n + 1 + (*n + 1) * u_dim1],
-                                    ldu);
+                            aocl_lapack_zlaset("A", &i__1, &i__2, &c_b1, &c_b2,
+                                               &u[*n + 1 + (*n + 1) * u_dim1], ldu);
                         }
                     }
                 }
                 else
                 {
-                    zlacpy_("U", &nr, n, &a[a_offset], lda, &u[nr + 1 + u_dim1], ldu);
+                    aocl_lapack_zlacpy("U", &nr, n, &a[a_offset], lda, &u[nr + 1 + u_dim1], ldu);
                     if(nr > 1)
                     {
                         i__1 = nr - 1;
                         i__2 = nr - 1;
-                        zlaset_("L", &i__1, &i__2, &c_b1, &c_b1, &u[nr + 2 + u_dim1], ldu);
+                        aocl_lapack_zlaset("L", &i__1, &i__2, &c_b1, &c_b1, &u[nr + 2 + u_dim1],
+                                           ldu);
                     }
                     i__1 = *lcwork - *n - nr;
-                    zgelqf_(&nr, n, &u[nr + 1 + u_dim1], ldu, &cwork[*n + 1], &cwork[*n + nr + 1],
-                            &i__1, &ierr);
-                    zlacpy_("L", &nr, &nr, &u[nr + 1 + u_dim1], ldu, &v[v_offset], ldv);
+                    aocl_lapack_zgelqf(&nr, n, &u[nr + 1 + u_dim1], ldu, &cwork[*n + 1],
+                                       &cwork[*n + nr + 1], &i__1, &ierr);
+                    aocl_lapack_zlacpy("L", &nr, &nr, &u[nr + 1 + u_dim1], ldu, &v[v_offset], ldv);
                     if(nr > 1)
                     {
                         i__1 = nr - 1;
                         i__2 = nr - 1;
-                        zlaset_("U", &i__1, &i__2, &c_b1, &c_b1, &v[(v_dim1 << 1) + 1], ldv);
+                        aocl_lapack_zlaset("U", &i__1, &i__2, &c_b1, &c_b1, &v[(v_dim1 << 1) + 1],
+                                           ldv);
                     }
                     i__1 = *lcwork - *n - nr;
-                    zgesvd_("S", "O", &nr, &nr, &v[v_offset], ldv, &s[1], &u[u_offset], ldu,
-                            &v[v_offset], ldv, &cwork[*n + nr + 1], &i__1, &rwork[1], info);
+                    aocl_lapack_zgesvd("S", "O", &nr, &nr, &v[v_offset], ldv, &s[1], &u[u_offset],
+                                       ldu, &v[v_offset], ldv, &cwork[*n + nr + 1], &i__1,
+                                       &rwork[1], info);
                     i__1 = *n - nr;
-                    zlaset_("A", &i__1, &nr, &c_b1, &c_b1, &v[nr + 1 + v_dim1], ldv);
+                    aocl_lapack_zlaset("A", &i__1, &nr, &c_b1, &c_b1, &v[nr + 1 + v_dim1], ldv);
                     i__1 = *n - nr;
-                    zlaset_("A", &nr, &i__1, &c_b1, &c_b1, &v[(nr + 1) * v_dim1 + 1], ldv);
+                    aocl_lapack_zlaset("A", &nr, &i__1, &c_b1, &c_b1, &v[(nr + 1) * v_dim1 + 1],
+                                       ldv);
                     i__1 = *n - nr;
                     i__2 = *n - nr;
-                    zlaset_("A", &i__1, &i__2, &c_b1, &c_b2, &v[nr + 1 + (nr + 1) * v_dim1], ldv);
+                    aocl_lapack_zlaset("A", &i__1, &i__2, &c_b1, &c_b2,
+                                       &v[nr + 1 + (nr + 1) * v_dim1], ldv);
                     i__1 = *lcwork - *n - nr;
-                    zunmlq_("R", "N", n, n, &nr, &u[nr + 1 + u_dim1], ldu, &cwork[*n + 1],
-                            &v[v_offset], ldv, &cwork[*n + nr + 1], &i__1, &ierr);
-                    zlapmt_(&c_false, n, n, &v[v_offset], ldv, &iwork[1]);
+                    aocl_lapack_zunmlq("R", "N", n, n, &nr, &u[nr + 1 + u_dim1], ldu,
+                                       &cwork[*n + 1], &v[v_offset], ldv, &cwork[*n + nr + 1],
+                                       &i__1, &ierr);
+                    aocl_lapack_zlapmt(&c_false, n, n, &v[v_offset], ldv, &iwork[1]);
                     /* .. assemble the left singular vector matrix U of dimensions */
                     /* (M x NR) or (M x N) or (M x M). */
                     if(nr < *m && !wntuf)
                     {
                         i__1 = *m - nr;
-                        zlaset_("A", &i__1, &nr, &c_b1, &c_b1, &u[nr + 1 + u_dim1], ldu);
+                        aocl_lapack_zlaset("A", &i__1, &nr, &c_b1, &c_b1, &u[nr + 1 + u_dim1], ldu);
                         if(nr < n1)
                         {
                             i__1 = n1 - nr;
-                            zlaset_("A", &nr, &i__1, &c_b1, &c_b1, &u[(nr + 1) * u_dim1 + 1], ldu);
+                            aocl_lapack_zlaset("A", &nr, &i__1, &c_b1, &c_b1,
+                                               &u[(nr + 1) * u_dim1 + 1], ldu);
                             i__1 = *m - nr;
                             i__2 = n1 - nr;
-                            zlaset_("A", &i__1, &i__2, &c_b1, &c_b2, &u[nr + 1 + (nr + 1) * u_dim1],
-                                    ldu);
+                            aocl_lapack_zlaset("A", &i__1, &i__2, &c_b1, &c_b2,
+                                               &u[nr + 1 + (nr + 1) * u_dim1], ldu);
                         }
                     }
                 }
@@ -2025,13 +2035,13 @@ void zgesvdq_(char *joba, char *jobp, char *jobr, char *jobu, char *jobv, intege
         if(!wntuf)
         {
             i__1 = *lcwork - *n;
-            zunmqr_("L", "N", m, &n1, n, &a[a_offset], lda, &cwork[1], &u[u_offset], ldu,
-                    &cwork[*n + 1], &i__1, &ierr);
+            aocl_lapack_zunmqr("L", "N", m, &n1, n, &a[a_offset], lda, &cwork[1], &u[u_offset], ldu,
+                               &cwork[*n + 1], &i__1, &ierr);
         }
         if(rowprm && !wntuf)
         {
             i__1 = *m - 1;
-            zlaswp_(&n1, &u[u_offset], ldu, &c__1, &i__1, &iwork[*n + 1], &c_n1);
+            aocl_lapack_zlaswp(&n1, &u[u_offset], ldu, &c__1, &i__1, &iwork[*n + 1], &c_n1);
         }
         /* ... end of the "full SVD" branch */
     }
@@ -2052,7 +2062,7 @@ L4002: /* .. if numerical rank deficiency is detected, the truncated */
     if(nr < *n)
     {
         i__1 = *n - nr;
-        dlaset_("G", &i__1, &c__1, &c_b74, &c_b74, &s[nr + 1], n);
+        aocl_lapack_dlaset("G", &i__1, &c__1, &c_b74, &c_b74, &s[nr + 1], n);
     }
     /* .. undo scaling;
     this may cause overflow in the largest singular */
@@ -2060,7 +2070,7 @@ L4002: /* .. if numerical rank deficiency is detected, the truncated */
     if(ascaled)
     {
         d__1 = sqrt((doublereal)(*m));
-        dlascl_("G", &c__0, &c__0, &c_b87, &d__1, &nr, &c__1, &s[1], n, &ierr);
+        aocl_lapack_dlascl("G", &c__0, &c__0, &c_b87, &d__1, &nr, &c__1, &s[1], n, &ierr);
     }
     if(conda)
     {

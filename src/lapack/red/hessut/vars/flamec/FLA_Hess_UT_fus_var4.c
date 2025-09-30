@@ -29,11 +29,11 @@ FLA_Error FLA_Hess_UT_ofu_var4( FLA_Obj A, FLA_Obj T )
 FLA_Error FLA_Hess_UT_step_ofu_var4( FLA_Obj A, FLA_Obj Y, FLA_Obj Z, FLA_Obj T )
 {
   FLA_Datatype datatype;
-  integer          m_A, m_T;
-  integer          rs_A, cs_A;
-  integer          rs_Y, cs_Y;
-  integer          rs_Z, cs_Z;
-  integer          rs_T, cs_T;
+  fla_dim_t          m_A, m_T;
+  fla_dim_t          rs_A, cs_A;
+  fla_dim_t          rs_Y, cs_Y;
+  fla_dim_t          rs_Z, cs_Z;
+  fla_dim_t          rs_T, cs_T;
 
   datatype = FLA_Obj_datatype( A );
 
@@ -129,12 +129,12 @@ FLA_Error FLA_Hess_UT_step_ofu_var4( FLA_Obj A, FLA_Obj Y, FLA_Obj Z, FLA_Obj T 
 
 
 
-FLA_Error FLA_Hess_UT_step_ofs_var4( integer m_A,
-                                     integer m_T,
-                                     float* buff_A, integer rs_A, integer cs_A, 
-                                     float* buff_Y, integer rs_Y, integer cs_Y,
-                                     float* buff_Z, integer rs_Z, integer cs_Z,
-                                     float* buff_T, integer rs_T, integer cs_T )
+FLA_Error FLA_Hess_UT_step_ofs_var4( fla_dim_t m_A,
+                                     fla_dim_t m_T,
+                                     float* buff_A, fla_dim_t rs_A, fla_dim_t cs_A, 
+                                     float* buff_Y, fla_dim_t rs_Y, fla_dim_t cs_Y,
+                                     float* buff_Z, fla_dim_t rs_Z, fla_dim_t cs_Z,
+                                     float* buff_T, fla_dim_t rs_T, fla_dim_t cs_T )
 {
   float*    buff_2  = FLA_FLOAT_PTR( FLA_TWO );
   float*    buff_1  = FLA_FLOAT_PTR( FLA_ONE );
@@ -146,16 +146,16 @@ FLA_Error FLA_Hess_UT_step_ofs_var4( integer m_A,
   float     beta, conj_beta;
   float     inv_tau11;
   float     minus_inv_tau11;
-  integer       i;
+  fla_dim_t       i;
 
   // b_alg = FLA_Obj_length( T );
-  integer       b_alg = m_T;
+  fla_dim_t       b_alg = m_T;
 
   // FLA_Obj_create( datatype_A, m_A, 1, 0, 0, &d );
   // FLA_Obj_create( datatype_A, m_A, 1, 0, 0, &e );
   // FLA_Obj_create( datatype_A, m_A, 1, 0, 0, &f );
   float*    buff_e = ( float* ) FLA_malloc( m_A * sizeof( *buff_A ) );
-  integer       inc_e  = 1;
+  fla_dim_t       inc_e  = 1;
 
   // FLA_Set( FLA_ZERO, Y );
   // FLA_Set( FLA_ZERO, Z );
@@ -201,10 +201,10 @@ FLA_Error FLA_Hess_UT_step_ofs_var4( integer m_A,
 
     float*    a2       = alpha11;
 
-    integer       m_ahead  = m_A - i - 1;
-    integer       n_ahead  = m_A - i - 1;
-    integer       m_behind = i;
-    integer       n_behind = i;
+    fla_dim_t       m_ahead  = m_A - i - 1;
+    fla_dim_t       n_ahead  = m_A - i - 1;
+    fla_dim_t       m_behind = i;
+    fla_dim_t       n_behind = i;
 
     /*------------------------------------------------------------*/
 
@@ -404,12 +404,12 @@ FLA_Error FLA_Hess_UT_step_ofs_var4( integer m_A,
 
 
 
-FLA_Error FLA_Hess_UT_step_ofd_var4( integer m_A,
-                                     integer m_T,
-                                     double* buff_A, integer rs_A, integer cs_A, 
-                                     double* buff_Y, integer rs_Y, integer cs_Y,
-                                     double* buff_Z, integer rs_Z, integer cs_Z,
-                                     double* buff_T, integer rs_T, integer cs_T )
+FLA_Error FLA_Hess_UT_step_ofd_var4( fla_dim_t m_A,
+                                     fla_dim_t m_T,
+                                     double* buff_A, fla_dim_t rs_A, fla_dim_t cs_A, 
+                                     double* buff_Y, fla_dim_t rs_Y, fla_dim_t cs_Y,
+                                     double* buff_Z, fla_dim_t rs_Z, fla_dim_t cs_Z,
+                                     double* buff_T, fla_dim_t rs_T, fla_dim_t cs_T )
 {
   double*   buff_2  = FLA_DOUBLE_PTR( FLA_TWO );
   double*   buff_1  = FLA_DOUBLE_PTR( FLA_ONE );
@@ -421,16 +421,16 @@ FLA_Error FLA_Hess_UT_step_ofd_var4( integer m_A,
   double    beta, conj_beta;
   double    inv_tau11;
   double    minus_inv_tau11;
-  integer       i;
+  fla_dim_t       i;
 
   // b_alg = FLA_Obj_length( T );
-  integer       b_alg = m_T;
+  fla_dim_t       b_alg = m_T;
 
   // FLA_Obj_create( datatype_A, m_A, 1, 0, 0, &d );
   // FLA_Obj_create( datatype_A, m_A, 1, 0, 0, &e );
   // FLA_Obj_create( datatype_A, m_A, 1, 0, 0, &f );
   double*   buff_e = ( double* ) FLA_malloc( m_A * sizeof( *buff_A ) );
-  integer       inc_e  = 1;
+  fla_dim_t       inc_e  = 1;
 
   // FLA_Set( FLA_ZERO, Y );
   // FLA_Set( FLA_ZERO, Z );
@@ -476,10 +476,10 @@ FLA_Error FLA_Hess_UT_step_ofd_var4( integer m_A,
 
     double*   a2       = alpha11;
 
-    integer       m_ahead  = m_A - i - 1;
-    integer       n_ahead  = m_A - i - 1;
-    integer       m_behind = i;
-    integer       n_behind = i;
+    fla_dim_t       m_ahead  = m_A - i - 1;
+    fla_dim_t       n_ahead  = m_A - i - 1;
+    fla_dim_t       m_behind = i;
+    fla_dim_t       n_behind = i;
 
     /*------------------------------------------------------------*/
 
@@ -679,12 +679,12 @@ FLA_Error FLA_Hess_UT_step_ofd_var4( integer m_A,
 
 
 
-FLA_Error FLA_Hess_UT_step_ofc_var4( integer m_A,
-                                     integer m_T,
-                                     scomplex* buff_A, integer rs_A, integer cs_A, 
-                                     scomplex* buff_Y, integer rs_Y, integer cs_Y,
-                                     scomplex* buff_Z, integer rs_Z, integer cs_Z,
-                                     scomplex* buff_T, integer rs_T, integer cs_T )
+FLA_Error FLA_Hess_UT_step_ofc_var4( fla_dim_t m_A,
+                                     fla_dim_t m_T,
+                                     scomplex* buff_A, fla_dim_t rs_A, fla_dim_t cs_A, 
+                                     scomplex* buff_Y, fla_dim_t rs_Y, fla_dim_t cs_Y,
+                                     scomplex* buff_Z, fla_dim_t rs_Z, fla_dim_t cs_Z,
+                                     scomplex* buff_T, fla_dim_t rs_T, fla_dim_t cs_T )
 {
   scomplex* buff_2  = FLA_COMPLEX_PTR( FLA_TWO );
   scomplex* buff_1  = FLA_COMPLEX_PTR( FLA_ONE );
@@ -696,16 +696,16 @@ FLA_Error FLA_Hess_UT_step_ofc_var4( integer m_A,
   scomplex  beta, conj_beta;
   scomplex  inv_tau11;
   scomplex  minus_inv_tau11;
-  integer       i;
+  fla_dim_t       i;
 
   // b_alg = FLA_Obj_length( T );
-  integer       b_alg = m_T;
+  fla_dim_t       b_alg = m_T;
 
   // FLA_Obj_create( datatype_A, m_A, 1, 0, 0, &d );
   // FLA_Obj_create( datatype_A, m_A, 1, 0, 0, &e );
   // FLA_Obj_create( datatype_A, m_A, 1, 0, 0, &f );
   scomplex* buff_e = ( scomplex* ) FLA_malloc( m_A * sizeof( *buff_A ) );
-  integer       inc_e  = 1;
+  fla_dim_t       inc_e  = 1;
 
   // FLA_Set( FLA_ZERO, Y );
   // FLA_Set( FLA_ZERO, Z );
@@ -751,10 +751,10 @@ FLA_Error FLA_Hess_UT_step_ofc_var4( integer m_A,
 
     scomplex* a2       = alpha11;
 
-    integer       m_ahead  = m_A - i - 1;
-    integer       n_ahead  = m_A - i - 1;
-    integer       m_behind = i;
-    integer       n_behind = i;
+    fla_dim_t       m_ahead  = m_A - i - 1;
+    fla_dim_t       n_ahead  = m_A - i - 1;
+    fla_dim_t       m_behind = i;
+    fla_dim_t       n_behind = i;
 
     /*------------------------------------------------------------*/
 
@@ -954,12 +954,12 @@ FLA_Error FLA_Hess_UT_step_ofc_var4( integer m_A,
 
 
 
-FLA_Error FLA_Hess_UT_step_ofz_var4( integer m_A,
-                                     integer m_T,
-                                     dcomplex* buff_A, integer rs_A, integer cs_A, 
-                                     dcomplex* buff_Y, integer rs_Y, integer cs_Y,
-                                     dcomplex* buff_Z, integer rs_Z, integer cs_Z,
-                                     dcomplex* buff_T, integer rs_T, integer cs_T )
+FLA_Error FLA_Hess_UT_step_ofz_var4( fla_dim_t m_A,
+                                     fla_dim_t m_T,
+                                     dcomplex* buff_A, fla_dim_t rs_A, fla_dim_t cs_A, 
+                                     dcomplex* buff_Y, fla_dim_t rs_Y, fla_dim_t cs_Y,
+                                     dcomplex* buff_Z, fla_dim_t rs_Z, fla_dim_t cs_Z,
+                                     dcomplex* buff_T, fla_dim_t rs_T, fla_dim_t cs_T )
 {
   dcomplex* buff_2  = FLA_DOUBLE_COMPLEX_PTR( FLA_TWO );
   dcomplex* buff_1  = FLA_DOUBLE_COMPLEX_PTR( FLA_ONE );
@@ -971,16 +971,16 @@ FLA_Error FLA_Hess_UT_step_ofz_var4( integer m_A,
   dcomplex  beta, conj_beta;
   dcomplex  inv_tau11;
   dcomplex  minus_inv_tau11;
-  integer       i;
+  fla_dim_t       i;
 
   // b_alg = FLA_Obj_length( T );
-  integer       b_alg = m_T;
+  fla_dim_t       b_alg = m_T;
 
   // FLA_Obj_create( datatype_A, m_A, 1, 0, 0, &d );
   // FLA_Obj_create( datatype_A, m_A, 1, 0, 0, &e );
   // FLA_Obj_create( datatype_A, m_A, 1, 0, 0, &f );
   dcomplex* buff_e = ( dcomplex* ) FLA_malloc( m_A * sizeof( *buff_A ) );
-  integer       inc_e  = 1;
+  fla_dim_t       inc_e  = 1;
 
   // FLA_Set( FLA_ZERO, Y );
   // FLA_Set( FLA_ZERO, Z );
@@ -1026,10 +1026,10 @@ FLA_Error FLA_Hess_UT_step_ofz_var4( integer m_A,
 
     dcomplex* a2       = alpha11;
 
-    integer       m_ahead  = m_A - i - 1;
-    integer       n_ahead  = m_A - i - 1;
-    integer       m_behind = i;
-    integer       n_behind = i;
+    fla_dim_t       m_ahead  = m_A - i - 1;
+    fla_dim_t       n_ahead  = m_A - i - 1;
+    fla_dim_t       m_behind = i;
+    fla_dim_t       n_behind = i;
 
     /*------------------------------------------------------------*/
 

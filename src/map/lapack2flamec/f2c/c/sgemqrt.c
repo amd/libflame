@@ -166,28 +166,47 @@
 /* > \ingroup realGEcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void sgemqrt_(char *side, char *trans, integer *m, integer *n, integer *k, integer *nb, real *v,
-              integer *ldv, real *t, integer *ldt, real *c__, integer *ldc, real *work,
-              integer *info)
+/** Generated wrapper function */
+void sgemqrt_(char *side, char *trans, aocl_int_t *m, aocl_int_t *n, aocl_int_t *k, aocl_int_t *nb,
+              real *v, aocl_int_t *ldv, real *t, aocl_int_t *ldt, real *c__, aocl_int_t *ldc,
+              real *work, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_sgemqrt(side, trans, m, n, k, nb, v, ldv, t, ldt, c__, ldc, work, info);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t k_64 = *k;
+    aocl_int64_t nb_64 = *nb;
+    aocl_int64_t ldv_64 = *ldv;
+    aocl_int64_t ldt_64 = *ldt;
+    aocl_int64_t ldc_64 = *ldc;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_sgemqrt(side, trans, &m_64, &n_64, &k_64, &nb_64, v, &ldv_64, t, &ldt_64, c__,
+                        &ldc_64, work, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_sgemqrt(char *side, char *trans, aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *k,
+                         aocl_int64_t *nb, real *v, aocl_int64_t *ldv, real *t, aocl_int64_t *ldt,
+                         real *c__, aocl_int64_t *ldc, real *work, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("sgemqrt inputs: side %c ,trans %c ,m %" FLA_IS ",n %" FLA_IS ",k %" FLA_IS
                       ",nb %" FLA_IS ",ldv %" FLA_IS ",ldt %" FLA_IS ",ldc %" FLA_IS "",
                       *side, *trans, *m, *n, *k, *nb, *ldv, *ldt, *ldc);
     /* System generated locals */
-    integer v_dim1, v_offset, c_dim1, c_offset, t_dim1, t_offset, i__1, i__2, i__3, i__4;
+    aocl_int64_t v_dim1, v_offset, c_dim1, c_offset, t_dim1, t_offset, i__1, i__2, i__3, i__4;
     /* Local variables */
-    integer i__, q, ib, kf;
+    aocl_int64_t i__, q, ib, kf;
     logical left, tran;
-    extern logical lsame_(char *, char *, integer, integer);
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     logical right;
-    extern /* Subroutine */
-        void
-        slarfb_(char *, char *, char *, char *, integer *, integer *, integer *, real *, integer *,
-                real *, integer *, real *, integer *, real *, integer *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical notran;
-    integer ldwork;
+    aocl_int64_t ldwork;
     /* -- LAPACK computational routine (version 3.7.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -274,7 +293,7 @@ void sgemqrt_(char *side, char *trans, integer *m, integer *n, integer *k, integ
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("SGEMQRT", &i__1, (ftnlen)7);
+        aocl_blas_xerbla("SGEMQRT", &i__1, (ftnlen)7);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -295,8 +314,9 @@ void sgemqrt_(char *side, char *trans, integer *m, integer *n, integer *k, integ
             i__4 = *k - i__ + 1; // , expr subst
             ib = fla_min(i__3, i__4);
             i__3 = *m - i__ + 1;
-            slarfb_("L", "T", "F", "C", &i__3, n, &ib, &v[i__ + i__ * v_dim1], ldv,
-                    &t[i__ * t_dim1 + 1], ldt, &c__[i__ + c_dim1], ldc, &work[1], &ldwork);
+            aocl_lapack_slarfb("L", "T", "F", "C", &i__3, n, &ib, &v[i__ + i__ * v_dim1], ldv,
+                               &t[i__ * t_dim1 + 1], ldt, &c__[i__ + c_dim1], ldc, &work[1],
+                               &ldwork);
         }
     }
     else if(right && notran)
@@ -310,8 +330,9 @@ void sgemqrt_(char *side, char *trans, integer *m, integer *n, integer *k, integ
             i__4 = *k - i__ + 1; // , expr subst
             ib = fla_min(i__3, i__4);
             i__3 = *n - i__ + 1;
-            slarfb_("R", "N", "F", "C", m, &i__3, &ib, &v[i__ + i__ * v_dim1], ldv,
-                    &t[i__ * t_dim1 + 1], ldt, &c__[i__ * c_dim1 + 1], ldc, &work[1], &ldwork);
+            aocl_lapack_slarfb("R", "N", "F", "C", m, &i__3, &ib, &v[i__ + i__ * v_dim1], ldv,
+                               &t[i__ * t_dim1 + 1], ldt, &c__[i__ * c_dim1 + 1], ldc, &work[1],
+                               &ldwork);
         }
     }
     else if(left && notran)
@@ -325,8 +346,9 @@ void sgemqrt_(char *side, char *trans, integer *m, integer *n, integer *k, integ
             i__3 = *k - i__ + 1; // , expr subst
             ib = fla_min(i__2, i__3);
             i__2 = *m - i__ + 1;
-            slarfb_("L", "N", "F", "C", &i__2, n, &ib, &v[i__ + i__ * v_dim1], ldv,
-                    &t[i__ * t_dim1 + 1], ldt, &c__[i__ + c_dim1], ldc, &work[1], &ldwork);
+            aocl_lapack_slarfb("L", "N", "F", "C", &i__2, n, &ib, &v[i__ + i__ * v_dim1], ldv,
+                               &t[i__ * t_dim1 + 1], ldt, &c__[i__ + c_dim1], ldc, &work[1],
+                               &ldwork);
         }
     }
     else if(right && tran)
@@ -340,8 +362,9 @@ void sgemqrt_(char *side, char *trans, integer *m, integer *n, integer *k, integ
             i__3 = *k - i__ + 1; // , expr subst
             ib = fla_min(i__2, i__3);
             i__2 = *n - i__ + 1;
-            slarfb_("R", "T", "F", "C", m, &i__2, &ib, &v[i__ + i__ * v_dim1], ldv,
-                    &t[i__ * t_dim1 + 1], ldt, &c__[i__ * c_dim1 + 1], ldc, &work[1], &ldwork);
+            aocl_lapack_slarfb("R", "T", "F", "C", m, &i__2, &ib, &v[i__ + i__ * v_dim1], ldv,
+                               &t[i__ * t_dim1 + 1], ldt, &c__[i__ * c_dim1 + 1], ldc, &work[1],
+                               &ldwork);
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT

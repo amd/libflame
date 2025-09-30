@@ -28,9 +28,9 @@ FLA_Error FLA_Apply_G_rf_asm_var9b( FLA_Obj G, FLA_Obj A )
 */
 {
 	FLA_Datatype datatype;
-	integer          k_G, m_A, n_A;
-	integer          rs_G, cs_G;
-	integer          rs_A, cs_A;
+	fla_dim_t          k_G, m_A, n_A;
+	fla_dim_t          rs_G, cs_G;
+	fla_dim_t          rs_A, cs_A;
 
 	datatype = FLA_Obj_datatype( A );
 
@@ -115,26 +115,26 @@ FLA_Error FLA_Apply_G_rf_asm_var9b( FLA_Obj G, FLA_Obj A )
 }
 
 
-FLA_Error FLA_Apply_G_rf_ass_var9b( integer       k_G,
-                                   integer       m_A,
-                                   integer       n_A,
-                                   integer       i_k,
-                                   integer       iTL,
-                                   scomplex* buff_G, integer rs_G, integer cs_G,
-                                   float*    buff_A, integer rs_A, integer cs_A )
+FLA_Error FLA_Apply_G_rf_ass_var9b( fla_dim_t       k_G,
+                                   fla_dim_t       m_A,
+                                   fla_dim_t       n_A,
+                                   fla_dim_t       i_k,
+                                   fla_dim_t       iTL,
+                                   scomplex* buff_G, fla_dim_t rs_G, fla_dim_t cs_G,
+                                   float*    buff_A, fla_dim_t rs_A, fla_dim_t cs_A )
 {
 	FLA_Check_error_code( FLA_NOT_YET_IMPLEMENTED );
 
 	return FLA_SUCCESS;
 }
 
-FLA_Error FLA_Apply_G_rf_asd_var9b( integer       k_G,
-                                   integer       m_A,
-                                   integer       n_A,
-                                   integer       i_k,
-                                   integer       iTL,
-                                   dcomplex* buff_G, integer rs_G, integer cs_G,
-                                   double*   buff_A, integer rs_A, integer cs_A )
+FLA_Error FLA_Apply_G_rf_asd_var9b( fla_dim_t       k_G,
+                                   fla_dim_t       m_A,
+                                   fla_dim_t       n_A,
+                                   fla_dim_t       i_k,
+                                   fla_dim_t       iTL,
+                                   dcomplex* buff_G, fla_dim_t rs_G, fla_dim_t cs_G,
+                                   double*   buff_A, fla_dim_t rs_A, fla_dim_t cs_A )
 {
 	double    one  = bl1_d1();
 	double    zero = bl1_d0();
@@ -147,14 +147,14 @@ FLA_Error FLA_Apply_G_rf_asd_var9b( integer       k_G,
 	double*   a3;
 	dcomplex* g12;
 	dcomplex* g23;
-	integer       i, j, g, k;
-	integer       nG, nG_app;
-	integer       n_iter;
-	integer       n_left;
-	integer       k_minus_1;
-	integer       n_fuse;
-	integer       is_ident12, is_ident23;
-	integer       m_app;
+	fla_dim_t       i, j, g, k;
+	fla_dim_t       nG, nG_app;
+	fla_dim_t       n_iter;
+	fla_dim_t       n_left;
+	fla_dim_t       k_minus_1;
+	fla_dim_t       n_fuse;
+	fla_dim_t       is_ident12, is_ident23;
+	fla_dim_t       m_app;
 
 
 	k_minus_1 = k_G - 1;
@@ -412,26 +412,26 @@ FLA_Error FLA_Apply_G_rf_asd_var9b( integer       k_G,
 	return FLA_SUCCESS;
 }
 
-FLA_Error FLA_Apply_G_rf_asc_var9b( integer       k_G,
-                                   integer       m_A,
-                                   integer       n_A,
-                                   integer       i_k,
-                                   integer       iTL,
-                                   scomplex* buff_G, integer rs_G, integer cs_G,
-                                   scomplex* buff_A, integer rs_A, integer cs_A )
+FLA_Error FLA_Apply_G_rf_asc_var9b( fla_dim_t       k_G,
+                                   fla_dim_t       m_A,
+                                   fla_dim_t       n_A,
+                                   fla_dim_t       i_k,
+                                   fla_dim_t       iTL,
+                                   scomplex* buff_G, fla_dim_t rs_G, fla_dim_t cs_G,
+                                   scomplex* buff_A, fla_dim_t rs_A, fla_dim_t cs_A )
 {
 	FLA_Check_error_code( FLA_NOT_YET_IMPLEMENTED );
 
 	return FLA_SUCCESS;
 }
 
-FLA_Error FLA_Apply_G_rf_asz_var9b( integer       k_G,
-                                   integer       m_A,
-                                   integer       n_A,
-                                   integer       i_k,
-                                   integer       iTL,
-                                   dcomplex* buff_G, integer rs_G, integer cs_G,
-                                   dcomplex* buff_A, integer rs_A, integer cs_A )
+FLA_Error FLA_Apply_G_rf_asz_var9b( fla_dim_t       k_G,
+                                   fla_dim_t       m_A,
+                                   fla_dim_t       n_A,
+                                   fla_dim_t       i_k,
+                                   fla_dim_t       iTL,
+                                   dcomplex* buff_G, fla_dim_t rs_G, fla_dim_t cs_G,
+                                   dcomplex* buff_A, fla_dim_t rs_A, fla_dim_t cs_A )
 {
 	FLA_Check_error_code( FLA_NOT_YET_IMPLEMENTED );
 

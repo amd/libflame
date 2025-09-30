@@ -16,7 +16,7 @@
 #include "blis.h"
 #endif
 
-void bl1_saxpysv( integer n, float* alpha0, float* alpha1, float* x, integer incx, float* beta, float* y, integer incy )
+void bl1_saxpysv( fla_dim_t n, float* alpha0, float* alpha1, float* x, fla_dim_t incx, float* beta, float* y, fla_dim_t incy )
 {
 	float    alpha_prod;
 
@@ -35,7 +35,7 @@ void bl1_saxpysv( integer n, float* alpha0, float* alpha1, float* x, integer inc
 	           y, incy );
 }
 
-void bl1_daxpysv( integer n, double* alpha0, double* alpha1, double* x, integer incx, double* beta, double* y, integer incy )
+void bl1_daxpysv( fla_dim_t n, double* alpha0, double* alpha1, double* x, fla_dim_t incx, double* beta, double* y, fla_dim_t incy )
 {
 	double   alpha_prod;
 
@@ -54,7 +54,7 @@ void bl1_daxpysv( integer n, double* alpha0, double* alpha1, double* x, integer 
 	           y, incy );
 }
 
-void bl1_caxpysv( integer n, scomplex* alpha0, scomplex* alpha1, scomplex* x, integer incx, scomplex* beta, scomplex* y, integer incy )
+void bl1_caxpysv( fla_dim_t n, scomplex* alpha0, scomplex* alpha1, scomplex* x, fla_dim_t incx, scomplex* beta, scomplex* y, fla_dim_t incy )
 {
 	scomplex alpha_prod;
 
@@ -74,7 +74,7 @@ void bl1_caxpysv( integer n, scomplex* alpha0, scomplex* alpha1, scomplex* x, in
 	           y, incy );
 }
 
-void bl1_zaxpysv( integer n, dcomplex* alpha0, dcomplex* alpha1, dcomplex* x, integer incx, dcomplex* beta, dcomplex* y, integer incy )
+void bl1_zaxpysv( fla_dim_t n, dcomplex* alpha0, dcomplex* alpha1, dcomplex* x, fla_dim_t incx, dcomplex* beta, dcomplex* y, fla_dim_t incy )
 {
 	dcomplex alpha_prod;
 

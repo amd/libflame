@@ -4,7 +4,7 @@
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
  /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
+static aocl_int64_t c__1 = 1;
 /* > \brief \b DLANHS returns the value of the 1-norm, Frobenius norm, infinity-norm, or the largest
  * absolute value of any element of an upper Hessenberg matrix. */
 /* =========== DOCUMENTATION =========== */
@@ -106,24 +106,35 @@ otherwise, WORK is not */
 /* > \author NAG Ltd. */
 /* > \ingroup doubleOTHERauxiliary */
 /* ===================================================================== */
-doublereal dlanhs_(char *norm, integer *n, doublereal *a, integer *lda, doublereal *work)
+/** Generated wrapper function */
+doublereal dlanhs_(char *norm, aocl_int_t *n, doublereal *a, aocl_int_t *lda, doublereal *work)
+{
+#if FLA_ENABLE_ILP64
+    return aocl_lapack_dlanhs(norm, n, a, lda, work);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t lda_64 = *lda;
+
+    return aocl_lapack_dlanhs(norm, &n_64, a, &lda_64, work);
+#endif
+}
+
+doublereal aocl_lapack_dlanhs(char *norm, aocl_int64_t *n, doublereal *a, aocl_int64_t *lda,
+                              doublereal *work)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dlanhs inputs: norm %c, n %" FLA_IS ", lda %" FLA_IS "", *norm, *n, *lda);
 
     /* System generated locals */
-    integer a_dim1, a_offset, i__1, i__2, i__3, i__4;
+    aocl_int64_t a_dim1, a_offset, i__1, i__2, i__3, i__4;
     doublereal ret_val, d__1;
     /* Builtin functions */
     double sqrt(doublereal);
     /* Local variables */
-    integer i__, j;
+    aocl_int64_t i__, j;
     doublereal sum, scale;
-    extern logical lsame_(char *, char *, integer, integer);
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     doublereal value;
-    extern /* Subroutine */
-        void
-        dlassq_(integer *, doublereal *, integer *, doublereal *, doublereal *);
     /* -- LAPACK auxiliary routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -248,7 +259,7 @@ doublereal dlanhs_(char *norm, integer *n, doublereal *a, integer *lda, doublere
             i__3 = *n;
             i__4 = j + 1; // , expr subst
             i__2 = fla_min(i__3, i__4);
-            dlassq_(&i__2, &a[j * a_dim1 + 1], &c__1, &scale, &sum);
+            aocl_lapack_dlassq(&i__2, &a[j * a_dim1 + 1], &c__1, &scale, &sum);
             /* L90: */
         }
         value = scale * sqrt(sum);

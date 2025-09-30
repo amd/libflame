@@ -16,18 +16,18 @@
 #include "blis.h"
 #endif
 
-void bl1_ssyrk( uplo1_t uplo, trans1_t trans, integer m, integer k, float* alpha, float* a, integer a_rs, integer a_cs, float* beta, float* c, integer c_rs, integer c_cs )
+void bl1_ssyrk( uplo1_t uplo, trans1_t trans, fla_dim_t m, fla_dim_t k, float* alpha, float* a, fla_dim_t a_rs, fla_dim_t a_cs, float* beta, float* c, fla_dim_t c_rs, fla_dim_t c_cs )
 {
 	uplo1_t    uplo_save = uplo;
-	integer       m_save    = m;
+	fla_dim_t       m_save    = m;
 	float*    a_save    = a;
 	float*    c_save    = c;
-	integer       a_rs_save = a_rs;
-	integer       a_cs_save = a_cs;
-	integer       c_rs_save = c_rs;
-	integer       c_cs_save = c_cs;
-	integer       lda, inca;
-	integer       ldc, incc;
+	fla_dim_t       a_rs_save = a_rs;
+	fla_dim_t       a_cs_save = a_cs;
+	fla_dim_t       c_rs_save = c_rs;
+	fla_dim_t       c_cs_save = c_cs;
+	fla_dim_t       lda, inca;
+	fla_dim_t       ldc, incc;
 
 	// Return early if possible.
 	if ( bl1_zero_dim2( m, k ) ) return;
@@ -112,18 +112,18 @@ void bl1_ssyrk( uplo1_t uplo, trans1_t trans, integer m, integer k, float* alpha
 	                          &c,     &c_rs,     &c_cs );
 }
 
-void bl1_dsyrk( uplo1_t uplo, trans1_t trans, integer m, integer k, double* alpha, double* a, integer a_rs, integer a_cs, double* beta, double* c, integer c_rs, integer c_cs )
+void bl1_dsyrk( uplo1_t uplo, trans1_t trans, fla_dim_t m, fla_dim_t k, double* alpha, double* a, fla_dim_t a_rs, fla_dim_t a_cs, double* beta, double* c, fla_dim_t c_rs, fla_dim_t c_cs )
 {
 	uplo1_t    uplo_save = uplo;
-	integer       m_save    = m;
+	fla_dim_t       m_save    = m;
 	double*   a_save    = a;
 	double*   c_save    = c;
-	integer       a_rs_save = a_rs;
-	integer       a_cs_save = a_cs;
-	integer       c_rs_save = c_rs;
-	integer       c_cs_save = c_cs;
-	integer       lda, inca;
-	integer       ldc, incc;
+	fla_dim_t       a_rs_save = a_rs;
+	fla_dim_t       a_cs_save = a_cs;
+	fla_dim_t       c_rs_save = c_rs;
+	fla_dim_t       c_cs_save = c_cs;
+	fla_dim_t       lda, inca;
+	fla_dim_t       ldc, incc;
 
 	// Return early if possible.
 	if ( bl1_zero_dim2( m, k ) ) return;
@@ -208,18 +208,18 @@ void bl1_dsyrk( uplo1_t uplo, trans1_t trans, integer m, integer k, double* alph
 	                          &c,     &c_rs,     &c_cs );
 }
 
-void bl1_csyrk( uplo1_t uplo, trans1_t trans, integer m, integer k, scomplex* alpha, scomplex* a, integer a_rs, integer a_cs, scomplex* beta, scomplex* c, integer c_rs, integer c_cs )
+void bl1_csyrk( uplo1_t uplo, trans1_t trans, fla_dim_t m, fla_dim_t k, scomplex* alpha, scomplex* a, fla_dim_t a_rs, fla_dim_t a_cs, scomplex* beta, scomplex* c, fla_dim_t c_rs, fla_dim_t c_cs )
 {
 	uplo1_t    uplo_save = uplo;
-	integer       m_save    = m;
+	fla_dim_t       m_save    = m;
 	scomplex* a_save    = a;
 	scomplex* c_save    = c;
-	integer       a_rs_save = a_rs;
-	integer       a_cs_save = a_cs;
-	integer       c_rs_save = c_rs;
-	integer       c_cs_save = c_cs;
-	integer       lda, inca;
-	integer       ldc, incc;
+	fla_dim_t       a_rs_save = a_rs;
+	fla_dim_t       a_cs_save = a_cs;
+	fla_dim_t       c_rs_save = c_rs;
+	fla_dim_t       c_cs_save = c_cs;
+	fla_dim_t       lda, inca;
+	fla_dim_t       ldc, incc;
 
 	// Return early if possible.
 	if ( bl1_zero_dim2( m, k ) ) return;
@@ -304,18 +304,18 @@ void bl1_csyrk( uplo1_t uplo, trans1_t trans, integer m, integer k, scomplex* al
 	                          &c,     &c_rs,     &c_cs );
 }
 
-void bl1_zsyrk( uplo1_t uplo, trans1_t trans, integer m, integer k, dcomplex* alpha, dcomplex* a, integer a_rs, integer a_cs, dcomplex* beta, dcomplex* c, integer c_rs, integer c_cs )
+void bl1_zsyrk( uplo1_t uplo, trans1_t trans, fla_dim_t m, fla_dim_t k, dcomplex* alpha, dcomplex* a, fla_dim_t a_rs, fla_dim_t a_cs, dcomplex* beta, dcomplex* c, fla_dim_t c_rs, fla_dim_t c_cs )
 {
 	uplo1_t    uplo_save = uplo;
-	integer       m_save    = m;
+	fla_dim_t       m_save    = m;
 	dcomplex* a_save    = a;
 	dcomplex* c_save    = c;
-	integer       a_rs_save = a_rs;
-	integer       a_cs_save = a_cs;
-	integer       c_rs_save = c_rs;
-	integer       c_cs_save = c_cs;
-	integer       lda, inca;
-	integer       ldc, incc;
+	fla_dim_t       a_rs_save = a_rs;
+	fla_dim_t       a_cs_save = a_cs;
+	fla_dim_t       c_rs_save = c_rs;
+	fla_dim_t       c_cs_save = c_cs;
+	fla_dim_t       lda, inca;
+	fla_dim_t       ldc, incc;
 	
 	// Return early if possible.
 	if ( bl1_zero_dim2( m, k ) ) return;
@@ -402,7 +402,7 @@ void bl1_zsyrk( uplo1_t uplo, trans1_t trans, integer m, integer k, dcomplex* al
 
 // --- Classic routine wrappers ---
 
-void bl1_ssyrk_blas( uplo1_t uplo, trans1_t trans, integer m, integer k, float* alpha, float* a, integer lda, float* beta, float* c, integer ldc )
+void bl1_ssyrk_blas( uplo1_t uplo, trans1_t trans, fla_dim_t m, fla_dim_t k, float* alpha, float* a, fla_dim_t lda, float* beta, float* c, fla_dim_t ldc )
 {
 #ifdef BLIS1_ENABLE_CBLAS_INTERFACES
 	enum CBLAS_ORDER     cblas_order = CblasColMajor;
@@ -439,7 +439,7 @@ void bl1_ssyrk_blas( uplo1_t uplo, trans1_t trans, integer m, integer k, float* 
 #endif
 }
 
-void bl1_dsyrk_blas( uplo1_t uplo, trans1_t trans, integer m, integer k, double* alpha, double* a, integer lda, double* beta, double* c, integer ldc )
+void bl1_dsyrk_blas( uplo1_t uplo, trans1_t trans, fla_dim_t m, fla_dim_t k, double* alpha, double* a, fla_dim_t lda, double* beta, double* c, fla_dim_t ldc )
 {
 #ifdef BLIS1_ENABLE_CBLAS_INTERFACES
 	enum CBLAS_ORDER     cblas_order = CblasColMajor;
@@ -476,7 +476,7 @@ void bl1_dsyrk_blas( uplo1_t uplo, trans1_t trans, integer m, integer k, double*
 #endif
 }
 
-void bl1_csyrk_blas( uplo1_t uplo, trans1_t trans, integer m, integer k, scomplex* alpha, scomplex* a, integer lda, scomplex* beta, scomplex* c, integer ldc )
+void bl1_csyrk_blas( uplo1_t uplo, trans1_t trans, fla_dim_t m, fla_dim_t k, scomplex* alpha, scomplex* a, fla_dim_t lda, scomplex* beta, scomplex* c, fla_dim_t ldc )
 {
 #ifdef BLIS1_ENABLE_CBLAS_INTERFACES
 	enum CBLAS_ORDER     cblas_order = CblasColMajor;
@@ -513,7 +513,7 @@ void bl1_csyrk_blas( uplo1_t uplo, trans1_t trans, integer m, integer k, scomple
 #endif
 }
 
-void bl1_zsyrk_blas( uplo1_t uplo, trans1_t trans, integer m, integer k, dcomplex* alpha, dcomplex* a, integer lda, dcomplex* beta, dcomplex* c, integer ldc )
+void bl1_zsyrk_blas( uplo1_t uplo, trans1_t trans, fla_dim_t m, fla_dim_t k, dcomplex* alpha, dcomplex* a, fla_dim_t lda, dcomplex* beta, dcomplex* c, fla_dim_t ldc )
 {
 #ifdef BLIS1_ENABLE_CBLAS_INTERFACES
 	enum CBLAS_ORDER     cblas_order = CblasColMajor;

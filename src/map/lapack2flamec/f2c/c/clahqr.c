@@ -4,8 +4,8 @@
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
  /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
-static integer c__2 = 2;
+static aocl_int64_t c__1 = 1;
+static aocl_int64_t c__2 = 2;
 /* > \brief \b CLAHQR computes the eigenvalues and Schur factorization of an upper Hessenberg
  * matrix, using th e double-shift/single-shift QR algorithm. */
 /* =========== DOCUMENTATION =========== */
@@ -198,9 +198,34 @@ elements i+1:ihi of W contain */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void clahqr_(logical *wantt, logical *wantz, integer *n, integer *ilo, integer *ihi, complex *h__,
-             integer *ldh, complex *w, integer *iloz, integer *ihiz, complex *z__, integer *ldz,
-             integer *info)
+/** Generated wrapper function */
+void clahqr_(logical *wantt, logical *wantz, aocl_int_t *n, aocl_int_t *ilo, aocl_int_t *ihi,
+             scomplex *h__, aocl_int_t *ldh, scomplex *w, aocl_int_t *iloz, aocl_int_t *ihiz,
+             scomplex *z__, aocl_int_t *ldz, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_clahqr(wantt, wantz, n, ilo, ihi, h__, ldh, w, iloz, ihiz, z__, ldz, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t ilo_64 = *ilo;
+    aocl_int64_t ihi_64 = *ihi;
+    aocl_int64_t ldh_64 = *ldh;
+    aocl_int64_t iloz_64 = *iloz;
+    aocl_int64_t ihiz_64 = *ihiz;
+    aocl_int64_t ldz_64 = *ldz;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_clahqr(wantt, wantz, &n_64, &ilo_64, &ihi_64, h__, &ldh_64, w, &iloz_64, &ihiz_64,
+                       z__, &ldz_64, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_clahqr(logical *wantt, logical *wantz, aocl_int64_t *n, aocl_int64_t *ilo,
+                        aocl_int64_t *ihi, scomplex *h__, aocl_int64_t *ldh, scomplex *w,
+                        aocl_int64_t *iloz, aocl_int64_t *ihiz, scomplex *z__, aocl_int64_t *ldz,
+                        aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -216,48 +241,41 @@ void clahqr_(logical *wantt, logical *wantz, integer *n, integer *ilo, integer *
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
-    integer h_dim1, h_offset, z_dim1, z_offset, i__1, i__2, i__3, i__4, i__5;
+    aocl_int64_t h_dim1, h_offset, z_dim1, z_offset, i__1, i__2, i__3, i__4, i__5;
     real r__1, r__2, r__3, r__4, r__5, r__6;
-    complex q__1, q__2, q__3, q__4, q__5, q__6, q__7;
+    scomplex q__1, q__2, q__3, q__4, q__5, q__6, q__7;
     /* Builtin functions */
-    double r_imag(complex *);
-    void r_cnjg(complex *, complex *);
-    double c_abs(complex *);
-    void c_sqrt(complex *, complex *), pow_ci(complex *, complex *, integer *);
+    double r_imag(scomplex *);
+    void r_cnjg(scomplex *, scomplex *);
+    double c_abs(scomplex *);
+    void c_sqrt(scomplex *, scomplex *), pow_ci(scomplex *, scomplex *, aocl_int64_t *);
     /* Local variables */
-    integer i__, j, k, l, m;
+    aocl_int64_t i__, j, k, l, m;
     real s;
-    complex t, u, v[2], x, y;
-    integer i1, i2;
-    complex t1;
+    scomplex t, u, v[2], x, y;
+    aocl_int64_t i1, i2;
+    scomplex t1;
     real t2;
-    complex v2;
+    scomplex v2;
     real aa, ab, ba, bb, h10;
-    complex h11;
+    scomplex h11;
     real h21;
-    complex h22, sc;
-    integer nh, nz;
+    scomplex h22, sc;
+    aocl_int64_t nh, nz;
     real sx;
-    integer jhi;
-    complex h11s;
-    integer jlo, its;
+    aocl_int64_t jhi;
+    scomplex h11s;
+    aocl_int64_t jlo, its;
     real ulp;
-    complex sum;
+    scomplex sum;
     real tst;
-    complex temp;
-    integer kdefl;
-    extern /* Subroutine */
-        void
-        cscal_(integer *, complex *, complex *, integer *),
-        ccopy_(integer *, complex *, integer *, complex *, integer *);
-    integer itmax;
+    scomplex temp;
+    aocl_int64_t kdefl;
+    aocl_int64_t itmax;
     real rtemp;
-    extern /* Subroutine */
-        void
-        clarfg_(integer *, complex *, complex *, integer *, complex *);
     extern /* Complex */
         void
-        cladiv_f2c_(complex *, complex *, complex *);
+        cladiv_f2c_(scomplex *, scomplex *, scomplex *);
     extern real slamch_(char *);
     real safmin, smlnum;
     /* -- LAPACK auxiliary routine -- */
@@ -367,18 +385,18 @@ void clahqr_(logical *wantt, logical *wantz, integer *n, integer *ilo, integer *
             h__[i__2].r = r__1;
             h__[i__2].i = 0.f; // , expr subst
             i__2 = jhi - i__ + 1;
-            cscal_(&i__2, &sc, &h__[i__ + i__ * h_dim1], ldh);
+            aocl_blas_cscal(&i__2, &sc, &h__[i__ + i__ * h_dim1], ldh);
             /* Computing MIN */
             i__3 = jhi;
             i__4 = i__ + 1; // , expr subst
             i__2 = fla_min(i__3, i__4) - jlo + 1;
             r_cnjg(&q__1, &sc);
-            cscal_(&i__2, &q__1, &h__[jlo + i__ * h_dim1], &c__1);
+            aocl_blas_cscal(&i__2, &q__1, &h__[jlo + i__ * h_dim1], &c__1);
             if(*wantz)
             {
                 i__2 = *ihiz - *iloz + 1;
                 r_cnjg(&q__1, &sc);
-                cscal_(&i__2, &q__1, &z__[*iloz + i__ * z_dim1], &c__1);
+                aocl_blas_cscal(&i__2, &q__1, &z__[*iloz + i__ * z_dim1], &c__1);
             }
         }
         /* L20: */
@@ -700,9 +718,9 @@ L30:
             /* after the call T2 ( = T1*V(2) ) is also real. */
             if(k > m)
             {
-                ccopy_(&c__2, &h__[k + (k - 1) * h_dim1], &c__1, v, &c__1);
+                aocl_blas_ccopy(&c__2, &h__[k + (k - 1) * h_dim1], &c__1, v, &c__1);
             }
-            clarfg_(&c__2, v, &v[1], &c__1, &t1);
+            aocl_lapack_clarfg(&c__2, v, &v[1], &c__1, &t1);
             if(k > m)
             {
                 i__3 = k + (k - 1) * h_dim1;
@@ -856,15 +874,15 @@ L30:
                         if(i2 > j)
                         {
                             i__4 = i2 - j;
-                            cscal_(&i__4, &temp, &h__[j + (j + 1) * h_dim1], ldh);
+                            aocl_blas_cscal(&i__4, &temp, &h__[j + (j + 1) * h_dim1], ldh);
                         }
                         i__4 = j - i1;
                         r_cnjg(&q__1, &temp);
-                        cscal_(&i__4, &q__1, &h__[i1 + j * h_dim1], &c__1);
+                        aocl_blas_cscal(&i__4, &q__1, &h__[i1 + j * h_dim1], &c__1);
                         if(*wantz)
                         {
                             r_cnjg(&q__1, &temp);
-                            cscal_(&nz, &q__1, &z__[*iloz + j * z_dim1], &c__1);
+                            aocl_blas_cscal(&nz, &q__1, &z__[*iloz + j * z_dim1], &c__1);
                         }
                     }
                     /* L110: */
@@ -890,13 +908,13 @@ L30:
             {
                 i__2 = i2 - i__;
                 r_cnjg(&q__1, &temp);
-                cscal_(&i__2, &q__1, &h__[i__ + (i__ + 1) * h_dim1], ldh);
+                aocl_blas_cscal(&i__2, &q__1, &h__[i__ + (i__ + 1) * h_dim1], ldh);
             }
             i__2 = i__ - i1;
-            cscal_(&i__2, &temp, &h__[i1 + i__ * h_dim1], &c__1);
+            aocl_blas_cscal(&i__2, &temp, &h__[i1 + i__ * h_dim1], &c__1);
             if(*wantz)
             {
-                cscal_(&nz, &temp, &z__[*iloz + i__ * z_dim1], &c__1);
+                aocl_blas_cscal(&nz, &temp, &z__[*iloz + i__ * z_dim1], &c__1);
             }
         }
         /* L130: */

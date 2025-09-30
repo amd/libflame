@@ -3,11 +3,12 @@
  on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
- /******************************************************************************
+/******************************************************************************
  * Copyright (C) 2025, Advanced Micro Devices, Inc. All rights reserved.
  *******************************************************************************/
-#include "FLA_f2c.h" 
-/* > \brief \b CLAG2Z converts a complex single precision matrix to a complex double precision matrix. */
+#include "FLA_f2c.h"
+/* > \brief \b CLAG2Z converts a scomplex single precision matrix to a scomplex double precision
+ * matrix. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
@@ -102,8 +103,27 @@
 /* > \ingroup complex16OTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-void clag2z_(integer *m, integer *n, scomplex *sa, integer *ldsa, dcomplex *a, integer *lda,
-             integer *info)
+/** Generated wrapper function */
+void clag2z_(aocl_int_t *m, aocl_int_t *n, scomplex *sa, aocl_int_t *ldsa, dcomplex *a,
+             aocl_int_t *lda, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_clag2z(m, n, sa, ldsa, a, lda, info);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t ldsa_64 = *ldsa;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_clag2z(&m_64, &n_64, sa, &ldsa_64, a, &lda_64, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_clag2z(aocl_int64_t *m, aocl_int64_t *n, scomplex *sa, aocl_int64_t *ldsa,
+                        dcomplex *a, aocl_int64_t *lda, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE

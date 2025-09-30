@@ -11,14 +11,14 @@
 #include "FLAME.h"
 
 
-FLA_Error FLA_Tevd_find_perfshift_ops( integer       m_d,
-                                       integer       m_l,
-                                       float*    buff_d, integer inc_d, 
-                                       float*    buff_e, integer inc_e, 
-                                       float*    buff_l, integer inc_l, 
-                                       integer*      buff_ls, integer inc_ls, 
-                                       float*    buff_pu, integer inc_pu, 
-                                       integer*      ij_shift )
+FLA_Error FLA_Tevd_find_perfshift_ops( fla_dim_t       m_d,
+                                       fla_dim_t       m_l,
+                                       float*    buff_d, fla_dim_t inc_d, 
+                                       float*    buff_e, fla_dim_t inc_e, 
+                                       float*    buff_l, fla_dim_t inc_l, 
+                                       fla_dim_t*      buff_ls, fla_dim_t inc_ls, 
+                                       float*    buff_pu, fla_dim_t inc_pu, 
+                                       fla_dim_t*      ij_shift )
 {
 	FLA_Check_error_code( FLA_NOT_YET_IMPLEMENTED );
 
@@ -27,23 +27,23 @@ FLA_Error FLA_Tevd_find_perfshift_ops( integer       m_d,
 
 //#define PRINTF
 
-FLA_Error FLA_Tevd_find_perfshift_opd( integer       m_d,
-                                       integer       m_l,
-                                       double*   buff_d, integer inc_d, 
-                                       double*   buff_e, integer inc_e, 
-                                       double*   buff_l, integer inc_l, 
-                                       integer*      buff_ls, integer inc_ls, 
-                                       double*   buff_pu, integer inc_pu, 
-                                       integer*      ij_shift )
+FLA_Error FLA_Tevd_find_perfshift_opd( fla_dim_t       m_d,
+                                       fla_dim_t       m_l,
+                                       double*   buff_d, fla_dim_t inc_d, 
+                                       double*   buff_e, fla_dim_t inc_e, 
+                                       double*   buff_l, fla_dim_t inc_l, 
+                                       fla_dim_t*      buff_ls, fla_dim_t inc_ls, 
+                                       double*   buff_pu, fla_dim_t inc_pu, 
+                                       fla_dim_t*      ij_shift )
 {
 	double* d1p;
 	double* e1p;
 	double* d2p;
 	double  wilkshift;
-	integer     i;
-	integer     ij_cand;
-	double  dist_cand;
-	double  pshift_cand;
+	fla_dim_t     i;
+	fla_dim_t     ij_cand;
+	double  dist_cand = 0.;
+	double  pshift_cand = 0.;
 	
 	d1p = buff_d + (m_d-2)*inc_d;
 	e1p = buff_e + (m_d-2)*inc_e;
@@ -76,7 +76,7 @@ FLA_Error FLA_Tevd_find_perfshift_opd( integer       m_d,
 	// Find an available (unused) shift.
 	for ( i = 0; i < m_l; ++i )
 	{
-		integer* status = buff_ls + (i  )*inc_ls;
+		fla_dim_t* status = buff_ls + (i  )*inc_ls;
 
 		if ( *status == 0 )
 		{
@@ -99,7 +99,7 @@ FLA_Error FLA_Tevd_find_perfshift_opd( integer       m_d,
 	for ( i = 0; i < m_l; ++i )
 	{
 		double* lambda1 = buff_l  + (i  )*inc_l;
-		integer*    status  = buff_ls + (i  )*inc_ls;
+		fla_dim_t*    status  = buff_ls + (i  )*inc_ls;
 		double  dist    = fabs( wilkshift - *lambda1 );
 
 		if ( *status == 1 ) continue;

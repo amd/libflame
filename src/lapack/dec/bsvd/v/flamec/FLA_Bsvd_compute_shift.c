@@ -13,9 +13,9 @@
 FLA_Error FLA_Bsvd_compute_shift( FLA_Obj tol, FLA_Obj sminl, FLA_Obj smax, FLA_Obj d, FLA_Obj e, FLA_Obj shift )
 {
     FLA_Datatype datatype;
-    integer          m_A;
-    integer          inc_d;
-    integer          inc_e;
+    fla_dim_t          m_A;
+    fla_dim_t          inc_d;
+    fla_dim_t          inc_e;
 
     datatype = FLA_Obj_datatype( d );
 
@@ -72,12 +72,12 @@ FLA_Error FLA_Bsvd_compute_shift( FLA_Obj tol, FLA_Obj sminl, FLA_Obj smax, FLA_
 
 
 
-FLA_Error FLA_Bsvd_compute_shift_ops( integer       m_A,
+FLA_Error FLA_Bsvd_compute_shift_ops( fla_dim_t       m_A,
                                       float     tol,
                                       float     sminl,
                                       float     smax,
-                                      float*    buff_d, integer inc_d,
-                                      float*    buff_e, integer inc_e,
+                                      float*    buff_d, fla_dim_t inc_d,
+                                      float*    buff_e, fla_dim_t inc_e,
                                       float*    shift )
 {
     float  hndrth = 0.01;
@@ -127,12 +127,12 @@ FLA_Error FLA_Bsvd_compute_shift_ops( integer       m_A,
 
 
 
-FLA_Error FLA_Bsvd_compute_shift_opd( integer       m_A,
+FLA_Error FLA_Bsvd_compute_shift_opd( fla_dim_t       m_A,
                                       double    tol,
                                       double    sminl,
                                       double    smax,
-                                      double*   buff_d, integer inc_d,
-                                      double*   buff_e, integer inc_e,
+                                      double*   buff_d, fla_dim_t inc_d,
+                                      double*   buff_e, fla_dim_t inc_e,
                                       double*   shift )
 {
     double  hndrth = 0.01;

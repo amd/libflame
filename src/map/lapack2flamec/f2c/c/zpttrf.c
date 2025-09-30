@@ -88,7 +88,22 @@ if k < N, the factorization could not */
 /* > \ingroup complex16PTcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void zpttrf_(integer *n, doublereal *d__, doublecomplex *e, integer *info)
+/** Generated wrapper function */
+void zpttrf_(aocl_int_t *n, doublereal *d__, dcomplex *e, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_zpttrf(n, d__, e, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_zpttrf(&n_64, d__, e, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_zpttrf(aocl_int64_t *n, doublereal *d__, dcomplex *e, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zpttrf inputs: n %" FLA_IS "", *n);
@@ -102,9 +117,6 @@ void zpttrf_(integer *n, doublereal *d__, doublecomplex *e, integer *info)
     doublereal f, g;
     aocl_int64_t i__, i4;
     doublereal eii, eir;
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -133,7 +145,7 @@ void zpttrf_(integer *n, doublereal *d__, doublecomplex *e, integer *info)
     {
         *info = -1;
         i__1 = -(*info);
-        xerbla_("ZPTTRF", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("ZPTTRF", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }

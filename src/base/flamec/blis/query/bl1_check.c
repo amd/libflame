@@ -18,7 +18,7 @@
 
 // --- storage-related ---------------------------------------------------------
 
-void bl1_check_storage_3m( integer a_rs, integer a_cs, integer b_rs, integer b_cs, integer c_rs, integer c_cs )
+void bl1_check_storage_3m( fla_dim_t a_rs, fla_dim_t a_cs, fla_dim_t b_rs, fla_dim_t b_cs, fla_dim_t c_rs, fla_dim_t c_cs )
 {
 	if ( bl1_is_gen_storage( a_rs, a_cs ) ||
 	     bl1_is_gen_storage( b_rs, b_cs ) ||
@@ -28,7 +28,7 @@ void bl1_check_storage_3m( integer a_rs, integer a_cs, integer b_rs, integer b_c
 	}
 }
 
-void bl1_check_storage_2m( integer a_rs, integer a_cs, integer b_rs, integer b_cs )
+void bl1_check_storage_2m( fla_dim_t a_rs, fla_dim_t a_cs, fla_dim_t b_rs, fla_dim_t b_cs )
 {
 	if ( bl1_is_gen_storage( a_rs, a_cs ) ||
 	     bl1_is_gen_storage( b_rs, b_cs ) )

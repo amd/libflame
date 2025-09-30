@@ -110,8 +110,26 @@
 /* > \ingroup complexPTsolve */
 /* ===================================================================== */
 /* Subroutine */
-void cptsv_(integer *n, integer *nrhs, real *d__, complex *e, complex *b, integer *ldb,
-            integer *info)
+/** Generated wrapper function */
+void cptsv_(aocl_int_t *n, aocl_int_t *nrhs, real *d__, scomplex *e, scomplex *b, aocl_int_t *ldb,
+            aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_cptsv(n, nrhs, d__, e, b, ldb, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t nrhs_64 = *nrhs;
+    aocl_int64_t ldb_64 = *ldb;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_cptsv(&n_64, &nrhs_64, d__, e, b, &ldb_64, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_cptsv(aocl_int64_t *n, aocl_int64_t *nrhs, real *d__, scomplex *e, scomplex *b,
+                       aocl_int64_t *ldb, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -126,13 +144,6 @@ void cptsv_(integer *n, integer *nrhs, real *d__, complex *e, complex *b, intege
     /* System generated locals */
     aocl_int64_t b_dim1, b_offset, i__1;
     /* Local variables */
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    extern /* Subroutine */
-        void
-        cpttrf_(integer *, real *, complex *, integer *),
-        cpttrs_(char *, integer *, integer *, real *, complex *, complex *, integer *, integer *);
     /* -- LAPACK driver routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -171,12 +182,12 @@ void cptsv_(integer *n, integer *nrhs, real *d__, complex *e, complex *b, intege
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("CPTSV ", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("CPTSV ", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
     /* Compute the L*D*L**H (or U**H*D*U) factorization of A. */
-    cpttrf_(n, &d__[1], &e[1], info);
+    aocl_lapack_cpttrf(n, &d__[1], &e[1], info);
     if(*info == 0)
     {
         /* Solve the system A*X = B, overwriting B with X. */

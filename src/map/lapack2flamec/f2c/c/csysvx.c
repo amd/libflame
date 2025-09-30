@@ -4,8 +4,8 @@
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
  /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
-static integer c_n1 = -1;
+static aocl_int64_t c__1 = 1;
+static aocl_int64_t c_n1 = -1;
 /* > \brief <b> CSYSVX computes the solution to system of linear equations A * X = B for SY
  * matrices</b> */
 /* =========== DOCUMENTATION =========== */
@@ -282,10 +282,37 @@ the routine */
 /* > \ingroup hesvx */
 /* ===================================================================== */
 /* Subroutine */
-void csysvx_(char *fact, char *uplo, integer *n, integer *nrhs, complex *a, integer *lda,
-             complex *af, integer *ldaf, integer *ipiv, complex *b, integer *ldb, complex *x,
-             integer *ldx, real *rcond, real *ferr, real *berr, complex *work, integer *lwork,
-             real *rwork, integer *info)
+/** Generated wrapper function */
+void csysvx_(char *fact, char *uplo, aocl_int_t *n, aocl_int_t *nrhs, scomplex *a, aocl_int_t *lda,
+             scomplex *af, aocl_int_t *ldaf, aocl_int_t *ipiv, scomplex *b, aocl_int_t *ldb,
+             scomplex *x, aocl_int_t *ldx, real *rcond, real *ferr, real *berr, scomplex *work,
+             aocl_int_t *lwork, real *rwork, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_csysvx(fact, uplo, n, nrhs, a, lda, af, ldaf, ipiv, b, ldb, x, ldx, rcond, ferr,
+                       berr, work, lwork, rwork, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t nrhs_64 = *nrhs;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t ldaf_64 = *ldaf;
+    aocl_int64_t ldb_64 = *ldb;
+    aocl_int64_t ldx_64 = *ldx;
+    aocl_int64_t lwork_64 = *lwork;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_csysvx(fact, uplo, &n_64, &nrhs_64, a, &lda_64, af, &ldaf_64, ipiv, b, &ldb_64, x,
+                       &ldx_64, rcond, ferr, berr, work, &lwork_64, rwork, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_csysvx(char *fact, char *uplo, aocl_int64_t *n, aocl_int64_t *nrhs, scomplex *a,
+                        aocl_int64_t *lda, scomplex *af, aocl_int64_t *ldaf, aocl_int_t *ipiv,
+                        scomplex *b, aocl_int64_t *ldb, scomplex *x, aocl_int64_t *ldx, real *rcond,
+                        real *ferr, real *berr, scomplex *work, aocl_int64_t *lwork, real *rwork,
+                        aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -304,36 +331,17 @@ void csysvx_(char *fact, char *uplo, integer *n, integer *nrhs, complex *a, inte
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
-    integer a_dim1, a_offset, af_dim1, af_offset, b_dim1, b_offset, x_dim1, x_offset, i__1, i__2;
+    aocl_int64_t a_dim1, a_offset, af_dim1, af_offset, b_dim1, b_offset, x_dim1, x_offset, i__1,
+        i__2;
     real r__1;
     /* Local variables */
-    integer nb;
-    extern logical lsame_(char *, char *, integer, integer);
+    aocl_int64_t nb;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     real anorm;
     extern real slamch_(char *);
     logical nofact;
-    extern /* Subroutine */
-        void
-        clacpy_(char *, integer *, integer *, complex *, integer *, complex *, integer *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
-    extern real clansy_(char *, char *, integer *, complex *, integer *, real *);
-    extern /* Subroutine */
-        void
-        csycon_(char *, integer *, complex *, integer *, integer *, real *, real *, complex *,
-                integer *),
-        csyrfs_(char *, integer *, integer *, complex *, integer *, complex *, integer *, integer *,
-                complex *, integer *, complex *, integer *, real *, real *, complex *, real *,
-                integer *),
-        csytrf_(char *, integer *, complex *, integer *, integer *, complex *, integer *,
-                integer *);
-    integer lwkopt;
+    aocl_int64_t lwkopt;
     logical lquery;
-    extern /* Subroutine */
-        void
-        csytrs_(char *, integer *, integer *, complex *, integer *, integer *, complex *, integer *,
-                integer *);
-    extern real sroundup_lwork(integer *);
     /* -- LAPACK driver routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -432,14 +440,14 @@ void csysvx_(char *fact, char *uplo, integer *n, integer *nrhs, complex *a, inte
             i__2 = *n * nb; // , expr subst
             lwkopt = fla_max(i__1, i__2);
         }
-        r__1 = sroundup_lwork(&lwkopt);
+        r__1 = aocl_lapack_sroundup_lwork(&lwkopt);
         work[1].r = r__1;
         work[1].i = 0.f; // , expr subst
     }
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("CSYSVX", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("CSYSVX", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
@@ -470,14 +478,15 @@ void csysvx_(char *fact, char *uplo, integer *n, integer *nrhs, complex *a, inte
     aocl_lapack_csytrs(uplo, n, nrhs, &af[af_offset], ldaf, &ipiv[1], &x[x_offset], ldx, info);
     /* Use iterative refinement to improve the computed solutions and */
     /* compute error bounds and backward error estimates for them. */
-    csyrfs_(uplo, n, nrhs, &a[a_offset], lda, &af[af_offset], ldaf, &ipiv[1], &b[b_offset], ldb,
-            &x[x_offset], ldx, &ferr[1], &berr[1], &work[1], &rwork[1], info);
+    aocl_lapack_csyrfs(uplo, n, nrhs, &a[a_offset], lda, &af[af_offset], ldaf, &ipiv[1],
+                       &b[b_offset], ldb, &x[x_offset], ldx, &ferr[1], &berr[1], &work[1],
+                       &rwork[1], info);
     /* Set INFO = N+1 if the matrix is singular to working precision. */
     if(*rcond < slamch_("Epsilon"))
     {
         *info = *n + 1;
     }
-    r__1 = sroundup_lwork(&lwkopt);
+    r__1 = aocl_lapack_sroundup_lwork(&lwkopt);
     work[1].r = r__1;
     work[1].i = 0.f; // , expr subst
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);

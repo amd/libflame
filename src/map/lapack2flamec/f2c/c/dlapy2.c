@@ -68,7 +68,7 @@ doublereal dlapy2_(doublereal *x, doublereal *y)
     doublereal w, z__, xabs, yabs;
     extern doublereal dlamch_(char *);
     static TLS_CLASS_SPEC doublereal hugeval;
-    static TLS_CLASS_SPEC integer r_once = 1;
+    static TLS_CLASS_SPEC aocl_int64_t r_once = 1;
     /* -- LAPACK auxiliary routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */

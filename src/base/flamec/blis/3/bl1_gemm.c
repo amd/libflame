@@ -16,30 +16,30 @@
 #include "blis.h"
 #endif
 
-void bl1_sgemm( trans1_t transa, trans1_t transb, integer m, integer k, integer n, float* alpha, float* a, integer a_rs, integer a_cs, float* b, integer b_rs, integer b_cs, float* beta, float* c, integer c_rs, integer c_cs )
+void bl1_sgemm( trans1_t transa, trans1_t transb, fla_dim_t m, fla_dim_t k, fla_dim_t n, float* alpha, float* a, fla_dim_t a_rs, fla_dim_t a_cs, float* b, fla_dim_t b_rs, fla_dim_t b_cs, float* beta, float* c, fla_dim_t c_rs, fla_dim_t c_cs )
 {
-	integer       m_save    = m;
-	integer       n_save    = n;
+	fla_dim_t       m_save    = m;
+	fla_dim_t       n_save    = n;
 	float*    a_save    = a;
 	float*    b_save    = b;
 	float*    c_save    = c;
-	integer       a_rs_save = a_rs;
-	integer       a_cs_save = a_cs;
-	integer       b_rs_save = b_rs;
-	integer       b_cs_save = b_cs;
-	integer       c_rs_save = c_rs;
-	integer       c_cs_save = c_cs;
+	fla_dim_t       a_rs_save = a_rs;
+	fla_dim_t       a_cs_save = a_cs;
+	fla_dim_t       b_rs_save = b_rs;
+	fla_dim_t       b_cs_save = b_cs;
+	fla_dim_t       c_rs_save = c_rs;
+	fla_dim_t       c_cs_save = c_cs;
 	float     zero = bl1_s0();
 	float     one  = bl1_s1();
 	float*    a_unswap;
 	float*    b_unswap;
 	float*    c_trans;
-	integer       lda, inca;
-	integer       ldb, incb;
-	integer       ldc, incc;
-	integer       ldc_trans, incc_trans;
-	integer       m_gemm, n_gemm;
-	integer       gemm_needs_axpyt = FALSE;
+	fla_dim_t       lda, inca;
+	fla_dim_t       ldb, incb;
+	fla_dim_t       ldc, incc;
+	fla_dim_t       ldc_trans, incc_trans;
+	fla_dim_t       m_gemm, n_gemm;
+	fla_dim_t       gemm_needs_axpyt = FALSE;
 
 	// Return early if possible.
 	if ( bl1_zero_dim3( m, k, n ) )
@@ -277,30 +277,30 @@ void bl1_sgemm( trans1_t transa, trans1_t transb, integer m, integer k, integer 
 	                         &c,     &c_rs,     &c_cs );
 }
 
-void bl1_dgemm( trans1_t transa, trans1_t transb, integer m, integer k, integer n, double* alpha, double* a, integer a_rs, integer a_cs, double* b, integer b_rs, integer b_cs, double* beta, double* c, integer c_rs, integer c_cs )
+void bl1_dgemm( trans1_t transa, trans1_t transb, fla_dim_t m, fla_dim_t k, fla_dim_t n, double* alpha, double* a, fla_dim_t a_rs, fla_dim_t a_cs, double* b, fla_dim_t b_rs, fla_dim_t b_cs, double* beta, double* c, fla_dim_t c_rs, fla_dim_t c_cs )
 {
-	integer       m_save    = m;
-	integer       n_save    = n;
+	fla_dim_t       m_save    = m;
+	fla_dim_t       n_save    = n;
 	double*   a_save    = a;
 	double*   b_save    = b;
 	double*   c_save    = c;
-	integer       a_rs_save = a_rs;
-	integer       a_cs_save = a_cs;
-	integer       b_rs_save = b_rs;
-	integer       b_cs_save = b_cs;
-	integer       c_rs_save = c_rs;
-	integer       c_cs_save = c_cs;
+	fla_dim_t       a_rs_save = a_rs;
+	fla_dim_t       a_cs_save = a_cs;
+	fla_dim_t       b_rs_save = b_rs;
+	fla_dim_t       b_cs_save = b_cs;
+	fla_dim_t       c_rs_save = c_rs;
+	fla_dim_t       c_cs_save = c_cs;
 	double    zero = bl1_d0();
 	double    one  = bl1_d1();
 	double*   a_unswap;
 	double*   b_unswap;
 	double*   c_trans;
-	integer       lda, inca;
-	integer       ldb, incb;
-	integer       ldc, incc;
-	integer       ldc_trans, incc_trans;
-	integer       m_gemm, n_gemm;
-	integer       gemm_needs_axpyt = FALSE;
+	fla_dim_t       lda, inca;
+	fla_dim_t       ldb, incb;
+	fla_dim_t       ldc, incc;
+	fla_dim_t       ldc_trans, incc_trans;
+	fla_dim_t       m_gemm, n_gemm;
+	fla_dim_t       gemm_needs_axpyt = FALSE;
 
 	// Return early if possible.
 	if ( bl1_zero_dim3( m, k, n ) )
@@ -538,19 +538,19 @@ void bl1_dgemm( trans1_t transa, trans1_t transb, integer m, integer k, integer 
 	                         &c,     &c_rs,     &c_cs );
 }
 
-void bl1_cgemm( trans1_t transa, trans1_t transb, integer m, integer k, integer n, scomplex* alpha, scomplex* a, integer a_rs, integer a_cs, scomplex* b, integer b_rs, integer b_cs, scomplex* beta, scomplex* c, integer c_rs, integer c_cs )
+void bl1_cgemm( trans1_t transa, trans1_t transb, fla_dim_t m, fla_dim_t k, fla_dim_t n, scomplex* alpha, scomplex* a, fla_dim_t a_rs, fla_dim_t a_cs, scomplex* b, fla_dim_t b_rs, fla_dim_t b_cs, scomplex* beta, scomplex* c, fla_dim_t c_rs, fla_dim_t c_cs )
 {
-	integer       m_save    = m;
-	integer       n_save    = n;
+	fla_dim_t       m_save    = m;
+	fla_dim_t       n_save    = n;
 	scomplex* a_save    = a;
 	scomplex* b_save    = b;
 	scomplex* c_save    = c;
-	integer       a_rs_save = a_rs;
-	integer       a_cs_save = a_cs;
-	integer       b_rs_save = b_rs;
-	integer       b_cs_save = b_cs;
-	integer       c_rs_save = c_rs;
-	integer       c_cs_save = c_cs;
+	fla_dim_t       a_rs_save = a_rs;
+	fla_dim_t       a_cs_save = a_cs;
+	fla_dim_t       b_rs_save = b_rs;
+	fla_dim_t       b_cs_save = b_cs;
+	fla_dim_t       c_rs_save = c_rs;
+	fla_dim_t       c_cs_save = c_cs;
 	scomplex  zero = bl1_c0();
 	scomplex  one  = bl1_c1();
 	scomplex* a_unswap;
@@ -558,16 +558,16 @@ void bl1_cgemm( trans1_t transa, trans1_t transb, integer m, integer k, integer 
 	scomplex* a_conj;
 	scomplex* b_conj;
 	scomplex* c_trans;
-	integer       lda, inca;
-	integer       ldb, incb;
-	integer       ldc, incc;
-	integer       lda_conj, inca_conj;
-	integer       ldb_conj, incb_conj;
-	integer       ldc_trans, incc_trans;
-	integer       m_gemm, n_gemm;
-	integer       gemm_needs_axpyt = FALSE;
-	integer       a_was_copied;
-	integer       b_was_copied;
+	fla_dim_t       lda, inca;
+	fla_dim_t       ldb, incb;
+	fla_dim_t       ldc, incc;
+	fla_dim_t       lda_conj, inca_conj;
+	fla_dim_t       ldb_conj, incb_conj;
+	fla_dim_t       ldc_trans, incc_trans;
+	fla_dim_t       m_gemm, n_gemm;
+	fla_dim_t       gemm_needs_axpyt = FALSE;
+	fla_dim_t       a_was_copied;
+	fla_dim_t       b_was_copied;
 
 	// Return early if possible.
 	if ( bl1_zero_dim3( m, k, n ) )
@@ -876,19 +876,19 @@ void bl1_cgemm( trans1_t transa, trans1_t transb, integer m, integer k, integer 
 	                         &c,     &c_rs,     &c_cs );
 }
 
-void bl1_zgemm( trans1_t transa, trans1_t transb, integer m, integer k, integer n, dcomplex* alpha, dcomplex* a, integer a_rs, integer a_cs, dcomplex* b, integer b_rs, integer b_cs, dcomplex* beta, dcomplex* c, integer c_rs, integer c_cs )
+void bl1_zgemm( trans1_t transa, trans1_t transb, fla_dim_t m, fla_dim_t k, fla_dim_t n, dcomplex* alpha, dcomplex* a, fla_dim_t a_rs, fla_dim_t a_cs, dcomplex* b, fla_dim_t b_rs, fla_dim_t b_cs, dcomplex* beta, dcomplex* c, fla_dim_t c_rs, fla_dim_t c_cs )
 {
-	integer       m_save    = m;
-	integer       n_save    = n;
+	fla_dim_t       m_save    = m;
+	fla_dim_t       n_save    = n;
 	dcomplex* a_save    = a;
 	dcomplex* b_save    = b;
 	dcomplex* c_save    = c;
-	integer       a_rs_save = a_rs;
-	integer       a_cs_save = a_cs;
-	integer       b_rs_save = b_rs;
-	integer       b_cs_save = b_cs;
-	integer       c_rs_save = c_rs;
-	integer       c_cs_save = c_cs;
+	fla_dim_t       a_rs_save = a_rs;
+	fla_dim_t       a_cs_save = a_cs;
+	fla_dim_t       b_rs_save = b_rs;
+	fla_dim_t       b_cs_save = b_cs;
+	fla_dim_t       c_rs_save = c_rs;
+	fla_dim_t       c_cs_save = c_cs;
 	dcomplex  zero = bl1_z0();
 	dcomplex  one  = bl1_z1();
 	dcomplex* a_unswap;
@@ -896,16 +896,16 @@ void bl1_zgemm( trans1_t transa, trans1_t transb, integer m, integer k, integer 
 	dcomplex* a_conj;
 	dcomplex* b_conj;
 	dcomplex* c_trans;
-	integer       lda, inca;
-	integer       ldb, incb;
-	integer       ldc, incc;
-	integer       lda_conj, inca_conj;
-	integer       ldb_conj, incb_conj;
-	integer       ldc_trans, incc_trans;
-	integer       m_gemm, n_gemm;
-	integer       gemm_needs_axpyt = FALSE;
-	integer       a_was_copied;
-	integer       b_was_copied;
+	fla_dim_t       lda, inca;
+	fla_dim_t       ldb, incb;
+	fla_dim_t       ldc, incc;
+	fla_dim_t       lda_conj, inca_conj;
+	fla_dim_t       ldb_conj, incb_conj;
+	fla_dim_t       ldc_trans, incc_trans;
+	fla_dim_t       m_gemm, n_gemm;
+	fla_dim_t       gemm_needs_axpyt = FALSE;
+	fla_dim_t       a_was_copied;
+	fla_dim_t       b_was_copied;
 
 	// Return early if possible.
 	if ( bl1_zero_dim3( m, k, n ) )
@@ -1216,7 +1216,7 @@ void bl1_zgemm( trans1_t transa, trans1_t transb, integer m, integer k, integer 
 
 // --- Classic routine wrappers ---
 
-void bl1_sgemm_blas( trans1_t transa, trans1_t transb, integer m, integer n, integer k, float* alpha, float* a, integer lda, float* b, integer ldb, float* beta, float* c, integer ldc )
+void bl1_sgemm_blas( trans1_t transa, trans1_t transb, fla_dim_t m, fla_dim_t n, fla_dim_t k, float* alpha, float* a, fla_dim_t lda, float* b, fla_dim_t ldb, float* beta, float* c, fla_dim_t ldc )
 {
 #ifdef BLIS1_ENABLE_CBLAS_INTERFACES
 	enum CBLAS_ORDER     cblas_order = CblasColMajor;
@@ -1257,7 +1257,7 @@ void bl1_sgemm_blas( trans1_t transa, trans1_t transb, integer m, integer n, int
 #endif
 }
 
-void bl1_dgemm_blas( trans1_t transa, trans1_t transb, integer m, integer n, integer k, double* alpha, double* a, integer lda, double* b, integer ldb, double* beta, double* c, integer ldc )
+void bl1_dgemm_blas( trans1_t transa, trans1_t transb, fla_dim_t m, fla_dim_t n, fla_dim_t k, double* alpha, double* a, fla_dim_t lda, double* b, fla_dim_t ldb, double* beta, double* c, fla_dim_t ldc )
 {
 #ifdef BLIS1_ENABLE_CBLAS_INTERFACES
 	enum CBLAS_ORDER     cblas_order = CblasColMajor;
@@ -1298,7 +1298,7 @@ void bl1_dgemm_blas( trans1_t transa, trans1_t transb, integer m, integer n, int
 #endif
 }
 
-void bl1_cgemm_blas( trans1_t transa, trans1_t transb, integer m, integer n, integer k, scomplex* alpha, scomplex* a, integer lda, scomplex* b, integer ldb, scomplex* beta, scomplex* c, integer ldc )
+void bl1_cgemm_blas( trans1_t transa, trans1_t transb, fla_dim_t m, fla_dim_t n, fla_dim_t k, scomplex* alpha, scomplex* a, fla_dim_t lda, scomplex* b, fla_dim_t ldb, scomplex* beta, scomplex* c, fla_dim_t ldc )
 {
 #ifdef BLIS1_ENABLE_CBLAS_INTERFACES
 	enum CBLAS_ORDER     cblas_order = CblasColMajor;
@@ -1339,7 +1339,7 @@ void bl1_cgemm_blas( trans1_t transa, trans1_t transb, integer m, integer n, int
 #endif
 }
 
-void bl1_zgemm_blas( trans1_t transa, trans1_t transb, integer m, integer n, integer k, dcomplex* alpha, dcomplex* a, integer lda, dcomplex* b, integer ldb, dcomplex* beta, dcomplex* c, integer ldc )
+void bl1_zgemm_blas( trans1_t transa, trans1_t transb, fla_dim_t m, fla_dim_t n, fla_dim_t k, dcomplex* alpha, dcomplex* a, fla_dim_t lda, dcomplex* b, fla_dim_t ldb, dcomplex* beta, dcomplex* c, fla_dim_t ldc )
 {
 #ifdef BLIS1_ENABLE_CBLAS_INTERFACES
 	enum CBLAS_ORDER     cblas_order = CblasColMajor;

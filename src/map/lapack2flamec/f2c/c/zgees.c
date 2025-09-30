@@ -4,9 +4,9 @@
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
  /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
-static integer c__0 = 0;
-static integer c_n1 = -1;
+static aocl_int64_t c__1 = 1;
+static aocl_int64_t c__0 = 0;
+static aocl_int64_t c_n1 = -1;
 /* > \brief <b> ZGEES computes the eigenvalues, the Schur form, and, optionally, the matrix of Schur
  * vectors f or GE matrices</b> */
 /* =========== DOCUMENTATION =========== */
@@ -201,9 +201,35 @@ elements 1:ILO-1 and i+1:N of W */
 /* > \ingroup gees */
 /* ===================================================================== */
 /* Subroutine */
-void zgees_(char *jobvs, char *sort, L_fpz1 select, integer *n, doublecomplex *a, integer *lda,
-            integer *sdim, doublecomplex *w, doublecomplex *vs, integer *ldvs, doublecomplex *work,
-            integer *lwork, doublereal *rwork, logical *bwork, integer *info)
+/** Generated wrapper function */
+void zgees_(char *jobvs, char *sort, L_fpz1 select, aocl_int_t *n, dcomplex *a,
+            aocl_int_t *lda, aocl_int_t *sdim, dcomplex *w, dcomplex *vs,
+            aocl_int_t *ldvs, dcomplex *work, aocl_int_t *lwork, doublereal *rwork,
+            logical *bwork, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_zgees(jobvs, sort, select, n, a, lda, sdim, w, vs, ldvs, work, lwork, rwork, bwork,
+                      info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t sdim_64 = *sdim;
+    aocl_int64_t ldvs_64 = *ldvs;
+    aocl_int64_t lwork_64 = *lwork;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_zgees(jobvs, sort, select, &n_64, a, &lda_64, &sdim_64, w, vs, &ldvs_64, work,
+                      &lwork_64, rwork, bwork, &info_64);
+
+    *sdim = (aocl_int_t)sdim_64;
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_zgees(char *jobvs, char *sort, L_fpz1 select, aocl_int64_t *n, dcomplex *a,
+                       aocl_int64_t *lda, aocl_int64_t *sdim, dcomplex *w, dcomplex *vs,
+                       aocl_int64_t *ldvs, dcomplex *work, aocl_int64_t *lwork,
+                       doublereal *rwork, logical *bwork, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zgees inputs: jobvs %c, sort %c, n %" FLA_IS ", lda %" FLA_IS
@@ -220,50 +246,16 @@ void zgees_(char *jobvs, char *sort, L_fpz1 select, integer *n, doublecomplex *a
     doublereal dum[1], eps, sep;
     aocl_int64_t ibal;
     doublereal anrm;
-    integer ierr, itau, iwrk, icond, ieval;
-    extern logical lsame_(char *, char *, integer, integer);
-    extern /* Subroutine */
-        void
-        zcopy_(integer *, doublecomplex *, integer *, doublecomplex *, integer *);
+    aocl_int64_t ierr, itau, iwrk, icond, ieval;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     logical scalea;
     extern doublereal dlamch_(char *);
     doublereal cscale;
-    extern /* Subroutine */
-        void
-        zgebak_(char *, char *, integer *, integer *, integer *, doublereal *, integer *,
-                doublecomplex *, integer *, integer *),
-        zgebal_(char *, integer *, doublecomplex *, integer *, integer *, integer *, doublereal *,
-                integer *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
-    extern doublereal zlange_(char *, integer *, integer *, doublecomplex *, integer *,
-                              doublereal *);
     doublereal bignum;
-    extern /* Subroutine */
-        void
-        zgehrd_(integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *,
-                doublecomplex *, integer *, integer *),
-        zlascl_(char *, integer *, integer *, doublereal *, doublereal *, integer *, integer *,
-                doublecomplex *, integer *, integer *),
-        zlacpy_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *,
-                integer *);
-    integer minwrk, maxwrk;
+    aocl_int64_t minwrk, maxwrk;
     doublereal smlnum;
-    extern /* Subroutine */
-        void
-        zhseqr_(char *, char *, integer *, integer *, integer *, doublecomplex *, integer *,
-                doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, integer *);
-    integer hswork;
-    extern /* Subroutine */
-        void
-        zunghr_(integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *,
-                doublecomplex *, integer *, integer *);
+    aocl_int64_t hswork;
     logical wantst, lquery, wantvs;
-    extern /* Subroutine */
-        void
-        ztrsen_(char *, char *, logical *, integer *, doublecomplex *, integer *, doublecomplex *,
-                integer *, doublecomplex *, integer *, doublereal *, doublereal *, doublecomplex *,
-                integer *, integer *);
     /* -- LAPACK driver routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -343,10 +335,10 @@ void zgees_(char *jobvs, char *sort, L_fpz1 select, integer *n, doublecomplex *a
         }
         else
         {
-            maxwrk = *n + *n * ilaenv_(&c__1, "ZGEHRD", " ", n, &c__1, n, &c__0);
+            maxwrk = *n + *n * aocl_lapack_ilaenv(&c__1, "ZGEHRD", " ", n, &c__1, n, &c__0);
             minwrk = *n << 1;
-            zhseqr_("S", jobvs, n, &c__1, n, &a[a_offset], lda, &w[1], &vs[vs_offset], ldvs,
-                    &work[1], &c_n1, &ieval);
+            aocl_lapack_zhseqr("S", jobvs, n, &c__1, n, &a[a_offset], lda, &w[1], &vs[vs_offset],
+                               ldvs, &work[1], &c_n1, &ieval);
             hswork = (integer)work[1].r;
             if(!wantvs)
             {
@@ -358,7 +350,8 @@ void zgees_(char *jobvs, char *sort, L_fpz1 select, integer *n, doublecomplex *a
                 i__1 = maxwrk;
                 i__2 = *n
                        + (*n - 1)
-                             * ilaenv_(&c__1, "ZUNGHR", " ", n, &c__1, n, &c_n1); // , expr subst
+                             * aocl_lapack_ilaenv(&c__1, "ZUNGHR", " ", n, &c__1, n,
+                                                  &c_n1); // , expr subst
                 maxwrk = fla_max(i__1, i__2);
                 maxwrk = fla_max(maxwrk, hswork);
             }
@@ -373,7 +366,7 @@ void zgees_(char *jobvs, char *sort, L_fpz1 select, integer *n, doublecomplex *a
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("ZGEES ", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("ZGEES ", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -410,7 +403,7 @@ void zgees_(char *jobvs, char *sort, L_fpz1 select, integer *n, doublecomplex *a
     }
     if(scalea)
     {
-        zlascl_("G", &c__0, &c__0, &anrm, &cscale, n, n, &a[a_offset], lda, &ierr);
+        aocl_lapack_zlascl("G", &c__0, &c__0, &anrm, &cscale, n, n, &a[a_offset], lda, &ierr);
     }
     /* Permute the matrix to make it more nearly triangular */
     /* (CWorkspace: none) */
@@ -423,11 +416,11 @@ void zgees_(char *jobvs, char *sort, L_fpz1 select, integer *n, doublecomplex *a
     itau = 1;
     iwrk = *n + itau;
     i__1 = *lwork - iwrk + 1;
-    zgehrd_(n, &ilo, &ihi, &a[a_offset], lda, &work[itau], &work[iwrk], &i__1, &ierr);
+    aocl_lapack_zgehrd(n, &ilo, &ihi, &a[a_offset], lda, &work[itau], &work[iwrk], &i__1, &ierr);
     if(wantvs)
     {
         /* Copy Householder vectors to VS */
-        zlacpy_("L", n, n, &a[a_offset], lda, &vs[vs_offset], ldvs);
+        aocl_lapack_zlacpy("L", n, n, &a[a_offset], lda, &vs[vs_offset], ldvs);
         /* Generate unitary matrix in VS */
         /* (CWorkspace: need 2*N-1, prefer N+(N-1)*NB) */
         /* (RWorkspace: none) */
@@ -441,8 +434,8 @@ void zgees_(char *jobvs, char *sort, L_fpz1 select, integer *n, doublecomplex *a
     /* (RWorkspace: none) */
     iwrk = itau;
     i__1 = *lwork - iwrk + 1;
-    zhseqr_("S", jobvs, n, &ilo, &ihi, &a[a_offset], lda, &w[1], &vs[vs_offset], ldvs, &work[iwrk],
-            &i__1, &ieval);
+    aocl_lapack_zhseqr("S", jobvs, n, &ilo, &ihi, &a[a_offset], lda, &w[1], &vs[vs_offset], ldvs,
+                       &work[iwrk], &i__1, &ieval);
     if(ieval > 0)
     {
         *info = ieval;
@@ -452,7 +445,7 @@ void zgees_(char *jobvs, char *sort, L_fpz1 select, integer *n, doublecomplex *a
     {
         if(scalea)
         {
-            zlascl_("G", &c__0, &c__0, &cscale, &anrm, n, &c__1, &w[1], n, &ierr);
+            aocl_lapack_zlascl("G", &c__0, &c__0, &cscale, &anrm, n, &c__1, &w[1], n, &ierr);
         }
         i__1 = *n;
         for(i__ = 1; i__ <= i__1; ++i__)
@@ -464,8 +457,8 @@ void zgees_(char *jobvs, char *sort, L_fpz1 select, integer *n, doublecomplex *a
         /* (CWorkspace: none) */
         /* (RWorkspace: none) */
         i__1 = *lwork - iwrk + 1;
-        ztrsen_("N", jobvs, &bwork[1], n, &a[a_offset], lda, &vs[vs_offset], ldvs, &w[1], sdim, &s,
-                &sep, &work[iwrk], &i__1, &icond);
+        aocl_lapack_ztrsen("N", jobvs, &bwork[1], n, &a[a_offset], lda, &vs[vs_offset], ldvs, &w[1],
+                           sdim, &s, &sep, &work[iwrk], &i__1, &icond);
     }
     if(wantvs)
     {
@@ -477,7 +470,7 @@ void zgees_(char *jobvs, char *sort, L_fpz1 select, integer *n, doublecomplex *a
     if(scalea)
     {
         /* Undo scaling for the Schur form of A */
-        zlascl_("U", &c__0, &c__0, &cscale, &anrm, n, n, &a[a_offset], lda, &ierr);
+        aocl_lapack_zlascl("U", &c__0, &c__0, &cscale, &anrm, n, n, &a[a_offset], lda, &ierr);
         i__1 = *lda + 1;
         aocl_blas_zcopy(n, &a[a_offset], &i__1, &w[1], &c__1);
     }

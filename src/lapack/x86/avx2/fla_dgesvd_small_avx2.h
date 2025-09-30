@@ -19,7 +19,7 @@ doublereal d_sign(doublereal *, doublereal *);
         slen = nr - i;                                                   \
         /* input address */                                              \
         doublereal *iptr;                                                \
-        integer has_outliers = 0;                                        \
+        aocl_int64_t has_outliers = 0;                                        \
                                                                          \
         /* Annihilate elements in current column */                      \
         iptr = (doublereal *)&ia[i + 1 + i * *ldia - 1];                 \
@@ -100,7 +100,7 @@ doublereal d_sign(doublereal *, doublereal *);
 /* Macro to ensure all singular values are positive
    (values only, no vector adjustments) */
 #define FLA_ENSURE_POSITIVE_SINGULAR_VALUES(n_vals)   \
-    for(integer i__ = 1; i__ <= (n_vals); i__++)      \
+    for(aocl_int64_t i__ = 1; i__ <= (n_vals); i__++)      \
     {                                                 \
         if(s[i__] == 0.0)                             \
         {                                             \

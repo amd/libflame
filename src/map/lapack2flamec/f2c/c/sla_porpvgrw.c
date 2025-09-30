@@ -99,16 +99,31 @@
 /* > \date December 2016 */
 /* > \ingroup realPOcomputational */
 /* ===================================================================== */
-real sla_porpvgrw_(char *uplo, integer *ncols, real *a, integer *lda, real *af, integer *ldaf,
-                   real *work)
+/** Generated wrapper function */
+real sla_porpvgrw_(char *uplo, aocl_int_t *ncols, real *a, aocl_int_t *lda, real *af,
+                   aocl_int_t *ldaf, real *work)
+{
+#if FLA_ENABLE_ILP64
+    return aocl_lapack_sla_porpvgrw(uplo, ncols, a, lda, af, ldaf, work);
+#else
+    aocl_int64_t ncols_64 = *ncols;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t ldaf_64 = *ldaf;
+
+    return aocl_lapack_sla_porpvgrw(uplo, &ncols_64, a, &lda_64, af, &ldaf_64, work);
+#endif
+}
+
+real aocl_lapack_sla_porpvgrw(char *uplo, aocl_int64_t *ncols, real *a, aocl_int64_t *lda, real *af,
+                              aocl_int64_t *ldaf, real *work)
 {
     /* System generated locals */
-    integer a_dim1, a_offset, af_dim1, af_offset, i__1, i__2;
+    aocl_int64_t a_dim1, a_offset, af_dim1, af_offset, i__1, i__2;
     real ret_val, r__1, r__2, r__3;
     /* Local variables */
-    integer i__, j;
+    aocl_int64_t i__, j;
     real amax, umax;
-    extern logical lsame_(char *, char *, integer, integer);
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     logical upper;
     real rpvgrw;
     /* -- LAPACK computational routine (version 3.7.0) -- */

@@ -16,7 +16,7 @@
 #include "blis.h"
 #endif
 
-void bl1_sswapv( integer n, float* x, integer incx, float* y, integer incy )
+void bl1_sswapv( fla_dim_t n, float* x, fla_dim_t incx, float* y, fla_dim_t incy )
 {
 	// Return early if possible.
 	if ( bl1_zero_dim1( n ) ) return;
@@ -26,7 +26,7 @@ void bl1_sswapv( integer n, float* x, integer incx, float* y, integer incy )
 	           y, incy );
 }
 
-void bl1_dswapv( integer n, double* x, integer incx, double* y, integer incy )
+void bl1_dswapv( fla_dim_t n, double* x, fla_dim_t incx, double* y, fla_dim_t incy )
 {
 	// Return early if possible.
 	if ( bl1_zero_dim1( n ) ) return;
@@ -36,7 +36,7 @@ void bl1_dswapv( integer n, double* x, integer incx, double* y, integer incy )
 	           y, incy );
 }
 
-void bl1_cswapv( integer n, scomplex* x, integer incx, scomplex* y, integer incy )
+void bl1_cswapv( fla_dim_t n, scomplex* x, fla_dim_t incx, scomplex* y, fla_dim_t incy )
 {
 	// Return early if possible.
 	if ( bl1_zero_dim1( n ) ) return;
@@ -46,7 +46,7 @@ void bl1_cswapv( integer n, scomplex* x, integer incx, scomplex* y, integer incy
 	           y, incy );
 }
 
-void bl1_zswapv( integer n, dcomplex* x, integer incx, dcomplex* y, integer incy )
+void bl1_zswapv( fla_dim_t n, dcomplex* x, fla_dim_t incx, dcomplex* y, fla_dim_t incy )
 {
 	// Return early if possible.
 	if ( bl1_zero_dim1( n ) ) return;

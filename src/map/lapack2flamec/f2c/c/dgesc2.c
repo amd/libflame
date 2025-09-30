@@ -4,8 +4,8 @@
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
  /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
-static integer c_n1 = -1;
+static aocl_int64_t c__1 = 1;
+static aocl_int64_t c_n1 = -1;
 /* > \brief \b DGESC2 solves a system of linear equations using the LU factorization with complete
  * pivoting co mputed by sgetc2. */
 /* =========== DOCUMENTATION =========== */
@@ -113,25 +113,32 @@ for 1 <= j <= N, column j of the */
 /* > Umea University, S-901 87 Umea, Sweden. */
 /* ===================================================================== */
 /* Subroutine */
-void dgesc2_(integer *n, doublereal *a, integer *lda, doublereal *rhs, integer *ipiv, integer *jpiv,
-             doublereal *scale)
+/** Generated wrapper function */
+void dgesc2_(aocl_int_t *n, doublereal *a, aocl_int_t *lda, doublereal *rhs, aocl_int_t *ipiv,
+             aocl_int_t *jpiv, doublereal *scale)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_dgesc2(n, a, lda, rhs, ipiv, jpiv, scale);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t lda_64 = *lda;
+
+    aocl_lapack_dgesc2(&n_64, a, &lda_64, rhs, ipiv, jpiv, scale);
+#endif
+}
+
+void aocl_lapack_dgesc2(aocl_int64_t *n, doublereal *a, aocl_int64_t *lda, doublereal *rhs,
+                        aocl_int_t *ipiv, aocl_int_t *jpiv, doublereal *scale)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dgesc2 inputs: n %" FLA_IS ", lda %" FLA_IS "", *n, *lda);
     /* System generated locals */
-    integer a_dim1, a_offset, i__1, i__2;
+    aocl_int64_t a_dim1, a_offset, i__1, i__2;
     doublereal d__1, d__2;
     /* Local variables */
-    integer i__, j;
+    aocl_int64_t i__, j;
     doublereal eps, temp;
-    extern /* Subroutine */
-        void
-        dscal_(integer *, doublereal *, doublereal *, integer *);
     extern doublereal dlamch_(char *);
-    extern integer idamax_(integer *, doublereal *, integer *);
-    extern /* Subroutine */
-        void
-        dlaswp_(integer *, doublereal *, integer *, integer *, integer *, integer *, integer *);
     doublereal smlnum;
     /* -- LAPACK auxiliary routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -165,7 +172,7 @@ void dgesc2_(integer *n, doublereal *a, integer *lda, doublereal *rhs, integer *
     smlnum = dlamch_("S") / eps;
     /* Apply permutations IPIV to RHS */
     i__1 = *n - 1;
-    dlaswp_(&c__1, &rhs[1], lda, &c__1, &i__1, &ipiv[1], &c__1);
+    aocl_lapack_dlaswp(&c__1, &rhs[1], lda, &c__1, &i__1, &ipiv[1], &c__1);
     /* Solve for L part */
     i__1 = *n - 1;
     for(i__ = 1; i__ <= i__1; ++i__)
@@ -181,11 +188,11 @@ void dgesc2_(integer *n, doublereal *a, integer *lda, doublereal *rhs, integer *
     /* Solve for U part */
     *scale = 1.;
     /* Check for scaling */
-    i__ = idamax_(n, &rhs[1], &c__1);
+    i__ = aocl_blas_idamax(n, &rhs[1], &c__1);
     if(smlnum * 2. * (d__1 = rhs[i__], f2c_abs(d__1)) > (d__2 = a[*n + *n * a_dim1], f2c_abs(d__2)))
     {
         temp = .5 / (d__1 = rhs[i__], f2c_abs(d__1));
-        dscal_(n, &temp, &rhs[1], &c__1);
+        aocl_blas_dscal(n, &temp, &rhs[1], &c__1);
         *scale *= temp;
     }
     for(i__ = *n; i__ >= 1; --i__)
@@ -202,7 +209,7 @@ void dgesc2_(integer *n, doublereal *a, integer *lda, doublereal *rhs, integer *
     }
     /* Apply permutations JPIV to the solution (RHS) */
     i__1 = *n - 1;
-    dlaswp_(&c__1, &rhs[1], lda, &c__1, &i__1, &jpiv[1], &c_n1);
+    aocl_lapack_dlaswp(&c__1, &rhs[1], lda, &c__1, &i__1, &jpiv[1], &c_n1);
     AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of DGESC2 */

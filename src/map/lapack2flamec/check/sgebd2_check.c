@@ -1,11 +1,11 @@
 #include "FLA_f2c.h"
 #include "FLA_lapack2flame_return_defs.h"
 
-int sgebd2_check(integer *m, integer *n, float *a, integer *lda, float *d__, float *e, float *tauq,
-                 float *taup, float *work, integer *info)
+int sgebd2_check(aocl_int64_t *m, aocl_int64_t *n, float *a, aocl_int64_t *lda, float *d__, float *e, float *tauq,
+                 float *taup, float *work, aocl_int64_t *info)
 {
     /* System generated locals */
-    integer a_dim1, a_offset, i__1;
+    aocl_int64_t a_dim1, a_offset, i__1;
 
     /* Parameter adjustments */
     a_dim1 = *lda;
@@ -33,7 +33,7 @@ int sgebd2_check(integer *m, integer *n, float *a, integer *lda, float *d__, flo
     if(*info < 0)
     {
         i__1 = -(*info);
-        xerbla_("SGEBD2", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("SGEBD2", &i__1, (ftnlen)6);
         return LAPACK_FAILURE;
     }
     return LAPACK_SUCCESS;

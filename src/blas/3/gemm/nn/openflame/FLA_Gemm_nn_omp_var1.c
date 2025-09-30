@@ -20,7 +20,7 @@ FLA_Error FLA_Gemm_nn_omp_var1( FLA_Obj alpha, FLA_Obj A, FLA_Obj B, FLA_Obj C, 
           CB,              C1,
                            C2;
 
-  integer b;
+  fla_dim_t b;
 
   FLA_Part_2x1( A,    &AT, 
                       &AB,            0, FLA_TOP );

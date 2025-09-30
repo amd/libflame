@@ -7,8 +7,8 @@
 #include "blis.h"
 #endif
 
-/* Subroutine */ integer lapack_sgetf2(integer *m, integer *n, real *a, integer *lda,
-	integer *ipiv, integer *info)
+/* Subroutine */ fla_dim_t lapack_sgetf2(fla_dim_t *m, fla_dim_t *n, real *a, fla_dim_t *lda,
+	aocl_int_t *ipiv, fla_dim_t *info)
 {
 
 
@@ -62,16 +62,15 @@
 
        Parameter adjustments */
     /* Table of constant values */
-    static TLS_CLASS_SPEC integer c__1 = 1;
+    static TLS_CLASS_SPEC fla_dim_t c__1 = 1;
     static TLS_CLASS_SPEC real c_b6 = -1.f;
 
     /* System generated locals */
-    integer a_dim1, a_offset, i__1, i__2, i__3;
+    fla_dim_t a_dim1, a_offset, i__1, i__2, i__3;
     real r__1;
     /* Local variables */
-	static TLS_CLASS_SPEC integer j;
-    static TLS_CLASS_SPEC integer jp;
-    extern /* Subroutine */ void xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+	static TLS_CLASS_SPEC fla_dim_t j;
+    static TLS_CLASS_SPEC fla_dim_t jp;
     int kn;
     float safmin;
     float a_piv;
@@ -94,7 +93,7 @@
     }
     if (*info != 0) {
 	i__1 = -(*info);
-	xerbla_("LAPACK_SGETF2", &i__1, (ftnlen)13);
+	aocl_blas_xerbla("LAPACK_SGETF2", &i__1, (ftnlen)13);
 	return 0;
     }
 
@@ -110,14 +109,14 @@
 /*        Find pivot and test for singularity. */
 
 	i__2 = *m - j + 1;
-	jp = j - 1 + isamax_(&i__2, &a_ref(j, j), &c__1);
+	jp = j - 1 + aocl_blas_isamax(&i__2, &a_ref(j, j), &c__1);
 	ipiv[j] = jp;
 	if (a_ref(jp, j) != 0.f) {
 
 /*           Apply the interchange to columns 1:N. */
 
 	    if (jp != j) {
-		sswap_(n, &a_ref(j, 1), lda, &a_ref(jp, 1), lda);
+		aocl_blas_sswap(n, &a_ref(j, 1), lda, &a_ref(jp, 1), lda);
 	    }
 
 /*           Compute elements J+1:M of J-th column. */
@@ -138,7 +137,7 @@
             else 
             {
                 r__1 = 1.f / a_piv;
-                sscal_(&i__2, &r__1, &a_ref(j + 1, j), &c__1);
+                aocl_blas_sscal(&i__2, &r__1, &a_ref(j + 1, j), &c__1);
             }
            }
 
@@ -153,7 +152,7 @@
 
 	    i__2 = *m - j;
 	    i__3 = *n - j;
-	    sger_(&i__2, &i__3, &c_b6, &a_ref(j + 1, j), &c__1, &a_ref(j, j +
+	    aocl_blas_sger(&i__2, &i__3, &c_b6, &a_ref(j + 1, j), &c__1, &a_ref(j, j +
 		    1), lda, &a_ref(j + 1, j + 1), lda);
 	}
 /* L10: */

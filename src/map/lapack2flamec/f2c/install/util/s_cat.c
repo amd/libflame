@@ -11,7 +11,7 @@ extern char *F77_aloc(ftnlen, const char *);
 extern "C" {
 #endif
 
-VOID s_cat(char *lp, char *rpp[], ftnint rnp[], ftnint *np)
+void s_cat(char *lp, char *rpp[], ftnint rnp[], ftnint *np)
 {
     ftnlen i, nc;
     char *rp;

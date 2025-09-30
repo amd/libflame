@@ -5,10 +5,10 @@
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static doublereal c_b5 = -1.;
-static integer c__1 = 1;
+static aocl_int64_t c__1 = 1;
 static doublereal c_b11 = 1.;
 static doublereal c_b13 = 0.;
-static integer c__0 = 0;
+static aocl_int64_t c__0 = 0;
 /* > \brief \b DLALS0 applies back multiplying factors in solving the least squares problem using
  * divide and c onquer SVD approach. Used by sgelsd. */
 /* =========== DOCUMENTATION =========== */
@@ -269,11 +269,46 @@ the */
 /* > Osni Marques, LBNL/NERSC, USA \n */
 /* ===================================================================== */
 /* Subroutine */
-void dlals0_(integer *icompq, integer *nl, integer *nr, integer *sqre, integer *nrhs, doublereal *b,
-             integer *ldb, doublereal *bx, integer *ldbx, integer *perm, integer *givptr,
-             integer *givcol, integer *ldgcol, doublereal *givnum, integer *ldgnum,
-             doublereal *poles, doublereal *difl, doublereal *difr, doublereal *z__, integer *k,
-             doublereal *c__, doublereal *s, doublereal *work, integer *info)
+/** Generated wrapper function */
+void dlals0_(aocl_int_t *icompq, aocl_int_t *nl, aocl_int_t *nr, aocl_int_t *sqre, aocl_int_t *nrhs,
+             doublereal *b, aocl_int_t *ldb, doublereal *bx, aocl_int_t *ldbx, aocl_int_t *perm,
+             aocl_int_t *givptr, aocl_int_t *givcol, aocl_int_t *ldgcol, doublereal *givnum,
+             aocl_int_t *ldgnum, doublereal *poles, doublereal *difl, doublereal *difr,
+             doublereal *z__, aocl_int_t *k, doublereal *c__, doublereal *s, doublereal *work,
+             aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_dlals0(icompq, nl, nr, sqre, nrhs, b, ldb, bx, ldbx, perm, givptr, givcol, ldgcol,
+                       givnum, ldgnum, poles, difl, difr, z__, k, c__, s, work, info);
+#else
+    aocl_int64_t icompq_64 = *icompq;
+    aocl_int64_t nl_64 = *nl;
+    aocl_int64_t nr_64 = *nr;
+    aocl_int64_t sqre_64 = *sqre;
+    aocl_int64_t nrhs_64 = *nrhs;
+    aocl_int64_t ldb_64 = *ldb;
+    aocl_int64_t ldbx_64 = *ldbx;
+    aocl_int64_t givptr_64 = *givptr;
+    aocl_int64_t ldgcol_64 = *ldgcol;
+    aocl_int64_t ldgnum_64 = *ldgnum;
+    aocl_int64_t k_64 = *k;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_dlals0(&icompq_64, &nl_64, &nr_64, &sqre_64, &nrhs_64, b, &ldb_64, bx, &ldbx_64,
+                       perm, &givptr_64, givcol, &ldgcol_64, givnum, &ldgnum_64, poles, difl, difr,
+                       z__, &k_64, c__, s, work, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_dlals0(aocl_int64_t *icompq, aocl_int64_t *nl, aocl_int64_t *nr,
+                        aocl_int64_t *sqre, aocl_int64_t *nrhs, doublereal *b, aocl_int64_t *ldb,
+                        doublereal *bx, aocl_int64_t *ldbx, aocl_int_t *perm, aocl_int64_t *givptr,
+                        aocl_int_t *givcol, aocl_int64_t *ldgcol, doublereal *givnum,
+                        aocl_int64_t *ldgnum, doublereal *poles, doublereal *difl, doublereal *difr,
+                        doublereal *z__, aocl_int64_t *k, doublereal *c__, doublereal *s,
+                        doublereal *work, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF(
@@ -282,35 +317,16 @@ void dlals0_(integer *icompq, integer *nl, integer *nr, integer *sqre, integer *
         ", ldgcol %" FLA_IS ", ldgnum %" FLA_IS ", k %" FLA_IS "",
         *icompq, *nl, *nr, *sqre, *nrhs, *ldb, *ldbx, *givptr, *givcol, *ldgcol, *ldgnum, *k);
     /* System generated locals */
-    integer givcol_dim1, givcol_offset, b_dim1, b_offset, bx_dim1, bx_offset, difr_dim1,
+    aocl_int64_t givcol_dim1, givcol_offset, b_dim1, b_offset, bx_dim1, bx_offset, difr_dim1,
         difr_offset, givnum_dim1, givnum_offset, poles_dim1, poles_offset, i__1, i__2;
     doublereal d__1;
     /* Local variables */
-    integer i__, j, m, n;
+    aocl_int64_t i__, j, m, n;
     doublereal dj;
-    integer nlp1;
+    aocl_int64_t nlp1;
     doublereal temp;
-    extern /* Subroutine */
-        void
-        drot_(integer *, doublereal *, integer *, doublereal *, integer *, doublereal *,
-              doublereal *);
-    extern doublereal dnrm2_(integer *, doublereal *, integer *);
-    extern /* Subroutine */
-        void
-        dscal_(integer *, doublereal *, doublereal *, integer *);
     doublereal diflj, difrj, dsigj;
-    extern /* Subroutine */
-        void
-        dgemv_(char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *,
-               integer *, doublereal *, doublereal *, integer *),
-        dcopy_(integer *, doublereal *, integer *, doublereal *, integer *);
     extern doublereal dlamc3_(doublereal *, doublereal *);
-    extern /* Subroutine */
-        void
-        dlascl_(char *, integer *, integer *, doublereal *, doublereal *, integer *, integer *,
-                doublereal *, integer *, integer *),
-        dlacpy_(char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal dsigjp;
     /* -- LAPACK computational routine (version 3.7.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -407,7 +423,7 @@ void dlals0_(integer *icompq, integer *nl, integer *nr, integer *sqre, integer *
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("DLALS0", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("DLALS0", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -420,27 +436,27 @@ void dlals0_(integer *icompq, integer *nl, integer *nr, integer *sqre, integer *
         i__1 = *givptr;
         for(i__ = 1; i__ <= i__1; ++i__)
         {
-            drot_(nrhs, &b[givcol[i__ + (givcol_dim1 << 1)] + b_dim1], ldb,
-                  &b[givcol[i__ + givcol_dim1] + b_dim1], ldb, &givnum[i__ + (givnum_dim1 << 1)],
-                  &givnum[i__ + givnum_dim1]);
+            aocl_blas_drot(nrhs, &b[givcol[i__ + (givcol_dim1 << 1)] + b_dim1], ldb,
+                           &b[givcol[i__ + givcol_dim1] + b_dim1], ldb,
+                           &givnum[i__ + (givnum_dim1 << 1)], &givnum[i__ + givnum_dim1]);
             /* L10: */
         }
         /* Step (2L): permute rows of B. */
-        dcopy_(nrhs, &b[nlp1 + b_dim1], ldb, &bx[bx_dim1 + 1], ldbx);
+        aocl_blas_dcopy(nrhs, &b[nlp1 + b_dim1], ldb, &bx[bx_dim1 + 1], ldbx);
         i__1 = n;
         for(i__ = 2; i__ <= i__1; ++i__)
         {
-            dcopy_(nrhs, &b[perm[i__] + b_dim1], ldb, &bx[i__ + bx_dim1], ldbx);
+            aocl_blas_dcopy(nrhs, &b[perm[i__] + b_dim1], ldb, &bx[i__ + bx_dim1], ldbx);
             /* L20: */
         }
         /* Step (3L): apply the inverse of the left singular vector */
         /* matrix to BX. */
         if(*k == 1)
         {
-            dcopy_(nrhs, &bx[bx_offset], ldbx, &b[b_offset], ldb);
+            aocl_blas_dcopy(nrhs, &bx[bx_offset], ldbx, &b[b_offset], ldb);
             if(z__[1] < 0.)
             {
-                dscal_(nrhs, &c_b5, &b[b_offset], ldb);
+                aocl_blas_dscal(nrhs, &c_b5, &b[b_offset], ldb);
             }
         }
         else
@@ -496,10 +512,11 @@ void dlals0_(integer *icompq, integer *nl, integer *nr, integer *sqre, integer *
                     /* L40: */
                 }
                 work[1] = -1.;
-                temp = dnrm2_(k, &work[1], &c__1);
-                dgemv_("T", k, nrhs, &c_b11, &bx[bx_offset], ldbx, &work[1], &c__1, &c_b13,
-                       &b[j + b_dim1], ldb);
-                dlascl_("G", &c__0, &c__0, &temp, &c_b11, &c__1, nrhs, &b[j + b_dim1], ldb, info);
+                temp = aocl_blas_dnrm2(k, &work[1], &c__1);
+                aocl_blas_dgemv("T", k, nrhs, &c_b11, &bx[bx_offset], ldbx, &work[1], &c__1, &c_b13,
+                                &b[j + b_dim1], ldb);
+                aocl_lapack_dlascl("G", &c__0, &c__0, &temp, &c_b11, &c__1, nrhs, &b[j + b_dim1],
+                                   ldb, info);
                 /* L50: */
             }
         }
@@ -507,7 +524,8 @@ void dlals0_(integer *icompq, integer *nl, integer *nr, integer *sqre, integer *
         if(*k < fla_max(m, n))
         {
             i__1 = n - *k;
-            dlacpy_("A", &i__1, nrhs, &bx[*k + 1 + bx_dim1], ldbx, &b[*k + 1 + b_dim1], ldb);
+            aocl_lapack_dlacpy("A", &i__1, nrhs, &bx[*k + 1 + bx_dim1], ldbx, &b[*k + 1 + b_dim1],
+                               ldb);
         }
     }
     else
@@ -517,7 +535,7 @@ void dlals0_(integer *icompq, integer *nl, integer *nr, integer *sqre, integer *
         /* to B. */
         if(*k == 1)
         {
-            dcopy_(nrhs, &b[b_offset], ldb, &bx[bx_offset], ldbx);
+            aocl_blas_dcopy(nrhs, &b[b_offset], ldb, &bx[bx_offset], ldbx);
         }
         else
         {
@@ -566,8 +584,8 @@ void dlals0_(integer *icompq, integer *nl, integer *nr, integer *sqre, integer *
                     }
                     /* L70: */
                 }
-                dgemv_("T", k, nrhs, &c_b11, &b[b_offset], ldb, &work[1], &c__1, &c_b13,
-                       &bx[j + bx_dim1], ldbx);
+                aocl_blas_dgemv("T", k, nrhs, &c_b11, &b[b_offset], ldb, &work[1], &c__1, &c_b13,
+                                &bx[j + bx_dim1], ldbx);
                 /* L80: */
             }
         }
@@ -575,33 +593,34 @@ void dlals0_(integer *icompq, integer *nl, integer *nr, integer *sqre, integer *
         /* related to the right null space of the subproblem. */
         if(*sqre == 1)
         {
-            dcopy_(nrhs, &b[m + b_dim1], ldb, &bx[m + bx_dim1], ldbx);
-            drot_(nrhs, &bx[bx_dim1 + 1], ldbx, &bx[m + bx_dim1], ldbx, c__, s);
+            aocl_blas_dcopy(nrhs, &b[m + b_dim1], ldb, &bx[m + bx_dim1], ldbx);
+            aocl_blas_drot(nrhs, &bx[bx_dim1 + 1], ldbx, &bx[m + bx_dim1], ldbx, c__, s);
         }
         if(*k < fla_max(m, n))
         {
             i__1 = n - *k;
-            dlacpy_("A", &i__1, nrhs, &b[*k + 1 + b_dim1], ldb, &bx[*k + 1 + bx_dim1], ldbx);
+            aocl_lapack_dlacpy("A", &i__1, nrhs, &b[*k + 1 + b_dim1], ldb, &bx[*k + 1 + bx_dim1],
+                               ldbx);
         }
         /* Step (3R): permute rows of B. */
-        dcopy_(nrhs, &bx[bx_dim1 + 1], ldbx, &b[nlp1 + b_dim1], ldb);
+        aocl_blas_dcopy(nrhs, &bx[bx_dim1 + 1], ldbx, &b[nlp1 + b_dim1], ldb);
         if(*sqre == 1)
         {
-            dcopy_(nrhs, &bx[m + bx_dim1], ldbx, &b[m + b_dim1], ldb);
+            aocl_blas_dcopy(nrhs, &bx[m + bx_dim1], ldbx, &b[m + b_dim1], ldb);
         }
         i__1 = n;
         for(i__ = 2; i__ <= i__1; ++i__)
         {
-            dcopy_(nrhs, &bx[i__ + bx_dim1], ldbx, &b[perm[i__] + b_dim1], ldb);
+            aocl_blas_dcopy(nrhs, &bx[i__ + bx_dim1], ldbx, &b[perm[i__] + b_dim1], ldb);
             /* L90: */
         }
         /* Step (4R): apply back the Givens rotations performed. */
         for(i__ = *givptr; i__ >= 1; --i__)
         {
             d__1 = -givnum[i__ + givnum_dim1];
-            drot_(nrhs, &b[givcol[i__ + (givcol_dim1 << 1)] + b_dim1], ldb,
-                  &b[givcol[i__ + givcol_dim1] + b_dim1], ldb, &givnum[i__ + (givnum_dim1 << 1)],
-                  &d__1);
+            aocl_blas_drot(nrhs, &b[givcol[i__ + (givcol_dim1 << 1)] + b_dim1], ldb,
+                           &b[givcol[i__ + givcol_dim1] + b_dim1], ldb,
+                           &givnum[i__ + (givnum_dim1 << 1)], &d__1);
             /* L100: */
         }
     }

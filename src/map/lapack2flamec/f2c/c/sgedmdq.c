@@ -4,7 +4,7 @@
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
  /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c_n1 = -1;
+static aocl_int64_t c_n1 = -1;
 static real c_b30 = 0.f;
 /* > \brief \b SGEDMDQ computes the Dynamic Mode Decomposition (DMD) for a pair of data snapshot
  * matrices. */
@@ -365,11 +365,11 @@ this and 3 */
 /* > The eigenvalues are determined as follows: */
 /* > If IMEIG(i) == 0, then the corresponding eigenvalue is */
 /* > real, LAMBDA(i) = REIG(i). */
-/* > If IMEIG(i)>0, then the corresponding complex */
+/* > If IMEIG(i)>0, then the corresponding scomplex */
 /* > conjugate pair of eigenvalues reads */
 /* > LAMBDA(i) = REIG(i) + sqrt(-1)*IMAG(i) */
 /* > LAMBDA(i+1) = REIG(i) - sqrt(-1)*IMAG(i) */
-/* > That is, complex conjugate pairs have consecutive */
+/* > That is, scomplex conjugate pairs have consecutive */
 /* > indices (i,i+1), with the positive imaginary part */
 /* > listed first. */
 /* > See the descriptions of K, REIG, Z. */
@@ -414,7 +414,7 @@ this and 3 */
 /* > Ritz pairs. */
 /* > If LAMBDA(i) is real, then */
 /* > RES(i) = || A * Z(:,i) - LAMBDA(i)*Z(:,i))||_2. */
-/* > If [LAMBDA(i), LAMBDA(i+1)] is a complex conjugate pair */
+/* > If [LAMBDA(i), LAMBDA(i+1)] is a scomplex conjugate pair */
 /* > then */
 /* > RES(i)=RES(i+1) = || A * Z(:,i:i+1) - Z(:,i:i+1) *B||_F */
 /* > where B = [ real(LAMBDA(i)) imag(LAMBDA(i)) ] */
@@ -456,7 +456,7 @@ K) contains */
 /* > \verbatim */
 /* > V (workspace/output) REAL (N-1)-by-(N-1) array */
 /* > On exit, V(1:K,1:K) contains the K eigenvectors of */
-/* > the Rayleigh quotient. The eigenvectors of a complex */
+/* > the Rayleigh quotient. The eigenvectors of a scomplex */
 /* > conjugate pair of eigenvalues are returned in real form */
 /* > as explained in the description of Z. The Ritz vectors */
 /* > (returned in Z) are the product of X and V;
@@ -579,12 +579,42 @@ LIWORK >=1 */
 /* ............................................................. */
 /* ............................................................. */
 /* Subroutine */
-void sgedmdq_(char *jobs, char *jobz, char *jobr, char *jobq, char *jobt, char *jobf,
-              integer *whtsvd, integer *m, integer *n, real *f, integer *ldf, real *x, integer *ldx,
-              real *y, integer *ldy, integer *nrnk, real *tol, integer *k, real *reig, real *imeig,
-              real *z__, integer *ldz, real *res, real *b, integer *ldb, real *v, integer *ldv,
-              real *s, integer *lds, real *work, integer *lwork, integer *iwork, integer *liwork,
-              integer *info)
+/** Generated wrapper function */
+void sgedmdq_(char *jobs, char *jobz, char *jobr, char *jobq, char *jobt, char *jobf, aocl_int_t *whtsvd, aocl_int_t *m, aocl_int_t *n, real *f, aocl_int_t *ldf, real *x, aocl_int_t *ldx, real *y, aocl_int_t *ldy, aocl_int_t *nrnk, real *tol, aocl_int_t *k, real *reig, real *imeig, real *z__, aocl_int_t *ldz, real *res, real *b, aocl_int_t *ldb, real *v, aocl_int_t *ldv, real *s, aocl_int_t *lds, real *work, aocl_int_t *lwork, aocl_int_t *iwork, aocl_int_t *liwork, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_sgedmdq(jobs, jobz, jobr, jobq, jobt, jobf, whtsvd, m, n, f, ldf, x, ldx, y, ldy, nrnk, tol, k, reig, imeig, z__, ldz, res, b, ldb, v, ldv, s, lds, work, lwork, iwork, liwork, info);
+#else
+    aocl_int64_t whtsvd_64 = *whtsvd;
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t ldf_64 = *ldf;
+    aocl_int64_t ldx_64 = *ldx;
+    aocl_int64_t ldy_64 = *ldy;
+    aocl_int64_t nrnk_64 = *nrnk;
+    aocl_int64_t k_64 = *k;
+    aocl_int64_t ldz_64 = *ldz;
+    aocl_int64_t ldb_64 = *ldb;
+    aocl_int64_t ldv_64 = *ldv;
+    aocl_int64_t lds_64 = *lds;
+    aocl_int64_t lwork_64 = *lwork;
+    aocl_int64_t liwork_64 = *liwork;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_sgedmdq(jobs, jobz, jobr, jobq, jobt, jobf, &whtsvd_64, &m_64, &n_64, f, &ldf_64, x, &ldx_64, y, &ldy_64, &nrnk_64, tol, &k_64, reig, imeig, z__, &ldz_64, res, b, &ldb_64, v, &ldv_64, s, &lds_64, work, &lwork_64, iwork, &liwork_64, &info_64);
+
+    *k = (aocl_int_t)k_64;
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_sgedmdq(char *jobs, char *jobz, char *jobr, char *jobq, char *jobt, char *jobf,
+              aocl_int64_t *whtsvd, aocl_int64_t *m, aocl_int64_t *n, real *f, aocl_int64_t *ldf,
+              real *x, aocl_int64_t *ldx, real *y, aocl_int64_t *ldy, aocl_int64_t *nrnk, real *tol,
+              aocl_int64_t *k, real *reig, real *imeig, real *z__, aocl_int64_t *ldz, real *res,
+              real *b, aocl_int64_t *ldb, real *v, aocl_int64_t *ldv, real *s, aocl_int64_t *lds,
+              real *work, aocl_int64_t *lwork, aocl_int_t *iwork, aocl_int64_t *liwork,
+              aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("sgedmdq inputs: jobs %c ,jobz %c ,jobr %c ,jobq %c ,jobt %c ,jobf %c "
@@ -594,46 +624,26 @@ void sgedmdq_(char *jobs, char *jobz, char *jobr, char *jobq, char *jobt, char *
                       *jobs, *jobz, *jobr, *jobq, *jobt, *jobf, *whtsvd, *m, *n, *ldf, *ldx, *ldy,
                       *nrnk, *ldz, *ldb, *ldv, *lds, *lwork, *liwork);
     /* System generated locals */
-    integer f_dim1, f_offset, x_dim1, x_offset, y_dim1, y_offset, z_dim1, z_offset, b_dim1,
+    aocl_int64_t f_dim1, f_offset, x_dim1, x_offset, y_dim1, y_offset, z_dim1, z_offset, b_dim1,
         b_offset, v_dim1, v_offset, s_dim1, s_offset, i__1, i__2;
     /* Local variables */
-    integer info1;
-    extern logical lsame_(char *, char *, integer, integer);
+    aocl_int64_t info1;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     char jobvl[1];
-    integer minmn;
+    aocl_int64_t minmn;
     logical wantq;
-    integer mlwqr, olwqr;
+    aocl_int64_t mlwqr, olwqr;
     logical wntex;
-    extern /* Subroutine */
-        void
-        sgedmd_(char *, char *, char *, char *, integer *, integer *, integer *, real *, integer *,
-                real *, integer *, integer *, real *, integer *, real *, real *, real *, integer *,
-                real *, real *, integer *, real *, integer *, real *, integer *, real *, integer *,
-                integer *, integer *, integer *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    integer mlwdmd, olwdmd;
-    extern /* Subroutine */
-        void
-        sgeqrf_(integer *, integer *, real *, integer *, real *, real *, integer *, integer *);
+    aocl_int64_t mlwdmd, olwdmd;
     logical sccolx, sccoly;
-    extern /* Subroutine */
-        void
-        slacpy_(char *, integer *, integer *, real *, integer *, real *, integer *),
-        slaset_(char *, integer *, integer *, real *, real *, real *, integer *);
-    integer iminwr;
+    aocl_int64_t iminwr;
     logical wntvec, wntvcf;
-    integer mlwgqr;
+    aocl_int64_t mlwgqr;
     logical wntref;
-    integer mlwork, olwgqr, olwork;
+    aocl_int64_t mlwork, olwgqr, olwork;
     real rdummy[2];
-    integer mlwmqr, olwmqr;
+    aocl_int64_t mlwmqr, olwmqr;
     logical lquery, wntres, wnttrf, wntvcq;
-    extern /* Subroutine */
-        void
-        sorgqr_(integer *, integer *, integer *, real *, integer *, real *, real *, integer *,
-                integer *),
-        sormqr_(char *, char *, integer *, integer *, integer *, real *, integer *, real *, real *,
-                integer *, real *, integer *, integer *);
     /* ...Translated by Pacific-Sierra Research vf90 Personal 3.4N3 04:20:24 10/24/24 */
     /* ...Switches: */
     /* -- LAPACK driver routine -- */
@@ -807,12 +817,12 @@ void sgedmdq_(char *jobs, char *jobz, char *jobr, char *jobq, char *jobt, char *
         olwork = 0;
         if(lquery)
         {
-            sgeqrf_(m, n, &f[f_offset], ldf, &work[1], rdummy, &c_n1, &info1);
+            aocl_lapack_sgeqrf(m, n, &f[f_offset], ldf, &work[1], rdummy, &c_n1, &info1);
             olwqr = (integer)rdummy[0];
             olwork = fla_min(*m, *n) + olwqr;
         }
         i__1 = *n - 1;
-        sgedmd_(jobs, jobvl, jobr, jobf, whtsvd, &minmn, &i__1, &x[x_offset], ldx, &y[y_offset],
+        aocl_lapack_sgedmd(jobs, jobvl, jobr, jobf, whtsvd, &minmn, &i__1, &x[x_offset], ldx, &y[y_offset],
                 ldy, nrnk, tol, k, &reig[1], &imeig[1], &z__[z_offset], ldz, &res[1], &b[b_offset],
                 ldb, &v[v_offset], ldv, &s[s_offset], lds, &work[1], &c_n1, &iwork[1], liwork,
                 &info1);
@@ -839,8 +849,8 @@ void sgedmdq_(char *jobs, char *jobz, char *jobr, char *jobq, char *jobt, char *
             mlwork = fla_max(i__1, i__2);
             if(lquery)
             {
-                sormqr_("L", "N", m, n, &minmn, &f[f_offset], ldf, &work[1], &z__[z_offset], ldz,
-                        &work[1], &c_n1, &info1);
+                aocl_lapack_sormqr("L", "N", m, n, &minmn, &f[f_offset], ldf, &work[1],
+                                   &z__[z_offset], ldz, &work[1], &c_n1, &info1);
                 olwmqr = (integer)work[1];
                 /* Computing MAX */
                 i__1 = olwork;
@@ -857,7 +867,8 @@ void sgedmdq_(char *jobs, char *jobz, char *jobr, char *jobq, char *jobt, char *
             mlwork = fla_max(i__1, i__2);
             if(lquery)
             {
-                sorgqr_(m, &minmn, &minmn, &f[f_offset], ldf, &work[1], &work[1], &c_n1, &info1);
+                aocl_lapack_sorgqr(m, &minmn, &minmn, &f[f_offset], ldf, &work[1], &work[1], &c_n1,
+                                   &info1);
                 olwgqr = (integer)work[1];
                 /* Computing MAX */
                 i__1 = olwork;
@@ -879,14 +890,14 @@ void sgedmdq_(char *jobs, char *jobz, char *jobr, char *jobq, char *jobt, char *
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("SGEDMDQ", &i__1, (ftnlen)7);
+        aocl_blas_xerbla("SGEDMDQ", &i__1, (ftnlen)7);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     else if(lquery)
     {
         /* Return minimal and optimal workspace sizes */
-        iwork[1] = iminwr;
+        iwork[1] = (aocl_int_t)(iminwr);
         work[1] = (real)mlwork;
         work[2] = (real)olwork;
         AOCL_DTL_TRACE_LOG_EXIT
@@ -898,27 +909,27 @@ void sgedmdq_(char *jobs, char *jobz, char *jobr, char *jobq, char *jobt, char *
     /* For large scale computation with M >>N , at this place */
     /* one can use an out of core QRF. */
     i__1 = *lwork - minmn;
-    sgeqrf_(m, n, &f[f_offset], ldf, &work[1], &work[minmn + 1], &i__1, &info1);
+    aocl_lapack_sgeqrf(m, n, &f[f_offset], ldf, &work[1], &work[minmn + 1], &i__1, &info1);
     /* Define X and Y as the snapshots representations in the */
     /* orthogonal basis computed in the QR factorization. */
     /* X corresponds to the leading N-1 and Y to the trailing */
     /* N-1 snapshots. */
     i__1 = *n - 1;
-    slaset_("L", &minmn, &i__1, &c_b30, &c_b30, &x[x_offset], ldx);
+    aocl_lapack_slaset("L", &minmn, &i__1, &c_b30, &c_b30, &x[x_offset], ldx);
     i__1 = *n - 1;
-    slacpy_("U", &minmn, &i__1, &f[f_offset], ldf, &x[x_offset], ldx);
+    aocl_lapack_slacpy("U", &minmn, &i__1, &f[f_offset], ldf, &x[x_offset], ldx);
     i__1 = *n - 1;
-    slacpy_("A", &minmn, &i__1, &f[(f_dim1 << 1) + 1], ldf, &y[y_offset], ldy);
+    aocl_lapack_slacpy("A", &minmn, &i__1, &f[(f_dim1 << 1) + 1], ldf, &y[y_offset], ldy);
     if(*m >= 3)
     {
         i__1 = minmn - 2;
         i__2 = *n - 2;
-        slaset_("L", &i__1, &i__2, &c_b30, &c_b30, &y[y_dim1 + 3], ldy);
+        aocl_lapack_slaset("L", &i__1, &i__2, &c_b30, &c_b30, &y[y_dim1 + 3], ldy);
     }
     /* Compute the DMD of the projected snapshot pairs (X,Y) */
     i__1 = *n - 1;
     i__2 = *lwork - minmn;
-    sgedmd_(jobs, jobvl, jobr, jobf, whtsvd, &minmn, &i__1, &x[x_offset], ldx, &y[y_offset], ldy,
+    aocl_lapack_sgedmd(jobs, jobvl, jobr, jobf, whtsvd, &minmn, &i__1, &x[x_offset], ldx, &y[y_offset], ldy,
             nrnk, tol, k, &reig[1], &imeig[1], &z__[z_offset], ldz, &res[1], &b[b_offset], ldb,
             &v[v_offset], ldv, &s[s_offset], lds, &work[minmn + 1], &i__2, &iwork[1], liwork,
             &info1);
@@ -941,11 +952,11 @@ void sgedmdq_(char *jobs, char *jobz, char *jobr, char *jobq, char *jobt, char *
         if(*m > minmn)
         {
             i__1 = *m - minmn;
-            slaset_("A", &i__1, k, &c_b30, &c_b30, &z__[minmn + 1 + z_dim1], ldz);
+            aocl_lapack_slaset("A", &i__1, k, &c_b30, &c_b30, &z__[minmn + 1 + z_dim1], ldz);
         }
         i__1 = *lwork - (minmn + *n - 1);
-        sormqr_("L", "N", m, k, &minmn, &f[f_offset], ldf, &work[1], &z__[z_offset], ldz,
-                &work[minmn + *n], &i__1, &info1);
+        aocl_lapack_sormqr("L", "N", m, k, &minmn, &f[f_offset], ldf, &work[1], &z__[z_offset], ldz,
+                           &work[minmn + *n], &i__1, &info1);
     }
     else if(wntvcf)
     {
@@ -955,15 +966,15 @@ void sgedmdq_(char *jobs, char *jobz, char *jobr, char *jobq, char *jobt, char *
         /* the SVD/POD_basis returned by SGEDMD in X) and the */
         /* second factor (the eigenvectors of the Rayleigh */
         /* quotient) is in the array V, as returned by SGEDMD. */
-        slacpy_("A", n, k, &x[x_offset], ldx, &z__[z_offset], ldz);
+        aocl_lapack_slacpy("A", n, k, &x[x_offset], ldx, &z__[z_offset], ldz);
         if(*m > *n)
         {
             i__1 = *m - *n;
-            slaset_("A", &i__1, k, &c_b30, &c_b30, &z__[*n + 1 + z_dim1], ldz);
+            aocl_lapack_slaset("A", &i__1, k, &c_b30, &c_b30, &z__[*n + 1 + z_dim1], ldz);
         }
         i__1 = *lwork - (minmn + *n - 1);
-        sormqr_("L", "N", m, k, &minmn, &f[f_offset], ldf, &work[1], &z__[z_offset], ldz,
-                &work[minmn + *n], &i__1, &info1);
+        aocl_lapack_sormqr("L", "N", m, k, &minmn, &f[f_offset], ldf, &work[1], &z__[z_offset], ldz,
+                           &work[minmn + *n], &i__1, &info1);
     }
     /* Some optional output variables: */
     /* The upper triangular factor in the initial QR */
@@ -974,13 +985,14 @@ void sgedmdq_(char *jobs, char *jobz, char *jobr, char *jobq, char *jobt, char *
     if(wnttrf)
     {
         /* Return the upper triangular R in Y */
-        slaset_("A", &minmn, n, &c_b30, &c_b30, &y[y_offset], ldy);
-        slacpy_("U", &minmn, n, &f[f_offset], ldf, &y[y_offset], ldy);
+        aocl_lapack_slaset("A", &minmn, n, &c_b30, &c_b30, &y[y_offset], ldy);
+        aocl_lapack_slacpy("U", &minmn, n, &f[f_offset], ldf, &y[y_offset], ldy);
     }
     if(wantq)
     {
         i__1 = *lwork - (minmn + *n - 1);
-        sorgqr_(m, &minmn, &minmn, &f[f_offset], ldf, &work[1], &work[minmn + *n], &i__1, &info1);
+        aocl_lapack_sorgqr(m, &minmn, &minmn, &f[f_offset], ldf, &work[1], &work[minmn + *n], &i__1,
+                           &info1);
     }
     AOCL_DTL_TRACE_LOG_EXIT
     return;

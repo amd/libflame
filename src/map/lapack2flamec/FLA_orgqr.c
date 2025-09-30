@@ -26,18 +26,93 @@
   as returned by SGEQRF.
 */
 
-extern int lapack_dorgqr(integer *m, integer *n, integer *k, doublereal *a, integer *lda,
-                         doublereal *tau, doublereal *work, integer *lwork, integer *info);
-extern void sorgqr_fla(integer *m, integer *n, integer *k, real *a, integer *lda, real *tau,
-                       real *work, integer *lwork, integer *info);
-extern void dorg2r_fla(integer *m, integer *n, integer *k, doublereal *a, integer *lda,
-                       doublereal *tau, doublereal *work, integer *info);
+extern int lapack_dorgqr(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *k, doublereal *a, aocl_int64_t *lda,
+                         doublereal *tau, doublereal *work, aocl_int64_t *lwork, aocl_int64_t *info);
+extern void sorgqr_fla(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *k, real *a, aocl_int64_t *lda, real *tau,
+                       real *work, aocl_int64_t *lwork, aocl_int64_t *info);
+extern void dorg2r_fla(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *k, doublereal *a, aocl_int64_t *lda,
+                       doublereal *tau, doublereal *work, aocl_int64_t *info);
+
+
+/** Generated wrapper function */
+void sorgqr_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *k, real *buff_A, aocl_int_t *ldim_A, real *buff_t, real *buff_w, aocl_int_t *lwork, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_sorgqr(m, n, k, buff_A, ldim_A, buff_t, buff_w, lwork, info);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t k_64 = *k;
+    aocl_int64_t ldim_A_64 = *ldim_A;
+    aocl_int64_t lwork_64 = *lwork;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_sorgqr(&m_64, &n_64, &k_64, buff_A, &ldim_A_64, buff_t, buff_w, &lwork_64, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+/** Generated wrapper function */
+void dorgqr_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *k, doublereal *buff_A, aocl_int_t *ldim_A, doublereal *buff_t, doublereal *buff_w, aocl_int_t *lwork, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_dorgqr(m, n, k, buff_A, ldim_A, buff_t, buff_w, lwork, info);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t k_64 = *k;
+    aocl_int64_t ldim_A_64 = *ldim_A;
+    aocl_int64_t lwork_64 = *lwork;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_dorgqr(&m_64, &n_64, &k_64, buff_A, &ldim_A_64, buff_t, buff_w, &lwork_64, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+/** Generated wrapper function */
+void sorg2r_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *k, real *buff_A, aocl_int_t *ldim_A, real *buff_t, real *buff_w, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_sorg2r(m, n, k, buff_A, ldim_A, buff_t, buff_w, info);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t k_64 = *k;
+    aocl_int64_t ldim_A_64 = *ldim_A;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_sorg2r(&m_64, &n_64, &k_64, buff_A, &ldim_A_64, buff_t, buff_w, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+/** Generated wrapper function */
+void dorg2r_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *k, doublereal *buff_A, aocl_int_t *ldim_A, doublereal *buff_t, doublereal *buff_w, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_dorg2r(m, n, k, buff_A, ldim_A, buff_t, buff_w, info);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t k_64 = *k;
+    aocl_int64_t ldim_A_64 = *ldim_A;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_dorg2r(&m_64, &n_64, &k_64, buff_A, &ldim_A_64, buff_t, buff_w, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
 
 #define LAPACK_orgqr(prefix, name)                                                  \
-    void F77_##prefix##name##qr(                                                    \
-        integer *m, integer *n, integer *k, PREFIX2LAPACK_TYPEDEF(prefix) * buff_A, \
-        integer * ldim_A, PREFIX2LAPACK_TYPEDEF(prefix) * buff_t,                   \
-        PREFIX2LAPACK_TYPEDEF(prefix) * buff_w, integer * lwork, integer * info)
+    void aocl_lapack_##prefix##name##qr(                                                    \
+        aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *k, PREFIX2LAPACK_TYPEDEF(prefix) * buff_A, \
+        aocl_int64_t * ldim_A, PREFIX2LAPACK_TYPEDEF(prefix) * buff_t,                   \
+        PREFIX2LAPACK_TYPEDEF(prefix) * buff_w, aocl_int64_t * lwork, aocl_int64_t * info)
 
 #define LAPACK_orgqr_body(prefix)                              \
     FLA_Datatype datatype = PREFIX2FLAME_DATATYPE(prefix);     \
@@ -175,18 +250,18 @@ LAPACK_orgqr(z, ung)
 #endif
 
 #define LAPACK_org2r(prefix, name)                                                        \
-    void F77_##prefix##name##2r(integer * m, integer * n, integer * k,                    \
-                                PREFIX2LAPACK_TYPEDEF(prefix) * buff_A, integer * ldim_A, \
+    void aocl_lapack_##prefix##name##2r(aocl_int64_t * m, aocl_int64_t * n, aocl_int64_t * k,                    \
+                                PREFIX2LAPACK_TYPEDEF(prefix) * buff_A, aocl_int64_t * ldim_A, \
                                 PREFIX2LAPACK_TYPEDEF(prefix) * buff_t,                   \
-                                PREFIX2LAPACK_TYPEDEF(prefix) * buff_w, integer * info)
+                                PREFIX2LAPACK_TYPEDEF(prefix) * buff_w, aocl_int64_t * info)
 
 LAPACK_org2r(s, org)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("sorg2r inputs: m %" FLA_IS ", n %" FLA_IS ", k %" FLA_IS ", lda %" FLA_IS "",
                       *m, *n, *k, *ldim_A);
-    extern void sorg2r_fla(integer * m, integer * n, integer * k, real * a, integer * lda,
-                           real * tau, real * work, integer * info);
+    extern void sorg2r_fla(aocl_int64_t * m, aocl_int64_t * n, aocl_int64_t * k, real * a, aocl_int64_t * lda,
+                           real * tau, real * work, aocl_int64_t * info);
 
 #if !FLA_ENABLE_AMD_OPT
     int fla_error = LAPACK_SUCCESS;

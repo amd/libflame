@@ -97,8 +97,23 @@
 /* > \ingroup doubleOTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-void dlapll_(integer *n, doublereal *x, integer *incx, doublereal *y, integer *incy,
+/** Generated wrapper function */
+void dlapll_(aocl_int_t *n, doublereal *x, aocl_int_t *incx, doublereal *y, aocl_int_t *incy,
              doublereal *ssmin)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_dlapll(n, x, incx, y, incy, ssmin);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t incx_64 = *incx;
+    aocl_int64_t incy_64 = *incy;
+
+    aocl_lapack_dlapll(&n_64, x, &incx_64, y, &incy_64, ssmin);
+#endif
+}
+
+void aocl_lapack_dlapll(aocl_int64_t *n, doublereal *x, aocl_int64_t *incx, doublereal *y,
+                        aocl_int64_t *incy, doublereal *ssmin)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dlapll inputs: n %" FLA_IS ", incx %" FLA_IS ", incy %" FLA_IS "", *n, *incx,
@@ -107,15 +122,7 @@ void dlapll_(integer *n, doublereal *x, integer *incx, doublereal *y, integer *i
     aocl_int64_t i__1;
     /* Local variables */
     doublereal c__, a11, a12, a22, tau;
-    extern doublereal ddot_(integer *, doublereal *, integer *, doublereal *, integer *);
-    extern /* Subroutine */
-        void
-        dlas2_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *),
-        daxpy_(integer *, doublereal *, doublereal *, integer *, doublereal *, integer *);
     doublereal ssmax;
-    extern /* Subroutine */
-        void
-        dlarfg_(integer *, doublereal *, doublereal *, integer *, doublereal *);
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */

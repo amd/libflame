@@ -11,7 +11,7 @@
  */
 #include "FLA_f2c.h" /* Table of constant values */
 
-static integer c__1 = 1;
+static aocl_int64_t c__1 = 1;
 /* > \brief \b ZLANGE returns the value of the 1-norm, Frobenius norm, infinity-norm, or the largest
  * absolute value of any element of a general rectangular matrix. */
 /* =========== DOCUMENTATION =========== */
@@ -50,7 +50,7 @@ static integer c__1 = 1;
 /* > */
 /* > ZLANGE returns the value of the one norm, or the Frobenius norm, or */
 /* > the infinity norm, or the element of largest absolute value of a */
-/* > complex matrix A. */
+/* > scomplex matrix A. */
 /* > \endverbatim */
 /* > */
 /* > \return ZLANGE */
@@ -119,26 +119,39 @@ otherwise, WORK is not */
 /* > \author NAG Ltd. */
 /* > \ingroup complex16GEauxiliary */
 /* ===================================================================== */
-doublereal zlange_(char *norm, integer *m, integer *n, doublecomplex *a, integer *lda,
+/** Generated wrapper function */
+doublereal zlange_(char *norm, aocl_int_t *m, aocl_int_t *n, dcomplex *a, aocl_int_t *lda,
                    doublereal *work)
 {
-    doublereal fla_get_max_zabs_element_vector(integer m, doublecomplex * a, integer a_dim);
+#if FLA_ENABLE_ILP64
+    return aocl_lapack_zlange(norm, m, n, a, lda, work);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t lda_64 = *lda;
+
+    return aocl_lapack_zlange(norm, &m_64, &n_64, a, &lda_64, work);
+#endif
+}
+
+doublereal aocl_lapack_zlange(char *norm, aocl_int64_t *m, aocl_int64_t *n, dcomplex *a,
+                              aocl_int64_t *lda, doublereal *work)
+{
+    doublereal fla_get_max_zabs_element_vector(aocl_int64_t m, dcomplex * a,
+                                               aocl_int64_t a_dim);
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zlange inputs: norm %c, m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS "",
                       *norm, *m, *n, *lda);
     /* System generated locals */
-    integer a_dim1, a_offset, i__1, i__2;
+    aocl_int64_t a_dim1, a_offset, i__1, i__2;
     doublereal ret_val;
     /* Builtin functions */
-    double z_abs(doublecomplex *), sqrt(doublereal);
+    double z_abs(dcomplex *), sqrt(doublereal);
     /* Local variables */
-    integer i__, j, j_a_dim;
+    aocl_int64_t i__, j, j_a_dim;
     doublereal sum, temp, scale;
-    extern logical lsame_(char *, char *, integer, integer);
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     doublereal value;
-    extern /* Subroutine */
-        void
-        zlassq_(integer *, doublecomplex *, integer *, doublereal *, doublereal *);
     /* -- LAPACK auxiliary routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -264,7 +277,7 @@ doublereal zlange_(char *norm, integer *m, integer *n, doublecomplex *a, integer
         i__1 = *n;
         for(j = 1; j <= i__1; ++j)
         {
-            zlassq_(m, &a[j * a_dim1 + 1], &c__1, &scale, &sum);
+            aocl_lapack_zlassq(m, &a[j * a_dim1 + 1], &c__1, &scale, &sum);
             /* L90: */
         }
         value = scale * sqrt(sum);

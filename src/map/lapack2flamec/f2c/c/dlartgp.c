@@ -99,8 +99,8 @@ void dlartgp_(doublereal *f, doublereal *g, doublereal *cs, doublereal *sn, doub
     aocl_int64_t i__1;
     doublereal d__1, d__2;
     /* Builtin functions */
-    double log(doublereal), pow_di(doublereal *, integer *), d_sign(doublereal *, doublereal *),
-        sqrt(doublereal);
+    double log(doublereal), pow_di(doublereal *, aocl_int64_t *),
+        d_sign(doublereal *, doublereal *), sqrt(doublereal);
     /* Local variables */
     aocl_int64_t i__;
     doublereal f1, g1, eps, scale;

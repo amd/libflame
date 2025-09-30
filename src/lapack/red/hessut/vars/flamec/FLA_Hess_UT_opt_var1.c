@@ -18,9 +18,9 @@ FLA_Error FLA_Hess_UT_opt_var1( FLA_Obj A, FLA_Obj T )
 FLA_Error FLA_Hess_UT_step_opt_var1( FLA_Obj A, FLA_Obj T )
 {
   FLA_Datatype datatype;
-  integer          m_A, m_T;
-  integer          rs_A, cs_A;
-  integer          rs_T, cs_T;
+  fla_dim_t          m_A, m_T;
+  fla_dim_t          rs_A, cs_A;
+  fla_dim_t          rs_T, cs_T;
 
   datatype = FLA_Obj_datatype( A );
 
@@ -94,19 +94,19 @@ FLA_Error FLA_Hess_UT_step_opt_var1( FLA_Obj A, FLA_Obj T )
 
 
 
-FLA_Error FLA_Hess_UT_step_ops_var1( integer m_A,
-                                     integer m_T,
-                                     float* buff_A, integer rs_A, integer cs_A, 
-                                     float* buff_T, integer rs_T, integer cs_T )
+FLA_Error FLA_Hess_UT_step_ops_var1( fla_dim_t m_A,
+                                     fla_dim_t m_T,
+                                     float* buff_A, fla_dim_t rs_A, fla_dim_t cs_A, 
+                                     float* buff_T, fla_dim_t rs_T, fla_dim_t cs_T )
 {
   float*    buff_1  = FLA_FLOAT_PTR( FLA_ONE );
   float*    buff_0  = FLA_FLOAT_PTR( FLA_ZERO );
 
   float     first_elem;
-  integer       i;
+  fla_dim_t       i;
 
   // b_alg = FLA_Obj_length( T );
-  integer       b_alg = m_T;
+  fla_dim_t       b_alg = m_T;
 
   for ( i = 0; i < b_alg; ++i )
   {
@@ -125,9 +125,9 @@ FLA_Error FLA_Hess_UT_step_ops_var1( integer m_A,
     float*    t01      = buff_T + (i  )*cs_T + (0  )*rs_T;
     float*    tau11    = buff_T + (i  )*cs_T + (i  )*rs_T;
 
-    integer       m_ahead  = m_A - i - 1;
-    integer       n_ahead  = m_A - i - 1;
-    integer       n_behind = i;
+    fla_dim_t       m_ahead  = m_A - i - 1;
+    fla_dim_t       n_ahead  = m_A - i - 1;
+    fla_dim_t       n_behind = i;
 
     /*------------------------------------------------------------*/
 
@@ -187,19 +187,19 @@ FLA_Error FLA_Hess_UT_step_ops_var1( integer m_A,
 
 
 
-FLA_Error FLA_Hess_UT_step_opd_var1( integer m_A,
-                                     integer m_T,
-                                     double* buff_A, integer rs_A, integer cs_A, 
-                                     double* buff_T, integer rs_T, integer cs_T )
+FLA_Error FLA_Hess_UT_step_opd_var1( fla_dim_t m_A,
+                                     fla_dim_t m_T,
+                                     double* buff_A, fla_dim_t rs_A, fla_dim_t cs_A, 
+                                     double* buff_T, fla_dim_t rs_T, fla_dim_t cs_T )
 {
   double*   buff_1  = FLA_DOUBLE_PTR( FLA_ONE );
   double*   buff_0  = FLA_DOUBLE_PTR( FLA_ZERO );
 
   double    first_elem;
-  integer       i;
+  fla_dim_t       i;
 
   // b_alg = FLA_Obj_length( T );
-  integer       b_alg = m_T;
+  fla_dim_t       b_alg = m_T;
 
   for ( i = 0; i < b_alg; ++i )
   {
@@ -218,9 +218,9 @@ FLA_Error FLA_Hess_UT_step_opd_var1( integer m_A,
     double*   t01      = buff_T + (i  )*cs_T + (0  )*rs_T;
     double*   tau11    = buff_T + (i  )*cs_T + (i  )*rs_T;
 
-    integer       m_ahead  = m_A - i - 1;
-    integer       n_ahead  = m_A - i - 1;
-    integer       n_behind = i;
+    fla_dim_t       m_ahead  = m_A - i - 1;
+    fla_dim_t       n_ahead  = m_A - i - 1;
+    fla_dim_t       n_behind = i;
 
     /*------------------------------------------------------------*/
 
@@ -280,19 +280,19 @@ FLA_Error FLA_Hess_UT_step_opd_var1( integer m_A,
 
 
 
-FLA_Error FLA_Hess_UT_step_opc_var1( integer m_A,
-                                     integer m_T,
-                                     scomplex* buff_A, integer rs_A, integer cs_A, 
-                                     scomplex* buff_T, integer rs_T, integer cs_T )
+FLA_Error FLA_Hess_UT_step_opc_var1( fla_dim_t m_A,
+                                     fla_dim_t m_T,
+                                     scomplex* buff_A, fla_dim_t rs_A, fla_dim_t cs_A, 
+                                     scomplex* buff_T, fla_dim_t rs_T, fla_dim_t cs_T )
 {
   scomplex* buff_1  = FLA_COMPLEX_PTR( FLA_ONE );
   scomplex* buff_0  = FLA_COMPLEX_PTR( FLA_ZERO );
 
   scomplex  first_elem;
-  integer       i;
+  fla_dim_t       i;
 
   // b_alg = FLA_Obj_length( T );
-  integer       b_alg = m_T;
+  fla_dim_t       b_alg = m_T;
 
   for ( i = 0; i < b_alg; ++i )
   {
@@ -311,9 +311,9 @@ FLA_Error FLA_Hess_UT_step_opc_var1( integer m_A,
     scomplex* t01      = buff_T + (i  )*cs_T + (0  )*rs_T;
     scomplex* tau11    = buff_T + (i  )*cs_T + (i  )*rs_T;
 
-    integer       m_ahead  = m_A - i - 1;
-    integer       n_ahead  = m_A - i - 1;
-    integer       n_behind = i;
+    fla_dim_t       m_ahead  = m_A - i - 1;
+    fla_dim_t       n_ahead  = m_A - i - 1;
+    fla_dim_t       n_behind = i;
 
     /*------------------------------------------------------------*/
 
@@ -373,19 +373,19 @@ FLA_Error FLA_Hess_UT_step_opc_var1( integer m_A,
 
 
 
-FLA_Error FLA_Hess_UT_step_opz_var1( integer m_A,
-                                     integer m_T,
-                                     dcomplex* buff_A, integer rs_A, integer cs_A, 
-                                     dcomplex* buff_T, integer rs_T, integer cs_T )
+FLA_Error FLA_Hess_UT_step_opz_var1( fla_dim_t m_A,
+                                     fla_dim_t m_T,
+                                     dcomplex* buff_A, fla_dim_t rs_A, fla_dim_t cs_A, 
+                                     dcomplex* buff_T, fla_dim_t rs_T, fla_dim_t cs_T )
 {
   dcomplex* buff_1  = FLA_DOUBLE_COMPLEX_PTR( FLA_ONE );
   dcomplex* buff_0  = FLA_DOUBLE_COMPLEX_PTR( FLA_ZERO );
 
   dcomplex  first_elem;
-  integer       i;
+  fla_dim_t       i;
 
   // b_alg = FLA_Obj_length( T );
-  integer       b_alg = m_T;
+  fla_dim_t       b_alg = m_T;
 
   for ( i = 0; i < b_alg; ++i )
   {
@@ -404,9 +404,9 @@ FLA_Error FLA_Hess_UT_step_opz_var1( integer m_A,
     dcomplex* t01      = buff_T + (i  )*cs_T + (0  )*rs_T;
     dcomplex* tau11    = buff_T + (i  )*cs_T + (i  )*rs_T;
 
-    integer       m_ahead  = m_A - i - 1;
-    integer       n_ahead  = m_A - i - 1;
-    integer       n_behind = i;
+    fla_dim_t       m_ahead  = m_A - i - 1;
+    fla_dim_t       n_ahead  = m_A - i - 1;
+    fla_dim_t       n_behind = i;
 
     /*------------------------------------------------------------*/
 

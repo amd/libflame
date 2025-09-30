@@ -4,13 +4,13 @@
  -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for
  libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static doublecomplex c_b1 = {1., 0.};
-static doublecomplex c_b2 = {0., 0.};
-static integer c__1 = 1;
-static integer c_n1 = -1;
-static integer c__2 = 2;
-static integer c__3 = 3;
-static integer c__16 = 16;
+static dcomplex c_b1 = {{1.}, {0.}};
+static dcomplex c_b2 = {{0.}, {0.}};
+static aocl_int64_t c__1 = 1;
+static aocl_int64_t c_n1 = -1;
+static aocl_int64_t c__2 = 2;
+static aocl_int64_t c__3 = 3;
+static aocl_int64_t c__16 = 16;
 /* > \brief \b ZGGHD3 */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -47,7 +47,7 @@ static integer c__16 = 16;
 /* > */
 /* > \verbatim */
 /* > */
-/* > ZGGHD3 reduces a pair of complex matrices (A,B) to generalized upper */
+/* > ZGGHD3 reduces a pair of scomplex matrices (A,B) to generalized upper */
 /* > Hessenberg form using unitary transformations, where A is a */
 /* > general matrix and B is upper triangular. The form of the */
 /* > generalized eigenvalue problem is */
@@ -238,9 +238,38 @@ the routine */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void zgghd3_(char *compq, char *compz, integer *n, integer *ilo, integer *ihi, doublecomplex *a,
-             integer *lda, doublecomplex *b, integer *ldb, doublecomplex *q, integer *ldq,
-             doublecomplex *z__, integer *ldz, doublecomplex *work, integer *lwork, integer *info)
+/** Generated wrapper function */
+void zgghd3_(char *compq, char *compz, aocl_int_t *n, aocl_int_t *ilo, aocl_int_t *ihi,
+             dcomplex *a, aocl_int_t *lda, dcomplex *b, aocl_int_t *ldb, dcomplex *q,
+             aocl_int_t *ldq, dcomplex *z__, aocl_int_t *ldz, dcomplex *work,
+             aocl_int_t *lwork, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_zgghd3(compq, compz, n, ilo, ihi, a, lda, b, ldb, q, ldq, z__, ldz, work, lwork,
+                       info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t ilo_64 = *ilo;
+    aocl_int64_t ihi_64 = *ihi;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t ldb_64 = *ldb;
+    aocl_int64_t ldq_64 = *ldq;
+    aocl_int64_t ldz_64 = *ldz;
+    aocl_int64_t lwork_64 = *lwork;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_zgghd3(compq, compz, &n_64, &ilo_64, &ihi_64, a, &lda_64, b, &ldb_64, q, &ldq_64,
+                       z__, &ldz_64, work, &lwork_64, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_zgghd3(char *compq, char *compz, aocl_int64_t *n, aocl_int64_t *ilo,
+                        aocl_int64_t *ihi, dcomplex *a, aocl_int64_t *lda, dcomplex *b,
+                        aocl_int64_t *ldb, dcomplex *q, aocl_int64_t *ldq, dcomplex *z__,
+                        aocl_int64_t *ldz, dcomplex *work, aocl_int64_t *lwork,
+                        aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zgghd3 inputs: compq %c, compz %c, n %" FLA_IS ", ilo %" FLA_IS
@@ -248,67 +277,33 @@ void zgghd3_(char *compq, char *compz, integer *n, integer *ilo, integer *ihi, d
                       ", ldz %" FLA_IS ", lwork %" FLA_IS "",
                       *compq, *compz, *n, *ilo, *ihi, *lda, *ldb, *ldq, *ldz, *lwork);
     /* System generated locals */
-    integer a_dim1, a_offset, b_dim1, b_offset, q_dim1, q_offset, z_dim1, z_offset, i__1, i__2,
+    aocl_int64_t a_dim1, a_offset, b_dim1, b_offset, q_dim1, q_offset, z_dim1, z_offset, i__1, i__2,
         i__3, i__4, i__5, i__6, i__7, i__8, i__9;
-    doublecomplex z__1, z__2, z__3, z__4;
+    dcomplex z__1, z__2, z__3, z__4;
     /* Builtin functions */
-    void d_cnjg(doublecomplex *, doublecomplex *);
+    void d_cnjg(dcomplex *, dcomplex *);
     /* Local variables */
     doublereal c__;
-    integer i__, j, k;
-    doublecomplex s, c1, c2;
-    integer j0;
-    doublecomplex s1, s2;
-    integer nb, jj, nh, nx, pw, nnb, len, top, ppw, n2nb;
+    aocl_int64_t i__, j, k;
+    dcomplex s, c1, c2;
+    aocl_int64_t j0;
+    dcomplex s1, s2;
+    aocl_int64_t nb, jj, nh, nx, pw, nnb, len, top, ppw, n2nb;
     logical blk22;
-    integer cola, jcol, ierr;
-    doublecomplex temp;
-    integer jrow, topq, ppwo;
-    extern /* Subroutine */
-        void
-        zrot_(integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublereal *,
-              doublecomplex *);
-    doublecomplex temp1, temp2, temp3;
-    integer kacc22;
-    extern logical lsame_(char *, char *, integer, integer);
-    integer nbmin;
-    doublecomplex ctemp;
-    extern /* Subroutine */
-        void
-        zgemm_(char *, char *, integer *, integer *, integer *, doublecomplex *, doublecomplex *,
-               integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *);
-    integer nblst;
+    aocl_int64_t cola, jcol, ierr;
+    dcomplex temp;
+    aocl_int64_t jrow, topq, ppwo;
+    dcomplex temp1, temp2, temp3;
+    aocl_int64_t kacc22;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    aocl_int64_t nbmin;
+    dcomplex ctemp;
+    aocl_int64_t nblst;
     logical initq;
-    extern /* Subroutine */
-        void
-        zgemv_(char *, integer *, integer *, doublecomplex *, doublecomplex *, integer *,
-               doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *);
     logical wantq, initz;
-    extern /* Subroutine */
-        void
-        zunm22_(char *, char *, integer *, integer *, integer *, integer *, doublecomplex *,
-                integer *, doublecomplex *, integer *, doublecomplex *, integer *, integer *);
     logical wantz;
-    extern /* Subroutine */
-        void
-        ztrmv_(char *, char *, char *, integer *, doublecomplex *, integer *, doublecomplex *,
-               integer *);
     char compq2[1], compz2[1];
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
-    extern /* Subroutine */
-        void
-        zgghrd_(char *, char *, integer *, integer *, integer *, doublecomplex *, integer *,
-                doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *,
-                integer *),
-        zlaset_(char *, integer *, integer *, doublecomplex *, doublecomplex *, doublecomplex *,
-                integer *),
-        zlartg_(doublecomplex *, doublecomplex *, doublereal *, doublecomplex *, doublecomplex *),
-        zlacpy_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *,
-                integer *);
-    integer lwkopt;
+    aocl_int64_t lwkopt;
     logical lquery;
     /* -- LAPACK computational routine (version 3.8.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -347,7 +342,7 @@ void zgghd3_(char *compq, char *compz, integer *n, integer *ilo, integer *ihi, d
     --work;
     /* Function Body */
     *info = 0;
-    nb = ilaenv_(&c__1, "ZGGHD3", " ", n, ilo, ihi, &c_n1);
+    nb = aocl_lapack_ilaenv(&c__1, "ZGGHD3", " ", n, ilo, ihi, &c_n1);
     /* Computing MAX */
     i__1 = *n * 6 * nb;
     lwkopt = fla_max(i__1, 1);
@@ -403,7 +398,7 @@ void zgghd3_(char *compq, char *compz, integer *n, integer *ilo, integer *ihi, d
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("ZGGHD3", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("ZGGHD3", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -415,18 +410,18 @@ void zgghd3_(char *compq, char *compz, integer *n, integer *ilo, integer *ihi, d
     /* Initialize Q and Z if desired. */
     if(initq)
     {
-        zlaset_("All", n, n, &c_b2, &c_b1, &q[q_offset], ldq);
+        aocl_lapack_zlaset("All", n, n, &c_b2, &c_b1, &q[q_offset], ldq);
     }
     if(initz)
     {
-        zlaset_("All", n, n, &c_b2, &c_b1, &z__[z_offset], ldz);
+        aocl_lapack_zlaset("All", n, n, &c_b2, &c_b1, &z__[z_offset], ldz);
     }
     /* Zero out lower triangle of B. */
     if(*n > 1)
     {
         i__1 = *n - 1;
         i__2 = *n - 1;
-        zlaset_("Lower", &i__1, &i__2, &c_b2, &c_b2, &b[b_dim1 + 2], ldb);
+        aocl_lapack_zlaset("Lower", &i__1, &i__2, &c_b2, &c_b2, &b[b_dim1 + 2], ldb);
     }
     /* Quick return if possible */
     nh = *ihi - *ilo + 1;
@@ -438,13 +433,13 @@ void zgghd3_(char *compq, char *compz, integer *n, integer *ilo, integer *ihi, d
         return;
     }
     /* Determine the blocksize. */
-    nbmin = ilaenv_(&c__2, "ZGGHD3", " ", n, ilo, ihi, &c_n1);
+    nbmin = aocl_lapack_ilaenv(&c__2, "ZGGHD3", " ", n, ilo, ihi, &c_n1);
     if(nb > 1 && nb < nh)
     {
         /* Determine when to use unblocked instead of blocked code. */
         /* Computing MAX */
         i__1 = nb;
-        i__2 = ilaenv_(&c__3, "ZGGHD3", " ", n, ilo, ihi, &c_n1); // , expr subst
+        i__2 = aocl_lapack_ilaenv(&c__3, "ZGGHD3", " ", n, ilo, ihi, &c_n1); // , expr subst
         nx = fla_max(i__1, i__2);
         if(nx < nh)
         {
@@ -456,7 +451,7 @@ void zgghd3_(char *compq, char *compz, integer *n, integer *ilo, integer *ihi, d
                 /* unblocked code. */
                 /* Computing MAX */
                 i__1 = 2;
-                i__2 = ilaenv_(&c__2, "ZGGHD3", " ", n, ilo, ihi, &c_n1); // , expr subst
+                i__2 = aocl_lapack_ilaenv(&c__2, "ZGGHD3", " ", n, ilo, ihi, &c_n1); // , expr subst
                 nbmin = fla_max(i__1, i__2);
                 if(*lwork >= *n * 6 * nbmin)
                 {
@@ -477,7 +472,7 @@ void zgghd3_(char *compq, char *compz, integer *n, integer *ilo, integer *ihi, d
     else
     {
         /* Use blocked code */
-        kacc22 = ilaenv_(&c__16, "ZGGHD3", " ", n, ilo, ihi, &c_n1);
+        kacc22 = aocl_lapack_ilaenv(&c__16, "ZGGHD3", " ", n, ilo, ihi, &c_n1);
         blk22 = kacc22 == 2;
         i__1 = *ihi - 2;
         i__2 = nb;
@@ -494,7 +489,7 @@ void zgghd3_(char *compq, char *compz, integer *n, integer *ilo, integer *ihi, d
             /* factor. */
             n2nb = (*ihi - jcol - 1) / nnb - 1;
             nblst = *ihi - jcol - n2nb * nnb;
-            zlaset_("All", &nblst, &nblst, &c_b2, &c_b1, &work[1], &nblst);
+            aocl_lapack_zlaset("All", &nblst, &nblst, &c_b2, &c_b1, &work[1], &nblst);
             pw = nblst * nblst + 1;
             i__3 = n2nb;
             for(i__ = 1; i__ <= i__3; ++i__)
@@ -502,7 +497,7 @@ void zgghd3_(char *compq, char *compz, integer *n, integer *ilo, integer *ihi, d
                 i__4 = nnb << 1;
                 i__5 = nnb << 1;
                 i__6 = nnb << 1;
-                zlaset_("All", &i__4, &i__5, &c_b2, &c_b1, &work[pw], &i__6);
+                aocl_lapack_zlaset("All", &i__4, &i__5, &c_b2, &c_b1, &work[pw], &i__6);
                 pw += (nnb << 2) * nnb;
             }
             /* Reduce columns JCOL:JCOL+NNB-1 of A to Hessenberg form. */
@@ -686,8 +681,8 @@ void zgghd3_(char *compq, char *compz, integer *n, integer *ilo, integer *ihi, d
                         b[i__6].r = 0.;
                         b[i__6].i = 0.; // , expr subst
                         i__6 = jj - top;
-                        zrot_(&i__6, &b[top + 1 + (jj + 1) * b_dim1], &c__1,
-                              &b[top + 1 + jj * b_dim1], &c__1, &c__, &s);
+                        aocl_lapack_zrot(&i__6, &b[top + 1 + (jj + 1) * b_dim1], &c__1,
+                                         &b[top + 1 + jj * b_dim1], &c__1, &c__, &s);
                         i__6 = jj + 1 + j * a_dim1;
                         z__1.r = c__;
                         z__1.i = 0.; // , expr subst
@@ -818,8 +813,8 @@ void zgghd3_(char *compq, char *compz, integer *n, integer *ilo, integer *ihi, d
                         d_cnjg(&z__2, &b[j + 1 + i__ + j * b_dim1]);
                         z__1.r = -z__2.r;
                         z__1.i = -z__2.i; // , expr subst
-                        zrot_(&i__5, &a[top + 1 + (j + i__ + 1) * a_dim1], &c__1,
-                              &a[top + 1 + (j + i__) * a_dim1], &c__1, &c__, &z__1);
+                        aocl_lapack_zrot(&i__5, &a[top + 1 + (j + i__ + 1) * a_dim1], &c__1,
+                                         &a[top + 1 + (j + i__) * a_dim1], &c__1, &c__, &z__1);
                     }
                 }
                 /* Update (J+1)th column of A by transformations from left. */
@@ -834,8 +829,8 @@ void zgghd3_(char *compq, char *compz, integer *n, integer *ilo, integer *ihi, d
                     /* where U21 is a LEN-by-LEN matrix and U12 is lower */
                     /* triangular. */
                     jrow = *ihi - nblst + 1;
-                    zgemv_("Conjugate", &nblst, &len, &c_b1, &work[1], &nblst,
-                           &a[jrow + (j + 1) * a_dim1], &c__1, &c_b2, &work[pw], &c__1);
+                    aocl_blas_zgemv("Conjugate", &nblst, &len, &c_b1, &work[1], &nblst,
+                                    &a[jrow + (j + 1) * a_dim1], &c__1, &c_b2, &work[pw], &c__1);
                     ppw = pw + len;
                     i__5 = jrow + nblst - len - 1;
                     for(i__ = jrow; i__ <= i__5; ++i__)
@@ -847,12 +842,13 @@ void zgghd3_(char *compq, char *compz, integer *n, integer *ilo, integer *ihi, d
                         ++ppw;
                     }
                     i__5 = nblst - len;
-                    ztrmv_("Lower", "Conjugate", "Non-unit", &i__5, &work[len * nblst + 1], &nblst,
-                           &work[pw + len], &c__1);
+                    aocl_blas_ztrmv("Lower", "Conjugate", "Non-unit", &i__5, &work[len * nblst + 1],
+                                    &nblst, &work[pw + len], &c__1);
                     i__5 = nblst - len;
-                    zgemv_("Conjugate", &len, &i__5, &c_b1, &work[(len + 1) * nblst - len + 1],
-                           &nblst, &a[jrow + nblst - len + (j + 1) * a_dim1], &c__1, &c_b1,
-                           &work[pw + len], &c__1);
+                    aocl_blas_zgemv("Conjugate", &len, &i__5, &c_b1,
+                                    &work[(len + 1) * nblst - len + 1], &nblst,
+                                    &a[jrow + nblst - len + (j + 1) * a_dim1], &c__1, &c_b1,
+                                    &work[pw + len], &c__1);
                     ppw = pw;
                     i__5 = jrow + nblst - 1;
                     for(i__ = jrow; i__ <= i__5; ++i__)
@@ -900,18 +896,21 @@ void zgghd3_(char *compq, char *compz, integer *n, integer *ilo, integer *ihi, d
                             ++ppw;
                         }
                         i__4 = nnb << 1;
-                        ztrmv_("Upper", "Conjugate", "Non-unit", &len, &work[ppwo + nnb], &i__4,
-                               &work[pw], &c__1);
+                        aocl_blas_ztrmv("Upper", "Conjugate", "Non-unit", &len, &work[ppwo + nnb],
+                                        &i__4, &work[pw], &c__1);
                         i__4 = nnb << 1;
-                        ztrmv_("Lower", "Conjugate", "Non-unit", &nnb,
-                               &work[ppwo + (len << 1) * nnb], &i__4, &work[pw + len], &c__1);
+                        aocl_blas_ztrmv("Lower", "Conjugate", "Non-unit", &nnb,
+                                        &work[ppwo + (len << 1) * nnb], &i__4, &work[pw + len],
+                                        &c__1);
                         i__4 = nnb << 1;
-                        zgemv_("Conjugate", &nnb, &len, &c_b1, &work[ppwo], &i__4,
-                               &a[jrow + (j + 1) * a_dim1], &c__1, &c_b1, &work[pw], &c__1);
+                        aocl_blas_zgemv("Conjugate", &nnb, &len, &c_b1, &work[ppwo], &i__4,
+                                        &a[jrow + (j + 1) * a_dim1], &c__1, &c_b1, &work[pw],
+                                        &c__1);
                         i__4 = nnb << 1;
-                        zgemv_("Conjugate", &len, &nnb, &c_b1, &work[ppwo + (len << 1) * nnb + nnb],
-                               &i__4, &a[jrow + nnb + (j + 1) * a_dim1], &c__1, &c_b1,
-                               &work[pw + len], &c__1);
+                        aocl_blas_zgemv("Conjugate", &len, &nnb, &c_b1,
+                                        &work[ppwo + (len << 1) * nnb + nnb], &i__4,
+                                        &a[jrow + nnb + (j + 1) * a_dim1], &c__1, &c_b1,
+                                        &work[pw + len], &c__1);
                         ppw = pw;
                         i__4 = jrow + len + nnb - 1;
                         for(i__ = jrow; i__ <= i__4; ++i__)
@@ -929,9 +928,10 @@ void zgghd3_(char *compq, char *compz, integer *n, integer *ilo, integer *ihi, d
             /* Apply accumulated unitary matrices to A. */
             cola = *n - jcol - nnb + 1;
             j = *ihi - nblst + 1;
-            zgemm_("Conjugate", "No Transpose", &nblst, &cola, &nblst, &c_b1, &work[1], &nblst,
-                   &a[j + (jcol + nnb) * a_dim1], lda, &c_b2, &work[pw], &nblst);
-            zlacpy_("All", &nblst, &cola, &work[pw], &nblst, &a[j + (jcol + nnb) * a_dim1], lda);
+            aocl_blas_zgemm("Conjugate", "No Transpose", &nblst, &cola, &nblst, &c_b1, &work[1],
+                            &nblst, &a[j + (jcol + nnb) * a_dim1], lda, &c_b2, &work[pw], &nblst);
+            aocl_lapack_zlacpy("All", &nblst, &cola, &work[pw], &nblst,
+                               &a[j + (jcol + nnb) * a_dim1], lda);
             ppwo = nblst * nblst + 1;
             j0 = j - nnb;
             i__3 = jcol + 1;
@@ -949,8 +949,9 @@ void zgghd3_(char *compq, char *compz, integer *n, integer *ilo, integer *ihi, d
                     i__5 = nnb << 1;
                     i__4 = nnb << 1;
                     i__7 = *lwork - pw + 1;
-                    zunm22_("Left", "Conjugate", &i__5, &cola, &nnb, &nnb, &work[ppwo], &i__4,
-                            &a[j + (jcol + nnb) * a_dim1], lda, &work[pw], &i__7, &ierr);
+                    aocl_lapack_zunm22("Left", "Conjugate", &i__5, &cola, &nnb, &nnb, &work[ppwo],
+                                       &i__4, &a[j + (jcol + nnb) * a_dim1], lda, &work[pw], &i__7,
+                                       &ierr);
                 }
                 else
                 {
@@ -959,12 +960,13 @@ void zgghd3_(char *compq, char *compz, integer *n, integer *ilo, integer *ihi, d
                     i__4 = nnb << 1;
                     i__7 = nnb << 1;
                     i__8 = nnb << 1;
-                    zgemm_("Conjugate", "No Transpose", &i__5, &cola, &i__4, &c_b1, &work[ppwo],
-                           &i__7, &a[j + (jcol + nnb) * a_dim1], lda, &c_b2, &work[pw], &i__8);
+                    aocl_blas_zgemm("Conjugate", "No Transpose", &i__5, &cola, &i__4, &c_b1,
+                                    &work[ppwo], &i__7, &a[j + (jcol + nnb) * a_dim1], lda, &c_b2,
+                                    &work[pw], &i__8);
                     i__5 = nnb << 1;
                     i__4 = nnb << 1;
-                    zlacpy_("All", &i__5, &cola, &work[pw], &i__4, &a[j + (jcol + nnb) * a_dim1],
-                            lda);
+                    aocl_lapack_zlacpy("All", &i__5, &cola, &work[pw], &i__4,
+                                       &a[j + (jcol + nnb) * a_dim1], lda);
                 }
                 ppwo += (nnb << 2) * nnb;
             }
@@ -985,9 +987,10 @@ void zgghd3_(char *compq, char *compz, integer *n, integer *ilo, integer *ihi, d
                     topq = 1;
                     nh = *n;
                 }
-                zgemm_("No Transpose", "No Transpose", &nh, &nblst, &nblst, &c_b1,
-                       &q[topq + j * q_dim1], ldq, &work[1], &nblst, &c_b2, &work[pw], &nh);
-                zlacpy_("All", &nh, &nblst, &work[pw], &nh, &q[topq + j * q_dim1], ldq);
+                aocl_blas_zgemm("No Transpose", "No Transpose", &nh, &nblst, &nblst, &c_b1,
+                                &q[topq + j * q_dim1], ldq, &work[1], &nblst, &c_b2, &work[pw],
+                                &nh);
+                aocl_lapack_zlacpy("All", &nh, &nblst, &work[pw], &nh, &q[topq + j * q_dim1], ldq);
                 ppwo = nblst * nblst + 1;
                 j0 = j - nnb;
                 i__6 = jcol + 1;
@@ -1008,8 +1011,9 @@ void zgghd3_(char *compq, char *compz, integer *n, integer *ilo, integer *ihi, d
                         i__5 = nnb << 1;
                         i__4 = nnb << 1;
                         i__7 = *lwork - pw + 1;
-                        zunm22_("Right", "No Transpose", &nh, &i__5, &nnb, &nnb, &work[ppwo], &i__4,
-                                &q[topq + j * q_dim1], ldq, &work[pw], &i__7, &ierr);
+                        aocl_lapack_zunm22("Right", "No Transpose", &nh, &i__5, &nnb, &nnb,
+                                           &work[ppwo], &i__4, &q[topq + j * q_dim1], ldq,
+                                           &work[pw], &i__7, &ierr);
                     }
                     else
                     {
@@ -1017,11 +1021,12 @@ void zgghd3_(char *compq, char *compz, integer *n, integer *ilo, integer *ihi, d
                         i__5 = nnb << 1;
                         i__4 = nnb << 1;
                         i__7 = nnb << 1;
-                        zgemm_("No Transpose", "No Transpose", &nh, &i__5, &i__4, &c_b1,
-                               &q[topq + j * q_dim1], ldq, &work[ppwo], &i__7, &c_b2, &work[pw],
-                               &nh);
+                        aocl_blas_zgemm("No Transpose", "No Transpose", &nh, &i__5, &i__4, &c_b1,
+                                        &q[topq + j * q_dim1], ldq, &work[ppwo], &i__7, &c_b2,
+                                        &work[pw], &nh);
                         i__5 = nnb << 1;
-                        zlacpy_("All", &nh, &i__5, &work[pw], &nh, &q[topq + j * q_dim1], ldq);
+                        aocl_lapack_zlacpy("All", &nh, &i__5, &work[pw], &nh, &q[topq + j * q_dim1],
+                                           ldq);
                     }
                     ppwo += (nnb << 2) * nnb;
                 }
@@ -1031,7 +1036,7 @@ void zgghd3_(char *compq, char *compz, integer *n, integer *ilo, integer *ihi, d
             {
                 /* Initialize small unitary factors that will hold the */
                 /* accumulated Givens rotations in workspace. */
-                zlaset_("All", &nblst, &nblst, &c_b2, &c_b1, &work[1], &nblst);
+                aocl_lapack_zlaset("All", &nblst, &nblst, &c_b2, &c_b1, &work[1], &nblst);
                 pw = nblst * nblst + 1;
                 i__3 = n2nb;
                 for(i__ = 1; i__ <= i__3; ++i__)
@@ -1039,7 +1044,7 @@ void zgghd3_(char *compq, char *compz, integer *n, integer *ilo, integer *ihi, d
                     i__6 = nnb << 1;
                     i__5 = nnb << 1;
                     i__4 = nnb << 1;
-                    zlaset_("All", &i__6, &i__5, &c_b2, &c_b1, &work[pw], &i__4);
+                    aocl_lapack_zlaset("All", &i__6, &i__5, &c_b2, &c_b1, &work[pw], &i__4);
                     pw += (nnb << 2) * nnb;
                 }
                 /* Accumulate Givens rotations into workspace array. */
@@ -1159,17 +1164,19 @@ void zgghd3_(char *compq, char *compz, integer *n, integer *ilo, integer *ihi, d
             else
             {
                 i__3 = *ihi - jcol - 1;
-                zlaset_("Lower", &i__3, &nnb, &c_b2, &c_b2, &a[jcol + 2 + jcol * a_dim1], lda);
+                aocl_lapack_zlaset("Lower", &i__3, &nnb, &c_b2, &c_b2, &a[jcol + 2 + jcol * a_dim1],
+                                   lda);
                 i__3 = *ihi - jcol - 1;
-                zlaset_("Lower", &i__3, &nnb, &c_b2, &c_b2, &b[jcol + 2 + jcol * b_dim1], ldb);
+                aocl_lapack_zlaset("Lower", &i__3, &nnb, &c_b2, &c_b2, &b[jcol + 2 + jcol * b_dim1],
+                                   ldb);
             }
             /* Apply accumulated unitary matrices to A and B. */
             if(top > 0)
             {
                 j = *ihi - nblst + 1;
-                zgemm_("No Transpose", "No Transpose", &top, &nblst, &nblst, &c_b1,
-                       &a[j * a_dim1 + 1], lda, &work[1], &nblst, &c_b2, &work[pw], &top);
-                zlacpy_("All", &top, &nblst, &work[pw], &top, &a[j * a_dim1 + 1], lda);
+                aocl_blas_zgemm("No Transpose", "No Transpose", &top, &nblst, &nblst, &c_b1,
+                                &a[j * a_dim1 + 1], lda, &work[1], &nblst, &c_b2, &work[pw], &top);
+                aocl_lapack_zlacpy("All", &top, &nblst, &work[pw], &top, &a[j * a_dim1 + 1], lda);
                 ppwo = nblst * nblst + 1;
                 j0 = j - nnb;
                 i__3 = jcol + 1;
@@ -1182,8 +1189,9 @@ void zgghd3_(char *compq, char *compz, integer *n, integer *ilo, integer *ihi, d
                         i__6 = nnb << 1;
                         i__4 = nnb << 1;
                         i__7 = *lwork - pw + 1;
-                        zunm22_("Right", "No Transpose", &top, &i__6, &nnb, &nnb, &work[ppwo],
-                                &i__4, &a[j * a_dim1 + 1], lda, &work[pw], &i__7, &ierr);
+                        aocl_lapack_zunm22("Right", "No Transpose", &top, &i__6, &nnb, &nnb,
+                                           &work[ppwo], &i__4, &a[j * a_dim1 + 1], lda, &work[pw],
+                                           &i__7, &ierr);
                     }
                     else
                     {
@@ -1191,17 +1199,19 @@ void zgghd3_(char *compq, char *compz, integer *n, integer *ilo, integer *ihi, d
                         i__6 = nnb << 1;
                         i__4 = nnb << 1;
                         i__7 = nnb << 1;
-                        zgemm_("No Transpose", "No Transpose", &top, &i__6, &i__4, &c_b1,
-                               &a[j * a_dim1 + 1], lda, &work[ppwo], &i__7, &c_b2, &work[pw], &top);
+                        aocl_blas_zgemm("No Transpose", "No Transpose", &top, &i__6, &i__4, &c_b1,
+                                        &a[j * a_dim1 + 1], lda, &work[ppwo], &i__7, &c_b2,
+                                        &work[pw], &top);
                         i__6 = nnb << 1;
-                        zlacpy_("All", &top, &i__6, &work[pw], &top, &a[j * a_dim1 + 1], lda);
+                        aocl_lapack_zlacpy("All", &top, &i__6, &work[pw], &top, &a[j * a_dim1 + 1],
+                                           lda);
                     }
                     ppwo += (nnb << 2) * nnb;
                 }
                 j = *ihi - nblst + 1;
-                zgemm_("No Transpose", "No Transpose", &top, &nblst, &nblst, &c_b1,
-                       &b[j * b_dim1 + 1], ldb, &work[1], &nblst, &c_b2, &work[pw], &top);
-                zlacpy_("All", &top, &nblst, &work[pw], &top, &b[j * b_dim1 + 1], ldb);
+                aocl_blas_zgemm("No Transpose", "No Transpose", &top, &nblst, &nblst, &c_b1,
+                                &b[j * b_dim1 + 1], ldb, &work[1], &nblst, &c_b2, &work[pw], &top);
+                aocl_lapack_zlacpy("All", &top, &nblst, &work[pw], &top, &b[j * b_dim1 + 1], ldb);
                 ppwo = nblst * nblst + 1;
                 j0 = j - nnb;
                 i__5 = jcol + 1;
@@ -1214,8 +1224,9 @@ void zgghd3_(char *compq, char *compz, integer *n, integer *ilo, integer *ihi, d
                         i__6 = nnb << 1;
                         i__4 = nnb << 1;
                         i__7 = *lwork - pw + 1;
-                        zunm22_("Right", "No Transpose", &top, &i__6, &nnb, &nnb, &work[ppwo],
-                                &i__4, &b[j * b_dim1 + 1], ldb, &work[pw], &i__7, &ierr);
+                        aocl_lapack_zunm22("Right", "No Transpose", &top, &i__6, &nnb, &nnb,
+                                           &work[ppwo], &i__4, &b[j * b_dim1 + 1], ldb, &work[pw],
+                                           &i__7, &ierr);
                     }
                     else
                     {
@@ -1223,10 +1234,12 @@ void zgghd3_(char *compq, char *compz, integer *n, integer *ilo, integer *ihi, d
                         i__6 = nnb << 1;
                         i__4 = nnb << 1;
                         i__7 = nnb << 1;
-                        zgemm_("No Transpose", "No Transpose", &top, &i__6, &i__4, &c_b1,
-                               &b[j * b_dim1 + 1], ldb, &work[ppwo], &i__7, &c_b2, &work[pw], &top);
+                        aocl_blas_zgemm("No Transpose", "No Transpose", &top, &i__6, &i__4, &c_b1,
+                                        &b[j * b_dim1 + 1], ldb, &work[ppwo], &i__7, &c_b2,
+                                        &work[pw], &top);
                         i__6 = nnb << 1;
-                        zlacpy_("All", &top, &i__6, &work[pw], &top, &b[j * b_dim1 + 1], ldb);
+                        aocl_lapack_zlacpy("All", &top, &i__6, &work[pw], &top, &b[j * b_dim1 + 1],
+                                           ldb);
                     }
                     ppwo += (nnb << 2) * nnb;
                 }
@@ -1248,9 +1261,11 @@ void zgghd3_(char *compq, char *compz, integer *n, integer *ilo, integer *ihi, d
                     topq = 1;
                     nh = *n;
                 }
-                zgemm_("No Transpose", "No Transpose", &nh, &nblst, &nblst, &c_b1,
-                       &z__[topq + j * z_dim1], ldz, &work[1], &nblst, &c_b2, &work[pw], &nh);
-                zlacpy_("All", &nh, &nblst, &work[pw], &nh, &z__[topq + j * z_dim1], ldz);
+                aocl_blas_zgemm("No Transpose", "No Transpose", &nh, &nblst, &nblst, &c_b1,
+                                &z__[topq + j * z_dim1], ldz, &work[1], &nblst, &c_b2, &work[pw],
+                                &nh);
+                aocl_lapack_zlacpy("All", &nh, &nblst, &work[pw], &nh, &z__[topq + j * z_dim1],
+                                   ldz);
                 ppwo = nblst * nblst + 1;
                 j0 = j - nnb;
                 i__3 = jcol + 1;
@@ -1271,8 +1286,9 @@ void zgghd3_(char *compq, char *compz, integer *n, integer *ilo, integer *ihi, d
                         i__6 = nnb << 1;
                         i__4 = nnb << 1;
                         i__7 = *lwork - pw + 1;
-                        zunm22_("Right", "No Transpose", &nh, &i__6, &nnb, &nnb, &work[ppwo], &i__4,
-                                &z__[topq + j * z_dim1], ldz, &work[pw], &i__7, &ierr);
+                        aocl_lapack_zunm22("Right", "No Transpose", &nh, &i__6, &nnb, &nnb,
+                                           &work[ppwo], &i__4, &z__[topq + j * z_dim1], ldz,
+                                           &work[pw], &i__7, &ierr);
                     }
                     else
                     {
@@ -1280,11 +1296,12 @@ void zgghd3_(char *compq, char *compz, integer *n, integer *ilo, integer *ihi, d
                         i__6 = nnb << 1;
                         i__4 = nnb << 1;
                         i__7 = nnb << 1;
-                        zgemm_("No Transpose", "No Transpose", &nh, &i__6, &i__4, &c_b1,
-                               &z__[topq + j * z_dim1], ldz, &work[ppwo], &i__7, &c_b2, &work[pw],
-                               &nh);
+                        aocl_blas_zgemm("No Transpose", "No Transpose", &nh, &i__6, &i__4, &c_b1,
+                                        &z__[topq + j * z_dim1], ldz, &work[ppwo], &i__7, &c_b2,
+                                        &work[pw], &nh);
                         i__6 = nnb << 1;
-                        zlacpy_("All", &nh, &i__6, &work[pw], &nh, &z__[topq + j * z_dim1], ldz);
+                        aocl_lapack_zlacpy("All", &nh, &i__6, &work[pw], &nh,
+                                           &z__[topq + j * z_dim1], ldz);
                     }
                     ppwo += (nnb << 2) * nnb;
                 }
@@ -1308,8 +1325,8 @@ void zgghd3_(char *compq, char *compz, integer *n, integer *ilo, integer *ihi, d
     }
     if(jcol < *ihi)
     {
-        zgghrd_(compq2, compz2, n, &jcol, ihi, &a[a_offset], lda, &b[b_offset], ldb, &q[q_offset],
-                ldq, &z__[z_offset], ldz, &ierr);
+        aocl_lapack_zgghrd(compq2, compz2, n, &jcol, ihi, &a[a_offset], lda, &b[b_offset], ldb,
+                           &q[q_offset], ldq, &z__[z_offset], ldz, &ierr);
     }
     z__1.r = (doublereal)lwkopt;
     z__1.i = 0.; // , expr subst

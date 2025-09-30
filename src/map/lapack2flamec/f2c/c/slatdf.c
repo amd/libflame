@@ -171,8 +171,23 @@ for 1 <= j <= N, column j of the */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void slatdf_(integer *ijob, integer *n, real *z__, integer *ldz, real *rhs, real *rdsum,
-             real *rdscal, integer *ipiv, integer *jpiv)
+/** Generated wrapper function */
+void slatdf_(aocl_int_t *ijob, aocl_int_t *n, real *z__, aocl_int_t *ldz, real *rhs, real *rdsum,
+             real *rdscal, aocl_int_t *ipiv, aocl_int_t *jpiv)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_slatdf(ijob, n, z__, ldz, rhs, rdsum, rdscal, ipiv, jpiv);
+#else
+    aocl_int64_t ijob_64 = *ijob;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t ldz_64 = *ldz;
+
+    aocl_lapack_slatdf(&ijob_64, &n_64, z__, &ldz_64, rhs, rdsum, rdscal, ipiv, jpiv);
+#endif
+}
+
+void aocl_lapack_slatdf(aocl_int64_t *ijob, aocl_int64_t *n, real *z__, aocl_int64_t *ldz,
+                        real *rhs, real *rdsum, real *rdscal, aocl_int_t *ipiv, aocl_int_t *jpiv)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("slatdf inputs: ijob %" FLA_IS ",n %" FLA_IS ",ldz %" FLA_IS ",jpiv %" FLA_IS
@@ -189,23 +204,10 @@ void slatdf_(integer *ijob, integer *n, real *z__, integer *ldz, real *rhs, real
     aocl_int64_t info;
     real temp;
     real work[32];
-    extern /* Subroutine */
-        void
-        sscal_(integer *, real *, real *, integer *);
     real pmone;
     real sminu;
     integer iwork[8];
-    extern /* Subroutine */
-        void
-        scopy_(integer *, real *, integer *, real *, integer *),
-        saxpy_(integer *, real *, real *, integer *, real *, integer *);
     real splus;
-    extern /* Subroutine */
-        void
-        sgesc2_(integer *, real *, integer *, real *, integer *, integer *, real *),
-        sgecon_(char *, integer *, real *, integer *, real *, real *, real *, integer *, integer *),
-        slassq_(integer *, real *, integer *, real *, real *),
-        slaswp_(integer *, real *, integer *, integer *, integer *, integer *, integer *);
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -320,19 +322,19 @@ void slatdf_(integer *ijob, integer *n, real *z__, integer *ldz, real *rhs, real
     else
     {
         /* IJOB = 2, Compute approximate nullvector XM of Z */
-        sgecon_("I", n, &z__[z_offset], ldz, &c_b23, &temp, work, iwork, &info);
-        scopy_(n, &work[*n], &c__1, xm, &c__1);
+        aocl_lapack_sgecon("I", n, &z__[z_offset], ldz, &c_b23, &temp, work, iwork, &info);
+        aocl_blas_scopy(n, &work[*n], &c__1, xm, &c__1);
         /* Compute RHS */
         i__1 = *n - 1;
-        slaswp_(&c__1, xm, ldz, &c__1, &i__1, &ipiv[1], &c_n1);
-        temp = 1.f / sqrt(sdot_(n, xm, &c__1, xm, &c__1));
-        sscal_(n, &temp, xm, &c__1);
-        scopy_(n, xm, &c__1, xp, &c__1);
-        saxpy_(n, &c_b23, &rhs[1], &c__1, xp, &c__1);
-        saxpy_(n, &c_b37, xm, &c__1, &rhs[1], &c__1);
-        sgesc2_(n, &z__[z_offset], ldz, &rhs[1], &ipiv[1], &jpiv[1], &temp);
-        sgesc2_(n, &z__[z_offset], ldz, xp, &ipiv[1], &jpiv[1], &temp);
-        if(sasum_(n, xp, &c__1) > sasum_(n, &rhs[1], &c__1))
+        aocl_lapack_slaswp(&c__1, xm, ldz, &c__1, &i__1, &ipiv[1], &c_n1);
+        temp = 1.f / sqrt(aocl_blas_sdot(n, xm, &c__1, xm, &c__1));
+        aocl_blas_sscal(n, &temp, xm, &c__1);
+        aocl_blas_scopy(n, xm, &c__1, xp, &c__1);
+        aocl_blas_saxpy(n, &c_b23, &rhs[1], &c__1, xp, &c__1);
+        aocl_blas_saxpy(n, &c_b37, xm, &c__1, &rhs[1], &c__1);
+        aocl_lapack_sgesc2(n, &z__[z_offset], ldz, &rhs[1], &ipiv[1], &jpiv[1], &temp);
+        aocl_lapack_sgesc2(n, &z__[z_offset], ldz, xp, &ipiv[1], &jpiv[1], &temp);
+        if(aocl_blas_sasum(n, xp, &c__1) > aocl_blas_sasum(n, &rhs[1], &c__1))
         {
             aocl_blas_scopy(n, xp, &c__1, &rhs[1], &c__1);
         }

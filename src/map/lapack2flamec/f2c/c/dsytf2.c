@@ -4,7 +4,7 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
+static aocl_int64_t c__1 = 1;
 /* > \brief \b DSYTF2 computes the factorization of a real symmetric indefinite matrix, using the
  * diagonal piv oting method (unblocked algorithm). */
 /* =========== DOCUMENTATION =========== */
@@ -190,7 +190,25 @@ static integer c__1 = 1;
 /* > \endverbatim */
 /* ===================================================================== */
 /* Subroutine */
-void dsytf2_(char *uplo, integer *n, doublereal *a, integer *lda, integer *ipiv, integer *info)
+/** Generated wrapper function */
+void dsytf2_(char *uplo, aocl_int_t *n, doublereal *a, aocl_int_t *lda, aocl_int_t *ipiv,
+             aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_dsytf2(uplo, n, a, lda, ipiv, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_dsytf2(uplo, &n_64, a, &lda_64, ipiv, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_dsytf2(char *uplo, aocl_int64_t *n, doublereal *a, aocl_int64_t *lda,
+                        aocl_int_t *ipiv, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dsytf2 inputs: uplo %c, n %" FLA_IS ", lda %" FLA_IS "", *uplo, *n, *lda);
@@ -204,25 +222,13 @@ void dsytf2_(char *uplo, integer *n, doublereal *a, integer *lda, integer *ipiv,
     doublereal t, r1, d11, d12, d21, d22;
     aocl_int64_t kk, kp;
     doublereal wk, wkm1, wkp1;
-    integer imax, jmax;
-    extern /* Subroutine */
-        void
-        dsyr_(char *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *);
+    aocl_int64_t imax, jmax;
     doublereal alpha;
-    extern /* Subroutine */
-        void
-        dscal_(integer *, doublereal *, doublereal *, integer *);
-    extern logical lsame_(char *, char *, integer, integer);
-    extern /* Subroutine */
-        void
-        dswap_(integer *, doublereal *, integer *, doublereal *, integer *);
-    integer kstep;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    aocl_int64_t kstep;
     logical upper;
     doublereal absakk;
     extern logical disnan_(doublereal *);
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal colmax, rowmax;
     /* -- LAPACK computational routine (version 3.5.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -269,7 +275,7 @@ void dsytf2_(char *uplo, integer *n, doublereal *a, integer *lda, integer *ipiv,
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("DSYTF2", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("DSYTF2", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -296,7 +302,7 @@ void dsytf2_(char *uplo, integer *n, doublereal *a, integer *lda, integer *ipiv,
         if(k > 1)
         {
             i__1 = k - 1;
-            imax = idamax_(&i__1, &a[k * a_dim1 + 1], &c__1);
+            imax = aocl_blas_idamax(&i__1, &a[k * a_dim1 + 1], &c__1);
             colmax = (d__1 = a[imax + k * a_dim1], f2c_dabs(d__1));
         }
         else
@@ -325,7 +331,7 @@ void dsytf2_(char *uplo, integer *n, doublereal *a, integer *lda, integer *ipiv,
                 /* JMAX is the column-index of the largest off-diagonal */
                 /* element in row IMAX, and ROWMAX is its absolute value */
                 i__1 = k - imax;
-                jmax = imax + idamax_(&i__1, &a[imax + (imax + 1) * a_dim1], lda);
+                jmax = imax + aocl_blas_idamax(&i__1, &a[imax + (imax + 1) * a_dim1], lda);
                 rowmax = (d__1 = a[imax + jmax * a_dim1], f2c_dabs(d__1));
                 if(imax > 1)
                 {
@@ -386,7 +392,7 @@ void dsytf2_(char *uplo, integer *n, doublereal *a, integer *lda, integer *ipiv,
                 r1 = 1. / a[k + k * a_dim1];
                 i__1 = k - 1;
                 d__1 = -r1;
-                dsyr_(uplo, &i__1, &d__1, &a[k * a_dim1 + 1], &c__1, &a[a_offset], lda);
+                aocl_blas_dsyr(uplo, &i__1, &d__1, &a[k * a_dim1 + 1], &c__1, &a[a_offset], lda);
                 /* Store U(k) in column k */
                 i__1 = k - 1;
                 aocl_blas_dscal(&i__1, &r1, &a[k * a_dim1 + 1], &c__1);
@@ -459,7 +465,7 @@ void dsytf2_(char *uplo, integer *n, doublereal *a, integer *lda, integer *ipiv,
         if(k < *n)
         {
             i__1 = *n - k;
-            imax = k + idamax_(&i__1, &a[k + 1 + k * a_dim1], &c__1);
+            imax = k + aocl_blas_idamax(&i__1, &a[k + 1 + k * a_dim1], &c__1);
             colmax = (d__1 = a[imax + k * a_dim1], f2c_dabs(d__1));
         }
         else
@@ -488,7 +494,7 @@ void dsytf2_(char *uplo, integer *n, doublereal *a, integer *lda, integer *ipiv,
                 /* JMAX is the column-index of the largest off-diagonal */
                 /* element in row IMAX, and ROWMAX is its absolute value */
                 i__1 = imax - k;
-                jmax = k - 1 + idamax_(&i__1, &a[imax + k * a_dim1], lda);
+                jmax = k - 1 + aocl_blas_idamax(&i__1, &a[imax + k * a_dim1], lda);
                 rowmax = (d__1 = a[imax + jmax * a_dim1], f2c_dabs(d__1));
                 if(imax < *n)
                 {
@@ -555,8 +561,8 @@ void dsytf2_(char *uplo, integer *n, doublereal *a, integer *lda, integer *ipiv,
                     d11 = 1. / a[k + k * a_dim1];
                     i__1 = *n - k;
                     d__1 = -d11;
-                    dsyr_(uplo, &i__1, &d__1, &a[k + 1 + k * a_dim1], &c__1,
-                          &a[k + 1 + (k + 1) * a_dim1], lda);
+                    aocl_blas_dsyr(uplo, &i__1, &d__1, &a[k + 1 + k * a_dim1], &c__1,
+                                   &a[k + 1 + (k + 1) * a_dim1], lda);
                     /* Store L(k) in column K */
                     i__1 = *n - k;
                     aocl_blas_dscal(&i__1, &d11, &a[k + 1 + k * a_dim1], &c__1);

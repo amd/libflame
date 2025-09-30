@@ -128,8 +128,22 @@
 /* > \ingroup complex16HEauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-void zlaqhe_(char *uplo, integer *n, doublecomplex *a, integer *lda, doublereal *s,
+/** Generated wrapper function */
+void zlaqhe_(char *uplo, aocl_int_t *n, dcomplex *a, aocl_int_t *lda, doublereal *s,
              doublereal *scond, doublereal *amax, char *equed)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_zlaqhe(uplo, n, a, lda, s, scond, amax, equed);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t lda_64 = *lda;
+
+    aocl_lapack_zlaqhe(uplo, &n_64, a, &lda_64, s, scond, amax, equed);
+#endif
+}
+
+void aocl_lapack_zlaqhe(char *uplo, aocl_int64_t *n, dcomplex *a, aocl_int64_t *lda,
+                        doublereal *s, doublereal *scond, doublereal *amax, char *equed)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zlaqhe inputs: uplo %c, n %" FLA_IS ", lda %" FLA_IS "", *uplo, *n, *lda);
@@ -140,7 +154,7 @@ void zlaqhe_(char *uplo, integer *n, doublecomplex *a, integer *lda, doublereal 
     /* Local variables */
     aocl_int64_t i__, j;
     doublereal cj, large;
-    extern logical lsame_(char *, char *, integer, integer);
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     doublereal small_val;
     extern doublereal dlamch_(char *);
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */

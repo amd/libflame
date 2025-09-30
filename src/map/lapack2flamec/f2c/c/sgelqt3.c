@@ -112,23 +112,35 @@ the elements below the diagonal are not used. */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void sgelqt3_(integer *m, integer *n, real *a, integer *lda, real *t, integer *ldt, integer *info)
+/** Generated wrapper function */
+void sgelqt3_(aocl_int_t *m, aocl_int_t *n, real *a, aocl_int_t *lda, real *t, aocl_int_t *ldt,
+              aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_sgelqt3(m, n, a, lda, t, ldt, info);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t ldt_64 = *ldt;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_sgelqt3(&m_64, &n_64, a, &lda_64, t, &ldt_64, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_sgelqt3(aocl_int64_t *m, aocl_int64_t *n, real *a, aocl_int64_t *lda, real *t,
+                         aocl_int64_t *ldt, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("sgelqt3 inputs: m %" FLA_IS ",n %" FLA_IS ",lda %" FLA_IS ",ldt %" FLA_IS "",
                       *m, *n, *lda, *ldt);
     /* System generated locals */
-    integer a_dim1, a_offset, t_dim1, t_offset, i__1, i__2;
+    aocl_int64_t a_dim1, a_offset, t_dim1, t_offset, i__1, i__2;
     /* Local variables */
-    integer i__, j, i1, j1, m1, m2, iinfo;
-    extern /* Subroutine */
-        void
-        sgemm_(char *, char *, integer *, integer *, integer *, real *, real *, integer *, real *,
-               integer *, real *, real *, integer *),
-        strmm_(char *, char *, char *, char *, integer *, integer *, real *, real *, integer *,
-               real *, integer *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
-        slarfg_(integer *, real *, real *, integer *, real *);
+    aocl_int64_t i__, j, i1, j1, m1, m2, iinfo;
     /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -172,14 +184,14 @@ void sgelqt3_(integer *m, integer *n, real *a, integer *lda, real *t, integer *l
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("SGELQT3", &i__1, (ftnlen)7);
+        aocl_blas_xerbla("SGELQT3", &i__1, (ftnlen)7);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     if(*m == 1)
     {
         /* Compute Householder transform when M=1 */
-        slarfg_(n, &a[a_dim1 + 1], &a[fla_min(2, *n) * a_dim1 + 1], lda, &t[t_dim1 + 1]);
+        aocl_lapack_slarfg(n, &a[a_dim1 + 1], &a[fla_min(2, *n) * a_dim1 + 1], lda, &t[t_dim1 + 1]);
     }
     else
     {
@@ -193,7 +205,7 @@ void sgelqt3_(integer *m, integer *n, real *a, integer *lda, real *t, integer *l
         i__1 = *m + 1;
         j1 = fla_min(i__1, *n);
         /* Compute A(1:M1,1:N) <- (Y1,R1,T1), where Q1 = I - Y1 T1 Y1^H */
-        sgelqt3_(&m1, n, &a[a_offset], lda, &t[t_offset], ldt, &iinfo);
+        aocl_lapack_sgelqt3(&m1, n, &a[a_offset], lda, &t[t_offset], ldt, &iinfo);
         /* Compute A(J1:M,1:N) = Q1^H A(J1:M,1:N) [workspace: T(1:N1,J1:N)] */
         i__1 = m2;
         for(i__ = 1; i__ <= i__1; ++i__)
@@ -204,15 +216,18 @@ void sgelqt3_(integer *m, integer *n, real *a, integer *lda, real *t, integer *l
                 t[i__ + m1 + j * t_dim1] = a[i__ + m1 + j * a_dim1];
             }
         }
-        strmm_("R", "U", "T", "U", &m2, &m1, &c_b7, &a[a_offset], lda, &t[i1 + t_dim1], ldt);
+        aocl_blas_strmm("R", "U", "T", "U", &m2, &m1, &c_b7, &a[a_offset], lda, &t[i1 + t_dim1],
+                        ldt);
         i__1 = *n - m1;
-        sgemm_("N", "T", &m2, &m1, &i__1, &c_b7, &a[i1 + i1 * a_dim1], lda, &a[i1 * a_dim1 + 1],
-               lda, &c_b7, &t[i1 + t_dim1], ldt);
-        strmm_("R", "U", "N", "N", &m2, &m1, &c_b7, &t[t_offset], ldt, &t[i1 + t_dim1], ldt);
+        aocl_blas_sgemm("N", "T", &m2, &m1, &i__1, &c_b7, &a[i1 + i1 * a_dim1], lda,
+                        &a[i1 * a_dim1 + 1], lda, &c_b7, &t[i1 + t_dim1], ldt);
+        aocl_blas_strmm("R", "U", "N", "N", &m2, &m1, &c_b7, &t[t_offset], ldt, &t[i1 + t_dim1],
+                        ldt);
         i__1 = *n - m1;
-        sgemm_("N", "N", &m2, &i__1, &m1, &c_b19, &t[i1 + t_dim1], ldt, &a[i1 * a_dim1 + 1], lda,
-               &c_b7, &a[i1 + i1 * a_dim1], lda);
-        strmm_("R", "U", "N", "U", &m2, &m1, &c_b7, &a[a_offset], lda, &t[i1 + t_dim1], ldt);
+        aocl_blas_sgemm("N", "N", &m2, &i__1, &m1, &c_b19, &t[i1 + t_dim1], ldt,
+                        &a[i1 * a_dim1 + 1], lda, &c_b7, &a[i1 + i1 * a_dim1], lda);
+        aocl_blas_strmm("R", "U", "N", "U", &m2, &m1, &c_b7, &a[a_offset], lda, &t[i1 + t_dim1],
+                        ldt);
         i__1 = m2;
         for(i__ = 1; i__ <= i__1; ++i__)
         {
@@ -225,7 +240,8 @@ void sgelqt3_(integer *m, integer *n, real *a, integer *lda, real *t, integer *l
         }
         /* Compute A(J1:M,J1:N) <- (Y2,R2,T2) where Q2 = I - Y2 T2 Y2^H */
         i__1 = *n - m1;
-        sgelqt3_(&m2, &i__1, &a[i1 + i1 * a_dim1], lda, &t[i1 + i1 * t_dim1], ldt, &iinfo);
+        aocl_lapack_sgelqt3(&m2, &i__1, &a[i1 + i1 * a_dim1], lda, &t[i1 + i1 * t_dim1], ldt,
+                            &iinfo);
         /* Compute T3 = T(J1:N1,1:N) = -T1 Y1^H Y2 T2 */
         i__1 = m2;
         for(i__ = 1; i__ <= i__1; ++i__)
@@ -236,14 +252,15 @@ void sgelqt3_(integer *m, integer *n, real *a, integer *lda, real *t, integer *l
                 t[j + (i__ + m1) * t_dim1] = a[j + (i__ + m1) * a_dim1];
             }
         }
-        strmm_("R", "U", "T", "U", &m1, &m2, &c_b7, &a[i1 + i1 * a_dim1], lda, &t[i1 * t_dim1 + 1],
-               ldt);
+        aocl_blas_strmm("R", "U", "T", "U", &m1, &m2, &c_b7, &a[i1 + i1 * a_dim1], lda,
+                        &t[i1 * t_dim1 + 1], ldt);
         i__1 = *n - *m;
-        sgemm_("N", "T", &m1, &m2, &i__1, &c_b7, &a[j1 * a_dim1 + 1], lda, &a[i1 + j1 * a_dim1],
-               lda, &c_b7, &t[i1 * t_dim1 + 1], ldt);
-        strmm_("L", "U", "N", "N", &m1, &m2, &c_b19, &t[t_offset], ldt, &t[i1 * t_dim1 + 1], ldt);
-        strmm_("R", "U", "N", "N", &m1, &m2, &c_b7, &t[i1 + i1 * t_dim1], ldt, &t[i1 * t_dim1 + 1],
-               ldt);
+        aocl_blas_sgemm("N", "T", &m1, &m2, &i__1, &c_b7, &a[j1 * a_dim1 + 1], lda,
+                        &a[i1 + j1 * a_dim1], lda, &c_b7, &t[i1 * t_dim1 + 1], ldt);
+        aocl_blas_strmm("L", "U", "N", "N", &m1, &m2, &c_b19, &t[t_offset], ldt,
+                        &t[i1 * t_dim1 + 1], ldt);
+        aocl_blas_strmm("R", "U", "N", "N", &m1, &m2, &c_b7, &t[i1 + i1 * t_dim1], ldt,
+                        &t[i1 * t_dim1 + 1], ldt);
         /* Y = (Y1,Y2);
         L = [ L1 0 ];
         T = [T1 T3] */

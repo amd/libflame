@@ -11,8 +11,8 @@ static aocl_int64_t c__12 = 12;
 static aocl_int64_t c__14 = 14;
 static aocl_int64_t c__16 = 16;
 static logical c_false = FALSE_;
-static integer c__1 = 1;
-static integer c__3 = 3;
+static aocl_int64_t c__1 = 1;
+static aocl_int64_t c__3 = 3;
 /* > \brief \b DLAQR0 computes the eigenvalues of a Hessenberg matrix, and optionally the matrices
  * from the Sc hur decomposition. */
 /* =========== DOCUMENTATION =========== */
@@ -262,10 +262,38 @@ IHI <= IHIZ <= N. */
 /* > \ingroup doubleOTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-void dlaqr0_(logical *wantt, logical *wantz, integer *n, integer *ilo, integer *ihi,
-             doublereal *h__, integer *ldh, doublereal *wr, doublereal *wi, integer *iloz,
-             integer *ihiz, doublereal *z__, integer *ldz, doublereal *work, integer *lwork,
-             integer *info)
+/** Generated wrapper function */
+void dlaqr0_(logical *wantt, logical *wantz, aocl_int_t *n, aocl_int_t *ilo, aocl_int_t *ihi,
+             doublereal *h__, aocl_int_t *ldh, doublereal *wr, doublereal *wi, aocl_int_t *iloz,
+             aocl_int_t *ihiz, doublereal *z__, aocl_int_t *ldz, doublereal *work,
+             aocl_int_t *lwork, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_dlaqr0(wantt, wantz, n, ilo, ihi, h__, ldh, wr, wi, iloz, ihiz, z__, ldz, work,
+                       lwork, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t ilo_64 = *ilo;
+    aocl_int64_t ihi_64 = *ihi;
+    aocl_int64_t ldh_64 = *ldh;
+    aocl_int64_t iloz_64 = *iloz;
+    aocl_int64_t ihiz_64 = *ihiz;
+    aocl_int64_t ldz_64 = *ldz;
+    aocl_int64_t lwork_64 = *lwork;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_dlaqr0(wantt, wantz, &n_64, &ilo_64, &ihi_64, h__, &ldh_64, wr, wi, &iloz_64,
+                       &ihiz_64, z__, &ldz_64, work, &lwork_64, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_dlaqr0(logical *wantt, logical *wantz, aocl_int64_t *n, aocl_int64_t *ilo,
+                        aocl_int64_t *ihi, doublereal *h__, aocl_int64_t *ldh, doublereal *wr,
+                        doublereal *wi, aocl_int64_t *iloz, aocl_int64_t *ihiz, doublereal *z__,
+                        aocl_int64_t *ldz, doublereal *work, aocl_int64_t *lwork,
+                        aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dlaqr0 inputs: n %" FLA_IS ", ilo %" FLA_IS ", ihi %" FLA_IS ", ldh %" FLA_IS
@@ -288,34 +316,12 @@ void dlaqr0_(logical *wantt, logical *wantz, integer *n, integer *ilo, integer *
     aocl_int64_t ktop;
     doublereal zdum[1] /* was [1][1] */
         ;
-    integer kacc22, itmax, nsmax, nwmax, kwtop;
-    extern /* Subroutine */
-        void
-        dlanv2_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *,
-                doublereal *, doublereal *, doublereal *, doublereal *),
-        dlaqr3_(logical *, logical *, integer *, integer *, integer *, integer *, doublereal *,
-                integer *, integer *, integer *, doublereal *, integer *, integer *, integer *,
-                doublereal *, doublereal *, doublereal *, integer *, integer *, doublereal *,
-                integer *, integer *, doublereal *, integer *, doublereal *, integer *),
-        dlaqr4_(logical *, logical *, integer *, integer *, integer *, doublereal *, integer *,
-                doublereal *, doublereal *, integer *, integer *, doublereal *, integer *,
-                doublereal *, integer *, integer *),
-        dlaqr5_(logical *, logical *, integer *, integer *, integer *, integer *, integer *,
-                doublereal *, doublereal *, doublereal *, integer *, integer *, integer *,
-                doublereal *, integer *, doublereal *, integer *, doublereal *, integer *,
-                integer *, doublereal *, integer *, integer *, doublereal *, integer *);
-    integer nibble;
-    extern /* Subroutine */
-        void
-        dlahqr_(logical *, logical *, integer *, integer *, integer *, doublereal *, integer *,
-                doublereal *, doublereal *, integer *, integer *, doublereal *, integer *,
-                integer *),
-        dlacpy_(char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *);
-    extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
+    aocl_int64_t kacc22, itmax, nsmax, nwmax, kwtop;
+    aocl_int64_t nibble;
     char jbcmpz[2];
     aocl_int64_t nwupbd;
     logical sorted;
-    integer lwkopt;
+    aocl_int64_t lwkopt;
     /* -- LAPACK auxiliary routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -374,8 +380,8 @@ void dlaqr0_(logical *wantt, logical *wantz, integer *n, integer *ilo, integer *
         lwkopt = 1;
         if(*lwork != -1)
         {
-            dlahqr_(wantt, wantz, n, ilo, ihi, &h__[h_offset], ldh, &wr[1], &wi[1], iloz, ihiz,
-                    &z__[z_offset], ldz, info);
+            aocl_lapack_dlahqr(wantt, wantz, n, ilo, ihi, &h__[h_offset], ldh, &wr[1], &wi[1], iloz,
+                               ihiz, &z__[z_offset], ldz, info);
         }
     }
     else
@@ -406,7 +412,7 @@ void dlaqr0_(logical *wantt, logical *wantz, integer *n, integer *ilo, integer *
         /* . subdiagonal workspace for NWR.GE.2 as required. */
         /* . (In fact, there is enough subdiagonal space for */
         /* . NWR.GE.4.) ==== */
-        nwr = ilaenv_(&c__13, "DLAQR0", jbcmpz, n, ilo, ihi, lwork);
+        nwr = aocl_lapack_ilaenv(&c__13, "DLAQR0", jbcmpz, n, ilo, ihi, lwork);
         nwr = fla_max(2, nwr);
         /* Computing MIN */
         i__1 = *ihi - *ilo + 1;
@@ -430,9 +436,9 @@ void dlaqr0_(logical *wantt, logical *wantz, integer *n, integer *ilo, integer *
         /* ==== Estimate optimal workspace ==== */
         /* ==== Workspace query call to DLAQR3 ==== */
         i__1 = nwr + 1;
-        dlaqr3_(wantt, wantz, n, ilo, ihi, &i__1, &h__[h_offset], ldh, iloz, ihiz, &z__[z_offset],
-                ldz, &ls, &ld, &wr[1], &wi[1], &h__[h_offset], ldh, n, &h__[h_offset], ldh, n,
-                &h__[h_offset], ldh, &work[1], &c_n1);
+        aocl_lapack_dlaqr3(wantt, wantz, n, ilo, ihi, &i__1, &h__[h_offset], ldh, iloz, ihiz,
+                           &z__[z_offset], ldz, &ls, &ld, &wr[1], &wi[1], &h__[h_offset], ldh, n,
+                           &h__[h_offset], ldh, n, &h__[h_offset], ldh, &work[1], &c_n1);
         /* ==== Optimal workspace = MAX(DLAQR5, DLAQR3) ==== */
         /* Computing MAX */
         i__1 = nsr * 3 / 2;
@@ -446,14 +452,14 @@ void dlaqr0_(logical *wantt, logical *wantz, integer *n, integer *ilo, integer *
             return;
         }
         /* ==== DLAHQR/DLAQR0 crossover point ==== */
-        nmin = ilaenv_(&c__12, "DLAQR0", jbcmpz, n, ilo, ihi, lwork);
+        nmin = aocl_lapack_ilaenv(&c__12, "DLAQR0", jbcmpz, n, ilo, ihi, lwork);
         nmin = fla_max(15, nmin);
         /* ==== Nibble crossover point ==== */
-        nibble = ilaenv_(&c__14, "DLAQR0", jbcmpz, n, ilo, ihi, lwork);
+        nibble = aocl_lapack_ilaenv(&c__14, "DLAQR0", jbcmpz, n, ilo, ihi, lwork);
         nibble = fla_max(0, nibble);
         /* ==== Accumulate reflections during ttswp? Use block */
         /* . 2-by-2 structure during matrix-matrix multiply? ==== */
-        kacc22 = ilaenv_(&c__16, "DLAQR0", jbcmpz, n, ilo, ihi, lwork);
+        kacc22 = aocl_lapack_ilaenv(&c__16, "DLAQR0", jbcmpz, n, ilo, ihi, lwork);
         kacc22 = fla_max(0, kacc22);
         kacc22 = fla_min(2, kacc22);
         /* ==== NWMAX = the largest possible deflation window for */
@@ -574,9 +580,10 @@ void dlaqr0_(logical *wantt, logical *wantz, integer *n, integer *ilo, integer *
             kwv = nw + 2;
             nve = *n - nw - kwv + 1;
             /* ==== Aggressive early deflation ==== */
-            dlaqr3_(wantt, wantz, n, &ktop, &kbot, &nw, &h__[h_offset], ldh, iloz, ihiz,
-                    &z__[z_offset], ldz, &ls, &ld, &wr[1], &wi[1], &h__[kv + h_dim1], ldh, &nho,
-                    &h__[kv + kt * h_dim1], ldh, &nve, &h__[kwv + h_dim1], ldh, &work[1], lwork);
+            aocl_lapack_dlaqr3(wantt, wantz, n, &ktop, &kbot, &nw, &h__[h_offset], ldh, iloz, ihiz,
+                               &z__[z_offset], ldz, &ls, &ld, &wr[1], &wi[1], &h__[kv + h_dim1],
+                               ldh, &nho, &h__[kv + kt * h_dim1], ldh, &nve, &h__[kwv + h_dim1],
+                               ldh, &work[1], lwork);
             /* ==== Adjust KBOT accounting for new deflations. ==== */
             kbot -= ld;
             /* ==== KS points to the shifts. ==== */
@@ -643,17 +650,19 @@ void dlaqr0_(logical *wantt, logical *wantz, integer *n, integer *ilo, integer *
                     {
                         ks = kbot - ns + 1;
                         kt = *n - ns + 1;
-                        dlacpy_("A", &ns, &ns, &h__[ks + ks * h_dim1], ldh, &h__[kt + h_dim1], ldh);
+                        aocl_lapack_dlacpy("A", &ns, &ns, &h__[ks + ks * h_dim1], ldh,
+                                           &h__[kt + h_dim1], ldh);
                         if(ns > nmin)
                         {
-                            dlaqr4_(&c_false, &c_false, &ns, &c__1, &ns, &h__[kt + h_dim1], ldh,
-                                    &wr[ks], &wi[ks], &c__1, &c__1, zdum, &c__1, &work[1], lwork,
-                                    &inf);
+                            aocl_lapack_dlaqr4(&c_false, &c_false, &ns, &c__1, &ns,
+                                               &h__[kt + h_dim1], ldh, &wr[ks], &wi[ks], &c__1,
+                                               &c__1, zdum, &c__1, &work[1], lwork, &inf);
                         }
                         else
                         {
-                            dlahqr_(&c_false, &c_false, &ns, &c__1, &ns, &h__[kt + h_dim1], ldh,
-                                    &wr[ks], &wi[ks], &c__1, &c__1, zdum, &c__1, &inf);
+                            aocl_lapack_dlahqr(&c_false, &c_false, &ns, &c__1, &ns,
+                                               &h__[kt + h_dim1], ldh, &wr[ks], &wi[ks], &c__1,
+                                               &c__1, zdum, &c__1, &inf);
                         }
                         ks += inf;
                         /* ==== In case of a rare QR failure use */
@@ -772,10 +781,10 @@ void dlaqr0_(logical *wantt, logical *wantz, integer *n, integer *ilo, integer *
                 kwv = kdu + 4;
                 nve = *n - kdu - kwv + 1;
                 /* ==== Small-bulge multi-shift QR sweep ==== */
-                dlaqr5_(wantt, wantz, &kacc22, n, &ktop, &kbot, &ns, &wr[ks], &wi[ks],
-                        &h__[h_offset], ldh, iloz, ihiz, &z__[z_offset], ldz, &work[1], &c__3,
-                        &h__[ku + h_dim1], ldh, &nve, &h__[kwv + h_dim1], ldh, &nho,
-                        &h__[ku + kwh * h_dim1], ldh);
+                aocl_lapack_dlaqr5(wantt, wantz, &kacc22, n, &ktop, &kbot, &ns, &wr[ks], &wi[ks],
+                                   &h__[h_offset], ldh, iloz, ihiz, &z__[z_offset], ldz, &work[1],
+                                   &c__3, &h__[ku + h_dim1], ldh, &nve, &h__[kwv + h_dim1], ldh,
+                                   &nho, &h__[ku + kwh * h_dim1], ldh);
             }
             /* ==== Note progress (or the lack of it). ==== */
             if(ld > 0)

@@ -1,13 +1,13 @@
 #include "FLA_f2c.h"
 #include "FLA_lapack2flame_return_defs.h"
-static integer c__1 = 1;
-static integer c_n1 = -1;
-int cgeqrf_check(integer *m, integer *n, scomplex *a, integer *lda, scomplex *tau, scomplex *work,
-                 integer *lwork, integer *info)
+static aocl_int64_t c__1 = 1;
+static aocl_int64_t c_n1 = -1;
+int cgeqrf_check(aocl_int64_t *m, aocl_int64_t *n, scomplex *a, aocl_int64_t *lda, scomplex *tau, scomplex *work,
+                 aocl_int64_t *lwork, aocl_int64_t *info)
 {
     /* System generated locals */
-    integer a_dim1, a_offset, i__1;
-    integer k, nb, lwkopt;
+    aocl_int64_t a_dim1, a_offset, i__1;
+    aocl_int64_t k, nb, lwkopt;
     logical lquery;
 
     /* Parameter adjustments */
@@ -42,7 +42,7 @@ int cgeqrf_check(integer *m, integer *n, scomplex *a, integer *lda, scomplex *ta
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("CGEQRF", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("CGEQRF", &i__1, (ftnlen)6);
         return LAPACK_FAILURE;
     }
     else if(lquery)

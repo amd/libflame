@@ -461,7 +461,7 @@ void sla_gerfsx_extended_(integer *prec_type__, integer *trans_type__, integer *
         sgetrs_(char *, integer *, integer *, real *, integer *, integer *, real *, integer *,
                 integer *);
     extern /* Character */
-        VOID
+        void
         chla_transtype_(char *, integer *);
     real hugeval;
     integer x_state__, z_state__;

@@ -25,12 +25,12 @@ FLA_Error FLA_Apply_H2_UT_l_opt_var1( FLA_Obj tau, FLA_Obj u2, FLA_Obj a1t,
 */
 {
   FLA_Datatype datatype;
-  integer          m_u2_A2;
-  integer          n_a1t;
-  integer          inc_u2;
-  integer          inc_a1t;
-  integer          rs_A2;
-  integer          cs_A2;
+  fla_dim_t          m_u2_A2;
+  fla_dim_t          n_a1t;
+  fla_dim_t          inc_u2;
+  fla_dim_t          inc_a1t;
+  fla_dim_t          rs_A2;
+  fla_dim_t          cs_A2;
 
   // The house-holder transformation in libFLAME never creates a zero tau value.
   // However, when libFLAME is mixed with LAPACK, zero tau means to apply an 
@@ -115,16 +115,16 @@ FLA_Error FLA_Apply_H2_UT_l_opt_var1( FLA_Obj tau, FLA_Obj u2, FLA_Obj a1t,
 
 
 
-FLA_Error FLA_Apply_H2_UT_l_ops_var1( integer m_u2_A2,
-                                      integer n_a1t,
+FLA_Error FLA_Apply_H2_UT_l_ops_var1( fla_dim_t m_u2_A2,
+                                      fla_dim_t n_a1t,
                                       float* tau,
-                                      float* u2, integer inc_u2,
-                                      float* a1t, integer inc_a1t,
-                                      float* A2, integer rs_A2, integer cs_A2 )
+                                      float* u2, fla_dim_t inc_u2,
+                                      float* a1t, fla_dim_t inc_a1t,
+                                      float* A2, fla_dim_t rs_A2, fla_dim_t cs_A2 )
 {
   float*    one_p       = FLA_FLOAT_PTR( FLA_ONE );
   float*    minus_one_p = FLA_FLOAT_PTR( FLA_MINUS_ONE );
-  integer       inc_w1t;
+  fla_dim_t       inc_w1t;
 
   // FLA_Obj w1t;
   float*    w1t;
@@ -189,16 +189,16 @@ FLA_Error FLA_Apply_H2_UT_l_ops_var1( integer m_u2_A2,
 
 
 
-FLA_Error FLA_Apply_H2_UT_l_opd_var1( integer m_u2_A2,
-                                      integer n_a1t,
+FLA_Error FLA_Apply_H2_UT_l_opd_var1( fla_dim_t m_u2_A2,
+                                      fla_dim_t n_a1t,
                                       double* tau,
-                                      double* u2, integer inc_u2,
-                                      double* a1t, integer inc_a1t,
-                                      double* A2, integer rs_A2, integer cs_A2 )
+                                      double* u2, fla_dim_t inc_u2,
+                                      double* a1t, fla_dim_t inc_a1t,
+                                      double* A2, fla_dim_t rs_A2, fla_dim_t cs_A2 )
 {
   double*   one_p       = FLA_DOUBLE_PTR( FLA_ONE );
   double*   minus_one_p = FLA_DOUBLE_PTR( FLA_MINUS_ONE );
-  integer       inc_w1t;
+  fla_dim_t       inc_w1t;
 
   // FLA_Obj w1t;
   double*   w1t;
@@ -263,16 +263,16 @@ FLA_Error FLA_Apply_H2_UT_l_opd_var1( integer m_u2_A2,
 
 
 
-FLA_Error FLA_Apply_H2_UT_l_opc_var1( integer m_u2_A2,
-                                      integer n_a1t,
+FLA_Error FLA_Apply_H2_UT_l_opc_var1( fla_dim_t m_u2_A2,
+                                      fla_dim_t n_a1t,
                                       scomplex* tau,
-                                      scomplex* u2, integer inc_u2,
-                                      scomplex* a1t, integer inc_a1t,
-                                      scomplex* A2, integer rs_A2, integer cs_A2 )
+                                      scomplex* u2, fla_dim_t inc_u2,
+                                      scomplex* a1t, fla_dim_t inc_a1t,
+                                      scomplex* A2, fla_dim_t rs_A2, fla_dim_t cs_A2 )
 {
   scomplex* one_p       = FLA_COMPLEX_PTR( FLA_ONE );
   scomplex* minus_one_p = FLA_COMPLEX_PTR( FLA_MINUS_ONE );
-  integer       inc_w1t;
+  fla_dim_t       inc_w1t;
 
   // FLA_Obj w1t;
   scomplex* w1t;
@@ -338,16 +338,16 @@ FLA_Error FLA_Apply_H2_UT_l_opc_var1( integer m_u2_A2,
 
 
 
-FLA_Error FLA_Apply_H2_UT_l_opz_var1( integer m_u2_A2,
-                                      integer n_a1t,
+FLA_Error FLA_Apply_H2_UT_l_opz_var1( fla_dim_t m_u2_A2,
+                                      fla_dim_t n_a1t,
                                       dcomplex* tau,
-                                      dcomplex* u2, integer inc_u2,
-                                      dcomplex* a1t, integer inc_a1t,
-                                      dcomplex* A2, integer rs_A2, integer cs_A2 )
+                                      dcomplex* u2, fla_dim_t inc_u2,
+                                      dcomplex* a1t, fla_dim_t inc_a1t,
+                                      dcomplex* A2, fla_dim_t rs_A2, fla_dim_t cs_A2 )
 {
   dcomplex* one_p       = FLA_DOUBLE_COMPLEX_PTR( FLA_ONE );
   dcomplex* minus_one_p = FLA_DOUBLE_COMPLEX_PTR( FLA_MINUS_ONE );
-  integer       inc_w1t;
+  fla_dim_t       inc_w1t;
 
   // FLA_Obj w1t;
   dcomplex* w1t;

@@ -5,7 +5,7 @@
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static doublereal c_b11 = 1.;
-static integer c__1 = 1;
+static aocl_int64_t c__1 = 1;
 /* > \brief <b> DSBEV computes the eigenvalues and, optionally, the left and/or right eigenvectors
  * for OTHER m atrices</b> */
 /* =========== DOCUMENTATION =========== */
@@ -148,8 +148,28 @@ i */
 /* > \ingroup doubleOTHEReigen */
 /* ===================================================================== */
 /* Subroutine */
-void dsbev_(char *jobz, char *uplo, integer *n, integer *kd, doublereal *ab, integer *ldab,
-            doublereal *w, doublereal *z__, integer *ldz, doublereal *work, integer *info)
+/** Generated wrapper function */
+void dsbev_(char *jobz, char *uplo, aocl_int_t *n, aocl_int_t *kd, doublereal *ab, aocl_int_t *ldab,
+            doublereal *w, doublereal *z__, aocl_int_t *ldz, doublereal *work, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_dsbev(jobz, uplo, n, kd, ab, ldab, w, z__, ldz, work, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t kd_64 = *kd;
+    aocl_int64_t ldab_64 = *ldab;
+    aocl_int64_t ldz_64 = *ldz;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_dsbev(jobz, uplo, &n_64, &kd_64, ab, &ldab_64, w, z__, &ldz_64, work, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_dsbev(char *jobz, char *uplo, aocl_int64_t *n, aocl_int64_t *kd, doublereal *ab,
+                       aocl_int64_t *ldab, doublereal *w, doublereal *z__, aocl_int64_t *ldz,
+                       doublereal *work, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dsbev inputs: jobz %c, uplo %c, n %" FLA_IS ", kd %" FLA_IS ", ldab %" FLA_IS
@@ -166,36 +186,15 @@ void dsbev_(char *jobz, char *uplo, integer *n, integer *kd, doublereal *ab, int
     doublereal anrm;
     aocl_int64_t imax;
     doublereal rmin, rmax;
-    extern /* Subroutine */
-        void
-        dscal_(integer *, doublereal *, doublereal *, integer *);
     doublereal sigma;
-    extern logical lsame_(char *, char *, integer, integer);
-    integer iinfo;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    aocl_int64_t iinfo;
     logical lower, wantz;
     extern doublereal dlamch_(char *);
-    integer iscale;
-    extern /* Subroutine */
-        void
-        dlascl_(char *, integer *, integer *, doublereal *, doublereal *, integer *, integer *,
-                doublereal *, integer *, integer *);
-    extern doublereal dlansb_(char *, char *, integer *, integer *, doublereal *, integer *,
-                              doublereal *);
+    aocl_int64_t iscale;
     doublereal safmin;
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal bignum;
-    extern /* Subroutine */
-        void
-        dsbtrd_(char *, char *, integer *, integer *, doublereal *, integer *, doublereal *,
-                doublereal *, doublereal *, integer *, doublereal *, integer *),
-        dsterf_(integer *, doublereal *, doublereal *, integer *);
-    integer indwrk;
-    extern /* Subroutine */
-        void
-        dsteqr_(char *, integer *, doublereal *, doublereal *, doublereal *, integer *,
-                doublereal *, integer *);
+    aocl_int64_t indwrk;
     doublereal smlnum;
     /* -- LAPACK driver routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -258,7 +257,7 @@ void dsbev_(char *jobz, char *uplo, integer *n, integer *kd, doublereal *ab, int
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("DSBEV ", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("DSBEV ", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -319,8 +318,8 @@ void dsbev_(char *jobz, char *uplo, integer *n, integer *kd, doublereal *ab, int
     /* Call DSBTRD to reduce symmetric band matrix to tridiagonal form. */
     inde = 1;
     indwrk = inde + *n;
-    dsbtrd_(jobz, uplo, n, kd, &ab[ab_offset], ldab, &w[1], &work[inde], &z__[z_offset], ldz,
-            &work[indwrk], &iinfo);
+    aocl_lapack_dsbtrd(jobz, uplo, n, kd, &ab[ab_offset], ldab, &w[1], &work[inde], &z__[z_offset],
+                       ldz, &work[indwrk], &iinfo);
     /* For eigenvalues only, call DSTERF. For eigenvectors, call SSTEQR. */
     if(!wantz)
     {
@@ -328,7 +327,7 @@ void dsbev_(char *jobz, char *uplo, integer *n, integer *kd, doublereal *ab, int
     }
     else
     {
-        dsteqr_(jobz, n, &w[1], &work[inde], &z__[z_offset], ldz, &work[indwrk], info);
+        aocl_lapack_dsteqr(jobz, n, &w[1], &work[inde], &z__[z_offset], ldz, &work[indwrk], info);
     }
     /* If matrix was scaled, then rescale eigenvalues appropriately. */
     if(iscale == 1)

@@ -14,46 +14,46 @@
 
 #include "FLA_LU_piv_vars.h"
 
-void FLA_get_optimum_params_getrf(integer m, integer n, integer *nb, int *n_threads);
+void FLA_get_optimum_params_getrf(fla_dim_t m, fla_dim_t n, fla_dim_t *nb, int *n_threads);
 FLA_Error FLA_LU_piv_internal( FLA_Obj A, FLA_Obj p, fla_lu_t* cntl );
-integer   FLA_LU_piv_small_s_var0( integer *m, integer *n, real *a, integer *lda,
-                                   integer *ipiv, integer *info );
-integer   FLA_LU_piv_small_s_var1( integer *m, integer *n, real *a, integer *lda,
-                                   integer *ipiv, integer *info );
-integer   FLA_LU_piv_small_d_var0( integer *m, integer *n, doublereal *a, integer *lda,
-                                   integer *ipiv, integer *info );
-integer   FLA_LU_piv_small_d_var1( integer *m, integer *n, doublereal *a, integer *lda,
-                                   integer *ipiv, integer *info );
-integer   FLA_LU_piv_small_d_var2( integer *m, integer *n, doublereal *a, integer *lda,
-                                   integer *ipiv, integer *info );
-int   FLA_LU_piv_small_z_var0( integer *m, integer *n, dcomplex *a, integer *lda,
-                                   integer *ipiv, integer *info);
-int   FLA_LU_piv_z_var0(integer *m, integer *n, dcomplex *a, integer *lda, integer *ipiv, integer *info);
-int   FLA_LU_piv_z_parallel( integer *m, integer *n, dcomplex *a, integer *lda, integer *ipiv, integer *info);
-int   FLA_LU_piv_z_var1_parallel(integer* m, integer* n, dcomplex* a, integer* lda, integer* ipiv, integer* info);
-integer   FLA_LU_piv_small_s_var0( integer *m, integer *n, real *a, integer *lda,
-                                   integer *ipiv, integer *info );
-integer   FLA_LU_piv_small_s_var1( integer *m, integer *n, real *a, integer *lda,
-                                   integer *ipiv, integer *info );
-int FLA_LU_piv_d_parallel( integer *m, integer *n, doublereal *a, integer *lda, integer *ipiv, integer *info);
+fla_dim_t   FLA_LU_piv_small_s_var0( fla_dim_t *m, fla_dim_t *n, real *a, fla_dim_t *lda,
+                                   aocl_int_t *ipiv, fla_dim_t *info );
+fla_dim_t   FLA_LU_piv_small_s_var1( fla_dim_t *m, fla_dim_t *n, real *a, fla_dim_t *lda,
+                                   aocl_int_t *ipiv, fla_dim_t *info );
+fla_dim_t   FLA_LU_piv_small_d_var0( fla_dim_t *m, fla_dim_t *n, doublereal *a, fla_dim_t *lda,
+                                   aocl_int_t *ipiv, fla_dim_t *info );
+fla_dim_t   FLA_LU_piv_small_d_var1( fla_dim_t *m, fla_dim_t *n, doublereal *a, fla_dim_t *lda,
+                                   aocl_int_t *ipiv, fla_dim_t *info );
+fla_dim_t   FLA_LU_piv_small_d_var2( fla_dim_t *m, fla_dim_t *n, doublereal *a, fla_dim_t *lda,
+                                   aocl_int_t *ipiv, fla_dim_t *info );
+int   FLA_LU_piv_small_z_var0( fla_dim_t *m, fla_dim_t *n, dcomplex *a, fla_dim_t *lda,
+                                   aocl_int_t *ipiv, fla_dim_t *info);
+int   FLA_LU_piv_z_var0(fla_dim_t *m, fla_dim_t *n, dcomplex *a, fla_dim_t *lda, aocl_int_t *ipiv, fla_dim_t *info);
+int   FLA_LU_piv_z_parallel( fla_dim_t *m, fla_dim_t *n, dcomplex *a, fla_dim_t *lda, aocl_int_t *ipiv, fla_dim_t *info);
+int   FLA_LU_piv_z_var1_parallel(fla_dim_t* m, fla_dim_t* n, dcomplex* a, fla_dim_t* lda, aocl_int_t* ipiv, fla_dim_t* info);
+fla_dim_t   FLA_LU_piv_small_s_var0( fla_dim_t *m, fla_dim_t *n, real *a, fla_dim_t *lda,
+                                   aocl_int_t *ipiv, fla_dim_t *info );
+fla_dim_t   FLA_LU_piv_small_s_var1( fla_dim_t *m, fla_dim_t *n, real *a, fla_dim_t *lda,
+                                   aocl_int_t *ipiv, fla_dim_t *info );
+int FLA_LU_piv_d_parallel( fla_dim_t *m, fla_dim_t *n, doublereal *a, fla_dim_t *lda, aocl_int_t *ipiv, fla_dim_t *info);
 
-int FLA_LU_piv_s_parallel( integer *m, integer *n, real *a, integer *lda, integer *ipiv, integer *info);
+int FLA_LU_piv_s_parallel( fla_dim_t *m, fla_dim_t *n, real *a, fla_dim_t *lda, aocl_int_t *ipiv, fla_dim_t *info);
 
 FLA_Error FLA_LU_piv_solve( FLA_Obj A, FLA_Obj p, FLA_Obj B, FLA_Obj X );
 
 FLA_Error FLASH_LU_piv_solve( FLA_Obj A, FLA_Obj p, FLA_Obj B, FLA_Obj X );
 
-integer lapack_cgetf2(integer *m, integer *n, scomplex *a, integer *lda,
-	 integer *ipiv, integer *info);
-integer lapack_cgetrf(integer *m, integer *n, scomplex *a, integer *lda,
-	 integer *ipiv, integer *info);
-integer lapack_dgetrf(integer *m, integer *n, doublereal *a, integer *
-	lda, integer *ipiv, integer *info);
-integer lapack_sgetf2(integer *m, integer *n, real *a, integer *lda,
-	integer *ipiv, integer *info);
-integer lapack_sgetrf(integer *m, integer *n, real *a, integer *lda,
-	integer *ipiv, integer *info);
-integer lapack_zgetf2(integer *m, integer *n, dcomplex *a,
-	integer *lda, integer *ipiv, integer *info);
-integer lapack_zgetrf(integer *m, integer *n, dcomplex *a,
-	integer *lda, integer *ipiv, integer *info);
+fla_dim_t lapack_cgetf2(fla_dim_t *m, fla_dim_t *n, scomplex *a, fla_dim_t *lda,
+	 aocl_int_t *ipiv, fla_dim_t *info);
+fla_dim_t lapack_cgetrf(fla_dim_t *m, fla_dim_t *n, scomplex *a, fla_dim_t *lda,
+	 aocl_int_t *ipiv, fla_dim_t *info);
+fla_dim_t lapack_dgetrf(fla_dim_t *m, fla_dim_t *n, doublereal *a, fla_dim_t *
+	lda, aocl_int_t *ipiv, fla_dim_t *info);
+fla_dim_t lapack_sgetf2(fla_dim_t *m, fla_dim_t *n, real *a, fla_dim_t *lda,
+	aocl_int_t *ipiv, fla_dim_t *info);
+fla_dim_t lapack_sgetrf(fla_dim_t *m, fla_dim_t *n, real *a, fla_dim_t *lda,
+	aocl_int_t *ipiv, fla_dim_t *info);
+fla_dim_t lapack_zgetf2(fla_dim_t *m, fla_dim_t *n, dcomplex *a,
+	fla_dim_t *lda, aocl_int_t *ipiv, fla_dim_t *info);
+fla_dim_t lapack_zgetrf(fla_dim_t *m, fla_dim_t *n, dcomplex *a,
+	fla_dim_t *lda, aocl_int_t *ipiv, fla_dim_t *info);

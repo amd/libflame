@@ -94,7 +94,20 @@ the array */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void clarnv_(integer *idist, integer *iseed, integer *n, complex *x)
+/** Generated wrapper function */
+void clarnv_(aocl_int_t *idist, aocl_int_t *iseed, aocl_int_t *n, scomplex *x)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_clarnv(idist, iseed, n, x);
+#else
+    aocl_int64_t idist_64 = *idist;
+    aocl_int64_t n_64 = *n;
+
+    aocl_lapack_clarnv(&idist_64, iseed, &n_64, x);
+#endif
+}
+
+void aocl_lapack_clarnv(aocl_int64_t *idist, aocl_int_t *iseed, aocl_int64_t *n, scomplex *x)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("clarnv inputs: idist %" FLA_IS ", iseed %" FLA_IS ", n %" FLA_IS "", *idist,
@@ -109,10 +122,7 @@ void clarnv_(integer *idist, integer *iseed, integer *n, complex *x)
     /* Local variables */
     aocl_int64_t i__;
     real u[128];
-    integer il, iv;
-    extern /* Subroutine */
-        void
-        slaruv_(integer *, integer *, real *);
+    aocl_int64_t il, iv;
     /* -- LAPACK auxiliary routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -146,7 +156,7 @@ void clarnv_(integer *idist, integer *iseed, integer *n, complex *x)
         /* Call SLARUV to generate 2*IL real numbers from a uniform (0,1) */
         /* distribution (2*IL <= LV) */
         i__2 = il << 1;
-        slaruv_(&iseed[1], &i__2, u);
+        aocl_lapack_slaruv(&iseed[1], &i__2, u);
         if(*idist == 1)
         {
             /* Copy generated numbers */

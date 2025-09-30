@@ -47,7 +47,19 @@
 /* > \see https://bitbucket.org/icl/magma/src/master/control/magma_zauxiliary.cpp */
 /* > \endverbatim */
 /* ===================================================================== */
-real sroundup_lwork(integer *lwork)
+/** Generated wrapper function */
+real sroundup_lwork(aocl_int_t *lwork)
+{
+#if FLA_ENABLE_ILP64
+    return aocl_lapack_sroundup_lwork(lwork);
+#else
+    aocl_int64_t lwork_64 = *lwork;
+
+    return aocl_lapack_sroundup_lwork(&lwork_64);
+#endif
+}
+
+real aocl_lapack_sroundup_lwork(aocl_int64_t *lwork)
 {
     /* System generated locals */
     real ret_val, eps;

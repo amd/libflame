@@ -405,11 +405,11 @@ defaults */
 /* > \ingroup complex16SYcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void zsyrfsx_(char *uplo, char *equed, integer *n, integer *nrhs, doublecomplex *a, integer *lda,
-              doublecomplex *af, integer *ldaf, integer *ipiv, doublereal *s, doublecomplex *b,
-              integer *ldb, doublecomplex *x, integer *ldx, doublereal *rcond, doublereal *berr,
+void zsyrfsx_(char *uplo, char *equed, integer *n, integer *nrhs, dcomplex *a, integer *lda,
+              dcomplex *af, integer *ldaf, integer *ipiv, doublereal *s, dcomplex *b,
+              integer *ldb, dcomplex *x, integer *ldx, doublereal *rcond, doublereal *berr,
               integer *n_err_bnds__, doublereal *err_bnds_norm__, doublereal *err_bnds_comp__,
-              integer *nparams, doublereal *params, doublecomplex *work, doublereal *rwork,
+              integer *nparams, doublereal *params, dcomplex *work, doublereal *rwork,
               integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
@@ -432,30 +432,30 @@ void zsyrfsx_(char *uplo, char *equed, integer *n, integer *nrhs, doublecomplex 
     char norm[1];
     extern /* Subroutine */
         void
-        zla_syrfsx_extended_(integer *, char *, integer *, integer *, doublecomplex *, integer *,
-                             doublecomplex *, integer *, integer *, logical *, doublereal *,
-                             doublecomplex *, integer *, doublecomplex *, integer *, doublereal *,
-                             integer *, doublereal *, doublereal *, doublecomplex *, doublereal *,
-                             doublecomplex *, doublereal *, doublereal *, integer *, doublereal *,
+        zla_syrfsx_extended_(integer *, char *, integer *, integer *, dcomplex *, integer *,
+                             dcomplex *, integer *, integer *, logical *, doublereal *,
+                             dcomplex *, integer *, dcomplex *, integer *, doublereal *,
+                             integer *, doublereal *, doublereal *, dcomplex *, doublereal *,
+                             dcomplex *, doublereal *, doublereal *, integer *, doublereal *,
                              doublereal *, logical *, integer *);
     logical ignore_cwise__;
     extern logical lsame_(char *, char *, integer, integer);
     doublereal anorm;
     logical rcequ;
-    extern doublereal zla_syrcond_c_(char *, integer *, doublecomplex *, integer *, doublecomplex *,
+    extern doublereal zla_syrcond_c_(char *, integer *, dcomplex *, integer *, dcomplex *,
                                      integer *, integer *, doublereal *, logical *, integer *,
-                                     doublecomplex *, doublereal *),
-        zla_syrcond_x_(char *, integer *, doublecomplex *, integer *, doublecomplex *, integer *,
-                       integer *, doublecomplex *, integer *, doublecomplex *, doublereal *),
+                                     dcomplex *, doublereal *),
+        zla_syrcond_x_(char *, integer *, dcomplex *, integer *, dcomplex *, integer *,
+                       integer *, dcomplex *, integer *, dcomplex *, doublereal *),
         dlamch_(char *);
     extern /* Subroutine */
         void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    extern doublereal zlansy_(char *, char *, integer *, doublecomplex *, integer *, doublereal *);
+    extern doublereal zlansy_(char *, char *, integer *, dcomplex *, integer *, doublereal *);
     extern /* Subroutine */
         void
-        zsycon_(char *, integer *, doublecomplex *, integer *, integer *, doublereal *,
-                doublereal *, doublecomplex *, integer *);
+        zsycon_(char *, integer *, dcomplex *, integer *, integer *, doublereal *,
+                doublereal *, dcomplex *, integer *);
     extern integer ilaprec_(char *);
     integer ithresh, n_norms__;
     doublereal rthresh;

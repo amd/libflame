@@ -18,14 +18,14 @@
 char* pc_str[N_PARAM_COMBOS] = { "" };
 
 void time_LQ_UT(
-               integer param_combo, integer type, integer nrepeats, integer m, integer n, integer b_flash,
+               aocl_int64_t param_combo, aocl_int64_t type, aocl_int64_t nrepeats, aocl_int64_t m, aocl_int64_t n, aocl_int64_t b_flash,
                FLA_Obj A, FLA_Obj TW, FLA_Obj b, FLA_Obj x,
                double *dtime, double *diff, double *gflops );
 
 
 int main(int argc, char *argv[])
 {
-  integer 
+  aocl_int64_t 
     datatype,
     n_threads,
     m_input,

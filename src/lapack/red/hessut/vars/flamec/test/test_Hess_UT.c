@@ -19,14 +19,14 @@
 
 
 void time_Hess(
-               integer variant, integer type, integer n_repeats, integer m, integer nb_alg,
+               aocl_int64_t variant, aocl_int64_t type, aocl_int64_t n_repeats, aocl_int64_t m, aocl_int64_t nb_alg,
                FLA_Obj A, FLA_Obj U, FLA_Obj Y, FLA_Obj Z, FLA_Obj T, FLA_Obj TT, FLA_Obj t,
                double *dtime, double *diff, double *gflops );
 
 
 int main(int argc, char *argv[])
 {
-  integer 
+  aocl_int64_t 
     m_input,
     m,
     p_first, p_last, p_inc,

@@ -4,7 +4,7 @@
  -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for
  libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
+static aocl_int64_t c__1 = 1;
 /* > \brief \b ZLA_GBRCOND_C computes the infinity norm condition number of op(A)*inv(diag(c)) for
  * general ban ded matrices. */
 /* =========== DOCUMENTATION =========== */
@@ -157,37 +157,56 @@ row i of the matrix was interchanged */
 /* > \date December 2016 */
 /* > \ingroup complex16GBcomputational */
 /* ===================================================================== */
-doublereal zla_gbrcond_c_(char *trans, integer *n, integer *kl, integer *ku, doublecomplex *ab,
-                          integer *ldab, doublecomplex *afb, integer *ldafb, integer *ipiv,
-                          doublereal *c__, logical *capply, integer *info, doublecomplex *work,
-                          doublereal *rwork)
+/** Generated wrapper function */
+doublereal zla_gbrcond_c_(char *trans, aocl_int_t *n, aocl_int_t *kl, aocl_int_t *ku,
+                          dcomplex *ab, aocl_int_t *ldab, dcomplex *afb,
+                          aocl_int_t *ldafb, aocl_int_t *ipiv, doublereal *c__, logical *capply,
+                          aocl_int_t *info, dcomplex *work, doublereal *rwork)
+{
+#if FLA_ENABLE_ILP64
+    return aocl_lapack_zla_gbrcond_c(trans, n, kl, ku, ab, ldab, afb, ldafb, ipiv, c__, capply,
+                                     info, work, rwork);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t kl_64 = *kl;
+    aocl_int64_t ku_64 = *ku;
+    aocl_int64_t ldab_64 = *ldab;
+    aocl_int64_t ldafb_64 = *ldafb;
+    aocl_int64_t info_64 = *info;
+
+    doublereal ret_val
+        = aocl_lapack_zla_gbrcond_c(trans, &n_64, &kl_64, &ku_64, ab, &ldab_64, afb, &ldafb_64,
+                                    ipiv, c__, capply, &info_64, work, rwork);
+
+    *info = (aocl_int_t)info_64;
+    return ret_val;
+#endif
+}
+
+doublereal aocl_lapack_zla_gbrcond_c(char *trans, aocl_int64_t *n, aocl_int64_t *kl,
+                                     aocl_int64_t *ku, dcomplex *ab, aocl_int64_t *ldab,
+                                     dcomplex *afb, aocl_int64_t *ldafb, aocl_int_t *ipiv,
+                                     doublereal *c__, logical *capply, aocl_int64_t *info,
+                                     dcomplex *work, doublereal *rwork)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zla_gbrcond_c inputs: trans %c, n %" FLA_IS ", kl %" FLA_IS ", ku %" FLA_IS
                       ", ldab %" FLA_IS ", ldafb %" FLA_IS ", capply %" FLA_IS "",
                       *trans, *n, *kl, *ku, *ldab, *ldafb, *capply);
     /* System generated locals */
-    integer ab_dim1, ab_offset, afb_dim1, afb_offset, i__1, i__2, i__3, i__4;
+    aocl_int64_t ab_dim1, ab_offset, afb_dim1, afb_offset, i__1, i__2, i__3, i__4;
     doublereal ret_val, d__1, d__2;
-    doublecomplex z__1;
+    dcomplex z__1;
     /* Builtin functions */
-    double d_imag(doublecomplex *);
+    double d_imag(dcomplex *);
     /* Local variables */
-    integer i__, j, kd, ke;
+    aocl_int64_t i__, j, kd, ke;
     doublereal tmp;
-    integer kase;
-    extern logical lsame_(char *, char *, integer, integer);
+    aocl_int64_t kase;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     integer isave[3];
     doublereal anorm;
-    extern /* Subroutine */
-        void
-        zlacn2_(integer *, doublecomplex *, doublecomplex *, doublereal *, integer *, integer *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal ainvnm;
-    extern /* Subroutine */
-        void
-        zgbtrs_(char *, integer *, integer *, integer *, integer *, doublecomplex *, integer *,
-                integer *, doublecomplex *, integer *, integer *);
     logical notrans;
     /* -- LAPACK computational routine (version 3.7.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -254,7 +273,7 @@ doublereal zla_gbrcond_c_(char *trans, integer *n, integer *kl, integer *ku, dou
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("ZLA_GBRCOND_C", &i__1, (ftnlen)13);
+        aocl_blas_xerbla("ZLA_GBRCOND_C", &i__1, (ftnlen)13);
         AOCL_DTL_TRACE_LOG_EXIT
         return ret_val;
     }
@@ -356,7 +375,7 @@ doublereal zla_gbrcond_c_(char *trans, integer *n, integer *kl, integer *ku, dou
     ainvnm = 0.;
     kase = 0;
 L10:
-    zlacn2_(n, &work[*n + 1], &work[1], &ainvnm, &kase, isave);
+    aocl_lapack_zlacn2(n, &work[*n + 1], &work[1], &ainvnm, &kase, isave);
     if(kase != 0)
     {
         if(kase == 2)
@@ -375,13 +394,13 @@ L10:
             }
             if(notrans)
             {
-                zgbtrs_("No transpose", n, kl, ku, &c__1, &afb[afb_offset], ldafb, &ipiv[1],
-                        &work[1], n, info);
+                aocl_lapack_zgbtrs("No transpose", n, kl, ku, &c__1, &afb[afb_offset], ldafb,
+                                   &ipiv[1], &work[1], n, info);
             }
             else
             {
-                zgbtrs_("Conjugate transpose", n, kl, ku, &c__1, &afb[afb_offset], ldafb, &ipiv[1],
-                        &work[1], n, info);
+                aocl_lapack_zgbtrs("Conjugate transpose", n, kl, ku, &c__1, &afb[afb_offset], ldafb,
+                                   &ipiv[1], &work[1], n, info);
             }
             /* Multiply by inv(C). */
             if(*capply)
@@ -418,13 +437,13 @@ L10:
             }
             if(notrans)
             {
-                zgbtrs_("Conjugate transpose", n, kl, ku, &c__1, &afb[afb_offset], ldafb, &ipiv[1],
-                        &work[1], n, info);
+                aocl_lapack_zgbtrs("Conjugate transpose", n, kl, ku, &c__1, &afb[afb_offset], ldafb,
+                                   &ipiv[1], &work[1], n, info);
             }
             else
             {
-                zgbtrs_("No transpose", n, kl, ku, &c__1, &afb[afb_offset], ldafb, &ipiv[1],
-                        &work[1], n, info);
+                aocl_lapack_zgbtrs("No transpose", n, kl, ku, &c__1, &afb[afb_offset], ldafb,
+                                   &ipiv[1], &work[1], n, info);
             }
             /* Multiply by R. */
             i__1 = *n;

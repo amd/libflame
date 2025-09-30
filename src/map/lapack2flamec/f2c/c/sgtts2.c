@@ -125,8 +125,25 @@ IPIV(i) = i indicates a row interchange was not */
 /* > \ingroup realGTcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void sgtts2_(integer *itrans, integer *n, integer *nrhs, real *dl, real *d__, real *du, real *du2,
-             integer *ipiv, real *b, integer *ldb)
+/** Generated wrapper function */
+void sgtts2_(aocl_int_t *itrans, aocl_int_t *n, aocl_int_t *nrhs, real *dl, real *d__, real *du,
+             real *du2, aocl_int_t *ipiv, real *b, aocl_int_t *ldb)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_sgtts2(itrans, n, nrhs, dl, d__, du, du2, ipiv, b, ldb);
+#else
+    aocl_int64_t itrans_64 = *itrans;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t nrhs_64 = *nrhs;
+    aocl_int64_t ldb_64 = *ldb;
+
+    aocl_lapack_sgtts2(&itrans_64, &n_64, &nrhs_64, dl, d__, du, du2, ipiv, b, &ldb_64);
+#endif
+}
+
+void aocl_lapack_sgtts2(aocl_int64_t *itrans, aocl_int64_t *n, aocl_int64_t *nrhs, real *dl,
+                        real *d__, real *du, real *du2, aocl_int_t *ipiv, real *b,
+                        aocl_int64_t *ldb)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("sgtts2 inputs: itrans %" FLA_IS ", n %" FLA_IS ", nrhs %" FLA_IS

@@ -4,7 +4,7 @@
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
  /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
+static aocl_int64_t c__1 = 1;
 /* > \brief \b CUNBDB1 */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -196,9 +196,34 @@ the routine */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void cunbdb1_(integer *m, integer *p, integer *q, complex *x11, integer *ldx11, complex *x21,
-              integer *ldx21, real *theta, real *phi, complex *taup1, complex *taup2,
-              complex *tauq1, complex *work, integer *lwork, integer *info)
+/** Generated wrapper function */
+void cunbdb1_(aocl_int_t *m, aocl_int_t *p, aocl_int_t *q, scomplex *x11, aocl_int_t *ldx11,
+              scomplex *x21, aocl_int_t *ldx21, real *theta, real *phi, scomplex *taup1,
+              scomplex *taup2, scomplex *tauq1, scomplex *work, aocl_int_t *lwork, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_cunbdb1(m, p, q, x11, ldx11, x21, ldx21, theta, phi, taup1, taup2, tauq1, work,
+                        lwork, info);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t p_64 = *p;
+    aocl_int64_t q_64 = *q;
+    aocl_int64_t ldx11_64 = *ldx11;
+    aocl_int64_t ldx21_64 = *ldx21;
+    aocl_int64_t lwork_64 = *lwork;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_cunbdb1(&m_64, &p_64, &q_64, x11, &ldx11_64, x21, &ldx21_64, theta, phi, taup1,
+                        taup2, tauq1, work, &lwork_64, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_cunbdb1(aocl_int64_t *m, aocl_int64_t *p, aocl_int64_t *q, scomplex *x11,
+                         aocl_int64_t *ldx11, scomplex *x21, aocl_int64_t *ldx21, real *theta,
+                         real *phi, scomplex *taup1, scomplex *taup2, scomplex *tauq1, scomplex *work,
+                         aocl_int64_t *lwork, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -214,42 +239,22 @@ void cunbdb1_(integer *m, integer *p, integer *q, complex *x11, integer *ldx11, 
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
-    integer x11_dim1, x11_offset, x21_dim1, x21_offset, i__1, i__2, i__3, i__4;
+    aocl_int64_t x11_dim1, x11_offset, x21_dim1, x21_offset, i__1, i__2, i__3, i__4;
     real r__1, r__2;
-    complex q__1;
+    scomplex q__1;
     /* Builtin functions */
     double atan2(doublereal, doublereal), cos(doublereal), sin(doublereal);
-    void r_cnjg(complex *, complex *);
+    void r_cnjg(scomplex *, scomplex *);
     double sqrt(doublereal);
     /* Local variables */
-    integer lworkmin, lworkopt;
+    aocl_int64_t lworkmin, lworkopt;
     real c__;
-    integer i__;
+    aocl_int64_t i__;
     real s;
-    integer childinfo;
-    extern /* Subroutine */
-        void
-        clarf_(char *, integer *, integer *, complex *, integer *, complex *, complex *, integer *,
-               complex *);
-    integer ilarf, llarf;
-    extern /* Subroutine */
-        void
-        csrot_(integer *, complex *, integer *, complex *, integer *, real *, real *);
-    extern real scnrm2_(integer *, complex *, integer *);
-    extern /* Subroutine */
-        void
-        clacgv_(integer *, complex *, integer *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    aocl_int64_t childinfo;
+    aocl_int64_t ilarf, llarf;
     logical lquery;
-    extern /* Subroutine */
-        void
-        cunbdb5_(integer *, integer *, integer *, complex *, integer *, complex *, integer *,
-                 complex *, integer *, complex *, integer *, complex *, integer *, integer *);
-    integer iorbdb5, lorbdb5;
-    extern /* Subroutine */
-        void
-        clarfgp_(integer *, complex *, complex *, integer *, complex *);
-    extern real sroundup_lwork(integer *);
+    aocl_int64_t iorbdb5, lorbdb5;
     /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -328,7 +333,7 @@ void cunbdb1_(integer *m, integer *p, integer *q, complex *x11, integer *ldx11, 
         i__2 = iorbdb5 + lorbdb5 - 1; // , expr subst
         lworkopt = fla_max(i__1, i__2);
         lworkmin = lworkopt;
-        r__1 = sroundup_lwork(&lworkopt);
+        r__1 = aocl_lapack_sroundup_lwork(&lworkopt);
         work[1].r = r__1;
         work[1].i = 0.f; // , expr subst
         if(*lwork < lworkmin && !lquery)
@@ -339,7 +344,7 @@ void cunbdb1_(integer *m, integer *p, integer *q, complex *x11, integer *ldx11, 
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("CUNBDB1", &i__1, (ftnlen)7);
+        aocl_blas_xerbla("CUNBDB1", &i__1, (ftnlen)7);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
@@ -353,11 +358,11 @@ void cunbdb1_(integer *m, integer *p, integer *q, complex *x11, integer *ldx11, 
     for(i__ = 1; i__ <= i__1; ++i__)
     {
         i__2 = *p - i__ + 1;
-        clarfgp_(&i__2, &x11[i__ + i__ * x11_dim1], &x11[i__ + 1 + i__ * x11_dim1], &c__1,
-                 &taup1[i__]);
+        aocl_lapack_clarfgp(&i__2, &x11[i__ + i__ * x11_dim1], &x11[i__ + 1 + i__ * x11_dim1],
+                            &c__1, &taup1[i__]);
         i__2 = *m - *p - i__ + 1;
-        clarfgp_(&i__2, &x21[i__ + i__ * x21_dim1], &x21[i__ + 1 + i__ * x21_dim1], &c__1,
-                 &taup2[i__]);
+        aocl_lapack_clarfgp(&i__2, &x21[i__ + i__ * x21_dim1], &x21[i__ + 1 + i__ * x21_dim1],
+                            &c__1, &taup2[i__]);
         theta[i__] = atan2((real)x21[i__ + i__ * x21_dim1].r, (real)x11[i__ + i__ * x11_dim1].r);
         c__ = cos(theta[i__]);
         s = sin(theta[i__]);
@@ -370,23 +375,23 @@ void cunbdb1_(integer *m, integer *p, integer *q, complex *x11, integer *ldx11, 
         i__2 = *p - i__ + 1;
         i__3 = *q - i__;
         r_cnjg(&q__1, &taup1[i__]);
-        clarf_("L", &i__2, &i__3, &x11[i__ + i__ * x11_dim1], &c__1, &q__1,
-               &x11[i__ + (i__ + 1) * x11_dim1], ldx11, &work[ilarf]);
+        aocl_lapack_clarf("L", &i__2, &i__3, &x11[i__ + i__ * x11_dim1], &c__1, &q__1,
+                          &x11[i__ + (i__ + 1) * x11_dim1], ldx11, &work[ilarf]);
         i__2 = *m - *p - i__ + 1;
         i__3 = *q - i__;
         r_cnjg(&q__1, &taup2[i__]);
-        clarf_("L", &i__2, &i__3, &x21[i__ + i__ * x21_dim1], &c__1, &q__1,
-               &x21[i__ + (i__ + 1) * x21_dim1], ldx21, &work[ilarf]);
+        aocl_lapack_clarf("L", &i__2, &i__3, &x21[i__ + i__ * x21_dim1], &c__1, &q__1,
+                          &x21[i__ + (i__ + 1) * x21_dim1], ldx21, &work[ilarf]);
         if(i__ < *q)
         {
             i__2 = *q - i__;
-            csrot_(&i__2, &x11[i__ + (i__ + 1) * x11_dim1], ldx11, &x21[i__ + (i__ + 1) * x21_dim1],
-                   ldx21, &c__, &s);
+            aocl_blas_csrot(&i__2, &x11[i__ + (i__ + 1) * x11_dim1], ldx11,
+                            &x21[i__ + (i__ + 1) * x21_dim1], ldx21, &c__, &s);
             i__2 = *q - i__;
-            clacgv_(&i__2, &x21[i__ + (i__ + 1) * x21_dim1], ldx21);
+            aocl_lapack_clacgv(&i__2, &x21[i__ + (i__ + 1) * x21_dim1], ldx21);
             i__2 = *q - i__;
-            clarfgp_(&i__2, &x21[i__ + (i__ + 1) * x21_dim1], &x21[i__ + (i__ + 2) * x21_dim1],
-                     ldx21, &tauq1[i__]);
+            aocl_lapack_clarfgp(&i__2, &x21[i__ + (i__ + 1) * x21_dim1],
+                                &x21[i__ + (i__ + 2) * x21_dim1], ldx21, &tauq1[i__]);
             i__2 = i__ + (i__ + 1) * x21_dim1;
             s = x21[i__2].r;
             i__2 = i__ + (i__ + 1) * x21_dim1;
@@ -394,30 +399,32 @@ void cunbdb1_(integer *m, integer *p, integer *q, complex *x11, integer *ldx11, 
             x21[i__2].i = 0.f; // , expr subst
             i__2 = *p - i__;
             i__3 = *q - i__;
-            clarf_("R", &i__2, &i__3, &x21[i__ + (i__ + 1) * x21_dim1], ldx21, &tauq1[i__],
-                   &x11[i__ + 1 + (i__ + 1) * x11_dim1], ldx11, &work[ilarf]);
+            aocl_lapack_clarf("R", &i__2, &i__3, &x21[i__ + (i__ + 1) * x21_dim1], ldx21,
+                              &tauq1[i__], &x11[i__ + 1 + (i__ + 1) * x11_dim1], ldx11,
+                              &work[ilarf]);
             i__2 = *m - *p - i__;
             i__3 = *q - i__;
-            clarf_("R", &i__2, &i__3, &x21[i__ + (i__ + 1) * x21_dim1], ldx21, &tauq1[i__],
-                   &x21[i__ + 1 + (i__ + 1) * x21_dim1], ldx21, &work[ilarf]);
+            aocl_lapack_clarf("R", &i__2, &i__3, &x21[i__ + (i__ + 1) * x21_dim1], ldx21,
+                              &tauq1[i__], &x21[i__ + 1 + (i__ + 1) * x21_dim1], ldx21,
+                              &work[ilarf]);
             i__2 = *q - i__;
-            clacgv_(&i__2, &x21[i__ + (i__ + 1) * x21_dim1], ldx21);
+            aocl_lapack_clacgv(&i__2, &x21[i__ + (i__ + 1) * x21_dim1], ldx21);
             i__2 = *p - i__;
             /* Computing 2nd power */
-            r__1 = scnrm2_(&i__2, &x11[i__ + 1 + (i__ + 1) * x11_dim1], &c__1);
+            r__1 = aocl_blas_scnrm2(&i__2, &x11[i__ + 1 + (i__ + 1) * x11_dim1], &c__1);
             i__3 = *m - *p - i__;
             /* Computing 2nd power */
-            r__2 = scnrm2_(&i__3, &x21[i__ + 1 + (i__ + 1) * x21_dim1], &c__1);
+            r__2 = aocl_blas_scnrm2(&i__3, &x21[i__ + 1 + (i__ + 1) * x21_dim1], &c__1);
             c__ = sqrt(r__1 * r__1 + r__2 * r__2);
             phi[i__] = atan2(s, c__);
             i__2 = *p - i__;
             i__3 = *m - *p - i__;
             i__4 = *q - i__ - 1;
-            cunbdb5_(&i__2, &i__3, &i__4, &x11[i__ + 1 + (i__ + 1) * x11_dim1], &c__1,
-                     &x21[i__ + 1 + (i__ + 1) * x21_dim1], &c__1,
-                     &x11[i__ + 1 + (i__ + 2) * x11_dim1], ldx11,
-                     &x21[i__ + 1 + (i__ + 2) * x21_dim1], ldx21, &work[iorbdb5], &lorbdb5,
-                     &childinfo);
+            aocl_lapack_cunbdb5(&i__2, &i__3, &i__4, &x11[i__ + 1 + (i__ + 1) * x11_dim1], &c__1,
+                                &x21[i__ + 1 + (i__ + 1) * x21_dim1], &c__1,
+                                &x11[i__ + 1 + (i__ + 2) * x11_dim1], ldx11,
+                                &x21[i__ + 1 + (i__ + 2) * x21_dim1], ldx21, &work[iorbdb5],
+                                &lorbdb5, &childinfo);
         }
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);

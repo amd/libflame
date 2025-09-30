@@ -188,30 +188,53 @@
 /* > Christof Voemel, University of California, Berkeley, USA */
 /* ===================================================================== */
 /* Subroutine */
-void dlarrb_(integer *n, doublereal *d__, doublereal *lld, integer *ifirst, integer *ilast,
-             doublereal *rtol1, doublereal *rtol2, integer *offset, doublereal *w, doublereal *wgap,
-             doublereal *werr, doublereal *work, integer *iwork, doublereal *pivmin,
-             doublereal *spdiam, integer *twist, integer *info)
+/** Generated wrapper function */
+void dlarrb_(aocl_int_t *n, doublereal *d__, doublereal *lld, aocl_int_t *ifirst, aocl_int_t *ilast,
+             doublereal *rtol1, doublereal *rtol2, aocl_int_t *offset, doublereal *w,
+             doublereal *wgap, doublereal *werr, doublereal *work, aocl_int_t *iwork,
+             doublereal *pivmin, doublereal *spdiam, aocl_int_t *twist, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_dlarrb(n, d__, lld, ifirst, ilast, rtol1, rtol2, offset, w, wgap, werr, work, iwork,
+                       pivmin, spdiam, twist, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t ifirst_64 = *ifirst;
+    aocl_int64_t ilast_64 = *ilast;
+    aocl_int64_t offset_64 = *offset;
+    aocl_int64_t twist_64 = *twist;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_dlarrb(&n_64, d__, lld, &ifirst_64, &ilast_64, rtol1, rtol2, &offset_64, w, wgap,
+                       werr, work, iwork, pivmin, spdiam, &twist_64, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_dlarrb(aocl_int64_t *n, doublereal *d__, doublereal *lld, aocl_int64_t *ifirst,
+                        aocl_int64_t *ilast, doublereal *rtol1, doublereal *rtol2,
+                        aocl_int64_t *offset, doublereal *w, doublereal *wgap, doublereal *werr,
+                        doublereal *work, aocl_int_t *iwork, doublereal *pivmin, doublereal *spdiam,
+                        aocl_int64_t *twist, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dlarrb inputs: n %" FLA_IS ", ifirst %" FLA_IS ", ilast %" FLA_IS
                       ", offset %" FLA_IS ", twist %" FLA_IS "",
                       *n, *ifirst, *ilast, *offset, *twist);
     /* System generated locals */
-    integer i__1;
+    aocl_int64_t i__1;
     doublereal d__1, d__2;
     /* Builtin functions */
     double log(doublereal);
     /* Local variables */
-    integer i__, k, r__, i1, ii, ip;
+    aocl_int64_t i__, k, r__, i1, ii, ip;
     doublereal gap, mid, tmp, back, lgap, rgap, left;
-    integer iter, nint, prev, next;
+    aocl_int64_t iter, nint, prev, next;
     doublereal cvrgd, right, width;
-    extern integer dlaneg_(integer *, doublereal *, doublereal *, doublereal *, doublereal *,
-                           integer *);
-    integer negcnt;
+    aocl_int64_t negcnt;
     doublereal mnwdth;
-    integer olnint, maxitr;
+    aocl_int64_t olnint, maxitr;
     /* -- LAPACK auxiliary routine (version 3.7.1) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -280,7 +303,7 @@ void dlarrb_(integer *n, doublereal *d__, doublereal *lld, integer *ifirst, inte
         /* Do while( NEGCNT(LEFT).GT.I-1 ) */
         back = werr[ii];
     L20:
-        negcnt = dlaneg_(n, &d__[1], &lld[1], &left, pivmin, &r__);
+        negcnt = aocl_lapack_dlaneg(n, &d__[1], &lld[1], &left, pivmin, &r__);
         if(negcnt > i__ - 1)
         {
             left -= back;
@@ -291,7 +314,7 @@ void dlarrb_(integer *n, doublereal *d__, doublereal *lld, integer *ifirst, inte
         /* Compute negcount from dstqds facto L+D+L+^T = L D L^T - RIGHT */
         back = werr[ii];
     L50:
-        negcnt = dlaneg_(n, &d__[1], &lld[1], &right, pivmin, &r__);
+        negcnt = aocl_lapack_dlaneg(n, &d__[1], &lld[1], &right, pivmin, &r__);
         if(negcnt < i__)
         {
             right += back;
@@ -321,7 +344,7 @@ void dlarrb_(integer *n, doublereal *d__, doublereal *lld, integer *ifirst, inte
             }
             if(prev >= i1 && i__ <= *ilast)
             {
-                iwork[(prev << 1) - 1] = i__ + 1;
+                iwork[(prev << 1) - 1] = (aocl_int_t)(i__ + 1);
             }
         }
         else
@@ -329,8 +352,8 @@ void dlarrb_(integer *n, doublereal *d__, doublereal *lld, integer *ifirst, inte
             /* unconverged interval found */
             prev = i__;
             ++nint;
-            iwork[k - 1] = i__ + 1;
-            iwork[k] = negcnt;
+            iwork[k - 1] = (aocl_int_t)(i__ + 1);
+            iwork[k] = (aocl_int_t)(negcnt);
         }
         work[k - 1] = left;
         work[k] = right;
@@ -384,7 +407,7 @@ L80:
                 /* Prev holds the last unconverged interval previously examined */
                 if(prev >= i1)
                 {
-                    iwork[(prev << 1) - 1] = next;
+                    iwork[(prev << 1) - 1] = (aocl_int_t)(next);
                 }
             }
             i__ = next;
@@ -392,7 +415,7 @@ L80:
         }
         prev = i__;
         /* Perform one bisection step */
-        negcnt = dlaneg_(n, &d__[1], &lld[1], &mid, pivmin, &r__);
+        negcnt = aocl_lapack_dlaneg(n, &d__[1], &lld[1], &mid, pivmin, &r__);
         if(negcnt <= i__ - 1)
         {
             work[k - 1] = mid;

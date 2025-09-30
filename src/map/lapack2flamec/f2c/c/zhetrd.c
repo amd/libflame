@@ -198,8 +198,28 @@ v(i+2:n) is stored on exit in A(i+2:n,i), */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void zhetrd_(char *uplo, integer *n, doublecomplex *a, integer *lda, doublereal *d__, doublereal *e,
-             doublecomplex *tau, doublecomplex *work, integer *lwork, integer *info)
+/** Generated wrapper function */
+void zhetrd_(char *uplo, aocl_int_t *n, dcomplex *a, aocl_int_t *lda, doublereal *d__,
+             doublereal *e, dcomplex *tau, dcomplex *work, aocl_int_t *lwork,
+             aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_zhetrd(uplo, n, a, lda, d__, e, tau, work, lwork, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t lwork_64 = *lwork;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_zhetrd(uplo, &n_64, a, &lda_64, d__, e, tau, work, &lwork_64, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_zhetrd(char *uplo, aocl_int64_t *n, dcomplex *a, aocl_int64_t *lda,
+                        doublereal *d__, doublereal *e, dcomplex *tau, dcomplex *work,
+                        aocl_int64_t *lwork, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zhetrd inputs: uplo %c, n %" FLA_IS ", lda %" FLA_IS "", *uplo, *n, *lda);
@@ -207,23 +227,11 @@ void zhetrd_(char *uplo, integer *n, doublecomplex *a, integer *lda, doublereal 
     aocl_int64_t a_dim1, a_offset, i__1, i__2, i__3, i__4, i__5;
     dcomplex z__1;
     /* Local variables */
-    integer i__, j, nb, kk, nx, iws;
-    extern logical lsame_(char *, char *, integer, integer);
-    integer nbmin, iinfo;
+    aocl_int64_t i__, j, nb, kk, nx, iws;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    aocl_int64_t nbmin, iinfo;
     logical upper;
-    extern /* Subroutine */
-        void
-        zhetd2_(char *, integer *, doublecomplex *, integer *, doublereal *, doublereal *,
-                doublecomplex *, integer *),
-        zher2k_(char *, char *, integer *, integer *, doublecomplex *, doublecomplex *, integer *,
-                doublecomplex *, integer *, doublereal *, doublecomplex *, integer *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
-    extern /* Subroutine */
-        void
-        zlatrd_(char *, integer *, integer *, doublecomplex *, integer *, doublereal *,
-                doublecomplex *, doublecomplex *, integer *);
-    integer ldwork, lwkopt;
+    aocl_int64_t ldwork, lwkopt;
     logical lquery;
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -285,7 +293,7 @@ void zhetrd_(char *uplo, integer *n, doublecomplex *a, integer *lda, doublereal 
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("ZHETRD", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("ZHETRD", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -310,7 +318,7 @@ void zhetrd_(char *uplo, integer *n, doublecomplex *a, integer *lda, doublereal 
         /* (last block is always handled by unblocked code). */
         /* Computing MAX */
         i__1 = nb;
-        i__2 = ilaenv_(&c__3, "ZHETRD", uplo, n, &c_n1, &c_n1, &c_n1); // , expr subst
+        i__2 = aocl_lapack_ilaenv(&c__3, "ZHETRD", uplo, n, &c_n1, &c_n1, &c_n1); // , expr subst
         nx = fla_max(i__1, i__2);
         if(nx < *n)
         {
@@ -325,7 +333,7 @@ void zhetrd_(char *uplo, integer *n, doublecomplex *a, integer *lda, doublereal 
                 /* Computing MAX */
                 i__1 = *lwork / ldwork;
                 nb = fla_max(i__1, 1);
-                nbmin = ilaenv_(&c__2, "ZHETRD", uplo, n, &c_n1, &c_n1, &c_n1);
+                nbmin = aocl_lapack_ilaenv(&c__2, "ZHETRD", uplo, n, &c_n1, &c_n1, &c_n1);
                 if(nb < nbmin)
                 {
                     nx = *n;
@@ -354,14 +362,15 @@ void zhetrd_(char *uplo, integer *n, doublecomplex *a, integer *lda, doublereal 
             /* matrix W which is needed to update the unreduced part of */
             /* the matrix */
             i__3 = i__ + nb - 1;
-            zlatrd_(uplo, &i__3, &nb, &a[a_offset], lda, &e[1], &tau[1], &work[1], &ldwork);
+            aocl_lapack_zlatrd(uplo, &i__3, &nb, &a[a_offset], lda, &e[1], &tau[1], &work[1],
+                               &ldwork);
             /* Update the unreduced submatrix A(1:i-1,1:i-1), using an */
             /* update of the form: A := A - V*W**H - W*V**H */
             i__3 = i__ - 1;
             z__1.r = -1.;
             z__1.i = -0.; // , expr subst
-            zher2k_(uplo, "No transpose", &i__3, &nb, &z__1, &a[i__ * a_dim1 + 1], lda, &work[1],
-                    &ldwork, &c_b23, &a[a_offset], lda);
+            aocl_blas_zher2k(uplo, "No transpose", &i__3, &nb, &z__1, &a[i__ * a_dim1 + 1], lda,
+                             &work[1], &ldwork, &c_b23, &a[a_offset], lda);
             /* Copy superdiagonal elements back into A, and diagonal */
             /* elements into D */
             i__3 = i__ + nb - 1;
@@ -392,15 +401,16 @@ void zhetrd_(char *uplo, integer *n, doublecomplex *a, integer *lda, doublereal 
             /* matrix W which is needed to update the unreduced part of */
             /* the matrix */
             i__3 = *n - i__ + 1;
-            zlatrd_(uplo, &i__3, &nb, &a[i__ + i__ * a_dim1], lda, &e[i__], &tau[i__], &work[1],
-                    &ldwork);
+            aocl_lapack_zlatrd(uplo, &i__3, &nb, &a[i__ + i__ * a_dim1], lda, &e[i__], &tau[i__],
+                               &work[1], &ldwork);
             /* Update the unreduced submatrix A(i+nb:n,i+nb:n), using */
             /* an update of the form: A := A - V*W**H - W*V**H */
             i__3 = *n - i__ - nb + 1;
             z__1.r = -1.;
             z__1.i = -0.; // , expr subst
-            zher2k_(uplo, "No transpose", &i__3, &nb, &z__1, &a[i__ + nb + i__ * a_dim1], lda,
-                    &work[nb + 1], &ldwork, &c_b23, &a[i__ + nb + (i__ + nb) * a_dim1], lda);
+            aocl_blas_zher2k(uplo, "No transpose", &i__3, &nb, &z__1, &a[i__ + nb + i__ * a_dim1],
+                             lda, &work[nb + 1], &ldwork, &c_b23,
+                             &a[i__ + nb + (i__ + nb) * a_dim1], lda);
             /* Copy subdiagonal elements back into A, and diagonal */
             /* elements into D */
             i__3 = i__ + nb - 1;

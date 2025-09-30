@@ -16,7 +16,7 @@
 #include "blis.h"
 #endif
 
-void bl1_sscalv( conj1_t conj, integer n, float* alpha, float* x, integer incx )
+void bl1_sscalv( conj1_t conj, fla_dim_t n, float* alpha, float* x, fla_dim_t incx )
 {
 	// Return early if possible.
 	if ( bl1_zero_dim1( n ) ) return;
@@ -27,7 +27,7 @@ void bl1_sscalv( conj1_t conj, integer n, float* alpha, float* x, integer incx )
 	           x, incx );
 }
 
-void bl1_dscalv( conj1_t conj, integer n, double* alpha, double* x, integer incx )
+void bl1_dscalv( conj1_t conj, fla_dim_t n, double* alpha, double* x, fla_dim_t incx )
 {
 	// Return early if possible.
 	if ( bl1_zero_dim1( n ) ) return;
@@ -38,7 +38,7 @@ void bl1_dscalv( conj1_t conj, integer n, double* alpha, double* x, integer incx
 	           x, incx );
 }
 
-void bl1_csscalv( conj1_t conj, integer n, float* alpha, scomplex* x, integer incx )
+void bl1_csscalv( conj1_t conj, fla_dim_t n, float* alpha, scomplex* x, fla_dim_t incx )
 {
 	// Return early if possible.
 	if ( bl1_zero_dim1( n ) ) return;
@@ -49,7 +49,7 @@ void bl1_csscalv( conj1_t conj, integer n, float* alpha, scomplex* x, integer in
 	            x, incx );
 }
 
-void bl1_cscalv( conj1_t conj, integer n, scomplex* alpha, scomplex* x, integer incx )
+void bl1_cscalv( conj1_t conj, fla_dim_t n, scomplex* alpha, scomplex* x, fla_dim_t incx )
 {
 	scomplex alpha_conj;
 
@@ -64,7 +64,7 @@ void bl1_cscalv( conj1_t conj, integer n, scomplex* alpha, scomplex* x, integer 
 	           x, incx );
 }
 
-void bl1_zdscalv( conj1_t conj, integer n, double* alpha, dcomplex* x, integer incx )
+void bl1_zdscalv( conj1_t conj, fla_dim_t n, double* alpha, dcomplex* x, fla_dim_t incx )
 {
 	// Return early if possible.
 	if ( bl1_zero_dim1( n ) ) return;
@@ -75,7 +75,7 @@ void bl1_zdscalv( conj1_t conj, integer n, double* alpha, dcomplex* x, integer i
 	            x, incx );
 }
 
-void bl1_zscalv( conj1_t conj, integer n, dcomplex* alpha, dcomplex* x, integer incx )
+void bl1_zscalv( conj1_t conj, fla_dim_t n, dcomplex* alpha, dcomplex* x, fla_dim_t incx )
 {
 	dcomplex alpha_conj;
 

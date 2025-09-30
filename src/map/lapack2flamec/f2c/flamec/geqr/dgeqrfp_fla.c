@@ -1,10 +1,10 @@
 /* dgeqrfp.f -- translated by f2c (version 20000121). You must link the resulting object file with
  * the libraries: -lf2c -lm (in that order) */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
-static integer c_n1 = -1;
-static integer c__3 = 3;
-static integer c__2 = 2;
+static aocl_int64_t c__1 = 1;
+static aocl_int64_t c_n1 = -1;
+static aocl_int64_t c__3 = 3;
+static aocl_int64_t c__2 = 2;
 /* > \brief \b DGEQRFP */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -150,32 +150,21 @@ v(i+1:m) is stored on exit in A(i+1:m,i), */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void dgeqrfp_fla(integer *m, integer *n, doublereal *a, integer *lda, doublereal *tau,
-                 doublereal *work, integer *lwork, integer *info)
+void dgeqrfp_fla(aocl_int64_t *m, aocl_int64_t *n, doublereal *a, aocl_int64_t *lda,
+                 doublereal *tau, doublereal *work, aocl_int64_t *lwork, aocl_int64_t *info)
 {
     /* System generated locals */
-    integer a_dim1, a_offset, i__1, i__2, i__3, i__4;
+    aocl_int64_t a_dim1, a_offset, i__1, i__2, i__3, i__4;
     /* Local variables */
-    integer i__, k, nbmin, iinfo, ib, nb;
-    extern /* Subroutine */
-        void
-        dlarfb_(char *, char *, char *, char *, integer *, integer *, integer *, doublereal *,
-                integer *, doublereal *, integer *, doublereal *, integer *, doublereal *,
-                integer *);
-    integer nx;
-    extern /* Subroutine */
-        void
-        dlarft_(char *, char *, integer *, integer *, doublereal *, integer *, doublereal *,
-                doublereal *, integer *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
-    integer ldwork, lwkopt;
+    aocl_int64_t i__, k, nbmin, iinfo, ib, nb;
+    aocl_int64_t nx;
+    aocl_int64_t ldwork, lwkopt;
     logical lquery;
     extern /* Subroutine */
         void
-        dgeqr2p_fla(integer *, integer *, doublereal *, integer *, doublereal *, doublereal *,
-                    integer *);
-    integer iws;
+        dgeqr2p_fla(aocl_int64_t *, aocl_int64_t *, doublereal *, aocl_int64_t *, doublereal *,
+                    doublereal *, aocl_int64_t *);
+    aocl_int64_t iws;
     /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -202,7 +191,7 @@ void dgeqrfp_fla(integer *m, integer *n, doublereal *a, integer *lda, doublereal
     --work;
     /* Function Body */
     *info = 0;
-    nb = ilaenv_(&c__1, "DGEQRF", " ", m, n, &c_n1, &c_n1);
+    nb = aocl_lapack_ilaenv(&c__1, "DGEQRF", " ", m, n, &c_n1, &c_n1);
     lwkopt = *n * nb;
     work[1] = (doublereal)lwkopt;
     lquery = *lwork == -1;
@@ -225,7 +214,7 @@ void dgeqrfp_fla(integer *m, integer *n, doublereal *a, integer *lda, doublereal
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("DGEQRFP", &i__1, (ftnlen)7);
+        aocl_blas_xerbla("DGEQRFP", &i__1, (ftnlen)7);
         return;
     }
     else if(lquery)
@@ -247,7 +236,7 @@ void dgeqrfp_fla(integer *m, integer *n, doublereal *a, integer *lda, doublereal
         /* Determine when to cross over from blocked to unblocked code. */
         /* Computing MAX */
         i__1 = 0;
-        i__2 = ilaenv_(&c__3, "DGEQRF", " ", m, n, &c_n1, &c_n1); // , expr subst
+        i__2 = aocl_lapack_ilaenv(&c__3, "DGEQRF", " ", m, n, &c_n1, &c_n1); // , expr subst
         nx = fla_max(i__1, i__2);
         if(nx < k)
         {
@@ -261,7 +250,7 @@ void dgeqrfp_fla(integer *m, integer *n, doublereal *a, integer *lda, doublereal
                 nb = *lwork / ldwork;
                 /* Computing MAX */
                 i__1 = 2;
-                i__2 = ilaenv_(&c__2, "DGEQRF", " ", m, n, &c_n1, &c_n1); // , expr subst
+                i__2 = aocl_lapack_ilaenv(&c__2, "DGEQRF", " ", m, n, &c_n1, &c_n1); // , expr subst
                 nbmin = fla_max(i__1, i__2);
             }
         }
@@ -285,14 +274,14 @@ void dgeqrfp_fla(integer *m, integer *n, doublereal *a, integer *lda, doublereal
                 /* Form the triangular factor of the block reflector */
                 /* H = H(i) H(i+1) . . . H(i+ib-1) */
                 i__3 = *m - i__ + 1;
-                dlarft_("Forward", "Columnwise", &i__3, &ib, &a[i__ + i__ * a_dim1], lda, &tau[i__],
-                        &work[1], &ldwork);
+                aocl_lapack_dlarft("Forward", "Columnwise", &i__3, &ib, &a[i__ + i__ * a_dim1], lda,
+                                   &tau[i__], &work[1], &ldwork);
                 /* Apply H**T to A(i:m,i+ib:n) from the left */
                 i__3 = *m - i__ + 1;
                 i__4 = *n - i__ - ib + 1;
-                dlarfb_("Left", "Transpose", "Forward", "Columnwise", &i__3, &i__4, &ib,
-                        &a[i__ + i__ * a_dim1], lda, &work[1], &ldwork,
-                        &a[i__ + (i__ + ib) * a_dim1], lda, &work[ib + 1], &ldwork);
+                aocl_lapack_dlarfb("Left", "Transpose", "Forward", "Columnwise", &i__3, &i__4, &ib,
+                                   &a[i__ + i__ * a_dim1], lda, &work[1], &ldwork,
+                                   &a[i__ + (i__ + ib) * a_dim1], lda, &work[ib + 1], &ldwork);
             }
             /* L10: */
         }

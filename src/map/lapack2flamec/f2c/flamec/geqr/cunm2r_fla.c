@@ -4,7 +4,7 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
+static aocl_int64_t c__1 = 1;
 /* > \brief \b CUNM2R multiplies a general matrix by the unitary matrix from a QR factorization
  * determined by cgeqrf (unblocked algorithm). */
 /* =========== DOCUMENTATION =========== */
@@ -158,9 +158,9 @@ static integer c__1 = 1;
 /* > \ingroup complexOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void cunm2r_fla(char *side, char *trans, integer *m, integer *n, integer *k, complex *a,
-                integer *lda, complex *tau, complex *c__, integer *ldc, complex *work,
-                integer *info)
+void cunm2r_fla(char *side, char *trans, aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *k,
+                scomplex *a, aocl_int64_t *lda, scomplex *tau, scomplex *c__, aocl_int64_t *ldc,
+                scomplex *work, aocl_int64_t *info)
 {
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, c_dim1, c_offset, i__1, i__2, i__3;
@@ -171,15 +171,8 @@ void cunm2r_fla(char *side, char *trans, integer *m, integer *n, integer *k, com
     aocl_int64_t i__, i1, i2, i3, ic, jc, mi, ni, nq;
     scomplex aii;
     logical left;
-    complex taui;
-    extern /* Subroutine */
-        void
-        clarf_(char *, integer *, integer *, complex *, integer *, complex *, complex *, integer *,
-               complex *);
-    extern logical lsame_(char *, char *, integer, integer);
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    scomplex taui;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     logical notran;
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -255,7 +248,7 @@ void cunm2r_fla(char *side, char *trans, integer *m, integer *n, integer *k, com
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("CUNM2R", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("CUNM2R", &i__1, (ftnlen)6);
         return;
     }
     /* Quick return if possible */
@@ -320,8 +313,8 @@ void cunm2r_fla(char *side, char *trans, integer *m, integer *n, integer *k, com
         i__3 = i__ + i__ * a_dim1;
         a[i__3].r = 1.f;
         a[i__3].i = 0.f; // , expr subst
-        clarf_(side, &mi, &ni, &a[i__ + i__ * a_dim1], &c__1, &taui, &c__[ic + jc * c_dim1], ldc,
-               &work[1]);
+        aocl_lapack_clarf(side, &mi, &ni, &a[i__ + i__ * a_dim1], &c__1, &taui,
+                          &c__[ic + jc * c_dim1], ldc, &work[1]);
         i__3 = i__ + i__ * a_dim1;
         a[i__3].real = aii.real;
         a[i__3].imag = aii.imag; // , expr subst

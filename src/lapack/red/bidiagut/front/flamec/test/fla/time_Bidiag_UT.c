@@ -16,17 +16,17 @@
 FLA_Error REF_Bidiag_UT( FLA_Obj A, FLA_Obj tu, FLA_Obj tv );
 
 void time_Bidiag_UT(
-                 integer param_combo, integer type, integer nrepeats, integer m, integer n,
+                 aocl_int64_t param_combo, aocl_int64_t type, aocl_int64_t nrepeats, aocl_int64_t m, aocl_int64_t n,
                  FLA_Obj A, FLA_Obj tu, FLA_Obj tv, FLA_Obj TU, FLA_Obj TV,
                  double *dtime, double *diff, double *gflops );
 
 
 void time_Bidiag_UT(
-                 integer param_combo, integer type, integer nrepeats, integer m, integer n,
+                 aocl_int64_t param_combo, aocl_int64_t type, aocl_int64_t nrepeats, aocl_int64_t m, aocl_int64_t n,
                  FLA_Obj A, FLA_Obj tu, FLA_Obj tv, FLA_Obj TU, FLA_Obj TV,
                  double *dtime, double *diff, double *gflops )
 {
-  integer
+  aocl_int64_t
     irep;
 
   double

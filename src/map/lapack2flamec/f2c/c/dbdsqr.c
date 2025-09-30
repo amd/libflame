@@ -5,7 +5,7 @@
  /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static doublereal c_b15 = -.125;
-static integer c__1 = 1;
+static aocl_int64_t c__1 = 1;
 static doublereal c_b49 = 1.;
 static doublereal c_b72 = -1.;
 /* > \brief \b DBDSQR */
@@ -243,65 +243,70 @@ if INFO = i, i */
 /* > \ingroup bdsqr */
 /* ===================================================================== */
 /* Subroutine */
-void dbdsqr_(char *uplo, integer *n, integer *ncvt, integer *nru, integer *ncc, doublereal *d__,
-             doublereal *e, doublereal *vt, integer *ldvt, doublereal *u, integer *ldu,
-             doublereal *c__, integer *ldc, doublereal *work, integer *info)
+/** Generated wrapper function */
+void dbdsqr_(char *uplo, aocl_int_t *n, aocl_int_t *ncvt, aocl_int_t *nru, aocl_int_t *ncc,
+             doublereal *d__, doublereal *e, doublereal *vt, aocl_int_t *ldvt, doublereal *u,
+             aocl_int_t *ldu, doublereal *c__, aocl_int_t *ldc, doublereal *work, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_dbdsqr(uplo, n, ncvt, nru, ncc, d__, e, vt, ldvt, u, ldu, c__, ldc, work, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t ncvt_64 = *ncvt;
+    aocl_int64_t nru_64 = *nru;
+    aocl_int64_t ncc_64 = *ncc;
+    aocl_int64_t ldvt_64 = *ldvt;
+    aocl_int64_t ldu_64 = *ldu;
+    aocl_int64_t ldc_64 = *ldc;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_dbdsqr(uplo, &n_64, &ncvt_64, &nru_64, &ncc_64, d__, e, vt, &ldvt_64, u, &ldu_64,
+                       c__, &ldc_64, work, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_dbdsqr(char *uplo, aocl_int64_t *n, aocl_int64_t *ncvt, aocl_int64_t *nru,
+                        aocl_int64_t *ncc, doublereal *d__, doublereal *e, doublereal *vt,
+                        aocl_int64_t *ldvt, doublereal *u, aocl_int64_t *ldu, doublereal *c__,
+                        aocl_int64_t *ldc, doublereal *work, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dbdsqr inputs: uplo %c, n %" FLA_IS ", ncvt %" FLA_IS ", nru %" FLA_IS
                       ", ncc %" FLA_IS ", ldvt %" FLA_IS ", ldu %" FLA_IS ", ldc %" FLA_IS "",
                       *uplo, *n, *ncvt, *nru, *ncc, *ldvt, *ldu, *ldc);
     /* System generated locals */
-    integer c_dim1, c_offset, u_dim1, u_offset, vt_dim1, vt_offset, i__1, i__2;
+    aocl_int64_t c_dim1, c_offset, u_dim1, u_offset, vt_dim1, vt_offset, i__1, i__2;
     doublereal d__1, d__2, d__3, d__4;
     /* Builtin functions */
     double pow_dd(doublereal *, doublereal *), sqrt(doublereal), d_sign(doublereal *, doublereal *);
     /* Local variables */
-    integer iterdivn;
+    aocl_int64_t iterdivn;
     doublereal f, g, h__;
-    integer i__, j, m;
+    aocl_int64_t i__, j, m;
     doublereal r__;
-    integer maxitdivn;
+    aocl_int64_t maxitdivn;
     doublereal cs;
-    integer ll;
+    aocl_int64_t ll;
     doublereal sn, mu;
-    integer nm1, nm12, nm13, lll;
+    aocl_int64_t nm1, nm12, nm13, lll;
     doublereal eps, sll, tol, abse;
-    integer idir;
+    aocl_int64_t idir;
     doublereal abss;
-    integer oldm;
+    aocl_int64_t oldm;
     doublereal cosl;
-    integer isub, iter;
+    aocl_int64_t isub, iter;
     doublereal unfl, sinl, cosr, smin, smax, sinr;
-    extern /* Subroutine */
-        void
-        drot_(integer *, doublereal *, integer *, doublereal *, integer *, doublereal *,
-              doublereal *),
-        dlas2_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *),
-        dscal_(integer *, doublereal *, doublereal *, integer *);
-    extern logical lsame_(char *, char *, integer, integer);
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     doublereal oldcs;
-    extern /* Subroutine */
-        void
-        dlasr_(char *, char *, char *, integer *, integer *, doublereal *, doublereal *,
-               doublereal *, integer *);
-    integer oldll;
+    aocl_int64_t oldll;
     doublereal shift, sigmn, oldsn;
-    extern /* Subroutine */
-        void
-        dswap_(integer *, doublereal *, integer *, doublereal *, integer *);
     doublereal sigmx;
     logical lower;
-    extern /* Subroutine */
-        void
-        dlasq1_(integer *, doublereal *, doublereal *, doublereal *, integer *),
-        dlasv2_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *,
-                doublereal *, doublereal *, doublereal *);
+    extern void dlasv2_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *,
+              doublereal *, doublereal *, doublereal *);
     extern doublereal dlamch_(char *);
-    extern /* Subroutine */
-        void
-        dlartg_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal sminoa, thresh;
     logical rotate;
     doublereal tolmul;
@@ -376,7 +381,7 @@ void dbdsqr_(char *uplo, integer *n, integer *ncvt, integer *nru, integer *ncc, 
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("DBDSQR", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("DBDSQR", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -394,7 +399,7 @@ void dbdsqr_(char *uplo, integer *n, integer *ncvt, integer *nru, integer *ncc, 
     /* If no singular vectors desired, use qd algorithm */
     if(!rotate)
     {
-        dlasq1_(n, &d__[1], &e[1], &work[1], info);
+        aocl_lapack_dlasq1(n, &d__[1], &e[1], &work[1], info);
         /* If INFO equals 2, dqds didn't finish, try to finish */
         if(*info != 2)
         {
@@ -428,11 +433,11 @@ void dbdsqr_(char *uplo, integer *n, integer *ncvt, integer *nru, integer *ncc, 
         /* Update singular vectors if desired */
         if(*nru > 0)
         {
-            dlasr_("R", "V", "F", nru, n, &work[1], &work[*n], &u[u_offset], ldu);
+            aocl_lapack_dlasr("R", "V", "F", nru, n, &work[1], &work[*n], &u[u_offset], ldu);
         }
         if(*ncc > 0)
         {
-            dlasr_("L", "V", "F", n, ncc, &work[1], &work[*n], &c__[c_offset], ldc);
+            aocl_lapack_dlasr("L", "V", "F", n, ncc, &work[1], &work[*n], &c__[c_offset], ldc);
         }
     }
     /* Compute singular values to relative accuracy TOL */
@@ -577,15 +582,16 @@ L90:
         /* Compute singular vectors, if desired */
         if(*ncvt > 0)
         {
-            drot_(ncvt, &vt[m - 1 + vt_dim1], ldvt, &vt[m + vt_dim1], ldvt, &cosr, &sinr);
+            aocl_blas_drot(ncvt, &vt[m - 1 + vt_dim1], ldvt, &vt[m + vt_dim1], ldvt, &cosr, &sinr);
         }
         if(*nru > 0)
         {
-            drot_(nru, &u[(m - 1) * u_dim1 + 1], &c__1, &u[m * u_dim1 + 1], &c__1, &cosl, &sinl);
+            aocl_blas_drot(nru, &u[(m - 1) * u_dim1 + 1], &c__1, &u[m * u_dim1 + 1], &c__1, &cosl,
+                           &sinl);
         }
         if(*ncc > 0)
         {
-            drot_(ncc, &c__[m - 1 + c_dim1], ldc, &c__[m + c_dim1], ldc, &cosl, &sinl);
+            aocl_blas_drot(ncc, &c__[m - 1 + c_dim1], ldc, &c__[m + c_dim1], ldc, &cosl, &sinl);
         }
         m += -2;
         goto L60;
@@ -741,19 +747,20 @@ L90:
             if(*ncvt > 0)
             {
                 i__1 = m - ll + 1;
-                dlasr_("L", "V", "F", &i__1, ncvt, &work[1], &work[*n], &vt[ll + vt_dim1], ldvt);
+                aocl_lapack_dlasr("L", "V", "F", &i__1, ncvt, &work[1], &work[*n],
+                                  &vt[ll + vt_dim1], ldvt);
             }
             if(*nru > 0)
             {
                 i__1 = m - ll + 1;
-                dlasr_("R", "V", "F", nru, &i__1, &work[nm12 + 1], &work[nm13 + 1],
-                       &u[ll * u_dim1 + 1], ldu);
+                aocl_lapack_dlasr("R", "V", "F", nru, &i__1, &work[nm12 + 1], &work[nm13 + 1],
+                                  &u[ll * u_dim1 + 1], ldu);
             }
             if(*ncc > 0)
             {
                 i__1 = m - ll + 1;
-                dlasr_("L", "V", "F", &i__1, ncc, &work[nm12 + 1], &work[nm13 + 1],
-                       &c__[ll + c_dim1], ldc);
+                aocl_lapack_dlasr("L", "V", "F", &i__1, ncc, &work[nm12 + 1], &work[nm13 + 1],
+                                  &c__[ll + c_dim1], ldc);
             }
             /* Test convergence */
             if((d__1 = e[m - 1], f2c_abs(d__1)) <= thresh)
@@ -792,18 +799,20 @@ L90:
             if(*ncvt > 0)
             {
                 i__1 = m - ll + 1;
-                dlasr_("L", "V", "B", &i__1, ncvt, &work[nm12 + 1], &work[nm13 + 1],
-                       &vt[ll + vt_dim1], ldvt);
+                aocl_lapack_dlasr("L", "V", "B", &i__1, ncvt, &work[nm12 + 1], &work[nm13 + 1],
+                                  &vt[ll + vt_dim1], ldvt);
             }
             if(*nru > 0)
             {
                 i__1 = m - ll + 1;
-                dlasr_("R", "V", "B", nru, &i__1, &work[1], &work[*n], &u[ll * u_dim1 + 1], ldu);
+                aocl_lapack_dlasr("R", "V", "B", nru, &i__1, &work[1], &work[*n],
+                                  &u[ll * u_dim1 + 1], ldu);
             }
             if(*ncc > 0)
             {
                 i__1 = m - ll + 1;
-                dlasr_("L", "V", "B", &i__1, ncc, &work[1], &work[*n], &c__[ll + c_dim1], ldc);
+                aocl_lapack_dlasr("L", "V", "B", &i__1, ncc, &work[1], &work[*n], &c__[ll + c_dim1],
+                                  ldc);
             }
             /* Test convergence */
             if((d__1 = e[ll], f2c_abs(d__1)) <= thresh)
@@ -854,19 +863,20 @@ L90:
             if(*ncvt > 0)
             {
                 i__1 = m - ll + 1;
-                dlasr_("L", "V", "F", &i__1, ncvt, &work[1], &work[*n], &vt[ll + vt_dim1], ldvt);
+                aocl_lapack_dlasr("L", "V", "F", &i__1, ncvt, &work[1], &work[*n],
+                                  &vt[ll + vt_dim1], ldvt);
             }
             if(*nru > 0)
             {
                 i__1 = m - ll + 1;
-                dlasr_("R", "V", "F", nru, &i__1, &work[nm12 + 1], &work[nm13 + 1],
-                       &u[ll * u_dim1 + 1], ldu);
+                aocl_lapack_dlasr("R", "V", "F", nru, &i__1, &work[nm12 + 1], &work[nm13 + 1],
+                                  &u[ll * u_dim1 + 1], ldu);
             }
             if(*ncc > 0)
             {
                 i__1 = m - ll + 1;
-                dlasr_("L", "V", "F", &i__1, ncc, &work[nm12 + 1], &work[nm13 + 1],
-                       &c__[ll + c_dim1], ldc);
+                aocl_lapack_dlasr("L", "V", "F", &i__1, ncc, &work[nm12 + 1], &work[nm13 + 1],
+                                  &c__[ll + c_dim1], ldc);
             }
             /* Test convergence */
             if((d__1 = e[m - 1], f2c_abs(d__1)) <= thresh)
@@ -918,18 +928,20 @@ L90:
             if(*ncvt > 0)
             {
                 i__1 = m - ll + 1;
-                dlasr_("L", "V", "B", &i__1, ncvt, &work[nm12 + 1], &work[nm13 + 1],
-                       &vt[ll + vt_dim1], ldvt);
+                aocl_lapack_dlasr("L", "V", "B", &i__1, ncvt, &work[nm12 + 1], &work[nm13 + 1],
+                                  &vt[ll + vt_dim1], ldvt);
             }
             if(*nru > 0)
             {
                 i__1 = m - ll + 1;
-                dlasr_("R", "V", "B", nru, &i__1, &work[1], &work[*n], &u[ll * u_dim1 + 1], ldu);
+                aocl_lapack_dlasr("R", "V", "B", nru, &i__1, &work[1], &work[*n],
+                                  &u[ll * u_dim1 + 1], ldu);
             }
             if(*ncc > 0)
             {
                 i__1 = m - ll + 1;
-                dlasr_("L", "V", "B", &i__1, ncc, &work[1], &work[*n], &c__[ll + c_dim1], ldc);
+                aocl_lapack_dlasr("L", "V", "B", &i__1, ncc, &work[1], &work[*n], &c__[ll + c_dim1],
+                                  ldc);
             }
         }
     }
@@ -946,7 +958,7 @@ L160:
             /* Change sign of singular vectors, if desired */
             if(*ncvt > 0)
             {
-                dscal_(ncvt, &c_b72, &vt[i__ + vt_dim1], ldvt);
+                aocl_blas_dscal(ncvt, &c_b72, &vt[i__ + vt_dim1], ldvt);
             }
         }
         /* L170: */
@@ -976,15 +988,16 @@ L160:
             d__[*n + 1 - i__] = smin;
             if(*ncvt > 0)
             {
-                dswap_(ncvt, &vt[isub + vt_dim1], ldvt, &vt[*n + 1 - i__ + vt_dim1], ldvt);
+                aocl_blas_dswap(ncvt, &vt[isub + vt_dim1], ldvt, &vt[*n + 1 - i__ + vt_dim1], ldvt);
             }
             if(*nru > 0)
             {
-                dswap_(nru, &u[isub * u_dim1 + 1], &c__1, &u[(*n + 1 - i__) * u_dim1 + 1], &c__1);
+                aocl_blas_dswap(nru, &u[isub * u_dim1 + 1], &c__1, &u[(*n + 1 - i__) * u_dim1 + 1],
+                                &c__1);
             }
             if(*ncc > 0)
             {
-                dswap_(ncc, &c__[isub + c_dim1], ldc, &c__[*n + 1 - i__ + c_dim1], ldc);
+                aocl_blas_dswap(ncc, &c__[isub + c_dim1], ldc, &c__[*n + 1 - i__ + c_dim1], ldc);
             }
         }
         /* L190: */

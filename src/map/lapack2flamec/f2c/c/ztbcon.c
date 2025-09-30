@@ -143,9 +143,28 @@ static aocl_int64_t c__1 = 1;
 /* > \ingroup complex16OTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void ztbcon_(char *norm, char *uplo, char *diag, integer *n, integer *kd, doublecomplex *ab,
-             integer *ldab, doublereal *rcond, doublecomplex *work, doublereal *rwork,
-             integer *info)
+/** Generated wrapper function */
+void ztbcon_(char *norm, char *uplo, char *diag, aocl_int_t *n, aocl_int_t *kd, dcomplex *ab,
+             aocl_int_t *ldab, doublereal *rcond, dcomplex *work, doublereal *rwork,
+             aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_ztbcon(norm, uplo, diag, n, kd, ab, ldab, rcond, work, rwork, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t kd_64 = *kd;
+    aocl_int64_t ldab_64 = *ldab;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_ztbcon(norm, uplo, diag, &n_64, &kd_64, ab, &ldab_64, rcond, work, rwork, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_ztbcon(char *norm, char *uplo, char *diag, aocl_int64_t *n, aocl_int64_t *kd,
+                        dcomplex *ab, aocl_int64_t *ldab, doublereal *rcond,
+                        dcomplex *work, doublereal *rwork, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("ztbcon inputs: norm %c, uplo %c, diag %c, n %" FLA_IS ", kd %" FLA_IS
@@ -159,28 +178,14 @@ void ztbcon_(char *norm, char *uplo, char *diag, integer *n, integer *kd, double
     /* Local variables */
     aocl_int64_t ix, kase, kase1;
     doublereal scale;
-    extern logical lsame_(char *, char *, integer, integer);
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     integer isave[3];
     doublereal anorm;
     logical upper;
     doublereal xnorm;
-    extern /* Subroutine */
-        void
-        zlacn2_(integer *, doublecomplex *, doublecomplex *, doublereal *, integer *, integer *);
     extern doublereal dlamch_(char *);
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal ainvnm;
-    extern integer izamax_(integer *, doublecomplex *, integer *);
-    extern doublereal zlantb_(char *, char *, char *, integer *, integer *, doublecomplex *,
-                              integer *, doublereal *);
     logical onenrm;
-    extern /* Subroutine */
-        void
-        zlatbs_(char *, char *, char *, char *, integer *, integer *, doublecomplex *, integer *,
-                doublecomplex *, doublereal *, doublereal *, integer *),
-        zdrscl_(integer *, doublereal *, doublecomplex *, integer *);
     char normin[1];
     doublereal smlnum;
     logical nounit;
@@ -249,7 +254,7 @@ void ztbcon_(char *norm, char *uplo, char *diag, integer *n, integer *kd, double
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("ZTBCON", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("ZTBCON", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -280,20 +285,20 @@ void ztbcon_(char *norm, char *uplo, char *diag, integer *n, integer *kd, double
         }
         kase = 0;
     L10:
-        zlacn2_(n, &work[*n + 1], &work[1], &ainvnm, &kase, isave);
+        aocl_lapack_zlacn2(n, &work[*n + 1], &work[1], &ainvnm, &kase, isave);
         if(kase != 0)
         {
             if(kase == kase1)
             {
                 /* Multiply by inv(A). */
-                zlatbs_(uplo, "No transpose", diag, normin, n, kd, &ab[ab_offset], ldab, &work[1],
-                        &scale, &rwork[1], info);
+                aocl_lapack_zlatbs(uplo, "No transpose", diag, normin, n, kd, &ab[ab_offset], ldab,
+                                   &work[1], &scale, &rwork[1], info);
             }
             else
             {
                 /* Multiply by inv(A**H). */
-                zlatbs_(uplo, "Conjugate transpose", diag, normin, n, kd, &ab[ab_offset], ldab,
-                        &work[1], &scale, &rwork[1], info);
+                aocl_lapack_zlatbs(uplo, "Conjugate transpose", diag, normin, n, kd, &ab[ab_offset],
+                                   ldab, &work[1], &scale, &rwork[1], info);
             }
             *(unsigned char *)normin = 'Y';
             /* Multiply by 1/SCALE if doing so will not cause overflow. */

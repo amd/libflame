@@ -15,27 +15,27 @@ FLA_Error FLA_Accum_T_UT_fr_blk_var2( FLA_Obj A, FLA_Obj t, FLA_Obj T );
 
 FLA_Error FLA_Accum_T_UT_fr_opt_var1( FLA_Obj A, FLA_Obj t, FLA_Obj T );
 
-FLA_Error FLA_Accum_T_UT_fr_ops_var1( integer m_A,
-                                      integer n_A,
-                                      float* A, integer rs_A, integer cs_A,
-                                      integer m_t,
-                                      float* t, integer inc_t,
-                                      float* T, integer rs_T, integer cs_T );
-FLA_Error FLA_Accum_T_UT_fr_opd_var1( integer m_A,
-                                      integer n_A,
-                                      double* A, integer rs_A, integer cs_A,
-                                      integer m_t,
-                                      double* t, integer inc_t,
-                                      double* T, integer rs_T, integer cs_T );
-FLA_Error FLA_Accum_T_UT_fr_opc_var1( integer m_A,
-                                      integer n_A,
-                                      scomplex* A, integer rs_A, integer cs_A,
-                                      integer m_t,
-                                      scomplex* t, integer inc_t,
-                                      scomplex* T, integer rs_T, integer cs_T );
-FLA_Error FLA_Accum_T_UT_fr_opz_var1( integer m_A,
-                                      integer n_A,
-                                      dcomplex* A, integer rs_A, integer cs_A,
-                                      integer m_t,
-                                      dcomplex* t, integer inc_t,
-                                      dcomplex* T, integer rs_T, integer cs_T );
+FLA_Error FLA_Accum_T_UT_fr_ops_var1( fla_dim_t m_A,
+                                      fla_dim_t n_A,
+                                      float* A, fla_dim_t rs_A, fla_dim_t cs_A,
+                                      fla_dim_t m_t,
+                                      float* t, fla_dim_t inc_t,
+                                      float* T, fla_dim_t rs_T, fla_dim_t cs_T );
+FLA_Error FLA_Accum_T_UT_fr_opd_var1( fla_dim_t m_A,
+                                      fla_dim_t n_A,
+                                      double* A, fla_dim_t rs_A, fla_dim_t cs_A,
+                                      fla_dim_t m_t,
+                                      double* t, fla_dim_t inc_t,
+                                      double* T, fla_dim_t rs_T, fla_dim_t cs_T );
+FLA_Error FLA_Accum_T_UT_fr_opc_var1( fla_dim_t m_A,
+                                      fla_dim_t n_A,
+                                      scomplex* A, fla_dim_t rs_A, fla_dim_t cs_A,
+                                      fla_dim_t m_t,
+                                      scomplex* t, fla_dim_t inc_t,
+                                      scomplex* T, fla_dim_t rs_T, fla_dim_t cs_T );
+FLA_Error FLA_Accum_T_UT_fr_opz_var1( fla_dim_t m_A,
+                                      fla_dim_t n_A,
+                                      dcomplex* A, fla_dim_t rs_A, fla_dim_t cs_A,
+                                      fla_dim_t m_t,
+                                      dcomplex* t, fla_dim_t inc_t,
+                                      dcomplex* T, fla_dim_t rs_T, fla_dim_t cs_T );

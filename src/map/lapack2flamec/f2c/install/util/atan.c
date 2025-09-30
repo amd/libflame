@@ -13,13 +13,13 @@ double d_atan(doublereal *x)
     return (atan(*x));
 }
 /*
-void c_atan(complex *r, complex *z)
+void c_atan(scomplex *r, scomplex *z)
 {
   double _Complex ret_val = catan(*z);
   r->r = creal(ret_val);
   r->i = cimag(ret_val);
 }
-void z_atan(doublecomplex *r, doublecomplex *z)
+void z_atan(dcomplex *r, dcomplex *z)
 {
   double _Complex ret_val = catan(*z);
   r->r = creal(ret_val);

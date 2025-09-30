@@ -116,8 +116,24 @@ static aocl_int64_t c__1 = 1;
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void cptcon_(integer *n, real *d__, complex *e, real *anorm, real *rcond, real *rwork,
-             integer *info)
+/** Generated wrapper function */
+void cptcon_(aocl_int_t *n, real *d__, scomplex *e, real *anorm, real *rcond, real *rwork,
+             aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_cptcon(n, d__, e, anorm, rcond, rwork, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_cptcon(&n_64, d__, e, anorm, rcond, rwork, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_cptcon(aocl_int64_t *n, real *d__, scomplex *e, real *anorm, real *rcond,
+                        real *rwork, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -133,13 +149,9 @@ void cptcon_(integer *n, real *d__, complex *e, real *anorm, real *rcond, real *
     aocl_int64_t i__1;
     real r__1;
     /* Builtin functions */
-    double c_abs(complex *);
+    double c_abs(scomplex *);
     /* Local variables */
-    integer i__, ix;
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    extern integer isamax_(integer *, real *, integer *);
+    aocl_int64_t i__, ix;
     real ainvnm;
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -179,7 +191,7 @@ void cptcon_(integer *n, real *d__, complex *e, real *anorm, real *rcond, real *
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("CPTCON", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("CPTCON", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
@@ -227,7 +239,7 @@ void cptcon_(integer *n, real *d__, complex *e, real *anorm, real *rcond, real *
         /* L30: */
     }
     /* Compute AINVNM = fla_max(x(i)), 1<=i<=n. */
-    ix = isamax_(n, &rwork[1], &c__1);
+    ix = aocl_blas_isamax(n, &rwork[1], &c__1);
     ainvnm = (r__1 = rwork[ix], f2c_abs(r__1));
     /* Compute the reciprocal condition number. */
     if(ainvnm != 0.f)

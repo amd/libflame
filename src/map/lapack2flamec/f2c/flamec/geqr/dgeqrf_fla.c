@@ -6,27 +6,24 @@
 #include "FLA_f2c.h" /* Table of constant values */
 #include "fla_lapack_x86_common.h"
 #if !FLA_ENABLE_AMD_OPT
-static integer c__1 = 1;
+static aocl_int64_t c__1 = 1;
 #endif
-static integer c_n1 = -1;
-static integer c__3 = 3;
-static integer c__2 = 2;
+static aocl_int64_t c_n1 = -1;
+static aocl_int64_t c__3 = 3;
+static aocl_int64_t c__2 = 2;
 
 extern int fla_thread_get_num_threads();
 
-integer get_block_size_dgeqrf(integer *m, integer *n);
+integer get_block_size_dgeqrf(aocl_int64_t *m, aocl_int64_t *n);
 
 #if FLA_ENABLE_AMD_OPT
-static void dgeqrf_mt_large(integer gm, integer gn, doublereal *a, integer lda, doublereal *tau,
-                            doublereal *work, integer nthreads, integer *info);
-static integer dgeqrf_mt_large_num_threads(integer gm, integer gn);
-static integer dgeqrf_mt_large_lwork(integer gm, integer gn, integer num_threads);
-void dgeqr2_fla(integer *, integer *, doublereal *, integer *, doublereal *, doublereal *,
-                integer *);
-void dlarfb_(char *, char *, char *, char *, integer *, integer *, integer *, doublereal *,
-             integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *);
-void dlarft_(char *, char *, integer *, integer *, doublereal *, integer *, doublereal *,
-             doublereal *, integer *);
+static void dgeqrf_mt_large(aocl_int64_t gm, aocl_int64_t gn, doublereal *a, aocl_int64_t lda,
+                            doublereal *tau, doublereal *work, aocl_int64_t nthreads,
+                            aocl_int64_t *info);
+static integer dgeqrf_mt_large_num_threads(aocl_int64_t gm, aocl_int64_t gn);
+static integer dgeqrf_mt_large_lwork(aocl_int64_t gm, aocl_int64_t gn, aocl_int64_t num_threads);
+void dgeqr2_fla(aocl_int64_t *, aocl_int64_t *, doublereal *, aocl_int64_t *, doublereal *,
+                doublereal *, aocl_int64_t *);
 #endif
 
 /* > \brief \b DGEQRF */
@@ -171,33 +168,22 @@ v(i+1:m) is stored on exit in A(i+1:m,i), */
 /* ===================================================================== */
 /* Subroutine */
 
-void dgeqrf_fla(integer *m, integer *n, doublereal *a, integer *lda, doublereal *tau,
-                doublereal *work, integer *lwork, integer *info)
+void dgeqrf_fla(aocl_int64_t *m, aocl_int64_t *n, doublereal *a, aocl_int64_t *lda, doublereal *tau,
+                doublereal *work, aocl_int64_t *lwork, aocl_int64_t *info)
 {
     /* System generated locals */
-    integer a_dim1, a_offset, i__1, i__2, i__3, i__4;
+    aocl_int64_t a_dim1, a_offset, i__1, i__2, i__3, i__4;
     /* Local variables */
-    integer i__, k, nbmin, iinfo;
+    aocl_int64_t i__, k, nbmin, iinfo;
     extern /* Subroutine */
         void
-        dgeqr2_fla(integer *, integer *, doublereal *, integer *, doublereal *, doublereal *,
-                   integer *);
-    integer ib, nb;
-    extern /* Subroutine */
-        void
-        dlarfb_(char *, char *, char *, char *, integer *, integer *, integer *, doublereal *,
-                integer *, doublereal *, integer *, doublereal *, integer *, doublereal *,
-                integer *);
-    integer nx;
-    extern /* Subroutine */
-        void
-        dlarft_(char *, char *, integer *, integer *, doublereal *, integer *, doublereal *,
-                doublereal *, integer *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
-    integer ldwork, lwkopt;
+        dgeqr2_fla(aocl_int64_t *, aocl_int64_t *, doublereal *, aocl_int64_t *, doublereal *,
+                   doublereal *, aocl_int64_t *);
+    aocl_int64_t ib, nb;
+    aocl_int64_t nx;
+    aocl_int64_t ldwork, lwkopt;
     logical lquery;
-    integer iws;
+    aocl_int64_t iws;
     /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -231,14 +217,14 @@ void dgeqrf_fla(integer *m, integer *n, doublereal *a, integer *lda, doublereal 
 #if FLA_ENABLE_AMD_OPT
     nb = get_block_size_dgeqrf(m, n);
 #else
-    nb = ilaenv_(&c__1, "DGEQRF", " ", m, n, &c_n1, &c_n1);
+    nb = aocl_lapack_ilaenv(&c__1, "DGEQRF", " ", m, n, &c_n1, &c_n1);
 #endif
 
     lwkopt = *n * nb;
 #if FLA_ENABLE_AMD_OPT && FLA_OPENMP_MULTITHREADING
     /* If the matrix is large, use the multithreaded version */
     /* Need to tune this threshold */
-    integer opt_mt_threads = 1;
+    aocl_int64_t opt_mt_threads = 1;
     if(*m >= FLA_DGEQRF_MT_LARGE_M_THRESH && *n >= FLA_DGEQRF_MT_LARGE_N_THRESH)
     {
         opt_mt_threads = dgeqrf_mt_large_num_threads(*m, *n);
@@ -266,7 +252,7 @@ void dgeqrf_fla(integer *m, integer *n, doublereal *a, integer *lda, doublereal 
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("DGEQRF", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("DGEQRF", &i__1, (ftnlen)6);
         return;
     }
     else if(lquery)
@@ -313,7 +299,7 @@ void dgeqrf_fla(integer *m, integer *n, doublereal *a, integer *lda, doublereal 
         /* Determine when to cross over from blocked to unblocked code. */
         /* Computing MAX */
         i__1 = 0;
-        i__2 = ilaenv_(&c__3, "DGEQRF", " ", m, n, &c_n1, &c_n1); // , expr subst
+        i__2 = aocl_lapack_ilaenv(&c__3, "DGEQRF", " ", m, n, &c_n1, &c_n1); // , expr subst
         nx = fla_max(i__1, i__2);
         if(nx < k)
         {
@@ -327,7 +313,7 @@ void dgeqrf_fla(integer *m, integer *n, doublereal *a, integer *lda, doublereal 
                 nb = *lwork / ldwork;
                 /* Computing MAX */
                 i__1 = 2;
-                i__2 = ilaenv_(&c__2, "DGEQRF", " ", m, n, &c_n1, &c_n1); // , expr subst
+                i__2 = aocl_lapack_ilaenv(&c__2, "DGEQRF", " ", m, n, &c_n1, &c_n1); // , expr subst
                 nbmin = fla_max(i__1, i__2);
             }
         }
@@ -363,14 +349,14 @@ void dgeqrf_fla(integer *m, integer *n, doublereal *a, integer *lda, doublereal 
                 /* H = H(i) H(i+1) . . . H(i+ib-1) */
 
                 i__3 = *m - i__ + 1;
-                dlarft_("Forward", "Columnwise", &i__3, &ib, &a[i__ + i__ * a_dim1], lda, &tau[i__],
-                        &work[1], &ldwork);
+                aocl_lapack_dlarft("Forward", "Columnwise", &i__3, &ib, &a[i__ + i__ * a_dim1], lda,
+                                   &tau[i__], &work[1], &ldwork);
                 /* Apply H**T to A(i:m,i+ib:n) from the left */
                 i__3 = *m - i__ + 1;
                 i__4 = *n - i__ - ib + 1;
-                dlarfb_("Left", "Transpose", "Forward", "Columnwise", &i__3, &i__4, &ib,
-                        &a[i__ + i__ * a_dim1], lda, &work[1], &ldwork,
-                        &a[i__ + (i__ + ib) * a_dim1], lda, &work[ib + 1], &ldwork);
+                aocl_lapack_dlarfb("Left", "Transpose", "Forward", "Columnwise", &i__3, &i__4, &ib,
+                                   &a[i__ + i__ * a_dim1], lda, &work[1], &ldwork,
+                                   &a[i__ + (i__ + ib) * a_dim1], lda, &work[ib + 1], &ldwork);
             }
             /* L10: */
         }
@@ -402,9 +388,9 @@ void dgeqrf_fla(integer *m, integer *n, doublereal *a, integer *lda, doublereal 
     /* End of DGEQRF */
 }
 
-integer get_block_size_dgeqrf(integer *m, integer *n)
+integer get_block_size_dgeqrf(aocl_int64_t *m, aocl_int64_t *n)
 {
-    integer block_size;
+    aocl_int64_t block_size;
 
     /* Set block_size=32 for small sizes */
     if(*m <= 17 && *n <= 17)
@@ -444,10 +430,10 @@ integer get_block_size_dgeqrf(integer *m, integer *n)
 #if FLA_ENABLE_AMD_OPT && FLA_OPENMP_MULTITHREADING
 
 /* Returns the optimial number of threads to use for dgeqrf_mt_large */
-static integer dgeqrf_mt_large_num_threads(integer gm, integer gn)
+static integer dgeqrf_mt_large_num_threads(aocl_int64_t gm, aocl_int64_t gn)
 {
     long long num_elems = (long long)gm * gn;
-    integer opt_nthreads;
+    aocl_int64_t opt_nthreads;
     if(num_elems <= FLA_DGEQRF_MT_THRESHOLD_8_THREADS)
     {
         opt_nthreads = 8;
@@ -461,51 +447,54 @@ static integer dgeqrf_mt_large_num_threads(integer gm, integer gn)
 
 /* Returns the number of containers needed for given nb items of size item_size
  * to fit in a container of size container_size */
-static inline size_t containers_needed_for_size(integer nb, size_t item_size, size_t container_size)
+static inline size_t containers_needed_for_size(aocl_int64_t nb, size_t item_size,
+                                                size_t container_size)
 {
     size_t size_needed = item_size * nb;
     return (size_needed - 1) / container_size + 1;
 }
 
 /* Returns the optimal lwork for multithreaded dgeqrf */
-static integer dgeqrf_mt_large_lwork(integer gm, integer gn, integer num_threads)
+static integer dgeqrf_mt_large_lwork(aocl_int64_t gm, aocl_int64_t gn, aocl_int64_t num_threads)
 {
 
-    integer nb = FLA_DGEQRF_MT_LARGE_PANEL_SIZE;
+    aocl_int64_t nb = FLA_DGEQRF_MT_LARGE_PANEL_SIZE;
 
     /* Number of panels */
-    integer nt = ((gn - 1) / nb) + 1;
+    aocl_int64_t nt = ((gn - 1) / nb) + 1;
 
     /* Storage to keep triangular factors for each panel */
-    integer triangular_factor_req = (nb * nb) * nt;
+    aocl_int64_t triangular_factor_req = (nb * nb) * nt;
 
-    integer per_thread_work_req = (nb * nb) * num_threads;
+    aocl_int64_t per_thread_work_req = (nb * nb) * num_threads;
 
     /* Dependency list to keep track of which panels are ready */
-    integer depend_list_req = containers_needed_for_size(nt, sizeof(uint8_t), sizeof(doublereal));
+    aocl_int64_t depend_list_req
+        = containers_needed_for_size(nt, sizeof(uint8_t), sizeof(doublereal));
 
-    integer lwork = triangular_factor_req + per_thread_work_req + depend_list_req;
+    aocl_int64_t lwork = triangular_factor_req + per_thread_work_req + depend_list_req;
 
     return lwork;
 }
 
-static void dgeqrf_large_mt_thread_fn(integer m, integer n, doublereal *a, integer lda,
-                                      doublereal *tau, doublereal *T_storage, uint8_t *a_dependency,
-                                      integer nb, integer k, doublereal *per_thread_work,
-                                      integer per_thread_work_size, integer *info)
+static void dgeqrf_large_mt_thread_fn(aocl_int64_t m, aocl_int64_t n, doublereal *a,
+                                      aocl_int64_t lda, doublereal *tau, doublereal *T_storage,
+                                      uint8_t *a_dependency, aocl_int64_t nb, aocl_int64_t k,
+                                      doublereal *per_thread_work,
+                                      aocl_int64_t per_thread_work_size, aocl_int64_t *info)
 {
     /* Get the current thread number */
-    integer thread_num = omp_get_thread_num();
-    integer iinfo;
+    aocl_int64_t thread_num = omp_get_thread_num();
+    aocl_int64_t iinfo;
     /* Get the thread-local workspace */
     doublereal *t_work = per_thread_work + thread_num * per_thread_work_size;
 
-    integer ldwork = nb;
+    aocl_int64_t ldwork = nb;
 
     /* Apply block reflector to all panels in left
      * columns of the current block.
      */
-    for(integer i = 0; i < fla_min(m, k); i += nb)
+    for(aocl_int64_t i = 0; i < fla_min(m, k); i += nb)
     {
         /* If the block reflector is not ready, wait for it */
         while(a_dependency[i / nb] == 0)
@@ -517,14 +506,14 @@ static void dgeqrf_large_mt_thread_fn(integer m, integer n, doublereal *a, integ
         }
 
         /* Apply the block reflector to the current panel */
-        integer mvai = m - i;
-        integer n_reflector = fla_min(mvai, nb);
-        dlarfb_("Left", "Transpose", "Forward", "Columnwise", &mvai, &n, &n_reflector,
-                &a[i + i * lda], &lda, T_storage + (nb * i), &nb, &a[k * lda + i], &lda, t_work,
-                &ldwork);
+        aocl_int64_t mvai = m - i;
+        aocl_int64_t n_reflector = fla_min(mvai, nb);
+        aocl_lapack_dlarfb("Left", "Transpose", "Forward", "Columnwise", &mvai, &n, &n_reflector,
+                           &a[i + i * lda], &lda, T_storage + (nb * i), &nb, &a[k * lda + i], &lda,
+                           t_work, &ldwork);
     }
 
-    integer mvak = m - k;
+    aocl_int64_t mvak = m - k;
 
     /* If there are no more rows to process, return */
     if(mvak <= 0)
@@ -543,9 +532,9 @@ static void dgeqrf_large_mt_thread_fn(integer m, integer n, doublereal *a, integ
     }
 
     /* Generate the triangular factor of the block reflector */
-    integer k_reflector = fla_min(mvak, n);
-    dlarft_("Forward", "Columnwise", &mvak, &k_reflector, &a[k * lda + k], &lda, &tau[k],
-            T_storage + (nb * k), &nb);
+    aocl_int64_t k_reflector = fla_min(mvak, n);
+    aocl_lapack_dlarft("Forward", "Columnwise", &mvak, &k_reflector, &a[k * lda + k], &lda, &tau[k],
+                       T_storage + (nb * k), &nb);
 
     /* Set the block reflector as ready */
     a_dependency[k / nb] = 1;
@@ -553,16 +542,17 @@ static void dgeqrf_large_mt_thread_fn(integer m, integer n, doublereal *a, integ
     __asm__ __volatile__("sfence");
 }
 
-static void dgeqrf_mt_large(integer gm, integer gn, doublereal *a, integer lda, doublereal *tau,
-                            doublereal *work, integer nthreads, integer *info)
+static void dgeqrf_mt_large(aocl_int64_t gm, aocl_int64_t gn, doublereal *a, aocl_int64_t lda,
+                            doublereal *tau, doublereal *work, aocl_int64_t nthreads,
+                            aocl_int64_t *info)
 {
 
-    integer nb = FLA_DGEQRF_MT_LARGE_PANEL_SIZE;
+    aocl_int64_t nb = FLA_DGEQRF_MT_LARGE_PANEL_SIZE;
 
-    integer iinfo = 0;
+    aocl_int64_t iinfo = 0;
 
     /* Number of panels */
-    integer nt = ((gn - 1) / nb) + 1;
+    aocl_int64_t nt = ((gn - 1) / nb) + 1;
 
     /* Storage to keep triangular factors for each panel */
     doublereal *T_storage = work;
@@ -579,16 +569,16 @@ static void dgeqrf_mt_large(integer gm, integer gn, doublereal *a, integer lda, 
     memset(a_dependency, 0, nt);
 
     /* Work size for each thread */
-    integer per_thread_work_size = (nb * nb);
+    aocl_int64_t per_thread_work_size = (nb * nb);
 
 /* Schedule threads to process panels
  * Panels are assigned to threads in a round-robin manner
  */
 #pragma omp parallel for num_threads(nthreads) schedule(static, 1) proc_bind(close)
-    for(integer i = 0; i < gn; i += nb)
+    for(aocl_int64_t i = 0; i < gn; i += nb)
     {
         /* Get the number of coulmns in current panel */
-        integer n_thread = fla_min(nb, gn - i);
+        aocl_int64_t n_thread = fla_min(nb, gn - i);
         dgeqrf_large_mt_thread_fn(gm, n_thread, a, lda, tau, T_storage, a_dependency, nb, i,
                                   per_thread_work, per_thread_work_size, &iinfo);
     }

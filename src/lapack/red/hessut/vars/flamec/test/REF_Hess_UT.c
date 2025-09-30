@@ -12,8 +12,8 @@
 
 FLA_Error REF_Hess_UT( FLA_Obj A, FLA_Obj t )
 {
-  integer ilo = 0;
-  integer ihi = FLA_Obj_length( A ) - 1;
+  aocl_int64_t ilo = 0;
+  aocl_int64_t ihi = FLA_Obj_length( A ) - 1;
 
   return FLA_Hess_blk_external( A, t, ilo, ihi );
 }

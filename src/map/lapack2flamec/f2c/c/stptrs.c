@@ -130,8 +130,26 @@ static aocl_int64_t c__1 = 1;
 /* > \ingroup realOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void stptrs_(char *uplo, char *trans, char *diag, integer *n, integer *nrhs, real *ap, real *b,
-             integer *ldb, integer *info)
+/** Generated wrapper function */
+void stptrs_(char *uplo, char *trans, char *diag, aocl_int_t *n, aocl_int_t *nrhs, real *ap,
+             real *b, aocl_int_t *ldb, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_stptrs(uplo, trans, diag, n, nrhs, ap, b, ldb, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t nrhs_64 = *nrhs;
+    aocl_int64_t ldb_64 = *ldb;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_stptrs(uplo, trans, diag, &n_64, &nrhs_64, ap, b, &ldb_64, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_stptrs(char *uplo, char *trans, char *diag, aocl_int64_t *n, aocl_int64_t *nrhs,
+                        real *ap, real *b, aocl_int64_t *ldb, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("stptrs inputs: uplo %c, trans %c, diag %c, n %" FLA_IS ", nrhs %" FLA_IS
@@ -140,13 +158,9 @@ void stptrs_(char *uplo, char *trans, char *diag, integer *n, integer *nrhs, rea
     /* System generated locals */
     aocl_int64_t b_dim1, b_offset, i__1;
     /* Local variables */
-    integer j, jc;
-    extern logical lsame_(char *, char *, integer, integer);
+    aocl_int64_t j, jc;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     logical upper;
-    extern /* Subroutine */
-        void
-        stpsv_(char *, char *, char *, integer *, real *, real *, integer *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical nounit;
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -205,7 +219,7 @@ void stptrs_(char *uplo, char *trans, char *diag, integer *n, integer *nrhs, rea
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("STPTRS", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("STPTRS", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }

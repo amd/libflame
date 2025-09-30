@@ -1,19 +1,12 @@
 #include "FLA_f2c.h"
 
-#ifndef FLA_ENABLE_F2C_DOTC
-
-extern complex cdotu_(integer *n, complex *cx, integer *incx, complex *cy, integer *incy);
-VOID cdotu_f2c_(complex *r, integer *n, complex *cx, integer *incx, complex *cy, integer *incy)
+void aocl_lapack_cdotu_f2c(scomplex *r, aocl_int64_t *n, scomplex *cx, aocl_int64_t *incx, scomplex *cy, aocl_int64_t *incy)
 {
-    *r = cdotu_(n, cx, incx, cy, incy);
+    aocl_blas_cdotu(r, n, cx, incx, cy, incy);
 }
 
-extern doublecomplex zdotu_(integer *n, doublecomplex *zx, integer *incx, doublecomplex *zy,
-                            integer *incy);
-VOID zdotu_f2c_(doublecomplex *r, integer *n, doublecomplex *cx, integer *incx, doublecomplex *cy,
-                integer *incy)
+void aocl_lapack_zdotu_f2c(dcomplex *r, aocl_int64_t *n, dcomplex *cx, aocl_int64_t *incx, dcomplex *cy,
+                aocl_int64_t *incy)
 {
-    *r = zdotu_(n, cx, incx, cy, incy);
+    aocl_blas_zdotu(r, n, cx, incx, cy, incy);
 }
-
-#endif

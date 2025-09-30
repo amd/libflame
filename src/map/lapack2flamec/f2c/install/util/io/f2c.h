@@ -147,8 +147,8 @@ union Multitype
     /* longint j; */
     real r;
     doublereal d;
-    complex c;
-    doublecomplex z;
+    scomplex c;
+    dcomplex z;
 };
 
 typedef union Multitype Multitype;
@@ -226,12 +226,12 @@ void _uninit_f2c(void *x, int type, long len);
 
 int abort_(void);
 
-void c_cos(complex *r, complex *z);
-void c_div(complex *c, complex *a, complex *b);
-void c_exp(complex *r, complex *z);
-void c_log(complex *r, complex *z);
-void c_sin(complex *r, complex *z);
-void c_sqrt(complex *r, complex *z);
+void c_cos(scomplex *r, scomplex *z);
+void c_div(scomplex *c, scomplex *a, scomplex *b);
+void c_exp(scomplex *r, scomplex *z);
+void c_log(scomplex *r, scomplex *z);
+void c_sin(scomplex *r, scomplex *z);
+void c_sqrt(scomplex *r, scomplex *z);
 
 double dtime_(float *tarray);
 
@@ -256,7 +256,7 @@ integer lbit_bits(integer a, integer b, integer len);
 integer lbit_shift(integer a, integer b);
 integer lbit_cshift(integer a, integer b, integer len);
 
-void pow_ci(complex *p, complex *a, integer *b);
+void pow_ci(scomplex *p, scomplex *a, integer *b);
 double pow_dd(doublereal *ap, doublereal *bp);
 double pow_di(doublereal *ap, integer *bp);
 shortint pow_hh(shortint *ap, shortint *bp);
@@ -265,8 +265,8 @@ integer pow_ii(integer *ap, integer *bp);
 longint pow_qq(longint *ap, longint *bp);
 #endif
 double pow_ri(real *ap, integer *bp);
-void pow_zi(doublecomplex *, doublecomplex *, integer *);
-void pow_zz(doublecomplex *r, doublecomplex *a, doublecomplex *b);
+void pow_zi(dcomplex *, dcomplex *, integer *);
+void pow_zz(dcomplex *r, dcomplex *a, dcomplex *b);
 
 #ifdef INTEGER_STAR_8
 longint qbit_bits(longint a, integer b, integer len);
@@ -279,12 +279,12 @@ double r_acos(real *x);
 double r_asin(real *x);
 double r_atan(real *x);
 double r_atn2(real *x, real *y);
-void r_cnjg(complex *r, complex *z);
+void r_cnjg(scomplex *r, scomplex *z);
 double r_cos(real *x);
 double r_cosh(real *x);
 double r_dim(real *a, real *b);
 double r_exp(real *x);
-double r_imag(complex *z);
+double r_imag(scomplex *z);
 double r_int(real *x);
 double r_lg10(real *x);
 double r_log(real *x);
@@ -306,12 +306,12 @@ int s_stop(char *s, ftnlen n);
 ftnint signal_(integer *sigp, void *proc);
 integer system_(register char *s, ftnlen n);
 
-void z_div(doublecomplex *, doublecomplex *, doublecomplex *);
-void z_cos(doublecomplex *r, doublecomplex *z);
-void z_exp(doublecomplex *r, doublecomplex *z);
-void z_log(doublecomplex *r, doublecomplex *z);
-void z_sin(doublecomplex *r, doublecomplex *z);
-void z_sqrt(doublecomplex *r, doublecomplex *z);
+void z_div(dcomplex *, dcomplex *, dcomplex *);
+void z_cos(dcomplex *r, dcomplex *z);
+void z_exp(dcomplex *r, dcomplex *z);
+void z_log(dcomplex *r, dcomplex *z);
+void z_sin(dcomplex *r, dcomplex *z);
+void z_sqrt(dcomplex *r, dcomplex *z);
 
 #ifndef F2C_NO_INLINE_H
 #if defined(__GNUC__)
@@ -320,18 +320,18 @@ void z_sqrt(doublecomplex *r, doublecomplex *z);
 #endif
 
 #if !defined(F2C_INLINE_H)
-double c_abs(const complex *z);
+double c_abs(const scomplex *z);
 double d_abs(const doublereal *x);
 double d_acos(const doublereal *x);
 double d_asin(const doublereal *x);
 double d_atan(const doublereal *x);
 double d_atn2(const doublereal *x, const doublereal *y);
-void d_cnjg(doublecomplex *r, const doublecomplex *z);
+void d_cnjg(dcomplex *r, const dcomplex *z);
 double d_cos(const doublereal *x);
 double d_cosh(const doublereal *x);
 double d_dim(const doublereal *a, const doublereal *b);
 double d_exp(const doublereal *x);
-double d_imag(const doublecomplex *z);
+double d_imag(const dcomplex *z);
 double d_int(const doublereal *x);
 double d_lg10(const doublereal *x);
 double d_log(const doublereal *x);
@@ -366,12 +366,12 @@ integer i_dnnt(const doublereal *x);
 integer i_len(const char *s, ftnlen n);
 integer i_len_trim(const char *s, ftnlen n);
 integer i_mod(const integer *a, const integer *b);
-integer fla_i_nint(const real *x);
+aocl_int64_t fla_i_nint(const real *x);
 integer i_sign(const integer *a, const integer *b);
 integer i_sceiling(const real *x);
 ftnint iargc_(void);
 int s_copy(char *a, const char *b, ftnlen la, ftnlen lb);
-double z_abs(const doublecomplex *z);
+double z_abs(const dcomplex *z);
 #endif /* !F2C_INLINE_H */
 
 /*************************************************************

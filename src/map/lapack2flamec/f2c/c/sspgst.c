@@ -115,11 +115,28 @@ static real c_b11 = 1.f;
 /* > \ingroup realOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void sspgst_(integer *itype, char *uplo, integer *n, real *ap, real *bp, integer *info)
+/** Generated wrapper function */
+void sspgst_(aocl_int_t *itype, char *uplo, aocl_int_t *n, real *ap, real *bp, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_sspgst(itype, uplo, n, ap, bp, info);
+#else
+    aocl_int64_t itype_64 = *itype;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_sspgst(&itype_64, uplo, &n_64, ap, bp, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_sspgst(aocl_int64_t *itype, char *uplo, aocl_int64_t *n, real *ap, real *bp,
+                        aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("sspgst inputs: itype %" FLA_IS ", uplo %c, n %" FLA_IS "", *itype, *uplo,
-             *n);
+                      *n);
     /* System generated locals */
     aocl_int64_t i__1, i__2;
     real r__1;
@@ -130,22 +147,8 @@ void sspgst_(integer *itype, char *uplo, integer *n, real *ap, real *bp, integer
     real akk;
     aocl_int64_t k1k1;
     real bjj, bkk;
-    extern real sdot_(integer *, real *, integer *, real *, integer *);
-    extern /* Subroutine */
-        void
-        sspr2_(char *, integer *, real *, real *, integer *, real *, integer *, real *);
-    extern logical lsame_(char *, char *, integer, integer);
-    extern /* Subroutine */
-        void
-        sscal_(integer *, real *, real *, integer *);
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     logical upper;
-    extern /* Subroutine */
-        void
-        saxpy_(integer *, real *, real *, integer *, real *, integer *),
-        sspmv_(char *, integer *, real *, real *, real *, integer *, real *, real *, integer *),
-        stpmv_(char *, char *, char *, integer *, real *, real *, integer *),
-        stpsv_(char *, char *, char *, integer *, real *, real *, integer *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -186,7 +189,7 @@ void sspgst_(integer *itype, char *uplo, integer *n, real *ap, real *bp, integer
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("SSPGST", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("SSPGST", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -204,14 +207,14 @@ void sspgst_(integer *itype, char *uplo, integer *n, real *ap, real *bp, integer
                 jj += j;
                 /* Compute the j-th column of the upper triangle of A */
                 bjj = bp[jj];
-                stpsv_(uplo, "Transpose", "Nonunit", &j, &bp[1], &ap[j1], &c__1);
+                aocl_blas_stpsv(uplo, "Transpose", "Nonunit", &j, &bp[1], &ap[j1], &c__1);
                 i__2 = j - 1;
-                sspmv_(uplo, &i__2, &c_b9, &ap[1], &bp[j1], &c__1, &c_b11, &ap[j1], &c__1);
+                aocl_blas_sspmv(uplo, &i__2, &c_b9, &ap[1], &bp[j1], &c__1, &c_b11, &ap[j1], &c__1);
                 i__2 = j - 1;
                 r__1 = 1.f / bjj;
                 aocl_blas_sscal(&i__2, &r__1, &ap[j1], &c__1);
                 i__2 = j - 1;
-                ap[jj] = (ap[jj] - sdot_(&i__2, &ap[j1], &c__1, &bp[j1], &c__1)) / bjj;
+                ap[jj] = (ap[jj] - aocl_blas_sdot(&i__2, &ap[j1], &c__1, &bp[j1], &c__1)) / bjj;
                 /* L10: */
             }
         }
@@ -238,11 +241,12 @@ void sspgst_(integer *itype, char *uplo, integer *n, real *ap, real *bp, integer
                     aocl_blas_sscal(&i__2, &r__1, &ap[kk + 1], &c__1);
                     ct = akk * -.5f;
                     i__2 = *n - k;
-                    saxpy_(&i__2, &ct, &bp[kk + 1], &c__1, &ap[kk + 1], &c__1);
+                    aocl_blas_saxpy(&i__2, &ct, &bp[kk + 1], &c__1, &ap[kk + 1], &c__1);
                     i__2 = *n - k;
-                    sspr2_(uplo, &i__2, &c_b9, &ap[kk + 1], &c__1, &bp[kk + 1], &c__1, &ap[k1k1]);
+                    aocl_blas_sspr2(uplo, &i__2, &c_b9, &ap[kk + 1], &c__1, &bp[kk + 1], &c__1,
+                                    &ap[k1k1]);
                     i__2 = *n - k;
-                    saxpy_(&i__2, &ct, &bp[kk + 1], &c__1, &ap[kk + 1], &c__1);
+                    aocl_blas_saxpy(&i__2, &ct, &bp[kk + 1], &c__1, &ap[kk + 1], &c__1);
                     i__2 = *n - k;
                     aocl_blas_stpsv(uplo, "No transpose", "Non-unit", &i__2, &bp[k1k1], &ap[kk + 1],
                                     &c__1);
@@ -268,12 +272,12 @@ void sspgst_(integer *itype, char *uplo, integer *n, real *ap, real *bp, integer
                 akk = ap[kk];
                 bkk = bp[kk];
                 i__2 = k - 1;
-                stpmv_(uplo, "No transpose", "Non-unit", &i__2, &bp[1], &ap[k1], &c__1);
+                aocl_blas_stpmv(uplo, "No transpose", "Non-unit", &i__2, &bp[1], &ap[k1], &c__1);
                 ct = akk * .5f;
                 i__2 = k - 1;
                 aocl_blas_saxpy(&i__2, &ct, &bp[k1], &c__1, &ap[k1], &c__1);
                 i__2 = k - 1;
-                sspr2_(uplo, &i__2, &c_b11, &ap[k1], &c__1, &bp[k1], &c__1, &ap[1]);
+                aocl_blas_sspr2(uplo, &i__2, &c_b11, &ap[k1], &c__1, &bp[k1], &c__1, &ap[1]);
                 i__2 = k - 1;
                 aocl_blas_saxpy(&i__2, &ct, &bp[k1], &c__1, &ap[k1], &c__1);
                 i__2 = k - 1;
@@ -301,8 +305,8 @@ void sspgst_(integer *itype, char *uplo, integer *n, real *ap, real *bp, integer
                 i__2 = *n - j;
                 aocl_blas_sscal(&i__2, &bjj, &ap[jj + 1], &c__1);
                 i__2 = *n - j;
-                sspmv_(uplo, &i__2, &c_b11, &ap[j1j1], &bp[jj + 1], &c__1, &c_b11, &ap[jj + 1],
-                       &c__1);
+                aocl_blas_sspmv(uplo, &i__2, &c_b11, &ap[j1j1], &bp[jj + 1], &c__1, &c_b11,
+                                &ap[jj + 1], &c__1);
                 i__2 = *n - j + 1;
                 aocl_blas_stpmv(uplo, "Transpose", "Non-unit", &i__2, &bp[jj], &ap[jj], &c__1);
                 jj = j1j1;

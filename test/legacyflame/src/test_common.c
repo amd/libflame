@@ -447,7 +447,7 @@ void z_div_t(dcomplex *cp, dcomplex *ap, dcomplex *bp)
    cp->imag = ( a.imag * b.real - a.real * b.imag ) / temp;
 }
 
-/* Division of complex types */
+/* Division of scomplex types */
 
 void c_div_t(scomplex *cp, scomplex *ap, scomplex *bp)
 {

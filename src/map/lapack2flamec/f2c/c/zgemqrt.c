@@ -38,13 +38,13 @@
 /* > */
 /* > \verbatim */
 /* > */
-/* > ZGEMQRT overwrites the general complex M-by-N matrix C with */
+/* > ZGEMQRT overwrites the general scomplex M-by-N matrix C with */
 /* > */
 /* > SIDE = 'L' SIDE = 'R' */
 /* > TRANS = 'N': Q C C Q */
 /* > TRANS = 'C': Q**H C C Q**H */
 /* > */
-/* > where Q is a complex orthogonal matrix defined as the product of K */
+/* > where Q is a scomplex orthogonal matrix defined as the product of K */
 /* > elementary reflectors: */
 /* > */
 /* > Q = H(1) H(2) . . . H(K) = I - V T V**H */
@@ -166,9 +166,34 @@
 /* > \ingroup complex16GEcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void zgemqrt_(char *side, char *trans, integer *m, integer *n, integer *k, integer *nb,
-              doublecomplex *v, integer *ldv, doublecomplex *t, integer *ldt, doublecomplex *c__,
-              integer *ldc, doublecomplex *work, integer *info)
+/** Generated wrapper function */
+void zgemqrt_(char *side, char *trans, aocl_int_t *m, aocl_int_t *n, aocl_int_t *k, aocl_int_t *nb,
+              dcomplex *v, aocl_int_t *ldv, dcomplex *t, aocl_int_t *ldt,
+              dcomplex *c__, aocl_int_t *ldc, dcomplex *work, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_zgemqrt(side, trans, m, n, k, nb, v, ldv, t, ldt, c__, ldc, work, info);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t k_64 = *k;
+    aocl_int64_t nb_64 = *nb;
+    aocl_int64_t ldv_64 = *ldv;
+    aocl_int64_t ldt_64 = *ldt;
+    aocl_int64_t ldc_64 = *ldc;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_zgemqrt(side, trans, &m_64, &n_64, &k_64, &nb_64, v, &ldv_64, t, &ldt_64, c__,
+                        &ldc_64, work, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_zgemqrt(char *side, char *trans, aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *k,
+                         aocl_int64_t *nb, dcomplex *v, aocl_int64_t *ldv, dcomplex *t,
+                         aocl_int64_t *ldt, dcomplex *c__, aocl_int64_t *ldc,
+                         dcomplex *work, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zgemqrt inputs: side %c, trans %c, m %" FLA_IS ", n %" FLA_IS ", k %" FLA_IS
@@ -176,22 +201,14 @@ void zgemqrt_(char *side, char *trans, integer *m, integer *n, integer *k, integ
                       *side, *trans, *m, *n, *k, *nb, *ldv, *ldt, *ldc);
 
     /* System generated locals */
-    integer v_dim1, v_offset, c_dim1, c_offset, t_dim1, t_offset, i__1, i__2, i__3, i__4;
+    aocl_int64_t v_dim1, v_offset, c_dim1, c_offset, t_dim1, t_offset, i__1, i__2, i__3, i__4;
     /* Local variables */
-    integer i__, q, ib, kf;
+    aocl_int64_t i__, q, ib, kf;
     logical left, tran;
-    extern logical lsame_(char *, char *, integer, integer);
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     logical right;
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    extern /* Subroutine */
-        void
-        zlarfb_(char *, char *, char *, char *, integer *, integer *, integer *, doublecomplex *,
-                integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *,
-                integer *);
     logical notran;
-    integer ldwork;
+    aocl_int64_t ldwork;
     /* -- LAPACK computational routine (version 3.7.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -278,7 +295,7 @@ void zgemqrt_(char *side, char *trans, integer *m, integer *n, integer *k, integ
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("ZGEMQRT", &i__1, (ftnlen)7);
+        aocl_blas_xerbla("ZGEMQRT", &i__1, (ftnlen)7);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -299,8 +316,9 @@ void zgemqrt_(char *side, char *trans, integer *m, integer *n, integer *k, integ
             i__4 = *k - i__ + 1; // , expr subst
             ib = fla_min(i__3, i__4);
             i__3 = *m - i__ + 1;
-            zlarfb_("L", "C", "F", "C", &i__3, n, &ib, &v[i__ + i__ * v_dim1], ldv,
-                    &t[i__ * t_dim1 + 1], ldt, &c__[i__ + c_dim1], ldc, &work[1], &ldwork);
+            aocl_lapack_zlarfb("L", "C", "F", "C", &i__3, n, &ib, &v[i__ + i__ * v_dim1], ldv,
+                               &t[i__ * t_dim1 + 1], ldt, &c__[i__ + c_dim1], ldc, &work[1],
+                               &ldwork);
         }
     }
     else if(right && notran)
@@ -314,8 +332,9 @@ void zgemqrt_(char *side, char *trans, integer *m, integer *n, integer *k, integ
             i__4 = *k - i__ + 1; // , expr subst
             ib = fla_min(i__3, i__4);
             i__3 = *n - i__ + 1;
-            zlarfb_("R", "N", "F", "C", m, &i__3, &ib, &v[i__ + i__ * v_dim1], ldv,
-                    &t[i__ * t_dim1 + 1], ldt, &c__[i__ * c_dim1 + 1], ldc, &work[1], &ldwork);
+            aocl_lapack_zlarfb("R", "N", "F", "C", m, &i__3, &ib, &v[i__ + i__ * v_dim1], ldv,
+                               &t[i__ * t_dim1 + 1], ldt, &c__[i__ * c_dim1 + 1], ldc, &work[1],
+                               &ldwork);
         }
     }
     else if(left && notran)
@@ -329,8 +348,9 @@ void zgemqrt_(char *side, char *trans, integer *m, integer *n, integer *k, integ
             i__3 = *k - i__ + 1; // , expr subst
             ib = fla_min(i__2, i__3);
             i__2 = *m - i__ + 1;
-            zlarfb_("L", "N", "F", "C", &i__2, n, &ib, &v[i__ + i__ * v_dim1], ldv,
-                    &t[i__ * t_dim1 + 1], ldt, &c__[i__ + c_dim1], ldc, &work[1], &ldwork);
+            aocl_lapack_zlarfb("L", "N", "F", "C", &i__2, n, &ib, &v[i__ + i__ * v_dim1], ldv,
+                               &t[i__ * t_dim1 + 1], ldt, &c__[i__ + c_dim1], ldc, &work[1],
+                               &ldwork);
         }
     }
     else if(right && tran)
@@ -344,8 +364,9 @@ void zgemqrt_(char *side, char *trans, integer *m, integer *n, integer *k, integ
             i__3 = *k - i__ + 1; // , expr subst
             ib = fla_min(i__2, i__3);
             i__2 = *n - i__ + 1;
-            zlarfb_("R", "C", "F", "C", m, &i__2, &ib, &v[i__ + i__ * v_dim1], ldv,
-                    &t[i__ * t_dim1 + 1], ldt, &c__[i__ * c_dim1 + 1], ldc, &work[1], &ldwork);
+            aocl_lapack_zlarfb("R", "C", "F", "C", m, &i__2, &ib, &v[i__ + i__ * v_dim1], ldv,
+                               &t[i__ * t_dim1 + 1], ldt, &c__[i__ * c_dim1 + 1], ldc, &work[1],
+                               &ldwork);
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT

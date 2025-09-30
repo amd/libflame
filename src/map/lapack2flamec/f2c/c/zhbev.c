@@ -5,7 +5,7 @@
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static doublereal c_b11 = 1.;
-static integer c__1 = 1;
+static aocl_int64_t c__1 = 1;
 /* > \brief <b> ZHBEV computes the eigenvalues and, optionally, the left and/or right eigenvectors
  * for OTHER m atrices</b> */
 /* =========== DOCUMENTATION =========== */
@@ -154,9 +154,30 @@ i */
 /* > \ingroup complex16OTHEReigen */
 /* ===================================================================== */
 /* Subroutine */
-void zhbev_(char *jobz, char *uplo, integer *n, integer *kd, doublecomplex *ab, integer *ldab,
-            doublereal *w, doublecomplex *z__, integer *ldz, doublecomplex *work, doublereal *rwork,
-            integer *info)
+/** Generated wrapper function */
+void zhbev_(char *jobz, char *uplo, aocl_int_t *n, aocl_int_t *kd, dcomplex *ab,
+            aocl_int_t *ldab, doublereal *w, dcomplex *z__, aocl_int_t *ldz,
+            dcomplex *work, doublereal *rwork, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_zhbev(jobz, uplo, n, kd, ab, ldab, w, z__, ldz, work, rwork, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t kd_64 = *kd;
+    aocl_int64_t ldab_64 = *ldab;
+    aocl_int64_t ldz_64 = *ldz;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_zhbev(jobz, uplo, &n_64, &kd_64, ab, &ldab_64, w, z__, &ldz_64, work, rwork,
+                      &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_zhbev(char *jobz, char *uplo, aocl_int64_t *n, aocl_int64_t *kd, dcomplex *ab,
+                       aocl_int64_t *ldab, doublereal *w, dcomplex *z__, aocl_int64_t *ldz,
+                       dcomplex *work, doublereal *rwork, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zhbev inputs: jobz %c, uplo %c, n %" FLA_IS ", kd %" FLA_IS ", ldab %" FLA_IS
@@ -173,35 +194,16 @@ void zhbev_(char *jobz, char *uplo, integer *n, integer *kd, doublecomplex *ab, 
     doublereal anrm;
     aocl_int64_t imax;
     doublereal rmin, rmax;
-    extern /* Subroutine */
-        void
-        dscal_(integer *, doublereal *, doublereal *, integer *);
     doublereal sigma;
-    extern logical lsame_(char *, char *, integer, integer);
-    integer iinfo;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    aocl_int64_t iinfo;
     logical lower, wantz;
     extern doublereal dlamch_(char *);
     aocl_int64_t iscale;
     doublereal safmin;
-    extern doublereal zlanhb_(char *, char *, integer *, integer *, doublecomplex *, integer *,
-                              doublereal *);
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal bignum;
-    extern /* Subroutine */
-        void
-        dsterf_(integer *, doublereal *, doublereal *, integer *),
-        zlascl_(char *, integer *, integer *, doublereal *, doublereal *, integer *, integer *,
-                doublecomplex *, integer *, integer *),
-        zhbtrd_(char *, char *, integer *, integer *, doublecomplex *, integer *, doublereal *,
-                doublereal *, doublecomplex *, integer *, doublecomplex *, integer *);
-    integer indrwk;
+    aocl_int64_t indrwk;
     doublereal smlnum;
-    extern /* Subroutine */
-        void
-        zsteqr_(char *, integer *, doublereal *, doublereal *, doublecomplex *, integer *,
-                doublereal *, integer *);
     /* -- LAPACK driver routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -264,7 +266,7 @@ void zhbev_(char *jobz, char *uplo, integer *n, integer *kd, doublecomplex *ab, 
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("ZHBEV ", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("ZHBEV ", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -328,8 +330,8 @@ void zhbev_(char *jobz, char *uplo, integer *n, integer *kd, doublecomplex *ab, 
     }
     /* Call ZHBTRD to reduce Hermitian band matrix to tridiagonal form. */
     inde = 1;
-    zhbtrd_(jobz, uplo, n, kd, &ab[ab_offset], ldab, &w[1], &rwork[inde], &z__[z_offset], ldz,
-            &work[1], &iinfo);
+    aocl_lapack_zhbtrd(jobz, uplo, n, kd, &ab[ab_offset], ldab, &w[1], &rwork[inde], &z__[z_offset],
+                       ldz, &work[1], &iinfo);
     /* For eigenvalues only, call DSTERF. For eigenvectors, call ZSTEQR. */
     if(!wantz)
     {
@@ -338,7 +340,7 @@ void zhbev_(char *jobz, char *uplo, integer *n, integer *kd, doublecomplex *ab, 
     else
     {
         indrwk = inde + *n;
-        zsteqr_(jobz, n, &w[1], &rwork[inde], &z__[z_offset], ldz, &rwork[indrwk], info);
+        aocl_lapack_zsteqr(jobz, n, &w[1], &rwork[inde], &z__[z_offset], ldz, &rwork[indrwk], info);
     }
     /* If matrix was scaled, then rescale eigenvalues appropriately. */
     if(iscale == 1)

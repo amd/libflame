@@ -103,7 +103,19 @@
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void slaed5_(integer *i__, real *d__, real *z__, real *delta, real *rho, real *dlam)
+/** Generated wrapper function */
+void slaed5_(aocl_int_t *i__, real *d__, real *z__, real *delta, real *rho, real *dlam)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_slaed5(i__, d__, z__, delta, rho, dlam);
+#else
+    aocl_int64_t i___64 = *i__;
+
+    aocl_lapack_slaed5(&i___64, d__, z__, delta, rho, dlam);
+#endif
+}
+
+void aocl_lapack_slaed5(aocl_int64_t *i__, real *d__, real *z__, real *delta, real *rho, real *dlam)
 {
     /* System generated locals */
     real r__1;

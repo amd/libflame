@@ -10,7 +10,7 @@ extern "C" {
  */
 
 #ifdef KR_headers
-VOID getarg_(n, s, ls) ftnint *n;
+void getarg_(n, s, ls) ftnint *n;
 char *s;
 ftnlen ls;
 #define Const /*nothing*/

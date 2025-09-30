@@ -4,9 +4,9 @@
  -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for
  libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
-static integer c_n1 = -1;
-static integer c__2 = 2;
+static aocl_int64_t c__1 = 1;
+static aocl_int64_t c_n1 = -1;
+static aocl_int64_t c__2 = 2;
 /* > \brief \b DSYTRF_ROOK */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -207,30 +207,40 @@ the routine */
 /* > \endverbatim */
 /* ===================================================================== */
 /* Subroutine */
-void dsytrf_rook_(char *uplo, integer *n, doublereal *a, integer *lda, integer *ipiv,
-                  doublereal *work, integer *lwork, integer *info)
+/** Generated wrapper function */
+void dsytrf_rook_(char *uplo, aocl_int_t *n, doublereal *a, aocl_int_t *lda, aocl_int_t *ipiv,
+                  doublereal *work, aocl_int_t *lwork, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_dsytrf_rook(uplo, n, a, lda, ipiv, work, lwork, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t lwork_64 = *lwork;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_dsytrf_rook(uplo, &n_64, a, &lda_64, ipiv, work, &lwork_64, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_dsytrf_rook(char *uplo, aocl_int64_t *n, doublereal *a, aocl_int64_t *lda,
+                             aocl_int_t *ipiv, doublereal *work, aocl_int64_t *lwork,
+                             aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dsytrf_rook inputs: uplo %c, n %" FLA_IS ", lda %" FLA_IS ", lwork %" FLA_IS
                       "",
                       *uplo, *n, *lda, *lwork);
     /* System generated locals */
-    integer a_dim1, a_offset, i__1, i__2;
+    aocl_int64_t a_dim1, a_offset, i__1, i__2;
     /* Local variables */
-    integer j, k, kb, nb, iws;
-    extern /* Subroutine */
-        void
-        dsytf2_rook_(char *, integer *, doublereal *, integer *, integer *, integer *),
-        dlasyf_rook_(char *, integer *, integer *, integer *, doublereal *, integer *, integer *,
-                     doublereal *, integer *, integer *);
-    extern logical lsame_(char *, char *, integer, integer);
-    integer nbmin, iinfo;
+    aocl_int64_t j, k, kb, nb, iws;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    aocl_int64_t nbmin, iinfo;
     logical upper;
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
-    integer ldwork, lwkopt;
+    aocl_int64_t ldwork, lwkopt;
     logical lquery;
     /* -- LAPACK computational routine (version 3.7.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -280,7 +290,7 @@ void dsytrf_rook_(char *uplo, integer *n, doublereal *a, integer *lda, integer *
     if(*info == 0)
     {
         /* Determine the block size */
-        nb = ilaenv_(&c__1, "DSYTRF_ROOK", uplo, n, &c_n1, &c_n1, &c_n1);
+        nb = aocl_lapack_ilaenv(&c__1, "DSYTRF_ROOK", uplo, n, &c_n1, &c_n1, &c_n1);
         /* Computing MAX */
         i__1 = 1;
         i__2 = *n * nb; // , expr subst
@@ -290,7 +300,7 @@ void dsytrf_rook_(char *uplo, integer *n, doublereal *a, integer *lda, integer *
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("DSYTRF_ROOK", &i__1, (ftnlen)11);
+        aocl_blas_xerbla("DSYTRF_ROOK", &i__1, (ftnlen)11);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -311,7 +321,8 @@ void dsytrf_rook_(char *uplo, integer *n, doublereal *a, integer *lda, integer *
             nb = fla_max(i__1, 1);
             /* Computing MAX */
             i__1 = 2;
-            i__2 = ilaenv_(&c__2, "DSYTRF_ROOK", uplo, n, &c_n1, &c_n1, &c_n1); // , expr subst
+            i__2 = aocl_lapack_ilaenv(&c__2, "DSYTRF_ROOK", uplo, n, &c_n1, &c_n1,
+                                      &c_n1); // , expr subst
             nbmin = fla_max(i__1, i__2);
         }
     }
@@ -340,13 +351,13 @@ void dsytrf_rook_(char *uplo, integer *n, doublereal *a, integer *lda, integer *
         {
             /* Factorize columns k-kb+1:k of A and use blocked code to */
             /* update columns 1:k-kb */
-            dlasyf_rook_(uplo, &k, &nb, &kb, &a[a_offset], lda, &ipiv[1], &work[1], &ldwork,
-                         &iinfo);
+            aocl_lapack_dlasyf_rook(uplo, &k, &nb, &kb, &a[a_offset], lda, &ipiv[1], &work[1],
+                                    &ldwork, &iinfo);
         }
         else
         {
             /* Use unblocked code to factorize columns 1:k of A */
-            dsytf2_rook_(uplo, &k, &a[a_offset], lda, &ipiv[1], &iinfo);
+            aocl_lapack_dsytf2_rook(uplo, &k, &a[a_offset], lda, &ipiv[1], &iinfo);
             kb = k;
         }
         /* Set INFO on the first occurrence of a zero pivot */
@@ -377,14 +388,14 @@ void dsytrf_rook_(char *uplo, integer *n, doublereal *a, integer *lda, integer *
             /* Factorize columns k:k+kb-1 of A and use blocked code to */
             /* update columns k+kb:n */
             i__1 = *n - k + 1;
-            dlasyf_rook_(uplo, &i__1, &nb, &kb, &a[k + k * a_dim1], lda, &ipiv[k], &work[1],
-                         &ldwork, &iinfo);
+            aocl_lapack_dlasyf_rook(uplo, &i__1, &nb, &kb, &a[k + k * a_dim1], lda, &ipiv[k],
+                                    &work[1], &ldwork, &iinfo);
         }
         else
         {
             /* Use unblocked code to factorize columns k:n of A */
             i__1 = *n - k + 1;
-            dsytf2_rook_(uplo, &i__1, &a[k + k * a_dim1], lda, &ipiv[k], &iinfo);
+            aocl_lapack_dsytf2_rook(uplo, &i__1, &a[k + k * a_dim1], lda, &ipiv[k], &iinfo);
             kb = *n - k + 1;
         }
         /* Set INFO on the first occurrence of a zero pivot */
@@ -398,11 +409,11 @@ void dsytrf_rook_(char *uplo, integer *n, doublereal *a, integer *lda, integer *
         {
             if(ipiv[j] > 0)
             {
-                ipiv[j] = ipiv[j] + k - 1;
+                ipiv[j] = (aocl_int_t)(ipiv[j] + k - 1);
             }
             else
             {
-                ipiv[j] = ipiv[j] - k + 1;
+                ipiv[j] = (aocl_int_t)(ipiv[j] - k + 1);
             }
             /* L30: */
         }

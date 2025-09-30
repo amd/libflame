@@ -4,7 +4,7 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
+static aocl_int64_t c__1 = 1;
 /* > \brief \b DLAEIN computes a specified right or left eigenvector of an upper Hessenberg matrix
  * by inverse iteration. */
 /* =========== DOCUMENTATION =========== */
@@ -117,7 +117,7 @@ if WI.ne.0.0 (scomplex eigenvalue), */
 /* > computed scomplex eigenvector. The eigenvector is normalized */
 /* > so that the component of largest magnitude has magnitude 1;
  */
-/* > here the magnitude of a complex number (x,y) is taken to be */
+/* > here the magnitude of a scomplex number (x,y) is taken to be */
 /* > |x| + |y|. */
 /* > VI is not referenced if WI = 0.0. */
 /* > \endverbatim */
@@ -175,10 +175,33 @@ VR is set to the */
 /* > \ingroup doubleOTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-void dlaein_(logical *rightv, logical *noinit, integer *n, doublereal *h__, integer *ldh,
+/** Generated wrapper function */
+void dlaein_(logical *rightv, logical *noinit, aocl_int_t *n, doublereal *h__, aocl_int_t *ldh,
              doublereal *wr, doublereal *wi, doublereal *vr, doublereal *vi, doublereal *b,
-             integer *ldb, doublereal *work, doublereal *eps3, doublereal *smlnum,
-             doublereal *bignum, integer *info)
+             aocl_int_t *ldb, doublereal *work, doublereal *eps3, doublereal *smlnum,
+             doublereal *bignum, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_dlaein(rightv, noinit, n, h__, ldh, wr, wi, vr, vi, b, ldb, work, eps3, smlnum,
+                       bignum, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t ldh_64 = *ldh;
+    aocl_int64_t ldb_64 = *ldb;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_dlaein(rightv, noinit, &n_64, h__, &ldh_64, wr, wi, vr, vi, b, &ldb_64, work, eps3,
+                       smlnum, bignum, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_dlaein(logical *rightv, logical *noinit, aocl_int64_t *n, doublereal *h__,
+                        aocl_int64_t *ldh, doublereal *wr, doublereal *wi, doublereal *vr,
+                        doublereal *vi, doublereal *b, aocl_int64_t *ldb, doublereal *work,
+                        doublereal *eps3, doublereal *smlnum, doublereal *bignum,
+                        aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dlaein inputs: n %" FLA_IS ", ldh %" FLA_IS ", ldb %" FLA_IS "", *n, *ldh,
@@ -195,21 +218,11 @@ void dlaein_(logical *rightv, logical *noinit, integer *n, doublereal *h__, inte
     doublereal w1, ei, ej, xi, xr, rec;
     aocl_int64_t its, ierr;
     doublereal temp, norm, vmax;
-    extern doublereal dnrm2_(integer *, doublereal *, integer *);
-    extern /* Subroutine */
-        void
-        dscal_(integer *, doublereal *, doublereal *, integer *);
     doublereal scale;
     char trans[1];
     doublereal vcrit, rootn, vnorm;
     extern doublereal dlapy2_(doublereal *, doublereal *);
     doublereal absbii, absbjj;
-    extern integer idamax_(integer *, doublereal *, integer *);
-    extern /* Subroutine */
-        void
-        dladiv_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *),
-        dlatrs_(char *, char *, char *, char *, integer *, doublereal *, integer *, doublereal *,
-                doublereal *, doublereal *, integer *);
     char normin[1];
     doublereal nrmsml, growto;
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
@@ -282,9 +295,9 @@ void dlaein_(logical *rightv, logical *noinit, integer *n, doublereal *h__, inte
         else
         {
             /* Scale supplied initial vector. */
-            vnorm = dnrm2_(n, &vr[1], &c__1);
+            vnorm = aocl_blas_dnrm2(n, &vr[1], &c__1);
             d__1 = *eps3 * rootn / fla_max(vnorm, nrmsml);
-            dscal_(n, &d__1, &vr[1], &c__1);
+            aocl_blas_dscal(n, &d__1, &vr[1], &c__1);
         }
         if(*rightv)
         {
@@ -388,11 +401,11 @@ void dlaein_(logical *rightv, logical *noinit, integer *n, doublereal *h__, inte
             /* Solve U*x = scale*v for a right eigenvector */
             /* or U**T*x = scale*v for a left eigenvector, */
             /* overwriting x on v. */
-            dlatrs_("Upper", trans, "Nonunit", normin, n, &b[b_offset], ldb, &vr[1], &scale,
-                    &work[1], &ierr);
+            aocl_lapack_dlatrs("Upper", trans, "Nonunit", normin, n, &b[b_offset], ldb, &vr[1],
+                               &scale, &work[1], &ierr);
             *(unsigned char *)normin = 'Y';
             /* Test for sufficient growth in the norm of v. */
-            vnorm = dasum_(n, &vr[1], &c__1);
+            vnorm = aocl_blas_dasum(n, &vr[1], &c__1);
             if(vnorm >= growto * scale)
             {
                 goto L120;
@@ -412,9 +425,9 @@ void dlaein_(logical *rightv, logical *noinit, integer *n, doublereal *h__, inte
         /* Failure to find eigenvector in N iterations. */
         *info = 1;
     L120: /* Normalize eigenvector. */
-        i__ = idamax_(n, &vr[1], &c__1);
+        i__ = aocl_blas_idamax(n, &vr[1], &c__1);
         d__2 = 1. / (d__1 = vr[i__], f2c_dabs(d__1));
-        dscal_(n, &d__2, &vr[1], &c__1);
+        aocl_blas_dscal(n, &d__2, &vr[1], &c__1);
     }
     else
     {
@@ -437,8 +450,8 @@ void dlaein_(logical *rightv, logical *noinit, integer *n, doublereal *h__, inte
             d__2 = aocl_blas_dnrm2(n, &vi[1], &c__1);
             norm = dlapy2_(&d__1, &d__2);
             rec = *eps3 * rootn / fla_max(norm, nrmsml);
-            dscal_(n, &rec, &vr[1], &c__1);
-            dscal_(n, &rec, &vi[1], &c__1);
+            aocl_blas_dscal(n, &rec, &vr[1], &c__1);
+            aocl_blas_dscal(n, &rec, &vi[1], &c__1);
         }
         if(*rightv)
         {
@@ -505,8 +518,8 @@ void dlaein_(logical *rightv, logical *noinit, integer *n, doublereal *h__, inte
                 /* Compute 1-norm of offdiagonal elements of i-th row. */
                 i__2 = *n - i__;
                 i__3 = *n - i__;
-                work[i__] = dasum_(&i__2, &b[i__ + (i__ + 1) * b_dim1], ldb)
-                            + dasum_(&i__3, &b[i__ + 2 + i__ * b_dim1], &c__1);
+                work[i__] = aocl_blas_dasum(&i__2, &b[i__ + (i__ + 1) * b_dim1], ldb)
+                            + aocl_blas_dasum(&i__3, &b[i__ + 2 + i__ * b_dim1], &c__1);
                 /* L170: */
             }
             if(b[*n + *n * b_dim1] == 0. && b[*n + 1 + *n * b_dim1] == 0.)
@@ -583,8 +596,8 @@ void dlaein_(logical *rightv, logical *noinit, integer *n, doublereal *h__, inte
                 /* Compute 1-norm of offdiagonal elements of j-th column. */
                 i__1 = j - 1;
                 i__2 = j - 1;
-                work[j] = dasum_(&i__1, &b[j * b_dim1 + 1], &c__1)
-                          + dasum_(&i__2, &b[j + 1 + b_dim1], ldb);
+                work[j] = aocl_blas_dasum(&i__1, &b[j * b_dim1 + 1], &c__1)
+                          + aocl_blas_dasum(&i__2, &b[j + 1 + b_dim1], ldb);
                 /* L210: */
             }
             if(b[b_dim1 + 1] == 0. && b[b_dim1 + 2] == 0.)
@@ -684,7 +697,7 @@ void dlaein_(logical *rightv, logical *noinit, integer *n, doublereal *h__, inte
                 /* L250: */
             }
             /* Test for sufficient growth in the norm of (VR,VI). */
-            vnorm = dasum_(n, &vr[1], &c__1) + dasum_(n, &vi[1], &c__1);
+            vnorm = aocl_blas_dasum(n, &vr[1], &c__1) + aocl_blas_dasum(n, &vi[1], &c__1);
             if(vnorm >= growto * scale)
             {
                 goto L280;

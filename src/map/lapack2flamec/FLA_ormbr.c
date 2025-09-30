@@ -46,19 +46,59 @@
   Here dimenions m and n are defined w.r.t C.
 */
 
-extern void sormbr_fla(char *vect, char *side, char *trans, integer *m, integer *n, integer *k,
-                       real *a, integer *lda, real *tau, real *c__, integer *ldc, real *work,
-                       integer *lwork, integer *info);
-extern void dormbr_fla(char *vect, char *side, char *trans, integer *m, integer *n, integer *k,
-                       doublereal *a, integer *lda, doublereal *tau, doublereal *c__, integer *ldc,
-                       doublereal *work, integer *lwork, integer *info);
+extern void sormbr_fla(char *vect, char *side, char *trans, aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *k,
+                       real *a, aocl_int64_t *lda, real *tau, real *c__, aocl_int64_t *ldc, real *work,
+                       aocl_int64_t *lwork, aocl_int64_t *info);
+extern void dormbr_fla(char *vect, char *side, char *trans, aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *k,
+                       doublereal *a, aocl_int64_t *lda, doublereal *tau, doublereal *c__, aocl_int64_t *ldc,
+                       doublereal *work, aocl_int64_t *lwork, aocl_int64_t *info);
+
+/** Generated wrapper function */
+void sormbr_(char *vect, char *side, char *trans, aocl_int_t *m, aocl_int_t *n, aocl_int_t *k, real *buff_A, aocl_int_t *ldim_A, real *buff_t, real *buff_C, aocl_int_t *ldim_C, real *buff_w, aocl_int_t *lwork, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_sormbr(vect, side, trans, m, n, k, buff_A, ldim_A, buff_t, buff_C, ldim_C, buff_w, lwork, info);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t k_64 = *k;
+    aocl_int64_t ldim_A_64 = *ldim_A;
+    aocl_int64_t ldim_C_64 = *ldim_C;
+    aocl_int64_t lwork_64 = *lwork;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_sormbr(vect, side, trans, &m_64, &n_64, &k_64, buff_A, &ldim_A_64, buff_t, buff_C, &ldim_C_64, buff_w, &lwork_64, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+/** Generated wrapper function */
+void dormbr_(char *vect, char *side, char *trans, aocl_int_t *m, aocl_int_t *n, aocl_int_t *k, doublereal *buff_A, aocl_int_t *ldim_A, doublereal *buff_t, doublereal *buff_C, aocl_int_t *ldim_C, doublereal *buff_w, aocl_int_t *lwork, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_dormbr(vect, side, trans, m, n, k, buff_A, ldim_A, buff_t, buff_C, ldim_C, buff_w, lwork, info);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t k_64 = *k;
+    aocl_int64_t ldim_A_64 = *ldim_A;
+    aocl_int64_t ldim_C_64 = *ldim_C;
+    aocl_int64_t lwork_64 = *lwork;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_dormbr(vect, side, trans, &m_64, &n_64, &k_64, buff_A, &ldim_A_64, buff_t, buff_C, &ldim_C_64, buff_w, &lwork_64, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
 
 #define LAPACK_ormbr(prefix, name)                                                      \
-    void F77_##prefix##name##br(                                                        \
-        char *vect, char *side, char *trans, integer *m, integer *n, integer *k,        \
-        PREFIX2LAPACK_TYPEDEF(prefix) * buff_A, integer * ldim_A,                       \
+    void aocl_lapack_##prefix##name##br(                                                        \
+        char *vect, char *side, char *trans, aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *k,        \
+        PREFIX2LAPACK_TYPEDEF(prefix) * buff_A, aocl_int64_t * ldim_A,                       \
         PREFIX2LAPACK_TYPEDEF(prefix) * buff_t, PREFIX2LAPACK_TYPEDEF(prefix) * buff_C, \
-        integer * ldim_C, PREFIX2LAPACK_TYPEDEF(prefix) * buff_w, integer * lwork, integer * info)
+        aocl_int64_t * ldim_C, PREFIX2LAPACK_TYPEDEF(prefix) * buff_w, aocl_int64_t * lwork, aocl_int64_t * info)
 
 #define LAPACK_ormbr_body(prefix)                                                             \
     FLA_Datatype datatype = PREFIX2FLAME_DATATYPE(prefix);                                    \
@@ -122,7 +162,7 @@ extern void dormbr_fla(char *vect, char *side, char *trans, integer *m, integer 
         FLA_Obj_create(datatype, m_t, 1, 0, 0, &rL);                                          \
         FLA_Obj_create(datatype, m_t, 1, 0, 0, &rR);                                          \
                                                                                               \
-        /* Extract diagonals (complex) and realify them. */                                   \
+        /* Extract diagonals (scomplex) and realify them. */                                   \
         FLA_Bidiag_UT_extract_diagonals(A, d2, e2);                                           \
         FLA_Bidiag_UT_realify_diagonals(uplo, d2, e2, rL, rR);                                \
     }                                                                                         \

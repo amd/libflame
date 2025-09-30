@@ -4,7 +4,7 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
+static aocl_int64_t c__1 = 1;
 static real c_b11 = 1.f;
 /* > \brief \b SLACON estimates the 1-norm of a square matrix, using reverse communication for
  * evaluating matr ix-vector products. */
@@ -113,7 +113,23 @@ static real c_b11 = 1.f;
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void slacon_(integer *n, real *v, real *x, integer *isgn, real *est, integer *kase)
+/** Generated wrapper function */
+void slacon_(aocl_int_t *n, real *v, real *x, aocl_int_t *isgn, real *est, aocl_int_t *kase)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_slacon(n, v, x, isgn, est, kase);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t kase_64 = *kase;
+
+    aocl_lapack_slacon(&n_64, v, x, isgn, est, &kase_64);
+
+    *kase = (aocl_int_t)kase_64;
+#endif
+}
+
+void aocl_lapack_slacon(aocl_int64_t *n, real *v, real *x, aocl_int_t *isgn, real *est,
+                        aocl_int64_t *kase)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("slacon inputs: n %" FLA_IS "", *n);
@@ -122,19 +138,13 @@ void slacon_(integer *n, real *v, real *x, integer *isgn, real *est, integer *ka
     real r__1;
     /* Builtin functions */
     double r_sign(real *, real *);
-    integer fla_i_nint(real *);
     /* Local variables */
-    integer i__;
+    aocl_int64_t i__;
     real temp;
-    static integer jump = 0;
-    static integer j = 0;
-    static integer iter = 0;
-    integer jlast;
-    extern real sasum_(integer *, real *, integer *);
-    extern /* Subroutine */
-        void
-        scopy_(integer *, real *, integer *, real *, integer *);
-    extern integer isamax_(integer *, real *, integer *);
+    static aocl_int64_t jump = 0;
+    static aocl_int64_t j = 0;
+    static aocl_int64_t iter = 0;
+    aocl_int64_t jlast;
     real altsgn, estold;
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -269,7 +279,7 @@ L90: /* TEST FOR CYCLING. */
     /* X HAS BEEN OVERWRITTEN BY TRANSPOSE(A)*X. */
 L110:
     jlast = j;
-    j = isamax_(n, &x[1], &c__1);
+    j = aocl_blas_isamax(n, &x[1], &c__1);
     if(x[jlast] != (r__1 = x[j], f2c_abs(r__1)) && iter < 5)
     {
         ++iter;
@@ -292,7 +302,7 @@ L120:
     /* ................ ENTRY (JUMP = 5) */
     /* X HAS BEEN OVERWRITTEN BY A*X. */
 L140:
-    temp = sasum_(n, &x[1], &c__1) / (real)(*n * 3) * 2.f;
+    temp = aocl_blas_sasum(n, &x[1], &c__1) / (real)(*n * 3) * 2.f;
     if(temp > *est)
     {
         aocl_blas_scopy(n, &x[1], &c__1, &v[1], &c__1);

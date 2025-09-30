@@ -1,13 +1,13 @@
 #include "FLA_f2c.h" /* Table of constant values */
 #include "FLA_lapack2flame_return_defs.h"
 
-int sorm2r_check(char *side, char *trans, integer *m, integer *n, integer *k, float *a,
-                 integer *lda, float *tau, float *c__, integer *ldc, float *work, integer *info)
+int sorm2r_check(char *side, char *trans, aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *k, float *a,
+                 aocl_int64_t *lda, float *tau, float *c__, aocl_int64_t *ldc, float *work, aocl_int64_t *info)
 {
     /* System generated locals */
-    integer a_dim1, a_offset, c_dim1, c_offset, i__1;
+    aocl_int64_t a_dim1, a_offset, c_dim1, c_offset, i__1;
     /* Local variables */
-    integer nq;
+    aocl_int64_t nq;
     logical left;
     logical notran;
 
@@ -64,7 +64,7 @@ int sorm2r_check(char *side, char *trans, integer *m, integer *n, integer *k, fl
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("SORM2R", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("SORM2R", &i__1, (ftnlen)6);
         return LAPACK_FAILURE;
     }
     /* Quick return if possible */

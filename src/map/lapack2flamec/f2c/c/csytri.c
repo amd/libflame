@@ -4,9 +4,9 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static complex c_b1 = {1.f, 0.f};
-static complex c_b2 = {0.f, 0.f};
-static integer c__1 = 1;
+static scomplex c_b1 = {{1.f}, {0.f}};
+static scomplex c_b2 = {{0.f}, {0.f}};
+static aocl_int64_t c__1 = 1;
 /* > \brief \b CSYTRI */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -116,8 +116,25 @@ the matrix is singular and its */
 /* > \ingroup complexSYcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void csytri_(char *uplo, integer *n, complex *a, integer *lda, integer *ipiv, complex *work,
-             integer *info)
+/** Generated wrapper function */
+void csytri_(char *uplo, aocl_int_t *n, scomplex *a, aocl_int_t *lda, aocl_int_t *ipiv,
+             scomplex *work, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_csytri(uplo, n, a, lda, ipiv, work, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_csytri(uplo, &n_64, a, &lda_64, ipiv, work, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_csytri(char *uplo, aocl_int64_t *n, scomplex *a, aocl_int64_t *lda,
+                        aocl_int_t *ipiv, scomplex *work, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -135,28 +152,14 @@ void csytri_(char *uplo, integer *n, complex *a, integer *lda, integer *ipiv, co
     /* Builtin functions */
     void c_div(scomplex *, scomplex *, scomplex *);
     /* Local variables */
-    complex d__;
-    integer k;
-    complex t, ak;
-    integer kp;
-    complex akp1, temp, akkp1;
-    extern logical lsame_(char *, char *, integer, integer);
-    extern /* Subroutine */
-        void
-        ccopy_(integer *, complex *, integer *, complex *, integer *);
-    extern /* Complex */
-        VOID
-        cdotu_f2c_(complex *, integer *, complex *, integer *, complex *, integer *);
-    extern /* Subroutine */
-        void
-        cswap_(integer *, complex *, integer *, complex *, integer *);
-    integer kstep;
+    scomplex d__;
+    aocl_int64_t k;
+    scomplex t, ak;
+    aocl_int64_t kp;
+    scomplex akp1, temp, akkp1;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    aocl_int64_t kstep;
     logical upper;
-    extern /* Subroutine */
-        void
-        csymv_(char *, integer *, complex *, complex *, integer *, complex *, integer *, complex *,
-               complex *, integer *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -202,7 +205,7 @@ void csytri_(char *uplo, integer *n, complex *a, integer *lda, integer *ipiv, co
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("CSYTRI", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("CSYTRI", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
@@ -270,12 +273,12 @@ void csytri_(char *uplo, integer *n, complex *a, integer *lda, integer *ipiv, co
                 i__1 = k - 1;
                 q__1.r = -1.f;
                 q__1.i = -0.f; // , expr subst
-                csymv_(uplo, &i__1, &q__1, &a[a_offset], lda, &work[1], &c__1, &c_b2,
-                       &a[k * a_dim1 + 1], &c__1);
+                aocl_lapack_csymv(uplo, &i__1, &q__1, &a[a_offset], lda, &work[1], &c__1, &c_b2,
+                                  &a[k * a_dim1 + 1], &c__1);
                 i__1 = k + k * a_dim1;
                 i__2 = k + k * a_dim1;
                 i__3 = k - 1;
-                cdotu_f2c_(&q__2, &i__3, &work[1], &c__1, &a[k * a_dim1 + 1], &c__1);
+                aocl_lapack_cdotu_f2c(&q__2, &i__3, &work[1], &c__1, &a[k * a_dim1 + 1], &c__1);
                 q__1.r = a[i__2].r - q__2.r;
                 q__1.i = a[i__2].i - q__2.i; // , expr subst
                 a[i__1].r = q__1.r;
@@ -329,12 +332,12 @@ void csytri_(char *uplo, integer *n, complex *a, integer *lda, integer *ipiv, co
                 i__1 = k - 1;
                 q__1.r = -1.f;
                 q__1.i = -0.f; // , expr subst
-                csymv_(uplo, &i__1, &q__1, &a[a_offset], lda, &work[1], &c__1, &c_b2,
-                       &a[k * a_dim1 + 1], &c__1);
+                aocl_lapack_csymv(uplo, &i__1, &q__1, &a[a_offset], lda, &work[1], &c__1, &c_b2,
+                                  &a[k * a_dim1 + 1], &c__1);
                 i__1 = k + k * a_dim1;
                 i__2 = k + k * a_dim1;
                 i__3 = k - 1;
-                cdotu_f2c_(&q__2, &i__3, &work[1], &c__1, &a[k * a_dim1 + 1], &c__1);
+                aocl_lapack_cdotu_f2c(&q__2, &i__3, &work[1], &c__1, &a[k * a_dim1 + 1], &c__1);
                 q__1.r = a[i__2].r - q__2.r;
                 q__1.i = a[i__2].i - q__2.i; // , expr subst
                 a[i__1].r = q__1.r;
@@ -342,23 +345,23 @@ void csytri_(char *uplo, integer *n, complex *a, integer *lda, integer *ipiv, co
                 i__1 = k + (k + 1) * a_dim1;
                 i__2 = k + (k + 1) * a_dim1;
                 i__3 = k - 1;
-                cdotu_f2c_(&q__2, &i__3, &a[k * a_dim1 + 1], &c__1, &a[(k + 1) * a_dim1 + 1],
+                aocl_lapack_cdotu_f2c(&q__2, &i__3, &a[k * a_dim1 + 1], &c__1, &a[(k + 1) * a_dim1 + 1],
                            &c__1);
                 q__1.r = a[i__2].r - q__2.r;
                 q__1.i = a[i__2].i - q__2.i; // , expr subst
                 a[i__1].r = q__1.r;
                 a[i__1].i = q__1.i; // , expr subst
                 i__1 = k - 1;
-                ccopy_(&i__1, &a[(k + 1) * a_dim1 + 1], &c__1, &work[1], &c__1);
+                aocl_blas_ccopy(&i__1, &a[(k + 1) * a_dim1 + 1], &c__1, &work[1], &c__1);
                 i__1 = k - 1;
                 q__1.r = -1.f;
                 q__1.i = -0.f; // , expr subst
-                csymv_(uplo, &i__1, &q__1, &a[a_offset], lda, &work[1], &c__1, &c_b2,
-                       &a[(k + 1) * a_dim1 + 1], &c__1);
+                aocl_lapack_csymv(uplo, &i__1, &q__1, &a[a_offset], lda, &work[1], &c__1, &c_b2,
+                                  &a[(k + 1) * a_dim1 + 1], &c__1);
                 i__1 = k + 1 + (k + 1) * a_dim1;
                 i__2 = k + 1 + (k + 1) * a_dim1;
                 i__3 = k - 1;
-                cdotu_f2c_(&q__2, &i__3, &work[1], &c__1, &a[(k + 1) * a_dim1 + 1], &c__1);
+                aocl_lapack_cdotu_f2c(&q__2, &i__3, &work[1], &c__1, &a[(k + 1) * a_dim1 + 1], &c__1);
                 q__1.r = a[i__2].r - q__2.r;
                 q__1.i = a[i__2].i - q__2.i; // , expr subst
                 a[i__1].r = q__1.r;
@@ -372,7 +375,7 @@ void csytri_(char *uplo, integer *n, complex *a, integer *lda, integer *ipiv, co
             /* Interchange rows and columns K and KP in the leading */
             /* submatrix A(1:k+1,1:k+1) */
             i__1 = kp - 1;
-            cswap_(&i__1, &a[k * a_dim1 + 1], &c__1, &a[kp * a_dim1 + 1], &c__1);
+            aocl_blas_cswap(&i__1, &a[k * a_dim1 + 1], &c__1, &a[kp * a_dim1 + 1], &c__1);
             i__1 = k - kp - 1;
             aocl_blas_cswap(&i__1, &a[kp + 1 + k * a_dim1], &c__1, &a[kp + (kp + 1) * a_dim1], lda);
             i__1 = k + k * a_dim1;
@@ -430,16 +433,16 @@ void csytri_(char *uplo, integer *n, complex *a, integer *lda, integer *ipiv, co
                 i__1 = *n - k;
                 q__1.r = -1.f;
                 q__1.i = -0.f; // , expr subst
-                csymv_(uplo, &i__1, &q__1, &a[k + 1 + (k + 1) * a_dim1], lda, &work[1], &c__1,
-                       &c_b2, &a[k + 1 + k * a_dim1], &c__1);
+                aocl_lapack_csymv(uplo, &i__1, &q__1, &a[k + 1 + (k + 1) * a_dim1], lda, &work[1],
+                                  &c__1, &c_b2, &a[k + 1 + k * a_dim1], &c__1);
                 i__1 = k + k * a_dim1;
                 i__2 = k + k * a_dim1;
                 i__3 = *n - k;
                 aocl_lapack_cdotu_f2c(&q__2, &i__3, &work[1], &c__1, &a[k + 1 + k * a_dim1], &c__1);
-                q__1.real = a[i__2].real - q__2.real;
-                q__1.imag = a[i__2].imag - q__2.imag; // , expr subst
-                a[i__1].real = q__1.real;
-                a[i__1].imag = q__1.imag; // , expr subst
+                q__1.r = a[i__2].r - q__2.r;
+                q__1.i = a[i__2].i - q__2.i; // , expr subst
+                a[i__1].r = q__1.r;
+                a[i__1].i = q__1.i; // , expr subst
             }
             kstep = 1;
         }
@@ -489,40 +492,40 @@ void csytri_(char *uplo, integer *n, complex *a, integer *lda, integer *ipiv, co
                 i__1 = *n - k;
                 q__1.r = -1.f;
                 q__1.i = -0.f; // , expr subst
-                csymv_(uplo, &i__1, &q__1, &a[k + 1 + (k + 1) * a_dim1], lda, &work[1], &c__1,
-                       &c_b2, &a[k + 1 + k * a_dim1], &c__1);
+                aocl_lapack_csymv(uplo, &i__1, &q__1, &a[k + 1 + (k + 1) * a_dim1], lda, &work[1],
+                                  &c__1, &c_b2, &a[k + 1 + k * a_dim1], &c__1);
                 i__1 = k + k * a_dim1;
                 i__2 = k + k * a_dim1;
                 i__3 = *n - k;
                 aocl_lapack_cdotu_f2c(&q__2, &i__3, &work[1], &c__1, &a[k + 1 + k * a_dim1], &c__1);
-                q__1.real = a[i__2].real - q__2.real;
-                q__1.imag = a[i__2].imag - q__2.imag; // , expr subst
-                a[i__1].real = q__1.real;
-                a[i__1].imag = q__1.imag; // , expr subst
+                q__1.r = a[i__2].r - q__2.r;
+                q__1.i = a[i__2].i - q__2.i; // , expr subst
+                a[i__1].r = q__1.r;
+                a[i__1].i = q__1.i; // , expr subst
                 i__1 = k + (k - 1) * a_dim1;
                 i__2 = k + (k - 1) * a_dim1;
                 i__3 = *n - k;
-                cdotu_f2c_(&q__2, &i__3, &a[k + 1 + k * a_dim1], &c__1,
+                aocl_lapack_cdotu_f2c(&q__2, &i__3, &a[k + 1 + k * a_dim1], &c__1,
                            &a[k + 1 + (k - 1) * a_dim1], &c__1);
                 q__1.r = a[i__2].r - q__2.r;
                 q__1.i = a[i__2].i - q__2.i; // , expr subst
                 a[i__1].r = q__1.r;
                 a[i__1].i = q__1.i; // , expr subst
                 i__1 = *n - k;
-                ccopy_(&i__1, &a[k + 1 + (k - 1) * a_dim1], &c__1, &work[1], &c__1);
+                aocl_blas_ccopy(&i__1, &a[k + 1 + (k - 1) * a_dim1], &c__1, &work[1], &c__1);
                 i__1 = *n - k;
                 q__1.r = -1.f;
                 q__1.i = -0.f; // , expr subst
-                csymv_(uplo, &i__1, &q__1, &a[k + 1 + (k + 1) * a_dim1], lda, &work[1], &c__1,
-                       &c_b2, &a[k + 1 + (k - 1) * a_dim1], &c__1);
+                aocl_lapack_csymv(uplo, &i__1, &q__1, &a[k + 1 + (k + 1) * a_dim1], lda, &work[1],
+                                  &c__1, &c_b2, &a[k + 1 + (k - 1) * a_dim1], &c__1);
                 i__1 = k - 1 + (k - 1) * a_dim1;
                 i__2 = k - 1 + (k - 1) * a_dim1;
                 i__3 = *n - k;
                 aocl_lapack_cdotu_f2c(&q__2, &i__3, &work[1], &c__1, &a[k + 1 + (k - 1) * a_dim1], &c__1);
-                q__1.real = a[i__2].real - q__2.real;
-                q__1.imag = a[i__2].imag - q__2.imag; // , expr subst
-                a[i__1].real = q__1.real;
-                a[i__1].imag = q__1.imag; // , expr subst
+                q__1.r = a[i__2].r - q__2.r;
+                q__1.i = a[i__2].i - q__2.i; // , expr subst
+                a[i__1].r = q__1.r;
+                a[i__1].i = q__1.i; // , expr subst
             }
             kstep = 2;
         }

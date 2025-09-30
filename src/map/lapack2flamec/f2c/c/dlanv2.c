@@ -44,7 +44,7 @@ static doublereal c_b6 = 1.;
 /* > */
 /* > where either */
 /* > 1) CC = 0 so that AA and DD are real eigenvalues of the matrix, or */
-/* > 2) AA = DD and BB*CC < 0, so that AA + or - sqrt(BB*CC) are complex */
+/* > 2) AA = DD and BB*CC < 0, so that AA + or - sqrt(BB*CC) are scomplex */
 /* > conjugate eigenvalues. */
 /* > \endverbatim */
 /* Arguments: */
@@ -91,7 +91,7 @@ static doublereal c_b6 = 1.;
 /* > \verbatim */
 /* > RT2I is DOUBLE PRECISION */
 /* > The real and imaginary parts of the eigenvalues. If the */
-/* > eigenvalues are a complex conjugate pair, RT1I > 0. */
+/* > eigenvalues are a scomplex conjugate pair, RT1I > 0. */
 /* > \endverbatim */
 /* > */
 /* > \param[out] CS */
@@ -130,12 +130,12 @@ void dlanv2_(doublereal *a, doublereal *b, doublereal *c__, doublereal *d__, dou
     AOCL_DTL_TRACE_ENTRY_INDENT
     doublereal d__1, d__2;
     /* Builtin functions */
-    double log(doublereal), pow_di(doublereal *, integer *), d_sign(doublereal *, doublereal *),
-        sqrt(doublereal);
+    double log(doublereal), pow_di(doublereal *, aocl_int64_t *),
+        d_sign(doublereal *, doublereal *), sqrt(doublereal);
     /* Local variables */
     doublereal p, z__, aa, bb, cc, dd, cs1, sn1, sab, sac, eps, tau, temp, scale, bcmax, bcmis,
         sigma;
-    integer count, i__1;
+    aocl_int64_t count, i__1;
     doublereal safmn2;
     extern doublereal dlapy2_(doublereal *, doublereal *);
     doublereal safmx2;

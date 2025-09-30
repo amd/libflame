@@ -7,8 +7,8 @@ int crotg_(scomplex *ca, scomplex *cb, real *c__, scomplex *s)
     real r__1, r__2;
     scomplex q__1, q__2, q__3;
     /* Builtin functions */
-    double c_f2c_abs(complex *), sqrt(doublereal);
-    void r_cnjg(complex *, complex *);
+    double c_f2c_abs(scomplex *), sqrt(doublereal);
+    void r_cnjg(scomplex *, scomplex *);
     /* Local variables */
     real norm;
     scomplex alpha;

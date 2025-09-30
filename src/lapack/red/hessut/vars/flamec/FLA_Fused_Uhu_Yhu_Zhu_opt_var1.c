@@ -23,11 +23,11 @@ FLA_Error FLA_Fused_Uhu_Yhu_Zhu_opt_var1(FLA_Obj delta, FLA_Obj U, FLA_Obj Y, FL
      t = U' u;
   */
   FLA_Datatype datatype;
-  integer m_U, n_U;
-  integer rs_U, cs_U;
-  integer rs_Y, cs_Y;
-  integer rs_Z, cs_Z;
-  integer inc_u, inc_y, inc_z, inc_t;
+  fla_dim_t m_U, n_U;
+  fla_dim_t rs_U, cs_U;
+  fla_dim_t rs_Y, cs_Y;
+  fla_dim_t rs_Z, cs_Z;
+  fla_dim_t inc_u, inc_y, inc_z, inc_t;
 
   datatype = FLA_Obj_datatype(U);
 
@@ -154,18 +154,18 @@ FLA_Error FLA_Fused_Uhu_Yhu_Zhu_opt_var1(FLA_Obj delta, FLA_Obj U, FLA_Obj Y, FL
   return FLA_SUCCESS;
 }
 
-FLA_Error FLA_Fused_Uhu_Yhu_Zhu_ops_var1(integer m_U,
-                                         integer n_U,
+FLA_Error FLA_Fused_Uhu_Yhu_Zhu_ops_var1(fla_dim_t m_U,
+                                         fla_dim_t n_U,
                                          float *buff_delta,
-                                         float *buff_U, integer rs_U, integer cs_U,
-                                         float *buff_Y, integer rs_Y, integer cs_Y,
-                                         float *buff_Z, integer rs_Z, integer cs_Z,
-                                         float *buff_t, integer inc_t,
-                                         float *buff_u, integer inc_u,
-                                         float *buff_y, integer inc_y,
-                                         float *buff_z, integer inc_z)
+                                         float *buff_U, fla_dim_t rs_U, fla_dim_t cs_U,
+                                         float *buff_Y, fla_dim_t rs_Y, fla_dim_t cs_Y,
+                                         float *buff_Z, fla_dim_t rs_Z, fla_dim_t cs_Z,
+                                         float *buff_t, fla_dim_t inc_t,
+                                         float *buff_u, fla_dim_t inc_u,
+                                         float *buff_y, fla_dim_t inc_y,
+                                         float *buff_z, fla_dim_t inc_z)
 {
-  integer i;
+  fla_dim_t i;
 
   for (i = 0; i < n_U; ++i)
   {
@@ -232,16 +232,16 @@ FLA_Error FLA_Fused_Uhu_Yhu_Zhu_ops_var1(integer m_U,
   return FLA_SUCCESS;
 }
 
-FLA_Error FLA_Fused_Uhu_Yhu_Zhu_opd_var1(integer m_U,
-                                         integer n_U,
+FLA_Error FLA_Fused_Uhu_Yhu_Zhu_opd_var1(fla_dim_t m_U,
+                                         fla_dim_t n_U,
                                          double *buff_delta,
-                                         double *buff_U, integer rs_U, integer cs_U,
-                                         double *buff_Y, integer rs_Y, integer cs_Y,
-                                         double *buff_Z, integer rs_Z, integer cs_Z,
-                                         double *buff_t, integer inc_t,
-                                         double *buff_u, integer inc_u,
-                                         double *buff_y, integer inc_y,
-                                         double *buff_z, integer inc_z)
+                                         double *buff_U, fla_dim_t rs_U, fla_dim_t cs_U,
+                                         double *buff_Y, fla_dim_t rs_Y, fla_dim_t cs_Y,
+                                         double *buff_Z, fla_dim_t rs_Z, fla_dim_t cs_Z,
+                                         double *buff_t, fla_dim_t inc_t,
+                                         double *buff_u, fla_dim_t inc_u,
+                                         double *buff_y, fla_dim_t inc_y,
+                                         double *buff_z, fla_dim_t inc_z)
 {
   double zero = bl1_d0();
 
@@ -259,13 +259,13 @@ FLA_Error FLA_Fused_Uhu_Yhu_Zhu_opd_var1(integer m_U,
   double beta = 0.;
   double gamma = 0.;
 
-  integer i;
+  fla_dim_t i;
 
-  integer n_run = n_U / 1;
-  integer step_u1 = 1 * cs_U;
-  integer step_y1 = 1 * cs_Y;
-  integer step_z1 = 1 * cs_Z;
-  integer step_tau1 = 1 * inc_t;
+  fla_dim_t n_run = n_U / 1;
+  fla_dim_t step_u1 = 1 * cs_U;
+  fla_dim_t step_y1 = 1 * cs_Y;
+  fla_dim_t step_z1 = 1 * cs_Z;
+  fla_dim_t step_tau1 = 1 * inc_t;
 
   u1 = buff_U;
   y1 = buff_Y;
@@ -316,18 +316,18 @@ FLA_Error FLA_Fused_Uhu_Yhu_Zhu_opd_var1(integer m_U,
   return FLA_SUCCESS;
 }
 
-FLA_Error FLA_Fused_Uhu_Yhu_Zhu_opc_var1(integer m_U,
-                                         integer n_U,
+FLA_Error FLA_Fused_Uhu_Yhu_Zhu_opc_var1(fla_dim_t m_U,
+                                         fla_dim_t n_U,
                                          scomplex *buff_delta,
-                                         scomplex *buff_U, integer rs_U, integer cs_U,
-                                         scomplex *buff_Y, integer rs_Y, integer cs_Y,
-                                         scomplex *buff_Z, integer rs_Z, integer cs_Z,
-                                         scomplex *buff_t, integer inc_t,
-                                         scomplex *buff_u, integer inc_u,
-                                         scomplex *buff_y, integer inc_y,
-                                         scomplex *buff_z, integer inc_z)
+                                         scomplex *buff_U, fla_dim_t rs_U, fla_dim_t cs_U,
+                                         scomplex *buff_Y, fla_dim_t rs_Y, fla_dim_t cs_Y,
+                                         scomplex *buff_Z, fla_dim_t rs_Z, fla_dim_t cs_Z,
+                                         scomplex *buff_t, fla_dim_t inc_t,
+                                         scomplex *buff_u, fla_dim_t inc_u,
+                                         scomplex *buff_y, fla_dim_t inc_y,
+                                         scomplex *buff_z, fla_dim_t inc_z)
 {
-  integer i;
+  fla_dim_t i;
 
   for (i = 0; i < n_U; ++i)
   {
@@ -396,16 +396,16 @@ FLA_Error FLA_Fused_Uhu_Yhu_Zhu_opc_var1(integer m_U,
   return FLA_SUCCESS;
 }
 
-FLA_Error FLA_Fused_Uhu_Yhu_Zhu_opz_var1(integer m_U,
-                                         integer n_U,
+FLA_Error FLA_Fused_Uhu_Yhu_Zhu_opz_var1(fla_dim_t m_U,
+                                         fla_dim_t n_U,
                                          dcomplex *buff_delta,
-                                         dcomplex *buff_U, integer rs_U, integer cs_U,
-                                         dcomplex *buff_Y, integer rs_Y, integer cs_Y,
-                                         dcomplex *buff_Z, integer rs_Z, integer cs_Z,
-                                         dcomplex *buff_t, integer inc_t,
-                                         dcomplex *buff_u, integer inc_u,
-                                         dcomplex *buff_y, integer inc_y,
-                                         dcomplex *buff_z, integer inc_z)
+                                         dcomplex *buff_U, fla_dim_t rs_U, fla_dim_t cs_U,
+                                         dcomplex *buff_Y, fla_dim_t rs_Y, fla_dim_t cs_Y,
+                                         dcomplex *buff_Z, fla_dim_t rs_Z, fla_dim_t cs_Z,
+                                         dcomplex *buff_t, fla_dim_t inc_t,
+                                         dcomplex *buff_u, fla_dim_t inc_u,
+                                         dcomplex *buff_y, fla_dim_t inc_y,
+                                         dcomplex *buff_z, fla_dim_t inc_z)
 {
   dcomplex zero = bl1_z0();
 
@@ -423,13 +423,13 @@ FLA_Error FLA_Fused_Uhu_Yhu_Zhu_opz_var1(integer m_U,
   dcomplex beta = (dcomplex){.real = 0., .imag = 0.};
   dcomplex gamma = (dcomplex){.real = 0., .imag = 0.};
 
-  integer i;
+  fla_dim_t i;
 
-  integer n_run = n_U / 1;
-  integer step_u1 = 1 * cs_U;
-  integer step_y1 = 1 * cs_Y;
-  integer step_z1 = 1 * cs_Z;
-  integer step_tau1 = 1 * inc_t;
+  fla_dim_t n_run = n_U / 1;
+  fla_dim_t step_u1 = 1 * cs_U;
+  fla_dim_t step_y1 = 1 * cs_Y;
+  fla_dim_t step_z1 = 1 * cs_Z;
+  fla_dim_t step_tau1 = 1 * inc_t;
 
   u1 = buff_U;
   y1 = buff_Y;

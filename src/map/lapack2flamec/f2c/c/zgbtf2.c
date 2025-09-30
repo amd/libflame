@@ -4,8 +4,8 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static doublecomplex c_b1 = {1., 0.};
-static integer c__1 = 1;
+static dcomplex c_b1 = {{1.}, {0.}};
+static aocl_int64_t c__1 = 1;
 /* > \brief \b ZGBTF2 computes the LU factorization of a general band matrix using the unblocked
  * version of th e algorithm. */
 /* =========== DOCUMENTATION =========== */
@@ -147,8 +147,28 @@ elements marked */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void zgbtf2_(integer *m, integer *n, integer *kl, integer *ku, doublecomplex *ab, integer *ldab,
-             integer *ipiv, integer *info)
+/** Generated wrapper function */
+void zgbtf2_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *kl, aocl_int_t *ku, dcomplex *ab,
+             aocl_int_t *ldab, aocl_int_t *ipiv, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_zgbtf2(m, n, kl, ku, ab, ldab, ipiv, info);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t kl_64 = *kl;
+    aocl_int64_t ku_64 = *ku;
+    aocl_int64_t ldab_64 = *ldab;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_zgbtf2(&m_64, &n_64, &kl_64, &ku_64, ab, &ldab_64, ipiv, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_zgbtf2(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *kl, aocl_int64_t *ku,
+                        dcomplex *ab, aocl_int64_t *ldab, aocl_int_t *ipiv, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zgbtf2 inputs: m %" FLA_IS ", n %" FLA_IS ", kl %" FLA_IS ", ku %" FLA_IS
@@ -161,15 +181,7 @@ void zgbtf2_(integer *m, integer *n, integer *kl, integer *ku, doublecomplex *ab
     /* Builtin functions */
     void z_div(dcomplex *, dcomplex *, dcomplex *);
     /* Local variables */
-    integer i__, j, km, jp, ju, kv;
-    extern /* Subroutine */
-        void
-        zscal_(integer *, doublecomplex *, doublecomplex *, integer *),
-        zgeru_(integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *,
-               integer *, doublecomplex *, integer *),
-        zswap_(integer *, doublecomplex *, integer *, doublecomplex *, integer *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    extern integer izamax_(integer *, doublecomplex *, integer *);
+    aocl_int64_t i__, j, km, jp, ju, kv;
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -228,7 +240,7 @@ void zgbtf2_(integer *m, integer *n, integer *kl, integer *ku, doublecomplex *ab
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("ZGBTF2", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("ZGBTF2", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -331,9 +343,9 @@ void zgbtf2_(integer *m, integer *n, integer *kl, integer *ku, doublecomplex *ab
                     z__1.imag = -0.; // , expr subst
                     i__3 = *ldab - 1;
                     i__4 = *ldab - 1;
-                    zgeru_(&km, &i__2, &z__1, &ab[kv + 2 + j * ab_dim1], &c__1,
-                           &ab[kv + (j + 1) * ab_dim1], &i__3, &ab[kv + 1 + (j + 1) * ab_dim1],
-                           &i__4);
+                    aocl_blas_zgeru(&km, &i__2, &z__1, &ab[kv + 2 + j * ab_dim1], &c__1,
+                                    &ab[kv + (j + 1) * ab_dim1], &i__3,
+                                    &ab[kv + 1 + (j + 1) * ab_dim1], &i__4);
                 }
             }
         }

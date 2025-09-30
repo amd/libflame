@@ -142,8 +142,26 @@ static doublereal c_b5 = 1.;
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void dlarz_(char *side, integer *m, integer *n, integer *l, doublereal *v, integer *incv,
-            doublereal *tau, doublereal *c__, integer *ldc, doublereal *work)
+/** Generated wrapper function */
+void dlarz_(char *side, aocl_int_t *m, aocl_int_t *n, aocl_int_t *l, doublereal *v,
+            aocl_int_t *incv, doublereal *tau, doublereal *c__, aocl_int_t *ldc, doublereal *work)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_dlarz(side, m, n, l, v, incv, tau, c__, ldc, work);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t l_64 = *l;
+    aocl_int64_t incv_64 = *incv;
+    aocl_int64_t ldc_64 = *ldc;
+
+    aocl_lapack_dlarz(side, &m_64, &n_64, &l_64, v, &incv_64, tau, c__, &ldc_64, work);
+#endif
+}
+
+void aocl_lapack_dlarz(char *side, aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *l, doublereal *v,
+                       aocl_int64_t *incv, doublereal *tau, doublereal *c__, aocl_int64_t *ldc,
+                       doublereal *work)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dlarz inputs: side %c, m %" FLA_IS ", n %" FLA_IS ", l %" FLA_IS
@@ -153,17 +171,7 @@ void dlarz_(char *side, integer *m, integer *n, integer *l, doublereal *v, integ
     aocl_int64_t c_dim1, c_offset;
     doublereal d__1;
     /* Local variables */
-    extern /* Subroutine */
-        void
-        dger_(integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *,
-              doublereal *, integer *);
-    extern logical lsame_(char *, char *, integer, integer);
-    extern /* Subroutine */
-        void
-        dgemv_(char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *,
-               integer *, doublereal *, doublereal *, integer *),
-        dcopy_(integer *, doublereal *, integer *, doublereal *, integer *),
-        daxpy_(integer *, doublereal *, doublereal *, integer *, doublereal *, integer *);
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -195,8 +203,8 @@ void dlarz_(char *side, integer *m, integer *n, integer *l, doublereal *v, integ
             /* w( 1:n ) = C( 1, 1:n ) */
             aocl_blas_dcopy(n, &c__[c_offset], ldc, &work[1], &c__1);
             /* w( 1:n ) = w( 1:n ) + C( m-l+1:m, 1:n )**T * v( 1:l ) */
-            dgemv_("Transpose", l, n, &c_b5, &c__[*m - *l + 1 + c_dim1], ldc, &v[1], incv, &c_b5,
-                   &work[1], &c__1);
+            aocl_blas_dgemv("Transpose", l, n, &c_b5, &c__[*m - *l + 1 + c_dim1], ldc, &v[1], incv,
+                            &c_b5, &work[1], &c__1);
             /* C( 1, 1:n ) = C( 1, 1:n ) - tau * w( 1:n ) */
             d__1 = -(*tau);
             aocl_blas_daxpy(n, &d__1, &work[1], &c__1, &c__[c_offset], ldc);
@@ -215,8 +223,8 @@ void dlarz_(char *side, integer *m, integer *n, integer *l, doublereal *v, integ
             /* w( 1:m ) = C( 1:m, 1 ) */
             aocl_blas_dcopy(m, &c__[c_offset], &c__1, &work[1], &c__1);
             /* w( 1:m ) = w( 1:m ) + C( 1:m, n-l+1:n, 1:n ) * v( 1:l ) */
-            dgemv_("No transpose", m, l, &c_b5, &c__[(*n - *l + 1) * c_dim1 + 1], ldc, &v[1], incv,
-                   &c_b5, &work[1], &c__1);
+            aocl_blas_dgemv("No transpose", m, l, &c_b5, &c__[(*n - *l + 1) * c_dim1 + 1], ldc,
+                            &v[1], incv, &c_b5, &work[1], &c__1);
             /* C( 1:m, 1 ) = C( 1:m, 1 ) - tau * w( 1:m ) */
             d__1 = -(*tau);
             aocl_blas_daxpy(m, &d__1, &work[1], &c__1, &c__[c_offset], &c__1);

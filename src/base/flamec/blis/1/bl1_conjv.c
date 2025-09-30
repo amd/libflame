@@ -16,32 +16,32 @@
 #include "blis.h"
 #endif
 
-void bl1_sconjv( integer m, float* x, integer incx )
+void bl1_sconjv( fla_dim_t m, float* x, fla_dim_t incx )
 {
 	return;
 }
 
-void bl1_dconjv( integer m, double* x, integer incx )
+void bl1_dconjv( fla_dim_t m, double* x, fla_dim_t incx )
 {
 	return;
 }
 
-void bl1_cconjv( integer m, scomplex* x, integer incx )
+void bl1_cconjv( fla_dim_t m, scomplex* x, fla_dim_t incx )
 {
 	float  m1        = bl1_sm1();
 	float* x_conj    = ( float* ) x + 1;
-	integer    incx_conj = 2 * incx;
+	fla_dim_t    incx_conj = 2 * incx;
 
 	bl1_sscal( m,
 	           &m1,
 	           x_conj, incx_conj );
 }
 
-void bl1_zconjv( integer m, dcomplex* x, integer incx )
+void bl1_zconjv( fla_dim_t m, dcomplex* x, fla_dim_t incx )
 {
 	double  m1        = bl1_dm1();
 	double* x_conj    = ( double* ) x + 1;
-	integer     incx_conj = 2 * incx;
+	fla_dim_t     incx_conj = 2 * incx;
 
 	bl1_dscal( m,
 	           &m1,

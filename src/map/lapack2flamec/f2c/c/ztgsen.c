@@ -4,7 +4,7 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
+static aocl_int64_t c__1 = 1;
 /* > \brief \b ZTGSEN */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -47,7 +47,7 @@ static integer c__1 = 1;
 /* > */
 /* > \verbatim */
 /* > */
-/* > ZTGSEN reorders the generalized Schur decomposition of a complex */
+/* > ZTGSEN reorders the generalized Schur decomposition of a scomplex */
 /* > matrix pair (A, B) (in terms of an unitary equivalence trans- */
 /* > formation Q**H * (A, B) * Z), so that a selected cluster of eigenvalues */
 /* > appears in the leading diagonal blocks of the pair (A,B). The leading */
@@ -437,60 +437,71 @@ Computing Eigenspaces with Specified */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void ztgsen_(integer *ijob, logical *wantq, logical *wantz, logical *select, integer *n,
-             doublecomplex *a, integer *lda, doublecomplex *b, integer *ldb, doublecomplex *alpha,
-             doublecomplex *beta, doublecomplex *q, integer *ldq, doublecomplex *z__, integer *ldz,
-             integer *m, doublereal *pl, doublereal *pr, doublereal *dif, doublecomplex *work,
-             integer *lwork, integer *iwork, integer *liwork, integer *info)
+/** Generated wrapper function */
+void ztgsen_(aocl_int_t *ijob, logical *wantq, logical *wantz, logical *select, aocl_int_t *n,
+             dcomplex *a, aocl_int_t *lda, dcomplex *b, aocl_int_t *ldb,
+             dcomplex *alpha, dcomplex *beta, dcomplex *q, aocl_int_t *ldq,
+             dcomplex *z__, aocl_int_t *ldz, aocl_int_t *m, doublereal *pl, doublereal *pr,
+             doublereal *dif, dcomplex *work, aocl_int_t *lwork, aocl_int_t *iwork,
+             aocl_int_t *liwork, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_ztgsen(ijob, wantq, wantz, select, n, a, lda, b, ldb, alpha, beta, q, ldq, z__, ldz,
+                       m, pl, pr, dif, work, lwork, iwork, liwork, info);
+#else
+    aocl_int64_t ijob_64 = *ijob;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t ldb_64 = *ldb;
+    aocl_int64_t ldq_64 = *ldq;
+    aocl_int64_t ldz_64 = *ldz;
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t lwork_64 = *lwork;
+    aocl_int64_t liwork_64 = *liwork;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_ztgsen(&ijob_64, wantq, wantz, select, &n_64, a, &lda_64, b, &ldb_64, alpha, beta,
+                       q, &ldq_64, z__, &ldz_64, &m_64, pl, pr, dif, work, &lwork_64, iwork,
+                       &liwork_64, &info_64);
+
+    *m = (aocl_int_t)m_64;
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_ztgsen(aocl_int64_t *ijob, logical *wantq, logical *wantz, logical *select,
+                        aocl_int64_t *n, dcomplex *a, aocl_int64_t *lda, dcomplex *b,
+                        aocl_int64_t *ldb, dcomplex *alpha, dcomplex *beta,
+                        dcomplex *q, aocl_int64_t *ldq, dcomplex *z__, aocl_int64_t *ldz,
+                        aocl_int64_t *m, doublereal *pl, doublereal *pr, doublereal *dif,
+                        dcomplex *work, aocl_int64_t *lwork, aocl_int_t *iwork,
+                        aocl_int64_t *liwork, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("ztgsen inputs: ijob %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS
                       ", ldb %" FLA_IS ", ldq %" FLA_IS ", ldz %" FLA_IS ", m %" FLA_IS "",
                       *ijob, *n, *lda, *ldb, *ldq, *ldz, *m);
     /* System generated locals */
-    integer a_dim1, a_offset, b_dim1, b_offset, q_dim1, q_offset, z_dim1, z_offset, i__1, i__2,
+    aocl_int64_t a_dim1, a_offset, b_dim1, b_offset, q_dim1, q_offset, z_dim1, z_offset, i__1, i__2,
         i__3;
-    doublecomplex z__1, z__2;
+    dcomplex z__1, z__2;
     /* Builtin functions */
-    double sqrt(doublereal), z_abs(doublecomplex *);
-    void d_cnjg(doublecomplex *, doublecomplex *);
+    double sqrt(doublereal), z_abs(dcomplex *);
+    void d_cnjg(dcomplex *, dcomplex *);
     /* Local variables */
-    integer i__, k, n1, n2, ks, mn2, ijb, kase, ierr;
+    aocl_int64_t i__, k, n1, n2, ks, mn2, ijb, kase, ierr;
     doublereal dsum;
     logical swap;
-    doublecomplex temp1, temp2;
+    dcomplex temp1, temp2;
     integer isave[3];
-    extern /* Subroutine */
-        void
-        zscal_(integer *, doublecomplex *, doublecomplex *, integer *);
     logical wantd;
-    integer lwmin;
+    aocl_int64_t lwmin;
     logical wantp;
-    extern /* Subroutine */
-        void
-        zlacn2_(integer *, doublecomplex *, doublecomplex *, doublereal *, integer *, integer *);
     logical wantd1, wantd2;
     extern doublereal dlamch_(char *);
     doublereal dscale, rdscal, safmin;
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    integer liwmin;
-    extern /* Subroutine */
-        void
-        zlacpy_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *,
-                integer *),
-        ztgexc_(logical *, logical *, integer *, doublecomplex *, integer *, doublecomplex *,
-                integer *, doublecomplex *, integer *, doublecomplex *, integer *, integer *,
-                integer *, integer *),
-        zlassq_(integer *, doublecomplex *, integer *, doublereal *, doublereal *);
+    aocl_int64_t liwmin;
     logical lquery;
-    extern /* Subroutine */
-        void
-        ztgsyl_(char *, integer *, integer *, integer *, doublecomplex *, integer *,
-                doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *,
-                doublecomplex *, integer *, doublecomplex *, integer *, doublereal *, doublereal *,
-                doublecomplex *, integer *, integer *, integer *);
     /* -- LAPACK computational routine (version 3.7.1) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -563,7 +574,7 @@ void ztgsen_(integer *ijob, logical *wantq, logical *wantz, logical *select, int
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("ZTGSEN", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("ZTGSEN", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -635,7 +646,7 @@ void ztgsen_(integer *ijob, logical *wantq, logical *wantz, logical *select, int
     }
     work[1].r = (doublereal)lwmin;
     work[1].i = 0.; // , expr subst
-    iwork[1] = liwmin;
+    iwork[1] = (aocl_int_t)(liwmin);
     if(*lwork < lwmin && !lquery)
     {
         *info = -21;
@@ -647,7 +658,7 @@ void ztgsen_(integer *ijob, logical *wantq, logical *wantz, logical *select, int
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("ZTGSEN", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("ZTGSEN", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -671,8 +682,8 @@ void ztgsen_(integer *ijob, logical *wantq, logical *wantz, logical *select, int
             i__1 = *n;
             for(i__ = 1; i__ <= i__1; ++i__)
             {
-                zlassq_(n, &a[i__ * a_dim1 + 1], &c__1, &dscale, &dsum);
-                zlassq_(n, &b[i__ * b_dim1 + 1], &c__1, &dscale, &dsum);
+                aocl_lapack_zlassq(n, &a[i__ * a_dim1 + 1], &c__1, &dscale, &dsum);
+                aocl_lapack_zlassq(n, &b[i__ * b_dim1 + 1], &c__1, &dscale, &dsum);
                 /* L20: */
             }
             dif[1] = dscale * sqrt(dsum);
@@ -695,8 +706,8 @@ void ztgsen_(integer *ijob, logical *wantq, logical *wantz, logical *select, int
             /* and Z that will swap adjacent diagonal blocks in (A, B). */
             if(k != ks)
             {
-                ztgexc_(wantq, wantz, n, &a[a_offset], lda, &b[b_offset], ldb, &q[q_offset], ldq,
-                        &z__[z_offset], ldz, &k, &ks, &ierr);
+                aocl_lapack_ztgexc(wantq, wantz, n, &a[a_offset], lda, &b[b_offset], ldb,
+                                   &q[q_offset], ldq, &z__[z_offset], ldz, &k, &ks, &ierr);
             }
             if(ierr > 0)
             {
@@ -725,19 +736,20 @@ void ztgsen_(integer *ijob, logical *wantq, logical *wantz, logical *select, int
         n1 = *m;
         n2 = *n - *m;
         i__ = n1 + 1;
-        zlacpy_("Full", &n1, &n2, &a[i__ * a_dim1 + 1], lda, &work[1], &n1);
-        zlacpy_("Full", &n1, &n2, &b[i__ * b_dim1 + 1], ldb, &work[n1 * n2 + 1], &n1);
+        aocl_lapack_zlacpy("Full", &n1, &n2, &a[i__ * a_dim1 + 1], lda, &work[1], &n1);
+        aocl_lapack_zlacpy("Full", &n1, &n2, &b[i__ * b_dim1 + 1], ldb, &work[n1 * n2 + 1], &n1);
         ijb = 0;
         i__1 = *lwork - (n1 << 1) * n2;
-        ztgsyl_("N", &ijb, &n1, &n2, &a[a_offset], lda, &a[i__ + i__ * a_dim1], lda, &work[1], &n1,
-                &b[b_offset], ldb, &b[i__ + i__ * b_dim1], ldb, &work[n1 * n2 + 1], &n1, &dscale,
-                &dif[1], &work[(n1 * n2 << 1) + 1], &i__1, &iwork[1], &ierr);
+        aocl_lapack_ztgsyl("N", &ijb, &n1, &n2, &a[a_offset], lda, &a[i__ + i__ * a_dim1], lda,
+                           &work[1], &n1, &b[b_offset], ldb, &b[i__ + i__ * b_dim1], ldb,
+                           &work[n1 * n2 + 1], &n1, &dscale, &dif[1], &work[(n1 * n2 << 1) + 1],
+                           &i__1, &iwork[1], &ierr);
         /* Estimate the reciprocal of norms of "projections" onto */
         /* left and right eigenspaces */
         rdscal = 0.;
         dsum = 1.;
         i__1 = n1 * n2;
-        zlassq_(&i__1, &work[1], &c__1, &rdscal, &dsum);
+        aocl_lapack_zlassq(&i__1, &work[1], &c__1, &rdscal, &dsum);
         *pl = rdscal * sqrt(dsum);
         if(*pl == 0.)
         {
@@ -750,7 +762,7 @@ void ztgsen_(integer *ijob, logical *wantq, logical *wantz, logical *select, int
         rdscal = 0.;
         dsum = 1.;
         i__1 = n1 * n2;
-        zlassq_(&i__1, &work[n1 * n2 + 1], &c__1, &rdscal, &dsum);
+        aocl_lapack_zlassq(&i__1, &work[n1 * n2 + 1], &c__1, &rdscal, &dsum);
         *pr = rdscal * sqrt(dsum);
         if(*pr == 0.)
         {
@@ -772,14 +784,16 @@ void ztgsen_(integer *ijob, logical *wantq, logical *wantz, logical *select, int
             ijb = 3;
             /* Frobenius norm-based Difu estimate. */
             i__1 = *lwork - (n1 << 1) * n2;
-            ztgsyl_("N", &ijb, &n1, &n2, &a[a_offset], lda, &a[i__ + i__ * a_dim1], lda, &work[1],
-                    &n1, &b[b_offset], ldb, &b[i__ + i__ * b_dim1], ldb, &work[n1 * n2 + 1], &n1,
-                    &dscale, &dif[1], &work[(n1 * n2 << 1) + 1], &i__1, &iwork[1], &ierr);
+            aocl_lapack_ztgsyl("N", &ijb, &n1, &n2, &a[a_offset], lda, &a[i__ + i__ * a_dim1], lda,
+                               &work[1], &n1, &b[b_offset], ldb, &b[i__ + i__ * b_dim1], ldb,
+                               &work[n1 * n2 + 1], &n1, &dscale, &dif[1], &work[(n1 * n2 << 1) + 1],
+                               &i__1, &iwork[1], &ierr);
             /* Frobenius norm-based Difl estimate. */
             i__1 = *lwork - (n1 << 1) * n2;
-            ztgsyl_("N", &ijb, &n2, &n1, &a[i__ + i__ * a_dim1], lda, &a[a_offset], lda, &work[1],
-                    &n2, &b[i__ + i__ * b_dim1], ldb, &b[b_offset], ldb, &work[n1 * n2 + 1], &n2,
-                    &dscale, &dif[2], &work[(n1 * n2 << 1) + 1], &i__1, &iwork[1], &ierr);
+            aocl_lapack_ztgsyl("N", &ijb, &n2, &n1, &a[i__ + i__ * a_dim1], lda, &a[a_offset], lda,
+                               &work[1], &n2, &b[i__ + i__ * b_dim1], ldb, &b[b_offset], ldb,
+                               &work[n1 * n2 + 1], &n2, &dscale, &dif[2], &work[(n1 * n2 << 1) + 1],
+                               &i__1, &iwork[1], &ierr);
         }
         else
         {
@@ -795,59 +809,62 @@ void ztgsen_(integer *ijob, logical *wantq, logical *wantz, logical *select, int
             mn2 = (n1 << 1) * n2;
             /* 1-norm-based estimate of Difu. */
         L40:
-            zlacn2_(&mn2, &work[mn2 + 1], &work[1], &dif[1], &kase, isave);
+            aocl_lapack_zlacn2(&mn2, &work[mn2 + 1], &work[1], &dif[1], &kase, isave);
             if(kase != 0)
             {
                 if(kase == 1)
                 {
                     /* Solve generalized Sylvester equation */
                     i__1 = *lwork - (n1 << 1) * n2;
-                    ztgsyl_("N", &ijb, &n1, &n2, &a[a_offset], lda, &a[i__ + i__ * a_dim1], lda,
-                            &work[1], &n1, &b[b_offset], ldb, &b[i__ + i__ * b_dim1], ldb,
-                            &work[n1 * n2 + 1], &n1, &dscale, &dif[1], &work[(n1 * n2 << 1) + 1],
-                            &i__1, &iwork[1], &ierr);
+                    aocl_lapack_ztgsyl("N", &ijb, &n1, &n2, &a[a_offset], lda,
+                                       &a[i__ + i__ * a_dim1], lda, &work[1], &n1, &b[b_offset],
+                                       ldb, &b[i__ + i__ * b_dim1], ldb, &work[n1 * n2 + 1], &n1,
+                                       &dscale, &dif[1], &work[(n1 * n2 << 1) + 1], &i__1,
+                                       &iwork[1], &ierr);
                 }
                 else
                 {
                     /* Solve the transposed variant. */
                     i__1 = *lwork - (n1 << 1) * n2;
-                    ztgsyl_("C", &ijb, &n1, &n2, &a[a_offset], lda, &a[i__ + i__ * a_dim1], lda,
-                            &work[1], &n1, &b[b_offset], ldb, &b[i__ + i__ * b_dim1], ldb,
-                            &work[n1 * n2 + 1], &n1, &dscale, &dif[1], &work[(n1 * n2 << 1) + 1],
-                            &i__1, &iwork[1], &ierr);
+                    aocl_lapack_ztgsyl("C", &ijb, &n1, &n2, &a[a_offset], lda,
+                                       &a[i__ + i__ * a_dim1], lda, &work[1], &n1, &b[b_offset],
+                                       ldb, &b[i__ + i__ * b_dim1], ldb, &work[n1 * n2 + 1], &n1,
+                                       &dscale, &dif[1], &work[(n1 * n2 << 1) + 1], &i__1,
+                                       &iwork[1], &ierr);
                 }
                 goto L40;
             }
             dif[1] = dscale / dif[1];
             /* 1-norm-based estimate of Difl. */
         L50:
-            zlacn2_(&mn2, &work[mn2 + 1], &work[1], &dif[2], &kase, isave);
+            aocl_lapack_zlacn2(&mn2, &work[mn2 + 1], &work[1], &dif[2], &kase, isave);
             if(kase != 0)
             {
                 if(kase == 1)
                 {
                     /* Solve generalized Sylvester equation */
                     i__1 = *lwork - (n1 << 1) * n2;
-                    ztgsyl_("N", &ijb, &n2, &n1, &a[i__ + i__ * a_dim1], lda, &a[a_offset], lda,
-                            &work[1], &n2, &b[i__ + i__ * b_dim1], ldb, &b[b_offset], ldb,
-                            &work[n1 * n2 + 1], &n2, &dscale, &dif[2], &work[(n1 * n2 << 1) + 1],
-                            &i__1, &iwork[1], &ierr);
+                    aocl_lapack_ztgsyl("N", &ijb, &n2, &n1, &a[i__ + i__ * a_dim1], lda,
+                                       &a[a_offset], lda, &work[1], &n2, &b[i__ + i__ * b_dim1],
+                                       ldb, &b[b_offset], ldb, &work[n1 * n2 + 1], &n2, &dscale,
+                                       &dif[2], &work[(n1 * n2 << 1) + 1], &i__1, &iwork[1], &ierr);
                 }
                 else
                 {
                     /* Solve the transposed variant. */
                     i__1 = *lwork - (n1 << 1) * n2;
-                    ztgsyl_("C", &ijb, &n2, &n1, &a[i__ + i__ * a_dim1], lda, &a[a_offset], lda,
-                            &work[1], &n2, &b[b_offset], ldb, &b[i__ + i__ * b_dim1], ldb,
-                            &work[n1 * n2 + 1], &n2, &dscale, &dif[2], &work[(n1 * n2 << 1) + 1],
-                            &i__1, &iwork[1], &ierr);
+                    aocl_lapack_ztgsyl("C", &ijb, &n2, &n1, &a[i__ + i__ * a_dim1], lda,
+                                       &a[a_offset], lda, &work[1], &n2, &b[b_offset], ldb,
+                                       &b[i__ + i__ * b_dim1], ldb, &work[n1 * n2 + 1], &n2,
+                                       &dscale, &dif[2], &work[(n1 * n2 << 1) + 1], &i__1,
+                                       &iwork[1], &ierr);
                 }
                 goto L50;
             }
             dif[2] = dscale / dif[2];
         }
     }
-    /* If B(K,K) is complex, make it real and positive (normalization */
+    /* If B(K,K) is scomplex, make it real and positive (normalization */
     /* of the generalized Schur form) and Store the generalized */
     /* eigenvalues of reordered pair (A, B) */
     i__1 = *n;
@@ -871,12 +888,12 @@ void ztgsen_(integer *ijob, logical *wantq, logical *wantz, logical *select, int
             b[i__2].r = dscale;
             b[i__2].i = 0.; // , expr subst
             i__2 = *n - k;
-            zscal_(&i__2, &temp1, &b[k + (k + 1) * b_dim1], ldb);
+            aocl_blas_zscal(&i__2, &temp1, &b[k + (k + 1) * b_dim1], ldb);
             i__2 = *n - k + 1;
-            zscal_(&i__2, &temp1, &a[k + k * a_dim1], lda);
+            aocl_blas_zscal(&i__2, &temp1, &a[k + k * a_dim1], lda);
             if(*wantq)
             {
-                zscal_(n, &temp2, &q[k * q_dim1 + 1], &c__1);
+                aocl_blas_zscal(n, &temp2, &q[k * q_dim1 + 1], &c__1);
             }
         }
         else
@@ -898,7 +915,7 @@ void ztgsen_(integer *ijob, logical *wantq, logical *wantz, logical *select, int
 L70:
     work[1].r = (doublereal)lwmin;
     work[1].i = 0.; // , expr subst
-    iwork[1] = liwmin;
+    iwork[1] = (aocl_int_t)(liwmin);
     AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of ZTGSEN */

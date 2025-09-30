@@ -31,10 +31,138 @@
    Hence, if the routine passes above error checking, FLA_Trinv should not produce any error.
 */
 
+/** Generated wrapper function */
+void strtri_(char *uplo, char *diag, aocl_int_t *n, real *buff_A, aocl_int_t *ldim_A, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_strtri(uplo, diag, n, buff_A, ldim_A, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t ldim_A_64 = *ldim_A;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_strtri(uplo, diag, &n_64, buff_A, &ldim_A_64, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+/** Generated wrapper function */
+void dtrtri_(char *uplo, char *diag, aocl_int_t *n, doublereal *buff_A, aocl_int_t *ldim_A, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_dtrtri(uplo, diag, n, buff_A, ldim_A, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t ldim_A_64 = *ldim_A;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_dtrtri(uplo, diag, &n_64, buff_A, &ldim_A_64, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+/** Generated wrapper function */
+void ctrtri_(char *uplo, char *diag, aocl_int_t *n, scomplex *buff_A, aocl_int_t *ldim_A, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_ctrtri(uplo, diag, n, buff_A, ldim_A, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t ldim_A_64 = *ldim_A;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_ctrtri(uplo, diag, &n_64, buff_A, &ldim_A_64, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+/** Generated wrapper function */
+void ztrtri_(char *uplo, char *diag, aocl_int_t *n, dcomplex *buff_A, aocl_int_t *ldim_A, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_ztrtri(uplo, diag, n, buff_A, ldim_A, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t ldim_A_64 = *ldim_A;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_ztrtri(uplo, diag, &n_64, buff_A, &ldim_A_64, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+/** Generated wrapper function */
+void strti2_(char *uplo, char *diag, aocl_int_t *n, real *buff_A, aocl_int_t *ldim_A, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_strti2(uplo, diag, n, buff_A, ldim_A, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t ldim_A_64 = *ldim_A;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_strti2(uplo, diag, &n_64, buff_A, &ldim_A_64, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+/** Generated wrapper function */
+void dtrti2_(char *uplo, char *diag, aocl_int_t *n, doublereal *buff_A, aocl_int_t *ldim_A, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_dtrti2(uplo, diag, n, buff_A, ldim_A, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t ldim_A_64 = *ldim_A;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_dtrti2(uplo, diag, &n_64, buff_A, &ldim_A_64, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+/** Generated wrapper function */
+void ctrti2_(char *uplo, char *diag, aocl_int_t *n, scomplex *buff_A, aocl_int_t *ldim_A, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_ctrti2(uplo, diag, n, buff_A, ldim_A, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t ldim_A_64 = *ldim_A;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_ctrti2(uplo, diag, &n_64, buff_A, &ldim_A_64, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+/** Generated wrapper function */
+void ztrti2_(char *uplo, char *diag, aocl_int_t *n, dcomplex *buff_A, aocl_int_t *ldim_A, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_ztrti2(uplo, diag, n, buff_A, ldim_A, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t ldim_A_64 = *ldim_A;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_ztrti2(uplo, diag, &n_64, buff_A, &ldim_A_64, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
 #define LAPACK_trtri(prefix)                                                           \
-    void F77_##prefix##trtri(char *uplo, char *diag, integer *n,                       \
-                             PREFIX2LAPACK_TYPEDEF(prefix) * buff_A, integer * ldim_A, \
-                             integer * info)
+    void aocl_lapack_##prefix##trtri(char *uplo, char *diag, aocl_int64_t *n,                       \
+                             PREFIX2LAPACK_TYPEDEF(prefix) * buff_A, aocl_int64_t * ldim_A, \
+                             aocl_int64_t * info)
 
 #define LAPACK_trtri_body(prefix)                          \
     FLA_Datatype datatype = PREFIX2FLAME_DATATYPE(prefix); \
@@ -151,9 +279,9 @@ LAPACK_trtri(z)
 }
 
 #define LAPACK_trti2(prefix)                                                           \
-    void F77_##prefix##trti2(char *uplo, char *diag, integer *n,                       \
-                             PREFIX2LAPACK_TYPEDEF(prefix) * buff_A, integer * ldim_A, \
-                             integer * info)
+    void aocl_lapack_##prefix##trti2(char *uplo, char *diag, aocl_int64_t *n,                       \
+                             PREFIX2LAPACK_TYPEDEF(prefix) * buff_A, aocl_int64_t * ldim_A, \
+                             aocl_int64_t * info)
 
 LAPACK_trti2(s)
 {

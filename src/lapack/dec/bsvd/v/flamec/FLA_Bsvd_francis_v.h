@@ -11,16 +11,16 @@
 // --- FLA_Bsvd_francis_v_opt_var1() -------------------------------------------
 
 FLA_Error FLA_Bsvd_francis_v_opt_var1( FLA_Obj shift, FLA_Obj g, FLA_Obj h, FLA_Obj d, FLA_Obj e );
-FLA_Error FLA_Bsvd_francis_v_ops_var1( integer       m_A,
+FLA_Error FLA_Bsvd_francis_v_ops_var1( fla_dim_t       m_A,
                                        float     shift,
-                                       scomplex* buff_g, integer inc_g, 
-                                       scomplex* buff_h, integer inc_h, 
-                                       float*    buff_d, integer inc_d, 
-                                       float*    buff_e, integer inc_e ); 
-FLA_Error FLA_Bsvd_francis_v_opd_var1( integer       m_A,
+                                       scomplex* buff_g, fla_dim_t inc_g, 
+                                       scomplex* buff_h, fla_dim_t inc_h, 
+                                       float*    buff_d, fla_dim_t inc_d, 
+                                       float*    buff_e, fla_dim_t inc_e ); 
+FLA_Error FLA_Bsvd_francis_v_opd_var1( fla_dim_t       m_A,
                                        double    shift,
-                                       dcomplex* buff_g, integer inc_g, 
-                                       dcomplex* buff_h, integer inc_h, 
-                                       double*   buff_d, integer inc_d, 
-                                       double*   buff_e, integer inc_e ); 
+                                       dcomplex* buff_g, fla_dim_t inc_g, 
+                                       dcomplex* buff_h, fla_dim_t inc_h, 
+                                       double*   buff_d, fla_dim_t inc_d, 
+                                       double*   buff_e, fla_dim_t inc_e ); 
 

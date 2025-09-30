@@ -117,16 +117,16 @@ higher precision or correctly rounded or */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void zlaev2_(doublecomplex *a, doublecomplex *b, doublecomplex *c__, doublereal *rt1,
-             doublereal *rt2, doublereal *cs1, doublecomplex *sn1)
+void zlaev2_(dcomplex *a, dcomplex *b, dcomplex *c__, doublereal *rt1,
+             doublereal *rt2, doublereal *cs1, dcomplex *sn1)
 {
     AOCL_DTL_TRACE_ENTRY_INDENT
     /* System generated locals */
     doublereal d__1, d__2, d__3;
     dcomplex z__1, z__2;
     /* Builtin functions */
-    double z_abs(doublecomplex *);
-    void d_cnjg(doublecomplex *, doublecomplex *);
+    double z_abs(dcomplex *);
+    void d_cnjg(dcomplex *, dcomplex *);
     /* Local variables */
     doublereal t;
     dcomplex w;

@@ -13,10 +13,10 @@
 FLA_Error FLA_Trmmsx_external( FLA_Side side, FLA_Uplo uplo, FLA_Trans trans, FLA_Diag diag, FLA_Obj alpha, FLA_Obj A, FLA_Obj B, FLA_Obj beta, FLA_Obj C )
 {
   FLA_Datatype datatype;
-  integer          m_B, n_B;
-  integer          rs_A, cs_A;
-  integer          rs_B, cs_B;
-  integer          rs_C, cs_C;
+  fla_dim_t          m_B, n_B;
+  fla_dim_t          rs_A, cs_A;
+  fla_dim_t          rs_B, cs_B;
+  fla_dim_t          rs_C, cs_C;
   side1_t       blis_side; 
   uplo1_t       blis_uplo;
   trans1_t      blis_trans;

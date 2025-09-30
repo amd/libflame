@@ -74,14 +74,27 @@
 /* > */
 /* > Nick Higham for use with ZLACON. */
 /* ===================================================================== */
-integer izmax1_(integer *n, doublecomplex *zx, integer *incx)
+/** Generated wrapper function */
+aocl_int_t izmax1_(aocl_int_t *n, dcomplex *zx, aocl_int_t *incx)
+{
+#if FLA_ENABLE_ILP64
+    return aocl_lapack_izmax1(n, zx, incx);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t incx_64 = *incx;
+
+    return aocl_lapack_izmax1(&n_64, zx, &incx_64);
+#endif
+}
+
+aocl_int64_t aocl_lapack_izmax1(aocl_int64_t *n, dcomplex *zx, aocl_int64_t *incx)
 {
     /* System generated locals */
-    integer ret_val, i__1;
+    aocl_int64_t ret_val, i__1;
     /* Builtin functions */
-    double z_abs(doublecomplex *);
+    double z_abs(dcomplex *);
     /* Local variables */
-    integer i__, ix;
+    aocl_int64_t i__, ix;
     doublereal dmax__;
     /* -- LAPACK auxiliary routine (version 3.7.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */

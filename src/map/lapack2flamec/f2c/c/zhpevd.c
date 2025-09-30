@@ -4,7 +4,7 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
+static aocl_int64_t c__1 = 1;
 /* > \brief <b> ZHPEVD computes the eigenvalues and, optionally, the left and/or right eigenvectors
  * for OTHER matrices</b> */
 /* =========== DOCUMENTATION =========== */
@@ -205,9 +205,34 @@ i */
 /* > \ingroup complex16OTHEReigen */
 /* ===================================================================== */
 /* Subroutine */
-void zhpevd_(char *jobz, char *uplo, integer *n, doublecomplex *ap, doublereal *w,
-             doublecomplex *z__, integer *ldz, doublecomplex *work, integer *lwork,
-             doublereal *rwork, integer *lrwork, integer *iwork, integer *liwork, integer *info)
+/** Generated wrapper function */
+void zhpevd_(char *jobz, char *uplo, aocl_int_t *n, dcomplex *ap, doublereal *w,
+             dcomplex *z__, aocl_int_t *ldz, dcomplex *work, aocl_int_t *lwork,
+             doublereal *rwork, aocl_int_t *lrwork, aocl_int_t *iwork, aocl_int_t *liwork,
+             aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_zhpevd(jobz, uplo, n, ap, w, z__, ldz, work, lwork, rwork, lrwork, iwork, liwork,
+                       info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t ldz_64 = *ldz;
+    aocl_int64_t lwork_64 = *lwork;
+    aocl_int64_t lrwork_64 = *lrwork;
+    aocl_int64_t liwork_64 = *liwork;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_zhpevd(jobz, uplo, &n_64, ap, w, z__, &ldz_64, work, &lwork_64, rwork, &lrwork_64,
+                       iwork, &liwork_64, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_zhpevd(char *jobz, char *uplo, aocl_int64_t *n, dcomplex *ap, doublereal *w,
+                        dcomplex *z__, aocl_int64_t *ldz, dcomplex *work,
+                        aocl_int64_t *lwork, doublereal *rwork, aocl_int64_t *lrwork,
+                        aocl_int_t *iwork, aocl_int64_t *liwork, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zhpevd inputs: jobz %c, uplo %c, n %" FLA_IS ", ldz %" FLA_IS "", *jobz,
@@ -223,44 +248,18 @@ void zhpevd_(char *jobz, char *uplo, integer *n, doublecomplex *ap, doublereal *
     doublereal anrm;
     aocl_int64_t imax;
     doublereal rmin, rmax;
-    extern /* Subroutine */
-        void
-        dscal_(integer *, doublereal *, doublereal *, integer *);
     doublereal sigma;
-    extern logical lsame_(char *, char *, integer, integer);
-    integer iinfo, lwmin, llrwk, llwrk;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    aocl_int64_t iinfo, lwmin, llrwk, llwrk;
     logical wantz;
     extern doublereal dlamch_(char *);
     aocl_int64_t iscale;
     doublereal safmin;
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    extern /* Subroutine */
-        void
-        zdscal_(integer *, doublereal *, doublecomplex *, integer *);
     doublereal bignum;
-    integer indtau;
-    extern /* Subroutine */
-        void
-        dsterf_(integer *, doublereal *, doublereal *, integer *);
-    extern doublereal zlanhp_(char *, char *, integer *, doublecomplex *, doublereal *);
-    extern /* Subroutine */
-        void
-        zstedc_(char *, integer *, doublereal *, doublereal *, doublecomplex *, integer *,
-                doublecomplex *, integer *, doublereal *, integer *, integer *, integer *,
-                integer *);
-    integer indrwk, indwrk, liwmin, lrwmin;
+    aocl_int64_t indtau;
+    aocl_int64_t indrwk, indwrk, liwmin, lrwmin;
     doublereal smlnum;
-    extern /* Subroutine */
-        void
-        zhptrd_(char *, integer *, doublecomplex *, doublereal *, doublereal *, doublecomplex *,
-                integer *);
     logical lquery;
-    extern /* Subroutine */
-        void
-        zupmtr_(char *, char *, char *, integer *, integer *, doublecomplex *, doublecomplex *,
-                doublecomplex *, integer *, doublecomplex *, integer *);
     /* -- LAPACK driver routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -339,7 +338,7 @@ void zhpevd_(char *jobz, char *uplo, integer *n, doublecomplex *ap, doublereal *
         work[1].r = (doublereal)lwmin;
         work[1].i = 0.; // , expr subst
         rwork[1] = (doublereal)lrwmin;
-        iwork[1] = liwmin;
+        iwork[1] = (aocl_int_t)(liwmin);
         if(*lwork < lwmin && !lquery)
         {
             *info = -9;
@@ -356,7 +355,7 @@ void zhpevd_(char *jobz, char *uplo, integer *n, doublecomplex *ap, doublereal *
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("ZHPEVD", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("ZHPEVD", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -424,10 +423,10 @@ void zhpevd_(char *jobz, char *uplo, integer *n, doublecomplex *ap, doublereal *
     }
     else
     {
-        zstedc_("I", n, &w[1], &rwork[inde], &z__[z_offset], ldz, &work[indwrk], &llwrk,
-                &rwork[indrwk], &llrwk, &iwork[1], liwork, info);
-        zupmtr_("L", uplo, "N", n, n, &ap[1], &work[indtau], &z__[z_offset], ldz, &work[indwrk],
-                &iinfo);
+        aocl_lapack_zstedc("I", n, &w[1], &rwork[inde], &z__[z_offset], ldz, &work[indwrk], &llwrk,
+                           &rwork[indrwk], &llrwk, &iwork[1], liwork, info);
+        aocl_lapack_zupmtr("L", uplo, "N", n, n, &ap[1], &work[indtau], &z__[z_offset], ldz,
+                           &work[indwrk], &iinfo);
     }
     /* If matrix was scaled, then rescale eigenvalues appropriately. */
     if(iscale == 1)
@@ -446,7 +445,7 @@ void zhpevd_(char *jobz, char *uplo, integer *n, doublecomplex *ap, doublereal *
     work[1].r = (doublereal)lwmin;
     work[1].i = 0.; // , expr subst
     rwork[1] = (doublereal)lrwmin;
-    iwork[1] = liwmin;
+    iwork[1] = (aocl_int_t)(liwmin);
     AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of ZHPEVD */

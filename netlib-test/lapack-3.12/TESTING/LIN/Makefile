@@ -36,7 +36,7 @@ include $(TOPSRCDIR)/make.inc
 
 ALINTST = \
    aladhd.o alaerh.o alaesm.o alahd.o alareq.o \
-   alasum.o alasvm.o chkxer.o icopy.o ilaenv.o xlaenv.o xerbla.o
+   alasum.o alasvm.o chkxer.o icopy.o ilaenv.o aocl_lapack_ilaenv.o xlaenv.o xerbla.o
 
 SCLNTST = slaord.o
 
@@ -327,3 +327,4 @@ zchkaa.o: zchkaa.F
 	$(FC) $(FFLAGS_DRV) -c -o $@ $<
 
 .NOTPARALLEL:
+

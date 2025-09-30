@@ -1,22 +1,22 @@
 #include "FLA_f2c.h"
 #include "FLA_lapack2flame_return_defs.h"
-static integer c_n1 = -1;
+static aocl_int64_t c_n1 = -1;
 
-int zungbr_check(char *vect, integer *m, integer *n, integer *k, dcomplex *a, integer *lda,
-                 dcomplex *tau, dcomplex *work, integer *lwork, integer *info)
+int zungbr_check(char *vect, aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *k, dcomplex *a, aocl_int64_t *lda,
+                 dcomplex *tau, dcomplex *work, aocl_int64_t *lwork, aocl_int64_t *info)
 {
     /* System generated locals */
-    integer a_dim1, a_offset, i__1, i__2, i__3;
+    aocl_int64_t a_dim1, a_offset, i__1, i__2, i__3;
     /* Local variables */
-    integer mn;
-    integer iinfo;
+    aocl_int64_t mn;
+    aocl_int64_t iinfo;
     logical wantq;
-    integer lwkopt;
+    aocl_int64_t lwkopt;
     logical lquery;
-    extern integer zunglq_check(integer *, integer *, integer *, dcomplex *, integer *, dcomplex *,
-                                dcomplex *, integer *, integer *),
-        zungqr_check(integer *, integer *, integer *, dcomplex *, integer *, dcomplex *, dcomplex *,
-                     integer *, integer *);
+    extern integer zunglq_check(aocl_int64_t *, aocl_int64_t *, aocl_int64_t *, dcomplex *, aocl_int64_t *, dcomplex *,
+                                dcomplex *, aocl_int64_t *, aocl_int64_t *),
+        zungqr_check(aocl_int64_t *, aocl_int64_t *, aocl_int64_t *, dcomplex *, aocl_int64_t *, dcomplex *, dcomplex *,
+                     aocl_int64_t *, aocl_int64_t *);
 
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
@@ -106,7 +106,7 @@ int zungbr_check(char *vect, integer *m, integer *n, integer *k, dcomplex *a, in
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("ZUNGBR", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("ZUNGBR", &i__1, (ftnlen)6);
         return LAPACK_FAILURE;
     }
     else if(lquery)

@@ -13,11 +13,11 @@
  * All the computations are done inline without using
  * corresponding BLAS APIs to reduce function overheads.
  */
-void fla_lu_piv_small_s_update_tr_matrix_avx2(integer i_1, integer mi, integer ni, real *acur,
-                                              integer lda_t)
+void fla_lu_piv_small_s_update_tr_matrix_avx2(aocl_int64_t i_1, aocl_int64_t mi, aocl_int64_t ni, real *acur,
+                                              aocl_int64_t lda_t)
 {
 
-    integer j, b_off, y_off;
+    aocl_int64_t j, b_off, y_off;
     real p_val;
     __m256 result[4], tempY[4], tempb[4], tempx, p_val8;
 

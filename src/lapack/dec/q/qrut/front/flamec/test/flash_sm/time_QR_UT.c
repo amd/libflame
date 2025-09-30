@@ -16,17 +16,17 @@
 
 
 void time_QR_UT(
-               integer param_combo, integer type, integer nrepeats, integer m, integer n,
+               aocl_int64_t param_combo, aocl_int64_t type, aocl_int64_t nrepeats, aocl_int64_t m, aocl_int64_t n,
                FLA_Obj A, FLA_Obj TW, FLA_Obj b, FLA_Obj x,
                double *dtime, double *diff, double *gflops );
 
 
 void time_QR_UT(
-               integer param_combo, integer type, integer nrepeats, integer m, integer n,
+               aocl_int64_t param_combo, aocl_int64_t type, aocl_int64_t nrepeats, aocl_int64_t m, aocl_int64_t n,
                FLA_Obj A, FLA_Obj TW, FLA_Obj b, FLA_Obj x,
                double *dtime, double *diff, double *gflops )
 {
-  integer
+  aocl_int64_t
     irep;
 
   double

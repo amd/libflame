@@ -16,7 +16,7 @@
 #include "blis.h"
 #endif
 
-void bl1_sscal( integer n, float* alpha, float* x, integer incx )
+void bl1_sscal( fla_dim_t n, float* alpha, float* x, fla_dim_t incx )
 {
 #ifdef BLIS1_ENABLE_CBLAS_INTERFACES
 	cblas_sscal( n,
@@ -29,7 +29,7 @@ void bl1_sscal( integer n, float* alpha, float* x, integer incx )
 #endif
 }
 
-void bl1_dscal( integer n, double* alpha, double* x, integer incx )
+void bl1_dscal( fla_dim_t n, double* alpha, double* x, fla_dim_t incx )
 {
 #ifdef BLIS1_ENABLE_CBLAS_INTERFACES
 	cblas_dscal( n,
@@ -42,7 +42,7 @@ void bl1_dscal( integer n, double* alpha, double* x, integer incx )
 #endif
 }
 
-void bl1_csscal( integer n, float* alpha, scomplex* x, integer incx )
+void bl1_csscal( fla_dim_t n, float* alpha, scomplex* x, fla_dim_t incx )
 {
 #ifdef BLIS1_ENABLE_CBLAS_INTERFACES
 	cblas_csscal( n,
@@ -55,7 +55,7 @@ void bl1_csscal( integer n, float* alpha, scomplex* x, integer incx )
 #endif
 }
 
-void bl1_cscal( integer n, scomplex* alpha, scomplex* x, integer incx )
+void bl1_cscal( fla_dim_t n, scomplex* alpha, scomplex* x, fla_dim_t incx )
 {
 #ifdef BLIS1_ENABLE_CBLAS_INTERFACES
 	cblas_cscal( n,
@@ -68,7 +68,7 @@ void bl1_cscal( integer n, scomplex* alpha, scomplex* x, integer incx )
 #endif
 }
 
-void bl1_zdscal( integer n, double* alpha, dcomplex* x, integer incx )
+void bl1_zdscal( fla_dim_t n, double* alpha, dcomplex* x, fla_dim_t incx )
 {
 #ifdef BLIS1_ENABLE_CBLAS_INTERFACES
 	cblas_zdscal( n,
@@ -81,7 +81,7 @@ void bl1_zdscal( integer n, double* alpha, dcomplex* x, integer incx )
 #endif
 }
 
-void bl1_zscal( integer n, dcomplex* alpha, dcomplex* x, integer incx )
+void bl1_zscal( fla_dim_t n, dcomplex* alpha, dcomplex* x, fla_dim_t incx )
 {
 #ifdef BLIS1_ENABLE_CBLAS_INTERFACES
 	cblas_zscal( n,

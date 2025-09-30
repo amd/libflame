@@ -192,7 +192,23 @@ k=N/2. IF TRANSR = 'T' then RFP is */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void dpftri_(char *transr, char *uplo, integer *n, doublereal *a, integer *info)
+/** Generated wrapper function */
+void dpftri_(char *transr, char *uplo, aocl_int_t *n, doublereal *a, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_dpftri(transr, uplo, n, a, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_dpftri(transr, uplo, &n_64, a, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_dpftri(char *transr, char *uplo, aocl_int64_t *n, doublereal *a,
+                        aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dpftri inputs: transr %c, uplo %c, n %" FLA_IS "", *transr, *uplo, *n);
@@ -201,22 +217,9 @@ void dpftri_(char *transr, char *uplo, integer *n, doublereal *a, integer *info)
     /* Local variables */
     aocl_int64_t k, n1, n2;
     logical normaltransr;
-    extern logical lsame_(char *, char *, integer, integer);
-    extern /* Subroutine */
-        void
-        dtrmm_(char *, char *, char *, char *, integer *, integer *, doublereal *, doublereal *,
-               integer *, doublereal *, integer *);
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     logical lower;
-    extern /* Subroutine */
-        void
-        dsyrk_(char *, char *, integer *, integer *, doublereal *, doublereal *, integer *,
-               doublereal *, doublereal *, integer *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical nisodd;
-    extern /* Subroutine */
-        void
-        dlauum_(char *, integer *, doublereal *, integer *, integer *),
-        dtftri_(char *, char *, char *, integer *, doublereal *, integer *);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -255,7 +258,7 @@ void dpftri_(char *transr, char *uplo, integer *n, doublereal *a, integer *info)
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("DPFTRI", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("DPFTRI", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -266,7 +269,7 @@ void dpftri_(char *transr, char *uplo, integer *n, doublereal *a, integer *info)
         return;
     }
     /* Invert the triangular Cholesky factor U or L. */
-    dtftri_(transr, uplo, "N", n, a, info);
+    aocl_lapack_dtftri(transr, uplo, "N", n, a, info);
     if(*info > 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
@@ -307,10 +310,10 @@ void dpftri_(char *transr, char *uplo, integer *n, doublereal *a, integer *info)
                 /* SRPA for LOWER, NORMAL and N is odd ( a(0:n-1,0:N1-1) ) */
                 /* T1 -> a(0,0), T2 -> a(0,1), S -> a(N1,0) */
                 /* T1 -> a(0), T2 -> a(n), S -> a(N1) */
-                dlauum_("L", &n1, a, n, info);
-                dsyrk_("L", "T", &n1, &n2, &c_b11, &a[n1], n, &c_b11, a, n);
-                dtrmm_("L", "U", "N", "N", &n2, &n1, &c_b11, &a[*n], n, &a[n1], n);
-                dlauum_("U", &n2, &a[*n], n, info);
+                aocl_lapack_dlauum("L", &n1, a, n, info);
+                aocl_blas_dsyrk("L", "T", &n1, &n2, &c_b11, &a[n1], n, &c_b11, a, n);
+                aocl_blas_dtrmm("L", "U", "N", "N", &n2, &n1, &c_b11, &a[*n], n, &a[n1], n);
+                aocl_lapack_dlauum("U", &n2, &a[*n], n, info);
             }
             else
             {
@@ -330,19 +333,19 @@ void dpftri_(char *transr, char *uplo, integer *n, doublereal *a, integer *info)
             {
                 /* SRPA for LOWER, TRANSPOSE, and N is odd */
                 /* T1 -> a(0), T2 -> a(1), S -> a(0+N1*N1) */
-                dlauum_("U", &n1, a, &n1, info);
-                dsyrk_("U", "N", &n1, &n2, &c_b11, &a[n1 * n1], &n1, &c_b11, a, &n1);
-                dtrmm_("R", "L", "N", "N", &n1, &n2, &c_b11, &a[1], &n1, &a[n1 * n1], &n1);
-                dlauum_("L", &n2, &a[1], &n1, info);
+                aocl_lapack_dlauum("U", &n1, a, &n1, info);
+                aocl_blas_dsyrk("U", "N", &n1, &n2, &c_b11, &a[n1 * n1], &n1, &c_b11, a, &n1);
+                aocl_blas_dtrmm("R", "L", "N", "N", &n1, &n2, &c_b11, &a[1], &n1, &a[n1 * n1], &n1);
+                aocl_lapack_dlauum("L", &n2, &a[1], &n1, info);
             }
             else
             {
                 /* SRPA for UPPER, TRANSPOSE, and N is odd */
                 /* T1 -> a(0+N2*N2), T2 -> a(0+N1*N2), S -> a(0) */
-                dlauum_("U", &n1, &a[n2 * n2], &n2, info);
-                dsyrk_("U", "T", &n1, &n2, &c_b11, a, &n2, &c_b11, &a[n2 * n2], &n2);
-                dtrmm_("L", "L", "T", "N", &n2, &n1, &c_b11, &a[n1 * n2], &n2, a, &n2);
-                dlauum_("L", &n2, &a[n1 * n2], &n2, info);
+                aocl_lapack_dlauum("U", &n1, &a[n2 * n2], &n2, info);
+                aocl_blas_dsyrk("U", "T", &n1, &n2, &c_b11, a, &n2, &c_b11, &a[n2 * n2], &n2);
+                aocl_blas_dtrmm("L", "L", "T", "N", &n2, &n1, &c_b11, &a[n1 * n2], &n2, a, &n2);
+                aocl_lapack_dlauum("L", &n2, &a[n1 * n2], &n2, info);
             }
         }
     }
@@ -361,10 +364,10 @@ void dpftri_(char *transr, char *uplo, integer *n, doublereal *a, integer *info)
                 aocl_lapack_dlauum("L", &k, &a[1], &i__1, info);
                 i__1 = *n + 1;
                 i__2 = *n + 1;
-                dsyrk_("L", "T", &k, &k, &c_b11, &a[k + 1], &i__1, &c_b11, &a[1], &i__2);
+                aocl_blas_dsyrk("L", "T", &k, &k, &c_b11, &a[k + 1], &i__1, &c_b11, &a[1], &i__2);
                 i__1 = *n + 1;
                 i__2 = *n + 1;
-                dtrmm_("L", "U", "N", "N", &k, &k, &c_b11, a, &i__1, &a[k + 1], &i__2);
+                aocl_blas_dtrmm("L", "U", "N", "N", &k, &k, &c_b11, a, &i__1, &a[k + 1], &i__2);
                 i__1 = *n + 1;
                 aocl_lapack_dlauum("U", &k, a, &i__1, info);
             }
@@ -380,7 +383,7 @@ void dpftri_(char *transr, char *uplo, integer *n, doublereal *a, integer *info)
                 aocl_blas_dsyrk("L", "N", &k, &k, &c_b11, a, &i__1, &c_b11, &a[k + 1], &i__2);
                 i__1 = *n + 1;
                 i__2 = *n + 1;
-                dtrmm_("R", "U", "T", "N", &k, &k, &c_b11, &a[k], &i__1, a, &i__2);
+                aocl_blas_dtrmm("R", "U", "T", "N", &k, &k, &c_b11, &a[k], &i__1, a, &i__2);
                 i__1 = *n + 1;
                 aocl_lapack_dlauum("U", &k, &a[k], &i__1, info);
             }
@@ -405,10 +408,10 @@ void dpftri_(char *transr, char *uplo, integer *n, doublereal *a, integer *info)
                 /* T1 -> B(0,k+1), T2 -> B(0,k), S -> B(0,0), */
                 /* T1 -> a(0+k*(k+1)), T2 -> a(0+k*k), S -> a(0+0));
                 lda=k */
-                dlauum_("U", &k, &a[k * (k + 1)], &k, info);
-                dsyrk_("U", "T", &k, &k, &c_b11, a, &k, &c_b11, &a[k * (k + 1)], &k);
-                dtrmm_("L", "L", "T", "N", &k, &k, &c_b11, &a[k * k], &k, a, &k);
-                dlauum_("L", &k, &a[k * k], &k, info);
+                aocl_lapack_dlauum("U", &k, &a[k * (k + 1)], &k, info);
+                aocl_blas_dsyrk("U", "T", &k, &k, &c_b11, a, &k, &c_b11, &a[k * (k + 1)], &k);
+                aocl_blas_dtrmm("L", "L", "T", "N", &k, &k, &c_b11, &a[k * k], &k, a, &k);
+                aocl_lapack_dlauum("L", &k, &a[k * k], &k, info);
             }
         }
     }

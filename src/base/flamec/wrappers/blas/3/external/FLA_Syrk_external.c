@@ -13,11 +13,11 @@
 FLA_Error FLA_Syrk_external( FLA_Uplo uplo, FLA_Trans trans, FLA_Obj alpha, FLA_Obj A, FLA_Obj beta, FLA_Obj C )
 {
   FLA_Datatype datatype;
-  integer          k_A;
-  integer          m_A, n_A;
-  integer          m_C;
-  integer          rs_A, cs_A;
-  integer          rs_C, cs_C;
+  fla_dim_t          k_A;
+  fla_dim_t          m_A, n_A;
+  fla_dim_t          m_C;
+  fla_dim_t          rs_A, cs_A;
+  fla_dim_t          rs_C, cs_C;
   uplo1_t       blis_uplo; 
   trans1_t      blis_trans;
 

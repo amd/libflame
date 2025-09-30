@@ -18,17 +18,17 @@
 
 FLA_Error REF_Trinv_lu( FLA_Obj A );
 void time_Trinv_lu(
-                  integer variant, integer type, integer nrepeats, integer m, integer nb_alg,
+                  aocl_int64_t variant, aocl_int64_t type, aocl_int64_t nrepeats, aocl_int64_t m, aocl_int64_t nb_alg,
                   FLA_Obj A, FLA_Obj x, FLA_Obj b, FLA_Obj norm,
                   double *dtime, double *diff, double *gflops );
 
 
 void time_Trinv_lu(
-                  integer variant, integer type, integer nrepeats, integer m, integer nb_alg,
+                  aocl_int64_t variant, aocl_int64_t type, aocl_int64_t nrepeats, aocl_int64_t m, aocl_int64_t nb_alg,
                   FLA_Obj A, FLA_Obj x, FLA_Obj b, FLA_Obj norm,
                   double *dtime, double *diff, double *gflops )
 {
-  integer
+  aocl_int64_t
     irep;
 
   double

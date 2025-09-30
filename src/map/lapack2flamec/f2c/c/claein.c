@@ -4,7 +4,7 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
+static aocl_int64_t c__1 = 1;
 /* > \brief \b CLAEIN computes a specified right or left eigenvector of an upper Hessenberg matrix
  * by inverse iteration. */
 /* =========== DOCUMENTATION =========== */
@@ -150,9 +150,29 @@ V is set to the */
 /* > \ingroup complexOTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-void claein_(logical *rightv, logical *noinit, integer *n, complex *h__, integer *ldh, complex *w,
-             complex *v, complex *b, integer *ldb, real *rwork, real *eps3, real *smlnum,
-             integer *info)
+/** Generated wrapper function */
+void claein_(logical *rightv, logical *noinit, aocl_int_t *n, scomplex *h__, aocl_int_t *ldh,
+             scomplex *w, scomplex *v, scomplex *b, aocl_int_t *ldb, real *rwork, real *eps3,
+             real *smlnum, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_claein(rightv, noinit, n, h__, ldh, w, v, b, ldb, rwork, eps3, smlnum, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t ldh_64 = *ldh;
+    aocl_int64_t ldb_64 = *ldb;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_claein(rightv, noinit, &n_64, h__, &ldh_64, w, v, b, &ldb_64, rwork, eps3, smlnum,
+                       &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_claein(logical *rightv, logical *noinit, aocl_int64_t *n, scomplex *h__,
+                        aocl_int64_t *ldh, scomplex *w, scomplex *v, scomplex *b, aocl_int64_t *ldb,
+                        real *rwork, real *eps3, real *smlnum, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -180,13 +200,7 @@ void claein_(logical *rightv, logical *noinit, integer *n, complex *h__, integer
     real rtemp, rootn, vnorm;
     extern /* Complex */
         void
-        cladiv_f2c_(complex *, complex *, complex *);
-    extern /* Subroutine */
-        void
-        csscal_(integer *, real *, complex *, integer *),
-        clatrs_(char *, char *, char *, char *, integer *, complex *, integer *, complex *, real *,
-                real *, integer *);
-    extern real scasum_(integer *, complex *, integer *);
+        cladiv_f2c_(scomplex *, scomplex *, scomplex *);
     char normin[1];
     real nrmsml, growto;
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
@@ -269,9 +283,9 @@ void claein_(logical *rightv, logical *noinit, integer *n, complex *h__, integer
     else
     {
         /* Scale supplied initial vector. */
-        vnorm = scnrm2_(n, &v[1], &c__1);
+        vnorm = aocl_blas_scnrm2(n, &v[1], &c__1);
         r__1 = *eps3 * rootn / fla_max(vnorm, nrmsml);
-        csscal_(n, &r__1, &v[1], &c__1);
+        aocl_blas_csscal(n, &r__1, &v[1], &c__1);
     }
     if(*rightv)
     {
@@ -447,11 +461,11 @@ void claein_(logical *rightv, logical *noinit, integer *n, complex *h__, integer
         /* Solve U*x = scale*v for a right eigenvector */
         /* or U**H *x = scale*v for a left eigenvector, */
         /* overwriting x on v. */
-        clatrs_("Upper", trans, "Nonunit", normin, n, &b[b_offset], ldb, &v[1], &scale, &rwork[1],
-                &ierr);
+        aocl_lapack_clatrs("Upper", trans, "Nonunit", normin, n, &b[b_offset], ldb, &v[1], &scale,
+                           &rwork[1], &ierr);
         *(unsigned char *)normin = 'Y';
         /* Test for sufficient growth in the norm of v. */
-        vnorm = scasum_(n, &v[1], &c__1);
+        vnorm = aocl_blas_scasum(n, &v[1], &c__1);
         if(vnorm >= growto * scale)
         {
             goto L120;
@@ -483,7 +497,7 @@ L120: /* Normalize eigenvector. */
     i__ = aocl_blas_icamax(n, &v[1], &c__1);
     i__1 = i__;
     r__3 = 1.f / ((r__1 = v[i__1].r, f2c_abs(r__1)) + (r__2 = r_imag(&v[i__]), f2c_abs(r__2)));
-    csscal_(n, &r__3, &v[1], &c__1);
+    aocl_blas_csscal(n, &r__3, &v[1], &c__1);
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
     return;
     /* End of CLAEIN */

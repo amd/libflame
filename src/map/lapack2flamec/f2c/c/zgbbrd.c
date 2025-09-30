@@ -4,9 +4,9 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static doublecomplex c_b1 = {0., 0.};
-static doublecomplex c_b2 = {1., 0.};
-static integer c__1 = 1;
+static dcomplex c_b1 = {{0.}, {0.}};
+static dcomplex c_b2 = {{1.}, {0.}};
+static aocl_int64_t c__1 = 1;
 /* > \brief \b ZGBBRD */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -197,10 +197,41 @@ LDC >= 1 if NCC = 0. */
 /* > \ingroup complex16GBcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void zgbbrd_(char *vect, integer *m, integer *n, integer *ncc, integer *kl, integer *ku,
-             doublecomplex *ab, integer *ldab, doublereal *d__, doublereal *e, doublecomplex *q,
-             integer *ldq, doublecomplex *pt, integer *ldpt, doublecomplex *c__, integer *ldc,
-             doublecomplex *work, doublereal *rwork, integer *info)
+/** Generated wrapper function */
+void zgbbrd_(char *vect, aocl_int_t *m, aocl_int_t *n, aocl_int_t *ncc, aocl_int_t *kl,
+             aocl_int_t *ku, dcomplex *ab, aocl_int_t *ldab, doublereal *d__, doublereal *e,
+             dcomplex *q, aocl_int_t *ldq, dcomplex *pt, aocl_int_t *ldpt,
+             dcomplex *c__, aocl_int_t *ldc, dcomplex *work, doublereal *rwork,
+             aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_zgbbrd(vect, m, n, ncc, kl, ku, ab, ldab, d__, e, q, ldq, pt, ldpt, c__, ldc, work,
+                       rwork, info);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t ncc_64 = *ncc;
+    aocl_int64_t kl_64 = *kl;
+    aocl_int64_t ku_64 = *ku;
+    aocl_int64_t ldab_64 = *ldab;
+    aocl_int64_t ldq_64 = *ldq;
+    aocl_int64_t ldpt_64 = *ldpt;
+    aocl_int64_t ldc_64 = *ldc;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_zgbbrd(vect, &m_64, &n_64, &ncc_64, &kl_64, &ku_64, ab, &ldab_64, d__, e, q,
+                       &ldq_64, pt, &ldpt_64, c__, &ldc_64, work, rwork, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_zgbbrd(char *vect, aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *ncc,
+                        aocl_int64_t *kl, aocl_int64_t *ku, dcomplex *ab, aocl_int64_t *ldab,
+                        doublereal *d__, doublereal *e, dcomplex *q, aocl_int64_t *ldq,
+                        dcomplex *pt, aocl_int64_t *ldpt, dcomplex *c__,
+                        aocl_int64_t *ldc, dcomplex *work, doublereal *rwork,
+                        aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zgbbrd inputs: vect %c, m %" FLA_IS ", n %" FLA_IS ", ncc %" FLA_IS
@@ -208,12 +239,12 @@ void zgbbrd_(char *vect, integer *m, integer *n, integer *ncc, integer *kl, inte
                       ", ldpt %" FLA_IS ", ldc %" FLA_IS "",
                       *vect, *m, *n, *ncc, *kl, *ku, *ldab, *ldq, *ldpt, *ldc);
     /* System generated locals */
-    integer ab_dim1, ab_offset, c_dim1, c_offset, pt_dim1, pt_offset, q_dim1, q_offset, i__1, i__2,
-        i__3, i__4, i__5, i__6, i__7;
-    doublecomplex z__1, z__2, z__3;
+    aocl_int64_t ab_dim1, ab_offset, c_dim1, c_offset, pt_dim1, pt_offset, q_dim1, q_offset, i__1,
+        i__2, i__3, i__4, i__5, i__6, i__7;
+    dcomplex z__1, z__2, z__3;
     /* Builtin functions */
-    void d_cnjg(doublecomplex *, doublecomplex *);
-    double z_abs(doublecomplex *);
+    void d_cnjg(dcomplex *, dcomplex *);
+    double z_abs(dcomplex *);
     /* Local variables */
     aocl_int64_t i__, j, l;
     dcomplex t;
@@ -224,32 +255,11 @@ void zgbbrd_(char *vect, integer *m, integer *n, integer *ncc, integer *kl, inte
     dcomplex rs;
     aocl_int64_t kb1, ml0, mu0, klm, kun, nrt, klu1, inca;
     doublereal abst;
-    extern /* Subroutine */
-        void
-        zrot_(integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublereal *,
-              doublecomplex *);
-    extern logical lsame_(char *, char *, integer, integer);
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     logical wantb, wantc;
-    extern /* Subroutine */
-        void
-        zscal_(integer *, doublecomplex *, doublecomplex *, integer *);
-    integer minmn;
+    aocl_int64_t minmn;
     logical wantq;
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    extern /* Subroutine */
-        void
-        zlaset_(char *, integer *, integer *, doublecomplex *, doublecomplex *, doublecomplex *,
-                integer *),
-        zlartg_(doublecomplex *, doublecomplex *, doublereal *, doublecomplex *, doublecomplex *),
-        zlargv_(integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublereal *,
-                integer *);
     logical wantpt;
-    extern /* Subroutine */
-        void
-        zlartv_(integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublereal *,
-                doublecomplex *, integer *);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -338,7 +348,7 @@ void zgbbrd_(char *vect, integer *m, integer *n, integer *ncc, integer *kl, inte
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("ZGBBRD", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("ZGBBRD", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -405,8 +415,8 @@ void zgbbrd_(char *vect, integer *m, integer *n, integer *ncc, integer *kl, inte
                 /* which have been created below the band */
                 if(nr > 0)
                 {
-                    zlargv_(&nr, &ab[klu1 + (j1 - klm - 1) * ab_dim1], &inca, &work[j1], &kb1,
-                            &rwork[j1], &kb1);
+                    aocl_lapack_zlargv(&nr, &ab[klu1 + (j1 - klm - 1) * ab_dim1], &inca, &work[j1],
+                                       &kb1, &rwork[j1], &kb1);
                 }
                 /* apply plane rotations from the left */
                 i__3 = kb;
@@ -422,9 +432,9 @@ void zgbbrd_(char *vect, integer *m, integer *n, integer *ncc, integer *kl, inte
                     }
                     if(nrt > 0)
                     {
-                        zlartv_(&nrt, &ab[klu1 - l + (j1 - klm + l - 1) * ab_dim1], &inca,
-                                &ab[klu1 - l + 1 + (j1 - klm + l - 1) * ab_dim1], &inca, &rwork[j1],
-                                &work[j1], &kb1);
+                        aocl_lapack_zlartv(&nrt, &ab[klu1 - l + (j1 - klm + l - 1) * ab_dim1],
+                                           &inca, &ab[klu1 - l + 1 + (j1 - klm + l - 1) * ab_dim1],
+                                           &inca, &rwork[j1], &work[j1], &kb1);
                     }
                     /* L10: */
                 }
@@ -447,9 +457,9 @@ void zgbbrd_(char *vect, integer *m, integer *n, integer *ncc, integer *kl, inte
                             i__3 = fla_min(i__4, i__5);
                             i__6 = *ldab - 1;
                             i__7 = *ldab - 1;
-                            zrot_(&i__3, &ab[*ku + ml - 2 + (i__ + 1) * ab_dim1], &i__6,
-                                  &ab[*ku + ml - 1 + (i__ + 1) * ab_dim1], &i__7,
-                                  &rwork[i__ + ml - 1], &work[i__ + ml - 1]);
+                            aocl_lapack_zrot(&i__3, &ab[*ku + ml - 2 + (i__ + 1) * ab_dim1], &i__6,
+                                             &ab[*ku + ml - 1 + (i__ + 1) * ab_dim1], &i__7,
+                                             &rwork[i__ + ml - 1], &work[i__ + ml - 1]);
                         }
                     }
                     ++nr;
@@ -463,8 +473,8 @@ void zgbbrd_(char *vect, integer *m, integer *n, integer *ncc, integer *kl, inte
                     for(j = j1; i__4 < 0 ? j >= i__3 : j <= i__3; j += i__4)
                     {
                         d_cnjg(&z__1, &work[j]);
-                        zrot_(m, &q[(j - 1) * q_dim1 + 1], &c__1, &q[j * q_dim1 + 1], &c__1,
-                              &rwork[j], &z__1);
+                        aocl_lapack_zrot(m, &q[(j - 1) * q_dim1 + 1], &c__1, &q[j * q_dim1 + 1],
+                                         &c__1, &rwork[j], &z__1);
                         /* L20: */
                     }
                 }
@@ -475,8 +485,8 @@ void zgbbrd_(char *vect, integer *m, integer *n, integer *ncc, integer *kl, inte
                     i__3 = kb1;
                     for(j = j1; i__3 < 0 ? j >= i__4 : j <= i__4; j += i__3)
                     {
-                        zrot_(ncc, &c__[j - 1 + c_dim1], ldc, &c__[j + c_dim1], ldc, &rwork[j],
-                              &work[j]);
+                        aocl_lapack_zrot(ncc, &c__[j - 1 + c_dim1], ldc, &c__[j + c_dim1], ldc,
+                                         &rwork[j], &work[j]);
                         /* L30: */
                     }
                 }
@@ -512,8 +522,8 @@ void zgbbrd_(char *vect, integer *m, integer *n, integer *ncc, integer *kl, inte
                 /* which have been generated above the band */
                 if(nr > 0)
                 {
-                    zlargv_(&nr, &ab[(j1 + kun - 1) * ab_dim1 + 1], &inca, &work[j1 + kun], &kb1,
-                            &rwork[j1 + kun], &kb1);
+                    aocl_lapack_zlargv(&nr, &ab[(j1 + kun - 1) * ab_dim1 + 1], &inca,
+                                       &work[j1 + kun], &kb1, &rwork[j1 + kun], &kb1);
                 }
                 /* apply plane rotations from the right */
                 i__4 = kb;
@@ -529,9 +539,9 @@ void zgbbrd_(char *vect, integer *m, integer *n, integer *ncc, integer *kl, inte
                     }
                     if(nrt > 0)
                     {
-                        zlartv_(&nrt, &ab[l + 1 + (j1 + kun - 1) * ab_dim1], &inca,
-                                &ab[l + (j1 + kun) * ab_dim1], &inca, &rwork[j1 + kun],
-                                &work[j1 + kun], &kb1);
+                        aocl_lapack_zlartv(&nrt, &ab[l + 1 + (j1 + kun - 1) * ab_dim1], &inca,
+                                           &ab[l + (j1 + kun) * ab_dim1], &inca, &rwork[j1 + kun],
+                                           &work[j1 + kun], &kb1);
                     }
                     /* L50: */
                 }
@@ -551,9 +561,9 @@ void zgbbrd_(char *vect, integer *m, integer *n, integer *ncc, integer *kl, inte
                         i__3 = *kl + mu - 2;
                         i__5 = *m - i__; // , expr subst
                         i__4 = fla_min(i__3, i__5);
-                        zrot_(&i__4, &ab[*ku - mu + 4 + (i__ + mu - 2) * ab_dim1], &c__1,
-                              &ab[*ku - mu + 3 + (i__ + mu - 1) * ab_dim1], &c__1,
-                              &rwork[i__ + mu - 1], &work[i__ + mu - 1]);
+                        aocl_lapack_zrot(&i__4, &ab[*ku - mu + 4 + (i__ + mu - 2) * ab_dim1], &c__1,
+                                         &ab[*ku - mu + 3 + (i__ + mu - 1) * ab_dim1], &c__1,
+                                         &rwork[i__ + mu - 1], &work[i__ + mu - 1]);
                     }
                     ++nr;
                     j1 -= kb1;
@@ -566,8 +576,8 @@ void zgbbrd_(char *vect, integer *m, integer *n, integer *ncc, integer *kl, inte
                     for(j = j1; i__3 < 0 ? j >= i__4 : j <= i__4; j += i__3)
                     {
                         d_cnjg(&z__1, &work[j + kun]);
-                        zrot_(n, &pt[j + kun - 1 + pt_dim1], ldpt, &pt[j + kun + pt_dim1], ldpt,
-                              &rwork[j + kun], &z__1);
+                        aocl_lapack_zrot(n, &pt[j + kun - 1 + pt_dim1], ldpt,
+                                         &pt[j + kun + pt_dim1], ldpt, &rwork[j + kun], &z__1);
                         /* L60: */
                     }
                 }
@@ -645,8 +655,8 @@ void zgbbrd_(char *vect, integer *m, integer *n, integer *ncc, integer *kl, inte
             if(wantq)
             {
                 d_cnjg(&z__1, &rs);
-                zrot_(m, &q[i__ * q_dim1 + 1], &c__1, &q[(i__ + 1) * q_dim1 + 1], &c__1, &rc,
-                      &z__1);
+                aocl_lapack_zrot(m, &q[i__ * q_dim1 + 1], &c__1, &q[(i__ + 1) * q_dim1 + 1], &c__1,
+                                 &rc, &z__1);
             }
             if(wantc)
             {

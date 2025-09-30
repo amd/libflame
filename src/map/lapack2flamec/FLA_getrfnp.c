@@ -32,9 +32,79 @@
 extern void DTL_Trace(uint8 ui8LogLevel, uint8 ui8LogType, const int8 *pi8FileName,
                       const int8 *pi8FunctionName, uint32 ui32LineNumber, const int8 *pi8Message);
 
+
+/** Generated wrapper function */
+void sgetrfnp_(aocl_int_t *m, aocl_int_t *n, real *buff_A, aocl_int_t *ldim_A, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_sgetrfnp(m, n, buff_A, ldim_A, info);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t ldim_A_64 = *ldim_A;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_sgetrfnp(&m_64, &n_64, buff_A, &ldim_A_64, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+/** Generated wrapper function */
+void dgetrfnp_(aocl_int_t *m, aocl_int_t *n, doublereal *buff_A, aocl_int_t *ldim_A, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_dgetrfnp(m, n, buff_A, ldim_A, info);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t ldim_A_64 = *ldim_A;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_dgetrfnp(&m_64, &n_64, buff_A, &ldim_A_64, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+/** Generated wrapper function */
+void cgetrfnp_(aocl_int_t *m, aocl_int_t *n, scomplex *buff_A, aocl_int_t *ldim_A, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_cgetrfnp(m, n, buff_A, ldim_A, info);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t ldim_A_64 = *ldim_A;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_cgetrfnp(&m_64, &n_64, buff_A, &ldim_A_64, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+/** Generated wrapper function */
+void zgetrfnp_(aocl_int_t *m, aocl_int_t *n, dcomplex *buff_A, aocl_int_t *ldim_A, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_zgetrfnp(m, n, buff_A, ldim_A, info);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t ldim_A_64 = *ldim_A;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_zgetrfnp(&m_64, &n_64, buff_A, &ldim_A_64, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+
 #define LAPACK_getrfnp(prefix)                                                                 \
-    void F77_##prefix##getrfnp(integer *m, integer *n, PREFIX2LAPACK_TYPEDEF(prefix) * buff_A, \
-                               integer * ldim_A, integer * info)
+    void aocl_lapack_##prefix##getrfnp(aocl_int64_t *m, aocl_int64_t *n, PREFIX2LAPACK_TYPEDEF(prefix) * buff_A, \
+                               aocl_int64_t * ldim_A, aocl_int64_t * info)
 
 #define LAPACK_getrfnp_body(prefix)                        \
     FLA_Datatype datatype = PREFIX2FLAME_DATATYPE(prefix); \

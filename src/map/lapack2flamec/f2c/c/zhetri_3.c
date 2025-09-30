@@ -4,8 +4,8 @@
  -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for
  libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
-static integer c_n1 = -1;
+static aocl_int64_t c__1 = 1;
+static aocl_int64_t c_n1 = -1;
 /* > \brief \b ZHETRI_3 */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -41,7 +41,7 @@ static integer c_n1 = -1;
 /* ============= */
 /* > */
 /* > \verbatim */
-/* > ZHETRI_3 computes the inverse of a complex Hermitian indefinite */
+/* > ZHETRI_3 computes the inverse of a scomplex Hermitian indefinite */
 /* > matrix A using the factorization computed by ZHETRF_RK or ZHETRF_BK: */
 /* > */
 /* > A = P*U*D*(U**H)*(P**T) or A = P*L*D*(L**H)*(P**T), */
@@ -172,27 +172,38 @@ the matrix is singular and its */
 /* > \endverbatim */
 /* ===================================================================== */
 /* Subroutine */
-void zhetri_3_(char *uplo, integer *n, doublecomplex *a, integer *lda, doublecomplex *e,
-               integer *ipiv, doublecomplex *work, integer *lwork, integer *info)
+/** Generated wrapper function */
+void zhetri_3_(char *uplo, aocl_int_t *n, dcomplex *a, aocl_int_t *lda, dcomplex *e,
+               aocl_int_t *ipiv, dcomplex *work, aocl_int_t *lwork, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_zhetri_3(uplo, n, a, lda, e, ipiv, work, lwork, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t lwork_64 = *lwork;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_zhetri_3(uplo, &n_64, a, &lda_64, e, ipiv, work, &lwork_64, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_zhetri_3(char *uplo, aocl_int64_t *n, dcomplex *a, aocl_int64_t *lda,
+                          dcomplex *e, aocl_int_t *ipiv, dcomplex *work,
+                          aocl_int64_t *lwork, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zhetri_3 inputs: uplo %c, n %" FLA_IS ", lda %" FLA_IS ", lwork %" FLA_IS "",
                       *uplo, *n, *lda, *lwork);
     /* System generated locals */
-    integer a_dim1, a_offset, i__1, i__2;
+    aocl_int64_t a_dim1, a_offset, i__1, i__2;
     /* Local variables */
-    extern /* Subroutine */
-        void
-        zhetri_3x_(char *, integer *, doublecomplex *, integer *, doublecomplex *, integer *,
-                   doublecomplex *, integer *, integer *);
-    integer nb;
-    extern logical lsame_(char *, char *, integer, integer);
+    aocl_int64_t nb;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     logical upper;
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
-    integer lwkopt;
+    aocl_int64_t lwkopt;
     logical lquery;
     /* -- LAPACK computational routine (version 3.8.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -227,7 +238,7 @@ void zhetri_3_(char *uplo, integer *n, doublecomplex *a, integer *lda, doublecom
     /* Determine the block size */
     /* Computing MAX */
     i__1 = 1;
-    i__2 = ilaenv_(&c__1, "ZHETRI_3", uplo, n, &c_n1, &c_n1, &c_n1); // , expr subst
+    i__2 = aocl_lapack_ilaenv(&c__1, "ZHETRI_3", uplo, n, &c_n1, &c_n1, &c_n1); // , expr subst
     nb = fla_max(i__1, i__2);
     lwkopt = (*n + nb + 1) * (nb + 3);
     if(!upper && !lsame_(uplo, "L", 1, 1))
@@ -249,7 +260,7 @@ void zhetri_3_(char *uplo, integer *n, doublecomplex *a, integer *lda, doublecom
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("ZHETRI_3", &i__1, (ftnlen)8);
+        aocl_blas_xerbla("ZHETRI_3", &i__1, (ftnlen)8);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -266,7 +277,7 @@ void zhetri_3_(char *uplo, integer *n, doublecomplex *a, integer *lda, doublecom
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
-    zhetri_3x_(uplo, n, &a[a_offset], lda, &e[1], &ipiv[1], &work[1], &nb, info);
+    aocl_lapack_zhetri_3x(uplo, n, &a[a_offset], lda, &e[1], &ipiv[1], &work[1], &nb, info);
     work[1].r = (doublereal)lwkopt;
     work[1].i = 0.; // , expr subst
     AOCL_DTL_TRACE_LOG_EXIT

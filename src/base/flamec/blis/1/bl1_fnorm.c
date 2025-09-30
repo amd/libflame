@@ -16,14 +16,14 @@
 #include "blis.h"
 #endif
 
-void bl1_sfnorm( integer m, integer n, float* a, integer a_rs, integer a_cs, float* norm )
+void bl1_sfnorm( fla_dim_t m, fla_dim_t n, float* a, fla_dim_t a_rs, fla_dim_t a_cs, float* norm )
 {
 	float*    a_ij;
 	float     sum;
-	integer       lda, inca;
-	integer       n_iter;
-	integer       n_elem;
-	integer       i, j;
+	fla_dim_t       lda, inca;
+	fla_dim_t       n_iter;
+	fla_dim_t       n_elem;
+	fla_dim_t       i, j;
 
 	// Return early if possible.
 	if ( bl1_zero_dim2( m, n ) ) return;
@@ -70,14 +70,14 @@ void bl1_sfnorm( integer m, integer n, float* a, integer a_rs, integer a_cs, flo
 	*norm = ( float ) sqrt( sum );
 }
 
-void bl1_dfnorm( integer m, integer n, double* a, integer a_rs, integer a_cs, double* norm )
+void bl1_dfnorm( fla_dim_t m, fla_dim_t n, double* a, fla_dim_t a_rs, fla_dim_t a_cs, double* norm )
 {
 	double*   a_ij;
 	double    sum;
-	integer       lda, inca;
-	integer       n_iter;
-	integer       n_elem;
-	integer       i, j;
+	fla_dim_t       lda, inca;
+	fla_dim_t       n_iter;
+	fla_dim_t       n_elem;
+	fla_dim_t       i, j;
 
 	// Return early if possible.
 	if ( bl1_zero_dim2( m, n ) ) return;
@@ -124,14 +124,14 @@ void bl1_dfnorm( integer m, integer n, double* a, integer a_rs, integer a_cs, do
 	*norm = sqrt( sum );
 }
 
-void bl1_cfnorm( integer m, integer n, scomplex* a, integer a_rs, integer a_cs, float* norm )
+void bl1_cfnorm( fla_dim_t m, fla_dim_t n, scomplex* a, fla_dim_t a_rs, fla_dim_t a_cs, float* norm )
 {
 	scomplex* a_ij;
 	float     sum;
-	integer       lda, inca;
-	integer       n_iter;
-	integer       n_elem;
-	integer       i, j;
+	fla_dim_t       lda, inca;
+	fla_dim_t       n_iter;
+	fla_dim_t       n_elem;
+	fla_dim_t       i, j;
 
 	// Return early if possible.
 	if ( bl1_zero_dim2( m, n ) ) return;
@@ -178,14 +178,14 @@ void bl1_cfnorm( integer m, integer n, scomplex* a, integer a_rs, integer a_cs, 
 	*norm = ( float ) sqrt( sum );
 }
 
-void bl1_zfnorm( integer m, integer n, dcomplex* a, integer a_rs, integer a_cs, double* norm )
+void bl1_zfnorm( fla_dim_t m, fla_dim_t n, dcomplex* a, fla_dim_t a_rs, fla_dim_t a_cs, double* norm )
 {
 	dcomplex* a_ij;
 	double    sum;
-	integer       lda, inca;
-	integer       n_iter;
-	integer       n_elem;
-	integer       i, j;
+	fla_dim_t       lda, inca;
+	fla_dim_t       n_iter;
+	fla_dim_t       n_elem;
+	fla_dim_t       i, j;
 
 	// Return early if possible.
 	if ( bl1_zero_dim2( m, n ) ) return;

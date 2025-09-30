@@ -20,4 +20,7 @@ ${CMAKE_CURRENT_SOURCE_DIR}/FLA_type_defs.h
 ${CMAKE_CURRENT_SOURCE_DIR}/FLA_util_base_prototypes.h
 ${CMAKE_CURRENT_SOURCE_DIR}/FLA_util_lapack_prototypes.h
 ${CMAKE_CURRENT_SOURCE_DIR}/FLAME.h
+${CMAKE_CURRENT_SOURCE_DIR}/aocl_lapack.h
+${CMAKE_CURRENT_SOURCE_DIR}/aocl_blas.h
+${CMAKE_CURRENT_SOURCE_DIR}/aocl_fla_lapack.h
 	)

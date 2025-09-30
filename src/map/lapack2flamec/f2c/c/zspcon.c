@@ -116,8 +116,25 @@ static aocl_int64_t c__1 = 1;
 /* > \ingroup complex16OTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void zspcon_(char *uplo, integer *n, doublecomplex *ap, integer *ipiv, doublereal *anorm,
-             doublereal *rcond, doublecomplex *work, integer *info)
+/** Generated wrapper function */
+void zspcon_(char *uplo, aocl_int_t *n, dcomplex *ap, aocl_int_t *ipiv, doublereal *anorm,
+             doublereal *rcond, dcomplex *work, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_zspcon(uplo, n, ap, ipiv, anorm, rcond, work, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_zspcon(uplo, &n_64, ap, ipiv, anorm, rcond, work, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_zspcon(char *uplo, aocl_int64_t *n, dcomplex *ap, aocl_int_t *ipiv,
+                        doublereal *anorm, doublereal *rcond, dcomplex *work,
+                        aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zspcon inputs: uplo %c, n %" FLA_IS "", *uplo, *n);
@@ -125,19 +142,11 @@ void zspcon_(char *uplo, integer *n, doublecomplex *ap, integer *ipiv, doublerea
     /* System generated locals */
     aocl_int64_t i__1, i__2;
     /* Local variables */
-    integer i__, ip, kase;
-    extern logical lsame_(char *, char *, integer, integer);
+    aocl_int64_t i__, ip, kase;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     integer isave[3];
     logical upper;
-    extern /* Subroutine */
-        void
-        zlacn2_(integer *, doublecomplex *, doublecomplex *, doublereal *, integer *, integer *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal ainvnm;
-    extern /* Subroutine */
-        void
-        zsptrs_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *,
-                integer *, integer *);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -181,7 +190,7 @@ void zspcon_(char *uplo, integer *n, doublecomplex *ap, integer *ipiv, doublerea
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("ZSPCON", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("ZSPCON", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -235,7 +244,7 @@ void zspcon_(char *uplo, integer *n, doublecomplex *ap, integer *ipiv, doublerea
     /* Estimate the 1-norm of the inverse. */
     kase = 0;
 L30:
-    zlacn2_(n, &work[*n + 1], &work[1], &ainvnm, &kase, isave);
+    aocl_lapack_zlacn2(n, &work[*n + 1], &work[1], &ainvnm, &kase, isave);
     if(kase != 0)
     {
         /* Multiply by inv(L*D*L**T) or inv(U*D*U**T). */

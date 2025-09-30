@@ -23,14 +23,14 @@ FLA_Error FLA_Fused_UYx_ZVx_opt_var1( FLA_Obj delta, FLA_Obj a, FLA_Obj U, FLA_O
    t  = V' conj(a);
 */
   FLA_Datatype datatype;
-  integer          m_U, n_U;
-  integer          m_V, n_V;
-  integer          rs_A, cs_A;
-  integer          rs_U, cs_U;
-  integer          rs_Y, cs_Y;
-  integer          rs_Z, cs_Z;
-  integer          rs_V, cs_V;
-  integer          inc_a, inc_temp, inc_t, inc_w, inc_al;
+  fla_dim_t          m_U, n_U;
+  fla_dim_t          m_V, n_V;
+  fla_dim_t          rs_A, cs_A;
+  fla_dim_t          rs_U, cs_U;
+  fla_dim_t          rs_Y, cs_Y;
+  fla_dim_t          rs_Z, cs_Z;
+  fla_dim_t          rs_V, cs_V;
+  fla_dim_t          inc_a, inc_temp, inc_t, inc_w, inc_al;
 
   datatype = FLA_Obj_datatype( A );
 
@@ -202,25 +202,25 @@ FLA_Error FLA_Fused_UYx_ZVx_opt_var1( FLA_Obj delta, FLA_Obj a, FLA_Obj U, FLA_O
 
 
 
-FLA_Error FLA_Fused_UYx_ZVx_ops_var1( integer m_U,
-                                      integer n_U,
-                                      integer m_V,
-                                      integer n_V,
+FLA_Error FLA_Fused_UYx_ZVx_ops_var1( fla_dim_t m_U,
+                                      fla_dim_t n_U,
+                                      fla_dim_t m_V,
+                                      fla_dim_t n_V,
                                       float* buff_delta, 
-                                      float* buff_U, integer rs_U, integer cs_U, 
-                                      float* buff_Y, integer rs_Y, integer cs_Y, 
-                                      float* buff_Z, integer rs_Z, integer cs_Z, 
-                                      float* buff_V, integer rs_V, integer cs_V, 
-                                      float* buff_A, integer rs_A, integer cs_A, 
-                                      float* buff_temp, integer inc_temp, 
-                                      float* buff_t, integer inc_t, 
-                                      float* buff_a, integer inc_a, 
-                                      float* buff_w, integer inc_w, 
-                                      float* buff_al, integer inc_al ) 
+                                      float* buff_U, fla_dim_t rs_U, fla_dim_t cs_U, 
+                                      float* buff_Y, fla_dim_t rs_Y, fla_dim_t cs_Y, 
+                                      float* buff_Z, fla_dim_t rs_Z, fla_dim_t cs_Z, 
+                                      float* buff_V, fla_dim_t rs_V, fla_dim_t cs_V, 
+                                      float* buff_A, fla_dim_t rs_A, fla_dim_t cs_A, 
+                                      float* buff_temp, fla_dim_t inc_temp, 
+                                      float* buff_t, fla_dim_t inc_t, 
+                                      float* buff_a, fla_dim_t inc_a, 
+                                      float* buff_w, fla_dim_t inc_w, 
+                                      float* buff_al, fla_dim_t inc_al ) 
 {
-  integer       i;
-  integer       m_A = m_U;
-  integer       m_Z = m_U;
+  fla_dim_t       i;
+  fla_dim_t       m_A = m_U;
+  fla_dim_t       m_Z = m_U;
 
   bl1_scopyv( BLIS1_NO_CONJUGATE,
               m_A,
@@ -332,26 +332,26 @@ FLA_Error FLA_Fused_UYx_ZVx_ops_var1( integer m_U,
 
 
 
-FLA_Error FLA_Fused_UYx_ZVx_opd_var1( integer m_U,
-                                      integer n_U,
-                                      integer m_V,
-                                      integer n_V,
+FLA_Error FLA_Fused_UYx_ZVx_opd_var1( fla_dim_t m_U,
+                                      fla_dim_t n_U,
+                                      fla_dim_t m_V,
+                                      fla_dim_t n_V,
                                       double* buff_delta, 
-                                      double* buff_U, integer rs_U, integer cs_U, 
-                                      double* buff_Y, integer rs_Y, integer cs_Y, 
-                                      double* buff_Z, integer rs_Z, integer cs_Z, 
-                                      double* buff_V, integer rs_V, integer cs_V, 
-                                      double* buff_A, integer rs_A, integer cs_A, 
-                                      double* buff_temp, integer inc_temp, 
-                                      double* buff_t, integer inc_t, 
-                                      double* buff_a, integer inc_a, 
-                                      double* buff_w, integer inc_w, 
-                                      double* buff_al, integer inc_al ) 
+                                      double* buff_U, fla_dim_t rs_U, fla_dim_t cs_U, 
+                                      double* buff_Y, fla_dim_t rs_Y, fla_dim_t cs_Y, 
+                                      double* buff_Z, fla_dim_t rs_Z, fla_dim_t cs_Z, 
+                                      double* buff_V, fla_dim_t rs_V, fla_dim_t cs_V, 
+                                      double* buff_A, fla_dim_t rs_A, fla_dim_t cs_A, 
+                                      double* buff_temp, fla_dim_t inc_temp, 
+                                      double* buff_t, fla_dim_t inc_t, 
+                                      double* buff_a, fla_dim_t inc_a, 
+                                      double* buff_w, fla_dim_t inc_w, 
+                                      double* buff_al, fla_dim_t inc_al ) 
 {
   double    zero = bl1_d0();
-  integer       i;
-  integer       m_A = m_U;
-  integer       m_Z = m_U;
+  fla_dim_t       i;
+  fla_dim_t       m_A = m_U;
+  fla_dim_t       m_Z = m_U;
 
   bl1_dcopyv( BLIS1_NO_CONJUGATE,
               m_A,
@@ -425,25 +425,25 @@ FLA_Error FLA_Fused_UYx_ZVx_opd_var1( integer m_U,
 
 
 
-FLA_Error FLA_Fused_UYx_ZVx_opc_var1( integer m_U,
-                                      integer n_U,
-                                      integer m_V,
-                                      integer n_V,
+FLA_Error FLA_Fused_UYx_ZVx_opc_var1( fla_dim_t m_U,
+                                      fla_dim_t n_U,
+                                      fla_dim_t m_V,
+                                      fla_dim_t n_V,
                                       scomplex* buff_delta, 
-                                      scomplex* buff_U, integer rs_U, integer cs_U, 
-                                      scomplex* buff_Y, integer rs_Y, integer cs_Y, 
-                                      scomplex* buff_Z, integer rs_Z, integer cs_Z, 
-                                      scomplex* buff_V, integer rs_V, integer cs_V, 
-                                      scomplex* buff_A, integer rs_A, integer cs_A, 
-                                      scomplex* buff_temp, integer inc_temp, 
-                                      scomplex* buff_t, integer inc_t, 
-                                      scomplex* buff_a, integer inc_a, 
-                                      scomplex* buff_w, integer inc_w, 
-                                      scomplex* buff_al, integer inc_al ) 
+                                      scomplex* buff_U, fla_dim_t rs_U, fla_dim_t cs_U, 
+                                      scomplex* buff_Y, fla_dim_t rs_Y, fla_dim_t cs_Y, 
+                                      scomplex* buff_Z, fla_dim_t rs_Z, fla_dim_t cs_Z, 
+                                      scomplex* buff_V, fla_dim_t rs_V, fla_dim_t cs_V, 
+                                      scomplex* buff_A, fla_dim_t rs_A, fla_dim_t cs_A, 
+                                      scomplex* buff_temp, fla_dim_t inc_temp, 
+                                      scomplex* buff_t, fla_dim_t inc_t, 
+                                      scomplex* buff_a, fla_dim_t inc_a, 
+                                      scomplex* buff_w, fla_dim_t inc_w, 
+                                      scomplex* buff_al, fla_dim_t inc_al ) 
 {
-  integer       i;
-  integer       m_A = m_U;
-  integer       m_Z = m_U;
+  fla_dim_t       i;
+  fla_dim_t       m_A = m_U;
+  fla_dim_t       m_Z = m_U;
 
   bl1_ccopyv( BLIS1_NO_CONJUGATE,
               m_A,
@@ -543,26 +543,26 @@ FLA_Error FLA_Fused_UYx_ZVx_opc_var1( integer m_U,
 
 
 
-FLA_Error FLA_Fused_UYx_ZVx_opz_var1( integer m_U,
-                                      integer n_U,
-                                      integer m_V,
-                                      integer n_V,
+FLA_Error FLA_Fused_UYx_ZVx_opz_var1( fla_dim_t m_U,
+                                      fla_dim_t n_U,
+                                      fla_dim_t m_V,
+                                      fla_dim_t n_V,
                                       dcomplex* buff_delta, 
-                                      dcomplex* buff_U, integer rs_U, integer cs_U, 
-                                      dcomplex* buff_Y, integer rs_Y, integer cs_Y, 
-                                      dcomplex* buff_Z, integer rs_Z, integer cs_Z, 
-                                      dcomplex* buff_V, integer rs_V, integer cs_V, 
-                                      dcomplex* buff_A, integer rs_A, integer cs_A, 
-                                      dcomplex* buff_temp, integer inc_temp, 
-                                      dcomplex* buff_t, integer inc_t, 
-                                      dcomplex* buff_a, integer inc_a, 
-                                      dcomplex* buff_w, integer inc_w, 
-                                      dcomplex* buff_al, integer inc_al ) 
+                                      dcomplex* buff_U, fla_dim_t rs_U, fla_dim_t cs_U, 
+                                      dcomplex* buff_Y, fla_dim_t rs_Y, fla_dim_t cs_Y, 
+                                      dcomplex* buff_Z, fla_dim_t rs_Z, fla_dim_t cs_Z, 
+                                      dcomplex* buff_V, fla_dim_t rs_V, fla_dim_t cs_V, 
+                                      dcomplex* buff_A, fla_dim_t rs_A, fla_dim_t cs_A, 
+                                      dcomplex* buff_temp, fla_dim_t inc_temp, 
+                                      dcomplex* buff_t, fla_dim_t inc_t, 
+                                      dcomplex* buff_a, fla_dim_t inc_a, 
+                                      dcomplex* buff_w, fla_dim_t inc_w, 
+                                      dcomplex* buff_al, fla_dim_t inc_al ) 
 {
   dcomplex  zero = bl1_z0();
-  integer       i;
-  integer       m_A = m_U;
-  integer       m_Z = m_U;
+  fla_dim_t       i;
+  fla_dim_t       m_A = m_U;
+  fla_dim_t       m_Z = m_U;
 
   bl1_zcopyv( BLIS1_NO_CONJUGATE,
               m_A,

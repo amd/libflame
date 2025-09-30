@@ -228,11 +228,11 @@ void fla_test_hseqr_experiment(char *tst_api, test_params_t *params, integer dat
 
     /* Performance computation
     (7)n^3 flops for eigen vectors for real
-    (25)n^3 flops for eigen vectors for complex
+    (25)n^3 flops for eigen vectors for scomplex
     (10)n^3 flops for Schur form is computed for real
-    (35)n^3 flops for Schur form is computed for complex
+    (35)n^3 flops for Schur form is computed for scomplex
     (20)n^3 flops full Schur factorization is computed for real
-    (70)n^3 flops full Schur factorization is computed for complex */
+    (70)n^3 flops full Schur factorization is computed for scomplex */
 
     if(same_char(compz, 'N'))
     {

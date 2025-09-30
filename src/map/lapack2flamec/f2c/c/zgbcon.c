@@ -145,9 +145,31 @@ for 1 <= i <= N, row i of the matrix was */
 /* > \ingroup complex16GBcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void zgbcon_(char *norm, integer *n, integer *kl, integer *ku, doublecomplex *ab, integer *ldab,
-             integer *ipiv, doublereal *anorm, doublereal *rcond, doublecomplex *work,
-             doublereal *rwork, integer *info)
+/** Generated wrapper function */
+void zgbcon_(char *norm, aocl_int_t *n, aocl_int_t *kl, aocl_int_t *ku, dcomplex *ab,
+             aocl_int_t *ldab, aocl_int_t *ipiv, doublereal *anorm, doublereal *rcond,
+             dcomplex *work, doublereal *rwork, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_zgbcon(norm, n, kl, ku, ab, ldab, ipiv, anorm, rcond, work, rwork, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t kl_64 = *kl;
+    aocl_int64_t ku_64 = *ku;
+    aocl_int64_t ldab_64 = *ldab;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_zgbcon(norm, &n_64, &kl_64, &ku_64, ab, &ldab_64, ipiv, anorm, rcond, work, rwork,
+                       &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_zgbcon(char *norm, aocl_int64_t *n, aocl_int64_t *kl, aocl_int64_t *ku,
+                        dcomplex *ab, aocl_int64_t *ldab, aocl_int_t *ipiv, doublereal *anorm,
+                        doublereal *rcond, dcomplex *work, doublereal *rwork,
+                        aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zgbcon inputs: norm %c, n %" FLA_IS ", kl %" FLA_IS ", ku %" FLA_IS
@@ -165,28 +187,12 @@ void zgbcon_(char *norm, integer *n, integer *kl, integer *ku, doublecomplex *ab
     dcomplex t;
     aocl_int64_t kd, lm, jp, ix, kase, kase1;
     doublereal scale;
-    extern logical lsame_(char *, char *, integer, integer);
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     integer isave[3];
-    extern /* Double Complex */
-        VOID
-        zdotc_f2c_(doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *,
-                   integer *);
     logical lnoti;
-    extern /* Subroutine */
-        void
-        zaxpy_(integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *),
-        zlacn2_(integer *, doublecomplex *, doublecomplex *, doublereal *, integer *, integer *);
     extern doublereal dlamch_(char *);
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal ainvnm;
     logical onenrm;
-    extern /* Subroutine */
-        void
-        zlatbs_(char *, char *, char *, char *, integer *, integer *, doublecomplex *, integer *,
-                doublecomplex *, doublereal *, doublereal *, integer *),
-        zdrscl_(integer *, doublereal *, doublecomplex *, integer *);
     char normin[1];
     doublereal smlnum;
     /* -- LAPACK computational routine (version 3.4.0) -- */
@@ -253,7 +259,7 @@ void zgbcon_(char *norm, integer *n, integer *kl, integer *ku, doublecomplex *ab
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("ZGBCON", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("ZGBCON", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -286,7 +292,7 @@ void zgbcon_(char *norm, integer *n, integer *kl, integer *ku, doublecomplex *ab
     lnoti = *kl > 0;
     kase = 0;
 L10:
-    zlacn2_(n, &work[*n + 1], &work[1], &ainvnm, &kase, isave);
+    aocl_lapack_zlacn2(n, &work[*n + 1], &work[1], &ainvnm, &kase, isave);
     if(kase != 0)
     {
         if(kase == kase1)
@@ -317,21 +323,22 @@ L10:
                     }
                     z__1.r = -t.r;
                     z__1.i = -t.i; // , expr subst
-                    zaxpy_(&lm, &z__1, &ab[kd + 1 + j * ab_dim1], &c__1, &work[j + 1], &c__1);
+                    aocl_blas_zaxpy(&lm, &z__1, &ab[kd + 1 + j * ab_dim1], &c__1, &work[j + 1],
+                                    &c__1);
                     /* L20: */
                 }
             }
             /* Multiply by inv(U). */
             i__1 = *kl + *ku;
-            zlatbs_("Upper", "No transpose", "Non-unit", normin, n, &i__1, &ab[ab_offset], ldab,
-                    &work[1], &scale, &rwork[1], info);
+            aocl_lapack_zlatbs("Upper", "No transpose", "Non-unit", normin, n, &i__1,
+                               &ab[ab_offset], ldab, &work[1], &scale, &rwork[1], info);
         }
         else
         {
             /* Multiply by inv(U**H). */
             i__1 = *kl + *ku;
-            zlatbs_("Upper", "Conjugate transpose", "Non-unit", normin, n, &i__1, &ab[ab_offset],
-                    ldab, &work[1], &scale, &rwork[1], info);
+            aocl_lapack_zlatbs("Upper", "Conjugate transpose", "Non-unit", normin, n, &i__1,
+                               &ab[ab_offset], ldab, &work[1], &scale, &rwork[1], info);
             /* Multiply by inv(L**H). */
             if(lnoti)
             {
@@ -343,7 +350,7 @@ L10:
                     lm = fla_min(i__1, i__2);
                     i__1 = j;
                     i__2 = j;
-                    zdotc_f2c_(&z__2, &lm, &ab[kd + 1 + j * ab_dim1], &c__1, &work[j + 1], &c__1);
+                    aocl_lapack_zdotc_f2c(&z__2, &lm, &ab[kd + 1 + j * ab_dim1], &c__1, &work[j + 1], &c__1);
                     z__1.r = work[i__2].r - z__2.r;
                     z__1.i = work[i__2].i - z__2.i; // , expr subst
                     work[i__1].r = z__1.r;

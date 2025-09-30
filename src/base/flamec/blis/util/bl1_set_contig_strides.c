@@ -16,7 +16,7 @@
 #include "blis.h"
 #endif
 
-void bl1_set_contig_strides( integer m, integer n, integer* rs, integer* cs )
+void bl1_set_contig_strides( fla_dim_t m, fla_dim_t n, fla_dim_t* rs, fla_dim_t* cs )
 {
 	// Default to column-major order.
 	*rs = 1;

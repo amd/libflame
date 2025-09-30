@@ -11,12 +11,10 @@
 #define ssign( x ) ( (x) < 0.0F ? -1.0F : 1.0F )
 #define dsign( x ) ( (x) < 0.0  ? -1.0  : 1.0  )
 
-void slarf_(char *, integer *, integer *, float *, integer *, float *, float *, integer *, float *);
-void dlarf_(char *, integer *, integer *, double *, integer *, double *, double *, integer *, double *);
 
-FLA_Error FLA_EXT_Househ2_l_ops( integer  m_x2,
+FLA_Error FLA_EXT_Househ2_l_ops( fla_dim_t  m_x2,
                                  float*   chi_1,
-                                 float*   x2, integer inc_x2,
+                                 float*   x2, fla_dim_t inc_x2,
                                  float*   tau )
 {
   float   one_half = 1.0F/2.0F;
@@ -26,9 +24,9 @@ FLA_Error FLA_EXT_Househ2_l_ops( integer  m_x2,
   float   norm_x_2;
   float   norm_x;
   float   safmin, rsafmn, lchi1;
-  integer i_one = 1;
-  integer i_two = 2;
-  integer kn;
+  fla_dim_t i_one = 1;
+  fla_dim_t i_two = 2;
+  fla_dim_t kn;
 
   //
   // Compute the 2-norm of x_2:
@@ -36,7 +34,7 @@ FLA_Error FLA_EXT_Househ2_l_ops( integer  m_x2,
   //   norm_x_2 := || x_2 ||_2
   //
 
-  norm_x_2 = snrm2_( &m_x2,
+  norm_x_2 = aocl_blas_snrm2( &m_x2,
                      x2, &inc_x2 );
 
   //
@@ -62,7 +60,7 @@ FLA_Error FLA_EXT_Househ2_l_ops( integer  m_x2,
   y[0] = lchi1;
   y[1] = norm_x_2;
 
-  norm_x = snrm2_( &i_two,
+  norm_x = aocl_blas_snrm2( &i_two,
                    y, &i_one );
 
   //
@@ -94,7 +92,7 @@ FLA_Error FLA_EXT_Househ2_l_ops( integer  m_x2,
 
     for( kn = 1; kn < 20; kn++ )
     {
-      sscal_( &m_x2,
+      aocl_blas_sscal( &m_x2,
               &rsafmn,
               x2, &inc_x2 );
       alpha = alpha * rsafmn;
@@ -107,7 +105,7 @@ FLA_Error FLA_EXT_Househ2_l_ops( integer  m_x2,
 
   inv_chi_1_minus_alpha = 1.0F / chi_1_minus_alpha;
 
-  sscal_( &m_x2,
+  aocl_blas_sscal( &m_x2,
           &inv_chi_1_minus_alpha,
           x2, &inc_x2 );
 
@@ -142,15 +140,15 @@ FLA_Error FLA_EXT_Househ2_l_ops( integer  m_x2,
   return FLA_SUCCESS;
 }
 
-FLA_Error FLA_EXT_sgeqrf( integer  m_A, integer n_A,
-                          float*   buff_A, integer cs_A,
+FLA_Error FLA_EXT_sgeqrf( fla_dim_t  m_A, fla_dim_t n_A,
+                          float*   buff_A, fla_dim_t cs_A,
                           float*   buff_t,
                           float*   buff_w,
-                          integer* lwork,
-                          integer* info )
+                          fla_dim_t* lwork,
+                          fla_dim_t* info )
 {
-  integer min_m_n = fla_min( m_A, n_A );
-  integer i, rs_A = 1;
+  fla_dim_t min_m_n = fla_min( m_A, n_A );
+  fla_dim_t i, rs_A = 1;
 
   for ( i = 0; i < min_m_n; ++i )
   {
@@ -161,10 +159,10 @@ FLA_Error FLA_EXT_sgeqrf( integer  m_A, integer n_A,
     float* tau1     = buff_t + i;
     float  alphat = *alpha11;
 
-    integer m_curr   = m_A - i;
+    fla_dim_t m_curr   = m_A - i;
 
-    integer m_ahead  = m_A - i - 1;
-    integer n_ahead  = n_A - i - 1;
+    fla_dim_t m_ahead  = m_A - i - 1;
+    fla_dim_t n_ahead  = n_A - i - 1;
 
     /*------------------------------------------------------------*/
 
@@ -179,7 +177,7 @@ FLA_Error FLA_EXT_sgeqrf( integer  m_A, integer n_A,
         *tau1 = 1.0F / *tau1;
 
     // Apply the computed Householder transformation on the matrix
-    slarf_( "Left",
+    aocl_lapack_slarf( "Left",
             &m_curr, &n_ahead,
             alpha11, &rs_A,
             tau1,
@@ -195,9 +193,9 @@ FLA_Error FLA_EXT_sgeqrf( integer  m_A, integer n_A,
   return FLA_SUCCESS;
 }
 
-FLA_Error FLA_EXT_Househ2_l_opd( integer   m_x2,
+FLA_Error FLA_EXT_Househ2_l_opd( fla_dim_t   m_x2,
                                  double*   chi_1,
-                                 double*   x2, integer inc_x2,
+                                 double*   x2, fla_dim_t inc_x2,
                                  double*   tau )
 {
   double   one_half = 1.0/2.0;
@@ -207,9 +205,9 @@ FLA_Error FLA_EXT_Househ2_l_opd( integer   m_x2,
   double   norm_x_2;
   double   norm_x;
   double   safmin, rsafmn, lchi1;
-  integer  i_one = 1;
-  integer  i_two = 2;
-  integer  kn;
+  fla_dim_t  i_one = 1;
+  fla_dim_t  i_two = 2;
+  fla_dim_t  kn;
 
   //
   // Compute the 2-norm of x_2:
@@ -217,7 +215,7 @@ FLA_Error FLA_EXT_Househ2_l_opd( integer   m_x2,
   //   norm_x_2 := || x_2 ||_2
   //
 
-  norm_x_2 = dnrm2_( &m_x2,
+  norm_x_2 = aocl_blas_dnrm2( &m_x2,
                      x2, &inc_x2 );
 
   //
@@ -243,7 +241,7 @@ FLA_Error FLA_EXT_Househ2_l_opd( integer   m_x2,
   y[0] = lchi1;
   y[1] = norm_x_2;
 
-  norm_x = dnrm2_( &i_two,
+  norm_x = aocl_blas_dnrm2( &i_two,
                    y, &i_one );
 
   //
@@ -275,7 +273,7 @@ FLA_Error FLA_EXT_Househ2_l_opd( integer   m_x2,
 
     for( kn = 1; kn < 20; kn++ )
     {
-      dscal_( &m_x2,
+      aocl_blas_dscal( &m_x2,
                &rsafmn,
                x2, &inc_x2 );
       alpha = alpha * rsafmn;
@@ -288,7 +286,7 @@ FLA_Error FLA_EXT_Househ2_l_opd( integer   m_x2,
 
   inv_chi_1_minus_alpha = 1.0 / chi_1_minus_alpha;
 
-  dscal_( &m_x2,
+  aocl_blas_dscal( &m_x2,
           &inv_chi_1_minus_alpha,
           x2, &inc_x2 );
 
@@ -323,15 +321,15 @@ FLA_Error FLA_EXT_Househ2_l_opd( integer   m_x2,
   return FLA_SUCCESS;
 }
 
-FLA_Error FLA_EXT_dgeqrf( integer  m_A, integer n_A,
-                          double*  buff_A, integer cs_A,
+FLA_Error FLA_EXT_dgeqrf( fla_dim_t  m_A, fla_dim_t n_A,
+                          double*  buff_A, fla_dim_t cs_A,
                           double*  buff_t,
                           double*  buff_w,
-                          integer* lwork,
-                          integer* info )
+                          fla_dim_t* lwork,
+                          fla_dim_t* info )
 {
-  integer min_m_n = fla_min( m_A, n_A );
-  integer i, rs_A = 1;
+  fla_dim_t min_m_n = fla_min( m_A, n_A );
+  fla_dim_t i, rs_A = 1;
 
   for ( i = 0; i < min_m_n; ++i )
   {
@@ -342,10 +340,10 @@ FLA_Error FLA_EXT_dgeqrf( integer  m_A, integer n_A,
     double* tau1     = buff_t + i;
     double  alphat   = *alpha11;
 
-    integer m_curr   = m_A - i;
+    fla_dim_t m_curr   = m_A - i;
 
-    integer m_ahead  = m_A - i - 1;
-    integer n_ahead  = n_A - i - 1;
+    fla_dim_t m_ahead  = m_A - i - 1;
+    fla_dim_t n_ahead  = n_A - i - 1;
 
     /*------------------------------------------------------------*/
 
@@ -360,7 +358,7 @@ FLA_Error FLA_EXT_dgeqrf( integer  m_A, integer n_A,
         *tau1 = 1.0 / *tau1;
 
     // Apply the computed Householder transformation on the matrix
-    dlarf_( "L",
+    aocl_lapack_dlarf( "L",
             &m_curr, &n_ahead,
             alpha11, &rs_A,
             tau1,

@@ -16,7 +16,7 @@
 #include "blis.h"
 #endif
 
-void bl1_sdots( conj1_t conj, integer n, float* alpha, float* x, integer incx, float* y, integer incy, float* beta, float* rho )
+void bl1_sdots( conj1_t conj, fla_dim_t n, float* alpha, float* x, fla_dim_t incx, float* y, fla_dim_t incy, float* beta, float* rho )
 {
 	float dot_prod;
 
@@ -29,7 +29,7 @@ void bl1_sdots( conj1_t conj, integer n, float* alpha, float* x, integer incx, f
 	*rho = (*beta) * (*rho) + (*alpha) * dot_prod;
 }
 
-void bl1_ddots( conj1_t conj, integer n, double* alpha, double* x, integer incx, double* y, integer incy, double* beta, double* rho )
+void bl1_ddots( conj1_t conj, fla_dim_t n, double* alpha, double* x, fla_dim_t incx, double* y, fla_dim_t incy, double* beta, double* rho )
 {
 	double dot_prod;
 
@@ -42,7 +42,7 @@ void bl1_ddots( conj1_t conj, integer n, double* alpha, double* x, integer incx,
 	*rho = (*beta) * (*rho) + (*alpha) * dot_prod;
 }
 
-void bl1_cdots( conj1_t conj, integer n, scomplex* alpha, scomplex* x, integer incx, scomplex* y, integer incy, scomplex* beta, scomplex* rho )
+void bl1_cdots( conj1_t conj, fla_dim_t n, scomplex* alpha, scomplex* x, fla_dim_t incx, scomplex* y, fla_dim_t incy, scomplex* beta, scomplex* rho )
 {
 	scomplex rho_orig = *rho;
 	scomplex dot_prod;
@@ -59,7 +59,7 @@ void bl1_cdots( conj1_t conj, integer n, scomplex* alpha, scomplex* x, integer i
 	            alpha->real * dot_prod.imag + alpha->imag * dot_prod.real;
 }
 
-void bl1_zdots( conj1_t conj, integer n, dcomplex* alpha, dcomplex* x, integer incx, dcomplex* y, integer incy, dcomplex* beta, dcomplex* rho )
+void bl1_zdots( conj1_t conj, fla_dim_t n, dcomplex* alpha, dcomplex* x, fla_dim_t incx, dcomplex* y, fla_dim_t incy, dcomplex* beta, dcomplex* rho )
 {
 	dcomplex rho_orig = *rho;
 	dcomplex dot_prod;

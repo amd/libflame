@@ -13,9 +13,9 @@
 FLA_Error FLA_Norm1_tridiag( FLA_Obj d, FLA_Obj e, FLA_Obj norm )
 {
 	FLA_Datatype datatype;
-	integer          m_A;
-	integer          inc_d;
-	integer          inc_e;
+	fla_dim_t          m_A;
+	fla_dim_t          inc_d;
+	fla_dim_t          inc_e;
 
 	datatype = FLA_Obj_datatype( d );
 
@@ -61,15 +61,15 @@ FLA_Error FLA_Norm1_tridiag( FLA_Obj d, FLA_Obj e, FLA_Obj norm )
 
 
 
-FLA_Error FLA_Norm1_tridiag_ops( integer       m_A,
-                                 float*    buff_d, integer inc_d, 
-                                 float*    buff_e, integer inc_e,
+FLA_Error FLA_Norm1_tridiag_ops( fla_dim_t       m_A,
+                                 float*    buff_d, fla_dim_t inc_d, 
+                                 float*    buff_e, fla_dim_t inc_e,
                                  float*    norm )
 {
 	float*  d  = buff_d;
 	float*  e  = buff_e;
 	float   nm;
-	integer     i;
+	fla_dim_t     i;
 
 	if ( m_A == 1 )
 	{
@@ -108,15 +108,15 @@ FLA_Error FLA_Norm1_tridiag_ops( integer       m_A,
 
 
 
-FLA_Error FLA_Norm1_tridiag_opd( integer       m_A,
-                                 double*   buff_d, integer inc_d, 
-                                 double*   buff_e, integer inc_e,
+FLA_Error FLA_Norm1_tridiag_opd( fla_dim_t       m_A,
+                                 double*   buff_d, fla_dim_t inc_d, 
+                                 double*   buff_e, fla_dim_t inc_e,
                                  double*   norm )
 {
 	double* d  = buff_d;
 	double* e  = buff_e;
 	double  nm;
-	integer     i;
+	fla_dim_t     i;
 
 	if ( m_A == 1 )
 	{

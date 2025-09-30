@@ -6,7 +6,7 @@
 #include "FLA_f2c.h" /* Table of constant values */
 static real c_b4 = 0.f;
 static real c_b5 = 1.f;
-static integer c__1 = 1;
+static aocl_int64_t c__1 = 1;
 /* > \brief \b SORGTSQR */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -174,29 +174,44 @@ static integer c__1 = 1;
 /* > \endverbatim */
 /* ===================================================================== */
 /* Subroutine */
-void sorgtsqr_(integer *m, integer *n, integer *mb, integer *nb, real *a, integer *lda, real *t,
-               integer *ldt, real *work, integer *lwork, integer *info)
+/** Generated wrapper function */
+void sorgtsqr_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *mb, aocl_int_t *nb, real *a,
+               aocl_int_t *lda, real *t, aocl_int_t *ldt, real *work, aocl_int_t *lwork,
+               aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_sorgtsqr(m, n, mb, nb, a, lda, t, ldt, work, lwork, info);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t mb_64 = *mb;
+    aocl_int64_t nb_64 = *nb;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t ldt_64 = *ldt;
+    aocl_int64_t lwork_64 = *lwork;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_sorgtsqr(&m_64, &n_64, &mb_64, &nb_64, a, &lda_64, t, &ldt_64, work, &lwork_64,
+                         &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_sorgtsqr(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *mb, aocl_int64_t *nb,
+                          real *a, aocl_int64_t *lda, real *t, aocl_int64_t *ldt, real *work,
+                          aocl_int64_t *lwork, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("sorgtsqr inputs: m %" FLA_IS ", n %" FLA_IS ", mb %" FLA_IS ", nb %" FLA_IS
                       ", lda %" FLA_IS ", ldt %" FLA_IS "",
                       *m, *n, *mb, *nb, *lda, *ldt);
     /* System generated locals */
-    integer a_dim1, a_offset, t_dim1, t_offset, i__1, i__2;
+    aocl_int64_t a_dim1, a_offset, t_dim1, t_offset, i__1, i__2;
     /* Local variables */
-    extern /* Subroutine */
-        void
-        slamtsqr_(char *, char *, integer *, integer *, integer *, integer *, integer *, real *,
-                  integer *, real *, integer *, real *, integer *, real *, integer *, integer *);
-    integer lworkopt, j, lc, lw, ldc, iinfo;
-    extern /* Subroutine */
-        void
-        scopy_(integer *, real *, integer *, real *, integer *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
-        slaset_(char *, integer *, integer *, real *, real *, real *, integer *);
+    aocl_int64_t lworkopt, j, lc, lw, ldc, iinfo;
     logical lquery;
-    integer nblocal;
-    extern real sroundup_lwork(integer *);
+    aocl_int64_t nblocal;
     /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -288,20 +303,20 @@ void sorgtsqr_(integer *m, integer *n, integer *mb, integer *nb, real *a, intege
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("SORGTSQR", &i__1, (ftnlen)8);
+        aocl_blas_xerbla("SORGTSQR", &i__1, (ftnlen)8);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     else if(lquery)
     {
-        work[1] = sroundup_lwork(&lworkopt);
+        work[1] = aocl_lapack_sroundup_lwork(&lworkopt);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Quick return if possible */
     if(fla_min(*m, *n) == 0)
     {
-        work[1] = sroundup_lwork(&lworkopt);
+        work[1] = aocl_lapack_sroundup_lwork(&lworkopt);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -313,22 +328,22 @@ void sorgtsqr_(integer *m, integer *n, integer *mb, integer *nb, real *a, intege
     /* ( 0 ) 0 is a (M-N)-by-N zero matrix. */
     /* (1a) Form M-by-N matrix in the array WORK(1:LDC*N) with ones */
     /* on the diagonal and zeros elsewhere. */
-    slaset_("F", m, n, &c_b4, &c_b5, &work[1], &ldc);
+    aocl_lapack_slaset("F", m, n, &c_b4, &c_b5, &work[1], &ldc);
     /* (1b) On input, WORK(1:LDC*N) stores ( I );
      */
     /* ( 0 ) */
     /* On output, WORK(1:LDC*N) stores Q1_in. */
-    slamtsqr_("L", "N", m, n, n, mb, &nblocal, &a[a_offset], lda, &t[t_offset], ldt, &work[1], &ldc,
-              &work[lc + 1], &lw, &iinfo);
+    aocl_lapack_slamtsqr("L", "N", m, n, n, mb, &nblocal, &a[a_offset], lda, &t[t_offset], ldt,
+                         &work[1], &ldc, &work[lc + 1], &lw, &iinfo);
     /* (2) Copy the result from the part of the work array (1:M,1:N) */
     /* with the leading dimension LDC that starts at WORK(1) into */
     /* the output array A(1:M,1:N) column-by-column. */
     i__1 = *n;
     for(j = 1; j <= i__1; ++j)
     {
-        scopy_(m, &work[(j - 1) * ldc + 1], &c__1, &a[j * a_dim1 + 1], &c__1);
+        aocl_blas_scopy(m, &work[(j - 1) * ldc + 1], &c__1, &a[j * a_dim1 + 1], &c__1);
     }
-    work[1] = sroundup_lwork(&lworkopt);
+    work[1] = aocl_lapack_sroundup_lwork(&lworkopt);
     AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SORGTSQR */

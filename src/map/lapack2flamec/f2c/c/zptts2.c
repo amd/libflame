@@ -108,8 +108,24 @@
 /* > \ingroup complex16PTcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void zptts2_(integer *iuplo, integer *n, integer *nrhs, doublereal *d__, doublecomplex *e,
-             doublecomplex *b, integer *ldb)
+/** Generated wrapper function */
+void zptts2_(aocl_int_t *iuplo, aocl_int_t *n, aocl_int_t *nrhs, doublereal *d__, dcomplex *e,
+             dcomplex *b, aocl_int_t *ldb)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_zptts2(iuplo, n, nrhs, d__, e, b, ldb);
+#else
+    aocl_int64_t iuplo_64 = *iuplo;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t nrhs_64 = *nrhs;
+    aocl_int64_t ldb_64 = *ldb;
+
+    aocl_lapack_zptts2(&iuplo_64, &n_64, &nrhs_64, d__, e, b, &ldb_64);
+#endif
+}
+
+void aocl_lapack_zptts2(aocl_int64_t *iuplo, aocl_int64_t *n, aocl_int64_t *nrhs, doublereal *d__,
+                        dcomplex *e, dcomplex *b, aocl_int64_t *ldb)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zptts2 inputs: iuplo %" FLA_IS ", n %" FLA_IS ", nrhs %" FLA_IS
@@ -123,10 +139,7 @@ void zptts2_(integer *iuplo, integer *n, integer *nrhs, doublereal *d__, doublec
     /* Builtin functions */
     void d_cnjg(dcomplex *, dcomplex *);
     /* Local variables */
-    integer i__, j;
-    extern /* Subroutine */
-        void
-        zdscal_(integer *, doublereal *, doublecomplex *, integer *);
+    aocl_int64_t i__, j;
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */

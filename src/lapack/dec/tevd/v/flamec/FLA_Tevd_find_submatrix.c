@@ -11,12 +11,12 @@
 #include "FLAME.h"
 
 
-FLA_Error FLA_Tevd_find_submatrix_ops( integer       m_A,
-                                       integer       ij_begin,
-                                       float*    buff_d, integer inc_d, 
-                                       float*    buff_e, integer inc_e,
-                                       integer*      ijTL,
-                                       integer*      ijBR )
+FLA_Error FLA_Tevd_find_submatrix_ops( fla_dim_t       m_A,
+                                       fla_dim_t       ij_begin,
+                                       float*    buff_d, fla_dim_t inc_d, 
+                                       float*    buff_e, fla_dim_t inc_e,
+                                       fla_dim_t*      ijTL,
+                                       fla_dim_t*      ijBR )
 {
 	FLA_Check_error_code( FLA_NOT_YET_IMPLEMENTED );
 
@@ -25,17 +25,17 @@ FLA_Error FLA_Tevd_find_submatrix_ops( integer       m_A,
 
 //#define PRINTF
 
-FLA_Error FLA_Tevd_find_submatrix_opd( integer       m_A,
-                                       integer       ij_begin,
-                                       double*   buff_d, integer inc_d, 
-                                       double*   buff_e, integer inc_e,
-                                       integer*      ijTL,
-                                       integer*      ijBR )
+FLA_Error FLA_Tevd_find_submatrix_opd( fla_dim_t       m_A,
+                                       fla_dim_t       ij_begin,
+                                       double*   buff_d, fla_dim_t inc_d, 
+                                       double*   buff_e, fla_dim_t inc_e,
+                                       fla_dim_t*      ijTL,
+                                       fla_dim_t*      ijBR )
 {
 	double rzero = bl1_d0();
 	double eps;
-	integer    ij_tl;
-	integer    ij_br;
+	fla_dim_t    ij_tl;
+	fla_dim_t    ij_br;
 
 	// Initialize some numerical constants.
 	eps = FLA_Mach_params_opd( FLA_MACH_EPS );

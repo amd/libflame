@@ -4,10 +4,10 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static const integer c__4 = 4;
-static const integer c__1 = 1;
-static const integer c__16 = 16;
-static const integer c__0 = 0;
+static const aocl_int64_t c__4 = 4;
+static const aocl_int64_t c__1 = 1;
+static const aocl_int64_t c__16 = 16;
+static const aocl_int64_t c__0 = 0;
 /* > \brief \b SLASY2 solves the Sylvester matrix equation where the matrices are of order 1 or 2.
  */
 /* =========== DOCUMENTATION =========== */
@@ -174,9 +174,35 @@ static const integer c__0 = 0;
 /* > \ingroup realSYauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-void slasy2_(logical *ltranl, logical *ltranr, integer *isgn, integer *n1, integer *n2, real *tl,
-             integer *ldtl, real *tr, integer *ldtr, real *b, integer *ldb, real *scale, real *x,
-             integer *ldx, real *xnorm, integer *info)
+/** Generated wrapper function */
+void slasy2_(logical *ltranl, logical *ltranr, aocl_int_t *isgn, aocl_int_t *n1, aocl_int_t *n2,
+             real *tl, aocl_int_t *ldtl, real *tr, aocl_int_t *ldtr, real *b, aocl_int_t *ldb,
+             real *scale, real *x, aocl_int_t *ldx, real *xnorm, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_slasy2(ltranl, ltranr, isgn, n1, n2, tl, ldtl, tr, ldtr, b, ldb, scale, x, ldx,
+                       xnorm, info);
+#else
+    aocl_int64_t isgn_64 = *isgn;
+    aocl_int64_t n1_64 = *n1;
+    aocl_int64_t n2_64 = *n2;
+    aocl_int64_t ldtl_64 = *ldtl;
+    aocl_int64_t ldtr_64 = *ldtr;
+    aocl_int64_t ldb_64 = *ldb;
+    aocl_int64_t ldx_64 = *ldx;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_slasy2(ltranl, ltranr, &isgn_64, &n1_64, &n2_64, tl, &ldtl_64, tr, &ldtr_64, b,
+                       &ldb_64, scale, x, &ldx_64, xnorm, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_slasy2(logical *ltranl, logical *ltranr, aocl_int64_t *isgn, aocl_int64_t *n1,
+                        aocl_int64_t *n2, real *tl, aocl_int64_t *ldtl, real *tr,
+                        aocl_int64_t *ldtr, real *b, aocl_int64_t *ldb, real *scale, real *x,
+                        aocl_int64_t *ldx, real *xnorm, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("slasy2 inputs: isgn %" FLA_IS ",n1 %" FLA_IS ",n2 %" FLA_IS ",ldtl %" FLA_IS
@@ -189,28 +215,23 @@ void slasy2_(logical *ltranl, logical *ltranr, integer *isgn, integer *n1, integ
     static const logical xswpiv[4] = {FALSE_, FALSE_, TRUE_, TRUE_};
     static const logical bswpiv[4] = {FALSE_, TRUE_, FALSE_, TRUE_};
     /* System generated locals */
-    integer b_dim1, b_offset, tl_dim1, tl_offset, tr_dim1, tr_offset, x_dim1, x_offset;
+    aocl_int64_t b_dim1, b_offset, tl_dim1, tl_offset, tr_dim1, tr_offset, x_dim1, x_offset;
     real r__1, r__2, r__3, r__4, r__5, r__6, r__7, r__8;
     /* Local variables */
-    integer i__, j, k;
+    aocl_int64_t i__, j, k;
     real x2[2], l21, u11, u12;
-    integer ip, jp;
+    aocl_int64_t ip, jp;
     real u22, t16[16] /* was [4][4] */
         ,
         gam, bet, eps, sgn, tmp[4], tau1, btmp[4], smin;
-    integer ipiv;
+    aocl_int64_t ipiv;
     real temp;
     integer jpiv[4];
     real xmax;
-    integer ipsv, jpsv;
+    aocl_int64_t ipsv, jpsv;
     logical bswap;
-    extern /* Subroutine */
-        void
-        scopy_(const integer *, real *, const integer *, real *, const integer *),
-        sswap_(const integer *, real *, const integer *, real *, const integer *);
     logical xswap;
     extern real slamch_(char *);
-    extern integer isamax_(const integer *, real *, const integer *);
     real smlnum;
     /* -- LAPACK auxiliary routine (version 3.7.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -351,7 +372,7 @@ L30: /* Computing MAX */
     btmp[1] = b[b_dim1 + 2];
 L40: /* Solve 2 by 2 system using complete pivoting. */
     /* Set pivots less than SMIN to SMIN. */
-    ipiv = isamax_(&c__4, tmp, &c__1);
+    ipiv = aocl_blas_isamax(&c__4, tmp, &c__1);
     u11 = tmp[ipiv - 1];
     if(f2c_abs(u11) <= smin)
     {
@@ -437,7 +458,7 @@ L50: /* Computing MAX */
     r__1 = eps * smin;
     smin = fla_max(r__1, smlnum);
     btmp[0] = 0.f;
-    scopy_(&c__16, btmp, &c__0, t16, &c__1);
+    aocl_blas_scopy(&c__16, btmp, &c__0, t16, &c__1);
     t16[0] = tl[tl_dim1 + 1] + sgn * tr[tr_dim1 + 1];
     t16[5] = tl[(tl_dim1 << 1) + 2] + sgn * tr[tr_dim1 + 1];
     t16[10] = tl[tl_dim1 + 1] + sgn * tr[(tr_dim1 << 1) + 2];
@@ -494,14 +515,14 @@ L50: /* Computing MAX */
         }
         if(ipsv != i__)
         {
-            sswap_(&c__4, &t16[ipsv - 1], &c__4, &t16[i__ - 1], &c__4);
+            aocl_blas_sswap(&c__4, &t16[ipsv - 1], &c__4, &t16[i__ - 1], &c__4);
             temp = btmp[i__ - 1];
             btmp[i__ - 1] = btmp[ipsv - 1];
             btmp[ipsv - 1] = temp;
         }
         if(jpsv != i__)
         {
-            sswap_(&c__4, &t16[(jpsv << 2) - 4], &c__1, &t16[(i__ << 2) - 4], &c__1);
+            aocl_blas_sswap(&c__4, &t16[(jpsv << 2) - 4], &c__1, &t16[(i__ << 2) - 4], &c__1);
         }
         jpiv[i__ - 1] = jpsv;
         if((r__1 = t16[i__ + (i__ << 2) - 5], f2c_abs(r__1)) < smin)

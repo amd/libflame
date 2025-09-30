@@ -14,18 +14,18 @@
 
 /* SVD for small fat-matrices
  */
-void fla_dgesvd_xs_small10T_avx2(integer *m, integer *n, doublereal *a, integer *lda, doublereal *s,
-                                 doublereal *u, integer *ldu, doublereal *vt, integer *ldvt,
-                                 doublereal *work, integer *info)
+void fla_dgesvd_xs_small10T_avx2(aocl_int64_t *m, aocl_int64_t *n, doublereal *a, aocl_int64_t *lda, doublereal *s,
+                                 doublereal *u, aocl_int64_t *ldu, doublereal *vt, aocl_int64_t *ldvt,
+                                 doublereal *work, aocl_int64_t *info)
 {
     /* Declare and init local variables */
     FLA_GEQRF_INIT_DSMALL();
 
-    integer ie;
-    integer itauq, itaup;
-    integer rlen, knt;
-    integer tm, tn;
-    integer c__1 = 1;
+    aocl_int64_t ie;
+    aocl_int64_t itauq, itaup;
+    aocl_int64_t rlen, knt;
+    aocl_int64_t tm, tn;
+    aocl_int64_t c__1 = 1;
 
     doublereal *tau, *tauq, *taup;
     doublereal *e;

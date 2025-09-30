@@ -4,8 +4,8 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static complex c_b1 = {1.f, 0.f};
-static complex c_b2 = {0.f, 0.f};
+static scomplex c_b1 = {{1.f}, {0.f}};
+static scomplex c_b2 = {{0.f}, {0.f}};
 /* > \brief \b CSYTRI2X */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -121,8 +121,26 @@ the matrix is singular and its */
 /* > \ingroup complexSYcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void csytri2x_(char *uplo, integer *n, complex *a, integer *lda, integer *ipiv, complex *work,
-               integer *nb, integer *info)
+/** Generated wrapper function */
+void csytri2x_(char *uplo, aocl_int_t *n, scomplex *a, aocl_int_t *lda, aocl_int_t *ipiv,
+               scomplex *work, aocl_int_t *nb, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_csytri2x(uplo, n, a, lda, ipiv, work, nb, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t nb_64 = *nb;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_csytri2x(uplo, &n_64, a, &lda_64, ipiv, work, &nb_64, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_csytri2x(char *uplo, aocl_int64_t *n, scomplex *a, aocl_int64_t *lda,
+                          aocl_int_t *ipiv, scomplex *work, aocl_int64_t *nb, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -136,42 +154,24 @@ void csytri2x_(char *uplo, integer *n, complex *a, integer *lda, integer *ipiv, 
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
-    integer a_dim1, a_offset, work_dim1, work_offset, i__1, i__2, i__3, i__4, i__5, i__6;
-    complex q__1, q__2, q__3;
+    aocl_int64_t a_dim1, a_offset, work_dim1, work_offset, i__1, i__2, i__3, i__4, i__5, i__6;
+    scomplex q__1, q__2, q__3;
     /* Builtin functions */
-    void c_div(complex *, complex *, complex *);
+    void c_div(scomplex *, scomplex *, scomplex *);
     /* Local variables */
-    extern /* Subroutine */
-        void
-        csyswapr_(char *, integer *, complex *, integer *, integer *, integer *);
-    complex d__;
-    integer i__, j, k;
-    complex t, ak;
-    integer u11, ip, nnb, cut;
-    complex akp1;
-    integer invd;
-    complex akkp1;
-    extern /* Subroutine */
-        void
-        cgemm_(char *, char *, integer *, integer *, integer *, complex *, complex *, integer *,
-               complex *, integer *, complex *, complex *, integer *);
-    extern logical lsame_(char *, char *, integer, integer);
-    integer iinfo;
-    extern /* Subroutine */
-        void
-        ctrmm_(char *, char *, char *, char *, integer *, integer *, complex *, complex *,
-               integer *, complex *, integer *);
-    integer count;
+    scomplex d__;
+    aocl_int64_t i__, j, k;
+    scomplex t, ak;
+    aocl_int64_t u11, ip, nnb, cut;
+    scomplex akp1;
+    aocl_int64_t invd;
+    scomplex akkp1;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    aocl_int64_t iinfo;
+    aocl_int64_t count;
     logical upper;
-    complex u01_i_j__, u11_i_j__;
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    extern /* Subroutine */
-        void
-        ctrtri_(char *, char *, integer *, complex *, integer *, integer *),
-        csyconv_(char *, char *, integer *, complex *, integer *, integer *, complex *, integer *);
-    complex u01_ip1_j__, u11_ip1_j__;
+    scomplex u01_i_j__, u11_i_j__;
+    scomplex u01_ip1_j__, u11_ip1_j__;
     /* -- LAPACK computational routine (version 3.7.1) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -220,7 +220,7 @@ void csytri2x_(char *uplo, integer *n, complex *a, integer *lda, integer *ipiv, 
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("CSYTRI2X", &i__1, (ftnlen)8);
+        aocl_blas_xerbla("CSYTRI2X", &i__1, (ftnlen)8);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
@@ -231,7 +231,7 @@ void csytri2x_(char *uplo, integer *n, complex *a, integer *lda, integer *ipiv, 
     }
     /* Convert A */
     /* Workspace got Non-diag elements of D */
-    csyconv_(uplo, "C", n, &a[a_offset], lda, &ipiv[1], &work[work_offset], &iinfo);
+    aocl_lapack_csyconv(uplo, "C", n, &a[a_offset], lda, &ipiv[1], &work[work_offset], &iinfo);
     /* Check that the diagonal matrix D is nonsingular. */
     if(upper)
     {
@@ -273,7 +273,7 @@ void csytri2x_(char *uplo, integer *n, complex *a, integer *lda, integer *ipiv, 
     if(upper)
     {
         /* invA = P * inv(U**T)*inv(D)*inv(U)*P**T. */
-        ctrtri_(uplo, "U", n, &a[a_offset], lda, info);
+        aocl_lapack_ctrtri(uplo, "U", n, &a[a_offset], lda, info);
         /* inv(D) and inv(D)*inv(U) */
         k = 1;
         while(k <= *n)
@@ -527,8 +527,8 @@ void csytri2x_(char *uplo, integer *n, complex *a, integer *lda, integer *ipiv, 
             }
             /* U11**T*invD1*U11->U11 */
             i__1 = *n + *nb + 1;
-            ctrmm_("L", "U", "T", "U", &nnb, &nnb, &c_b1, &a[cut + 1 + (cut + 1) * a_dim1], lda,
-                   &work[u11 + 1 + work_dim1], &i__1);
+            aocl_blas_ctrmm("L", "U", "T", "U", &nnb, &nnb, &c_b1, &a[cut + 1 + (cut + 1) * a_dim1],
+                            lda, &work[u11 + 1 + work_dim1], &i__1);
             i__1 = nnb;
             for(i__ = 1; i__ <= i__1; ++i__)
             {
@@ -544,8 +544,8 @@ void csytri2x_(char *uplo, integer *n, complex *a, integer *lda, integer *ipiv, 
             /* U01**T*invD*U01->A(CUT+I,CUT+J) */
             i__1 = *n + *nb + 1;
             i__2 = *n + *nb + 1;
-            cgemm_("T", "N", &nnb, &nnb, &cut, &c_b1, &a[(cut + 1) * a_dim1 + 1], lda,
-                   &work[work_offset], &i__1, &c_b2, &work[u11 + 1 + work_dim1], &i__2);
+            aocl_blas_cgemm("T", "N", &nnb, &nnb, &cut, &c_b1, &a[(cut + 1) * a_dim1 + 1], lda,
+                            &work[work_offset], &i__1, &c_b2, &work[u11 + 1 + work_dim1], &i__2);
             /* U11 = U11**T*invD1*U11 + U01**T*invD*U01 */
             i__1 = nnb;
             for(i__ = 1; i__ <= i__1; ++i__)
@@ -564,8 +564,8 @@ void csytri2x_(char *uplo, integer *n, complex *a, integer *lda, integer *ipiv, 
             }
             /* U01 = U00**T*invD0*U01 */
             i__1 = *n + *nb + 1;
-            ctrmm_("L", uplo, "T", "U", &cut, &nnb, &c_b1, &a[a_offset], lda, &work[work_offset],
-                   &i__1);
+            aocl_blas_ctrmm("L", uplo, "T", "U", &cut, &nnb, &c_b1, &a[a_offset], lda,
+                            &work[work_offset], &i__1);
             /* Update U01 */
             i__1 = cut;
             for(i__ = 1; i__ <= i__1; ++i__)
@@ -590,11 +590,11 @@ void csytri2x_(char *uplo, integer *n, complex *a, integer *lda, integer *ipiv, 
                 ip = ipiv[i__];
                 if(i__ < ip)
                 {
-                    csyswapr_(uplo, n, &a[a_offset], lda, &i__, &ip);
+                    aocl_lapack_csyswapr(uplo, n, &a[a_offset], lda, &i__, &ip);
                 }
                 if(i__ > ip)
                 {
-                    csyswapr_(uplo, n, &a[a_offset], lda, &ip, &i__);
+                    aocl_lapack_csyswapr(uplo, n, &a[a_offset], lda, &ip, &i__);
                 }
             }
             else
@@ -604,12 +604,12 @@ void csytri2x_(char *uplo, integer *n, complex *a, integer *lda, integer *ipiv, 
                 if(i__ - 1 < ip)
                 {
                     i__1 = i__ - 1;
-                    csyswapr_(uplo, n, &a[a_offset], lda, &i__1, &ip);
+                    aocl_lapack_csyswapr(uplo, n, &a[a_offset], lda, &i__1, &ip);
                 }
                 if(i__ - 1 > ip)
                 {
                     i__1 = i__ - 1;
-                    csyswapr_(uplo, n, &a[a_offset], lda, &ip, &i__1);
+                    aocl_lapack_csyswapr(uplo, n, &a[a_offset], lda, &ip, &i__1);
                 }
             }
             ++i__;
@@ -619,7 +619,7 @@ void csytri2x_(char *uplo, integer *n, complex *a, integer *lda, integer *ipiv, 
     {
         /* LOWER... */
         /* invA = P * inv(U**T)*inv(D)*inv(U)*P**T. */
-        ctrtri_(uplo, "U", n, &a[a_offset], lda, info);
+        aocl_lapack_ctrtri(uplo, "U", n, &a[a_offset], lda, info);
         /* inv(D) and inv(D)*inv(U) */
         k = *n;
         while(k >= 1)
@@ -871,8 +871,9 @@ void csytri2x_(char *uplo, integer *n, complex *a, integer *lda, integer *ipiv, 
             }
             /* L11**T*invD1*L11->L11 */
             i__1 = *n + *nb + 1;
-            ctrmm_("L", uplo, "T", "U", &nnb, &nnb, &c_b1, &a[cut + 1 + (cut + 1) * a_dim1], lda,
-                   &work[u11 + 1 + work_dim1], &i__1);
+            aocl_blas_ctrmm("L", uplo, "T", "U", &nnb, &nnb, &c_b1,
+                            &a[cut + 1 + (cut + 1) * a_dim1], lda, &work[u11 + 1 + work_dim1],
+                            &i__1);
             i__1 = nnb;
             for(i__ = 1; i__ <= i__1; ++i__)
             {
@@ -891,8 +892,9 @@ void csytri2x_(char *uplo, integer *n, complex *a, integer *lda, integer *ipiv, 
                 i__1 = *n - nnb - cut;
                 i__2 = *n + *nb + 1;
                 i__3 = *n + *nb + 1;
-                cgemm_("T", "N", &nnb, &nnb, &i__1, &c_b1, &a[cut + nnb + 1 + (cut + 1) * a_dim1],
-                       lda, &work[work_offset], &i__2, &c_b2, &work[u11 + 1 + work_dim1], &i__3);
+                aocl_blas_cgemm("T", "N", &nnb, &nnb, &i__1, &c_b1,
+                                &a[cut + nnb + 1 + (cut + 1) * a_dim1], lda, &work[work_offset],
+                                &i__2, &c_b2, &work[u11 + 1 + work_dim1], &i__3);
                 /* L11 = L11**T*invD1*L11 + U01**T*invD*U01 */
                 i__1 = nnb;
                 for(i__ = 1; i__ <= i__1; ++i__)
@@ -912,9 +914,9 @@ void csytri2x_(char *uplo, integer *n, complex *a, integer *lda, integer *ipiv, 
                 /* L01 = L22**T*invD2*L21 */
                 i__1 = *n - nnb - cut;
                 i__2 = *n + *nb + 1;
-                ctrmm_("L", uplo, "T", "U", &i__1, &nnb, &c_b1,
-                       &a[cut + nnb + 1 + (cut + nnb + 1) * a_dim1], lda, &work[work_offset],
-                       &i__2);
+                aocl_blas_ctrmm("L", uplo, "T", "U", &i__1, &nnb, &c_b1,
+                                &a[cut + nnb + 1 + (cut + nnb + 1) * a_dim1], lda,
+                                &work[work_offset], &i__2);
                 /* Update L21 */
                 i__1 = *n - cut - nnb;
                 for(i__ = 1; i__ <= i__1; ++i__)
@@ -957,11 +959,11 @@ void csytri2x_(char *uplo, integer *n, complex *a, integer *lda, integer *ipiv, 
                 ip = ipiv[i__];
                 if(i__ < ip)
                 {
-                    csyswapr_(uplo, n, &a[a_offset], lda, &i__, &ip);
+                    aocl_lapack_csyswapr(uplo, n, &a[a_offset], lda, &i__, &ip);
                 }
                 if(i__ > ip)
                 {
-                    csyswapr_(uplo, n, &a[a_offset], lda, &ip, &i__);
+                    aocl_lapack_csyswapr(uplo, n, &a[a_offset], lda, &ip, &i__);
                 }
             }
             else
@@ -969,11 +971,11 @@ void csytri2x_(char *uplo, integer *n, complex *a, integer *lda, integer *ipiv, 
                 ip = -ipiv[i__];
                 if(i__ < ip)
                 {
-                    csyswapr_(uplo, n, &a[a_offset], lda, &i__, &ip);
+                    aocl_lapack_csyswapr(uplo, n, &a[a_offset], lda, &i__, &ip);
                 }
                 if(i__ > ip)
                 {
-                    csyswapr_(uplo, n, &a[a_offset], lda, &ip, &i__);
+                    aocl_lapack_csyswapr(uplo, n, &a[a_offset], lda, &ip, &i__);
                 }
                 --i__;
             }

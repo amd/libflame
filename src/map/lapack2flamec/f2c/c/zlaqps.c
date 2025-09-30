@@ -4,9 +4,9 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static doublecomplex c_b1 = {0., 0.};
-static doublecomplex c_b2 = {1., 0.};
-static integer c__1 = 1;
+static dcomplex c_b1 = {{0.}, {0.}};
+static dcomplex c_b2 = {{1.}, {0.}};
+static aocl_int64_t c__1 = 1;
 /* > \brief \b ZLAQPS computes a step of QR factorization with column pivoting of a real m-by-n
  * matrix A by us ing BLAS level 3. */
 /* =========== DOCUMENTATION =========== */
@@ -173,9 +173,34 @@ static integer c__1 = 1;
 /* > \endhtmlonly */
 /* ===================================================================== */
 /* Subroutine */
-void zlaqps_(integer *m, integer *n, integer *offset, integer *nb, integer *kb, doublecomplex *a,
-             integer *lda, integer *jpvt, doublecomplex *tau, doublereal *vn1, doublereal *vn2,
-             doublecomplex *auxv, doublecomplex *f, integer *ldf)
+/** Generated wrapper function */
+void zlaqps_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *offset, aocl_int_t *nb, aocl_int_t *kb,
+             dcomplex *a, aocl_int_t *lda, aocl_int_t *jpvt, dcomplex *tau,
+             doublereal *vn1, doublereal *vn2, dcomplex *auxv, dcomplex *f,
+             aocl_int_t *ldf)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_zlaqps(m, n, offset, nb, kb, a, lda, jpvt, tau, vn1, vn2, auxv, f, ldf);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t offset_64 = *offset;
+    aocl_int64_t nb_64 = *nb;
+    aocl_int64_t kb_64 = *kb;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t ldf_64 = *ldf;
+
+    aocl_lapack_zlaqps(&m_64, &n_64, &offset_64, &nb_64, &kb_64, a, &lda_64, jpvt, tau, vn1, vn2,
+                       auxv, f, &ldf_64);
+
+    *kb = (aocl_int_t)kb_64;
+#endif
+}
+
+void aocl_lapack_zlaqps(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *offset, aocl_int64_t *nb,
+                        aocl_int64_t *kb, dcomplex *a, aocl_int64_t *lda, aocl_int_t *jpvt,
+                        dcomplex *tau, doublereal *vn1, doublereal *vn2, dcomplex *auxv,
+                        dcomplex *f, aocl_int64_t *ldf)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zlaqps inputs: m %" FLA_IS ", n %" FLA_IS ", offset %" FLA_IS ", nb %" FLA_IS
@@ -187,29 +212,18 @@ void zlaqps_(integer *m, integer *n, integer *offset, integer *nb, integer *kb, 
     dcomplex z__1;
     /* Builtin functions */
     double sqrt(doublereal);
-    void d_cnjg(doublecomplex *, doublecomplex *);
-    double z_abs(doublecomplex *);
+    void d_cnjg(dcomplex *, dcomplex *);
+    double z_abs(dcomplex *);
     integer i_dnnt(doublereal *);
     /* Local variables */
     aocl_int64_t j, k, rk;
     dcomplex akk;
     aocl_int64_t pvt;
     doublereal temp, temp2, tol3z;
-    integer itemp;
-    extern /* Subroutine */
-        void
-        zgemm_(char *, char *, integer *, integer *, integer *, doublecomplex *, doublecomplex *,
-               integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *),
-        zgemv_(char *, integer *, integer *, doublecomplex *, doublecomplex *, integer *,
-               doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *),
-        zswap_(integer *, doublecomplex *, integer *, doublecomplex *, integer *);
-    extern doublereal dznrm2_(integer *, doublecomplex *, integer *), dlamch_(char *);
-    extern integer idamax_(integer *, doublereal *, integer *);
-    integer lsticc;
-    extern /* Subroutine */
-        void
-        zlarfg_(integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *);
-    integer lastrk;
+    aocl_int64_t itemp;
+    extern doublereal dlamch_(char *);
+    aocl_int64_t lsticc;
+    aocl_int64_t lastrk;
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -258,7 +272,7 @@ L10:
         rk = *offset + k;
         /* Determine ith pivot column and swap if necessary */
         i__1 = *n - k + 1;
-        pvt = k - 1 + idamax_(&i__1, &vn1[k], &c__1);
+        pvt = k - 1 + aocl_blas_idamax(&i__1, &vn1[k], &c__1);
         if(pvt != k)
         {
             aocl_blas_zswap(m, &a[pvt * a_dim1 + 1], &c__1, &a[k * a_dim1 + 1], &c__1);
@@ -287,8 +301,8 @@ L10:
             i__2 = k - 1;
             z__1.r = -1.;
             z__1.i = -0.; // , expr subst
-            zgemv_("No transpose", &i__1, &i__2, &z__1, &a[rk + a_dim1], lda, &f[k + f_dim1], ldf,
-                   &c_b2, &a[rk + k * a_dim1], &c__1);
+            aocl_blas_zgemv("No transpose", &i__1, &i__2, &z__1, &a[rk + a_dim1], lda,
+                            &f[k + f_dim1], ldf, &c_b2, &a[rk + k * a_dim1], &c__1);
             i__1 = k - 1;
             for(j = 1; j <= i__1; ++j)
             {
@@ -303,11 +317,11 @@ L10:
         if(rk < *m)
         {
             i__1 = *m - rk + 1;
-            zlarfg_(&i__1, &a[rk + k * a_dim1], &a[rk + 1 + k * a_dim1], &c__1, &tau[k]);
+            aocl_lapack_zlarfg(&i__1, &a[rk + k * a_dim1], &a[rk + 1 + k * a_dim1], &c__1, &tau[k]);
         }
         else
         {
-            zlarfg_(&c__1, &a[rk + k * a_dim1], &a[rk + k * a_dim1], &c__1, &tau[k]);
+            aocl_lapack_zlarfg(&c__1, &a[rk + k * a_dim1], &a[rk + k * a_dim1], &c__1, &tau[k]);
         }
         i__1 = rk + k * a_dim1;
         akk.real = a[i__1].real;
@@ -321,8 +335,8 @@ L10:
         {
             i__1 = *m - rk + 1;
             i__2 = *n - k;
-            zgemv_("Conjugate transpose", &i__1, &i__2, &tau[k], &a[rk + (k + 1) * a_dim1], lda,
-                   &a[rk + k * a_dim1], &c__1, &c_b1, &f[k + 1 + k * f_dim1], &c__1);
+            aocl_blas_zgemv("Conjugate transpose", &i__1, &i__2, &tau[k], &a[rk + (k + 1) * a_dim1],
+                            lda, &a[rk + k * a_dim1], &c__1, &c_b1, &f[k + 1 + k * f_dim1], &c__1);
         }
         /* Padding F(1:K,K) with zeros. */
         i__1 = k;
@@ -343,11 +357,11 @@ L10:
             i__3 = k;
             z__1.r = -tau[i__3].r;
             z__1.i = -tau[i__3].i; // , expr subst
-            zgemv_("Conjugate transpose", &i__1, &i__2, &z__1, &a[rk + a_dim1], lda,
-                   &a[rk + k * a_dim1], &c__1, &c_b1, &auxv[1], &c__1);
+            aocl_blas_zgemv("Conjugate transpose", &i__1, &i__2, &z__1, &a[rk + a_dim1], lda,
+                            &a[rk + k * a_dim1], &c__1, &c_b1, &auxv[1], &c__1);
             i__1 = k - 1;
-            zgemv_("No transpose", n, &i__1, &c_b2, &f[f_dim1 + 1], ldf, &auxv[1], &c__1, &c_b2,
-                   &f[k * f_dim1 + 1], &c__1);
+            aocl_blas_zgemv("No transpose", n, &i__1, &c_b2, &f[f_dim1 + 1], ldf, &auxv[1], &c__1,
+                            &c_b2, &f[k * f_dim1 + 1], &c__1);
         }
         /* Update the current row of A: */
         /* A(RK,K+1:N) := A(RK,K+1:N) - A(RK,1:K)*F(K+1:N,1:K)**H. */
@@ -356,8 +370,9 @@ L10:
             i__1 = *n - k;
             z__1.r = -1.;
             z__1.i = -0.; // , expr subst
-            zgemm_("No transpose", "Conjugate transpose", &c__1, &i__1, &k, &z__1, &a[rk + a_dim1],
-                   lda, &f[k + 1 + f_dim1], ldf, &c_b2, &a[rk + (k + 1) * a_dim1], lda);
+            aocl_blas_zgemm("No transpose", "Conjugate transpose", &c__1, &i__1, &k, &z__1,
+                            &a[rk + a_dim1], lda, &f[k + 1 + f_dim1], ldf, &c_b2,
+                            &a[rk + (k + 1) * a_dim1], lda);
         }
         /* Update partial column norms. */
         if(rk < lastrk)
@@ -410,8 +425,9 @@ L10:
         i__2 = *n - *kb;
         z__1.r = -1.;
         z__1.i = -0.; // , expr subst
-        zgemm_("No transpose", "Conjugate transpose", &i__1, &i__2, kb, &z__1, &a[rk + 1 + a_dim1],
-               lda, &f[*kb + 1 + f_dim1], ldf, &c_b2, &a[rk + 1 + (*kb + 1) * a_dim1], lda);
+        aocl_blas_zgemm("No transpose", "Conjugate transpose", &i__1, &i__2, kb, &z__1,
+                        &a[rk + 1 + a_dim1], lda, &f[*kb + 1 + f_dim1], ldf, &c_b2,
+                        &a[rk + 1 + (*kb + 1) * a_dim1], lda);
     }
     /* Recomputation of difficult columns. */
 L60:

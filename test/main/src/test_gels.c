@@ -168,7 +168,7 @@ void fla_test_gels_experiment(char *tst_api, test_params_t *params, integer data
         m_b = m;
     }
 
-    /* trans for complex number should be equal to 'C' (or 'c') while passing to the GEL api
+    /* trans for scomplex number should be equal to 'C' (or 'c') while passing to the GEL api
      */
     if((datatype == COMPLEX || datatype == DOUBLE_COMPLEX) && (same_char(trans, 'T')))
     {

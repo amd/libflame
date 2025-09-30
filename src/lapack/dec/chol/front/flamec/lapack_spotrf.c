@@ -9,25 +9,24 @@
 
 /* Table of constant values */
 
-static integer c__1 = 1;
-static integer c_n1 = -1;
+static aocl_int64_t c__1 = 1;
+static aocl_int64_t c_n1 = -1;
 static real c_b13 = -1.f;
 static real c_b14 = 1.f;
 
-/* Subroutine */ int lapack_spotrf(char *uplo, integer *n, real *a, integer *lda,
-	integer *info)
+/* Subroutine */ int lapack_spotrf(char *uplo, aocl_int64_t *n, real *a, aocl_int64_t *lda,
+	aocl_int64_t *info)
 {
     /* System generated locals */
-    integer a_dim1, a_offset, i__1, i__2, i__3, i__4;
+    aocl_int64_t a_dim1, a_offset, i__1, i__2, i__3, i__4;
 
     /* Local variables */
-    integer j, jb, nb;
+    aocl_int64_t j, jb, nb;
     logical upper;
 #ifndef FLA_ENABLE_AOCL_BLAS
-	void xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-	logical lsame_(char *ca, char *cbi, integer a, integer b);
+	logical lsame_(char *ca, char *cbi, aocl_int64_t a, aocl_int64_t b);
 #endif
-	int lapack_spotf2(char *uplo, integer *n, real *a, integer *lda, integer *info);
+	int lapack_spotf2(char *uplo, aocl_int64_t *n, real *a, aocl_int64_t *lda, aocl_int64_t *info);
 
 /*  SPOTRF computes the Cholesky factorization of a real symmetric */
 /*  positive definite matrix A. */
@@ -98,7 +97,7 @@ static real c_b14 = 1.f;
     }
     if (*info != 0) {
 	i__1 = -(*info);
-	xerbla_("LAPACK_SPOTRF", &i__1, (ftnlen)13);
+	aocl_blas_xerbla("LAPACK_SPOTRF", &i__1, (ftnlen)13);
 	return 0;
     }
 
@@ -110,7 +109,7 @@ static real c_b14 = 1.f;
 
 /*     Determine the block size for this environment. */
 
-    nb = ilaenv_(&c__1, "SPOTRF", uplo, n, &c_n1, &c_n1, &c_n1);
+    nb = aocl_lapack_ilaenv(&c__1, "SPOTRF", uplo, n, &c_n1, &c_n1, &c_n1);
     if (nb <= 1 || nb >= *n) {
 
 /*        Use unblocked code. */
@@ -140,7 +139,7 @@ static real c_b14 = 1.f;
                 	AOCL_FLA_PROGRESS_FUNC_PTR("SPOTRF",6,&progress_step_count,&progress_thread_id,&progress_total_threads);
             	    }
         	#endif 
-		ssyrk_("Upper", "Transpose", &jb, &i__3, &c_b13, &a[j *
+		aocl_blas_ssyrk("Upper", "Transpose", &jb, &i__3, &c_b13, &a[j *
 			a_dim1 + 1], lda, &c_b14, &a[j + j * a_dim1], lda);
 		lapack_spotf2("Upper", &jb, &a[j + j * a_dim1], lda, info);
 		if (*info != 0) {
@@ -152,12 +151,12 @@ static real c_b14 = 1.f;
 
 		    i__3 = *n - j - jb + 1;
 		    i__4 = j - 1;
-		    sgemm_("Transpose", "No transpose", &jb, &i__3, &i__4, &
+		    aocl_blas_sgemm("Transpose", "No transpose", &jb, &i__3, &i__4, &
 			    c_b13, &a[j * a_dim1 + 1], lda, &a[(j + jb) *
 			    a_dim1 + 1], lda, &c_b14, &a[j + (j + jb) *
 			    a_dim1], lda);
 		    i__3 = *n - j - jb + 1;
-		    strsm_("Left", "Upper", "Transpose", "Non-unit", &jb, &
+		    aocl_blas_strsm("Left", "Upper", "Transpose", "Non-unit", &jb, &
 			    i__3, &c_b14, &a[j + j * a_dim1], lda, &a[j + (j
 			    + jb) * a_dim1], lda);
 		}
@@ -185,7 +184,7 @@ static real c_b14 = 1.f;
                 	AOCL_FLA_PROGRESS_FUNC_PTR("SPOTRF",6,&progress_step_count,&progress_thread_id,&progress_total_threads);
                     }
                 #endif
-		ssyrk_("Lower", "No transpose", &jb, &i__3, &c_b13, &a[j +
+		aocl_blas_ssyrk("Lower", "No transpose", &jb, &i__3, &c_b13, &a[j +
 			a_dim1], lda, &c_b14, &a[j + j * a_dim1], lda);
 		lapack_spotf2("Lower", &jb, &a[j + j * a_dim1], lda, info);
 		if (*info != 0) {
@@ -197,11 +196,11 @@ static real c_b14 = 1.f;
 
 		    i__3 = *n - j - jb + 1;
 		    i__4 = j - 1;
-		    sgemm_("No transpose", "Transpose", &i__3, &jb, &i__4, &
+		    aocl_blas_sgemm("No transpose", "Transpose", &i__3, &jb, &i__4, &
 			    c_b13, &a[j + jb + a_dim1], lda, &a[j + a_dim1],
 			    lda, &c_b14, &a[j + jb + j * a_dim1], lda);
 		    i__3 = *n - j - jb + 1;
-		    strsm_("Right", "Lower", "Transpose", "Non-unit", &i__3, &
+		    aocl_blas_strsm("Right", "Lower", "Transpose", "Non-unit", &i__3, &
 			    jb, &c_b14, &a[j + j * a_dim1], lda, &a[j + jb +
 			    j * a_dim1], lda);
 		}

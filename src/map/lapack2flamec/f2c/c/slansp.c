@@ -4,7 +4,7 @@
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
  /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
+static aocl_int64_t c__1 = 1;
 /* > \brief \b SLANSP returns the value of the 1-norm, or the Frobenius norm, or the infinity norm,
  * or the ele ment of largest absolute value of a symmetric matrix supplied in packed form. */
 /* =========== DOCUMENTATION =========== */
@@ -112,23 +112,32 @@ otherwise, */
 /* > \author NAG Ltd. */
 /* > \ingroup realOTHERauxiliary */
 /* ===================================================================== */
-real slansp_(char *norm, char *uplo, integer *n, real *ap, real *work)
+/** Generated wrapper function */
+real slansp_(char *norm, char *uplo, aocl_int_t *n, real *ap, real *work)
+{
+#if FLA_ENABLE_ILP64
+    return aocl_lapack_slansp(norm, uplo, n, ap, work);
+#else
+    aocl_int64_t n_64 = *n;
+
+    return aocl_lapack_slansp(norm, uplo, &n_64, ap, work);
+#endif
+}
+
+real aocl_lapack_slansp(char *norm, char *uplo, aocl_int64_t *n, real *ap, real *work)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("slansp inputs: norm %c, uplo %c, n %" FLA_IS "", *norm, *uplo, *n);
     /* System generated locals */
-    integer i__1, i__2;
+    aocl_int64_t i__1, i__2;
     real ret_val, r__1;
     /* Builtin functions */
     double sqrt(doublereal);
     /* Local variables */
-    integer i__, j, k;
+    aocl_int64_t i__, j, k;
     real sum, absa, scale;
-    extern logical lsame_(char *, char *, integer, integer);
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     real value;
-    extern /* Subroutine */
-        void
-        slassq_(integer *, real *, integer *, real *, real *);
     /* -- LAPACK auxiliary routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -279,7 +288,7 @@ real slansp_(char *norm, char *uplo, integer *n, real *ap, real *work)
             for(j = 2; j <= i__1; ++j)
             {
                 i__2 = j - 1;
-                slassq_(&i__2, &ap[k], &c__1, &scale, &sum);
+                aocl_lapack_slassq(&i__2, &ap[k], &c__1, &scale, &sum);
                 k += j;
                 /* L110: */
             }
@@ -290,7 +299,7 @@ real slansp_(char *norm, char *uplo, integer *n, real *ap, real *work)
             for(j = 1; j <= i__1; ++j)
             {
                 i__2 = *n - j;
-                slassq_(&i__2, &ap[k], &c__1, &scale, &sum);
+                aocl_lapack_slassq(&i__2, &ap[k], &c__1, &scale, &sum);
                 k = k + *n - j + 1;
                 /* L120: */
             }

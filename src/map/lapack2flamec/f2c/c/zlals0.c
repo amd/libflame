@@ -5,10 +5,10 @@
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static doublereal c_b5 = -1.;
-static integer c__1 = 1;
+static aocl_int64_t c__1 = 1;
 static doublereal c_b13 = 1.;
 static doublereal c_b15 = 0.;
-static integer c__0 = 0;
+static aocl_int64_t c__0 = 0;
 /* > \brief \b ZLALS0 applies back multiplying factors in solving the least squares problem using
  * divide and c onquer SVD approach. Used by sgelsd. */
 /* =========== DOCUMENTATION =========== */
@@ -271,11 +271,46 @@ the */
 /* > Osni Marques, LBNL/NERSC, USA \n */
 /* ===================================================================== */
 /* Subroutine */
-void zlals0_(integer *icompq, integer *nl, integer *nr, integer *sqre, integer *nrhs,
-             doublecomplex *b, integer *ldb, doublecomplex *bx, integer *ldbx, integer *perm,
-             integer *givptr, integer *givcol, integer *ldgcol, doublereal *givnum, integer *ldgnum,
-             doublereal *poles, doublereal *difl, doublereal *difr, doublereal *z__, integer *k,
-             doublereal *c__, doublereal *s, doublereal *rwork, integer *info)
+/** Generated wrapper function */
+void zlals0_(aocl_int_t *icompq, aocl_int_t *nl, aocl_int_t *nr, aocl_int_t *sqre, aocl_int_t *nrhs,
+             dcomplex *b, aocl_int_t *ldb, dcomplex *bx, aocl_int_t *ldbx,
+             aocl_int_t *perm, aocl_int_t *givptr, aocl_int_t *givcol, aocl_int_t *ldgcol,
+             doublereal *givnum, aocl_int_t *ldgnum, doublereal *poles, doublereal *difl,
+             doublereal *difr, doublereal *z__, aocl_int_t *k, doublereal *c__, doublereal *s,
+             doublereal *rwork, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_zlals0(icompq, nl, nr, sqre, nrhs, b, ldb, bx, ldbx, perm, givptr, givcol, ldgcol,
+                       givnum, ldgnum, poles, difl, difr, z__, k, c__, s, rwork, info);
+#else
+    aocl_int64_t icompq_64 = *icompq;
+    aocl_int64_t nl_64 = *nl;
+    aocl_int64_t nr_64 = *nr;
+    aocl_int64_t sqre_64 = *sqre;
+    aocl_int64_t nrhs_64 = *nrhs;
+    aocl_int64_t ldb_64 = *ldb;
+    aocl_int64_t ldbx_64 = *ldbx;
+    aocl_int64_t givptr_64 = *givptr;
+    aocl_int64_t ldgcol_64 = *ldgcol;
+    aocl_int64_t ldgnum_64 = *ldgnum;
+    aocl_int64_t k_64 = *k;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_zlals0(&icompq_64, &nl_64, &nr_64, &sqre_64, &nrhs_64, b, &ldb_64, bx, &ldbx_64,
+                       perm, &givptr_64, givcol, &ldgcol_64, givnum, &ldgnum_64, poles, difl, difr,
+                       z__, &k_64, c__, s, rwork, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_zlals0(aocl_int64_t *icompq, aocl_int64_t *nl, aocl_int64_t *nr,
+                        aocl_int64_t *sqre, aocl_int64_t *nrhs, dcomplex *b, aocl_int64_t *ldb,
+                        dcomplex *bx, aocl_int64_t *ldbx, aocl_int_t *perm,
+                        aocl_int64_t *givptr, aocl_int_t *givcol, aocl_int64_t *ldgcol,
+                        doublereal *givnum, aocl_int64_t *ldgnum, doublereal *poles,
+                        doublereal *difl, doublereal *difr, doublereal *z__, aocl_int64_t *k,
+                        doublereal *c__, doublereal *s, doublereal *rwork, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zlals0 inputs: icompq %" FLA_IS ", nl %" FLA_IS ", nr %" FLA_IS
@@ -283,40 +318,22 @@ void zlals0_(integer *icompq, integer *nl, integer *nr, integer *sqre, integer *
                       ", givptr %" FLA_IS ", ldgcol %" FLA_IS ", ldgnum %" FLA_IS ", k %" FLA_IS "",
                       *icompq, *nl, *nr, *sqre, *nrhs, *ldb, *ldbx, *givptr, *ldgcol, *ldgnum, *k);
     /* System generated locals */
-    integer givcol_dim1, givcol_offset, difr_dim1, difr_offset, givnum_dim1, givnum_offset,
+    aocl_int64_t givcol_dim1, givcol_offset, difr_dim1, difr_offset, givnum_dim1, givnum_offset,
         poles_dim1, poles_offset, b_dim1, b_offset, bx_dim1, bx_offset, i__1, i__2, i__3, i__4,
         i__5;
     doublereal d__1;
-    doublecomplex z__1;
+    dcomplex z__1;
     /* Builtin functions */
-    double d_imag(doublecomplex *);
+    double d_imag(dcomplex *);
     /* Local variables */
-    integer i__, j, m, n;
+    aocl_int64_t i__, j, m, n;
     doublereal dj;
-    integer nlp1, jcol;
+    aocl_int64_t nlp1, jcol;
     doublereal temp;
-    integer jrow;
-    extern doublereal dnrm2_(integer *, doublereal *, integer *);
+    aocl_int64_t jrow;
     doublereal diflj, difrj, dsigj;
-    extern /* Subroutine */
-        void
-        dgemv_(char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *,
-               integer *, doublereal *, doublereal *, integer *),
-        zdrot_(integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublereal *,
-               doublereal *);
     extern doublereal dlamc3_(doublereal *, doublereal *);
-    extern /* Subroutine */
-        void
-        zcopy_(integer *, doublecomplex *, integer *, doublecomplex *, integer *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal dsigjp;
-    extern /* Subroutine */
-        void
-        zdscal_(integer *, doublereal *, doublecomplex *, integer *),
-        zlascl_(char *, integer *, integer *, doublereal *, doublereal *, integer *, integer *,
-                doublecomplex *, integer *, integer *),
-        zlacpy_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *,
-                integer *);
     /* -- LAPACK computational routine (version 3.7.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -412,7 +429,7 @@ void zlals0_(integer *icompq, integer *nl, integer *nr, integer *sqre, integer *
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("ZLALS0", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("ZLALS0", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -425,27 +442,27 @@ void zlals0_(integer *icompq, integer *nl, integer *nr, integer *sqre, integer *
         i__1 = *givptr;
         for(i__ = 1; i__ <= i__1; ++i__)
         {
-            zdrot_(nrhs, &b[givcol[i__ + (givcol_dim1 << 1)] + b_dim1], ldb,
-                   &b[givcol[i__ + givcol_dim1] + b_dim1], ldb, &givnum[i__ + (givnum_dim1 << 1)],
-                   &givnum[i__ + givnum_dim1]);
+            aocl_blas_zdrot(nrhs, &b[givcol[i__ + (givcol_dim1 << 1)] + b_dim1], ldb,
+                            &b[givcol[i__ + givcol_dim1] + b_dim1], ldb,
+                            &givnum[i__ + (givnum_dim1 << 1)], &givnum[i__ + givnum_dim1]);
             /* L10: */
         }
         /* Step (2L): permute rows of B. */
-        zcopy_(nrhs, &b[nlp1 + b_dim1], ldb, &bx[bx_dim1 + 1], ldbx);
+        aocl_blas_zcopy(nrhs, &b[nlp1 + b_dim1], ldb, &bx[bx_dim1 + 1], ldbx);
         i__1 = n;
         for(i__ = 2; i__ <= i__1; ++i__)
         {
-            zcopy_(nrhs, &b[perm[i__] + b_dim1], ldb, &bx[i__ + bx_dim1], ldbx);
+            aocl_blas_zcopy(nrhs, &b[perm[i__] + b_dim1], ldb, &bx[i__ + bx_dim1], ldbx);
             /* L20: */
         }
         /* Step (3L): apply the inverse of the left singular vector */
         /* matrix to BX. */
         if(*k == 1)
         {
-            zcopy_(nrhs, &bx[bx_offset], ldbx, &b[b_offset], ldb);
+            aocl_blas_zcopy(nrhs, &bx[bx_offset], ldbx, &b[b_offset], ldb);
             if(z__[1] < 0.)
             {
-                zdscal_(nrhs, &c_b5, &b[b_offset], ldb);
+                aocl_blas_zdscal(nrhs, &c_b5, &b[b_offset], ldb);
             }
         }
         else
@@ -501,8 +518,8 @@ void zlals0_(integer *icompq, integer *nl, integer *nr, integer *sqre, integer *
                     /* L40: */
                 }
                 rwork[1] = -1.;
-                temp = dnrm2_(k, &rwork[1], &c__1);
-                /* Since B and BX are complex, the following call to DGEMV */
+                temp = aocl_blas_dnrm2(k, &rwork[1], &c__1);
+                /* Since B and BX are scomplex, the following call to DGEMV */
                 /* is performed in two steps (real and imaginary parts). */
                 /* CALL DGEMV( 'T', K, NRHS, ONE, BX, LDBX, WORK, 1, ZERO, */
                 /* $ B( J, 1 ), LDB ) */
@@ -520,8 +537,8 @@ void zlals0_(integer *icompq, integer *nl, integer *nr, integer *sqre, integer *
                     }
                     /* L60: */
                 }
-                dgemv_("T", k, nrhs, &c_b13, &rwork[*k + 1 + (*nrhs << 1)], k, &rwork[1], &c__1,
-                       &c_b15, &rwork[*k + 1], &c__1);
+                aocl_blas_dgemv("T", k, nrhs, &c_b13, &rwork[*k + 1 + (*nrhs << 1)], k, &rwork[1],
+                                &c__1, &c_b15, &rwork[*k + 1], &c__1);
                 i__ = *k + (*nrhs << 1);
                 i__2 = *nrhs;
                 for(jcol = 1; jcol <= i__2; ++jcol)
@@ -535,8 +552,8 @@ void zlals0_(integer *icompq, integer *nl, integer *nr, integer *sqre, integer *
                     }
                     /* L80: */
                 }
-                dgemv_("T", k, nrhs, &c_b13, &rwork[*k + 1 + (*nrhs << 1)], k, &rwork[1], &c__1,
-                       &c_b15, &rwork[*k + 1 + *nrhs], &c__1);
+                aocl_blas_dgemv("T", k, nrhs, &c_b13, &rwork[*k + 1 + (*nrhs << 1)], k, &rwork[1],
+                                &c__1, &c_b15, &rwork[*k + 1 + *nrhs], &c__1);
                 i__2 = *nrhs;
                 for(jcol = 1; jcol <= i__2; ++jcol)
                 {
@@ -549,7 +566,8 @@ void zlals0_(integer *icompq, integer *nl, integer *nr, integer *sqre, integer *
                     b[i__3].i = z__1.i; // , expr subst
                     /* L90: */
                 }
-                zlascl_("G", &c__0, &c__0, &temp, &c_b13, &c__1, nrhs, &b[j + b_dim1], ldb, info);
+                aocl_lapack_zlascl("G", &c__0, &c__0, &temp, &c_b13, &c__1, nrhs, &b[j + b_dim1],
+                                   ldb, info);
                 /* L100: */
             }
         }
@@ -557,7 +575,8 @@ void zlals0_(integer *icompq, integer *nl, integer *nr, integer *sqre, integer *
         if(*k < fla_max(m, n))
         {
             i__1 = n - *k;
-            zlacpy_("A", &i__1, nrhs, &bx[*k + 1 + bx_dim1], ldbx, &b[*k + 1 + b_dim1], ldb);
+            aocl_lapack_zlacpy("A", &i__1, nrhs, &bx[*k + 1 + bx_dim1], ldbx, &b[*k + 1 + b_dim1],
+                               ldb);
         }
     }
     else
@@ -567,7 +586,7 @@ void zlals0_(integer *icompq, integer *nl, integer *nr, integer *sqre, integer *
         /* to B. */
         if(*k == 1)
         {
-            zcopy_(nrhs, &b[b_offset], ldb, &bx[bx_offset], ldbx);
+            aocl_blas_zcopy(nrhs, &b[b_offset], ldb, &bx[bx_offset], ldbx);
         }
         else
         {
@@ -616,7 +635,7 @@ void zlals0_(integer *icompq, integer *nl, integer *nr, integer *sqre, integer *
                     }
                     /* L120: */
                 }
-                /* Since B and BX are complex, the following call to DGEMV */
+                /* Since B and BX are scomplex, the following call to DGEMV */
                 /* is performed in two steps (real and imaginary parts). */
                 /* CALL DGEMV( 'T', K, NRHS, ONE, B, LDB, WORK, 1, ZERO, */
                 /* $ BX( J, 1 ), LDBX ) */
@@ -634,8 +653,8 @@ void zlals0_(integer *icompq, integer *nl, integer *nr, integer *sqre, integer *
                     }
                     /* L140: */
                 }
-                dgemv_("T", k, nrhs, &c_b13, &rwork[*k + 1 + (*nrhs << 1)], k, &rwork[1], &c__1,
-                       &c_b15, &rwork[*k + 1], &c__1);
+                aocl_blas_dgemv("T", k, nrhs, &c_b13, &rwork[*k + 1 + (*nrhs << 1)], k, &rwork[1],
+                                &c__1, &c_b15, &rwork[*k + 1], &c__1);
                 i__ = *k + (*nrhs << 1);
                 i__2 = *nrhs;
                 for(jcol = 1; jcol <= i__2; ++jcol)
@@ -649,8 +668,8 @@ void zlals0_(integer *icompq, integer *nl, integer *nr, integer *sqre, integer *
                     }
                     /* L160: */
                 }
-                dgemv_("T", k, nrhs, &c_b13, &rwork[*k + 1 + (*nrhs << 1)], k, &rwork[1], &c__1,
-                       &c_b15, &rwork[*k + 1 + *nrhs], &c__1);
+                aocl_blas_dgemv("T", k, nrhs, &c_b13, &rwork[*k + 1 + (*nrhs << 1)], k, &rwork[1],
+                                &c__1, &c_b15, &rwork[*k + 1 + *nrhs], &c__1);
                 i__2 = *nrhs;
                 for(jcol = 1; jcol <= i__2; ++jcol)
                 {
@@ -670,33 +689,34 @@ void zlals0_(integer *icompq, integer *nl, integer *nr, integer *sqre, integer *
         /* related to the right null space of the subproblem. */
         if(*sqre == 1)
         {
-            zcopy_(nrhs, &b[m + b_dim1], ldb, &bx[m + bx_dim1], ldbx);
-            zdrot_(nrhs, &bx[bx_dim1 + 1], ldbx, &bx[m + bx_dim1], ldbx, c__, s);
+            aocl_blas_zcopy(nrhs, &b[m + b_dim1], ldb, &bx[m + bx_dim1], ldbx);
+            aocl_blas_zdrot(nrhs, &bx[bx_dim1 + 1], ldbx, &bx[m + bx_dim1], ldbx, c__, s);
         }
         if(*k < fla_max(m, n))
         {
             i__1 = n - *k;
-            zlacpy_("A", &i__1, nrhs, &b[*k + 1 + b_dim1], ldb, &bx[*k + 1 + bx_dim1], ldbx);
+            aocl_lapack_zlacpy("A", &i__1, nrhs, &b[*k + 1 + b_dim1], ldb, &bx[*k + 1 + bx_dim1],
+                               ldbx);
         }
         /* Step (3R): permute rows of B. */
-        zcopy_(nrhs, &bx[bx_dim1 + 1], ldbx, &b[nlp1 + b_dim1], ldb);
+        aocl_blas_zcopy(nrhs, &bx[bx_dim1 + 1], ldbx, &b[nlp1 + b_dim1], ldb);
         if(*sqre == 1)
         {
-            zcopy_(nrhs, &bx[m + bx_dim1], ldbx, &b[m + b_dim1], ldb);
+            aocl_blas_zcopy(nrhs, &bx[m + bx_dim1], ldbx, &b[m + b_dim1], ldb);
         }
         i__1 = n;
         for(i__ = 2; i__ <= i__1; ++i__)
         {
-            zcopy_(nrhs, &bx[i__ + bx_dim1], ldbx, &b[perm[i__] + b_dim1], ldb);
+            aocl_blas_zcopy(nrhs, &bx[i__ + bx_dim1], ldbx, &b[perm[i__] + b_dim1], ldb);
             /* L190: */
         }
         /* Step (4R): apply back the Givens rotations performed. */
         for(i__ = *givptr; i__ >= 1; --i__)
         {
             d__1 = -givnum[i__ + givnum_dim1];
-            zdrot_(nrhs, &b[givcol[i__ + (givcol_dim1 << 1)] + b_dim1], ldb,
-                   &b[givcol[i__ + givcol_dim1] + b_dim1], ldb, &givnum[i__ + (givnum_dim1 << 1)],
-                   &d__1);
+            aocl_blas_zdrot(nrhs, &b[givcol[i__ + (givcol_dim1 << 1)] + b_dim1], ldb,
+                            &b[givcol[i__ + givcol_dim1] + b_dim1], ldb,
+                            &givnum[i__ + (givnum_dim1 << 1)], &d__1);
             /* L200: */
         }
     }

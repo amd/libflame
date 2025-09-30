@@ -4,7 +4,7 @@
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
  /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
+static aocl_int64_t c__1 = 1;
 /* > \brief \b SLACN2 estimates the 1-norm of a square matrix, using reverse communication for
  * evaluating matr ix-vector products. */
 /* =========== DOCUMENTATION =========== */
@@ -131,7 +131,24 @@ static integer c__1 = 1;
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void slacn2_(integer *n, real *v, real *x, integer *isgn, real *est, integer *kase, integer *isave)
+/** Generated wrapper function */
+void slacn2_(aocl_int_t *n, real *v, real *x, aocl_int_t *isgn, real *est, aocl_int_t *kase,
+             aocl_int_t *isave)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_slacn2(n, v, x, isgn, est, kase, isave);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t kase_64 = *kase;
+
+    aocl_lapack_slacn2(&n_64, v, x, isgn, est, &kase_64, isave);
+
+    *kase = (aocl_int_t)kase_64;
+#endif
+}
+
+void aocl_lapack_slacn2(aocl_int64_t *n, real *v, real *x, aocl_int_t *isgn, real *est,
+                        aocl_int64_t *kase, aocl_int_t *isave)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("slacn2 inputs: n %" FLA_IS ", isgn %" FLA_IS ", kase %" FLA_IS
@@ -141,16 +158,10 @@ void slacn2_(integer *n, real *v, real *x, integer *isgn, real *est, integer *ka
     aocl_int64_t i__1;
     real r__1;
     /* Builtin functions */
-    integer fla_i_nint(real *);
     /* Local variables */
-    integer i__;
+    aocl_int64_t i__;
     real xs, temp;
-    integer jlast;
-    extern real sasum_(integer *, real *, integer *);
-    extern /* Subroutine */
-        void
-        scopy_(integer *, real *, integer *, real *, integer *);
-    extern integer isamax_(integer *, real *, integer *);
+    aocl_int64_t jlast;
     real altsgn, estold;
     /* -- LAPACK auxiliary routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -302,7 +313,7 @@ L90: /* TEST FOR CYCLING. */
     /* X HAS BEEN OVERWRITTEN BY TRANSPOSE(A)*X. */
 L110:
     jlast = isave[2];
-    isave[2] = isamax_(n, &x[1], &c__1);
+    isave[2] = aocl_blas_isamax(n, &x[1], &c__1);
     if(x[jlast] != (r__1 = x[isave[2]], f2c_abs(r__1)) && isave[3] < 5)
     {
         ++isave[3];
@@ -325,7 +336,7 @@ L120:
     /* ................ ENTRY (ISAVE( 1 ) = 5) */
     /* X HAS BEEN OVERWRITTEN BY A*X. */
 L140:
-    temp = sasum_(n, &x[1], &c__1) / (real)(*n * 3) * 2.f;
+    temp = aocl_blas_sasum(n, &x[1], &c__1) / (real)(*n * 3) * 2.f;
     if(temp > *est)
     {
         aocl_blas_scopy(n, &x[1], &c__1, &v[1], &c__1);

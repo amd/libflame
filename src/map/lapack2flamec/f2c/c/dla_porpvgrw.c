@@ -100,20 +100,36 @@
 /* > \date December 2016 */
 /* > \ingroup doublePOcomputational */
 /* ===================================================================== */
-doublereal dla_porpvgrw_(char *uplo, integer *ncols, doublereal *a, integer *lda, doublereal *af,
-                         integer *ldaf, doublereal *work)
+/** Generated wrapper function */
+doublereal dla_porpvgrw_(char *uplo, aocl_int_t *ncols, doublereal *a, aocl_int_t *lda,
+                         doublereal *af, aocl_int_t *ldaf, doublereal *work)
+{
+#if FLA_ENABLE_ILP64
+    return aocl_lapack_dla_porpvgrw(uplo, ncols, a, lda, af, ldaf, work);
+#else
+    aocl_int64_t ncols_64 = *ncols;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t ldaf_64 = *ldaf;
+
+    return aocl_lapack_dla_porpvgrw(uplo, &ncols_64, a, &lda_64, af, &ldaf_64, work);
+#endif
+}
+
+doublereal aocl_lapack_dla_porpvgrw(char *uplo, aocl_int64_t *ncols, doublereal *a,
+                                    aocl_int64_t *lda, doublereal *af, aocl_int64_t *ldaf,
+                                    doublereal *work)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dla_porpvgrw inputs: uplo %c, ncols %" FLA_IS ", lda %" FLA_IS
                       ", ldaf %" FLA_IS "",
                       *uplo, *ncols, *lda, *ldaf);
     /* System generated locals */
-    integer a_dim1, a_offset, af_dim1, af_offset, i__1, i__2;
+    aocl_int64_t a_dim1, a_offset, af_dim1, af_offset, i__1, i__2;
     doublereal ret_val, d__1, d__2, d__3;
     /* Local variables */
-    integer i__, j;
+    aocl_int64_t i__, j;
     doublereal amax, umax;
-    extern logical lsame_(char *, char *, integer, integer);
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     logical upper;
     doublereal rpvgrw;
     /* -- LAPACK computational routine (version 3.7.0) -- */

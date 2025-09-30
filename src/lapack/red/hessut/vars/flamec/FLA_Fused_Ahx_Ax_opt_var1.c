@@ -18,9 +18,9 @@ FLA_Error FLA_Fused_Ahx_Ax_opt_var1( FLA_Obj A, FLA_Obj x, FLA_Obj v, FLA_Obj w 
    w = A  * x;
 */
   FLA_Datatype datatype;
-  integer          m_A, n_A;
-  integer          rs_A, cs_A;
-  integer          inc_x, inc_v, inc_w;
+  fla_dim_t          m_A, n_A;
+  fla_dim_t          rs_A, cs_A;
+  fla_dim_t          inc_x, inc_v, inc_w;
 
   datatype = FLA_Obj_datatype( A );
 
@@ -113,15 +113,15 @@ FLA_Error FLA_Fused_Ahx_Ax_opt_var1( FLA_Obj A, FLA_Obj x, FLA_Obj v, FLA_Obj w 
 
 
 
-FLA_Error FLA_Fused_Ahx_Ax_ops_var1( integer m_A,
-                                     integer n_A,
-                                     float* buff_A, integer rs_A, integer cs_A, 
-                                     float* buff_x, integer inc_x, 
-                                     float* buff_v, integer inc_v, 
-                                     float* buff_w, integer inc_w )
+FLA_Error FLA_Fused_Ahx_Ax_ops_var1( fla_dim_t m_A,
+                                     fla_dim_t n_A,
+                                     float* buff_A, fla_dim_t rs_A, fla_dim_t cs_A, 
+                                     float* buff_x, fla_dim_t inc_x, 
+                                     float* buff_v, fla_dim_t inc_v, 
+                                     float* buff_w, fla_dim_t inc_w )
 {
   float*    buff_0  = FLA_FLOAT_PTR( FLA_ZERO );
-  integer       i;
+  fla_dim_t       i;
 
   bl1_ssetv( m_A,
              buff_0,
@@ -170,15 +170,15 @@ FLA_Error FLA_Fused_Ahx_Ax_ops_var1( integer m_A,
 
 
 
-FLA_Error FLA_Fused_Ahx_Ax_opd_var1( integer m_A,
-                                     integer n_A,
-                                     double* buff_A, integer rs_A, integer cs_A, 
-                                     double* buff_x, integer inc_x, 
-                                     double* buff_v, integer inc_v, 
-                                     double* buff_w, integer inc_w )
+FLA_Error FLA_Fused_Ahx_Ax_opd_var1( fla_dim_t m_A,
+                                     fla_dim_t n_A,
+                                     double* buff_A, fla_dim_t rs_A, fla_dim_t cs_A, 
+                                     double* buff_x, fla_dim_t inc_x, 
+                                     double* buff_v, fla_dim_t inc_v, 
+                                     double* buff_w, fla_dim_t inc_w )
 {
   double    zero  = bl1_d0();
-  integer       i;
+  fla_dim_t       i;
 
   double*   restrict w = buff_w;
   double*   restrict x = buff_x;
@@ -190,11 +190,11 @@ FLA_Error FLA_Fused_Ahx_Ax_opd_var1( integer m_A,
   double*   restrict chi1;
   double*   restrict chi2;
 
-  integer       n_run     = n_A / 2;
-  integer       n_left    = n_A % 2;
-  integer       step_a1   = 2*cs_A;
-  integer       step_nu1  = 2*inc_v;
-  integer       step_chi1 = 2*inc_x;
+  fla_dim_t       n_run     = n_A / 2;
+  fla_dim_t       n_left    = n_A % 2;
+  fla_dim_t       step_a1   = 2*cs_A;
+  fla_dim_t       step_nu1  = 2*inc_v;
+  fla_dim_t       step_chi1 = 2*inc_x;
 
   bl1_dsetv( m_A,
              &zero,
@@ -253,15 +253,15 @@ FLA_Error FLA_Fused_Ahx_Ax_opd_var1( integer m_A,
 
 
 
-FLA_Error FLA_Fused_Ahx_Ax_opc_var1( integer m_A,
-                                     integer n_A,
-                                     scomplex* buff_A, integer rs_A, integer cs_A, 
-                                     scomplex* buff_x, integer inc_x, 
-                                     scomplex* buff_v, integer inc_v, 
-                                     scomplex* buff_w, integer inc_w )
+FLA_Error FLA_Fused_Ahx_Ax_opc_var1( fla_dim_t m_A,
+                                     fla_dim_t n_A,
+                                     scomplex* buff_A, fla_dim_t rs_A, fla_dim_t cs_A, 
+                                     scomplex* buff_x, fla_dim_t inc_x, 
+                                     scomplex* buff_v, fla_dim_t inc_v, 
+                                     scomplex* buff_w, fla_dim_t inc_w )
 {
   scomplex* buff_0  = FLA_COMPLEX_PTR( FLA_ZERO );
-  integer       i;
+  fla_dim_t       i;
 
   bl1_csetv( m_A,
              buff_0,
@@ -304,15 +304,15 @@ FLA_Error FLA_Fused_Ahx_Ax_opc_var1( integer m_A,
 
 
 
-FLA_Error FLA_Fused_Ahx_Ax_opz_var1( integer m_A,
-                                     integer n_A,
-                                     dcomplex* buff_A, integer rs_A, integer cs_A, 
-                                     dcomplex* buff_x, integer inc_x, 
-                                     dcomplex* buff_v, integer inc_v, 
-                                     dcomplex* buff_w, integer inc_w )
+FLA_Error FLA_Fused_Ahx_Ax_opz_var1( fla_dim_t m_A,
+                                     fla_dim_t n_A,
+                                     dcomplex* buff_A, fla_dim_t rs_A, fla_dim_t cs_A, 
+                                     dcomplex* buff_x, fla_dim_t inc_x, 
+                                     dcomplex* buff_v, fla_dim_t inc_v, 
+                                     dcomplex* buff_w, fla_dim_t inc_w )
 {
   dcomplex  zero  = bl1_z0();
-  integer       i;
+  fla_dim_t       i;
 
   dcomplex* restrict w = buff_w;
   dcomplex* restrict x = buff_x;
@@ -324,11 +324,11 @@ FLA_Error FLA_Fused_Ahx_Ax_opz_var1( integer m_A,
   dcomplex* restrict chi1;
   dcomplex* restrict chi2;
 
-  integer       n_run     = n_A / 2;
-  integer       n_left    = n_A % 2;
-  integer       step_a1   = 2*cs_A;
-  integer       step_nu1  = 2*inc_v;
-  integer       step_chi1 = 2*inc_x;
+  fla_dim_t       n_run     = n_A / 2;
+  fla_dim_t       n_left    = n_A % 2;
+  fla_dim_t       step_a1   = 2*cs_A;
+  fla_dim_t       step_nu1  = 2*inc_v;
+  fla_dim_t       step_chi1 = 2*inc_x;
 
   bl1_zsetv( m_A,
              &zero,

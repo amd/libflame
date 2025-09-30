@@ -4,7 +4,7 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
+static aocl_int64_t c__1 = 1;
 static real c_b6 = 1.f;
 /* > \brief \b SLARFT forms the triangular factor T of a block reflector H = I - vtvH */
 /* =========== DOCUMENTATION =========== */
@@ -164,28 +164,36 @@ if DIRECT = 'B', T is */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void slarft_(char *direct, char *storev, integer *n, integer *k, real *v, integer *ldv, real *tau,
-             real *t, integer *ldt)
+/** Generated wrapper function */
+void slarft_(char *direct, char *storev, aocl_int_t *n, aocl_int_t *k, real *v, aocl_int_t *ldv,
+             real *tau, real *t, aocl_int_t *ldt)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_slarft(direct, storev, n, k, v, ldv, tau, t, ldt);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t k_64 = *k;
+    aocl_int64_t ldv_64 = *ldv;
+    aocl_int64_t ldt_64 = *ldt;
+
+    aocl_lapack_slarft(direct, storev, &n_64, &k_64, v, &ldv_64, tau, t, &ldt_64);
+#endif
+}
+
+void aocl_lapack_slarft(char *direct, char *storev, aocl_int64_t *n, aocl_int64_t *k, real *v,
+                        aocl_int64_t *ldv, real *tau, real *t, aocl_int64_t *ldt)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("slarft inputs: direct %c, storev %c, n %" FLA_IS ", k %" FLA_IS
                       ", ldv %" FLA_IS ", ldt %" FLA_IS "",
                       *direct, *storev, *n, *k, *ldv, *ldt);
     /* System generated locals */
-    integer t_dim1, t_offset, v_dim1, v_offset, i__1, i__2, i__3;
+    aocl_int64_t t_dim1, t_offset, v_dim1, v_offset, i__1, i__2, i__3;
     real r__1;
     /* Local variables */
-    integer i__, j, prevlastv;
-    extern logical lsame_(char *, char *, integer, integer);
-    extern /* Subroutine */
-        void
-        sgemv_(char *, integer *, integer *, real *, real *, integer *, real *, integer *, real *,
-               real *, integer *);
-    integer lastv;
-    extern /* Subroutine */
-        void
-        strmv_(char *, char *, char *, integer *, real *, integer *, real *, integer *),
-        f90_exit_(void);
+    aocl_int64_t i__, j, prevlastv;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    aocl_int64_t lastv;
     /* -- LAPACK auxiliary routine (version 3.7.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -259,8 +267,9 @@ void slarft_(char *direct, char *storev, integer *n, integer *k, real *v, intege
                     i__2 = j - i__;
                     i__3 = i__ - 1;
                     r__1 = -tau[i__];
-                    sgemv_("Transpose", &i__2, &i__3, &r__1, &v[i__ + 1 + v_dim1], ldv,
-                           &v[i__ + 1 + i__ * v_dim1], &c__1, &c_b6, &t[i__ * t_dim1 + 1], &c__1);
+                    aocl_blas_sgemv("Transpose", &i__2, &i__3, &r__1, &v[i__ + 1 + v_dim1], ldv,
+                                    &v[i__ + 1 + i__ * v_dim1], &c__1, &c_b6, &t[i__ * t_dim1 + 1],
+                                    &c__1);
                 }
                 else
                 {
@@ -283,13 +292,14 @@ void slarft_(char *direct, char *storev, integer *n, integer *k, real *v, intege
                     i__2 = i__ - 1;
                     i__3 = j - i__;
                     r__1 = -tau[i__];
-                    sgemv_("No transpose", &i__2, &i__3, &r__1, &v[(i__ + 1) * v_dim1 + 1], ldv,
-                           &v[i__ + (i__ + 1) * v_dim1], ldv, &c_b6, &t[i__ * t_dim1 + 1], &c__1);
+                    aocl_blas_sgemv("No transpose", &i__2, &i__3, &r__1, &v[(i__ + 1) * v_dim1 + 1],
+                                    ldv, &v[i__ + (i__ + 1) * v_dim1], ldv, &c_b6,
+                                    &t[i__ * t_dim1 + 1], &c__1);
                 }
                 /* T(1:i-1,i) := T(1:i-1,1:i-1) * T(1:i-1,i) */
                 i__2 = i__ - 1;
-                strmv_("Upper", "No transpose", "Non-unit", &i__2, &t[t_offset], ldt,
-                       &t[i__ * t_dim1 + 1], &c__1);
+                aocl_blas_strmv("Upper", "No transpose", "Non-unit", &i__2, &t[t_offset], ldt,
+                                &t[i__ * t_dim1 + 1], &c__1);
                 t[i__ + i__ * t_dim1] = tau[i__];
                 if(i__ > 1)
                 {
@@ -342,9 +352,9 @@ void slarft_(char *direct, char *storev, integer *n, integer *k, real *v, intege
                         i__1 = *n - *k + i__ - j;
                         i__2 = *k - i__;
                         r__1 = -tau[i__];
-                        sgemv_("Transpose", &i__1, &i__2, &r__1, &v[j + (i__ + 1) * v_dim1], ldv,
-                               &v[j + i__ * v_dim1], &c__1, &c_b6, &t[i__ + 1 + i__ * t_dim1],
-                               &c__1);
+                        aocl_blas_sgemv("Transpose", &i__1, &i__2, &r__1,
+                                        &v[j + (i__ + 1) * v_dim1], ldv, &v[j + i__ * v_dim1],
+                                        &c__1, &c_b6, &t[i__ + 1 + i__ * t_dim1], &c__1);
                     }
                     else
                     {
@@ -367,14 +377,15 @@ void slarft_(char *direct, char *storev, integer *n, integer *k, real *v, intege
                         i__1 = *k - i__;
                         i__2 = *n - *k + i__ - j;
                         r__1 = -tau[i__];
-                        sgemv_("No transpose", &i__1, &i__2, &r__1, &v[i__ + 1 + j * v_dim1], ldv,
-                               &v[i__ + j * v_dim1], ldv, &c_b6, &t[i__ + 1 + i__ * t_dim1], &c__1);
+                        aocl_blas_sgemv("No transpose", &i__1, &i__2, &r__1,
+                                        &v[i__ + 1 + j * v_dim1], ldv, &v[i__ + j * v_dim1], ldv,
+                                        &c_b6, &t[i__ + 1 + i__ * t_dim1], &c__1);
                     }
                     /* T(i+1:k,i) := T(i+1:k,i+1:k) * T(i+1:k,i) */
                     i__1 = *k - i__;
-                    strmv_("Lower", "No transpose", "Non-unit", &i__1,
-                           &t[i__ + 1 + (i__ + 1) * t_dim1], ldt, &t[i__ + 1 + i__ * t_dim1],
-                           &c__1);
+                    aocl_blas_strmv("Lower", "No transpose", "Non-unit", &i__1,
+                                    &t[i__ + 1 + (i__ + 1) * t_dim1], ldt,
+                                    &t[i__ + 1 + i__ * t_dim1], &c__1);
                     if(i__ > 1)
                     {
                         prevlastv = fla_min(prevlastv, lastv);

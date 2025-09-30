@@ -46,13 +46,13 @@ FLA_Error FLA_Mach_params( FLA_Machval machval, FLA_Obj val )
 
 float FLA_Mach_params_ops( FLA_Machval machval )
 {
-	static TLS_CLASS_SPEC integer    first_time = TRUE;
+	static TLS_CLASS_SPEC fla_dim_t    first_time = TRUE;
 	static TLS_CLASS_SPEC float  vals[FLA_MACH_N_VALS];
 
 	if ( first_time )
 	{
 		char lapack_machval;
-		integer  i;
+		fla_dim_t  i;
 
 		for( i = 0; i < FLA_MACH_N_VALS - 1; ++i )
 		{
@@ -73,13 +73,13 @@ float FLA_Mach_params_ops( FLA_Machval machval )
 
 double FLA_Mach_params_opd( FLA_Machval machval )
 {
-	static TLS_CLASS_SPEC integer    first_time = TRUE;
+	static TLS_CLASS_SPEC fla_dim_t    first_time = TRUE;
 	static TLS_CLASS_SPEC double vals[FLA_MACH_N_VALS];
 
 	if ( first_time )
 	{
 		char lapack_machval;
-		integer  i;
+		fla_dim_t  i;
 
 		for( i = 0; i < FLA_MACH_N_VALS - 1; ++i )
 		{

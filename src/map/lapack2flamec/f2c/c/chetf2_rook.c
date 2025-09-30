@@ -4,8 +4,8 @@
  -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for
  libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
-/* > \brief \b CHETF2_ROOK computes the factorization of a complex Hermitian indefinite matrix using
+static aocl_int64_t c__1 = 1;
+/* > \brief \b CHETF2_ROOK computes the factorization of a scomplex Hermitian indefinite matrix using
  * the bound ed Bunch-Kaufman ("rook") diagonal pivoting method (unblocked algorithm). */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -190,7 +190,25 @@ static integer c__1 = 1;
 /* > \endverbatim */
 /* ===================================================================== */
 /* Subroutine */
-void chetf2_rook_(char *uplo, integer *n, complex *a, integer *lda, integer *ipiv, integer *info)
+/** Generated wrapper function */
+void chetf2_rook_(char *uplo, aocl_int_t *n, scomplex *a, aocl_int_t *lda, aocl_int_t *ipiv,
+                  aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_chetf2_rook(uplo, n, a, lda, ipiv, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_chetf2_rook(uplo, &n_64, a, &lda_64, ipiv, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_chetf2_rook(char *uplo, aocl_int64_t *n, scomplex *a, aocl_int64_t *lda,
+                             aocl_int_t *ipiv, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -220,28 +238,18 @@ void chetf2_rook_(char *uplo, integer *n, complex *a, integer *lda, integer *ipi
     aocl_int64_t ii, kk, kp;
     scomplex wk;
     real tt;
-    complex wkm1, wkp1;
-    extern /* Subroutine */
-        void
-        cher_(char *, integer *, real *, complex *, integer *, complex *, integer *);
+    scomplex wkm1, wkp1;
     logical done;
     aocl_int64_t imax, jmax;
     real alpha;
-    extern logical lsame_(char *, char *, integer, integer);
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     real sfmin;
-    extern /* Subroutine */
-        void
-        cswap_(integer *, complex *, integer *, complex *, integer *);
-    integer itemp, kstep;
+    aocl_int64_t itemp, kstep;
     real stemp;
     logical upper;
     extern real slapy2_(real *, real *);
     real absakk;
     extern real slamch_(char *);
-    extern /* Subroutine */
-        void
-        csscal_(integer *, real *, complex *, integer *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real colmax, rowmax;
     /* -- LAPACK computational routine (version 3.5.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -293,7 +301,7 @@ void chetf2_rook_(char *uplo, integer *n, complex *a, integer *lda, integer *ipi
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("CHETF2_ROOK", &i__1, (ftnlen)11);
+        aocl_blas_xerbla("CHETF2_ROOK", &i__1, (ftnlen)11);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
@@ -576,7 +584,8 @@ void chetf2_rook_(char *uplo, integer *n, complex *a, integer *lda, integer *ipi
                         d11 = 1.f / a[i__1].real;
                         i__1 = k - 1;
                         r__1 = -d11;
-                        cher_(uplo, &i__1, &r__1, &a[k * a_dim1 + 1], &c__1, &a[a_offset], lda);
+                        aocl_blas_cher(uplo, &i__1, &r__1, &a[k * a_dim1 + 1], &c__1, &a[a_offset],
+                                       lda);
                         /* Store U(k) in column k */
                         i__1 = k - 1;
                         aocl_blas_csscal(&i__1, &d11, &a[k * a_dim1 + 1], &c__1);
@@ -603,7 +612,8 @@ void chetf2_rook_(char *uplo, integer *n, complex *a, integer *lda, integer *ipi
                         /* = A - (W(k)/D(k))*(D(k))*(W(k)/D(K))**T */
                         i__1 = k - 1;
                         r__1 = -d11;
-                        cher_(uplo, &i__1, &r__1, &a[k * a_dim1 + 1], &c__1, &a[a_offset], lda);
+                        aocl_blas_cher(uplo, &i__1, &r__1, &a[k * a_dim1 + 1], &c__1, &a[a_offset],
+                                       lda);
                     }
                 }
             }
@@ -810,7 +820,7 @@ void chetf2_rook_(char *uplo, integer *n, complex *a, integer *lda, integer *ipi
                 if(imax < *n)
                 {
                     i__1 = *n - imax;
-                    itemp = imax + icamax_(&i__1, &a[imax + 1 + imax * a_dim1], &c__1);
+                    itemp = imax + aocl_blas_icamax(&i__1, &a[imax + 1 + imax * a_dim1], &c__1);
                     i__1 = itemp + imax * a_dim1;
                     stemp = (r__1 = a[i__1].r, f2c_abs(r__1))
                             + (r__2 = r_imag(&a[itemp + imax * a_dim1]), f2c_abs(r__2));
@@ -1007,8 +1017,8 @@ void chetf2_rook_(char *uplo, integer *n, complex *a, integer *lda, integer *ipi
                         d11 = 1.f / a[i__1].real;
                         i__1 = *n - k;
                         r__1 = -d11;
-                        cher_(uplo, &i__1, &r__1, &a[k + 1 + k * a_dim1], &c__1,
-                              &a[k + 1 + (k + 1) * a_dim1], lda);
+                        aocl_blas_cher(uplo, &i__1, &r__1, &a[k + 1 + k * a_dim1], &c__1,
+                                       &a[k + 1 + (k + 1) * a_dim1], lda);
                         /* Store L(k) in column k */
                         i__1 = *n - k;
                         aocl_blas_csscal(&i__1, &d11, &a[k + 1 + k * a_dim1], &c__1);
@@ -1035,8 +1045,8 @@ void chetf2_rook_(char *uplo, integer *n, complex *a, integer *lda, integer *ipi
                         /* = A - (W(k)/D(k))*(D(k))*(W(k)/D(K))**T */
                         i__1 = *n - k;
                         r__1 = -d11;
-                        cher_(uplo, &i__1, &r__1, &a[k + 1 + k * a_dim1], &c__1,
-                              &a[k + 1 + (k + 1) * a_dim1], lda);
+                        aocl_blas_cher(uplo, &i__1, &r__1, &a[k + 1 + k * a_dim1], &c__1,
+                                       &a[k + 1 + (k + 1) * a_dim1], lda);
                     }
                 }
             }

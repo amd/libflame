@@ -115,8 +115,24 @@ static aocl_int64_t c__1 = 1;
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void dptcon_(integer *n, doublereal *d__, doublereal *e, doublereal *anorm, doublereal *rcond,
-             doublereal *work, integer *info)
+/** Generated wrapper function */
+void dptcon_(aocl_int_t *n, doublereal *d__, doublereal *e, doublereal *anorm, doublereal *rcond,
+             doublereal *work, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_dptcon(n, d__, e, anorm, rcond, work, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_dptcon(&n_64, d__, e, anorm, rcond, work, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_dptcon(aocl_int64_t *n, doublereal *d__, doublereal *e, doublereal *anorm,
+                        doublereal *rcond, doublereal *work, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dptcon inputs: n %" FLA_IS "", *n);
@@ -124,11 +140,7 @@ void dptcon_(integer *n, doublereal *d__, doublereal *e, doublereal *anorm, doub
     aocl_int64_t i__1;
     doublereal d__1;
     /* Local variables */
-    integer i__, ix;
-    extern integer idamax_(integer *, doublereal *, integer *);
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    aocl_int64_t i__, ix;
     doublereal ainvnm;
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -168,7 +180,7 @@ void dptcon_(integer *n, doublereal *d__, doublereal *e, doublereal *anorm, doub
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("DPTCON", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("DPTCON", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -216,7 +228,7 @@ void dptcon_(integer *n, doublereal *d__, doublereal *e, doublereal *anorm, doub
         /* L30: */
     }
     /* Compute AINVNM = fla_max(x(i)), 1<=i<=n. */
-    ix = idamax_(n, &work[1], &c__1);
+    ix = aocl_blas_idamax(n, &work[1], &c__1);
     ainvnm = (d__1 = work[ix], f2c_dabs(d__1));
     /* Compute the reciprocal condition number. */
     if(ainvnm != 0.)

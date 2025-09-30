@@ -4,7 +4,7 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
+static aocl_int64_t c__1 = 1;
 static doublereal c_b36 = 10.;
 static doublereal c_b72 = .5;
 /* > \brief \b ZGGBAL */
@@ -43,7 +43,7 @@ static doublereal c_b72 = .5;
 /* > */
 /* > \verbatim */
 /* > */
-/* > ZGGBAL balances a pair of general complex matrices (A,B). This */
+/* > ZGGBAL balances a pair of general scomplex matrices (A,B). This */
 /* > involves, first, permuting A and B by similarity transformations to */
 /* > isolate eigenvalues in the first 1 to ILO$-$1 and last IHI+1 to N */
 /* > elements on the diagonal;
@@ -179,59 +179,67 @@ and second, applying a diagonal similarity */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void zggbal_(char *job, integer *n, doublecomplex *a, integer *lda, doublecomplex *b, integer *ldb,
-             integer *ilo, integer *ihi, doublereal *lscale, doublereal *rscale, doublereal *work,
-             integer *info)
+/** Generated wrapper function */
+void zggbal_(char *job, aocl_int_t *n, dcomplex *a, aocl_int_t *lda, dcomplex *b,
+             aocl_int_t *ldb, aocl_int_t *ilo, aocl_int_t *ihi, doublereal *lscale,
+             doublereal *rscale, doublereal *work, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_zggbal(job, n, a, lda, b, ldb, ilo, ihi, lscale, rscale, work, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t ldb_64 = *ldb;
+    aocl_int64_t ilo_64 = *ilo;
+    aocl_int64_t ihi_64 = *ihi;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_zggbal(job, &n_64, a, &lda_64, b, &ldb_64, &ilo_64, &ihi_64, lscale, rscale, work,
+                       &info_64);
+
+    *ilo = (aocl_int_t)ilo_64;
+    *ihi = (aocl_int_t)ihi_64;
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_zggbal(char *job, aocl_int64_t *n, dcomplex *a, aocl_int64_t *lda,
+                        dcomplex *b, aocl_int64_t *ldb, aocl_int64_t *ilo, aocl_int64_t *ihi,
+                        doublereal *lscale, doublereal *rscale, doublereal *work,
+                        aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zggbal inputs: job %c, n %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS
                       ", ilo %" FLA_IS ", ihi %" FLA_IS "",
                       *job, *n, *lda, *ldb, *ilo, *ihi);
     /* System generated locals */
-    integer a_dim1, a_offset, b_dim1, b_offset, i__1, i__2, i__3, i__4;
+    aocl_int64_t a_dim1, a_offset, b_dim1, b_offset, i__1, i__2, i__3, i__4;
     doublereal d__1, d__2, d__3;
     /* Builtin functions */
-    double d_lg10(doublereal *), d_imag(doublecomplex *), z_abs(doublecomplex *),
-        d_sign(doublereal *, doublereal *), pow_di(doublereal *, integer *);
+    double d_lg10(doublereal *), d_imag(dcomplex *), z_abs(dcomplex *),
+        d_sign(doublereal *, doublereal *), pow_di(doublereal *, aocl_int64_t *);
     /* Local variables */
-    integer i__, j, k, l, m;
+    aocl_int64_t i__, j, k, l, m;
     doublereal t;
-    integer jc;
+    aocl_int64_t jc;
     doublereal ta, tb, tc;
-    integer ir;
+    aocl_int64_t ir;
     doublereal ew;
-    integer it, nr, ip1, jp1, lm1;
+    aocl_int64_t it, nr, ip1, jp1, lm1;
     doublereal cab, rab, ewc, cor, sum;
-    integer nrp2, icab, lcab;
+    aocl_int64_t nrp2, icab, lcab;
     doublereal beta, coef;
-    integer irab, lrab;
+    aocl_int64_t irab, lrab;
     doublereal basl, cmax;
-    extern doublereal ddot_(integer *, doublereal *, integer *, doublereal *, integer *);
     doublereal coef2, coef5, gamma, alpha;
-    extern /* Subroutine */
-        void
-        dscal_(integer *, doublereal *, doublereal *, integer *);
-    extern logical lsame_(char *, char *, integer, integer);
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     doublereal sfmin, sfmax;
-    integer iflow;
-    extern /* Subroutine */
-        void
-        daxpy_(integer *, doublereal *, doublereal *, integer *, doublereal *, integer *);
-    integer kount;
-    extern /* Subroutine */
-        void
-        zswap_(integer *, doublecomplex *, integer *, doublecomplex *, integer *);
+    aocl_int64_t iflow;
+    aocl_int64_t kount;
     extern doublereal dlamch_(char *);
     doublereal pgamma;
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    extern /* Subroutine */
-        void
-        zdscal_(integer *, doublereal *, doublecomplex *, integer *);
-    integer lsfmin;
-    extern integer izamax_(integer *, doublecomplex *, integer *);
-    integer lsfmax;
+    aocl_int64_t lsfmin;
+    aocl_int64_t lsfmax;
     /* -- LAPACK computational routine (version 3.7.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -289,7 +297,7 @@ void zggbal_(char *job, integer *n, doublecomplex *a, integer *lda, doublecomple
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("ZGGBAL", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("ZGGBAL", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -429,9 +437,9 @@ L160:
         goto L170;
     }
     i__1 = *n - k + 1;
-    zswap_(&i__1, &a[i__ + k * a_dim1], lda, &a[m + k * a_dim1], lda);
+    aocl_blas_zswap(&i__1, &a[i__ + k * a_dim1], lda, &a[m + k * a_dim1], lda);
     i__1 = *n - k + 1;
-    zswap_(&i__1, &b[i__ + k * b_dim1], ldb, &b[m + k * b_dim1], ldb);
+    aocl_blas_zswap(&i__1, &b[i__ + k * b_dim1], ldb, &b[m + k * b_dim1], ldb);
     /* Permute columns M and J */
 L170:
     rscale[m] = (doublereal)j;
@@ -439,8 +447,8 @@ L170:
     {
         goto L180;
     }
-    zswap_(&l, &a[j * a_dim1 + 1], &c__1, &a[m * a_dim1 + 1], &c__1);
-    zswap_(&l, &b[j * b_dim1 + 1], &c__1, &b[m * b_dim1 + 1], &c__1);
+    aocl_blas_zswap(&l, &a[j * a_dim1 + 1], &c__1, &a[m * a_dim1 + 1], &c__1);
+    aocl_blas_zswap(&l, &b[j * b_dim1 + 1], &c__1, &b[m * b_dim1 + 1], &c__1);
 L180:
     switch(iflow)
     {
@@ -528,8 +536,8 @@ L190:
     it = 1;
     /* Start generalized conjugate gradient iteration */
 L250:
-    gamma = ddot_(&nr, &work[*ilo + (*n << 2)], &c__1, &work[*ilo + (*n << 2)], &c__1)
-            + ddot_(&nr, &work[*ilo + *n * 5], &c__1, &work[*ilo + *n * 5], &c__1);
+    gamma = aocl_blas_ddot(&nr, &work[*ilo + (*n << 2)], &c__1, &work[*ilo + (*n << 2)], &c__1)
+            + aocl_blas_ddot(&nr, &work[*ilo + *n * 5], &c__1, &work[*ilo + *n * 5], &c__1);
     ew = 0.;
     ewc = 0.;
     i__1 = *ihi;
@@ -556,10 +564,10 @@ L250:
     }
     t = coef5 * (ewc - ew * 3.);
     tc = coef5 * (ew - ewc * 3.);
-    dscal_(&nr, &beta, &work[*ilo], &c__1);
-    dscal_(&nr, &beta, &work[*ilo + *n], &c__1);
-    daxpy_(&nr, &coef, &work[*ilo + (*n << 2)], &c__1, &work[*ilo + *n], &c__1);
-    daxpy_(&nr, &coef, &work[*ilo + *n * 5], &c__1, &work[*ilo], &c__1);
+    aocl_blas_dscal(&nr, &beta, &work[*ilo], &c__1);
+    aocl_blas_dscal(&nr, &beta, &work[*ilo + *n], &c__1);
+    aocl_blas_daxpy(&nr, &coef, &work[*ilo + (*n << 2)], &c__1, &work[*ilo + *n], &c__1);
+    aocl_blas_daxpy(&nr, &coef, &work[*ilo + *n * 5], &c__1, &work[*ilo], &c__1);
     i__1 = *ihi;
     for(i__ = *ilo; i__ <= i__1; ++i__)
     {
@@ -624,8 +632,8 @@ L250:
         work[j + *n * 3] = (doublereal)kount * work[j] + sum;
         /* L330: */
     }
-    sum = ddot_(&nr, &work[*ilo + *n], &c__1, &work[*ilo + (*n << 1)], &c__1)
-          + ddot_(&nr, &work[*ilo], &c__1, &work[*ilo + *n * 3], &c__1);
+    sum = aocl_blas_ddot(&nr, &work[*ilo + *n], &c__1, &work[*ilo + (*n << 1)], &c__1)
+          + aocl_blas_ddot(&nr, &work[*ilo], &c__1, &work[*ilo + *n * 3], &c__1);
     alpha = gamma / sum;
     /* Determine correction to current iteration */
     cmax = 0.;
@@ -651,9 +659,9 @@ L250:
         goto L350;
     }
     d__1 = -alpha;
-    daxpy_(&nr, &d__1, &work[*ilo + (*n << 1)], &c__1, &work[*ilo + (*n << 2)], &c__1);
+    aocl_blas_daxpy(&nr, &d__1, &work[*ilo + (*n << 1)], &c__1, &work[*ilo + (*n << 2)], &c__1);
     d__1 = -alpha;
-    daxpy_(&nr, &d__1, &work[*ilo + *n * 3], &c__1, &work[*ilo + *n * 5], &c__1);
+    aocl_blas_daxpy(&nr, &d__1, &work[*ilo + *n * 3], &c__1, &work[*ilo + *n * 5], &c__1);
     pgamma = gamma;
     ++it;
     if(it <= nrp2)
@@ -670,10 +678,10 @@ L350:
     for(i__ = *ilo; i__ <= i__1; ++i__)
     {
         i__2 = *n - *ilo + 1;
-        irab = izamax_(&i__2, &a[i__ + *ilo * a_dim1], lda);
+        irab = aocl_blas_izamax(&i__2, &a[i__ + *ilo * a_dim1], lda);
         rab = z_abs(&a[i__ + (irab + *ilo - 1) * a_dim1]);
         i__2 = *n - *ilo + 1;
-        irab = izamax_(&i__2, &b[i__ + *ilo * b_dim1], ldb);
+        irab = aocl_blas_izamax(&i__2, &b[i__ + *ilo * b_dim1], ldb);
         /* Computing MAX */
         d__1 = rab;
         d__2 = z_abs(&b[i__ + (irab + *ilo - 1) * b_dim1]); // , expr subst
@@ -687,9 +695,9 @@ L350:
         i__3 = lsfmax - lrab; // ; expr subst
         ir = fla_min(i__2, i__3);
         lscale[i__] = pow_di(&c_b36, &ir);
-        icab = izamax_(ihi, &a[i__ * a_dim1 + 1], &c__1);
+        icab = aocl_blas_izamax(ihi, &a[i__ * a_dim1 + 1], &c__1);
         cab = z_abs(&a[icab + i__ * a_dim1]);
-        icab = izamax_(ihi, &b[i__ * b_dim1 + 1], &c__1);
+        icab = aocl_blas_izamax(ihi, &b[i__ * b_dim1 + 1], &c__1);
         /* Computing MAX */
         d__1 = cab;
         d__2 = z_abs(&b[icab + i__ * b_dim1]); // , expr subst
@@ -710,17 +718,17 @@ L350:
     for(i__ = *ilo; i__ <= i__1; ++i__)
     {
         i__2 = *n - *ilo + 1;
-        zdscal_(&i__2, &lscale[i__], &a[i__ + *ilo * a_dim1], lda);
+        aocl_blas_zdscal(&i__2, &lscale[i__], &a[i__ + *ilo * a_dim1], lda);
         i__2 = *n - *ilo + 1;
-        zdscal_(&i__2, &lscale[i__], &b[i__ + *ilo * b_dim1], ldb);
+        aocl_blas_zdscal(&i__2, &lscale[i__], &b[i__ + *ilo * b_dim1], ldb);
         /* L370: */
     }
     /* Column scaling of matrices A and B */
     i__1 = *ihi;
     for(j = *ilo; j <= i__1; ++j)
     {
-        zdscal_(ihi, &rscale[j], &a[j * a_dim1 + 1], &c__1);
-        zdscal_(ihi, &rscale[j], &b[j * b_dim1 + 1], &c__1);
+        aocl_blas_zdscal(ihi, &rscale[j], &a[j * a_dim1 + 1], &c__1);
+        aocl_blas_zdscal(ihi, &rscale[j], &b[j * b_dim1 + 1], &c__1);
         /* L380: */
     }
     AOCL_DTL_TRACE_LOG_EXIT

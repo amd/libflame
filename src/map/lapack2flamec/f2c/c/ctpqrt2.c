@@ -4,10 +4,10 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static complex c_b1 = {1.f, 0.f};
-static complex c_b2 = {0.f, 0.f};
-static integer c__1 = 1;
-/* > \brief \b CTPQRT2 computes a QR factorization of a real or complex "triangular-pentagonal"
+static scomplex c_b1 = {{1.f}, {0.f}};
+static scomplex c_b2 = {{0.f}, {0.f}};
+static aocl_int64_t c__1 = 1;
+/* > \brief \b CTPQRT2 computes a QR factorization of a real or scomplex "triangular-pentagonal"
  * matrix, which is composed of a triangular block and a pentagonal block, using the compact WY
  * representation for Q. */
 /* =========== DOCUMENTATION =========== */
@@ -42,7 +42,7 @@ static integer c__1 = 1;
 /* > */
 /* > \verbatim */
 /* > */
-/* > CTPQRT2 computes a QR factorization of a complex "triangular-pentagonal" */
+/* > CTPQRT2 computes a QR factorization of a scomplex "triangular-pentagonal" */
 /* > matrix C, which is composed of a triangular block A and pentagonal block B, */
 /* > using the compact WY representation for Q. */
 /* > \endverbatim */
@@ -176,8 +176,30 @@ that is, */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void ctpqrt2_(integer *m, integer *n, integer *l, complex *a, integer *lda, complex *b,
-              integer *ldb, complex *t, integer *ldt, integer *info)
+/** Generated wrapper function */
+void ctpqrt2_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *l, scomplex *a, aocl_int_t *lda, scomplex *b,
+              aocl_int_t *ldb, scomplex *t, aocl_int_t *ldt, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_ctpqrt2(m, n, l, a, lda, b, ldb, t, ldt, info);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t l_64 = *l;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t ldb_64 = *ldb;
+    aocl_int64_t ldt_64 = *ldt;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_ctpqrt2(&m_64, &n_64, &l_64, a, &lda_64, b, &ldb_64, t, &ldt_64, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_ctpqrt2(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *l, scomplex *a,
+                         aocl_int64_t *lda, scomplex *b, aocl_int64_t *ldb, scomplex *t,
+                         aocl_int64_t *ldt, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -192,24 +214,13 @@ void ctpqrt2_(integer *m, integer *n, integer *l, complex *a, integer *lda, comp
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
-    integer a_dim1, a_offset, b_dim1, b_offset, t_dim1, t_offset, i__1, i__2, i__3, i__4;
-    complex q__1, q__2, q__3;
+    aocl_int64_t a_dim1, a_offset, b_dim1, b_offset, t_dim1, t_offset, i__1, i__2, i__3, i__4;
+    scomplex q__1, q__2, q__3;
     /* Builtin functions */
-    void r_cnjg(complex *, complex *);
+    void r_cnjg(scomplex *, scomplex *);
     /* Local variables */
-    integer i__, j, p, mp, np;
-    extern /* Subroutine */
-        void
-        cgerc_(integer *, integer *, complex *, complex *, integer *, complex *, integer *,
-               complex *, integer *);
-    complex alpha;
-    extern /* Subroutine */
-        void
-        cgemv_(char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *,
-               complex *, complex *, integer *),
-        ctrmv_(char *, char *, char *, integer *, complex *, integer *, complex *, integer *),
-        clarfg_(integer *, complex *, complex *, integer *, complex *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    aocl_int64_t i__, j, p, mp, np;
+    scomplex alpha;
     /* -- LAPACK computational routine (version 3.7.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -268,7 +279,7 @@ void ctpqrt2_(integer *m, integer *n, integer *l, complex *a, integer *lda, comp
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("CTPQRT2", &i__1, (ftnlen)7);
+        aocl_blas_xerbla("CTPQRT2", &i__1, (ftnlen)7);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
@@ -284,7 +295,8 @@ void ctpqrt2_(integer *m, integer *n, integer *l, complex *a, integer *lda, comp
         /* Generate elementary reflector H(I) to annihilate B(:,I) */
         p = *m - *l + fla_min(*l, i__);
         i__2 = p + 1;
-        clarfg_(&i__2, &a[i__ + i__ * a_dim1], &b[i__ * b_dim1 + 1], &c__1, &t[i__ + t_dim1]);
+        aocl_lapack_clarfg(&i__2, &a[i__ + i__ * a_dim1], &b[i__ * b_dim1 + 1], &c__1,
+                           &t[i__ + t_dim1]);
         if(i__ < *n)
         {
             /* W(1:N-I) := C(I:M,I+1:N)**H * C(I:M,I) [use W = T(:,N)] */
@@ -297,8 +309,8 @@ void ctpqrt2_(integer *m, integer *n, integer *l, complex *a, integer *lda, comp
                 t[i__3].i = q__1.i; // , expr subst
             }
             i__2 = *n - i__;
-            cgemv_("C", &p, &i__2, &c_b1, &b[(i__ + 1) * b_dim1 + 1], ldb, &b[i__ * b_dim1 + 1],
-                   &c__1, &c_b1, &t[*n * t_dim1 + 1], &c__1);
+            aocl_blas_cgemv("C", &p, &i__2, &c_b1, &b[(i__ + 1) * b_dim1 + 1], ldb,
+                            &b[i__ * b_dim1 + 1], &c__1, &c_b1, &t[*n * t_dim1 + 1], &c__1);
             /* C(I:M,I+1:N) = C(I:m,I+1:N) + alpha*C(I:M,I)*W(1:N-1)**H */
             r_cnjg(&q__2, &t[i__ + t_dim1]);
             q__1.r = -q__2.r;
@@ -319,8 +331,8 @@ void ctpqrt2_(integer *m, integer *n, integer *l, complex *a, integer *lda, comp
                 a[i__3].i = q__1.i; // , expr subst
             }
             i__2 = *n - i__;
-            cgerc_(&p, &i__2, &alpha, &b[i__ * b_dim1 + 1], &c__1, &t[*n * t_dim1 + 1], &c__1,
-                   &b[(i__ + 1) * b_dim1 + 1], ldb);
+            aocl_blas_cgerc(&p, &i__2, &alpha, &b[i__ * b_dim1 + 1], &c__1, &t[*n * t_dim1 + 1],
+                            &c__1, &b[(i__ + 1) * b_dim1 + 1], ldb);
         }
     }
     i__1 = *n;
@@ -359,19 +371,19 @@ void ctpqrt2_(integer *m, integer *n, integer *l, complex *a, integer *lda, comp
             t[i__3].r = q__1.r;
             t[i__3].i = q__1.i; // , expr subst
         }
-        ctrmv_("U", "C", "N", &p, &b[mp + b_dim1], ldb, &t[i__ * t_dim1 + 1], &c__1);
+        aocl_blas_ctrmv("U", "C", "N", &p, &b[mp + b_dim1], ldb, &t[i__ * t_dim1 + 1], &c__1);
         /* Rectangular part of B2 */
         i__2 = i__ - 1 - p;
-        cgemv_("C", l, &i__2, &alpha, &b[mp + np * b_dim1], ldb, &b[mp + i__ * b_dim1], &c__1,
-               &c_b2, &t[np + i__ * t_dim1], &c__1);
+        aocl_blas_cgemv("C", l, &i__2, &alpha, &b[mp + np * b_dim1], ldb, &b[mp + i__ * b_dim1],
+                        &c__1, &c_b2, &t[np + i__ * t_dim1], &c__1);
         /* B1 */
         i__2 = *m - *l;
         i__3 = i__ - 1;
-        cgemv_("C", &i__2, &i__3, &alpha, &b[b_offset], ldb, &b[i__ * b_dim1 + 1], &c__1, &c_b1,
-               &t[i__ * t_dim1 + 1], &c__1);
+        aocl_blas_cgemv("C", &i__2, &i__3, &alpha, &b[b_offset], ldb, &b[i__ * b_dim1 + 1], &c__1,
+                        &c_b1, &t[i__ * t_dim1 + 1], &c__1);
         /* T(1:I-1,I) := T(1:I-1,1:I-1) * T(1:I-1,I) */
         i__2 = i__ - 1;
-        ctrmv_("U", "N", "N", &i__2, &t[t_offset], ldt, &t[i__ * t_dim1 + 1], &c__1);
+        aocl_blas_ctrmv("U", "N", "N", &i__2, &t[t_offset], ldt, &t[i__ * t_dim1 + 1], &c__1);
         /* T(I,I) = tau(I) */
         i__2 = i__ + i__ * t_dim1;
         i__3 = i__ + t_dim1;

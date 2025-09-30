@@ -4,8 +4,8 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static complex c_b1 = {1.f, 0.f};
-static integer c__1 = 1;
+static scomplex c_b1 = {{1.f}, {0.f}};
+static aocl_int64_t c__1 = 1;
 /* > \brief \b CSYTF2 computes the factorization of a real symmetric indefinite matrix, using the
  * diagonal piv oting method (unblocked algorithm). */
 /* =========== DOCUMENTATION =========== */
@@ -188,7 +188,25 @@ static integer c__1 = 1;
 /* > \endverbatim */
 /* ===================================================================== */
 /* Subroutine */
-void csytf2_(char *uplo, integer *n, complex *a, integer *lda, integer *ipiv, integer *info)
+/** Generated wrapper function */
+void csytf2_(char *uplo, aocl_int_t *n, scomplex *a, aocl_int_t *lda, aocl_int_t *ipiv,
+             aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_csytf2(uplo, n, a, lda, ipiv, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_csytf2(uplo, &n_64, a, &lda_64, ipiv, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_csytf2(char *uplo, aocl_int64_t *n, scomplex *a, aocl_int64_t *lda,
+                        aocl_int_t *ipiv, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -208,29 +226,16 @@ void csytf2_(char *uplo, integer *n, complex *a, integer *lda, integer *ipiv, in
     double sqrt(doublereal), r_imag(scomplex *);
     void c_div(scomplex *, scomplex *, scomplex *);
     /* Local variables */
-    integer i__, j, k;
-    complex t, r1, d11, d12, d21, d22;
-    integer kk, kp;
-    complex wk, wkm1, wkp1;
-    integer imax, jmax;
-    extern /* Subroutine */
-        void
-        csyr_(char *, integer *, complex *, complex *, integer *, complex *, integer *);
+    aocl_int64_t i__, j, k;
+    scomplex t, r1, d11, d12, d21, d22;
+    aocl_int64_t kk, kp;
+    scomplex wk, wkm1, wkp1;
+    aocl_int64_t imax, jmax;
     real alpha;
-    extern /* Subroutine */
-        void
-        cscal_(integer *, complex *, complex *, integer *);
-    extern logical lsame_(char *, char *, integer, integer);
-    extern /* Subroutine */
-        void
-        cswap_(integer *, complex *, integer *, complex *, integer *);
-    integer kstep;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    aocl_int64_t kstep;
     logical upper;
     real absakk;
-    extern integer icamax_(integer *, complex *, integer *);
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real colmax;
     extern logical sisnan_(real *);
     real rowmax;
@@ -284,7 +289,7 @@ void csytf2_(char *uplo, integer *n, complex *a, integer *lda, integer *ipiv, in
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("CSYTF2", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("CSYTF2", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
@@ -433,7 +438,7 @@ void csytf2_(char *uplo, integer *n, complex *a, integer *lda, integer *ipiv, in
                 i__1 = k - 1;
                 q__1.r = -r1.r;
                 q__1.i = -r1.i; // , expr subst
-                csyr_(uplo, &i__1, &q__1, &a[k * a_dim1 + 1], &c__1, &a[a_offset], lda);
+                aocl_lapack_csyr(uplo, &i__1, &q__1, &a[k * a_dim1 + 1], &c__1, &a[a_offset], lda);
                 /* Store U(k) in column k */
                 i__1 = k - 1;
                 aocl_blas_cscal(&i__1, &r1, &a[k * a_dim1 + 1], &c__1);
@@ -682,8 +687,8 @@ void csytf2_(char *uplo, integer *n, complex *a, integer *lda, integer *ipiv, in
                     i__1 = *n - k;
                     q__1.r = -r1.r;
                     q__1.i = -r1.i; // , expr subst
-                    csyr_(uplo, &i__1, &q__1, &a[k + 1 + k * a_dim1], &c__1,
-                          &a[k + 1 + (k + 1) * a_dim1], lda);
+                    aocl_lapack_csyr(uplo, &i__1, &q__1, &a[k + 1 + k * a_dim1], &c__1,
+                                     &a[k + 1 + (k + 1) * a_dim1], lda);
                     /* Store L(k) in column K */
                     i__1 = *n - k;
                     aocl_blas_cscal(&i__1, &r1, &a[k + 1 + k * a_dim1], &c__1);

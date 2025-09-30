@@ -93,8 +93,24 @@
 /* > \date November 2011 */
 /* > \ingroup doubleGEcomputational */
 /* ===================================================================== */
-doublereal dla_gerpvgrw_(integer *n, integer *ncols, doublereal *a, integer *lda, doublereal *af,
-                         integer *ldaf)
+/** Generated wrapper function */
+doublereal dla_gerpvgrw_(aocl_int_t *n, aocl_int_t *ncols, doublereal *a, aocl_int_t *lda,
+                         doublereal *af, aocl_int_t *ldaf)
+{
+#if FLA_ENABLE_ILP64
+    return aocl_lapack_dla_gerpvgrw(n, ncols, a, lda, af, ldaf);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t ncols_64 = *ncols;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t ldaf_64 = *ldaf;
+
+    return aocl_lapack_dla_gerpvgrw(&n_64, &ncols_64, a, &lda_64, af, &ldaf_64);
+#endif
+}
+
+doublereal aocl_lapack_dla_gerpvgrw(aocl_int64_t *n, aocl_int64_t *ncols, doublereal *a,
+                                    aocl_int64_t *lda, doublereal *af, aocl_int64_t *ldaf)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dla_gerpvgrw inputs: n %" FLA_IS ", ncols %" FLA_IS ", lda %" FLA_IS

@@ -14,8 +14,8 @@ FLA_Error FLA_Asum_external( FLA_Obj x, FLA_Obj asum_x )
 {
   FLA_Datatype datatype;
   FLA_Datatype dt_asum;
-  integer          num_elem;
-  integer          inc_x;
+  fla_dim_t          num_elem;
+  fla_dim_t          inc_x;
 
   if ( FLA_Check_error_level() == FLA_FULL_ERROR_CHECKING ) 
     FLA_Asum_check( x, asum_x );

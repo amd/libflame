@@ -11,8 +11,8 @@
 
 #ifdef FLA_ENABLE_AMD_OPT
 
-void fla_dgesvd_nn_small1T_avx2(integer *m, integer *n, doublereal *a, integer *lda, doublereal *s,
-                                doublereal *work, integer *info)
+void fla_dgesvd_nn_small1T_avx2(aocl_int64_t *m, aocl_int64_t *n, doublereal *a, aocl_int64_t *lda, doublereal *s,
+                                doublereal *work, aocl_int64_t *info)
 {
     /* Declare and init local variables */
     FLA_GEQRF_INIT_DSMALL();
@@ -21,12 +21,12 @@ void fla_dgesvd_nn_small1T_avx2(integer *m, integer *n, doublereal *a, integer *
     doublereal *tau, *tauq, *taup;
     doublereal *e;
 
-    integer c__0 = 0;
-    integer c__1 = 1;
+    aocl_int64_t c__0 = 0;
+    aocl_int64_t c__1 = 1;
 
-    integer ie;
-    integer itauq, itaup;
-    integer rlen, knt;
+    aocl_int64_t ie;
+    aocl_int64_t itauq, itaup;
+    aocl_int64_t rlen, knt;
 
     /* indices for partitioning work buffer */
     ie = 1;

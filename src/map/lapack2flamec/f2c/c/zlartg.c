@@ -4,7 +4,7 @@
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
  /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Subroutine */
-/* > \brief \b ZLARTG generates a plane rotation with real cosine and complex sine. */
+/* > \brief \b ZLARTG generates a plane rotation with real cosine and scomplex sine. */
 
 /*  =========== DOCUMENTATION =========== */
 
@@ -117,19 +117,19 @@
 /* >  https://doi.org/10.1145/3061665 */
 /* > */
 /* > \endverbatim */
-void zlartg_(doublecomplex *f, doublecomplex *g, doublereal *c__, doublecomplex *s,
-             doublecomplex *r__)
+void zlartg_(dcomplex *f, dcomplex *g, doublereal *c__, dcomplex *s,
+             dcomplex *r__)
 {
     AOCL_DTL_TRACE_ENTRY_INDENT
-    doublecomplex z__1, z__2, z__3;
+    dcomplex z__1, z__2, z__3;
     /* Builtin functions */
-    double sqrt(doublereal), d_imag(doublecomplex *);
-    void d_cnjg(doublecomplex *, doublecomplex *),
-        z_div(doublecomplex *, doublecomplex *, doublecomplex *);
+    double sqrt(doublereal), d_imag(dcomplex *);
+    void d_cnjg(dcomplex *, dcomplex *),
+        z_div(dcomplex *, dcomplex *, dcomplex *);
     /* Local variables */
     doublereal d__, u, v, w, f1, f2, g1, g2, h2;
     doublereal d__1, d__2, d__3, d__4;
-    doublecomplex fs, gs;
+    dcomplex fs, gs;
     doublereal rtmin, rtmax, safmin, safmax;
     /* ...Translated by Pacific-Sierra Research vf90 Personal 3.4N3 04:17:29 1/20/23 */
     /*  -- LAPACK auxiliary routine -- */
@@ -178,7 +178,7 @@ void zlartg_(doublecomplex *f, doublecomplex *g, doublereal *c__, doublecomplex 
             {
                 /* Use unscaled algorithm */
                 /* The following two lines can be replaced by `d = f2c_dabs( g )`. */
-                /* This algorithm do not use the intrinsic complex abs. */
+                /* This algorithm do not use the intrinsic scomplex abs. */
                 /* Computing 2nd power */
                 d__1 = g->r;
                 /* Computing 2nd power */
@@ -203,7 +203,7 @@ void zlartg_(doublecomplex *f, doublecomplex *g, doublereal *c__, doublecomplex 
                 gs.r = z__1.r;
                 gs.i = z__1.i; // , expr subst
                 /* The following two lines can be replaced by `d = f2c_dabs( gs )`. */
-                /* This algorithm do not use the intrinsic complex abs. */
+                /* This algorithm do not use the intrinsic scomplex abs. */
                 /* Computing 2nd power */
                 d__1 = gs.r;
                 /* Computing 2nd power */

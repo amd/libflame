@@ -111,8 +111,21 @@
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void dlasd5_(integer *i__, doublereal *d__, doublereal *z__, doublereal *delta, doublereal *rho,
+/** Generated wrapper function */
+void dlasd5_(aocl_int_t *i__, doublereal *d__, doublereal *z__, doublereal *delta, doublereal *rho,
              doublereal *dsigma, doublereal *work)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_dlasd5(i__, d__, z__, delta, rho, dsigma, work);
+#else
+    aocl_int64_t i___64 = *i__;
+
+    aocl_lapack_dlasd5(&i___64, d__, z__, delta, rho, dsigma, work);
+#endif
+}
+
+void aocl_lapack_dlasd5(aocl_int64_t *i__, doublereal *d__, doublereal *z__, doublereal *delta,
+                        doublereal *rho, doublereal *dsigma, doublereal *work)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dlasd5 inputs: i__ %" FLA_IS "", *i__);

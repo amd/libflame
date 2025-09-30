@@ -57,48 +57,48 @@ void           FLASH_Queue_set_cache_size( fla_dim_t size );
 fla_dim_t          FLASH_Queue_get_cache_size( void );
 void           FLASH_Queue_set_cache_line_size( fla_dim_t size );
 fla_dim_t          FLASH_Queue_get_cache_line_size( void );
-void           FLASH_Queue_set_cores_per_cache( integer cores );
-integer            FLASH_Queue_get_cores_per_cache( void );
-void           FLASH_Queue_set_cores_per_queue( integer cores );
-integer            FLASH_Queue_get_cores_per_queue( void );
+void           FLASH_Queue_set_cores_per_cache( fla_dim_t cores );
+fla_dim_t            FLASH_Queue_get_cores_per_cache( void );
+void           FLASH_Queue_set_cores_per_queue( fla_dim_t cores );
+fla_dim_t            FLASH_Queue_get_cores_per_queue( void );
 void           FLASH_Queue_reset( void );
 FLASH_Task*    FLASH_Queue_get_head_task( void );
 FLASH_Task*    FLASH_Queue_get_tail_task( void );
 void           FLASH_Queue_push( void *func, void *cntl, char *name,
                                  FLA_Bool enabled_gpu,
-                                 integer n_int_args, integer n_fla_args,
-                                 integer n_input_args, integer n_output_args, ... );
+                                 fla_dim_t n_int_args, fla_dim_t n_fla_args,
+                                 fla_dim_t n_input_args, fla_dim_t n_output_args, ... );
 void           FLASH_Queue_push_input( FLA_Obj obj, FLASH_Task* t );
 void           FLASH_Queue_push_output( FLA_Obj obj, FLASH_Task* t );
 FLASH_Task*    FLASH_Task_alloc( void *func, void *cntl, char *name,
                                  FLA_Bool enabled_gpu,
-                                 integer n_int_args, integer n_fla_args,
-                                 integer n_input_args, integer n_output_args );
+                                 fla_dim_t n_int_args, fla_dim_t n_fla_args,
+                                 fla_dim_t n_input_args, fla_dim_t n_output_args );
 void           FLASH_Task_free( FLASH_Task *t );
 void           FLASH_Queue_exec_task( FLASH_Task *t );
 void           FLASH_Queue_verbose_output( void );
 
 void           FLASH_Queue_init_tasks( void *arg );
 void           FLASH_Queue_wait_enqueue( FLASH_Task *t, void *arg );
-FLASH_Task*    FLASH_Queue_wait_dequeue( integer queue, integer cache, void *arg );
-FLASH_Task*    FLASH_Queue_wait_dequeue_block( integer queue, integer cache, void *arg );
+FLASH_Task*    FLASH_Queue_wait_dequeue( fla_dim_t queue, fla_dim_t cache, void *arg );
+FLASH_Task*    FLASH_Queue_wait_dequeue_block( fla_dim_t queue, fla_dim_t cache, void *arg );
 void           FLASH_Queue_update_cache( FLASH_Task *t, void *arg );
-void           FLASH_Queue_update_cache_block( FLA_Obj obj, integer cache, FLA_Bool output, void *arg );
-void           FLASH_Queue_prefetch( integer cache, void *arg );
+void           FLASH_Queue_update_cache_block( FLA_Obj obj, fla_dim_t cache, FLA_Bool output, void *arg );
+void           FLASH_Queue_prefetch( fla_dim_t cache, void *arg );
 void           FLASH_Queue_prefetch_block( FLA_Obj obj );
-FLASH_Task*    FLASH_Queue_work_stealing( integer queue, void *arg );
+FLASH_Task*    FLASH_Queue_work_stealing( fla_dim_t queue, void *arg );
 #ifdef FLA_ENABLE_GPU
-void           FLASH_Queue_create_gpu( integer thread, void *arg );
-void           FLASH_Queue_destroy_gpu( integer thread, void *arg );
+void           FLASH_Queue_create_gpu( fla_dim_t thread, void *arg );
+void           FLASH_Queue_destroy_gpu( fla_dim_t thread, void *arg );
 FLA_Bool       FLASH_Queue_exec_gpu( FLASH_Task *t, void *arg );
 FLA_Bool       FLASH_Queue_check_gpu( FLASH_Task *t, void *arg );
-FLA_Bool       FLASH_Queue_check_block_gpu( FLA_Obj obj, integer thread, void *arg );
+FLA_Bool       FLASH_Queue_check_block_gpu( FLA_Obj obj, fla_dim_t thread, void *arg );
 void           FLASH_Queue_update_gpu( FLASH_Task *t, void **input_arg, void **output_arg, void *arg );
-void           FLASH_Queue_update_block_gpu( FLA_Obj obj, void **buffer_gpu, integer thread, void *arg );
+void           FLASH_Queue_update_block_gpu( FLA_Obj obj, void **buffer_gpu, fla_dim_t thread, void *arg );
 void           FLASH_Queue_mark_gpu( FLASH_Task *t, void *arg );
-void           FLASH_Queue_invalidate_block_gpu( FLA_Obj obj, integer thread, void *arg );
-void           FLASH_Queue_flush_block_gpu( FLA_Obj obj, integer thread, void *arg );
-void           FLASH_Queue_flush_gpu( integer thread, void *arg );
+void           FLASH_Queue_invalidate_block_gpu( FLA_Obj obj, fla_dim_t thread, void *arg );
+void           FLASH_Queue_flush_block_gpu( FLA_Obj obj, fla_dim_t thread, void *arg );
+void           FLASH_Queue_flush_gpu( fla_dim_t thread, void *arg );
 #endif
 void           FLASH_Queue_exec_parallel( void *arg );
 void*          FLASH_Queue_exec_parallel_function( void *arg );

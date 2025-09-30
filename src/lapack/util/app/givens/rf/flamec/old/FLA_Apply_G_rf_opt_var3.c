@@ -31,9 +31,9 @@ FLA_Error FLA_Apply_G_rf_opt_var3( FLA_Obj G, FLA_Obj A )
 */
 {
 	FLA_Datatype datatype;
-	integer          k_G, m_A, n_A;
-	integer          rs_G, cs_G;
-	integer          rs_A, cs_A;
+	aocl_int64_t          k_G, m_A, n_A;
+	aocl_int64_t          rs_G, cs_G;
+	aocl_int64_t          rs_A, cs_A;
 
 	datatype = FLA_Obj_datatype( A );
 
@@ -110,20 +110,20 @@ FLA_Error FLA_Apply_G_rf_opt_var3( FLA_Obj G, FLA_Obj A )
 }
 
 
-FLA_Error FLA_Apply_G_rf_ops_var3( integer       k_G,
-                                   integer       m_A,
-                                   integer       n_A,
-                                   scomplex* buff_G, integer rs_G, integer cs_G,
-                                   float*    buff_A, integer rs_A, integer cs_A )
+FLA_Error FLA_Apply_G_rf_ops_var3( aocl_int64_t       k_G,
+                                   aocl_int64_t       m_A,
+                                   aocl_int64_t       n_A,
+                                   scomplex* buff_G, aocl_int64_t rs_G, aocl_int64_t cs_G,
+                                   float*    buff_A, aocl_int64_t rs_A, aocl_int64_t cs_A )
 {
 	return FLA_SUCCESS;
 }
 
-FLA_Error FLA_Apply_G_rf_opd_var3( integer       k_G,
-                                   integer       m_A,
-                                   integer       n_A,
-                                   dcomplex* buff_G, integer rs_G, integer cs_G,
-                                   double*   buff_A, integer rs_A, integer cs_A )
+FLA_Error FLA_Apply_G_rf_opd_var3( aocl_int64_t       k_G,
+                                   aocl_int64_t       m_A,
+                                   aocl_int64_t       n_A,
+                                   dcomplex* buff_G, aocl_int64_t rs_G, aocl_int64_t cs_G,
+                                   double*   buff_A, aocl_int64_t rs_A, aocl_int64_t cs_A )
 {
 	double    one  = bl1_d1();
 	double    zero = bl1_d0();
@@ -132,10 +132,10 @@ FLA_Error FLA_Apply_G_rf_opd_var3( integer       k_G,
 	double*   a1;
 	double*   a2;
 	dcomplex* g11;
-	integer       j, g, k;
-	integer       nG, nG_app;
-	integer       twok_minus_1;
-	integer       offset;
+	aocl_int64_t       j, g, k;
+	aocl_int64_t       nG, nG_app;
+	aocl_int64_t       twok_minus_1;
+	aocl_int64_t       offset;
 
 	twok_minus_1 = 2 * ( k_G - 1 );
 	nG           = n_A - 1;
@@ -233,20 +233,20 @@ FLA_Error FLA_Apply_G_rf_opd_var3( integer       k_G,
 	return FLA_SUCCESS;
 }
 
-FLA_Error FLA_Apply_G_rf_opc_var3( integer       k_G,
-                                   integer       m_A,
-                                   integer       n_A,
-                                   scomplex* buff_G, integer rs_G, integer cs_G,
-                                   scomplex* buff_A, integer rs_A, integer cs_A )
+FLA_Error FLA_Apply_G_rf_opc_var3( aocl_int64_t       k_G,
+                                   aocl_int64_t       m_A,
+                                   aocl_int64_t       n_A,
+                                   scomplex* buff_G, aocl_int64_t rs_G, aocl_int64_t cs_G,
+                                   scomplex* buff_A, aocl_int64_t rs_A, aocl_int64_t cs_A )
 {
 	return FLA_SUCCESS;
 }
 
-FLA_Error FLA_Apply_G_rf_opz_var3( integer       k_G,
-                                   integer       m_A,
-                                   integer       n_A,
-                                   dcomplex* buff_G, integer rs_G, integer cs_G,
-                                   dcomplex* buff_A, integer rs_A, integer cs_A )
+FLA_Error FLA_Apply_G_rf_opz_var3( aocl_int64_t       k_G,
+                                   aocl_int64_t       m_A,
+                                   aocl_int64_t       n_A,
+                                   dcomplex* buff_G, aocl_int64_t rs_G, aocl_int64_t cs_G,
+                                   dcomplex* buff_A, aocl_int64_t rs_A, aocl_int64_t cs_A )
 {
 	double    one  = bl1_d1();
 	double    zero = bl1_d0();
@@ -255,10 +255,10 @@ FLA_Error FLA_Apply_G_rf_opz_var3( integer       k_G,
 	dcomplex* a1;
 	dcomplex* a2;
 	dcomplex* g11;
-	integer       j, g, k;
-	integer       nG, nG_app;
-	integer       twok_minus_1;
-	integer       offset;
+	aocl_int64_t       j, g, k;
+	aocl_int64_t       nG, nG_app;
+	aocl_int64_t       twok_minus_1;
+	aocl_int64_t       offset;
 
 	twok_minus_1 = 2 * ( k_G - 1 );
 	nG           = n_A - 1;

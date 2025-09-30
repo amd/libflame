@@ -113,8 +113,24 @@ static doublereal c_b11 = 1.;
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void dlacon_(integer *n, doublereal *v, doublereal *x, integer *isgn, doublereal *est,
-             integer *kase)
+/** Generated wrapper function */
+void dlacon_(aocl_int_t *n, doublereal *v, doublereal *x, aocl_int_t *isgn, doublereal *est,
+             aocl_int_t *kase)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_dlacon(n, v, x, isgn, est, kase);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t kase_64 = *kase;
+
+    aocl_lapack_dlacon(&n_64, v, x, isgn, est, &kase_64);
+
+    *kase = (aocl_int_t)kase_64;
+#endif
+}
+
+void aocl_lapack_dlacon(aocl_int64_t *n, doublereal *v, doublereal *x, aocl_int_t *isgn,
+                        doublereal *est, aocl_int64_t *kase)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dlacon inputs: n %" FLA_IS ", kase %" FLA_IS "", *n, *kase);
@@ -125,17 +141,12 @@ void dlacon_(integer *n, doublereal *v, doublereal *x, integer *isgn, doublereal
     double d_sign(doublereal *, doublereal *);
     integer i_dnnt(doublereal *);
     /* Local variables */
-    integer i__;
+    aocl_int64_t i__;
     doublereal temp;
-    static integer jump = 0;
-    static integer j = 0;
-    static integer iter = 0;
-    extern doublereal dasum_(integer *, doublereal *, integer *);
-    integer jlast;
-    extern /* Subroutine */
-        void
-        dcopy_(integer *, doublereal *, integer *, doublereal *, integer *);
-    extern integer idamax_(integer *, doublereal *, integer *);
+    static aocl_int64_t jump = 0;
+    static aocl_int64_t j = 0;
+    static aocl_int64_t iter = 0;
+    aocl_int64_t jlast;
     doublereal altsgn, estold;
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -270,7 +281,7 @@ L90: /* TEST FOR CYCLING. */
     /* X HAS BEEN OVERWRITTEN BY TRANSPOSE(A)*X. */
 L110:
     jlast = j;
-    j = idamax_(n, &x[1], &c__1);
+    j = aocl_blas_idamax(n, &x[1], &c__1);
     if(x[jlast] != (d__1 = x[j], f2c_dabs(d__1)) && iter < 5)
     {
         ++iter;
@@ -293,7 +304,7 @@ L120:
     /* ................ ENTRY (JUMP = 5) */
     /* X HAS BEEN OVERWRITTEN BY A*X. */
 L140:
-    temp = dasum_(n, &x[1], &c__1) / (doublereal)(*n * 3) * 2.;
+    temp = aocl_blas_dasum(n, &x[1], &c__1) / (doublereal)(*n * 3) * 2.;
     if(temp > *est)
     {
         aocl_blas_dcopy(n, &x[1], &c__1, &v[1], &c__1);

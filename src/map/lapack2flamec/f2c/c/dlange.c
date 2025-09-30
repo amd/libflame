@@ -9,7 +9,7 @@
 #include "FLA_f2c.h" /* Table of constant values */
 #include "fla_lapack_x86_common.h"
 
-static integer c__1 = 1;
+static aocl_int64_t c__1 = 1;
 /* > \brief \b DLANGE returns the value of the 1-norm, Frobenius norm, infinity-norm, or the largest
  * absolute value of any element of a general rectangular matrix. */
 /* =========== DOCUMENTATION =========== */
@@ -116,25 +116,37 @@ otherwise, WORK is not */
 /* > \author NAG Ltd. */
 /* > \ingroup doubleGEauxiliary */
 /* ===================================================================== */
-doublereal dlange_(char *norm, integer *m, integer *n, doublereal *a, integer *lda,
-                   doublereal *work)
+/** Generated wrapper function */
+double dlange_(char *norm, aocl_int_t *m, aocl_int_t *n, doublereal *a, aocl_int_t *lda,
+               doublereal *work)
+{
+#if FLA_ENABLE_ILP64
+    return aocl_lapack_dlange(norm, m, n, a, lda, work);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t lda_64 = *lda;
+
+    return aocl_lapack_dlange(norm, &m_64, &n_64, a, &lda_64, work);
+#endif
+}
+
+doublereal aocl_lapack_dlange(char *norm, aocl_int64_t *m, aocl_int64_t *n, doublereal *a,
+                              aocl_int64_t *lda, doublereal *work)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dlange inputs: norm %c, m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS "",
                       *norm, *m, *n, *lda);
     /* System generated locals */
-    integer a_dim1, a_offset, i__1, i__2;
+    aocl_int64_t a_dim1, a_offset, i__1, i__2;
     doublereal ret_val, d__1;
     /* Builtin functions */
     double sqrt(doublereal);
     /* Local variables */
-    integer i__, j, j_a_dim;
+    aocl_int64_t i__, j, j_a_dim;
     doublereal sum, temp, scale;
-    extern logical lsame_(char *, char *, integer, integer);
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     doublereal value;
-    extern /* Subroutine */
-        void
-        dlassq_(integer *, doublereal *, integer *, doublereal *, doublereal *);
     /* -- LAPACK auxiliary routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -259,7 +271,7 @@ doublereal dlange_(char *norm, integer *m, integer *n, doublereal *a, integer *l
         i__1 = *n;
         for(j = 1; j <= i__1; ++j)
         {
-            dlassq_(m, &a[j * a_dim1 + 1], &c__1, &scale, &sum);
+            aocl_lapack_dlassq(m, &a[j * a_dim1 + 1], &c__1, &scale, &sum);
             /* L90: */
         }
         value = scale * sqrt(sum);

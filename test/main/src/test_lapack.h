@@ -262,7 +262,7 @@ extern char fla_test_binary_name[MAX_BINARY_NAME_LENGTH + 1];
             func_str = "UNMLQ";                               \
     }
 
-/* Macro to skip complex and double complex tests of not supported APIs */
+/* Macro to skip scomplex and double scomplex tests of not supported APIs */
 #define FLA_SKIP_TEST(datatype_char, func_str)                                      \
     ((((same_char(datatype_char, 'c') || same_char(datatype_char, 'z'))             \
        && strcmp(func_str, "STEVD") == 0)                                           \

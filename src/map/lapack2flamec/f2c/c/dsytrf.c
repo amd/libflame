@@ -182,8 +182,26 @@ the routine */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void dsytrf_(char *uplo, integer *n, doublereal *a, integer *lda, integer *ipiv, doublereal *work,
-             integer *lwork, integer *info)
+/** Generated wrapper function */
+void dsytrf_(char *uplo, aocl_int_t *n, doublereal *a, aocl_int_t *lda, aocl_int_t *ipiv,
+             doublereal *work, aocl_int_t *lwork, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_dsytrf(uplo, n, a, lda, ipiv, work, lwork, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t lwork_64 = *lwork;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_dsytrf(uplo, &n_64, a, &lda_64, ipiv, work, &lwork_64, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_dsytrf(char *uplo, aocl_int64_t *n, doublereal *a, aocl_int64_t *lda,
+                        aocl_int_t *ipiv, doublereal *work, aocl_int64_t *lwork, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dsytrf inputs: uplo %c, n %" FLA_IS ", lda %" FLA_IS ", lwork %" FLA_IS "",
@@ -191,20 +209,11 @@ void dsytrf_(char *uplo, integer *n, doublereal *a, integer *lda, integer *ipiv,
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, i__1, i__2;
     /* Local variables */
-    integer j, k, kb, nb, iws;
-    extern logical lsame_(char *, char *, integer, integer);
-    integer nbmin, iinfo;
+    aocl_int64_t j, k, kb, nb, iws;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    aocl_int64_t nbmin, iinfo;
     logical upper;
-    extern /* Subroutine */
-        void
-        dsytf2_(char *, integer *, doublereal *, integer *, integer *, integer *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
-    extern /* Subroutine */
-        void
-        dlasyf_(char *, integer *, integer *, integer *, doublereal *, integer *, integer *,
-                doublereal *, integer *, integer *);
-    integer ldwork, lwkopt;
+    aocl_int64_t ldwork, lwkopt;
     logical lquery;
     /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -253,7 +262,7 @@ void dsytrf_(char *uplo, integer *n, doublereal *a, integer *lda, integer *ipiv,
     if(*info == 0)
     {
         /* Determine the block size */
-        nb = ilaenv_(&c__1, "DSYTRF", uplo, n, &c_n1, &c_n1, &c_n1);
+        nb = aocl_lapack_ilaenv(&c__1, "DSYTRF", uplo, n, &c_n1, &c_n1, &c_n1);
         /* Computing MAX */
         i__1 = 1;
         i__2 = *n * nb; // , expr subst
@@ -263,7 +272,7 @@ void dsytrf_(char *uplo, integer *n, doublereal *a, integer *lda, integer *ipiv,
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("DSYTRF", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("DSYTRF", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -284,7 +293,8 @@ void dsytrf_(char *uplo, integer *n, doublereal *a, integer *lda, integer *ipiv,
             nb = fla_max(i__1, 1);
             /* Computing MAX */
             i__1 = 2;
-            i__2 = ilaenv_(&c__2, "DSYTRF", uplo, n, &c_n1, &c_n1, &c_n1); // , expr subst
+            i__2
+                = aocl_lapack_ilaenv(&c__2, "DSYTRF", uplo, n, &c_n1, &c_n1, &c_n1); // , expr subst
             nbmin = fla_max(i__1, i__2);
         }
     }
@@ -349,8 +359,8 @@ void dsytrf_(char *uplo, integer *n, doublereal *a, integer *lda, integer *ipiv,
             /* Factorize columns k:k+kb-1 of A and use blocked code to */
             /* update columns k+kb:n */
             i__1 = *n - k + 1;
-            dlasyf_(uplo, &i__1, &nb, &kb, &a[k + k * a_dim1], lda, &ipiv[k], &work[1], &ldwork,
-                    &iinfo);
+            aocl_lapack_dlasyf(uplo, &i__1, &nb, &kb, &a[k + k * a_dim1], lda, &ipiv[k], &work[1],
+                               &ldwork, &iinfo);
         }
         else
         {

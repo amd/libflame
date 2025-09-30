@@ -5,10 +5,10 @@
 #include "FLA_f2c.h"
 #include "FLA_lapack2flame_return_defs.h"
 
-int sgetrfnpi_check(integer *m, integer *n, integer *nfact, float *a, integer *lda, integer *info)
+int sgetrfnpi_check(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *nfact, float *a, aocl_int64_t *lda, aocl_int64_t *info)
 {
     /* System generated locals */
-    integer a_dim1, a_offset, i__1;
+    aocl_int64_t a_dim1, a_offset, i__1;
     /* Parameter adjustments */
     a_dim1 = *lda;
     a_offset = 1 + a_dim1;
@@ -35,7 +35,7 @@ int sgetrfnpi_check(integer *m, integer *n, integer *nfact, float *a, integer *l
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("SGETRFNPI", &i__1, (ftnlen)9);
+        aocl_blas_xerbla("SGETRFNPI", &i__1, (ftnlen)9);
         return LAPACK_FAILURE;
     }
     /* Quick return if possible */

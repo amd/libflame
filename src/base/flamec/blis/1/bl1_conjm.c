@@ -16,24 +16,24 @@
 #include "blis.h"
 #endif
 
-void bl1_sconjm( integer m, integer n, float* a, integer a_rs, integer a_cs )
+void bl1_sconjm( fla_dim_t m, fla_dim_t n, float* a, fla_dim_t a_rs, fla_dim_t a_cs )
 {
 	return;
 }
 
-void bl1_dconjm( integer m, integer n, double* a, integer a_rs, integer a_cs )
+void bl1_dconjm( fla_dim_t m, fla_dim_t n, double* a, fla_dim_t a_rs, fla_dim_t a_cs )
 {
 	return;
 }
 
-void bl1_cconjm( integer m, integer n, scomplex* a, integer a_rs, integer a_cs )
+void bl1_cconjm( fla_dim_t m, fla_dim_t n, scomplex* a, fla_dim_t a_rs, fla_dim_t a_cs )
 {
 	float   m1 = bl1_sm1();
 	float*  a_conj;
-	integer     lda, inca;
-	integer     n_iter;
-	integer     n_elem;
-	integer     j;
+	fla_dim_t     lda, inca;
+	fla_dim_t     n_iter;
+	fla_dim_t     n_elem;
+	fla_dim_t     j;
 
 	// Return early if possible.
 	if ( bl1_zero_dim2( m, n ) ) return;
@@ -75,14 +75,14 @@ void bl1_cconjm( integer m, integer n, scomplex* a, integer a_rs, integer a_cs )
 	}
 }
 
-void bl1_zconjm( integer m, integer n, dcomplex* a, integer a_rs, integer a_cs )
+void bl1_zconjm( fla_dim_t m, fla_dim_t n, dcomplex* a, fla_dim_t a_rs, fla_dim_t a_cs )
 {
 	double  m1 = bl1_dm1();
 	double* a_conj;
-	integer     lda, inca;
-	integer     n_iter;
-	integer     n_elem;
-	integer     j;
+	fla_dim_t     lda, inca;
+	fla_dim_t     n_iter;
+	fla_dim_t     n_elem;
+	fla_dim_t     j;
 
 	// Return early if possible.
 	if ( bl1_zero_dim2( m, n ) ) return;

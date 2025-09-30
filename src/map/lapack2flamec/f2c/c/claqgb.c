@@ -153,8 +153,28 @@
 /* > \ingroup complexGBauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-void claqgb_(integer *m, integer *n, integer *kl, integer *ku, complex *ab, integer *ldab,
-             real *r__, real *c__, real *rowcnd, real *colcnd, real *amax, char *equed)
+/** Generated wrapper function */
+void claqgb_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *kl, aocl_int_t *ku, scomplex *ab,
+             aocl_int_t *ldab, real *r__, real *c__, real *rowcnd, real *colcnd, real *amax,
+             char *equed)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_claqgb(m, n, kl, ku, ab, ldab, r__, c__, rowcnd, colcnd, amax, equed);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t kl_64 = *kl;
+    aocl_int64_t ku_64 = *ku;
+    aocl_int64_t ldab_64 = *ldab;
+
+    aocl_lapack_claqgb(&m_64, &n_64, &kl_64, &ku_64, ab, &ldab_64, r__, c__, rowcnd, colcnd, amax,
+                       equed);
+#endif
+}
+
+void aocl_lapack_claqgb(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *kl, aocl_int64_t *ku,
+                        scomplex *ab, aocl_int64_t *ldab, real *r__, real *c__, real *rowcnd,
+                        real *colcnd, real *amax, char *equed)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -173,7 +193,7 @@ void claqgb_(integer *m, integer *n, integer *kl, integer *ku, complex *ab, inte
     real r__1;
     scomplex q__1;
     /* Local variables */
-    integer i__, j;
+    aocl_int64_t i__, j;
     real cj, large, small_val;
     extern real slamch_(char *);
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */

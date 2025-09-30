@@ -16,7 +16,7 @@
 #include "blis.h"
 #endif
 
-void bl1_set_dims_with_trans( trans1_t trans, integer m, integer n, integer* m_new, integer* n_new )
+void bl1_set_dims_with_trans( trans1_t trans, fla_dim_t m, fla_dim_t n, fla_dim_t* m_new, fla_dim_t* n_new )
 {
 	if ( bl1_does_trans( trans ) )
 	{
@@ -30,7 +30,7 @@ void bl1_set_dims_with_trans( trans1_t trans, integer m, integer n, integer* m_n
 	}
 }
 
-void bl1_set_dim_with_side( side1_t side, integer m, integer n, integer* dim_new )
+void bl1_set_dim_with_side( side1_t side, fla_dim_t m, fla_dim_t n, fla_dim_t* dim_new )
 {
 	if ( bl1_is_left( side ) )
 	{

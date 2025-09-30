@@ -4,8 +4,8 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
-/* > \brief \b CHETF2 computes the factorization of a complex Hermitian matrix, using the diagonal
+static aocl_int64_t c__1 = 1;
+/* > \brief \b CHETF2 computes the factorization of a scomplex Hermitian matrix, using the diagonal
  * pivoting me thod (unblocked algorithm calling Level 2 BLAS). */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -184,7 +184,25 @@ static integer c__1 = 1;
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void chetf2_(char *uplo, integer *n, complex *a, integer *lda, integer *ipiv, integer *info)
+/** Generated wrapper function */
+void chetf2_(char *uplo, aocl_int_t *n, scomplex *a, aocl_int_t *lda, aocl_int_t *ipiv,
+             aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_chetf2(uplo, n, a, lda, ipiv, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_chetf2(uplo, &n_64, a, &lda_64, ipiv, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_chetf2(char *uplo, aocl_int64_t *n, scomplex *a, aocl_int64_t *lda,
+                        aocl_int_t *ipiv, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -214,25 +232,14 @@ void chetf2_(char *uplo, integer *n, complex *a, integer *lda, integer *ipiv, in
     aocl_int64_t kk, kp;
     scomplex wk;
     real tt;
-    complex wkm1, wkp1;
-    extern /* Subroutine */
-        void
-        cher_(char *, integer *, real *, complex *, integer *, complex *, integer *);
-    integer imax, jmax;
+    scomplex wkm1, wkp1;
+    aocl_int64_t imax, jmax;
     real alpha;
-    extern logical lsame_(char *, char *, integer, integer);
-    extern /* Subroutine */
-        void
-        cswap_(integer *, complex *, integer *, complex *, integer *);
-    integer kstep;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    aocl_int64_t kstep;
     logical upper;
     extern real slapy2_(real *, real *);
     real absakk;
-    extern integer icamax_(integer *, complex *, integer *);
-    extern /* Subroutine */
-        void
-        csscal_(integer *, real *, complex *, integer *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real colmax;
     extern logical sisnan_(real *);
     real rowmax;
@@ -286,7 +293,7 @@ void chetf2_(char *uplo, integer *n, complex *a, integer *lda, integer *ipiv, in
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("CHETF2", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("CHETF2", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
@@ -472,7 +479,7 @@ void chetf2_(char *uplo, integer *n, complex *a, integer *lda, integer *ipiv, in
                 r1 = 1.f / a[i__1].real;
                 i__1 = k - 1;
                 r__1 = -r1;
-                cher_(uplo, &i__1, &r__1, &a[k * a_dim1 + 1], &c__1, &a[a_offset], lda);
+                aocl_blas_cher(uplo, &i__1, &r__1, &a[k * a_dim1 + 1], &c__1, &a[a_offset], lda);
                 /* Store U(k) in column k */
                 i__1 = k - 1;
                 aocl_blas_csscal(&i__1, &r1, &a[k * a_dim1 + 1], &c__1);
@@ -768,8 +775,8 @@ void chetf2_(char *uplo, integer *n, complex *a, integer *lda, integer *ipiv, in
                     r1 = 1.f / a[i__1].real;
                     i__1 = *n - k;
                     r__1 = -r1;
-                    cher_(uplo, &i__1, &r__1, &a[k + 1 + k * a_dim1], &c__1,
-                          &a[k + 1 + (k + 1) * a_dim1], lda);
+                    aocl_blas_cher(uplo, &i__1, &r__1, &a[k + 1 + k * a_dim1], &c__1,
+                                   &a[k + 1 + (k + 1) * a_dim1], lda);
                     /* Store L(k) in column K */
                     i__1 = *n - k;
                     aocl_blas_csscal(&i__1, &r1, &a[k + 1 + k * a_dim1], &c__1);

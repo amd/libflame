@@ -134,8 +134,24 @@
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void zlatrz_(integer *m, integer *n, integer *l, doublecomplex *a, integer *lda, doublecomplex *tau,
-             doublecomplex *work)
+/** Generated wrapper function */
+void zlatrz_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *l, dcomplex *a, aocl_int_t *lda,
+             dcomplex *tau, dcomplex *work)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_zlatrz(m, n, l, a, lda, tau, work);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t l_64 = *l;
+    aocl_int64_t lda_64 = *lda;
+
+    aocl_lapack_zlatrz(&m_64, &n_64, &l_64, a, &lda_64, tau, work);
+#endif
+}
+
+void aocl_lapack_zlatrz(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *l, dcomplex *a,
+                        aocl_int64_t *lda, dcomplex *tau, dcomplex *work)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zlatrz inputs: m %" FLA_IS ", n %" FLA_IS ", l %" FLA_IS ", lda %" FLA_IS "",
@@ -147,14 +163,8 @@ void zlatrz_(integer *m, integer *n, integer *l, doublecomplex *a, integer *lda,
     /* Builtin functions */
     void d_cnjg(dcomplex *, dcomplex *);
     /* Local variables */
-    integer i__;
-    doublecomplex alpha;
-    extern /* Subroutine */
-        void
-        zlarz_(char *, integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *,
-               doublecomplex *, integer *, doublecomplex *),
-        zlarfg_(integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *),
-        zlacgv_(integer *, doublecomplex *, integer *);
+    aocl_int64_t i__;
+    dcomplex alpha;
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -208,7 +218,7 @@ void zlatrz_(integer *m, integer *n, integer *l, doublecomplex *a, integer *lda,
         alpha.real = z__1.real;
         alpha.imag = z__1.imag; // , expr subst
         i__1 = *l + 1;
-        zlarfg_(&i__1, &alpha, &a[i__ + (*n - *l + 1) * a_dim1], lda, &tau[i__]);
+        aocl_lapack_zlarfg(&i__1, &alpha, &a[i__ + (*n - *l + 1) * a_dim1], lda, &tau[i__]);
         i__1 = i__;
         d_cnjg(&z__1, &tau[i__]);
         tau[i__1].real = z__1.real;
@@ -217,8 +227,8 @@ void zlatrz_(integer *m, integer *n, integer *l, doublecomplex *a, integer *lda,
         i__1 = i__ - 1;
         i__2 = *n - i__ + 1;
         d_cnjg(&z__1, &tau[i__]);
-        zlarz_("Right", &i__1, &i__2, l, &a[i__ + (*n - *l + 1) * a_dim1], lda, &z__1,
-               &a[i__ * a_dim1 + 1], lda, &work[1]);
+        aocl_lapack_zlarz("Right", &i__1, &i__2, l, &a[i__ + (*n - *l + 1) * a_dim1], lda, &z__1,
+                          &a[i__ * a_dim1 + 1], lda, &work[1]);
         i__1 = i__ + i__ * a_dim1;
         d_cnjg(&z__1, &alpha);
         a[i__1].real = z__1.real;

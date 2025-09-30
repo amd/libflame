@@ -4,9 +4,9 @@
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
  /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
+static aocl_int64_t c__1 = 1;
 /* > \brief \b ZLANSY returns the value of the 1-norm, or the Frobenius norm, or the infinity norm,
- * or the ele ment of largest absolute value of a complex symmetric matrix. */
+ * or the ele ment of largest absolute value of a scomplex symmetric matrix. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
@@ -43,7 +43,7 @@ static integer c__1 = 1;
 /* > */
 /* > ZLANSY returns the value of the one norm, or the Frobenius norm, or */
 /* > the infinity norm, or the element of largest absolute value of a */
-/* > complex symmetric matrix A. */
+/* > scomplex symmetric matrix A. */
 /* > \endverbatim */
 /* > */
 /* > \return ZLANSY */
@@ -120,26 +120,37 @@ otherwise, */
 /* > \author NAG Ltd. */
 /* > \ingroup complex16SYauxiliary */
 /* ===================================================================== */
-doublereal zlansy_(char *norm, char *uplo, integer *n, doublecomplex *a, integer *lda,
+/** Generated wrapper function */
+doublereal zlansy_(char *norm, char *uplo, aocl_int_t *n, dcomplex *a, aocl_int_t *lda,
                    doublereal *work)
+{
+#if FLA_ENABLE_ILP64
+    return aocl_lapack_zlansy(norm, uplo, n, a, lda, work);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t lda_64 = *lda;
+
+    return aocl_lapack_zlansy(norm, uplo, &n_64, a, &lda_64, work);
+#endif
+}
+
+doublereal aocl_lapack_zlansy(char *norm, char *uplo, aocl_int64_t *n, dcomplex *a,
+                              aocl_int64_t *lda, doublereal *work)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zlansy inputs: norm %c, uplo %c, n %" FLA_IS ", lda %" FLA_IS "", *norm,
                       *uplo, *n, *lda);
     /* System generated locals */
-    integer a_dim1, a_offset, i__1, i__2;
+    aocl_int64_t a_dim1, a_offset, i__1, i__2;
     doublereal ret_val;
     /* Builtin functions */
-    double z_abs(doublecomplex *), sqrt(doublereal);
+    double z_abs(dcomplex *), sqrt(doublereal);
     /* Local variables */
-    integer i__, j;
+    aocl_int64_t i__, j;
     doublereal sum, absa, scale;
-    extern logical lsame_(char *, char *, integer, integer);
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     doublereal value;
     extern logical disnan_(doublereal *);
-    extern /* Subroutine */
-        void
-        zlassq_(integer *, doublecomplex *, integer *, doublereal *, doublereal *);
     /* -- LAPACK auxiliary routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -282,7 +293,7 @@ doublereal zlansy_(char *norm, char *uplo, integer *n, doublecomplex *a, integer
             for(j = 2; j <= i__1; ++j)
             {
                 i__2 = j - 1;
-                zlassq_(&i__2, &a[j * a_dim1 + 1], &c__1, &scale, &sum);
+                aocl_lapack_zlassq(&i__2, &a[j * a_dim1 + 1], &c__1, &scale, &sum);
                 /* L110: */
             }
         }
@@ -292,13 +303,13 @@ doublereal zlansy_(char *norm, char *uplo, integer *n, doublecomplex *a, integer
             for(j = 1; j <= i__1; ++j)
             {
                 i__2 = *n - j;
-                zlassq_(&i__2, &a[j + 1 + j * a_dim1], &c__1, &scale, &sum);
+                aocl_lapack_zlassq(&i__2, &a[j + 1 + j * a_dim1], &c__1, &scale, &sum);
                 /* L120: */
             }
         }
         sum *= 2;
         i__1 = *lda + 1;
-        zlassq_(n, &a[a_offset], &i__1, &scale, &sum);
+        aocl_lapack_zlassq(n, &a[a_offset], &i__1, &scale, &sum);
         value = scale * sqrt(sum);
     }
     ret_val = value;

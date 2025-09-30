@@ -268,9 +268,33 @@ the routine */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void ctrsen_(char *job, char *compq, logical *select, integer *n, complex *t, integer *ldt,
-             complex *q, integer *ldq, complex *w, integer *m, real *s, real *sep, complex *work,
-             integer *lwork, integer *info)
+/** Generated wrapper function */
+void ctrsen_(char *job, char *compq, logical *select, aocl_int_t *n, scomplex *t, aocl_int_t *ldt,
+             scomplex *q, aocl_int_t *ldq, scomplex *w, aocl_int_t *m, real *s, real *sep,
+             scomplex *work, aocl_int_t *lwork, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_ctrsen(job, compq, select, n, t, ldt, q, ldq, w, m, s, sep, work, lwork, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t ldt_64 = *ldt;
+    aocl_int64_t ldq_64 = *ldq;
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t lwork_64 = *lwork;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_ctrsen(job, compq, select, &n_64, t, &ldt_64, q, &ldq_64, w, &m_64, s, sep, work,
+                       &lwork_64, &info_64);
+
+    *m = (aocl_int_t)m_64;
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_ctrsen(char *job, char *compq, logical *select, aocl_int64_t *n, scomplex *t,
+                        aocl_int64_t *ldt, scomplex *q, aocl_int64_t *ldq, scomplex *w,
+                        aocl_int64_t *m, real *s, real *sep, scomplex *work, aocl_int64_t *lwork,
+                        aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -285,7 +309,7 @@ void ctrsen_(char *job, char *compq, logical *select, integer *n, complex *t, in
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
-    integer q_dim1, q_offset, t_dim1, t_offset, i__1, i__2, i__3;
+    aocl_int64_t q_dim1, q_offset, t_dim1, t_offset, i__1, i__2, i__3;
     real r__1;
     /* Builtin functions */
     double sqrt(doublereal);
@@ -294,31 +318,15 @@ void ctrsen_(char *job, char *compq, logical *select, integer *n, complex *t, in
     real est;
     aocl_int64_t kase, ierr;
     real scale;
-    extern logical lsame_(char *, char *, integer, integer);
-    integer isave[3], lwmin;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    aocl_int_t isave[3];
+    aocl_int64_t lwmin;
     logical wantq, wants;
     real rnorm;
-    extern /* Subroutine */
-        void
-        clacn2_(integer *, complex *, complex *, real *, integer *, integer *);
     real rwork[1];
-    extern real clange_(char *, integer *, integer *, complex *, integer *, real *);
-    extern /* Subroutine */
-        void
-        clacpy_(char *, integer *, integer *, complex *, integer *, complex *, integer *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical wantbh;
-    extern /* Subroutine */
-        void
-        ctrexc_(char *, integer *, complex *, integer *, complex *, integer *, integer *, integer *,
-                integer *);
     logical wantsp;
-    extern /* Subroutine */
-        void
-        ctrsyl_(char *, char *, integer *, integer *, integer *, complex *, integer *, complex *,
-                integer *, complex *, integer *, real *, integer *);
     logical lquery;
-    extern real sroundup_lwork(integer *);
     /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -414,14 +422,14 @@ void ctrsen_(char *job, char *compq, logical *select, integer *n, complex *t, in
     }
     if(*info == 0)
     {
-        r__1 = sroundup_lwork(&lwmin);
+        r__1 = aocl_lapack_sroundup_lwork(&lwmin);
         work[1].r = r__1;
         work[1].i = 0.f; // , expr subst
     }
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("CTRSEN", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("CTRSEN", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
@@ -454,7 +462,7 @@ void ctrsen_(char *job, char *compq, logical *select, integer *n, complex *t, in
             /* Swap the K-th eigenvalue to position KS. */
             if(k != ks)
             {
-                ctrexc_(compq, n, &t[t_offset], ldt, &q[q_offset], ldq, &k, &ks, &ierr);
+                aocl_lapack_ctrexc(compq, n, &t[t_offset], ldt, &q[q_offset], ldq, &k, &ks, &ierr);
             }
         }
         /* L20: */
@@ -463,12 +471,12 @@ void ctrsen_(char *job, char *compq, logical *select, integer *n, complex *t, in
     {
         /* Solve the Sylvester equation for R: */
         /* T11*R - R*T22 = scale*T12 */
-        clacpy_("F", &n1, &n2, &t[(n1 + 1) * t_dim1 + 1], ldt, &work[1], &n1);
-        ctrsyl_("N", "N", &c_n1, &n1, &n2, &t[t_offset], ldt, &t[n1 + 1 + (n1 + 1) * t_dim1], ldt,
-                &work[1], &n1, &scale, &ierr);
+        aocl_lapack_clacpy("F", &n1, &n2, &t[(n1 + 1) * t_dim1 + 1], ldt, &work[1], &n1);
+        aocl_lapack_ctrsyl("N", "N", &c_n1, &n1, &n2, &t[t_offset], ldt,
+                           &t[n1 + 1 + (n1 + 1) * t_dim1], ldt, &work[1], &n1, &scale, &ierr);
         /* Estimate the reciprocal of the condition number of the cluster */
         /* of eigenvalues. */
-        rnorm = clange_("F", &n1, &n2, &work[1], &n1, rwork);
+        rnorm = aocl_lapack_clange("F", &n1, &n2, &work[1], &n1, rwork);
         if(rnorm == 0.f)
         {
             *s = 1.f;
@@ -484,20 +492,22 @@ void ctrsen_(char *job, char *compq, logical *select, integer *n, complex *t, in
         est = 0.f;
         kase = 0;
     L30:
-        clacn2_(&nn, &work[nn + 1], &work[1], &est, &kase, isave);
+        aocl_lapack_clacn2(&nn, &work[nn + 1], &work[1], &est, &kase, isave);
         if(kase != 0)
         {
             if(kase == 1)
             {
                 /* Solve T11*R - R*T22 = scale*X. */
-                ctrsyl_("N", "N", &c_n1, &n1, &n2, &t[t_offset], ldt,
-                        &t[n1 + 1 + (n1 + 1) * t_dim1], ldt, &work[1], &n1, &scale, &ierr);
+                aocl_lapack_ctrsyl("N", "N", &c_n1, &n1, &n2, &t[t_offset], ldt,
+                                   &t[n1 + 1 + (n1 + 1) * t_dim1], ldt, &work[1], &n1, &scale,
+                                   &ierr);
             }
             else
             {
                 /* Solve T11**H*R - R*T22**H = scale*X. */
-                ctrsyl_("C", "C", &c_n1, &n1, &n2, &t[t_offset], ldt,
-                        &t[n1 + 1 + (n1 + 1) * t_dim1], ldt, &work[1], &n1, &scale, &ierr);
+                aocl_lapack_ctrsyl("C", "C", &c_n1, &n1, &n2, &t[t_offset], ldt,
+                                   &t[n1 + 1 + (n1 + 1) * t_dim1], ldt, &work[1], &n1, &scale,
+                                   &ierr);
             }
             goto L30;
         }
@@ -513,7 +523,7 @@ L40: /* Copy reordered eigenvalues to W. */
         w[i__2].imag = t[i__3].imag; // , expr subst
         /* L50: */
     }
-    r__1 = sroundup_lwork(&lwmin);
+    r__1 = aocl_lapack_sroundup_lwork(&lwmin);
     work[1].r = r__1;
     work[1].i = 0.f; // , expr subst
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);

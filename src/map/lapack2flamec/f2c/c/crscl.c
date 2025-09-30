@@ -37,7 +37,7 @@
 /* > */
 /* > \verbatim */
 /* > */
-/* > CRSCL multiplies an n-element complex vector x by the complex scalar */
+/* > CRSCL multiplies an n-element scomplex vector x by the scomplex scalar */
 /* > 1/a. This is done without overflow or underflow as long as */
 /* > the final result x/a does not overflow or underflow. */
 /* > \endverbatim */
@@ -78,29 +78,33 @@
 /* > \ingroup complexOTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-void crscl_(integer *n, complex *a, complex *x, integer *incx)
+/** Generated wrapper function */
+void crscl_(aocl_int_t *n, scomplex *a, scomplex *x, aocl_int_t *incx)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_crscl(n, a, x, incx);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t incx_64 = *incx;
+
+    aocl_lapack_crscl(&n_64, a, x, &incx_64);
+#endif
+}
+
+void aocl_lapack_crscl(aocl_int64_t *n, scomplex *a, scomplex *x, aocl_int64_t *incx)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("crscl inputs: n %" FLA_IS ",incx %" FLA_IS "", *n, *incx);
 
     /* System generated locals */
     real r__1, r__2;
-    complex q__1;
+    scomplex q__1;
     /* Builtin functions */
-    double r_imag(complex *);
+    double r_imag(scomplex *);
     /* Local variables */
     real ai, ar, ui, ov, ur, absi, absr;
-    extern /* Subroutine */
-        void
-        cscal_(integer *, complex *, complex *, integer *);
     extern real slamch_(char *);
-    extern /* Subroutine */
-        void
-        csscal_(integer *, real *, complex *, integer *);
     real safmin, safmax;
-    extern /* Subroutine */
-        void
-        csrscl_(integer *, real *, complex *, integer *);
     /* -- LAPACK auxiliary routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -141,7 +145,7 @@ void crscl_(integer *n, complex *a, complex *x, integer *incx)
     if(ai == 0.f)
     {
         /* If alpha is real, then we can use csrscl */
-        csrscl_(n, &ar, &x[1], incx);
+        aocl_lapack_csrscl(n, &ar, &x[1], incx);
     }
     else if(ar == 0.f)
     {
@@ -149,26 +153,26 @@ void crscl_(integer *n, complex *a, complex *x, integer *incx)
         /* alpha were real. */
         if(absi > safmax)
         {
-            csscal_(n, &safmin, &x[1], incx);
+            aocl_blas_csscal(n, &safmin, &x[1], incx);
             r__1 = -safmax / ai;
             q__1.r = 0.f;
             q__1.i = r__1; // , expr subst
-            cscal_(n, &q__1, &x[1], incx);
+            aocl_blas_cscal(n, &q__1, &x[1], incx);
         }
         else if(absi < safmin)
         {
             r__1 = -safmin / ai;
             q__1.r = 0.f;
             q__1.i = r__1; // , expr subst
-            cscal_(n, &q__1, &x[1], incx);
-            csscal_(n, &safmax, &x[1], incx);
+            aocl_blas_cscal(n, &q__1, &x[1], incx);
+            aocl_blas_csscal(n, &safmax, &x[1], incx);
         }
         else
         {
             r__1 = -1.f / ai;
             q__1.r = 0.f;
             q__1.i = r__1; // , expr subst
-            cscal_(n, &q__1, &x[1], incx);
+            aocl_blas_cscal(n, &q__1, &x[1], incx);
         }
     }
     else
@@ -189,8 +193,8 @@ void crscl_(integer *n, complex *a, complex *x, integer *incx)
             r__2 = -safmin / ui;
             q__1.r = r__1;
             q__1.i = r__2; // , expr subst
-            cscal_(n, &q__1, &x[1], incx);
-            csscal_(n, &safmax, &x[1], incx);
+            aocl_blas_cscal(n, &q__1, &x[1], incx);
+            aocl_blas_csscal(n, &safmax, &x[1], incx);
         }
         else if(f2c_abs(ur) > safmax || f2c_abs(ui) > safmax)
         {
@@ -201,11 +205,11 @@ void crscl_(integer *n, complex *a, complex *x, integer *incx)
                 r__2 = -1.f / ui;
                 q__1.r = r__1;
                 q__1.i = r__2; // , expr subst
-                cscal_(n, &q__1, &x[1], incx);
+                aocl_blas_cscal(n, &q__1, &x[1], incx);
             }
             else
             {
-                csscal_(n, &safmin, &x[1], incx);
+                aocl_blas_csscal(n, &safmin, &x[1], incx);
                 if(f2c_abs(ur) > ov || f2c_abs(ui) > ov)
                 {
                     /* Infs were generated. We do proper scaling to avoid them. */
@@ -225,7 +229,7 @@ void crscl_(integer *n, complex *a, complex *x, integer *incx)
                     r__2 = -1.f / ui;
                     q__1.r = r__1;
                     q__1.i = r__2; // , expr subst
-                    cscal_(n, &q__1, &x[1], incx);
+                    aocl_blas_cscal(n, &q__1, &x[1], incx);
                 }
                 else
                 {
@@ -233,7 +237,7 @@ void crscl_(integer *n, complex *a, complex *x, integer *incx)
                     r__2 = -safmax / ui;
                     q__1.r = r__1;
                     q__1.i = r__2; // , expr subst
-                    cscal_(n, &q__1, &x[1], incx);
+                    aocl_blas_cscal(n, &q__1, &x[1], incx);
                 }
             }
         }
@@ -243,7 +247,7 @@ void crscl_(integer *n, complex *a, complex *x, integer *incx)
             r__2 = -1.f / ui;
             q__1.r = r__1;
             q__1.i = r__2; // , expr subst
-            cscal_(n, &q__1, &x[1], incx);
+            aocl_blas_cscal(n, &q__1, &x[1], incx);
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT

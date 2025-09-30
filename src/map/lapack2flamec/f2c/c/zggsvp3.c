@@ -4,9 +4,9 @@
  -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for
  libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static doublecomplex c_b1 = {0., 0.};
-static doublecomplex c_b2 = {1., 0.};
-static integer c_n1 = -1;
+static dcomplex c_b1 = {{0.}, {0.}};
+static dcomplex c_b2 = {{1.}, {0.}};
+static aocl_int64_t c_n1 = -1;
 /* > \brief \b ZGGSVP3 */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -284,12 +284,48 @@ the routine */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void zggsvp3_(char *jobu, char *jobv, char *jobq, integer *m, integer *p, integer *n,
-              doublecomplex *a, integer *lda, doublecomplex *b, integer *ldb, doublereal *tola,
-              doublereal *tolb, integer *k, integer *l, doublecomplex *u, integer *ldu,
-              doublecomplex *v, integer *ldv, doublecomplex *q, integer *ldq, integer *iwork,
-              doublereal *rwork, doublecomplex *tau, doublecomplex *work, integer *lwork,
-              integer *info)
+/** Generated wrapper function */
+void zggsvp3_(char *jobu, char *jobv, char *jobq, aocl_int_t *m, aocl_int_t *p, aocl_int_t *n,
+              dcomplex *a, aocl_int_t *lda, dcomplex *b, aocl_int_t *ldb,
+              doublereal *tola, doublereal *tolb, aocl_int_t *k, aocl_int_t *l, dcomplex *u,
+              aocl_int_t *ldu, dcomplex *v, aocl_int_t *ldv, dcomplex *q, aocl_int_t *ldq,
+              aocl_int_t *iwork, doublereal *rwork, dcomplex *tau, dcomplex *work,
+              aocl_int_t *lwork, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_zggsvp3(jobu, jobv, jobq, m, p, n, a, lda, b, ldb, tola, tolb, k, l, u, ldu, v, ldv,
+                        q, ldq, iwork, rwork, tau, work, lwork, info);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t p_64 = *p;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t ldb_64 = *ldb;
+    aocl_int64_t k_64 = *k;
+    aocl_int64_t l_64 = *l;
+    aocl_int64_t ldu_64 = *ldu;
+    aocl_int64_t ldv_64 = *ldv;
+    aocl_int64_t ldq_64 = *ldq;
+    aocl_int64_t lwork_64 = *lwork;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_zggsvp3(jobu, jobv, jobq, &m_64, &p_64, &n_64, a, &lda_64, b, &ldb_64, tola, tolb,
+                        &k_64, &l_64, u, &ldu_64, v, &ldv_64, q, &ldq_64, iwork, rwork, tau, work,
+                        &lwork_64, &info_64);
+
+    *k = (aocl_int_t)k_64;
+    *l = (aocl_int_t)l_64;
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_zggsvp3(char *jobu, char *jobv, char *jobq, aocl_int64_t *m, aocl_int64_t *p,
+                         aocl_int64_t *n, dcomplex *a, aocl_int64_t *lda, dcomplex *b,
+                         aocl_int64_t *ldb, doublereal *tola, doublereal *tolb, aocl_int64_t *k,
+                         aocl_int64_t *l, dcomplex *u, aocl_int64_t *ldu, dcomplex *v,
+                         aocl_int64_t *ldv, dcomplex *q, aocl_int64_t *ldq, aocl_int_t *iwork,
+                         doublereal *rwork, dcomplex *tau, dcomplex *work,
+                         aocl_int64_t *lwork, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zggsvp3 inputs: jobu %c, jobv %c, jobq %c, m %" FLA_IS ", p %" FLA_IS
@@ -297,39 +333,17 @@ void zggsvp3_(char *jobu, char *jobv, char *jobq, integer *m, integer *p, intege
                       ", ldu %" FLA_IS ", ldv %" FLA_IS ", ldq %" FLA_IS "",
                       *jobu, *jobv, *jobq, *m, *p, *n, *lda, *ldb, *k, *l, *ldu, *ldv, *ldq);
     /* System generated locals */
-    integer a_dim1, a_offset, b_dim1, b_offset, q_dim1, q_offset, u_dim1, u_offset, v_dim1,
+    aocl_int64_t a_dim1, a_offset, b_dim1, b_offset, q_dim1, q_offset, u_dim1, u_offset, v_dim1,
         v_offset, i__1, i__2, i__3;
-    doublecomplex z__1;
+    dcomplex z__1;
     /* Builtin functions */
-    double z_abs(doublecomplex *);
+    double z_abs(dcomplex *);
     /* Local variables */
-    integer i__, j;
-    extern logical lsame_(char *, char *i, integer, integer);
+    aocl_int64_t i__, j;
+    extern logical lsame_(char *, char *i, aocl_int64_t, aocl_int64_t);
     logical wantq, wantu, wantv;
-    extern /* Subroutine */
-        void
-        zgeqp3_(integer *, integer *, doublecomplex *, integer *, integer *, doublecomplex *,
-                doublecomplex *, integer *, doublereal *, integer *),
-        zgeqr2_(integer *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *,
-                integer *),
-        zgerq2_(integer *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *,
-                integer *),
-        zung2r_(integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *,
-                doublecomplex *, integer *),
-        zunm2r_(char *, char *, integer *, integer *, integer *, doublecomplex *, integer *,
-                doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *),
-        zunmr2_(char *, char *, integer *, integer *, integer *, doublecomplex *, integer *,
-                doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
-        zlacpy_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *,
-                integer *);
     logical forwrd;
-    extern /* Subroutine */
-        void
-        zlaset_(char *, integer *, integer *, doublecomplex *, doublecomplex *, doublecomplex *,
-                integer *),
-        zlapmt_(logical *, integer *, integer *, doublecomplex *, integer *, integer *);
-    integer lwkopt;
+    aocl_int64_t lwkopt;
     logical lquery;
     /* -- LAPACK computational routine (version 3.7.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -432,7 +446,8 @@ void zggsvp3_(char *jobu, char *jobv, char *jobq, integer *m, integer *p, intege
     /* Compute workspace */
     if(*info == 0)
     {
-        zgeqp3_(p, n, &b[b_offset], ldb, &iwork[1], &tau[1], &work[1], &c_n1, &rwork[1], info);
+        aocl_lapack_zgeqp3(p, n, &b[b_offset], ldb, &iwork[1], &tau[1], &work[1], &c_n1, &rwork[1],
+                           info);
         lwkopt = (integer)work[1].r;
         if(wantv)
         {
@@ -447,7 +462,8 @@ void zggsvp3_(char *jobu, char *jobv, char *jobq, integer *m, integer *p, intege
         {
             lwkopt = fla_max(lwkopt, *n);
         }
-        zgeqp3_(m, n, &a[a_offset], lda, &iwork[1], &tau[1], &work[1], &c_n1, &rwork[1], info);
+        aocl_lapack_zgeqp3(m, n, &a[a_offset], lda, &iwork[1], &tau[1], &work[1], &c_n1, &rwork[1],
+                           info);
         /* Computing MAX */
         i__1 = lwkopt;
         i__2 = (integer)work[1].r; // , expr subst
@@ -461,7 +477,7 @@ void zggsvp3_(char *jobu, char *jobv, char *jobq, integer *m, integer *p, intege
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("ZGGSVP3", &i__1, (ftnlen)7);
+        aocl_blas_xerbla("ZGGSVP3", &i__1, (ftnlen)7);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -478,9 +494,10 @@ void zggsvp3_(char *jobu, char *jobv, char *jobq, integer *m, integer *p, intege
         iwork[i__] = 0;
         /* L10: */
     }
-    zgeqp3_(p, n, &b[b_offset], ldb, &iwork[1], &tau[1], &work[1], lwork, &rwork[1], info);
+    aocl_lapack_zgeqp3(p, n, &b[b_offset], ldb, &iwork[1], &tau[1], &work[1], lwork, &rwork[1],
+                       info);
     /* Update A := A*P */
-    zlapmt_(&forwrd, m, n, &a[a_offset], lda, &iwork[1]);
+    aocl_lapack_zlapmt(&forwrd, m, n, &a[a_offset], lda, &iwork[1]);
     /* Determine the effective rank of matrix B. */
     *l = 0;
     i__1 = fla_min(*p, *n);
@@ -495,14 +512,14 @@ void zggsvp3_(char *jobu, char *jobv, char *jobq, integer *m, integer *p, intege
     if(wantv)
     {
         /* Copy the details of V, and form V. */
-        zlaset_("Full", p, p, &c_b1, &c_b1, &v[v_offset], ldv);
+        aocl_lapack_zlaset("Full", p, p, &c_b1, &c_b1, &v[v_offset], ldv);
         if(*p > 1)
         {
             i__1 = *p - 1;
-            zlacpy_("Lower", &i__1, n, &b[b_dim1 + 2], ldb, &v[v_dim1 + 2], ldv);
+            aocl_lapack_zlacpy("Lower", &i__1, n, &b[b_dim1 + 2], ldb, &v[v_dim1 + 2], ldv);
         }
         i__1 = fla_min(*p, *n);
-        zung2r_(p, p, &i__1, &v[v_offset], ldv, &tau[1], &work[1], info);
+        aocl_lapack_zung2r(p, p, &i__1, &v[v_offset], ldv, &tau[1], &work[1], info);
     }
     /* Clean up B */
     i__1 = *l - 1;
@@ -521,30 +538,30 @@ void zggsvp3_(char *jobu, char *jobv, char *jobq, integer *m, integer *p, intege
     if(*p > *l)
     {
         i__1 = *p - *l;
-        zlaset_("Full", &i__1, n, &c_b1, &c_b1, &b[*l + 1 + b_dim1], ldb);
+        aocl_lapack_zlaset("Full", &i__1, n, &c_b1, &c_b1, &b[*l + 1 + b_dim1], ldb);
     }
     if(wantq)
     {
         /* Set Q = I and Update Q := Q*P */
-        zlaset_("Full", n, n, &c_b1, &c_b2, &q[q_offset], ldq);
-        zlapmt_(&forwrd, n, n, &q[q_offset], ldq, &iwork[1]);
+        aocl_lapack_zlaset("Full", n, n, &c_b1, &c_b2, &q[q_offset], ldq);
+        aocl_lapack_zlapmt(&forwrd, n, n, &q[q_offset], ldq, &iwork[1]);
     }
     if(*p >= *l && *n != *l)
     {
         /* RQ factorization of ( S11 S12 ) = ( 0 S12 )*Z */
-        zgerq2_(l, n, &b[b_offset], ldb, &tau[1], &work[1], info);
+        aocl_lapack_zgerq2(l, n, &b[b_offset], ldb, &tau[1], &work[1], info);
         /* Update A := A*Z**H */
-        zunmr2_("Right", "Conjugate transpose", m, n, l, &b[b_offset], ldb, &tau[1], &a[a_offset],
-                lda, &work[1], info);
+        aocl_lapack_zunmr2("Right", "Conjugate transpose", m, n, l, &b[b_offset], ldb, &tau[1],
+                           &a[a_offset], lda, &work[1], info);
         if(wantq)
         {
             /* Update Q := Q*Z**H */
-            zunmr2_("Right", "Conjugate transpose", n, n, l, &b[b_offset], ldb, &tau[1],
-                    &q[q_offset], ldq, &work[1], info);
+            aocl_lapack_zunmr2("Right", "Conjugate transpose", n, n, l, &b[b_offset], ldb, &tau[1],
+                               &q[q_offset], ldq, &work[1], info);
         }
         /* Clean up B */
         i__1 = *n - *l;
-        zlaset_("Full", l, &i__1, &c_b1, &c_b1, &b[b_offset], ldb);
+        aocl_lapack_zlaset("Full", l, &i__1, &c_b1, &c_b1, &b[b_offset], ldb);
         i__1 = *n;
         for(j = *n - *l + 1; j <= i__1; ++j)
         {
@@ -571,7 +588,8 @@ void zggsvp3_(char *jobu, char *jobv, char *jobq, integer *m, integer *p, intege
         /* L70: */
     }
     i__1 = *n - *l;
-    zgeqp3_(m, &i__1, &a[a_offset], lda, &iwork[1], &tau[1], &work[1], lwork, &rwork[1], info);
+    aocl_lapack_zgeqp3(m, &i__1, &a[a_offset], lda, &iwork[1], &tau[1], &work[1], lwork, &rwork[1],
+                       info);
     /* Determine the effective rank of A11 */
     *k = 0;
     /* Computing MIN */
@@ -591,29 +609,29 @@ void zggsvp3_(char *jobu, char *jobv, char *jobq, integer *m, integer *p, intege
     i__2 = *m;
     i__3 = *n - *l; // , expr subst
     i__1 = fla_min(i__2, i__3);
-    zunm2r_("Left", "Conjugate transpose", m, l, &i__1, &a[a_offset], lda, &tau[1],
-            &a[(*n - *l + 1) * a_dim1 + 1], lda, &work[1], info);
+    aocl_lapack_zunm2r("Left", "Conjugate transpose", m, l, &i__1, &a[a_offset], lda, &tau[1],
+                       &a[(*n - *l + 1) * a_dim1 + 1], lda, &work[1], info);
     if(wantu)
     {
         /* Copy the details of U, and form U */
-        zlaset_("Full", m, m, &c_b1, &c_b1, &u[u_offset], ldu);
+        aocl_lapack_zlaset("Full", m, m, &c_b1, &c_b1, &u[u_offset], ldu);
         if(*m > 1)
         {
             i__1 = *m - 1;
             i__2 = *n - *l;
-            zlacpy_("Lower", &i__1, &i__2, &a[a_dim1 + 2], lda, &u[u_dim1 + 2], ldu);
+            aocl_lapack_zlacpy("Lower", &i__1, &i__2, &a[a_dim1 + 2], lda, &u[u_dim1 + 2], ldu);
         }
         /* Computing MIN */
         i__2 = *m;
         i__3 = *n - *l; // , expr subst
         i__1 = fla_min(i__2, i__3);
-        zung2r_(m, m, &i__1, &u[u_offset], ldu, &tau[1], &work[1], info);
+        aocl_lapack_zung2r(m, m, &i__1, &u[u_offset], ldu, &tau[1], &work[1], info);
     }
     if(wantq)
     {
         /* Update Q( 1:N, 1:N-L ) = Q( 1:N, 1:N-L )*P1 */
         i__1 = *n - *l;
-        zlapmt_(&forwrd, n, &i__1, &q[q_offset], ldq, &iwork[1]);
+        aocl_lapack_zlapmt(&forwrd, n, &i__1, &q[q_offset], ldq, &iwork[1]);
     }
     /* Clean up A: set the strictly lower triangular part of */
     /* A(1:K, 1:K) = 0, and A( K+1:M, 1:N-L ) = 0. */
@@ -634,23 +652,23 @@ void zggsvp3_(char *jobu, char *jobv, char *jobq, integer *m, integer *p, intege
     {
         i__1 = *m - *k;
         i__2 = *n - *l;
-        zlaset_("Full", &i__1, &i__2, &c_b1, &c_b1, &a[*k + 1 + a_dim1], lda);
+        aocl_lapack_zlaset("Full", &i__1, &i__2, &c_b1, &c_b1, &a[*k + 1 + a_dim1], lda);
     }
     if(*n - *l > *k)
     {
         /* RQ factorization of ( T11 T12 ) = ( 0 T12 )*Z1 */
         i__1 = *n - *l;
-        zgerq2_(k, &i__1, &a[a_offset], lda, &tau[1], &work[1], info);
+        aocl_lapack_zgerq2(k, &i__1, &a[a_offset], lda, &tau[1], &work[1], info);
         if(wantq)
         {
             /* Update Q( 1:N,1:N-L ) = Q( 1:N,1:N-L )*Z1**H */
             i__1 = *n - *l;
-            zunmr2_("Right", "Conjugate transpose", n, &i__1, k, &a[a_offset], lda, &tau[1],
-                    &q[q_offset], ldq, &work[1], info);
+            aocl_lapack_zunmr2("Right", "Conjugate transpose", n, &i__1, k, &a[a_offset], lda,
+                               &tau[1], &q[q_offset], ldq, &work[1], info);
         }
         /* Clean up A */
         i__1 = *n - *l - *k;
-        zlaset_("Full", k, &i__1, &c_b1, &c_b1, &a[a_offset], lda);
+        aocl_lapack_zlaset("Full", k, &i__1, &c_b1, &c_b1, &a[a_offset], lda);
         i__1 = *n - *l;
         for(j = *n - *l - *k + 1; j <= i__1; ++j)
         {
@@ -669,7 +687,8 @@ void zggsvp3_(char *jobu, char *jobv, char *jobq, integer *m, integer *p, intege
     {
         /* QR factorization of A( K+1:M,N-L+1:N ) */
         i__1 = *m - *k;
-        zgeqr2_(&i__1, l, &a[*k + 1 + (*n - *l + 1) * a_dim1], lda, &tau[1], &work[1], info);
+        aocl_lapack_zgeqr2(&i__1, l, &a[*k + 1 + (*n - *l + 1) * a_dim1], lda, &tau[1], &work[1],
+                           info);
         if(wantu)
         {
             /* Update U(:,K+1:M) := U(:,K+1:M)*U1 */
@@ -677,8 +696,9 @@ void zggsvp3_(char *jobu, char *jobv, char *jobq, integer *m, integer *p, intege
             /* Computing MIN */
             i__3 = *m - *k;
             i__2 = fla_min(i__3, *l);
-            zunm2r_("Right", "No transpose", m, &i__1, &i__2, &a[*k + 1 + (*n - *l + 1) * a_dim1],
-                    lda, &tau[1], &u[(*k + 1) * u_dim1 + 1], ldu, &work[1], info);
+            aocl_lapack_zunm2r("Right", "No transpose", m, &i__1, &i__2,
+                               &a[*k + 1 + (*n - *l + 1) * a_dim1], lda, &tau[1],
+                               &u[(*k + 1) * u_dim1 + 1], ldu, &work[1], info);
         }
         /* Clean up */
         i__1 = *n;

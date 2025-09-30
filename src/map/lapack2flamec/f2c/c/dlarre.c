@@ -4,8 +4,8 @@
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
  /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
-static integer c__2 = 2;
+static aocl_int64_t c__1 = 1;
+static aocl_int64_t c__2 = 2;
 /* > \brief \b DLARRE given the tridiagonal matrix T, sets small off-diagonal elements to zero and
  * for each un reduced block Ti, finds base representations and eigenvalues. */
 /* =========== DOCUMENTATION =========== */
@@ -303,79 +303,82 @@ IBLOCK(i)=1 if eigenvalue */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void dlarre_(char *range, integer *n, doublereal *vl, doublereal *vu, integer *il, integer *iu,
-             doublereal *d__, doublereal *e, doublereal *e2, doublereal *rtol1, doublereal *rtol2,
-             doublereal *spltol, integer *nsplit, integer *isplit, integer *m, doublereal *w,
-             doublereal *werr, doublereal *wgap, integer *iblock, integer *indexw, doublereal *gers,
-             doublereal *pivmin, doublereal *work, integer *iwork, integer *info)
+/** Generated wrapper function */
+void dlarre_(char *range, aocl_int_t *n, doublereal *vl, doublereal *vu, aocl_int_t *il,
+             aocl_int_t *iu, doublereal *d__, doublereal *e, doublereal *e2, doublereal *rtol1,
+             doublereal *rtol2, doublereal *spltol, aocl_int_t *nsplit, aocl_int_t *isplit,
+             aocl_int_t *m, doublereal *w, doublereal *werr, doublereal *wgap, aocl_int_t *iblock,
+             aocl_int_t *indexw, doublereal *gers, doublereal *pivmin, doublereal *work,
+             aocl_int_t *iwork, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_dlarre(range, n, vl, vu, il, iu, d__, e, e2, rtol1, rtol2, spltol, nsplit, isplit,
+                       m, w, werr, wgap, iblock, indexw, gers, pivmin, work, iwork, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t il_64 = *il;
+    aocl_int64_t iu_64 = *iu;
+    aocl_int64_t nsplit_64 = *nsplit;
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_dlarre(range, &n_64, vl, vu, &il_64, &iu_64, d__, e, e2, rtol1, rtol2, spltol,
+                       &nsplit_64, isplit, &m_64, w, werr, wgap, iblock, indexw, gers, pivmin, work,
+                       iwork, &info_64);
+
+    *nsplit = (aocl_int_t)nsplit_64;
+    *m = (aocl_int_t)m_64;
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_dlarre(char *range, aocl_int64_t *n, doublereal *vl, doublereal *vu,
+                        aocl_int64_t *il, aocl_int64_t *iu, doublereal *d__, doublereal *e,
+                        doublereal *e2, doublereal *rtol1, doublereal *rtol2, doublereal *spltol,
+                        aocl_int64_t *nsplit, aocl_int_t *isplit, aocl_int64_t *m, doublereal *w,
+                        doublereal *werr, doublereal *wgap, aocl_int_t *iblock, aocl_int_t *indexw,
+                        doublereal *gers, doublereal *pivmin, doublereal *work, aocl_int_t *iwork,
+                        aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dlarre inputs: range %c, n %" FLA_IS ", il %" FLA_IS ", iu %" FLA_IS "",
                       *range, *n, *il, *iu);
     /* System generated locals */
-    integer i__1, i__2;
+    aocl_int64_t i__1, i__2;
     doublereal d__1, d__2, d__3;
     /* Builtin functions */
     double sqrt(doublereal), log(doublereal);
     /* Local variables */
-    integer i__, j;
+    aocl_int64_t i__, j;
     doublereal s1, s2;
-    integer mb;
+    aocl_int64_t mb;
     doublereal gl;
-    integer in, mm;
+    aocl_int64_t in, mm;
     doublereal gu;
-    integer cnt;
+    aocl_int64_t cnt;
     doublereal eps, tau, tmp, rtl;
-    integer cnt1, cnt2;
+    aocl_int64_t cnt1, cnt2;
     doublereal tmp1, eabs;
-    integer iend, jblk;
+    aocl_int64_t iend, jblk;
     doublereal eold;
-    integer indl;
+    aocl_int64_t indl;
     doublereal dmax__, emax;
-    integer wend, idum, indu;
+    aocl_int64_t wend, idum, indu;
     doublereal rtol;
     integer iseed[4];
     doublereal avgap, sigma;
-    extern logical lsame_(char *, char *, integer, integer);
-    integer iinfo;
-    extern /* Subroutine */
-        void
-        dcopy_(integer *, doublereal *, integer *, doublereal *, integer *);
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    aocl_int64_t iinfo;
     logical norep;
-    extern /* Subroutine */
-        void
-        dlasq2_(integer *, doublereal *, integer *);
     extern doublereal dlamch_(char *);
-    integer ibegin;
+    aocl_int64_t ibegin;
     logical forceb;
-    integer irange;
+    aocl_int64_t irange;
     doublereal sgndef;
-    extern /* Subroutine */
-        void
-        dlarra_(integer *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *,
-                integer *, integer *, integer *),
-        dlarrb_(integer *, doublereal *, doublereal *, integer *, integer *, doublereal *,
-                doublereal *, integer *, doublereal *, doublereal *, doublereal *, doublereal *,
-                integer *, doublereal *, doublereal *, integer *, integer *),
-        dlarrc_(char *, integer *, doublereal *, doublereal *, doublereal *, doublereal *,
-                doublereal *, integer *, integer *, integer *, integer *);
-    integer wbegin;
-    extern /* Subroutine */
-        void
-        dlarrd_(char *, char *, integer *, doublereal *, doublereal *, integer *, integer *,
-                doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *,
-                integer *, integer *, integer *, doublereal *, doublereal *, doublereal *,
-                doublereal *, integer *, integer *, doublereal *, integer *, integer *);
+    aocl_int64_t wbegin;
     doublereal safmin, spdiam;
-    extern /* Subroutine */
-        void
-        dlarrk_(integer *, integer *, doublereal *, doublereal *, doublereal *, doublereal *,
-                doublereal *, doublereal *, doublereal *, doublereal *, integer *);
     logical usedqd;
     doublereal clwdth, isleft;
-    extern /* Subroutine */
-        void
-        dlarnv_(integer *, integer *, integer *, doublereal *);
     doublereal isrght, bsrtol, dpivot;
     /* -- LAPACK auxiliary routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -509,7 +512,7 @@ void dlarre_(char *range, integer *n, doublereal *vl, doublereal *vu, integer *i
     /* estimate that is wrong by at most a factor of SQRT(2) */
     spdiam = gu - gl;
     /* Compute splitting points */
-    dlarra_(n, &d__[1], &e[1], &e2[1], spltol, &spdiam, nsplit, &isplit[1], &iinfo);
+    aocl_lapack_dlarra(n, &d__[1], &e[1], &e2[1], spltol, &spdiam, nsplit, &isplit[1], &iinfo);
     /* Can force use of bisection instead of faster DQDS. */
     /* Option left in the code for future multisection work. */
     forceb = FALSE_;
@@ -530,9 +533,9 @@ void dlarre_(char *range, integer *n, doublereal *vl, doublereal *vu, integer *i
         /* An interval [LEFT,RIGHT] has converged if */
         /* RIGHT-LEFT.LT.RTOL*MAX(ABS(LEFT),ABS(RIGHT)) */
         /* DLARRD needs a WORK of size 4*N, IWORK of size 3*N */
-        dlarrd_(range, "B", n, vl, vu, il, iu, &gers[1], &bsrtol, &d__[1], &e[1], &e2[1], pivmin,
-                nsplit, &isplit[1], &mm, &w[1], &werr[1], vl, vu, &iblock[1], &indexw[1], &work[1],
-                &iwork[1], &iinfo);
+        aocl_lapack_dlarrd(range, "B", n, vl, vu, il, iu, &gers[1], &bsrtol, &d__[1], &e[1], &e2[1],
+                           pivmin, nsplit, &isplit[1], &mm, &w[1], &werr[1], vl, vu, &iblock[1],
+                           &indexw[1], &work[1], &iwork[1], &iinfo);
         if(iinfo != 0)
         {
             *info = -1;
@@ -571,7 +574,7 @@ void dlarre_(char *range, integer *n, doublereal *vl, doublereal *vu, integer *i
                 /* The gap for a single block doesn't matter for the later */
                 /* algorithm and is assigned an arbitrary large value */
                 wgap[*m] = 0.;
-                iblock[*m] = jblk;
+                iblock[*m] = (aocl_int_t)(jblk);
                 indexw[*m] = 1;
                 ++wbegin;
             }
@@ -655,8 +658,8 @@ void dlarre_(char *range, integer *n, doublereal *vl, doublereal *vu, integer *i
         {
             /* Case of DQDS */
             /* Find approximations to the extremal eigenvalues of the block */
-            dlarrk_(&in, &c__1, &gl, &gu, &d__[ibegin], &e2[ibegin], pivmin, &rtl, &tmp, &tmp1,
-                    &iinfo);
+            aocl_lapack_dlarrk(&in, &c__1, &gl, &gu, &d__[ibegin], &e2[ibegin], pivmin, &rtl, &tmp,
+                               &tmp1, &iinfo);
             if(iinfo != 0)
             {
                 *info = -1;
@@ -667,8 +670,8 @@ void dlarre_(char *range, integer *n, doublereal *vl, doublereal *vu, integer *i
             d__2 = gl;
             d__3 = tmp - tmp1 - eps * 100. * (d__1 = tmp - tmp1, f2c_abs(d__1)); // , expr subst
             isleft = fla_max(d__2, d__3);
-            dlarrk_(&in, &in, &gl, &gu, &d__[ibegin], &e2[ibegin], pivmin, &rtl, &tmp, &tmp1,
-                    &iinfo);
+            aocl_lapack_dlarrk(&in, &in, &gl, &gu, &d__[ibegin], &e2[ibegin], pivmin, &rtl, &tmp,
+                               &tmp1, &iinfo);
             if(iinfo != 0)
             {
                 *info = -1;
@@ -739,8 +742,8 @@ void dlarre_(char *range, integer *n, doublereal *vl, doublereal *vu, integer *i
         /* Compute the negcount at the 1/4 and 3/4 points */
         if(mb > 1)
         {
-            dlarrc_("T", &in, &s1, &s2, &d__[ibegin], &e[ibegin], pivmin, &cnt, &cnt1, &cnt2,
-                    &iinfo);
+            aocl_lapack_dlarrc("T", &in, &s1, &s2, &d__[ibegin], &e[ibegin], pivmin, &cnt, &cnt1,
+                               &cnt2, &iinfo);
         }
         if(mb == 1)
         {
@@ -922,9 +925,9 @@ void dlarre_(char *range, integer *n, doublereal *vl, doublereal *vu, integer *i
         /* Store the shift. */
         e[iend] = sigma;
         /* Store D and L. */
-        dcopy_(&in, &work[1], &c__1, &d__[ibegin], &c__1);
+        aocl_blas_dcopy(&in, &work[1], &c__1, &d__[ibegin], &c__1);
         i__2 = in - 1;
-        dcopy_(&i__2, &work[in + 1], &c__1, &e[ibegin], &c__1);
+        aocl_blas_dcopy(&i__2, &work[in + 1], &c__1, &e[ibegin], &c__1);
         if(mb > 1)
         {
             /* Perturb each entry of the base representation by a small */
@@ -936,7 +939,7 @@ void dlarre_(char *range, integer *n, doublereal *vl, doublereal *vu, integer *i
                 /* L122: */
             }
             i__2 = (in << 1) - 1;
-            dlarnv_(&c__2, iseed, &i__2, &work[1]);
+            aocl_lapack_dlarnv(&c__2, iseed, &i__2, &work[1]);
             i__2 = in - 1;
             for(i__ = 1; i__ <= i__2; ++i__)
             {
@@ -977,9 +980,9 @@ void dlarre_(char *range, integer *n, doublereal *vl, doublereal *vu, integer *i
             }
             /* use bisection to find EV from INDL to INDU */
             i__2 = indl - 1;
-            dlarrb_(&in, &d__[ibegin], &work[ibegin], &indl, &indu, rtol1, rtol2, &i__2, &w[wbegin],
-                    &wgap[wbegin], &werr[wbegin], &work[(*n << 1) + 1], &iwork[1], pivmin, &spdiam,
-                    &in, &iinfo);
+            aocl_lapack_dlarrb(&in, &d__[ibegin], &work[ibegin], &indl, &indu, rtol1, rtol2, &i__2,
+                               &w[wbegin], &wgap[wbegin], &werr[wbegin], &work[(*n << 1) + 1],
+                               &iwork[1], pivmin, &spdiam, &in, &iinfo);
             if(iinfo != 0)
             {
                 *info = -4;
@@ -996,8 +999,8 @@ void dlarre_(char *range, integer *n, doublereal *vl, doublereal *vu, integer *i
             for(i__ = indl; i__ <= i__2; ++i__)
             {
                 ++(*m);
-                iblock[*m] = jblk;
-                indexw[*m] = i__;
+                iblock[*m] = (aocl_int_t)(jblk);
+                indexw[*m] = (aocl_int_t)(i__);
                 /* L138: */
             }
         }
@@ -1026,7 +1029,7 @@ void dlarre_(char *range, integer *n, doublereal *vl, doublereal *vu, integer *i
             }
             work[(in << 1) - 1] = (d__1 = d__[iend], f2c_abs(d__1));
             work[in * 2] = 0.;
-            dlasq2_(&in, &work[1], &iinfo);
+            aocl_lapack_dlasq2(&in, &work[1], &iinfo);
             if(iinfo != 0)
             {
                 /* If IINFO = -5 then an index is part of a tight cluster */
@@ -1058,8 +1061,8 @@ void dlarre_(char *range, integer *n, doublereal *vl, doublereal *vu, integer *i
                 {
                     ++(*m);
                     w[*m] = work[in - i__ + 1];
-                    iblock[*m] = jblk;
-                    indexw[*m] = i__;
+                    iblock[*m] = (aocl_int_t)(jblk);
+                    indexw[*m] = (aocl_int_t)(i__);
                     /* L150: */
                 }
             }
@@ -1070,8 +1073,8 @@ void dlarre_(char *range, integer *n, doublereal *vl, doublereal *vu, integer *i
                 {
                     ++(*m);
                     w[*m] = -work[i__];
-                    iblock[*m] = jblk;
-                    indexw[*m] = i__;
+                    iblock[*m] = (aocl_int_t)(jblk);
+                    indexw[*m] = (aocl_int_t)(i__);
                     /* L160: */
                 }
             }

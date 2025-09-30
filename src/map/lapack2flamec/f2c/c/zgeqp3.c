@@ -7,10 +7,10 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
-static integer c_n1 = -1;
-static integer c__3 = 3;
-static integer c__2 = 2;
+static aocl_int64_t c__1 = 1;
+static aocl_int64_t c_n1 = -1;
+static aocl_int64_t c__3 = 3;
+static aocl_int64_t c__2 = 2;
 /* > \brief \b ZGEQP3 */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -151,7 +151,7 @@ the routine */
 /* > */
 /* > H(i) = I - tau * v * v**H */
 /* > */
-/* > where tau is a complex scalar, and v is a real/complex vector */
+/* > where tau is a scomplex scalar, and v is a real/scomplex vector */
 /* > with v(1:i-1) = 0 and v(i) = 1;
 v(i+1:m) is stored on exit in */
 /* > A(i+1:m,i), and tau in TAU(i). */
@@ -164,45 +164,42 @@ v(i+1:m) is stored on exit in */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void zgeqp3_(integer *m, integer *n, doublecomplex *a, integer *lda, integer *jpvt,
-             doublecomplex *tau, doublecomplex *work, integer *lwork, doublereal *rwork,
-             integer *info)
+/** Generated wrapper function */
+void zgeqp3_(aocl_int_t *m, aocl_int_t *n, dcomplex *a, aocl_int_t *lda, aocl_int_t *jpvt,
+             dcomplex *tau, dcomplex *work, aocl_int_t *lwork, doublereal *rwork,
+             aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_zgeqp3(m, n, a, lda, jpvt, tau, work, lwork, rwork, info);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t lwork_64 = *lwork;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_zgeqp3(&m_64, &n_64, a, &lda_64, jpvt, tau, work, &lwork_64, rwork, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_zgeqp3(aocl_int64_t *m, aocl_int64_t *n, dcomplex *a, aocl_int64_t *lda,
+                        aocl_int_t *jpvt, dcomplex *tau, dcomplex *work,
+                        aocl_int64_t *lwork, doublereal *rwork, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zgeqp3 inputs: m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS ", lwork %" FLA_IS
                       "",
                       *m, *n, *lda, *lwork);
     /* System generated locals */
-    integer a_dim1, a_offset, i__1, i__2, i__3;
-    doublecomplex z__1;
+    aocl_int64_t a_dim1, a_offset, i__1, i__2, i__3;
+    dcomplex z__1;
     /* Local variables */
-    integer j, jb, na, nb, sm, sn, nx, fjb, iws, nfxd, nbmin, minmn, minws;
-    extern /* Subroutine */
-        void
-        zswap_(integer *, doublecomplex *, integer *, doublecomplex *, integer *),
-        zlaqp2_(integer *, integer *, integer *, doublecomplex *, integer *, integer *,
-                doublecomplex *, doublereal *, doublereal *, doublecomplex *);
-    extern doublereal dznrm2_(integer *, doublecomplex *, integer *);
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
-    extern /* Subroutine */
-        void
-        zgeqrf_(integer *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *,
-                integer *, integer *);
-    integer topbmn, sminmn;
-    extern /* Subroutine */
-        void
-        zlaqps_(integer *, integer *, integer *, integer *, integer *, doublecomplex *, integer *,
-                integer *, doublecomplex *, doublereal *, doublereal *, doublecomplex *,
-                doublecomplex *, integer *);
-    integer lwkopt;
+    aocl_int64_t j, jb, na, nb, sm, sn, nx, fjb, iws, nfxd, nbmin, minmn, minws;
+    aocl_int64_t topbmn, sminmn;
+    aocl_int64_t lwkopt;
     logical lquery;
-    extern /* Subroutine */
-        void
-        zunmqr_(char *, char *, integer *, integer *, integer *, doublecomplex *, integer *,
-                doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, integer *);
     /* -- LAPACK computational routine (version 3.7.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -262,7 +259,7 @@ void zgeqp3_(integer *m, integer *n, doublecomplex *a, integer *lda, integer *jp
 #ifdef FLA_ENABLE_AMD_OPT
             nb = FLA_ZGEQP3_BLOCK_SMALL_THRESH;
 #else
-            nb = ilaenv_(&c__1, "ZGEQRF", " ", m, n, &c_n1, &c_n1);
+            nb = aocl_lapack_ilaenv(&c__1, "ZGEQRF", " ", m, n, &c_n1, &c_n1);
 #endif
             lwkopt = (*n + 1) * nb;
         }
@@ -278,7 +275,7 @@ void zgeqp3_(integer *m, integer *n, doublecomplex *a, integer *lda, integer *jp
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("ZGEQP3", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("ZGEQP3", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -296,19 +293,19 @@ void zgeqp3_(integer *m, integer *n, doublecomplex *a, integer *lda, integer *jp
         {
             if(j != nfxd)
             {
-                zswap_(m, &a[j * a_dim1 + 1], &c__1, &a[nfxd * a_dim1 + 1], &c__1);
+                aocl_blas_zswap(m, &a[j * a_dim1 + 1], &c__1, &a[nfxd * a_dim1 + 1], &c__1);
                 jpvt[j] = jpvt[nfxd];
-                jpvt[nfxd] = j;
+                jpvt[nfxd] = (aocl_int_t)(j);
             }
             else
             {
-                jpvt[j] = j;
+                jpvt[j] = (aocl_int_t)(j);
             }
             ++nfxd;
         }
         else
         {
-            jpvt[j] = j;
+            jpvt[j] = (aocl_int_t)(j);
         }
         /* L10: */
     }
@@ -321,7 +318,7 @@ void zgeqp3_(integer *m, integer *n, doublecomplex *a, integer *lda, integer *jp
     {
         na = fla_min(*m, nfxd);
         /* CC CALL ZGEQR2( M, NA, A, LDA, TAU, WORK, INFO ) */
-        zgeqrf_(m, &na, &a[a_offset], lda, &tau[1], &work[1], lwork, info);
+        aocl_lapack_zgeqrf(m, &na, &a[a_offset], lda, &tau[1], &work[1], lwork, info);
         /* Computing MAX */
         i__1 = iws;
         i__2 = (integer)work[1].r; // , expr subst
@@ -332,8 +329,8 @@ void zgeqp3_(integer *m, integer *n, doublecomplex *a, integer *lda, integer *jp
             /* CC $ NA, A, LDA, TAU, A( 1, NA+1 ), LDA, WORK, */
             /* CC $ INFO ) */
             i__1 = *n - na;
-            zunmqr_("Left", "Conjugate Transpose", m, &i__1, &na, &a[a_offset], lda, &tau[1],
-                    &a[(na + 1) * a_dim1 + 1], lda, &work[1], lwork, info);
+            aocl_lapack_zunmqr("Left", "Conjugate Transpose", m, &i__1, &na, &a[a_offset], lda,
+                               &tau[1], &a[(na + 1) * a_dim1 + 1], lda, &work[1], lwork, info);
             /* Computing MAX */
             i__1 = iws;
             i__2 = (integer)work[1].r; // , expr subst
@@ -351,7 +348,7 @@ void zgeqp3_(integer *m, integer *n, doublecomplex *a, integer *lda, integer *jp
 #ifdef FLA_ENABLE_AMD_OPT
         nb = FLA_ZGEQP3_BLOCK_SMALL_THRESH;
 #else
-        nb = ilaenv_(&c__1, "ZGEQRF", " ", &sm, &sn, &c_n1, &c_n1);
+        nb = aocl_lapack_ilaenv(&c__1, "ZGEQRF", " ", &sm, &sn, &c_n1, &c_n1);
 #endif
         nbmin = 2;
         nx = 0;
@@ -360,7 +357,7 @@ void zgeqp3_(integer *m, integer *n, doublecomplex *a, integer *lda, integer *jp
             /* Determine when to cross over from blocked to unblocked code. */
             /* Computing MAX */
             i__1 = 0;
-            i__2 = ilaenv_(&c__3, "ZGEQRF", " ", &sm, &sn, &c_n1, &c_n1); // , expr subst
+            i__2 = aocl_lapack_ilaenv(&c__3, "ZGEQRF", " ", &sm, &sn, &c_n1, &c_n1); // , expr subst
             nx = fla_max(i__1, i__2);
             if(nx < sminmn)
             {
@@ -374,7 +371,8 @@ void zgeqp3_(integer *m, integer *n, doublecomplex *a, integer *lda, integer *jp
                     nb = *lwork / (sn + 1);
                     /* Computing MAX */
                     i__1 = 2;
-                    i__2 = ilaenv_(&c__2, "ZGEQRF", " ", &sm, &sn, &c_n1, &c_n1); // , expr subst
+                    i__2 = aocl_lapack_ilaenv(&c__2, "ZGEQRF", " ", &sm, &sn, &c_n1,
+                                              &c_n1); // , expr subst
                     nbmin = fla_max(i__1, i__2);
                 }
             }
@@ -384,7 +382,7 @@ void zgeqp3_(integer *m, integer *n, doublecomplex *a, integer *lda, integer *jp
         i__1 = *n;
         for(j = nfxd + 1; j <= i__1; ++j)
         {
-            rwork[j] = dznrm2_(&sm, &a[nfxd + 1 + j * a_dim1], &c__1);
+            rwork[j] = aocl_blas_dznrm2(&sm, &a[nfxd + 1 + j * a_dim1], &c__1);
             rwork[*n + j] = rwork[j];
             /* L20: */
         }
@@ -405,8 +403,9 @@ void zgeqp3_(integer *m, integer *n, doublecomplex *a, integer *lda, integer *jp
                 i__1 = *n - j + 1;
                 i__2 = j - 1;
                 i__3 = *n - j + 1;
-                zlaqps_(m, &i__1, &i__2, &jb, &fjb, &a[j * a_dim1 + 1], lda, &jpvt[j], &tau[j],
-                        &rwork[j], &rwork[*n + j], &work[1], &work[jb + 1], &i__3);
+                aocl_lapack_zlaqps(m, &i__1, &i__2, &jb, &fjb, &a[j * a_dim1 + 1], lda, &jpvt[j],
+                                   &tau[j], &rwork[j], &rwork[*n + j], &work[1], &work[jb + 1],
+                                   &i__3);
                 j += fjb;
                 goto L30;
             }
@@ -420,8 +419,8 @@ void zgeqp3_(integer *m, integer *n, doublecomplex *a, integer *lda, integer *jp
         {
             i__1 = *n - j + 1;
             i__2 = j - 1;
-            zlaqp2_(m, &i__1, &i__2, &a[j * a_dim1 + 1], lda, &jpvt[j], &tau[j], &rwork[j],
-                    &rwork[*n + j], &work[1]);
+            aocl_lapack_zlaqp2(m, &i__1, &i__2, &a[j * a_dim1 + 1], lda, &jpvt[j], &tau[j],
+                               &rwork[j], &rwork[*n + j], &work[1]);
         }
     }
     z__1.r = (doublereal)lwkopt;

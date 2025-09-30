@@ -4,13 +4,13 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__2 = 2;
-static integer c_n1 = -1;
-static integer c__3 = 3;
-static integer c__4 = 4;
+static aocl_int64_t c__2 = 2;
+static aocl_int64_t c_n1 = -1;
+static aocl_int64_t c__3 = 3;
+static aocl_int64_t c__4 = 4;
 static real c_b21 = 1.f;
 static real c_b29 = 0.f;
-static integer c__1 = 1;
+static aocl_int64_t c__1 = 1;
 /* > \brief <b> SSBEVD_2STAGE computes the eigenvalues and, optionally, the left and/or right
  * eigenvectors for OTHER matrices</b> */
 /* @generated from dsbevd_2stage.f, fortran d -> s, Sat Nov 5 23:58:03 2016 */
@@ -234,67 +234,65 @@ i */
 /* > \endverbatim */
 /* ===================================================================== */
 /* Subroutine */
-void ssbevd_2stage_(char *jobz, char *uplo, integer *n, integer *kd, real *ab, integer *ldab,
-                    real *w, real *z__, integer *ldz, real *work, integer *lwork, integer *iwork,
-                    integer *liwork, integer *info)
+/** Generated wrapper function */
+void ssbevd_2stage_(char *jobz, char *uplo, aocl_int_t *n, aocl_int_t *kd, real *ab,
+                    aocl_int_t *ldab, real *w, real *z__, aocl_int_t *ldz, real *work,
+                    aocl_int_t *lwork, aocl_int_t *iwork, aocl_int_t *liwork, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_ssbevd_2stage(jobz, uplo, n, kd, ab, ldab, w, z__, ldz, work, lwork, iwork, liwork,
+                              info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t kd_64 = *kd;
+    aocl_int64_t ldab_64 = *ldab;
+    aocl_int64_t ldz_64 = *ldz;
+    aocl_int64_t lwork_64 = *lwork;
+    aocl_int64_t liwork_64 = *liwork;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_ssbevd_2stage(jobz, uplo, &n_64, &kd_64, ab, &ldab_64, w, z__, &ldz_64, work,
+                              &lwork_64, iwork, &liwork_64, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_ssbevd_2stage(char *jobz, char *uplo, aocl_int64_t *n, aocl_int64_t *kd, real *ab,
+                               aocl_int64_t *ldab, real *w, real *z__, aocl_int64_t *ldz,
+                               real *work, aocl_int64_t *lwork, aocl_int_t *iwork,
+                               aocl_int64_t *liwork, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF(
-             "ssbevd_2stage inputs: jobz %c, uplo %c, n %" FLA_IS ", kd %" FLA_IS ", ldab %" FLA_IS
-             ", ldz %" FLA_IS ", *liwork %" FLA_IS "",
-             *jobz, *uplo, *n, *kd, *ldab, *ldz, *liwork);
+    AOCL_DTL_SNPRINTF("ssbevd_2stage inputs: jobz %c, uplo %c, n %" FLA_IS ", kd %" FLA_IS
+                      ", ldab %" FLA_IS ", ldz %" FLA_IS ", *liwork %" FLA_IS "",
+                      *jobz, *uplo, *n, *kd, *ldab, *ldz, *liwork);
     /* System generated locals */
-    integer ab_dim1, ab_offset, z_dim1, z_offset, i__1, i__2;
+    aocl_int64_t ab_dim1, ab_offset, z_dim1, z_offset, i__1, i__2;
     real r__1;
     /* Builtin functions */
     double sqrt(doublereal);
     /* Local variables */
-    integer ib;
+    aocl_int64_t ib;
     real eps;
-    integer inde;
-    extern integer ilaenv2stage_(integer *, char *, char *, integer *, integer *, integer *,
-                                 integer *);
+    aocl_int64_t inde;
     real anrm, rmin, rmax;
-    extern /* Subroutine */
-        void
-        ssytrd_sb2st_(char *, char *, char *, integer *, integer *, real *, integer *, real *,
-                      real *, real *, integer *, real *, integer *, integer *);
     real sigma;
-    extern logical lsame_(char *, char *, integer, integer);
-    integer iinfo;
-    extern /* Subroutine */
-        void
-        sscal_(integer *, real *, real *, integer *),
-        sgemm_(char *, char *, integer *, integer *, integer *, real *, real *, integer *, real *,
-               integer *, real *, real *, integer *);
-    integer lhtrd, lwmin;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    aocl_int64_t iinfo;
+    aocl_int64_t lhtrd, lwmin;
     logical lower;
-    integer lwtrd;
+    aocl_int64_t lwtrd;
     logical wantz;
-    integer indwk2, llwrk2, iscale;
+    aocl_int64_t indwk2, llwrk2, iscale;
     extern real slamch_(char *);
     real safmin;
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real bignum;
-    extern real slansb_(char *, char *, integer *, integer *, real *, integer *, real *);
-    extern /* Subroutine */
-        void
-        slascl_(char *, integer *, integer *, real *, real *, integer *, integer *, real *,
-                integer *, integer *),
-        sstedc_(char *, integer *, real *, real *, real *, integer *, real *, integer *, integer *,
-                integer *, integer *),
-        slacpy_(char *, integer *, integer *, real *, integer *, real *, integer *);
-    integer indwrk, liwmin;
-    extern /* Subroutine */
-        void
-        ssterf_(integer *, real *, real *, integer *);
-    integer llwork;
+    aocl_int64_t indwrk, liwmin;
+    aocl_int64_t llwork;
     real smlnum;
     logical lquery;
-    extern real sroundup_lwork(integer *);
-    integer indhous;
+    aocl_int64_t indhous;
     /* -- LAPACK driver routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -337,9 +335,9 @@ void ssbevd_2stage_(char *jobz, char *uplo, integer *n, integer *kd, real *ab, i
     }
     else
     {
-        ib = ilaenv2stage_(&c__2, "SSYTRD_SB2ST", jobz, n, kd, &c_n1, &c_n1);
-        lhtrd = ilaenv2stage_(&c__3, "SSYTRD_SB2ST", jobz, n, kd, &ib, &c_n1);
-        lwtrd = ilaenv2stage_(&c__4, "SSYTRD_SB2ST", jobz, n, kd, &ib, &c_n1);
+        ib = aocl_lapack_ilaenv2stage(&c__2, "SSYTRD_SB2ST", jobz, n, kd, &c_n1, &c_n1);
+        lhtrd = aocl_lapack_ilaenv2stage(&c__3, "SSYTRD_SB2ST", jobz, n, kd, &ib, &c_n1);
+        lwtrd = aocl_lapack_ilaenv2stage(&c__4, "SSYTRD_SB2ST", jobz, n, kd, &ib, &c_n1);
         if(wantz)
         {
             liwmin = *n * 5 + 3;
@@ -382,8 +380,8 @@ void ssbevd_2stage_(char *jobz, char *uplo, integer *n, integer *kd, real *ab, i
     }
     if(*info == 0)
     {
-        work[1] = sroundup_lwork(&lwmin);
-        iwork[1] = liwmin;
+        work[1] = aocl_lapack_sroundup_lwork(&lwmin);
+        iwork[1] = (aocl_int_t)(liwmin);
         if(*lwork < lwmin && !lquery)
         {
             *info = -11;
@@ -396,7 +394,7 @@ void ssbevd_2stage_(char *jobz, char *uplo, integer *n, integer *kd, real *ab, i
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("SSBEVD_2STAGE", &i__1, (ftnlen)13);
+        aocl_blas_xerbla("SSBEVD_2STAGE", &i__1, (ftnlen)13);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -429,7 +427,7 @@ void ssbevd_2stage_(char *jobz, char *uplo, integer *n, integer *kd, real *ab, i
     rmin = sqrt(smlnum);
     rmax = sqrt(bignum);
     /* Scale matrix to allowable range, if necessary. */
-    anrm = slansb_("M", uplo, n, kd, &ab[ab_offset], ldab, &work[1]);
+    anrm = aocl_lapack_slansb("M", uplo, n, kd, &ab[ab_offset], ldab, &work[1]);
     iscale = 0;
     if(anrm > 0.f && anrm < rmin)
     {
@@ -445,11 +443,11 @@ void ssbevd_2stage_(char *jobz, char *uplo, integer *n, integer *kd, real *ab, i
     {
         if(lower)
         {
-            slascl_("B", kd, kd, &c_b21, &sigma, n, n, &ab[ab_offset], ldab, info);
+            aocl_lapack_slascl("B", kd, kd, &c_b21, &sigma, n, n, &ab[ab_offset], ldab, info);
         }
         else
         {
-            slascl_("Q", kd, kd, &c_b21, &sigma, n, n, &ab[ab_offset], ldab, info);
+            aocl_lapack_slascl("Q", kd, kd, &c_b21, &sigma, n, n, &ab[ab_offset], ldab, info);
         }
     }
     /* Call SSYTRD_SB2ST to reduce band symmetric matrix to tridiagonal form. */
@@ -459,29 +457,29 @@ void ssbevd_2stage_(char *jobz, char *uplo, integer *n, integer *kd, real *ab, i
     llwork = *lwork - indwrk + 1;
     indwk2 = indwrk + *n * *n;
     llwrk2 = *lwork - indwk2 + 1;
-    ssytrd_sb2st_("N", jobz, uplo, n, kd, &ab[ab_offset], ldab, &w[1], &work[inde], &work[indhous],
+    aocl_lapack_ssytrd_sb2st("N", jobz, uplo, n, kd, &ab[ab_offset], ldab, &w[1], &work[inde], &work[indhous],
                   &lhtrd, &work[indwrk], &llwork, &iinfo);
     /* For eigenvalues only, call SSTERF. For eigenvectors, call SSTEDC. */
     if(!wantz)
     {
-        ssterf_(n, &w[1], &work[inde], info);
+        aocl_lapack_ssterf(n, &w[1], &work[inde], info);
     }
     else
     {
-        sstedc_("I", n, &w[1], &work[inde], &work[indwrk], n, &work[indwk2], &llwrk2, &iwork[1],
-                liwork, info);
-        sgemm_("N", "N", n, n, n, &c_b21, &z__[z_offset], ldz, &work[indwrk], n, &c_b29,
-               &work[indwk2], n);
-        slacpy_("A", n, n, &work[indwk2], n, &z__[z_offset], ldz);
+        aocl_lapack_sstedc("I", n, &w[1], &work[inde], &work[indwrk], n, &work[indwk2], &llwrk2,
+                           &iwork[1], liwork, info);
+        aocl_blas_sgemm("N", "N", n, n, n, &c_b21, &z__[z_offset], ldz, &work[indwrk], n, &c_b29,
+                        &work[indwk2], n);
+        aocl_lapack_slacpy("A", n, n, &work[indwk2], n, &z__[z_offset], ldz);
     }
     /* If matrix was scaled, then rescale eigenvalues appropriately. */
     if(iscale == 1)
     {
         r__1 = 1.f / sigma;
-        sscal_(n, &r__1, &w[1], &c__1);
+        aocl_blas_sscal(n, &r__1, &w[1], &c__1);
     }
-    work[1] = sroundup_lwork(&lwmin);
-    iwork[1] = liwmin;
+    work[1] = aocl_lapack_sroundup_lwork(&lwmin);
+    iwork[1] = (aocl_int_t)(liwmin);
     AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SSBEVD_2STAGE */

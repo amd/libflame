@@ -136,29 +136,45 @@ otherwise it is between d(1) and d(2). See */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void dlaed6_(integer *kniter, logical *orgati, doublereal *rho, doublereal *d__, doublereal *z__,
-             doublereal *finit, doublereal *tau, integer *info)
+/** Generated wrapper function */
+void dlaed6_(aocl_int_t *kniter, logical *orgati, doublereal *rho, doublereal *d__, doublereal *z__,
+             doublereal *finit, doublereal *tau, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_dlaed6(kniter, orgati, rho, d__, z__, finit, tau, info);
+#else
+    aocl_int64_t kniter_64 = *kniter;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_dlaed6(&kniter_64, orgati, rho, d__, z__, finit, tau, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_dlaed6(aocl_int64_t *kniter, logical *orgati, doublereal *rho, doublereal *d__,
+                        doublereal *z__, doublereal *finit, doublereal *tau, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dlaed6 inputs: kniter %" FLA_IS ", orgati %" FLA_IS ", rho %lf", *kniter,
                       *orgati, *rho);
     /* System generated locals */
-    integer i__1;
+    aocl_int64_t i__1;
     doublereal d__1, d__2, d__3, d__4;
     /* Builtin functions */
-    double sqrt(doublereal), log(doublereal), pow_di(doublereal *, integer *);
+    double sqrt(doublereal), log(doublereal), pow_di(doublereal *, aocl_int64_t *);
     /* Local variables */
     doublereal a, b, c__, f;
-    integer i__;
+    aocl_int64_t i__;
     doublereal fc, df, ddf, lbd, eta, ubd;
-    integer iter;
+    aocl_int64_t iter;
     doublereal temp, temp1, temp2, temp3, temp4;
     logical scale;
-    integer niter;
+    aocl_int64_t niter;
     extern doublereal dlamch_(char *);
     doublereal dscale[3], sclfac, zscale[3], erretm, sclinv;
     static TLS_CLASS_SPEC doublereal eps, base, small1, sminv1, small2, sminv2;
-    static TLS_CLASS_SPEC integer r_once = 1;
+    static TLS_CLASS_SPEC aocl_int64_t r_once = 1;
     /* -- LAPACK computational routine (version 3.7.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */

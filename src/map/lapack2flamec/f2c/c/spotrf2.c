@@ -100,25 +100,35 @@ static real c_b11 = -1.f;
 /* > \ingroup realPOcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void spotrf2_(char *uplo, integer *n, real *a, integer *lda, integer *info)
+/** Generated wrapper function */
+void spotrf2_(char *uplo, aocl_int_t *n, real *a, aocl_int_t *lda, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_spotrf2(uplo, n, a, lda, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_spotrf2(uplo, &n_64, a, &lda_64, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_spotrf2(char *uplo, aocl_int64_t *n, real *a, aocl_int64_t *lda,
+                         aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     /* System generated locals */
-    integer a_dim1, a_offset, i__1;
+    aocl_int64_t a_dim1, a_offset, i__1;
     /* Builtin functions */
     double sqrt(doublereal);
     /* Local variables */
-    integer n1, n2;
-    extern logical lsame_(char *, char *, integer, integer);
-    integer iinfo;
+    aocl_int64_t n1, n2;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    aocl_int64_t iinfo;
     logical upper;
-    extern /* Subroutine */
-        void
-        strsm_(char *, char *, char *, char *, integer *, integer *, real *, real *, integer *,
-               real *, integer *),
-        ssyrk_(char *, char *, integer *, integer *, real *, real *, integer *, real *, real *,
-               integer *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern logical sisnan_(real *);
     /* -- LAPACK computational routine (version 3.8.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -163,7 +173,7 @@ void spotrf2_(char *uplo, integer *n, real *a, integer *lda, integer *info)
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("SPOTRF2", &i__1, (ftnlen)7);
+        aocl_blas_xerbla("SPOTRF2", &i__1, (ftnlen)7);
         return;
     }
     /* Quick return if possible */
@@ -189,7 +199,7 @@ void spotrf2_(char *uplo, integer *n, real *a, integer *lda, integer *info)
         n1 = *n / 2;
         n2 = *n - n1;
         /* Factor A11 */
-        spotrf2_(uplo, &n1, &a[a_dim1 + 1], lda, &iinfo);
+        aocl_lapack_spotrf2(uplo, &n1, &a[a_dim1 + 1], lda, &iinfo);
         if(iinfo != 0)
         {
             *info = iinfo;
@@ -199,12 +209,12 @@ void spotrf2_(char *uplo, integer *n, real *a, integer *lda, integer *info)
         if(upper)
         {
             /* Update and scale A12 */
-            strsm_("L", "U", "T", "N", &n1, &n2, &c_b9, &a[a_dim1 + 1], lda,
-                   &a[(n1 + 1) * a_dim1 + 1], lda);
+            aocl_blas_strsm("L", "U", "T", "N", &n1, &n2, &c_b9, &a[a_dim1 + 1], lda,
+                            &a[(n1 + 1) * a_dim1 + 1], lda);
             /* Update and factor A22 */
-            ssyrk_(uplo, "T", &n2, &n1, &c_b11, &a[(n1 + 1) * a_dim1 + 1], lda, &c_b9,
-                   &a[n1 + 1 + (n1 + 1) * a_dim1], lda);
-            spotrf2_(uplo, &n2, &a[n1 + 1 + (n1 + 1) * a_dim1], lda, &iinfo);
+            aocl_blas_ssyrk(uplo, "T", &n2, &n1, &c_b11, &a[(n1 + 1) * a_dim1 + 1], lda, &c_b9,
+                            &a[n1 + 1 + (n1 + 1) * a_dim1], lda);
+            aocl_lapack_spotrf2(uplo, &n2, &a[n1 + 1 + (n1 + 1) * a_dim1], lda, &iinfo);
             if(iinfo != 0)
             {
                 *info = iinfo + n1;
@@ -215,12 +225,12 @@ void spotrf2_(char *uplo, integer *n, real *a, integer *lda, integer *info)
         else
         {
             /* Update and scale A21 */
-            strsm_("R", "L", "T", "N", &n2, &n1, &c_b9, &a[a_dim1 + 1], lda, &a[n1 + 1 + a_dim1],
-                   lda);
+            aocl_blas_strsm("R", "L", "T", "N", &n2, &n1, &c_b9, &a[a_dim1 + 1], lda,
+                            &a[n1 + 1 + a_dim1], lda);
             /* Update and factor A22 */
-            ssyrk_(uplo, "N", &n2, &n1, &c_b11, &a[n1 + 1 + a_dim1], lda, &c_b9,
-                   &a[n1 + 1 + (n1 + 1) * a_dim1], lda);
-            spotrf2_(uplo, &n2, &a[n1 + 1 + (n1 + 1) * a_dim1], lda, &iinfo);
+            aocl_blas_ssyrk(uplo, "N", &n2, &n1, &c_b11, &a[n1 + 1 + a_dim1], lda, &c_b9,
+                            &a[n1 + 1 + (n1 + 1) * a_dim1], lda);
+            aocl_lapack_spotrf2(uplo, &n2, &a[n1 + 1 + (n1 + 1) * a_dim1], lda, &iinfo);
             if(iinfo != 0)
             {
                 *info = iinfo + n1;

@@ -233,8 +233,25 @@ b(i), i=1,..,n}
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void dlatps_(char *uplo, char *trans, char *diag, char *normin, integer *n, doublereal *ap,
-             doublereal *x, doublereal *scale, doublereal *cnorm, integer *info)
+/** Generated wrapper function */
+void dlatps_(char *uplo, char *trans, char *diag, char *normin, aocl_int_t *n, doublereal *ap,
+             doublereal *x, doublereal *scale, doublereal *cnorm, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_dlatps(uplo, trans, diag, normin, n, ap, x, scale, cnorm, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_dlatps(uplo, trans, diag, normin, &n_64, ap, x, scale, cnorm, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_dlatps(char *uplo, char *trans, char *diag, char *normin, aocl_int64_t *n,
+                        doublereal *ap, doublereal *x, doublereal *scale, doublereal *cnorm,
+                        aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dlatps inputs: uplo %c, trans %c, diag %c, normin %c, n %" FLA_IS "", *uplo,
@@ -249,25 +266,11 @@ void dlatps_(char *uplo, char *trans, char *diag, char *normin, integer *n, doub
     doublereal xbnd;
     aocl_int64_t imax;
     doublereal tmax, tjjs, xmax, grow, sumj;
-    extern /* Subroutine */
-        void
-        dscal_(integer *, doublereal *, doublereal *, integer *);
-    extern logical lsame_(char *, char *, integer, integer);
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     doublereal tscal, uscal;
-    extern doublereal dasum_(integer *, doublereal *, integer *);
-    integer jlast;
-    extern /* Subroutine */
-        void
-        daxpy_(integer *, doublereal *, doublereal *, integer *, doublereal *, integer *);
+    aocl_int64_t jlast;
     logical upper;
-    extern /* Subroutine */
-        void
-        dtpsv_(char *, char *, char *, integer *, doublereal *, doublereal *, integer *);
     extern doublereal dlamch_(char *);
-    extern integer idamax_(integer *, doublereal *, integer *);
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal bignum;
     logical notran;
     aocl_int64_t jfirst;
@@ -327,7 +330,7 @@ void dlatps_(char *uplo, char *trans, char *diag, char *normin, integer *n, doub
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("DLATPS", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("DLATPS", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -387,7 +390,7 @@ void dlatps_(char *uplo, char *trans, char *diag, char *normin, integer *n, doub
     }
     /* Compute a bound on the computed solution vector to see if the */
     /* Level 2 BLAS routine DTPSV can be used. */
-    j = idamax_(n, &x[1], &c__1);
+    j = aocl_blas_idamax(n, &x[1], &c__1);
     xmax = (d__1 = x[j], f2c_dabs(d__1));
     xbnd = xmax;
     if(notran)
@@ -683,9 +686,9 @@ void dlatps_(char *uplo, char *trans, char *diag, char *normin, integer *n, doub
                         /* x(1:j-1) := x(1:j-1) - x(j) * A(1:j-1,j) */
                         i__3 = j - 1;
                         d__1 = -x[j] * tscal;
-                        daxpy_(&i__3, &d__1, &ap[ip - j + 1], &c__1, &x[1], &c__1);
+                        aocl_blas_daxpy(&i__3, &d__1, &ap[ip - j + 1], &c__1, &x[1], &c__1);
                         i__3 = j - 1;
-                        i__ = idamax_(&i__3, &x[1], &c__1);
+                        i__ = aocl_blas_idamax(&i__3, &x[1], &c__1);
                         xmax = (d__1 = x[i__], f2c_dabs(d__1));
                     }
                     ip -= j;
@@ -698,9 +701,9 @@ void dlatps_(char *uplo, char *trans, char *diag, char *normin, integer *n, doub
                         /* x(j+1:n) := x(j+1:n) - x(j) * A(j+1:n,j) */
                         i__3 = *n - j;
                         d__1 = -x[j] * tscal;
-                        daxpy_(&i__3, &d__1, &ap[ip + 1], &c__1, &x[j + 1], &c__1);
+                        aocl_blas_daxpy(&i__3, &d__1, &ap[ip + 1], &c__1, &x[j + 1], &c__1);
                         i__3 = *n - j;
-                        i__ = j + idamax_(&i__3, &x[j + 1], &c__1);
+                        i__ = j + aocl_blas_idamax(&i__3, &x[j + 1], &c__1);
                         xmax = (d__1 = x[i__], f2c_dabs(d__1));
                     }
                     ip = ip + *n - j + 1;
@@ -759,12 +762,12 @@ void dlatps_(char *uplo, char *trans, char *diag, char *normin, integer *n, doub
                     if(upper)
                     {
                         i__3 = j - 1;
-                        sumj = ddot_(&i__3, &ap[ip - j + 1], &c__1, &x[1], &c__1);
+                        sumj = aocl_blas_ddot(&i__3, &ap[ip - j + 1], &c__1, &x[1], &c__1);
                     }
                     else if(j < *n)
                     {
                         i__3 = *n - j;
-                        sumj = ddot_(&i__3, &ap[ip + 1], &c__1, &x[j + 1], &c__1);
+                        sumj = aocl_blas_ddot(&i__3, &ap[ip + 1], &c__1, &x[j + 1], &c__1);
                     }
                 }
                 else

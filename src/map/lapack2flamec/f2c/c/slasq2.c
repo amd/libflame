@@ -4,8 +4,8 @@
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
  /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
-static integer c__2 = 2;
+static aocl_int64_t c__1 = 1;
+static aocl_int64_t c__2 = 2;
 /* > \brief \b SLASQ2 computes all the eigenvalues of the symmetric positive definite tridiagonal
  * matrix assoc iated with the qd Array Z to high relative accuracy. Used by sbdsqr and sstegr. */
 /* =========== DOCUMENTATION =========== */
@@ -110,52 +110,56 @@ static integer c__2 = 2;
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void slasq2_(integer *n, real *z__, integer *info)
+/** Generated wrapper function */
+void slasq2_(aocl_int_t *n, real *z__, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_slasq2(n, z__, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_slasq2(&n_64, z__, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_slasq2(aocl_int64_t *n, real *z__, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("slasq2 inputs: n %" FLA_IS "", *n);
     /* System generated locals */
-    integer i__1, i__2, i__3;
+    aocl_int64_t i__1, i__2, i__3;
     real r__1, r__2;
     /* Builtin functions */
     double sqrt(doublereal);
     /* Local variables */
     real d__, e, g;
-    integer k;
+    aocl_int64_t k;
     real s, t;
-    integer i0, i1, i4, n0, n1;
+    aocl_int64_t i0, i1, i4, n0, n1;
     real dn;
-    integer pp;
+    aocl_int64_t pp;
     real dn1, dn2, dee, eps, tau, tol;
-    integer ipn4;
+    aocl_int64_t ipn4;
     real tol2;
     logical ieee;
-    integer nbig;
+    aocl_int64_t nbig;
     real dmin__, emin, emax;
-    integer kmin, ndiv, iter;
+    aocl_int64_t kmin, ndiv, iter;
     real qmin, temp, qmax, zmax;
-    integer splt;
+    aocl_int64_t splt;
     real dmin1, dmin2;
-    integer nfail;
+    aocl_int64_t nfail;
     real desig, trace, sigma;
-    integer iinfo;
+    aocl_int64_t iinfo;
     real tempe, tempq;
-    integer ttype;
-    extern /* Subroutine */
-        void
-        slasq3_(integer *, integer *, real *, integer *, real *, real *, real *, real *, integer *,
-                integer *, integer *, logical *, integer *, real *, real *, real *, real *, real *,
-                real *, real *);
+    aocl_int64_t ttype;
     real deemin;
     extern real slamch_(char *);
-    integer iwhila, iwhilb;
+    aocl_int64_t iwhila, iwhilb;
     real oldemn, safmin;
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    extern /* Subroutine */
-        void
-        slasrt_(char *, integer *, real *, integer *);
     /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -190,7 +194,7 @@ void slasq2_(integer *n, real *z__, integer *info)
     if(*n < 0)
     {
         *info = -1;
-        xerbla_("SLASQ2", &c__1, (ftnlen)6);
+        aocl_blas_xerbla("SLASQ2", &c__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -205,7 +209,7 @@ void slasq2_(integer *n, real *z__, integer *info)
         if(z__[1] < 0.f)
         {
             *info = -201;
-            xerbla_("SLASQ2", &c__2, (ftnlen)6);
+            aocl_blas_xerbla("SLASQ2", &c__2, (ftnlen)6);
         }
         AOCL_DTL_TRACE_LOG_EXIT
         return;
@@ -216,21 +220,21 @@ void slasq2_(integer *n, real *z__, integer *info)
         if(z__[1] < 0.f)
         {
             *info = -201;
-            xerbla_("SLASQ2", &c__2, (ftnlen)6);
+            aocl_blas_xerbla("SLASQ2", &c__2, (ftnlen)6);
             AOCL_DTL_TRACE_LOG_EXIT
             return;
         }
         else if(z__[2] < 0.f)
         {
             *info = -202;
-            xerbla_("SLASQ2", &c__2, (ftnlen)6);
+            aocl_blas_xerbla("SLASQ2", &c__2, (ftnlen)6);
             AOCL_DTL_TRACE_LOG_EXIT
             return;
         }
         else if(z__[3] < 0.f)
         {
             *info = -203;
-            xerbla_("SLASQ2", &c__2, (ftnlen)6);
+            aocl_blas_xerbla("SLASQ2", &c__2, (ftnlen)6);
             AOCL_DTL_TRACE_LOG_EXIT
             return;
         }
@@ -275,14 +279,14 @@ void slasq2_(integer *n, real *z__, integer *info)
         if(z__[k] < 0.f)
         {
             *info = -(k + 200);
-            xerbla_("SLASQ2", &c__2, (ftnlen)6);
+            aocl_blas_xerbla("SLASQ2", &c__2, (ftnlen)6);
             AOCL_DTL_TRACE_LOG_EXIT
             return;
         }
         else if(z__[k + 1] < 0.f)
         {
             *info = -(k + 201);
-            xerbla_("SLASQ2", &c__2, (ftnlen)6);
+            aocl_blas_xerbla("SLASQ2", &c__2, (ftnlen)6);
             AOCL_DTL_TRACE_LOG_EXIT
             return;
         }
@@ -305,7 +309,7 @@ void slasq2_(integer *n, real *z__, integer *info)
     if(z__[(*n << 1) - 1] < 0.f)
     {
         *info = -((*n << 1) + 199);
-        xerbla_("SLASQ2", &c__2, (ftnlen)6);
+        aocl_blas_xerbla("SLASQ2", &c__2, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -324,7 +328,7 @@ void slasq2_(integer *n, real *z__, integer *info)
             z__[k] = z__[(k << 1) - 1];
             /* L20: */
         }
-        slasrt_("D", n, &z__[1], &iinfo);
+        aocl_lapack_slasrt("D", n, &z__[1], &iinfo);
         z__[(*n << 1) - 1] = d__;
         AOCL_DTL_TRACE_LOG_EXIT
         return;
@@ -575,8 +579,9 @@ void slasq2_(integer *n, real *z__, integer *info)
                 goto L150;
             }
             /* While submatrix unfinished take a good dqds step. */
-            slasq3_(&i0, &n0, &z__[1], &pp, &dmin__, &sigma, &desig, &qmax, &nfail, &iter, &ndiv,
-                    &ieee, &ttype, &dmin1, &dmin2, &dn, &dn1, &dn2, &g, &tau);
+            aocl_lapack_slasq3(&i0, &n0, &z__[1], &pp, &dmin__, &sigma, &desig, &qmax, &nfail,
+                               &iter, &ndiv, &ieee, &ttype, &dmin1, &dmin2, &dn, &dn1, &dn2, &g,
+                               &tau);
             pp = 1 - pp;
             /* When EMIN is very small check for splits. */
             if(pp == 0 && n0 - i0 >= 3)
@@ -673,7 +678,7 @@ void slasq2_(integer *n, real *z__, integer *info)
         return;
         /* end IWHILB */
     L150: /* L160: */
-          ;
+        ;
     }
     *info = 3;
     AOCL_DTL_TRACE_LOG_EXIT
@@ -687,7 +692,7 @@ L170: /* Move q's to the front. */
         /* L180: */
     }
     /* Sort and compute sum of eigenvalues. */
-    slasrt_("D", n, &z__[1], &iinfo);
+    aocl_lapack_slasrt("D", n, &z__[1], &iinfo);
     e = 0.f;
     for(k = *n; k >= 1; --k)
     {

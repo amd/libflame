@@ -18,14 +18,14 @@
 char* pc_str[N_PARAM_COMBOS] = { "n", "h" };
 
 void time_Lyap(
-                integer param_combo, integer type, integer nrepeats, integer m,
+                aocl_int64_t param_combo, aocl_int64_t type, aocl_int64_t nrepeats, aocl_int64_t m,
                 FLA_Obj isgn, FLA_Obj A, FLA_Obj C, FLA_Obj C_ref, FLA_Obj scale,
                 double *dtime, double *diff, double *gflops );
 
 
 int main(int argc, char *argv[])
 {
-  integer 
+  aocl_int64_t 
     datatype,
     m_input,
     m,
@@ -36,7 +36,7 @@ int main(int argc, char *argv[])
     i, j,
     n_param_combos = N_PARAM_COMBOS;
 
-  integer sign;
+  aocl_int64_t sign;
   
   char *colors = "brkgmcbrkg";
   char *ticks  = "o+*xso+*xs";

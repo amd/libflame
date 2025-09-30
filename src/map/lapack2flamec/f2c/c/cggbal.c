@@ -178,8 +178,33 @@ and second, applying a diagonal similarity */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void cggbal_(char *job, integer *n, complex *a, integer *lda, complex *b, integer *ldb,
-             integer *ilo, integer *ihi, real *lscale, real *rscale, real *work, integer *info)
+/** Generated wrapper function */
+void cggbal_(char *job, aocl_int_t *n, scomplex *a, aocl_int_t *lda, scomplex *b, aocl_int_t *ldb,
+             aocl_int_t *ilo, aocl_int_t *ihi, real *lscale, real *rscale, real *work,
+             aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_cggbal(job, n, a, lda, b, ldb, ilo, ihi, lscale, rscale, work, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t ldb_64 = *ldb;
+    aocl_int64_t ilo_64 = *ilo;
+    aocl_int64_t ihi_64 = *ihi;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_cggbal(job, &n_64, a, &lda_64, b, &ldb_64, &ilo_64, &ihi_64, lscale, rscale, work,
+                       &info_64);
+
+    *ilo = (aocl_int_t)ilo_64;
+    *ihi = (aocl_int_t)ihi_64;
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_cggbal(char *job, aocl_int64_t *n, scomplex *a, aocl_int64_t *lda, scomplex *b,
+                        aocl_int64_t *ldb, aocl_int64_t *ilo, aocl_int64_t *ihi, real *lscale,
+                        real *rscale, real *work, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("cggbal inputs: job %c, n %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS
@@ -189,8 +214,8 @@ void cggbal_(char *job, integer *n, complex *a, integer *lda, complex *b, intege
     aocl_int64_t a_dim1, a_offset, b_dim1, b_offset, i__1, i__2, i__3, i__4;
     real r__1, r__2, r__3;
     /* Builtin functions */
-    double r_lg10(real *), r_imag(complex *), c_abs(complex *), r_sign(real *, real *),
-        pow_ri(real *, integer *);
+    double r_lg10(real *), r_imag(scomplex *), c_abs(scomplex *), r_sign(real *, real *),
+        pow_ri(real *, aocl_int64_t *);
     /* Local variables */
     aocl_int64_t i__, j, k, l, m;
     real t;
@@ -205,26 +230,13 @@ void cggbal_(char *job, integer *n, complex *a, integer *lda, complex *b, intege
     aocl_int64_t irab, lrab;
     real basl, cmax;
     real coef2, coef5, gamma, alpha;
-    extern logical lsame_(char *, char *, integer, integer);
-    extern /* Subroutine */
-        void
-        sscal_(integer *, real *, real *, integer *);
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     real sfmin;
-    extern /* Subroutine */
-        void
-        cswap_(integer *, complex *, integer *, complex *, integer *);
     real sfmax;
-    integer iflow, kount;
-    extern /* Subroutine */
-        void
-        saxpy_(integer *, real *, real *, integer *, real *, integer *);
+    aocl_int64_t iflow, kount;
     real pgamma;
     extern real slamch_(char *);
-    extern /* Subroutine */
-        void
-        csscal_(integer *, real *, complex *, integer *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    integer lsfmin, lsfmax;
+    aocl_int64_t lsfmin, lsfmax;
     /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -281,7 +293,7 @@ void cggbal_(char *job, integer *n, complex *a, integer *lda, complex *b, intege
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("CGGBAL", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("CGGBAL", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -520,8 +532,8 @@ L190:
     it = 1;
     /* Start generalized conjugate gradient iteration */
 L250:
-    gamma = sdot_(&nr, &work[*ilo + (*n << 2)], &c__1, &work[*ilo + (*n << 2)], &c__1)
-            + sdot_(&nr, &work[*ilo + *n * 5], &c__1, &work[*ilo + *n * 5], &c__1);
+    gamma = aocl_blas_sdot(&nr, &work[*ilo + (*n << 2)], &c__1, &work[*ilo + (*n << 2)], &c__1)
+            + aocl_blas_sdot(&nr, &work[*ilo + *n * 5], &c__1, &work[*ilo + *n * 5], &c__1);
     ew = 0.f;
     ewc = 0.f;
     i__1 = *ihi;
@@ -548,10 +560,10 @@ L250:
     }
     t = coef5 * (ewc - ew * 3.f);
     tc = coef5 * (ew - ewc * 3.f);
-    sscal_(&nr, &beta, &work[*ilo], &c__1);
-    sscal_(&nr, &beta, &work[*ilo + *n], &c__1);
-    saxpy_(&nr, &coef, &work[*ilo + (*n << 2)], &c__1, &work[*ilo + *n], &c__1);
-    saxpy_(&nr, &coef, &work[*ilo + *n * 5], &c__1, &work[*ilo], &c__1);
+    aocl_blas_sscal(&nr, &beta, &work[*ilo], &c__1);
+    aocl_blas_sscal(&nr, &beta, &work[*ilo + *n], &c__1);
+    aocl_blas_saxpy(&nr, &coef, &work[*ilo + (*n << 2)], &c__1, &work[*ilo + *n], &c__1);
+    aocl_blas_saxpy(&nr, &coef, &work[*ilo + *n * 5], &c__1, &work[*ilo], &c__1);
     i__1 = *ihi;
     for(i__ = *ilo; i__ <= i__1; ++i__)
     {
@@ -616,8 +628,8 @@ L250:
         work[j + *n * 3] = (real)kount * work[j] + sum;
         /* L330: */
     }
-    sum = sdot_(&nr, &work[*ilo + *n], &c__1, &work[*ilo + (*n << 1)], &c__1)
-          + sdot_(&nr, &work[*ilo], &c__1, &work[*ilo + *n * 3], &c__1);
+    sum = aocl_blas_sdot(&nr, &work[*ilo + *n], &c__1, &work[*ilo + (*n << 1)], &c__1)
+          + aocl_blas_sdot(&nr, &work[*ilo], &c__1, &work[*ilo + *n * 3], &c__1);
     alpha = gamma / sum;
     /* Determine correction to current iteration */
     cmax = 0.f;
@@ -643,9 +655,9 @@ L250:
         goto L350;
     }
     r__1 = -alpha;
-    saxpy_(&nr, &r__1, &work[*ilo + (*n << 1)], &c__1, &work[*ilo + (*n << 2)], &c__1);
+    aocl_blas_saxpy(&nr, &r__1, &work[*ilo + (*n << 1)], &c__1, &work[*ilo + (*n << 2)], &c__1);
     r__1 = -alpha;
-    saxpy_(&nr, &r__1, &work[*ilo + *n * 3], &c__1, &work[*ilo + *n * 5], &c__1);
+    aocl_blas_saxpy(&nr, &r__1, &work[*ilo + *n * 3], &c__1, &work[*ilo + *n * 5], &c__1);
     pgamma = gamma;
     ++it;
     if(it <= nrp2)
@@ -662,7 +674,7 @@ L350:
     for(i__ = *ilo; i__ <= i__1; ++i__)
     {
         i__2 = *n - *ilo + 1;
-        irab = icamax_(&i__2, &a[i__ + *ilo * a_dim1], lda);
+        irab = aocl_blas_icamax(&i__2, &a[i__ + *ilo * a_dim1], lda);
         rab = c_abs(&a[i__ + (irab + *ilo - 1) * a_dim1]);
         i__2 = *n - *ilo + 1;
         irab = aocl_blas_icamax(&i__2, &b[i__ + *ilo * b_dim1], ldb);
@@ -679,9 +691,9 @@ L350:
         i__3 = lsfmax - lrab; // ; expr subst
         ir = fla_min(i__2, i__3);
         lscale[i__] = pow_ri(&c_b36, &ir);
-        icab = icamax_(ihi, &a[i__ * a_dim1 + 1], &c__1);
+        icab = aocl_blas_icamax(ihi, &a[i__ * a_dim1 + 1], &c__1);
         cab = c_abs(&a[icab + i__ * a_dim1]);
-        icab = icamax_(ihi, &b[i__ * b_dim1 + 1], &c__1);
+        icab = aocl_blas_icamax(ihi, &b[i__ * b_dim1 + 1], &c__1);
         /* Computing MAX */
         r__1 = cab;
         r__2 = c_abs(&b[icab + i__ * b_dim1]); // , expr subst

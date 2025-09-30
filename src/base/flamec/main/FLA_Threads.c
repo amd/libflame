@@ -14,12 +14,12 @@ void FLA_Thread_get_subrange
      (
        int thread_ID,
        int num_threads,
-       integer range,
-       integer *sub_range,
-       integer *index
+       fla_dim_t range,
+       fla_dim_t *sub_range,
+       fla_dim_t *index
      )
 {
-    integer sub_region, remainder;
+    fla_dim_t sub_region, remainder;
 
     if(range <= 0)
     {

@@ -28,9 +28,9 @@ void bl1_vfree( void* p )
 	free( ( void* ) p );
 }
 
-void bl1_ifree( integer* p )
+void bl1_ifree( fla_dim_t* p )
 {
-	free( ( integer* ) p );
+	free( ( fla_dim_t* ) p );
 }
 
 void bl1_sfree( float* p )

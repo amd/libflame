@@ -4,8 +4,8 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
-static integer c_n1 = -1;
+static aocl_int64_t c__1 = 1;
+static aocl_int64_t c_n1 = -1;
 static real c_b18 = -1.f;
 static real c_b20 = 1.f;
 /* > \brief \b SSYTRF_AA */
@@ -134,39 +134,39 @@ the routine */
 /* > \ingroup hetrf_aa */
 /* ===================================================================== */
 /* Subroutine */
-void ssytrf_aa_(char *uplo, integer *n, real *a, integer *lda, integer *ipiv, real *work,
-                integer *lwork, integer *info)
+/** Generated wrapper function */
+void ssytrf_aa_(char *uplo, aocl_int_t *n, real *a, aocl_int_t *lda, aocl_int_t *ipiv, real *work,
+                aocl_int_t *lwork, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_ssytrf_aa(uplo, n, a, lda, ipiv, work, lwork, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t lwork_64 = *lwork;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_ssytrf_aa(uplo, &n_64, a, &lda_64, ipiv, work, &lwork_64, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_ssytrf_aa(char *uplo, aocl_int64_t *n, real *a, aocl_int64_t *lda,
+                           aocl_int_t *ipiv, real *work, aocl_int64_t *lwork, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("ssytrf_aa inputs: uplo %c, n %" FLA_IS ", lda %" FLA_IS "", *uplo, *n, *lda);
     /* System generated locals */
-    integer a_dim1, a_offset, i__1, i__2, i__3, i__4;
+    aocl_int64_t a_dim1, a_offset, i__1, i__2, i__3, i__4;
     /* Local variables */
-    integer j;
-    extern /* Subroutine */
-        void
-        slasyf_aa_(char *, integer *, integer *, integer *, real *, integer *, integer *, real *,
-                   integer *, real *);
-    integer j1, k1, k2, j2, j3, jb, nb, mj, nj;
+    aocl_int64_t j;
+    aocl_int64_t j1, k1, k2, j2, j3, jb, nb, mj, nj;
     real alpha;
-    extern logical lsame_(char *, char *, integer, integer);
-    extern /* Subroutine */
-        void
-        sscal_(integer *, real *, real *, integer *),
-        sgemm_(char *, char *, integer *, integer *, integer *, real *, real *, integer *, real *,
-               integer *, real *, real *, integer *),
-        sgemv_(char *, integer *, integer *, real *, real *, integer *, real *, integer *, real *,
-               real *, integer *);
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     logical upper;
-    extern /* Subroutine */
-        void
-        scopy_(integer *, real *, integer *, real *, integer *),
-        sswap_(integer *, real *, integer *, real *, integer *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
-    integer lwkopt;
+    aocl_int64_t lwkopt;
     logical lquery;
-    extern real sroundup_lwork(integer *);
     /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -193,7 +193,7 @@ void ssytrf_aa_(char *uplo, integer *n, real *a, integer *lda, integer *ipiv, re
     --ipiv;
     --work;
     /* Function Body */
-    nb = ilaenv_(&c__1, "SSYTRF_AA", uplo, n, &c_n1, &c_n1, &c_n1);
+    nb = aocl_lapack_ilaenv(&c__1, "SSYTRF_AA", uplo, n, &c_n1, &c_n1, &c_n1);
     /* Test the input parameters. */
     *info = 0;
     upper = lsame_(uplo, "U", 1, 1);
@@ -223,12 +223,12 @@ void ssytrf_aa_(char *uplo, integer *n, real *a, integer *lda, integer *ipiv, re
     if(*info == 0)
     {
         lwkopt = (nb + 1) * *n;
-        work[1] = sroundup_lwork(&lwkopt);
+        work[1] = aocl_lapack_sroundup_lwork(&lwkopt);
     }
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("SSYTRF_AA", &i__1, (ftnlen)9);
+        aocl_blas_xerbla("SSYTRF_AA", &i__1, (ftnlen)9);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -260,7 +260,7 @@ void ssytrf_aa_(char *uplo, integer *n, real *a, integer *lda, integer *ipiv, re
         /* Factorize A as U**T*D*U using the upper triangle of A */
         /* ..................................................... */
         /* Copy first row A(1, 1:N) into H(1:n) (stored in WORK(1:N)) */
-        scopy_(n, &a[a_dim1 + 1], lda, &work[1], &c__1);
+        aocl_blas_scopy(n, &a[a_dim1 + 1], lda, &work[1], &c__1);
         /* J is the main loop index, increasing from 1 to N in steps of */
         /* JB, where JB is the number of columns factorized by SLASYF;
          */
@@ -285,8 +285,8 @@ void ssytrf_aa_(char *uplo, integer *n, real *a, integer *lda, integer *ipiv, re
         /* Panel factorization */
         i__1 = 2 - k1;
         i__2 = *n - j;
-        slasyf_aa_(uplo, &i__1, &i__2, &jb, &a[fla_max(1, j) + (j + 1) * a_dim1], lda, &ipiv[j + 1],
-                   &work[1], n, &work[*n * nb + 1]);
+        aocl_lapack_slasyf_aa(uplo, &i__1, &i__2, &jb, &a[fla_max(1, j) + (j + 1) * a_dim1], lda,
+                              &ipiv[j + 1], &work[1], n, &work[*n * nb + 1]);
         /* Adjust IPIV and apply it back (J-th step picks (J+1)-th pivot) */
         /* Computing MIN */
         i__2 = *n;
@@ -294,11 +294,12 @@ void ssytrf_aa_(char *uplo, integer *n, real *a, integer *lda, integer *ipiv, re
         i__1 = fla_min(i__2, i__3);
         for(j2 = j + 2; j2 <= i__1; ++j2)
         {
-            ipiv[j2] += j;
+            ipiv[j2] += (aocl_int_t)(j);
             if(j2 != ipiv[j2] && j1 - k1 > 2)
             {
                 i__2 = j1 - k1 - 2;
-                sswap_(&i__2, &a[j2 * a_dim1 + 1], &c__1, &a[ipiv[j2] * a_dim1 + 1], &c__1);
+                aocl_blas_sswap(&i__2, &a[j2 * a_dim1 + 1], &c__1, &a[ipiv[j2] * a_dim1 + 1],
+                                &c__1);
             }
         }
         j += jb;
@@ -314,10 +315,10 @@ void ssytrf_aa_(char *uplo, integer *n, real *a, integer *lda, integer *ipiv, re
                 alpha = a[j + (j + 1) * a_dim1];
                 a[j + (j + 1) * a_dim1] = 1.f;
                 i__1 = *n - j;
-                scopy_(&i__1, &a[j - 1 + (j + 1) * a_dim1], lda, &work[j + 1 - j1 + 1 + jb * *n],
-                       &c__1);
+                aocl_blas_scopy(&i__1, &a[j - 1 + (j + 1) * a_dim1], lda,
+                                &work[j + 1 - j1 + 1 + jb * *n], &c__1);
                 i__1 = *n - j;
-                sscal_(&i__1, &alpha, &work[j + 1 - j1 + 1 + jb * *n], &c__1);
+                aocl_blas_sscal(&i__1, &alpha, &work[j + 1 - j1 + 1 + jb * *n], &c__1);
                 /* K1 identifies if the previous column of the panel has been */
                 /* explicitly stored, e.g., K1=1 and K2= 0 for the first panel, */
                 /* while K1=0 and K2=1 for the rest */
@@ -346,23 +347,24 @@ void ssytrf_aa_(char *uplo, integer *n, real *a, integer *lda, integer *ipiv, re
                     for(mj = nj - 1; mj >= 1; --mj)
                     {
                         i__3 = jb + 1;
-                        sgemv_("No transpose", &mj, &i__3, &c_b18, &work[j3 - j1 + 1 + k1 * *n], n,
-                               &a[j1 - k2 + j3 * a_dim1], &c__1, &c_b20, &a[j3 + j3 * a_dim1], lda);
+                        aocl_blas_sgemv("No transpose", &mj, &i__3, &c_b18,
+                                        &work[j3 - j1 + 1 + k1 * *n], n, &a[j1 - k2 + j3 * a_dim1],
+                                        &c__1, &c_b20, &a[j3 + j3 * a_dim1], lda);
                         ++j3;
                     }
                     /* Update off-diagonal block of J2-th block row with SGEMM */
                     i__3 = *n - j3 + 1;
                     i__4 = jb + 1;
-                    sgemm_("Transpose", "Transpose", &nj, &i__3, &i__4, &c_b18,
-                           &a[j1 - k2 + j2 * a_dim1], lda, &work[j3 - j1 + 1 + k1 * *n], n, &c_b20,
-                           &a[j2 + j3 * a_dim1], lda);
+                    aocl_blas_sgemm("Transpose", "Transpose", &nj, &i__3, &i__4, &c_b18,
+                                    &a[j1 - k2 + j2 * a_dim1], lda, &work[j3 - j1 + 1 + k1 * *n], n,
+                                    &c_b20, &a[j2 + j3 * a_dim1], lda);
                 }
                 /* Recover T( J, J+1 ) */
                 a[j + (j + 1) * a_dim1] = alpha;
             }
             /* WORK(J+1, 1) stores H(J+1, 1) */
             i__2 = *n - j;
-            scopy_(&i__2, &a[j + 1 + (j + 1) * a_dim1], lda, &work[1], &c__1);
+            aocl_blas_scopy(&i__2, &a[j + 1 + (j + 1) * a_dim1], lda, &work[1], &c__1);
         }
         goto L10;
     }
@@ -373,7 +375,7 @@ void ssytrf_aa_(char *uplo, integer *n, real *a, integer *lda, integer *ipiv, re
         /* ..................................................... */
         /* copy first column A(1:N, 1) into H(1:N, 1) */
         /* (stored in WORK(1:N)) */
-        scopy_(n, &a[a_dim1 + 1], &c__1, &work[1], &c__1);
+        aocl_blas_scopy(n, &a[a_dim1 + 1], &c__1, &work[1], &c__1);
         /* J is the main loop index, increasing from 1 to N in steps of */
         /* JB, where JB is the number of columns factorized by SLASYF;
          */
@@ -398,8 +400,8 @@ void ssytrf_aa_(char *uplo, integer *n, real *a, integer *lda, integer *ipiv, re
         /* Panel factorization */
         i__2 = 2 - k1;
         i__1 = *n - j;
-        slasyf_aa_(uplo, &i__2, &i__1, &jb, &a[j + 1 + fla_max(1, j) * a_dim1], lda, &ipiv[j + 1],
-                   &work[1], n, &work[*n * nb + 1]);
+        aocl_lapack_slasyf_aa(uplo, &i__2, &i__1, &jb, &a[j + 1 + fla_max(1, j) * a_dim1], lda,
+                              &ipiv[j + 1], &work[1], n, &work[*n * nb + 1]);
         /* Adjust IPIV and apply it back (J-th step picks (J+1)-th pivot) */
         /* Computing MIN */
         i__1 = *n;
@@ -407,11 +409,11 @@ void ssytrf_aa_(char *uplo, integer *n, real *a, integer *lda, integer *ipiv, re
         i__2 = fla_min(i__1, i__3);
         for(j2 = j + 2; j2 <= i__2; ++j2)
         {
-            ipiv[j2] += j;
+            ipiv[j2] += (aocl_int_t)(j);
             if(j2 != ipiv[j2] && j1 - k1 > 2)
             {
                 i__1 = j1 - k1 - 2;
-                sswap_(&i__1, &a[j2 + a_dim1], lda, &a[ipiv[j2] + a_dim1], lda);
+                aocl_blas_sswap(&i__1, &a[j2 + a_dim1], lda, &a[ipiv[j2] + a_dim1], lda);
             }
         }
         j += jb;
@@ -427,10 +429,10 @@ void ssytrf_aa_(char *uplo, integer *n, real *a, integer *lda, integer *ipiv, re
                 alpha = a[j + 1 + j * a_dim1];
                 a[j + 1 + j * a_dim1] = 1.f;
                 i__2 = *n - j;
-                scopy_(&i__2, &a[j + 1 + (j - 1) * a_dim1], &c__1, &work[j + 1 - j1 + 1 + jb * *n],
-                       &c__1);
+                aocl_blas_scopy(&i__2, &a[j + 1 + (j - 1) * a_dim1], &c__1,
+                                &work[j + 1 - j1 + 1 + jb * *n], &c__1);
                 i__2 = *n - j;
-                sscal_(&i__2, &alpha, &work[j + 1 - j1 + 1 + jb * *n], &c__1);
+                aocl_blas_sscal(&i__2, &alpha, &work[j + 1 - j1 + 1 + jb * *n], &c__1);
                 /* K1 identifies if the previous column of the panel has been */
                 /* explicitly stored, e.g., K1=1 and K2= 0 for the first panel, */
                 /* while K1=0 and K2=1 for the rest */
@@ -459,29 +461,29 @@ void ssytrf_aa_(char *uplo, integer *n, real *a, integer *lda, integer *ipiv, re
                     for(mj = nj - 1; mj >= 1; --mj)
                     {
                         i__3 = jb + 1;
-                        sgemv_("No transpose", &mj, &i__3, &c_b18, &work[j3 - j1 + 1 + k1 * *n], n,
-                               &a[j3 + (j1 - k2) * a_dim1], lda, &c_b20, &a[j3 + j3 * a_dim1],
-                               &c__1);
+                        aocl_blas_sgemv(
+                            "No transpose", &mj, &i__3, &c_b18, &work[j3 - j1 + 1 + k1 * *n], n,
+                            &a[j3 + (j1 - k2) * a_dim1], lda, &c_b20, &a[j3 + j3 * a_dim1], &c__1);
                         ++j3;
                     }
                     /* Update off-diagonal block in J2-th block column with SGEMM */
                     i__3 = *n - j3 + 1;
                     i__4 = jb + 1;
-                    sgemm_("No transpose", "Transpose", &i__3, &nj, &i__4, &c_b18,
-                           &work[j3 - j1 + 1 + k1 * *n], n, &a[j2 + (j1 - k2) * a_dim1], lda,
-                           &c_b20, &a[j3 + j2 * a_dim1], lda);
+                    aocl_blas_sgemm("No transpose", "Transpose", &i__3, &nj, &i__4, &c_b18,
+                                    &work[j3 - j1 + 1 + k1 * *n], n, &a[j2 + (j1 - k2) * a_dim1],
+                                    lda, &c_b20, &a[j3 + j2 * a_dim1], lda);
                 }
                 /* Recover T( J+1, J ) */
                 a[j + 1 + j * a_dim1] = alpha;
             }
             /* WORK(J+1, 1) stores H(J+1, 1) */
             i__1 = *n - j;
-            scopy_(&i__1, &a[j + 1 + (j + 1) * a_dim1], &c__1, &work[1], &c__1);
+            aocl_blas_scopy(&i__1, &a[j + 1 + (j + 1) * a_dim1], &c__1, &work[1], &c__1);
         }
         goto L11;
     }
 L20:
-    work[1] = sroundup_lwork(&lwkopt);
+    work[1] = aocl_lapack_sroundup_lwork(&lwkopt);
     AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SSYTRF_AA */

@@ -9,8 +9,8 @@
  */
 
 #include "FLA_f2c.h" /* Table of constant values */
-static complex c_b1 = {1.f, 0.f};
-static integer c__1 = 1;
+static scomplex c_b1 = {{1.f}, {0.f}};
+static aocl_int64_t c__1 = 1;
 /* > \brief \b CSPTRF */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -163,7 +163,23 @@ static integer c__1 = 1;
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void csptrf_(char *uplo, integer *n, complex *ap, integer *ipiv, integer *info)
+/** Generated wrapper function */
+void csptrf_(char *uplo, aocl_int_t *n, scomplex *ap, aocl_int_t *ipiv, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_csptrf(uplo, n, ap, ipiv, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_csptrf(uplo, &n_64, ap, ipiv, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_csptrf(char *uplo, aocl_int64_t *n, scomplex *ap, aocl_int_t *ipiv,
+                        aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -183,31 +199,18 @@ void csptrf_(char *uplo, integer *n, complex *ap, integer *ipiv, integer *info)
     double sqrt(doublereal), r_imag(scomplex *);
     void c_div(scomplex *, scomplex *, scomplex *);
     /* Local variables */
-    integer i__, j, k;
-    complex t, r1, d11, d12, d21, d22;
-    integer kc, kk, kp;
-    complex wk;
-    integer kx, knc, kpc, npp;
-    complex wkm1, wkp1;
-    integer imax, jmax;
-    extern /* Subroutine */
-        void
-        cspr_(char *, integer *, complex *, complex *, integer *, complex *);
+    aocl_int64_t i__, j, k;
+    scomplex t, r1, d11, d12, d21, d22;
+    aocl_int64_t kc, kk, kp;
+    scomplex wk;
+    aocl_int64_t kx, knc, kpc, npp;
+    scomplex wkm1, wkp1;
+    aocl_int64_t imax, jmax;
     real alpha;
-    extern /* Subroutine */
-        void
-        cscal_(integer *, complex *, complex *, integer *);
-    extern logical lsame_(char *, char *, integer, integer);
-    extern /* Subroutine */
-        void
-        cswap_(integer *, complex *, integer *, complex *, integer *);
-    integer kstep;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    aocl_int64_t kstep;
     logical upper;
     real absakk;
-    extern integer icamax_(integer *, complex *, integer *);
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real colmax, rowmax;
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -253,7 +256,7 @@ void csptrf_(char *uplo, integer *n, complex *ap, integer *ipiv, integer *info)
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("CSPTRF", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("CSPTRF", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
@@ -430,8 +433,8 @@ void csptrf_(char *uplo, integer *n, complex *ap, integer *ipiv, integer *info)
                 r1.real = q__1.real;
                 r1.imag = q__1.imag; // , expr subst
                 i__1 = k - 1;
-                q__1.real = -r1.real;
-                q__1.imag = -r1.imag; // , expr subst
+                q__1.r = -r1.r;
+                q__1.i = -r1.i; // , expr subst
                 aocl_lapack_cspr(uplo, &i__1, &q__1, &ap[kc], &c__1, &ap[1]);
                 /* Store U(k) in column k */
                 i__1 = k - 1;
@@ -709,8 +712,8 @@ void csptrf_(char *uplo, integer *n, complex *ap, integer *ipiv, integer *info)
                     r1.real = q__1.real;
                     r1.imag = q__1.imag; // , expr subst
                     i__1 = *n - k;
-                    q__1.real = -r1.real;
-                    q__1.imag = -r1.imag; // , expr subst
+                    q__1.r = -r1.r;
+                    q__1.i = -r1.i; // , expr subst
                     aocl_lapack_cspr(uplo, &i__1, &q__1, &ap[kc + 1], &c__1, &ap[kc + *n - k + 1]);
                     /* Store L(k) in column K */
                     i__1 = *n - k;

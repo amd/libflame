@@ -4,9 +4,9 @@
  -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for
  libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static complex c_b1 = {1.f, 0.f};
-static integer c__1 = 1;
-/* > \brief \b CSYTF2_ROOK computes the factorization of a complex symmetric indefinite matrix using
+static scomplex c_b1 = {{1.f}, {0.f}};
+static aocl_int64_t c__1 = 1;
+/* > \brief \b CSYTF2_ROOK computes the factorization of a scomplex symmetric indefinite matrix using
  * the bound ed Bunch-Kaufman ("rook") diagonal pivoting method (unblocked algorithm). */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -191,7 +191,25 @@ static integer c__1 = 1;
 /* > \endverbatim */
 /* ===================================================================== */
 /* Subroutine */
-void csytf2_rook_(char *uplo, integer *n, complex *a, integer *lda, integer *ipiv, integer *info)
+/** Generated wrapper function */
+void csytf2_rook_(char *uplo, aocl_int_t *n, scomplex *a, aocl_int_t *lda, aocl_int_t *ipiv,
+                  aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_csytf2_rook(uplo, n, a, lda, ipiv, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_csytf2_rook(uplo, &n_64, a, &lda_64, ipiv, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_csytf2_rook(char *uplo, aocl_int64_t *n, scomplex *a, aocl_int64_t *lda,
+                             aocl_int_t *ipiv, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -216,27 +234,15 @@ void csytf2_rook_(char *uplo, integer *n, complex *a, integer *lda, integer *ipi
     aocl_int64_t ii, kk, kp;
     scomplex wk, wkm1, wkp1;
     logical done;
-    integer imax, jmax;
-    extern /* Subroutine */
-        void
-        csyr_(char *, integer *, complex *, complex *, integer *, complex *, integer *);
+    aocl_int64_t imax, jmax;
     real alpha;
-    extern /* Subroutine */
-        void
-        cscal_(integer *, complex *, complex *, integer *);
-    extern logical lsame_(char *, char *, integer, integer);
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     real sfmin;
-    extern /* Subroutine */
-        void
-        cswap_(integer *, complex *, integer *, complex *, integer *);
-    integer itemp, kstep;
+    aocl_int64_t itemp, kstep;
     real stemp;
     logical upper;
     real absakk;
     extern real slamch_(char *);
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real colmax, rowmax;
     /* -- LAPACK computational routine (version 3.5.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -288,7 +294,7 @@ void csytf2_rook_(char *uplo, integer *n, complex *a, integer *lda, integer *ipi
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("CSYTF2_ROOK", &i__1, (ftnlen)11);
+        aocl_blas_xerbla("CSYTF2_ROOK", &i__1, (ftnlen)11);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
@@ -459,7 +465,8 @@ void csytf2_rook_(char *uplo, integer *n, complex *a, integer *lda, integer *ipi
                 if(kk > 1 && kp < kk - 1)
                 {
                     i__1 = kk - kp - 1;
-                    cswap_(&i__1, &a[kp + 1 + kk * a_dim1], &c__1, &a[kp + (kp + 1) * a_dim1], lda);
+                    aocl_blas_cswap(&i__1, &a[kp + 1 + kk * a_dim1], &c__1,
+                                    &a[kp + (kp + 1) * a_dim1], lda);
                 }
                 i__1 = kk + kk * a_dim1;
                 t.real = a[i__1].real;
@@ -509,7 +516,8 @@ void csytf2_rook_(char *uplo, integer *n, complex *a, integer *lda, integer *ipi
                         i__1 = k - 1;
                         q__1.r = -d11.r;
                         q__1.i = -d11.i; // , expr subst
-                        csyr_(uplo, &i__1, &q__1, &a[k * a_dim1 + 1], &c__1, &a[a_offset], lda);
+                        aocl_lapack_csyr(uplo, &i__1, &q__1, &a[k * a_dim1 + 1], &c__1,
+                                         &a[a_offset], lda);
                         /* Store U(k) in column k */
                         i__1 = k - 1;
                         aocl_blas_cscal(&i__1, &d11, &a[k * a_dim1 + 1], &c__1);
@@ -536,7 +544,8 @@ void csytf2_rook_(char *uplo, integer *n, complex *a, integer *lda, integer *ipi
                         i__1 = k - 1;
                         q__1.r = -d11.r;
                         q__1.i = -d11.i; // , expr subst
-                        csyr_(uplo, &i__1, &q__1, &a[k * a_dim1 + 1], &c__1, &a[a_offset], lda);
+                        aocl_lapack_csyr(uplo, &i__1, &q__1, &a[k * a_dim1 + 1], &c__1,
+                                         &a[a_offset], lda);
                     }
                 }
             }
@@ -711,7 +720,7 @@ void csytf2_rook_(char *uplo, integer *n, complex *a, integer *lda, integer *ipi
                 if(imax < *n)
                 {
                     i__1 = *n - imax;
-                    itemp = imax + icamax_(&i__1, &a[imax + 1 + imax * a_dim1], &c__1);
+                    itemp = imax + aocl_blas_icamax(&i__1, &a[imax + 1 + imax * a_dim1], &c__1);
                     i__1 = itemp + imax * a_dim1;
                     stemp = (r__1 = a[i__1].r, f2c_abs(r__1))
                             + (r__2 = r_imag(&a[itemp + imax * a_dim1]), f2c_abs(r__2));
@@ -800,7 +809,8 @@ void csytf2_rook_(char *uplo, integer *n, complex *a, integer *lda, integer *ipi
                 if(kk < *n && kp > kk + 1)
                 {
                     i__1 = kp - kk - 1;
-                    cswap_(&i__1, &a[kk + 1 + kk * a_dim1], &c__1, &a[kp + (kk + 1) * a_dim1], lda);
+                    aocl_blas_cswap(&i__1, &a[kk + 1 + kk * a_dim1], &c__1,
+                                    &a[kp + (kk + 1) * a_dim1], lda);
                 }
                 i__1 = kk + kk * a_dim1;
                 t.real = a[i__1].real;
@@ -850,8 +860,8 @@ void csytf2_rook_(char *uplo, integer *n, complex *a, integer *lda, integer *ipi
                         i__1 = *n - k;
                         q__1.r = -d11.r;
                         q__1.i = -d11.i; // , expr subst
-                        csyr_(uplo, &i__1, &q__1, &a[k + 1 + k * a_dim1], &c__1,
-                              &a[k + 1 + (k + 1) * a_dim1], lda);
+                        aocl_lapack_csyr(uplo, &i__1, &q__1, &a[k + 1 + k * a_dim1], &c__1,
+                                         &a[k + 1 + (k + 1) * a_dim1], lda);
                         /* Store L(k) in column k */
                         i__1 = *n - k;
                         aocl_blas_cscal(&i__1, &d11, &a[k + 1 + k * a_dim1], &c__1);
@@ -878,8 +888,8 @@ void csytf2_rook_(char *uplo, integer *n, complex *a, integer *lda, integer *ipi
                         i__1 = *n - k;
                         q__1.r = -d11.r;
                         q__1.i = -d11.i; // , expr subst
-                        csyr_(uplo, &i__1, &q__1, &a[k + 1 + k * a_dim1], &c__1,
-                              &a[k + 1 + (k + 1) * a_dim1], lda);
+                        aocl_lapack_csyr(uplo, &i__1, &q__1, &a[k + 1 + k * a_dim1], &c__1,
+                                         &a[k + 1 + (k + 1) * a_dim1], lda);
                     }
                 }
             }

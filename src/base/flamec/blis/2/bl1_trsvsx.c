@@ -16,13 +16,13 @@
 #include "blis.h"
 #endif
 
-void bl1_strsvsx( uplo1_t uplo, trans1_t trans, diag1_t diag, integer m, float* alpha, float* a, integer a_rs, integer a_cs, float* x, integer incx, float* beta, float* y, integer incy )
+void bl1_strsvsx( uplo1_t uplo, trans1_t trans, diag1_t diag, fla_dim_t m, float* alpha, float* a, fla_dim_t a_rs, fla_dim_t a_cs, float* x, fla_dim_t incx, float* beta, float* y, fla_dim_t incy )
 {
 	float*    a_save    = a;
-	integer       a_rs_save = a_rs;
-	integer       a_cs_save = a_cs;
+	fla_dim_t       a_rs_save = a_rs;
+	fla_dim_t       a_cs_save = a_cs;
 	float*    x_temp;
-    integer       incx_temp;
+    fla_dim_t       incx_temp;
 
 	// Return early if possible.
 	if ( bl1_zero_dim1( m ) ) return;
@@ -74,13 +74,13 @@ void bl1_strsvsx( uplo1_t uplo, trans1_t trans, diag1_t diag, integer m, float* 
 	                   &a,     &a_rs,     &a_cs );
 }
 
-void bl1_dtrsvsx( uplo1_t uplo, trans1_t trans, diag1_t diag, integer m, double* alpha, double* a, integer a_rs, integer a_cs, double* x, integer incx, double* beta, double* y, integer incy )
+void bl1_dtrsvsx( uplo1_t uplo, trans1_t trans, diag1_t diag, fla_dim_t m, double* alpha, double* a, fla_dim_t a_rs, fla_dim_t a_cs, double* x, fla_dim_t incx, double* beta, double* y, fla_dim_t incy )
 {
 	double*   a_save    = a;
-	integer       a_rs_save = a_rs;
-	integer       a_cs_save = a_cs;
+	fla_dim_t       a_rs_save = a_rs;
+	fla_dim_t       a_cs_save = a_cs;
 	double*   x_temp;
-    integer       incx_temp;
+    fla_dim_t       incx_temp;
 
 	// Return early if possible.
 	if ( bl1_zero_dim1( m ) ) return;
@@ -132,13 +132,13 @@ void bl1_dtrsvsx( uplo1_t uplo, trans1_t trans, diag1_t diag, integer m, double*
 	                   &a,     &a_rs,     &a_cs );
 }
 
-void bl1_ctrsvsx( uplo1_t uplo, trans1_t trans, diag1_t diag, integer m, scomplex* alpha, scomplex* a, integer a_rs, integer a_cs, scomplex* x, integer incx, scomplex* beta, scomplex* y, integer incy )
+void bl1_ctrsvsx( uplo1_t uplo, trans1_t trans, diag1_t diag, fla_dim_t m, scomplex* alpha, scomplex* a, fla_dim_t a_rs, fla_dim_t a_cs, scomplex* x, fla_dim_t incx, scomplex* beta, scomplex* y, fla_dim_t incy )
 {
 	scomplex* a_save    = a;
-	integer       a_rs_save = a_rs;
-	integer       a_cs_save = a_cs;
+	fla_dim_t       a_rs_save = a_rs;
+	fla_dim_t       a_cs_save = a_cs;
 	scomplex* x_temp;
-    integer       incx_temp;
+    fla_dim_t       incx_temp;
 
 	// Return early if possible.
 	if ( bl1_zero_dim1( m ) ) return;
@@ -190,13 +190,13 @@ void bl1_ctrsvsx( uplo1_t uplo, trans1_t trans, diag1_t diag, integer m, scomple
 	                   &a,     &a_rs,     &a_cs );
 }
 
-void bl1_ztrsvsx( uplo1_t uplo, trans1_t trans, diag1_t diag, integer m, dcomplex* alpha, dcomplex* a, integer a_rs, integer a_cs, dcomplex* x, integer incx, dcomplex* beta, dcomplex* y, integer incy )
+void bl1_ztrsvsx( uplo1_t uplo, trans1_t trans, diag1_t diag, fla_dim_t m, dcomplex* alpha, dcomplex* a, fla_dim_t a_rs, fla_dim_t a_cs, dcomplex* x, fla_dim_t incx, dcomplex* beta, dcomplex* y, fla_dim_t incy )
 {
 	dcomplex* a_save    = a;
-	integer       a_rs_save = a_rs;
-	integer       a_cs_save = a_cs;
+	fla_dim_t       a_rs_save = a_rs;
+	fla_dim_t       a_cs_save = a_cs;
 	dcomplex* x_temp;
-    integer       incx_temp;
+    fla_dim_t       incx_temp;
 
 	// Return early if possible.
 	if ( bl1_zero_dim1( m ) ) return;

@@ -4,10 +4,10 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
-static integer c_n1 = -1;
-static integer c__3 = 3;
-static integer c__2 = 2;
+static aocl_int64_t c__1 = 1;
+static aocl_int64_t c_n1 = -1;
+static aocl_int64_t c__3 = 3;
+static aocl_int64_t c__2 = 2;
 /* > \brief \b SORGQR */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -129,24 +129,14 @@ the routine */
 /* > \ingroup realOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void sorgqr_fla(integer *m, integer *n, integer *k, real *a, integer *lda, real *tau, real *work,
-                integer *lwork, integer *info)
+void sorgqr_fla(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *k, real *a, aocl_int64_t *lda,
+                real *tau, real *work, aocl_int64_t *lwork, aocl_int64_t *info)
 {
     /* System generated locals */
-    integer a_dim1, a_offset, i__1, i__2, i__3;
+    aocl_int64_t a_dim1, a_offset, i__1, i__2, i__3;
     /* Local variables */
-    integer i__, j, l, ib, nb, ki, kk, nx, iws, nbmin, iinfo;
-    extern /* Subroutine */
-        void
-        sorg2r_fla(integer *, integer *, integer *, real *, integer *, real *, real *, integer *),
-        slarfb_(char *, char *, char *, char *, integer *, integer *, integer *, real *, integer *,
-                real *, integer *, real *, integer *, real *, integer *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
-    extern /* Subroutine */
-        void
-        slarft_(char *, char *, integer *, integer *, real *, integer *, real *, real *, integer *);
-    integer ldwork, lwkopt;
+    aocl_int64_t i__, j, l, ib, nb, ki, kk, nx, iws, nbmin, iinfo;
+    aocl_int64_t ldwork, lwkopt;
     logical lquery;
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -177,7 +167,7 @@ void sorgqr_fla(integer *m, integer *n, integer *k, real *a, integer *lda, real 
     --work;
     /* Function Body */
     *info = 0;
-    nb = ilaenv_(&c__1, "SORGQR", " ", m, n, k, &c_n1);
+    nb = aocl_lapack_ilaenv(&c__1, "SORGQR", " ", m, n, k, &c_n1);
     lwkopt = fla_max(1, *n) * nb;
     work[1] = (real)lwkopt;
     lquery = *lwork == -1;
@@ -204,7 +194,7 @@ void sorgqr_fla(integer *m, integer *n, integer *k, real *a, integer *lda, real 
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("SORGQR", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("SORGQR", &i__1, (ftnlen)6);
         return;
     }
     else if(lquery)
@@ -225,7 +215,7 @@ void sorgqr_fla(integer *m, integer *n, integer *k, real *a, integer *lda, real 
         /* Determine when to cross over from blocked to unblocked code. */
         /* Computing MAX */
         i__1 = 0;
-        i__2 = ilaenv_(&c__3, "SORGQR", " ", m, n, k, &c_n1); // , expr subst
+        i__2 = aocl_lapack_ilaenv(&c__3, "SORGQR", " ", m, n, k, &c_n1); // , expr subst
         nx = fla_max(i__1, i__2);
         if(nx < *k)
         {
@@ -239,7 +229,7 @@ void sorgqr_fla(integer *m, integer *n, integer *k, real *a, integer *lda, real 
                 nb = *lwork / ldwork;
                 /* Computing MAX */
                 i__1 = 2;
-                i__2 = ilaenv_(&c__2, "SORGQR", " ", m, n, k, &c_n1); // , expr subst
+                i__2 = aocl_lapack_ilaenv(&c__2, "SORGQR", " ", m, n, k, &c_n1); // , expr subst
                 nbmin = fla_max(i__1, i__2);
             }
         }
@@ -294,14 +284,14 @@ void sorgqr_fla(integer *m, integer *n, integer *k, real *a, integer *lda, real 
                 /* Form the triangular factor of the block reflector */
                 /* H = H(i) H(i+1) . . . H(i+ib-1) */
                 i__2 = *m - i__ + 1;
-                slarft_("Forward", "Columnwise", &i__2, &ib, &a[i__ + i__ * a_dim1], lda, &tau[i__],
-                        &work[1], &ldwork);
+                aocl_lapack_slarft("Forward", "Columnwise", &i__2, &ib, &a[i__ + i__ * a_dim1], lda,
+                                   &tau[i__], &work[1], &ldwork);
                 /* Apply H to A(i:m,i+ib:n) from the left */
                 i__2 = *m - i__ + 1;
                 i__3 = *n - i__ - ib + 1;
-                slarfb_("Left", "No transpose", "Forward", "Columnwise", &i__2, &i__3, &ib,
-                        &a[i__ + i__ * a_dim1], lda, &work[1], &ldwork,
-                        &a[i__ + (i__ + ib) * a_dim1], lda, &work[ib + 1], &ldwork);
+                aocl_lapack_slarfb("Left", "No transpose", "Forward", "Columnwise", &i__2, &i__3,
+                                   &ib, &a[i__ + i__ * a_dim1], lda, &work[1], &ldwork,
+                                   &a[i__ + (i__ + ib) * a_dim1], lda, &work[ib + 1], &ldwork);
             }
             /* Apply H to rows i:m of current block */
             i__2 = *m - i__ + 1;

@@ -161,43 +161,45 @@ the matrix is singular and its */
 /* > \endverbatim */
 /* ===================================================================== */
 /* Subroutine */
-void dsytri_3x_(char *uplo, integer *n, doublereal *a, integer *lda, doublereal *e, integer *ipiv,
-                doublereal *work, integer *nb, integer *info)
+/** Generated wrapper function */
+void dsytri_3x_(char *uplo, aocl_int_t *n, doublereal *a, aocl_int_t *lda, doublereal *e,
+                aocl_int_t *ipiv, doublereal *work, aocl_int_t *nb, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_dsytri_3x(uplo, n, a, lda, e, ipiv, work, nb, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t nb_64 = *nb;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_dsytri_3x(uplo, &n_64, a, &lda_64, e, ipiv, work, &nb_64, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_dsytri_3x(char *uplo, aocl_int64_t *n, doublereal *a, aocl_int64_t *lda,
+                           doublereal *e, aocl_int_t *ipiv, doublereal *work, aocl_int64_t *nb,
+                           aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dsytri_3x inputs: uplo %c, n %" FLA_IS ", lda %" FLA_IS ", nb %" FLA_IS "",
                       *uplo, *n, *lda, *nb);
     /* System generated locals */
-    integer a_dim1, a_offset, work_dim1, work_offset, i__1, i__2, i__3;
+    aocl_int64_t a_dim1, a_offset, work_dim1, work_offset, i__1, i__2, i__3;
     /* Local variables */
-    extern /* Subroutine */
-        void
-        dsyswapr_(char *, integer *, doublereal *, integer *, integer *, integer *);
     doublereal d__;
-    integer i__, j, k;
+    aocl_int64_t i__, j, k;
     doublereal t, ak;
-    integer u11, ip, nnb, cut;
+    aocl_int64_t u11, ip, nnb, cut;
     doublereal akp1;
-    integer invd;
+    aocl_int64_t invd;
     doublereal akkp1;
-    extern /* Subroutine */
-        void
-        dgemm_(char *, char *, integer *, integer *, integer *, doublereal *, doublereal *,
-               integer *, doublereal *, integer *, doublereal *, doublereal *, integer *);
-    extern logical lsame_(char *, char *, integer, integer);
-    extern /* Subroutine */
-        void
-        dtrmm_(char *, char *, char *, char *, integer *, integer *, doublereal *, doublereal *,
-               integer *, doublereal *, integer *);
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     logical upper;
     doublereal u01_i_j__, u11_i_j__;
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    integer icount;
-    extern /* Subroutine */
-        void
-        dtrtri_(char *, char *, integer *, doublereal *, integer *, integer *);
+    aocl_int64_t icount;
     doublereal u01_ip1_j__, u11_ip1_j__;
     /* -- LAPACK computational routine (version 3.7.1) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -248,7 +250,7 @@ void dsytri_3x_(char *uplo, integer *n, doublereal *a, integer *lda, doublereal 
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("DSYTRI_3X", &i__1, (ftnlen)9);
+        aocl_blas_xerbla("DSYTRI_3X", &i__1, (ftnlen)9);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -303,7 +305,7 @@ void dsytri_3x_(char *uplo, integer *n, doublereal *a, integer *lda, doublereal 
     {
         /* Begin Upper */
         /* invA = P * inv(U**T) * inv(D) * inv(U) * P**T. */
-        dtrtri_(uplo, "U", n, &a[a_offset], lda, info);
+        aocl_lapack_dtrtri(uplo, "U", n, &a[a_offset], lda, info);
         /* inv(D) and inv(D) * inv(U) */
         k = 1;
         while(k <= *n)
@@ -450,8 +452,9 @@ void dsytri_3x_(char *uplo, integer *n, doublereal *a, integer *lda, doublereal 
             }
             /* U11**T * invD1 * U11 -> U11 */
             i__1 = *n + *nb + 1;
-            dtrmm_("L", "U", "T", "U", &nnb, &nnb, &c_b10, &a[cut + 1 + (cut + 1) * a_dim1], lda,
-                   &work[u11 + 1 + work_dim1], &i__1);
+            aocl_blas_dtrmm("L", "U", "T", "U", &nnb, &nnb, &c_b10,
+                            &a[cut + 1 + (cut + 1) * a_dim1], lda, &work[u11 + 1 + work_dim1],
+                            &i__1);
             i__1 = nnb;
             for(i__ = 1; i__ <= i__1; ++i__)
             {
@@ -464,8 +467,8 @@ void dsytri_3x_(char *uplo, integer *n, doublereal *a, integer *lda, doublereal 
             /* U01**T * invD * U01 -> A( CUT+I, CUT+J ) */
             i__1 = *n + *nb + 1;
             i__2 = *n + *nb + 1;
-            dgemm_("T", "N", &nnb, &nnb, &cut, &c_b10, &a[(cut + 1) * a_dim1 + 1], lda,
-                   &work[work_offset], &i__1, &c_b14, &work[u11 + 1 + work_dim1], &i__2);
+            aocl_blas_dgemm("T", "N", &nnb, &nnb, &cut, &c_b10, &a[(cut + 1) * a_dim1 + 1], lda,
+                            &work[work_offset], &i__1, &c_b14, &work[u11 + 1 + work_dim1], &i__2);
             /* U11 = U11**T * invD1 * U11 + U01**T * invD * U01 */
             i__1 = nnb;
             for(i__ = 1; i__ <= i__1; ++i__)
@@ -478,8 +481,8 @@ void dsytri_3x_(char *uplo, integer *n, doublereal *a, integer *lda, doublereal 
             }
             /* U01 = U00**T * invD0 * U01 */
             i__1 = *n + *nb + 1;
-            dtrmm_("L", uplo, "T", "U", &cut, &nnb, &c_b10, &a[a_offset], lda, &work[work_offset],
-                   &i__1);
+            aocl_blas_dtrmm("L", uplo, "T", "U", &cut, &nnb, &c_b10, &a[a_offset], lda,
+                            &work[work_offset], &i__1);
             /* Update U01 */
             i__1 = cut;
             for(i__ = 1; i__ <= i__1; ++i__)
@@ -509,11 +512,11 @@ void dsytri_3x_(char *uplo, integer *n, doublereal *a, integer *lda, doublereal 
             {
                 if(i__ < ip)
                 {
-                    dsyswapr_(uplo, n, &a[a_offset], lda, &i__, &ip);
+                    aocl_lapack_dsyswapr(uplo, n, &a[a_offset], lda, &i__, &ip);
                 }
                 if(i__ > ip)
                 {
-                    dsyswapr_(uplo, n, &a[a_offset], lda, &ip, &i__);
+                    aocl_lapack_dsyswapr(uplo, n, &a[a_offset], lda, &ip, &i__);
                 }
             }
         }
@@ -522,7 +525,7 @@ void dsytri_3x_(char *uplo, integer *n, doublereal *a, integer *lda, doublereal 
     {
         /* Begin Lower */
         /* inv A = P * inv(L**T) * inv(D) * inv(L) * P**T. */
-        dtrtri_(uplo, "U", n, &a[a_offset], lda, info);
+        aocl_lapack_dtrtri(uplo, "U", n, &a[a_offset], lda, info);
         /* inv(D) and inv(D) * inv(L) */
         k = *n;
         while(k >= 1)
@@ -667,8 +670,9 @@ void dsytri_3x_(char *uplo, integer *n, doublereal *a, integer *lda, doublereal 
             }
             /* L11**T * invD1 * L11 -> L11 */
             i__1 = *n + *nb + 1;
-            dtrmm_("L", uplo, "T", "U", &nnb, &nnb, &c_b10, &a[cut + 1 + (cut + 1) * a_dim1], lda,
-                   &work[u11 + 1 + work_dim1], &i__1);
+            aocl_blas_dtrmm("L", uplo, "T", "U", &nnb, &nnb, &c_b10,
+                            &a[cut + 1 + (cut + 1) * a_dim1], lda, &work[u11 + 1 + work_dim1],
+                            &i__1);
             i__1 = nnb;
             for(i__ = 1; i__ <= i__1; ++i__)
             {
@@ -684,8 +688,9 @@ void dsytri_3x_(char *uplo, integer *n, doublereal *a, integer *lda, doublereal 
                 i__1 = *n - nnb - cut;
                 i__2 = *n + *nb + 1;
                 i__3 = *n + *nb + 1;
-                dgemm_("T", "N", &nnb, &nnb, &i__1, &c_b10, &a[cut + nnb + 1 + (cut + 1) * a_dim1],
-                       lda, &work[work_offset], &i__2, &c_b14, &work[u11 + 1 + work_dim1], &i__3);
+                aocl_blas_dgemm("T", "N", &nnb, &nnb, &i__1, &c_b10,
+                                &a[cut + nnb + 1 + (cut + 1) * a_dim1], lda, &work[work_offset],
+                                &i__2, &c_b14, &work[u11 + 1 + work_dim1], &i__3);
                 /* L11 = L11**T * invD1 * L11 + U01**T * invD * U01 */
                 i__1 = nnb;
                 for(i__ = 1; i__ <= i__1; ++i__)
@@ -699,9 +704,9 @@ void dsytri_3x_(char *uplo, integer *n, doublereal *a, integer *lda, doublereal 
                 /* L01 = L22**T * invD2 * L21 */
                 i__1 = *n - nnb - cut;
                 i__2 = *n + *nb + 1;
-                dtrmm_("L", uplo, "T", "U", &i__1, &nnb, &c_b10,
-                       &a[cut + nnb + 1 + (cut + nnb + 1) * a_dim1], lda, &work[work_offset],
-                       &i__2);
+                aocl_blas_dtrmm("L", uplo, "T", "U", &i__1, &nnb, &c_b10,
+                                &a[cut + nnb + 1 + (cut + nnb + 1) * a_dim1], lda,
+                                &work[work_offset], &i__2);
                 /* Update L21 */
                 i__1 = *n - cut - nnb;
                 for(i__ = 1; i__ <= i__1; ++i__)
@@ -745,11 +750,11 @@ void dsytri_3x_(char *uplo, integer *n, doublereal *a, integer *lda, doublereal 
             {
                 if(i__ < ip)
                 {
-                    dsyswapr_(uplo, n, &a[a_offset], lda, &i__, &ip);
+                    aocl_lapack_dsyswapr(uplo, n, &a[a_offset], lda, &i__, &ip);
                 }
                 if(i__ > ip)
                 {
-                    dsyswapr_(uplo, n, &a[a_offset], lda, &ip, &i__);
+                    aocl_lapack_dsyswapr(uplo, n, &a[a_offset], lda, &ip, &i__);
                 }
             }
         }

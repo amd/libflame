@@ -5,9 +5,9 @@
 
 #include "FLAME.h"
 
-integer FLA_env_get_var( const char* env, integer fallback )
+fla_dim_t FLA_env_get_var( const char* env, fla_dim_t fallback )
 {
-	integer r_val;
+	fla_dim_t r_val;
 	char*  str;
 
 	// Query the environment variable and store the result in str.
@@ -16,9 +16,9 @@ integer FLA_env_get_var( const char* env, integer fallback )
 	// Set the return value based on the string obtained from getenv().
 	if ( str != NULL )
 	{
-		// If there was no error, convert the string to an integer and
-		// prepare to return that integer.
-		r_val = ( integer )strtol( str, NULL, 10 );
+		// If there was no error, convert the string to an fla_dim_t and
+		// prepare to return that fla_dim_t.
+		r_val = ( fla_dim_t )strtol( str, NULL, 10 );
 	}
 	else
 	{
@@ -29,10 +29,10 @@ integer FLA_env_get_var( const char* env, integer fallback )
 	return r_val;
 }
 
-integer FLASH_get_num_threads( integer fallback )
+fla_dim_t FLASH_get_num_threads( fla_dim_t fallback )
 {
 
-    integer fla_threads;
+    fla_dim_t fla_threads;
     extern int fla_thread_get_num_threads(void);
 
     fla_threads = fla_thread_get_num_threads();

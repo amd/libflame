@@ -4,7 +4,7 @@
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
  /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
+static aocl_int64_t c__1 = 1;
 /* > \brief \b ZLAQZ1 */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -164,10 +164,39 @@ static integer c__1 = 1;
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void zlaqz1_(logical *ilq, logical *ilz, integer *k, integer *istartm, integer *istopm,
-             integer *ihi, doublecomplex *a, integer *lda, doublecomplex *b, integer *ldb,
-             integer *nq, integer *qstart, doublecomplex *q, integer *ldq, integer *nz,
-             integer *zstart, doublecomplex *z__, integer *ldz)
+/** Generated wrapper function */
+void zlaqz1_(logical *ilq, logical *ilz, aocl_int_t *k, aocl_int_t *istartm, aocl_int_t *istopm,
+             aocl_int_t *ihi, dcomplex *a, aocl_int_t *lda, dcomplex *b, aocl_int_t *ldb,
+             aocl_int_t *nq, aocl_int_t *qstart, dcomplex *q, aocl_int_t *ldq, aocl_int_t *nz,
+             aocl_int_t *zstart, dcomplex *z__, aocl_int_t *ldz)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_zlaqz1(ilq, ilz, k, istartm, istopm, ihi, a, lda, b, ldb, nq, qstart, q, ldq, nz,
+                       zstart, z__, ldz);
+#else
+    aocl_int64_t k_64 = *k;
+    aocl_int64_t istartm_64 = *istartm;
+    aocl_int64_t istopm_64 = *istopm;
+    aocl_int64_t ihi_64 = *ihi;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t ldb_64 = *ldb;
+    aocl_int64_t nq_64 = *nq;
+    aocl_int64_t qstart_64 = *qstart;
+    aocl_int64_t ldq_64 = *ldq;
+    aocl_int64_t nz_64 = *nz;
+    aocl_int64_t zstart_64 = *zstart;
+    aocl_int64_t ldz_64 = *ldz;
+
+    aocl_lapack_zlaqz1(ilq, ilz, &k_64, &istartm_64, &istopm_64, &ihi_64, a, &lda_64, b, &ldb_64,
+                       &nq_64, &qstart_64, q, &ldq_64, &nz_64, &zstart_64, z__, &ldz_64);
+#endif
+}
+
+void aocl_lapack_zlaqz1(logical *ilq, logical *ilz, aocl_int64_t *k, aocl_int64_t *istartm,
+                        aocl_int64_t *istopm, aocl_int64_t *ihi, dcomplex *a,
+                        aocl_int64_t *lda, dcomplex *b, aocl_int64_t *ldb, aocl_int64_t *nq,
+                        aocl_int64_t *qstart, dcomplex *q, aocl_int64_t *ldq, aocl_int64_t *nz,
+                        aocl_int64_t *zstart, dcomplex *z__, aocl_int64_t *ldz)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF(
@@ -176,18 +205,14 @@ void zlaqz1_(logical *ilq, logical *ilz, integer *k, integer *istartm, integer *
         ", nz %" FLA_IS ", zstart %" FLA_IS ", ldz %" FLA_IS "",
         *k, *istartm, *istopm, *ihi, *lda, *ldb, *nq, *qstart, *ldq, *nz, *zstart, *ldz);
     /* System generated locals */
-    integer a_dim1, a_offset, b_dim1, b_offset, q_dim1, q_offset, z_dim1, z_offset, i__1;
-    doublecomplex z__1;
+    aocl_int64_t a_dim1, a_offset, b_dim1, b_offset, q_dim1, q_offset, z_dim1, z_offset, i__1;
+    dcomplex z__1;
     /* Builtin functions */
-    void d_cnjg(doublecomplex *, doublecomplex *);
+    void d_cnjg(dcomplex *, dcomplex *);
     /* Local variables */
     doublereal c__;
-    doublecomplex s, temp;
-    extern /* Subroutine */
-        void
-        zrot_(integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublereal *,
-              doublecomplex *),
-        zlartg_(doublecomplex *, doublecomplex *, doublereal *, doublecomplex *, doublecomplex *);
+    dcomplex s, temp;
+    extern void zlartg_(dcomplex *, dcomplex *, doublereal *, dcomplex *, dcomplex *);
     /* Arguments */
     /* Parameters */
     /* Local variables */
@@ -217,15 +242,15 @@ void zlaqz1_(logical *ilq, logical *ilz, integer *k, integer *istartm, integer *
         b[i__1].r = 0.;
         b[i__1].i = 0.; // , expr subst
         i__1 = *ihi - *istartm;
-        zrot_(&i__1, &b[*istartm + *ihi * b_dim1], &c__1, &b[*istartm + (*ihi - 1) * b_dim1], &c__1,
-              &c__, &s);
+        aocl_lapack_zrot(&i__1, &b[*istartm + *ihi * b_dim1], &c__1,
+                         &b[*istartm + (*ihi - 1) * b_dim1], &c__1, &c__, &s);
         i__1 = *ihi - *istartm + 1;
-        zrot_(&i__1, &a[*istartm + *ihi * a_dim1], &c__1, &a[*istartm + (*ihi - 1) * a_dim1], &c__1,
-              &c__, &s);
+        aocl_lapack_zrot(&i__1, &a[*istartm + *ihi * a_dim1], &c__1,
+                         &a[*istartm + (*ihi - 1) * a_dim1], &c__1, &c__, &s);
         if(*ilz)
         {
-            zrot_(nz, &z__[(*ihi - *zstart + 1) * z_dim1 + 1], &c__1,
-                  &z__[(*ihi - 1 - *zstart + 1) * z_dim1 + 1], &c__1, &c__, &s);
+            aocl_lapack_zrot(nz, &z__[(*ihi - *zstart + 1) * z_dim1 + 1], &c__1,
+                             &z__[(*ihi - 1 - *zstart + 1) * z_dim1 + 1], &c__1, &c__, &s);
         }
     }
     else
@@ -240,15 +265,15 @@ void zlaqz1_(logical *ilq, logical *ilz, integer *k, integer *istartm, integer *
         b[i__1].r = 0.;
         b[i__1].i = 0.; // , expr subst
         i__1 = *k + 2 - *istartm + 1;
-        zrot_(&i__1, &a[*istartm + (*k + 1) * a_dim1], &c__1, &a[*istartm + *k * a_dim1], &c__1,
-              &c__, &s);
+        aocl_lapack_zrot(&i__1, &a[*istartm + (*k + 1) * a_dim1], &c__1, &a[*istartm + *k * a_dim1],
+                         &c__1, &c__, &s);
         i__1 = *k - *istartm + 1;
-        zrot_(&i__1, &b[*istartm + (*k + 1) * b_dim1], &c__1, &b[*istartm + *k * b_dim1], &c__1,
-              &c__, &s);
+        aocl_lapack_zrot(&i__1, &b[*istartm + (*k + 1) * b_dim1], &c__1, &b[*istartm + *k * b_dim1],
+                         &c__1, &c__, &s);
         if(*ilz)
         {
-            zrot_(nz, &z__[(*k + 1 - *zstart + 1) * z_dim1 + 1], &c__1,
-                  &z__[(*k - *zstart + 1) * z_dim1 + 1], &c__1, &c__, &s);
+            aocl_lapack_zrot(nz, &z__[(*k + 1 - *zstart + 1) * z_dim1 + 1], &c__1,
+                             &z__[(*k - *zstart + 1) * z_dim1 + 1], &c__1, &c__, &s);
         }
         /* Apply transformation from the left */
         zlartg_(&a[*k + 1 + *k * a_dim1], &a[*k + 2 + *k * a_dim1], &c__, &s, &temp);
@@ -259,16 +284,16 @@ void zlaqz1_(logical *ilq, logical *ilz, integer *k, integer *istartm, integer *
         a[i__1].r = 0.;
         a[i__1].i = 0.; // , expr subst
         i__1 = *istopm - *k;
-        zrot_(&i__1, &a[*k + 1 + (*k + 1) * a_dim1], lda, &a[*k + 2 + (*k + 1) * a_dim1], lda, &c__,
-              &s);
+        aocl_lapack_zrot(&i__1, &a[*k + 1 + (*k + 1) * a_dim1], lda, &a[*k + 2 + (*k + 1) * a_dim1],
+                         lda, &c__, &s);
         i__1 = *istopm - *k;
-        zrot_(&i__1, &b[*k + 1 + (*k + 1) * b_dim1], ldb, &b[*k + 2 + (*k + 1) * b_dim1], ldb, &c__,
-              &s);
+        aocl_lapack_zrot(&i__1, &b[*k + 1 + (*k + 1) * b_dim1], ldb, &b[*k + 2 + (*k + 1) * b_dim1],
+                         ldb, &c__, &s);
         if(*ilq)
         {
             d_cnjg(&z__1, &s);
-            zrot_(nq, &q[(*k + 1 - *qstart + 1) * q_dim1 + 1], &c__1,
-                  &q[(*k + 2 - *qstart + 1) * q_dim1 + 1], &c__1, &c__, &z__1);
+            aocl_lapack_zrot(nq, &q[(*k + 1 - *qstart + 1) * q_dim1 + 1], &c__1,
+                             &q[(*k + 2 - *qstart + 1) * q_dim1 + 1], &c__1, &c__, &z__1);
         }
     }
     /* End of ZLAQZ1 */

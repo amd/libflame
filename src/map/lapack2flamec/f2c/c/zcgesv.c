@@ -4,9 +4,9 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static doublecomplex c_b1 = {-1., 0.};
-static doublecomplex c_b2 = {1., 0.};
-static integer c__1 = 1;
+static dcomplex c_b1 = {{-1.}, {0.}};
+static dcomplex c_b2 = {{1.}, {0.}};
+static aocl_int64_t c__1 = 1;
 /* > \brief <b> ZCGESV computes the solution to system of linear equations A * X = B for GE
  * matrices</b> (mixe d precision with iterative refinement) */
 /* =========== DOCUMENTATION =========== */
@@ -46,7 +46,7 @@ static integer c__1 = 1;
 /* > */
 /* > \verbatim */
 /* > */
-/* > ZCGESV computes the solution to a complex system of linear equations */
+/* > ZCGESV computes the solution to a scomplex system of linear equations */
 /* > A * X = B, */
 /* > where A is an N-by-N matrix and X and B are N-by-NRHS matrices. */
 /* > */
@@ -202,52 +202,53 @@ the unit diagonal elements of L are not stored. */
 /* > \ingroup complex16GEsolve */
 /* ===================================================================== */
 /* Subroutine */
-void zcgesv_(integer *n, integer *nrhs, doublecomplex *a, integer *lda, integer *ipiv,
-             doublecomplex *b, integer *ldb, doublecomplex *x, integer *ldx, doublecomplex *work,
-             complex *swork, doublereal *rwork, integer *iter, integer *info)
+/** Generated wrapper function */
+void zcgesv_(aocl_int_t *n, aocl_int_t *nrhs, dcomplex *a, aocl_int_t *lda, aocl_int_t *ipiv,
+             dcomplex *b, aocl_int_t *ldb, dcomplex *x, aocl_int_t *ldx,
+             dcomplex *work, scomplex *swork, doublereal *rwork, aocl_int_t *iter,
+             aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_zcgesv(n, nrhs, a, lda, ipiv, b, ldb, x, ldx, work, swork, rwork, iter, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t nrhs_64 = *nrhs;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t ldb_64 = *ldb;
+    aocl_int64_t ldx_64 = *ldx;
+    aocl_int64_t iter_64 = *iter;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_zcgesv(&n_64, &nrhs_64, a, &lda_64, ipiv, b, &ldb_64, x, &ldx_64, work, swork,
+                       rwork, &iter_64, &info_64);
+
+    *iter = (aocl_int_t)iter_64;
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_zcgesv(aocl_int64_t *n, aocl_int64_t *nrhs, dcomplex *a, aocl_int64_t *lda,
+                        aocl_int_t *ipiv, dcomplex *b, aocl_int64_t *ldb, dcomplex *x,
+                        aocl_int64_t *ldx, dcomplex *work, scomplex *swork, doublereal *rwork,
+                        aocl_int64_t *iter, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zcgesv inputs: n %" FLA_IS ", nrhs %" FLA_IS ", lda %" FLA_IS
                       ", ldb %" FLA_IS ", ldx %" FLA_IS "",
                       *n, *nrhs, *lda, *ldb, *ldx);
     /* System generated locals */
-    integer a_dim1, a_offset, b_dim1, b_offset, work_dim1, work_offset, x_dim1, x_offset, i__1,
+    aocl_int64_t a_dim1, a_offset, b_dim1, b_offset, work_dim1, work_offset, x_dim1, x_offset, i__1,
         i__2;
     doublereal d__1, d__2;
     /* Builtin functions */
-    double sqrt(doublereal), d_imag(doublecomplex *);
+    double sqrt(doublereal), d_imag(dcomplex *);
     /* Local variables */
-    integer i__;
+    aocl_int64_t i__;
     doublereal cte, eps, anrm;
-    integer ptsa;
+    aocl_int64_t ptsa;
     doublereal rnrm, xnrm;
-    integer ptsx, iiter;
-    extern /* Subroutine */
-        void
-        zgemm_(char *, char *, integer *, integer *, integer *, doublecomplex *, doublecomplex *,
-               integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *),
-        zaxpy_(integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *),
-        clag2z_(integer *, integer *, complex *, integer *, doublecomplex *, integer *, integer *),
-        zlag2c_(integer *, integer *, doublecomplex *, integer *, complex *, integer *, integer *);
+    aocl_int64_t ptsx, iiter;
     extern doublereal dlamch_(char *);
-    extern /* Subroutine */
-        void
-        cgetrf_(integer *, integer *, complex *, integer *, integer *, integer *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    extern doublereal zlange_(char *, integer *, integer *, doublecomplex *, integer *,
-                              doublereal *);
-    extern /* Subroutine */
-        void
-        cgetrs_(char *, integer *, integer *, complex *, integer *, integer *, complex *, integer *,
-                integer *);
-    extern integer izamax_(integer *, doublecomplex *, integer *);
-    extern /* Subroutine */
-        void
-        zlacpy_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *,
-                integer *),
-        zgetrf_(integer *, integer *, doublecomplex *, integer *, integer *, integer *),
-        zgetrs_(char *, integer *, integer *, doublecomplex *, integer *, integer *,
-                doublecomplex *, integer *, integer *);
     /* -- LAPACK driver routine (version 3.8.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -313,7 +314,7 @@ void zcgesv_(integer *n, integer *nrhs, doublecomplex *a, integer *lda, integer 
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("ZCGESV", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("ZCGESV", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -331,7 +332,7 @@ void zcgesv_(integer *n, integer *nrhs, doublecomplex *a, integer *lda, integer 
         goto L40;
     }
     /* Compute some constants. */
-    anrm = zlange_("I", n, n, &a[a_offset], lda, &rwork[1]);
+    anrm = aocl_lapack_zlange("I", n, n, &a[a_offset], lda, &rwork[1]);
     eps = dlamch_("Epsilon");
     cte = anrm * eps * sqrt((doublereal)(*n)) * 1.;
     /* Set the indices PTSA, PTSX for referencing SA and SX in SWORK. */
@@ -339,7 +340,7 @@ void zcgesv_(integer *n, integer *nrhs, doublecomplex *a, integer *lda, integer 
     ptsx = ptsa + *n * *n;
     /* Convert B from double precision to single precision and store the */
     /* result in SX. */
-    zlag2c_(n, nrhs, &b[b_offset], ldb, &swork[ptsx], n, info);
+    aocl_lapack_zlag2c(n, nrhs, &b[b_offset], ldb, &swork[ptsx], n, info);
     if(*info != 0)
     {
         *iter = -2;
@@ -347,40 +348,40 @@ void zcgesv_(integer *n, integer *nrhs, doublecomplex *a, integer *lda, integer 
     }
     /* Convert A from double precision to single precision and store the */
     /* result in SA. */
-    zlag2c_(n, n, &a[a_offset], lda, &swork[ptsa], n, info);
+    aocl_lapack_zlag2c(n, n, &a[a_offset], lda, &swork[ptsa], n, info);
     if(*info != 0)
     {
         *iter = -2;
         goto L40;
     }
     /* Compute the LU factorization of SA. */
-    cgetrf_(n, n, &swork[ptsa], n, &ipiv[1], info);
+    aocl_lapack_cgetrf(n, n, &swork[ptsa], n, &ipiv[1], info);
     if(*info != 0)
     {
         *iter = -3;
         goto L40;
     }
     /* Solve the system SA*SX = SB. */
-    cgetrs_("No transpose", n, nrhs, &swork[ptsa], n, &ipiv[1], &swork[ptsx], n, info);
+    aocl_lapack_cgetrs("No transpose", n, nrhs, &swork[ptsa], n, &ipiv[1], &swork[ptsx], n, info);
     /* Convert SX back to double precision */
-    clag2z_(n, nrhs, &swork[ptsx], n, &x[x_offset], ldx, info);
+    aocl_lapack_clag2z(n, nrhs, &swork[ptsx], n, &x[x_offset], ldx, info);
     /* Compute R = B - AX (R is WORK). */
-    zlacpy_("All", n, nrhs, &b[b_offset], ldb, &work[work_offset], n);
-    zgemm_("No Transpose", "No Transpose", n, nrhs, n, &c_b1, &a[a_offset], lda, &x[x_offset], ldx,
-           &c_b2, &work[work_offset], n);
+    aocl_lapack_zlacpy("All", n, nrhs, &b[b_offset], ldb, &work[work_offset], n);
+    aocl_blas_zgemm("No Transpose", "No Transpose", n, nrhs, n, &c_b1, &a[a_offset], lda,
+                    &x[x_offset], ldx, &c_b2, &work[work_offset], n);
     /* Check whether the NRHS normwise backward errors satisfy the */
     /* stopping criterion. If yes, set ITER=0 and return. */
     i__1 = *nrhs;
     for(i__ = 1; i__ <= i__1; ++i__)
     {
-        i__2 = izamax_(n, &x[i__ * x_dim1 + 1], &c__1) + i__ * x_dim1;
+        i__2 = aocl_blas_izamax(n, &x[i__ * x_dim1 + 1], &c__1) + i__ * x_dim1;
         xnrm = (d__1 = x[i__2].r, f2c_abs(d__1))
-               + (d__2 = d_imag(&x[izamax_(n, &x[i__ * x_dim1 + 1], &c__1) + i__ * x_dim1]),
+               + (d__2 = d_imag(&x[aocl_blas_izamax(n, &x[i__ * x_dim1 + 1], &c__1) + i__ * x_dim1]),
                   f2c_abs(d__2));
-        i__2 = izamax_(n, &work[i__ * work_dim1 + 1], &c__1) + i__ * work_dim1;
+        i__2 = aocl_blas_izamax(n, &work[i__ * work_dim1 + 1], &c__1) + i__ * work_dim1;
         rnrm = (d__1 = work[i__2].r, f2c_abs(d__1))
                + (d__2
-                  = d_imag(&work[izamax_(n, &work[i__ * work_dim1 + 1], &c__1) + i__ * work_dim1]),
+                  = d_imag(&work[aocl_blas_izamax(n, &work[i__ * work_dim1 + 1], &c__1) + i__ * work_dim1]),
                   f2c_abs(d__2));
         if(rnrm > xnrm * cte)
         {
@@ -397,39 +398,41 @@ L10:
     {
         /* Convert R (in WORK) from double precision to single precision */
         /* and store the result in SX. */
-        zlag2c_(n, nrhs, &work[work_offset], n, &swork[ptsx], n, info);
+        aocl_lapack_zlag2c(n, nrhs, &work[work_offset], n, &swork[ptsx], n, info);
         if(*info != 0)
         {
             *iter = -2;
             goto L40;
         }
         /* Solve the system SA*SX = SR. */
-        cgetrs_("No transpose", n, nrhs, &swork[ptsa], n, &ipiv[1], &swork[ptsx], n, info);
+        aocl_lapack_cgetrs("No transpose", n, nrhs, &swork[ptsa], n, &ipiv[1], &swork[ptsx], n,
+                           info);
         /* Convert SX back to double precision and update the current */
         /* iterate. */
-        clag2z_(n, nrhs, &swork[ptsx], n, &work[work_offset], n, info);
+        aocl_lapack_clag2z(n, nrhs, &swork[ptsx], n, &work[work_offset], n, info);
         i__1 = *nrhs;
         for(i__ = 1; i__ <= i__1; ++i__)
         {
-            zaxpy_(n, &c_b2, &work[i__ * work_dim1 + 1], &c__1, &x[i__ * x_dim1 + 1], &c__1);
+            aocl_blas_zaxpy(n, &c_b2, &work[i__ * work_dim1 + 1], &c__1, &x[i__ * x_dim1 + 1],
+                            &c__1);
         }
         /* Compute R = B - AX (R is WORK). */
-        zlacpy_("All", n, nrhs, &b[b_offset], ldb, &work[work_offset], n);
-        zgemm_("No Transpose", "No Transpose", n, nrhs, n, &c_b1, &a[a_offset], lda, &x[x_offset],
-               ldx, &c_b2, &work[work_offset], n);
+        aocl_lapack_zlacpy("All", n, nrhs, &b[b_offset], ldb, &work[work_offset], n);
+        aocl_blas_zgemm("No Transpose", "No Transpose", n, nrhs, n, &c_b1, &a[a_offset], lda,
+                        &x[x_offset], ldx, &c_b2, &work[work_offset], n);
         /* Check whether the NRHS normwise backward errors satisfy the */
         /* stopping criterion. If yes, set ITER=IITER>0 and return. */
         i__1 = *nrhs;
         for(i__ = 1; i__ <= i__1; ++i__)
         {
-            i__2 = izamax_(n, &x[i__ * x_dim1 + 1], &c__1) + i__ * x_dim1;
+            i__2 = aocl_blas_izamax(n, &x[i__ * x_dim1 + 1], &c__1) + i__ * x_dim1;
             xnrm = (d__1 = x[i__2].r, f2c_abs(d__1))
-                   + (d__2 = d_imag(&x[izamax_(n, &x[i__ * x_dim1 + 1], &c__1) + i__ * x_dim1]),
+                   + (d__2 = d_imag(&x[aocl_blas_izamax(n, &x[i__ * x_dim1 + 1], &c__1) + i__ * x_dim1]),
                       f2c_abs(d__2));
-            i__2 = izamax_(n, &work[i__ * work_dim1 + 1], &c__1) + i__ * work_dim1;
+            i__2 = aocl_blas_izamax(n, &work[i__ * work_dim1 + 1], &c__1) + i__ * work_dim1;
             rnrm = (d__1 = work[i__2].r, f2c_abs(d__1))
                    + (d__2 = d_imag(
-                          &work[izamax_(n, &work[i__ * work_dim1 + 1], &c__1) + i__ * work_dim1]),
+                          &work[aocl_blas_izamax(n, &work[i__ * work_dim1 + 1], &c__1) + i__ * work_dim1]),
                       f2c_abs(d__2));
             if(rnrm > xnrm * cte)
             {
@@ -442,7 +445,7 @@ L10:
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     L20: /* L30: */
-         ;
+        ;
     }
     /* If we are at this place of the code, this is because we have */
     /* performed ITER=ITERMAX iterations and never satisfied the stopping */
@@ -451,14 +454,15 @@ L10:
     *iter = -31;
 L40: /* Single-precision iterative refinement failed to converge to a */
     /* satisfactory solution, so we resort to double precision. */
-    zgetrf_(n, n, &a[a_offset], lda, &ipiv[1], info);
+    aocl_lapack_zgetrf(n, n, &a[a_offset], lda, &ipiv[1], info);
     if(*info != 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
-    zlacpy_("All", n, nrhs, &b[b_offset], ldb, &x[x_offset], ldx);
-    zgetrs_("No transpose", n, nrhs, &a[a_offset], lda, &ipiv[1], &x[x_offset], ldx, info);
+    aocl_lapack_zlacpy("All", n, nrhs, &b[b_offset], ldb, &x[x_offset], ldx);
+    aocl_lapack_zgetrs("No transpose", n, nrhs, &a[a_offset], lda, &ipiv[1], &x[x_offset], ldx,
+                       info);
     AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of ZCGESV. */

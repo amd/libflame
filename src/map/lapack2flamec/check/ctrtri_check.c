@@ -1,10 +1,10 @@
 #include "FLA_f2c.h"
 #include "FLA_lapack2flame_return_defs.h"
 
-int ctrtri_check(char *uplo, char *diag, integer *n, scomplex *a, integer *lda, integer *info)
+int ctrtri_check(char *uplo, char *diag, aocl_int64_t *n, scomplex *a, aocl_int64_t *lda, aocl_int64_t *info)
 {
     /* System generated locals */
-    integer a_dim1, a_offset, i__1, i__2;
+    aocl_int64_t a_dim1, a_offset, i__1, i__2;
     /* Local variables */
     logical upper;
     logical nounit;
@@ -36,7 +36,7 @@ int ctrtri_check(char *uplo, char *diag, integer *n, scomplex *a, integer *lda, 
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("CTRTRI", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("CTRTRI", &i__1, (ftnlen)6);
         return LAPACK_FAILURE;
     }
     /* Quick return if possible */

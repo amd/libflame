@@ -7,8 +7,8 @@ int zrotg_(dcomplex *ca, dcomplex *cb, doublereal * c__, dcomplex *s)
     doublereal d__1, d__2;
     dcomplex z__1, z__2, z__3, z__4;
     /* Builtin functions */
-    double z_f2c_abs(doublecomplex *);
-    void z_div(doublecomplex *, doublecomplex *, doublecomplex *);
+    double z_f2c_abs(dcomplex *);
+    void z_div(dcomplex *, dcomplex *, dcomplex *);
     double sqrt(doublereal);
     void d_cnjg(dcomplex *, dcomplex *);
     /* Local variables */

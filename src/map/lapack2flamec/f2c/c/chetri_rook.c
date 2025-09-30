@@ -4,8 +4,8 @@
  -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for
  libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static complex c_b2 = {0.f, 0.f};
-static integer c__1 = 1;
+static scomplex c_b2 = {{0.f}, {0.f}};
+static aocl_int64_t c__1 = 1;
 /* > \brief \b CHETRI_ROOK computes the inverse of HE matrix using the factorization obtained with
  * the bounded Bunch-Kaufman ("rook") diagonal pivoting method. */
 /* =========== DOCUMENTATION =========== */
@@ -129,8 +129,25 @@ the matrix is singular and its */
 /* > \endverbatim */
 /* ===================================================================== */
 /* Subroutine */
-void chetri_rook_(char *uplo, integer *n, complex *a, integer *lda, integer *ipiv, complex *work,
-                  integer *info)
+/** Generated wrapper function */
+void chetri_rook_(char *uplo, aocl_int_t *n, scomplex *a, aocl_int_t *lda, aocl_int_t *ipiv,
+                  scomplex *work, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_chetri_rook(uplo, n, a, lda, ipiv, work, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_chetri_rook(uplo, &n_64, a, &lda_64, ipiv, work, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_chetri_rook(char *uplo, aocl_int64_t *n, scomplex *a, aocl_int64_t *lda,
+                             aocl_int_t *ipiv, scomplex *work, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -147,30 +164,18 @@ void chetri_rook_(char *uplo, integer *n, complex *a, integer *lda, integer *ipi
     real r__1;
     scomplex q__1, q__2;
     /* Builtin functions */
-    double c_abs(complex *);
-    void r_cnjg(complex *, complex *);
+    double c_abs(scomplex *);
+    void r_cnjg(scomplex *, scomplex *);
     /* Local variables */
     real d__;
     aocl_int64_t j, k;
     real t, ak;
     aocl_int64_t kp;
     real akp1;
-    complex temp, akkp1;
-    extern /* Complex */
-        VOID
-        cdotc_f2c_(complex *, integer *, complex *, integer *, complex *, integer *);
-    extern logical lsame_(char *, char *, integer, integer);
-    extern /* Subroutine */
-        void
-        chemv_(char *, integer *, complex *, complex *, integer *, complex *, integer *, complex *,
-               complex *, integer *),
-        ccopy_(integer *, complex *, integer *, complex *, integer *),
-        cswap_(integer *, complex *, integer *, complex *, integer *);
-    integer kstep;
+    scomplex temp, akkp1;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    aocl_int64_t kstep;
     logical upper;
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.5.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -216,7 +221,7 @@ void chetri_rook_(char *uplo, integer *n, complex *a, integer *lda, integer *ipi
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("CHETRI_ROOK", &i__1, (ftnlen)11);
+        aocl_blas_xerbla("CHETRI_ROOK", &i__1, (ftnlen)11);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
@@ -285,12 +290,12 @@ void chetri_rook_(char *uplo, integer *n, complex *a, integer *lda, integer *ipi
                 i__1 = k - 1;
                 q__1.r = -1.f;
                 q__1.i = -0.f; // , expr subst
-                chemv_(uplo, &i__1, &q__1, &a[a_offset], lda, &work[1], &c__1, &c_b2,
-                       &a[k * a_dim1 + 1], &c__1);
+                aocl_blas_chemv(uplo, &i__1, &q__1, &a[a_offset], lda, &work[1], &c__1, &c_b2,
+                                &a[k * a_dim1 + 1], &c__1);
                 i__1 = k + k * a_dim1;
                 i__2 = k + k * a_dim1;
                 i__3 = k - 1;
-                cdotc_f2c_(&q__2, &i__3, &work[1], &c__1, &a[k * a_dim1 + 1], &c__1);
+                aocl_lapack_cdotc_f2c(&q__2, &i__3, &work[1], &c__1, &a[k * a_dim1 + 1], &c__1);
                 r__1 = q__2.r;
                 q__1.r = a[i__2].r - r__1;
                 q__1.i = a[i__2].i; // , expr subst
@@ -337,12 +342,12 @@ void chetri_rook_(char *uplo, integer *n, complex *a, integer *lda, integer *ipi
                 i__1 = k - 1;
                 q__1.r = -1.f;
                 q__1.i = -0.f; // , expr subst
-                chemv_(uplo, &i__1, &q__1, &a[a_offset], lda, &work[1], &c__1, &c_b2,
-                       &a[k * a_dim1 + 1], &c__1);
+                aocl_blas_chemv(uplo, &i__1, &q__1, &a[a_offset], lda, &work[1], &c__1, &c_b2,
+                                &a[k * a_dim1 + 1], &c__1);
                 i__1 = k + k * a_dim1;
                 i__2 = k + k * a_dim1;
                 i__3 = k - 1;
-                cdotc_f2c_(&q__2, &i__3, &work[1], &c__1, &a[k * a_dim1 + 1], &c__1);
+                aocl_lapack_cdotc_f2c(&q__2, &i__3, &work[1], &c__1, &a[k * a_dim1 + 1], &c__1);
                 r__1 = q__2.r;
                 q__1.r = a[i__2].r - r__1;
                 q__1.i = a[i__2].i; // , expr subst
@@ -351,23 +356,23 @@ void chetri_rook_(char *uplo, integer *n, complex *a, integer *lda, integer *ipi
                 i__1 = k + (k + 1) * a_dim1;
                 i__2 = k + (k + 1) * a_dim1;
                 i__3 = k - 1;
-                cdotc_f2c_(&q__2, &i__3, &a[k * a_dim1 + 1], &c__1, &a[(k + 1) * a_dim1 + 1],
+                aocl_lapack_cdotc_f2c(&q__2, &i__3, &a[k * a_dim1 + 1], &c__1, &a[(k + 1) * a_dim1 + 1],
                            &c__1);
                 q__1.r = a[i__2].r - q__2.r;
                 q__1.i = a[i__2].i - q__2.i; // , expr subst
                 a[i__1].r = q__1.r;
                 a[i__1].i = q__1.i; // , expr subst
                 i__1 = k - 1;
-                ccopy_(&i__1, &a[(k + 1) * a_dim1 + 1], &c__1, &work[1], &c__1);
+                aocl_blas_ccopy(&i__1, &a[(k + 1) * a_dim1 + 1], &c__1, &work[1], &c__1);
                 i__1 = k - 1;
                 q__1.r = -1.f;
                 q__1.i = -0.f; // , expr subst
-                chemv_(uplo, &i__1, &q__1, &a[a_offset], lda, &work[1], &c__1, &c_b2,
-                       &a[(k + 1) * a_dim1 + 1], &c__1);
+                aocl_blas_chemv(uplo, &i__1, &q__1, &a[a_offset], lda, &work[1], &c__1, &c_b2,
+                                &a[(k + 1) * a_dim1 + 1], &c__1);
                 i__1 = k + 1 + (k + 1) * a_dim1;
                 i__2 = k + 1 + (k + 1) * a_dim1;
                 i__3 = k - 1;
-                cdotc_f2c_(&q__2, &i__3, &work[1], &c__1, &a[(k + 1) * a_dim1 + 1], &c__1);
+                aocl_lapack_cdotc_f2c(&q__2, &i__3, &work[1], &c__1, &a[(k + 1) * a_dim1 + 1], &c__1);
                 r__1 = q__2.r;
                 q__1.r = a[i__2].r - r__1;
                 q__1.i = a[i__2].i; // , expr subst
@@ -545,17 +550,17 @@ void chetri_rook_(char *uplo, integer *n, complex *a, integer *lda, integer *ipi
                 i__1 = *n - k;
                 q__1.r = -1.f;
                 q__1.i = -0.f; // , expr subst
-                chemv_(uplo, &i__1, &q__1, &a[k + 1 + (k + 1) * a_dim1], lda, &work[1], &c__1,
-                       &c_b2, &a[k + 1 + k * a_dim1], &c__1);
+                aocl_blas_chemv(uplo, &i__1, &q__1, &a[k + 1 + (k + 1) * a_dim1], lda, &work[1],
+                                &c__1, &c_b2, &a[k + 1 + k * a_dim1], &c__1);
                 i__1 = k + k * a_dim1;
                 i__2 = k + k * a_dim1;
                 i__3 = *n - k;
                 aocl_lapack_cdotc_f2c(&q__2, &i__3, &work[1], &c__1, &a[k + 1 + k * a_dim1], &c__1);
-                r__1 = q__2.real;
-                q__1.real = a[i__2].real - r__1;
-                q__1.imag = a[i__2].imag; // , expr subst
-                a[i__1].real = q__1.real;
-                a[i__1].imag = q__1.imag; // , expr subst
+                r__1 = q__2.r;
+                q__1.r = a[i__2].r - r__1;
+                q__1.i = a[i__2].i; // , expr subst
+                a[i__1].r = q__1.r;
+                a[i__1].i = q__1.i; // , expr subst
             }
             kstep = 1;
         }
@@ -597,42 +602,42 @@ void chetri_rook_(char *uplo, integer *n, complex *a, integer *lda, integer *ipi
                 i__1 = *n - k;
                 q__1.r = -1.f;
                 q__1.i = -0.f; // , expr subst
-                chemv_(uplo, &i__1, &q__1, &a[k + 1 + (k + 1) * a_dim1], lda, &work[1], &c__1,
-                       &c_b2, &a[k + 1 + k * a_dim1], &c__1);
+                aocl_blas_chemv(uplo, &i__1, &q__1, &a[k + 1 + (k + 1) * a_dim1], lda, &work[1],
+                                &c__1, &c_b2, &a[k + 1 + k * a_dim1], &c__1);
                 i__1 = k + k * a_dim1;
                 i__2 = k + k * a_dim1;
                 i__3 = *n - k;
                 aocl_lapack_cdotc_f2c(&q__2, &i__3, &work[1], &c__1, &a[k + 1 + k * a_dim1], &c__1);
-                r__1 = q__2.real;
-                q__1.real = a[i__2].real - r__1;
-                q__1.imag = a[i__2].imag; // , expr subst
-                a[i__1].real = q__1.real;
-                a[i__1].imag = q__1.imag; // , expr subst
+                r__1 = q__2.r;
+                q__1.r = a[i__2].r - r__1;
+                q__1.i = a[i__2].i; // , expr subst
+                a[i__1].r = q__1.r;
+                a[i__1].i = q__1.i; // , expr subst
                 i__1 = k + (k - 1) * a_dim1;
                 i__2 = k + (k - 1) * a_dim1;
                 i__3 = *n - k;
-                cdotc_f2c_(&q__2, &i__3, &a[k + 1 + k * a_dim1], &c__1,
+                aocl_lapack_cdotc_f2c(&q__2, &i__3, &a[k + 1 + k * a_dim1], &c__1,
                            &a[k + 1 + (k - 1) * a_dim1], &c__1);
                 q__1.r = a[i__2].r - q__2.r;
                 q__1.i = a[i__2].i - q__2.i; // , expr subst
                 a[i__1].r = q__1.r;
                 a[i__1].i = q__1.i; // , expr subst
                 i__1 = *n - k;
-                ccopy_(&i__1, &a[k + 1 + (k - 1) * a_dim1], &c__1, &work[1], &c__1);
+                aocl_blas_ccopy(&i__1, &a[k + 1 + (k - 1) * a_dim1], &c__1, &work[1], &c__1);
                 i__1 = *n - k;
                 q__1.r = -1.f;
                 q__1.i = -0.f; // , expr subst
-                chemv_(uplo, &i__1, &q__1, &a[k + 1 + (k + 1) * a_dim1], lda, &work[1], &c__1,
-                       &c_b2, &a[k + 1 + (k - 1) * a_dim1], &c__1);
+                aocl_blas_chemv(uplo, &i__1, &q__1, &a[k + 1 + (k + 1) * a_dim1], lda, &work[1],
+                                &c__1, &c_b2, &a[k + 1 + (k - 1) * a_dim1], &c__1);
                 i__1 = k - 1 + (k - 1) * a_dim1;
                 i__2 = k - 1 + (k - 1) * a_dim1;
                 i__3 = *n - k;
                 aocl_lapack_cdotc_f2c(&q__2, &i__3, &work[1], &c__1, &a[k + 1 + (k - 1) * a_dim1], &c__1);
-                r__1 = q__2.real;
-                q__1.real = a[i__2].real - r__1;
-                q__1.imag = a[i__2].imag; // , expr subst
-                a[i__1].real = q__1.real;
-                a[i__1].imag = q__1.imag; // , expr subst
+                r__1 = q__2.r;
+                q__1.r = a[i__2].r - r__1;
+                q__1.i = a[i__2].i; // , expr subst
+                a[i__1].r = q__1.r;
+                a[i__1].i = q__1.i; // , expr subst
             }
             kstep = 2;
         }

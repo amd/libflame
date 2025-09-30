@@ -129,19 +129,44 @@
 /* > Christof Voemel, University of California, Berkeley, USA */
 /* ===================================================================== */
 /* Subroutine */
-void dlarrc_(char *jobt, integer *n, doublereal *vl, doublereal *vu, doublereal *d__, doublereal *e,
-             doublereal *pivmin, integer *eigcnt, integer *lcnt, integer *rcnt, integer *info)
+/** Generated wrapper function */
+void dlarrc_(char *jobt, aocl_int_t *n, doublereal *vl, doublereal *vu, doublereal *d__,
+             doublereal *e, doublereal *pivmin, aocl_int_t *eigcnt, aocl_int_t *lcnt,
+             aocl_int_t *rcnt, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_dlarrc(jobt, n, vl, vu, d__, e, pivmin, eigcnt, lcnt, rcnt, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t eigcnt_64 = *eigcnt;
+    aocl_int64_t lcnt_64 = *lcnt;
+    aocl_int64_t rcnt_64 = *rcnt;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_dlarrc(jobt, &n_64, vl, vu, d__, e, pivmin, &eigcnt_64, &lcnt_64, &rcnt_64,
+                       &info_64);
+
+    *eigcnt = (aocl_int_t)eigcnt_64;
+    *lcnt = (aocl_int_t)lcnt_64;
+    *rcnt = (aocl_int_t)rcnt_64;
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_dlarrc(char *jobt, aocl_int64_t *n, doublereal *vl, doublereal *vu,
+                        doublereal *d__, doublereal *e, doublereal *pivmin, aocl_int64_t *eigcnt,
+                        aocl_int64_t *lcnt, aocl_int64_t *rcnt, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dlarrc inputs: jobt %c, n %" FLA_IS "", *jobt, *n);
     /* System generated locals */
-    integer i__1;
+    aocl_int64_t i__1;
     doublereal d__1;
     /* Local variables */
-    integer i__;
+    aocl_int64_t i__;
     doublereal sl, su, tmp, tmp2;
     logical matt;
-    extern logical lsame_(char *, char *, integer, integer);
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     doublereal lpivot, rpivot;
     /* -- LAPACK auxiliary routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */

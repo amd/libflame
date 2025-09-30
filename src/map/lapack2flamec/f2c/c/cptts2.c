@@ -108,8 +108,24 @@
 /* > \ingroup complexPTcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void cptts2_(integer *iuplo, integer *n, integer *nrhs, real *d__, complex *e, complex *b,
-             integer *ldb)
+/** Generated wrapper function */
+void cptts2_(aocl_int_t *iuplo, aocl_int_t *n, aocl_int_t *nrhs, real *d__, scomplex *e, scomplex *b,
+             aocl_int_t *ldb)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_cptts2(iuplo, n, nrhs, d__, e, b, ldb);
+#else
+    aocl_int64_t iuplo_64 = *iuplo;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t nrhs_64 = *nrhs;
+    aocl_int64_t ldb_64 = *ldb;
+
+    aocl_lapack_cptts2(&iuplo_64, &n_64, &nrhs_64, d__, e, b, &ldb_64);
+#endif
+}
+
+void aocl_lapack_cptts2(aocl_int64_t *iuplo, aocl_int64_t *n, aocl_int64_t *nrhs, real *d__,
+                        scomplex *e, scomplex *b, aocl_int64_t *ldb)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -130,10 +146,7 @@ void cptts2_(integer *iuplo, integer *n, integer *nrhs, real *d__, complex *e, c
     /* Builtin functions */
     void r_cnjg(scomplex *, scomplex *);
     /* Local variables */
-    integer i__, j;
-    extern /* Subroutine */
-        void
-        csscal_(integer *, real *, complex *, integer *);
+    aocl_int64_t i__, j;
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */

@@ -29,11 +29,54 @@
 
 */
 
+extern void sorgtr_fla(char *uplo, aocl_int64_t *n, real *a, aocl_int64_t *lda, real *tau, real *work,
+                       aocl_int64_t *lwork, aocl_int64_t *info);
+extern void dorgtr_fla(char *uplo, aocl_int64_t *n, doublereal *a, aocl_int64_t *lda, doublereal *tau,
+                       doublereal *work, aocl_int64_t *lwork, aocl_int64_t *info);
+extern void cungtr_fla(char *uplo, aocl_int64_t *n, scomplex *a, aocl_int64_t *lda, scomplex *tau,
+                       scomplex *work, aocl_int64_t *lwork, aocl_int64_t *info);
+extern void zungtr_fla(char *uplo, aocl_int64_t *n, dcomplex *a, aocl_int64_t *lda, dcomplex *tau,
+                       dcomplex *work, aocl_int64_t *lwork, aocl_int64_t *info);
+
+/** Generated wrapper function */
+void sorgtr_(char *uplo, aocl_int_t *m, real *buff_A, aocl_int_t *ldim_A, real *buff_t, real *buff_w, aocl_int_t *lwork, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_sorgtr(uplo, m, buff_A, ldim_A, buff_t, buff_w, lwork, info);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t ldim_A_64 = *ldim_A;
+    aocl_int64_t lwork_64 = *lwork;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_sorgtr(uplo, &m_64, buff_A, &ldim_A_64, buff_t, buff_w, &lwork_64, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+/** Generated wrapper function */
+void dorgtr_(char *uplo, aocl_int_t *m, doublereal *buff_A, aocl_int_t *ldim_A, doublereal *buff_t, doublereal *buff_w, aocl_int_t *lwork, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_dorgtr(uplo, m, buff_A, ldim_A, buff_t, buff_w, lwork, info);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t ldim_A_64 = *ldim_A;
+    aocl_int64_t lwork_64 = *lwork;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_dorgtr(uplo, &m_64, buff_A, &ldim_A_64, buff_t, buff_w, &lwork_64, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
 #define LAPACK_orgtr(prefix, name)                                                              \
-    void F77_##prefix##name##tr(char *uplo, integer *m, PREFIX2LAPACK_TYPEDEF(prefix) * buff_A, \
-                                integer * ldim_A, PREFIX2LAPACK_TYPEDEF(prefix) * buff_t,       \
-                                PREFIX2LAPACK_TYPEDEF(prefix) * buff_w, integer * lwork,        \
-                                integer * info)
+    void aocl_lapack_##prefix##name##tr(char *uplo, aocl_int64_t *m, PREFIX2LAPACK_TYPEDEF(prefix) * buff_A, \
+                                aocl_int64_t * ldim_A, PREFIX2LAPACK_TYPEDEF(prefix) * buff_t,       \
+                                PREFIX2LAPACK_TYPEDEF(prefix) * buff_w, aocl_int64_t * lwork,        \
+                                aocl_int64_t * info)
 
 #define LAPACK_orgtr_body(prefix)                                     \
     FLA_Datatype datatype = PREFIX2FLAME_DATATYPE(prefix);            \
@@ -117,15 +160,6 @@
                                                                       \
     *info = 0;
 
-extern void sorgtr_fla(char *uplo, integer *n, real *a, integer *lda, real *tau, real *work,
-                       integer *lwork, integer *info);
-extern void dorgtr_fla(char *uplo, integer *n, doublereal *a, integer *lda, doublereal *tau,
-                       doublereal *work, integer *lwork, integer *info);
-extern void cungtr_fla(char *uplo, integer *n, complex *a, integer *lda, complex *tau,
-                       complex *work, integer *lwork, integer *info);
-extern void zungtr_fla(char *uplo, integer *n, doublecomplex *a, integer *lda, doublecomplex *tau,
-                       doublecomplex *work, integer *lwork, integer *info);
-
 LAPACK_orgtr(s, org)
 {
     AOCL_DTL_TRACE_LOG_INIT
@@ -193,7 +227,7 @@ LAPACK_orgtr(c, ung)
     {
         if(*uplo == 'U' || *uplo == 'u')
         {
-            cungtr_fla(uplo, m, (complex *)buff_A, ldim_A, (complex *)buff_t, (complex *)buff_w,
+            cungtr_fla(uplo, m, (scomplex *)buff_A, ldim_A, (scomplex *)buff_t, (scomplex *)buff_w,
                        lwork, info);
             AOCL_DTL_TRACE_LOG_EXIT
             return;
@@ -221,8 +255,8 @@ LAPACK_orgtr(z, ung)
     {
         if(*uplo == 'U' || *uplo == 'u')
         {
-            zungtr_fla(uplo, m, (doublecomplex *)buff_A, ldim_A, (doublecomplex *)buff_t,
-                       (doublecomplex *)buff_w, lwork, info);
+            zungtr_fla(uplo, m, (dcomplex *)buff_A, ldim_A, (dcomplex *)buff_t,
+                       (dcomplex *)buff_w, lwork, info);
             AOCL_DTL_TRACE_LOG_EXIT
             return;
         }

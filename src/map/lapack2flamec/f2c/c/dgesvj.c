@@ -6,9 +6,9 @@
 #include "FLA_f2c.h" /* Table of constant values */
 static doublereal c_b17 = 0.;
 static doublereal c_b18 = 1.;
-static integer c__1 = 1;
-static integer c__0 = 0;
-static integer c__2 = 2;
+static aocl_int64_t c__1 = 1;
+static aocl_int64_t c__0 = 0;
+static aocl_int64_t c__2 = 2;
 /* > \brief \b DGESVJ */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -342,91 +342,78 @@ kappa(A*D), where kappa(.) is the */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void dgesvj_(char *joba, char *jobu, char *jobv, integer *m, integer *n, doublereal *a,
-             integer *lda, doublereal *sva, integer *mv, doublereal *v, integer *ldv,
-             doublereal *work, integer *lwork, integer *info)
+/** Generated wrapper function */
+void dgesvj_(char *joba, char *jobu, char *jobv, aocl_int_t *m, aocl_int_t *n, doublereal *a,
+             aocl_int_t *lda, doublereal *sva, aocl_int_t *mv, doublereal *v, aocl_int_t *ldv,
+             doublereal *work, aocl_int_t *lwork, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_dgesvj(joba, jobu, jobv, m, n, a, lda, sva, mv, v, ldv, work, lwork, info);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t mv_64 = *mv;
+    aocl_int64_t ldv_64 = *ldv;
+    aocl_int64_t lwork_64 = *lwork;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_dgesvj(joba, jobu, jobv, &m_64, &n_64, a, &lda_64, sva, &mv_64, v, &ldv_64, work,
+                       &lwork_64, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_dgesvj(char *joba, char *jobu, char *jobv, aocl_int64_t *m, aocl_int64_t *n,
+                        doublereal *a, aocl_int64_t *lda, doublereal *sva, aocl_int64_t *mv,
+                        doublereal *v, aocl_int64_t *ldv, doublereal *work, aocl_int64_t *lwork,
+                        aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dgesvj inputs: joba %c, jobu %c, jobv %c, m %" FLA_IS ", n %" FLA_IS
                       ", lda %" FLA_IS ", mv %" FLA_IS ", ldv %" FLA_IS ", lwork %" FLA_IS "",
                       *joba, *jobu, *jobv, *m, *n, *lda, *mv, *ldv, *lwork);
     /* System generated locals */
-    integer a_dim1, a_offset, v_dim1, v_offset, i__1, i__2, i__3, i__4, i__5;
+    aocl_int64_t a_dim1, a_offset, v_dim1, v_offset, i__1, i__2, i__3, i__4, i__5;
     doublereal d__1, d__2;
     /* Builtin functions */
     double sqrt(doublereal), d_sign(doublereal *, doublereal *);
     /* Local variables */
     doublereal bigtheta;
-    integer pskipped, i__, p, q;
+    aocl_int64_t pskipped, i__, p, q;
     doublereal t;
-    integer n2, n4;
+    aocl_int64_t n2, n4;
     doublereal rootsfmin;
-    integer n34;
+    aocl_int64_t n34;
     doublereal cs, sn;
-    integer ir1, jbc;
+    aocl_int64_t ir1, jbc;
     doublereal big;
-    integer kbl, igl, ibr, jgl, nbl;
+    aocl_int64_t kbl, igl, ibr, jgl, nbl;
     doublereal skl, tol;
-    integer mvl;
+    aocl_int64_t mvl;
     doublereal aapp, aapq, aaqq;
-    extern doublereal ddot_(integer *, doublereal *, integer *, doublereal *, integer *);
     doublereal ctol;
-    integer ierr;
+    aocl_int64_t ierr;
     doublereal aapp0;
-    extern doublereal dnrm2_(integer *, doublereal *, integer *);
     doublereal temp1;
-    extern /* Subroutine */
-        void
-        dscal_(integer *, doublereal *, doublereal *, integer *);
     doublereal apoaq, aqoap;
-    extern logical lsame_(char *, char *, integer, integer);
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     doublereal theta, small_val, sfmin;
     logical lsvec;
-    extern /* Subroutine */
-        void
-        dcopy_(integer *, doublereal *, integer *, doublereal *, integer *);
     doublereal fastr[5];
-    extern /* Subroutine */
-        void
-        dswap_(integer *, doublereal *, integer *, doublereal *, integer *);
     doublereal epsln;
     logical applv, rsvec;
-    extern /* Subroutine */
-        void
-        daxpy_(integer *, doublereal *, doublereal *, integer *, doublereal *, integer *);
     logical uctol;
-    extern /* Subroutine */
-        void
-        drotm_(integer *, doublereal *, integer *, doublereal *, integer *, doublereal *);
     logical lower, upper, rotok;
-    extern /* Subroutine */
-        void
-        dgsvj0_(char *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *,
-                integer *, doublereal *, integer *, doublereal *, doublereal *, doublereal *,
-                integer *, doublereal *, integer *, integer *),
-        dgsvj1_(char *, integer *, integer *, integer *, doublereal *, integer *, doublereal *,
-                doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *,
-                doublereal *, integer *, doublereal *, integer *, integer *);
     extern doublereal dlamch_(char *);
-    extern /* Subroutine */
-        void
-        dlascl_(char *, integer *, integer *, doublereal *, doublereal *, integer *, integer *,
-                doublereal *, integer *, integer *);
-    extern integer idamax_(integer *, doublereal *, integer *);
-    extern /* Subroutine */
-        void
-        dlaset_(char *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    integer ijblsk, swband, blskip;
+    aocl_int64_t ijblsk, swband, blskip;
     doublereal mxaapq;
-    extern /* Subroutine */
-        void
-        dlassq_(integer *, doublereal *, integer *, doublereal *, doublereal *);
     doublereal thsign, mxsinj;
-    integer emptsw, notrot, iswrot, lkahead;
+    aocl_int64_t emptsw, notrot, iswrot, lkahead;
     logical goscale, noscale;
     doublereal rootbig, rooteps;
-    integer rowskip;
+    aocl_int64_t rowskip;
     doublereal roottol;
     /* -- LAPACK computational routine (version 3.7.1) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -526,7 +513,7 @@ void dgesvj_(char *joba, char *jobu, char *jobv, integer *m, integer *n, doubler
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("DGESVJ", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("DGESVJ", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -576,7 +563,7 @@ void dgesvj_(char *joba, char *jobu, char *jobv, integer *m, integer *n, doubler
     {
         *info = -4;
         i__1 = -(*info);
-        xerbla_("DGESVJ", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("DGESVJ", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -584,7 +571,7 @@ void dgesvj_(char *joba, char *jobu, char *jobv, integer *m, integer *n, doubler
     if(rsvec)
     {
         mvl = *n;
-        dlaset_("A", &mvl, n, &c_b17, &c_b18, &v[v_offset], ldv);
+        aocl_lapack_dlaset("A", &mvl, n, &c_b17, &c_b18, &v[v_offset], ldv);
     }
     else if(applv)
     {
@@ -611,12 +598,12 @@ void dgesvj_(char *joba, char *jobu, char *jobv, integer *m, integer *n, doubler
             aapp = 0.;
             aaqq = 1.;
             i__2 = *m - p + 1;
-            dlassq_(&i__2, &a[p + p * a_dim1], &c__1, &aapp, &aaqq);
+            aocl_lapack_dlassq(&i__2, &a[p + p * a_dim1], &c__1, &aapp, &aaqq);
             if(aapp > big)
             {
                 *info = -6;
                 i__2 = -(*info);
-                xerbla_("DGESVJ", &i__2, (ftnlen)6);
+                aocl_blas_xerbla("DGESVJ", &i__2, (ftnlen)6);
                 AOCL_DTL_TRACE_LOG_EXIT
                 return;
             }
@@ -651,12 +638,12 @@ void dgesvj_(char *joba, char *jobu, char *jobv, integer *m, integer *n, doubler
         {
             aapp = 0.;
             aaqq = 1.;
-            dlassq_(&p, &a[p * a_dim1 + 1], &c__1, &aapp, &aaqq);
+            aocl_lapack_dlassq(&p, &a[p * a_dim1 + 1], &c__1, &aapp, &aaqq);
             if(aapp > big)
             {
                 *info = -6;
                 i__2 = -(*info);
-                xerbla_("DGESVJ", &i__2, (ftnlen)6);
+                aocl_blas_xerbla("DGESVJ", &i__2, (ftnlen)6);
                 AOCL_DTL_TRACE_LOG_EXIT
                 return;
             }
@@ -691,12 +678,12 @@ void dgesvj_(char *joba, char *jobu, char *jobv, integer *m, integer *n, doubler
         {
             aapp = 0.;
             aaqq = 1.;
-            dlassq_(m, &a[p * a_dim1 + 1], &c__1, &aapp, &aaqq);
+            aocl_lapack_dlassq(m, &a[p * a_dim1 + 1], &c__1, &aapp, &aaqq);
             if(aapp > big)
             {
                 *info = -6;
                 i__2 = -(*info);
-                xerbla_("DGESVJ", &i__2, (ftnlen)6);
+                aocl_blas_xerbla("DGESVJ", &i__2, (ftnlen)6);
                 AOCL_DTL_TRACE_LOG_EXIT
                 return;
             }
@@ -753,7 +740,7 @@ void dgesvj_(char *joba, char *jobu, char *jobv, integer *m, integer *n, doubler
     {
         if(lsvec)
         {
-            dlaset_("G", m, n, &c_b17, &c_b18, &a[a_offset], lda);
+            aocl_lapack_dlaset("G", m, n, &c_b17, &c_b18, &a[a_offset], lda);
         }
         work[1] = 1.;
         work[2] = 0.;
@@ -769,7 +756,8 @@ void dgesvj_(char *joba, char *jobu, char *jobv, integer *m, integer *n, doubler
     {
         if(lsvec)
         {
-            dlascl_("G", &c__0, &c__0, &sva[1], &skl, m, &c__1, &a[a_dim1 + 1], lda, &ierr);
+            aocl_lapack_dlascl("G", &c__0, &c__0, &sva[1], &skl, m, &c__1, &a[a_dim1 + 1], lda,
+                               &ierr);
         }
         work[1] = 1. / skl;
         if(sva[1] >= sfmin)
@@ -834,12 +822,12 @@ void dgesvj_(char *joba, char *jobu, char *jobv, integer *m, integer *n, doubler
     /* Scale, if necessary */
     if(temp1 != 1.)
     {
-        dlascl_("G", &c__0, &c__0, &c_b18, &temp1, n, &c__1, &sva[1], n, &ierr);
+        aocl_lapack_dlascl("G", &c__0, &c__0, &c_b18, &temp1, n, &c__1, &sva[1], n, &ierr);
     }
     skl = temp1 * skl;
     if(skl != 1.)
     {
-        dlascl_(joba, &c__0, &c__0, &c_b18, &skl, m, n, &a[a_offset], lda, &ierr);
+        aocl_lapack_dlascl(joba, &c__0, &c__0, &c_b18, &skl, m, n, &a[a_offset], lda, &ierr);
         skl = 1. / skl;
     }
     /* Row-cyclic Jacobi SVD algorithm with column pivoting */
@@ -914,51 +902,59 @@ void dgesvj_(char *joba, char *jobu, char *jobv, integer *m, integer *n, doubler
             i__1 = *m - n34;
             i__2 = *n - n34;
             i__3 = *lwork - *n;
-            dgsvj0_(jobv, &i__1, &i__2, &a[n34 + 1 + (n34 + 1) * a_dim1], lda, &work[n34 + 1],
-                    &sva[n34 + 1], &mvl, &v[n34 * q + 1 + (n34 + 1) * v_dim1], ldv, &epsln, &sfmin,
-                    &tol, &c__2, &work[*n + 1], &i__3, &ierr);
+            aocl_lapack_dgsvj0(jobv, &i__1, &i__2, &a[n34 + 1 + (n34 + 1) * a_dim1], lda,
+                               &work[n34 + 1], &sva[n34 + 1], &mvl,
+                               &v[n34 * q + 1 + (n34 + 1) * v_dim1], ldv, &epsln, &sfmin, &tol,
+                               &c__2, &work[*n + 1], &i__3, &ierr);
             i__1 = *m - n2;
             i__2 = n34 - n2;
             i__3 = *lwork - *n;
-            dgsvj0_(jobv, &i__1, &i__2, &a[n2 + 1 + (n2 + 1) * a_dim1], lda, &work[n2 + 1],
-                    &sva[n2 + 1], &mvl, &v[n2 * q + 1 + (n2 + 1) * v_dim1], ldv, &epsln, &sfmin,
-                    &tol, &c__2, &work[*n + 1], &i__3, &ierr);
+            aocl_lapack_dgsvj0(jobv, &i__1, &i__2, &a[n2 + 1 + (n2 + 1) * a_dim1], lda,
+                               &work[n2 + 1], &sva[n2 + 1], &mvl,
+                               &v[n2 * q + 1 + (n2 + 1) * v_dim1], ldv, &epsln, &sfmin, &tol, &c__2,
+                               &work[*n + 1], &i__3, &ierr);
             i__1 = *m - n2;
             i__2 = *n - n2;
             i__3 = *lwork - *n;
-            dgsvj1_(jobv, &i__1, &i__2, &n4, &a[n2 + 1 + (n2 + 1) * a_dim1], lda, &work[n2 + 1],
-                    &sva[n2 + 1], &mvl, &v[n2 * q + 1 + (n2 + 1) * v_dim1], ldv, &epsln, &sfmin,
-                    &tol, &c__1, &work[*n + 1], &i__3, &ierr);
+            aocl_lapack_dgsvj1(jobv, &i__1, &i__2, &n4, &a[n2 + 1 + (n2 + 1) * a_dim1], lda,
+                               &work[n2 + 1], &sva[n2 + 1], &mvl,
+                               &v[n2 * q + 1 + (n2 + 1) * v_dim1], ldv, &epsln, &sfmin, &tol, &c__1,
+                               &work[*n + 1], &i__3, &ierr);
             i__1 = *m - n4;
             i__2 = n2 - n4;
             i__3 = *lwork - *n;
-            dgsvj0_(jobv, &i__1, &i__2, &a[n4 + 1 + (n4 + 1) * a_dim1], lda, &work[n4 + 1],
-                    &sva[n4 + 1], &mvl, &v[n4 * q + 1 + (n4 + 1) * v_dim1], ldv, &epsln, &sfmin,
-                    &tol, &c__1, &work[*n + 1], &i__3, &ierr);
+            aocl_lapack_dgsvj0(jobv, &i__1, &i__2, &a[n4 + 1 + (n4 + 1) * a_dim1], lda,
+                               &work[n4 + 1], &sva[n4 + 1], &mvl,
+                               &v[n4 * q + 1 + (n4 + 1) * v_dim1], ldv, &epsln, &sfmin, &tol, &c__1,
+                               &work[*n + 1], &i__3, &ierr);
             i__1 = *lwork - *n;
-            dgsvj0_(jobv, m, &n4, &a[a_offset], lda, &work[1], &sva[1], &mvl, &v[v_offset], ldv,
-                    &epsln, &sfmin, &tol, &c__1, &work[*n + 1], &i__1, &ierr);
+            aocl_lapack_dgsvj0(jobv, m, &n4, &a[a_offset], lda, &work[1], &sva[1], &mvl,
+                               &v[v_offset], ldv, &epsln, &sfmin, &tol, &c__1, &work[*n + 1], &i__1,
+                               &ierr);
             i__1 = *lwork - *n;
-            dgsvj1_(jobv, m, &n2, &n4, &a[a_offset], lda, &work[1], &sva[1], &mvl, &v[v_offset],
-                    ldv, &epsln, &sfmin, &tol, &c__1, &work[*n + 1], &i__1, &ierr);
+            aocl_lapack_dgsvj1(jobv, m, &n2, &n4, &a[a_offset], lda, &work[1], &sva[1], &mvl,
+                               &v[v_offset], ldv, &epsln, &sfmin, &tol, &c__1, &work[*n + 1], &i__1,
+                               &ierr);
         }
         else if(upper)
         {
             i__1 = *lwork - *n;
-            dgsvj0_(jobv, &n4, &n4, &a[a_offset], lda, &work[1], &sva[1], &mvl, &v[v_offset], ldv,
-                    &epsln, &sfmin, &tol, &c__2, &work[*n + 1], &i__1, &ierr);
+            aocl_lapack_dgsvj0(jobv, &n4, &n4, &a[a_offset], lda, &work[1], &sva[1], &mvl,
+                               &v[v_offset], ldv, &epsln, &sfmin, &tol, &c__2, &work[*n + 1], &i__1,
+                               &ierr);
             i__1 = *lwork - *n;
-            dgsvj0_(jobv, &n2, &n4, &a[(n4 + 1) * a_dim1 + 1], lda, &work[n4 + 1], &sva[n4 + 1],
-                    &mvl, &v[n4 * q + 1 + (n4 + 1) * v_dim1], ldv, &epsln, &sfmin, &tol, &c__1,
-                    &work[*n + 1], &i__1, &ierr);
+            aocl_lapack_dgsvj0(jobv, &n2, &n4, &a[(n4 + 1) * a_dim1 + 1], lda, &work[n4 + 1],
+                               &sva[n4 + 1], &mvl, &v[n4 * q + 1 + (n4 + 1) * v_dim1], ldv, &epsln,
+                               &sfmin, &tol, &c__1, &work[*n + 1], &i__1, &ierr);
             i__1 = *lwork - *n;
-            dgsvj1_(jobv, &n2, &n2, &n4, &a[a_offset], lda, &work[1], &sva[1], &mvl, &v[v_offset],
-                    ldv, &epsln, &sfmin, &tol, &c__1, &work[*n + 1], &i__1, &ierr);
+            aocl_lapack_dgsvj1(jobv, &n2, &n2, &n4, &a[a_offset], lda, &work[1], &sva[1], &mvl,
+                               &v[v_offset], ldv, &epsln, &sfmin, &tol, &c__1, &work[*n + 1], &i__1,
+                               &ierr);
             i__1 = n2 + n4;
             i__2 = *lwork - *n;
-            dgsvj0_(jobv, &i__1, &n4, &a[(n2 + 1) * a_dim1 + 1], lda, &work[n2 + 1], &sva[n2 + 1],
-                    &mvl, &v[n2 * q + 1 + (n2 + 1) * v_dim1], ldv, &epsln, &sfmin, &tol, &c__1,
-                    &work[*n + 1], &i__2, &ierr);
+            aocl_lapack_dgsvj0(jobv, &i__1, &n4, &a[(n2 + 1) * a_dim1 + 1], lda, &work[n2 + 1],
+                               &sva[n2 + 1], &mvl, &v[n2 * q + 1 + (n2 + 1) * v_dim1], ldv, &epsln,
+                               &sfmin, &tol, &c__1, &work[*n + 1], &i__2, &ierr);
         }
     }
     /* .. Row-cyclic pivot strategy with de Rijk's pivoting .. */
@@ -993,13 +989,14 @@ void dgesvj_(char *joba, char *jobu, char *jobv, integer *m, integer *n, doubler
                 {
                     /* .. de Rijk's pivoting */
                     i__4 = *n - p + 1;
-                    q = idamax_(&i__4, &sva[p], &c__1) + p - 1;
+                    q = aocl_blas_idamax(&i__4, &sva[p], &c__1) + p - 1;
                     if(p != q)
                     {
-                        dswap_(m, &a[p * a_dim1 + 1], &c__1, &a[q * a_dim1 + 1], &c__1);
+                        aocl_blas_dswap(m, &a[p * a_dim1 + 1], &c__1, &a[q * a_dim1 + 1], &c__1);
                         if(rsvec)
                         {
-                            dswap_(&mvl, &v[p * v_dim1 + 1], &c__1, &v[q * v_dim1 + 1], &c__1);
+                            aocl_blas_dswap(&mvl, &v[p * v_dim1 + 1], &c__1, &v[q * v_dim1 + 1],
+                                            &c__1);
                         }
                         temp1 = sva[p];
                         sva[p] = sva[q];
@@ -1023,13 +1020,13 @@ void dgesvj_(char *joba, char *jobu, char *jobv, integer *m, integer *n, doubler
                         /* below should read "AAPP = DNRM2( M, A(1,p), 1 ) * WORK(p)". */
                         if(sva[p] < rootbig && sva[p] > rootsfmin)
                         {
-                            sva[p] = dnrm2_(m, &a[p * a_dim1 + 1], &c__1) * work[p];
+                            sva[p] = aocl_blas_dnrm2(m, &a[p * a_dim1 + 1], &c__1) * work[p];
                         }
                         else
                         {
                             temp1 = 0.;
                             aapp = 1.;
-                            dlassq_(m, &a[p * a_dim1 + 1], &c__1, &temp1, &aapp);
+                            aocl_lapack_dlassq(m, &a[p * a_dim1 + 1], &c__1, &temp1, &aapp);
                             sva[p] = temp1 * sqrt(aapp) * work[p];
                         }
                         aapp = sva[p];
@@ -1055,17 +1052,18 @@ void dgesvj_(char *joba, char *jobu, char *jobv, integer *m, integer *n, doubler
                                     rotok = small_val * aapp <= aaqq;
                                     if(aapp < big / aaqq)
                                     {
-                                        aapq = ddot_(m, &a[p * a_dim1 + 1], &c__1,
-                                                     &a[q * a_dim1 + 1], &c__1)
+                                        aapq = aocl_blas_ddot(m, &a[p * a_dim1 + 1], &c__1,
+                                                              &a[q * a_dim1 + 1], &c__1)
                                                * work[p] * work[q] / aaqq / aapp;
                                     }
                                     else
                                     {
-                                        dcopy_(m, &a[p * a_dim1 + 1], &c__1, &work[*n + 1], &c__1);
-                                        dlascl_("G", &c__0, &c__0, &aapp, &work[p], m, &c__1,
-                                                &work[*n + 1], lda, &ierr);
-                                        aapq = ddot_(m, &work[*n + 1], &c__1, &a[q * a_dim1 + 1],
-                                                     &c__1)
+                                        aocl_blas_dcopy(m, &a[p * a_dim1 + 1], &c__1, &work[*n + 1],
+                                                        &c__1);
+                                        aocl_lapack_dlascl("G", &c__0, &c__0, &aapp, &work[p], m,
+                                                           &c__1, &work[*n + 1], lda, &ierr);
+                                        aapq = aocl_blas_ddot(m, &work[*n + 1], &c__1,
+                                                              &a[q * a_dim1 + 1], &c__1)
                                                * work[q] / aaqq;
                                     }
                                 }
@@ -1074,17 +1072,18 @@ void dgesvj_(char *joba, char *jobu, char *jobv, integer *m, integer *n, doubler
                                     rotok = aapp <= aaqq / small_val;
                                     if(aapp > small_val / aaqq)
                                     {
-                                        aapq = ddot_(m, &a[p * a_dim1 + 1], &c__1,
-                                                     &a[q * a_dim1 + 1], &c__1)
+                                        aapq = aocl_blas_ddot(m, &a[p * a_dim1 + 1], &c__1,
+                                                              &a[q * a_dim1 + 1], &c__1)
                                                * work[p] * work[q] / aaqq / aapp;
                                     }
                                     else
                                     {
-                                        dcopy_(m, &a[q * a_dim1 + 1], &c__1, &work[*n + 1], &c__1);
-                                        dlascl_("G", &c__0, &c__0, &aaqq, &work[q], m, &c__1,
-                                                &work[*n + 1], lda, &ierr);
-                                        aapq = ddot_(m, &work[*n + 1], &c__1, &a[p * a_dim1 + 1],
-                                                     &c__1)
+                                        aocl_blas_dcopy(m, &a[q * a_dim1 + 1], &c__1, &work[*n + 1],
+                                                        &c__1);
+                                        aocl_lapack_dlascl("G", &c__0, &c__0, &aaqq, &work[q], m,
+                                                           &c__1, &work[*n + 1], lda, &ierr);
+                                        aapq = aocl_blas_ddot(m, &work[*n + 1], &c__1,
+                                                              &a[p * a_dim1 + 1], &c__1)
                                                * work[p] / aapp;
                                     }
                                 }
@@ -1113,12 +1112,12 @@ void dgesvj_(char *joba, char *jobu, char *jobv, integer *m, integer *n, doubler
                                             t = .5 / theta;
                                             fastr[2] = t * work[p] / work[q];
                                             fastr[3] = -t * work[q] / work[p];
-                                            drotm_(m, &a[p * a_dim1 + 1], &c__1, &a[q * a_dim1 + 1],
-                                                   &c__1, fastr);
+                                            aocl_blas_drotm(m, &a[p * a_dim1 + 1], &c__1,
+                                                            &a[q * a_dim1 + 1], &c__1, fastr);
                                             if(rsvec)
                                             {
-                                                drotm_(&mvl, &v[p * v_dim1 + 1], &c__1,
-                                                       &v[q * v_dim1 + 1], &c__1, fastr);
+                                                aocl_blas_drotm(&mvl, &v[p * v_dim1 + 1], &c__1,
+                                                                &v[q * v_dim1 + 1], &c__1, fastr);
                                             }
                                             /* Computing MAX */
                                             d__1 = 0.;
@@ -1162,32 +1161,38 @@ void dgesvj_(char *joba, char *jobu, char *jobv, integer *m, integer *n, doubler
                                                     fastr[3] = -t * aqoap;
                                                     work[p] *= cs;
                                                     work[q] *= cs;
-                                                    drotm_(m, &a[p * a_dim1 + 1], &c__1,
-                                                           &a[q * a_dim1 + 1], &c__1, fastr);
+                                                    aocl_blas_drotm(m, &a[p * a_dim1 + 1], &c__1,
+                                                                    &a[q * a_dim1 + 1], &c__1,
+                                                                    fastr);
                                                     if(rsvec)
                                                     {
-                                                        drotm_(&mvl, &v[p * v_dim1 + 1], &c__1,
-                                                               &v[q * v_dim1 + 1], &c__1, fastr);
+                                                        aocl_blas_drotm(&mvl, &v[p * v_dim1 + 1],
+                                                                        &c__1, &v[q * v_dim1 + 1],
+                                                                        &c__1, fastr);
                                                     }
                                                 }
                                                 else
                                                 {
                                                     d__1 = -t * aqoap;
-                                                    daxpy_(m, &d__1, &a[q * a_dim1 + 1], &c__1,
-                                                           &a[p * a_dim1 + 1], &c__1);
+                                                    aocl_blas_daxpy(m, &d__1, &a[q * a_dim1 + 1],
+                                                                    &c__1, &a[p * a_dim1 + 1],
+                                                                    &c__1);
                                                     d__1 = cs * sn * apoaq;
-                                                    daxpy_(m, &d__1, &a[p * a_dim1 + 1], &c__1,
-                                                           &a[q * a_dim1 + 1], &c__1);
+                                                    aocl_blas_daxpy(m, &d__1, &a[p * a_dim1 + 1],
+                                                                    &c__1, &a[q * a_dim1 + 1],
+                                                                    &c__1);
                                                     work[p] *= cs;
                                                     work[q] /= cs;
                                                     if(rsvec)
                                                     {
                                                         d__1 = -t * aqoap;
-                                                        daxpy_(&mvl, &d__1, &v[q * v_dim1 + 1],
-                                                               &c__1, &v[p * v_dim1 + 1], &c__1);
+                                                        aocl_blas_daxpy(&mvl, &d__1,
+                                                                        &v[q * v_dim1 + 1], &c__1,
+                                                                        &v[p * v_dim1 + 1], &c__1);
                                                         d__1 = cs * sn * apoaq;
-                                                        daxpy_(&mvl, &d__1, &v[p * v_dim1 + 1],
-                                                               &c__1, &v[q * v_dim1 + 1], &c__1);
+                                                        aocl_blas_daxpy(&mvl, &d__1,
+                                                                        &v[p * v_dim1 + 1], &c__1,
+                                                                        &v[q * v_dim1 + 1], &c__1);
                                                     }
                                                 }
                                             }
@@ -1196,21 +1201,25 @@ void dgesvj_(char *joba, char *jobu, char *jobv, integer *m, integer *n, doubler
                                                 if(work[q] >= 1.)
                                                 {
                                                     d__1 = t * apoaq;
-                                                    daxpy_(m, &d__1, &a[p * a_dim1 + 1], &c__1,
-                                                           &a[q * a_dim1 + 1], &c__1);
+                                                    aocl_blas_daxpy(m, &d__1, &a[p * a_dim1 + 1],
+                                                                    &c__1, &a[q * a_dim1 + 1],
+                                                                    &c__1);
                                                     d__1 = -cs * sn * aqoap;
-                                                    daxpy_(m, &d__1, &a[q * a_dim1 + 1], &c__1,
-                                                           &a[p * a_dim1 + 1], &c__1);
+                                                    aocl_blas_daxpy(m, &d__1, &a[q * a_dim1 + 1],
+                                                                    &c__1, &a[p * a_dim1 + 1],
+                                                                    &c__1);
                                                     work[p] /= cs;
                                                     work[q] *= cs;
                                                     if(rsvec)
                                                     {
                                                         d__1 = t * apoaq;
-                                                        daxpy_(&mvl, &d__1, &v[p * v_dim1 + 1],
-                                                               &c__1, &v[q * v_dim1 + 1], &c__1);
+                                                        aocl_blas_daxpy(&mvl, &d__1,
+                                                                        &v[p * v_dim1 + 1], &c__1,
+                                                                        &v[q * v_dim1 + 1], &c__1);
                                                         d__1 = -cs * sn * aqoap;
-                                                        daxpy_(&mvl, &d__1, &v[q * v_dim1 + 1],
-                                                               &c__1, &v[p * v_dim1 + 1], &c__1);
+                                                        aocl_blas_daxpy(&mvl, &d__1,
+                                                                        &v[q * v_dim1 + 1], &c__1,
+                                                                        &v[p * v_dim1 + 1], &c__1);
                                                     }
                                                 }
                                                 else
@@ -1218,45 +1227,49 @@ void dgesvj_(char *joba, char *jobu, char *jobv, integer *m, integer *n, doubler
                                                     if(work[p] >= work[q])
                                                     {
                                                         d__1 = -t * aqoap;
-                                                        daxpy_(m, &d__1, &a[q * a_dim1 + 1], &c__1,
-                                                               &a[p * a_dim1 + 1], &c__1);
+                                                        aocl_blas_daxpy(m, &d__1,
+                                                                        &a[q * a_dim1 + 1], &c__1,
+                                                                        &a[p * a_dim1 + 1], &c__1);
                                                         d__1 = cs * sn * apoaq;
-                                                        daxpy_(m, &d__1, &a[p * a_dim1 + 1], &c__1,
-                                                               &a[q * a_dim1 + 1], &c__1);
+                                                        aocl_blas_daxpy(m, &d__1,
+                                                                        &a[p * a_dim1 + 1], &c__1,
+                                                                        &a[q * a_dim1 + 1], &c__1);
                                                         work[p] *= cs;
                                                         work[q] /= cs;
                                                         if(rsvec)
                                                         {
                                                             d__1 = -t * aqoap;
-                                                            daxpy_(&mvl, &d__1, &v[q * v_dim1 + 1],
-                                                                   &c__1, &v[p * v_dim1 + 1],
-                                                                   &c__1);
+                                                            aocl_blas_daxpy(
+                                                                &mvl, &d__1, &v[q * v_dim1 + 1],
+                                                                &c__1, &v[p * v_dim1 + 1], &c__1);
                                                             d__1 = cs * sn * apoaq;
-                                                            daxpy_(&mvl, &d__1, &v[p * v_dim1 + 1],
-                                                                   &c__1, &v[q * v_dim1 + 1],
-                                                                   &c__1);
+                                                            aocl_blas_daxpy(
+                                                                &mvl, &d__1, &v[p * v_dim1 + 1],
+                                                                &c__1, &v[q * v_dim1 + 1], &c__1);
                                                         }
                                                     }
                                                     else
                                                     {
                                                         d__1 = t * apoaq;
-                                                        daxpy_(m, &d__1, &a[p * a_dim1 + 1], &c__1,
-                                                               &a[q * a_dim1 + 1], &c__1);
+                                                        aocl_blas_daxpy(m, &d__1,
+                                                                        &a[p * a_dim1 + 1], &c__1,
+                                                                        &a[q * a_dim1 + 1], &c__1);
                                                         d__1 = -cs * sn * aqoap;
-                                                        daxpy_(m, &d__1, &a[q * a_dim1 + 1], &c__1,
-                                                               &a[p * a_dim1 + 1], &c__1);
+                                                        aocl_blas_daxpy(m, &d__1,
+                                                                        &a[q * a_dim1 + 1], &c__1,
+                                                                        &a[p * a_dim1 + 1], &c__1);
                                                         work[p] /= cs;
                                                         work[q] *= cs;
                                                         if(rsvec)
                                                         {
                                                             d__1 = t * apoaq;
-                                                            daxpy_(&mvl, &d__1, &v[p * v_dim1 + 1],
-                                                                   &c__1, &v[q * v_dim1 + 1],
-                                                                   &c__1);
+                                                            aocl_blas_daxpy(
+                                                                &mvl, &d__1, &v[p * v_dim1 + 1],
+                                                                &c__1, &v[q * v_dim1 + 1], &c__1);
                                                             d__1 = -cs * sn * aqoap;
-                                                            daxpy_(&mvl, &d__1, &v[q * v_dim1 + 1],
-                                                                   &c__1, &v[p * v_dim1 + 1],
-                                                                   &c__1);
+                                                            aocl_blas_daxpy(
+                                                                &mvl, &d__1, &v[q * v_dim1 + 1],
+                                                                &c__1, &v[p * v_dim1 + 1], &c__1);
                                                         }
                                                     }
                                                 }
@@ -1267,16 +1280,17 @@ void dgesvj_(char *joba, char *jobu, char *jobv, integer *m, integer *n, doubler
                                     {
                                         /* .. have to use modified Gram-Schmidt like transformation
                                          */
-                                        dcopy_(m, &a[p * a_dim1 + 1], &c__1, &work[*n + 1], &c__1);
-                                        dlascl_("G", &c__0, &c__0, &aapp, &c_b18, m, &c__1,
-                                                &work[*n + 1], lda, &ierr);
-                                        dlascl_("G", &c__0, &c__0, &aaqq, &c_b18, m, &c__1,
-                                                &a[q * a_dim1 + 1], lda, &ierr);
+                                        aocl_blas_dcopy(m, &a[p * a_dim1 + 1], &c__1, &work[*n + 1],
+                                                        &c__1);
+                                        aocl_lapack_dlascl("G", &c__0, &c__0, &aapp, &c_b18, m,
+                                                           &c__1, &work[*n + 1], lda, &ierr);
+                                        aocl_lapack_dlascl("G", &c__0, &c__0, &aaqq, &c_b18, m,
+                                                           &c__1, &a[q * a_dim1 + 1], lda, &ierr);
                                         temp1 = -aapq * work[p] / work[q];
-                                        daxpy_(m, &temp1, &work[*n + 1], &c__1, &a[q * a_dim1 + 1],
-                                               &c__1);
-                                        dlascl_("G", &c__0, &c__0, &c_b18, &aaqq, m, &c__1,
-                                                &a[q * a_dim1 + 1], lda, &ierr);
+                                        aocl_blas_daxpy(m, &temp1, &work[*n + 1], &c__1,
+                                                        &a[q * a_dim1 + 1], &c__1);
+                                        aocl_lapack_dlascl("G", &c__0, &c__0, &c_b18, &aaqq, m,
+                                                           &c__1, &a[q * a_dim1 + 1], lda, &ierr);
                                         /* Computing MAX */
                                         d__1 = 0.;
                                         d__2 = 1. - aapq * aapq; // , expr subst
@@ -1292,13 +1306,13 @@ void dgesvj_(char *joba, char *jobu, char *jobv, integer *m, integer *n, doubler
                                     {
                                         if(aaqq < rootbig && aaqq > rootsfmin)
                                         {
-                                            sva[q] = dnrm2_(m, &a[q * a_dim1 + 1], &c__1) * work[q];
+                                            sva[q] = aocl_blas_dnrm2(m, &a[q * a_dim1 + 1], &c__1) * work[q];
                                         }
                                         else
                                         {
                                             t = 0.;
                                             aaqq = 1.;
-                                            dlassq_(m, &a[q * a_dim1 + 1], &c__1, &t, &aaqq);
+                                            aocl_lapack_dlassq(m, &a[q * a_dim1 + 1], &c__1, &t, &aaqq);
                                             sva[q] = t * sqrt(aaqq) * work[q];
                                         }
                                     }
@@ -1306,13 +1320,13 @@ void dgesvj_(char *joba, char *jobu, char *jobv, integer *m, integer *n, doubler
                                     {
                                         if(aapp < rootbig && aapp > rootsfmin)
                                         {
-                                            aapp = dnrm2_(m, &a[p * a_dim1 + 1], &c__1) * work[p];
+                                            aapp = aocl_blas_dnrm2(m, &a[p * a_dim1 + 1], &c__1) * work[p];
                                         }
                                         else
                                         {
                                             t = 0.;
                                             aapp = 1.;
-                                            dlassq_(m, &a[p * a_dim1 + 1], &c__1, &t, &aapp);
+                                            aocl_lapack_dlassq(m, &a[p * a_dim1 + 1], &c__1, &t, &aapp);
                                             aapp = t * sqrt(aapp) * work[p];
                                         }
                                         sva[p] = aapp;
@@ -1410,17 +1424,18 @@ void dgesvj_(char *joba, char *jobu, char *jobv, integer *m, integer *n, doubler
                                     }
                                     if(aapp < big / aaqq)
                                     {
-                                        aapq = ddot_(m, &a[p * a_dim1 + 1], &c__1,
-                                                     &a[q * a_dim1 + 1], &c__1)
+                                        aapq = aocl_blas_ddot(m, &a[p * a_dim1 + 1], &c__1,
+                                                              &a[q * a_dim1 + 1], &c__1)
                                                * work[p] * work[q] / aaqq / aapp;
                                     }
                                     else
                                     {
-                                        dcopy_(m, &a[p * a_dim1 + 1], &c__1, &work[*n + 1], &c__1);
-                                        dlascl_("G", &c__0, &c__0, &aapp, &work[p], m, &c__1,
-                                                &work[*n + 1], lda, &ierr);
-                                        aapq = ddot_(m, &work[*n + 1], &c__1, &a[q * a_dim1 + 1],
-                                                     &c__1)
+                                        aocl_blas_dcopy(m, &a[p * a_dim1 + 1], &c__1, &work[*n + 1],
+                                                        &c__1);
+                                        aocl_lapack_dlascl("G", &c__0, &c__0, &aapp, &work[p], m,
+                                                           &c__1, &work[*n + 1], lda, &ierr);
+                                        aapq = aocl_blas_ddot(m, &work[*n + 1], &c__1,
+                                                              &a[q * a_dim1 + 1], &c__1)
                                                * work[q] / aaqq;
                                     }
                                 }
@@ -1436,17 +1451,18 @@ void dgesvj_(char *joba, char *jobu, char *jobv, integer *m, integer *n, doubler
                                     }
                                     if(aapp > small_val / aaqq)
                                     {
-                                        aapq = ddot_(m, &a[p * a_dim1 + 1], &c__1,
-                                                     &a[q * a_dim1 + 1], &c__1)
+                                        aapq = aocl_blas_ddot(m, &a[p * a_dim1 + 1], &c__1,
+                                                              &a[q * a_dim1 + 1], &c__1)
                                                * work[p] * work[q] / aaqq / aapp;
                                     }
                                     else
                                     {
-                                        dcopy_(m, &a[q * a_dim1 + 1], &c__1, &work[*n + 1], &c__1);
-                                        dlascl_("G", &c__0, &c__0, &aaqq, &work[q], m, &c__1,
-                                                &work[*n + 1], lda, &ierr);
-                                        aapq = ddot_(m, &work[*n + 1], &c__1, &a[p * a_dim1 + 1],
-                                                     &c__1)
+                                        aocl_blas_dcopy(m, &a[q * a_dim1 + 1], &c__1, &work[*n + 1],
+                                                        &c__1);
+                                        aocl_lapack_dlascl("G", &c__0, &c__0, &aaqq, &work[q], m,
+                                                           &c__1, &work[*n + 1], lda, &ierr);
+                                        aapq = aocl_blas_ddot(m, &work[*n + 1], &c__1,
+                                                              &a[p * a_dim1 + 1], &c__1)
                                                * work[p] / aapp;
                                     }
                                 }
@@ -1475,12 +1491,12 @@ void dgesvj_(char *joba, char *jobu, char *jobv, integer *m, integer *n, doubler
                                             t = .5 / theta;
                                             fastr[2] = t * work[p] / work[q];
                                             fastr[3] = -t * work[q] / work[p];
-                                            drotm_(m, &a[p * a_dim1 + 1], &c__1, &a[q * a_dim1 + 1],
-                                                   &c__1, fastr);
+                                            aocl_blas_drotm(m, &a[p * a_dim1 + 1], &c__1,
+                                                            &a[q * a_dim1 + 1], &c__1, fastr);
                                             if(rsvec)
                                             {
-                                                drotm_(&mvl, &v[p * v_dim1 + 1], &c__1,
-                                                       &v[q * v_dim1 + 1], &c__1, fastr);
+                                                aocl_blas_drotm(&mvl, &v[p * v_dim1 + 1], &c__1,
+                                                                &v[q * v_dim1 + 1], &c__1, fastr);
                                             }
                                             /* Computing MAX */
                                             d__1 = 0.;
@@ -1528,30 +1544,36 @@ void dgesvj_(char *joba, char *jobu, char *jobv, integer *m, integer *n, doubler
                                                     fastr[3] = -t * aqoap;
                                                     work[p] *= cs;
                                                     work[q] *= cs;
-                                                    drotm_(m, &a[p * a_dim1 + 1], &c__1,
-                                                           &a[q * a_dim1 + 1], &c__1, fastr);
+                                                    aocl_blas_drotm(m, &a[p * a_dim1 + 1], &c__1,
+                                                                    &a[q * a_dim1 + 1], &c__1,
+                                                                    fastr);
                                                     if(rsvec)
                                                     {
-                                                        drotm_(&mvl, &v[p * v_dim1 + 1], &c__1,
-                                                               &v[q * v_dim1 + 1], &c__1, fastr);
+                                                        aocl_blas_drotm(&mvl, &v[p * v_dim1 + 1],
+                                                                        &c__1, &v[q * v_dim1 + 1],
+                                                                        &c__1, fastr);
                                                     }
                                                 }
                                                 else
                                                 {
                                                     d__1 = -t * aqoap;
-                                                    daxpy_(m, &d__1, &a[q * a_dim1 + 1], &c__1,
-                                                           &a[p * a_dim1 + 1], &c__1);
+                                                    aocl_blas_daxpy(m, &d__1, &a[q * a_dim1 + 1],
+                                                                    &c__1, &a[p * a_dim1 + 1],
+                                                                    &c__1);
                                                     d__1 = cs * sn * apoaq;
-                                                    daxpy_(m, &d__1, &a[p * a_dim1 + 1], &c__1,
-                                                           &a[q * a_dim1 + 1], &c__1);
+                                                    aocl_blas_daxpy(m, &d__1, &a[p * a_dim1 + 1],
+                                                                    &c__1, &a[q * a_dim1 + 1],
+                                                                    &c__1);
                                                     if(rsvec)
                                                     {
                                                         d__1 = -t * aqoap;
-                                                        daxpy_(&mvl, &d__1, &v[q * v_dim1 + 1],
-                                                               &c__1, &v[p * v_dim1 + 1], &c__1);
+                                                        aocl_blas_daxpy(&mvl, &d__1,
+                                                                        &v[q * v_dim1 + 1], &c__1,
+                                                                        &v[p * v_dim1 + 1], &c__1);
                                                         d__1 = cs * sn * apoaq;
-                                                        daxpy_(&mvl, &d__1, &v[p * v_dim1 + 1],
-                                                               &c__1, &v[q * v_dim1 + 1], &c__1);
+                                                        aocl_blas_daxpy(&mvl, &d__1,
+                                                                        &v[p * v_dim1 + 1], &c__1,
+                                                                        &v[q * v_dim1 + 1], &c__1);
                                                     }
                                                     work[p] *= cs;
                                                     work[q] /= cs;
@@ -1562,19 +1584,23 @@ void dgesvj_(char *joba, char *jobu, char *jobv, integer *m, integer *n, doubler
                                                 if(work[q] >= 1.)
                                                 {
                                                     d__1 = t * apoaq;
-                                                    daxpy_(m, &d__1, &a[p * a_dim1 + 1], &c__1,
-                                                           &a[q * a_dim1 + 1], &c__1);
+                                                    aocl_blas_daxpy(m, &d__1, &a[p * a_dim1 + 1],
+                                                                    &c__1, &a[q * a_dim1 + 1],
+                                                                    &c__1);
                                                     d__1 = -cs * sn * aqoap;
-                                                    daxpy_(m, &d__1, &a[q * a_dim1 + 1], &c__1,
-                                                           &a[p * a_dim1 + 1], &c__1);
+                                                    aocl_blas_daxpy(m, &d__1, &a[q * a_dim1 + 1],
+                                                                    &c__1, &a[p * a_dim1 + 1],
+                                                                    &c__1);
                                                     if(rsvec)
                                                     {
                                                         d__1 = t * apoaq;
-                                                        daxpy_(&mvl, &d__1, &v[p * v_dim1 + 1],
-                                                               &c__1, &v[q * v_dim1 + 1], &c__1);
+                                                        aocl_blas_daxpy(&mvl, &d__1,
+                                                                        &v[p * v_dim1 + 1], &c__1,
+                                                                        &v[q * v_dim1 + 1], &c__1);
                                                         d__1 = -cs * sn * aqoap;
-                                                        daxpy_(&mvl, &d__1, &v[q * v_dim1 + 1],
-                                                               &c__1, &v[p * v_dim1 + 1], &c__1);
+                                                        aocl_blas_daxpy(&mvl, &d__1,
+                                                                        &v[q * v_dim1 + 1], &c__1,
+                                                                        &v[p * v_dim1 + 1], &c__1);
                                                     }
                                                     work[p] /= cs;
                                                     work[q] *= cs;
@@ -1584,45 +1610,49 @@ void dgesvj_(char *joba, char *jobu, char *jobv, integer *m, integer *n, doubler
                                                     if(work[p] >= work[q])
                                                     {
                                                         d__1 = -t * aqoap;
-                                                        daxpy_(m, &d__1, &a[q * a_dim1 + 1], &c__1,
-                                                               &a[p * a_dim1 + 1], &c__1);
+                                                        aocl_blas_daxpy(m, &d__1,
+                                                                        &a[q * a_dim1 + 1], &c__1,
+                                                                        &a[p * a_dim1 + 1], &c__1);
                                                         d__1 = cs * sn * apoaq;
-                                                        daxpy_(m, &d__1, &a[p * a_dim1 + 1], &c__1,
-                                                               &a[q * a_dim1 + 1], &c__1);
+                                                        aocl_blas_daxpy(m, &d__1,
+                                                                        &a[p * a_dim1 + 1], &c__1,
+                                                                        &a[q * a_dim1 + 1], &c__1);
                                                         work[p] *= cs;
                                                         work[q] /= cs;
                                                         if(rsvec)
                                                         {
                                                             d__1 = -t * aqoap;
-                                                            daxpy_(&mvl, &d__1, &v[q * v_dim1 + 1],
-                                                                   &c__1, &v[p * v_dim1 + 1],
-                                                                   &c__1);
+                                                            aocl_blas_daxpy(
+                                                                &mvl, &d__1, &v[q * v_dim1 + 1],
+                                                                &c__1, &v[p * v_dim1 + 1], &c__1);
                                                             d__1 = cs * sn * apoaq;
-                                                            daxpy_(&mvl, &d__1, &v[p * v_dim1 + 1],
-                                                                   &c__1, &v[q * v_dim1 + 1],
-                                                                   &c__1);
+                                                            aocl_blas_daxpy(
+                                                                &mvl, &d__1, &v[p * v_dim1 + 1],
+                                                                &c__1, &v[q * v_dim1 + 1], &c__1);
                                                         }
                                                     }
                                                     else
                                                     {
                                                         d__1 = t * apoaq;
-                                                        daxpy_(m, &d__1, &a[p * a_dim1 + 1], &c__1,
-                                                               &a[q * a_dim1 + 1], &c__1);
+                                                        aocl_blas_daxpy(m, &d__1,
+                                                                        &a[p * a_dim1 + 1], &c__1,
+                                                                        &a[q * a_dim1 + 1], &c__1);
                                                         d__1 = -cs * sn * aqoap;
-                                                        daxpy_(m, &d__1, &a[q * a_dim1 + 1], &c__1,
-                                                               &a[p * a_dim1 + 1], &c__1);
+                                                        aocl_blas_daxpy(m, &d__1,
+                                                                        &a[q * a_dim1 + 1], &c__1,
+                                                                        &a[p * a_dim1 + 1], &c__1);
                                                         work[p] /= cs;
                                                         work[q] *= cs;
                                                         if(rsvec)
                                                         {
                                                             d__1 = t * apoaq;
-                                                            daxpy_(&mvl, &d__1, &v[p * v_dim1 + 1],
-                                                                   &c__1, &v[q * v_dim1 + 1],
-                                                                   &c__1);
+                                                            aocl_blas_daxpy(
+                                                                &mvl, &d__1, &v[p * v_dim1 + 1],
+                                                                &c__1, &v[q * v_dim1 + 1], &c__1);
                                                             d__1 = -cs * sn * aqoap;
-                                                            daxpy_(&mvl, &d__1, &v[q * v_dim1 + 1],
-                                                                   &c__1, &v[p * v_dim1 + 1],
-                                                                   &c__1);
+                                                            aocl_blas_daxpy(
+                                                                &mvl, &d__1, &v[q * v_dim1 + 1],
+                                                                &c__1, &v[p * v_dim1 + 1], &c__1);
                                                         }
                                                     }
                                                 }
@@ -1633,17 +1663,19 @@ void dgesvj_(char *joba, char *jobu, char *jobv, integer *m, integer *n, doubler
                                     {
                                         if(aapp > aaqq)
                                         {
-                                            dcopy_(m, &a[p * a_dim1 + 1], &c__1, &work[*n + 1],
-                                                   &c__1);
-                                            dlascl_("G", &c__0, &c__0, &aapp, &c_b18, m, &c__1,
-                                                    &work[*n + 1], lda, &ierr);
-                                            dlascl_("G", &c__0, &c__0, &aaqq, &c_b18, m, &c__1,
-                                                    &a[q * a_dim1 + 1], lda, &ierr);
+                                            aocl_blas_dcopy(m, &a[p * a_dim1 + 1], &c__1,
+                                                            &work[*n + 1], &c__1);
+                                            aocl_lapack_dlascl("G", &c__0, &c__0, &aapp, &c_b18, m,
+                                                               &c__1, &work[*n + 1], lda, &ierr);
+                                            aocl_lapack_dlascl("G", &c__0, &c__0, &aaqq, &c_b18, m,
+                                                               &c__1, &a[q * a_dim1 + 1], lda,
+                                                               &ierr);
                                             temp1 = -aapq * work[p] / work[q];
-                                            daxpy_(m, &temp1, &work[*n + 1], &c__1,
-                                                   &a[q * a_dim1 + 1], &c__1);
-                                            dlascl_("G", &c__0, &c__0, &c_b18, &aaqq, m, &c__1,
-                                                    &a[q * a_dim1 + 1], lda, &ierr);
+                                            aocl_blas_daxpy(m, &temp1, &work[*n + 1], &c__1,
+                                                            &a[q * a_dim1 + 1], &c__1);
+                                            aocl_lapack_dlascl("G", &c__0, &c__0, &c_b18, &aaqq, m,
+                                                               &c__1, &a[q * a_dim1 + 1], lda,
+                                                               &ierr);
                                             /* Computing MAX */
                                             d__1 = 0.;
                                             d__2 = 1. - aapq * aapq; // , expr subst
@@ -1652,17 +1684,19 @@ void dgesvj_(char *joba, char *jobu, char *jobv, integer *m, integer *n, doubler
                                         }
                                         else
                                         {
-                                            dcopy_(m, &a[q * a_dim1 + 1], &c__1, &work[*n + 1],
-                                                   &c__1);
-                                            dlascl_("G", &c__0, &c__0, &aaqq, &c_b18, m, &c__1,
-                                                    &work[*n + 1], lda, &ierr);
-                                            dlascl_("G", &c__0, &c__0, &aapp, &c_b18, m, &c__1,
-                                                    &a[p * a_dim1 + 1], lda, &ierr);
+                                            aocl_blas_dcopy(m, &a[q * a_dim1 + 1], &c__1,
+                                                            &work[*n + 1], &c__1);
+                                            aocl_lapack_dlascl("G", &c__0, &c__0, &aaqq, &c_b18, m,
+                                                               &c__1, &work[*n + 1], lda, &ierr);
+                                            aocl_lapack_dlascl("G", &c__0, &c__0, &aapp, &c_b18, m,
+                                                               &c__1, &a[p * a_dim1 + 1], lda,
+                                                               &ierr);
                                             temp1 = -aapq * work[q] / work[p];
-                                            daxpy_(m, &temp1, &work[*n + 1], &c__1,
-                                                   &a[p * a_dim1 + 1], &c__1);
-                                            dlascl_("G", &c__0, &c__0, &c_b18, &aapp, m, &c__1,
-                                                    &a[p * a_dim1 + 1], lda, &ierr);
+                                            aocl_blas_daxpy(m, &temp1, &work[*n + 1], &c__1,
+                                                            &a[p * a_dim1 + 1], &c__1);
+                                            aocl_lapack_dlascl("G", &c__0, &c__0, &c_b18, &aapp, m,
+                                                               &c__1, &a[p * a_dim1 + 1], lda,
+                                                               &ierr);
                                             /* Computing MAX */
                                             d__1 = 0.;
                                             d__2 = 1. - aapq * aapq; // , expr subst
@@ -1679,13 +1713,13 @@ void dgesvj_(char *joba, char *jobu, char *jobv, integer *m, integer *n, doubler
                                     {
                                         if(aaqq < rootbig && aaqq > rootsfmin)
                                         {
-                                            sva[q] = dnrm2_(m, &a[q * a_dim1 + 1], &c__1) * work[q];
+                                            sva[q] = aocl_blas_dnrm2(m, &a[q * a_dim1 + 1], &c__1) * work[q];
                                         }
                                         else
                                         {
                                             t = 0.;
                                             aaqq = 1.;
-                                            dlassq_(m, &a[q * a_dim1 + 1], &c__1, &t, &aaqq);
+                                            aocl_lapack_dlassq(m, &a[q * a_dim1 + 1], &c__1, &t, &aaqq);
                                             sva[q] = t * sqrt(aaqq) * work[q];
                                         }
                                     }
@@ -1695,13 +1729,13 @@ void dgesvj_(char *joba, char *jobu, char *jobv, integer *m, integer *n, doubler
                                     {
                                         if(aapp < rootbig && aapp > rootsfmin)
                                         {
-                                            aapp = dnrm2_(m, &a[p * a_dim1 + 1], &c__1) * work[p];
+                                            aapp = aocl_blas_dnrm2(m, &a[p * a_dim1 + 1], &c__1) * work[p];
                                         }
                                         else
                                         {
                                             t = 0.;
                                             aapp = 1.;
-                                            dlassq_(m, &a[p * a_dim1 + 1], &c__1, &t, &aapp);
+                                            aocl_lapack_dlassq(m, &a[p * a_dim1 + 1], &c__1, &t, &aapp);
                                             aapp = t * sqrt(aapp) * work[p];
                                         }
                                         sva[p] = aapp;
@@ -1775,13 +1809,13 @@ void dgesvj_(char *joba, char *jobu, char *jobv, integer *m, integer *n, doubler
         /* .. update SVA(N) */
         if(sva[*n] < rootbig && sva[*n] > rootsfmin)
         {
-            sva[*n] = dnrm2_(m, &a[*n * a_dim1 + 1], &c__1) * work[*n];
+            sva[*n] = aocl_blas_dnrm2(m, &a[*n * a_dim1 + 1], &c__1) * work[*n];
         }
         else
         {
             t = 0.;
             aapp = 1.;
-            dlassq_(m, &a[*n * a_dim1 + 1], &c__1, &t, &aapp);
+            aocl_lapack_dlassq(m, &a[*n * a_dim1 + 1], &c__1, &t, &aapp);
             sva[*n] = t * sqrt(aapp) * work[*n];
         }
         /* Additional steering devices */
@@ -1816,7 +1850,7 @@ L1995: /* Sort the singular values and find how many are above */
     for(p = 1; p <= i__1; ++p)
     {
         i__2 = *n - p + 1;
-        q = idamax_(&i__2, &sva[p], &c__1) + p - 1;
+        q = aocl_blas_idamax(&i__2, &sva[p], &c__1) + p - 1;
         if(p != q)
         {
             temp1 = sva[p];
@@ -1825,10 +1859,10 @@ L1995: /* Sort the singular values and find how many are above */
             temp1 = work[p];
             work[p] = work[q];
             work[q] = temp1;
-            dswap_(m, &a[p * a_dim1 + 1], &c__1, &a[q * a_dim1 + 1], &c__1);
+            aocl_blas_dswap(m, &a[p * a_dim1 + 1], &c__1, &a[q * a_dim1 + 1], &c__1);
             if(rsvec)
             {
-                dswap_(&mvl, &v[p * v_dim1 + 1], &c__1, &v[q * v_dim1 + 1], &c__1);
+                aocl_blas_dswap(&mvl, &v[p * v_dim1 + 1], &c__1, &v[q * v_dim1 + 1], &c__1);
             }
         }
         if(sva[p] != 0.)
@@ -1856,7 +1890,7 @@ L1995: /* Sort the singular values and find how many are above */
         for(p = 1; p <= i__1; ++p)
         {
             d__1 = work[p] / sva[p];
-            dscal_(m, &d__1, &a[p * a_dim1 + 1], &c__1);
+            aocl_blas_dscal(m, &d__1, &a[p * a_dim1 + 1], &c__1);
             /* L1998: */
         }
     }
@@ -1868,7 +1902,7 @@ L1995: /* Sort the singular values and find how many are above */
             i__1 = *n;
             for(p = 1; p <= i__1; ++p)
             {
-                dscal_(&mvl, &work[p], &v[p * v_dim1 + 1], &c__1);
+                aocl_blas_dscal(&mvl, &work[p], &v[p * v_dim1 + 1], &c__1);
                 /* L2398: */
             }
         }
@@ -1877,8 +1911,8 @@ L1995: /* Sort the singular values and find how many are above */
             i__1 = *n;
             for(p = 1; p <= i__1; ++p)
             {
-                temp1 = 1. / dnrm2_(&mvl, &v[p * v_dim1 + 1], &c__1);
-                dscal_(&mvl, &temp1, &v[p * v_dim1 + 1], &c__1);
+                temp1 = 1. / aocl_blas_dnrm2(&mvl, &v[p * v_dim1 + 1], &c__1);
+                aocl_blas_dscal(&mvl, &temp1, &v[p * v_dim1 + 1], &c__1);
                 /* L2399: */
             }
         }

@@ -86,7 +86,22 @@
 /* > \ingroup complex16OTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void zlascl2_(integer *m, integer *n, doublereal *d__, doublecomplex *x, integer *ldx)
+/** Generated wrapper function */
+void zlascl2_(aocl_int_t *m, aocl_int_t *n, doublereal *d__, dcomplex *x, aocl_int_t *ldx)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_zlascl2(m, n, d__, x, ldx);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t ldx_64 = *ldx;
+
+    aocl_lapack_zlascl2(&m_64, &n_64, d__, x, &ldx_64);
+#endif
+}
+
+void aocl_lapack_zlascl2(aocl_int64_t *m, aocl_int64_t *n, doublereal *d__, dcomplex *x,
+                         aocl_int64_t *ldx)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zlascl2 inputs: m %" FLA_IS ", n %" FLA_IS ", ldx %" FLA_IS "", *m, *n,

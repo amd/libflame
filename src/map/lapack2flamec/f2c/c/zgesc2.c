@@ -4,9 +4,9 @@
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
  /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
-static doublecomplex c_b13 = {1., 0.};
-static integer c_n1 = -1;
+static aocl_int64_t c__1 = 1;
+static dcomplex c_b13 = {{1.}, {0.}};
+static aocl_int64_t c_n1 = -1;
 /* > \brief \b ZGESC2 solves a system of linear equations using the LU factorization with complete
  * pivoting co mputed by sgetc2. */
 /* =========== DOCUMENTATION =========== */
@@ -115,31 +115,38 @@ for 1 <= j <= N, column j of the */
 /* > Umea University, S-901 87 Umea, Sweden. */
 /* ===================================================================== */
 /* Subroutine */
-void zgesc2_(integer *n, doublecomplex *a, integer *lda, doublecomplex *rhs, integer *ipiv,
-             integer *jpiv, doublereal *scale)
+/** Generated wrapper function */
+void zgesc2_(aocl_int_t *n, dcomplex *a, aocl_int_t *lda, dcomplex *rhs, aocl_int_t *ipiv,
+             aocl_int_t *jpiv, doublereal *scale)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_zgesc2(n, a, lda, rhs, ipiv, jpiv, scale);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t lda_64 = *lda;
+
+    aocl_lapack_zgesc2(&n_64, a, &lda_64, rhs, ipiv, jpiv, scale);
+#endif
+}
+
+void aocl_lapack_zgesc2(aocl_int64_t *n, dcomplex *a, aocl_int64_t *lda, dcomplex *rhs,
+                        aocl_int_t *ipiv, aocl_int_t *jpiv, doublereal *scale)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zgesc2 inputs: n %" FLA_IS ", lda %" FLA_IS "", *n, *lda);
     /* System generated locals */
-    integer a_dim1, a_offset, i__1, i__2, i__3, i__4, i__5, i__6;
+    aocl_int64_t a_dim1, a_offset, i__1, i__2, i__3, i__4, i__5, i__6;
     doublereal d__1;
-    doublecomplex z__1, z__2, z__3;
+    dcomplex z__1, z__2, z__3;
     /* Builtin functions */
-    double z_abs(doublecomplex *);
-    void z_div(doublecomplex *, doublecomplex *, doublecomplex *);
+    double z_abs(dcomplex *);
+    void z_div(dcomplex *, dcomplex *, dcomplex *);
     /* Local variables */
-    integer i__, j;
+    aocl_int64_t i__, j;
     doublereal eps;
-    doublecomplex temp;
-    extern /* Subroutine */
-        void
-        zscal_(integer *, doublecomplex *, doublecomplex *, integer *);
+    dcomplex temp;
     extern doublereal dlamch_(char *);
-    extern integer izamax_(integer *, doublecomplex *, integer *);
     doublereal smlnum;
-    extern /* Subroutine */
-        void
-        zlaswp_(integer *, doublecomplex *, integer *, integer *, integer *, integer *, integer *);
     /* -- LAPACK auxiliary routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -172,7 +179,7 @@ void zgesc2_(integer *n, doublecomplex *a, integer *lda, doublecomplex *rhs, int
     smlnum = dlamch_("S") / eps;
     /* Apply permutations IPIV to RHS */
     i__1 = *n - 1;
-    zlaswp_(&c__1, &rhs[1], lda, &c__1, &i__1, &ipiv[1], &c__1);
+    aocl_lapack_zlaswp(&c__1, &rhs[1], lda, &c__1, &i__1, &ipiv[1], &c__1);
     /* Solve for L part */
     i__1 = *n - 1;
     for(i__ = 1; i__ <= i__1; ++i__)
@@ -197,7 +204,7 @@ void zgesc2_(integer *n, doublecomplex *a, integer *lda, doublecomplex *rhs, int
     /* Solve for U part */
     *scale = 1.;
     /* Check for scaling */
-    i__ = izamax_(n, &rhs[1], &c__1);
+    i__ = aocl_blas_izamax(n, &rhs[1], &c__1);
     if(smlnum * 2. * z_abs(&rhs[i__]) > z_abs(&a[*n + *n * a_dim1]))
     {
         d__1 = z_abs(&rhs[i__]);
@@ -205,7 +212,7 @@ void zgesc2_(integer *n, doublecomplex *a, integer *lda, doublecomplex *rhs, int
         z__1.i = 0. / d__1; // , expr subst
         temp.r = z__1.r;
         temp.i = z__1.i; // , expr subst
-        zscal_(n, &temp, &rhs[1], &c__1);
+        aocl_blas_zscal(n, &temp, &rhs[1], &c__1);
         *scale *= temp.r;
     }
     for(i__ = *n; i__ >= 1; --i__)
@@ -240,7 +247,7 @@ void zgesc2_(integer *n, doublecomplex *a, integer *lda, doublecomplex *rhs, int
     }
     /* Apply permutations JPIV to the solution (RHS) */
     i__1 = *n - 1;
-    zlaswp_(&c__1, &rhs[1], lda, &c__1, &i__1, &jpiv[1], &c_n1);
+    aocl_lapack_zlaswp(&c__1, &rhs[1], lda, &c__1, &i__1, &jpiv[1], &c_n1);
     AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of ZGESC2 */

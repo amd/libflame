@@ -141,8 +141,27 @@ v(1:m-k+i-1) is stored on exit in */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void cgeqlf_(integer *m, integer *n, complex *a, integer *lda, complex *tau, complex *work,
-             integer *lwork, integer *info)
+/** Generated wrapper function */
+void cgeqlf_(aocl_int_t *m, aocl_int_t *n, scomplex *a, aocl_int_t *lda, scomplex *tau, scomplex *work,
+             aocl_int_t *lwork, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_cgeqlf(m, n, a, lda, tau, work, lwork, info);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t lwork_64 = *lwork;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_cgeqlf(&m_64, &n_64, a, &lda_64, tau, work, &lwork_64, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_cgeqlf(aocl_int64_t *m, aocl_int64_t *n, scomplex *a, aocl_int64_t *lda,
+                        scomplex *tau, scomplex *work, aocl_int64_t *lwork, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -156,22 +175,12 @@ void cgeqlf_(integer *m, integer *n, complex *a, integer *lda, complex *tau, com
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
-    integer a_dim1, a_offset, i__1, i__2, i__3, i__4;
+    aocl_int64_t a_dim1, a_offset, i__1, i__2, i__3, i__4;
     real r__1;
     /* Local variables */
-    integer i__, k, ib, nb, ki, kk, mu, nu, nx, iws, nbmin, iinfo;
-    extern /* Subroutine */
-        void
-        cgeql2_(integer *, integer *, complex *, integer *, complex *, complex *, integer *),
-        clarfb_(char *, char *, char *, char *, integer *, integer *, integer *, complex *,
-                integer *, complex *, integer *, complex *, integer *, complex *, integer *),
-        clarft_(char *, char *, integer *, integer *, complex *, integer *, complex *, complex *,
-                integer *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
-    integer ldwork, lwkopt;
+    aocl_int64_t i__, k, ib, nb, ki, kk, mu, nu, nx, iws, nbmin, iinfo;
+    aocl_int64_t ldwork, lwkopt;
     logical lquery;
-    extern real sroundup_lwork(integer *);
     /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -211,7 +220,7 @@ void cgeqlf_(integer *m, integer *n, complex *a, integer *lda, complex *tau, com
     {
         *info = -4;
     }
-    nb = ilaenv_(&c__1, "CGEQLF", " ", m, n, &c_n1, &c_n1);
+    nb = aocl_lapack_ilaenv(&c__1, "CGEQLF", " ", m, n, &c_n1, &c_n1);
     if(*info == 0)
     {
         k = fla_min(*m, *n);
@@ -223,7 +232,7 @@ void cgeqlf_(integer *m, integer *n, complex *a, integer *lda, complex *tau, com
         {
             lwkopt = *n * nb;
         }
-        r__1 = sroundup_lwork(&lwkopt);
+        r__1 = aocl_lapack_sroundup_lwork(&lwkopt);
         work[1].r = r__1;
         work[1].i = 0.f; // , expr subst
         if(*lwork < fla_max(1, *n) && !lquery)
@@ -234,7 +243,7 @@ void cgeqlf_(integer *m, integer *n, complex *a, integer *lda, complex *tau, com
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("CGEQLF", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("CGEQLF", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
@@ -257,7 +266,7 @@ void cgeqlf_(integer *m, integer *n, complex *a, integer *lda, complex *tau, com
         /* Determine when to cross over from blocked to unblocked code. */
         /* Computing MAX */
         i__1 = 0;
-        i__2 = ilaenv_(&c__3, "CGEQLF", " ", m, n, &c_n1, &c_n1); // , expr subst
+        i__2 = aocl_lapack_ilaenv(&c__3, "CGEQLF", " ", m, n, &c_n1, &c_n1); // , expr subst
         nx = fla_max(i__1, i__2);
         if(nx < k)
         {
@@ -271,7 +280,7 @@ void cgeqlf_(integer *m, integer *n, complex *a, integer *lda, complex *tau, com
                 nb = *lwork / ldwork;
                 /* Computing MAX */
                 i__1 = 2;
-                i__2 = ilaenv_(&c__2, "CGEQLF", " ", m, n, &c_n1, &c_n1); // , expr subst
+                i__2 = aocl_lapack_ilaenv(&c__2, "CGEQLF", " ", m, n, &c_n1, &c_n1); // , expr subst
                 nbmin = fla_max(i__1, i__2);
             }
         }
@@ -295,22 +304,24 @@ void cgeqlf_(integer *m, integer *n, complex *a, integer *lda, complex *tau, com
             /* Compute the QL factorization of the current block */
             /* A(1:m-k+i+ib-1,n-k+i:n-k+i+ib-1) */
             i__3 = *m - k + i__ + ib - 1;
-            cgeql2_(&i__3, &ib, &a[(*n - k + i__) * a_dim1 + 1], lda, &tau[i__], &work[1], &iinfo);
+            aocl_lapack_cgeql2(&i__3, &ib, &a[(*n - k + i__) * a_dim1 + 1], lda, &tau[i__],
+                               &work[1], &iinfo);
             if(*n - k + i__ > 1)
             {
                 /* Form the triangular factor of the block reflector */
                 /* H = H(i+ib-1) . . . H(i+1) H(i) */
                 i__3 = *m - k + i__ + ib - 1;
-                clarft_("Backward", "Columnwise", &i__3, &ib, &a[(*n - k + i__) * a_dim1 + 1], lda,
-                        &tau[i__], &work[1], &ldwork);
+                aocl_lapack_clarft("Backward", "Columnwise", &i__3, &ib,
+                                   &a[(*n - k + i__) * a_dim1 + 1], lda, &tau[i__], &work[1],
+                                   &ldwork);
                 /* Apply H**H to A(1:m-k+i+ib-1,1:n-k+i-1) from the left */
                 i__3 = *m - k + i__ + ib - 1;
                 i__4 = *n - k + i__ - 1;
-                clarfb_("Left", "Conjugate transpose", "Backward",
-                        "Columnwi"
-                        "se",
-                        &i__3, &i__4, &ib, &a[(*n - k + i__) * a_dim1 + 1], lda, &work[1], &ldwork,
-                        &a[a_offset], lda, &work[ib + 1], &ldwork);
+                aocl_lapack_clarfb("Left", "Conjugate transpose", "Backward",
+                                   "Columnwi"
+                                   "se",
+                                   &i__3, &i__4, &ib, &a[(*n - k + i__) * a_dim1 + 1], lda,
+                                   &work[1], &ldwork, &a[a_offset], lda, &work[ib + 1], &ldwork);
             }
             /* L10: */
         }
@@ -327,7 +338,7 @@ void cgeqlf_(integer *m, integer *n, complex *a, integer *lda, complex *tau, com
     {
         aocl_lapack_cgeql2(&mu, &nu, &a[a_offset], lda, &tau[1], &work[1], &iinfo);
     }
-    r__1 = sroundup_lwork(&iws);
+    r__1 = aocl_lapack_sroundup_lwork(&iws);
     work[1].r = r__1;
     work[1].i = 0.f; // , expr subst
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);

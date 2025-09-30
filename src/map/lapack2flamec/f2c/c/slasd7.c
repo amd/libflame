@@ -4,7 +4,7 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
+static aocl_int64_t c__1 = 1;
 /* > \brief \b SLASD7 merges the two sets of singular values together into a single sorted set. Then
  * it tries to deflate the size of the problem. Used by sbdsdc. */
 /* =========== DOCUMENTATION =========== */
@@ -278,11 +278,44 @@ and entries in the second half */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void slasd7_(integer *icompq, integer *nl, integer *nr, integer *sqre, integer *k, real *d__,
-             real *z__, real *zw, real *vf, real *vfw, real *vl, real *vlw, real *alpha, real *beta,
-             real *dsigma, integer *idx, integer *idxp, integer *idxq, integer *perm,
-             integer *givptr, integer *givcol, integer *ldgcol, real *givnum, integer *ldgnum,
-             real *c__, real *s, integer *info)
+/** Generated wrapper function */
+void slasd7_(aocl_int_t *icompq, aocl_int_t *nl, aocl_int_t *nr, aocl_int_t *sqre, aocl_int_t *k,
+             real *d__, real *z__, real *zw, real *vf, real *vfw, real *vl, real *vlw, real *alpha,
+             real *beta, real *dsigma, aocl_int_t *idx, aocl_int_t *idxp, aocl_int_t *idxq,
+             aocl_int_t *perm, aocl_int_t *givptr, aocl_int_t *givcol, aocl_int_t *ldgcol,
+             real *givnum, aocl_int_t *ldgnum, real *c__, real *s, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_slasd7(icompq, nl, nr, sqre, k, d__, z__, zw, vf, vfw, vl, vlw, alpha, beta, dsigma,
+                       idx, idxp, idxq, perm, givptr, givcol, ldgcol, givnum, ldgnum, c__, s, info);
+#else
+    aocl_int64_t icompq_64 = *icompq;
+    aocl_int64_t nl_64 = *nl;
+    aocl_int64_t nr_64 = *nr;
+    aocl_int64_t sqre_64 = *sqre;
+    aocl_int64_t k_64 = *k;
+    aocl_int64_t givptr_64 = *givptr;
+    aocl_int64_t ldgcol_64 = *ldgcol;
+    aocl_int64_t ldgnum_64 = *ldgnum;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_slasd7(&icompq_64, &nl_64, &nr_64, &sqre_64, &k_64, d__, z__, zw, vf, vfw, vl, vlw,
+                       alpha, beta, dsigma, idx, idxp, idxq, perm, &givptr_64, givcol, &ldgcol_64,
+                       givnum, &ldgnum_64, c__, s, &info_64);
+
+    *k = (aocl_int_t)k_64;
+    *givptr = (aocl_int_t)givptr_64;
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_slasd7(aocl_int64_t *icompq, aocl_int64_t *nl, aocl_int64_t *nr,
+                        aocl_int64_t *sqre, aocl_int64_t *k, real *d__, real *z__, real *zw,
+                        real *vf, real *vfw, real *vl, real *vlw, real *alpha, real *beta,
+                        real *dsigma, aocl_int_t *idx, aocl_int_t *idxp, aocl_int_t *idxq,
+                        aocl_int_t *perm, aocl_int64_t *givptr, aocl_int_t *givcol,
+                        aocl_int64_t *ldgcol, real *givnum, aocl_int64_t *ldgnum, real *c__,
+                        real *s, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("slasd7 inputs: icompq %" FLA_IS ", nl %" FLA_IS ", nr %" FLA_IS
@@ -297,21 +330,9 @@ void slasd7_(integer *icompq, integer *nl, integer *nr, integer *sqre, integer *
     real z1;
     aocl_int64_t jp;
     real eps, tau, tol;
-    integer nlp1, nlp2, idxi, idxj;
-    extern /* Subroutine */
-        void
-        srot_(integer *, real *, integer *, real *, integer *, real *, real *);
-    integer idxjp, jprev;
-    extern /* Subroutine */
-        void
-        scopy_(integer *, real *, integer *, real *, integer *);
+    aocl_int64_t nlp1, nlp2, idxi, idxj;
+    aocl_int64_t idxjp, jprev;
     extern real slapy2_(real *, real *), slamch_(char *);
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    extern /* Subroutine */
-        void
-        slamrg_(integer *, integer *, real *, integer *, integer *, integer *);
     real hlftol;
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -385,7 +406,7 @@ void slasd7_(integer *icompq, integer *nl, integer *nr, integer *sqre, integer *
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("SLASD7", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("SLASD7", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -479,7 +500,7 @@ void slasd7_(integer *icompq, integer *nl, integer *nr, integer *sqre, integer *
         {
             /* Deflate due to small z component. */
             --k2;
-            idxp[k2] = j;
+            idxp[k2] = (aocl_int_t)(j);
             if(j == n)
             {
                 goto L100;
@@ -633,7 +654,7 @@ L100: /* Sort the singular values into DSIGMA. The singular values which */
     i__1 = n - 1;
     aocl_blas_scopy(&i__1, &vfw[2], &c__1, &vf[2], &c__1);
     i__1 = n - 1;
-    scopy_(&i__1, &vlw[2], &c__1, &vl[2], &c__1);
+    aocl_blas_scopy(&i__1, &vlw[2], &c__1, &vl[2], &c__1);
     AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SLASD7 */

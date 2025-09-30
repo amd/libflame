@@ -21,7 +21,7 @@
 #ifndef __cplusplus
 #include <complex.h>
 #endif
-#undef complex
+#undef scomplex
 #include "FLA_config.h"
 #include "FLA_macro_defs.h"
 #include "FLA_type_defs.h"
@@ -29,6 +29,10 @@
 #include "FLA_progress.h"
 #include "FLA_Context.h"
 #include "FLA_Threads.h"
+#include "aocl_lapack.h"
+#include "aocl_fla_lapack.h"
+#include "aocl_blas.h"
+#include "FLA_lapack_f77_prototypes.h"
 
 #ifndef F2C_INCLUDE
 #define F2C_INCLUDE
@@ -45,149 +49,21 @@
 #endif
 
 /* DTL purpose */
+#ifdef _WIN32
+	#define FLA_IS "lld"
+#else
+	#define FLA_IS "ld"
+#endif
+
 #ifdef FLA_ENABLE_ILP64
   #ifdef _WIN32
-    #define FLA_IS "lld"
+    #define FLA_ISL "lld"
   #else
-    #define FLA_IS "ld"
+    #define FLA_ISL "ld"
   #endif
 #else
-  #define FLA_IS "d"
+  #define FLA_ISL "d"
 #endif
-
-#if LF_AOCL_DTL_LOG_ENABLE
-	/*Increases visibility of FLA_clock()*/
-	double FLA_Clock();
-	void get_time_unit(char * , double *);
-
-	#define BUFF_SIZE 256
-	#define BUFFER buffer
-	/*Variable Argument macro for snprintf*/
-	#define AOCL_DTL_SNPRINTF(...) snprintf(BUFFER,BUFF_SIZE,__VA_ARGS__)
-
-#else
-	#define AOCL_DTL_SNPRINTF(...)
-
-#endif
-
-/**
- * AOCL_DTL_TRACE_ENTRY_INDENT & AOCL_DTL_TRACE_EXIT_INDENT for assigning 
- * dynamic trace levels based on order of API calls
- */
-#if LF_AOCL_DTL_TRACE_ENABLE
-	extern TLS_CLASS_SPEC int AOCL_TRACE_COUNTER;
-	#define AOCL_DTL_TRACE_ENTRY_INDENT AOCL_DTL_TRACE_ENTRY(AOCL_TRACE_COUNTER++);
-	#define AOCL_DTL_TRACE_EXIT_INDENT 	AOCL_DTL_TRACE_EXIT(--AOCL_TRACE_COUNTER);
-#else
-	#define AOCL_DTL_TRACE_ENTRY_INDENT 
-	#define AOCL_DTL_TRACE_EXIT_INDENT
-#endif
-
-
-/**
- * Macros for DTL Tracing with Indentation and Logging inputs with time
- */
-#if LF_AOCL_DTL_LOG_ENABLE & LF_AOCL_DTL_TRACE_ENABLE
-	#define AOCL_DTL_TRACE_LOG_INIT 						\
-		AOCL_DTL_TRACE_ENTRY_INDENT							\
-		double api_start_time = 0.0;      					\
-		char buffer[256],unit[3]=" s";    					\
-		double api_duration;              					\
-		api_start_time = FLA_Clock();
-
-	#define AOCL_DTL_TRACE_LOG_EXIT    						\
-		api_duration = FLA_Clock()-api_start_time;      	\
-		get_time_unit(unit, &api_duration);					\
-		snprintf(buffer+strlen(buffer), 					\
-			sizeof(buffer) - strlen(buffer),				\
-			" time: %06.2f%s ",api_duration,unit);			\
-		AOCL_DTL_LOG(AOCL_DTL_LEVEL_INFO, buffer);   		\
-		AOCL_DTL_TRACE_EXIT_INDENT
-
-#elif LF_AOCL_DTL_LOG_ENABLE
-	#define AOCL_DTL_TRACE_LOG_INIT 						\
-		double api_start_time = 0.0;    					\
-		char buffer[256],unit[3]=" s";  					\
-		double api_duration;            					\
-		api_start_time = FLA_Clock();
-
-	#define AOCL_DTL_TRACE_LOG_EXIT    						\
-		api_duration = FLA_Clock()-api_start_time;      	\
-		get_time_unit(unit,  &api_duration);				\
-		snprintf(buffer+strlen(buffer), 					\
-				sizeof(buffer) - strlen(buffer),			\
-				" time: %06.2f%s ", api_duration,unit);		\
-		AOCL_DTL_LOG(AOCL_DTL_LEVEL_INFO, buffer);   
-
-#elif LF_AOCL_DTL_TRACE_ENABLE
-	#define AOCL_DTL_TRACE_LOG_INIT 						\
-		AOCL_DTL_TRACE_ENTRY_INDENT
-
-	#define AOCL_DTL_TRACE_LOG_EXIT  						\
-		AOCL_DTL_TRACE_EXIT_INDENT
-
-#else
-	#define AOCL_DTL_TRACE_LOG_INIT 
-	#define AOCL_DTL_TRACE_LOG_EXIT
-
-#endif
-
-/* Macro to access array item pointers stored in column major order */
-#define M_PTR(A, r, c, lda) ((A) + (((c) * (lda)) + (r)))
-
-// LDLT Factorization for packed matrices uses different threshold to choose
-// between blocked /  unblocked variants and also the blocksize for the blocked
-// variant. The thresholds and blocksizes re defined here
-#define FLA_SPFFRT2__NTHRESH1         (64)
-#define FLA_SPFFRT2__NTHRESH2         (201)
-#define FLA_SPFFRT2__NTHRESH3         (4096)
-#define FLA_SPFFRT2__NCOLTHRESH       (3)
-#define FLA_SPFFRT2__NCOLFRAC_THRESH1 (25)
-#define FLA_SPFFRT2__NCOLFRAC_THRESH2 (80)
-#define FLA_SPFFRT2__NCOLFRAC_THRESH3 (20)
-#define FLA_SPFFRT2__BSIZE_NL1        (256)
-#define FLA_SPFFRT2__BSIZE_NL2        (4096)
-#define FLA_SPFFRT2__BSIZE1           (8)
-#define FLA_SPFFRT2__BSIZE2           (32)
-#define FLA_SPFFRT2__BSIZE3           (64)
-
-
-/* typedef long integer integer; */
-#ifdef __cplusplus
-  // For C++, include stdint.h.
-#include <stdint.h> // skipped
-#elif __STDC_VERSION__ >= 199901L
-  // For C99 (or later), include stdint.h.
-#include <stdint.h> // skipped
-#else
-  // When stdint.h is not available, manually typedef the types we will use.
-#ifdef _WIN32
-typedef          __int32  int32_t;
-typedef unsigned __int32 uint32_t;
-typedef          __int64  int64_t;
-typedef unsigned __int64 uint64_t;
-#else
-#error "Attempting to compile on pre-C99 system without stdint.h."
-#endif
-#endif
-/* typedef long integer integer; */
-#ifdef FLA_ENABLE_ILP64
-typedef int64_t integer;
-typedef uint64_t uinteger;
-#else
-typedef int32_t integer;
-typedef unsigned long int uinteger;
-#endif
-
-typedef char *address;
-typedef short int shortint;
-typedef float real;
-typedef double doublereal;
-typedef struct { real r, i; } complex;
-typedef struct { doublereal r, i; } doublecomplex;
-
-/* typedef long int logical; */
-typedef integer logical; 
 
 #if LF_AOCL_DTL_LOG_ENABLE
 	/*Increases visibility of FLA_clock()*/
@@ -431,10 +307,10 @@ struct Namelist {
 typedef struct Namelist Namelist;
 
 #ifndef ceiling_f90_
-  #define ceiling_f90_(x) ((integer)(x) + ((x) > 0 && (x) != (integer)(x)))
+  #define ceiling_f90_(x) ((fla_dim_t)(x) + ((x) > 0 && (x) != (fla_dim_t)(x)))
 #endif
 #ifndef floor_f90_
-  #define floor_f90_(x) ((integer)(x) - ((x) < 0 && (x) != (integer)(x)))
+  #define floor_f90_(x) ((fla_dim_t)(x) - ((x) < 0 && (x) != (fla_dim_t)(x)))
 #endif
 #ifndef f2c_abs
   #define f2c_abs(x) ((x) >= 0 ? (x) : -(x))
@@ -454,55 +330,6 @@ typedef struct Namelist Namelist;
 #define bit_set(a,b)	((a) |  ((uinteger)1 << (b)))
 
 
-#define F2C_proc_par_types 1
-#ifdef __cplusplus
-typedef int /* Unknown procedure type */ (*U_fp)(...);
-typedef shortint (*J_fp)(...);
-typedef integer (*I_fp)(...);
-typedef real (*R_fp)(...);
-typedef doublereal (*D_fp)(...);
-typedef doublereal (*E_fp)(...);
-typedef /* Complex */ VOID (*C_fp)(...);
-typedef /* Double Complex */ VOID (*Z_fp)(...);
-typedef logical (*L_fp)(...);
-typedef logical (*L_fp1)(complex *);
-typedef logical (*L_fp2)(complex *, complex *);
-typedef logical (*L_fps2)(real *, real *);
-typedef logical (*L_fps3)(real *, real *, real *);
-typedef logical (*L_fpd2)(doublereal *, doublereal *);
-typedef logical (*L_fpd3)(doublereal *, doublereal *, doublereal *);
-typedef logical (*L_fpz1)(doublecomplex *);
-typedef logical (*L_fpz2)(doublecomplex *, doublecomplex *);
-typedef shortlogical (*K_fp)(...);
-typedef /* Character */ VOID (*H_fp)(...);
-typedef /* Subroutine */ int (*S_fp)(...);
-#else
-typedef int /* Unknown procedure type */ (*U_fp)();
-typedef shortint (*J_fp)();
-typedef integer (*I_fp)();
-typedef real (*R_fp)();
-typedef doublereal (*D_fp)();
-typedef doublereal (*E_fp)();
-typedef /* Complex */ VOID (*C_fp)();
-typedef /* Double Complex */ VOID (*Z_fp)();
-typedef logical (*L_fp)();
-typedef logical (*L_fp1)(complex *);
-typedef logical (*L_fp2)(complex *, complex *);
-typedef logical (*L_fps2)(real *, real *);
-typedef logical (*L_fps3)(real *, real *, real *);
-typedef logical (*L_fpd2)(doublereal *, doublereal *);
-typedef logical (*L_fpd3)(doublereal *, doublereal *, doublereal *);
-typedef logical (*L_fpz1)(doublecomplex *);
-typedef logical (*L_fpz2)(doublecomplex *, doublecomplex *);
-typedef shortlogical (*K_fp)();
-typedef /* Character */ VOID (*H_fp)();
-typedef /* Subroutine */ int (*S_fp)();
-#endif
-/* E_fp is for real functions when -R is not specified */
-typedef VOID C_f;	/* complex function */
-typedef VOID H_f;	/* character function */
-typedef VOID Z_f;	/* double complex function */
-typedef doublereal E_f;	/* real function with -R not specified */
 
 /* undef any lower-case symbols that your C compiler predefines, e.g.: */
 

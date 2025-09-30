@@ -114,8 +114,26 @@ B is N by N and real;
 /* > \ingroup complex16OTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-void zlacrm_(integer *m, integer *n, doublecomplex *a, integer *lda, doublereal *b, integer *ldb,
-             doublecomplex *c__, integer *ldc, doublereal *rwork)
+/** Generated wrapper function */
+void zlacrm_(aocl_int_t *m, aocl_int_t *n, dcomplex *a, aocl_int_t *lda, doublereal *b,
+             aocl_int_t *ldb, dcomplex *c__, aocl_int_t *ldc, doublereal *rwork)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_zlacrm(m, n, a, lda, b, ldb, c__, ldc, rwork);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t ldb_64 = *ldb;
+    aocl_int64_t ldc_64 = *ldc;
+
+    aocl_lapack_zlacrm(&m_64, &n_64, a, &lda_64, b, &ldb_64, c__, &ldc_64, rwork);
+#endif
+}
+
+void aocl_lapack_zlacrm(aocl_int64_t *m, aocl_int64_t *n, dcomplex *a, aocl_int64_t *lda,
+                        doublereal *b, aocl_int64_t *ldb, dcomplex *c__, aocl_int64_t *ldc,
+                        doublereal *rwork)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zlacrm inputs: m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS
@@ -128,11 +146,7 @@ void zlacrm_(integer *m, integer *n, doublecomplex *a, integer *lda, doublereal 
     /* Builtin functions */
     double d_imag(dcomplex *);
     /* Local variables */
-    integer i__, j, l;
-    extern /* Subroutine */
-        void
-        dgemm_(char *, char *, integer *, integer *, integer *, doublereal *, doublereal *,
-               integer *, doublereal *, integer *, doublereal *, doublereal *, integer *);
+    aocl_int64_t i__, j, l;
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -182,7 +196,7 @@ void zlacrm_(integer *m, integer *n, doublecomplex *a, integer *lda, doublereal 
         /* L20: */
     }
     l = *m * *n + 1;
-    dgemm_("N", "N", m, n, n, &c_b6, &rwork[1], m, &b[b_offset], ldb, &c_b7, &rwork[l], m);
+    aocl_blas_dgemm("N", "N", m, n, n, &c_b6, &rwork[1], m, &b[b_offset], ldb, &c_b7, &rwork[l], m);
     i__1 = *n;
     for(j = 1; j <= i__1; ++j)
     {
@@ -208,7 +222,7 @@ void zlacrm_(integer *m, integer *n, doublecomplex *a, integer *lda, doublereal 
         }
         /* L60: */
     }
-    dgemm_("N", "N", m, n, n, &c_b6, &rwork[1], m, &b[b_offset], ldb, &c_b7, &rwork[l], m);
+    aocl_blas_dgemm("N", "N", m, n, n, &c_b6, &rwork[1], m, &b[b_offset], ldb, &c_b7, &rwork[l], m);
     i__1 = *n;
     for(j = 1; j <= i__1; ++j)
     {

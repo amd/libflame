@@ -4,7 +4,7 @@
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
  /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
+static aocl_int64_t c__1 = 1;
 /* > \brief \b DLAHQR computes the eigenvalues and Schur factorization of an upper Hessenberg
  * matrix, using th e double-shift/single-shift QR algorithm. */
 /* =========== DOCUMENTATION =========== */
@@ -116,7 +116,7 @@ IHI <= N. */
 /* > The real and imaginary parts, respectively, of the computed */
 /* > eigenvalues ILO to IHI are stored in the corresponding */
 /* > elements of WR and WI. If two eigenvalues are computed as a */
-/* > complex conjugate pair, they are stored in consecutive */
+/* > scomplex conjugate pair, they are stored in consecutive */
 /* > elements of WR and WI, say the i-th and (i+1)th, with */
 /* > WI(i) > 0 and WI(i+1) < 0. If WANTT is .TRUE., the */
 /* > eigenvalues are stored in the same order as on the diagonal */
@@ -209,49 +209,64 @@ elements i+1:ihi of WR and WI */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void dlahqr_(logical *wantt, logical *wantz, integer *n, integer *ilo, integer *ihi,
-             doublereal *h__, integer *ldh, doublereal *wr, doublereal *wi, integer *iloz,
-             integer *ihiz, doublereal *z__, integer *ldz, integer *info)
+/** Generated wrapper function */
+void dlahqr_(logical *wantt, logical *wantz, aocl_int_t *n, aocl_int_t *ilo, aocl_int_t *ihi,
+             doublereal *h__, aocl_int_t *ldh, doublereal *wr, doublereal *wi, aocl_int_t *iloz,
+             aocl_int_t *ihiz, doublereal *z__, aocl_int_t *ldz, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_dlahqr(wantt, wantz, n, ilo, ihi, h__, ldh, wr, wi, iloz, ihiz, z__, ldz, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t ilo_64 = *ilo;
+    aocl_int64_t ihi_64 = *ihi;
+    aocl_int64_t ldh_64 = *ldh;
+    aocl_int64_t iloz_64 = *iloz;
+    aocl_int64_t ihiz_64 = *ihiz;
+    aocl_int64_t ldz_64 = *ldz;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_dlahqr(wantt, wantz, &n_64, &ilo_64, &ihi_64, h__, &ldh_64, wr, wi, &iloz_64,
+                       &ihiz_64, z__, &ldz_64, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_dlahqr(logical *wantt, logical *wantz, aocl_int64_t *n, aocl_int64_t *ilo,
+                        aocl_int64_t *ihi, doublereal *h__, aocl_int64_t *ldh, doublereal *wr,
+                        doublereal *wi, aocl_int64_t *iloz, aocl_int64_t *ihiz, doublereal *z__,
+                        aocl_int64_t *ldz, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dlahqr inputs: n %" FLA_IS ", ilo %" FLA_IS ", ihi %" FLA_IS ", ldh %" FLA_IS
                       ", iloz %" FLA_IS ", ihiz %" FLA_IS ", ldz %" FLA_IS "",
                       *n, *ilo, *ihi, *ldh, *iloz, *ihiz, *ldz);
     /* System generated locals */
-    integer h_dim1, h_offset, z_dim1, z_offset, i__1, i__2, i__3, i__4;
+    aocl_int64_t h_dim1, h_offset, z_dim1, z_offset, i__1, i__2, i__3, i__4;
     doublereal d__1, d__2, d__3, d__4;
     /* Builtin functions */
     double sqrt(doublereal);
     /* Local variables */
-    integer i__, j, k, l, m;
+    aocl_int64_t i__, j, k, l, m;
     doublereal s, v[3];
-    integer i1, i2;
+    aocl_int64_t i1, i2;
     doublereal t1, t2, t3, v2, v3, aa, ab, ba, bb, h11, h12, h21, h22, cs;
-    integer nh;
+    aocl_int64_t nh;
     doublereal sn;
-    integer nr;
+    aocl_int64_t nr;
     doublereal tr;
-    integer nz;
+    aocl_int64_t nz;
     doublereal det, h21s;
-    integer its;
+    aocl_int64_t its;
     doublereal ulp, sum, tst, rt1i, rt2i, rt1r, rt2r;
-    extern /* Subroutine */
-        void
-        drot_(integer *, doublereal *, integer *, doublereal *, integer *, doublereal *,
-              doublereal *);
-    integer kdefl;
-    extern /* Subroutine */
-        void
-        dcopy_(integer *, doublereal *, integer *, doublereal *, integer *);
-    integer itmax;
+    aocl_int64_t kdefl;
+    aocl_int64_t itmax;
     extern /* Subroutine */
         void
         dlanv2_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *,
                 doublereal *, doublereal *, doublereal *, doublereal *);
     extern doublereal dlamch_(char *);
-    extern /* Subroutine */
-        void
-        dlarfg_(integer *, doublereal *, doublereal *, integer *, doublereal *);
     doublereal safmin, rtdisc, smlnum;
     /* -- LAPACK auxiliary routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -472,7 +487,7 @@ L20:
             rtdisc = sqrt((f2c_dabs(det)));
             if(det >= 0.)
             {
-                /* ==== complex conjugate shifts ==== */
+                /* ==== scomplex conjugate shifts ==== */
                 rt1r = tr * s;
                 rt2r = rt1r;
                 rt1i = rtdisc * s;
@@ -550,9 +565,9 @@ L20:
             nr = fla_min(i__3, i__4);
             if(k > m)
             {
-                dcopy_(&nr, &h__[k + (k - 1) * h_dim1], &c__1, v, &c__1);
+                aocl_blas_dcopy(&nr, &h__[k + (k - 1) * h_dim1], &c__1, v, &c__1);
             }
-            dlarfg_(&nr, v, &v[1], &c__1, &t1);
+            aocl_lapack_dlarfg(&nr, v, &v[1], &c__1, &t1);
             if(k > m)
             {
                 h__[k + (k - 1) * h_dim1] = v[0];
@@ -681,18 +696,18 @@ L150:
             if(i2 > i__)
             {
                 i__1 = i2 - i__;
-                drot_(&i__1, &h__[i__ - 1 + (i__ + 1) * h_dim1], ldh,
-                      &h__[i__ + (i__ + 1) * h_dim1], ldh, &cs, &sn);
+                aocl_blas_drot(&i__1, &h__[i__ - 1 + (i__ + 1) * h_dim1], ldh,
+                               &h__[i__ + (i__ + 1) * h_dim1], ldh, &cs, &sn);
             }
             i__1 = i__ - i1 - 1;
-            drot_(&i__1, &h__[i1 + (i__ - 1) * h_dim1], &c__1, &h__[i1 + i__ * h_dim1], &c__1, &cs,
-                  &sn);
+            aocl_blas_drot(&i__1, &h__[i1 + (i__ - 1) * h_dim1], &c__1, &h__[i1 + i__ * h_dim1],
+                           &c__1, &cs, &sn);
         }
         if(*wantz)
         {
             /* Apply the transformation to Z. */
-            drot_(&nz, &z__[*iloz + (i__ - 1) * z_dim1], &c__1, &z__[*iloz + i__ * z_dim1], &c__1,
-                  &cs, &sn);
+            aocl_blas_drot(&nz, &z__[*iloz + (i__ - 1) * z_dim1], &c__1, &z__[*iloz + i__ * z_dim1],
+                           &c__1, &cs, &sn);
         }
     }
     /* reset deflation counter */

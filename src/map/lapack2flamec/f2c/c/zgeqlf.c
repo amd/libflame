@@ -142,8 +142,28 @@ v(1:m-k+i-1) is stored on exit in */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void zgeqlf_(integer *m, integer *n, doublecomplex *a, integer *lda, doublecomplex *tau,
-             doublecomplex *work, integer *lwork, integer *info)
+/** Generated wrapper function */
+void zgeqlf_(aocl_int_t *m, aocl_int_t *n, dcomplex *a, aocl_int_t *lda, dcomplex *tau,
+             dcomplex *work, aocl_int_t *lwork, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_zgeqlf(m, n, a, lda, tau, work, lwork, info);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t lwork_64 = *lwork;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_zgeqlf(&m_64, &n_64, a, &lda_64, tau, work, &lwork_64, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_zgeqlf(aocl_int64_t *m, aocl_int64_t *n, dcomplex *a, aocl_int64_t *lda,
+                        dcomplex *tau, dcomplex *work, aocl_int64_t *lwork,
+                        aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zgeqlf inputs: m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS ", lwork %" FLA_IS
@@ -152,24 +172,9 @@ void zgeqlf_(integer *m, integer *n, doublecomplex *a, integer *lda, doublecompl
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, i__1, i__2, i__3, i__4;
     /* Local variables */
-    integer i__, k, ib, nb, ki, kk, mu, nu, nx, iws, nbmin, iinfo;
-    extern /* Subroutine */
-        void
-        zgeql2_(integer *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *,
-                integer *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
-    extern /* Subroutine */
-        void
-        zlarfb_(char *, char *, char *, char *, integer *, integer *, integer *, doublecomplex *,
-                integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *,
-                integer *);
-    integer ldwork;
-    extern /* Subroutine */
-        void
-        zlarft_(char *, char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *,
-                doublecomplex *, integer *);
-    integer lwkopt;
+    aocl_int64_t i__, k, ib, nb, ki, kk, mu, nu, nx, iws, nbmin, iinfo;
+    aocl_int64_t ldwork;
+    aocl_int64_t lwkopt;
     logical lquery;
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -211,7 +216,7 @@ void zgeqlf_(integer *m, integer *n, doublecomplex *a, integer *lda, doublecompl
     {
         *info = -4;
     }
-    nb = ilaenv_(&c__1, "ZGEQLF", " ", m, n, &c_n1, &c_n1);
+    nb = aocl_lapack_ilaenv(&c__1, "ZGEQLF", " ", m, n, &c_n1, &c_n1);
     if(*info == 0)
     {
         k = fla_min(*m, *n);
@@ -233,7 +238,7 @@ void zgeqlf_(integer *m, integer *n, doublecomplex *a, integer *lda, doublecompl
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("ZGEQLF", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("ZGEQLF", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -256,7 +261,7 @@ void zgeqlf_(integer *m, integer *n, doublecomplex *a, integer *lda, doublecompl
         /* Determine when to cross over from blocked to unblocked code. */
         /* Computing MAX */
         i__1 = 0;
-        i__2 = ilaenv_(&c__3, "ZGEQLF", " ", m, n, &c_n1, &c_n1); // , expr subst
+        i__2 = aocl_lapack_ilaenv(&c__3, "ZGEQLF", " ", m, n, &c_n1, &c_n1); // , expr subst
         nx = fla_max(i__1, i__2);
         if(nx < k)
         {
@@ -270,7 +275,7 @@ void zgeqlf_(integer *m, integer *n, doublecomplex *a, integer *lda, doublecompl
                 nb = *lwork / ldwork;
                 /* Computing MAX */
                 i__1 = 2;
-                i__2 = ilaenv_(&c__2, "ZGEQLF", " ", m, n, &c_n1, &c_n1); // , expr subst
+                i__2 = aocl_lapack_ilaenv(&c__2, "ZGEQLF", " ", m, n, &c_n1, &c_n1); // , expr subst
                 nbmin = fla_max(i__1, i__2);
             }
         }
@@ -294,22 +299,24 @@ void zgeqlf_(integer *m, integer *n, doublecomplex *a, integer *lda, doublecompl
             /* Compute the QL factorization of the current block */
             /* A(1:m-k+i+ib-1,n-k+i:n-k+i+ib-1) */
             i__3 = *m - k + i__ + ib - 1;
-            zgeql2_(&i__3, &ib, &a[(*n - k + i__) * a_dim1 + 1], lda, &tau[i__], &work[1], &iinfo);
+            aocl_lapack_zgeql2(&i__3, &ib, &a[(*n - k + i__) * a_dim1 + 1], lda, &tau[i__],
+                               &work[1], &iinfo);
             if(*n - k + i__ > 1)
             {
                 /* Form the triangular factor of the block reflector */
                 /* H = H(i+ib-1) . . . H(i+1) H(i) */
                 i__3 = *m - k + i__ + ib - 1;
-                zlarft_("Backward", "Columnwise", &i__3, &ib, &a[(*n - k + i__) * a_dim1 + 1], lda,
-                        &tau[i__], &work[1], &ldwork);
+                aocl_lapack_zlarft("Backward", "Columnwise", &i__3, &ib,
+                                   &a[(*n - k + i__) * a_dim1 + 1], lda, &tau[i__], &work[1],
+                                   &ldwork);
                 /* Apply H**H to A(1:m-k+i+ib-1,1:n-k+i-1) from the left */
                 i__3 = *m - k + i__ + ib - 1;
                 i__4 = *n - k + i__ - 1;
-                zlarfb_("Left", "Conjugate transpose", "Backward",
-                        "Columnwi"
-                        "se",
-                        &i__3, &i__4, &ib, &a[(*n - k + i__) * a_dim1 + 1], lda, &work[1], &ldwork,
-                        &a[a_offset], lda, &work[ib + 1], &ldwork);
+                aocl_lapack_zlarfb("Left", "Conjugate transpose", "Backward",
+                                   "Columnwi"
+                                   "se",
+                                   &i__3, &i__4, &ib, &a[(*n - k + i__) * a_dim1 + 1], lda,
+                                   &work[1], &ldwork, &a[a_offset], lda, &work[ib + 1], &ldwork);
             }
             /* L10: */
         }

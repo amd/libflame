@@ -140,8 +140,29 @@
 /* > \ingroup OTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-void slascl_(char *type__, integer *kl, integer *ku, real *cfrom, real *cto, integer *m, integer *n,
-             real *a, integer *lda, integer *info)
+/** Generated wrapper function */
+void slascl_(char *type__, aocl_int_t *kl, aocl_int_t *ku, real *cfrom, real *cto, aocl_int_t *m,
+             aocl_int_t *n, real *a, aocl_int_t *lda, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_slascl(type__, kl, ku, cfrom, cto, m, n, a, lda, info);
+#else
+    aocl_int64_t kl_64 = *kl;
+    aocl_int64_t ku_64 = *ku;
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_slascl(type__, &kl_64, &ku_64, cfrom, cto, &m_64, &n_64, a, &lda_64, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_slascl(char *type__, aocl_int64_t *kl, aocl_int64_t *ku, real *cfrom, real *cto,
+                        aocl_int64_t *m, aocl_int64_t *n, real *a, aocl_int64_t *lda,
+                        aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("slascl inputs: type__ %c, kl %" FLA_IS ", ku %" FLA_IS ", m %" FLA_IS
@@ -154,14 +175,11 @@ void slascl_(char *type__, integer *kl, integer *ku, real *cfrom, real *cto, int
     real mul, cto1;
     logical done;
     real ctoc;
-    extern logical lsame_(char *, char *, integer, integer);
-    integer itype;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    aocl_int64_t itype;
     real cfrom1;
     extern real slamch_(char *);
     real cfromc;
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real bignum;
     extern logical sisnan_(real *);
     real smlnum;
@@ -273,7 +291,7 @@ void slascl_(char *type__, integer *kl, integer *ku, real *cfrom, real *cto, int
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("SLASCL", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("SLASCL", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }

@@ -35,7 +35,7 @@
 /* > square root of the sum of squares. */
 /* > */
 /* > This version is discontinuous in R at F = 0 but it returns the same */
-/* > C and S as CLARTG for complex inputs (F,0) and (G,0). */
+/* > C and S as CLARTG for scomplex inputs (F,0) and (G,0). */
 /* > */
 /* > This is a more accurate version of the BLAS1 routine SROTG, */
 /* > with the following other differences: */

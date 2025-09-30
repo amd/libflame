@@ -113,8 +113,8 @@ logical aocl_lapack_lsamen(const aocl_int64_t *n, const char *ca, const char *cb
     integer i_len(const char *, ftnlen);
 
     /* Local variables */
-    integer i__;
-    extern logical lsame_(char *, char *, integer, integer);
+    aocl_int64_t i__;
+    extern logical lsame_(const char *, const char *, aocl_int64_t, aocl_int64_t);
 
     ftnlen ca_len, cb_len;
 

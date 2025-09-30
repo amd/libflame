@@ -302,17 +302,45 @@ static logical c_false = FALSE_;
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void dtgevc_(char *side, char *howmny, logical *select, integer *n, doublereal *s, integer *lds,
-             doublereal *p, integer *ldp, doublereal *vl, integer *ldvl, doublereal *vr,
-             integer *ldvr, integer *mm, integer *m, doublereal *work, integer *info)
+/** Generated wrapper function */
+void dtgevc_(char *side, char *howmny, logical *select, aocl_int_t *n, doublereal *s,
+             aocl_int_t *lds, doublereal *p, aocl_int_t *ldp, doublereal *vl, aocl_int_t *ldvl,
+             doublereal *vr, aocl_int_t *ldvr, aocl_int_t *mm, aocl_int_t *m, doublereal *work,
+             aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_dtgevc(side, howmny, select, n, s, lds, p, ldp, vl, ldvl, vr, ldvr, mm, m, work,
+                       info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t lds_64 = *lds;
+    aocl_int64_t ldp_64 = *ldp;
+    aocl_int64_t ldvl_64 = *ldvl;
+    aocl_int64_t ldvr_64 = *ldvr;
+    aocl_int64_t mm_64 = *mm;
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_dtgevc(side, howmny, select, &n_64, s, &lds_64, p, &ldp_64, vl, &ldvl_64, vr,
+                       &ldvr_64, &mm_64, &m_64, work, &info_64);
+
+    *m = (aocl_int_t)m_64;
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_dtgevc(char *side, char *howmny, logical *select, aocl_int64_t *n, doublereal *s,
+                        aocl_int64_t *lds, doublereal *p, aocl_int64_t *ldp, doublereal *vl,
+                        aocl_int64_t *ldvl, doublereal *vr, aocl_int64_t *ldvr, aocl_int64_t *mm,
+                        aocl_int64_t *m, doublereal *work, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dtgevc inputs: side %c, howmny %c, n %" FLA_IS ", lds %" FLA_IS
                       ", ldp %" FLA_IS ", ldvl %" FLA_IS ", ldvr %" FLA_IS ", mm %" FLA_IS "",
                       *side, *howmny, *n, *lds, *ldp, *ldvl, *ldvr, *mm);
     /* System generated locals */
-    integer p_dim1, p_offset, s_dim1, s_offset, vl_dim1, vl_offset, vr_dim1, vr_offset, i__1, i__2,
-        i__3, i__4, i__5;
+    aocl_int64_t p_dim1, p_offset, s_dim1, s_offset, vl_dim1, vl_offset, vr_dim1, vr_offset, i__1,
+        i__2, i__3, i__4, i__5;
     doublereal d__1, d__2, d__3, d__4, d__5, d__6;
     /* Local variables */
     aocl_int64_t i__, j, ja, jc, je, na, im, jr, jw, nw;
@@ -320,35 +348,22 @@ void dtgevc_(char *side, char *howmny, logical *select, integer *n, doublereal *
     logical lsa, lsb;
     doublereal ulp, sum[4] /* was [2][2] */
         ;
-    integer ibeg, ieig, iend;
+    aocl_int64_t ibeg, ieig, iend;
     doublereal dmin__, temp, xmax, sump[4] /* was [2][2] */
         ,
         sums[4] /* was [2][2] */
         ;
-    extern /* Subroutine */
-        void
-        dlag2_(doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *,
-               doublereal *, doublereal *, doublereal *, doublereal *);
     doublereal cim2a, cim2b, cre2a, cre2b, temp2, bdiag[2], acoef, scale;
     logical ilall;
     aocl_int64_t iside;
     doublereal sbeta;
-    extern logical lsame_(char *, char *, integer, integer);
-    extern /* Subroutine */
-        void
-        dgemv_(char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *,
-               integer *, doublereal *, doublereal *, integer *);
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     logical il2by2;
-    integer iinfo;
+    aocl_int64_t iinfo;
     doublereal small_val;
     logical compl ;
     doublereal anorm, bnorm;
     logical compr;
-    extern /* Subroutine */
-        void
-        dlaln2_(logical *, integer *, integer *, doublereal *, doublereal *, doublereal *,
-                integer *, doublereal *, doublereal *, doublereal *, integer *, doublereal *,
-                doublereal *, doublereal *, integer *, doublereal *, doublereal *, integer *);
     doublereal temp2i, temp2r;
     logical ilabad, ilbbad;
     doublereal acoefa, bcoefa, cimaga, cimagb;
@@ -356,15 +371,9 @@ void dtgevc_(char *side, char *howmny, logical *select, integer *n, doublereal *
     doublereal bcoefi, ascale, bscale, creala, crealb;
     extern doublereal dlamch_(char *);
     doublereal bcoefr, salfar, safmin;
-    extern /* Subroutine */
-        void
-        dlacpy_(char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *);
     doublereal xscale, bignum;
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical ilcomp, ilcplx;
-    integer ihwmny;
+    aocl_int64_t ihwmny;
     /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -473,7 +482,7 @@ void dtgevc_(char *side, char *howmny, logical *select, integer *n, doublereal *
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("DTGEVC", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("DTGEVC", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -564,7 +573,7 @@ void dtgevc_(char *side, char *howmny, logical *select, integer *n, doublereal *
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("DTGEVC", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("DTGEVC", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -675,7 +684,7 @@ void dtgevc_(char *side, char *howmny, logical *select, integer *n, doublereal *
                 goto L220;
             }
             /* Decide if (a) singular pencil, (b) real eigenvalue, or */
-            /* (c) complex eigenvalue. */
+            /* (c) scomplex eigenvalue. */
             if(!ilcplx)
             {
                 if((d__1 = s[je + je * s_dim1], f2c_dabs(d__1)) <= safmin
@@ -769,8 +778,8 @@ void dtgevc_(char *side, char *howmny, logical *select, integer *n, doublereal *
             {
                 /* Complex eigenvalue */
                 d__1 = safmin * 100.;
-                dlag2_(&s[je + je * s_dim1], lds, &p[je + je * p_dim1], ldp, &d__1, &acoef, &temp,
-                       &bcoefr, &temp2, &bcoefi);
+                aocl_lapack_dlag2(&s[je + je * s_dim1], lds, &p[je + je * p_dim1], ldp, &d__1,
+                                  &acoef, &temp, &bcoefr, &temp2, &bcoefi);
                 bcoefi = -bcoefi;
                 if(bcoefi == 0.)
                 {
@@ -950,9 +959,9 @@ void dtgevc_(char *side, char *howmny, logical *select, integer *n, doublereal *
                 /* T */
                 /* Solve ( a A - b B ) y = SUM(,) */
                 /* with scaling and perturbation of the denominator */
-                dlaln2_(&c_true, &na, &nw, &dmin__, &acoef, &s[j + j * s_dim1], lds, bdiag,
-                        &bdiag[1], sum, &c__2, &bcoefr, &bcoefi, &work[(*n << 1) + j], n, &scale,
-                        &temp, &iinfo);
+                aocl_lapack_dlaln2(&c_true, &na, &nw, &dmin__, &acoef, &s[j + j * s_dim1], lds,
+                                   bdiag, &bdiag[1], sum, &c__2, &bcoefr, &bcoefi,
+                                   &work[(*n << 1) + j], n, &scale, &temp, &iinfo);
                 if(scale < 1.)
                 {
                     i__3 = nw - 1;
@@ -980,9 +989,9 @@ void dtgevc_(char *side, char *howmny, logical *select, integer *n, doublereal *
                 for(jw = 0; jw <= i__2; ++jw)
                 {
                     i__3 = *n + 1 - je;
-                    dgemv_("N", n, &i__3, &c_b34, &vl[je * vl_dim1 + 1], ldvl,
-                           &work[(jw + 2) * *n + je], &c__1, &c_b36, &work[(jw + 4) * *n + 1],
-                           &c__1);
+                    aocl_blas_dgemv("N", n, &i__3, &c_b34, &vl[je * vl_dim1 + 1], ldvl,
+                                    &work[(jw + 2) * *n + je], &c__1, &c_b36,
+                                    &work[(jw + 4) * *n + 1], &c__1);
                     /* L170: */
                 }
                 aocl_lapack_dlacpy(" ", n, &nw, &work[(*n << 2) + 1], n, &vl[je * vl_dim1 + 1],
@@ -1087,7 +1096,7 @@ void dtgevc_(char *side, char *howmny, logical *select, integer *n, doublereal *
                 goto L500;
             }
             /* Decide if (a) singular pencil, (b) real eigenvalue, or */
-            /* (c) complex eigenvalue. */
+            /* (c) scomplex eigenvalue. */
             if(!ilcplx)
             {
                 if((d__1 = s[je + je * s_dim1], f2c_dabs(d__1)) <= safmin
@@ -1194,8 +1203,9 @@ void dtgevc_(char *side, char *howmny, logical *select, integer *n, doublereal *
             {
                 /* Complex eigenvalue */
                 d__1 = safmin * 100.;
-                dlag2_(&s[je - 1 + (je - 1) * s_dim1], lds, &p[je - 1 + (je - 1) * p_dim1], ldp,
-                       &d__1, &acoef, &temp, &bcoefr, &temp2, &bcoefi);
+                aocl_lapack_dlag2(&s[je - 1 + (je - 1) * s_dim1], lds,
+                                  &p[je - 1 + (je - 1) * p_dim1], ldp, &d__1, &acoef, &temp,
+                                  &bcoefr, &temp2, &bcoefi);
                 if(bcoefi == 0.)
                 {
                     *info = je - 1;
@@ -1316,9 +1326,9 @@ void dtgevc_(char *side, char *howmny, logical *select, integer *n, doublereal *
                     na = 1;
                 }
                 /* Compute x(j) (and x(j+1), if 2-by-2 block) */
-                dlaln2_(&c_false, &na, &nw, &dmin__, &acoef, &s[j + j * s_dim1], lds, bdiag,
-                        &bdiag[1], &work[(*n << 1) + j], n, &bcoefr, &bcoefi, sum, &c__2, &scale,
-                        &temp, &iinfo);
+                aocl_lapack_dlaln2(&c_false, &na, &nw, &dmin__, &acoef, &s[j + j * s_dim1], lds,
+                                   bdiag, &bdiag[1], &work[(*n << 1) + j], n, &bcoefr, &bcoefi, sum,
+                                   &c__2, &scale, &temp, &iinfo);
                 if(scale < 1.)
                 {
                     i__1 = nw - 1;

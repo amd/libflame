@@ -28,8 +28,8 @@
 static const __m256i mask_reg[6] = {{0, 0, 0, 0},    {-1, 0, 0, 0},    {-1, -1, 0, 0},
                                     {-1, -1, -1, 0}, {-1, -1, -1, -1}, {-1, -1, -1, -1}};
 
-static void n_8(integer *n, integer *nrhs, doublereal *a, integer *lda, doublereal *b, integer *ldb,
-                integer *ipiv)
+static void n_8(aocl_int64_t *n, aocl_int64_t *nrhs, doublereal *a, aocl_int64_t *lda, doublereal *b, aocl_int64_t *ldb,
+                aocl_int_t *ipiv)
 {
     __m256d b_reg[16];
     __m256i mask1, mask2;
@@ -435,8 +435,8 @@ static void n_8(integer *n, integer *nrhs, doublereal *a, integer *lda, doublere
     }
 }
 
-static void n_7(integer *n, integer *nrhs, doublereal *a, integer *lda, doublereal *b, integer *ldb,
-                integer *ipiv)
+static void n_7(aocl_int64_t *n, aocl_int64_t *nrhs, doublereal *a, aocl_int64_t *lda, doublereal *b, aocl_int64_t *ldb,
+                aocl_int_t *ipiv)
 {
     __m256d b_reg[16];
     __m256i mask1, mask2;
@@ -678,8 +678,8 @@ static void n_7(integer *n, integer *nrhs, doublereal *a, integer *lda, doublere
     }
 }
 
-static void n_6(integer *n, integer *nrhs, doublereal *a, integer *lda, doublereal *b, integer *ldb,
-                integer *ipiv)
+static void n_6(aocl_int64_t *n, aocl_int64_t *nrhs, doublereal *a, aocl_int64_t *lda, doublereal *b, aocl_int64_t *ldb,
+                aocl_int_t *ipiv)
 {
     __m256d b_reg[16];
     __m256i mask1, mask2;
@@ -872,8 +872,8 @@ static void n_6(integer *n, integer *nrhs, doublereal *a, integer *lda, doublere
     }
 }
 
-static void n_5(integer *n, integer *nrhs, doublereal *a, integer *lda, doublereal *b, integer *ldb,
-                integer *ipiv)
+static void n_5(aocl_int64_t *n, aocl_int64_t *nrhs, doublereal *a, aocl_int64_t *lda, doublereal *b, aocl_int64_t *ldb,
+                aocl_int_t *ipiv)
 {
     __m256d b_reg[16];
     __m256i mask1, mask2;
@@ -1024,8 +1024,8 @@ static void n_5(integer *n, integer *nrhs, doublereal *a, integer *lda, doublere
     }
 }
 
-static void n_4(integer *n, integer *nrhs, doublereal *a, integer *lda, doublereal *b, integer *ldb,
-                integer *ipiv)
+static void n_4(aocl_int64_t *n, aocl_int64_t *nrhs, doublereal *a, aocl_int64_t *lda, doublereal *b, aocl_int64_t *ldb,
+                aocl_int_t *ipiv)
 {
     int i;
     __m256d b_reg[4];
@@ -1104,8 +1104,8 @@ static void n_4(integer *n, integer *nrhs, doublereal *a, integer *lda, doublere
     }
 }
 
-static void n_3(integer *n, integer *nrhs, doublereal *a, integer *lda, doublereal *b, integer *ldb,
-                integer *ipiv)
+static void n_3(aocl_int64_t *n, aocl_int64_t *nrhs, doublereal *a, aocl_int64_t *lda, doublereal *b, aocl_int64_t *ldb,
+                aocl_int_t *ipiv)
 {
     int i;
     __m256d b_reg[4];
@@ -1164,12 +1164,12 @@ static void n_3(integer *n, integer *nrhs, doublereal *a, integer *lda, doublere
 }
 
 /* Small DGETRS path (NOTRANS) should only be used for size between 3 to 8 and NRHS <= N */
-int fla_dgetrs_small_trsm_ll_avx2(char *trans, integer *n, integer *nrhs, doublereal *a,
-                                  integer *lda, integer *ipiv, doublereal *b, integer *ldb,
-                                  integer *info)
+int fla_dgetrs_small_trsm_ll_avx2(char *trans, aocl_int64_t *n, aocl_int64_t *nrhs, doublereal *a,
+                                  aocl_int64_t *lda, aocl_int_t *ipiv, doublereal *b, aocl_int64_t *ldb,
+                                  aocl_int64_t *info)
 {
     // Array of function pointers
-    void (*fp[6])(integer *, integer *, doublereal *, integer *, doublereal *, integer *, integer *)
+    void (*fp[6])(aocl_int64_t *, aocl_int64_t *, doublereal *, aocl_int64_t *, doublereal *, aocl_int64_t *, aocl_int_t *)
         = {n_3, n_4, n_5, n_6, n_7, n_8};
     fp[*n - 3](n, nrhs, a, lda, b, ldb, ipiv);
     return 0;

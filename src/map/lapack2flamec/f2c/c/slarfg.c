@@ -101,27 +101,36 @@
 /* > \ingroup realOTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-void slarfg_(integer *n, real *alpha, real *x, integer *incx, real *tau)
+/** Generated wrapper function */
+void slarfg_(aocl_int_t *n, real *alpha, real *x, aocl_int_t *incx, real *tau)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_slarfg(n, alpha, x, incx, tau);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t incx_64 = *incx;
+
+    aocl_lapack_slarfg(&n_64, alpha, x, &incx_64, tau);
+#endif
+}
+
+void aocl_lapack_slarfg(aocl_int64_t *n, real *alpha, real *x, aocl_int64_t *incx, real *tau)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("slarfg inputs: n %" FLA_IS ", incx %" FLA_IS "", *n, *incx);
     /* System generated locals */
-    integer i__1;
+    aocl_int64_t i__1;
     real r__1;
     /* Builtin functions */
     double r_sign(real *, real *);
     /* Local variables */
-    integer j, knt;
+    aocl_int64_t j, knt;
     real beta;
-    extern real snrm2_(integer *, real *, integer *);
-    extern /* Subroutine */
-        void
-        sscal_(integer *, real *, real *, integer *);
     real xnorm;
     extern real slapy2_(real *, real *), slamch_(char *);
     real safmin, rsafmn;
 #if FLA_ENABLE_AMD_OPT
-    void fla_sscal(integer * n, real * alpha, real * x, integer * incx);
+    void fla_sscal(aocl_int64_t * n, real * alpha, real * x, aocl_int64_t * incx);
 #endif
 
     /* -- LAPACK auxiliary routine (version 3.8.0) -- */
@@ -154,7 +163,7 @@ void slarfg_(integer *n, real *alpha, real *x, integer *incx, real *tau)
         return;
     }
     i__1 = *n - 1;
-    xnorm = snrm2_(&i__1, &x[1], incx);
+    xnorm = aocl_blas_snrm2(&i__1, &x[1], incx);
     if(xnorm == 0.f)
     {
         /* H = I */
@@ -179,7 +188,7 @@ void slarfg_(integer *n, real *alpha, real *x, integer *incx, real *tau)
             /* Inline SSCAL for small sizes */
             fla_sscal(&i__1, &rsafmn, &x[1], incx);
 #else
-            sscal_(&i__1, &rsafmn, &x[1], incx);
+            aocl_blas_sscal(&i__1, &rsafmn, &x[1], incx);
 #endif
             beta *= rsafmn;
             *alpha *= rsafmn;
@@ -189,7 +198,7 @@ void slarfg_(integer *n, real *alpha, real *x, integer *incx, real *tau)
             }
             /* New BETA is at most 1, at least SAFMIN */
             i__1 = *n - 1;
-            xnorm = snrm2_(&i__1, &x[1], incx);
+            xnorm = aocl_blas_snrm2(&i__1, &x[1], incx);
             r__1 = slapy2_(alpha, &xnorm);
             beta = -r_sign(&r__1, alpha);
         }
@@ -200,7 +209,7 @@ void slarfg_(integer *n, real *alpha, real *x, integer *incx, real *tau)
         /* Inline SSCAL for small sizes */
         fla_sscal(&i__1, &r__1, &x[1], incx);
 #else
-        sscal_(&i__1, &r__1, &x[1], incx);
+        aocl_blas_sscal(&i__1, &r__1, &x[1], incx);
 #endif
         /* If ALPHA is subnormal, it may lose relative accuracy */
         i__1 = knt;

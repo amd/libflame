@@ -4,9 +4,9 @@
  -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for
  libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static doublecomplex c_b1 = {1., 0.};
-static integer c__1 = 1;
-/* > \brief \b ZSYTF2_RK computes the factorization of a complex symmetric indefinite matrix using
+static dcomplex c_b1 = {{1.}, {0.}};
+static aocl_int64_t c__1 = 1;
+/* > \brief \b ZSYTF2_RK computes the factorization of a scomplex symmetric indefinite matrix using
  * the bounded Bunch-Kaufman (rook) diagonal pivoting method (BLAS2 unblocked algorithm). */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -41,7 +41,7 @@ static integer c__1 = 1;
 /* ============= */
 /* > */
 /* > \verbatim */
-/* > ZSYTF2_RK computes the factorization of a complex symmetric matrix A */
+/* > ZSYTF2_RK computes the factorization of a scomplex symmetric matrix A */
 /* > using the bounded Bunch-Kaufman (rook) diagonal pivoting method: */
 /* > */
 /* > A = P*U*D*(U**T)*(P**T) or A = P*L*D*(L**T)*(P**T), */
@@ -241,47 +241,50 @@ static integer c__1 = 1;
 /* > \endverbatim */
 /* ===================================================================== */
 /* Subroutine */
-void zsytf2_rk_(char *uplo, integer *n, doublecomplex *a, integer *lda, doublecomplex *e,
-                integer *ipiv, integer *info)
+/** Generated wrapper function */
+void zsytf2_rk_(char *uplo, aocl_int_t *n, dcomplex *a, aocl_int_t *lda, dcomplex *e,
+                aocl_int_t *ipiv, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_zsytf2_rk(uplo, n, a, lda, e, ipiv, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_zsytf2_rk(uplo, &n_64, a, &lda_64, e, ipiv, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_zsytf2_rk(char *uplo, aocl_int64_t *n, dcomplex *a, aocl_int64_t *lda,
+                           dcomplex *e, aocl_int_t *ipiv, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zsytf2_rk inputs: uplo %c, n %" FLA_IS ", lda %" FLA_IS "", *uplo, *n, *lda);
     /* System generated locals */
-    integer a_dim1, a_offset, i__1, i__2, i__3, i__4;
+    aocl_int64_t a_dim1, a_offset, i__1, i__2, i__3, i__4;
     doublereal d__1, d__2;
-    doublecomplex z__1, z__2, z__3, z__4, z__5, z__6;
+    dcomplex z__1, z__2, z__3, z__4, z__5, z__6;
     /* Builtin functions */
-    double sqrt(doublereal), d_imag(doublecomplex *);
-    void z_div(doublecomplex *, doublecomplex *, doublecomplex *);
+    double sqrt(doublereal), d_imag(dcomplex *);
+    void z_div(dcomplex *, dcomplex *, dcomplex *);
     /* Local variables */
-    integer i__, j, k, p;
-    doublecomplex t, d11, d12, d21, d22;
-    integer ii, kk, kp;
-    doublecomplex wk, wkm1, wkp1;
+    aocl_int64_t i__, j, k, p;
+    dcomplex t, d11, d12, d21, d22;
+    aocl_int64_t ii, kk, kp;
+    dcomplex wk, wkm1, wkp1;
     logical done;
-    integer imax, jmax;
-    extern /* Subroutine */
-        void
-        zsyr_(char *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *,
-              integer *);
+    aocl_int64_t imax, jmax;
     doublereal alpha;
-    extern logical lsame_(char *, char *, integer, integer);
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     doublereal dtemp, sfmin;
-    extern /* Subroutine */
-        void
-        zscal_(integer *, doublecomplex *, doublecomplex *, integer *);
-    integer itemp, kstep;
+    aocl_int64_t itemp, kstep;
     logical upper;
-    extern /* Subroutine */
-        void
-        zswap_(integer *, doublecomplex *, integer *, doublecomplex *, integer *);
     extern doublereal dlamch_(char *);
     doublereal absakk;
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal colmax;
-    extern integer izamax_(integer *, doublecomplex *, integer *);
     doublereal rowmax;
     /* -- LAPACK computational routine (version 3.7.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -334,7 +337,7 @@ void zsytf2_rk_(char *uplo, integer *n, doublecomplex *a, integer *lda, doubleco
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("ZSYTF2_RK", &i__1, (ftnlen)9);
+        aocl_blas_xerbla("ZSYTF2_RK", &i__1, (ftnlen)9);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -370,7 +373,7 @@ void zsytf2_rk_(char *uplo, integer *n, doublecomplex *a, integer *lda, doubleco
         if(k > 1)
         {
             i__1 = k - 1;
-            imax = izamax_(&i__1, &a[k * a_dim1 + 1], &c__1);
+            imax = aocl_blas_izamax(&i__1, &a[k * a_dim1 + 1], &c__1);
             i__1 = imax + k * a_dim1;
             colmax = (d__1 = a[i__1].r, f2c_dabs(d__1))
                      + (d__2 = d_imag(&a[imax + k * a_dim1]), f2c_dabs(d__2));
@@ -417,7 +420,7 @@ void zsytf2_rk_(char *uplo, integer *n, doublecomplex *a, integer *lda, doubleco
                 if(imax != k)
                 {
                     i__1 = k - imax;
-                    jmax = imax + izamax_(&i__1, &a[imax + (imax + 1) * a_dim1], lda);
+                    jmax = imax + aocl_blas_izamax(&i__1, &a[imax + (imax + 1) * a_dim1], lda);
                     i__1 = imax + jmax * a_dim1;
                     rowmax = (d__1 = a[i__1].r, f2c_dabs(d__1))
                              + (d__2 = d_imag(&a[imax + jmax * a_dim1]), f2c_dabs(d__2));
@@ -429,7 +432,7 @@ void zsytf2_rk_(char *uplo, integer *n, doublecomplex *a, integer *lda, doubleco
                 if(imax > 1)
                 {
                     i__1 = imax - 1;
-                    itemp = izamax_(&i__1, &a[imax * a_dim1 + 1], &c__1);
+                    itemp = aocl_blas_izamax(&i__1, &a[imax * a_dim1 + 1], &c__1);
                     i__1 = itemp + imax * a_dim1;
                     dtemp = (d__1 = a[i__1].r, f2c_dabs(d__1))
                             + (d__2 = d_imag(&a[itemp + imax * a_dim1]), f2c_dabs(d__2));
@@ -483,12 +486,13 @@ void zsytf2_rk_(char *uplo, integer *n, doublecomplex *a, integer *lda, doubleco
                 if(p > 1)
                 {
                     i__1 = p - 1;
-                    zswap_(&i__1, &a[k * a_dim1 + 1], &c__1, &a[p * a_dim1 + 1], &c__1);
+                    aocl_blas_zswap(&i__1, &a[k * a_dim1 + 1], &c__1, &a[p * a_dim1 + 1], &c__1);
                 }
                 if(p < k - 1)
                 {
                     i__1 = k - p - 1;
-                    zswap_(&i__1, &a[p + 1 + k * a_dim1], &c__1, &a[p + (p + 1) * a_dim1], lda);
+                    aocl_blas_zswap(&i__1, &a[p + 1 + k * a_dim1], &c__1, &a[p + (p + 1) * a_dim1],
+                                    lda);
                 }
                 i__1 = k + k * a_dim1;
                 t.r = a[i__1].r;
@@ -505,7 +509,8 @@ void zsytf2_rk_(char *uplo, integer *n, doublecomplex *a, integer *lda, doubleco
                 if(k < *n)
                 {
                     i__1 = *n - k;
-                    zswap_(&i__1, &a[k + (k + 1) * a_dim1], lda, &a[p + (k + 1) * a_dim1], lda);
+                    aocl_blas_zswap(&i__1, &a[k + (k + 1) * a_dim1], lda, &a[p + (k + 1) * a_dim1],
+                                    lda);
                 }
             }
             /* Second swap */
@@ -517,12 +522,13 @@ void zsytf2_rk_(char *uplo, integer *n, doublecomplex *a, integer *lda, doubleco
                 if(kp > 1)
                 {
                     i__1 = kp - 1;
-                    zswap_(&i__1, &a[kk * a_dim1 + 1], &c__1, &a[kp * a_dim1 + 1], &c__1);
+                    aocl_blas_zswap(&i__1, &a[kk * a_dim1 + 1], &c__1, &a[kp * a_dim1 + 1], &c__1);
                 }
                 if(kk > 1 && kp < kk - 1)
                 {
                     i__1 = kk - kp - 1;
-                    zswap_(&i__1, &a[kp + 1 + kk * a_dim1], &c__1, &a[kp + (kp + 1) * a_dim1], lda);
+                    aocl_blas_zswap(&i__1, &a[kp + 1 + kk * a_dim1], &c__1,
+                                    &a[kp + (kp + 1) * a_dim1], lda);
                 }
                 i__1 = kk + kk * a_dim1;
                 t.r = a[i__1].r;
@@ -552,7 +558,8 @@ void zsytf2_rk_(char *uplo, integer *n, doublecomplex *a, integer *lda, doubleco
                 if(k < *n)
                 {
                     i__1 = *n - k;
-                    zswap_(&i__1, &a[kk + (k + 1) * a_dim1], lda, &a[kp + (k + 1) * a_dim1], lda);
+                    aocl_blas_zswap(&i__1, &a[kk + (k + 1) * a_dim1], lda,
+                                    &a[kp + (k + 1) * a_dim1], lda);
                 }
             }
             /* Update the leading submatrix */
@@ -579,10 +586,11 @@ void zsytf2_rk_(char *uplo, integer *n, doublecomplex *a, integer *lda, doubleco
                         i__1 = k - 1;
                         z__1.r = -d11.r;
                         z__1.i = -d11.i; // , expr subst
-                        zsyr_(uplo, &i__1, &z__1, &a[k * a_dim1 + 1], &c__1, &a[a_offset], lda);
+                        aocl_lapack_zsyr(uplo, &i__1, &z__1, &a[k * a_dim1 + 1], &c__1,
+                                         &a[a_offset], lda);
                         /* Store U(k) in column k */
                         i__1 = k - 1;
-                        zscal_(&i__1, &d11, &a[k * a_dim1 + 1], &c__1);
+                        aocl_blas_zscal(&i__1, &d11, &a[k * a_dim1 + 1], &c__1);
                     }
                     else
                     {
@@ -606,7 +614,8 @@ void zsytf2_rk_(char *uplo, integer *n, doublecomplex *a, integer *lda, doubleco
                         i__1 = k - 1;
                         z__1.r = -d11.r;
                         z__1.i = -d11.i; // , expr subst
-                        zsyr_(uplo, &i__1, &z__1, &a[k * a_dim1 + 1], &c__1, &a[a_offset], lda);
+                        aocl_lapack_zsyr(uplo, &i__1, &z__1, &a[k * a_dim1 + 1], &c__1,
+                                         &a[a_offset], lda);
                     }
                     /* Store the superdiagonal element of D in array E */
                     i__1 = k;
@@ -712,12 +721,12 @@ void zsytf2_rk_(char *uplo, integer *n, doublecomplex *a, integer *lda, doubleco
         /* Store details of the interchanges in IPIV */
         if(kstep == 1)
         {
-            ipiv[k] = kp;
+            ipiv[k] = (aocl_int_t)(kp);
         }
         else
         {
-            ipiv[k] = -p;
-            ipiv[k - 1] = -kp;
+            ipiv[k] = (aocl_int_t)(-p);
+            ipiv[k - 1] = (aocl_int_t)(-kp);
         }
         /* Decrease K and return to the start of the main loop */
         k -= kstep;
@@ -752,7 +761,7 @@ void zsytf2_rk_(char *uplo, integer *n, doublecomplex *a, integer *lda, doubleco
         if(k < *n)
         {
             i__1 = *n - k;
-            imax = k + izamax_(&i__1, &a[k + 1 + k * a_dim1], &c__1);
+            imax = k + aocl_blas_izamax(&i__1, &a[k + 1 + k * a_dim1], &c__1);
             i__1 = imax + k * a_dim1;
             colmax = (d__1 = a[i__1].r, f2c_dabs(d__1))
                      + (d__2 = d_imag(&a[imax + k * a_dim1]), f2c_dabs(d__2));
@@ -798,7 +807,7 @@ void zsytf2_rk_(char *uplo, integer *n, doublecomplex *a, integer *lda, doubleco
                 if(imax != k)
                 {
                     i__1 = imax - k;
-                    jmax = k - 1 + izamax_(&i__1, &a[imax + k * a_dim1], lda);
+                    jmax = k - 1 + aocl_blas_izamax(&i__1, &a[imax + k * a_dim1], lda);
                     i__1 = imax + jmax * a_dim1;
                     rowmax = (d__1 = a[i__1].r, f2c_dabs(d__1))
                              + (d__2 = d_imag(&a[imax + jmax * a_dim1]), f2c_dabs(d__2));
@@ -810,7 +819,7 @@ void zsytf2_rk_(char *uplo, integer *n, doublecomplex *a, integer *lda, doubleco
                 if(imax < *n)
                 {
                     i__1 = *n - imax;
-                    itemp = imax + izamax_(&i__1, &a[imax + 1 + imax * a_dim1], &c__1);
+                    itemp = imax + aocl_blas_izamax(&i__1, &a[imax + 1 + imax * a_dim1], &c__1);
                     i__1 = itemp + imax * a_dim1;
                     dtemp = (d__1 = a[i__1].r, f2c_dabs(d__1))
                             + (d__2 = d_imag(&a[itemp + imax * a_dim1]), f2c_dabs(d__2));
@@ -864,12 +873,14 @@ void zsytf2_rk_(char *uplo, integer *n, doublecomplex *a, integer *lda, doubleco
                 if(p < *n)
                 {
                     i__1 = *n - p;
-                    zswap_(&i__1, &a[p + 1 + k * a_dim1], &c__1, &a[p + 1 + p * a_dim1], &c__1);
+                    aocl_blas_zswap(&i__1, &a[p + 1 + k * a_dim1], &c__1, &a[p + 1 + p * a_dim1],
+                                    &c__1);
                 }
                 if(p > k + 1)
                 {
                     i__1 = p - k - 1;
-                    zswap_(&i__1, &a[k + 1 + k * a_dim1], &c__1, &a[p + (k + 1) * a_dim1], lda);
+                    aocl_blas_zswap(&i__1, &a[k + 1 + k * a_dim1], &c__1, &a[p + (k + 1) * a_dim1],
+                                    lda);
                 }
                 i__1 = k + k * a_dim1;
                 t.r = a[i__1].r;
@@ -886,7 +897,7 @@ void zsytf2_rk_(char *uplo, integer *n, doublecomplex *a, integer *lda, doubleco
                 if(k > 1)
                 {
                     i__1 = k - 1;
-                    zswap_(&i__1, &a[k + a_dim1], lda, &a[p + a_dim1], lda);
+                    aocl_blas_zswap(&i__1, &a[k + a_dim1], lda, &a[p + a_dim1], lda);
                 }
             }
             /* Second swap */
@@ -898,12 +909,14 @@ void zsytf2_rk_(char *uplo, integer *n, doublecomplex *a, integer *lda, doubleco
                 if(kp < *n)
                 {
                     i__1 = *n - kp;
-                    zswap_(&i__1, &a[kp + 1 + kk * a_dim1], &c__1, &a[kp + 1 + kp * a_dim1], &c__1);
+                    aocl_blas_zswap(&i__1, &a[kp + 1 + kk * a_dim1], &c__1,
+                                    &a[kp + 1 + kp * a_dim1], &c__1);
                 }
                 if(kk < *n && kp > kk + 1)
                 {
                     i__1 = kp - kk - 1;
-                    zswap_(&i__1, &a[kk + 1 + kk * a_dim1], &c__1, &a[kp + (kk + 1) * a_dim1], lda);
+                    aocl_blas_zswap(&i__1, &a[kk + 1 + kk * a_dim1], &c__1,
+                                    &a[kp + (kk + 1) * a_dim1], lda);
                 }
                 i__1 = kk + kk * a_dim1;
                 t.r = a[i__1].r;
@@ -933,7 +946,7 @@ void zsytf2_rk_(char *uplo, integer *n, doublecomplex *a, integer *lda, doubleco
                 if(k > 1)
                 {
                     i__1 = k - 1;
-                    zswap_(&i__1, &a[kk + a_dim1], lda, &a[kp + a_dim1], lda);
+                    aocl_blas_zswap(&i__1, &a[kk + a_dim1], lda, &a[kp + a_dim1], lda);
                 }
             }
             /* Update the trailing submatrix */
@@ -960,11 +973,11 @@ void zsytf2_rk_(char *uplo, integer *n, doublecomplex *a, integer *lda, doubleco
                         i__1 = *n - k;
                         z__1.r = -d11.r;
                         z__1.i = -d11.i; // , expr subst
-                        zsyr_(uplo, &i__1, &z__1, &a[k + 1 + k * a_dim1], &c__1,
-                              &a[k + 1 + (k + 1) * a_dim1], lda);
+                        aocl_lapack_zsyr(uplo, &i__1, &z__1, &a[k + 1 + k * a_dim1], &c__1,
+                                         &a[k + 1 + (k + 1) * a_dim1], lda);
                         /* Store L(k) in column k */
                         i__1 = *n - k;
-                        zscal_(&i__1, &d11, &a[k + 1 + k * a_dim1], &c__1);
+                        aocl_blas_zscal(&i__1, &d11, &a[k + 1 + k * a_dim1], &c__1);
                     }
                     else
                     {
@@ -988,8 +1001,8 @@ void zsytf2_rk_(char *uplo, integer *n, doublecomplex *a, integer *lda, doubleco
                         i__1 = *n - k;
                         z__1.r = -d11.r;
                         z__1.i = -d11.i; // , expr subst
-                        zsyr_(uplo, &i__1, &z__1, &a[k + 1 + k * a_dim1], &c__1,
-                              &a[k + 1 + (k + 1) * a_dim1], lda);
+                        aocl_lapack_zsyr(uplo, &i__1, &z__1, &a[k + 1 + k * a_dim1], &c__1,
+                                         &a[k + 1 + (k + 1) * a_dim1], lda);
                     }
                     /* Store the subdiagonal element of D in array E */
                     i__1 = k;
@@ -1099,12 +1112,12 @@ void zsytf2_rk_(char *uplo, integer *n, doublecomplex *a, integer *lda, doubleco
         /* Store details of the interchanges in IPIV */
         if(kstep == 1)
         {
-            ipiv[k] = kp;
+            ipiv[k] = (aocl_int_t)(kp);
         }
         else
         {
-            ipiv[k] = -p;
-            ipiv[k + 1] = -kp;
+            ipiv[k] = (aocl_int_t)(-p);
+            ipiv[k + 1] = (aocl_int_t)(-kp);
         }
         /* Increase K and return to the start of the main loop */
         k += kstep;

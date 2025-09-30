@@ -16,10 +16,10 @@
 #include "blis.h"
 #endif
 
-void bl1_isetdiag( integer offset, integer m, integer n, integer* sigma, integer* a, integer a_rs, integer a_cs )
+void bl1_isetdiag( fla_dim_t offset, fla_dim_t m, fla_dim_t n, fla_dim_t* sigma, fla_dim_t* a, fla_dim_t a_rs, fla_dim_t a_cs )
 {
-	integer*   alpha;
-	integer    i, j;
+	fla_dim_t*   alpha;
+	fla_dim_t    i, j;
 
 	i = j = 0;
 
@@ -37,10 +37,10 @@ void bl1_isetdiag( integer offset, integer m, integer n, integer* sigma, integer
 	}
 }
 
-void bl1_ssetdiag( integer offset, integer m, integer n, float* sigma, float* a, integer a_rs, integer a_cs )
+void bl1_ssetdiag( fla_dim_t offset, fla_dim_t m, fla_dim_t n, float* sigma, float* a, fla_dim_t a_rs, fla_dim_t a_cs )
 {
 	float* alpha;
-	integer    i, j;
+	fla_dim_t    i, j;
 
 	i = j = 0;
 
@@ -58,10 +58,10 @@ void bl1_ssetdiag( integer offset, integer m, integer n, float* sigma, float* a,
 	}
 }
 
-void bl1_dsetdiag( integer offset, integer m, integer n, double* sigma, double* a, integer a_rs, integer a_cs )
+void bl1_dsetdiag( fla_dim_t offset, fla_dim_t m, fla_dim_t n, double* sigma, double* a, fla_dim_t a_rs, fla_dim_t a_cs )
 {
 	double* alpha;
-	integer     i, j;
+	fla_dim_t     i, j;
 
 	i = j = 0;
 
@@ -79,10 +79,10 @@ void bl1_dsetdiag( integer offset, integer m, integer n, double* sigma, double* 
 	}
 }
 
-void bl1_csetdiag( integer offset, integer m, integer n, scomplex* sigma, scomplex* a, integer a_rs, integer a_cs )
+void bl1_csetdiag( fla_dim_t offset, fla_dim_t m, fla_dim_t n, scomplex* sigma, scomplex* a, fla_dim_t a_rs, fla_dim_t a_cs )
 {
 	scomplex* alpha;
-	integer       i, j;
+	fla_dim_t       i, j;
 
 	i = j = 0;
 
@@ -101,10 +101,10 @@ void bl1_csetdiag( integer offset, integer m, integer n, scomplex* sigma, scompl
 	}
 }
 
-void bl1_zsetdiag( integer offset, integer m, integer n, dcomplex* sigma, dcomplex* a, integer a_rs, integer a_cs )
+void bl1_zsetdiag( fla_dim_t offset, fla_dim_t m, fla_dim_t n, dcomplex* sigma, dcomplex* a, fla_dim_t a_rs, fla_dim_t a_cs )
 {
 	dcomplex* alpha;
-	integer       i, j;
+	fla_dim_t       i, j;
 
 	i = j = 0;
 

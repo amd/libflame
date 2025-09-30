@@ -1,20 +1,20 @@
 #include "FLA_f2c.h" /* Table of constant values */
 #include "FLA_lapack2flame_return_defs.h"
-static integer c_n1 = -1;
+static aocl_int64_t c_n1 = -1;
 
-int dorgbr_check(char *vect, integer *m, integer *n, integer *k, double *a, integer *lda,
-                 double *tau, double *work, integer *lwork, integer *info)
+int dorgbr_check(char *vect, aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *k, double *a, aocl_int64_t *lda,
+                 double *tau, double *work, aocl_int64_t *lwork, aocl_int64_t *info)
 {
     /* System generated locals */
-    integer a_dim1, a_offset, i__1, i__2, i__3;
+    aocl_int64_t a_dim1, a_offset, i__1, i__2, i__3;
     /* Local variables */
-    integer iinfo;
+    aocl_int64_t iinfo;
     logical wantq;
-    extern int dorglq_check(integer *, integer *, integer *, double *, integer *, double *,
-                            double *, integer *, integer *),
-        dorgqr_check(integer *, integer *, integer *, double *, integer *, double *, double *,
-                     integer *, integer *);
-    integer mn, lwkopt;
+    extern int dorglq_check(aocl_int64_t *, aocl_int64_t *, aocl_int64_t *, double *, aocl_int64_t *, double *,
+                            double *, aocl_int64_t *, aocl_int64_t *),
+        dorgqr_check(aocl_int64_t *, aocl_int64_t *, aocl_int64_t *, double *, aocl_int64_t *, double *, double *,
+                     aocl_int64_t *, aocl_int64_t *);
+    aocl_int64_t mn, lwkopt;
     logical lquery;
 
     /* Parameter adjustments */
@@ -98,7 +98,7 @@ int dorgbr_check(char *vect, integer *m, integer *n, integer *k, double *a, inte
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("DORGBR", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("DORGBR", &i__1, (ftnlen)6);
         return LAPACK_FAILURE;
     }
     else if(lquery)

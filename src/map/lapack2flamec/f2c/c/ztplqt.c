@@ -37,7 +37,7 @@
 /* > */
 /* > \verbatim */
 /* > */
-/* > DTPLQT computes a blocked LQ factorization of a complex */
+/* > DTPLQT computes a blocked LQ factorization of a scomplex */
 /* > "triangular-pentagonal" matrix C, which is composed of a */
 /* > triangular block A and pentagonal block B, using the compact */
 /* > WY representation for Q. */
@@ -185,28 +185,43 @@ that is, */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void ztplqt_(integer *m, integer *n, integer *l, integer *mb, doublecomplex *a, integer *lda,
-             doublecomplex *b, integer *ldb, doublecomplex *t, integer *ldt, doublecomplex *work,
-             integer *info)
+/** Generated wrapper function */
+void ztplqt_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *l, aocl_int_t *mb, dcomplex *a,
+             aocl_int_t *lda, dcomplex *b, aocl_int_t *ldb, dcomplex *t, aocl_int_t *ldt,
+             dcomplex *work, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_ztplqt(m, n, l, mb, a, lda, b, ldb, t, ldt, work, info);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t l_64 = *l;
+    aocl_int64_t mb_64 = *mb;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t ldb_64 = *ldb;
+    aocl_int64_t ldt_64 = *ldt;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_ztplqt(&m_64, &n_64, &l_64, &mb_64, a, &lda_64, b, &ldb_64, t, &ldt_64, work,
+                       &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_ztplqt(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *l, aocl_int64_t *mb,
+                        dcomplex *a, aocl_int64_t *lda, dcomplex *b, aocl_int64_t *ldb,
+                        dcomplex *t, aocl_int64_t *ldt, dcomplex *work,
+                        aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("ztplqt inputs: m %" FLA_IS ", n %" FLA_IS ", l %" FLA_IS ", mb %" FLA_IS
                       ", lda %" FLA_IS ", ldb %" FLA_IS ", ldt %" FLA_IS "",
                       *m, *n, *l, *mb, *lda, *ldb, *ldt);
     /* System generated locals */
-    integer a_dim1, a_offset, b_dim1, b_offset, t_dim1, t_offset, i__1, i__2, i__3, i__4;
+    aocl_int64_t a_dim1, a_offset, b_dim1, b_offset, t_dim1, t_offset, i__1, i__2, i__3, i__4;
     /* Local variables */
-    integer i__, ib, lb, nb, iinfo;
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    extern /* Subroutine */
-        void
-        ztprfb_(char *, char *, char *, char *, integer *, integer *, integer *, integer *,
-                doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *,
-                doublecomplex *, integer *, doublecomplex *, integer *),
-        ztplqt2_(integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *,
-                 integer *, doublecomplex *, integer *, integer *);
+    aocl_int64_t i__, ib, lb, nb, iinfo;
     /* -- LAPACK computational routine (version 3.7.1) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -267,7 +282,7 @@ void ztplqt_(integer *m, integer *n, integer *l, integer *mb, doublecomplex *a, 
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("ZTPLQT", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("ZTPLQT", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -296,16 +311,16 @@ void ztplqt_(integer *m, integer *n, integer *l, integer *mb, doublecomplex *a, 
         {
             lb = nb - *n + *l - i__ + 1;
         }
-        ztplqt2_(&ib, &nb, &lb, &a[i__ + i__ * a_dim1], lda, &b[i__ + b_dim1], ldb,
-                 &t[i__ * t_dim1 + 1], ldt, &iinfo);
+        aocl_lapack_ztplqt2(&ib, &nb, &lb, &a[i__ + i__ * a_dim1], lda, &b[i__ + b_dim1], ldb,
+                            &t[i__ * t_dim1 + 1], ldt, &iinfo);
         /* Update by applying H**T to B(I+IB:M,:) from the right */
         if(i__ + ib <= *m)
         {
             i__3 = *m - i__ - ib + 1;
             i__4 = *m - i__ - ib + 1;
-            ztprfb_("R", "N", "F", "R", &i__3, &nb, &ib, &lb, &b[i__ + b_dim1], ldb,
-                    &t[i__ * t_dim1 + 1], ldt, &a[i__ + ib + i__ * a_dim1], lda,
-                    &b[i__ + ib + b_dim1], ldb, &work[1], &i__4);
+            aocl_lapack_ztprfb("R", "N", "F", "R", &i__3, &nb, &ib, &lb, &b[i__ + b_dim1], ldb,
+                               &t[i__ * t_dim1 + 1], ldt, &a[i__ + ib + i__ * a_dim1], lda,
+                               &b[i__ + ib + b_dim1], ldb, &work[1], &i__4);
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT

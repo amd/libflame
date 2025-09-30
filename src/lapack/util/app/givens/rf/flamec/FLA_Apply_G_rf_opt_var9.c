@@ -31,9 +31,9 @@ FLA_Error FLA_Apply_G_rf_opt_var9( FLA_Obj G, FLA_Obj A )
 */
 {
 	FLA_Datatype datatype;
-	integer          k_G, m_A, n_A;
-	integer          rs_G, cs_G;
-	integer          rs_A, cs_A;
+	fla_dim_t          k_G, m_A, n_A;
+	fla_dim_t          rs_G, cs_G;
+	fla_dim_t          rs_A, cs_A;
 
 	datatype = FLA_Obj_datatype( A );
 
@@ -110,11 +110,11 @@ FLA_Error FLA_Apply_G_rf_opt_var9( FLA_Obj G, FLA_Obj A )
 }
 
 
-FLA_Error FLA_Apply_G_rf_ops_var9( integer       k_G,
-                                   integer       m_A,
-                                   integer       n_A,
-                                   scomplex* buff_G, integer rs_G, integer cs_G,
-                                   float*    buff_A, integer rs_A, integer cs_A )
+FLA_Error FLA_Apply_G_rf_ops_var9( fla_dim_t       k_G,
+                                   fla_dim_t       m_A,
+                                   fla_dim_t       n_A,
+                                   scomplex* buff_G, fla_dim_t rs_G, fla_dim_t cs_G,
+                                   float*    buff_A, fla_dim_t rs_A, fla_dim_t cs_A )
 {
 	float     one  = bl1_s1();
 	float     zero = bl1_s0();
@@ -127,13 +127,13 @@ FLA_Error FLA_Apply_G_rf_ops_var9( integer       k_G,
 	float*    a3;
 	scomplex* g12;
 	scomplex* g23;
-	integer       i, j, g, k;
-	integer       nG, nG_app;
-	integer       n_iter;
-	integer       n_left;
-	integer       k_minus_1;
-	integer       n_fuse;
-	integer       is_ident12, is_ident23;
+	fla_dim_t       i, j, g, k;
+	fla_dim_t       nG, nG_app;
+	fla_dim_t       n_iter;
+	fla_dim_t       n_left;
+	fla_dim_t       k_minus_1;
+	fla_dim_t       n_fuse;
+	fla_dim_t       is_ident12, is_ident23;
 
 	k_minus_1 = k_G - 1;
 	nG        = n_A - 1;
@@ -377,11 +377,11 @@ FLA_Error FLA_Apply_G_rf_ops_var9( integer       k_G,
 	return FLA_SUCCESS;
 }
 
-FLA_Error FLA_Apply_G_rf_opd_var9( integer       k_G,
-                                   integer       m_A,
-                                   integer       n_A,
-                                   dcomplex* buff_G, integer rs_G, integer cs_G,
-                                   double*   buff_A, integer rs_A, integer cs_A )
+FLA_Error FLA_Apply_G_rf_opd_var9( fla_dim_t       k_G,
+                                   fla_dim_t       m_A,
+                                   fla_dim_t       n_A,
+                                   dcomplex* buff_G, fla_dim_t rs_G, fla_dim_t cs_G,
+                                   double*   buff_A, fla_dim_t rs_A, fla_dim_t cs_A )
 {
 	double    one  = bl1_d1();
 	double    zero = bl1_d0();
@@ -394,13 +394,13 @@ FLA_Error FLA_Apply_G_rf_opd_var9( integer       k_G,
 	double*   a3;
 	dcomplex* g12;
 	dcomplex* g23;
-	integer       i, j, g, k;
-	integer       nG, nG_app;
-	integer       n_iter;
-	integer       n_left;
-	integer       k_minus_1;
-	integer       n_fuse;
-	integer       is_ident12, is_ident23;
+	fla_dim_t       i, j, g, k;
+	fla_dim_t       nG, nG_app;
+	fla_dim_t       n_iter;
+	fla_dim_t       n_left;
+	fla_dim_t       k_minus_1;
+	fla_dim_t       n_fuse;
+	fla_dim_t       is_ident12, is_ident23;
 
 	k_minus_1 = k_G - 1;
 	nG        = n_A - 1;
@@ -644,11 +644,11 @@ FLA_Error FLA_Apply_G_rf_opd_var9( integer       k_G,
 	return FLA_SUCCESS;
 }
 
-FLA_Error FLA_Apply_G_rf_opc_var9( integer       k_G,
-                                   integer       m_A,
-                                   integer       n_A,
-                                   scomplex* buff_G, integer rs_G, integer cs_G,
-                                   scomplex* buff_A, integer rs_A, integer cs_A )
+FLA_Error FLA_Apply_G_rf_opc_var9( fla_dim_t       k_G,
+                                   fla_dim_t       m_A,
+                                   fla_dim_t       n_A,
+                                   scomplex* buff_G, fla_dim_t rs_G, fla_dim_t cs_G,
+                                   scomplex* buff_A, fla_dim_t rs_A, fla_dim_t cs_A )
 {
 	float     one  = bl1_s1();
 	float     zero = bl1_s0();
@@ -661,13 +661,13 @@ FLA_Error FLA_Apply_G_rf_opc_var9( integer       k_G,
 	scomplex* a3;
 	scomplex* g12;
 	scomplex* g23;
-	integer       i, j, g, k;
-	integer       nG, nG_app;
-	integer       n_iter;
-	integer       n_left;
-	integer       k_minus_1;
-	integer       n_fuse;
-	integer       is_ident12, is_ident23;
+	fla_dim_t       i, j, g, k;
+	fla_dim_t       nG, nG_app;
+	fla_dim_t       n_iter;
+	fla_dim_t       n_left;
+	fla_dim_t       k_minus_1;
+	fla_dim_t       n_fuse;
+	fla_dim_t       is_ident12, is_ident23;
 
 	k_minus_1 = k_G - 1;
 	nG        = n_A - 1;
@@ -911,11 +911,11 @@ FLA_Error FLA_Apply_G_rf_opc_var9( integer       k_G,
 	return FLA_SUCCESS;
 }
 
-FLA_Error FLA_Apply_G_rf_opz_var9( integer       k_G,
-                                   integer       m_A,
-                                   integer       n_A,
-                                   dcomplex* buff_G, integer rs_G, integer cs_G,
-                                   dcomplex* buff_A, integer rs_A, integer cs_A )
+FLA_Error FLA_Apply_G_rf_opz_var9( fla_dim_t       k_G,
+                                   fla_dim_t       m_A,
+                                   fla_dim_t       n_A,
+                                   dcomplex* buff_G, fla_dim_t rs_G, fla_dim_t cs_G,
+                                   dcomplex* buff_A, fla_dim_t rs_A, fla_dim_t cs_A )
 {
 	double    one  = bl1_d1();
 	double    zero = bl1_d0();
@@ -928,13 +928,13 @@ FLA_Error FLA_Apply_G_rf_opz_var9( integer       k_G,
 	dcomplex* a3;
 	dcomplex* g12;
 	dcomplex* g23;
-	integer       i, j, g, k;
-	integer       nG, nG_app;
-	integer       n_iter;
-	integer       n_left;
-	integer       k_minus_1;
-	integer       n_fuse;
-	integer       is_ident12, is_ident23;
+	fla_dim_t       i, j, g, k;
+	fla_dim_t       nG, nG_app;
+	fla_dim_t       n_iter;
+	fla_dim_t       n_left;
+	fla_dim_t       k_minus_1;
+	fla_dim_t       n_fuse;
+	fla_dim_t       is_ident12, is_ident23;
 
 	k_minus_1 = k_G - 1;
 	nG        = n_A - 1;

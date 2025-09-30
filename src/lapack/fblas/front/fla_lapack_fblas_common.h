@@ -8,5 +8,5 @@
  *  *  */
 
 #ifdef FLA_ENABLE_AMD_OPT
-integer fla_idamax(integer *n, doublereal *dx, integer *incx);
+fla_dim_t fla_idamax(fla_dim_t *n, doublereal *dx, fla_dim_t *incx);
 #endif

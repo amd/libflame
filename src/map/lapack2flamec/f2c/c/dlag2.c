@@ -151,9 +151,24 @@ if a diagonal is smaller */
 /* > \ingroup doubleOTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-void dlag2_(doublereal *a, integer *lda, doublereal *b, integer *ldb, doublereal *safmin,
+/** Generated wrapper function */
+void dlag2_(doublereal *a, aocl_int_t *lda, doublereal *b, aocl_int_t *ldb, doublereal *safmin,
             doublereal *scale1, doublereal *scale2, doublereal *wr1, doublereal *wr2,
             doublereal *wi)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_dlag2(a, lda, b, ldb, safmin, scale1, scale2, wr1, wr2, wi);
+#else
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t ldb_64 = *ldb;
+
+    aocl_lapack_dlag2(a, &lda_64, b, &ldb_64, safmin, scale1, scale2, wr1, wr2, wi);
+#endif
+}
+
+void aocl_lapack_dlag2(doublereal *a, aocl_int64_t *lda, doublereal *b, aocl_int64_t *ldb,
+                       doublereal *safmin, doublereal *scale1, doublereal *scale2, doublereal *wr1,
+                       doublereal *wr2, doublereal *wi)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dlag2 inputs: lda %" FLA_IS ", ldb %" FLA_IS "", *lda, *ldb);

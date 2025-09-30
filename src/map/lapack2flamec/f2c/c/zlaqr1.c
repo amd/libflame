@@ -102,20 +102,34 @@
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void zlaqr1_(integer *n, doublecomplex *h__, integer *ldh, doublecomplex *s1, doublecomplex *s2,
-             doublecomplex *v)
+/** Generated wrapper function */
+void zlaqr1_(aocl_int_t *n, dcomplex *h__, aocl_int_t *ldh, dcomplex *s1,
+             dcomplex *s2, dcomplex *v)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_zlaqr1(n, h__, ldh, s1, s2, v);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t ldh_64 = *ldh;
+
+    aocl_lapack_zlaqr1(&n_64, h__, &ldh_64, s1, s2, v);
+#endif
+}
+
+void aocl_lapack_zlaqr1(aocl_int64_t *n, dcomplex *h__, aocl_int64_t *ldh, dcomplex *s1,
+                        dcomplex *s2, dcomplex *v)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zlaqr1 inputs: n %" FLA_IS ", ldh %" FLA_IS "", *n, *ldh);
     /* System generated locals */
-    integer h_dim1, h_offset, i__1, i__2, i__3, i__4;
+    aocl_int64_t h_dim1, h_offset, i__1, i__2, i__3, i__4;
     doublereal d__1, d__2, d__3, d__4, d__5, d__6;
-    doublecomplex z__1, z__2, z__3, z__4, z__5, z__6, z__7, z__8;
+    dcomplex z__1, z__2, z__3, z__4, z__5, z__6, z__7, z__8;
     /* Builtin functions */
-    double d_imag(doublecomplex *);
+    double d_imag(dcomplex *);
     /* Local variables */
     doublereal s;
-    doublecomplex h21s, h31s;
+    dcomplex h21s, h31s;
     /* -- LAPACK auxiliary routine (version 3.7.1) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */

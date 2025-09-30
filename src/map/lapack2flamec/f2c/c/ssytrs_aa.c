@@ -5,7 +5,7 @@
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static real c_b9 = 1.f;
-static integer c__1 = 1;
+static aocl_int64_t c__1 = 1;
 /* > \brief \b SSYTRS_AA */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -128,31 +128,44 @@ static integer c__1 = 1;
 /* > \ingroup hetrs_aa */
 /* ===================================================================== */
 /* Subroutine */
-void ssytrs_aa_(char *uplo, integer *n, integer *nrhs, real *a, integer *lda, integer *ipiv,
-                real *b, integer *ldb, real *work, integer *lwork, integer *info)
+/** Generated wrapper function */
+void ssytrs_aa_(char *uplo, aocl_int_t *n, aocl_int_t *nrhs, real *a, aocl_int_t *lda,
+                aocl_int_t *ipiv, real *b, aocl_int_t *ldb, real *work, aocl_int_t *lwork,
+                aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_ssytrs_aa(uplo, n, nrhs, a, lda, ipiv, b, ldb, work, lwork, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t nrhs_64 = *nrhs;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t ldb_64 = *ldb;
+    aocl_int64_t lwork_64 = *lwork;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_ssytrs_aa(uplo, &n_64, &nrhs_64, a, &lda_64, ipiv, b, &ldb_64, work, &lwork_64,
+                          &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_ssytrs_aa(char *uplo, aocl_int64_t *n, aocl_int64_t *nrhs, real *a,
+                           aocl_int64_t *lda, aocl_int_t *ipiv, real *b, aocl_int64_t *ldb,
+                           real *work, aocl_int64_t *lwork, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF(
-             "ssytrs_aa inputs: uplo %c, n %" FLA_IS ", nrhs %" FLA_IS ", lda %" FLA_IS
-             ", ldb %" FLA_IS "",
-             *uplo, *n, *nrhs, *lda, *ldb);
+    AOCL_DTL_SNPRINTF("ssytrs_aa inputs: uplo %c, n %" FLA_IS ", nrhs %" FLA_IS ", lda %" FLA_IS
+                      ", ldb %" FLA_IS "",
+                      *uplo, *n, *nrhs, *lda, *ldb);
     /* System generated locals */
-    integer a_dim1, a_offset, b_dim1, b_offset, i__1, i__2;
+    aocl_int64_t a_dim1, a_offset, b_dim1, b_offset, i__1, i__2;
     /* Local variables */
-    integer k, kp;
-    extern logical lsame_(char *, char *, integer, integer);
+    aocl_int64_t k, kp;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     logical upper;
-    extern /* Subroutine */
-        void
-        sswap_(integer *, real *, integer *, real *, integer *),
-        sgtsv_(integer *, integer *, real *, real *, real *, real *, integer *, integer *),
-        strsm_(char *, char *, char *, char *, integer *, integer *, real *, real *, integer *,
-               real *, integer *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
-        slacpy_(char *, integer *, integer *, real *, integer *, real *, integer *);
-    integer lwkopt;
+    aocl_int64_t lwkopt;
     logical lquery;
-    extern real sroundup_lwork(integer *);
     /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -217,14 +230,14 @@ void ssytrs_aa_(char *uplo, integer *n, integer *nrhs, real *a, integer *lda, in
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("SSYTRS_AA", &i__1, (ftnlen)9);
+        aocl_blas_xerbla("SSYTRS_AA", &i__1, (ftnlen)9);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     else if(lquery)
     {
         lwkopt = *n * 3 - 2;
-        work[1] = sroundup_lwork(&lwkopt);
+        work[1] = aocl_lapack_sroundup_lwork(&lwkopt);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -247,36 +260,37 @@ void ssytrs_aa_(char *uplo, integer *n, integer *nrhs, real *a, integer *lda, in
                 kp = ipiv[k];
                 if(kp != k)
                 {
-                    sswap_(nrhs, &b[k + b_dim1], ldb, &b[kp + b_dim1], ldb);
+                    aocl_blas_sswap(nrhs, &b[k + b_dim1], ldb, &b[kp + b_dim1], ldb);
                 }
                 ++k;
             }
             /* Compute U**T \ B -> B [ (U**T \P**T * B) ] */
             i__1 = *n - 1;
-            strsm_("L", "U", "T", "U", &i__1, nrhs, &c_b9, &a[(a_dim1 << 1) + 1], lda,
-                   &b[b_dim1 + 2], ldb);
+            aocl_blas_strsm("L", "U", "T", "U", &i__1, nrhs, &c_b9, &a[(a_dim1 << 1) + 1], lda,
+                            &b[b_dim1 + 2], ldb);
         }
         /* 2) Solve with triangular matrix T */
         /* Compute T \ B -> B [ T \ (U**T \P**T * B) ] */
         i__1 = *lda + 1;
-        slacpy_("F", &c__1, n, &a[a_dim1 + 1], &i__1, &work[*n], &c__1);
+        aocl_lapack_slacpy("F", &c__1, n, &a[a_dim1 + 1], &i__1, &work[*n], &c__1);
         if(*n > 1)
         {
             i__1 = *n - 1;
             i__2 = *lda + 1;
-            slacpy_("F", &c__1, &i__1, &a[(a_dim1 << 1) + 1], &i__2, &work[1], &c__1);
+            aocl_lapack_slacpy("F", &c__1, &i__1, &a[(a_dim1 << 1) + 1], &i__2, &work[1], &c__1);
             i__1 = *n - 1;
             i__2 = *lda + 1;
-            slacpy_("F", &c__1, &i__1, &a[(a_dim1 << 1) + 1], &i__2, &work[*n * 2], &c__1);
+            aocl_lapack_slacpy("F", &c__1, &i__1, &a[(a_dim1 << 1) + 1], &i__2, &work[*n * 2],
+                               &c__1);
         }
-        sgtsv_(n, nrhs, &work[1], &work[*n], &work[*n * 2], &b[b_offset], ldb, info);
+        aocl_lapack_sgtsv(n, nrhs, &work[1], &work[*n], &work[*n * 2], &b[b_offset], ldb, info);
         /* 3) Backward substitution with U */
         if(*n > 1)
         {
             /* Compute U \ B -> B [ U \ (T \ (U**T \P**T * B) ) ] */
             i__1 = *n - 1;
-            strsm_("L", "U", "N", "U", &i__1, nrhs, &c_b9, &a[(a_dim1 << 1) + 1], lda,
-                   &b[b_dim1 + 2], ldb);
+            aocl_blas_strsm("L", "U", "N", "U", &i__1, nrhs, &c_b9, &a[(a_dim1 << 1) + 1], lda,
+                            &b[b_dim1 + 2], ldb);
             /* Pivot, P * B -> B [ P * (U \ (T \ (U**T \P**T * B) )) ] */
             k = *n;
             while(k >= 1)
@@ -284,7 +298,7 @@ void ssytrs_aa_(char *uplo, integer *n, integer *nrhs, real *a, integer *lda, in
                 kp = ipiv[k];
                 if(kp != k)
                 {
-                    sswap_(nrhs, &b[k + b_dim1], ldb, &b[kp + b_dim1], ldb);
+                    aocl_blas_sswap(nrhs, &b[k + b_dim1], ldb, &b[kp + b_dim1], ldb);
                 }
                 --k;
             }
@@ -303,36 +317,36 @@ void ssytrs_aa_(char *uplo, integer *n, integer *nrhs, real *a, integer *lda, in
                 kp = ipiv[k];
                 if(kp != k)
                 {
-                    sswap_(nrhs, &b[k + b_dim1], ldb, &b[kp + b_dim1], ldb);
+                    aocl_blas_sswap(nrhs, &b[k + b_dim1], ldb, &b[kp + b_dim1], ldb);
                 }
                 ++k;
             }
             /* Compute L \ B -> B [ (L \P**T * B) ] */
             i__1 = *n - 1;
-            strsm_("L", "L", "N", "U", &i__1, nrhs, &c_b9, &a[a_dim1 + 2], lda, &b[b_dim1 + 2],
-                   ldb);
+            aocl_blas_strsm("L", "L", "N", "U", &i__1, nrhs, &c_b9, &a[a_dim1 + 2], lda,
+                            &b[b_dim1 + 2], ldb);
         }
         /* 2) Solve with triangular matrix T */
         /* Compute T \ B -> B [ T \ (L \P**T * B) ] */
         i__1 = *lda + 1;
-        slacpy_("F", &c__1, n, &a[a_dim1 + 1], &i__1, &work[*n], &c__1);
+        aocl_lapack_slacpy("F", &c__1, n, &a[a_dim1 + 1], &i__1, &work[*n], &c__1);
         if(*n > 1)
         {
             i__1 = *n - 1;
             i__2 = *lda + 1;
-            slacpy_("F", &c__1, &i__1, &a[a_dim1 + 2], &i__2, &work[1], &c__1);
+            aocl_lapack_slacpy("F", &c__1, &i__1, &a[a_dim1 + 2], &i__2, &work[1], &c__1);
             i__1 = *n - 1;
             i__2 = *lda + 1;
-            slacpy_("F", &c__1, &i__1, &a[a_dim1 + 2], &i__2, &work[*n * 2], &c__1);
+            aocl_lapack_slacpy("F", &c__1, &i__1, &a[a_dim1 + 2], &i__2, &work[*n * 2], &c__1);
         }
-        sgtsv_(n, nrhs, &work[1], &work[*n], &work[*n * 2], &b[b_offset], ldb, info);
+        aocl_lapack_sgtsv(n, nrhs, &work[1], &work[*n], &work[*n * 2], &b[b_offset], ldb, info);
         /* 3) Backward substitution with L**T */
         if(*n > 1)
         {
             /* Compute L**T \ B -> B [ L**T \ (T \ (L \P**T * B) ) ] */
             i__1 = *n - 1;
-            strsm_("L", "L", "T", "U", &i__1, nrhs, &c_b9, &a[a_dim1 + 2], lda, &b[b_dim1 + 2],
-                   ldb);
+            aocl_blas_strsm("L", "L", "T", "U", &i__1, nrhs, &c_b9, &a[a_dim1 + 2], lda,
+                            &b[b_dim1 + 2], ldb);
             /* Pivot, P * B -> B [ P * (L**T \ (T \ (L \P**T * B) )) ] */
             k = *n;
             while(k >= 1)
@@ -340,7 +354,7 @@ void ssytrs_aa_(char *uplo, integer *n, integer *nrhs, real *a, integer *lda, in
                 kp = ipiv[k];
                 if(kp != k)
                 {
-                    sswap_(nrhs, &b[k + b_dim1], ldb, &b[kp + b_dim1], ldb);
+                    aocl_blas_sswap(nrhs, &b[k + b_dim1], ldb, &b[kp + b_dim1], ldb);
                 }
                 --k;
             }

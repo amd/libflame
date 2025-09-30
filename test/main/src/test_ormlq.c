@@ -262,7 +262,7 @@ void prepare_ormlq_run(integer datatype, char side, char trans, integer m, integ
     double exe_time;
     create_matrix(datatype, LAPACK_COL_MAJOR, m, n, &C_save, ldc);
 
-    /* Workspace size calculations for complex datatype */
+    /* Workspace size calculations for scomplex datatype */
     /* Make a workspace query the first time through. This will provide us with
      and ideal workspace size based on an internal block size.
      NOTE: LAPACKE interface handles workspace query internally */

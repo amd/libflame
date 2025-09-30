@@ -3,7 +3,7 @@
  .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
  /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
-#include "FLA_f2c.h" /* > \brief \b CLARTG generates a plane rotation with real cosine and complex sine. */
+#include "FLA_f2c.h" /* > \brief \b CLARTG generates a plane rotation with real cosine and scomplex sine. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
@@ -106,18 +106,18 @@ x / |x|, x != 0 */
 /* > */
 /* > \endverbatim */
 /* Subroutine */
-void clartg_(complex *f, complex *g, real *c__, complex *s, complex *r__)
+void clartg_(scomplex *f, scomplex *g, real *c__, scomplex *s, scomplex *r__)
 {
     AOCL_DTL_TRACE_LOG_INIT
     /* System generated locals */
     real r__1, r__2, r__3, r__4;
-    complex q__1, q__2, q__3;
+    scomplex q__1, q__2, q__3;
     /* Builtin functions */
-    double sqrt(doublereal), r_imag(complex *);
-    void r_cnjg(complex *, complex *), c_div(complex *, complex *, complex *);
+    double sqrt(doublereal), r_imag(scomplex *);
+    void r_cnjg(scomplex *, scomplex *), c_div(scomplex *, scomplex *, scomplex *);
     /* Local variables */
     real d__, u, v, w, f1, f2, g1, g2, h2;
-    complex fs, gs;
+    scomplex fs, gs;
     real rtmin, rtmax, safmin, safmax;
     /* ...Translated by Pacific-Sierra Research vf90 Personal 3.4N3 00:33:35 2/21/25 */
     /* ...Switches: */
@@ -172,7 +172,7 @@ void clartg_(complex *f, complex *g, real *c__, complex *s, complex *r__)
             {
                 /* Use unscaled algorithm */
                 /* The following two lines can be replaced by `d = f2c_abs( g )`. */
-                /* This algorithm do not use the intrinsic complex abs. */
+                /* This algorithm do not use the intrinsic scomplex abs. */
                 /* Computing 2nd power */
                 r__1 = g->r;
                 /* Computing 2nd power */
@@ -197,7 +197,7 @@ void clartg_(complex *f, complex *g, real *c__, complex *s, complex *r__)
                 gs.r = q__1.r;
                 gs.i = q__1.i; // , expr subst
                 /* The following two lines can be replaced by `d = f2c_abs( gs )`. */
-                /* This algorithm do not use the intrinsic complex abs. */
+                /* This algorithm do not use the intrinsic scomplex abs. */
                 /* Computing 2nd power */
                 r__1 = gs.r;
                 /* Computing 2nd power */

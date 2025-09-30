@@ -16,9 +16,9 @@ FLA_Error FLA_LU_piv_opt_var4( FLA_Obj A, FLA_Obj p )
 {
   FLA_Error    r_val = FLA_SUCCESS;
   FLA_Datatype datatype;
-  integer          m_A, n_A;
-  integer          rs_A, cs_A;
-  integer          inc_p;
+  fla_dim_t          m_A, n_A;
+  fla_dim_t          rs_A, cs_A;
+  fla_dim_t          inc_p;
 
   datatype = FLA_Obj_datatype( A );
 
@@ -35,7 +35,7 @@ FLA_Error FLA_LU_piv_opt_var4( FLA_Obj A, FLA_Obj p )
     case FLA_FLOAT:
     {
       float* buff_A = FLA_FLOAT_PTR( A );
-      integer*   buff_p = FLA_INT_PTR( p );
+      fla_dim_t*   buff_p = FLA_INT_PTR( p );
 
       r_val = FLA_LU_piv_ops_var4( m_A,
                                    n_A,
@@ -48,7 +48,7 @@ FLA_Error FLA_LU_piv_opt_var4( FLA_Obj A, FLA_Obj p )
     case FLA_DOUBLE:
     {
       double* buff_A = FLA_DOUBLE_PTR( A );
-      integer*    buff_p = FLA_INT_PTR( p );
+      fla_dim_t*    buff_p = FLA_INT_PTR( p );
 
       r_val = FLA_LU_piv_opd_var4( m_A,
                                    n_A,
@@ -61,7 +61,7 @@ FLA_Error FLA_LU_piv_opt_var4( FLA_Obj A, FLA_Obj p )
     case FLA_COMPLEX:
     {
       scomplex* buff_A = FLA_COMPLEX_PTR( A );
-      integer*      buff_p = FLA_INT_PTR( p );
+      fla_dim_t*      buff_p = FLA_INT_PTR( p );
 
       r_val = FLA_LU_piv_opc_var4( m_A,
                                    n_A,
@@ -74,7 +74,7 @@ FLA_Error FLA_LU_piv_opt_var4( FLA_Obj A, FLA_Obj p )
     case FLA_DOUBLE_COMPLEX:
     {
       dcomplex* buff_A = FLA_DOUBLE_COMPLEX_PTR( A );
-      integer*      buff_p = FLA_INT_PTR( p );
+      fla_dim_t*      buff_p = FLA_INT_PTR( p );
 
       r_val = FLA_LU_piv_opz_var4( m_A,
                                    n_A,
@@ -90,16 +90,16 @@ FLA_Error FLA_LU_piv_opt_var4( FLA_Obj A, FLA_Obj p )
 
 
 
-FLA_Error FLA_LU_piv_ops_var4( integer m_A,
-                               integer n_A,
-                               float*    buff_A, integer rs_A, integer cs_A,
-                               integer*      buff_p, integer inc_p )
+FLA_Error FLA_LU_piv_ops_var4( fla_dim_t m_A,
+                               fla_dim_t n_A,
+                               float*    buff_A, fla_dim_t rs_A, fla_dim_t cs_A,
+                               fla_dim_t*      buff_p, fla_dim_t inc_p )
 {
   FLA_Error r_val = FLA_SUCCESS;
   float*    buff_1  = FLA_FLOAT_PTR( FLA_ONE );
   float*    buff_m1 = FLA_FLOAT_PTR( FLA_MINUS_ONE );
-  integer       min_m_n = fla_min( m_A, n_A );
-  integer       i, is_null_pivot;
+  fla_dim_t       min_m_n = fla_min( m_A, n_A );
+  fla_dim_t       i, is_null_pivot;
 
 
   for ( i = 0; i < min_m_n; ++i )
@@ -113,11 +113,11 @@ FLA_Error FLA_LU_piv_ops_var4( integer m_A,
     float*    A02       = buff_A + (i+1)*cs_A + (0  )*rs_A;
     float*    a12t      = buff_A + (i+1)*cs_A + (i  )*rs_A;
 
-    integer*      pi1       = buff_p + i*inc_p;
+    fla_dim_t*      pi1       = buff_p + i*inc_p;
 
-    integer       m_ahead   = m_A - i - 1;
-    integer       n_ahead   = n_A - i - 1;
-    integer       mn_behind = i;
+    fla_dim_t       m_ahead   = m_A - i - 1;
+    fla_dim_t       n_ahead   = n_A - i - 1;
+    fla_dim_t       mn_behind = i;
 
     /*------------------------------------------------------------*/
 
@@ -215,16 +215,16 @@ FLA_Error FLA_LU_piv_ops_var4( integer m_A,
 
 
 
-FLA_Error FLA_LU_piv_opd_var4( integer m_A,
-                               integer n_A,
-                               double*   buff_A, integer rs_A, integer cs_A,
-                               integer*      buff_p, integer inc_p )
+FLA_Error FLA_LU_piv_opd_var4( fla_dim_t m_A,
+                               fla_dim_t n_A,
+                               double*   buff_A, fla_dim_t rs_A, fla_dim_t cs_A,
+                               fla_dim_t*      buff_p, fla_dim_t inc_p )
 {
   FLA_Error r_val   = FLA_SUCCESS;
   double*   buff_1  = FLA_DOUBLE_PTR( FLA_ONE );
   double*   buff_m1 = FLA_DOUBLE_PTR( FLA_MINUS_ONE );
-  integer       min_m_n = fla_min( m_A, n_A );
-  integer       i, is_null_pivot;
+  fla_dim_t       min_m_n = fla_min( m_A, n_A );
+  fla_dim_t       i, is_null_pivot;
 
   for ( i = 0; i < min_m_n; ++i )
   {
@@ -237,11 +237,11 @@ FLA_Error FLA_LU_piv_opd_var4( integer m_A,
     double*   A02       = buff_A + (i+1)*cs_A + (0  )*rs_A;
     double*   a12t      = buff_A + (i+1)*cs_A + (i  )*rs_A;
 
-    integer*      pi1       = buff_p + i*inc_p;
+    fla_dim_t*      pi1       = buff_p + i*inc_p;
 
-    integer       m_ahead   = m_A - i - 1;
-    integer       n_ahead   = n_A - i - 1;
-    integer       mn_behind = i;
+    fla_dim_t       m_ahead   = m_A - i - 1;
+    fla_dim_t       n_ahead   = n_A - i - 1;
+    fla_dim_t       mn_behind = i;
 
     /*------------------------------------------------------------*/
 
@@ -339,16 +339,16 @@ FLA_Error FLA_LU_piv_opd_var4( integer m_A,
 
 
 
-FLA_Error FLA_LU_piv_opc_var4( integer m_A,
-                               integer n_A,
-                               scomplex* buff_A, integer rs_A, integer cs_A,
-                               integer*      buff_p, integer inc_p )
+FLA_Error FLA_LU_piv_opc_var4( fla_dim_t m_A,
+                               fla_dim_t n_A,
+                               scomplex* buff_A, fla_dim_t rs_A, fla_dim_t cs_A,
+                               fla_dim_t*      buff_p, fla_dim_t inc_p )
 {
   FLA_Error r_val   = FLA_SUCCESS;
   scomplex* buff_1  = FLA_COMPLEX_PTR( FLA_ONE );
   scomplex* buff_m1 = FLA_COMPLEX_PTR( FLA_MINUS_ONE );
-  integer       min_m_n = fla_min( m_A, n_A );
-  integer       i, is_null_pivot;
+  fla_dim_t       min_m_n = fla_min( m_A, n_A );
+  fla_dim_t       i, is_null_pivot;
 
   for ( i = 0; i < min_m_n; ++i )
   {
@@ -361,11 +361,11 @@ FLA_Error FLA_LU_piv_opc_var4( integer m_A,
     scomplex* A02       = buff_A + (i+1)*cs_A + (0  )*rs_A;
     scomplex* a12t      = buff_A + (i+1)*cs_A + (i  )*rs_A;
 
-    integer*      pi1       = buff_p + i*inc_p;
+    fla_dim_t*      pi1       = buff_p + i*inc_p;
 
-    integer       m_ahead   = m_A - i - 1;
-    integer       n_ahead   = n_A - i - 1;
-    integer       mn_behind = i;
+    fla_dim_t       m_ahead   = m_A - i - 1;
+    fla_dim_t       n_ahead   = n_A - i - 1;
+    fla_dim_t       mn_behind = i;
 
     /*------------------------------------------------------------*/
 
@@ -463,16 +463,16 @@ FLA_Error FLA_LU_piv_opc_var4( integer m_A,
 
 
 
-FLA_Error FLA_LU_piv_opz_var4( integer m_A,
-                               integer n_A,
-                               dcomplex* buff_A, integer rs_A, integer cs_A,
-                               integer*      buff_p, integer inc_p )
+FLA_Error FLA_LU_piv_opz_var4( fla_dim_t m_A,
+                               fla_dim_t n_A,
+                               dcomplex* buff_A, fla_dim_t rs_A, fla_dim_t cs_A,
+                               fla_dim_t*      buff_p, fla_dim_t inc_p )
 {
   FLA_Error r_val   = FLA_SUCCESS;
   dcomplex* buff_1  = FLA_DOUBLE_COMPLEX_PTR( FLA_ONE );
   dcomplex* buff_m1 = FLA_DOUBLE_COMPLEX_PTR( FLA_MINUS_ONE );
-  integer       min_m_n = fla_min( m_A, n_A );
-  integer       i, is_null_pivot;
+  fla_dim_t       min_m_n = fla_min( m_A, n_A );
+  fla_dim_t       i, is_null_pivot;
 
   for ( i = 0; i < min_m_n; ++i )
   {
@@ -485,11 +485,11 @@ FLA_Error FLA_LU_piv_opz_var4( integer m_A,
     dcomplex* A02       = buff_A + (i+1)*cs_A + (0  )*rs_A;
     dcomplex* a12t      = buff_A + (i+1)*cs_A + (i  )*rs_A;
 
-    integer*      pi1       = buff_p + i*inc_p;
+    fla_dim_t*      pi1       = buff_p + i*inc_p;
 
-    integer       m_ahead   = m_A - i - 1;
-    integer       n_ahead   = n_A - i - 1;
-    integer       mn_behind = i;
+    fla_dim_t       m_ahead   = m_A - i - 1;
+    fla_dim_t       n_ahead   = n_A - i - 1;
+    fla_dim_t       mn_behind = i;
 
     /*------------------------------------------------------------*/
 

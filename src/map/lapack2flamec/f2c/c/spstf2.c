@@ -4,7 +4,7 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
+static aocl_int64_t c__1 = 1;
 static real c_b16 = -1.f;
 static real c_b18 = 1.f;
 /* > \brief \b SPSTF2 computes the Cholesky factorization with complete pivoting of a real symmetric
@@ -141,41 +141,44 @@ static real c_b18 = 1.f;
 /* > \ingroup realOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void spstf2_(char *uplo, integer *n, real *a, integer *lda, integer *piv, integer *rank, real *tol,
-             real *work, integer *info)
+/** Generated wrapper function */
+void spstf2_(char *uplo, aocl_int_t *n, real *a, aocl_int_t *lda, aocl_int_t *piv, aocl_int_t *rank,
+             real *tol, real *work, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_spstf2(uplo, n, a, lda, piv, rank, tol, work, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t rank_64 = *rank;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_spstf2(uplo, &n_64, a, &lda_64, piv, &rank_64, tol, work, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_spstf2(char *uplo, aocl_int64_t *n, real *a, aocl_int64_t *lda, aocl_int_t *piv,
+                        aocl_int64_t *rank, real *tol, real *work, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("spstf2 inputs: uplo %c, n %" FLA_IS ", lda %" FLA_IS "", *uplo, *n,
-             *lda);
+    AOCL_DTL_SNPRINTF("spstf2 inputs: uplo %c, n %" FLA_IS ", lda %" FLA_IS "", *uplo, *n, *lda);
     /* System generated locals */
-    integer a_dim1, a_offset, i__1, i__2, i__3;
+    aocl_int64_t a_dim1, a_offset, i__1, i__2, i__3;
     real r__1;
     /* Builtin functions */
     double sqrt(doublereal);
     /* Local variables */
-    integer i__, j;
+    aocl_int64_t i__, j;
     real ajj;
-    integer pvt;
-    extern logical lsame_(char *, char *, integer, integer);
-    extern /* Subroutine */
-        void
-        sscal_(integer *, real *, real *, integer *);
-    integer itemp;
-    extern /* Subroutine */
-        void
-        sgemv_(char *, integer *, integer *, real *, real *, integer *, real *, integer *, real *,
-               real *, integer *);
+    aocl_int64_t pvt;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    aocl_int64_t itemp;
     real stemp;
     logical upper;
-    extern /* Subroutine */
-        void
-        sswap_(integer *, real *, integer *, real *, integer *);
     real sstop;
     extern real slamch_(char *);
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    extern integer smaxloc_(real *, integer *);
     extern logical sisnan_(real *);
     /* -- LAPACK computational routine (version 3.7.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -222,7 +225,7 @@ void spstf2_(char *uplo, integer *n, real *a, integer *lda, integer *piv, intege
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("SPSTF2", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("SPSTF2", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -236,7 +239,7 @@ void spstf2_(char *uplo, integer *n, real *a, integer *lda, integer *piv, intege
     i__1 = *n;
     for(i__ = 1; i__ <= i__1; ++i__)
     {
-        piv[i__] = i__;
+        piv[i__] = (aocl_int_t)(i__);
         /* L100: */
     }
     /* Compute stopping value */
@@ -297,7 +300,7 @@ void spstf2_(char *uplo, integer *n, real *a, integer *lda, integer *piv, intege
             if(j > 1)
             {
                 i__2 = *n - j + 1;
-                itemp = smaxloc_(&work[*n + j], &i__2);
+                itemp = aocl_lapack_smaxloc(&work[*n + j], &i__2);
                 pvt = itemp + j - 1;
                 ajj = work[*n + pvt];
                 if(ajj <= sstop || sisnan_(&ajj))
@@ -311,22 +314,23 @@ void spstf2_(char *uplo, integer *n, real *a, integer *lda, integer *piv, intege
                 /* Pivot OK, so can now swap pivot rows and columns */
                 a[pvt + pvt * a_dim1] = a[j + j * a_dim1];
                 i__2 = j - 1;
-                sswap_(&i__2, &a[j * a_dim1 + 1], &c__1, &a[pvt * a_dim1 + 1], &c__1);
+                aocl_blas_sswap(&i__2, &a[j * a_dim1 + 1], &c__1, &a[pvt * a_dim1 + 1], &c__1);
                 if(pvt < *n)
                 {
                     i__2 = *n - pvt;
-                    sswap_(&i__2, &a[j + (pvt + 1) * a_dim1], lda, &a[pvt + (pvt + 1) * a_dim1],
-                           lda);
+                    aocl_blas_sswap(&i__2, &a[j + (pvt + 1) * a_dim1], lda,
+                                    &a[pvt + (pvt + 1) * a_dim1], lda);
                 }
                 i__2 = pvt - j - 1;
-                sswap_(&i__2, &a[j + (j + 1) * a_dim1], lda, &a[j + 1 + pvt * a_dim1], &c__1);
+                aocl_blas_sswap(&i__2, &a[j + (j + 1) * a_dim1], lda, &a[j + 1 + pvt * a_dim1],
+                                &c__1);
                 /* Swap dot products and PIV */
                 stemp = work[j];
                 work[j] = work[pvt];
                 work[pvt] = stemp;
                 itemp = piv[pvt];
                 piv[pvt] = piv[j];
-                piv[j] = itemp;
+                piv[j] = (aocl_int_t)(itemp);
             }
             ajj = sqrt(ajj);
             a[j + j * a_dim1] = ajj;
@@ -335,11 +339,11 @@ void spstf2_(char *uplo, integer *n, real *a, integer *lda, integer *piv, intege
             {
                 i__2 = j - 1;
                 i__3 = *n - j;
-                sgemv_("Trans", &i__2, &i__3, &c_b16, &a[(j + 1) * a_dim1 + 1], lda,
-                       &a[j * a_dim1 + 1], &c__1, &c_b18, &a[j + (j + 1) * a_dim1], lda);
+                aocl_blas_sgemv("Trans", &i__2, &i__3, &c_b16, &a[(j + 1) * a_dim1 + 1], lda,
+                                &a[j * a_dim1 + 1], &c__1, &c_b18, &a[j + (j + 1) * a_dim1], lda);
                 i__2 = *n - j;
                 r__1 = 1.f / ajj;
-                sscal_(&i__2, &r__1, &a[j + (j + 1) * a_dim1], lda);
+                aocl_blas_sscal(&i__2, &r__1, &a[j + (j + 1) * a_dim1], lda);
             }
             /* L130: */
         }
@@ -368,7 +372,7 @@ void spstf2_(char *uplo, integer *n, real *a, integer *lda, integer *piv, intege
             if(j > 1)
             {
                 i__2 = *n - j + 1;
-                itemp = smaxloc_(&work[*n + j], &i__2);
+                itemp = aocl_lapack_smaxloc(&work[*n + j], &i__2);
                 pvt = itemp + j - 1;
                 ajj = work[*n + pvt];
                 if(ajj <= sstop || sisnan_(&ajj))
@@ -382,22 +386,23 @@ void spstf2_(char *uplo, integer *n, real *a, integer *lda, integer *piv, intege
                 /* Pivot OK, so can now swap pivot rows and columns */
                 a[pvt + pvt * a_dim1] = a[j + j * a_dim1];
                 i__2 = j - 1;
-                sswap_(&i__2, &a[j + a_dim1], lda, &a[pvt + a_dim1], lda);
+                aocl_blas_sswap(&i__2, &a[j + a_dim1], lda, &a[pvt + a_dim1], lda);
                 if(pvt < *n)
                 {
                     i__2 = *n - pvt;
-                    sswap_(&i__2, &a[pvt + 1 + j * a_dim1], &c__1, &a[pvt + 1 + pvt * a_dim1],
-                           &c__1);
+                    aocl_blas_sswap(&i__2, &a[pvt + 1 + j * a_dim1], &c__1,
+                                    &a[pvt + 1 + pvt * a_dim1], &c__1);
                 }
                 i__2 = pvt - j - 1;
-                sswap_(&i__2, &a[j + 1 + j * a_dim1], &c__1, &a[pvt + (j + 1) * a_dim1], lda);
+                aocl_blas_sswap(&i__2, &a[j + 1 + j * a_dim1], &c__1, &a[pvt + (j + 1) * a_dim1],
+                                lda);
                 /* Swap dot products and PIV */
                 stemp = work[j];
                 work[j] = work[pvt];
                 work[pvt] = stemp;
                 itemp = piv[pvt];
                 piv[pvt] = piv[j];
-                piv[j] = itemp;
+                piv[j] = (aocl_int_t)(itemp);
             }
             ajj = sqrt(ajj);
             a[j + j * a_dim1] = ajj;
@@ -406,11 +411,11 @@ void spstf2_(char *uplo, integer *n, real *a, integer *lda, integer *piv, intege
             {
                 i__2 = *n - j;
                 i__3 = j - 1;
-                sgemv_("No Trans", &i__2, &i__3, &c_b16, &a[j + 1 + a_dim1], lda, &a[j + a_dim1],
-                       lda, &c_b18, &a[j + 1 + j * a_dim1], &c__1);
+                aocl_blas_sgemv("No Trans", &i__2, &i__3, &c_b16, &a[j + 1 + a_dim1], lda,
+                                &a[j + a_dim1], lda, &c_b18, &a[j + 1 + j * a_dim1], &c__1);
                 i__2 = *n - j;
                 r__1 = 1.f / ajj;
-                sscal_(&i__2, &r__1, &a[j + 1 + j * a_dim1], &c__1);
+                aocl_blas_sscal(&i__2, &r__1, &a[j + 1 + j * a_dim1], &c__1);
             }
             /* L150: */
         }

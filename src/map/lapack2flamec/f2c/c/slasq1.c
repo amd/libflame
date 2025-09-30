@@ -4,9 +4,9 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
-static integer c__2 = 2;
-static integer c__0 = 0;
+static aocl_int64_t c__1 = 1;
+static aocl_int64_t c__2 = 2;
+static aocl_int64_t c__0 = 0;
 /* > \brief \b SLASQ1 computes the singular values of a real square bidiagonal matrix. Used by
  * sbdsqr. */
 /* =========== DOCUMENTATION =========== */
@@ -108,38 +108,41 @@ static integer c__0 = 0;
 /* > \ingroup auxOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void slasq1_(integer *n, real *d__, real *e, real *work, integer *info)
+/** Generated wrapper function */
+void slasq1_(aocl_int_t *n, real *d__, real *e, real *work, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_slasq1(n, d__, e, work, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_slasq1(&n_64, d__, e, work, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_slasq1(aocl_int64_t *n, real *d__, real *e, real *work, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("slasq1 inputs: n %" FLA_IS "", *n);
     /* System generated locals */
-    integer i__1, i__2;
+    aocl_int64_t i__1, i__2;
     real r__1, r__2, r__3;
     /* Builtin functions */
     double sqrt(doublereal);
     /* Local variables */
-    integer i__;
+    aocl_int64_t i__;
     real eps;
     extern /* Subroutine */
         void
         slas2_(real *, real *, real *, real *, real *);
     real scale;
-    integer iinfo;
+    aocl_int64_t iinfo;
     real sigmn, sigmx;
-    extern /* Subroutine */
-        void
-        scopy_(integer *, real *, integer *, real *, integer *),
-        slasq2_(integer *, real *, integer *);
     extern real slamch_(char *);
     real safmin;
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    extern /* Subroutine */
-        void
-        slascl_(char *, integer *, integer *, real *, real *, integer *, integer *, real *,
-                integer *, integer *),
-        slasrt_(char *, integer *, real *, integer *);
     /* -- LAPACK computational routine (version 3.7.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -170,7 +173,7 @@ void slasq1_(integer *n, real *d__, real *e, real *work, integer *info)
     {
         *info = -1;
         i__1 = -(*info);
-        xerbla_("SLASQ1", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("SLASQ1", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -209,7 +212,7 @@ void slasq1_(integer *n, real *d__, real *e, real *work, integer *info)
     /* Early return if SIGMX is zero (matrix is already diagonal). */
     if(sigmx == 0.f)
     {
-        slasrt_("D", n, &d__[1], &iinfo);
+        aocl_lapack_slasrt("D", n, &d__[1], &iinfo);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -227,12 +230,12 @@ void slasq1_(integer *n, real *d__, real *e, real *work, integer *info)
     eps = slamch_("Precision");
     safmin = slamch_("Safe minimum");
     scale = sqrt(eps / safmin);
-    scopy_(n, &d__[1], &c__1, &work[1], &c__2);
+    aocl_blas_scopy(n, &d__[1], &c__1, &work[1], &c__2);
     i__1 = *n - 1;
-    scopy_(&i__1, &e[1], &c__1, &work[2], &c__2);
+    aocl_blas_scopy(&i__1, &e[1], &c__1, &work[2], &c__2);
     i__1 = (*n << 1) - 1;
     i__2 = (*n << 1) - 1;
-    slascl_("G", &c__0, &c__0, &sigmx, &scale, &i__1, &c__1, &work[1], &i__2, &iinfo);
+    aocl_lapack_slascl("G", &c__0, &c__0, &sigmx, &scale, &i__1, &c__1, &work[1], &i__2, &iinfo);
     /* Compute the q's and e's. */
     i__1 = (*n << 1) - 1;
     for(i__ = 1; i__ <= i__1; ++i__)
@@ -243,7 +246,7 @@ void slasq1_(integer *n, real *d__, real *e, real *work, integer *info)
         /* L30: */
     }
     work[*n * 2] = 0.f;
-    slasq2_(n, &work[1], info);
+    aocl_lapack_slasq2(n, &work[1], info);
     if(*info == 0)
     {
         i__1 = *n;
@@ -252,7 +255,7 @@ void slasq1_(integer *n, real *d__, real *e, real *work, integer *info)
             d__[i__] = sqrt(work[i__]);
             /* L40: */
         }
-        slascl_("G", &c__0, &c__0, &scale, &sigmx, n, &c__1, &d__[1], n, &iinfo);
+        aocl_lapack_slascl("G", &c__0, &c__0, &scale, &sigmx, n, &c__1, &d__[1], n, &iinfo);
     }
     else if(*info == 2)
     {
@@ -264,8 +267,8 @@ void slasq1_(integer *n, real *d__, real *e, real *work, integer *info)
             d__[i__] = sqrt(work[(i__ << 1) - 1]);
             e[i__] = sqrt(work[i__ * 2]);
         }
-        slascl_("G", &c__0, &c__0, &scale, &sigmx, n, &c__1, &d__[1], n, &iinfo);
-        slascl_("G", &c__0, &c__0, &scale, &sigmx, n, &c__1, &e[1], n, &iinfo);
+        aocl_lapack_slascl("G", &c__0, &c__0, &scale, &sigmx, n, &c__1, &d__[1], n, &iinfo);
+        aocl_lapack_slascl("G", &c__0, &c__0, &scale, &sigmx, n, &c__1, &e[1], n, &iinfo);
     }
     AOCL_DTL_TRACE_LOG_EXIT
     return;

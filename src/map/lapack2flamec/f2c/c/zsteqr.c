@@ -4,11 +4,11 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static doublecomplex c_b1 = {0., 0.};
-static doublecomplex c_b2 = {1., 0.};
-static integer c__0 = 0;
-static integer c__1 = 1;
-static integer c__2 = 2;
+static dcomplex c_b1 = {{0.}, {0.}};
+static dcomplex c_b2 = {{1.}, {0.}};
+static aocl_int64_t c__0 = 0;
+static aocl_int64_t c__1 = 1;
+static aocl_int64_t c__2 = 2;
 static doublereal c_b41 = 1.;
 /* > \brief \b ZSTEQR */
 /* =========== DOCUMENTATION =========== */
@@ -136,8 +136,25 @@ on exit, D */
 /* > \ingroup complex16OTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void zsteqr_(char *compz, integer *n, doublereal *d__, doublereal *e, doublecomplex *z__,
-             integer *ldz, doublereal *work, integer *info)
+/** Generated wrapper function */
+void zsteqr_(char *compz, aocl_int_t *n, doublereal *d__, doublereal *e, dcomplex *z__,
+             aocl_int_t *ldz, doublereal *work, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_zsteqr(compz, n, d__, e, z__, ldz, work, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t ldz_64 = *ldz;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_zsteqr(compz, &n_64, d__, e, z__, &ldz_64, work, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_zsteqr(char *compz, aocl_int64_t *n, doublereal *d__, doublereal *e,
+                        dcomplex *z__, aocl_int64_t *ldz, doublereal *work, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zsteqr inputs: compz %c, n %" FLA_IS ", ldz %" FLA_IS "", *compz, *n, *ldz);
@@ -158,42 +175,22 @@ void zsteqr_(char *compz, integer *n, doublereal *d__, doublereal *e, doublecomp
     extern /* Subroutine */
         void
         dlae2_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *);
-    extern logical lsame_(char *, char *, integer, integer);
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     doublereal anorm;
-    extern /* Subroutine */
-        void
-        zlasr_(char *, char *, char *, integer *, integer *, doublereal *, doublereal *,
-               doublecomplex *, integer *),
-        zswap_(integer *, doublecomplex *, integer *, doublecomplex *, integer *),
-        dlaev2_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *,
-                doublereal *);
-    integer lendm1, lendp1;
+    extern void dlaev2_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *,
+              doublereal *);
+    aocl_int64_t lendm1, lendp1;
     extern doublereal dlapy2_(doublereal *, doublereal *), dlamch_(char *);
-    integer iscale;
-    extern /* Subroutine */
-        void
-        dlascl_(char *, integer *, integer *, doublereal *, doublereal *, integer *, integer *,
-                doublereal *, integer *, integer *);
+    aocl_int64_t iscale;
     doublereal safmin;
     extern /* Subroutine */
         void
         dlartg_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *);
     doublereal safmax;
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    extern doublereal dlanst_(char *, integer *, doublereal *, doublereal *);
-    extern /* Subroutine */
-        void
-        dlasrt_(char *, integer *, doublereal *, integer *);
-    integer lendsv;
+    aocl_int64_t lendsv;
     doublereal ssfmin;
     aocl_int64_t nmaxit, icompz;
     doublereal ssfmax;
-    extern /* Subroutine */
-        void
-        zlaset_(char *, integer *, integer *, doublecomplex *, doublecomplex *, doublecomplex *,
-                integer *);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -255,7 +252,7 @@ void zsteqr_(char *compz, integer *n, doublereal *d__, doublereal *e, doublecomp
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("ZSTEQR", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("ZSTEQR", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -410,8 +407,8 @@ L30:
                 dlaev2_(&d__[l], &e[l], &d__[l + 1], &rt1, &rt2, &c__, &s);
                 work[l] = c__;
                 work[*n - 1 + l] = s;
-                zlasr_("R", "V", "B", n, &c__2, &work[l], &work[*n - 1 + l], &z__[l * z_dim1 + 1],
-                       ldz);
+                aocl_lapack_zlasr("R", "V", "B", n, &c__2, &work[l], &work[*n - 1 + l],
+                                  &z__[l * z_dim1 + 1], ldz);
             }
             else
             {
@@ -527,8 +524,8 @@ L30:
                 dlaev2_(&d__[l - 1], &e[l - 1], &d__[l], &rt1, &rt2, &c__, &s);
                 work[m] = c__;
                 work[*n - 1 + m] = s;
-                zlasr_("R", "V", "F", n, &c__2, &work[m], &work[*n - 1 + m],
-                       &z__[(l - 1) * z_dim1 + 1], ldz);
+                aocl_lapack_zlasr("R", "V", "F", n, &c__2, &work[m], &work[*n - 1 + m],
+                                  &z__[(l - 1) * z_dim1 + 1], ldz);
             }
             else
             {

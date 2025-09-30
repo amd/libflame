@@ -180,9 +180,33 @@ static aocl_int64_t c__1 = 1;
 /* > \ingroup complexOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void ctrrfs_(char *uplo, char *trans, char *diag, integer *n, integer *nrhs, complex *a,
-             integer *lda, complex *b, integer *ldb, complex *x, integer *ldx, real *ferr,
-             real *berr, complex *work, real *rwork, integer *info)
+/** Generated wrapper function */
+void ctrrfs_(char *uplo, char *trans, char *diag, aocl_int_t *n, aocl_int_t *nrhs, scomplex *a,
+             aocl_int_t *lda, scomplex *b, aocl_int_t *ldb, scomplex *x, aocl_int_t *ldx, real *ferr,
+             real *berr, scomplex *work, real *rwork, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_ctrrfs(uplo, trans, diag, n, nrhs, a, lda, b, ldb, x, ldx, ferr, berr, work, rwork,
+                       info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t nrhs_64 = *nrhs;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t ldb_64 = *ldb;
+    aocl_int64_t ldx_64 = *ldx;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_ctrrfs(uplo, trans, diag, &n_64, &nrhs_64, a, &lda_64, b, &ldb_64, x, &ldx_64, ferr,
+                       berr, work, rwork, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_ctrrfs(char *uplo, char *trans, char *diag, aocl_int64_t *n, aocl_int64_t *nrhs,
+                        scomplex *a, aocl_int64_t *lda, scomplex *b, aocl_int64_t *ldb, scomplex *x,
+                        aocl_int64_t *ldx, real *ferr, real *berr, scomplex *work, real *rwork,
+                        aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -212,23 +236,11 @@ void ctrrfs_(char *uplo, char *trans, char *diag, integer *n, integer *nrhs, com
     real eps;
     aocl_int64_t kase;
     real safe1, safe2;
-    extern logical lsame_(char *, char *, integer, integer);
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     integer isave[3];
-    extern /* Subroutine */
-        void
-        ccopy_(integer *, complex *, integer *, complex *, integer *),
-        caxpy_(integer *, complex *, complex *, integer *, complex *, integer *);
     logical upper;
-    extern /* Subroutine */
-        void
-        ctrmv_(char *, char *, char *, integer *, complex *, integer *, complex *, integer *),
-        ctrsv_(char *, char *, char *, integer *, complex *, integer *, complex *, integer *),
-        clacn2_(integer *, complex *, complex *, real *, integer *, integer *);
     extern real slamch_(char *);
     real safmin;
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical notran;
     char transn[1], transt[1];
     logical nounit;
@@ -314,7 +326,7 @@ void ctrrfs_(char *uplo, char *trans, char *diag, integer *n, integer *nrhs, com
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("CTRRFS", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("CTRRFS", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
@@ -355,8 +367,8 @@ void ctrrfs_(char *uplo, char *trans, char *diag, integer *n, integer *nrhs, com
         /* where op(A) = A, A**T, or A**H, depending on TRANS. */
         aocl_blas_ccopy(n, &x[j * x_dim1 + 1], &c__1, &work[1], &c__1);
         aocl_blas_ctrmv(uplo, trans, diag, n, &a[a_offset], lda, &work[1], &c__1);
-        q__1.real = -1.f;
-        q__1.imag = -0.f; // , expr subst
+        q__1.r = -1.f;
+        q__1.i = -0.f; // , expr subst
         aocl_blas_caxpy(n, &q__1, &b[j * b_dim1 + 1], &c__1, &work[1], &c__1);
         /* Compute componentwise relative backward error from formula */
         /* fla_max(i) ( f2c_abs(R(i)) / ( f2c_abs(op(A))*f2c_abs(X) + f2c_abs(B) )(i) ) */
@@ -626,13 +638,13 @@ void ctrrfs_(char *uplo, char *trans, char *diag, integer *n, integer *nrhs, com
         }
         kase = 0;
     L210:
-        clacn2_(n, &work[*n + 1], &work[1], &ferr[j], &kase, isave);
+        aocl_lapack_clacn2(n, &work[*n + 1], &work[1], &ferr[j], &kase, isave);
         if(kase != 0)
         {
             if(kase == 1)
             {
                 /* Multiply by diag(W)*inv(op(A)**H). */
-                ctrsv_(uplo, transt, diag, n, &a[a_offset], lda, &work[1], &c__1);
+                aocl_blas_ctrsv(uplo, transt, diag, n, &a[a_offset], lda, &work[1], &c__1);
                 i__2 = *n;
                 for(i__ = 1; i__ <= i__2; ++i__)
                 {
@@ -661,7 +673,7 @@ void ctrrfs_(char *uplo, char *trans, char *diag, integer *n, integer *nrhs, com
                     work[i__3].imag = q__1.imag; // , expr subst
                     /* L230: */
                 }
-                ctrsv_(uplo, transn, diag, n, &a[a_offset], lda, &work[1], &c__1);
+                aocl_blas_ctrsv(uplo, transn, diag, n, &a[a_offset], lda, &work[1], &c__1);
             }
             goto L210;
         }

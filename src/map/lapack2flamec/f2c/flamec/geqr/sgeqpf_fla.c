@@ -4,7 +4,7 @@
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
  /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
+static aocl_int64_t c__1 = 1;
 /* > \brief \b SGEQPF */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -141,39 +141,22 @@ v(i+1:m) is stored on exit in A(i+1:m,i). */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void sgeqpf_fla(integer *m, integer *n, real *a, integer *lda, integer *jpvt, real *tau, real *work,
-                integer *info)
+void sgeqpf_fla(aocl_int64_t *m, aocl_int64_t *n, real *a, aocl_int64_t *lda, aocl_int_t *jpvt,
+                real *tau, real *work, aocl_int64_t *info)
 {
     /* System generated locals */
-    integer a_dim1, a_offset, i__1, i__2, i__3;
+    aocl_int64_t a_dim1, a_offset, i__1, i__2, i__3;
     real r__1, r__2;
     /* Builtin functions */
     double sqrt(doublereal);
     /* Local variables */
-    integer i__, j, ma, mn;
+    aocl_int64_t i__, j, ma, mn;
     real aii;
-    integer pvt;
+    aocl_int64_t pvt;
     real temp, temp2;
-    extern real snrm2_(integer *, real *, integer *);
     real tol3z;
-    extern /* Subroutine */
-        void
-        slarf_(char *, integer *, integer *, real *, integer *, real *, real *, integer *, real *);
-    integer itemp;
-    extern /* Subroutine */
-        void
-        sswap_(integer *, real *, integer *, real *, integer *),
-        sgeqr2_(integer *, integer *, real *, integer *, real *, real *, integer *),
-        sorm2r_(char *, char *, integer *, integer *, integer *, real *, integer *, real *, real *,
-                integer *, real *, integer *);
+    aocl_int64_t itemp;
     extern real slamch_(char *);
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    extern /* Subroutine */
-        void
-        slarfg_(integer *, real *, real *, integer *, real *);
-    extern integer isamax_(integer *, real *, integer *);
     /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -218,7 +201,7 @@ void sgeqpf_fla(integer *m, integer *n, real *a, integer *lda, integer *jpvt, re
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("SGEQPF", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("SGEQPF", &i__1, (ftnlen)6);
         return;
     }
     mn = fla_min(*m, *n);
@@ -232,19 +215,19 @@ void sgeqpf_fla(integer *m, integer *n, real *a, integer *lda, integer *jpvt, re
         {
             if(i__ != itemp)
             {
-                sswap_(m, &a[i__ * a_dim1 + 1], &c__1, &a[itemp * a_dim1 + 1], &c__1);
+                aocl_blas_sswap(m, &a[i__ * a_dim1 + 1], &c__1, &a[itemp * a_dim1 + 1], &c__1);
                 jpvt[i__] = jpvt[itemp];
-                jpvt[itemp] = i__;
+                jpvt[itemp] = (aocl_int_t)i__;
             }
             else
             {
-                jpvt[i__] = i__;
+                jpvt[i__] = (aocl_int_t)i__;
             }
             ++itemp;
         }
         else
         {
-            jpvt[i__] = i__;
+            jpvt[i__] = (aocl_int_t)i__;
         }
         /* L10: */
     }
@@ -253,12 +236,12 @@ void sgeqpf_fla(integer *m, integer *n, real *a, integer *lda, integer *jpvt, re
     if(itemp > 0)
     {
         ma = fla_min(itemp, *m);
-        sgeqr2_(m, &ma, &a[a_offset], lda, &tau[1], &work[1], info);
+        aocl_lapack_sgeqr2(m, &ma, &a[a_offset], lda, &tau[1], &work[1], info);
         if(ma < *n)
         {
             i__1 = *n - ma;
-            sorm2r_("Left", "Transpose", m, &i__1, &ma, &a[a_offset], lda, &tau[1],
-                    &a[(ma + 1) * a_dim1 + 1], lda, &work[1], info);
+            aocl_lapack_sorm2r("Left", "Transpose", m, &i__1, &ma, &a[a_offset], lda, &tau[1],
+                               &a[(ma + 1) * a_dim1 + 1], lda, &work[1], info);
         }
     }
     if(itemp < mn)
@@ -269,7 +252,7 @@ void sgeqpf_fla(integer *m, integer *n, real *a, integer *lda, integer *jpvt, re
         for(i__ = itemp + 1; i__ <= i__1; ++i__)
         {
             i__2 = *m - itemp;
-            work[i__] = snrm2_(&i__2, &a[itemp + 1 + i__ * a_dim1], &c__1);
+            work[i__] = aocl_blas_snrm2(&i__2, &a[itemp + 1 + i__ * a_dim1], &c__1);
             work[*n + i__] = work[i__];
             /* L20: */
         }
@@ -279,13 +262,13 @@ void sgeqpf_fla(integer *m, integer *n, real *a, integer *lda, integer *jpvt, re
         {
             /* Determine ith pivot column and swap if necessary */
             i__2 = *n - i__ + 1;
-            pvt = i__ - 1 + isamax_(&i__2, &work[i__], &c__1);
+            pvt = i__ - 1 + aocl_blas_isamax(&i__2, &work[i__], &c__1);
             if(pvt != i__)
             {
-                sswap_(m, &a[pvt * a_dim1 + 1], &c__1, &a[i__ * a_dim1 + 1], &c__1);
+                aocl_blas_sswap(m, &a[pvt * a_dim1 + 1], &c__1, &a[i__ * a_dim1 + 1], &c__1);
                 itemp = jpvt[pvt];
                 jpvt[pvt] = jpvt[i__];
-                jpvt[i__] = itemp;
+                jpvt[i__] = (aocl_int_t)itemp;
                 work[pvt] = work[i__];
                 work[*n + pvt] = work[*n + i__];
             }
@@ -293,12 +276,13 @@ void sgeqpf_fla(integer *m, integer *n, real *a, integer *lda, integer *jpvt, re
             if(i__ < *m)
             {
                 i__2 = *m - i__ + 1;
-                slarfg_(&i__2, &a[i__ + i__ * a_dim1], &a[i__ + 1 + i__ * a_dim1], &c__1,
-                        &tau[i__]);
+                aocl_lapack_slarfg(&i__2, &a[i__ + i__ * a_dim1], &a[i__ + 1 + i__ * a_dim1], &c__1,
+                                   &tau[i__]);
             }
             else
             {
-                slarfg_(&c__1, &a[*m + *m * a_dim1], &a[*m + *m * a_dim1], &c__1, &tau[*m]);
+                aocl_lapack_slarfg(&c__1, &a[*m + *m * a_dim1], &a[*m + *m * a_dim1], &c__1,
+                                   &tau[*m]);
             }
             if(i__ < *n)
             {
@@ -307,8 +291,8 @@ void sgeqpf_fla(integer *m, integer *n, real *a, integer *lda, integer *jpvt, re
                 a[i__ + i__ * a_dim1] = 1.f;
                 i__2 = *m - i__ + 1;
                 i__3 = *n - i__;
-                slarf_("LEFT", &i__2, &i__3, &a[i__ + i__ * a_dim1], &c__1, &tau[i__],
-                       &a[i__ + (i__ + 1) * a_dim1], lda, &work[(*n << 1) + 1]);
+                aocl_lapack_slarf("LEFT", &i__2, &i__3, &a[i__ + i__ * a_dim1], &c__1, &tau[i__],
+                                  &a[i__ + (i__ + 1) * a_dim1], lda, &work[(*n << 1) + 1]);
                 a[i__ + i__ * a_dim1] = aii;
             }
             /* Update partial column norms */
@@ -332,7 +316,7 @@ void sgeqpf_fla(integer *m, integer *n, real *a, integer *lda, integer *jpvt, re
                         if(*m - i__ > 0)
                         {
                             i__3 = *m - i__;
-                            work[j] = snrm2_(&i__3, &a[i__ + 1 + j * a_dim1], &c__1);
+                            work[j] = aocl_blas_snrm2(&i__3, &a[i__ + 1 + j * a_dim1], &c__1);
                             work[*n + j] = work[j];
                         }
                         else

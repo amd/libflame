@@ -224,10 +224,35 @@ is largest */
 /* > Christof Voemel, University of California, Berkeley, USA */
 /* ===================================================================== */
 /* Subroutine */
-void slar1v_(integer *n, integer *b1, integer *bn, real *lambda, real *d__, real *l, real *ld,
-             real *lld, real *pivmin, real *gaptol, real *z__, logical *wantnc, integer *negcnt,
-             real *ztz, real *mingma, integer *r__, integer *isuppz, real *nrminv, real *resid,
-             real *rqcorr, real *work)
+/** Generated wrapper function */
+void slar1v_(aocl_int_t *n, aocl_int_t *b1, aocl_int_t *bn, real *lambda, real *d__, real *l,
+             real *ld, real *lld, real *pivmin, real *gaptol, real *z__, logical *wantnc,
+             aocl_int_t *negcnt, real *ztz, real *mingma, aocl_int_t *r__, aocl_int_t *isuppz,
+             real *nrminv, real *resid, real *rqcorr, real *work)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_slar1v(n, b1, bn, lambda, d__, l, ld, lld, pivmin, gaptol, z__, wantnc, negcnt, ztz,
+                       mingma, r__, isuppz, nrminv, resid, rqcorr, work);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t b1_64 = *b1;
+    aocl_int64_t bn_64 = *bn;
+    aocl_int64_t negcnt_64 = *negcnt;
+    aocl_int64_t r___64 = *r__;
+
+    aocl_lapack_slar1v(&n_64, &b1_64, &bn_64, lambda, d__, l, ld, lld, pivmin, gaptol, z__, wantnc,
+                       &negcnt_64, ztz, mingma, &r___64, isuppz, nrminv, resid, rqcorr, work);
+
+    *negcnt = (aocl_int_t)negcnt_64;
+    *r__ = (aocl_int_t)r___64;
+#endif
+}
+
+void aocl_lapack_slar1v(aocl_int64_t *n, aocl_int64_t *b1, aocl_int64_t *bn, real *lambda,
+                        real *d__, real *l, real *ld, real *lld, real *pivmin, real *gaptol,
+                        real *z__, logical *wantnc, aocl_int64_t *negcnt, real *ztz, real *mingma,
+                        aocl_int64_t *r__, aocl_int_t *isuppz, real *nrminv, real *resid,
+                        real *rqcorr, real *work)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("slar1v inputs: n %" FLA_IS ",b1 %" FLA_IS ",bn %" FLA_IS "", *n, *b1, *bn);

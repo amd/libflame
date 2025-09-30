@@ -4,7 +4,7 @@
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
  /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
+static aocl_int64_t c__1 = 1;
 /* > \brief \b CHPGVD */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -229,9 +229,34 @@ the */
 /* > Mark Fahey, Department of Mathematics, Univ. of Kentucky, USA */
 /* ===================================================================== */
 /* Subroutine */
-void chpgvd_(integer *itype, char *jobz, char *uplo, integer *n, complex *ap, complex *bp, real *w,
-             complex *z__, integer *ldz, complex *work, integer *lwork, real *rwork,
-             integer *lrwork, integer *iwork, integer *liwork, integer *info)
+/** Generated wrapper function */
+void chpgvd_(aocl_int_t *itype, char *jobz, char *uplo, aocl_int_t *n, scomplex *ap, scomplex *bp,
+             real *w, scomplex *z__, aocl_int_t *ldz, scomplex *work, aocl_int_t *lwork, real *rwork,
+             aocl_int_t *lrwork, aocl_int_t *iwork, aocl_int_t *liwork, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_chpgvd(itype, jobz, uplo, n, ap, bp, w, z__, ldz, work, lwork, rwork, lrwork, iwork,
+                       liwork, info);
+#else
+    aocl_int64_t itype_64 = *itype;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t ldz_64 = *ldz;
+    aocl_int64_t lwork_64 = *lwork;
+    aocl_int64_t lrwork_64 = *lrwork;
+    aocl_int64_t liwork_64 = *liwork;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_chpgvd(&itype_64, jobz, uplo, &n_64, ap, bp, w, z__, &ldz_64, work, &lwork_64,
+                       rwork, &lrwork_64, iwork, &liwork_64, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_chpgvd(aocl_int64_t *itype, char *jobz, char *uplo, aocl_int64_t *n, scomplex *ap,
+                        scomplex *bp, real *w, scomplex *z__, aocl_int64_t *ldz, scomplex *work,
+                        aocl_int64_t *lwork, real *rwork, aocl_int64_t *lrwork, aocl_int_t *iwork,
+                        aocl_int64_t *liwork, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("chpgvd inputs: itype %" FLA_IS ", jobz %c, uplo %c, n %" FLA_IS
@@ -241,28 +266,14 @@ void chpgvd_(integer *itype, char *jobz, char *uplo, integer *n, complex *ap, co
     aocl_int64_t z_dim1, z_offset, i__1;
     real r__1, r__2;
     /* Local variables */
-    integer j, neig;
-    extern logical lsame_(char *, char *, integer, integer);
-    integer lwmin;
+    aocl_int64_t j, neig;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    aocl_int64_t lwmin;
     char trans[1];
-    extern /* Subroutine */
-        void
-        ctpmv_(char *, char *, char *, integer *, complex *, complex *, integer *);
     logical upper;
-    extern /* Subroutine */
-        void
-        ctpsv_(char *, char *, char *, integer *, complex *, complex *, integer *);
     logical wantz;
-    extern /* Subroutine */
-        void
-        chpevd_(char *, char *, integer *, complex *, real *, complex *, integer *, complex *,
-                integer *, real *, integer *, integer *, integer *, integer *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
-        chpgst_(integer *, char *, integer *, complex *, complex *, integer *),
-        cpptrf_(char *, integer *, complex *, integer *);
-    integer liwmin, lrwmin;
+    aocl_int64_t liwmin, lrwmin;
     logical lquery;
-    extern real sroundup_lwork(integer *);
     /* -- LAPACK driver routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -341,11 +352,11 @@ void chpgvd_(integer *itype, char *jobz, char *uplo, integer *n, complex *ap, co
                 liwmin = 1;
             }
         }
-        r__1 = sroundup_lwork(&lwmin);
+        r__1 = aocl_lapack_sroundup_lwork(&lwmin);
         work[1].r = r__1;
         work[1].i = 0.f; // , expr subst
         rwork[1] = (real)lrwmin;
-        iwork[1] = liwmin;
+        iwork[1] = (aocl_int_t)(liwmin);
         if(*lwork < lwmin && !lquery)
         {
             *info = -11;
@@ -362,7 +373,7 @@ void chpgvd_(integer *itype, char *jobz, char *uplo, integer *n, complex *ap, co
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("CHPGVD", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("CHPGVD", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -378,7 +389,7 @@ void chpgvd_(integer *itype, char *jobz, char *uplo, integer *n, complex *ap, co
         return;
     }
     /* Form a Cholesky factorization of B. */
-    cpptrf_(uplo, n, &bp[1], info);
+    aocl_lapack_cpptrf(uplo, n, &bp[1], info);
     if(*info != 0)
     {
         *info = *n + *info;
@@ -386,9 +397,9 @@ void chpgvd_(integer *itype, char *jobz, char *uplo, integer *n, complex *ap, co
         return;
     }
     /* Transform problem to standard eigenvalue problem and solve. */
-    chpgst_(itype, uplo, n, &ap[1], &bp[1], info);
-    chpevd_(jobz, uplo, n, &ap[1], &w[1], &z__[z_offset], ldz, &work[1], lwork, &rwork[1], lrwork,
-            &iwork[1], liwork, info);
+    aocl_lapack_chpgst(itype, uplo, n, &ap[1], &bp[1], info);
+    aocl_lapack_chpevd(jobz, uplo, n, &ap[1], &w[1], &z__[z_offset], ldz, &work[1], lwork,
+                       &rwork[1], lrwork, &iwork[1], liwork, info);
     /* Computing MAX */
     r__1 = (real)lwmin;
     r__2 = work[1].r; // , expr subst
@@ -449,11 +460,11 @@ void chpgvd_(integer *itype, char *jobz, char *uplo, integer *n, complex *ap, co
             }
         }
     }
-    r__1 = sroundup_lwork(&lwmin);
+    r__1 = aocl_lapack_sroundup_lwork(&lwmin);
     work[1].r = r__1;
     work[1].i = 0.f; // , expr subst
     rwork[1] = (real)lrwmin;
-    iwork[1] = liwmin;
+    iwork[1] = (aocl_int_t)(liwmin);
     AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of CHPGVD */

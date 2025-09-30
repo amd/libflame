@@ -17,17 +17,17 @@
 FLA_Error REF_Bsvd_v( FLA_Uplo uplo, FLA_Obj d, FLA_Obj e, FLA_Obj U, FLA_Obj V );
 
 void time_Bsvd_v(
-               integer variant, integer type, integer n_repeats, integer m, integer n, integer n_iter_max, integer k_accum, integer b_alg,
+               aocl_int64_t variant, aocl_int64_t type, aocl_int64_t n_repeats, aocl_int64_t m, aocl_int64_t n, aocl_int64_t n_iter_max, aocl_int64_t k_accum, aocl_int64_t b_alg,
                FLA_Obj A_orig, FLA_Obj d, FLA_Obj e, FLA_Obj s, FLA_Obj G, FLA_Obj H, FLA_Obj RG, FLA_Obj RH, FLA_Obj W, FLA_Obj U, FLA_Obj V,
                double *dtime, double *diff1, double* diff2, double *gflops );
 
 
 void time_Bsvd_v(
-               integer variant, integer type, integer n_repeats, integer m, integer n, integer n_iter_max, integer k_accum, integer b_alg,
+               aocl_int64_t variant, aocl_int64_t type, aocl_int64_t n_repeats, aocl_int64_t m, aocl_int64_t n, aocl_int64_t n_iter_max, aocl_int64_t k_accum, aocl_int64_t b_alg,
                FLA_Obj A_orig, FLA_Obj d, FLA_Obj e, FLA_Obj s, FLA_Obj G, FLA_Obj H, FLA_Obj RG, FLA_Obj RH, FLA_Obj W, FLA_Obj U, FLA_Obj V,
                double *dtime, double *diff1, double* diff2, double *gflops )
 {
-  integer irep;
+  aocl_int64_t irep;
 
   double
     k, dtime_old = 1.0e9;

@@ -876,11 +876,11 @@ inline void bdsqr(char* uplo, integer* n, integer* ncvt, integer* nru, integer* 
 }
 
 // --- Bidiagonal divide-and-conquor algorithm ---
-inline void bdsdc(char* uplo, char* compq, integer* n, float*  d, float*  e, float*  u, integer* ldu, float*  vt, integer* ldvt, float*  q, float*  iq, float* work, integer* iwork, integer* info)
+inline void bdsdc(char* uplo, char* compq, integer* n, float*  d, float*  e, float*  u, integer* ldu, float*  vt, integer* ldvt, float*  q, integer*  iq, float* work, integer* iwork, integer* info)
 {
   sbdsdc_(uplo, compq, n, d, e, u, ldu, vt, ldvt, q, iq, work, iwork, info);
 }
-inline void bdsdc(char* uplo, char* compq, integer* n, double* d, double* e, double* u, integer* ldu, double* vt, integer* ldvt, double* q, double* iq, double* work, integer* iwork, integer* info)
+inline void bdsdc(char* uplo, char* compq, integer* n, double* d, double* e, double* u, integer* ldu, double* vt, integer* ldvt, double* q, integer* iq, double* work, integer* iwork, integer* info)
 {
   dbdsdc_(uplo, compq, n, d, e, u, ldu, vt, ldvt, q, iq, work, iwork, info);
 }

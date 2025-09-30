@@ -10,7 +10,7 @@
 
 #include "FLAME.h"
 
-FLA_Error FLA_Hess_check( FLA_Obj A, FLA_Obj t, integer ilo, integer ihi )
+FLA_Error FLA_Hess_check( FLA_Obj A, FLA_Obj t, fla_dim_t ilo, fla_dim_t ihi )
 {
   FLA_Error e_val;
 

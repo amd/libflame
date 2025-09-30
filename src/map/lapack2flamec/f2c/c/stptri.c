@@ -117,7 +117,22 @@ static aocl_int64_t c__1 = 1;
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void stptri_(char *uplo, char *diag, integer *n, real *ap, integer *info)
+/** Generated wrapper function */
+void stptri_(char *uplo, char *diag, aocl_int_t *n, real *ap, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_stptri(uplo, diag, n, ap, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_stptri(uplo, diag, &n_64, ap, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_stptri(char *uplo, char *diag, aocl_int64_t *n, real *ap, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("stptri inputs: uplo %c, diag %c, n %" FLA_IS "", *uplo, *diag, *n);
@@ -126,16 +141,9 @@ void stptri_(char *uplo, char *diag, integer *n, real *ap, integer *info)
     /* Local variables */
     aocl_int64_t j, jc, jj;
     real ajj;
-    extern logical lsame_(char *, char *, integer, integer);
-    extern /* Subroutine */
-        void
-        sscal_(integer *, real *, real *, integer *);
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     logical upper;
-    extern /* Subroutine */
-        void
-        stpmv_(char *, char *, char *, integer *, real *, real *, integer *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    integer jclast;
+    aocl_int64_t jclast;
     logical nounit;
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -178,7 +186,7 @@ void stptri_(char *uplo, char *diag, integer *n, real *ap, integer *info)
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("STPTRI", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("STPTRI", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -235,7 +243,7 @@ void stptri_(char *uplo, char *diag, integer *n, real *ap, integer *info)
             }
             /* Compute elements 1:j-1 of j-th column. */
             i__2 = j - 1;
-            stpmv_("Upper", "No transpose", diag, &i__2, &ap[1], &ap[jc], &c__1);
+            aocl_blas_stpmv("Upper", "No transpose", diag, &i__2, &ap[1], &ap[jc], &c__1);
             i__2 = j - 1;
             aocl_blas_sscal(&i__2, &ajj, &ap[jc], &c__1);
             jc += j;
@@ -261,7 +269,8 @@ void stptri_(char *uplo, char *diag, integer *n, real *ap, integer *info)
             {
                 /* Compute elements j+1:n of j-th column. */
                 i__1 = *n - j;
-                stpmv_("Lower", "No transpose", diag, &i__1, &ap[jclast], &ap[jc + 1], &c__1);
+                aocl_blas_stpmv("Lower", "No transpose", diag, &i__1, &ap[jclast], &ap[jc + 1],
+                                &c__1);
                 i__1 = *n - j;
                 aocl_blas_sscal(&i__1, &ajj, &ap[jc + 1], &c__1);
             }

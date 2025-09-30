@@ -291,7 +291,7 @@ void prepare_geqp3_run(integer m_A, integer n_A, void *A, integer lda, integer *
         lwork = g_lwork;
     }
 
-    /* rwork for complex types */
+    /* rwork for scomplex types */
     if(datatype >= COMPLEX)
         create_realtype_vector(datatype, &rwork, 2 * n_A);
 

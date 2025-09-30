@@ -16,13 +16,13 @@
 #include "blis.h"
 #endif
 
-void bl1_srandm( integer m, integer n, float* a, integer a_rs, integer a_cs )
+void bl1_srandm( fla_dim_t m, fla_dim_t n, float* a, fla_dim_t a_rs, fla_dim_t a_cs )
 {
 	float*    a_begin;
-	integer       inca, lda;
-	integer       n_iter;
-	integer       n_elem;
-	integer       j;
+	fla_dim_t       inca, lda;
+	fla_dim_t       n_iter;
+	fla_dim_t       n_elem;
+	fla_dim_t       j;
 
 	// Return early if possible.
 	if ( bl1_zero_dim2( m, n ) ) return;
@@ -50,13 +50,13 @@ void bl1_srandm( integer m, integer n, float* a, integer a_rs, integer a_cs )
 	}
 }
 
-void bl1_drandm( integer m, integer n, double* a, integer a_rs, integer a_cs )
+void bl1_drandm( fla_dim_t m, fla_dim_t n, double* a, fla_dim_t a_rs, fla_dim_t a_cs )
 {
 	double*   a_begin;
-	integer       inca, lda;
-	integer       n_iter;
-	integer       n_elem;
-	integer       j;
+	fla_dim_t       inca, lda;
+	fla_dim_t       n_iter;
+	fla_dim_t       n_elem;
+	fla_dim_t       j;
 
 	// Return early if possible.
 	if ( bl1_zero_dim2( m, n ) ) return;
@@ -84,13 +84,13 @@ void bl1_drandm( integer m, integer n, double* a, integer a_rs, integer a_cs )
 	}
 }
 
-void bl1_crandm( integer m, integer n, scomplex* a, integer a_rs, integer a_cs )
+void bl1_crandm( fla_dim_t m, fla_dim_t n, scomplex* a, fla_dim_t a_rs, fla_dim_t a_cs )
 {
 	scomplex* a_begin;
-	integer       inca, lda;
-	integer       n_iter;
-	integer       n_elem;
-	integer       j;
+	fla_dim_t       inca, lda;
+	fla_dim_t       n_iter;
+	fla_dim_t       n_elem;
+	fla_dim_t       j;
 
 	// Return early if possible.
 	if ( bl1_zero_dim2( m, n ) ) return;
@@ -118,13 +118,13 @@ void bl1_crandm( integer m, integer n, scomplex* a, integer a_rs, integer a_cs )
 	}
 }
 
-void bl1_zrandm( integer m, integer n, dcomplex* a, integer a_rs, integer a_cs )
+void bl1_zrandm( fla_dim_t m, fla_dim_t n, dcomplex* a, fla_dim_t a_rs, fla_dim_t a_cs )
 {
 	dcomplex* a_begin;
-	integer       inca, lda;
-	integer       n_iter;
-	integer       n_elem;
-	integer       j;
+	fla_dim_t       inca, lda;
+	fla_dim_t       n_iter;
+	fla_dim_t       n_elem;
+	fla_dim_t       j;
 
 	// Return early if possible.
 	if ( bl1_zero_dim2( m, n ) ) return;

@@ -12,10 +12,10 @@
 
 FLA_Error FLA_Ttmm_blk_external( FLA_Uplo uplo, FLA_Obj A )
 {
-  integer      info = 0;
+  fla_dim_t      info = 0;
 #ifdef FLA_ENABLE_EXTERNAL_LAPACK_INTERFACES
   FLA_Datatype datatype;
-  integer          m_A, cs_A;
+  fla_dim_t          m_A, cs_A;
   char         blas_uplo;
 
   if ( FLA_Check_error_level() == FLA_FULL_ERROR_CHECKING )

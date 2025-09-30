@@ -4,7 +4,7 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
+static aocl_int64_t c__1 = 1;
 /* > \brief \b DLANGT returns the value of the 1-norm, Frobenius norm, infinity-norm, or the largest
  * absolute value of any element of a general tridiagonal matrix. */
 /* =========== DOCUMENTATION =========== */
@@ -103,24 +103,34 @@ static integer c__1 = 1;
 /* > \date December 2016 */
 /* > \ingroup doubleOTHERauxiliary */
 /* ===================================================================== */
-doublereal dlangt_(char *norm, integer *n, doublereal *dl, doublereal *d__, doublereal *du)
+/** Generated wrapper function */
+doublereal dlangt_(char *norm, aocl_int_t *n, doublereal *dl, doublereal *d__, doublereal *du)
+{
+#if FLA_ENABLE_ILP64
+    return aocl_lapack_dlangt(norm, n, dl, d__, du);
+#else
+    aocl_int64_t n_64 = *n;
+
+    return aocl_lapack_dlangt(norm, &n_64, dl, d__, du);
+#endif
+}
+
+doublereal aocl_lapack_dlangt(char *norm, aocl_int64_t *n, doublereal *dl, doublereal *d__,
+                              doublereal *du)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dlangt inputs: norm %c, n %" FLA_IS "", *norm, *n);
     /* System generated locals */
-    integer i__1;
+    aocl_int64_t i__1;
     doublereal ret_val, d__1, d__2, d__3, d__4;
     /* Builtin functions */
     double sqrt(doublereal);
     /* Local variables */
-    integer i__;
+    aocl_int64_t i__;
     doublereal sum, temp, scale;
-    extern logical lsame_(char *, char *, integer, integer);
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     doublereal anorm;
     extern logical disnan_(doublereal *);
-    extern /* Subroutine */
-        void
-        dlassq_(integer *, doublereal *, integer *, doublereal *, doublereal *);
     /* -- LAPACK auxiliary routine (version 3.7.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -237,13 +247,13 @@ doublereal dlangt_(char *norm, integer *n, doublereal *dl, doublereal *d__, doub
         /* Find normF(A). */
         scale = 0.;
         sum = 1.;
-        dlassq_(n, &d__[1], &c__1, &scale, &sum);
+        aocl_lapack_dlassq(n, &d__[1], &c__1, &scale, &sum);
         if(*n > 1)
         {
             i__1 = *n - 1;
-            dlassq_(&i__1, &dl[1], &c__1, &scale, &sum);
+            aocl_lapack_dlassq(&i__1, &dl[1], &c__1, &scale, &sum);
             i__1 = *n - 1;
-            dlassq_(&i__1, &du[1], &c__1, &scale, &sum);
+            aocl_lapack_dlassq(&i__1, &du[1], &c__1, &scale, &sum);
         }
         anorm = scale * sqrt(sum);
     }

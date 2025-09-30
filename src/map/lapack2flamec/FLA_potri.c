@@ -30,9 +30,73 @@
    computed by ZPOTRF.
 */
 
+/** Generated wrapper function */
+void spotri_(char *uplo, aocl_int_t *n, real *buff_A, aocl_int_t *ldim_A, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_spotri(uplo, n, buff_A, ldim_A, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t ldim_A_64 = *ldim_A;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_spotri(uplo, &n_64, buff_A, &ldim_A_64, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+/** Generated wrapper function */
+void dpotri_(char *uplo, aocl_int_t *n, doublereal *buff_A, aocl_int_t *ldim_A, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_dpotri(uplo, n, buff_A, ldim_A, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t ldim_A_64 = *ldim_A;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_dpotri(uplo, &n_64, buff_A, &ldim_A_64, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+/** Generated wrapper function */
+void cpotri_(char *uplo, aocl_int_t *n, scomplex *buff_A, aocl_int_t *ldim_A, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_cpotri(uplo, n, buff_A, ldim_A, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t ldim_A_64 = *ldim_A;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_cpotri(uplo, &n_64, buff_A, &ldim_A_64, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+/** Generated wrapper function */
+void zpotri_(char *uplo, aocl_int_t *n, dcomplex *buff_A, aocl_int_t *ldim_A, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_zpotri(uplo, n, buff_A, ldim_A, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t ldim_A_64 = *ldim_A;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_zpotri(uplo, &n_64, buff_A, &ldim_A_64, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
 #define LAPACK_potri(prefix)                                                                 \
-    void F77_##prefix##potri(char *uplo, integer *n, PREFIX2LAPACK_TYPEDEF(prefix) * buff_A, \
-                             integer * ldim_A, integer * info)
+    void aocl_lapack_##prefix##potri(char *uplo, aocl_int64_t *n, PREFIX2LAPACK_TYPEDEF(prefix) * buff_A, \
+                             aocl_int64_t * ldim_A, aocl_int64_t * info)
 
 #define LAPACK_potri_body(prefix)                          \
     FLA_Datatype datatype = PREFIX2FLAME_DATATYPE(prefix); \

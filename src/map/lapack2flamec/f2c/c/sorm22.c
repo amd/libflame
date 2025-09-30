@@ -163,31 +163,47 @@ the routine */
 /* > \ingroup unm22 */
 /* ===================================================================== */
 /* Subroutine */
-void sorm22_(char *side, char *trans, integer *m, integer *n, integer *n1, integer *n2, real *q,
-             integer *ldq, real *c__, integer *ldc, real *work, integer *lwork, integer *info)
+/** Generated wrapper function */
+void sorm22_(char *side, char *trans, aocl_int_t *m, aocl_int_t *n, aocl_int_t *n1, aocl_int_t *n2,
+             real *q, aocl_int_t *ldq, real *c__, aocl_int_t *ldc, real *work, aocl_int_t *lwork,
+             aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_sorm22(side, trans, m, n, n1, n2, q, ldq, c__, ldc, work, lwork, info);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t n1_64 = *n1;
+    aocl_int64_t n2_64 = *n2;
+    aocl_int64_t ldq_64 = *ldq;
+    aocl_int64_t ldc_64 = *ldc;
+    aocl_int64_t lwork_64 = *lwork;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_sorm22(side, trans, &m_64, &n_64, &n1_64, &n2_64, q, &ldq_64, c__, &ldc_64, work,
+                       &lwork_64, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_sorm22(char *side, char *trans, aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *n1,
+                        aocl_int64_t *n2, real *q, aocl_int64_t *ldq, real *c__, aocl_int64_t *ldc,
+                        real *work, aocl_int64_t *lwork, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("sorm22 inputs: side %c ,trans %c ,m %" FLA_IS ",n %" FLA_IS ",n1 %" FLA_IS
                       ",n2 %" FLA_IS ",ldq %" FLA_IS ",ldc %" FLA_IS ",lwork %" FLA_IS "",
                       *side, *trans, *m, *n, *n1, *n2, *ldq, *ldc, *lwork);
     /* System generated locals */
-    integer q_dim1, q_offset, c_dim1, c_offset, i__1, i__2, i__3, i__4;
+    aocl_int64_t q_dim1, q_offset, c_dim1, c_offset, i__1, i__2, i__3, i__4;
     /* Local variables */
-    integer i__, nb, nq, nw, len;
+    aocl_int64_t i__, nb, nq, nw, len;
     logical left;
-    extern logical lsame_(char *, char *, integer, integer);
-    extern /* Subroutine */
-        void
-        sgemm_(char *, char *, integer *, integer *, integer *, real *, real *, integer *, real *,
-               integer *, real *, real *, integer *),
-        strmm_(char *, char *, char *, char *, integer *, integer *, real *, real *, integer *,
-               real *, integer *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
-        slacpy_(char *, integer *, integer *, real *, integer *, real *, integer *);
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     logical notran;
-    integer ldwork, lwkopt;
+    aocl_int64_t ldwork, lwkopt;
     logical lquery;
-    extern real sroundup_lwork(integer *);
     /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -275,12 +291,12 @@ void sorm22_(char *side, char *trans, integer *m, integer *n, integer *n1, integ
     if(*info == 0)
     {
         lwkopt = *m * *n;
-        work[1] = sroundup_lwork(&lwkopt);
+        work[1] = aocl_lapack_sroundup_lwork(&lwkopt);
     }
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("SORM22", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("SORM22", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -299,16 +315,16 @@ void sorm22_(char *side, char *trans, integer *m, integer *n, integer *n1, integ
     /* Degenerate cases (N1 = 0 or N2 = 0) are handled using STRMM. */
     if(*n1 == 0)
     {
-        strmm_(side, "Upper", trans, "Non-Unit", m, n, &c_b10, &q[q_offset], ldq, &c__[c_offset],
-               ldc);
+        aocl_blas_strmm(side, "Upper", trans, "Non-Unit", m, n, &c_b10, &q[q_offset], ldq,
+                        &c__[c_offset], ldc);
         work[1] = 1.f;
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     else if(*n2 == 0)
     {
-        strmm_(side, "Lower", trans, "Non-Unit", m, n, &c_b10, &q[q_offset], ldq, &c__[c_offset],
-               ldc);
+        aocl_blas_strmm(side, "Lower", trans, "Non-Unit", m, n, &c_b10, &q[q_offset], ldq,
+                        &c__[c_offset], ldc);
         work[1] = 1.f;
         AOCL_DTL_TRACE_LOG_EXIT
         return;
@@ -332,22 +348,24 @@ void sorm22_(char *side, char *trans, integer *m, integer *n, integer *n1, integ
                 len = fla_min(i__3, i__4);
                 ldwork = *m;
                 /* Multiply bottom part of C by Q12. */
-                slacpy_("All", n1, &len, &c__[*n2 + 1 + i__ * c_dim1], ldc, &work[1], &ldwork);
-                strmm_("Left", "Lower", "No Transpose", "Non-Unit", n1, &len, &c_b10,
-                       &q[(*n2 + 1) * q_dim1 + 1], ldq, &work[1], &ldwork);
+                aocl_lapack_slacpy("All", n1, &len, &c__[*n2 + 1 + i__ * c_dim1], ldc, &work[1],
+                                   &ldwork);
+                aocl_blas_strmm("Left", "Lower", "No Transpose", "Non-Unit", n1, &len, &c_b10,
+                                &q[(*n2 + 1) * q_dim1 + 1], ldq, &work[1], &ldwork);
                 /* Multiply top part of C by Q11. */
-                sgemm_("No Transpose", "No Transpose", n1, &len, n2, &c_b10, &q[q_offset], ldq,
-                       &c__[i__ * c_dim1 + 1], ldc, &c_b10, &work[1], &ldwork);
+                aocl_blas_sgemm("No Transpose", "No Transpose", n1, &len, n2, &c_b10, &q[q_offset],
+                                ldq, &c__[i__ * c_dim1 + 1], ldc, &c_b10, &work[1], &ldwork);
                 /* Multiply top part of C by Q21. */
-                slacpy_("All", n2, &len, &c__[i__ * c_dim1 + 1], ldc, &work[*n1 + 1], &ldwork);
-                strmm_("Left", "Upper", "No Transpose", "Non-Unit", n2, &len, &c_b10,
-                       &q[*n1 + 1 + q_dim1], ldq, &work[*n1 + 1], &ldwork);
+                aocl_lapack_slacpy("All", n2, &len, &c__[i__ * c_dim1 + 1], ldc, &work[*n1 + 1],
+                                   &ldwork);
+                aocl_blas_strmm("Left", "Upper", "No Transpose", "Non-Unit", n2, &len, &c_b10,
+                                &q[*n1 + 1 + q_dim1], ldq, &work[*n1 + 1], &ldwork);
                 /* Multiply bottom part of C by Q22. */
-                sgemm_("No Transpose", "No Transpose", n2, &len, n1, &c_b10,
-                       &q[*n1 + 1 + (*n2 + 1) * q_dim1], ldq, &c__[*n2 + 1 + i__ * c_dim1], ldc,
-                       &c_b10, &work[*n1 + 1], &ldwork);
+                aocl_blas_sgemm("No Transpose", "No Transpose", n2, &len, n1, &c_b10,
+                                &q[*n1 + 1 + (*n2 + 1) * q_dim1], ldq, &c__[*n2 + 1 + i__ * c_dim1],
+                                ldc, &c_b10, &work[*n1 + 1], &ldwork);
                 /* Copy everything back. */
-                slacpy_("All", m, &len, &work[1], &ldwork, &c__[i__ * c_dim1 + 1], ldc);
+                aocl_lapack_slacpy("All", m, &len, &work[1], &ldwork, &c__[i__ * c_dim1 + 1], ldc);
             }
         }
         else
@@ -362,22 +380,24 @@ void sorm22_(char *side, char *trans, integer *m, integer *n, integer *n1, integ
                 len = fla_min(i__3, i__4);
                 ldwork = *m;
                 /* Multiply bottom part of C by Q21**T. */
-                slacpy_("All", n2, &len, &c__[*n1 + 1 + i__ * c_dim1], ldc, &work[1], &ldwork);
-                strmm_("Left", "Upper", "Transpose", "Non-Unit", n2, &len, &c_b10,
-                       &q[*n1 + 1 + q_dim1], ldq, &work[1], &ldwork);
+                aocl_lapack_slacpy("All", n2, &len, &c__[*n1 + 1 + i__ * c_dim1], ldc, &work[1],
+                                   &ldwork);
+                aocl_blas_strmm("Left", "Upper", "Transpose", "Non-Unit", n2, &len, &c_b10,
+                                &q[*n1 + 1 + q_dim1], ldq, &work[1], &ldwork);
                 /* Multiply top part of C by Q11**T. */
-                sgemm_("Transpose", "No Transpose", n2, &len, n1, &c_b10, &q[q_offset], ldq,
-                       &c__[i__ * c_dim1 + 1], ldc, &c_b10, &work[1], &ldwork);
+                aocl_blas_sgemm("Transpose", "No Transpose", n2, &len, n1, &c_b10, &q[q_offset],
+                                ldq, &c__[i__ * c_dim1 + 1], ldc, &c_b10, &work[1], &ldwork);
                 /* Multiply top part of C by Q12**T. */
-                slacpy_("All", n1, &len, &c__[i__ * c_dim1 + 1], ldc, &work[*n2 + 1], &ldwork);
-                strmm_("Left", "Lower", "Transpose", "Non-Unit", n1, &len, &c_b10,
-                       &q[(*n2 + 1) * q_dim1 + 1], ldq, &work[*n2 + 1], &ldwork);
+                aocl_lapack_slacpy("All", n1, &len, &c__[i__ * c_dim1 + 1], ldc, &work[*n2 + 1],
+                                   &ldwork);
+                aocl_blas_strmm("Left", "Lower", "Transpose", "Non-Unit", n1, &len, &c_b10,
+                                &q[(*n2 + 1) * q_dim1 + 1], ldq, &work[*n2 + 1], &ldwork);
                 /* Multiply bottom part of C by Q22**T. */
-                sgemm_("Transpose", "No Transpose", n1, &len, n2, &c_b10,
-                       &q[*n1 + 1 + (*n2 + 1) * q_dim1], ldq, &c__[*n1 + 1 + i__ * c_dim1], ldc,
-                       &c_b10, &work[*n2 + 1], &ldwork);
+                aocl_blas_sgemm("Transpose", "No Transpose", n1, &len, n2, &c_b10,
+                                &q[*n1 + 1 + (*n2 + 1) * q_dim1], ldq, &c__[*n1 + 1 + i__ * c_dim1],
+                                ldc, &c_b10, &work[*n2 + 1], &ldwork);
                 /* Copy everything back. */
-                slacpy_("All", m, &len, &work[1], &ldwork, &c__[i__ * c_dim1 + 1], ldc);
+                aocl_lapack_slacpy("All", m, &len, &work[1], &ldwork, &c__[i__ * c_dim1 + 1], ldc);
             }
         }
     }
@@ -395,22 +415,26 @@ void sorm22_(char *side, char *trans, integer *m, integer *n, integer *n1, integ
                 len = fla_min(i__3, i__4);
                 ldwork = len;
                 /* Multiply right part of C by Q21. */
-                slacpy_("All", &len, n2, &c__[i__ + (*n1 + 1) * c_dim1], ldc, &work[1], &ldwork);
-                strmm_("Right", "Upper", "No Transpose", "Non-Unit", &len, n2, &c_b10,
-                       &q[*n1 + 1 + q_dim1], ldq, &work[1], &ldwork);
+                aocl_lapack_slacpy("All", &len, n2, &c__[i__ + (*n1 + 1) * c_dim1], ldc, &work[1],
+                                   &ldwork);
+                aocl_blas_strmm("Right", "Upper", "No Transpose", "Non-Unit", &len, n2, &c_b10,
+                                &q[*n1 + 1 + q_dim1], ldq, &work[1], &ldwork);
                 /* Multiply left part of C by Q11. */
-                sgemm_("No Transpose", "No Transpose", &len, n2, n1, &c_b10, &c__[i__ + c_dim1],
-                       ldc, &q[q_offset], ldq, &c_b10, &work[1], &ldwork);
+                aocl_blas_sgemm("No Transpose", "No Transpose", &len, n2, n1, &c_b10,
+                                &c__[i__ + c_dim1], ldc, &q[q_offset], ldq, &c_b10, &work[1],
+                                &ldwork);
                 /* Multiply left part of C by Q12. */
-                slacpy_("All", &len, n1, &c__[i__ + c_dim1], ldc, &work[*n2 * ldwork + 1], &ldwork);
-                strmm_("Right", "Lower", "No Transpose", "Non-Unit", &len, n1, &c_b10,
-                       &q[(*n2 + 1) * q_dim1 + 1], ldq, &work[*n2 * ldwork + 1], &ldwork);
+                aocl_lapack_slacpy("All", &len, n1, &c__[i__ + c_dim1], ldc,
+                                   &work[*n2 * ldwork + 1], &ldwork);
+                aocl_blas_strmm("Right", "Lower", "No Transpose", "Non-Unit", &len, n1, &c_b10,
+                                &q[(*n2 + 1) * q_dim1 + 1], ldq, &work[*n2 * ldwork + 1], &ldwork);
                 /* Multiply right part of C by Q22. */
-                sgemm_("No Transpose", "No Transpose", &len, n1, n2, &c_b10,
-                       &c__[i__ + (*n1 + 1) * c_dim1], ldc, &q[*n1 + 1 + (*n2 + 1) * q_dim1], ldq,
-                       &c_b10, &work[*n2 * ldwork + 1], &ldwork);
+                aocl_blas_sgemm("No Transpose", "No Transpose", &len, n1, n2, &c_b10,
+                                &c__[i__ + (*n1 + 1) * c_dim1], ldc,
+                                &q[*n1 + 1 + (*n2 + 1) * q_dim1], ldq, &c_b10,
+                                &work[*n2 * ldwork + 1], &ldwork);
                 /* Copy everything back. */
-                slacpy_("All", &len, n, &work[1], &ldwork, &c__[i__ + c_dim1], ldc);
+                aocl_lapack_slacpy("All", &len, n, &work[1], &ldwork, &c__[i__ + c_dim1], ldc);
             }
         }
         else
@@ -425,26 +449,30 @@ void sorm22_(char *side, char *trans, integer *m, integer *n, integer *n1, integ
                 len = fla_min(i__3, i__4);
                 ldwork = len;
                 /* Multiply right part of C by Q12**T. */
-                slacpy_("All", &len, n1, &c__[i__ + (*n2 + 1) * c_dim1], ldc, &work[1], &ldwork);
-                strmm_("Right", "Lower", "Transpose", "Non-Unit", &len, n1, &c_b10,
-                       &q[(*n2 + 1) * q_dim1 + 1], ldq, &work[1], &ldwork);
+                aocl_lapack_slacpy("All", &len, n1, &c__[i__ + (*n2 + 1) * c_dim1], ldc, &work[1],
+                                   &ldwork);
+                aocl_blas_strmm("Right", "Lower", "Transpose", "Non-Unit", &len, n1, &c_b10,
+                                &q[(*n2 + 1) * q_dim1 + 1], ldq, &work[1], &ldwork);
                 /* Multiply left part of C by Q11**T. */
-                sgemm_("No Transpose", "Transpose", &len, n1, n2, &c_b10, &c__[i__ + c_dim1], ldc,
-                       &q[q_offset], ldq, &c_b10, &work[1], &ldwork);
+                aocl_blas_sgemm("No Transpose", "Transpose", &len, n1, n2, &c_b10,
+                                &c__[i__ + c_dim1], ldc, &q[q_offset], ldq, &c_b10, &work[1],
+                                &ldwork);
                 /* Multiply left part of C by Q21**T. */
-                slacpy_("All", &len, n2, &c__[i__ + c_dim1], ldc, &work[*n1 * ldwork + 1], &ldwork);
-                strmm_("Right", "Upper", "Transpose", "Non-Unit", &len, n2, &c_b10,
-                       &q[*n1 + 1 + q_dim1], ldq, &work[*n1 * ldwork + 1], &ldwork);
+                aocl_lapack_slacpy("All", &len, n2, &c__[i__ + c_dim1], ldc,
+                                   &work[*n1 * ldwork + 1], &ldwork);
+                aocl_blas_strmm("Right", "Upper", "Transpose", "Non-Unit", &len, n2, &c_b10,
+                                &q[*n1 + 1 + q_dim1], ldq, &work[*n1 * ldwork + 1], &ldwork);
                 /* Multiply right part of C by Q22**T. */
-                sgemm_("No Transpose", "Transpose", &len, n2, n1, &c_b10,
-                       &c__[i__ + (*n2 + 1) * c_dim1], ldc, &q[*n1 + 1 + (*n2 + 1) * q_dim1], ldq,
-                       &c_b10, &work[*n1 * ldwork + 1], &ldwork);
+                aocl_blas_sgemm("No Transpose", "Transpose", &len, n2, n1, &c_b10,
+                                &c__[i__ + (*n2 + 1) * c_dim1], ldc,
+                                &q[*n1 + 1 + (*n2 + 1) * q_dim1], ldq, &c_b10,
+                                &work[*n1 * ldwork + 1], &ldwork);
                 /* Copy everything back. */
-                slacpy_("All", &len, n, &work[1], &ldwork, &c__[i__ + c_dim1], ldc);
+                aocl_lapack_slacpy("All", &len, n, &work[1], &ldwork, &c__[i__ + c_dim1], ldc);
             }
         }
     }
-    work[1] = sroundup_lwork(&lwkopt);
+    work[1] = aocl_lapack_sroundup_lwork(&lwkopt);
     AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SORM22 */

@@ -4,11 +4,11 @@
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
  /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__9 = 9;
-static integer c__0 = 0;
-static integer c__6 = 6;
-static integer c_n1 = -1;
-static integer c__1 = 1;
+static aocl_int64_t c__9 = 9;
+static aocl_int64_t c__0 = 0;
+static aocl_int64_t c__6 = 6;
+static aocl_int64_t c_n1 = -1;
+static aocl_int64_t c__1 = 1;
 static real c_b81 = 0.f;
 /* > \brief <b> SGELSD computes the minimum-norm solution to a linear least squares problem for GE
  * matrices</b > */
@@ -207,65 +207,57 @@ the routine */
 /* > Osni Marques, LBNL/NERSC, USA \n */
 /* ===================================================================== */
 /* Subroutine */
-void sgelsd_(integer *m, integer *n, integer *nrhs, real *a, integer *lda, real *b, integer *ldb,
-             real *s, real *rcond, integer *rank, real *work, integer *lwork, integer *iwork,
-             integer *info)
+/** Generated wrapper function */
+void sgelsd_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *nrhs, real *a, aocl_int_t *lda, real *b,
+             aocl_int_t *ldb, real *s, real *rcond, aocl_int_t *rank, real *work, aocl_int_t *lwork,
+             aocl_int_t *iwork, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_sgelsd(m, n, nrhs, a, lda, b, ldb, s, rcond, rank, work, lwork, iwork, info);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t nrhs_64 = *nrhs;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t ldb_64 = *ldb;
+    aocl_int64_t rank_64 = *rank;
+    aocl_int64_t lwork_64 = *lwork;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_sgelsd(&m_64, &n_64, &nrhs_64, a, &lda_64, b, &ldb_64, s, rcond, &rank_64, work,
+                       &lwork_64, iwork, &info_64);
+
+    *rank = (aocl_int_t)rank_64;
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_sgelsd(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *nrhs, real *a,
+                        aocl_int64_t *lda, real *b, aocl_int64_t *ldb, real *s, real *rcond,
+                        aocl_int64_t *rank, real *work, aocl_int64_t *lwork, aocl_int_t *iwork,
+                        aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("sgelsd inputs: m %" FLA_IS ", n %" FLA_IS ", nrhs %" FLA_IS ", lda %" FLA_IS
                       ", ldb %" FLA_IS ", rcond %e, lwork %" FLA_IS "",
                       *m, *n, *nrhs, *lda, *ldb, *rcond, *lwork);
     /* System generated locals */
-    integer a_dim1, a_offset, b_dim1, b_offset, i__1, i__2, i__3, i__4;
+    aocl_int64_t a_dim1, a_offset, b_dim1, b_offset, i__1, i__2, i__3, i__4;
     /* Builtin functions */
     double log(doublereal);
     /* Local variables */
-    integer ie, il, mm;
+    aocl_int64_t ie, il, mm;
     real eps, anrm, bnrm;
-    integer itau, nlvl, iascl, ibscl;
+    aocl_int64_t itau, nlvl, iascl, ibscl;
     real sfmin;
-    integer minmn, maxmn, itaup, itauq, mnthr, nwork;
-    extern /* Subroutine */
-        void
-        sgebrd_(integer *, integer *, real *, integer *, real *, real *, real *, real *, real *,
-                integer *, integer *);
-    extern real slamch_(char *), slange_(char *, integer *, integer *, real *, integer *, real *);
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
+    aocl_int64_t minmn, maxmn, itaup, itauq, mnthr, nwork;
     real bignum;
-    extern /* Subroutine */
-        void
-        sgelqf_(integer *, integer *, real *, integer *, real *, real *, integer *, integer *),
-        slalsd_(char *, integer *, integer *, integer *, real *, real *, real *, integer *, real *,
-                integer *, real *, integer *, integer *),
-        slascl_(char *, integer *, integer *, real *, real *, integer *, integer *, real *,
-                integer *, integer *);
-    integer wlalsd;
-    extern /* Subroutine */
-        void
-        sgeqrf_(integer *, integer *, real *, integer *, real *, real *, integer *, integer *),
-        slacpy_(char *, integer *, integer *, real *, integer *, real *, integer *),
-        slaset_(char *, integer *, integer *, real *, real *, real *, integer *);
-    integer ldwork;
-    extern /* Subroutine */
-        void
-        sormbr_(char *, char *, char *, integer *, integer *, integer *, real *, integer *, real *,
-                real *, integer *, real *, integer *, integer *);
-    integer liwork, minwrk, maxwrk;
+    aocl_int64_t wlalsd;
+    aocl_int64_t ldwork;
+    aocl_int64_t liwork, minwrk, maxwrk;
     real smlnum;
-    extern /* Subroutine */
-        void
-        sormlq_(char *, char *, integer *, integer *, integer *, real *, integer *, real *, real *,
-                integer *, real *, integer *, integer *);
     logical lquery;
-    integer smlsiz;
-    extern /* Subroutine */
-        void
-        sormqr_(char *, char *, integer *, integer *, integer *, real *, integer *, real *, real *,
-                integer *, real *, integer *, integer *);
-    extern real sroundup_lwork(integer *);
+    aocl_int64_t smlsiz;
     /* -- LAPACK driver routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -328,7 +320,7 @@ void sgelsd_(integer *m, integer *n, integer *nrhs, real *a, integer *lda, real 
     /* as well as the preferred amount for good performance. */
     /* NB refers to the optimal block size for the immediately */
     /* following subroutine, as returned by ILAENV.) */
-    mnthr = ilaenv_(&c__6, "SGELSD", " ", m, n, nrhs, &c_n1);
+    mnthr = aocl_lapack_ilaenv(&c__6, "SGELSD", " ", m, n, nrhs, &c_n1);
     if(*info == 0)
     {
         minwrk = 1;
@@ -336,7 +328,7 @@ void sgelsd_(integer *m, integer *n, integer *nrhs, real *a, integer *lda, real 
         liwork = 1;
         if(minmn > 0)
         {
-            smlsiz = ilaenv_(&c__9, "SGELSD", " ", &c__0, &c__0, &c__0, &c__0);
+            smlsiz = aocl_lapack_ilaenv(&c__9, "SGELSD", " ", &c__0, &c__0, &c__0, &c__0);
             /* Computing MAX */
             i__1 = (integer)(log((real)minmn / (real)(smlsiz + 1)) / log(2.f)) + 1;
             nlvl = fla_max(i__1, 0);
@@ -349,12 +341,17 @@ void sgelsd_(integer *m, integer *n, integer *nrhs, real *a, integer *lda, real 
                 mm = *n;
                 /* Computing MAX */
                 i__1 = maxwrk;
-                i__2 = *n + *n * ilaenv_(&c__1, "SGEQRF", " ", m, n, &c_n1, &c_n1); // , expr subst
+                i__2 = *n
+                       + *n
+                             * aocl_lapack_ilaenv(&c__1, "SGEQRF", " ", m, n, &c_n1,
+                                                  &c_n1); // , expr subst
                 maxwrk = fla_max(i__1, i__2);
                 /* Computing MAX */
                 i__1 = maxwrk;
                 i__2 = *n
-                       + *nrhs * ilaenv_(&c__1, "SORMQR", "LT", m, nrhs, n, &c_n1); // , expr subst
+                       + *nrhs
+                             * aocl_lapack_ilaenv(&c__1, "SORMQR", "LT", m, nrhs, n,
+                                                  &c_n1); // , expr subst
                 maxwrk = fla_max(i__1, i__2);
             }
             if(*m >= *n)
@@ -364,19 +361,22 @@ void sgelsd_(integer *m, integer *n, integer *nrhs, real *a, integer *lda, real 
                 i__1 = maxwrk;
                 i__2 = *n * 3
                        + (mm + *n)
-                             * ilaenv_(&c__1, "SGEBRD", " ", &mm, n, &c_n1, &c_n1); // , expr subst
+                             * aocl_lapack_ilaenv(&c__1, "SGEBRD", " ", &mm, n, &c_n1,
+                                                  &c_n1); // , expr subst
                 maxwrk = fla_max(i__1, i__2);
                 /* Computing MAX */
                 i__1 = maxwrk;
                 i__2 = *n * 3
                        + *nrhs
-                             * ilaenv_(&c__1, "SORMBR", "QLT", &mm, nrhs, n, &c_n1); // , expr subst
+                             * aocl_lapack_ilaenv(&c__1, "SORMBR", "QLT", &mm, nrhs, n,
+                                                  &c_n1); // , expr subst
                 maxwrk = fla_max(i__1, i__2);
                 /* Computing MAX */
                 i__1 = maxwrk;
                 i__2 = *n * 3
                        + (*n - 1)
-                             * ilaenv_(&c__1, "SORMBR", "PLN", n, nrhs, n, &c_n1); // , expr subst
+                             * aocl_lapack_ilaenv(&c__1, "SORMBR", "PLN", n, nrhs, n,
+                                                  &c_n1); // , expr subst
                 maxwrk = fla_max(i__1, i__2);
                 /* Computing 2nd power */
                 i__1 = smlsiz + 1;
@@ -400,27 +400,27 @@ void sgelsd_(integer *m, integer *n, integer *nrhs, real *a, integer *lda, real 
                 {
                     /* Path 2a - underdetermined, with many more columns */
                     /* than rows. */
-                    maxwrk = *m + *m * ilaenv_(&c__1, "SGELQF", " ", m, n, &c_n1, &c_n1);
+                    maxwrk = *m + *m * aocl_lapack_ilaenv(&c__1, "SGELQF", " ", m, n, &c_n1, &c_n1);
                     /* Computing MAX */
                     i__1 = maxwrk;
-                    i__2
-                        = *m * *m + (*m << 2)
-                          + (*m << 1)
-                                * ilaenv_(&c__1, "SGEBRD", " ", m, m, &c_n1, &c_n1); // , expr subst
+                    i__2 = *m * *m + (*m << 2)
+                           + (*m << 1)
+                                 * aocl_lapack_ilaenv(&c__1, "SGEBRD", " ", m, m, &c_n1,
+                                                      &c_n1); // , expr subst
                     maxwrk = fla_max(i__1, i__2);
                     /* Computing MAX */
                     i__1 = maxwrk;
                     i__2 = *m * *m + (*m << 2)
                            + *nrhs
-                                 * ilaenv_(&c__1, "SORMBR", "QLT", m, nrhs, m,
-                                           &c_n1); // , expr subst
+                                 * aocl_lapack_ilaenv(&c__1, "SORMBR", "QLT", m, nrhs, m,
+                                                      &c_n1); // , expr subst
                     maxwrk = fla_max(i__1, i__2);
                     /* Computing MAX */
                     i__1 = maxwrk;
                     i__2 = *m * *m + (*m << 2)
                            + (*m - 1)
-                                 * ilaenv_(&c__1, "SORMBR", "PLN", m, nrhs, m,
-                                           &c_n1); // , expr subst
+                                 * aocl_lapack_ilaenv(&c__1, "SORMBR", "PLN", m, nrhs, m,
+                                                      &c_n1); // , expr subst
                     maxwrk = fla_max(i__1, i__2);
                     if(*nrhs > 1)
                     {
@@ -438,10 +438,10 @@ void sgelsd_(integer *m, integer *n, integer *nrhs, real *a, integer *lda, real 
                     }
                     /* Computing MAX */
                     i__1 = maxwrk;
-                    i__2
-                        = *m
-                          + *nrhs
-                                * ilaenv_(&c__1, "SORMLQ", "LT", n, nrhs, m, &c_n1); // , expr subst
+                    i__2 = *m
+                           + *nrhs
+                                 * aocl_lapack_ilaenv(&c__1, "SORMLQ", "LT", n, nrhs, m,
+                                                      &c_n1); // , expr subst
                     maxwrk = fla_max(i__1, i__2);
                     /* Computing MAX */
                     i__1 = maxwrk;
@@ -461,22 +461,24 @@ void sgelsd_(integer *m, integer *n, integer *nrhs, real *a, integer *lda, real 
                 else
                 {
                     /* Path 2 - remaining underdetermined cases. */
-                    maxwrk = *m * 3 + (*n + *m) * ilaenv_(&c__1, "SGEBRD", " ", m, n, &c_n1, &c_n1);
+                    maxwrk = *m * 3
+                             + (*n + *m)
+                                   * aocl_lapack_ilaenv(&c__1, "SGEBRD", " ", m, n, &c_n1, &c_n1);
                     /* Computing MAX */
                     i__1 = maxwrk;
                     i__2 = *m * 3
                            + *nrhs
-                                 * ilaenv_(&c__1, "SORMBR", "QLT", m, nrhs, n,
-                                           &c_n1); // , expr subst
+                                 * aocl_lapack_ilaenv(&c__1, "SORMBR", "QLT", m, nrhs, n,
+                                                      &c_n1); // , expr subst
                     maxwrk = fla_max(i__1, i__2);
                     /* Computing MAX */
                     i__1 = maxwrk;
                     i__2 = *m * 3
                            + *m
-                                 * ilaenv_(&c__1,
-                                           "SORM"
-                                           "BR",
-                                           "PLN", n, nrhs, m, &c_n1); // , expr subst
+                                 * aocl_lapack_ilaenv(&c__1,
+                                                      "SORM"
+                                                      "BR",
+                                                      "PLN", n, nrhs, m, &c_n1); // , expr subst
                     maxwrk = fla_max(i__1, i__2);
                     /* Computing MAX */
                     i__1 = maxwrk;
@@ -491,8 +493,8 @@ void sgelsd_(integer *m, integer *n, integer *nrhs, real *a, integer *lda, real 
             }
         }
         minwrk = fla_min(minwrk, maxwrk);
-        work[1] = sroundup_lwork(&maxwrk);
-        iwork[1] = liwork;
+        work[1] = aocl_lapack_sroundup_lwork(&maxwrk);
+        iwork[1] = (aocl_int_t)(liwork);
         if(*lwork < minwrk && !lquery)
         {
             *info = -12;
@@ -501,7 +503,7 @@ void sgelsd_(integer *m, integer *n, integer *nrhs, real *a, integer *lda, real 
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("SGELSD", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("SGELSD", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -523,49 +525,49 @@ void sgelsd_(integer *m, integer *n, integer *nrhs, real *a, integer *lda, real 
     smlnum = sfmin / eps;
     bignum = 1.f / smlnum;
     /* Scale A if max entry outside range [SMLNUM,BIGNUM]. */
-    anrm = slange_("M", m, n, &a[a_offset], lda, &work[1]);
+    anrm = aocl_lapack_slange("M", m, n, &a[a_offset], lda, &work[1]);
     iascl = 0;
     if(anrm > 0.f && anrm < smlnum)
     {
         /* Scale matrix norm up to SMLNUM. */
-        slascl_("G", &c__0, &c__0, &anrm, &smlnum, m, n, &a[a_offset], lda, info);
+        aocl_lapack_slascl("G", &c__0, &c__0, &anrm, &smlnum, m, n, &a[a_offset], lda, info);
         iascl = 1;
     }
     else if(anrm > bignum)
     {
         /* Scale matrix norm down to BIGNUM. */
-        slascl_("G", &c__0, &c__0, &anrm, &bignum, m, n, &a[a_offset], lda, info);
+        aocl_lapack_slascl("G", &c__0, &c__0, &anrm, &bignum, m, n, &a[a_offset], lda, info);
         iascl = 2;
     }
     else if(anrm == 0.f)
     {
         /* Matrix all zero. Return zero solution. */
         i__1 = fla_max(*m, *n);
-        slaset_("F", &i__1, nrhs, &c_b81, &c_b81, &b[b_offset], ldb);
-        slaset_("F", &minmn, &c__1, &c_b81, &c_b81, &s[1], &c__1);
+        aocl_lapack_slaset("F", &i__1, nrhs, &c_b81, &c_b81, &b[b_offset], ldb);
+        aocl_lapack_slaset("F", &minmn, &c__1, &c_b81, &c_b81, &s[1], &c__1);
         *rank = 0;
         goto L10;
     }
     /* Scale B if max entry outside range [SMLNUM,BIGNUM]. */
-    bnrm = slange_("M", m, nrhs, &b[b_offset], ldb, &work[1]);
+    bnrm = aocl_lapack_slange("M", m, nrhs, &b[b_offset], ldb, &work[1]);
     ibscl = 0;
     if(bnrm > 0.f && bnrm < smlnum)
     {
         /* Scale matrix norm up to SMLNUM. */
-        slascl_("G", &c__0, &c__0, &bnrm, &smlnum, m, nrhs, &b[b_offset], ldb, info);
+        aocl_lapack_slascl("G", &c__0, &c__0, &bnrm, &smlnum, m, nrhs, &b[b_offset], ldb, info);
         ibscl = 1;
     }
     else if(bnrm > bignum)
     {
         /* Scale matrix norm down to BIGNUM. */
-        slascl_("G", &c__0, &c__0, &bnrm, &bignum, m, nrhs, &b[b_offset], ldb, info);
+        aocl_lapack_slascl("G", &c__0, &c__0, &bnrm, &bignum, m, nrhs, &b[b_offset], ldb, info);
         ibscl = 2;
     }
     /* If M < N make sure certain entries of B are zero. */
     if(*m < *n)
     {
         i__1 = *n - *m;
-        slaset_("F", &i__1, nrhs, &c_b81, &c_b81, &b[*m + 1 + b_dim1], ldb);
+        aocl_lapack_slaset("F", &i__1, nrhs, &c_b81, &c_b81, &b[*m + 1 + b_dim1], ldb);
     }
     /* Overdetermined case. */
     if(*m >= *n)
@@ -581,18 +583,18 @@ void sgelsd_(integer *m, integer *n, integer *nrhs, real *a, integer *lda, real 
             /* Compute A=Q*R. */
             /* (Workspace: need 2*N, prefer N+N*NB) */
             i__1 = *lwork - nwork + 1;
-            sgeqrf_(m, n, &a[a_offset], lda, &work[itau], &work[nwork], &i__1, info);
+            aocl_lapack_sgeqrf(m, n, &a[a_offset], lda, &work[itau], &work[nwork], &i__1, info);
             /* Multiply B by transpose(Q). */
             /* (Workspace: need N+NRHS, prefer N+NRHS*NB) */
             i__1 = *lwork - nwork + 1;
-            sormqr_("L", "T", m, nrhs, n, &a[a_offset], lda, &work[itau], &b[b_offset], ldb,
-                    &work[nwork], &i__1, info);
+            aocl_lapack_sormqr("L", "T", m, nrhs, n, &a[a_offset], lda, &work[itau], &b[b_offset],
+                               ldb, &work[nwork], &i__1, info);
             /* Zero out below R. */
             if(*n > 1)
             {
                 i__1 = *n - 1;
                 i__2 = *n - 1;
-                slaset_("L", &i__1, &i__2, &c_b81, &c_b81, &a[a_dim1 + 2], lda);
+                aocl_lapack_slaset("L", &i__1, &i__2, &c_b81, &c_b81, &a[a_dim1 + 2], lda);
             }
         }
         ie = 1;
@@ -602,24 +604,24 @@ void sgelsd_(integer *m, integer *n, integer *nrhs, real *a, integer *lda, real 
         /* Bidiagonalize R in A. */
         /* (Workspace: need 3*N+MM, prefer 3*N+(MM+N)*NB) */
         i__1 = *lwork - nwork + 1;
-        sgebrd_(&mm, n, &a[a_offset], lda, &s[1], &work[ie], &work[itauq], &work[itaup],
-                &work[nwork], &i__1, info);
+        aocl_lapack_sgebrd(&mm, n, &a[a_offset], lda, &s[1], &work[ie], &work[itauq], &work[itaup],
+                           &work[nwork], &i__1, info);
         /* Multiply B by transpose of left bidiagonalizing vectors of R. */
         /* (Workspace: need 3*N+NRHS, prefer 3*N+NRHS*NB) */
         i__1 = *lwork - nwork + 1;
-        sormbr_("Q", "L", "T", &mm, nrhs, n, &a[a_offset], lda, &work[itauq], &b[b_offset], ldb,
-                &work[nwork], &i__1, info);
+        aocl_lapack_sormbr("Q", "L", "T", &mm, nrhs, n, &a[a_offset], lda, &work[itauq],
+                           &b[b_offset], ldb, &work[nwork], &i__1, info);
         /* Solve the bidiagonal least squares problem. */
-        slalsd_("U", &smlsiz, n, nrhs, &s[1], &work[ie], &b[b_offset], ldb, rcond, rank,
-                &work[nwork], &iwork[1], info);
+        aocl_lapack_slalsd("U", &smlsiz, n, nrhs, &s[1], &work[ie], &b[b_offset], ldb, rcond, rank,
+                           &work[nwork], &iwork[1], info);
         if(*info != 0)
         {
             goto L10;
         }
         /* Multiply B by right bidiagonalizing vectors of R. */
         i__1 = *lwork - nwork + 1;
-        sormbr_("P", "L", "N", n, nrhs, n, &a[a_offset], lda, &work[itaup], &b[b_offset], ldb,
-                &work[nwork], &i__1, info);
+        aocl_lapack_sormbr("P", "L", "N", n, nrhs, n, &a[a_offset], lda, &work[itaup], &b[b_offset],
+                           ldb, &work[nwork], &i__1, info);
     }
     else /* if(complicated condition) */
     {
@@ -649,13 +651,13 @@ void sgelsd_(integer *m, integer *n, integer *nrhs, real *a, integer *lda, real 
             /* Compute A=L*Q. */
             /* (Workspace: need 2*M, prefer M+M*NB) */
             i__1 = *lwork - nwork + 1;
-            sgelqf_(m, n, &a[a_offset], lda, &work[itau], &work[nwork], &i__1, info);
+            aocl_lapack_sgelqf(m, n, &a[a_offset], lda, &work[itau], &work[nwork], &i__1, info);
             il = nwork;
             /* Copy L to WORK(IL), zeroing out above its diagonal. */
-            slacpy_("L", m, m, &a[a_offset], lda, &work[il], &ldwork);
+            aocl_lapack_slacpy("L", m, m, &a[a_offset], lda, &work[il], &ldwork);
             i__1 = *m - 1;
             i__2 = *m - 1;
-            slaset_("U", &i__1, &i__2, &c_b81, &c_b81, &work[il + ldwork], &ldwork);
+            aocl_lapack_slaset("U", &i__1, &i__2, &c_b81, &c_b81, &work[il + ldwork], &ldwork);
             ie = il + ldwork * *m;
             itauq = ie + *m;
             itaup = itauq + *m;
@@ -663,33 +665,33 @@ void sgelsd_(integer *m, integer *n, integer *nrhs, real *a, integer *lda, real 
             /* Bidiagonalize L in WORK(IL). */
             /* (Workspace: need M*M+5*M, prefer M*M+4*M+2*M*NB) */
             i__1 = *lwork - nwork + 1;
-            sgebrd_(m, m, &work[il], &ldwork, &s[1], &work[ie], &work[itauq], &work[itaup],
-                    &work[nwork], &i__1, info);
+            aocl_lapack_sgebrd(m, m, &work[il], &ldwork, &s[1], &work[ie], &work[itauq],
+                               &work[itaup], &work[nwork], &i__1, info);
             /* Multiply B by transpose of left bidiagonalizing vectors of L. */
             /* (Workspace: need M*M+4*M+NRHS, prefer M*M+4*M+NRHS*NB) */
             i__1 = *lwork - nwork + 1;
-            sormbr_("Q", "L", "T", m, nrhs, m, &work[il], &ldwork, &work[itauq], &b[b_offset], ldb,
-                    &work[nwork], &i__1, info);
+            aocl_lapack_sormbr("Q", "L", "T", m, nrhs, m, &work[il], &ldwork, &work[itauq],
+                               &b[b_offset], ldb, &work[nwork], &i__1, info);
             /* Solve the bidiagonal least squares problem. */
-            slalsd_("U", &smlsiz, m, nrhs, &s[1], &work[ie], &b[b_offset], ldb, rcond, rank,
-                    &work[nwork], &iwork[1], info);
+            aocl_lapack_slalsd("U", &smlsiz, m, nrhs, &s[1], &work[ie], &b[b_offset], ldb, rcond,
+                               rank, &work[nwork], &iwork[1], info);
             if(*info != 0)
             {
                 goto L10;
             }
             /* Multiply B by right bidiagonalizing vectors of L. */
             i__1 = *lwork - nwork + 1;
-            sormbr_("P", "L", "N", m, nrhs, m, &work[il], &ldwork, &work[itaup], &b[b_offset], ldb,
-                    &work[nwork], &i__1, info);
+            aocl_lapack_sormbr("P", "L", "N", m, nrhs, m, &work[il], &ldwork, &work[itaup],
+                               &b[b_offset], ldb, &work[nwork], &i__1, info);
             /* Zero out below first M rows of B. */
             i__1 = *n - *m;
-            slaset_("F", &i__1, nrhs, &c_b81, &c_b81, &b[*m + 1 + b_dim1], ldb);
+            aocl_lapack_slaset("F", &i__1, nrhs, &c_b81, &c_b81, &b[*m + 1 + b_dim1], ldb);
             nwork = itau + *m;
             /* Multiply transpose(Q) by B. */
             /* (Workspace: need M+NRHS, prefer M+NRHS*NB) */
             i__1 = *lwork - nwork + 1;
-            sormlq_("L", "T", n, nrhs, m, &a[a_offset], lda, &work[itau], &b[b_offset], ldb,
-                    &work[nwork], &i__1, info);
+            aocl_lapack_sormlq("L", "T", n, nrhs, m, &a[a_offset], lda, &work[itau], &b[b_offset],
+                               ldb, &work[nwork], &i__1, info);
         }
         else
         {
@@ -701,48 +703,48 @@ void sgelsd_(integer *m, integer *n, integer *nrhs, real *a, integer *lda, real 
             /* Bidiagonalize A. */
             /* (Workspace: need 3*M+N, prefer 3*M+(M+N)*NB) */
             i__1 = *lwork - nwork + 1;
-            sgebrd_(m, n, &a[a_offset], lda, &s[1], &work[ie], &work[itauq], &work[itaup],
-                    &work[nwork], &i__1, info);
+            aocl_lapack_sgebrd(m, n, &a[a_offset], lda, &s[1], &work[ie], &work[itauq],
+                               &work[itaup], &work[nwork], &i__1, info);
             /* Multiply B by transpose of left bidiagonalizing vectors. */
             /* (Workspace: need 3*M+NRHS, prefer 3*M+NRHS*NB) */
             i__1 = *lwork - nwork + 1;
-            sormbr_("Q", "L", "T", m, nrhs, n, &a[a_offset], lda, &work[itauq], &b[b_offset], ldb,
-                    &work[nwork], &i__1, info);
+            aocl_lapack_sormbr("Q", "L", "T", m, nrhs, n, &a[a_offset], lda, &work[itauq],
+                               &b[b_offset], ldb, &work[nwork], &i__1, info);
             /* Solve the bidiagonal least squares problem. */
-            slalsd_("L", &smlsiz, m, nrhs, &s[1], &work[ie], &b[b_offset], ldb, rcond, rank,
-                    &work[nwork], &iwork[1], info);
+            aocl_lapack_slalsd("L", &smlsiz, m, nrhs, &s[1], &work[ie], &b[b_offset], ldb, rcond,
+                               rank, &work[nwork], &iwork[1], info);
             if(*info != 0)
             {
                 goto L10;
             }
             /* Multiply B by right bidiagonalizing vectors of A. */
             i__1 = *lwork - nwork + 1;
-            sormbr_("P", "L", "N", n, nrhs, m, &a[a_offset], lda, &work[itaup], &b[b_offset], ldb,
-                    &work[nwork], &i__1, info);
+            aocl_lapack_sormbr("P", "L", "N", n, nrhs, m, &a[a_offset], lda, &work[itaup],
+                               &b[b_offset], ldb, &work[nwork], &i__1, info);
         }
     }
     /* Undo scaling. */
     if(iascl == 1)
     {
-        slascl_("G", &c__0, &c__0, &anrm, &smlnum, n, nrhs, &b[b_offset], ldb, info);
-        slascl_("G", &c__0, &c__0, &smlnum, &anrm, &minmn, &c__1, &s[1], &minmn, info);
+        aocl_lapack_slascl("G", &c__0, &c__0, &anrm, &smlnum, n, nrhs, &b[b_offset], ldb, info);
+        aocl_lapack_slascl("G", &c__0, &c__0, &smlnum, &anrm, &minmn, &c__1, &s[1], &minmn, info);
     }
     else if(iascl == 2)
     {
-        slascl_("G", &c__0, &c__0, &anrm, &bignum, n, nrhs, &b[b_offset], ldb, info);
-        slascl_("G", &c__0, &c__0, &bignum, &anrm, &minmn, &c__1, &s[1], &minmn, info);
+        aocl_lapack_slascl("G", &c__0, &c__0, &anrm, &bignum, n, nrhs, &b[b_offset], ldb, info);
+        aocl_lapack_slascl("G", &c__0, &c__0, &bignum, &anrm, &minmn, &c__1, &s[1], &minmn, info);
     }
     if(ibscl == 1)
     {
-        slascl_("G", &c__0, &c__0, &smlnum, &bnrm, n, nrhs, &b[b_offset], ldb, info);
+        aocl_lapack_slascl("G", &c__0, &c__0, &smlnum, &bnrm, n, nrhs, &b[b_offset], ldb, info);
     }
     else if(ibscl == 2)
     {
-        slascl_("G", &c__0, &c__0, &bignum, &bnrm, n, nrhs, &b[b_offset], ldb, info);
+        aocl_lapack_slascl("G", &c__0, &c__0, &bignum, &bnrm, n, nrhs, &b[b_offset], ldb, info);
     }
 L10:
-    work[1] = sroundup_lwork(&maxwrk);
-    iwork[1] = liwork;
+    work[1] = aocl_lapack_sroundup_lwork(&maxwrk);
+    iwork[1] = (aocl_int_t)(liwork);
     AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SGELSD */

@@ -10,16 +10,16 @@
 
 // --- FLA_Tevd_iteracc_n_opt_var1() -------------------------------------------
 
-FLA_Error FLA_Tevd_iteracc_n_ops_var1( integer       m_A,
-                                       integer       n_G,
-                                       integer       ijTL,
-                                       float*    buff_d, integer inc_d, 
-                                       float*    buff_e, integer inc_e,
-                                       integer*      n_iter_perf );
-FLA_Error FLA_Tevd_iteracc_n_opd_var1( integer       m_A,
-                                       integer       n_G,
-                                       integer       ijTL,
-                                       double*   buff_d, integer inc_d, 
-                                       double*   buff_e, integer inc_e,
-                                       integer*      n_iter_perf );
+FLA_Error FLA_Tevd_iteracc_n_ops_var1( fla_dim_t       m_A,
+                                       fla_dim_t       n_G,
+                                       fla_dim_t       ijTL,
+                                       float*    buff_d, fla_dim_t inc_d, 
+                                       float*    buff_e, fla_dim_t inc_e,
+                                       fla_dim_t*      n_iter_perf );
+FLA_Error FLA_Tevd_iteracc_n_opd_var1( fla_dim_t       m_A,
+                                       fla_dim_t       n_G,
+                                       fla_dim_t       ijTL,
+                                       double*   buff_d, fla_dim_t inc_d, 
+                                       double*   buff_e, fla_dim_t inc_e,
+                                       fla_dim_t*      n_iter_perf );
 

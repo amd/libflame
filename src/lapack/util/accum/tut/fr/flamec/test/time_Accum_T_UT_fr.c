@@ -16,17 +16,17 @@
 
 FLA_Error REF_Accum_T_UT_fr( FLA_Obj A, FLA_Obj t );
 void time_Accum_T_UT_fr(
-                 integer variant, integer type, integer nrepeats, integer m, integer n,
+                 aocl_int64_t variant, aocl_int64_t type, aocl_int64_t nrepeats, aocl_int64_t m, aocl_int64_t n,
                  FLA_Obj A, FLA_Obj t, FLA_Obj T, FLA_Obj W, FLA_Obj b, FLA_Obj b_ref,
                  double *dtime, double *diff, double *gflops );
 
 
 void time_Accum_T_UT_fr(
-                 integer variant, integer type, integer nrepeats, integer m, integer n,
+                 aocl_int64_t variant, aocl_int64_t type, aocl_int64_t nrepeats, aocl_int64_t m, aocl_int64_t n,
                  FLA_Obj A, FLA_Obj t, FLA_Obj T, FLA_Obj W, FLA_Obj b, FLA_Obj b_ref,
                  double *dtime, double *diff, double *gflops )
 {
-  integer
+  aocl_int64_t
     irep;
 
   double

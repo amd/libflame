@@ -8,10 +8,10 @@
  */
 #include "FLA_f2c.h" /* Table of constant values */
 
-static integer c__1 = 1;
-static integer c_n1 = -1;
-static integer c__2 = 2;
-static integer c__65 = 65;
+static aocl_int64_t c__1 = 1;
+static aocl_int64_t c_n1 = -1;
+static aocl_int64_t c__2 = 2;
+static aocl_int64_t c__65 = 65;
 /* > \brief \b CUNMQR */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -48,13 +48,13 @@ static integer c__65 = 65;
 /* > */
 /* > \verbatim */
 /* > */
-/* > CUNMQR overwrites the general complex M-by-N matrix C with */
+/* > CUNMQR overwrites the general scomplex M-by-N matrix C with */
 /* > */
 /* > SIDE = 'L' SIDE = 'R' */
 /* > TRANS = 'N': Q * C C * Q */
 /* > TRANS = 'C': Q**H * C C * Q**H */
 /* > */
-/* > where Q is a complex unitary matrix defined as the product of k */
+/* > where Q is a scomplex unitary matrix defined as the product of k */
 /* > elementary reflectors */
 /* > */
 /* > Q = H(1) H(2) . . . H(k) */
@@ -177,8 +177,32 @@ the routine */
 /* > \ingroup complexOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void cunmqr_(char *side, char *trans, integer *m, integer *n, integer *k, complex *a, integer *lda,
-             complex *tau, complex *c__, integer *ldc, complex *work, integer *lwork, integer *info)
+/** Generated wrapper function */
+void cunmqr_(char *side, char *trans, aocl_int_t *m, aocl_int_t *n, aocl_int_t *k, scomplex *a,
+             aocl_int_t *lda, scomplex *tau, scomplex *c__, aocl_int_t *ldc, scomplex *work,
+             aocl_int_t *lwork, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_cunmqr(side, trans, m, n, k, a, lda, tau, c__, ldc, work, lwork, info);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t k_64 = *k;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t ldc_64 = *ldc;
+    aocl_int64_t lwork_64 = *lwork;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_cunmqr(side, trans, &m_64, &n_64, &k_64, a, &lda_64, tau, c__, &ldc_64, work,
+                       &lwork_64, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_cunmqr(char *side, char *trans, aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *k,
+                        scomplex *a, aocl_int64_t *lda, scomplex *tau, scomplex *c__,
+                        aocl_int64_t *ldc, scomplex *work, aocl_int64_t *lwork, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -189,47 +213,37 @@ void cunmqr_(char *side, char *trans, integer *m, integer *n, integer *k, comple
              *side, *trans, *m, *n, *k, *lda, *ldc, *lwork);
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
-    extern void fla_cunmqr(char *side, char *trans, integer *m, integer *n, integer *k, complex *a,
-                           integer *lda, complex *tau, complex *c__, integer *ldc, complex *work,
-                           integer *lwork, integer *info);
+    extern void fla_cunmqr(char *side, char *trans, aocl_int64_t *m, aocl_int64_t *n,
+                           aocl_int64_t *k, scomplex *a, aocl_int64_t *lda, scomplex *tau,
+                           scomplex *c__, aocl_int64_t *ldc, scomplex *work, aocl_int64_t *lwork,
+                           aocl_int64_t *info);
 
     fla_cunmqr(side, trans, m, n, k, a, lda, tau, c__, ldc, work, lwork, info);
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
     return;
 }
 
-void fla_cunmqr(char *side, char *trans, integer *m, integer *n, integer *k, complex *a,
-                integer *lda, complex *tau, complex *c__, integer *ldc, complex *work,
-                integer *lwork, integer *info)
+void fla_cunmqr(char *side, char *trans, aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *k,
+                scomplex *a, aocl_int64_t *lda, scomplex *tau, scomplex *c__, aocl_int64_t *ldc,
+                scomplex *work, aocl_int64_t *lwork, aocl_int64_t *info)
 {
     /* System generated locals */
-    integer a_dim1, a_offset, c_dim1, c_offset, i__1, i__2, i__4, i__5;
+    aocl_int64_t a_dim1, a_offset, c_dim1, c_offset, i__1, i__2, i__4, i__5;
     char ch__1[2];
     /* Builtin functions */
     /* Subroutine */
 
     /* Local variables */
-    integer i__, i1, i2, i3, ib, ic, jc, nb, mi, ni, nq, nw, iwt;
+    aocl_int64_t i__, i1, i2, i3, ib, ic, jc, nb, mi, ni, nq, nw, iwt;
     logical left;
-    extern logical lsame_(char *, char *, integer, integer);
-    integer nbmin, iinfo;
-    extern /* Subroutine */
-        void
-        cunm2r_(char *, char *, integer *, integer *, integer *, complex *, integer *, complex *,
-                complex *, integer *, complex *, integer *),
-        clarfb_(char *, char *, char *, char *, integer *, integer *, integer *, complex *,
-                integer *, complex *, integer *, complex *, integer *, complex *, integer *),
-        clarft_(char *, char *, integer *, integer *, complex *, integer *, complex *, complex *,
-                integer *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
-    extern real sroundup_lwork(integer *);
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    aocl_int64_t nbmin, iinfo;
     logical notran;
-    integer ldwork, lwkopt;
+    aocl_int64_t ldwork, lwkopt;
     logical lquery;
 #if FLA_OPENMP_MULTITHREADING
     int thread_id, actual_num_threads;
-    integer index, mi_sub, ni_sub;
+    aocl_int64_t index, mi_sub, ni_sub;
 #endif
     /* -- LAPACK computational routine (version 3.7.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -318,16 +332,16 @@ void fla_cunmqr(char *side, char *trans, integer *m, integer *n, integer *k, com
         /* Compute the workspace requirements */
         /* Computing MIN */
         i__1 = 64;
-        i__2 = ilaenv_(&c__1, "CUNMQR", ch__1, m, n, k, &c_n1); // , expr subst
+        i__2 = aocl_lapack_ilaenv(&c__1, "CUNMQR", ch__1, m, n, k, &c_n1); // , expr subst
         nb = fla_min(i__1, i__2);
         lwkopt = fla_max(1, nw) * nb + 4160;
-        work[1].r = sroundup_lwork(&lwkopt);
+        work[1].r = aocl_lapack_sroundup_lwork(&lwkopt);
         work[1].i = 0.f; // , expr subst
     }
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("CUNMQR", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("CUNMQR", &i__1, (ftnlen)6);
         return;
     }
     else if(lquery)
@@ -350,15 +364,15 @@ void fla_cunmqr(char *side, char *trans, integer *m, integer *n, integer *k, com
             nb = (*lwork - 4160) / ldwork;
             /* Computing MAX */
             i__1 = 2;
-            i__2 = ilaenv_(&c__2, "CUNMQR", ch__1, m, n, k, &c_n1); // , expr subst
+            i__2 = aocl_lapack_ilaenv(&c__2, "CUNMQR", ch__1, m, n, k, &c_n1); // , expr subst
             nbmin = fla_max(i__1, i__2);
         }
     }
     if(nb < nbmin || nb >= *k)
     {
         /* Use unblocked code */
-        cunm2r_(side, trans, m, n, k, &a[a_offset], lda, &tau[1], &c__[c_offset], ldc, &work[1],
-                &iinfo);
+        aocl_lapack_cunm2r(side, trans, m, n, k, &a[a_offset], lda, &tau[1], &c__[c_offset], ldc,
+                           &work[1], &iinfo);
     }
     else
     {
@@ -412,8 +426,8 @@ void fla_cunmqr(char *side, char *trans, integer *m, integer *n, integer *k, com
                     /* Form the triangular factor of the block reflector */
                     /* H = H(i) H(i+1) . . . H(i+ib-1) */
                     i__4 = nq - i__ + 1;
-                    clarft_("Forward", "Columnwise", &i__4, &ib, &a[i__ + i__ * a_dim1], lda,
-                            &tau[i__], &work[iwt], &c__65);
+                    aocl_lapack_clarft("Forward", "Columnwise", &i__4, &ib, &a[i__ + i__ * a_dim1],
+                                       lda, &tau[i__], &work[iwt], &c__65);
                 }
 
                 if(left)
@@ -441,23 +455,26 @@ void fla_cunmqr(char *side, char *trans, integer *m, integer *n, integer *k, com
                 /* Apply H or H**H */
 #ifdef FLA_OPENMP_MULTITHREADING
                 if(left)
-                    clarfb_(side, trans, "Forward", "Columnwise", &mi_sub, &ni_sub, &ib,
-                            &a[i__ + i__ * a_dim1], lda, &work[iwt], &c__65,
-                            &c__[ic + (index + jc) * c_dim1], ldc, &work[1 + index], &ldwork);
+                    aocl_lapack_clarfb(side, trans, "Forward", "Columnwise", &mi_sub, &ni_sub, &ib,
+                                       &a[i__ + i__ * a_dim1], lda, &work[iwt], &c__65,
+                                       &c__[ic + (index + jc) * c_dim1], ldc, &work[1 + index],
+                                       &ldwork);
                 else
-                    clarfb_(side, trans, "Forward", "Columnwise", &mi_sub, &ni_sub, &ib,
-                            &a[i__ + i__ * a_dim1], lda, &work[iwt], &c__65,
-                            &c__[index + ic + jc * c_dim1], ldc, &work[1 + index], &ldwork);
+                    aocl_lapack_clarfb(side, trans, "Forward", "Columnwise", &mi_sub, &ni_sub, &ib,
+                                       &a[i__ + i__ * a_dim1], lda, &work[iwt], &c__65,
+                                       &c__[index + ic + jc * c_dim1], ldc, &work[1 + index],
+                                       &ldwork);
 #pragma omp barrier
 #else
-                clarfb_(side, trans, "Forward", "Columnwise", &mi, &ni, &ib, &a[i__ + i__ * a_dim1],
-                        lda, &work[iwt], &c__65, &c__[ic + jc * c_dim1], ldc, &work[1], &ldwork);
+                aocl_lapack_clarfb(side, trans, "Forward", "Columnwise", &mi, &ni, &ib,
+                                   &a[i__ + i__ * a_dim1], lda, &work[iwt], &c__65,
+                                   &c__[ic + jc * c_dim1], ldc, &work[1], &ldwork);
 #endif
                 /* L10: */
             }
         }
     }
-    work[1].r = sroundup_lwork(&lwkopt);
+    work[1].r = aocl_lapack_sroundup_lwork(&lwkopt);
     work[1].i = 0.f; // , expr subst
     return;
     /* End of CUNMQR */

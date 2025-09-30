@@ -150,9 +150,28 @@ static aocl_int64_t c__1 = 1;
 /* > \ingroup complex16OTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void zupmtr_(char *side, char *uplo, char *trans, integer *m, integer *n, doublecomplex *ap,
-             doublecomplex *tau, doublecomplex *c__, integer *ldc, doublecomplex *work,
-             integer *info)
+/** Generated wrapper function */
+void zupmtr_(char *side, char *uplo, char *trans, aocl_int_t *m, aocl_int_t *n, dcomplex *ap,
+             dcomplex *tau, dcomplex *c__, aocl_int_t *ldc, dcomplex *work,
+             aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_zupmtr(side, uplo, trans, m, n, ap, tau, c__, ldc, work, info);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t ldc_64 = *ldc;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_zupmtr(side, uplo, trans, &m_64, &n_64, ap, tau, c__, &ldc_64, work, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_zupmtr(char *side, char *uplo, char *trans, aocl_int64_t *m, aocl_int64_t *n,
+                        dcomplex *ap, dcomplex *tau, dcomplex *c__,
+                        aocl_int64_t *ldc, dcomplex *work, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zupmtr inputs: side %c, uplo %c, trans %c, m %" FLA_IS ", n %" FLA_IS
@@ -167,16 +186,9 @@ void zupmtr_(char *side, char *uplo, char *trans, integer *m, integer *n, double
     aocl_int64_t i__, i1, i2, i3, ic, jc, ii, mi, ni, nq;
     dcomplex aii;
     logical left;
-    doublecomplex taui;
-    extern logical lsame_(char *, char *, integer, integer);
-    extern /* Subroutine */
-        void
-        zlarf_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *,
-               doublecomplex *, integer *, doublecomplex *);
+    dcomplex taui;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     logical upper;
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical notran, forwrd;
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -247,7 +259,7 @@ void zupmtr_(char *side, char *uplo, char *trans, integer *m, integer *n, double
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("ZUPMTR", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("ZUPMTR", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -316,7 +328,8 @@ void zupmtr_(char *side, char *uplo, char *trans, integer *m, integer *n, double
             i__3 = ii;
             ap[i__3].r = 1.;
             ap[i__3].i = 0.; // , expr subst
-            zlarf_(side, &mi, &ni, &ap[ii - i__ + 1], &c__1, &taui, &c__[c_offset], ldc, &work[1]);
+            aocl_lapack_zlarf(side, &mi, &ni, &ap[ii - i__ + 1], &c__1, &taui, &c__[c_offset], ldc,
+                              &work[1]);
             i__3 = ii;
             ap[i__3].r = aii.r;
             ap[i__3].i = aii.i; // , expr subst

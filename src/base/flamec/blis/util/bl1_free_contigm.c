@@ -16,7 +16,7 @@
 #include "blis.h"
 #endif
 
-void bl1_sfree_contigm( float* a_save, integer a_rs_save, integer a_cs_save, float** a, integer* a_rs, integer* a_cs )
+void bl1_sfree_contigm( float* a_save, fla_dim_t a_rs_save, fla_dim_t a_cs_save, float** a, fla_dim_t* a_rs, fla_dim_t* a_cs )
 {
 	if ( bl1_is_gen_storage( a_rs_save, a_cs_save ) )
 	{
@@ -32,7 +32,7 @@ void bl1_sfree_contigm( float* a_save, integer a_rs_save, integer a_cs_save, flo
 	}
 }
 
-void bl1_dfree_contigm( double* a_save, integer a_rs_save, integer a_cs_save, double** a, integer* a_rs, integer* a_cs )
+void bl1_dfree_contigm( double* a_save, fla_dim_t a_rs_save, fla_dim_t a_cs_save, double** a, fla_dim_t* a_rs, fla_dim_t* a_cs )
 {
 	if ( bl1_is_gen_storage( a_rs_save, a_cs_save ) )
 	{
@@ -48,7 +48,7 @@ void bl1_dfree_contigm( double* a_save, integer a_rs_save, integer a_cs_save, do
 	}
 }
 
-void bl1_cfree_contigm( scomplex* a_save, integer a_rs_save, integer a_cs_save, scomplex** a, integer* a_rs, integer* a_cs )
+void bl1_cfree_contigm( scomplex* a_save, fla_dim_t a_rs_save, fla_dim_t a_cs_save, scomplex** a, fla_dim_t* a_rs, fla_dim_t* a_cs )
 {
 	if ( bl1_is_gen_storage( a_rs_save, a_cs_save ) )
 	{
@@ -64,7 +64,7 @@ void bl1_cfree_contigm( scomplex* a_save, integer a_rs_save, integer a_cs_save, 
 	}
 }
 
-void bl1_zfree_contigm( dcomplex* a_save, integer a_rs_save, integer a_cs_save, dcomplex** a, integer* a_rs, integer* a_cs )
+void bl1_zfree_contigm( dcomplex* a_save, fla_dim_t a_rs_save, fla_dim_t a_cs_save, dcomplex** a, fla_dim_t* a_rs, fla_dim_t* a_cs )
 {
 	if ( bl1_is_gen_storage( a_rs_save, a_cs_save ) )
 	{

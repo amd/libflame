@@ -36,7 +36,7 @@
 /* > */
 /* > \verbatim */
 /* > */
-/* > CUNGL2 generates an m-by-n complex matrix Q with orthonormal rows, */
+/* > CUNGL2 generates an m-by-n scomplex matrix Q with orthonormal rows, */
 /* > which is defined as the first m rows of a product of k elementary */
 /* > reflectors of order n */
 /* > */
@@ -108,23 +108,16 @@
 /* > \ingroup complexOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void cungl2_fla(integer *m, integer *n, integer *k, complex *a, integer *lda, complex *tau,
-                complex *work, integer *info)
+void cungl2_fla(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *k, scomplex *a, aocl_int64_t *lda,
+                scomplex *tau, scomplex *work, aocl_int64_t *info)
 {
     /* System generated locals */
-    integer a_dim1, a_offset, i__1, i__2, i__3;
-    complex q__1, q__2;
+    aocl_int64_t a_dim1, a_offset, i__1, i__2, i__3;
+    scomplex q__1, q__2;
     /* Builtin functions */
-    void r_cnjg(complex *, complex *);
+    void r_cnjg(scomplex *, scomplex *);
     /* Local variables */
-    integer i__, j, l;
-    extern /* Subroutine */
-        void
-        cscal_(integer *, complex *, complex *, integer *),
-        clarf_(char *, integer *, integer *, complex *, integer *, complex *, complex *, integer *,
-               complex *),
-        clacgv_(integer *, complex *, integer *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    aocl_int64_t i__, j, l;
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -171,7 +164,7 @@ void cungl2_fla(integer *m, integer *n, integer *k, complex *a, integer *lda, co
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("CUNGL2", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("CUNGL2", &i__1, (ftnlen)6);
         return;
     }
     /* Quick return if possible */
@@ -208,7 +201,7 @@ void cungl2_fla(integer *m, integer *n, integer *k, complex *a, integer *lda, co
         if(i__ < *n)
         {
             i__1 = *n - i__;
-            clacgv_(&i__1, &a[i__ + (i__ + 1) * a_dim1], lda);
+            aocl_lapack_clacgv(&i__1, &a[i__ + (i__ + 1) * a_dim1], lda);
             if(i__ < *m)
             {
                 i__1 = i__ + i__ * a_dim1;
@@ -217,16 +210,16 @@ void cungl2_fla(integer *m, integer *n, integer *k, complex *a, integer *lda, co
                 i__1 = *m - i__;
                 i__2 = *n - i__ + 1;
                 r_cnjg(&q__1, &tau[i__]);
-                clarf_("Right", &i__1, &i__2, &a[i__ + i__ * a_dim1], lda, &q__1,
-                       &a[i__ + 1 + i__ * a_dim1], lda, &work[1]);
+                aocl_lapack_clarf("Right", &i__1, &i__2, &a[i__ + i__ * a_dim1], lda, &q__1,
+                                  &a[i__ + 1 + i__ * a_dim1], lda, &work[1]);
             }
             i__1 = *n - i__;
             i__2 = i__;
             q__1.r = -tau[i__2].r;
             q__1.i = -tau[i__2].i; // , expr subst
-            cscal_(&i__1, &q__1, &a[i__ + (i__ + 1) * a_dim1], lda);
+            aocl_blas_cscal(&i__1, &q__1, &a[i__ + (i__ + 1) * a_dim1], lda);
             i__1 = *n - i__;
-            clacgv_(&i__1, &a[i__ + (i__ + 1) * a_dim1], lda);
+            aocl_lapack_clacgv(&i__1, &a[i__ + (i__ + 1) * a_dim1], lda);
         }
         i__1 = i__ + i__ * a_dim1;
         r_cnjg(&q__2, &tau[i__]);

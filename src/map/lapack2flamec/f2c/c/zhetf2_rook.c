@@ -4,8 +4,8 @@
  -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for
  libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
-/* > \brief \b ZHETF2_ROOK computes the factorization of a complex Hermitian indefinite matrix using
+static aocl_int64_t c__1 = 1;
+/* > \brief \b ZHETF2_ROOK computes the factorization of a scomplex Hermitian indefinite matrix using
  * the bound ed Bunch-Kaufman ("rook") diagonal pivoting method (unblocked algorithm). */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -190,8 +190,25 @@ static integer c__1 = 1;
 /* > \endverbatim */
 /* ===================================================================== */
 /* Subroutine */
-void zhetf2_rook_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *ipiv,
-                  integer *info)
+/** Generated wrapper function */
+void zhetf2_rook_(char *uplo, aocl_int_t *n, dcomplex *a, aocl_int_t *lda, aocl_int_t *ipiv,
+                  aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_zhetf2_rook(uplo, n, a, lda, ipiv, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_zhetf2_rook(uplo, &n_64, a, &lda_64, ipiv, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_zhetf2_rook(char *uplo, aocl_int64_t *n, dcomplex *a, aocl_int64_t *lda,
+                             aocl_int_t *ipiv, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zhetf2_rook inputs: uplo %c, n %" FLA_IS ", lda %" FLA_IS "", *uplo, *n,
@@ -216,27 +233,14 @@ void zhetf2_rook_(char *uplo, integer *n, doublecomplex *a, integer *lda, intege
     doublereal tt;
     dcomplex wkm1, wkp1;
     logical done;
-    integer imax, jmax;
-    extern /* Subroutine */
-        void
-        zher_(char *, integer *, doublereal *, doublecomplex *, integer *, doublecomplex *,
-              integer *);
+    aocl_int64_t imax, jmax;
     doublereal alpha;
-    extern logical lsame_(char *, char *, integer, integer);
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     doublereal dtemp, sfmin;
     aocl_int64_t itemp, kstep;
     logical upper;
-    extern /* Subroutine */
-        void
-        zswap_(integer *, doublecomplex *, integer *, doublecomplex *, integer *);
     extern doublereal dlapy2_(doublereal *, doublereal *), dlamch_(char *);
     doublereal absakk;
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    extern /* Subroutine */
-        void
-        zdscal_(integer *, doublereal *, doublecomplex *, integer *);
     doublereal colmax;
     doublereal rowmax;
     /* -- LAPACK computational routine (version 3.5.0) -- */
@@ -289,7 +293,7 @@ void zhetf2_rook_(char *uplo, integer *n, doublecomplex *a, integer *lda, intege
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("ZHETF2_ROOK", &i__1, (ftnlen)11);
+        aocl_blas_xerbla("ZHETF2_ROOK", &i__1, (ftnlen)11);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -572,7 +576,8 @@ void zhetf2_rook_(char *uplo, integer *n, doublecomplex *a, integer *lda, intege
                         d11 = 1. / a[i__1].real;
                         i__1 = k - 1;
                         d__1 = -d11;
-                        zher_(uplo, &i__1, &d__1, &a[k * a_dim1 + 1], &c__1, &a[a_offset], lda);
+                        aocl_blas_zher(uplo, &i__1, &d__1, &a[k * a_dim1 + 1], &c__1, &a[a_offset],
+                                       lda);
                         /* Store U(k) in column k */
                         i__1 = k - 1;
                         aocl_blas_zdscal(&i__1, &d11, &a[k * a_dim1 + 1], &c__1);
@@ -599,7 +604,8 @@ void zhetf2_rook_(char *uplo, integer *n, doublecomplex *a, integer *lda, intege
                         /* = A - (W(k)/D(k))*(D(k))*(W(k)/D(K))**T */
                         i__1 = k - 1;
                         d__1 = -d11;
-                        zher_(uplo, &i__1, &d__1, &a[k * a_dim1 + 1], &c__1, &a[a_offset], lda);
+                        aocl_blas_zher(uplo, &i__1, &d__1, &a[k * a_dim1 + 1], &c__1, &a[a_offset],
+                                       lda);
                     }
                 }
             }
@@ -806,7 +812,7 @@ void zhetf2_rook_(char *uplo, integer *n, doublecomplex *a, integer *lda, intege
                 if(imax < *n)
                 {
                     i__1 = *n - imax;
-                    itemp = imax + izamax_(&i__1, &a[imax + 1 + imax * a_dim1], &c__1);
+                    itemp = imax + aocl_blas_izamax(&i__1, &a[imax + 1 + imax * a_dim1], &c__1);
                     i__1 = itemp + imax * a_dim1;
                     dtemp = (d__1 = a[i__1].r, f2c_dabs(d__1))
                             + (d__2 = d_imag(&a[itemp + imax * a_dim1]), f2c_dabs(d__2));
@@ -1003,8 +1009,8 @@ void zhetf2_rook_(char *uplo, integer *n, doublecomplex *a, integer *lda, intege
                         d11 = 1. / a[i__1].real;
                         i__1 = *n - k;
                         d__1 = -d11;
-                        zher_(uplo, &i__1, &d__1, &a[k + 1 + k * a_dim1], &c__1,
-                              &a[k + 1 + (k + 1) * a_dim1], lda);
+                        aocl_blas_zher(uplo, &i__1, &d__1, &a[k + 1 + k * a_dim1], &c__1,
+                                       &a[k + 1 + (k + 1) * a_dim1], lda);
                         /* Store L(k) in column k */
                         i__1 = *n - k;
                         aocl_blas_zdscal(&i__1, &d11, &a[k + 1 + k * a_dim1], &c__1);
@@ -1031,8 +1037,8 @@ void zhetf2_rook_(char *uplo, integer *n, doublecomplex *a, integer *lda, intege
                         /* = A - (W(k)/D(k))*(D(k))*(W(k)/D(K))**T */
                         i__1 = *n - k;
                         d__1 = -d11;
-                        zher_(uplo, &i__1, &d__1, &a[k + 1 + k * a_dim1], &c__1,
-                              &a[k + 1 + (k + 1) * a_dim1], lda);
+                        aocl_blas_zher(uplo, &i__1, &d__1, &a[k + 1 + k * a_dim1], &c__1,
+                                       &a[k + 1 + (k + 1) * a_dim1], lda);
                     }
                 }
             }

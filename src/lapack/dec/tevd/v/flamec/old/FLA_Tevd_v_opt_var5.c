@@ -13,11 +13,11 @@
 FLA_Error FLA_Tevd_v_opt_var5( FLA_Obj d, FLA_Obj e, FLA_Obj G, FLA_Obj U )
 {
 	FLA_Datatype datatype;
-	integer          m_A, m_U;
-	integer          inc_d;
-	integer          inc_e;
-	integer          rs_G, cs_G;
-	integer          rs_U, cs_U;
+	aocl_int64_t          m_A, m_U;
+	aocl_int64_t          inc_d;
+	aocl_int64_t          inc_e;
+	aocl_int64_t          rs_G, cs_G;
+	aocl_int64_t          rs_U, cs_U;
 
 	datatype = FLA_Obj_datatype( U );
 
@@ -110,54 +110,54 @@ FLA_Error FLA_Tevd_v_opt_var5( FLA_Obj d, FLA_Obj e, FLA_Obj G, FLA_Obj U )
 
 
 
-FLA_Error FLA_Tevd_v_ops_var5( integer       m_A,
-                               integer       m_U,
-                               float*    buff_d, integer inc_d, 
-                               float*    buff_e, integer inc_e,
-                               float*    buff_G, integer rs_G, integer cs_G,
-                               float*    buff_U, integer rs_U, integer cs_U )
+FLA_Error FLA_Tevd_v_ops_var5( aocl_int64_t       m_A,
+                               aocl_int64_t       m_U,
+                               float*    buff_d, aocl_int64_t inc_d, 
+                               float*    buff_e, aocl_int64_t inc_e,
+                               float*    buff_G, aocl_int64_t rs_G, aocl_int64_t cs_G,
+                               float*    buff_U, aocl_int64_t rs_U, aocl_int64_t cs_U )
 {
 	return FLA_SUCCESS;
 }
 
 
 
-FLA_Error FLA_Tevd_v_opd_var5( integer       m_A,
-                               integer       m_U,
-                               double*   buff_d, integer inc_d, 
-                               double*   buff_e, integer inc_e,
-                               double*   buff_G, integer rs_G, integer cs_G,
-                               double*   buff_U, integer rs_U, integer cs_U )
+FLA_Error FLA_Tevd_v_opd_var5( aocl_int64_t       m_A,
+                               aocl_int64_t       m_U,
+                               double*   buff_d, aocl_int64_t inc_d, 
+                               double*   buff_e, aocl_int64_t inc_e,
+                               double*   buff_G, aocl_int64_t rs_G, aocl_int64_t cs_G,
+                               double*   buff_U, aocl_int64_t rs_U, aocl_int64_t cs_U )
 {
 	return FLA_SUCCESS;
 }
 
-FLA_Error FLA_Tevd_v_opc_var5( integer       m_A,
-                               integer       m_U,
-                               float*    buff_d, integer inc_d, 
-                               float*    buff_e, integer inc_e,
-                               float*    buff_G, integer rs_G, integer cs_G,
-                               scomplex* buff_U, integer rs_U, integer cs_U )
+FLA_Error FLA_Tevd_v_opc_var5( aocl_int64_t       m_A,
+                               aocl_int64_t       m_U,
+                               float*    buff_d, aocl_int64_t inc_d, 
+                               float*    buff_e, aocl_int64_t inc_e,
+                               float*    buff_G, aocl_int64_t rs_G, aocl_int64_t cs_G,
+                               scomplex* buff_U, aocl_int64_t rs_U, aocl_int64_t cs_U )
 {
 	return FLA_SUCCESS;
 }
 
 //#define PRINTF
 
-FLA_Error FLA_Tevd_v_opz_var5( integer       m_A,
-                               integer       m_U,
-                               double*   buff_d, integer inc_d, 
-                               double*   buff_e, integer inc_e,
-                               double*   buff_G, integer rs_G, integer cs_G,
-                               dcomplex* buff_U, integer rs_U, integer cs_U )
+FLA_Error FLA_Tevd_v_opz_var5( aocl_int64_t       m_A,
+                               aocl_int64_t       m_U,
+                               double*   buff_d, aocl_int64_t inc_d, 
+                               double*   buff_e, aocl_int64_t inc_e,
+                               double*   buff_G, aocl_int64_t rs_G, aocl_int64_t cs_G,
+                               dcomplex* buff_U, aocl_int64_t rs_U, aocl_int64_t cs_U )
 {
 	double  one  = bl1_d1();
 	double  zero = bl1_d0();
 	double* buff_Ur;
 	double* buff_Uc;
-	integer     rs_Ur, cs_Ur;
-	integer     rs_Uc, cs_Uc;
-	integer     i;
+	aocl_int64_t     rs_Ur, cs_Ur;
+	aocl_int64_t     rs_Uc, cs_Uc;
+	aocl_int64_t     i;
 	dgiv_t  rots;
 	
 /*

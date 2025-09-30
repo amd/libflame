@@ -162,7 +162,23 @@ static aocl_int64_t c__1 = 1;
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void dsptrf_(char *uplo, integer *n, doublereal *ap, integer *ipiv, integer *info)
+/** Generated wrapper function */
+void dsptrf_(char *uplo, aocl_int_t *n, doublereal *ap, aocl_int_t *ipiv, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_dsptrf(uplo, n, ap, ipiv, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_dsptrf(uplo, &n_64, ap, ipiv, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_dsptrf(char *uplo, aocl_int64_t *n, doublereal *ap, aocl_int_t *ipiv,
+                        aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dsptrf inputs: uplo %c, n %" FLA_IS "", *uplo, *n);
@@ -178,25 +194,12 @@ void dsptrf_(char *uplo, integer *n, doublereal *ap, integer *ipiv, integer *inf
     doublereal wk;
     aocl_int64_t kx, knc, kpc, npp;
     doublereal wkm1, wkp1;
-    integer imax, jmax;
-    extern /* Subroutine */
-        void
-        dspr_(char *, integer *, doublereal *, doublereal *, integer *, doublereal *);
+    aocl_int64_t imax, jmax;
     doublereal alpha;
-    extern /* Subroutine */
-        void
-        dscal_(integer *, doublereal *, doublereal *, integer *);
-    extern logical lsame_(char *, char *, integer, integer);
-    extern /* Subroutine */
-        void
-        dswap_(integer *, doublereal *, integer *, doublereal *, integer *);
-    integer kstep;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    aocl_int64_t kstep;
     logical upper;
     doublereal absakk;
-    extern integer idamax_(integer *, doublereal *, integer *);
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal colmax, rowmax;
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -238,7 +241,7 @@ void dsptrf_(char *uplo, integer *n, doublereal *ap, integer *ipiv, integer *inf
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("DSPTRF", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("DSPTRF", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -267,7 +270,7 @@ void dsptrf_(char *uplo, integer *n, doublereal *ap, integer *ipiv, integer *inf
         if(k > 1)
         {
             i__1 = k - 1;
-            imax = idamax_(&i__1, &ap[kc], &c__1);
+            imax = aocl_blas_idamax(&i__1, &ap[kc], &c__1);
             colmax = (d__1 = ap[kc + imax - 1], f2c_dabs(d__1));
         }
         else
@@ -456,7 +459,7 @@ void dsptrf_(char *uplo, integer *n, doublereal *ap, integer *ipiv, integer *inf
         if(k < *n)
         {
             i__1 = *n - k;
-            imax = k + idamax_(&i__1, &ap[kc + 1], &c__1);
+            imax = k + aocl_blas_idamax(&i__1, &ap[kc + 1], &c__1);
             colmax = (d__1 = ap[kc + imax - k], f2c_dabs(d__1));
         }
         else

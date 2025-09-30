@@ -190,7 +190,7 @@ void fla_test_gehrd_experiment(char *tst_api, test_params_t *params, integer dat
     /* Get the minimum time */
     /* Performance computation
     (2/3)*(ihi - ilo)^2(2ihi + 2ilo + 3n) flops for real values
-    4*((2/3)*(ihi - ilo)^2(2ihi + 2ilo + 3n)) flops for complex values */
+    4*((2/3)*(ihi - ilo)^2(2ihi + 2ilo + 3n)) flops for scomplex values */
     if(datatype == FLOAT || datatype == DOUBLE)
         perf = (double)((2.0 / 3.0) * pow((ihi - ilo), 2) * (2 * ihi + 2 * ilo + 3 * n)) / time_min
                / FLOPS_PER_UNIT_PERF;

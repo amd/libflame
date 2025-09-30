@@ -13,8 +13,8 @@
 FLA_Error FLA_LU_nopiv_opt_var5( FLA_Obj A )
 {
   FLA_Datatype datatype;
-  integer          m_A, n_A;
-  integer          rs_A, cs_A;
+  fla_dim_t          m_A, n_A;
+  fla_dim_t          rs_A, cs_A;
 
   datatype = FLA_Obj_datatype( A );
 
@@ -76,13 +76,13 @@ FLA_Error FLA_LU_nopiv_opt_var5( FLA_Obj A )
 
 
 
-FLA_Error FLA_LU_nopiv_ops_var5( integer m_A,
-                                 integer n_A,
-                                 float* buff_A, integer rs_A, integer cs_A )
+FLA_Error FLA_LU_nopiv_ops_var5( fla_dim_t m_A,
+                                 fla_dim_t n_A,
+                                 float* buff_A, fla_dim_t rs_A, fla_dim_t cs_A )
 {
   float*    buff_m1 = FLA_FLOAT_PTR( FLA_MINUS_ONE );
-  integer       min_m_n = fla_min( m_A, n_A );
-  integer       i;
+  fla_dim_t       min_m_n = fla_min( m_A, n_A );
+  fla_dim_t       i;
 
   for ( i = 0; i < min_m_n; ++i )
   {
@@ -91,8 +91,8 @@ FLA_Error FLA_LU_nopiv_ops_var5( integer m_A,
     float*    a12t      = buff_A + (i+1)*cs_A + (i  )*rs_A;
     float*    A22       = buff_A + (i+1)*cs_A + (i+1)*rs_A;
 
-    integer       m_ahead   = m_A - i - 1;
-    integer       n_ahead   = n_A - i - 1;
+    fla_dim_t       m_ahead   = m_A - i - 1;
+    fla_dim_t       n_ahead   = n_A - i - 1;
 
     /*------------------------------------------------------------*/
 
@@ -121,13 +121,13 @@ FLA_Error FLA_LU_nopiv_ops_var5( integer m_A,
 
 
 
-FLA_Error FLA_LU_nopiv_opd_var5( integer m_A,
-                                 integer n_A,
-                                 double* buff_A, integer rs_A, integer cs_A )
+FLA_Error FLA_LU_nopiv_opd_var5( fla_dim_t m_A,
+                                 fla_dim_t n_A,
+                                 double* buff_A, fla_dim_t rs_A, fla_dim_t cs_A )
 {
   double*   buff_m1 = FLA_DOUBLE_PTR( FLA_MINUS_ONE );
-  integer       min_m_n = fla_min( m_A, n_A );
-  integer       i;
+  fla_dim_t       min_m_n = fla_min( m_A, n_A );
+  fla_dim_t       i;
 
   for ( i = 0; i < min_m_n; ++i )
   {
@@ -136,8 +136,8 @@ FLA_Error FLA_LU_nopiv_opd_var5( integer m_A,
     double*   a12t      = buff_A + (i+1)*cs_A + (i  )*rs_A;
     double*   A22       = buff_A + (i+1)*cs_A + (i+1)*rs_A;
 
-    integer       m_ahead   = m_A - i - 1;
-    integer       n_ahead   = n_A - i - 1;
+    fla_dim_t       m_ahead   = m_A - i - 1;
+    fla_dim_t       n_ahead   = n_A - i - 1;
 
     /*------------------------------------------------------------*/
 
@@ -166,13 +166,13 @@ FLA_Error FLA_LU_nopiv_opd_var5( integer m_A,
 
 
 
-FLA_Error FLA_LU_nopiv_opc_var5( integer m_A,
-                                 integer n_A,
-                                 scomplex* buff_A, integer rs_A, integer cs_A )
+FLA_Error FLA_LU_nopiv_opc_var5( fla_dim_t m_A,
+                                 fla_dim_t n_A,
+                                 scomplex* buff_A, fla_dim_t rs_A, fla_dim_t cs_A )
 {
   scomplex* buff_m1 = FLA_COMPLEX_PTR( FLA_MINUS_ONE );
-  integer       min_m_n = fla_min( m_A, n_A );
-  integer       i;
+  fla_dim_t       min_m_n = fla_min( m_A, n_A );
+  fla_dim_t       i;
 
   for ( i = 0; i < min_m_n; ++i )
   {
@@ -181,8 +181,8 @@ FLA_Error FLA_LU_nopiv_opc_var5( integer m_A,
     scomplex* a12t      = buff_A + (i+1)*cs_A + (i  )*rs_A;
     scomplex* A22       = buff_A + (i+1)*cs_A + (i+1)*rs_A;
 
-    integer       m_ahead   = m_A - i - 1;
-    integer       n_ahead   = n_A - i - 1;
+    fla_dim_t       m_ahead   = m_A - i - 1;
+    fla_dim_t       n_ahead   = n_A - i - 1;
 
     /*------------------------------------------------------------*/
 
@@ -211,13 +211,13 @@ FLA_Error FLA_LU_nopiv_opc_var5( integer m_A,
 
 
 
-FLA_Error FLA_LU_nopiv_opz_var5( integer m_A,
-                                 integer n_A,
-                                 dcomplex* buff_A, integer rs_A, integer cs_A )
+FLA_Error FLA_LU_nopiv_opz_var5( fla_dim_t m_A,
+                                 fla_dim_t n_A,
+                                 dcomplex* buff_A, fla_dim_t rs_A, fla_dim_t cs_A )
 {
   dcomplex* buff_m1 = FLA_DOUBLE_COMPLEX_PTR( FLA_MINUS_ONE );
-  integer       min_m_n = fla_min( m_A, n_A );
-  integer       i;
+  fla_dim_t       min_m_n = fla_min( m_A, n_A );
+  fla_dim_t       i;
 
   for ( i = 0; i < min_m_n; ++i )
   {
@@ -226,8 +226,8 @@ FLA_Error FLA_LU_nopiv_opz_var5( integer m_A,
     dcomplex* a12t      = buff_A + (i+1)*cs_A + (i  )*rs_A;
     dcomplex* A22       = buff_A + (i+1)*cs_A + (i+1)*rs_A;
 
-    integer       m_ahead   = m_A - i - 1;
-    integer       n_ahead   = n_A - i - 1;
+    fla_dim_t       m_ahead   = m_A - i - 1;
+    fla_dim_t       n_ahead   = n_A - i - 1;
 
     /*------------------------------------------------------------*/
 

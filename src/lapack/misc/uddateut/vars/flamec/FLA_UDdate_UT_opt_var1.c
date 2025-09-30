@@ -15,11 +15,11 @@ FLA_Error FLA_UDdate_UT_opt_var1( FLA_Obj R,
                                   FLA_Obj D, FLA_Obj T )
 {
   FLA_Datatype datatype;
-  integer          mn_RT, m_C, m_D;
-  integer          rs_R, cs_R;
-  integer          rs_C, cs_C;
-  integer          rs_D, cs_D;
-  integer          rs_T, cs_T;
+  fla_dim_t          mn_RT, m_C, m_D;
+  fla_dim_t          rs_R, cs_R;
+  fla_dim_t          rs_C, cs_C;
+  fla_dim_t          rs_D, cs_D;
+  fla_dim_t          rs_T, cs_T;
 
   datatype = FLA_Obj_datatype( R );
 
@@ -117,18 +117,18 @@ FLA_Error FLA_UDdate_UT_opt_var1( FLA_Obj R,
 
 
 
-FLA_Error FLA_UDdate_UT_ops_var1( integer mn_RT,
-                                  integer m_C,
-                                  integer m_D,
-                                  float* buff_R, integer rs_R, integer cs_R,
-                                  float* buff_C, integer rs_C, integer cs_C,
-                                  float* buff_D, integer rs_D, integer cs_D,
-                                  float* buff_T, integer rs_T, integer cs_T )
+FLA_Error FLA_UDdate_UT_ops_var1( fla_dim_t mn_RT,
+                                  fla_dim_t m_C,
+                                  fla_dim_t m_D,
+                                  float* buff_R, fla_dim_t rs_R, fla_dim_t cs_R,
+                                  float* buff_C, fla_dim_t rs_C, fla_dim_t cs_C,
+                                  float* buff_D, fla_dim_t rs_D, fla_dim_t cs_D,
+                                  float* buff_T, fla_dim_t rs_T, fla_dim_t cs_T )
 {
   float*    buff_half = FLA_FLOAT_PTR( FLA_ONE_HALF );
   float*    buff_1    = FLA_FLOAT_PTR( FLA_ONE );
   float*    buff_m1   = FLA_FLOAT_PTR( FLA_MINUS_ONE );
-  integer       i;
+  fla_dim_t       i;
 
   for ( i = 0; i < mn_RT; ++i )
   {
@@ -144,7 +144,7 @@ FLA_Error FLA_UDdate_UT_ops_var1( integer mn_RT,
     float*    tau11     = buff_T + (i  )*cs_T + (i  )*rs_T;
     float*    w12t      = buff_T + (i+1)*cs_T + (i  )*rs_T;
 
-    integer       mn_ahead  = mn_RT - i - 1;
+    fla_dim_t       mn_ahead  = mn_RT - i - 1;
 
     //------------------------------------------------------------//
 
@@ -215,18 +215,18 @@ FLA_Error FLA_UDdate_UT_ops_var1( integer mn_RT,
 
 
 
-FLA_Error FLA_UDdate_UT_opd_var1( integer mn_RT,
-                                  integer m_C,
-                                  integer m_D,
-                                  double* buff_R, integer rs_R, integer cs_R,
-                                  double* buff_C, integer rs_C, integer cs_C,
-                                  double* buff_D, integer rs_D, integer cs_D,
-                                  double* buff_T, integer rs_T, integer cs_T )
+FLA_Error FLA_UDdate_UT_opd_var1( fla_dim_t mn_RT,
+                                  fla_dim_t m_C,
+                                  fla_dim_t m_D,
+                                  double* buff_R, fla_dim_t rs_R, fla_dim_t cs_R,
+                                  double* buff_C, fla_dim_t rs_C, fla_dim_t cs_C,
+                                  double* buff_D, fla_dim_t rs_D, fla_dim_t cs_D,
+                                  double* buff_T, fla_dim_t rs_T, fla_dim_t cs_T )
 {
   double*   buff_half = FLA_DOUBLE_PTR( FLA_ONE_HALF );
   double*   buff_1    = FLA_DOUBLE_PTR( FLA_ONE );
   double*   buff_m1   = FLA_DOUBLE_PTR( FLA_MINUS_ONE );
-  integer       i;
+  fla_dim_t       i;
 
   for ( i = 0; i < mn_RT; ++i )
   {
@@ -242,7 +242,7 @@ FLA_Error FLA_UDdate_UT_opd_var1( integer mn_RT,
     double*   tau11     = buff_T + (i  )*cs_T + (i  )*rs_T;
     double*   w12t      = buff_T + (i+1)*cs_T + (i  )*rs_T;
 
-    integer       mn_ahead  = mn_RT - i - 1;
+    fla_dim_t       mn_ahead  = mn_RT - i - 1;
 
     //------------------------------------------------------------//
 
@@ -313,18 +313,18 @@ FLA_Error FLA_UDdate_UT_opd_var1( integer mn_RT,
 
 
 
-FLA_Error FLA_UDdate_UT_opc_var1( integer mn_RT,
-                                  integer m_C,
-                                  integer m_D,
-                                  scomplex* buff_R, integer rs_R, integer cs_R,
-                                  scomplex* buff_C, integer rs_C, integer cs_C,
-                                  scomplex* buff_D, integer rs_D, integer cs_D,
-                                  scomplex* buff_T, integer rs_T, integer cs_T )
+FLA_Error FLA_UDdate_UT_opc_var1( fla_dim_t mn_RT,
+                                  fla_dim_t m_C,
+                                  fla_dim_t m_D,
+                                  scomplex* buff_R, fla_dim_t rs_R, fla_dim_t cs_R,
+                                  scomplex* buff_C, fla_dim_t rs_C, fla_dim_t cs_C,
+                                  scomplex* buff_D, fla_dim_t rs_D, fla_dim_t cs_D,
+                                  scomplex* buff_T, fla_dim_t rs_T, fla_dim_t cs_T )
 {
   scomplex* buff_half = FLA_COMPLEX_PTR( FLA_ONE_HALF );
   float*    buff_1    = FLA_FLOAT_PTR( FLA_ONE );
   float*    buff_m1   = FLA_FLOAT_PTR( FLA_MINUS_ONE );
-  integer       i;
+  fla_dim_t       i;
 
   for ( i = 0; i < mn_RT; ++i )
   {
@@ -340,7 +340,7 @@ FLA_Error FLA_UDdate_UT_opc_var1( integer mn_RT,
     scomplex* tau11     = buff_T + (i  )*cs_T + (i  )*rs_T;
     scomplex* w12t      = buff_T + (i+1)*cs_T + (i  )*rs_T;
 
-    integer       mn_ahead  = mn_RT - i - 1;
+    fla_dim_t       mn_ahead  = mn_RT - i - 1;
 
     //------------------------------------------------------------//
 
@@ -411,18 +411,18 @@ FLA_Error FLA_UDdate_UT_opc_var1( integer mn_RT,
 
 
 
-FLA_Error FLA_UDdate_UT_opz_var1( integer mn_RT,
-                                  integer m_C,
-                                  integer m_D,
-                                  dcomplex* buff_R, integer rs_R, integer cs_R,
-                                  dcomplex* buff_C, integer rs_C, integer cs_C,
-                                  dcomplex* buff_D, integer rs_D, integer cs_D,
-                                  dcomplex* buff_T, integer rs_T, integer cs_T )
+FLA_Error FLA_UDdate_UT_opz_var1( fla_dim_t mn_RT,
+                                  fla_dim_t m_C,
+                                  fla_dim_t m_D,
+                                  dcomplex* buff_R, fla_dim_t rs_R, fla_dim_t cs_R,
+                                  dcomplex* buff_C, fla_dim_t rs_C, fla_dim_t cs_C,
+                                  dcomplex* buff_D, fla_dim_t rs_D, fla_dim_t cs_D,
+                                  dcomplex* buff_T, fla_dim_t rs_T, fla_dim_t cs_T )
 {
   dcomplex* buff_half = FLA_DOUBLE_COMPLEX_PTR( FLA_ONE_HALF );
   double*   buff_1    = FLA_DOUBLE_PTR( FLA_ONE );
   double*   buff_m1   = FLA_DOUBLE_PTR( FLA_MINUS_ONE );
-  integer       i;
+  fla_dim_t       i;
 
   for ( i = 0; i < mn_RT; ++i )
   {
@@ -438,7 +438,7 @@ FLA_Error FLA_UDdate_UT_opz_var1( integer mn_RT,
     dcomplex* tau11     = buff_T + (i  )*cs_T + (i  )*rs_T;
     dcomplex* w12t      = buff_T + (i+1)*cs_T + (i  )*rs_T;
 
-    integer       mn_ahead  = mn_RT - i - 1;
+    fla_dim_t       mn_ahead  = mn_RT - i - 1;
 
     //------------------------------------------------------------//
 

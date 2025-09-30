@@ -4,10 +4,10 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__9 = 9;
-static integer c__0 = 0;
+static aocl_int64_t c__9 = 9;
+static aocl_int64_t c__0 = 0;
 static real c_b15 = 1.f;
-static integer c__1 = 1;
+static aocl_int64_t c__1 = 1;
 static real c_b29 = 0.f;
 /* > \brief \b SBDSDC */
 /* =========== DOCUMENTATION =========== */
@@ -207,67 +207,59 @@ static real c_b29 = 0.f;
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void sbdsdc_(char *uplo, char *compq, integer *n, real *d__, real *e, real *u, integer *ldu,
-             real *vt, integer *ldvt, real *q, integer *iq, real *work, integer *iwork,
-             integer *info)
+/** Generated wrapper function */
+void sbdsdc_(char *uplo, char *compq, aocl_int_t *n, real *d__, real *e, real *u, aocl_int_t *ldu,
+             real *vt, aocl_int_t *ldvt, real *q, aocl_int_t *iq, real *work, aocl_int_t *iwork,
+             aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_sbdsdc(uplo, compq, n, d__, e, u, ldu, vt, ldvt, q, iq, work, iwork, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t ldu_64 = *ldu;
+    aocl_int64_t ldvt_64 = *ldvt;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_sbdsdc(uplo, compq, &n_64, d__, e, u, &ldu_64, vt, &ldvt_64, q, iq, work, iwork,
+                       &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_sbdsdc(char *uplo, char *compq, aocl_int64_t *n, real *d__, real *e, real *u,
+                        aocl_int64_t *ldu, real *vt, aocl_int64_t *ldvt, real *q, aocl_int_t *iq,
+                        real *work, aocl_int_t *iwork, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("sbdsdc inputs: uplo %c ,compq %c ,n %" FLA_IS ",ldu %" FLA_IS
                       ",ldvt %" FLA_IS "",
                       *uplo, *compq, *n, *ldu, *ldvt);
     /* System generated locals */
-    integer u_dim1, u_offset, vt_dim1, vt_offset, i__1, i__2;
+    aocl_int64_t u_dim1, u_offset, vt_dim1, vt_offset, i__1, i__2;
     real r__1;
     /* Builtin functions */
     double r_sign(real *, real *), log(doublereal);
     /* Local variables */
-    integer i__, j, k;
+    aocl_int64_t i__, j, k;
     real p, r__;
-    integer z__, ic, ii, kk;
+    aocl_int64_t z__, ic, ii, kk;
     real cs;
-    integer is, iu;
+    aocl_int64_t is, iu;
     real sn;
-    integer nm1;
+    aocl_int64_t nm1;
     real eps;
-    integer ivt, difl, difr, ierr, perm, mlvl, sqre;
-    extern logical lsame_(char *, char *, integer, integer);
-    integer poles;
-    extern /* Subroutine */
-        void
-        slasr_(char *, char *, char *, integer *, integer *, real *, real *, real *, integer *);
-    integer iuplo, nsize, start;
-    extern /* Subroutine */
-        void
-        scopy_(integer *, real *, integer *, real *, integer *),
-        sswap_(integer *, real *, integer *, real *, integer *),
-        slasd0_(integer *, integer *, real *, real *, real *, integer *, real *, integer *,
-                integer *, integer *, real *, integer *);
+    aocl_int64_t ivt, difl, difr, ierr, perm, mlvl, sqre;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    aocl_int64_t poles;
+    aocl_int64_t iuplo, nsize, start;
     extern real slamch_(char *);
-    extern /* Subroutine */
-        void
-        slasda_(integer *, integer *, integer *, integer *, real *, real *, real *, integer *,
-                real *, integer *, real *, real *, real *, real *, integer *, integer *, integer *,
-                integer *, real *, real *, real *, real *, integer *, integer *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
-    extern /* Subroutine */
-        void
-        slascl_(char *, integer *, integer *, real *, real *, integer *, integer *, real *,
-                integer *, integer *);
-    integer givcol;
-    extern /* Subroutine */
-        void
-        slasdq_(char *, integer *, integer *, integer *, integer *, integer *, real *, real *,
-                real *, integer *, real *, integer *, real *, integer *, real *, integer *);
-    integer icompq;
-    extern /* Subroutine */
-        void
-        slaset_(char *, integer *, integer *, real *, real *, real *, integer *),
-        slartg_(real *, real *, real *, real *, real *);
+    aocl_int64_t givcol;
+    aocl_int64_t icompq;
+    extern void slartg_(real *, real *, real *, real *, real *);
     real orgnrm;
-    integer givnum;
-    extern real slanst_(char *, integer *, real *, real *);
-    integer givptr, qstart, smlsiz, wstart, smlszp;
+    aocl_int64_t givnum;
+    aocl_int64_t givptr, qstart, smlsiz, wstart, smlszp;
     /* -- LAPACK computational routine (version 3.7.1) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -364,7 +356,7 @@ void sbdsdc_(char *uplo, char *compq, integer *n, real *d__, real *e, real *u, i
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("SBDSDC", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("SBDSDC", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -374,7 +366,7 @@ void sbdsdc_(char *uplo, char *compq, integer *n, real *d__, real *e, real *u, i
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
-    smlsiz = ilaenv_(&c__9, "SBDSDC", " ", &c__0, &c__0, &c__0, &c__0);
+    smlsiz = aocl_lapack_ilaenv(&c__9, "SBDSDC", " ", &c__0, &c__0, &c__0, &c__0);
     if(*n == 1)
     {
         if(icompq == 1)
@@ -398,9 +390,9 @@ void sbdsdc_(char *uplo, char *compq, integer *n, real *d__, real *e, real *u, i
     qstart = 3;
     if(icompq == 1)
     {
-        scopy_(n, &d__[1], &c__1, &q[1], &c__1);
+        aocl_blas_scopy(n, &d__[1], &c__1, &q[1], &c__1);
         i__1 = *n - 1;
-        scopy_(&i__1, &e[1], &c__1, &q[*n + 1], &c__1);
+        aocl_blas_scopy(&i__1, &e[1], &c__1, &q[*n + 1], &c__1);
     }
     if(iuplo == 2)
     {
@@ -435,8 +427,8 @@ void sbdsdc_(char *uplo, char *compq, integer *n, real *d__, real *e, real *u, i
         /* Ignore WSTART, instead using WORK( 1 ), since the two vectors */
         /* for CS and -SN above are added only if ICOMPQ == 2, */
         /* and adding them exceeds documented WORK size of 4*n. */
-        slasdq_("U", &c__0, n, &c__0, &c__0, &c__0, &d__[1], &e[1], &vt[vt_offset], ldvt,
-                &u[u_offset], ldu, &u[u_offset], ldu, &work[1], info);
+        aocl_lapack_slasdq("U", &c__0, n, &c__0, &c__0, &c__0, &d__[1], &e[1], &vt[vt_offset], ldvt,
+                           &u[u_offset], ldu, &u[u_offset], ldu, &work[1], info);
         goto L40;
     }
     /* If N is smaller than the minimum divide size SMLSIZ, then solve */
@@ -445,37 +437,37 @@ void sbdsdc_(char *uplo, char *compq, integer *n, real *d__, real *e, real *u, i
     {
         if(icompq == 2)
         {
-            slaset_("A", n, n, &c_b29, &c_b15, &u[u_offset], ldu);
-            slaset_("A", n, n, &c_b29, &c_b15, &vt[vt_offset], ldvt);
-            slasdq_("U", &c__0, n, n, n, &c__0, &d__[1], &e[1], &vt[vt_offset], ldvt, &u[u_offset],
-                    ldu, &u[u_offset], ldu, &work[wstart], info);
+            aocl_lapack_slaset("A", n, n, &c_b29, &c_b15, &u[u_offset], ldu);
+            aocl_lapack_slaset("A", n, n, &c_b29, &c_b15, &vt[vt_offset], ldvt);
+            aocl_lapack_slasdq("U", &c__0, n, n, n, &c__0, &d__[1], &e[1], &vt[vt_offset], ldvt,
+                               &u[u_offset], ldu, &u[u_offset], ldu, &work[wstart], info);
         }
         else if(icompq == 1)
         {
             iu = 1;
             ivt = iu + *n;
-            slaset_("A", n, n, &c_b29, &c_b15, &q[iu + (qstart - 1) * *n], n);
-            slaset_("A", n, n, &c_b29, &c_b15, &q[ivt + (qstart - 1) * *n], n);
-            slasdq_("U", &c__0, n, n, n, &c__0, &d__[1], &e[1], &q[ivt + (qstart - 1) * *n], n,
-                    &q[iu + (qstart - 1) * *n], n, &q[iu + (qstart - 1) * *n], n, &work[wstart],
-                    info);
+            aocl_lapack_slaset("A", n, n, &c_b29, &c_b15, &q[iu + (qstart - 1) * *n], n);
+            aocl_lapack_slaset("A", n, n, &c_b29, &c_b15, &q[ivt + (qstart - 1) * *n], n);
+            aocl_lapack_slasdq("U", &c__0, n, n, n, &c__0, &d__[1], &e[1],
+                               &q[ivt + (qstart - 1) * *n], n, &q[iu + (qstart - 1) * *n], n,
+                               &q[iu + (qstart - 1) * *n], n, &work[wstart], info);
         }
         goto L40;
     }
     if(icompq == 2)
     {
-        slaset_("A", n, n, &c_b29, &c_b15, &u[u_offset], ldu);
-        slaset_("A", n, n, &c_b29, &c_b15, &vt[vt_offset], ldvt);
+        aocl_lapack_slaset("A", n, n, &c_b29, &c_b15, &u[u_offset], ldu);
+        aocl_lapack_slaset("A", n, n, &c_b29, &c_b15, &vt[vt_offset], ldvt);
     }
     /* Scale. */
-    orgnrm = slanst_("M", n, &d__[1], &e[1]);
+    orgnrm = aocl_lapack_slanst("M", n, &d__[1], &e[1]);
     if(orgnrm == 0.f)
     {
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
-    slascl_("G", &c__0, &c__0, &orgnrm, &c_b15, n, &c__1, &d__[1], n, &ierr);
-    slascl_("G", &c__0, &c__0, &orgnrm, &c_b15, &nm1, &c__1, &e[1], &nm1, &ierr);
+    aocl_lapack_slascl("G", &c__0, &c__0, &orgnrm, &c_b15, n, &c__1, &d__[1], n, &ierr);
+    aocl_lapack_slascl("G", &c__0, &c__0, &orgnrm, &c_b15, &nm1, &c__1, &e[1], &nm1, &ierr);
     eps = slamch_("Epsilon");
     mlvl = (integer)(log((real)(*n) / (real)(smlsiz + 1)) / log(2.f)) + 1;
     smlszp = smlsiz + 1;
@@ -543,20 +535,21 @@ void sbdsdc_(char *uplo, char *compq, integer *n, real *d__, real *e, real *u, i
             }
             if(icompq == 2)
             {
-                slasd0_(&nsize, &sqre, &d__[start], &e[start], &u[start + start * u_dim1], ldu,
-                        &vt[start + start * vt_dim1], ldvt, &smlsiz, &iwork[1], &work[wstart],
-                        info);
+                aocl_lapack_slasd0(&nsize, &sqre, &d__[start], &e[start],
+                                   &u[start + start * u_dim1], ldu, &vt[start + start * vt_dim1],
+                                   ldvt, &smlsiz, &iwork[1], &work[wstart], info);
             }
             else
             {
-                slasda_(&icompq, &smlsiz, &nsize, &sqre, &d__[start], &e[start],
-                        &q[start + (iu + qstart - 2) * *n], n, &q[start + (ivt + qstart - 2) * *n],
-                        &iq[start + k * *n], &q[start + (difl + qstart - 2) * *n],
-                        &q[start + (difr + qstart - 2) * *n], &q[start + (z__ + qstart - 2) * *n],
-                        &q[start + (poles + qstart - 2) * *n], &iq[start + givptr * *n],
-                        &iq[start + givcol * *n], n, &iq[start + perm * *n],
-                        &q[start + (givnum + qstart - 2) * *n], &q[start + (ic + qstart - 2) * *n],
-                        &q[start + (is + qstart - 2) * *n], &work[wstart], &iwork[1], info);
+                aocl_lapack_slasda(
+                    &icompq, &smlsiz, &nsize, &sqre, &d__[start], &e[start],
+                    &q[start + (iu + qstart - 2) * *n], n, &q[start + (ivt + qstart - 2) * *n],
+                    &iq[start + k * *n], &q[start + (difl + qstart - 2) * *n],
+                    &q[start + (difr + qstart - 2) * *n], &q[start + (z__ + qstart - 2) * *n],
+                    &q[start + (poles + qstart - 2) * *n], &iq[start + givptr * *n],
+                    &iq[start + givcol * *n], n, &iq[start + perm * *n],
+                    &q[start + (givnum + qstart - 2) * *n], &q[start + (ic + qstart - 2) * *n],
+                    &q[start + (is + qstart - 2) * *n], &work[wstart], &iwork[1], info);
             }
             if(*info != 0)
             {
@@ -568,7 +561,7 @@ void sbdsdc_(char *uplo, char *compq, integer *n, real *d__, real *e, real *u, i
         /* L30: */
     }
     /* Unscale */
-    slascl_("G", &c__0, &c__0, &c_b15, &orgnrm, n, &c__1, &d__[1], n, &ierr);
+    aocl_lapack_slascl("G", &c__0, &c__0, &c_b15, &orgnrm, n, &c__1, &d__[1], n, &ierr);
 L40: /* Use Selection Sort to minimize swaps of singular vectors */
     i__1 = *n;
     for(ii = 2; ii <= i__1; ++ii)
@@ -592,17 +585,17 @@ L40: /* Use Selection Sort to minimize swaps of singular vectors */
             d__[i__] = p;
             if(icompq == 1)
             {
-                iq[i__] = kk;
+                iq[i__] = (aocl_int_t)(kk);
             }
             else if(icompq == 2)
             {
-                sswap_(n, &u[i__ * u_dim1 + 1], &c__1, &u[kk * u_dim1 + 1], &c__1);
-                sswap_(n, &vt[i__ + vt_dim1], ldvt, &vt[kk + vt_dim1], ldvt);
+                aocl_blas_sswap(n, &u[i__ * u_dim1 + 1], &c__1, &u[kk * u_dim1 + 1], &c__1);
+                aocl_blas_sswap(n, &vt[i__ + vt_dim1], ldvt, &vt[kk + vt_dim1], ldvt);
             }
         }
         else if(icompq == 1)
         {
-            iq[i__] = i__;
+            iq[i__] = (aocl_int_t)(i__);
         }
         /* L60: */
     }
@@ -622,7 +615,7 @@ L40: /* Use Selection Sort to minimize swaps of singular vectors */
     /* which rotated B to be upper bidiagonal */
     if(iuplo == 2 && icompq == 2)
     {
-        slasr_("L", "V", "B", n, n, &work[1], &work[*n], &u[u_offset], ldu);
+        aocl_lapack_slasr("L", "V", "B", n, n, &work[1], &work[*n], &u[u_offset], ldu);
     }
     AOCL_DTL_TRACE_LOG_EXIT
     return;

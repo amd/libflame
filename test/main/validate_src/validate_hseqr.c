@@ -52,7 +52,7 @@ void validate_hseqr(char *tst_api, char *job, char *compz, integer n, void *H, v
     if(datatype == FLOAT || datatype == DOUBLE)
     {
         /* Find negative value of every 2nd element (starting from ilo-1 till ihi-2) and store in
-         * next location. Used to store imaginary parts of complex conjuate pair of eigen
+         * next location. Used to store imaginary parts of scomplex conjuate pair of eigen
          * values */
         add_negative_values_ilo_ihi(datatype, wi_in, *ilo, *ihi);
 

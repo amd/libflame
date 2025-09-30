@@ -13,10 +13,10 @@
 FLA_Error FLA_Her2c_external( FLA_Uplo uplo, FLA_Conj conj, FLA_Obj alpha, FLA_Obj x, FLA_Obj y, FLA_Obj A )
 {
   FLA_Datatype datatype;
-  integer          m_A;
-  integer          rs_A, cs_A;
-  integer          inc_x; 
-  integer          inc_y; 
+  fla_dim_t          m_A;
+  fla_dim_t          rs_A, cs_A;
+  fla_dim_t          inc_x; 
+  fla_dim_t          inc_y; 
   uplo1_t       blis_uplo;
   conj1_t       blis_conj;
 

@@ -4,10 +4,10 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
-static integer c_n1 = -1;
-static integer c__3 = 3;
-static integer c__2 = 2;
+static aocl_int64_t c__1 = 1;
+static aocl_int64_t c_n1 = -1;
+static aocl_int64_t c__3 = 3;
+static aocl_int64_t c__2 = 2;
 static real c_b23 = 1.f;
 /* > \brief \b CHETRD */
 /* =========== DOCUMENTATION =========== */
@@ -44,7 +44,7 @@ static real c_b23 = 1.f;
 /* > */
 /* > \verbatim */
 /* > */
-/* > CHETRD reduces a complex Hermitian matrix A to real symmetric */
+/* > CHETRD reduces a scomplex Hermitian matrix A to real symmetric */
 /* > tridiagonal form T by a unitary similarity transformation: */
 /* > Q**H * A * Q = T. */
 /* > \endverbatim */
@@ -162,7 +162,7 @@ the routine */
 /* > */
 /* > H(i) = I - tau * v * v**H */
 /* > */
-/* > where tau is a complex scalar, and v is a complex vector with */
+/* > where tau is a scomplex scalar, and v is a scomplex vector with */
 /* > v(i+1:n) = 0 and v(i) = 1;
 v(1:i-1) is stored on exit in */
 /* > A(1:i-1,i+1), and tau in TAU(i). */
@@ -176,7 +176,7 @@ v(1:i-1) is stored on exit in */
 /* > */
 /* > H(i) = I - tau * v * v**H */
 /* > */
-/* > where tau is a complex scalar, and v is a complex vector with */
+/* > where tau is a scomplex scalar, and v is a scomplex vector with */
 /* > v(1:i) = 0 and v(i+1) = 1;
 v(i+2:n) is stored on exit in A(i+2:n,i), */
 /* > and tau in TAU(i). */
@@ -198,27 +198,18 @@ v(i+2:n) is stored on exit in A(i+2:n,i), */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void chetrd_fla(char *uplo, integer *n, complex *a, integer *lda, real *d__, real *e, complex *tau,
-                complex *work, integer *lwork, integer *info)
+void chetrd_fla(char *uplo, aocl_int64_t *n, scomplex *a, aocl_int64_t *lda, real *d__, real *e,
+                scomplex *tau, scomplex *work, aocl_int64_t *lwork, aocl_int64_t *info)
 {
     /* System generated locals */
-    integer a_dim1, a_offset, i__1, i__2, i__3, i__4, i__5;
-    complex q__1;
+    aocl_int64_t a_dim1, a_offset, i__1, i__2, i__3, i__4, i__5;
+    scomplex q__1;
     /* Local variables */
-    integer i__, j, nb, kk, nx, iws;
-    extern logical lsame_(char *, char *, integer, integer);
-    integer nbmin, iinfo;
+    aocl_int64_t i__, j, nb, kk, nx, iws;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    aocl_int64_t nbmin, iinfo;
     logical upper;
-    extern /* Subroutine */
-        void
-        chetd2_fla(char *, integer *, complex *, integer *, real *, real *, complex *, integer *),
-        cher2k_(char *, char *, integer *, integer *, complex *, complex *, integer *, complex *,
-                integer *, real *, complex *, integer *),
-        clatrd_(char *, integer *, integer *, complex *, integer *, real *, complex *, complex *,
-                integer *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
-    integer ldwork, lwkopt;
+    aocl_int64_t ldwork, lwkopt;
     logical lquery;
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -272,7 +263,7 @@ void chetrd_fla(char *uplo, integer *n, complex *a, integer *lda, real *d__, rea
     if(*info == 0)
     {
         /* Determine the block size. */
-        nb = ilaenv_(&c__1, "CHETRD", uplo, n, &c_n1, &c_n1, &c_n1);
+        nb = aocl_lapack_ilaenv(&c__1, "CHETRD", uplo, n, &c_n1, &c_n1, &c_n1);
         lwkopt = *n * nb;
         work[1].r = (real)lwkopt;
         work[1].i = 0.f; // , expr subst
@@ -280,7 +271,7 @@ void chetrd_fla(char *uplo, integer *n, complex *a, integer *lda, real *d__, rea
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("CHETRD", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("CHETRD", &i__1, (ftnlen)6);
         return;
     }
     else if(lquery)
@@ -302,7 +293,7 @@ void chetrd_fla(char *uplo, integer *n, complex *a, integer *lda, real *d__, rea
         /* (last block is always handled by unblocked code). */
         /* Computing MAX */
         i__1 = nb;
-        i__2 = ilaenv_(&c__3, "CHETRD", uplo, n, &c_n1, &c_n1, &c_n1); // , expr subst
+        i__2 = aocl_lapack_ilaenv(&c__3, "CHETRD", uplo, n, &c_n1, &c_n1, &c_n1); // , expr subst
         nx = fla_max(i__1, i__2);
         if(nx < *n)
         {
@@ -317,7 +308,7 @@ void chetrd_fla(char *uplo, integer *n, complex *a, integer *lda, real *d__, rea
                 /* Computing MAX */
                 i__1 = *lwork / ldwork;
                 nb = fla_max(i__1, 1);
-                nbmin = ilaenv_(&c__2, "CHETRD", uplo, n, &c_n1, &c_n1, &c_n1);
+                nbmin = aocl_lapack_ilaenv(&c__2, "CHETRD", uplo, n, &c_n1, &c_n1, &c_n1);
                 if(nb < nbmin)
                 {
                     nx = *n;
@@ -346,14 +337,15 @@ void chetrd_fla(char *uplo, integer *n, complex *a, integer *lda, real *d__, rea
             /* matrix W which is needed to update the unreduced part of */
             /* the matrix */
             i__3 = i__ + nb - 1;
-            clatrd_(uplo, &i__3, &nb, &a[a_offset], lda, &e[1], &tau[1], &work[1], &ldwork);
+            aocl_lapack_clatrd(uplo, &i__3, &nb, &a[a_offset], lda, &e[1], &tau[1], &work[1],
+                               &ldwork);
             /* Update the unreduced submatrix A(1:i-1,1:i-1), using an */
             /* update of the form: A := A - V*W**H - W*V**H */
             i__3 = i__ - 1;
             q__1.r = -1.f;
             q__1.i = -0.f; // , expr subst
-            cher2k_(uplo, "No transpose", &i__3, &nb, &q__1, &a[i__ * a_dim1 + 1], lda, &work[1],
-                    &ldwork, &c_b23, &a[a_offset], lda);
+            aocl_blas_cher2k(uplo, "No transpose", &i__3, &nb, &q__1, &a[i__ * a_dim1 + 1], lda,
+                             &work[1], &ldwork, &c_b23, &a[a_offset], lda);
             /* Copy superdiagonal elements back into A, and diagonal */
             /* elements into D */
             i__3 = i__ + nb - 1;
@@ -384,15 +376,16 @@ void chetrd_fla(char *uplo, integer *n, complex *a, integer *lda, real *d__, rea
             /* matrix W which is needed to update the unreduced part of */
             /* the matrix */
             i__3 = *n - i__ + 1;
-            clatrd_(uplo, &i__3, &nb, &a[i__ + i__ * a_dim1], lda, &e[i__], &tau[i__], &work[1],
-                    &ldwork);
+            aocl_lapack_clatrd(uplo, &i__3, &nb, &a[i__ + i__ * a_dim1], lda, &e[i__], &tau[i__],
+                               &work[1], &ldwork);
             /* Update the unreduced submatrix A(i+nb:n,i+nb:n), using */
             /* an update of the form: A := A - V*W**H - W*V**H */
             i__3 = *n - i__ - nb + 1;
             q__1.r = -1.f;
             q__1.i = -0.f; // , expr subst
-            cher2k_(uplo, "No transpose", &i__3, &nb, &q__1, &a[i__ + nb + i__ * a_dim1], lda,
-                    &work[nb + 1], &ldwork, &c_b23, &a[i__ + nb + (i__ + nb) * a_dim1], lda);
+            aocl_blas_cher2k(uplo, "No transpose", &i__3, &nb, &q__1, &a[i__ + nb + i__ * a_dim1],
+                             lda, &work[nb + 1], &ldwork, &c_b23,
+                             &a[i__ + nb + (i__ + nb) * a_dim1], lda);
             /* Copy subdiagonal elements back into A, and diagonal */
             /* elements into D */
             i__3 = i__ + nb - 1;

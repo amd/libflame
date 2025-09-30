@@ -16,9 +16,9 @@
 #include "blis.h"
 #endif
 
-void bl1_screate_contigmr( uplo1_t uplo, integer m, integer n, float* a_save, integer a_rs_save, integer a_cs_save, float** a, integer* a_rs, integer* a_cs )
+void bl1_screate_contigmr( uplo1_t uplo, fla_dim_t m, fla_dim_t n, float* a_save, fla_dim_t a_rs_save, fla_dim_t a_cs_save, float** a, fla_dim_t* a_rs, fla_dim_t* a_cs )
 {
-	integer m_contig, n_contig;
+	fla_dim_t m_contig, n_contig;
 
 	if ( bl1_is_gen_storage( a_rs_save, a_cs_save ) )
 	{
@@ -48,9 +48,9 @@ void bl1_screate_contigmr( uplo1_t uplo, integer m, integer n, float* a_save, in
 	}
 }
 
-void bl1_dcreate_contigmr( uplo1_t uplo, integer m, integer n, double* a_save, integer a_rs_save, integer a_cs_save, double** a, integer* a_rs, integer* a_cs )
+void bl1_dcreate_contigmr( uplo1_t uplo, fla_dim_t m, fla_dim_t n, double* a_save, fla_dim_t a_rs_save, fla_dim_t a_cs_save, double** a, fla_dim_t* a_rs, fla_dim_t* a_cs )
 {
-	integer m_contig, n_contig;
+	fla_dim_t m_contig, n_contig;
 
 	if ( bl1_is_gen_storage( a_rs_save, a_cs_save ) )
 	{
@@ -80,9 +80,9 @@ void bl1_dcreate_contigmr( uplo1_t uplo, integer m, integer n, double* a_save, i
 	}
 }
 
-void bl1_ccreate_contigmr( uplo1_t uplo, integer m, integer n, scomplex* a_save, integer a_rs_save, integer a_cs_save, scomplex** a, integer* a_rs, integer* a_cs )
+void bl1_ccreate_contigmr( uplo1_t uplo, fla_dim_t m, fla_dim_t n, scomplex* a_save, fla_dim_t a_rs_save, fla_dim_t a_cs_save, scomplex** a, fla_dim_t* a_rs, fla_dim_t* a_cs )
 {
-	integer m_contig, n_contig;
+	fla_dim_t m_contig, n_contig;
 
 	if ( bl1_is_gen_storage( a_rs_save, a_cs_save ) )
 	{
@@ -112,9 +112,9 @@ void bl1_ccreate_contigmr( uplo1_t uplo, integer m, integer n, scomplex* a_save,
 	}
 }
 
-void bl1_zcreate_contigmr( uplo1_t uplo, integer m, integer n, dcomplex* a_save, integer a_rs_save, integer a_cs_save, dcomplex** a, integer* a_rs, integer* a_cs )
+void bl1_zcreate_contigmr( uplo1_t uplo, fla_dim_t m, fla_dim_t n, dcomplex* a_save, fla_dim_t a_rs_save, fla_dim_t a_cs_save, dcomplex** a, fla_dim_t* a_rs, fla_dim_t* a_cs )
 {
-	integer m_contig, n_contig;
+	fla_dim_t m_contig, n_contig;
 
 	if ( bl1_is_gen_storage( a_rs_save, a_cs_save ) )
 	{

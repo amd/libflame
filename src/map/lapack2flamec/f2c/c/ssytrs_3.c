@@ -163,34 +163,44 @@ static real c_b9 = 1.f;
 /* > \endverbatim */
 /* ==================================================================== */
 /* Subroutine */
-void ssytrs_3_(char *uplo, integer *n, integer *nrhs, real *a, integer *lda, real *e, integer *ipiv,
-               real *b, integer *ldb, integer *info)
+/** Generated wrapper function */
+void ssytrs_3_(char *uplo, aocl_int_t *n, aocl_int_t *nrhs, real *a, aocl_int_t *lda, real *e,
+               aocl_int_t *ipiv, real *b, aocl_int_t *ldb, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_ssytrs_3(uplo, n, nrhs, a, lda, e, ipiv, b, ldb, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t nrhs_64 = *nrhs;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t ldb_64 = *ldb;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_ssytrs_3(uplo, &n_64, &nrhs_64, a, &lda_64, e, ipiv, b, &ldb_64, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_ssytrs_3(char *uplo, aocl_int64_t *n, aocl_int64_t *nrhs, real *a,
+                          aocl_int64_t *lda, real *e, aocl_int_t *ipiv, real *b, aocl_int64_t *ldb,
+                          aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF(
-             "ssytrs_3 inputs: uplo %c, n %" FLA_IS ", nrhs %" FLA_IS ", lda %" FLA_IS
-             ", ldb %" FLA_IS "",
-             *uplo, *n, *nrhs, *lda, *ldb);
+    AOCL_DTL_SNPRINTF("ssytrs_3 inputs: uplo %c, n %" FLA_IS ", nrhs %" FLA_IS ", lda %" FLA_IS
+                      ", ldb %" FLA_IS "",
+                      *uplo, *n, *nrhs, *lda, *ldb);
     /* System generated locals */
-    integer a_dim1, a_offset, b_dim1, b_offset, i__1, i__2;
+    aocl_int64_t a_dim1, a_offset, b_dim1, b_offset, i__1, i__2;
     real r__1;
     /* Local variables */
-    integer i__, j, k;
+    aocl_int64_t i__, j, k;
     real ak, bk;
-    integer kp;
+    aocl_int64_t kp;
     real akm1, bkm1, akm1k;
-    extern logical lsame_(char *, char *, integer, integer);
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     real denom;
-    extern /* Subroutine */
-        void
-        sscal_(integer *, real *, real *, integer *);
     logical upper;
-    extern /* Subroutine */
-        void
-        sswap_(integer *, real *, integer *, real *, integer *),
-        strsm_(char *, char *, char *, char *, integer *, integer *, real *, real *, integer *,
-               real *, integer *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.7.1) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -246,7 +256,7 @@ void ssytrs_3_(char *uplo, integer *n, integer *nrhs, real *a, integer *lda, rea
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("SSYTRS_3", &i__1, (ftnlen)8);
+        aocl_blas_xerbla("SSYTRS_3", &i__1, (ftnlen)8);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -271,11 +281,11 @@ void ssytrs_3_(char *uplo, integer *n, integer *nrhs, real *a, integer *lda, rea
             kp = (i__1 = ipiv[k], f2c_abs(i__1));
             if(kp != k)
             {
-                sswap_(nrhs, &b[k + b_dim1], ldb, &b[kp + b_dim1], ldb);
+                aocl_blas_sswap(nrhs, &b[k + b_dim1], ldb, &b[kp + b_dim1], ldb);
             }
         }
         /* Compute (U \P**T * B) -> B [ (U \P**T * B) ] */
-        strsm_("L", "U", "N", "U", n, nrhs, &c_b9, &a[a_offset], lda, &b[b_offset], ldb);
+        aocl_blas_strsm("L", "U", "N", "U", n, nrhs, &c_b9, &a[a_offset], lda, &b[b_offset], ldb);
         /* Compute D \ B -> B [ D \ (U \P**T * B) ] */
         i__ = *n;
         while(i__ >= 1)
@@ -283,7 +293,7 @@ void ssytrs_3_(char *uplo, integer *n, integer *nrhs, real *a, integer *lda, rea
             if(ipiv[i__] > 0)
             {
                 r__1 = 1.f / a[i__ + i__ * a_dim1];
-                sscal_(nrhs, &r__1, &b[i__ + b_dim1], ldb);
+                aocl_blas_sscal(nrhs, &r__1, &b[i__ + b_dim1], ldb);
             }
             else if(i__ > 1)
             {
@@ -304,7 +314,7 @@ void ssytrs_3_(char *uplo, integer *n, integer *nrhs, real *a, integer *lda, rea
             --i__;
         }
         /* Compute (U**T \ B) -> B [ U**T \ (D \ (U \P**T * B) ) ] */
-        strsm_("L", "U", "T", "U", n, nrhs, &c_b9, &a[a_offset], lda, &b[b_offset], ldb);
+        aocl_blas_strsm("L", "U", "T", "U", n, nrhs, &c_b9, &a[a_offset], lda, &b[b_offset], ldb);
         /* P * B [ P * (U**T \ (D \ (U \P**T * B) )) ] */
         /* Interchange rows K and IPIV(K) of matrix B in reverse order */
         /* from the formation order of IPIV(I) vector for Upper case. */
@@ -317,7 +327,7 @@ void ssytrs_3_(char *uplo, integer *n, integer *nrhs, real *a, integer *lda, rea
             kp = (i__2 = ipiv[k], f2c_abs(i__2));
             if(kp != k)
             {
-                sswap_(nrhs, &b[k + b_dim1], ldb, &b[kp + b_dim1], ldb);
+                aocl_blas_sswap(nrhs, &b[k + b_dim1], ldb, &b[kp + b_dim1], ldb);
             }
         }
     }
@@ -337,11 +347,11 @@ void ssytrs_3_(char *uplo, integer *n, integer *nrhs, real *a, integer *lda, rea
             kp = (i__2 = ipiv[k], f2c_abs(i__2));
             if(kp != k)
             {
-                sswap_(nrhs, &b[k + b_dim1], ldb, &b[kp + b_dim1], ldb);
+                aocl_blas_sswap(nrhs, &b[k + b_dim1], ldb, &b[kp + b_dim1], ldb);
             }
         }
         /* Compute (L \P**T * B) -> B [ (L \P**T * B) ] */
-        strsm_("L", "L", "N", "U", n, nrhs, &c_b9, &a[a_offset], lda, &b[b_offset], ldb);
+        aocl_blas_strsm("L", "L", "N", "U", n, nrhs, &c_b9, &a[a_offset], lda, &b[b_offset], ldb);
         /* Compute D \ B -> B [ D \ (L \P**T * B) ] */
         i__ = 1;
         while(i__ <= *n)
@@ -349,7 +359,7 @@ void ssytrs_3_(char *uplo, integer *n, integer *nrhs, real *a, integer *lda, rea
             if(ipiv[i__] > 0)
             {
                 r__1 = 1.f / a[i__ + i__ * a_dim1];
-                sscal_(nrhs, &r__1, &b[i__ + b_dim1], ldb);
+                aocl_blas_sscal(nrhs, &r__1, &b[i__ + b_dim1], ldb);
             }
             else if(i__ < *n)
             {
@@ -370,7 +380,7 @@ void ssytrs_3_(char *uplo, integer *n, integer *nrhs, real *a, integer *lda, rea
             ++i__;
         }
         /* Compute (L**T \ B) -> B [ L**T \ (D \ (L \P**T * B) ) ] */
-        strsm_("L", "L", "T", "U", n, nrhs, &c_b9, &a[a_offset], lda, &b[b_offset], ldb);
+        aocl_blas_strsm("L", "L", "T", "U", n, nrhs, &c_b9, &a[a_offset], lda, &b[b_offset], ldb);
         /* P * B [ P * (L**T \ (D \ (L \P**T * B) )) ] */
         /* Interchange rows K and IPIV(K) of matrix B in reverse order */
         /* from the formation order of IPIV(I) vector for Lower case. */
@@ -382,7 +392,7 @@ void ssytrs_3_(char *uplo, integer *n, integer *nrhs, real *a, integer *lda, rea
             kp = (i__1 = ipiv[k], f2c_abs(i__1));
             if(kp != k)
             {
-                sswap_(nrhs, &b[k + b_dim1], ldb, &b[kp + b_dim1], ldb);
+                aocl_blas_sswap(nrhs, &b[k + b_dim1], ldb, &b[kp + b_dim1], ldb);
             }
         }
         /* END Lower */

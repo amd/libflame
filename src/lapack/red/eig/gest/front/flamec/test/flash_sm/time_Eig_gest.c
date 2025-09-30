@@ -17,17 +17,17 @@
 FLA_Error REF_Eig_gest( FLA_Inv inv, FLA_Uplo uplo, FLA_Obj A, FLA_Obj B );
 
 void time_Eig_gest(
-                integer param_combo, integer type, integer n_repeats, integer n,
+                aocl_int64_t param_combo, aocl_int64_t type, aocl_int64_t n_repeats, aocl_int64_t n,
                 FLA_Inv inv, FLA_Uplo uplo, FLA_Obj A, FLA_Obj B, FLA_Obj norm,
                 double *dtime, double *diff, double *gflops );
 
 
 void time_Eig_gest(
-                integer param_combo, integer type, integer nrepeats, integer m,
+                aocl_int64_t param_combo, aocl_int64_t type, aocl_int64_t nrepeats, aocl_int64_t m,
                 FLA_Inv inv, FLA_Uplo uplo, FLA_Obj A, FLA_Obj B, FLA_Obj norm,
                 double *dtime, double *diff, double *gflops )
 {
-  integer
+  aocl_int64_t
     irep;
 
   double

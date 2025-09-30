@@ -136,24 +136,40 @@ otherwise it is between d(1) and d(2). See */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void slaed6_(integer *kniter, logical *orgati, real *rho, real *d__, real *z__, real *finit,
-             real *tau, integer *info)
+/** Generated wrapper function */
+void slaed6_(aocl_int_t *kniter, logical *orgati, real *rho, real *d__, real *z__, real *finit,
+             real *tau, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_slaed6(kniter, orgati, rho, d__, z__, finit, tau, info);
+#else
+    aocl_int64_t kniter_64 = *kniter;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_slaed6(&kniter_64, orgati, rho, d__, z__, finit, tau, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_slaed6(aocl_int64_t *kniter, logical *orgati, real *rho, real *d__, real *z__,
+                        real *finit, real *tau, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("slaed6_ inputs: *kniter %" FLA_IS "", *kniter);
     /* System generated locals */
-    integer i__1;
+    aocl_int64_t i__1;
     real r__1, r__2, r__3, r__4;
     /* Builtin functions */
-    double sqrt(doublereal), log(doublereal), pow_ri(real *, integer *);
+    double sqrt(doublereal), log(doublereal), pow_ri(real *, aocl_int64_t *);
     /* Local variables */
     real a, b, c__, f;
-    integer i__;
+    aocl_int64_t i__;
     real fc, df, ddf, lbd, eta, ubd, eps, base;
-    integer iter;
+    aocl_int64_t iter;
     real temp, temp1, temp2, temp3, temp4;
     logical scale;
-    integer niter;
+    aocl_int64_t niter;
     real small1, small2, sminv1, sminv2, dscale[3], sclfac;
     extern real slamch_(char *);
     real zscale[3], erretm, sclinv;

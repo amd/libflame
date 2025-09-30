@@ -11,9 +11,9 @@
 
 #if FLA_ENABLE_AMD_OPT
 
-int fla_dscal_ix1_avx512(integer *n, doublereal *da, doublereal *dx, integer *incx)
+int fla_dscal_ix1_avx512(aocl_int64_t *n, doublereal *da, doublereal *dx, aocl_int64_t *incx)
 {
-    integer i, i__1;
+    aocl_int64_t i, i__1;
     __m512d alpha512, xv512, pv512;
     __m256d alpha256, xv256, pv256;
     __m128d alpha128, xv128, pv128;

@@ -38,7 +38,7 @@
 /* > */
 /* > \verbatim */
 /* > */
-/* > CUNML2 overwrites the general complex m-by-n matrix C with */
+/* > CUNML2 overwrites the general scomplex m-by-n matrix C with */
 /* > */
 /* > Q * C if SIDE = 'L' and TRANS = 'N', or */
 /* > */
@@ -48,7 +48,7 @@
 /* > */
 /* > C * Q**H if SIDE = 'R' and TRANS = 'C', */
 /* > */
-/* > where Q is a complex unitary matrix defined as the product of k */
+/* > where Q is a scomplex unitary matrix defined as the product of k */
 /* > elementary reflectors */
 /* > */
 /* > Q = H(k)**H . . . H(2)**H H(1)**H */
@@ -154,29 +154,21 @@
 /* > \ingroup complexOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void cunml2_fla(char *side, char *trans, integer *m, integer *n, integer *k, complex *a,
-                integer *lda, complex *tau, complex *c__, integer *ldc, complex *work,
-                integer *info)
+void cunml2_fla(char *side, char *trans, aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *k,
+                scomplex *a, aocl_int64_t *lda, scomplex *tau, scomplex *c__, aocl_int64_t *ldc,
+                scomplex *work, aocl_int64_t *info)
 {
     /* System generated locals */
-    integer a_dim1, a_offset, c_dim1, c_offset, i__1, i__2, i__3;
-    complex q__1;
+    aocl_int64_t a_dim1, a_offset, c_dim1, c_offset, i__1, i__2, i__3;
+    scomplex q__1;
     /* Builtin functions */
-    void r_cnjg(complex *, complex *);
+    void r_cnjg(scomplex *, scomplex *);
     /* Local variables */
-    integer i__, i1, i2, i3, ic, jc, mi, ni, nq;
-    complex aii;
+    aocl_int64_t i__, i1, i2, i3, ic, jc, mi, ni, nq;
+    scomplex aii;
     logical left;
-    complex taui;
-    extern /* Subroutine */
-        void
-        clarf_(char *, integer *, integer *, complex *, integer *, complex *, complex *, integer *,
-               complex *);
-    extern logical lsame_(char *, char *, integer, integer);
-    extern /* Subroutine */
-        void
-        clacgv_(integer *, complex *, integer *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    scomplex taui;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     logical notran;
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -252,7 +244,7 @@ void cunml2_fla(char *side, char *trans, integer *m, integer *n, integer *k, com
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("CUNML2", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("CUNML2", &i__1, (ftnlen)6);
         return;
     }
     /* Quick return if possible */
@@ -314,7 +306,7 @@ void cunml2_fla(char *side, char *trans, integer *m, integer *n, integer *k, com
         if(i__ < nq)
         {
             i__3 = nq - i__;
-            clacgv_(&i__3, &a[i__ + (i__ + 1) * a_dim1], lda);
+            aocl_lapack_clacgv(&i__3, &a[i__ + (i__ + 1) * a_dim1], lda);
         }
         i__3 = i__ + i__ * a_dim1;
         aii.r = a[i__3].r;
@@ -322,15 +314,15 @@ void cunml2_fla(char *side, char *trans, integer *m, integer *n, integer *k, com
         i__3 = i__ + i__ * a_dim1;
         a[i__3].r = 1.f;
         a[i__3].i = 0.f; // , expr subst
-        clarf_(side, &mi, &ni, &a[i__ + i__ * a_dim1], lda, &taui, &c__[ic + jc * c_dim1], ldc,
-               &work[1]);
+        aocl_lapack_clarf(side, &mi, &ni, &a[i__ + i__ * a_dim1], lda, &taui,
+                          &c__[ic + jc * c_dim1], ldc, &work[1]);
         i__3 = i__ + i__ * a_dim1;
         a[i__3].r = aii.r;
         a[i__3].i = aii.i; // , expr subst
         if(i__ < nq)
         {
             i__3 = nq - i__;
-            clacgv_(&i__3, &a[i__ + (i__ + 1) * a_dim1], lda);
+            aocl_lapack_clacgv(&i__3, &a[i__ + (i__ + 1) * a_dim1], lda);
         }
         /* L10: */
     }

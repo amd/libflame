@@ -16,20 +16,72 @@
   symmetric matrix in packed storage format.
 */
 
-extern int sspffrt2_check(float *ap, integer *n, integer *ncolm, float *work, float *work2);
-extern int dspffrt2_check(double *ap, integer *n, integer *ncolm, double *work, double *work2);
-extern int cspffrt2_check(scomplex *ap, integer *n, integer *ncolm, scomplex *work,
+extern int sspffrt2_check(float *ap, aocl_int64_t *n, aocl_int64_t *ncolm, float *work, float *work2);
+extern int dspffrt2_check(double *ap, aocl_int64_t *n, aocl_int64_t *ncolm, double *work, double *work2);
+extern int cspffrt2_check(scomplex *ap, aocl_int64_t *n, aocl_int64_t *ncolm, scomplex *work,
                           scomplex *work2);
-extern int zspffrt2_check(dcomplex *ap, integer *n, integer *ncolm, dcomplex *work,
+extern int zspffrt2_check(dcomplex *ap, aocl_int64_t *n, aocl_int64_t *ncolm, dcomplex *work,
                           dcomplex *work2);
-extern void sspffrt2_fla(float *ap, integer *n, integer *ncolm, float *work, float *work2);
-extern void dspffrt2_fla(double *ap, integer *n, integer *ncolm, double *work, double *work2);
-extern void cspffrt2_fla(scomplex *ap, integer *n, integer *ncolm, scomplex *work, scomplex *work2);
-extern void zspffrt2_fla(dcomplex *ap, integer *n, integer *ncolm, dcomplex *work, dcomplex *work2);
+extern void sspffrt2_fla(float *ap, aocl_int64_t *n, aocl_int64_t *ncolm, float *work, float *work2);
+extern void dspffrt2_fla(double *ap, aocl_int64_t *n, aocl_int64_t *ncolm, double *work, double *work2);
+extern void cspffrt2_fla(scomplex *ap, aocl_int64_t *n, aocl_int64_t *ncolm, scomplex *work, scomplex *work2);
+extern void zspffrt2_fla(dcomplex *ap, aocl_int64_t *n, aocl_int64_t *ncolm, dcomplex *work, dcomplex *work2);
+
+/** Generated wrapper function */
+void sspffrt2_(real *ap, aocl_int_t *n, aocl_int_t *ncolm, real *work, real *work2)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_sspffrt2(ap, n, ncolm, work, work2);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t ncolm_64 = *ncolm;
+
+    aocl_lapack_sspffrt2(ap, &n_64, &ncolm_64, work, work2);
+#endif
+}
+
+/** Generated wrapper function */
+void dspffrt2_(doublereal *ap, aocl_int_t *n, aocl_int_t *ncolm, doublereal *work, doublereal *work2)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_dspffrt2(ap, n, ncolm, work, work2);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t ncolm_64 = *ncolm;
+
+    aocl_lapack_dspffrt2(ap, &n_64, &ncolm_64, work, work2);
+#endif
+}
+
+/** Generated wrapper function */
+void cspffrt2_(scomplex *ap, aocl_int_t *n, aocl_int_t *ncolm, scomplex *work, scomplex *work2)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_cspffrt2(ap, n, ncolm, work, work2);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t ncolm_64 = *ncolm;
+
+    aocl_lapack_cspffrt2(ap, &n_64, &ncolm_64, work, work2);
+#endif
+}
+
+/** Generated wrapper function */
+void zspffrt2_(dcomplex *ap, aocl_int_t *n, aocl_int_t *ncolm, dcomplex *work, dcomplex *work2)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_zspffrt2(ap, n, ncolm, work, work2);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t ncolm_64 = *ncolm;
+
+    aocl_lapack_zspffrt2(ap, &n_64, &ncolm_64, work, work2);
+#endif
+}
 
 #define LAPACK_spffrt2(prefix)                                                        \
-    void F77_##prefix##spffrt2(PREFIX2LAPACK_TYPEDEF(prefix) * buff_AP, integer * n,  \
-                               integer * ncolm, PREFIX2LAPACK_TYPEDEF(prefix) * work, \
+    void aocl_lapack_##prefix##spffrt2(PREFIX2LAPACK_TYPEDEF(prefix) * buff_AP, aocl_int64_t * n,  \
+                               aocl_int64_t * ncolm, PREFIX2LAPACK_TYPEDEF(prefix) * work, \
                                PREFIX2LAPACK_TYPEDEF(prefix) * work2)
 
 #define LAPACK_spffrt2_body(prefix) prefix##spffrt2_fla(buff_AP, n, ncolm, work, work2);

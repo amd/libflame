@@ -9,24 +9,24 @@
 */
 
 FLA_Error FLA_Apply_G_lb_opt_var1( FLA_Obj c, FLA_Obj s, FLA_Obj A );
-FLA_Error FLA_Apply_G_lb_ops_var1( integer       m_A,
-                                   integer       n_A,
-                                   float*    buff_c, integer inc_c,
-                                   float*    buff_s, integer inc_s,
-                                   float*    buff_A, integer rs_A, integer cs_A );
-FLA_Error FLA_Apply_G_lb_opd_var1( integer       m_A,
-                                   integer       n_A,
-                                   double*   buff_c, integer inc_c,
-                                   double*   buff_s, integer inc_s,
-                                   double*   buff_A, integer rs_A, integer cs_A );
-FLA_Error FLA_Apply_G_lb_opc_var1( integer       m_A,
-                                   integer       n_A,
-                                   float*    buff_c, integer inc_c,
-                                   float*    buff_s, integer inc_s,
-                                   scomplex* buff_A, integer rs_A, integer cs_A );
-FLA_Error FLA_Apply_G_lb_opz_var1( integer       m_A,
-                                   integer       n_A,
-                                   double*   buff_c, integer inc_c,
-                                   double*   buff_s, integer inc_s,
-                                   dcomplex* buff_A, integer rs_A, integer cs_A );
+FLA_Error FLA_Apply_G_lb_ops_var1( fla_dim_t       m_A,
+                                   fla_dim_t       n_A,
+                                   float*    buff_c, fla_dim_t inc_c,
+                                   float*    buff_s, fla_dim_t inc_s,
+                                   float*    buff_A, fla_dim_t rs_A, fla_dim_t cs_A );
+FLA_Error FLA_Apply_G_lb_opd_var1( fla_dim_t       m_A,
+                                   fla_dim_t       n_A,
+                                   double*   buff_c, fla_dim_t inc_c,
+                                   double*   buff_s, fla_dim_t inc_s,
+                                   double*   buff_A, fla_dim_t rs_A, fla_dim_t cs_A );
+FLA_Error FLA_Apply_G_lb_opc_var1( fla_dim_t       m_A,
+                                   fla_dim_t       n_A,
+                                   float*    buff_c, fla_dim_t inc_c,
+                                   float*    buff_s, fla_dim_t inc_s,
+                                   scomplex* buff_A, fla_dim_t rs_A, fla_dim_t cs_A );
+FLA_Error FLA_Apply_G_lb_opz_var1( fla_dim_t       m_A,
+                                   fla_dim_t       n_A,
+                                   double*   buff_c, fla_dim_t inc_c,
+                                   double*   buff_s, fla_dim_t inc_s,
+                                   dcomplex* buff_A, fla_dim_t rs_A, fla_dim_t cs_A );
 

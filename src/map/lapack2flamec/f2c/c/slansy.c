@@ -4,7 +4,7 @@
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
  /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
+static aocl_int64_t c__1 = 1;
 /* > \brief \b SLANSY returns the value of the 1-norm, or the Frobenius norm, or the infinity norm,
  * or the ele ment of largest absolute value of a real symmetric matrix. */
 /* =========== DOCUMENTATION =========== */
@@ -119,24 +119,35 @@ otherwise, */
 /* > \author NAG Ltd. */
 /* > \ingroup realSYauxiliary */
 /* ===================================================================== */
-real slansy_(char *norm, char *uplo, integer *n, real *a, integer *lda, real *work)
+/** Generated wrapper function */
+real slansy_(char *norm, char *uplo, aocl_int_t *n, real *a, aocl_int_t *lda, real *work)
+{
+#if FLA_ENABLE_ILP64
+    return aocl_lapack_slansy(norm, uplo, n, a, lda, work);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t lda_64 = *lda;
+
+    return aocl_lapack_slansy(norm, uplo, &n_64, a, &lda_64, work);
+#endif
+}
+
+real aocl_lapack_slansy(char *norm, char *uplo, aocl_int64_t *n, real *a, aocl_int64_t *lda,
+                        real *work)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("slansy inputs: norm %c, uplo %c, n %" FLA_IS ", lda %" FLA_IS "", *norm,
                       *uplo, *n, *lda);
     /* System generated locals */
-    integer a_dim1, a_offset, i__1, i__2;
+    aocl_int64_t a_dim1, a_offset, i__1, i__2;
     real ret_val, r__1;
     /* Builtin functions */
     double sqrt(doublereal);
     /* Local variables */
-    integer i__, j;
+    aocl_int64_t i__, j;
     real sum, absa, scale;
-    extern logical lsame_(char *, char *, integer, integer);
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     real value;
-    extern /* Subroutine */
-        void
-        slassq_(integer *, real *, integer *, real *, real *);
     /* -- LAPACK auxiliary routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -279,7 +290,7 @@ real slansy_(char *norm, char *uplo, integer *n, real *a, integer *lda, real *wo
             for(j = 2; j <= i__1; ++j)
             {
                 i__2 = j - 1;
-                slassq_(&i__2, &a[j * a_dim1 + 1], &c__1, &scale, &sum);
+                aocl_lapack_slassq(&i__2, &a[j * a_dim1 + 1], &c__1, &scale, &sum);
                 /* L110: */
             }
         }
@@ -289,13 +300,13 @@ real slansy_(char *norm, char *uplo, integer *n, real *a, integer *lda, real *wo
             for(j = 1; j <= i__1; ++j)
             {
                 i__2 = *n - j;
-                slassq_(&i__2, &a[j + 1 + j * a_dim1], &c__1, &scale, &sum);
+                aocl_lapack_slassq(&i__2, &a[j + 1 + j * a_dim1], &c__1, &scale, &sum);
                 /* L120: */
             }
         }
         sum *= 2;
         i__1 = *lda + 1;
-        slassq_(n, &a[a_offset], &i__1, &scale, &sum);
+        aocl_lapack_slassq(n, &a[a_offset], &i__1, &scale, &sum);
         value = scale * sqrt(sum);
     }
     ret_val = value;

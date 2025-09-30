@@ -4,7 +4,7 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
+static aocl_int64_t c__1 = 1;
 /* > \brief \b SLARRF finds a new relatively robust representation such that at least one of the
  * eigenvalues i s relatively isolated. */
 /* =========== DOCUMENTATION =========== */
@@ -187,30 +187,49 @@ static integer c__1 = 1;
 /* > Christof Voemel, University of California, Berkeley, USA */
 /* ===================================================================== */
 /* Subroutine */
-void slarrf_(integer *n, real *d__, real *l, real *ld, integer *clstrt, integer *clend, real *w,
-             real *wgap, real *werr, real *spdiam, real *clgapl, real *clgapr, real *pivmin,
-             real *sigma, real *dplus, real *lplus, real *work, integer *info)
+/** Generated wrapper function */
+void slarrf_(aocl_int_t *n, real *d__, real *l, real *ld, aocl_int_t *clstrt, aocl_int_t *clend,
+             real *w, real *wgap, real *werr, real *spdiam, real *clgapl, real *clgapr,
+             real *pivmin, real *sigma, real *dplus, real *lplus, real *work, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_slarrf(n, d__, l, ld, clstrt, clend, w, wgap, werr, spdiam, clgapl, clgapr, pivmin,
+                       sigma, dplus, lplus, work, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t clstrt_64 = *clstrt;
+    aocl_int64_t clend_64 = *clend;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_slarrf(&n_64, d__, l, ld, &clstrt_64, &clend_64, w, wgap, werr, spdiam, clgapl,
+                       clgapr, pivmin, sigma, dplus, lplus, work, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_slarrf(aocl_int64_t *n, real *d__, real *l, real *ld, aocl_int64_t *clstrt,
+                        aocl_int64_t *clend, real *w, real *wgap, real *werr, real *spdiam,
+                        real *clgapl, real *clgapr, real *pivmin, real *sigma, real *dplus,
+                        real *lplus, real *work, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("slarrf inputs: n %" FLA_IS ",clstrt %" FLA_IS ",clend %" FLA_IS "", *n,
                       *clstrt, *clend);
     /* System generated locals */
-    integer i__1;
+    aocl_int64_t i__1;
     real r__1, r__2, r__3;
     /* Builtin functions */
     double sqrt(doublereal);
     /* Local variables */
-    integer i__;
+    aocl_int64_t i__;
     real s, bestshift, smlgrowth, eps, tmp, max1, max2, rrr1, rrr2, znm2, growthbound, fail, fact,
         oldp;
-    integer indx;
+    aocl_int64_t indx;
     real prod;
-    integer ktry;
+    aocl_int64_t ktry;
     real fail2, avgap, ldmax, rdmax;
-    integer shift;
-    extern /* Subroutine */
-        void
-        scopy_(integer *, real *, integer *, real *, integer *);
+    aocl_int64_t shift;
     logical dorrr1;
     real ldelta;
     extern real slamch_(char *);
@@ -554,9 +573,9 @@ L100:
     else if(shift == 2)
     {
         /* store new L and D back into DPLUS, LPLUS */
-        scopy_(n, &work[1], &c__1, &dplus[1], &c__1);
+        aocl_blas_scopy(n, &work[1], &c__1, &dplus[1], &c__1);
         i__1 = *n - 1;
-        scopy_(&i__1, &work[*n + 1], &c__1, &lplus[1], &c__1);
+        aocl_blas_scopy(&i__1, &work[*n + 1], &c__1, &lplus[1], &c__1);
     }
     AOCL_DTL_TRACE_LOG_EXIT
     return;

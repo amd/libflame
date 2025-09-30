@@ -4,7 +4,7 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
+static aocl_int64_t c__1 = 1;
 /* > \brief <b> CHPEV computes the eigenvalues and, optionally, the left and/or right eigenvectors
  * for OTHER m atrices</b> */
 /* =========== DOCUMENTATION =========== */
@@ -139,8 +139,25 @@ i */
 /* > \ingroup complexOTHEReigen */
 /* ===================================================================== */
 /* Subroutine */
-void chpev_(char *jobz, char *uplo, integer *n, complex *ap, real *w, complex *z__, integer *ldz,
-            complex *work, real *rwork, integer *info)
+/** Generated wrapper function */
+void chpev_(char *jobz, char *uplo, aocl_int_t *n, scomplex *ap, real *w, scomplex *z__,
+            aocl_int_t *ldz, scomplex *work, real *rwork, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_chpev(jobz, uplo, n, ap, w, z__, ldz, work, rwork, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t ldz_64 = *ldz;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_chpev(jobz, uplo, &n_64, ap, w, z__, &ldz_64, work, rwork, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_chpev(char *jobz, char *uplo, aocl_int64_t *n, scomplex *ap, real *w, scomplex *z__,
+                       aocl_int64_t *ldz, scomplex *work, real *rwork, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -164,33 +181,15 @@ void chpev_(char *jobz, char *uplo, integer *n, complex *ap, real *w, complex *z
     real anrm;
     aocl_int64_t imax;
     real rmin, rmax, sigma;
-    extern logical lsame_(char *, char *, integer, integer);
-    integer iinfo;
-    extern /* Subroutine */
-        void
-        sscal_(integer *, real *, real *, integer *);
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    aocl_int64_t iinfo;
     logical wantz;
-    integer iscale;
-    extern real clanhp_(char *, char *, integer *, complex *, real *), slamch_(char *);
-    extern /* Subroutine */
-        void
-        csscal_(integer *, real *, complex *, integer *);
+    aocl_int64_t iscale;
+    extern real slamch_(char *);
     real safmin;
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real bignum;
-    integer indtau;
-    extern /* Subroutine */
-        void
-        chptrd_(char *, integer *, complex *, real *, real *, complex *, integer *);
-    integer indrwk, indwrk;
-    extern /* Subroutine */
-        void
-        csteqr_(char *, integer *, real *, real *, complex *, integer *, real *, integer *),
-        cupgtr_(char *, integer *, complex *, complex *, complex *, integer *, complex *,
-                integer *),
-        ssterf_(integer *, real *, real *, integer *);
+    aocl_int64_t indtau;
+    aocl_int64_t indrwk, indwrk;
     real smlnum;
     /* -- LAPACK driver routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -243,7 +242,7 @@ void chpev_(char *jobz, char *uplo, integer *n, complex *ap, real *w, complex *z
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("CHPEV ", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("CHPEV ", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
@@ -304,9 +303,10 @@ void chpev_(char *jobz, char *uplo, integer *n, complex *ap, real *w, complex *z
     else
     {
         indwrk = indtau + *n;
-        cupgtr_(uplo, n, &ap[1], &work[indtau], &z__[z_offset], ldz, &work[indwrk], &iinfo);
+        aocl_lapack_cupgtr(uplo, n, &ap[1], &work[indtau], &z__[z_offset], ldz, &work[indwrk],
+                           &iinfo);
         indrwk = inde + *n;
-        csteqr_(jobz, n, &w[1], &rwork[inde], &z__[z_offset], ldz, &rwork[indrwk], info);
+        aocl_lapack_csteqr(jobz, n, &w[1], &rwork[inde], &z__[z_offset], ldz, &rwork[indrwk], info);
     }
     /* If matrix was scaled, then rescale eigenvalues appropriately. */
     if(iscale == 1)

@@ -4,10 +4,10 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__9 = 9;
-static integer c__0 = 0;
+static aocl_int64_t c__9 = 9;
+static aocl_int64_t c__0 = 0;
 static doublereal c_b15 = 1.;
-static integer c__1 = 1;
+static aocl_int64_t c__1 = 1;
 static doublereal c_b29 = 0.;
 /* > \brief \b DBDSDC */
 /* =========== DOCUMENTATION =========== */
@@ -207,64 +207,58 @@ static doublereal c_b29 = 0.;
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void dbdsdc_(char *uplo, char *compq, integer *n, doublereal *d__, doublereal *e, doublereal *u,
-             integer *ldu, doublereal *vt, integer *ldvt, doublereal *q, integer *iq,
-             doublereal *work, integer *iwork, integer *info)
+/** Generated wrapper function */
+void dbdsdc_(char *uplo, char *compq, aocl_int_t *n, doublereal *d__, doublereal *e, doublereal *u,
+             aocl_int_t *ldu, doublereal *vt, aocl_int_t *ldvt, doublereal *q, aocl_int_t *iq,
+             doublereal *work, aocl_int_t *iwork, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_dbdsdc(uplo, compq, n, d__, e, u, ldu, vt, ldvt, q, iq, work, iwork, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t ldu_64 = *ldu;
+    aocl_int64_t ldvt_64 = *ldvt;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_dbdsdc(uplo, compq, &n_64, d__, e, u, &ldu_64, vt, &ldvt_64, q, iq, work, iwork,
+                       &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_dbdsdc(char *uplo, char *compq, aocl_int64_t *n, doublereal *d__, doublereal *e,
+                        doublereal *u, aocl_int64_t *ldu, doublereal *vt, aocl_int64_t *ldvt,
+                        doublereal *q, aocl_int_t *iq, doublereal *work, aocl_int_t *iwork,
+                        aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dbdsdc inputs: uplo %c, compq %c, n %" FLA_IS ", ldu %" FLA_IS
                       ", ldvt %" FLA_IS "",
                       *uplo, *compq, *n, *ldu, *ldvt);
     /* System generated locals */
-    integer u_dim1, u_offset, vt_dim1, vt_offset, i__1, i__2;
+    aocl_int64_t u_dim1, u_offset, vt_dim1, vt_offset, i__1, i__2;
     doublereal d__1;
     /* Builtin functions */
     double d_sign(doublereal *, doublereal *), log(doublereal);
     /* Local variables */
-    integer i__, j, k;
+    aocl_int64_t i__, j, k;
     doublereal p, r__;
-    integer z__, ic, ii, kk;
+    aocl_int64_t z__, ic, ii, kk;
     doublereal cs;
-    integer is, iu;
+    aocl_int64_t is, iu;
     doublereal sn;
-    integer nm1;
+    aocl_int64_t nm1;
     doublereal eps;
-    integer ivt, difl, difr, ierr, perm, mlvl, sqre;
-    extern logical lsame_(char *, char *, integer, integer);
-    extern /* Subroutine */
-        void
-        dlasr_(char *, char *, char *, integer *, integer *, doublereal *, doublereal *,
-               doublereal *, integer *),
-        dcopy_(integer *, doublereal *, integer *, doublereal *, integer *),
-        dswap_(integer *, doublereal *, integer *, doublereal *, integer *);
-    integer poles, iuplo, nsize, start;
-    extern /* Subroutine */
-        void
-        dlasd0_(integer *, integer *, doublereal *, doublereal *, doublereal *, integer *,
-                doublereal *, integer *, integer *, integer *, doublereal *, integer *);
+    aocl_int64_t ivt, difl, difr, ierr, perm, mlvl, sqre;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    aocl_int64_t poles, iuplo, nsize, start;
     extern doublereal dlamch_(char *);
-    extern /* Subroutine */
-        void
-        dlasda_(integer *, integer *, integer *, integer *, doublereal *, doublereal *,
-                doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *,
-                doublereal *, doublereal *, integer *, integer *, integer *, integer *,
-                doublereal *, doublereal *, doublereal *, doublereal *, integer *, integer *),
-        dlascl_(char *, integer *, integer *, doublereal *, doublereal *, integer *, integer *,
-                doublereal *, integer *, integer *),
-        dlasdq_(char *, integer *, integer *, integer *, integer *, integer *, doublereal *,
-                doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *,
-                integer *, doublereal *, integer *),
-        dlaset_(char *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *),
-        dlartg_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *);
-    extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    integer givcol;
-    extern doublereal dlanst_(char *, integer *, doublereal *, doublereal *);
-    integer icompq;
+    extern void dlartg_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *);
+    aocl_int64_t givcol;
+    aocl_int64_t icompq;
     doublereal orgnrm;
-    integer givnum, givptr, qstart, smlsiz, wstart, smlszp;
+    aocl_int64_t givnum, givptr, qstart, smlsiz, wstart, smlszp;
     /* -- LAPACK computational routine (version 3.7.1) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -361,7 +355,7 @@ void dbdsdc_(char *uplo, char *compq, integer *n, doublereal *d__, doublereal *e
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("DBDSDC", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("DBDSDC", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -371,7 +365,7 @@ void dbdsdc_(char *uplo, char *compq, integer *n, doublereal *d__, doublereal *e
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
-    smlsiz = ilaenv_(&c__9, "DBDSDC", " ", &c__0, &c__0, &c__0, &c__0);
+    smlsiz = aocl_lapack_ilaenv(&c__9, "DBDSDC", " ", &c__0, &c__0, &c__0, &c__0);
     if(*n == 1)
     {
         if(icompq == 1)
@@ -395,9 +389,9 @@ void dbdsdc_(char *uplo, char *compq, integer *n, doublereal *d__, doublereal *e
     qstart = 3;
     if(icompq == 1)
     {
-        dcopy_(n, &d__[1], &c__1, &q[1], &c__1);
+        aocl_blas_dcopy(n, &d__[1], &c__1, &q[1], &c__1);
         i__1 = *n - 1;
-        dcopy_(&i__1, &e[1], &c__1, &q[*n + 1], &c__1);
+        aocl_blas_dcopy(&i__1, &e[1], &c__1, &q[*n + 1], &c__1);
     }
     if(iuplo == 2)
     {
@@ -432,8 +426,8 @@ void dbdsdc_(char *uplo, char *compq, integer *n, doublereal *d__, doublereal *e
         /* Ignore WSTART, instead using WORK( 1 ), since the two vectors */
         /* for CS and -SN above are added only if ICOMPQ == 2, */
         /* and adding them exceeds documented WORK size of 4*n. */
-        dlasdq_("U", &c__0, n, &c__0, &c__0, &c__0, &d__[1], &e[1], &vt[vt_offset], ldvt,
-                &u[u_offset], ldu, &u[u_offset], ldu, &work[1], info);
+        aocl_lapack_dlasdq("U", &c__0, n, &c__0, &c__0, &c__0, &d__[1], &e[1], &vt[vt_offset], ldvt,
+                           &u[u_offset], ldu, &u[u_offset], ldu, &work[1], info);
         goto L40;
     }
     /* If N is smaller than the minimum divide size SMLSIZ, then solve */
@@ -442,37 +436,37 @@ void dbdsdc_(char *uplo, char *compq, integer *n, doublereal *d__, doublereal *e
     {
         if(icompq == 2)
         {
-            dlaset_("A", n, n, &c_b29, &c_b15, &u[u_offset], ldu);
-            dlaset_("A", n, n, &c_b29, &c_b15, &vt[vt_offset], ldvt);
-            dlasdq_("U", &c__0, n, n, n, &c__0, &d__[1], &e[1], &vt[vt_offset], ldvt, &u[u_offset],
-                    ldu, &u[u_offset], ldu, &work[wstart], info);
+            aocl_lapack_dlaset("A", n, n, &c_b29, &c_b15, &u[u_offset], ldu);
+            aocl_lapack_dlaset("A", n, n, &c_b29, &c_b15, &vt[vt_offset], ldvt);
+            aocl_lapack_dlasdq("U", &c__0, n, n, n, &c__0, &d__[1], &e[1], &vt[vt_offset], ldvt,
+                               &u[u_offset], ldu, &u[u_offset], ldu, &work[wstart], info);
         }
         else if(icompq == 1)
         {
             iu = 1;
             ivt = iu + *n;
-            dlaset_("A", n, n, &c_b29, &c_b15, &q[iu + (qstart - 1) * *n], n);
-            dlaset_("A", n, n, &c_b29, &c_b15, &q[ivt + (qstart - 1) * *n], n);
-            dlasdq_("U", &c__0, n, n, n, &c__0, &d__[1], &e[1], &q[ivt + (qstart - 1) * *n], n,
-                    &q[iu + (qstart - 1) * *n], n, &q[iu + (qstart - 1) * *n], n, &work[wstart],
-                    info);
+            aocl_lapack_dlaset("A", n, n, &c_b29, &c_b15, &q[iu + (qstart - 1) * *n], n);
+            aocl_lapack_dlaset("A", n, n, &c_b29, &c_b15, &q[ivt + (qstart - 1) * *n], n);
+            aocl_lapack_dlasdq("U", &c__0, n, n, n, &c__0, &d__[1], &e[1],
+                               &q[ivt + (qstart - 1) * *n], n, &q[iu + (qstart - 1) * *n], n,
+                               &q[iu + (qstart - 1) * *n], n, &work[wstart], info);
         }
         goto L40;
     }
     if(icompq == 2)
     {
-        dlaset_("A", n, n, &c_b29, &c_b15, &u[u_offset], ldu);
-        dlaset_("A", n, n, &c_b29, &c_b15, &vt[vt_offset], ldvt);
+        aocl_lapack_dlaset("A", n, n, &c_b29, &c_b15, &u[u_offset], ldu);
+        aocl_lapack_dlaset("A", n, n, &c_b29, &c_b15, &vt[vt_offset], ldvt);
     }
     /* Scale. */
-    orgnrm = dlanst_("M", n, &d__[1], &e[1]);
+    orgnrm = aocl_lapack_dlanst("M", n, &d__[1], &e[1]);
     if(orgnrm == 0.)
     {
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
-    dlascl_("G", &c__0, &c__0, &orgnrm, &c_b15, n, &c__1, &d__[1], n, &ierr);
-    dlascl_("G", &c__0, &c__0, &orgnrm, &c_b15, &nm1, &c__1, &e[1], &nm1, &ierr);
+    aocl_lapack_dlascl("G", &c__0, &c__0, &orgnrm, &c_b15, n, &c__1, &d__[1], n, &ierr);
+    aocl_lapack_dlascl("G", &c__0, &c__0, &orgnrm, &c_b15, &nm1, &c__1, &e[1], &nm1, &ierr);
     eps = dlamch_("Epsilon") * .9;
     mlvl = (integer)(log((doublereal)(*n) / (doublereal)(smlsiz + 1)) / log(2.)) + 1;
     smlszp = smlsiz + 1;
@@ -540,20 +534,21 @@ void dbdsdc_(char *uplo, char *compq, integer *n, doublereal *d__, doublereal *e
             }
             if(icompq == 2)
             {
-                dlasd0_(&nsize, &sqre, &d__[start], &e[start], &u[start + start * u_dim1], ldu,
-                        &vt[start + start * vt_dim1], ldvt, &smlsiz, &iwork[1], &work[wstart],
-                        info);
+                aocl_lapack_dlasd0(&nsize, &sqre, &d__[start], &e[start],
+                                   &u[start + start * u_dim1], ldu, &vt[start + start * vt_dim1],
+                                   ldvt, &smlsiz, &iwork[1], &work[wstart], info);
             }
             else
             {
-                dlasda_(&icompq, &smlsiz, &nsize, &sqre, &d__[start], &e[start],
-                        &q[start + (iu + qstart - 2) * *n], n, &q[start + (ivt + qstart - 2) * *n],
-                        &iq[start + k * *n], &q[start + (difl + qstart - 2) * *n],
-                        &q[start + (difr + qstart - 2) * *n], &q[start + (z__ + qstart - 2) * *n],
-                        &q[start + (poles + qstart - 2) * *n], &iq[start + givptr * *n],
-                        &iq[start + givcol * *n], n, &iq[start + perm * *n],
-                        &q[start + (givnum + qstart - 2) * *n], &q[start + (ic + qstart - 2) * *n],
-                        &q[start + (is + qstart - 2) * *n], &work[wstart], &iwork[1], info);
+                aocl_lapack_dlasda(
+                    &icompq, &smlsiz, &nsize, &sqre, &d__[start], &e[start],
+                    &q[start + (iu + qstart - 2) * *n], n, &q[start + (ivt + qstart - 2) * *n],
+                    &iq[start + k * *n], &q[start + (difl + qstart - 2) * *n],
+                    &q[start + (difr + qstart - 2) * *n], &q[start + (z__ + qstart - 2) * *n],
+                    &q[start + (poles + qstart - 2) * *n], &iq[start + givptr * *n],
+                    &iq[start + givcol * *n], n, &iq[start + perm * *n],
+                    &q[start + (givnum + qstart - 2) * *n], &q[start + (ic + qstart - 2) * *n],
+                    &q[start + (is + qstart - 2) * *n], &work[wstart], &iwork[1], info);
             }
             if(*info != 0)
             {
@@ -565,7 +560,7 @@ void dbdsdc_(char *uplo, char *compq, integer *n, doublereal *d__, doublereal *e
         /* L30: */
     }
     /* Unscale */
-    dlascl_("G", &c__0, &c__0, &c_b15, &orgnrm, n, &c__1, &d__[1], n, &ierr);
+    aocl_lapack_dlascl("G", &c__0, &c__0, &c_b15, &orgnrm, n, &c__1, &d__[1], n, &ierr);
 L40: /* Use Selection Sort to minimize swaps of singular vectors */
     i__1 = *n;
     for(ii = 2; ii <= i__1; ++ii)
@@ -589,17 +584,17 @@ L40: /* Use Selection Sort to minimize swaps of singular vectors */
             d__[i__] = p;
             if(icompq == 1)
             {
-                iq[i__] = kk;
+                iq[i__] = (aocl_int_t)(kk);
             }
             else if(icompq == 2)
             {
-                dswap_(n, &u[i__ * u_dim1 + 1], &c__1, &u[kk * u_dim1 + 1], &c__1);
-                dswap_(n, &vt[i__ + vt_dim1], ldvt, &vt[kk + vt_dim1], ldvt);
+                aocl_blas_dswap(n, &u[i__ * u_dim1 + 1], &c__1, &u[kk * u_dim1 + 1], &c__1);
+                aocl_blas_dswap(n, &vt[i__ + vt_dim1], ldvt, &vt[kk + vt_dim1], ldvt);
             }
         }
         else if(icompq == 1)
         {
-            iq[i__] = i__;
+            iq[i__] = (aocl_int_t)(i__);
         }
         /* L60: */
     }
@@ -619,7 +614,7 @@ L40: /* Use Selection Sort to minimize swaps of singular vectors */
     /* which rotated B to be upper bidiagonal */
     if(iuplo == 2 && icompq == 2)
     {
-        dlasr_("L", "V", "B", n, n, &work[1], &work[*n], &u[u_offset], ldu);
+        aocl_lapack_dlasr("L", "V", "B", n, n, &work[1], &work[*n], &u[u_offset], ldu);
     }
     AOCL_DTL_TRACE_LOG_EXIT
     return;

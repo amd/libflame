@@ -131,32 +131,32 @@ FLA_Error FLA_Sort_svd( FLA_Direct direct, FLA_Obj s, FLA_Obj U, FLA_Obj V )
 
 
 
-FLA_Error FLA_Sort_svd_f_ops( integer       m_U,
-                              integer       n_V,
-                              float*    s, integer inc_s,
-                              float*    U, integer rs_U, integer cs_U,
-                              float*    V, integer rs_V, integer cs_V )
+FLA_Error FLA_Sort_svd_f_ops( fla_dim_t       m_U,
+                              fla_dim_t       n_V,
+                              float*    s, fla_dim_t inc_s,
+                              float*    U, fla_dim_t rs_U, fla_dim_t cs_U,
+                              float*    V, fla_dim_t rs_V, fla_dim_t cs_V )
 {
 	return FLA_SUCCESS;
 }
 
-FLA_Error FLA_Sort_svd_b_ops( integer       m_U,
-                              integer       n_V,
-                              float*    s, integer inc_s,
-                              float*    U, integer rs_U, integer cs_U,
-                              float*    V, integer rs_V, integer cs_V )
+FLA_Error FLA_Sort_svd_b_ops( fla_dim_t       m_U,
+                              fla_dim_t       n_V,
+                              float*    s, fla_dim_t inc_s,
+                              float*    U, fla_dim_t rs_U, fla_dim_t cs_U,
+                              float*    V, fla_dim_t rs_V, fla_dim_t cs_V )
 {
 	return FLA_SUCCESS;
 }
 
-FLA_Error FLA_Sort_svd_f_opd( integer       m_U,
-                              integer       n_V,
-                              double*   s, integer inc_s,
-                              double*   U, integer rs_U, integer cs_U,
-                              double*   V, integer rs_V, integer cs_V )
+FLA_Error FLA_Sort_svd_f_opd( fla_dim_t       m_U,
+                              fla_dim_t       n_V,
+                              double*   s, fla_dim_t inc_s,
+                              double*   U, fla_dim_t rs_U, fla_dim_t cs_U,
+                              double*   V, fla_dim_t rs_V, fla_dim_t cs_V )
 {
-	integer    min_m_n = fla_min( m_U, n_V );
-	integer    i, ii, j, k;
+	fla_dim_t    min_m_n = fla_min( m_U, n_V );
+	fla_dim_t    i, ii, j, k;
 	double p;
 
 	for ( ii = 1; ii < min_m_n; ++ii )
@@ -191,14 +191,14 @@ FLA_Error FLA_Sort_svd_f_opd( integer       m_U,
 	return FLA_SUCCESS;
 }
 
-FLA_Error FLA_Sort_svd_b_opd( integer       m_U,
-                              integer       n_V,
-                              double*   s, integer inc_s,
-                              double*   U, integer rs_U, integer cs_U,
-                              double*   V, integer rs_V, integer cs_V )
+FLA_Error FLA_Sort_svd_b_opd( fla_dim_t       m_U,
+                              fla_dim_t       n_V,
+                              double*   s, fla_dim_t inc_s,
+                              double*   U, fla_dim_t rs_U, fla_dim_t cs_U,
+                              double*   V, fla_dim_t rs_V, fla_dim_t cs_V )
 {
-	integer    min_m_n = fla_min( m_U, n_V );
-	integer    i, ii, j, k;
+	fla_dim_t    min_m_n = fla_min( m_U, n_V );
+	fla_dim_t    i, ii, j, k;
 	double p;
 
 	for ( ii = 1; ii < min_m_n; ++ii )
@@ -233,32 +233,32 @@ FLA_Error FLA_Sort_svd_b_opd( integer       m_U,
 	return FLA_SUCCESS;
 }
 
-FLA_Error FLA_Sort_svd_f_opc( integer       m_U,
-                              integer       n_V,
-                              float*    s, integer inc_s,
-                              scomplex* U, integer rs_U, integer cs_U,
-                              scomplex* V, integer rs_V, integer cs_V )
+FLA_Error FLA_Sort_svd_f_opc( fla_dim_t       m_U,
+                              fla_dim_t       n_V,
+                              float*    s, fla_dim_t inc_s,
+                              scomplex* U, fla_dim_t rs_U, fla_dim_t cs_U,
+                              scomplex* V, fla_dim_t rs_V, fla_dim_t cs_V )
 {
 	return FLA_SUCCESS;
 }
 
-FLA_Error FLA_Sort_svd_b_opc( integer       m_U,
-                              integer       n_V,
-                              float*    s, integer inc_s,
-                              scomplex* U, integer rs_U, integer cs_U,
-                              scomplex* V, integer rs_V, integer cs_V )
+FLA_Error FLA_Sort_svd_b_opc( fla_dim_t       m_U,
+                              fla_dim_t       n_V,
+                              float*    s, fla_dim_t inc_s,
+                              scomplex* U, fla_dim_t rs_U, fla_dim_t cs_U,
+                              scomplex* V, fla_dim_t rs_V, fla_dim_t cs_V )
 {
 	return FLA_SUCCESS;
 }
 
-FLA_Error FLA_Sort_svd_f_opz( integer       m_U,
-                              integer       n_V,
-                              double*   s, integer inc_s,
-                              dcomplex* U, integer rs_U, integer cs_U,
-                              dcomplex* V, integer rs_V, integer cs_V )
+FLA_Error FLA_Sort_svd_f_opz( fla_dim_t       m_U,
+                              fla_dim_t       n_V,
+                              double*   s, fla_dim_t inc_s,
+                              dcomplex* U, fla_dim_t rs_U, fla_dim_t cs_U,
+                              dcomplex* V, fla_dim_t rs_V, fla_dim_t cs_V )
 {
-	integer    min_m_n = fla_min( m_U, n_V );
-	integer    i, ii, j, k;
+	fla_dim_t    min_m_n = fla_min( m_U, n_V );
+	fla_dim_t    i, ii, j, k;
 	double p;
 
 	for ( ii = 1; ii < min_m_n; ++ii )
@@ -293,14 +293,14 @@ FLA_Error FLA_Sort_svd_f_opz( integer       m_U,
 	return FLA_SUCCESS;
 }
 
-FLA_Error FLA_Sort_svd_b_opz( integer       m_U,
-                              integer       n_V,
-                              double*   s, integer inc_s,
-                              dcomplex* U, integer rs_U, integer cs_U,
-                              dcomplex* V, integer rs_V, integer cs_V )
+FLA_Error FLA_Sort_svd_b_opz( fla_dim_t       m_U,
+                              fla_dim_t       n_V,
+                              double*   s, fla_dim_t inc_s,
+                              dcomplex* U, fla_dim_t rs_U, fla_dim_t cs_U,
+                              dcomplex* V, fla_dim_t rs_V, fla_dim_t cs_V )
 {
-	integer    min_m_n = fla_min( m_U, n_V );
-	integer    i, ii, j, k;
+	fla_dim_t    min_m_n = fla_min( m_U, n_V );
+	fla_dim_t    i, ii, j, k;
 	double p;
 
 	for ( ii = 1; ii < min_m_n; ++ii )

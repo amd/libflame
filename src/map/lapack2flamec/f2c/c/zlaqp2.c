@@ -144,8 +144,26 @@ if JPVT(i) = 0, */
 /* > \endhtmlonly */
 /* ===================================================================== */
 /* Subroutine */
-void zlaqp2_(integer *m, integer *n, integer *offset, doublecomplex *a, integer *lda, integer *jpvt,
-             doublecomplex *tau, doublereal *vn1, doublereal *vn2, doublecomplex *work)
+/** Generated wrapper function */
+void zlaqp2_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *offset, dcomplex *a, aocl_int_t *lda,
+             aocl_int_t *jpvt, dcomplex *tau, doublereal *vn1, doublereal *vn2,
+             dcomplex *work)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_zlaqp2(m, n, offset, a, lda, jpvt, tau, vn1, vn2, work);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t offset_64 = *offset;
+    aocl_int64_t lda_64 = *lda;
+
+    aocl_lapack_zlaqp2(&m_64, &n_64, &offset_64, a, &lda_64, jpvt, tau, vn1, vn2, work);
+#endif
+}
+
+void aocl_lapack_zlaqp2(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *offset, dcomplex *a,
+                        aocl_int64_t *lda, aocl_int_t *jpvt, dcomplex *tau, doublereal *vn1,
+                        doublereal *vn2, dcomplex *work)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zlaqp2 inputs: m %" FLA_IS ", n %" FLA_IS ", offset %" FLA_IS
@@ -157,24 +175,15 @@ void zlaqp2_(integer *m, integer *n, integer *offset, doublecomplex *a, integer 
     dcomplex z__1;
     /* Builtin functions */
     double sqrt(doublereal);
-    void d_cnjg(doublecomplex *, doublecomplex *);
-    double z_abs(doublecomplex *);
+    void d_cnjg(dcomplex *, dcomplex *);
+    double z_abs(dcomplex *);
     /* Local variables */
     aocl_int64_t i__, j, mn;
     dcomplex aii;
     aocl_int64_t pvt;
     doublereal temp, temp2, tol3z;
-    integer offpi, itemp;
-    extern /* Subroutine */
-        void
-        zlarf_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *,
-               doublecomplex *, integer *, doublecomplex *),
-        zswap_(integer *, doublecomplex *, integer *, doublecomplex *, integer *);
-    extern doublereal dznrm2_(integer *, doublecomplex *, integer *), dlamch_(char *);
-    extern integer idamax_(integer *, doublereal *, integer *);
-    extern /* Subroutine */
-        void
-        zlarfg_(integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *);
+    aocl_int64_t offpi, itemp;
+    extern doublereal dlamch_(char *);
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -216,10 +225,10 @@ void zlaqp2_(integer *m, integer *n, integer *offset, doublecomplex *a, integer 
         offpi = *offset + i__;
         /* Determine ith pivot column and swap if necessary. */
         i__2 = *n - i__ + 1;
-        pvt = i__ - 1 + idamax_(&i__2, &vn1[i__], &c__1);
+        pvt = i__ - 1 + aocl_blas_idamax(&i__2, &vn1[i__], &c__1);
         if(pvt != i__)
         {
-            zswap_(m, &a[pvt * a_dim1 + 1], &c__1, &a[i__ * a_dim1 + 1], &c__1);
+            aocl_blas_zswap(m, &a[pvt * a_dim1 + 1], &c__1, &a[i__ * a_dim1 + 1], &c__1);
             itemp = jpvt[pvt];
             jpvt[pvt] = jpvt[i__];
             jpvt[i__] = (aocl_int_t)(itemp);
@@ -230,12 +239,13 @@ void zlaqp2_(integer *m, integer *n, integer *offset, doublecomplex *a, integer 
         if(offpi < *m)
         {
             i__2 = *m - offpi + 1;
-            zlarfg_(&i__2, &a[offpi + i__ * a_dim1], &a[offpi + 1 + i__ * a_dim1], &c__1,
-                    &tau[i__]);
+            aocl_lapack_zlarfg(&i__2, &a[offpi + i__ * a_dim1], &a[offpi + 1 + i__ * a_dim1], &c__1,
+                               &tau[i__]);
         }
         else
         {
-            zlarfg_(&c__1, &a[*m + i__ * a_dim1], &a[*m + i__ * a_dim1], &c__1, &tau[i__]);
+            aocl_lapack_zlarfg(&c__1, &a[*m + i__ * a_dim1], &a[*m + i__ * a_dim1], &c__1,
+                               &tau[i__]);
         }
         if(i__ < *n)
         {
@@ -249,8 +259,8 @@ void zlaqp2_(integer *m, integer *n, integer *offset, doublecomplex *a, integer 
             i__2 = *m - offpi + 1;
             i__3 = *n - i__;
             d_cnjg(&z__1, &tau[i__]);
-            zlarf_("Left", &i__2, &i__3, &a[offpi + i__ * a_dim1], &c__1, &z__1,
-                   &a[offpi + (i__ + 1) * a_dim1], lda, &work[1]);
+            aocl_lapack_zlarf("Left", &i__2, &i__3, &a[offpi + i__ * a_dim1], &c__1, &z__1,
+                              &a[offpi + (i__ + 1) * a_dim1], lda, &work[1]);
             i__2 = offpi + i__ * a_dim1;
             a[i__2].real = aii.real;
             a[i__2].imag = aii.imag; // , expr subst
@@ -275,7 +285,7 @@ void zlaqp2_(integer *m, integer *n, integer *offset, doublecomplex *a, integer 
                     if(offpi < *m)
                     {
                         i__3 = *m - offpi;
-                        vn1[j] = dznrm2_(&i__3, &a[offpi + 1 + j * a_dim1], &c__1);
+                        vn1[j] = aocl_blas_dznrm2(&i__3, &a[offpi + 1 + j * a_dim1], &c__1);
                         vn2[j] = vn1[j];
                     }
                     else

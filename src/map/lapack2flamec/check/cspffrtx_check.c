@@ -6,9 +6,9 @@
 #include "FLA_f2c.h"
 #include "FLA_lapack2flame_return_defs.h"
 
-int cspffrtx_check(scomplex *ap, integer *n, integer *ncolm, scomplex *work, scomplex *work2)
+int cspffrtx_check(scomplex *ap, aocl_int64_t *n, aocl_int64_t *ncolm, scomplex *work, scomplex *work2)
 {
-    integer ret_val = LAPACK_SUCCESS;
+    aocl_int64_t ret_val = LAPACK_SUCCESS;
 
     if(*n < 0)
     {

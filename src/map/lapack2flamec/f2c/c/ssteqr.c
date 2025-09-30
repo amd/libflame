@@ -134,12 +134,28 @@ on exit, D */
 /* > \ingroup auxOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void ssteqr_(char *compz, integer *n, real *d__, real *e, real *z__, integer *ldz, real *work,
-             integer *info)
+/** Generated wrapper function */
+void ssteqr_(char *compz, aocl_int_t *n, real *d__, real *e, real *z__, aocl_int_t *ldz, real *work,
+             aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_ssteqr(compz, n, d__, e, z__, ldz, work, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t ldz_64 = *ldz;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_ssteqr(compz, &n_64, d__, e, z__, &ldz_64, work, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_ssteqr(char *compz, aocl_int64_t *n, real *d__, real *e, real *z__,
+                        aocl_int64_t *ldz, real *work, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("ssteqr inputs: compz %c, n %" FLA_IS ", ldz %" FLA_IS "", *compz, *n,
-             *ldz);
+    AOCL_DTL_SNPRINTF("ssteqr inputs: compz %c, n %" FLA_IS ", ldz %" FLA_IS "", *compz, *n, *ldz);
     /* System generated locals */
     aocl_int64_t z_dim1, z_offset, i__1, i__2;
     real r__1, r__2;
@@ -157,14 +173,9 @@ void ssteqr_(char *compz, integer *n, real *d__, real *e, real *z__, integer *ld
     extern /* Subroutine */
         void
         slae2_(real *, real *, real *, real *, real *);
-    extern logical lsame_(char *, char *, integer, integer);
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     real anorm;
     aocl_int64_t lendm1, lendp1;
-    extern /* Subroutine */
-        void
-        slasr_(char *, char *, char *, integer *, integer *, real *, real *, real *, integer *),
-        sswap_(integer *, real *, integer *, real *, integer *);
-    integer lendm1, lendp1;
     extern /* Subroutine */
         void
         slaev2_(real *, real *, real *, real *, real *, real *, real *);
@@ -172,26 +183,11 @@ void ssteqr_(char *compz, integer *n, real *d__, real *e, real *z__, integer *ld
     aocl_int64_t iscale;
     extern real slamch_(char *);
     real safmin;
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real safmax;
-    extern /* Subroutine */
-        void
-        slascl_(char *, integer *, integer *, real *, real *, integer *, integer *, real *,
-                integer *, integer *);
-    integer lendsv;
-    extern /* Subroutine */
-        void
-        slartg_(real *, real *, real *, real *, real *),
-        slaset_(char *, integer *, integer *, real *, real *, real *, integer *);
+    aocl_int64_t lendsv;
     real ssfmin;
     aocl_int64_t nmaxit, icompz;
     real ssfmax;
-    extern real slanst_(char *, integer *, real *, real *);
-    extern /* Subroutine */
-        void
-        slasrt_(char *, integer *, real *, integer *);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -253,7 +249,7 @@ void ssteqr_(char *compz, integer *n, real *d__, real *e, real *z__, integer *ld
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("SSTEQR", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("SSTEQR", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -405,8 +401,8 @@ L30:
                 slaev2_(&d__[l], &e[l], &d__[l + 1], &rt1, &rt2, &c__, &s);
                 work[l] = c__;
                 work[*n - 1 + l] = s;
-                slasr_("R", "V", "B", n, &c__2, &work[l], &work[*n - 1 + l], &z__[l * z_dim1 + 1],
-                       ldz);
+                aocl_lapack_slasr("R", "V", "B", n, &c__2, &work[l], &work[*n - 1 + l],
+                                  &z__[l * z_dim1 + 1], ldz);
             }
             else
             {
@@ -521,8 +517,8 @@ L30:
                 slaev2_(&d__[l - 1], &e[l - 1], &d__[l], &rt1, &rt2, &c__, &s);
                 work[m] = c__;
                 work[*n - 1 + m] = s;
-                slasr_("R", "V", "F", n, &c__2, &work[m], &work[*n - 1 + m],
-                       &z__[(l - 1) * z_dim1 + 1], ldz);
+                aocl_lapack_slasr("R", "V", "F", n, &c__2, &work[m], &work[*n - 1 + m],
+                                  &z__[(l - 1) * z_dim1 + 1], ldz);
             }
             else
             {

@@ -131,8 +131,27 @@ static aocl_int64_t c__1 = 1;
 /* > \ingroup complexOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void cpbcon_(char *uplo, integer *n, integer *kd, complex *ab, integer *ldab, real *anorm,
-             real *rcond, complex *work, real *rwork, integer *info)
+/** Generated wrapper function */
+void cpbcon_(char *uplo, aocl_int_t *n, aocl_int_t *kd, scomplex *ab, aocl_int_t *ldab, real *anorm,
+             real *rcond, scomplex *work, real *rwork, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_cpbcon(uplo, n, kd, ab, ldab, anorm, rcond, work, rwork, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t kd_64 = *kd;
+    aocl_int64_t ldab_64 = *ldab;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_cpbcon(uplo, &n_64, &kd_64, ab, &ldab_64, anorm, rcond, work, rwork, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_cpbcon(char *uplo, aocl_int64_t *n, aocl_int64_t *kd, scomplex *ab,
+                        aocl_int64_t *ldab, real *anorm, real *rcond, scomplex *work, real *rwork,
+                        aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -153,27 +172,13 @@ void cpbcon_(char *uplo, integer *n, integer *kd, complex *ab, integer *ldab, re
     /* Local variables */
     aocl_int64_t ix, kase;
     real scale;
-    extern logical lsame_(char *, char *, integer, integer);
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     integer isave[3];
     logical upper;
-    extern /* Subroutine */
-        void
-        clacn2_(integer *, complex *, complex *, real *, integer *, integer *);
-    extern integer icamax_(integer *, complex *, integer *);
     real scalel;
     extern real slamch_(char *);
-    extern /* Subroutine */
-        void
-        clatbs_(char *, char *, char *, char *, integer *, integer *, complex *, integer *,
-                complex *, real *, real *, integer *);
     real scaleu;
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real ainvnm;
-    extern /* Subroutine */
-        void
-        csrscl_(integer *, real *, complex *, integer *);
     char normin[1];
     real smlnum;
     /* -- LAPACK computational routine (version 3.4.0) -- */
@@ -235,7 +240,7 @@ void cpbcon_(char *uplo, integer *n, integer *kd, complex *ab, integer *ldab, re
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("CPBCON", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("CPBCON", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
@@ -257,28 +262,28 @@ void cpbcon_(char *uplo, integer *n, integer *kd, complex *ab, integer *ldab, re
     kase = 0;
     *(unsigned char *)normin = 'N';
 L10:
-    clacn2_(n, &work[*n + 1], &work[1], &ainvnm, &kase, isave);
+    aocl_lapack_clacn2(n, &work[*n + 1], &work[1], &ainvnm, &kase, isave);
     if(kase != 0)
     {
         if(upper)
         {
             /* Multiply by inv(U**H). */
-            clatbs_("Upper", "Conjugate transpose", "Non-unit", normin, n, kd, &ab[ab_offset], ldab,
-                    &work[1], &scalel, &rwork[1], info);
+            aocl_lapack_clatbs("Upper", "Conjugate transpose", "Non-unit", normin, n, kd,
+                               &ab[ab_offset], ldab, &work[1], &scalel, &rwork[1], info);
             *(unsigned char *)normin = 'Y';
             /* Multiply by inv(U). */
-            clatbs_("Upper", "No transpose", "Non-unit", normin, n, kd, &ab[ab_offset], ldab,
-                    &work[1], &scaleu, &rwork[1], info);
+            aocl_lapack_clatbs("Upper", "No transpose", "Non-unit", normin, n, kd, &ab[ab_offset],
+                               ldab, &work[1], &scaleu, &rwork[1], info);
         }
         else
         {
             /* Multiply by inv(L). */
-            clatbs_("Lower", "No transpose", "Non-unit", normin, n, kd, &ab[ab_offset], ldab,
-                    &work[1], &scalel, &rwork[1], info);
+            aocl_lapack_clatbs("Lower", "No transpose", "Non-unit", normin, n, kd, &ab[ab_offset],
+                               ldab, &work[1], &scalel, &rwork[1], info);
             *(unsigned char *)normin = 'Y';
             /* Multiply by inv(L**H). */
-            clatbs_("Lower", "Conjugate transpose", "Non-unit", normin, n, kd, &ab[ab_offset], ldab,
-                    &work[1], &scaleu, &rwork[1], info);
+            aocl_lapack_clatbs("Lower", "Conjugate transpose", "Non-unit", normin, n, kd,
+                               &ab[ab_offset], ldab, &work[1], &scaleu, &rwork[1], info);
         }
         /* Multiply by 1/SCALE if doing so will not cause overflow. */
         scale = scalel * scaleu;

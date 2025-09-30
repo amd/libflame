@@ -4,11 +4,11 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
-static integer c_n1 = -1;
-static integer c__2 = 2;
-static integer c__3 = 3;
-static integer c__4 = 4;
+static aocl_int64_t c__1 = 1;
+static aocl_int64_t c_n1 = -1;
+static aocl_int64_t c__2 = 2;
+static aocl_int64_t c__3 = 3;
+static aocl_int64_t c__4 = 4;
 static real c_b26 = 1.f;
 /* > \brief \b SSYGV_2STAGE */
 /* @generated from dsygv_2stage.f, fortran d -> s, Sun Nov 6 12:54:29 2016 */
@@ -230,45 +230,47 @@ the routine */
 /* > \endverbatim */
 /* ===================================================================== */
 /* Subroutine */
-void ssygv_2stage_(integer *itype, char *jobz, char *uplo, integer *n, real *a, integer *lda,
-                   real *b, integer *ldb, real *w, real *work, integer *lwork, integer *info)
+/** Generated wrapper function */
+void ssygv_2stage_(aocl_int_t *itype, char *jobz, char *uplo, aocl_int_t *n, real *a,
+                   aocl_int_t *lda, real *b, aocl_int_t *ldb, real *w, real *work,
+                   aocl_int_t *lwork, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_ssygv_2stage(itype, jobz, uplo, n, a, lda, b, ldb, w, work, lwork, info);
+#else
+    aocl_int64_t itype_64 = *itype;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t ldb_64 = *ldb;
+    aocl_int64_t lwork_64 = *lwork;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_ssygv_2stage(&itype_64, jobz, uplo, &n_64, a, &lda_64, b, &ldb_64, w, work,
+                             &lwork_64, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_ssygv_2stage(aocl_int64_t *itype, char *jobz, char *uplo, aocl_int64_t *n, real *a,
+                              aocl_int64_t *lda, real *b, aocl_int64_t *ldb, real *w, real *work,
+                              aocl_int64_t *lwork, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF(
-             "ssygv_2stage inputs: itype %" FLA_IS ", jobz %c, uplo %c, n %" FLA_IS ", lda %" FLA_IS
-             ", ldb %" FLA_IS "",
-             *itype, *jobz, *uplo, *n, *lda, *ldb);
+    AOCL_DTL_SNPRINTF("ssygv_2stage inputs: itype %" FLA_IS ", jobz %c, uplo %c, n %" FLA_IS
+                      ", lda %" FLA_IS ", ldb %" FLA_IS "",
+                      *itype, *jobz, *uplo, *n, *lda, *ldb);
     /* System generated locals */
-    integer a_dim1, a_offset, b_dim1, b_offset, i__1;
+    aocl_int64_t a_dim1, a_offset, b_dim1, b_offset, i__1;
     /* Local variables */
-    integer ib, kd, neig;
-    extern integer ilaenv2stage_(integer *, char *, char *, integer *, integer *, integer *,
-                                 integer *);
-    extern /* Subroutine */
-        void
-        ssyev_2stage_(char *, char *, integer *, real *, integer *, real *, real *, integer *,
-                      integer *);
-    extern logical lsame_(char *, char *, integer, integer);
-    integer lhtrd, lwmin;
+    aocl_int64_t ib, kd, neig;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    aocl_int64_t lhtrd, lwmin;
     char trans[1];
     logical upper;
-    integer lwtrd;
-    extern /* Subroutine */
-        void
-        strmm_(char *, char *, char *, char *, integer *, integer *, real *, real *, integer *,
-               real *, integer *);
+    aocl_int64_t lwtrd;
     logical wantz;
-    extern /* Subroutine */
-        void
-        strsm_(char *, char *, char *, char *, integer *, integer *, real *, real *, integer *,
-               real *, integer *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
-        spotrf_(char *, integer *, real *, integer *, integer *);
     logical lquery;
-    extern /* Subroutine */
-        void
-        ssygst_(integer *, char *, integer *, real *, integer *, real *, integer *, integer *);
-    extern real sroundup_lwork(integer *);
     /* -- LAPACK driver routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -329,10 +331,10 @@ void ssygv_2stage_(integer *itype, char *jobz, char *uplo, integer *n, real *a, 
     }
     if(*info == 0)
     {
-        kd = ilaenv2stage_(&c__1, "SSYTRD_2STAGE", jobz, n, &c_n1, &c_n1, &c_n1);
-        ib = ilaenv2stage_(&c__2, "SSYTRD_2STAGE", jobz, n, &kd, &c_n1, &c_n1);
-        lhtrd = ilaenv2stage_(&c__3, "SSYTRD_2STAGE", jobz, n, &kd, &ib, &c_n1);
-        lwtrd = ilaenv2stage_(&c__4, "SSYTRD_2STAGE", jobz, n, &kd, &ib, &c_n1);
+        kd = aocl_lapack_ilaenv2stage(&c__1, "SSYTRD_2STAGE", jobz, n, &c_n1, &c_n1, &c_n1);
+        ib = aocl_lapack_ilaenv2stage(&c__2, "SSYTRD_2STAGE", jobz, n, &kd, &c_n1, &c_n1);
+        lhtrd = aocl_lapack_ilaenv2stage(&c__3, "SSYTRD_2STAGE", jobz, n, &kd, &ib, &c_n1);
+        lwtrd = aocl_lapack_ilaenv2stage(&c__4, "SSYTRD_2STAGE", jobz, n, &kd, &ib, &c_n1);
         lwmin = (*n << 1) + lhtrd + lwtrd;
         work[1] = (real)lwmin;
         if(*lwork < lwmin && !lquery)
@@ -343,7 +345,7 @@ void ssygv_2stage_(integer *itype, char *jobz, char *uplo, integer *n, real *a, 
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("SSYGV_2STAGE ", &i__1, (ftnlen)13);
+        aocl_blas_xerbla("SSYGV_2STAGE ", &i__1, (ftnlen)13);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -359,7 +361,7 @@ void ssygv_2stage_(integer *itype, char *jobz, char *uplo, integer *n, real *a, 
         return;
     }
     /* Form a Cholesky factorization of B. */
-    spotrf_(uplo, n, &b[b_offset], ldb, info);
+    aocl_lapack_spotrf(uplo, n, &b[b_offset], ldb, info);
     if(*info != 0)
     {
         *info = *n + *info;
@@ -367,8 +369,8 @@ void ssygv_2stage_(integer *itype, char *jobz, char *uplo, integer *n, real *a, 
         return;
     }
     /* Transform problem to standard eigenvalue problem and solve. */
-    ssygst_(itype, uplo, n, &a[a_offset], lda, &b[b_offset], ldb, info);
-    ssyev_2stage_(jobz, uplo, n, &a[a_offset], lda, &w[1], &work[1], lwork, info);
+    aocl_lapack_ssygst(itype, uplo, n, &a[a_offset], lda, &b[b_offset], ldb, info);
+    aocl_lapack_ssyev_2stage(jobz, uplo, n, &a[a_offset], lda, &w[1], &work[1], lwork, info);
     if(wantz)
     {
         /* Backtransform eigenvectors to the original problem. */
@@ -390,8 +392,8 @@ void ssygv_2stage_(integer *itype, char *jobz, char *uplo, integer *n, real *a, 
             {
                 *(unsigned char *)trans = 'T';
             }
-            strsm_("Left", uplo, trans, "Non-unit", n, &neig, &c_b26, &b[b_offset], ldb,
-                   &a[a_offset], lda);
+            aocl_blas_strsm("Left", uplo, trans, "Non-unit", n, &neig, &c_b26, &b[b_offset], ldb,
+                            &a[a_offset], lda);
         }
         else if(*itype == 3)
         {
@@ -406,11 +408,11 @@ void ssygv_2stage_(integer *itype, char *jobz, char *uplo, integer *n, real *a, 
             {
                 *(unsigned char *)trans = 'N';
             }
-            strmm_("Left", uplo, trans, "Non-unit", n, &neig, &c_b26, &b[b_offset], ldb,
-                   &a[a_offset], lda);
+            aocl_blas_strmm("Left", uplo, trans, "Non-unit", n, &neig, &c_b26, &b[b_offset], ldb,
+                            &a[a_offset], lda);
         }
     }
-    work[1] = sroundup_lwork(&lwmin);
+    work[1] = aocl_lapack_sroundup_lwork(&lwmin);
     AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SSYGV_2STAGE */

@@ -114,8 +114,25 @@ B is M by N and scomplex;
 /* > \ingroup complexOTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-void clarcm_(integer *m, integer *n, real *a, integer *lda, complex *b, integer *ldb, complex *c__,
-             integer *ldc, real *rwork)
+/** Generated wrapper function */
+void clarcm_(aocl_int_t *m, aocl_int_t *n, real *a, aocl_int_t *lda, scomplex *b, aocl_int_t *ldb,
+             scomplex *c__, aocl_int_t *ldc, real *rwork)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_clarcm(m, n, a, lda, b, ldb, c__, ldc, rwork);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t ldb_64 = *ldb;
+    aocl_int64_t ldc_64 = *ldc;
+
+    aocl_lapack_clarcm(&m_64, &n_64, a, &lda_64, b, &ldb_64, c__, &ldc_64, rwork);
+#endif
+}
+
+void aocl_lapack_clarcm(aocl_int64_t *m, aocl_int64_t *n, real *a, aocl_int64_t *lda, scomplex *b,
+                        aocl_int64_t *ldb, scomplex *c__, aocl_int64_t *ldc, real *rwork)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -136,11 +153,7 @@ void clarcm_(integer *m, integer *n, real *a, integer *lda, complex *b, integer 
     /* Builtin functions */
     double r_imag(scomplex *);
     /* Local variables */
-    integer i__, j, l;
-    extern /* Subroutine */
-        void
-        sgemm_(char *, char *, integer *, integer *, integer *, real *, real *, integer *, real *,
-               integer *, real *, real *, integer *);
+    aocl_int64_t i__, j, l;
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -190,7 +203,7 @@ void clarcm_(integer *m, integer *n, real *a, integer *lda, complex *b, integer 
         /* L20: */
     }
     l = *m * *n + 1;
-    sgemm_("N", "N", m, n, m, &c_b6, &a[a_offset], lda, &rwork[1], m, &c_b7, &rwork[l], m);
+    aocl_blas_sgemm("N", "N", m, n, m, &c_b6, &a[a_offset], lda, &rwork[1], m, &c_b7, &rwork[l], m);
     i__1 = *n;
     for(j = 1; j <= i__1; ++j)
     {
@@ -216,7 +229,7 @@ void clarcm_(integer *m, integer *n, real *a, integer *lda, complex *b, integer 
         }
         /* L60: */
     }
-    sgemm_("N", "N", m, n, m, &c_b6, &a[a_offset], lda, &rwork[1], m, &c_b7, &rwork[l], m);
+    aocl_blas_sgemm("N", "N", m, n, m, &c_b6, &a[a_offset], lda, &rwork[1], m, &c_b7, &rwork[l], m);
     i__1 = *n;
     for(j = 1; j <= i__1; ++j)
     {

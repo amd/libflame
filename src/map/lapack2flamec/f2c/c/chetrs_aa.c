@@ -4,8 +4,8 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static complex c_b9 = {1.f, 0.f};
-static integer c__1 = 1;
+static scomplex c_b9 = {{1.f}, {0.f}};
+static aocl_int64_t c__1 = 1;
 /* > \brief \b CHETRS_AA */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -42,7 +42,7 @@ static integer c__1 = 1;
 /* > */
 /* > \verbatim */
 /* > */
-/* > CHETRS_AA solves a system of linear equations A*X = B with a complex */
+/* > CHETRS_AA solves a system of linear equations A*X = B with a scomplex */
 /* > hermitian matrix A using the factorization A = U**H*T*U or */
 /* > A = L*T*L**H computed by CHETRF_AA. */
 /* > \endverbatim */
@@ -128,8 +128,31 @@ static integer c__1 = 1;
 /* > \ingroup hetrs_aa */
 /* ===================================================================== */
 /* Subroutine */
-void chetrs_aa_(char *uplo, integer *n, integer *nrhs, complex *a, integer *lda, integer *ipiv,
-                complex *b, integer *ldb, complex *work, integer *lwork, integer *info)
+/** Generated wrapper function */
+void chetrs_aa_(char *uplo, aocl_int_t *n, aocl_int_t *nrhs, scomplex *a, aocl_int_t *lda,
+                aocl_int_t *ipiv, scomplex *b, aocl_int_t *ldb, scomplex *work, aocl_int_t *lwork,
+                aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_chetrs_aa(uplo, n, nrhs, a, lda, ipiv, b, ldb, work, lwork, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t nrhs_64 = *nrhs;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t ldb_64 = *ldb;
+    aocl_int64_t lwork_64 = *lwork;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_chetrs_aa(uplo, &n_64, &nrhs_64, a, &lda_64, ipiv, b, &ldb_64, work, &lwork_64,
+                          &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_chetrs_aa(char *uplo, aocl_int64_t *n, aocl_int64_t *nrhs, scomplex *a,
+                           aocl_int64_t *lda, aocl_int_t *ipiv, scomplex *b, aocl_int64_t *ldb,
+                           scomplex *work, aocl_int64_t *lwork, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -145,27 +168,14 @@ void chetrs_aa_(char *uplo, integer *n, integer *nrhs, complex *a, integer *lda,
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
-    integer a_dim1, a_offset, b_dim1, b_offset, i__1, i__2;
+    aocl_int64_t a_dim1, a_offset, b_dim1, b_offset, i__1, i__2;
     real r__1;
     /* Local variables */
-    integer k, kp;
-    extern logical lsame_(char *, char *, integer, integer);
-    extern /* Subroutine */
-        void
-        cswap_(integer *, complex *, integer *, complex *, integer *),
-        cgtsv_(integer *, integer *, complex *, complex *, complex *, complex *, integer *,
-               integer *),
-        ctrsm_(char *, char *, char *, char *, integer *, integer *, complex *, complex *,
-               integer *, complex *, integer *);
+    aocl_int64_t k, kp;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     logical upper;
-    extern /* Subroutine */
-        void
-        clacgv_(integer *, complex *, integer *),
-        clacpy_(char *, integer *, integer *, complex *, integer *, complex *, integer *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    integer lwkopt;
+    aocl_int64_t lwkopt;
     logical lquery;
-    extern real sroundup_lwork(integer *);
     /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -230,14 +240,14 @@ void chetrs_aa_(char *uplo, integer *n, integer *nrhs, complex *a, integer *lda,
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("CHETRS_AA", &i__1, (ftnlen)9);
+        aocl_blas_xerbla("CHETRS_AA", &i__1, (ftnlen)9);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
     else if(lquery)
     {
         lwkopt = *n * 3 - 2;
-        r__1 = sroundup_lwork(&lwkopt);
+        r__1 = aocl_lapack_sroundup_lwork(&lwkopt);
         work[1].r = r__1;
         work[1].i = 0.f; // , expr subst
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
@@ -262,38 +272,39 @@ void chetrs_aa_(char *uplo, integer *n, integer *nrhs, complex *a, integer *lda,
                 kp = ipiv[k];
                 if(kp != k)
                 {
-                    cswap_(nrhs, &b[k + b_dim1], ldb, &b[kp + b_dim1], ldb);
+                    aocl_blas_cswap(nrhs, &b[k + b_dim1], ldb, &b[kp + b_dim1], ldb);
                 }
                 ++k;
             }
             /* Compute U**H \ B -> B [ (U**H \P**T * B) ] */
             i__1 = *n - 1;
-            ctrsm_("L", "U", "C", "U", &i__1, nrhs, &c_b9, &a[(a_dim1 << 1) + 1], lda,
-                   &b[b_dim1 + 2], ldb);
+            aocl_blas_ctrsm("L", "U", "C", "U", &i__1, nrhs, &c_b9, &a[(a_dim1 << 1) + 1], lda,
+                            &b[b_dim1 + 2], ldb);
         }
         /* 2) Solve with triangular matrix T */
         /* Compute T \ B -> B [ T \ (U**H \P**T * B) ] */
         i__1 = *lda + 1;
-        clacpy_("F", &c__1, n, &a[a_dim1 + 1], &i__1, &work[*n], &c__1);
+        aocl_lapack_clacpy("F", &c__1, n, &a[a_dim1 + 1], &i__1, &work[*n], &c__1);
         if(*n > 1)
         {
             i__1 = *n - 1;
             i__2 = *lda + 1;
-            clacpy_("F", &c__1, &i__1, &a[(a_dim1 << 1) + 1], &i__2, &work[*n * 2], &c__1);
+            aocl_lapack_clacpy("F", &c__1, &i__1, &a[(a_dim1 << 1) + 1], &i__2, &work[*n * 2],
+                               &c__1);
             i__1 = *n - 1;
             i__2 = *lda + 1;
-            clacpy_("F", &c__1, &i__1, &a[(a_dim1 << 1) + 1], &i__2, &work[1], &c__1);
+            aocl_lapack_clacpy("F", &c__1, &i__1, &a[(a_dim1 << 1) + 1], &i__2, &work[1], &c__1);
             i__1 = *n - 1;
-            clacgv_(&i__1, &work[1], &c__1);
+            aocl_lapack_clacgv(&i__1, &work[1], &c__1);
         }
-        cgtsv_(n, nrhs, &work[1], &work[*n], &work[*n * 2], &b[b_offset], ldb, info);
+        aocl_lapack_cgtsv(n, nrhs, &work[1], &work[*n], &work[*n * 2], &b[b_offset], ldb, info);
         /* 3) Backward substitution with U */
         if(*n > 1)
         {
             /* Compute U \ B -> B [ U \ (T \ (U**H \P**T * B) ) ] */
             i__1 = *n - 1;
-            ctrsm_("L", "U", "N", "U", &i__1, nrhs, &c_b9, &a[(a_dim1 << 1) + 1], lda,
-                   &b[b_dim1 + 2], ldb);
+            aocl_blas_ctrsm("L", "U", "N", "U", &i__1, nrhs, &c_b9, &a[(a_dim1 << 1) + 1], lda,
+                            &b[b_dim1 + 2], ldb);
             /* Pivot, P * B -> B [ P * (U \ (T \ (U**H \P**T * B) )) ] */
             k = *n;
             while(k >= 1)
@@ -301,7 +312,7 @@ void chetrs_aa_(char *uplo, integer *n, integer *nrhs, complex *a, integer *lda,
                 kp = ipiv[k];
                 if(kp != k)
                 {
-                    cswap_(nrhs, &b[k + b_dim1], ldb, &b[kp + b_dim1], ldb);
+                    aocl_blas_cswap(nrhs, &b[k + b_dim1], ldb, &b[kp + b_dim1], ldb);
                 }
                 --k;
             }
@@ -320,38 +331,38 @@ void chetrs_aa_(char *uplo, integer *n, integer *nrhs, complex *a, integer *lda,
                 kp = ipiv[k];
                 if(kp != k)
                 {
-                    cswap_(nrhs, &b[k + b_dim1], ldb, &b[kp + b_dim1], ldb);
+                    aocl_blas_cswap(nrhs, &b[k + b_dim1], ldb, &b[kp + b_dim1], ldb);
                 }
                 ++k;
             }
             /* Compute L \ B -> B [ (L \P**T * B) ] */
             i__1 = *n - 1;
-            ctrsm_("L", "L", "N", "U", &i__1, nrhs, &c_b9, &a[a_dim1 + 2], lda, &b[b_dim1 + 2],
-                   ldb);
+            aocl_blas_ctrsm("L", "L", "N", "U", &i__1, nrhs, &c_b9, &a[a_dim1 + 2], lda,
+                            &b[b_dim1 + 2], ldb);
         }
         /* 2) Solve with triangular matrix T */
         /* Compute T \ B -> B [ T \ (L \P**T * B) ] */
         i__1 = *lda + 1;
-        clacpy_("F", &c__1, n, &a[a_dim1 + 1], &i__1, &work[*n], &c__1);
+        aocl_lapack_clacpy("F", &c__1, n, &a[a_dim1 + 1], &i__1, &work[*n], &c__1);
         if(*n > 1)
         {
             i__1 = *n - 1;
             i__2 = *lda + 1;
-            clacpy_("F", &c__1, &i__1, &a[a_dim1 + 2], &i__2, &work[1], &c__1);
+            aocl_lapack_clacpy("F", &c__1, &i__1, &a[a_dim1 + 2], &i__2, &work[1], &c__1);
             i__1 = *n - 1;
             i__2 = *lda + 1;
-            clacpy_("F", &c__1, &i__1, &a[a_dim1 + 2], &i__2, &work[*n * 2], &c__1);
+            aocl_lapack_clacpy("F", &c__1, &i__1, &a[a_dim1 + 2], &i__2, &work[*n * 2], &c__1);
             i__1 = *n - 1;
-            clacgv_(&i__1, &work[*n * 2], &c__1);
+            aocl_lapack_clacgv(&i__1, &work[*n * 2], &c__1);
         }
-        cgtsv_(n, nrhs, &work[1], &work[*n], &work[*n * 2], &b[b_offset], ldb, info);
+        aocl_lapack_cgtsv(n, nrhs, &work[1], &work[*n], &work[*n * 2], &b[b_offset], ldb, info);
         /* 3) Backward substitution with L**H */
         if(*n > 1)
         {
             /* Compute (L**H \ B) -> B [ L**H \ (T \ (L \P**T * B) ) ] */
             i__1 = *n - 1;
-            ctrsm_("L", "L", "C", "U", &i__1, nrhs, &c_b9, &a[a_dim1 + 2], lda, &b[b_dim1 + 2],
-                   ldb);
+            aocl_blas_ctrsm("L", "L", "C", "U", &i__1, nrhs, &c_b9, &a[a_dim1 + 2], lda,
+                            &b[b_dim1 + 2], ldb);
             /* Pivot, P * B -> B [ P * (L**H \ (T \ (L \P**T * B) )) ] */
             k = *n;
             while(k >= 1)
@@ -359,7 +370,7 @@ void chetrs_aa_(char *uplo, integer *n, integer *nrhs, complex *a, integer *lda,
                 kp = ipiv[k];
                 if(kp != k)
                 {
-                    cswap_(nrhs, &b[k + b_dim1], ldb, &b[kp + b_dim1], ldb);
+                    aocl_blas_cswap(nrhs, &b[k + b_dim1], ldb, &b[kp + b_dim1], ldb);
                 }
                 --k;
             }

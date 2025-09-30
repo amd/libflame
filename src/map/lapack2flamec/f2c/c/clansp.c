@@ -4,7 +4,7 @@
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
  /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
+static aocl_int64_t c__1 = 1;
 /* > \brief \b CLANSP returns the value of the 1-norm, or the Frobenius norm, or the infinity norm,
  * or the ele ment of largest absolute value of a symmetric matrix supplied in packed form. */
 /* =========== DOCUMENTATION =========== */
@@ -43,7 +43,7 @@ static integer c__1 = 1;
 /* > */
 /* > CLANSP returns the value of the one norm, or the Frobenius norm, or */
 /* > the infinity norm, or the element of largest absolute value of a */
-/* > complex symmetric matrix A, supplied in packed form. */
+/* > scomplex symmetric matrix A, supplied in packed form. */
 /* > \endverbatim */
 /* > */
 /* > \return CLANSP */
@@ -113,7 +113,19 @@ otherwise, */
 /* > \author NAG Ltd. */
 /* > \ingroup complexOTHERauxiliary */
 /* ===================================================================== */
-real clansp_(char *norm, char *uplo, integer *n, complex *ap, real *work)
+/** Generated wrapper function */
+real clansp_(char *norm, char *uplo, aocl_int_t *n, scomplex *ap, real *work)
+{
+#if FLA_ENABLE_ILP64
+    return aocl_lapack_clansp(norm, uplo, n, ap, work);
+#else
+    aocl_int64_t n_64 = *n;
+
+    return aocl_lapack_clansp(norm, uplo, &n_64, ap, work);
+#endif
+}
+
+real aocl_lapack_clansp(char *norm, char *uplo, aocl_int64_t *n, scomplex *ap, real *work)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -126,18 +138,15 @@ real clansp_(char *norm, char *uplo, integer *n, complex *ap, real *work)
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
-    integer i__1, i__2;
+    aocl_int64_t i__1, i__2;
     real ret_val, r__1;
     /* Builtin functions */
-    double c_abs(complex *), r_imag(complex *), sqrt(doublereal);
+    double c_abs(scomplex *), r_imag(scomplex *), sqrt(doublereal);
     /* Local variables */
-    integer i__, j, k;
+    aocl_int64_t i__, j, k;
     real sum, absa, scale;
-    extern logical lsame_(char *, char *, integer, integer);
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     real value;
-    extern /* Subroutine */
-        void
-        classq_(integer *, complex *, integer *, real *, real *);
     extern logical sisnan_(real *);
     /* -- LAPACK auxiliary routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -289,7 +298,7 @@ real clansp_(char *norm, char *uplo, integer *n, complex *ap, real *work)
             for(j = 2; j <= i__1; ++j)
             {
                 i__2 = j - 1;
-                classq_(&i__2, &ap[k], &c__1, &scale, &sum);
+                aocl_lapack_classq(&i__2, &ap[k], &c__1, &scale, &sum);
                 k += j;
                 /* L110: */
             }
@@ -300,7 +309,7 @@ real clansp_(char *norm, char *uplo, integer *n, complex *ap, real *work)
             for(j = 1; j <= i__1; ++j)
             {
                 i__2 = *n - j;
-                classq_(&i__2, &ap[k], &c__1, &scale, &sum);
+                aocl_lapack_classq(&i__2, &ap[k], &c__1, &scale, &sum);
                 k = k + *n - j + 1;
                 /* L120: */
             }

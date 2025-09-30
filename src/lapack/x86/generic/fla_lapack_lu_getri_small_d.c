@@ -10,10 +10,10 @@
 #include "fla_lapack_lu_small_kernels_d.h"
 
 #if FLA_ENABLE_AMD_OPT
-static inline void lapack_getri_small_unblocked_d(integer n, doublereal *restrict a, integer a_dim1,
-                                                  integer *restrict ipiv, doublereal *restrict work)
+static inline void lapack_getri_small_unblocked_d(aocl_int64_t n, doublereal *restrict a, aocl_int64_t a_dim1,
+                                                  aocl_int_t *restrict ipiv, doublereal *restrict work)
 {
-    integer i, j, k;
+    aocl_int64_t i, j, k;
     for(i = 1; i <= n; ++i)
     {
         if(a[i + i * a_dim1] == 0.0)
@@ -90,7 +90,7 @@ static inline void lapack_getri_small_unblocked_d(integer n, doublereal *restric
     /* Column interchanges (shared) */
     for(j = n - 1; j >= 1; --j)
     {
-        integer jp = ipiv[j];
+        aocl_int64_t jp = ipiv[j];
         if(jp != j)
         {
             doublereal *apiv = &a[1 + jp * a_dim1];
@@ -106,12 +106,12 @@ static inline void lapack_getri_small_unblocked_d(integer n, doublereal *restric
     work[1] = (doublereal)n;
 }
 
-void lapack_getri_small_d(integer *n, doublereal *a, integer *lda, integer *ipiv, doublereal *work,
-                          integer *info)
+void lapack_getri_small_d(aocl_int64_t *n, doublereal *a, aocl_int64_t *lda, aocl_int_t *ipiv, doublereal *work,
+                          aocl_int64_t *info)
 {
-    integer a_dim1, i__1, i__;
+    aocl_int64_t a_dim1, i__1, i__;
     doublereal t_val, *acur, *apiv, *asrc, *ax, *ay;
-    integer i, j, jp;
+    aocl_int64_t i, j, jp;
 
     a_dim1 = *lda;
     /* check singularity of triangular input matrix  */

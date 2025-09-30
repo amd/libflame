@@ -250,8 +250,28 @@ b(i), i=1,..,n}
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void clatbs_(char *uplo, char *trans, char *diag, char *normin, integer *n, integer *kd,
-             complex *ab, integer *ldab, complex *x, real *scale, real *cnorm, integer *info)
+/** Generated wrapper function */
+void clatbs_(char *uplo, char *trans, char *diag, char *normin, aocl_int_t *n, aocl_int_t *kd,
+             scomplex *ab, aocl_int_t *ldab, scomplex *x, real *scale, real *cnorm, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_clatbs(uplo, trans, diag, normin, n, kd, ab, ldab, x, scale, cnorm, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t kd_64 = *kd;
+    aocl_int64_t ldab_64 = *ldab;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_clatbs(uplo, trans, diag, normin, &n_64, &kd_64, ab, &ldab_64, x, scale, cnorm,
+                       &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_clatbs(char *uplo, char *trans, char *diag, char *normin, aocl_int64_t *n,
+                        aocl_int64_t *kd, scomplex *ab, aocl_int64_t *ldab, scomplex *x, real *scale,
+                        real *cnorm, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -283,36 +303,17 @@ void clatbs_(char *uplo, char *trans, char *diag, char *normin, integer *n, inte
     real tmax;
     scomplex tjjs;
     real xmax, grow;
-    integer maind;
-    extern /* Complex */
-        VOID
-        cdotc_f2c_(complex *, integer *, complex *, integer *, complex *, integer *);
-    extern logical lsame_(char *, char *, integer, integer);
-    extern /* Subroutine */
-        void
-        sscal_(integer *, real *, real *, integer *);
+    aocl_int64_t maind;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     real tscal;
-    complex uscal;
-    integer jlast;
-    extern /* Complex */
-        VOID
-        cdotu_f2c_(complex *, integer *, complex *, integer *, complex *, integer *);
-    complex csumj;
-    extern /* Subroutine */
-        void
-        ctbsv_(char *, char *, char *, integer *, integer *, complex *, integer *, complex *,
-               integer *),
-        caxpy_(integer *, complex *, complex *, integer *, complex *, integer *);
+    scomplex uscal;
+    aocl_int64_t jlast;
+    scomplex csumj;
     logical upper;
-    extern integer icamax_(integer *, complex *, integer *);
     extern /* Complex */
         void
-        cladiv_f2c_(complex *, complex *, complex *);
+        cladiv_f2c_(scomplex *, scomplex *, scomplex *);
     extern real slamch_(char *);
-    extern /* Subroutine */
-        void
-        csscal_(integer *, real *, complex *, integer *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real bignum;
     logical notran;
     aocl_int64_t jfirst;
@@ -351,7 +352,7 @@ void clatbs_(char *uplo, char *trans, char *diag, char *normin, integer *n, inte
     *info = 0;
     // initializing as {1, 0} because it is
     // used as divisor
-    tjjs = (complex){.r = 1.f, .i = 0.f};
+    tjjs = (scomplex){.r = 1.f, .i = 0.f};
     upper = lsame_(uplo, "U", 1, 1);
     notran = lsame_(trans, "N", 1, 1);
     nounit = lsame_(diag, "N", 1, 1);
@@ -387,7 +388,7 @@ void clatbs_(char *uplo, char *trans, char *diag, char *normin, integer *n, inte
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("CLATBS", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("CLATBS", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
@@ -414,7 +415,7 @@ void clatbs_(char *uplo, char *trans, char *diag, char *normin, integer *n, inte
                 i__2 = *kd;
                 i__3 = j - 1; // , expr subst
                 jlen = fla_min(i__2, i__3);
-                cnorm[j] = scasum_(&jlen, &ab[*kd + 1 - jlen + j * ab_dim1], &c__1);
+                cnorm[j] = aocl_blas_scasum(&jlen, &ab[*kd + 1 - jlen + j * ab_dim1], &c__1);
                 /* L10: */
             }
         }
@@ -808,8 +809,8 @@ void clatbs_(char *uplo, char *trans, char *diag, char *normin, integer *n, inte
                         q__2.i = -x[i__3].i; // , expr subst
                         q__1.r = tscal * q__2.r;
                         q__1.i = tscal * q__2.i; // , expr subst
-                        caxpy_(&jlen, &q__1, &ab[*kd + 1 - jlen + j * ab_dim1], &c__1, &x[j - jlen],
-                               &c__1);
+                        aocl_blas_caxpy(&jlen, &q__1, &ab[*kd + 1 - jlen + j * ab_dim1], &c__1,
+                                        &x[j - jlen], &c__1);
                         i__3 = j - 1;
                         i__ = aocl_blas_icamax(&i__3, &x[1], &c__1);
                         i__3 = i__;
@@ -833,7 +834,8 @@ void clatbs_(char *uplo, char *trans, char *diag, char *normin, integer *n, inte
                         q__2.i = -x[i__3].i; // , expr subst
                         q__1.r = tscal * q__2.r;
                         q__1.i = tscal * q__2.i; // , expr subst
-                        caxpy_(&jlen, &q__1, &ab[j * ab_dim1 + 2], &c__1, &x[j + 1], &c__1);
+                        aocl_blas_caxpy(&jlen, &q__1, &ab[j * ab_dim1 + 2], &c__1, &x[j + 1],
+                                        &c__1);
                     }
                     i__3 = *n - j;
                     i__ = j + aocl_blas_icamax(&i__3, &x[j + 1], &c__1);
@@ -906,7 +908,7 @@ void clatbs_(char *uplo, char *trans, char *diag, char *normin, integer *n, inte
                         i__3 = *kd;
                         i__4 = j - 1; // , expr subst
                         jlen = fla_min(i__3, i__4);
-                        cdotu_f2c_(&q__1, &jlen, &ab[*kd + 1 - jlen + j * ab_dim1], &c__1,
+                        aocl_lapack_cdotu_f2c(&q__1, &jlen, &ab[*kd + 1 - jlen + j * ab_dim1], &c__1,
                                    &x[j - jlen], &c__1);
                         csumj.r = q__1.r;
                         csumj.i = q__1.i; // , expr subst
@@ -920,8 +922,8 @@ void clatbs_(char *uplo, char *trans, char *diag, char *normin, integer *n, inte
                         if(jlen > 1)
                         {
                             aocl_lapack_cdotu_f2c(&q__1, &jlen, &ab[j * ab_dim1 + 2], &c__1, &x[j + 1], &c__1);
-                            csumj.real = q__1.real;
-                            csumj.imag = q__1.imag; // , expr subst
+                            csumj.r = q__1.r;
+                            csumj.i = q__1.i; // , expr subst
                         }
                     }
                 }
@@ -1143,7 +1145,7 @@ void clatbs_(char *uplo, char *trans, char *diag, char *normin, integer *n, inte
                         i__3 = *kd;
                         i__4 = j - 1; // , expr subst
                         jlen = fla_min(i__3, i__4);
-                        cdotc_f2c_(&q__1, &jlen, &ab[*kd + 1 - jlen + j * ab_dim1], &c__1,
+                        aocl_lapack_cdotc_f2c(&q__1, &jlen, &ab[*kd + 1 - jlen + j * ab_dim1], &c__1,
                                    &x[j - jlen], &c__1);
                         csumj.r = q__1.r;
                         csumj.i = q__1.i; // , expr subst
@@ -1157,8 +1159,8 @@ void clatbs_(char *uplo, char *trans, char *diag, char *normin, integer *n, inte
                         if(jlen > 1)
                         {
                             aocl_lapack_cdotc_f2c(&q__1, &jlen, &ab[j * ab_dim1 + 2], &c__1, &x[j + 1], &c__1);
-                            csumj.real = q__1.real;
-                            csumj.imag = q__1.imag; // , expr subst
+                            csumj.r = q__1.r;
+                            csumj.i = q__1.i; // , expr subst
                         }
                     }
                 }

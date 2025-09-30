@@ -1,15 +1,22 @@
-/* ../netlib/sgelq2.f -- translated by f2c (version 20000121). You must link the resulting object file with the libraries: -lf2c -lm (in that order) */
+/* ../netlib/sgelq2.f -- translated by f2c (version 20000121). You must link the resulting object
+ * file with the libraries: -lf2c -lm (in that order) */
 #include "FLA_f2c.h" /* > \brief \b SGELQ2 computes the LQ factorization of a general rectangular matrix using an unblocked algorit hm. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download SGELQ2 + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/sgelq2. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/sgelq2.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/sgelq2. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/sgelq2.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sgelq2. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sgelq2.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -33,9 +40,9 @@
 /* > where: */
 /* > */
 /* > Q is a n-by-n orthogonal matrix;
-*/
+ */
 /* > L is a lower-triangular m-by-m matrix;
-*/
+ */
 /* > 0 is a m-by-(n-m) zero matrix, if m < n. */
 /* > */
 /* > \endverbatim */
@@ -117,14 +124,13 @@ v(i+1:n) is stored on exit in A(i,i+1:n), */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int lapack_sgelq2(integer *m, integer *n, real *a, integer *lda, real *tau, real *work, integer *info)
+int lapack_sgelq2(aocl_int64_t *m, aocl_int64_t *n, real *a, aocl_int64_t *lda, real *tau,
+                  real *work, aocl_int64_t *info)
 {
     /* System generated locals */
-    integer a_dim1, a_offset, i__1, i__2, i__3;
+    aocl_int64_t a_dim1, a_offset, i__1, i__2, i__3;
     /* Local variables */
-    integer i__, k;
-    extern /* Subroutine */
-    void slarf_(char *, integer *, integer *, real *, integer *, real *, real *, integer *, real *), xerbla_(const char *srname, const integer *info, ftnlen srname_len), slarfg_(integer *, real *, real *, integer *, real *);
+    aocl_int64_t i__, k;
     real aii;
     /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -152,43 +158,43 @@ int lapack_sgelq2(integer *m, integer *n, real *a, integer *lda, real *tau, real
     --work;
     /* Function Body */
     *info = 0;
-    if (*m < 0)
+    if(*m < 0)
     {
         *info = -1;
     }
-    else if (*n < 0)
+    else if(*n < 0)
     {
         *info = -2;
     }
-    else if (*lda < fla_max(1,*m))
+    else if(*lda < fla_max(1, *m))
     {
         *info = -4;
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("SGELQ2", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("SGELQ2", &i__1, (ftnlen)6);
         return 0;
     }
-    k = fla_min(*m,*n);
+    k = fla_min(*m, *n);
     i__1 = k;
-    for (i__ = 1;
-            i__ <= i__1;
-            ++i__)
+    for(i__ = 1; i__ <= i__1; ++i__)
     {
         /* Generate elementary reflector H(i) to annihilate A(i,i+1:n) */
         i__2 = *n - i__ + 1;
         /* Computing MIN */
         i__3 = i__ + 1;
-        slarfg_(&i__2, &a[i__ + i__ * a_dim1], &a[i__ + fla_min(i__3,*n) * a_dim1], lda, &tau[i__]);
-        if (i__ < *m)
+        aocl_lapack_slarfg(&i__2, &a[i__ + i__ * a_dim1], &a[i__ + fla_min(i__3, *n) * a_dim1], lda,
+                           &tau[i__]);
+        if(i__ < *m)
         {
             /* Apply H(i) to A(i+1:m,i:n) from the right */
             aii = a[i__ + i__ * a_dim1];
             a[i__ + i__ * a_dim1] = 1.f;
             i__2 = *m - i__;
             i__3 = *n - i__ + 1;
-            slarf_("Right", &i__2, &i__3, &a[i__ + i__ * a_dim1], lda, &tau[ i__], &a[i__ + 1 + i__ * a_dim1], lda, &work[1]);
+            aocl_lapack_slarf("Right", &i__2, &i__3, &a[i__ + i__ * a_dim1], lda, &tau[i__],
+                              &a[i__ + 1 + i__ * a_dim1], lda, &work[1]);
             a[i__ + i__ * a_dim1] = aii;
         }
         /* L10: */

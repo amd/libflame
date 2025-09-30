@@ -24,18 +24,18 @@
 #endif
 
 /* Complex types are structures equivalent to the
-* Fortran complex types COMPLEX(4) and COMPLEX(8).
+* Fortran scomplex types COMPLEX(4) and COMPLEX(8).
 *
 * One can also redefine the types with his own types
 * for example by including in the code definitions like
 *
-* #define lapack_complex_float std::complex<float>
-* #define lapack_complex_double std::complex<double>
+* #define lapack_complex_float std::scomplex<float>
+* #define lapack_complex_double std::scomplex<double>
 *
 * or define these types in the command line:
 *
-* -Dlapack_complex_float="std::complex<float>"
-* -Dlapack_complex_double="std::complex<double>"
+* -Dlapack_complex_float="std::scomplex<float>"
+* -Dlapack_complex_double="std::scomplex<double>"
 */
 
 #ifndef LAPACK_COMPLEX_CUSTOM

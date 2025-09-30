@@ -4,10 +4,10 @@
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
  /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
-static integer c_n1 = -1;
-static integer c__3 = 3;
-static integer c__2 = 2;
+static aocl_int64_t c__1 = 1;
+static aocl_int64_t c_n1 = -1;
+static aocl_int64_t c__3 = 3;
+static aocl_int64_t c__2 = 2;
 /* > \brief \b SGEQRFP */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -153,28 +153,19 @@ v(i+1:m) is stored on exit in A(i+1:m,i), */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void sgeqrfp_fla(integer *m, integer *n, real *a, integer *lda, real *tau, real *work,
-                 integer *lwork, integer *info)
+void sgeqrfp_fla(aocl_int64_t *m, aocl_int64_t *n, real *a, aocl_int64_t *lda, real *tau,
+                 real *work, aocl_int64_t *lwork, aocl_int64_t *info)
 {
     /* System generated locals */
-    integer a_dim1, a_offset, i__1, i__2, i__3, i__4;
+    aocl_int64_t a_dim1, a_offset, i__1, i__2, i__3, i__4;
     /* Local variables */
-    integer i__, k, ib, nb, nx, iws, nbmin, iinfo;
-    extern /* Subroutine */
-        void
-        slarfb_(char *, char *, char *, char *, integer *, integer *, integer *, real *, integer *,
-                real *, integer *, real *, integer *, real *, integer *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
-    extern /* Subroutine */
-        void
-        slarft_(char *, char *, integer *, integer *, real *, integer *, real *, real *, integer *);
-    integer ldwork, lwkopt;
+    aocl_int64_t i__, k, ib, nb, nx, iws, nbmin, iinfo;
+    aocl_int64_t ldwork, lwkopt;
     logical lquery;
     extern /* Subroutine */
         void
-        sgeqr2p_fla(integer *, integer *, real *, integer *, real *, real *, integer *);
-    extern real sroundup_lwork(integer *);
+        sgeqr2p_fla(aocl_int64_t *, aocl_int64_t *, real *, aocl_int64_t *, real *, real *,
+                    aocl_int64_t *);
     /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -201,9 +192,9 @@ void sgeqrfp_fla(integer *m, integer *n, real *a, integer *lda, real *tau, real 
     --work;
     /* Function Body */
     *info = 0;
-    nb = ilaenv_(&c__1, "SGEQRF", " ", m, n, &c_n1, &c_n1);
+    nb = aocl_lapack_ilaenv(&c__1, "SGEQRF", " ", m, n, &c_n1, &c_n1);
     lwkopt = *n * nb;
-    work[1] = sroundup_lwork(&lwkopt);
+    work[1] = aocl_lapack_sroundup_lwork(&lwkopt);
     lquery = *lwork == -1;
     if(*m < 0)
     {
@@ -224,7 +215,7 @@ void sgeqrfp_fla(integer *m, integer *n, real *a, integer *lda, real *tau, real 
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("SGEQRFP", &i__1, (ftnlen)7);
+        aocl_blas_xerbla("SGEQRFP", &i__1, (ftnlen)7);
         return;
     }
     else if(lquery)
@@ -246,7 +237,7 @@ void sgeqrfp_fla(integer *m, integer *n, real *a, integer *lda, real *tau, real 
         /* Determine when to cross over from blocked to unblocked code. */
         /* Computing MAX */
         i__1 = 0;
-        i__2 = ilaenv_(&c__3, "SGEQRF", " ", m, n, &c_n1, &c_n1); // , expr subst
+        i__2 = aocl_lapack_ilaenv(&c__3, "SGEQRF", " ", m, n, &c_n1, &c_n1); // , expr subst
         nx = fla_max(i__1, i__2);
         if(nx < k)
         {
@@ -260,7 +251,7 @@ void sgeqrfp_fla(integer *m, integer *n, real *a, integer *lda, real *tau, real 
                 nb = *lwork / ldwork;
                 /* Computing MAX */
                 i__1 = 2;
-                i__2 = ilaenv_(&c__2, "SGEQRF", " ", m, n, &c_n1, &c_n1); // , expr subst
+                i__2 = aocl_lapack_ilaenv(&c__2, "SGEQRF", " ", m, n, &c_n1, &c_n1); // , expr subst
                 nbmin = fla_max(i__1, i__2);
             }
         }
@@ -284,14 +275,14 @@ void sgeqrfp_fla(integer *m, integer *n, real *a, integer *lda, real *tau, real 
                 /* Form the triangular factor of the block reflector */
                 /* H = H(i) H(i+1) . . . H(i+ib-1) */
                 i__3 = *m - i__ + 1;
-                slarft_("Forward", "Columnwise", &i__3, &ib, &a[i__ + i__ * a_dim1], lda, &tau[i__],
-                        &work[1], &ldwork);
+                aocl_lapack_slarft("Forward", "Columnwise", &i__3, &ib, &a[i__ + i__ * a_dim1], lda,
+                                   &tau[i__], &work[1], &ldwork);
                 /* Apply H**T to A(i:m,i+ib:n) from the left */
                 i__3 = *m - i__ + 1;
                 i__4 = *n - i__ - ib + 1;
-                slarfb_("Left", "Transpose", "Forward", "Columnwise", &i__3, &i__4, &ib,
-                        &a[i__ + i__ * a_dim1], lda, &work[1], &ldwork,
-                        &a[i__ + (i__ + ib) * a_dim1], lda, &work[ib + 1], &ldwork);
+                aocl_lapack_slarfb("Left", "Transpose", "Forward", "Columnwise", &i__3, &i__4, &ib,
+                                   &a[i__ + i__ * a_dim1], lda, &work[1], &ldwork,
+                                   &a[i__ + (i__ + ib) * a_dim1], lda, &work[ib + 1], &ldwork);
             }
             /* L10: */
         }
@@ -307,7 +298,7 @@ void sgeqrfp_fla(integer *m, integer *n, real *a, integer *lda, real *tau, real 
         i__1 = *n - i__ + 1;
         sgeqr2p_fla(&i__2, &i__1, &a[i__ + i__ * a_dim1], lda, &tau[i__], &work[1], &iinfo);
     }
-    work[1] = sroundup_lwork(&iws);
+    work[1] = aocl_lapack_sroundup_lwork(&iws);
     return;
     /* End of SGEQRFP */
 }

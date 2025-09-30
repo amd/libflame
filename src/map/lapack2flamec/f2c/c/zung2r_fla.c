@@ -4,7 +4,7 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
+static aocl_int64_t c__1 = 1;
 /* > \brief \b ZUNG2R */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -38,7 +38,7 @@ static integer c__1 = 1;
 /* > */
 /* > \verbatim */
 /* > */
-/* > ZUNG2R generates an m by n complex matrix Q with orthonormal columns, */
+/* > ZUNG2R generates an m by n scomplex matrix Q with orthonormal columns, */
 /* > which is defined as the first n columns of a product of k elementary */
 /* > reflectors of order m */
 /* > */
@@ -111,20 +111,14 @@ static integer c__1 = 1;
 /* > \ingroup complex16OTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void zung2r_fla(integer *m, integer *n, integer *k, doublecomplex *a, integer *lda,
-                doublecomplex *tau, doublecomplex *work, integer *info)
+void zung2r_fla(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *k, dcomplex *a,
+                aocl_int64_t *lda, dcomplex *tau, dcomplex *work, aocl_int64_t *info)
 {
     /* System generated locals */
-    integer a_dim1, a_offset, i__1, i__2, i__3;
-    doublecomplex z__1;
+    aocl_int64_t a_dim1, a_offset, i__1, i__2, i__3;
+    dcomplex z__1;
     /* Local variables */
-    integer i__, j, l;
-    extern /* Subroutine */
-        void
-        zscal_(integer *, doublecomplex *, doublecomplex *, integer *),
-        zlarf_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *,
-               doublecomplex *, integer *, doublecomplex *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    aocl_int64_t i__, j, l;
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -171,7 +165,7 @@ void zung2r_fla(integer *m, integer *n, integer *k, doublecomplex *a, integer *l
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("ZUNG2R", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("ZUNG2R", &i__1, (ftnlen)6);
         return;
     }
     /* Quick return if possible */
@@ -206,8 +200,8 @@ void zung2r_fla(integer *m, integer *n, integer *k, doublecomplex *a, integer *l
             a[i__1].i = 0.; // , expr subst
             i__1 = *m - i__ + 1;
             i__2 = *n - i__;
-            zlarf_("Left", &i__1, &i__2, &a[i__ + i__ * a_dim1], &c__1, &tau[i__],
-                   &a[i__ + (i__ + 1) * a_dim1], lda, &work[1]);
+            aocl_lapack_zlarf("Left", &i__1, &i__2, &a[i__ + i__ * a_dim1], &c__1, &tau[i__],
+                              &a[i__ + (i__ + 1) * a_dim1], lda, &work[1]);
         }
         if(i__ < *m)
         {
@@ -215,7 +209,7 @@ void zung2r_fla(integer *m, integer *n, integer *k, doublecomplex *a, integer *l
             i__2 = i__;
             z__1.r = -tau[i__2].r;
             z__1.i = -tau[i__2].i; // , expr subst
-            zscal_(&i__1, &z__1, &a[i__ + 1 + i__ * a_dim1], &c__1);
+            aocl_blas_zscal(&i__1, &z__1, &a[i__ + 1 + i__ * a_dim1], &c__1);
         }
         i__1 = i__ + i__ * a_dim1;
         i__2 = i__;

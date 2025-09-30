@@ -5,15 +5,15 @@
  *******************************************************************************/
 #include "FLA_f2c.h" /* Table of constant values */
 #if !FLA_ENABLE_AMD_OPT
-static integer c__1 = 1;
+static aocl_int64_t c__1 = 1;
 #endif
-static integer c_n1 = -1;
-static integer c__3 = 3;
-static integer c__2 = 2;
+static aocl_int64_t c_n1 = -1;
+static aocl_int64_t c__3 = 3;
+static aocl_int64_t c__2 = 2;
 
 extern int fla_thread_get_num_threads();
 
-integer get_block_size_sgeqrf(integer *m, integer *n);
+integer get_block_size_sgeqrf(aocl_int64_t *m, aocl_int64_t *n);
 
 /* > \brief \b SGEQRF */
 /* =========== DOCUMENTATION =========== */
@@ -158,29 +158,20 @@ v(i+1:m) is stored on exit in A(i+1:m,i), */
 /* ===================================================================== */
 /* Subroutine */
 
-void sgeqrf_fla(integer *m, integer *n, real *a, integer *lda, real *tau, real *work,
-                integer *lwork, integer *info)
+void sgeqrf_fla(aocl_int64_t *m, aocl_int64_t *n, real *a, aocl_int64_t *lda, real *tau, real *work,
+                aocl_int64_t *lwork, aocl_int64_t *info)
 {
     /* System generated locals */
-    integer a_dim1, a_offset, i__1, i__2, i__3, i__4;
+    aocl_int64_t a_dim1, a_offset, i__1, i__2, i__3, i__4;
     /* Local variables */
-    integer i__, k, iws, nbmin, iinfo;
+    aocl_int64_t i__, k, iws, nbmin, iinfo;
     extern /* Subroutine */
         void
-        sgeqr2_fla(integer *, integer *, real *, integer *, real *, real *, integer *);
-    integer ib, nb, nx;
-    extern /* Subroutine */
-        void
-        slarfb_(char *, char *, char *, char *, integer *, integer *, integer *, real *, integer *,
-                real *, integer *, real *, integer *, real *, integer *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
-    extern /* Subroutine */
-        void
-        slarft_(char *, char *, integer *, integer *, real *, integer *, real *, real *, integer *);
-    integer ldwork, lwkopt;
+        sgeqr2_fla(aocl_int64_t *, aocl_int64_t *, real *, aocl_int64_t *, real *, real *,
+                   aocl_int64_t *);
+    aocl_int64_t ib, nb, nx;
+    aocl_int64_t ldwork, lwkopt;
     logical lquery;
-    extern real sroundup_lwork(integer *);
     /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -215,7 +206,7 @@ void sgeqrf_fla(integer *m, integer *n, real *a, integer *lda, real *tau, real *
 #if FLA_ENABLE_AMD_OPT
     nb = get_block_size_sgeqrf(m, n);
 #else
-    nb = ilaenv_(&c__1, "SGEQRF", " ", m, n, &c_n1, &c_n1);
+    nb = aocl_lapack_ilaenv(&c__1, "SGEQRF", " ", m, n, &c_n1, &c_n1);
 #endif
     lquery = *lwork == -1;
     if(*m < 0)
@@ -237,7 +228,7 @@ void sgeqrf_fla(integer *m, integer *n, real *a, integer *lda, real *tau, real *
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("SGEQRF", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("SGEQRF", &i__1, (ftnlen)6);
         return;
     }
     else if(lquery)
@@ -250,7 +241,7 @@ void sgeqrf_fla(integer *m, integer *n, real *a, integer *lda, real *tau, real *
         {
             lwkopt = *n * nb;
         }
-        work[1] = sroundup_lwork(&lwkopt);
+        work[1] = aocl_lapack_sroundup_lwork(&lwkopt);
         return;
     }
     /* Quick return if possible */
@@ -275,7 +266,7 @@ void sgeqrf_fla(integer *m, integer *n, real *a, integer *lda, real *tau, real *
         /* Determine when to cross over from blocked to unblocked code. */
         /* Computing MAX */
         i__1 = 0;
-        i__2 = ilaenv_(&c__3, "SGEQRF", " ", m, n, &c_n1, &c_n1); // , expr subst
+        i__2 = aocl_lapack_ilaenv(&c__3, "SGEQRF", " ", m, n, &c_n1, &c_n1); // , expr subst
         nx = fla_max(i__1, i__2);
         if(nx < k)
         {
@@ -289,7 +280,7 @@ void sgeqrf_fla(integer *m, integer *n, real *a, integer *lda, real *tau, real *
                 nb = *lwork / ldwork;
                 /* Computing MAX */
                 i__1 = 2;
-                i__2 = ilaenv_(&c__2, "SGEQRF", " ", m, n, &c_n1, &c_n1); // , expr subst
+                i__2 = aocl_lapack_ilaenv(&c__2, "SGEQRF", " ", m, n, &c_n1, &c_n1); // , expr subst
                 nbmin = fla_max(i__1, i__2);
             }
         }
@@ -325,14 +316,14 @@ void sgeqrf_fla(integer *m, integer *n, real *a, integer *lda, real *tau, real *
                 /* Form the triangular factor of the block reflector */
                 /* H = H(i) H(i+1) . . . H(i+ib-1) */
                 i__3 = *m - i__ + 1;
-                slarft_("Forward", "Columnwise", &i__3, &ib, &a[i__ + i__ * a_dim1], lda, &tau[i__],
-                        &work[1], &ldwork);
+                aocl_lapack_slarft("Forward", "Columnwise", &i__3, &ib, &a[i__ + i__ * a_dim1], lda,
+                                   &tau[i__], &work[1], &ldwork);
                 /* Apply H**T to A(i:m,i+ib:n) from the left */
                 i__3 = *m - i__ + 1;
                 i__4 = *n - i__ - ib + 1;
-                slarfb_("Left", "Transpose", "Forward", "Columnwise", &i__3, &i__4, &ib,
-                        &a[i__ + i__ * a_dim1], lda, &work[1], &ldwork,
-                        &a[i__ + (i__ + ib) * a_dim1], lda, &work[ib + 1], &ldwork);
+                aocl_lapack_slarfb("Left", "Transpose", "Forward", "Columnwise", &i__3, &i__4, &ib,
+                                   &a[i__ + i__ * a_dim1], lda, &work[1], &ldwork,
+                                   &a[i__ + (i__ + ib) * a_dim1], lda, &work[ib + 1], &ldwork);
             }
             /* L10: */
         }
@@ -360,14 +351,14 @@ void sgeqrf_fla(integer *m, integer *n, real *a, integer *lda, real *tau, real *
 
         sgeqr2_fla(&i__2, &i__1, &a[i__ + i__ * a_dim1], lda, &tau[i__], &work[1], &iinfo);
     }
-    work[1] = sroundup_lwork(&iws);
+    work[1] = aocl_lapack_sroundup_lwork(&iws);
     return;
     /* End of SGEQRF */
 }
 
-integer get_block_size_sgeqrf(integer *m, integer *n)
+integer get_block_size_sgeqrf(aocl_int64_t *m, aocl_int64_t *n)
 {
-    integer block_size;
+    aocl_int64_t block_size;
 
     /* Set block_size=32 for small sizes */
     if(*m <= 17 && *n <= 17)

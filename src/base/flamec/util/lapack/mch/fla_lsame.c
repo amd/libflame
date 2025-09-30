@@ -23,7 +23,7 @@ logical fla_lsame(char *ca, char *cb, ftnlen ca_len, ftnlen cb_len)
     logical ret_val;
 
     /* Local variables */
-    integer inta, intb, zcode;
+    fla_dim_t inta, intb, zcode;
 
 
 /*  -- LAPACK auxiliary routine (version 3.2) -- */

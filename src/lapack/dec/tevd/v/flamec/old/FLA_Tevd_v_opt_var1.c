@@ -13,11 +13,11 @@
 FLA_Error FLA_Tevd_v_opt_var1( FLA_Obj d, FLA_Obj e, FLA_Obj G, FLA_Obj U )
 {
 	FLA_Datatype datatype;
-	integer          m_A, m_U, n_G;
-	integer          inc_d;
-	integer          inc_e;
-	integer          rs_G, cs_G;
-	integer          rs_U, cs_U;
+	aocl_int64_t          m_A, m_U, n_G;
+	aocl_int64_t          inc_d;
+	aocl_int64_t          inc_e;
+	aocl_int64_t          rs_G, cs_G;
+	aocl_int64_t          rs_U, cs_U;
 
 	datatype = FLA_Obj_datatype( U );
 
@@ -115,55 +115,55 @@ FLA_Error FLA_Tevd_v_opt_var1( FLA_Obj d, FLA_Obj e, FLA_Obj G, FLA_Obj U )
 
 
 
-FLA_Error FLA_Tevd_v_ops_var1( integer       m_A,
-                               integer       m_U,
-                               integer       n_G,
-                               float*    buff_d, integer inc_d, 
-                               float*    buff_e, integer inc_e,
-                               scomplex* buff_G, integer rs_G, integer cs_G,
-                               float*    buff_U, integer rs_U, integer cs_U )
+FLA_Error FLA_Tevd_v_ops_var1( aocl_int64_t       m_A,
+                               aocl_int64_t       m_U,
+                               aocl_int64_t       n_G,
+                               float*    buff_d, aocl_int64_t inc_d, 
+                               float*    buff_e, aocl_int64_t inc_e,
+                               scomplex* buff_G, aocl_int64_t rs_G, aocl_int64_t cs_G,
+                               float*    buff_U, aocl_int64_t rs_U, aocl_int64_t cs_U )
 {
 	return FLA_SUCCESS;
 }
 
-FLA_Error FLA_Tevd_v_opd_var1( integer       m_A,
-                               integer       m_U,
-                               integer       n_G,
-                               double*   buff_d, integer inc_d, 
-                               double*   buff_e, integer inc_e,
-                               dcomplex* buff_G, integer rs_G, integer cs_G,
-                               double*   buff_U, integer rs_U, integer cs_U )
+FLA_Error FLA_Tevd_v_opd_var1( aocl_int64_t       m_A,
+                               aocl_int64_t       m_U,
+                               aocl_int64_t       n_G,
+                               double*   buff_d, aocl_int64_t inc_d, 
+                               double*   buff_e, aocl_int64_t inc_e,
+                               dcomplex* buff_G, aocl_int64_t rs_G, aocl_int64_t cs_G,
+                               double*   buff_U, aocl_int64_t rs_U, aocl_int64_t cs_U )
 {
 	return FLA_SUCCESS;
 }
 
-FLA_Error FLA_Tevd_v_opc_var1( integer       m_A,
-                               integer       m_U,
-                               integer       n_G,
-                               float*    buff_d, integer inc_d, 
-                               float*    buff_e, integer inc_e,
-                               scomplex* buff_G, integer rs_G, integer cs_G,
-                               scomplex* buff_U, integer rs_U, integer cs_U )
+FLA_Error FLA_Tevd_v_opc_var1( aocl_int64_t       m_A,
+                               aocl_int64_t       m_U,
+                               aocl_int64_t       n_G,
+                               float*    buff_d, aocl_int64_t inc_d, 
+                               float*    buff_e, aocl_int64_t inc_e,
+                               scomplex* buff_G, aocl_int64_t rs_G, aocl_int64_t cs_G,
+                               scomplex* buff_U, aocl_int64_t rs_U, aocl_int64_t cs_U )
 {
 	return FLA_SUCCESS;
 }
 
-FLA_Error FLA_Tevd_v_opz_var1( integer       m_A,
-                               integer       m_U,
-                               integer       n_G,
-                               double*   buff_d, integer inc_d, 
-                               double*   buff_e, integer inc_e,
-                               dcomplex* buff_G, integer rs_G, integer cs_G,
-                               dcomplex* buff_U, integer rs_U, integer cs_U )
+FLA_Error FLA_Tevd_v_opz_var1( aocl_int64_t       m_A,
+                               aocl_int64_t       m_U,
+                               aocl_int64_t       n_G,
+                               double*   buff_d, aocl_int64_t inc_d, 
+                               double*   buff_e, aocl_int64_t inc_e,
+                               dcomplex* buff_G, aocl_int64_t rs_G, aocl_int64_t cs_G,
+                               dcomplex* buff_U, aocl_int64_t rs_U, aocl_int64_t cs_U )
 {
 	double  gamma, sigma;
-	integer     i, k;
-	integer     k_total = 0;
-	integer     k_weight = 0;
+	aocl_int64_t     i, k;
+	aocl_int64_t     k_total = 0;
+	aocl_int64_t     k_weight = 0;
 
 	for ( i = m_A - 1; i > 1; --i )
 	{
-		integer m_ATL = i + 1;
+		aocl_int64_t m_ATL = i + 1;
 
 		/*------------------------------------------------------------*/
 

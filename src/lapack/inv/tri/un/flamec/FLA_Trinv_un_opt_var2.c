@@ -15,8 +15,8 @@
 FLA_Error FLA_Trinv_un_opt_var2( FLA_Obj A )
 {
   FLA_Datatype datatype;
-  integer          mn_A;
-  integer          rs_A, cs_A;
+  fla_dim_t          mn_A;
+  fla_dim_t          rs_A, cs_A;
 
   datatype = FLA_Obj_datatype( A );
 
@@ -73,11 +73,11 @@ FLA_Error FLA_Trinv_un_opt_var2( FLA_Obj A )
 
 
 
-FLA_Error FLA_Trinv_un_ops_var2( integer mn_A,
-                                 float* buff_A, integer rs_A, integer cs_A )
+FLA_Error FLA_Trinv_un_ops_var2( fla_dim_t mn_A,
+                                 float* buff_A, fla_dim_t rs_A, fla_dim_t cs_A )
 {
   float     alpha11_m1;
-  integer       i;
+  fla_dim_t       i;
 
   for ( i = 0; i < mn_A; ++i )
   {
@@ -85,7 +85,7 @@ FLA_Error FLA_Trinv_un_ops_var2( integer mn_A,
     float*    a12t      = buff_A + (i+1)*cs_A + (i  )*rs_A;
     float*    A22       = buff_A + (i+1)*cs_A + (i+1)*rs_A;
 
-    integer       mn_ahead  = mn_A - i - 1;
+    fla_dim_t       mn_ahead  = mn_A - i - 1;
 
     /*------------------------------------------------------------*/
 
@@ -118,11 +118,11 @@ FLA_Error FLA_Trinv_un_ops_var2( integer mn_A,
 
 
 
-FLA_Error FLA_Trinv_un_opd_var2( integer mn_A,
-                                 double* buff_A, integer rs_A, integer cs_A )
+FLA_Error FLA_Trinv_un_opd_var2( fla_dim_t mn_A,
+                                 double* buff_A, fla_dim_t rs_A, fla_dim_t cs_A )
 {
   double    alpha11_m1;
-  integer       i;
+  fla_dim_t       i;
 
   for ( i = 0; i < mn_A; ++i )
   {
@@ -130,7 +130,7 @@ FLA_Error FLA_Trinv_un_opd_var2( integer mn_A,
     double*   a12t      = buff_A + (i+1)*cs_A + (i  )*rs_A;
     double*   A22       = buff_A + (i+1)*cs_A + (i+1)*rs_A;
 
-    integer       mn_ahead  = mn_A - i - 1;
+    fla_dim_t       mn_ahead  = mn_A - i - 1;
 
     /*------------------------------------------------------------*/
 
@@ -163,11 +163,11 @@ FLA_Error FLA_Trinv_un_opd_var2( integer mn_A,
 
 
 
-FLA_Error FLA_Trinv_un_opc_var2( integer mn_A,
-                                 scomplex* buff_A, integer rs_A, integer cs_A )
+FLA_Error FLA_Trinv_un_opc_var2( fla_dim_t mn_A,
+                                 scomplex* buff_A, fla_dim_t rs_A, fla_dim_t cs_A )
 {
   scomplex  alpha11_m1;
-  integer       i;
+  fla_dim_t       i;
 
   for ( i = 0; i < mn_A; ++i )
   {
@@ -175,7 +175,7 @@ FLA_Error FLA_Trinv_un_opc_var2( integer mn_A,
     scomplex* a12t      = buff_A + (i+1)*cs_A + (i  )*rs_A;
     scomplex* A22       = buff_A + (i+1)*cs_A + (i+1)*rs_A;
 
-    integer       mn_ahead  = mn_A - i - 1;
+    fla_dim_t       mn_ahead  = mn_A - i - 1;
 
     /*------------------------------------------------------------*/
 
@@ -208,11 +208,11 @@ FLA_Error FLA_Trinv_un_opc_var2( integer mn_A,
 
 
 
-FLA_Error FLA_Trinv_un_opz_var2( integer mn_A,
-                                 dcomplex* buff_A, integer rs_A, integer cs_A )
+FLA_Error FLA_Trinv_un_opz_var2( fla_dim_t mn_A,
+                                 dcomplex* buff_A, fla_dim_t rs_A, fla_dim_t cs_A )
 {
   dcomplex  alpha11_m1;
-  integer       i;
+  fla_dim_t       i;
 
   for ( i = 0; i < mn_A; ++i )
   {
@@ -220,7 +220,7 @@ FLA_Error FLA_Trinv_un_opz_var2( integer mn_A,
     dcomplex* a12t      = buff_A + (i+1)*cs_A + (i  )*rs_A;
     dcomplex* A22       = buff_A + (i+1)*cs_A + (i+1)*rs_A;
 
-    integer       mn_ahead  = mn_A - i - 1;
+    fla_dim_t       mn_ahead  = mn_A - i - 1;
 
     /*------------------------------------------------------------*/
 

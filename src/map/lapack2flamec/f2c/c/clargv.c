@@ -3,7 +3,7 @@
  .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
  /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
-#include "FLA_f2c.h" /* > \brief \b CLARGV generates a vector of plane rotations with real cosines and complex sines. */
+#include "FLA_f2c.h" /* > \brief \b CLARGV generates a vector of plane rotations with real cosines and scomplex sines. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
@@ -116,8 +116,24 @@
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void clargv_(integer *n, complex *x, integer *incx, complex *y, integer *incy, real *c__,
-             integer *incc)
+/** Generated wrapper function */
+void clargv_(aocl_int_t *n, scomplex *x, aocl_int_t *incx, scomplex *y, aocl_int_t *incy, real *c__,
+             aocl_int_t *incc)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_clargv(n, x, incx, y, incy, c__, incc);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t incx_64 = *incx;
+    aocl_int64_t incy_64 = *incy;
+    aocl_int64_t incc_64 = *incc;
+
+    aocl_lapack_clargv(&n_64, x, &incx_64, y, &incy_64, c__, &incc_64);
+#endif
+}
+
+void aocl_lapack_clargv(aocl_int64_t *n, scomplex *x, aocl_int64_t *incx, scomplex *y,
+                        aocl_int64_t *incy, real *c__, aocl_int64_t *incc)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("clargv inputs: n %" FLA_IS ", incx %" FLA_IS ", incy %" FLA_IS
@@ -282,8 +298,8 @@ void clargv_(integer *n, complex *x, integer *incx, complex *y, integer *incy, r
                 r__2 = g.real;
                 r__3 = r_imag(&g);
                 r__1 = slapy2_(&r__2, &r__3);
-                r__.real = r__1;
-                r__.imag = 0.f; // , expr subst
+                r__.r = r__1;
+                r__.i = 0.f; // , expr subst
                 /* Do scomplex/real division explicitly with two real */
                 /* divisions */
                 r__1 = gs.real;
@@ -312,7 +328,7 @@ void clargv_(integer *n, complex *x, integer *incx, complex *y, integer *incy, r
             /* Therefore, CS = F2S/G2S / sqrt( 1 + (F2S/G2S)**2 ) = F2S/G2S */
             cs = f2s / g2s;
             /* Make sure f2c_abs(FF) = 1 */
-            /* Do complex/real division explicitly with 2 real divisions */
+            /* Do scomplex/real division explicitly with 2 real divisions */
             /* Computing MAX */
             r__3 = (r__1 = f.r, f2c_abs(r__1));
             r__4 = (r__2 = r_imag(&f), f2c_abs(r__2)); // , expr subst
@@ -374,7 +390,7 @@ void clargv_(integer *n, complex *x, integer *incx, complex *y, integer *incy, r
             cs = 1.f / f2s;
             d__ = f2 + g2;
             /* Do scomplex/real division explicitly with two real divisions */
-            r__1 = r__.real / d__;
+            r__1 = r__.r / d__;
             r__2 = r_imag(&r__) / d__;
             q__1.real = r__1;
             q__1.imag = r__2; // , expr subst

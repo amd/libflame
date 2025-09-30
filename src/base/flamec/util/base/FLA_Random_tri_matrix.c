@@ -13,8 +13,8 @@
 FLA_Error FLA_Random_tri_matrix( FLA_Uplo uplo, FLA_Diag diag, FLA_Obj A )
 {
   FLA_Datatype datatype;
-  integer          m_A, n_A;
-  integer          rs_A, cs_A;
+  fla_dim_t          m_A, n_A;
+  fla_dim_t          rs_A, cs_A;
   uplo1_t       blis_uplo;
   diag1_t       blis_diag;
 

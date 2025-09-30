@@ -13,10 +13,10 @@
 FLA_Error FLA_Syr2_external( FLA_Uplo uplo, FLA_Obj alpha, FLA_Obj x, FLA_Obj y, FLA_Obj A )
 {
   FLA_Datatype datatype;
-  integer          m_A;
-  integer          rs_A, cs_A;
-  integer          inc_x; 
-  integer          inc_y; 
+  fla_dim_t          m_A;
+  fla_dim_t          rs_A, cs_A;
+  fla_dim_t          inc_x; 
+  fla_dim_t          inc_y; 
   uplo1_t       blis_uplo;
 
   if ( FLA_Check_error_level() == FLA_FULL_ERROR_CHECKING ) 

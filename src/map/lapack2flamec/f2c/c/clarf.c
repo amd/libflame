@@ -4,9 +4,9 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static complex c_b1 = {1.f, 0.f};
-static complex c_b2 = {0.f, 0.f};
-static integer c__1 = 1;
+static scomplex c_b1 = {{1.f}, {0.f}};
+static scomplex c_b2 = {{0.f}, {0.f}};
+static aocl_int64_t c__1 = 1;
 /* > \brief \b CLARF applies an elementary reflector to a general rectangular matrix. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -127,8 +127,24 @@ static integer c__1 = 1;
 /* > \ingroup complexOTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-void clarf_(char *side, integer *m, integer *n, complex *v, integer *incv, complex *tau,
-            complex *c__, integer *ldc, complex *work)
+/** Generated wrapper function */
+void clarf_(char *side, aocl_int_t *m, aocl_int_t *n, scomplex *v, aocl_int_t *incv, scomplex *tau,
+            scomplex *c__, aocl_int_t *ldc, scomplex *work)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_clarf(side, m, n, v, incv, tau, c__, ldc, work);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t incv_64 = *incv;
+    aocl_int64_t ldc_64 = *ldc;
+
+    aocl_lapack_clarf(side, &m_64, &n_64, v, &incv_64, tau, c__, &ldc_64, work);
+#endif
+}
+
+void aocl_lapack_clarf(char *side, aocl_int64_t *m, aocl_int64_t *n, scomplex *v, aocl_int64_t *incv,
+                       scomplex *tau, scomplex *c__, aocl_int64_t *ldc, scomplex *work)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -148,16 +164,8 @@ void clarf_(char *side, integer *m, integer *n, complex *v, integer *incv, compl
     /* Local variables */
     aocl_int64_t i__;
     logical applyleft;
-    extern /* Subroutine */
-        void
-        cgerc_(integer *, integer *, complex *, complex *, integer *, complex *, integer *,
-               complex *, integer *),
-        cgemv_(char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *,
-               complex *, complex *, integer *);
-    extern logical lsame_(char *, char *, integer, integer);
-    integer lastc, lastv;
-    extern integer ilaclc_(integer *, integer *, complex *, integer *),
-        ilaclr_(integer *, integer *, complex *, integer *);
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    aocl_int64_t lastc, lastv;
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -236,12 +244,13 @@ void clarf_(char *side, integer *m, integer *n, complex *v, integer *incv, compl
         if(lastv > 0)
         {
             /* w(1:lastc,1) := C(1:lastv,1:lastc)**H * v(1:lastv,1) */
-            cgemv_("Conjugate transpose", &lastv, &lastc, &c_b1, &c__[c_offset], ldc, &v[1], incv,
-                   &c_b2, &work[1], &c__1);
+            aocl_blas_cgemv("Conjugate transpose", &lastv, &lastc, &c_b1, &c__[c_offset], ldc,
+                            &v[1], incv, &c_b2, &work[1], &c__1);
             /* C(1:lastv,1:lastc) := C(...) - v(1:lastv,1) * w(1:lastc,1)**H */
             q__1.r = -tau->r;
             q__1.i = -tau->i; // , expr subst
-            cgerc_(&lastv, &lastc, &q__1, &v[1], incv, &work[1], &c__1, &c__[c_offset], ldc);
+            aocl_blas_cgerc(&lastv, &lastc, &q__1, &v[1], incv, &work[1], &c__1, &c__[c_offset],
+                            ldc);
         }
     }
     else
@@ -250,12 +259,13 @@ void clarf_(char *side, integer *m, integer *n, complex *v, integer *incv, compl
         if(lastv > 0)
         {
             /* w(1:lastc,1) := C(1:lastc,1:lastv) * v(1:lastv,1) */
-            cgemv_("No transpose", &lastc, &lastv, &c_b1, &c__[c_offset], ldc, &v[1], incv, &c_b2,
-                   &work[1], &c__1);
+            aocl_blas_cgemv("No transpose", &lastc, &lastv, &c_b1, &c__[c_offset], ldc, &v[1], incv,
+                            &c_b2, &work[1], &c__1);
             /* C(1:lastc,1:lastv) := C(...) - w(1:lastc,1) * v(1:lastv,1)**H */
             q__1.r = -tau->r;
             q__1.i = -tau->i; // , expr subst
-            cgerc_(&lastc, &lastv, &q__1, &work[1], &c__1, &v[1], incv, &c__[c_offset], ldc);
+            aocl_blas_cgerc(&lastc, &lastv, &q__1, &work[1], &c__1, &v[1], incv, &c__[c_offset],
+                            ldc);
         }
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);

@@ -16,7 +16,7 @@
 #include "blis.h"
 #endif
 
-void bl1_scopy( integer m, float* x, integer incx, float* y, integer incy )
+void bl1_scopy( fla_dim_t m, float* x, fla_dim_t incx, float* y, fla_dim_t incy )
 {
 #ifdef BLIS1_ENABLE_CBLAS_INTERFACES
 	cblas_scopy( m,
@@ -29,7 +29,7 @@ void bl1_scopy( integer m, float* x, integer incx, float* y, integer incy )
 #endif
 }
 
-void bl1_dcopy( integer m, double* x, integer incx, double* y, integer incy )
+void bl1_dcopy( fla_dim_t m, double* x, fla_dim_t incx, double* y, fla_dim_t incy )
 {
 #ifdef BLIS1_ENABLE_CBLAS_INTERFACES
 	cblas_dcopy( m,
@@ -42,7 +42,7 @@ void bl1_dcopy( integer m, double* x, integer incx, double* y, integer incy )
 #endif
 }
 
-void bl1_ccopy( integer m, scomplex* x, integer incx, scomplex* y, integer incy )
+void bl1_ccopy( fla_dim_t m, scomplex* x, fla_dim_t incx, scomplex* y, fla_dim_t incy )
 {
 #ifdef BLIS1_ENABLE_CBLAS_INTERFACES
 	cblas_ccopy( m,
@@ -55,7 +55,7 @@ void bl1_ccopy( integer m, scomplex* x, integer incx, scomplex* y, integer incy 
 #endif
 }
 
-void bl1_zcopy( integer m, dcomplex* x, integer incx, dcomplex* y, integer incy )
+void bl1_zcopy( fla_dim_t m, dcomplex* x, fla_dim_t incx, dcomplex* y, fla_dim_t incy )
 {
 #ifdef BLIS1_ENABLE_CBLAS_INTERFACES
 	cblas_zcopy( m,

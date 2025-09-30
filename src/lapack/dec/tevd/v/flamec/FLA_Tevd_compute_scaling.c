@@ -10,9 +10,9 @@
 
 #include "FLAME.h"
 
-FLA_Error FLA_Tevd_compute_scaling_ops( integer       m_A,
-                                        float*    buff_d, integer inc_d, 
-                                        float*    buff_e, integer inc_e,
+FLA_Error FLA_Tevd_compute_scaling_ops( fla_dim_t       m_A,
+                                        float*    buff_d, fla_dim_t inc_d, 
+                                        float*    buff_e, fla_dim_t inc_e,
                                         float*    sigma )
 {
 	float  one   = bl1_s1();
@@ -56,9 +56,9 @@ FLA_Error FLA_Tevd_compute_scaling_ops( integer       m_A,
 	return FLA_SUCCESS;
 }
 
-FLA_Error FLA_Tevd_compute_scaling_opd( integer       m_A,
-                                        double*   buff_d, integer inc_d, 
-                                        double*   buff_e, integer inc_e,
+FLA_Error FLA_Tevd_compute_scaling_opd( fla_dim_t       m_A,
+                                        double*   buff_d, fla_dim_t inc_d, 
+                                        double*   buff_e, fla_dim_t inc_e,
                                         double*   sigma )
 {
 	double one   = bl1_d1();

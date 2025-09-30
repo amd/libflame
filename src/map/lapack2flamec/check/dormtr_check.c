@@ -1,23 +1,23 @@
 #include "FLA_f2c.h"
 #include "FLA_lapack2flame_return_defs.h"
-static integer c__1 = 1;
-static integer c_n1 = -1;
+static aocl_int64_t c__1 = 1;
+static aocl_int64_t c_n1 = -1;
 
-int dormtr_check(char *side, char *uplo, char *trans, integer *m, integer *n, double *a,
-                 integer *lda, double *tau, double *c__, integer *ldc, double *work, integer *lwork,
-                 integer *info)
+int dormtr_check(char *side, char *uplo, char *trans, aocl_int64_t *m, aocl_int64_t *n, double *a,
+                 aocl_int64_t *lda, double *tau, double *c__, aocl_int64_t *ldc, double *work, aocl_int64_t *lwork,
+                 aocl_int64_t *info)
 {
     /* System generated locals */
-    integer a_dim1, a_offset, c_dim1, c_offset, i__2, i__3;
+    aocl_int64_t a_dim1, a_offset, c_dim1, c_offset, i__2, i__3;
     char ch__1[2];
     /* Builtin functions */
     /* Subroutine */
 
     /* Local variables */
-    integer nb, nq, nw;
+    aocl_int64_t nb, nq, nw;
     logical left;
     logical upper;
-    integer lwkopt;
+    aocl_int64_t lwkopt;
     logical lquery;
 
     /* Parameter adjustments */
@@ -115,7 +115,7 @@ int dormtr_check(char *side, char *uplo, char *trans, integer *m, integer *n, do
     if(*info != 0)
     {
         i__2 = -(*info);
-        xerbla_("DORMTR", &i__2, (ftnlen)6);
+        aocl_blas_xerbla("DORMTR", &i__2, (ftnlen)6);
         return LAPACK_FAILURE;
     }
     else if(lquery)

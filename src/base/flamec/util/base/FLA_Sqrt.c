@@ -13,7 +13,7 @@
 FLA_Error FLA_Sqrt( FLA_Obj alpha )
 {
   FLA_Datatype datatype;
-  integer          r_val = FLA_SUCCESS;
+  fla_dim_t          r_val = FLA_SUCCESS;
 
   if ( FLA_Check_error_level() >= FLA_MIN_ERROR_CHECKING )
     FLA_Sqrt_check( alpha );

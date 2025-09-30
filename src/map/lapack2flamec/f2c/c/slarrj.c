@@ -160,29 +160,52 @@
 /* > Christof Voemel, University of California, Berkeley, USA */
 /* ===================================================================== */
 /* Subroutine */
-void slarrj_(integer *n, real *d__, real *e2, integer *ifirst, integer *ilast, real *rtol,
-             integer *offset, real *w, real *werr, real *work, integer *iwork, real *pivmin,
-             real *spdiam, integer *info)
+/** Generated wrapper function */
+void slarrj_(aocl_int_t *n, real *d__, real *e2, aocl_int_t *ifirst, aocl_int_t *ilast, real *rtol,
+             aocl_int_t *offset, real *w, real *werr, real *work, aocl_int_t *iwork, real *pivmin,
+             real *spdiam, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_slarrj(n, d__, e2, ifirst, ilast, rtol, offset, w, werr, work, iwork, pivmin,
+                       spdiam, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t ifirst_64 = *ifirst;
+    aocl_int64_t ilast_64 = *ilast;
+    aocl_int64_t offset_64 = *offset;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_slarrj(&n_64, d__, e2, &ifirst_64, &ilast_64, rtol, &offset_64, w, werr, work,
+                       iwork, pivmin, spdiam, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_slarrj(aocl_int64_t *n, real *d__, real *e2, aocl_int64_t *ifirst,
+                        aocl_int64_t *ilast, real *rtol, aocl_int64_t *offset, real *w, real *werr,
+                        real *work, aocl_int_t *iwork, real *pivmin, real *spdiam,
+                        aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("slarrj inputs: n %" FLA_IS ",ifirst %" FLA_IS ",ilast %" FLA_IS
                       ",offset %" FLA_IS "",
                       *n, *ifirst, *ilast, *offset);
     /* System generated locals */
-    integer i__1, i__2;
+    aocl_int64_t i__1, i__2;
     real r__1, r__2;
     /* Builtin functions */
     double log(doublereal);
     /* Local variables */
-    integer i__, j, k, p;
+    aocl_int64_t i__, j, k, p;
     real s;
-    integer i1, i2, ii;
+    aocl_int64_t i1, i2, ii;
     real fac, mid;
-    integer cnt;
+    aocl_int64_t cnt;
     real tmp, left;
-    integer iter, nint, prev, next, savi1;
+    aocl_int64_t iter, nint, prev, next, savi1;
     real right, width, dplus;
-    integer olnint, maxitr;
+    aocl_int64_t olnint, maxitr;
     /* -- LAPACK auxiliary routine (version 3.7.1) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -255,7 +278,7 @@ void slarrj_(integer *n, real *d__, real *e2, integer *ifirst, integer *ilast, r
             }
             if(prev >= i1 && i__ <= i2)
             {
-                iwork[(prev << 1) - 1] = i__ + 1;
+                iwork[(prev << 1) - 1] = (aocl_int_t)(i__ + 1);
             }
         }
         else
@@ -316,8 +339,8 @@ void slarrj_(integer *n, real *d__, real *e2, integer *ifirst, integer *ilast, r
                 goto L50;
             }
             ++nint;
-            iwork[k - 1] = i__ + 1;
-            iwork[k] = cnt;
+            iwork[k - 1] = (aocl_int_t)(i__ + 1);
+            iwork[k] = (aocl_int_t)(cnt);
         }
         work[k - 1] = left;
         work[k] = right;
@@ -361,7 +384,7 @@ L80:
                 /* Prev holds the last unconverged interval previously examined */
                 if(prev >= i1)
                 {
-                    iwork[(prev << 1) - 1] = next;
+                    iwork[(prev << 1) - 1] = (aocl_int_t)(next);
                 }
             }
             i__ = next;

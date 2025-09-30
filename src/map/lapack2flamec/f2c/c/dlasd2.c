@@ -272,11 +272,42 @@ and entries in the second half */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void dlasd2_(integer *nl, integer *nr, integer *sqre, integer *k, doublereal *d__, doublereal *z__,
-             doublereal *alpha, doublereal *beta, doublereal *u, integer *ldu, doublereal *vt,
-             integer *ldvt, doublereal *dsigma, doublereal *u2, integer *ldu2, doublereal *vt2,
-             integer *ldvt2, integer *idxp, integer *idx, integer *idxc, integer *idxq,
-             integer *coltyp, integer *info)
+/** Generated wrapper function */
+void dlasd2_(aocl_int_t *nl, aocl_int_t *nr, aocl_int_t *sqre, aocl_int_t *k, doublereal *d__,
+             doublereal *z__, doublereal *alpha, doublereal *beta, doublereal *u, aocl_int_t *ldu,
+             doublereal *vt, aocl_int_t *ldvt, doublereal *dsigma, doublereal *u2, aocl_int_t *ldu2,
+             doublereal *vt2, aocl_int_t *ldvt2, aocl_int_t *idxp, aocl_int_t *idx,
+             aocl_int_t *idxc, aocl_int_t *idxq, aocl_int_t *coltyp, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_dlasd2(nl, nr, sqre, k, d__, z__, alpha, beta, u, ldu, vt, ldvt, dsigma, u2, ldu2,
+                       vt2, ldvt2, idxp, idx, idxc, idxq, coltyp, info);
+#else
+    aocl_int64_t nl_64 = *nl;
+    aocl_int64_t nr_64 = *nr;
+    aocl_int64_t sqre_64 = *sqre;
+    aocl_int64_t k_64 = *k;
+    aocl_int64_t ldu_64 = *ldu;
+    aocl_int64_t ldvt_64 = *ldvt;
+    aocl_int64_t ldu2_64 = *ldu2;
+    aocl_int64_t ldvt2_64 = *ldvt2;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_dlasd2(&nl_64, &nr_64, &sqre_64, &k_64, d__, z__, alpha, beta, u, &ldu_64, vt,
+                       &ldvt_64, dsigma, u2, &ldu2_64, vt2, &ldvt2_64, idxp, idx, idxc, idxq,
+                       coltyp, &info_64);
+
+    *k = (aocl_int_t)k_64;
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_dlasd2(aocl_int64_t *nl, aocl_int64_t *nr, aocl_int64_t *sqre, aocl_int64_t *k,
+                        doublereal *d__, doublereal *z__, doublereal *alpha, doublereal *beta,
+                        doublereal *u, aocl_int64_t *ldu, doublereal *vt, aocl_int64_t *ldvt,
+                        doublereal *dsigma, doublereal *u2, aocl_int64_t *ldu2, doublereal *vt2,
+                        aocl_int64_t *ldvt2, aocl_int_t *idxp, aocl_int_t *idx, aocl_int_t *idxc,
+                        aocl_int_t *idxq, aocl_int_t *coltyp, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dlasd2 inputs: nl %" FLA_IS ", nr %" FLA_IS ", sqre %" FLA_IS
@@ -295,23 +326,10 @@ void dlasd2_(integer *nl, integer *nr, integer *sqre, integer *k, doublereal *d_
     doublereal z1;
     aocl_int64_t ct, jp;
     doublereal eps, tau, tol;
-    integer psm[4], nlp1, nlp2, idxi, idxj;
-    extern /* Subroutine */
-        void
-        drot_(integer *, doublereal *, integer *, doublereal *, integer *, doublereal *,
-              doublereal *);
-    integer ctot[4], idxjp;
-    extern /* Subroutine */
-        void
-        dcopy_(integer *, doublereal *, integer *, doublereal *, integer *);
-    integer jprev;
+    aocl_int64_t psm[4], nlp1, nlp2, idxi, idxj;
+    aocl_int64_t ctot[4], idxjp;
+    aocl_int64_t jprev;
     extern doublereal dlapy2_(doublereal *, doublereal *), dlamch_(char *);
-    extern /* Subroutine */
-        void
-        dlamrg_(integer *, integer *, doublereal *, integer *, integer *, integer *),
-        dlacpy_(char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *),
-        dlaset_(char *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal hlftol;
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -395,7 +413,7 @@ void dlasd2_(integer *nl, integer *nr, integer *sqre, integer *k, doublereal *d_
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("DLASD2", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("DLASD2", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -549,8 +567,9 @@ L100:
             {
                 --idxj;
             }
-            drot_(&n, &u[idxjp * u_dim1 + 1], &c__1, &u[idxj * u_dim1 + 1], &c__1, &c__, &s);
-            drot_(&m, &vt[idxjp + vt_dim1], ldvt, &vt[idxj + vt_dim1], ldvt, &c__, &s);
+            aocl_blas_drot(&n, &u[idxjp * u_dim1 + 1], &c__1, &u[idxj * u_dim1 + 1], &c__1, &c__,
+                           &s);
+            aocl_blas_drot(&m, &vt[idxjp + vt_dim1], ldvt, &vt[idxj + vt_dim1], ldvt, &c__, &s);
             if(coltyp[j] != coltyp[jprev])
             {
                 coltyp[j] = 3;

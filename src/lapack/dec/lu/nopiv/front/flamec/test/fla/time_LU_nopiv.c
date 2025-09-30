@@ -15,17 +15,17 @@
 
 FLA_Error REF_LU_piv( FLA_Obj A, FLA_Obj p );
 void time_LU(
-              integer is_pivoting, integer type, integer nrepeats, integer m, integer n,
+              aocl_int64_t is_pivoting, aocl_int64_t type, aocl_int64_t nrepeats, aocl_int64_t m, aocl_int64_t n,
               FLA_Obj A, FLA_Obj b, FLA_Obj b_orig, FLA_Obj b_norm,
               double *dtime, double *diff, double *gflops );
 
 
 void time_LU(
-              integer is_pivoting, integer type, integer nrepeats, integer m, integer n,
+              aocl_int64_t is_pivoting, aocl_int64_t type, aocl_int64_t nrepeats, aocl_int64_t m, aocl_int64_t n,
               FLA_Obj A, FLA_Obj b, FLA_Obj b_orig, FLA_Obj b_norm,
               double *dtime, double *diff, double *gflops )
 {
-  integer
+  aocl_int64_t
     irep;
 
   double

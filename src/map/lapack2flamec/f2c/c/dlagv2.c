@@ -4,8 +4,8 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__2 = 2;
-static integer c__1 = 1;
+static aocl_int64_t c__2 = 2;
+static aocl_int64_t c__1 = 1;
 /* > \brief \b DLAGV2 computes the Generalized Schur factorization of a real 2-by-2 matrix pencil
  * (A,B) where B is upper triangular. */
 /* =========== DOCUMENTATION =========== */
@@ -154,9 +154,24 @@ static integer c__1 = 1;
 /* > Mark Fahey, Department of Mathematics, Univ. of Kentucky, USA */
 /* ===================================================================== */
 /* Subroutine */
-void dlagv2_(doublereal *a, integer *lda, doublereal *b, integer *ldb, doublereal *alphar,
+/** Generated wrapper function */
+void dlagv2_(doublereal *a, aocl_int_t *lda, doublereal *b, aocl_int_t *ldb, doublereal *alphar,
              doublereal *alphai, doublereal *beta, doublereal *csl, doublereal *snl,
              doublereal *csr, doublereal *snr)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_dlagv2(a, lda, b, ldb, alphar, alphai, beta, csl, snl, csr, snr);
+#else
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t ldb_64 = *ldb;
+
+    aocl_lapack_dlagv2(a, &lda_64, b, &ldb_64, alphar, alphai, beta, csl, snl, csr, snr);
+#endif
+}
+
+void aocl_lapack_dlagv2(doublereal *a, aocl_int64_t *lda, doublereal *b, aocl_int64_t *ldb,
+                        doublereal *alphar, doublereal *alphai, doublereal *beta, doublereal *csl,
+                        doublereal *snl, doublereal *csr, doublereal *snr)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dlagv2 inputs: lda %" FLA_IS ", ldb %" FLA_IS "", *lda, *ldb);
@@ -165,12 +180,6 @@ void dlagv2_(doublereal *a, integer *lda, doublereal *b, integer *ldb, doublerea
     doublereal d__1, d__2, d__3, d__4, d__5, d__6;
     /* Local variables */
     doublereal r__, t, h1, h2, h3, wi, qq, rr, wr1, wr2, ulp;
-    extern /* Subroutine */
-        void
-        drot_(integer *, doublereal *, integer *, doublereal *, integer *, doublereal *,
-              doublereal *),
-        dlag2_(doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *,
-               doublereal *, doublereal *, doublereal *, doublereal *);
     doublereal anorm, bnorm, scale1, scale2;
     extern /* Subroutine */
         void
@@ -279,7 +288,8 @@ void dlagv2_(doublereal *a, integer *lda, doublereal *b, integer *ldb, doublerea
     else
     {
         /* B is nonsingular, first compute the eigenvalues of (A,B) */
-        dlag2_(&a[a_offset], lda, &b[b_offset], ldb, &safmin, &scale1, &scale2, &wr1, &wr2, &wi);
+        aocl_lapack_dlag2(&a[a_offset], lda, &b[b_offset], ldb, &safmin, &scale1, &scale2, &wr1,
+                          &wr2, &wi);
         if(wi == 0.)
         {
             /* two real eigenvalues, compute s*A-w*B */

@@ -6,9 +6,9 @@
 #include "fla_lapack_avx2_kernels.h"
 
 #if FLA_ENABLE_AMD_OPT
-void fla_dpotri_small_avx2(char *uplo, integer *n, double *A, integer *lda, integer *info)
+void fla_dpotri_small_avx2(char *uplo, aocl_int64_t *n, double *A, aocl_int64_t *lda, aocl_int64_t *info)
 {
-    integer N = *n, i, j, k, LDA = *lda, ilda, jlda;
+    aocl_int64_t N = *n, i, j, k, LDA = *lda, ilda, jlda;
     char u = toupper(*uplo);
     double sum;
     __m256d vai, vaj, vsum;

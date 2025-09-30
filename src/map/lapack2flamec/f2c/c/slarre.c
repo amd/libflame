@@ -4,8 +4,8 @@
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
  /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
-static integer c__2 = 2;
+static aocl_int64_t c__1 = 1;
+static aocl_int64_t c__2 = 2;
 /* > \brief \b SLARRE given the tridiagonal matrix T, sets small off-diagonal elements to zero and
  * for each un reduced block Ti, finds base representations and eigenvalues. */
 /* =========== DOCUMENTATION =========== */
@@ -303,72 +303,80 @@ IBLOCK(i)=1 if eigenvalue */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void slarre_(char *range, integer *n, real *vl, real *vu, integer *il, integer *iu, real *d__,
-             real *e, real *e2, real *rtol1, real *rtol2, real *spltol, integer *nsplit,
-             integer *isplit, integer *m, real *w, real *werr, real *wgap, integer *iblock,
-             integer *indexw, real *gers, real *pivmin, real *work, integer *iwork, integer *info)
+/** Generated wrapper function */
+void slarre_(char *range, aocl_int_t *n, real *vl, real *vu, aocl_int_t *il, aocl_int_t *iu,
+             real *d__, real *e, real *e2, real *rtol1, real *rtol2, real *spltol,
+             aocl_int_t *nsplit, aocl_int_t *isplit, aocl_int_t *m, real *w, real *werr, real *wgap,
+             aocl_int_t *iblock, aocl_int_t *indexw, real *gers, real *pivmin, real *work,
+             aocl_int_t *iwork, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_slarre(range, n, vl, vu, il, iu, d__, e, e2, rtol1, rtol2, spltol, nsplit, isplit,
+                       m, w, werr, wgap, iblock, indexw, gers, pivmin, work, iwork, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t il_64 = *il;
+    aocl_int64_t iu_64 = *iu;
+    aocl_int64_t nsplit_64 = *nsplit;
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_slarre(range, &n_64, vl, vu, &il_64, &iu_64, d__, e, e2, rtol1, rtol2, spltol,
+                       &nsplit_64, isplit, &m_64, w, werr, wgap, iblock, indexw, gers, pivmin, work,
+                       iwork, &info_64);
+
+    *nsplit = (aocl_int_t)nsplit_64;
+    *m = (aocl_int_t)m_64;
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_slarre(char *range, aocl_int64_t *n, real *vl, real *vu, aocl_int64_t *il,
+                        aocl_int64_t *iu, real *d__, real *e, real *e2, real *rtol1, real *rtol2,
+                        real *spltol, aocl_int64_t *nsplit, aocl_int_t *isplit, aocl_int64_t *m,
+                        real *w, real *werr, real *wgap, aocl_int_t *iblock, aocl_int_t *indexw,
+                        real *gers, real *pivmin, real *work, aocl_int_t *iwork, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("slarre inputs: range %c ,n %" FLA_IS ",il %" FLA_IS ",iu %" FLA_IS "",
                       *range, *n, *il, *iu);
     /* System generated locals */
-    integer i__1, i__2;
+    aocl_int64_t i__1, i__2;
     real r__1, r__2, r__3;
     /* Builtin functions */
     double sqrt(doublereal), log(doublereal);
     /* Local variables */
-    integer i__, j;
+    aocl_int64_t i__, j;
     real s1, s2;
-    integer mb;
+    aocl_int64_t mb;
     real gl;
-    integer in, mm;
+    aocl_int64_t in, mm;
     real gu;
-    integer cnt;
+    aocl_int64_t cnt;
     real eps, tau, tmp, rtl;
-    integer cnt1, cnt2;
+    aocl_int64_t cnt1, cnt2;
     real tmp1, eabs;
-    integer iend, jblk;
+    aocl_int64_t iend, jblk;
     real eold;
-    integer indl;
+    aocl_int64_t indl;
     real dmax__, emax;
-    integer wend, idum, indu;
+    aocl_int64_t wend, idum, indu;
     real rtol;
     integer iseed[4];
     real avgap, sigma;
-    extern logical lsame_(char *, char *, integer, integer);
-    integer iinfo;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    aocl_int64_t iinfo;
     logical norep;
-    extern /* Subroutine */
-        void
-        scopy_(integer *, real *, integer *, real *, integer *),
-        slasq2_(integer *, real *, integer *);
-    integer ibegin;
+    aocl_int64_t ibegin;
     logical forceb;
-    integer irange;
+    aocl_int64_t irange;
     real sgndef;
     extern real slamch_(char *);
-    integer wbegin;
+    aocl_int64_t wbegin;
     real safmin, spdiam;
-    extern /* Subroutine */
-        void
-        slarra_(integer *, real *, real *, real *, real *, real *, integer *, integer *, integer *);
     logical usedqd;
     real clwdth, isleft;
-    extern /* Subroutine */
-        void
-        slarrb_(integer *, real *, real *, integer *, integer *, real *, real *, integer *, real *,
-                real *, real *, real *, integer *, real *, real *, integer *, integer *),
-        slarrc_(char *, integer *, real *, real *, real *, real *, real *, integer *, integer *,
-                integer *, integer *),
-        slarrd_(char *, char *, integer *, real *, real *, integer *, integer *, real *, real *,
-                real *, real *, real *, real *, integer *, integer *, integer *, real *, real *,
-                real *, real *, integer *, integer *, real *, integer *, integer *),
-        slarrk_(integer *, integer *, real *, real *, real *, real *, real *, real *, real *,
-                real *, integer *);
     real isrght, bsrtol, dpivot;
-    extern /* Subroutine */
-        void
-        slarnv_(integer *, integer *, integer *, real *);
     /* -- LAPACK auxiliary routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -504,7 +512,7 @@ void slarre_(char *range, integer *n, real *vl, real *vu, integer *il, integer *
     /* estimate that is wrong by at most a factor of SQRT(2) */
     spdiam = gu - gl;
     /* Compute splitting points */
-    slarra_(n, &d__[1], &e[1], &e2[1], spltol, &spdiam, nsplit, &isplit[1], &iinfo);
+    aocl_lapack_slarra(n, &d__[1], &e[1], &e2[1], spltol, &spdiam, nsplit, &isplit[1], &iinfo);
     /* Can force use of bisection instead of faster DQDS. */
     /* Option left in the code for future multisection work. */
     forceb = FALSE_;
@@ -525,9 +533,9 @@ void slarre_(char *range, integer *n, real *vl, real *vu, integer *il, integer *
         /* An interval [LEFT,RIGHT] has converged if */
         /* RIGHT-LEFT.LT.RTOL*MAX(ABS(LEFT),ABS(RIGHT)) */
         /* SLARRD needs a WORK of size 4*N, IWORK of size 3*N */
-        slarrd_(range, "B", n, vl, vu, il, iu, &gers[1], &bsrtol, &d__[1], &e[1], &e2[1], pivmin,
-                nsplit, &isplit[1], &mm, &w[1], &werr[1], vl, vu, &iblock[1], &indexw[1], &work[1],
-                &iwork[1], &iinfo);
+        aocl_lapack_slarrd(range, "B", n, vl, vu, il, iu, &gers[1], &bsrtol, &d__[1], &e[1], &e2[1],
+                           pivmin, nsplit, &isplit[1], &mm, &w[1], &werr[1], vl, vu, &iblock[1],
+                           &indexw[1], &work[1], &iwork[1], &iinfo);
         if(iinfo != 0)
         {
             *info = -1;
@@ -566,7 +574,7 @@ void slarre_(char *range, integer *n, real *vl, real *vu, integer *il, integer *
                 /* The gap for a single block doesn't matter for the later */
                 /* algorithm and is assigned an arbitrary large value */
                 wgap[*m] = 0.f;
-                iblock[*m] = jblk;
+                iblock[*m] = (aocl_int_t)(jblk);
                 indexw[*m] = 1;
                 ++wbegin;
             }
@@ -650,8 +658,8 @@ void slarre_(char *range, integer *n, real *vl, real *vu, integer *il, integer *
         {
             /* Case of DQDS */
             /* Find approximations to the extremal eigenvalues of the block */
-            slarrk_(&in, &c__1, &gl, &gu, &d__[ibegin], &e2[ibegin], pivmin, &rtl, &tmp, &tmp1,
-                    &iinfo);
+            aocl_lapack_slarrk(&in, &c__1, &gl, &gu, &d__[ibegin], &e2[ibegin], pivmin, &rtl, &tmp,
+                               &tmp1, &iinfo);
             if(iinfo != 0)
             {
                 *info = -1;
@@ -662,8 +670,8 @@ void slarre_(char *range, integer *n, real *vl, real *vu, integer *il, integer *
             r__2 = gl;
             r__3 = tmp - tmp1 - eps * 100.f * (r__1 = tmp - tmp1, f2c_abs(r__1)); // , expr subst
             isleft = fla_max(r__2, r__3);
-            slarrk_(&in, &in, &gl, &gu, &d__[ibegin], &e2[ibegin], pivmin, &rtl, &tmp, &tmp1,
-                    &iinfo);
+            aocl_lapack_slarrk(&in, &in, &gl, &gu, &d__[ibegin], &e2[ibegin], pivmin, &rtl, &tmp,
+                               &tmp1, &iinfo);
             if(iinfo != 0)
             {
                 *info = -1;
@@ -734,8 +742,8 @@ void slarre_(char *range, integer *n, real *vl, real *vu, integer *il, integer *
         /* Compute the negcount at the 1/4 and 3/4 points */
         if(mb > 1)
         {
-            slarrc_("T", &in, &s1, &s2, &d__[ibegin], &e[ibegin], pivmin, &cnt, &cnt1, &cnt2,
-                    &iinfo);
+            aocl_lapack_slarrc("T", &in, &s1, &s2, &d__[ibegin], &e[ibegin], pivmin, &cnt, &cnt1,
+                               &cnt2, &iinfo);
         }
         if(mb == 1)
         {
@@ -917,9 +925,9 @@ void slarre_(char *range, integer *n, real *vl, real *vu, integer *il, integer *
         /* Store the shift. */
         e[iend] = sigma;
         /* Store D and L. */
-        scopy_(&in, &work[1], &c__1, &d__[ibegin], &c__1);
+        aocl_blas_scopy(&in, &work[1], &c__1, &d__[ibegin], &c__1);
         i__2 = in - 1;
-        scopy_(&i__2, &work[in + 1], &c__1, &e[ibegin], &c__1);
+        aocl_blas_scopy(&i__2, &work[in + 1], &c__1, &e[ibegin], &c__1);
         if(mb > 1)
         {
             /* Perturb each entry of the base representation by a small */
@@ -931,7 +939,7 @@ void slarre_(char *range, integer *n, real *vl, real *vu, integer *il, integer *
                 /* L122: */
             }
             i__2 = (in << 1) - 1;
-            slarnv_(&c__2, iseed, &i__2, &work[1]);
+            aocl_lapack_slarnv(&c__2, iseed, &i__2, &work[1]);
             i__2 = in - 1;
             for(i__ = 1; i__ <= i__2; ++i__)
             {
@@ -972,9 +980,9 @@ void slarre_(char *range, integer *n, real *vl, real *vu, integer *il, integer *
             }
             /* use bisection to find EV from INDL to INDU */
             i__2 = indl - 1;
-            slarrb_(&in, &d__[ibegin], &work[ibegin], &indl, &indu, rtol1, rtol2, &i__2, &w[wbegin],
-                    &wgap[wbegin], &werr[wbegin], &work[(*n << 1) + 1], &iwork[1], pivmin, &spdiam,
-                    &in, &iinfo);
+            aocl_lapack_slarrb(&in, &d__[ibegin], &work[ibegin], &indl, &indu, rtol1, rtol2, &i__2,
+                               &w[wbegin], &wgap[wbegin], &werr[wbegin], &work[(*n << 1) + 1],
+                               &iwork[1], pivmin, &spdiam, &in, &iinfo);
             if(iinfo != 0)
             {
                 *info = -4;
@@ -991,8 +999,8 @@ void slarre_(char *range, integer *n, real *vl, real *vu, integer *il, integer *
             for(i__ = indl; i__ <= i__2; ++i__)
             {
                 ++(*m);
-                iblock[*m] = jblk;
-                indexw[*m] = i__;
+                iblock[*m] = (aocl_int_t)(jblk);
+                indexw[*m] = (aocl_int_t)(i__);
                 /* L138: */
             }
         }
@@ -1021,7 +1029,7 @@ void slarre_(char *range, integer *n, real *vl, real *vu, integer *il, integer *
             }
             work[(in << 1) - 1] = (r__1 = d__[iend], f2c_abs(r__1));
             work[in * 2] = 0.f;
-            slasq2_(&in, &work[1], &iinfo);
+            aocl_lapack_slasq2(&in, &work[1], &iinfo);
             if(iinfo != 0)
             {
                 /* If IINFO = -5 then an index is part of a tight cluster */
@@ -1053,8 +1061,8 @@ void slarre_(char *range, integer *n, real *vl, real *vu, integer *il, integer *
                 {
                     ++(*m);
                     w[*m] = work[in - i__ + 1];
-                    iblock[*m] = jblk;
-                    indexw[*m] = i__;
+                    iblock[*m] = (aocl_int_t)(jblk);
+                    indexw[*m] = (aocl_int_t)(i__);
                     /* L150: */
                 }
             }
@@ -1065,8 +1073,8 @@ void slarre_(char *range, integer *n, real *vl, real *vu, integer *il, integer *
                 {
                     ++(*m);
                     w[*m] = -work[i__];
-                    iblock[*m] = jblk;
-                    indexw[*m] = i__;
+                    iblock[*m] = (aocl_int_t)(jblk);
+                    indexw[*m] = (aocl_int_t)(i__);
                     /* L160: */
                 }
             }

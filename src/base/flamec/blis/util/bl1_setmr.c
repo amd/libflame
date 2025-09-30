@@ -16,14 +16,14 @@
 #include "blis.h"
 #endif
 
-void bl1_ssetmr( uplo1_t uplo, integer m, integer n, float* sigma, float* a, integer a_rs, integer a_cs )
+void bl1_ssetmr( uplo1_t uplo, fla_dim_t m, fla_dim_t n, float* sigma, float* a, fla_dim_t a_rs, fla_dim_t a_cs )
 {
 	float*    a_begin;
-	integer       lda, inca;
-	integer       n_iter;
-	integer       n_elem_max;
-	integer       n_elem;
-	integer       j;
+	fla_dim_t       lda, inca;
+	fla_dim_t       n_iter;
+	fla_dim_t       n_elem_max;
+	fla_dim_t       n_elem;
+	fla_dim_t       j;
 
 	// Return early if possible.
 	if ( bl1_zero_dim2( m, n ) ) return;
@@ -69,14 +69,14 @@ void bl1_ssetmr( uplo1_t uplo, integer m, integer n, float* sigma, float* a, int
 	}
 }
 
-void bl1_dsetmr( uplo1_t uplo, integer m, integer n, double* sigma, double* a, integer a_rs, integer a_cs )
+void bl1_dsetmr( uplo1_t uplo, fla_dim_t m, fla_dim_t n, double* sigma, double* a, fla_dim_t a_rs, fla_dim_t a_cs )
 {
 	double*   a_begin;
-	integer       lda, inca;
-	integer       n_iter;
-	integer       n_elem_max;
-	integer       n_elem;
-	integer       j;
+	fla_dim_t       lda, inca;
+	fla_dim_t       n_iter;
+	fla_dim_t       n_elem_max;
+	fla_dim_t       n_elem;
+	fla_dim_t       j;
 
 	// Return early if possible.
 	if ( bl1_zero_dim2( m, n ) ) return;
@@ -122,14 +122,14 @@ void bl1_dsetmr( uplo1_t uplo, integer m, integer n, double* sigma, double* a, i
 	}
 }
 
-void bl1_csetmr( uplo1_t uplo, integer m, integer n, scomplex* sigma, scomplex* a, integer a_rs, integer a_cs )
+void bl1_csetmr( uplo1_t uplo, fla_dim_t m, fla_dim_t n, scomplex* sigma, scomplex* a, fla_dim_t a_rs, fla_dim_t a_cs )
 {
 	scomplex* a_begin;
-	integer       lda, inca;
-	integer       n_iter;
-	integer       n_elem_max;
-	integer       n_elem;
-	integer       j;
+	fla_dim_t       lda, inca;
+	fla_dim_t       n_iter;
+	fla_dim_t       n_elem_max;
+	fla_dim_t       n_elem;
+	fla_dim_t       j;
 
 	// Return early if possible.
 	if ( bl1_zero_dim2( m, n ) ) return;
@@ -175,14 +175,14 @@ void bl1_csetmr( uplo1_t uplo, integer m, integer n, scomplex* sigma, scomplex* 
 	}
 }
 
-void bl1_zsetmr( uplo1_t uplo, integer m, integer n, dcomplex* sigma, dcomplex* a, integer a_rs, integer a_cs )
+void bl1_zsetmr( uplo1_t uplo, fla_dim_t m, fla_dim_t n, dcomplex* sigma, dcomplex* a, fla_dim_t a_rs, fla_dim_t a_cs )
 {
 	dcomplex* a_begin;
-	integer       lda, inca;
-	integer       n_iter;
-	integer       n_elem_max;
-	integer       n_elem;
-	integer       j;
+	fla_dim_t       lda, inca;
+	fla_dim_t       n_iter;
+	fla_dim_t       n_elem_max;
+	fla_dim_t       n_elem;
+	fla_dim_t       j;
 
 	// Return early if possible.
 	if ( bl1_zero_dim2( m, n ) ) return;

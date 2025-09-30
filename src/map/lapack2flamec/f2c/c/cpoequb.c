@@ -108,7 +108,25 @@
 /* > \ingroup complexPOcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void cpoequb_(integer *n, complex *a, integer *lda, real *s, real *scond, real *amax, integer *info)
+/** Generated wrapper function */
+void cpoequb_(aocl_int_t *n, scomplex *a, aocl_int_t *lda, real *s, real *scond, real *amax,
+              aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_cpoequb(n, a, lda, s, scond, amax, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_cpoequb(&n_64, a, &lda_64, s, scond, amax, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_cpoequb(aocl_int64_t *n, scomplex *a, aocl_int64_t *lda, real *s, real *scond,
+                         real *amax, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -129,9 +147,6 @@ void cpoequb_(integer *n, complex *a, integer *lda, real *s, real *scond, real *
     aocl_int64_t i__;
     real tmp, base, smin;
     extern real slamch_(char *);
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -172,7 +187,7 @@ void cpoequb_(integer *n, complex *a, integer *lda, real *s, real *scond, real *
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("CPOEQUB", &i__1, (ftnlen)7);
+        aocl_blas_xerbla("CPOEQUB", &i__1, (ftnlen)7);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }

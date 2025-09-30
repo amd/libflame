@@ -4,12 +4,12 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static doublecomplex c_b1 = {0., 0.};
-static doublecomplex c_b2 = {1., 0.};
-static integer c__6 = 6;
-static integer c__0 = 0;
-static integer c_n1 = -1;
-static integer c__1 = 1;
+static dcomplex c_b1 = {{0.}, {0.}};
+static dcomplex c_b2 = {{1.}, {0.}};
+static aocl_int64_t c__6 = 6;
+static aocl_int64_t c__0 = 0;
+static aocl_int64_t c_n1 = -1;
+static aocl_int64_t c__1 = 1;
 /* > \brief <b> ZGESVD computes the singular value decomposition (SVD) for GE matrices</b> */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -47,7 +47,7 @@ static integer c__1 = 1;
 /* > */
 /* > \verbatim */
 /* > */
-/* > ZGESVD computes the singular value decomposition (SVD) of a complex */
+/* > ZGESVD computes the singular value decomposition (SVD) of a scomplex */
 /* > M-by-N matrix A, optionally computing the left and/or right singular */
 /* > vectors. The SVD is written */
 /* > */
@@ -231,9 +231,34 @@ the routine */
 /* > \ingroup complex16GEsing */
 /* ===================================================================== */
 /* Subroutine */
-void zgesvd_(char *jobu, char *jobvt, integer *m, integer *n, doublecomplex *a, integer *lda,
-             doublereal *s, doublecomplex *u, integer *ldu, doublecomplex *vt, integer *ldvt,
-             doublecomplex *work, integer *lwork, doublereal *rwork, integer *info)
+/** Generated wrapper function */
+void zgesvd_(char *jobu, char *jobvt, aocl_int_t *m, aocl_int_t *n, dcomplex *a,
+             aocl_int_t *lda, doublereal *s, dcomplex *u, aocl_int_t *ldu, dcomplex *vt,
+             aocl_int_t *ldvt, dcomplex *work, aocl_int_t *lwork, doublereal *rwork,
+             aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_zgesvd(jobu, jobvt, m, n, a, lda, s, u, ldu, vt, ldvt, work, lwork, rwork, info);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t ldu_64 = *ldu;
+    aocl_int64_t ldvt_64 = *ldvt;
+    aocl_int64_t lwork_64 = *lwork;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_zgesvd(jobu, jobvt, &m_64, &n_64, a, &lda_64, s, u, &ldu_64, vt, &ldvt_64, work,
+                       &lwork_64, rwork, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_zgesvd(char *jobu, char *jobvt, aocl_int64_t *m, aocl_int64_t *n, dcomplex *a,
+                        aocl_int64_t *lda, doublereal *s, dcomplex *u, aocl_int64_t *ldu,
+                        dcomplex *vt, aocl_int64_t *ldvt, dcomplex *work,
+                        aocl_int64_t *lwork, doublereal *rwork, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zgesvd inputs: jobu %c, jobvt %c, m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS
@@ -241,77 +266,32 @@ void zgesvd_(char *jobu, char *jobvt, integer *m, integer *n, doublecomplex *a, 
                       *jobu, *jobvt, *m, *n, *lda, *ldu, *ldvt);
 
     /* System generated locals */
-    integer a_dim1, a_offset, u_dim1, u_offset, vt_dim1, vt_offset, i__2, i__3, i__4;
+    aocl_int64_t a_dim1, a_offset, u_dim1, u_offset, vt_dim1, vt_offset, i__2, i__3, i__4;
     char ch__1[2];
     /* Builtin functions */
     /* Subroutine */
 
     double sqrt(doublereal);
     /* Local variables */
-    integer i__, ie, ir, iu, blk, ncu;
+    aocl_int64_t i__, ie, ir, iu, blk, ncu;
     doublereal dum[1], eps;
-    integer nru;
-    doublecomplex cdum[1];
-    integer iscl;
+    aocl_int64_t nru;
+    dcomplex cdum[1];
+    aocl_int64_t iscl;
     doublereal anrm;
-    integer ierr, itau, ncvt, nrvt, lwork_zgebrd__, lwork_zgelqf__, lwork_zgeqrf__;
-    extern logical lsame_(char *, char *, integer, integer);
-    integer chunk, minmn;
-    extern /* Subroutine */
-        void
-        zgemm_(char *, char *, integer *, integer *, integer *, doublecomplex *, doublecomplex *,
-               integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *);
-    integer wrkbl, itaup, itauq, mnthr, iwork;
+    aocl_int64_t ierr, itau, ncvt, nrvt, lwork_zgebrd__, lwork_zgelqf__, lwork_zgeqrf__;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    aocl_int64_t chunk, minmn;
+    aocl_int64_t wrkbl, itaup, itauq, mnthr, iwork;
     logical wntua, wntva, wntun, wntuo, wntvn, wntvo, wntus, wntvs;
     extern doublereal dlamch_(char *);
-    extern /* Subroutine */
-        void
-        dlascl_(char *, integer *, integer *, doublereal *, doublereal *, integer *, integer *,
-                doublereal *, integer *, integer *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
-        zgebrd_(integer *, integer *, doublecomplex *, integer *, doublereal *, doublereal *,
-                doublecomplex *, doublecomplex *, doublecomplex *, integer *, integer *);
-    extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
-    extern doublereal zlange_(char *, integer *, integer *, doublecomplex *, integer *,
-                              doublereal *);
     doublereal bignum;
-    extern /* Subroutine */
-        void
-        zgelqf_(integer *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *,
-                integer *, integer *),
-        zlascl_(char *, integer *, integer *, doublereal *, doublereal *, integer *, integer *,
-                doublecomplex *, integer *, integer *),
-        zgeqrf_(integer *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *,
-                integer *, integer *),
-        zlacpy_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *,
-                integer *),
-        zlaset_(char *, integer *, integer *, doublecomplex *, doublecomplex *, doublecomplex *,
-                integer *);
-    integer ldwrkr;
-    extern /* Subroutine */
-        void
-        zbdsqr_(char *, integer *, integer *, integer *, integer *, doublereal *, doublereal *,
-                doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *,
-                doublereal *, integer *);
-    integer minwrk, ldwrku, maxwrk;
-    extern /* Subroutine */
-        void
-        zungbr_(char *, integer *, integer *, integer *, doublecomplex *, integer *,
-                doublecomplex *, doublecomplex *, integer *, integer *);
+    aocl_int64_t ldwrkr;
+    aocl_int64_t minwrk, ldwrku, maxwrk;
     doublereal smlnum;
-    integer irwork;
-    extern /* Subroutine */
-        void
-        zunmbr_(char *, char *, char *, integer *, integer *, integer *, doublecomplex *, integer *,
-                doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, integer *),
-        zunglq_(integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *,
-                doublecomplex *, integer *, integer *);
+    aocl_int64_t irwork;
     logical lquery, wntuas, wntvas;
-    extern /* Subroutine */
-        void
-        zungqr_(integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *,
-                doublecomplex *, integer *, integer *);
-    integer lwork_zungbr_p__, lwork_zungbr_q__, lwork_zunglq_m__, lwork_zunglq_n__,
+    aocl_int64_t lwork_zungbr_p__, lwork_zungbr_q__, lwork_zunglq_m__, lwork_zunglq_n__,
         lwork_zungqr_m__, lwork_zungqr_n__;
     /* -- LAPACK driver routine (version 3.7.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -397,7 +377,7 @@ void zgesvd_(char *jobu, char *jobvt, integer *m, integer *n, doublecomplex *a, 
     /* (Note: Comments in the code beginning "Workspace:" describe the */
     /* minimal amount of workspace needed at that point in the code, */
     /* as well as the preferred amount for good performance. */
-    /* CWorkspace refers to complex workspace, and RWorkspace to */
+    /* CWorkspace refers to scomplex workspace, and RWorkspace to */
     /* real workspace. NB refers to the optimal block size for the */
     /* immediately following subroutine, as returned by ILAENV.) */
     if(*info == 0)
@@ -407,22 +387,22 @@ void zgesvd_(char *jobu, char *jobvt, integer *m, integer *n, doublecomplex *a, 
         if(*m >= *n && minmn > 0)
         {
             /* Space needed for ZBDSQR is BDSPAC = 5*N */
-            mnthr = ilaenv_(&c__6, "ZGESVD", ch__1, m, n, &c__0, &c__0);
+            mnthr = aocl_lapack_ilaenv(&c__6, "ZGESVD", ch__1, m, n, &c__0, &c__0);
             /* Compute space needed for ZGEQRF */
-            zgeqrf_(m, n, &a[a_offset], lda, cdum, cdum, &c_n1, &ierr);
+            aocl_lapack_zgeqrf(m, n, &a[a_offset], lda, cdum, cdum, &c_n1, &ierr);
             lwork_zgeqrf__ = (integer)cdum[0].r;
             /* Compute space needed for ZUNGQR */
-            zungqr_(m, n, n, &a[a_offset], lda, cdum, cdum, &c_n1, &ierr);
+            aocl_lapack_zungqr(m, n, n, &a[a_offset], lda, cdum, cdum, &c_n1, &ierr);
             lwork_zungqr_n__ = (integer)cdum[0].r;
-            zungqr_(m, m, n, &a[a_offset], lda, cdum, cdum, &c_n1, &ierr);
+            aocl_lapack_zungqr(m, m, n, &a[a_offset], lda, cdum, cdum, &c_n1, &ierr);
             lwork_zungqr_m__ = (integer)cdum[0].r;
             /* Compute space needed for ZGEBRD */
-            zgebrd_(n, n, &a[a_offset], lda, &s[1], dum, cdum, cdum, cdum, &c_n1, &ierr);
+            aocl_lapack_zgebrd(n, n, &a[a_offset], lda, &s[1], dum, cdum, cdum, cdum, &c_n1, &ierr);
             lwork_zgebrd__ = (integer)cdum[0].r;
             /* Compute space needed for ZUNGBR */
-            zungbr_("P", n, n, n, &a[a_offset], lda, cdum, cdum, &c_n1, &ierr);
+            aocl_lapack_zungbr("P", n, n, n, &a[a_offset], lda, cdum, cdum, &c_n1, &ierr);
             lwork_zungbr_p__ = (integer)cdum[0].r;
-            zungbr_("Q", n, n, n, &a[a_offset], lda, cdum, cdum, &c_n1, &ierr);
+            aocl_lapack_zungbr("Q", n, n, n, &a[a_offset], lda, cdum, cdum, &c_n1, &ierr);
             lwork_zungbr_q__ = (integer)cdum[0].r;
             if(*m >= mnthr)
             {
@@ -628,12 +608,13 @@ void zgesvd_(char *jobu, char *jobvt, integer *m, integer *n, doublecomplex *a, 
             else
             {
                 /* Path 10 (M at least N, but not much larger) */
-                zgebrd_(m, n, &a[a_offset], lda, &s[1], dum, cdum, cdum, cdum, &c_n1, &ierr);
+                aocl_lapack_zgebrd(m, n, &a[a_offset], lda, &s[1], dum, cdum, cdum, cdum, &c_n1,
+                                   &ierr);
                 lwork_zgebrd__ = (integer)cdum[0].r;
                 maxwrk = (*n << 1) + lwork_zgebrd__;
                 if(wntus || wntuo)
                 {
-                    zungbr_("Q", m, n, n, &a[a_offset], lda, cdum, cdum, &c_n1, &ierr);
+                    aocl_lapack_zungbr("Q", m, n, n, &a[a_offset], lda, cdum, cdum, &c_n1, &ierr);
                     lwork_zungbr_q__ = (integer)cdum[0].r;
                     /* Computing MAX */
                     i__2 = maxwrk;
@@ -642,7 +623,7 @@ void zgesvd_(char *jobu, char *jobvt, integer *m, integer *n, doublecomplex *a, 
                 }
                 if(wntua)
                 {
-                    zungbr_("Q", m, m, n, &a[a_offset], lda, cdum, cdum, &c_n1, &ierr);
+                    aocl_lapack_zungbr("Q", m, m, n, &a[a_offset], lda, cdum, cdum, &c_n1, &ierr);
                     lwork_zungbr_q__ = (integer)cdum[0].r;
                     /* Computing MAX */
                     i__2 = maxwrk;
@@ -662,23 +643,23 @@ void zgesvd_(char *jobu, char *jobvt, integer *m, integer *n, doublecomplex *a, 
         else if(minmn > 0)
         {
             /* Space needed for ZBDSQR is BDSPAC = 5*M */
-            mnthr = ilaenv_(&c__6, "ZGESVD", ch__1, m, n, &c__0, &c__0);
+            mnthr = aocl_lapack_ilaenv(&c__6, "ZGESVD", ch__1, m, n, &c__0, &c__0);
             /* Compute space needed for ZGELQF */
-            zgelqf_(m, n, &a[a_offset], lda, cdum, cdum, &c_n1, &ierr);
+            aocl_lapack_zgelqf(m, n, &a[a_offset], lda, cdum, cdum, &c_n1, &ierr);
             lwork_zgelqf__ = (integer)cdum[0].r;
             /* Compute space needed for ZUNGLQ */
-            zunglq_(n, n, m, cdum, n, cdum, cdum, &c_n1, &ierr);
+            aocl_lapack_zunglq(n, n, m, cdum, n, cdum, cdum, &c_n1, &ierr);
             lwork_zunglq_n__ = (integer)cdum[0].r;
-            zunglq_(m, n, m, &a[a_offset], lda, cdum, cdum, &c_n1, &ierr);
+            aocl_lapack_zunglq(m, n, m, &a[a_offset], lda, cdum, cdum, &c_n1, &ierr);
             lwork_zunglq_m__ = (integer)cdum[0].r;
             /* Compute space needed for ZGEBRD */
-            zgebrd_(m, m, &a[a_offset], lda, &s[1], dum, cdum, cdum, cdum, &c_n1, &ierr);
+            aocl_lapack_zgebrd(m, m, &a[a_offset], lda, &s[1], dum, cdum, cdum, cdum, &c_n1, &ierr);
             lwork_zgebrd__ = (integer)cdum[0].r;
             /* Compute space needed for ZUNGBR P */
-            zungbr_("P", m, m, m, &a[a_offset], n, cdum, cdum, &c_n1, &ierr);
+            aocl_lapack_zungbr("P", m, m, m, &a[a_offset], n, cdum, cdum, &c_n1, &ierr);
             lwork_zungbr_p__ = (integer)cdum[0].r;
             /* Compute space needed for ZUNGBR Q */
-            zungbr_("Q", m, m, m, &a[a_offset], n, cdum, cdum, &c_n1, &ierr);
+            aocl_lapack_zungbr("Q", m, m, m, &a[a_offset], n, cdum, cdum, &c_n1, &ierr);
             lwork_zungbr_q__ = (integer)cdum[0].r;
             if(*n >= mnthr)
             {
@@ -884,13 +865,14 @@ void zgesvd_(char *jobu, char *jobvt, integer *m, integer *n, doublecomplex *a, 
             else
             {
                 /* Path 10t(N greater than M, but not much larger) */
-                zgebrd_(m, n, &a[a_offset], lda, &s[1], dum, cdum, cdum, cdum, &c_n1, &ierr);
+                aocl_lapack_zgebrd(m, n, &a[a_offset], lda, &s[1], dum, cdum, cdum, cdum, &c_n1,
+                                   &ierr);
                 lwork_zgebrd__ = (integer)cdum[0].r;
                 maxwrk = (*m << 1) + lwork_zgebrd__;
                 if(wntvs || wntvo)
                 {
                     /* Compute space needed for ZUNGBR P */
-                    zungbr_("P", m, n, m, &a[a_offset], n, cdum, cdum, &c_n1, &ierr);
+                    aocl_lapack_zungbr("P", m, n, m, &a[a_offset], n, cdum, cdum, &c_n1, &ierr);
                     lwork_zungbr_p__ = (integer)cdum[0].r;
                     /* Computing MAX */
                     i__2 = maxwrk;
@@ -899,7 +881,7 @@ void zgesvd_(char *jobu, char *jobvt, integer *m, integer *n, doublecomplex *a, 
                 }
                 if(wntva)
                 {
-                    zungbr_("P", n, n, m, &a[a_offset], n, cdum, cdum, &c_n1, &ierr);
+                    aocl_lapack_zungbr("P", n, n, m, &a[a_offset], n, cdum, cdum, &c_n1, &ierr);
                     lwork_zungbr_p__ = (integer)cdum[0].r;
                     /* Computing MAX */
                     i__2 = maxwrk;
@@ -927,7 +909,7 @@ void zgesvd_(char *jobu, char *jobvt, integer *m, integer *n, doublecomplex *a, 
     if(*info != 0)
     {
         i__2 = -(*info);
-        xerbla_("ZGESVD", &i__2, (ftnlen)6);
+        aocl_blas_xerbla("ZGESVD", &i__2, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -947,17 +929,17 @@ void zgesvd_(char *jobu, char *jobvt, integer *m, integer *n, doublecomplex *a, 
     smlnum = sqrt(dlamch_("S")) / eps;
     bignum = 1. / smlnum;
     /* Scale A if max element outside range [SMLNUM,BIGNUM] */
-    anrm = zlange_("M", m, n, &a[a_offset], lda, dum);
+    anrm = aocl_lapack_zlange("M", m, n, &a[a_offset], lda, dum);
     iscl = 0;
     if(anrm > 0. && anrm < smlnum)
     {
         iscl = 1;
-        zlascl_("G", &c__0, &c__0, &anrm, &smlnum, m, n, &a[a_offset], lda, &ierr);
+        aocl_lapack_zlascl("G", &c__0, &c__0, &anrm, &smlnum, m, n, &a[a_offset], lda, &ierr);
     }
     else if(anrm > bignum)
     {
         iscl = 1;
-        zlascl_("G", &c__0, &c__0, &anrm, &bignum, m, n, &a[a_offset], lda, &ierr);
+        aocl_lapack_zlascl("G", &c__0, &c__0, &anrm, &bignum, m, n, &a[a_offset], lda, &ierr);
     }
     if(*m >= *n)
     {
@@ -976,13 +958,14 @@ void zgesvd_(char *jobu, char *jobvt, integer *m, integer *n, doublecomplex *a, 
                 /* (CWorkspace: need 2*N, prefer N+N*NB) */
                 /* (RWorkspace: need 0) */
                 i__2 = *lwork - iwork + 1;
-                zgeqrf_(m, n, &a[a_offset], lda, &work[itau], &work[iwork], &i__2, &ierr);
+                aocl_lapack_zgeqrf(m, n, &a[a_offset], lda, &work[itau], &work[iwork], &i__2,
+                                   &ierr);
                 /* Zero out below R */
                 if(*n > 1)
                 {
                     i__2 = *n - 1;
                     i__3 = *n - 1;
-                    zlaset_("L", &i__2, &i__3, &c_b1, &c_b1, &a[a_dim1 + 2], lda);
+                    aocl_lapack_zlaset("L", &i__2, &i__3, &c_b1, &c_b1, &a[a_dim1 + 2], lda);
                 }
                 ie = 1;
                 itauq = 1;
@@ -992,8 +975,8 @@ void zgesvd_(char *jobu, char *jobvt, integer *m, integer *n, doublecomplex *a, 
                 /* (CWorkspace: need 3*N, prefer 2*N+2*N*NB) */
                 /* (RWorkspace: need N) */
                 i__2 = *lwork - iwork + 1;
-                zgebrd_(n, n, &a[a_offset], lda, &s[1], &rwork[ie], &work[itauq], &work[itaup],
-                        &work[iwork], &i__2, &ierr);
+                aocl_lapack_zgebrd(n, n, &a[a_offset], lda, &s[1], &rwork[ie], &work[itauq],
+                                   &work[itaup], &work[iwork], &i__2, &ierr);
                 ncvt = 0;
                 if(wntvo || wntvas)
                 {
@@ -1001,8 +984,8 @@ void zgesvd_(char *jobu, char *jobvt, integer *m, integer *n, doublecomplex *a, 
                     /* (CWorkspace: need 3*N-1, prefer 2*N+(N-1)*NB) */
                     /* (RWorkspace: 0) */
                     i__2 = *lwork - iwork + 1;
-                    zungbr_("P", n, n, n, &a[a_offset], lda, &work[itaup], &work[iwork], &i__2,
-                            &ierr);
+                    aocl_lapack_zungbr("P", n, n, n, &a[a_offset], lda, &work[itaup], &work[iwork],
+                                       &i__2, &ierr);
                     ncvt = *n;
                 }
                 irwork = ie + *n;
@@ -1010,12 +993,12 @@ void zgesvd_(char *jobu, char *jobvt, integer *m, integer *n, doublecomplex *a, 
                 /* singular vectors of A in A if desired */
                 /* (CWorkspace: 0) */
                 /* (RWorkspace: need BDSPAC) */
-                zbdsqr_("U", n, &ncvt, &c__0, &c__0, &s[1], &rwork[ie], &a[a_offset], lda, cdum,
-                        &c__1, cdum, &c__1, &rwork[irwork], info);
+                aocl_lapack_zbdsqr("U", n, &ncvt, &c__0, &c__0, &s[1], &rwork[ie], &a[a_offset],
+                                   lda, cdum, &c__1, cdum, &c__1, &rwork[irwork], info);
                 /* If right singular vectors desired in VT, copy them there */
                 if(wntvas)
                 {
-                    zlacpy_("F", n, n, &a[a_offset], lda, &vt[vt_offset], ldvt);
+                    aocl_lapack_zlacpy("F", n, n, &a[a_offset], lda, &vt[vt_offset], ldvt);
                 }
             }
             else if(wntuo && wntvn)
@@ -1060,17 +1043,19 @@ void zgesvd_(char *jobu, char *jobvt, integer *m, integer *n, doublecomplex *a, 
                     /* (CWorkspace: need N*N+2*N, prefer N*N+N+N*NB) */
                     /* (RWorkspace: 0) */
                     i__2 = *lwork - iwork + 1;
-                    zgeqrf_(m, n, &a[a_offset], lda, &work[itau], &work[iwork], &i__2, &ierr);
+                    aocl_lapack_zgeqrf(m, n, &a[a_offset], lda, &work[itau], &work[iwork], &i__2,
+                                       &ierr);
                     /* Copy R to WORK(IR) and zero out below it */
-                    zlacpy_("U", n, n, &a[a_offset], lda, &work[ir], &ldwrkr);
+                    aocl_lapack_zlacpy("U", n, n, &a[a_offset], lda, &work[ir], &ldwrkr);
                     i__2 = *n - 1;
                     i__3 = *n - 1;
-                    zlaset_("L", &i__2, &i__3, &c_b1, &c_b1, &work[ir + 1], &ldwrkr);
+                    aocl_lapack_zlaset("L", &i__2, &i__3, &c_b1, &c_b1, &work[ir + 1], &ldwrkr);
                     /* Generate Q in A */
                     /* (CWorkspace: need N*N+2*N, prefer N*N+N+N*NB) */
                     /* (RWorkspace: 0) */
                     i__2 = *lwork - iwork + 1;
-                    zungqr_(m, n, n, &a[a_offset], lda, &work[itau], &work[iwork], &i__2, &ierr);
+                    aocl_lapack_zungqr(m, n, n, &a[a_offset], lda, &work[itau], &work[iwork], &i__2,
+                                       &ierr);
                     ie = 1;
                     itauq = itau;
                     itaup = itauq + *n;
@@ -1079,21 +1064,21 @@ void zgesvd_(char *jobu, char *jobvt, integer *m, integer *n, doublecomplex *a, 
                     /* (CWorkspace: need N*N+3*N, prefer N*N+2*N+2*N*NB) */
                     /* (RWorkspace: need N) */
                     i__2 = *lwork - iwork + 1;
-                    zgebrd_(n, n, &work[ir], &ldwrkr, &s[1], &rwork[ie], &work[itauq], &work[itaup],
-                            &work[iwork], &i__2, &ierr);
+                    aocl_lapack_zgebrd(n, n, &work[ir], &ldwrkr, &s[1], &rwork[ie], &work[itauq],
+                                       &work[itaup], &work[iwork], &i__2, &ierr);
                     /* Generate left vectors bidiagonalizing R */
                     /* (CWorkspace: need N*N+3*N, prefer N*N+2*N+N*NB) */
                     /* (RWorkspace: need 0) */
                     i__2 = *lwork - iwork + 1;
-                    zungbr_("Q", n, n, n, &work[ir], &ldwrkr, &work[itauq], &work[iwork], &i__2,
-                            &ierr);
+                    aocl_lapack_zungbr("Q", n, n, n, &work[ir], &ldwrkr, &work[itauq], &work[iwork],
+                                       &i__2, &ierr);
                     irwork = ie + *n;
                     /* Perform bidiagonal QR iteration, computing left */
                     /* singular vectors of R in WORK(IR) */
                     /* (CWorkspace: need N*N) */
                     /* (RWorkspace: need BDSPAC) */
-                    zbdsqr_("U", n, &c__0, n, &c__0, &s[1], &rwork[ie], cdum, &c__1, &work[ir],
-                            &ldwrkr, cdum, &c__1, &rwork[irwork], info);
+                    aocl_lapack_zbdsqr("U", n, &c__0, n, &c__0, &s[1], &rwork[ie], cdum, &c__1,
+                                       &work[ir], &ldwrkr, cdum, &c__1, &rwork[irwork], info);
                     iu = itauq;
                     /* Multiply Q in A by left singular vectors of R in */
                     /* WORK(IR), storing result in WORK(IU) and copying to A */
@@ -1106,9 +1091,10 @@ void zgesvd_(char *jobu, char *jobvt, integer *m, integer *n, doublecomplex *a, 
                         /* Computing MIN */
                         i__4 = *m - i__ + 1;
                         chunk = fla_min(i__4, ldwrku);
-                        zgemm_("N", "N", &chunk, n, n, &c_b2, &a[i__ + a_dim1], lda, &work[ir],
-                               &ldwrkr, &c_b1, &work[iu], &ldwrku);
-                        zlacpy_("F", &chunk, n, &work[iu], &ldwrku, &a[i__ + a_dim1], lda);
+                        aocl_blas_zgemm("N", "N", &chunk, n, n, &c_b2, &a[i__ + a_dim1], lda,
+                                        &work[ir], &ldwrkr, &c_b1, &work[iu], &ldwrku);
+                        aocl_lapack_zlacpy("F", &chunk, n, &work[iu], &ldwrku, &a[i__ + a_dim1],
+                                           lda);
                         /* L10: */
                     }
                 }
@@ -1123,21 +1109,21 @@ void zgesvd_(char *jobu, char *jobvt, integer *m, integer *n, doublecomplex *a, 
                     /* (CWorkspace: need 2*N+M, prefer 2*N+(M+N)*NB) */
                     /* (RWorkspace: N) */
                     i__3 = *lwork - iwork + 1;
-                    zgebrd_(m, n, &a[a_offset], lda, &s[1], &rwork[ie], &work[itauq], &work[itaup],
-                            &work[iwork], &i__3, &ierr);
+                    aocl_lapack_zgebrd(m, n, &a[a_offset], lda, &s[1], &rwork[ie], &work[itauq],
+                                       &work[itaup], &work[iwork], &i__3, &ierr);
                     /* Generate left vectors bidiagonalizing A */
                     /* (CWorkspace: need 3*N, prefer 2*N+N*NB) */
                     /* (RWorkspace: 0) */
                     i__3 = *lwork - iwork + 1;
-                    zungbr_("Q", m, n, n, &a[a_offset], lda, &work[itauq], &work[iwork], &i__3,
-                            &ierr);
+                    aocl_lapack_zungbr("Q", m, n, n, &a[a_offset], lda, &work[itauq], &work[iwork],
+                                       &i__3, &ierr);
                     irwork = ie + *n;
                     /* Perform bidiagonal QR iteration, computing left */
                     /* singular vectors of A in A */
                     /* (CWorkspace: need 0) */
                     /* (RWorkspace: need BDSPAC) */
-                    zbdsqr_("U", n, &c__0, m, &c__0, &s[1], &rwork[ie], cdum, &c__1, &a[a_offset],
-                            lda, cdum, &c__1, &rwork[irwork], info);
+                    aocl_lapack_zbdsqr("U", n, &c__0, m, &c__0, &s[1], &rwork[ie], cdum, &c__1,
+                                       &a[a_offset], lda, cdum, &c__1, &rwork[irwork], info);
                 }
             }
             else if(wntuo && wntvas)
@@ -1182,20 +1168,22 @@ void zgesvd_(char *jobu, char *jobvt, integer *m, integer *n, doublecomplex *a, 
                     /* (CWorkspace: need N*N+2*N, prefer N*N+N+N*NB) */
                     /* (RWorkspace: 0) */
                     i__3 = *lwork - iwork + 1;
-                    zgeqrf_(m, n, &a[a_offset], lda, &work[itau], &work[iwork], &i__3, &ierr);
+                    aocl_lapack_zgeqrf(m, n, &a[a_offset], lda, &work[itau], &work[iwork], &i__3,
+                                       &ierr);
                     /* Copy R to VT, zeroing out below it */
-                    zlacpy_("U", n, n, &a[a_offset], lda, &vt[vt_offset], ldvt);
+                    aocl_lapack_zlacpy("U", n, n, &a[a_offset], lda, &vt[vt_offset], ldvt);
                     if(*n > 1)
                     {
                         i__3 = *n - 1;
                         i__2 = *n - 1;
-                        zlaset_("L", &i__3, &i__2, &c_b1, &c_b1, &vt[vt_dim1 + 2], ldvt);
+                        aocl_lapack_zlaset("L", &i__3, &i__2, &c_b1, &c_b1, &vt[vt_dim1 + 2], ldvt);
                     }
                     /* Generate Q in A */
                     /* (CWorkspace: need N*N+2*N, prefer N*N+N+N*NB) */
                     /* (RWorkspace: 0) */
                     i__3 = *lwork - iwork + 1;
-                    zungqr_(m, n, n, &a[a_offset], lda, &work[itau], &work[iwork], &i__3, &ierr);
+                    aocl_lapack_zungqr(m, n, n, &a[a_offset], lda, &work[itau], &work[iwork], &i__3,
+                                       &ierr);
                     ie = 1;
                     itauq = itau;
                     itaup = itauq + *n;
@@ -1204,29 +1192,29 @@ void zgesvd_(char *jobu, char *jobvt, integer *m, integer *n, doublecomplex *a, 
                     /* (CWorkspace: need N*N+3*N, prefer N*N+2*N+2*N*NB) */
                     /* (RWorkspace: need N) */
                     i__3 = *lwork - iwork + 1;
-                    zgebrd_(n, n, &vt[vt_offset], ldvt, &s[1], &rwork[ie], &work[itauq],
-                            &work[itaup], &work[iwork], &i__3, &ierr);
-                    zlacpy_("L", n, n, &vt[vt_offset], ldvt, &work[ir], &ldwrkr);
+                    aocl_lapack_zgebrd(n, n, &vt[vt_offset], ldvt, &s[1], &rwork[ie], &work[itauq],
+                                       &work[itaup], &work[iwork], &i__3, &ierr);
+                    aocl_lapack_zlacpy("L", n, n, &vt[vt_offset], ldvt, &work[ir], &ldwrkr);
                     /* Generate left vectors bidiagonalizing R in WORK(IR) */
                     /* (CWorkspace: need N*N+3*N, prefer N*N+2*N+N*NB) */
                     /* (RWorkspace: 0) */
                     i__3 = *lwork - iwork + 1;
-                    zungbr_("Q", n, n, n, &work[ir], &ldwrkr, &work[itauq], &work[iwork], &i__3,
-                            &ierr);
+                    aocl_lapack_zungbr("Q", n, n, n, &work[ir], &ldwrkr, &work[itauq], &work[iwork],
+                                       &i__3, &ierr);
                     /* Generate right vectors bidiagonalizing R in VT */
                     /* (CWorkspace: need N*N+3*N-1, prefer N*N+2*N+(N-1)*NB) */
                     /* (RWorkspace: 0) */
                     i__3 = *lwork - iwork + 1;
-                    zungbr_("P", n, n, n, &vt[vt_offset], ldvt, &work[itaup], &work[iwork], &i__3,
-                            &ierr);
+                    aocl_lapack_zungbr("P", n, n, n, &vt[vt_offset], ldvt, &work[itaup],
+                                       &work[iwork], &i__3, &ierr);
                     irwork = ie + *n;
                     /* Perform bidiagonal QR iteration, computing left */
                     /* singular vectors of R in WORK(IR) and computing right */
                     /* singular vectors of R in VT */
                     /* (CWorkspace: need N*N) */
                     /* (RWorkspace: need BDSPAC) */
-                    zbdsqr_("U", n, n, n, &c__0, &s[1], &rwork[ie], &vt[vt_offset], ldvt, &work[ir],
-                            &ldwrkr, cdum, &c__1, &rwork[irwork], info);
+                    aocl_lapack_zbdsqr("U", n, n, n, &c__0, &s[1], &rwork[ie], &vt[vt_offset], ldvt,
+                                       &work[ir], &ldwrkr, cdum, &c__1, &rwork[irwork], info);
                     iu = itauq;
                     /* Multiply Q in A by left singular vectors of R in */
                     /* WORK(IR), storing result in WORK(IU) and copying to A */
@@ -1239,9 +1227,10 @@ void zgesvd_(char *jobu, char *jobvt, integer *m, integer *n, doublecomplex *a, 
                         /* Computing MIN */
                         i__4 = *m - i__ + 1;
                         chunk = fla_min(i__4, ldwrku);
-                        zgemm_("N", "N", &chunk, n, n, &c_b2, &a[i__ + a_dim1], lda, &work[ir],
-                               &ldwrkr, &c_b1, &work[iu], &ldwrku);
-                        zlacpy_("F", &chunk, n, &work[iu], &ldwrku, &a[i__ + a_dim1], lda);
+                        aocl_blas_zgemm("N", "N", &chunk, n, n, &c_b2, &a[i__ + a_dim1], lda,
+                                        &work[ir], &ldwrkr, &c_b1, &work[iu], &ldwrku);
+                        aocl_lapack_zlacpy("F", &chunk, n, &work[iu], &ldwrku, &a[i__ + a_dim1],
+                                           lda);
                         /* L20: */
                     }
                 }
@@ -1254,20 +1243,22 @@ void zgesvd_(char *jobu, char *jobvt, integer *m, integer *n, doublecomplex *a, 
                     /* (CWorkspace: need 2*N, prefer N+N*NB) */
                     /* (RWorkspace: 0) */
                     i__2 = *lwork - iwork + 1;
-                    zgeqrf_(m, n, &a[a_offset], lda, &work[itau], &work[iwork], &i__2, &ierr);
+                    aocl_lapack_zgeqrf(m, n, &a[a_offset], lda, &work[itau], &work[iwork], &i__2,
+                                       &ierr);
                     /* Copy R to VT, zeroing out below it */
-                    zlacpy_("U", n, n, &a[a_offset], lda, &vt[vt_offset], ldvt);
+                    aocl_lapack_zlacpy("U", n, n, &a[a_offset], lda, &vt[vt_offset], ldvt);
                     if(*n > 1)
                     {
                         i__2 = *n - 1;
                         i__3 = *n - 1;
-                        zlaset_("L", &i__2, &i__3, &c_b1, &c_b1, &vt[vt_dim1 + 2], ldvt);
+                        aocl_lapack_zlaset("L", &i__2, &i__3, &c_b1, &c_b1, &vt[vt_dim1 + 2], ldvt);
                     }
                     /* Generate Q in A */
                     /* (CWorkspace: need 2*N, prefer N+N*NB) */
                     /* (RWorkspace: 0) */
                     i__2 = *lwork - iwork + 1;
-                    zungqr_(m, n, n, &a[a_offset], lda, &work[itau], &work[iwork], &i__2, &ierr);
+                    aocl_lapack_zungqr(m, n, n, &a[a_offset], lda, &work[itau], &work[iwork], &i__2,
+                                       &ierr);
                     ie = 1;
                     itauq = itau;
                     itaup = itauq + *n;
@@ -1276,28 +1267,28 @@ void zgesvd_(char *jobu, char *jobvt, integer *m, integer *n, doublecomplex *a, 
                     /* (CWorkspace: need 3*N, prefer 2*N+2*N*NB) */
                     /* (RWorkspace: N) */
                     i__2 = *lwork - iwork + 1;
-                    zgebrd_(n, n, &vt[vt_offset], ldvt, &s[1], &rwork[ie], &work[itauq],
-                            &work[itaup], &work[iwork], &i__2, &ierr);
+                    aocl_lapack_zgebrd(n, n, &vt[vt_offset], ldvt, &s[1], &rwork[ie], &work[itauq],
+                                       &work[itaup], &work[iwork], &i__2, &ierr);
                     /* Multiply Q in A by left vectors bidiagonalizing R */
                     /* (CWorkspace: need 2*N+M, prefer 2*N+M*NB) */
                     /* (RWorkspace: 0) */
                     i__2 = *lwork - iwork + 1;
-                    zunmbr_("Q", "R", "N", m, n, n, &vt[vt_offset], ldvt, &work[itauq],
-                            &a[a_offset], lda, &work[iwork], &i__2, &ierr);
+                    aocl_lapack_zunmbr("Q", "R", "N", m, n, n, &vt[vt_offset], ldvt, &work[itauq],
+                                       &a[a_offset], lda, &work[iwork], &i__2, &ierr);
                     /* Generate right vectors bidiagonalizing R in VT */
                     /* (CWorkspace: need 3*N-1, prefer 2*N+(N-1)*NB) */
                     /* (RWorkspace: 0) */
                     i__2 = *lwork - iwork + 1;
-                    zungbr_("P", n, n, n, &vt[vt_offset], ldvt, &work[itaup], &work[iwork], &i__2,
-                            &ierr);
+                    aocl_lapack_zungbr("P", n, n, n, &vt[vt_offset], ldvt, &work[itaup],
+                                       &work[iwork], &i__2, &ierr);
                     irwork = ie + *n;
                     /* Perform bidiagonal QR iteration, computing left */
                     /* singular vectors of A in A and computing right */
                     /* singular vectors of A in VT */
                     /* (CWorkspace: 0) */
                     /* (RWorkspace: need BDSPAC) */
-                    zbdsqr_("U", n, n, m, &c__0, &s[1], &rwork[ie], &vt[vt_offset], ldvt,
-                            &a[a_offset], lda, cdum, &c__1, &rwork[irwork], info);
+                    aocl_lapack_zbdsqr("U", n, n, m, &c__0, &s[1], &rwork[ie], &vt[vt_offset], ldvt,
+                                       &a[a_offset], lda, cdum, &c__1, &rwork[irwork], info);
                 }
             }
             else if(wntus)
@@ -1327,18 +1318,19 @@ void zgesvd_(char *jobu, char *jobvt, integer *m, integer *n, doublecomplex *a, 
                         /* (CWorkspace: need N*N+2*N, prefer N*N+N+N*NB) */
                         /* (RWorkspace: 0) */
                         i__2 = *lwork - iwork + 1;
-                        zgeqrf_(m, n, &a[a_offset], lda, &work[itau], &work[iwork], &i__2, &ierr);
+                        aocl_lapack_zgeqrf(m, n, &a[a_offset], lda, &work[itau], &work[iwork],
+                                           &i__2, &ierr);
                         /* Copy R to WORK(IR), zeroing out below it */
-                        zlacpy_("U", n, n, &a[a_offset], lda, &work[ir], &ldwrkr);
+                        aocl_lapack_zlacpy("U", n, n, &a[a_offset], lda, &work[ir], &ldwrkr);
                         i__2 = *n - 1;
                         i__3 = *n - 1;
-                        zlaset_("L", &i__2, &i__3, &c_b1, &c_b1, &work[ir + 1], &ldwrkr);
+                        aocl_lapack_zlaset("L", &i__2, &i__3, &c_b1, &c_b1, &work[ir + 1], &ldwrkr);
                         /* Generate Q in A */
                         /* (CWorkspace: need N*N+2*N, prefer N*N+N+N*NB) */
                         /* (RWorkspace: 0) */
                         i__2 = *lwork - iwork + 1;
-                        zungqr_(m, n, n, &a[a_offset], lda, &work[itau], &work[iwork], &i__2,
-                                &ierr);
+                        aocl_lapack_zungqr(m, n, n, &a[a_offset], lda, &work[itau], &work[iwork],
+                                           &i__2, &ierr);
                         ie = 1;
                         itauq = itau;
                         itaup = itauq + *n;
@@ -1347,27 +1339,27 @@ void zgesvd_(char *jobu, char *jobvt, integer *m, integer *n, doublecomplex *a, 
                         /* (CWorkspace: need N*N+3*N, prefer N*N+2*N+2*N*NB) */
                         /* (RWorkspace: need N) */
                         i__2 = *lwork - iwork + 1;
-                        zgebrd_(n, n, &work[ir], &ldwrkr, &s[1], &rwork[ie], &work[itauq],
-                                &work[itaup], &work[iwork], &i__2, &ierr);
+                        aocl_lapack_zgebrd(n, n, &work[ir], &ldwrkr, &s[1], &rwork[ie],
+                                           &work[itauq], &work[itaup], &work[iwork], &i__2, &ierr);
                         /* Generate left vectors bidiagonalizing R in WORK(IR) */
                         /* (CWorkspace: need N*N+3*N, prefer N*N+2*N+N*NB) */
                         /* (RWorkspace: 0) */
                         i__2 = *lwork - iwork + 1;
-                        zungbr_("Q", n, n, n, &work[ir], &ldwrkr, &work[itauq], &work[iwork], &i__2,
-                                &ierr);
+                        aocl_lapack_zungbr("Q", n, n, n, &work[ir], &ldwrkr, &work[itauq],
+                                           &work[iwork], &i__2, &ierr);
                         irwork = ie + *n;
                         /* Perform bidiagonal QR iteration, computing left */
                         /* singular vectors of R in WORK(IR) */
                         /* (CWorkspace: need N*N) */
                         /* (RWorkspace: need BDSPAC) */
-                        zbdsqr_("U", n, &c__0, n, &c__0, &s[1], &rwork[ie], cdum, &c__1, &work[ir],
-                                &ldwrkr, cdum, &c__1, &rwork[irwork], info);
+                        aocl_lapack_zbdsqr("U", n, &c__0, n, &c__0, &s[1], &rwork[ie], cdum, &c__1,
+                                           &work[ir], &ldwrkr, cdum, &c__1, &rwork[irwork], info);
                         /* Multiply Q in A by left singular vectors of R in */
                         /* WORK(IR), storing result in U */
                         /* (CWorkspace: need N*N) */
                         /* (RWorkspace: 0) */
-                        zgemm_("N", "N", m, n, n, &c_b2, &a[a_offset], lda, &work[ir], &ldwrkr,
-                               &c_b1, &u[u_offset], ldu);
+                        aocl_blas_zgemm("N", "N", m, n, n, &c_b2, &a[a_offset], lda, &work[ir],
+                                        &ldwrkr, &c_b1, &u[u_offset], ldu);
                     }
                     else
                     {
@@ -1378,14 +1370,15 @@ void zgesvd_(char *jobu, char *jobvt, integer *m, integer *n, doublecomplex *a, 
                         /* (CWorkspace: need 2*N, prefer N+N*NB) */
                         /* (RWorkspace: 0) */
                         i__2 = *lwork - iwork + 1;
-                        zgeqrf_(m, n, &a[a_offset], lda, &work[itau], &work[iwork], &i__2, &ierr);
-                        zlacpy_("L", m, n, &a[a_offset], lda, &u[u_offset], ldu);
+                        aocl_lapack_zgeqrf(m, n, &a[a_offset], lda, &work[itau], &work[iwork],
+                                           &i__2, &ierr);
+                        aocl_lapack_zlacpy("L", m, n, &a[a_offset], lda, &u[u_offset], ldu);
                         /* Generate Q in U */
                         /* (CWorkspace: need 2*N, prefer N+N*NB) */
                         /* (RWorkspace: 0) */
                         i__2 = *lwork - iwork + 1;
-                        zungqr_(m, n, n, &u[u_offset], ldu, &work[itau], &work[iwork], &i__2,
-                                &ierr);
+                        aocl_lapack_zungqr(m, n, n, &u[u_offset], ldu, &work[itau], &work[iwork],
+                                           &i__2, &ierr);
                         ie = 1;
                         itauq = itau;
                         itaup = itauq + *n;
@@ -1395,27 +1388,28 @@ void zgesvd_(char *jobu, char *jobvt, integer *m, integer *n, doublecomplex *a, 
                         {
                             i__2 = *n - 1;
                             i__3 = *n - 1;
-                            zlaset_("L", &i__2, &i__3, &c_b1, &c_b1, &a[a_dim1 + 2], lda);
+                            aocl_lapack_zlaset("L", &i__2, &i__3, &c_b1, &c_b1, &a[a_dim1 + 2],
+                                               lda);
                         }
                         /* Bidiagonalize R in A */
                         /* (CWorkspace: need 3*N, prefer 2*N+2*N*NB) */
                         /* (RWorkspace: need N) */
                         i__2 = *lwork - iwork + 1;
-                        zgebrd_(n, n, &a[a_offset], lda, &s[1], &rwork[ie], &work[itauq],
-                                &work[itaup], &work[iwork], &i__2, &ierr);
+                        aocl_lapack_zgebrd(n, n, &a[a_offset], lda, &s[1], &rwork[ie], &work[itauq],
+                                           &work[itaup], &work[iwork], &i__2, &ierr);
                         /* Multiply Q in U by left vectors bidiagonalizing R */
                         /* (CWorkspace: need 2*N+M, prefer 2*N+M*NB) */
                         /* (RWorkspace: 0) */
                         i__2 = *lwork - iwork + 1;
-                        zunmbr_("Q", "R", "N", m, n, n, &a[a_offset], lda, &work[itauq],
-                                &u[u_offset], ldu, &work[iwork], &i__2, &ierr);
+                        aocl_lapack_zunmbr("Q", "R", "N", m, n, n, &a[a_offset], lda, &work[itauq],
+                                           &u[u_offset], ldu, &work[iwork], &i__2, &ierr);
                         irwork = ie + *n;
                         /* Perform bidiagonal QR iteration, computing left */
                         /* singular vectors of A in U */
                         /* (CWorkspace: 0) */
                         /* (RWorkspace: need BDSPAC) */
-                        zbdsqr_("U", n, &c__0, m, &c__0, &s[1], &rwork[ie], cdum, &c__1,
-                                &u[u_offset], ldu, cdum, &c__1, &rwork[irwork], info);
+                        aocl_lapack_zbdsqr("U", n, &c__0, m, &c__0, &s[1], &rwork[ie], cdum, &c__1,
+                                           &u[u_offset], ldu, cdum, &c__1, &rwork[irwork], info);
                     }
                 }
                 else if(wntvo)
@@ -1454,18 +1448,19 @@ void zgesvd_(char *jobu, char *jobvt, integer *m, integer *n, doublecomplex *a, 
                         /* (CWorkspace: need 2*N*N+2*N, prefer 2*N*N+N+N*NB) */
                         /* (RWorkspace: 0) */
                         i__2 = *lwork - iwork + 1;
-                        zgeqrf_(m, n, &a[a_offset], lda, &work[itau], &work[iwork], &i__2, &ierr);
+                        aocl_lapack_zgeqrf(m, n, &a[a_offset], lda, &work[itau], &work[iwork],
+                                           &i__2, &ierr);
                         /* Copy R to WORK(IU), zeroing out below it */
-                        zlacpy_("U", n, n, &a[a_offset], lda, &work[iu], &ldwrku);
+                        aocl_lapack_zlacpy("U", n, n, &a[a_offset], lda, &work[iu], &ldwrku);
                         i__2 = *n - 1;
                         i__3 = *n - 1;
-                        zlaset_("L", &i__2, &i__3, &c_b1, &c_b1, &work[iu + 1], &ldwrku);
+                        aocl_lapack_zlaset("L", &i__2, &i__3, &c_b1, &c_b1, &work[iu + 1], &ldwrku);
                         /* Generate Q in A */
                         /* (CWorkspace: need 2*N*N+2*N, prefer 2*N*N+N+N*NB) */
                         /* (RWorkspace: 0) */
                         i__2 = *lwork - iwork + 1;
-                        zungqr_(m, n, n, &a[a_offset], lda, &work[itau], &work[iwork], &i__2,
-                                &ierr);
+                        aocl_lapack_zungqr(m, n, n, &a[a_offset], lda, &work[itau], &work[iwork],
+                                           &i__2, &ierr);
                         ie = 1;
                         itauq = itau;
                         itaup = itauq + *n;
@@ -1476,40 +1471,41 @@ void zgesvd_(char *jobu, char *jobvt, integer *m, integer *n, doublecomplex *a, 
                         /* prefer 2*N*N+2*N+2*N*NB) */
                         /* (RWorkspace: need N) */
                         i__2 = *lwork - iwork + 1;
-                        zgebrd_(n, n, &work[iu], &ldwrku, &s[1], &rwork[ie], &work[itauq],
-                                &work[itaup], &work[iwork], &i__2, &ierr);
-                        zlacpy_("U", n, n, &work[iu], &ldwrku, &work[ir], &ldwrkr);
+                        aocl_lapack_zgebrd(n, n, &work[iu], &ldwrku, &s[1], &rwork[ie],
+                                           &work[itauq], &work[itaup], &work[iwork], &i__2, &ierr);
+                        aocl_lapack_zlacpy("U", n, n, &work[iu], &ldwrku, &work[ir], &ldwrkr);
                         /* Generate left bidiagonalizing vectors in WORK(IU) */
                         /* (CWorkspace: need 2*N*N+3*N, prefer 2*N*N+2*N+N*NB) */
                         /* (RWorkspace: 0) */
                         i__2 = *lwork - iwork + 1;
-                        zungbr_("Q", n, n, n, &work[iu], &ldwrku, &work[itauq], &work[iwork], &i__2,
-                                &ierr);
+                        aocl_lapack_zungbr("Q", n, n, n, &work[iu], &ldwrku, &work[itauq],
+                                           &work[iwork], &i__2, &ierr);
                         /* Generate right bidiagonalizing vectors in WORK(IR) */
                         /* (CWorkspace: need 2*N*N+3*N-1, */
                         /* prefer 2*N*N+2*N+(N-1)*NB) */
                         /* (RWorkspace: 0) */
                         i__2 = *lwork - iwork + 1;
-                        zungbr_("P", n, n, n, &work[ir], &ldwrkr, &work[itaup], &work[iwork], &i__2,
-                                &ierr);
+                        aocl_lapack_zungbr("P", n, n, n, &work[ir], &ldwrkr, &work[itaup],
+                                           &work[iwork], &i__2, &ierr);
                         irwork = ie + *n;
                         /* Perform bidiagonal QR iteration, computing left */
                         /* singular vectors of R in WORK(IU) and computing */
                         /* right singular vectors of R in WORK(IR) */
                         /* (CWorkspace: need 2*N*N) */
                         /* (RWorkspace: need BDSPAC) */
-                        zbdsqr_("U", n, n, n, &c__0, &s[1], &rwork[ie], &work[ir], &ldwrkr,
-                                &work[iu], &ldwrku, cdum, &c__1, &rwork[irwork], info);
+                        aocl_lapack_zbdsqr("U", n, n, n, &c__0, &s[1], &rwork[ie], &work[ir],
+                                           &ldwrkr, &work[iu], &ldwrku, cdum, &c__1, &rwork[irwork],
+                                           info);
                         /* Multiply Q in A by left singular vectors of R in */
                         /* WORK(IU), storing result in U */
                         /* (CWorkspace: need N*N) */
                         /* (RWorkspace: 0) */
-                        zgemm_("N", "N", m, n, n, &c_b2, &a[a_offset], lda, &work[iu], &ldwrku,
-                               &c_b1, &u[u_offset], ldu);
+                        aocl_blas_zgemm("N", "N", m, n, n, &c_b2, &a[a_offset], lda, &work[iu],
+                                        &ldwrku, &c_b1, &u[u_offset], ldu);
                         /* Copy right singular vectors of R to A */
                         /* (CWorkspace: need N*N) */
                         /* (RWorkspace: 0) */
-                        zlacpy_("F", n, n, &work[ir], &ldwrkr, &a[a_offset], lda);
+                        aocl_lapack_zlacpy("F", n, n, &work[ir], &ldwrkr, &a[a_offset], lda);
                     }
                     else
                     {
@@ -1520,14 +1516,15 @@ void zgesvd_(char *jobu, char *jobvt, integer *m, integer *n, doublecomplex *a, 
                         /* (CWorkspace: need 2*N, prefer N+N*NB) */
                         /* (RWorkspace: 0) */
                         i__2 = *lwork - iwork + 1;
-                        zgeqrf_(m, n, &a[a_offset], lda, &work[itau], &work[iwork], &i__2, &ierr);
-                        zlacpy_("L", m, n, &a[a_offset], lda, &u[u_offset], ldu);
+                        aocl_lapack_zgeqrf(m, n, &a[a_offset], lda, &work[itau], &work[iwork],
+                                           &i__2, &ierr);
+                        aocl_lapack_zlacpy("L", m, n, &a[a_offset], lda, &u[u_offset], ldu);
                         /* Generate Q in U */
                         /* (CWorkspace: need 2*N, prefer N+N*NB) */
                         /* (RWorkspace: 0) */
                         i__2 = *lwork - iwork + 1;
-                        zungqr_(m, n, n, &u[u_offset], ldu, &work[itau], &work[iwork], &i__2,
-                                &ierr);
+                        aocl_lapack_zungqr(m, n, n, &u[u_offset], ldu, &work[itau], &work[iwork],
+                                           &i__2, &ierr);
                         ie = 1;
                         itauq = itau;
                         itaup = itauq + *n;
@@ -1537,34 +1534,36 @@ void zgesvd_(char *jobu, char *jobvt, integer *m, integer *n, doublecomplex *a, 
                         {
                             i__2 = *n - 1;
                             i__3 = *n - 1;
-                            zlaset_("L", &i__2, &i__3, &c_b1, &c_b1, &a[a_dim1 + 2], lda);
+                            aocl_lapack_zlaset("L", &i__2, &i__3, &c_b1, &c_b1, &a[a_dim1 + 2],
+                                               lda);
                         }
                         /* Bidiagonalize R in A */
                         /* (CWorkspace: need 3*N, prefer 2*N+2*N*NB) */
                         /* (RWorkspace: need N) */
                         i__2 = *lwork - iwork + 1;
-                        zgebrd_(n, n, &a[a_offset], lda, &s[1], &rwork[ie], &work[itauq],
-                                &work[itaup], &work[iwork], &i__2, &ierr);
+                        aocl_lapack_zgebrd(n, n, &a[a_offset], lda, &s[1], &rwork[ie], &work[itauq],
+                                           &work[itaup], &work[iwork], &i__2, &ierr);
                         /* Multiply Q in U by left vectors bidiagonalizing R */
                         /* (CWorkspace: need 2*N+M, prefer 2*N+M*NB) */
                         /* (RWorkspace: 0) */
                         i__2 = *lwork - iwork + 1;
-                        zunmbr_("Q", "R", "N", m, n, n, &a[a_offset], lda, &work[itauq],
-                                &u[u_offset], ldu, &work[iwork], &i__2, &ierr);
+                        aocl_lapack_zunmbr("Q", "R", "N", m, n, n, &a[a_offset], lda, &work[itauq],
+                                           &u[u_offset], ldu, &work[iwork], &i__2, &ierr);
                         /* Generate right vectors bidiagonalizing R in A */
                         /* (CWorkspace: need 3*N-1, prefer 2*N+(N-1)*NB) */
                         /* (RWorkspace: 0) */
                         i__2 = *lwork - iwork + 1;
-                        zungbr_("P", n, n, n, &a[a_offset], lda, &work[itaup], &work[iwork], &i__2,
-                                &ierr);
+                        aocl_lapack_zungbr("P", n, n, n, &a[a_offset], lda, &work[itaup],
+                                           &work[iwork], &i__2, &ierr);
                         irwork = ie + *n;
                         /* Perform bidiagonal QR iteration, computing left */
                         /* singular vectors of A in U and computing right */
                         /* singular vectors of A in A */
                         /* (CWorkspace: 0) */
                         /* (RWorkspace: need BDSPAC) */
-                        zbdsqr_("U", n, n, m, &c__0, &s[1], &rwork[ie], &a[a_offset], lda,
-                                &u[u_offset], ldu, cdum, &c__1, &rwork[irwork], info);
+                        aocl_lapack_zbdsqr("U", n, n, m, &c__0, &s[1], &rwork[ie], &a[a_offset],
+                                           lda, &u[u_offset], ldu, cdum, &c__1, &rwork[irwork],
+                                           info);
                     }
                 }
                 else if(wntvas)
@@ -1593,18 +1592,19 @@ void zgesvd_(char *jobu, char *jobvt, integer *m, integer *n, doublecomplex *a, 
                         /* (CWorkspace: need N*N+2*N, prefer N*N+N+N*NB) */
                         /* (RWorkspace: 0) */
                         i__2 = *lwork - iwork + 1;
-                        zgeqrf_(m, n, &a[a_offset], lda, &work[itau], &work[iwork], &i__2, &ierr);
+                        aocl_lapack_zgeqrf(m, n, &a[a_offset], lda, &work[itau], &work[iwork],
+                                           &i__2, &ierr);
                         /* Copy R to WORK(IU), zeroing out below it */
-                        zlacpy_("U", n, n, &a[a_offset], lda, &work[iu], &ldwrku);
+                        aocl_lapack_zlacpy("U", n, n, &a[a_offset], lda, &work[iu], &ldwrku);
                         i__2 = *n - 1;
                         i__3 = *n - 1;
-                        zlaset_("L", &i__2, &i__3, &c_b1, &c_b1, &work[iu + 1], &ldwrku);
+                        aocl_lapack_zlaset("L", &i__2, &i__3, &c_b1, &c_b1, &work[iu + 1], &ldwrku);
                         /* Generate Q in A */
                         /* (CWorkspace: need N*N+2*N, prefer N*N+N+N*NB) */
                         /* (RWorkspace: 0) */
                         i__2 = *lwork - iwork + 1;
-                        zungqr_(m, n, n, &a[a_offset], lda, &work[itau], &work[iwork], &i__2,
-                                &ierr);
+                        aocl_lapack_zungqr(m, n, n, &a[a_offset], lda, &work[itau], &work[iwork],
+                                           &i__2, &ierr);
                         ie = 1;
                         itauq = itau;
                         itaup = itauq + *n;
@@ -1613,36 +1613,37 @@ void zgesvd_(char *jobu, char *jobvt, integer *m, integer *n, doublecomplex *a, 
                         /* (CWorkspace: need N*N+3*N, prefer N*N+2*N+2*N*NB) */
                         /* (RWorkspace: need N) */
                         i__2 = *lwork - iwork + 1;
-                        zgebrd_(n, n, &work[iu], &ldwrku, &s[1], &rwork[ie], &work[itauq],
-                                &work[itaup], &work[iwork], &i__2, &ierr);
-                        zlacpy_("U", n, n, &work[iu], &ldwrku, &vt[vt_offset], ldvt);
+                        aocl_lapack_zgebrd(n, n, &work[iu], &ldwrku, &s[1], &rwork[ie],
+                                           &work[itauq], &work[itaup], &work[iwork], &i__2, &ierr);
+                        aocl_lapack_zlacpy("U", n, n, &work[iu], &ldwrku, &vt[vt_offset], ldvt);
                         /* Generate left bidiagonalizing vectors in WORK(IU) */
                         /* (CWorkspace: need N*N+3*N, prefer N*N+2*N+N*NB) */
                         /* (RWorkspace: 0) */
                         i__2 = *lwork - iwork + 1;
-                        zungbr_("Q", n, n, n, &work[iu], &ldwrku, &work[itauq], &work[iwork], &i__2,
-                                &ierr);
+                        aocl_lapack_zungbr("Q", n, n, n, &work[iu], &ldwrku, &work[itauq],
+                                           &work[iwork], &i__2, &ierr);
                         /* Generate right bidiagonalizing vectors in VT */
                         /* (CWorkspace: need N*N+3*N-1, */
                         /* prefer N*N+2*N+(N-1)*NB) */
                         /* (RWorkspace: 0) */
                         i__2 = *lwork - iwork + 1;
-                        zungbr_("P", n, n, n, &vt[vt_offset], ldvt, &work[itaup], &work[iwork],
-                                &i__2, &ierr);
+                        aocl_lapack_zungbr("P", n, n, n, &vt[vt_offset], ldvt, &work[itaup],
+                                           &work[iwork], &i__2, &ierr);
                         irwork = ie + *n;
                         /* Perform bidiagonal QR iteration, computing left */
                         /* singular vectors of R in WORK(IU) and computing */
                         /* right singular vectors of R in VT */
                         /* (CWorkspace: need N*N) */
                         /* (RWorkspace: need BDSPAC) */
-                        zbdsqr_("U", n, n, n, &c__0, &s[1], &rwork[ie], &vt[vt_offset], ldvt,
-                                &work[iu], &ldwrku, cdum, &c__1, &rwork[irwork], info);
+                        aocl_lapack_zbdsqr("U", n, n, n, &c__0, &s[1], &rwork[ie], &vt[vt_offset],
+                                           ldvt, &work[iu], &ldwrku, cdum, &c__1, &rwork[irwork],
+                                           info);
                         /* Multiply Q in A by left singular vectors of R in */
                         /* WORK(IU), storing result in U */
                         /* (CWorkspace: need N*N) */
                         /* (RWorkspace: 0) */
-                        zgemm_("N", "N", m, n, n, &c_b2, &a[a_offset], lda, &work[iu], &ldwrku,
-                               &c_b1, &u[u_offset], ldu);
+                        aocl_blas_zgemm("N", "N", m, n, n, &c_b2, &a[a_offset], lda, &work[iu],
+                                        &ldwrku, &c_b1, &u[u_offset], ldu);
                     }
                     else
                     {
@@ -1653,21 +1654,23 @@ void zgesvd_(char *jobu, char *jobvt, integer *m, integer *n, doublecomplex *a, 
                         /* (CWorkspace: need 2*N, prefer N+N*NB) */
                         /* (RWorkspace: 0) */
                         i__2 = *lwork - iwork + 1;
-                        zgeqrf_(m, n, &a[a_offset], lda, &work[itau], &work[iwork], &i__2, &ierr);
-                        zlacpy_("L", m, n, &a[a_offset], lda, &u[u_offset], ldu);
+                        aocl_lapack_zgeqrf(m, n, &a[a_offset], lda, &work[itau], &work[iwork],
+                                           &i__2, &ierr);
+                        aocl_lapack_zlacpy("L", m, n, &a[a_offset], lda, &u[u_offset], ldu);
                         /* Generate Q in U */
                         /* (CWorkspace: need 2*N, prefer N+N*NB) */
                         /* (RWorkspace: 0) */
                         i__2 = *lwork - iwork + 1;
-                        zungqr_(m, n, n, &u[u_offset], ldu, &work[itau], &work[iwork], &i__2,
-                                &ierr);
+                        aocl_lapack_zungqr(m, n, n, &u[u_offset], ldu, &work[itau], &work[iwork],
+                                           &i__2, &ierr);
                         /* Copy R to VT, zeroing out below it */
-                        zlacpy_("U", n, n, &a[a_offset], lda, &vt[vt_offset], ldvt);
+                        aocl_lapack_zlacpy("U", n, n, &a[a_offset], lda, &vt[vt_offset], ldvt);
                         if(*n > 1)
                         {
                             i__2 = *n - 1;
                             i__3 = *n - 1;
-                            zlaset_("L", &i__2, &i__3, &c_b1, &c_b1, &vt[vt_dim1 + 2], ldvt);
+                            aocl_lapack_zlaset("L", &i__2, &i__3, &c_b1, &c_b1, &vt[vt_dim1 + 2],
+                                               ldvt);
                         }
                         ie = 1;
                         itauq = itau;
@@ -1677,29 +1680,31 @@ void zgesvd_(char *jobu, char *jobvt, integer *m, integer *n, doublecomplex *a, 
                         /* (CWorkspace: need 3*N, prefer 2*N+2*N*NB) */
                         /* (RWorkspace: need N) */
                         i__2 = *lwork - iwork + 1;
-                        zgebrd_(n, n, &vt[vt_offset], ldvt, &s[1], &rwork[ie], &work[itauq],
-                                &work[itaup], &work[iwork], &i__2, &ierr);
+                        aocl_lapack_zgebrd(n, n, &vt[vt_offset], ldvt, &s[1], &rwork[ie],
+                                           &work[itauq], &work[itaup], &work[iwork], &i__2, &ierr);
                         /* Multiply Q in U by left bidiagonalizing vectors */
                         /* in VT */
                         /* (CWorkspace: need 2*N+M, prefer 2*N+M*NB) */
                         /* (RWorkspace: 0) */
                         i__2 = *lwork - iwork + 1;
-                        zunmbr_("Q", "R", "N", m, n, n, &vt[vt_offset], ldvt, &work[itauq],
-                                &u[u_offset], ldu, &work[iwork], &i__2, &ierr);
+                        aocl_lapack_zunmbr("Q", "R", "N", m, n, n, &vt[vt_offset], ldvt,
+                                           &work[itauq], &u[u_offset], ldu, &work[iwork], &i__2,
+                                           &ierr);
                         /* Generate right bidiagonalizing vectors in VT */
                         /* (CWorkspace: need 3*N-1, prefer 2*N+(N-1)*NB) */
                         /* (RWorkspace: 0) */
                         i__2 = *lwork - iwork + 1;
-                        zungbr_("P", n, n, n, &vt[vt_offset], ldvt, &work[itaup], &work[iwork],
-                                &i__2, &ierr);
+                        aocl_lapack_zungbr("P", n, n, n, &vt[vt_offset], ldvt, &work[itaup],
+                                           &work[iwork], &i__2, &ierr);
                         irwork = ie + *n;
                         /* Perform bidiagonal QR iteration, computing left */
                         /* singular vectors of A in U and computing right */
                         /* singular vectors of A in VT */
                         /* (CWorkspace: 0) */
                         /* (RWorkspace: need BDSPAC) */
-                        zbdsqr_("U", n, n, m, &c__0, &s[1], &rwork[ie], &vt[vt_offset], ldvt,
-                                &u[u_offset], ldu, cdum, &c__1, &rwork[irwork], info);
+                        aocl_lapack_zbdsqr("U", n, n, m, &c__0, &s[1], &rwork[ie], &vt[vt_offset],
+                                           ldvt, &u[u_offset], ldu, cdum, &c__1, &rwork[irwork],
+                                           info);
                     }
                 }
             }
@@ -1733,19 +1738,20 @@ void zgesvd_(char *jobu, char *jobvt, integer *m, integer *n, doublecomplex *a, 
                         /* (CWorkspace: need N*N+2*N, prefer N*N+N+N*NB) */
                         /* (RWorkspace: 0) */
                         i__2 = *lwork - iwork + 1;
-                        zgeqrf_(m, n, &a[a_offset], lda, &work[itau], &work[iwork], &i__2, &ierr);
-                        zlacpy_("L", m, n, &a[a_offset], lda, &u[u_offset], ldu);
+                        aocl_lapack_zgeqrf(m, n, &a[a_offset], lda, &work[itau], &work[iwork],
+                                           &i__2, &ierr);
+                        aocl_lapack_zlacpy("L", m, n, &a[a_offset], lda, &u[u_offset], ldu);
                         /* Copy R to WORK(IR), zeroing out below it */
-                        zlacpy_("U", n, n, &a[a_offset], lda, &work[ir], &ldwrkr);
+                        aocl_lapack_zlacpy("U", n, n, &a[a_offset], lda, &work[ir], &ldwrkr);
                         i__2 = *n - 1;
                         i__3 = *n - 1;
-                        zlaset_("L", &i__2, &i__3, &c_b1, &c_b1, &work[ir + 1], &ldwrkr);
+                        aocl_lapack_zlaset("L", &i__2, &i__3, &c_b1, &c_b1, &work[ir + 1], &ldwrkr);
                         /* Generate Q in U */
                         /* (CWorkspace: need N*N+N+M, prefer N*N+N+M*NB) */
                         /* (RWorkspace: 0) */
                         i__2 = *lwork - iwork + 1;
-                        zungqr_(m, m, n, &u[u_offset], ldu, &work[itau], &work[iwork], &i__2,
-                                &ierr);
+                        aocl_lapack_zungqr(m, m, n, &u[u_offset], ldu, &work[itau], &work[iwork],
+                                           &i__2, &ierr);
                         ie = 1;
                         itauq = itau;
                         itaup = itauq + *n;
@@ -1754,29 +1760,29 @@ void zgesvd_(char *jobu, char *jobvt, integer *m, integer *n, doublecomplex *a, 
                         /* (CWorkspace: need N*N+3*N, prefer N*N+2*N+2*N*NB) */
                         /* (RWorkspace: need N) */
                         i__2 = *lwork - iwork + 1;
-                        zgebrd_(n, n, &work[ir], &ldwrkr, &s[1], &rwork[ie], &work[itauq],
-                                &work[itaup], &work[iwork], &i__2, &ierr);
+                        aocl_lapack_zgebrd(n, n, &work[ir], &ldwrkr, &s[1], &rwork[ie],
+                                           &work[itauq], &work[itaup], &work[iwork], &i__2, &ierr);
                         /* Generate left bidiagonalizing vectors in WORK(IR) */
                         /* (CWorkspace: need N*N+3*N, prefer N*N+2*N+N*NB) */
                         /* (RWorkspace: 0) */
                         i__2 = *lwork - iwork + 1;
-                        zungbr_("Q", n, n, n, &work[ir], &ldwrkr, &work[itauq], &work[iwork], &i__2,
-                                &ierr);
+                        aocl_lapack_zungbr("Q", n, n, n, &work[ir], &ldwrkr, &work[itauq],
+                                           &work[iwork], &i__2, &ierr);
                         irwork = ie + *n;
                         /* Perform bidiagonal QR iteration, computing left */
                         /* singular vectors of R in WORK(IR) */
                         /* (CWorkspace: need N*N) */
                         /* (RWorkspace: need BDSPAC) */
-                        zbdsqr_("U", n, &c__0, n, &c__0, &s[1], &rwork[ie], cdum, &c__1, &work[ir],
-                                &ldwrkr, cdum, &c__1, &rwork[irwork], info);
+                        aocl_lapack_zbdsqr("U", n, &c__0, n, &c__0, &s[1], &rwork[ie], cdum, &c__1,
+                                           &work[ir], &ldwrkr, cdum, &c__1, &rwork[irwork], info);
                         /* Multiply Q in U by left singular vectors of R in */
                         /* WORK(IR), storing result in A */
                         /* (CWorkspace: need N*N) */
                         /* (RWorkspace: 0) */
-                        zgemm_("N", "N", m, n, n, &c_b2, &u[u_offset], ldu, &work[ir], &ldwrkr,
-                               &c_b1, &a[a_offset], lda);
+                        aocl_blas_zgemm("N", "N", m, n, n, &c_b2, &u[u_offset], ldu, &work[ir],
+                                        &ldwrkr, &c_b1, &a[a_offset], lda);
                         /* Copy left singular vectors of A from A to U */
-                        zlacpy_("F", m, n, &a[a_offset], lda, &u[u_offset], ldu);
+                        aocl_lapack_zlacpy("F", m, n, &a[a_offset], lda, &u[u_offset], ldu);
                     }
                     else
                     {
@@ -1787,14 +1793,15 @@ void zgesvd_(char *jobu, char *jobvt, integer *m, integer *n, doublecomplex *a, 
                         /* (CWorkspace: need 2*N, prefer N+N*NB) */
                         /* (RWorkspace: 0) */
                         i__2 = *lwork - iwork + 1;
-                        zgeqrf_(m, n, &a[a_offset], lda, &work[itau], &work[iwork], &i__2, &ierr);
-                        zlacpy_("L", m, n, &a[a_offset], lda, &u[u_offset], ldu);
+                        aocl_lapack_zgeqrf(m, n, &a[a_offset], lda, &work[itau], &work[iwork],
+                                           &i__2, &ierr);
+                        aocl_lapack_zlacpy("L", m, n, &a[a_offset], lda, &u[u_offset], ldu);
                         /* Generate Q in U */
                         /* (CWorkspace: need N+M, prefer N+M*NB) */
                         /* (RWorkspace: 0) */
                         i__2 = *lwork - iwork + 1;
-                        zungqr_(m, m, n, &u[u_offset], ldu, &work[itau], &work[iwork], &i__2,
-                                &ierr);
+                        aocl_lapack_zungqr(m, m, n, &u[u_offset], ldu, &work[itau], &work[iwork],
+                                           &i__2, &ierr);
                         ie = 1;
                         itauq = itau;
                         itaup = itauq + *n;
@@ -1804,28 +1811,29 @@ void zgesvd_(char *jobu, char *jobvt, integer *m, integer *n, doublecomplex *a, 
                         {
                             i__2 = *n - 1;
                             i__3 = *n - 1;
-                            zlaset_("L", &i__2, &i__3, &c_b1, &c_b1, &a[a_dim1 + 2], lda);
+                            aocl_lapack_zlaset("L", &i__2, &i__3, &c_b1, &c_b1, &a[a_dim1 + 2],
+                                               lda);
                         }
                         /* Bidiagonalize R in A */
                         /* (CWorkspace: need 3*N, prefer 2*N+2*N*NB) */
                         /* (RWorkspace: need N) */
                         i__2 = *lwork - iwork + 1;
-                        zgebrd_(n, n, &a[a_offset], lda, &s[1], &rwork[ie], &work[itauq],
-                                &work[itaup], &work[iwork], &i__2, &ierr);
+                        aocl_lapack_zgebrd(n, n, &a[a_offset], lda, &s[1], &rwork[ie], &work[itauq],
+                                           &work[itaup], &work[iwork], &i__2, &ierr);
                         /* Multiply Q in U by left bidiagonalizing vectors */
                         /* in A */
                         /* (CWorkspace: need 2*N+M, prefer 2*N+M*NB) */
                         /* (RWorkspace: 0) */
                         i__2 = *lwork - iwork + 1;
-                        zunmbr_("Q", "R", "N", m, n, n, &a[a_offset], lda, &work[itauq],
-                                &u[u_offset], ldu, &work[iwork], &i__2, &ierr);
+                        aocl_lapack_zunmbr("Q", "R", "N", m, n, n, &a[a_offset], lda, &work[itauq],
+                                           &u[u_offset], ldu, &work[iwork], &i__2, &ierr);
                         irwork = ie + *n;
                         /* Perform bidiagonal QR iteration, computing left */
                         /* singular vectors of A in U */
                         /* (CWorkspace: 0) */
                         /* (RWorkspace: need BDSPAC) */
-                        zbdsqr_("U", n, &c__0, m, &c__0, &s[1], &rwork[ie], cdum, &c__1,
-                                &u[u_offset], ldu, cdum, &c__1, &rwork[irwork], info);
+                        aocl_lapack_zbdsqr("U", n, &c__0, m, &c__0, &s[1], &rwork[ie], cdum, &c__1,
+                                           &u[u_offset], ldu, cdum, &c__1, &rwork[irwork], info);
                     }
                 }
                 else if(wntvo)
@@ -1867,19 +1875,20 @@ void zgesvd_(char *jobu, char *jobvt, integer *m, integer *n, doublecomplex *a, 
                         /* (CWorkspace: need 2*N*N+2*N, prefer 2*N*N+N+N*NB) */
                         /* (RWorkspace: 0) */
                         i__2 = *lwork - iwork + 1;
-                        zgeqrf_(m, n, &a[a_offset], lda, &work[itau], &work[iwork], &i__2, &ierr);
-                        zlacpy_("L", m, n, &a[a_offset], lda, &u[u_offset], ldu);
+                        aocl_lapack_zgeqrf(m, n, &a[a_offset], lda, &work[itau], &work[iwork],
+                                           &i__2, &ierr);
+                        aocl_lapack_zlacpy("L", m, n, &a[a_offset], lda, &u[u_offset], ldu);
                         /* Generate Q in U */
                         /* (CWorkspace: need 2*N*N+N+M, prefer 2*N*N+N+M*NB) */
                         /* (RWorkspace: 0) */
                         i__2 = *lwork - iwork + 1;
-                        zungqr_(m, m, n, &u[u_offset], ldu, &work[itau], &work[iwork], &i__2,
-                                &ierr);
+                        aocl_lapack_zungqr(m, m, n, &u[u_offset], ldu, &work[itau], &work[iwork],
+                                           &i__2, &ierr);
                         /* Copy R to WORK(IU), zeroing out below it */
-                        zlacpy_("U", n, n, &a[a_offset], lda, &work[iu], &ldwrku);
+                        aocl_lapack_zlacpy("U", n, n, &a[a_offset], lda, &work[iu], &ldwrku);
                         i__2 = *n - 1;
                         i__3 = *n - 1;
-                        zlaset_("L", &i__2, &i__3, &c_b1, &c_b1, &work[iu + 1], &ldwrku);
+                        aocl_lapack_zlaset("L", &i__2, &i__3, &c_b1, &c_b1, &work[iu + 1], &ldwrku);
                         ie = 1;
                         itauq = itau;
                         itaup = itauq + *n;
@@ -1890,40 +1899,41 @@ void zgesvd_(char *jobu, char *jobvt, integer *m, integer *n, doublecomplex *a, 
                         /* prefer 2*N*N+2*N+2*N*NB) */
                         /* (RWorkspace: need N) */
                         i__2 = *lwork - iwork + 1;
-                        zgebrd_(n, n, &work[iu], &ldwrku, &s[1], &rwork[ie], &work[itauq],
-                                &work[itaup], &work[iwork], &i__2, &ierr);
-                        zlacpy_("U", n, n, &work[iu], &ldwrku, &work[ir], &ldwrkr);
+                        aocl_lapack_zgebrd(n, n, &work[iu], &ldwrku, &s[1], &rwork[ie],
+                                           &work[itauq], &work[itaup], &work[iwork], &i__2, &ierr);
+                        aocl_lapack_zlacpy("U", n, n, &work[iu], &ldwrku, &work[ir], &ldwrkr);
                         /* Generate left bidiagonalizing vectors in WORK(IU) */
                         /* (CWorkspace: need 2*N*N+3*N, prefer 2*N*N+2*N+N*NB) */
                         /* (RWorkspace: 0) */
                         i__2 = *lwork - iwork + 1;
-                        zungbr_("Q", n, n, n, &work[iu], &ldwrku, &work[itauq], &work[iwork], &i__2,
-                                &ierr);
+                        aocl_lapack_zungbr("Q", n, n, n, &work[iu], &ldwrku, &work[itauq],
+                                           &work[iwork], &i__2, &ierr);
                         /* Generate right bidiagonalizing vectors in WORK(IR) */
                         /* (CWorkspace: need 2*N*N+3*N-1, */
                         /* prefer 2*N*N+2*N+(N-1)*NB) */
                         /* (RWorkspace: 0) */
                         i__2 = *lwork - iwork + 1;
-                        zungbr_("P", n, n, n, &work[ir], &ldwrkr, &work[itaup], &work[iwork], &i__2,
-                                &ierr);
+                        aocl_lapack_zungbr("P", n, n, n, &work[ir], &ldwrkr, &work[itaup],
+                                           &work[iwork], &i__2, &ierr);
                         irwork = ie + *n;
                         /* Perform bidiagonal QR iteration, computing left */
                         /* singular vectors of R in WORK(IU) and computing */
                         /* right singular vectors of R in WORK(IR) */
                         /* (CWorkspace: need 2*N*N) */
                         /* (RWorkspace: need BDSPAC) */
-                        zbdsqr_("U", n, n, n, &c__0, &s[1], &rwork[ie], &work[ir], &ldwrkr,
-                                &work[iu], &ldwrku, cdum, &c__1, &rwork[irwork], info);
+                        aocl_lapack_zbdsqr("U", n, n, n, &c__0, &s[1], &rwork[ie], &work[ir],
+                                           &ldwrkr, &work[iu], &ldwrku, cdum, &c__1, &rwork[irwork],
+                                           info);
                         /* Multiply Q in U by left singular vectors of R in */
                         /* WORK(IU), storing result in A */
                         /* (CWorkspace: need N*N) */
                         /* (RWorkspace: 0) */
-                        zgemm_("N", "N", m, n, n, &c_b2, &u[u_offset], ldu, &work[iu], &ldwrku,
-                               &c_b1, &a[a_offset], lda);
+                        aocl_blas_zgemm("N", "N", m, n, n, &c_b2, &u[u_offset], ldu, &work[iu],
+                                        &ldwrku, &c_b1, &a[a_offset], lda);
                         /* Copy left singular vectors of A from A to U */
-                        zlacpy_("F", m, n, &a[a_offset], lda, &u[u_offset], ldu);
+                        aocl_lapack_zlacpy("F", m, n, &a[a_offset], lda, &u[u_offset], ldu);
                         /* Copy right singular vectors of R from WORK(IR) to A */
-                        zlacpy_("F", n, n, &work[ir], &ldwrkr, &a[a_offset], lda);
+                        aocl_lapack_zlacpy("F", n, n, &work[ir], &ldwrkr, &a[a_offset], lda);
                     }
                     else
                     {
@@ -1934,14 +1944,15 @@ void zgesvd_(char *jobu, char *jobvt, integer *m, integer *n, doublecomplex *a, 
                         /* (CWorkspace: need 2*N, prefer N+N*NB) */
                         /* (RWorkspace: 0) */
                         i__2 = *lwork - iwork + 1;
-                        zgeqrf_(m, n, &a[a_offset], lda, &work[itau], &work[iwork], &i__2, &ierr);
-                        zlacpy_("L", m, n, &a[a_offset], lda, &u[u_offset], ldu);
+                        aocl_lapack_zgeqrf(m, n, &a[a_offset], lda, &work[itau], &work[iwork],
+                                           &i__2, &ierr);
+                        aocl_lapack_zlacpy("L", m, n, &a[a_offset], lda, &u[u_offset], ldu);
                         /* Generate Q in U */
                         /* (CWorkspace: need N+M, prefer N+M*NB) */
                         /* (RWorkspace: 0) */
                         i__2 = *lwork - iwork + 1;
-                        zungqr_(m, m, n, &u[u_offset], ldu, &work[itau], &work[iwork], &i__2,
-                                &ierr);
+                        aocl_lapack_zungqr(m, m, n, &u[u_offset], ldu, &work[itau], &work[iwork],
+                                           &i__2, &ierr);
                         ie = 1;
                         itauq = itau;
                         itaup = itauq + *n;
@@ -1951,35 +1962,37 @@ void zgesvd_(char *jobu, char *jobvt, integer *m, integer *n, doublecomplex *a, 
                         {
                             i__2 = *n - 1;
                             i__3 = *n - 1;
-                            zlaset_("L", &i__2, &i__3, &c_b1, &c_b1, &a[a_dim1 + 2], lda);
+                            aocl_lapack_zlaset("L", &i__2, &i__3, &c_b1, &c_b1, &a[a_dim1 + 2],
+                                               lda);
                         }
                         /* Bidiagonalize R in A */
                         /* (CWorkspace: need 3*N, prefer 2*N+2*N*NB) */
                         /* (RWorkspace: need N) */
                         i__2 = *lwork - iwork + 1;
-                        zgebrd_(n, n, &a[a_offset], lda, &s[1], &rwork[ie], &work[itauq],
-                                &work[itaup], &work[iwork], &i__2, &ierr);
+                        aocl_lapack_zgebrd(n, n, &a[a_offset], lda, &s[1], &rwork[ie], &work[itauq],
+                                           &work[itaup], &work[iwork], &i__2, &ierr);
                         /* Multiply Q in U by left bidiagonalizing vectors */
                         /* in A */
                         /* (CWorkspace: need 2*N+M, prefer 2*N+M*NB) */
                         /* (RWorkspace: 0) */
                         i__2 = *lwork - iwork + 1;
-                        zunmbr_("Q", "R", "N", m, n, n, &a[a_offset], lda, &work[itauq],
-                                &u[u_offset], ldu, &work[iwork], &i__2, &ierr);
+                        aocl_lapack_zunmbr("Q", "R", "N", m, n, n, &a[a_offset], lda, &work[itauq],
+                                           &u[u_offset], ldu, &work[iwork], &i__2, &ierr);
                         /* Generate right bidiagonalizing vectors in A */
                         /* (CWorkspace: need 3*N-1, prefer 2*N+(N-1)*NB) */
                         /* (RWorkspace: 0) */
                         i__2 = *lwork - iwork + 1;
-                        zungbr_("P", n, n, n, &a[a_offset], lda, &work[itaup], &work[iwork], &i__2,
-                                &ierr);
+                        aocl_lapack_zungbr("P", n, n, n, &a[a_offset], lda, &work[itaup],
+                                           &work[iwork], &i__2, &ierr);
                         irwork = ie + *n;
                         /* Perform bidiagonal QR iteration, computing left */
                         /* singular vectors of A in U and computing right */
                         /* singular vectors of A in A */
                         /* (CWorkspace: 0) */
                         /* (RWorkspace: need BDSPAC) */
-                        zbdsqr_("U", n, n, m, &c__0, &s[1], &rwork[ie], &a[a_offset], lda,
-                                &u[u_offset], ldu, cdum, &c__1, &rwork[irwork], info);
+                        aocl_lapack_zbdsqr("U", n, n, m, &c__0, &s[1], &rwork[ie], &a[a_offset],
+                                           lda, &u[u_offset], ldu, cdum, &c__1, &rwork[irwork],
+                                           info);
                     }
                 }
                 else if(wntvas)
@@ -2011,19 +2024,20 @@ void zgesvd_(char *jobu, char *jobvt, integer *m, integer *n, doublecomplex *a, 
                         /* (CWorkspace: need N*N+2*N, prefer N*N+N+N*NB) */
                         /* (RWorkspace: 0) */
                         i__2 = *lwork - iwork + 1;
-                        zgeqrf_(m, n, &a[a_offset], lda, &work[itau], &work[iwork], &i__2, &ierr);
-                        zlacpy_("L", m, n, &a[a_offset], lda, &u[u_offset], ldu);
+                        aocl_lapack_zgeqrf(m, n, &a[a_offset], lda, &work[itau], &work[iwork],
+                                           &i__2, &ierr);
+                        aocl_lapack_zlacpy("L", m, n, &a[a_offset], lda, &u[u_offset], ldu);
                         /* Generate Q in U */
                         /* (CWorkspace: need N*N+N+M, prefer N*N+N+M*NB) */
                         /* (RWorkspace: 0) */
                         i__2 = *lwork - iwork + 1;
-                        zungqr_(m, m, n, &u[u_offset], ldu, &work[itau], &work[iwork], &i__2,
-                                &ierr);
+                        aocl_lapack_zungqr(m, m, n, &u[u_offset], ldu, &work[itau], &work[iwork],
+                                           &i__2, &ierr);
                         /* Copy R to WORK(IU), zeroing out below it */
-                        zlacpy_("U", n, n, &a[a_offset], lda, &work[iu], &ldwrku);
+                        aocl_lapack_zlacpy("U", n, n, &a[a_offset], lda, &work[iu], &ldwrku);
                         i__2 = *n - 1;
                         i__3 = *n - 1;
-                        zlaset_("L", &i__2, &i__3, &c_b1, &c_b1, &work[iu + 1], &ldwrku);
+                        aocl_lapack_zlaset("L", &i__2, &i__3, &c_b1, &c_b1, &work[iu + 1], &ldwrku);
                         ie = 1;
                         itauq = itau;
                         itaup = itauq + *n;
@@ -2032,38 +2046,39 @@ void zgesvd_(char *jobu, char *jobvt, integer *m, integer *n, doublecomplex *a, 
                         /* (CWorkspace: need N*N+3*N, prefer N*N+2*N+2*N*NB) */
                         /* (RWorkspace: need N) */
                         i__2 = *lwork - iwork + 1;
-                        zgebrd_(n, n, &work[iu], &ldwrku, &s[1], &rwork[ie], &work[itauq],
-                                &work[itaup], &work[iwork], &i__2, &ierr);
-                        zlacpy_("U", n, n, &work[iu], &ldwrku, &vt[vt_offset], ldvt);
+                        aocl_lapack_zgebrd(n, n, &work[iu], &ldwrku, &s[1], &rwork[ie],
+                                           &work[itauq], &work[itaup], &work[iwork], &i__2, &ierr);
+                        aocl_lapack_zlacpy("U", n, n, &work[iu], &ldwrku, &vt[vt_offset], ldvt);
                         /* Generate left bidiagonalizing vectors in WORK(IU) */
                         /* (CWorkspace: need N*N+3*N, prefer N*N+2*N+N*NB) */
                         /* (RWorkspace: 0) */
                         i__2 = *lwork - iwork + 1;
-                        zungbr_("Q", n, n, n, &work[iu], &ldwrku, &work[itauq], &work[iwork], &i__2,
-                                &ierr);
+                        aocl_lapack_zungbr("Q", n, n, n, &work[iu], &ldwrku, &work[itauq],
+                                           &work[iwork], &i__2, &ierr);
                         /* Generate right bidiagonalizing vectors in VT */
                         /* (CWorkspace: need N*N+3*N-1, */
                         /* prefer N*N+2*N+(N-1)*NB) */
                         /* (RWorkspace: need 0) */
                         i__2 = *lwork - iwork + 1;
-                        zungbr_("P", n, n, n, &vt[vt_offset], ldvt, &work[itaup], &work[iwork],
-                                &i__2, &ierr);
+                        aocl_lapack_zungbr("P", n, n, n, &vt[vt_offset], ldvt, &work[itaup],
+                                           &work[iwork], &i__2, &ierr);
                         irwork = ie + *n;
                         /* Perform bidiagonal QR iteration, computing left */
                         /* singular vectors of R in WORK(IU) and computing */
                         /* right singular vectors of R in VT */
                         /* (CWorkspace: need N*N) */
                         /* (RWorkspace: need BDSPAC) */
-                        zbdsqr_("U", n, n, n, &c__0, &s[1], &rwork[ie], &vt[vt_offset], ldvt,
-                                &work[iu], &ldwrku, cdum, &c__1, &rwork[irwork], info);
+                        aocl_lapack_zbdsqr("U", n, n, n, &c__0, &s[1], &rwork[ie], &vt[vt_offset],
+                                           ldvt, &work[iu], &ldwrku, cdum, &c__1, &rwork[irwork],
+                                           info);
                         /* Multiply Q in U by left singular vectors of R in */
                         /* WORK(IU), storing result in A */
                         /* (CWorkspace: need N*N) */
                         /* (RWorkspace: 0) */
-                        zgemm_("N", "N", m, n, n, &c_b2, &u[u_offset], ldu, &work[iu], &ldwrku,
-                               &c_b1, &a[a_offset], lda);
+                        aocl_blas_zgemm("N", "N", m, n, n, &c_b2, &u[u_offset], ldu, &work[iu],
+                                        &ldwrku, &c_b1, &a[a_offset], lda);
                         /* Copy left singular vectors of A from A to U */
-                        zlacpy_("F", m, n, &a[a_offset], lda, &u[u_offset], ldu);
+                        aocl_lapack_zlacpy("F", m, n, &a[a_offset], lda, &u[u_offset], ldu);
                     }
                     else
                     {
@@ -2074,21 +2089,23 @@ void zgesvd_(char *jobu, char *jobvt, integer *m, integer *n, doublecomplex *a, 
                         /* (CWorkspace: need 2*N, prefer N+N*NB) */
                         /* (RWorkspace: 0) */
                         i__2 = *lwork - iwork + 1;
-                        zgeqrf_(m, n, &a[a_offset], lda, &work[itau], &work[iwork], &i__2, &ierr);
-                        zlacpy_("L", m, n, &a[a_offset], lda, &u[u_offset], ldu);
+                        aocl_lapack_zgeqrf(m, n, &a[a_offset], lda, &work[itau], &work[iwork],
+                                           &i__2, &ierr);
+                        aocl_lapack_zlacpy("L", m, n, &a[a_offset], lda, &u[u_offset], ldu);
                         /* Generate Q in U */
                         /* (CWorkspace: need N+M, prefer N+M*NB) */
                         /* (RWorkspace: 0) */
                         i__2 = *lwork - iwork + 1;
-                        zungqr_(m, m, n, &u[u_offset], ldu, &work[itau], &work[iwork], &i__2,
-                                &ierr);
+                        aocl_lapack_zungqr(m, m, n, &u[u_offset], ldu, &work[itau], &work[iwork],
+                                           &i__2, &ierr);
                         /* Copy R from A to VT, zeroing out below it */
-                        zlacpy_("U", n, n, &a[a_offset], lda, &vt[vt_offset], ldvt);
+                        aocl_lapack_zlacpy("U", n, n, &a[a_offset], lda, &vt[vt_offset], ldvt);
                         if(*n > 1)
                         {
                             i__2 = *n - 1;
                             i__3 = *n - 1;
-                            zlaset_("L", &i__2, &i__3, &c_b1, &c_b1, &vt[vt_dim1 + 2], ldvt);
+                            aocl_lapack_zlaset("L", &i__2, &i__3, &c_b1, &c_b1, &vt[vt_dim1 + 2],
+                                               ldvt);
                         }
                         ie = 1;
                         itauq = itau;
@@ -2098,29 +2115,31 @@ void zgesvd_(char *jobu, char *jobvt, integer *m, integer *n, doublecomplex *a, 
                         /* (CWorkspace: need 3*N, prefer 2*N+2*N*NB) */
                         /* (RWorkspace: need N) */
                         i__2 = *lwork - iwork + 1;
-                        zgebrd_(n, n, &vt[vt_offset], ldvt, &s[1], &rwork[ie], &work[itauq],
-                                &work[itaup], &work[iwork], &i__2, &ierr);
+                        aocl_lapack_zgebrd(n, n, &vt[vt_offset], ldvt, &s[1], &rwork[ie],
+                                           &work[itauq], &work[itaup], &work[iwork], &i__2, &ierr);
                         /* Multiply Q in U by left bidiagonalizing vectors */
                         /* in VT */
                         /* (CWorkspace: need 2*N+M, prefer 2*N+M*NB) */
                         /* (RWorkspace: 0) */
                         i__2 = *lwork - iwork + 1;
-                        zunmbr_("Q", "R", "N", m, n, n, &vt[vt_offset], ldvt, &work[itauq],
-                                &u[u_offset], ldu, &work[iwork], &i__2, &ierr);
+                        aocl_lapack_zunmbr("Q", "R", "N", m, n, n, &vt[vt_offset], ldvt,
+                                           &work[itauq], &u[u_offset], ldu, &work[iwork], &i__2,
+                                           &ierr);
                         /* Generate right bidiagonalizing vectors in VT */
                         /* (CWorkspace: need 3*N-1, prefer 2*N+(N-1)*NB) */
                         /* (RWorkspace: 0) */
                         i__2 = *lwork - iwork + 1;
-                        zungbr_("P", n, n, n, &vt[vt_offset], ldvt, &work[itaup], &work[iwork],
-                                &i__2, &ierr);
+                        aocl_lapack_zungbr("P", n, n, n, &vt[vt_offset], ldvt, &work[itaup],
+                                           &work[iwork], &i__2, &ierr);
                         irwork = ie + *n;
                         /* Perform bidiagonal QR iteration, computing left */
                         /* singular vectors of A in U and computing right */
                         /* singular vectors of A in VT */
                         /* (CWorkspace: 0) */
                         /* (RWorkspace: need BDSPAC) */
-                        zbdsqr_("U", n, n, m, &c__0, &s[1], &rwork[ie], &vt[vt_offset], ldvt,
-                                &u[u_offset], ldu, cdum, &c__1, &rwork[irwork], info);
+                        aocl_lapack_zbdsqr("U", n, n, m, &c__0, &s[1], &rwork[ie], &vt[vt_offset],
+                                           ldvt, &u[u_offset], ldu, cdum, &c__1, &rwork[irwork],
+                                           info);
                     }
                 }
             }
@@ -2138,15 +2157,15 @@ void zgesvd_(char *jobu, char *jobvt, integer *m, integer *n, doublecomplex *a, 
             /* (CWorkspace: need 2*N+M, prefer 2*N+(M+N)*NB) */
             /* (RWorkspace: need N) */
             i__2 = *lwork - iwork + 1;
-            zgebrd_(m, n, &a[a_offset], lda, &s[1], &rwork[ie], &work[itauq], &work[itaup],
-                    &work[iwork], &i__2, &ierr);
+            aocl_lapack_zgebrd(m, n, &a[a_offset], lda, &s[1], &rwork[ie], &work[itauq],
+                               &work[itaup], &work[iwork], &i__2, &ierr);
             if(wntuas)
             {
                 /* If left singular vectors desired in U, copy result to U */
                 /* and generate left bidiagonalizing vectors in U */
                 /* (CWorkspace: need 2*N+NCU, prefer 2*N+NCU*NB) */
                 /* (RWorkspace: 0) */
-                zlacpy_("L", m, n, &a[a_offset], lda, &u[u_offset], ldu);
+                aocl_lapack_zlacpy("L", m, n, &a[a_offset], lda, &u[u_offset], ldu);
                 if(wntus)
                 {
                     ncu = *n;
@@ -2156,8 +2175,8 @@ void zgesvd_(char *jobu, char *jobvt, integer *m, integer *n, doublecomplex *a, 
                     ncu = *m;
                 }
                 i__2 = *lwork - iwork + 1;
-                zungbr_("Q", m, &ncu, n, &u[u_offset], ldu, &work[itauq], &work[iwork], &i__2,
-                        &ierr);
+                aocl_lapack_zungbr("Q", m, &ncu, n, &u[u_offset], ldu, &work[itauq], &work[iwork],
+                                   &i__2, &ierr);
             }
             if(wntvas)
             {
@@ -2165,10 +2184,10 @@ void zgesvd_(char *jobu, char *jobvt, integer *m, integer *n, doublecomplex *a, 
                 /* VT and generate right bidiagonalizing vectors in VT */
                 /* (CWorkspace: need 3*N-1, prefer 2*N+(N-1)*NB) */
                 /* (RWorkspace: 0) */
-                zlacpy_("U", n, n, &a[a_offset], lda, &vt[vt_offset], ldvt);
+                aocl_lapack_zlacpy("U", n, n, &a[a_offset], lda, &vt[vt_offset], ldvt);
                 i__2 = *lwork - iwork + 1;
-                zungbr_("P", n, n, n, &vt[vt_offset], ldvt, &work[itaup], &work[iwork], &i__2,
-                        &ierr);
+                aocl_lapack_zungbr("P", n, n, n, &vt[vt_offset], ldvt, &work[itaup], &work[iwork],
+                                   &i__2, &ierr);
             }
             if(wntuo)
             {
@@ -2177,7 +2196,8 @@ void zgesvd_(char *jobu, char *jobvt, integer *m, integer *n, doublecomplex *a, 
                 /* (CWorkspace: need 3*N, prefer 2*N+N*NB) */
                 /* (RWorkspace: 0) */
                 i__2 = *lwork - iwork + 1;
-                zungbr_("Q", m, n, n, &a[a_offset], lda, &work[itauq], &work[iwork], &i__2, &ierr);
+                aocl_lapack_zungbr("Q", m, n, n, &a[a_offset], lda, &work[itauq], &work[iwork],
+                                   &i__2, &ierr);
             }
             if(wntvo)
             {
@@ -2186,7 +2206,8 @@ void zgesvd_(char *jobu, char *jobvt, integer *m, integer *n, doublecomplex *a, 
                 /* (CWorkspace: need 3*N-1, prefer 2*N+(N-1)*NB) */
                 /* (RWorkspace: 0) */
                 i__2 = *lwork - iwork + 1;
-                zungbr_("P", n, n, n, &a[a_offset], lda, &work[itaup], &work[iwork], &i__2, &ierr);
+                aocl_lapack_zungbr("P", n, n, n, &a[a_offset], lda, &work[itaup], &work[iwork],
+                                   &i__2, &ierr);
             }
             irwork = ie + *n;
             if(wntuas || wntuo)
@@ -2212,8 +2233,8 @@ void zgesvd_(char *jobu, char *jobvt, integer *m, integer *n, doublecomplex *a, 
                 /* vectors in VT */
                 /* (CWorkspace: 0) */
                 /* (RWorkspace: need BDSPAC) */
-                zbdsqr_("U", n, &ncvt, &nru, &c__0, &s[1], &rwork[ie], &vt[vt_offset], ldvt,
-                        &u[u_offset], ldu, cdum, &c__1, &rwork[irwork], info);
+                aocl_lapack_zbdsqr("U", n, &ncvt, &nru, &c__0, &s[1], &rwork[ie], &vt[vt_offset],
+                                   ldvt, &u[u_offset], ldu, cdum, &c__1, &rwork[irwork], info);
             }
             else if(!wntuo && wntvo)
             {
@@ -2222,8 +2243,8 @@ void zgesvd_(char *jobu, char *jobvt, integer *m, integer *n, doublecomplex *a, 
                 /* vectors in A */
                 /* (CWorkspace: 0) */
                 /* (RWorkspace: need BDSPAC) */
-                zbdsqr_("U", n, &ncvt, &nru, &c__0, &s[1], &rwork[ie], &a[a_offset], lda,
-                        &u[u_offset], ldu, cdum, &c__1, &rwork[irwork], info);
+                aocl_lapack_zbdsqr("U", n, &ncvt, &nru, &c__0, &s[1], &rwork[ie], &a[a_offset], lda,
+                                   &u[u_offset], ldu, cdum, &c__1, &rwork[irwork], info);
             }
             else
             {
@@ -2232,8 +2253,8 @@ void zgesvd_(char *jobu, char *jobvt, integer *m, integer *n, doublecomplex *a, 
                 /* vectors in VT */
                 /* (CWorkspace: 0) */
                 /* (RWorkspace: need BDSPAC) */
-                zbdsqr_("U", n, &ncvt, &nru, &c__0, &s[1], &rwork[ie], &vt[vt_offset], ldvt,
-                        &a[a_offset], lda, cdum, &c__1, &rwork[irwork], info);
+                aocl_lapack_zbdsqr("U", n, &ncvt, &nru, &c__0, &s[1], &rwork[ie], &vt[vt_offset],
+                                   ldvt, &a[a_offset], lda, cdum, &c__1, &rwork[irwork], info);
             }
         }
     }
@@ -2254,11 +2275,12 @@ void zgesvd_(char *jobu, char *jobvt, integer *m, integer *n, doublecomplex *a, 
                 /* (CWorkspace: need 2*M, prefer M+M*NB) */
                 /* (RWorkspace: 0) */
                 i__2 = *lwork - iwork + 1;
-                zgelqf_(m, n, &a[a_offset], lda, &work[itau], &work[iwork], &i__2, &ierr);
+                aocl_lapack_zgelqf(m, n, &a[a_offset], lda, &work[itau], &work[iwork], &i__2,
+                                   &ierr);
                 /* Zero out above L */
                 i__2 = *m - 1;
                 i__3 = *m - 1;
-                zlaset_("U", &i__2, &i__3, &c_b1, &c_b1, &a[(a_dim1 << 1) + 1], lda);
+                aocl_lapack_zlaset("U", &i__2, &i__3, &c_b1, &c_b1, &a[(a_dim1 << 1) + 1], lda);
                 ie = 1;
                 itauq = 1;
                 itaup = itauq + *m;
@@ -2267,16 +2289,16 @@ void zgesvd_(char *jobu, char *jobvt, integer *m, integer *n, doublecomplex *a, 
                 /* (CWorkspace: need 3*M, prefer 2*M+2*M*NB) */
                 /* (RWorkspace: need M) */
                 i__2 = *lwork - iwork + 1;
-                zgebrd_(m, m, &a[a_offset], lda, &s[1], &rwork[ie], &work[itauq], &work[itaup],
-                        &work[iwork], &i__2, &ierr);
+                aocl_lapack_zgebrd(m, m, &a[a_offset], lda, &s[1], &rwork[ie], &work[itauq],
+                                   &work[itaup], &work[iwork], &i__2, &ierr);
                 if(wntuo || wntuas)
                 {
                     /* If left singular vectors desired, generate Q */
                     /* (CWorkspace: need 3*M, prefer 2*M+M*NB) */
                     /* (RWorkspace: 0) */
                     i__2 = *lwork - iwork + 1;
-                    zungbr_("Q", m, m, m, &a[a_offset], lda, &work[itauq], &work[iwork], &i__2,
-                            &ierr);
+                    aocl_lapack_zungbr("Q", m, m, m, &a[a_offset], lda, &work[itauq], &work[iwork],
+                                       &i__2, &ierr);
                 }
                 irwork = ie + *m;
                 nru = 0;
@@ -2288,12 +2310,12 @@ void zgesvd_(char *jobu, char *jobvt, integer *m, integer *n, doublecomplex *a, 
                 /* vectors of A in A if desired */
                 /* (CWorkspace: 0) */
                 /* (RWorkspace: need BDSPAC) */
-                zbdsqr_("U", m, &c__0, &nru, &c__0, &s[1], &rwork[ie], cdum, &c__1, &a[a_offset],
-                        lda, cdum, &c__1, &rwork[irwork], info);
+                aocl_lapack_zbdsqr("U", m, &c__0, &nru, &c__0, &s[1], &rwork[ie], cdum, &c__1,
+                                   &a[a_offset], lda, cdum, &c__1, &rwork[irwork], info);
                 /* If left singular vectors desired in U, copy them there */
                 if(wntuas)
                 {
-                    zlacpy_("F", m, m, &a[a_offset], lda, &u[u_offset], ldu);
+                    aocl_lapack_zlacpy("F", m, m, &a[a_offset], lda, &u[u_offset], ldu);
                 }
             }
             else if(wntvo && wntun)
@@ -2341,17 +2363,20 @@ void zgesvd_(char *jobu, char *jobvt, integer *m, integer *n, doublecomplex *a, 
                     /* (CWorkspace: need M*M+2*M, prefer M*M+M+M*NB) */
                     /* (RWorkspace: 0) */
                     i__2 = *lwork - iwork + 1;
-                    zgelqf_(m, n, &a[a_offset], lda, &work[itau], &work[iwork], &i__2, &ierr);
+                    aocl_lapack_zgelqf(m, n, &a[a_offset], lda, &work[itau], &work[iwork], &i__2,
+                                       &ierr);
                     /* Copy L to WORK(IR) and zero out above it */
-                    zlacpy_("L", m, m, &a[a_offset], lda, &work[ir], &ldwrkr);
+                    aocl_lapack_zlacpy("L", m, m, &a[a_offset], lda, &work[ir], &ldwrkr);
                     i__2 = *m - 1;
                     i__3 = *m - 1;
-                    zlaset_("U", &i__2, &i__3, &c_b1, &c_b1, &work[ir + ldwrkr], &ldwrkr);
+                    aocl_lapack_zlaset("U", &i__2, &i__3, &c_b1, &c_b1, &work[ir + ldwrkr],
+                                       &ldwrkr);
                     /* Generate Q in A */
                     /* (CWorkspace: need M*M+2*M, prefer M*M+M+M*NB) */
                     /* (RWorkspace: 0) */
                     i__2 = *lwork - iwork + 1;
-                    zunglq_(m, n, m, &a[a_offset], lda, &work[itau], &work[iwork], &i__2, &ierr);
+                    aocl_lapack_zunglq(m, n, m, &a[a_offset], lda, &work[itau], &work[iwork], &i__2,
+                                       &ierr);
                     ie = 1;
                     itauq = itau;
                     itaup = itauq + *m;
@@ -2360,21 +2385,21 @@ void zgesvd_(char *jobu, char *jobvt, integer *m, integer *n, doublecomplex *a, 
                     /* (CWorkspace: need M*M+3*M, prefer M*M+2*M+2*M*NB) */
                     /* (RWorkspace: need M) */
                     i__2 = *lwork - iwork + 1;
-                    zgebrd_(m, m, &work[ir], &ldwrkr, &s[1], &rwork[ie], &work[itauq], &work[itaup],
-                            &work[iwork], &i__2, &ierr);
+                    aocl_lapack_zgebrd(m, m, &work[ir], &ldwrkr, &s[1], &rwork[ie], &work[itauq],
+                                       &work[itaup], &work[iwork], &i__2, &ierr);
                     /* Generate right vectors bidiagonalizing L */
                     /* (CWorkspace: need M*M+3*M-1, prefer M*M+2*M+(M-1)*NB) */
                     /* (RWorkspace: 0) */
                     i__2 = *lwork - iwork + 1;
-                    zungbr_("P", m, m, m, &work[ir], &ldwrkr, &work[itaup], &work[iwork], &i__2,
-                            &ierr);
+                    aocl_lapack_zungbr("P", m, m, m, &work[ir], &ldwrkr, &work[itaup], &work[iwork],
+                                       &i__2, &ierr);
                     irwork = ie + *m;
                     /* Perform bidiagonal QR iteration, computing right */
                     /* singular vectors of L in WORK(IR) */
                     /* (CWorkspace: need M*M) */
                     /* (RWorkspace: need BDSPAC) */
-                    zbdsqr_("U", m, m, &c__0, &c__0, &s[1], &rwork[ie], &work[ir], &ldwrkr, cdum,
-                            &c__1, cdum, &c__1, &rwork[irwork], info);
+                    aocl_lapack_zbdsqr("U", m, m, &c__0, &c__0, &s[1], &rwork[ie], &work[ir],
+                                       &ldwrkr, cdum, &c__1, cdum, &c__1, &rwork[irwork], info);
                     iu = itauq;
                     /* Multiply right singular vectors of L in WORK(IR) by Q */
                     /* in A, storing result in WORK(IU) and copying to A */
@@ -2387,9 +2412,10 @@ void zgesvd_(char *jobu, char *jobvt, integer *m, integer *n, doublecomplex *a, 
                         /* Computing MIN */
                         i__4 = *n - i__ + 1;
                         blk = fla_min(i__4, chunk);
-                        zgemm_("N", "N", m, &blk, m, &c_b2, &work[ir], &ldwrkr,
-                               &a[i__ * a_dim1 + 1], lda, &c_b1, &work[iu], &ldwrku);
-                        zlacpy_("F", m, &blk, &work[iu], &ldwrku, &a[i__ * a_dim1 + 1], lda);
+                        aocl_blas_zgemm("N", "N", m, &blk, m, &c_b2, &work[ir], &ldwrkr,
+                                        &a[i__ * a_dim1 + 1], lda, &c_b1, &work[iu], &ldwrku);
+                        aocl_lapack_zlacpy("F", m, &blk, &work[iu], &ldwrku, &a[i__ * a_dim1 + 1],
+                                           lda);
                         /* L30: */
                     }
                 }
@@ -2404,21 +2430,21 @@ void zgesvd_(char *jobu, char *jobvt, integer *m, integer *n, doublecomplex *a, 
                     /* (CWorkspace: need 2*M+N, prefer 2*M+(M+N)*NB) */
                     /* (RWorkspace: need M) */
                     i__3 = *lwork - iwork + 1;
-                    zgebrd_(m, n, &a[a_offset], lda, &s[1], &rwork[ie], &work[itauq], &work[itaup],
-                            &work[iwork], &i__3, &ierr);
+                    aocl_lapack_zgebrd(m, n, &a[a_offset], lda, &s[1], &rwork[ie], &work[itauq],
+                                       &work[itaup], &work[iwork], &i__3, &ierr);
                     /* Generate right vectors bidiagonalizing A */
                     /* (CWorkspace: need 3*M, prefer 2*M+M*NB) */
                     /* (RWorkspace: 0) */
                     i__3 = *lwork - iwork + 1;
-                    zungbr_("P", m, n, m, &a[a_offset], lda, &work[itaup], &work[iwork], &i__3,
-                            &ierr);
+                    aocl_lapack_zungbr("P", m, n, m, &a[a_offset], lda, &work[itaup], &work[iwork],
+                                       &i__3, &ierr);
                     irwork = ie + *m;
                     /* Perform bidiagonal QR iteration, computing right */
                     /* singular vectors of A in A */
                     /* (CWorkspace: 0) */
                     /* (RWorkspace: need BDSPAC) */
-                    zbdsqr_("L", m, n, &c__0, &c__0, &s[1], &rwork[ie], &a[a_offset], lda, cdum,
-                            &c__1, cdum, &c__1, &rwork[irwork], info);
+                    aocl_lapack_zbdsqr("L", m, n, &c__0, &c__0, &s[1], &rwork[ie], &a[a_offset],
+                                       lda, cdum, &c__1, cdum, &c__1, &rwork[irwork], info);
                 }
             }
             else if(wntvo && wntuas)
@@ -2466,17 +2492,19 @@ void zgesvd_(char *jobu, char *jobvt, integer *m, integer *n, doublecomplex *a, 
                     /* (CWorkspace: need M*M+2*M, prefer M*M+M+M*NB) */
                     /* (RWorkspace: 0) */
                     i__3 = *lwork - iwork + 1;
-                    zgelqf_(m, n, &a[a_offset], lda, &work[itau], &work[iwork], &i__3, &ierr);
+                    aocl_lapack_zgelqf(m, n, &a[a_offset], lda, &work[itau], &work[iwork], &i__3,
+                                       &ierr);
                     /* Copy L to U, zeroing about above it */
-                    zlacpy_("L", m, m, &a[a_offset], lda, &u[u_offset], ldu);
+                    aocl_lapack_zlacpy("L", m, m, &a[a_offset], lda, &u[u_offset], ldu);
                     i__3 = *m - 1;
                     i__2 = *m - 1;
-                    zlaset_("U", &i__3, &i__2, &c_b1, &c_b1, &u[(u_dim1 << 1) + 1], ldu);
+                    aocl_lapack_zlaset("U", &i__3, &i__2, &c_b1, &c_b1, &u[(u_dim1 << 1) + 1], ldu);
                     /* Generate Q in A */
                     /* (CWorkspace: need M*M+2*M, prefer M*M+M+M*NB) */
                     /* (RWorkspace: 0) */
                     i__3 = *lwork - iwork + 1;
-                    zunglq_(m, n, m, &a[a_offset], lda, &work[itau], &work[iwork], &i__3, &ierr);
+                    aocl_lapack_zunglq(m, n, m, &a[a_offset], lda, &work[itau], &work[iwork], &i__3,
+                                       &ierr);
                     ie = 1;
                     itauq = itau;
                     itaup = itauq + *m;
@@ -2485,29 +2513,29 @@ void zgesvd_(char *jobu, char *jobvt, integer *m, integer *n, doublecomplex *a, 
                     /* (CWorkspace: need M*M+3*M, prefer M*M+2*M+2*M*NB) */
                     /* (RWorkspace: need M) */
                     i__3 = *lwork - iwork + 1;
-                    zgebrd_(m, m, &u[u_offset], ldu, &s[1], &rwork[ie], &work[itauq], &work[itaup],
-                            &work[iwork], &i__3, &ierr);
-                    zlacpy_("U", m, m, &u[u_offset], ldu, &work[ir], &ldwrkr);
+                    aocl_lapack_zgebrd(m, m, &u[u_offset], ldu, &s[1], &rwork[ie], &work[itauq],
+                                       &work[itaup], &work[iwork], &i__3, &ierr);
+                    aocl_lapack_zlacpy("U", m, m, &u[u_offset], ldu, &work[ir], &ldwrkr);
                     /* Generate right vectors bidiagonalizing L in WORK(IR) */
                     /* (CWorkspace: need M*M+3*M-1, prefer M*M+2*M+(M-1)*NB) */
                     /* (RWorkspace: 0) */
                     i__3 = *lwork - iwork + 1;
-                    zungbr_("P", m, m, m, &work[ir], &ldwrkr, &work[itaup], &work[iwork], &i__3,
-                            &ierr);
+                    aocl_lapack_zungbr("P", m, m, m, &work[ir], &ldwrkr, &work[itaup], &work[iwork],
+                                       &i__3, &ierr);
                     /* Generate left vectors bidiagonalizing L in U */
                     /* (CWorkspace: need M*M+3*M, prefer M*M+2*M+M*NB) */
                     /* (RWorkspace: 0) */
                     i__3 = *lwork - iwork + 1;
-                    zungbr_("Q", m, m, m, &u[u_offset], ldu, &work[itauq], &work[iwork], &i__3,
-                            &ierr);
+                    aocl_lapack_zungbr("Q", m, m, m, &u[u_offset], ldu, &work[itauq], &work[iwork],
+                                       &i__3, &ierr);
                     irwork = ie + *m;
                     /* Perform bidiagonal QR iteration, computing left */
                     /* singular vectors of L in U, and computing right */
                     /* singular vectors of L in WORK(IR) */
                     /* (CWorkspace: need M*M) */
                     /* (RWorkspace: need BDSPAC) */
-                    zbdsqr_("U", m, m, m, &c__0, &s[1], &rwork[ie], &work[ir], &ldwrkr,
-                            &u[u_offset], ldu, cdum, &c__1, &rwork[irwork], info);
+                    aocl_lapack_zbdsqr("U", m, m, m, &c__0, &s[1], &rwork[ie], &work[ir], &ldwrkr,
+                                       &u[u_offset], ldu, cdum, &c__1, &rwork[irwork], info);
                     iu = itauq;
                     /* Multiply right singular vectors of L in WORK(IR) by Q */
                     /* in A, storing result in WORK(IU) and copying to A */
@@ -2520,9 +2548,10 @@ void zgesvd_(char *jobu, char *jobvt, integer *m, integer *n, doublecomplex *a, 
                         /* Computing MIN */
                         i__4 = *n - i__ + 1;
                         blk = fla_min(i__4, chunk);
-                        zgemm_("N", "N", m, &blk, m, &c_b2, &work[ir], &ldwrkr,
-                               &a[i__ * a_dim1 + 1], lda, &c_b1, &work[iu], &ldwrku);
-                        zlacpy_("F", m, &blk, &work[iu], &ldwrku, &a[i__ * a_dim1 + 1], lda);
+                        aocl_blas_zgemm("N", "N", m, &blk, m, &c_b2, &work[ir], &ldwrkr,
+                                        &a[i__ * a_dim1 + 1], lda, &c_b1, &work[iu], &ldwrku);
+                        aocl_lapack_zlacpy("F", m, &blk, &work[iu], &ldwrku, &a[i__ * a_dim1 + 1],
+                                           lda);
                         /* L40: */
                     }
                 }
@@ -2535,17 +2564,19 @@ void zgesvd_(char *jobu, char *jobvt, integer *m, integer *n, doublecomplex *a, 
                     /* (CWorkspace: need 2*M, prefer M+M*NB) */
                     /* (RWorkspace: 0) */
                     i__2 = *lwork - iwork + 1;
-                    zgelqf_(m, n, &a[a_offset], lda, &work[itau], &work[iwork], &i__2, &ierr);
+                    aocl_lapack_zgelqf(m, n, &a[a_offset], lda, &work[itau], &work[iwork], &i__2,
+                                       &ierr);
                     /* Copy L to U, zeroing out above it */
-                    zlacpy_("L", m, m, &a[a_offset], lda, &u[u_offset], ldu);
+                    aocl_lapack_zlacpy("L", m, m, &a[a_offset], lda, &u[u_offset], ldu);
                     i__2 = *m - 1;
                     i__3 = *m - 1;
-                    zlaset_("U", &i__2, &i__3, &c_b1, &c_b1, &u[(u_dim1 << 1) + 1], ldu);
+                    aocl_lapack_zlaset("U", &i__2, &i__3, &c_b1, &c_b1, &u[(u_dim1 << 1) + 1], ldu);
                     /* Generate Q in A */
                     /* (CWorkspace: need 2*M, prefer M+M*NB) */
                     /* (RWorkspace: 0) */
                     i__2 = *lwork - iwork + 1;
-                    zunglq_(m, n, m, &a[a_offset], lda, &work[itau], &work[iwork], &i__2, &ierr);
+                    aocl_lapack_zunglq(m, n, m, &a[a_offset], lda, &work[itau], &work[iwork], &i__2,
+                                       &ierr);
                     ie = 1;
                     itauq = itau;
                     itaup = itauq + *m;
@@ -2554,28 +2585,28 @@ void zgesvd_(char *jobu, char *jobvt, integer *m, integer *n, doublecomplex *a, 
                     /* (CWorkspace: need 3*M, prefer 2*M+2*M*NB) */
                     /* (RWorkspace: need M) */
                     i__2 = *lwork - iwork + 1;
-                    zgebrd_(m, m, &u[u_offset], ldu, &s[1], &rwork[ie], &work[itauq], &work[itaup],
-                            &work[iwork], &i__2, &ierr);
+                    aocl_lapack_zgebrd(m, m, &u[u_offset], ldu, &s[1], &rwork[ie], &work[itauq],
+                                       &work[itaup], &work[iwork], &i__2, &ierr);
                     /* Multiply right vectors bidiagonalizing L by Q in A */
                     /* (CWorkspace: need 2*M+N, prefer 2*M+N*NB) */
                     /* (RWorkspace: 0) */
                     i__2 = *lwork - iwork + 1;
-                    zunmbr_("P", "L", "C", m, n, m, &u[u_offset], ldu, &work[itaup], &a[a_offset],
-                            lda, &work[iwork], &i__2, &ierr);
+                    aocl_lapack_zunmbr("P", "L", "C", m, n, m, &u[u_offset], ldu, &work[itaup],
+                                       &a[a_offset], lda, &work[iwork], &i__2, &ierr);
                     /* Generate left vectors bidiagonalizing L in U */
                     /* (CWorkspace: need 3*M, prefer 2*M+M*NB) */
                     /* (RWorkspace: 0) */
                     i__2 = *lwork - iwork + 1;
-                    zungbr_("Q", m, m, m, &u[u_offset], ldu, &work[itauq], &work[iwork], &i__2,
-                            &ierr);
+                    aocl_lapack_zungbr("Q", m, m, m, &u[u_offset], ldu, &work[itauq], &work[iwork],
+                                       &i__2, &ierr);
                     irwork = ie + *m;
                     /* Perform bidiagonal QR iteration, computing left */
                     /* singular vectors of A in U and computing right */
                     /* singular vectors of A in A */
                     /* (CWorkspace: 0) */
                     /* (RWorkspace: need BDSPAC) */
-                    zbdsqr_("U", m, n, m, &c__0, &s[1], &rwork[ie], &a[a_offset], lda, &u[u_offset],
-                            ldu, cdum, &c__1, &rwork[irwork], info);
+                    aocl_lapack_zbdsqr("U", m, n, m, &c__0, &s[1], &rwork[ie], &a[a_offset], lda,
+                                       &u[u_offset], ldu, cdum, &c__1, &rwork[irwork], info);
                 }
             }
             else if(wntvs)
@@ -2605,18 +2636,20 @@ void zgesvd_(char *jobu, char *jobvt, integer *m, integer *n, doublecomplex *a, 
                         /* (CWorkspace: need M*M+2*M, prefer M*M+M+M*NB) */
                         /* (RWorkspace: 0) */
                         i__2 = *lwork - iwork + 1;
-                        zgelqf_(m, n, &a[a_offset], lda, &work[itau], &work[iwork], &i__2, &ierr);
+                        aocl_lapack_zgelqf(m, n, &a[a_offset], lda, &work[itau], &work[iwork],
+                                           &i__2, &ierr);
                         /* Copy L to WORK(IR), zeroing out above it */
-                        zlacpy_("L", m, m, &a[a_offset], lda, &work[ir], &ldwrkr);
+                        aocl_lapack_zlacpy("L", m, m, &a[a_offset], lda, &work[ir], &ldwrkr);
                         i__2 = *m - 1;
                         i__3 = *m - 1;
-                        zlaset_("U", &i__2, &i__3, &c_b1, &c_b1, &work[ir + ldwrkr], &ldwrkr);
+                        aocl_lapack_zlaset("U", &i__2, &i__3, &c_b1, &c_b1, &work[ir + ldwrkr],
+                                           &ldwrkr);
                         /* Generate Q in A */
                         /* (CWorkspace: need M*M+2*M, prefer M*M+M+M*NB) */
                         /* (RWorkspace: 0) */
                         i__2 = *lwork - iwork + 1;
-                        zunglq_(m, n, m, &a[a_offset], lda, &work[itau], &work[iwork], &i__2,
-                                &ierr);
+                        aocl_lapack_zunglq(m, n, m, &a[a_offset], lda, &work[itau], &work[iwork],
+                                           &i__2, &ierr);
                         ie = 1;
                         itauq = itau;
                         itaup = itauq + *m;
@@ -2625,28 +2658,28 @@ void zgesvd_(char *jobu, char *jobvt, integer *m, integer *n, doublecomplex *a, 
                         /* (CWorkspace: need M*M+3*M, prefer M*M+2*M+2*M*NB) */
                         /* (RWorkspace: need M) */
                         i__2 = *lwork - iwork + 1;
-                        zgebrd_(m, m, &work[ir], &ldwrkr, &s[1], &rwork[ie], &work[itauq],
-                                &work[itaup], &work[iwork], &i__2, &ierr);
+                        aocl_lapack_zgebrd(m, m, &work[ir], &ldwrkr, &s[1], &rwork[ie],
+                                           &work[itauq], &work[itaup], &work[iwork], &i__2, &ierr);
                         /* Generate right vectors bidiagonalizing L in */
                         /* WORK(IR) */
                         /* (CWorkspace: need M*M+3*M, prefer M*M+2*M+(M-1)*NB) */
                         /* (RWorkspace: 0) */
                         i__2 = *lwork - iwork + 1;
-                        zungbr_("P", m, m, m, &work[ir], &ldwrkr, &work[itaup], &work[iwork], &i__2,
-                                &ierr);
+                        aocl_lapack_zungbr("P", m, m, m, &work[ir], &ldwrkr, &work[itaup],
+                                           &work[iwork], &i__2, &ierr);
                         irwork = ie + *m;
                         /* Perform bidiagonal QR iteration, computing right */
                         /* singular vectors of L in WORK(IR) */
                         /* (CWorkspace: need M*M) */
                         /* (RWorkspace: need BDSPAC) */
-                        zbdsqr_("U", m, m, &c__0, &c__0, &s[1], &rwork[ie], &work[ir], &ldwrkr,
-                                cdum, &c__1, cdum, &c__1, &rwork[irwork], info);
+                        aocl_lapack_zbdsqr("U", m, m, &c__0, &c__0, &s[1], &rwork[ie], &work[ir],
+                                           &ldwrkr, cdum, &c__1, cdum, &c__1, &rwork[irwork], info);
                         /* Multiply right singular vectors of L in WORK(IR) by */
                         /* Q in A, storing result in VT */
                         /* (CWorkspace: need M*M) */
                         /* (RWorkspace: 0) */
-                        zgemm_("N", "N", m, n, m, &c_b2, &work[ir], &ldwrkr, &a[a_offset], lda,
-                               &c_b1, &vt[vt_offset], ldvt);
+                        aocl_blas_zgemm("N", "N", m, n, m, &c_b2, &work[ir], &ldwrkr, &a[a_offset],
+                                        lda, &c_b1, &vt[vt_offset], ldvt);
                     }
                     else
                     {
@@ -2657,15 +2690,16 @@ void zgesvd_(char *jobu, char *jobvt, integer *m, integer *n, doublecomplex *a, 
                         /* (CWorkspace: need 2*M, prefer M+M*NB) */
                         /* (RWorkspace: 0) */
                         i__2 = *lwork - iwork + 1;
-                        zgelqf_(m, n, &a[a_offset], lda, &work[itau], &work[iwork], &i__2, &ierr);
+                        aocl_lapack_zgelqf(m, n, &a[a_offset], lda, &work[itau], &work[iwork],
+                                           &i__2, &ierr);
                         /* Copy result to VT */
-                        zlacpy_("U", m, n, &a[a_offset], lda, &vt[vt_offset], ldvt);
+                        aocl_lapack_zlacpy("U", m, n, &a[a_offset], lda, &vt[vt_offset], ldvt);
                         /* Generate Q in VT */
                         /* (CWorkspace: need 2*M, prefer M+M*NB) */
                         /* (RWorkspace: 0) */
                         i__2 = *lwork - iwork + 1;
-                        zunglq_(m, n, m, &vt[vt_offset], ldvt, &work[itau], &work[iwork], &i__2,
-                                &ierr);
+                        aocl_lapack_zunglq(m, n, m, &vt[vt_offset], ldvt, &work[itau], &work[iwork],
+                                           &i__2, &ierr);
                         ie = 1;
                         itauq = itau;
                         itaup = itauq + *m;
@@ -2673,26 +2707,28 @@ void zgesvd_(char *jobu, char *jobvt, integer *m, integer *n, doublecomplex *a, 
                         /* Zero out above L in A */
                         i__2 = *m - 1;
                         i__3 = *m - 1;
-                        zlaset_("U", &i__2, &i__3, &c_b1, &c_b1, &a[(a_dim1 << 1) + 1], lda);
+                        aocl_lapack_zlaset("U", &i__2, &i__3, &c_b1, &c_b1, &a[(a_dim1 << 1) + 1],
+                                           lda);
                         /* Bidiagonalize L in A */
                         /* (CWorkspace: need 3*M, prefer 2*M+2*M*NB) */
                         /* (RWorkspace: need M) */
                         i__2 = *lwork - iwork + 1;
-                        zgebrd_(m, m, &a[a_offset], lda, &s[1], &rwork[ie], &work[itauq],
-                                &work[itaup], &work[iwork], &i__2, &ierr);
+                        aocl_lapack_zgebrd(m, m, &a[a_offset], lda, &s[1], &rwork[ie], &work[itauq],
+                                           &work[itaup], &work[iwork], &i__2, &ierr);
                         /* Multiply right vectors bidiagonalizing L by Q in VT */
                         /* (CWorkspace: need 2*M+N, prefer 2*M+N*NB) */
                         /* (RWorkspace: 0) */
                         i__2 = *lwork - iwork + 1;
-                        zunmbr_("P", "L", "C", m, n, m, &a[a_offset], lda, &work[itaup],
-                                &vt[vt_offset], ldvt, &work[iwork], &i__2, &ierr);
+                        aocl_lapack_zunmbr("P", "L", "C", m, n, m, &a[a_offset], lda, &work[itaup],
+                                           &vt[vt_offset], ldvt, &work[iwork], &i__2, &ierr);
                         irwork = ie + *m;
                         /* Perform bidiagonal QR iteration, computing right */
                         /* singular vectors of A in VT */
                         /* (CWorkspace: 0) */
                         /* (RWorkspace: need BDSPAC) */
-                        zbdsqr_("U", m, n, &c__0, &c__0, &s[1], &rwork[ie], &vt[vt_offset], ldvt,
-                                cdum, &c__1, cdum, &c__1, &rwork[irwork], info);
+                        aocl_lapack_zbdsqr("U", m, n, &c__0, &c__0, &s[1], &rwork[ie],
+                                           &vt[vt_offset], ldvt, cdum, &c__1, cdum, &c__1,
+                                           &rwork[irwork], info);
                     }
                 }
                 else if(wntuo)
@@ -2731,18 +2767,20 @@ void zgesvd_(char *jobu, char *jobvt, integer *m, integer *n, doublecomplex *a, 
                         /* (CWorkspace: need 2*M*M+2*M, prefer 2*M*M+M+M*NB) */
                         /* (RWorkspace: 0) */
                         i__2 = *lwork - iwork + 1;
-                        zgelqf_(m, n, &a[a_offset], lda, &work[itau], &work[iwork], &i__2, &ierr);
+                        aocl_lapack_zgelqf(m, n, &a[a_offset], lda, &work[itau], &work[iwork],
+                                           &i__2, &ierr);
                         /* Copy L to WORK(IU), zeroing out below it */
-                        zlacpy_("L", m, m, &a[a_offset], lda, &work[iu], &ldwrku);
+                        aocl_lapack_zlacpy("L", m, m, &a[a_offset], lda, &work[iu], &ldwrku);
                         i__2 = *m - 1;
                         i__3 = *m - 1;
-                        zlaset_("U", &i__2, &i__3, &c_b1, &c_b1, &work[iu + ldwrku], &ldwrku);
+                        aocl_lapack_zlaset("U", &i__2, &i__3, &c_b1, &c_b1, &work[iu + ldwrku],
+                                           &ldwrku);
                         /* Generate Q in A */
                         /* (CWorkspace: need 2*M*M+2*M, prefer 2*M*M+M+M*NB) */
                         /* (RWorkspace: 0) */
                         i__2 = *lwork - iwork + 1;
-                        zunglq_(m, n, m, &a[a_offset], lda, &work[itau], &work[iwork], &i__2,
-                                &ierr);
+                        aocl_lapack_zunglq(m, n, m, &a[a_offset], lda, &work[itau], &work[iwork],
+                                           &i__2, &ierr);
                         ie = 1;
                         itauq = itau;
                         itaup = itauq + *m;
@@ -2753,40 +2791,41 @@ void zgesvd_(char *jobu, char *jobvt, integer *m, integer *n, doublecomplex *a, 
                         /* prefer 2*M*M+2*M+2*M*NB) */
                         /* (RWorkspace: need M) */
                         i__2 = *lwork - iwork + 1;
-                        zgebrd_(m, m, &work[iu], &ldwrku, &s[1], &rwork[ie], &work[itauq],
-                                &work[itaup], &work[iwork], &i__2, &ierr);
-                        zlacpy_("L", m, m, &work[iu], &ldwrku, &work[ir], &ldwrkr);
+                        aocl_lapack_zgebrd(m, m, &work[iu], &ldwrku, &s[1], &rwork[ie],
+                                           &work[itauq], &work[itaup], &work[iwork], &i__2, &ierr);
+                        aocl_lapack_zlacpy("L", m, m, &work[iu], &ldwrku, &work[ir], &ldwrkr);
                         /* Generate right bidiagonalizing vectors in WORK(IU) */
                         /* (CWorkspace: need 2*M*M+3*M-1, */
                         /* prefer 2*M*M+2*M+(M-1)*NB) */
                         /* (RWorkspace: 0) */
                         i__2 = *lwork - iwork + 1;
-                        zungbr_("P", m, m, m, &work[iu], &ldwrku, &work[itaup], &work[iwork], &i__2,
-                                &ierr);
+                        aocl_lapack_zungbr("P", m, m, m, &work[iu], &ldwrku, &work[itaup],
+                                           &work[iwork], &i__2, &ierr);
                         /* Generate left bidiagonalizing vectors in WORK(IR) */
                         /* (CWorkspace: need 2*M*M+3*M, prefer 2*M*M+2*M+M*NB) */
                         /* (RWorkspace: 0) */
                         i__2 = *lwork - iwork + 1;
-                        zungbr_("Q", m, m, m, &work[ir], &ldwrkr, &work[itauq], &work[iwork], &i__2,
-                                &ierr);
+                        aocl_lapack_zungbr("Q", m, m, m, &work[ir], &ldwrkr, &work[itauq],
+                                           &work[iwork], &i__2, &ierr);
                         irwork = ie + *m;
                         /* Perform bidiagonal QR iteration, computing left */
                         /* singular vectors of L in WORK(IR) and computing */
                         /* right singular vectors of L in WORK(IU) */
                         /* (CWorkspace: need 2*M*M) */
                         /* (RWorkspace: need BDSPAC) */
-                        zbdsqr_("U", m, m, m, &c__0, &s[1], &rwork[ie], &work[iu], &ldwrku,
-                                &work[ir], &ldwrkr, cdum, &c__1, &rwork[irwork], info);
+                        aocl_lapack_zbdsqr("U", m, m, m, &c__0, &s[1], &rwork[ie], &work[iu],
+                                           &ldwrku, &work[ir], &ldwrkr, cdum, &c__1, &rwork[irwork],
+                                           info);
                         /* Multiply right singular vectors of L in WORK(IU) by */
                         /* Q in A, storing result in VT */
                         /* (CWorkspace: need M*M) */
                         /* (RWorkspace: 0) */
-                        zgemm_("N", "N", m, n, m, &c_b2, &work[iu], &ldwrku, &a[a_offset], lda,
-                               &c_b1, &vt[vt_offset], ldvt);
+                        aocl_blas_zgemm("N", "N", m, n, m, &c_b2, &work[iu], &ldwrku, &a[a_offset],
+                                        lda, &c_b1, &vt[vt_offset], ldvt);
                         /* Copy left singular vectors of L to A */
                         /* (CWorkspace: need M*M) */
                         /* (RWorkspace: 0) */
-                        zlacpy_("F", m, m, &work[ir], &ldwrkr, &a[a_offset], lda);
+                        aocl_lapack_zlacpy("F", m, m, &work[ir], &ldwrkr, &a[a_offset], lda);
                     }
                     else
                     {
@@ -2797,14 +2836,15 @@ void zgesvd_(char *jobu, char *jobvt, integer *m, integer *n, doublecomplex *a, 
                         /* (CWorkspace: need 2*M, prefer M+M*NB) */
                         /* (RWorkspace: 0) */
                         i__2 = *lwork - iwork + 1;
-                        zgelqf_(m, n, &a[a_offset], lda, &work[itau], &work[iwork], &i__2, &ierr);
-                        zlacpy_("U", m, n, &a[a_offset], lda, &vt[vt_offset], ldvt);
+                        aocl_lapack_zgelqf(m, n, &a[a_offset], lda, &work[itau], &work[iwork],
+                                           &i__2, &ierr);
+                        aocl_lapack_zlacpy("U", m, n, &a[a_offset], lda, &vt[vt_offset], ldvt);
                         /* Generate Q in VT */
                         /* (CWorkspace: need 2*M, prefer M+M*NB) */
                         /* (RWorkspace: 0) */
                         i__2 = *lwork - iwork + 1;
-                        zunglq_(m, n, m, &vt[vt_offset], ldvt, &work[itau], &work[iwork], &i__2,
-                                &ierr);
+                        aocl_lapack_zunglq(m, n, m, &vt[vt_offset], ldvt, &work[itau], &work[iwork],
+                                           &i__2, &ierr);
                         ie = 1;
                         itauq = itau;
                         itaup = itauq + *m;
@@ -2812,33 +2852,35 @@ void zgesvd_(char *jobu, char *jobvt, integer *m, integer *n, doublecomplex *a, 
                         /* Zero out above L in A */
                         i__2 = *m - 1;
                         i__3 = *m - 1;
-                        zlaset_("U", &i__2, &i__3, &c_b1, &c_b1, &a[(a_dim1 << 1) + 1], lda);
+                        aocl_lapack_zlaset("U", &i__2, &i__3, &c_b1, &c_b1, &a[(a_dim1 << 1) + 1],
+                                           lda);
                         /* Bidiagonalize L in A */
                         /* (CWorkspace: need 3*M, prefer 2*M+2*M*NB) */
                         /* (RWorkspace: need M) */
                         i__2 = *lwork - iwork + 1;
-                        zgebrd_(m, m, &a[a_offset], lda, &s[1], &rwork[ie], &work[itauq],
-                                &work[itaup], &work[iwork], &i__2, &ierr);
+                        aocl_lapack_zgebrd(m, m, &a[a_offset], lda, &s[1], &rwork[ie], &work[itauq],
+                                           &work[itaup], &work[iwork], &i__2, &ierr);
                         /* Multiply right vectors bidiagonalizing L by Q in VT */
                         /* (CWorkspace: need 2*M+N, prefer 2*M+N*NB) */
                         /* (RWorkspace: 0) */
                         i__2 = *lwork - iwork + 1;
-                        zunmbr_("P", "L", "C", m, n, m, &a[a_offset], lda, &work[itaup],
-                                &vt[vt_offset], ldvt, &work[iwork], &i__2, &ierr);
+                        aocl_lapack_zunmbr("P", "L", "C", m, n, m, &a[a_offset], lda, &work[itaup],
+                                           &vt[vt_offset], ldvt, &work[iwork], &i__2, &ierr);
                         /* Generate left bidiagonalizing vectors of L in A */
                         /* (CWorkspace: need 3*M, prefer 2*M+M*NB) */
                         /* (RWorkspace: 0) */
                         i__2 = *lwork - iwork + 1;
-                        zungbr_("Q", m, m, m, &a[a_offset], lda, &work[itauq], &work[iwork], &i__2,
-                                &ierr);
+                        aocl_lapack_zungbr("Q", m, m, m, &a[a_offset], lda, &work[itauq],
+                                           &work[iwork], &i__2, &ierr);
                         irwork = ie + *m;
                         /* Perform bidiagonal QR iteration, computing left */
                         /* singular vectors of A in A and computing right */
                         /* singular vectors of A in VT */
                         /* (CWorkspace: 0) */
                         /* (RWorkspace: need BDSPAC) */
-                        zbdsqr_("U", m, n, m, &c__0, &s[1], &rwork[ie], &vt[vt_offset], ldvt,
-                                &a[a_offset], lda, cdum, &c__1, &rwork[irwork], info);
+                        aocl_lapack_zbdsqr("U", m, n, m, &c__0, &s[1], &rwork[ie], &vt[vt_offset],
+                                           ldvt, &a[a_offset], lda, cdum, &c__1, &rwork[irwork],
+                                           info);
                     }
                 }
                 else if(wntuas)
@@ -2867,18 +2909,20 @@ void zgesvd_(char *jobu, char *jobvt, integer *m, integer *n, doublecomplex *a, 
                         /* (CWorkspace: need M*M+2*M, prefer M*M+M+M*NB) */
                         /* (RWorkspace: 0) */
                         i__2 = *lwork - iwork + 1;
-                        zgelqf_(m, n, &a[a_offset], lda, &work[itau], &work[iwork], &i__2, &ierr);
+                        aocl_lapack_zgelqf(m, n, &a[a_offset], lda, &work[itau], &work[iwork],
+                                           &i__2, &ierr);
                         /* Copy L to WORK(IU), zeroing out above it */
-                        zlacpy_("L", m, m, &a[a_offset], lda, &work[iu], &ldwrku);
+                        aocl_lapack_zlacpy("L", m, m, &a[a_offset], lda, &work[iu], &ldwrku);
                         i__2 = *m - 1;
                         i__3 = *m - 1;
-                        zlaset_("U", &i__2, &i__3, &c_b1, &c_b1, &work[iu + ldwrku], &ldwrku);
+                        aocl_lapack_zlaset("U", &i__2, &i__3, &c_b1, &c_b1, &work[iu + ldwrku],
+                                           &ldwrku);
                         /* Generate Q in A */
                         /* (CWorkspace: need M*M+2*M, prefer M*M+M+M*NB) */
                         /* (RWorkspace: 0) */
                         i__2 = *lwork - iwork + 1;
-                        zunglq_(m, n, m, &a[a_offset], lda, &work[itau], &work[iwork], &i__2,
-                                &ierr);
+                        aocl_lapack_zunglq(m, n, m, &a[a_offset], lda, &work[itau], &work[iwork],
+                                           &i__2, &ierr);
                         ie = 1;
                         itauq = itau;
                         itaup = itauq + *m;
@@ -2887,36 +2931,37 @@ void zgesvd_(char *jobu, char *jobvt, integer *m, integer *n, doublecomplex *a, 
                         /* (CWorkspace: need M*M+3*M, prefer M*M+2*M+2*M*NB) */
                         /* (RWorkspace: need M) */
                         i__2 = *lwork - iwork + 1;
-                        zgebrd_(m, m, &work[iu], &ldwrku, &s[1], &rwork[ie], &work[itauq],
-                                &work[itaup], &work[iwork], &i__2, &ierr);
-                        zlacpy_("L", m, m, &work[iu], &ldwrku, &u[u_offset], ldu);
+                        aocl_lapack_zgebrd(m, m, &work[iu], &ldwrku, &s[1], &rwork[ie],
+                                           &work[itauq], &work[itaup], &work[iwork], &i__2, &ierr);
+                        aocl_lapack_zlacpy("L", m, m, &work[iu], &ldwrku, &u[u_offset], ldu);
                         /* Generate right bidiagonalizing vectors in WORK(IU) */
                         /* (CWorkspace: need M*M+3*M-1, */
                         /* prefer M*M+2*M+(M-1)*NB) */
                         /* (RWorkspace: 0) */
                         i__2 = *lwork - iwork + 1;
-                        zungbr_("P", m, m, m, &work[iu], &ldwrku, &work[itaup], &work[iwork], &i__2,
-                                &ierr);
+                        aocl_lapack_zungbr("P", m, m, m, &work[iu], &ldwrku, &work[itaup],
+                                           &work[iwork], &i__2, &ierr);
                         /* Generate left bidiagonalizing vectors in U */
                         /* (CWorkspace: need M*M+3*M, prefer M*M+2*M+M*NB) */
                         /* (RWorkspace: 0) */
                         i__2 = *lwork - iwork + 1;
-                        zungbr_("Q", m, m, m, &u[u_offset], ldu, &work[itauq], &work[iwork], &i__2,
-                                &ierr);
+                        aocl_lapack_zungbr("Q", m, m, m, &u[u_offset], ldu, &work[itauq],
+                                           &work[iwork], &i__2, &ierr);
                         irwork = ie + *m;
                         /* Perform bidiagonal QR iteration, computing left */
                         /* singular vectors of L in U and computing right */
                         /* singular vectors of L in WORK(IU) */
                         /* (CWorkspace: need M*M) */
                         /* (RWorkspace: need BDSPAC) */
-                        zbdsqr_("U", m, m, m, &c__0, &s[1], &rwork[ie], &work[iu], &ldwrku,
-                                &u[u_offset], ldu, cdum, &c__1, &rwork[irwork], info);
+                        aocl_lapack_zbdsqr("U", m, m, m, &c__0, &s[1], &rwork[ie], &work[iu],
+                                           &ldwrku, &u[u_offset], ldu, cdum, &c__1, &rwork[irwork],
+                                           info);
                         /* Multiply right singular vectors of L in WORK(IU) by */
                         /* Q in A, storing result in VT */
                         /* (CWorkspace: need M*M) */
                         /* (RWorkspace: 0) */
-                        zgemm_("N", "N", m, n, m, &c_b2, &work[iu], &ldwrku, &a[a_offset], lda,
-                               &c_b1, &vt[vt_offset], ldvt);
+                        aocl_blas_zgemm("N", "N", m, n, m, &c_b2, &work[iu], &ldwrku, &a[a_offset],
+                                        lda, &c_b1, &vt[vt_offset], ldvt);
                     }
                     else
                     {
@@ -2927,19 +2972,21 @@ void zgesvd_(char *jobu, char *jobvt, integer *m, integer *n, doublecomplex *a, 
                         /* (CWorkspace: need 2*M, prefer M+M*NB) */
                         /* (RWorkspace: 0) */
                         i__2 = *lwork - iwork + 1;
-                        zgelqf_(m, n, &a[a_offset], lda, &work[itau], &work[iwork], &i__2, &ierr);
-                        zlacpy_("U", m, n, &a[a_offset], lda, &vt[vt_offset], ldvt);
+                        aocl_lapack_zgelqf(m, n, &a[a_offset], lda, &work[itau], &work[iwork],
+                                           &i__2, &ierr);
+                        aocl_lapack_zlacpy("U", m, n, &a[a_offset], lda, &vt[vt_offset], ldvt);
                         /* Generate Q in VT */
                         /* (CWorkspace: need 2*M, prefer M+M*NB) */
                         /* (RWorkspace: 0) */
                         i__2 = *lwork - iwork + 1;
-                        zunglq_(m, n, m, &vt[vt_offset], ldvt, &work[itau], &work[iwork], &i__2,
-                                &ierr);
+                        aocl_lapack_zunglq(m, n, m, &vt[vt_offset], ldvt, &work[itau], &work[iwork],
+                                           &i__2, &ierr);
                         /* Copy L to U, zeroing out above it */
-                        zlacpy_("L", m, m, &a[a_offset], lda, &u[u_offset], ldu);
+                        aocl_lapack_zlacpy("L", m, m, &a[a_offset], lda, &u[u_offset], ldu);
                         i__2 = *m - 1;
                         i__3 = *m - 1;
-                        zlaset_("U", &i__2, &i__3, &c_b1, &c_b1, &u[(u_dim1 << 1) + 1], ldu);
+                        aocl_lapack_zlaset("U", &i__2, &i__3, &c_b1, &c_b1, &u[(u_dim1 << 1) + 1],
+                                           ldu);
                         ie = 1;
                         itauq = itau;
                         itaup = itauq + *m;
@@ -2948,29 +2995,30 @@ void zgesvd_(char *jobu, char *jobvt, integer *m, integer *n, doublecomplex *a, 
                         /* (CWorkspace: need 3*M, prefer 2*M+2*M*NB) */
                         /* (RWorkspace: need M) */
                         i__2 = *lwork - iwork + 1;
-                        zgebrd_(m, m, &u[u_offset], ldu, &s[1], &rwork[ie], &work[itauq],
-                                &work[itaup], &work[iwork], &i__2, &ierr);
+                        aocl_lapack_zgebrd(m, m, &u[u_offset], ldu, &s[1], &rwork[ie], &work[itauq],
+                                           &work[itaup], &work[iwork], &i__2, &ierr);
                         /* Multiply right bidiagonalizing vectors in U by Q */
                         /* in VT */
                         /* (CWorkspace: need 2*M+N, prefer 2*M+N*NB) */
                         /* (RWorkspace: 0) */
                         i__2 = *lwork - iwork + 1;
-                        zunmbr_("P", "L", "C", m, n, m, &u[u_offset], ldu, &work[itaup],
-                                &vt[vt_offset], ldvt, &work[iwork], &i__2, &ierr);
+                        aocl_lapack_zunmbr("P", "L", "C", m, n, m, &u[u_offset], ldu, &work[itaup],
+                                           &vt[vt_offset], ldvt, &work[iwork], &i__2, &ierr);
                         /* Generate left bidiagonalizing vectors in U */
                         /* (CWorkspace: need 3*M, prefer 2*M+M*NB) */
                         /* (RWorkspace: 0) */
                         i__2 = *lwork - iwork + 1;
-                        zungbr_("Q", m, m, m, &u[u_offset], ldu, &work[itauq], &work[iwork], &i__2,
-                                &ierr);
+                        aocl_lapack_zungbr("Q", m, m, m, &u[u_offset], ldu, &work[itauq],
+                                           &work[iwork], &i__2, &ierr);
                         irwork = ie + *m;
                         /* Perform bidiagonal QR iteration, computing left */
                         /* singular vectors of A in U and computing right */
                         /* singular vectors of A in VT */
                         /* (CWorkspace: 0) */
                         /* (RWorkspace: need BDSPAC) */
-                        zbdsqr_("U", m, n, m, &c__0, &s[1], &rwork[ie], &vt[vt_offset], ldvt,
-                                &u[u_offset], ldu, cdum, &c__1, &rwork[irwork], info);
+                        aocl_lapack_zbdsqr("U", m, n, m, &c__0, &s[1], &rwork[ie], &vt[vt_offset],
+                                           ldvt, &u[u_offset], ldu, cdum, &c__1, &rwork[irwork],
+                                           info);
                     }
                 }
             }
@@ -3004,19 +3052,21 @@ void zgesvd_(char *jobu, char *jobvt, integer *m, integer *n, doublecomplex *a, 
                         /* (CWorkspace: need M*M+2*M, prefer M*M+M+M*NB) */
                         /* (RWorkspace: 0) */
                         i__2 = *lwork - iwork + 1;
-                        zgelqf_(m, n, &a[a_offset], lda, &work[itau], &work[iwork], &i__2, &ierr);
-                        zlacpy_("U", m, n, &a[a_offset], lda, &vt[vt_offset], ldvt);
+                        aocl_lapack_zgelqf(m, n, &a[a_offset], lda, &work[itau], &work[iwork],
+                                           &i__2, &ierr);
+                        aocl_lapack_zlacpy("U", m, n, &a[a_offset], lda, &vt[vt_offset], ldvt);
                         /* Copy L to WORK(IR), zeroing out above it */
-                        zlacpy_("L", m, m, &a[a_offset], lda, &work[ir], &ldwrkr);
+                        aocl_lapack_zlacpy("L", m, m, &a[a_offset], lda, &work[ir], &ldwrkr);
                         i__2 = *m - 1;
                         i__3 = *m - 1;
-                        zlaset_("U", &i__2, &i__3, &c_b1, &c_b1, &work[ir + ldwrkr], &ldwrkr);
+                        aocl_lapack_zlaset("U", &i__2, &i__3, &c_b1, &c_b1, &work[ir + ldwrkr],
+                                           &ldwrkr);
                         /* Generate Q in VT */
                         /* (CWorkspace: need M*M+M+N, prefer M*M+M+N*NB) */
                         /* (RWorkspace: 0) */
                         i__2 = *lwork - iwork + 1;
-                        zunglq_(n, n, m, &vt[vt_offset], ldvt, &work[itau], &work[iwork], &i__2,
-                                &ierr);
+                        aocl_lapack_zunglq(n, n, m, &vt[vt_offset], ldvt, &work[itau], &work[iwork],
+                                           &i__2, &ierr);
                         ie = 1;
                         itauq = itau;
                         itaup = itauq + *m;
@@ -3025,30 +3075,30 @@ void zgesvd_(char *jobu, char *jobvt, integer *m, integer *n, doublecomplex *a, 
                         /* (CWorkspace: need M*M+3*M, prefer M*M+2*M+2*M*NB) */
                         /* (RWorkspace: need M) */
                         i__2 = *lwork - iwork + 1;
-                        zgebrd_(m, m, &work[ir], &ldwrkr, &s[1], &rwork[ie], &work[itauq],
-                                &work[itaup], &work[iwork], &i__2, &ierr);
+                        aocl_lapack_zgebrd(m, m, &work[ir], &ldwrkr, &s[1], &rwork[ie],
+                                           &work[itauq], &work[itaup], &work[iwork], &i__2, &ierr);
                         /* Generate right bidiagonalizing vectors in WORK(IR) */
                         /* (CWorkspace: need M*M+3*M-1, */
                         /* prefer M*M+2*M+(M-1)*NB) */
                         /* (RWorkspace: 0) */
                         i__2 = *lwork - iwork + 1;
-                        zungbr_("P", m, m, m, &work[ir], &ldwrkr, &work[itaup], &work[iwork], &i__2,
-                                &ierr);
+                        aocl_lapack_zungbr("P", m, m, m, &work[ir], &ldwrkr, &work[itaup],
+                                           &work[iwork], &i__2, &ierr);
                         irwork = ie + *m;
                         /* Perform bidiagonal QR iteration, computing right */
                         /* singular vectors of L in WORK(IR) */
                         /* (CWorkspace: need M*M) */
                         /* (RWorkspace: need BDSPAC) */
-                        zbdsqr_("U", m, m, &c__0, &c__0, &s[1], &rwork[ie], &work[ir], &ldwrkr,
-                                cdum, &c__1, cdum, &c__1, &rwork[irwork], info);
+                        aocl_lapack_zbdsqr("U", m, m, &c__0, &c__0, &s[1], &rwork[ie], &work[ir],
+                                           &ldwrkr, cdum, &c__1, cdum, &c__1, &rwork[irwork], info);
                         /* Multiply right singular vectors of L in WORK(IR) by */
                         /* Q in VT, storing result in A */
                         /* (CWorkspace: need M*M) */
                         /* (RWorkspace: 0) */
-                        zgemm_("N", "N", m, n, m, &c_b2, &work[ir], &ldwrkr, &vt[vt_offset], ldvt,
-                               &c_b1, &a[a_offset], lda);
+                        aocl_blas_zgemm("N", "N", m, n, m, &c_b2, &work[ir], &ldwrkr,
+                                        &vt[vt_offset], ldvt, &c_b1, &a[a_offset], lda);
                         /* Copy right singular vectors of A from A to VT */
-                        zlacpy_("F", m, n, &a[a_offset], lda, &vt[vt_offset], ldvt);
+                        aocl_lapack_zlacpy("F", m, n, &a[a_offset], lda, &vt[vt_offset], ldvt);
                     }
                     else
                     {
@@ -3059,14 +3109,15 @@ void zgesvd_(char *jobu, char *jobvt, integer *m, integer *n, doublecomplex *a, 
                         /* (CWorkspace: need 2*M, prefer M+M*NB) */
                         /* (RWorkspace: 0) */
                         i__2 = *lwork - iwork + 1;
-                        zgelqf_(m, n, &a[a_offset], lda, &work[itau], &work[iwork], &i__2, &ierr);
-                        zlacpy_("U", m, n, &a[a_offset], lda, &vt[vt_offset], ldvt);
+                        aocl_lapack_zgelqf(m, n, &a[a_offset], lda, &work[itau], &work[iwork],
+                                           &i__2, &ierr);
+                        aocl_lapack_zlacpy("U", m, n, &a[a_offset], lda, &vt[vt_offset], ldvt);
                         /* Generate Q in VT */
                         /* (CWorkspace: need M+N, prefer M+N*NB) */
                         /* (RWorkspace: 0) */
                         i__2 = *lwork - iwork + 1;
-                        zunglq_(n, n, m, &vt[vt_offset], ldvt, &work[itau], &work[iwork], &i__2,
-                                &ierr);
+                        aocl_lapack_zunglq(n, n, m, &vt[vt_offset], ldvt, &work[itau], &work[iwork],
+                                           &i__2, &ierr);
                         ie = 1;
                         itauq = itau;
                         itaup = itauq + *m;
@@ -3074,27 +3125,29 @@ void zgesvd_(char *jobu, char *jobvt, integer *m, integer *n, doublecomplex *a, 
                         /* Zero out above L in A */
                         i__2 = *m - 1;
                         i__3 = *m - 1;
-                        zlaset_("U", &i__2, &i__3, &c_b1, &c_b1, &a[(a_dim1 << 1) + 1], lda);
+                        aocl_lapack_zlaset("U", &i__2, &i__3, &c_b1, &c_b1, &a[(a_dim1 << 1) + 1],
+                                           lda);
                         /* Bidiagonalize L in A */
                         /* (CWorkspace: need 3*M, prefer 2*M+2*M*NB) */
                         /* (RWorkspace: need M) */
                         i__2 = *lwork - iwork + 1;
-                        zgebrd_(m, m, &a[a_offset], lda, &s[1], &rwork[ie], &work[itauq],
-                                &work[itaup], &work[iwork], &i__2, &ierr);
+                        aocl_lapack_zgebrd(m, m, &a[a_offset], lda, &s[1], &rwork[ie], &work[itauq],
+                                           &work[itaup], &work[iwork], &i__2, &ierr);
                         /* Multiply right bidiagonalizing vectors in A by Q */
                         /* in VT */
                         /* (CWorkspace: need 2*M+N, prefer 2*M+N*NB) */
                         /* (RWorkspace: 0) */
                         i__2 = *lwork - iwork + 1;
-                        zunmbr_("P", "L", "C", m, n, m, &a[a_offset], lda, &work[itaup],
-                                &vt[vt_offset], ldvt, &work[iwork], &i__2, &ierr);
+                        aocl_lapack_zunmbr("P", "L", "C", m, n, m, &a[a_offset], lda, &work[itaup],
+                                           &vt[vt_offset], ldvt, &work[iwork], &i__2, &ierr);
                         irwork = ie + *m;
                         /* Perform bidiagonal QR iteration, computing right */
                         /* singular vectors of A in VT */
                         /* (CWorkspace: 0) */
                         /* (RWorkspace: need BDSPAC) */
-                        zbdsqr_("U", m, n, &c__0, &c__0, &s[1], &rwork[ie], &vt[vt_offset], ldvt,
-                                cdum, &c__1, cdum, &c__1, &rwork[irwork], info);
+                        aocl_lapack_zbdsqr("U", m, n, &c__0, &c__0, &s[1], &rwork[ie],
+                                           &vt[vt_offset], ldvt, cdum, &c__1, cdum, &c__1,
+                                           &rwork[irwork], info);
                     }
                 }
                 else if(wntuo)
@@ -3136,19 +3189,21 @@ void zgesvd_(char *jobu, char *jobvt, integer *m, integer *n, doublecomplex *a, 
                         /* (CWorkspace: need 2*M*M+2*M, prefer 2*M*M+M+M*NB) */
                         /* (RWorkspace: 0) */
                         i__2 = *lwork - iwork + 1;
-                        zgelqf_(m, n, &a[a_offset], lda, &work[itau], &work[iwork], &i__2, &ierr);
-                        zlacpy_("U", m, n, &a[a_offset], lda, &vt[vt_offset], ldvt);
+                        aocl_lapack_zgelqf(m, n, &a[a_offset], lda, &work[itau], &work[iwork],
+                                           &i__2, &ierr);
+                        aocl_lapack_zlacpy("U", m, n, &a[a_offset], lda, &vt[vt_offset], ldvt);
                         /* Generate Q in VT */
                         /* (CWorkspace: need 2*M*M+M+N, prefer 2*M*M+M+N*NB) */
                         /* (RWorkspace: 0) */
                         i__2 = *lwork - iwork + 1;
-                        zunglq_(n, n, m, &vt[vt_offset], ldvt, &work[itau], &work[iwork], &i__2,
-                                &ierr);
+                        aocl_lapack_zunglq(n, n, m, &vt[vt_offset], ldvt, &work[itau], &work[iwork],
+                                           &i__2, &ierr);
                         /* Copy L to WORK(IU), zeroing out above it */
-                        zlacpy_("L", m, m, &a[a_offset], lda, &work[iu], &ldwrku);
+                        aocl_lapack_zlacpy("L", m, m, &a[a_offset], lda, &work[iu], &ldwrku);
                         i__2 = *m - 1;
                         i__3 = *m - 1;
-                        zlaset_("U", &i__2, &i__3, &c_b1, &c_b1, &work[iu + ldwrku], &ldwrku);
+                        aocl_lapack_zlaset("U", &i__2, &i__3, &c_b1, &c_b1, &work[iu + ldwrku],
+                                           &ldwrku);
                         ie = 1;
                         itauq = itau;
                         itaup = itauq + *m;
@@ -3159,40 +3214,41 @@ void zgesvd_(char *jobu, char *jobvt, integer *m, integer *n, doublecomplex *a, 
                         /* prefer 2*M*M+2*M+2*M*NB) */
                         /* (RWorkspace: need M) */
                         i__2 = *lwork - iwork + 1;
-                        zgebrd_(m, m, &work[iu], &ldwrku, &s[1], &rwork[ie], &work[itauq],
-                                &work[itaup], &work[iwork], &i__2, &ierr);
-                        zlacpy_("L", m, m, &work[iu], &ldwrku, &work[ir], &ldwrkr);
+                        aocl_lapack_zgebrd(m, m, &work[iu], &ldwrku, &s[1], &rwork[ie],
+                                           &work[itauq], &work[itaup], &work[iwork], &i__2, &ierr);
+                        aocl_lapack_zlacpy("L", m, m, &work[iu], &ldwrku, &work[ir], &ldwrkr);
                         /* Generate right bidiagonalizing vectors in WORK(IU) */
                         /* (CWorkspace: need 2*M*M+3*M-1, */
                         /* prefer 2*M*M+2*M+(M-1)*NB) */
                         /* (RWorkspace: 0) */
                         i__2 = *lwork - iwork + 1;
-                        zungbr_("P", m, m, m, &work[iu], &ldwrku, &work[itaup], &work[iwork], &i__2,
-                                &ierr);
+                        aocl_lapack_zungbr("P", m, m, m, &work[iu], &ldwrku, &work[itaup],
+                                           &work[iwork], &i__2, &ierr);
                         /* Generate left bidiagonalizing vectors in WORK(IR) */
                         /* (CWorkspace: need 2*M*M+3*M, prefer 2*M*M+2*M+M*NB) */
                         /* (RWorkspace: 0) */
                         i__2 = *lwork - iwork + 1;
-                        zungbr_("Q", m, m, m, &work[ir], &ldwrkr, &work[itauq], &work[iwork], &i__2,
-                                &ierr);
+                        aocl_lapack_zungbr("Q", m, m, m, &work[ir], &ldwrkr, &work[itauq],
+                                           &work[iwork], &i__2, &ierr);
                         irwork = ie + *m;
                         /* Perform bidiagonal QR iteration, computing left */
                         /* singular vectors of L in WORK(IR) and computing */
                         /* right singular vectors of L in WORK(IU) */
                         /* (CWorkspace: need 2*M*M) */
                         /* (RWorkspace: need BDSPAC) */
-                        zbdsqr_("U", m, m, m, &c__0, &s[1], &rwork[ie], &work[iu], &ldwrku,
-                                &work[ir], &ldwrkr, cdum, &c__1, &rwork[irwork], info);
+                        aocl_lapack_zbdsqr("U", m, m, m, &c__0, &s[1], &rwork[ie], &work[iu],
+                                           &ldwrku, &work[ir], &ldwrkr, cdum, &c__1, &rwork[irwork],
+                                           info);
                         /* Multiply right singular vectors of L in WORK(IU) by */
                         /* Q in VT, storing result in A */
                         /* (CWorkspace: need M*M) */
                         /* (RWorkspace: 0) */
-                        zgemm_("N", "N", m, n, m, &c_b2, &work[iu], &ldwrku, &vt[vt_offset], ldvt,
-                               &c_b1, &a[a_offset], lda);
+                        aocl_blas_zgemm("N", "N", m, n, m, &c_b2, &work[iu], &ldwrku,
+                                        &vt[vt_offset], ldvt, &c_b1, &a[a_offset], lda);
                         /* Copy right singular vectors of A from A to VT */
-                        zlacpy_("F", m, n, &a[a_offset], lda, &vt[vt_offset], ldvt);
+                        aocl_lapack_zlacpy("F", m, n, &a[a_offset], lda, &vt[vt_offset], ldvt);
                         /* Copy left singular vectors of A from WORK(IR) to A */
-                        zlacpy_("F", m, m, &work[ir], &ldwrkr, &a[a_offset], lda);
+                        aocl_lapack_zlacpy("F", m, m, &work[ir], &ldwrkr, &a[a_offset], lda);
                     }
                     else
                     {
@@ -3203,14 +3259,15 @@ void zgesvd_(char *jobu, char *jobvt, integer *m, integer *n, doublecomplex *a, 
                         /* (CWorkspace: need 2*M, prefer M+M*NB) */
                         /* (RWorkspace: 0) */
                         i__2 = *lwork - iwork + 1;
-                        zgelqf_(m, n, &a[a_offset], lda, &work[itau], &work[iwork], &i__2, &ierr);
-                        zlacpy_("U", m, n, &a[a_offset], lda, &vt[vt_offset], ldvt);
+                        aocl_lapack_zgelqf(m, n, &a[a_offset], lda, &work[itau], &work[iwork],
+                                           &i__2, &ierr);
+                        aocl_lapack_zlacpy("U", m, n, &a[a_offset], lda, &vt[vt_offset], ldvt);
                         /* Generate Q in VT */
                         /* (CWorkspace: need M+N, prefer M+N*NB) */
                         /* (RWorkspace: 0) */
                         i__2 = *lwork - iwork + 1;
-                        zunglq_(n, n, m, &vt[vt_offset], ldvt, &work[itau], &work[iwork], &i__2,
-                                &ierr);
+                        aocl_lapack_zunglq(n, n, m, &vt[vt_offset], ldvt, &work[itau], &work[iwork],
+                                           &i__2, &ierr);
                         ie = 1;
                         itauq = itau;
                         itaup = itauq + *m;
@@ -3218,34 +3275,36 @@ void zgesvd_(char *jobu, char *jobvt, integer *m, integer *n, doublecomplex *a, 
                         /* Zero out above L in A */
                         i__2 = *m - 1;
                         i__3 = *m - 1;
-                        zlaset_("U", &i__2, &i__3, &c_b1, &c_b1, &a[(a_dim1 << 1) + 1], lda);
+                        aocl_lapack_zlaset("U", &i__2, &i__3, &c_b1, &c_b1, &a[(a_dim1 << 1) + 1],
+                                           lda);
                         /* Bidiagonalize L in A */
                         /* (CWorkspace: need 3*M, prefer 2*M+2*M*NB) */
                         /* (RWorkspace: need M) */
                         i__2 = *lwork - iwork + 1;
-                        zgebrd_(m, m, &a[a_offset], lda, &s[1], &rwork[ie], &work[itauq],
-                                &work[itaup], &work[iwork], &i__2, &ierr);
+                        aocl_lapack_zgebrd(m, m, &a[a_offset], lda, &s[1], &rwork[ie], &work[itauq],
+                                           &work[itaup], &work[iwork], &i__2, &ierr);
                         /* Multiply right bidiagonalizing vectors in A by Q */
                         /* in VT */
                         /* (CWorkspace: need 2*M+N, prefer 2*M+N*NB) */
                         /* (RWorkspace: 0) */
                         i__2 = *lwork - iwork + 1;
-                        zunmbr_("P", "L", "C", m, n, m, &a[a_offset], lda, &work[itaup],
-                                &vt[vt_offset], ldvt, &work[iwork], &i__2, &ierr);
+                        aocl_lapack_zunmbr("P", "L", "C", m, n, m, &a[a_offset], lda, &work[itaup],
+                                           &vt[vt_offset], ldvt, &work[iwork], &i__2, &ierr);
                         /* Generate left bidiagonalizing vectors in A */
                         /* (CWorkspace: need 3*M, prefer 2*M+M*NB) */
                         /* (RWorkspace: 0) */
                         i__2 = *lwork - iwork + 1;
-                        zungbr_("Q", m, m, m, &a[a_offset], lda, &work[itauq], &work[iwork], &i__2,
-                                &ierr);
+                        aocl_lapack_zungbr("Q", m, m, m, &a[a_offset], lda, &work[itauq],
+                                           &work[iwork], &i__2, &ierr);
                         irwork = ie + *m;
                         /* Perform bidiagonal QR iteration, computing left */
                         /* singular vectors of A in A and computing right */
                         /* singular vectors of A in VT */
                         /* (CWorkspace: 0) */
                         /* (RWorkspace: need BDSPAC) */
-                        zbdsqr_("U", m, n, m, &c__0, &s[1], &rwork[ie], &vt[vt_offset], ldvt,
-                                &a[a_offset], lda, cdum, &c__1, &rwork[irwork], info);
+                        aocl_lapack_zbdsqr("U", m, n, m, &c__0, &s[1], &rwork[ie], &vt[vt_offset],
+                                           ldvt, &a[a_offset], lda, cdum, &c__1, &rwork[irwork],
+                                           info);
                     }
                 }
                 else if(wntuas)
@@ -3277,19 +3336,21 @@ void zgesvd_(char *jobu, char *jobvt, integer *m, integer *n, doublecomplex *a, 
                         /* (CWorkspace: need M*M+2*M, prefer M*M+M+M*NB) */
                         /* (RWorkspace: 0) */
                         i__2 = *lwork - iwork + 1;
-                        zgelqf_(m, n, &a[a_offset], lda, &work[itau], &work[iwork], &i__2, &ierr);
-                        zlacpy_("U", m, n, &a[a_offset], lda, &vt[vt_offset], ldvt);
+                        aocl_lapack_zgelqf(m, n, &a[a_offset], lda, &work[itau], &work[iwork],
+                                           &i__2, &ierr);
+                        aocl_lapack_zlacpy("U", m, n, &a[a_offset], lda, &vt[vt_offset], ldvt);
                         /* Generate Q in VT */
                         /* (CWorkspace: need M*M+M+N, prefer M*M+M+N*NB) */
                         /* (RWorkspace: 0) */
                         i__2 = *lwork - iwork + 1;
-                        zunglq_(n, n, m, &vt[vt_offset], ldvt, &work[itau], &work[iwork], &i__2,
-                                &ierr);
+                        aocl_lapack_zunglq(n, n, m, &vt[vt_offset], ldvt, &work[itau], &work[iwork],
+                                           &i__2, &ierr);
                         /* Copy L to WORK(IU), zeroing out above it */
-                        zlacpy_("L", m, m, &a[a_offset], lda, &work[iu], &ldwrku);
+                        aocl_lapack_zlacpy("L", m, m, &a[a_offset], lda, &work[iu], &ldwrku);
                         i__2 = *m - 1;
                         i__3 = *m - 1;
-                        zlaset_("U", &i__2, &i__3, &c_b1, &c_b1, &work[iu + ldwrku], &ldwrku);
+                        aocl_lapack_zlaset("U", &i__2, &i__3, &c_b1, &c_b1, &work[iu + ldwrku],
+                                           &ldwrku);
                         ie = 1;
                         itauq = itau;
                         itaup = itauq + *m;
@@ -3298,37 +3359,38 @@ void zgesvd_(char *jobu, char *jobvt, integer *m, integer *n, doublecomplex *a, 
                         /* (CWorkspace: need M*M+3*M, prefer M*M+2*M+2*M*NB) */
                         /* (RWorkspace: need M) */
                         i__2 = *lwork - iwork + 1;
-                        zgebrd_(m, m, &work[iu], &ldwrku, &s[1], &rwork[ie], &work[itauq],
-                                &work[itaup], &work[iwork], &i__2, &ierr);
-                        zlacpy_("L", m, m, &work[iu], &ldwrku, &u[u_offset], ldu);
+                        aocl_lapack_zgebrd(m, m, &work[iu], &ldwrku, &s[1], &rwork[ie],
+                                           &work[itauq], &work[itaup], &work[iwork], &i__2, &ierr);
+                        aocl_lapack_zlacpy("L", m, m, &work[iu], &ldwrku, &u[u_offset], ldu);
                         /* Generate right bidiagonalizing vectors in WORK(IU) */
                         /* (CWorkspace: need M*M+3*M, prefer M*M+2*M+(M-1)*NB) */
                         /* (RWorkspace: 0) */
                         i__2 = *lwork - iwork + 1;
-                        zungbr_("P", m, m, m, &work[iu], &ldwrku, &work[itaup], &work[iwork], &i__2,
-                                &ierr);
+                        aocl_lapack_zungbr("P", m, m, m, &work[iu], &ldwrku, &work[itaup],
+                                           &work[iwork], &i__2, &ierr);
                         /* Generate left bidiagonalizing vectors in U */
                         /* (CWorkspace: need M*M+3*M, prefer M*M+2*M+M*NB) */
                         /* (RWorkspace: 0) */
                         i__2 = *lwork - iwork + 1;
-                        zungbr_("Q", m, m, m, &u[u_offset], ldu, &work[itauq], &work[iwork], &i__2,
-                                &ierr);
+                        aocl_lapack_zungbr("Q", m, m, m, &u[u_offset], ldu, &work[itauq],
+                                           &work[iwork], &i__2, &ierr);
                         irwork = ie + *m;
                         /* Perform bidiagonal QR iteration, computing left */
                         /* singular vectors of L in U and computing right */
                         /* singular vectors of L in WORK(IU) */
                         /* (CWorkspace: need M*M) */
                         /* (RWorkspace: need BDSPAC) */
-                        zbdsqr_("U", m, m, m, &c__0, &s[1], &rwork[ie], &work[iu], &ldwrku,
-                                &u[u_offset], ldu, cdum, &c__1, &rwork[irwork], info);
+                        aocl_lapack_zbdsqr("U", m, m, m, &c__0, &s[1], &rwork[ie], &work[iu],
+                                           &ldwrku, &u[u_offset], ldu, cdum, &c__1, &rwork[irwork],
+                                           info);
                         /* Multiply right singular vectors of L in WORK(IU) by */
                         /* Q in VT, storing result in A */
                         /* (CWorkspace: need M*M) */
                         /* (RWorkspace: 0) */
-                        zgemm_("N", "N", m, n, m, &c_b2, &work[iu], &ldwrku, &vt[vt_offset], ldvt,
-                               &c_b1, &a[a_offset], lda);
+                        aocl_blas_zgemm("N", "N", m, n, m, &c_b2, &work[iu], &ldwrku,
+                                        &vt[vt_offset], ldvt, &c_b1, &a[a_offset], lda);
                         /* Copy right singular vectors of A from A to VT */
-                        zlacpy_("F", m, n, &a[a_offset], lda, &vt[vt_offset], ldvt);
+                        aocl_lapack_zlacpy("F", m, n, &a[a_offset], lda, &vt[vt_offset], ldvt);
                     }
                     else
                     {
@@ -3339,19 +3401,21 @@ void zgesvd_(char *jobu, char *jobvt, integer *m, integer *n, doublecomplex *a, 
                         /* (CWorkspace: need 2*M, prefer M+M*NB) */
                         /* (RWorkspace: 0) */
                         i__2 = *lwork - iwork + 1;
-                        zgelqf_(m, n, &a[a_offset], lda, &work[itau], &work[iwork], &i__2, &ierr);
-                        zlacpy_("U", m, n, &a[a_offset], lda, &vt[vt_offset], ldvt);
+                        aocl_lapack_zgelqf(m, n, &a[a_offset], lda, &work[itau], &work[iwork],
+                                           &i__2, &ierr);
+                        aocl_lapack_zlacpy("U", m, n, &a[a_offset], lda, &vt[vt_offset], ldvt);
                         /* Generate Q in VT */
                         /* (CWorkspace: need M+N, prefer M+N*NB) */
                         /* (RWorkspace: 0) */
                         i__2 = *lwork - iwork + 1;
-                        zunglq_(n, n, m, &vt[vt_offset], ldvt, &work[itau], &work[iwork], &i__2,
-                                &ierr);
+                        aocl_lapack_zunglq(n, n, m, &vt[vt_offset], ldvt, &work[itau], &work[iwork],
+                                           &i__2, &ierr);
                         /* Copy L to U, zeroing out above it */
-                        zlacpy_("L", m, m, &a[a_offset], lda, &u[u_offset], ldu);
+                        aocl_lapack_zlacpy("L", m, m, &a[a_offset], lda, &u[u_offset], ldu);
                         i__2 = *m - 1;
                         i__3 = *m - 1;
-                        zlaset_("U", &i__2, &i__3, &c_b1, &c_b1, &u[(u_dim1 << 1) + 1], ldu);
+                        aocl_lapack_zlaset("U", &i__2, &i__3, &c_b1, &c_b1, &u[(u_dim1 << 1) + 1],
+                                           ldu);
                         ie = 1;
                         itauq = itau;
                         itaup = itauq + *m;
@@ -3360,29 +3424,30 @@ void zgesvd_(char *jobu, char *jobvt, integer *m, integer *n, doublecomplex *a, 
                         /* (CWorkspace: need 3*M, prefer 2*M+2*M*NB) */
                         /* (RWorkspace: need M) */
                         i__2 = *lwork - iwork + 1;
-                        zgebrd_(m, m, &u[u_offset], ldu, &s[1], &rwork[ie], &work[itauq],
-                                &work[itaup], &work[iwork], &i__2, &ierr);
+                        aocl_lapack_zgebrd(m, m, &u[u_offset], ldu, &s[1], &rwork[ie], &work[itauq],
+                                           &work[itaup], &work[iwork], &i__2, &ierr);
                         /* Multiply right bidiagonalizing vectors in U by Q */
                         /* in VT */
                         /* (CWorkspace: need 2*M+N, prefer 2*M+N*NB) */
                         /* (RWorkspace: 0) */
                         i__2 = *lwork - iwork + 1;
-                        zunmbr_("P", "L", "C", m, n, m, &u[u_offset], ldu, &work[itaup],
-                                &vt[vt_offset], ldvt, &work[iwork], &i__2, &ierr);
+                        aocl_lapack_zunmbr("P", "L", "C", m, n, m, &u[u_offset], ldu, &work[itaup],
+                                           &vt[vt_offset], ldvt, &work[iwork], &i__2, &ierr);
                         /* Generate left bidiagonalizing vectors in U */
                         /* (CWorkspace: need 3*M, prefer 2*M+M*NB) */
                         /* (RWorkspace: 0) */
                         i__2 = *lwork - iwork + 1;
-                        zungbr_("Q", m, m, m, &u[u_offset], ldu, &work[itauq], &work[iwork], &i__2,
-                                &ierr);
+                        aocl_lapack_zungbr("Q", m, m, m, &u[u_offset], ldu, &work[itauq],
+                                           &work[iwork], &i__2, &ierr);
                         irwork = ie + *m;
                         /* Perform bidiagonal QR iteration, computing left */
                         /* singular vectors of A in U and computing right */
                         /* singular vectors of A in VT */
                         /* (CWorkspace: 0) */
                         /* (RWorkspace: need BDSPAC) */
-                        zbdsqr_("U", m, n, m, &c__0, &s[1], &rwork[ie], &vt[vt_offset], ldvt,
-                                &u[u_offset], ldu, cdum, &c__1, &rwork[irwork], info);
+                        aocl_lapack_zbdsqr("U", m, n, m, &c__0, &s[1], &rwork[ie], &vt[vt_offset],
+                                           ldvt, &u[u_offset], ldu, cdum, &c__1, &rwork[irwork],
+                                           info);
                     }
                 }
             }
@@ -3400,17 +3465,18 @@ void zgesvd_(char *jobu, char *jobvt, integer *m, integer *n, doublecomplex *a, 
             /* (CWorkspace: need 2*M+N, prefer 2*M+(M+N)*NB) */
             /* (RWorkspace: M) */
             i__2 = *lwork - iwork + 1;
-            zgebrd_(m, n, &a[a_offset], lda, &s[1], &rwork[ie], &work[itauq], &work[itaup],
-                    &work[iwork], &i__2, &ierr);
+            aocl_lapack_zgebrd(m, n, &a[a_offset], lda, &s[1], &rwork[ie], &work[itauq],
+                               &work[itaup], &work[iwork], &i__2, &ierr);
             if(wntuas)
             {
                 /* If left singular vectors desired in U, copy result to U */
                 /* and generate left bidiagonalizing vectors in U */
                 /* (CWorkspace: need 3*M-1, prefer 2*M+(M-1)*NB) */
                 /* (RWorkspace: 0) */
-                zlacpy_("L", m, m, &a[a_offset], lda, &u[u_offset], ldu);
+                aocl_lapack_zlacpy("L", m, m, &a[a_offset], lda, &u[u_offset], ldu);
                 i__2 = *lwork - iwork + 1;
-                zungbr_("Q", m, m, n, &u[u_offset], ldu, &work[itauq], &work[iwork], &i__2, &ierr);
+                aocl_lapack_zungbr("Q", m, m, n, &u[u_offset], ldu, &work[itauq], &work[iwork],
+                                   &i__2, &ierr);
             }
             if(wntvas)
             {
@@ -3418,7 +3484,7 @@ void zgesvd_(char *jobu, char *jobvt, integer *m, integer *n, doublecomplex *a, 
                 /* VT and generate right bidiagonalizing vectors in VT */
                 /* (CWorkspace: need 2*M+NRVT, prefer 2*M+NRVT*NB) */
                 /* (RWorkspace: 0) */
-                zlacpy_("U", m, n, &a[a_offset], lda, &vt[vt_offset], ldvt);
+                aocl_lapack_zlacpy("U", m, n, &a[a_offset], lda, &vt[vt_offset], ldvt);
                 if(wntva)
                 {
                     nrvt = *n;
@@ -3428,8 +3494,8 @@ void zgesvd_(char *jobu, char *jobvt, integer *m, integer *n, doublecomplex *a, 
                     nrvt = *m;
                 }
                 i__2 = *lwork - iwork + 1;
-                zungbr_("P", &nrvt, n, m, &vt[vt_offset], ldvt, &work[itaup], &work[iwork], &i__2,
-                        &ierr);
+                aocl_lapack_zungbr("P", &nrvt, n, m, &vt[vt_offset], ldvt, &work[itaup],
+                                   &work[iwork], &i__2, &ierr);
             }
             if(wntuo)
             {
@@ -3438,7 +3504,8 @@ void zgesvd_(char *jobu, char *jobvt, integer *m, integer *n, doublecomplex *a, 
                 /* (CWorkspace: need 3*M-1, prefer 2*M+(M-1)*NB) */
                 /* (RWorkspace: 0) */
                 i__2 = *lwork - iwork + 1;
-                zungbr_("Q", m, m, n, &a[a_offset], lda, &work[itauq], &work[iwork], &i__2, &ierr);
+                aocl_lapack_zungbr("Q", m, m, n, &a[a_offset], lda, &work[itauq], &work[iwork],
+                                   &i__2, &ierr);
             }
             if(wntvo)
             {
@@ -3447,7 +3514,8 @@ void zgesvd_(char *jobu, char *jobvt, integer *m, integer *n, doublecomplex *a, 
                 /* (CWorkspace: need 3*M, prefer 2*M+M*NB) */
                 /* (RWorkspace: 0) */
                 i__2 = *lwork - iwork + 1;
-                zungbr_("P", m, n, m, &a[a_offset], lda, &work[itaup], &work[iwork], &i__2, &ierr);
+                aocl_lapack_zungbr("P", m, n, m, &a[a_offset], lda, &work[itaup], &work[iwork],
+                                   &i__2, &ierr);
             }
             irwork = ie + *m;
             if(wntuas || wntuo)
@@ -3473,8 +3541,8 @@ void zgesvd_(char *jobu, char *jobvt, integer *m, integer *n, doublecomplex *a, 
                 /* vectors in VT */
                 /* (CWorkspace: 0) */
                 /* (RWorkspace: need BDSPAC) */
-                zbdsqr_("L", m, &ncvt, &nru, &c__0, &s[1], &rwork[ie], &vt[vt_offset], ldvt,
-                        &u[u_offset], ldu, cdum, &c__1, &rwork[irwork], info);
+                aocl_lapack_zbdsqr("L", m, &ncvt, &nru, &c__0, &s[1], &rwork[ie], &vt[vt_offset],
+                                   ldvt, &u[u_offset], ldu, cdum, &c__1, &rwork[irwork], info);
             }
             else if(!wntuo && wntvo)
             {
@@ -3483,8 +3551,8 @@ void zgesvd_(char *jobu, char *jobvt, integer *m, integer *n, doublecomplex *a, 
                 /* vectors in A */
                 /* (CWorkspace: 0) */
                 /* (RWorkspace: need BDSPAC) */
-                zbdsqr_("L", m, &ncvt, &nru, &c__0, &s[1], &rwork[ie], &a[a_offset], lda,
-                        &u[u_offset], ldu, cdum, &c__1, &rwork[irwork], info);
+                aocl_lapack_zbdsqr("L", m, &ncvt, &nru, &c__0, &s[1], &rwork[ie], &a[a_offset], lda,
+                                   &u[u_offset], ldu, cdum, &c__1, &rwork[irwork], info);
             }
             else
             {
@@ -3493,8 +3561,8 @@ void zgesvd_(char *jobu, char *jobvt, integer *m, integer *n, doublecomplex *a, 
                 /* vectors in VT */
                 /* (CWorkspace: 0) */
                 /* (RWorkspace: need BDSPAC) */
-                zbdsqr_("L", m, &ncvt, &nru, &c__0, &s[1], &rwork[ie], &vt[vt_offset], ldvt,
-                        &a[a_offset], lda, cdum, &c__1, &rwork[irwork], info);
+                aocl_lapack_zbdsqr("L", m, &ncvt, &nru, &c__0, &s[1], &rwork[ie], &vt[vt_offset],
+                                   ldvt, &a[a_offset], lda, cdum, &c__1, &rwork[irwork], info);
             }
         }
     }
@@ -3503,21 +3571,25 @@ void zgesvd_(char *jobu, char *jobvt, integer *m, integer *n, doublecomplex *a, 
     {
         if(anrm > bignum)
         {
-            dlascl_("G", &c__0, &c__0, &bignum, &anrm, &minmn, &c__1, &s[1], &minmn, &ierr);
+            aocl_lapack_dlascl("G", &c__0, &c__0, &bignum, &anrm, &minmn, &c__1, &s[1], &minmn,
+                               &ierr);
         }
         if(*info != 0 && anrm > bignum)
         {
             i__2 = minmn - 1;
-            dlascl_("G", &c__0, &c__0, &bignum, &anrm, &i__2, &c__1, &rwork[ie], &minmn, &ierr);
+            aocl_lapack_dlascl("G", &c__0, &c__0, &bignum, &anrm, &i__2, &c__1, &rwork[ie], &minmn,
+                               &ierr);
         }
         if(anrm < smlnum)
         {
-            dlascl_("G", &c__0, &c__0, &smlnum, &anrm, &minmn, &c__1, &s[1], &minmn, &ierr);
+            aocl_lapack_dlascl("G", &c__0, &c__0, &smlnum, &anrm, &minmn, &c__1, &s[1], &minmn,
+                               &ierr);
         }
         if(*info != 0 && anrm < smlnum)
         {
             i__2 = minmn - 1;
-            dlascl_("G", &c__0, &c__0, &smlnum, &anrm, &i__2, &c__1, &rwork[ie], &minmn, &ierr);
+            aocl_lapack_dlascl("G", &c__0, &c__0, &smlnum, &anrm, &i__2, &c__1, &rwork[ie], &minmn,
+                               &ierr);
         }
     }
     /* Return optimal workspace in WORK(1) */

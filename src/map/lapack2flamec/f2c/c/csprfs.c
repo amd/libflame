@@ -4,8 +4,8 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static complex c_b1 = {1.f, 0.f};
-static integer c__1 = 1;
+static scomplex c_b1 = {{1.f}, {0.f}};
+static aocl_int64_t c__1 = 1;
 /* > \brief \b CSPRFS */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -178,9 +178,31 @@ static integer c__1 = 1;
 /* > \ingroup complexOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void csprfs_(char *uplo, integer *n, integer *nrhs, complex *ap, complex *afp, integer *ipiv,
-             complex *b, integer *ldb, complex *x, integer *ldx, real *ferr, real *berr,
-             complex *work, real *rwork, integer *info)
+/** Generated wrapper function */
+void csprfs_(char *uplo, aocl_int_t *n, aocl_int_t *nrhs, scomplex *ap, scomplex *afp,
+             aocl_int_t *ipiv, scomplex *b, aocl_int_t *ldb, scomplex *x, aocl_int_t *ldx, real *ferr,
+             real *berr, scomplex *work, real *rwork, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_csprfs(uplo, n, nrhs, ap, afp, ipiv, b, ldb, x, ldx, ferr, berr, work, rwork, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t nrhs_64 = *nrhs;
+    aocl_int64_t ldb_64 = *ldb;
+    aocl_int64_t ldx_64 = *ldx;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_csprfs(uplo, &n_64, &nrhs_64, ap, afp, ipiv, b, &ldb_64, x, &ldx_64, ferr, berr,
+                       work, rwork, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_csprfs(char *uplo, aocl_int64_t *n, aocl_int64_t *nrhs, scomplex *ap, scomplex *afp,
+                        aocl_int_t *ipiv, scomplex *b, aocl_int64_t *ldb, scomplex *x,
+                        aocl_int64_t *ldx, real *ferr, real *berr, scomplex *work, real *rwork,
+                        aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -209,31 +231,13 @@ void csprfs_(char *uplo, integer *n, integer *nrhs, complex *ap, complex *afp, i
     real eps;
     aocl_int64_t kase;
     real safe1, safe2;
-    extern logical lsame_(char *, char *, integer, integer);
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     integer isave[3];
-    extern /* Subroutine */
-        void
-        ccopy_(integer *, complex *, integer *, complex *, integer *),
-        caxpy_(integer *, complex *, complex *, integer *, complex *, integer *);
-    integer count;
-    extern /* Subroutine */
-        void
-        cspmv_(char *, integer *, complex *, complex *, complex *, integer *, complex *, complex *,
-               integer *);
+    aocl_int64_t count;
     logical upper;
-    extern /* Subroutine */
-        void
-        clacn2_(integer *, complex *, complex *, real *, integer *, integer *);
     extern real slamch_(char *);
     real safmin;
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real lstres;
-    extern /* Subroutine */
-        void
-        csptrs_(char *, integer *, integer *, complex *, integer *, complex *, integer *,
-                integer *);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -301,7 +305,7 @@ void csprfs_(char *uplo, integer *n, integer *nrhs, complex *ap, complex *afp, i
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("CSPRFS", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("CSPRFS", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
@@ -332,10 +336,11 @@ void csprfs_(char *uplo, integer *n, integer *nrhs, complex *ap, complex *afp, i
         lstres = 3.f;
     L20: /* Loop until stopping criterion is satisfied. */
         /* Compute residual R = B - A * X */
-        ccopy_(n, &b[j * b_dim1 + 1], &c__1, &work[1], &c__1);
+        aocl_blas_ccopy(n, &b[j * b_dim1 + 1], &c__1, &work[1], &c__1);
         q__1.r = -1.f;
         q__1.i = -0.f; // , expr subst
-        cspmv_(uplo, n, &q__1, &ap[1], &x[j * x_dim1 + 1], &c__1, &c_b1, &work[1], &c__1);
+        aocl_lapack_cspmv(uplo, n, &q__1, &ap[1], &x[j * x_dim1 + 1], &c__1, &c_b1, &work[1],
+                          &c__1);
         /* Compute componentwise relative backward error from formula */
         /* fla_max(i) ( f2c_abs(R(i)) / ( f2c_abs(A)*f2c_abs(X) + f2c_abs(B) )(i) ) */
         /* where f2c_abs(Z) is the componentwise absolute value of the matrix */
@@ -501,7 +506,7 @@ void csprfs_(char *uplo, integer *n, integer *nrhs, complex *ap, complex *afp, i
         }
         kase = 0;
     L100:
-        clacn2_(n, &work[*n + 1], &work[1], &ferr[j], &kase, isave);
+        aocl_lapack_clacn2(n, &work[*n + 1], &work[1], &ferr[j], &kase, isave);
         if(kase != 0)
         {
             if(kase == 1)

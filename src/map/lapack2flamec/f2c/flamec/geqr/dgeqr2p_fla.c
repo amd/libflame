@@ -1,7 +1,7 @@
 /* dgeqr2p.f -- translated by f2c (version 20000121). You must link the resulting object file with
  * the libraries: -lf2c -lm (in that order) */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
+static aocl_int64_t c__1 = 1;
 /* > \brief \b DGEQR2P computes the QR factorization of a general rectangular matrix with
  * non-negative diagona l elements using an unblocked algorithm. */
 /* =========== DOCUMENTATION =========== */
@@ -132,22 +132,14 @@ v(i+1:m) is stored on exit in A(i+1:m,i), */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void dgeqr2p_fla(integer *m, integer *n, doublereal *a, integer *lda, doublereal *tau,
-                 doublereal *work, integer *info)
+void dgeqr2p_fla(aocl_int64_t *m, aocl_int64_t *n, doublereal *a, aocl_int64_t *lda,
+                 doublereal *tau, doublereal *work, aocl_int64_t *info)
 {
     /* System generated locals */
-    integer a_dim1, a_offset, i__1, i__2, i__3;
+    aocl_int64_t a_dim1, a_offset, i__1, i__2, i__3;
     /* Local variables */
-    integer i__, k;
-    extern /* Subroutine */
-        void
-        dlarf_(char *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *,
-               integer *, doublereal *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    aocl_int64_t i__, k;
     doublereal aii;
-    extern /* Subroutine */
-        void
-        dlarfgp_(integer *, doublereal *, doublereal *, integer *, doublereal *);
     /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -189,7 +181,7 @@ void dgeqr2p_fla(integer *m, integer *n, doublereal *a, integer *lda, doublereal
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("DGEQR2P", &i__1, (ftnlen)7);
+        aocl_blas_xerbla("DGEQR2P", &i__1, (ftnlen)7);
         return;
     }
     k = fla_min(*m, *n);
@@ -200,8 +192,8 @@ void dgeqr2p_fla(integer *m, integer *n, doublereal *a, integer *lda, doublereal
         i__2 = *m - i__ + 1;
         /* Computing MIN */
         i__3 = i__ + 1;
-        dlarfgp_(&i__2, &a[i__ + i__ * a_dim1], &a[fla_min(i__3, *m) + i__ * a_dim1], &c__1,
-                 &tau[i__]);
+        aocl_lapack_dlarfgp(&i__2, &a[i__ + i__ * a_dim1], &a[fla_min(i__3, *m) + i__ * a_dim1],
+                            &c__1, &tau[i__]);
         if(i__ < *n)
         {
             /* Apply H(i) to A(i:m,i+1:n) from the left */
@@ -209,8 +201,8 @@ void dgeqr2p_fla(integer *m, integer *n, doublereal *a, integer *lda, doublereal
             a[i__ + i__ * a_dim1] = 1.;
             i__2 = *m - i__ + 1;
             i__3 = *n - i__;
-            dlarf_("Left", &i__2, &i__3, &a[i__ + i__ * a_dim1], &c__1, &tau[i__],
-                   &a[i__ + (i__ + 1) * a_dim1], lda, &work[1]);
+            aocl_lapack_dlarf("Left", &i__2, &i__3, &a[i__ + i__ * a_dim1], &c__1, &tau[i__],
+                              &a[i__ + (i__ + 1) * a_dim1], lda, &work[1]);
             a[i__ + i__ * a_dim1] = aii;
         }
         /* L10: */

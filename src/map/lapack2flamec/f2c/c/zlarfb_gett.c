@@ -4,8 +4,8 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static doublecomplex c_b1 = {1., 0.};
-static integer c__1 = 1;
+static dcomplex c_b1 = {{1.}, {0.}};
+static aocl_int64_t c__1 = 1;
 /* > \brief \b ZLARFB_GETT */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -43,8 +43,8 @@ static integer c__1 = 1;
 /* > */
 /* > \verbatim */
 /* > */
-/* > ZLARFB_GETT applies a complex Householder block reflector H from the */
-/* > left to a complex (K+M)-by-N "triangular-pentagonal" matrix */
+/* > ZLARFB_GETT applies a scomplex Householder block reflector H from the */
+/* > left to a scomplex (K+M)-by-N "triangular-pentagonal" matrix */
 /* > composed of two block matrices: an upper trapezoidal K-by-N matrix A */
 /* > stored in the array A, and a rectangular M-by-(N-K) matrix B, stored */
 /* > in the array B. The block reflector H is stored in a compact */
@@ -389,29 +389,44 @@ static integer c__1 = 1;
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void zlarfb_gett_(char *ident, integer *m, integer *n, integer *k, doublecomplex *t, integer *ldt,
-                  doublecomplex *a, integer *lda, doublecomplex *b, integer *ldb,
-                  doublecomplex *work, integer *ldwork)
+/** Generated wrapper function */
+void zlarfb_gett_(char *ident, aocl_int_t *m, aocl_int_t *n, aocl_int_t *k, dcomplex *t,
+                  aocl_int_t *ldt, dcomplex *a, aocl_int_t *lda, dcomplex *b,
+                  aocl_int_t *ldb, dcomplex *work, aocl_int_t *ldwork)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_zlarfb_gett(ident, m, n, k, t, ldt, a, lda, b, ldb, work, ldwork);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t k_64 = *k;
+    aocl_int64_t ldt_64 = *ldt;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t ldb_64 = *ldb;
+    aocl_int64_t ldwork_64 = *ldwork;
+
+    aocl_lapack_zlarfb_gett(ident, &m_64, &n_64, &k_64, t, &ldt_64, a, &lda_64, b, &ldb_64, work,
+                            &ldwork_64);
+#endif
+}
+
+void aocl_lapack_zlarfb_gett(char *ident, aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *k,
+                             dcomplex *t, aocl_int64_t *ldt, dcomplex *a,
+                             aocl_int64_t *lda, dcomplex *b, aocl_int64_t *ldb,
+                             dcomplex *work, aocl_int64_t *ldwork)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zlarfb_gett inputs: ident %c, m %" FLA_IS ", n %" FLA_IS ", k %" FLA_IS
                       ", ldt %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS "",
                       *ident, *m, *n, *k, *ldt, *lda, *ldb);
     /* System generated locals */
-    integer a_dim1, a_offset, b_dim1, b_offset, t_dim1, t_offset, work_dim1, work_offset, i__1,
+    aocl_int64_t a_dim1, a_offset, b_dim1, b_offset, t_dim1, t_offset, work_dim1, work_offset, i__1,
         i__2, i__3, i__4, i__5;
-    doublecomplex z__1;
+    dcomplex z__1;
     /* Local variables */
-    integer i__, j;
+    aocl_int64_t i__, j;
     logical lnotident;
-    extern logical lsame_(char *, char *, integer, integer);
-    extern /* Subroutine */
-        void
-        zgemm_(char *, char *, integer *, integer *, integer *, doublecomplex *, doublecomplex *,
-               integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *),
-        zcopy_(integer *, doublecomplex *, integer *, doublecomplex *, integer *),
-        ztrmm_(char *, char *, char *, char *, integer *, integer *, doublecomplex *,
-               doublecomplex *, integer *, doublecomplex *, integer *);
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     /* -- LAPACK auxiliary routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -462,7 +477,7 @@ void zlarfb_gett_(char *ident, integer *m, integer *n, integer *k, doublecomplex
         i__1 = *n - *k;
         for(j = 1; j <= i__1; ++j)
         {
-            zcopy_(k, &a[(*k + j) * a_dim1 + 1], &c__1, &work[j * work_dim1 + 1], &c__1);
+            aocl_blas_zcopy(k, &a[(*k + j) * a_dim1 + 1], &c__1, &work[j * work_dim1 + 1], &c__1);
         }
         if(lnotident)
         {
@@ -470,21 +485,22 @@ void zlarfb_gett_(char *ident, integer *m, integer *n, integer *k, doublecomplex
             /* V1 is not an identy matrix, but unit lower-triangular */
             /* V1 stored in A1 (diagonal ones are not stored). */
             i__1 = *n - *k;
-            ztrmm_("L", "L", "C", "U", k, &i__1, &c_b1, &a[a_offset], lda, &work[work_offset],
-                   ldwork);
+            aocl_blas_ztrmm("L", "L", "C", "U", k, &i__1, &c_b1, &a[a_offset], lda,
+                            &work[work_offset], ldwork);
         }
         /* col2_(3) Compute W2: = W2 + (V2**H) * B2 = W2 + (B1**H) * B2 */
         /* V2 stored in B1. */
         if(*m > 0)
         {
             i__1 = *n - *k;
-            zgemm_("C", "N", k, &i__1, m, &c_b1, &b[b_offset], ldb, &b[(*k + 1) * b_dim1 + 1], ldb,
-                   &c_b1, &work[work_offset], ldwork);
+            aocl_blas_zgemm("C", "N", k, &i__1, m, &c_b1, &b[b_offset], ldb,
+                            &b[(*k + 1) * b_dim1 + 1], ldb, &c_b1, &work[work_offset], ldwork);
         }
         /* col2_(4) Compute W2: = T * W2, */
         /* T is upper-triangular. */
         i__1 = *n - *k;
-        ztrmm_("L", "U", "N", "N", k, &i__1, &c_b1, &t[t_offset], ldt, &work[work_offset], ldwork);
+        aocl_blas_ztrmm("L", "U", "N", "N", k, &i__1, &c_b1, &t[t_offset], ldt, &work[work_offset],
+                        ldwork);
         /* col2_(5) Compute B2: = B2 - V2 * W2 = B2 - B1 * W2, */
         /* V2 stored in B1. */
         if(*m > 0)
@@ -492,8 +508,8 @@ void zlarfb_gett_(char *ident, integer *m, integer *n, integer *k, doublecomplex
             i__1 = *n - *k;
             z__1.r = -1.;
             z__1.i = -0.; // , expr subst
-            zgemm_("N", "N", m, &i__1, k, &z__1, &b[b_offset], ldb, &work[work_offset], ldwork,
-                   &c_b1, &b[(*k + 1) * b_dim1 + 1], ldb);
+            aocl_blas_zgemm("N", "N", m, &i__1, k, &z__1, &b[b_offset], ldb, &work[work_offset],
+                            ldwork, &c_b1, &b[(*k + 1) * b_dim1 + 1], ldb);
         }
         if(lnotident)
         {
@@ -501,8 +517,8 @@ void zlarfb_gett_(char *ident, integer *m, integer *n, integer *k, doublecomplex
             /* V1 is not an identity matrix, but unit lower-triangular, */
             /* V1 stored in A1 (diagonal ones are not stored). */
             i__1 = *n - *k;
-            ztrmm_("L", "L", "N", "U", k, &i__1, &c_b1, &a[a_offset], lda, &work[work_offset],
-                   ldwork);
+            aocl_blas_ztrmm("L", "L", "N", "U", k, &i__1, &c_b1, &a[a_offset], lda,
+                            &work[work_offset], ldwork);
         }
         /* col2_(7) Compute A2: = A2 - W2 = */
         /* = A(1:K, K+1:N-K) - WORK(1:K, 1:N-K), */
@@ -534,7 +550,7 @@ void zlarfb_gett_(char *ident, integer *m, integer *n, integer *k, doublecomplex
     i__1 = *k;
     for(j = 1; j <= i__1; ++j)
     {
-        zcopy_(&j, &a[j * a_dim1 + 1], &c__1, &work[j * work_dim1 + 1], &c__1);
+        aocl_blas_zcopy(&j, &a[j * a_dim1 + 1], &c__1, &work[j * work_dim1 + 1], &c__1);
     }
     /* Set the subdiagonal elements of W1 to zero column-by-column. */
     i__1 = *k - 1;
@@ -554,19 +570,21 @@ void zlarfb_gett_(char *ident, integer *m, integer *n, integer *k, doublecomplex
         /* V1 is not an identity matrix, but unit lower-triangular */
         /* V1 stored in A1 (diagonal ones are not stored), */
         /* W1 is upper-triangular with zeroes below the diagonal. */
-        ztrmm_("L", "L", "C", "U", k, k, &c_b1, &a[a_offset], lda, &work[work_offset], ldwork);
+        aocl_blas_ztrmm("L", "L", "C", "U", k, k, &c_b1, &a[a_offset], lda, &work[work_offset],
+                        ldwork);
     }
     /* col1_(3) Compute W1: = T * W1, */
     /* T is upper-triangular, */
     /* W1 is upper-triangular with zeroes below the diagonal. */
-    ztrmm_("L", "U", "N", "N", k, k, &c_b1, &t[t_offset], ldt, &work[work_offset], ldwork);
+    aocl_blas_ztrmm("L", "U", "N", "N", k, k, &c_b1, &t[t_offset], ldt, &work[work_offset], ldwork);
     /* col1_(4) Compute B1: = - V2 * W1 = - B1 * W1, */
     /* V2 = B1, W1 is upper-triangular with zeroes below the diagonal. */
     if(*m > 0)
     {
         z__1.r = -1.;
         z__1.i = -0.; // , expr subst
-        ztrmm_("R", "U", "N", "N", m, k, &z__1, &work[work_offset], ldwork, &b[b_offset], ldb);
+        aocl_blas_ztrmm("R", "U", "N", "N", m, k, &z__1, &work[work_offset], ldwork, &b[b_offset],
+                        ldb);
     }
     if(lnotident)
     {
@@ -575,7 +593,8 @@ void zlarfb_gett_(char *ident, integer *m, integer *n, integer *k, doublecomplex
         /* V1 stored in A1 (diagonal ones are not stored), */
         /* W1 is upper-triangular on input with zeroes below the diagonal, */
         /* and square on output. */
-        ztrmm_("L", "L", "N", "U", k, k, &c_b1, &a[a_offset], lda, &work[work_offset], ldwork);
+        aocl_blas_ztrmm("L", "L", "N", "U", k, k, &c_b1, &a[a_offset], lda, &work[work_offset],
+                        ldwork);
         /* col1_(6) Compute A1: = A1 - W1 = A(1:K, 1:K) - WORK(1:K, 1:K) */
         /* column-by-column. A1 is upper-triangular on input. */
         /* If IDENT, A1 is square on output, and W1 is square, */

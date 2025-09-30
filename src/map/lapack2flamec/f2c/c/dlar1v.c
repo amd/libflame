@@ -224,11 +224,37 @@ is largest */
 /* > Christof Voemel, University of California, Berkeley, USA */
 /* ===================================================================== */
 /* Subroutine */
-void dlar1v_(integer *n, integer *b1, integer *bn, doublereal *lambda, doublereal *d__,
+/** Generated wrapper function */
+void dlar1v_(aocl_int_t *n, aocl_int_t *b1, aocl_int_t *bn, doublereal *lambda, doublereal *d__,
              doublereal *l, doublereal *ld, doublereal *lld, doublereal *pivmin, doublereal *gaptol,
-             doublereal *z__, logical *wantnc, integer *negcnt, doublereal *ztz, doublereal *mingma,
-             integer *r__, integer *isuppz, doublereal *nrminv, doublereal *resid,
-             doublereal *rqcorr, doublereal *work)
+             doublereal *z__, logical *wantnc, aocl_int_t *negcnt, doublereal *ztz,
+             doublereal *mingma, aocl_int_t *r__, aocl_int_t *isuppz, doublereal *nrminv,
+             doublereal *resid, doublereal *rqcorr, doublereal *work)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_dlar1v(n, b1, bn, lambda, d__, l, ld, lld, pivmin, gaptol, z__, wantnc, negcnt, ztz,
+                       mingma, r__, isuppz, nrminv, resid, rqcorr, work);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t b1_64 = *b1;
+    aocl_int64_t bn_64 = *bn;
+    aocl_int64_t negcnt_64 = *negcnt;
+    aocl_int64_t r___64 = *r__;
+
+    aocl_lapack_dlar1v(&n_64, &b1_64, &bn_64, lambda, d__, l, ld, lld, pivmin, gaptol, z__, wantnc,
+                       &negcnt_64, ztz, mingma, &r___64, isuppz, nrminv, resid, rqcorr, work);
+
+    *negcnt = (aocl_int_t)negcnt_64;
+    *r__ = (aocl_int_t)r___64;
+#endif
+}
+
+void aocl_lapack_dlar1v(aocl_int64_t *n, aocl_int64_t *b1, aocl_int64_t *bn, doublereal *lambda,
+                        doublereal *d__, doublereal *l, doublereal *ld, doublereal *lld,
+                        doublereal *pivmin, doublereal *gaptol, doublereal *z__, logical *wantnc,
+                        aocl_int64_t *negcnt, doublereal *ztz, doublereal *mingma,
+                        aocl_int64_t *r__, aocl_int_t *isuppz, doublereal *nrminv,
+                        doublereal *resid, doublereal *rqcorr, doublereal *work)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dlar1v inputs: n %" FLA_IS ", b1 %" FLA_IS ", bn %" FLA_IS ", r__ %" FLA_IS

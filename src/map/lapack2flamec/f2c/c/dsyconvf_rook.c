@@ -197,24 +197,36 @@
 /* > \endverbatim */
 /* ===================================================================== */
 /* Subroutine */
-void dsyconvf_rook_(char *uplo, char *way, integer *n, doublereal *a, integer *lda, doublereal *e,
-                    integer *ipiv, integer *info)
+/** Generated wrapper function */
+void dsyconvf_rook_(char *uplo, char *way, aocl_int_t *n, doublereal *a, aocl_int_t *lda,
+                    doublereal *e, aocl_int_t *ipiv, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_dsyconvf_rook(uplo, way, n, a, lda, e, ipiv, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_dsyconvf_rook(uplo, way, &n_64, a, &lda_64, e, ipiv, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_dsyconvf_rook(char *uplo, char *way, aocl_int64_t *n, doublereal *a,
+                               aocl_int64_t *lda, doublereal *e, aocl_int_t *ipiv,
+                               aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dsyconvf_rook inputs: uplo %c, way %c, n %" FLA_IS ", lda %" FLA_IS "",
                       *uplo, *way, *n, *lda);
     /* System generated locals */
-    integer a_dim1, a_offset, i__1;
+    aocl_int64_t a_dim1, a_offset, i__1;
     /* Local variables */
-    integer i__, ip, ip2;
-    extern logical lsame_(char *, char *, integer, integer);
-    extern /* Subroutine */
-        void
-        dswap_(integer *, doublereal *, integer *, doublereal *, integer *);
+    aocl_int64_t i__, ip, ip2;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     logical upper;
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical convert;
     /* -- LAPACK computational routine (version 3.8.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -261,7 +273,7 @@ void dsyconvf_rook_(char *uplo, char *way, integer *n, doublereal *a, integer *l
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("DSYCONVF_ROOK", &i__1, (ftnlen)13);
+        aocl_blas_xerbla("DSYCONVF_ROOK", &i__1, (ftnlen)13);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -313,8 +325,8 @@ void dsyconvf_rook_(char *uplo, char *way, integer *n, doublereal *a, integer *l
                         if(ip != i__)
                         {
                             i__1 = *n - i__;
-                            dswap_(&i__1, &a[i__ + (i__ + 1) * a_dim1], lda,
-                                   &a[ip + (i__ + 1) * a_dim1], lda);
+                            aocl_blas_dswap(&i__1, &a[i__ + (i__ + 1) * a_dim1], lda,
+                                            &a[ip + (i__ + 1) * a_dim1], lda);
                         }
                     }
                 }
@@ -330,14 +342,14 @@ void dsyconvf_rook_(char *uplo, char *way, integer *n, doublereal *a, integer *l
                         if(ip != i__)
                         {
                             i__1 = *n - i__;
-                            dswap_(&i__1, &a[i__ + (i__ + 1) * a_dim1], lda,
-                                   &a[ip + (i__ + 1) * a_dim1], lda);
+                            aocl_blas_dswap(&i__1, &a[i__ + (i__ + 1) * a_dim1], lda,
+                                            &a[ip + (i__ + 1) * a_dim1], lda);
                         }
                         if(ip2 != i__ - 1)
                         {
                             i__1 = *n - i__;
-                            dswap_(&i__1, &a[i__ - 1 + (i__ + 1) * a_dim1], lda,
-                                   &a[ip2 + (i__ + 1) * a_dim1], lda);
+                            aocl_blas_dswap(&i__1, &a[i__ - 1 + (i__ + 1) * a_dim1], lda,
+                                            &a[ip2 + (i__ + 1) * a_dim1], lda);
                         }
                     }
                     --i__;
@@ -364,8 +376,8 @@ void dsyconvf_rook_(char *uplo, char *way, integer *n, doublereal *a, integer *l
                         if(ip != i__)
                         {
                             i__1 = *n - i__;
-                            dswap_(&i__1, &a[ip + (i__ + 1) * a_dim1], lda,
-                                   &a[i__ + (i__ + 1) * a_dim1], lda);
+                            aocl_blas_dswap(&i__1, &a[ip + (i__ + 1) * a_dim1], lda,
+                                            &a[i__ + (i__ + 1) * a_dim1], lda);
                         }
                     }
                 }
@@ -382,14 +394,14 @@ void dsyconvf_rook_(char *uplo, char *way, integer *n, doublereal *a, integer *l
                         if(ip2 != i__ - 1)
                         {
                             i__1 = *n - i__;
-                            dswap_(&i__1, &a[ip2 + (i__ + 1) * a_dim1], lda,
-                                   &a[i__ - 1 + (i__ + 1) * a_dim1], lda);
+                            aocl_blas_dswap(&i__1, &a[ip2 + (i__ + 1) * a_dim1], lda,
+                                            &a[i__ - 1 + (i__ + 1) * a_dim1], lda);
                         }
                         if(ip != i__)
                         {
                             i__1 = *n - i__;
-                            dswap_(&i__1, &a[ip + (i__ + 1) * a_dim1], lda,
-                                   &a[i__ + (i__ + 1) * a_dim1], lda);
+                            aocl_blas_dswap(&i__1, &a[ip + (i__ + 1) * a_dim1], lda,
+                                            &a[i__ + (i__ + 1) * a_dim1], lda);
                         }
                     }
                 }
@@ -453,7 +465,7 @@ void dsyconvf_rook_(char *uplo, char *way, integer *n, doublereal *a, integer *l
                         if(ip != i__)
                         {
                             i__1 = i__ - 1;
-                            dswap_(&i__1, &a[i__ + a_dim1], lda, &a[ip + a_dim1], lda);
+                            aocl_blas_dswap(&i__1, &a[i__ + a_dim1], lda, &a[ip + a_dim1], lda);
                         }
                     }
                 }
@@ -469,12 +481,13 @@ void dsyconvf_rook_(char *uplo, char *way, integer *n, doublereal *a, integer *l
                         if(ip != i__)
                         {
                             i__1 = i__ - 1;
-                            dswap_(&i__1, &a[i__ + a_dim1], lda, &a[ip + a_dim1], lda);
+                            aocl_blas_dswap(&i__1, &a[i__ + a_dim1], lda, &a[ip + a_dim1], lda);
                         }
                         if(ip2 != i__ + 1)
                         {
                             i__1 = i__ - 1;
-                            dswap_(&i__1, &a[i__ + 1 + a_dim1], lda, &a[ip2 + a_dim1], lda);
+                            aocl_blas_dswap(&i__1, &a[i__ + 1 + a_dim1], lda, &a[ip2 + a_dim1],
+                                            lda);
                         }
                     }
                     ++i__;
@@ -501,7 +514,7 @@ void dsyconvf_rook_(char *uplo, char *way, integer *n, doublereal *a, integer *l
                         if(ip != i__)
                         {
                             i__1 = i__ - 1;
-                            dswap_(&i__1, &a[ip + a_dim1], lda, &a[i__ + a_dim1], lda);
+                            aocl_blas_dswap(&i__1, &a[ip + a_dim1], lda, &a[i__ + a_dim1], lda);
                         }
                     }
                 }
@@ -518,12 +531,13 @@ void dsyconvf_rook_(char *uplo, char *way, integer *n, doublereal *a, integer *l
                         if(ip2 != i__ + 1)
                         {
                             i__1 = i__ - 1;
-                            dswap_(&i__1, &a[ip2 + a_dim1], lda, &a[i__ + 1 + a_dim1], lda);
+                            aocl_blas_dswap(&i__1, &a[ip2 + a_dim1], lda, &a[i__ + 1 + a_dim1],
+                                            lda);
                         }
                         if(ip != i__)
                         {
                             i__1 = i__ - 1;
-                            dswap_(&i__1, &a[ip + a_dim1], lda, &a[i__ + a_dim1], lda);
+                            aocl_blas_dswap(&i__1, &a[ip + a_dim1], lda, &a[i__ + a_dim1], lda);
                         }
                     }
                 }

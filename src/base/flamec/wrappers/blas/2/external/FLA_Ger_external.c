@@ -13,10 +13,10 @@
 FLA_Error FLA_Ger_external( FLA_Obj alpha, FLA_Obj x, FLA_Obj y, FLA_Obj A )
 {
   FLA_Datatype datatype;
-  integer          m_A, n_A;
-  integer          rs_A, cs_A;
-  integer          inc_x;
-  integer          inc_y;
+  fla_dim_t          m_A, n_A;
+  fla_dim_t          rs_A, cs_A;
+  fla_dim_t          inc_x;
+  fla_dim_t          inc_y;
   conj1_t       blis_conjx;
   conj1_t       blis_conjy;
 

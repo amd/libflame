@@ -97,7 +97,23 @@
 /* > \ingroup doublePTcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void dptts2_(integer *n, integer *nrhs, doublereal *d__, doublereal *e, doublereal *b, integer *ldb)
+/** Generated wrapper function */
+void dptts2_(aocl_int_t *n, aocl_int_t *nrhs, doublereal *d__, doublereal *e, doublereal *b,
+             aocl_int_t *ldb)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_dptts2(n, nrhs, d__, e, b, ldb);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t nrhs_64 = *nrhs;
+    aocl_int64_t ldb_64 = *ldb;
+
+    aocl_lapack_dptts2(&n_64, &nrhs_64, d__, e, b, &ldb_64);
+#endif
+}
+
+void aocl_lapack_dptts2(aocl_int64_t *n, aocl_int64_t *nrhs, doublereal *d__, doublereal *e,
+                        doublereal *b, aocl_int64_t *ldb)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dptts2 inputs: n %" FLA_IS ", nrhs %" FLA_IS ", ldb %" FLA_IS "", *n, *nrhs,
@@ -106,10 +122,7 @@ void dptts2_(integer *n, integer *nrhs, doublereal *d__, doublereal *e, doublere
     aocl_int64_t b_dim1, b_offset, i__1, i__2;
     doublereal d__1;
     /* Local variables */
-    integer i__, j;
-    extern /* Subroutine */
-        void
-        dscal_(integer *, doublereal *, doublereal *, integer *);
+    aocl_int64_t i__, j;
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */

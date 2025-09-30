@@ -4,7 +4,7 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
+static aocl_int64_t c__1 = 1;
 /* > \brief \b DSYEQUB */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -129,34 +129,46 @@ static integer c__1 = 1;
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void dsyequb_(char *uplo, integer *n, doublereal *a, integer *lda, doublereal *s, doublereal *scond,
-              doublereal *amax, doublereal *work, integer *info)
+/** Generated wrapper function */
+void dsyequb_(char *uplo, aocl_int_t *n, doublereal *a, aocl_int_t *lda, doublereal *s,
+              doublereal *scond, doublereal *amax, doublereal *work, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_dsyequb(uplo, n, a, lda, s, scond, amax, work, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_dsyequb(uplo, &n_64, a, &lda_64, s, scond, amax, work, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_dsyequb(char *uplo, aocl_int64_t *n, doublereal *a, aocl_int64_t *lda,
+                         doublereal *s, doublereal *scond, doublereal *amax, doublereal *work,
+                         aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dsyequb inputs: uplo %c, n %" FLA_IS ", lda %" FLA_IS "", *uplo, *n, *lda);
     /* System generated locals */
-    integer a_dim1, a_offset, i__1, i__2;
+    aocl_int64_t a_dim1, a_offset, i__1, i__2;
     doublereal d__1, d__2, d__3;
     /* Builtin functions */
-    double sqrt(doublereal), log(doublereal), pow_di(doublereal *, integer *);
+    double sqrt(doublereal), log(doublereal), pow_di(doublereal *, aocl_int64_t *);
     /* Local variables */
     doublereal d__;
-    integer i__, j;
+    aocl_int64_t i__, j;
     doublereal t, u, c0, c1, c2, si;
     logical up;
     doublereal avg, std, tol, base;
-    integer iter;
+    aocl_int64_t iter;
     doublereal smin, smax, scale;
-    extern logical lsame_(char *, char *, integer, integer);
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     doublereal sumsq;
     extern doublereal dlamch_(char *);
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal bignum;
-    extern /* Subroutine */
-        void
-        dlassq_(integer *, doublereal *, integer *, doublereal *, doublereal *);
     doublereal smlnum;
     /* -- LAPACK computational routine (version 3.8.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -202,7 +214,7 @@ void dsyequb_(char *uplo, integer *n, doublereal *a, integer *lda, doublereal *s
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("DSYEQUB", &i__1, (ftnlen)7);
+        aocl_blas_xerbla("DSYEQUB", &i__1, (ftnlen)7);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -341,7 +353,7 @@ void dsyequb_(char *uplo, integer *n, doublereal *a, integer *lda, doublereal *s
         {
             work[i__] = s[i__ - *n] * work[i__ - *n] - avg;
         }
-        dlassq_(n, &work[*n + 1], &c__1, &scale, &sumsq);
+        aocl_lapack_dlassq(n, &work[*n + 1], &c__1, &scale, &sumsq);
         std = scale * sqrt(sumsq / *n);
         if(std < tol * avg)
         {

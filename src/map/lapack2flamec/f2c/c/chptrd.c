@@ -4,8 +4,8 @@
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
  /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static complex c_b2 = {0.f, 0.f};
-static integer c__1 = 1;
+static scomplex c_b2 = {{0.f}, {0.f}};
+static aocl_int64_t c__1 = 1;
 /* > \brief \b CHPTRD */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -153,7 +153,24 @@ v(i+2:n) is stored on exit in AP, */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void chptrd_(char *uplo, integer *n, complex *ap, real *d__, real *e, complex *tau, integer *info)
+/** Generated wrapper function */
+void chptrd_(char *uplo, aocl_int_t *n, scomplex *ap, real *d__, real *e, scomplex *tau,
+             aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_chptrd(uplo, n, ap, d__, e, tau, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_chptrd(uplo, &n_64, ap, d__, e, tau, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_chptrd(char *uplo, aocl_int64_t *n, scomplex *ap, real *d__, real *e, scomplex *tau,
+                        aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("chptrd inputs: uplo %c, n %" FLA_IS "", *uplo, *n);
@@ -162,26 +179,11 @@ void chptrd_(char *uplo, integer *n, complex *ap, real *d__, real *e, complex *t
     real r__1;
     scomplex q__1, q__2, q__3, q__4;
     /* Local variables */
-    integer i__, i1, ii, i1i1;
-    complex taui;
-    extern /* Subroutine */
-        void
-        chpr2_(char *, integer *, complex *, complex *, integer *, complex *, integer *, complex *);
-    complex alpha;
-    extern /* Complex */
-        VOID
-        cdotc_f2c_(complex *, integer *, complex *, integer *, complex *, integer *);
-    extern logical lsame_(char *, char *, integer, integer);
-    extern /* Subroutine */
-        void
-        chpmv_(char *, integer *, complex *, complex *, complex *, integer *, complex *, complex *,
-               integer *),
-        caxpy_(integer *, complex *, complex *, integer *, complex *, integer *);
+    aocl_int64_t i__, i1, ii, i1i1;
+    scomplex taui;
+    scomplex alpha;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     logical upper;
-    extern /* Subroutine */
-        void
-        clarfg_(integer *, complex *, complex *, integer *, complex *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -221,7 +223,7 @@ void chptrd_(char *uplo, integer *n, complex *ap, real *d__, real *e, complex *t
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("CHPTRD", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("CHPTRD", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -248,7 +250,7 @@ void chptrd_(char *uplo, integer *n, complex *ap, real *d__, real *e, complex *t
             i__1 = i1 + i__ - 1;
             alpha.r = ap[i__1].r;
             alpha.i = ap[i__1].i; // , expr subst
-            clarfg_(&i__, &alpha, &ap[i1], &c__1, &taui);
+            aocl_lapack_clarfg(&i__, &alpha, &ap[i1], &c__1, &taui);
             e[i__] = alpha.r;
             if(taui.r != 0.f || taui.i != 0.f)
             {
@@ -257,23 +259,23 @@ void chptrd_(char *uplo, integer *n, complex *ap, real *d__, real *e, complex *t
                 ap[i__1].real = 1.f;
                 ap[i__1].imag = 0.f; // , expr subst
                 /* Compute y := tau * A * v storing y in TAU(1:i) */
-                chpmv_(uplo, &i__, &taui, &ap[1], &ap[i1], &c__1, &c_b2, &tau[1], &c__1);
+                aocl_blas_chpmv(uplo, &i__, &taui, &ap[1], &ap[i1], &c__1, &c_b2, &tau[1], &c__1);
                 /* Compute w := y - 1/2 * tau * (y**H *v) * v */
-                q__3.real = -.5f;
-                q__3.imag = -0.f; // , expr subst
-                q__2.real = q__3.real * taui.real - q__3.imag * taui.imag;
-                q__2.imag = q__3.real * taui.imag + q__3.imag * taui.real; // , expr subst
+                q__3.r = -.5f;
+                q__3.i = -0.f; // , expr subst
+                q__2.r = q__3.r * taui.r - q__3.i * taui.i;
+                q__2.i = q__3.r * taui.i + q__3.i * taui.r; // , expr subst
                 aocl_lapack_cdotc_f2c(&q__4, &i__, &tau[1], &c__1, &ap[i1], &c__1);
-                q__1.real = q__2.real * q__4.real - q__2.imag * q__4.imag;
-                q__1.imag = q__2.real * q__4.imag + q__2.imag * q__4.real; // , expr subst
-                alpha.real = q__1.real;
-                alpha.imag = q__1.imag; // , expr subst
+                q__1.r = q__2.r * q__4.r - q__2.i * q__4.i;
+                q__1.i = q__2.r * q__4.i + q__2.i * q__4.r; // , expr subst
+                alpha.r = q__1.r;
+                alpha.i = q__1.i; // , expr subst
                 aocl_blas_caxpy(&i__, &alpha, &ap[i1], &c__1, &tau[1], &c__1);
                 /* Apply the transformation as a rank-2 update: */
                 /* A := A - v * w**H - w * v**H */
                 q__1.r = -1.f;
                 q__1.i = -0.f; // , expr subst
-                chpr2_(uplo, &i__, &q__1, &ap[i1], &c__1, &tau[1], &c__1, &ap[1]);
+                aocl_blas_chpr2(uplo, &i__, &q__1, &ap[i1], &c__1, &tau[1], &c__1, &ap[1]);
             }
             i__1 = i1 + i__ - 1;
             i__2 = i__;
@@ -307,7 +309,7 @@ void chptrd_(char *uplo, integer *n, complex *ap, real *d__, real *e, complex *t
             alpha.real = ap[i__2].real;
             alpha.imag = ap[i__2].imag; // , expr subst
             i__2 = *n - i__;
-            clarfg_(&i__2, &alpha, &ap[ii + 2], &c__1, &taui);
+            aocl_lapack_clarfg(&i__2, &alpha, &ap[ii + 2], &c__1, &taui);
             e[i__] = alpha.r;
             if(taui.r != 0.f || taui.i != 0.f)
             {
@@ -317,7 +319,8 @@ void chptrd_(char *uplo, integer *n, complex *ap, real *d__, real *e, complex *t
                 ap[i__2].imag = 0.f; // , expr subst
                 /* Compute y := tau * A * v storing y in TAU(i:n-1) */
                 i__2 = *n - i__;
-                chpmv_(uplo, &i__2, &taui, &ap[i1i1], &ap[ii + 1], &c__1, &c_b2, &tau[i__], &c__1);
+                aocl_blas_chpmv(uplo, &i__2, &taui, &ap[i1i1], &ap[ii + 1], &c__1, &c_b2, &tau[i__],
+                                &c__1);
                 /* Compute w := y - 1/2 * tau * (y**H *v) * v */
                 q__3.real = -.5f;
                 q__3.imag = -0.f; // , expr subst
@@ -325,10 +328,10 @@ void chptrd_(char *uplo, integer *n, complex *ap, real *d__, real *e, complex *t
                 q__2.imag = q__3.real * taui.imag + q__3.imag * taui.real; // , expr subst
                 i__2 = *n - i__;
                 aocl_lapack_cdotc_f2c(&q__4, &i__2, &tau[i__], &c__1, &ap[ii + 1], &c__1);
-                q__1.real = q__2.real * q__4.real - q__2.imag * q__4.imag;
-                q__1.imag = q__2.real * q__4.imag + q__2.imag * q__4.real; // , expr subst
-                alpha.real = q__1.real;
-                alpha.imag = q__1.imag; // , expr subst
+                q__1.r = q__2.r * q__4.r - q__2.i * q__4.i;
+                q__1.i = q__2.r * q__4.i + q__2.i * q__4.r; // , expr subst
+                alpha.r = q__1.r;
+                alpha.i = q__1.i; // , expr subst
                 i__2 = *n - i__;
                 aocl_blas_caxpy(&i__2, &alpha, &ap[ii + 1], &c__1, &tau[i__], &c__1);
                 /* Apply the transformation as a rank-2 update: */
@@ -336,7 +339,8 @@ void chptrd_(char *uplo, integer *n, complex *ap, real *d__, real *e, complex *t
                 i__2 = *n - i__;
                 q__1.r = -1.f;
                 q__1.i = -0.f; // , expr subst
-                chpr2_(uplo, &i__2, &q__1, &ap[ii + 1], &c__1, &tau[i__], &c__1, &ap[i1i1]);
+                aocl_blas_chpr2(uplo, &i__2, &q__1, &ap[ii + 1], &c__1, &tau[i__], &c__1,
+                                &ap[i1i1]);
             }
             i__2 = ii + 1;
             i__3 = i__;

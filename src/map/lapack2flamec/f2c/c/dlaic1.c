@@ -132,8 +132,23 @@ static doublereal c_b5 = 1.;
 /* > \ingroup doubleOTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-void dlaic1_(integer *job, integer *j, doublereal *x, doublereal *sest, doublereal *w,
+/** Generated wrapper function */
+void dlaic1_(aocl_int_t *job, aocl_int_t *j, doublereal *x, doublereal *sest, doublereal *w,
              doublereal *gamma, doublereal *sestpr, doublereal *s, doublereal *c__)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_dlaic1(job, j, x, sest, w, gamma, sestpr, s, c__);
+#else
+    aocl_int64_t job_64 = *job;
+    aocl_int64_t j_64 = *j;
+
+    aocl_lapack_dlaic1(&job_64, &j_64, x, sest, w, gamma, sestpr, s, c__);
+#endif
+}
+
+void aocl_lapack_dlaic1(aocl_int64_t *job, aocl_int64_t *j, doublereal *x, doublereal *sest,
+                        doublereal *w, doublereal *gamma, doublereal *sestpr, doublereal *s,
+                        doublereal *c__)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dlaic1 inputs: job %" FLA_IS ", j %" FLA_IS "", *job, *j);
@@ -169,7 +184,7 @@ void dlaic1_(integer *job, integer *j, doublereal *x, doublereal *sest, doublere
     --x;
     /* Function Body */
     eps = dlamch_("Epsilon");
-    alpha = ddot_(j, &x[1], &c__1, &w[1], &c__1);
+    alpha = aocl_blas_ddot(j, &x[1], &c__1, &w[1], &c__1);
     absalp = f2c_dabs(alpha);
     absgam = f2c_dabs(*gamma);
     absest = f2c_dabs(*sest);

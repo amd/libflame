@@ -16,10 +16,10 @@
 #include "blis.h"
 #endif
 
-void bl1_sident( integer m, float* a, integer a_rs, integer a_cs )
+void bl1_sident( fla_dim_t m, float* a, fla_dim_t a_rs, fla_dim_t a_cs )
 {
 	float* alpha;
-	integer    i, j;
+	fla_dim_t    i, j;
 
 	for ( j = 0; j < m; ++j )
 	{
@@ -35,10 +35,10 @@ void bl1_sident( integer m, float* a, integer a_rs, integer a_cs )
 	}
 }
 
-void bl1_dident( integer m, double* a, integer a_rs, integer a_cs )
+void bl1_dident( fla_dim_t m, double* a, fla_dim_t a_rs, fla_dim_t a_cs )
 {
 	double* alpha;
-	integer     i, j;
+	fla_dim_t     i, j;
 
 	for ( j = 0; j < m; ++j )
 	{
@@ -54,10 +54,10 @@ void bl1_dident( integer m, double* a, integer a_rs, integer a_cs )
 	}
 }
 
-void bl1_cident( integer m, scomplex* a, integer a_rs, integer a_cs )
+void bl1_cident( fla_dim_t m, scomplex* a, fla_dim_t a_rs, fla_dim_t a_cs )
 {
 	scomplex* alpha;
-	integer       i, j;
+	fla_dim_t       i, j;
 
 	for ( j = 0; j < m; ++j )
 	{
@@ -74,10 +74,10 @@ void bl1_cident( integer m, scomplex* a, integer a_rs, integer a_cs )
 	}
 }
 
-void bl1_zident( integer m, dcomplex* a, integer a_rs, integer a_cs )
+void bl1_zident( fla_dim_t m, dcomplex* a, fla_dim_t a_rs, fla_dim_t a_cs )
 {
 	dcomplex* alpha;
-	integer       i, j;
+	fla_dim_t       i, j;
 
 	for ( j = 0; j < m; ++j )
 	{

@@ -139,24 +139,42 @@
 /* > \ingroup OTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-void dlarrk_(integer *n, integer *iw, doublereal *gl, doublereal *gu, doublereal *d__,
+/** Generated wrapper function */
+void dlarrk_(aocl_int_t *n, aocl_int_t *iw, doublereal *gl, doublereal *gu, doublereal *d__,
              doublereal *e2, doublereal *pivmin, doublereal *reltol, doublereal *w,
-             doublereal *werr, integer *info)
+             doublereal *werr, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_dlarrk(n, iw, gl, gu, d__, e2, pivmin, reltol, w, werr, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t iw_64 = *iw;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_dlarrk(&n_64, &iw_64, gl, gu, d__, e2, pivmin, reltol, w, werr, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_dlarrk(aocl_int64_t *n, aocl_int64_t *iw, doublereal *gl, doublereal *gu,
+                        doublereal *d__, doublereal *e2, doublereal *pivmin, doublereal *reltol,
+                        doublereal *w, doublereal *werr, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dlarrk inputs: n %" FLA_IS ", iw %" FLA_IS "", *n, *iw);
     /* System generated locals */
-    integer i__1;
+    aocl_int64_t i__1;
     doublereal d__1, d__2;
     /* Builtin functions */
     double log(doublereal);
     /* Local variables */
-    integer i__, it;
+    aocl_int64_t i__, it;
     doublereal mid, eps, tmp1, tmp2, left, atoli, right;
-    integer itmax;
+    aocl_int64_t itmax;
     doublereal rtoli, tnorm;
     extern doublereal dlamch_(char *);
-    integer negcnt;
+    aocl_int64_t negcnt;
     /* -- LAPACK auxiliary routine (version 3.7.1) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */

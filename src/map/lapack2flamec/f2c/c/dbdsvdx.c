@@ -6,9 +6,9 @@
 #include "FLA_f2c.h" /* Table of constant values */
 static doublereal c_b10 = 1.;
 static doublereal c_b14 = -.125;
-static integer c__1 = 1;
+static aocl_int64_t c__1 = 1;
 static doublereal c_b20 = 0.;
-static integer c__2 = 2;
+static aocl_int64_t c__2 = 2;
 /* > \brief \b DBDSVDX */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -238,78 +238,81 @@ if RANGE = 'V', the exact value of */
 /* > \ingroup doubleOTHEReigen */
 /* ===================================================================== */
 /* Subroutine */
-void dbdsvdx_(char *uplo, char *jobz, char *range, integer *n, doublereal *d__, doublereal *e,
-              doublereal *vl, doublereal *vu, integer *il, integer *iu, integer *ns, doublereal *s,
-              doublereal *z__, integer *ldz, doublereal *work, integer *iwork, integer *info)
+/** Generated wrapper function */
+void dbdsvdx_(char *uplo, char *jobz, char *range, aocl_int_t *n, doublereal *d__, doublereal *e,
+              doublereal *vl, doublereal *vu, aocl_int_t *il, aocl_int_t *iu, aocl_int_t *ns,
+              doublereal *s, doublereal *z__, aocl_int_t *ldz, doublereal *work, aocl_int_t *iwork,
+              aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_dbdsvdx(uplo, jobz, range, n, d__, e, vl, vu, il, iu, ns, s, z__, ldz, work, iwork,
+                        info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t il_64 = *il;
+    aocl_int64_t iu_64 = *iu;
+    aocl_int64_t ns_64 = *ns;
+    aocl_int64_t ldz_64 = *ldz;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_dbdsvdx(uplo, jobz, range, &n_64, d__, e, vl, vu, &il_64, &iu_64, &ns_64, s, z__,
+                        &ldz_64, work, iwork, &info_64);
+
+    *ns = (aocl_int_t)ns_64;
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_dbdsvdx(char *uplo, char *jobz, char *range, aocl_int64_t *n, doublereal *d__,
+                         doublereal *e, doublereal *vl, doublereal *vu, aocl_int64_t *il,
+                         aocl_int64_t *iu, aocl_int64_t *ns, doublereal *s, doublereal *z__,
+                         aocl_int64_t *ldz, doublereal *work, aocl_int_t *iwork, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dbdsvdx inputs: uplo %c, jobz %c, range %c, n %" FLA_IS ", il %" FLA_IS
                       ", iu %" FLA_IS ", ldz %" FLA_IS "",
                       *uplo, *jobz, *range, *n, *il, *iu, *ldz);
     /* System generated locals */
-    integer z_dim1, z_offset, i__1, i__2, i__3, i__4, i__5;
+    aocl_int64_t z_dim1, z_offset, i__1, i__2, i__3, i__4, i__5;
     doublereal d__1, d__2, d__3, d__4;
     /* Builtin functions */
     double d_sign(doublereal *, doublereal *), sqrt(doublereal), pow_dd(doublereal *, doublereal *);
     /* Local variables */
-    integer i__, j, k;
+    aocl_int64_t i__, j, k;
     doublereal d1;
-    integer j1, j2;
+    aocl_int64_t j1, j2;
     doublereal mu, eps;
-    integer nsl;
+    aocl_int64_t nsl;
     doublereal tol, ulp;
-    integer nru, nrv;
+    aocl_int64_t nru, nrv;
     doublereal emin;
-    extern doublereal ddot_(integer *, doublereal *, integer *, doublereal *, integer *);
-    integer ntgk;
+    aocl_int64_t ntgk;
     doublereal smin, smax, nrmu, nrmv;
-    extern doublereal dnrm2_(integer *, doublereal *, integer *);
     logical sveq0;
-    integer idbeg;
+    aocl_int64_t idbeg;
     doublereal sqrt2;
-    integer idend;
-    extern /* Subroutine */
-        void
-        dscal_(integer *, doublereal *, doublereal *, integer *);
-    integer isbeg;
-    extern logical lsame_(char *, char *, integer, integer);
-    integer idtgk, ietgk, iltgk, itemp;
-    extern /* Subroutine */
-        void
-        dcopy_(integer *, doublereal *, integer *, doublereal *, integer *);
-    integer icolz;
+    aocl_int64_t idend;
+    aocl_int64_t isbeg;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    aocl_int64_t idtgk, ietgk, iltgk, itemp;
+    aocl_int64_t icolz;
     logical allsv;
-    integer idptr;
+    aocl_int64_t idptr;
     logical indsv;
-    integer ieptr, iutgk;
-    extern /* Subroutine */
-        void
-        daxpy_(integer *, doublereal *, doublereal *, integer *, doublereal *, integer *),
-        dswap_(integer *, doublereal *, integer *, doublereal *, integer *);
+    aocl_int64_t ieptr, iutgk;
     logical lower;
     doublereal vltgk;
     doublereal zjtji;
     logical split, valsv;
-    integer isplt;
+    aocl_int64_t isplt;
     doublereal ortol, vutgk;
     logical wantz;
     char rngvx[1];
-    integer irowu, irowv, irowz;
+    aocl_int64_t irowu, irowv, irowz;
     extern doublereal dlamch_(char *);
-    integer iifail;
-    extern integer idamax_(integer *, doublereal *, integer *);
-    extern /* Subroutine */
-        void
-        dlaset_(char *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    aocl_int64_t iifail;
     doublereal abstol, thresh;
-    integer iiwork;
-    extern /* Subroutine */
-        void
-        dstevx_(char *jobz, char *range, integer *n, doublereal *d__, doublereal *e, doublereal *vl,
-                doublereal *vu, integer *il, integer *iu, doublereal *abstol, integer *m,
-                doublereal *w, doublereal *z__, integer *ldz, doublereal *work, integer *iwork,
-                integer *ifail, integer *info);
+    aocl_int64_t iiwork;
     doublereal *ev, *ev_arr;
     /* -- LAPACK driver routine (version 3.8.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -399,7 +402,7 @@ void dbdsvdx_(char *uplo, char *jobz, char *range, integer *n, doublereal *d__, 
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("DBDSVDX", &i__1, (ftnlen)7);
+        aocl_blas_xerbla("DBDSVDX", &i__1, (ftnlen)7);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -461,10 +464,10 @@ void dbdsvdx_(char *uplo, char *jobz, char *range, integer *n, doublereal *d__, 
     d__2 = fla_min(d__3, d__4); // , expr subst
     tol = fla_max(d__1, d__2) * eps;
     /* Compute approximate maximum, minimum singular values. */
-    i__ = idamax_(n, &d__[1], &c__1);
+    i__ = aocl_blas_idamax(n, &d__[1], &c__1);
     smax = (d__1 = d__[i__], f2c_dabs(d__1));
     i__1 = *n - 1;
-    i__ = idamax_(&i__1, &e[1], &c__1);
+    i__ = aocl_blas_idamax(&i__1, &e[1], &c__1);
     /* Computing MAX */
     d__2 = smax;
     d__3 = (d__1 = e[i__], f2c_dabs(d__1)); // , expr subst
@@ -530,7 +533,7 @@ void dbdsvdx_(char *uplo, char *jobz, char *range, integer *n, doublereal *d__, 
         {
             i__1 = *n << 1;
             i__2 = *n + 1;
-            dlaset_("F", &i__1, &i__2, &c_b20, &c_b20, &z__[z_offset], ldz);
+            aocl_lapack_dlaset("F", &i__1, &i__2, &c_b20, &c_b20, &z__[z_offset], ldz);
         }
     }
     else if(valsv)
@@ -547,13 +550,13 @@ void dbdsvdx_(char *uplo, char *jobz, char *range, integer *n, doublereal *d__, 
         {
             work[idtgk - 1 + j1] = 0.;
         }
-        dcopy_(n, &d__[1], &c__1, &work[ietgk], &c__2);
+        aocl_blas_dcopy(n, &d__[1], &c__1, &work[ietgk], &c__2);
         i__1 = *n - 1;
-        dcopy_(&i__1, &e[1], &c__1, &work[ietgk + 1], &c__2);
+        aocl_blas_dcopy(&i__1, &e[1], &c__1, &work[ietgk + 1], &c__2);
         i__1 = *n << 1;
-        dstevx_("N", "V", &i__1, &work[idtgk], &work[ietgk], &vltgk, &vutgk, &iltgk, &iltgk,
-                &abstol, ns, &ev[1], &z__[z_offset], ldz, &work[itemp], &iwork[iiwork],
-                &iwork[iifail], info);
+        aocl_lapack_dstevx("N", "V", &i__1, &work[idtgk], &work[ietgk], &vltgk, &vutgk, &iltgk,
+                           &iltgk, &abstol, ns, &ev[1], &z__[z_offset], ldz, &work[itemp],
+                           &iwork[iiwork], &iwork[iifail], info);
         if(*ns == 0)
         {
             /* De-allocate temporary Eigen Value buffer and return */
@@ -566,7 +569,7 @@ void dbdsvdx_(char *uplo, char *jobz, char *range, integer *n, doublereal *d__, 
             if(wantz)
             {
                 i__1 = *n << 1;
-                dlaset_("F", &i__1, ns, &c_b20, &c_b20, &z__[z_offset], ldz);
+                aocl_lapack_dlaset("F", &i__1, ns, &c_b20, &c_b20, &z__[z_offset], ldz);
             }
         }
     }
@@ -586,13 +589,13 @@ void dbdsvdx_(char *uplo, char *jobz, char *range, integer *n, doublereal *d__, 
         {
             work[idtgk - 1 + j1] = 0.;
         }
-        dcopy_(n, &d__[1], &c__1, &work[ietgk], &c__2);
+        aocl_blas_dcopy(n, &d__[1], &c__1, &work[ietgk], &c__2);
         i__1 = *n - 1;
-        dcopy_(&i__1, &e[1], &c__1, &work[ietgk + 1], &c__2);
+        aocl_blas_dcopy(&i__1, &e[1], &c__1, &work[ietgk + 1], &c__2);
         i__1 = *n << 1;
-        dstevx_("N", "I", &i__1, &work[idtgk], &work[ietgk], &vltgk, &vltgk, &iltgk, &iltgk,
-                &abstol, ns, &ev[1], &z__[z_offset], ldz, &work[itemp], &iwork[iiwork],
-                &iwork[iifail], info);
+        aocl_lapack_dstevx("N", "I", &i__1, &work[idtgk], &work[ietgk], &vltgk, &vltgk, &iltgk,
+                           &iltgk, &abstol, ns, &ev[1], &z__[z_offset], ldz, &work[itemp],
+                           &iwork[iiwork], &iwork[iifail], info);
         vltgk = ev[1] - smax * 2. * ulp * *n;
         /* WORK( IDTGK:IDTGK+2*N-1 ) = ZERO */
         i__1 = *n << 1;
@@ -600,13 +603,13 @@ void dbdsvdx_(char *uplo, char *jobz, char *range, integer *n, doublereal *d__, 
         {
             work[idtgk - 1 + j1] = 0.;
         }
-        dcopy_(n, &d__[1], &c__1, &work[ietgk], &c__2);
+        aocl_blas_dcopy(n, &d__[1], &c__1, &work[ietgk], &c__2);
         i__1 = *n - 1;
-        dcopy_(&i__1, &e[1], &c__1, &work[ietgk + 1], &c__2);
+        aocl_blas_dcopy(&i__1, &e[1], &c__1, &work[ietgk + 1], &c__2);
         i__1 = *n << 1;
-        dstevx_("N", "I", &i__1, &work[idtgk], &work[ietgk], &vutgk, &vutgk, &iutgk, &iutgk,
-                &abstol, ns, &ev[1], &z__[z_offset], ldz, &work[itemp], &iwork[iiwork],
-                &iwork[iifail], info);
+        aocl_lapack_dstevx("N", "I", &i__1, &work[idtgk], &work[ietgk], &vutgk, &vutgk, &iutgk,
+                           &iutgk, &abstol, ns, &ev[1], &z__[z_offset], ldz, &work[itemp],
+                           &iwork[iiwork], &iwork[iifail], info);
         vutgk = ev[1] + smax * 2. * ulp * *n;
         vutgk = fla_min(vutgk, 0.);
         /* If VLTGK=VUTGK, DSTEVX returns an error message, */
@@ -619,7 +622,7 @@ void dbdsvdx_(char *uplo, char *jobz, char *range, integer *n, doublereal *d__, 
         {
             i__1 = *n << 1;
             i__2 = *iu - *il + 1;
-            dlaset_("F", &i__1, &i__2, &c_b20, &c_b20, &z__[z_offset], ldz);
+            aocl_lapack_dlaset("F", &i__1, &i__2, &c_b20, &c_b20, &z__[z_offset], ldz);
         }
     }
     /* Initialize variables and pointers for S, Z, and WORK. */
@@ -653,9 +656,9 @@ void dbdsvdx_(char *uplo, char *jobz, char *range, integer *n, doublereal *d__, 
     {
         work[idtgk - 1 + j1] = 0.;
     }
-    dcopy_(n, &d__[1], &c__1, &work[ietgk], &c__2);
+    aocl_blas_dcopy(n, &d__[1], &c__1, &work[ietgk], &c__2);
     i__1 = *n - 1;
-    dcopy_(&i__1, &e[1], &c__1, &work[ietgk + 1], &c__2);
+    aocl_blas_dcopy(&i__1, &e[1], &c__1, &work[ietgk + 1], &c__2);
     /* Check for splits in two levels, outer level */
     /* in E and inner level in D. */
     i__1 = *n << 1;
@@ -749,10 +752,10 @@ void dbdsvdx_(char *uplo, char *jobz, char *range, integer *n, doublereal *d__, 
                     /* Workspace needed by DSTEVX: */
                     /* WORK( ITEMP: ): 2*5*NTGK */
                     /* IWORK( 1: ): 2*6*NTGK */
-                    dstevx_(jobz, rngvx, &ntgk, &work[idtgk + isplt - 1], &work[ietgk + isplt - 1],
-                            &vltgk, &vutgk, &iltgk, &iutgk, &abstol, &nsl, &ev[isbeg],
-                            &z__[irowz + icolz * z_dim1], ldz, &work[itemp], &iwork[iiwork],
-                            &iwork[iifail], info);
+                    aocl_lapack_dstevx(jobz, rngvx, &ntgk, &work[idtgk + isplt - 1],
+                                       &work[ietgk + isplt - 1], &vltgk, &vutgk, &iltgk, &iutgk,
+                                       &abstol, &nsl, &ev[isbeg], &z__[irowz + icolz * z_dim1], ldz,
+                                       &work[itemp], &iwork[iiwork], &iwork[iifail], info);
                     if(*info != 0)
                     {
                         /* Assign Singular Values from temporary array to s */
@@ -817,7 +820,7 @@ void dbdsvdx_(char *uplo, char *jobz, char *range, integer *n, doublereal *d__, 
                         i__3 = fla_min(i__4, i__5);
                         for(i__ = 0; i__ <= i__3; ++i__)
                         {
-                            nrmu = dnrm2_(&nru, &z__[irowu + (icolz + i__) * z_dim1], &c__2);
+                            nrmu = aocl_blas_dnrm2(&nru, &z__[irowu + (icolz + i__) * z_dim1], &c__2);
                             if(nrmu == 0.)
                             {
                                 /* De-allocate temporary Eigen Value buffer and return */
@@ -827,20 +830,24 @@ void dbdsvdx_(char *uplo, char *jobz, char *range, integer *n, doublereal *d__, 
                                 return;
                             }
                             d__1 = 1. / nrmu;
-                            dscal_(&nru, &d__1, &z__[irowu + (icolz + i__) * z_dim1], &c__2);
+                            aocl_blas_dscal(&nru, &d__1, &z__[irowu + (icolz + i__) * z_dim1],
+                                            &c__2);
                             if(nrmu != 1. && (d__1 = nrmu - ortol, f2c_dabs(d__1)) * sqrt2 > 1.)
                             {
                                 i__4 = i__ - 1;
                                 for(j = 0; j <= i__4; ++j)
                                 {
-                                    zjtji = -ddot_(&nru, &z__[irowu + (icolz + j) * z_dim1], &c__2,
-                                                   &z__[irowu + (icolz + i__) * z_dim1], &c__2);
-                                    daxpy_(&nru, &zjtji, &z__[irowu + (icolz + j) * z_dim1], &c__2,
-                                           &z__[irowu + (icolz + i__) * z_dim1], &c__2);
+                                    zjtji = -aocl_blas_ddot(
+                                        &nru, &z__[irowu + (icolz + j) * z_dim1], &c__2,
+                                        &z__[irowu + (icolz + i__) * z_dim1], &c__2);
+                                    aocl_blas_daxpy(&nru, &zjtji,
+                                                    &z__[irowu + (icolz + j) * z_dim1], &c__2,
+                                                    &z__[irowu + (icolz + i__) * z_dim1], &c__2);
                                 }
-                                nrmu = dnrm2_(&nru, &z__[irowu + (icolz + i__) * z_dim1], &c__2);
+                                nrmu = aocl_blas_dnrm2(&nru, &z__[irowu + (icolz + i__) * z_dim1], &c__2);
                                 d__1 = 1. / nrmu;
-                                dscal_(&nru, &d__1, &z__[irowu + (icolz + i__) * z_dim1], &c__2);
+                                aocl_blas_dscal(&nru, &d__1, &z__[irowu + (icolz + i__) * z_dim1],
+                                                &c__2);
                             }
                         }
                         /* Computing MIN */
@@ -849,7 +856,7 @@ void dbdsvdx_(char *uplo, char *jobz, char *range, integer *n, doublereal *d__, 
                         i__3 = fla_min(i__4, i__5);
                         for(i__ = 0; i__ <= i__3; ++i__)
                         {
-                            nrmv = dnrm2_(&nrv, &z__[irowv + (icolz + i__) * z_dim1], &c__2);
+                            nrmv = aocl_blas_dnrm2(&nrv, &z__[irowv + (icolz + i__) * z_dim1], &c__2);
                             if(nrmv == 0.)
                             {
                                 /* De-allocate temporary Eigen Value buffer and return */
@@ -859,20 +866,24 @@ void dbdsvdx_(char *uplo, char *jobz, char *range, integer *n, doublereal *d__, 
                                 return;
                             }
                             d__1 = -1. / nrmv;
-                            dscal_(&nrv, &d__1, &z__[irowv + (icolz + i__) * z_dim1], &c__2);
+                            aocl_blas_dscal(&nrv, &d__1, &z__[irowv + (icolz + i__) * z_dim1],
+                                            &c__2);
                             if(nrmv != 1. && (d__1 = nrmv - ortol, f2c_dabs(d__1)) * sqrt2 > 1.)
                             {
                                 i__4 = i__ - 1;
                                 for(j = 0; j <= i__4; ++j)
                                 {
-                                    zjtji = -ddot_(&nrv, &z__[irowv + (icolz + j) * z_dim1], &c__2,
-                                                   &z__[irowv + (icolz + i__) * z_dim1], &c__2);
-                                    daxpy_(&nru, &zjtji, &z__[irowv + (icolz + j) * z_dim1], &c__2,
-                                           &z__[irowv + (icolz + i__) * z_dim1], &c__2);
+                                    zjtji = -aocl_blas_ddot(
+                                        &nrv, &z__[irowv + (icolz + j) * z_dim1], &c__2,
+                                        &z__[irowv + (icolz + i__) * z_dim1], &c__2);
+                                    aocl_blas_daxpy(&nru, &zjtji,
+                                                    &z__[irowv + (icolz + j) * z_dim1], &c__2,
+                                                    &z__[irowv + (icolz + i__) * z_dim1], &c__2);
                                 }
-                                nrmv = dnrm2_(&nrv, &z__[irowv + (icolz + i__) * z_dim1], &c__2);
+                                nrmv = aocl_blas_dnrm2(&nrv, &z__[irowv + (icolz + i__) * z_dim1], &c__2);
                                 d__1 = 1. / nrmv;
-                                dscal_(&nrv, &d__1, &z__[irowv + (icolz + i__) * z_dim1], &c__2);
+                                aocl_blas_dscal(&nrv, &d__1, &z__[irowv + (icolz + i__) * z_dim1],
+                                                &c__2);
                             }
                         }
                         if(vutgk == 0. && idptr < idend && ntgk % 2 > 0)
@@ -975,8 +986,8 @@ void dbdsvdx_(char *uplo, char *jobz, char *range, integer *n, doublereal *d__, 
             if(wantz)
             {
                 i__2 = *n << 1;
-                dswap_(&i__2, &z__[k * z_dim1 + 1], &c__1, &z__[(*ns + 1 - i__) * z_dim1 + 1],
-                       &c__1);
+                aocl_blas_dswap(&i__2, &z__[k * z_dim1 + 1], &c__1,
+                                &z__[(*ns + 1 - i__) * z_dim1 + 1], &c__1);
             }
         }
     }
@@ -1021,16 +1032,16 @@ void dbdsvdx_(char *uplo, char *jobz, char *range, integer *n, doublereal *d__, 
         for(i__ = 1; i__ <= i__1; ++i__)
         {
             i__2 = *n << 1;
-            dcopy_(&i__2, &z__[i__ * z_dim1 + 1], &c__1, &work[1], &c__1);
+            aocl_blas_dcopy(&i__2, &z__[i__ * z_dim1 + 1], &c__1, &work[1], &c__1);
             if(lower)
             {
-                dcopy_(n, &work[2], &c__2, &z__[*n + 1 + i__ * z_dim1], &c__1);
-                dcopy_(n, &work[1], &c__2, &z__[i__ * z_dim1 + 1], &c__1);
+                aocl_blas_dcopy(n, &work[2], &c__2, &z__[*n + 1 + i__ * z_dim1], &c__1);
+                aocl_blas_dcopy(n, &work[1], &c__2, &z__[i__ * z_dim1 + 1], &c__1);
             }
             else
             {
-                dcopy_(n, &work[2], &c__2, &z__[i__ * z_dim1 + 1], &c__1);
-                dcopy_(n, &work[1], &c__2, &z__[*n + 1 + i__ * z_dim1], &c__1);
+                aocl_blas_dcopy(n, &work[2], &c__2, &z__[i__ * z_dim1 + 1], &c__1);
+                aocl_blas_dcopy(n, &work[1], &c__2, &z__[*n + 1 + i__ * z_dim1], &c__1);
             }
         }
     }

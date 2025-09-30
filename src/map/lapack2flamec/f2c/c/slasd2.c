@@ -277,10 +277,41 @@ and entries in the second half */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void slasd2_(integer *nl, integer *nr, integer *sqre, integer *k, real *d__, real *z__, real *alpha,
-             real *beta, real *u, integer *ldu, real *vt, integer *ldvt, real *dsigma, real *u2,
-             integer *ldu2, real *vt2, integer *ldvt2, integer *idxp, integer *idx, integer *idxc,
-             integer *idxq, integer *coltyp, integer *info)
+/** Generated wrapper function */
+void slasd2_(aocl_int_t *nl, aocl_int_t *nr, aocl_int_t *sqre, aocl_int_t *k, real *d__, real *z__,
+             real *alpha, real *beta, real *u, aocl_int_t *ldu, real *vt, aocl_int_t *ldvt,
+             real *dsigma, real *u2, aocl_int_t *ldu2, real *vt2, aocl_int_t *ldvt2,
+             aocl_int_t *idxp, aocl_int_t *idx, aocl_int_t *idxc, aocl_int_t *idxq,
+             aocl_int_t *coltyp, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_slasd2(nl, nr, sqre, k, d__, z__, alpha, beta, u, ldu, vt, ldvt, dsigma, u2, ldu2,
+                       vt2, ldvt2, idxp, idx, idxc, idxq, coltyp, info);
+#else
+    aocl_int64_t nl_64 = *nl;
+    aocl_int64_t nr_64 = *nr;
+    aocl_int64_t sqre_64 = *sqre;
+    aocl_int64_t k_64 = *k;
+    aocl_int64_t ldu_64 = *ldu;
+    aocl_int64_t ldvt_64 = *ldvt;
+    aocl_int64_t ldu2_64 = *ldu2;
+    aocl_int64_t ldvt2_64 = *ldvt2;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_slasd2(&nl_64, &nr_64, &sqre_64, &k_64, d__, z__, alpha, beta, u, &ldu_64, vt,
+                       &ldvt_64, dsigma, u2, &ldu2_64, vt2, &ldvt2_64, idxp, idx, idxc, idxq,
+                       coltyp, &info_64);
+
+    *k = (aocl_int_t)k_64;
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_slasd2(aocl_int64_t *nl, aocl_int64_t *nr, aocl_int64_t *sqre, aocl_int64_t *k,
+                        real *d__, real *z__, real *alpha, real *beta, real *u, aocl_int64_t *ldu,
+                        real *vt, aocl_int64_t *ldvt, real *dsigma, real *u2, aocl_int64_t *ldu2,
+                        real *vt2, aocl_int64_t *ldvt2, aocl_int_t *idxp, aocl_int_t *idx,
+                        aocl_int_t *idxc, aocl_int_t *idxq, aocl_int_t *coltyp, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("slasd2 inputs: nl %" FLA_IS ",nr %" FLA_IS ",sqre %" FLA_IS ",ldu %" FLA_IS
@@ -298,26 +329,10 @@ void slasd2_(integer *nl, integer *nr, integer *sqre, integer *k, real *d__, rea
     real z1;
     aocl_int64_t ct, jp;
     real eps, tau, tol;
-    integer psm[4], nlp1, nlp2, idxi, idxj, ctot[4];
-    extern /* Subroutine */
-        void
-        srot_(integer *, real *, integer *, real *, integer *, real *, real *);
-    integer idxjp, jprev;
-    extern /* Subroutine */
-        void
-        scopy_(integer *, real *, integer *, real *, integer *);
+    aocl_int64_t psm[4], nlp1, nlp2, idxi, idxj, ctot[4];
+    aocl_int64_t idxjp, jprev;
     extern real slapy2_(real *, real *), slamch_(char *);
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    extern /* Subroutine */
-        void
-        slamrg_(integer *, integer *, real *, integer *, integer *, integer *);
     real hlftol;
-    extern /* Subroutine */
-        void
-        slacpy_(char *, integer *, integer *, real *, integer *, real *, integer *),
-        slaset_(char *, integer *, integer *, real *, real *, real *, integer *);
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -400,7 +415,7 @@ void slasd2_(integer *nl, integer *nr, integer *sqre, integer *k, real *d__, rea
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("SLASD2", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("SLASD2", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -554,8 +569,9 @@ L100:
             {
                 --idxj;
             }
-            srot_(&n, &u[idxjp * u_dim1 + 1], &c__1, &u[idxj * u_dim1 + 1], &c__1, &c__, &s);
-            srot_(&m, &vt[idxjp + vt_dim1], ldvt, &vt[idxj + vt_dim1], ldvt, &c__, &s);
+            aocl_blas_srot(&n, &u[idxjp * u_dim1 + 1], &c__1, &u[idxj * u_dim1 + 1], &c__1, &c__,
+                           &s);
+            aocl_blas_srot(&m, &vt[idxjp + vt_dim1], ldvt, &vt[idxj + vt_dim1], ldvt, &c__, &s);
             if(coltyp[j] != coltyp[jprev])
             {
                 coltyp[j] = 3;

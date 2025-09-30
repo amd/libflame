@@ -13,15 +13,15 @@
 FLA_Error FLA_SA_LU_unb( FLA_Obj U, FLA_Obj D, FLA_Obj p, FLA_Obj L )
 {
   FLA_Datatype datatype;
-  integer          m_U, cs_U;
-  integer          m_D, cs_D;
-  integer               cs_L;
-  // integer               rs_U;
-  integer               rs_D;
-  // integer               rs_L;
-  integer          m_U_min_j, m_U_min_j_min_1; 
-  integer          j, ipiv;
-  integer*         buff_p;
+  fla_dim_t          m_U, cs_U;
+  fla_dim_t          m_D, cs_D;
+  fla_dim_t               cs_L;
+  // fla_dim_t               rs_U;
+  fla_dim_t               rs_D;
+  // fla_dim_t               rs_L;
+  fla_dim_t          m_U_min_j, m_U_min_j_min_1; 
+  fla_dim_t          j, ipiv;
+  fla_dim_t*         buff_p;
 
   if ( FLA_Obj_has_zero_dim( U ) ) return FLA_SUCCESS;
   
@@ -41,7 +41,7 @@ FLA_Error FLA_SA_LU_unb( FLA_Obj U, FLA_Obj D, FLA_Obj p, FLA_Obj L )
   FLA_Copy_external( U, L );
   FLA_Triangularize( FLA_UPPER_TRIANGULAR, FLA_NONUNIT_DIAG, L );
 
-  buff_p     = ( integer * ) FLA_INT_PTR( p );
+  buff_p     = ( fla_dim_t * ) FLA_INT_PTR( p );
 
   switch ( datatype ){
 

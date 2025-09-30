@@ -76,7 +76,19 @@
 /* > \ingroup complex16OTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void zla_wwaddw_(integer *n, doublecomplex *x, doublecomplex *y, doublecomplex *w)
+/** Generated wrapper function */
+void zla_wwaddw_(aocl_int_t *n, dcomplex *x, dcomplex *y, dcomplex *w)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_zla_wwaddw(n, x, y, w);
+#else
+    aocl_int64_t n_64 = *n;
+
+    aocl_lapack_zla_wwaddw(&n_64, x, y, w);
+#endif
+}
+
+void aocl_lapack_zla_wwaddw(aocl_int64_t *n, dcomplex *x, dcomplex *y, dcomplex *w)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zla_wwaddw inputs: n %" FLA_IS "", *n);

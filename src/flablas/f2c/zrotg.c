@@ -1,19 +1,19 @@
 /* zrotg.f -- translated by f2c (version 19991025). You must link the resulting object file with the libraries: -lf2c -lm (in that order) */
 #include "FLA_f2c.h"
 /* Subroutine */
-int zrotg_(doublecomplex *ca, doublecomplex *cb, doublereal * c__, doublecomplex *s)
+int zrotg_(dcomplex *ca, dcomplex *cb, doublereal * c__, dcomplex *s)
 {
     /* System generated locals */
     doublereal d__1, d__2;
-    doublecomplex z__1, z__2, z__3, z__4;
+    dcomplex z__1, z__2, z__3, z__4;
     /* Builtin functions */
-    double z_f2c_abs(doublecomplex *);
-    void z_div(doublecomplex *, doublecomplex *, doublecomplex *);
+    double z_f2c_abs(dcomplex *);
+    void z_div(dcomplex *, dcomplex *, dcomplex *);
     double sqrt(doublereal);
-    void d_cnjg(doublecomplex *, doublecomplex *);
+    void d_cnjg(dcomplex *, dcomplex *);
     /* Local variables */
     doublereal norm;
-    doublecomplex alpha;
+    dcomplex alpha;
     doublereal scale;
     if (z_f2c_abs(ca) != 0.)
     {

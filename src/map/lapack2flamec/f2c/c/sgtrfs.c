@@ -4,7 +4,7 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
+static aocl_int64_t c__1 = 1;
 static real c_b18 = -1.f;
 static real c_b19 = 1.f;
 /* > \brief \b SGTRFS */
@@ -207,47 +207,56 @@ IPIV(i) = i indicates a row interchange was not */
 /* > \ingroup realGTcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void sgtrfs_(char *trans, integer *n, integer *nrhs, real *dl, real *d__, real *du, real *dlf,
-             real *df, real *duf, real *du2, integer *ipiv, real *b, integer *ldb, real *x,
-             integer *ldx, real *ferr, real *berr, real *work, integer *iwork, integer *info)
+/** Generated wrapper function */
+void sgtrfs_(char *trans, aocl_int_t *n, aocl_int_t *nrhs, real *dl, real *d__, real *du, real *dlf,
+             real *df, real *duf, real *du2, aocl_int_t *ipiv, real *b, aocl_int_t *ldb, real *x,
+             aocl_int_t *ldx, real *ferr, real *berr, real *work, aocl_int_t *iwork,
+             aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_sgtrfs(trans, n, nrhs, dl, d__, du, dlf, df, duf, du2, ipiv, b, ldb, x, ldx, ferr,
+                       berr, work, iwork, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t nrhs_64 = *nrhs;
+    aocl_int64_t ldb_64 = *ldb;
+    aocl_int64_t ldx_64 = *ldx;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_sgtrfs(trans, &n_64, &nrhs_64, dl, d__, du, dlf, df, duf, du2, ipiv, b, &ldb_64, x,
+                       &ldx_64, ferr, berr, work, iwork, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_sgtrfs(char *trans, aocl_int64_t *n, aocl_int64_t *nrhs, real *dl, real *d__,
+                        real *du, real *dlf, real *df, real *duf, real *du2, aocl_int_t *ipiv,
+                        real *b, aocl_int64_t *ldb, real *x, aocl_int64_t *ldx, real *ferr,
+                        real *berr, real *work, aocl_int_t *iwork, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("sgtrfs inputs: trans %c, n %" FLA_IS ", nrhs %" FLA_IS ", ldb %" FLA_IS
                       ", ldx %" FLA_IS "",
                       *trans, *n, *nrhs, *ldb, *ldx);
     /* System generated locals */
-    integer b_dim1, b_offset, x_dim1, x_offset, i__1, i__2;
+    aocl_int64_t b_dim1, b_offset, x_dim1, x_offset, i__1, i__2;
     real r__1, r__2, r__3, r__4;
     /* Local variables */
-    integer i__, j;
+    aocl_int64_t i__, j;
     real s;
-    integer nz;
+    aocl_int64_t nz;
     real eps;
-    integer kase;
+    aocl_int64_t kase;
     real safe1, safe2;
-    extern logical lsame_(char *, char *, integer, integer);
-    integer isave[3], count;
-    extern /* Subroutine */
-        void
-        scopy_(integer *, real *, integer *, real *, integer *),
-        saxpy_(integer *, real *, real *, integer *, real *, integer *),
-        slacn2_(integer *, real *, real *, integer *, real *, integer *, integer *);
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    aocl_int_t isave[3]; 
+    aocl_int64_t count;
     extern real slamch_(char *);
     real safmin;
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    extern /* Subroutine */
-        void
-        slagtm_(char *, integer *, integer *, real *, real *, real *, real *, real *, integer *,
-                real *, real *, integer *);
     logical notran;
     char transn[1], transt[1];
     real lstres;
-    extern /* Subroutine */
-        void
-        sgttrs_(char *, integer *, integer *, real *, real *, real *, real *, integer *, real *,
-                integer *, integer *);
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -316,7 +325,7 @@ void sgtrfs_(char *trans, integer *n, integer *nrhs, real *dl, real *d__, real *
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("SGTRFS", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("SGTRFS", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -358,9 +367,9 @@ void sgtrfs_(char *trans, integer *n, integer *nrhs, real *dl, real *d__, real *
     L20: /* Loop until stopping criterion is satisfied. */
         /* Compute residual R = B - op(A) * X, */
         /* where op(A) = A, A**T, or A**H, depending on TRANS. */
-        scopy_(n, &b[j * b_dim1 + 1], &c__1, &work[*n + 1], &c__1);
-        slagtm_(trans, n, &c__1, &c_b18, &dl[1], &d__[1], &du[1], &x[j * x_dim1 + 1], ldx, &c_b19,
-                &work[*n + 1], n);
+        aocl_blas_scopy(n, &b[j * b_dim1 + 1], &c__1, &work[*n + 1], &c__1);
+        aocl_lapack_slagtm(trans, n, &c__1, &c_b18, &dl[1], &d__[1], &du[1], &x[j * x_dim1 + 1],
+                           ldx, &c_b19, &work[*n + 1], n);
         /* Compute f2c_abs(op(A))*f2c_abs(x) + f2c_abs(b) for use in the backward */
         /* error bound. */
         if(notran)
@@ -451,9 +460,9 @@ void sgtrfs_(char *trans, integer *n, integer *nrhs, real *dl, real *d__, real *
         if(berr[j] > eps && berr[j] * 2.f <= lstres && count <= 5)
         {
             /* Update solution and try again. */
-            sgttrs_(trans, n, &c__1, &dlf[1], &df[1], &duf[1], &du2[1], &ipiv[1], &work[*n + 1], n,
-                    info);
-            saxpy_(n, &c_b19, &work[*n + 1], &c__1, &x[j * x_dim1 + 1], &c__1);
+            aocl_lapack_sgttrs(trans, n, &c__1, &dlf[1], &df[1], &duf[1], &du2[1], &ipiv[1],
+                               &work[*n + 1], n, info);
+            aocl_blas_saxpy(n, &c_b19, &work[*n + 1], &c__1, &x[j * x_dim1 + 1], &c__1);
             lstres = berr[j];
             ++count;
             goto L20;
@@ -490,14 +499,15 @@ void sgtrfs_(char *trans, integer *n, integer *nrhs, real *dl, real *d__, real *
         }
         kase = 0;
     L70:
-        slacn2_(n, &work[(*n << 1) + 1], &work[*n + 1], &iwork[1], &ferr[j], &kase, isave);
+        aocl_lapack_slacn2(n, &work[(*n << 1) + 1], &work[*n + 1], &iwork[1], &ferr[j], &kase,
+                           isave);
         if(kase != 0)
         {
             if(kase == 1)
             {
                 /* Multiply by diag(W)*inv(op(A)**T). */
-                sgttrs_(transt, n, &c__1, &dlf[1], &df[1], &duf[1], &du2[1], &ipiv[1],
-                        &work[*n + 1], n, info);
+                aocl_lapack_sgttrs(transt, n, &c__1, &dlf[1], &df[1], &duf[1], &du2[1], &ipiv[1],
+                                   &work[*n + 1], n, info);
                 i__2 = *n;
                 for(i__ = 1; i__ <= i__2; ++i__)
                 {
@@ -514,8 +524,8 @@ void sgtrfs_(char *trans, integer *n, integer *nrhs, real *dl, real *d__, real *
                     work[*n + i__] = work[i__] * work[*n + i__];
                     /* L90: */
                 }
-                sgttrs_(transn, n, &c__1, &dlf[1], &df[1], &duf[1], &du2[1], &ipiv[1],
-                        &work[*n + 1], n, info);
+                aocl_lapack_sgttrs(transn, n, &c__1, &dlf[1], &df[1], &duf[1], &du2[1], &ipiv[1],
+                                   &work[*n + 1], n, info);
             }
             goto L70;
         }

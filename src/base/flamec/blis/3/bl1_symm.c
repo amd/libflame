@@ -16,32 +16,32 @@
 #include "blis.h"
 #endif
 
-void bl1_ssymm( side1_t side, uplo1_t uplo, integer m, integer n, float* alpha, float* a, integer a_rs, integer a_cs, float* b, integer b_rs, integer b_cs, float* beta, float* c, integer c_rs, integer c_cs )
+void bl1_ssymm( side1_t side, uplo1_t uplo, fla_dim_t m, fla_dim_t n, float* alpha, float* a, fla_dim_t a_rs, fla_dim_t a_cs, float* b, fla_dim_t b_rs, fla_dim_t b_cs, float* beta, float* c, fla_dim_t c_rs, fla_dim_t c_cs )
 {
-	integer       m_save    = m;
-	integer       n_save    = n;
+	fla_dim_t       m_save    = m;
+	fla_dim_t       n_save    = n;
 	float*    a_save    = a;
 	float*    b_save    = b;
 	float*    c_save    = c;
-	integer       a_rs_save = a_rs;
-	integer       a_cs_save = a_cs;
-	integer       b_rs_save = b_rs;
-	integer       b_cs_save = b_cs;
-	integer       c_rs_save = c_rs;
-	integer       c_cs_save = c_cs;
+	fla_dim_t       a_rs_save = a_rs;
+	fla_dim_t       a_cs_save = a_cs;
+	fla_dim_t       b_rs_save = b_rs;
+	fla_dim_t       b_cs_save = b_cs;
+	fla_dim_t       c_rs_save = c_rs;
+	fla_dim_t       c_cs_save = c_cs;
 	float     zero = bl1_s0();
 	float     one  = bl1_s1();
 	float*    b_copy;
 	float*    c_trans;
-	integer       dim_a;
-	integer       lda, inca;
-	integer       ldb, incb;
-	integer       ldc, incc;
-	integer       ldb_copy, incb_copy;
-	integer       ldc_trans, incc_trans;
-	integer       symm_needs_copyb  = FALSE;
-	integer       symm_needs_transb = FALSE;
-	integer       symm_needs_axpyt  = FALSE;
+	fla_dim_t       dim_a;
+	fla_dim_t       lda, inca;
+	fla_dim_t       ldb, incb;
+	fla_dim_t       ldc, incc;
+	fla_dim_t       ldb_copy, incb_copy;
+	fla_dim_t       ldc_trans, incc_trans;
+	fla_dim_t       symm_needs_copyb  = FALSE;
+	fla_dim_t       symm_needs_transb = FALSE;
+	fla_dim_t       symm_needs_axpyt  = FALSE;
 
 	// Return early if possible.
 	if ( bl1_zero_dim2( m, n ) ) return;
@@ -277,32 +277,32 @@ void bl1_ssymm( side1_t side, uplo1_t uplo, integer m, integer n, float* alpha, 
 	                         &c,     &c_rs,     &c_cs );
 }
 
-void bl1_dsymm( side1_t side, uplo1_t uplo, integer m, integer n, double* alpha, double* a, integer a_rs, integer a_cs, double* b, integer b_rs, integer b_cs, double* beta, double* c, integer c_rs, integer c_cs )
+void bl1_dsymm( side1_t side, uplo1_t uplo, fla_dim_t m, fla_dim_t n, double* alpha, double* a, fla_dim_t a_rs, fla_dim_t a_cs, double* b, fla_dim_t b_rs, fla_dim_t b_cs, double* beta, double* c, fla_dim_t c_rs, fla_dim_t c_cs )
 {
-	integer       m_save    = m;
-	integer       n_save    = n;
+	fla_dim_t       m_save    = m;
+	fla_dim_t       n_save    = n;
 	double*   a_save    = a;
 	double*   b_save    = b;
 	double*   c_save    = c;
-	integer       a_rs_save = a_rs;
-	integer       a_cs_save = a_cs;
-	integer       b_rs_save = b_rs;
-	integer       b_cs_save = b_cs;
-	integer       c_rs_save = c_rs;
-	integer       c_cs_save = c_cs;
+	fla_dim_t       a_rs_save = a_rs;
+	fla_dim_t       a_cs_save = a_cs;
+	fla_dim_t       b_rs_save = b_rs;
+	fla_dim_t       b_cs_save = b_cs;
+	fla_dim_t       c_rs_save = c_rs;
+	fla_dim_t       c_cs_save = c_cs;
 	double    zero = bl1_d0();
 	double    one  = bl1_d1();
 	double*   b_copy;
 	double*   c_trans;
-	integer       dim_a;
-	integer       lda, inca;
-	integer       ldb, incb;
-	integer       ldc, incc;
-	integer       ldb_copy, incb_copy;
-	integer       ldc_trans, incc_trans;
-	integer       symm_needs_copyb  = FALSE;
-	integer       symm_needs_transb = FALSE;
-	integer       symm_needs_axpyt  = FALSE;
+	fla_dim_t       dim_a;
+	fla_dim_t       lda, inca;
+	fla_dim_t       ldb, incb;
+	fla_dim_t       ldc, incc;
+	fla_dim_t       ldb_copy, incb_copy;
+	fla_dim_t       ldc_trans, incc_trans;
+	fla_dim_t       symm_needs_copyb  = FALSE;
+	fla_dim_t       symm_needs_transb = FALSE;
+	fla_dim_t       symm_needs_axpyt  = FALSE;
 
 	// Return early if possible.
 	if ( bl1_zero_dim2( m, n ) ) return;
@@ -538,32 +538,32 @@ void bl1_dsymm( side1_t side, uplo1_t uplo, integer m, integer n, double* alpha,
 	                         &c,     &c_rs,     &c_cs );
 }
 
-void bl1_csymm( side1_t side, uplo1_t uplo, integer m, integer n, scomplex* alpha, scomplex* a, integer a_rs, integer a_cs, scomplex* b, integer b_rs, integer b_cs, scomplex* beta, scomplex* c, integer c_rs, integer c_cs )
+void bl1_csymm( side1_t side, uplo1_t uplo, fla_dim_t m, fla_dim_t n, scomplex* alpha, scomplex* a, fla_dim_t a_rs, fla_dim_t a_cs, scomplex* b, fla_dim_t b_rs, fla_dim_t b_cs, scomplex* beta, scomplex* c, fla_dim_t c_rs, fla_dim_t c_cs )
 {
-	integer       m_save    = m;
-	integer       n_save    = n;
+	fla_dim_t       m_save    = m;
+	fla_dim_t       n_save    = n;
 	scomplex* a_save    = a;
 	scomplex* b_save    = b;
 	scomplex* c_save    = c;
-	integer       a_rs_save = a_rs;
-	integer       a_cs_save = a_cs;
-	integer       b_rs_save = b_rs;
-	integer       b_cs_save = b_cs;
-	integer       c_rs_save = c_rs;
-	integer       c_cs_save = c_cs;
+	fla_dim_t       a_rs_save = a_rs;
+	fla_dim_t       a_cs_save = a_cs;
+	fla_dim_t       b_rs_save = b_rs;
+	fla_dim_t       b_cs_save = b_cs;
+	fla_dim_t       c_rs_save = c_rs;
+	fla_dim_t       c_cs_save = c_cs;
 	scomplex  zero = bl1_c0();
 	scomplex  one  = bl1_c1();
 	scomplex* b_copy;
 	scomplex* c_trans;
-	integer       dim_a;
-	integer       lda, inca;
-	integer       ldb, incb;
-	integer       ldc, incc;
-	integer       ldb_copy, incb_copy;
-	integer       ldc_trans, incc_trans;
-	integer       symm_needs_copyb  = FALSE;
-	integer       symm_needs_transb = FALSE;
-	integer       symm_needs_axpyt  = FALSE;
+	fla_dim_t       dim_a;
+	fla_dim_t       lda, inca;
+	fla_dim_t       ldb, incb;
+	fla_dim_t       ldc, incc;
+	fla_dim_t       ldb_copy, incb_copy;
+	fla_dim_t       ldc_trans, incc_trans;
+	fla_dim_t       symm_needs_copyb  = FALSE;
+	fla_dim_t       symm_needs_transb = FALSE;
+	fla_dim_t       symm_needs_axpyt  = FALSE;
 
 	// Return early if possible.
 	if ( bl1_zero_dim2( m, n ) ) return;
@@ -799,32 +799,32 @@ void bl1_csymm( side1_t side, uplo1_t uplo, integer m, integer n, scomplex* alph
 	                         &c,     &c_rs,     &c_cs );
 }
 
-void bl1_zsymm( side1_t side, uplo1_t uplo, integer m, integer n, dcomplex* alpha, dcomplex* a, integer a_rs, integer a_cs, dcomplex* b, integer b_rs, integer b_cs, dcomplex* beta, dcomplex* c, integer c_rs, integer c_cs )
+void bl1_zsymm( side1_t side, uplo1_t uplo, fla_dim_t m, fla_dim_t n, dcomplex* alpha, dcomplex* a, fla_dim_t a_rs, fla_dim_t a_cs, dcomplex* b, fla_dim_t b_rs, fla_dim_t b_cs, dcomplex* beta, dcomplex* c, fla_dim_t c_rs, fla_dim_t c_cs )
 {
-	integer       m_save    = m;
-	integer       n_save    = n;
+	fla_dim_t       m_save    = m;
+	fla_dim_t       n_save    = n;
 	dcomplex* a_save    = a;
 	dcomplex* b_save    = b;
 	dcomplex* c_save    = c;
-	integer       a_rs_save = a_rs;
-	integer       a_cs_save = a_cs;
-	integer       b_rs_save = b_rs;
-	integer       b_cs_save = b_cs;
-	integer       c_rs_save = c_rs;
-	integer       c_cs_save = c_cs;
+	fla_dim_t       a_rs_save = a_rs;
+	fla_dim_t       a_cs_save = a_cs;
+	fla_dim_t       b_rs_save = b_rs;
+	fla_dim_t       b_cs_save = b_cs;
+	fla_dim_t       c_rs_save = c_rs;
+	fla_dim_t       c_cs_save = c_cs;
 	dcomplex  zero = bl1_z0();
 	dcomplex  one  = bl1_z1();
 	dcomplex* b_copy;
 	dcomplex* c_trans;
-	integer       dim_a;
-	integer       lda, inca;
-	integer       ldb, incb;
-	integer       ldc, incc;
-	integer       ldb_copy, incb_copy;
-	integer       ldc_trans, incc_trans;
-	integer       symm_needs_copyb  = FALSE;
-	integer       symm_needs_transb = FALSE;
-	integer       symm_needs_axpyt  = FALSE;
+	fla_dim_t       dim_a;
+	fla_dim_t       lda, inca;
+	fla_dim_t       ldb, incb;
+	fla_dim_t       ldc, incc;
+	fla_dim_t       ldb_copy, incb_copy;
+	fla_dim_t       ldc_trans, incc_trans;
+	fla_dim_t       symm_needs_copyb  = FALSE;
+	fla_dim_t       symm_needs_transb = FALSE;
+	fla_dim_t       symm_needs_axpyt  = FALSE;
 
 	// Return early if possible.
 	if ( bl1_zero_dim2( m, n ) ) return;
@@ -1062,7 +1062,7 @@ void bl1_zsymm( side1_t side, uplo1_t uplo, integer m, integer n, dcomplex* alph
 
 // --- Classic routine wrappers ---
 
-void bl1_ssymm_blas( side1_t side, uplo1_t uplo, integer m, integer n, float* alpha, float* a, integer lda, float* b, integer ldb, float* beta, float* c, integer ldc )
+void bl1_ssymm_blas( side1_t side, uplo1_t uplo, fla_dim_t m, fla_dim_t n, float* alpha, float* a, fla_dim_t lda, float* b, fla_dim_t ldb, float* beta, float* c, fla_dim_t ldc )
 {
 #ifdef BLIS1_ENABLE_CBLAS_INTERFACES
 	enum CBLAS_ORDER cblas_order = CblasColMajor;
@@ -1101,7 +1101,7 @@ void bl1_ssymm_blas( side1_t side, uplo1_t uplo, integer m, integer n, float* al
 #endif
 }
 
-void bl1_dsymm_blas( side1_t side, uplo1_t uplo, integer m, integer n, double* alpha, double* a, integer lda, double* b, integer ldb, double* beta, double* c, integer ldc )
+void bl1_dsymm_blas( side1_t side, uplo1_t uplo, fla_dim_t m, fla_dim_t n, double* alpha, double* a, fla_dim_t lda, double* b, fla_dim_t ldb, double* beta, double* c, fla_dim_t ldc )
 {
 #ifdef BLIS1_ENABLE_CBLAS_INTERFACES
 	enum CBLAS_ORDER cblas_order = CblasColMajor;
@@ -1140,7 +1140,7 @@ void bl1_dsymm_blas( side1_t side, uplo1_t uplo, integer m, integer n, double* a
 #endif
 }
 
-void bl1_csymm_blas( side1_t side, uplo1_t uplo, integer m, integer n, scomplex* alpha, scomplex* a, integer lda, scomplex* b, integer ldb, scomplex* beta, scomplex* c, integer ldc )
+void bl1_csymm_blas( side1_t side, uplo1_t uplo, fla_dim_t m, fla_dim_t n, scomplex* alpha, scomplex* a, fla_dim_t lda, scomplex* b, fla_dim_t ldb, scomplex* beta, scomplex* c, fla_dim_t ldc )
 {
 #ifdef BLIS1_ENABLE_CBLAS_INTERFACES
 	enum CBLAS_ORDER cblas_order = CblasColMajor;
@@ -1179,7 +1179,7 @@ void bl1_csymm_blas( side1_t side, uplo1_t uplo, integer m, integer n, scomplex*
 #endif
 }
 
-void bl1_zsymm_blas( side1_t side, uplo1_t uplo, integer m, integer n, dcomplex* alpha, dcomplex* a, integer lda, dcomplex* b, integer ldb, dcomplex* beta, dcomplex* c, integer ldc )
+void bl1_zsymm_blas( side1_t side, uplo1_t uplo, fla_dim_t m, fla_dim_t n, dcomplex* alpha, dcomplex* a, fla_dim_t lda, dcomplex* b, fla_dim_t ldb, dcomplex* beta, dcomplex* c, fla_dim_t ldc )
 {
 #ifdef BLIS1_ENABLE_CBLAS_INTERFACES
 	enum CBLAS_ORDER cblas_order = CblasColMajor;

@@ -4,7 +4,7 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
+static aocl_int64_t c__1 = 1;
 static real c_b7 = -1.f;
 static real c_b8 = 1.f;
 static real c_b30 = 0.f;
@@ -403,11 +403,43 @@ static real c_b30 = 0.f;
 /* > \endverbatim */
 /* ===================================================================== */
 /* Subroutine */
-void slaqp3rk_(integer *m, integer *n, integer *nrhs, integer *ioffset, integer *nb, real *abstol,
-               real *reltol, integer *kp1, real *maxc2nrm, real *a, integer *lda, logical *done,
-               integer *kb, real *maxc2nrmk, real *relmaxc2nrmk, integer *jpiv, real *tau,
-               real *vn1, real *vn2, real *auxv, real *f, integer *ldf, integer *iwork,
-               integer *info)
+/** Generated wrapper function */
+void slaqp3rk_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *nrhs, aocl_int_t *ioffset, aocl_int_t *nb,
+               real *abstol, real *reltol, aocl_int_t *kp1, real *maxc2nrm, real *a,
+               aocl_int_t *lda, logical *done, aocl_int_t *kb, real *maxc2nrmk, real *relmaxc2nrmk,
+               aocl_int_t *jpiv, real *tau, real *vn1, real *vn2, real *auxv, real *f,
+               aocl_int_t *ldf, aocl_int_t *iwork, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_slaqp3rk(m, n, nrhs, ioffset, nb, abstol, reltol, kp1, maxc2nrm, a, lda, done, kb,
+                         maxc2nrmk, relmaxc2nrmk, jpiv, tau, vn1, vn2, auxv, f, ldf, iwork, info);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t nrhs_64 = *nrhs;
+    aocl_int64_t ioffset_64 = *ioffset;
+    aocl_int64_t nb_64 = *nb;
+    aocl_int64_t kp1_64 = *kp1;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t kb_64 = *kb;
+    aocl_int64_t ldf_64 = *ldf;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_slaqp3rk(&m_64, &n_64, &nrhs_64, &ioffset_64, &nb_64, abstol, reltol, &kp1_64,
+                         maxc2nrm, a, &lda_64, done, &kb_64, maxc2nrmk, relmaxc2nrmk, jpiv, tau,
+                         vn1, vn2, auxv, f, &ldf_64, iwork, &info_64);
+
+    *kb = (aocl_int_t)kb_64;
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_slaqp3rk(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *nrhs,
+                          aocl_int64_t *ioffset, aocl_int64_t *nb, real *abstol, real *reltol,
+                          aocl_int64_t *kp1, real *maxc2nrm, real *a, aocl_int64_t *lda,
+                          logical *done, aocl_int64_t *kb, real *maxc2nrmk, real *relmaxc2nrmk,
+                          aocl_int_t *jpiv, real *tau, real *vn1, real *vn2, real *auxv, real *f,
+                          aocl_int64_t *ldf, aocl_int_t *iwork, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("slaqp3rk inputs: m %" FLA_IS ",n %" FLA_IS ",nrhs %" FLA_IS
@@ -415,31 +447,17 @@ void slaqp3rk_(integer *m, integer *n, integer *nrhs, integer *ioffset, integer 
                       ",ldf %" FLA_IS "",
                       *m, *n, *nrhs, *ioffset, *nb, *kp1, *lda, *ldf);
     /* System generated locals */
-    integer a_dim1, a_offset, f_dim1, f_offset, i__1, i__2;
+    aocl_int64_t a_dim1, a_offset, f_dim1, f_offset, i__1, i__2;
     real r__1, r__2;
     /* Builtin functions */
     double sqrt(doublereal);
     /* Local variables */
-    integer i__, j, k, minmnfact, minmnupdt, if__, kp;
+    aocl_int64_t i__, j, k, minmnfact, minmnupdt, if__, kp;
     real aik, temp, temp2;
-    extern real snrm2_(integer *, real *, integer *);
     real tol3z;
-    extern /* Subroutine */
-        void
-        sgemm_(char *, char *, integer *, integer *, integer *, real *, real *, integer *, real *,
-               integer *, real *, real *, integer *);
-    integer itemp;
-    extern /* Subroutine */
-        void
-        sgemv_(char *, integer *, integer *, real *, real *, integer *, real *, integer *, real *,
-               real *, integer *),
-        sswap_(integer *, real *, integer *, real *, integer *);
+    aocl_int64_t itemp;
     extern real slamch_(char *);
-    extern /* Subroutine */
-        void
-        slarfg_(integer *, real *, real *, integer *, real *);
-    integer lsticc;
-    extern integer isamax_(integer *, real *, integer *);
+    aocl_int64_t lsticc;
     extern logical sisnan_(real *);
     real hugeval;
     /* -- LAPACK auxiliary routine -- */
@@ -512,7 +530,7 @@ void slaqp3rk_(integer *m, integer *n, integer *nrhs, integer *ioffset, integer 
             /* of the column with the maximum 2-norm in the */
             /* submatrix A(I:M,K:N). */
             i__1 = *n - k + 1;
-            kp = k - 1 + isamax_(&i__1, &vn1[k], &c__1);
+            kp = k - 1 + aocl_blas_isamax(&i__1, &vn1[k], &c__1);
             /* Determine the maximum column 2-norm and the relative maximum */
             /* column 2-norm of the submatrix A(I:M,K:N) in step K. */
             *maxc2nrmk = vn1[kp];
@@ -551,9 +569,9 @@ void slaqp3rk_(integer *m, integer *n, integer *nrhs, integer *ioffset, integer 
                 if(*nrhs > 0 && *kb < *m - *ioffset)
                 {
                     i__1 = *m - if__;
-                    sgemm_("No transpose", "Transpose", &i__1, nrhs, kb, &c_b7,
-                           &a[if__ + 1 + a_dim1], lda, &f[*n + 1 + f_dim1], ldf, &c_b8,
-                           &a[if__ + 1 + (*n + 1) * a_dim1], lda);
+                    aocl_blas_sgemm("No transpose", "Transpose", &i__1, nrhs, kb, &c_b7,
+                                    &a[if__ + 1 + a_dim1], lda, &f[*n + 1 + f_dim1], ldf, &c_b8,
+                                    &a[if__ + 1 + (*n + 1) * a_dim1], lda);
                 }
                 /* There is no need to recompute the 2-norm of the */
                 /* difficult columns, since we stop the factorization. */
@@ -592,9 +610,9 @@ void slaqp3rk_(integer *m, integer *n, integer *nrhs, integer *ioffset, integer 
                 if(*nrhs > 0 && *kb < *m - *ioffset)
                 {
                     i__1 = *m - if__;
-                    sgemm_("No transpose", "Transpose", &i__1, nrhs, kb, &c_b7,
-                           &a[if__ + 1 + a_dim1], lda, &f[*n + 1 + f_dim1], ldf, &c_b8,
-                           &a[if__ + 1 + (*n + 1) * a_dim1], lda);
+                    aocl_blas_sgemm("No transpose", "Transpose", &i__1, nrhs, kb, &c_b7,
+                                    &a[if__ + 1 + a_dim1], lda, &f[*n + 1 + f_dim1], ldf, &c_b8,
+                                    &a[if__ + 1 + (*n + 1) * a_dim1], lda);
                 }
                 /* There is no need to recompute the 2-norm of the */
                 /* difficult columns, since we stop the factorization. */
@@ -658,9 +676,9 @@ void slaqp3rk_(integer *m, integer *n, integer *nrhs, integer *ioffset, integer 
                 {
                     i__1 = *m - if__;
                     i__2 = *n + *nrhs - *kb;
-                    sgemm_("No transpose", "Transpose", &i__1, &i__2, kb, &c_b7,
-                           &a[if__ + 1 + a_dim1], lda, &f[*kb + 1 + f_dim1], ldf, &c_b8,
-                           &a[if__ + 1 + (*kb + 1) * a_dim1], lda);
+                    aocl_blas_sgemm("No transpose", "Transpose", &i__1, &i__2, kb, &c_b7,
+                                    &a[if__ + 1 + a_dim1], lda, &f[*kb + 1 + f_dim1], ldf, &c_b8,
+                                    &a[if__ + 1 + (*kb + 1) * a_dim1], lda);
                 }
                 /* There is no need to recompute the 2-norm of the */
                 /* difficult columns, since we stop the factorization. */
@@ -694,14 +712,14 @@ void slaqp3rk_(integer *m, integer *n, integer *nrhs, integer *ioffset, integer 
         /* the original matrix A_orig, not the block A(1:M,1:N). */
         if(kp != k)
         {
-            sswap_(m, &a[kp * a_dim1 + 1], &c__1, &a[k * a_dim1 + 1], &c__1);
+            aocl_blas_sswap(m, &a[kp * a_dim1 + 1], &c__1, &a[k * a_dim1 + 1], &c__1);
             i__1 = k - 1;
-            sswap_(&i__1, &f[kp + f_dim1], ldf, &f[k + f_dim1], ldf);
+            aocl_blas_sswap(&i__1, &f[kp + f_dim1], ldf, &f[k + f_dim1], ldf);
             vn1[kp] = vn1[k];
             vn2[kp] = vn2[k];
             itemp = jpiv[kp];
             jpiv[kp] = jpiv[k];
-            jpiv[k] = itemp;
+            jpiv[k] = (aocl_int_t)(itemp);
         }
         /* Apply previous Householder reflectors to column K: */
         /* A(I:M,K) := A(I:M,K) - A(I:M,1:K-1)*F(K,1:K-1)**T. */
@@ -709,14 +727,15 @@ void slaqp3rk_(integer *m, integer *n, integer *nrhs, integer *ioffset, integer 
         {
             i__1 = *m - i__ + 1;
             i__2 = k - 1;
-            sgemv_("No transpose", &i__1, &i__2, &c_b7, &a[i__ + a_dim1], lda, &f[k + f_dim1], ldf,
-                   &c_b8, &a[i__ + k * a_dim1], &c__1);
+            aocl_blas_sgemv("No transpose", &i__1, &i__2, &c_b7, &a[i__ + a_dim1], lda,
+                            &f[k + f_dim1], ldf, &c_b8, &a[i__ + k * a_dim1], &c__1);
         }
         /* Generate elementary reflector H(k) using the column A(I:M,K). */
         if(i__ < *m)
         {
             i__1 = *m - i__ + 1;
-            slarfg_(&i__1, &a[i__ + k * a_dim1], &a[i__ + 1 + k * a_dim1], &c__1, &tau[k]);
+            aocl_lapack_slarfg(&i__1, &a[i__ + k * a_dim1], &a[i__ + 1 + k * a_dim1], &c__1,
+                               &tau[k]);
         }
         else
         {
@@ -759,8 +778,9 @@ void slaqp3rk_(integer *m, integer *n, integer *nrhs, integer *ioffset, integer 
             if(*nrhs > 0 && *kb < *m - *ioffset)
             {
                 i__1 = *m - if__;
-                sgemm_("No transpose", "Transpose", &i__1, nrhs, kb, &c_b7, &a[if__ + 1 + a_dim1],
-                       lda, &f[*n + 1 + f_dim1], ldf, &c_b8, &a[if__ + 1 + (*n + 1) * a_dim1], lda);
+                aocl_blas_sgemm("No transpose", "Transpose", &i__1, nrhs, kb, &c_b7,
+                                &a[if__ + 1 + a_dim1], lda, &f[*n + 1 + f_dim1], ldf, &c_b8,
+                                &a[if__ + 1 + (*n + 1) * a_dim1], lda);
             }
             /* There is no need to recompute the 2-norm of the */
             /* difficult columns, since we stop the factorization. */
@@ -780,8 +800,8 @@ void slaqp3rk_(integer *m, integer *n, integer *nrhs, integer *ioffset, integer 
         {
             i__1 = *m - i__ + 1;
             i__2 = *n + *nrhs - k;
-            sgemv_("Transpose", &i__1, &i__2, &tau[k], &a[i__ + (k + 1) * a_dim1], lda,
-                   &a[i__ + k * a_dim1], &c__1, &c_b30, &f[k + 1 + k * f_dim1], &c__1);
+            aocl_blas_sgemv("Transpose", &i__1, &i__2, &tau[k], &a[i__ + (k + 1) * a_dim1], lda,
+                            &a[i__ + k * a_dim1], &c__1, &c_b30, &f[k + 1 + k * f_dim1], &c__1);
         }
         /* 2) Zero out elements above and on the diagonal of the */
         /* column K in matrix F, i.e elements F(1:K,K). */
@@ -798,12 +818,12 @@ void slaqp3rk_(integer *m, integer *n, integer *nrhs, integer *ioffset, integer 
             i__1 = *m - i__ + 1;
             i__2 = k - 1;
             r__1 = -tau[k];
-            sgemv_("Transpose", &i__1, &i__2, &r__1, &a[i__ + a_dim1], lda, &a[i__ + k * a_dim1],
-                   &c__1, &c_b30, &auxv[1], &c__1);
+            aocl_blas_sgemv("Transpose", &i__1, &i__2, &r__1, &a[i__ + a_dim1], lda,
+                            &a[i__ + k * a_dim1], &c__1, &c_b30, &auxv[1], &c__1);
             i__1 = *n + *nrhs;
             i__2 = k - 1;
-            sgemv_("No transpose", &i__1, &i__2, &c_b8, &f[f_dim1 + 1], ldf, &auxv[1], &c__1, &c_b8,
-                   &f[k * f_dim1 + 1], &c__1);
+            aocl_blas_sgemv("No transpose", &i__1, &i__2, &c_b8, &f[f_dim1 + 1], ldf, &auxv[1],
+                            &c__1, &c_b8, &f[k * f_dim1 + 1], &c__1);
         }
         /* =============================================================== */
         /* Update the current I-th row of A: */
@@ -812,8 +832,8 @@ void slaqp3rk_(integer *m, integer *n, integer *nrhs, integer *ioffset, integer 
         if(k < *n + *nrhs)
         {
             i__1 = *n + *nrhs - k;
-            sgemv_("No transpose", &i__1, &k, &c_b7, &f[k + 1 + f_dim1], ldf, &a[i__ + a_dim1], lda,
-                   &c_b8, &a[i__ + (k + 1) * a_dim1], lda);
+            aocl_blas_sgemv("No transpose", &i__1, &k, &c_b7, &f[k + 1 + f_dim1], ldf,
+                            &a[i__ + a_dim1], lda, &c_b8, &a[i__ + (k + 1) * a_dim1], lda);
         }
         a[i__ + k * a_dim1] = aik;
         /* Update the partial column 2-norms for the residual matrix, */
@@ -844,7 +864,7 @@ void slaqp3rk_(integer *m, integer *n, integer *nrhs, integer *ioffset, integer 
                         /* NOTE: ILSTCC > 1, threfore we can use IWORK only */
                         /* with N-1 elements, where the elements are */
                         /* shifted by 1 to the left. */
-                        iwork[j - 1] = lsticc;
+                        iwork[j - 1] = (aocl_int_t)(lsticc);
                         /* Set the index of the last difficult column LSTICC. */
                         lsticc = j;
                     }
@@ -876,8 +896,9 @@ void slaqp3rk_(integer *m, integer *n, integer *nrhs, integer *ioffset, integer 
     {
         i__1 = *m - if__;
         i__2 = *n + *nrhs - *kb;
-        sgemm_("No transpose", "Transpose", &i__1, &i__2, kb, &c_b7, &a[if__ + 1 + a_dim1], lda,
-               &f[*kb + 1 + f_dim1], ldf, &c_b8, &a[if__ + 1 + (*kb + 1) * a_dim1], lda);
+        aocl_blas_sgemm("No transpose", "Transpose", &i__1, &i__2, kb, &c_b7, &a[if__ + 1 + a_dim1],
+                        lda, &f[*kb + 1 + f_dim1], ldf, &c_b8, &a[if__ + 1 + (*kb + 1) * a_dim1],
+                        lda);
     }
     /* Recompute the 2-norm of the difficult columns. */
     /* Loop over the index of the difficult columns from the largest */
@@ -894,7 +915,7 @@ void slaqp3rk_(integer *m, integer *n, integer *nrhs, integer *ioffset, integer 
         /* SNRM2 does not fail on vectors with norm below the value of */
         /* SQRT(SLAMCH('S')) */
         i__1 = *m - if__;
-        vn1[lsticc] = snrm2_(&i__1, &a[if__ + 1 + lsticc * a_dim1], &c__1);
+        vn1[lsticc] = aocl_blas_snrm2(&i__1, &a[if__ + 1 + lsticc * a_dim1], &c__1);
         vn2[lsticc] = vn1[lsticc];
         /* Downdate the index of the last difficult column to */
         /* the index of the previous difficult column. */

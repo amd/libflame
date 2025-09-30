@@ -4,7 +4,7 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
+static aocl_int64_t c__1 = 1;
 /* > \brief \b ZHPGST */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -42,7 +42,7 @@ static integer c__1 = 1;
 /* > \verbatim */
 /* > */
 /* > ZHPGV computes all the eigenvalues and, optionally, the eigenvectors */
-/* > of a complex generalized Hermitian-definite eigenproblem, of the form */
+/* > of a scomplex generalized Hermitian-definite eigenproblem, of the form */
 /* > A*x=(lambda)*B*x, A*Bx=(lambda)*x, or B*A*x=(lambda)*x. */
 /* > Here A and B are assumed to be Hermitian, stored in packed format, */
 /* > and B is also positive definite. */
@@ -168,33 +168,42 @@ static integer c__1 = 1;
 /* > \ingroup complex16OTHEReigen */
 /* ===================================================================== */
 /* Subroutine */
-void zhpgv_(integer *itype, char *jobz, char *uplo, integer *n, doublecomplex *ap,
-            doublecomplex *bp, doublereal *w, doublecomplex *z__, integer *ldz, doublecomplex *work,
-            doublereal *rwork, integer *info)
+/** Generated wrapper function */
+void zhpgv_(aocl_int_t *itype, char *jobz, char *uplo, aocl_int_t *n, dcomplex *ap,
+            dcomplex *bp, doublereal *w, dcomplex *z__, aocl_int_t *ldz,
+            dcomplex *work, doublereal *rwork, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_zhpgv(itype, jobz, uplo, n, ap, bp, w, z__, ldz, work, rwork, info);
+#else
+    aocl_int64_t itype_64 = *itype;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t ldz_64 = *ldz;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_zhpgv(&itype_64, jobz, uplo, &n_64, ap, bp, w, z__, &ldz_64, work, rwork, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_zhpgv(aocl_int64_t *itype, char *jobz, char *uplo, aocl_int64_t *n,
+                       dcomplex *ap, dcomplex *bp, doublereal *w, dcomplex *z__,
+                       aocl_int64_t *ldz, dcomplex *work, doublereal *rwork,
+                       aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zhpgv inputs: itype %" FLA_IS ", jobz %c, uplo %c, n %" FLA_IS
                       ", ldz %" FLA_IS "",
                       *itype, *jobz, *uplo, *n, *ldz);
     /* System generated locals */
-    integer z_dim1, z_offset, i__1;
+    aocl_int64_t z_dim1, z_offset, i__1;
     /* Local variables */
-    integer j, neig;
-    extern logical lsame_(char *, char *, integer, integer);
+    aocl_int64_t j, neig;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     char trans[1];
     logical upper;
-    extern /* Subroutine */
-        void
-        zhpev_(char *, char *, integer *, doublecomplex *, doublereal *, doublecomplex *, integer *,
-               doublecomplex *, doublereal *, integer *);
     logical wantz;
-    extern /* Subroutine */
-        void
-        ztpmv_(char *, char *, char *, integer *, doublecomplex *, doublecomplex *, integer *),
-        ztpsv_(char *, char *, char *, integer *, doublecomplex *, doublecomplex *, integer *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
-        zhpgst_(integer *, char *, integer *, doublecomplex *, doublecomplex *, integer *),
-        zpptrf_(char *, integer *, doublecomplex *, integer *);
     /* -- LAPACK driver routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -248,7 +257,7 @@ void zhpgv_(integer *itype, char *jobz, char *uplo, integer *n, doublecomplex *a
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("ZHPGV ", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("ZHPGV ", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -259,7 +268,7 @@ void zhpgv_(integer *itype, char *jobz, char *uplo, integer *n, doublecomplex *a
         return;
     }
     /* Form a Cholesky factorization of B. */
-    zpptrf_(uplo, n, &bp[1], info);
+    aocl_lapack_zpptrf(uplo, n, &bp[1], info);
     if(*info != 0)
     {
         *info = *n + *info;
@@ -267,8 +276,8 @@ void zhpgv_(integer *itype, char *jobz, char *uplo, integer *n, doublecomplex *a
         return;
     }
     /* Transform problem to standard eigenvalue problem and solve. */
-    zhpgst_(itype, uplo, n, &ap[1], &bp[1], info);
-    zhpev_(jobz, uplo, n, &ap[1], &w[1], &z__[z_offset], ldz, &work[1], &rwork[1], info);
+    aocl_lapack_zhpgst(itype, uplo, n, &ap[1], &bp[1], info);
+    aocl_lapack_zhpev(jobz, uplo, n, &ap[1], &w[1], &z__[z_offset], ldz, &work[1], &rwork[1], info);
     if(wantz)
     {
         /* Backtransform eigenvectors to the original problem. */
@@ -293,7 +302,7 @@ void zhpgv_(integer *itype, char *jobz, char *uplo, integer *n, doublecomplex *a
             i__1 = neig;
             for(j = 1; j <= i__1; ++j)
             {
-                ztpsv_(uplo, trans, "Non-unit", n, &bp[1], &z__[j * z_dim1 + 1], &c__1);
+                aocl_blas_ztpsv(uplo, trans, "Non-unit", n, &bp[1], &z__[j * z_dim1 + 1], &c__1);
                 /* L10: */
             }
         }
@@ -313,7 +322,7 @@ void zhpgv_(integer *itype, char *jobz, char *uplo, integer *n, doublecomplex *a
             i__1 = neig;
             for(j = 1; j <= i__1; ++j)
             {
-                ztpmv_(uplo, trans, "Non-unit", n, &bp[1], &z__[j * z_dim1 + 1], &c__1);
+                aocl_blas_ztpmv(uplo, trans, "Non-unit", n, &bp[1], &z__[j * z_dim1 + 1], &c__1);
                 /* L20: */
             }
         }

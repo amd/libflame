@@ -12,10 +12,10 @@
 
 #if FLA_ENABLE_AMD_OPT
 
-int fla_sscal_ix1_avx512(integer *n, real *sa, real *sx)
+int fla_sscal_ix1_avx512(aocl_int64_t *n, real *sa, real *sx)
 {
     /* Local variables */
-    integer i__1, i = 0;
+    aocl_int64_t i__1, i = 0;
     __m512 alpha512, xv512[4], pv512[4];
     __m256 alpha256, xv256[2], pv256[2];
     __m128 alpha128, xv128, pv128;
@@ -64,7 +64,7 @@ int fla_sscal_ix1_avx512(integer *n, real *sa, real *sx)
     // Process 8 elements at a time
     for(; i < (i__1 - 7); i += 8)
     {
-        /* load complex inputs */
+        /* load scomplex inputs */
         xv256[0] = _mm256_loadu_ps((float const *)&sx[i]);
 
         /* performs the scaling */
@@ -77,7 +77,7 @@ int fla_sscal_ix1_avx512(integer *n, real *sa, real *sx)
     // Process 4 elements at a time
     for(; i < (i__1 - 3); i += 4)
     {
-        /* load complex inputs */
+        /* load scomplex inputs */
         xv128 = _mm_loadu_ps((float const *)&sx[i]);
 
         /* performs the scaling */
@@ -90,7 +90,7 @@ int fla_sscal_ix1_avx512(integer *n, real *sa, real *sx)
     /* remainder iterations */
     for(; i < i__1; i += 1)
     {
-        /* load complex inputs */
+        /* load scomplex inputs */
         xv128 = _mm_load_ss((float const *)&sx[i]);
 
         /* performs the scaling */

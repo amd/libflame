@@ -4,7 +4,7 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
+static aocl_int64_t c__1 = 1;
 static real c_b11 = 1.f;
 /* > \brief \b SPTRFS */
 /* =========== DOCUMENTATION =========== */
@@ -159,35 +159,47 @@ static real c_b11 = 1.f;
 /* > \ingroup realPTcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void sptrfs_(integer *n, integer *nrhs, real *d__, real *e, real *df, real *ef, real *b,
-             integer *ldb, real *x, integer *ldx, real *ferr, real *berr, real *work, integer *info)
+/** Generated wrapper function */
+void sptrfs_(aocl_int_t *n, aocl_int_t *nrhs, real *d__, real *e, real *df, real *ef, real *b,
+             aocl_int_t *ldb, real *x, aocl_int_t *ldx, real *ferr, real *berr, real *work,
+             aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_sptrfs(n, nrhs, d__, e, df, ef, b, ldb, x, ldx, ferr, berr, work, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t nrhs_64 = *nrhs;
+    aocl_int64_t ldb_64 = *ldb;
+    aocl_int64_t ldx_64 = *ldx;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_sptrfs(&n_64, &nrhs_64, d__, e, df, ef, b, &ldb_64, x, &ldx_64, ferr, berr, work,
+                       &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_sptrfs(aocl_int64_t *n, aocl_int64_t *nrhs, real *d__, real *e, real *df, real *ef,
+                        real *b, aocl_int64_t *ldb, real *x, aocl_int64_t *ldx, real *ferr,
+                        real *berr, real *work, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF(
-             "sptrfs inputs: n %" FLA_IS ", nrhs %" FLA_IS ", ldb %" FLA_IS ", ldx %" FLA_IS "", *n,
-             *nrhs, *ldb, *ldx);
+    AOCL_DTL_SNPRINTF("sptrfs inputs: n %" FLA_IS ", nrhs %" FLA_IS ", ldb %" FLA_IS
+                      ", ldx %" FLA_IS "",
+                      *n, *nrhs, *ldb, *ldx);
     /* System generated locals */
-    integer b_dim1, b_offset, x_dim1, x_offset, i__1, i__2;
+    aocl_int64_t b_dim1, b_offset, x_dim1, x_offset, i__1, i__2;
     real r__1, r__2, r__3;
     /* Local variables */
-    integer i__, j;
+    aocl_int64_t i__, j;
     real s, bi, cx, dx, ex;
-    integer ix, nz;
+    aocl_int64_t ix, nz;
     real eps, safe1, safe2;
-    integer count;
-    extern /* Subroutine */
-        void
-        saxpy_(integer *, real *, real *, integer *, real *, integer *);
+    aocl_int64_t count;
     extern real slamch_(char *);
     real safmin;
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    extern integer isamax_(integer *, real *, integer *);
     real lstres;
-    extern /* Subroutine */
-        void
-        spttrs_(integer *, integer *, real *, real *, real *, integer *, integer *);
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -244,7 +256,7 @@ void sptrfs_(integer *n, integer *nrhs, real *d__, real *e, real *df, real *ef, 
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("SPTRFS", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("SPTRFS", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -343,8 +355,8 @@ void sptrfs_(integer *n, integer *nrhs, real *d__, real *e, real *df, real *ef, 
         if(berr[j] > eps && berr[j] * 2.f <= lstres && count <= 5)
         {
             /* Update solution and try again. */
-            spttrs_(n, &c__1, &df[1], &ef[1], &work[*n + 1], n, info);
-            saxpy_(n, &c_b11, &work[*n + 1], &c__1, &x[j * x_dim1 + 1], &c__1);
+            aocl_lapack_spttrs(n, &c__1, &df[1], &ef[1], &work[*n + 1], n, info);
+            aocl_blas_saxpy(n, &c_b11, &work[*n + 1], &c__1, &x[j * x_dim1 + 1], &c__1);
             lstres = berr[j];
             ++count;
             goto L20;
@@ -376,7 +388,7 @@ void sptrfs_(integer *n, integer *nrhs, real *d__, real *e, real *df, real *ef, 
             }
             /* L50: */
         }
-        ix = isamax_(n, &work[1], &c__1);
+        ix = aocl_blas_isamax(n, &work[1], &c__1);
         ferr[j] = work[ix];
         /* Estimate the norm of inv(A). */
         /* Solve M(A) * x = e, where M(A) = (m(i,j)) is given by */
@@ -399,7 +411,7 @@ void sptrfs_(integer *n, integer *nrhs, real *d__, real *e, real *df, real *ef, 
             /* L70: */
         }
         /* Compute norm(inv(A)) = fla_max(x(i)), 1<=i<=n. */
-        ix = isamax_(n, &work[1], &c__1);
+        ix = aocl_blas_isamax(n, &work[1], &c__1);
         ferr[j] *= (r__1 = work[ix], f2c_abs(r__1));
         /* Normalize error. */
         lstres = 0.f;

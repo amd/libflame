@@ -4,7 +4,7 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static doublecomplex c_b1 = {1., 0.};
+static dcomplex c_b1 = {{1.}, {0.}};
 /* > \brief \b ZTFTRI */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -225,28 +225,37 @@ If UPLO = 'L' the RFP A contains the nt */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void ztftri_(char *transr, char *uplo, char *diag, integer *n, doublecomplex *a, integer *info)
+/** Generated wrapper function */
+void ztftri_(char *transr, char *uplo, char *diag, aocl_int_t *n, dcomplex *a,
+             aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_ztftri(transr, uplo, diag, n, a, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_ztftri(transr, uplo, diag, &n_64, a, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_ztftri(char *transr, char *uplo, char *diag, aocl_int64_t *n, dcomplex *a,
+                        aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("ztftri inputs: transr %c, uplo %c, diag %c, n %" FLA_IS "", *transr, *uplo,
                       *diag, *n);
     /* System generated locals */
-    integer i__1, i__2;
-    doublecomplex z__1;
+    aocl_int64_t i__1, i__2;
+    dcomplex z__1;
     /* Local variables */
-    integer k, n1, n2;
+    aocl_int64_t k, n1, n2;
     logical normaltransr;
-    extern logical lsame_(char *, char *, integer, integer);
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     logical lower;
-    extern /* Subroutine */
-        void
-        ztrmm_(char *, char *, char *, char *, integer *, integer *, doublecomplex *,
-               doublecomplex *, integer *, doublecomplex *, integer *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical nisodd;
-    extern /* Subroutine */
-        void
-        ztrtri_(char *, char *, integer *, doublecomplex *, integer *, integer *);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -290,7 +299,7 @@ void ztftri_(char *transr, char *uplo, char *diag, integer *n, doublecomplex *a,
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("ZTFTRI", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("ZTFTRI", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -334,7 +343,7 @@ void ztftri_(char *transr, char *uplo, char *diag, integer *n, doublecomplex *a,
                 /* SRPA for LOWER, NORMAL and N is odd ( a(0:n-1,0:n1-1) ) */
                 /* T1 -> a(0,0), T2 -> a(0,1), S -> a(n1,0) */
                 /* T1 -> a(0), T2 -> a(n), S -> a(n1) */
-                ztrtri_("L", diag, &n1, a, n, info);
+                aocl_lapack_ztrtri("L", diag, &n1, a, n, info);
                 if(*info > 0)
                 {
                     AOCL_DTL_TRACE_LOG_EXIT
@@ -342,8 +351,8 @@ void ztftri_(char *transr, char *uplo, char *diag, integer *n, doublecomplex *a,
                 }
                 z__1.r = -1.;
                 z__1.i = -0.; // , expr subst
-                ztrmm_("R", "L", "N", diag, &n2, &n1, &z__1, a, n, &a[n1], n);
-                ztrtri_("U", diag, &n2, &a[*n], n, info);
+                aocl_blas_ztrmm("R", "L", "N", diag, &n2, &n1, &z__1, a, n, &a[n1], n);
+                aocl_lapack_ztrtri("U", diag, &n2, &a[*n], n, info);
                 if(*info > 0)
                 {
                     *info += n1;
@@ -353,14 +362,14 @@ void ztftri_(char *transr, char *uplo, char *diag, integer *n, doublecomplex *a,
                     AOCL_DTL_TRACE_LOG_EXIT
                     return;
                 }
-                ztrmm_("L", "U", "C", diag, &n2, &n1, &c_b1, &a[*n], n, &a[n1], n);
+                aocl_blas_ztrmm("L", "U", "C", diag, &n2, &n1, &c_b1, &a[*n], n, &a[n1], n);
             }
             else
             {
                 /* SRPA for UPPER, NORMAL and N is odd ( a(0:n-1,0:n2-1) */
                 /* T1 -> a(n1+1,0), T2 -> a(n1,0), S -> a(0,0) */
                 /* T1 -> a(n2), T2 -> a(n1), S -> a(0) */
-                ztrtri_("L", diag, &n1, &a[n2], n, info);
+                aocl_lapack_ztrtri("L", diag, &n1, &a[n2], n, info);
                 if(*info > 0)
                 {
                     AOCL_DTL_TRACE_LOG_EXIT
@@ -368,8 +377,8 @@ void ztftri_(char *transr, char *uplo, char *diag, integer *n, doublecomplex *a,
                 }
                 z__1.r = -1.;
                 z__1.i = -0.; // , expr subst
-                ztrmm_("L", "L", "C", diag, &n1, &n2, &z__1, &a[n2], n, a, n);
-                ztrtri_("U", diag, &n2, &a[n1], n, info);
+                aocl_blas_ztrmm("L", "L", "C", diag, &n1, &n2, &z__1, &a[n2], n, a, n);
+                aocl_lapack_ztrtri("U", diag, &n2, &a[n1], n, info);
                 if(*info > 0)
                 {
                     *info += n1;
@@ -379,7 +388,7 @@ void ztftri_(char *transr, char *uplo, char *diag, integer *n, doublecomplex *a,
                     AOCL_DTL_TRACE_LOG_EXIT
                     return;
                 }
-                ztrmm_("R", "U", "N", diag, &n1, &n2, &c_b1, &a[n1], n, a, n);
+                aocl_blas_ztrmm("R", "U", "N", diag, &n1, &n2, &c_b1, &a[n1], n, a, n);
             }
         }
         else
@@ -389,7 +398,7 @@ void ztftri_(char *transr, char *uplo, char *diag, integer *n, doublecomplex *a,
             {
                 /* SRPA for LOWER, TRANSPOSE and N is odd */
                 /* T1 -> a(0), T2 -> a(1), S -> a(0+n1*n1) */
-                ztrtri_("U", diag, &n1, a, &n1, info);
+                aocl_lapack_ztrtri("U", diag, &n1, a, &n1, info);
                 if(*info > 0)
                 {
                     AOCL_DTL_TRACE_LOG_EXIT
@@ -397,8 +406,8 @@ void ztftri_(char *transr, char *uplo, char *diag, integer *n, doublecomplex *a,
                 }
                 z__1.r = -1.;
                 z__1.i = -0.; // , expr subst
-                ztrmm_("L", "U", "N", diag, &n1, &n2, &z__1, a, &n1, &a[n1 * n1], &n1);
-                ztrtri_("L", diag, &n2, &a[1], &n1, info);
+                aocl_blas_ztrmm("L", "U", "N", diag, &n1, &n2, &z__1, a, &n1, &a[n1 * n1], &n1);
+                aocl_lapack_ztrtri("L", diag, &n2, &a[1], &n1, info);
                 if(*info > 0)
                 {
                     *info += n1;
@@ -408,13 +417,13 @@ void ztftri_(char *transr, char *uplo, char *diag, integer *n, doublecomplex *a,
                     AOCL_DTL_TRACE_LOG_EXIT
                     return;
                 }
-                ztrmm_("R", "L", "C", diag, &n1, &n2, &c_b1, &a[1], &n1, &a[n1 * n1], &n1);
+                aocl_blas_ztrmm("R", "L", "C", diag, &n1, &n2, &c_b1, &a[1], &n1, &a[n1 * n1], &n1);
             }
             else
             {
                 /* SRPA for UPPER, TRANSPOSE and N is odd */
                 /* T1 -> a(0+n2*n2), T2 -> a(0+n1*n2), S -> a(0) */
-                ztrtri_("U", diag, &n1, &a[n2 * n2], &n2, info);
+                aocl_lapack_ztrtri("U", diag, &n1, &a[n2 * n2], &n2, info);
                 if(*info > 0)
                 {
                     AOCL_DTL_TRACE_LOG_EXIT
@@ -422,8 +431,8 @@ void ztftri_(char *transr, char *uplo, char *diag, integer *n, doublecomplex *a,
                 }
                 z__1.r = -1.;
                 z__1.i = -0.; // , expr subst
-                ztrmm_("R", "U", "C", diag, &n2, &n1, &z__1, &a[n2 * n2], &n2, a, &n2);
-                ztrtri_("L", diag, &n2, &a[n1 * n2], &n2, info);
+                aocl_blas_ztrmm("R", "U", "C", diag, &n2, &n1, &z__1, &a[n2 * n2], &n2, a, &n2);
+                aocl_lapack_ztrtri("L", diag, &n2, &a[n1 * n2], &n2, info);
                 if(*info > 0)
                 {
                     *info += n1;
@@ -433,7 +442,7 @@ void ztftri_(char *transr, char *uplo, char *diag, integer *n, doublecomplex *a,
                     AOCL_DTL_TRACE_LOG_EXIT
                     return;
                 }
-                ztrmm_("L", "L", "N", diag, &n2, &n1, &c_b1, &a[n1 * n2], &n2, a, &n2);
+                aocl_blas_ztrmm("L", "L", "N", diag, &n2, &n1, &c_b1, &a[n1 * n2], &n2, a, &n2);
             }
         }
     }
@@ -449,7 +458,7 @@ void ztftri_(char *transr, char *uplo, char *diag, integer *n, doublecomplex *a,
                 /* T1 -> a(1,0), T2 -> a(0,0), S -> a(k+1,0) */
                 /* T1 -> a(1), T2 -> a(0), S -> a(k+1) */
                 i__1 = *n + 1;
-                ztrtri_("L", diag, &k, &a[1], &i__1, info);
+                aocl_lapack_ztrtri("L", diag, &k, &a[1], &i__1, info);
                 if(*info > 0)
                 {
                     AOCL_DTL_TRACE_LOG_EXIT
@@ -459,9 +468,9 @@ void ztftri_(char *transr, char *uplo, char *diag, integer *n, doublecomplex *a,
                 z__1.i = -0.; // , expr subst
                 i__1 = *n + 1;
                 i__2 = *n + 1;
-                ztrmm_("R", "L", "N", diag, &k, &k, &z__1, &a[1], &i__1, &a[k + 1], &i__2);
+                aocl_blas_ztrmm("R", "L", "N", diag, &k, &k, &z__1, &a[1], &i__1, &a[k + 1], &i__2);
                 i__1 = *n + 1;
-                ztrtri_("U", diag, &k, a, &i__1, info);
+                aocl_lapack_ztrtri("U", diag, &k, a, &i__1, info);
                 if(*info > 0)
                 {
                     *info += k;
@@ -473,7 +482,7 @@ void ztftri_(char *transr, char *uplo, char *diag, integer *n, doublecomplex *a,
                 }
                 i__1 = *n + 1;
                 i__2 = *n + 1;
-                ztrmm_("L", "U", "C", diag, &k, &k, &c_b1, a, &i__1, &a[k + 1], &i__2);
+                aocl_blas_ztrmm("L", "U", "C", diag, &k, &k, &c_b1, a, &i__1, &a[k + 1], &i__2);
             }
             else
             {
@@ -481,7 +490,7 @@ void ztftri_(char *transr, char *uplo, char *diag, integer *n, doublecomplex *a,
                 /* T1 -> a(k+1,0) , T2 -> a(k,0), S -> a(0,0) */
                 /* T1 -> a(k+1), T2 -> a(k), S -> a(0) */
                 i__1 = *n + 1;
-                ztrtri_("L", diag, &k, &a[k + 1], &i__1, info);
+                aocl_lapack_ztrtri("L", diag, &k, &a[k + 1], &i__1, info);
                 if(*info > 0)
                 {
                     AOCL_DTL_TRACE_LOG_EXIT
@@ -491,9 +500,9 @@ void ztftri_(char *transr, char *uplo, char *diag, integer *n, doublecomplex *a,
                 z__1.i = -0.; // , expr subst
                 i__1 = *n + 1;
                 i__2 = *n + 1;
-                ztrmm_("L", "L", "C", diag, &k, &k, &z__1, &a[k + 1], &i__1, a, &i__2);
+                aocl_blas_ztrmm("L", "L", "C", diag, &k, &k, &z__1, &a[k + 1], &i__1, a, &i__2);
                 i__1 = *n + 1;
-                ztrtri_("U", diag, &k, &a[k], &i__1, info);
+                aocl_lapack_ztrtri("U", diag, &k, &a[k], &i__1, info);
                 if(*info > 0)
                 {
                     *info += k;
@@ -505,7 +514,7 @@ void ztftri_(char *transr, char *uplo, char *diag, integer *n, doublecomplex *a,
                 }
                 i__1 = *n + 1;
                 i__2 = *n + 1;
-                ztrmm_("R", "U", "N", diag, &k, &k, &c_b1, &a[k], &i__1, a, &i__2);
+                aocl_blas_ztrmm("R", "U", "N", diag, &k, &k, &c_b1, &a[k], &i__1, a, &i__2);
             }
         }
         else
@@ -517,7 +526,7 @@ void ztftri_(char *transr, char *uplo, char *diag, integer *n, doublecomplex *a,
                 /* T1 -> B(0,1), T2 -> B(0,0), S -> B(0,k+1) */
                 /* T1 -> a(0+k), T2 -> a(0+0), S -> a(0+k*(k+1));
                 lda=k */
-                ztrtri_("U", diag, &k, &a[k], &k, info);
+                aocl_lapack_ztrtri("U", diag, &k, &a[k], &k, info);
                 if(*info > 0)
                 {
                     AOCL_DTL_TRACE_LOG_EXIT
@@ -525,8 +534,8 @@ void ztftri_(char *transr, char *uplo, char *diag, integer *n, doublecomplex *a,
                 }
                 z__1.r = -1.;
                 z__1.i = -0.; // , expr subst
-                ztrmm_("L", "U", "N", diag, &k, &k, &z__1, &a[k], &k, &a[k * (k + 1)], &k);
-                ztrtri_("L", diag, &k, a, &k, info);
+                aocl_blas_ztrmm("L", "U", "N", diag, &k, &k, &z__1, &a[k], &k, &a[k * (k + 1)], &k);
+                aocl_lapack_ztrtri("L", diag, &k, a, &k, info);
                 if(*info > 0)
                 {
                     *info += k;
@@ -536,7 +545,7 @@ void ztftri_(char *transr, char *uplo, char *diag, integer *n, doublecomplex *a,
                     AOCL_DTL_TRACE_LOG_EXIT
                     return;
                 }
-                ztrmm_("R", "L", "C", diag, &k, &k, &c_b1, a, &k, &a[k * (k + 1)], &k);
+                aocl_blas_ztrmm("R", "L", "C", diag, &k, &k, &c_b1, a, &k, &a[k * (k + 1)], &k);
             }
             else
             {
@@ -544,7 +553,7 @@ void ztftri_(char *transr, char *uplo, char *diag, integer *n, doublecomplex *a,
                 /* T1 -> B(0,k+1), T2 -> B(0,k), S -> B(0,0) */
                 /* T1 -> a(0+k*(k+1)), T2 -> a(0+k*k), S -> a(0+0));
                 lda=k */
-                ztrtri_("U", diag, &k, &a[k * (k + 1)], &k, info);
+                aocl_lapack_ztrtri("U", diag, &k, &a[k * (k + 1)], &k, info);
                 if(*info > 0)
                 {
                     AOCL_DTL_TRACE_LOG_EXIT
@@ -552,8 +561,8 @@ void ztftri_(char *transr, char *uplo, char *diag, integer *n, doublecomplex *a,
                 }
                 z__1.r = -1.;
                 z__1.i = -0.; // , expr subst
-                ztrmm_("R", "U", "C", diag, &k, &k, &z__1, &a[k * (k + 1)], &k, a, &k);
-                ztrtri_("L", diag, &k, &a[k * k], &k, info);
+                aocl_blas_ztrmm("R", "U", "C", diag, &k, &k, &z__1, &a[k * (k + 1)], &k, a, &k);
+                aocl_lapack_ztrtri("L", diag, &k, &a[k * k], &k, info);
                 if(*info > 0)
                 {
                     *info += k;
@@ -563,7 +572,7 @@ void ztftri_(char *transr, char *uplo, char *diag, integer *n, doublecomplex *a,
                     AOCL_DTL_TRACE_LOG_EXIT
                     return;
                 }
-                ztrmm_("L", "L", "N", diag, &k, &k, &c_b1, &a[k * k], &k, a, &k);
+                aocl_blas_ztrmm("L", "L", "N", diag, &k, &k, &c_b1, &a[k * k], &k, a, &k);
             }
         }
     }

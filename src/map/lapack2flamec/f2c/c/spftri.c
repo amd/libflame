@@ -192,29 +192,33 @@ k=N/2. IF TRANSR = 'T' then RFP is */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void spftri_(char *transr, char *uplo, integer *n, real *a, integer *info)
+/** Generated wrapper function */
+void spftri_(char *transr, char *uplo, aocl_int_t *n, real *a, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_spftri(transr, uplo, n, a, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_spftri(transr, uplo, &n_64, a, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_spftri(char *transr, char *uplo, aocl_int64_t *n, real *a, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("spftri inputs: transr %c ,uplo %c ,n %" FLA_IS "", *transr, *uplo, *n);
     /* System generated locals */
-    integer i__1, i__2;
+    aocl_int64_t i__1, i__2;
     /* Local variables */
-    integer k, n1, n2;
+    aocl_int64_t k, n1, n2;
     logical normaltransr;
-    extern logical lsame_(char *, char *, integer, integer);
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     logical lower;
-    extern /* Subroutine */
-        void
-        strmm_(char *, char *, char *, char *, integer *, integer *, real *, real *, integer *,
-               real *, integer *),
-        ssyrk_(char *, char *, integer *, integer *, real *, real *, integer *, real *, real *,
-               integer *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical nisodd;
-    extern /* Subroutine */
-        void
-        slauum_(char *, integer *, real *, integer *, integer *),
-        stftri_(char *, char *, char *, integer *, real *, integer *);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -253,7 +257,7 @@ void spftri_(char *transr, char *uplo, integer *n, real *a, integer *info)
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("SPFTRI", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("SPFTRI", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -264,7 +268,7 @@ void spftri_(char *transr, char *uplo, integer *n, real *a, integer *info)
         return;
     }
     /* Invert the triangular Cholesky factor U or L. */
-    stftri_(transr, uplo, "N", n, a, info);
+    aocl_lapack_stftri(transr, uplo, "N", n, a, info);
     if(*info > 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
@@ -305,20 +309,20 @@ void spftri_(char *transr, char *uplo, integer *n, real *a, integer *info)
                 /* SRPA for LOWER, NORMAL and N is odd ( a(0:n-1,0:N1-1) ) */
                 /* T1 -> a(0,0), T2 -> a(0,1), S -> a(N1,0) */
                 /* T1 -> a(0), T2 -> a(n), S -> a(N1) */
-                slauum_("L", &n1, a, n, info);
-                ssyrk_("L", "T", &n1, &n2, &c_b11, &a[n1], n, &c_b11, a, n);
-                strmm_("L", "U", "N", "N", &n2, &n1, &c_b11, &a[*n], n, &a[n1], n);
-                slauum_("U", &n2, &a[*n], n, info);
+                aocl_lapack_slauum("L", &n1, a, n, info);
+                aocl_blas_ssyrk("L", "T", &n1, &n2, &c_b11, &a[n1], n, &c_b11, a, n);
+                aocl_blas_strmm("L", "U", "N", "N", &n2, &n1, &c_b11, &a[*n], n, &a[n1], n);
+                aocl_lapack_slauum("U", &n2, &a[*n], n, info);
             }
             else
             {
                 /* SRPA for UPPER, NORMAL and N is odd ( a(0:n-1,0:N2-1) */
                 /* T1 -> a(N1+1,0), T2 -> a(N1,0), S -> a(0,0) */
                 /* T1 -> a(N2), T2 -> a(N1), S -> a(0) */
-                slauum_("L", &n1, &a[n2], n, info);
-                ssyrk_("L", "N", &n1, &n2, &c_b11, a, n, &c_b11, &a[n2], n);
-                strmm_("R", "U", "T", "N", &n1, &n2, &c_b11, &a[n1], n, a, n);
-                slauum_("U", &n2, &a[n1], n, info);
+                aocl_lapack_slauum("L", &n1, &a[n2], n, info);
+                aocl_blas_ssyrk("L", "N", &n1, &n2, &c_b11, a, n, &c_b11, &a[n2], n);
+                aocl_blas_strmm("R", "U", "T", "N", &n1, &n2, &c_b11, &a[n1], n, a, n);
+                aocl_lapack_slauum("U", &n2, &a[n1], n, info);
             }
         }
         else
@@ -328,19 +332,19 @@ void spftri_(char *transr, char *uplo, integer *n, real *a, integer *info)
             {
                 /* SRPA for LOWER, TRANSPOSE, and N is odd */
                 /* T1 -> a(0), T2 -> a(1), S -> a(0+N1*N1) */
-                slauum_("U", &n1, a, &n1, info);
-                ssyrk_("U", "N", &n1, &n2, &c_b11, &a[n1 * n1], &n1, &c_b11, a, &n1);
-                strmm_("R", "L", "N", "N", &n1, &n2, &c_b11, &a[1], &n1, &a[n1 * n1], &n1);
-                slauum_("L", &n2, &a[1], &n1, info);
+                aocl_lapack_slauum("U", &n1, a, &n1, info);
+                aocl_blas_ssyrk("U", "N", &n1, &n2, &c_b11, &a[n1 * n1], &n1, &c_b11, a, &n1);
+                aocl_blas_strmm("R", "L", "N", "N", &n1, &n2, &c_b11, &a[1], &n1, &a[n1 * n1], &n1);
+                aocl_lapack_slauum("L", &n2, &a[1], &n1, info);
             }
             else
             {
                 /* SRPA for UPPER, TRANSPOSE, and N is odd */
                 /* T1 -> a(0+N2*N2), T2 -> a(0+N1*N2), S -> a(0) */
-                slauum_("U", &n1, &a[n2 * n2], &n2, info);
-                ssyrk_("U", "T", &n1, &n2, &c_b11, a, &n2, &c_b11, &a[n2 * n2], &n2);
-                strmm_("L", "L", "T", "N", &n2, &n1, &c_b11, &a[n1 * n2], &n2, a, &n2);
-                slauum_("L", &n2, &a[n1 * n2], &n2, info);
+                aocl_lapack_slauum("U", &n1, &a[n2 * n2], &n2, info);
+                aocl_blas_ssyrk("U", "T", &n1, &n2, &c_b11, a, &n2, &c_b11, &a[n2 * n2], &n2);
+                aocl_blas_strmm("L", "L", "T", "N", &n2, &n1, &c_b11, &a[n1 * n2], &n2, a, &n2);
+                aocl_lapack_slauum("L", &n2, &a[n1 * n2], &n2, info);
             }
         }
     }
@@ -356,15 +360,15 @@ void spftri_(char *transr, char *uplo, integer *n, real *a, integer *info)
                 /* T1 -> a(1,0), T2 -> a(0,0), S -> a(k+1,0) */
                 /* T1 -> a(1), T2 -> a(0), S -> a(k+1) */
                 i__1 = *n + 1;
-                slauum_("L", &k, &a[1], &i__1, info);
+                aocl_lapack_slauum("L", &k, &a[1], &i__1, info);
                 i__1 = *n + 1;
                 i__2 = *n + 1;
-                ssyrk_("L", "T", &k, &k, &c_b11, &a[k + 1], &i__1, &c_b11, &a[1], &i__2);
+                aocl_blas_ssyrk("L", "T", &k, &k, &c_b11, &a[k + 1], &i__1, &c_b11, &a[1], &i__2);
                 i__1 = *n + 1;
                 i__2 = *n + 1;
-                strmm_("L", "U", "N", "N", &k, &k, &c_b11, a, &i__1, &a[k + 1], &i__2);
+                aocl_blas_strmm("L", "U", "N", "N", &k, &k, &c_b11, a, &i__1, &a[k + 1], &i__2);
                 i__1 = *n + 1;
-                slauum_("U", &k, a, &i__1, info);
+                aocl_lapack_slauum("U", &k, a, &i__1, info);
             }
             else
             {
@@ -372,15 +376,15 @@ void spftri_(char *transr, char *uplo, integer *n, real *a, integer *info)
                 /* T1 -> a(k+1,0) , T2 -> a(k,0), S -> a(0,0) */
                 /* T1 -> a(k+1), T2 -> a(k), S -> a(0) */
                 i__1 = *n + 1;
-                slauum_("L", &k, &a[k + 1], &i__1, info);
+                aocl_lapack_slauum("L", &k, &a[k + 1], &i__1, info);
                 i__1 = *n + 1;
                 i__2 = *n + 1;
-                ssyrk_("L", "N", &k, &k, &c_b11, a, &i__1, &c_b11, &a[k + 1], &i__2);
+                aocl_blas_ssyrk("L", "N", &k, &k, &c_b11, a, &i__1, &c_b11, &a[k + 1], &i__2);
                 i__1 = *n + 1;
                 i__2 = *n + 1;
-                strmm_("R", "U", "T", "N", &k, &k, &c_b11, &a[k], &i__1, a, &i__2);
+                aocl_blas_strmm("R", "U", "T", "N", &k, &k, &c_b11, &a[k], &i__1, a, &i__2);
                 i__1 = *n + 1;
-                slauum_("U", &k, &a[k], &i__1, info);
+                aocl_lapack_slauum("U", &k, &a[k], &i__1, info);
             }
         }
         else
@@ -392,10 +396,10 @@ void spftri_(char *transr, char *uplo, integer *n, real *a, integer *info)
                 /* T1 -> B(0,1), T2 -> B(0,0), S -> B(0,k+1), */
                 /* T1 -> a(0+k), T2 -> a(0+0), S -> a(0+k*(k+1));
                 lda=k */
-                slauum_("U", &k, &a[k], &k, info);
-                ssyrk_("U", "N", &k, &k, &c_b11, &a[k * (k + 1)], &k, &c_b11, &a[k], &k);
-                strmm_("R", "L", "N", "N", &k, &k, &c_b11, a, &k, &a[k * (k + 1)], &k);
-                slauum_("L", &k, a, &k, info);
+                aocl_lapack_slauum("U", &k, &a[k], &k, info);
+                aocl_blas_ssyrk("U", "N", &k, &k, &c_b11, &a[k * (k + 1)], &k, &c_b11, &a[k], &k);
+                aocl_blas_strmm("R", "L", "N", "N", &k, &k, &c_b11, a, &k, &a[k * (k + 1)], &k);
+                aocl_lapack_slauum("L", &k, a, &k, info);
             }
             else
             {
@@ -403,10 +407,10 @@ void spftri_(char *transr, char *uplo, integer *n, real *a, integer *info)
                 /* T1 -> B(0,k+1), T2 -> B(0,k), S -> B(0,0), */
                 /* T1 -> a(0+k*(k+1)), T2 -> a(0+k*k), S -> a(0+0));
                 lda=k */
-                slauum_("U", &k, &a[k * (k + 1)], &k, info);
-                ssyrk_("U", "T", &k, &k, &c_b11, a, &k, &c_b11, &a[k * (k + 1)], &k);
-                strmm_("L", "L", "T", "N", &k, &k, &c_b11, &a[k * k], &k, a, &k);
-                slauum_("L", &k, &a[k * k], &k, info);
+                aocl_lapack_slauum("U", &k, &a[k * (k + 1)], &k, info);
+                aocl_blas_ssyrk("U", "T", &k, &k, &c_b11, a, &k, &c_b11, &a[k * (k + 1)], &k);
+                aocl_blas_strmm("L", "L", "T", "N", &k, &k, &c_b11, &a[k * k], &k, a, &k);
+                aocl_lapack_slauum("L", &k, &a[k * k], &k, info);
             }
         }
     }

@@ -1,11 +1,11 @@
 #include "FLA_f2c.h" /* Table of constant values */
 #include "FLA_lapack2flame_return_defs.h"
 
-int zgeqpf_check(integer *m, integer *n, dcomplex *a, integer *lda, integer *jpvt, dcomplex *tau,
-                 dcomplex *work, double *rwork, integer *info)
+int zgeqpf_check(aocl_int64_t *m, aocl_int64_t *n, dcomplex *a, aocl_int64_t *lda, aocl_int64_t *jpvt, dcomplex *tau,
+                 dcomplex *work, double *rwork, aocl_int64_t *info)
 {
     /* System generated locals */
-    integer a_dim1, a_offset, i__1;
+    aocl_int64_t a_dim1, a_offset, i__1;
 
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
@@ -38,7 +38,7 @@ int zgeqpf_check(integer *m, integer *n, dcomplex *a, integer *lda, integer *jpv
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("ZGEQPF", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("ZGEQPF", &i__1, (ftnlen)6);
         return LAPACK_FAILURE;
     }
     /* Quick return if possible */

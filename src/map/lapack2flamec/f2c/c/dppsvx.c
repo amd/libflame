@@ -4,7 +4,7 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
+static aocl_int64_t c__1 = 1;
 /* > \brief <b> DPPSVX computes the solution to system of linear equations A * X = B for OTHER
  * matrices</b> */
 /* =========== DOCUMENTATION =========== */
@@ -314,53 +314,53 @@ if EQUED = 'Y', */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void dppsvx_(char *fact, char *uplo, integer *n, integer *nrhs, doublereal *ap, doublereal *afp,
-             char *equed, doublereal *s, doublereal *b, integer *ldb, doublereal *x, integer *ldx,
-             doublereal *rcond, doublereal *ferr, doublereal *berr, doublereal *work,
-             integer *iwork, integer *info)
+/** Generated wrapper function */
+void dppsvx_(char *fact, char *uplo, aocl_int_t *n, aocl_int_t *nrhs, doublereal *ap,
+             doublereal *afp, char *equed, doublereal *s, doublereal *b, aocl_int_t *ldb,
+             doublereal *x, aocl_int_t *ldx, doublereal *rcond, doublereal *ferr, doublereal *berr,
+             doublereal *work, aocl_int_t *iwork, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_dppsvx(fact, uplo, n, nrhs, ap, afp, equed, s, b, ldb, x, ldx, rcond, ferr, berr,
+                       work, iwork, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t nrhs_64 = *nrhs;
+    aocl_int64_t ldb_64 = *ldb;
+    aocl_int64_t ldx_64 = *ldx;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_dppsvx(fact, uplo, &n_64, &nrhs_64, ap, afp, equed, s, b, &ldb_64, x, &ldx_64,
+                       rcond, ferr, berr, work, iwork, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_dppsvx(char *fact, char *uplo, aocl_int64_t *n, aocl_int64_t *nrhs, doublereal *ap,
+                        doublereal *afp, char *equed, doublereal *s, doublereal *b,
+                        aocl_int64_t *ldb, doublereal *x, aocl_int64_t *ldx, doublereal *rcond,
+                        doublereal *ferr, doublereal *berr, doublereal *work, aocl_int_t *iwork,
+                        aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dppsvx inputs: fact %c, uplo %c, n %" FLA_IS ", nrhs %" FLA_IS
                       ", equed %c, ldb %" FLA_IS ", ldx %" FLA_IS "",
                       *fact, *uplo, *n, *nrhs, *equed, *ldb, *ldx);
     /* System generated locals */
-    integer b_dim1, b_offset, x_dim1, x_offset, i__1, i__2;
+    aocl_int64_t b_dim1, b_offset, x_dim1, x_offset, i__1, i__2;
     doublereal d__1, d__2;
     /* Local variables */
-    integer i__, j;
+    aocl_int64_t i__, j;
     doublereal amax, smin, smax;
-    extern logical lsame_(char *, char *, integer, integer);
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     doublereal scond, anorm;
-    extern /* Subroutine */
-        void
-        dcopy_(integer *, doublereal *, integer *, doublereal *, integer *);
     logical equil, rcequ;
     extern doublereal dlamch_(char *);
     logical nofact;
-    extern /* Subroutine */
-        void
-        dlacpy_(char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal bignum;
-    extern doublereal dlansp_(char *, char *, integer *, doublereal *, doublereal *);
-    extern /* Subroutine */
-        void
-        dppcon_(char *, integer *, doublereal *, doublereal *, doublereal *, doublereal *,
-                integer *, integer *),
-        dlaqsp_(char *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, char *);
-    integer infequ;
-    extern /* Subroutine */
-        void
-        dppequ_(char *, integer *, doublereal *, doublereal *, doublereal *, doublereal *,
-                integer *),
-        dpprfs_(char *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *,
-                doublereal *, integer *, doublereal *, doublereal *, doublereal *, integer *,
-                integer *),
-        dpptrf_(char *, integer *, doublereal *, integer *);
+    aocl_int64_t infequ;
     doublereal smlnum;
-    extern /* Subroutine */
-        void
-        dpptrs_(char *, integer *, integer *, doublereal *, doublereal *, integer *, integer *);
     /* -- LAPACK driver routine (version 3.4.1) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -480,18 +480,18 @@ void dppsvx_(char *fact, char *uplo, integer *n, integer *nrhs, doublereal *ap, 
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("DPPSVX", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("DPPSVX", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     if(equil)
     {
         /* Compute row and column scalings to equilibrate the matrix A. */
-        dppequ_(uplo, n, &ap[1], &s[1], &scond, &amax, &infequ);
+        aocl_lapack_dppequ(uplo, n, &ap[1], &s[1], &scond, &amax, &infequ);
         if(infequ == 0)
         {
             /* Equilibrate the matrix. */
-            dlaqsp_(uplo, n, &ap[1], &s[1], &scond, &amax, equed);
+            aocl_lapack_dlaqsp(uplo, n, &ap[1], &s[1], &scond, &amax, equed);
             rcequ = lsame_(equed, "Y", 1, 1);
         }
     }
@@ -514,8 +514,8 @@ void dppsvx_(char *fact, char *uplo, integer *n, integer *nrhs, doublereal *ap, 
     {
         /* Compute the Cholesky factorization A = U**T * U or A = L * L**T. */
         i__1 = *n * (*n + 1) / 2;
-        dcopy_(&i__1, &ap[1], &c__1, &afp[1], &c__1);
-        dpptrf_(uplo, n, &afp[1], info);
+        aocl_blas_dcopy(&i__1, &ap[1], &c__1, &afp[1], &c__1);
+        aocl_lapack_dpptrf(uplo, n, &afp[1], info);
         /* Return if INFO is non-zero. */
         if(*info > 0)
         {
@@ -525,16 +525,16 @@ void dppsvx_(char *fact, char *uplo, integer *n, integer *nrhs, doublereal *ap, 
         }
     }
     /* Compute the norm of the matrix A. */
-    anorm = dlansp_("I", uplo, n, &ap[1], &work[1]);
+    anorm = aocl_lapack_dlansp("I", uplo, n, &ap[1], &work[1]);
     /* Compute the reciprocal of the condition number of A. */
-    dppcon_(uplo, n, &afp[1], &anorm, rcond, &work[1], &iwork[1], info);
+    aocl_lapack_dppcon(uplo, n, &afp[1], &anorm, rcond, &work[1], &iwork[1], info);
     /* Compute the solution matrix X. */
-    dlacpy_("Full", n, nrhs, &b[b_offset], ldb, &x[x_offset], ldx);
-    dpptrs_(uplo, n, nrhs, &afp[1], &x[x_offset], ldx, info);
+    aocl_lapack_dlacpy("Full", n, nrhs, &b[b_offset], ldb, &x[x_offset], ldx);
+    aocl_lapack_dpptrs(uplo, n, nrhs, &afp[1], &x[x_offset], ldx, info);
     /* Use iterative refinement to improve the computed solution and */
     /* compute error bounds and backward error estimates for it. */
-    dpprfs_(uplo, n, nrhs, &ap[1], &afp[1], &b[b_offset], ldb, &x[x_offset], ldx, &ferr[1],
-            &berr[1], &work[1], &iwork[1], info);
+    aocl_lapack_dpprfs(uplo, n, nrhs, &ap[1], &afp[1], &b[b_offset], ldb, &x[x_offset], ldx,
+                       &ferr[1], &berr[1], &work[1], &iwork[1], info);
     /* Transform the solution matrix X to a solution of the original */
     /* system. */
     if(rcequ)

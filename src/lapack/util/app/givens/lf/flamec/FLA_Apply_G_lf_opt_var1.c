@@ -30,9 +30,9 @@ FLA_Error FLA_Apply_G_lf_opt_var1( FLA_Obj G, FLA_Obj A )
 */
 {
     FLA_Datatype datatype;
-    integer          k_G, m_A, n_A;
-    integer          rs_G, cs_G;
-    integer          rs_A, cs_A;
+    fla_dim_t          k_G, m_A, n_A;
+    fla_dim_t          rs_G, cs_G;
+    fla_dim_t          rs_A, cs_A;
 
     datatype = FLA_Obj_datatype( A );
 

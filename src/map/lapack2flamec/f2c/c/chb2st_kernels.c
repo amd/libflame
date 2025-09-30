@@ -4,7 +4,7 @@
  with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for
  libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
+static aocl_int64_t c__1 = 1;
 /* > \brief \b CHB2ST_KERNELS */
 /* @generated from zhb2st_kernels.f, fortran z -> c, Wed Dec 7 08:22:40 2016 */
 /* =========== DOCUMENTATION =========== */
@@ -167,9 +167,34 @@ static integer c__1 = 1;
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void chb2st_kernels_(char *uplo, logical *wantz, integer *ttype, integer *st, integer *ed,
-                     integer *sweep, integer *n, integer *nb, integer *ib, complex *a, integer *lda,
-                     complex *v, complex *tau, integer *ldvt, complex *work)
+/** Generated wrapper function */
+void chb2st_kernels_(char *uplo, logical *wantz, aocl_int_t *ttype, aocl_int_t *st, aocl_int_t *ed,
+                     aocl_int_t *sweep, aocl_int_t *n, aocl_int_t *nb, aocl_int_t *ib, scomplex *a,
+                     aocl_int_t *lda, scomplex *v, scomplex *tau, aocl_int_t *ldvt, scomplex *work)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_chb2st_kernels(uplo, wantz, ttype, st, ed, sweep, n, nb, ib, a, lda, v, tau, ldvt,
+                               work);
+#else
+    aocl_int64_t ttype_64 = *ttype;
+    aocl_int64_t st_64 = *st;
+    aocl_int64_t ed_64 = *ed;
+    aocl_int64_t sweep_64 = *sweep;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t nb_64 = *nb;
+    aocl_int64_t ib_64 = *ib;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t ldvt_64 = *ldvt;
+
+    aocl_lapack_chb2st_kernels(uplo, wantz, &ttype_64, &st_64, &ed_64, &sweep_64, &n_64, &nb_64,
+                               &ib_64, a, &lda_64, v, tau, &ldvt_64, work);
+#endif
+}
+
+void aocl_lapack_chb2st_kernels(char *uplo, logical *wantz, aocl_int64_t *ttype, aocl_int64_t *st,
+                                aocl_int64_t *ed, aocl_int64_t *sweep, aocl_int64_t *n,
+                                aocl_int64_t *nb, aocl_int64_t *ib, scomplex *a, aocl_int64_t *lda,
+                                scomplex *v, scomplex *tau, aocl_int64_t *ldvt, scomplex *work)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -188,26 +213,17 @@ void chb2st_kernels_(char *uplo, logical *wantz, integer *ttype, integer *st, in
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
-    integer a_dim1, a_offset, i__1, i__2, i__3;
-    complex q__1;
+    aocl_int64_t a_dim1, a_offset, i__1, i__2, i__3;
+    scomplex q__1;
     /* Builtin functions */
-    void r_cnjg(complex *, complex *);
+    void r_cnjg(scomplex *, scomplex *);
     /* Local variables */
-    integer i__, j1, j2, lm, ln;
-    complex ctmp;
-    integer dpos, vpos;
-    extern logical lsame_(char *, char *, integer, integer);
+    aocl_int64_t i__, j1, j2, lm, ln;
+    scomplex ctmp;
+    aocl_int64_t dpos, vpos;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     logical upper;
-    extern /* Subroutine */
-        void
-        clarfg_(integer *, complex *, complex *, integer *, complex *);
-    extern /* Subroutine */
-        void
-        clarfx_(char *, integer *, integer *, complex *, complex *, complex *, integer *,
-                complex *),
-        clarfy_(char *, integer *, complex *, integer *, complex *, complex *, integer *,
-                complex *);
-    integer ofdpos, taupos;
+    aocl_int64_t ofdpos, taupos;
     /* -- LAPACK computational routine (version 3.7.1) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -281,21 +297,23 @@ void chb2st_kernels_(char *uplo, logical *wantz, integer *ttype, integer *st, in
             r_cnjg(&q__1, &a[ofdpos + *st * a_dim1]);
             ctmp.r = q__1.r;
             ctmp.i = q__1.i; // , expr subst
-            clarfg_(&lm, &ctmp, &v[vpos + 1], &c__1, &tau[taupos]);
+            aocl_lapack_clarfg(&lm, &ctmp, &v[vpos + 1], &c__1, &tau[taupos]);
             i__1 = ofdpos + *st * a_dim1;
             a[i__1].r = ctmp.r;
             a[i__1].i = ctmp.i; // , expr subst
             lm = *ed - *st + 1;
             r_cnjg(&q__1, &tau[taupos]);
             i__1 = *lda - 1;
-            clarfy_(uplo, &lm, &v[vpos], &c__1, &q__1, &a[dpos + *st * a_dim1], &i__1, &work[1]);
+            aocl_lapack_clarfy(uplo, &lm, &v[vpos], &c__1, &q__1, &a[dpos + *st * a_dim1], &i__1,
+                               &work[1]);
         }
         if(*ttype == 3)
         {
             lm = *ed - *st + 1;
             r_cnjg(&q__1, &tau[taupos]);
             i__1 = *lda - 1;
-            clarfy_(uplo, &lm, &v[vpos], &c__1, &q__1, &a[dpos + *st * a_dim1], &i__1, &work[1]);
+            aocl_lapack_clarfy(uplo, &lm, &v[vpos], &c__1, &q__1, &a[dpos + *st * a_dim1], &i__1,
+                               &work[1]);
         }
         if(*ttype == 2)
         {
@@ -309,8 +327,8 @@ void chb2st_kernels_(char *uplo, logical *wantz, integer *ttype, integer *st, in
             {
                 r_cnjg(&q__1, &tau[taupos]);
                 i__1 = *lda - 1;
-                clarfx_("Left", &ln, &lm, &v[vpos], &q__1, &a[dpos - *nb + j1 * a_dim1], &i__1,
-                        &work[1]);
+                aocl_lapack_clarfx("Left", &ln, &lm, &v[vpos], &q__1, &a[dpos - *nb + j1 * a_dim1],
+                                   &i__1, &work[1]);
                 if(*wantz)
                 {
                     vpos = (*sweep - 1) % 2 * *n + j1;
@@ -339,14 +357,14 @@ void chb2st_kernels_(char *uplo, logical *wantz, integer *ttype, integer *st, in
                 r_cnjg(&q__1, &a[dpos - *nb + j1 * a_dim1]);
                 ctmp.r = q__1.r;
                 ctmp.i = q__1.i; // , expr subst
-                clarfg_(&lm, &ctmp, &v[vpos + 1], &c__1, &tau[taupos]);
+                aocl_lapack_clarfg(&lm, &ctmp, &v[vpos + 1], &c__1, &tau[taupos]);
                 i__1 = dpos - *nb + j1 * a_dim1;
                 a[i__1].r = ctmp.r;
                 a[i__1].i = ctmp.i; // , expr subst
                 i__1 = ln - 1;
                 i__2 = *lda - 1;
-                clarfx_("Right", &i__1, &lm, &v[vpos], &tau[taupos],
-                        &a[dpos - *nb + 1 + j1 * a_dim1], &i__2, &work[1]);
+                aocl_lapack_clarfx("Right", &i__1, &lm, &v[vpos], &tau[taupos],
+                                   &a[dpos - *nb + 1 + j1 * a_dim1], &i__2, &work[1]);
             }
         }
         /* Lower case */
@@ -381,18 +399,21 @@ void chb2st_kernels_(char *uplo, logical *wantz, integer *ttype, integer *st, in
                 a[i__2].i = 0.f; // , expr subst
                 /* L20: */
             }
-            clarfg_(&lm, &a[ofdpos + (*st - 1) * a_dim1], &v[vpos + 1], &c__1, &tau[taupos]);
+            aocl_lapack_clarfg(&lm, &a[ofdpos + (*st - 1) * a_dim1], &v[vpos + 1], &c__1,
+                               &tau[taupos]);
             lm = *ed - *st + 1;
             r_cnjg(&q__1, &tau[taupos]);
             i__1 = *lda - 1;
-            clarfy_(uplo, &lm, &v[vpos], &c__1, &q__1, &a[dpos + *st * a_dim1], &i__1, &work[1]);
+            aocl_lapack_clarfy(uplo, &lm, &v[vpos], &c__1, &q__1, &a[dpos + *st * a_dim1], &i__1,
+                               &work[1]);
         }
         if(*ttype == 3)
         {
             lm = *ed - *st + 1;
             r_cnjg(&q__1, &tau[taupos]);
             i__1 = *lda - 1;
-            clarfy_(uplo, &lm, &v[vpos], &c__1, &q__1, &a[dpos + *st * a_dim1], &i__1, &work[1]);
+            aocl_lapack_clarfy(uplo, &lm, &v[vpos], &c__1, &q__1, &a[dpos + *st * a_dim1], &i__1,
+                               &work[1]);
         }
         if(*ttype == 2)
         {
@@ -405,8 +426,8 @@ void chb2st_kernels_(char *uplo, logical *wantz, integer *ttype, integer *st, in
             if(lm > 0)
             {
                 i__1 = *lda - 1;
-                clarfx_("Right", &lm, &ln, &v[vpos], &tau[taupos], &a[dpos + *nb + *st * a_dim1],
-                        &i__1, &work[1]);
+                aocl_lapack_clarfx("Right", &lm, &ln, &v[vpos], &tau[taupos],
+                                   &a[dpos + *nb + *st * a_dim1], &i__1, &work[1]);
                 if(*wantz)
                 {
                     vpos = (*sweep - 1) % 2 * *n + j1;
@@ -432,12 +453,13 @@ void chb2st_kernels_(char *uplo, logical *wantz, integer *ttype, integer *st, in
                     a[i__2].i = 0.f; // , expr subst
                     /* L40: */
                 }
-                clarfg_(&lm, &a[dpos + *nb + *st * a_dim1], &v[vpos + 1], &c__1, &tau[taupos]);
+                aocl_lapack_clarfg(&lm, &a[dpos + *nb + *st * a_dim1], &v[vpos + 1], &c__1,
+                                   &tau[taupos]);
                 i__1 = ln - 1;
                 r_cnjg(&q__1, &tau[taupos]);
                 i__2 = *lda - 1;
-                clarfx_("Left", &lm, &i__1, &v[vpos], &q__1,
-                        &a[dpos + *nb - 1 + (*st + 1) * a_dim1], &i__2, &work[1]);
+                aocl_lapack_clarfx("Left", &lm, &i__1, &v[vpos], &q__1,
+                                   &a[dpos + *nb - 1 + (*st + 1) * a_dim1], &i__2, &work[1]);
             }
         }
     }

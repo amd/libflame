@@ -163,8 +163,23 @@
 /* > \ingroup complexOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void chfrk_(char *transr, char *uplo, char *trans, integer *n, integer *k, real *alpha, complex *a,
-            integer *lda, real *beta, complex *c__)
+/** Generated wrapper function */
+void chfrk_(char *transr, char *uplo, char *trans, aocl_int_t *n, aocl_int_t *k, real *alpha,
+            scomplex *a, aocl_int_t *lda, real *beta, scomplex *c__)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_chfrk(transr, uplo, trans, n, k, alpha, a, lda, beta, c__);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t k_64 = *k;
+    aocl_int64_t lda_64 = *lda;
+
+    aocl_lapack_chfrk(transr, uplo, trans, &n_64, &k_64, alpha, a, &lda_64, beta, c__);
+#endif
+}
+
+void aocl_lapack_chfrk(char *transr, char *uplo, char *trans, aocl_int64_t *n, aocl_int64_t *k,
+                       real *alpha, scomplex *a, aocl_int64_t *lda, real *beta, scomplex *c__)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -179,25 +194,16 @@ void chfrk_(char *transr, char *uplo, char *trans, integer *n, integer *k, real 
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
-    integer a_dim1, a_offset, i__1, i__2;
-    complex q__1;
+    aocl_int64_t a_dim1, a_offset, i__1, i__2;
+    scomplex q__1;
     /* Local variables */
-    integer j, n1, n2, nk, info;
-    complex cbeta;
+    aocl_int64_t j, n1, n2, nk, info;
+    scomplex cbeta;
     logical normaltransr;
-    extern /* Subroutine */
-        void
-        cgemm_(char *, char *, integer *, integer *, integer *, complex *, complex *, integer *,
-               complex *, integer *, complex *, complex *, integer *),
-        cherk_(char *, char *, integer *, integer *, real *, complex *, integer *, real *,
-               complex *, integer *);
-    extern logical lsame_(char *, char *, integer, integer);
-    integer nrowa;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    aocl_int64_t nrowa;
     logical lower;
-    complex calpha;
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    scomplex calpha;
     logical nisodd, notrans;
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -266,7 +272,7 @@ void chfrk_(char *transr, char *uplo, char *trans, integer *n, integer *k, real 
     if(info != 0)
     {
         i__1 = -info;
-        xerbla_("CHFRK ", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("CHFRK ", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
@@ -332,20 +338,20 @@ void chfrk_(char *transr, char *uplo, char *trans, integer *n, integer *k, real 
                 if(notrans)
                 {
                     /* N is odd, TRANSR = 'N', UPLO = 'L', and TRANS = 'N' */
-                    cherk_("L", "N", &n1, k, alpha, &a[a_dim1 + 1], lda, beta, &c__[1], n);
-                    cherk_("U", "N", &n2, k, alpha, &a[n1 + 1 + a_dim1], lda, beta, &c__[*n + 1],
-                           n);
-                    cgemm_("N", "C", &n2, &n1, k, &calpha, &a[n1 + 1 + a_dim1], lda, &a[a_dim1 + 1],
-                           lda, &cbeta, &c__[n1 + 1], n);
+                    aocl_blas_cherk("L", "N", &n1, k, alpha, &a[a_dim1 + 1], lda, beta, &c__[1], n);
+                    aocl_blas_cherk("U", "N", &n2, k, alpha, &a[n1 + 1 + a_dim1], lda, beta,
+                                    &c__[*n + 1], n);
+                    aocl_blas_cgemm("N", "C", &n2, &n1, k, &calpha, &a[n1 + 1 + a_dim1], lda,
+                                    &a[a_dim1 + 1], lda, &cbeta, &c__[n1 + 1], n);
                 }
                 else
                 {
                     /* N is odd, TRANSR = 'N', UPLO = 'L', and TRANS = 'C' */
-                    cherk_("L", "C", &n1, k, alpha, &a[a_dim1 + 1], lda, beta, &c__[1], n);
-                    cherk_("U", "C", &n2, k, alpha, &a[(n1 + 1) * a_dim1 + 1], lda, beta,
-                           &c__[*n + 1], n);
-                    cgemm_("C", "N", &n2, &n1, k, &calpha, &a[(n1 + 1) * a_dim1 + 1], lda,
-                           &a[a_dim1 + 1], lda, &cbeta, &c__[n1 + 1], n);
+                    aocl_blas_cherk("L", "C", &n1, k, alpha, &a[a_dim1 + 1], lda, beta, &c__[1], n);
+                    aocl_blas_cherk("U", "C", &n2, k, alpha, &a[(n1 + 1) * a_dim1 + 1], lda, beta,
+                                    &c__[*n + 1], n);
+                    aocl_blas_cgemm("C", "N", &n2, &n1, k, &calpha, &a[(n1 + 1) * a_dim1 + 1], lda,
+                                    &a[a_dim1 + 1], lda, &cbeta, &c__[n1 + 1], n);
                 }
             }
             else
@@ -354,19 +360,22 @@ void chfrk_(char *transr, char *uplo, char *trans, integer *n, integer *k, real 
                 if(notrans)
                 {
                     /* N is odd, TRANSR = 'N', UPLO = 'U', and TRANS = 'N' */
-                    cherk_("L", "N", &n1, k, alpha, &a[a_dim1 + 1], lda, beta, &c__[n2 + 1], n);
-                    cherk_("U", "N", &n2, k, alpha, &a[n2 + a_dim1], lda, beta, &c__[n1 + 1], n);
-                    cgemm_("N", "C", &n1, &n2, k, &calpha, &a[a_dim1 + 1], lda, &a[n2 + a_dim1],
-                           lda, &cbeta, &c__[1], n);
+                    aocl_blas_cherk("L", "N", &n1, k, alpha, &a[a_dim1 + 1], lda, beta,
+                                    &c__[n2 + 1], n);
+                    aocl_blas_cherk("U", "N", &n2, k, alpha, &a[n2 + a_dim1], lda, beta,
+                                    &c__[n1 + 1], n);
+                    aocl_blas_cgemm("N", "C", &n1, &n2, k, &calpha, &a[a_dim1 + 1], lda,
+                                    &a[n2 + a_dim1], lda, &cbeta, &c__[1], n);
                 }
                 else
                 {
                     /* N is odd, TRANSR = 'N', UPLO = 'U', and TRANS = 'C' */
-                    cherk_("L", "C", &n1, k, alpha, &a[a_dim1 + 1], lda, beta, &c__[n2 + 1], n);
-                    cherk_("U", "C", &n2, k, alpha, &a[n2 * a_dim1 + 1], lda, beta, &c__[n1 + 1],
-                           n);
-                    cgemm_("C", "N", &n1, &n2, k, &calpha, &a[a_dim1 + 1], lda, &a[n2 * a_dim1 + 1],
-                           lda, &cbeta, &c__[1], n);
+                    aocl_blas_cherk("L", "C", &n1, k, alpha, &a[a_dim1 + 1], lda, beta,
+                                    &c__[n2 + 1], n);
+                    aocl_blas_cherk("U", "C", &n2, k, alpha, &a[n2 * a_dim1 + 1], lda, beta,
+                                    &c__[n1 + 1], n);
+                    aocl_blas_cgemm("C", "N", &n1, &n2, k, &calpha, &a[a_dim1 + 1], lda,
+                                    &a[n2 * a_dim1 + 1], lda, &cbeta, &c__[1], n);
                 }
             }
         }
@@ -379,19 +388,22 @@ void chfrk_(char *transr, char *uplo, char *trans, integer *n, integer *k, real 
                 if(notrans)
                 {
                     /* N is odd, TRANSR = 'C', UPLO = 'L', and TRANS = 'N' */
-                    cherk_("U", "N", &n1, k, alpha, &a[a_dim1 + 1], lda, beta, &c__[1], &n1);
-                    cherk_("L", "N", &n2, k, alpha, &a[n1 + 1 + a_dim1], lda, beta, &c__[2], &n1);
-                    cgemm_("N", "C", &n1, &n2, k, &calpha, &a[a_dim1 + 1], lda, &a[n1 + 1 + a_dim1],
-                           lda, &cbeta, &c__[n1 * n1 + 1], &n1);
+                    aocl_blas_cherk("U", "N", &n1, k, alpha, &a[a_dim1 + 1], lda, beta, &c__[1],
+                                    &n1);
+                    aocl_blas_cherk("L", "N", &n2, k, alpha, &a[n1 + 1 + a_dim1], lda, beta,
+                                    &c__[2], &n1);
+                    aocl_blas_cgemm("N", "C", &n1, &n2, k, &calpha, &a[a_dim1 + 1], lda,
+                                    &a[n1 + 1 + a_dim1], lda, &cbeta, &c__[n1 * n1 + 1], &n1);
                 }
                 else
                 {
                     /* N is odd, TRANSR = 'C', UPLO = 'L', and TRANS = 'C' */
-                    cherk_("U", "C", &n1, k, alpha, &a[a_dim1 + 1], lda, beta, &c__[1], &n1);
-                    cherk_("L", "C", &n2, k, alpha, &a[(n1 + 1) * a_dim1 + 1], lda, beta, &c__[2],
-                           &n1);
-                    cgemm_("C", "N", &n1, &n2, k, &calpha, &a[a_dim1 + 1], lda,
-                           &a[(n1 + 1) * a_dim1 + 1], lda, &cbeta, &c__[n1 * n1 + 1], &n1);
+                    aocl_blas_cherk("U", "C", &n1, k, alpha, &a[a_dim1 + 1], lda, beta, &c__[1],
+                                    &n1);
+                    aocl_blas_cherk("L", "C", &n2, k, alpha, &a[(n1 + 1) * a_dim1 + 1], lda, beta,
+                                    &c__[2], &n1);
+                    aocl_blas_cgemm("C", "N", &n1, &n2, k, &calpha, &a[a_dim1 + 1], lda,
+                                    &a[(n1 + 1) * a_dim1 + 1], lda, &cbeta, &c__[n1 * n1 + 1], &n1);
                 }
             }
             else
@@ -400,22 +412,22 @@ void chfrk_(char *transr, char *uplo, char *trans, integer *n, integer *k, real 
                 if(notrans)
                 {
                     /* N is odd, TRANSR = 'C', UPLO = 'U', and TRANS = 'N' */
-                    cherk_("U", "N", &n1, k, alpha, &a[a_dim1 + 1], lda, beta, &c__[n2 * n2 + 1],
-                           &n2);
-                    cherk_("L", "N", &n2, k, alpha, &a[n1 + 1 + a_dim1], lda, beta,
-                           &c__[n1 * n2 + 1], &n2);
-                    cgemm_("N", "C", &n2, &n1, k, &calpha, &a[n1 + 1 + a_dim1], lda, &a[a_dim1 + 1],
-                           lda, &cbeta, &c__[1], &n2);
+                    aocl_blas_cherk("U", "N", &n1, k, alpha, &a[a_dim1 + 1], lda, beta,
+                                    &c__[n2 * n2 + 1], &n2);
+                    aocl_blas_cherk("L", "N", &n2, k, alpha, &a[n1 + 1 + a_dim1], lda, beta,
+                                    &c__[n1 * n2 + 1], &n2);
+                    aocl_blas_cgemm("N", "C", &n2, &n1, k, &calpha, &a[n1 + 1 + a_dim1], lda,
+                                    &a[a_dim1 + 1], lda, &cbeta, &c__[1], &n2);
                 }
                 else
                 {
                     /* N is odd, TRANSR = 'C', UPLO = 'U', and TRANS = 'C' */
-                    cherk_("U", "C", &n1, k, alpha, &a[a_dim1 + 1], lda, beta, &c__[n2 * n2 + 1],
-                           &n2);
-                    cherk_("L", "C", &n2, k, alpha, &a[(n1 + 1) * a_dim1 + 1], lda, beta,
-                           &c__[n1 * n2 + 1], &n2);
-                    cgemm_("C", "N", &n2, &n1, k, &calpha, &a[(n1 + 1) * a_dim1 + 1], lda,
-                           &a[a_dim1 + 1], lda, &cbeta, &c__[1], &n2);
+                    aocl_blas_cherk("U", "C", &n1, k, alpha, &a[a_dim1 + 1], lda, beta,
+                                    &c__[n2 * n2 + 1], &n2);
+                    aocl_blas_cherk("L", "C", &n2, k, alpha, &a[(n1 + 1) * a_dim1 + 1], lda, beta,
+                                    &c__[n1 * n2 + 1], &n2);
+                    aocl_blas_cgemm("C", "N", &n2, &n1, k, &calpha, &a[(n1 + 1) * a_dim1 + 1], lda,
+                                    &a[a_dim1 + 1], lda, &cbeta, &c__[1], &n2);
                 }
             }
         }
@@ -433,24 +445,27 @@ void chfrk_(char *transr, char *uplo, char *trans, integer *n, integer *k, real 
                 {
                     /* N is even, TRANSR = 'N', UPLO = 'L', and TRANS = 'N' */
                     i__1 = *n + 1;
-                    cherk_("L", "N", &nk, k, alpha, &a[a_dim1 + 1], lda, beta, &c__[2], &i__1);
+                    aocl_blas_cherk("L", "N", &nk, k, alpha, &a[a_dim1 + 1], lda, beta, &c__[2],
+                                    &i__1);
                     i__1 = *n + 1;
-                    cherk_("U", "N", &nk, k, alpha, &a[nk + 1 + a_dim1], lda, beta, &c__[1], &i__1);
+                    aocl_blas_cherk("U", "N", &nk, k, alpha, &a[nk + 1 + a_dim1], lda, beta,
+                                    &c__[1], &i__1);
                     i__1 = *n + 1;
-                    cgemm_("N", "C", &nk, &nk, k, &calpha, &a[nk + 1 + a_dim1], lda, &a[a_dim1 + 1],
-                           lda, &cbeta, &c__[nk + 2], &i__1);
+                    aocl_blas_cgemm("N", "C", &nk, &nk, k, &calpha, &a[nk + 1 + a_dim1], lda,
+                                    &a[a_dim1 + 1], lda, &cbeta, &c__[nk + 2], &i__1);
                 }
                 else
                 {
                     /* N is even, TRANSR = 'N', UPLO = 'L', and TRANS = 'C' */
                     i__1 = *n + 1;
-                    cherk_("L", "C", &nk, k, alpha, &a[a_dim1 + 1], lda, beta, &c__[2], &i__1);
+                    aocl_blas_cherk("L", "C", &nk, k, alpha, &a[a_dim1 + 1], lda, beta, &c__[2],
+                                    &i__1);
                     i__1 = *n + 1;
-                    cherk_("U", "C", &nk, k, alpha, &a[(nk + 1) * a_dim1 + 1], lda, beta, &c__[1],
-                           &i__1);
+                    aocl_blas_cherk("U", "C", &nk, k, alpha, &a[(nk + 1) * a_dim1 + 1], lda, beta,
+                                    &c__[1], &i__1);
                     i__1 = *n + 1;
-                    cgemm_("C", "N", &nk, &nk, k, &calpha, &a[(nk + 1) * a_dim1 + 1], lda,
-                           &a[a_dim1 + 1], lda, &cbeta, &c__[nk + 2], &i__1);
+                    aocl_blas_cgemm("C", "N", &nk, &nk, k, &calpha, &a[(nk + 1) * a_dim1 + 1], lda,
+                                    &a[a_dim1 + 1], lda, &cbeta, &c__[nk + 2], &i__1);
                 }
             }
             else
@@ -460,25 +475,27 @@ void chfrk_(char *transr, char *uplo, char *trans, integer *n, integer *k, real 
                 {
                     /* N is even, TRANSR = 'N', UPLO = 'U', and TRANS = 'N' */
                     i__1 = *n + 1;
-                    cherk_("L", "N", &nk, k, alpha, &a[a_dim1 + 1], lda, beta, &c__[nk + 2], &i__1);
+                    aocl_blas_cherk("L", "N", &nk, k, alpha, &a[a_dim1 + 1], lda, beta,
+                                    &c__[nk + 2], &i__1);
                     i__1 = *n + 1;
-                    cherk_("U", "N", &nk, k, alpha, &a[nk + 1 + a_dim1], lda, beta, &c__[nk + 1],
-                           &i__1);
+                    aocl_blas_cherk("U", "N", &nk, k, alpha, &a[nk + 1 + a_dim1], lda, beta,
+                                    &c__[nk + 1], &i__1);
                     i__1 = *n + 1;
-                    cgemm_("N", "C", &nk, &nk, k, &calpha, &a[a_dim1 + 1], lda, &a[nk + 1 + a_dim1],
-                           lda, &cbeta, &c__[1], &i__1);
+                    aocl_blas_cgemm("N", "C", &nk, &nk, k, &calpha, &a[a_dim1 + 1], lda,
+                                    &a[nk + 1 + a_dim1], lda, &cbeta, &c__[1], &i__1);
                 }
                 else
                 {
                     /* N is even, TRANSR = 'N', UPLO = 'U', and TRANS = 'C' */
                     i__1 = *n + 1;
-                    cherk_("L", "C", &nk, k, alpha, &a[a_dim1 + 1], lda, beta, &c__[nk + 2], &i__1);
+                    aocl_blas_cherk("L", "C", &nk, k, alpha, &a[a_dim1 + 1], lda, beta,
+                                    &c__[nk + 2], &i__1);
                     i__1 = *n + 1;
-                    cherk_("U", "C", &nk, k, alpha, &a[(nk + 1) * a_dim1 + 1], lda, beta,
-                           &c__[nk + 1], &i__1);
+                    aocl_blas_cherk("U", "C", &nk, k, alpha, &a[(nk + 1) * a_dim1 + 1], lda, beta,
+                                    &c__[nk + 1], &i__1);
                     i__1 = *n + 1;
-                    cgemm_("C", "N", &nk, &nk, k, &calpha, &a[a_dim1 + 1], lda,
-                           &a[(nk + 1) * a_dim1 + 1], lda, &cbeta, &c__[1], &i__1);
+                    aocl_blas_cgemm("C", "N", &nk, &nk, k, &calpha, &a[a_dim1 + 1], lda,
+                                    &a[(nk + 1) * a_dim1 + 1], lda, &cbeta, &c__[1], &i__1);
                 }
             }
         }
@@ -491,19 +508,23 @@ void chfrk_(char *transr, char *uplo, char *trans, integer *n, integer *k, real 
                 if(notrans)
                 {
                     /* N is even, TRANSR = 'C', UPLO = 'L', and TRANS = 'N' */
-                    cherk_("U", "N", &nk, k, alpha, &a[a_dim1 + 1], lda, beta, &c__[nk + 1], &nk);
-                    cherk_("L", "N", &nk, k, alpha, &a[nk + 1 + a_dim1], lda, beta, &c__[1], &nk);
-                    cgemm_("N", "C", &nk, &nk, k, &calpha, &a[a_dim1 + 1], lda, &a[nk + 1 + a_dim1],
-                           lda, &cbeta, &c__[(nk + 1) * nk + 1], &nk);
+                    aocl_blas_cherk("U", "N", &nk, k, alpha, &a[a_dim1 + 1], lda, beta,
+                                    &c__[nk + 1], &nk);
+                    aocl_blas_cherk("L", "N", &nk, k, alpha, &a[nk + 1 + a_dim1], lda, beta,
+                                    &c__[1], &nk);
+                    aocl_blas_cgemm("N", "C", &nk, &nk, k, &calpha, &a[a_dim1 + 1], lda,
+                                    &a[nk + 1 + a_dim1], lda, &cbeta, &c__[(nk + 1) * nk + 1], &nk);
                 }
                 else
                 {
                     /* N is even, TRANSR = 'C', UPLO = 'L', and TRANS = 'C' */
-                    cherk_("U", "C", &nk, k, alpha, &a[a_dim1 + 1], lda, beta, &c__[nk + 1], &nk);
-                    cherk_("L", "C", &nk, k, alpha, &a[(nk + 1) * a_dim1 + 1], lda, beta, &c__[1],
-                           &nk);
-                    cgemm_("C", "N", &nk, &nk, k, &calpha, &a[a_dim1 + 1], lda,
-                           &a[(nk + 1) * a_dim1 + 1], lda, &cbeta, &c__[(nk + 1) * nk + 1], &nk);
+                    aocl_blas_cherk("U", "C", &nk, k, alpha, &a[a_dim1 + 1], lda, beta,
+                                    &c__[nk + 1], &nk);
+                    aocl_blas_cherk("L", "C", &nk, k, alpha, &a[(nk + 1) * a_dim1 + 1], lda, beta,
+                                    &c__[1], &nk);
+                    aocl_blas_cgemm("C", "N", &nk, &nk, k, &calpha, &a[a_dim1 + 1], lda,
+                                    &a[(nk + 1) * a_dim1 + 1], lda, &cbeta, &c__[(nk + 1) * nk + 1],
+                                    &nk);
                 }
             }
             else
@@ -512,22 +533,22 @@ void chfrk_(char *transr, char *uplo, char *trans, integer *n, integer *k, real 
                 if(notrans)
                 {
                     /* N is even, TRANSR = 'C', UPLO = 'U', and TRANS = 'N' */
-                    cherk_("U", "N", &nk, k, alpha, &a[a_dim1 + 1], lda, beta,
-                           &c__[nk * (nk + 1) + 1], &nk);
-                    cherk_("L", "N", &nk, k, alpha, &a[nk + 1 + a_dim1], lda, beta,
-                           &c__[nk * nk + 1], &nk);
-                    cgemm_("N", "C", &nk, &nk, k, &calpha, &a[nk + 1 + a_dim1], lda, &a[a_dim1 + 1],
-                           lda, &cbeta, &c__[1], &nk);
+                    aocl_blas_cherk("U", "N", &nk, k, alpha, &a[a_dim1 + 1], lda, beta,
+                                    &c__[nk * (nk + 1) + 1], &nk);
+                    aocl_blas_cherk("L", "N", &nk, k, alpha, &a[nk + 1 + a_dim1], lda, beta,
+                                    &c__[nk * nk + 1], &nk);
+                    aocl_blas_cgemm("N", "C", &nk, &nk, k, &calpha, &a[nk + 1 + a_dim1], lda,
+                                    &a[a_dim1 + 1], lda, &cbeta, &c__[1], &nk);
                 }
                 else
                 {
                     /* N is even, TRANSR = 'C', UPLO = 'U', and TRANS = 'C' */
-                    cherk_("U", "C", &nk, k, alpha, &a[a_dim1 + 1], lda, beta,
-                           &c__[nk * (nk + 1) + 1], &nk);
-                    cherk_("L", "C", &nk, k, alpha, &a[(nk + 1) * a_dim1 + 1], lda, beta,
-                           &c__[nk * nk + 1], &nk);
-                    cgemm_("C", "N", &nk, &nk, k, &calpha, &a[(nk + 1) * a_dim1 + 1], lda,
-                           &a[a_dim1 + 1], lda, &cbeta, &c__[1], &nk);
+                    aocl_blas_cherk("U", "C", &nk, k, alpha, &a[a_dim1 + 1], lda, beta,
+                                    &c__[nk * (nk + 1) + 1], &nk);
+                    aocl_blas_cherk("L", "C", &nk, k, alpha, &a[(nk + 1) * a_dim1 + 1], lda, beta,
+                                    &c__[nk * nk + 1], &nk);
+                    aocl_blas_cgemm("C", "N", &nk, &nk, k, &calpha, &a[(nk + 1) * a_dim1 + 1], lda,
+                                    &a[a_dim1 + 1], lda, &cbeta, &c__[1], &nk);
                 }
             }
         }

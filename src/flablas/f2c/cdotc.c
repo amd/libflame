@@ -1,17 +1,17 @@
 /* cdotc.f -- translated by f2c (version 19991025). You must link the resulting object file with the libraries: -lf2c -lm (in that order) */
 #include "FLA_f2c.h"
-complex cdotc_(/*complex * ret_val,*/
-    integer *n, complex *cx, integer *incx, complex *cy, integer *incy)
+scomplex cdotc_(/*scomplex * ret_val,*/
+    integer *n, scomplex *cx, integer *incx, scomplex *cy, integer *incy)
 {
-    complex ret_val;
+    scomplex ret_val;
     /* System generated locals */
     integer i__1, i__2;
-    complex q__1, q__2, q__3;
+    scomplex q__1, q__2, q__3;
     /* Builtin functions */
-    void r_cnjg(complex *, complex *);
+    void r_cnjg(scomplex *, scomplex *);
     /* Local variables */
     integer i__;
-    complex ctemp;
+    scomplex ctemp;
     integer ix, iy;
     /* forms the dot product of two vectors, conjugating the first */
     /* vector. */

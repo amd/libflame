@@ -1,7 +1,7 @@
 /* zcopy.f -- translated by f2c (version 19991025). You must link the resulting object file with the libraries: -lf2c -lm (in that order) */
 #include "FLA_f2c.h"
 /* Subroutine */
-int zcopy_(integer *n, doublecomplex *zx, integer *incx, doublecomplex *zy, integer *incy)
+int zcopy_(integer *n, dcomplex *zx, integer *incx, dcomplex *zy, integer *incy)
 {
     /* System generated locals */
     integer i__1, i__2, i__3;

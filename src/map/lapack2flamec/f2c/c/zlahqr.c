@@ -4,8 +4,8 @@
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
  /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
-static integer c__2 = 2;
+static aocl_int64_t c__1 = 1;
+static aocl_int64_t c__2 = 2;
 /* > \brief \b ZLAHQR computes the eigenvalues and Schur factorization of an upper Hessenberg
  * matrix, using th e double-shift/single-shift QR algorithm. */
 /* =========== DOCUMENTATION =========== */
@@ -198,62 +198,78 @@ elements i+1:ihi of W contain */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void zlahqr_(logical *wantt, logical *wantz, integer *n, integer *ilo, integer *ihi,
-             doublecomplex *h__, integer *ldh, doublecomplex *w, integer *iloz, integer *ihiz,
-             doublecomplex *z__, integer *ldz, integer *info)
+/** Generated wrapper function */
+void zlahqr_(logical *wantt, logical *wantz, aocl_int_t *n, aocl_int_t *ilo, aocl_int_t *ihi,
+             dcomplex *h__, aocl_int_t *ldh, dcomplex *w, aocl_int_t *iloz,
+             aocl_int_t *ihiz, dcomplex *z__, aocl_int_t *ldz, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_zlahqr(wantt, wantz, n, ilo, ihi, h__, ldh, w, iloz, ihiz, z__, ldz, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t ilo_64 = *ilo;
+    aocl_int64_t ihi_64 = *ihi;
+    aocl_int64_t ldh_64 = *ldh;
+    aocl_int64_t iloz_64 = *iloz;
+    aocl_int64_t ihiz_64 = *ihiz;
+    aocl_int64_t ldz_64 = *ldz;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_zlahqr(wantt, wantz, &n_64, &ilo_64, &ihi_64, h__, &ldh_64, w, &iloz_64, &ihiz_64,
+                       z__, &ldz_64, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_zlahqr(logical *wantt, logical *wantz, aocl_int64_t *n, aocl_int64_t *ilo,
+                        aocl_int64_t *ihi, dcomplex *h__, aocl_int64_t *ldh, dcomplex *w,
+                        aocl_int64_t *iloz, aocl_int64_t *ihiz, dcomplex *z__,
+                        aocl_int64_t *ldz, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zlahqr inputs: n %" FLA_IS ", ilo %" FLA_IS ", ihi %" FLA_IS ", ldh %" FLA_IS
                       ", iloz %" FLA_IS ", ihiz %" FLA_IS ", ldz %" FLA_IS "",
                       *n, *ilo, *ihi, *ldh, *iloz, *ihiz, *ldz);
     /* System generated locals */
-    integer h_dim1, h_offset, z_dim1, z_offset, i__1, i__2, i__3, i__4, i__5;
+    aocl_int64_t h_dim1, h_offset, z_dim1, z_offset, i__1, i__2, i__3, i__4, i__5;
     doublereal d__1, d__2, d__3, d__4, d__5, d__6;
-    doublecomplex z__1, z__2, z__3, z__4, z__5, z__6, z__7;
+    dcomplex z__1, z__2, z__3, z__4, z__5, z__6, z__7;
     /* Builtin functions */
-    double d_imag(doublecomplex *);
-    void d_cnjg(doublecomplex *, doublecomplex *);
-    double z_abs(doublecomplex *);
-    void z_sqrt(doublecomplex *, doublecomplex *),
-        pow_zi(doublecomplex *, doublecomplex *, integer *);
+    double d_imag(dcomplex *);
+    void d_cnjg(dcomplex *, dcomplex *);
+    double z_abs(dcomplex *);
+    void z_sqrt(dcomplex *, dcomplex *),
+        pow_zi(dcomplex *, dcomplex *, aocl_int64_t *);
     /* Local variables */
-    integer i__, j, k, l, m;
+    aocl_int64_t i__, j, k, l, m;
     doublereal s;
-    doublecomplex t, u, v[2], x, y;
-    integer i1, i2;
-    doublecomplex t1;
+    dcomplex t, u, v[2], x, y;
+    aocl_int64_t i1, i2;
+    dcomplex t1;
     doublereal t2;
-    doublecomplex v2;
+    dcomplex v2;
     doublereal aa, ab, ba, bb, h10;
-    doublecomplex h11;
+    dcomplex h11;
     doublereal h21;
-    doublecomplex h22, sc;
-    integer nh, nz;
+    dcomplex h22, sc;
+    aocl_int64_t nh, nz;
     doublereal sx;
-    integer jhi;
-    doublecomplex h11s;
-    integer jlo, its;
+    aocl_int64_t jhi;
+    dcomplex h11s;
+    aocl_int64_t jlo, its;
     doublereal ulp;
-    doublecomplex sum;
+    dcomplex sum;
     doublereal tst;
-    doublecomplex temp;
-    integer kdefl;
-    extern /* Subroutine */
-        void
-        zscal_(integer *, doublecomplex *, doublecomplex *, integer *);
-    integer itmax;
+    dcomplex temp;
+    aocl_int64_t kdefl;
+    aocl_int64_t itmax;
     doublereal rtemp;
-    extern /* Subroutine */
-        void
-        zcopy_(integer *, doublecomplex *, integer *, doublecomplex *, integer *);
     extern doublereal dlamch_(char *);
     doublereal safmin;
-    extern /* Subroutine */
-        void
-        zlarfg_(integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *);
     extern /* Double Complex */
         void
-        zladiv_f2c_(doublecomplex *, doublecomplex *, doublecomplex *);
+        zladiv_f2c_(dcomplex *, dcomplex *, dcomplex *);
     doublereal smlnum;
     /* -- LAPACK auxiliary routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -362,18 +378,18 @@ void zlahqr_(logical *wantt, logical *wantz, integer *n, integer *ilo, integer *
             h__[i__2].r = d__1;
             h__[i__2].i = 0.; // , expr subst
             i__2 = jhi - i__ + 1;
-            zscal_(&i__2, &sc, &h__[i__ + i__ * h_dim1], ldh);
+            aocl_blas_zscal(&i__2, &sc, &h__[i__ + i__ * h_dim1], ldh);
             /* Computing MIN */
             i__3 = jhi;
             i__4 = i__ + 1; // , expr subst
             i__2 = fla_min(i__3, i__4) - jlo + 1;
             d_cnjg(&z__1, &sc);
-            zscal_(&i__2, &z__1, &h__[jlo + i__ * h_dim1], &c__1);
+            aocl_blas_zscal(&i__2, &z__1, &h__[jlo + i__ * h_dim1], &c__1);
             if(*wantz)
             {
                 i__2 = *ihiz - *iloz + 1;
                 d_cnjg(&z__1, &sc);
-                zscal_(&i__2, &z__1, &z__[*iloz + i__ * z_dim1], &c__1);
+                aocl_blas_zscal(&i__2, &z__1, &z__[*iloz + i__ * z_dim1], &c__1);
             }
         }
         /* L20: */
@@ -670,7 +686,8 @@ L30:
         h11s.i = z__1.i; // , expr subst
         i__2 = l + 1 + l * h_dim1;
         h21 = h__[i__2].r;
-        s = (d__1 = h11s.r, f2c_dabs(d__1)) + (d__2 = d_imag(&h11s), f2c_dabs(d__2)) + f2c_dabs(h21);
+        s = (d__1 = h11s.r, f2c_dabs(d__1)) + (d__2 = d_imag(&h11s), f2c_dabs(d__2))
+            + f2c_dabs(h21);
         z__1.r = h11s.r / s;
         z__1.i = h11s.i / s; // , expr subst
         h11s.r = z__1.r;
@@ -695,9 +712,9 @@ L30:
             /* after the call T2 ( = T1*V(2) ) is also real. */
             if(k > m)
             {
-                zcopy_(&c__2, &h__[k + (k - 1) * h_dim1], &c__1, v, &c__1);
+                aocl_blas_zcopy(&c__2, &h__[k + (k - 1) * h_dim1], &c__1, v, &c__1);
             }
-            zlarfg_(&c__2, v, &v[1], &c__1, &t1);
+            aocl_lapack_zlarfg(&c__2, v, &v[1], &c__1, &t1);
             if(k > m)
             {
                 i__3 = k + (k - 1) * h_dim1;
@@ -851,15 +868,15 @@ L30:
                         if(i2 > j)
                         {
                             i__4 = i2 - j;
-                            zscal_(&i__4, &temp, &h__[j + (j + 1) * h_dim1], ldh);
+                            aocl_blas_zscal(&i__4, &temp, &h__[j + (j + 1) * h_dim1], ldh);
                         }
                         i__4 = j - i1;
                         d_cnjg(&z__1, &temp);
-                        zscal_(&i__4, &z__1, &h__[i1 + j * h_dim1], &c__1);
+                        aocl_blas_zscal(&i__4, &z__1, &h__[i1 + j * h_dim1], &c__1);
                         if(*wantz)
                         {
                             d_cnjg(&z__1, &temp);
-                            zscal_(&nz, &z__1, &z__[*iloz + j * z_dim1], &c__1);
+                            aocl_blas_zscal(&nz, &z__1, &z__[*iloz + j * z_dim1], &c__1);
                         }
                     }
                     /* L110: */
@@ -885,13 +902,13 @@ L30:
             {
                 i__2 = i2 - i__;
                 d_cnjg(&z__1, &temp);
-                zscal_(&i__2, &z__1, &h__[i__ + (i__ + 1) * h_dim1], ldh);
+                aocl_blas_zscal(&i__2, &z__1, &h__[i__ + (i__ + 1) * h_dim1], ldh);
             }
             i__2 = i__ - i1;
-            zscal_(&i__2, &temp, &h__[i1 + i__ * h_dim1], &c__1);
+            aocl_blas_zscal(&i__2, &temp, &h__[i1 + i__ * h_dim1], &c__1);
             if(*wantz)
             {
-                zscal_(&nz, &temp, &z__[*iloz + i__ * z_dim1], &c__1);
+                aocl_blas_zscal(&nz, &temp, &z__[*iloz + i__ * z_dim1], &c__1);
             }
         }
         /* L130: */

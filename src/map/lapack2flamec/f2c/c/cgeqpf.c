@@ -4,7 +4,7 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
+static aocl_int64_t c__1 = 1;
 /* > \brief \b CGEQPF */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -43,7 +43,7 @@ static integer c__1 = 1;
 /* > This routine is deprecated and has been replaced by routine CGEQP3. */
 /* > */
 /* > CGEQPF computes a QR factorization with column pivoting of a */
-/* > complex M-by-N matrix A: A*P = Q*R. */
+/* > scomplex M-by-N matrix A: A*P = Q*R. */
 /* > \endverbatim */
 /* Arguments: */
 /* ========== */
@@ -131,7 +131,7 @@ if JPVT(i) = 0, */
 /* > */
 /* > H = I - tau * v * v**H */
 /* > */
-/* > where tau is a complex scalar, and v is a complex vector with */
+/* > where tau is a scomplex scalar, and v is a scomplex vector with */
 /* > v(1:i-1) = 0 and v(i) = 1;
 v(i+1:m) is stored on exit in A(i+1:m,i). */
 /* > */
@@ -148,8 +148,25 @@ v(i+1:m) is stored on exit in A(i+1:m,i). */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void cgeqpf_(integer *m, integer *n, complex *a, integer *lda, integer *jpvt, complex *tau,
-             complex *work, real *rwork, integer *info)
+/** Generated wrapper function */
+void cgeqpf_(aocl_int_t *m, aocl_int_t *n, scomplex *a, aocl_int_t *lda, aocl_int_t *jpvt, scomplex *tau, scomplex *work, real *rwork, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_cgeqpf(m, n, a, lda, jpvt, tau, work, rwork, info);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_cgeqpf(&m_64, &n_64, a, &lda_64, jpvt, tau, work, rwork, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_cgeqpf(aocl_int64_t *m, aocl_int64_t *n, scomplex *a, aocl_int64_t *lda, aocl_int_t *jpvt,
+             scomplex *tau, scomplex *work, real *rwork, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -159,38 +176,20 @@ void cgeqpf_(integer *m, integer *n, complex *a, integer *lda, integer *jpvt, co
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
-    integer a_dim1, a_offset, i__1, i__2, i__3;
+    aocl_int64_t a_dim1, a_offset, i__1, i__2, i__3;
     real r__1, r__2;
-    complex q__1;
+    scomplex q__1;
     /* Builtin functions */
     double sqrt(doublereal);
-    void r_cnjg(complex *, complex *);
-    double c_abs(complex *);
+    void r_cnjg(scomplex *, scomplex *);
+    double c_abs(scomplex *);
     /* Local variables */
-    integer i__, j, ma, mn;
-    complex aii;
-    integer pvt;
+    aocl_int64_t i__, j, ma, mn;
+    scomplex aii;
+    aocl_int64_t pvt;
     real temp, temp2, tol3z;
-    extern /* Subroutine */
-        void
-        clarf_(char *, integer *, integer *, complex *, integer *, complex *, complex *, integer *,
-               complex *),
-        cswap_(integer *, complex *, integer *, complex *, integer *);
-    integer itemp;
-    extern /* Subroutine */
-        void
-        cgeqr2_(integer *, integer *, complex *, integer *, complex *, complex *, integer *);
-    extern real scnrm2_(integer *, complex *, integer *);
-    extern /* Subroutine */
-        void
-        cunm2r_(char *, char *, integer *, integer *, integer *, complex *, integer *, complex *,
-                complex *, integer *, complex *, integer *),
-        clarfg_(integer *, complex *, complex *, integer *, complex *);
+    aocl_int64_t itemp;
     extern real slamch_(char *);
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    extern integer isamax_(integer *, real *, integer *);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -237,7 +236,7 @@ void cgeqpf_(integer *m, integer *n, complex *a, integer *lda, integer *jpvt, co
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("CGEQPF", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("CGEQPF", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
@@ -252,19 +251,19 @@ void cgeqpf_(integer *m, integer *n, complex *a, integer *lda, integer *jpvt, co
         {
             if(i__ != itemp)
             {
-                cswap_(m, &a[i__ * a_dim1 + 1], &c__1, &a[itemp * a_dim1 + 1], &c__1);
+                aocl_blas_cswap(m, &a[i__ * a_dim1 + 1], &c__1, &a[itemp * a_dim1 + 1], &c__1);
                 jpvt[i__] = jpvt[itemp];
-                jpvt[itemp] = i__;
+                jpvt[itemp] = (aocl_int_t)(i__);
             }
             else
             {
-                jpvt[i__] = i__;
+                jpvt[i__] = (aocl_int_t)(i__);
             }
             ++itemp;
         }
         else
         {
-            jpvt[i__] = i__;
+            jpvt[i__] = (aocl_int_t)(i__);
         }
         /* L10: */
     }
@@ -273,12 +272,12 @@ void cgeqpf_(integer *m, integer *n, complex *a, integer *lda, integer *jpvt, co
     if(itemp > 0)
     {
         ma = fla_min(itemp, *m);
-        cgeqr2_(m, &ma, &a[a_offset], lda, &tau[1], &work[1], info);
+        aocl_lapack_cgeqr2(m, &ma, &a[a_offset], lda, &tau[1], &work[1], info);
         if(ma < *n)
         {
             i__1 = *n - ma;
-            cunm2r_("Left", "Conjugate transpose", m, &i__1, &ma, &a[a_offset], lda, &tau[1],
-                    &a[(ma + 1) * a_dim1 + 1], lda, &work[1], info);
+            aocl_lapack_cunm2r("Left", "Conjugate transpose", m, &i__1, &ma, &a[a_offset], lda,
+                               &tau[1], &a[(ma + 1) * a_dim1 + 1], lda, &work[1], info);
         }
     }
     if(itemp < mn)
@@ -289,7 +288,7 @@ void cgeqpf_(integer *m, integer *n, complex *a, integer *lda, integer *jpvt, co
         for(i__ = itemp + 1; i__ <= i__1; ++i__)
         {
             i__2 = *m - itemp;
-            rwork[i__] = scnrm2_(&i__2, &a[itemp + 1 + i__ * a_dim1], &c__1);
+            rwork[i__] = aocl_blas_scnrm2(&i__2, &a[itemp + 1 + i__ * a_dim1], &c__1);
             rwork[*n + i__] = rwork[i__];
             /* L20: */
         }
@@ -299,13 +298,13 @@ void cgeqpf_(integer *m, integer *n, complex *a, integer *lda, integer *jpvt, co
         {
             /* Determine ith pivot column and swap if necessary */
             i__2 = *n - i__ + 1;
-            pvt = i__ - 1 + isamax_(&i__2, &rwork[i__], &c__1);
+            pvt = i__ - 1 + aocl_blas_isamax(&i__2, &rwork[i__], &c__1);
             if(pvt != i__)
             {
-                cswap_(m, &a[pvt * a_dim1 + 1], &c__1, &a[i__ * a_dim1 + 1], &c__1);
+                aocl_blas_cswap(m, &a[pvt * a_dim1 + 1], &c__1, &a[i__ * a_dim1 + 1], &c__1);
                 itemp = jpvt[pvt];
                 jpvt[pvt] = jpvt[i__];
-                jpvt[i__] = itemp;
+                jpvt[i__] = (aocl_int_t)(itemp);
                 rwork[pvt] = rwork[i__];
                 rwork[*n + pvt] = rwork[*n + i__];
             }
@@ -316,7 +315,7 @@ void cgeqpf_(integer *m, integer *n, complex *a, integer *lda, integer *jpvt, co
             i__2 = *m - i__ + 1;
             /* Computing MIN */
             i__3 = i__ + 1;
-            clarfg_(&i__2, &aii, &a[fla_min(i__3, *m) + i__ * a_dim1], &c__1, &tau[i__]);
+            aocl_lapack_clarfg(&i__2, &aii, &a[fla_min(i__3, *m) + i__ * a_dim1], &c__1, &tau[i__]);
             i__2 = i__ + i__ * a_dim1;
             a[i__2].r = aii.r;
             a[i__2].i = aii.i; // , expr subst
@@ -332,8 +331,8 @@ void cgeqpf_(integer *m, integer *n, complex *a, integer *lda, integer *jpvt, co
                 i__2 = *m - i__ + 1;
                 i__3 = *n - i__;
                 r_cnjg(&q__1, &tau[i__]);
-                clarf_("Left", &i__2, &i__3, &a[i__ + i__ * a_dim1], &c__1, &q__1,
-                       &a[i__ + (i__ + 1) * a_dim1], lda, &work[1]);
+                aocl_lapack_clarf("Left", &i__2, &i__3, &a[i__ + i__ * a_dim1], &c__1, &q__1,
+                                  &a[i__ + (i__ + 1) * a_dim1], lda, &work[1]);
                 i__2 = i__ + i__ * a_dim1;
                 a[i__2].r = aii.r;
                 a[i__2].i = aii.i; // , expr subst
@@ -359,7 +358,7 @@ void cgeqpf_(integer *m, integer *n, complex *a, integer *lda, integer *jpvt, co
                         if(*m - i__ > 0)
                         {
                             i__3 = *m - i__;
-                            rwork[j] = scnrm2_(&i__3, &a[i__ + 1 + j * a_dim1], &c__1);
+                            rwork[j] = aocl_blas_scnrm2(&i__3, &a[i__ + 1 + j * a_dim1], &c__1);
                             rwork[*n + j] = rwork[j];
                         }
                         else

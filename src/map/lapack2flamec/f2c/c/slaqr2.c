@@ -4,8 +4,8 @@
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
  /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
-static integer c_n1 = -1;
+static aocl_int64_t c__1 = 1;
+static aocl_int64_t c_n1 = -1;
 static real c_b12 = 0.f;
 static real c_b13 = 1.f;
 static logical c_true = TRUE_;
@@ -279,11 +279,50 @@ SLAQR2 */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void slaqr2_(logical *wantt, logical *wantz, integer *n, integer *ktop, integer *kbot, integer *nw,
-             real *h__, integer *ldh, integer *iloz, integer *ihiz, real *z__, integer *ldz,
-             integer *ns, integer *nd, real *sr, real *si, real *v, integer *ldv, integer *nh,
-             real *t, integer *ldt, integer *nv, real *wv, integer *ldwv, real *work,
-             integer *lwork)
+/** Generated wrapper function */
+void slaqr2_(logical *wantt, logical *wantz, aocl_int_t *n, aocl_int_t *ktop, aocl_int_t *kbot,
+             aocl_int_t *nw, real *h__, aocl_int_t *ldh, aocl_int_t *iloz, aocl_int_t *ihiz,
+             real *z__, aocl_int_t *ldz, aocl_int_t *ns, aocl_int_t *nd, real *sr, real *si,
+             real *v, aocl_int_t *ldv, aocl_int_t *nh, real *t, aocl_int_t *ldt, aocl_int_t *nv,
+             real *wv, aocl_int_t *ldwv, real *work, aocl_int_t *lwork)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_slaqr2(wantt, wantz, n, ktop, kbot, nw, h__, ldh, iloz, ihiz, z__, ldz, ns, nd, sr,
+                       si, v, ldv, nh, t, ldt, nv, wv, ldwv, work, lwork);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t ktop_64 = *ktop;
+    aocl_int64_t kbot_64 = *kbot;
+    aocl_int64_t nw_64 = *nw;
+    aocl_int64_t ldh_64 = *ldh;
+    aocl_int64_t iloz_64 = *iloz;
+    aocl_int64_t ihiz_64 = *ihiz;
+    aocl_int64_t ldz_64 = *ldz;
+    aocl_int64_t ns_64 = *ns;
+    aocl_int64_t nd_64 = *nd;
+    aocl_int64_t ldv_64 = *ldv;
+    aocl_int64_t nh_64 = *nh;
+    aocl_int64_t ldt_64 = *ldt;
+    aocl_int64_t nv_64 = *nv;
+    aocl_int64_t ldwv_64 = *ldwv;
+    aocl_int64_t lwork_64 = *lwork;
+
+    aocl_lapack_slaqr2(wantt, wantz, &n_64, &ktop_64, &kbot_64, &nw_64, h__, &ldh_64, &iloz_64,
+                       &ihiz_64, z__, &ldz_64, &ns_64, &nd_64, sr, si, v, &ldv_64, &nh_64, t,
+                       &ldt_64, &nv_64, wv, &ldwv_64, work, &lwork_64);
+
+    *ns = (aocl_int_t)ns_64;
+    *nd = (aocl_int_t)nd_64;
+#endif
+}
+
+void aocl_lapack_slaqr2(logical *wantt, logical *wantz, aocl_int64_t *n, aocl_int64_t *ktop,
+                        aocl_int64_t *kbot, aocl_int64_t *nw, real *h__, aocl_int64_t *ldh,
+                        aocl_int64_t *iloz, aocl_int64_t *ihiz, real *z__, aocl_int64_t *ldz,
+                        aocl_int64_t *ns, aocl_int64_t *nd, real *sr, real *si, real *v,
+                        aocl_int64_t *ldv, aocl_int64_t *nh, real *t, aocl_int64_t *ldt,
+                        aocl_int64_t *nv, real *wv, aocl_int64_t *ldwv, real *work,
+                        aocl_int64_t *lwork)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF(
@@ -292,60 +331,32 @@ void slaqr2_(logical *wantt, logical *wantz, integer *n, integer *ktop, integer 
         ",ldt %" FLA_IS ",nv %" FLA_IS ",ldwv %" FLA_IS ",lwork %" FLA_IS "",
         *n, *ktop, *kbot, *nw, *ldh, *iloz, *ihiz, *ldz, *ldv, *nh, *ldt, *nv, *ldwv, *lwork);
     /* System generated locals */
-    integer h_dim1, h_offset, t_dim1, t_offset, v_dim1, v_offset, wv_dim1, wv_offset, z_dim1,
+    aocl_int64_t h_dim1, h_offset, t_dim1, t_offset, v_dim1, v_offset, wv_dim1, wv_offset, z_dim1,
         z_offset, i__1, i__2, i__3, i__4;
     real r__1, r__2, r__3, r__4, r__5, r__6;
     /* Builtin functions */
     double sqrt(doublereal);
     /* Local variables */
-    integer i__, j, k;
+    aocl_int64_t i__, j, k;
     real s, aa, bb, cc, dd, cs, sn;
-    integer jw;
+    aocl_int64_t jw;
     real evi, evk, foo;
-    integer kln;
+    aocl_int64_t kln;
     real tau, ulp;
-    integer lwk1, lwk2;
+    aocl_int64_t lwk1, lwk2;
     real beta;
-    integer kend, kcol, info, ifst, ilst, ltop, krow;
+    aocl_int64_t kend, kcol, info, ifst, ilst, ltop, krow;
     logical bulge;
-    extern /* Subroutine */
-        void
-        slarf_(char *, integer *, integer *, real *, integer *, real *, real *, integer *, real *),
-        sgemm_(char *, char *, integer *, integer *, integer *, real *, real *, integer *, real *,
-               integer *, real *, real *, integer *);
-    integer infqr;
-    extern /* Subroutine */
-        void
-        scopy_(integer *, real *, integer *, real *, integer *);
-    integer kwtop;
+    aocl_int64_t infqr;
+    aocl_int64_t kwtop;
     extern /* Subroutine */
         void
         slanv2_(real *, real *, real *, real *, real *, real *, real *, real *, real *, real *);
     extern real slamch_(char *);
-    extern /* Subroutine */
-        void
-        sgehrd_(integer *, integer *, integer *, real *, integer *, real *, real *, integer *,
-                integer *);
     real safmin;
-    extern /* Subroutine */
-        void
-        slarfg_(integer *, real *, real *, integer *, real *);
-    extern /* Subroutine */
-        void
-        slahqr_(logical *, logical *, integer *, integer *, integer *, real *, integer *, real *,
-                real *, integer *, integer *, real *, integer *, integer *),
-        slacpy_(char *, integer *, integer *, real *, integer *, real *, integer *),
-        slaset_(char *, integer *, integer *, real *, real *, real *, integer *);
     logical sorted;
-    extern /* Subroutine */
-        void
-        strexc_(char *, integer *, real *, integer *, real *, integer *, integer *, integer *,
-                real *, integer *),
-        sormhr_(char *, char *, integer *, integer *, integer *, integer *, real *, integer *,
-                real *, real *, integer *, real *, integer *, integer *);
     real smlnum;
-    integer lwkopt;
-    extern real sroundup_lwork(integer *);
+    aocl_int64_t lwkopt;
     /* -- LAPACK auxiliary routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -398,12 +409,12 @@ void slaqr2_(logical *wantt, logical *wantz, integer *n, integer *ktop, integer 
     {
         /* ==== Workspace query call to SGEHRD ==== */
         i__1 = jw - 1;
-        sgehrd_(&jw, &c__1, &i__1, &t[t_offset], ldt, &work[1], &work[1], &c_n1, &info);
+        aocl_lapack_sgehrd(&jw, &c__1, &i__1, &t[t_offset], ldt, &work[1], &work[1], &c_n1, &info);
         lwk1 = (integer)work[1];
         /* ==== Workspace query call to SORMHR ==== */
         i__1 = jw - 1;
-        sormhr_("R", "N", &jw, &jw, &c__1, &i__1, &t[t_offset], ldt, &work[1], &v[v_offset], ldv,
-                &work[1], &c_n1, &info);
+        aocl_lapack_sormhr("R", "N", &jw, &jw, &c__1, &i__1, &t[t_offset], ldt, &work[1],
+                           &v[v_offset], ldv, &work[1], &c_n1, &info);
         lwk2 = (integer)work[1];
         /* ==== Optimal workspace ==== */
         lwkopt = jw + fla_max(lwk1, lwk2);
@@ -411,7 +422,7 @@ void slaqr2_(logical *wantt, logical *wantz, integer *n, integer *ktop, integer 
     /* ==== Quick return in case of workspace query. ==== */
     if(*lwork == -1)
     {
-        work[1] = sroundup_lwork(&lwkopt);
+        work[1] = aocl_lapack_sroundup_lwork(&lwkopt);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -477,14 +488,14 @@ void slaqr2_(logical *wantt, logical *wantz, integer *n, integer *ktop, integer 
     /* . aggressive early deflation using that part of */
     /* . the deflation window that converged using INFQR */
     /* . here and there to keep track.) ==== */
-    slacpy_("U", &jw, &jw, &h__[kwtop + kwtop * h_dim1], ldh, &t[t_offset], ldt);
+    aocl_lapack_slacpy("U", &jw, &jw, &h__[kwtop + kwtop * h_dim1], ldh, &t[t_offset], ldt);
     i__1 = jw - 1;
     i__2 = *ldh + 1;
     i__3 = *ldt + 1;
-    scopy_(&i__1, &h__[kwtop + 1 + kwtop * h_dim1], &i__2, &t[t_dim1 + 2], &i__3);
-    slaset_("A", &jw, &jw, &c_b12, &c_b13, &v[v_offset], ldv);
-    slahqr_(&c_true, &c_true, &jw, &c__1, &jw, &t[t_offset], ldt, &sr[kwtop], &si[kwtop], &c__1,
-            &jw, &v[v_offset], ldv, &infqr);
+    aocl_blas_scopy(&i__1, &h__[kwtop + 1 + kwtop * h_dim1], &i__2, &t[t_dim1 + 2], &i__3);
+    aocl_lapack_slaset("A", &jw, &jw, &c_b12, &c_b13, &v[v_offset], ldv);
+    aocl_lapack_slahqr(&c_true, &c_true, &jw, &c__1, &jw, &t[t_offset], ldt, &sr[kwtop], &si[kwtop],
+                       &c__1, &jw, &v[v_offset], ldv, &infqr);
     /* ==== STREXC needs a clean margin near the diagonal ==== */
     i__1 = jw - 3;
     for(j = 1; j <= i__1; ++j)
@@ -533,8 +544,8 @@ L20:
                 /* ==== Undeflatable. Move it up out of the way. */
                 /* . (STREXC can not fail in this case.) ==== */
                 ifst = *ns;
-                strexc_("V", &jw, &t[t_offset], ldt, &v[v_offset], ldv, &ifst, &ilst, &work[1],
-                        &info);
+                aocl_lapack_strexc("V", &jw, &t[t_offset], ldt, &v[v_offset], ldv, &ifst, &ilst,
+                                   &work[1], &info);
                 ++ilst;
             }
         }
@@ -565,8 +576,8 @@ L20:
                 /* . Fortunately, STREXC does the right thing with */
                 /* . ILST in case of a rare exchange failure. ==== */
                 ifst = *ns;
-                strexc_("V", &jw, &t[t_offset], ldt, &v[v_offset], ldv, &ifst, &ilst, &work[1],
-                        &info);
+                aocl_lapack_strexc("V", &jw, &t[t_offset], ldt, &v[v_offset], ldv, &ifst, &ilst,
+                                   &work[1], &info);
                 ilst += 2;
             }
         }
@@ -641,8 +652,8 @@ L20:
                 sorted = FALSE_;
                 ifst = i__;
                 ilst = k;
-                strexc_("V", &jw, &t[t_offset], ldt, &v[v_offset], ldv, &ifst, &ilst, &work[1],
-                        &info);
+                aocl_lapack_strexc("V", &jw, &t[t_offset], ldt, &v[v_offset], ldv, &ifst, &ilst,
+                                   &work[1], &info);
                 if(info == 0)
                 {
                     i__ = ilst;
@@ -703,36 +714,39 @@ L60:
         if(*ns > 1 && s != 0.f)
         {
             /* ==== Reflect spike back into lower triangle ==== */
-            scopy_(ns, &v[v_offset], ldv, &work[1], &c__1);
+            aocl_blas_scopy(ns, &v[v_offset], ldv, &work[1], &c__1);
             beta = work[1];
-            slarfg_(ns, &beta, &work[2], &c__1, &tau);
+            aocl_lapack_slarfg(ns, &beta, &work[2], &c__1, &tau);
             work[1] = 1.f;
             i__1 = jw - 2;
             i__2 = jw - 2;
-            slaset_("L", &i__1, &i__2, &c_b12, &c_b12, &t[t_dim1 + 3], ldt);
-            slarf_("L", ns, &jw, &work[1], &c__1, &tau, &t[t_offset], ldt, &work[jw + 1]);
-            slarf_("R", ns, ns, &work[1], &c__1, &tau, &t[t_offset], ldt, &work[jw + 1]);
-            slarf_("R", &jw, ns, &work[1], &c__1, &tau, &v[v_offset], ldv, &work[jw + 1]);
+            aocl_lapack_slaset("L", &i__1, &i__2, &c_b12, &c_b12, &t[t_dim1 + 3], ldt);
+            aocl_lapack_slarf("L", ns, &jw, &work[1], &c__1, &tau, &t[t_offset], ldt,
+                              &work[jw + 1]);
+            aocl_lapack_slarf("R", ns, ns, &work[1], &c__1, &tau, &t[t_offset], ldt, &work[jw + 1]);
+            aocl_lapack_slarf("R", &jw, ns, &work[1], &c__1, &tau, &v[v_offset], ldv,
+                              &work[jw + 1]);
             i__1 = *lwork - jw;
-            sgehrd_(&jw, &c__1, ns, &t[t_offset], ldt, &work[1], &work[jw + 1], &i__1, &info);
+            aocl_lapack_sgehrd(&jw, &c__1, ns, &t[t_offset], ldt, &work[1], &work[jw + 1], &i__1,
+                               &info);
         }
         /* ==== Copy updated reduced window into place ==== */
         if(kwtop > 1)
         {
             h__[kwtop + (kwtop - 1) * h_dim1] = s * v[v_dim1 + 1];
         }
-        slacpy_("U", &jw, &jw, &t[t_offset], ldt, &h__[kwtop + kwtop * h_dim1], ldh);
+        aocl_lapack_slacpy("U", &jw, &jw, &t[t_offset], ldt, &h__[kwtop + kwtop * h_dim1], ldh);
         i__1 = jw - 1;
         i__2 = *ldt + 1;
         i__3 = *ldh + 1;
-        scopy_(&i__1, &t[t_dim1 + 2], &i__2, &h__[kwtop + 1 + kwtop * h_dim1], &i__3);
+        aocl_blas_scopy(&i__1, &t[t_dim1 + 2], &i__2, &h__[kwtop + 1 + kwtop * h_dim1], &i__3);
         /* ==== Accumulate orthogonal matrix in order update */
         /* . H and Z, if requested. ==== */
         if(*ns > 1 && s != 0.f)
         {
             i__1 = *lwork - jw;
-            sormhr_("R", "N", &jw, ns, &c__1, ns, &t[t_offset], ldt, &work[1], &v[v_offset], ldv,
-                    &work[jw + 1], &i__1, &info);
+            aocl_lapack_sormhr("R", "N", &jw, ns, &c__1, ns, &t[t_offset], ldt, &work[1],
+                               &v[v_offset], ldv, &work[jw + 1], &i__1, &info);
         }
         /* ==== Update vertical slab in H ==== */
         if(*wantt)
@@ -751,9 +765,10 @@ L60:
             i__3 = *nv;
             i__4 = kwtop - krow; // , expr subst
             kln = fla_min(i__3, i__4);
-            sgemm_("N", "N", &kln, &jw, &jw, &c_b13, &h__[krow + kwtop * h_dim1], ldh, &v[v_offset],
-                   ldv, &c_b12, &wv[wv_offset], ldwv);
-            slacpy_("A", &kln, &jw, &wv[wv_offset], ldwv, &h__[krow + kwtop * h_dim1], ldh);
+            aocl_blas_sgemm("N", "N", &kln, &jw, &jw, &c_b13, &h__[krow + kwtop * h_dim1], ldh,
+                            &v[v_offset], ldv, &c_b12, &wv[wv_offset], ldwv);
+            aocl_lapack_slacpy("A", &kln, &jw, &wv[wv_offset], ldwv, &h__[krow + kwtop * h_dim1],
+                               ldh);
             /* L70: */
         }
         /* ==== Update horizontal slab in H ==== */
@@ -767,9 +782,10 @@ L60:
                 i__3 = *nh;
                 i__4 = *n - kcol + 1; // , expr subst
                 kln = fla_min(i__3, i__4);
-                sgemm_("C", "N", &jw, &kln, &jw, &c_b13, &v[v_offset], ldv,
-                       &h__[kwtop + kcol * h_dim1], ldh, &c_b12, &t[t_offset], ldt);
-                slacpy_("A", &jw, &kln, &t[t_offset], ldt, &h__[kwtop + kcol * h_dim1], ldh);
+                aocl_blas_sgemm("C", "N", &jw, &kln, &jw, &c_b13, &v[v_offset], ldv,
+                                &h__[kwtop + kcol * h_dim1], ldh, &c_b12, &t[t_offset], ldt);
+                aocl_lapack_slacpy("A", &jw, &kln, &t[t_offset], ldt, &h__[kwtop + kcol * h_dim1],
+                                   ldh);
                 /* L80: */
             }
         }
@@ -784,9 +800,10 @@ L60:
                 i__3 = *nv;
                 i__4 = *ihiz - krow + 1; // , expr subst
                 kln = fla_min(i__3, i__4);
-                sgemm_("N", "N", &kln, &jw, &jw, &c_b13, &z__[krow + kwtop * z_dim1], ldz,
-                       &v[v_offset], ldv, &c_b12, &wv[wv_offset], ldwv);
-                slacpy_("A", &kln, &jw, &wv[wv_offset], ldwv, &z__[krow + kwtop * z_dim1], ldz);
+                aocl_blas_sgemm("N", "N", &kln, &jw, &jw, &c_b13, &z__[krow + kwtop * z_dim1], ldz,
+                                &v[v_offset], ldv, &c_b12, &wv[wv_offset], ldwv);
+                aocl_lapack_slacpy("A", &kln, &jw, &wv[wv_offset], ldwv,
+                                   &z__[krow + kwtop * z_dim1], ldz);
                 /* L90: */
             }
         }
@@ -800,7 +817,7 @@ L60:
     /* . window.) ==== */
     *ns -= infqr;
     /* ==== Return optimal workspace. ==== */
-    work[1] = sroundup_lwork(&lwkopt);
+    work[1] = aocl_lapack_sroundup_lwork(&lwkopt);
     /* ==== End of SLAQR2 ==== */
     AOCL_DTL_TRACE_LOG_EXIT
     return;

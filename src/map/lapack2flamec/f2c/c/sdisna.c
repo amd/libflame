@@ -38,7 +38,7 @@
 /* > \verbatim */
 /* > */
 /* > SDISNA computes the reciprocal condition numbers for the eigenvectors */
-/* > of a real symmetric or complex Hermitian matrix or for the left or */
+/* > of a real symmetric or scomplex Hermitian matrix or for the left or */
 /* > right singular vectors of a general m-by-n matrix. The reciprocal */
 /* > condition number is the 'gap' between the corresponding eigenvalue or */
 /* > singular value and the nearest other one. */
@@ -114,26 +114,40 @@
 /* > \ingroup auxOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void sdisna_(char *job, integer *m, integer *n, real *d__, real *sep, integer *info)
+/** Generated wrapper function */
+void sdisna_(char *job, aocl_int_t *m, aocl_int_t *n, real *d__, real *sep, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_sdisna(job, m, n, d__, sep, info);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_sdisna(job, &m_64, &n_64, d__, sep, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_sdisna(char *job, aocl_int64_t *m, aocl_int64_t *n, real *d__, real *sep,
+                        aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("sdisna inputs: job %c ,m %" FLA_IS ",n %" FLA_IS "", *job, *m, *n);
     /* System generated locals */
-    integer i__1;
+    aocl_int64_t i__1;
     real r__1, r__2, r__3;
     /* Local variables */
-    integer i__, k;
+    aocl_int64_t i__, k;
     real eps;
     logical decr, left, incr, sing, eigen;
-    extern logical lsame_(char *, char *, integer, integer);
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     real anorm;
     logical right;
     real oldgap;
     extern real slamch_(char *);
     real safmin;
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real newgap, thresh;
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -221,7 +235,7 @@ void sdisna_(char *job, integer *m, integer *n, real *d__, real *sep, integer *i
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("SDISNA", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("SDISNA", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }

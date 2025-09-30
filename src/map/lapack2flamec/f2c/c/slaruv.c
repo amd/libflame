@@ -90,7 +90,19 @@ the array */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void slaruv_(integer *iseed, integer *n, real *x)
+/** Generated wrapper function */
+void slaruv_(aocl_int_t *iseed, aocl_int_t *n, real *x)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_slaruv(iseed, n, x);
+#else
+    aocl_int64_t n_64 = *n;
+
+    aocl_lapack_slaruv(iseed, &n_64, x);
+#endif
+}
+
+void aocl_lapack_slaruv(aocl_int_t *iseed, aocl_int64_t *n, real *x)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("slaruv inputs: iseed %" FLA_IS ", n  %" FLA_IS "", *iseed, *n);
@@ -132,9 +144,9 @@ void slaruv_(integer *iseed, integer *n, real *x)
            2881, 3637, 1465, 2829, 2161, 3365, 361,  2685, 3745, 2325, 3609, 3821, 3537, 517,  3017,
            2141, 1537};
     /* System generated locals */
-    integer i__1;
+    aocl_int64_t i__1;
     /* Local variables */
-    integer i__, i1, i2, i3, i4, it1, it2, it3, it4;
+    aocl_int64_t i__, i1, i2, i3, i4, it1, it2, it3, it4;
     /* -- LAPACK auxiliary routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -212,10 +224,10 @@ void slaruv_(integer *iseed, integer *n, real *x)
         /* L10: */
     }
     /* Return final value of seed */
-    iseed[1] = it1;
-    iseed[2] = it2;
-    iseed[3] = it3;
-    iseed[4] = it4;
+    iseed[1] = (aocl_int_t)(it1);
+    iseed[2] = (aocl_int_t)(it2);
+    iseed[3] = (aocl_int_t)(it3);
+    iseed[4] = (aocl_int_t)(it4);
     AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SLARUV */

@@ -193,9 +193,9 @@ FLA_Error FLA_QR_UT_form_Q_blk_var1( FLA_Obj A, FLA_Obj T, FLA_Obj W )
 FLA_Error FLA_QR_UT_form_Q_opt_var1( FLA_Obj A, FLA_Obj T )
 {
     FLA_Datatype datatype;
-    integer          m_A, n_A;
-    integer          rs_A, cs_A;
-    integer          rs_T, cs_T;
+    fla_dim_t          m_A, n_A;
+    fla_dim_t          rs_A, cs_A;
+    fla_dim_t          rs_T, cs_T;
 
     datatype = FLA_Obj_datatype( A );
 
@@ -265,14 +265,14 @@ FLA_Error FLA_QR_UT_form_Q_opt_var1( FLA_Obj A, FLA_Obj T )
     return FLA_SUCCESS;
 }
 
-FLA_Error FLA_QR_UT_form_Q_ops_var1( integer       m_A,
-                                     integer       n_A,
-                                     float*    buff_A, integer rs_A, integer cs_A,
-                                     float*    buff_T, integer rs_T, integer cs_T )
+FLA_Error FLA_QR_UT_form_Q_ops_var1( fla_dim_t       m_A,
+                                     fla_dim_t       n_A,
+                                     float*    buff_A, fla_dim_t rs_A, fla_dim_t cs_A,
+                                     float*    buff_T, fla_dim_t rs_T, fla_dim_t cs_T )
 {
     float    one     = bl1_d1();
-    integer      min_m_n = fla_min( m_A, n_A );
-    integer      i;
+    fla_dim_t      min_m_n = fla_min( m_A, n_A );
+    fla_dim_t      i;
 
     for ( i = min_m_n - 1; i >= 0; --i )
     {
@@ -286,9 +286,9 @@ FLA_Error FLA_QR_UT_form_Q_ops_var1( integer       m_A,
 
         float     minus_inv_tau11;
 
-        //integer       m_behind = i;
-        integer       n_ahead  = n_A - i - 1;
-        integer       m_ahead  = m_A - i - 1;
+        //fla_dim_t       m_behind = i;
+        fla_dim_t       n_ahead  = n_A - i - 1;
+        fla_dim_t       m_ahead  = m_A - i - 1;
 
         FLA_Apply_H2_UT_l_ops_var1( m_ahead,
                                     n_ahead,
@@ -315,14 +315,14 @@ FLA_Error FLA_QR_UT_form_Q_ops_var1( integer       m_A,
     return FLA_SUCCESS;
 }
 
-FLA_Error FLA_QR_UT_form_Q_opd_var1( integer       m_A,
-                                     integer       n_A,
-                                     double*   buff_A, integer rs_A, integer cs_A,
-                                     double*   buff_T, integer rs_T, integer cs_T )
+FLA_Error FLA_QR_UT_form_Q_opd_var1( fla_dim_t       m_A,
+                                     fla_dim_t       n_A,
+                                     double*   buff_A, fla_dim_t rs_A, fla_dim_t cs_A,
+                                     double*   buff_T, fla_dim_t rs_T, fla_dim_t cs_T )
 {
     double   one     = bl1_d1();
-    integer      min_m_n = fla_min( m_A, n_A );
-    integer      i;
+    fla_dim_t      min_m_n = fla_min( m_A, n_A );
+    fla_dim_t      i;
 
     for ( i = min_m_n - 1; i >= 0; --i )
     {
@@ -336,9 +336,9 @@ FLA_Error FLA_QR_UT_form_Q_opd_var1( integer       m_A,
 
         double    minus_inv_tau11;
 
-        //integer       m_behind = i;
-        integer       n_ahead  = n_A - i - 1;
-        integer       m_ahead  = m_A - i - 1;
+        //fla_dim_t       m_behind = i;
+        fla_dim_t       n_ahead  = n_A - i - 1;
+        fla_dim_t       m_ahead  = m_A - i - 1;
 
         FLA_Apply_H2_UT_l_opd_var1( m_ahead,
                                     n_ahead,
@@ -366,15 +366,15 @@ FLA_Error FLA_QR_UT_form_Q_opd_var1( integer       m_A,
 }
 
 
-FLA_Error FLA_QR_UT_form_Q_opc_var1( integer       m_A,
-                                     integer       n_A,
-                                     scomplex* buff_A, integer rs_A, integer cs_A,
-                                     scomplex* buff_T, integer rs_T, integer cs_T )
+FLA_Error FLA_QR_UT_form_Q_opc_var1( fla_dim_t       m_A,
+                                     fla_dim_t       n_A,
+                                     scomplex* buff_A, fla_dim_t rs_A, fla_dim_t cs_A,
+                                     scomplex* buff_T, fla_dim_t rs_T, fla_dim_t cs_T )
 {
     scomplex zero    = bl1_c0();
     scomplex one     = bl1_c1();
-    integer      min_m_n = fla_min( m_A, n_A );
-    integer      i;
+    fla_dim_t      min_m_n = fla_min( m_A, n_A );
+    fla_dim_t      i;
 
     for ( i = min_m_n - 1; i >= 0; --i )
     {
@@ -388,9 +388,9 @@ FLA_Error FLA_QR_UT_form_Q_opc_var1( integer       m_A,
 
         scomplex  minus_inv_tau11;
 
-        //integer       m_behind = i;
-        integer       n_ahead  = n_A - i - 1;
-        integer       m_ahead  = m_A - i - 1;
+        //fla_dim_t       m_behind = i;
+        fla_dim_t       n_ahead  = n_A - i - 1;
+        fla_dim_t       m_ahead  = m_A - i - 1;
 
         FLA_Apply_H2_UT_l_opc_var1( m_ahead,
                                     n_ahead,
@@ -419,15 +419,15 @@ FLA_Error FLA_QR_UT_form_Q_opc_var1( integer       m_A,
     return FLA_SUCCESS;
 }
 
-FLA_Error FLA_QR_UT_form_Q_opz_var1( integer       m_A,
-                                     integer       n_A,
-                                     dcomplex* buff_A, integer rs_A, integer cs_A,
-                                     dcomplex* buff_T, integer rs_T, integer cs_T )
+FLA_Error FLA_QR_UT_form_Q_opz_var1( fla_dim_t       m_A,
+                                     fla_dim_t       n_A,
+                                     dcomplex* buff_A, fla_dim_t rs_A, fla_dim_t cs_A,
+                                     dcomplex* buff_T, fla_dim_t rs_T, fla_dim_t cs_T )
 {
     dcomplex zero    = bl1_z0();
     dcomplex one     = bl1_z1();
-    integer      min_m_n = fla_min( m_A, n_A );
-    integer      i;
+    fla_dim_t      min_m_n = fla_min( m_A, n_A );
+    fla_dim_t      i;
 
     for ( i = min_m_n - 1; i >= 0; --i )
     {
@@ -441,9 +441,9 @@ FLA_Error FLA_QR_UT_form_Q_opz_var1( integer       m_A,
 
         dcomplex  minus_inv_tau11;
 
-        //integer       m_behind = i;
-        integer       n_ahead  = n_A - i - 1;
-        integer       m_ahead  = m_A - i - 1;
+        //fla_dim_t       m_behind = i;
+        fla_dim_t       n_ahead  = n_A - i - 1;
+        fla_dim_t       m_ahead  = m_A - i - 1;
 
         FLA_Apply_H2_UT_l_opz_var1( m_ahead,
                                     n_ahead,

@@ -36,7 +36,7 @@ FLA_Error FLA_Fill_with_random_dist( FLA_Obj shift, FLA_Obj max, FLA_Obj x )
     FLA_Axpy( FLA_ONE, y, r );
 
 	// Overwrite x with the distribution we created in l.
-	// If x is complex, then this is where the conversion between
+	// If x is scomplex, then this is where the conversion between
 	// datatypes happens.
 	FLA_Copy( r, x );
 

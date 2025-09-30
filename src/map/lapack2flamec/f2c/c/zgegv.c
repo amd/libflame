@@ -4,10 +4,10 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static doublecomplex c_b1 = {0., 0.};
-static doublecomplex c_b2 = {1., 0.};
-static integer c__1 = 1;
-static integer c_n1 = -1;
+static dcomplex c_b1 = {{0.}, {0.}};
+static dcomplex c_b2 = {{1.}, {0.}};
+static aocl_int64_t c__1 = 1;
+static aocl_int64_t c_n1 = -1;
 static doublereal c_b29 = 1.;
 /* > \brief <b> ZGEEVX computes the eigenvalues and, optionally, the left and/or right eigenvectors
  * for GE mat rices</b> */
@@ -51,7 +51,7 @@ static doublereal c_b29 = 1.;
 /* > This routine is deprecated and has been replaced by routine ZGGEV. */
 /* > */
 /* > ZGEGV computes the eigenvalues and, optionally, the left and/or right */
-/* > eigenvectors of a complex matrix pair (A,B). */
+/* > eigenvectors of a scomplex matrix pair (A,B). */
 /* > Given two square matrices A and B, */
 /* > the generalized nonsymmetric eigenvalue problem (GNEP) is to find the */
 /* > eigenvalues lambda and corresponding (non-zero) eigenvectors x such */
@@ -140,14 +140,14 @@ static doublereal c_b29 = 1.;
 /* > \param[out] ALPHA */
 /* > \verbatim */
 /* > ALPHA is COMPLEX*16 array, dimension (N) */
-/* > The complex scalars alpha that define the eigenvalues of */
+/* > The scomplex scalars alpha that define the eigenvalues of */
 /* > GNEP. */
 /* > \endverbatim */
 /* > */
 /* > \param[out] BETA */
 /* > \verbatim */
 /* > BETA is COMPLEX*16 array, dimension (N) */
-/* > The complex scalars beta that define the eigenvalues of GNEP. */
+/* > The scomplex scalars beta that define the eigenvalues of GNEP. */
 /* > */
 /* > Together, the quantities alpha = ALPHA(j) and beta = BETA(j) */
 /* > represent the j-th eigenvalue of the matrix pair (A,B), in */
@@ -278,7 +278,7 @@ the routine */
 /* > -------- -- - --- - -- ---- */
 /* > */
 /* > If any eigenvectors are computed (either JOBVL='V' or JOBVR='V' or */
-/* > both), then on exit the arrays A and B will contain the complex Schur */
+/* > both), then on exit the arrays A and B will contain the scomplex Schur */
 /* > form[*] of the "balanced" versions of A and B. If no eigenvectors */
 /* > are computed, then only the diagonal blocks will be correct. */
 /* > */
@@ -287,88 +287,66 @@ the routine */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void zgegv_(char *jobvl, char *jobvr, integer *n, doublecomplex *a, integer *lda, doublecomplex *b,
-            integer *ldb, doublecomplex *alpha, doublecomplex *beta, doublecomplex *vl,
-            integer *ldvl, doublecomplex *vr, integer *ldvr, doublecomplex *work, integer *lwork,
-            doublereal *rwork, integer *info)
+/** Generated wrapper function */
+void zgegv_(char *jobvl, char *jobvr, aocl_int_t *n, dcomplex *a, aocl_int_t *lda, dcomplex *b, aocl_int_t *ldb, dcomplex *alpha, dcomplex *beta, dcomplex *vl, aocl_int_t *ldvl, dcomplex *vr, aocl_int_t *ldvr, dcomplex *work, aocl_int_t *lwork, doublereal *rwork, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_zgegv(jobvl, jobvr, n, a, lda, b, ldb, alpha, beta, vl, ldvl, vr, ldvr, work, lwork, rwork, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t ldb_64 = *ldb;
+    aocl_int64_t ldvl_64 = *ldvl;
+    aocl_int64_t ldvr_64 = *ldvr;
+    aocl_int64_t lwork_64 = *lwork;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_zgegv(jobvl, jobvr, &n_64, a, &lda_64, b, &ldb_64, alpha, beta, vl, &ldvl_64, vr, &ldvr_64, work, &lwork_64, rwork, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_zgegv(char *jobvl, char *jobvr, aocl_int64_t *n, dcomplex *a, aocl_int64_t *lda,
+            dcomplex *b, aocl_int64_t *ldb, dcomplex *alpha, dcomplex *beta,
+            dcomplex *vl, aocl_int64_t *ldvl, dcomplex *vr, aocl_int64_t *ldvr,
+            dcomplex *work, aocl_int64_t *lwork, doublereal *rwork, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zgegv inputs: jobvl %c, jobvr %c, n %" FLA_IS ", lda %" FLA_IS
                       ", ldb %" FLA_IS ", ldvl %" FLA_IS ", ldvr %" FLA_IS "",
                       *jobvl, *jobvr, *n, *lda, *ldb, *ldvl, *ldvr);
     /* System generated locals */
-    integer a_dim1, a_offset, b_dim1, b_offset, vl_dim1, vl_offset, vr_dim1, vr_offset, i__1, i__2,
-        i__3, i__4;
+    aocl_int64_t a_dim1, a_offset, b_dim1, b_offset, vl_dim1, vl_offset, vr_dim1, vr_offset, i__1,
+        i__2, i__3, i__4;
     doublereal d__1, d__2, d__3, d__4;
-    doublecomplex z__1, z__2;
+    dcomplex z__1, z__2;
     /* Builtin functions */
-    double d_imag(doublecomplex *);
+    double d_imag(dcomplex *);
     /* Local variables */
-    integer jc, nb, in, jr, nb1, nb2, nb3, ihi, ilo;
+    aocl_int64_t jc, nb, in, jr, nb1, nb2, nb3, ihi, ilo;
     doublereal eps;
     logical ilv;
     doublereal absb, anrm, bnrm;
-    integer itau;
+    aocl_int64_t itau;
     doublereal temp;
     logical ilvl, ilvr;
-    integer lopt;
+    aocl_int64_t lopt;
     doublereal anrm1, anrm2, bnrm1, bnrm2, absai, scale, absar, sbeta;
-    extern logical lsame_(char *, char *, integer, integer);
-    integer ileft, iinfo, icols, iwork, irows;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    aocl_int64_t ileft, iinfo, icols, iwork, irows;
     extern doublereal dlamch_(char *);
     doublereal salfai;
-    extern /* Subroutine */
-        void
-        zggbak_(char *, char *, integer *, integer *, integer *, doublereal *, doublereal *,
-                integer *, doublecomplex *, integer *, integer *),
-        zggbal_(char *, integer *, doublecomplex *, integer *, doublecomplex *, integer *,
-                integer *, integer *, doublereal *, doublereal *, doublereal *, integer *);
     doublereal salfar, safmin;
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal safmax;
     char chtemp[1];
     logical ldumma[1];
-    extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
-    extern doublereal zlange_(char *, integer *, integer *, doublecomplex *, integer *,
-                              doublereal *);
-    integer ijobvl, iright;
+    aocl_int64_t ijobvl, iright;
     logical ilimit;
-    extern /* Subroutine */
-        void
-        zgghrd_(char *, char *, integer *, integer *, integer *, doublecomplex *, integer *,
-                doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *,
-                integer *),
-        zlascl_(char *, integer *, integer *, doublereal *, doublereal *, integer *, integer *,
-                doublecomplex *, integer *, integer *);
-    integer ijobvr;
-    extern /* Subroutine */
-        void
-        zgeqrf_(integer *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *,
-                integer *, integer *);
-    integer lwkmin;
-    extern /* Subroutine */
-        void
-        zlacpy_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *,
-                integer *),
-        zlaset_(char *, integer *, integer *, doublecomplex *, doublecomplex *, doublecomplex *,
-                integer *),
-        ztgevc_(char *, char *, logical *, integer *, doublecomplex *, integer *, doublecomplex *,
-                integer *, doublecomplex *, integer *, doublecomplex *, integer *, integer *,
-                integer *, doublecomplex *, doublereal *, integer *),
-        zhgeqz_(char *, char *, char *, integer *, integer *, integer *, doublecomplex *, integer *,
-                doublecomplex *, integer *, doublecomplex *, doublecomplex *, doublecomplex *,
-                integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublereal *,
-                integer *);
-    integer irwork, lwkopt;
+    aocl_int64_t ijobvr;
+    aocl_int64_t lwkmin;
+    aocl_int64_t irwork, lwkopt;
     logical lquery;
-    extern /* Subroutine */
-        void
-        zungqr_(integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *,
-                doublecomplex *, integer *, integer *),
-        zunmqr_(char *, char *, integer *, integer *, integer *, doublecomplex *, integer *,
-                doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, integer *);
     /* -- LAPACK driver routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -488,9 +466,9 @@ void zgegv_(char *jobvl, char *jobvr, integer *n, doublecomplex *a, integer *lda
     }
     if(*info == 0)
     {
-        nb1 = ilaenv_(&c__1, "ZGEQRF", " ", n, n, &c_n1, &c_n1);
-        nb2 = ilaenv_(&c__1, "ZUNMQR", " ", n, n, n, &c_n1);
-        nb3 = ilaenv_(&c__1, "ZUNGQR", " ", n, n, n, &c_n1);
+        nb1 = aocl_lapack_ilaenv(&c__1, "ZGEQRF", " ", n, n, &c_n1, &c_n1);
+        nb2 = aocl_lapack_ilaenv(&c__1, "ZUNMQR", " ", n, n, n, &c_n1);
+        nb3 = aocl_lapack_ilaenv(&c__1, "ZUNGQR", " ", n, n, n, &c_n1);
         /* Computing MAX */
         i__1 = fla_max(nb1, nb2);
         nb = fla_max(i__1, nb3);
@@ -504,7 +482,7 @@ void zgegv_(char *jobvl, char *jobvr, integer *n, doublecomplex *a, integer *lda
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("ZGEGV ", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("ZGEGV ", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -525,7 +503,7 @@ void zgegv_(char *jobvl, char *jobvr, integer *n, doublecomplex *a, integer *lda
     safmin += safmin;
     safmax = 1. / safmin;
     /* Scale A */
-    anrm = zlange_("M", n, n, &a[a_offset], lda, &rwork[1]);
+    anrm = aocl_lapack_zlange("M", n, n, &a[a_offset], lda, &rwork[1]);
     anrm1 = anrm;
     anrm2 = 1.;
     if(anrm < 1.)
@@ -538,7 +516,7 @@ void zgegv_(char *jobvl, char *jobvr, integer *n, doublecomplex *a, integer *lda
     }
     if(anrm > 0.)
     {
-        zlascl_("G", &c_n1, &c_n1, &anrm, &c_b29, n, n, &a[a_offset], lda, &iinfo);
+        aocl_lapack_zlascl("G", &c_n1, &c_n1, &anrm, &c_b29, n, n, &a[a_offset], lda, &iinfo);
         if(iinfo != 0)
         {
             *info = *n + 10;
@@ -547,7 +525,7 @@ void zgegv_(char *jobvl, char *jobvr, integer *n, doublecomplex *a, integer *lda
         }
     }
     /* Scale B */
-    bnrm = zlange_("M", n, n, &b[b_offset], ldb, &rwork[1]);
+    bnrm = aocl_lapack_zlange("M", n, n, &b[b_offset], ldb, &rwork[1]);
     bnrm1 = bnrm;
     bnrm2 = 1.;
     if(bnrm < 1.)
@@ -560,7 +538,7 @@ void zgegv_(char *jobvl, char *jobvr, integer *n, doublecomplex *a, integer *lda
     }
     if(bnrm > 0.)
     {
-        zlascl_("G", &c_n1, &c_n1, &bnrm, &c_b29, n, n, &b[b_offset], ldb, &iinfo);
+        aocl_lapack_zlascl("G", &c_n1, &c_n1, &bnrm, &c_b29, n, n, &b[b_offset], ldb, &iinfo);
         if(iinfo != 0)
         {
             *info = *n + 10;
@@ -573,8 +551,8 @@ void zgegv_(char *jobvl, char *jobvr, integer *n, doublecomplex *a, integer *lda
     ileft = 1;
     iright = *n + 1;
     irwork = iright + *n;
-    zggbal_("P", n, &a[a_offset], lda, &b[b_offset], ldb, &ilo, &ihi, &rwork[ileft], &rwork[iright],
-            &rwork[irwork], &iinfo);
+    aocl_lapack_zggbal("P", n, &a[a_offset], lda, &b[b_offset], ldb, &ilo, &ihi, &rwork[ileft],
+                       &rwork[iright], &rwork[irwork], &iinfo);
     if(iinfo != 0)
     {
         *info = *n + 1;
@@ -593,7 +571,8 @@ void zgegv_(char *jobvl, char *jobvr, integer *n, doublecomplex *a, integer *lda
     itau = 1;
     iwork = itau + irows;
     i__1 = *lwork + 1 - iwork;
-    zgeqrf_(&irows, &icols, &b[ilo + ilo * b_dim1], ldb, &work[itau], &work[iwork], &i__1, &iinfo);
+    aocl_lapack_zgeqrf(&irows, &icols, &b[ilo + ilo * b_dim1], ldb, &work[itau], &work[iwork],
+                       &i__1, &iinfo);
     if(iinfo >= 0)
     {
         /* Computing MAX */
@@ -608,8 +587,8 @@ void zgegv_(char *jobvl, char *jobvr, integer *n, doublecomplex *a, integer *lda
         goto L80;
     }
     i__1 = *lwork + 1 - iwork;
-    zunmqr_("L", "C", &irows, &icols, &irows, &b[ilo + ilo * b_dim1], ldb, &work[itau],
-            &a[ilo + ilo * a_dim1], lda, &work[iwork], &i__1, &iinfo);
+    aocl_lapack_zunmqr("L", "C", &irows, &icols, &irows, &b[ilo + ilo * b_dim1], ldb, &work[itau],
+                       &a[ilo + ilo * a_dim1], lda, &work[iwork], &i__1, &iinfo);
     if(iinfo >= 0)
     {
         /* Computing MAX */
@@ -625,14 +604,14 @@ void zgegv_(char *jobvl, char *jobvr, integer *n, doublecomplex *a, integer *lda
     }
     if(ilvl)
     {
-        zlaset_("Full", n, n, &c_b1, &c_b2, &vl[vl_offset], ldvl);
+        aocl_lapack_zlaset("Full", n, n, &c_b1, &c_b2, &vl[vl_offset], ldvl);
         i__1 = irows - 1;
         i__2 = irows - 1;
-        zlacpy_("L", &i__1, &i__2, &b[ilo + 1 + ilo * b_dim1], ldb, &vl[ilo + 1 + ilo * vl_dim1],
-                ldvl);
+        aocl_lapack_zlacpy("L", &i__1, &i__2, &b[ilo + 1 + ilo * b_dim1], ldb,
+                           &vl[ilo + 1 + ilo * vl_dim1], ldvl);
         i__1 = *lwork + 1 - iwork;
-        zungqr_(&irows, &irows, &irows, &vl[ilo + ilo * vl_dim1], ldvl, &work[itau], &work[iwork],
-                &i__1, &iinfo);
+        aocl_lapack_zungqr(&irows, &irows, &irows, &vl[ilo + ilo * vl_dim1], ldvl, &work[itau],
+                           &work[iwork], &i__1, &iinfo);
         if(iinfo >= 0)
         {
             /* Computing MAX */
@@ -649,19 +628,20 @@ void zgegv_(char *jobvl, char *jobvr, integer *n, doublecomplex *a, integer *lda
     }
     if(ilvr)
     {
-        zlaset_("Full", n, n, &c_b1, &c_b2, &vr[vr_offset], ldvr);
+        aocl_lapack_zlaset("Full", n, n, &c_b1, &c_b2, &vr[vr_offset], ldvr);
     }
     /* Reduce to generalized Hessenberg form */
     if(ilv)
     {
         /* Eigenvectors requested -- work on whole matrix. */
-        zgghrd_(jobvl, jobvr, n, &ilo, &ihi, &a[a_offset], lda, &b[b_offset], ldb, &vl[vl_offset],
-                ldvl, &vr[vr_offset], ldvr, &iinfo);
+        aocl_lapack_zgghrd(jobvl, jobvr, n, &ilo, &ihi, &a[a_offset], lda, &b[b_offset], ldb,
+                           &vl[vl_offset], ldvl, &vr[vr_offset], ldvr, &iinfo);
     }
     else
     {
-        zgghrd_("N", "N", &irows, &c__1, &irows, &a[ilo + ilo * a_dim1], lda,
-                &b[ilo + ilo * b_dim1], ldb, &vl[vl_offset], ldvl, &vr[vr_offset], ldvr, &iinfo);
+        aocl_lapack_zgghrd("N", "N", &irows, &c__1, &irows, &a[ilo + ilo * a_dim1], lda,
+                           &b[ilo + ilo * b_dim1], ldb, &vl[vl_offset], ldvl, &vr[vr_offset], ldvr,
+                           &iinfo);
     }
     if(iinfo != 0)
     {
@@ -679,9 +659,9 @@ void zgegv_(char *jobvl, char *jobvr, integer *n, doublecomplex *a, integer *lda
         *(unsigned char *)chtemp = 'E';
     }
     i__1 = *lwork + 1 - iwork;
-    zhgeqz_(chtemp, jobvl, jobvr, n, &ilo, &ihi, &a[a_offset], lda, &b[b_offset], ldb, &alpha[1],
-            &beta[1], &vl[vl_offset], ldvl, &vr[vr_offset], ldvr, &work[iwork], &i__1,
-            &rwork[irwork], &iinfo);
+    aocl_lapack_zhgeqz(chtemp, jobvl, jobvr, n, &ilo, &ihi, &a[a_offset], lda, &b[b_offset], ldb,
+                       &alpha[1], &beta[1], &vl[vl_offset], ldvl, &vr[vr_offset], ldvr,
+                       &work[iwork], &i__1, &rwork[irwork], &iinfo);
     if(iinfo >= 0)
     {
         /* Computing MAX */
@@ -724,8 +704,9 @@ void zgegv_(char *jobvl, char *jobvr, integer *n, doublecomplex *a, integer *lda
         {
             *(unsigned char *)chtemp = 'R';
         }
-        ztgevc_(chtemp, "B", ldumma, n, &a[a_offset], lda, &b[b_offset], ldb, &vl[vl_offset], ldvl,
-                &vr[vr_offset], ldvr, n, &in, &work[iwork], &rwork[irwork], &iinfo);
+        aocl_lapack_ztgevc(chtemp, "B", ldumma, n, &a[a_offset], lda, &b[b_offset], ldb,
+                           &vl[vl_offset], ldvl, &vr[vr_offset], ldvr, n, &in, &work[iwork],
+                           &rwork[irwork], &iinfo);
         if(iinfo != 0)
         {
             *info = *n + 7;
@@ -734,8 +715,8 @@ void zgegv_(char *jobvl, char *jobvr, integer *n, doublecomplex *a, integer *lda
         /* Undo balancing on VL and VR, rescale */
         if(ilvl)
         {
-            zggbak_("P", "L", n, &ilo, &ihi, &rwork[ileft], &rwork[iright], n, &vl[vl_offset], ldvl,
-                    &iinfo);
+            aocl_lapack_zggbak("P", "L", n, &ilo, &ihi, &rwork[ileft], &rwork[iright], n,
+                               &vl[vl_offset], ldvl, &iinfo);
             if(iinfo != 0)
             {
                 *info = *n + 8;
@@ -778,8 +759,8 @@ void zgegv_(char *jobvl, char *jobvr, integer *n, doublecomplex *a, integer *lda
         }
         if(ilvr)
         {
-            zggbak_("P", "R", n, &ilo, &ihi, &rwork[ileft], &rwork[iright], n, &vr[vr_offset], ldvr,
-                    &iinfo);
+            aocl_lapack_zggbak("P", "R", n, &ilo, &ihi, &rwork[ileft], &rwork[iright], n,
+                               &vr[vr_offset], ldvr, &iinfo);
             if(iinfo != 0)
             {
                 *info = *n + 9;

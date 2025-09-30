@@ -27,19 +27,19 @@ FLA_Error FLASH_LQ_UT_solve( FLA_Obj A, FLA_Obj T, FLA_Obj B, FLA_Obj X );
 FLA_Error FLA_LQ_UT_form_Q( FLA_Obj A, FLA_Obj T, FLA_Obj Q );
 //FLA_Error FLA_LQ_UT_form_Q_blk_var1( FLA_Obj A, FLA_Obj T, FLA_Obj W );
 //FLA_Error FLA_LQ_UT_form_Q_opt_var1( FLA_Obj A, FLA_Obj T );
-//FLA_Error FLA_LQ_UT_form_Q_ops_var1( integer       m_A,
-//                                     integer       n_A,
-//                                     float*    buff_A, integer rs_A, integer cs_A,
-//                                     float*    buff_T, integer rs_T, integer cs_T );
-//FLA_Error FLA_LQ_UT_form_Q_opd_var1( integer       m_A,
-//                                     integer       n_A,
-//                                     double*   buff_A, integer rs_A, integer cs_A,
-//                                     double*   buff_T, integer rs_T, integer cs_T );
-//FLA_Error FLA_LQ_UT_form_Q_opc_var1( integer       m_A,
-//                                     integer       n_A,
-//                                     scomplex* buff_A, integer rs_A, integer cs_A,
-//                                     scomplex* buff_T, integer rs_T, integer cs_T );
-//FLA_Error FLA_LQ_UT_form_Q_opz_var1( integer       m_A,
-//                                     integer       n_A,
-//                                     dcomplex* buff_A, integer rs_A, integer cs_A,
-//                                     dcomplex* buff_T, integer rs_T, integer cs_T );
+//FLA_Error FLA_LQ_UT_form_Q_ops_var1( fla_dim_t       m_A,
+//                                     fla_dim_t       n_A,
+//                                     float*    buff_A, fla_dim_t rs_A, fla_dim_t cs_A,
+//                                     float*    buff_T, fla_dim_t rs_T, fla_dim_t cs_T );
+//FLA_Error FLA_LQ_UT_form_Q_opd_var1( fla_dim_t       m_A,
+//                                     fla_dim_t       n_A,
+//                                     double*   buff_A, fla_dim_t rs_A, fla_dim_t cs_A,
+//                                     double*   buff_T, fla_dim_t rs_T, fla_dim_t cs_T );
+//FLA_Error FLA_LQ_UT_form_Q_opc_var1( fla_dim_t       m_A,
+//                                     fla_dim_t       n_A,
+//                                     scomplex* buff_A, fla_dim_t rs_A, fla_dim_t cs_A,
+//                                     scomplex* buff_T, fla_dim_t rs_T, fla_dim_t cs_T );
+//FLA_Error FLA_LQ_UT_form_Q_opz_var1( fla_dim_t       m_A,
+//                                     fla_dim_t       n_A,
+//                                     dcomplex* buff_A, fla_dim_t rs_A, fla_dim_t cs_A,
+//                                     dcomplex* buff_T, fla_dim_t rs_T, fla_dim_t cs_T );

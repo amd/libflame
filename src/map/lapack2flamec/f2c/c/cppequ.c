@@ -114,7 +114,24 @@
 /* > \ingroup complexOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void cppequ_(char *uplo, integer *n, complex *ap, real *s, real *scond, real *amax, integer *info)
+/** Generated wrapper function */
+void cppequ_(char *uplo, aocl_int_t *n, scomplex *ap, real *s, real *scond, real *amax,
+             aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_cppequ(uplo, n, ap, s, scond, amax, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_cppequ(uplo, &n_64, ap, s, scond, amax, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_cppequ(char *uplo, aocl_int64_t *n, scomplex *ap, real *s, real *scond, real *amax,
+                        aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -127,18 +144,15 @@ void cppequ_(char *uplo, integer *n, complex *ap, real *s, real *scond, real *am
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
-    integer i__1, i__2;
+    aocl_int64_t i__1, i__2;
     real r__1, r__2;
     /* Builtin functions */
     double sqrt(doublereal);
     /* Local variables */
-    integer i__, jj;
+    aocl_int64_t i__, jj;
     real smin;
-    extern logical lsame_(char *, char *, integer, integer);
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     logical upper;
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -177,7 +191,7 @@ void cppequ_(char *uplo, integer *n, complex *ap, real *s, real *scond, real *am
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("CPPEQU", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("CPPEQU", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }

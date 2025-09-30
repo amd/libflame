@@ -17,14 +17,14 @@
 
 
 void time_Tevd_v(
-               integer variant, integer type, integer n_repeats, integer m, integer k_accum, integer b_alg, integer n_iter_max,
+               aocl_int64_t variant, aocl_int64_t type, aocl_int64_t n_repeats, aocl_int64_t m, aocl_int64_t k_accum, aocl_int64_t b_alg, aocl_int64_t n_iter_max,
                FLA_Obj A_orig, FLA_Obj d, FLA_Obj e, FLA_Obj G, FLA_Obj R, FLA_Obj W2, FLA_Obj A, FLA_Obj l,
                double *dtime, double *diff1, double* diff2, double *gflops );
 
 
 int main(int argc, char *argv[])
 {
-  integer 
+  aocl_int64_t 
     m_input,
     m,
     p_first, p_last, p_inc,

@@ -4,7 +4,7 @@
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
  /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__0 = 0;
+static aocl_int64_t c__0 = 0;
 /* > \brief \b DLATSQR */
 /* Definition: */
 /* =========== */
@@ -162,26 +162,42 @@ the routine */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void dlatsqr_(integer *m, integer *n, integer *mb, integer *nb, doublereal *a, integer *lda,
-              doublereal *t, integer *ldt, doublereal *work, integer *lwork, integer *info)
+/** Generated wrapper function */
+void dlatsqr_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *mb, aocl_int_t *nb, doublereal *a,
+              aocl_int_t *lda, doublereal *t, aocl_int_t *ldt, doublereal *work, aocl_int_t *lwork,
+              aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_dlatsqr(m, n, mb, nb, a, lda, t, ldt, work, lwork, info);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t mb_64 = *mb;
+    aocl_int64_t nb_64 = *nb;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t ldt_64 = *ldt;
+    aocl_int64_t lwork_64 = *lwork;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_dlatsqr(&m_64, &n_64, &mb_64, &nb_64, a, &lda_64, t, &ldt_64, work, &lwork_64,
+                        &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_dlatsqr(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *mb, aocl_int64_t *nb,
+                         doublereal *a, aocl_int64_t *lda, doublereal *t, aocl_int64_t *ldt,
+                         doublereal *work, aocl_int64_t *lwork, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dlatsqr inputs: m %" FLA_IS ", n %" FLA_IS ", mb %" FLA_IS ", nb %" FLA_IS
                       ", lda %" FLA_IS ", ldt %" FLA_IS ", lwork %" FLA_IS "",
                       *m, *n, *mb, *nb, *lda, *ldt, *lwork);
     /* System generated locals */
-    integer a_dim1, a_offset, t_dim1, t_offset, i__1, i__2, i__3;
+    aocl_int64_t a_dim1, a_offset, t_dim1, t_offset, i__1, i__2, i__3;
     /* Local variables */
-    integer i__, ii, kk, ctr;
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    extern /* Subroutine */
-        void
-        dgeqrt_(integer *, integer *, integer *, doublereal *, integer *, doublereal *, integer *,
-                doublereal *, integer *),
-        dtpqrt_(integer *, integer *, integer *, integer *, doublereal *, integer *, doublereal *,
-                integer *, doublereal *, integer *, doublereal *, integer *);
+    aocl_int64_t i__, ii, kk, ctr;
     logical lquery;
     /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -246,7 +262,7 @@ void dlatsqr_(integer *m, integer *n, integer *mb, integer *nb, doublereal *a, i
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("DLATSQR", &i__1, (ftnlen)7);
+        aocl_blas_xerbla("DLATSQR", &i__1, (ftnlen)7);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -264,14 +280,14 @@ void dlatsqr_(integer *m, integer *n, integer *mb, integer *nb, doublereal *a, i
     /* The QR Decomposition */
     if(*mb <= *n || *mb >= *m)
     {
-        dgeqrt_(m, n, nb, &a[a_offset], lda, &t[t_offset], ldt, &work[1], info);
+        aocl_lapack_dgeqrt(m, n, nb, &a[a_offset], lda, &t[t_offset], ldt, &work[1], info);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     kk = (*m - *n) % (*mb - *n);
     ii = *m - kk + 1;
     /* Compute the QR factorization of the first block A(1:MB,1:N) */
-    dgeqrt_(mb, n, nb, &a[a_dim1 + 1], lda, &t[t_offset], ldt, &work[1], info);
+    aocl_lapack_dgeqrt(mb, n, nb, &a[a_dim1 + 1], lda, &t[t_offset], ldt, &work[1], info);
     ctr = 1;
     i__1 = ii - *mb + *n;
     i__2 = *mb - *n;
@@ -279,15 +295,15 @@ void dlatsqr_(integer *m, integer *n, integer *mb, integer *nb, doublereal *a, i
     {
         /* Compute the QR factorization of the current block A(I:I+MB-N,1:N) */
         i__3 = *mb - *n;
-        dtpqrt_(&i__3, n, &c__0, nb, &a[a_dim1 + 1], lda, &a[i__ + a_dim1], lda,
-                &t[(ctr * *n + 1) * t_dim1 + 1], ldt, &work[1], info);
+        aocl_lapack_dtpqrt(&i__3, n, &c__0, nb, &a[a_dim1 + 1], lda, &a[i__ + a_dim1], lda,
+                           &t[(ctr * *n + 1) * t_dim1 + 1], ldt, &work[1], info);
         ++ctr;
     }
     /* Compute the QR factorization of the last block A(II:M,1:N) */
     if(ii <= *m)
     {
-        dtpqrt_(&kk, n, &c__0, nb, &a[a_dim1 + 1], lda, &a[ii + a_dim1], lda,
-                &t[(ctr * *n + 1) * t_dim1 + 1], ldt, &work[1], info);
+        aocl_lapack_dtpqrt(&kk, n, &c__0, nb, &a[a_dim1 + 1], lda, &a[ii + a_dim1], lda,
+                           &t[(ctr * *n + 1) * t_dim1 + 1], ldt, &work[1], info);
     }
     work[1] = (doublereal)(*n * *nb);
     AOCL_DTL_TRACE_LOG_EXIT

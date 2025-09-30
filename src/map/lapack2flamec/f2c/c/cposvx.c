@@ -43,7 +43,7 @@
 /* > \verbatim */
 /* > */
 /* > CPOSVX uses the Cholesky factorization A = U**H*U or A = L*L**H to */
-/* > compute the solution to a complex system of linear equations */
+/* > compute the solution to a scomplex system of linear equations */
 /* > A * X = B, */
 /* > where A is an N-by-N Hermitian positive definite matrix and X and B */
 /* > are N-by-NRHS matrices. */
@@ -303,10 +303,35 @@ if EQUED = 'Y', */
 /* > \ingroup complexPOsolve */
 /* ===================================================================== */
 /* Subroutine */
-void cposvx_(char *fact, char *uplo, integer *n, integer *nrhs, complex *a, integer *lda,
-             complex *af, integer *ldaf, char *equed, real *s, complex *b, integer *ldb, complex *x,
-             integer *ldx, real *rcond, real *ferr, real *berr, complex *work, real *rwork,
-             integer *info)
+/** Generated wrapper function */
+void cposvx_(char *fact, char *uplo, aocl_int_t *n, aocl_int_t *nrhs, scomplex *a, aocl_int_t *lda,
+             scomplex *af, aocl_int_t *ldaf, char *equed, real *s, scomplex *b, aocl_int_t *ldb,
+             scomplex *x, aocl_int_t *ldx, real *rcond, real *ferr, real *berr, scomplex *work,
+             real *rwork, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_cposvx(fact, uplo, n, nrhs, a, lda, af, ldaf, equed, s, b, ldb, x, ldx, rcond, ferr,
+                       berr, work, rwork, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t nrhs_64 = *nrhs;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t ldaf_64 = *ldaf;
+    aocl_int64_t ldb_64 = *ldb;
+    aocl_int64_t ldx_64 = *ldx;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_cposvx(fact, uplo, &n_64, &nrhs_64, a, &lda_64, af, &ldaf_64, equed, s, b, &ldb_64,
+                       x, &ldx_64, rcond, ferr, berr, work, rwork, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_cposvx(char *fact, char *uplo, aocl_int64_t *n, aocl_int64_t *nrhs, scomplex *a,
+                        aocl_int64_t *lda, scomplex *af, aocl_int64_t *ldaf, char *equed, real *s,
+                        scomplex *b, aocl_int64_t *ldb, scomplex *x, aocl_int64_t *ldx, real *rcond,
+                        real *ferr, real *berr, scomplex *work, real *rwork, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -325,40 +350,20 @@ void cposvx_(char *fact, char *uplo, integer *n, integer *nrhs, complex *a, inte
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
-    integer a_dim1, a_offset, af_dim1, af_offset, b_dim1, b_offset, x_dim1, x_offset, i__1, i__2,
-        i__3, i__4, i__5;
+    aocl_int64_t a_dim1, a_offset, af_dim1, af_offset, b_dim1, b_offset, x_dim1, x_offset, i__1,
+        i__2, i__3, i__4, i__5;
     real r__1, r__2;
-    complex q__1;
+    scomplex q__1;
     /* Local variables */
-    integer i__, j;
+    aocl_int64_t i__, j;
     real amax, smin, smax;
-    extern logical lsame_(char *, char *, integer, integer);
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     real scond, anorm;
     logical equil, rcequ;
-    extern real clanhe_(char *, char *, integer *, complex *, integer *, real *);
-    extern /* Subroutine */
-        void
-        claqhe_(char *, integer *, complex *, integer *, real *, real *, real *, char *);
     extern real slamch_(char *);
     logical nofact;
-    extern /* Subroutine */
-        void
-        clacpy_(char *, integer *, integer *, complex *, integer *, complex *, integer *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real bignum;
-    extern /* Subroutine */
-        void
-        cpocon_(char *, integer *, complex *, integer *, real *, real *, complex *, real *,
-                integer *);
-    integer infequ;
-    extern /* Subroutine */
-        void
-        cpoequ_(integer *, complex *, integer *, real *, real *, real *, integer *),
-        cporfs_(char *, integer *, integer *, complex *, integer *, complex *, integer *, complex *,
-                integer *, complex *, integer *, real *, real *, complex *, real *, integer *),
-        cpotrf_(char *, integer *, complex *, integer *, integer *),
-        cpotrs_(char *, integer *, integer *, complex *, integer *, complex *, integer *,
-                integer *);
+    aocl_int64_t infequ;
     real smlnum;
     /* -- LAPACK driver routine (version 3.4.1) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -491,18 +496,18 @@ void cposvx_(char *fact, char *uplo, integer *n, integer *nrhs, complex *a, inte
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("CPOSVX", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("CPOSVX", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
     if(equil)
     {
         /* Compute row and column scalings to equilibrate the matrix A. */
-        cpoequ_(n, &a[a_offset], lda, &s[1], &scond, &amax, &infequ);
+        aocl_lapack_cpoequ(n, &a[a_offset], lda, &s[1], &scond, &amax, &infequ);
         if(infequ == 0)
         {
             /* Equilibrate the matrix. */
-            claqhe_(uplo, n, &a[a_offset], lda, &s[1], &scond, &amax, equed);
+            aocl_lapack_claqhe(uplo, n, &a[a_offset], lda, &s[1], &scond, &amax, equed);
             rcequ = lsame_(equed, "Y", 1, 1);
         }
     }
@@ -530,8 +535,8 @@ void cposvx_(char *fact, char *uplo, integer *n, integer *nrhs, complex *a, inte
     if(nofact || equil)
     {
         /* Compute the Cholesky factorization A = U**H *U or A = L*L**H. */
-        clacpy_(uplo, n, n, &a[a_offset], lda, &af[af_offset], ldaf);
-        cpotrf_(uplo, n, &af[af_offset], ldaf, info);
+        aocl_lapack_clacpy(uplo, n, n, &a[a_offset], lda, &af[af_offset], ldaf);
+        aocl_lapack_cpotrf(uplo, n, &af[af_offset], ldaf, info);
         /* Return if INFO is non-zero. */
         if(*info > 0)
         {
@@ -541,16 +546,16 @@ void cposvx_(char *fact, char *uplo, integer *n, integer *nrhs, complex *a, inte
         }
     }
     /* Compute the norm of the matrix A. */
-    anorm = clanhe_("1", uplo, n, &a[a_offset], lda, &rwork[1]);
+    anorm = aocl_lapack_clanhe("1", uplo, n, &a[a_offset], lda, &rwork[1]);
     /* Compute the reciprocal of the condition number of A. */
-    cpocon_(uplo, n, &af[af_offset], ldaf, &anorm, rcond, &work[1], &rwork[1], info);
+    aocl_lapack_cpocon(uplo, n, &af[af_offset], ldaf, &anorm, rcond, &work[1], &rwork[1], info);
     /* Compute the solution matrix X. */
-    clacpy_("Full", n, nrhs, &b[b_offset], ldb, &x[x_offset], ldx);
-    cpotrs_(uplo, n, nrhs, &af[af_offset], ldaf, &x[x_offset], ldx, info);
+    aocl_lapack_clacpy("Full", n, nrhs, &b[b_offset], ldb, &x[x_offset], ldx);
+    aocl_lapack_cpotrs(uplo, n, nrhs, &af[af_offset], ldaf, &x[x_offset], ldx, info);
     /* Use iterative refinement to improve the computed solution and */
     /* compute error bounds and backward error estimates for it. */
-    cporfs_(uplo, n, nrhs, &a[a_offset], lda, &af[af_offset], ldaf, &b[b_offset], ldb, &x[x_offset],
-            ldx, &ferr[1], &berr[1], &work[1], &rwork[1], info);
+    aocl_lapack_cporfs(uplo, n, nrhs, &a[a_offset], lda, &af[af_offset], ldaf, &b[b_offset], ldb,
+                       &x[x_offset], ldx, &ferr[1], &berr[1], &work[1], &rwork[1], info);
     /* Transform the solution matrix X to a solution of the original */
     /* system. */
     if(rcequ)

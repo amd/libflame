@@ -107,10 +107,23 @@ array.f"> */
 /* > \ingroup auxOTHERauxiliary */
 
 /*  ===================================================================== */
-/* Subroutine */ int xerbla_array_(char *srname_array__, integer *srname_len__, integer *info)
+/* Subroutine */ /** Generated wrapper function */
+int xerbla_array_(char *srname_array__, aocl_int_t *srname_len__, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    return aocl_lapack_xerbla_array(srname_array__, srname_len__, info);
+#else
+    aocl_int64_t srname_len___64 = *srname_len__;
+    aocl_int64_t info_64 = *info;
+
+    return aocl_lapack_xerbla_array(srname_array__, &srname_len___64, &info_64);
+#endif
+}
+
+int aocl_lapack_xerbla_array(char *srname_array__, aocl_int64_t *srname_len__, aocl_int64_t *info)
 {
     /* System generated locals */
-    integer i__1, i__2, i__3;
+    aocl_int64_t i__1, i__2, i__3;
 
     /* Builtin functions */
     /* Subroutine */
@@ -118,8 +131,7 @@ array.f"> */
     integer i_len(char *, ftnlen);
 
     /* Local variables */
-    integer i__;
-    extern /* Subroutine */ int xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    aocl_int64_t i__;
     char srname[32];
 
     /*  -- LAPACK auxiliary routine (version 3.4.0) -- */
@@ -156,6 +168,6 @@ array.f"> */
     {
         *(unsigned char *)&srname[i__ - 1] = *(unsigned char *)&srname_array__[i__];
     }
-    xerbla_(srname, info, i__1);
+    aocl_blas_xerbla(srname, info, i__1);
     return 0;
 } /* xerbla_array__ */

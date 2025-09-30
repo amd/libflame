@@ -1,11 +1,11 @@
 #include "FLA_f2c.h"
 #include "FLA_lapack2flame_return_defs.h"
 
-int zgehd2_check(integer *n, integer *ilo, integer *ihi, dcomplex *a, integer *lda, dcomplex *tau,
-                 dcomplex *work, integer *info)
+int zgehd2_check(aocl_int64_t *n, aocl_int64_t *ilo, aocl_int64_t *ihi, dcomplex *a, aocl_int64_t *lda, dcomplex *tau,
+                 dcomplex *work, aocl_int64_t *info)
 {
     /* System generated locals */
-    integer a_dim1, a_offset, i__1;
+    aocl_int64_t a_dim1, a_offset, i__1;
 
     /* Parameter adjustments */
     a_dim1 = *lda;
@@ -34,7 +34,7 @@ int zgehd2_check(integer *n, integer *ilo, integer *ihi, dcomplex *a, integer *l
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("ZGEHD2", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("ZGEHD2", &i__1, (ftnlen)6);
         return LAPACK_FAILURE;
     }
     return LAPACK_SUCCESS;

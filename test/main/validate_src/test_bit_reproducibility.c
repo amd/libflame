@@ -302,7 +302,7 @@ integer store_load_input_matrices(char BRT_char, char *filename, integer num_mat
         }                                                \
         case COMPLEX:                                    \
         {                                                \
-            mul = (sizeof(complex) / sizeof(uint32_t));  \
+            mul = (sizeof(scomplex) / sizeof(uint32_t));  \
             break;                                       \
         }                                                \
         case DOUBLE_COMPLEX:                             \

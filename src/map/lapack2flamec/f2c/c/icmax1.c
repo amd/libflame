@@ -74,14 +74,27 @@
 /* > */
 /* > Nick Higham for use with CLACON. */
 /* ===================================================================== */
-integer icmax1_(integer *n, complex *cx, integer *incx)
+/** Generated wrapper function */
+aocl_int_t icmax1_(aocl_int_t *n, scomplex *cx, aocl_int_t *incx)
+{
+#if FLA_ENABLE_ILP64
+    return aocl_lapack_icmax1(n, cx, incx);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t incx_64 = *incx;
+
+    return aocl_lapack_icmax1(&n_64, cx, &incx_64);
+#endif
+}
+
+aocl_int64_t aocl_lapack_icmax1(aocl_int64_t *n, scomplex *cx, aocl_int64_t *incx)
 {
     /* System generated locals */
-    integer ret_val, i__1;
+    aocl_int64_t ret_val, i__1;
     /* Builtin functions */
-    double c_abs(complex *);
+    double c_abs(scomplex *);
     /* Local variables */
-    integer i__, ix;
+    aocl_int64_t i__, ix;
     real smax;
     /* -- LAPACK auxiliary routine (version 3.7.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */

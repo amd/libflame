@@ -114,7 +114,7 @@
     /* Free matrices */                                             \
     if(jobv != FLA_SVD_VECTORS_NONE)                                \
     {                                                               \
-        /* if V is flipped abd complex, then apply conjugate */     \
+        /* if V is flipped abd scomplex, then apply conjugate */     \
         if(FLA_Obj_is_complex(Vt) == TRUE)                          \
             FLA_Conjugate(Vt);                                      \
         FLA_Obj_free_without_buffer(&Vt);                           \

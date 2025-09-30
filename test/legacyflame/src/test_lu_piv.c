@@ -397,10 +397,12 @@ void FLA_GETRF( integer m,
         double       time_min   = 1e9;
 	integer lda;
 	integer* p;
+	fla_dim_t* p_buff; 
 
 	lda     = (integer)FLA_Obj_col_stride( A );
-        p     = ( integer * ) FLA_INT_PTR( p_obj );
-        
+    p     = ( integer * ) FLA_malloc( fla_min( m, n ) * sizeof( integer ) );
+	p_buff = ( fla_dim_t * ) FLA_INT_PTR( p_obj );
+	        
         switch( datatype )
         {
                 case FLA_FLOAT:
@@ -468,6 +470,12 @@ void FLA_GETRF( integer m,
                         break;
                 }
         }
+		/* copy p to p_buff using explicit for */
+		for( i = 0; i < fla_min( m, n ); i++ )
+		{
+			p_buff[i] = (fla_dim_t)p[i];
+		}
+		FLA_free( p );
         *time_min_ = time_min;
 }
 

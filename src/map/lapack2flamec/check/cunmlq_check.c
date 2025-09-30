@@ -1,23 +1,23 @@
 #include "FLA_f2c.h"
 #include "FLA_lapack2flame_return_defs.h"
-static integer c__1 = 1;
-static integer c_n1 = -1;
+static aocl_int64_t c__1 = 1;
+static aocl_int64_t c_n1 = -1;
 
-int cunmlq_check(char *side, char *trans, integer *m, integer *n, integer *k, scomplex *a,
-                 integer *lda, scomplex *tau, scomplex *c__, integer *ldc, scomplex *work,
-                 integer *lwork, integer *info)
+int cunmlq_check(char *side, char *trans, aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *k, scomplex *a,
+                 aocl_int64_t *lda, scomplex *tau, scomplex *c__, aocl_int64_t *ldc, scomplex *work,
+                 aocl_int64_t *lwork, aocl_int64_t *info)
 {
     /* System generated locals */
-    integer a_dim1, a_offset, c_dim1, c_offset, i__1, i__2;
+    aocl_int64_t a_dim1, a_offset, c_dim1, c_offset, i__1, i__2;
     char ch__1[2];
     /* Builtin functions */
     /* Subroutine */
 
     /* Local variables */
-    integer nb, nq, nw;
+    aocl_int64_t nb, nq, nw;
     logical left;
     logical notran;
-    integer lwkopt;
+    aocl_int64_t lwkopt;
     logical lquery;
 
     /* Parameter adjustments */
@@ -83,7 +83,7 @@ int cunmlq_check(char *side, char *trans, integer *m, integer *n, integer *k, sc
         /* is used to define the local array T. */
         /* Computing MIN */
         i__1 = 64;
-        i__2 = ilaenv_(&c__1, "CUNMLQ", ch__1, m, n, k, &c_n1); // , expr subst
+        i__2 = aocl_lapack_ilaenv(&c__1, "CUNMLQ", ch__1, m, n, k, &c_n1); // , expr subst
         nb = fla_min(i__1, i__2);
         lwkopt = fla_max(1, nw) * nb;
         work[1].real = (float)lwkopt;
@@ -92,7 +92,7 @@ int cunmlq_check(char *side, char *trans, integer *m, integer *n, integer *k, sc
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("CUNMLQ", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("CUNMLQ", &i__1, (ftnlen)6);
         return LAPACK_FAILURE;
     }
     else if(lquery)

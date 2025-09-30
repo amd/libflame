@@ -4,8 +4,8 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
-static integer c_n1 = -1;
+static aocl_int64_t c__1 = 1;
+static aocl_int64_t c_n1 = -1;
 /* > \brief \b ZUNMTR */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -41,13 +41,13 @@ static integer c_n1 = -1;
 /* > */
 /* > \verbatim */
 /* > */
-/* > ZUNMTR overwrites the general complex M-by-N matrix C with */
+/* > ZUNMTR overwrites the general scomplex M-by-N matrix C with */
 /* > */
 /* > SIDE = 'L' SIDE = 'R' */
 /* > TRANS = 'N': Q * C C * Q */
 /* > TRANS = 'C': Q**H * C C * Q**H */
 /* > */
-/* > where Q is a complex unitary matrix of order nq, with nq = m if */
+/* > where Q is a scomplex unitary matrix of order nq, with nq = m if */
 /* > SIDE = 'L' and nq = n if SIDE = 'R'. Q is defined as the product of */
 /* > nq-1 elementary reflectors, as returned by ZHETRD: */
 /* > */
@@ -175,38 +175,51 @@ the routine */
 /* > \ingroup complex16OTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void zunmtr_(char *side, char *uplo, char *trans, integer *m, integer *n, doublecomplex *a,
-             integer *lda, doublecomplex *tau, doublecomplex *c__, integer *ldc,
-             doublecomplex *work, integer *lwork, integer *info)
+/** Generated wrapper function */
+void zunmtr_(char *side, char *uplo, char *trans, aocl_int_t *m, aocl_int_t *n, dcomplex *a,
+             aocl_int_t *lda, dcomplex *tau, dcomplex *c__, aocl_int_t *ldc,
+             dcomplex *work, aocl_int_t *lwork, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_zunmtr(side, uplo, trans, m, n, a, lda, tau, c__, ldc, work, lwork, info);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t ldc_64 = *ldc;
+    aocl_int64_t lwork_64 = *lwork;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_zunmtr(side, uplo, trans, &m_64, &n_64, a, &lda_64, tau, c__, &ldc_64, work,
+                       &lwork_64, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_zunmtr(char *side, char *uplo, char *trans, aocl_int64_t *m, aocl_int64_t *n,
+                        dcomplex *a, aocl_int64_t *lda, dcomplex *tau, dcomplex *c__,
+                        aocl_int64_t *ldc, dcomplex *work, aocl_int64_t *lwork,
+                        aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zunmtr inputs: side %c, uplo %c, trans %c, m %" FLA_IS ", n %" FLA_IS
                       ", lda %" FLA_IS ", ldc %" FLA_IS ", lwork %" FLA_IS "",
                       *side, *uplo, *trans, *m, *n, *lda, *ldc, *lwork);
     /* System generated locals */
-    integer a_dim1, a_offset, c_dim1, c_offset, i__2, i__3;
+    aocl_int64_t a_dim1, a_offset, c_dim1, c_offset, i__2, i__3;
     char ch__1[2];
     /* Builtin functions */
     /* Subroutine */
 
     /* Local variables */
-    integer i1, i2, nb, mi, ni, nq, nw;
+    aocl_int64_t i1, i2, nb, mi, ni, nq, nw;
     logical left;
-    extern logical lsame_(char *, char *, integer, integer);
-    integer iinfo;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    aocl_int64_t iinfo;
     logical upper;
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
-    integer lwkopt;
+    aocl_int64_t lwkopt;
     logical lquery;
-    extern /* Subroutine */
-        void
-        zunmql_(char *, char *, integer *, integer *, integer *, doublecomplex *, integer *,
-                doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, integer *),
-        zunmqr_(char *, char *, integer *, integer *, integer *, doublecomplex *, integer *,
-                doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, integer *);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -291,13 +304,13 @@ void zunmtr_(char *side, char *uplo, char *trans, integer *m, integer *n, double
             {
                 i__2 = *m - 1;
                 i__3 = *m - 1;
-                nb = ilaenv_(&c__1, "ZUNMQL", ch__1, &i__2, n, &i__3, &c_n1);
+                nb = aocl_lapack_ilaenv(&c__1, "ZUNMQL", ch__1, &i__2, n, &i__3, &c_n1);
             }
             else
             {
                 i__2 = *n - 1;
                 i__3 = *n - 1;
-                nb = ilaenv_(&c__1, "ZUNMQL", ch__1, m, &i__2, &i__3, &c_n1);
+                nb = aocl_lapack_ilaenv(&c__1, "ZUNMQL", ch__1, m, &i__2, &i__3, &c_n1);
             }
         }
         else
@@ -306,13 +319,13 @@ void zunmtr_(char *side, char *uplo, char *trans, integer *m, integer *n, double
             {
                 i__2 = *m - 1;
                 i__3 = *m - 1;
-                nb = ilaenv_(&c__1, "ZUNMQR", ch__1, &i__2, n, &i__3, &c_n1);
+                nb = aocl_lapack_ilaenv(&c__1, "ZUNMQR", ch__1, &i__2, n, &i__3, &c_n1);
             }
             else
             {
                 i__2 = *n - 1;
                 i__3 = *n - 1;
-                nb = ilaenv_(&c__1, "ZUNMQR", ch__1, m, &i__2, &i__3, &c_n1);
+                nb = aocl_lapack_ilaenv(&c__1, "ZUNMQR", ch__1, m, &i__2, &i__3, &c_n1);
             }
         }
         lwkopt = fla_max(1, nw) * nb;
@@ -322,7 +335,7 @@ void zunmtr_(char *side, char *uplo, char *trans, integer *m, integer *n, double
     if(*info != 0)
     {
         i__2 = -(*info);
-        xerbla_("ZUNMTR", &i__2, (ftnlen)6);
+        aocl_blas_xerbla("ZUNMTR", &i__2, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -353,8 +366,8 @@ void zunmtr_(char *side, char *uplo, char *trans, integer *m, integer *n, double
     {
         /* Q was determined by a call to ZHETRD with UPLO = 'U' */
         i__2 = nq - 1;
-        zunmql_(side, trans, &mi, &ni, &i__2, &a[(a_dim1 << 1) + 1], lda, &tau[1], &c__[c_offset],
-                ldc, &work[1], lwork, &iinfo);
+        aocl_lapack_zunmql(side, trans, &mi, &ni, &i__2, &a[(a_dim1 << 1) + 1], lda, &tau[1],
+                           &c__[c_offset], ldc, &work[1], lwork, &iinfo);
     }
     else
     {
@@ -370,8 +383,8 @@ void zunmtr_(char *side, char *uplo, char *trans, integer *m, integer *n, double
             i2 = 2;
         }
         i__2 = nq - 1;
-        zunmqr_(side, trans, &mi, &ni, &i__2, &a[a_dim1 + 2], lda, &tau[1], &c__[i1 + i2 * c_dim1],
-                ldc, &work[1], lwork, &iinfo);
+        aocl_lapack_zunmqr(side, trans, &mi, &ni, &i__2, &a[a_dim1 + 2], lda, &tau[1],
+                           &c__[i1 + i2 * c_dim1], ldc, &work[1], lwork, &iinfo);
     }
     work[1].r = (doublereal)lwkopt;
     work[1].i = 0.; // , expr subst

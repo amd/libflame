@@ -4,7 +4,7 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
+static aocl_int64_t c__1 = 1;
 static doublereal c_b36 = .5;
 /* > \brief \b DLATPS solves a triangular system of equations with the matrix held in packed
  * storage. */
@@ -233,45 +233,47 @@ b(i), i=1,..,n}
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void dlatps_(char *uplo, char *trans, char *diag, char *normin, integer *n, doublereal *ap,
-             doublereal *x, doublereal *scale, doublereal *cnorm, integer *info)
+/** Generated wrapper function */
+void dlatps_(char *uplo, char *trans, char *diag, char *normin, aocl_int_t *n, doublereal *ap,
+             doublereal *x, doublereal *scale, doublereal *cnorm, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_dlatps(uplo, trans, diag, normin, n, ap, x, scale, cnorm, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_dlatps(uplo, trans, diag, normin, &n_64, ap, x, scale, cnorm, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_dlatps(char *uplo, char *trans, char *diag, char *normin, aocl_int64_t *n,
+                        doublereal *ap, doublereal *x, doublereal *scale, doublereal *cnorm,
+                        aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dlatps inputs: uplo %c, trans %c, diag %c, normin %c, n %" FLA_IS "", *uplo,
                       *trans, *normin, *n);
     /* System generated locals */
-    integer i__1, i__2, i__3;
+    aocl_int64_t i__1, i__2, i__3;
     doublereal d__1, d__2, d__3;
     /* Local variables */
-    integer i__, j, ip;
+    aocl_int64_t i__, j, ip;
     doublereal xj, rec, tjj;
-    integer jinc, jlen;
-    extern doublereal ddot_(integer *, doublereal *, integer *, doublereal *, integer *);
+    aocl_int64_t jinc, jlen;
     doublereal xbnd;
-    integer imax;
+    aocl_int64_t imax;
     doublereal tmax, tjjs, xmax, grow, sumj;
-    extern /* Subroutine */
-        void
-        dscal_(integer *, doublereal *, doublereal *, integer *);
-    extern logical lsame_(char *, char *, integer, integer);
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     doublereal tscal, uscal;
-    extern doublereal dasum_(integer *, doublereal *, integer *);
-    integer jlast;
-    extern /* Subroutine */
-        void
-        daxpy_(integer *, doublereal *, doublereal *, integer *, doublereal *, integer *);
+    aocl_int64_t jlast;
     logical upper;
-    extern /* Subroutine */
-        void
-        dtpsv_(char *, char *, char *, integer *, doublereal *, doublereal *, integer *);
     extern doublereal dlamch_(char *);
-    extern integer idamax_(integer *, doublereal *, integer *);
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal bignum;
     logical notran;
-    integer jfirst;
+    aocl_int64_t jfirst;
     doublereal smlnum;
     logical nounit;
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
@@ -328,7 +330,7 @@ void dlatps_(char *uplo, char *trans, char *diag, char *normin, integer *n, doub
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("DLATPS", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("DLATPS", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -353,7 +355,7 @@ void dlatps_(char *uplo, char *trans, char *diag, char *normin, integer *n, doub
             for(j = 1; j <= i__1; ++j)
             {
                 i__2 = j - 1;
-                cnorm[j] = dasum_(&i__2, &ap[ip], &c__1);
+                cnorm[j] = aocl_blas_dasum(&i__2, &ap[ip], &c__1);
                 ip += j;
                 /* L10: */
             }
@@ -366,7 +368,7 @@ void dlatps_(char *uplo, char *trans, char *diag, char *normin, integer *n, doub
             for(j = 1; j <= i__1; ++j)
             {
                 i__2 = *n - j;
-                cnorm[j] = dasum_(&i__2, &ap[ip + 1], &c__1);
+                cnorm[j] = aocl_blas_dasum(&i__2, &ap[ip + 1], &c__1);
                 ip = ip + *n - j + 1;
                 /* L20: */
             }
@@ -375,7 +377,7 @@ void dlatps_(char *uplo, char *trans, char *diag, char *normin, integer *n, doub
     }
     /* Scale the column norms by TSCAL if the maximum element in CNORM is */
     /* greater than BIGNUM. */
-    imax = idamax_(n, &cnorm[1], &c__1);
+    imax = aocl_blas_idamax(n, &cnorm[1], &c__1);
     tmax = cnorm[imax];
     if(tmax <= bignum)
     {
@@ -384,11 +386,11 @@ void dlatps_(char *uplo, char *trans, char *diag, char *normin, integer *n, doub
     else
     {
         tscal = 1. / (smlnum * tmax);
-        dscal_(n, &tscal, &cnorm[1], &c__1);
+        aocl_blas_dscal(n, &tscal, &cnorm[1], &c__1);
     }
     /* Compute a bound on the computed solution vector to see if the */
     /* Level 2 BLAS routine DTPSV can be used. */
-    j = idamax_(n, &x[1], &c__1);
+    j = aocl_blas_idamax(n, &x[1], &c__1);
     xmax = (d__1 = x[j], f2c_dabs(d__1));
     xbnd = xmax;
     if(notran)
@@ -568,7 +570,7 @@ void dlatps_(char *uplo, char *trans, char *diag, char *normin, integer *n, doub
     {
         /* Use the Level 2 BLAS solve if the reciprocal of the bound on */
         /* elements of X is not too small. */
-        dtpsv_(uplo, trans, diag, n, &ap[1], &x[1], &c__1);
+        aocl_blas_dtpsv(uplo, trans, diag, n, &ap[1], &x[1], &c__1);
     }
     else
     {
@@ -578,7 +580,7 @@ void dlatps_(char *uplo, char *trans, char *diag, char *normin, integer *n, doub
             /* Scale X so that its components are less than or equal to */
             /* BIGNUM in absolute value. */
             *scale = bignum / xmax;
-            dscal_(n, scale, &x[1], &c__1);
+            aocl_blas_dscal(n, scale, &x[1], &c__1);
             xmax = bignum;
         }
         if(notran)
@@ -613,7 +615,7 @@ void dlatps_(char *uplo, char *trans, char *diag, char *normin, integer *n, doub
                         {
                             /* Scale x by 1/b(j). */
                             rec = 1. / xj;
-                            dscal_(n, &rec, &x[1], &c__1);
+                            aocl_blas_dscal(n, &rec, &x[1], &c__1);
                             *scale *= rec;
                             xmax *= rec;
                         }
@@ -635,7 +637,7 @@ void dlatps_(char *uplo, char *trans, char *diag, char *normin, integer *n, doub
                             /* multiplying x(j) times column j. */
                             rec /= cnorm[j];
                         }
-                        dscal_(n, &rec, &x[1], &c__1);
+                        aocl_blas_dscal(n, &rec, &x[1], &c__1);
                         *scale *= rec;
                         xmax *= rec;
                     }
@@ -666,14 +668,14 @@ void dlatps_(char *uplo, char *trans, char *diag, char *normin, integer *n, doub
                     {
                         /* Scale x by 1/(2*f2c_dabs(x(j))). */
                         rec *= .5;
-                        dscal_(n, &rec, &x[1], &c__1);
+                        aocl_blas_dscal(n, &rec, &x[1], &c__1);
                         *scale *= rec;
                     }
                 }
                 else if(xj * cnorm[j] > bignum - xmax)
                 {
                     /* Scale x by 1/2. */
-                    dscal_(n, &c_b36, &x[1], &c__1);
+                    aocl_blas_dscal(n, &c_b36, &x[1], &c__1);
                     *scale *= .5;
                 }
                 if(upper)
@@ -684,9 +686,9 @@ void dlatps_(char *uplo, char *trans, char *diag, char *normin, integer *n, doub
                         /* x(1:j-1) := x(1:j-1) - x(j) * A(1:j-1,j) */
                         i__3 = j - 1;
                         d__1 = -x[j] * tscal;
-                        daxpy_(&i__3, &d__1, &ap[ip - j + 1], &c__1, &x[1], &c__1);
+                        aocl_blas_daxpy(&i__3, &d__1, &ap[ip - j + 1], &c__1, &x[1], &c__1);
                         i__3 = j - 1;
-                        i__ = idamax_(&i__3, &x[1], &c__1);
+                        i__ = aocl_blas_idamax(&i__3, &x[1], &c__1);
                         xmax = (d__1 = x[i__], f2c_dabs(d__1));
                     }
                     ip -= j;
@@ -699,9 +701,9 @@ void dlatps_(char *uplo, char *trans, char *diag, char *normin, integer *n, doub
                         /* x(j+1:n) := x(j+1:n) - x(j) * A(j+1:n,j) */
                         i__3 = *n - j;
                         d__1 = -x[j] * tscal;
-                        daxpy_(&i__3, &d__1, &ap[ip + 1], &c__1, &x[j + 1], &c__1);
+                        aocl_blas_daxpy(&i__3, &d__1, &ap[ip + 1], &c__1, &x[j + 1], &c__1);
                         i__3 = *n - j;
-                        i__ = j + idamax_(&i__3, &x[j + 1], &c__1);
+                        i__ = j + aocl_blas_idamax(&i__3, &x[j + 1], &c__1);
                         xmax = (d__1 = x[i__], f2c_dabs(d__1));
                     }
                     ip = ip + *n - j + 1;
@@ -747,7 +749,7 @@ void dlatps_(char *uplo, char *trans, char *diag, char *normin, integer *n, doub
                     }
                     if(rec < 1.)
                     {
-                        dscal_(n, &rec, &x[1], &c__1);
+                        aocl_blas_dscal(n, &rec, &x[1], &c__1);
                         *scale *= rec;
                         xmax *= rec;
                     }
@@ -760,12 +762,12 @@ void dlatps_(char *uplo, char *trans, char *diag, char *normin, integer *n, doub
                     if(upper)
                     {
                         i__3 = j - 1;
-                        sumj = ddot_(&i__3, &ap[ip - j + 1], &c__1, &x[1], &c__1);
+                        sumj = aocl_blas_ddot(&i__3, &ap[ip - j + 1], &c__1, &x[1], &c__1);
                     }
                     else if(j < *n)
                     {
                         i__3 = *n - j;
-                        sumj = ddot_(&i__3, &ap[ip + 1], &c__1, &x[j + 1], &c__1);
+                        sumj = aocl_blas_ddot(&i__3, &ap[ip + 1], &c__1, &x[j + 1], &c__1);
                     }
                 }
                 else
@@ -819,7 +821,7 @@ void dlatps_(char *uplo, char *trans, char *diag, char *normin, integer *n, doub
                             {
                                 /* Scale X by 1/f2c_dabs(x(j)). */
                                 rec = 1. / xj;
-                                dscal_(n, &rec, &x[1], &c__1);
+                                aocl_blas_dscal(n, &rec, &x[1], &c__1);
                                 *scale *= rec;
                                 xmax *= rec;
                             }
@@ -833,7 +835,7 @@ void dlatps_(char *uplo, char *trans, char *diag, char *normin, integer *n, doub
                         {
                             /* Scale x by (1/f2c_dabs(x(j)))*f2c_dabs(A(j,j))*BIGNUM. */
                             rec = tjj * bignum / xj;
-                            dscal_(n, &rec, &x[1], &c__1);
+                            aocl_blas_dscal(n, &rec, &x[1], &c__1);
                             *scale *= rec;
                             xmax *= rec;
                         }
@@ -876,7 +878,7 @@ void dlatps_(char *uplo, char *trans, char *diag, char *normin, integer *n, doub
     if(tscal != 1.)
     {
         d__1 = 1. / tscal;
-        dscal_(n, &d__1, &cnorm[1], &c__1);
+        aocl_blas_dscal(n, &d__1, &cnorm[1], &c__1);
     }
     AOCL_DTL_TRACE_LOG_EXIT
     return;

@@ -48,7 +48,7 @@
 /* > \verbatim */
 /* > */
 /* > CPOSVXX uses the Cholesky factorization A = U**T*U or A = L*L**T */
-/* > to compute the solution to a complex system of linear equations */
+/* > to compute the solution to a scomplex system of linear equations */
 /* > A * X = B, where A is an N-by-N Hermitian positive definite matrix */
 /* > and X and B are N-by-NRHS matrices. */
 /* > */
@@ -499,11 +499,11 @@ defaults */
 /* > \ingroup complexPOsolve */
 /* ===================================================================== */
 /* Subroutine */
-void cposvxx_(char *fact, char *uplo, integer *n, integer *nrhs, complex *a, integer *lda,
-              complex *af, integer *ldaf, char *equed, real *s, complex *b, integer *ldb,
-              complex *x, integer *ldx, real *rcond, real *rpvgrw, real *berr,
+void cposvxx_(char *fact, char *uplo, integer *n, integer *nrhs, scomplex *a, integer *lda,
+              scomplex *af, integer *ldaf, char *equed, real *s, scomplex *b, integer *ldb,
+              scomplex *x, integer *ldx, real *rcond, real *rpvgrw, real *berr,
               integer *n_err_bnds__, real *err_bnds_norm__, real *err_bnds_comp__, integer *nparams,
-              real *params, complex *work, real *rwork, integer *info)
+              real *params, scomplex *work, real *rwork, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -528,35 +528,35 @@ void cposvxx_(char *fact, char *uplo, integer *n, integer *nrhs, complex *a, int
     /* Local variables */
     integer j;
     real amax, smin, smax;
-    extern real cla_porpvgrw_(char *, integer *, complex *, integer *, complex *, integer *,
+    extern real cla_porpvgrw_(char *, integer *, scomplex *, integer *, scomplex *, integer *,
                               real *);
     extern logical lsame_(char *, char *, integer, integer);
     real scond;
     logical equil, rcequ;
     extern /* Subroutine */
         void
-        claqhe_(char *, integer *, complex *, integer *, real *, real *, real *, char *);
+        claqhe_(char *, integer *, scomplex *, integer *, real *, real *, real *, char *);
     extern real slamch_(char *);
     logical nofact;
     extern /* Subroutine */
         void
-        clacpy_(char *, integer *, integer *, complex *, integer *, complex *, integer *),
+        clacpy_(char *, integer *, integer *, scomplex *, integer *, scomplex *, integer *),
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real bignum;
     integer infequ;
     extern /* Subroutine */
         void
-        cpotrf_(char *, integer *, complex *, integer *, integer *),
-        cpotrs_(char *, integer *, integer *, complex *, integer *, complex *, integer *,
+        cpotrf_(char *, integer *, scomplex *, integer *, integer *),
+        cpotrs_(char *, integer *, integer *, scomplex *, integer *, scomplex *, integer *,
                 integer *);
     real smlnum;
     extern /* Subroutine */
         void
-        clascl2_(integer *, integer *, real *, complex *, integer *),
-        cpoequb_(integer *, complex *, integer *, real *, real *, real *, integer *),
-        cporfsx_(char *, char *, integer *, integer *, complex *, integer *, complex *, integer *,
-                 real *, complex *, integer *, complex *, integer *, real *, real *, integer *,
-                 real *, real *, integer *, real *, complex *, real *, integer *);
+        clascl2_(integer *, integer *, real *, scomplex *, integer *),
+        cpoequb_(integer *, scomplex *, integer *, real *, real *, real *, integer *),
+        cporfsx_(char *, char *, integer *, integer *, scomplex *, integer *, scomplex *, integer *,
+                 real *, scomplex *, integer *, scomplex *, integer *, real *, real *, integer *,
+                 real *, real *, integer *, real *, scomplex *, real *, integer *);
     /* -- LAPACK driver routine (version 3.7.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */

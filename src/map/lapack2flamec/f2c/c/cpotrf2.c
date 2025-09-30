@@ -4,7 +4,7 @@
  -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for
  libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static complex c_b1 = {1.f, 0.f};
+static scomplex c_b1 = {{1.f}, {0.f}};
 static real c_b11 = -1.f;
 static real c_b12 = 1.f;
 /* > \brief \b CPOTRF2 */
@@ -101,7 +101,24 @@ static real c_b12 = 1.f;
 /* > \ingroup complexPOcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void cpotrf2_(char *uplo, integer *n, complex *a, integer *lda, integer *info)
+/** Generated wrapper function */
+void cpotrf2_(char *uplo, aocl_int_t *n, scomplex *a, aocl_int_t *lda, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_cpotrf2(uplo, n, a, lda, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_cpotrf2(uplo, &n_64, a, &lda_64, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_cpotrf2(char *uplo, aocl_int64_t *n, scomplex *a, aocl_int64_t *lda,
+                         aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -114,27 +131,16 @@ void cpotrf2_(char *uplo, integer *n, complex *a, integer *lda, integer *info)
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
-    integer a_dim1, a_offset, i__1;
+    aocl_int64_t a_dim1, a_offset, i__1;
     real r__1;
     /* Builtin functions */
     double sqrt(doublereal);
     /* Local variables */
-    integer n1, n2;
+    aocl_int64_t n1, n2;
     real ajj;
-    extern /* Subroutine */
-        void
-        cherk_(char *, char *, integer *, integer *, real *, complex *, integer *, real *,
-               complex *, integer *);
-    extern logical lsame_(char *, char *, integer, integer);
-    integer iinfo;
-    extern /* Subroutine */
-        void
-        ctrsm_(char *, char *, char *, char *, integer *, integer *, complex *, complex *,
-               integer *, complex *, integer *);
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    aocl_int64_t iinfo;
     logical upper;
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern logical sisnan_(real *);
     /* -- LAPACK computational routine (version 3.7.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -179,7 +185,7 @@ void cpotrf2_(char *uplo, integer *n, complex *a, integer *lda, integer *info)
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("CPOTRF2", &i__1, (ftnlen)7);
+        aocl_blas_xerbla("CPOTRF2", &i__1, (ftnlen)7);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
@@ -213,7 +219,7 @@ void cpotrf2_(char *uplo, integer *n, complex *a, integer *lda, integer *info)
         n1 = *n / 2;
         n2 = *n - n1;
         /* Factor A11 */
-        cpotrf2_(uplo, &n1, &a[a_dim1 + 1], lda, &iinfo);
+        aocl_lapack_cpotrf2(uplo, &n1, &a[a_dim1 + 1], lda, &iinfo);
         if(iinfo != 0)
         {
             *info = iinfo;
@@ -224,12 +230,12 @@ void cpotrf2_(char *uplo, integer *n, complex *a, integer *lda, integer *info)
         if(upper)
         {
             /* Update and scale A12 */
-            ctrsm_("L", "U", "C", "N", &n1, &n2, &c_b1, &a[a_dim1 + 1], lda,
-                   &a[(n1 + 1) * a_dim1 + 1], lda);
+            aocl_blas_ctrsm("L", "U", "C", "N", &n1, &n2, &c_b1, &a[a_dim1 + 1], lda,
+                            &a[(n1 + 1) * a_dim1 + 1], lda);
             /* Update and factor A22 */
-            cherk_(uplo, "C", &n2, &n1, &c_b11, &a[(n1 + 1) * a_dim1 + 1], lda, &c_b12,
-                   &a[n1 + 1 + (n1 + 1) * a_dim1], lda);
-            cpotrf2_(uplo, &n2, &a[n1 + 1 + (n1 + 1) * a_dim1], lda, &iinfo);
+            aocl_blas_cherk(uplo, "C", &n2, &n1, &c_b11, &a[(n1 + 1) * a_dim1 + 1], lda, &c_b12,
+                            &a[n1 + 1 + (n1 + 1) * a_dim1], lda);
+            aocl_lapack_cpotrf2(uplo, &n2, &a[n1 + 1 + (n1 + 1) * a_dim1], lda, &iinfo);
             if(iinfo != 0)
             {
                 *info = iinfo + n1;
@@ -241,12 +247,12 @@ void cpotrf2_(char *uplo, integer *n, complex *a, integer *lda, integer *info)
         else
         {
             /* Update and scale A21 */
-            ctrsm_("R", "L", "C", "N", &n2, &n1, &c_b1, &a[a_dim1 + 1], lda, &a[n1 + 1 + a_dim1],
-                   lda);
+            aocl_blas_ctrsm("R", "L", "C", "N", &n2, &n1, &c_b1, &a[a_dim1 + 1], lda,
+                            &a[n1 + 1 + a_dim1], lda);
             /* Update and factor A22 */
-            cherk_(uplo, "N", &n2, &n1, &c_b11, &a[n1 + 1 + a_dim1], lda, &c_b12,
-                   &a[n1 + 1 + (n1 + 1) * a_dim1], lda);
-            cpotrf2_(uplo, &n2, &a[n1 + 1 + (n1 + 1) * a_dim1], lda, &iinfo);
+            aocl_blas_cherk(uplo, "N", &n2, &n1, &c_b11, &a[n1 + 1 + a_dim1], lda, &c_b12,
+                            &a[n1 + 1 + (n1 + 1) * a_dim1], lda);
+            aocl_lapack_cpotrf2(uplo, &n2, &a[n1 + 1 + (n1 + 1) * a_dim1], lda, &iinfo);
             if(iinfo != 0)
             {
                 *info = iinfo + n1;

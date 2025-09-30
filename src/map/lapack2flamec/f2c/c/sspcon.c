@@ -4,7 +4,7 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
+static aocl_int64_t c__1 = 1;
 /* > \brief \b SSPCON */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -122,26 +122,35 @@ static integer c__1 = 1;
 /* > \ingroup realOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void sspcon_(char *uplo, integer *n, real *ap, integer *ipiv, real *anorm, real *rcond, real *work,
-             integer *iwork, integer *info)
+/** Generated wrapper function */
+void sspcon_(char *uplo, aocl_int_t *n, real *ap, aocl_int_t *ipiv, real *anorm, real *rcond,
+             real *work, aocl_int_t *iwork, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_sspcon(uplo, n, ap, ipiv, anorm, rcond, work, iwork, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_sspcon(uplo, &n_64, ap, ipiv, anorm, rcond, work, iwork, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_sspcon(char *uplo, aocl_int64_t *n, real *ap, aocl_int_t *ipiv, real *anorm,
+                        real *rcond, real *work, aocl_int_t *iwork, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("sspcon inputs: uplo %c, n %" FLA_IS "", *uplo, *n);
     /* System generated locals */
-    integer i__1;
+    aocl_int64_t i__1;
     /* Local variables */
-    integer i__, ip, kase;
-    extern logical lsame_(char *, char *, integer, integer);
+    aocl_int64_t i__, ip, kase;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     integer isave[3];
     logical upper;
-    extern /* Subroutine */
-        void
-        slacn2_(integer *, real *, real *, integer *, real *, integer *, integer *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real ainvnm;
-    extern /* Subroutine */
-        void
-        ssptrs_(char *, integer *, integer *, real *, integer *, real *, integer *, integer *);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -186,7 +195,7 @@ void sspcon_(char *uplo, integer *n, real *ap, integer *ipiv, real *anorm, real 
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("SSPCON", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("SSPCON", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -238,11 +247,11 @@ void sspcon_(char *uplo, integer *n, real *ap, integer *ipiv, real *anorm, real 
     /* Estimate the 1-norm of the inverse. */
     kase = 0;
 L30:
-    slacn2_(n, &work[*n + 1], &work[1], &iwork[1], &ainvnm, &kase, isave);
+    aocl_lapack_slacn2(n, &work[*n + 1], &work[1], &iwork[1], &ainvnm, &kase, isave);
     if(kase != 0)
     {
         /* Multiply by inv(L*D*L**T) or inv(U*D*U**T). */
-        ssptrs_(uplo, n, &c__1, &ap[1], &ipiv[1], &work[1], n, info);
+        aocl_lapack_ssptrs(uplo, n, &c__1, &ap[1], &ipiv[1], &work[1], n, info);
         goto L30;
     }
     /* Compute the estimate of the reciprocal condition number. */

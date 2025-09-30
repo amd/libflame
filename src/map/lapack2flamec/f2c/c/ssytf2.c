@@ -4,7 +4,7 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
+static aocl_int64_t c__1 = 1;
 /* > \brief \b SSYTF2 computes the factorization of a real symmetric indefinite matrix, using the
  * diagonal piv oting method (unblocked algorithm). */
 /* =========== DOCUMENTATION =========== */
@@ -191,40 +191,44 @@ static integer c__1 = 1;
 /* > \endverbatim */
 /* ===================================================================== */
 /* Subroutine */
-void ssytf2_(char *uplo, integer *n, real *a, integer *lda, integer *ipiv, integer *info)
+/** Generated wrapper function */
+void ssytf2_(char *uplo, aocl_int_t *n, real *a, aocl_int_t *lda, aocl_int_t *ipiv,
+             aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_ssytf2(uplo, n, a, lda, ipiv, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_ssytf2(uplo, &n_64, a, &lda_64, ipiv, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_ssytf2(char *uplo, aocl_int64_t *n, real *a, aocl_int64_t *lda, aocl_int_t *ipiv,
+                        aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("ssytf2 inputs: uplo %c, n %" FLA_IS ", lda %" FLA_IS "", *uplo, *n,
-             *lda);
+    AOCL_DTL_SNPRINTF("ssytf2 inputs: uplo %c, n %" FLA_IS ", lda %" FLA_IS "", *uplo, *n, *lda);
     /* System generated locals */
-    integer a_dim1, a_offset, i__1, i__2;
+    aocl_int64_t a_dim1, a_offset, i__1, i__2;
     real r__1, r__2, r__3;
     /* Builtin functions */
     double sqrt(doublereal);
     /* Local variables */
-    integer i__, j, k;
+    aocl_int64_t i__, j, k;
     real t, r1, d11, d12, d21, d22;
-    integer kk, kp;
+    aocl_int64_t kk, kp;
     real wk, wkm1, wkp1;
-    integer imax, jmax;
-    extern /* Subroutine */
-        void
-        ssyr_(char *, integer *, real *, real *, integer *, real *, integer *);
+    aocl_int64_t imax, jmax;
     real alpha;
-    extern logical lsame_(char *, char *, integer, integer);
-    extern /* Subroutine */
-        void
-        sscal_(integer *, real *, real *, integer *);
-    integer kstep;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    aocl_int64_t kstep;
     logical upper;
-    extern /* Subroutine */
-        void
-        sswap_(integer *, real *, integer *, real *, integer *);
     real absakk;
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    extern integer isamax_(integer *, real *, integer *);
     real colmax;
     extern logical sisnan_(real *);
     real rowmax;
@@ -273,7 +277,7 @@ void ssytf2_(char *uplo, integer *n, real *a, integer *lda, integer *ipiv, integ
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("SSYTF2", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("SSYTF2", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -300,7 +304,7 @@ void ssytf2_(char *uplo, integer *n, real *a, integer *lda, integer *ipiv, integ
         if(k > 1)
         {
             i__1 = k - 1;
-            imax = isamax_(&i__1, &a[k * a_dim1 + 1], &c__1);
+            imax = aocl_blas_isamax(&i__1, &a[k * a_dim1 + 1], &c__1);
             colmax = (r__1 = a[imax + k * a_dim1], f2c_abs(r__1));
         }
         else
@@ -329,12 +333,12 @@ void ssytf2_(char *uplo, integer *n, real *a, integer *lda, integer *ipiv, integ
                 /* JMAX is the column-index of the largest off-diagonal */
                 /* element in row IMAX, and ROWMAX is its absolute value */
                 i__1 = k - imax;
-                jmax = imax + isamax_(&i__1, &a[imax + (imax + 1) * a_dim1], lda);
+                jmax = imax + aocl_blas_isamax(&i__1, &a[imax + (imax + 1) * a_dim1], lda);
                 rowmax = (r__1 = a[imax + jmax * a_dim1], f2c_abs(r__1));
                 if(imax > 1)
                 {
                     i__1 = imax - 1;
-                    jmax = isamax_(&i__1, &a[imax * a_dim1 + 1], &c__1);
+                    jmax = aocl_blas_isamax(&i__1, &a[imax * a_dim1 + 1], &c__1);
                     /* Computing MAX */
                     r__2 = rowmax;
                     r__3 = (r__1 = a[jmax + imax * a_dim1], f2c_abs(r__1)); // , expr subst
@@ -365,9 +369,10 @@ void ssytf2_(char *uplo, integer *n, real *a, integer *lda, integer *ipiv, integ
                 /* Interchange rows and columns KK and KP in the leading */
                 /* submatrix A(1:k,1:k) */
                 i__1 = kp - 1;
-                sswap_(&i__1, &a[kk * a_dim1 + 1], &c__1, &a[kp * a_dim1 + 1], &c__1);
+                aocl_blas_sswap(&i__1, &a[kk * a_dim1 + 1], &c__1, &a[kp * a_dim1 + 1], &c__1);
                 i__1 = kk - kp - 1;
-                sswap_(&i__1, &a[kp + 1 + kk * a_dim1], &c__1, &a[kp + (kp + 1) * a_dim1], lda);
+                aocl_blas_sswap(&i__1, &a[kp + 1 + kk * a_dim1], &c__1, &a[kp + (kp + 1) * a_dim1],
+                                lda);
                 t = a[kk + kk * a_dim1];
                 a[kk + kk * a_dim1] = a[kp + kp * a_dim1];
                 a[kp + kp * a_dim1] = t;
@@ -389,10 +394,10 @@ void ssytf2_(char *uplo, integer *n, real *a, integer *lda, integer *ipiv, integ
                 r1 = 1.f / a[k + k * a_dim1];
                 i__1 = k - 1;
                 r__1 = -r1;
-                ssyr_(uplo, &i__1, &r__1, &a[k * a_dim1 + 1], &c__1, &a[a_offset], lda);
+                aocl_blas_ssyr(uplo, &i__1, &r__1, &a[k * a_dim1 + 1], &c__1, &a[a_offset], lda);
                 /* Store U(k) in column k */
                 i__1 = k - 1;
-                sscal_(&i__1, &r1, &a[k * a_dim1 + 1], &c__1);
+                aocl_blas_sscal(&i__1, &r1, &a[k * a_dim1 + 1], &c__1);
             }
             else
             {
@@ -430,12 +435,12 @@ void ssytf2_(char *uplo, integer *n, real *a, integer *lda, integer *ipiv, integ
         /* Store details of the interchanges in IPIV */
         if(kstep == 1)
         {
-            ipiv[k] = kp;
+            ipiv[k] = (aocl_int_t)(kp);
         }
         else
         {
-            ipiv[k] = -kp;
-            ipiv[k - 1] = -kp;
+            ipiv[k] = (aocl_int_t)(-kp);
+            ipiv[k - 1] = (aocl_int_t)(-kp);
         }
         /* Decrease K and return to the start of the main loop */
         k -= kstep;
@@ -462,7 +467,7 @@ void ssytf2_(char *uplo, integer *n, real *a, integer *lda, integer *ipiv, integ
         if(k < *n)
         {
             i__1 = *n - k;
-            imax = k + isamax_(&i__1, &a[k + 1 + k * a_dim1], &c__1);
+            imax = k + aocl_blas_isamax(&i__1, &a[k + 1 + k * a_dim1], &c__1);
             colmax = (r__1 = a[imax + k * a_dim1], f2c_abs(r__1));
         }
         else
@@ -491,12 +496,12 @@ void ssytf2_(char *uplo, integer *n, real *a, integer *lda, integer *ipiv, integ
                 /* JMAX is the column-index of the largest off-diagonal */
                 /* element in row IMAX, and ROWMAX is its absolute value */
                 i__1 = imax - k;
-                jmax = k - 1 + isamax_(&i__1, &a[imax + k * a_dim1], lda);
+                jmax = k - 1 + aocl_blas_isamax(&i__1, &a[imax + k * a_dim1], lda);
                 rowmax = (r__1 = a[imax + jmax * a_dim1], f2c_abs(r__1));
                 if(imax < *n)
                 {
                     i__1 = *n - imax;
-                    jmax = imax + isamax_(&i__1, &a[imax + 1 + imax * a_dim1], &c__1);
+                    jmax = imax + aocl_blas_isamax(&i__1, &a[imax + 1 + imax * a_dim1], &c__1);
                     /* Computing MAX */
                     r__2 = rowmax;
                     r__3 = (r__1 = a[jmax + imax * a_dim1], f2c_abs(r__1)); // , expr subst
@@ -529,10 +534,12 @@ void ssytf2_(char *uplo, integer *n, real *a, integer *lda, integer *ipiv, integ
                 if(kp < *n)
                 {
                     i__1 = *n - kp;
-                    sswap_(&i__1, &a[kp + 1 + kk * a_dim1], &c__1, &a[kp + 1 + kp * a_dim1], &c__1);
+                    aocl_blas_sswap(&i__1, &a[kp + 1 + kk * a_dim1], &c__1,
+                                    &a[kp + 1 + kp * a_dim1], &c__1);
                 }
                 i__1 = kp - kk - 1;
-                sswap_(&i__1, &a[kk + 1 + kk * a_dim1], &c__1, &a[kp + (kk + 1) * a_dim1], lda);
+                aocl_blas_sswap(&i__1, &a[kk + 1 + kk * a_dim1], &c__1, &a[kp + (kk + 1) * a_dim1],
+                                lda);
                 t = a[kk + kk * a_dim1];
                 a[kk + kk * a_dim1] = a[kp + kp * a_dim1];
                 a[kp + kp * a_dim1] = t;
@@ -556,11 +563,11 @@ void ssytf2_(char *uplo, integer *n, real *a, integer *lda, integer *ipiv, integ
                     d11 = 1.f / a[k + k * a_dim1];
                     i__1 = *n - k;
                     r__1 = -d11;
-                    ssyr_(uplo, &i__1, &r__1, &a[k + 1 + k * a_dim1], &c__1,
-                          &a[k + 1 + (k + 1) * a_dim1], lda);
+                    aocl_blas_ssyr(uplo, &i__1, &r__1, &a[k + 1 + k * a_dim1], &c__1,
+                                   &a[k + 1 + (k + 1) * a_dim1], lda);
                     /* Store L(k) in column K */
                     i__1 = *n - k;
-                    sscal_(&i__1, &d11, &a[k + 1 + k * a_dim1], &c__1);
+                    aocl_blas_sscal(&i__1, &d11, &a[k + 1 + k * a_dim1], &c__1);
                 }
             }
             else
@@ -599,12 +606,12 @@ void ssytf2_(char *uplo, integer *n, real *a, integer *lda, integer *ipiv, integ
         /* Store details of the interchanges in IPIV */
         if(kstep == 1)
         {
-            ipiv[k] = kp;
+            ipiv[k] = (aocl_int_t)(kp);
         }
         else
         {
-            ipiv[k] = -kp;
-            ipiv[k + 1] = -kp;
+            ipiv[k] = (aocl_int_t)(-kp);
+            ipiv[k + 1] = (aocl_int_t)(-kp);
         }
         /* Increase K and return to the start of the main loop */
         k += kstep;

@@ -7,14 +7,14 @@
 
 
 #if FLA_ENABLE_AMD_OPT
-extern int lapack_dpotf2(char *uplo, integer *n, double *a, integer *lda, integer *info);
+extern int lapack_dpotf2(char *uplo, aocl_int64_t *n, double *a, aocl_int64_t *lda, aocl_int64_t *info);
 
-int fla_dpotrf_small_avx512(char *uplo, integer *n, doublereal *a, integer *lda, integer *info)
+int fla_dpotrf_small_avx512(char *uplo, aocl_int64_t *n, doublereal *a, aocl_int64_t *lda, aocl_int64_t *info)
 {
     *info = 0;
     logical upper = (*uplo == 'U' || *uplo == 'u');
     logical lower = (*uplo == 'L' || *uplo == 'l');
-    integer i = 1, i_1 = 1, j = 1, ni = 1, k = 1;
+    aocl_int64_t i = 1, i_1 = 1, j = 1, ni = 1, k = 1;
     doublereal *acur, p_val = 1;
     __m128d acur_i1_vec_128, acur_j_vec_128, acur_update_vec_128;
     __m256d p_val_vec_256, acur_vec_256, acur_i1_vec_256, acur_j_vec_256, acur_update_vec_256;
@@ -177,7 +177,7 @@ int fla_dpotrf_small_avx512(char *uplo, integer *n, doublereal *a, integer *lda,
                Performs rank-1 update operation for Cholesky factorization */
             for(i_1 = 1; i_1 < ni; i_1++)
             {
-                integer i_1xlda = (i_1 * *lda);
+                aocl_int64_t i_1xlda = (i_1 * *lda);
                 {
                     /* Broadcast acur[i_1] */
                     acur_i1_vec_512 = _mm512_broadcastsd_pd(_mm_load_sd(&acur[i_1]));
@@ -251,7 +251,7 @@ int fla_dpotrf_small_avx512(char *uplo, integer *n, doublereal *a, integer *lda,
             }
             for(i_1 = 1; i_1 < ni; i_1++)
             {
-                integer i_1xlda = (i_1 * *lda);
+                aocl_int64_t i_1xlda = (i_1 * *lda);
                 for(j = 1; j <= i_1; j++)
                 {
                     acur[j + i_1xlda]

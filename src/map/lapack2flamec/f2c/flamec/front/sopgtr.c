@@ -110,21 +110,33 @@
 /* > \ingroup realOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void sopgtr_(char *uplo, integer *n, real *ap, real *tau, real *q, integer *ldq, real *work,
-             integer *info)
+/** Generated wrapper function */
+void sopgtr_(char *uplo, aocl_int_t *n, real *ap, real *tau, real *q, aocl_int_t *ldq, real *work,
+             aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_sopgtr(uplo, n, ap, tau, q, ldq, work, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t ldq_64 = *ldq;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_sopgtr(uplo, &n_64, ap, tau, q, &ldq_64, work, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_sopgtr(char *uplo, aocl_int64_t *n, real *ap, real *tau, real *q,
+                        aocl_int64_t *ldq, real *work, aocl_int64_t *info)
 {
     /* System generated locals */
-    integer q_dim1, q_offset, i__1, i__2, i__3;
+    aocl_int64_t q_dim1, q_offset, i__1, i__2, i__3;
     /* Local variables */
-    integer i__, j, ij;
-    extern logical lsame_(char *, char *, integer, integer);
-    integer iinfo;
+    aocl_int64_t i__, j, ij;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    aocl_int64_t iinfo;
     logical upper;
-    extern /* Subroutine */
-        void
-        sorg2l_(integer *, integer *, integer *, real *, integer *, real *, real *, integer *),
-        sorg2r_fla(integer *, integer *, integer *, real *, integer *, real *, real *, integer *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -171,7 +183,7 @@ void sopgtr_(char *uplo, integer *n, real *ap, real *tau, real *q, integer *ldq,
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("SOPGTR", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("SOPGTR", &i__1, (ftnlen)6);
         return;
     }
     /* Quick return if possible */
@@ -211,7 +223,7 @@ void sopgtr_(char *uplo, integer *n, real *ap, real *tau, real *q, integer *ldq,
         i__1 = *n - 1;
         i__2 = *n - 1;
         i__3 = *n - 1;
-        sorg2l_(&i__1, &i__2, &i__3, &q[q_offset], ldq, &tau[1], &work[1], &iinfo);
+        aocl_lapack_sorg2l(&i__1, &i__2, &i__3, &q[q_offset], ldq, &tau[1], &work[1], &iinfo);
     }
     else
     {

@@ -3,7 +3,7 @@
  on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
-#include "FLA_f2c.h" /* > \brief \b ZLARTV applies a vector of plane rotations with real cosines and complex sines to the elements of a pair of vectors. */
+#include "FLA_f2c.h" /* > \brief \b ZLARTV applies a vector of plane rotations with real cosines and scomplex sines to the elements of a pair of vectors. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
@@ -37,8 +37,8 @@
 /* > */
 /* > \verbatim */
 /* > */
-/* > ZLARTV applies a vector of complex plane rotations with real cosines */
-/* > to elements of the complex vectors x and y. For i = 1,2,...,n */
+/* > ZLARTV applies a vector of scomplex plane rotations with real cosines */
+/* > to elements of the scomplex vectors x and y. For i = 1,2,...,n */
 /* > */
 /* > ( x(i) ) := ( c(i) s(i) ) ( x(i) ) */
 /* > ( y(i) ) ( -conjg(s(i)) c(i) ) ( y(i) ) */
@@ -102,21 +102,37 @@
 /* > \ingroup complex16OTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-void zlartv_(integer *n, doublecomplex *x, integer *incx, doublecomplex *y, integer *incy,
-             doublereal *c__, doublecomplex *s, integer *incc)
+/** Generated wrapper function */
+void zlartv_(aocl_int_t *n, dcomplex *x, aocl_int_t *incx, dcomplex *y, aocl_int_t *incy,
+             doublereal *c__, dcomplex *s, aocl_int_t *incc)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_zlartv(n, x, incx, y, incy, c__, s, incc);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t incx_64 = *incx;
+    aocl_int64_t incy_64 = *incy;
+    aocl_int64_t incc_64 = *incc;
+
+    aocl_lapack_zlartv(&n_64, x, &incx_64, y, &incy_64, c__, s, &incc_64);
+#endif
+}
+
+void aocl_lapack_zlartv(aocl_int64_t *n, dcomplex *x, aocl_int64_t *incx, dcomplex *y,
+                        aocl_int64_t *incy, doublereal *c__, dcomplex *s, aocl_int64_t *incc)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zlartv inputs: n %" FLA_IS ", incx %" FLA_IS ", incy %" FLA_IS
                       ", incc %" FLA_IS "",
                       *n, *incx, *incy, *incc);
     /* System generated locals */
-    integer i__1, i__2, i__3, i__4;
-    doublecomplex z__1, z__2, z__3, z__4;
+    aocl_int64_t i__1, i__2, i__3, i__4;
+    dcomplex z__1, z__2, z__3, z__4;
     /* Builtin functions */
-    void d_cnjg(doublecomplex *, doublecomplex *);
+    void d_cnjg(dcomplex *, dcomplex *);
     /* Local variables */
-    integer i__, ic, ix, iy;
-    doublecomplex xi, yi;
+    aocl_int64_t i__, ic, ix, iy;
+    dcomplex xi, yi;
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */

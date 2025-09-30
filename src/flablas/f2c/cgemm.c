@@ -1,17 +1,17 @@
 /* cgemm.f -- translated by f2c (version 19991025). You must link the resulting object file with the libraries: -lf2c -lm (in that order) */
 #include "FLA_f2c.h"
 /* Subroutine */
-int cgemm_(char *transa, char *transb, integer *m, integer * n, integer *k, complex *alpha, complex *a, integer *lda, complex *b, integer *ldb, complex *beta, complex *c__, integer *ldc)
+int cgemm_(char *transa, char *transb, integer *m, integer * n, integer *k, scomplex *alpha, scomplex *a, integer *lda, scomplex *b, integer *ldb, scomplex *beta, scomplex *c__, integer *ldc)
 {
     /* System generated locals */
     integer a_dim1, a_offset, b_dim1, b_offset, c_dim1, c_offset, i__1, i__2, i__3, i__4, i__5, i__6;
-    complex q__1, q__2, q__3, q__4;
+    scomplex q__1, q__2, q__3, q__4;
     /* Builtin functions */
-    void r_cnjg(complex *, complex *);
+    void r_cnjg(scomplex *, scomplex *);
     /* Local variables */
     integer info;
     logical nota, notb;
-    complex temp;
+    scomplex temp;
     integer i__, j, l;
     logical conja, conjb;
     integer ncola;

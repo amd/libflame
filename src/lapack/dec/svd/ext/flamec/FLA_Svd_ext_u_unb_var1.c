@@ -26,7 +26,7 @@ FLA_Error FLA_Svd_ext_u_unb_var1(FLA_Svd_type jobu, FLA_Svd_type jobv,
     double crossover_ratio = 17.0 / 9.0;
     FLA_Bool u_is_formed = FALSE,
              v_is_formed = FALSE;
-    integer apply_scale;
+    fla_dim_t apply_scale;
 
     n_GH = k_accum;
 
@@ -122,7 +122,7 @@ FLA_Error FLA_Svd_ext_u_unb_var1(FLA_Svd_type jobu, FLA_Svd_type jobv,
             }
         }
 
-        // For complex matrices, apply realification transformation.
+        // For scomplex matrices, apply realification transformation.
         if (FLA_Obj_is_complex(A) && jobu != FLA_SVD_VECTORS_NONE)
         {
             FLA_Obj UL, UR;

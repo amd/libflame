@@ -1,15 +1,15 @@
 #include "FLA_f2c.h"
 #include "FLA_lapack2flame_return_defs.h"
 
-int zunml2_check(char *side, char *trans, integer *m, integer *n, integer *k, dcomplex *a,
-                 integer *lda, dcomplex *tau, dcomplex *c__, integer *ldc, dcomplex *work,
-                 integer *info)
+int zunml2_check(char *side, char *trans, aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *k, dcomplex *a,
+                 aocl_int64_t *lda, dcomplex *tau, dcomplex *c__, aocl_int64_t *ldc, dcomplex *work,
+                 aocl_int64_t *info)
 {
     /* System generated locals */
-    integer a_dim1, a_offset, c_dim1, c_offset, i__1;
+    aocl_int64_t a_dim1, a_offset, c_dim1, c_offset, i__1;
 
     /* Local variables */
-    integer nq;
+    aocl_int64_t nq;
     logical left;
     logical notran;
 
@@ -66,7 +66,7 @@ int zunml2_check(char *side, char *trans, integer *m, integer *n, integer *k, dc
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("ZUNML2", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("ZUNML2", &i__1, (ftnlen)6);
         return LAPACK_FAILURE;
     }
     /* Quick return if possible */

@@ -16,19 +16,19 @@
 
 
 void time_Apply_Q_UT_inc(
-               integer param_combo, integer type, integer nrepeats, integer m, integer n,
+               aocl_int64_t param_combo, aocl_int64_t type, aocl_int64_t nrepeats, aocl_int64_t m, aocl_int64_t n,
                FLA_Obj A, FLA_Obj TW, FLA_Obj W1, FLA_Obj B, FLA_Obj B_ref,
                FLA_Obj A_flat, FLA_Obj T_flat, FLA_Obj W_flat, FLA_Obj B_flat,
                double *dtime, double *diff, double *gflops );
 
 
 void time_Apply_Q_UT_inc(
-               integer param_combo, integer type, integer nrepeats, integer m, integer n,
+               aocl_int64_t param_combo, aocl_int64_t type, aocl_int64_t nrepeats, aocl_int64_t m, aocl_int64_t n,
                FLA_Obj A, FLA_Obj TW, FLA_Obj W1, FLA_Obj B, FLA_Obj B_ref,
                FLA_Obj A_flat, FLA_Obj T_flat, FLA_Obj W_flat, FLA_Obj B_flat,
                double *dtime, double *diff, double *gflops )
 {
-  integer
+  aocl_int64_t
     irep;
 
   double

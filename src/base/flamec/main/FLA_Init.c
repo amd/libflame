@@ -35,8 +35,8 @@ FLA_Obj TLS_CLASS_SPEC FLA_OVERFLOW_SQUARE_THRES = {};
 
 const TLS_CLASS_SPEC float    fzero = 0.0f;
 const TLS_CLASS_SPEC double   dzero = 0.0;
-const TLS_CLASS_SPEC scomplex czero = { 0.0f, 0.0f };
-const TLS_CLASS_SPEC dcomplex zzero = { 0.0 , 0.0  };
+const TLS_CLASS_SPEC scomplex czero = { {0.0f}, {0.0f} };
+const TLS_CLASS_SPEC dcomplex zzero = { {0.0} , {0.0}  };
 
 struct _LF_VERSION
 {
@@ -248,13 +248,13 @@ char*     FLA_Get_AOCL_Version( void )
      {
 	    return lflibversion.version;
      }
-     integer vers_major, vers_minor, vers_patch;
+     aocl_int_t vers_major, vers_minor, vers_patch;
      ilaver_(&vers_major, &vers_minor, &vers_patch);
 
      char lfmainversion[] = "AOCL-LAPACK ";
      char* lfversion = lflibversion.version;
      char lapackversion[30];
-     snprintf(lapackversion, sizeof(lapackversion), ", supports LAPACK %"FLA_IS".%"FLA_IS".%"FLA_IS"",
+     snprintf(lapackversion, sizeof(lapackversion), ", supports LAPACK %"FLA_ISL".%"FLA_ISL".%"FLA_ISL"",
               vers_major, vers_minor, vers_patch);
      int length, i;
 

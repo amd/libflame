@@ -4,10 +4,10 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
-static integer c_n1 = -1;
-static integer c__3 = 3;
-static integer c__2 = 2;
+static aocl_int64_t c__1 = 1;
+static aocl_int64_t c_n1 = -1;
+static aocl_int64_t c__3 = 3;
+static aocl_int64_t c__2 = 2;
 /* > \brief \b DORGLQ */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -128,25 +128,14 @@ the routine */
 /* > \ingroup doubleOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void dorglq_fla(integer *m, integer *n, integer *k, doublereal *a, integer *lda, doublereal *tau,
-                doublereal *work, integer *lwork, integer *info)
+void dorglq_fla(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *k, doublereal *a, aocl_int64_t *lda,
+                doublereal *tau, doublereal *work, aocl_int64_t *lwork, aocl_int64_t *info)
 {
     /* System generated locals */
-    integer a_dim1, a_offset, i__1, i__2, i__3;
+    aocl_int64_t a_dim1, a_offset, i__1, i__2, i__3;
     /* Local variables */
-    integer i__, j, l, ib, nb, ki, kk, nx, iws, nbmin, iinfo;
-    extern /* Subroutine */
-        void
-        dorgl2_fla(integer *, integer *, integer *, doublereal *, integer *, doublereal *,
-                   doublereal *, integer *),
-        dlarfb_(char *, char *, char *, char *, integer *, integer *, integer *, doublereal *,
-                integer *, doublereal *, integer *, doublereal *, integer *, doublereal *,
-                integer *),
-        dlarft_(char *, char *, integer *, integer *, doublereal *, integer *, doublereal *,
-                doublereal *, integer *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
-    integer ldwork, lwkopt;
+    aocl_int64_t i__, j, l, ib, nb, ki, kk, nx, iws, nbmin, iinfo;
+    aocl_int64_t ldwork, lwkopt;
     logical lquery;
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -177,7 +166,7 @@ void dorglq_fla(integer *m, integer *n, integer *k, doublereal *a, integer *lda,
     --work;
     /* Function Body */
     *info = 0;
-    nb = ilaenv_(&c__1, "DORGLQ", " ", m, n, k, &c_n1);
+    nb = aocl_lapack_ilaenv(&c__1, "DORGLQ", " ", m, n, k, &c_n1);
     lwkopt = fla_max(1, *m) * nb;
     work[1] = (doublereal)lwkopt;
     lquery = *lwork == -1;
@@ -204,7 +193,7 @@ void dorglq_fla(integer *m, integer *n, integer *k, doublereal *a, integer *lda,
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("DORGLQ", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("DORGLQ", &i__1, (ftnlen)6);
         return;
     }
     else if(lquery)
@@ -225,7 +214,7 @@ void dorglq_fla(integer *m, integer *n, integer *k, doublereal *a, integer *lda,
         /* Determine when to cross over from blocked to unblocked code. */
         /* Computing MAX */
         i__1 = 0;
-        i__2 = ilaenv_(&c__3, "DORGLQ", " ", m, n, k, &c_n1); // , expr subst
+        i__2 = aocl_lapack_ilaenv(&c__3, "DORGLQ", " ", m, n, k, &c_n1); // , expr subst
         nx = fla_max(i__1, i__2);
         if(nx < *k)
         {
@@ -239,7 +228,7 @@ void dorglq_fla(integer *m, integer *n, integer *k, doublereal *a, integer *lda,
                 nb = *lwork / ldwork;
                 /* Computing MAX */
                 i__1 = 2;
-                i__2 = ilaenv_(&c__2, "DORGLQ", " ", m, n, k, &c_n1); // , expr subst
+                i__2 = aocl_lapack_ilaenv(&c__2, "DORGLQ", " ", m, n, k, &c_n1); // , expr subst
                 nbmin = fla_max(i__1, i__2);
             }
         }
@@ -294,14 +283,14 @@ void dorglq_fla(integer *m, integer *n, integer *k, doublereal *a, integer *lda,
                 /* Form the triangular factor of the block reflector */
                 /* H = H(i) H(i+1) . . . H(i+ib-1) */
                 i__2 = *n - i__ + 1;
-                dlarft_("Forward", "Rowwise", &i__2, &ib, &a[i__ + i__ * a_dim1], lda, &tau[i__],
-                        &work[1], &ldwork);
+                aocl_lapack_dlarft("Forward", "Rowwise", &i__2, &ib, &a[i__ + i__ * a_dim1], lda,
+                                   &tau[i__], &work[1], &ldwork);
                 /* Apply H**T to A(i+ib:m,i:n) from the right */
                 i__2 = *m - i__ - ib + 1;
                 i__3 = *n - i__ + 1;
-                dlarfb_("Right", "Transpose", "Forward", "Rowwise", &i__2, &i__3, &ib,
-                        &a[i__ + i__ * a_dim1], lda, &work[1], &ldwork, &a[i__ + ib + i__ * a_dim1],
-                        lda, &work[ib + 1], &ldwork);
+                aocl_lapack_dlarfb("Right", "Transpose", "Forward", "Rowwise", &i__2, &i__3, &ib,
+                                   &a[i__ + i__ * a_dim1], lda, &work[1], &ldwork,
+                                   &a[i__ + ib + i__ * a_dim1], lda, &work[ib + 1], &ldwork);
             }
             /* Apply H**T to columns i:n of current block */
             i__2 = *n - i__ + 1;

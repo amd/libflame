@@ -4,7 +4,7 @@
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
  /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
+static aocl_int64_t c__1 = 1;
 /* > \brief \b CLANHB returns the value of the 1-norm, or the Frobenius norm, or the infinity norm,
  * or the ele ment of largest absolute value of a Hermitian band matrix. */
 /* =========== DOCUMENTATION =========== */
@@ -129,7 +129,23 @@ otherwise, */
 /* > \author NAG Ltd. */
 /* > \ingroup complexOTHERauxiliary */
 /* ===================================================================== */
-real clanhb_(char *norm, char *uplo, integer *n, integer *k, complex *ab, integer *ldab, real *work)
+/** Generated wrapper function */
+real clanhb_(char *norm, char *uplo, aocl_int_t *n, aocl_int_t *k, scomplex *ab, aocl_int_t *ldab,
+             real *work)
+{
+#if FLA_ENABLE_ILP64
+    return aocl_lapack_clanhb(norm, uplo, n, k, ab, ldab, work);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t k_64 = *k;
+    aocl_int64_t ldab_64 = *ldab;
+
+    return aocl_lapack_clanhb(norm, uplo, &n_64, &k_64, ab, &ldab_64, work);
+#endif
+}
+
+real aocl_lapack_clanhb(char *norm, char *uplo, aocl_int64_t *n, aocl_int64_t *k, scomplex *ab,
+                        aocl_int64_t *ldab, real *work)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -144,18 +160,15 @@ real clanhb_(char *norm, char *uplo, integer *n, integer *k, complex *ab, intege
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
-    integer ab_dim1, ab_offset, i__1, i__2, i__3, i__4;
+    aocl_int64_t ab_dim1, ab_offset, i__1, i__2, i__3, i__4;
     real ret_val, r__1;
     /* Builtin functions */
-    double c_abs(complex *), sqrt(doublereal);
+    double c_abs(scomplex *), sqrt(doublereal);
     /* Local variables */
-    integer i__, j, l;
+    aocl_int64_t i__, j, l;
     real sum, absa, scale;
-    extern logical lsame_(char *, char *, integer, integer);
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     real value;
-    extern /* Subroutine */
-        void
-        classq_(integer *, complex *, integer *, real *, real *);
     extern logical sisnan_(real *);
     /* -- LAPACK auxiliary routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -332,7 +345,7 @@ real clanhb_(char *norm, char *uplo, integer *n, integer *k, complex *ab, intege
                     i__4 = fla_min(i__3, *k);
                     /* Computing MAX */
                     i__2 = *k + 2 - j;
-                    classq_(&i__4, &ab[fla_max(i__2, 1) + j * ab_dim1], &c__1, &scale, &sum);
+                    aocl_lapack_classq(&i__4, &ab[fla_max(i__2, 1) + j * ab_dim1], &c__1, &scale, &sum);
                     /* L110: */
                 }
                 l = *k + 1;
@@ -345,7 +358,7 @@ real clanhb_(char *norm, char *uplo, integer *n, integer *k, complex *ab, intege
                     /* Computing MIN */
                     i__3 = *n - j;
                     i__4 = fla_min(i__3, *k);
-                    classq_(&i__4, &ab[j * ab_dim1 + 2], &c__1, &scale, &sum);
+                    aocl_lapack_classq(&i__4, &ab[j * ab_dim1 + 2], &c__1, &scale, &sum);
                     /* L120: */
                 }
                 l = 1;

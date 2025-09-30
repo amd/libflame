@@ -3,7 +3,7 @@
  on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
-#include "FLA_f2c.h" /* > \brief \b CLACGV conjugates a complex vector. */
+#include "FLA_f2c.h" /* > \brief \b CLACGV conjugates a scomplex vector. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
@@ -36,7 +36,7 @@
 /* > */
 /* > \verbatim */
 /* > */
-/* > CLACGV conjugates a complex vector of length N. */
+/* > CLACGV conjugates a scomplex vector of length N. */
 /* > \endverbatim */
 /* Arguments: */
 /* ========== */
@@ -69,7 +69,20 @@
 /* > \ingroup complexOTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-void clacgv_(integer *n, complex *x, integer *incx)
+/** Generated wrapper function */
+void clacgv_(aocl_int_t *n, scomplex *x, aocl_int_t *incx)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_clacgv(n, x, incx);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t incx_64 = *incx;
+
+    aocl_lapack_clacgv(&n_64, x, &incx_64);
+#endif
+}
+
+void aocl_lapack_clacgv(aocl_int64_t *n, scomplex *x, aocl_int64_t *incx)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -82,10 +95,10 @@ void clacgv_(integer *n, complex *x, integer *incx)
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
-    integer i__1;
-    complex q__1;
+    aocl_int64_t i__1;
+    scomplex q__1;
     /* Local variables */
-    integer i__, ioff;
+    aocl_int64_t i__, ioff;
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */

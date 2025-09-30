@@ -5,12 +5,12 @@
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 
 /*
-*     Modifications Copyright (c) 2024 Advanced Micro Devices, Inc.  All rights reserved.
-*/
+ *     Modifications Copyright (c) 2024 Advanced Micro Devices, Inc.  All rights reserved.
+ */
 
 #include "FLA_f2c.h" /* Table of constant values */
-static doublecomplex c_b1 = {1., 0.};
-static integer c__1 = 1;
+static dcomplex c_b1 = {{1.}, {0.}};
+static aocl_int64_t c__1 = 1;
 /* > \brief \b ZSPTRF */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -46,7 +46,7 @@ static integer c__1 = 1;
 /* > */
 /* > \verbatim */
 /* > */
-/* > ZSPTRF computes the factorization of a complex symmetric matrix A */
+/* > ZSPTRF computes the factorization of a scomplex symmetric matrix A */
 /* > stored in packed format using the Bunch-Kaufman diagonal pivoting */
 /* > method: */
 /* > */
@@ -163,45 +163,48 @@ static integer c__1 = 1;
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void zsptrf_(char *uplo, integer *n, doublecomplex *ap, integer *ipiv, integer *info)
+/** Generated wrapper function */
+void zsptrf_(char *uplo, aocl_int_t *n, dcomplex *ap, aocl_int_t *ipiv, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_zsptrf(uplo, n, ap, ipiv, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_zsptrf(uplo, &n_64, ap, ipiv, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_zsptrf(char *uplo, aocl_int64_t *n, dcomplex *ap, aocl_int_t *ipiv,
+                        aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zsptrf inputs: uplo %c, n %" FLA_IS "", *uplo, *n);
 
     /* System generated locals */
-    integer i__1, i__2, i__3, i__4, i__5, i__6;
+    aocl_int64_t i__1, i__2, i__3, i__4, i__5, i__6;
     doublereal d__1, d__2, d__3, d__4;
-    doublecomplex z__1, z__2, z__3, z__4;
+    dcomplex z__1, z__2, z__3, z__4;
     /* Builtin functions */
-    double sqrt(doublereal), d_imag(doublecomplex *);
-    void z_div(doublecomplex *, doublecomplex *, doublecomplex *);
+    double sqrt(doublereal), d_imag(dcomplex *);
+    void z_div(dcomplex *, dcomplex *, dcomplex *);
     /* Local variables */
-    integer i__, j, k;
-    doublecomplex t, r1, d11, d12, d21, d22;
-    integer kc, kk, kp;
-    doublecomplex wk;
-    integer kx, knc, kpc, npp;
-    doublecomplex wkm1, wkp1;
-    integer imax, jmax;
-    extern /* Subroutine */
-        void
-        zspr_(char *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *);
+    aocl_int64_t i__, j, k;
+    dcomplex t, r1, d11, d12, d21, d22;
+    aocl_int64_t kc, kk, kp;
+    dcomplex wk;
+    aocl_int64_t kx, knc, kpc, npp;
+    dcomplex wkm1, wkp1;
+    aocl_int64_t imax, jmax;
     doublereal alpha;
-    extern logical lsame_(char *, char *, integer, integer);
-    extern /* Subroutine */
-        void
-        zscal_(integer *, doublecomplex *, doublecomplex *, integer *);
-    integer kstep;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    aocl_int64_t kstep;
     logical upper;
-    extern /* Subroutine */
-        void
-        zswap_(integer *, doublecomplex *, integer *, doublecomplex *, integer *);
     doublereal absakk;
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal colmax;
-    extern integer izamax_(integer *, doublecomplex *, integer *);
     doublereal rowmax;
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -247,7 +250,7 @@ void zsptrf_(char *uplo, integer *n, doublecomplex *ap, integer *ipiv, integer *
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("ZSPTRF", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("ZSPTRF", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -278,7 +281,7 @@ void zsptrf_(char *uplo, integer *n, doublecomplex *ap, integer *ipiv, integer *
         if(k > 1)
         {
             i__1 = k - 1;
-            imax = izamax_(&i__1, &ap[kc], &c__1);
+            imax = aocl_blas_izamax(&i__1, &ap[kc], &c__1);
             i__1 = kc + imax - 1;
             colmax = (d__1 = ap[i__1].r, f2c_dabs(d__1))
                      + (d__2 = d_imag(&ap[kc + imax - 1]), f2c_dabs(d__2));
@@ -326,7 +329,7 @@ void zsptrf_(char *uplo, integer *n, doublecomplex *ap, integer *ipiv, integer *
                 if(imax > 1)
                 {
                     i__1 = imax - 1;
-                    jmax = izamax_(&i__1, &ap[kpc], &c__1);
+                    jmax = aocl_blas_izamax(&i__1, &ap[kpc], &c__1);
                     /* Computing MAX */
                     i__1 = kpc + jmax - 1;
                     d__3 = rowmax;
@@ -369,7 +372,7 @@ void zsptrf_(char *uplo, integer *n, doublecomplex *ap, integer *ipiv, integer *
                 /* Interchange rows and columns KK and KP in the leading */
                 /* submatrix A(1:k,1:k) */
                 i__1 = kp - 1;
-                zswap_(&i__1, &ap[knc], &c__1, &ap[kpc], &c__1);
+                aocl_blas_zswap(&i__1, &ap[knc], &c__1, &ap[kpc], &c__1);
                 kx = kpc + kp - 1;
                 i__1 = kk - 1;
                 for(j = kp + 1; j <= i__1; ++j)
@@ -425,10 +428,10 @@ void zsptrf_(char *uplo, integer *n, doublecomplex *ap, integer *ipiv, integer *
                 i__1 = k - 1;
                 z__1.r = -r1.r;
                 z__1.i = -r1.i; // , expr subst
-                zspr_(uplo, &i__1, &z__1, &ap[kc], &c__1, &ap[1]);
+                aocl_lapack_zspr(uplo, &i__1, &z__1, &ap[kc], &c__1, &ap[1]);
                 /* Store U(k) in column k */
                 i__1 = k - 1;
-                zscal_(&i__1, &r1, &ap[kc], &c__1);
+                aocl_blas_zscal(&i__1, &r1, &ap[kc], &c__1);
             }
             else
             {
@@ -514,12 +517,12 @@ void zsptrf_(char *uplo, integer *n, doublecomplex *ap, integer *ipiv, integer *
         /* Store details of the interchanges in IPIV */
         if(kstep == 1)
         {
-            ipiv[k] = kp;
+            ipiv[k] = (aocl_int_t)(kp);
         }
         else
         {
-            ipiv[k] = -kp;
-            ipiv[k - 1] = -kp;
+            ipiv[k] = (aocl_int_t)(-kp);
+            ipiv[k - 1] = (aocl_int_t)(-kp);
         }
         /* Decrease K and return to the start of the main loop */
         k -= kstep;
@@ -551,7 +554,7 @@ void zsptrf_(char *uplo, integer *n, doublecomplex *ap, integer *ipiv, integer *
         if(k < *n)
         {
             i__1 = *n - k;
-            imax = k + izamax_(&i__1, &ap[kc + 1], &c__1);
+            imax = k + aocl_blas_izamax(&i__1, &ap[kc + 1], &c__1);
             i__1 = kc + imax - k;
             colmax = (d__1 = ap[i__1].r, f2c_dabs(d__1))
                      + (d__2 = d_imag(&ap[kc + imax - k]), f2c_dabs(d__2));
@@ -601,7 +604,7 @@ void zsptrf_(char *uplo, integer *n, doublecomplex *ap, integer *ipiv, integer *
                 if(imax < *n)
                 {
                     i__1 = *n - imax;
-                    jmax = imax + izamax_(&i__1, &ap[kpc + 1], &c__1);
+                    jmax = imax + aocl_blas_izamax(&i__1, &ap[kpc + 1], &c__1);
                     /* Computing MAX */
                     i__1 = kpc + jmax - imax;
                     d__3 = rowmax;
@@ -647,7 +650,7 @@ void zsptrf_(char *uplo, integer *n, doublecomplex *ap, integer *ipiv, integer *
                 if(kp < *n)
                 {
                     i__1 = *n - kp;
-                    zswap_(&i__1, &ap[knc + kp - kk + 1], &c__1, &ap[kpc + 1], &c__1);
+                    aocl_blas_zswap(&i__1, &ap[knc + kp - kk + 1], &c__1, &ap[kpc + 1], &c__1);
                 }
                 kx = knc + kp - kk;
                 i__1 = kp - 1;
@@ -706,10 +709,10 @@ void zsptrf_(char *uplo, integer *n, doublecomplex *ap, integer *ipiv, integer *
                     i__1 = *n - k;
                     z__1.r = -r1.r;
                     z__1.i = -r1.i; // , expr subst
-                    zspr_(uplo, &i__1, &z__1, &ap[kc + 1], &c__1, &ap[kc + *n - k + 1]);
+                    aocl_lapack_zspr(uplo, &i__1, &z__1, &ap[kc + 1], &c__1, &ap[kc + *n - k + 1]);
                     /* Store L(k) in column K */
                     i__1 = *n - k;
-                    zscal_(&i__1, &r1, &ap[kc + 1], &c__1);
+                    aocl_blas_zscal(&i__1, &r1, &ap[kc + 1], &c__1);
                 }
             }
             else
@@ -800,12 +803,12 @@ void zsptrf_(char *uplo, integer *n, doublecomplex *ap, integer *ipiv, integer *
         /* Store details of the interchanges in IPIV */
         if(kstep == 1)
         {
-            ipiv[k] = kp;
+            ipiv[k] = (aocl_int_t)(kp);
         }
         else
         {
-            ipiv[k] = -kp;
-            ipiv[k + 1] = -kp;
+            ipiv[k] = (aocl_int_t)(-kp);
+            ipiv[k + 1] = (aocl_int_t)(-kp);
         }
         /* Increase K and return to the start of the main loop */
         k += kstep;

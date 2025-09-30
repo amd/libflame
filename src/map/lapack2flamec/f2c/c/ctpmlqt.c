@@ -21,9 +21,9 @@
 /* > */
 /* > \verbatim */
 /* > */
-/* > CTPMLQT applies a complex orthogonal matrix Q obtained from a */
-/* > "triangular-pentagonal" complex block reflector H to a general */
-/* > complex matrix C, which consists of two blocks A and B. */
+/* > CTPMLQT applies a scomplex orthogonal matrix Q obtained from a */
+/* > "triangular-pentagonal" scomplex block reflector H to a general */
+/* > scomplex matrix C, which consists of two blocks A and B. */
 /* > \endverbatim */
 /* Arguments: */
 /* ========== */
@@ -199,9 +199,36 @@ V2 is lower trapezoidal, consisting of the first L */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void ctpmlqt_(char *side, char *trans, integer *m, integer *n, integer *k, integer *l, integer *mb,
-              complex *v, integer *ldv, complex *t, integer *ldt, complex *a, integer *lda,
-              complex *b, integer *ldb, complex *work, integer *info)
+/** Generated wrapper function */
+void ctpmlqt_(char *side, char *trans, aocl_int_t *m, aocl_int_t *n, aocl_int_t *k, aocl_int_t *l,
+              aocl_int_t *mb, scomplex *v, aocl_int_t *ldv, scomplex *t, aocl_int_t *ldt, scomplex *a,
+              aocl_int_t *lda, scomplex *b, aocl_int_t *ldb, scomplex *work, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_ctpmlqt(side, trans, m, n, k, l, mb, v, ldv, t, ldt, a, lda, b, ldb, work, info);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t k_64 = *k;
+    aocl_int64_t l_64 = *l;
+    aocl_int64_t mb_64 = *mb;
+    aocl_int64_t ldv_64 = *ldv;
+    aocl_int64_t ldt_64 = *ldt;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t ldb_64 = *ldb;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_ctpmlqt(side, trans, &m_64, &n_64, &k_64, &l_64, &mb_64, v, &ldv_64, t, &ldt_64, a,
+                        &lda_64, b, &ldb_64, work, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_ctpmlqt(char *side, char *trans, aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *k,
+                         aocl_int64_t *l, aocl_int64_t *mb, scomplex *v, aocl_int64_t *ldv,
+                         scomplex *t, aocl_int64_t *ldt, scomplex *a, aocl_int64_t *lda, scomplex *b,
+                         aocl_int64_t *ldb, scomplex *work, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -220,21 +247,13 @@ void ctpmlqt_(char *side, char *trans, integer *m, integer *n, integer *k, integ
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
-    integer v_dim1, v_offset, a_dim1, a_offset, b_dim1, b_offset, t_dim1, t_offset, i__1, i__2,
+    aocl_int64_t v_dim1, v_offset, a_dim1, a_offset, b_dim1, b_offset, t_dim1, t_offset, i__1, i__2,
         i__3, i__4;
     /* Local variables */
-    integer i__, ib, lb, nb, kf, ldaq;
+    aocl_int64_t i__, ib, lb, nb, kf, ldaq;
     logical left, tran;
-    extern logical lsame_(char *, char *, integer, integer);
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     logical right;
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    extern /* Subroutine */
-        void
-        ctprfb_(char *, char *, char *, char *, integer *, integer *, integer *, integer *,
-                complex *, integer *, complex *, integer *, complex *, integer *, complex *,
-                integer *, complex *, integer *);
     logical notran;
     /* -- LAPACK computational routine (version 3.7.1) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -331,7 +350,7 @@ void ctpmlqt_(char *side, char *trans, integer *m, integer *n, integer *k, integ
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("CTPMLQT", &i__1, (ftnlen)7);
+        aocl_blas_xerbla("CTPMLQT", &i__1, (ftnlen)7);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
@@ -362,9 +381,9 @@ void ctpmlqt_(char *side, char *trans, integer *m, integer *n, integer *k, integ
             {
                 lb = 0;
             }
-            ctprfb_("L", "C", "F", "R", &nb, n, &ib, &lb, &v[i__ + v_dim1], ldv,
-                    &t[i__ * t_dim1 + 1], ldt, &a[i__ + a_dim1], lda, &b[b_offset], ldb, &work[1],
-                    &ib);
+            aocl_lapack_ctprfb("L", "C", "F", "R", &nb, n, &ib, &lb, &v[i__ + v_dim1], ldv,
+                               &t[i__ * t_dim1 + 1], ldt, &a[i__ + a_dim1], lda, &b[b_offset], ldb,
+                               &work[1], &ib);
         }
     }
     else if(right && tran)
@@ -388,9 +407,9 @@ void ctpmlqt_(char *side, char *trans, integer *m, integer *n, integer *k, integ
             {
                 lb = nb - *n + *l - i__ + 1;
             }
-            ctprfb_("R", "N", "F", "R", m, &nb, &ib, &lb, &v[i__ + v_dim1], ldv,
-                    &t[i__ * t_dim1 + 1], ldt, &a[i__ * a_dim1 + 1], lda, &b[b_offset], ldb,
-                    &work[1], m);
+            aocl_lapack_ctprfb("R", "N", "F", "R", m, &nb, &ib, &lb, &v[i__ + v_dim1], ldv,
+                               &t[i__ * t_dim1 + 1], ldt, &a[i__ * a_dim1 + 1], lda, &b[b_offset],
+                               ldb, &work[1], m);
         }
     }
     else if(left && tran)
@@ -414,9 +433,9 @@ void ctpmlqt_(char *side, char *trans, integer *m, integer *n, integer *k, integ
             {
                 lb = 0;
             }
-            ctprfb_("L", "N", "F", "R", &nb, n, &ib, &lb, &v[i__ + v_dim1], ldv,
-                    &t[i__ * t_dim1 + 1], ldt, &a[i__ + a_dim1], lda, &b[b_offset], ldb, &work[1],
-                    &ib);
+            aocl_lapack_ctprfb("L", "N", "F", "R", &nb, n, &ib, &lb, &v[i__ + v_dim1], ldv,
+                               &t[i__ * t_dim1 + 1], ldt, &a[i__ + a_dim1], lda, &b[b_offset], ldb,
+                               &work[1], &ib);
         }
     }
     else if(right && notran)
@@ -440,9 +459,9 @@ void ctpmlqt_(char *side, char *trans, integer *m, integer *n, integer *k, integ
             {
                 lb = nb - *n + *l - i__ + 1;
             }
-            ctprfb_("R", "C", "F", "R", m, &nb, &ib, &lb, &v[i__ + v_dim1], ldv,
-                    &t[i__ * t_dim1 + 1], ldt, &a[i__ * a_dim1 + 1], lda, &b[b_offset], ldb,
-                    &work[1], m);
+            aocl_lapack_ctprfb("R", "C", "F", "R", m, &nb, &ib, &lb, &v[i__ + v_dim1], ldv,
+                               &t[i__ * t_dim1 + 1], ldt, &a[i__ * a_dim1 + 1], lda, &b[b_offset],
+                               ldb, &work[1], m);
         }
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);

@@ -4,8 +4,8 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
-static integer c_n1 = -1;
+static aocl_int64_t c__1 = 1;
+static aocl_int64_t c_n1 = -1;
 static real c_b27 = 1.f;
 static real c_b38 = 0.f;
 /* > \brief <b> SGEEVX computes the eigenvalues and, optionally, the left and/or right eigenvectors
@@ -153,7 +153,7 @@ static real c_b38 = 0.f;
 /* > eigenvalue of GNEP. If ALPHAI(j) is zero, then the j-th */
 /* > eigenvalue is real;
 if positive, then the j-th and */
-/* > (j+1)-st eigenvalues are a complex conjugate pair, with */
+/* > (j+1)-st eigenvalues are a scomplex conjugate pair, with */
 /* > ALPHAI(j+1) = -ALPHAI(j). */
 /* > \endverbatim */
 /* > */
@@ -175,7 +175,7 @@ if positive, then the j-th and */
 /* > If JOBVL = 'V', the left eigenvectors u(j) are stored */
 /* > in the columns of VL, in the same order as their eigenvalues. */
 /* > If the j-th eigenvalue is real, then u(j) = VL(:,j). */
-/* > If the j-th and (j+1)-st eigenvalues form a complex conjugate */
+/* > If the j-th and (j+1)-st eigenvalues form a scomplex conjugate */
 /* > pair, then */
 /* > u(j) = VL(:,j) + i*VL(:,j+1) */
 /* > and */
@@ -201,7 +201,7 @@ if positive, then the j-th and */
 /* > If JOBVR = 'V', the right eigenvectors x(j) are stored */
 /* > in the columns of VR, in the same order as their eigenvalues. */
 /* > If the j-th eigenvalue is real, then x(j) = VR(:,j). */
-/* > If the j-th and (j+1)-st eigenvalues form a complex conjugate */
+/* > If the j-th and (j+1)-st eigenvalues form a scomplex conjugate */
 /* > pair, then */
 /* > x(j) = VR(:,j) + i*VR(:,j+1) */
 /* > and */
@@ -311,79 +311,63 @@ the routine */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void sgegv_(char *jobvl, char *jobvr, integer *n, real *a, integer *lda, real *b, integer *ldb,
-            real *alphar, real *alphai, real *beta, real *vl, integer *ldvl, real *vr,
-            integer *ldvr, real *work, integer *lwork, integer *info)
+/** Generated wrapper function */
+void sgegv_(char *jobvl, char *jobvr, aocl_int_t *n, real *a, aocl_int_t *lda, real *b, aocl_int_t *ldb, real *alphar, real *alphai, real *beta, real *vl, aocl_int_t *ldvl, real *vr, aocl_int_t *ldvr, real *work, aocl_int_t *lwork, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_sgegv(jobvl, jobvr, n, a, lda, b, ldb, alphar, alphai, beta, vl, ldvl, vr, ldvr, work, lwork, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t ldb_64 = *ldb;
+    aocl_int64_t ldvl_64 = *ldvl;
+    aocl_int64_t ldvr_64 = *ldvr;
+    aocl_int64_t lwork_64 = *lwork;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_sgegv(jobvl, jobvr, &n_64, a, &lda_64, b, &ldb_64, alphar, alphai, beta, vl, &ldvl_64, vr, &ldvr_64, work, &lwork_64, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_sgegv(char *jobvl, char *jobvr, aocl_int64_t *n, real *a, aocl_int64_t *lda, real *b,
+            aocl_int64_t *ldb, real *alphar, real *alphai, real *beta, real *vl, aocl_int64_t *ldvl,
+            real *vr, aocl_int64_t *ldvr, real *work, aocl_int64_t *lwork, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("sgegv inputs: jobvl %c ,jobvr %c ,n %" FLA_IS ",lda %" FLA_IS ",ldb %" FLA_IS
                       ",ldvl %" FLA_IS ",ldvr %" FLA_IS ",lwork %" FLA_IS "",
                       *jobvl, *jobvr, *n, *lda, *ldb, *ldvl, *ldvr, *lwork);
     /* System generated locals */
-    integer a_dim1, a_offset, b_dim1, b_offset, vl_dim1, vl_offset, vr_dim1, vr_offset, i__1, i__2;
+    aocl_int64_t a_dim1, a_offset, b_dim1, b_offset, vl_dim1, vl_offset, vr_dim1, vr_offset, i__1,
+        i__2;
     real r__1, r__2, r__3, r__4;
     /* Local variables */
-    integer jc, nb, in, jr, nb1, nb2, nb3, ihi, ilo;
+    aocl_int64_t jc, nb, in, jr, nb1, nb2, nb3, ihi, ilo;
     real eps;
     logical ilv;
     real absb, anrm, bnrm;
-    integer itau;
+    aocl_int64_t itau;
     real temp;
     logical ilvl, ilvr;
-    integer lopt;
+    aocl_int64_t lopt;
     real anrm1, anrm2, bnrm1, bnrm2, absai, scale, absar, sbeta;
-    extern logical lsame_(char *, char *, integer, integer);
-    integer ileft, iinfo, icols, iwork, irows;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    aocl_int64_t ileft, iinfo, icols, iwork, irows;
     real salfai;
-    extern /* Subroutine */
-        void
-        sggbak_(char *, char *, integer *, integer *, integer *, real *, real *, integer *, real *,
-                integer *, integer *),
-        sggbal_(char *, integer *, real *, integer *, real *, integer *, integer *, integer *,
-                real *, real *, real *, integer *);
     real salfar;
-    extern real slamch_(char *), slange_(char *, integer *, integer *, real *, integer *, real *);
     real safmin;
-    extern /* Subroutine */
-        void
-        sgghrd_(char *, char *, integer *, integer *, integer *, real *, integer *, real *,
-                integer *, real *, integer *, real *, integer *, integer *);
     real safmax;
     char chtemp[1];
     logical ldumma[1];
-    extern /* Subroutine */
-        void
-        slascl_(char *, integer *, integer *, real *, real *, integer *, integer *, real *,
-                integer *, integer *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
-    integer ijobvl, iright;
+    aocl_int64_t ijobvl, iright;
     logical ilimit;
-    extern /* Subroutine */
-        void
-        sgeqrf_(integer *, integer *, real *, integer *, real *, real *, integer *, integer *);
-    integer ijobvr;
-    extern /* Subroutine */
-        void
-        slacpy_(char *, integer *, integer *, real *, integer *, real *, integer *),
-        slaset_(char *, integer *, integer *, real *, real *, real *, integer *),
-        stgevc_(char *, char *, logical *, integer *, real *, integer *, real *, integer *, real *,
-                integer *, real *, integer *, integer *, integer *, real *, integer *);
+    aocl_int64_t ijobvr;
     real onepls;
-    integer lwkmin;
-    extern /* Subroutine */
-        void
-        shgeqz_(char *, char *, char *, integer *, integer *, integer *, real *, integer *, real *,
-                integer *, real *, real *, real *, real *, integer *, real *, integer *, real *,
-                integer *, integer *),
-        sorgqr_(integer *, integer *, integer *, real *, integer *, real *, real *, integer *,
-                integer *);
-    integer lwkopt;
+    aocl_int64_t lwkmin;
+    aocl_int64_t lwkopt;
     logical lquery;
-    extern /* Subroutine */
-        void
-        sormqr_(char *, char *, integer *, integer *, integer *, real *, integer *, real *, real *,
-                integer *, real *, integer *, integer *);
     /* -- LAPACK driver routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -498,9 +482,9 @@ void sgegv_(char *jobvl, char *jobvr, integer *n, real *a, integer *lda, real *b
     }
     if(*info == 0)
     {
-        nb1 = ilaenv_(&c__1, "SGEQRF", " ", n, n, &c_n1, &c_n1);
-        nb2 = ilaenv_(&c__1, "SORMQR", " ", n, n, n, &c_n1);
-        nb3 = ilaenv_(&c__1, "SORGQR", " ", n, n, n, &c_n1);
+        nb1 = aocl_lapack_ilaenv(&c__1, "SGEQRF", " ", n, n, &c_n1, &c_n1);
+        nb2 = aocl_lapack_ilaenv(&c__1, "SORMQR", " ", n, n, n, &c_n1);
+        nb3 = aocl_lapack_ilaenv(&c__1, "SORGQR", " ", n, n, n, &c_n1);
         /* Computing MAX */
         i__1 = fla_max(nb1, nb2);
         nb = fla_max(i__1, nb3);
@@ -513,7 +497,7 @@ void sgegv_(char *jobvl, char *jobvr, integer *n, real *a, integer *lda, real *b
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("SGEGV ", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("SGEGV ", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -535,7 +519,7 @@ void sgegv_(char *jobvl, char *jobvr, integer *n, real *a, integer *lda, real *b
     safmax = 1.f / safmin;
     onepls = eps * 4 + 1.f;
     /* Scale A */
-    anrm = slange_("M", n, n, &a[a_offset], lda, &work[1]);
+    anrm = aocl_lapack_slange("M", n, n, &a[a_offset], lda, &work[1]);
     anrm1 = anrm;
     anrm2 = 1.f;
     if(anrm < 1.f)
@@ -548,7 +532,7 @@ void sgegv_(char *jobvl, char *jobvr, integer *n, real *a, integer *lda, real *b
     }
     if(anrm > 0.f)
     {
-        slascl_("G", &c_n1, &c_n1, &anrm, &c_b27, n, n, &a[a_offset], lda, &iinfo);
+        aocl_lapack_slascl("G", &c_n1, &c_n1, &anrm, &c_b27, n, n, &a[a_offset], lda, &iinfo);
         if(iinfo != 0)
         {
             *info = *n + 10;
@@ -557,7 +541,7 @@ void sgegv_(char *jobvl, char *jobvr, integer *n, real *a, integer *lda, real *b
         }
     }
     /* Scale B */
-    bnrm = slange_("M", n, n, &b[b_offset], ldb, &work[1]);
+    bnrm = aocl_lapack_slange("M", n, n, &b[b_offset], ldb, &work[1]);
     bnrm1 = bnrm;
     bnrm2 = 1.f;
     if(bnrm < 1.f)
@@ -570,7 +554,7 @@ void sgegv_(char *jobvl, char *jobvr, integer *n, real *a, integer *lda, real *b
     }
     if(bnrm > 0.f)
     {
-        slascl_("G", &c_n1, &c_n1, &bnrm, &c_b27, n, n, &b[b_offset], ldb, &iinfo);
+        aocl_lapack_slascl("G", &c_n1, &c_n1, &bnrm, &c_b27, n, n, &b[b_offset], ldb, &iinfo);
         if(iinfo != 0)
         {
             *info = *n + 10;
@@ -584,8 +568,8 @@ void sgegv_(char *jobvl, char *jobvr, integer *n, real *a, integer *lda, real *b
     ileft = 1;
     iright = *n + 1;
     iwork = iright + *n;
-    sggbal_("P", n, &a[a_offset], lda, &b[b_offset], ldb, &ilo, &ihi, &work[ileft], &work[iright],
-            &work[iwork], &iinfo);
+    aocl_lapack_sggbal("P", n, &a[a_offset], lda, &b[b_offset], ldb, &ilo, &ihi, &work[ileft],
+                       &work[iright], &work[iwork], &iinfo);
     if(iinfo != 0)
     {
         *info = *n + 1;
@@ -606,7 +590,8 @@ void sgegv_(char *jobvl, char *jobvr, integer *n, real *a, integer *lda, real *b
     itau = iwork;
     iwork = itau + irows;
     i__1 = *lwork + 1 - iwork;
-    sgeqrf_(&irows, &icols, &b[ilo + ilo * b_dim1], ldb, &work[itau], &work[iwork], &i__1, &iinfo);
+    aocl_lapack_sgeqrf(&irows, &icols, &b[ilo + ilo * b_dim1], ldb, &work[itau], &work[iwork],
+                       &i__1, &iinfo);
     if(iinfo >= 0)
     {
         /* Computing MAX */
@@ -620,8 +605,8 @@ void sgegv_(char *jobvl, char *jobvr, integer *n, real *a, integer *lda, real *b
         goto L120;
     }
     i__1 = *lwork + 1 - iwork;
-    sormqr_("L", "T", &irows, &icols, &irows, &b[ilo + ilo * b_dim1], ldb, &work[itau],
-            &a[ilo + ilo * a_dim1], lda, &work[iwork], &i__1, &iinfo);
+    aocl_lapack_sormqr("L", "T", &irows, &icols, &irows, &b[ilo + ilo * b_dim1], ldb, &work[itau],
+                       &a[ilo + ilo * a_dim1], lda, &work[iwork], &i__1, &iinfo);
     if(iinfo >= 0)
     {
         /* Computing MAX */
@@ -636,14 +621,14 @@ void sgegv_(char *jobvl, char *jobvr, integer *n, real *a, integer *lda, real *b
     }
     if(ilvl)
     {
-        slaset_("Full", n, n, &c_b38, &c_b27, &vl[vl_offset], ldvl);
+        aocl_lapack_slaset("Full", n, n, &c_b38, &c_b27, &vl[vl_offset], ldvl);
         i__1 = irows - 1;
         i__2 = irows - 1;
-        slacpy_("L", &i__1, &i__2, &b[ilo + 1 + ilo * b_dim1], ldb, &vl[ilo + 1 + ilo * vl_dim1],
-                ldvl);
+        aocl_lapack_slacpy("L", &i__1, &i__2, &b[ilo + 1 + ilo * b_dim1], ldb,
+                           &vl[ilo + 1 + ilo * vl_dim1], ldvl);
         i__1 = *lwork + 1 - iwork;
-        sorgqr_(&irows, &irows, &irows, &vl[ilo + ilo * vl_dim1], ldvl, &work[itau], &work[iwork],
-                &i__1, &iinfo);
+        aocl_lapack_sorgqr(&irows, &irows, &irows, &vl[ilo + ilo * vl_dim1], ldvl, &work[itau],
+                           &work[iwork], &i__1, &iinfo);
         if(iinfo >= 0)
         {
             /* Computing MAX */
@@ -659,19 +644,20 @@ void sgegv_(char *jobvl, char *jobvr, integer *n, real *a, integer *lda, real *b
     }
     if(ilvr)
     {
-        slaset_("Full", n, n, &c_b38, &c_b27, &vr[vr_offset], ldvr);
+        aocl_lapack_slaset("Full", n, n, &c_b38, &c_b27, &vr[vr_offset], ldvr);
     }
     /* Reduce to generalized Hessenberg form */
     if(ilv)
     {
         /* Eigenvectors requested -- work on whole matrix. */
-        sgghrd_(jobvl, jobvr, n, &ilo, &ihi, &a[a_offset], lda, &b[b_offset], ldb, &vl[vl_offset],
-                ldvl, &vr[vr_offset], ldvr, &iinfo);
+        aocl_lapack_sgghrd(jobvl, jobvr, n, &ilo, &ihi, &a[a_offset], lda, &b[b_offset], ldb,
+                           &vl[vl_offset], ldvl, &vr[vr_offset], ldvr, &iinfo);
     }
     else
     {
-        sgghrd_("N", "N", &irows, &c__1, &irows, &a[ilo + ilo * a_dim1], lda,
-                &b[ilo + ilo * b_dim1], ldb, &vl[vl_offset], ldvl, &vr[vr_offset], ldvr, &iinfo);
+        aocl_lapack_sgghrd("N", "N", &irows, &c__1, &irows, &a[ilo + ilo * a_dim1], lda,
+                           &b[ilo + ilo * b_dim1], ldb, &vl[vl_offset], ldvl, &vr[vr_offset], ldvr,
+                           &iinfo);
     }
     if(iinfo != 0)
     {
@@ -691,9 +677,9 @@ void sgegv_(char *jobvl, char *jobvr, integer *n, real *a, integer *lda, real *b
         *(unsigned char *)chtemp = 'E';
     }
     i__1 = *lwork + 1 - iwork;
-    shgeqz_(chtemp, jobvl, jobvr, n, &ilo, &ihi, &a[a_offset], lda, &b[b_offset], ldb, &alphar[1],
-            &alphai[1], &beta[1], &vl[vl_offset], ldvl, &vr[vr_offset], ldvr, &work[iwork], &i__1,
-            &iinfo);
+    aocl_lapack_shgeqz(chtemp, jobvl, jobvr, n, &ilo, &ihi, &a[a_offset], lda, &b[b_offset], ldb,
+                       &alphar[1], &alphai[1], &beta[1], &vl[vl_offset], ldvl, &vr[vr_offset], ldvr,
+                       &work[iwork], &i__1, &iinfo);
     if(iinfo >= 0)
     {
         /* Computing MAX */
@@ -735,8 +721,9 @@ void sgegv_(char *jobvl, char *jobvr, integer *n, real *a, integer *lda, real *b
         {
             *(unsigned char *)chtemp = 'R';
         }
-        stgevc_(chtemp, "B", ldumma, n, &a[a_offset], lda, &b[b_offset], ldb, &vl[vl_offset], ldvl,
-                &vr[vr_offset], ldvr, n, &in, &work[iwork], &iinfo);
+        aocl_lapack_stgevc(chtemp, "B", ldumma, n, &a[a_offset], lda, &b[b_offset], ldb,
+                           &vl[vl_offset], ldvl, &vr[vr_offset], ldvr, n, &in, &work[iwork],
+                           &iinfo);
         if(iinfo != 0)
         {
             *info = *n + 7;
@@ -745,8 +732,8 @@ void sgegv_(char *jobvl, char *jobvr, integer *n, real *a, integer *lda, real *b
         /* Undo balancing on VL and VR, rescale */
         if(ilvl)
         {
-            sggbak_("P", "L", n, &ilo, &ihi, &work[ileft], &work[iright], n, &vl[vl_offset], ldvl,
-                    &iinfo);
+            aocl_lapack_sggbak("P", "L", n, &ilo, &ihi, &work[ileft], &work[iright], n,
+                               &vl[vl_offset], ldvl, &iinfo);
             if(iinfo != 0)
             {
                 *info = *n + 8;
@@ -815,8 +802,8 @@ void sgegv_(char *jobvl, char *jobvr, integer *n, real *a, integer *lda, real *b
         }
         if(ilvr)
         {
-            sggbak_("P", "R", n, &ilo, &ihi, &work[ileft], &work[iright], n, &vr[vr_offset], ldvr,
-                    &iinfo);
+            aocl_lapack_sggbak("P", "R", n, &ilo, &ihi, &work[ileft], &work[iright], n,
+                               &vr[vr_offset], ldvr, &iinfo);
             if(iinfo != 0)
             {
                 *info = *n + 9;

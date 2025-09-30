@@ -17,14 +17,14 @@
 
 
 void time_Ttmm_u(
-               integer variant, integer type, integer n_repeats, integer n, integer nb_alg,
+               aocl_int64_t variant, aocl_int64_t type, aocl_int64_t n_repeats, aocl_int64_t n, aocl_int64_t nb_alg,
                FLA_Obj A, FLA_Obj x, FLA_Obj b, FLA_Obj norm,
                double *dtime, double *diff, double *gflops );
 
 
 int main(int argc, char *argv[])
 {
-  integer 
+  aocl_int64_t 
     m_input,
     m,
     p_first, p_last, p_inc,

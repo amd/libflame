@@ -4,8 +4,8 @@
  -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for
  libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
-static integer c_n1 = -1;
+static aocl_int64_t c__1 = 1;
+static aocl_int64_t c_n1 = -1;
 /* > \brief \b DSYTRI_3 */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -172,27 +172,38 @@ the matrix is singular and its */
 /* > \endverbatim */
 /* ===================================================================== */
 /* Subroutine */
-void dsytri_3_(char *uplo, integer *n, doublereal *a, integer *lda, doublereal *e, integer *ipiv,
-               doublereal *work, integer *lwork, integer *info)
+/** Generated wrapper function */
+void dsytri_3_(char *uplo, aocl_int_t *n, doublereal *a, aocl_int_t *lda, doublereal *e,
+               aocl_int_t *ipiv, doublereal *work, aocl_int_t *lwork, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_dsytri_3(uplo, n, a, lda, e, ipiv, work, lwork, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t lwork_64 = *lwork;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_dsytri_3(uplo, &n_64, a, &lda_64, e, ipiv, work, &lwork_64, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_dsytri_3(char *uplo, aocl_int64_t *n, doublereal *a, aocl_int64_t *lda,
+                          doublereal *e, aocl_int_t *ipiv, doublereal *work, aocl_int64_t *lwork,
+                          aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dsytri_3 inputs: uplo %c, n %" FLA_IS ", lda %" FLA_IS ", lwork %" FLA_IS "",
                       *uplo, *n, *lda, *lwork);
     /* System generated locals */
-    integer a_dim1, a_offset, i__1, i__2;
+    aocl_int64_t a_dim1, a_offset, i__1, i__2;
     /* Local variables */
-    extern /* Subroutine */
-        void
-        dsytri_3x_(char *, integer *, doublereal *, integer *, doublereal *, integer *,
-                   doublereal *, integer *, integer *);
-    integer nb;
-    extern logical lsame_(char *, char *, integer, integer);
+    aocl_int64_t nb;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     logical upper;
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
-    integer lwkopt;
+    aocl_int64_t lwkopt;
     logical lquery;
     /* -- LAPACK computational routine (version 3.8.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -227,7 +238,7 @@ void dsytri_3_(char *uplo, integer *n, doublereal *a, integer *lda, doublereal *
     /* Determine the block size */
     /* Computing MAX */
     i__1 = 1;
-    i__2 = ilaenv_(&c__1, "DSYTRI_3", uplo, n, &c_n1, &c_n1, &c_n1); // , expr subst
+    i__2 = aocl_lapack_ilaenv(&c__1, "DSYTRI_3", uplo, n, &c_n1, &c_n1, &c_n1); // , expr subst
     nb = fla_max(i__1, i__2);
     lwkopt = (*n + nb + 1) * (nb + 3);
     if(!upper && !lsame_(uplo, "L", 1, 1))
@@ -249,7 +260,7 @@ void dsytri_3_(char *uplo, integer *n, doublereal *a, integer *lda, doublereal *
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("DSYTRI_3", &i__1, (ftnlen)8);
+        aocl_blas_xerbla("DSYTRI_3", &i__1, (ftnlen)8);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -265,7 +276,7 @@ void dsytri_3_(char *uplo, integer *n, doublereal *a, integer *lda, doublereal *
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
-    dsytri_3x_(uplo, n, &a[a_offset], lda, &e[1], &ipiv[1], &work[1], &nb, info);
+    aocl_lapack_dsytri_3x(uplo, n, &a[a_offset], lda, &e[1], &ipiv[1], &work[1], &nb, info);
     work[1] = (doublereal)lwkopt;
     AOCL_DTL_TRACE_LOG_EXIT
     return;

@@ -49,7 +49,7 @@
 /* > \verbatim */
 /* > */
 /* > ZSYSVXX uses the diagonal pivoting factorization to compute the */
-/* > solution to a complex*16 system of linear equations A * X = B, where */
+/* > solution to a scomplex*16 system of linear equations A * X = B, where */
 /* > A is an N-by-N symmetric matrix and X and B are N-by-NRHS */
 /* > matrices. */
 /* > */
@@ -509,12 +509,12 @@ defaults */
 /* > \ingroup complex16SYsolve */
 /* ===================================================================== */
 /* Subroutine */
-void zsysvxx_(char *fact, char *uplo, integer *n, integer *nrhs, doublecomplex *a, integer *lda,
-              doublecomplex *af, integer *ldaf, integer *ipiv, char *equed, doublereal *s,
-              doublecomplex *b, integer *ldb, doublecomplex *x, integer *ldx, doublereal *rcond,
+void zsysvxx_(char *fact, char *uplo, integer *n, integer *nrhs, dcomplex *a, integer *lda,
+              dcomplex *af, integer *ldaf, integer *ipiv, char *equed, doublereal *s,
+              dcomplex *b, integer *ldb, dcomplex *x, integer *ldx, doublereal *rcond,
               doublereal *rpvgrw, doublereal *berr, integer *n_err_bnds__,
               doublereal *err_bnds_norm__, doublereal *err_bnds_comp__, integer *nparams,
-              doublereal *params, doublecomplex *work, doublereal *rwork, integer *info)
+              doublereal *params, dcomplex *work, doublereal *rwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zsysvxx inputs: fact %c, uplo %c, n %" FLA_IS ", nrhs %" FLA_IS
@@ -529,16 +529,16 @@ void zsysvxx_(char *fact, char *uplo, integer *n, integer *nrhs, doublecomplex *
     /* Local variables */
     extern /* Subroutine */
         void
-        zsyrfsx_(char *, char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *,
-                 integer *, integer *, doublereal *, doublecomplex *, integer *, doublecomplex *,
+        zsyrfsx_(char *, char *, integer *, integer *, dcomplex *, integer *, dcomplex *,
+                 integer *, integer *, doublereal *, dcomplex *, integer *, dcomplex *,
                  integer *, doublereal *, doublereal *, integer *, doublereal *, doublereal *,
-                 integer *, doublereal *, doublecomplex *, doublereal *, integer *);
+                 integer *, doublereal *, dcomplex *, doublereal *, integer *);
     integer j;
     doublereal amax, smin, smax;
     extern logical lsame_(char *, char *, integer, integer);
     doublereal scond;
-    extern doublereal zla_syrpvgrw_(char *, integer *, integer *, doublecomplex *, integer *,
-                                    doublecomplex *, integer *, integer *, doublereal *);
+    extern doublereal zla_syrpvgrw_(char *, integer *, integer *, dcomplex *, integer *,
+                                    dcomplex *, integer *, integer *, doublereal *);
     logical equil, rcequ;
     extern doublereal dlamch_(char *);
     logical nofact;
@@ -549,20 +549,20 @@ void zsysvxx_(char *fact, char *uplo, integer *n, integer *nrhs, doublecomplex *
     integer infequ;
     extern /* Subroutine */
         void
-        zlacpy_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *,
+        zlacpy_(char *, integer *, integer *, dcomplex *, integer *, dcomplex *,
                 integer *);
     doublereal smlnum;
     extern /* Subroutine */
         void
-        zlaqsy_(char *, integer *, doublecomplex *, integer *, doublereal *, doublereal *,
+        zlaqsy_(char *, integer *, dcomplex *, integer *, doublereal *, doublereal *,
                 doublereal *, char *),
-        zsytrf_(char *, integer *, doublecomplex *, integer *, integer *, doublecomplex *,
+        zsytrf_(char *, integer *, dcomplex *, integer *, integer *, dcomplex *,
                 integer *, integer *),
-        zlascl2_(integer *, integer *, doublereal *, doublecomplex *, integer *),
-        zsytrs_(char *, integer *, integer *, doublecomplex *, integer *, integer *,
-                doublecomplex *, integer *, integer *),
-        zsyequb_(char *, integer *, doublecomplex *, integer *, doublereal *, doublereal *,
-                 doublereal *, doublecomplex *, integer *);
+        zlascl2_(integer *, integer *, doublereal *, dcomplex *, integer *),
+        zsytrs_(char *, integer *, integer *, dcomplex *, integer *, integer *,
+                dcomplex *, integer *, integer *),
+        zsyequb_(char *, integer *, dcomplex *, integer *, doublereal *, doublereal *,
+                 doublereal *, dcomplex *, integer *);
     /* -- LAPACK driver routine (version 3.7.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */

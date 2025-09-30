@@ -4,7 +4,7 @@
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
  /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
+static aocl_int64_t c__1 = 1;
 /* > \brief \b SLAED9 used by SSTEDC. Finds the roots of the secular equation and updates the
  * eigenvectors. Us ed when the original matrix is dense. */
 /* =========== DOCUMENTATION =========== */
@@ -151,27 +151,45 @@ static integer c__1 = 1;
 /* > at Berkeley, USA */
 /* ===================================================================== */
 /* Subroutine */
-void slaed9_(integer *k, integer *kstart, integer *kstop, integer *n, real *d__, real *q,
-             integer *ldq, real *rho, real *dlambda, real *w, real *s, integer *lds, integer *info)
+/** Generated wrapper function */
+void slaed9_(aocl_int_t *k, aocl_int_t *kstart, aocl_int_t *kstop, aocl_int_t *n, real *d__,
+             real *q, aocl_int_t *ldq, real *rho, real *dlambda, real *w, real *s, aocl_int_t *lds,
+             aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_slaed9(k, kstart, kstop, n, d__, q, ldq, rho, dlambda, w, s, lds, info);
+#else
+    aocl_int64_t k_64 = *k;
+    aocl_int64_t kstart_64 = *kstart;
+    aocl_int64_t kstop_64 = *kstop;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t ldq_64 = *ldq;
+    aocl_int64_t lds_64 = *lds;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_slaed9(&k_64, &kstart_64, &kstop_64, &n_64, d__, q, &ldq_64, rho, dlambda, w, s,
+                       &lds_64, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_slaed9(aocl_int64_t *k, aocl_int64_t *kstart, aocl_int64_t *kstop, aocl_int64_t *n,
+                        real *d__, real *q, aocl_int64_t *ldq, real *rho, real *dlambda, real *w,
+                        real *s, aocl_int64_t *lds, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("slaed9 inputs: k %" FLA_IS ",kstart %" FLA_IS ",kstop %" FLA_IS ",n %" FLA_IS
                       ",ldq %" FLA_IS ",lds %" FLA_IS "",
                       *k, *kstart, *kstop, *n, *ldq, *lds);
     /* System generated locals */
-    integer q_dim1, q_offset, s_dim1, s_offset, i__1, i__2;
+    aocl_int64_t q_dim1, q_offset, s_dim1, s_offset, i__1, i__2;
     real r__1;
     /* Builtin functions */
     double sqrt(doublereal), r_sign(real *, real *);
     /* Local variables */
-    integer i__, j;
+    aocl_int64_t i__, j;
     real temp;
-    extern real snrm2_(integer *, real *, integer *);
-    extern /* Subroutine */
-        void
-        scopy_(integer *, real *, integer *, real *, integer *),
-        slaed4_(integer *, integer *, real *, real *, real *, real *, real *, integer *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -229,7 +247,7 @@ void slaed9_(integer *k, integer *kstart, integer *kstop, integer *n, real *d__,
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("SLAED9", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("SLAED9", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -242,7 +260,7 @@ void slaed9_(integer *k, integer *kstart, integer *kstop, integer *n, real *d__,
     i__1 = *kstop;
     for(j = *kstart; j <= i__1; ++j)
     {
-        slaed4_(k, &j, &dlambda[1], &w[1], &q[j * q_dim1 + 1], rho, &d__[j], info);
+        aocl_lapack_slaed4(k, &j, &dlambda[1], &w[1], &q[j * q_dim1 + 1], rho, &d__[j], info);
         /* If the zero finder fails, the computation is terminated. */
         if(*info != 0)
         {
@@ -266,10 +284,10 @@ void slaed9_(integer *k, integer *kstart, integer *kstop, integer *n, real *d__,
         goto L120;
     }
     /* Compute updated W. */
-    scopy_(k, &w[1], &c__1, &s[s_offset], &c__1);
+    aocl_blas_scopy(k, &w[1], &c__1, &s[s_offset], &c__1);
     /* Initialize W(I) = Q(I,I) */
     i__1 = *ldq + 1;
-    scopy_(k, &q[q_offset], &i__1, &w[1], &c__1);
+    aocl_blas_scopy(k, &q[q_offset], &i__1, &w[1], &c__1);
     i__1 = *k;
     for(j = 1; j <= i__1; ++j)
     {
@@ -304,7 +322,7 @@ void slaed9_(integer *k, integer *kstart, integer *kstop, integer *n, real *d__,
             q[i__ + j * q_dim1] = w[i__] / q[i__ + j * q_dim1];
             /* L90: */
         }
-        temp = snrm2_(k, &q[j * q_dim1 + 1], &c__1);
+        temp = aocl_blas_snrm2(k, &q[j * q_dim1 + 1], &c__1);
         i__2 = *k;
         for(i__ = 1; i__ <= i__2; ++i__)
         {

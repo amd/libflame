@@ -4,11 +4,11 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
-static integer c_n1 = -1;
-static integer c__2 = 2;
-static integer c__3 = 3;
-static integer c__4 = 4;
+static aocl_int64_t c__1 = 1;
+static aocl_int64_t c_n1 = -1;
+static aocl_int64_t c__2 = 2;
+static aocl_int64_t c__3 = 3;
+static aocl_int64_t c__4 = 4;
 /* > \brief \b SSYTRD_2STAGE */
 /* @generated from zhetrd_2stage.f, fortran z -> s, Sun Nov 6 19:34:06 2016 */
 /* =========== DOCUMENTATION =========== */
@@ -227,34 +227,43 @@ the routine */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void ssytrd_2stage_(char *vect, char *uplo, integer *n, real *a, integer *lda, real *d__, real *e,
-                    real *tau, real *hous2, integer *lhous2, real *work, integer *lwork,
-                    integer *info)
+/** Generated wrapper function */
+void ssytrd_2stage_(char *vect, char *uplo, aocl_int_t *n, real *a, aocl_int_t *lda, real *d__,
+                    real *e, real *tau, real *hous2, aocl_int_t *lhous2, real *work,
+                    aocl_int_t *lwork, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_ssytrd_2stage(vect, uplo, n, a, lda, d__, e, tau, hous2, lhous2, work, lwork, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t lhous2_64 = *lhous2;
+    aocl_int64_t lwork_64 = *lwork;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_ssytrd_2stage(vect, uplo, &n_64, a, &lda_64, d__, e, tau, hous2, &lhous2_64, work,
+                              &lwork_64, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_ssytrd_2stage(char *vect, char *uplo, aocl_int64_t *n, real *a, aocl_int64_t *lda,
+                               real *d__, real *e, real *tau, real *hous2, aocl_int64_t *lhous2,
+                               real *work, aocl_int64_t *lwork, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF(
-             "ssytrd_2stage inputs: vect %c, uplo %c, n %" FLA_IS ", lda %" FLA_IS
-             ", lhous2 %" FLA_IS "",
-             *vect, *uplo, *n, *lda, *lhous2);
+    AOCL_DTL_SNPRINTF("ssytrd_2stage inputs: vect %c, uplo %c, n %" FLA_IS ", lda %" FLA_IS
+                      ", lhous2 %" FLA_IS "",
+                      *vect, *uplo, *n, *lda, *lhous2);
     /* System generated locals */
-    integer a_dim1, a_offset, i__1;
+    aocl_int64_t a_dim1, a_offset, i__1;
     /* Local variables */
-    integer ib, kd, ldab;
-    extern integer ilaenv2stage_(integer *, char *, char *, integer *, integer *, integer *,
-                                 integer *);
-    integer lwrk, wpos;
-    extern /* Subroutine */
-        void
-        ssytrd_sb2st_(char *, char *, char *, integer *, integer *, real *, integer *, real *,
-                      real *, real *, integer *, real *, integer *, integer *),
-        ssytrd_sy2sb_(char *, integer *, integer *, real *, integer *, real *, integer *, real *,
-                      real *, integer *, integer *);
-    extern logical lsame_(char *, char *, integer, integer);
-    integer abpos, lhmin, lwmin;
+    aocl_int64_t ib, kd, ldab;
+    aocl_int64_t lwrk, wpos;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    aocl_int64_t abpos, lhmin, lwmin;
     logical upper;
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical lquery;
     /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -287,10 +296,10 @@ void ssytrd_2stage_(char *vect, char *uplo, integer *n, real *a, integer *lda, r
     upper = lsame_(uplo, "U", 1, 1);
     lquery = *lwork == -1 || *lhous2 == -1;
     /* Determine the block size, the workspace size and the hous size. */
-    kd = ilaenv2stage_(&c__1, "SSYTRD_2STAGE", vect, n, &c_n1, &c_n1, &c_n1);
-    ib = ilaenv2stage_(&c__2, "SSYTRD_2STAGE", vect, n, &kd, &c_n1, &c_n1);
-    lhmin = ilaenv2stage_(&c__3, "SSYTRD_2STAGE", vect, n, &kd, &ib, &c_n1);
-    lwmin = ilaenv2stage_(&c__4, "SSYTRD_2STAGE", vect, n, &kd, &ib, &c_n1);
+    kd = aocl_lapack_ilaenv2stage(&c__1, "SSYTRD_2STAGE", vect, n, &c_n1, &c_n1, &c_n1);
+    ib = aocl_lapack_ilaenv2stage(&c__2, "SSYTRD_2STAGE", vect, n, &kd, &c_n1, &c_n1);
+    lhmin = aocl_lapack_ilaenv2stage(&c__3, "SSYTRD_2STAGE", vect, n, &kd, &ib, &c_n1);
+    lwmin = aocl_lapack_ilaenv2stage(&c__4, "SSYTRD_2STAGE", vect, n, &kd, &ib, &c_n1);
     /* WRITE(*,*),'SSYTRD_2STAGE N KD UPLO LHMIN LWMIN ',N, KD, UPLO, */
     /* $ LHMIN, LWMIN */
     if(!lsame_(vect, "N", 1, 1))
@@ -325,7 +334,7 @@ void ssytrd_2stage_(char *vect, char *uplo, integer *n, real *a, integer *lda, r
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("SSYTRD_2STAGE", &i__1, (ftnlen)13);
+        aocl_blas_xerbla("SSYTRD_2STAGE", &i__1, (ftnlen)13);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -346,21 +355,21 @@ void ssytrd_2stage_(char *vect, char *uplo, integer *n, real *a, integer *lda, r
     lwrk = *lwork - ldab * *n;
     abpos = 1;
     wpos = abpos + ldab * *n;
-    ssytrd_sy2sb_(uplo, n, &kd, &a[a_offset], lda, &work[abpos], &ldab, &tau[1], &work[wpos], &lwrk,
-                  info);
+    aocl_lapack_ssytrd_sy2sb(uplo, n, &kd, &a[a_offset], lda, &work[abpos], &ldab, &tau[1],
+                             &work[wpos], &lwrk, info);
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("SSYTRD_SY2SB", &i__1, (ftnlen)12);
+        aocl_blas_xerbla("SSYTRD_SY2SB", &i__1, (ftnlen)12);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
-    ssytrd_sb2st_("Y", vect, uplo, n, &kd, &work[abpos], &ldab, &d__[1], &e[1], &hous2[1], lhous2,
+    aocl_lapack_ssytrd_sb2st("Y", vect, uplo, n, &kd, &work[abpos], &ldab, &d__[1], &e[1], &hous2[1], lhous2,
                   &work[wpos], &lwrk, info);
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("SSYTRD_SB2ST", &i__1, (ftnlen)12);
+        aocl_blas_xerbla("SSYTRD_SB2ST", &i__1, (ftnlen)12);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }

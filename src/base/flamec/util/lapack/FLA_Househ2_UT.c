@@ -58,8 +58,8 @@ FLA_Error FLA_Househ2_UT( FLA_Side side, FLA_Obj chi_1, FLA_Obj x2, FLA_Obj tau 
 */
 {
   FLA_Datatype datatype;
-  integer          m_x2;
-  integer          inc_x2;
+  fla_dim_t          m_x2;
+  fla_dim_t          inc_x2;
 
   datatype = FLA_Obj_datatype( x2 );
 
@@ -157,9 +157,9 @@ FLA_Error FLA_Househ2_UT( FLA_Side side, FLA_Obj chi_1, FLA_Obj x2, FLA_Obj tau 
 
 
 
-FLA_Error FLA_Househ2_UT_l_ops( integer       m_x2,
+FLA_Error FLA_Househ2_UT_l_ops( fla_dim_t       m_x2,
                                 float*    chi_1,
-                                float*    x2, integer inc_x2,
+                                float*    x2, fla_dim_t inc_x2,
                                 float*    tau )
 {
   float    one_half = *FLA_FLOAT_PTR( FLA_ONE_HALF );
@@ -307,9 +307,9 @@ FLA_Error FLA_Househ2_UT_l_ops( integer       m_x2,
 }
 
 
-FLA_Error FLA_Househ2_UT_l_opd( integer       m_x2,
+FLA_Error FLA_Househ2_UT_l_opd( fla_dim_t       m_x2,
                                 double*   chi_1,
-                                double*   x2, integer inc_x2,
+                                double*   x2, fla_dim_t inc_x2,
                                 double*   tau )
 {
   double   one_half = *FLA_DOUBLE_PTR( FLA_ONE_HALF );
@@ -458,9 +458,9 @@ FLA_Error FLA_Househ2_UT_l_opd( integer       m_x2,
 }
 
 
-FLA_Error FLA_Househ2_UT_l_opc( integer       m_x2,
+FLA_Error FLA_Househ2_UT_l_opc( fla_dim_t       m_x2,
                                 scomplex* chi_1,
-                                scomplex* x2, integer inc_x2,
+                                scomplex* x2, fla_dim_t inc_x2,
                                 scomplex* tau )
 {
   scomplex one_half = *FLA_COMPLEX_PTR( FLA_ONE_HALF );
@@ -589,9 +589,9 @@ FLA_Error FLA_Househ2_UT_l_opc( integer       m_x2,
 
 
 
-FLA_Error FLA_Househ2_UT_l_opz( integer       m_x2,
+FLA_Error FLA_Househ2_UT_l_opz( fla_dim_t       m_x2,
                                 dcomplex* chi_1,
-                                dcomplex* x2, integer inc_x2,
+                                dcomplex* x2, fla_dim_t inc_x2,
                                 dcomplex* tau )
 {
   dcomplex one_half = *FLA_DOUBLE_COMPLEX_PTR( FLA_ONE_HALF );
@@ -719,9 +719,9 @@ FLA_Error FLA_Househ2_UT_l_opz( integer       m_x2,
 
 
 
-FLA_Error FLA_Househ2_UT_r_ops( integer       m_x2,
+FLA_Error FLA_Househ2_UT_r_ops( fla_dim_t       m_x2,
                                 float*    chi_1,
-                                float*    x2, integer inc_x2,
+                                float*    x2, fla_dim_t inc_x2,
                                 float*    tau )
 {
   FLA_Househ2_UT_l_ops( m_x2,
@@ -732,9 +732,9 @@ FLA_Error FLA_Househ2_UT_r_ops( integer       m_x2,
   return FLA_SUCCESS;
 }
 
-FLA_Error FLA_Househ2_UT_r_opd( integer       m_x2,
+FLA_Error FLA_Househ2_UT_r_opd( fla_dim_t       m_x2,
                                 double*   chi_1,
-                                double*   x2, integer inc_x2,
+                                double*   x2, fla_dim_t inc_x2,
                                 double*   tau )
 {
   FLA_Househ2_UT_l_opd( m_x2,
@@ -745,9 +745,9 @@ FLA_Error FLA_Househ2_UT_r_opd( integer       m_x2,
   return FLA_SUCCESS;
 }
 
-FLA_Error FLA_Househ2_UT_r_opc( integer       m_x2,
+FLA_Error FLA_Househ2_UT_r_opc( fla_dim_t       m_x2,
                                 scomplex* chi_1,
-                                scomplex* x2, integer inc_x2,
+                                scomplex* x2, fla_dim_t inc_x2,
                                 scomplex* tau )
 {
   FLA_Househ2_UT_l_opc( m_x2,
@@ -761,9 +761,9 @@ FLA_Error FLA_Househ2_UT_r_opc( integer       m_x2,
   return FLA_SUCCESS;
 }
 
-FLA_Error FLA_Househ2_UT_r_opz( integer       m_x2,
+FLA_Error FLA_Househ2_UT_r_opz( fla_dim_t       m_x2,
                                 dcomplex* chi_1,
-                                dcomplex* x2, integer inc_x2,
+                                dcomplex* x2, fla_dim_t inc_x2,
                                 dcomplex* tau )
 {
   FLA_Househ2_UT_l_opz( m_x2,

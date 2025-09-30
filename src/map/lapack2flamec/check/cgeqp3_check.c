@@ -1,16 +1,16 @@
 #include "FLA_f2c.h"
 #include "FLA_lapack2flame_return_defs.h"
-static integer c__1 = 1;
-static integer c_n1 = -1;
-int cgeqp3_check(integer *m, integer *n, scomplex *a, integer *lda, integer *jpvt, scomplex *tau,
-                 scomplex *work, integer *lwork, float *rwork, integer *info)
+static aocl_int64_t c__1 = 1;
+static aocl_int64_t c_n1 = -1;
+int cgeqp3_check(aocl_int64_t *m, aocl_int64_t *n, scomplex *a, aocl_int64_t *lda, aocl_int64_t *jpvt, scomplex *tau,
+                 scomplex *work, aocl_int64_t *lwork, float *rwork, aocl_int64_t *info)
 {
     /* System generated locals */
-    integer a_dim1, a_offset, i__1;
+    aocl_int64_t a_dim1, a_offset, i__1;
     /* Local variables */
-    integer nb, iws;
-    integer minmn;
-    integer lwkopt;
+    aocl_int64_t nb, iws;
+    aocl_int64_t minmn;
+    aocl_int64_t lwkopt;
     logical lquery;
 
     /* Parameter adjustments */
@@ -47,7 +47,7 @@ int cgeqp3_check(integer *m, integer *n, scomplex *a, integer *lda, integer *jpv
         else
         {
             iws = *n + 1;
-            nb = ilaenv_(&c__1, "CGEQRF", " ", m, n, &c_n1, &c_n1);
+            nb = aocl_lapack_ilaenv(&c__1, "CGEQRF", " ", m, n, &c_n1, &c_n1);
             lwkopt = (*n + 1) * nb;
         }
         work[1].real = (float)lwkopt;
@@ -60,7 +60,7 @@ int cgeqp3_check(integer *m, integer *n, scomplex *a, integer *lda, integer *jpv
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("CGEQP3", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("CGEQP3", &i__1, (ftnlen)6);
         return LAPACK_FAILURE;
     }
     else if(lquery)

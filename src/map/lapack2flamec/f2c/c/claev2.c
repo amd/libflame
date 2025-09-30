@@ -117,18 +117,18 @@ higher precision or correctly rounded or */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void claev2_(complex *a, complex *b, complex *c__, real *rt1, real *rt2, real *cs1, complex *sn1)
+void claev2_(scomplex *a, scomplex *b, scomplex *c__, real *rt1, real *rt2, real *cs1, scomplex *sn1)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
     /* System generated locals */
     real r__1, r__2, r__3;
-    complex q__1, q__2;
+    scomplex q__1, q__2;
     /* Builtin functions */
-    double c_abs(complex *);
-    void r_cnjg(complex *, complex *);
+    double c_abs(scomplex *);
+    void r_cnjg(scomplex *, scomplex *);
     /* Local variables */
     real t;
-    complex w;
+    scomplex w;
     extern /* Subroutine */
         void
         slaev2_(real *, real *, real *, real *, real *, real *, real *);

@@ -214,25 +214,39 @@
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void ztrttf_(char *transr, char *uplo, integer *n, doublecomplex *a, integer *lda,
-             doublecomplex *arf, integer *info)
+/** Generated wrapper function */
+void ztrttf_(char *transr, char *uplo, aocl_int_t *n, dcomplex *a, aocl_int_t *lda,
+             dcomplex *arf, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_ztrttf(transr, uplo, n, a, lda, arf, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_ztrttf(transr, uplo, &n_64, a, &lda_64, arf, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_ztrttf(char *transr, char *uplo, aocl_int64_t *n, dcomplex *a,
+                        aocl_int64_t *lda, dcomplex *arf, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("ztrttf inputs: transr %c, uplo %c, n %" FLA_IS ", lda %" FLA_IS "", *transr,
                       *uplo, *n, *lda);
     /* System generated locals */
-    integer a_dim1, a_offset, i__1, i__2, i__3, i__4;
-    doublecomplex z__1;
+    aocl_int64_t a_dim1, a_offset, i__1, i__2, i__3, i__4;
+    dcomplex z__1;
     /* Builtin functions */
-    void d_cnjg(doublecomplex *, doublecomplex *);
+    void d_cnjg(dcomplex *, dcomplex *);
     /* Local variables */
-    integer i__, j, k, l, n1, n2, ij, nt, nx2, np1x2;
+    aocl_int64_t i__, j, k, l, n1, n2, ij, nt, nx2, np1x2;
     logical normaltransr;
-    extern logical lsame_(char *, char *, integer, integer);
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     logical lower;
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical nisodd;
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -282,7 +296,7 @@ void ztrttf_(char *transr, char *uplo, integer *n, doublecomplex *a, integer *ld
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("ZTRTTF", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("ZTRTTF", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }

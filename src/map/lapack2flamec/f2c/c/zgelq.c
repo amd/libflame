@@ -4,9 +4,9 @@
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
  /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
-static integer c_n1 = -1;
-static integer c__2 = 2;
+static aocl_int64_t c__1 = 1;
+static aocl_int64_t c_n1 = -1;
+static aocl_int64_t c__2 = 2;
 /* > \brief \b ZGELQ */
 /* Definition: */
 /* =========== */
@@ -23,7 +23,7 @@ static integer c__2 = 2;
 /* > */
 /* > \verbatim */
 /* > */
-/* > ZGELQ computes an LQ factorization of a complex M-by-N matrix A: */
+/* > ZGELQ computes an LQ factorization of a scomplex M-by-N matrix A: */
 /* > */
 /* > A = ( L 0 ) * Q */
 /* > */
@@ -170,33 +170,42 @@ static integer c__2 = 2;
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void zgelq_(integer *m, integer *n, doublecomplex *a, integer *lda, doublecomplex *t,
-            integer *tsize, doublecomplex *work, integer *lwork, integer *info)
+/** Generated wrapper function */
+void zgelq_(aocl_int_t *m, aocl_int_t *n, dcomplex *a, aocl_int_t *lda, dcomplex *t,
+            aocl_int_t *tsize, dcomplex *work, aocl_int_t *lwork, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_zgelq(m, n, a, lda, t, tsize, work, lwork, info);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t tsize_64 = *tsize;
+    aocl_int64_t lwork_64 = *lwork;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_zgelq(&m_64, &n_64, a, &lda_64, t, &tsize_64, work, &lwork_64, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_zgelq(aocl_int64_t *m, aocl_int64_t *n, dcomplex *a, aocl_int64_t *lda,
+                       dcomplex *t, aocl_int64_t *tsize, dcomplex *work,
+                       aocl_int64_t *lwork, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zgelq inputs: m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS ", tsize %" FLA_IS
                       "",
                       *m, *n, *lda, *tsize);
     /* System generated locals */
-    integer a_dim1, a_offset, i__1, i__2;
+    aocl_int64_t a_dim1, a_offset, i__1, i__2;
     /* Local variables */
-    integer mb, nb;
+    aocl_int64_t mb, nb;
     logical mint, minw;
-    integer lwmin, lwreq, lwopt, nblcks;
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
-    extern /* Subroutine */
-        void
-        zgelqt_(integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *,
-                integer *, doublecomplex *, integer *);
+    aocl_int64_t lwmin, lwreq, lwopt, nblcks;
     logical lminws, lquery;
-    integer mintsz;
-    extern /* Subroutine */
-        void
-        zlaswlq_(integer *, integer *, integer *, integer *, doublecomplex *, integer *,
-                 doublecomplex *, integer *, doublecomplex *, integer *, integer *);
+    aocl_int64_t mintsz;
     /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd. -- */
@@ -243,8 +252,8 @@ void zgelq_(integer *m, integer *n, doublecomplex *a, integer *lda, doublecomple
     /* Determine the block size */
     if(fla_min(*m, *n) > 0)
     {
-        mb = ilaenv_(&c__1, "ZGELQ ", " ", m, n, &c__1, &c_n1);
-        nb = ilaenv_(&c__1, "ZGELQ ", " ", m, n, &c__2, &c_n1);
+        mb = aocl_lapack_ilaenv(&c__1, "ZGELQ ", " ", m, n, &c__1, &c_n1);
+        nb = aocl_lapack_ilaenv(&c__1, "ZGELQ ", " ", m, n, &c__2, &c_n1);
     }
     else
     {
@@ -385,7 +394,7 @@ void zgelq_(integer *m, integer *n, doublecomplex *a, integer *lda, doublecomple
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("ZGELQ", &i__1, (ftnlen)5);
+        aocl_blas_xerbla("ZGELQ", &i__1, (ftnlen)5);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -403,11 +412,11 @@ void zgelq_(integer *m, integer *n, doublecomplex *a, integer *lda, doublecomple
     /* The LQ Decomposition */
     if(*n <= *m || nb <= *m || nb >= *n)
     {
-        zgelqt_(m, n, &mb, &a[a_offset], lda, &t[6], &mb, &work[1], info);
+        aocl_lapack_zgelqt(m, n, &mb, &a[a_offset], lda, &t[6], &mb, &work[1], info);
     }
     else
     {
-        zlaswlq_(m, n, &mb, &nb, &a[a_offset], lda, &t[6], &mb, &work[1], lwork, info);
+        aocl_lapack_zlaswlq(m, n, &mb, &nb, &a[a_offset], lda, &t[6], &mb, &work[1], lwork, info);
     }
     work[1].r = (doublereal)lwreq;
     work[1].i = 0.; // , expr subst

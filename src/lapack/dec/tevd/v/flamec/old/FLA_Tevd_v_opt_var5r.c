@@ -13,9 +13,9 @@
 FLA_Error FLA_Tevd_v_opt_var5r( FLA_Obj d, FLA_Obj e )
 {
 	FLA_Datatype datatype;
-	integer          m_A;
-	integer          inc_d;
-	integer          inc_e;
+	aocl_int64_t          m_A;
+	aocl_int64_t          inc_d;
+	aocl_int64_t          inc_e;
 
 	datatype = FLA_Obj_datatype( d );
 
@@ -62,10 +62,10 @@ FLA_Error FLA_Tevd_v_opt_var5r( FLA_Obj d, FLA_Obj e )
 
 
 
-FLA_Error FLA_Tevd_v_ops_var5r( integer       m_A,
-                                integer       ij,
-                                float*    buff_d, integer inc_d, 
-                                float*    buff_e, integer inc_e,
+FLA_Error FLA_Tevd_v_ops_var5r( aocl_int64_t       m_A,
+                                aocl_int64_t       ij,
+                                float*    buff_d, aocl_int64_t inc_d, 
+                                float*    buff_e, aocl_int64_t inc_e,
                                 sgiv_t*   rots )
 {
 	return FLA_SUCCESS;
@@ -73,19 +73,19 @@ FLA_Error FLA_Tevd_v_ops_var5r( integer       m_A,
 
 //#define PRINTF
 
-FLA_Error FLA_Tevd_v_opd_var5r( integer       m_A,
-                                integer       ij,
-                                double*   buff_d, integer inc_d, 
-                                double*   buff_e, integer inc_e,
+FLA_Error FLA_Tevd_v_opd_var5r( aocl_int64_t       m_A,
+                                aocl_int64_t       ij,
+                                double*   buff_d, aocl_int64_t inc_d, 
+                                double*   buff_e, aocl_int64_t inc_e,
                                 dgiv_t*   rots )
 {
 	FLA_Error r_val;
-	integer       i;
+	aocl_int64_t       i;
 
 	// Iterate from back to front until all that is left is a 2x2.
 	for ( i = m_A - 1; i > 1; --i )
 	{
-		integer m_ATL = i + 1;
+		aocl_int64_t m_ATL = i + 1;
 
 		/*------------------------------------------------------------*/
 
@@ -121,10 +121,10 @@ FLA_Error FLA_Tevd_v_opd_var5r( integer       m_A,
 			// An eigenvalue converged somewhere within the diagonal (not at
 			// either the end), so we have to recurse with two subproblems.
 			{
-				integer       m_ATL = r_val;
-				integer       m_ABR = m_A - r_val - 1;
-				integer       ijT   = ij;
-				integer       ijB   = ij + m_ATL + 1;
+				aocl_int64_t       m_ATL = r_val;
+				aocl_int64_t       m_ABR = m_A - r_val - 1;
+				aocl_int64_t       ijT   = ij;
+				aocl_int64_t       ijB   = ij + m_ATL + 1;
 				double*   dTL   = buff_d + (0      )*inc_d;
 				double*   eTL   = buff_e + (0      )*inc_e;
 				double*   dBR   = buff_d + (m_ATL+1)*inc_d;

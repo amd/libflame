@@ -4,8 +4,8 @@
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
  /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
-static integer c_n1 = -1;
+static aocl_int64_t c__1 = 1;
+static aocl_int64_t c_n1 = -1;
 static real c_b32 = -1.f;
 static real c_b34 = 1.f;
 /* > \brief \b SGGGLM */
@@ -187,39 +187,43 @@ the least squares solution could not */
 /* > \ingroup ggglm */
 /* ===================================================================== */
 /* Subroutine */
-void sggglm_(integer *n, integer *m, integer *p, real *a, integer *lda, real *b, integer *ldb,
-             real *d__, real *x, real *y, real *work, integer *lwork, integer *info)
+/** Generated wrapper function */
+void sggglm_(aocl_int_t *n, aocl_int_t *m, aocl_int_t *p, real *a, aocl_int_t *lda, real *b,
+             aocl_int_t *ldb, real *d__, real *x, real *y, real *work, aocl_int_t *lwork,
+             aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_sggglm(n, m, p, a, lda, b, ldb, d__, x, y, work, lwork, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t p_64 = *p;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t ldb_64 = *ldb;
+    aocl_int64_t lwork_64 = *lwork;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_sggglm(&n_64, &m_64, &p_64, a, &lda_64, b, &ldb_64, d__, x, y, work, &lwork_64,
+                       &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_sggglm(aocl_int64_t *n, aocl_int64_t *m, aocl_int64_t *p, real *a,
+                        aocl_int64_t *lda, real *b, aocl_int64_t *ldb, real *d__, real *x, real *y,
+                        real *work, aocl_int64_t *lwork, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("sggglm inputs: n %" FLA_IS ", m %" FLA_IS ", p %" FLA_IS ", lda %" FLA_IS
                       ", ldb %" FLA_IS "",
                       *n, *m, *p, *lda, *ldb);
     /* System generated locals */
-    integer a_dim1, a_offset, b_dim1, b_offset, i__1, i__2, i__3, i__4;
+    aocl_int64_t a_dim1, a_offset, b_dim1, b_offset, i__1, i__2, i__3, i__4;
     /* Local variables */
-    integer i__, nb, np, nb1, nb2, nb3, nb4, lopt;
-    extern /* Subroutine */
-        void
-        sgemv_(char *, integer *, integer *, real *, real *, integer *, real *, integer *, real *,
-               real *, integer *),
-        scopy_(integer *, real *, integer *, real *, integer *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
-    extern /* Subroutine */
-        void
-        sggqrf_(integer *, integer *, integer *, real *, integer *, real *, real *, integer *,
-                real *, real *, integer *, integer *);
-    integer lwkmin, lwkopt;
+    aocl_int64_t i__, nb, np, nb1, nb2, nb3, nb4, lopt;
+    aocl_int64_t lwkmin, lwkopt;
     logical lquery;
-    extern /* Subroutine */
-        void
-        sormqr_(char *, char *, integer *, integer *, integer *, real *, integer *, real *, real *,
-                integer *, real *, integer *, integer *),
-        sormrq_(char *, char *, integer *, integer *, integer *, real *, integer *, real *, real *,
-                integer *, real *, integer *, integer *),
-        strtrs_(char *, char *, char *, integer *, integer *, real *, integer *, real *, integer *,
-                integer *);
-    extern real sroundup_lwork(integer *);
     /* -- LAPACK driver routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -285,10 +289,10 @@ void sggglm_(integer *n, integer *m, integer *p, real *a, integer *lda, real *b,
         }
         else
         {
-            nb1 = ilaenv_(&c__1, "SGEQRF", " ", n, m, &c_n1, &c_n1);
-            nb2 = ilaenv_(&c__1, "SGERQF", " ", n, m, &c_n1, &c_n1);
-            nb3 = ilaenv_(&c__1, "SORMQR", " ", n, m, p, &c_n1);
-            nb4 = ilaenv_(&c__1, "SORMRQ", " ", n, m, p, &c_n1);
+            nb1 = aocl_lapack_ilaenv(&c__1, "SGEQRF", " ", n, m, &c_n1, &c_n1);
+            nb2 = aocl_lapack_ilaenv(&c__1, "SGERQF", " ", n, m, &c_n1, &c_n1);
+            nb3 = aocl_lapack_ilaenv(&c__1, "SORMQR", " ", n, m, p, &c_n1);
+            nb4 = aocl_lapack_ilaenv(&c__1, "SORMRQ", " ", n, m, p, &c_n1);
             /* Computing MAX */
             i__1 = fla_max(nb1, nb2);
             i__1 = fla_max(i__1, nb3); // , expr subst
@@ -296,7 +300,7 @@ void sggglm_(integer *n, integer *m, integer *p, real *a, integer *lda, real *b,
             lwkmin = *m + *n + *p;
             lwkopt = *m + np + fla_max(*n, *p) * nb;
         }
-        work[1] = sroundup_lwork(&lwkopt);
+        work[1] = aocl_lapack_sroundup_lwork(&lwkopt);
         if(*lwork < lwkmin && !lquery)
         {
             *info = -12;
@@ -305,7 +309,7 @@ void sggglm_(integer *n, integer *m, integer *p, real *a, integer *lda, real *b,
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("SGGGLM", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("SGGGLM", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -337,15 +341,15 @@ void sggglm_(integer *n, integer *m, integer *p, real *a, integer *lda, real *b,
     /* where R11 and T22 are upper triangular, and Q and Z are */
     /* orthogonal. */
     i__1 = *lwork - *m - np;
-    sggqrf_(n, m, p, &a[a_offset], lda, &work[1], &b[b_offset], ldb, &work[*m + 1],
-            &work[*m + np + 1], &i__1, info);
+    aocl_lapack_sggqrf(n, m, p, &a[a_offset], lda, &work[1], &b[b_offset], ldb, &work[*m + 1],
+                       &work[*m + np + 1], &i__1, info);
     lopt = (integer)work[*m + np + 1];
     /* Update left-hand-side vector d = Q**T*d = ( d1 ) M */
     /* ( d2 ) N-M */
     i__1 = fla_max(1, *n);
     i__2 = *lwork - *m - np;
-    sormqr_("Left", "Transpose", n, &c__1, m, &a[a_offset], lda, &work[1], &d__[1], &i__1,
-            &work[*m + np + 1], &i__2, info);
+    aocl_lapack_sormqr("Left", "Transpose", n, &c__1, m, &a[a_offset], lda, &work[1], &d__[1],
+                       &i__1, &work[*m + np + 1], &i__2, info);
     /* Computing MAX */
     i__1 = lopt;
     i__2 = (integer)work[*m + np + 1]; // , expr subst
@@ -355,8 +359,9 @@ void sggglm_(integer *n, integer *m, integer *p, real *a, integer *lda, real *b,
     {
         i__1 = *n - *m;
         i__2 = *n - *m;
-        strtrs_("Upper", "No transpose", "Non unit", &i__1, &c__1,
-                &b[*m + 1 + (*m + *p - *n + 1) * b_dim1], ldb, &d__[*m + 1], &i__2, info);
+        aocl_lapack_strtrs("Upper", "No transpose", "Non unit", &i__1, &c__1,
+                           &b[*m + 1 + (*m + *p - *n + 1) * b_dim1], ldb, &d__[*m + 1], &i__2,
+                           info);
         if(*info > 0)
         {
             *info = 1;
@@ -364,7 +369,7 @@ void sggglm_(integer *n, integer *m, integer *p, real *a, integer *lda, real *b,
             return;
         }
         i__1 = *n - *m;
-        scopy_(&i__1, &d__[*m + 1], &c__1, &y[*m + *p - *n + 1], &c__1);
+        aocl_blas_scopy(&i__1, &d__[*m + 1], &c__1, &y[*m + *p - *n + 1], &c__1);
     }
     /* Set y1 = 0 */
     i__1 = *m + *p - *n;
@@ -375,12 +380,13 @@ void sggglm_(integer *n, integer *m, integer *p, real *a, integer *lda, real *b,
     }
     /* Update d1 = d1 - T12*y2 */
     i__1 = *n - *m;
-    sgemv_("No transpose", m, &i__1, &c_b32, &b[(*m + *p - *n + 1) * b_dim1 + 1], ldb,
-           &y[*m + *p - *n + 1], &c__1, &c_b34, &d__[1], &c__1);
+    aocl_blas_sgemv("No transpose", m, &i__1, &c_b32, &b[(*m + *p - *n + 1) * b_dim1 + 1], ldb,
+                    &y[*m + *p - *n + 1], &c__1, &c_b34, &d__[1], &c__1);
     /* Solve triangular system: R11*x = d1 */
     if(*m > 0)
     {
-        strtrs_("Upper", "No Transpose", "Non unit", m, &c__1, &a[a_offset], lda, &d__[1], m, info);
+        aocl_lapack_strtrs("Upper", "No Transpose", "Non unit", m, &c__1, &a[a_offset], lda,
+                           &d__[1], m, info);
         if(*info > 0)
         {
             *info = 2;
@@ -388,7 +394,7 @@ void sggglm_(integer *n, integer *m, integer *p, real *a, integer *lda, real *b,
             return;
         }
         /* Copy D to X */
-        scopy_(m, &d__[1], &c__1, &x[1], &c__1);
+        aocl_blas_scopy(m, &d__[1], &c__1, &x[1], &c__1);
     }
     /* Backward transformation y = Z**T *y */
     /* Computing MAX */
@@ -396,8 +402,8 @@ void sggglm_(integer *n, integer *m, integer *p, real *a, integer *lda, real *b,
     i__2 = *n - *p + 1; // , expr subst
     i__3 = fla_max(1, *p);
     i__4 = *lwork - *m - np;
-    sormrq_("Left", "Transpose", p, &c__1, &np, &b[fla_max(i__1, i__2) + b_dim1], ldb,
-            &work[*m + 1], &y[1], &i__3, &work[*m + np + 1], &i__4, info);
+    aocl_lapack_sormrq("Left", "Transpose", p, &c__1, &np, &b[fla_max(i__1, i__2) + b_dim1], ldb,
+                       &work[*m + 1], &y[1], &i__3, &work[*m + np + 1], &i__4, info);
     /* Computing MAX */
     i__1 = lopt;
     i__2 = (integer)work[*m + np + 1]; // , expr subst

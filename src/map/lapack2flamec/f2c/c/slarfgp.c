@@ -98,24 +98,33 @@
 /* > \ingroup larfgp */
 /* ===================================================================== */
 /* Subroutine */
-void slarfgp_(integer *n, real *alpha, real *x, integer *incx, real *tau)
+/** Generated wrapper function */
+void slarfgp_(aocl_int_t *n, real *alpha, real *x, aocl_int_t *incx, real *tau)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_slarfgp(n, alpha, x, incx, tau);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t incx_64 = *incx;
+
+    aocl_lapack_slarfgp(&n_64, alpha, x, &incx_64, tau);
+#endif
+}
+
+void aocl_lapack_slarfgp(aocl_int64_t *n, real *alpha, real *x, aocl_int64_t *incx, real *tau)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("slarfgp inputs: n %" FLA_IS ",incx %" FLA_IS "", *n, *incx);
     /* System generated locals */
-    integer i__1;
+    aocl_int64_t i__1;
     real r__1;
     /* Builtin functions */
     double r_sign(real *, real *);
     /* Local variables */
-    integer j;
+    aocl_int64_t j;
     real savealpha, eps;
-    integer knt;
+    aocl_int64_t knt;
     real beta;
-    extern real snrm2_(integer *, real *, integer *);
-    extern /* Subroutine */
-        void
-        sscal_(integer *, real *, real *, integer *);
     real xnorm;
     extern real slapy2_(real *, real *), slamch_(char *);
     real bignum, smlnum;
@@ -149,7 +158,7 @@ void slarfgp_(integer *n, real *alpha, real *x, integer *incx, real *tau)
     }
     eps = slamch_("Precision");
     i__1 = *n - 1;
-    xnorm = snrm2_(&i__1, &x[1], incx);
+    xnorm = aocl_blas_snrm2(&i__1, &x[1], incx);
     if(xnorm <= eps * f2c_abs(*alpha))
     {
         /* H = [+/-1, 0;
@@ -189,7 +198,7 @@ void slarfgp_(integer *n, real *alpha, real *x, integer *incx, real *tau)
         L10:
             ++knt;
             i__1 = *n - 1;
-            sscal_(&i__1, &bignum, &x[1], incx);
+            aocl_blas_sscal(&i__1, &bignum, &x[1], incx);
             beta *= bignum;
             *alpha *= bignum;
             if(f2c_abs(beta) < smlnum && knt < 20)
@@ -198,7 +207,7 @@ void slarfgp_(integer *n, real *alpha, real *x, integer *incx, real *tau)
             }
             /* New BETA is at most 1, at least SMLNUM */
             i__1 = *n - 1;
-            xnorm = snrm2_(&i__1, &x[1], incx);
+            xnorm = aocl_blas_snrm2(&i__1, &x[1], incx);
             r__1 = slapy2_(alpha, &xnorm);
             beta = r_sign(&r__1, alpha);
         }
@@ -242,7 +251,7 @@ void slarfgp_(integer *n, real *alpha, real *x, integer *incx, real *tau)
             /* This is the general case. */
             i__1 = *n - 1;
             r__1 = 1.f / *alpha;
-            sscal_(&i__1, &r__1, &x[1], incx);
+            aocl_blas_sscal(&i__1, &r__1, &x[1], incx);
         }
         /* If BETA is subnormal, it may lose relative accuracy */
         i__1 = knt;

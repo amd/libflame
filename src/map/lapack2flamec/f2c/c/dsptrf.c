@@ -9,7 +9,7 @@
  */
 
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
+static aocl_int64_t c__1 = 1;
 /* > \brief \b DSPTRF */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -162,41 +162,44 @@ static integer c__1 = 1;
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void dsptrf_(char *uplo, integer *n, doublereal *ap, integer *ipiv, integer *info)
+/** Generated wrapper function */
+void dsptrf_(char *uplo, aocl_int_t *n, doublereal *ap, aocl_int_t *ipiv, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_dsptrf(uplo, n, ap, ipiv, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_dsptrf(uplo, &n_64, ap, ipiv, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_dsptrf(char *uplo, aocl_int64_t *n, doublereal *ap, aocl_int_t *ipiv,
+                        aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dsptrf inputs: uplo %c, n %" FLA_IS "", *uplo, *n);
     /* System generated locals */
-    integer i__1, i__2;
+    aocl_int64_t i__1, i__2;
     doublereal d__1, d__2, d__3;
     /* Builtin functions */
     double sqrt(doublereal);
     /* Local variables */
-    integer i__, j, k;
+    aocl_int64_t i__, j, k;
     doublereal t, r1, d11, d12, d21, d22;
-    integer kc, kk, kp;
+    aocl_int64_t kc, kk, kp;
     doublereal wk;
-    integer kx, knc, kpc, npp;
+    aocl_int64_t kx, knc, kpc, npp;
     doublereal wkm1, wkp1;
-    integer imax, jmax;
-    extern /* Subroutine */
-        void
-        dspr_(char *, integer *, doublereal *, doublereal *, integer *, doublereal *);
+    aocl_int64_t imax, jmax;
     doublereal alpha;
-    extern /* Subroutine */
-        void
-        dscal_(integer *, doublereal *, doublereal *, integer *);
-    extern logical lsame_(char *, char *, integer, integer);
-    extern /* Subroutine */
-        void
-        dswap_(integer *, doublereal *, integer *, doublereal *, integer *);
-    integer kstep;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    aocl_int64_t kstep;
     logical upper;
     doublereal absakk;
-    extern integer idamax_(integer *, doublereal *, integer *);
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal colmax, rowmax;
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -238,7 +241,7 @@ void dsptrf_(char *uplo, integer *n, doublereal *ap, integer *ipiv, integer *inf
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("DSPTRF", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("DSPTRF", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -267,7 +270,7 @@ void dsptrf_(char *uplo, integer *n, doublereal *ap, integer *ipiv, integer *inf
         if(k > 1)
         {
             i__1 = k - 1;
-            imax = idamax_(&i__1, &ap[kc], &c__1);
+            imax = aocl_blas_idamax(&i__1, &ap[kc], &c__1);
             colmax = (d__1 = ap[kc + imax - 1], f2c_dabs(d__1));
         }
         else
@@ -310,7 +313,7 @@ void dsptrf_(char *uplo, integer *n, doublereal *ap, integer *ipiv, integer *inf
                 if(imax > 1)
                 {
                     i__1 = imax - 1;
-                    jmax = idamax_(&i__1, &ap[kpc], &c__1);
+                    jmax = aocl_blas_idamax(&i__1, &ap[kpc], &c__1);
                     /* Computing MAX */
                     d__2 = rowmax;
                     d__3 = (d__1 = ap[kpc + jmax - 1], f2c_dabs(d__1)); // , expr subst
@@ -345,7 +348,7 @@ void dsptrf_(char *uplo, integer *n, doublereal *ap, integer *ipiv, integer *inf
                 /* Interchange rows and columns KK and KP in the leading */
                 /* submatrix A(1:k,1:k) */
                 i__1 = kp - 1;
-                dswap_(&i__1, &ap[knc], &c__1, &ap[kpc], &c__1);
+                aocl_blas_dswap(&i__1, &ap[knc], &c__1, &ap[kpc], &c__1);
                 kx = kpc + kp - 1;
                 i__1 = kk - 1;
                 for(j = kp + 1; j <= i__1; ++j)
@@ -377,10 +380,10 @@ void dsptrf_(char *uplo, integer *n, doublereal *ap, integer *ipiv, integer *inf
                 r1 = 1. / ap[kc + k - 1];
                 i__1 = k - 1;
                 d__1 = -r1;
-                dspr_(uplo, &i__1, &d__1, &ap[kc], &c__1, &ap[1]);
+                aocl_blas_dspr(uplo, &i__1, &d__1, &ap[kc], &c__1, &ap[1]);
                 /* Store U(k) in column k */
                 i__1 = k - 1;
-                dscal_(&i__1, &r1, &ap[kc], &c__1);
+                aocl_blas_dscal(&i__1, &r1, &ap[kc], &c__1);
             }
             else
             {
@@ -420,12 +423,12 @@ void dsptrf_(char *uplo, integer *n, doublereal *ap, integer *ipiv, integer *inf
         /* Store details of the interchanges in IPIV */
         if(kstep == 1)
         {
-            ipiv[k] = kp;
+            ipiv[k] = (aocl_int_t)(kp);
         }
         else
         {
-            ipiv[k] = -kp;
-            ipiv[k - 1] = -kp;
+            ipiv[k] = (aocl_int_t)(-kp);
+            ipiv[k - 1] = (aocl_int_t)(-kp);
         }
         /* Decrease K and return to the start of the main loop */
         k -= kstep;
@@ -456,7 +459,7 @@ void dsptrf_(char *uplo, integer *n, doublereal *ap, integer *ipiv, integer *inf
         if(k < *n)
         {
             i__1 = *n - k;
-            imax = k + idamax_(&i__1, &ap[kc + 1], &c__1);
+            imax = k + aocl_blas_idamax(&i__1, &ap[kc + 1], &c__1);
             colmax = (d__1 = ap[kc + imax - k], f2c_dabs(d__1));
         }
         else
@@ -500,7 +503,7 @@ void dsptrf_(char *uplo, integer *n, doublereal *ap, integer *ipiv, integer *inf
                 if(imax < *n)
                 {
                     i__1 = *n - imax;
-                    jmax = imax + idamax_(&i__1, &ap[kpc + 1], &c__1);
+                    jmax = imax + aocl_blas_idamax(&i__1, &ap[kpc + 1], &c__1);
                     /* Computing MAX */
                     d__2 = rowmax;
                     d__3 = (d__1 = ap[kpc + jmax - imax], f2c_dabs(d__1)); // , expr subst
@@ -537,7 +540,7 @@ void dsptrf_(char *uplo, integer *n, doublereal *ap, integer *ipiv, integer *inf
                 if(kp < *n)
                 {
                     i__1 = *n - kp;
-                    dswap_(&i__1, &ap[knc + kp - kk + 1], &c__1, &ap[kpc + 1], &c__1);
+                    aocl_blas_dswap(&i__1, &ap[knc + kp - kk + 1], &c__1, &ap[kpc + 1], &c__1);
                 }
                 kx = knc + kp - kk;
                 i__1 = kp - 1;
@@ -572,10 +575,10 @@ void dsptrf_(char *uplo, integer *n, doublereal *ap, integer *ipiv, integer *inf
                     r1 = 1. / ap[kc];
                     i__1 = *n - k;
                     d__1 = -r1;
-                    dspr_(uplo, &i__1, &d__1, &ap[kc + 1], &c__1, &ap[kc + *n - k + 1]);
+                    aocl_blas_dspr(uplo, &i__1, &d__1, &ap[kc + 1], &c__1, &ap[kc + *n - k + 1]);
                     /* Store L(k) in column K */
                     i__1 = *n - k;
-                    dscal_(&i__1, &r1, &ap[kc + 1], &c__1);
+                    aocl_blas_dscal(&i__1, &r1, &ap[kc + 1], &c__1);
                 }
             }
             else
@@ -624,12 +627,12 @@ void dsptrf_(char *uplo, integer *n, doublereal *ap, integer *ipiv, integer *inf
         /* Store details of the interchanges in IPIV */
         if(kstep == 1)
         {
-            ipiv[k] = kp;
+            ipiv[k] = (aocl_int_t)(kp);
         }
         else
         {
-            ipiv[k] = -kp;
-            ipiv[k + 1] = -kp;
+            ipiv[k] = (aocl_int_t)(-kp);
+            ipiv[k + 1] = (aocl_int_t)(-kp);
         }
         /* Increase K and return to the start of the main loop */
         k += kstep;

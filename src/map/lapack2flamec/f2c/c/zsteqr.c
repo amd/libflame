@@ -4,11 +4,11 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static doublecomplex c_b1 = {0., 0.};
-static doublecomplex c_b2 = {1., 0.};
-static integer c__0 = 0;
-static integer c__1 = 1;
-static integer c__2 = 2;
+static dcomplex c_b1 = {{0.}, {0.}};
+static dcomplex c_b2 = {{1.}, {0.}};
+static aocl_int64_t c__0 = 0;
+static aocl_int64_t c__1 = 1;
+static aocl_int64_t c__2 = 2;
 static doublereal c_b41 = 1.;
 /* > \brief \b ZSTEQR */
 /* =========== DOCUMENTATION =========== */
@@ -47,7 +47,7 @@ static doublereal c_b41 = 1.;
 /* > */
 /* > ZSTEQR computes all eigenvalues and, optionally, eigenvectors of a */
 /* > symmetric tridiagonal matrix using the implicit QL or QR method. */
-/* > The eigenvectors of a full or band complex Hermitian matrix can also */
+/* > The eigenvectors of a full or band scomplex Hermitian matrix can also */
 /* > be found if ZHETRD or ZHPTRD or ZHBTRD has been used to reduce this */
 /* > matrix to tridiagonal form. */
 /* > \endverbatim */
@@ -136,64 +136,61 @@ on exit, D */
 /* > \ingroup complex16OTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void zsteqr_(char *compz, integer *n, doublereal *d__, doublereal *e, doublecomplex *z__,
-             integer *ldz, doublereal *work, integer *info)
+/** Generated wrapper function */
+void zsteqr_(char *compz, aocl_int_t *n, doublereal *d__, doublereal *e, dcomplex *z__,
+             aocl_int_t *ldz, doublereal *work, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_zsteqr(compz, n, d__, e, z__, ldz, work, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t ldz_64 = *ldz;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_zsteqr(compz, &n_64, d__, e, z__, &ldz_64, work, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_zsteqr(char *compz, aocl_int64_t *n, doublereal *d__, doublereal *e,
+                        dcomplex *z__, aocl_int64_t *ldz, doublereal *work, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zsteqr inputs: compz %c, n %" FLA_IS ", ldz %" FLA_IS "", *compz, *n, *ldz);
     /* System generated locals */
-    integer z_dim1, z_offset, i__1, i__2;
+    aocl_int64_t z_dim1, z_offset, i__1, i__2;
     doublereal d__1, d__2;
     /* Builtin functions */
     double sqrt(doublereal), d_sign(doublereal *, doublereal *);
     /* Local variables */
     doublereal b, c__, f, g;
-    integer i__, j, k, l, m;
+    aocl_int64_t i__, j, k, l, m;
     doublereal p, r__, s;
-    integer l1, ii, mm, lm1, mm1, nm1;
+    aocl_int64_t l1, ii, mm, lm1, mm1, nm1;
     doublereal rt1, rt2, eps;
-    integer lsv;
+    aocl_int64_t lsv;
     doublereal tst, eps2;
-    integer lend, jtot;
+    aocl_int64_t lend, jtot;
     extern /* Subroutine */
         void
         dlae2_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *);
-    extern logical lsame_(char *, char *, integer, integer);
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     doublereal anorm;
-    extern /* Subroutine */
-        void
-        zlasr_(char *, char *, char *, integer *, integer *, doublereal *, doublereal *,
-               doublecomplex *, integer *),
-        zswap_(integer *, doublecomplex *, integer *, doublecomplex *, integer *),
-        dlaev2_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *,
-                doublereal *);
-    integer lendm1, lendp1;
+    extern void dlaev2_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *,
+              doublereal *);
+    aocl_int64_t lendm1, lendp1;
     extern doublereal dlapy2_(doublereal *, doublereal *), dlamch_(char *);
-    integer iscale;
-    extern /* Subroutine */
-        void
-        dlascl_(char *, integer *, integer *, doublereal *, doublereal *, integer *, integer *,
-                doublereal *, integer *, integer *);
+    aocl_int64_t iscale;
     doublereal safmin;
     extern /* Subroutine */
         void
         dlartg_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *);
     doublereal safmax;
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    extern doublereal dlanst_(char *, integer *, doublereal *, doublereal *);
-    extern /* Subroutine */
-        void
-        dlasrt_(char *, integer *, doublereal *, integer *);
-    integer lendsv;
+    aocl_int64_t lendsv;
     doublereal ssfmin;
-    integer nmaxit, icompz;
+    aocl_int64_t nmaxit, icompz;
     doublereal ssfmax;
-    extern /* Subroutine */
-        void
-        zlaset_(char *, integer *, integer *, doublecomplex *, doublecomplex *, doublecomplex *,
-                integer *);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -255,7 +252,7 @@ void zsteqr_(char *compz, integer *n, doublereal *d__, doublereal *e, doublecomp
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("ZSTEQR", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("ZSTEQR", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -289,7 +286,7 @@ void zsteqr_(char *compz, integer *n, doublereal *d__, doublereal *e, doublecomp
     /* matrix. */
     if(icompz == 2)
     {
-        zlaset_("Full", n, n, &c_b1, &c_b2, &z__[z_offset], ldz);
+        aocl_lapack_zlaset("Full", n, n, &c_b1, &c_b2, &z__[z_offset], ldz);
     }
     nmaxit = *n * 30;
     jtot = 0;
@@ -339,7 +336,7 @@ L30:
     }
     /* Scale submatrix in rows and columns L to LEND */
     i__1 = lend - l + 1;
-    anorm = dlanst_("I", &i__1, &d__[l], &e[l]);
+    anorm = aocl_lapack_dlanst("I", &i__1, &d__[l], &e[l]);
     iscale = 0;
     if(anorm == 0.)
     {
@@ -349,17 +346,17 @@ L30:
     {
         iscale = 1;
         i__1 = lend - l + 1;
-        dlascl_("G", &c__0, &c__0, &anorm, &ssfmax, &i__1, &c__1, &d__[l], n, info);
+        aocl_lapack_dlascl("G", &c__0, &c__0, &anorm, &ssfmax, &i__1, &c__1, &d__[l], n, info);
         i__1 = lend - l;
-        dlascl_("G", &c__0, &c__0, &anorm, &ssfmax, &i__1, &c__1, &e[l], n, info);
+        aocl_lapack_dlascl("G", &c__0, &c__0, &anorm, &ssfmax, &i__1, &c__1, &e[l], n, info);
     }
     else if(anorm < ssfmin)
     {
         iscale = 2;
         i__1 = lend - l + 1;
-        dlascl_("G", &c__0, &c__0, &anorm, &ssfmin, &i__1, &c__1, &d__[l], n, info);
+        aocl_lapack_dlascl("G", &c__0, &c__0, &anorm, &ssfmin, &i__1, &c__1, &d__[l], n, info);
         i__1 = lend - l;
-        dlascl_("G", &c__0, &c__0, &anorm, &ssfmin, &i__1, &c__1, &e[l], n, info);
+        aocl_lapack_dlascl("G", &c__0, &c__0, &anorm, &ssfmin, &i__1, &c__1, &e[l], n, info);
     }
     /* Choose between QL and QR iteration */
     if((d__1 = d__[lend], f2c_dabs(d__1)) < (d__2 = d__[l], f2c_dabs(d__2)))
@@ -410,8 +407,8 @@ L30:
                 dlaev2_(&d__[l], &e[l], &d__[l + 1], &rt1, &rt2, &c__, &s);
                 work[l] = c__;
                 work[*n - 1 + l] = s;
-                zlasr_("R", "V", "B", n, &c__2, &work[l], &work[*n - 1 + l], &z__[l * z_dim1 + 1],
-                       ldz);
+                aocl_lapack_zlasr("R", "V", "B", n, &c__2, &work[l], &work[*n - 1 + l],
+                                  &z__[l * z_dim1 + 1], ldz);
             }
             else
             {
@@ -468,7 +465,8 @@ L30:
         if(icompz > 0)
         {
             mm = m - l + 1;
-            zlasr_("R", "V", "B", n, &mm, &work[l], &work[*n - 1 + l], &z__[l * z_dim1 + 1], ldz);
+            aocl_lapack_zlasr("R", "V", "B", n, &mm, &work[l], &work[*n - 1 + l],
+                              &z__[l * z_dim1 + 1], ldz);
         }
         d__[l] -= p;
         e[l] = g;
@@ -526,8 +524,8 @@ L30:
                 dlaev2_(&d__[l - 1], &e[l - 1], &d__[l], &rt1, &rt2, &c__, &s);
                 work[m] = c__;
                 work[*n - 1 + m] = s;
-                zlasr_("R", "V", "F", n, &c__2, &work[m], &work[*n - 1 + m],
-                       &z__[(l - 1) * z_dim1 + 1], ldz);
+                aocl_lapack_zlasr("R", "V", "F", n, &c__2, &work[m], &work[*n - 1 + m],
+                                  &z__[(l - 1) * z_dim1 + 1], ldz);
             }
             else
             {
@@ -584,7 +582,8 @@ L30:
         if(icompz > 0)
         {
             mm = l - m + 1;
-            zlasr_("R", "V", "F", n, &mm, &work[m], &work[*n - 1 + m], &z__[m * z_dim1 + 1], ldz);
+            aocl_lapack_zlasr("R", "V", "F", n, &mm, &work[m], &work[*n - 1 + m],
+                              &z__[m * z_dim1 + 1], ldz);
         }
         d__[l] -= p;
         e[lm1] = g;
@@ -604,16 +603,16 @@ L140:
     if(iscale == 1)
     {
         i__1 = lendsv - lsv + 1;
-        dlascl_("G", &c__0, &c__0, &ssfmax, &anorm, &i__1, &c__1, &d__[lsv], n, info);
+        aocl_lapack_dlascl("G", &c__0, &c__0, &ssfmax, &anorm, &i__1, &c__1, &d__[lsv], n, info);
         i__1 = lendsv - lsv;
-        dlascl_("G", &c__0, &c__0, &ssfmax, &anorm, &i__1, &c__1, &e[lsv], n, info);
+        aocl_lapack_dlascl("G", &c__0, &c__0, &ssfmax, &anorm, &i__1, &c__1, &e[lsv], n, info);
     }
     else if(iscale == 2)
     {
         i__1 = lendsv - lsv + 1;
-        dlascl_("G", &c__0, &c__0, &ssfmin, &anorm, &i__1, &c__1, &d__[lsv], n, info);
+        aocl_lapack_dlascl("G", &c__0, &c__0, &ssfmin, &anorm, &i__1, &c__1, &d__[lsv], n, info);
         i__1 = lendsv - lsv;
-        dlascl_("G", &c__0, &c__0, &ssfmin, &anorm, &i__1, &c__1, &e[lsv], n, info);
+        aocl_lapack_dlascl("G", &c__0, &c__0, &ssfmin, &anorm, &i__1, &c__1, &e[lsv], n, info);
     }
     /* Check for no convergence to an eigenvalue after a total */
     /* of N*MAXIT iterations. */
@@ -637,7 +636,7 @@ L160:
     if(icompz == 0)
     {
         /* Use Quick Sort */
-        dlasrt_("I", n, &d__[1], info);
+        aocl_lapack_dlasrt("I", n, &d__[1], info);
     }
     else
     {
@@ -662,7 +661,7 @@ L160:
             {
                 d__[k] = d__[i__];
                 d__[i__] = p;
-                zswap_(n, &z__[i__ * z_dim1 + 1], &c__1, &z__[k * z_dim1 + 1], &c__1);
+                aocl_blas_zswap(n, &z__[i__ * z_dim1 + 1], &c__1, &z__[k * z_dim1 + 1], &c__1);
             }
             /* L180: */
         }

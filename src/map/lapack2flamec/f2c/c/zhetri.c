@@ -4,8 +4,8 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static doublecomplex c_b2 = {0., 0.};
-static integer c__1 = 1;
+static dcomplex c_b2 = {{0.}, {0.}};
+static aocl_int64_t c__1 = 1;
 /* > \brief \b ZHETRI */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -41,7 +41,7 @@ static integer c__1 = 1;
 /* > */
 /* > \verbatim */
 /* > */
-/* > ZHETRI computes the inverse of a complex Hermitian indefinite matrix */
+/* > ZHETRI computes the inverse of a scomplex Hermitian indefinite matrix */
 /* > A using the factorization A = U*D*U**H or A = L*D*L**H computed by */
 /* > ZHETRF. */
 /* > \endverbatim */
@@ -115,42 +115,46 @@ the matrix is singular and its */
 /* > \ingroup complex16HEcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void zhetri_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *ipiv,
-             doublecomplex *work, integer *info)
+/** Generated wrapper function */
+void zhetri_(char *uplo, aocl_int_t *n, dcomplex *a, aocl_int_t *lda, aocl_int_t *ipiv,
+             dcomplex *work, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_zhetri(uplo, n, a, lda, ipiv, work, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_zhetri(uplo, &n_64, a, &lda_64, ipiv, work, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_zhetri(char *uplo, aocl_int64_t *n, dcomplex *a, aocl_int64_t *lda,
+                        aocl_int_t *ipiv, dcomplex *work, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zhetri inputs: uplo %c, n %" FLA_IS ", lda %" FLA_IS "", *uplo, *n, *lda);
 
     /* System generated locals */
-    integer a_dim1, a_offset, i__1, i__2, i__3;
+    aocl_int64_t a_dim1, a_offset, i__1, i__2, i__3;
     doublereal d__1;
-    doublecomplex z__1, z__2;
+    dcomplex z__1, z__2;
     /* Builtin functions */
-    double z_abs(doublecomplex *);
-    void d_cnjg(doublecomplex *, doublecomplex *);
+    double z_abs(dcomplex *);
+    void d_cnjg(dcomplex *, dcomplex *);
     /* Local variables */
     doublereal d__;
-    integer j, k;
+    aocl_int64_t j, k;
     doublereal t, ak;
-    integer kp;
+    aocl_int64_t kp;
     doublereal akp1;
-    doublecomplex temp, akkp1;
-    extern logical lsame_(char *, char *, integer, integer);
-    extern /* Double Complex */
-        VOID
-        zdotc_f2c_(doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *,
-                   integer *);
-    integer kstep;
-    extern /* Subroutine */
-        void
-        zhemv_(char *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *,
-               integer *, doublecomplex *, doublecomplex *, integer *);
+    dcomplex temp, akkp1;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    aocl_int64_t kstep;
     logical upper;
-    extern /* Subroutine */
-        void
-        zcopy_(integer *, doublecomplex *, integer *, doublecomplex *, integer *),
-        zswap_(integer *, doublecomplex *, integer *, doublecomplex *, integer *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -196,7 +200,7 @@ void zhetri_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *ip
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("ZHETRI", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("ZHETRI", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -261,16 +265,16 @@ void zhetri_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *ip
             if(k > 1)
             {
                 i__1 = k - 1;
-                zcopy_(&i__1, &a[k * a_dim1 + 1], &c__1, &work[1], &c__1);
+                aocl_blas_zcopy(&i__1, &a[k * a_dim1 + 1], &c__1, &work[1], &c__1);
                 i__1 = k - 1;
                 z__1.r = -1.;
                 z__1.i = -0.; // , expr subst
-                zhemv_(uplo, &i__1, &z__1, &a[a_offset], lda, &work[1], &c__1, &c_b2,
-                       &a[k * a_dim1 + 1], &c__1);
+                aocl_blas_zhemv(uplo, &i__1, &z__1, &a[a_offset], lda, &work[1], &c__1, &c_b2,
+                                &a[k * a_dim1 + 1], &c__1);
                 i__1 = k + k * a_dim1;
                 i__2 = k + k * a_dim1;
                 i__3 = k - 1;
-                zdotc_f2c_(&z__2, &i__3, &work[1], &c__1, &a[k * a_dim1 + 1], &c__1);
+                aocl_lapack_zdotc_f2c(&z__2, &i__3, &work[1], &c__1, &a[k * a_dim1 + 1], &c__1);
                 d__1 = z__2.r;
                 z__1.r = a[i__2].r - d__1;
                 z__1.i = a[i__2].i; // , expr subst
@@ -313,16 +317,16 @@ void zhetri_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *ip
             if(k > 1)
             {
                 i__1 = k - 1;
-                zcopy_(&i__1, &a[k * a_dim1 + 1], &c__1, &work[1], &c__1);
+                aocl_blas_zcopy(&i__1, &a[k * a_dim1 + 1], &c__1, &work[1], &c__1);
                 i__1 = k - 1;
                 z__1.r = -1.;
                 z__1.i = -0.; // , expr subst
-                zhemv_(uplo, &i__1, &z__1, &a[a_offset], lda, &work[1], &c__1, &c_b2,
-                       &a[k * a_dim1 + 1], &c__1);
+                aocl_blas_zhemv(uplo, &i__1, &z__1, &a[a_offset], lda, &work[1], &c__1, &c_b2,
+                                &a[k * a_dim1 + 1], &c__1);
                 i__1 = k + k * a_dim1;
                 i__2 = k + k * a_dim1;
                 i__3 = k - 1;
-                zdotc_f2c_(&z__2, &i__3, &work[1], &c__1, &a[k * a_dim1 + 1], &c__1);
+                aocl_lapack_zdotc_f2c(&z__2, &i__3, &work[1], &c__1, &a[k * a_dim1 + 1], &c__1);
                 d__1 = z__2.r;
                 z__1.r = a[i__2].r - d__1;
                 z__1.i = a[i__2].i; // , expr subst
@@ -331,23 +335,23 @@ void zhetri_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *ip
                 i__1 = k + (k + 1) * a_dim1;
                 i__2 = k + (k + 1) * a_dim1;
                 i__3 = k - 1;
-                zdotc_f2c_(&z__2, &i__3, &a[k * a_dim1 + 1], &c__1, &a[(k + 1) * a_dim1 + 1],
+                aocl_lapack_zdotc_f2c(&z__2, &i__3, &a[k * a_dim1 + 1], &c__1, &a[(k + 1) * a_dim1 + 1],
                            &c__1);
                 z__1.r = a[i__2].r - z__2.r;
                 z__1.i = a[i__2].i - z__2.i; // , expr subst
                 a[i__1].r = z__1.r;
                 a[i__1].i = z__1.i; // , expr subst
                 i__1 = k - 1;
-                zcopy_(&i__1, &a[(k + 1) * a_dim1 + 1], &c__1, &work[1], &c__1);
+                aocl_blas_zcopy(&i__1, &a[(k + 1) * a_dim1 + 1], &c__1, &work[1], &c__1);
                 i__1 = k - 1;
                 z__1.r = -1.;
                 z__1.i = -0.; // , expr subst
-                zhemv_(uplo, &i__1, &z__1, &a[a_offset], lda, &work[1], &c__1, &c_b2,
-                       &a[(k + 1) * a_dim1 + 1], &c__1);
+                aocl_blas_zhemv(uplo, &i__1, &z__1, &a[a_offset], lda, &work[1], &c__1, &c_b2,
+                                &a[(k + 1) * a_dim1 + 1], &c__1);
                 i__1 = k + 1 + (k + 1) * a_dim1;
                 i__2 = k + 1 + (k + 1) * a_dim1;
                 i__3 = k - 1;
-                zdotc_f2c_(&z__2, &i__3, &work[1], &c__1, &a[(k + 1) * a_dim1 + 1], &c__1);
+                aocl_lapack_zdotc_f2c(&z__2, &i__3, &work[1], &c__1, &a[(k + 1) * a_dim1 + 1], &c__1);
                 d__1 = z__2.r;
                 z__1.r = a[i__2].r - d__1;
                 z__1.i = a[i__2].i; // , expr subst
@@ -362,7 +366,7 @@ void zhetri_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *ip
             /* Interchange rows and columns K and KP in the leading */
             /* submatrix A(1:k+1,1:k+1) */
             i__1 = kp - 1;
-            zswap_(&i__1, &a[k * a_dim1 + 1], &c__1, &a[kp * a_dim1 + 1], &c__1);
+            aocl_blas_zswap(&i__1, &a[k * a_dim1 + 1], &c__1, &a[kp * a_dim1 + 1], &c__1);
             i__1 = k - 1;
             for(j = kp + 1; j <= i__1; ++j)
             {
@@ -434,16 +438,16 @@ void zhetri_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *ip
             if(k < *n)
             {
                 i__1 = *n - k;
-                zcopy_(&i__1, &a[k + 1 + k * a_dim1], &c__1, &work[1], &c__1);
+                aocl_blas_zcopy(&i__1, &a[k + 1 + k * a_dim1], &c__1, &work[1], &c__1);
                 i__1 = *n - k;
                 z__1.r = -1.;
                 z__1.i = -0.; // , expr subst
-                zhemv_(uplo, &i__1, &z__1, &a[k + 1 + (k + 1) * a_dim1], lda, &work[1], &c__1,
-                       &c_b2, &a[k + 1 + k * a_dim1], &c__1);
+                aocl_blas_zhemv(uplo, &i__1, &z__1, &a[k + 1 + (k + 1) * a_dim1], lda, &work[1],
+                                &c__1, &c_b2, &a[k + 1 + k * a_dim1], &c__1);
                 i__1 = k + k * a_dim1;
                 i__2 = k + k * a_dim1;
                 i__3 = *n - k;
-                zdotc_f2c_(&z__2, &i__3, &work[1], &c__1, &a[k + 1 + k * a_dim1], &c__1);
+                aocl_lapack_zdotc_f2c(&z__2, &i__3, &work[1], &c__1, &a[k + 1 + k * a_dim1], &c__1);
                 d__1 = z__2.r;
                 z__1.r = a[i__2].r - d__1;
                 z__1.i = a[i__2].i; // , expr subst
@@ -486,16 +490,16 @@ void zhetri_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *ip
             if(k < *n)
             {
                 i__1 = *n - k;
-                zcopy_(&i__1, &a[k + 1 + k * a_dim1], &c__1, &work[1], &c__1);
+                aocl_blas_zcopy(&i__1, &a[k + 1 + k * a_dim1], &c__1, &work[1], &c__1);
                 i__1 = *n - k;
                 z__1.r = -1.;
                 z__1.i = -0.; // , expr subst
-                zhemv_(uplo, &i__1, &z__1, &a[k + 1 + (k + 1) * a_dim1], lda, &work[1], &c__1,
-                       &c_b2, &a[k + 1 + k * a_dim1], &c__1);
+                aocl_blas_zhemv(uplo, &i__1, &z__1, &a[k + 1 + (k + 1) * a_dim1], lda, &work[1],
+                                &c__1, &c_b2, &a[k + 1 + k * a_dim1], &c__1);
                 i__1 = k + k * a_dim1;
                 i__2 = k + k * a_dim1;
                 i__3 = *n - k;
-                zdotc_f2c_(&z__2, &i__3, &work[1], &c__1, &a[k + 1 + k * a_dim1], &c__1);
+                aocl_lapack_zdotc_f2c(&z__2, &i__3, &work[1], &c__1, &a[k + 1 + k * a_dim1], &c__1);
                 d__1 = z__2.r;
                 z__1.r = a[i__2].r - d__1;
                 z__1.i = a[i__2].i; // , expr subst
@@ -504,23 +508,23 @@ void zhetri_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *ip
                 i__1 = k + (k - 1) * a_dim1;
                 i__2 = k + (k - 1) * a_dim1;
                 i__3 = *n - k;
-                zdotc_f2c_(&z__2, &i__3, &a[k + 1 + k * a_dim1], &c__1,
+                aocl_lapack_zdotc_f2c(&z__2, &i__3, &a[k + 1 + k * a_dim1], &c__1,
                            &a[k + 1 + (k - 1) * a_dim1], &c__1);
                 z__1.r = a[i__2].r - z__2.r;
                 z__1.i = a[i__2].i - z__2.i; // , expr subst
                 a[i__1].r = z__1.r;
                 a[i__1].i = z__1.i; // , expr subst
                 i__1 = *n - k;
-                zcopy_(&i__1, &a[k + 1 + (k - 1) * a_dim1], &c__1, &work[1], &c__1);
+                aocl_blas_zcopy(&i__1, &a[k + 1 + (k - 1) * a_dim1], &c__1, &work[1], &c__1);
                 i__1 = *n - k;
                 z__1.r = -1.;
                 z__1.i = -0.; // , expr subst
-                zhemv_(uplo, &i__1, &z__1, &a[k + 1 + (k + 1) * a_dim1], lda, &work[1], &c__1,
-                       &c_b2, &a[k + 1 + (k - 1) * a_dim1], &c__1);
+                aocl_blas_zhemv(uplo, &i__1, &z__1, &a[k + 1 + (k + 1) * a_dim1], lda, &work[1],
+                                &c__1, &c_b2, &a[k + 1 + (k - 1) * a_dim1], &c__1);
                 i__1 = k - 1 + (k - 1) * a_dim1;
                 i__2 = k - 1 + (k - 1) * a_dim1;
                 i__3 = *n - k;
-                zdotc_f2c_(&z__2, &i__3, &work[1], &c__1, &a[k + 1 + (k - 1) * a_dim1], &c__1);
+                aocl_lapack_zdotc_f2c(&z__2, &i__3, &work[1], &c__1, &a[k + 1 + (k - 1) * a_dim1], &c__1);
                 d__1 = z__2.r;
                 z__1.r = a[i__2].r - d__1;
                 z__1.i = a[i__2].i; // , expr subst
@@ -537,7 +541,8 @@ void zhetri_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *ip
             if(kp < *n)
             {
                 i__1 = *n - kp;
-                zswap_(&i__1, &a[kp + 1 + k * a_dim1], &c__1, &a[kp + 1 + kp * a_dim1], &c__1);
+                aocl_blas_zswap(&i__1, &a[kp + 1 + k * a_dim1], &c__1, &a[kp + 1 + kp * a_dim1],
+                                &c__1);
             }
             i__1 = kp - 1;
             for(j = k + 1; j <= i__1; ++j)

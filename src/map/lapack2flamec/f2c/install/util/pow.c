@@ -36,7 +36,7 @@ double pow_di(doublereal *ap, integer *bp)
 
 #ifdef _WIN32
 /* Complex */
-void pow_ci(complex *p, complex *a, integer *b)
+void pow_ci(scomplex *p, scomplex *a, integer *b)
 {
     _Fcomplex a_ = {a->r, a->i};
     _Fcomplex b_ = {*b, 0};
@@ -44,7 +44,7 @@ void pow_ci(complex *p, complex *a, integer *b)
     p->r = crealf(ret_val);
     p->i = cimagf(ret_val);
 }
-void pow_zz(doublecomplex *r, doublecomplex *a, doublecomplex *b)
+void pow_zz(dcomplex *r, dcomplex *a, dcomplex *b)
 {
     _Dcomplex a_ = {a->r, a->i};
     _Dcomplex b_ = {a->r, a->i};
@@ -52,7 +52,7 @@ void pow_zz(doublecomplex *r, doublecomplex *a, doublecomplex *b)
     r->r = creal(ret_val);
     r->i = cimag(ret_val);
 }
-void pow_zi(doublecomplex *p, doublecomplex *a, integer *b)
+void pow_zi(dcomplex *p, dcomplex *a, integer *b)
 {
     _Dcomplex a_ = {a->r, a->i};
     _Dcomplex b_ = {*b, 0};
@@ -62,19 +62,19 @@ void pow_zi(doublecomplex *p, doublecomplex *a, integer *b)
 }
 #else
 /* Complex */
-void pow_ci(complex *p, complex *a, integer *b)
+void pow_ci(scomplex *p, scomplex *a, integer *b)
 {
     double _Complex ret_val = cpow(a->r + I * a->i, *b);
     p->r = creal(ret_val);
     p->i = cimag(ret_val);
 }
-void pow_zz(doublecomplex *r, doublecomplex *a, doublecomplex *b)
+void pow_zz(dcomplex *r, dcomplex *a, dcomplex *b)
 {
     double _Complex ret_val = cpow(a->r + I * a->i, b->r + I * b->i);
     r->r = creal(ret_val);
     r->i = cimag(ret_val);
 }
-void pow_zi(doublecomplex *p, doublecomplex *a, integer *b)
+void pow_zi(dcomplex *p, dcomplex *a, integer *b)
 {
     double _Complex ret_val = cpow(a->r + I * a->i, *b);
     p->r = creal(ret_val);

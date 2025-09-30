@@ -4,7 +4,7 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
+static aocl_int64_t c__1 = 1;
 /* > \brief \b DPBCON */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -130,39 +130,44 @@ static integer c__1 = 1;
 /* > \ingroup doubleOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void dpbcon_(char *uplo, integer *n, integer *kd, doublereal *ab, integer *ldab, doublereal *anorm,
-             doublereal *rcond, doublereal *work, integer *iwork, integer *info)
+/** Generated wrapper function */
+void dpbcon_(char *uplo, aocl_int_t *n, aocl_int_t *kd, doublereal *ab, aocl_int_t *ldab,
+             doublereal *anorm, doublereal *rcond, doublereal *work, aocl_int_t *iwork,
+             aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_dpbcon(uplo, n, kd, ab, ldab, anorm, rcond, work, iwork, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t kd_64 = *kd;
+    aocl_int64_t ldab_64 = *ldab;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_dpbcon(uplo, &n_64, &kd_64, ab, &ldab_64, anorm, rcond, work, iwork, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_dpbcon(char *uplo, aocl_int64_t *n, aocl_int64_t *kd, doublereal *ab,
+                        aocl_int64_t *ldab, doublereal *anorm, doublereal *rcond, doublereal *work,
+                        aocl_int_t *iwork, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dpbcon inputs: uplo %c, n %" FLA_IS ", kd %" FLA_IS ", ldab %" FLA_IS "",
                       *uplo, *n, *kd, *ldab);
     /* System generated locals */
-    integer ab_dim1, ab_offset, i__1;
+    aocl_int64_t ab_dim1, ab_offset, i__1;
     doublereal d__1;
     /* Local variables */
-    integer ix, kase;
+    aocl_int64_t ix, kase;
     doublereal scale;
-    extern logical lsame_(char *, char *, integer, integer);
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     integer isave[3];
-    extern /* Subroutine */
-        void
-        drscl_(integer *, doublereal *, doublereal *, integer *);
     logical upper;
-    extern /* Subroutine */
-        void
-        dlacn2_(integer *, doublereal *, doublereal *, integer *, doublereal *, integer *,
-                integer *);
     extern doublereal dlamch_(char *);
     doublereal scalel;
-    extern integer idamax_(integer *, doublereal *, integer *);
-    extern /* Subroutine */
-        void
-        dlatbs_(char *, char *, char *, char *, integer *, integer *, doublereal *, integer *,
-                doublereal *, doublereal *, doublereal *, integer *);
     doublereal scaleu;
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal ainvnm;
     char normin[1];
     doublereal smlnum;
@@ -221,7 +226,7 @@ void dpbcon_(char *uplo, integer *n, integer *kd, doublereal *ab, integer *ldab,
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("DPBCON", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("DPBCON", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -243,39 +248,39 @@ void dpbcon_(char *uplo, integer *n, integer *kd, doublereal *ab, integer *ldab,
     kase = 0;
     *(unsigned char *)normin = 'N';
 L10:
-    dlacn2_(n, &work[*n + 1], &work[1], &iwork[1], &ainvnm, &kase, isave);
+    aocl_lapack_dlacn2(n, &work[*n + 1], &work[1], &iwork[1], &ainvnm, &kase, isave);
     if(kase != 0)
     {
         if(upper)
         {
             /* Multiply by inv(U**T). */
-            dlatbs_("Upper", "Transpose", "Non-unit", normin, n, kd, &ab[ab_offset], ldab, &work[1],
-                    &scalel, &work[(*n << 1) + 1], info);
+            aocl_lapack_dlatbs("Upper", "Transpose", "Non-unit", normin, n, kd, &ab[ab_offset],
+                               ldab, &work[1], &scalel, &work[(*n << 1) + 1], info);
             *(unsigned char *)normin = 'Y';
             /* Multiply by inv(U). */
-            dlatbs_("Upper", "No transpose", "Non-unit", normin, n, kd, &ab[ab_offset], ldab,
-                    &work[1], &scaleu, &work[(*n << 1) + 1], info);
+            aocl_lapack_dlatbs("Upper", "No transpose", "Non-unit", normin, n, kd, &ab[ab_offset],
+                               ldab, &work[1], &scaleu, &work[(*n << 1) + 1], info);
         }
         else
         {
             /* Multiply by inv(L). */
-            dlatbs_("Lower", "No transpose", "Non-unit", normin, n, kd, &ab[ab_offset], ldab,
-                    &work[1], &scalel, &work[(*n << 1) + 1], info);
+            aocl_lapack_dlatbs("Lower", "No transpose", "Non-unit", normin, n, kd, &ab[ab_offset],
+                               ldab, &work[1], &scalel, &work[(*n << 1) + 1], info);
             *(unsigned char *)normin = 'Y';
             /* Multiply by inv(L**T). */
-            dlatbs_("Lower", "Transpose", "Non-unit", normin, n, kd, &ab[ab_offset], ldab, &work[1],
-                    &scaleu, &work[(*n << 1) + 1], info);
+            aocl_lapack_dlatbs("Lower", "Transpose", "Non-unit", normin, n, kd, &ab[ab_offset],
+                               ldab, &work[1], &scaleu, &work[(*n << 1) + 1], info);
         }
         /* Multiply by 1/SCALE if doing so will not cause overflow. */
         scale = scalel * scaleu;
         if(scale != 1.)
         {
-            ix = idamax_(n, &work[1], &c__1);
+            ix = aocl_blas_idamax(n, &work[1], &c__1);
             if(scale < (d__1 = work[ix], f2c_dabs(d__1)) * smlnum || scale == 0.)
             {
                 goto L20;
             }
-            drscl_(n, &scale, &work[1], &c__1);
+            aocl_lapack_drscl(n, &scale, &work[1], &c__1);
         }
         goto L10;
     }

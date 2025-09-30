@@ -4,8 +4,8 @@
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
  /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
-static integer c__0 = 0;
+static aocl_int64_t c__1 = 1;
+static aocl_int64_t c__0 = 0;
 static doublereal c_b7 = 1.;
 /* > \brief \b DLASD8 finds the square roots of the roots of the secular equation, and stores, for
  * each elemen t in D, the distance to its two nearest poles. Used by sbdsdc. */
@@ -162,39 +162,47 @@ static doublereal c_b7 = 1.;
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void dlasd8_(integer *icompq, integer *k, doublereal *d__, doublereal *z__, doublereal *vf,
-             doublereal *vl, doublereal *difl, doublereal *difr, integer *lddifr,
-             doublereal *dsigma, doublereal *work, integer *info)
+/** Generated wrapper function */
+void dlasd8_(aocl_int_t *icompq, aocl_int_t *k, doublereal *d__, doublereal *z__, doublereal *vf,
+             doublereal *vl, doublereal *difl, doublereal *difr, aocl_int_t *lddifr,
+             doublereal *dsigma, doublereal *work, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_dlasd8(icompq, k, d__, z__, vf, vl, difl, difr, lddifr, dsigma, work, info);
+#else
+    aocl_int64_t icompq_64 = *icompq;
+    aocl_int64_t k_64 = *k;
+    aocl_int64_t lddifr_64 = *lddifr;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_dlasd8(&icompq_64, &k_64, d__, z__, vf, vl, difl, difr, &lddifr_64, dsigma, work,
+                       &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_dlasd8(aocl_int64_t *icompq, aocl_int64_t *k, doublereal *d__, doublereal *z__,
+                        doublereal *vf, doublereal *vl, doublereal *difl, doublereal *difr,
+                        aocl_int64_t *lddifr, doublereal *dsigma, doublereal *work,
+                        aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dlasd8 inputs: icompq %" FLA_IS ", k %" FLA_IS ", lddifr %" FLA_IS "",
                       *icompq, *k, *lddifr);
     /* System generated locals */
-    integer difr_dim1, difr_offset, i__1, i__2;
+    aocl_int64_t difr_dim1, difr_offset, i__1, i__2;
     doublereal d__1, d__2;
     /* Builtin functions */
     double sqrt(doublereal), d_sign(doublereal *, doublereal *);
     /* Local variables */
-    integer i__, j;
+    aocl_int64_t i__, j;
     doublereal dj, rho;
-    integer iwk1, iwk2, iwk3;
-    extern doublereal ddot_(integer *, doublereal *, integer *, doublereal *, integer *);
+    aocl_int64_t iwk1, iwk2, iwk3;
     doublereal temp;
-    extern doublereal dnrm2_(integer *, doublereal *, integer *);
-    integer iwk2i, iwk3i;
+    aocl_int64_t iwk2i, iwk3i;
     doublereal diflj, difrj, dsigj;
-    extern /* Subroutine */
-        void
-        dcopy_(integer *, doublereal *, integer *, doublereal *, integer *);
     extern doublereal dlamc3_(doublereal *, doublereal *);
-    extern /* Subroutine */
-        void
-        dlasd4_(integer *, integer *, doublereal *, doublereal *, doublereal *, doublereal *,
-                doublereal *, doublereal *, integer *),
-        dlascl_(char *, integer *, integer *, doublereal *, doublereal *, integer *, integer *,
-                doublereal *, integer *, integer *),
-        dlaset_(char *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal dsigjp;
     /* -- LAPACK auxiliary routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -245,7 +253,7 @@ void dlasd8_(integer *icompq, integer *k, doublereal *d__, doublereal *z__, doub
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("DLASD8", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("DLASD8", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -269,17 +277,18 @@ void dlasd8_(integer *icompq, integer *k, doublereal *d__, doublereal *z__, doub
     iwk2i = iwk2 - 1;
     iwk3i = iwk3 - 1;
     /* Normalize Z. */
-    rho = dnrm2_(k, &z__[1], &c__1);
-    dlascl_("G", &c__0, &c__0, &rho, &c_b7, k, &c__1, &z__[1], k, info);
+    rho = aocl_blas_dnrm2(k, &z__[1], &c__1);
+    aocl_lapack_dlascl("G", &c__0, &c__0, &rho, &c_b7, k, &c__1, &z__[1], k, info);
     rho *= rho;
     /* Initialize WORK(IWK3). */
-    dlaset_("A", k, &c__1, &c_b7, &c_b7, &work[iwk3], k);
+    aocl_lapack_dlaset("A", k, &c__1, &c_b7, &c_b7, &work[iwk3], k);
     /* Compute the updated singular values, the arrays DIFL, DIFR, */
     /* and the updated Z. */
     i__1 = *k;
     for(j = 1; j <= i__1; ++j)
     {
-        dlasd4_(k, &j, &dsigma[1], &z__[1], &work[iwk1], &rho, &d__[j], &work[iwk2], info);
+        aocl_lapack_dlasd4(k, &j, &dsigma[1], &z__[1], &work[iwk1], &rho, &d__[j], &work[iwk2],
+                           info);
         /* If the root finder fails, report the convergence failure. */
         if(*info != 0)
         {
@@ -341,17 +350,17 @@ void dlasd8_(integer *icompq, integer *k, doublereal *d__, doublereal *z__, doub
             work[i__] = z__[i__] / (dlamc3_(&dsigma[i__], &dsigjp) + difrj) / (dsigma[i__] + dj);
             /* L70: */
         }
-        temp = dnrm2_(k, &work[1], &c__1);
-        work[iwk2i + j] = ddot_(k, &work[1], &c__1, &vf[1], &c__1) / temp;
-        work[iwk3i + j] = ddot_(k, &work[1], &c__1, &vl[1], &c__1) / temp;
+        temp = aocl_blas_dnrm2(k, &work[1], &c__1);
+        work[iwk2i + j] = aocl_blas_ddot(k, &work[1], &c__1, &vf[1], &c__1) / temp;
+        work[iwk3i + j] = aocl_blas_ddot(k, &work[1], &c__1, &vl[1], &c__1) / temp;
         if(*icompq == 1)
         {
             difr[j + (difr_dim1 << 1)] = temp;
         }
         /* L80: */
     }
-    dcopy_(k, &work[iwk2], &c__1, &vf[1], &c__1);
-    dcopy_(k, &work[iwk3], &c__1, &vl[1], &c__1);
+    aocl_blas_dcopy(k, &work[iwk2], &c__1, &vf[1], &c__1);
+    aocl_blas_dcopy(k, &work[iwk3], &c__1, &vl[1], &c__1);
     AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of DLASD8 */

@@ -4,10 +4,10 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
+static aocl_int64_t c__1 = 1;
 static real c_b5 = 1.f;
 static real c_b17 = 0.f;
-/* > \brief \b STPQRT2 computes a QR factorization of a real or complex "triangular-pentagonal"
+/* > \brief \b STPQRT2 computes a QR factorization of a real or scomplex "triangular-pentagonal"
  * matrix, which is composed of a triangular block and a pentagonal block, using the compact WY
  * representation for Q. */
 /* =========== DOCUMENTATION =========== */
@@ -176,30 +176,40 @@ that is, */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void stpqrt2_(integer *m, integer *n, integer *l, real *a, integer *lda, real *b, integer *ldb,
-              real *t, integer *ldt, integer *info)
+/** Generated wrapper function */
+void stpqrt2_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *l, real *a, aocl_int_t *lda, real *b,
+              aocl_int_t *ldb, real *t, aocl_int_t *ldt, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_stpqrt2(m, n, l, a, lda, b, ldb, t, ldt, info);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t l_64 = *l;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t ldb_64 = *ldb;
+    aocl_int64_t ldt_64 = *ldt;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_stpqrt2(&m_64, &n_64, &l_64, a, &lda_64, b, &ldb_64, t, &ldt_64, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_stpqrt2(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *l, real *a,
+                         aocl_int64_t *lda, real *b, aocl_int64_t *ldb, real *t, aocl_int64_t *ldt,
+                         aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF(
-             "stpqrt2 inputs: m %" FLA_IS ", n %" FLA_IS ", l %" FLA_IS ", lda %" FLA_IS
-             ", ldb %" FLA_IS ", ldt %" FLA_IS "",
-             *m, *n, *l, *lda, *ldb, *ldt);
+    AOCL_DTL_SNPRINTF("stpqrt2 inputs: m %" FLA_IS ", n %" FLA_IS ", l %" FLA_IS ", lda %" FLA_IS
+                      ", ldb %" FLA_IS ", ldt %" FLA_IS "",
+                      *m, *n, *l, *lda, *ldb, *ldt);
     /* System generated locals */
-    integer a_dim1, a_offset, b_dim1, b_offset, t_dim1, t_offset, i__1, i__2, i__3;
+    aocl_int64_t a_dim1, a_offset, b_dim1, b_offset, t_dim1, t_offset, i__1, i__2, i__3;
     /* Local variables */
-    integer i__, j, p, mp, np;
-    extern /* Subroutine */
-        void
-        sger_(integer *, integer *, real *, real *, integer *, real *, integer *, real *,
-              integer *);
+    aocl_int64_t i__, j, p, mp, np;
     real alpha;
-    extern /* Subroutine */
-        void
-        sgemv_(char *, integer *, integer *, real *, real *, integer *, real *, integer *, real *,
-               real *, integer *),
-        strmv_(char *, char *, char *, integer *, real *, integer *, real *, integer *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
-        slarfg_(integer *, real *, real *, integer *, real *);
     /* -- LAPACK computational routine (version 3.7.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -258,7 +268,7 @@ void stpqrt2_(integer *m, integer *n, integer *l, real *a, integer *lda, real *b
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("STPQRT2", &i__1, (ftnlen)7);
+        aocl_blas_xerbla("STPQRT2", &i__1, (ftnlen)7);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -274,7 +284,8 @@ void stpqrt2_(integer *m, integer *n, integer *l, real *a, integer *lda, real *b
         /* Generate elementary reflector H(I) to annihilate B(:,I) */
         p = *m - *l + fla_min(*l, i__);
         i__2 = p + 1;
-        slarfg_(&i__2, &a[i__ + i__ * a_dim1], &b[i__ * b_dim1 + 1], &c__1, &t[i__ + t_dim1]);
+        aocl_lapack_slarfg(&i__2, &a[i__ + i__ * a_dim1], &b[i__ * b_dim1 + 1], &c__1,
+                           &t[i__ + t_dim1]);
         if(i__ < *n)
         {
             /* W(1:N-I) := C(I:M,I+1:N)^H * C(I:M,I) [use W = T(:,N)] */
@@ -284,8 +295,8 @@ void stpqrt2_(integer *m, integer *n, integer *l, real *a, integer *lda, real *b
                 t[j + *n * t_dim1] = a[i__ + (i__ + j) * a_dim1];
             }
             i__2 = *n - i__;
-            sgemv_("T", &p, &i__2, &c_b5, &b[(i__ + 1) * b_dim1 + 1], ldb, &b[i__ * b_dim1 + 1],
-                   &c__1, &c_b5, &t[*n * t_dim1 + 1], &c__1);
+            aocl_blas_sgemv("T", &p, &i__2, &c_b5, &b[(i__ + 1) * b_dim1 + 1], ldb,
+                            &b[i__ * b_dim1 + 1], &c__1, &c_b5, &t[*n * t_dim1 + 1], &c__1);
             /* C(I:M,I+1:N) = C(I:m,I+1:N) + alpha*C(I:M,I)*W(1:N-1)^H */
             alpha = -t[i__ + t_dim1];
             i__2 = *n - i__;
@@ -294,8 +305,8 @@ void stpqrt2_(integer *m, integer *n, integer *l, real *a, integer *lda, real *b
                 a[i__ + (i__ + j) * a_dim1] += alpha * t[j + *n * t_dim1];
             }
             i__2 = *n - i__;
-            sger_(&p, &i__2, &alpha, &b[i__ * b_dim1 + 1], &c__1, &t[*n * t_dim1 + 1], &c__1,
-                  &b[(i__ + 1) * b_dim1 + 1], ldb);
+            aocl_blas_sger(&p, &i__2, &alpha, &b[i__ * b_dim1 + 1], &c__1, &t[*n * t_dim1 + 1],
+                           &c__1, &b[(i__ + 1) * b_dim1 + 1], ldb);
         }
     }
     i__1 = *n;
@@ -323,19 +334,19 @@ void stpqrt2_(integer *m, integer *n, integer *l, real *a, integer *lda, real *b
         {
             t[j + i__ * t_dim1] = alpha * b[*m - *l + j + i__ * b_dim1];
         }
-        strmv_("U", "T", "N", &p, &b[mp + b_dim1], ldb, &t[i__ * t_dim1 + 1], &c__1);
+        aocl_blas_strmv("U", "T", "N", &p, &b[mp + b_dim1], ldb, &t[i__ * t_dim1 + 1], &c__1);
         /* Rectangular part of B2 */
         i__2 = i__ - 1 - p;
-        sgemv_("T", l, &i__2, &alpha, &b[mp + np * b_dim1], ldb, &b[mp + i__ * b_dim1], &c__1,
-               &c_b17, &t[np + i__ * t_dim1], &c__1);
+        aocl_blas_sgemv("T", l, &i__2, &alpha, &b[mp + np * b_dim1], ldb, &b[mp + i__ * b_dim1],
+                        &c__1, &c_b17, &t[np + i__ * t_dim1], &c__1);
         /* B1 */
         i__2 = *m - *l;
         i__3 = i__ - 1;
-        sgemv_("T", &i__2, &i__3, &alpha, &b[b_offset], ldb, &b[i__ * b_dim1 + 1], &c__1, &c_b5,
-               &t[i__ * t_dim1 + 1], &c__1);
+        aocl_blas_sgemv("T", &i__2, &i__3, &alpha, &b[b_offset], ldb, &b[i__ * b_dim1 + 1], &c__1,
+                        &c_b5, &t[i__ * t_dim1 + 1], &c__1);
         /* T(1:I-1,I) := T(1:I-1,1:I-1) * T(1:I-1,I) */
         i__2 = i__ - 1;
-        strmv_("U", "N", "N", &i__2, &t[t_offset], ldt, &t[i__ * t_dim1 + 1], &c__1);
+        aocl_blas_strmv("U", "N", "N", &i__2, &t[t_offset], ldt, &t[i__ * t_dim1 + 1], &c__1);
         /* T(I,I) = tau(I) */
         t[i__ + i__ * t_dim1] = t[i__ + t_dim1];
         t[i__ + t_dim1] = 0.f;

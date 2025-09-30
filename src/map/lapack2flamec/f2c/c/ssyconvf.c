@@ -205,22 +205,35 @@
 /* > \endverbatim */
 /* ===================================================================== */
 /* Subroutine */
-void ssyconvf_(char *uplo, char *way, integer *n, real *a, integer *lda, real *e, integer *ipiv,
-               integer *info)
+/** Generated wrapper function */
+void ssyconvf_(char *uplo, char *way, aocl_int_t *n, real *a, aocl_int_t *lda, real *e,
+               aocl_int_t *ipiv, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_ssyconvf(uplo, way, n, a, lda, e, ipiv, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_ssyconvf(uplo, way, &n_64, a, &lda_64, e, ipiv, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_ssyconvf(char *uplo, char *way, aocl_int64_t *n, real *a, aocl_int64_t *lda,
+                          real *e, aocl_int_t *ipiv, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("ssyconvf inputs: uplo %c ,way %c ,n %" FLA_IS ",lda %" FLA_IS "", *uplo,
                       *way, *n, *lda);
     /* System generated locals */
-    integer a_dim1, a_offset, i__1;
+    aocl_int64_t a_dim1, a_offset, i__1;
     /* Local variables */
-    integer i__, ip;
-    extern logical lsame_(char *, char *, integer, integer);
+    aocl_int64_t i__, ip;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     logical upper;
-    extern /* Subroutine */
-        void
-        sswap_(integer *, real *, integer *, real *, integer *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical convert;
     /* -- LAPACK computational routine (version 3.8.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -267,7 +280,7 @@ void ssyconvf_(char *uplo, char *way, integer *n, real *a, integer *lda, real *e
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("SSYCONVF", &i__1, (ftnlen)8);
+        aocl_blas_xerbla("SSYCONVF", &i__1, (ftnlen)8);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -319,8 +332,8 @@ void ssyconvf_(char *uplo, char *way, integer *n, real *a, integer *lda, real *e
                         if(ip != i__)
                         {
                             i__1 = *n - i__;
-                            sswap_(&i__1, &a[i__ + (i__ + 1) * a_dim1], lda,
-                                   &a[ip + (i__ + 1) * a_dim1], lda);
+                            aocl_blas_sswap(&i__1, &a[i__ + (i__ + 1) * a_dim1], lda,
+                                            &a[ip + (i__ + 1) * a_dim1], lda);
                         }
                     }
                 }
@@ -334,15 +347,15 @@ void ssyconvf_(char *uplo, char *way, integer *n, real *a, integer *lda, real *e
                         if(ip != i__ - 1)
                         {
                             i__1 = *n - i__;
-                            sswap_(&i__1, &a[i__ - 1 + (i__ + 1) * a_dim1], lda,
-                                   &a[ip + (i__ + 1) * a_dim1], lda);
+                            aocl_blas_sswap(&i__1, &a[i__ - 1 + (i__ + 1) * a_dim1], lda,
+                                            &a[ip + (i__ + 1) * a_dim1], lda);
                         }
                     }
                     /* Convert IPIV */
                     /* There is no interchnge of rows i and and IPIV(i), */
                     /* so this should be reflected in IPIV format for */
                     /* *SYTRF_RK ( or *SYTRF_BK) */
-                    ipiv[i__] = i__;
+                    ipiv[i__] = (aocl_int_t)(i__);
                     --i__;
                 }
                 --i__;
@@ -367,8 +380,8 @@ void ssyconvf_(char *uplo, char *way, integer *n, real *a, integer *lda, real *e
                         if(ip != i__)
                         {
                             i__1 = *n - i__;
-                            sswap_(&i__1, &a[ip + (i__ + 1) * a_dim1], lda,
-                                   &a[i__ + (i__ + 1) * a_dim1], lda);
+                            aocl_blas_sswap(&i__1, &a[ip + (i__ + 1) * a_dim1], lda,
+                                            &a[i__ + (i__ + 1) * a_dim1], lda);
                         }
                     }
                 }
@@ -383,8 +396,8 @@ void ssyconvf_(char *uplo, char *way, integer *n, real *a, integer *lda, real *e
                         if(ip != i__ - 1)
                         {
                             i__1 = *n - i__;
-                            sswap_(&i__1, &a[ip + (i__ + 1) * a_dim1], lda,
-                                   &a[i__ - 1 + (i__ + 1) * a_dim1], lda);
+                            aocl_blas_sswap(&i__1, &a[ip + (i__ + 1) * a_dim1], lda,
+                                            &a[i__ - 1 + (i__ + 1) * a_dim1], lda);
                         }
                     }
                     /* Convert IPIV */
@@ -453,7 +466,7 @@ void ssyconvf_(char *uplo, char *way, integer *n, real *a, integer *lda, real *e
                         if(ip != i__)
                         {
                             i__1 = i__ - 1;
-                            sswap_(&i__1, &a[i__ + a_dim1], lda, &a[ip + a_dim1], lda);
+                            aocl_blas_sswap(&i__1, &a[i__ + a_dim1], lda, &a[ip + a_dim1], lda);
                         }
                     }
                 }
@@ -467,14 +480,14 @@ void ssyconvf_(char *uplo, char *way, integer *n, real *a, integer *lda, real *e
                         if(ip != i__ + 1)
                         {
                             i__1 = i__ - 1;
-                            sswap_(&i__1, &a[i__ + 1 + a_dim1], lda, &a[ip + a_dim1], lda);
+                            aocl_blas_sswap(&i__1, &a[i__ + 1 + a_dim1], lda, &a[ip + a_dim1], lda);
                         }
                     }
                     /* Convert IPIV */
                     /* There is no interchnge of rows i and and IPIV(i), */
                     /* so this should be reflected in IPIV format for */
                     /* *SYTRF_RK ( or *SYTRF_BK) */
-                    ipiv[i__] = i__;
+                    ipiv[i__] = (aocl_int_t)(i__);
                     ++i__;
                 }
                 ++i__;
@@ -499,7 +512,7 @@ void ssyconvf_(char *uplo, char *way, integer *n, real *a, integer *lda, real *e
                         if(ip != i__)
                         {
                             i__1 = i__ - 1;
-                            sswap_(&i__1, &a[ip + a_dim1], lda, &a[i__ + a_dim1], lda);
+                            aocl_blas_sswap(&i__1, &a[ip + a_dim1], lda, &a[i__ + a_dim1], lda);
                         }
                     }
                 }
@@ -514,7 +527,7 @@ void ssyconvf_(char *uplo, char *way, integer *n, real *a, integer *lda, real *e
                         if(ip != i__ + 1)
                         {
                             i__1 = i__ - 1;
-                            sswap_(&i__1, &a[ip + a_dim1], lda, &a[i__ + 1 + a_dim1], lda);
+                            aocl_blas_sswap(&i__1, &a[ip + a_dim1], lda, &a[i__ + 1 + a_dim1], lda);
                         }
                     }
                     /* Convert IPIV */

@@ -84,27 +84,39 @@
 /* > \ingroup auxOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void slasrt_(char *id, integer *n, real *d__, integer *info)
+/** Generated wrapper function */
+void slasrt_(char *id, aocl_int_t *n, real *d__, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_slasrt(id, n, d__, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_slasrt(id, &n_64, d__, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_slasrt(char *id, aocl_int64_t *n, real *d__, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("slasrt inputs: id %c, n %" FLA_IS "", *id, *n);
     /* System generated locals */
-    integer i__1, i__2;
+    aocl_int64_t i__1, i__2;
     /* Local variables */
-    integer i__, j;
+    aocl_int64_t i__, j;
     real d1, d2, d3;
-    integer dir;
+    aocl_int64_t dir;
     real tmp;
-    integer endd;
-    extern logical lsame_(char *, char *, integer, integer);
+    aocl_int64_t endd;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     integer stack[64] /* was [2][32] */
         ;
     real dmnmx;
-    integer start;
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    integer stkpnt;
+    aocl_int64_t start;
+    aocl_int64_t stkpnt;
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -150,7 +162,7 @@ void slasrt_(char *id, integer *n, real *d__, integer *info)
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("SLASRT", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("SLASRT", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }

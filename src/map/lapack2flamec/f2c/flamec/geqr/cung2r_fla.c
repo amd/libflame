@@ -4,7 +4,7 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
+static aocl_int64_t c__1 = 1;
 /* > \brief \b CUNG2R */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -38,7 +38,7 @@ static integer c__1 = 1;
 /* > */
 /* > \verbatim */
 /* > */
-/* > CUNG2R generates an m by n complex matrix Q with orthonormal columns, */
+/* > CUNG2R generates an m by n scomplex matrix Q with orthonormal columns, */
 /* > which is defined as the first n columns of a product of k elementary */
 /* > reflectors of order m */
 /* > */
@@ -111,20 +111,14 @@ static integer c__1 = 1;
 /* > \ingroup complexOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void cung2r_fla(integer *m, integer *n, integer *k, complex *a, integer *lda, complex *tau,
-                complex *work, integer *info)
+void cung2r_fla(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *k, scomplex *a, aocl_int64_t *lda,
+                scomplex *tau, scomplex *work, aocl_int64_t *info)
 {
     /* System generated locals */
-    integer a_dim1, a_offset, i__1, i__2, i__3;
-    complex q__1;
+    aocl_int64_t a_dim1, a_offset, i__1, i__2, i__3;
+    scomplex q__1;
     /* Local variables */
-    integer i__, j, l;
-    extern /* Subroutine */
-        void
-        cscal_(integer *, complex *, complex *, integer *),
-        clarf_(char *, integer *, integer *, complex *, integer *, complex *, complex *, integer *,
-               complex *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    aocl_int64_t i__, j, l;
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -171,7 +165,7 @@ void cung2r_fla(integer *m, integer *n, integer *k, complex *a, integer *lda, co
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("CUNG2R", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("CUNG2R", &i__1, (ftnlen)6);
         return;
     }
     /* Quick return if possible */
@@ -206,8 +200,8 @@ void cung2r_fla(integer *m, integer *n, integer *k, complex *a, integer *lda, co
             a[i__1].i = 0.f; // , expr subst
             i__1 = *m - i__ + 1;
             i__2 = *n - i__;
-            clarf_("Left", &i__1, &i__2, &a[i__ + i__ * a_dim1], &c__1, &tau[i__],
-                   &a[i__ + (i__ + 1) * a_dim1], lda, &work[1]);
+            aocl_lapack_clarf("Left", &i__1, &i__2, &a[i__ + i__ * a_dim1], &c__1, &tau[i__],
+                              &a[i__ + (i__ + 1) * a_dim1], lda, &work[1]);
         }
         if(i__ < *m)
         {
@@ -215,7 +209,7 @@ void cung2r_fla(integer *m, integer *n, integer *k, complex *a, integer *lda, co
             i__2 = i__;
             q__1.r = -tau[i__2].r;
             q__1.i = -tau[i__2].i; // , expr subst
-            cscal_(&i__1, &q__1, &a[i__ + 1 + i__ * a_dim1], &c__1);
+            aocl_blas_cscal(&i__1, &q__1, &a[i__ + 1 + i__ * a_dim1], &c__1);
         }
         i__1 = i__ + i__ * a_dim1;
         i__2 = i__;

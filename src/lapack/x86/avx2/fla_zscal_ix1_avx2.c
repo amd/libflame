@@ -11,10 +11,10 @@
 #include "fla_lapack_avx2_kernels.h"
 
 #if FLA_ENABLE_AMD_OPT
-int fla_zscal_ix1_avx2(integer *n, doublecomplex *alpha, doublecomplex *x)
+int fla_zscal_ix1_avx2(aocl_int64_t *n, dcomplex *alpha, dcomplex *x)
 {
     /* Local variables */
-    integer i__1, i;
+    aocl_int64_t i__1, i;
     __m256d alpha256_real, alpha256_img, ar256, ai256;
     __m128d alpha128_real, alpha128_img, ar128, ai128;
     __m256d xv256[4], yv256[4], sv256[4], pv256[4];
@@ -41,7 +41,7 @@ int fla_zscal_ix1_avx2(integer *n, doublecomplex *alpha, doublecomplex *x)
     /* Code for increments equal to 1 only */
     for(i = 0; i < (i__1 - 7); i += 8)
     {
-        /* load complex inputs */
+        /* load scomplex inputs */
         xv256[0] = _mm256_loadu_pd((double const *)&x[i]);
         xv256[1] = _mm256_loadu_pd((double const *)&x[i + 2]);
         xv256[2] = _mm256_loadu_pd((double const *)&x[i + 4]);
@@ -76,7 +76,7 @@ int fla_zscal_ix1_avx2(integer *n, doublecomplex *alpha, doublecomplex *x)
 
     for(; i < (i__1 - 3); i += 4)
     {
-        /* load complex inputs */
+        /* load scomplex inputs */
         xv256[0] = _mm256_loadu_pd((double const *)&x[i]);
         xv256[1] = _mm256_loadu_pd((double const *)&x[i + 2]);
 

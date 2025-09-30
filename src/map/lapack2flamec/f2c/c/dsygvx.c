@@ -4,8 +4,8 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
-static integer c_n1 = -1;
+static aocl_int64_t c__1 = 1;
+static aocl_int64_t c_n1 = -1;
 static doublereal c_b19 = 1.;
 /* > \brief \b DSYGST */
 /* =========== DOCUMENTATION =========== */
@@ -293,11 +293,43 @@ the routine */
 /* > Mark Fahey, Department of Mathematics, Univ. of Kentucky, USA */
 /* ===================================================================== */
 /* Subroutine */
-void dsygvx_(integer *itype, char *jobz, char *range, char *uplo, integer *n, doublereal *a,
-             integer *lda, doublereal *b, integer *ldb, doublereal *vl, doublereal *vu, integer *il,
-             integer *iu, doublereal *abstol, integer *m, doublereal *w, doublereal *z__,
-             integer *ldz, doublereal *work, integer *lwork, integer *iwork, integer *ifail,
-             integer *info)
+/** Generated wrapper function */
+void dsygvx_(aocl_int_t *itype, char *jobz, char *range, char *uplo, aocl_int_t *n, doublereal *a,
+             aocl_int_t *lda, doublereal *b, aocl_int_t *ldb, doublereal *vl, doublereal *vu,
+             aocl_int_t *il, aocl_int_t *iu, doublereal *abstol, aocl_int_t *m, doublereal *w,
+             doublereal *z__, aocl_int_t *ldz, doublereal *work, aocl_int_t *lwork,
+             aocl_int_t *iwork, aocl_int_t *ifail, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_dsygvx(itype, jobz, range, uplo, n, a, lda, b, ldb, vl, vu, il, iu, abstol, m, w,
+                       z__, ldz, work, lwork, iwork, ifail, info);
+#else
+    aocl_int64_t itype_64 = *itype;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t ldb_64 = *ldb;
+    aocl_int64_t il_64 = *il;
+    aocl_int64_t iu_64 = *iu;
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t ldz_64 = *ldz;
+    aocl_int64_t lwork_64 = *lwork;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_dsygvx(&itype_64, jobz, range, uplo, &n_64, a, &lda_64, b, &ldb_64, vl, vu, &il_64,
+                       &iu_64, abstol, &m_64, w, z__, &ldz_64, work, &lwork_64, iwork, ifail,
+                       &info_64);
+
+    *m = (aocl_int_t)m_64;
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_dsygvx(aocl_int64_t *itype, char *jobz, char *range, char *uplo, aocl_int64_t *n,
+                        doublereal *a, aocl_int64_t *lda, doublereal *b, aocl_int64_t *ldb,
+                        doublereal *vl, doublereal *vu, aocl_int64_t *il, aocl_int64_t *iu,
+                        doublereal *abstol, aocl_int64_t *m, doublereal *w, doublereal *z__,
+                        aocl_int64_t *ldz, doublereal *work, aocl_int64_t *lwork, aocl_int_t *iwork,
+                        aocl_int_t *ifail, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dsygvx inputs: itype %" FLA_IS ", jobz %c, range %c, uplo %c, n %" FLA_IS
@@ -305,39 +337,15 @@ void dsygvx_(integer *itype, char *jobz, char *range, char *uplo, integer *n, do
                       ", ldz %" FLA_IS ", lwork %" FLA_IS "",
                       *itype, *jobz, *range, *uplo, *n, *lda, *ldb, *il, *iu, *ldz, *lwork);
     /* System generated locals */
-    integer a_dim1, a_offset, b_dim1, b_offset, z_dim1, z_offset, i__1, i__2;
+    aocl_int64_t a_dim1, a_offset, b_dim1, b_offset, z_dim1, z_offset, i__1, i__2;
     /* Local variables */
-    integer nb;
-    extern logical lsame_(char *, char *, integer, integer);
-    extern /* Subroutine */
-        void
-        dtrmm_(char *, char *, char *, char *, integer *, integer *, doublereal *, doublereal *,
-               integer *, doublereal *, integer *);
+    aocl_int64_t nb;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     char trans[1];
-    extern /* Subroutine */
-        void
-        dtrsm_(char *, char *, char *, char *, integer *, integer *, doublereal *, doublereal *,
-               integer *, doublereal *, integer *);
     logical upper, wantz, alleig, indeig, valeig;
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
-    extern /* Subroutine */
-        void
-        dpotrf_(char *, integer *, doublereal *, integer *, integer *);
-    integer lwkmin;
-    extern /* Subroutine */
-        void
-        dsygst_(integer *, char *, integer *, doublereal *, integer *, doublereal *, integer *,
-                integer *);
-    integer lwkopt;
+    aocl_int64_t lwkmin;
+    aocl_int64_t lwkopt;
     logical lquery;
-    extern /* Subroutine */
-        void
-        dsyevx_(char *, char *, char *, integer *, doublereal *, integer *, doublereal *,
-                doublereal *, integer *, integer *, doublereal *, integer *, doublereal *,
-                doublereal *, integer *, doublereal *, integer *, integer *, integer *, integer *);
     /* -- LAPACK driver routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -443,7 +451,7 @@ void dsygvx_(integer *itype, char *jobz, char *range, char *uplo, integer *n, do
         i__1 = 1;
         i__2 = *n << 3; // , expr subst
         lwkmin = fla_max(i__1, i__2);
-        nb = ilaenv_(&c__1, "DSYTRD", uplo, n, &c_n1, &c_n1, &c_n1);
+        nb = aocl_lapack_ilaenv(&c__1, "DSYTRD", uplo, n, &c_n1, &c_n1, &c_n1);
         /* Computing MAX */
         i__1 = lwkmin;
         i__2 = (nb + 3) * *n; // , expr subst
@@ -457,7 +465,7 @@ void dsygvx_(integer *itype, char *jobz, char *range, char *uplo, integer *n, do
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("DSYGVX", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("DSYGVX", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -474,7 +482,7 @@ void dsygvx_(integer *itype, char *jobz, char *range, char *uplo, integer *n, do
         return;
     }
     /* Form a Cholesky factorization of B. */
-    dpotrf_(uplo, n, &b[b_offset], ldb, info);
+    aocl_lapack_dpotrf(uplo, n, &b[b_offset], ldb, info);
     if(*info != 0)
     {
         *info = *n + *info;
@@ -482,9 +490,9 @@ void dsygvx_(integer *itype, char *jobz, char *range, char *uplo, integer *n, do
         return;
     }
     /* Transform problem to standard eigenvalue problem and solve. */
-    dsygst_(itype, uplo, n, &a[a_offset], lda, &b[b_offset], ldb, info);
-    dsyevx_(jobz, range, uplo, n, &a[a_offset], lda, vl, vu, il, iu, abstol, m, &w[1],
-            &z__[z_offset], ldz, &work[1], lwork, &iwork[1], &ifail[1], info);
+    aocl_lapack_dsygst(itype, uplo, n, &a[a_offset], lda, &b[b_offset], ldb, info);
+    aocl_lapack_dsyevx(jobz, range, uplo, n, &a[a_offset], lda, vl, vu, il, iu, abstol, m, &w[1],
+                       &z__[z_offset], ldz, &work[1], lwork, &iwork[1], &ifail[1], info);
     if(wantz)
     {
         /* Backtransform eigenvectors to the original problem. */
@@ -505,8 +513,8 @@ void dsygvx_(integer *itype, char *jobz, char *range, char *uplo, integer *n, do
             {
                 *(unsigned char *)trans = 'T';
             }
-            dtrsm_("Left", uplo, trans, "Non-unit", n, m, &c_b19, &b[b_offset], ldb, &z__[z_offset],
-                   ldz);
+            aocl_blas_dtrsm("Left", uplo, trans, "Non-unit", n, m, &c_b19, &b[b_offset], ldb,
+                            &z__[z_offset], ldz);
         }
         else if(*itype == 3)
         {
@@ -521,8 +529,8 @@ void dsygvx_(integer *itype, char *jobz, char *range, char *uplo, integer *n, do
             {
                 *(unsigned char *)trans = 'N';
             }
-            dtrmm_("Left", uplo, trans, "Non-unit", n, m, &c_b19, &b[b_offset], ldb, &z__[z_offset],
-                   ldz);
+            aocl_blas_dtrmm("Left", uplo, trans, "Non-unit", n, m, &c_b19, &b[b_offset], ldb,
+                            &z__[z_offset], ldz);
         }
     }
     /* Set WORK(1) to optimal workspace size. */

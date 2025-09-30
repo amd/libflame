@@ -4,7 +4,7 @@
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
  /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__0 = 0;
+static aocl_int64_t c__0 = 0;
 /* > \brief \b DLAMTSQR */
 /* Definition: */
 /* =========== */
@@ -197,9 +197,38 @@ the routine */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void dlamtsqr_(char *side, char *trans, integer *m, integer *n, integer *k, integer *mb,
-               integer *nb, doublereal *a, integer *lda, doublereal *t, integer *ldt,
-               doublereal *c__, integer *ldc, doublereal *work, integer *lwork, integer *info)
+/** Generated wrapper function */
+void dlamtsqr_(char *side, char *trans, aocl_int_t *m, aocl_int_t *n, aocl_int_t *k, aocl_int_t *mb,
+               aocl_int_t *nb, doublereal *a, aocl_int_t *lda, doublereal *t, aocl_int_t *ldt,
+               doublereal *c__, aocl_int_t *ldc, doublereal *work, aocl_int_t *lwork,
+               aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_dlamtsqr(side, trans, m, n, k, mb, nb, a, lda, t, ldt, c__, ldc, work, lwork, info);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t k_64 = *k;
+    aocl_int64_t mb_64 = *mb;
+    aocl_int64_t nb_64 = *nb;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t ldt_64 = *ldt;
+    aocl_int64_t ldc_64 = *ldc;
+    aocl_int64_t lwork_64 = *lwork;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_dlamtsqr(side, trans, &m_64, &n_64, &k_64, &mb_64, &nb_64, a, &lda_64, t, &ldt_64,
+                         c__, &ldc_64, work, &lwork_64, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_dlamtsqr(char *side, char *trans, aocl_int64_t *m, aocl_int64_t *n,
+                          aocl_int64_t *k, aocl_int64_t *mb, aocl_int64_t *nb, doublereal *a,
+                          aocl_int64_t *lda, doublereal *t, aocl_int64_t *ldt, doublereal *c__,
+                          aocl_int64_t *ldc, doublereal *work, aocl_int64_t *lwork,
+                          aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dlamtsqr inputs: side %c, trans %c, m %" FLA_IS ", n %" FLA_IS ", k %" FLA_IS
@@ -208,24 +237,13 @@ void dlamtsqr_(char *side, char *trans, integer *m, integer *n, integer *k, inte
                       *side, *trans, *m, *n, *k, *mb, *nb, *lda, *ldt, *ldc, *lwork);
 
     /* System generated locals */
-    integer a_dim1, a_offset, c_dim1, c_offset, t_dim1, t_offset, i__1, i__2, i__3;
+    aocl_int64_t a_dim1, a_offset, c_dim1, c_offset, t_dim1, t_offset, i__1, i__2, i__3;
     /* Local variables */
-    integer i__, q, ii, kk, lw, ctr;
+    aocl_int64_t i__, q, ii, kk, lw, ctr;
     logical left, tran;
-    extern logical lsame_(char *, char *, integer, integer);
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     logical right;
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical notran, lquery;
-    extern /* Subroutine */
-        void
-        dgemqrt_(char *, char *, integer *, integer *, integer *, integer *, doublereal *,
-                 integer *, doublereal *, integer *, doublereal *, integer *, doublereal *,
-                 integer *),
-        dtpmqrt_(char *, char *, integer *, integer *, integer *, integer *, integer *,
-                 doublereal *, integer *, doublereal *, integer *, doublereal *, integer *,
-                 doublereal *, integer *, doublereal *, integer *);
     /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -318,7 +336,7 @@ void dlamtsqr_(char *side, char *trans, integer *m, integer *n, integer *k, inte
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("DLAMTSQR", &i__1, (ftnlen)8);
+        aocl_blas_xerbla("DLAMTSQR", &i__1, (ftnlen)8);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -339,8 +357,8 @@ void dlamtsqr_(char *side, char *trans, integer *m, integer *n, integer *k, inte
     i__1 = fla_max(*m, *n);
     if(*mb <= *k || *mb >= fla_max(i__1, *k))
     {
-        dgemqrt_(side, trans, m, n, k, nb, &a[a_offset], lda, &t[t_offset], ldt, &c__[c_offset],
-                 ldc, &work[1], info);
+        aocl_lapack_dgemqrt(side, trans, m, n, k, nb, &a[a_offset], lda, &t[t_offset], ldt,
+                            &c__[c_offset], ldc, &work[1], info);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -352,9 +370,9 @@ void dlamtsqr_(char *side, char *trans, integer *m, integer *n, integer *k, inte
         if(kk > 0)
         {
             ii = *m - kk + 1;
-            dtpmqrt_("L", "N", &kk, n, k, &c__0, nb, &a[ii + a_dim1], lda,
-                     &t[(ctr * *k + 1) * t_dim1 + 1], ldt, &c__[c_dim1 + 1], ldc, &c__[ii + c_dim1],
-                     ldc, &work[1], info);
+            aocl_lapack_dtpmqrt("L", "N", &kk, n, k, &c__0, nb, &a[ii + a_dim1], lda,
+                                &t[(ctr * *k + 1) * t_dim1 + 1], ldt, &c__[c_dim1 + 1], ldc,
+                                &c__[ii + c_dim1], ldc, &work[1], info);
         }
         else
         {
@@ -367,13 +385,13 @@ void dlamtsqr_(char *side, char *trans, integer *m, integer *n, integer *k, inte
             /* Multiply Q to the current block of C (I:I+MB,1:N) */
             --ctr;
             i__3 = *mb - *k;
-            dtpmqrt_("L", "N", &i__3, n, k, &c__0, nb, &a[i__ + a_dim1], lda,
-                     &t[(ctr * *k + 1) * t_dim1 + 1], ldt, &c__[c_dim1 + 1], ldc,
-                     &c__[i__ + c_dim1], ldc, &work[1], info);
+            aocl_lapack_dtpmqrt("L", "N", &i__3, n, k, &c__0, nb, &a[i__ + a_dim1], lda,
+                                &t[(ctr * *k + 1) * t_dim1 + 1], ldt, &c__[c_dim1 + 1], ldc,
+                                &c__[i__ + c_dim1], ldc, &work[1], info);
         }
         /* Multiply Q to the first block of C (1:MB,1:N) */
-        dgemqrt_("L", "N", mb, n, k, nb, &a[a_dim1 + 1], lda, &t[t_offset], ldt, &c__[c_dim1 + 1],
-                 ldc, &work[1], info);
+        aocl_lapack_dgemqrt("L", "N", mb, n, k, nb, &a[a_dim1 + 1], lda, &t[t_offset], ldt,
+                            &c__[c_dim1 + 1], ldc, &work[1], info);
     }
     else if(left && tran)
     {
@@ -381,25 +399,25 @@ void dlamtsqr_(char *side, char *trans, integer *m, integer *n, integer *k, inte
         kk = (*m - *k) % (*mb - *k);
         ii = *m - kk + 1;
         ctr = 1;
-        dgemqrt_("L", "T", mb, n, k, nb, &a[a_dim1 + 1], lda, &t[t_offset], ldt, &c__[c_dim1 + 1],
-                 ldc, &work[1], info);
+        aocl_lapack_dgemqrt("L", "T", mb, n, k, nb, &a[a_dim1 + 1], lda, &t[t_offset], ldt,
+                            &c__[c_dim1 + 1], ldc, &work[1], info);
         i__2 = ii - *mb + *k;
         i__1 = *mb - *k;
         for(i__ = *mb + 1; i__1 < 0 ? i__ >= i__2 : i__ <= i__2; i__ += i__1)
         {
             /* Multiply Q to the current block of C (I:I+MB,1:N) */
             i__3 = *mb - *k;
-            dtpmqrt_("L", "T", &i__3, n, k, &c__0, nb, &a[i__ + a_dim1], lda,
-                     &t[(ctr * *k + 1) * t_dim1 + 1], ldt, &c__[c_dim1 + 1], ldc,
-                     &c__[i__ + c_dim1], ldc, &work[1], info);
+            aocl_lapack_dtpmqrt("L", "T", &i__3, n, k, &c__0, nb, &a[i__ + a_dim1], lda,
+                                &t[(ctr * *k + 1) * t_dim1 + 1], ldt, &c__[c_dim1 + 1], ldc,
+                                &c__[i__ + c_dim1], ldc, &work[1], info);
             ++ctr;
         }
         if(ii <= *m)
         {
             /* Multiply Q to the last block of C */
-            dtpmqrt_("L", "T", &kk, n, k, &c__0, nb, &a[ii + a_dim1], lda,
-                     &t[(ctr * *k + 1) * t_dim1 + 1], ldt, &c__[c_dim1 + 1], ldc, &c__[ii + c_dim1],
-                     ldc, &work[1], info);
+            aocl_lapack_dtpmqrt("L", "T", &kk, n, k, &c__0, nb, &a[ii + a_dim1], lda,
+                                &t[(ctr * *k + 1) * t_dim1 + 1], ldt, &c__[c_dim1 + 1], ldc,
+                                &c__[ii + c_dim1], ldc, &work[1], info);
         }
     }
     else if(right && tran)
@@ -410,9 +428,9 @@ void dlamtsqr_(char *side, char *trans, integer *m, integer *n, integer *k, inte
         if(kk > 0)
         {
             ii = *n - kk + 1;
-            dtpmqrt_("R", "T", m, &kk, k, &c__0, nb, &a[ii + a_dim1], lda,
-                     &t[(ctr * *k + 1) * t_dim1 + 1], ldt, &c__[c_dim1 + 1], ldc,
-                     &c__[ii * c_dim1 + 1], ldc, &work[1], info);
+            aocl_lapack_dtpmqrt("R", "T", m, &kk, k, &c__0, nb, &a[ii + a_dim1], lda,
+                                &t[(ctr * *k + 1) * t_dim1 + 1], ldt, &c__[c_dim1 + 1], ldc,
+                                &c__[ii * c_dim1 + 1], ldc, &work[1], info);
         }
         else
         {
@@ -425,13 +443,13 @@ void dlamtsqr_(char *side, char *trans, integer *m, integer *n, integer *k, inte
             /* Multiply Q to the current block of C (1:M,I:I+MB) */
             --ctr;
             i__3 = *mb - *k;
-            dtpmqrt_("R", "T", m, &i__3, k, &c__0, nb, &a[i__ + a_dim1], lda,
-                     &t[(ctr * *k + 1) * t_dim1 + 1], ldt, &c__[c_dim1 + 1], ldc,
-                     &c__[i__ * c_dim1 + 1], ldc, &work[1], info);
+            aocl_lapack_dtpmqrt("R", "T", m, &i__3, k, &c__0, nb, &a[i__ + a_dim1], lda,
+                                &t[(ctr * *k + 1) * t_dim1 + 1], ldt, &c__[c_dim1 + 1], ldc,
+                                &c__[i__ * c_dim1 + 1], ldc, &work[1], info);
         }
         /* Multiply Q to the first block of C (1:M,1:MB) */
-        dgemqrt_("R", "T", m, mb, k, nb, &a[a_dim1 + 1], lda, &t[t_offset], ldt, &c__[c_dim1 + 1],
-                 ldc, &work[1], info);
+        aocl_lapack_dgemqrt("R", "T", m, mb, k, nb, &a[a_dim1 + 1], lda, &t[t_offset], ldt,
+                            &c__[c_dim1 + 1], ldc, &work[1], info);
     }
     else if(right && notran)
     {
@@ -439,25 +457,25 @@ void dlamtsqr_(char *side, char *trans, integer *m, integer *n, integer *k, inte
         kk = (*n - *k) % (*mb - *k);
         ii = *n - kk + 1;
         ctr = 1;
-        dgemqrt_("R", "N", m, mb, k, nb, &a[a_dim1 + 1], lda, &t[t_offset], ldt, &c__[c_dim1 + 1],
-                 ldc, &work[1], info);
+        aocl_lapack_dgemqrt("R", "N", m, mb, k, nb, &a[a_dim1 + 1], lda, &t[t_offset], ldt,
+                            &c__[c_dim1 + 1], ldc, &work[1], info);
         i__2 = ii - *mb + *k;
         i__1 = *mb - *k;
         for(i__ = *mb + 1; i__1 < 0 ? i__ >= i__2 : i__ <= i__2; i__ += i__1)
         {
             /* Multiply Q to the current block of C (1:M,I:I+MB) */
             i__3 = *mb - *k;
-            dtpmqrt_("R", "N", m, &i__3, k, &c__0, nb, &a[i__ + a_dim1], lda,
-                     &t[(ctr * *k + 1) * t_dim1 + 1], ldt, &c__[c_dim1 + 1], ldc,
-                     &c__[i__ * c_dim1 + 1], ldc, &work[1], info);
+            aocl_lapack_dtpmqrt("R", "N", m, &i__3, k, &c__0, nb, &a[i__ + a_dim1], lda,
+                                &t[(ctr * *k + 1) * t_dim1 + 1], ldt, &c__[c_dim1 + 1], ldc,
+                                &c__[i__ * c_dim1 + 1], ldc, &work[1], info);
             ++ctr;
         }
         if(ii <= *n)
         {
             /* Multiply Q to the last block of C */
-            dtpmqrt_("R", "N", m, &kk, k, &c__0, nb, &a[ii + a_dim1], lda,
-                     &t[(ctr * *k + 1) * t_dim1 + 1], ldt, &c__[c_dim1 + 1], ldc,
-                     &c__[ii * c_dim1 + 1], ldc, &work[1], info);
+            aocl_lapack_dtpmqrt("R", "N", m, &kk, k, &c__0, nb, &a[ii + a_dim1], lda,
+                                &t[(ctr * *k + 1) * t_dim1 + 1], ldt, &c__[c_dim1 + 1], ldc,
+                                &c__[ii * c_dim1 + 1], ldc, &work[1], info);
         }
     }
     work[1] = (doublereal)lw;

@@ -4,7 +4,7 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
+static aocl_int64_t c__1 = 1;
 static doublereal c_b8 = 1.;
 /* > \brief \b DTZRQF */
 /* =========== DOCUMENTATION =========== */
@@ -136,23 +136,31 @@ static doublereal c_b8 = 1.;
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void dtzrqf_(integer *m, integer *n, doublereal *a, integer *lda, doublereal *tau, integer *info)
+/** Generated wrapper function */
+void dtzrqf_(aocl_int_t *m, aocl_int_t *n, doublereal *a, aocl_int_t *lda, doublereal *tau, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_dtzrqf(m, n, a, lda, tau, info);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_dtzrqf(&m_64, &n_64, a, &lda_64, tau, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_dtzrqf(aocl_int64_t *m, aocl_int64_t *n, doublereal *a, aocl_int64_t *lda, doublereal *tau,
+             aocl_int64_t *info)
 {
     /* System generated locals */
-    integer a_dim1, a_offset, i__1, i__2;
+    aocl_int64_t a_dim1, a_offset, i__1, i__2;
     doublereal d__1;
     /* Local variables */
-    integer i__, k, m1;
-    extern /* Subroutine */
-        void
-        dger_(integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *,
-              doublereal *, integer *),
-        dgemv_(char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *,
-               integer *, doublereal *, doublereal *, integer *),
-        dcopy_(integer *, doublereal *, integer *, doublereal *, integer *),
-        daxpy_(integer *, doublereal *, doublereal *, integer *, doublereal *, integer *),
-        dlarfg_(integer *, doublereal *, doublereal *, integer *, doublereal *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    aocl_int64_t i__, k, m1;
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -194,7 +202,7 @@ void dtzrqf_(integer *m, integer *n, doublereal *a, integer *lda, doublereal *ta
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("DTZRQF", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("DTZRQF", &i__1, (ftnlen)6);
         return;
     }
     /* Perform the factorization. */
@@ -221,7 +229,7 @@ void dtzrqf_(integer *m, integer *n, doublereal *a, integer *lda, doublereal *ta
             /* Use a Householder reflection to zero the kth row of A. */
             /* First set up the reflection. */
             i__1 = *n - *m + 1;
-            dlarfg_(&i__1, &a[k + k * a_dim1], &a[k + m1 * a_dim1], lda, &tau[k]);
+            aocl_lapack_dlarfg(&i__1, &a[k + k * a_dim1], &a[k + m1 * a_dim1], lda, &tau[k]);
             if(tau[k] != 0. && k > 1)
             {
                 /* We now perform the operation A := A*P( k ). */
@@ -230,22 +238,22 @@ void dtzrqf_(integer *m, integer *n, doublereal *a, integer *lda, doublereal *ta
                 /* the kth column of A. Also let B denote the first */
                 /* ( k - 1 ) rows of the last ( n - m ) columns of A. */
                 i__1 = k - 1;
-                dcopy_(&i__1, &a[k * a_dim1 + 1], &c__1, &tau[1], &c__1);
+                aocl_blas_dcopy(&i__1, &a[k * a_dim1 + 1], &c__1, &tau[1], &c__1);
                 /* Form w = a( k ) + B*z( k ) in TAU. */
                 i__1 = k - 1;
                 i__2 = *n - *m;
-                dgemv_("No transpose", &i__1, &i__2, &c_b8, &a[m1 * a_dim1 + 1], lda,
-                       &a[k + m1 * a_dim1], lda, &c_b8, &tau[1], &c__1);
+                aocl_blas_dgemv("No transpose", &i__1, &i__2, &c_b8, &a[m1 * a_dim1 + 1], lda,
+                                &a[k + m1 * a_dim1], lda, &c_b8, &tau[1], &c__1);
                 /* Now form a( k ) := a( k ) - tau*w */
                 /* and B := B - tau*w*z( k )**T. */
                 i__1 = k - 1;
                 d__1 = -tau[k];
-                daxpy_(&i__1, &d__1, &tau[1], &c__1, &a[k * a_dim1 + 1], &c__1);
+                aocl_blas_daxpy(&i__1, &d__1, &tau[1], &c__1, &a[k * a_dim1 + 1], &c__1);
                 i__1 = k - 1;
                 i__2 = *n - *m;
                 d__1 = -tau[k];
-                dger_(&i__1, &i__2, &d__1, &tau[1], &c__1, &a[k + m1 * a_dim1], lda,
-                      &a[m1 * a_dim1 + 1], lda);
+                aocl_blas_dger(&i__1, &i__2, &d__1, &tau[1], &c__1, &a[k + m1 * a_dim1], lda,
+                               &a[m1 * a_dim1 + 1], lda);
             }
             /* L20: */
         }

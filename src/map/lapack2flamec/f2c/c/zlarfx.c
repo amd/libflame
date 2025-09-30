@@ -4,7 +4,7 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
+static aocl_int64_t c__1 = 1;
 /* > \brief \b ZLARFX applies an elementary reflector to a general rectangular matrix, with loop
  * unrolling whe n the reflector has order ≤ 10. */
 /* =========== DOCUMENTATION =========== */
@@ -41,13 +41,13 @@ static integer c__1 = 1;
 /* > */
 /* > \verbatim */
 /* > */
-/* > ZLARFX applies a complex elementary reflector H to a complex m by n */
+/* > ZLARFX applies a scomplex elementary reflector H to a scomplex m by n */
 /* > matrix C, from either the left or the right. H is represented in the */
 /* > form */
 /* > */
 /* > H = I - tau * v * v**H */
 /* > */
-/* > where tau is a complex scalar and v is a complex vector. */
+/* > where tau is a scomplex scalar and v is a scomplex vector. */
 /* > */
 /* > If tau = 0, then H is taken to be the unit matrix */
 /* > */
@@ -117,27 +117,40 @@ static integer c__1 = 1;
 /* > \ingroup complex16OTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-void zlarfx_(char *side, integer *m, integer *n, doublecomplex *v, doublecomplex *tau,
-             doublecomplex *c__, integer *ldc, doublecomplex *work)
+/** Generated wrapper function */
+void zlarfx_(char *side, aocl_int_t *m, aocl_int_t *n, dcomplex *v, dcomplex *tau,
+             dcomplex *c__, aocl_int_t *ldc, dcomplex *work)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_zlarfx(side, m, n, v, tau, c__, ldc, work);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t ldc_64 = *ldc;
+
+    aocl_lapack_zlarfx(side, &m_64, &n_64, v, tau, c__, &ldc_64, work);
+#endif
+}
+
+void aocl_lapack_zlarfx(char *side, aocl_int64_t *m, aocl_int64_t *n, dcomplex *v,
+                        dcomplex *tau, dcomplex *c__, aocl_int64_t *ldc,
+                        dcomplex *work)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zlarfx inputs: side %c, m %" FLA_IS ", n %" FLA_IS ", ldc %" FLA_IS "",
                       *side, *m, *n, *ldc);
     /* System generated locals */
-    integer c_dim1, c_offset, i__1, i__2, i__3, i__4, i__5, i__6, i__7, i__8, i__9, i__10, i__11;
-    doublecomplex z__1, z__2, z__3, z__4, z__5, z__6, z__7, z__8, z__9, z__10, z__11, z__12, z__13,
+    aocl_int64_t c_dim1, c_offset, i__1, i__2, i__3, i__4, i__5, i__6, i__7, i__8, i__9, i__10,
+        i__11;
+    dcomplex z__1, z__2, z__3, z__4, z__5, z__6, z__7, z__8, z__9, z__10, z__11, z__12, z__13,
         z__14, z__15, z__16, z__17, z__18, z__19;
     /* Builtin functions */
-    void d_cnjg(doublecomplex *, doublecomplex *);
+    void d_cnjg(dcomplex *, dcomplex *);
     /* Local variables */
-    integer j;
-    doublecomplex t1, t2, t3, t4, t5, t6, t7, t8, t9, v1, v2, v3, v4, v5, v6, v7, v8, v9, t10, v10,
+    aocl_int64_t j;
+    dcomplex t1, t2, t3, t4, t5, t6, t7, t8, t9, v1, v2, v3, v4, v5, v6, v7, v8, v9, t10, v10,
         sum;
-    extern logical lsame_(char *, char *, integer, integer);
-    extern /* Subroutine */
-        void
-        zlarf_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *,
-               doublecomplex *, integer *, doublecomplex *);
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -197,7 +210,7 @@ void zlarfx_(char *side, integer *m, integer *n, doublecomplex *v, doublecomplex
                 goto L190;
         }
         /* Code for general M */
-        zlarf_(side, m, n, &v[1], &c__1, tau, &c__[c_offset], ldc, &work[1]);
+        aocl_lapack_zlarf(side, m, n, &v[1], &c__1, tau, &c__[c_offset], ldc, &work[1]);
         goto L410;
     L10: /* Special code for 1 x 1 Householder */
         z__3.r = tau->r * v[1].r - tau->i * v[1].i;
@@ -1446,7 +1459,7 @@ void zlarfx_(char *side, integer *m, integer *n, doublecomplex *v, doublecomplex
                 goto L390;
         }
         /* Code for general N */
-        zlarf_(side, m, n, &v[1], &c__1, tau, &c__[c_offset], ldc, &work[1]);
+        aocl_lapack_zlarf(side, m, n, &v[1], &c__1, tau, &c__[c_offset], ldc, &work[1]);
         goto L410;
     L210: /* Special code for 1 x 1 Householder */
         z__3.r = tau->r * v[1].r - tau->i * v[1].i;

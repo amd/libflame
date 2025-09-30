@@ -1,20 +1,20 @@
 #include "FLA_f2c.h"
 #include "FLA_lapack2flame_return_defs.h"
-static integer c__1 = 1;
-static integer c_n1 = -1;
+static aocl_int64_t c__1 = 1;
+static aocl_int64_t c_n1 = -1;
 
-int zunmtr_check(char *side, char *uplo, char *trans, integer *m, integer *n, dcomplex *a,
-                 integer *lda, dcomplex *tau, dcomplex *c__, integer *ldc, dcomplex *work,
-                 integer *lwork, integer *info)
+int zunmtr_check(char *side, char *uplo, char *trans, aocl_int64_t *m, aocl_int64_t *n, dcomplex *a,
+                 aocl_int64_t *lda, dcomplex *tau, dcomplex *c__, aocl_int64_t *ldc, dcomplex *work,
+                 aocl_int64_t *lwork, aocl_int64_t *info)
 {
     /* System generated locals */
-    integer a_dim1, a_offset, c_dim1, c_offset, i__2, i__3;
+    aocl_int64_t a_dim1, a_offset, c_dim1, c_offset, i__2, i__3;
     char ch__1[2];
     /* Local variables */
-    integer nb, nq, nw;
+    aocl_int64_t nb, nq, nw;
     logical left;
     logical upper;
-    integer lwkopt;
+    aocl_int64_t lwkopt;
     logical lquery;
 
     /* Parameter adjustments */
@@ -82,13 +82,13 @@ int zunmtr_check(char *side, char *uplo, char *trans, integer *m, integer *n, dc
             {
                 i__2 = *m - 1;
                 i__3 = *m - 1;
-                nb = ilaenv_(&c__1, "ZUNMQL", ch__1, &i__2, n, &i__3, &c_n1);
+                nb = aocl_lapack_ilaenv(&c__1, "ZUNMQL", ch__1, &i__2, n, &i__3, &c_n1);
             }
             else
             {
                 i__2 = *n - 1;
                 i__3 = *n - 1;
-                nb = ilaenv_(&c__1, "ZUNMQL", ch__1, m, &i__2, &i__3, &c_n1);
+                nb = aocl_lapack_ilaenv(&c__1, "ZUNMQL", ch__1, m, &i__2, &i__3, &c_n1);
             }
         }
         else
@@ -97,13 +97,13 @@ int zunmtr_check(char *side, char *uplo, char *trans, integer *m, integer *n, dc
             {
                 i__2 = *m - 1;
                 i__3 = *m - 1;
-                nb = ilaenv_(&c__1, "ZUNMQR", ch__1, &i__2, n, &i__3, &c_n1);
+                nb = aocl_lapack_ilaenv(&c__1, "ZUNMQR", ch__1, &i__2, n, &i__3, &c_n1);
             }
             else
             {
                 i__2 = *n - 1;
                 i__3 = *n - 1;
-                nb = ilaenv_(&c__1, "ZUNMQR", ch__1, m, &i__2, &i__3, &c_n1);
+                nb = aocl_lapack_ilaenv(&c__1, "ZUNMQR", ch__1, m, &i__2, &i__3, &c_n1);
             }
         }
         lwkopt = fla_max(1, nw) * nb;
@@ -113,7 +113,7 @@ int zunmtr_check(char *side, char *uplo, char *trans, integer *m, integer *n, dc
     if(*info != 0)
     {
         i__2 = -(*info);
-        xerbla_("ZUNMTR", &i__2, (ftnlen)6);
+        aocl_blas_xerbla("ZUNMTR", &i__2, (ftnlen)6);
         return LAPACK_FAILURE;
     }
     else if(lquery)

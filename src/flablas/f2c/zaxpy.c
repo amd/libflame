@@ -1,14 +1,14 @@
 /* zaxpy.f -- translated by f2c (version 19991025). You must link the resulting object file with the libraries: -lf2c -lm (in that order) */
 #include "FLA_f2c.h"
 /* Subroutine */
-int zaxpy_(integer *n, doublecomplex *za, doublecomplex *zx, integer *incx, doublecomplex *zy, integer *incy)
+int zaxpy_(integer *n, dcomplex *za, dcomplex *zx, integer *incx, dcomplex *zy, integer *incy)
 {
     /* System generated locals */
     integer i__1, i__2, i__3, i__4;
-    doublecomplex z__1, z__2;
+    dcomplex z__1, z__2;
     /* Local variables */
     integer i__;
-    extern doublereal dcabs1_(doublecomplex *);
+    extern doublereal dcabs1_(dcomplex *);
     integer ix, iy;
     /* constant times a vector plus a vector. */
     /* jack dongarra, 3/11/78. */

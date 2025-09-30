@@ -10,11 +10,11 @@
 #include "fla_lapack_avx2_kernels.h"
 
 #if FLA_ENABLE_AMD_OPT
-int fla_sger_avx2(integer *m, integer *n, real *alpha, real *x, integer *incx, real *y,
-                  integer *incy, real *a, integer *lda)
+int fla_sger_avx2(aocl_int64_t *m, aocl_int64_t *n, real *alpha, real *x, aocl_int64_t *incx, real *y,
+                  aocl_int64_t *incy, real *a, aocl_int64_t *lda)
 {
     /* Local Variables */
-    integer i__1, i__2, j, jy, i, kx, ix, a_offset;
+    aocl_int64_t i__1, i__2, j, jy, i, kx, ix, a_offset;
     real temp, *p;
     i__1 = *n;
     i__2 = *m;

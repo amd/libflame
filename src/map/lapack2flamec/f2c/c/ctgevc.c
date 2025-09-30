@@ -4,9 +4,9 @@
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
  /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static complex c_b1 = {0.f, 0.f};
-static complex c_b2 = {1.f, 0.f};
-static integer c__1 = 1;
+static scomplex c_b1 = {{0.f}, {0.f}};
+static scomplex c_b2 = {{1.f}, {0.f}};
+static aocl_int64_t c__1 = 1;
 /* > \brief \b CTGEVC */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -46,9 +46,9 @@ static integer c__1 = 1;
 /* > \verbatim */
 /* > */
 /* > CTGEVC computes some or all of the right and/or left eigenvectors of */
-/* > a pair of complex matrices (S,P), where S and P are upper triangular. */
+/* > a pair of scomplex matrices (S,P), where S and P are upper triangular. */
 /* > Matrix pairs of this type are produced by the generalized Schur */
-/* > factorization of a complex matrix pair (A,B): */
+/* > factorization of a scomplex matrix pair (A,B): */
 /* > */
 /* > A = Q*S*Z**H, B = Q*P*Z**H */
 /* > */
@@ -223,9 +223,37 @@ static integer c__1 = 1;
 /* > \ingroup tgevc */
 /* ===================================================================== */
 /* Subroutine */
-void ctgevc_(char *side, char *howmny, logical *select, integer *n, complex *s, integer *lds,
-             complex *p, integer *ldp, complex *vl, integer *ldvl, complex *vr, integer *ldvr,
-             integer *mm, integer *m, complex *work, real *rwork, integer *info)
+/** Generated wrapper function */
+void ctgevc_(char *side, char *howmny, logical *select, aocl_int_t *n, scomplex *s, aocl_int_t *lds,
+             scomplex *p, aocl_int_t *ldp, scomplex *vl, aocl_int_t *ldvl, scomplex *vr,
+             aocl_int_t *ldvr, aocl_int_t *mm, aocl_int_t *m, scomplex *work, real *rwork,
+             aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_ctgevc(side, howmny, select, n, s, lds, p, ldp, vl, ldvl, vr, ldvr, mm, m, work,
+                       rwork, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t lds_64 = *lds;
+    aocl_int64_t ldp_64 = *ldp;
+    aocl_int64_t ldvl_64 = *ldvl;
+    aocl_int64_t ldvr_64 = *ldvr;
+    aocl_int64_t mm_64 = *mm;
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_ctgevc(side, howmny, select, &n_64, s, &lds_64, p, &ldp_64, vl, &ldvl_64, vr,
+                       &ldvr_64, &mm_64, &m_64, work, rwork, &info_64);
+
+    *m = (aocl_int_t)m_64;
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_ctgevc(char *side, char *howmny, logical *select, aocl_int64_t *n, scomplex *s,
+                        aocl_int64_t *lds, scomplex *p, aocl_int64_t *ldp, scomplex *vl,
+                        aocl_int64_t *ldvl, scomplex *vr, aocl_int64_t *ldvr, aocl_int64_t *mm,
+                        aocl_int64_t *m, scomplex *work, real *rwork, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -243,56 +271,49 @@ void ctgevc_(char *side, char *howmny, logical *select, integer *n, complex *s, 
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
-    integer p_dim1, p_offset, s_dim1, s_offset, vl_dim1, vl_offset, vr_dim1, vr_offset, i__1, i__2,
-        i__3, i__4, i__5;
+    aocl_int64_t p_dim1, p_offset, s_dim1, s_offset, vl_dim1, vl_offset, vr_dim1, vr_offset, i__1,
+        i__2, i__3, i__4, i__5;
     real r__1, r__2, r__3, r__4, r__5, r__6;
-    complex q__1, q__2, q__3, q__4;
+    scomplex q__1, q__2, q__3, q__4;
     /* Builtin functions */
-    double r_imag(complex *);
-    void r_cnjg(complex *, complex *);
+    double r_imag(scomplex *);
+    void r_cnjg(scomplex *, scomplex *);
     /* Local variables */
-    complex d__;
-    integer i__, j;
-    complex ca, cb;
-    integer je, im, jr;
+    scomplex d__;
+    aocl_int64_t i__, j;
+    scomplex ca, cb;
+    aocl_int64_t je, im, jr;
     real big;
     logical lsa, lsb;
     real ulp;
-    complex sum;
-    integer ibeg, ieig, iend;
+    scomplex sum;
+    aocl_int64_t ibeg, ieig, iend;
     real dmin__;
-    integer isrc;
+    aocl_int64_t isrc;
     real temp;
-    complex suma, sumb;
+    scomplex suma, sumb;
     real xmax, scale;
     logical ilall;
-    integer iside;
+    aocl_int64_t iside;
     real sbeta;
-    extern logical lsame_(char *, char *, integer, integer);
-    extern /* Subroutine */
-        void
-        cgemv_(char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *,
-               complex *, complex *, integer *);
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     real small_val;
     logical compl ;
     real anorm, bnorm;
     logical compr, ilbbad;
     real acoefa, bcoefa, acoeff;
-    complex bcoeff;
+    scomplex bcoeff;
     logical ilback;
     real ascale, bscale;
     extern /* Complex */
         void
-        cladiv_f2c_(complex *, complex *, complex *);
+        cladiv_f2c_(scomplex *, scomplex *, scomplex *);
     extern real slamch_(char *);
-    complex salpha;
+    scomplex salpha;
     real safmin;
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real bignum;
     logical ilcomp;
-    integer ihwmny;
+    aocl_int64_t ihwmny;
     /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -404,7 +425,7 @@ void ctgevc_(char *side, char *howmny, logical *select, integer *n, complex *s, 
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("CTGEVC", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("CTGEVC", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
@@ -456,7 +477,7 @@ void ctgevc_(char *side, char *howmny, logical *select, integer *n, complex *s, 
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("CTGEVC", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("CTGEVC", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
@@ -789,8 +810,8 @@ void ctgevc_(char *side, char *howmny, logical *select, integer *n, complex *s, 
                 if(ilback)
                 {
                     i__2 = *n + 1 - je;
-                    cgemv_("N", n, &i__2, &c_b2, &vl[je * vl_dim1 + 1], ldvl, &work[je], &c__1,
-                           &c_b1, &work[*n + 1], &c__1);
+                    aocl_blas_cgemv("N", n, &i__2, &c_b2, &vl[je * vl_dim1 + 1], ldvl, &work[je],
+                                    &c__1, &c_b1, &work[*n + 1], &c__1);
                     isrc = 2;
                     ibeg = 1;
                 }
@@ -1124,8 +1145,8 @@ void ctgevc_(char *side, char *howmny, logical *select, integer *n, complex *s, 
                 /* Back transform eigenvector if HOWMNY='B'. */
                 if(ilback)
                 {
-                    cgemv_("N", n, &je, &c_b2, &vr[vr_offset], ldvr, &work[1], &c__1, &c_b1,
-                           &work[*n + 1], &c__1);
+                    aocl_blas_cgemv("N", n, &je, &c_b2, &vr[vr_offset], ldvr, &work[1], &c__1,
+                                    &c_b1, &work[*n + 1], &c__1);
                     isrc = 2;
                     iend = *n;
                 }

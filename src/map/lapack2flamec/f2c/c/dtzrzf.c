@@ -4,10 +4,10 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
-static integer c_n1 = -1;
-static integer c__3 = 3;
-static integer c__2 = 2;
+static aocl_int64_t c__1 = 1;
+static aocl_int64_t c_n1 = -1;
+static aocl_int64_t c__3 = 3;
+static aocl_int64_t c__2 = 2;
 /* > \brief \b DTZRZF */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -151,32 +151,34 @@ the routine */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void dtzrzf_(integer *m, integer *n, doublereal *a, integer *lda, doublereal *tau, doublereal *work,
-             integer *lwork, integer *info)
+/** Generated wrapper function */
+void dtzrzf_(aocl_int_t *m, aocl_int_t *n, doublereal *a, aocl_int_t *lda, doublereal *tau,
+             doublereal *work, aocl_int_t *lwork, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_dtzrzf(m, n, a, lda, tau, work, lwork, info);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t lwork_64 = *lwork;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_dtzrzf(&m_64, &n_64, a, &lda_64, tau, work, &lwork_64, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_dtzrzf(aocl_int64_t *m, aocl_int64_t *n, doublereal *a, aocl_int64_t *lda,
+                        doublereal *tau, doublereal *work, aocl_int64_t *lwork, aocl_int64_t *info)
 {
     /* System generated locals */
-    integer a_dim1, a_offset, i__1, i__2, i__3, i__4, i__5;
+    aocl_int64_t a_dim1, a_offset, i__1, i__2, i__3, i__4, i__5;
     /* Local variables */
-    integer i__, m1, ib, nb, ki, kk, mu, nx, iws, nbmin;
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    extern /* Subroutine */
-        void
-        dlarzb_(char *, char *, char *, char *, integer *, integer *, integer *, integer *,
-                doublereal *, integer *, doublereal *, integer *, doublereal *, integer *,
-                doublereal *, integer *);
-    extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
-    extern /* Subroutine */
-        void
-        dlarzt_(char *, char *, integer *, integer *, doublereal *, integer *, doublereal *,
-                doublereal *, integer *);
-    integer lwkmin, ldwork;
-    extern /* Subroutine */
-        void
-        dlatrz_(integer *, integer *, integer *, doublereal *, integer *, doublereal *,
-                doublereal *);
-    integer lwkopt;
+    aocl_int64_t i__, m1, ib, nb, ki, kk, mu, nx, iws, nbmin;
+    aocl_int64_t lwkmin, ldwork;
+    aocl_int64_t lwkopt;
     logical lquery;
     /* -- LAPACK computational routine (version 3.4.1) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -231,7 +233,7 @@ void dtzrzf_(integer *m, integer *n, doublereal *a, integer *lda, doublereal *ta
         else
         {
             /* Determine the block size. */
-            nb = ilaenv_(&c__1, "DGERQF", " ", m, n, &c_n1, &c_n1);
+            nb = aocl_lapack_ilaenv(&c__1, "DGERQF", " ", m, n, &c_n1, &c_n1);
             lwkopt = *m * nb;
             lwkmin = fla_max(1, *m);
         }
@@ -244,7 +246,7 @@ void dtzrzf_(integer *m, integer *n, doublereal *a, integer *lda, doublereal *ta
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("DTZRZF", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("DTZRZF", &i__1, (ftnlen)6);
         return;
     }
     else if(lquery)
@@ -274,7 +276,7 @@ void dtzrzf_(integer *m, integer *n, doublereal *a, integer *lda, doublereal *ta
         /* Determine when to cross over from blocked to unblocked code. */
         /* Computing MAX */
         i__1 = 0;
-        i__2 = ilaenv_(&c__3, "DGERQF", " ", m, n, &c_n1, &c_n1); // , expr subst
+        i__2 = aocl_lapack_ilaenv(&c__3, "DGERQF", " ", m, n, &c_n1, &c_n1); // , expr subst
         nx = fla_max(i__1, i__2);
         if(nx < *m)
         {
@@ -288,7 +290,7 @@ void dtzrzf_(integer *m, integer *n, doublereal *a, integer *lda, doublereal *ta
                 nb = *lwork / ldwork;
                 /* Computing MAX */
                 i__1 = 2;
-                i__2 = ilaenv_(&c__2, "DGERQF", " ", m, n, &c_n1, &c_n1); // , expr subst
+                i__2 = aocl_lapack_ilaenv(&c__2, "DGERQF", " ", m, n, &c_n1, &c_n1); // , expr subst
                 nbmin = fla_max(i__1, i__2);
             }
         }
@@ -316,21 +318,21 @@ void dtzrzf_(integer *m, integer *n, doublereal *a, integer *lda, doublereal *ta
             /* A(i:i+ib-1,i:n) */
             i__3 = *n - i__ + 1;
             i__4 = *n - *m;
-            dlatrz_(&ib, &i__3, &i__4, &a[i__ + i__ * a_dim1], lda, &tau[i__], &work[1]);
+            aocl_lapack_dlatrz(&ib, &i__3, &i__4, &a[i__ + i__ * a_dim1], lda, &tau[i__], &work[1]);
             if(i__ > 1)
             {
                 /* Form the triangular factor of the block reflector */
                 /* H = H(i+ib-1) . . . H(i+1) H(i) */
                 i__3 = *n - *m;
-                dlarzt_("Backward", "Rowwise", &i__3, &ib, &a[i__ + m1 * a_dim1], lda, &tau[i__],
-                        &work[1], &ldwork);
+                aocl_lapack_dlarzt("Backward", "Rowwise", &i__3, &ib, &a[i__ + m1 * a_dim1], lda,
+                                   &tau[i__], &work[1], &ldwork);
                 /* Apply H to A(1:i-1,i:n) from the right */
                 i__3 = i__ - 1;
                 i__4 = *n - i__ + 1;
                 i__5 = *n - *m;
-                dlarzb_("Right", "No transpose", "Backward", "Rowwise", &i__3, &i__4, &ib, &i__5,
-                        &a[i__ + m1 * a_dim1], lda, &work[1], &ldwork, &a[i__ * a_dim1 + 1], lda,
-                        &work[ib + 1], &ldwork);
+                aocl_lapack_dlarzb("Right", "No transpose", "Backward", "Rowwise", &i__3, &i__4,
+                                   &ib, &i__5, &a[i__ + m1 * a_dim1], lda, &work[1], &ldwork,
+                                   &a[i__ * a_dim1 + 1], lda, &work[ib + 1], &ldwork);
             }
             /* L20: */
         }
@@ -344,7 +346,7 @@ void dtzrzf_(integer *m, integer *n, doublereal *a, integer *lda, doublereal *ta
     if(mu > 0)
     {
         i__2 = *n - *m;
-        dlatrz_(&mu, n, &i__2, &a[a_offset], lda, &tau[1], &work[1]);
+        aocl_lapack_dlatrz(&mu, n, &i__2, &a[a_offset], lda, &tau[1], &work[1]);
     }
     work[1] = (doublereal)lwkopt;
     return;

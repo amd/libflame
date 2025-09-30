@@ -4,7 +4,7 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
+static aocl_int64_t c__1 = 1;
 /* > \brief \b SGETSQRHRT */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -41,7 +41,7 @@ static integer c__1 = 1;
 /* > \verbatim */
 /* > */
 /* > SGETSQRHRT computes a NB2-sized column blocked QR-factorization */
-/* > of a complex M-by-N matrix A with M >= N, */
+/* > of a scomplex M-by-N matrix A with M >= N, */
 /* > */
 /* > A = Q * R. */
 /* > */
@@ -175,36 +175,47 @@ static integer c__1 = 1;
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void sgetsqrhrt_(integer *m, integer *n, integer *mb1, integer *nb1, integer *nb2, real *a,
-                 integer *lda, real *t, integer *ldt, real *work, integer *lwork, integer *info)
+/** Generated wrapper function */
+void sgetsqrhrt_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *mb1, aocl_int_t *nb1, aocl_int_t *nb2,
+                 real *a, aocl_int_t *lda, real *t, aocl_int_t *ldt, real *work, aocl_int_t *lwork,
+                 aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_sgetsqrhrt(m, n, mb1, nb1, nb2, a, lda, t, ldt, work, lwork, info);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t mb1_64 = *mb1;
+    aocl_int64_t nb1_64 = *nb1;
+    aocl_int64_t nb2_64 = *nb2;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t ldt_64 = *ldt;
+    aocl_int64_t lwork_64 = *lwork;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_sgetsqrhrt(&m_64, &n_64, &mb1_64, &nb1_64, &nb2_64, a, &lda_64, t, &ldt_64, work,
+                           &lwork_64, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_sgetsqrhrt(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *mb1, aocl_int64_t *nb1,
+                            aocl_int64_t *nb2, real *a, aocl_int64_t *lda, real *t,
+                            aocl_int64_t *ldt, real *work, aocl_int64_t *lwork, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("sgetsqrhrt inputs: m %" FLA_IS ",n %" FLA_IS ",mb1 %" FLA_IS ",nb1 %" FLA_IS
-                      ",nb2 %" FLA_IS ",lda %" FLA_IS ", ldt %" FLA_IS ",lwork %" FLA_IS"",
+                      ",nb2 %" FLA_IS ",lda %" FLA_IS ", ldt %" FLA_IS ",lwork %" FLA_IS "",
                       *m, *n, *mb1, *nb1, *nb2, *lda, *ldt, *lwork);
     /* System generated locals */
-    integer a_dim1, a_offset, t_dim1, t_offset, i__1, i__2, i__3, i__4;
+    aocl_int64_t a_dim1, a_offset, t_dim1, t_offset, i__1, i__2, i__3, i__4;
     real r__1, r__2;
     /* Local variables */
-    integer lworkopt, i__, j;
-    extern /* Subroutine */
-        void
-        sorhr_col_(integer *, integer *, integer *, real *, integer *, real *, integer *, real *,
-                   integer *);
-    integer lw1, lw2, num_all_row_blocks__, lwt, ldwt, iinfo;
-    extern /* Subroutine */
-        void
-        sorgtsqr_row_(integer *, integer *, integer *, integer *, real *, integer *, real *,
-                      integer *, real *, integer *, integer *),
-        scopy_(integer *, real *, integer *, real *, integer *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    aocl_int64_t lworkopt, i__, j;
+    aocl_int64_t lw1, lw2, num_all_row_blocks__, lwt, ldwt, iinfo;
     logical lquery;
-    extern real sroundup_lwork(integer *);
-    extern /* Subroutine */
-        void
-        slatsqr_(integer *, integer *, integer *, integer *, real *, integer *, real *, integer *,
-                 real *, integer *, integer *);
-    integer nb1local, nb2local;
+    aocl_int64_t nb1local, nb2local;
     /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -321,43 +332,43 @@ void sgetsqrhrt_(integer *m, integer *n, integer *mb1, integer *nb1, integer *nb
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("SGETSQRHRT", &i__1, (ftnlen)10);
+        aocl_blas_xerbla("SGETSQRHRT", &i__1, (ftnlen)10);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     else if(lquery)
     {
-        work[1] = sroundup_lwork(&lworkopt);
+        work[1] = aocl_lapack_sroundup_lwork(&lworkopt);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Quick return if possible */
     if(fla_min(*m, *n) == 0)
     {
-        work[1] = sroundup_lwork(&lworkopt);
+        work[1] = aocl_lapack_sroundup_lwork(&lworkopt);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     nb2local = fla_min(*nb2, *n);
     /* (1) Perform TSQR-factorization of the M-by-N matrix A. */
-    slatsqr_(m, n, mb1, &nb1local, &a[a_offset], lda, &work[1], &ldwt, &work[lwt + 1], &lw1,
-             &iinfo);
+    aocl_lapack_slatsqr(m, n, mb1, &nb1local, &a[a_offset], lda, &work[1], &ldwt, &work[lwt + 1],
+                        &lw1, &iinfo);
     /* (2) Copy the factor R_tsqr stored in the upper-triangular part */
     /* of A into the square matrix in the work array */
     /* WORK(LWT+1:LWT+N*N) column-by-column. */
     i__1 = *n;
     for(j = 1; j <= i__1; ++j)
     {
-        scopy_(&j, &a[j * a_dim1 + 1], &c__1, &work[lwt + *n * (j - 1) + 1], &c__1);
+        aocl_blas_scopy(&j, &a[j * a_dim1 + 1], &c__1, &work[lwt + *n * (j - 1) + 1], &c__1);
     }
     /* (3) Generate a M-by-N matrix Q with orthonormal columns from */
     /* the result stored below the diagonal in the array A in place. */
-    sorgtsqr_row_(m, n, mb1, &nb1local, &a[a_offset], lda, &work[1], &ldwt,
-                  &work[lwt + *n * *n + 1], &lw2, &iinfo);
+    aocl_lapack_sorgtsqr_row(m, n, mb1, &nb1local, &a[a_offset], lda, &work[1], &ldwt,
+                             &work[lwt + *n * *n + 1], &lw2, &iinfo);
     /* (4) Perform the reconstruction of Householder vectors from */
     /* the matrix Q (stored in A) in place. */
-    sorhr_col_(m, n, &nb2local, &a[a_offset], lda, &t[t_offset], ldt, &work[lwt + *n * *n + 1],
-               &iinfo);
+    aocl_lapack_sorhr_col(m, n, &nb2local, &a[a_offset], lda, &t[t_offset], ldt,
+                          &work[lwt + *n * *n + 1], &iinfo);
     /* (5) Copy the factor R_tsqr stored in the square matrix in the */
     /* work array WORK(LWT+1:LWT+N*N) into the upper-triangular */
     /* part of A. */
@@ -383,10 +394,11 @@ void sgetsqrhrt_(integer *m, integer *n, integer *mb1, integer *nb1, integer *nb
         else
         {
             i__2 = *n - i__ + 1;
-            scopy_(&i__2, &work[lwt + *n * (i__ - 1) + i__], n, &a[i__ + i__ * a_dim1], lda);
+            aocl_blas_scopy(&i__2, &work[lwt + *n * (i__ - 1) + i__], n, &a[i__ + i__ * a_dim1],
+                            lda);
         }
     }
-    work[1] = sroundup_lwork(&lworkopt);
+    work[1] = aocl_lapack_sroundup_lwork(&lworkopt);
     AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SGETSQRHRT */

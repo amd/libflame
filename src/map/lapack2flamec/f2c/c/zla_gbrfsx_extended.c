@@ -6,8 +6,8 @@
  libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
-static doublecomplex c_b6 = {-1., 0.};
-static doublecomplex c_b8 = {1., 0.};
+static dcomplex c_b6 = {{-1.}, {0.}};
+static dcomplex c_b8 = {{1.}, {0.}};
 static doublereal c_b31 = 1.;
 /* > \brief \b ZLA_GBRFSX_EXTENDED improves the computed solution to a system of linear equations
  * for general banded matrices by performing extra-precise iterative refinement and provides error
@@ -417,13 +417,13 @@ i+1}
 /* ===================================================================== */
 /* Subroutine */
 void zla_gbrfsx_extended_(integer *prec_type__, integer *trans_type__, integer *n, integer *kl,
-                          integer *ku, integer *nrhs, doublecomplex *ab, integer *ldab,
-                          doublecomplex *afb, integer *ldafb, integer *ipiv, logical *colequ,
-                          doublereal *c__, doublecomplex *b, integer *ldb, doublecomplex *y,
+                          integer *ku, integer *nrhs, dcomplex *ab, integer *ldab,
+                          dcomplex *afb, integer *ldafb, integer *ipiv, logical *colequ,
+                          doublereal *c__, dcomplex *b, integer *ldb, dcomplex *y,
                           integer *ldy, doublereal *berr_out__, integer *n_norms__,
                           doublereal *err_bnds_norm__, doublereal *err_bnds_comp__,
-                          doublecomplex *res, doublereal *ayb, doublecomplex *dy,
-                          doublecomplex *y_tail__, doublereal *rcond, integer *ithresh,
+                          dcomplex *res, doublereal *ayb, dcomplex *dy,
+                          dcomplex *y_tail__, doublereal *rcond, integer *ithresh,
                           doublereal *rthresh, doublereal *dz_ub__, logical *ignore_cwise__,
                           integer *info)
 {
@@ -442,54 +442,54 @@ void zla_gbrfsx_extended_(integer *prec_type__, integer *trans_type__, integer *
     doublereal d__1, d__2;
     char ch__1[1];
     /* Builtin functions */
-    double d_imag(doublecomplex *);
+    double d_imag(dcomplex *);
     /* Local variables */
     doublereal dxratmax, dzratmax;
     integer i__, j, m;
     extern /* Subroutine */
         void
         zla_gbamv_(integer *, integer *, integer *, integer *, integer *, doublereal *,
-                   doublecomplex *, integer *, doublecomplex *, integer *, doublereal *,
+                   dcomplex *, integer *, dcomplex *, integer *, doublereal *,
                    doublereal *, integer *);
     logical incr_prec__;
     doublereal prev_dz_z__, yk, final_dx_x__, final_dz_z__;
     extern /* Subroutine */
         void
-        zla_wwaddw_(integer *, doublecomplex *, doublecomplex *, doublecomplex *);
+        zla_wwaddw_(integer *, dcomplex *, dcomplex *, dcomplex *);
     doublereal prevnormdx;
     integer cnt;
     doublereal dyk, eps, incr_thresh__, dx_x__, dz_z__, ymin;
     extern /* Subroutine */
         void
-        zla_lin_berr_(integer *, integer *, integer *, doublecomplex *, doublereal *, doublereal *),
-        blas_zgbmv_x_(integer *, integer *, integer *, integer *, integer *, doublecomplex *,
-                      doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *,
-                      doublecomplex *, integer *, integer *);
+        zla_lin_berr_(integer *, integer *, integer *, dcomplex *, doublereal *, doublereal *),
+        blas_zgbmv_x_(integer *, integer *, integer *, integer *, integer *, dcomplex *,
+                      dcomplex *, integer *, dcomplex *, integer *, dcomplex *,
+                      dcomplex *, integer *, integer *);
     integer y_prec_state__;
     extern /* Subroutine */
         int
-        blas_zgbmv2_x_(integer *, integer *, integer *, integer *, integer *, doublecomplex *,
-                       doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *,
-                       doublecomplex *, doublecomplex *, integer *, integer *);
+        blas_zgbmv2_x_(integer *, integer *, integer *, integer *, integer *, dcomplex *,
+                       dcomplex *, integer *, dcomplex *, dcomplex *, integer *,
+                       dcomplex *, dcomplex *, integer *, integer *);
     doublereal dxrat, dzrat;
     extern /* Subroutine */
         void
-        zgbmv_(char *, integer *, integer *, integer *, integer *, doublecomplex *, doublecomplex *,
-               integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *);
+        zgbmv_(char *, integer *, integer *, integer *, integer *, dcomplex *, dcomplex *,
+               integer *, dcomplex *, integer *, dcomplex *, dcomplex *, integer *);
     char trans[1];
     doublereal normx, normy;
     extern /* Subroutine */
         void
-        zcopy_(integer *, doublecomplex *, integer *, doublecomplex *, integer *),
-        zaxpy_(integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *);
+        zcopy_(integer *, dcomplex *, integer *, dcomplex *, integer *),
+        zaxpy_(integer *, dcomplex *, dcomplex *, integer *, dcomplex *, integer *);
     extern doublereal dlamch_(char *);
     doublereal normdx;
     extern /* Subroutine */
         void
-        zgbtrs_(char *, integer *, integer *, integer *, integer *, doublecomplex *, integer *,
-                integer *, doublecomplex *, integer *, integer *);
+        zgbtrs_(char *, integer *, integer *, integer *, integer *, dcomplex *, integer *,
+                integer *, dcomplex *, integer *, integer *);
     extern /* Character */
-        VOID
+        void
         chla_transtype_(char *, integer *);
     doublereal hugeval;
     integer x_state__, z_state__;

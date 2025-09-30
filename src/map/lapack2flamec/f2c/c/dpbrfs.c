@@ -4,7 +4,7 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
+static aocl_int64_t c__1 = 1;
 static doublereal c_b12 = -1.;
 static doublereal c_b14 = 1.;
 /* > \brief \b DPBRFS */
@@ -188,49 +188,59 @@ static doublereal c_b14 = 1.;
 /* > \ingroup doubleOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void dpbrfs_(char *uplo, integer *n, integer *kd, integer *nrhs, doublereal *ab, integer *ldab,
-             doublereal *afb, integer *ldafb, doublereal *b, integer *ldb, doublereal *x,
-             integer *ldx, doublereal *ferr, doublereal *berr, doublereal *work, integer *iwork,
-             integer *info)
+/** Generated wrapper function */
+void dpbrfs_(char *uplo, aocl_int_t *n, aocl_int_t *kd, aocl_int_t *nrhs, doublereal *ab,
+             aocl_int_t *ldab, doublereal *afb, aocl_int_t *ldafb, doublereal *b, aocl_int_t *ldb,
+             doublereal *x, aocl_int_t *ldx, doublereal *ferr, doublereal *berr, doublereal *work,
+             aocl_int_t *iwork, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_dpbrfs(uplo, n, kd, nrhs, ab, ldab, afb, ldafb, b, ldb, x, ldx, ferr, berr, work,
+                       iwork, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t kd_64 = *kd;
+    aocl_int64_t nrhs_64 = *nrhs;
+    aocl_int64_t ldab_64 = *ldab;
+    aocl_int64_t ldafb_64 = *ldafb;
+    aocl_int64_t ldb_64 = *ldb;
+    aocl_int64_t ldx_64 = *ldx;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_dpbrfs(uplo, &n_64, &kd_64, &nrhs_64, ab, &ldab_64, afb, &ldafb_64, b, &ldb_64, x,
+                       &ldx_64, ferr, berr, work, iwork, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_dpbrfs(char *uplo, aocl_int64_t *n, aocl_int64_t *kd, aocl_int64_t *nrhs,
+                        doublereal *ab, aocl_int64_t *ldab, doublereal *afb, aocl_int64_t *ldafb,
+                        doublereal *b, aocl_int64_t *ldb, doublereal *x, aocl_int64_t *ldx,
+                        doublereal *ferr, doublereal *berr, doublereal *work, aocl_int_t *iwork,
+                        aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dpbrfs inputs: uplo %c, n %" FLA_IS ", kd %" FLA_IS ", nrhs %" FLA_IS
                       ", ldab %" FLA_IS ", ldafb %" FLA_IS ", ldb %" FLA_IS ", ldx %" FLA_IS "",
                       *uplo, *n, *kd, *nrhs, *ldab, *ldafb, *ldb, *ldx);
     /* System generated locals */
-    integer ab_dim1, ab_offset, afb_dim1, afb_offset, b_dim1, b_offset, x_dim1, x_offset, i__1,
+    aocl_int64_t ab_dim1, ab_offset, afb_dim1, afb_offset, b_dim1, b_offset, x_dim1, x_offset, i__1,
         i__2, i__3, i__4, i__5;
     doublereal d__1, d__2, d__3;
     /* Local variables */
-    integer i__, j, k, l;
+    aocl_int64_t i__, j, k, l;
     doublereal s, xk;
-    integer nz;
+    aocl_int64_t nz;
     doublereal eps;
-    integer kase;
+    aocl_int64_t kase;
     doublereal safe1, safe2;
-    extern logical lsame_(char *, char *, integer, integer);
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     integer isave[3];
-    extern /* Subroutine */
-        void
-        dsbmv_(char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *,
-               integer *, doublereal *, doublereal *, integer *),
-        dcopy_(integer *, doublereal *, integer *, doublereal *, integer *),
-        daxpy_(integer *, doublereal *, doublereal *, integer *, doublereal *, integer *);
-    integer count;
+    aocl_int64_t count;
     logical upper;
-    extern /* Subroutine */
-        void
-        dlacn2_(integer *, doublereal *, doublereal *, integer *, doublereal *, integer *,
-                integer *);
     extern doublereal dlamch_(char *);
     doublereal safmin;
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    extern /* Subroutine */
-        void
-        dpbtrs_(char *, integer *, integer *, integer *, doublereal *, integer *, doublereal *,
-                integer *, integer *);
     doublereal lstres;
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -310,7 +320,7 @@ void dpbrfs_(char *uplo, integer *n, integer *kd, integer *nrhs, doublereal *ab,
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("DPBRFS", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("DPBRFS", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -344,9 +354,9 @@ void dpbrfs_(char *uplo, integer *n, integer *kd, integer *nrhs, doublereal *ab,
         lstres = 3.;
     L20: /* Loop until stopping criterion is satisfied. */
         /* Compute residual R = B - A * X */
-        dcopy_(n, &b[j * b_dim1 + 1], &c__1, &work[*n + 1], &c__1);
-        dsbmv_(uplo, n, kd, &c_b12, &ab[ab_offset], ldab, &x[j * x_dim1 + 1], &c__1, &c_b14,
-               &work[*n + 1], &c__1);
+        aocl_blas_dcopy(n, &b[j * b_dim1 + 1], &c__1, &work[*n + 1], &c__1);
+        aocl_blas_dsbmv(uplo, n, kd, &c_b12, &ab[ab_offset], ldab, &x[j * x_dim1 + 1], &c__1,
+                        &c_b14, &work[*n + 1], &c__1);
         /* Compute componentwise relative backward error from formula */
         /* fla_max(i) ( f2c_dabs(R(i)) / ( f2c_dabs(A)*f2c_dabs(X) + f2c_dabs(B) )(i) ) */
         /* where f2c_dabs(Z) is the componentwise absolute value of the matrix */
@@ -437,8 +447,8 @@ void dpbrfs_(char *uplo, integer *n, integer *kd, integer *nrhs, doublereal *ab,
         if(berr[j] > eps && berr[j] * 2. <= lstres && count <= 5)
         {
             /* Update solution and try again. */
-            dpbtrs_(uplo, n, kd, &c__1, &afb[afb_offset], ldafb, &work[*n + 1], n, info);
-            daxpy_(n, &c_b14, &work[*n + 1], &c__1, &x[j * x_dim1 + 1], &c__1);
+            aocl_lapack_dpbtrs(uplo, n, kd, &c__1, &afb[afb_offset], ldafb, &work[*n + 1], n, info);
+            aocl_blas_daxpy(n, &c_b14, &work[*n + 1], &c__1, &x[j * x_dim1 + 1], &c__1);
             lstres = berr[j];
             ++count;
             goto L20;
@@ -475,13 +485,15 @@ void dpbrfs_(char *uplo, integer *n, integer *kd, integer *nrhs, doublereal *ab,
         }
         kase = 0;
     L100:
-        dlacn2_(n, &work[(*n << 1) + 1], &work[*n + 1], &iwork[1], &ferr[j], &kase, isave);
+        aocl_lapack_dlacn2(n, &work[(*n << 1) + 1], &work[*n + 1], &iwork[1], &ferr[j], &kase,
+                           isave);
         if(kase != 0)
         {
             if(kase == 1)
             {
                 /* Multiply by diag(W)*inv(A**T). */
-                dpbtrs_(uplo, n, kd, &c__1, &afb[afb_offset], ldafb, &work[*n + 1], n, info);
+                aocl_lapack_dpbtrs(uplo, n, kd, &c__1, &afb[afb_offset], ldafb, &work[*n + 1], n,
+                                   info);
                 i__2 = *n;
                 for(i__ = 1; i__ <= i__2; ++i__)
                 {
@@ -498,7 +510,8 @@ void dpbrfs_(char *uplo, integer *n, integer *kd, integer *nrhs, doublereal *ab,
                     work[*n + i__] *= work[i__];
                     /* L120: */
                 }
-                dpbtrs_(uplo, n, kd, &c__1, &afb[afb_offset], ldafb, &work[*n + 1], n, info);
+                aocl_lapack_dpbtrs(uplo, n, kd, &c__1, &afb[afb_offset], ldafb, &work[*n + 1], n,
+                                   info);
             }
             goto L100;
         }

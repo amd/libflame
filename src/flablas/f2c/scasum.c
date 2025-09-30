@@ -1,16 +1,16 @@
 /* scasum.f -- translated by f2c (version 19991025). You must link the resulting object file with the libraries: -lf2c -lm (in that order) */
 #include "FLA_f2c.h"
-real scasum_(integer *n, complex *cx, integer *incx)
+real scasum_(integer *n, scomplex *cx, integer *incx)
 {
     /* System generated locals */
     integer i__1, i__2, i__3;
     real ret_val, r__1, r__2;
     /* Builtin functions */
-    double r_imag(complex *);
+    double r_imag(scomplex *);
     /* Local variables */
     integer i__, nincx;
     real stemp;
-    /* takes the sum of the absolute values of a complex vector and */
+    /* takes the sum of the absolute values of a scomplex vector and */
     /* returns a single precision result. */
     /* jack dongarra, linpack, 3/11/78. */
     /* modified 3/93 to return if incx .le. 0. */

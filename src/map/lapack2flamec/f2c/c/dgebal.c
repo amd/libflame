@@ -4,7 +4,7 @@
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
  /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
+static aocl_int64_t c__1 = 1;
 /* > \brief \b DGEBAL */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -163,34 +163,44 @@ and second, applying a diagonal similarity transformation */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void dgebal_(char *job, integer *n, doublereal *a, integer *lda, integer *ilo, integer *ihi,
-             doublereal *scale, integer *info)
+/** Generated wrapper function */
+void dgebal_(char *job, aocl_int_t *n, doublereal *a, aocl_int_t *lda, aocl_int_t *ilo,
+             aocl_int_t *ihi, doublereal *scale, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_dgebal(job, n, a, lda, ilo, ihi, scale, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t ilo_64 = *ilo;
+    aocl_int64_t ihi_64 = *ihi;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_dgebal(job, &n_64, a, &lda_64, &ilo_64, &ihi_64, scale, &info_64);
+
+    *ilo = (aocl_int_t)ilo_64;
+    *ihi = (aocl_int_t)ihi_64;
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_dgebal(char *job, aocl_int64_t *n, doublereal *a, aocl_int64_t *lda,
+                        aocl_int64_t *ilo, aocl_int64_t *ihi, doublereal *scale, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dgebal inputs: job %c, n %" FLA_IS ", lda %" FLA_IS "", *job, *n, *lda);
     /* System generated locals */
-    integer a_dim1, a_offset, i__1, i__2;
+    aocl_int64_t a_dim1, a_offset, i__1, i__2;
     doublereal d__1, d__2;
     /* Local variables */
     doublereal c__, f, g;
-    integer i__, j, k, l;
+    aocl_int64_t i__, j, k, l;
     doublereal r__, s, ca, ra;
-    integer ica, ira;
-    extern doublereal dnrm2_(integer *, doublereal *, integer *);
-    extern /* Subroutine */
-        void
-        dscal_(integer *, doublereal *, doublereal *, integer *);
-    extern logical lsame_(char *, char *, integer, integer);
-    extern /* Subroutine */
-        void
-        dswap_(integer *, doublereal *, integer *, doublereal *, integer *);
+    aocl_int64_t ica, ira;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     doublereal sfmin1, sfmin2, sfmax1, sfmax2;
     extern doublereal dlamch_(char *);
-    extern integer idamax_(integer *, doublereal *, integer *);
     extern logical disnan_(doublereal *);
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical noconv, canswap;
     /* -- LAPACK computational routine (version 3.5.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -234,7 +244,7 @@ void dgebal_(char *job, integer *n, doublereal *a, integer *lda, integer *ilo, i
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("DGEBAL", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("DGEBAL", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -286,9 +296,9 @@ void dgebal_(char *job, integer *n, doublereal *a, integer *lda, integer *ilo, i
                     scale[l] = (doublereal)i__;
                     if(i__ != l)
                     {
-                        dswap_(&l, &a[i__ * a_dim1 + 1], &c__1, &a[l * a_dim1 + 1], &c__1);
+                        aocl_blas_dswap(&l, &a[i__ * a_dim1 + 1], &c__1, &a[l * a_dim1 + 1], &c__1);
                         i__1 = *n - k + 1;
-                        dswap_(&i__1, &a[i__ + k * a_dim1], lda, &a[l + k * a_dim1], lda);
+                        aocl_blas_dswap(&i__1, &a[i__ + k * a_dim1], lda, &a[l + k * a_dim1], lda);
                     }
                     noconv = TRUE_;
                     if(l == 1)
@@ -325,9 +335,9 @@ void dgebal_(char *job, integer *n, doublereal *a, integer *lda, integer *ilo, i
                     scale[k] = (doublereal)j;
                     if(j != k)
                     {
-                        dswap_(&l, &a[j * a_dim1 + 1], &c__1, &a[k * a_dim1 + 1], &c__1);
+                        aocl_blas_dswap(&l, &a[j * a_dim1 + 1], &c__1, &a[k * a_dim1 + 1], &c__1);
                         i__2 = *n - k + 1;
-                        dswap_(&i__2, &a[j + k * a_dim1], lda, &a[k + k * a_dim1], lda);
+                        aocl_blas_dswap(&i__2, &a[j + k * a_dim1], lda, &a[k + k * a_dim1], lda);
                     }
                     noconv = TRUE_;
                     ++k;
@@ -363,13 +373,13 @@ void dgebal_(char *job, integer *n, doublereal *a, integer *lda, integer *ilo, i
         for(i__ = k; i__ <= i__1; ++i__)
         {
             i__2 = l - k + 1;
-            c__ = dnrm2_(&i__2, &a[k + i__ * a_dim1], &c__1);
+            c__ = aocl_blas_dnrm2(&i__2, &a[k + i__ * a_dim1], &c__1);
             i__2 = l - k + 1;
-            r__ = dnrm2_(&i__2, &a[i__ + k * a_dim1], lda);
-            ica = idamax_(&l, &a[i__ * a_dim1 + 1], &c__1);
+            r__ = aocl_blas_dnrm2(&i__2, &a[i__ + k * a_dim1], lda);
+            ica = aocl_blas_idamax(&l, &a[i__ * a_dim1 + 1], &c__1);
             ca = (d__1 = a[ica + i__ * a_dim1], f2c_abs(d__1));
             i__2 = *n - k + 1;
-            ira = idamax_(&i__2, &a[i__ + k * a_dim1], lda);
+            ira = aocl_blas_idamax(&i__2, &a[i__ + k * a_dim1], lda);
             ra = (d__1 = a[i__ + (ira + k - 1) * a_dim1], f2c_abs(d__1));
             /* Guard against zero C or R due to underflow. */
             if(c__ == 0. || r__ == 0.)
@@ -382,7 +392,7 @@ void dgebal_(char *job, integer *n, doublereal *a, integer *lda, integer *ilo, i
             {
                 *info = -3;
                 i__2 = -(*info);
-                xerbla_("DGEBAL", &i__2, (ftnlen)6);
+                aocl_blas_xerbla("DGEBAL", &i__2, (ftnlen)6);
                 AOCL_DTL_TRACE_LOG_EXIT
                 return;
             }
@@ -444,8 +454,8 @@ void dgebal_(char *job, integer *n, doublereal *a, integer *lda, integer *ilo, i
             scale[i__] *= f;
             noconv = TRUE_;
             i__2 = *n - k + 1;
-            dscal_(&i__2, &g, &a[i__ + k * a_dim1], lda);
-            dscal_(&l, &f, &a[i__ * a_dim1 + 1], &c__1);
+            aocl_blas_dscal(&i__2, &g, &a[i__ + k * a_dim1], lda);
+            aocl_blas_dscal(&l, &f, &a[i__ * a_dim1 + 1], &c__1);
         }
     }
     *ilo = k;

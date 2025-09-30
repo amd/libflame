@@ -76,7 +76,19 @@
 /* > \ingroup complexOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void cla_wwaddw_(integer *n, complex *x, complex *y, complex *w)
+/** Generated wrapper function */
+void cla_wwaddw_(aocl_int_t *n, scomplex *x, scomplex *y, scomplex *w)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_cla_wwaddw(n, x, y, w);
+#else
+    aocl_int64_t n_64 = *n;
+
+    aocl_lapack_cla_wwaddw(&n_64, x, y, w);
+#endif
+}
+
+void aocl_lapack_cla_wwaddw(aocl_int64_t *n, scomplex *x, scomplex *y, scomplex *w)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -89,11 +101,11 @@ void cla_wwaddw_(integer *n, complex *x, complex *y, complex *w)
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
-    integer i__1, i__2, i__3, i__4, i__5;
-    complex q__1, q__2, q__3;
+    aocl_int64_t i__1, i__2, i__3, i__4, i__5;
+    scomplex q__1, q__2, q__3;
     /* Local variables */
-    integer i__;
-    complex s;
+    aocl_int64_t i__;
+    scomplex s;
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */

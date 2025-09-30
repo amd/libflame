@@ -179,30 +179,50 @@
 /* > \ingroup realGBcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void sla_gbamv_(integer *trans, integer *m, integer *n, integer *kl, integer *ku, real *alpha,
-                real *ab, integer *ldab, real *x, integer *incx, real *beta, real *y, integer *incy)
+/** Generated wrapper function */
+void sla_gbamv_(aocl_int_t *trans, aocl_int_t *m, aocl_int_t *n, aocl_int_t *kl, aocl_int_t *ku,
+                real *alpha, real *ab, aocl_int_t *ldab, real *x, aocl_int_t *incx, real *beta,
+                real *y, aocl_int_t *incy)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_sla_gbamv(trans, m, n, kl, ku, alpha, ab, ldab, x, incx, beta, y, incy);
+#else
+    aocl_int64_t trans_64 = *trans;
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t kl_64 = *kl;
+    aocl_int64_t ku_64 = *ku;
+    aocl_int64_t ldab_64 = *ldab;
+    aocl_int64_t incx_64 = *incx;
+    aocl_int64_t incy_64 = *incy;
+
+    aocl_lapack_sla_gbamv(&trans_64, &m_64, &n_64, &kl_64, &ku_64, alpha, ab, &ldab_64, x, &incx_64,
+                          beta, y, &incy_64);
+#endif
+}
+
+void aocl_lapack_sla_gbamv(aocl_int64_t *trans, aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *kl,
+                           aocl_int64_t *ku, real *alpha, real *ab, aocl_int64_t *ldab, real *x,
+                           aocl_int64_t *incx, real *beta, real *y, aocl_int64_t *incy)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("sla_gbamv inputs: trans %" FLA_IS ",m %" FLA_IS ",n %" FLA_IS ",kl %" FLA_IS
                       ",ku %" FLA_IS ",ldab %" FLA_IS ",incx %" FLA_IS ",incy %" FLA_IS "",
                       *trans, *m, *n, *kl, *ku, *ldab, *incx, *incy);
     /* System generated locals */
-    integer ab_dim1, ab_offset, i__1, i__2, i__3, i__4;
+    aocl_int64_t ab_dim1, ab_offset, i__1, i__2, i__3, i__4;
     real r__1;
     /* Builtin functions */
     double r_sign(real *, real *);
     /* Local variables */
     extern integer ilatrans_(char *);
-    integer i__, j;
+    aocl_int64_t i__, j;
     logical symb_zero__;
-    integer kd, ke, iy, jx, kx, ky, info;
+    aocl_int64_t kd, ke, iy, jx, kx, ky, info;
     real temp;
-    integer lenx, leny;
+    aocl_int64_t lenx, leny;
     real safe1;
     extern real slamch_(char *);
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -266,7 +286,7 @@ void sla_gbamv_(integer *trans, integer *m, integer *n, integer *kl, integer *ku
     }
     if(info != 0)
     {
-        xerbla_("SLA_GBAMV ", &info, (ftnlen)10);
+        aocl_blas_xerbla("SLA_GBAMV ", &info, (ftnlen)10);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }

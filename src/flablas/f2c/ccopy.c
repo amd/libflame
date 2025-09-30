@@ -1,7 +1,7 @@
 /* ccopy.f -- translated by f2c (version 19991025). You must link the resulting object file with the libraries: -lf2c -lm (in that order) */
 #include "FLA_f2c.h"
 /* Subroutine */
-int ccopy_(integer *n, complex *cx, integer *incx, complex * cy, integer *incy)
+int ccopy_(integer *n, scomplex *cx, integer *incx, scomplex * cy, integer *incy)
 {
     /* System generated locals */
     integer i__1, i__2, i__3;

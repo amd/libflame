@@ -4,11 +4,11 @@
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
  /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static complex c_b1 = {0.f, 0.f};
-static complex c_b2 = {1.f, 0.f};
-static integer c__2 = 2;
-static integer c__1 = 1;
-static integer c__3 = 3;
+static scomplex c_b1 = {{0.f}, {0.f}};
+static scomplex c_b2 = {{1.f}, {0.f}};
+static aocl_int64_t c__2 = 2;
+static aocl_int64_t c__1 = 1;
+static aocl_int64_t c__3 = 3;
 /* > \brief \b CLAQR5 performs a single small-bulge multi-shift QR sweep. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -254,11 +254,45 @@ static integer c__3 = 3;
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void claqr5_(logical *wantt, logical *wantz, integer *kacc22, integer *n, integer *ktop,
-             integer *kbot, integer *nshfts, complex *s, complex *h__, integer *ldh, integer *iloz,
-             integer *ihiz, complex *z__, integer *ldz, complex *v, integer *ldv, complex *u,
-             integer *ldu, integer *nv, complex *wv, integer *ldwv, integer *nh, complex *wh,
-             integer *ldwh)
+/** Generated wrapper function */
+void claqr5_(logical *wantt, logical *wantz, aocl_int_t *kacc22, aocl_int_t *n, aocl_int_t *ktop,
+             aocl_int_t *kbot, aocl_int_t *nshfts, scomplex *s, scomplex *h__, aocl_int_t *ldh,
+             aocl_int_t *iloz, aocl_int_t *ihiz, scomplex *z__, aocl_int_t *ldz, scomplex *v,
+             aocl_int_t *ldv, scomplex *u, aocl_int_t *ldu, aocl_int_t *nv, scomplex *wv,
+             aocl_int_t *ldwv, aocl_int_t *nh, scomplex *wh, aocl_int_t *ldwh)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_claqr5(wantt, wantz, kacc22, n, ktop, kbot, nshfts, s, h__, ldh, iloz, ihiz, z__,
+                       ldz, v, ldv, u, ldu, nv, wv, ldwv, nh, wh, ldwh);
+#else
+    aocl_int64_t kacc22_64 = *kacc22;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t ktop_64 = *ktop;
+    aocl_int64_t kbot_64 = *kbot;
+    aocl_int64_t nshfts_64 = *nshfts;
+    aocl_int64_t ldh_64 = *ldh;
+    aocl_int64_t iloz_64 = *iloz;
+    aocl_int64_t ihiz_64 = *ihiz;
+    aocl_int64_t ldz_64 = *ldz;
+    aocl_int64_t ldv_64 = *ldv;
+    aocl_int64_t ldu_64 = *ldu;
+    aocl_int64_t nv_64 = *nv;
+    aocl_int64_t ldwv_64 = *ldwv;
+    aocl_int64_t nh_64 = *nh;
+    aocl_int64_t ldwh_64 = *ldwh;
+
+    aocl_lapack_claqr5(wantt, wantz, &kacc22_64, &n_64, &ktop_64, &kbot_64, &nshfts_64, s, h__,
+                       &ldh_64, &iloz_64, &ihiz_64, z__, &ldz_64, v, &ldv_64, u, &ldu_64, &nv_64,
+                       wv, &ldwv_64, &nh_64, wh, &ldwh_64);
+#endif
+}
+
+void aocl_lapack_claqr5(logical *wantt, logical *wantz, aocl_int64_t *kacc22, aocl_int64_t *n,
+                        aocl_int64_t *ktop, aocl_int64_t *kbot, aocl_int64_t *nshfts, scomplex *s,
+                        scomplex *h__, aocl_int64_t *ldh, aocl_int64_t *iloz, aocl_int64_t *ihiz,
+                        scomplex *z__, aocl_int64_t *ldz, scomplex *v, aocl_int64_t *ldv, scomplex *u,
+                        aocl_int64_t *ldu, aocl_int64_t *nv, scomplex *wv, aocl_int64_t *ldwv,
+                        aocl_int64_t *nh, scomplex *wh, aocl_int64_t *ldwh)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -280,40 +314,28 @@ void claqr5_(logical *wantt, logical *wantz, integer *kacc22, integer *n, intege
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
-    integer h_dim1, h_offset, u_dim1, u_offset, v_dim1, v_offset, wh_dim1, wh_offset, wv_dim1,
+    aocl_int64_t h_dim1, h_offset, u_dim1, u_offset, v_dim1, v_offset, wh_dim1, wh_offset, wv_dim1,
         wv_offset, z_dim1, z_offset, i__1, i__2, i__3, i__4, i__5, i__6, i__7, i__8, i__9, i__10,
         i__11;
     real r__1, r__2, r__3, r__4, r__5, r__6, r__7, r__8, r__9, r__10;
-    complex q__1, q__2, q__3, q__4, q__5, q__6, q__7;
+    scomplex q__1, q__2, q__3, q__4, q__5, q__6, q__7;
     /* Local variables */
-    integer j, k, m, i2, k1, i4;
+    aocl_int64_t j, k, m, i2, k1, i4;
     real h11, h12, h21, h22;
-    integer m22, ns, nu;
-    complex vt[3];
+    aocl_int64_t m22, ns, nu;
+    scomplex vt[3];
     real scl;
-    integer kdu, kms;
+    aocl_int64_t kdu, kms;
     real ulp, tst1, tst2;
-    complex beta;
+    scomplex beta;
     logical bmp22;
-    integer jcol, jlen, jbot, mbot, jtop, jrow, mtop;
-    complex alpha;
+    aocl_int64_t jcol, jlen, jbot, mbot, jtop, jrow, mtop;
+    scomplex alpha;
     logical accum;
-    extern /* Subroutine */
-        void
-        cgemm_(char *, char *, integer *, integer *, integer *, complex *, complex *, integer *,
-               complex *, integer *, complex *, complex *, integer *);
-    integer ndcol, incol, krcol, nbmps;
-    extern /* Subroutine */
-        void
-        claqr1_(integer *, complex *, integer *, complex *, complex *, complex *),
-        clarfg_(integer *, complex *, complex *, integer *, complex *);
+    aocl_int64_t ndcol, incol, krcol, nbmps;
     extern real slamch_(char *);
-    extern /* Subroutine */
-        void
-        clacpy_(char *, integer *, integer *, complex *, integer *, complex *, integer *),
-        claset_(char *, integer *, integer *, complex *, complex *, complex *, integer *);
     real safmin;
-    complex refsum;
+    scomplex refsum;
     real smlnum;
     /* -- LAPACK auxiliary routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -418,7 +440,7 @@ void claqr5_(logical *wantt, logical *wantz, integer *kacc22, integer *n, intege
         ndcol = incol + kdu;
         if(accum)
         {
-            claset_("ALL", &kdu, &kdu, &c_b1, &c_b2, &u[u_offset], ldu);
+            aocl_lapack_claset("ALL", &kdu, &kdu, &c_b1, &c_b2, &u[u_offset], ldu);
         }
         /* ==== Near-the-diagonal bulge chase. The following loop */
         /* . performs the near-the-diagonal part of a small bulge */
@@ -466,11 +488,11 @@ void claqr5_(logical *wantt, logical *wantz, integer *kacc22, integer *n, intege
                 if(k == *ktop - 1)
                 {
                     i__4 = m22 * v_dim1 + 1;
-                    claqr1_(&c__2, &h__[k + 1 + (k + 1) * h_dim1], ldh, &s[(m22 << 1) - 1],
-                            &s[m22 * 2], &v[i__4]);
+                    aocl_lapack_claqr1(&c__2, &h__[k + 1 + (k + 1) * h_dim1], ldh,
+                                       &s[(m22 << 1) - 1], &s[m22 * 2], &v[i__4]);
                     beta.r = v[i__4].r;
                     beta.i = v[i__4].i; // , expr subst
-                    clarfg_(&c__2, &beta, &v[m22 * v_dim1 + 2], &c__1, &v[i__4]);
+                    aocl_lapack_clarfg(&c__2, &beta, &v[m22 * v_dim1 + 2], &c__1, &v[i__4]);
                 }
                 else
                 {
@@ -481,7 +503,8 @@ void claqr5_(logical *wantt, logical *wantz, integer *kacc22, integer *n, intege
                     i__5 = k + 2 + k * h_dim1;
                     v[i__4].r = h__[i__5].r;
                     v[i__4].i = h__[i__5].i; // , expr subst
-                    clarfg_(&c__2, &beta, &v[m22 * v_dim1 + 2], &c__1, &v[m22 * v_dim1 + 1]);
+                    aocl_lapack_clarfg(&c__2, &beta, &v[m22 * v_dim1 + 2], &c__1,
+                                       &v[m22 * v_dim1 + 1]);
                     i__4 = k + 1 + k * h_dim1;
                     h__[i__4].r = beta.r;
                     h__[i__4].i = beta.i; // , expr subst
@@ -779,12 +802,13 @@ void claqr5_(logical *wantt, logical *wantz, integer *kacc22, integer *n, intege
                 k = krcol + (m - 1 << 1);
                 if(k == *ktop - 1)
                 {
-                    claqr1_(&c__3, &h__[*ktop + *ktop * h_dim1], ldh, &s[(m << 1) - 1], &s[m * 2],
-                            &v[m * v_dim1 + 1]);
+                    aocl_lapack_claqr1(&c__3, &h__[*ktop + *ktop * h_dim1], ldh, &s[(m << 1) - 1],
+                                       &s[m * 2], &v[m * v_dim1 + 1]);
                     i__4 = m * v_dim1 + 1;
                     alpha.r = v[i__4].r;
                     alpha.i = v[i__4].i; // , expr subst
-                    clarfg_(&c__3, &alpha, &v[m * v_dim1 + 2], &c__1, &v[m * v_dim1 + 1]);
+                    aocl_lapack_clarfg(&c__3, &alpha, &v[m * v_dim1 + 2], &c__1,
+                                       &v[m * v_dim1 + 1]);
                 }
                 else
                 {
@@ -840,7 +864,7 @@ void claqr5_(logical *wantt, logical *wantz, integer *kacc22, integer *n, intege
                     u3i = h__[i__5].i;
                     v[i__4].r = u3r;
                     v[i__4].i = u3i; // , expr subst
-                    clarfg_(&c__3, &beta, &v[m * v_dim1 + 2], &c__1, &v[m * v_dim1 + 1]);
+                    aocl_lapack_clarfg(&c__3, &beta, &v[m * v_dim1 + 2], &c__1, &v[m * v_dim1 + 1]);
                     /* ==== A Bulge may collapse because of vigilant */
                     /* . deflation or destructive underflow. In the */
                     /* . underflow case, try the two-small-subdiagonals */
@@ -866,11 +890,11 @@ void claqr5_(logical *wantt, logical *wantz, integer *kacc22, integer *n, intege
                         /* . If the fill resulting from the new */
                         /* . reflector is too large, then abandon it. */
                         /* . Otherwise, use the new one. ==== */
-                        claqr1_(&c__3, &h__[k + 1 + (k + 1) * h_dim1], ldh, &s[(m << 1) - 1],
-                                &s[m * 2], vt);
+                        aocl_lapack_claqr1(&c__3, &h__[k + 1 + (k + 1) * h_dim1], ldh,
+                                           &s[(m << 1) - 1], &s[m * 2], vt);
                         alpha.r = vt[0].r;
                         alpha.i = vt[0].i; // , expr subst
-                        clarfg_(&c__3, &alpha, &vt[1], &c__1, vt);
+                        aocl_lapack_clarfg(&c__3, &alpha, &vt[1], &c__1, vt);
                         q__2.r = vt->r;
                         q__2.i = -vt->i;
                         i__4 = k + 1 + k * h_dim1;
@@ -1423,10 +1447,10 @@ void claqr5_(logical *wantt, logical *wantz, integer *kacc22, integer *n, intege
                 i__7 = *nh;
                 i__4 = jbot - jcol + 1; // , expr subst
                 jlen = fla_min(i__7, i__4);
-                cgemm_("C", "N", &nu, &jlen, &nu, &c_b2, &u[k1 + k1 * u_dim1], ldu,
-                       &h__[incol + k1 + jcol * h_dim1], ldh, &c_b1, &wh[wh_offset], ldwh);
-                clacpy_("ALL", &nu, &jlen, &wh[wh_offset], ldwh, &h__[incol + k1 + jcol * h_dim1],
-                        ldh);
+                aocl_blas_cgemm("C", "N", &nu, &jlen, &nu, &c_b2, &u[k1 + k1 * u_dim1], ldu,
+                                &h__[incol + k1 + jcol * h_dim1], ldh, &c_b1, &wh[wh_offset], ldwh);
+                aocl_lapack_clacpy("ALL", &nu, &jlen, &wh[wh_offset], ldwh,
+                                   &h__[incol + k1 + jcol * h_dim1], ldh);
                 /* L150: */
             }
             /* ==== Vertical multiply ==== */
@@ -1438,10 +1462,11 @@ void claqr5_(logical *wantt, logical *wantz, integer *kacc22, integer *n, intege
                 i__7 = *nv;
                 i__4 = fla_max(*ktop, incol) - jrow; // , expr subst
                 jlen = fla_min(i__7, i__4);
-                cgemm_("N", "N", &jlen, &nu, &nu, &c_b2, &h__[jrow + (incol + k1) * h_dim1], ldh,
-                       &u[k1 + k1 * u_dim1], ldu, &c_b1, &wv[wv_offset], ldwv);
-                clacpy_("ALL", &jlen, &nu, &wv[wv_offset], ldwv, &h__[jrow + (incol + k1) * h_dim1],
-                        ldh);
+                aocl_blas_cgemm("N", "N", &jlen, &nu, &nu, &c_b2,
+                                &h__[jrow + (incol + k1) * h_dim1], ldh, &u[k1 + k1 * u_dim1], ldu,
+                                &c_b1, &wv[wv_offset], ldwv);
+                aocl_lapack_clacpy("ALL", &jlen, &nu, &wv[wv_offset], ldwv,
+                                   &h__[jrow + (incol + k1) * h_dim1], ldh);
                 /* L160: */
             }
             /* ==== Z multiply (also vertical) ==== */
@@ -1455,10 +1480,11 @@ void claqr5_(logical *wantt, logical *wantz, integer *kacc22, integer *n, intege
                     i__7 = *nv;
                     i__4 = *ihiz - jrow + 1; // , expr subst
                     jlen = fla_min(i__7, i__4);
-                    cgemm_("N", "N", &jlen, &nu, &nu, &c_b2, &z__[jrow + (incol + k1) * z_dim1],
-                           ldz, &u[k1 + k1 * u_dim1], ldu, &c_b1, &wv[wv_offset], ldwv);
-                    clacpy_("ALL", &jlen, &nu, &wv[wv_offset], ldwv,
-                            &z__[jrow + (incol + k1) * z_dim1], ldz);
+                    aocl_blas_cgemm("N", "N", &jlen, &nu, &nu, &c_b2,
+                                    &z__[jrow + (incol + k1) * z_dim1], ldz, &u[k1 + k1 * u_dim1],
+                                    ldu, &c_b1, &wv[wv_offset], ldwv);
+                    aocl_lapack_clacpy("ALL", &jlen, &nu, &wv[wv_offset], ldwv,
+                                       &z__[jrow + (incol + k1) * z_dim1], ldz);
                     /* L170: */
                 }
             }
@@ -1470,3 +1496,4 @@ void claqr5_(logical *wantt, logical *wantz, integer *kacc22, integer *n, intege
     return;
 }
 /* claqr5_ */
+

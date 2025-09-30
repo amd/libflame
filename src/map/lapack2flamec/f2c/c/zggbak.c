@@ -39,7 +39,7 @@
 /* > */
 /* > \verbatim */
 /* > */
-/* > ZGGBAK forms the right or left eigenvectors of a complex generalized */
+/* > ZGGBAK forms the right or left eigenvectors of a scomplex generalized */
 /* > eigenvalue problem A*x = lambda*B*x, by backward transformation on */
 /* > the computed eigenvectors of the balanced pair of matrices output by */
 /* > ZGGBAL. */
@@ -147,24 +147,42 @@ ILO=1 and IHI=0, if N=0. */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void zggbak_(char *job, char *side, integer *n, integer *ilo, integer *ihi, doublereal *lscale,
-             doublereal *rscale, integer *m, doublecomplex *v, integer *ldv, integer *info)
+/** Generated wrapper function */
+void zggbak_(char *job, char *side, aocl_int_t *n, aocl_int_t *ilo, aocl_int_t *ihi,
+             doublereal *lscale, doublereal *rscale, aocl_int_t *m, dcomplex *v,
+             aocl_int_t *ldv, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_zggbak(job, side, n, ilo, ihi, lscale, rscale, m, v, ldv, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t ilo_64 = *ilo;
+    aocl_int64_t ihi_64 = *ihi;
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t ldv_64 = *ldv;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_zggbak(job, side, &n_64, &ilo_64, &ihi_64, lscale, rscale, &m_64, v, &ldv_64,
+                       &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_zggbak(char *job, char *side, aocl_int64_t *n, aocl_int64_t *ilo,
+                        aocl_int64_t *ihi, doublereal *lscale, doublereal *rscale, aocl_int64_t *m,
+                        dcomplex *v, aocl_int64_t *ldv, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zggbak inputs: job %c, side %c, n %" FLA_IS ", ilo %" FLA_IS ", ihi %" FLA_IS
                       ", m %" FLA_IS ", ldv %" FLA_IS "",
                       *job, *side, *n, *ilo, *ihi, *m, *ldv);
     /* System generated locals */
-    integer v_dim1, v_offset, i__1;
+    aocl_int64_t v_dim1, v_offset, i__1;
     /* Local variables */
-    integer i__, k;
-    extern logical lsame_(char *, char *, integer, integer);
+    aocl_int64_t i__, k;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     logical leftv;
-    extern /* Subroutine */
-        void
-        zswap_(integer *, doublecomplex *, integer *, doublecomplex *, integer *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
-        zdscal_(integer *, doublereal *, doublecomplex *, integer *);
     logical rightv;
     /* -- LAPACK computational routine (version 3.7.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -235,7 +253,7 @@ void zggbak_(char *job, char *side, integer *n, integer *ilo, integer *ihi, doub
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("ZGGBAK", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("ZGGBAK", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -268,7 +286,7 @@ void zggbak_(char *job, char *side, integer *n, integer *ilo, integer *ihi, doub
             i__1 = *ihi;
             for(i__ = *ilo; i__ <= i__1; ++i__)
             {
-                zdscal_(m, &rscale[i__], &v[i__ + v_dim1], ldv);
+                aocl_blas_zdscal(m, &rscale[i__], &v[i__ + v_dim1], ldv);
                 /* L10: */
             }
         }
@@ -278,7 +296,7 @@ void zggbak_(char *job, char *side, integer *n, integer *ilo, integer *ihi, doub
             i__1 = *ihi;
             for(i__ = *ilo; i__ <= i__1; ++i__)
             {
-                zdscal_(m, &lscale[i__], &v[i__ + v_dim1], ldv);
+                aocl_blas_zdscal(m, &lscale[i__], &v[i__ + v_dim1], ldv);
                 /* L20: */
             }
         }
@@ -301,7 +319,7 @@ L30:
                 {
                     goto L40;
                 }
-                zswap_(m, &v[i__ + v_dim1], ldv, &v[k + v_dim1], ldv);
+                aocl_blas_zswap(m, &v[i__ + v_dim1], ldv, &v[k + v_dim1], ldv);
             L40:;
             }
         L50:
@@ -317,7 +335,7 @@ L30:
                 {
                     goto L60;
                 }
-                zswap_(m, &v[i__ + v_dim1], ldv, &v[k + v_dim1], ldv);
+                aocl_blas_zswap(m, &v[i__ + v_dim1], ldv, &v[k + v_dim1], ldv);
             L60:;
             }
         }
@@ -336,7 +354,7 @@ L30:
                 {
                     goto L80;
                 }
-                zswap_(m, &v[i__ + v_dim1], ldv, &v[k + v_dim1], ldv);
+                aocl_blas_zswap(m, &v[i__ + v_dim1], ldv, &v[k + v_dim1], ldv);
             L80:;
             }
         L90:
@@ -352,7 +370,7 @@ L30:
                 {
                     goto L100;
                 }
-                zswap_(m, &v[i__ + v_dim1], ldv, &v[k + v_dim1], ldv);
+                aocl_blas_zswap(m, &v[i__ + v_dim1], ldv, &v[k + v_dim1], ldv);
             L100:;
             }
         }

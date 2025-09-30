@@ -4,8 +4,8 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
-static integer c_n1 = -1;
+static aocl_int64_t c__1 = 1;
+static aocl_int64_t c_n1 = -1;
 /* > \brief \b DORGTR */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -123,27 +123,19 @@ the routine */
 /* > \ingroup doubleOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void dorgtr_fla(char *uplo, integer *n, doublereal *a, integer *lda, doublereal *tau,
-                doublereal *work, integer *lwork, integer *info)
+void dorgtr_fla(char *uplo, aocl_int64_t *n, doublereal *a, aocl_int64_t *lda, doublereal *tau,
+                doublereal *work, aocl_int64_t *lwork, aocl_int64_t *info)
 {
     /* System generated locals */
-    integer a_dim1, a_offset, i__1, i__2, i__3;
+    aocl_int64_t a_dim1, a_offset, i__1, i__2, i__3;
     /* Local variables */
-    integer i__, j, nb;
-    extern logical lsame_(char *, char *, integer, integer);
-    integer iinfo;
+    aocl_int64_t i__, j, nb;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    aocl_int64_t iinfo;
     logical upper;
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
-    extern /* Subroutine */
-        void
-        dorgql_(integer *, integer *, integer *, doublereal *, integer *, doublereal *,
-                doublereal *, integer *, integer *),
-        lapack_dorgqr(integer *, integer *, integer *, doublereal *, integer *, doublereal *,
-                      doublereal *, integer *, integer *);
-    integer lwkopt;
+    int lapack_dorgqr(aocl_int64_t *, aocl_int64_t *, aocl_int64_t *, doublereal *, aocl_int64_t *,
+                    doublereal *, doublereal *, aocl_int64_t *, aocl_int64_t *);
+    aocl_int64_t lwkopt;
     logical lquery;
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -205,14 +197,14 @@ void dorgtr_fla(char *uplo, integer *n, doublereal *a, integer *lda, doublereal 
             i__1 = *n - 1;
             i__2 = *n - 1;
             i__3 = *n - 1;
-            nb = ilaenv_(&c__1, "DORGQL", " ", &i__1, &i__2, &i__3, &c_n1);
+            nb = aocl_lapack_ilaenv(&c__1, "DORGQL", " ", &i__1, &i__2, &i__3, &c_n1);
         }
         else
         {
             i__1 = *n - 1;
             i__2 = *n - 1;
             i__3 = *n - 1;
-            nb = ilaenv_(&c__1, "DORGQR", " ", &i__1, &i__2, &i__3, &c_n1);
+            nb = aocl_lapack_ilaenv(&c__1, "DORGQR", " ", &i__1, &i__2, &i__3, &c_n1);
         }
         /* Computing MAX */
         i__1 = 1;
@@ -223,7 +215,7 @@ void dorgtr_fla(char *uplo, integer *n, doublereal *a, integer *lda, doublereal 
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("DORGTR", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("DORGTR", &i__1, (ftnlen)6);
         return;
     }
     else if(lquery)
@@ -265,7 +257,8 @@ void dorgtr_fla(char *uplo, integer *n, doublereal *a, integer *lda, doublereal 
         i__1 = *n - 1;
         i__2 = *n - 1;
         i__3 = *n - 1;
-        dorgql_(&i__1, &i__2, &i__3, &a[a_offset], lda, &tau[1], &work[1], lwork, &iinfo);
+        aocl_lapack_dorgql(&i__1, &i__2, &i__3, &a[a_offset], lda, &tau[1], &work[1], lwork,
+                           &iinfo);
     }
     else
     {

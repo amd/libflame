@@ -4,7 +4,7 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
+static aocl_int64_t c__1 = 1;
 /* > \brief \b ZUPMTR */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -40,13 +40,13 @@ static integer c__1 = 1;
 /* > */
 /* > \verbatim */
 /* > */
-/* > ZUPMTR overwrites the general complex M-by-N matrix C with */
+/* > ZUPMTR overwrites the general scomplex M-by-N matrix C with */
 /* > */
 /* > SIDE = 'L' SIDE = 'R' */
 /* > TRANS = 'N': Q * C C * Q */
 /* > TRANS = 'C': Q**H * C C * Q**H */
 /* > */
-/* > where Q is a complex unitary matrix of order nq, with nq = m if */
+/* > where Q is a scomplex unitary matrix of order nq, with nq = m if */
 /* > SIDE = 'L' and nq = n if SIDE = 'R'. Q is defined as the product of */
 /* > nq-1 elementary reflectors, as returned by ZHPTRD using packed */
 /* > storage: */
@@ -150,33 +150,45 @@ static integer c__1 = 1;
 /* > \ingroup complex16OTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void zupmtr_(char *side, char *uplo, char *trans, integer *m, integer *n, doublecomplex *ap,
-             doublecomplex *tau, doublecomplex *c__, integer *ldc, doublecomplex *work,
-             integer *info)
+/** Generated wrapper function */
+void zupmtr_(char *side, char *uplo, char *trans, aocl_int_t *m, aocl_int_t *n, dcomplex *ap,
+             dcomplex *tau, dcomplex *c__, aocl_int_t *ldc, dcomplex *work,
+             aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_zupmtr(side, uplo, trans, m, n, ap, tau, c__, ldc, work, info);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t ldc_64 = *ldc;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_zupmtr(side, uplo, trans, &m_64, &n_64, ap, tau, c__, &ldc_64, work, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_zupmtr(char *side, char *uplo, char *trans, aocl_int64_t *m, aocl_int64_t *n,
+                        dcomplex *ap, dcomplex *tau, dcomplex *c__,
+                        aocl_int64_t *ldc, dcomplex *work, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zupmtr inputs: side %c, uplo %c, trans %c, m %" FLA_IS ", n %" FLA_IS
                       ", ldc %" FLA_IS "",
                       *side, *uplo, *trans, *m, *n, *ldc);
     /* System generated locals */
-    integer c_dim1, c_offset, i__1, i__2, i__3;
-    doublecomplex z__1;
+    aocl_int64_t c_dim1, c_offset, i__1, i__2, i__3;
+    dcomplex z__1;
     /* Builtin functions */
-    void d_cnjg(doublecomplex *, doublecomplex *);
+    void d_cnjg(dcomplex *, dcomplex *);
     /* Local variables */
-    integer i__, i1, i2, i3, ic, jc, ii, mi, ni, nq;
-    doublecomplex aii;
+    aocl_int64_t i__, i1, i2, i3, ic, jc, ii, mi, ni, nq;
+    dcomplex aii;
     logical left;
-    doublecomplex taui;
-    extern logical lsame_(char *, char *, integer, integer);
-    extern /* Subroutine */
-        void
-        zlarf_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *,
-               doublecomplex *, integer *, doublecomplex *);
+    dcomplex taui;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     logical upper;
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical notran, forwrd;
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -247,7 +259,7 @@ void zupmtr_(char *side, char *uplo, char *trans, integer *m, integer *n, double
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("ZUPMTR", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("ZUPMTR", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -316,7 +328,8 @@ void zupmtr_(char *side, char *uplo, char *trans, integer *m, integer *n, double
             i__3 = ii;
             ap[i__3].r = 1.;
             ap[i__3].i = 0.; // , expr subst
-            zlarf_(side, &mi, &ni, &ap[ii - i__ + 1], &c__1, &taui, &c__[c_offset], ldc, &work[1]);
+            aocl_lapack_zlarf(side, &mi, &ni, &ap[ii - i__ + 1], &c__1, &taui, &c__[c_offset], ldc,
+                              &work[1]);
             i__3 = ii;
             ap[i__3].r = aii.r;
             ap[i__3].i = aii.i; // , expr subst
@@ -394,7 +407,8 @@ void zupmtr_(char *side, char *uplo, char *trans, integer *m, integer *n, double
                 taui.r = z__1.r;
                 taui.i = z__1.i; // , expr subst
             }
-            zlarf_(side, &mi, &ni, &ap[ii], &c__1, &taui, &c__[ic + jc * c_dim1], ldc, &work[1]);
+            aocl_lapack_zlarf(side, &mi, &ni, &ap[ii], &c__1, &taui, &c__[ic + jc * c_dim1], ldc,
+                              &work[1]);
             i__3 = ii;
             ap[i__3].r = aii.r;
             ap[i__3].i = aii.i; // , expr subst

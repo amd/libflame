@@ -19,14 +19,14 @@
 char* pc_str[N_PARAM_COMBOS] = { "" };
 
 void time_CAQR_UT_inc(
-               integer param_combo, integer type, integer nrepeats, integer m, integer n, fla_dim_t n_panels,
+               aocl_int64_t param_combo, aocl_int64_t type, aocl_int64_t nrepeats, aocl_int64_t m, aocl_int64_t n, fla_dim_t n_panels,
                FLA_Obj A, FLA_Obj ATW, FLA_Obj R, FLA_Obj RTW, FLA_Obj b, FLA_Obj x,
                double *dtime, double *diff, double *gflops );
 
 
 int main(int argc, char *argv[])
 {
-  integer 
+  aocl_int64_t 
     datatype,
     n_threads,
     m_input,

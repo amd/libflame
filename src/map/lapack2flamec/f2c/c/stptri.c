@@ -4,7 +4,7 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
+static aocl_int64_t c__1 = 1;
 /* > \brief \b STPTRI */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -117,25 +117,33 @@ static integer c__1 = 1;
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void stptri_(char *uplo, char *diag, integer *n, real *ap, integer *info)
+/** Generated wrapper function */
+void stptri_(char *uplo, char *diag, aocl_int_t *n, real *ap, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_stptri(uplo, diag, n, ap, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_stptri(uplo, diag, &n_64, ap, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_stptri(char *uplo, char *diag, aocl_int64_t *n, real *ap, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("stptri inputs: uplo %c, diag %c, n %" FLA_IS "", *uplo, *diag, *n);
     /* System generated locals */
-    integer i__1, i__2;
+    aocl_int64_t i__1, i__2;
     /* Local variables */
-    integer j, jc, jj;
+    aocl_int64_t j, jc, jj;
     real ajj;
-    extern logical lsame_(char *, char *, integer, integer);
-    extern /* Subroutine */
-        void
-        sscal_(integer *, real *, real *, integer *);
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     logical upper;
-    extern /* Subroutine */
-        void
-        stpmv_(char *, char *, char *, integer *, real *, real *, integer *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    integer jclast;
+    aocl_int64_t jclast;
     logical nounit;
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -178,7 +186,7 @@ void stptri_(char *uplo, char *diag, integer *n, real *ap, integer *info)
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("STPTRI", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("STPTRI", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -235,9 +243,9 @@ void stptri_(char *uplo, char *diag, integer *n, real *ap, integer *info)
             }
             /* Compute elements 1:j-1 of j-th column. */
             i__2 = j - 1;
-            stpmv_("Upper", "No transpose", diag, &i__2, &ap[1], &ap[jc], &c__1);
+            aocl_blas_stpmv("Upper", "No transpose", diag, &i__2, &ap[1], &ap[jc], &c__1);
             i__2 = j - 1;
-            sscal_(&i__2, &ajj, &ap[jc], &c__1);
+            aocl_blas_sscal(&i__2, &ajj, &ap[jc], &c__1);
             jc += j;
             /* L30: */
         }
@@ -261,9 +269,10 @@ void stptri_(char *uplo, char *diag, integer *n, real *ap, integer *info)
             {
                 /* Compute elements j+1:n of j-th column. */
                 i__1 = *n - j;
-                stpmv_("Lower", "No transpose", diag, &i__1, &ap[jclast], &ap[jc + 1], &c__1);
+                aocl_blas_stpmv("Lower", "No transpose", diag, &i__1, &ap[jclast], &ap[jc + 1],
+                                &c__1);
                 i__1 = *n - j;
-                sscal_(&i__1, &ajj, &ap[jc + 1], &c__1);
+                aocl_blas_sscal(&i__1, &ajj, &ap[jc + 1], &c__1);
             }
             jclast = jc;
             jc = jc - *n + j - 2;

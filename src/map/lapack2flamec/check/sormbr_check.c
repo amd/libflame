@@ -1,21 +1,21 @@
 #include "FLA_f2c.h"
 #include "FLA_lapack2flame_return_defs.h"
-static integer c__1 = 1;
-static integer c_n1 = -1;
+static aocl_int64_t c__1 = 1;
+static aocl_int64_t c_n1 = -1;
 
-int sormbr_check(char *vect, char *side, char *trans, integer *m, integer *n, integer *k, float *a,
-                 integer *lda, float *tau, float *c__, integer *ldc, float *work, integer *lwork,
-                 integer *info)
+int sormbr_check(char *vect, char *side, char *trans, aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *k, float *a,
+                 aocl_int64_t *lda, float *tau, float *c__, aocl_int64_t *ldc, float *work, aocl_int64_t *lwork,
+                 aocl_int64_t *info)
 {
     /* System generated locals */
-    integer a_dim1, a_offset, c_dim1, c_offset, i__1, i__2;
+    aocl_int64_t a_dim1, a_offset, c_dim1, c_offset, i__1, i__2;
     char ch__1[2];
 
     /* Local variables */
-    integer nb, nq, nw;
+    aocl_int64_t nb, nq, nw;
     logical left;
     logical notran, applyq;
-    integer lwkopt;
+    aocl_int64_t lwkopt;
     logical lquery;
 
     /* Parameter adjustments */
@@ -94,13 +94,13 @@ int sormbr_check(char *vect, char *side, char *trans, integer *m, integer *n, in
             {
                 i__1 = *m - 1;
                 i__2 = *m - 1;
-                nb = ilaenv_(&c__1, "SORMQR", ch__1, &i__1, n, &i__2, &c_n1);
+                nb = aocl_lapack_ilaenv(&c__1, "SORMQR", ch__1, &i__1, n, &i__2, &c_n1);
             }
             else
             {
                 i__1 = *n - 1;
                 i__2 = *n - 1;
-                nb = ilaenv_(&c__1, "SORMQR", ch__1, m, &i__1, &i__2, &c_n1);
+                nb = aocl_lapack_ilaenv(&c__1, "SORMQR", ch__1, m, &i__1, &i__2, &c_n1);
             }
         }
         else
@@ -109,13 +109,13 @@ int sormbr_check(char *vect, char *side, char *trans, integer *m, integer *n, in
             {
                 i__1 = *m - 1;
                 i__2 = *m - 1;
-                nb = ilaenv_(&c__1, "SORMLQ", ch__1, &i__1, n, &i__2, &c_n1);
+                nb = aocl_lapack_ilaenv(&c__1, "SORMLQ", ch__1, &i__1, n, &i__2, &c_n1);
             }
             else
             {
                 i__1 = *n - 1;
                 i__2 = *n - 1;
-                nb = ilaenv_(&c__1, "SORMLQ", ch__1, m, &i__1, &i__2, &c_n1);
+                nb = aocl_lapack_ilaenv(&c__1, "SORMLQ", ch__1, m, &i__1, &i__2, &c_n1);
             }
         }
         lwkopt = fla_max(1, nw) * nb;
@@ -124,7 +124,7 @@ int sormbr_check(char *vect, char *side, char *trans, integer *m, integer *n, in
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("SORMBR", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("SORMBR", &i__1, (ftnlen)6);
         return LAPACK_FAILURE;
     }
     else if(lquery)

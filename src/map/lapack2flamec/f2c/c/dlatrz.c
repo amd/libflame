@@ -134,21 +134,32 @@
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void dlatrz_(integer *m, integer *n, integer *l, doublereal *a, integer *lda, doublereal *tau,
-             doublereal *work)
+/** Generated wrapper function */
+void dlatrz_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *l, doublereal *a, aocl_int_t *lda,
+             doublereal *tau, doublereal *work)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_dlatrz(m, n, l, a, lda, tau, work);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t l_64 = *l;
+    aocl_int64_t lda_64 = *lda;
+
+    aocl_lapack_dlatrz(&m_64, &n_64, &l_64, a, &lda_64, tau, work);
+#endif
+}
+
+void aocl_lapack_dlatrz(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *l, doublereal *a,
+                        aocl_int64_t *lda, doublereal *tau, doublereal *work)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dlatrz inputs: m %" FLA_IS ", n %" FLA_IS ", l %" FLA_IS ", lda %" FLA_IS "",
                       *m, *n, *l, *lda);
     /* System generated locals */
-    integer a_dim1, a_offset, i__1, i__2;
+    aocl_int64_t a_dim1, a_offset, i__1, i__2;
     /* Local variables */
-    integer i__;
-    extern /* Subroutine */
-        void
-        dlarz_(char *, integer *, integer *, integer *, doublereal *, integer *, doublereal *,
-               doublereal *, integer *, doublereal *),
-        dlarfg_(integer *, doublereal *, doublereal *, integer *, doublereal *);
+    aocl_int64_t i__;
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -195,12 +206,13 @@ void dlatrz_(integer *m, integer *n, integer *l, doublereal *a, integer *lda, do
         /* Generate elementary reflector H(i) to annihilate */
         /* [ A(i,i) A(i,n-l+1:n) ] */
         i__1 = *l + 1;
-        dlarfg_(&i__1, &a[i__ + i__ * a_dim1], &a[i__ + (*n - *l + 1) * a_dim1], lda, &tau[i__]);
+        aocl_lapack_dlarfg(&i__1, &a[i__ + i__ * a_dim1], &a[i__ + (*n - *l + 1) * a_dim1], lda,
+                           &tau[i__]);
         /* Apply H(i) to A(1:i-1,i:n) from the right */
         i__1 = i__ - 1;
         i__2 = *n - i__ + 1;
-        dlarz_("Right", &i__1, &i__2, l, &a[i__ + (*n - *l + 1) * a_dim1], lda, &tau[i__],
-               &a[i__ * a_dim1 + 1], lda, &work[1]);
+        aocl_lapack_dlarz("Right", &i__1, &i__2, l, &a[i__ + (*n - *l + 1) * a_dim1], lda,
+                          &tau[i__], &a[i__ * a_dim1 + 1], lda, &work[1]);
         /* L20: */
     }
     AOCL_DTL_TRACE_LOG_EXIT

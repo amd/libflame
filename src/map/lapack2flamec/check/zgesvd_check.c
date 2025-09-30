@@ -1,37 +1,25 @@
 #include "FLA_f2c.h"
 #include "FLA_lapack2flame_return_defs.h"
-static integer c__6 = 6;
-static integer c__0 = 0;
-static integer c_n1 = -1;
+static aocl_int64_t c__6 = 6;
+static aocl_int64_t c__0 = 0;
+static aocl_int64_t c_n1 = -1;
 
-int zgesvd_check(char *jobu, char *jobvt, integer *m, integer *n, dcomplex *a, integer *lda,
-                 double *s, dcomplex *u, integer *ldu, dcomplex *vt, integer *ldvt, dcomplex *work,
-                 integer *lwork, double *rwork, integer *info)
+int zgesvd_check(char *jobu, char *jobvt, aocl_int64_t *m, aocl_int64_t *n, dcomplex *a, aocl_int64_t *lda,
+                 double *s, dcomplex *u, aocl_int64_t *ldu, dcomplex *vt, aocl_int64_t *ldvt, dcomplex *work,
+                 aocl_int64_t *lwork, double *rwork, aocl_int64_t *info)
 {
     /* System generated locals */
-    integer a_dim1, a_offset, u_dim1, u_offset, vt_dim1, vt_offset, i__2, i__3;
+    aocl_int64_t a_dim1, a_offset, u_dim1, u_offset, vt_dim1, vt_offset, i__2, i__3;
     char ch__1[2];
     /* Local variables */
     double dum[2];
-    integer ierr, lwork_zgebrd__, lwork_zgelqf__, lwork_zgeqrf__;
-    integer minmn;
-    integer wrkbl, mnthr;
+    aocl_int64_t ierr, lwork_zgebrd__, lwork_zgelqf__, lwork_zgeqrf__;
+    aocl_int64_t minmn;
+    aocl_int64_t wrkbl, mnthr;
     logical wntua, wntva, wntun, wntuo, wntvn, wntvo, wntus, wntvs;
-    extern void zgebrd_(integer *, integer *, dcomplex *, integer *, double *, double *, dcomplex *,
-                        dcomplex *, dcomplex *, integer *, integer *),
-        zgelqf_(integer *, integer *, dcomplex *, integer *, dcomplex *, dcomplex *, integer *,
-                integer *),
-        zgeqrf_(integer *, integer *, dcomplex *, integer *, dcomplex *, dcomplex *, integer *,
-                integer *),
-        zungbr_(char *, integer *, integer *, integer *, dcomplex *, integer *, dcomplex *,
-                dcomplex *, integer *, integer *),
-        zunglq_(integer *, integer *, integer *, dcomplex *, integer *, dcomplex *, dcomplex *,
-                integer *, integer *),
-        zungqr_(integer *, integer *, integer *, dcomplex *, integer *, dcomplex *, dcomplex *,
-                integer *, integer *);
-    integer minwrk, maxwrk;
+    aocl_int64_t minwrk, maxwrk;
     logical lquery, wntuas, wntvas;
-    integer lwork_zungbr_p__, lwork_zungbr_q__, lwork_zunglq_m__, lwork_zunglq_n__,
+    aocl_int64_t lwork_zungbr_p__, lwork_zungbr_q__, lwork_zunglq_m__, lwork_zunglq_n__,
         lwork_zungqr_m__, lwork_zungqr_n__;
 
     /* Parameter adjustments */
@@ -93,7 +81,7 @@ int zgesvd_check(char *jobu, char *jobvt, integer *m, integer *n, dcomplex *a, i
     /* (Note: Comments in the code beginning "Workspace:" describe the */
     /* minimal amount of workspace needed at that point in the code, */
     /* as well as the preferred amount for good performance. */
-    /* CWorkspace refers to complex workspace, and RWorkspace to */
+    /* CWorkspace refers to scomplex workspace, and RWorkspace to */
     /* real workspace. NB refers to the optimal block size for the */
     /* immediately following subroutine, as returned by ILAENV.) */
     if(*info == 0)
@@ -103,24 +91,24 @@ int zgesvd_check(char *jobu, char *jobvt, integer *m, integer *n, dcomplex *a, i
         if(*m >= *n && minmn > 0)
         {
             /* Space needed for ZBDSQR is BDSPAC = 5*N */
-            mnthr = ilaenv_(&c__6, "ZGESVD", ch__1, m, n, &c__0, &c__0);
+            mnthr = aocl_lapack_ilaenv(&c__6, "ZGESVD", ch__1, m, n, &c__0, &c__0);
             /* Compute space needed for ZGEQRF */
-            zgeqrf_(m, n, &a[a_offset], lda, (dcomplex *)dum, (dcomplex *)dum, &c_n1, &ierr);
+            aocl_lapack_zgeqrf(m, n, &a[a_offset], lda, (dcomplex *)dum, (dcomplex *)dum, &c_n1, &ierr);
             lwork_zgeqrf__ = (integer)dum[0];
             /* Compute space needed for ZUNGQR */
-            zungqr_(m, n, n, &a[a_offset], lda, (dcomplex *)dum, (dcomplex *)dum, &c_n1, &ierr);
+            aocl_lapack_zungqr(m, n, n, &a[a_offset], lda, (dcomplex *)dum, (dcomplex *)dum, &c_n1, &ierr);
             lwork_zungqr_n__ = (integer)dum[0];
-            zungqr_(m, m, n, &a[a_offset], lda, (dcomplex *)dum, (dcomplex *)dum, &c_n1, &ierr);
+            aocl_lapack_zungqr(m, m, n, &a[a_offset], lda, (dcomplex *)dum, (dcomplex *)dum, &c_n1, &ierr);
             lwork_zungqr_m__ = (integer)dum[0];
             /* Compute space needed for ZGEBRD */
-            zgebrd_(n, n, &a[a_offset], lda, &s[1], dum, (dcomplex *)dum, (dcomplex *)dum,
+            aocl_lapack_zgebrd(n, n, &a[a_offset], lda, &s[1], dum, (dcomplex *)dum, (dcomplex *)dum,
                     (dcomplex *)dum, &c_n1, &ierr);
             lwork_zgebrd__ = (integer)dum[0];
             /* Compute space needed for ZUNGBR */
-            zungbr_("P", n, n, n, &a[a_offset], lda, (dcomplex *)dum, (dcomplex *)dum, &c_n1,
+            aocl_lapack_zungbr("P", n, n, n, &a[a_offset], lda, (dcomplex *)dum, (dcomplex *)dum, &c_n1,
                     &ierr);
             lwork_zungbr_p__ = (integer)dum[0];
-            zungbr_("Q", n, n, n, &a[a_offset], lda, (dcomplex *)dum, (dcomplex *)dum, &c_n1,
+            aocl_lapack_zungbr("Q", n, n, n, &a[a_offset], lda, (dcomplex *)dum, (dcomplex *)dum, &c_n1,
                     &ierr);
             lwork_zungbr_q__ = (integer)dum[0];
             if(*m >= mnthr)
@@ -327,13 +315,13 @@ int zgesvd_check(char *jobu, char *jobvt, integer *m, integer *n, dcomplex *a, i
             else
             {
                 /* Path 10 (M at least N, but not much larger) */
-                zgebrd_(m, n, &a[a_offset], lda, &s[1], dum, (dcomplex *)dum, (dcomplex *)dum,
+                aocl_lapack_zgebrd(m, n, &a[a_offset], lda, &s[1], dum, (dcomplex *)dum, (dcomplex *)dum,
                         (dcomplex *)dum, &c_n1, &ierr);
                 lwork_zgebrd__ = (integer)dum[0];
                 maxwrk = (*n << 1) + lwork_zgebrd__;
                 if(wntus || wntuo)
                 {
-                    zungbr_("Q", m, n, n, &a[a_offset], lda, (dcomplex *)dum, (dcomplex *)dum,
+                    aocl_lapack_zungbr("Q", m, n, n, &a[a_offset], lda, (dcomplex *)dum, (dcomplex *)dum,
                             &c_n1, &ierr);
                     lwork_zungbr_q__ = (integer)dum[0];
                     /* Computing MAX */
@@ -343,7 +331,7 @@ int zgesvd_check(char *jobu, char *jobvt, integer *m, integer *n, dcomplex *a, i
                 }
                 if(wntua)
                 {
-                    zungbr_("Q", m, m, n, &a[a_offset], lda, (dcomplex *)dum, (dcomplex *)dum,
+                    aocl_lapack_zungbr("Q", m, m, n, &a[a_offset], lda, (dcomplex *)dum, (dcomplex *)dum,
                             &c_n1, &ierr);
                     lwork_zungbr_q__ = (integer)dum[0];
                     /* Computing MAX */
@@ -364,24 +352,24 @@ int zgesvd_check(char *jobu, char *jobvt, integer *m, integer *n, dcomplex *a, i
         else if(minmn > 0)
         {
             /* Space needed for ZBDSQR is BDSPAC = 5*M */
-            mnthr = ilaenv_(&c__6, "ZGESVD", ch__1, m, n, &c__0, &c__0);
+            mnthr = aocl_lapack_ilaenv(&c__6, "ZGESVD", ch__1, m, n, &c__0, &c__0);
             /* Compute space needed for ZGELQF */
-            zgelqf_(m, n, &a[a_offset], lda, (dcomplex *)dum, (dcomplex *)dum, &c_n1, &ierr);
+            aocl_lapack_zgelqf(m, n, &a[a_offset], lda, (dcomplex *)dum, (dcomplex *)dum, &c_n1, &ierr);
             lwork_zgelqf__ = (integer)dum[0];
             /* Compute space needed for ZUNGLQ */
-            zunglq_(n, n, m, (dcomplex *)dum, n, (dcomplex *)dum, (dcomplex *)dum, &c_n1, &ierr);
+            aocl_lapack_zunglq(n, n, m, (dcomplex *)dum, n, (dcomplex *)dum, (dcomplex *)dum, &c_n1, &ierr);
             lwork_zunglq_n__ = (integer)dum[0];
-            zunglq_(m, n, m, &a[a_offset], lda, (dcomplex *)dum, (dcomplex *)dum, &c_n1, &ierr);
+            aocl_lapack_zunglq(m, n, m, &a[a_offset], lda, (dcomplex *)dum, (dcomplex *)dum, &c_n1, &ierr);
             lwork_zunglq_m__ = (integer)dum[0];
             /* Compute space needed for ZGEBRD */
-            zgebrd_(m, m, &a[a_offset], lda, &s[1], dum, (dcomplex *)dum, (dcomplex *)dum,
+            aocl_lapack_zgebrd(m, m, &a[a_offset], lda, &s[1], dum, (dcomplex *)dum, (dcomplex *)dum,
                     (dcomplex *)dum, &c_n1, &ierr);
             lwork_zgebrd__ = (integer)dum[0];
             /* Compute space needed for ZUNGBR P */
-            zungbr_("P", m, m, m, &a[a_offset], n, (dcomplex *)dum, (dcomplex *)dum, &c_n1, &ierr);
+            aocl_lapack_zungbr("P", m, m, m, &a[a_offset], n, (dcomplex *)dum, (dcomplex *)dum, &c_n1, &ierr);
             lwork_zungbr_p__ = (integer)dum[0];
             /* Compute space needed for ZUNGBR Q */
-            zungbr_("Q", m, m, m, &a[a_offset], n, (dcomplex *)dum, (dcomplex *)dum, &c_n1, &ierr);
+            aocl_lapack_zungbr("Q", m, m, m, &a[a_offset], n, (dcomplex *)dum, (dcomplex *)dum, &c_n1, &ierr);
             lwork_zungbr_q__ = (integer)dum[0];
             if(*n >= mnthr)
             {
@@ -587,14 +575,14 @@ int zgesvd_check(char *jobu, char *jobvt, integer *m, integer *n, dcomplex *a, i
             else
             {
                 /* Path 10t(N greater than M, but not much larger) */
-                zgebrd_(m, n, &a[a_offset], lda, &s[1], dum, (dcomplex *)dum, (dcomplex *)dum,
+                aocl_lapack_zgebrd(m, n, &a[a_offset], lda, &s[1], dum, (dcomplex *)dum, (dcomplex *)dum,
                         (dcomplex *)dum, &c_n1, &ierr);
                 lwork_zgebrd__ = (integer)dum[0];
                 maxwrk = (*m << 1) + lwork_zgebrd__;
                 if(wntvs || wntvo)
                 {
                     /* Compute space needed for ZUNGBR P */
-                    zungbr_("P", m, n, m, &a[a_offset], n, (dcomplex *)dum, (dcomplex *)dum, &c_n1,
+                    aocl_lapack_zungbr("P", m, n, m, &a[a_offset], n, (dcomplex *)dum, (dcomplex *)dum, &c_n1,
                             &ierr);
                     lwork_zungbr_p__ = (integer)dum[0];
                     /* Computing MAX */
@@ -604,7 +592,7 @@ int zgesvd_check(char *jobu, char *jobvt, integer *m, integer *n, dcomplex *a, i
                 }
                 if(wntva)
                 {
-                    zungbr_("P", n, n, m, &a[a_offset], n, (dcomplex *)dum, (dcomplex *)dum, &c_n1,
+                    aocl_lapack_zungbr("P", n, n, m, &a[a_offset], n, (dcomplex *)dum, (dcomplex *)dum, &c_n1,
                             &ierr);
                     lwork_zungbr_p__ = (integer)dum[0];
                     /* Computing MAX */
@@ -633,7 +621,7 @@ int zgesvd_check(char *jobu, char *jobvt, integer *m, integer *n, dcomplex *a, i
     if(*info != 0)
     {
         i__2 = -(*info);
-        xerbla_("ZGESVD", &i__2, (ftnlen)6);
+        aocl_blas_xerbla("ZGESVD", &i__2, (ftnlen)6);
         return LAPACK_FAILURE;
     }
     else if(lquery)

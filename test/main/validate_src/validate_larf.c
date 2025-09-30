@@ -18,11 +18,11 @@ void validate_larf(char *tst_api, integer datatype, char side, integer m, intege
     /*
     This function does the following:
     1.1 If type = float or double, compute H = I - tau * v_tmp * v_tmp-transpose
-    1.2 If type = complex or double complex, compute H = I - tau * v_tmp * v_tmp-hermitian-transpose
+    1.2 If type = scomplex or double scomplex, compute H = I - tau * v_tmp * v_tmp-hermitian-transpose
 
     2.1 If type = float or double,  compute out_validate = H * c__out_tmp(when side = L) or
     c_out_tmp * H(when side = R)
-    2.2 If type = complex or double complex,  compute out_validate =
+    2.2 If type = scomplex or double scomplex,  compute out_validate =
     H-hermitian-transpose * c__out_tmp(when side = L) or c_out_tmp * H-hermitian-transpose(when side
     = R)
 

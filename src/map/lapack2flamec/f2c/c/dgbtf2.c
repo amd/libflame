@@ -13,18 +13,19 @@
 #include "blis.h"
 #endif
 
-static integer c__1 = 1;
+static aocl_int64_t c__1 = 1;
 static doublereal c_b9 = -1.;
 
 #if FLA_ENABLE_AOCL_BLAS
 
 /* This function is an implementation of dgbtf2 using AOCL-BLAS compute kernels */
-void dgbtf2_aocl_blas_ver(integer *m, integer *n, integer *kl, integer *ku, doublereal *ab,
-                          integer *ldab, integer *ipiv, integer *info)
+void dgbtf2_aocl_blas_ver(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *kl, aocl_int64_t *ku,
+                          doublereal *ab, aocl_int64_t *ldab, aocl_int_t *ipiv,
+                          aocl_int64_t *info)
 {
-    integer ab_dim1, ab_offset, i__1, i__2, i__3, i__4;
+    aocl_int64_t ab_dim1, ab_offset, i__1, i__2, i__3, i__4;
     doublereal d__1;
-    integer i__, j, km, jp, ju, kv;
+    aocl_int64_t i__, j, km, jp, ju, kv;
     doublereal alpha;
     doublereal *x, *y, *r;
     dim_t index;
@@ -74,7 +75,7 @@ void dgbtf2_aocl_blas_ver(integer *m, integer *n, integer *kl, integer *ku, doub
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("DGBTF2", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("DGBTF2", &i__1, (ftnlen)6);
         return;
     }
 
@@ -158,7 +159,7 @@ void dgbtf2_aocl_blas_ver(integer *m, integer *n, integer *kl, integer *ku, doub
                     y = &ab[kv + (j + 1) * ab_dim1];
                     r = &ab[kv + 1 + (j + 1) * ab_dim1];
 
-                    for(integer i = 0; i < i__2; i++)
+                    for(aocl_int64_t i = 0; i < i__2; i++)
                     {
                         alpha = -y[i * i__4];
 
@@ -327,29 +328,39 @@ elements marked */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void dgbtf2_(integer *m, integer *n, integer *kl, integer *ku, doublereal *ab, integer *ldab,
-             integer *ipiv, integer *info)
+/** Generated wrapper function */
+void dgbtf2_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *kl, aocl_int_t *ku, doublereal *ab,
+             aocl_int_t *ldab, aocl_int_t *ipiv, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_dgbtf2(m, n, kl, ku, ab, ldab, ipiv, info);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t kl_64 = *kl;
+    aocl_int64_t ku_64 = *ku;
+    aocl_int64_t ldab_64 = *ldab;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_dgbtf2(&m_64, &n_64, &kl_64, &ku_64, ab, &ldab_64, ipiv, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_dgbtf2(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *kl, aocl_int64_t *ku,
+                        doublereal *ab, aocl_int64_t *ldab, aocl_int_t *ipiv, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dgbtf2 inputs: m %" FLA_IS ", n %" FLA_IS ", kl %" FLA_IS ", ku %" FLA_IS
                       ", ldab %" FLA_IS "",
                       *m, *n, *kl, *ku, *ldab);
     /* System generated locals */
-    integer ab_dim1, ab_offset, i__1, i__2, i__3, i__4;
+    aocl_int64_t ab_dim1, ab_offset, i__1, i__2, i__3, i__4;
     doublereal d__1;
     /* Local variables */
-    integer i__, j, km, jp, ju, kv;
+    aocl_int64_t i__, j, km, jp, ju, kv;
 #ifndef FLA_ENABLE_AOCL_BLAS
-    extern /* Subroutine */
-        void
-        dger_(integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *,
-              doublereal *, integer *),
-        dscal_(integer *, doublereal *, doublereal *, integer *),
-        dswap_(integer *, doublereal *, integer *, doublereal *, integer *);
-    extern integer idamax_(integer *, doublereal *, integer *);
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
 #endif
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -418,7 +429,7 @@ void dgbtf2_(integer *m, integer *n, integer *kl, integer *ku, doublereal *ab, i
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("DGBTF2", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("DGBTF2", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -484,8 +495,8 @@ void dgbtf2_(integer *m, integer *n, integer *kl, integer *ku, doublereal *ab, i
         i__3 = *m - j; // , expr subst
         km = fla_min(i__2, i__3);
         i__2 = km + 1;
-        jp = idamax_(&i__2, &ab[kv + 1 + j * ab_dim1], &c__1);
-        ipiv[j] = jp + j - 1;
+        jp = aocl_blas_idamax(&i__2, &ab[kv + 1 + j * ab_dim1], &c__1);
+        ipiv[j] = (aocl_int_t)(jp + j - 1);
         if(ab[kv + jp + j * ab_dim1] != 0.)
         {
             /* Computing MAX */
@@ -500,22 +511,23 @@ void dgbtf2_(integer *m, integer *n, integer *kl, integer *ku, doublereal *ab, i
                 i__2 = ju - j + 1;
                 i__3 = *ldab - 1;
                 i__4 = *ldab - 1;
-                dswap_(&i__2, &ab[kv + jp + j * ab_dim1], &i__3, &ab[kv + 1 + j * ab_dim1], &i__4);
+                aocl_blas_dswap(&i__2, &ab[kv + jp + j * ab_dim1], &i__3, &ab[kv + 1 + j * ab_dim1],
+                                &i__4);
             }
             if(km > 0)
             {
                 /* Compute multipliers. */
                 d__1 = 1. / ab[kv + 1 + j * ab_dim1];
-                dscal_(&km, &d__1, &ab[kv + 2 + j * ab_dim1], &c__1);
+                aocl_blas_dscal(&km, &d__1, &ab[kv + 2 + j * ab_dim1], &c__1);
                 /* Update trailing submatrix within the band. */
                 if(ju > j)
                 {
                     i__2 = ju - j;
                     i__3 = *ldab - 1;
                     i__4 = *ldab - 1;
-                    dger_(&km, &i__2, &c_b9, &ab[kv + 2 + j * ab_dim1], &c__1,
-                          &ab[kv + (j + 1) * ab_dim1], &i__3, &ab[kv + 1 + (j + 1) * ab_dim1],
-                          &i__4);
+                    aocl_blas_dger(&km, &i__2, &c_b9, &ab[kv + 2 + j * ab_dim1], &c__1,
+                                   &ab[kv + (j + 1) * ab_dim1], &i__3,
+                                   &ab[kv + 1 + (j + 1) * ab_dim1], &i__4);
                 }
             }
         }

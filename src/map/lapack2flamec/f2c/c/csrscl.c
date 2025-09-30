@@ -37,7 +37,7 @@
 /* > */
 /* > \verbatim */
 /* > */
-/* > CSRSCL multiplies an n-element complex vector x by the real scalar */
+/* > CSRSCL multiplies an n-element scomplex vector x by the real scalar */
 /* > 1/a. This is done without overflow or underflow as long as */
 /* > the final result x/a does not overflow or underflow. */
 /* > \endverbatim */
@@ -78,7 +78,20 @@
 /* > \ingroup rscl */
 /* ===================================================================== */
 /* Subroutine */
-void csrscl_(integer *n, real *sa, complex *sx, integer *incx)
+/** Generated wrapper function */
+void csrscl_(aocl_int_t *n, real *sa, scomplex *sx, aocl_int_t *incx)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_csrscl(n, sa, sx, incx);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t incx_64 = *incx;
+
+    aocl_lapack_csrscl(&n_64, sa, sx, &incx_64);
+#endif
+}
+
+void aocl_lapack_csrscl(aocl_int64_t *n, real *sa, scomplex *sx, aocl_int64_t *incx)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -94,9 +107,6 @@ void csrscl_(integer *n, real *sa, complex *sx, integer *incx)
     logical done;
     real cnum, cden1, cnum1;
     extern real slamch_(char *);
-    extern /* Subroutine */
-        void
-        csscal_(integer *, real *, complex *, integer *);
     real bignum, smlnum;
     /* -- LAPACK auxiliary routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -156,7 +166,7 @@ L10:
         done = TRUE_;
     }
     /* Scale the vector X by MUL */
-    csscal_(n, &mul, &sx[1], incx);
+    aocl_blas_csscal(n, &mul, &sx[1], incx);
     if(!done)
     {
         goto L10;

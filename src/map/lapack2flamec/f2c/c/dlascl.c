@@ -140,29 +140,47 @@
 /* > \ingroup OTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-void dlascl_(char *type__, integer *kl, integer *ku, doublereal *cfrom, doublereal *cto, integer *m,
-             integer *n, doublereal *a, integer *lda, integer *info)
+/** Generated wrapper function */
+void dlascl_(char *type__, aocl_int_t *kl, aocl_int_t *ku, doublereal *cfrom, doublereal *cto,
+             aocl_int_t *m, aocl_int_t *n, doublereal *a, aocl_int_t *lda, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_dlascl(type__, kl, ku, cfrom, cto, m, n, a, lda, info);
+#else
+    aocl_int64_t kl_64 = *kl;
+    aocl_int64_t ku_64 = *ku;
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_dlascl(type__, &kl_64, &ku_64, cfrom, cto, &m_64, &n_64, a, &lda_64, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_dlascl(char *type__, aocl_int64_t *kl, aocl_int64_t *ku, doublereal *cfrom,
+                        doublereal *cto, aocl_int64_t *m, aocl_int64_t *n, doublereal *a,
+                        aocl_int64_t *lda, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dlascl inputs: type__ %c, kl %" FLA_IS ", ku %" FLA_IS ", m %" FLA_IS
                       ", n %" FLA_IS ", lda %" FLA_IS "",
                       *type__, *kl, *ku, *m, *n, *lda);
     /* System generated locals */
-    integer a_dim1, a_offset, i__1, i__2, i__3, i__4, i__5;
+    aocl_int64_t a_dim1, a_offset, i__1, i__2, i__3, i__4, i__5;
     /* Local variables */
-    integer i__, j, k1, k2, k3, k4;
+    aocl_int64_t i__, j, k1, k2, k3, k4;
     doublereal mul, cto1;
     logical done;
     doublereal ctoc;
-    extern logical lsame_(char *, char *, integer, integer);
-    integer itype;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    aocl_int64_t itype;
     doublereal cfrom1;
     extern doublereal dlamch_(char *);
     doublereal cfromc;
     extern logical disnan_(doublereal *);
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal bignum, smlnum;
     /* -- LAPACK auxiliary routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -272,7 +290,7 @@ void dlascl_(char *type__, integer *kl, integer *ku, doublereal *cfrom, doublere
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("DLASCL", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("DLASCL", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }

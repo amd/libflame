@@ -349,54 +349,59 @@ if EQUED = 'N' or 'R', C */
 /* > \ingroup realGEsolve */
 /* ===================================================================== */
 /* Subroutine */
-void sgesvx_(char *fact, char *trans, integer *n, integer *nrhs, real *a, integer *lda, real *af,
-             integer *ldaf, integer *ipiv, char *equed, real *r__, real *c__, real *b, integer *ldb,
-             real *x, integer *ldx, real *rcond, real *ferr, real *berr, real *work, integer *iwork,
-             integer *info)
+/** Generated wrapper function */
+void sgesvx_(char *fact, char *trans, aocl_int_t *n, aocl_int_t *nrhs, real *a, aocl_int_t *lda,
+             real *af, aocl_int_t *ldaf, aocl_int_t *ipiv, char *equed, real *r__, real *c__,
+             real *b, aocl_int_t *ldb, real *x, aocl_int_t *ldx, real *rcond, real *ferr,
+             real *berr, real *work, aocl_int_t *iwork, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_sgesvx(fact, trans, n, nrhs, a, lda, af, ldaf, ipiv, equed, r__, c__, b, ldb, x,
+                       ldx, rcond, ferr, berr, work, iwork, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t nrhs_64 = *nrhs;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t ldaf_64 = *ldaf;
+    aocl_int64_t ldb_64 = *ldb;
+    aocl_int64_t ldx_64 = *ldx;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_sgesvx(fact, trans, &n_64, &nrhs_64, a, &lda_64, af, &ldaf_64, ipiv, equed, r__,
+                       c__, b, &ldb_64, x, &ldx_64, rcond, ferr, berr, work, iwork, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_sgesvx(char *fact, char *trans, aocl_int64_t *n, aocl_int64_t *nrhs, real *a,
+                        aocl_int64_t *lda, real *af, aocl_int64_t *ldaf, aocl_int_t *ipiv,
+                        char *equed, real *r__, real *c__, real *b, aocl_int64_t *ldb, real *x,
+                        aocl_int64_t *ldx, real *rcond, real *ferr, real *berr, real *work,
+                        aocl_int_t *iwork, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("sgesvx inputs: fact %c ,trans %c ,n %" FLA_IS ",nrhs %" FLA_IS
                       ",lda %" FLA_IS ",ldaf %" FLA_IS ",equed %c ,ldb %" FLA_IS ",ldx %" FLA_IS "",
                       *fact, *trans, *n, *nrhs, *lda, *ldaf, *equed, *ldb, *ldx);
     /* System generated locals */
-    integer a_dim1, a_offset, af_dim1, af_offset, b_dim1, b_offset, x_dim1, x_offset, i__1, i__2;
+    aocl_int64_t a_dim1, a_offset, af_dim1, af_offset, b_dim1, b_offset, x_dim1, x_offset, i__1,
+        i__2;
     real r__1, r__2;
     /* Local variables */
-    integer i__, j;
+    aocl_int64_t i__, j;
     real amax;
     char norm[1];
-    extern logical lsame_(char *, char *, integer, integer);
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     real rcmin, rcmax, anorm;
     logical equil;
     real colcnd;
-    extern real slamch_(char *), slange_(char *, integer *, integer *, real *, integer *, real *);
     logical nofact;
-    extern /* Subroutine */
-        void
-        slaqge_(integer *, integer *, real *, integer *, real *, real *, real *, real *, real *,
-                char *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
-        sgecon_(char *, integer *, real *, integer *, real *, real *, real *, integer *, integer *);
     real bignum;
-    integer infequ;
+    aocl_int64_t infequ;
     logical colequ;
-    extern /* Subroutine */
-        void
-        sgeequ_(integer *, integer *, real *, integer *, real *, real *, real *, real *, real *,
-                integer *),
-        sgerfs_(char *, integer *, integer *, real *, integer *, real *, integer *, integer *,
-                real *, integer *, real *, integer *, real *, real *, real *, integer *, integer *),
-        sgetrf_(integer *, integer *, real *, integer *, integer *, integer *);
     real rowcnd;
-    extern /* Subroutine */
-        void
-        slacpy_(char *, integer *, integer *, real *, integer *, real *, integer *);
     logical notran;
-    extern real slantr_(char *, char *, char *, integer *, integer *, real *, integer *, real *);
-    extern /* Subroutine */
-        void
-        sgetrs_(char *, integer *, integer *, real *, integer *, integer *, real *, integer *,
-                integer *);
     real smlnum;
     logical rowequ;
     real rpvgrw;
@@ -566,18 +571,20 @@ void sgesvx_(char *fact, char *trans, integer *n, integer *nrhs, real *a, intege
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("SGESVX", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("SGESVX", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     if(equil)
     {
         /* Compute row and column scalings to equilibrate the matrix A. */
-        sgeequ_(n, n, &a[a_offset], lda, &r__[1], &c__[1], &rowcnd, &colcnd, &amax, &infequ);
+        aocl_lapack_sgeequ(n, n, &a[a_offset], lda, &r__[1], &c__[1], &rowcnd, &colcnd, &amax,
+                           &infequ);
         if(infequ == 0)
         {
             /* Equilibrate the matrix. */
-            slaqge_(n, n, &a[a_offset], lda, &r__[1], &c__[1], &rowcnd, &colcnd, &amax, equed);
+            aocl_lapack_slaqge(n, n, &a[a_offset], lda, &r__[1], &c__[1], &rowcnd, &colcnd, &amax,
+                               equed);
             rowequ = lsame_(equed, "R", 1, 1) || lsame_(equed, "B", 1, 1);
             colequ = lsame_(equed, "C", 1, 1) || lsame_(equed, "B", 1, 1);
         }
@@ -617,21 +624,21 @@ void sgesvx_(char *fact, char *trans, integer *n, integer *nrhs, real *a, intege
     if(nofact || equil)
     {
         /* Compute the LU factorization of A. */
-        slacpy_("Full", n, n, &a[a_offset], lda, &af[af_offset], ldaf);
-        sgetrf_(n, n, &af[af_offset], ldaf, &ipiv[1], info);
+        aocl_lapack_slacpy("Full", n, n, &a[a_offset], lda, &af[af_offset], ldaf);
+        aocl_lapack_sgetrf(n, n, &af[af_offset], ldaf, &ipiv[1], info);
         /* Return if INFO is non-zero. */
         if(*info > 0)
         {
             /* Compute the reciprocal pivot growth factor of the */
             /* leading rank-deficient INFO columns of A. */
-            rpvgrw = slantr_("M", "U", "N", info, info, &af[af_offset], ldaf, &work[1]);
+            rpvgrw = aocl_lapack_slantr("M", "U", "N", info, info, &af[af_offset], ldaf, &work[1]);
             if(rpvgrw == 0.f)
             {
                 rpvgrw = 1.f;
             }
             else
             {
-                rpvgrw = slange_("M", n, info, &a[a_offset], lda, &work[1]) / rpvgrw;
+                rpvgrw = aocl_lapack_slange("M", n, info, &a[a_offset], lda, &work[1]) / rpvgrw;
             }
             work[1] = rpvgrw;
             *rcond = 0.f;
@@ -649,25 +656,26 @@ void sgesvx_(char *fact, char *trans, integer *n, integer *nrhs, real *a, intege
     {
         *(unsigned char *)norm = 'I';
     }
-    anorm = slange_(norm, n, n, &a[a_offset], lda, &work[1]);
-    rpvgrw = slantr_("M", "U", "N", n, n, &af[af_offset], ldaf, &work[1]);
+    anorm = aocl_lapack_slange(norm, n, n, &a[a_offset], lda, &work[1]);
+    rpvgrw = aocl_lapack_slantr("M", "U", "N", n, n, &af[af_offset], ldaf, &work[1]);
     if(rpvgrw == 0.f)
     {
         rpvgrw = 1.f;
     }
     else
     {
-        rpvgrw = slange_("M", n, n, &a[a_offset], lda, &work[1]) / rpvgrw;
+        rpvgrw = aocl_lapack_slange("M", n, n, &a[a_offset], lda, &work[1]) / rpvgrw;
     }
     /* Compute the reciprocal of the condition number of A. */
-    sgecon_(norm, n, &af[af_offset], ldaf, &anorm, rcond, &work[1], &iwork[1], info);
+    aocl_lapack_sgecon(norm, n, &af[af_offset], ldaf, &anorm, rcond, &work[1], &iwork[1], info);
     /* Compute the solution matrix X. */
-    slacpy_("Full", n, nrhs, &b[b_offset], ldb, &x[x_offset], ldx);
-    sgetrs_(trans, n, nrhs, &af[af_offset], ldaf, &ipiv[1], &x[x_offset], ldx, info);
+    aocl_lapack_slacpy("Full", n, nrhs, &b[b_offset], ldb, &x[x_offset], ldx);
+    aocl_lapack_sgetrs(trans, n, nrhs, &af[af_offset], ldaf, &ipiv[1], &x[x_offset], ldx, info);
     /* Use iterative refinement to improve the computed solution and */
     /* compute error bounds and backward error estimates for it. */
-    sgerfs_(trans, n, nrhs, &a[a_offset], lda, &af[af_offset], ldaf, &ipiv[1], &b[b_offset], ldb,
-            &x[x_offset], ldx, &ferr[1], &berr[1], &work[1], &iwork[1], info);
+    aocl_lapack_sgerfs(trans, n, nrhs, &a[a_offset], lda, &af[af_offset], ldaf, &ipiv[1],
+                       &b[b_offset], ldb, &x[x_offset], ldx, &ferr[1], &berr[1], &work[1],
+                       &iwork[1], info);
     /* Transform the solution matrix X to a solution of the original */
     /* system. */
     if(notran)

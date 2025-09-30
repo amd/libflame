@@ -13,18 +13,18 @@
  * All the computations are done inline without using
  * corresponding BLAS APIs to reduce function overheads.
  */
-integer FLA_LU_piv_small_d_var0( integer *m, integer *n,
-                                   doublereal *a, integer *lda,
-                                   integer *ipiv,
-                                   integer *info)
+fla_dim_t FLA_LU_piv_small_d_var0( fla_dim_t *m, fla_dim_t *n,
+                                   doublereal *a, fla_dim_t *lda,
+                                   aocl_int_t *ipiv,
+                                   fla_dim_t *info)
 {
-    integer mi, ni;
-    integer i, j, i_1;
+    fla_dim_t mi, ni;
+    fla_dim_t i, j, i_1;
 
     doublereal p_val, max_val, t_val;
     doublereal *acur, *apiv, *asrc;
-    integer p_idx;
-    integer min_m_n = fla_min(*m, *n);
+    fla_dim_t p_idx;
+    fla_dim_t min_m_n = fla_min(*m, *n);
 
     for( i = 0; i < min_m_n; i++ )
     {
@@ -49,7 +49,7 @@ integer FLA_LU_piv_small_d_var0( integer *m, integer *n,
 
         apiv = a + p_idx;
         asrc = a + i;
-        ipiv[i] = p_idx + 1;
+        ipiv[i] = (aocl_int_t)(p_idx + 1);
 
         /* Swap rows and calculate a column of L */
         if( max_val != 0.0 )
@@ -91,21 +91,20 @@ integer FLA_LU_piv_small_d_var0( integer *m, integer *n,
  *
  * This is an unblocked variant making use of BLAS APIs
  */
-integer FLA_LU_piv_small_d_var1( integer *m, integer *n,
-                                   doublereal *a, integer *lda,
-                                   integer *ipiv,
-                                   integer *info)
+fla_dim_t FLA_LU_piv_small_d_var1( fla_dim_t *m, fla_dim_t *n,
+                                   doublereal *a, fla_dim_t *lda,
+                                   aocl_int_t *ipiv,
+                                   fla_dim_t *info)
 {
-    integer a_dim1, a_offset, i__1, i__2, i__3;
+    fla_dim_t a_dim1, a_offset, i__1, i__2, i__3;
     doublereal d__1;
-    integer c__1 = 1;
+    fla_dim_t c__1 = 1;
     doublereal c_n1 = -1.;
 
 
     /* Local variables */
-    integer i__, j, jp;
+    fla_dim_t i__, j, jp;
     extern doublereal dlamch_(char *);
-    extern /* Subroutine */ void xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal sfmin;
 
     a_dim1 = *lda;
@@ -122,8 +121,8 @@ integer FLA_LU_piv_small_d_var1( integer *m, integer *n,
 
 /*        Find pivot and test for singularity. */
 	    i__2 = *m - j + 1;
-	    jp = j - 1 + idamax_(&i__2, &a[j + j * a_dim1], &c__1);
-	    ipiv[j] = jp;
+	    jp = j - 1 + aocl_blas_idamax(&i__2, &a[j + j * a_dim1], &c__1);
+	    ipiv[j] = (aocl_int_t)jp;
 	    if (a[jp + j * a_dim1] != 0.)
         {
 
@@ -131,7 +130,7 @@ integer FLA_LU_piv_small_d_var1( integer *m, integer *n,
             
             if (jp != j)
             {
-                dswap_(n, &a[j + a_dim1], lda, &a[jp + a_dim1], lda);
+                aocl_blas_dswap(n, &a[j + a_dim1], lda, &a[jp + a_dim1], lda);
             }
 
 /*           Compute elements J+1:M of J-th column. */
@@ -144,7 +143,7 @@ integer FLA_LU_piv_small_d_var1( integer *m, integer *n,
                 {
 		            i__2 = *m - j;
 		            d__1 = 1. / a[j + j * a_dim1];
-		            dscal_(&i__2, &d__1, &a[j + 1 + j * a_dim1], &c__1);
+		            aocl_blas_dscal(&i__2, &d__1, &a[j + 1 + j * a_dim1], &c__1);
 		        }
                 else
                 {
@@ -169,7 +168,7 @@ integer FLA_LU_piv_small_d_var1( integer *m, integer *n,
 
 	        i__2 = *m - j;
             i__3 = *n - j;
-            dger_(&i__2, &i__3, &c_n1, &a[j + 1 + j * a_dim1], &c__1, &a[j + (
+            aocl_blas_dger(&i__2, &i__3, &c_n1, &a[j + 1 + j * a_dim1], &c__1, &a[j + (
 		           j + 1) * a_dim1], lda, &a[j + 1 + (j + 1) * a_dim1], lda);
         }
 /* L10: */
@@ -183,22 +182,21 @@ integer FLA_LU_piv_small_d_var1( integer *m, integer *n,
  * This is a simple non-recursive blocked variant making
  * use of BLAS APIs.
  */
-integer FLA_LU_piv_small_d_var2( integer *m, integer *n,
-                                   doublereal *a, integer *lda,
-                                   integer *ipiv,
-                                   integer *info)
+fla_dim_t FLA_LU_piv_small_d_var2( fla_dim_t *m, fla_dim_t *n,
+                                   doublereal *a, fla_dim_t *lda,
+                                   aocl_int_t *ipiv,
+                                   fla_dim_t *info)
 {
-    integer c__1 = 1;
+    fla_dim_t c__1 = 1;
     doublereal c_b16 = 1.;
     doublereal c_b19 = -1.;
 
-    integer a_dim1, a_offset, i__1, i__2, i__3, i__4, i__5;
+    fla_dim_t a_dim1, a_offset, i__1, i__2, i__3, i__4, i__5;
 
     /* Local variables */
-    integer i__, j, jb, nb;
+    fla_dim_t i__, j, jb, nb;
     extern doublereal dlamch_(char *);
-    extern /* Subroutine */ void xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    integer iinfo;
+    fla_dim_t iinfo;
 
 #define a_ref(a_1,a_2) a[(a_2)*a_dim1 + a_1]
 
@@ -219,7 +217,7 @@ integer FLA_LU_piv_small_d_var2( integer *m, integer *n,
              singularity. */
 
 	    i__3 = *m - j + 1;
-	    dgetrf2_(&i__3, &jb, &a_ref(j, j), lda, &ipiv[j], &iinfo);
+	    aocl_lapack_dgetrf2(&i__3, &jb, &a_ref(j, j), lda, &ipiv[j], &iinfo);
 
 /*           Adjust INFO and the pivot indices. */
 
@@ -232,7 +230,7 @@ integer FLA_LU_piv_small_d_var2( integer *m, integer *n,
 	    i__3 = fla_min(i__4,i__5);
 	    for (i__ = j; i__ <= i__3; ++i__)
         {
-            ipiv[i__] = j - 1 + ipiv[i__];
+            ipiv[i__] = (aocl_int_t)(j - 1 + ipiv[i__]);
 /* L10: */
 	    }
 
@@ -240,7 +238,7 @@ integer FLA_LU_piv_small_d_var2( integer *m, integer *n,
 
 	    i__3 = j - 1;
 	    i__4 = j + jb - 1;
-	    dlaswp_(&i__3, &a[a_offset], lda, &j, &i__4, &ipiv[1], &c__1);
+	    aocl_lapack_dlaswp(&i__3, &a[a_offset], lda, &j, &i__4, &ipiv[1], &c__1);
 
 	    if (j + jb <= *n)
         {
@@ -249,20 +247,20 @@ integer FLA_LU_piv_small_d_var2( integer *m, integer *n,
 
 		    i__3 = *n - j - jb + 1;
     		i__4 = j + jb - 1;
-	    	dlaswp_(&i__3, &a_ref(1, j + jb), lda, &j, &i__4, &ipiv[1], &
+	    	aocl_lapack_dlaswp(&i__3, &a_ref(1, j + jb), lda, &j, &i__4, &ipiv[1], &
 		        	c__1);
 
 /*              Compute block row of U. */
             
             i__3 = *n - j - jb + 1;
-            dtrsm_("Left", "Lower", "No transpose", "Unit", &jb, &i__3, &c_b16,
+            aocl_blas_dtrsm("Left", "Lower", "No transpose", "Unit", &jb, &i__3, &c_b16,
                     &a_ref(j, j), lda, &a_ref(j, j + jb), lda);
             if (j + jb <= *m)
             {
 /*                 Update trailing submatrix. */
                 i__3 = *m - j - jb + 1;
                 i__4 = *n - j - jb + 1;
-                dgemm_("No transpose", "No transpose", &i__3, &i__4, &jb,
+                aocl_blas_dgemm("No transpose", "No transpose", &i__3, &i__4, &jb,
                         &c_b19, &a_ref(j + jb, j), lda, &a_ref(j, j + jb),
                         lda, &c_b16, &a_ref(j + jb, j + jb), lda);
             }

@@ -4,7 +4,7 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c_n1 = -1;
+static aocl_int64_t c_n1 = -1;
 static logical c_false = FALSE_;
 /* > \brief \b ZUNCSD */
 /* =========== DOCUMENTATION =========== */
@@ -320,13 +320,55 @@ the routine */
 /* > \ingroup complex16OTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
+/** Generated wrapper function */
 void zuncsd_(char *jobu1, char *jobu2, char *jobv1t, char *jobv2t, char *trans, char *signs,
-             integer *m, integer *p, integer *q, doublecomplex *x11, integer *ldx11,
-             doublecomplex *x12, integer *ldx12, doublecomplex *x21, integer *ldx21,
-             doublecomplex *x22, integer *ldx22, doublereal *theta, doublecomplex *u1,
-             integer *ldu1, doublecomplex *u2, integer *ldu2, doublecomplex *v1t, integer *ldv1t,
-             doublecomplex *v2t, integer *ldv2t, doublecomplex *work, integer *lwork,
-             doublereal *rwork, integer *lrwork, integer *iwork, integer *info)
+             aocl_int_t *m, aocl_int_t *p, aocl_int_t *q, dcomplex *x11, aocl_int_t *ldx11,
+             dcomplex *x12, aocl_int_t *ldx12, dcomplex *x21, aocl_int_t *ldx21,
+             dcomplex *x22, aocl_int_t *ldx22, doublereal *theta, dcomplex *u1,
+             aocl_int_t *ldu1, dcomplex *u2, aocl_int_t *ldu2, dcomplex *v1t,
+             aocl_int_t *ldv1t, dcomplex *v2t, aocl_int_t *ldv2t, dcomplex *work,
+             aocl_int_t *lwork, doublereal *rwork, aocl_int_t *lrwork, aocl_int_t *iwork,
+             aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_zuncsd(jobu1, jobu2, jobv1t, jobv2t, trans, signs, m, p, q, x11, ldx11, x12, ldx12,
+                       x21, ldx21, x22, ldx22, theta, u1, ldu1, u2, ldu2, v1t, ldv1t, v2t, ldv2t,
+                       work, lwork, rwork, lrwork, iwork, info);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t p_64 = *p;
+    aocl_int64_t q_64 = *q;
+    aocl_int64_t ldx11_64 = *ldx11;
+    aocl_int64_t ldx12_64 = *ldx12;
+    aocl_int64_t ldx21_64 = *ldx21;
+    aocl_int64_t ldx22_64 = *ldx22;
+    aocl_int64_t ldu1_64 = *ldu1;
+    aocl_int64_t ldu2_64 = *ldu2;
+    aocl_int64_t ldv1t_64 = *ldv1t;
+    aocl_int64_t ldv2t_64 = *ldv2t;
+    aocl_int64_t lwork_64 = *lwork;
+    aocl_int64_t lrwork_64 = *lrwork;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_zuncsd(jobu1, jobu2, jobv1t, jobv2t, trans, signs, &m_64, &p_64, &q_64, x11,
+                       &ldx11_64, x12, &ldx12_64, x21, &ldx21_64, x22, &ldx22_64, theta, u1,
+                       &ldu1_64, u2, &ldu2_64, v1t, &ldv1t_64, v2t, &ldv2t_64, work, &lwork_64,
+                       rwork, &lrwork_64, iwork, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_zuncsd(char *jobu1, char *jobu2, char *jobv1t, char *jobv2t, char *trans,
+                        char *signs, aocl_int64_t *m, aocl_int64_t *p, aocl_int64_t *q,
+                        dcomplex *x11, aocl_int64_t *ldx11, dcomplex *x12,
+                        aocl_int64_t *ldx12, dcomplex *x21, aocl_int64_t *ldx21,
+                        dcomplex *x22, aocl_int64_t *ldx22, doublereal *theta,
+                        dcomplex *u1, aocl_int64_t *ldu1, dcomplex *u2,
+                        aocl_int64_t *ldu2, dcomplex *v1t, aocl_int64_t *ldv1t,
+                        dcomplex *v2t, aocl_int64_t *ldv2t, dcomplex *work,
+                        aocl_int64_t *lwork, doublereal *rwork, aocl_int64_t *lrwork,
+                        aocl_int_t *iwork, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF(
@@ -337,58 +379,26 @@ void zuncsd_(char *jobu1, char *jobu2, char *jobv1t, char *jobv2t, char *trans, 
         *jobu1, *jobu2, *jobv1t, *jobv2t, *trans, *signs, *m, *p, *q, *ldx11, *ldx12, *ldx21,
         *ldx22, *ldu1, *ldu2, *ldv1t, *ldv2t, *lwork, *lrwork);
     /* System generated locals */
-    integer u1_dim1, u1_offset, u2_dim1, u2_offset, v1t_dim1, v1t_offset, v2t_dim1, v2t_offset,
+    aocl_int64_t u1_dim1, u1_offset, u2_dim1, u2_offset, v1t_dim1, v1t_offset, v2t_dim1, v2t_offset,
         x11_dim1, x11_offset, x12_dim1, x12_offset, x21_dim1, x21_offset, x22_dim1, x22_offset,
         i__1, i__2, i__3, i__4, i__5, i__6;
     /* Local variables */
     logical colmajor;
-    integer lworkmin, lworkopt, i__, j, childinfo, p1, q1, lrworkmin, lrworkopt, lbbcsdwork,
+    aocl_int64_t lworkmin, lworkopt, i__, j, childinfo, p1, q1, lrworkmin, lrworkopt, lbbcsdwork,
         lorbdbwork, lorglqwork, lorgqrwork, ib11d, ib11e, ib12d, ib12e, ib21d, ib21e, ib22d, ib22e,
         iphi;
     logical defaultsigns;
-    extern logical lsame_(char *, char *, integer, integer);
-    integer lbbcsdworkmin, itaup1, itaup2, itauq1, itauq2, lorbdbworkmin, lbbcsdworkopt;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    aocl_int64_t lbbcsdworkmin, itaup1, itaup2, itauq1, itauq2, lorbdbworkmin, lbbcsdworkopt;
     logical wantu1, wantu2;
-    integer ibbcsd, lorbdbworkopt, iorbdb, lorglqworkmin;
-    extern /* Subroutine */
-        void
-        zbbcsd_(char *, char *, char *, char *, char *, integer *, integer *, integer *,
-                doublereal *, doublereal *, doublecomplex *, integer *, doublecomplex *, integer *,
-                doublecomplex *, integer *, doublecomplex *, integer *, doublereal *, doublereal *,
-                doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *,
-                doublereal *, integer *, integer *);
-    integer lorgqrworkmin;
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    integer lorglqworkopt;
-    extern /* Subroutine */
-        void
-        zunbdb_(char *, char *, integer *, integer *, integer *, doublecomplex *, integer *,
-                doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *,
-                doublereal *, doublereal *, doublecomplex *, doublecomplex *, doublecomplex *,
-                doublecomplex *, doublecomplex *, integer *, integer *);
-    integer lorgqrworkopt, iorglq;
-    extern /* Subroutine */
-        void
-        zlacpy_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *,
-                integer *);
-    integer iorgqr;
-    extern /* Subroutine */
-        void
-        zlapmr_(logical *, integer *, integer *, doublecomplex *, integer *, integer *);
+    aocl_int64_t ibbcsd, lorbdbworkopt, iorbdb, lorglqworkmin;
+    aocl_int64_t lorgqrworkmin;
+    aocl_int64_t lorglqworkopt;
+    aocl_int64_t lorgqrworkopt, iorglq;
+    aocl_int64_t iorgqr;
     char signst[1];
-    extern /* Subroutine */
-        void
-        zlapmt_(logical *, integer *, integer *, doublecomplex *, integer *, integer *);
     char transt[1];
     logical lquery;
-    extern /* Subroutine */
-        void
-        zunglq_(integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *,
-                doublecomplex *, integer *, integer *),
-        zungqr_(integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *,
-                doublecomplex *, integer *, integer *);
     logical wantv1t, wantv2t, lrquery;
     /* -- LAPACK computational routine (version 3.7.1) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -574,10 +584,11 @@ void zuncsd_(char *jobu1, char *jobu2, char *jobv1t, char *jobv2t, char *trans, 
         {
             *(unsigned char *)signst = 'D';
         }
-        zuncsd_(jobv1t, jobv2t, jobu1, jobu2, transt, signst, m, q, p, &x11[x11_offset], ldx11,
-                &x21[x21_offset], ldx21, &x12[x12_offset], ldx12, &x22[x22_offset], ldx22,
-                &theta[1], &v1t[v1t_offset], ldv1t, &v2t[v2t_offset], ldv2t, &u1[u1_offset], ldu1,
-                &u2[u2_offset], ldu2, &work[1], lwork, &rwork[1], lrwork, &iwork[1], info);
+        aocl_lapack_zuncsd(jobv1t, jobv2t, jobu1, jobu2, transt, signst, m, q, p, &x11[x11_offset],
+                           ldx11, &x21[x21_offset], ldx21, &x12[x12_offset], ldx12,
+                           &x22[x22_offset], ldx22, &theta[1], &v1t[v1t_offset], ldv1t,
+                           &v2t[v2t_offset], ldv2t, &u1[u1_offset], ldu1, &u2[u2_offset], ldu2,
+                           &work[1], lwork, &rwork[1], lrwork, &iwork[1], info);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -597,10 +608,11 @@ void zuncsd_(char *jobu1, char *jobu2, char *jobv1t, char *jobv2t, char *trans, 
         }
         i__1 = *m - *p;
         i__2 = *m - *q;
-        zuncsd_(jobu2, jobu1, jobv2t, jobv1t, trans, signst, m, &i__1, &i__2, &x22[x22_offset],
-                ldx22, &x21[x21_offset], ldx21, &x12[x12_offset], ldx12, &x11[x11_offset], ldx11,
-                &theta[1], &u2[u2_offset], ldu2, &u1[u1_offset], ldu1, &v2t[v2t_offset], ldv2t,
-                &v1t[v1t_offset], ldv1t, &work[1], lwork, &rwork[1], lrwork, &iwork[1], info);
+        aocl_lapack_zuncsd(jobu2, jobu1, jobv2t, jobv1t, trans, signst, m, &i__1, &i__2,
+                           &x22[x22_offset], ldx22, &x21[x21_offset], ldx21, &x12[x12_offset],
+                           ldx12, &x11[x11_offset], ldx11, &theta[1], &u2[u2_offset], ldu2,
+                           &u1[u1_offset], ldu1, &v2t[v2t_offset], ldv2t, &v1t[v1t_offset], ldv1t,
+                           &work[1], lwork, &rwork[1], lrwork, &iwork[1], info);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -633,10 +645,11 @@ void zuncsd_(char *jobu1, char *jobu2, char *jobv1t, char *jobv2t, char *trans, 
         i__1 = 1;
         i__2 = *q - 1; // , expr subst
         ibbcsd = ib22e + fla_max(i__1, i__2);
-        zbbcsd_(jobu1, jobu2, jobv1t, jobv2t, trans, m, p, q, &theta[1], &theta[1], &u1[u1_offset],
-                ldu1, &u2[u2_offset], ldu2, &v1t[v1t_offset], ldv1t, &v2t[v2t_offset], ldv2t,
-                &theta[1], &theta[1], &theta[1], &theta[1], &theta[1], &theta[1], &theta[1],
-                &theta[1], &rwork[1], &c_n1, &childinfo);
+        aocl_lapack_zbbcsd(jobu1, jobu2, jobv1t, jobv2t, trans, m, p, q, &theta[1], &theta[1],
+                           &u1[u1_offset], ldu1, &u2[u2_offset], ldu2, &v1t[v1t_offset], ldv1t,
+                           &v2t[v2t_offset], ldv2t, &theta[1], &theta[1], &theta[1], &theta[1],
+                           &theta[1], &theta[1], &theta[1], &theta[1], &rwork[1], &c_n1,
+                           &childinfo);
         lbbcsdworkopt = (integer)rwork[1];
         lbbcsdworkmin = lbbcsdworkopt;
         lrworkopt = ibbcsd + lbbcsdworkopt - 1;
@@ -661,8 +674,8 @@ void zuncsd_(char *jobu1, char *jobu2, char *jobv1t, char *jobv2t, char *trans, 
         i__5 = 1;
         i__6 = *m - *q; // , expr subst
         i__4 = fla_max(i__5, i__6);
-        zungqr_(&i__1, &i__2, &i__3, &u1[u1_offset], &i__4, &u1[u1_offset], &work[1], &c_n1,
-                &childinfo);
+        aocl_lapack_zungqr(&i__1, &i__2, &i__3, &u1[u1_offset], &i__4, &u1[u1_offset], &work[1],
+                           &c_n1, &childinfo);
         lorgqrworkopt = (integer)work[1].r;
         /* Computing MAX */
         i__1 = 1;
@@ -679,8 +692,8 @@ void zuncsd_(char *jobu1, char *jobu2, char *jobv1t, char *jobv2t, char *trans, 
         i__5 = 1;
         i__6 = *m - *q; // , expr subst
         i__4 = fla_max(i__5, i__6);
-        zunglq_(&i__1, &i__2, &i__3, &u1[u1_offset], &i__4, &u1[u1_offset], &work[1], &c_n1,
-                &childinfo);
+        aocl_lapack_zunglq(&i__1, &i__2, &i__3, &u1[u1_offset], &i__4, &u1[u1_offset], &work[1],
+                           &c_n1, &childinfo);
         lorglqworkopt = (integer)work[1].r;
         /* Computing MAX */
         i__1 = 1;
@@ -690,10 +703,10 @@ void zuncsd_(char *jobu1, char *jobu2, char *jobv1t, char *jobv2t, char *trans, 
         i__1 = 1;
         i__2 = *m - *q; // , expr subst
         iorbdb = itauq2 + fla_max(i__1, i__2);
-        zunbdb_(trans, signs, m, p, q, &x11[x11_offset], ldx11, &x12[x12_offset], ldx12,
-                &x21[x21_offset], ldx21, &x22[x22_offset], ldx22, &theta[1], &theta[1],
-                &u1[u1_offset], &u2[u2_offset], &v1t[v1t_offset], &v2t[v2t_offset], &work[1], &c_n1,
-                &childinfo);
+        aocl_lapack_zunbdb(trans, signs, m, p, q, &x11[x11_offset], ldx11, &x12[x12_offset], ldx12,
+                           &x21[x21_offset], ldx21, &x22[x22_offset], ldx22, &theta[1], &theta[1],
+                           &u1[u1_offset], &u2[u2_offset], &v1t[v1t_offset], &v2t[v2t_offset],
+                           &work[1], &c_n1, &childinfo);
         lorbdbworkopt = (integer)work[1].r;
         lorbdbworkmin = lorbdbworkopt;
         /* Computing MAX */
@@ -729,7 +742,7 @@ void zuncsd_(char *jobu1, char *jobu2, char *jobv1t, char *jobv2t, char *trans, 
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("ZUNCSD", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("ZUNCSD", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -739,33 +752,34 @@ void zuncsd_(char *jobu1, char *jobu2, char *jobv1t, char *jobv2t, char *trans, 
         return;
     }
     /* Transform to bidiagonal block form */
-    zunbdb_(trans, signs, m, p, q, &x11[x11_offset], ldx11, &x12[x12_offset], ldx12,
-            &x21[x21_offset], ldx21, &x22[x22_offset], ldx22, &theta[1], &rwork[iphi],
-            &work[itaup1], &work[itaup2], &work[itauq1], &work[itauq2], &work[iorbdb], &lorbdbwork,
-            &childinfo);
+    aocl_lapack_zunbdb(trans, signs, m, p, q, &x11[x11_offset], ldx11, &x12[x12_offset], ldx12,
+                       &x21[x21_offset], ldx21, &x22[x22_offset], ldx22, &theta[1], &rwork[iphi],
+                       &work[itaup1], &work[itaup2], &work[itauq1], &work[itauq2], &work[iorbdb],
+                       &lorbdbwork, &childinfo);
     /* Accumulate Householder reflectors */
     if(colmajor)
     {
         if(wantu1 && *p > 0)
         {
-            zlacpy_("L", p, q, &x11[x11_offset], ldx11, &u1[u1_offset], ldu1);
-            zungqr_(p, p, q, &u1[u1_offset], ldu1, &work[itaup1], &work[iorgqr], &lorgqrwork, info);
+            aocl_lapack_zlacpy("L", p, q, &x11[x11_offset], ldx11, &u1[u1_offset], ldu1);
+            aocl_lapack_zungqr(p, p, q, &u1[u1_offset], ldu1, &work[itaup1], &work[iorgqr],
+                               &lorgqrwork, info);
         }
         if(wantu2 && *m - *p > 0)
         {
             i__1 = *m - *p;
-            zlacpy_("L", &i__1, q, &x21[x21_offset], ldx21, &u2[u2_offset], ldu2);
+            aocl_lapack_zlacpy("L", &i__1, q, &x21[x21_offset], ldx21, &u2[u2_offset], ldu2);
             i__1 = *m - *p;
             i__2 = *m - *p;
-            zungqr_(&i__1, &i__2, q, &u2[u2_offset], ldu2, &work[itaup2], &work[iorgqr],
-                    &lorgqrwork, info);
+            aocl_lapack_zungqr(&i__1, &i__2, q, &u2[u2_offset], ldu2, &work[itaup2], &work[iorgqr],
+                               &lorgqrwork, info);
         }
         if(wantv1t && *q > 0)
         {
             i__1 = *q - 1;
             i__2 = *q - 1;
-            zlacpy_("U", &i__1, &i__2, &x11[(x11_dim1 << 1) + 1], ldx11, &v1t[(v1t_dim1 << 1) + 2],
-                    ldv1t);
+            aocl_lapack_zlacpy("U", &i__1, &i__2, &x11[(x11_dim1 << 1) + 1], ldx11,
+                               &v1t[(v1t_dim1 << 1) + 2], ldv1t);
             i__1 = v1t_dim1 + 1;
             v1t[i__1].r = 1.;
             v1t[i__1].i = 0.; // , expr subst
@@ -782,27 +796,27 @@ void zuncsd_(char *jobu1, char *jobu2, char *jobv1t, char *jobv2t, char *trans, 
             i__1 = *q - 1;
             i__2 = *q - 1;
             i__3 = *q - 1;
-            zunglq_(&i__1, &i__2, &i__3, &v1t[(v1t_dim1 << 1) + 2], ldv1t, &work[itauq1],
-                    &work[iorglq], &lorglqwork, info);
+            aocl_lapack_zunglq(&i__1, &i__2, &i__3, &v1t[(v1t_dim1 << 1) + 2], ldv1t, &work[itauq1],
+                               &work[iorglq], &lorglqwork, info);
         }
         if(wantv2t && *m - *q > 0)
         {
             i__1 = *m - *q;
-            zlacpy_("U", p, &i__1, &x12[x12_offset], ldx12, &v2t[v2t_offset], ldv2t);
+            aocl_lapack_zlacpy("U", p, &i__1, &x12[x12_offset], ldx12, &v2t[v2t_offset], ldv2t);
             if(*m - *p > *q)
             {
                 i__1 = *m - *p - *q;
                 i__2 = *m - *p - *q;
-                zlacpy_("U", &i__1, &i__2, &x22[*q + 1 + (*p + 1) * x22_dim1], ldx22,
-                        &v2t[*p + 1 + (*p + 1) * v2t_dim1], ldv2t);
+                aocl_lapack_zlacpy("U", &i__1, &i__2, &x22[*q + 1 + (*p + 1) * x22_dim1], ldx22,
+                                   &v2t[*p + 1 + (*p + 1) * v2t_dim1], ldv2t);
             }
             if(*m > *q)
             {
                 i__1 = *m - *q;
                 i__2 = *m - *q;
                 i__3 = *m - *q;
-                zunglq_(&i__1, &i__2, &i__3, &v2t[v2t_offset], ldv2t, &work[itauq2], &work[iorglq],
-                        &lorglqwork, info);
+                aocl_lapack_zunglq(&i__1, &i__2, &i__3, &v2t[v2t_offset], ldv2t, &work[itauq2],
+                                   &work[iorglq], &lorglqwork, info);
             }
         }
     }
@@ -810,23 +824,25 @@ void zuncsd_(char *jobu1, char *jobu2, char *jobv1t, char *jobv2t, char *trans, 
     {
         if(wantu1 && *p > 0)
         {
-            zlacpy_("U", q, p, &x11[x11_offset], ldx11, &u1[u1_offset], ldu1);
-            zunglq_(p, p, q, &u1[u1_offset], ldu1, &work[itaup1], &work[iorglq], &lorglqwork, info);
+            aocl_lapack_zlacpy("U", q, p, &x11[x11_offset], ldx11, &u1[u1_offset], ldu1);
+            aocl_lapack_zunglq(p, p, q, &u1[u1_offset], ldu1, &work[itaup1], &work[iorglq],
+                               &lorglqwork, info);
         }
         if(wantu2 && *m - *p > 0)
         {
             i__1 = *m - *p;
-            zlacpy_("U", q, &i__1, &x21[x21_offset], ldx21, &u2[u2_offset], ldu2);
+            aocl_lapack_zlacpy("U", q, &i__1, &x21[x21_offset], ldx21, &u2[u2_offset], ldu2);
             i__1 = *m - *p;
             i__2 = *m - *p;
-            zunglq_(&i__1, &i__2, q, &u2[u2_offset], ldu2, &work[itaup2], &work[iorglq],
-                    &lorglqwork, info);
+            aocl_lapack_zunglq(&i__1, &i__2, q, &u2[u2_offset], ldu2, &work[itaup2], &work[iorglq],
+                               &lorglqwork, info);
         }
         if(wantv1t && *q > 0)
         {
             i__1 = *q - 1;
             i__2 = *q - 1;
-            zlacpy_("L", &i__1, &i__2, &x11[x11_dim1 + 2], ldx11, &v1t[(v1t_dim1 << 1) + 2], ldv1t);
+            aocl_lapack_zlacpy("L", &i__1, &i__2, &x11[x11_dim1 + 2], ldx11,
+                               &v1t[(v1t_dim1 << 1) + 2], ldv1t);
             i__1 = v1t_dim1 + 1;
             v1t[i__1].r = 1.;
             v1t[i__1].i = 0.; // , expr subst
@@ -843,8 +859,8 @@ void zuncsd_(char *jobu1, char *jobu2, char *jobv1t, char *jobv2t, char *trans, 
             i__1 = *q - 1;
             i__2 = *q - 1;
             i__3 = *q - 1;
-            zungqr_(&i__1, &i__2, &i__3, &v1t[(v1t_dim1 << 1) + 2], ldv1t, &work[itauq1],
-                    &work[iorgqr], &lorgqrwork, info);
+            aocl_lapack_zungqr(&i__1, &i__2, &i__3, &v1t[(v1t_dim1 << 1) + 2], ldv1t, &work[itauq1],
+                               &work[iorgqr], &lorgqrwork, info);
         }
         if(wantv2t && *m - *q > 0)
         {
@@ -855,26 +871,27 @@ void zuncsd_(char *jobu1, char *jobu2, char *jobv1t, char *jobv2t, char *trans, 
             i__1 = *q + 1;
             q1 = fla_min(i__1, *m);
             i__1 = *m - *q;
-            zlacpy_("L", &i__1, p, &x12[x12_offset], ldx12, &v2t[v2t_offset], ldv2t);
+            aocl_lapack_zlacpy("L", &i__1, p, &x12[x12_offset], ldx12, &v2t[v2t_offset], ldv2t);
             if(*m > *p + *q)
             {
                 i__1 = *m - *p - *q;
                 i__2 = *m - *p - *q;
-                zlacpy_("L", &i__1, &i__2, &x22[p1 + q1 * x22_dim1], ldx22,
-                        &v2t[*p + 1 + (*p + 1) * v2t_dim1], ldv2t);
+                aocl_lapack_zlacpy("L", &i__1, &i__2, &x22[p1 + q1 * x22_dim1], ldx22,
+                                   &v2t[*p + 1 + (*p + 1) * v2t_dim1], ldv2t);
             }
             i__1 = *m - *q;
             i__2 = *m - *q;
             i__3 = *m - *q;
-            zungqr_(&i__1, &i__2, &i__3, &v2t[v2t_offset], ldv2t, &work[itauq2], &work[iorgqr],
-                    &lorgqrwork, info);
+            aocl_lapack_zungqr(&i__1, &i__2, &i__3, &v2t[v2t_offset], ldv2t, &work[itauq2],
+                               &work[iorgqr], &lorgqrwork, info);
         }
     }
     /* Compute the CSD of the matrix in bidiagonal-block form */
-    zbbcsd_(jobu1, jobu2, jobv1t, jobv2t, trans, m, p, q, &theta[1], &rwork[iphi], &u1[u1_offset],
-            ldu1, &u2[u2_offset], ldu2, &v1t[v1t_offset], ldv1t, &v2t[v2t_offset], ldv2t,
-            &rwork[ib11d], &rwork[ib11e], &rwork[ib12d], &rwork[ib12e], &rwork[ib21d],
-            &rwork[ib21e], &rwork[ib22d], &rwork[ib22e], &rwork[ibbcsd], &lbbcsdwork, info);
+    aocl_lapack_zbbcsd(jobu1, jobu2, jobv1t, jobv2t, trans, m, p, q, &theta[1], &rwork[iphi],
+                       &u1[u1_offset], ldu1, &u2[u2_offset], ldu2, &v1t[v1t_offset], ldv1t,
+                       &v2t[v2t_offset], ldv2t, &rwork[ib11d], &rwork[ib11e], &rwork[ib12d],
+                       &rwork[ib12e], &rwork[ib21d], &rwork[ib21e], &rwork[ib22d], &rwork[ib22e],
+                       &rwork[ibbcsd], &lbbcsdwork, info);
     /* Permute rows and columns to place identity submatrices in top- */
     /* left corner of (1,1)-block and/or bottom-right corner of (1,2)- */
     /* block and/or bottom-right corner of (2,1)-block and/or top-left */
@@ -884,24 +901,24 @@ void zuncsd_(char *jobu1, char *jobu2, char *jobv1t, char *jobv2t, char *trans, 
         i__1 = *q;
         for(i__ = 1; i__ <= i__1; ++i__)
         {
-            iwork[i__] = *m - *p - *q + i__;
+            iwork[i__] = (aocl_int_t)(*m - *p - *q + i__);
         }
         i__1 = *m - *p;
         for(i__ = *q + 1; i__ <= i__1; ++i__)
         {
-            iwork[i__] = i__ - *q;
+            iwork[i__] = (aocl_int_t)(i__ - *q);
         }
         if(colmajor)
         {
             i__1 = *m - *p;
             i__2 = *m - *p;
-            zlapmt_(&c_false, &i__1, &i__2, &u2[u2_offset], ldu2, &iwork[1]);
+            aocl_lapack_zlapmt(&c_false, &i__1, &i__2, &u2[u2_offset], ldu2, &iwork[1]);
         }
         else
         {
             i__1 = *m - *p;
             i__2 = *m - *p;
-            zlapmr_(&c_false, &i__1, &i__2, &u2[u2_offset], ldu2, &iwork[1]);
+            aocl_lapack_zlapmr(&c_false, &i__1, &i__2, &u2[u2_offset], ldu2, &iwork[1]);
         }
     }
     if(*m > 0 && wantv2t)
@@ -909,24 +926,24 @@ void zuncsd_(char *jobu1, char *jobu2, char *jobv1t, char *jobv2t, char *trans, 
         i__1 = *p;
         for(i__ = 1; i__ <= i__1; ++i__)
         {
-            iwork[i__] = *m - *p - *q + i__;
+            iwork[i__] = (aocl_int_t)(*m - *p - *q + i__);
         }
         i__1 = *m - *q;
         for(i__ = *p + 1; i__ <= i__1; ++i__)
         {
-            iwork[i__] = i__ - *p;
+            iwork[i__] = (aocl_int_t)(i__ - *p);
         }
         if(!colmajor)
         {
             i__1 = *m - *q;
             i__2 = *m - *q;
-            zlapmt_(&c_false, &i__1, &i__2, &v2t[v2t_offset], ldv2t, &iwork[1]);
+            aocl_lapack_zlapmt(&c_false, &i__1, &i__2, &v2t[v2t_offset], ldv2t, &iwork[1]);
         }
         else
         {
             i__1 = *m - *q;
             i__2 = *m - *q;
-            zlapmr_(&c_false, &i__1, &i__2, &v2t[v2t_offset], ldv2t, &iwork[1]);
+            aocl_lapack_zlapmr(&c_false, &i__1, &i__2, &v2t[v2t_offset], ldv2t, &iwork[1]);
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT

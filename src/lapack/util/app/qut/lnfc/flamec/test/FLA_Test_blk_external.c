@@ -12,15 +12,15 @@
 
 FLA_Error FLA_Test_blk_external( FLA_Side side, FLA_Trans trans, FLA_Store storev, FLA_Obj A, FLA_Obj t, FLA_Obj B )
 {
-  integer          info = 0;
+  aocl_int64_t          info = 0;
 #ifdef FLA_ENABLE_EXTERNAL_LAPACK_INTERFACES
   FLA_Datatype datatype;
   // integer          m_A, n_A;
-  integer          m_B, n_B;
-  integer          cs_A;
-  integer          cs_B;
-  integer          k_t;
-  integer          lwork;
+  aocl_int64_t          m_B, n_B;
+  aocl_int64_t          cs_A;
+  aocl_int64_t          cs_B;
+  aocl_int64_t          k_t;
+  aocl_int64_t          lwork;
   char         blas_side;
   char         blas_trans;
   FLA_Obj      work_obj, d, e, tu, tv;
@@ -67,7 +67,7 @@ FLA_Error FLA_Test_blk_external( FLA_Side side, FLA_Trans trans, FLA_Store store
     dcomplex *buff_B    = ( dcomplex * ) FLA_DOUBLE_COMPLEX_PTR( B );
     dcomplex *buff_work = ( dcomplex * ) FLA_DOUBLE_COMPLEX_PTR( work_obj );
 
-    zgebrd_( &m_B,
+    aocl_lapack_zgebrd( &m_B,
              &n_B,
              buff_A, &cs_A,
              buff_d,
@@ -76,7 +76,7 @@ FLA_Error FLA_Test_blk_external( FLA_Side side, FLA_Trans trans, FLA_Store store
              buff_tv,
              buff_work, &lwork,
              &info );
-    zunmqr_( &blas_side,
+    aocl_lapack_zunmqr( &blas_side,
              &blas_trans,
              &m_B,
              &n_B,

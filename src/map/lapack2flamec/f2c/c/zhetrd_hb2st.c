@@ -7,12 +7,12 @@
 #ifdef FLA_OPENMP_MULTITHREADING
 #include <omp.h>
 #endif
-static doublecomplex c_b1 = {0., 0.};
-static integer c__2 = 2;
-static integer c_n1 = -1;
-static integer c__3 = 3;
-static integer c__4 = 4;
-/* > \brief \b ZHETRD_HB2ST reduces a complex Hermitian band matrix A to real symmetric tridiagonal
+static dcomplex c_b1 = {{0.}, {0.}};
+static aocl_int64_t c__2 = 2;
+static aocl_int64_t c_n1 = -1;
+static aocl_int64_t c__3 = 3;
+static aocl_int64_t c__4 = 4;
+/* > \brief \b ZHETRD_HB2ST reduces a scomplex Hermitian band matrix A to real symmetric tridiagonal
  * form T */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -53,7 +53,7 @@ static integer c__4 = 4;
 /* > */
 /* > \verbatim */
 /* > */
-/* > ZHETRD_HB2ST reduces a complex Hermitian band matrix A to real symmetric */
+/* > ZHETRD_HB2ST reduces a scomplex Hermitian band matrix A to real symmetric */
 /* > tridiagonal form T by a unitary similarity transformation: */
 /* > Q**H * A * Q = T. */
 /* > \endverbatim */
@@ -240,45 +240,51 @@ the routine */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void zhetrd_hb2st_(char *stage1, char *vect, char *uplo, integer *n, integer *kd, doublecomplex *ab,
-                   integer *ldab, doublereal *d__, doublereal *e, doublecomplex *hous,
-                   integer *lhous, doublecomplex *work, integer *lwork, integer *info)
+/** Generated wrapper function */
+void zhetrd_hb2st_(char *stage1, char *vect, char *uplo, aocl_int_t *n, aocl_int_t *kd, dcomplex *ab, aocl_int_t *ldab, doublereal *d__, doublereal *e, dcomplex *hous, aocl_int_t *lhous, dcomplex *work, aocl_int_t *lwork, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_zhetrd_hb2st(stage1, vect, uplo, n, kd, ab, ldab, d__, e, hous, lhous, work, lwork, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t kd_64 = *kd;
+    aocl_int64_t ldab_64 = *ldab;
+    aocl_int64_t lhous_64 = *lhous;
+    aocl_int64_t lwork_64 = *lwork;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_zhetrd_hb2st(stage1, vect, uplo, &n_64, &kd_64, ab, &ldab_64, d__, e, hous, &lhous_64, work, &lwork_64, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_zhetrd_hb2st(char *stage1, char *vect, char *uplo, aocl_int64_t *n, aocl_int64_t *kd,
+                   dcomplex *ab, aocl_int64_t *ldab, doublereal *d__, doublereal *e,
+                   dcomplex *hous, aocl_int64_t *lhous, dcomplex *work,
+                   aocl_int64_t *lwork, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zhetrd_hb2st inputs: stage1 %c, vect %c, uplo %c, n %" FLA_IS ", kd %" FLA_IS
                       ", ldab %" FLA_IS ", lhous %" FLA_IS "",
                       *stage1, *vect, *uplo, *n, *kd, *ldab, *lhous);
     /* System generated locals */
-    integer ab_dim1, ab_offset, i__1, i__2, i__3, i__4, i__5;
-    doublecomplex z__1;
+    aocl_int64_t ab_dim1, ab_offset, i__1, i__2, i__3, i__4, i__5;
+    dcomplex z__1;
     /* Builtin functions */
-    double z_abs(doublecomplex *);
+    double z_abs(dcomplex *);
     /* Local variables */
-    integer abofdpos, i__, k, m, stepercol, ed, ib, st, blklastind, lda, tid, ldv;
-    doublecomplex tmp;
-    integer stt, inda;
-    extern integer ilaenv2stage_(integer *, char *, char *, integer *, integer *, integer *,
-                                 integer *);
-    integer thed, myid, indw, apos, dpos, indv, edind;
-    extern logical lsame_(char *, char *, integer, integer);
-    integer lhmin, sizea, shift, stind, colpt, lwmin, awpos;
+    aocl_int64_t abofdpos, i__, k, m, stepercol, ed, ib, st, blklastind, lda, tid, ldv;
+    dcomplex tmp;
+    aocl_int64_t stt, inda;
+    aocl_int64_t thed, myid, indw, apos, dpos, indv, edind;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    aocl_int64_t lhmin, sizea, shift, stind, colpt, lwmin, awpos;
     logical wantq, upper;
-    integer grsiz, ttype, abdpos;
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    integer thgrid, thgrnb, indtau;
+    aocl_int64_t grsiz, ttype, abdpos;
+    aocl_int64_t thgrid, thgrnb, indtau;
     doublereal abstmp;
-    integer ofdpos;
-    extern /* Subroutine */
-        int
-        zhb2st_kernels_(char *, logical *, integer *, integer *, integer *, integer *, integer *,
-                        integer *, integer *, doublecomplex *, integer *, doublecomplex *,
-                        doublecomplex *, integer *, doublecomplex *),
-        zlacpy_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *,
-                integer *),
-        zlaset_(char *, integer *, integer *, doublecomplex *, doublecomplex *, doublecomplex *,
-                integer *);
+    aocl_int64_t ofdpos;
 #ifdef FLA_OPENMP_MULTITHREADING
     extern /* Function */
         int
@@ -286,7 +292,7 @@ void zhetrd_hb2st_(char *stage1, char *vect, char *uplo, integer *n, integer *kd
     int nthreads;
 #endif
     logical lquery, afters1;
-    integer ceiltmp, sweepid, nbtiles, sizetau, thgrsiz;
+    aocl_int64_t ceiltmp, sweepid, nbtiles, sizetau, thgrsiz;
     /* -- LAPACK computational routine (version 3.8.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -324,9 +330,9 @@ void zhetrd_hb2st_(char *stage1, char *vect, char *uplo, integer *n, integer *kd
     upper = lsame_(uplo, "U", 1, 1);
     lquery = *lwork == -1 || *lhous == -1;
     /* Determine the block size, the workspace size and the hous size. */
-    ib = ilaenv2stage_(&c__2, "ZHETRD_HB2ST", vect, n, kd, &c_n1, &c_n1);
-    lhmin = ilaenv2stage_(&c__3, "ZHETRD_HB2ST", vect, n, kd, &ib, &c_n1);
-    lwmin = ilaenv2stage_(&c__4, "ZHETRD_HB2ST", vect, n, kd, &ib, &c_n1);
+    ib = aocl_lapack_ilaenv2stage(&c__2, "ZHETRD_HB2ST", vect, n, kd, &c_n1, &c_n1);
+    lhmin = aocl_lapack_ilaenv2stage(&c__3, "ZHETRD_HB2ST", vect, n, kd, &ib, &c_n1);
+    lwmin = aocl_lapack_ilaenv2stage(&c__4, "ZHETRD_HB2ST", vect, n, kd, &ib, &c_n1);
     if(!afters1 && !lsame_(stage1, "N", 1, 1))
     {
         *info = -1;
@@ -369,7 +375,7 @@ void zhetrd_hb2st_(char *stage1, char *vect, char *uplo, integer *n, integer *kd
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("ZHETRD_HB2ST", &i__1, (ftnlen)12);
+        aocl_blas_xerbla("ZHETRD_HB2ST", &i__1, (ftnlen)12);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -418,7 +424,7 @@ void zhetrd_hb2st_(char *stage1, char *vect, char *uplo, integer *n, integer *kd
     }
     /* Case KD=0: */
     /* The matrix is diagonal. We just copy it (convert to "real" for */
-    /* complex because D is double and the imaginary part should be 0) */
+    /* scomplex because D is double and the imaginary part should be 0) */
     /* and store it in D. A sequential code here is better or */
     /* in a parallel environment it might need two cores for D and E */
     if(*kd == 0)
@@ -576,17 +582,17 @@ void zhetrd_hb2st_(char *stage1, char *vect, char *uplo, integer *n, integer *kd
         ++thgrnb;
     }
     i__1 = *kd + 1;
-    zlacpy_("A", &i__1, n, &ab[ab_offset], ldab, &work[apos], &lda);
-    zlaset_("A", kd, n, &c_b1, &c_b1, &work[awpos], &lda);
+    aocl_lapack_zlacpy("A", &i__1, n, &ab[ab_offset], ldab, &work[apos], &lda);
+    aocl_lapack_zlaset("A", kd, n, &c_b1, &c_b1, &work[awpos], &lda);
 
     /* openMP parallelisation start here */
 #ifdef FLA_OPENMP_MULTITHREADING
     nthreads = 1;
     nthreads = fla_thread_get_num_threads();
 #pragma omp parallel num_threads(nthreads) private(tid, thgrid, blklastind) private(             \
-    thed, i__, m, k, st, ed, stt, sweepid, myid, ttype, colpt, stind, edind)                     \
+        thed, i__, m, k, st, ed, stt, sweepid, myid, ttype, colpt, stind, edind)                 \
     shared(uplo, wantq, indv, indtau, hous, work, n, kd, ib, nbtiles, lda, ldv, inda, stepercol, \
-           thgrnb, thgrsiz, grsiz, shift)
+               thgrnb, thgrsiz, grsiz, shift)
     {
 #pragma omp master
         {
@@ -652,16 +658,14 @@ void zhetrd_hb2st_(char *stage1, char *vect, char *uplo, integer *n, integer *kd
 #ifdef FLA_OPENMP_MULTITHREADING
                                 if(ttype != 1)
                                 {
-#pragma omp task depend(in                                                            \
-                        : work[myid + shift - 1]) depend(in                           \
-                                                         : work[myid - 1]) depend(out \
-                                                                                  : work[myid])
+#pragma omp task depend(in : work[myid + shift - 1]) depend(in : work[myid - 1]) \
+    depend(out : work[myid])
                                     {
                                         tid = omp_get_thread_num();
-                                        zhb2st_kernels_(uplo, &wantq, &ttype, &stind, &edind,
-                                                        &sweepid, n, kd, &ib, &work[inda], &lda,
-                                                        &hous[indv], &hous[indtau], &ldv,
-                                                        &work[indw + tid * *kd]);
+                                        aocl_lapack_zhb2st_kernels(
+                                            uplo, &wantq, &ttype, &stind, &edind, &sweepid, n, kd,
+                                            &ib, &work[inda], &lda, &hous[indv], &hous[indtau],
+                                            &ldv, &work[indw + tid * *kd]);
                                     }
                                 }
                                 else
@@ -669,16 +673,16 @@ void zhetrd_hb2st_(char *stage1, char *vect, char *uplo, integer *n, integer *kd
 #pragma omp task depend(in : work[myid + shift - 1]) depend(out : work[myid])
                                     {
                                         tid = omp_get_thread_num();
-                                        zhb2st_kernels_(uplo, &wantq, &ttype, &stind, &edind,
-                                                        &sweepid, n, kd, &ib, &work[inda], &lda,
-                                                        &hous[indv], &hous[indtau], &ldv,
-                                                        &work[indw + tid * *kd]);
+                                        aocl_lapack_zhb2st_kernels(
+                                            uplo, &wantq, &ttype, &stind, &edind, &sweepid, n, kd,
+                                            &ib, &work[inda], &lda, &hous[indv], &hous[indtau],
+                                            &ldv, &work[indw + tid * *kd]);
                                     }
                                 }
 #else
-                        zhb2st_kernels_(uplo, &wantq, &ttype, &stind, &edind, &sweepid, n, kd, &ib,
-                                        &work[inda], &lda, &hous[indv], &hous[indtau], &ldv,
-                                        &work[indw]);
+                        aocl_lapack_zhb2st_kernels(uplo, &wantq, &ttype, &stind, &edind, &sweepid,
+                                                   n, kd, &ib, &work[inda], &lda, &hous[indv],
+                                                   &hous[indtau], &ldv, &work[indw]);
 #endif
                                 if(blklastind >= *n - 1)
                                 {

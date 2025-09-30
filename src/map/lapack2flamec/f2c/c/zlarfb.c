@@ -7,8 +7,8 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static doublecomplex c_b1 = {1., 0.};
-static integer c__1 = 1;
+static dcomplex c_b1 = {{1.}, {0.}};
+static aocl_int64_t c__1 = 1;
 /* > \brief \b ZLARFB applies a block reflector or its conjugate-transpose to a general rectangular
  * matrix. */
 /* =========== DOCUMENTATION =========== */
@@ -46,8 +46,8 @@ static integer c__1 = 1;
 /* > */
 /* > \verbatim */
 /* > */
-/* > ZLARFB applies a complex block reflector H or its transpose H**H to a */
-/* > complex M-by-N matrix C, from either the left or the right. */
+/* > ZLARFB applies a scomplex block reflector H or its transpose H**H to a */
+/* > scomplex M-by-N matrix C, from either the left or the right. */
 /* > \endverbatim */
 /* Arguments: */
 /* ========== */
@@ -200,9 +200,32 @@ the corresponding */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void zlarfb_(char *side, char *trans, char *direct, char *storev, integer *m, integer *n,
-             integer *k, doublecomplex *v, integer *ldv, doublecomplex *t, integer *ldt,
-             doublecomplex *c__, integer *ldc, doublecomplex *work, integer *ldwork)
+/** Generated wrapper function */
+void zlarfb_(char *side, char *trans, char *direct, char *storev, aocl_int_t *m, aocl_int_t *n,
+             aocl_int_t *k, dcomplex *v, aocl_int_t *ldv, dcomplex *t, aocl_int_t *ldt,
+             dcomplex *c__, aocl_int_t *ldc, dcomplex *work, aocl_int_t *ldwork)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_zlarfb(side, trans, direct, storev, m, n, k, v, ldv, t, ldt, c__, ldc, work,
+                       ldwork);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t k_64 = *k;
+    aocl_int64_t ldv_64 = *ldv;
+    aocl_int64_t ldt_64 = *ldt;
+    aocl_int64_t ldc_64 = *ldc;
+    aocl_int64_t ldwork_64 = *ldwork;
+
+    aocl_lapack_zlarfb(side, trans, direct, storev, &m_64, &n_64, &k_64, v, &ldv_64, t, &ldt_64,
+                       c__, &ldc_64, work, &ldwork_64);
+#endif
+}
+
+void aocl_lapack_zlarfb(char *side, char *trans, char *direct, char *storev, aocl_int64_t *m,
+                        aocl_int64_t *n, aocl_int64_t *k, dcomplex *v, aocl_int64_t *ldv,
+                        dcomplex *t, aocl_int64_t *ldt, dcomplex *c__, aocl_int64_t *ldc,
+                        dcomplex *work, aocl_int64_t *ldwork)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zlarfb inputs: side %c, trans %c, direct %c, storev %c, m %" FLA_IS
@@ -211,20 +234,12 @@ void zlarfb_(char *side, char *trans, char *direct, char *storev, integer *m, in
                       *side, *trans, *direct, *storev, *m, *n, *k, *ldv, *ldt, *ldc, *ldwork);
 
     /* System generated locals */
-    integer c_dim1, c_offset, t_dim1, t_offset, v_dim1, v_offset, work_dim1, work_offset, i__1,
+    aocl_int64_t c_dim1, c_offset, t_dim1, t_offset, v_dim1, v_offset, work_dim1, work_offset, i__1,
         i__2, i__3, i__4, i__5;
-    doublecomplex z__1, z__2;
+    dcomplex z__1, z__2;
     /* Local variables */
-    integer i__, j;
-    extern logical lsame_(char *, char *, integer, integer);
-    extern /* Subroutine */
-        void
-        zgemm_(char *, char *, integer *, integer *, integer *, doublecomplex *, doublecomplex *,
-               integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *),
-        zcopy_(integer *, doublecomplex *, integer *, doublecomplex *, integer *),
-        ztrmm_(char *, char *, char *, char *, integer *, integer *, doublecomplex *,
-               doublecomplex *, integer *, doublecomplex *, integer *),
-        zlacgv_(integer *, doublecomplex *, integer *);
+    aocl_int64_t i__, j;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     char transt[1];
     /* -- LAPACK auxiliary routine (version 3.5.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -290,24 +305,24 @@ void zlarfb_(char *side, char *trans, char *direct, char *storev, integer *m, in
                 i__1 = *k;
                 for(j = 1; j <= i__1; ++j)
                 {
-                    zcopy_(n, &c__[j + c_dim1], ldc, &work[j * work_dim1 + 1], &c__1);
-                    zlacgv_(n, &work[j * work_dim1 + 1], &c__1);
+                    aocl_blas_zcopy(n, &c__[j + c_dim1], ldc, &work[j * work_dim1 + 1], &c__1);
+                    aocl_lapack_zlacgv(n, &work[j * work_dim1 + 1], &c__1);
                     /* L10: */
                 }
                 /* W := W * V1 */
-                ztrmm_("Right", "Lower", "No transpose", "Unit", n, k, &c_b1, &v[v_offset], ldv,
-                       &work[work_offset], ldwork);
+                aocl_blas_ztrmm("Right", "Lower", "No transpose", "Unit", n, k, &c_b1, &v[v_offset],
+                                ldv, &work[work_offset], ldwork);
                 if(*m > *k)
                 {
                     /* W := W + C2**H * V2 */
                     i__1 = *m - *k;
-                    zgemm_("Conjugate transpose", "No transpose", n, k, &i__1, &c_b1,
-                           &c__[*k + 1 + c_dim1], ldc, &v[*k + 1 + v_dim1], ldv, &c_b1,
-                           &work[work_offset], ldwork);
+                    aocl_blas_zgemm("Conjugate transpose", "No transpose", n, k, &i__1, &c_b1,
+                                    &c__[*k + 1 + c_dim1], ldc, &v[*k + 1 + v_dim1], ldv, &c_b1,
+                                    &work[work_offset], ldwork);
                 }
                 /* W := W * T**H or W * T */
-                ztrmm_("Right", "Upper", transt, "Non-unit", n, k, &c_b1, &t[t_offset], ldt,
-                       &work[work_offset], ldwork);
+                aocl_blas_ztrmm("Right", "Upper", transt, "Non-unit", n, k, &c_b1, &t[t_offset],
+                                ldt, &work[work_offset], ldwork);
                 /* C := C - V * W**H */
                 if(*m > *k)
                 {
@@ -315,13 +330,13 @@ void zlarfb_(char *side, char *trans, char *direct, char *storev, integer *m, in
                     i__1 = *m - *k;
                     z__1.r = -1.;
                     z__1.i = -0.; // , expr subst
-                    zgemm_("No transpose", "Conjugate transpose", &i__1, n, k, &z__1,
-                           &v[*k + 1 + v_dim1], ldv, &work[work_offset], ldwork, &c_b1,
-                           &c__[*k + 1 + c_dim1], ldc);
+                    aocl_blas_zgemm("No transpose", "Conjugate transpose", &i__1, n, k, &z__1,
+                                    &v[*k + 1 + v_dim1], ldv, &work[work_offset], ldwork, &c_b1,
+                                    &c__[*k + 1 + c_dim1], ldc);
                 }
                 /* W := W * V1**H */
-                ztrmm_("Right", "Lower", "Conjugate transpose", "Unit", n, k, &c_b1, &v[v_offset],
-                       ldv, &work[work_offset], ldwork);
+                aocl_blas_ztrmm("Right", "Lower", "Conjugate transpose", "Unit", n, k, &c_b1,
+                                &v[v_offset], ldv, &work[work_offset], ldwork);
                 /* C1 := C1 - W**H */
                 i__1 = *k;
                 for(j = 1; j <= i__1; ++j)
@@ -350,23 +365,24 @@ void zlarfb_(char *side, char *trans, char *direct, char *storev, integer *m, in
                 i__1 = *k;
                 for(j = 1; j <= i__1; ++j)
                 {
-                    zcopy_(m, &c__[j * c_dim1 + 1], &c__1, &work[j * work_dim1 + 1], &c__1);
+                    aocl_blas_zcopy(m, &c__[j * c_dim1 + 1], &c__1, &work[j * work_dim1 + 1],
+                                    &c__1);
                     /* L40: */
                 }
                 /* W := W * V1 */
-                ztrmm_("Right", "Lower", "No transpose", "Unit", m, k, &c_b1, &v[v_offset], ldv,
-                       &work[work_offset], ldwork);
+                aocl_blas_ztrmm("Right", "Lower", "No transpose", "Unit", m, k, &c_b1, &v[v_offset],
+                                ldv, &work[work_offset], ldwork);
                 if(*n > *k)
                 {
                     /* W := W + C2 * V2 */
                     i__1 = *n - *k;
-                    zgemm_("No transpose", "No transpose", m, k, &i__1, &c_b1,
-                           &c__[(*k + 1) * c_dim1 + 1], ldc, &v[*k + 1 + v_dim1], ldv, &c_b1,
-                           &work[work_offset], ldwork);
+                    aocl_blas_zgemm("No transpose", "No transpose", m, k, &i__1, &c_b1,
+                                    &c__[(*k + 1) * c_dim1 + 1], ldc, &v[*k + 1 + v_dim1], ldv,
+                                    &c_b1, &work[work_offset], ldwork);
                 }
                 /* W := W * T or W * T**H */
-                ztrmm_("Right", "Upper", trans, "Non-unit", m, k, &c_b1, &t[t_offset], ldt,
-                       &work[work_offset], ldwork);
+                aocl_blas_ztrmm("Right", "Upper", trans, "Non-unit", m, k, &c_b1, &t[t_offset], ldt,
+                                &work[work_offset], ldwork);
                 /* C := C - W * V**H */
                 if(*n > *k)
                 {
@@ -374,13 +390,13 @@ void zlarfb_(char *side, char *trans, char *direct, char *storev, integer *m, in
                     i__1 = *n - *k;
                     z__1.r = -1.;
                     z__1.i = -0.; // , expr subst
-                    zgemm_("No transpose", "Conjugate transpose", m, &i__1, k, &z__1,
-                           &work[work_offset], ldwork, &v[*k + 1 + v_dim1], ldv, &c_b1,
-                           &c__[(*k + 1) * c_dim1 + 1], ldc);
+                    aocl_blas_zgemm("No transpose", "Conjugate transpose", m, &i__1, k, &z__1,
+                                    &work[work_offset], ldwork, &v[*k + 1 + v_dim1], ldv, &c_b1,
+                                    &c__[(*k + 1) * c_dim1 + 1], ldc);
                 }
                 /* W := W * V1**H */
-                ztrmm_("Right", "Lower", "Conjugate transpose", "Unit", m, k, &c_b1, &v[v_offset],
-                       ldv, &work[work_offset], ldwork);
+                aocl_blas_ztrmm("Right", "Lower", "Conjugate transpose", "Unit", m, k, &c_b1,
+                                &v[v_offset], ldv, &work[work_offset], ldwork);
                 /* C1 := C1 - W */
                 i__1 = *k;
                 for(j = 1; j <= i__1; ++j)
@@ -415,24 +431,25 @@ void zlarfb_(char *side, char *trans, char *direct, char *storev, integer *m, in
                 i__1 = *k;
                 for(j = 1; j <= i__1; ++j)
                 {
-                    zcopy_(n, &c__[*m - *k + j + c_dim1], ldc, &work[j * work_dim1 + 1], &c__1);
-                    zlacgv_(n, &work[j * work_dim1 + 1], &c__1);
+                    aocl_blas_zcopy(n, &c__[*m - *k + j + c_dim1], ldc, &work[j * work_dim1 + 1],
+                                    &c__1);
+                    aocl_lapack_zlacgv(n, &work[j * work_dim1 + 1], &c__1);
                     /* L70: */
                 }
                 /* W := W * V2 */
-                ztrmm_("Right", "Upper", "No transpose", "Unit", n, k, &c_b1,
-                       &v[*m - *k + 1 + v_dim1], ldv, &work[work_offset], ldwork);
+                aocl_blas_ztrmm("Right", "Upper", "No transpose", "Unit", n, k, &c_b1,
+                                &v[*m - *k + 1 + v_dim1], ldv, &work[work_offset], ldwork);
                 if(*m > *k)
                 {
                     /* W := W + C1**H * V1 */
                     i__1 = *m - *k;
-                    zgemm_("Conjugate transpose", "No transpose", n, k, &i__1, &c_b1,
-                           &c__[c_offset], ldc, &v[v_offset], ldv, &c_b1, &work[work_offset],
-                           ldwork);
+                    aocl_blas_zgemm("Conjugate transpose", "No transpose", n, k, &i__1, &c_b1,
+                                    &c__[c_offset], ldc, &v[v_offset], ldv, &c_b1,
+                                    &work[work_offset], ldwork);
                 }
                 /* W := W * T**H or W * T */
-                ztrmm_("Right", "Lower", transt, "Non-unit", n, k, &c_b1, &t[t_offset], ldt,
-                       &work[work_offset], ldwork);
+                aocl_blas_ztrmm("Right", "Lower", transt, "Non-unit", n, k, &c_b1, &t[t_offset],
+                                ldt, &work[work_offset], ldwork);
                 /* C := C - V * W**H */
                 if(*m > *k)
                 {
@@ -440,12 +457,13 @@ void zlarfb_(char *side, char *trans, char *direct, char *storev, integer *m, in
                     i__1 = *m - *k;
                     z__1.r = -1.;
                     z__1.i = -0.; // , expr subst
-                    zgemm_("No transpose", "Conjugate transpose", &i__1, n, k, &z__1, &v[v_offset],
-                           ldv, &work[work_offset], ldwork, &c_b1, &c__[c_offset], ldc);
+                    aocl_blas_zgemm("No transpose", "Conjugate transpose", &i__1, n, k, &z__1,
+                                    &v[v_offset], ldv, &work[work_offset], ldwork, &c_b1,
+                                    &c__[c_offset], ldc);
                 }
                 /* W := W * V2**H */
-                ztrmm_("Right", "Upper", "Conjugate transpose", "Unit", n, k, &c_b1,
-                       &v[*m - *k + 1 + v_dim1], ldv, &work[work_offset], ldwork);
+                aocl_blas_ztrmm("Right", "Upper", "Conjugate transpose", "Unit", n, k, &c_b1,
+                                &v[*m - *k + 1 + v_dim1], ldv, &work[work_offset], ldwork);
                 /* C2 := C2 - W**H */
                 i__1 = *k;
                 for(j = 1; j <= i__1; ++j)
@@ -474,23 +492,24 @@ void zlarfb_(char *side, char *trans, char *direct, char *storev, integer *m, in
                 i__1 = *k;
                 for(j = 1; j <= i__1; ++j)
                 {
-                    zcopy_(m, &c__[(*n - *k + j) * c_dim1 + 1], &c__1, &work[j * work_dim1 + 1],
-                           &c__1);
+                    aocl_blas_zcopy(m, &c__[(*n - *k + j) * c_dim1 + 1], &c__1,
+                                    &work[j * work_dim1 + 1], &c__1);
                     /* L100: */
                 }
                 /* W := W * V2 */
-                ztrmm_("Right", "Upper", "No transpose", "Unit", m, k, &c_b1,
-                       &v[*n - *k + 1 + v_dim1], ldv, &work[work_offset], ldwork);
+                aocl_blas_ztrmm("Right", "Upper", "No transpose", "Unit", m, k, &c_b1,
+                                &v[*n - *k + 1 + v_dim1], ldv, &work[work_offset], ldwork);
                 if(*n > *k)
                 {
                     /* W := W + C1 * V1 */
                     i__1 = *n - *k;
-                    zgemm_("No transpose", "No transpose", m, k, &i__1, &c_b1, &c__[c_offset], ldc,
-                           &v[v_offset], ldv, &c_b1, &work[work_offset], ldwork);
+                    aocl_blas_zgemm("No transpose", "No transpose", m, k, &i__1, &c_b1,
+                                    &c__[c_offset], ldc, &v[v_offset], ldv, &c_b1,
+                                    &work[work_offset], ldwork);
                 }
                 /* W := W * T or W * T**H */
-                ztrmm_("Right", "Lower", trans, "Non-unit", m, k, &c_b1, &t[t_offset], ldt,
-                       &work[work_offset], ldwork);
+                aocl_blas_ztrmm("Right", "Lower", trans, "Non-unit", m, k, &c_b1, &t[t_offset], ldt,
+                                &work[work_offset], ldwork);
                 /* C := C - W * V**H */
                 if(*n > *k)
                 {
@@ -498,13 +517,13 @@ void zlarfb_(char *side, char *trans, char *direct, char *storev, integer *m, in
                     i__1 = *n - *k;
                     z__1.r = -1.;
                     z__1.i = -0.; // , expr subst
-                    zgemm_("No transpose", "Conjugate transpose", m, &i__1, k, &z__1,
-                           &work[work_offset], ldwork, &v[v_offset], ldv, &c_b1, &c__[c_offset],
-                           ldc);
+                    aocl_blas_zgemm("No transpose", "Conjugate transpose", m, &i__1, k, &z__1,
+                                    &work[work_offset], ldwork, &v[v_offset], ldv, &c_b1,
+                                    &c__[c_offset], ldc);
                 }
                 /* W := W * V2**H */
-                ztrmm_("Right", "Upper", "Conjugate transpose", "Unit", m, k, &c_b1,
-                       &v[*n - *k + 1 + v_dim1], ldv, &work[work_offset], ldwork);
+                aocl_blas_ztrmm("Right", "Upper", "Conjugate transpose", "Unit", m, k, &c_b1,
+                                &v[*n - *k + 1 + v_dim1], ldv, &work[work_offset], ldwork);
                 /* C2 := C2 - W */
                 i__1 = *k;
                 for(j = 1; j <= i__1; ++j)
@@ -541,24 +560,24 @@ void zlarfb_(char *side, char *trans, char *direct, char *storev, integer *m, in
                 i__1 = *k;
                 for(j = 1; j <= i__1; ++j)
                 {
-                    zcopy_(n, &c__[j + c_dim1], ldc, &work[j * work_dim1 + 1], &c__1);
-                    zlacgv_(n, &work[j * work_dim1 + 1], &c__1);
+                    aocl_blas_zcopy(n, &c__[j + c_dim1], ldc, &work[j * work_dim1 + 1], &c__1);
+                    aocl_lapack_zlacgv(n, &work[j * work_dim1 + 1], &c__1);
                     /* L130: */
                 }
                 /* W := W * V1**H */
-                ztrmm_("Right", "Upper", "Conjugate transpose", "Unit", n, k, &c_b1, &v[v_offset],
-                       ldv, &work[work_offset], ldwork);
+                aocl_blas_ztrmm("Right", "Upper", "Conjugate transpose", "Unit", n, k, &c_b1,
+                                &v[v_offset], ldv, &work[work_offset], ldwork);
                 if(*m > *k)
                 {
                     /* W := W + C2**H * V2**H */
                     i__1 = *m - *k;
-                    zgemm_("Conjugate transpose", "Conjugate transpose", n, k, &i__1, &c_b1,
-                           &c__[*k + 1 + c_dim1], ldc, &v[(*k + 1) * v_dim1 + 1], ldv, &c_b1,
-                           &work[work_offset], ldwork);
+                    aocl_blas_zgemm("Conjugate transpose", "Conjugate transpose", n, k, &i__1,
+                                    &c_b1, &c__[*k + 1 + c_dim1], ldc, &v[(*k + 1) * v_dim1 + 1],
+                                    ldv, &c_b1, &work[work_offset], ldwork);
                 }
                 /* W := W * T**H or W * T */
-                ztrmm_("Right", "Upper", transt, "Non-unit", n, k, &c_b1, &t[t_offset], ldt,
-                       &work[work_offset], ldwork);
+                aocl_blas_ztrmm("Right", "Upper", transt, "Non-unit", n, k, &c_b1, &t[t_offset],
+                                ldt, &work[work_offset], ldwork);
                 /* C := C - V**H * W**H */
                 if(*m > *k)
                 {
@@ -566,13 +585,13 @@ void zlarfb_(char *side, char *trans, char *direct, char *storev, integer *m, in
                     i__1 = *m - *k;
                     z__1.r = -1.;
                     z__1.i = -0.; // , expr subst
-                    zgemm_("Conjugate transpose", "Conjugate transpose", &i__1, n, k, &z__1,
-                           &v[(*k + 1) * v_dim1 + 1], ldv, &work[work_offset], ldwork, &c_b1,
-                           &c__[*k + 1 + c_dim1], ldc);
+                    aocl_blas_zgemm("Conjugate transpose", "Conjugate transpose", &i__1, n, k,
+                                    &z__1, &v[(*k + 1) * v_dim1 + 1], ldv, &work[work_offset],
+                                    ldwork, &c_b1, &c__[*k + 1 + c_dim1], ldc);
                 }
                 /* W := W * V1 */
-                ztrmm_("Right", "Upper", "No transpose", "Unit", n, k, &c_b1, &v[v_offset], ldv,
-                       &work[work_offset], ldwork);
+                aocl_blas_ztrmm("Right", "Upper", "No transpose", "Unit", n, k, &c_b1, &v[v_offset],
+                                ldv, &work[work_offset], ldwork);
                 /* C1 := C1 - W**H */
                 i__1 = *k;
                 for(j = 1; j <= i__1; ++j)
@@ -601,23 +620,24 @@ void zlarfb_(char *side, char *trans, char *direct, char *storev, integer *m, in
                 i__1 = *k;
                 for(j = 1; j <= i__1; ++j)
                 {
-                    zcopy_(m, &c__[j * c_dim1 + 1], &c__1, &work[j * work_dim1 + 1], &c__1);
+                    aocl_blas_zcopy(m, &c__[j * c_dim1 + 1], &c__1, &work[j * work_dim1 + 1],
+                                    &c__1);
                     /* L160: */
                 }
                 /* W := W * V1**H */
-                ztrmm_("Right", "Upper", "Conjugate transpose", "Unit", m, k, &c_b1, &v[v_offset],
-                       ldv, &work[work_offset], ldwork);
+                aocl_blas_ztrmm("Right", "Upper", "Conjugate transpose", "Unit", m, k, &c_b1,
+                                &v[v_offset], ldv, &work[work_offset], ldwork);
                 if(*n > *k)
                 {
                     /* W := W + C2 * V2**H */
                     i__1 = *n - *k;
-                    zgemm_("No transpose", "Conjugate transpose", m, k, &i__1, &c_b1,
-                           &c__[(*k + 1) * c_dim1 + 1], ldc, &v[(*k + 1) * v_dim1 + 1], ldv, &c_b1,
-                           &work[work_offset], ldwork);
+                    aocl_blas_zgemm("No transpose", "Conjugate transpose", m, k, &i__1, &c_b1,
+                                    &c__[(*k + 1) * c_dim1 + 1], ldc, &v[(*k + 1) * v_dim1 + 1],
+                                    ldv, &c_b1, &work[work_offset], ldwork);
                 }
                 /* W := W * T or W * T**H */
-                ztrmm_("Right", "Upper", trans, "Non-unit", m, k, &c_b1, &t[t_offset], ldt,
-                       &work[work_offset], ldwork);
+                aocl_blas_ztrmm("Right", "Upper", trans, "Non-unit", m, k, &c_b1, &t[t_offset], ldt,
+                                &work[work_offset], ldwork);
                 /* C := C - W * V */
                 if(*n > *k)
                 {
@@ -625,13 +645,13 @@ void zlarfb_(char *side, char *trans, char *direct, char *storev, integer *m, in
                     i__1 = *n - *k;
                     z__1.r = -1.;
                     z__1.i = -0.; // , expr subst
-                    zgemm_("No transpose", "No transpose", m, &i__1, k, &z__1, &work[work_offset],
-                           ldwork, &v[(*k + 1) * v_dim1 + 1], ldv, &c_b1,
-                           &c__[(*k + 1) * c_dim1 + 1], ldc);
+                    aocl_blas_zgemm("No transpose", "No transpose", m, &i__1, k, &z__1,
+                                    &work[work_offset], ldwork, &v[(*k + 1) * v_dim1 + 1], ldv,
+                                    &c_b1, &c__[(*k + 1) * c_dim1 + 1], ldc);
                 }
                 /* W := W * V1 */
-                ztrmm_("Right", "Upper", "No transpose", "Unit", m, k, &c_b1, &v[v_offset], ldv,
-                       &work[work_offset], ldwork);
+                aocl_blas_ztrmm("Right", "Upper", "No transpose", "Unit", m, k, &c_b1, &v[v_offset],
+                                ldv, &work[work_offset], ldwork);
                 /* C1 := C1 - W */
                 i__1 = *k;
                 for(j = 1; j <= i__1; ++j)
@@ -665,24 +685,25 @@ void zlarfb_(char *side, char *trans, char *direct, char *storev, integer *m, in
                 i__1 = *k;
                 for(j = 1; j <= i__1; ++j)
                 {
-                    zcopy_(n, &c__[*m - *k + j + c_dim1], ldc, &work[j * work_dim1 + 1], &c__1);
-                    zlacgv_(n, &work[j * work_dim1 + 1], &c__1);
+                    aocl_blas_zcopy(n, &c__[*m - *k + j + c_dim1], ldc, &work[j * work_dim1 + 1],
+                                    &c__1);
+                    aocl_lapack_zlacgv(n, &work[j * work_dim1 + 1], &c__1);
                     /* L190: */
                 }
                 /* W := W * V2**H */
-                ztrmm_("Right", "Lower", "Conjugate transpose", "Unit", n, k, &c_b1,
-                       &v[(*m - *k + 1) * v_dim1 + 1], ldv, &work[work_offset], ldwork);
+                aocl_blas_ztrmm("Right", "Lower", "Conjugate transpose", "Unit", n, k, &c_b1,
+                                &v[(*m - *k + 1) * v_dim1 + 1], ldv, &work[work_offset], ldwork);
                 if(*m > *k)
                 {
                     /* W := W + C1**H * V1**H */
                     i__1 = *m - *k;
-                    zgemm_("Conjugate transpose", "Conjugate transpose", n, k, &i__1, &c_b1,
-                           &c__[c_offset], ldc, &v[v_offset], ldv, &c_b1, &work[work_offset],
-                           ldwork);
+                    aocl_blas_zgemm("Conjugate transpose", "Conjugate transpose", n, k, &i__1,
+                                    &c_b1, &c__[c_offset], ldc, &v[v_offset], ldv, &c_b1,
+                                    &work[work_offset], ldwork);
                 }
                 /* W := W * T**H or W * T */
-                ztrmm_("Right", "Lower", transt, "Non-unit", n, k, &c_b1, &t[t_offset], ldt,
-                       &work[work_offset], ldwork);
+                aocl_blas_ztrmm("Right", "Lower", transt, "Non-unit", n, k, &c_b1, &t[t_offset],
+                                ldt, &work[work_offset], ldwork);
                 /* C := C - V**H * W**H */
                 if(*m > *k)
                 {
@@ -690,13 +711,13 @@ void zlarfb_(char *side, char *trans, char *direct, char *storev, integer *m, in
                     i__1 = *m - *k;
                     z__1.r = -1.;
                     z__1.i = -0.; // , expr subst
-                    zgemm_("Conjugate transpose", "Conjugate transpose", &i__1, n, k, &z__1,
-                           &v[v_offset], ldv, &work[work_offset], ldwork, &c_b1, &c__[c_offset],
-                           ldc);
+                    aocl_blas_zgemm("Conjugate transpose", "Conjugate transpose", &i__1, n, k,
+                                    &z__1, &v[v_offset], ldv, &work[work_offset], ldwork, &c_b1,
+                                    &c__[c_offset], ldc);
                 }
                 /* W := W * V2 */
-                ztrmm_("Right", "Lower", "No transpose", "Unit", n, k, &c_b1,
-                       &v[(*m - *k + 1) * v_dim1 + 1], ldv, &work[work_offset], ldwork);
+                aocl_blas_ztrmm("Right", "Lower", "No transpose", "Unit", n, k, &c_b1,
+                                &v[(*m - *k + 1) * v_dim1 + 1], ldv, &work[work_offset], ldwork);
                 /* C2 := C2 - W**H */
                 i__1 = *k;
                 for(j = 1; j <= i__1; ++j)
@@ -725,24 +746,24 @@ void zlarfb_(char *side, char *trans, char *direct, char *storev, integer *m, in
                 i__1 = *k;
                 for(j = 1; j <= i__1; ++j)
                 {
-                    zcopy_(m, &c__[(*n - *k + j) * c_dim1 + 1], &c__1, &work[j * work_dim1 + 1],
-                           &c__1);
+                    aocl_blas_zcopy(m, &c__[(*n - *k + j) * c_dim1 + 1], &c__1,
+                                    &work[j * work_dim1 + 1], &c__1);
                     /* L220: */
                 }
                 /* W := W * V2**H */
-                ztrmm_("Right", "Lower", "Conjugate transpose", "Unit", m, k, &c_b1,
-                       &v[(*n - *k + 1) * v_dim1 + 1], ldv, &work[work_offset], ldwork);
+                aocl_blas_ztrmm("Right", "Lower", "Conjugate transpose", "Unit", m, k, &c_b1,
+                                &v[(*n - *k + 1) * v_dim1 + 1], ldv, &work[work_offset], ldwork);
                 if(*n > *k)
                 {
                     /* W := W + C1 * V1**H */
                     i__1 = *n - *k;
-                    zgemm_("No transpose", "Conjugate transpose", m, k, &i__1, &c_b1,
-                           &c__[c_offset], ldc, &v[v_offset], ldv, &c_b1, &work[work_offset],
-                           ldwork);
+                    aocl_blas_zgemm("No transpose", "Conjugate transpose", m, k, &i__1, &c_b1,
+                                    &c__[c_offset], ldc, &v[v_offset], ldv, &c_b1,
+                                    &work[work_offset], ldwork);
                 }
                 /* W := W * T or W * T**H */
-                ztrmm_("Right", "Lower", trans, "Non-unit", m, k, &c_b1, &t[t_offset], ldt,
-                       &work[work_offset], ldwork);
+                aocl_blas_ztrmm("Right", "Lower", trans, "Non-unit", m, k, &c_b1, &t[t_offset], ldt,
+                                &work[work_offset], ldwork);
                 /* C := C - W * V */
                 if(*n > *k)
                 {
@@ -750,12 +771,13 @@ void zlarfb_(char *side, char *trans, char *direct, char *storev, integer *m, in
                     i__1 = *n - *k;
                     z__1.r = -1.;
                     z__1.i = -0.; // , expr subst
-                    zgemm_("No transpose", "No transpose", m, &i__1, k, &z__1, &work[work_offset],
-                           ldwork, &v[v_offset], ldv, &c_b1, &c__[c_offset], ldc);
+                    aocl_blas_zgemm("No transpose", "No transpose", m, &i__1, k, &z__1,
+                                    &work[work_offset], ldwork, &v[v_offset], ldv, &c_b1,
+                                    &c__[c_offset], ldc);
                 }
                 /* W := W * V2 */
-                ztrmm_("Right", "Lower", "No transpose", "Unit", m, k, &c_b1,
-                       &v[(*n - *k + 1) * v_dim1 + 1], ldv, &work[work_offset], ldwork);
+                aocl_blas_ztrmm("Right", "Lower", "No transpose", "Unit", m, k, &c_b1,
+                                &v[(*n - *k + 1) * v_dim1 + 1], ldv, &work[work_offset], ldwork);
                 /* C1 := C1 - W */
                 i__1 = *k;
                 for(j = 1; j <= i__1; ++j)

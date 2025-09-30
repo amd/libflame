@@ -4,8 +4,8 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static complex c_b1 = {1.f, 0.f};
-static integer c__1 = 1;
+static scomplex c_b1 = {{1.f}, {0.f}};
+static aocl_int64_t c__1 = 1;
 /* > \brief \b CHPTRS */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -41,7 +41,7 @@ static integer c__1 = 1;
 /* > */
 /* > \verbatim */
 /* > */
-/* > CHPTRS solves a system of linear equations A*X = B with a complex */
+/* > CHPTRS solves a system of linear equations A*X = B with a scomplex */
 /* > Hermitian matrix A stored in packed format using the factorization */
 /* > A = U*D*U**H or A = L*D*L**H computed by CHPTRF. */
 /* > \endverbatim */
@@ -114,8 +114,26 @@ static integer c__1 = 1;
 /* > \ingroup complexOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void chptrs_(char *uplo, integer *n, integer *nrhs, complex *ap, integer *ipiv, complex *b,
-             integer *ldb, integer *info)
+/** Generated wrapper function */
+void chptrs_(char *uplo, aocl_int_t *n, aocl_int_t *nrhs, scomplex *ap, aocl_int_t *ipiv, scomplex *b,
+             aocl_int_t *ldb, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_chptrs(uplo, n, nrhs, ap, ipiv, b, ldb, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t nrhs_64 = *nrhs;
+    aocl_int64_t ldb_64 = *ldb;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_chptrs(uplo, &n_64, &nrhs_64, ap, ipiv, b, &ldb_64, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_chptrs(char *uplo, aocl_int64_t *n, aocl_int64_t *nrhs, scomplex *ap,
+                        aocl_int_t *ipiv, scomplex *b, aocl_int64_t *ldb, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -129,31 +147,19 @@ void chptrs_(char *uplo, integer *n, integer *nrhs, complex *ap, integer *ipiv, 
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
-    integer b_dim1, b_offset, i__1, i__2;
-    complex q__1, q__2, q__3;
+    aocl_int64_t b_dim1, b_offset, i__1, i__2;
+    scomplex q__1, q__2, q__3;
     /* Builtin functions */
-    void c_div(complex *, complex *, complex *), r_cnjg(complex *, complex *);
+    void c_div(scomplex *, scomplex *, scomplex *), r_cnjg(scomplex *, scomplex *);
     /* Local variables */
-    integer j, k;
+    aocl_int64_t j, k;
     real s;
-    complex ak, bk;
-    integer kc, kp;
-    complex akm1, bkm1, akm1k;
-    extern logical lsame_(char *, char *, integer, integer);
-    complex denom;
-    extern /* Subroutine */
-        void
-        cgemv_(char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *,
-               complex *, complex *, integer *),
-        cgeru_(integer *, integer *, complex *, complex *, integer *, complex *, integer *,
-               complex *, integer *),
-        cswap_(integer *, complex *, integer *, complex *, integer *);
+    scomplex ak, bk;
+    aocl_int64_t kc, kp;
+    scomplex akm1, bkm1, akm1k;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    scomplex denom;
     logical upper;
-    extern /* Subroutine */
-        void
-        clacgv_(integer *, complex *, integer *),
-        csscal_(integer *, real *, complex *, integer *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -202,7 +208,7 @@ void chptrs_(char *uplo, integer *n, integer *nrhs, complex *ap, integer *ipiv, 
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("CHPTRS", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("CHPTRS", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
@@ -233,18 +239,19 @@ void chptrs_(char *uplo, integer *n, integer *nrhs, complex *ap, integer *ipiv, 
             kp = ipiv[k];
             if(kp != k)
             {
-                cswap_(nrhs, &b[k + b_dim1], ldb, &b[kp + b_dim1], ldb);
+                aocl_blas_cswap(nrhs, &b[k + b_dim1], ldb, &b[kp + b_dim1], ldb);
             }
             /* Multiply by inv(U(K)), where U(K) is the transformation */
             /* stored in column K of A. */
             i__1 = k - 1;
             q__1.r = -1.f;
             q__1.i = -0.f; // , expr subst
-            cgeru_(&i__1, nrhs, &q__1, &ap[kc], &c__1, &b[k + b_dim1], ldb, &b[b_dim1 + 1], ldb);
+            aocl_blas_cgeru(&i__1, nrhs, &q__1, &ap[kc], &c__1, &b[k + b_dim1], ldb, &b[b_dim1 + 1],
+                            ldb);
             /* Multiply by the inverse of the diagonal block. */
             i__1 = kc + k - 1;
             s = 1.f / ap[i__1].r;
-            csscal_(nrhs, &s, &b[k + b_dim1], ldb);
+            aocl_blas_csscal(nrhs, &s, &b[k + b_dim1], ldb);
             --k;
         }
         else
@@ -254,19 +261,20 @@ void chptrs_(char *uplo, integer *n, integer *nrhs, complex *ap, integer *ipiv, 
             kp = -ipiv[k];
             if(kp != k - 1)
             {
-                cswap_(nrhs, &b[k - 1 + b_dim1], ldb, &b[kp + b_dim1], ldb);
+                aocl_blas_cswap(nrhs, &b[k - 1 + b_dim1], ldb, &b[kp + b_dim1], ldb);
             }
             /* Multiply by inv(U(K)), where U(K) is the transformation */
             /* stored in columns K-1 and K of A. */
             i__1 = k - 2;
             q__1.r = -1.f;
             q__1.i = -0.f; // , expr subst
-            cgeru_(&i__1, nrhs, &q__1, &ap[kc], &c__1, &b[k + b_dim1], ldb, &b[b_dim1 + 1], ldb);
+            aocl_blas_cgeru(&i__1, nrhs, &q__1, &ap[kc], &c__1, &b[k + b_dim1], ldb, &b[b_dim1 + 1],
+                            ldb);
             i__1 = k - 2;
             q__1.r = -1.f;
             q__1.i = -0.f; // , expr subst
-            cgeru_(&i__1, nrhs, &q__1, &ap[kc - (k - 1)], &c__1, &b[k - 1 + b_dim1], ldb,
-                   &b[b_dim1 + 1], ldb);
+            aocl_blas_cgeru(&i__1, nrhs, &q__1, &ap[kc - (k - 1)], &c__1, &b[k - 1 + b_dim1], ldb,
+                            &b[b_dim1 + 1], ldb);
             /* Multiply by the inverse of the diagonal block. */
             i__1 = kc + k - 2;
             akm1k.r = ap[i__1].r;
@@ -333,19 +341,19 @@ void chptrs_(char *uplo, integer *n, integer *nrhs, complex *ap, integer *ipiv, 
             /* stored in column K of A. */
             if(k > 1)
             {
-                clacgv_(nrhs, &b[k + b_dim1], ldb);
+                aocl_lapack_clacgv(nrhs, &b[k + b_dim1], ldb);
                 i__1 = k - 1;
                 q__1.r = -1.f;
                 q__1.i = -0.f; // , expr subst
-                cgemv_("Conjugate transpose", &i__1, nrhs, &q__1, &b[b_offset], ldb, &ap[kc], &c__1,
-                       &c_b1, &b[k + b_dim1], ldb);
-                clacgv_(nrhs, &b[k + b_dim1], ldb);
+                aocl_blas_cgemv("Conjugate transpose", &i__1, nrhs, &q__1, &b[b_offset], ldb,
+                                &ap[kc], &c__1, &c_b1, &b[k + b_dim1], ldb);
+                aocl_lapack_clacgv(nrhs, &b[k + b_dim1], ldb);
             }
             /* Interchange rows K and IPIV(K). */
             kp = ipiv[k];
             if(kp != k)
             {
-                cswap_(nrhs, &b[k + b_dim1], ldb, &b[kp + b_dim1], ldb);
+                aocl_blas_cswap(nrhs, &b[k + b_dim1], ldb, &b[kp + b_dim1], ldb);
             }
             kc += k;
             ++k;
@@ -357,26 +365,26 @@ void chptrs_(char *uplo, integer *n, integer *nrhs, complex *ap, integer *ipiv, 
             /* stored in columns K and K+1 of A. */
             if(k > 1)
             {
-                clacgv_(nrhs, &b[k + b_dim1], ldb);
+                aocl_lapack_clacgv(nrhs, &b[k + b_dim1], ldb);
                 i__1 = k - 1;
                 q__1.r = -1.f;
                 q__1.i = -0.f; // , expr subst
-                cgemv_("Conjugate transpose", &i__1, nrhs, &q__1, &b[b_offset], ldb, &ap[kc], &c__1,
-                       &c_b1, &b[k + b_dim1], ldb);
-                clacgv_(nrhs, &b[k + b_dim1], ldb);
-                clacgv_(nrhs, &b[k + 1 + b_dim1], ldb);
+                aocl_blas_cgemv("Conjugate transpose", &i__1, nrhs, &q__1, &b[b_offset], ldb,
+                                &ap[kc], &c__1, &c_b1, &b[k + b_dim1], ldb);
+                aocl_lapack_clacgv(nrhs, &b[k + b_dim1], ldb);
+                aocl_lapack_clacgv(nrhs, &b[k + 1 + b_dim1], ldb);
                 i__1 = k - 1;
                 q__1.r = -1.f;
                 q__1.i = -0.f; // , expr subst
-                cgemv_("Conjugate transpose", &i__1, nrhs, &q__1, &b[b_offset], ldb, &ap[kc + k],
-                       &c__1, &c_b1, &b[k + 1 + b_dim1], ldb);
-                clacgv_(nrhs, &b[k + 1 + b_dim1], ldb);
+                aocl_blas_cgemv("Conjugate transpose", &i__1, nrhs, &q__1, &b[b_offset], ldb,
+                                &ap[kc + k], &c__1, &c_b1, &b[k + 1 + b_dim1], ldb);
+                aocl_lapack_clacgv(nrhs, &b[k + 1 + b_dim1], ldb);
             }
             /* Interchange rows K and -IPIV(K). */
             kp = -ipiv[k];
             if(kp != k)
             {
-                cswap_(nrhs, &b[k + b_dim1], ldb, &b[kp + b_dim1], ldb);
+                aocl_blas_cswap(nrhs, &b[k + b_dim1], ldb, &b[kp + b_dim1], ldb);
             }
             kc = kc + (k << 1) + 1;
             k += 2;
@@ -404,7 +412,7 @@ void chptrs_(char *uplo, integer *n, integer *nrhs, complex *ap, integer *ipiv, 
             kp = ipiv[k];
             if(kp != k)
             {
-                cswap_(nrhs, &b[k + b_dim1], ldb, &b[kp + b_dim1], ldb);
+                aocl_blas_cswap(nrhs, &b[k + b_dim1], ldb, &b[kp + b_dim1], ldb);
             }
             /* Multiply by inv(L(K)), where L(K) is the transformation */
             /* stored in column K of A. */
@@ -413,13 +421,13 @@ void chptrs_(char *uplo, integer *n, integer *nrhs, complex *ap, integer *ipiv, 
                 i__1 = *n - k;
                 q__1.r = -1.f;
                 q__1.i = -0.f; // , expr subst
-                cgeru_(&i__1, nrhs, &q__1, &ap[kc + 1], &c__1, &b[k + b_dim1], ldb,
-                       &b[k + 1 + b_dim1], ldb);
+                aocl_blas_cgeru(&i__1, nrhs, &q__1, &ap[kc + 1], &c__1, &b[k + b_dim1], ldb,
+                                &b[k + 1 + b_dim1], ldb);
             }
             /* Multiply by the inverse of the diagonal block. */
             i__1 = kc;
             s = 1.f / ap[i__1].r;
-            csscal_(nrhs, &s, &b[k + b_dim1], ldb);
+            aocl_blas_csscal(nrhs, &s, &b[k + b_dim1], ldb);
             kc = kc + *n - k + 1;
             ++k;
         }
@@ -430,7 +438,7 @@ void chptrs_(char *uplo, integer *n, integer *nrhs, complex *ap, integer *ipiv, 
             kp = -ipiv[k];
             if(kp != k + 1)
             {
-                cswap_(nrhs, &b[k + 1 + b_dim1], ldb, &b[kp + b_dim1], ldb);
+                aocl_blas_cswap(nrhs, &b[k + 1 + b_dim1], ldb, &b[kp + b_dim1], ldb);
             }
             /* Multiply by inv(L(K)), where L(K) is the transformation */
             /* stored in columns K and K+1 of A. */
@@ -439,13 +447,13 @@ void chptrs_(char *uplo, integer *n, integer *nrhs, complex *ap, integer *ipiv, 
                 i__1 = *n - k - 1;
                 q__1.r = -1.f;
                 q__1.i = -0.f; // , expr subst
-                cgeru_(&i__1, nrhs, &q__1, &ap[kc + 2], &c__1, &b[k + b_dim1], ldb,
-                       &b[k + 2 + b_dim1], ldb);
+                aocl_blas_cgeru(&i__1, nrhs, &q__1, &ap[kc + 2], &c__1, &b[k + b_dim1], ldb,
+                                &b[k + 2 + b_dim1], ldb);
                 i__1 = *n - k - 1;
                 q__1.r = -1.f;
                 q__1.i = -0.f; // , expr subst
-                cgeru_(&i__1, nrhs, &q__1, &ap[kc + *n - k + 2], &c__1, &b[k + 1 + b_dim1], ldb,
-                       &b[k + 2 + b_dim1], ldb);
+                aocl_blas_cgeru(&i__1, nrhs, &q__1, &ap[kc + *n - k + 2], &c__1, &b[k + 1 + b_dim1],
+                                ldb, &b[k + 2 + b_dim1], ldb);
             }
             /* Multiply by the inverse of the diagonal block. */
             i__1 = kc + 1;
@@ -514,19 +522,19 @@ void chptrs_(char *uplo, integer *n, integer *nrhs, complex *ap, integer *ipiv, 
             /* stored in column K of A. */
             if(k < *n)
             {
-                clacgv_(nrhs, &b[k + b_dim1], ldb);
+                aocl_lapack_clacgv(nrhs, &b[k + b_dim1], ldb);
                 i__1 = *n - k;
                 q__1.r = -1.f;
                 q__1.i = -0.f; // , expr subst
-                cgemv_("Conjugate transpose", &i__1, nrhs, &q__1, &b[k + 1 + b_dim1], ldb,
-                       &ap[kc + 1], &c__1, &c_b1, &b[k + b_dim1], ldb);
-                clacgv_(nrhs, &b[k + b_dim1], ldb);
+                aocl_blas_cgemv("Conjugate transpose", &i__1, nrhs, &q__1, &b[k + 1 + b_dim1], ldb,
+                                &ap[kc + 1], &c__1, &c_b1, &b[k + b_dim1], ldb);
+                aocl_lapack_clacgv(nrhs, &b[k + b_dim1], ldb);
             }
             /* Interchange rows K and IPIV(K). */
             kp = ipiv[k];
             if(kp != k)
             {
-                cswap_(nrhs, &b[k + b_dim1], ldb, &b[kp + b_dim1], ldb);
+                aocl_blas_cswap(nrhs, &b[k + b_dim1], ldb, &b[kp + b_dim1], ldb);
             }
             --k;
         }
@@ -537,26 +545,26 @@ void chptrs_(char *uplo, integer *n, integer *nrhs, complex *ap, integer *ipiv, 
             /* stored in columns K-1 and K of A. */
             if(k < *n)
             {
-                clacgv_(nrhs, &b[k + b_dim1], ldb);
+                aocl_lapack_clacgv(nrhs, &b[k + b_dim1], ldb);
                 i__1 = *n - k;
                 q__1.r = -1.f;
                 q__1.i = -0.f; // , expr subst
-                cgemv_("Conjugate transpose", &i__1, nrhs, &q__1, &b[k + 1 + b_dim1], ldb,
-                       &ap[kc + 1], &c__1, &c_b1, &b[k + b_dim1], ldb);
-                clacgv_(nrhs, &b[k + b_dim1], ldb);
-                clacgv_(nrhs, &b[k - 1 + b_dim1], ldb);
+                aocl_blas_cgemv("Conjugate transpose", &i__1, nrhs, &q__1, &b[k + 1 + b_dim1], ldb,
+                                &ap[kc + 1], &c__1, &c_b1, &b[k + b_dim1], ldb);
+                aocl_lapack_clacgv(nrhs, &b[k + b_dim1], ldb);
+                aocl_lapack_clacgv(nrhs, &b[k - 1 + b_dim1], ldb);
                 i__1 = *n - k;
                 q__1.r = -1.f;
                 q__1.i = -0.f; // , expr subst
-                cgemv_("Conjugate transpose", &i__1, nrhs, &q__1, &b[k + 1 + b_dim1], ldb,
-                       &ap[kc - (*n - k)], &c__1, &c_b1, &b[k - 1 + b_dim1], ldb);
-                clacgv_(nrhs, &b[k - 1 + b_dim1], ldb);
+                aocl_blas_cgemv("Conjugate transpose", &i__1, nrhs, &q__1, &b[k + 1 + b_dim1], ldb,
+                                &ap[kc - (*n - k)], &c__1, &c_b1, &b[k - 1 + b_dim1], ldb);
+                aocl_lapack_clacgv(nrhs, &b[k - 1 + b_dim1], ldb);
             }
             /* Interchange rows K and -IPIV(K). */
             kp = -ipiv[k];
             if(kp != k)
             {
-                cswap_(nrhs, &b[k + b_dim1], ldb, &b[kp + b_dim1], ldb);
+                aocl_blas_cswap(nrhs, &b[k + b_dim1], ldb, &b[kp + b_dim1], ldb);
             }
             kc -= *n - k + 2;
             k += -2;

@@ -4,7 +4,7 @@
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
  /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
+static aocl_int64_t c__1 = 1;
 /* > \brief \b SGEBAL */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -163,31 +163,43 @@ and second, applying a diagonal similarity transformation */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void sgebal_(char *job, integer *n, real *a, integer *lda, integer *ilo, integer *ihi, real *scale,
-             integer *info)
+/** Generated wrapper function */
+void sgebal_(char *job, aocl_int_t *n, real *a, aocl_int_t *lda, aocl_int_t *ilo, aocl_int_t *ihi,
+             real *scale, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_sgebal(job, n, a, lda, ilo, ihi, scale, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t ilo_64 = *ilo;
+    aocl_int64_t ihi_64 = *ihi;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_sgebal(job, &n_64, a, &lda_64, &ilo_64, &ihi_64, scale, &info_64);
+
+    *ilo = (aocl_int_t)ilo_64;
+    *ihi = (aocl_int_t)ihi_64;
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_sgebal(char *job, aocl_int64_t *n, real *a, aocl_int64_t *lda, aocl_int64_t *ilo,
+                        aocl_int64_t *ihi, real *scale, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("sgebal inputs: job %c ,n %" FLA_IS ",lda %" FLA_IS "", *job, *n, *lda);
     /* System generated locals */
-    integer a_dim1, a_offset, i__1, i__2;
+    aocl_int64_t a_dim1, a_offset, i__1, i__2;
     real r__1, r__2;
     /* Local variables */
     real c__, f, g;
-    integer i__, j, k, l;
+    aocl_int64_t i__, j, k, l;
     real r__, s, ca, ra;
-    integer ica, ira;
-    extern real snrm2_(integer *, real *, integer *);
-    extern logical lsame_(char *, char *, integer, integer);
-    extern /* Subroutine */
-        void
-        sscal_(integer *, real *, real *, integer *),
-        sswap_(integer *, real *, integer *, real *, integer *);
+    aocl_int64_t ica, ira;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     real sfmin1, sfmin2, sfmax1, sfmax2;
     extern real slamch_(char *);
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    extern integer isamax_(integer *, real *, integer *);
     extern logical sisnan_(real *);
     logical noconv;
     logical canswap;
@@ -233,7 +245,7 @@ void sgebal_(char *job, integer *n, real *a, integer *lda, integer *ilo, integer
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("SGEBAL", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("SGEBAL", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -285,9 +297,9 @@ void sgebal_(char *job, integer *n, real *a, integer *lda, integer *ilo, integer
                     scale[l] = (real)i__;
                     if(i__ != l)
                     {
-                        sswap_(&l, &a[i__ * a_dim1 + 1], &c__1, &a[l * a_dim1 + 1], &c__1);
+                        aocl_blas_sswap(&l, &a[i__ * a_dim1 + 1], &c__1, &a[l * a_dim1 + 1], &c__1);
                         i__1 = *n - k + 1;
-                        sswap_(&i__1, &a[i__ + k * a_dim1], lda, &a[l + k * a_dim1], lda);
+                        aocl_blas_sswap(&i__1, &a[i__ + k * a_dim1], lda, &a[l + k * a_dim1], lda);
                     }
                     noconv = TRUE_;
                     if(l == 1)
@@ -324,9 +336,9 @@ void sgebal_(char *job, integer *n, real *a, integer *lda, integer *ilo, integer
                     scale[k] = (real)j;
                     if(j != k)
                     {
-                        sswap_(&l, &a[j * a_dim1 + 1], &c__1, &a[k * a_dim1 + 1], &c__1);
+                        aocl_blas_sswap(&l, &a[j * a_dim1 + 1], &c__1, &a[k * a_dim1 + 1], &c__1);
                         i__2 = *n - k + 1;
-                        sswap_(&i__2, &a[j + k * a_dim1], lda, &a[k + k * a_dim1], lda);
+                        aocl_blas_sswap(&i__2, &a[j + k * a_dim1], lda, &a[k + k * a_dim1], lda);
                     }
                     noconv = TRUE_;
                     ++k;
@@ -362,13 +374,13 @@ void sgebal_(char *job, integer *n, real *a, integer *lda, integer *ilo, integer
         for(i__ = k; i__ <= i__1; ++i__)
         {
             i__2 = l - k + 1;
-            c__ = snrm2_(&i__2, &a[k + i__ * a_dim1], &c__1);
+            c__ = aocl_blas_snrm2(&i__2, &a[k + i__ * a_dim1], &c__1);
             i__2 = l - k + 1;
-            r__ = snrm2_(&i__2, &a[i__ + k * a_dim1], lda);
-            ica = isamax_(&l, &a[i__ * a_dim1 + 1], &c__1);
+            r__ = aocl_blas_snrm2(&i__2, &a[i__ + k * a_dim1], lda);
+            ica = aocl_blas_isamax(&l, &a[i__ * a_dim1 + 1], &c__1);
             ca = (r__1 = a[ica + i__ * a_dim1], f2c_abs(r__1));
             i__2 = *n - k + 1;
-            ira = isamax_(&i__2, &a[i__ + k * a_dim1], lda);
+            ira = aocl_blas_isamax(&i__2, &a[i__ + k * a_dim1], lda);
             ra = (r__1 = a[i__ + (ira + k - 1) * a_dim1], f2c_abs(r__1));
             /* Guard against zero C or R due to underflow. */
             if(c__ == 0.f || r__ == 0.f)
@@ -381,7 +393,7 @@ void sgebal_(char *job, integer *n, real *a, integer *lda, integer *ilo, integer
             {
                 *info = -3;
                 i__2 = -(*info);
-                xerbla_("SGEBAL", &i__2, (ftnlen)6);
+                aocl_blas_xerbla("SGEBAL", &i__2, (ftnlen)6);
                 AOCL_DTL_TRACE_LOG_EXIT
                 return;
             }
@@ -443,8 +455,8 @@ void sgebal_(char *job, integer *n, real *a, integer *lda, integer *ilo, integer
             scale[i__] *= f;
             noconv = TRUE_;
             i__2 = *n - k + 1;
-            sscal_(&i__2, &g, &a[i__ + k * a_dim1], lda);
-            sscal_(&l, &f, &a[i__ * a_dim1 + 1], &c__1);
+            aocl_blas_sscal(&i__2, &g, &a[i__ + k * a_dim1], lda);
+            aocl_blas_sscal(&l, &f, &a[i__ * a_dim1 + 1], &c__1);
         }
     }
     *ilo = k;

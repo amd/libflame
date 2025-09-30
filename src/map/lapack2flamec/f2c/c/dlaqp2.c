@@ -4,7 +4,7 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
+static aocl_int64_t c__1 = 1;
 /* > \brief \b DLAQP2 computes a QR factorization with column pivoting of the matrix block. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -144,42 +144,47 @@ if JPVT(i) = 0, */
 /* > \endhtmlonly */
 /* ===================================================================== */
 /* Subroutine */
-void dlaqp2_(integer *m, integer *n, integer *offset, doublereal *a, integer *lda, integer *jpvt,
-             doublereal *tau, doublereal *vn1, doublereal *vn2, doublereal *work)
+/** Generated wrapper function */
+void dlaqp2_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *offset, doublereal *a, aocl_int_t *lda,
+             aocl_int_t *jpvt, doublereal *tau, doublereal *vn1, doublereal *vn2, doublereal *work)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_dlaqp2(m, n, offset, a, lda, jpvt, tau, vn1, vn2, work);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t offset_64 = *offset;
+    aocl_int64_t lda_64 = *lda;
+
+    aocl_lapack_dlaqp2(&m_64, &n_64, &offset_64, a, &lda_64, jpvt, tau, vn1, vn2, work);
+#endif
+}
+
+void aocl_lapack_dlaqp2(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *offset, doublereal *a,
+                        aocl_int64_t *lda, aocl_int_t *jpvt, doublereal *tau, doublereal *vn1,
+                        doublereal *vn2, doublereal *work)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dlaqp2 inputs: m %" FLA_IS ", n %" FLA_IS ", offset %" FLA_IS
                       ", lda %" FLA_IS "",
                       *m, *n, *offset, *lda);
     /* System generated locals */
-    integer a_dim1, a_offset, i__1, i__2, i__3;
+    aocl_int64_t a_dim1, a_offset, i__1, i__2, i__3;
     doublereal d__1, d__2;
     /* Builtin functions */
     double sqrt(doublereal);
     /* Local variables */
-    integer i__, j, mn;
+    aocl_int64_t i__, j, mn;
     doublereal aii, vn1_j;
-    integer pvt;
+    aocl_int64_t pvt;
     doublereal temp;
     doublereal temp2, tol3z;
-    extern /* Subroutine */
-        void
-        dlarf_(char *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *,
-               integer *, doublereal *);
-    integer offpi, itemp;
-    extern /* Subroutine */
-        void
-        dswap_(integer *, doublereal *, integer *, doublereal *, integer *);
+    aocl_int64_t offpi, itemp;
     extern doublereal dlamch_(char *);
-    extern /* Subroutine */
-        void
-        dlarfg_(integer *, doublereal *, doublereal *, integer *, doublereal *);
-    extern integer idamax_(integer *, doublereal *, integer *);
-    extern integer fla_idamax(integer *, doublereal *, integer *);
+    extern integer fla_idamax(aocl_int64_t *, doublereal *, aocl_int64_t *);
 #if FLA_ENABLE_AMD_OPT
-    extern doublereal fla_dnrm2_blas_kernel(integer *, doublereal *, integer *);
+    extern doublereal fla_dnrm2_blas_kernel(aocl_int64_t *, doublereal *, aocl_int64_t *);
 #else
-    extern doublereal dnrm2_(integer *, doublereal *, integer *);
 #endif
     /* -- LAPACK auxiliary routine (version 3.5.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -230,17 +235,17 @@ void dlaqp2_(integer *m, integer *n, integer *offset, doublereal *a, integer *ld
         }
         else
         {
-            pvt = i__ - 1 + idamax_(&i__2, &vn1[i__], &c__1);
+            pvt = i__ - 1 + aocl_blas_idamax(&i__2, &vn1[i__], &c__1);
         }
 #else
-        pvt = i__ - 1 + idamax_(&i__2, &vn1[i__], &c__1);
+        pvt = i__ - 1 + aocl_blas_idamax(&i__2, &vn1[i__], &c__1);
 #endif
         if(pvt != i__)
         {
-            dswap_(m, &a[pvt * a_dim1 + 1], &c__1, &a[i__ * a_dim1 + 1], &c__1);
+            aocl_blas_dswap(m, &a[pvt * a_dim1 + 1], &c__1, &a[i__ * a_dim1 + 1], &c__1);
             itemp = jpvt[pvt];
             jpvt[pvt] = jpvt[i__];
-            jpvt[i__] = itemp;
+            jpvt[i__] = (aocl_int_t)(itemp);
             vn1[pvt] = vn1[i__];
             vn2[pvt] = vn2[i__];
         }
@@ -248,12 +253,13 @@ void dlaqp2_(integer *m, integer *n, integer *offset, doublereal *a, integer *ld
         if(offpi < *m)
         {
             i__2 = *m - offpi + 1;
-            dlarfg_(&i__2, &a[offpi + i__ * a_dim1], &a[offpi + 1 + i__ * a_dim1], &c__1,
-                    &tau[i__]);
+            aocl_lapack_dlarfg(&i__2, &a[offpi + i__ * a_dim1], &a[offpi + 1 + i__ * a_dim1], &c__1,
+                               &tau[i__]);
         }
         else
         {
-            dlarfg_(&c__1, &a[*m + i__ * a_dim1], &a[*m + i__ * a_dim1], &c__1, &tau[i__]);
+            aocl_lapack_dlarfg(&c__1, &a[*m + i__ * a_dim1], &a[*m + i__ * a_dim1], &c__1,
+                               &tau[i__]);
         }
         if(i__ < *n)
         {
@@ -262,8 +268,8 @@ void dlaqp2_(integer *m, integer *n, integer *offset, doublereal *a, integer *ld
             a[offpi + i__ * a_dim1] = 1.;
             i__2 = *m - offpi + 1;
             i__3 = *n - i__;
-            dlarf_("Left", &i__2, &i__3, &a[offpi + i__ * a_dim1], &c__1, &tau[i__],
-                   &a[offpi + (i__ + 1) * a_dim1], lda, &work[1]);
+            aocl_lapack_dlarf("Left", &i__2, &i__3, &a[offpi + i__ * a_dim1], &c__1, &tau[i__],
+                              &a[offpi + (i__ + 1) * a_dim1], lda, &work[1]);
             a[offpi + i__ * a_dim1] = aii;
         }
         /* Update partial column norms. */
@@ -290,7 +296,7 @@ void dlaqp2_(integer *m, integer *n, integer *offset, doublereal *a, integer *ld
 #if FLA_ENABLE_AMD_OPT
                         vn1_j = fla_dnrm2_blas_kernel(&i__3, &a[offpi + 1 + j * a_dim1], &c__1);
 #else
-                        vn1_j = dnrm2_(&i__3, &a[offpi + 1 + j * a_dim1], &c__1);
+                        vn1_j = aocl_blas_dnrm2(&i__3, &a[offpi + 1 + j * a_dim1], &c__1);
 #endif
                         vn2[j] = vn1_j;
                     }

@@ -4,7 +4,7 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
+static aocl_int64_t c__1 = 1;
 /* > \brief \b CPPTRS */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -107,8 +107,26 @@ static integer c__1 = 1;
 /* > \ingroup complexOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void cpptrs_(char *uplo, integer *n, integer *nrhs, complex *ap, complex *b, integer *ldb,
-             integer *info)
+/** Generated wrapper function */
+void cpptrs_(char *uplo, aocl_int_t *n, aocl_int_t *nrhs, scomplex *ap, scomplex *b, aocl_int_t *ldb,
+             aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_cpptrs(uplo, n, nrhs, ap, b, ldb, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t nrhs_64 = *nrhs;
+    aocl_int64_t ldb_64 = *ldb;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_cpptrs(uplo, &n_64, &nrhs_64, ap, b, &ldb_64, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_cpptrs(char *uplo, aocl_int64_t *n, aocl_int64_t *nrhs, scomplex *ap, scomplex *b,
+                        aocl_int64_t *ldb, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -122,15 +140,11 @@ void cpptrs_(char *uplo, integer *n, integer *nrhs, complex *ap, complex *b, int
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
-    integer b_dim1, b_offset, i__1;
+    aocl_int64_t b_dim1, b_offset, i__1;
     /* Local variables */
-    integer i__;
-    extern logical lsame_(char *, char *, integer, integer);
+    aocl_int64_t i__;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     logical upper;
-    extern /* Subroutine */
-        void
-        ctpsv_(char *, char *, char *, integer *, complex *, complex *, integer *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -177,7 +191,7 @@ void cpptrs_(char *uplo, integer *n, integer *nrhs, complex *ap, complex *b, int
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("CPPTRS", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("CPPTRS", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
@@ -194,10 +208,11 @@ void cpptrs_(char *uplo, integer *n, integer *nrhs, complex *ap, complex *b, int
         for(i__ = 1; i__ <= i__1; ++i__)
         {
             /* Solve U**H *X = B, overwriting B with X. */
-            ctpsv_("Upper", "Conjugate transpose", "Non-unit", n, &ap[1], &b[i__ * b_dim1 + 1],
-                   &c__1);
+            aocl_blas_ctpsv("Upper", "Conjugate transpose", "Non-unit", n, &ap[1],
+                            &b[i__ * b_dim1 + 1], &c__1);
             /* Solve U*X = B, overwriting B with X. */
-            ctpsv_("Upper", "No transpose", "Non-unit", n, &ap[1], &b[i__ * b_dim1 + 1], &c__1);
+            aocl_blas_ctpsv("Upper", "No transpose", "Non-unit", n, &ap[1], &b[i__ * b_dim1 + 1],
+                            &c__1);
             /* L10: */
         }
     }
@@ -208,10 +223,11 @@ void cpptrs_(char *uplo, integer *n, integer *nrhs, complex *ap, complex *b, int
         for(i__ = 1; i__ <= i__1; ++i__)
         {
             /* Solve L*Y = B, overwriting B with X. */
-            ctpsv_("Lower", "No transpose", "Non-unit", n, &ap[1], &b[i__ * b_dim1 + 1], &c__1);
+            aocl_blas_ctpsv("Lower", "No transpose", "Non-unit", n, &ap[1], &b[i__ * b_dim1 + 1],
+                            &c__1);
             /* Solve L**H *X = Y, overwriting B with X. */
-            ctpsv_("Lower", "Conjugate transpose", "Non-unit", n, &ap[1], &b[i__ * b_dim1 + 1],
-                   &c__1);
+            aocl_blas_ctpsv("Lower", "Conjugate transpose", "Non-unit", n, &ap[1],
+                            &b[i__ * b_dim1 + 1], &c__1);
             /* L20: */
         }
     }

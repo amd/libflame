@@ -175,36 +175,58 @@
 /* > \ingroup auxOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void dlasq3_(integer *i0, integer *n0, doublereal *z__, integer *pp, doublereal *dmin__,
-             doublereal *sigma, doublereal *desig, doublereal *qmax, integer *nfail, integer *iter,
-             integer *ndiv, logical *ieee, integer *ttype, doublereal *dmin1, doublereal *dmin2,
-             doublereal *dn, doublereal *dn1, doublereal *dn2, doublereal *g, doublereal *tau)
+/** Generated wrapper function */
+void dlasq3_(aocl_int_t *i0, aocl_int_t *n0, doublereal *z__, aocl_int_t *pp, doublereal *dmin__,
+             doublereal *sigma, doublereal *desig, doublereal *qmax, aocl_int_t *nfail,
+             aocl_int_t *iter, aocl_int_t *ndiv, logical *ieee, aocl_int_t *ttype,
+             doublereal *dmin1, doublereal *dmin2, doublereal *dn, doublereal *dn1, doublereal *dn2,
+             doublereal *g, doublereal *tau)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_dlasq3(i0, n0, z__, pp, dmin__, sigma, desig, qmax, nfail, iter, ndiv, ieee, ttype,
+                       dmin1, dmin2, dn, dn1, dn2, g, tau);
+#else
+    aocl_int64_t i0_64 = *i0;
+    aocl_int64_t n0_64 = *n0;
+    aocl_int64_t pp_64 = *pp;
+    aocl_int64_t nfail_64 = *nfail;
+    aocl_int64_t iter_64 = *iter;
+    aocl_int64_t ndiv_64 = *ndiv;
+    aocl_int64_t ttype_64 = *ttype;
+
+    aocl_lapack_dlasq3(&i0_64, &n0_64, z__, &pp_64, dmin__, sigma, desig, qmax, &nfail_64, &iter_64,
+                       &ndiv_64, ieee, &ttype_64, dmin1, dmin2, dn, dn1, dn2, g, tau);
+
+    *n0 = (aocl_int_t)n0_64;
+    *pp = (aocl_int_t)pp_64;
+    *nfail = (aocl_int_t)nfail_64;
+    *iter = (aocl_int_t)iter_64;
+    *ndiv = (aocl_int_t)ndiv_64;
+    *ttype = (aocl_int_t)ttype_64;
+#endif
+}
+
+void aocl_lapack_dlasq3(aocl_int64_t *i0, aocl_int64_t *n0, doublereal *z__, aocl_int64_t *pp,
+                        doublereal *dmin__, doublereal *sigma, doublereal *desig, doublereal *qmax,
+                        aocl_int64_t *nfail, aocl_int64_t *iter, aocl_int64_t *ndiv, logical *ieee,
+                        aocl_int64_t *ttype, doublereal *dmin1, doublereal *dmin2, doublereal *dn,
+                        doublereal *dn1, doublereal *dn2, doublereal *g, doublereal *tau)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dlasq3 inputs: i0 %" FLA_IS ", n0 %" FLA_IS ", pp %" FLA_IS
                       ", nfail %" FLA_IS ", iter %" FLA_IS ", ndiv %" FLA_IS ", ttype %" FLA_IS "",
                       *i0, *n0, *pp, *nfail, *iter, *ndiv, *ttype);
     /* System generated locals */
-    integer i__1;
+    aocl_int64_t i__1;
     doublereal d__1, d__2;
     /* Builtin functions */
     double sqrt(doublereal);
     /* Local variables */
     doublereal s, t;
-    integer j4, nn;
+    aocl_int64_t j4, nn;
     doublereal eps, tol;
-    integer n0in, ipn4;
+    aocl_int64_t n0in, ipn4;
     doublereal tol2, temp;
-    extern /* Subroutine */
-        void
-        dlasq4_(integer *, integer *, doublereal *, integer *, integer *, doublereal *,
-                doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *,
-                integer *, doublereal *),
-        dlasq5_(integer *, integer *, doublereal *, integer *, doublereal *, doublereal *,
-                doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *,
-                logical *, doublereal *),
-        dlasq6_(integer *, integer *, doublereal *, integer *, doublereal *, doublereal *,
-                doublereal *, doublereal *, doublereal *, doublereal *);
     extern doublereal dlamch_(char *);
     extern logical disnan_(doublereal *);
     /* -- LAPACK computational routine (version 3.7.0) -- */
@@ -350,10 +372,12 @@ L50:
         }
     }
     /* Choose a shift. */
-    dlasq4_(i0, n0, &z__[1], pp, &n0in, dmin__, dmin1, dmin2, dn, dn1, dn2, tau, ttype, g);
+    aocl_lapack_dlasq4(i0, n0, &z__[1], pp, &n0in, dmin__, dmin1, dmin2, dn, dn1, dn2, tau, ttype,
+                       g);
     /* Call dqds until DMIN > 0. */
 L70:
-    dlasq5_(i0, n0, &z__[1], pp, tau, sigma, dmin__, dmin1, dmin2, dn, dn1, dn2, ieee, &eps);
+    aocl_lapack_dlasq5(i0, n0, &z__[1], pp, tau, sigma, dmin__, dmin1, dmin2, dn, dn1, dn2, ieee,
+                       &eps);
     *ndiv += *n0 - *i0 + 2;
     ++(*iter);
     /* Check status. */
@@ -413,7 +437,7 @@ L70:
     }
     /* Risk of underflow. */
 L80:
-    dlasq6_(i0, n0, &z__[1], pp, dmin__, dmin1, dmin2, dn, dn1, dn2);
+    aocl_lapack_dlasq6(i0, n0, &z__[1], pp, dmin__, dmin1, dmin2, dn, dn1, dn2);
     *ndiv += *n0 - *i0 + 2;
     ++(*iter);
     *tau = 0.;

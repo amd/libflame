@@ -4,10 +4,10 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
-static integer c_n1 = -1;
-static integer c__3 = 3;
-static integer c__2 = 2;
+static aocl_int64_t c__1 = 1;
+static aocl_int64_t c_n1 = -1;
+static aocl_int64_t c__3 = 3;
+static aocl_int64_t c__2 = 2;
 static real c_b22 = -1.f;
 static real c_b23 = 1.f;
 /* > \brief \b SSYTRD */
@@ -199,29 +199,18 @@ v(i+2:n) is stored on exit in A(i+2:n,i), */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void ssytrd_fla(char *uplo, integer *n, real *a, integer *lda, real *d__, real *e, real *tau,
-                real *work, integer *lwork, integer *info)
+void ssytrd_fla(char *uplo, aocl_int64_t *n, real *a, aocl_int64_t *lda, real *d__, real *e,
+                real *tau, real *work, aocl_int64_t *lwork, aocl_int64_t *info)
 {
     /* System generated locals */
-    integer a_dim1, a_offset, i__1, i__2, i__3;
+    aocl_int64_t a_dim1, a_offset, i__1, i__2, i__3;
     /* Local variables */
-    integer i__, j, nb, kk, nx, iws;
-    extern logical lsame_(char *, char *, integer, integer);
-    integer nbmin, iinfo;
+    aocl_int64_t i__, j, nb, kk, nx, iws;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    aocl_int64_t nbmin, iinfo;
     logical upper;
-    extern /* Subroutine */
-        void
-        ssytd2_fla(char *, integer *, real *, integer *, real *, real *, real *, integer *),
-        ssyr2k_(char *, char *, integer *, integer *, real *, real *, integer *, real *, integer *,
-                real *, real *, integer *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
-    extern /* Subroutine */
-        void
-        slatrd_(char *, integer *, integer *, real *, integer *, real *, real *, real *, integer *);
-    integer ldwork, lwkopt;
+    aocl_int64_t ldwork, lwkopt;
     logical lquery;
-    extern real sroundup_lwork(integer *);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -274,14 +263,14 @@ void ssytrd_fla(char *uplo, integer *n, real *a, integer *lda, real *d__, real *
     if(*info == 0)
     {
         /* Determine the block size. */
-        nb = ilaenv_(&c__1, "SSYTRD", uplo, n, &c_n1, &c_n1, &c_n1);
+        nb = aocl_lapack_ilaenv(&c__1, "SSYTRD", uplo, n, &c_n1, &c_n1, &c_n1);
         lwkopt = *n * nb;
-        work[1] = sroundup_lwork(&lwkopt);
+        work[1] = aocl_lapack_sroundup_lwork(&lwkopt);
     }
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("SSYTRD", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("SSYTRD", &i__1, (ftnlen)6);
         return;
     }
     else if(lquery)
@@ -302,7 +291,7 @@ void ssytrd_fla(char *uplo, integer *n, real *a, integer *lda, real *d__, real *
         /* (last block is always handled by unblocked code). */
         /* Computing MAX */
         i__1 = nb;
-        i__2 = ilaenv_(&c__3, "SSYTRD", uplo, n, &c_n1, &c_n1, &c_n1); // , expr subst
+        i__2 = aocl_lapack_ilaenv(&c__3, "SSYTRD", uplo, n, &c_n1, &c_n1, &c_n1); // , expr subst
         nx = fla_max(i__1, i__2);
         if(nx < *n)
         {
@@ -317,7 +306,7 @@ void ssytrd_fla(char *uplo, integer *n, real *a, integer *lda, real *d__, real *
                 /* Computing MAX */
                 i__1 = *lwork / ldwork;
                 nb = fla_max(i__1, 1);
-                nbmin = ilaenv_(&c__2, "SSYTRD", uplo, n, &c_n1, &c_n1, &c_n1);
+                nbmin = aocl_lapack_ilaenv(&c__2, "SSYTRD", uplo, n, &c_n1, &c_n1, &c_n1);
                 if(nb < nbmin)
                 {
                     nx = *n;
@@ -346,12 +335,13 @@ void ssytrd_fla(char *uplo, integer *n, real *a, integer *lda, real *d__, real *
             /* matrix W which is needed to update the unreduced part of */
             /* the matrix */
             i__3 = i__ + nb - 1;
-            slatrd_(uplo, &i__3, &nb, &a[a_offset], lda, &e[1], &tau[1], &work[1], &ldwork);
+            aocl_lapack_slatrd(uplo, &i__3, &nb, &a[a_offset], lda, &e[1], &tau[1], &work[1],
+                               &ldwork);
             /* Update the unreduced submatrix A(1:i-1,1:i-1), using an */
             /* update of the form: A := A - V*W**T - W*V**T */
             i__3 = i__ - 1;
-            ssyr2k_(uplo, "No transpose", &i__3, &nb, &c_b22, &a[i__ * a_dim1 + 1], lda, &work[1],
-                    &ldwork, &c_b23, &a[a_offset], lda);
+            aocl_blas_ssyr2k(uplo, "No transpose", &i__3, &nb, &c_b22, &a[i__ * a_dim1 + 1], lda,
+                             &work[1], &ldwork, &c_b23, &a[a_offset], lda);
             /* Copy superdiagonal elements back into A, and diagonal */
             /* elements into D */
             i__3 = i__ + nb - 1;
@@ -377,13 +367,14 @@ void ssytrd_fla(char *uplo, integer *n, real *a, integer *lda, real *d__, real *
             /* matrix W which is needed to update the unreduced part of */
             /* the matrix */
             i__3 = *n - i__ + 1;
-            slatrd_(uplo, &i__3, &nb, &a[i__ + i__ * a_dim1], lda, &e[i__], &tau[i__], &work[1],
-                    &ldwork);
+            aocl_lapack_slatrd(uplo, &i__3, &nb, &a[i__ + i__ * a_dim1], lda, &e[i__], &tau[i__],
+                               &work[1], &ldwork);
             /* Update the unreduced submatrix A(i+ib:n,i+ib:n), using */
             /* an update of the form: A := A - V*W**T - W*V**T */
             i__3 = *n - i__ - nb + 1;
-            ssyr2k_(uplo, "No transpose", &i__3, &nb, &c_b22, &a[i__ + nb + i__ * a_dim1], lda,
-                    &work[nb + 1], &ldwork, &c_b23, &a[i__ + nb + (i__ + nb) * a_dim1], lda);
+            aocl_blas_ssyr2k(uplo, "No transpose", &i__3, &nb, &c_b22, &a[i__ + nb + i__ * a_dim1],
+                             lda, &work[nb + 1], &ldwork, &c_b23,
+                             &a[i__ + nb + (i__ + nb) * a_dim1], lda);
             /* Copy subdiagonal elements back into A, and diagonal */
             /* elements into D */
             i__3 = i__ + nb - 1;
@@ -399,7 +390,7 @@ void ssytrd_fla(char *uplo, integer *n, real *a, integer *lda, real *d__, real *
         i__1 = *n - i__ + 1;
         ssytd2_fla(uplo, &i__1, &a[i__ + i__ * a_dim1], lda, &d__[i__], &e[i__], &tau[i__], &iinfo);
     }
-    work[1] = sroundup_lwork(&lwkopt);
+    work[1] = aocl_lapack_sroundup_lwork(&lwkopt);
     return;
     /* End of SSYTRD */
 }

@@ -19,17 +19,17 @@
 FLA_Error REF_SPDinv( FLA_Trans trans, FLA_Obj C );
 
 void time_SPDinv(
-                integer param_combo, integer type, integer nrepeats, integer m,
+                aocl_int64_t param_combo, aocl_int64_t type, aocl_int64_t nrepeats, aocl_int64_t m,
                 FLA_Obj C, FLA_Obj C_ref,
                 double *dtime, double *diff, double *gflops );
 
 
 void time_SPDinv(
-                integer param_combo, integer type, integer nrepeats, integer m,
+                aocl_int64_t param_combo, aocl_int64_t type, aocl_int64_t nrepeats, aocl_int64_t m,
                 FLA_Obj C, FLA_Obj C_ref,
                 double *dtime, double *diff, double *gflops )
 {
-  integer
+  aocl_int64_t
     irep;
 
   double

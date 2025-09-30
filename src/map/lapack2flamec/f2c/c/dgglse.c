@@ -182,9 +182,33 @@ the least squares solution could not */
 /* > \ingroup doubleOTHERsolve */
 /* ===================================================================== */
 /* Subroutine */
-void dgglse_(integer *m, integer *n, integer *p, doublereal *a, integer *lda, doublereal *b,
-             integer *ldb, doublereal *c__, doublereal *d__, doublereal *x, doublereal *work,
-             integer *lwork, integer *info)
+/** Generated wrapper function */
+void dgglse_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *p, doublereal *a, aocl_int_t *lda,
+             doublereal *b, aocl_int_t *ldb, doublereal *c__, doublereal *d__, doublereal *x,
+             doublereal *work, aocl_int_t *lwork, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_dgglse(m, n, p, a, lda, b, ldb, c__, d__, x, work, lwork, info);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t p_64 = *p;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t ldb_64 = *ldb;
+    aocl_int64_t lwork_64 = *lwork;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_dgglse(&m_64, &n_64, &p_64, a, &lda_64, b, &ldb_64, c__, d__, x, work, &lwork_64,
+                       &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_dgglse(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *p, doublereal *a,
+                        aocl_int64_t *lda, doublereal *b, aocl_int64_t *ldb, doublereal *c__,
+                        doublereal *d__, doublereal *x, doublereal *work, aocl_int64_t *lwork,
+                        aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dgglse inputs: m %" FLA_IS ", n %" FLA_IS ", p %" FLA_IS ", lda %" FLA_IS
@@ -193,31 +217,10 @@ void dgglse_(integer *m, integer *n, integer *p, doublereal *a, integer *lda, do
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, b_dim1, b_offset, i__1, i__2;
     /* Local variables */
-    integer nb, mn, nr, nb1, nb2, nb3, nb4, lopt;
-    extern /* Subroutine */
-        void
-        dgemv_(char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *,
-               integer *, doublereal *, doublereal *, integer *),
-        dcopy_(integer *, doublereal *, integer *, doublereal *, integer *),
-        daxpy_(integer *, doublereal *, doublereal *, integer *, doublereal *, integer *),
-        dtrmv_(char *, char *, char *, integer *, doublereal *, integer *, doublereal *, integer *),
-        dggrqf_(integer *, integer *, integer *, doublereal *, integer *, doublereal *,
-                doublereal *, integer *, doublereal *, doublereal *, integer *, integer *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
-    integer lwkmin;
-    extern /* Subroutine */
-        void
-        dormqr_(char *, char *, integer *, integer *, integer *, doublereal *, integer *,
-                doublereal *, doublereal *, integer *, doublereal *, integer *, integer *),
-        dormrq_(char *, char *, integer *, integer *, integer *, doublereal *, integer *,
-                doublereal *, doublereal *, integer *, doublereal *, integer *, integer *);
-    integer lwkopt;
+    aocl_int64_t nb, mn, nr, nb1, nb2, nb3, nb4, lopt;
+    aocl_int64_t lwkmin;
+    aocl_int64_t lwkopt;
     logical lquery;
-    extern /* Subroutine */
-        void
-        dtrtrs_(char *, char *, char *, integer *, integer *, doublereal *, integer *, doublereal *,
-                integer *, integer *);
     /* -- LAPACK driver routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -304,7 +307,7 @@ void dgglse_(integer *m, integer *n, integer *p, doublereal *a, integer *lda, do
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("DGGLSE", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("DGGLSE", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -326,15 +329,15 @@ void dgglse_(integer *m, integer *n, integer *p, doublereal *a, integer *lda, do
     /* where T12 and R11 are upper triangular, and Q and Z are */
     /* orthogonal. */
     i__1 = *lwork - *p - mn;
-    dggrqf_(p, m, n, &b[b_offset], ldb, &work[1], &a[a_offset], lda, &work[*p + 1],
-            &work[*p + mn + 1], &i__1, info);
+    aocl_lapack_dggrqf(p, m, n, &b[b_offset], ldb, &work[1], &a[a_offset], lda, &work[*p + 1],
+                       &work[*p + mn + 1], &i__1, info);
     lopt = (integer)work[*p + mn + 1];
     /* Update c = Z**T *c = ( c1 ) N-P */
     /* ( c2 ) M+P-N */
     i__1 = fla_max(1, *m);
     i__2 = *lwork - *p - mn;
-    dormqr_("Left", "Transpose", m, &c__1, &mn, &a[a_offset], lda, &work[*p + 1], &c__[1], &i__1,
-            &work[*p + mn + 1], &i__2, info);
+    aocl_lapack_dormqr("Left", "Transpose", m, &c__1, &mn, &a[a_offset], lda, &work[*p + 1],
+                       &c__[1], &i__1, &work[*p + mn + 1], &i__2, info);
     /* Computing MAX */
     i__1 = lopt;
     i__2 = (integer)work[*p + mn + 1]; // , expr subst
@@ -342,8 +345,8 @@ void dgglse_(integer *m, integer *n, integer *p, doublereal *a, integer *lda, do
     /* Solve T12*x2 = d for x2 */
     if(*p > 0)
     {
-        dtrtrs_("Upper", "No transpose", "Non-unit", p, &c__1, &b[(*n - *p + 1) * b_dim1 + 1], ldb,
-                &d__[1], p, info);
+        aocl_lapack_dtrtrs("Upper", "No transpose", "Non-unit", p, &c__1,
+                           &b[(*n - *p + 1) * b_dim1 + 1], ldb, &d__[1], p, info);
         if(*info > 0)
         {
             *info = 1;
@@ -354,16 +357,16 @@ void dgglse_(integer *m, integer *n, integer *p, doublereal *a, integer *lda, do
         aocl_blas_dcopy(p, &d__[1], &c__1, &x[*n - *p + 1], &c__1);
         /* Update c1 */
         i__1 = *n - *p;
-        dgemv_("No transpose", &i__1, p, &c_b31, &a[(*n - *p + 1) * a_dim1 + 1], lda, &d__[1],
-               &c__1, &c_b33, &c__[1], &c__1);
+        aocl_blas_dgemv("No transpose", &i__1, p, &c_b31, &a[(*n - *p + 1) * a_dim1 + 1], lda,
+                        &d__[1], &c__1, &c_b33, &c__[1], &c__1);
     }
     /* Solve R11*x1 = c1 for x1 */
     if(*n > *p)
     {
         i__1 = *n - *p;
         i__2 = *n - *p;
-        dtrtrs_("Upper", "No transpose", "Non-unit", &i__1, &c__1, &a[a_offset], lda, &c__[1],
-                &i__2, info);
+        aocl_lapack_dtrtrs("Upper", "No transpose", "Non-unit", &i__1, &c__1, &a[a_offset], lda,
+                           &c__[1], &i__2, info);
         if(*info > 0)
         {
             *info = 2;
@@ -381,8 +384,8 @@ void dgglse_(integer *m, integer *n, integer *p, doublereal *a, integer *lda, do
         if(nr > 0)
         {
             i__1 = *n - *m;
-            dgemv_("No transpose", &nr, &i__1, &c_b31, &a[*n - *p + 1 + (*m + 1) * a_dim1], lda,
-                   &d__[nr + 1], &c__1, &c_b33, &c__[*n - *p + 1], &c__1);
+            aocl_blas_dgemv("No transpose", &nr, &i__1, &c_b31, &a[*n - *p + 1 + (*m + 1) * a_dim1],
+                            lda, &d__[nr + 1], &c__1, &c_b33, &c__[*n - *p + 1], &c__1);
         }
     }
     else
@@ -391,14 +394,14 @@ void dgglse_(integer *m, integer *n, integer *p, doublereal *a, integer *lda, do
     }
     if(nr > 0)
     {
-        dtrmv_("Upper", "No transpose", "Non unit", &nr, &a[*n - *p + 1 + (*n - *p + 1) * a_dim1],
-               lda, &d__[1], &c__1);
-        daxpy_(&nr, &c_b31, &d__[1], &c__1, &c__[*n - *p + 1], &c__1);
+        aocl_blas_dtrmv("Upper", "No transpose", "Non unit", &nr,
+                        &a[*n - *p + 1 + (*n - *p + 1) * a_dim1], lda, &d__[1], &c__1);
+        aocl_blas_daxpy(&nr, &c_b31, &d__[1], &c__1, &c__[*n - *p + 1], &c__1);
     }
     /* Backward transformation x = Q**T*x */
     i__1 = *lwork - *p - mn;
-    dormrq_("Left", "Transpose", n, &c__1, p, &b[b_offset], ldb, &work[1], &x[1], n,
-            &work[*p + mn + 1], &i__1, info);
+    aocl_lapack_dormrq("Left", "Transpose", n, &c__1, p, &b[b_offset], ldb, &work[1], &x[1], n,
+                       &work[*p + mn + 1], &i__1, info);
     /* Computing MAX */
     i__1 = lopt;
     i__2 = (integer)work[*p + mn + 1]; // , expr subst

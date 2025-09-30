@@ -5,7 +5,7 @@
  libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static real c_b6 = -1.f;
-static integer c__1 = 1;
+static aocl_int64_t c__1 = 1;
 static real c_b8 = 1.f;
 static real c_b22 = 0.f;
 /* > \brief \b SLASYF_AA */
@@ -144,32 +144,37 @@ static real c_b22 = 0.f;
 /* > \ingroup realSYcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void slasyf_aa_(char *uplo, integer *j1, integer *m, integer *nb, real *a, integer *lda,
-                integer *ipiv, real *h__, integer *ldh, real *work)
+/** Generated wrapper function */
+void slasyf_aa_(char *uplo, aocl_int_t *j1, aocl_int_t *m, aocl_int_t *nb, real *a, aocl_int_t *lda,
+                aocl_int_t *ipiv, real *h__, aocl_int_t *ldh, real *work)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_slasyf_aa(uplo, j1, m, nb, a, lda, ipiv, h__, ldh, work);
+#else
+    aocl_int64_t j1_64 = *j1;
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t nb_64 = *nb;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t ldh_64 = *ldh;
+
+    aocl_lapack_slasyf_aa(uplo, &j1_64, &m_64, &nb_64, a, &lda_64, ipiv, h__, &ldh_64, work);
+#endif
+}
+
+void aocl_lapack_slasyf_aa(char *uplo, aocl_int64_t *j1, aocl_int64_t *m, aocl_int64_t *nb, real *a,
+                           aocl_int64_t *lda, aocl_int_t *ipiv, real *h__, aocl_int64_t *ldh,
+                           real *work)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF(
-             "slasyf_aa inputs: uplo %c, j1 %" FLA_IS ", m %" FLA_IS ", nb %" FLA_IS
-             ", lda %" FLA_IS ", ldh %" FLA_IS "",
-             *uplo, *j1, *m, *nb, *lda, *ldh);
+    AOCL_DTL_SNPRINTF("slasyf_aa inputs: uplo %c, j1 %" FLA_IS ", m %" FLA_IS ", nb %" FLA_IS
+                      ", lda %" FLA_IS ", ldh %" FLA_IS "",
+                      *uplo, *j1, *m, *nb, *lda, *ldh);
     /* System generated locals */
-    integer a_dim1, a_offset, h_dim1, h_offset, i__1;
+    aocl_int64_t a_dim1, a_offset, h_dim1, h_offset, i__1;
     /* Local variables */
-    integer j, k, i1, k1, i2, mj;
+    aocl_int64_t j, k, i1, k1, i2, mj;
     real piv, alpha;
-    extern logical lsame_(char *, char *, integer, integer);
-    extern /* Subroutine */
-        void
-        sscal_(integer *, real *, real *, integer *),
-        sgemv_(char *, integer *, integer *, real *, real *, integer *, real *, integer *, real *,
-               real *, integer *),
-        scopy_(integer *, real *, integer *, real *, integer *),
-        sswap_(integer *, real *, integer *, real *, integer *),
-        saxpy_(integer *, real *, real *, integer *, real *, integer *);
-    extern integer isamax_(integer *, real *, integer *);
-    extern /* Subroutine */
-        void
-        slaset_(char *, integer *, integer *, real *, real *, real *, integer *);
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     /* -- LAPACK computational routine (version 3.8.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -237,17 +242,17 @@ void slasyf_aa_(char *uplo, integer *j1, integer *m, integer *nb, real *a, integ
             /* > for the rest of the columns, K is J+1, skipping only the */
             /* first column */
             i__1 = j - k1;
-            sgemv_("No transpose", &mj, &i__1, &c_b6, &h__[j + k1 * h_dim1], ldh,
-                   &a[j * a_dim1 + 1], &c__1, &c_b8, &h__[j + j * h_dim1], &c__1);
+            aocl_blas_sgemv("No transpose", &mj, &i__1, &c_b6, &h__[j + k1 * h_dim1], ldh,
+                            &a[j * a_dim1 + 1], &c__1, &c_b8, &h__[j + j * h_dim1], &c__1);
         }
         /* Copy H(i:M, i) into WORK */
-        scopy_(&mj, &h__[j + j * h_dim1], &c__1, &work[1], &c__1);
+        aocl_blas_scopy(&mj, &h__[j + j * h_dim1], &c__1, &work[1], &c__1);
         if(j > k1)
         {
             /* Compute WORK := WORK - L(J-1, J:M) * T(J-1,J), */
             /* where A(J-1, J) stores T(J-1, J) and A(J-2, J:M) stores U(J-1, J:M) */
             alpha = -a[k - 1 + j * a_dim1];
-            saxpy_(&mj, &alpha, &a[k - 2 + j * a_dim1], lda, &work[1], &c__1);
+            aocl_blas_saxpy(&mj, &alpha, &a[k - 2 + j * a_dim1], lda, &work[1], &c__1);
         }
         /* Set A(J, J) = T(J, J) */
         a[k + j * a_dim1] = work[1];
@@ -259,11 +264,11 @@ void slasyf_aa_(char *uplo, integer *j1, integer *m, integer *nb, real *a, integ
             {
                 alpha = -a[k + j * a_dim1];
                 i__1 = *m - j;
-                saxpy_(&i__1, &alpha, &a[k - 1 + (j + 1) * a_dim1], lda, &work[2], &c__1);
+                aocl_blas_saxpy(&i__1, &alpha, &a[k - 1 + (j + 1) * a_dim1], lda, &work[2], &c__1);
             }
             /* Find fla_max(|WORK(2:M)|) */
             i__1 = *m - j;
-            i2 = isamax_(&i__1, &work[2], &c__1) + 1;
+            i2 = aocl_blas_isamax(&i__1, &work[2], &c__1) + 1;
             piv = work[i2];
             /* Apply symmetric pivot */
             if(i2 != 2 && piv != 0.f)
@@ -276,14 +281,14 @@ void slasyf_aa_(char *uplo, integer *j1, integer *m, integer *nb, real *a, integ
                 i1 = i1 + j - 1;
                 i2 = i2 + j - 1;
                 i__1 = i2 - i1 - 1;
-                sswap_(&i__1, &a[*j1 + i1 - 1 + (i1 + 1) * a_dim1], lda, &a[*j1 + i1 + i2 * a_dim1],
-                       &c__1);
+                aocl_blas_sswap(&i__1, &a[*j1 + i1 - 1 + (i1 + 1) * a_dim1], lda,
+                                &a[*j1 + i1 + i2 * a_dim1], &c__1);
                 /* Swap A(I1, I2+1:M) with A(I2, I2+1:M) */
                 if(i2 < *m)
                 {
                     i__1 = *m - i2;
-                    sswap_(&i__1, &a[*j1 + i1 - 1 + (i2 + 1) * a_dim1], lda,
-                           &a[*j1 + i2 - 1 + (i2 + 1) * a_dim1], lda);
+                    aocl_blas_sswap(&i__1, &a[*j1 + i1 - 1 + (i2 + 1) * a_dim1], lda,
+                                    &a[*j1 + i2 - 1 + (i2 + 1) * a_dim1], lda);
                 }
                 /* Swap A(I1, I1) with A(I2,I2) */
                 piv = a[i1 + *j1 - 1 + i1 * a_dim1];
@@ -291,19 +296,19 @@ void slasyf_aa_(char *uplo, integer *j1, integer *m, integer *nb, real *a, integ
                 a[*j1 + i2 - 1 + i2 * a_dim1] = piv;
                 /* Swap H(I1, 1:J1) with H(I2, 1:J1) */
                 i__1 = i1 - 1;
-                sswap_(&i__1, &h__[i1 + h_dim1], ldh, &h__[i2 + h_dim1], ldh);
-                ipiv[i1] = i2;
+                aocl_blas_sswap(&i__1, &h__[i1 + h_dim1], ldh, &h__[i2 + h_dim1], ldh);
+                ipiv[i1] = (aocl_int_t)(i2);
                 if(i1 > k1 - 1)
                 {
                     /* Swap L(1:I1-1, I1) with L(1:I1-1, I2), */
                     /* skipping the first column */
                     i__1 = i1 - k1 + 1;
-                    sswap_(&i__1, &a[i1 * a_dim1 + 1], &c__1, &a[i2 * a_dim1 + 1], &c__1);
+                    aocl_blas_sswap(&i__1, &a[i1 * a_dim1 + 1], &c__1, &a[i2 * a_dim1 + 1], &c__1);
                 }
             }
             else
             {
-                ipiv[j + 1] = j + 1;
+                ipiv[j + 1] = (aocl_int_t)(j + 1);
             }
             /* Set A(J, J+1) = T(J, J+1) */
             a[k + (j + 1) * a_dim1] = work[2];
@@ -311,8 +316,8 @@ void slasyf_aa_(char *uplo, integer *j1, integer *m, integer *nb, real *a, integ
             {
                 /* Copy A(J+1:M, J+1) into H(J:M, J), */
                 i__1 = *m - j;
-                scopy_(&i__1, &a[k + 1 + (j + 1) * a_dim1], lda, &h__[j + 1 + (j + 1) * h_dim1],
-                       &c__1);
+                aocl_blas_scopy(&i__1, &a[k + 1 + (j + 1) * a_dim1], lda,
+                                &h__[j + 1 + (j + 1) * h_dim1], &c__1);
             }
             /* Compute L(J+2, J+1) = WORK( 3:M ) / T(J, J+1), */
             /* where A(J, J+1) = T(J, J+1) and A(J+2:M, J) = L(J+2:M, J+1) */
@@ -322,14 +327,15 @@ void slasyf_aa_(char *uplo, integer *j1, integer *m, integer *nb, real *a, integ
                 {
                     alpha = 1.f / a[k + (j + 1) * a_dim1];
                     i__1 = *m - j - 1;
-                    scopy_(&i__1, &work[3], &c__1, &a[k + (j + 2) * a_dim1], lda);
+                    aocl_blas_scopy(&i__1, &work[3], &c__1, &a[k + (j + 2) * a_dim1], lda);
                     i__1 = *m - j - 1;
-                    sscal_(&i__1, &alpha, &a[k + (j + 2) * a_dim1], lda);
+                    aocl_blas_sscal(&i__1, &alpha, &a[k + (j + 2) * a_dim1], lda);
                 }
                 else
                 {
                     i__1 = *m - j - 1;
-                    slaset_("Full", &c__1, &i__1, &c_b22, &c_b22, &a[k + (j + 2) * a_dim1], lda);
+                    aocl_lapack_slaset("Full", &c__1, &i__1, &c_b22, &c_b22,
+                                       &a[k + (j + 2) * a_dim1], lda);
                 }
             }
         }
@@ -371,17 +377,17 @@ void slasyf_aa_(char *uplo, integer *j1, integer *m, integer *nb, real *a, integ
             /* > for the rest of the columns, K is J+1, skipping only the */
             /* first column */
             i__1 = j - k1;
-            sgemv_("No transpose", &mj, &i__1, &c_b6, &h__[j + k1 * h_dim1], ldh, &a[j + a_dim1],
-                   lda, &c_b8, &h__[j + j * h_dim1], &c__1);
+            aocl_blas_sgemv("No transpose", &mj, &i__1, &c_b6, &h__[j + k1 * h_dim1], ldh,
+                            &a[j + a_dim1], lda, &c_b8, &h__[j + j * h_dim1], &c__1);
         }
         /* Copy H(J:M, J) into WORK */
-        scopy_(&mj, &h__[j + j * h_dim1], &c__1, &work[1], &c__1);
+        aocl_blas_scopy(&mj, &h__[j + j * h_dim1], &c__1, &work[1], &c__1);
         if(j > k1)
         {
             /* Compute WORK := WORK - L(J:M, J-1) * T(J-1,J), */
             /* where A(J-1, J) = T(J-1, J) and A(J, J-2) = L(J, J-1) */
             alpha = -a[j + (k - 1) * a_dim1];
-            saxpy_(&mj, &alpha, &a[j + (k - 2) * a_dim1], &c__1, &work[1], &c__1);
+            aocl_blas_saxpy(&mj, &alpha, &a[j + (k - 2) * a_dim1], &c__1, &work[1], &c__1);
         }
         /* Set A(J, J) = T(J, J) */
         a[j + k * a_dim1] = work[1];
@@ -393,11 +399,12 @@ void slasyf_aa_(char *uplo, integer *j1, integer *m, integer *nb, real *a, integ
             {
                 alpha = -a[j + k * a_dim1];
                 i__1 = *m - j;
-                saxpy_(&i__1, &alpha, &a[j + 1 + (k - 1) * a_dim1], &c__1, &work[2], &c__1);
+                aocl_blas_saxpy(&i__1, &alpha, &a[j + 1 + (k - 1) * a_dim1], &c__1, &work[2],
+                                &c__1);
             }
             /* Find fla_max(|WORK(2:M)|) */
             i__1 = *m - j;
-            i2 = isamax_(&i__1, &work[2], &c__1) + 1;
+            i2 = aocl_blas_isamax(&i__1, &work[2], &c__1) + 1;
             piv = work[i2];
             /* Apply symmetric pivot */
             if(i2 != 2 && piv != 0.f)
@@ -410,14 +417,14 @@ void slasyf_aa_(char *uplo, integer *j1, integer *m, integer *nb, real *a, integ
                 i1 = i1 + j - 1;
                 i2 = i2 + j - 1;
                 i__1 = i2 - i1 - 1;
-                sswap_(&i__1, &a[i1 + 1 + (*j1 + i1 - 1) * a_dim1], &c__1,
-                       &a[i2 + (*j1 + i1) * a_dim1], lda);
+                aocl_blas_sswap(&i__1, &a[i1 + 1 + (*j1 + i1 - 1) * a_dim1], &c__1,
+                                &a[i2 + (*j1 + i1) * a_dim1], lda);
                 /* Swap A(I2+1:M, I1) with A(I2+1:M, I2) */
                 if(i2 < *m)
                 {
                     i__1 = *m - i2;
-                    sswap_(&i__1, &a[i2 + 1 + (*j1 + i1 - 1) * a_dim1], &c__1,
-                           &a[i2 + 1 + (*j1 + i2 - 1) * a_dim1], &c__1);
+                    aocl_blas_sswap(&i__1, &a[i2 + 1 + (*j1 + i1 - 1) * a_dim1], &c__1,
+                                    &a[i2 + 1 + (*j1 + i2 - 1) * a_dim1], &c__1);
                 }
                 /* Swap A(I1, I1) with A(I2, I2) */
                 piv = a[i1 + (*j1 + i1 - 1) * a_dim1];
@@ -425,19 +432,19 @@ void slasyf_aa_(char *uplo, integer *j1, integer *m, integer *nb, real *a, integ
                 a[i2 + (*j1 + i2 - 1) * a_dim1] = piv;
                 /* Swap H(I1, I1:J1) with H(I2, I2:J1) */
                 i__1 = i1 - 1;
-                sswap_(&i__1, &h__[i1 + h_dim1], ldh, &h__[i2 + h_dim1], ldh);
-                ipiv[i1] = i2;
+                aocl_blas_sswap(&i__1, &h__[i1 + h_dim1], ldh, &h__[i2 + h_dim1], ldh);
+                ipiv[i1] = (aocl_int_t)(i2);
                 if(i1 > k1 - 1)
                 {
                     /* Swap L(1:I1-1, I1) with L(1:I1-1, I2), */
                     /* skipping the first column */
                     i__1 = i1 - k1 + 1;
-                    sswap_(&i__1, &a[i1 + a_dim1], lda, &a[i2 + a_dim1], lda);
+                    aocl_blas_sswap(&i__1, &a[i1 + a_dim1], lda, &a[i2 + a_dim1], lda);
                 }
             }
             else
             {
-                ipiv[j + 1] = j + 1;
+                ipiv[j + 1] = (aocl_int_t)(j + 1);
             }
             /* Set A(J+1, J) = T(J+1, J) */
             a[j + 1 + k * a_dim1] = work[2];
@@ -445,8 +452,8 @@ void slasyf_aa_(char *uplo, integer *j1, integer *m, integer *nb, real *a, integ
             {
                 /* Copy A(J+1:M, J+1) into H(J+1:M, J), */
                 i__1 = *m - j;
-                scopy_(&i__1, &a[j + 1 + (k + 1) * a_dim1], &c__1, &h__[j + 1 + (j + 1) * h_dim1],
-                       &c__1);
+                aocl_blas_scopy(&i__1, &a[j + 1 + (k + 1) * a_dim1], &c__1,
+                                &h__[j + 1 + (j + 1) * h_dim1], &c__1);
             }
             /* Compute L(J+2, J+1) = WORK( 3:M ) / T(J, J+1), */
             /* where A(J, J+1) = T(J, J+1) and A(J+2:M, J) = L(J+2:M, J+1) */
@@ -456,14 +463,15 @@ void slasyf_aa_(char *uplo, integer *j1, integer *m, integer *nb, real *a, integ
                 {
                     alpha = 1.f / a[j + 1 + k * a_dim1];
                     i__1 = *m - j - 1;
-                    scopy_(&i__1, &work[3], &c__1, &a[j + 2 + k * a_dim1], &c__1);
+                    aocl_blas_scopy(&i__1, &work[3], &c__1, &a[j + 2 + k * a_dim1], &c__1);
                     i__1 = *m - j - 1;
-                    sscal_(&i__1, &alpha, &a[j + 2 + k * a_dim1], &c__1);
+                    aocl_blas_sscal(&i__1, &alpha, &a[j + 2 + k * a_dim1], &c__1);
                 }
                 else
                 {
                     i__1 = *m - j - 1;
-                    slaset_("Full", &i__1, &c__1, &c_b22, &c_b22, &a[j + 2 + k * a_dim1], lda);
+                    aocl_lapack_slaset("Full", &i__1, &c__1, &c_b22, &c_b22, &a[j + 2 + k * a_dim1],
+                                       lda);
                 }
             }
         }

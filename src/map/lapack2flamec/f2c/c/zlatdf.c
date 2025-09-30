@@ -4,9 +4,9 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static doublecomplex c_b1 = {1., 0.};
-static integer c__1 = 1;
-static integer c_n1 = -1;
+static dcomplex c_b1 = {{1.}, {0.}};
+static aocl_int64_t c__1 = 1;
+static aocl_int64_t c_n1 = -1;
 static doublereal c_b24 = 1.;
 /* > \brief \b ZLATDF uses the LU factorization of the n-by-n matrix computed by sgetc2 and computes
  * a contrib ution to the reciprocal Dif-estimate. */
@@ -168,8 +168,25 @@ for 1 <= j <= N, column j of the */
 /* > 1995. */
 /* ===================================================================== */
 /* Subroutine */
-void zlatdf_(integer *ijob, integer *n, doublecomplex *z__, integer *ldz, doublecomplex *rhs,
-             doublereal *rdsum, doublereal *rdscal, integer *ipiv, integer *jpiv)
+/** Generated wrapper function */
+void zlatdf_(aocl_int_t *ijob, aocl_int_t *n, dcomplex *z__, aocl_int_t *ldz,
+             dcomplex *rhs, doublereal *rdsum, doublereal *rdscal, aocl_int_t *ipiv,
+             aocl_int_t *jpiv)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_zlatdf(ijob, n, z__, ldz, rhs, rdsum, rdscal, ipiv, jpiv);
+#else
+    aocl_int64_t ijob_64 = *ijob;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t ldz_64 = *ldz;
+
+    aocl_lapack_zlatdf(&ijob_64, &n_64, z__, &ldz_64, rhs, rdsum, rdscal, ipiv, jpiv);
+#endif
+}
+
+void aocl_lapack_zlatdf(aocl_int64_t *ijob, aocl_int64_t *n, dcomplex *z__, aocl_int64_t *ldz,
+                        dcomplex *rhs, doublereal *rdsum, doublereal *rdscal, aocl_int_t *ipiv,
+                        aocl_int_t *jpiv)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zlatdf inputs: ijob %" FLA_IS ", n %" FLA_IS ", ldz %" FLA_IS
@@ -179,40 +196,18 @@ void zlatdf_(integer *ijob, integer *n, doublecomplex *z__, integer *ldz, double
     aocl_int64_t z_dim1, z_offset, i__1, i__2, i__3, i__4, i__5;
     dcomplex z__1, z__2, z__3;
     /* Builtin functions */
-    void z_div(doublecomplex *, doublecomplex *, doublecomplex *);
-    double z_abs(doublecomplex *);
-    void z_sqrt(doublecomplex *, doublecomplex *);
+    void z_div(dcomplex *, dcomplex *, dcomplex *);
+    double z_abs(dcomplex *);
+    void z_sqrt(dcomplex *, dcomplex *);
     /* Local variables */
     aocl_int64_t i__, j, k;
     dcomplex bm, bp, xm[2], xp[2];
     aocl_int64_t info;
     dcomplex temp, work[8];
     doublereal scale;
-    extern /* Subroutine */
-        void
-        zscal_(integer *, doublecomplex *, doublecomplex *, integer *);
-    doublecomplex pmone;
-    extern /* Double Complex */
-        VOID
-        zdotc_f2c_(doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *,
-                   integer *);
+    dcomplex pmone;
     doublereal rtemp, sminu, rwork[2];
-    extern /* Subroutine */
-        void
-        zcopy_(integer *, doublecomplex *, integer *, doublecomplex *, integer *);
     doublereal splus;
-    extern /* Subroutine */
-        void
-        zaxpy_(integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *),
-        zgesc2_(integer *, doublecomplex *, integer *, doublecomplex *, integer *, integer *,
-                doublereal *),
-        zgecon_(char *, integer *, doublecomplex *, integer *, doublereal *, doublereal *,
-                doublecomplex *, doublereal *, integer *);
-    extern doublereal dzasum_(integer *, doublecomplex *, integer *);
-    extern /* Subroutine */
-        void
-        zlassq_(integer *, doublecomplex *, integer *, doublereal *, doublereal *),
-        zlaswp_(integer *, doublecomplex *, integer *, integer *, integer *, integer *, integer *);
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -270,12 +265,12 @@ void zlatdf_(integer *ijob, integer *n, doublecomplex *z__, integer *ldz, double
             /* Lockahead for L- part RHS(1:N-1) = +-1 */
             /* SPLUS and SMIN computed more efficiently than in BSOLVE[1]. */
             i__2 = *n - j;
-            zdotc_f2c_(&z__1, &i__2, &z__[j + 1 + j * z_dim1], &c__1, &z__[j + 1 + j * z_dim1],
+            aocl_lapack_zdotc_f2c(&z__1, &i__2, &z__[j + 1 + j * z_dim1], &c__1, &z__[j + 1 + j * z_dim1],
                        &c__1);
             splus += z__1.r;
             i__2 = *n - j;
             aocl_lapack_zdotc_f2c(&z__1, &i__2, &z__[j + 1 + j * z_dim1], &c__1, &rhs[j + 1], &c__1);
-            sminu = z__1.real;
+            sminu = z__1.r;
             i__2 = j;
             splus *= rhs[i__2].r;
             if(splus > sminu)
@@ -394,7 +389,7 @@ void zlatdf_(integer *ijob, integer *n, doublecomplex *z__, integer *ldz, double
         i__1 = *n - 1;
         aocl_lapack_zlaswp(&c__1, &rhs[1], ldz, &c__1, &i__1, &jpiv[1], &c_n1);
         /* Compute the sum of squares */
-        zlassq_(n, &rhs[1], &c__1, rdscal, rdsum);
+        aocl_lapack_zlassq(n, &rhs[1], &c__1, rdscal, rdsum);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -410,20 +405,20 @@ void zlatdf_(integer *ijob, integer *n, doublecomplex *z__, integer *ldz, double
     z_div(&z__1, &c_b1, &z__2);
     temp.r = z__1.r;
     temp.i = z__1.i; // , expr subst
-    zscal_(n, &temp, xm, &c__1);
-    zcopy_(n, xm, &c__1, xp, &c__1);
-    zaxpy_(n, &c_b1, &rhs[1], &c__1, xp, &c__1);
+    aocl_blas_zscal(n, &temp, xm, &c__1);
+    aocl_blas_zcopy(n, xm, &c__1, xp, &c__1);
+    aocl_blas_zaxpy(n, &c_b1, &rhs[1], &c__1, xp, &c__1);
     z__1.r = -1.;
     z__1.i = -0.; // , expr subst
-    zaxpy_(n, &z__1, xm, &c__1, &rhs[1], &c__1);
-    zgesc2_(n, &z__[z_offset], ldz, &rhs[1], &ipiv[1], &jpiv[1], &scale);
-    zgesc2_(n, &z__[z_offset], ldz, xp, &ipiv[1], &jpiv[1], &scale);
-    if(dzasum_(n, xp, &c__1) > dzasum_(n, &rhs[1], &c__1))
+    aocl_blas_zaxpy(n, &z__1, xm, &c__1, &rhs[1], &c__1);
+    aocl_lapack_zgesc2(n, &z__[z_offset], ldz, &rhs[1], &ipiv[1], &jpiv[1], &scale);
+    aocl_lapack_zgesc2(n, &z__[z_offset], ldz, xp, &ipiv[1], &jpiv[1], &scale);
+    if(aocl_blas_dzasum(n, xp, &c__1) > aocl_blas_dzasum(n, &rhs[1], &c__1))
     {
         aocl_blas_zcopy(n, xp, &c__1, &rhs[1], &c__1);
     }
     /* Compute the sum of squares */
-    zlassq_(n, &rhs[1], &c__1, rdscal, rdsum);
+    aocl_lapack_zlassq(n, &rhs[1], &c__1, rdscal, rdsum);
     AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of ZLATDF */

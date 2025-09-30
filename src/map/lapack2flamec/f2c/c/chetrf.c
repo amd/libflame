@@ -176,8 +176,26 @@ static aocl_int64_t c__2 = 2;
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void chetrf_(char *uplo, integer *n, complex *a, integer *lda, integer *ipiv, complex *work,
-             integer *lwork, integer *info)
+/** Generated wrapper function */
+void chetrf_(char *uplo, aocl_int_t *n, scomplex *a, aocl_int_t *lda, aocl_int_t *ipiv,
+             scomplex *work, aocl_int_t *lwork, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_chetrf(uplo, n, a, lda, ipiv, work, lwork, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t lwork_64 = *lwork;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_chetrf(uplo, &n_64, a, &lda_64, ipiv, work, &lwork_64, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_chetrf(char *uplo, aocl_int64_t *n, scomplex *a, aocl_int64_t *lda,
+                        aocl_int_t *ipiv, scomplex *work, aocl_int64_t *lwork, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -192,23 +210,15 @@ void chetrf_(char *uplo, integer *n, complex *a, integer *lda, integer *ipiv, co
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
-    integer a_dim1, a_offset, i__1, i__2;
+    aocl_int64_t a_dim1, a_offset, i__1, i__2;
     real r__1;
     /* Local variables */
-    integer j, k, kb, nb, iws;
-    extern logical lsame_(char *, char *, integer, integer);
-    integer nbmin, iinfo;
+    aocl_int64_t j, k, kb, nb, iws;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    aocl_int64_t nbmin, iinfo;
     logical upper;
-    extern /* Subroutine */
-        void
-        chetf2_(char *, integer *, complex *, integer *, integer *, integer *),
-        clahef_(char *, integer *, integer *, integer *, complex *, integer *, integer *, complex *,
-                integer *, integer *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
-    integer ldwork, lwkopt;
+    aocl_int64_t ldwork, lwkopt;
     logical lquery;
-    extern real sroundup_lwork(integer *);
     /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -258,14 +268,14 @@ void chetrf_(char *uplo, integer *n, complex *a, integer *lda, integer *ipiv, co
         /* Determine the block size */
         nb = aocl_lapack_ilaenv(&c__1, "CHETRF", uplo, n, &c_n1, &c_n1, &c_n1);
         lwkopt = *n * nb;
-        r__1 = sroundup_lwork(&lwkopt);
+        r__1 = aocl_lapack_sroundup_lwork(&lwkopt);
         work[1].r = r__1;
         work[1].i = 0.f; // , expr subst
     }
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("CHETRF", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("CHETRF", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
@@ -286,7 +296,8 @@ void chetrf_(char *uplo, integer *n, complex *a, integer *lda, integer *ipiv, co
             nb = fla_max(i__1, 1);
             /* Computing MAX */
             i__1 = 2;
-            i__2 = ilaenv_(&c__2, "CHETRF", uplo, n, &c_n1, &c_n1, &c_n1); // , expr subst
+            i__2
+                = aocl_lapack_ilaenv(&c__2, "CHETRF", uplo, n, &c_n1, &c_n1, &c_n1); // , expr subst
             nbmin = fla_max(i__1, i__2);
         }
     }
@@ -385,7 +396,7 @@ void chetrf_(char *uplo, integer *n, complex *a, integer *lda, integer *ipiv, co
         goto L20;
     }
 L40:
-    r__1 = sroundup_lwork(&lwkopt);
+    r__1 = aocl_lapack_sroundup_lwork(&lwkopt);
     work[1].r = r__1;
     work[1].i = 0.f; // , expr subst
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);

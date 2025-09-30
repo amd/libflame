@@ -23,8 +23,8 @@ FLA_Error FLA_Gemm_nn_omp_var35( FLA_Obj alpha, FLA_Obj A, FLA_Obj B, FLA_Obj C,
                            B21;
   FLA_Obj C1_local;
 
-  integer i, j, lock_ldim, lock_i;
-  integer b_n, b_k;
+  fla_dim_t i, j, lock_ldim, lock_i;
+  fla_dim_t b_n, b_k;
 
 
   FLA_Part_1x2( B,    &BL,  &BR,      0, FLA_LEFT );

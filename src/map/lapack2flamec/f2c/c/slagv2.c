@@ -4,8 +4,8 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__2 = 2;
-static integer c__1 = 1;
+static aocl_int64_t c__2 = 2;
+static aocl_int64_t c__1 = 1;
 /* > \brief \b SLAGV2 computes the Generalized Schur factorization of a real 2-by-2 matrix pencil
  * (A,B) where B is upper triangular. */
 /* =========== DOCUMENTATION =========== */
@@ -154,8 +154,22 @@ static integer c__1 = 1;
 /* > Mark Fahey, Department of Mathematics, Univ. of Kentucky, USA */
 /* ===================================================================== */
 /* Subroutine */
-void slagv2_(real *a, integer *lda, real *b, integer *ldb, real *alphar, real *alphai, real *beta,
-             real *csl, real *snl, real *csr, real *snr)
+/** Generated wrapper function */
+void slagv2_(real *a, aocl_int_t *lda, real *b, aocl_int_t *ldb, real *alphar, real *alphai,
+             real *beta, real *csl, real *snl, real *csr, real *snr)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_slagv2(a, lda, b, ldb, alphar, alphai, beta, csl, snl, csr, snr);
+#else
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t ldb_64 = *ldb;
+
+    aocl_lapack_slagv2(a, &lda_64, b, &ldb_64, alphar, alphai, beta, csl, snl, csr, snr);
+#endif
+}
+
+void aocl_lapack_slagv2(real *a, aocl_int64_t *lda, real *b, aocl_int64_t *ldb, real *alphar,
+                        real *alphai, real *beta, real *csl, real *snl, real *csr, real *snr)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("slagv2 inputs: lda %" FLA_IS ",ldb %" FLA_IS "", *lda, *ldb);
@@ -164,11 +178,6 @@ void slagv2_(real *a, integer *lda, real *b, integer *ldb, real *alphar, real *a
     real r__1, r__2, r__3, r__4, r__5, r__6;
     /* Local variables */
     real r__, t, h1, h2, h3, wi, qq, rr, wr1, wr2, ulp;
-    extern /* Subroutine */
-        void
-        srot_(integer *, real *, integer *, real *, integer *, real *, real *),
-        slag2_(real *, integer *, real *, integer *, real *, real *, real *, real *, real *,
-               real *);
     real anorm, bnorm, scale1, scale2;
     extern /* Subroutine */
         void
@@ -276,7 +285,8 @@ void slagv2_(real *a, integer *lda, real *b, integer *ldb, real *alphar, real *a
     else
     {
         /* B is nonsingular, first compute the eigenvalues of (A,B) */
-        slag2_(&a[a_offset], lda, &b[b_offset], ldb, &safmin, &scale1, &scale2, &wr1, &wr2, &wi);
+        aocl_lapack_slag2(&a[a_offset], lda, &b[b_offset], ldb, &safmin, &scale1, &scale2, &wr1,
+                          &wr2, &wi);
         if(wi == 0.f)
         {
             /* two real eigenvalues, compute s*A-w*B */

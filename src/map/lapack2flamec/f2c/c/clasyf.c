@@ -9,9 +9,9 @@
  */
 
 #include "FLA_f2c.h" /* Table of constant values */
-static complex c_b1 = {1.f, 0.f};
-static integer c__1 = 1;
-/* > \brief \b CLASYF computes a partial factorization of a complex symmetric matrix using the
+static scomplex c_b1 = {{1.f}, {0.f}};
+static aocl_int64_t c__1 = 1;
+/* > \brief \b CLASYF computes a partial factorization of a scomplex symmetric matrix using the
  * Bunch-Kaufman d iagonal pivoting method. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -180,8 +180,30 @@ static integer c__1 = 1;
 /* > \endverbatim */
 /* ===================================================================== */
 /* Subroutine */
-void clasyf_(char *uplo, integer *n, integer *nb, integer *kb, complex *a, integer *lda,
-             integer *ipiv, complex *w, integer *ldw, integer *info)
+/** Generated wrapper function */
+void clasyf_(char *uplo, aocl_int_t *n, aocl_int_t *nb, aocl_int_t *kb, scomplex *a, aocl_int_t *lda,
+             aocl_int_t *ipiv, scomplex *w, aocl_int_t *ldw, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_clasyf(uplo, n, nb, kb, a, lda, ipiv, w, ldw, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t nb_64 = *nb;
+    aocl_int64_t kb_64 = *kb;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t ldw_64 = *ldw;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_clasyf(uplo, &n_64, &nb_64, &kb_64, a, &lda_64, ipiv, w, &ldw_64, &info_64);
+
+    *kb = (aocl_int_t)kb_64;
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_clasyf(char *uplo, aocl_int64_t *n, aocl_int64_t *nb, aocl_int64_t *kb, scomplex *a,
+                        aocl_int64_t *lda, aocl_int_t *ipiv, scomplex *w, aocl_int64_t *ldw,
+                        aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -207,19 +229,8 @@ void clasyf_(char *uplo, integer *n, integer *nb, integer *kb, complex *a, integ
     scomplex t, r1, d11, d21, d22;
     aocl_int64_t jb, jj, kk, jp, kp, kw, kkw, imax, jmax;
     real alpha;
-    extern /* Subroutine */
-        void
-        cscal_(integer *, complex *, complex *, integer *),
-        cgemm_(char *, char *, integer *, integer *, integer *, complex *, complex *, integer *,
-               complex *, integer *, complex *, complex *, integer *);
-    extern logical lsame_(char *, char *, integer, integer);
-    extern /* Subroutine */
-        void
-        cgemv_(char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *,
-               complex *, complex *, integer *),
-        ccopy_(integer *, complex *, integer *, complex *, integer *),
-        cswap_(integer *, complex *, integer *, complex *, integer *);
-    integer kstep;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    aocl_int64_t kstep;
     real absakk;
     real colmax, rowmax;
     /* -- LAPACK computational routine (version 3.5.0) -- */
@@ -275,14 +286,14 @@ void clasyf_(char *uplo, integer *n, integer *nb, integer *kb, complex *a, integ
             goto L30;
         }
         /* Copy column K of A to column KW of W and update it */
-        ccopy_(&k, &a[k * a_dim1 + 1], &c__1, &w[kw * w_dim1 + 1], &c__1);
+        aocl_blas_ccopy(&k, &a[k * a_dim1 + 1], &c__1, &w[kw * w_dim1 + 1], &c__1);
         if(k < *n)
         {
             i__1 = *n - k;
             q__1.r = -1.f;
             q__1.i = -0.f; // , expr subst
-            cgemv_("No transpose", &k, &i__1, &q__1, &a[(k + 1) * a_dim1 + 1], lda,
-                   &w[k + (kw + 1) * w_dim1], ldw, &c_b1, &w[kw * w_dim1 + 1], &c__1);
+            aocl_blas_cgemv("No transpose", &k, &i__1, &q__1, &a[(k + 1) * a_dim1 + 1], lda,
+                            &w[k + (kw + 1) * w_dim1], ldw, &c_b1, &w[kw * w_dim1 + 1], &c__1);
         }
         kstep = 1;
         /* Determine rows and columns to be interchanged and whether */
@@ -327,16 +338,16 @@ void clasyf_(char *uplo, integer *n, integer *nb, integer *kb, complex *a, integ
                 aocl_blas_ccopy(&imax, &a[imax * a_dim1 + 1], &c__1, &w[(kw - 1) * w_dim1 + 1],
                                 &c__1);
                 i__1 = k - imax;
-                ccopy_(&i__1, &a[imax + (imax + 1) * a_dim1], lda, &w[imax + 1 + (kw - 1) * w_dim1],
-                       &c__1);
+                aocl_blas_ccopy(&i__1, &a[imax + (imax + 1) * a_dim1], lda,
+                                &w[imax + 1 + (kw - 1) * w_dim1], &c__1);
                 if(k < *n)
                 {
                     i__1 = *n - k;
                     q__1.r = -1.f;
                     q__1.i = -0.f; // , expr subst
-                    cgemv_("No transpose", &k, &i__1, &q__1, &a[(k + 1) * a_dim1 + 1], lda,
-                           &w[imax + (kw + 1) * w_dim1], ldw, &c_b1, &w[(kw - 1) * w_dim1 + 1],
-                           &c__1);
+                    aocl_blas_cgemv("No transpose", &k, &i__1, &q__1, &a[(k + 1) * a_dim1 + 1], lda,
+                                    &w[imax + (kw + 1) * w_dim1], ldw, &c_b1,
+                                    &w[(kw - 1) * w_dim1 + 1], &c__1);
                 }
                 /* JMAX is the column-index of the largest off-diagonal */
                 /* element in row IMAX, and ROWMAX is its absolute value */
@@ -403,7 +414,8 @@ void clasyf_(char *uplo, integer *n, integer *nb, integer *kb, complex *a, integ
                 a[i__1].real = a[i__2].real;
                 a[i__1].imag = a[i__2].imag; // , expr subst
                 i__1 = kk - 1 - kp;
-                ccopy_(&i__1, &a[kp + 1 + kk * a_dim1], &c__1, &a[kp + (kp + 1) * a_dim1], lda);
+                aocl_blas_ccopy(&i__1, &a[kp + 1 + kk * a_dim1], &c__1, &a[kp + (kp + 1) * a_dim1],
+                                lda);
                 if(kp > 1)
                 {
                     i__1 = kp - 1;
@@ -433,7 +445,7 @@ void clasyf_(char *uplo, integer *n, integer *nb, integer *kb, complex *a, integ
                 /* and not stored. */
                 /* A(k,k) := D(k,k) = W(k,kw) */
                 /* A(1:k-1,k) := U(1:k-1,k) = W(1:k-1,kw)/D(k,k) */
-                ccopy_(&k, &w[kw * w_dim1 + 1], &c__1, &a[k * a_dim1 + 1], &c__1);
+                aocl_blas_ccopy(&k, &w[kw * w_dim1 + 1], &c__1, &a[k * a_dim1 + 1], &c__1);
                 c_div(&q__1, &c_b1, &a[k + k * a_dim1]);
                 r1.real = q__1.real;
                 r1.imag = q__1.imag; // , expr subst
@@ -568,8 +580,8 @@ void clasyf_(char *uplo, integer *n, integer *nb, integer *kb, complex *a, integ
                 i__4 = *n - k;
                 q__1.r = -1.f;
                 q__1.i = -0.f; // , expr subst
-                cgemv_("No transpose", &i__3, &i__4, &q__1, &a[j + (k + 1) * a_dim1], lda,
-                       &w[jj + (kw + 1) * w_dim1], ldw, &c_b1, &a[j + jj * a_dim1], &c__1);
+                aocl_blas_cgemv("No transpose", &i__3, &i__4, &q__1, &a[j + (k + 1) * a_dim1], lda,
+                                &w[jj + (kw + 1) * w_dim1], ldw, &c_b1, &a[j + jj * a_dim1], &c__1);
                 /* L40: */
             }
             /* Update the rectangular superdiagonal block */
@@ -577,8 +589,9 @@ void clasyf_(char *uplo, integer *n, integer *nb, integer *kb, complex *a, integ
             i__3 = *n - k;
             q__1.r = -1.f;
             q__1.i = -0.f; // , expr subst
-            cgemm_("No transpose", "Transpose", &i__2, &jb, &i__3, &q__1, &a[(k + 1) * a_dim1 + 1],
-                   lda, &w[j + (kw + 1) * w_dim1], ldw, &c_b1, &a[j * a_dim1 + 1], lda);
+            aocl_blas_cgemm("No transpose", "Transpose", &i__2, &jb, &i__3, &q__1,
+                            &a[(k + 1) * a_dim1 + 1], lda, &w[j + (kw + 1) * w_dim1], ldw, &c_b1,
+                            &a[j * a_dim1 + 1], lda);
             /* L50: */
         }
         /* Put U12 in standard form by partially undoing the interchanges */
@@ -629,8 +642,8 @@ void clasyf_(char *uplo, integer *n, integer *nb, integer *kb, complex *a, integ
         i__2 = k - 1;
         q__1.r = -1.f;
         q__1.i = -0.f; // , expr subst
-        cgemv_("No transpose", &i__1, &i__2, &q__1, &a[k + a_dim1], lda, &w[k + w_dim1], ldw, &c_b1,
-               &w[k + k * w_dim1], &c__1);
+        aocl_blas_cgemv("No transpose", &i__1, &i__2, &q__1, &a[k + a_dim1], lda, &w[k + w_dim1],
+                        ldw, &c_b1, &w[k + k * w_dim1], &c__1);
         kstep = 1;
         /* Determine rows and columns to be interchanged and whether */
         /* a 1-by-1 or 2-by-2 pivot block will be used */
@@ -680,12 +693,12 @@ void clasyf_(char *uplo, integer *n, integer *nb, integer *kb, complex *a, integ
                 i__2 = k - 1;
                 q__1.r = -1.f;
                 q__1.i = -0.f; // , expr subst
-                cgemv_("No transpose", &i__1, &i__2, &q__1, &a[k + a_dim1], lda, &w[imax + w_dim1],
-                       ldw, &c_b1, &w[k + (k + 1) * w_dim1], &c__1);
+                aocl_blas_cgemv("No transpose", &i__1, &i__2, &q__1, &a[k + a_dim1], lda,
+                                &w[imax + w_dim1], ldw, &c_b1, &w[k + (k + 1) * w_dim1], &c__1);
                 /* JMAX is the column-index of the largest off-diagonal */
                 /* element in row IMAX, and ROWMAX is its absolute value */
                 i__1 = imax - k;
-                jmax = k - 1 + icamax_(&i__1, &w[k + (k + 1) * w_dim1], &c__1);
+                jmax = k - 1 + aocl_blas_icamax(&i__1, &w[k + (k + 1) * w_dim1], &c__1);
                 i__1 = jmax + (k + 1) * w_dim1;
                 rowmax = (r__1 = w[i__1].r, f2c_abs(r__1))
                          + (r__2 = r_imag(&w[jmax + (k + 1) * w_dim1]), f2c_abs(r__2));
@@ -746,7 +759,8 @@ void clasyf_(char *uplo, integer *n, integer *nb, integer *kb, complex *a, integ
                 a[i__1].real = a[i__2].real;
                 a[i__1].imag = a[i__2].imag; // , expr subst
                 i__1 = kp - kk - 1;
-                ccopy_(&i__1, &a[kk + 1 + kk * a_dim1], &c__1, &a[kp + (kk + 1) * a_dim1], lda);
+                aocl_blas_ccopy(&i__1, &a[kk + 1 + kk * a_dim1], &c__1, &a[kp + (kk + 1) * a_dim1],
+                                lda);
                 if(kp < *n)
                 {
                     i__1 = *n - kp;
@@ -776,7 +790,7 @@ void clasyf_(char *uplo, integer *n, integer *nb, integer *kb, complex *a, integ
                 /* A(k,k) := D(k,k) = W(k,k) */
                 /* A(k+1:N,k) := L(k+1:N,k) = W(k+1:N,k)/D(k,k) */
                 i__1 = *n - k + 1;
-                ccopy_(&i__1, &w[k + k * w_dim1], &c__1, &a[k + k * a_dim1], &c__1);
+                aocl_blas_ccopy(&i__1, &w[k + k * w_dim1], &c__1, &a[k + k * a_dim1], &c__1);
                 if(k < *n)
                 {
                     c_div(&q__1, &c_b1, &a[k + k * a_dim1]);
@@ -915,8 +929,8 @@ void clasyf_(char *uplo, integer *n, integer *nb, integer *kb, complex *a, integ
                 i__5 = k - 1;
                 q__1.r = -1.f;
                 q__1.i = -0.f; // , expr subst
-                cgemv_("No transpose", &i__4, &i__5, &q__1, &a[jj + a_dim1], lda, &w[jj + w_dim1],
-                       ldw, &c_b1, &a[jj + jj * a_dim1], &c__1);
+                aocl_blas_cgemv("No transpose", &i__4, &i__5, &q__1, &a[jj + a_dim1], lda,
+                                &w[jj + w_dim1], ldw, &c_b1, &a[jj + jj * a_dim1], &c__1);
                 /* L100: */
             }
             /* Update the rectangular subdiagonal block */
@@ -926,8 +940,9 @@ void clasyf_(char *uplo, integer *n, integer *nb, integer *kb, complex *a, integ
                 i__4 = k - 1;
                 q__1.r = -1.f;
                 q__1.i = -0.f; // , expr subst
-                cgemm_("No transpose", "Transpose", &i__3, &jb, &i__4, &q__1, &a[j + jb + a_dim1],
-                       lda, &w[j + w_dim1], ldw, &c_b1, &a[j + jb + j * a_dim1], lda);
+                aocl_blas_cgemm("No transpose", "Transpose", &i__3, &jb, &i__4, &q__1,
+                                &a[j + jb + a_dim1], lda, &w[j + w_dim1], ldw, &c_b1,
+                                &a[j + jb + j * a_dim1], lda);
             }
             /* L110: */
         }

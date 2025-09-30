@@ -15,7 +15,7 @@
 
 #if FLA_ENABLE_AMD_OPT
 static doublereal c_b15 = -.125;
-static integer c__1 = 1;
+static aocl_int64_t c__1 = 1;
 static doublereal c_b49 = 1.;
 static doublereal c_b72 = -1.;
 /* > \brief \b DBDSQR */
@@ -253,42 +253,38 @@ if INFO = i, i */
 /* > \ingroup auxOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-int lapack_dbdsqr_small(char *uplo, integer *n, integer *ncvt, integer *nru,
-                        doublereal *d__, doublereal *e, doublereal *vt, integer *ldvt,
-                        doublereal *u, integer *ldu, integer *info)
+int lapack_dbdsqr_small(char *uplo, aocl_int64_t *n, aocl_int64_t *ncvt, aocl_int64_t *nru,
+                        doublereal *d__, doublereal *e, doublereal *vt, aocl_int64_t *ldvt,
+                        doublereal *u, aocl_int64_t *ldu, aocl_int64_t *info)
 {
     /* System generated locals */
-    integer u_dim1, u_offset, vt_dim1, vt_offset, i__1, i__2;
+    aocl_int64_t u_dim1, u_offset, vt_dim1, vt_offset, i__1, i__2;
     doublereal d__1, d__2, d__3, d__4;
     /* Builtin functions */
     double pow_dd(doublereal *, doublereal *), sqrt(doublereal), d_sign(doublereal *, doublereal *);
     /* Local variables */
-    integer iterdivn;
+    aocl_int64_t iterdivn;
     doublereal f, g, h__;
-    integer i__, j, m;
+    aocl_int64_t i__, j, m;
     doublereal r__;
-    integer maxitdivn;
+    aocl_int64_t maxitdivn;
     doublereal cs;
-    integer ll;
+    aocl_int64_t ll;
     doublereal sn, mu;
-    integer tidx, lll;
+    aocl_int64_t tidx, lll;
     doublereal eps, sll, tol, abse;
-    integer idir;
+    aocl_int64_t idir;
     doublereal abss;
-    integer oldm;
+    aocl_int64_t oldm;
     doublereal cosl;
-    integer isub, iter;
+    aocl_int64_t isub, iter;
     doublereal unfl, sinl, cosr, smin, smax, sinr;
 #ifndef FLA_ENABLE_AOCL_BLAS
-    extern /* Subroutine */
-        void
-        drot_(integer *, doublereal *, integer *, doublereal *, integer *, doublereal *,
-              doublereal *),
-        dlas2_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *);
-    extern logical lsame_(char *, char *, integer a, integer b);
+    void dlas2_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *);
+    extern logical lsame_(char *, char *, aocl_int64_t a, aocl_int64_t b);
 #endif
     doublereal oldcs;
-    integer oldll;
+    aocl_int64_t oldll;
     doublereal shift, sigmn, oldsn;
     /* Subroutine */
     doublereal sminl, sigmx;
@@ -503,11 +499,12 @@ L90:
         /* Compute singular vectors, if desired */
         if(*ncvt > 0)
         {
-            drot_(ncvt, &vt[m - 1 + vt_dim1], ldvt, &vt[m + vt_dim1], ldvt, &cosr, &sinr);
+            aocl_blas_drot(ncvt, &vt[m - 1 + vt_dim1], ldvt, &vt[m + vt_dim1], ldvt, &cosr, &sinr);
         }
         if(*nru > 0)
         {
-            drot_(nru, &u[(m - 1) * u_dim1 + 1], &c__1, &u[m * u_dim1 + 1], &c__1, &cosl, &sinl);
+            aocl_blas_drot(nru, &u[(m - 1) * u_dim1 + 1], &c__1, &u[m * u_dim1 + 1], &c__1, &cosl,
+                           &sinl);
         }
         m += -2;
         goto L60;
@@ -817,7 +814,7 @@ L160:
             /* Change sign of singular vectors, if desired */
             if(*ncvt > 0)
             {
-                dscal_(ncvt, &c_b72, &vt[i__ + vt_dim1], ldvt);
+                aocl_blas_dscal(ncvt, &c_b72, &vt[i__ + vt_dim1], ldvt);
             }
         }
     }
@@ -845,11 +842,12 @@ L160:
             d__[*n + 1 - i__] = smin;
             if(*ncvt > 0)
             {
-                dswap_(ncvt, &vt[isub + vt_dim1], ldvt, &vt[*n + 1 - i__ + vt_dim1], ldvt);
+                aocl_blas_dswap(ncvt, &vt[isub + vt_dim1], ldvt, &vt[*n + 1 - i__ + vt_dim1], ldvt);
             }
             if(*nru > 0)
             {
-                dswap_(nru, &u[isub * u_dim1 + 1], &c__1, &u[(*n + 1 - i__) * u_dim1 + 1], &c__1);
+                aocl_blas_dswap(nru, &u[isub * u_dim1 + 1], &c__1, &u[(*n + 1 - i__) * u_dim1 + 1],
+                                &c__1);
             }
         }
     }

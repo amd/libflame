@@ -1,11 +1,11 @@
 #include "FLA_f2c.h"
 #include "FLA_lapack2flame_return_defs.h"
 
-int ssygs2_check(integer *itype, char *uplo, integer *n, float *a, integer *lda, float *b,
-                 integer *ldb, integer *info)
+int ssygs2_check(aocl_int64_t *itype, char *uplo, aocl_int64_t *n, float *a, aocl_int64_t *lda, float *b,
+                 aocl_int64_t *ldb, aocl_int64_t *info)
 {
     /* System generated locals */
-    integer a_dim1, a_offset, b_dim1, b_offset, i__1;
+    aocl_int64_t a_dim1, a_offset, b_dim1, b_offset, i__1;
     logical upper;
 
     /* Parameter adjustments */
@@ -41,7 +41,7 @@ int ssygs2_check(integer *itype, char *uplo, integer *n, float *a, integer *lda,
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("SSYGS2", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("SSYGS2", &i__1, (ftnlen)6);
         return LAPACK_FAILURE;
     }
     return LAPACK_SUCCESS;

@@ -16,17 +16,17 @@
 #include "blis.h"
 #endif
 
-void bl1_saxpymrt( uplo1_t uplo, trans1_t trans, integer m, integer n, float* alpha, float* a, integer a_rs, integer a_cs, float* b, integer b_rs, integer b_cs )
+void bl1_saxpymrt( uplo1_t uplo, trans1_t trans, fla_dim_t m, fla_dim_t n, float* alpha, float* a, fla_dim_t a_rs, fla_dim_t a_cs, float* b, fla_dim_t b_rs, fla_dim_t b_cs )
 {
 	float*    a_begin;
 	float*    b_begin;
-	integer       lda, inca;
-	integer       ldb, incb;
-	integer       n_iter;
-	integer       n_elem;
-	integer       n_elem_max;
-	integer       n_elem_is_descending;
-	integer       j;
+	fla_dim_t       lda, inca;
+	fla_dim_t       ldb, incb;
+	fla_dim_t       n_iter;
+	fla_dim_t       n_elem;
+	fla_dim_t       n_elem_max;
+	fla_dim_t       n_elem_is_descending;
+	fla_dim_t       j;
 	conj1_t    conj;
 
 	// Return early if possible.
@@ -123,17 +123,17 @@ void bl1_saxpymrt( uplo1_t uplo, trans1_t trans, integer m, integer n, float* al
 	}
 }
 
-void bl1_daxpymrt( uplo1_t uplo, trans1_t trans, integer m, integer n, double* alpha, double* a, integer a_rs, integer a_cs, double* b, integer b_rs, integer b_cs )
+void bl1_daxpymrt( uplo1_t uplo, trans1_t trans, fla_dim_t m, fla_dim_t n, double* alpha, double* a, fla_dim_t a_rs, fla_dim_t a_cs, double* b, fla_dim_t b_rs, fla_dim_t b_cs )
 {
 	double*   a_begin;
 	double*   b_begin;
-	integer       lda, inca;
-	integer       ldb, incb;
-	integer       n_iter;
-	integer       n_elem;
-	integer       n_elem_max;
-	integer       n_elem_is_descending;
-	integer       j;
+	fla_dim_t       lda, inca;
+	fla_dim_t       ldb, incb;
+	fla_dim_t       n_iter;
+	fla_dim_t       n_elem;
+	fla_dim_t       n_elem_max;
+	fla_dim_t       n_elem_is_descending;
+	fla_dim_t       j;
 	conj1_t    conj;
 
 	// Return early if possible.
@@ -230,17 +230,17 @@ void bl1_daxpymrt( uplo1_t uplo, trans1_t trans, integer m, integer n, double* a
 	}
 }
 
-void bl1_caxpymrt( uplo1_t uplo, trans1_t trans, integer m, integer n, scomplex* alpha, scomplex* a, integer a_rs, integer a_cs, scomplex* b, integer b_rs, integer b_cs )
+void bl1_caxpymrt( uplo1_t uplo, trans1_t trans, fla_dim_t m, fla_dim_t n, scomplex* alpha, scomplex* a, fla_dim_t a_rs, fla_dim_t a_cs, scomplex* b, fla_dim_t b_rs, fla_dim_t b_cs )
 {
 	scomplex* a_begin;
 	scomplex* b_begin;
-	integer       lda, inca;
-	integer       ldb, incb;
-	integer       n_iter;
-	integer       n_elem;
-	integer       n_elem_max;
-	integer       n_elem_is_descending;
-	integer       j;
+	fla_dim_t       lda, inca;
+	fla_dim_t       ldb, incb;
+	fla_dim_t       n_iter;
+	fla_dim_t       n_elem;
+	fla_dim_t       n_elem_max;
+	fla_dim_t       n_elem_is_descending;
+	fla_dim_t       j;
 	conj1_t    conj;
 
 	// Return early if possible.
@@ -337,17 +337,17 @@ void bl1_caxpymrt( uplo1_t uplo, trans1_t trans, integer m, integer n, scomplex*
 	}
 }
 
-void bl1_zaxpymrt( uplo1_t uplo, trans1_t trans, integer m, integer n, dcomplex* alpha, dcomplex* a, integer a_rs, integer a_cs, dcomplex* b, integer b_rs, integer b_cs )
+void bl1_zaxpymrt( uplo1_t uplo, trans1_t trans, fla_dim_t m, fla_dim_t n, dcomplex* alpha, dcomplex* a, fla_dim_t a_rs, fla_dim_t a_cs, dcomplex* b, fla_dim_t b_rs, fla_dim_t b_cs )
 {
 	dcomplex* a_begin;
 	dcomplex* b_begin;
-	integer       lda, inca;
-	integer       ldb, incb;
-	integer       n_iter;
-	integer       n_elem;
-	integer       n_elem_max;
-	integer       n_elem_is_descending;
-	integer       j;
+	fla_dim_t       lda, inca;
+	fla_dim_t       ldb, incb;
+	fla_dim_t       n_iter;
+	fla_dim_t       n_elem;
+	fla_dim_t       n_elem_max;
+	fla_dim_t       n_elem_is_descending;
+	fla_dim_t       j;
 	conj1_t    conj;
 
 	// Return early if possible.

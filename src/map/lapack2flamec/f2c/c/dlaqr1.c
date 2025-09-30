@@ -116,13 +116,27 @@
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void dlaqr1_(integer *n, doublereal *h__, integer *ldh, doublereal *sr1, doublereal *si1,
+/** Generated wrapper function */
+void dlaqr1_(aocl_int_t *n, doublereal *h__, aocl_int_t *ldh, doublereal *sr1, doublereal *si1,
              doublereal *sr2, doublereal *si2, doublereal *v)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_dlaqr1(n, h__, ldh, sr1, si1, sr2, si2, v);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t ldh_64 = *ldh;
+
+    aocl_lapack_dlaqr1(&n_64, h__, &ldh_64, sr1, si1, sr2, si2, v);
+#endif
+}
+
+void aocl_lapack_dlaqr1(aocl_int64_t *n, doublereal *h__, aocl_int64_t *ldh, doublereal *sr1,
+                        doublereal *si1, doublereal *sr2, doublereal *si2, doublereal *v)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dlaqr1 inputs: n %" FLA_IS ", ldh %" FLA_IS "", *n, *ldh);
     /* System generated locals */
-    integer h_dim1, h_offset;
+    aocl_int64_t h_dim1, h_offset;
     doublereal d__1, d__2, d__3;
     /* Local variables */
     doublereal s, h21s, h31s;

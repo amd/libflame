@@ -4,9 +4,9 @@
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
  /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
-static integer c__0 = 0;
-static integer c_n1 = -1;
+static aocl_int64_t c__1 = 1;
+static aocl_int64_t c__0 = 0;
+static aocl_int64_t c_n1 = -1;
 /* > \brief <b> DGEEVX computes the eigenvalues and, optionally, the left and/or right eigenvectors
  * for GE mat rices</b> */
 /* =========== DOCUMENTATION =========== */
@@ -182,7 +182,7 @@ static integer c_n1 = -1;
 /* > If JOBVL = 'N', VL is not referenced. */
 /* > If the j-th eigenvalue is real, then u(j) = VL(:,j), */
 /* > the j-th column of VL. */
-/* > If the j-th and (j+1)-st eigenvalues form a complex */
+/* > If the j-th and (j+1)-st eigenvalues form a scomplex */
 /* > conjugate pair, then u(j) = VL(:,j) + i*VL(:,j+1) and */
 /* > u(j+1) = VL(:,j) - i*VL(:,j+1). */
 /* > \endverbatim */
@@ -204,7 +204,7 @@ if */
 /* > If JOBVR = 'N', VR is not referenced. */
 /* > If the j-th eigenvalue is real, then v(j) = VR(:,j), */
 /* > the j-th column of VR. */
-/* > If the j-th and (j+1)-st eigenvalues form a complex */
+/* > If the j-th and (j+1)-st eigenvalues form a scomplex */
 /* > conjugate pair, then v(j) = VR(:,j) + i*VR(:,j+1) and */
 /* > v(j+1) = VR(:,j) - i*VR(:,j+1). */
 /* > \endverbatim */
@@ -312,88 +312,76 @@ elements 1:ILO-1 and i+1:N of WR */
 /* > \ingroup geevx */
 /* ===================================================================== */
 /* Subroutine */
-void dgeevx_(char *balanc, char *jobvl, char *jobvr, char *sense, integer *n, doublereal *a,
-             integer *lda, doublereal *wr, doublereal *wi, doublereal *vl, integer *ldvl,
-             doublereal *vr, integer *ldvr, integer *ilo, integer *ihi, doublereal *scale,
+/** Generated wrapper function */
+void dgeevx_(char *balanc, char *jobvl, char *jobvr, char *sense, aocl_int_t *n, doublereal *a,
+             aocl_int_t *lda, doublereal *wr, doublereal *wi, doublereal *vl, aocl_int_t *ldvl,
+             doublereal *vr, aocl_int_t *ldvr, aocl_int_t *ilo, aocl_int_t *ihi, doublereal *scale,
              doublereal *abnrm, doublereal *rconde, doublereal *rcondv, doublereal *work,
-             integer *lwork, integer *iwork, integer *info)
+             aocl_int_t *lwork, aocl_int_t *iwork, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_dgeevx(balanc, jobvl, jobvr, sense, n, a, lda, wr, wi, vl, ldvl, vr, ldvr, ilo, ihi,
+                       scale, abnrm, rconde, rcondv, work, lwork, iwork, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t ldvl_64 = *ldvl;
+    aocl_int64_t ldvr_64 = *ldvr;
+    aocl_int64_t ilo_64 = *ilo;
+    aocl_int64_t ihi_64 = *ihi;
+    aocl_int64_t lwork_64 = *lwork;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_dgeevx(balanc, jobvl, jobvr, sense, &n_64, a, &lda_64, wr, wi, vl, &ldvl_64, vr,
+                       &ldvr_64, &ilo_64, &ihi_64, scale, abnrm, rconde, rcondv, work, &lwork_64,
+                       iwork, &info_64);
+
+    *ilo = (aocl_int_t)ilo_64;
+    *ihi = (aocl_int_t)ihi_64;
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_dgeevx(char *balanc, char *jobvl, char *jobvr, char *sense, aocl_int64_t *n,
+                        doublereal *a, aocl_int64_t *lda, doublereal *wr, doublereal *wi,
+                        doublereal *vl, aocl_int64_t *ldvl, doublereal *vr, aocl_int64_t *ldvr,
+                        aocl_int64_t *ilo, aocl_int64_t *ihi, doublereal *scale, doublereal *abnrm,
+                        doublereal *rconde, doublereal *rcondv, doublereal *work,
+                        aocl_int64_t *lwork, aocl_int_t *iwork, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dgeevx inputs: balanc %c, jobvl %c, jobvr %c, sense %c, n %" FLA_IS
                       ", lda %" FLA_IS ", ldvl %" FLA_IS ", ldvr %" FLA_IS ", lwork %" FLA_IS "",
                       *balanc, *jobvl, *jobvr, *sense, *n, *lda, *ldvl, *ldvr, *lwork);
     /* System generated locals */
-    integer a_dim1, a_offset, vl_dim1, vl_offset, vr_dim1, vr_offset, i__1, i__2, i__3;
+    aocl_int64_t a_dim1, a_offset, vl_dim1, vl_offset, vr_dim1, vr_offset, i__1, i__2, i__3;
     doublereal d__1, d__2;
     /* Builtin functions */
     double sqrt(doublereal);
     /* Local variables */
-    integer i__, k;
+    aocl_int64_t i__, k;
     doublereal r__, cs, sn;
     char job[1];
     doublereal scl, dum[1], eps;
-    integer lwork_trevc__;
+    aocl_int64_t lwork_trevc__;
     char side[1];
     doublereal anrm;
-    integer ierr, itau;
-    extern /* Subroutine */
-        void
-        drot_(integer *, doublereal *, integer *, doublereal *, integer *, doublereal *,
-              doublereal *);
-    integer iwrk, nout;
-    extern doublereal dnrm2_(integer *, doublereal *, integer *);
-    extern /* Subroutine */
-        void
-        dscal_(integer *, doublereal *, doublereal *, integer *);
-    integer icond;
-    extern logical lsame_(char *, char *, integer, integer);
+    aocl_int64_t ierr, itau;
+    aocl_int64_t iwrk, nout;
+    aocl_int64_t icond;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     extern doublereal dlapy2_(doublereal *, doublereal *);
-    extern /* Subroutine */
-        void
-        dgebak_(char *, char *, integer *, integer *, integer *, doublereal *, integer *,
-                doublereal *, integer *, integer *),
-        dgebal_(char *, integer *, doublereal *, integer *, integer *, integer *, doublereal *,
-                integer *);
     logical scalea;
     extern doublereal dlamch_(char *);
     doublereal cscale;
-    extern doublereal dlange_(char *, integer *, integer *, doublereal *, integer *, doublereal *);
-    extern /* Subroutine */
-        void
-        dgehrd_(integer *, integer *, integer *, doublereal *, integer *, doublereal *,
-                doublereal *, integer *, integer *),
-        dlascl_(char *, integer *, integer *, doublereal *, doublereal *, integer *, integer *,
-                doublereal *, integer *, integer *);
-    extern integer idamax_(integer *, doublereal *, integer *);
-    extern /* Subroutine */
-        void
-        dlacpy_(char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *),
-        dlartg_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical select[1];
-    extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     doublereal bignum;
-    extern /* Subroutine */
-        void
-        dorghr_(integer *, integer *, integer *, doublereal *, integer *, doublereal *,
-                doublereal *, integer *, integer *),
-        dhseqr_(char *, char *, integer *, integer *, integer *, doublereal *, integer *,
-                doublereal *, doublereal *, doublereal *, integer *, doublereal *, integer *,
-                integer *),
-        dtrsna_(char *, char *, logical *, integer *, doublereal *, integer *, doublereal *,
-                integer *, doublereal *, integer *, doublereal *, doublereal *, integer *,
-                integer *, doublereal *, integer *, integer *, integer *);
-    integer minwrk, maxwrk;
+    aocl_int64_t minwrk, maxwrk;
     logical wantvl, wntsnb;
-    integer hswork;
+    aocl_int64_t hswork;
     logical wntsne;
     doublereal smlnum;
     logical lquery, wantvr, wntsnn, wntsnv;
-    extern /* Subroutine */
-        void
-        dtrevc3_(char *, char *, logical *, integer *, doublereal *, integer *, doublereal *,
-                 integer *, doublereal *, integer *, integer *, integer *, doublereal *, integer *,
-                 integer *);
     /* -- LAPACK driver routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -493,42 +481,42 @@ void dgeevx_(char *balanc, char *jobvl, char *jobvr, char *sense, integer *n, do
         }
         else
         {
-            maxwrk = *n + *n * ilaenv_(&c__1, "DGEHRD", " ", n, &c__1, n, &c__0);
+            maxwrk = *n + *n * aocl_lapack_ilaenv(&c__1, "DGEHRD", " ", n, &c__1, n, &c__0);
             if(wantvl)
             {
-                dtrevc3_("L", "B", select, n, &a[a_offset], lda, &vl[vl_offset], ldvl,
-                         &vr[vr_offset], ldvr, n, &nout, &work[1], &c_n1, &ierr);
+                aocl_lapack_dtrevc3("L", "B", select, n, &a[a_offset], lda, &vl[vl_offset], ldvl,
+                                    &vr[vr_offset], ldvr, n, &nout, &work[1], &c_n1, &ierr);
                 lwork_trevc__ = (integer)work[1];
                 /* Computing MAX */
                 i__1 = maxwrk;
                 i__2 = *n + lwork_trevc__; // , expr subst
                 maxwrk = fla_max(i__1, i__2);
-                dhseqr_("S", "V", n, &c__1, n, &a[a_offset], lda, &wr[1], &wi[1], &vl[vl_offset],
-                        ldvl, &work[1], &c_n1, info);
+                aocl_lapack_dhseqr("S", "V", n, &c__1, n, &a[a_offset], lda, &wr[1], &wi[1],
+                                   &vl[vl_offset], ldvl, &work[1], &c_n1, info);
             }
             else if(wantvr)
             {
-                dtrevc3_("R", "B", select, n, &a[a_offset], lda, &vl[vl_offset], ldvl,
-                         &vr[vr_offset], ldvr, n, &nout, &work[1], &c_n1, &ierr);
+                aocl_lapack_dtrevc3("R", "B", select, n, &a[a_offset], lda, &vl[vl_offset], ldvl,
+                                    &vr[vr_offset], ldvr, n, &nout, &work[1], &c_n1, &ierr);
                 lwork_trevc__ = (integer)work[1];
                 /* Computing MAX */
                 i__1 = maxwrk;
                 i__2 = *n + lwork_trevc__; // , expr subst
                 maxwrk = fla_max(i__1, i__2);
-                dhseqr_("S", "V", n, &c__1, n, &a[a_offset], lda, &wr[1], &wi[1], &vr[vr_offset],
-                        ldvr, &work[1], &c_n1, info);
+                aocl_lapack_dhseqr("S", "V", n, &c__1, n, &a[a_offset], lda, &wr[1], &wi[1],
+                                   &vr[vr_offset], ldvr, &work[1], &c_n1, info);
             }
             else
             {
                 if(wntsnn)
                 {
-                    dhseqr_("E", "N", n, &c__1, n, &a[a_offset], lda, &wr[1], &wi[1],
-                            &vr[vr_offset], ldvr, &work[1], &c_n1, info);
+                    aocl_lapack_dhseqr("E", "N", n, &c__1, n, &a[a_offset], lda, &wr[1], &wi[1],
+                                       &vr[vr_offset], ldvr, &work[1], &c_n1, info);
                 }
                 else
                 {
-                    dhseqr_("S", "N", n, &c__1, n, &a[a_offset], lda, &wr[1], &wi[1],
-                            &vr[vr_offset], ldvr, &work[1], &c_n1, info);
+                    aocl_lapack_dhseqr("S", "N", n, &c__1, n, &a[a_offset], lda, &wr[1], &wi[1],
+                                       &vr[vr_offset], ldvr, &work[1], &c_n1, info);
                 }
             }
             hswork = (integer)work[1];
@@ -566,7 +554,8 @@ void dgeevx_(char *balanc, char *jobvl, char *jobvr, char *sense, integer *n, do
                 i__1 = maxwrk;
                 i__2 = *n
                        + (*n - 1)
-                             * ilaenv_(&c__1, "DORGHR", " ", n, &c__1, n, &c_n1); // , expr subst
+                             * aocl_lapack_ilaenv(&c__1, "DORGHR", " ", n, &c__1, n,
+                                                  &c_n1); // , expr subst
                 maxwrk = fla_max(i__1, i__2);
                 if(!wntsnn && !wntsne)
                 {
@@ -591,7 +580,7 @@ void dgeevx_(char *balanc, char *jobvl, char *jobvr, char *sense, integer *n, do
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("DGEEVX", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("DGEEVX", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -614,7 +603,7 @@ void dgeevx_(char *balanc, char *jobvl, char *jobvr, char *sense, integer *n, do
     bignum = 1. / smlnum;
     /* Scale A if max element outside range [SMLNUM,BIGNUM] */
     icond = 0;
-    anrm = dlange_("M", n, n, &a[a_offset], lda, dum);
+    anrm = aocl_lapack_dlange("M", n, n, &a[a_offset], lda, dum);
     scalea = FALSE_;
     if(anrm > 0. && anrm < smlnum)
     {
@@ -628,15 +617,15 @@ void dgeevx_(char *balanc, char *jobvl, char *jobvr, char *sense, integer *n, do
     }
     if(scalea)
     {
-        dlascl_("G", &c__0, &c__0, &anrm, &cscale, n, n, &a[a_offset], lda, &ierr);
+        aocl_lapack_dlascl("G", &c__0, &c__0, &anrm, &cscale, n, n, &a[a_offset], lda, &ierr);
     }
     /* Balance the matrix and compute ABNRM */
-    dgebal_(balanc, n, &a[a_offset], lda, ilo, ihi, &scale[1], &ierr);
-    *abnrm = dlange_("1", n, n, &a[a_offset], lda, dum);
+    aocl_lapack_dgebal(balanc, n, &a[a_offset], lda, ilo, ihi, &scale[1], &ierr);
+    *abnrm = aocl_lapack_dlange("1", n, n, &a[a_offset], lda, dum);
     if(scalea)
     {
         dum[0] = *abnrm;
-        dlascl_("G", &c__0, &c__0, &cscale, &anrm, &c__1, &c__1, dum, &c__1, &ierr);
+        aocl_lapack_dlascl("G", &c__0, &c__0, &cscale, &anrm, &c__1, &c__1, dum, &c__1, &ierr);
         *abnrm = dum[0];
     }
     /* Reduce to upper Hessenberg form */
@@ -644,29 +633,30 @@ void dgeevx_(char *balanc, char *jobvl, char *jobvr, char *sense, integer *n, do
     itau = 1;
     iwrk = itau + *n;
     i__1 = *lwork - iwrk + 1;
-    dgehrd_(n, ilo, ihi, &a[a_offset], lda, &work[itau], &work[iwrk], &i__1, &ierr);
+    aocl_lapack_dgehrd(n, ilo, ihi, &a[a_offset], lda, &work[itau], &work[iwrk], &i__1, &ierr);
     if(wantvl)
     {
         /* Want left eigenvectors */
         /* Copy Householder vectors to VL */
         *(unsigned char *)side = 'L';
-        dlacpy_("L", n, n, &a[a_offset], lda, &vl[vl_offset], ldvl);
+        aocl_lapack_dlacpy("L", n, n, &a[a_offset], lda, &vl[vl_offset], ldvl);
         /* Generate orthogonal matrix in VL */
         /* (Workspace: need 2*N-1, prefer N+(N-1)*NB) */
         i__1 = *lwork - iwrk + 1;
-        dorghr_(n, ilo, ihi, &vl[vl_offset], ldvl, &work[itau], &work[iwrk], &i__1, &ierr);
+        aocl_lapack_dorghr(n, ilo, ihi, &vl[vl_offset], ldvl, &work[itau], &work[iwrk], &i__1,
+                           &ierr);
         /* Perform QR iteration, accumulating Schur vectors in VL */
         /* (Workspace: need 1, prefer HSWORK (see comments) ) */
         iwrk = itau;
         i__1 = *lwork - iwrk + 1;
-        dhseqr_("S", "V", n, ilo, ihi, &a[a_offset], lda, &wr[1], &wi[1], &vl[vl_offset], ldvl,
-                &work[iwrk], &i__1, info);
+        aocl_lapack_dhseqr("S", "V", n, ilo, ihi, &a[a_offset], lda, &wr[1], &wi[1], &vl[vl_offset],
+                           ldvl, &work[iwrk], &i__1, info);
         if(wantvr)
         {
             /* Want left and right eigenvectors */
             /* Copy Schur vectors to VR */
             *(unsigned char *)side = 'B';
-            dlacpy_("F", n, n, &vl[vl_offset], ldvl, &vr[vr_offset], ldvr);
+            aocl_lapack_dlacpy("F", n, n, &vl[vl_offset], ldvl, &vr[vr_offset], ldvr);
         }
     }
     else if(wantvr)
@@ -674,17 +664,18 @@ void dgeevx_(char *balanc, char *jobvl, char *jobvr, char *sense, integer *n, do
         /* Want right eigenvectors */
         /* Copy Householder vectors to VR */
         *(unsigned char *)side = 'R';
-        dlacpy_("L", n, n, &a[a_offset], lda, &vr[vr_offset], ldvr);
+        aocl_lapack_dlacpy("L", n, n, &a[a_offset], lda, &vr[vr_offset], ldvr);
         /* Generate orthogonal matrix in VR */
         /* (Workspace: need 2*N-1, prefer N+(N-1)*NB) */
         i__1 = *lwork - iwrk + 1;
-        dorghr_(n, ilo, ihi, &vr[vr_offset], ldvr, &work[itau], &work[iwrk], &i__1, &ierr);
+        aocl_lapack_dorghr(n, ilo, ihi, &vr[vr_offset], ldvr, &work[itau], &work[iwrk], &i__1,
+                           &ierr);
         /* Perform QR iteration, accumulating Schur vectors in VR */
         /* (Workspace: need 1, prefer HSWORK (see comments) ) */
         iwrk = itau;
         i__1 = *lwork - iwrk + 1;
-        dhseqr_("S", "V", n, ilo, ihi, &a[a_offset], lda, &wr[1], &wi[1], &vr[vr_offset], ldvr,
-                &work[iwrk], &i__1, info);
+        aocl_lapack_dhseqr("S", "V", n, ilo, ihi, &a[a_offset], lda, &wr[1], &wi[1], &vr[vr_offset],
+                           ldvr, &work[iwrk], &i__1, info);
     }
     else
     {
@@ -701,8 +692,8 @@ void dgeevx_(char *balanc, char *jobvl, char *jobvr, char *sense, integer *n, do
         /* (Workspace: need 1, prefer HSWORK (see comments) ) */
         iwrk = itau;
         i__1 = *lwork - iwrk + 1;
-        dhseqr_(job, "N", n, ilo, ihi, &a[a_offset], lda, &wr[1], &wi[1], &vr[vr_offset], ldvr,
-                &work[iwrk], &i__1, info);
+        aocl_lapack_dhseqr(job, "N", n, ilo, ihi, &a[a_offset], lda, &wr[1], &wi[1], &vr[vr_offset],
+                           ldvr, &work[iwrk], &i__1, info);
     }
     /* If INFO .NE. 0 from DHSEQR, then quit */
     if(*info != 0)
@@ -714,36 +705,37 @@ void dgeevx_(char *balanc, char *jobvl, char *jobvr, char *sense, integer *n, do
         /* Compute left and/or right eigenvectors */
         /* (Workspace: need 3*N, prefer N + 2*N*NB) */
         i__1 = *lwork - iwrk + 1;
-        dtrevc3_(side, "B", select, n, &a[a_offset], lda, &vl[vl_offset], ldvl, &vr[vr_offset],
-                 ldvr, n, &nout, &work[iwrk], &i__1, &ierr);
+        aocl_lapack_dtrevc3(side, "B", select, n, &a[a_offset], lda, &vl[vl_offset], ldvl,
+                            &vr[vr_offset], ldvr, n, &nout, &work[iwrk], &i__1, &ierr);
     }
     /* Compute condition numbers if desired */
     /* (Workspace: need N*N+6*N unless SENSE = 'E') */
     if(!wntsnn)
     {
-        dtrsna_(sense, "A", select, n, &a[a_offset], lda, &vl[vl_offset], ldvl, &vr[vr_offset],
-                ldvr, &rconde[1], &rcondv[1], n, &nout, &work[iwrk], n, &iwork[1], &icond);
+        aocl_lapack_dtrsna(sense, "A", select, n, &a[a_offset], lda, &vl[vl_offset], ldvl,
+                           &vr[vr_offset], ldvr, &rconde[1], &rcondv[1], n, &nout, &work[iwrk], n,
+                           &iwork[1], &icond);
     }
     if(wantvl)
     {
         /* Undo balancing of left eigenvectors */
-        dgebak_(balanc, "L", n, ilo, ihi, &scale[1], n, &vl[vl_offset], ldvl, &ierr);
+        aocl_lapack_dgebak(balanc, "L", n, ilo, ihi, &scale[1], n, &vl[vl_offset], ldvl, &ierr);
         /* Normalize left eigenvectors and make largest component real */
         i__1 = *n;
         for(i__ = 1; i__ <= i__1; ++i__)
         {
             if(wi[i__] == 0.)
             {
-                scl = 1. / dnrm2_(n, &vl[i__ * vl_dim1 + 1], &c__1);
-                dscal_(n, &scl, &vl[i__ * vl_dim1 + 1], &c__1);
+                scl = 1. / aocl_blas_dnrm2(n, &vl[i__ * vl_dim1 + 1], &c__1);
+                aocl_blas_dscal(n, &scl, &vl[i__ * vl_dim1 + 1], &c__1);
             }
             else if(wi[i__] > 0.)
             {
-                d__1 = dnrm2_(n, &vl[i__ * vl_dim1 + 1], &c__1);
-                d__2 = dnrm2_(n, &vl[(i__ + 1) * vl_dim1 + 1], &c__1);
+                d__1 = aocl_blas_dnrm2(n, &vl[i__ * vl_dim1 + 1], &c__1);
+                d__2 = aocl_blas_dnrm2(n, &vl[(i__ + 1) * vl_dim1 + 1], &c__1);
                 scl = 1. / dlapy2_(&d__1, &d__2);
-                dscal_(n, &scl, &vl[i__ * vl_dim1 + 1], &c__1);
-                dscal_(n, &scl, &vl[(i__ + 1) * vl_dim1 + 1], &c__1);
+                aocl_blas_dscal(n, &scl, &vl[i__ * vl_dim1 + 1], &c__1);
+                aocl_blas_dscal(n, &scl, &vl[(i__ + 1) * vl_dim1 + 1], &c__1);
                 i__2 = *n;
                 for(k = 1; k <= i__2; ++k)
                 {
@@ -754,10 +746,10 @@ void dgeevx_(char *balanc, char *jobvl, char *jobvr, char *sense, integer *n, do
                     work[k] = d__1 * d__1 + d__2 * d__2;
                     /* L10: */
                 }
-                k = idamax_(n, &work[1], &c__1);
+                k = aocl_blas_idamax(n, &work[1], &c__1);
                 dlartg_(&vl[k + i__ * vl_dim1], &vl[k + (i__ + 1) * vl_dim1], &cs, &sn, &r__);
-                drot_(n, &vl[i__ * vl_dim1 + 1], &c__1, &vl[(i__ + 1) * vl_dim1 + 1], &c__1, &cs,
-                      &sn);
+                aocl_blas_drot(n, &vl[i__ * vl_dim1 + 1], &c__1, &vl[(i__ + 1) * vl_dim1 + 1],
+                               &c__1, &cs, &sn);
                 vl[k + (i__ + 1) * vl_dim1] = 0.;
             }
             /* L20: */
@@ -766,23 +758,23 @@ void dgeevx_(char *balanc, char *jobvl, char *jobvr, char *sense, integer *n, do
     if(wantvr)
     {
         /* Undo balancing of right eigenvectors */
-        dgebak_(balanc, "R", n, ilo, ihi, &scale[1], n, &vr[vr_offset], ldvr, &ierr);
+        aocl_lapack_dgebak(balanc, "R", n, ilo, ihi, &scale[1], n, &vr[vr_offset], ldvr, &ierr);
         /* Normalize right eigenvectors and make largest component real */
         i__1 = *n;
         for(i__ = 1; i__ <= i__1; ++i__)
         {
             if(wi[i__] == 0.)
             {
-                scl = 1. / dnrm2_(n, &vr[i__ * vr_dim1 + 1], &c__1);
-                dscal_(n, &scl, &vr[i__ * vr_dim1 + 1], &c__1);
+                scl = 1. / aocl_blas_dnrm2(n, &vr[i__ * vr_dim1 + 1], &c__1);
+                aocl_blas_dscal(n, &scl, &vr[i__ * vr_dim1 + 1], &c__1);
             }
             else if(wi[i__] > 0.)
             {
-                d__1 = dnrm2_(n, &vr[i__ * vr_dim1 + 1], &c__1);
-                d__2 = dnrm2_(n, &vr[(i__ + 1) * vr_dim1 + 1], &c__1);
+                d__1 = aocl_blas_dnrm2(n, &vr[i__ * vr_dim1 + 1], &c__1);
+                d__2 = aocl_blas_dnrm2(n, &vr[(i__ + 1) * vr_dim1 + 1], &c__1);
                 scl = 1. / dlapy2_(&d__1, &d__2);
-                dscal_(n, &scl, &vr[i__ * vr_dim1 + 1], &c__1);
-                dscal_(n, &scl, &vr[(i__ + 1) * vr_dim1 + 1], &c__1);
+                aocl_blas_dscal(n, &scl, &vr[i__ * vr_dim1 + 1], &c__1);
+                aocl_blas_dscal(n, &scl, &vr[(i__ + 1) * vr_dim1 + 1], &c__1);
                 i__2 = *n;
                 for(k = 1; k <= i__2; ++k)
                 {
@@ -793,10 +785,10 @@ void dgeevx_(char *balanc, char *jobvl, char *jobvr, char *sense, integer *n, do
                     work[k] = d__1 * d__1 + d__2 * d__2;
                     /* L30: */
                 }
-                k = idamax_(n, &work[1], &c__1);
+                k = aocl_blas_idamax(n, &work[1], &c__1);
                 dlartg_(&vr[k + i__ * vr_dim1], &vr[k + (i__ + 1) * vr_dim1], &cs, &sn, &r__);
-                drot_(n, &vr[i__ * vr_dim1 + 1], &c__1, &vr[(i__ + 1) * vr_dim1 + 1], &c__1, &cs,
-                      &sn);
+                aocl_blas_drot(n, &vr[i__ * vr_dim1 + 1], &c__1, &vr[(i__ + 1) * vr_dim1 + 1],
+                               &c__1, &cs, &sn);
                 vr[k + (i__ + 1) * vr_dim1] = 0.;
             }
             /* L40: */
@@ -810,25 +802,28 @@ L50:
         /* Computing MAX */
         i__3 = *n - *info;
         i__2 = fla_max(i__3, 1);
-        dlascl_("G", &c__0, &c__0, &cscale, &anrm, &i__1, &c__1, &wr[*info + 1], &i__2, &ierr);
+        aocl_lapack_dlascl("G", &c__0, &c__0, &cscale, &anrm, &i__1, &c__1, &wr[*info + 1], &i__2,
+                           &ierr);
         i__1 = *n - *info;
         /* Computing MAX */
         i__3 = *n - *info;
         i__2 = fla_max(i__3, 1);
-        dlascl_("G", &c__0, &c__0, &cscale, &anrm, &i__1, &c__1, &wi[*info + 1], &i__2, &ierr);
+        aocl_lapack_dlascl("G", &c__0, &c__0, &cscale, &anrm, &i__1, &c__1, &wi[*info + 1], &i__2,
+                           &ierr);
         if(*info == 0)
         {
             if((wntsnv || wntsnb) && icond == 0)
             {
-                dlascl_("G", &c__0, &c__0, &cscale, &anrm, n, &c__1, &rcondv[1], n, &ierr);
+                aocl_lapack_dlascl("G", &c__0, &c__0, &cscale, &anrm, n, &c__1, &rcondv[1], n,
+                                   &ierr);
             }
         }
         else
         {
             i__1 = *ilo - 1;
-            dlascl_("G", &c__0, &c__0, &cscale, &anrm, &i__1, &c__1, &wr[1], n, &ierr);
+            aocl_lapack_dlascl("G", &c__0, &c__0, &cscale, &anrm, &i__1, &c__1, &wr[1], n, &ierr);
             i__1 = *ilo - 1;
-            dlascl_("G", &c__0, &c__0, &cscale, &anrm, &i__1, &c__1, &wi[1], n, &ierr);
+            aocl_lapack_dlascl("G", &c__0, &c__0, &cscale, &anrm, &i__1, &c__1, &wi[1], n, &ierr);
         }
     }
     work[1] = (doublereal)maxwrk;

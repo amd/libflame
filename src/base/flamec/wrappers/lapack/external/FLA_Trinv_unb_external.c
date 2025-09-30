@@ -18,9 +18,9 @@ FLA_Error FLA_Trinv_unb_external( FLA_Uplo uplo, FLA_Diag diag, FLA_Obj A )
 {
   FLA_Error    r_val = FLA_SUCCESS;
 #ifdef FLA_ENABLE_EXTERNAL_LAPACK_INTERFACES
-  integer          info;
+  fla_dim_t          info;
   FLA_Datatype datatype;
-  integer          m_A, cs_A;
+  fla_dim_t          m_A, cs_A;
   char         blas_uplo;
   char         blas_diag;
 

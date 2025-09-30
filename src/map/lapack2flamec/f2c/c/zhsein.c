@@ -253,10 +253,38 @@ here the magnitude of a scomplex number */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void zhsein_(char *side, char *eigsrc, char *initv, logical *select, integer *n, doublecomplex *h__,
-             integer *ldh, doublecomplex *w, doublecomplex *vl, integer *ldvl, doublecomplex *vr,
-             integer *ldvr, integer *mm, integer *m, doublecomplex *work, doublereal *rwork,
-             integer *ifaill, integer *ifailr, integer *info)
+/** Generated wrapper function */
+void zhsein_(char *side, char *eigsrc, char *initv, logical *select, aocl_int_t *n,
+             dcomplex *h__, aocl_int_t *ldh, dcomplex *w, dcomplex *vl,
+             aocl_int_t *ldvl, dcomplex *vr, aocl_int_t *ldvr, aocl_int_t *mm, aocl_int_t *m,
+             dcomplex *work, doublereal *rwork, aocl_int_t *ifaill, aocl_int_t *ifailr,
+             aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_zhsein(side, eigsrc, initv, select, n, h__, ldh, w, vl, ldvl, vr, ldvr, mm, m, work,
+                       rwork, ifaill, ifailr, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t ldh_64 = *ldh;
+    aocl_int64_t ldvl_64 = *ldvl;
+    aocl_int64_t ldvr_64 = *ldvr;
+    aocl_int64_t mm_64 = *mm;
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_zhsein(side, eigsrc, initv, select, &n_64, h__, &ldh_64, w, vl, &ldvl_64, vr,
+                       &ldvr_64, &mm_64, &m_64, work, rwork, ifaill, ifailr, &info_64);
+
+    *m = (aocl_int_t)m_64;
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_zhsein(char *side, char *eigsrc, char *initv, logical *select, aocl_int64_t *n,
+                        dcomplex *h__, aocl_int64_t *ldh, dcomplex *w, dcomplex *vl,
+                        aocl_int64_t *ldvl, dcomplex *vr, aocl_int64_t *ldvr, aocl_int64_t *mm,
+                        aocl_int64_t *m, dcomplex *work, doublereal *rwork, aocl_int_t *ifaill,
+                        aocl_int_t *ifailr, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zhsein inputs: side %c, eigsrc %c, initv %c, n %" FLA_IS ", ldh %" FLA_IS
@@ -273,21 +301,12 @@ void zhsein_(char *side, char *eigsrc, char *initv, logical *select, integer *n,
     dcomplex wk;
     aocl_int64_t kln;
     doublereal ulp, eps3, unfl;
-    extern logical lsame_(char *, char *, integer, integer);
-    integer iinfo;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    aocl_int64_t iinfo;
     logical leftv, bothv;
     doublereal hnorm;
     extern doublereal dlamch_(char *);
     extern logical disnan_(doublereal *);
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    extern /* Subroutine */
-        void
-        zlaein_(logical *, logical *, integer *, doublecomplex *, integer *, doublecomplex *,
-                doublecomplex *, doublecomplex *, integer *, doublereal *, doublereal *,
-                doublereal *, integer *);
-    extern doublereal zlanhs_(char *, integer *, doublecomplex *, integer *, doublereal *);
     logical noinit;
     aocl_int64_t ldwork;
     logical rightv, fromqr;
@@ -387,7 +406,7 @@ void zhsein_(char *side, char *eigsrc, char *initv, logical *select, integer *n,
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("ZHSEIN", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("ZHSEIN", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -463,7 +482,7 @@ void zhsein_(char *side, char *eigsrc, char *initv, logical *select, integer *n,
                 /* Compute infinity-norm of submatrix H(KL:KR,KL:KR) if it */
                 /* has not ben computed before. */
                 i__2 = kr - kl + 1;
-                hnorm = zlanhs_("I", &i__2, &h__[kl + kl * h_dim1], ldh, &rwork[1]);
+                hnorm = aocl_lapack_zlanhs("I", &i__2, &h__[kl + kl * h_dim1], ldh, &rwork[1]);
                 if(disnan_(&hnorm))
                 {
                     *info = -6;
@@ -513,9 +532,9 @@ void zhsein_(char *side, char *eigsrc, char *initv, logical *select, integer *n,
             {
                 /* Compute left eigenvector. */
                 i__2 = *n - kl + 1;
-                zlaein_(&c_false, &noinit, &i__2, &h__[kl + kl * h_dim1], ldh, &wk,
-                        &vl[kl + ks * vl_dim1], &work[1], &ldwork, &rwork[1], &eps3, &smlnum,
-                        &iinfo);
+                aocl_lapack_zlaein(&c_false, &noinit, &i__2, &h__[kl + kl * h_dim1], ldh, &wk,
+                                   &vl[kl + ks * vl_dim1], &work[1], &ldwork, &rwork[1], &eps3,
+                                   &smlnum, &iinfo);
                 if(iinfo > 0)
                 {
                     ++(*info);
@@ -537,8 +556,9 @@ void zhsein_(char *side, char *eigsrc, char *initv, logical *select, integer *n,
             if(rightv)
             {
                 /* Compute right eigenvector. */
-                zlaein_(&c_true, &noinit, &kr, &h__[h_offset], ldh, &wk, &vr[ks * vr_dim1 + 1],
-                        &work[1], &ldwork, &rwork[1], &eps3, &smlnum, &iinfo);
+                aocl_lapack_zlaein(&c_true, &noinit, &kr, &h__[h_offset], ldh, &wk,
+                                   &vr[ks * vr_dim1 + 1], &work[1], &ldwork, &rwork[1], &eps3,
+                                   &smlnum, &iinfo);
                 if(iinfo > 0)
                 {
                     ++(*info);

@@ -176,8 +176,9 @@ the routine */
 /* > \ingroup realOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void sormtr_fla(char *side, char *uplo, char *trans, integer *m, integer *n, real *a, integer *lda,
-                real *tau, real *c__, integer *ldc, real *work, integer *lwork, integer *info)
+void sormtr_fla(char *side, char *uplo, char *trans, aocl_int64_t *m, aocl_int64_t *n, real *a,
+                aocl_int64_t *lda, real *tau, real *c__, aocl_int64_t *ldc, real *work,
+                aocl_int64_t *lwork, aocl_int64_t *info)
 {
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, c_dim1, c_offset, i__2, i__3;
@@ -188,24 +189,16 @@ void sormtr_fla(char *side, char *uplo, char *trans, integer *m, integer *n, rea
     /* Local variables */
     aocl_int64_t i1, i2, nb, mi, ni, nq, nw;
     logical left;
-    extern logical lsame_(char *, char *, integer, integer);
-    integer iinfo;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    aocl_int64_t iinfo;
     logical upper;
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
-    extern /* Subroutine */
-        void
-        sormql_(char *, char *, integer *, integer *, integer *, real *, integer *, real *, real *,
-                integer *, real *, integer *, integer *);
-    integer lwkopt;
+    aocl_int64_t lwkopt;
     logical lquery;
     extern /* Subroutine */
         void
-        sormqr_fla(char *, char *, integer *, integer *, integer *, real *, integer *, real *,
-                   real *, integer *, real *, integer *, integer *);
-    extern real sroundup_lwork(integer *);
+        sormqr_fla(char *, char *, aocl_int64_t *, aocl_int64_t *, aocl_int64_t *, real *,
+                   aocl_int64_t *, real *, real *, aocl_int64_t *, real *, aocl_int64_t *,
+                   aocl_int64_t *);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -315,12 +308,12 @@ void sormtr_fla(char *side, char *uplo, char *trans, integer *m, integer *n, rea
             }
         }
         lwkopt = fla_max(1, nw) * nb;
-        work[1] = sroundup_lwork(&lwkopt);
+        work[1] = aocl_lapack_sroundup_lwork(&lwkopt);
     }
     if(*info != 0)
     {
         i__2 = -(*info);
-        xerbla_("SORMTR", &i__2, (ftnlen)6);
+        aocl_blas_xerbla("SORMTR", &i__2, (ftnlen)6);
         return;
     }
     else if(lquery)
@@ -347,8 +340,8 @@ void sormtr_fla(char *side, char *uplo, char *trans, integer *m, integer *n, rea
     {
         /* Q was determined by a call to SSYTRD with UPLO = 'U' */
         i__2 = nq - 1;
-        sormql_(side, trans, &mi, &ni, &i__2, &a[(a_dim1 << 1) + 1], lda, &tau[1], &c__[c_offset],
-                ldc, &work[1], lwork, &iinfo);
+        aocl_lapack_sormql(side, trans, &mi, &ni, &i__2, &a[(a_dim1 << 1) + 1], lda, &tau[1],
+                           &c__[c_offset], ldc, &work[1], lwork, &iinfo);
     }
     else
     {
@@ -367,7 +360,7 @@ void sormtr_fla(char *side, char *uplo, char *trans, integer *m, integer *n, rea
         sormqr_fla(side, trans, &mi, &ni, &i__2, &a[a_dim1 + 2], lda, &tau[1],
                    &c__[i1 + i2 * c_dim1], ldc, &work[1], lwork, &iinfo);
     }
-    work[1] = sroundup_lwork(&lwkopt);
+    work[1] = aocl_lapack_sroundup_lwork(&lwkopt);
     return;
     /* End of SORMTR */
 }

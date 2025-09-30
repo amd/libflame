@@ -16,15 +16,15 @@
 #include "blis.h"
 #endif
 
-void bl1_sewscalmt( trans1_t trans, integer m, integer n, float* a, integer a_rs, integer a_cs, float* b, integer b_rs, integer b_cs )
+void bl1_sewscalmt( trans1_t trans, fla_dim_t m, fla_dim_t n, float* a, fla_dim_t a_rs, fla_dim_t a_cs, float* b, fla_dim_t b_rs, fla_dim_t b_cs )
 {
 	float*    a_begin;
 	float*    b_begin;
-	integer       lda, inca;
-	integer       ldb, incb;
-	integer       n_iter;
-	integer       n_elem;
-	integer       j;
+	fla_dim_t       lda, inca;
+	fla_dim_t       ldb, incb;
+	fla_dim_t       n_iter;
+	fla_dim_t       n_elem;
+	fla_dim_t       j;
 	conj1_t    conj;
 
 	// Return early if possible.
@@ -88,15 +88,15 @@ void bl1_sewscalmt( trans1_t trans, integer m, integer n, float* a, integer a_rs
 	}
 }
 
-void bl1_dewscalmt( trans1_t trans, integer m, integer n, double* a, integer a_rs, integer a_cs, double* b, integer b_rs, integer b_cs )
+void bl1_dewscalmt( trans1_t trans, fla_dim_t m, fla_dim_t n, double* a, fla_dim_t a_rs, fla_dim_t a_cs, double* b, fla_dim_t b_rs, fla_dim_t b_cs )
 {
 	double*   a_begin;
 	double*   b_begin;
-	integer       lda, inca;
-	integer       ldb, incb;
-	integer       n_iter;
-	integer       n_elem;
-	integer       j;
+	fla_dim_t       lda, inca;
+	fla_dim_t       ldb, incb;
+	fla_dim_t       n_iter;
+	fla_dim_t       n_elem;
+	fla_dim_t       j;
 	conj1_t    conj;
 
 	// Return early if possible.
@@ -160,15 +160,15 @@ void bl1_dewscalmt( trans1_t trans, integer m, integer n, double* a, integer a_r
 	}
 }
 
-void bl1_csewscalmt( trans1_t trans, integer m, integer n, float* a, integer a_rs, integer a_cs, scomplex* b, integer b_rs, integer b_cs )
+void bl1_csewscalmt( trans1_t trans, fla_dim_t m, fla_dim_t n, float* a, fla_dim_t a_rs, fla_dim_t a_cs, scomplex* b, fla_dim_t b_rs, fla_dim_t b_cs )
 {
 	float*    a_begin;
 	scomplex* b_begin;
-	integer       lda, inca;
-	integer       ldb, incb;
-	integer       n_iter;
-	integer       n_elem;
-	integer       j;
+	fla_dim_t       lda, inca;
+	fla_dim_t       ldb, incb;
+	fla_dim_t       n_iter;
+	fla_dim_t       n_elem;
+	fla_dim_t       j;
 	conj1_t    conj;
 
 	// Return early if possible.
@@ -232,15 +232,15 @@ void bl1_csewscalmt( trans1_t trans, integer m, integer n, float* a, integer a_r
 	}
 }
 
-void bl1_cewscalmt( trans1_t trans, integer m, integer n, scomplex* a, integer a_rs, integer a_cs, scomplex* b, integer b_rs, integer b_cs )
+void bl1_cewscalmt( trans1_t trans, fla_dim_t m, fla_dim_t n, scomplex* a, fla_dim_t a_rs, fla_dim_t a_cs, scomplex* b, fla_dim_t b_rs, fla_dim_t b_cs )
 {
 	scomplex* a_begin;
 	scomplex* b_begin;
-	integer       lda, inca;
-	integer       ldb, incb;
-	integer       n_iter;
-	integer       n_elem;
-	integer       j;
+	fla_dim_t       lda, inca;
+	fla_dim_t       ldb, incb;
+	fla_dim_t       n_iter;
+	fla_dim_t       n_elem;
+	fla_dim_t       j;
 	conj1_t    conj;
 
 	// Return early if possible.
@@ -304,15 +304,15 @@ void bl1_cewscalmt( trans1_t trans, integer m, integer n, scomplex* a, integer a
 	}
 }
 
-void bl1_zdewscalmt( trans1_t trans, integer m, integer n, double* a, integer a_rs, integer a_cs, dcomplex* b, integer b_rs, integer b_cs )
+void bl1_zdewscalmt( trans1_t trans, fla_dim_t m, fla_dim_t n, double* a, fla_dim_t a_rs, fla_dim_t a_cs, dcomplex* b, fla_dim_t b_rs, fla_dim_t b_cs )
 {
 	double*   a_begin;
 	dcomplex* b_begin;
-	integer       lda, inca;
-	integer       ldb, incb;
-	integer       n_iter;
-	integer       n_elem;
-	integer       j;
+	fla_dim_t       lda, inca;
+	fla_dim_t       ldb, incb;
+	fla_dim_t       n_iter;
+	fla_dim_t       n_elem;
+	fla_dim_t       j;
 	conj1_t    conj;
 
 	// Return early if possible.
@@ -376,15 +376,15 @@ void bl1_zdewscalmt( trans1_t trans, integer m, integer n, double* a, integer a_
 	}
 }
 
-void bl1_zewscalmt( trans1_t trans, integer m, integer n, dcomplex* a, integer a_rs, integer a_cs, dcomplex* b, integer b_rs, integer b_cs )
+void bl1_zewscalmt( trans1_t trans, fla_dim_t m, fla_dim_t n, dcomplex* a, fla_dim_t a_rs, fla_dim_t a_cs, dcomplex* b, fla_dim_t b_rs, fla_dim_t b_cs )
 {
 	dcomplex* a_begin;
 	dcomplex* b_begin;
-	integer       lda, inca;
-	integer       ldb, incb;
-	integer       n_iter;
-	integer       n_elem;
-	integer       j;
+	fla_dim_t       lda, inca;
+	fla_dim_t       ldb, incb;
+	fla_dim_t       n_iter;
+	fla_dim_t       n_elem;
+	fla_dim_t       j;
 	conj1_t    conj;
 
 	// Return early if possible.

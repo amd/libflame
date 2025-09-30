@@ -1,69 +1,43 @@
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
-static integer c_n1 = -1;
-static integer c__0 = 0;
+static aocl_int64_t c__1 = 1;
+static aocl_int64_t c_n1 = -1;
+static aocl_int64_t c__0 = 0;
 static doublereal c_b17 = 1.;
 /* > \brief <b> dsteqr_helper computes the eigenvalues and  right eigenvectors for SY matrices</b>
  */
 /* =========== DOCUMENTATION =========== */
 /* ===================================================================== */
 /* Subroutine */
-void dsteqr_helper_(char *jobz, char *uplo, integer *n, doublereal *a, integer *lda, doublereal *w,
-                    doublereal *work, integer *lwork, integer *iwork, integer *liwork,
-                    integer *info)
+void dsteqr_helper_(char *jobz, char *uplo, aocl_int64_t *n, doublereal *a, aocl_int64_t *lda,
+                    doublereal *w, doublereal *work, aocl_int64_t *lwork, aocl_int_t *iwork,
+                    aocl_int64_t *liwork, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dsteqr_helper inputs: jobz %c, uplo %c, n %" FLA_IS ", lda %" FLA_IS
                       ", lwork %" FLA_IS ", liwork %" FLA_IS "",
                       *jobz, *uplo, *n, *lda, *lwork, *liwork);
     /* System generated locals */
-    integer a_dim1, a_offset, i__1, i__2;
+    aocl_int64_t a_dim1, a_offset, i__1, i__2;
     doublereal d__1;
     /* Builtin functions */
     double sqrt(doublereal);
     /* Local variables */
     doublereal eps;
-    integer inde;
+    aocl_int64_t inde;
     doublereal anrm, rmin, rmax;
-    integer lopt;
-    extern /* Subroutine */
-        void
-        dscal_(integer *, doublereal *, doublereal *, integer *);
+    aocl_int64_t lopt;
     doublereal sigma;
-    extern logical lsame_(char *, char *, integer, integer);
-    integer iinfo, lwmin, liopt;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    aocl_int64_t iinfo, lwmin, liopt;
     logical wantz;
-    integer indwk2, llwrk2;
+    aocl_int64_t indwk2, llwrk2;
     extern doublereal dlamch_(char *);
-    integer iscale;
-    extern /* Subroutine */
-        void
-        dlascl_(char *, integer *, integer *, doublereal *, doublereal *, integer *, integer *,
-                doublereal *, integer *, integer *),
-        dstedc_(char *, integer *, doublereal *, doublereal *, doublereal *, integer *,
-                doublereal *, integer *, integer *, integer *, integer *),
-        dlacpy_(char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *);
+    aocl_int64_t iscale;
     doublereal safmin;
-    extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal bignum;
-    integer indtau;
-    extern /* Subroutine */
-        void
-        dsterf_(integer *, doublereal *, doublereal *, integer *);
-    extern doublereal dlansy_(char *, char *, integer *, doublereal *, integer *, doublereal *);
-    integer indwrk, liwmin;
-    extern /* Subroutine */
-        void
-        dormtr_(char *, char *, char *, integer *, integer *, doublereal *, integer *, doublereal *,
-                doublereal *, integer *, doublereal *, integer *, integer *);
-    extern /* Subroutine */
-        void
-        dsytrd_(char *uplo, integer *n, doublereal *a, integer *lda, doublereal *d__, doublereal *e,
-                doublereal *tau, doublereal *work, integer *lwork, integer *info);
-    integer llwork;
+    aocl_int64_t indtau;
+    aocl_int64_t indwrk, liwmin;
+    aocl_int64_t llwork;
     doublereal smlnum;
     logical lquery;
     /* -- LAPACK driver routine (version 3.4.2) -- */
@@ -125,12 +99,13 @@ void dsteqr_helper_(char *jobz, char *uplo, integer *n, doublereal *a, integer *
             /* Computing MAX */
             i__1 = lwmin;
             i__2 = (*n << 1)
-                   + ilaenv_(&c__1, "DSYEVD", uplo, n, &c_n1, &c_n1, &c_n1); // , expr subst
+                   + aocl_lapack_ilaenv(&c__1, "DSYEVD", uplo, n, &c_n1, &c_n1,
+                                        &c_n1); // , expr subst
             lopt = fla_max(i__1, i__2);
             liopt = liwmin;
         }
         work[1] = (doublereal)lopt;
-        iwork[1] = liopt;
+        iwork[1] = (aocl_int_t)liopt;
         if(*lwork < lwmin && !lquery)
         {
             *info = -8;
@@ -143,7 +118,7 @@ void dsteqr_helper_(char *jobz, char *uplo, integer *n, doublereal *a, integer *
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("DSYEVD", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("DSYEVD", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -176,7 +151,7 @@ void dsteqr_helper_(char *jobz, char *uplo, integer *n, doublereal *a, integer *
     rmin = sqrt(smlnum);
     rmax = sqrt(bignum);
     /* Scale matrix to allowable range, if necessary. */
-    anrm = dlansy_("M", uplo, n, &a[a_offset], lda, &work[1]);
+    anrm = aocl_lapack_dlansy("M", uplo, n, &a[a_offset], lda, &work[1]);
     iscale = 0;
     if(anrm > 0. && anrm < rmin)
     {
@@ -190,7 +165,7 @@ void dsteqr_helper_(char *jobz, char *uplo, integer *n, doublereal *a, integer *
     }
     if(iscale == 1)
     {
-        dlascl_(uplo, &c__0, &c__0, &c_b17, &sigma, n, n, &a[a_offset], lda, info);
+        aocl_lapack_dlascl(uplo, &c__0, &c__0, &c_b17, &sigma, n, n, &a[a_offset], lda, info);
     }
     // printf("reaching after lascl\n");
     /* Call DSYTRD to reduce symmetric matrix to tridiagonal form. */
@@ -204,29 +179,29 @@ void dsteqr_helper_(char *jobz, char *uplo, integer *n, doublereal *a, integer *
     /* DSTEDC to generate the eigenvector matrix, WORK(INDWRK), of the */
     /* tridiagonal matrix, then call DORMTR to multiply it by the */
     /* Householder transformations stored in A. */
-    dsytrd_(uplo, n, &a[a_offset], lda, &w[1], &work[inde], &work[indtau], &work[indwrk], &llwork,
-            &iinfo);
+    aocl_lapack_dsytrd(uplo, n, &a[a_offset], lda, &w[1], &work[inde], &work[indtau], &work[indwrk],
+                       &llwork, &iinfo);
     lopt = (integer)((*n << 1) + work[indwrk]);
     if(!wantz)
     {
-        dsterf_(n, &w[1], &work[inde], info);
+        aocl_lapack_dsterf(n, &w[1], &work[inde], info);
     }
     else
     {
-        dstedc_("I", n, &w[1], &work[inde], &work[indwrk], n, &work[indwk2], &llwrk2, &iwork[1],
-                liwork, info);
-        dormtr_("L", uplo, "N", n, n, &a[a_offset], lda, &work[indtau], &work[indwrk], n,
-                &work[indwk2], &llwrk2, &iinfo);
-        dlacpy_("A", n, n, &work[indwrk], n, &a[a_offset], lda);
+        aocl_lapack_dstedc("I", n, &w[1], &work[inde], &work[indwrk], n, &work[indwk2], &llwrk2,
+                           &iwork[1], liwork, info);
+        aocl_lapack_dormtr("L", uplo, "N", n, n, &a[a_offset], lda, &work[indtau], &work[indwrk], n,
+                           &work[indwk2], &llwrk2, &iinfo);
+        aocl_lapack_dlacpy("A", n, n, &work[indwrk], n, &a[a_offset], lda);
     }
     /* If matrix was scaled, then rescale eigenvalues appropriately. */
     if(iscale == 1)
     {
         d__1 = 1. / sigma;
-        dscal_(n, &d__1, &w[1], &c__1);
+        aocl_blas_dscal(n, &d__1, &w[1], &c__1);
     }
     work[1] = (doublereal)lopt;
-    iwork[1] = liopt;
+    iwork[1] = (aocl_int_t)liopt;
 
     AOCL_DTL_TRACE_LOG_EXIT
     return;

@@ -159,8 +159,26 @@
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void zhpsv_(char *uplo, integer *n, integer *nrhs, doublecomplex *ap, integer *ipiv,
-            doublecomplex *b, integer *ldb, integer *info)
+/** Generated wrapper function */
+void zhpsv_(char *uplo, aocl_int_t *n, aocl_int_t *nrhs, dcomplex *ap, aocl_int_t *ipiv,
+            dcomplex *b, aocl_int_t *ldb, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_zhpsv(uplo, n, nrhs, ap, ipiv, b, ldb, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t nrhs_64 = *nrhs;
+    aocl_int64_t ldb_64 = *ldb;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_zhpsv(uplo, &n_64, &nrhs_64, ap, ipiv, b, &ldb_64, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_zhpsv(char *uplo, aocl_int64_t *n, aocl_int64_t *nrhs, dcomplex *ap,
+                       aocl_int_t *ipiv, dcomplex *b, aocl_int64_t *ldb, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zhpsv inputs: uplo %c, n %" FLA_IS ", nrhs %" FLA_IS ", ldb %" FLA_IS "",
@@ -168,15 +186,7 @@ void zhpsv_(char *uplo, integer *n, integer *nrhs, doublecomplex *ap, integer *i
     /* System generated locals */
     aocl_int64_t b_dim1, b_offset, i__1;
     /* Local variables */
-    extern logical lsame_(char *, char *, integer, integer);
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    extern /* Subroutine */
-        void
-        zhptrf_(char *, integer *, doublecomplex *, integer *, integer *),
-        zhptrs_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *,
-                integer *, integer *);
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     /* -- LAPACK driver routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -221,12 +231,12 @@ void zhpsv_(char *uplo, integer *n, integer *nrhs, doublecomplex *ap, integer *i
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("ZHPSV ", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("ZHPSV ", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Compute the factorization A = U*D*U**H or A = L*D*L**H. */
-    zhptrf_(uplo, n, &ap[1], &ipiv[1], info);
+    aocl_lapack_zhptrf(uplo, n, &ap[1], &ipiv[1], info);
     if(*info == 0)
     {
         /* Solve the system A*X = B, overwriting B with X. */

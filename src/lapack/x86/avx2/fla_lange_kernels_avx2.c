@@ -82,7 +82,7 @@
     type_mm128x(x) vmax128 = {0};                                                                \
     type_mm256x(x) nan_flag = invoke_mm256_set1_px(x, 0);                                        \
     type_mm128x(x) nan_flag128 = invoke_mm_set1_px(x, 0);                                        \
-    integer i__, lasti, found_nan;                                                               \
+    aocl_int64_t i__, lasti, found_nan;                                                               \
     realtype max_value, temp;                                                                    \
     max_value = 0.0f;                                                                            \
     lasti = m - (m % stepsize);                                                                  \
@@ -199,7 +199,7 @@
     __m256d nan_flag = _mm256_set1_pd(0.0);                                                    \
     __m128d nan_flag128 = _mm_set1_pd(0.0);                                                    \
     doublereal max_value;                                                                      \
-    integer i__, lasti, found_nan;                                                             \
+    aocl_int64_t i__, lasti, found_nan;                                                             \
     max_value = 0.0f;                                                                          \
     lasti = m - (m % 8);                                                                       \
     /* Get maximum upto size lasti */                                                          \
@@ -293,7 +293,7 @@
     __m256d vmax = {0};                                                                   \
     __m128d vmax128 = {0};                                                                \
     doublereal max_value;                                                                 \
-    integer i__, lasti;                                                                   \
+    aocl_int64_t i__, lasti;                                                                   \
     scale_vec = _mm256_set1_pd(scale_factor);                                             \
     scale_vec128 = _mm_set1_pd(scale_factor);                                             \
     max_value = 0.0f;                                                                     \
@@ -376,19 +376,19 @@
     max_value = _mm_cvtsd_f64(vmax128);                                                   \
     max_value = sqrt(max_value);
 
-doublereal fla_get_max_dabs_element_vector_avx2(integer m, doublereal *a, integer a_dim)
+doublereal fla_get_max_dabs_element_vector_avx2(aocl_int64_t m, doublereal *a, aocl_int64_t a_dim)
 {
     fla_get_max_xabs_element_vector_real_avx2(d, doublereal, m, a, a_dim, 4, 8, 2);
     return max_value;
 }
 
-real fla_get_max_sabs_element_vector_avx2(integer m, real *a, integer a_dim)
+real fla_get_max_sabs_element_vector_avx2(aocl_int64_t m, real *a, aocl_int64_t a_dim)
 {
     fla_get_max_xabs_element_vector_real_avx2(s, real, m, a, a_dim, 8, 16, 4);
     return max_value;
 }
 
-doublereal fla_get_max_zabs_element_vector_avx2(integer m, doublecomplex *a, integer a_dim)
+doublereal fla_get_max_zabs_element_vector_avx2(aocl_int64_t m, dcomplex *a, aocl_int64_t a_dim)
 {
     /* Threshold amd scaling values taken from dlassq API
        which calculates sum of squares by performaing scaling
@@ -415,7 +415,7 @@ doublereal fla_get_max_zabs_element_vector_avx2(integer m, doublecomplex *a, int
     return max_value;
 }
 
-real fla_get_max_cabs_element_vector_avx2(integer m, complex *a, integer a_dim)
+real fla_get_max_cabs_element_vector_avx2(aocl_int64_t m, scomplex *a, aocl_int64_t a_dim)
 {
     /* The real value is upscaled to doublereal during calculation of absolute
         value. Hence underflow/overflow is taken care of. */

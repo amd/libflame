@@ -233,8 +233,24 @@ b(i), i=1,..,n}
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void slatps_(char *uplo, char *trans, char *diag, char *normin, integer *n, real *ap, real *x,
-             real *scale, real *cnorm, integer *info)
+/** Generated wrapper function */
+void slatps_(char *uplo, char *trans, char *diag, char *normin, aocl_int_t *n, real *ap, real *x,
+             real *scale, real *cnorm, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_slatps(uplo, trans, diag, normin, n, ap, x, scale, cnorm, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_slatps(uplo, trans, diag, normin, &n_64, ap, x, scale, cnorm, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_slatps(char *uplo, char *trans, char *diag, char *normin, aocl_int64_t *n,
+                        real *ap, real *x, real *scale, real *cnorm, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("slatps inputs: uplo %c ,trans %c ,diag %c ,normin %c ,n %" FLA_IS "", *uplo,
@@ -250,21 +266,11 @@ void slatps_(char *uplo, char *trans, char *diag, char *normin, integer *n, real
     aocl_int64_t imax;
     real tmax, tjjs;
     real xmax, grow, sumj;
-    extern logical lsame_(char *, char *, integer, integer);
-    extern /* Subroutine */
-        void
-        sscal_(integer *, real *, real *, integer *);
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     real tscal, uscal;
     aocl_int64_t jlast;
     logical upper;
-    extern /* Subroutine */
-        void
-        saxpy_(integer *, real *, real *, integer *, real *, integer *),
-        stpsv_(char *, char *, char *, integer *, real *, real *, integer *);
     extern real slamch_(char *);
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real bignum;
     logical notran;
     aocl_int64_t jfirst;
@@ -324,7 +330,7 @@ void slatps_(char *uplo, char *trans, char *diag, char *normin, integer *n, real
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("SLATPS", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("SLATPS", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -384,7 +390,7 @@ void slatps_(char *uplo, char *trans, char *diag, char *normin, integer *n, real
     }
     /* Compute a bound on the computed solution vector to see if the */
     /* Level 2 BLAS routine STPSV can be used. */
-    j = isamax_(n, &x[1], &c__1);
+    j = aocl_blas_isamax(n, &x[1], &c__1);
     xmax = (r__1 = x[j], f2c_abs(r__1));
     xbnd = xmax;
     if(notran)
@@ -680,9 +686,9 @@ void slatps_(char *uplo, char *trans, char *diag, char *normin, integer *n, real
                         /* x(1:j-1) := x(1:j-1) - x(j) * A(1:j-1,j) */
                         i__3 = j - 1;
                         r__1 = -x[j] * tscal;
-                        saxpy_(&i__3, &r__1, &ap[ip - j + 1], &c__1, &x[1], &c__1);
+                        aocl_blas_saxpy(&i__3, &r__1, &ap[ip - j + 1], &c__1, &x[1], &c__1);
                         i__3 = j - 1;
-                        i__ = isamax_(&i__3, &x[1], &c__1);
+                        i__ = aocl_blas_isamax(&i__3, &x[1], &c__1);
                         xmax = (r__1 = x[i__], f2c_abs(r__1));
                     }
                     ip -= j;
@@ -695,9 +701,9 @@ void slatps_(char *uplo, char *trans, char *diag, char *normin, integer *n, real
                         /* x(j+1:n) := x(j+1:n) - x(j) * A(j+1:n,j) */
                         i__3 = *n - j;
                         r__1 = -x[j] * tscal;
-                        saxpy_(&i__3, &r__1, &ap[ip + 1], &c__1, &x[j + 1], &c__1);
+                        aocl_blas_saxpy(&i__3, &r__1, &ap[ip + 1], &c__1, &x[j + 1], &c__1);
                         i__3 = *n - j;
-                        i__ = j + isamax_(&i__3, &x[j + 1], &c__1);
+                        i__ = j + aocl_blas_isamax(&i__3, &x[j + 1], &c__1);
                         xmax = (r__1 = x[i__], f2c_abs(r__1));
                     }
                     ip = ip + *n - j + 1;
@@ -756,12 +762,12 @@ void slatps_(char *uplo, char *trans, char *diag, char *normin, integer *n, real
                     if(upper)
                     {
                         i__3 = j - 1;
-                        sumj = sdot_(&i__3, &ap[ip - j + 1], &c__1, &x[1], &c__1);
+                        sumj = aocl_blas_sdot(&i__3, &ap[ip - j + 1], &c__1, &x[1], &c__1);
                     }
                     else if(j < *n)
                     {
                         i__3 = *n - j;
-                        sumj = sdot_(&i__3, &ap[ip + 1], &c__1, &x[j + 1], &c__1);
+                        sumj = aocl_blas_sdot(&i__3, &ap[ip + 1], &c__1, &x[j + 1], &c__1);
                     }
                 }
                 else

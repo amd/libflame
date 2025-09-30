@@ -4,7 +4,7 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
+static aocl_int64_t c__1 = 1;
 /* > \brief \b DORBDB1 */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -199,48 +199,55 @@ the routine */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void dorbdb1_(integer *m, integer *p, integer *q, doublereal *x11, integer *ldx11, doublereal *x21,
-              integer *ldx21, doublereal *theta, doublereal *phi, doublereal *taup1,
-              doublereal *taup2, doublereal *tauq1, doublereal *work, integer *lwork, integer *info)
+/** Generated wrapper function */
+void dorbdb1_(aocl_int_t *m, aocl_int_t *p, aocl_int_t *q, doublereal *x11, aocl_int_t *ldx11,
+              doublereal *x21, aocl_int_t *ldx21, doublereal *theta, doublereal *phi,
+              doublereal *taup1, doublereal *taup2, doublereal *tauq1, doublereal *work,
+              aocl_int_t *lwork, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_dorbdb1(m, p, q, x11, ldx11, x21, ldx21, theta, phi, taup1, taup2, tauq1, work,
+                        lwork, info);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t p_64 = *p;
+    aocl_int64_t q_64 = *q;
+    aocl_int64_t ldx11_64 = *ldx11;
+    aocl_int64_t ldx21_64 = *ldx21;
+    aocl_int64_t lwork_64 = *lwork;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_dorbdb1(&m_64, &p_64, &q_64, x11, &ldx11_64, x21, &ldx21_64, theta, phi, taup1,
+                        taup2, tauq1, work, &lwork_64, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_dorbdb1(aocl_int64_t *m, aocl_int64_t *p, aocl_int64_t *q, doublereal *x11,
+                         aocl_int64_t *ldx11, doublereal *x21, aocl_int64_t *ldx21,
+                         doublereal *theta, doublereal *phi, doublereal *taup1, doublereal *taup2,
+                         doublereal *tauq1, doublereal *work, aocl_int64_t *lwork,
+                         aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dorbdb1 inputs: m %" FLA_IS ", p %" FLA_IS ", q %" FLA_IS ", ldx11 %" FLA_IS
                       ", ldx21 %" FLA_IS ", lwork %" FLA_IS "",
                       *m, *p, *q, *ldx11, *ldx21, *lwork);
     /* System generated locals */
-    integer x11_dim1, x11_offset, x21_dim1, x21_offset, i__1, i__2, i__3, i__4;
+    aocl_int64_t x11_dim1, x11_offset, x21_dim1, x21_offset, i__1, i__2, i__3, i__4;
     doublereal d__1, d__2;
     /* Builtin functions */
     double atan2(doublereal, doublereal), cos(doublereal), sin(doublereal), sqrt(doublereal);
     /* Local variables */
-    integer lworkmin, lworkopt;
+    aocl_int64_t lworkmin, lworkopt;
     doublereal c__;
-    integer i__;
+    aocl_int64_t i__;
     doublereal s;
-    integer childinfo;
-    extern /* Subroutine */
-        void
-        drot_(integer *, doublereal *, integer *, doublereal *, integer *, doublereal *,
-              doublereal *);
-    extern doublereal dnrm2_(integer *, doublereal *, integer *);
-    extern /* Subroutine */
-        void
-        dlarf_(char *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *,
-               integer *, doublereal *);
-    integer ilarf, llarf;
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    aocl_int64_t childinfo;
+    aocl_int64_t ilarf, llarf;
     logical lquery;
-    extern /* Subroutine */
-        void
-        dorbdb5_(integer *, integer *, integer *, doublereal *, integer *, doublereal *, integer *,
-                 doublereal *, integer *, doublereal *, integer *, doublereal *, integer *,
-                 integer *);
-    integer iorbdb5, lorbdb5;
-    extern /* Subroutine */
-        void
-        dlarfgp_(integer *, doublereal *, doublereal *, integer *, doublereal *);
+    aocl_int64_t iorbdb5, lorbdb5;
     /* -- LAPACK computational routine (version 3.7.1) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -329,7 +336,7 @@ void dorbdb1_(integer *m, integer *p, integer *q, doublereal *x11, integer *ldx1
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("DORBDB1", &i__1, (ftnlen)7);
+        aocl_blas_xerbla("DORBDB1", &i__1, (ftnlen)7);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -343,11 +350,11 @@ void dorbdb1_(integer *m, integer *p, integer *q, doublereal *x11, integer *ldx1
     for(i__ = 1; i__ <= i__1; ++i__)
     {
         i__2 = *p - i__ + 1;
-        dlarfgp_(&i__2, &x11[i__ + i__ * x11_dim1], &x11[i__ + 1 + i__ * x11_dim1], &c__1,
-                 &taup1[i__]);
+        aocl_lapack_dlarfgp(&i__2, &x11[i__ + i__ * x11_dim1], &x11[i__ + 1 + i__ * x11_dim1],
+                            &c__1, &taup1[i__]);
         i__2 = *m - *p - i__ + 1;
-        dlarfgp_(&i__2, &x21[i__ + i__ * x21_dim1], &x21[i__ + 1 + i__ * x21_dim1], &c__1,
-                 &taup2[i__]);
+        aocl_lapack_dlarfgp(&i__2, &x21[i__ + i__ * x21_dim1], &x21[i__ + 1 + i__ * x21_dim1],
+                            &c__1, &taup2[i__]);
         theta[i__] = atan2(x21[i__ + i__ * x21_dim1], x11[i__ + i__ * x11_dim1]);
         c__ = cos(theta[i__]);
         s = sin(theta[i__]);
@@ -355,46 +362,48 @@ void dorbdb1_(integer *m, integer *p, integer *q, doublereal *x11, integer *ldx1
         x21[i__ + i__ * x21_dim1] = 1.;
         i__2 = *p - i__ + 1;
         i__3 = *q - i__;
-        dlarf_("L", &i__2, &i__3, &x11[i__ + i__ * x11_dim1], &c__1, &taup1[i__],
-               &x11[i__ + (i__ + 1) * x11_dim1], ldx11, &work[ilarf]);
+        aocl_lapack_dlarf("L", &i__2, &i__3, &x11[i__ + i__ * x11_dim1], &c__1, &taup1[i__],
+                          &x11[i__ + (i__ + 1) * x11_dim1], ldx11, &work[ilarf]);
         i__2 = *m - *p - i__ + 1;
         i__3 = *q - i__;
-        dlarf_("L", &i__2, &i__3, &x21[i__ + i__ * x21_dim1], &c__1, &taup2[i__],
-               &x21[i__ + (i__ + 1) * x21_dim1], ldx21, &work[ilarf]);
+        aocl_lapack_dlarf("L", &i__2, &i__3, &x21[i__ + i__ * x21_dim1], &c__1, &taup2[i__],
+                          &x21[i__ + (i__ + 1) * x21_dim1], ldx21, &work[ilarf]);
         if(i__ < *q)
         {
             i__2 = *q - i__;
-            drot_(&i__2, &x11[i__ + (i__ + 1) * x11_dim1], ldx11, &x21[i__ + (i__ + 1) * x21_dim1],
-                  ldx21, &c__, &s);
+            aocl_blas_drot(&i__2, &x11[i__ + (i__ + 1) * x11_dim1], ldx11,
+                           &x21[i__ + (i__ + 1) * x21_dim1], ldx21, &c__, &s);
             i__2 = *q - i__;
-            dlarfgp_(&i__2, &x21[i__ + (i__ + 1) * x21_dim1], &x21[i__ + (i__ + 2) * x21_dim1],
-                     ldx21, &tauq1[i__]);
+            aocl_lapack_dlarfgp(&i__2, &x21[i__ + (i__ + 1) * x21_dim1],
+                                &x21[i__ + (i__ + 2) * x21_dim1], ldx21, &tauq1[i__]);
             s = x21[i__ + (i__ + 1) * x21_dim1];
             x21[i__ + (i__ + 1) * x21_dim1] = 1.;
             i__2 = *p - i__;
             i__3 = *q - i__;
-            dlarf_("R", &i__2, &i__3, &x21[i__ + (i__ + 1) * x21_dim1], ldx21, &tauq1[i__],
-                   &x11[i__ + 1 + (i__ + 1) * x11_dim1], ldx11, &work[ilarf]);
+            aocl_lapack_dlarf("R", &i__2, &i__3, &x21[i__ + (i__ + 1) * x21_dim1], ldx21,
+                              &tauq1[i__], &x11[i__ + 1 + (i__ + 1) * x11_dim1], ldx11,
+                              &work[ilarf]);
             i__2 = *m - *p - i__;
             i__3 = *q - i__;
-            dlarf_("R", &i__2, &i__3, &x21[i__ + (i__ + 1) * x21_dim1], ldx21, &tauq1[i__],
-                   &x21[i__ + 1 + (i__ + 1) * x21_dim1], ldx21, &work[ilarf]);
+            aocl_lapack_dlarf("R", &i__2, &i__3, &x21[i__ + (i__ + 1) * x21_dim1], ldx21,
+                              &tauq1[i__], &x21[i__ + 1 + (i__ + 1) * x21_dim1], ldx21,
+                              &work[ilarf]);
             i__2 = *p - i__;
             /* Computing 2nd power */
-            d__1 = dnrm2_(&i__2, &x11[i__ + 1 + (i__ + 1) * x11_dim1], &c__1);
+            d__1 = aocl_blas_dnrm2(&i__2, &x11[i__ + 1 + (i__ + 1) * x11_dim1], &c__1);
             i__3 = *m - *p - i__;
             /* Computing 2nd power */
-            d__2 = dnrm2_(&i__3, &x21[i__ + 1 + (i__ + 1) * x21_dim1], &c__1);
+            d__2 = aocl_blas_dnrm2(&i__3, &x21[i__ + 1 + (i__ + 1) * x21_dim1], &c__1);
             c__ = sqrt(d__1 * d__1 + d__2 * d__2);
             phi[i__] = atan2(s, c__);
             i__2 = *p - i__;
             i__3 = *m - *p - i__;
             i__4 = *q - i__ - 1;
-            dorbdb5_(&i__2, &i__3, &i__4, &x11[i__ + 1 + (i__ + 1) * x11_dim1], &c__1,
-                     &x21[i__ + 1 + (i__ + 1) * x21_dim1], &c__1,
-                     &x11[i__ + 1 + (i__ + 2) * x11_dim1], ldx11,
-                     &x21[i__ + 1 + (i__ + 2) * x21_dim1], ldx21, &work[iorbdb5], &lorbdb5,
-                     &childinfo);
+            aocl_lapack_dorbdb5(&i__2, &i__3, &i__4, &x11[i__ + 1 + (i__ + 1) * x11_dim1], &c__1,
+                                &x21[i__ + 1 + (i__ + 1) * x21_dim1], &c__1,
+                                &x11[i__ + 1 + (i__ + 2) * x11_dim1], ldx11,
+                                &x21[i__ + 1 + (i__ + 2) * x21_dim1], ldx21, &work[iorbdb5],
+                                &lorbdb5, &childinfo);
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT

@@ -264,14 +264,41 @@ these eigenvalues are flagged by a */
 /* > \ingroup auxOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void sstebz_(char *range, char *order, integer *n, real *vl, real *vu, integer *il, integer *iu,
-             real *abstol, real *d__, real *e, integer *m, integer *nsplit, real *w,
-             integer *iblock, integer *isplit, real *work, integer *iwork, integer *info)
+/** Generated wrapper function */
+void sstebz_(char *range, char *order, aocl_int_t *n, real *vl, real *vu, aocl_int_t *il,
+             aocl_int_t *iu, real *abstol, real *d__, real *e, aocl_int_t *m, aocl_int_t *nsplit,
+             real *w, aocl_int_t *iblock, aocl_int_t *isplit, real *work, aocl_int_t *iwork,
+             aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_sstebz(range, order, n, vl, vu, il, iu, abstol, d__, e, m, nsplit, w, iblock,
+                       isplit, work, iwork, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t il_64 = *il;
+    aocl_int64_t iu_64 = *iu;
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t nsplit_64 = *nsplit;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_sstebz(range, order, &n_64, vl, vu, &il_64, &iu_64, abstol, d__, e, &m_64,
+                       &nsplit_64, w, iblock, isplit, work, iwork, &info_64);
+
+    *m = (aocl_int_t)m_64;
+    *nsplit = (aocl_int_t)nsplit_64;
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_sstebz(char *range, char *order, aocl_int64_t *n, real *vl, real *vu,
+                        aocl_int64_t *il, aocl_int64_t *iu, real *abstol, real *d__, real *e,
+                        aocl_int64_t *m, aocl_int64_t *nsplit, real *w, aocl_int_t *iblock,
+                        aocl_int_t *isplit, real *work, aocl_int_t *iwork, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF(
-             "sstebz inputs: range %c, order %c, n %" FLA_IS ", il %" FLA_IS ", iu %" FLA_IS "",
-             *range, *order, *n, *il, *iu);
+    AOCL_DTL_SNPRINTF("sstebz inputs: range %c, order %c, n %" FLA_IS ", il %" FLA_IS
+                      ", iu %" FLA_IS "",
+                      *range, *order, *n, *il, *iu);
     /* System generated locals */
     aocl_int64_t i__1, i__2, i__3;
     real r__1, r__2, r__3, r__4, r__5;
@@ -288,9 +315,9 @@ void sstebz_(char *range, char *order, integer *n, real *vl, real *vu, integer *
     real ulp, wlu, wul;
     aocl_int64_t nwu;
     real tmp1, tmp2;
-    integer iend, ioff, iout, itmp1, jdisc;
-    extern logical lsame_(char *, char *, integer, integer);
-    integer iinfo;
+    aocl_int64_t iend, ioff, iout, itmp1, jdisc;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    aocl_int64_t iinfo;
     real atoli;
     aocl_int64_t iwoff;
     real bnorm;
@@ -300,17 +327,8 @@ void sstebz_(char *range, char *order, integer *n, real *vl, real *vu, integer *
     extern real slamch_(char *);
     real safemn;
     integer idumma[1];
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
-    integer idiscu;
-    extern /* Subroutine */
-        void
-        slaebz_(integer *, integer *, integer *, integer *, integer *, integer *, real *, real *,
-                real *, real *, real *, real *, integer *, real *, real *, integer *, integer *,
-                real *, integer *, integer *);
-    integer iorder;
+    aocl_int64_t idiscu;
+    aocl_int64_t iorder;
     logical ncnvrg;
     real pivmin;
     logical toofew;
@@ -409,7 +427,7 @@ void sstebz_(char *range, char *order, integer *n, real *vl, real *vu, integer *
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("SSTEBZ", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("SSTEBZ", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -435,7 +453,7 @@ void sstebz_(char *range, char *order, integer *n, real *vl, real *vu, integer *
     safemn = slamch_("S");
     ulp = slamch_("P");
     rtoli = ulp * 2.f;
-    nb = ilaenv_(&c__1, "SSTEBZ", " ", n, &c_n1, &c_n1, &c_n1);
+    nb = aocl_lapack_ilaenv(&c__1, "SSTEBZ", " ", n, &c_n1, &c_n1, &c_n1);
     if(nb <= 1)
     {
         nb = 0;
@@ -542,13 +560,13 @@ void sstebz_(char *range, char *order, integer *n, real *vl, real *vu, integer *
         work[*n + 6] = gu;
         iwork[1] = -1;
         iwork[2] = -1;
-        iwork[3] = *n + 1;
-        iwork[4] = *n + 1;
-        iwork[5] = *il - 1;
-        iwork[6] = *iu;
-        slaebz_(&c__3, &itmax, n, &c__2, &c__2, &nb, &atoli, &rtoli, &pivmin, &d__[1], &e[1],
-                &work[1], &iwork[5], &work[*n + 1], &work[*n + 5], &iout, &iwork[1], &w[1],
-                &iblock[1], &iinfo);
+        iwork[3] = (aocl_int_t)(*n + 1);
+        iwork[4] = (aocl_int_t)(*n + 1);
+        iwork[5] = (aocl_int_t)(*il - 1);
+        iwork[6] = (aocl_int_t)(*iu);
+        aocl_lapack_slaebz(&c__3, &itmax, n, &c__2, &c__2, &nb, &atoli, &rtoli, &pivmin, &d__[1],
+                           &e[1], &work[1], &iwork[5], &work[*n + 1], &work[*n + 5], &iout,
+                           &iwork[1], &w[1], &iblock[1], &iinfo);
         if(iwork[6] == *iu)
         {
             wl = work[*n + 1];
@@ -710,17 +728,19 @@ void sstebz_(char *range, char *order, integer *n, real *vl, real *vu, integer *
             /* Set Up Initial Interval */
             work[*n + 1] = gl;
             work[*n + in + 1] = gu;
-            slaebz_(&c__1, &c__0, &in, &in, &c__1, &nb, &atoli, &rtoli, &pivmin, &d__[ibegin],
-                    &e[ibegin], &work[ibegin], idumma, &work[*n + 1], &work[*n + (in << 1) + 1],
-                    &im, &iwork[1], &w[*m + 1], &iblock[*m + 1], &iinfo);
+            aocl_lapack_slaebz(&c__1, &c__0, &in, &in, &c__1, &nb, &atoli, &rtoli, &pivmin,
+                               &d__[ibegin], &e[ibegin], &work[ibegin], idumma, &work[*n + 1],
+                               &work[*n + (in << 1) + 1], &im, &iwork[1], &w[*m + 1],
+                               &iblock[*m + 1], &iinfo);
             nwl += iwork[1];
             nwu += iwork[in + 1];
             iwoff = *m - iwork[1];
             /* Compute Eigenvalues */
             itmax = (integer)((log(gu - gl + pivmin) - log(pivmin)) / log(2.f)) + 2;
-            slaebz_(&c__2, &itmax, &in, &in, &c__1, &nb, &atoli, &rtoli, &pivmin, &d__[ibegin],
-                    &e[ibegin], &work[ibegin], idumma, &work[*n + 1], &work[*n + (in << 1) + 1],
-                    &iout, &iwork[1], &w[*m + 1], &iblock[*m + 1], &iinfo);
+            aocl_lapack_slaebz(&c__2, &itmax, &in, &in, &c__1, &nb, &atoli, &rtoli, &pivmin,
+                               &d__[ibegin], &e[ibegin], &work[ibegin], idumma, &work[*n + 1],
+                               &work[*n + (in << 1) + 1], &iout, &iwork[1], &w[*m + 1],
+                               &iblock[*m + 1], &iinfo);
             /* Copy Eigenvalues Into W and IBLOCK */
             /* Use -JB for block number for unconverged eigenvalues. */
             i__2 = iout;

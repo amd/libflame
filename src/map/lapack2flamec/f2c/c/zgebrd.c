@@ -4,11 +4,11 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static doublecomplex c_b1 = {1., 0.};
-static integer c__1 = 1;
-static integer c_n1 = -1;
-static integer c__3 = 3;
-static integer c__2 = 2;
+static dcomplex c_b1 = {{1.}, {0.}};
+static aocl_int64_t c__1 = 1;
+static aocl_int64_t c_n1 = -1;
+static aocl_int64_t c__3 = 3;
+static aocl_int64_t c__2 = 2;
 /* > \brief \b ZGEBRD */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -44,7 +44,7 @@ static integer c__2 = 2;
 /* > */
 /* > \verbatim */
 /* > */
-/* > ZGEBRD reduces a general complex M-by-N matrix A to upper or lower */
+/* > ZGEBRD reduces a general scomplex M-by-N matrix A to upper or lower */
 /* > bidiagonal form B by a unitary transformation: Q**H * A * P = B. */
 /* > */
 /* > If m >= n, B is upper bidiagonal;
@@ -175,7 +175,7 @@ the routine */
 /* > */
 /* > H(i) = I - tauq * v * v**H and G(i) = I - taup * u * u**H */
 /* > */
-/* > where tauq and taup are complex scalars, and v and u are complex */
+/* > where tauq and taup are scomplex scalars, and v and u are scomplex */
 /* > vectors;
 v(1:i-1) = 0, v(i) = 1, and v(i+1:m) is stored on exit in */
 /* > A(i+1:m,i);
@@ -191,7 +191,7 @@ tauq is stored in TAUQ(i) and taup in TAUP(i). */
 /* > */
 /* > H(i) = I - tauq * v * v**H and G(i) = I - taup * u * u**H */
 /* > */
-/* > where tauq and taup are complex scalars, and v and u are complex */
+/* > where tauq and taup are scomplex scalars, and v and u are scomplex */
 /* > vectors;
 v(1:i) = 0, v(i+1) = 1, and v(i+2:m) is stored on exit in */
 /* > A(i+2:m,i);
@@ -217,31 +217,40 @@ tauq is stored in TAUQ(i) and taup in TAUP(i). */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void zgebrd_(integer *m, integer *n, doublecomplex *a, integer *lda, doublereal *d__, doublereal *e,
-             doublecomplex *tauq, doublecomplex *taup, doublecomplex *work, integer *lwork,
-             integer *info)
+/** Generated wrapper function */
+void zgebrd_(aocl_int_t *m, aocl_int_t *n, dcomplex *a, aocl_int_t *lda, doublereal *d__,
+             doublereal *e, dcomplex *tauq, dcomplex *taup, dcomplex *work,
+             aocl_int_t *lwork, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_zgebrd(m, n, a, lda, d__, e, tauq, taup, work, lwork, info);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t lwork_64 = *lwork;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_zgebrd(&m_64, &n_64, a, &lda_64, d__, e, tauq, taup, work, &lwork_64, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_zgebrd(aocl_int64_t *m, aocl_int64_t *n, dcomplex *a, aocl_int64_t *lda,
+                        doublereal *d__, doublereal *e, dcomplex *tauq, dcomplex *taup,
+                        dcomplex *work, aocl_int64_t *lwork, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zgebrd inputs: m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS "", *m, *n, *lda);
 
     /* System generated locals */
-    integer a_dim1, a_offset, i__1, i__2, i__3, i__4, i__5;
+    aocl_int64_t a_dim1, a_offset, i__1, i__2, i__3, i__4, i__5;
     doublereal d__1;
-    doublecomplex z__1;
+    dcomplex z__1;
     /* Local variables */
-    integer i__, j, nb, nx, ws, nbmin, iinfo, minmn;
-    extern /* Subroutine */
-        void
-        zgemm_(char *, char *, integer *, integer *, integer *, doublecomplex *, doublecomplex *,
-               integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *),
-        zgebd2_(integer *, integer *, doublecomplex *, integer *, doublereal *, doublereal *,
-                doublecomplex *, doublecomplex *, doublecomplex *, integer *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
-        zlabrd_(integer *, integer *, integer *, doublecomplex *, integer *, doublereal *,
-                doublereal *, doublecomplex *, doublecomplex *, doublecomplex *, integer *,
-                doublecomplex *, integer *);
-    extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
-    integer ldwrkx, ldwrky, lwkopt;
+    aocl_int64_t i__, j, nb, nx, ws, nbmin, iinfo, minmn;
+    aocl_int64_t ldwrkx, ldwrky, lwkopt;
     logical lquery;
     /* -- LAPACK computational routine (version 3.8.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -277,7 +286,7 @@ void zgebrd_(integer *m, integer *n, doublecomplex *a, integer *lda, doublereal 
     *info = 0;
     /* Computing MAX */
     i__1 = 1;
-    i__2 = ilaenv_(&c__1, "ZGEBRD", " ", m, n, &c_n1, &c_n1); // , expr subst
+    i__2 = aocl_lapack_ilaenv(&c__1, "ZGEBRD", " ", m, n, &c_n1, &c_n1); // , expr subst
     nb = fla_max(i__1, i__2);
     lwkopt = (*m + *n) * nb;
     d__1 = (doublereal)lwkopt;
@@ -308,7 +317,7 @@ void zgebrd_(integer *m, integer *n, doublecomplex *a, integer *lda, doublereal 
     if(*info < 0)
     {
         i__1 = -(*info);
-        xerbla_("ZGEBRD", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("ZGEBRD", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -334,7 +343,7 @@ void zgebrd_(integer *m, integer *n, doublecomplex *a, integer *lda, doublereal 
         /* Set the crossover point NX. */
         /* Computing MAX */
         i__1 = nb;
-        i__2 = ilaenv_(&c__3, "ZGEBRD", " ", m, n, &c_n1, &c_n1); // , expr subst
+        i__2 = aocl_lapack_ilaenv(&c__3, "ZGEBRD", " ", m, n, &c_n1, &c_n1); // , expr subst
         nx = fla_max(i__1, i__2);
         /* Determine when to switch from blocked to unblocked code. */
         if(nx < minmn)
@@ -344,7 +353,7 @@ void zgebrd_(integer *m, integer *n, doublecomplex *a, integer *lda, doublereal 
             {
                 /* Not enough work space for the optimal NB, consider using */
                 /* a smaller block size. */
-                nbmin = ilaenv_(&c__2, "ZGEBRD", " ", m, n, &c_n1, &c_n1);
+                nbmin = aocl_lapack_ilaenv(&c__2, "ZGEBRD", " ", m, n, &c_n1, &c_n1);
                 if(*lwork >= (*m + *n) * nbmin)
                 {
                     nb = *lwork / (*m + *n);
@@ -370,23 +379,25 @@ void zgebrd_(integer *m, integer *n, doublecomplex *a, integer *lda, doublereal 
         /* part of the matrix */
         i__3 = *m - i__ + 1;
         i__4 = *n - i__ + 1;
-        zlabrd_(&i__3, &i__4, &nb, &a[i__ + i__ * a_dim1], lda, &d__[i__], &e[i__], &tauq[i__],
-                &taup[i__], &work[1], &ldwrkx, &work[ldwrkx * nb + 1], &ldwrky);
+        aocl_lapack_zlabrd(&i__3, &i__4, &nb, &a[i__ + i__ * a_dim1], lda, &d__[i__], &e[i__],
+                           &tauq[i__], &taup[i__], &work[1], &ldwrkx, &work[ldwrkx * nb + 1],
+                           &ldwrky);
         /* Update the trailing submatrix A(i+ib:m,i+ib:n), using */
         /* an update of the form A := A - V*Y**H - X*U**H */
         i__3 = *m - i__ - nb + 1;
         i__4 = *n - i__ - nb + 1;
         z__1.r = -1.;
         z__1.i = -0.; // , expr subst
-        zgemm_("No transpose", "Conjugate transpose", &i__3, &i__4, &nb, &z__1,
-               &a[i__ + nb + i__ * a_dim1], lda, &work[ldwrkx * nb + nb + 1], &ldwrky, &c_b1,
-               &a[i__ + nb + (i__ + nb) * a_dim1], lda);
+        aocl_blas_zgemm("No transpose", "Conjugate transpose", &i__3, &i__4, &nb, &z__1,
+                        &a[i__ + nb + i__ * a_dim1], lda, &work[ldwrkx * nb + nb + 1], &ldwrky,
+                        &c_b1, &a[i__ + nb + (i__ + nb) * a_dim1], lda);
         i__3 = *m - i__ - nb + 1;
         i__4 = *n - i__ - nb + 1;
         z__1.r = -1.;
         z__1.i = -0.; // , expr subst
-        zgemm_("No transpose", "No transpose", &i__3, &i__4, &nb, &z__1, &work[nb + 1], &ldwrkx,
-               &a[i__ + (i__ + nb) * a_dim1], lda, &c_b1, &a[i__ + nb + (i__ + nb) * a_dim1], lda);
+        aocl_blas_zgemm("No transpose", "No transpose", &i__3, &i__4, &nb, &z__1, &work[nb + 1],
+                        &ldwrkx, &a[i__ + (i__ + nb) * a_dim1], lda, &c_b1,
+                        &a[i__ + nb + (i__ + nb) * a_dim1], lda);
         /* Copy diagonal and off-diagonal elements of B back into A */
         if(*m >= *n)
         {
@@ -425,8 +436,8 @@ void zgebrd_(integer *m, integer *n, doublecomplex *a, integer *lda, doublereal 
     /* Use unblocked code to reduce the remainder of the matrix */
     i__2 = *m - i__ + 1;
     i__1 = *n - i__ + 1;
-    zgebd2_(&i__2, &i__1, &a[i__ + i__ * a_dim1], lda, &d__[i__], &e[i__], &tauq[i__], &taup[i__],
-            &work[1], &iinfo);
+    aocl_lapack_zgebd2(&i__2, &i__1, &a[i__ + i__ * a_dim1], lda, &d__[i__], &e[i__], &tauq[i__],
+                       &taup[i__], &work[1], &iinfo);
     work[1].r = (doublereal)ws;
     work[1].i = 0.; // , expr subst
     AOCL_DTL_TRACE_LOG_EXIT

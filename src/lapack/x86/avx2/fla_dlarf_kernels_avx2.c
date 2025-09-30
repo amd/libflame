@@ -7,11 +7,11 @@
 #include "fla_lapack_avx2_kernels.h"
 
 #if FLA_ENABLE_AMD_OPT
-void fla_dlarf_left_apply_incv1_avx2(integer m, integer n, doublereal *a_buff, integer ldr,
+void fla_dlarf_left_apply_incv1_avx2(aocl_int64_t m, aocl_int64_t n, doublereal *a_buff, aocl_int64_t ldr,
                                      doublereal *v, doublereal ntau, doublereal *work)
 {
-    integer acols, arows;
-    integer k, j;
+    aocl_int64_t acols, arows;
+    aocl_int64_t k, j;
     __m128d vd2_inp;
     __m128d vd2_ntau, vd2_dtmp, vd2_vj1, vd2_dtmp2;
     __m256d vd4_dtmp, vd4_inp, vd4_vj, vd4_dtmp2;

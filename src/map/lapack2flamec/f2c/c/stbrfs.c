@@ -188,15 +188,39 @@ static real c_b19 = -1.f;
 /* > \ingroup realOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void stbrfs_(char *uplo, char *trans, char *diag, integer *n, integer *kd, integer *nrhs, real *ab,
-             integer *ldab, real *b, integer *ldb, real *x, integer *ldx, real *ferr, real *berr,
-             real *work, integer *iwork, integer *info)
+/** Generated wrapper function */
+void stbrfs_(char *uplo, char *trans, char *diag, aocl_int_t *n, aocl_int_t *kd, aocl_int_t *nrhs,
+             real *ab, aocl_int_t *ldab, real *b, aocl_int_t *ldb, real *x, aocl_int_t *ldx,
+             real *ferr, real *berr, real *work, aocl_int_t *iwork, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_stbrfs(uplo, trans, diag, n, kd, nrhs, ab, ldab, b, ldb, x, ldx, ferr, berr, work,
+                       iwork, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t kd_64 = *kd;
+    aocl_int64_t nrhs_64 = *nrhs;
+    aocl_int64_t ldab_64 = *ldab;
+    aocl_int64_t ldb_64 = *ldb;
+    aocl_int64_t ldx_64 = *ldx;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_stbrfs(uplo, trans, diag, &n_64, &kd_64, &nrhs_64, ab, &ldab_64, b, &ldb_64, x,
+                       &ldx_64, ferr, berr, work, iwork, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_stbrfs(char *uplo, char *trans, char *diag, aocl_int64_t *n, aocl_int64_t *kd,
+                        aocl_int64_t *nrhs, real *ab, aocl_int64_t *ldab, real *b,
+                        aocl_int64_t *ldb, real *x, aocl_int64_t *ldx, real *ferr, real *berr,
+                        real *work, aocl_int_t *iwork, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF(
-             "stbrfs inputs: uplo %c, trans %c, diag %c, n %" FLA_IS ", kd %" FLA_IS
-             ", nrhs %" FLA_IS ", ldab %" FLA_IS ", ldb %" FLA_IS ", ldx %" FLA_IS "",
-             *uplo, *trans, *diag, *n, *kd, *nrhs, *ldab, *ldb, *ldx);
+    AOCL_DTL_SNPRINTF("stbrfs inputs: uplo %c, trans %c, diag %c, n %" FLA_IS ", kd %" FLA_IS
+                      ", nrhs %" FLA_IS ", ldab %" FLA_IS ", ldb %" FLA_IS ", ldx %" FLA_IS "",
+                      *uplo, *trans, *diag, *n, *kd, *nrhs, *ldab, *ldb, *ldx);
     /* System generated locals */
     aocl_int64_t ab_dim1, ab_offset, b_dim1, b_offset, x_dim1, x_offset, i__1, i__2, i__3, i__4,
         i__5;
@@ -208,21 +232,11 @@ void stbrfs_(char *uplo, char *trans, char *diag, integer *n, integer *kd, integ
     real eps;
     aocl_int64_t kase;
     real safe1, safe2;
-    extern logical lsame_(char *, char *, integer, integer);
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     integer isave[3];
     logical upper;
-    extern /* Subroutine */
-        void
-        scopy_(integer *, real *, integer *, real *, integer *),
-        stbmv_(char *, char *, char *, integer *, integer *, real *, integer *, real *, integer *),
-        stbsv_(char *, char *, char *, integer *, integer *, real *, integer *, real *, integer *),
-        saxpy_(integer *, real *, real *, integer *, real *, integer *),
-        slacn2_(integer *, real *, real *, integer *, real *, integer *, integer *);
     extern real slamch_(char *);
     real safmin;
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical notran;
     char transt[1];
     logical nounit;
@@ -308,7 +322,7 @@ void stbrfs_(char *uplo, char *trans, char *diag, integer *n, integer *kd, integ
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("STBRFS", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("STBRFS", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -590,13 +604,15 @@ void stbrfs_(char *uplo, char *trans, char *diag, integer *n, integer *kd, integ
         }
         kase = 0;
     L210:
-        slacn2_(n, &work[(*n << 1) + 1], &work[*n + 1], &iwork[1], &ferr[j], &kase, isave);
+        aocl_lapack_slacn2(n, &work[(*n << 1) + 1], &work[*n + 1], &iwork[1], &ferr[j], &kase,
+                           isave);
         if(kase != 0)
         {
             if(kase == 1)
             {
                 /* Multiply by diag(W)*inv(op(A)**T). */
-                stbsv_(uplo, transt, diag, n, kd, &ab[ab_offset], ldab, &work[*n + 1], &c__1);
+                aocl_blas_stbsv(uplo, transt, diag, n, kd, &ab[ab_offset], ldab, &work[*n + 1],
+                                &c__1);
                 i__2 = *n;
                 for(i__ = 1; i__ <= i__2; ++i__)
                 {
@@ -613,7 +629,8 @@ void stbrfs_(char *uplo, char *trans, char *diag, integer *n, integer *kd, integ
                     work[*n + i__] = work[i__] * work[*n + i__];
                     /* L230: */
                 }
-                stbsv_(uplo, trans, diag, n, kd, &ab[ab_offset], ldab, &work[*n + 1], &c__1);
+                aocl_blas_stbsv(uplo, trans, diag, n, kd, &ab[ab_offset], ldab, &work[*n + 1],
+                                &c__1);
             }
             goto L210;
         }

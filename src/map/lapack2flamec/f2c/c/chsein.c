@@ -253,10 +253,37 @@ here the magnitude of a scomplex number */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void chsein_(char *side, char *eigsrc, char *initv, logical *select, integer *n, complex *h__,
-             integer *ldh, complex *w, complex *vl, integer *ldvl, complex *vr, integer *ldvr,
-             integer *mm, integer *m, complex *work, real *rwork, integer *ifaill, integer *ifailr,
-             integer *info)
+/** Generated wrapper function */
+void chsein_(char *side, char *eigsrc, char *initv, logical *select, aocl_int_t *n, scomplex *h__,
+             aocl_int_t *ldh, scomplex *w, scomplex *vl, aocl_int_t *ldvl, scomplex *vr,
+             aocl_int_t *ldvr, aocl_int_t *mm, aocl_int_t *m, scomplex *work, real *rwork,
+             aocl_int_t *ifaill, aocl_int_t *ifailr, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_chsein(side, eigsrc, initv, select, n, h__, ldh, w, vl, ldvl, vr, ldvr, mm, m, work,
+                       rwork, ifaill, ifailr, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t ldh_64 = *ldh;
+    aocl_int64_t ldvl_64 = *ldvl;
+    aocl_int64_t ldvr_64 = *ldvr;
+    aocl_int64_t mm_64 = *mm;
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_chsein(side, eigsrc, initv, select, &n_64, h__, &ldh_64, w, vl, &ldvl_64, vr,
+                       &ldvr_64, &mm_64, &m_64, work, rwork, ifaill, ifailr, &info_64);
+
+    *m = (aocl_int_t)m_64;
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_chsein(char *side, char *eigsrc, char *initv, logical *select, aocl_int64_t *n,
+                        scomplex *h__, aocl_int64_t *ldh, scomplex *w, scomplex *vl,
+                        aocl_int64_t *ldvl, scomplex *vr, aocl_int64_t *ldvr, aocl_int64_t *mm,
+                        aocl_int64_t *m, scomplex *work, real *rwork, aocl_int_t *ifaill,
+                        aocl_int_t *ifailr, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -284,18 +311,10 @@ void chsein_(char *side, char *eigsrc, char *initv, logical *select, integer *n,
     scomplex wk;
     aocl_int64_t kln;
     real ulp, eps3, unfl;
-    extern logical lsame_(char *, char *, integer, integer);
-    integer iinfo;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    aocl_int64_t iinfo;
     logical leftv, bothv;
     real hnorm;
-    extern /* Subroutine */
-        void
-        claein_(logical *, logical *, integer *, complex *, integer *, complex *, complex *,
-                complex *, integer *, real *, real *, real *, integer *);
-    extern real slamch_(char *), clanhs_(char *, integer *, complex *, integer *, real *);
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern logical sisnan_(real *);
     logical noinit;
     aocl_int64_t ldwork;
@@ -397,7 +416,7 @@ void chsein_(char *side, char *eigsrc, char *initv, logical *select, integer *n,
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("CHSEIN", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("CHSEIN", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
@@ -473,7 +492,7 @@ void chsein_(char *side, char *eigsrc, char *initv, logical *select, integer *n,
                 /* Compute infinity-norm of submatrix H(KL:KR,KL:KR) if it */
                 /* has not ben computed before. */
                 i__2 = kr - kl + 1;
-                hnorm = clanhs_("I", &i__2, &h__[kl + kl * h_dim1], ldh, &rwork[1]);
+                hnorm = aocl_lapack_clanhs("I", &i__2, &h__[kl + kl * h_dim1], ldh, &rwork[1]);
                 if(sisnan_(&hnorm))
                 {
                     *info = -6;
@@ -522,9 +541,9 @@ void chsein_(char *side, char *eigsrc, char *initv, logical *select, integer *n,
             {
                 /* Compute left eigenvector. */
                 i__2 = *n - kl + 1;
-                claein_(&c_false, &noinit, &i__2, &h__[kl + kl * h_dim1], ldh, &wk,
-                        &vl[kl + ks * vl_dim1], &work[1], &ldwork, &rwork[1], &eps3, &smlnum,
-                        &iinfo);
+                aocl_lapack_claein(&c_false, &noinit, &i__2, &h__[kl + kl * h_dim1], ldh, &wk,
+                                   &vl[kl + ks * vl_dim1], &work[1], &ldwork, &rwork[1], &eps3,
+                                   &smlnum, &iinfo);
                 if(iinfo > 0)
                 {
                     ++(*info);
@@ -546,8 +565,9 @@ void chsein_(char *side, char *eigsrc, char *initv, logical *select, integer *n,
             if(rightv)
             {
                 /* Compute right eigenvector. */
-                claein_(&c_true, &noinit, &kr, &h__[h_offset], ldh, &wk, &vr[ks * vr_dim1 + 1],
-                        &work[1], &ldwork, &rwork[1], &eps3, &smlnum, &iinfo);
+                aocl_lapack_claein(&c_true, &noinit, &kr, &h__[h_offset], ldh, &wk,
+                                   &vr[ks * vr_dim1 + 1], &work[1], &ldwork, &rwork[1], &eps3,
+                                   &smlnum, &iinfo);
                 if(iinfo > 0)
                 {
                     ++(*info);

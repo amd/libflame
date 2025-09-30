@@ -4,9 +4,6 @@
  -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for
  libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static complex c_b1 = {1.f, 0.f};
-static complex c_b2 = {0.f, 0.f};
-static integer c__1 = 1;
 /* > \brief \b CLARFY */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -102,85 +99,17 @@ static integer c__1 = 1;
 /* > \ingroup complexOTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-void clarfy_(char *uplo, integer *n, complex *v, integer *incv, complex *tau, complex *c__,
-             integer *ldc, complex *work)
+/** Generated wrapper function */
+void clarfy_(char *uplo, aocl_int_t *n, scomplex *v, aocl_int_t *incv, scomplex *tau, scomplex *c__,
+             aocl_int_t *ldc, scomplex *work)
 {
-    AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
-#if LF_AOCL_DTL_LOG_ENABLE
-    char buffer[256];
 #if FLA_ENABLE_ILP64
-    snprintf(buffer, 256, "clarfy inputs: uplo %c, n %lld, incv %lld, ldc %lld", *uplo, *n, *incv,
-             *ldc);
+    aocl_lapack_clarfy(uplo, n, v, incv, tau, c__, ldc, work);
 #else
-    snprintf(buffer, 256, "clarfy inputs: uplo %c, n %d, incv %d, ldc %d", *uplo, *n, *incv, *ldc);
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t incv_64 = *incv;
+    aocl_int64_t ldc_64 = *ldc;
+
+    aocl_lapack_clarfy(uplo, &n_64, v, &incv_64, tau, c__, &ldc_64, work);
 #endif
-    AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
-#endif
-    /* System generated locals */
-    integer c_dim1, c_offset;
-    complex q__1, q__2, q__3, q__4;
-    /* Local variables */
-    extern /* Subroutine */
-        void
-        cher2_(char *, integer *, complex *, complex *, integer *, complex *, integer *, complex *,
-               integer *);
-    complex alpha;
-    extern /* Complex */
-        VOID
-        cdotc_f2c_(complex *, integer *, complex *, integer *, complex *, integer *);
-    extern /* Subroutine */
-        void
-        chemv_(char *, integer *, complex *, complex *, integer *, complex *, integer *, complex *,
-               complex *, integer *),
-        caxpy_(integer *, complex *, complex *, integer *, complex *, integer *);
-    /* -- LAPACK test routine (version 3.7.0) -- */
-    /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
-    /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
-    /* December 2016 */
-    /* .. Scalar Arguments .. */
-    /* .. */
-    /* .. Array Arguments .. */
-    /* .. */
-    /* ===================================================================== */
-    /* .. Parameters .. */
-    /* .. */
-    /* .. Local Scalars .. */
-    /* .. */
-    /* .. External Subroutines .. */
-    /* .. */
-    /* .. External Functions .. */
-    /* .. */
-    /* .. Executable Statements .. */
-    /* Parameter adjustments */
-    --v;
-    c_dim1 = *ldc;
-    c_offset = 1 + c_dim1;
-    c__ -= c_offset;
-    --work;
-    /* Function Body */
-    if(tau->r == 0.f && tau->i == 0.f)
-    {
-        AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-        return;
-    }
-    /* Form w:= C * v */
-    chemv_(uplo, n, &c_b1, &c__[c_offset], ldc, &v[1], incv, &c_b2, &work[1], &c__1);
-    q__3.r = -.5f;
-    q__3.i = -0.f; // , expr subst
-    q__2.r = q__3.r * tau->r - q__3.i * tau->i;
-    q__2.i = q__3.r * tau->i + q__3.i * tau->r; // , expr subst
-    cdotc_f2c_(&q__4, n, &work[1], &c__1, &v[1], incv);
-    q__1.r = q__2.r * q__4.r - q__2.i * q__4.i;
-    q__1.i = q__2.r * q__4.i + q__2.i * q__4.r; // , expr subst
-    alpha.r = q__1.r;
-    alpha.i = q__1.i; // , expr subst
-    caxpy_(n, &alpha, &v[1], incv, &work[1], &c__1);
-    /* C := C - v * w' - w * v' */
-    q__1.r = -tau->r;
-    q__1.i = -tau->i; // , expr subst
-    cher2_(uplo, n, &q__1, &v[1], incv, &work[1], &c__1, &c__[c_offset], ldc);
-    AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
-    return;
-    /* End of CLARFY */
 }
-/* clarfy_ */

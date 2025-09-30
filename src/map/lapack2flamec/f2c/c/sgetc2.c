@@ -4,7 +4,7 @@
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
  /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
+static aocl_int64_t c__1 = 1;
 static real c_b10 = -1.f;
 /* > \brief \b SGETC2 computes the LU factorization with complete pivoting of the general n-by-n
  * matrix. */
@@ -111,25 +111,36 @@ for 1 <= j <= N, column j of the */
 /* > Umea University, S-901 87 Umea, Sweden. */
 /* ===================================================================== */
 /* Subroutine */
-void sgetc2_(integer *n, real *a, integer *lda, integer *ipiv, integer *jpiv, integer *info)
+/** Generated wrapper function */
+void sgetc2_(aocl_int_t *n, real *a, aocl_int_t *lda, aocl_int_t *ipiv, aocl_int_t *jpiv,
+             aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_sgetc2(n, a, lda, ipiv, jpiv, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_sgetc2(&n_64, a, &lda_64, ipiv, jpiv, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_sgetc2(aocl_int64_t *n, real *a, aocl_int64_t *lda, aocl_int_t *ipiv,
+                        aocl_int_t *jpiv, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("sgetc2 inputs: n %" FLA_IS ",lda %" FLA_IS "", *n, *lda);
     /* System generated locals */
-    integer a_dim1, a_offset, i__1, i__2, i__3;
+    aocl_int64_t a_dim1, a_offset, i__1, i__2, i__3;
     real r__1;
     /* Local variables */
-    integer i__, j, ip, jp;
+    aocl_int64_t i__, j, ip, jp;
     real eps;
-    integer ipv, jpv;
-    extern /* Subroutine */
-        void
-        sger_(integer *, integer *, real *, real *, integer *, real *, integer *, real *,
-              integer *);
+    aocl_int64_t ipv, jpv;
     real smin, xmax;
-    extern /* Subroutine */
-        void
-        sswap_(integer *, real *, integer *, real *, integer *);
     extern real slamch_(char *);
     real smlnum;
     /* -- LAPACK auxiliary routine -- */
@@ -216,15 +227,15 @@ void sgetc2_(integer *n, real *a, integer *lda, integer *ipiv, integer *jpiv, in
         /* Swap rows */
         if(ipv != i__)
         {
-            sswap_(n, &a[ipv + a_dim1], lda, &a[i__ + a_dim1], lda);
+            aocl_blas_sswap(n, &a[ipv + a_dim1], lda, &a[i__ + a_dim1], lda);
         }
-        ipiv[i__] = ipv;
+        ipiv[i__] = (aocl_int_t)(ipv);
         /* Swap columns */
         if(jpv != i__)
         {
-            sswap_(n, &a[jpv * a_dim1 + 1], &c__1, &a[i__ * a_dim1 + 1], &c__1);
+            aocl_blas_sswap(n, &a[jpv * a_dim1 + 1], &c__1, &a[i__ * a_dim1 + 1], &c__1);
         }
-        jpiv[i__] = jpv;
+        jpiv[i__] = (aocl_int_t)(jpv);
         /* Check for singularity */
         if((r__1 = a[i__ + i__ * a_dim1], f2c_abs(r__1)) < smin)
         {
@@ -239,8 +250,8 @@ void sgetc2_(integer *n, real *a, integer *lda, integer *ipiv, integer *jpiv, in
         }
         i__2 = *n - i__;
         i__3 = *n - i__;
-        sger_(&i__2, &i__3, &c_b10, &a[i__ + 1 + i__ * a_dim1], &c__1, &a[i__ + (i__ + 1) * a_dim1],
-              lda, &a[i__ + 1 + (i__ + 1) * a_dim1], lda);
+        aocl_blas_sger(&i__2, &i__3, &c_b10, &a[i__ + 1 + i__ * a_dim1], &c__1,
+                       &a[i__ + (i__ + 1) * a_dim1], lda, &a[i__ + 1 + (i__ + 1) * a_dim1], lda);
         /* L40: */
     }
     if((r__1 = a[*n + *n * a_dim1], f2c_abs(r__1)) < smin)
@@ -249,8 +260,8 @@ void sgetc2_(integer *n, real *a, integer *lda, integer *ipiv, integer *jpiv, in
         a[*n + *n * a_dim1] = smin;
     }
     /* Set last pivots to N */
-    ipiv[*n] = *n;
-    jpiv[*n] = *n;
+    ipiv[*n] = (aocl_int_t)(*n);
+    jpiv[*n] = (aocl_int_t)(*n);
     AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SGETC2 */

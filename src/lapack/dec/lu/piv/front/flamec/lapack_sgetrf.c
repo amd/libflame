@@ -9,23 +9,19 @@
 
 /* Table of constant values */
 
-static TLS_CLASS_SPEC integer c__1 = 1;
-static TLS_CLASS_SPEC integer c_n1 = -1;
+static TLS_CLASS_SPEC fla_dim_t c__1 = 1;
+static TLS_CLASS_SPEC fla_dim_t c_n1 = -1;
 static TLS_CLASS_SPEC real c_b11 = -1.f;
 static TLS_CLASS_SPEC real c_b12 = 1.f;
 
-/* Subroutine */ integer lapack_sgetrf(integer *m, integer *n, real *a, integer *lda,
-	integer *ipiv, integer *info)
+/* Subroutine */ fla_dim_t lapack_sgetrf(fla_dim_t *m, fla_dim_t *n, real *a, fla_dim_t *lda,
+	aocl_int_t *ipiv, fla_dim_t *info)
 {
     /* System generated locals */
-    integer a_dim1, a_offset, i__1, i__2, i__3, i__4, i__5;
+    fla_dim_t a_dim1, a_offset, i__1, i__2, i__3, i__4, i__5;
 
     /* Local variables */
-    integer i__, j, jb, nb, iinfo;
-    extern integer ilaenv_(integer *, char *, char *, integer *, integer *,integer *, integer *);
-    extern /* Subroutine */ void slaswp_(integer *, real *, integer *, integer *, integer *, 
-        integer *, integer *);
-	extern void xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    fla_dim_t i__, j, jb, nb, iinfo;
 
 
 /*  ======= */
@@ -107,7 +103,7 @@ static TLS_CLASS_SPEC real c_b12 = 1.f;
     }
     if (*info != 0) {
 	i__1 = -(*info);
-	xerbla_("LAPACK_SGETRF", &i__1, (ftnlen)13);
+	aocl_blas_xerbla("LAPACK_SGETRF", &i__1, (ftnlen)13);
 	return *info;
     }
 
@@ -119,7 +115,7 @@ static TLS_CLASS_SPEC real c_b12 = 1.f;
 
 /*     Determine the block size for this environment. */
 
-    nb = ilaenv_(&c__1, "SGETRF", " ", m, n, &c_n1, &c_n1);
+    nb = aocl_lapack_ilaenv(&c__1, "SGETRF", " ", m, n, &c_n1, &c_n1);
     if (nb <= 1 || nb >= fla_min(*m,*n)) {
 
 /*        Use unblocked code. */
@@ -167,7 +163,7 @@ static TLS_CLASS_SPEC real c_b12 = 1.f;
 
 	    i__3 = *m - j + 1;
 	    i__4 = j - 1;
-	    sgemm_("No transpose", "No transpose", &i__3, &jb, &i__4, &c_b11,
+	    aocl_blas_sgemm("No transpose", "No transpose", &i__3, &jb, &i__4, &c_b11,
 		    &a[j + a_dim1], lda, &a[j * a_dim1 + 1], lda, &c_b12, &a[
 		    j + j * a_dim1], lda);
 
@@ -175,7 +171,7 @@ static TLS_CLASS_SPEC real c_b12 = 1.f;
 /*           singularity. */
 
 	    i__3 = *m - j + 1;
-	    sgetrf2_(&i__3, &jb, &a[j + j * a_dim1], lda, &ipiv[j], &iinfo);
+	    aocl_lapack_sgetrf2(&i__3, &jb, &a[j + j * a_dim1], lda, &ipiv[j], &iinfo);
 /*           Adjust INFO and the pivot indices. */
 
 	    if (*info == 0 && iinfo > 0) {
@@ -185,7 +181,7 @@ static TLS_CLASS_SPEC real c_b12 = 1.f;
 	    i__4 = *m, i__5 = j + jb - 1;
 	    i__3 = fla_min(i__4,i__5);
 	    for (i__ = j; i__ <= i__3; ++i__) {
-		ipiv[i__] = j - 1 + ipiv[i__];
+		ipiv[i__] = (aocl_int_t)(j - 1 + ipiv[i__]);
 /* L10: */
 	    }
 
@@ -193,7 +189,7 @@ static TLS_CLASS_SPEC real c_b12 = 1.f;
 
 	    i__3 = j - 1;
 	    i__4 = j + jb - 1;
-	    slaswp_(&i__3, &a[a_offset], lda, &j, &i__4, &ipiv[1], &c__1);
+	    aocl_lapack_slaswp(&i__3, &a[a_offset], lda, &j, &i__4, &ipiv[1], &c__1);
 
 	    if (j + jb <= *n) {
 
@@ -201,19 +197,19 @@ static TLS_CLASS_SPEC real c_b12 = 1.f;
 
 		i__3 = *n - j - jb + 1;
 		i__4 = j + jb - 1;
-		slaswp_(&i__3, &a[(j + jb) * a_dim1 + 1], lda, &j, &i__4, &
+		aocl_lapack_slaswp(&i__3, &a[(j + jb) * a_dim1 + 1], lda, &j, &i__4, &
 			ipiv[1], &c__1);
 
 		i__3 = *n - j - jb + 1;
 		i__4 = j - 1;
-		sgemm_("No transpose", "No transpose", &jb, &i__3, &i__4, &
+		aocl_blas_sgemm("No transpose", "No transpose", &jb, &i__3, &i__4, &
 			c_b11, &a[j + a_dim1], lda, &a[(j + jb) * a_dim1 + 1],
 			 lda, &c_b12, &a[j + (j + jb) * a_dim1], lda);
 
 /*              Compute block row of U. */
 
 		i__3 = *n - j - jb + 1;
-		strsm_("Left", "Lower", "No transpose", "Unit", &jb, &i__3, &
+		aocl_blas_strsm("Left", "Lower", "No transpose", "Unit", &jb, &i__3, &
 			c_b12, &a[j + j * a_dim1], lda, &a[j + (j + jb) *
 			a_dim1], lda);
 	    }

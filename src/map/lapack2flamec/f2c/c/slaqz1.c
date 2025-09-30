@@ -118,13 +118,27 @@
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void slaqz1_(real *a, integer *lda, real *b, integer *ldb, real *sr1, real *sr2, real *si,
+/** Generated wrapper function */
+void slaqz1_(real *a, aocl_int_t *lda, real *b, aocl_int_t *ldb, real *sr1, real *sr2, real *si,
              real *beta1, real *beta2, real *v)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_slaqz1(a, lda, b, ldb, sr1, sr2, si, beta1, beta2, v);
+#else
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t ldb_64 = *ldb;
+
+    aocl_lapack_slaqz1(a, &lda_64, b, &ldb_64, sr1, sr2, si, beta1, beta2, v);
+#endif
+}
+
+void aocl_lapack_slaqz1(real *a, aocl_int64_t *lda, real *b, aocl_int64_t *ldb, real *sr1,
+                        real *sr2, real *si, real *beta1, real *beta2, real *v)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("slaqz1 inputs: lda %" FLA_IS ", ldb %" FLA_IS "", *lda, *ldb);
     /* System generated locals */
-    integer a_dim1, a_offset, b_dim1, b_offset;
+    aocl_int64_t a_dim1, a_offset, b_dim1, b_offset;
     /* Builtin functions */
     double sqrt(doublereal);
     /* Local variables */

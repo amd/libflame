@@ -31,9 +31,9 @@ FLA_Error FLA_Apply_G_rf_opt_var5( FLA_Obj G, FLA_Obj A )
 */
 {
 	FLA_Datatype datatype;
-	integer          k_G, m_A, n_A;
-	integer          rs_G, cs_G;
-	integer          rs_A, cs_A;
+	aocl_int64_t          k_G, m_A, n_A;
+	aocl_int64_t          rs_G, cs_G;
+	aocl_int64_t          rs_A, cs_A;
 
 	datatype = FLA_Obj_datatype( A );
 
@@ -110,20 +110,20 @@ FLA_Error FLA_Apply_G_rf_opt_var5( FLA_Obj G, FLA_Obj A )
 }
 
 
-FLA_Error FLA_Apply_G_rf_ops_var5( integer       k_G,
-                                   integer       m_A,
-                                   integer       n_A,
-                                   scomplex* buff_G, integer rs_G, integer cs_G,
-                                   float*    buff_A, integer rs_A, integer cs_A )
+FLA_Error FLA_Apply_G_rf_ops_var5( aocl_int64_t       k_G,
+                                   aocl_int64_t       m_A,
+                                   aocl_int64_t       n_A,
+                                   scomplex* buff_G, aocl_int64_t rs_G, aocl_int64_t cs_G,
+                                   float*    buff_A, aocl_int64_t rs_A, aocl_int64_t cs_A )
 {
 	return FLA_SUCCESS;
 }
 
-FLA_Error FLA_Apply_G_rf_opd_var5( integer       k_G,
-                                   integer       m_A,
-                                   integer       n_A,
-                                   dcomplex* buff_G, integer rs_G, integer cs_G,
-                                   double*   buff_A, integer rs_A, integer cs_A )
+FLA_Error FLA_Apply_G_rf_opd_var5( aocl_int64_t       k_G,
+                                   aocl_int64_t       m_A,
+                                   aocl_int64_t       n_A,
+                                   dcomplex* buff_G, aocl_int64_t rs_G, aocl_int64_t cs_G,
+                                   double*   buff_A, aocl_int64_t rs_A, aocl_int64_t cs_A )
 {
 	double             one  = bl1_d1();
 	double             zero = bl1_d0();
@@ -134,14 +134,14 @@ FLA_Error FLA_Apply_G_rf_opd_var5( integer       k_G,
 	double*   restrict a3;
 	dcomplex* restrict g12;
 	dcomplex* restrict g23;
-	integer                j, g, k;
-	integer                nG, nG_app;
-	integer                k_minus_1;
-	integer                is_ident12;
-	integer                is_ident23;
+	aocl_int64_t                j, g, k;
+	aocl_int64_t                nG, nG_app;
+	aocl_int64_t                k_minus_1;
+	aocl_int64_t                is_ident12;
+	aocl_int64_t                is_ident23;
 
-	integer                n_run  = ( n_A - 1 ) / 2;
-	integer                n_left = ( n_A - 1 ) % 2;
+	aocl_int64_t                n_run  = ( n_A - 1 ) / 2;
+	aocl_int64_t                n_left = ( n_A - 1 ) % 2;
 
 	k_minus_1 = k_G - 1;
 	nG        = n_A - 1;
@@ -362,20 +362,20 @@ FLA_Error FLA_Apply_G_rf_opd_var5( integer       k_G,
 	return FLA_SUCCESS;
 }
 
-FLA_Error FLA_Apply_G_rf_opc_var5( integer       k_G,
-                                   integer       m_A,
-                                   integer       n_A,
-                                   scomplex* buff_G, integer rs_G, integer cs_G,
-                                   scomplex* buff_A, integer rs_A, integer cs_A )
+FLA_Error FLA_Apply_G_rf_opc_var5( aocl_int64_t       k_G,
+                                   aocl_int64_t       m_A,
+                                   aocl_int64_t       n_A,
+                                   scomplex* buff_G, aocl_int64_t rs_G, aocl_int64_t cs_G,
+                                   scomplex* buff_A, aocl_int64_t rs_A, aocl_int64_t cs_A )
 {
 	return FLA_SUCCESS;
 }
 
-FLA_Error FLA_Apply_G_rf_opz_var5( integer       k_G,
-                                   integer       m_A,
-                                   integer       n_A,
-                                   dcomplex* buff_G, integer rs_G, integer cs_G,
-                                   dcomplex* buff_A, integer rs_A, integer cs_A )
+FLA_Error FLA_Apply_G_rf_opz_var5( aocl_int64_t       k_G,
+                                   aocl_int64_t       m_A,
+                                   aocl_int64_t       n_A,
+                                   dcomplex* buff_G, aocl_int64_t rs_G, aocl_int64_t cs_G,
+                                   dcomplex* buff_A, aocl_int64_t rs_A, aocl_int64_t cs_A )
 {
 	double             one  = bl1_d1();
 	double             zero = bl1_d0();
@@ -386,14 +386,14 @@ FLA_Error FLA_Apply_G_rf_opz_var5( integer       k_G,
 	dcomplex* restrict a3;
 	dcomplex* restrict g12;
 	dcomplex* restrict g23;
-	integer                j, g, k;
-	integer                nG, nG_app;
-	integer                k_minus_1;
-	integer                is_ident12;
-	integer                is_ident23;
+	aocl_int64_t                j, g, k;
+	aocl_int64_t                nG, nG_app;
+	aocl_int64_t                k_minus_1;
+	aocl_int64_t                is_ident12;
+	aocl_int64_t                is_ident23;
 
-	integer                n_run  = ( n_A - 1 ) / 2;
-	integer                n_left = ( n_A - 1 ) % 2;
+	aocl_int64_t                n_run  = ( n_A - 1 ) / 2;
+	aocl_int64_t                n_left = ( n_A - 1 ) % 2;
 
 	k_minus_1 = k_G - 1;
 	nG        = n_A - 1;

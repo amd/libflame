@@ -4,7 +4,7 @@
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
  /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
+static aocl_int64_t c__1 = 1;
 /* > \brief \b DLANSB returns the value of the 1-norm, or the Frobenius norm, or the infinity norm,
  * or the ele ment of largest absolute value of a symmetric band matrix. */
 /* =========== DOCUMENTATION =========== */
@@ -126,26 +126,38 @@ otherwise, */
 /* > \author NAG Ltd. */
 /* > \ingroup doubleOTHERauxiliary */
 /* ===================================================================== */
-doublereal dlansb_(char *norm, char *uplo, integer *n, integer *k, doublereal *ab, integer *ldab,
-                   doublereal *work)
+/** Generated wrapper function */
+doublereal dlansb_(char *norm, char *uplo, aocl_int_t *n, aocl_int_t *k, doublereal *ab,
+                   aocl_int_t *ldab, doublereal *work)
+{
+#if FLA_ENABLE_ILP64
+    return aocl_lapack_dlansb(norm, uplo, n, k, ab, ldab, work);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t k_64 = *k;
+    aocl_int64_t ldab_64 = *ldab;
+
+    return aocl_lapack_dlansb(norm, uplo, &n_64, &k_64, ab, &ldab_64, work);
+#endif
+}
+
+doublereal aocl_lapack_dlansb(char *norm, char *uplo, aocl_int64_t *n, aocl_int64_t *k,
+                              doublereal *ab, aocl_int64_t *ldab, doublereal *work)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dlansb inputs: norm %c, uplo %c, n %" FLA_IS ", k %" FLA_IS ", ldab %" FLA_IS
                       "",
                       *norm, *uplo, *n, *k, *ldab);
     /* System generated locals */
-    integer ab_dim1, ab_offset, i__1, i__2, i__3, i__4;
+    aocl_int64_t ab_dim1, ab_offset, i__1, i__2, i__3, i__4;
     doublereal ret_val, d__1;
     /* Builtin functions */
     double sqrt(doublereal);
     /* Local variables */
-    integer i__, j, l;
+    aocl_int64_t i__, j, l;
     doublereal sum, absa, scale;
-    extern logical lsame_(char *, char *, integer, integer);
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     doublereal value;
-    extern /* Subroutine */
-        void
-        dlassq_(integer *, doublereal *, integer *, doublereal *, doublereal *);
     /* -- LAPACK auxiliary routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -307,7 +319,7 @@ doublereal dlansb_(char *norm, char *uplo, integer *n, integer *k, doublereal *a
                     i__4 = fla_min(i__3, *k);
                     /* Computing MAX */
                     i__2 = *k + 2 - j;
-                    dlassq_(&i__4, &ab[fla_max(i__2, 1) + j * ab_dim1], &c__1, &scale, &sum);
+                    aocl_lapack_dlassq(&i__4, &ab[fla_max(i__2, 1) + j * ab_dim1], &c__1, &scale, &sum);
                     /* L110: */
                 }
                 l = *k + 1;
@@ -320,7 +332,7 @@ doublereal dlansb_(char *norm, char *uplo, integer *n, integer *k, doublereal *a
                     /* Computing MIN */
                     i__3 = *n - j;
                     i__4 = fla_min(i__3, *k);
-                    dlassq_(&i__4, &ab[j * ab_dim1 + 2], &c__1, &scale, &sum);
+                    aocl_lapack_dlassq(&i__4, &ab[j * ab_dim1 + 2], &c__1, &scale, &sum);
                     /* L120: */
                 }
                 l = 1;
@@ -331,7 +343,7 @@ doublereal dlansb_(char *norm, char *uplo, integer *n, integer *k, doublereal *a
         {
             l = 1;
         }
-        dlassq_(n, &ab[l + ab_dim1], ldab, &scale, &sum);
+        aocl_lapack_dlassq(n, &ab[l + ab_dim1], ldab, &scale, &sum);
         value = scale * sqrt(sum);
     }
     ret_val = value;

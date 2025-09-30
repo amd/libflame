@@ -16,22 +16,23 @@
 /* SVD for small tall-matrices with QR factorization
  * already computed
  */
-void fla_dgesvd_small6_avx2(integer wntus, integer wntvs, integer *m, integer *n, doublereal *a,
-                            integer *lda, doublereal *qr, integer *ldqr, doublereal *s,
-                            doublereal *u, integer *ldu, doublereal *vt, integer *ldvt,
-                            doublereal *work, integer *info)
+void fla_dgesvd_small6_avx2(aocl_int64_t wntus, aocl_int64_t wntvs, aocl_int64_t *m,
+                            aocl_int64_t *n, doublereal *a, aocl_int64_t *lda, doublereal *qr,
+                            aocl_int64_t *ldqr, doublereal *s, doublereal *u, aocl_int64_t *ldu,
+                            doublereal *vt, aocl_int64_t *ldvt, doublereal *work,
+                            aocl_int64_t *info)
 {
     /* Declare and init local variables */
     FLA_GEQRF_INIT_DSMALL();
 
-    integer ie;
-    integer itau, itauq, itaup;
-    integer rlen, knt;
-    integer ni;
-    integer tn;
-    integer ncvt, nru;
-    integer *ldau;
-    integer c__1 = 1;
+    aocl_int64_t ie;
+    aocl_int64_t itau, itauq, itaup;
+    aocl_int64_t rlen, knt;
+    aocl_int64_t ni;
+    aocl_int64_t tn;
+    aocl_int64_t ncvt, nru;
+    aocl_int64_t *ldau;
+    aocl_int64_t c__1 = 1;
 
     doublereal *tau, *tauq, *taup;
     doublereal *e, *au;
@@ -72,7 +73,7 @@ void fla_dgesvd_small6_avx2(integer wntus, integer wntvs, integer *m, integer *n
         au = u;
         ldau = ldu;
         /* Copy R to U */
-        dlacpy_("U", n, n, &a[1 + *lda], lda, &au[1 + *ldau], ldau);
+        aocl_lapack_dlacpy("U", n, n, &a[1 + *lda], lda, &au[1 + *ldau], ldau);
     }
     else
     {
@@ -82,7 +83,7 @@ void fla_dgesvd_small6_avx2(integer wntus, integer wntvs, integer *m, integer *n
     }
     /* Set lower part of U to zero */
     tn = *n - 1;
-    dlaset_("L", &tn, &tn, &c_zero, &c_zero, &au[2 + *ldau], ldau);
+    aocl_lapack_dlaset("L", &tn, &tn, &c_zero, &c_zero, &au[2 + *ldau], ldau);
 
     FLA_BIDIAGONALIZE_SMALL(*n, *n, au, ldau, tauq, taup, s, e);
 
@@ -132,7 +133,7 @@ void fla_dgesvd_small6_avx2(integer wntus, integer wntvs, integer *m, integer *n
         if(ncvt == 0 && nru == 0)
         {
             /* Compute Singular Values excluding computation of Singular Vectors */
-            dlasq1_(n, &s[1], &e[1], &work[itau - 1], info);
+            aocl_lapack_dlasq1(n, &s[1], &e[1], &work[itau - 1], info);
 
             /* Ensure singular values are positive */
             if(*info == 0)
@@ -143,8 +144,8 @@ void fla_dgesvd_small6_avx2(integer wntus, integer wntvs, integer *m, integer *n
         else
         {
             /* Compute Singular Values and Vectors */
-            lapack_dbdsqr_small("U", n, &ncvt, &nru, &s[1], &e[1], &vt[1 + *ldvt], ldvt, &u[1 + *ldu],
-                                ldu, info);
+            lapack_dbdsqr_small("U", n, &ncvt, &nru, &s[1], &e[1], &vt[1 + *ldvt], ldvt,
+                                &u[1 + *ldu], ldu, info);
         }
     }
 

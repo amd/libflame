@@ -4,12 +4,12 @@
  -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for
  libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static complex c_b1 = {0.f, 0.f};
-static complex c_b2 = {1.f, 0.f};
-static integer c_n1 = -1;
-static integer c__1 = 1;
+static scomplex c_b1 = {{0.f}, {0.f}};
+static scomplex c_b2 = {{1.f}, {0.f}};
+static aocl_int64_t c_n1 = -1;
+static aocl_int64_t c__1 = 1;
 static real c_b74 = 0.f;
-static integer c__0 = 0;
+static aocl_int64_t c__0 = 0;
 static real c_b87 = 1.f;
 static logical c_false = FALSE_;
 /* > \brief <b> CGESVDQ computes the singular value decomposition (SVD) with a QR-Preconditioned QR
@@ -53,7 +53,7 @@ static logical c_false = FALSE_;
 /* > */
 /* > \verbatim */
 /* > */
-/* > CGESVDQ computes the singular value decomposition (SVD) of a complex */
+/* > CGESVDQ computes the singular value decomposition (SVD) of a scomplex */
 /* > M-by-N matrix A, where M >= N. The SVD of A is written as */
 /* > [++] [xx] [x0] [xx] */
 /* > A = U * SIGMA * V^*, [++] = [xx] * [ox] * [xx] */
@@ -431,10 +431,43 @@ the routine */
 /* > \ingroup complexGEsing */
 /* ===================================================================== */
 /* Subroutine */
-void cgesvdq_(char *joba, char *jobp, char *jobr, char *jobu, char *jobv, integer *m, integer *n,
-              complex *a, integer *lda, real *s, complex *u, integer *ldu, complex *v, integer *ldv,
-              integer *numrank, integer *iwork, integer *liwork, complex *cwork, integer *lcwork,
-              real *rwork, integer *lrwork, integer *info)
+/** Generated wrapper function */
+void cgesvdq_(char *joba, char *jobp, char *jobr, char *jobu, char *jobv, aocl_int_t *m,
+              aocl_int_t *n, scomplex *a, aocl_int_t *lda, real *s, scomplex *u, aocl_int_t *ldu,
+              scomplex *v, aocl_int_t *ldv, aocl_int_t *numrank, aocl_int_t *iwork,
+              aocl_int_t *liwork, scomplex *cwork, aocl_int_t *lcwork, real *rwork,
+              aocl_int_t *lrwork, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_cgesvdq(joba, jobp, jobr, jobu, jobv, m, n, a, lda, s, u, ldu, v, ldv, numrank,
+                        iwork, liwork, cwork, lcwork, rwork, lrwork, info);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t ldu_64 = *ldu;
+    aocl_int64_t ldv_64 = *ldv;
+    aocl_int64_t numrank_64 = *numrank;
+    aocl_int64_t liwork_64 = *liwork;
+    aocl_int64_t lcwork_64 = *lcwork;
+    aocl_int64_t lrwork_64 = *lrwork;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_cgesvdq(joba, jobp, jobr, jobu, jobv, &m_64, &n_64, a, &lda_64, s, u, &ldu_64, v,
+                        &ldv_64, &numrank_64, iwork, &liwork_64, cwork, &lcwork_64, rwork,
+                        &lrwork_64, &info_64);
+
+    *numrank = (aocl_int_t)numrank_64;
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_cgesvdq(char *joba, char *jobp, char *jobr, char *jobu, char *jobv,
+                         aocl_int64_t *m, aocl_int64_t *n, scomplex *a, aocl_int64_t *lda, real *s,
+                         scomplex *u, aocl_int64_t *ldu, scomplex *v, aocl_int64_t *ldv,
+                         aocl_int64_t *numrank, aocl_int_t *iwork, aocl_int64_t *liwork,
+                         scomplex *cwork, aocl_int64_t *lcwork, real *rwork, aocl_int64_t *lrwork,
+                         aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -453,87 +486,47 @@ void cgesvdq_(char *joba, char *jobp, char *jobr, char *jobu, char *jobv, intege
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
-    integer a_dim1, a_offset, u_dim1, u_offset, v_dim1, v_offset, i__1, i__2, i__3;
+    aocl_int64_t a_dim1, a_offset, u_dim1, u_offset, v_dim1, v_offset, i__1, i__2, i__3;
     real r__1;
-    complex q__1;
+    scomplex q__1;
     /* Builtin functions */
-    double sqrt(doublereal), c_abs(complex *);
-    void r_cnjg(complex *, complex *);
+    double sqrt(doublereal), c_abs(scomplex *);
+    void r_cnjg(scomplex *, scomplex *);
     /* Local variables */
-    integer optratio, p, q, n1, nr;
+    aocl_int64_t optratio, p, q, n1, nr;
     real big;
-    integer lwrk_cgeqp3__, lwrk_cgelqf__, lwrk_cgeqrf__, lwrk_cgesvd__, lwrk_cunmlq__,
+    aocl_int64_t lwrk_cgeqp3__, lwrk_cgelqf__, lwrk_cgeqrf__, lwrk_cgesvd__, lwrk_cunmlq__,
         lwrk_cunmqr__, lwrk_cgesvd2__, ierr;
-    complex ctmp;
+    scomplex ctmp;
     real rtmp;
-    integer lwrk_cunmqr2__;
+    aocl_int64_t lwrk_cunmqr2__;
     logical lsvc0, accla;
-    integer lwqp3;
+    aocl_int64_t lwqp3;
     logical acclh, acclm, conda;
-    extern logical lsame_(char *, char *, integer, integer);
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     logical lsvec;
     real sfmin, epsln;
-    integer lwcon;
+    aocl_int64_t lwcon;
     logical rsvec;
-    integer lwlqf, lwqrf;
+    aocl_int64_t lwlqf, lwqrf;
     logical wntua;
-    integer lwsvd;
+    aocl_int64_t lwsvd;
     logical wntva, dntwu, dntwv, wntuf;
-    integer lwunq;
+    aocl_int64_t lwunq;
     logical wntur, wntus, wntvr;
-    extern /* Subroutine */
-        void
-        cgeqp3_(integer *, integer *, complex *, integer *, integer *, complex *, complex *,
-                integer *, real *, integer *);
-    extern real scnrm2_(integer *, complex *, integer *);
-    integer lwsvd2, lwunq2;
-    extern real clange_(char *, integer *, integer *, complex *, integer *, real *);
-    extern /* Subroutine */
-        void
-        cgelqf_(integer *, integer *, complex *, integer *, complex *, complex *, integer *,
-                integer *),
-        clascl_(char *, integer *, integer *, real *, real *, integer *, integer *, complex *,
-                integer *, integer *);
+    aocl_int64_t lwsvd2, lwunq2;
     real sconda;
-    extern /* Subroutine */
-        void
-        cgeqrf_(integer *, integer *, complex *, integer *, complex *, complex *, integer *,
-                integer *),
-        csscal_(integer *, real *, complex *, integer *);
     extern real slamch_(char *);
-    extern /* Subroutine */
-        void
-        cgesvd_(char *, char *, integer *, integer *, complex *, integer *, real *, complex *,
-                integer *, complex *, integer *, complex *, integer *, real *, integer *),
-        clacpy_(char *, integer *, integer *, complex *, integer *, complex *, integer *),
-        claset_(char *, integer *, integer *, complex *, complex *, complex *, integer *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
-        clapmt_(logical *, integer *, integer *, complex *, integer *, integer *),
-        slascl_(char *, integer *, integer *, real *, real *, integer *, integer *, real *,
-                integer *, integer *),
-        cpocon_(char *, integer *, complex *, integer *, real *, real *, complex *, real *,
-                integer *);
-    extern integer isamax_(integer *, real *, integer *);
-    extern /* Subroutine */
-        void
-        claswp_(integer *, complex *, integer *, integer *, integer *, integer *, integer *),
-        slaset_(char *, integer *, integer *, real *, real *, real *, integer *);
-    complex cdummy[1];
-    extern /* Subroutine */
-        void
-        cunmlq_(char *, char *, integer *, integer *, integer *, complex *, integer *, complex *,
-                complex *, integer *, complex *, integer *, integer *),
-        cunmqr_(char *, char *, integer *, integer *, integer *, complex *, integer *, complex *,
-                complex *, integer *, complex *, integer *, integer *);
-    integer minwrk;
+    scomplex cdummy[1];
+    aocl_int64_t minwrk;
     logical rtrans;
     real rdummy[1];
     logical lquery;
-    integer lwunlq, optwrk;
+    aocl_int64_t lwunlq, optwrk;
     logical rowprm;
-    integer minwrk2;
+    aocl_int64_t minwrk2;
     logical ascaled;
-    integer optwrk2, iminwrk, rminwrk;
+    aocl_int64_t optwrk2, iminwrk, rminwrk;
     /* .. Scalar Arguments .. */
     /* .. */
     /* .. Array Arguments .. */
@@ -684,18 +677,19 @@ void cgesvdq_(char *joba, char *jobp, char *jobr, char *jobu, char *jobv, intege
         lwsvd = fla_max(i__1, 1);
         if(lquery)
         {
-            cgeqp3_(m, n, &a[a_offset], lda, &iwork[1], cdummy, cdummy, &c_n1, rdummy, &ierr);
+            aocl_lapack_cgeqp3(m, n, &a[a_offset], lda, &iwork[1], cdummy, cdummy, &c_n1, rdummy,
+                               &ierr);
             lwrk_cgeqp3__ = (integer)cdummy[0].r;
             if(wntus || wntur)
             {
-                cunmqr_("L", "N", m, n, n, &a[a_offset], lda, cdummy, &u[u_offset], ldu, cdummy,
-                        &c_n1, &ierr);
+                aocl_lapack_cunmqr("L", "N", m, n, n, &a[a_offset], lda, cdummy, &u[u_offset], ldu,
+                                   cdummy, &c_n1, &ierr);
                 lwrk_cunmqr__ = (integer)cdummy[0].r;
             }
             else if(wntua)
             {
-                cunmqr_("L", "N", m, m, n, &a[a_offset], lda, cdummy, &u[u_offset], ldu, cdummy,
-                        &c_n1, &ierr);
+                aocl_lapack_cunmqr("L", "N", m, m, n, &a[a_offset], lda, cdummy, &u[u_offset], ldu,
+                                   cdummy, &c_n1, &ierr);
                 lwrk_cunmqr__ = (integer)cdummy[0].r;
             }
             else
@@ -707,7 +701,7 @@ void cgesvdq_(char *joba, char *jobp, char *jobr, char *jobu, char *jobv, intege
         optwrk = 2;
         if(!(lsvec || rsvec))
         {
-            /* .. minimal and optimal sizes of the complex workspace if */
+            /* .. minimal and optimal sizes of the scomplex workspace if */
             /* only the singular values are requested */
             if(conda)
             {
@@ -724,8 +718,8 @@ void cgesvdq_(char *joba, char *jobp, char *jobr, char *jobu, char *jobv, intege
             }
             if(lquery)
             {
-                cgesvd_("N", "N", n, n, &a[a_offset], lda, &s[1], &u[u_offset], ldu, &v[v_offset],
-                        ldv, cdummy, &c_n1, rdummy, &ierr);
+                aocl_lapack_cgesvd("N", "N", n, n, &a[a_offset], lda, &s[1], &u[u_offset], ldu,
+                                   &v[v_offset], ldv, cdummy, &c_n1, rdummy, &ierr);
                 lwrk_cgesvd__ = (integer)cdummy[0].r;
                 if(conda)
                 {
@@ -745,7 +739,7 @@ void cgesvdq_(char *joba, char *jobp, char *jobr, char *jobu, char *jobv, intege
         }
         else if(lsvec && !rsvec)
         {
-            /* .. minimal and optimal sizes of the complex workspace if the */
+            /* .. minimal and optimal sizes of the scomplex workspace if the */
             /* singular values and the left singular vectors are requested */
             if(conda)
             {
@@ -764,13 +758,13 @@ void cgesvdq_(char *joba, char *jobp, char *jobr, char *jobu, char *jobv, intege
             {
                 if(rtrans)
                 {
-                    cgesvd_("N", "O", n, n, &a[a_offset], lda, &s[1], &u[u_offset], ldu,
-                            &v[v_offset], ldv, cdummy, &c_n1, rdummy, &ierr);
+                    aocl_lapack_cgesvd("N", "O", n, n, &a[a_offset], lda, &s[1], &u[u_offset], ldu,
+                                       &v[v_offset], ldv, cdummy, &c_n1, rdummy, &ierr);
                 }
                 else
                 {
-                    cgesvd_("O", "N", n, n, &a[a_offset], lda, &s[1], &u[u_offset], ldu,
-                            &v[v_offset], ldv, cdummy, &c_n1, rdummy, &ierr);
+                    aocl_lapack_cgesvd("O", "N", n, n, &a[a_offset], lda, &s[1], &u[u_offset], ldu,
+                                       &v[v_offset], ldv, cdummy, &c_n1, rdummy, &ierr);
                 }
                 lwrk_cgesvd__ = (integer)cdummy[0].r;
                 if(conda)
@@ -790,7 +784,7 @@ void cgesvdq_(char *joba, char *jobp, char *jobr, char *jobu, char *jobv, intege
         }
         else if(rsvec && !lsvec)
         {
-            /* .. minimal and optimal sizes of the complex workspace if the */
+            /* .. minimal and optimal sizes of the scomplex workspace if the */
             /* singular values and the right singular vectors are requested */
             if(conda)
             {
@@ -806,13 +800,13 @@ void cgesvdq_(char *joba, char *jobp, char *jobr, char *jobu, char *jobv, intege
             {
                 if(rtrans)
                 {
-                    cgesvd_("O", "N", n, n, &a[a_offset], lda, &s[1], &u[u_offset], ldu,
-                            &v[v_offset], ldv, cdummy, &c_n1, rdummy, &ierr);
+                    aocl_lapack_cgesvd("O", "N", n, n, &a[a_offset], lda, &s[1], &u[u_offset], ldu,
+                                       &v[v_offset], ldv, cdummy, &c_n1, rdummy, &ierr);
                 }
                 else
                 {
-                    cgesvd_("N", "O", n, n, &a[a_offset], lda, &s[1], &u[u_offset], ldu,
-                            &v[v_offset], ldv, cdummy, &c_n1, rdummy, &ierr);
+                    aocl_lapack_cgesvd("N", "O", n, n, &a[a_offset], lda, &s[1], &u[u_offset], ldu,
+                                       &v[v_offset], ldv, cdummy, &c_n1, rdummy, &ierr);
                 }
                 lwrk_cgesvd__ = (integer)cdummy[0].r;
                 if(conda)
@@ -829,7 +823,7 @@ void cgesvdq_(char *joba, char *jobp, char *jobr, char *jobu, char *jobv, intege
         }
         else
         {
-            /* .. minimal and optimal sizes of the complex workspace if the */
+            /* .. minimal and optimal sizes of the scomplex workspace if the */
             /* full SVD is requested */
             if(rtrans)
             {
@@ -904,8 +898,8 @@ void cgesvdq_(char *joba, char *jobp, char *jobr, char *jobu, char *jobv, intege
             {
                 if(rtrans)
                 {
-                    cgesvd_("O", "A", n, n, &a[a_offset], lda, &s[1], &u[u_offset], ldu,
-                            &v[v_offset], ldv, cdummy, &c_n1, rdummy, &ierr);
+                    aocl_lapack_cgesvd("O", "A", n, n, &a[a_offset], lda, &s[1], &u[u_offset], ldu,
+                                       &v[v_offset], ldv, cdummy, &c_n1, rdummy, &ierr);
                     lwrk_cgesvd__ = (integer)cdummy[0].r;
                     /* Computing MAX */
                     i__1 = fla_max(lwrk_cgeqp3__, lwrk_cgesvd__);
@@ -918,16 +912,18 @@ void cgesvdq_(char *joba, char *jobp, char *jobr, char *jobu, char *jobv, intege
                     if(wntva)
                     {
                         i__1 = *n / 2;
-                        cgeqrf_(n, &i__1, &u[u_offset], ldu, cdummy, cdummy, &c_n1, &ierr);
+                        aocl_lapack_cgeqrf(n, &i__1, &u[u_offset], ldu, cdummy, cdummy, &c_n1,
+                                           &ierr);
                         lwrk_cgeqrf__ = (integer)cdummy[0].r;
                         i__1 = *n / 2;
                         i__2 = *n / 2;
-                        cgesvd_("S", "O", &i__1, &i__2, &v[v_offset], ldv, &s[1], &u[u_offset], ldu,
-                                &v[v_offset], ldv, cdummy, &c_n1, rdummy, &ierr);
+                        aocl_lapack_cgesvd("S", "O", &i__1, &i__2, &v[v_offset], ldv, &s[1],
+                                           &u[u_offset], ldu, &v[v_offset], ldv, cdummy, &c_n1,
+                                           rdummy, &ierr);
                         lwrk_cgesvd2__ = (integer)cdummy[0].r;
                         i__1 = *n / 2;
-                        cunmqr_("R", "C", n, n, &i__1, &u[u_offset], ldu, cdummy, &v[v_offset], ldv,
-                                cdummy, &c_n1, &ierr);
+                        aocl_lapack_cunmqr("R", "C", n, n, &i__1, &u[u_offset], ldu, cdummy,
+                                           &v[v_offset], ldv, cdummy, &c_n1, &ierr);
                         lwrk_cunmqr2__ = (integer)cdummy[0].r;
                         /* Computing MAX */
                         i__1 = lwrk_cgeqp3__, i__2 = *n / 2 + lwrk_cgeqrf__,
@@ -945,8 +941,8 @@ void cgesvdq_(char *joba, char *jobp, char *jobr, char *jobu, char *jobv, intege
                 }
                 else
                 {
-                    cgesvd_("S", "O", n, n, &a[a_offset], lda, &s[1], &u[u_offset], ldu,
-                            &v[v_offset], ldv, cdummy, &c_n1, rdummy, &ierr);
+                    aocl_lapack_cgesvd("S", "O", n, n, &a[a_offset], lda, &s[1], &u[u_offset], ldu,
+                                       &v[v_offset], ldv, cdummy, &c_n1, rdummy, &ierr);
                     lwrk_cgesvd__ = (integer)cdummy[0].r;
                     /* Computing MAX */
                     i__1 = fla_max(lwrk_cgeqp3__, lwrk_cgesvd__);
@@ -959,16 +955,18 @@ void cgesvdq_(char *joba, char *jobp, char *jobr, char *jobu, char *jobv, intege
                     if(wntva)
                     {
                         i__1 = *n / 2;
-                        cgelqf_(&i__1, n, &u[u_offset], ldu, cdummy, cdummy, &c_n1, &ierr);
+                        aocl_lapack_cgelqf(&i__1, n, &u[u_offset], ldu, cdummy, cdummy, &c_n1,
+                                           &ierr);
                         lwrk_cgelqf__ = (integer)cdummy[0].r;
                         i__1 = *n / 2;
                         i__2 = *n / 2;
-                        cgesvd_("S", "O", &i__1, &i__2, &v[v_offset], ldv, &s[1], &u[u_offset], ldu,
-                                &v[v_offset], ldv, cdummy, &c_n1, rdummy, &ierr);
+                        aocl_lapack_cgesvd("S", "O", &i__1, &i__2, &v[v_offset], ldv, &s[1],
+                                           &u[u_offset], ldu, &v[v_offset], ldv, cdummy, &c_n1,
+                                           rdummy, &ierr);
                         lwrk_cgesvd2__ = (integer)cdummy[0].r;
                         i__1 = *n / 2;
-                        cunmlq_("R", "N", n, n, &i__1, &u[u_offset], ldu, cdummy, &v[v_offset], ldv,
-                                cdummy, &c_n1, &ierr);
+                        aocl_lapack_cunmlq("R", "N", n, n, &i__1, &u[u_offset], ldu, cdummy,
+                                           &v[v_offset], ldv, cdummy, &c_n1, &ierr);
                         lwrk_cunmlq__ = (integer)cdummy[0].r;
                         /* Computing MAX */
                         i__1 = lwrk_cgeqp3__, i__2 = *n / 2 + lwrk_cgelqf__,
@@ -1000,14 +998,14 @@ void cgesvdq_(char *joba, char *jobp, char *jobr, char *jobu, char *jobv, intege
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("CGESVDQ", &i__1, (ftnlen)7);
+        aocl_blas_xerbla("CGESVDQ", &i__1, (ftnlen)7);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
     else if(lquery)
     {
         /* Return optimal workspace */
-        iwork[1] = iminwrk;
+        iwork[1] = (aocl_int_t)(iminwrk);
         cwork[1].r = (real)optwrk;
         cwork[1].i = 0.f; // , expr subst
         cwork[2].r = (real)minwrk;
@@ -1035,13 +1033,13 @@ void cgesvdq_(char *joba, char *jobp, char *jobr, char *jobu, char *jobv, intege
         {
             /* RWORK(p) = ABS( A(p,ICAMAX(N,A(p,1),LDA)) ) */
             /* [[CLANGE will return NaN if an entry of the p-th row is Nan]] */
-            rwork[p] = clange_("M", &c__1, n, &a[p + a_dim1], lda, rdummy);
+            rwork[p] = aocl_lapack_clange("M", &c__1, n, &a[p + a_dim1], lda, rdummy);
             /* .. check for NaN's and Inf's */
             if(rwork[p] != rwork[p] || rwork[p] * 0.f != 0.f)
             {
                 *info = -8;
                 i__2 = -(*info);
-                xerbla_("CGESVDQ", &i__2, (ftnlen)7);
+                aocl_blas_xerbla("CGESVDQ", &i__2, (ftnlen)7);
                 AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
                 return;
             }
@@ -1051,8 +1049,8 @@ void cgesvdq_(char *joba, char *jobp, char *jobr, char *jobu, char *jobv, intege
         for(p = 1; p <= i__1; ++p)
         {
             i__2 = *m - p + 1;
-            q = isamax_(&i__2, &rwork[p], &c__1) + p - 1;
-            iwork[*n + p] = q;
+            q = aocl_blas_isamax(&i__2, &rwork[p], &c__1) + p - 1;
+            iwork[*n + p] = (aocl_int_t)(q);
             if(p != q)
             {
                 rtmp = rwork[p];
@@ -1065,28 +1063,28 @@ void cgesvdq_(char *joba, char *jobp, char *jobr, char *jobu, char *jobv, intege
         {
             /* Quick return: A is the M x N zero matrix. */
             *numrank = 0;
-            slaset_("G", n, &c__1, &c_b74, &c_b74, &s[1], n);
+            aocl_lapack_slaset("G", n, &c__1, &c_b74, &c_b74, &s[1], n);
             if(wntus)
             {
-                claset_("G", m, n, &c_b1, &c_b2, &u[u_offset], ldu);
+                aocl_lapack_claset("G", m, n, &c_b1, &c_b2, &u[u_offset], ldu);
             }
             if(wntua)
             {
-                claset_("G", m, m, &c_b1, &c_b2, &u[u_offset], ldu);
+                aocl_lapack_claset("G", m, m, &c_b1, &c_b2, &u[u_offset], ldu);
             }
             if(wntva)
             {
-                claset_("G", n, n, &c_b1, &c_b2, &v[v_offset], ldv);
+                aocl_lapack_claset("G", n, n, &c_b1, &c_b2, &v[v_offset], ldv);
             }
             if(wntuf)
             {
-                claset_("G", n, &c__1, &c_b1, &c_b1, &cwork[1], n);
-                claset_("G", m, n, &c_b1, &c_b2, &u[u_offset], ldu);
+                aocl_lapack_claset("G", n, &c__1, &c_b1, &c_b1, &cwork[1], n);
+                aocl_lapack_claset("G", m, n, &c_b1, &c_b2, &u[u_offset], ldu);
             }
             i__1 = *n;
             for(p = 1; p <= i__1; ++p)
             {
-                iwork[p] = p;
+                iwork[p] = (aocl_int_t)(p);
                 /* L5001: */
             }
             if(rowprm)
@@ -1094,7 +1092,7 @@ void cgesvdq_(char *joba, char *jobp, char *jobr, char *jobu, char *jobv, intege
                 i__1 = *n + *m - 1;
                 for(p = *n + 1; p <= i__1; ++p)
                 {
-                    iwork[p] = p - *n;
+                    iwork[p] = (aocl_int_t)(p - *n);
                     /* L5002: */
                 }
             }
@@ -1111,11 +1109,11 @@ void cgesvdq_(char *joba, char *jobp, char *jobr, char *jobu, char *jobv, intege
             /* .. to prevent overflow in the QR factorization, scale the */
             /* matrix by 1/sqrt(M) if too large entry detected */
             r__1 = sqrt((real)(*m));
-            clascl_("G", &c__0, &c__0, &r__1, &c_b87, m, n, &a[a_offset], lda, &ierr);
+            aocl_lapack_clascl("G", &c__0, &c__0, &r__1, &c_b87, m, n, &a[a_offset], lda, &ierr);
             ascaled = TRUE_;
         }
         i__1 = *m - 1;
-        claswp_(n, &a[a_offset], lda, &c__1, &i__1, &iwork[*n + 1], &c__1);
+        aocl_lapack_claswp(n, &a[a_offset], lda, &c__1, &i__1, &iwork[*n + 1], &c__1);
     }
     /* .. At this stage, preemptive scaling is done only to avoid column */
     /* norms overflows during the QR factorization. The SVD procedure should */
@@ -1123,12 +1121,12 @@ void cgesvdq_(char *joba, char *jobp, char *jobr, char *jobu, char *jobv, intege
     /* underflows. That depends on the SVD procedure. */
     if(!rowprm)
     {
-        rtmp = clange_("M", m, n, &a[a_offset], lda, &rwork[1]);
+        rtmp = aocl_lapack_clange("M", m, n, &a[a_offset], lda, &rwork[1]);
         if(rtmp != rtmp || rtmp * 0.f != 0.f)
         {
             *info = -8;
             i__1 = -(*info);
-            xerbla_("CGESVDQ", &i__1, (ftnlen)7);
+            aocl_blas_xerbla("CGESVDQ", &i__1, (ftnlen)7);
             AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
             return;
         }
@@ -1137,7 +1135,7 @@ void cgesvdq_(char *joba, char *jobp, char *jobr, char *jobu, char *jobv, intege
             /* .. to prevent overflow in the QR factorization, scale the */
             /* matrix by 1/sqrt(M) if too large entry detected */
             r__1 = sqrt((real)(*m));
-            clascl_("G", &c__0, &c__0, &r__1, &c_b87, m, n, &a[a_offset], lda, &ierr);
+            aocl_lapack_clascl("G", &c__0, &c__0, &r__1, &c_b87, m, n, &a[a_offset], lda, &ierr);
             ascaled = TRUE_;
         }
     }
@@ -1152,7 +1150,8 @@ void cgesvdq_(char *joba, char *jobp, char *jobr, char *jobu, char *jobv, intege
         /* L1963: */
     }
     i__1 = *lcwork - *n;
-    cgeqp3_(m, n, &a[a_offset], lda, &iwork[1], &cwork[1], &cwork[*n + 1], &i__1, &rwork[1], &ierr);
+    aocl_lapack_cgeqp3(m, n, &a[a_offset], lda, &iwork[1], &cwork[1], &cwork[*n + 1], &i__1,
+                       &rwork[1], &ierr);
     /* If the user requested accuracy level allows truncation in the */
     /* computed upper triangular factor, the matrix R is examined and, */
     /* if possible, replaced with its leading upper trapezoidal part. */
@@ -1226,7 +1225,7 @@ void cgesvdq_(char *joba, char *jobp, char *jobr, char *jobu, char *jobv, intege
             /* Estimate the scaled condition number of A. Use the fact that it is */
             /* the same as the scaled condition number of R. */
             /* .. V is used as workspace */
-            clacpy_("U", n, n, &a[a_offset], lda, &v[v_offset], ldv);
+            aocl_lapack_clacpy("U", n, n, &a[a_offset], lda, &v[v_offset], ldv);
             /* Only the leading NR x NR submatrix of the triangular factor */
             /* is considered. Only if NR=N will this give a reliable error */
             /* bound. However, even for NR < N, this can be used on an */
@@ -1235,19 +1234,20 @@ void cgesvdq_(char *joba, char *jobp, char *jobr, char *jobu, char *jobv, intege
             i__1 = nr;
             for(p = 1; p <= i__1; ++p)
             {
-                rtmp = scnrm2_(&p, &v[p * v_dim1 + 1], &c__1);
+                rtmp = aocl_blas_scnrm2(&p, &v[p * v_dim1 + 1], &c__1);
                 r__1 = 1.f / rtmp;
-                csscal_(&p, &r__1, &v[p * v_dim1 + 1], &c__1);
+                aocl_blas_csscal(&p, &r__1, &v[p * v_dim1 + 1], &c__1);
                 /* L3053: */
             }
             if(!(lsvec || rsvec))
             {
-                cpocon_("U", &nr, &v[v_offset], ldv, &c_b87, &rtmp, &cwork[1], &rwork[1], &ierr);
+                aocl_lapack_cpocon("U", &nr, &v[v_offset], ldv, &c_b87, &rtmp, &cwork[1], &rwork[1],
+                                   &ierr);
             }
             else
             {
-                cpocon_("U", &nr, &v[v_offset], ldv, &c_b87, &rtmp, &cwork[*n + 1], &rwork[1],
-                        &ierr);
+                aocl_lapack_cpocon("U", &nr, &v[v_offset], ldv, &c_b87, &rtmp, &cwork[*n + 1],
+                                   &rwork[1], &ierr);
             }
             sconda = 1.f / sqrt(rtmp);
             /* For NR=N, SCONDA is an estimate of SQRT(||(R^* * R)^(-1)||_1), */
@@ -1301,8 +1301,8 @@ void cgesvdq_(char *joba, char *jobp, char *jobr, char *jobu, char *jobv, intege
                 }
                 /* L1146: */
             }
-            cgesvd_("N", "N", n, &nr, &a[a_offset], lda, &s[1], &u[u_offset], ldu, &v[v_offset],
-                    ldv, &cwork[1], lcwork, &rwork[1], info);
+            aocl_lapack_cgesvd("N", "N", n, &nr, &a[a_offset], lda, &s[1], &u[u_offset], ldu,
+                               &v[v_offset], ldv, &cwork[1], lcwork, &rwork[1], info);
         }
         else
         {
@@ -1311,10 +1311,10 @@ void cgesvdq_(char *joba, char *jobp, char *jobr, char *jobu, char *jobv, intege
             {
                 i__1 = nr - 1;
                 i__2 = nr - 1;
-                claset_("L", &i__1, &i__2, &c_b1, &c_b1, &a[a_dim1 + 2], lda);
+                aocl_lapack_claset("L", &i__1, &i__2, &c_b1, &c_b1, &a[a_dim1 + 2], lda);
             }
-            cgesvd_("N", "N", &nr, n, &a[a_offset], lda, &s[1], &u[u_offset], ldu, &v[v_offset],
-                    ldv, &cwork[1], lcwork, &rwork[1], info);
+            aocl_lapack_cgesvd("N", "N", &nr, n, &a[a_offset], lda, &s[1], &u[u_offset], ldu,
+                               &v[v_offset], ldv, &cwork[1], lcwork, &rwork[1], info);
         }
     }
     else if(lsvec && !rsvec)
@@ -1345,14 +1345,14 @@ void cgesvdq_(char *joba, char *jobp, char *jobr, char *jobu, char *jobv, intege
             {
                 i__1 = nr - 1;
                 i__2 = nr - 1;
-                claset_("U", &i__1, &i__2, &c_b1, &c_b1, &u[(u_dim1 << 1) + 1], ldu);
+                aocl_lapack_claset("U", &i__1, &i__2, &c_b1, &c_b1, &u[(u_dim1 << 1) + 1], ldu);
             }
             /* .. the left singular vectors not computed, the NR right singular */
             /* vectors overwrite [U](1:NR,1:NR) as conjugate transposed. These */
             /* will be pre-multiplied by Q to build the left singular vectors of A. */
             i__1 = *lcwork - *n;
-            cgesvd_("N", "O", n, &nr, &u[u_offset], ldu, &s[1], &u[u_offset], ldu, &u[u_offset],
-                    ldu, &cwork[*n + 1], &i__1, &rwork[1], info);
+            aocl_lapack_cgesvd("N", "O", n, &nr, &u[u_offset], ldu, &s[1], &u[u_offset], ldu,
+                               &u[u_offset], ldu, &cwork[*n + 1], &i__1, &rwork[1], info);
             i__1 = nr;
             for(p = 1; p <= i__1; ++p)
             {
@@ -1382,18 +1382,18 @@ void cgesvdq_(char *joba, char *jobp, char *jobr, char *jobu, char *jobv, intege
         {
             /* .. apply CGESVD to R */
             /* .. copy R into [U] and overwrite [U] with the left singular vectors */
-            clacpy_("U", &nr, n, &a[a_offset], lda, &u[u_offset], ldu);
+            aocl_lapack_clacpy("U", &nr, n, &a[a_offset], lda, &u[u_offset], ldu);
             if(nr > 1)
             {
                 i__1 = nr - 1;
                 i__2 = nr - 1;
-                claset_("L", &i__1, &i__2, &c_b1, &c_b1, &u[u_dim1 + 2], ldu);
+                aocl_lapack_claset("L", &i__1, &i__2, &c_b1, &c_b1, &u[u_dim1 + 2], ldu);
             }
             /* .. the right singular vectors not computed, the NR left singular */
             /* vectors overwrite [U](1:NR,1:NR) */
             i__1 = *lcwork - *n;
-            cgesvd_("O", "N", &nr, n, &u[u_offset], ldu, &s[1], &u[u_offset], ldu, &v[v_offset],
-                    ldv, &cwork[*n + 1], &i__1, &rwork[1], info);
+            aocl_lapack_cgesvd("O", "N", &nr, n, &u[u_offset], ldu, &s[1], &u[u_offset], ldu,
+                               &v[v_offset], ldv, &cwork[*n + 1], &i__1, &rwork[1], info);
             /* .. now [U](1:NR,1:NR) contains the NR left singular vectors of */
             /* R. These will be pre-multiplied by Q to build the left singular */
             /* vectors of A. */
@@ -1403,14 +1403,15 @@ void cgesvdq_(char *joba, char *jobp, char *jobr, char *jobu, char *jobv, intege
         if(nr < *m && !wntuf)
         {
             i__1 = *m - nr;
-            claset_("A", &i__1, &nr, &c_b1, &c_b1, &u[nr + 1 + u_dim1], ldu);
+            aocl_lapack_claset("A", &i__1, &nr, &c_b1, &c_b1, &u[nr + 1 + u_dim1], ldu);
             if(nr < n1)
             {
                 i__1 = n1 - nr;
-                claset_("A", &nr, &i__1, &c_b1, &c_b1, &u[(nr + 1) * u_dim1 + 1], ldu);
+                aocl_lapack_claset("A", &nr, &i__1, &c_b1, &c_b1, &u[(nr + 1) * u_dim1 + 1], ldu);
                 i__1 = *m - nr;
                 i__2 = n1 - nr;
-                claset_("A", &i__1, &i__2, &c_b1, &c_b2, &u[nr + 1 + (nr + 1) * u_dim1], ldu);
+                aocl_lapack_claset("A", &i__1, &i__2, &c_b1, &c_b2, &u[nr + 1 + (nr + 1) * u_dim1],
+                                   ldu);
             }
         }
         /* The Q matrix from the first QRF is built into the left singular */
@@ -1418,13 +1419,13 @@ void cgesvdq_(char *joba, char *jobp, char *jobr, char *jobu, char *jobv, intege
         if(!wntuf)
         {
             i__1 = *lcwork - *n;
-            cunmqr_("L", "N", m, &n1, n, &a[a_offset], lda, &cwork[1], &u[u_offset], ldu,
-                    &cwork[*n + 1], &i__1, &ierr);
+            aocl_lapack_cunmqr("L", "N", m, &n1, n, &a[a_offset], lda, &cwork[1], &u[u_offset], ldu,
+                               &cwork[*n + 1], &i__1, &ierr);
         }
         if(rowprm && !wntuf)
         {
             i__1 = *m - 1;
-            claswp_(&n1, &u[u_offset], ldu, &c__1, &i__1, &iwork[*n + 1], &c_n1);
+            aocl_lapack_claswp(&n1, &u[u_offset], ldu, &c__1, &i__1, &iwork[*n + 1], &c_n1);
         }
     }
     else if(rsvec && !lsvec)
@@ -1454,15 +1455,15 @@ void cgesvdq_(char *joba, char *jobp, char *jobr, char *jobu, char *jobv, intege
             {
                 i__1 = nr - 1;
                 i__2 = nr - 1;
-                claset_("U", &i__1, &i__2, &c_b1, &c_b1, &v[(v_dim1 << 1) + 1], ldv);
+                aocl_lapack_claset("U", &i__1, &i__2, &c_b1, &c_b1, &v[(v_dim1 << 1) + 1], ldv);
             }
             /* .. the left singular vectors of R**H overwrite V, the right singular */
             /* vectors not computed */
             if(wntvr || nr == *n)
             {
                 i__1 = *lcwork - *n;
-                cgesvd_("O", "N", n, &nr, &v[v_offset], ldv, &s[1], &u[u_offset], ldu, &u[u_offset],
-                        ldu, &cwork[*n + 1], &i__1, &rwork[1], info);
+                aocl_lapack_cgesvd("O", "N", n, &nr, &v[v_offset], ldv, &s[1], &u[u_offset], ldu,
+                                   &u[u_offset], ldu, &cwork[*n + 1], &i__1, &rwork[1], info);
                 i__1 = nr;
                 for(p = 1; p <= i__1; ++p)
                 {
@@ -1504,7 +1505,7 @@ void cgesvdq_(char *joba, char *jobp, char *jobr, char *jobu, char *jobv, intege
                         /* L1103: */
                     }
                 }
-                clapmt_(&c_false, &nr, n, &v[v_offset], ldv, &iwork[1]);
+                aocl_lapack_clapmt(&c_false, &nr, n, &v[v_offset], ldv, &iwork[1]);
             }
             else
             {
@@ -1514,10 +1515,10 @@ void cgesvdq_(char *joba, char *jobp, char *jobr, char *jobu, char *jobv, intege
                 /* way is to first use the QR factorization. For more details */
                 /* how to implement this, see the " FULL SVD " branch. */
                 i__1 = *n - nr;
-                claset_("G", n, &i__1, &c_b1, &c_b1, &v[(nr + 1) * v_dim1 + 1], ldv);
+                aocl_lapack_claset("G", n, &i__1, &c_b1, &c_b1, &v[(nr + 1) * v_dim1 + 1], ldv);
                 i__1 = *lcwork - *n;
-                cgesvd_("O", "N", n, n, &v[v_offset], ldv, &s[1], &u[u_offset], ldu, &u[u_offset],
-                        ldu, &cwork[*n + 1], &i__1, &rwork[1], info);
+                aocl_lapack_cgesvd("O", "N", n, n, &v[v_offset], ldv, &s[1], &u[u_offset], ldu,
+                                   &u[u_offset], ldu, &cwork[*n + 1], &i__1, &rwork[1], info);
                 i__1 = *n;
                 for(p = 1; p <= i__1; ++p)
                 {
@@ -1542,28 +1543,28 @@ void cgesvdq_(char *joba, char *jobp, char *jobr, char *jobu, char *jobv, intege
                     }
                     /* L1123: */
                 }
-                clapmt_(&c_false, n, n, &v[v_offset], ldv, &iwork[1]);
+                aocl_lapack_clapmt(&c_false, n, n, &v[v_offset], ldv, &iwork[1]);
             }
         }
         else
         {
             /* .. aply CGESVD to R */
             /* .. copy R into V and overwrite V with the right singular vectors */
-            clacpy_("U", &nr, n, &a[a_offset], lda, &v[v_offset], ldv);
+            aocl_lapack_clacpy("U", &nr, n, &a[a_offset], lda, &v[v_offset], ldv);
             if(nr > 1)
             {
                 i__1 = nr - 1;
                 i__2 = nr - 1;
-                claset_("L", &i__1, &i__2, &c_b1, &c_b1, &v[v_dim1 + 2], ldv);
+                aocl_lapack_claset("L", &i__1, &i__2, &c_b1, &c_b1, &v[v_dim1 + 2], ldv);
             }
             /* .. the right singular vectors overwrite V, the NR left singular */
             /* vectors stored in U(1:NR,1:NR) */
             if(wntvr || nr == *n)
             {
                 i__1 = *lcwork - *n;
-                cgesvd_("N", "O", &nr, n, &v[v_offset], ldv, &s[1], &u[u_offset], ldu, &v[v_offset],
-                        ldv, &cwork[*n + 1], &i__1, &rwork[1], info);
-                clapmt_(&c_false, &nr, n, &v[v_offset], ldv, &iwork[1]);
+                aocl_lapack_cgesvd("N", "O", &nr, n, &v[v_offset], ldv, &s[1], &u[u_offset], ldu,
+                                   &v[v_offset], ldv, &cwork[*n + 1], &i__1, &rwork[1], info);
+                aocl_lapack_clapmt(&c_false, &nr, n, &v[v_offset], ldv, &iwork[1]);
                 /* .. now [V](1:NR,1:N) contains V(1:N,1:NR)**H */
             }
             else
@@ -1574,11 +1575,11 @@ void cgesvdq_(char *joba, char *jobp, char *jobr, char *jobu, char *jobv, intege
                 /* way is to first use the LQ factorization. For more details */
                 /* how to implement this, see the " FULL SVD " branch. */
                 i__1 = *n - nr;
-                claset_("G", &i__1, n, &c_b1, &c_b1, &v[nr + 1 + v_dim1], ldv);
+                aocl_lapack_claset("G", &i__1, n, &c_b1, &c_b1, &v[nr + 1 + v_dim1], ldv);
                 i__1 = *lcwork - *n;
-                cgesvd_("N", "O", n, n, &v[v_offset], ldv, &s[1], &u[u_offset], ldu, &v[v_offset],
-                        ldv, &cwork[*n + 1], &i__1, &rwork[1], info);
-                clapmt_(&c_false, n, n, &v[v_offset], ldv, &iwork[1]);
+                aocl_lapack_cgesvd("N", "O", n, n, &v[v_offset], ldv, &s[1], &u[u_offset], ldu,
+                                   &v[v_offset], ldv, &cwork[*n + 1], &i__1, &rwork[1], info);
+                aocl_lapack_clapmt(&c_false, n, n, &v[v_offset], ldv, &iwork[1]);
             }
             /* .. now [V] contains the adjoint of the matrix of the right singular */
             /* vectors of A. */
@@ -1614,14 +1615,14 @@ void cgesvdq_(char *joba, char *jobp, char *jobr, char *jobu, char *jobv, intege
                 {
                     i__1 = nr - 1;
                     i__2 = nr - 1;
-                    claset_("U", &i__1, &i__2, &c_b1, &c_b1, &v[(v_dim1 << 1) + 1], ldv);
+                    aocl_lapack_claset("U", &i__1, &i__2, &c_b1, &c_b1, &v[(v_dim1 << 1) + 1], ldv);
                 }
                 /* .. the left singular vectors of R**H overwrite [V], the NR right */
                 /* singular vectors of R**H stored in [U](1:NR,1:NR) as conjugate */
                 /* transposed */
                 i__1 = *lcwork - *n;
-                cgesvd_("O", "A", n, &nr, &v[v_offset], ldv, &s[1], &v[v_offset], ldv, &u[u_offset],
-                        ldu, &cwork[*n + 1], &i__1, &rwork[1], info);
+                aocl_lapack_cgesvd("O", "A", n, &nr, &v[v_offset], ldv, &s[1], &v[v_offset], ldv,
+                                   &u[u_offset], ldu, &cwork[*n + 1], &i__1, &rwork[1], info);
                 /* .. assemble V */
                 i__1 = nr;
                 for(p = 1; p <= i__1; ++p)
@@ -1664,7 +1665,7 @@ void cgesvdq_(char *joba, char *jobp, char *jobr, char *jobu, char *jobv, intege
                         /* L1101: */
                     }
                 }
-                clapmt_(&c_false, &nr, n, &v[v_offset], ldv, &iwork[1]);
+                aocl_lapack_clapmt(&c_false, &nr, n, &v[v_offset], ldv, &iwork[1]);
                 i__1 = nr;
                 for(p = 1; p <= i__1; ++p)
                 {
@@ -1692,15 +1693,16 @@ void cgesvdq_(char *joba, char *jobp, char *jobr, char *jobu, char *jobv, intege
                 if(nr < *m && !wntuf)
                 {
                     i__1 = *m - nr;
-                    claset_("A", &i__1, &nr, &c_b1, &c_b1, &u[nr + 1 + u_dim1], ldu);
+                    aocl_lapack_claset("A", &i__1, &nr, &c_b1, &c_b1, &u[nr + 1 + u_dim1], ldu);
                     if(nr < n1)
                     {
                         i__1 = n1 - nr;
-                        claset_("A", &nr, &i__1, &c_b1, &c_b1, &u[(nr + 1) * u_dim1 + 1], ldu);
+                        aocl_lapack_claset("A", &nr, &i__1, &c_b1, &c_b1, &u[(nr + 1) * u_dim1 + 1],
+                                           ldu);
                         i__1 = *m - nr;
                         i__2 = n1 - nr;
-                        claset_("A", &i__1, &i__2, &c_b1, &c_b2, &u[nr + 1 + (nr + 1) * u_dim1],
-                                ldu);
+                        aocl_lapack_claset("A", &i__1, &i__2, &c_b1, &c_b2,
+                                           &u[nr + 1 + (nr + 1) * u_dim1], ldu);
                     }
                 }
             }
@@ -1736,13 +1738,14 @@ void cgesvdq_(char *joba, char *jobp, char *jobr, char *jobu, char *jobv, intege
                     {
                         i__1 = nr - 1;
                         i__2 = nr - 1;
-                        claset_("U", &i__1, &i__2, &c_b1, &c_b1, &v[(v_dim1 << 1) + 1], ldv);
+                        aocl_lapack_claset("U", &i__1, &i__2, &c_b1, &c_b1, &v[(v_dim1 << 1) + 1],
+                                           ldv);
                     }
                     i__1 = *n - nr;
-                    claset_("A", n, &i__1, &c_b1, &c_b1, &v[(nr + 1) * v_dim1 + 1], ldv);
+                    aocl_lapack_claset("A", n, &i__1, &c_b1, &c_b1, &v[(nr + 1) * v_dim1 + 1], ldv);
                     i__1 = *lcwork - *n;
-                    cgesvd_("O", "A", n, n, &v[v_offset], ldv, &s[1], &v[v_offset], ldv,
-                            &u[u_offset], ldu, &cwork[*n + 1], &i__1, &rwork[1], info);
+                    aocl_lapack_cgesvd("O", "A", n, n, &v[v_offset], ldv, &s[1], &v[v_offset], ldv,
+                                       &u[u_offset], ldu, &cwork[*n + 1], &i__1, &rwork[1], info);
                     i__1 = *n;
                     for(p = 1; p <= i__1; ++p)
                     {
@@ -1767,7 +1770,7 @@ void cgesvdq_(char *joba, char *jobp, char *jobr, char *jobu, char *jobv, intege
                         }
                         /* L1113: */
                     }
-                    clapmt_(&c_false, n, n, &v[v_offset], ldv, &iwork[1]);
+                    aocl_lapack_clapmt(&c_false, n, n, &v[v_offset], ldv, &iwork[1]);
                     /* .. assemble the left singular vector matrix U of dimensions */
                     /* (M x N1), i.e. (M x N) or (M x M). */
                     i__1 = *n;
@@ -1797,15 +1800,16 @@ void cgesvdq_(char *joba, char *jobp, char *jobr, char *jobu, char *jobv, intege
                     if(*n < *m && !wntuf)
                     {
                         i__1 = *m - *n;
-                        claset_("A", &i__1, n, &c_b1, &c_b1, &u[*n + 1 + u_dim1], ldu);
+                        aocl_lapack_claset("A", &i__1, n, &c_b1, &c_b1, &u[*n + 1 + u_dim1], ldu);
                         if(*n < n1)
                         {
                             i__1 = n1 - *n;
-                            claset_("A", n, &i__1, &c_b1, &c_b1, &u[(*n + 1) * u_dim1 + 1], ldu);
+                            aocl_lapack_claset("A", n, &i__1, &c_b1, &c_b1,
+                                               &u[(*n + 1) * u_dim1 + 1], ldu);
                             i__1 = *m - *n;
                             i__2 = n1 - *n;
-                            claset_("A", &i__1, &i__2, &c_b1, &c_b2, &u[*n + 1 + (*n + 1) * u_dim1],
-                                    ldu);
+                            aocl_lapack_claset("A", &i__1, &i__2, &c_b1, &c_b2,
+                                               &u[*n + 1 + (*n + 1) * u_dim1], ldu);
                         }
                     }
                 }
@@ -1831,11 +1835,12 @@ void cgesvdq_(char *joba, char *jobp, char *jobr, char *jobu, char *jobv, intege
                     {
                         i__1 = nr - 1;
                         i__2 = nr - 1;
-                        claset_("U", &i__1, &i__2, &c_b1, &c_b1, &u[(nr + 2) * u_dim1 + 1], ldu);
+                        aocl_lapack_claset("U", &i__1, &i__2, &c_b1, &c_b1,
+                                           &u[(nr + 2) * u_dim1 + 1], ldu);
                     }
                     i__1 = *lcwork - *n - nr;
-                    cgeqrf_(n, &nr, &u[(nr + 1) * u_dim1 + 1], ldu, &cwork[*n + 1],
-                            &cwork[*n + nr + 1], &i__1, &ierr);
+                    aocl_lapack_cgeqrf(n, &nr, &u[(nr + 1) * u_dim1 + 1], ldu, &cwork[*n + 1],
+                                       &cwork[*n + nr + 1], &i__1, &ierr);
                     i__1 = nr;
                     for(p = 1; p <= i__1; ++p)
                     {
@@ -1852,35 +1857,40 @@ void cgesvdq_(char *joba, char *jobp, char *jobr, char *jobu, char *jobv, intege
                     }
                     i__1 = nr - 1;
                     i__2 = nr - 1;
-                    claset_("U", &i__1, &i__2, &c_b1, &c_b1, &v[(v_dim1 << 1) + 1], ldv);
+                    aocl_lapack_claset("U", &i__1, &i__2, &c_b1, &c_b1, &v[(v_dim1 << 1) + 1], ldv);
                     i__1 = *lcwork - *n - nr;
-                    cgesvd_("S", "O", &nr, &nr, &v[v_offset], ldv, &s[1], &u[u_offset], ldu,
-                            &v[v_offset], ldv, &cwork[*n + nr + 1], &i__1, &rwork[1], info);
+                    aocl_lapack_cgesvd("S", "O", &nr, &nr, &v[v_offset], ldv, &s[1], &u[u_offset],
+                                       ldu, &v[v_offset], ldv, &cwork[*n + nr + 1], &i__1,
+                                       &rwork[1], info);
                     i__1 = *n - nr;
-                    claset_("A", &i__1, &nr, &c_b1, &c_b1, &v[nr + 1 + v_dim1], ldv);
+                    aocl_lapack_claset("A", &i__1, &nr, &c_b1, &c_b1, &v[nr + 1 + v_dim1], ldv);
                     i__1 = *n - nr;
-                    claset_("A", &nr, &i__1, &c_b1, &c_b1, &v[(nr + 1) * v_dim1 + 1], ldv);
+                    aocl_lapack_claset("A", &nr, &i__1, &c_b1, &c_b1, &v[(nr + 1) * v_dim1 + 1],
+                                       ldv);
                     i__1 = *n - nr;
                     i__2 = *n - nr;
-                    claset_("A", &i__1, &i__2, &c_b1, &c_b2, &v[nr + 1 + (nr + 1) * v_dim1], ldv);
+                    aocl_lapack_claset("A", &i__1, &i__2, &c_b1, &c_b2,
+                                       &v[nr + 1 + (nr + 1) * v_dim1], ldv);
                     i__1 = *lcwork - *n - nr;
-                    cunmqr_("R", "C", n, n, &nr, &u[(nr + 1) * u_dim1 + 1], ldu, &cwork[*n + 1],
-                            &v[v_offset], ldv, &cwork[*n + nr + 1], &i__1, &ierr);
-                    clapmt_(&c_false, n, n, &v[v_offset], ldv, &iwork[1]);
+                    aocl_lapack_cunmqr("R", "C", n, n, &nr, &u[(nr + 1) * u_dim1 + 1], ldu,
+                                       &cwork[*n + 1], &v[v_offset], ldv, &cwork[*n + nr + 1],
+                                       &i__1, &ierr);
+                    aocl_lapack_clapmt(&c_false, n, n, &v[v_offset], ldv, &iwork[1]);
                     /* .. assemble the left singular vector matrix U of dimensions */
                     /* (M x NR) or (M x N) or (M x M). */
                     if(nr < *m && !wntuf)
                     {
                         i__1 = *m - nr;
-                        claset_("A", &i__1, &nr, &c_b1, &c_b1, &u[nr + 1 + u_dim1], ldu);
+                        aocl_lapack_claset("A", &i__1, &nr, &c_b1, &c_b1, &u[nr + 1 + u_dim1], ldu);
                         if(nr < n1)
                         {
                             i__1 = n1 - nr;
-                            claset_("A", &nr, &i__1, &c_b1, &c_b1, &u[(nr + 1) * u_dim1 + 1], ldu);
+                            aocl_lapack_claset("A", &nr, &i__1, &c_b1, &c_b1,
+                                               &u[(nr + 1) * u_dim1 + 1], ldu);
                             i__1 = *m - nr;
                             i__2 = n1 - nr;
-                            claset_("A", &i__1, &i__2, &c_b1, &c_b2, &u[nr + 1 + (nr + 1) * u_dim1],
-                                    ldu);
+                            aocl_lapack_claset("A", &i__1, &i__2, &c_b1, &c_b2,
+                                               &u[nr + 1 + (nr + 1) * u_dim1], ldu);
                         }
                     }
                 }
@@ -1892,34 +1902,35 @@ void cgesvdq_(char *joba, char *jobp, char *jobr, char *jobu, char *jobv, intege
             if(wntvr || nr == *n)
             {
                 /* .. copy R into [V] and overwrite V with the right singular vectors */
-                clacpy_("U", &nr, n, &a[a_offset], lda, &v[v_offset], ldv);
+                aocl_lapack_clacpy("U", &nr, n, &a[a_offset], lda, &v[v_offset], ldv);
                 if(nr > 1)
                 {
                     i__1 = nr - 1;
                     i__2 = nr - 1;
-                    claset_("L", &i__1, &i__2, &c_b1, &c_b1, &v[v_dim1 + 2], ldv);
+                    aocl_lapack_claset("L", &i__1, &i__2, &c_b1, &c_b1, &v[v_dim1 + 2], ldv);
                 }
                 /* .. the right singular vectors of R overwrite [V], the NR left */
                 /* singular vectors of R stored in [U](1:NR,1:NR) */
                 i__1 = *lcwork - *n;
-                cgesvd_("S", "O", &nr, n, &v[v_offset], ldv, &s[1], &u[u_offset], ldu, &v[v_offset],
-                        ldv, &cwork[*n + 1], &i__1, &rwork[1], info);
-                clapmt_(&c_false, &nr, n, &v[v_offset], ldv, &iwork[1]);
+                aocl_lapack_cgesvd("S", "O", &nr, n, &v[v_offset], ldv, &s[1], &u[u_offset], ldu,
+                                   &v[v_offset], ldv, &cwork[*n + 1], &i__1, &rwork[1], info);
+                aocl_lapack_clapmt(&c_false, &nr, n, &v[v_offset], ldv, &iwork[1]);
                 /* .. now [V](1:NR,1:N) contains V(1:N,1:NR)**H */
                 /* .. assemble the left singular vector matrix U of dimensions */
                 /* (M x NR) or (M x N) or (M x M). */
                 if(nr < *m && !wntuf)
                 {
                     i__1 = *m - nr;
-                    claset_("A", &i__1, &nr, &c_b1, &c_b1, &u[nr + 1 + u_dim1], ldu);
+                    aocl_lapack_claset("A", &i__1, &nr, &c_b1, &c_b1, &u[nr + 1 + u_dim1], ldu);
                     if(nr < n1)
                     {
                         i__1 = n1 - nr;
-                        claset_("A", &nr, &i__1, &c_b1, &c_b1, &u[(nr + 1) * u_dim1 + 1], ldu);
+                        aocl_lapack_claset("A", &nr, &i__1, &c_b1, &c_b1, &u[(nr + 1) * u_dim1 + 1],
+                                           ldu);
                         i__1 = *m - nr;
                         i__2 = n1 - nr;
-                        claset_("A", &i__1, &i__2, &c_b1, &c_b2, &u[nr + 1 + (nr + 1) * u_dim1],
-                                ldu);
+                        aocl_lapack_claset("A", &i__1, &i__2, &c_b1, &c_b2,
+                                           &u[nr + 1 + (nr + 1) * u_dim1], ldu);
                     }
                 }
             }
@@ -1937,21 +1948,21 @@ void cgesvdq_(char *joba, char *jobp, char *jobr, char *jobu, char *jobv, intege
                 optratio = 2;
                 if(optratio * nr > *n)
                 {
-                    clacpy_("U", &nr, n, &a[a_offset], lda, &v[v_offset], ldv);
+                    aocl_lapack_clacpy("U", &nr, n, &a[a_offset], lda, &v[v_offset], ldv);
                     if(nr > 1)
                     {
                         i__1 = nr - 1;
                         i__2 = nr - 1;
-                        claset_("L", &i__1, &i__2, &c_b1, &c_b1, &v[v_dim1 + 2], ldv);
+                        aocl_lapack_claset("L", &i__1, &i__2, &c_b1, &c_b1, &v[v_dim1 + 2], ldv);
                     }
                     /* .. the right singular vectors of R overwrite [V], the NR left */
                     /* singular vectors of R stored in [U](1:NR,1:NR) */
                     i__1 = *n - nr;
-                    claset_("A", &i__1, n, &c_b1, &c_b1, &v[nr + 1 + v_dim1], ldv);
+                    aocl_lapack_claset("A", &i__1, n, &c_b1, &c_b1, &v[nr + 1 + v_dim1], ldv);
                     i__1 = *lcwork - *n;
-                    cgesvd_("S", "O", n, n, &v[v_offset], ldv, &s[1], &u[u_offset], ldu,
-                            &v[v_offset], ldv, &cwork[*n + 1], &i__1, &rwork[1], info);
-                    clapmt_(&c_false, n, n, &v[v_offset], ldv, &iwork[1]);
+                    aocl_lapack_cgesvd("S", "O", n, n, &v[v_offset], ldv, &s[1], &u[u_offset], ldu,
+                                       &v[v_offset], ldv, &cwork[*n + 1], &i__1, &rwork[1], info);
+                    aocl_lapack_clapmt(&c_false, n, n, &v[v_offset], ldv, &iwork[1]);
                     /* .. now [V] contains the adjoint of the matrix of the right */
                     /* singular vectors of A. The leading N left singular vectors */
                     /* are in [U](1:N,1:N) */
@@ -1960,65 +1971,73 @@ void cgesvdq_(char *joba, char *jobp, char *jobr, char *jobu, char *jobv, intege
                     if(*n < *m && !wntuf)
                     {
                         i__1 = *m - *n;
-                        claset_("A", &i__1, n, &c_b1, &c_b1, &u[*n + 1 + u_dim1], ldu);
+                        aocl_lapack_claset("A", &i__1, n, &c_b1, &c_b1, &u[*n + 1 + u_dim1], ldu);
                         if(*n < n1)
                         {
                             i__1 = n1 - *n;
-                            claset_("A", n, &i__1, &c_b1, &c_b1, &u[(*n + 1) * u_dim1 + 1], ldu);
+                            aocl_lapack_claset("A", n, &i__1, &c_b1, &c_b1,
+                                               &u[(*n + 1) * u_dim1 + 1], ldu);
                             i__1 = *m - *n;
                             i__2 = n1 - *n;
-                            claset_("A", &i__1, &i__2, &c_b1, &c_b2, &u[*n + 1 + (*n + 1) * u_dim1],
-                                    ldu);
+                            aocl_lapack_claset("A", &i__1, &i__2, &c_b1, &c_b2,
+                                               &u[*n + 1 + (*n + 1) * u_dim1], ldu);
                         }
                     }
                 }
                 else
                 {
-                    clacpy_("U", &nr, n, &a[a_offset], lda, &u[nr + 1 + u_dim1], ldu);
+                    aocl_lapack_clacpy("U", &nr, n, &a[a_offset], lda, &u[nr + 1 + u_dim1], ldu);
                     if(nr > 1)
                     {
                         i__1 = nr - 1;
                         i__2 = nr - 1;
-                        claset_("L", &i__1, &i__2, &c_b1, &c_b1, &u[nr + 2 + u_dim1], ldu);
+                        aocl_lapack_claset("L", &i__1, &i__2, &c_b1, &c_b1, &u[nr + 2 + u_dim1],
+                                           ldu);
                     }
                     i__1 = *lcwork - *n - nr;
-                    cgelqf_(&nr, n, &u[nr + 1 + u_dim1], ldu, &cwork[*n + 1], &cwork[*n + nr + 1],
-                            &i__1, &ierr);
-                    clacpy_("L", &nr, &nr, &u[nr + 1 + u_dim1], ldu, &v[v_offset], ldv);
+                    aocl_lapack_cgelqf(&nr, n, &u[nr + 1 + u_dim1], ldu, &cwork[*n + 1],
+                                       &cwork[*n + nr + 1], &i__1, &ierr);
+                    aocl_lapack_clacpy("L", &nr, &nr, &u[nr + 1 + u_dim1], ldu, &v[v_offset], ldv);
                     if(nr > 1)
                     {
                         i__1 = nr - 1;
                         i__2 = nr - 1;
-                        claset_("U", &i__1, &i__2, &c_b1, &c_b1, &v[(v_dim1 << 1) + 1], ldv);
+                        aocl_lapack_claset("U", &i__1, &i__2, &c_b1, &c_b1, &v[(v_dim1 << 1) + 1],
+                                           ldv);
                     }
                     i__1 = *lcwork - *n - nr;
-                    cgesvd_("S", "O", &nr, &nr, &v[v_offset], ldv, &s[1], &u[u_offset], ldu,
-                            &v[v_offset], ldv, &cwork[*n + nr + 1], &i__1, &rwork[1], info);
+                    aocl_lapack_cgesvd("S", "O", &nr, &nr, &v[v_offset], ldv, &s[1], &u[u_offset],
+                                       ldu, &v[v_offset], ldv, &cwork[*n + nr + 1], &i__1,
+                                       &rwork[1], info);
                     i__1 = *n - nr;
-                    claset_("A", &i__1, &nr, &c_b1, &c_b1, &v[nr + 1 + v_dim1], ldv);
+                    aocl_lapack_claset("A", &i__1, &nr, &c_b1, &c_b1, &v[nr + 1 + v_dim1], ldv);
                     i__1 = *n - nr;
-                    claset_("A", &nr, &i__1, &c_b1, &c_b1, &v[(nr + 1) * v_dim1 + 1], ldv);
+                    aocl_lapack_claset("A", &nr, &i__1, &c_b1, &c_b1, &v[(nr + 1) * v_dim1 + 1],
+                                       ldv);
                     i__1 = *n - nr;
                     i__2 = *n - nr;
-                    claset_("A", &i__1, &i__2, &c_b1, &c_b2, &v[nr + 1 + (nr + 1) * v_dim1], ldv);
+                    aocl_lapack_claset("A", &i__1, &i__2, &c_b1, &c_b2,
+                                       &v[nr + 1 + (nr + 1) * v_dim1], ldv);
                     i__1 = *lcwork - *n - nr;
-                    cunmlq_("R", "N", n, n, &nr, &u[nr + 1 + u_dim1], ldu, &cwork[*n + 1],
-                            &v[v_offset], ldv, &cwork[*n + nr + 1], &i__1, &ierr);
-                    clapmt_(&c_false, n, n, &v[v_offset], ldv, &iwork[1]);
+                    aocl_lapack_cunmlq("R", "N", n, n, &nr, &u[nr + 1 + u_dim1], ldu,
+                                       &cwork[*n + 1], &v[v_offset], ldv, &cwork[*n + nr + 1],
+                                       &i__1, &ierr);
+                    aocl_lapack_clapmt(&c_false, n, n, &v[v_offset], ldv, &iwork[1]);
                     /* .. assemble the left singular vector matrix U of dimensions */
                     /* (M x NR) or (M x N) or (M x M). */
                     if(nr < *m && !wntuf)
                     {
                         i__1 = *m - nr;
-                        claset_("A", &i__1, &nr, &c_b1, &c_b1, &u[nr + 1 + u_dim1], ldu);
+                        aocl_lapack_claset("A", &i__1, &nr, &c_b1, &c_b1, &u[nr + 1 + u_dim1], ldu);
                         if(nr < n1)
                         {
                             i__1 = n1 - nr;
-                            claset_("A", &nr, &i__1, &c_b1, &c_b1, &u[(nr + 1) * u_dim1 + 1], ldu);
+                            aocl_lapack_claset("A", &nr, &i__1, &c_b1, &c_b1,
+                                               &u[(nr + 1) * u_dim1 + 1], ldu);
                             i__1 = *m - nr;
                             i__2 = n1 - nr;
-                            claset_("A", &i__1, &i__2, &c_b1, &c_b2, &u[nr + 1 + (nr + 1) * u_dim1],
-                                    ldu);
+                            aocl_lapack_claset("A", &i__1, &i__2, &c_b1, &c_b2,
+                                               &u[nr + 1 + (nr + 1) * u_dim1], ldu);
                         }
                     }
                 }
@@ -2030,13 +2049,13 @@ void cgesvdq_(char *joba, char *jobp, char *jobr, char *jobu, char *jobv, intege
         if(!wntuf)
         {
             i__1 = *lcwork - *n;
-            cunmqr_("L", "N", m, &n1, n, &a[a_offset], lda, &cwork[1], &u[u_offset], ldu,
-                    &cwork[*n + 1], &i__1, &ierr);
+            aocl_lapack_cunmqr("L", "N", m, &n1, n, &a[a_offset], lda, &cwork[1], &u[u_offset], ldu,
+                               &cwork[*n + 1], &i__1, &ierr);
         }
         if(rowprm && !wntuf)
         {
             i__1 = *m - 1;
-            claswp_(&n1, &u[u_offset], ldu, &c__1, &i__1, &iwork[*n + 1], &c_n1);
+            aocl_lapack_claswp(&n1, &u[u_offset], ldu, &c__1, &i__1, &iwork[*n + 1], &c_n1);
         }
         /* ... end of the "full SVD" branch */
     }
@@ -2057,7 +2076,7 @@ L4002: /* .. if numerical rank deficiency is detected, the truncated */
     if(nr < *n)
     {
         i__1 = *n - nr;
-        slaset_("G", &i__1, &c__1, &c_b74, &c_b74, &s[nr + 1], n);
+        aocl_lapack_slaset("G", &i__1, &c__1, &c_b74, &c_b74, &s[nr + 1], n);
     }
     /* .. undo scaling;
     this may cause overflow in the largest singular */
@@ -2065,7 +2084,7 @@ L4002: /* .. if numerical rank deficiency is detected, the truncated */
     if(ascaled)
     {
         r__1 = sqrt((real)(*m));
-        slascl_("G", &c__0, &c__0, &c_b87, &r__1, &nr, &c__1, &s[1], n, &ierr);
+        aocl_lapack_slascl("G", &c__0, &c__0, &c_b87, &r__1, &nr, &c__1, &s[1], n, &ierr);
     }
     if(conda)
     {

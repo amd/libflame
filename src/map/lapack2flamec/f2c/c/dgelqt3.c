@@ -6,7 +6,7 @@
 #include "FLA_f2c.h" /* Table of constant values */
 static doublereal c_b7 = 1.;
 static doublereal c_b19 = -1.;
-/* > \brief \b DGELQT3 recursively computes a LQ factorization of a general real or complex matrix
+/* > \brief \b DGELQT3 recursively computes a LQ factorization of a general real or scomplex matrix
  * using the c ompact WY representation of Q. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -132,28 +132,37 @@ the elements below the diagonal are not used. */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void dgelqt3_(integer *m, integer *n, doublereal *a, integer *lda, doublereal *t, integer *ldt,
-              integer *info)
+/** Generated wrapper function */
+void dgelqt3_(aocl_int_t *m, aocl_int_t *n, doublereal *a, aocl_int_t *lda, doublereal *t,
+              aocl_int_t *ldt, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_dgelqt3(m, n, a, lda, t, ldt, info);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t ldt_64 = *ldt;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_dgelqt3(&m_64, &n_64, a, &lda_64, t, &ldt_64, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_dgelqt3(aocl_int64_t *m, aocl_int64_t *n, doublereal *a, aocl_int64_t *lda,
+                         doublereal *t, aocl_int64_t *ldt, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dgelqt3 inputs: m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS ", ldt %" FLA_IS
                       "",
                       *m, *n, *lda, *ldt);
     /* System generated locals */
-    integer a_dim1, a_offset, t_dim1, t_offset, i__1, i__2;
+    aocl_int64_t a_dim1, a_offset, t_dim1, t_offset, i__1, i__2;
     /* Local variables */
-    integer i__, j, i1, j1, m1, m2;
-    extern /* Subroutine */
-        void
-        dgemm_(char *, char *, integer *, integer *, integer *, doublereal *, doublereal *,
-               integer *, doublereal *, integer *, doublereal *, doublereal *, integer *);
-    integer iinfo;
-    extern /* Subroutine */
-        void
-        dtrmm_(char *, char *, char *, char *, integer *, integer *, doublereal *, doublereal *,
-               integer *, doublereal *, integer *),
-        dlarfg_(integer *, doublereal *, doublereal *, integer *, doublereal *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    aocl_int64_t i__, j, i1, j1, m1, m2;
+    aocl_int64_t iinfo;
     /* -- LAPACK computational routine (version 3.8.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -198,14 +207,14 @@ void dgelqt3_(integer *m, integer *n, doublereal *a, integer *lda, doublereal *t
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("DGELQT3", &i__1, (ftnlen)7);
+        aocl_blas_xerbla("DGELQT3", &i__1, (ftnlen)7);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     if(*m == 1)
     {
         /* Compute Householder transform when N=1 */
-        dlarfg_(n, &a[a_offset], &a[fla_min(2, *n) * a_dim1 + 1], lda, &t[t_offset]);
+        aocl_lapack_dlarfg(n, &a[a_offset], &a[fla_min(2, *n) * a_dim1 + 1], lda, &t[t_offset]);
     }
     else
     {
@@ -219,7 +228,7 @@ void dgelqt3_(integer *m, integer *n, doublereal *a, integer *lda, doublereal *t
         i__1 = *m + 1;
         j1 = fla_min(i__1, *n);
         /* Compute A(1:M1,1:N) <- (Y1,R1,T1), where Q1 = I - Y1 T1 Y1^H */
-        dgelqt3_(&m1, n, &a[a_offset], lda, &t[t_offset], ldt, &iinfo);
+        aocl_lapack_dgelqt3(&m1, n, &a[a_offset], lda, &t[t_offset], ldt, &iinfo);
         /* Compute A(J1:M,1:N) = Q1^H A(J1:M,1:N) [workspace: T(1:N1,J1:N)] */
         i__1 = m2;
         for(i__ = 1; i__ <= i__1; ++i__)
@@ -230,15 +239,18 @@ void dgelqt3_(integer *m, integer *n, doublereal *a, integer *lda, doublereal *t
                 t[i__ + m1 + j * t_dim1] = a[i__ + m1 + j * a_dim1];
             }
         }
-        dtrmm_("R", "U", "T", "U", &m2, &m1, &c_b7, &a[a_offset], lda, &t[i1 + t_dim1], ldt);
+        aocl_blas_dtrmm("R", "U", "T", "U", &m2, &m1, &c_b7, &a[a_offset], lda, &t[i1 + t_dim1],
+                        ldt);
         i__1 = *n - m1;
-        dgemm_("N", "T", &m2, &m1, &i__1, &c_b7, &a[i1 + i1 * a_dim1], lda, &a[i1 * a_dim1 + 1],
-               lda, &c_b7, &t[i1 + t_dim1], ldt);
-        dtrmm_("R", "U", "N", "N", &m2, &m1, &c_b7, &t[t_offset], ldt, &t[i1 + t_dim1], ldt);
+        aocl_blas_dgemm("N", "T", &m2, &m1, &i__1, &c_b7, &a[i1 + i1 * a_dim1], lda,
+                        &a[i1 * a_dim1 + 1], lda, &c_b7, &t[i1 + t_dim1], ldt);
+        aocl_blas_dtrmm("R", "U", "N", "N", &m2, &m1, &c_b7, &t[t_offset], ldt, &t[i1 + t_dim1],
+                        ldt);
         i__1 = *n - m1;
-        dgemm_("N", "N", &m2, &i__1, &m1, &c_b19, &t[i1 + t_dim1], ldt, &a[i1 * a_dim1 + 1], lda,
-               &c_b7, &a[i1 + i1 * a_dim1], lda);
-        dtrmm_("R", "U", "N", "U", &m2, &m1, &c_b7, &a[a_offset], lda, &t[i1 + t_dim1], ldt);
+        aocl_blas_dgemm("N", "N", &m2, &i__1, &m1, &c_b19, &t[i1 + t_dim1], ldt,
+                        &a[i1 * a_dim1 + 1], lda, &c_b7, &a[i1 + i1 * a_dim1], lda);
+        aocl_blas_dtrmm("R", "U", "N", "U", &m2, &m1, &c_b7, &a[a_offset], lda, &t[i1 + t_dim1],
+                        ldt);
         i__1 = m2;
         for(i__ = 1; i__ <= i__1; ++i__)
         {
@@ -251,7 +263,8 @@ void dgelqt3_(integer *m, integer *n, doublereal *a, integer *lda, doublereal *t
         }
         /* Compute A(J1:M,J1:N) <- (Y2,R2,T2) where Q2 = I - Y2 T2 Y2^H */
         i__1 = *n - m1;
-        dgelqt3_(&m2, &i__1, &a[i1 + i1 * a_dim1], lda, &t[i1 + i1 * t_dim1], ldt, &iinfo);
+        aocl_lapack_dgelqt3(&m2, &i__1, &a[i1 + i1 * a_dim1], lda, &t[i1 + i1 * t_dim1], ldt,
+                            &iinfo);
         /* Compute T3 = T(J1:N1,1:N) = -T1 Y1^H Y2 T2 */
         i__1 = m2;
         for(i__ = 1; i__ <= i__1; ++i__)
@@ -262,14 +275,15 @@ void dgelqt3_(integer *m, integer *n, doublereal *a, integer *lda, doublereal *t
                 t[j + (i__ + m1) * t_dim1] = a[j + (i__ + m1) * a_dim1];
             }
         }
-        dtrmm_("R", "U", "T", "U", &m1, &m2, &c_b7, &a[i1 + i1 * a_dim1], lda, &t[i1 * t_dim1 + 1],
-               ldt);
+        aocl_blas_dtrmm("R", "U", "T", "U", &m1, &m2, &c_b7, &a[i1 + i1 * a_dim1], lda,
+                        &t[i1 * t_dim1 + 1], ldt);
         i__1 = *n - *m;
-        dgemm_("N", "T", &m1, &m2, &i__1, &c_b7, &a[j1 * a_dim1 + 1], lda, &a[i1 + j1 * a_dim1],
-               lda, &c_b7, &t[i1 * t_dim1 + 1], ldt);
-        dtrmm_("L", "U", "N", "N", &m1, &m2, &c_b19, &t[t_offset], ldt, &t[i1 * t_dim1 + 1], ldt);
-        dtrmm_("R", "U", "N", "N", &m1, &m2, &c_b7, &t[i1 + i1 * t_dim1], ldt, &t[i1 * t_dim1 + 1],
-               ldt);
+        aocl_blas_dgemm("N", "T", &m1, &m2, &i__1, &c_b7, &a[j1 * a_dim1 + 1], lda,
+                        &a[i1 + j1 * a_dim1], lda, &c_b7, &t[i1 * t_dim1 + 1], ldt);
+        aocl_blas_dtrmm("L", "U", "N", "N", &m1, &m2, &c_b19, &t[t_offset], ldt,
+                        &t[i1 * t_dim1 + 1], ldt);
+        aocl_blas_dtrmm("R", "U", "N", "N", &m1, &m2, &c_b7, &t[i1 + i1 * t_dim1], ldt,
+                        &t[i1 * t_dim1 + 1], ldt);
         /* Y = (Y1,Y2);
         L = [ L1 0 ];
         T = [T1 T3] */

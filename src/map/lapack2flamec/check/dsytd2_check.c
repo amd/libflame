@@ -1,11 +1,11 @@
 #include "FLA_f2c.h"
 #include "FLA_lapack2flame_return_defs.h"
 
-int dsytd2_check(char *uplo, integer *n, double *a, integer *lda, double *d__, double *e,
-                 double *tau, integer *info)
+int dsytd2_check(char *uplo, aocl_int64_t *n, double *a, aocl_int64_t *lda, double *d__, double *e,
+                 double *tau, aocl_int64_t *info)
 {
     /* System generated locals */
-    integer a_dim1, a_offset, i__1;
+    aocl_int64_t a_dim1, a_offset, i__1;
     /* Local variables */
     logical upper;
 
@@ -34,7 +34,7 @@ int dsytd2_check(char *uplo, integer *n, double *a, integer *lda, double *d__, d
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("DSYTD2", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("DSYTD2", &i__1, (ftnlen)6);
         return LAPACK_FAILURE;
     }
     /* Quick return if possible */

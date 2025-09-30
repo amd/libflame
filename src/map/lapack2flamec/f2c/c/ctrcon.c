@@ -136,8 +136,26 @@ static aocl_int64_t c__1 = 1;
 /* > \ingroup complexOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void ctrcon_(char *norm, char *uplo, char *diag, integer *n, complex *a, integer *lda, real *rcond,
-             complex *work, real *rwork, integer *info)
+/** Generated wrapper function */
+void ctrcon_(char *norm, char *uplo, char *diag, aocl_int_t *n, scomplex *a, aocl_int_t *lda,
+             real *rcond, scomplex *work, real *rwork, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_ctrcon(norm, uplo, diag, n, a, lda, rcond, work, rwork, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_ctrcon(norm, uplo, diag, &n_64, a, &lda_64, rcond, work, rwork, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_ctrcon(char *norm, char *uplo, char *diag, aocl_int64_t *n, scomplex *a,
+                        aocl_int64_t *lda, real *rcond, scomplex *work, real *rwork,
+                        aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -159,25 +177,13 @@ void ctrcon_(char *norm, char *uplo, char *diag, integer *n, complex *a, integer
     /* Local variables */
     aocl_int64_t ix, kase, kase1;
     real scale;
-    extern logical lsame_(char *, char *, integer, integer);
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     integer isave[3];
     real anorm;
     logical upper;
-    extern /* Subroutine */
-        void
-        clacn2_(integer *, complex *, complex *, real *, integer *, integer *);
     real xnorm;
     extern real slamch_(char *);
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    extern real clantr_(char *, char *, char *, integer *, integer *, complex *, integer *, real *);
     real ainvnm;
-    extern /* Subroutine */
-        void
-        clatrs_(char *, char *, char *, char *, integer *, complex *, integer *, complex *, real *,
-                real *, integer *),
-        csrscl_(integer *, real *, complex *, integer *);
     logical onenrm;
     char normin[1];
     real smlnum;
@@ -243,7 +249,7 @@ void ctrcon_(char *norm, char *uplo, char *diag, integer *n, complex *a, integer
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("CTRCON", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("CTRCON", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
@@ -274,20 +280,20 @@ void ctrcon_(char *norm, char *uplo, char *diag, integer *n, complex *a, integer
         }
         kase = 0;
     L10:
-        clacn2_(n, &work[*n + 1], &work[1], &ainvnm, &kase, isave);
+        aocl_lapack_clacn2(n, &work[*n + 1], &work[1], &ainvnm, &kase, isave);
         if(kase != 0)
         {
             if(kase == kase1)
             {
                 /* Multiply by inv(A). */
-                clatrs_(uplo, "No transpose", diag, normin, n, &a[a_offset], lda, &work[1], &scale,
-                        &rwork[1], info);
+                aocl_lapack_clatrs(uplo, "No transpose", diag, normin, n, &a[a_offset], lda,
+                                   &work[1], &scale, &rwork[1], info);
             }
             else
             {
                 /* Multiply by inv(A**H). */
-                clatrs_(uplo, "Conjugate transpose", diag, normin, n, &a[a_offset], lda, &work[1],
-                        &scale, &rwork[1], info);
+                aocl_lapack_clatrs(uplo, "Conjugate transpose", diag, normin, n, &a[a_offset], lda,
+                                   &work[1], &scale, &rwork[1], info);
             }
             *(unsigned char *)normin = 'Y';
             /* Multiply by 1/SCALE if doing so will not cause overflow. */

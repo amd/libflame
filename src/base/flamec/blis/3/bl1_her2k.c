@@ -16,7 +16,7 @@
 #include "blis.h"
 #endif
 
-void bl1_sher2k( uplo1_t uplo, trans1_t trans, integer m, integer k, float* alpha, float* a, integer a_rs, integer a_cs, float* b, integer b_rs, integer b_cs, float* beta, float* c, integer c_rs, integer c_cs )
+void bl1_sher2k( uplo1_t uplo, trans1_t trans, fla_dim_t m, fla_dim_t k, float* alpha, float* a, fla_dim_t a_rs, fla_dim_t a_cs, float* b, fla_dim_t b_rs, fla_dim_t b_cs, float* beta, float* c, fla_dim_t c_rs, fla_dim_t c_cs )
 {
 	bl1_ssyr2k( uplo,
 	            trans,
@@ -29,7 +29,7 @@ void bl1_sher2k( uplo1_t uplo, trans1_t trans, integer m, integer k, float* alph
 	            c, c_rs, c_cs );
 }
 
-void bl1_dher2k( uplo1_t uplo, trans1_t trans, integer m, integer k, double* alpha, double* a, integer a_rs, integer a_cs, double* b, integer b_rs, integer b_cs, double* beta, double* c, integer c_rs, integer c_cs )
+void bl1_dher2k( uplo1_t uplo, trans1_t trans, fla_dim_t m, fla_dim_t k, double* alpha, double* a, fla_dim_t a_rs, fla_dim_t a_cs, double* b, fla_dim_t b_rs, fla_dim_t b_cs, double* beta, double* c, fla_dim_t c_rs, fla_dim_t c_cs )
 {
 	bl1_dsyr2k( uplo,
 	            trans,
@@ -42,35 +42,35 @@ void bl1_dher2k( uplo1_t uplo, trans1_t trans, integer m, integer k, double* alp
 	            c, c_rs, c_cs );
 }
 
-void bl1_cher2k( uplo1_t uplo, trans1_t trans, integer m, integer k, scomplex* alpha, scomplex* a, integer a_rs, integer a_cs, scomplex* b, integer b_rs, integer b_cs, float* beta, scomplex* c, integer c_rs, integer c_cs )
+void bl1_cher2k( uplo1_t uplo, trans1_t trans, fla_dim_t m, fla_dim_t k, scomplex* alpha, scomplex* a, fla_dim_t a_rs, fla_dim_t a_cs, scomplex* b, fla_dim_t b_rs, fla_dim_t b_cs, float* beta, scomplex* c, fla_dim_t c_rs, fla_dim_t c_cs )
 {
 	uplo1_t    uplo_save = uplo;
-	integer       m_save    = m;
+	fla_dim_t       m_save    = m;
 	scomplex* a_save    = a;
 	scomplex* b_save    = b;
 	scomplex* c_save    = c;
-	integer       a_rs_save = a_rs;
-	integer       a_cs_save = a_cs;
-	integer       b_rs_save = b_rs;
-	integer       b_cs_save = b_cs;
-	integer       c_rs_save = c_rs;
-	integer       c_cs_save = c_cs;
+	fla_dim_t       a_rs_save = a_rs;
+	fla_dim_t       a_cs_save = a_cs;
+	fla_dim_t       b_rs_save = b_rs;
+	fla_dim_t       b_cs_save = b_cs;
+	fla_dim_t       c_rs_save = c_rs;
+	fla_dim_t       c_cs_save = c_cs;
 	float     zero_r = bl1_s0();
 	scomplex  one    = bl1_c1();
 	scomplex  alpha_copy;
 	scomplex* a_copy;
 	scomplex* b_copy;
 	scomplex* c_conj;
-	integer       lda, inca;
-	integer       ldb, incb;
-	integer       ldc, incc;
-	integer       lda_copy, inca_copy;
-	integer       ldb_copy, incb_copy;
-	integer       ldc_conj, incc_conj;
-	integer       her2k_needs_copya      = FALSE;
-	integer       her2k_needs_copyb      = FALSE;
-	integer       her2k_needs_conj       = FALSE;
-	integer       her2k_needs_alpha_conj = FALSE;
+	fla_dim_t       lda, inca;
+	fla_dim_t       ldb, incb;
+	fla_dim_t       ldc, incc;
+	fla_dim_t       lda_copy, inca_copy;
+	fla_dim_t       ldb_copy, incb_copy;
+	fla_dim_t       ldc_conj, incc_conj;
+	fla_dim_t       her2k_needs_copya      = FALSE;
+	fla_dim_t       her2k_needs_copyb      = FALSE;
+	fla_dim_t       her2k_needs_conj       = FALSE;
+	fla_dim_t       her2k_needs_alpha_conj = FALSE;
 
 	// Return early if possible.
 	if ( bl1_zero_dim2( m, k ) ) return;
@@ -214,8 +214,8 @@ void bl1_cher2k( uplo1_t uplo, trans1_t trans, integer m, integer k, scomplex* a
 	// We handle those two cases here.
 	if ( her2k_needs_copya )
 	{
-		integer m_a;
-		integer n_a;
+		fla_dim_t m_a;
+		fla_dim_t n_a;
 
 		// Determine the dimensions of A according to the value of trans. We
 		// need this in order to set the leading dimension of the copy of A.
@@ -242,8 +242,8 @@ void bl1_cher2k( uplo1_t uplo, trans1_t trans, integer m, integer k, scomplex* a
 	// We handle those two cases here.
 	if ( her2k_needs_copyb )
 	{
-		integer m_b;
-		integer n_b;
+		fla_dim_t m_b;
+		fla_dim_t n_b;
 
 		// Determine the dimensions of B according to the value of trans. We
 		// need this in order to set the leading dimension of the copy of B.
@@ -337,35 +337,35 @@ void bl1_cher2k( uplo1_t uplo, trans1_t trans, integer m, integer k, scomplex* a
 	                          &c,     &c_rs,     &c_cs );
 }
 
-void bl1_zher2k( uplo1_t uplo, trans1_t trans, integer m, integer k, dcomplex* alpha, dcomplex* a, integer a_rs, integer a_cs, dcomplex* b, integer b_rs, integer b_cs, double* beta, dcomplex* c, integer c_rs, integer c_cs )
+void bl1_zher2k( uplo1_t uplo, trans1_t trans, fla_dim_t m, fla_dim_t k, dcomplex* alpha, dcomplex* a, fla_dim_t a_rs, fla_dim_t a_cs, dcomplex* b, fla_dim_t b_rs, fla_dim_t b_cs, double* beta, dcomplex* c, fla_dim_t c_rs, fla_dim_t c_cs )
 {
 	uplo1_t    uplo_save = uplo;
-	integer       m_save    = m;
+	fla_dim_t       m_save    = m;
 	dcomplex* a_save    = a;
 	dcomplex* b_save    = b;
 	dcomplex* c_save    = c;
-	integer       a_rs_save = a_rs;
-	integer       a_cs_save = a_cs;
-	integer       b_rs_save = b_rs;
-	integer       b_cs_save = b_cs;
-	integer       c_rs_save = c_rs;
-	integer       c_cs_save = c_cs;
+	fla_dim_t       a_rs_save = a_rs;
+	fla_dim_t       a_cs_save = a_cs;
+	fla_dim_t       b_rs_save = b_rs;
+	fla_dim_t       b_cs_save = b_cs;
+	fla_dim_t       c_rs_save = c_rs;
+	fla_dim_t       c_cs_save = c_cs;
 	double    zero_r = bl1_d0();
 	dcomplex  one    = bl1_z1();
 	dcomplex  alpha_copy;
 	dcomplex* a_copy;
 	dcomplex* b_copy;
 	dcomplex* c_conj;
-	integer       lda, inca;
-	integer       ldb, incb;
-	integer       ldc, incc;
-	integer       lda_copy, inca_copy;
-	integer       ldb_copy, incb_copy;
-	integer       ldc_conj, incc_conj;
-	integer       her2k_needs_copya      = FALSE;
-	integer       her2k_needs_copyb      = FALSE;
-	integer       her2k_needs_conj       = FALSE;
-	integer       her2k_needs_alpha_conj = FALSE;
+	fla_dim_t       lda, inca;
+	fla_dim_t       ldb, incb;
+	fla_dim_t       ldc, incc;
+	fla_dim_t       lda_copy, inca_copy;
+	fla_dim_t       ldb_copy, incb_copy;
+	fla_dim_t       ldc_conj, incc_conj;
+	fla_dim_t       her2k_needs_copya      = FALSE;
+	fla_dim_t       her2k_needs_copyb      = FALSE;
+	fla_dim_t       her2k_needs_conj       = FALSE;
+	fla_dim_t       her2k_needs_alpha_conj = FALSE;
 
 	// Return early if possible.
 	if ( bl1_zero_dim2( m, k ) ) return;
@@ -509,8 +509,8 @@ void bl1_zher2k( uplo1_t uplo, trans1_t trans, integer m, integer k, dcomplex* a
 	// We handle those two cases here.
 	if ( her2k_needs_copya )
 	{
-		integer m_a;
-		integer n_a;
+		fla_dim_t m_a;
+		fla_dim_t n_a;
 
 		// Determine the dimensions of A according to the value of trans. We
 		// need this in order to set the leading dimension of the copy of A.
@@ -537,8 +537,8 @@ void bl1_zher2k( uplo1_t uplo, trans1_t trans, integer m, integer k, dcomplex* a
 	// We handle those two cases here.
 	if ( her2k_needs_copyb )
 	{
-		integer m_b;
-		integer n_b;
+		fla_dim_t m_b;
+		fla_dim_t n_b;
 
 		// Determine the dimensions of B according to the value of trans. We
 		// need this in order to set the leading dimension of the copy of B.
@@ -634,7 +634,7 @@ void bl1_zher2k( uplo1_t uplo, trans1_t trans, integer m, integer k, dcomplex* a
 
 // --- Classic routine wrappers ---
 
-void bl1_cher2k_blas( uplo1_t uplo, trans1_t trans, integer m, integer k, scomplex* alpha, scomplex* a, integer lda, scomplex* b, integer ldb, float*  beta, scomplex* c, integer ldc )
+void bl1_cher2k_blas( uplo1_t uplo, trans1_t trans, fla_dim_t m, fla_dim_t k, scomplex* alpha, scomplex* a, fla_dim_t lda, scomplex* b, fla_dim_t ldb, float*  beta, scomplex* c, fla_dim_t ldc )
 {
 #ifdef BLIS1_ENABLE_CBLAS_INTERFACES
 	enum CBLAS_ORDER     cblas_order = CblasColMajor;
@@ -673,7 +673,7 @@ void bl1_cher2k_blas( uplo1_t uplo, trans1_t trans, integer m, integer k, scompl
 #endif
 }
 
-void bl1_zher2k_blas( uplo1_t uplo, trans1_t trans, integer m, integer k, dcomplex* alpha, dcomplex* a, integer lda, dcomplex* b, integer ldb, double* beta, dcomplex* c, integer ldc )
+void bl1_zher2k_blas( uplo1_t uplo, trans1_t trans, fla_dim_t m, fla_dim_t k, dcomplex* alpha, dcomplex* a, fla_dim_t lda, dcomplex* b, fla_dim_t ldb, double* beta, dcomplex* c, fla_dim_t ldc )
 {
 #ifdef BLIS1_ENABLE_CBLAS_INTERFACES
 	enum CBLAS_ORDER     cblas_order = CblasColMajor;

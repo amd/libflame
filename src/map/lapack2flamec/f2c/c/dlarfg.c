@@ -106,30 +106,39 @@
 /* > \ingroup doubleOTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-void dlarfg_(integer *n, doublereal *alpha, doublereal *x, integer *incx, doublereal *tau)
+/** Generated wrapper function */
+void dlarfg_(aocl_int_t *n, doublereal *alpha, doublereal *x, aocl_int_t *incx, doublereal *tau)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_dlarfg(n, alpha, x, incx, tau);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t incx_64 = *incx;
+
+    aocl_lapack_dlarfg(&n_64, alpha, x, &incx_64, tau);
+#endif
+}
+
+void aocl_lapack_dlarfg(aocl_int64_t *n, doublereal *alpha, doublereal *x, aocl_int64_t *incx,
+                        doublereal *tau)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dlarfg inputs: n %" FLA_IS ", incx %" FLA_IS "", *n, *incx);
     /* System generated locals */
-    integer i__1;
+    aocl_int64_t i__1;
     doublereal d__1;
     /* Builtin functions */
     double d_sign(doublereal *, doublereal *);
     /* Local variables */
-    integer j, knt;
+    aocl_int64_t j, knt;
     doublereal beta;
-    extern /* Subroutine */
-        void
-        dscal_(integer *, doublereal *, doublereal *, integer *);
     doublereal xnorm;
     extern doublereal dlapy2_(doublereal *, doublereal *), dlamch_(char *);
 #if FLA_ENABLE_AMD_OPT
-    extern int fla_dscal(integer * n, doublereal * da, doublereal * dx, integer * incx);
-    extern doublereal fla_dnrm2_blas_kernel(integer *, doublereal *, integer *);
+    extern doublereal fla_dnrm2_blas_kernel(aocl_int64_t *, doublereal *, aocl_int64_t *);
 #else
-    extern doublereal dnrm2_(integer *, doublereal *, integer *);
 #endif
-    static TLS_CLASS_SPEC integer r_once = 1;
+    static TLS_CLASS_SPEC aocl_int64_t r_once = 1;
     static TLS_CLASS_SPEC doublereal safmin, rsafmn;
     /* -- LAPACK auxiliary routine (version 3.8.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -166,7 +175,7 @@ void dlarfg_(integer *n, doublereal *alpha, doublereal *x, integer *incx, double
 #if FLA_ENABLE_AMD_OPT
     xnorm = fla_dnrm2_blas_kernel(&i__1, &x[1], incx);
 #else
-    xnorm = dnrm2_(&i__1, &x[1], incx);
+    xnorm = aocl_blas_dnrm2(&i__1, &x[1], incx);
 #endif
     if(xnorm == 0.)
     {
@@ -193,10 +202,10 @@ void dlarfg_(integer *n, doublereal *alpha, doublereal *x, integer *incx, double
             ++knt;
             i__1 = *n - 1;
 #if FLA_ENABLE_AMD_OPT
-        /* Inline DSCAL for small sizes */
+            /* Inline DSCAL for small sizes */
             fla_dscal(&i__1, &rsafmn, &x[1], incx);
 #else
-            dscal_(&i__1, &rsafmn, &x[1], incx);
+            aocl_blas_dscal(&i__1, &rsafmn, &x[1], incx);
 #endif
             beta *= rsafmn;
             *alpha *= rsafmn;
@@ -209,7 +218,7 @@ void dlarfg_(integer *n, doublereal *alpha, doublereal *x, integer *incx, double
 #if FLA_ENABLE_AMD_OPT
             xnorm = fla_dnrm2_blas_kernel(&i__1, &x[1], incx);
 #else
-            xnorm = dnrm2_(&i__1, &x[1], incx);
+            xnorm = aocl_blas_dnrm2(&i__1, &x[1], incx);
 #endif
             d__1 = dlapy2_(alpha, &xnorm);
             beta = -d_sign(&d__1, alpha);
@@ -222,7 +231,7 @@ void dlarfg_(integer *n, doublereal *alpha, doublereal *x, integer *incx, double
         /* Inline DSCAL for small sizes */
         fla_dscal(&i__1, &d__1, &x[1], incx);
 #else
-        dscal_(&i__1, &d__1, &x[1], incx);
+        aocl_blas_dscal(&i__1, &d__1, &x[1], incx);
 #endif
         /* If ALPHA is subnormal, it may lose relative accuracy */
         i__1 = knt;

@@ -4,7 +4,7 @@
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
  /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__0 = 0;
+static aocl_int64_t c__0 = 0;
 /* > \brief \b SLASWLQ */
 /* Definition: */
 /* =========== */
@@ -163,28 +163,43 @@ the routine */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void slaswlq_(integer *m, integer *n, integer *mb, integer *nb, real *a, integer *lda, real *t,
-              integer *ldt, real *work, integer *lwork, integer *info)
+/** Generated wrapper function */
+void slaswlq_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *mb, aocl_int_t *nb, real *a,
+              aocl_int_t *lda, real *t, aocl_int_t *ldt, real *work, aocl_int_t *lwork,
+              aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_slaswlq(m, n, mb, nb, a, lda, t, ldt, work, lwork, info);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t mb_64 = *mb;
+    aocl_int64_t nb_64 = *nb;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t ldt_64 = *ldt;
+    aocl_int64_t lwork_64 = *lwork;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_slaswlq(&m_64, &n_64, &mb_64, &nb_64, a, &lda_64, t, &ldt_64, work, &lwork_64,
+                        &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_slaswlq(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *mb, aocl_int64_t *nb,
+                         real *a, aocl_int64_t *lda, real *t, aocl_int64_t *ldt, real *work,
+                         aocl_int64_t *lwork, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("slaswlq inputs: m %" FLA_IS ", n %" FLA_IS ", mb %" FLA_IS ", nb %" FLA_IS
                       ", lda %" FLA_IS ", ldt %" FLA_IS ", lwork %" FLA_IS "",
                       *m, *n, *mb, *nb, *lda, *ldt, *lwork);
     /* System generated locals */
-    integer a_dim1, a_offset, t_dim1, t_offset, i__1, i__2, i__3;
+    aocl_int64_t a_dim1, a_offset, t_dim1, t_offset, i__1, i__2, i__3;
     /* Local variables */
-    integer i__, ii, kk, ctr;
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
-        sgelqt_(integer *, integer *, integer *, real *, integer *, real *, integer *, real *,
-                integer *);
+    aocl_int64_t i__, ii, kk, ctr;
     logical lquery;
-    extern /* Subroutine */
-        void
-        stplqt_(integer *, integer *, integer *, integer *, real *, integer *, real *, integer *,
-                real *, integer *, real *, integer *);
-    extern real sroundup_lwork(integer *);
     /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd. -- */
@@ -248,7 +263,7 @@ void slaswlq_(integer *m, integer *n, integer *mb, integer *nb, real *a, integer
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("SLASWLQ", &i__1, (ftnlen)7);
+        aocl_blas_xerbla("SLASWLQ", &i__1, (ftnlen)7);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -266,14 +281,14 @@ void slaswlq_(integer *m, integer *n, integer *mb, integer *nb, real *a, integer
     /* The LQ Decomposition */
     if(*m >= *n || *nb <= *m || *nb >= *n)
     {
-        sgelqt_(m, n, mb, &a[a_offset], lda, &t[t_offset], ldt, &work[1], info);
+        aocl_lapack_sgelqt(m, n, mb, &a[a_offset], lda, &t[t_offset], ldt, &work[1], info);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     kk = (*n - *m) % (*nb - *m);
     ii = *n - kk + 1;
     /* Compute the LQ factorization of the first block A(1:M,1:NB) */
-    sgelqt_(m, nb, mb, &a[a_dim1 + 1], lda, &t[t_offset], ldt, &work[1], info);
+    aocl_lapack_sgelqt(m, nb, mb, &a[a_dim1 + 1], lda, &t[t_offset], ldt, &work[1], info);
     ctr = 1;
     i__1 = ii - *nb + *m;
     i__2 = *nb - *m;
@@ -281,18 +296,18 @@ void slaswlq_(integer *m, integer *n, integer *mb, integer *nb, real *a, integer
     {
         /* Compute the QR factorization of the current block A(1:M,I:I+NB-M) */
         i__3 = *nb - *m;
-        stplqt_(m, &i__3, &c__0, mb, &a[a_dim1 + 1], lda, &a[i__ * a_dim1 + 1], lda,
-                &t[(ctr * *m + 1) * t_dim1 + 1], ldt, &work[1], info);
+        aocl_lapack_stplqt(m, &i__3, &c__0, mb, &a[a_dim1 + 1], lda, &a[i__ * a_dim1 + 1], lda,
+                           &t[(ctr * *m + 1) * t_dim1 + 1], ldt, &work[1], info);
         ++ctr;
     }
     /* Compute the QR factorization of the last block A(1:M,II:N) */
     if(ii <= *n)
     {
-        stplqt_(m, &kk, &c__0, mb, &a[a_dim1 + 1], lda, &a[ii * a_dim1 + 1], lda,
-                &t[(ctr * *m + 1) * t_dim1 + 1], ldt, &work[1], info);
+        aocl_lapack_stplqt(m, &kk, &c__0, mb, &a[a_dim1 + 1], lda, &a[ii * a_dim1 + 1], lda,
+                           &t[(ctr * *m + 1) * t_dim1 + 1], ldt, &work[1], info);
     }
     i__2 = *m * *mb;
-    work[1] = sroundup_lwork(&i__2);
+    work[1] = aocl_lapack_sroundup_lwork(&i__2);
     AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SLASWLQ */

@@ -19,17 +19,17 @@
 FLA_Error REF_Apply_Q( FLA_Side side, FLA_Uplo uplo, FLA_Trans trans, FLA_Obj A, FLA_Obj t, FLA_Obj B );
 
 void time_Chol(
-                integer param_combo, integer type, integer nrepeats, integer m, integer n,
+                aocl_int64_t param_combo, aocl_int64_t type, aocl_int64_t nrepeats, aocl_int64_t m, aocl_int64_t n,
                 FLA_Obj A, FLA_Obj A_ref, FLA_Obj T, FLA_Obj t_ref, FLA_Obj B, FLA_Obj B_ref, FLA_Obj X, FLA_Obj X_ref, FLA_Obj W,
                 double *dtime, double *diff, double *gflops );
 
 
 void time_Chol(
-                integer param_combo, integer type, integer nrepeats, integer m, integer n,
+                aocl_int64_t param_combo, aocl_int64_t type, aocl_int64_t nrepeats, aocl_int64_t m, aocl_int64_t n,
                 FLA_Obj A, FLA_Obj A_ref, FLA_Obj T, FLA_Obj t_ref, FLA_Obj B, FLA_Obj B_ref, FLA_Obj X, FLA_Obj X_ref, FLA_Obj W,
                 double *dtime, double *diff, double *gflops )
 {
-  integer
+  aocl_int64_t
     irep;
 
   double

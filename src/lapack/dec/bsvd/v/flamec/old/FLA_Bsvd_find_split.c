@@ -13,9 +13,9 @@
 FLA_Error FLA_Bsvd_find_split( FLA_Obj d, FLA_Obj e )
 {
 	FLA_Datatype datatype;
-	integer          m_A;
-	integer          inc_d;
-	integer          inc_e;
+	aocl_int64_t          m_A;
+	aocl_int64_t          inc_d;
+	aocl_int64_t          inc_e;
 
 	datatype = FLA_Obj_datatype( d );
 
@@ -57,9 +57,9 @@ FLA_Error FLA_Bsvd_find_split( FLA_Obj d, FLA_Obj e )
 
 
 
-FLA_Error FLA_Bsvd_find_split_ops( integer       m_A,
-                                   float*    buff_d, integer inc_d, 
-                                   float*    buff_e, integer inc_e )
+FLA_Error FLA_Bsvd_find_split_ops( aocl_int64_t       m_A,
+                                   float*    buff_d, aocl_int64_t inc_d, 
+                                   float*    buff_e, aocl_int64_t inc_e )
 {
 	FLA_Check_error_code( FLA_NOT_YET_IMPLEMENTED );
 
@@ -68,11 +68,11 @@ FLA_Error FLA_Bsvd_find_split_ops( integer       m_A,
 
 
 
-FLA_Error FLA_Bsvd_find_split_opd( integer       m_A,
-                                   double*   buff_d, integer inc_d, 
-                                   double*   buff_e, integer inc_e )
+FLA_Error FLA_Bsvd_find_split_opd( aocl_int64_t       m_A,
+                                   double*   buff_d, aocl_int64_t inc_d, 
+                                   double*   buff_e, aocl_int64_t inc_e )
 {
-	integer i;
+	aocl_int64_t i;
 
 	for ( i = 0; i < m_A - 1; ++i )
 	{

@@ -16,17 +16,17 @@
 FLA_Error REF_Tridiag_UT( FLA_Uplo uplo, FLA_Obj A, FLA_Obj t );
 
 void time_Tridiag_UT(
-                 integer param_combo, integer type, integer nrepeats, integer m,
+                 aocl_int64_t param_combo, aocl_int64_t type, aocl_int64_t nrepeats, aocl_int64_t m,
                  FLA_Obj A, FLA_Obj t, FLA_Obj T, FLA_Obj W,
                  double *dtime, double *diff, double *gflops );
 
 
 void time_Tridiag_UT(
-                 integer param_combo, integer type, integer nrepeats, integer m,
+                 aocl_int64_t param_combo, aocl_int64_t type, aocl_int64_t nrepeats, aocl_int64_t m,
                  FLA_Obj A, FLA_Obj t, FLA_Obj T, FLA_Obj W,
                  double *dtime, double *diff, double *gflops )
 {
-  integer
+  aocl_int64_t
     irep;
 
   double

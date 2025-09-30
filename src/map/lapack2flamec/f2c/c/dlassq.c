@@ -121,18 +121,31 @@
 
 /* la_isnan__ */
 /* Subroutine */
-void dlassq_(integer *n, doublereal *x, integer *incx, doublereal *scl, doublereal *sumsq)
+/** Generated wrapper function */
+void dlassq_(aocl_int_t *n, doublereal *x, aocl_int_t *incx, doublereal *scl, doublereal *sumsq)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_dlassq(n, x, incx, scl, sumsq);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t incx_64 = *incx;
+
+    aocl_lapack_dlassq(&n_64, x, &incx_64, scl, sumsq);
+#endif
+}
+
+void aocl_lapack_dlassq(aocl_int64_t *n, doublereal *x, aocl_int64_t *incx, doublereal *scl, doublereal *sumsq)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dlassq inputs: n %" FLA_IS ", incx %" FLA_IS "", *n, *incx);
     /* System generated locals */
-    integer i__1;
+    aocl_int64_t i__1;
     doublereal r__1, r__2;
     /* Builtin functions */
     double pow_ri(doublereal *, doublereal *), sqrt(doublereal);
-    integer i__;
+    aocl_int64_t i__;
     doublereal ax;
-    integer ix;
+    aocl_int64_t ix;
     doublereal abig, amed, sbig, tbig, asml, ymin, ssml, tsml, ymax;
     logical notbig;
     /* ...Translated by Pacific-Sierra Research vf90 Personal 3.4N3 09:17:33 8/30/21 */

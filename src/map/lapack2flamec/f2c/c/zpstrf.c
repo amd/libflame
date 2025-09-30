@@ -4,12 +4,12 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static doublecomplex c_b1 = {1., 0.};
-static integer c__1 = 1;
-static integer c_n1 = -1;
+static dcomplex c_b1 = {{1.}, {0.}};
+static aocl_int64_t c__1 = 1;
+static aocl_int64_t c_n1 = -1;
 static doublereal c_b29 = -1.;
 static doublereal c_b30 = 1.;
-/* > \brief \b ZPSTRF computes the Cholesky factorization with complete pivoting of a complex
+/* > \brief \b ZPSTRF computes the Cholesky factorization with complete pivoting of a scomplex
  * Hermitian positi ve semidefinite matrix. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -48,7 +48,7 @@ static doublereal c_b30 = 1.;
 /* > \verbatim */
 /* > */
 /* > ZPSTRF computes the Cholesky factorization with complete */
-/* > pivoting of a complex Hermitian positive semidefinite matrix A. */
+/* > pivoting of a scomplex Hermitian positive semidefinite matrix A. */
 /* > */
 /* > The factorization has the form */
 /* > P**T * A * P = U**H * U , if UPLO = 'U', */
@@ -144,56 +144,52 @@ static doublereal c_b30 = 1.;
 /* > \ingroup complex16OTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void zpstrf_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *piv, integer *rank,
-             doublereal *tol, doublereal *work, integer *info)
+/** Generated wrapper function */
+void zpstrf_(char *uplo, aocl_int_t *n, dcomplex *a, aocl_int_t *lda, aocl_int_t *piv,
+             aocl_int_t *rank, doublereal *tol, doublereal *work, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_zpstrf(uplo, n, a, lda, piv, rank, tol, work, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t rank_64 = *rank;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_zpstrf(uplo, &n_64, a, &lda_64, piv, &rank_64, tol, work, &info_64);
+
+    *rank = (aocl_int_t)rank_64;
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_zpstrf(char *uplo, aocl_int64_t *n, dcomplex *a, aocl_int64_t *lda,
+                        aocl_int_t *piv, aocl_int64_t *rank, doublereal *tol, doublereal *work,
+                        aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zpstrf inputs: uplo %c, n %" FLA_IS ", lda %" FLA_IS ", tol %lf", *uplo, *n,
                       *lda, *tol);
 
     /* System generated locals */
-    integer a_dim1, a_offset, i__1, i__2, i__3, i__4, i__5;
+    aocl_int64_t a_dim1, a_offset, i__1, i__2, i__3, i__4, i__5;
     doublereal d__1;
-    doublecomplex z__1, z__2;
+    dcomplex z__1, z__2;
     /* Builtin functions */
-    void d_cnjg(doublecomplex *, doublecomplex *);
+    void d_cnjg(dcomplex *, dcomplex *);
     double sqrt(doublereal);
     /* Local variables */
-    integer i__, j, k, jb, nb;
+    aocl_int64_t i__, j, k, jb, nb;
     doublereal ajj;
-    integer pvt;
-    extern logical lsame_(char *, char *, integer, integer);
+    aocl_int64_t pvt;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     doublereal dtemp;
-    integer itemp;
-    extern /* Subroutine */
-        void
-        zherk_(char *, char *, integer *, integer *, doublereal *, doublecomplex *, integer *,
-               doublereal *, doublecomplex *, integer *),
-        zgemv_(char *, integer *, integer *, doublecomplex *, doublecomplex *, integer *,
-               doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *);
+    aocl_int64_t itemp;
     doublereal dstop;
     logical upper;
-    doublecomplex ztemp;
-    extern /* Subroutine */
-        void
-        zswap_(integer *, doublecomplex *, integer *, doublecomplex *, integer *);
+    dcomplex ztemp;
     extern doublereal dlamch_(char *);
-    extern /* Subroutine */
-        void
-        zpstf2_(char *, integer *, doublecomplex *, integer *, integer *, integer *, doublereal *,
-                doublereal *, integer *);
     extern logical disnan_(doublereal *);
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
-    extern /* Subroutine */
-        void
-        zdscal_(integer *, doublereal *, doublecomplex *, integer *);
-    extern integer dmaxloc_(doublereal *, integer *);
-    extern /* Subroutine */
-        void
-        zlacgv_(integer *, doublecomplex *, integer *);
     /* -- LAPACK computational routine (version 3.7.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -239,7 +235,7 @@ void zpstrf_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *pi
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("ZPSTRF", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("ZPSTRF", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -250,11 +246,11 @@ void zpstrf_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *pi
         return;
     }
     /* Get block size */
-    nb = ilaenv_(&c__1, "ZPOTRF", uplo, n, &c_n1, &c_n1, &c_n1);
+    nb = aocl_lapack_ilaenv(&c__1, "ZPOTRF", uplo, n, &c_n1, &c_n1, &c_n1);
     if(nb <= 1 || nb >= *n)
     {
         /* Use unblocked code */
-        zpstf2_(uplo, n, &a[a_dim1 + 1], lda, &piv[1], rank, tol, &work[1], info);
+        aocl_lapack_zpstf2(uplo, n, &a[a_dim1 + 1], lda, &piv[1], rank, tol, &work[1], info);
         goto L230;
     }
     else
@@ -263,7 +259,7 @@ void zpstrf_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *pi
         i__1 = *n;
         for(i__ = 1; i__ <= i__1; ++i__)
         {
-            piv[i__] = i__;
+            piv[i__] = (aocl_int_t)(i__);
             /* L100: */
         }
         /* Compute stopping value */
@@ -274,7 +270,7 @@ void zpstrf_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *pi
             work[i__] = a[i__2].r;
             /* L110: */
         }
-        pvt = dmaxloc_(&work[1], n);
+        pvt = aocl_lapack_dmaxloc(&work[1], n);
         i__1 = pvt + pvt * a_dim1;
         ajj = a[i__1].r;
         if(ajj <= 0. || disnan_(&ajj))
@@ -336,7 +332,7 @@ void zpstrf_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *pi
                     if(j > 1)
                     {
                         i__4 = *n - j + 1;
-                        itemp = dmaxloc_(&work[*n + j], &i__4);
+                        itemp = aocl_lapack_dmaxloc(&work[*n + j], &i__4);
                         pvt = itemp + j - 1;
                         ajj = work[*n + pvt];
                         if(ajj <= dstop || disnan_(&ajj))
@@ -355,12 +351,13 @@ void zpstrf_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *pi
                         a[i__4].r = a[i__5].r;
                         a[i__4].i = a[i__5].i; // , expr subst
                         i__4 = j - 1;
-                        zswap_(&i__4, &a[j * a_dim1 + 1], &c__1, &a[pvt * a_dim1 + 1], &c__1);
+                        aocl_blas_zswap(&i__4, &a[j * a_dim1 + 1], &c__1, &a[pvt * a_dim1 + 1],
+                                        &c__1);
                         if(pvt < *n)
                         {
                             i__4 = *n - pvt;
-                            zswap_(&i__4, &a[j + (pvt + 1) * a_dim1], lda,
-                                   &a[pvt + (pvt + 1) * a_dim1], lda);
+                            aocl_blas_zswap(&i__4, &a[j + (pvt + 1) * a_dim1], lda,
+                                            &a[pvt + (pvt + 1) * a_dim1], lda);
                         }
                         i__4 = pvt - 1;
                         for(i__ = j + 1; i__ <= i__4; ++i__)
@@ -387,7 +384,7 @@ void zpstrf_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *pi
                         work[pvt] = dtemp;
                         itemp = piv[pvt];
                         piv[pvt] = piv[j];
-                        piv[j] = itemp;
+                        piv[j] = (aocl_int_t)(itemp);
                     }
                     ajj = sqrt(ajj);
                     i__4 = j + j * a_dim1;
@@ -397,18 +394,19 @@ void zpstrf_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *pi
                     if(j < *n)
                     {
                         i__4 = j - 1;
-                        zlacgv_(&i__4, &a[j * a_dim1 + 1], &c__1);
+                        aocl_lapack_zlacgv(&i__4, &a[j * a_dim1 + 1], &c__1);
                         i__4 = j - k;
                         i__5 = *n - j;
                         z__1.r = -1.;
                         z__1.i = -0.; // , expr subst
-                        zgemv_("Trans", &i__4, &i__5, &z__1, &a[k + (j + 1) * a_dim1], lda,
-                               &a[k + j * a_dim1], &c__1, &c_b1, &a[j + (j + 1) * a_dim1], lda);
+                        aocl_blas_zgemv("Trans", &i__4, &i__5, &z__1, &a[k + (j + 1) * a_dim1], lda,
+                                        &a[k + j * a_dim1], &c__1, &c_b1, &a[j + (j + 1) * a_dim1],
+                                        lda);
                         i__4 = j - 1;
-                        zlacgv_(&i__4, &a[j * a_dim1 + 1], &c__1);
+                        aocl_lapack_zlacgv(&i__4, &a[j * a_dim1 + 1], &c__1);
                         i__4 = *n - j;
                         d__1 = 1. / ajj;
-                        zdscal_(&i__4, &d__1, &a[j + (j + 1) * a_dim1], lda);
+                        aocl_blas_zdscal(&i__4, &d__1, &a[j + (j + 1) * a_dim1], lda);
                     }
                     /* L150: */
                 }
@@ -416,8 +414,8 @@ void zpstrf_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *pi
                 if(k + jb <= *n)
                 {
                     i__3 = *n - j + 1;
-                    zherk_("Upper", "Conj Trans", &i__3, &jb, &c_b29, &a[k + j * a_dim1], lda,
-                           &c_b30, &a[j + j * a_dim1], lda);
+                    aocl_blas_zherk("Upper", "Conj Trans", &i__3, &jb, &c_b29, &a[k + j * a_dim1],
+                                    lda, &c_b30, &a[j + j * a_dim1], lda);
                 }
                 /* L160: */
             }
@@ -466,7 +464,7 @@ void zpstrf_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *pi
                     if(j > 1)
                     {
                         i__4 = *n - j + 1;
-                        itemp = dmaxloc_(&work[*n + j], &i__4);
+                        itemp = aocl_lapack_dmaxloc(&work[*n + j], &i__4);
                         pvt = itemp + j - 1;
                         ajj = work[*n + pvt];
                         if(ajj <= dstop || disnan_(&ajj))
@@ -485,12 +483,12 @@ void zpstrf_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *pi
                         a[i__4].r = a[i__5].r;
                         a[i__4].i = a[i__5].i; // , expr subst
                         i__4 = j - 1;
-                        zswap_(&i__4, &a[j + a_dim1], lda, &a[pvt + a_dim1], lda);
+                        aocl_blas_zswap(&i__4, &a[j + a_dim1], lda, &a[pvt + a_dim1], lda);
                         if(pvt < *n)
                         {
                             i__4 = *n - pvt;
-                            zswap_(&i__4, &a[pvt + 1 + j * a_dim1], &c__1,
-                                   &a[pvt + 1 + pvt * a_dim1], &c__1);
+                            aocl_blas_zswap(&i__4, &a[pvt + 1 + j * a_dim1], &c__1,
+                                            &a[pvt + 1 + pvt * a_dim1], &c__1);
                         }
                         i__4 = pvt - 1;
                         for(i__ = j + 1; i__ <= i__4; ++i__)
@@ -517,7 +515,7 @@ void zpstrf_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *pi
                         work[pvt] = dtemp;
                         itemp = piv[pvt];
                         piv[pvt] = piv[j];
-                        piv[j] = itemp;
+                        piv[j] = (aocl_int_t)(itemp);
                     }
                     ajj = sqrt(ajj);
                     i__4 = j + j * a_dim1;
@@ -527,18 +525,19 @@ void zpstrf_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *pi
                     if(j < *n)
                     {
                         i__4 = j - 1;
-                        zlacgv_(&i__4, &a[j + a_dim1], lda);
+                        aocl_lapack_zlacgv(&i__4, &a[j + a_dim1], lda);
                         i__4 = *n - j;
                         i__5 = j - k;
                         z__1.r = -1.;
                         z__1.i = -0.; // , expr subst
-                        zgemv_("No Trans", &i__4, &i__5, &z__1, &a[j + 1 + k * a_dim1], lda,
-                               &a[j + k * a_dim1], lda, &c_b1, &a[j + 1 + j * a_dim1], &c__1);
+                        aocl_blas_zgemv("No Trans", &i__4, &i__5, &z__1, &a[j + 1 + k * a_dim1],
+                                        lda, &a[j + k * a_dim1], lda, &c_b1, &a[j + 1 + j * a_dim1],
+                                        &c__1);
                         i__4 = j - 1;
-                        zlacgv_(&i__4, &a[j + a_dim1], lda);
+                        aocl_lapack_zlacgv(&i__4, &a[j + a_dim1], lda);
                         i__4 = *n - j;
                         d__1 = 1. / ajj;
-                        zdscal_(&i__4, &d__1, &a[j + 1 + j * a_dim1], &c__1);
+                        aocl_blas_zdscal(&i__4, &d__1, &a[j + 1 + j * a_dim1], &c__1);
                     }
                     /* L200: */
                 }
@@ -546,8 +545,8 @@ void zpstrf_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *pi
                 if(k + jb <= *n)
                 {
                     i__3 = *n - j + 1;
-                    zherk_("Lower", "No Trans", &i__3, &jb, &c_b29, &a[j + k * a_dim1], lda, &c_b30,
-                           &a[j + j * a_dim1], lda);
+                    aocl_blas_zherk("Lower", "No Trans", &i__3, &jb, &c_b29, &a[j + k * a_dim1],
+                                    lda, &c_b30, &a[j + j * a_dim1], lda);
                 }
                 /* L210: */
             }

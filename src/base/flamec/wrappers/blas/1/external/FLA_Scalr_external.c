@@ -13,8 +13,8 @@
 FLA_Error FLA_Scalr_external( FLA_Uplo uplo, FLA_Obj alpha, FLA_Obj A )
 {
   FLA_Datatype datatype, dt_alpha;
-  integer          m_A, n_A;
-  integer          rs_A, cs_A;
+  fla_dim_t          m_A, n_A;
+  fla_dim_t          rs_A, cs_A;
   uplo1_t       blis_uplo;
 
   if ( FLA_Check_error_level() == FLA_FULL_ERROR_CHECKING ) 

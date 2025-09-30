@@ -152,31 +152,31 @@
 /* > \ingroup complex16OTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-void zlags2_(logical *upper, doublereal *a1, doublecomplex *a2, doublereal *a3, doublereal *b1,
-             doublecomplex *b2, doublereal *b3, doublereal *csu, doublecomplex *snu,
-             doublereal *csv, doublecomplex *snv, doublereal *csq, doublecomplex *snq)
+void zlags2_(logical *upper, doublereal *a1, dcomplex *a2, doublereal *a3, doublereal *b1,
+             dcomplex *b2, doublereal *b3, doublereal *csu, dcomplex *snu,
+             doublereal *csv, dcomplex *snv, doublereal *csq, dcomplex *snq)
 {
     AOCL_DTL_TRACE_ENTRY_INDENT
     /* System generated locals */
     doublereal d__1, d__2, d__3, d__4, d__5, d__6, d__7, d__8;
-    doublecomplex z__1, z__2, z__3, z__4, z__5;
+    dcomplex z__1, z__2, z__3, z__4, z__5;
     /* Builtin functions */
-    double z_abs(doublecomplex *), d_imag(doublecomplex *);
-    void d_cnjg(doublecomplex *, doublecomplex *);
+    double z_abs(dcomplex *), d_imag(dcomplex *);
+    void d_cnjg(dcomplex *, dcomplex *);
     /* Local variables */
     doublereal a;
-    doublecomplex b, c__;
+    dcomplex b, c__;
     doublereal d__;
-    doublecomplex r__, d1;
+    dcomplex r__, d1;
     doublereal s1, s2, fb, fc;
-    doublecomplex ua11, ua12, ua21, ua22, vb11, vb12, vb21, vb22;
+    dcomplex ua11, ua12, ua21, ua22, vb11, vb12, vb21, vb22;
     doublereal csl, csr, snl, snr, aua11, aua12, aua21, aua22, avb12, avb11, avb21, avb22, ua11r,
         ua22r, vb11r, vb22r;
     extern /* Subroutine */
         void
         dlasv2_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *,
                 doublereal *, doublereal *, doublereal *),
-        zlartg_(doublecomplex *, doublecomplex *, doublereal *, doublecomplex *, doublecomplex *);
+        zlartg_(dcomplex *, dcomplex *, doublereal *, dcomplex *, dcomplex *);
     /* -- LAPACK auxiliary routine (version 3.7.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -213,7 +213,7 @@ void zlags2_(logical *upper, doublereal *a1, doublecomplex *a2, doublereal *a3, 
         b.r = z__1.r;
         b.i = z__1.i; // , expr subst
         fb = z_abs(&b);
-        /* Transform complex 2-by-2 matrix C to real matrix by unitary */
+        /* Transform scomplex 2-by-2 matrix C to real matrix by unitary */
         /* diagonal matrix diag(1,D1). */
         d1.r = 1.;
         d1.i = 0.; // , expr subst
@@ -443,7 +443,7 @@ void zlags2_(logical *upper, doublereal *a1, doublecomplex *a2, doublereal *a3, 
         c__.r = z__1.r;
         c__.i = z__1.i; // , expr subst
         fc = z_abs(&c__);
-        /* Transform complex 2-by-2 matrix C to real matrix by unitary */
+        /* Transform scomplex 2-by-2 matrix C to real matrix by unitary */
         /* diagonal matrix diag(d1,1). */
         d1.r = 1.;
         d1.i = 0.; // , expr subst

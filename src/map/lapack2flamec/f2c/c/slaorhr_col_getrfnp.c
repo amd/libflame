@@ -4,8 +4,8 @@
  with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for
  libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
-static integer c_n1 = -1;
+static aocl_int64_t c__1 = 1;
+static aocl_int64_t c_n1 = -1;
 static real c_b12 = 1.f;
 static real c_b15 = -1.f;
 /* > \brief \b SLAORHR_COL_GETRFNP */
@@ -149,27 +149,35 @@ the unit diagonal elements of L are not stored. */
 /* > \endverbatim */
 /* ===================================================================== */
 /* Subroutine */
-void slaorhr_col_getrfnp_(integer *m, integer *n, real *a, integer *lda, real *d__, integer *info)
+/** Generated wrapper function */
+void slaorhr_col_getrfnp_(aocl_int_t *m, aocl_int_t *n, real *a, aocl_int_t *lda, real *d__,
+                          aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_slaorhr_col_getrfnp(m, n, a, lda, d__, info);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_slaorhr_col_getrfnp(&m_64, &n_64, a, &lda_64, d__, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_slaorhr_col_getrfnp(aocl_int64_t *m, aocl_int64_t *n, real *a, aocl_int64_t *lda,
+                                     real *d__, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("slaorhr_col_getrfnp inputs: m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS "",
                       *m, *n, *lda);
     /* System generated locals */
-    integer a_dim1, a_offset, i__1, i__2, i__3, i__4;
+    aocl_int64_t a_dim1, a_offset, i__1, i__2, i__3, i__4;
     /* Local variables */
-    integer j, jb, nb;
-    extern /* Subroutine */
-        void
-        slaorhr_col_getrfnp2_(integer *, integer *, real *, integer *, real *, integer *);
-    integer iinfo;
-    extern /* Subroutine */
-        void
-        sgemm_(char *, char *, integer *, integer *, integer *, real *, real *, integer *, real *,
-               integer *, real *, real *, integer *),
-        strsm_(char *, char *, char *, char *, integer *, integer *, real *, real *, integer *,
-               real *, integer *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
+    aocl_int64_t j, jb, nb;
+    aocl_int64_t iinfo;
     /* -- LAPACK computational routine (version 3.9.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -213,7 +221,7 @@ void slaorhr_col_getrfnp_(integer *m, integer *n, real *a, integer *lda, real *d
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("SLAORHR_COL_GETRFNP", &i__1, (ftnlen)19);
+        aocl_blas_xerbla("SLAORHR_COL_GETRFNP", &i__1, (ftnlen)19);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -224,11 +232,11 @@ void slaorhr_col_getrfnp_(integer *m, integer *n, real *a, integer *lda, real *d
         return;
     }
     /* Determine the block size for this environment. */
-    nb = ilaenv_(&c__1, "SLAORHR_COL_GETRFNP", " ", m, n, &c_n1, &c_n1);
+    nb = aocl_lapack_ilaenv(&c__1, "SLAORHR_COL_GETRFNP", " ", m, n, &c_n1, &c_n1);
     if(nb <= 1 || nb >= fla_min(*m, *n))
     {
         /* Use unblocked code. */
-        slaorhr_col_getrfnp2_(m, n, &a[a_offset], lda, &d__[1], info);
+        aocl_lapack_slaorhr_col_getrfnp2(m, n, &a[a_offset], lda, &d__[1], info);
     }
     else
     {
@@ -242,21 +250,21 @@ void slaorhr_col_getrfnp_(integer *m, integer *n, real *a, integer *lda, real *d
             jb = fla_min(i__3, nb);
             /* Factor diagonal and subdiagonal blocks. */
             i__3 = *m - j + 1;
-            slaorhr_col_getrfnp2_(&i__3, &jb, &a[j + j * a_dim1], lda, &d__[j], &iinfo);
+            aocl_lapack_slaorhr_col_getrfnp2(&i__3, &jb, &a[j + j * a_dim1], lda, &d__[j], &iinfo);
             if(j + jb <= *n)
             {
                 /* Compute block row of U. */
                 i__3 = *n - j - jb + 1;
-                strsm_("Left", "Lower", "No transpose", "Unit", &jb, &i__3, &c_b12,
-                       &a[j + j * a_dim1], lda, &a[j + (j + jb) * a_dim1], lda);
+                aocl_blas_strsm("Left", "Lower", "No transpose", "Unit", &jb, &i__3, &c_b12,
+                                &a[j + j * a_dim1], lda, &a[j + (j + jb) * a_dim1], lda);
                 if(j + jb <= *m)
                 {
                     /* Update trailing submatrix. */
                     i__3 = *m - j - jb + 1;
                     i__4 = *n - j - jb + 1;
-                    sgemm_("No transpose", "No transpose", &i__3, &i__4, &jb, &c_b15,
-                           &a[j + jb + j * a_dim1], lda, &a[j + (j + jb) * a_dim1], lda, &c_b12,
-                           &a[j + jb + (j + jb) * a_dim1], lda);
+                    aocl_blas_sgemm("No transpose", "No transpose", &i__3, &i__4, &jb, &c_b15,
+                                    &a[j + jb + j * a_dim1], lda, &a[j + (j + jb) * a_dim1], lda,
+                                    &c_b12, &a[j + jb + (j + jb) * a_dim1], lda);
                 }
             }
         }

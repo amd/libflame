@@ -3,7 +3,7 @@
  on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
-#include "FLA_f2c.h" /* > \brief \b CLAR2V applies a vector of plane rotations with real cosines and complex sines from both sides to a sequence of 2-by-2 symmetric/Hermitian matrices. */
+#include "FLA_f2c.h" /* > \brief \b CLAR2V applies a vector of plane rotations with real cosines and scomplex sines from both sides to a sequence of 2-by-2 symmetric/Hermitian matrices. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
@@ -108,8 +108,23 @@ the elements of y are assumed to be real. */
 /* > \ingroup complexOTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-void clar2v_(integer *n, complex *x, complex *y, complex *z__, integer *incx, real *c__, complex *s,
-             integer *incc)
+/** Generated wrapper function */
+void clar2v_(aocl_int_t *n, scomplex *x, scomplex *y, scomplex *z__, aocl_int_t *incx, real *c__,
+             scomplex *s, aocl_int_t *incc)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_clar2v(n, x, y, z__, incx, c__, s, incc);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t incx_64 = *incx;
+    aocl_int64_t incc_64 = *incc;
+
+    aocl_lapack_clar2v(&n_64, x, y, z__, &incx_64, c__, s, &incc_64);
+#endif
+}
+
+void aocl_lapack_clar2v(aocl_int64_t *n, scomplex *x, scomplex *y, scomplex *z__, aocl_int64_t *incx,
+                        real *c__, scomplex *s, aocl_int64_t *incc)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE

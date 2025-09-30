@@ -6,8 +6,8 @@
 #include "FLA_f2c.h" /* Table of constant values */
 static doublereal c_b12 = 0.;
 static doublereal c_b13 = 1.;
-static integer c__1 = 1;
-static integer c__3 = 3;
+static aocl_int64_t c__1 = 1;
+static aocl_int64_t c__3 = 3;
 /* > \brief \b DHGEQZ */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -66,7 +66,7 @@ static integer c__3 = 3;
 /* > diagonal blocks. */
 /* > */
 /* > The 1-by-1 blocks correspond to real eigenvalues of the matrix pair */
-/* > (H,T) and the 2-by-2 blocks correspond to complex conjugate pairs of */
+/* > (H,T) and the 2-by-2 blocks correspond to scomplex conjugate pairs of */
 /* > eigenvalues. */
 /* > */
 /* > Additionally, the 2-by-2 upper triangular diagonal blocks of P */
@@ -86,7 +86,7 @@ static integer c__3 = 3;
 /* > */
 /* > To avoid overflow, eigenvalues of the matrix pair (H,T) (equivalently, */
 /* > of (A,B)) are computed as a pair of values (alpha,beta), where alpha is */
-/* > complex and beta real. */
+/* > scomplex and beta real. */
 /* > If beta is nonzero, lambda = alpha / beta is an eigenvalue of the */
 /* > generalized nonsymmetric eigenvalue problem (GNEP) */
 /* > A*x = lambda*B*x */
@@ -208,7 +208,7 @@ if N = 0, ILO=1 and IHI=0. */
 /* > If ALPHAI(j) is zero, then the j-th eigenvalue is real;
 if */
 /* > positive, then the j-th and (j+1)-st eigenvalues are a */
-/* > complex conjugate pair, with ALPHAI(j+1) = -ALPHAI(j). */
+/* > scomplex conjugate pair, with ALPHAI(j+1) = -ALPHAI(j). */
 /* > \endverbatim */
 /* > */
 /* > \param[out] BETA */
@@ -310,10 +310,38 @@ the routine */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void dhgeqz_(char *job, char *compq, char *compz, integer *n, integer *ilo, integer *ihi,
-             doublereal *h__, integer *ldh, doublereal *t, integer *ldt, doublereal *alphar,
-             doublereal *alphai, doublereal *beta, doublereal *q, integer *ldq, doublereal *z__,
-             integer *ldz, doublereal *work, integer *lwork, integer *info)
+/** Generated wrapper function */
+void dhgeqz_(char *job, char *compq, char *compz, aocl_int_t *n, aocl_int_t *ilo, aocl_int_t *ihi,
+             doublereal *h__, aocl_int_t *ldh, doublereal *t, aocl_int_t *ldt, doublereal *alphar,
+             doublereal *alphai, doublereal *beta, doublereal *q, aocl_int_t *ldq, doublereal *z__,
+             aocl_int_t *ldz, doublereal *work, aocl_int_t *lwork, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_dhgeqz(job, compq, compz, n, ilo, ihi, h__, ldh, t, ldt, alphar, alphai, beta, q,
+                       ldq, z__, ldz, work, lwork, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t ilo_64 = *ilo;
+    aocl_int64_t ihi_64 = *ihi;
+    aocl_int64_t ldh_64 = *ldh;
+    aocl_int64_t ldt_64 = *ldt;
+    aocl_int64_t ldq_64 = *ldq;
+    aocl_int64_t ldz_64 = *ldz;
+    aocl_int64_t lwork_64 = *lwork;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_dhgeqz(job, compq, compz, &n_64, &ilo_64, &ihi_64, h__, &ldh_64, t, &ldt_64, alphar,
+                       alphai, beta, q, &ldq_64, z__, &ldz_64, work, &lwork_64, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_dhgeqz(char *job, char *compq, char *compz, aocl_int64_t *n, aocl_int64_t *ilo,
+                        aocl_int64_t *ihi, doublereal *h__, aocl_int64_t *ldh, doublereal *t,
+                        aocl_int64_t *ldt, doublereal *alphar, doublereal *alphai, doublereal *beta,
+                        doublereal *q, aocl_int64_t *ldq, doublereal *z__, aocl_int64_t *ldz,
+                        doublereal *work, aocl_int64_t *lwork, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dhgeqz inputs: job %c, compq %c, compz %c, n %" FLA_IS ", ilo %" FLA_IS
@@ -321,16 +349,16 @@ void dhgeqz_(char *job, char *compq, char *compz, integer *n, integer *ilo, inte
                       ", ldz %" FLA_IS ", lwork %" FLA_IS "",
                       *job, *compq, *compz, *n, *ilo, *ihi, *ldh, *ldt, *ldq, *ldz, *lwork);
     extern fla_context fla_global_context;
-    extern void fla_dhgeqz_opt(char *job, char *compq, char *compz, integer *n, integer *ilo,
-                               integer *ihi, doublereal *h__, integer *ldh, doublereal *t,
-                               integer *ldt, doublereal *alphar, doublereal *alphai,
-                               doublereal *beta, doublereal *q, integer *ldq, doublereal *z__,
-                               integer *ldz, doublereal *work, integer *lwork, integer *info);
-    extern void fla_dhgeqz_native(char *job, char *compq, char *compz, integer *n, integer *ilo,
-                                  integer *ihi, doublereal *h__, integer *ldh, doublereal *t,
-                                  integer *ldt, doublereal *alphar, doublereal *alphai,
-                                  doublereal *beta, doublereal *q, integer *ldq, doublereal *z__,
-                                  integer *ldz, doublereal *work, integer *lwork, integer *info);
+    extern void fla_dhgeqz_opt(
+        char *job, char *compq, char *compz, aocl_int64_t *n, aocl_int64_t *ilo, aocl_int64_t *ihi,
+        doublereal *h__, aocl_int64_t *ldh, doublereal *t, aocl_int64_t *ldt, doublereal *alphar,
+        doublereal *alphai, doublereal *beta, doublereal *q, aocl_int64_t *ldq, doublereal *z__,
+        aocl_int64_t *ldz, doublereal *work, aocl_int64_t *lwork, aocl_int64_t *info);
+    extern void fla_dhgeqz_native(
+        char *job, char *compq, char *compz, aocl_int64_t *n, aocl_int64_t *ilo, aocl_int64_t *ihi,
+        doublereal *h__, aocl_int64_t *ldh, doublereal *t, aocl_int64_t *ldt, doublereal *alphar,
+        doublereal *alphai, doublereal *beta, doublereal *q, aocl_int64_t *ldq, doublereal *z__,
+        aocl_int64_t *ldz, doublereal *work, aocl_int64_t *lwork, aocl_int64_t *info);
 
     /* Initialize global context data */
     aocl_fla_init();
@@ -355,45 +383,40 @@ void dhgeqz_(char *job, char *compq, char *compz, integer *n, integer *ilo, inte
 }
 
 #if FLA_ENABLE_AMD_OPT
-void fla_dhgeqz_opt(char *job, char *compq, char *compz, integer *n, integer *ilo, integer *ihi,
-                    doublereal *h__, integer *ldh, doublereal *t, integer *ldt, doublereal *alphar,
-                    doublereal *alphai, doublereal *beta, doublereal *q, integer *ldq,
-                    doublereal *z__, integer *ldz, doublereal *work, integer *lwork, integer *info)
+void fla_dhgeqz_opt(char *job, char *compq, char *compz, aocl_int64_t *n, aocl_int64_t *ilo,
+                    aocl_int64_t *ihi, doublereal *h__, aocl_int64_t *ldh, doublereal *t,
+                    aocl_int64_t *ldt, doublereal *alphar, doublereal *alphai, doublereal *beta,
+                    doublereal *q, aocl_int64_t *ldq, doublereal *z__, aocl_int64_t *ldz,
+                    doublereal *work, aocl_int64_t *lwork, aocl_int64_t *info)
 {
     /* System generated locals */
-    integer h_dim1, h_offset, q_dim1, q_offset, t_dim1, t_offset, z_dim1, z_offset, i__1, i__2,
+    aocl_int64_t h_dim1, h_offset, q_dim1, q_offset, t_dim1, t_offset, z_dim1, z_offset, i__1, i__2,
         i__3, i__4;
     doublereal d__1, d__2, d__3, d__4, d__5;
     /* Builtin functions */
     double sqrt(doublereal);
     /* Local variables */
     doublereal c__;
-    integer j;
+    aocl_int64_t j;
     doublereal s, v[3], s1, s2, t1, t2, t3, u1, u2, a11, a12, a21, a22, b11, b22, c12, c21;
-    integer jc;
+    aocl_int64_t jc;
     doublereal an, bn, cl, cq, cr;
-    integer in;
+    aocl_int64_t in;
     doublereal u12, w11, w12, w21;
-    integer jr;
+    aocl_int64_t jr;
     doublereal cz, w22, sl, wi, sr, vs, wr, b1a, b2a, a1i, a2i, b1i, b2i, a1r, a2r, b1r, b2r, wr2,
         ad11, ad12, ad21, ad22, c11i, c22i;
-    integer jch;
+    aocl_int64_t jch;
     doublereal c11r, c22r;
     logical ilq;
     doublereal u12l, tau, sqi;
     logical ilz;
     doublereal ulp, sqr, szi, szr, ad11l, ad12l, ad21l, ad22l, ad32l, wabs, atol, btol, temp;
-    extern /* Subroutine */
-        void
-        drot_(integer *, doublereal *, integer *, doublereal *, integer *, doublereal *,
-              doublereal *),
-        dlag2_(doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *,
-               doublereal *, doublereal *, doublereal *, doublereal *);
     doublereal temp2, s1inv, scale;
-    extern logical lsame_(char *, char *, integer, integer);
-    integer iiter, ilast, jiter;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    aocl_int64_t iiter, ilast, jiter;
     doublereal anorm, bnorm;
-    integer maxit;
+    aocl_int64_t maxit;
     doublereal tempi, tempr;
     extern doublereal dlapy2_(doublereal *, doublereal *),
         dlapy3_(doublereal *, doublereal *, doublereal *);
@@ -404,26 +427,16 @@ void fla_dhgeqz_opt(char *job, char *compq, char *compz, integer *n, integer *il
     logical ilazr2;
     doublereal ascale, bscale;
     extern doublereal dlamch_(char *);
-    extern /* Subroutine */
-        void
-        dlarfg_(integer *, doublereal *, doublereal *, integer *, doublereal *);
-    extern doublereal dlanhs_(char *, integer *, doublereal *, integer *, doublereal *);
-    extern /* Subroutine */
-        void
-        dlaset_(char *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *);
     doublereal safmin;
     extern /* Subroutine */
         void
         dlartg_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *);
     doublereal safmax;
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal eshift;
     logical ilschr;
-    integer icompq, ilastm, ischur;
+    aocl_int64_t icompq, ilastm, ischur;
     logical ilazro;
-    integer icompz, ifirst, ifrstm, istart;
+    aocl_int64_t icompz, ifirst, ifrstm, istart;
     logical ilpivt, lquery;
     /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -449,10 +462,10 @@ void fla_dhgeqz_opt(char *job, char *compq, char *compz, integer *n, integer *il
     /* .. Executable Statements .. */
     /* Decode JOB, COMPQ, COMPZ */
     /* Parameter adjustments */
-    extern int fla_dhrot3(integer * n, doublereal * a, integer * lda, doublereal * v,
+    extern int fla_dhrot3(aocl_int64_t * n, doublereal * a, aocl_int64_t * lda, doublereal * v,
                           doublereal * tau);
-    extern int fla_drot(integer * n, doublereal * dx, integer * incx, doublereal * dy,
-                        integer * incy, doublereal * c__, doublereal * s);
+    extern int fla_drot(aocl_int64_t * n, doublereal * dx, aocl_int64_t * incx, doublereal * dy,
+                        aocl_int64_t * incy, doublereal * c__, doublereal * s);
     h_dim1 = *ldh;
     h_offset = 1 + h_dim1;
     h__ -= h_offset;
@@ -576,7 +589,7 @@ void fla_dhgeqz_opt(char *job, char *compq, char *compz, integer *n, integer *il
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("DHGEQZ", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("DHGEQZ", &i__1, (ftnlen)6);
         return;
     }
     else if(lquery)
@@ -592,19 +605,19 @@ void fla_dhgeqz_opt(char *job, char *compq, char *compz, integer *n, integer *il
     /* Initialize Q and Z */
     if(icompq == 3)
     {
-        dlaset_("Full", n, n, &c_b12, &c_b13, &q[q_offset], ldq);
+        aocl_lapack_dlaset("Full", n, n, &c_b12, &c_b13, &q[q_offset], ldq);
     }
     if(icompz == 3)
     {
-        dlaset_("Full", n, n, &c_b12, &c_b13, &z__[z_offset], ldz);
+        aocl_lapack_dlaset("Full", n, n, &c_b12, &c_b13, &z__[z_offset], ldz);
     }
     /* Machine Constants */
     in = *ihi + 1 - *ilo;
     safmin = dlamch_("S");
     safmax = 1. / safmin;
     ulp = dlamch_("E") * dlamch_("B");
-    anorm = dlanhs_("F", &in, &h__[*ilo + *ilo * h_dim1], ldh, &work[1]);
-    bnorm = dlanhs_("F", &in, &t[*ilo + *ilo * t_dim1], ldt, &work[1]);
+    anorm = aocl_lapack_dlanhs("F", &in, &h__[*ilo + *ilo * h_dim1], ldh, &work[1]);
+    bnorm = aocl_lapack_dlanhs("F", &in, &t[*ilo + *ilo * t_dim1], ldt, &work[1]);
     /* Computing MAX */
     d__1 = safmin;
     d__2 = ulp * anorm; // , expr subst
@@ -982,8 +995,9 @@ void fla_dhgeqz_opt(char *job, char *compq, char *compz, integer *n, integer *il
             /* bottom-right 2x2 block of A and B. The first eigenvalue */
             /* returned by DLAG2 is the Wilkinson shift (AEP p.512), */
             d__1 = safmin * 100.;
-            dlag2_(&h__[ilast - 1 + (ilast - 1) * h_dim1], ldh,
-                   &t[ilast - 1 + (ilast - 1) * t_dim1], ldt, &d__1, &s1, &s2, &wr, &wr2, &wi);
+            aocl_lapack_dlag2(&h__[ilast - 1 + (ilast - 1) * h_dim1], ldh,
+                              &t[ilast - 1 + (ilast - 1) * t_dim1], ldt, &d__1, &s1, &s2, &wr, &wr2,
+                              &wi);
             if((d__1 = wr / s1 * t[ilast + ilast * t_dim1] - h__[ilast + ilast * h_dim1],
                 f2c_abs(d__1))
                > (d__2 = wr2 / s2 * t[ilast + ilast * t_dim1] - h__[ilast + ilast * h_dim1],
@@ -1117,7 +1131,7 @@ void fla_dhgeqz_opt(char *job, char *compq, char *compz, integer *n, integer *il
     L200:
         if(ifirst + 1 == ilast)
         {
-            /* Special case -- 2x2 block with complex eigenvectors */
+            /* Special case -- 2x2 block with scomplex eigenvectors */
             /* Step 1: Standardize, that is, rotate so that */
             /* ( B11 0 ) */
             /* B = ( ) with B11 non-negative. */
@@ -1187,8 +1201,9 @@ void fla_dhgeqz_opt(char *job, char *compq, char *compz, integer *n, integer *il
             /* Step 2: Compute ALPHAR, ALPHAI, and BETA (see refs.) */
             /* Recompute shift */
             d__1 = safmin * 100.;
-            dlag2_(&h__[ilast - 1 + (ilast - 1) * h_dim1], ldh,
-                   &t[ilast - 1 + (ilast - 1) * t_dim1], ldt, &d__1, &s1, &temp, &wr, &temp2, &wi);
+            aocl_lapack_dlag2(&h__[ilast - 1 + (ilast - 1) * h_dim1], ldh,
+                              &t[ilast - 1 + (ilast - 1) * t_dim1], ldt, &d__1, &s1, &temp, &wr,
+                              &temp2, &wi);
             /* If standardization has perturbed the shift onto real line, */
             /* do another (real single-shift) QR step. */
             if(wi == 0.)
@@ -1201,7 +1216,7 @@ void fla_dhgeqz_opt(char *job, char *compq, char *compz, integer *n, integer *il
             a21 = h__[ilast + (ilast - 1) * h_dim1];
             a12 = h__[ilast - 1 + ilast * h_dim1];
             a22 = h__[ilast + ilast * h_dim1];
-            /* Compute complex Givens rotation on right */
+            /* Compute scomplex Givens rotation on right */
             /* (Assume some element of C = (sA - wB) > unfl ) */
             /* __ */
             /* (sA - wB) ( CZ -SZ ) */
@@ -1345,7 +1360,7 @@ void fla_dhgeqz_opt(char *job, char *compq, char *compz, integer *n, integer *il
                    * ad21l;
             v[2] = ad32l * ad21l;
             istart = ifirst;
-            dlarfg_(&c__3, v, &v[1], &c__1, &tau);
+            aocl_lapack_dlarfg(&c__3, v, &v[1], &c__1, &tau);
             v[0] = 1.;
             /* Sweep */
             i__2 = ilast - 2;
@@ -1358,7 +1373,7 @@ void fla_dhgeqz_opt(char *job, char *compq, char *compz, integer *n, integer *il
                     v[0] = h__[j + (j - 1) * h_dim1];
                     v[1] = h__[j + 1 + (j - 1) * h_dim1];
                     v[2] = h__[j + 2 + (j - 1) * h_dim1];
-                    dlarfg_(&c__3, &h__[j + (j - 1) * h_dim1], &v[1], &c__1, &tau);
+                    aocl_lapack_dlarfg(&c__3, &h__[j + (j - 1) * h_dim1], &v[1], &c__1, &tau);
                     v[0] = 1.;
                     h__[j + 1 + (j - 1) * h_dim1] = 0.;
                     h__[j + 2 + (j - 1) * h_dim1] = 0.;
@@ -1585,7 +1600,7 @@ void fla_dhgeqz_opt(char *job, char *compq, char *compz, integer *n, integer *il
         goto L350;
         /* End of iteration loop */
     L350: /* L360: */
-          ;
+        ;
     }
     /* Drop-through = non-convergence */
     *info = ilast;
@@ -1637,42 +1652,40 @@ L420:
 }
 #endif
 
-void fla_dhgeqz_native(char *job, char *compq, char *compz, integer *n, integer *ilo, integer *ihi,
-                       doublereal *h__, integer *ldh, doublereal *t, integer *ldt,
-                       doublereal *alphar, doublereal *alphai, doublereal *beta, doublereal *q,
-                       integer *ldq, doublereal *z__, integer *ldz, doublereal *work,
-                       integer *lwork, integer *info)
+void fla_dhgeqz_native(char *job, char *compq, char *compz, aocl_int64_t *n, aocl_int64_t *ilo,
+                       aocl_int64_t *ihi, doublereal *h__, aocl_int64_t *ldh, doublereal *t,
+                       aocl_int64_t *ldt, doublereal *alphar, doublereal *alphai, doublereal *beta,
+                       doublereal *q, aocl_int64_t *ldq, doublereal *z__, aocl_int64_t *ldz,
+                       doublereal *work, aocl_int64_t *lwork, aocl_int64_t *info)
 {
     /* System generated locals */
-    integer h_dim1, h_offset, q_dim1, q_offset, t_dim1, t_offset, z_dim1, z_offset, i__1, i__2,
+    aocl_int64_t h_dim1, h_offset, q_dim1, q_offset, t_dim1, t_offset, z_dim1, z_offset, i__1, i__2,
         i__3, i__4;
     doublereal d__1, d__2, d__3, d__4, d__5;
     /* Builtin functions */
     double sqrt(doublereal);
     /* Local variables */
     doublereal c__;
-    integer j;
+    aocl_int64_t j;
     doublereal s, v[3], s1, s2, t1, t2, t3, u1, u2, a11, a12, a21, a22, b11, b22, c12, c21;
-    integer jc;
+    aocl_int64_t jc;
     doublereal an, bn, cl, cq, cr;
-    integer in;
+    aocl_int64_t in;
     doublereal u12, w11, w12, w21;
-    integer jr;
+    aocl_int64_t jr;
     doublereal cz, w22, sl, wi, sr, vs, wr, b1a, b2a, a1i, a2i, b1i, b2i, a1r, a2r, b1r, b2r, wr2,
         ad11, ad12, ad21, ad22, c11i, c22i;
-    integer jch;
+    aocl_int64_t jch;
     doublereal c11r, c22r;
     logical ilq;
     doublereal u12l, tau, sqi;
     logical ilz;
     doublereal ulp, sqr, szi, szr, ad11l, ad12l, ad21l, ad22l, ad32l, wabs, atol, btol, temp;
-    extern void dlag2_(doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *,
-                       doublereal *, doublereal *, doublereal *, doublereal *);
     doublereal temp2, s1inv, scale;
-    extern logical lsame_(char *, char *, integer, integer);
-    integer iiter, ilast, jiter;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    aocl_int64_t iiter, ilast, jiter;
     doublereal anorm, bnorm;
-    integer maxit;
+    aocl_int64_t maxit;
     doublereal tempi, tempr;
     extern doublereal dlapy2_(doublereal *, doublereal *),
         dlapy3_(doublereal *, doublereal *, doublereal *);
@@ -1681,30 +1694,18 @@ void fla_dhgeqz_native(char *job, char *compq, char *compz, integer *n, integer 
         dlasv2_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *,
                 doublereal *, doublereal *, doublereal *);
     logical ilazr2;
-    extern void drot_(integer * n, doublereal * dx, integer * incx, doublereal * dy, integer * incy,
-                      doublereal * c__, doublereal * s);
     doublereal ascale, bscale;
     extern doublereal dlamch_(char *);
-    extern /* Subroutine */
-        void
-        dlarfg_(integer *, doublereal *, doublereal *, integer *, doublereal *);
-    extern doublereal dlanhs_(char *, integer *, doublereal *, integer *, doublereal *);
-    extern /* Subroutine */
-        void
-        dlaset_(char *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *);
     doublereal safmin;
     extern /* Subroutine */
         void
         dlartg_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *);
     doublereal safmax;
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal eshift;
     logical ilschr;
-    integer icompq, ilastm, ischur;
+    aocl_int64_t icompq, ilastm, ischur;
     logical ilazro;
-    integer icompz, ifirst, ifrstm, istart;
+    aocl_int64_t icompz, ifirst, ifrstm, istart;
     logical ilpivt, lquery;
     /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -1854,7 +1855,7 @@ void fla_dhgeqz_native(char *job, char *compq, char *compz, integer *n, integer 
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("DHGEQZ", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("DHGEQZ", &i__1, (ftnlen)6);
         return;
     }
     else if(lquery)
@@ -1870,19 +1871,19 @@ void fla_dhgeqz_native(char *job, char *compq, char *compz, integer *n, integer 
     /* Initialize Q and Z */
     if(icompq == 3)
     {
-        dlaset_("Full", n, n, &c_b12, &c_b13, &q[q_offset], ldq);
+        aocl_lapack_dlaset("Full", n, n, &c_b12, &c_b13, &q[q_offset], ldq);
     }
     if(icompz == 3)
     {
-        dlaset_("Full", n, n, &c_b12, &c_b13, &z__[z_offset], ldz);
+        aocl_lapack_dlaset("Full", n, n, &c_b12, &c_b13, &z__[z_offset], ldz);
     }
     /* Machine Constants */
     in = *ihi + 1 - *ilo;
     safmin = dlamch_("S");
     safmax = 1. / safmin;
     ulp = dlamch_("E") * dlamch_("B");
-    anorm = dlanhs_("F", &in, &h__[*ilo + *ilo * h_dim1], ldh, &work[1]);
-    bnorm = dlanhs_("F", &in, &t[*ilo + *ilo * t_dim1], ldt, &work[1]);
+    anorm = aocl_lapack_dlanhs("F", &in, &h__[*ilo + *ilo * h_dim1], ldh, &work[1]);
+    bnorm = aocl_lapack_dlanhs("F", &in, &t[*ilo + *ilo * t_dim1], ldt, &work[1]);
     /* Computing MAX */
     d__1 = safmin;
     d__2 = ulp * anorm; // , expr subst
@@ -2067,15 +2068,15 @@ void fla_dhgeqz_native(char *job, char *compq, char *compz, integer *n, integer 
                                 &h__[jch + jch * h_dim1]);
                         h__[jch + 1 + jch * h_dim1] = 0.;
                         i__4 = ilastm - jch;
-                        drot_(&i__4, &h__[jch + (jch + 1) * h_dim1], ldh,
-                              &h__[jch + 1 + (jch + 1) * h_dim1], ldh, &c__, &s);
+                        aocl_blas_drot(&i__4, &h__[jch + (jch + 1) * h_dim1], ldh,
+                                       &h__[jch + 1 + (jch + 1) * h_dim1], ldh, &c__, &s);
                         i__4 = ilastm - jch;
-                        drot_(&i__4, &t[jch + (jch + 1) * t_dim1], ldt,
-                              &t[jch + 1 + (jch + 1) * t_dim1], ldt, &c__, &s);
+                        aocl_blas_drot(&i__4, &t[jch + (jch + 1) * t_dim1], ldt,
+                                       &t[jch + 1 + (jch + 1) * t_dim1], ldt, &c__, &s);
                         if(ilq)
                         {
-                            drot_(n, &q[jch * q_dim1 + 1], &c__1, &q[(jch + 1) * q_dim1 + 1], &c__1,
-                                  &c__, &s);
+                            aocl_blas_drot(n, &q[jch * q_dim1 + 1], &c__1,
+                                           &q[(jch + 1) * q_dim1 + 1], &c__1, &c__, &s);
                         }
                         if(ilazr2)
                         {
@@ -2113,31 +2114,31 @@ void fla_dhgeqz_native(char *job, char *compq, char *compz, integer *n, integer 
                         if(jch < ilastm - 1)
                         {
                             i__4 = ilastm - jch - 1;
-                            drot_(&i__4, &t[jch + (jch + 2) * t_dim1], ldt,
-                                  &t[jch + 1 + (jch + 2) * t_dim1], ldt, &c__, &s);
+                            aocl_blas_drot(&i__4, &t[jch + (jch + 2) * t_dim1], ldt,
+                                           &t[jch + 1 + (jch + 2) * t_dim1], ldt, &c__, &s);
                         }
                         i__4 = ilastm - jch + 2;
-                        drot_(&i__4, &h__[jch + (jch - 1) * h_dim1], ldh,
-                              &h__[jch + 1 + (jch - 1) * h_dim1], ldh, &c__, &s);
+                        aocl_blas_drot(&i__4, &h__[jch + (jch - 1) * h_dim1], ldh,
+                                       &h__[jch + 1 + (jch - 1) * h_dim1], ldh, &c__, &s);
                         if(ilq)
                         {
-                            drot_(n, &q[jch * q_dim1 + 1], &c__1, &q[(jch + 1) * q_dim1 + 1], &c__1,
-                                  &c__, &s);
+                            aocl_blas_drot(n, &q[jch * q_dim1 + 1], &c__1,
+                                           &q[(jch + 1) * q_dim1 + 1], &c__1, &c__, &s);
                         }
                         temp = h__[jch + 1 + jch * h_dim1];
                         dlartg_(&temp, &h__[jch + 1 + (jch - 1) * h_dim1], &c__, &s,
                                 &h__[jch + 1 + jch * h_dim1]);
                         h__[jch + 1 + (jch - 1) * h_dim1] = 0.;
                         i__4 = jch + 1 - ifrstm;
-                        drot_(&i__4, &h__[ifrstm + jch * h_dim1], &c__1,
-                              &h__[ifrstm + (jch - 1) * h_dim1], &c__1, &c__, &s);
+                        aocl_blas_drot(&i__4, &h__[ifrstm + jch * h_dim1], &c__1,
+                                       &h__[ifrstm + (jch - 1) * h_dim1], &c__1, &c__, &s);
                         i__4 = jch - ifrstm;
-                        drot_(&i__4, &t[ifrstm + jch * t_dim1], &c__1,
-                              &t[ifrstm + (jch - 1) * t_dim1], &c__1, &c__, &s);
+                        aocl_blas_drot(&i__4, &t[ifrstm + jch * t_dim1], &c__1,
+                                       &t[ifrstm + (jch - 1) * t_dim1], &c__1, &c__, &s);
                         if(ilz)
                         {
-                            drot_(n, &z__[jch * z_dim1 + 1], &c__1, &z__[(jch - 1) * z_dim1 + 1],
-                                  &c__1, &c__, &s);
+                            aocl_blas_drot(n, &z__[jch * z_dim1 + 1], &c__1,
+                                           &z__[(jch - 1) * z_dim1 + 1], &c__1, &c__, &s);
                         }
                         /* L50: */
                     }
@@ -2163,15 +2164,15 @@ void fla_dhgeqz_native(char *job, char *compq, char *compz, integer *n, integer 
         dlartg_(&temp, &h__[ilast + (ilast - 1) * h_dim1], &c__, &s, &h__[ilast + ilast * h_dim1]);
         h__[ilast + (ilast - 1) * h_dim1] = 0.;
         i__2 = ilast - ifrstm;
-        drot_(&i__2, &h__[ifrstm + ilast * h_dim1], &c__1, &h__[ifrstm + (ilast - 1) * h_dim1],
-              &c__1, &c__, &s);
+        aocl_blas_drot(&i__2, &h__[ifrstm + ilast * h_dim1], &c__1,
+                       &h__[ifrstm + (ilast - 1) * h_dim1], &c__1, &c__, &s);
         i__2 = ilast - ifrstm;
-        drot_(&i__2, &t[ifrstm + ilast * t_dim1], &c__1, &t[ifrstm + (ilast - 1) * t_dim1], &c__1,
-              &c__, &s);
+        aocl_blas_drot(&i__2, &t[ifrstm + ilast * t_dim1], &c__1, &t[ifrstm + (ilast - 1) * t_dim1],
+                       &c__1, &c__, &s);
         if(ilz)
         {
-            drot_(n, &z__[ilast * z_dim1 + 1], &c__1, &z__[(ilast - 1) * z_dim1 + 1], &c__1, &c__,
-                  &s);
+            aocl_blas_drot(n, &z__[ilast * z_dim1 + 1], &c__1, &z__[(ilast - 1) * z_dim1 + 1],
+                           &c__1, &c__, &s);
         }
     /* H(ILAST,ILAST-1)=0 -- Standardize B, set ALPHAR, ALPHAI, */
     /* and BETA */
@@ -2260,8 +2261,9 @@ void fla_dhgeqz_native(char *job, char *compq, char *compz, integer *n, integer 
             /* bottom-right 2x2 block of A and B. The first eigenvalue */
             /* returned by DLAG2 is the Wilkinson shift (AEP p.512), */
             d__1 = safmin * 100.;
-            dlag2_(&h__[ilast - 1 + (ilast - 1) * h_dim1], ldh,
-                   &t[ilast - 1 + (ilast - 1) * t_dim1], ldt, &d__1, &s1, &s2, &wr, &wr2, &wi);
+            aocl_lapack_dlag2(&h__[ilast - 1 + (ilast - 1) * h_dim1], ldh,
+                              &t[ilast - 1 + (ilast - 1) * t_dim1], ldt, &d__1, &s1, &s2, &wr, &wr2,
+                              &wi);
             if((d__1 = wr / s1 * t[ilast + ilast * t_dim1] - h__[ilast + ilast * h_dim1],
                 f2c_abs(d__1))
                > (d__2 = wr2 / s2 * t[ilast + ilast * t_dim1] - h__[ilast + ilast * h_dim1],
@@ -2412,7 +2414,7 @@ void fla_dhgeqz_native(char *job, char *compq, char *compz, integer *n, integer 
     L200:
         if(ifirst + 1 == ilast)
         {
-            /* Special case -- 2x2 block with complex eigenvectors */
+            /* Special case -- 2x2 block with scomplex eigenvectors */
             /* Step 1: Standardize, that is, rotate so that */
             /* ( B11 0 ) */
             /* B = ( ) with B11 non-negative. */
@@ -2427,32 +2429,32 @@ void fla_dhgeqz_native(char *job, char *compq, char *compz, integer *n, integer 
                 b22 = -b22;
             }
             i__2 = ilastm + 1 - ifirst;
-            drot_(&i__2, &h__[ilast - 1 + (ilast - 1) * h_dim1], ldh,
-                  &h__[ilast + (ilast - 1) * h_dim1], ldh, &cl, &sl);
+            aocl_blas_drot(&i__2, &h__[ilast - 1 + (ilast - 1) * h_dim1], ldh,
+                           &h__[ilast + (ilast - 1) * h_dim1], ldh, &cl, &sl);
             i__2 = ilast + 1 - ifrstm;
-            drot_(&i__2, &h__[ifrstm + (ilast - 1) * h_dim1], &c__1, &h__[ifrstm + ilast * h_dim1],
-                  &c__1, &cr, &sr);
+            aocl_blas_drot(&i__2, &h__[ifrstm + (ilast - 1) * h_dim1], &c__1,
+                           &h__[ifrstm + ilast * h_dim1], &c__1, &cr, &sr);
             if(ilast < ilastm)
             {
                 i__2 = ilastm - ilast;
-                drot_(&i__2, &t[ilast - 1 + (ilast + 1) * t_dim1], ldt,
-                      &t[ilast + (ilast + 1) * t_dim1], ldt, &cl, &sl);
+                aocl_blas_drot(&i__2, &t[ilast - 1 + (ilast + 1) * t_dim1], ldt,
+                               &t[ilast + (ilast + 1) * t_dim1], ldt, &cl, &sl);
             }
             if(ifrstm < ilast - 1)
             {
                 i__2 = ifirst - ifrstm;
-                drot_(&i__2, &t[ifrstm + (ilast - 1) * t_dim1], &c__1, &t[ifrstm + ilast * t_dim1],
-                      &c__1, &cr, &sr);
+                aocl_blas_drot(&i__2, &t[ifrstm + (ilast - 1) * t_dim1], &c__1,
+                               &t[ifrstm + ilast * t_dim1], &c__1, &cr, &sr);
             }
             if(ilq)
             {
-                drot_(n, &q[(ilast - 1) * q_dim1 + 1], &c__1, &q[ilast * q_dim1 + 1], &c__1, &cl,
-                      &sl);
+                aocl_blas_drot(n, &q[(ilast - 1) * q_dim1 + 1], &c__1, &q[ilast * q_dim1 + 1],
+                               &c__1, &cl, &sl);
             }
             if(ilz)
             {
-                drot_(n, &z__[(ilast - 1) * z_dim1 + 1], &c__1, &z__[ilast * z_dim1 + 1], &c__1,
-                      &cr, &sr);
+                aocl_blas_drot(n, &z__[(ilast - 1) * z_dim1 + 1], &c__1, &z__[ilast * z_dim1 + 1],
+                               &c__1, &cr, &sr);
             }
             t[ilast - 1 + (ilast - 1) * t_dim1] = b11;
             t[ilast - 1 + ilast * t_dim1] = 0.;
@@ -2482,8 +2484,9 @@ void fla_dhgeqz_native(char *job, char *compq, char *compz, integer *n, integer 
             /* Step 2: Compute ALPHAR, ALPHAI, and BETA (see refs.) */
             /* Recompute shift */
             d__1 = safmin * 100.;
-            dlag2_(&h__[ilast - 1 + (ilast - 1) * h_dim1], ldh,
-                   &t[ilast - 1 + (ilast - 1) * t_dim1], ldt, &d__1, &s1, &temp, &wr, &temp2, &wi);
+            aocl_lapack_dlag2(&h__[ilast - 1 + (ilast - 1) * h_dim1], ldh,
+                              &t[ilast - 1 + (ilast - 1) * t_dim1], ldt, &d__1, &s1, &temp, &wr,
+                              &temp2, &wi);
             /* If standardization has perturbed the shift onto real line, */
             /* do another (real single-shift) QR step. */
             if(wi == 0.)
@@ -2496,7 +2499,7 @@ void fla_dhgeqz_native(char *job, char *compq, char *compz, integer *n, integer 
             a21 = h__[ilast + (ilast - 1) * h_dim1];
             a12 = h__[ilast - 1 + ilast * h_dim1];
             a22 = h__[ilast + ilast * h_dim1];
-            /* Compute complex Givens rotation on right */
+            /* Compute scomplex Givens rotation on right */
             /* (Assume some element of C = (sA - wB) > unfl ) */
             /* __ */
             /* (sA - wB) ( CZ -SZ ) */
@@ -2640,7 +2643,7 @@ void fla_dhgeqz_native(char *job, char *compq, char *compz, integer *n, integer 
                    * ad21l;
             v[2] = ad32l * ad21l;
             istart = ifirst;
-            dlarfg_(&c__3, v, &v[1], &c__1, &tau);
+            aocl_lapack_dlarfg(&c__3, v, &v[1], &c__1, &tau);
             v[0] = 1.;
             /* Sweep */
             i__2 = ilast - 2;
@@ -2653,7 +2656,7 @@ void fla_dhgeqz_native(char *job, char *compq, char *compz, integer *n, integer 
                     v[0] = h__[j + (j - 1) * h_dim1];
                     v[1] = h__[j + 1 + (j - 1) * h_dim1];
                     v[2] = h__[j + 2 + (j - 1) * h_dim1];
-                    dlarfg_(&c__3, &h__[j + (j - 1) * h_dim1], &v[1], &c__1, &tau);
+                    aocl_lapack_dlarfg(&c__3, &h__[j + (j - 1) * h_dim1], &v[1], &c__1, &tau);
                     v[0] = 1.;
                     h__[j + 1 + (j - 1) * h_dim1] = 0.;
                     h__[j + 2 + (j - 1) * h_dim1] = 0.;
@@ -2892,7 +2895,7 @@ void fla_dhgeqz_native(char *job, char *compq, char *compz, integer *n, integer 
         goto L350;
     /* End of iteration loop */
     L350: /* L360: */
-          ;
+        ;
     }
     /* Drop-through = non-convergence */
     *info = ilast;

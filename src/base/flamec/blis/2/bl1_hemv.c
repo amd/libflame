@@ -16,7 +16,7 @@
 #include "blis.h"
 #endif
 
-void bl1_shemv( uplo1_t uplo, conj1_t conj, integer m, float* alpha, float* a, integer a_rs, integer a_cs, float* x, integer incx, float* beta, float* y, integer incy )
+void bl1_shemv( uplo1_t uplo, conj1_t conj, fla_dim_t m, float* alpha, float* a, fla_dim_t a_rs, fla_dim_t a_cs, float* x, fla_dim_t incx, float* beta, float* y, fla_dim_t incy )
 {
 	bl1_ssymv( uplo,
 	           m,
@@ -27,7 +27,7 @@ void bl1_shemv( uplo1_t uplo, conj1_t conj, integer m, float* alpha, float* a, i
 	           y, incy );
 }
 
-void bl1_dhemv( uplo1_t uplo, conj1_t conj, integer m, double* alpha, double* a, integer a_rs, integer a_cs, double* x, integer incx, double* beta, double* y, integer incy )
+void bl1_dhemv( uplo1_t uplo, conj1_t conj, fla_dim_t m, double* alpha, double* a, fla_dim_t a_rs, fla_dim_t a_cs, double* x, fla_dim_t incx, double* beta, double* y, fla_dim_t incy )
 {
 	bl1_dsymv( uplo,
 	           m,
@@ -38,18 +38,18 @@ void bl1_dhemv( uplo1_t uplo, conj1_t conj, integer m, double* alpha, double* a,
 	           y, incy );
 }
 
-void bl1_chemv( uplo1_t uplo, conj1_t conj, integer m, scomplex* alpha, scomplex* a, integer a_rs, integer a_cs, scomplex* x, integer incx, scomplex* beta, scomplex* y, integer incy )
+void bl1_chemv( uplo1_t uplo, conj1_t conj, fla_dim_t m, scomplex* alpha, scomplex* a, fla_dim_t a_rs, fla_dim_t a_cs, scomplex* x, fla_dim_t incx, scomplex* beta, scomplex* y, fla_dim_t incy )
 {
 	scomplex* a_save    = a;
-	integer       a_rs_save = a_rs;
-	integer       a_cs_save = a_cs;
+	fla_dim_t       a_rs_save = a_rs;
+	fla_dim_t       a_cs_save = a_cs;
 	scomplex  zero = bl1_c0();
 	scomplex  one  = bl1_c1();
 	scomplex* x_conj;
 	scomplex* ax;
-	integer       lda, inca;
-	integer       incx_conj;
-	integer       incax;
+	fla_dim_t       lda, inca;
+	fla_dim_t       incx_conj;
+	fla_dim_t       incax;
 
 	// Return early if possible.
 	if ( bl1_zero_dim1( m ) ) return;
@@ -137,18 +137,18 @@ void bl1_chemv( uplo1_t uplo, conj1_t conj, integer m, scomplex* alpha, scomplex
 	                   &a,     &a_rs,     &a_cs );
 }
 
-void bl1_zhemv( uplo1_t uplo, conj1_t conj, integer m, dcomplex* alpha, dcomplex* a, integer a_rs, integer a_cs, dcomplex* x, integer incx, dcomplex* beta, dcomplex* y, integer incy )
+void bl1_zhemv( uplo1_t uplo, conj1_t conj, fla_dim_t m, dcomplex* alpha, dcomplex* a, fla_dim_t a_rs, fla_dim_t a_cs, dcomplex* x, fla_dim_t incx, dcomplex* beta, dcomplex* y, fla_dim_t incy )
 {
 	dcomplex* a_save    = a;
-	integer       a_rs_save = a_rs;
-	integer       a_cs_save = a_cs;
+	fla_dim_t       a_rs_save = a_rs;
+	fla_dim_t       a_cs_save = a_cs;
 	dcomplex  zero = bl1_z0();
 	dcomplex  one  = bl1_z1();
 	dcomplex* x_conj;
 	dcomplex* ax;
-	integer       lda, inca;
-	integer       incx_conj;
-	integer       incax;
+	fla_dim_t       lda, inca;
+	fla_dim_t       incx_conj;
+	fla_dim_t       incax;
 
 	// Return early if possible.
 	if ( bl1_zero_dim1( m ) ) return;
@@ -238,7 +238,7 @@ void bl1_zhemv( uplo1_t uplo, conj1_t conj, integer m, dcomplex* alpha, dcomplex
 
 // --- Classic routine wrappers ---
 
-void bl1_chemv_blas( uplo1_t uplo, integer m, scomplex* alpha, scomplex* a, integer lda, scomplex* x, integer incx, scomplex* beta, scomplex* y, integer incy )
+void bl1_chemv_blas( uplo1_t uplo, fla_dim_t m, scomplex* alpha, scomplex* a, fla_dim_t lda, scomplex* x, fla_dim_t incx, scomplex* beta, scomplex* y, fla_dim_t incy )
 {
 #ifdef BLIS1_ENABLE_CBLAS_INTERFACES
 	enum CBLAS_ORDER cblas_order = CblasColMajor;
@@ -269,7 +269,7 @@ void bl1_chemv_blas( uplo1_t uplo, integer m, scomplex* alpha, scomplex* a, inte
 #endif
 }
 
-void bl1_zhemv_blas( uplo1_t uplo, integer m, dcomplex* alpha, dcomplex* a, integer lda, dcomplex* x, integer incx, dcomplex* beta, dcomplex* y, integer incy )
+void bl1_zhemv_blas( uplo1_t uplo, fla_dim_t m, dcomplex* alpha, dcomplex* a, fla_dim_t lda, dcomplex* x, fla_dim_t incx, dcomplex* beta, dcomplex* y, fla_dim_t incy )
 {
 #ifdef BLIS1_ENABLE_CBLAS_INTERFACES
 	enum CBLAS_ORDER cblas_order = CblasColMajor;

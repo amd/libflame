@@ -405,11 +405,11 @@ defaults */
 /* > \ingroup complexSYcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void csyrfsx_(char *uplo, char *equed, integer *n, integer *nrhs, complex *a, integer *lda,
-              complex *af, integer *ldaf, integer *ipiv, real *s, complex *b, integer *ldb,
-              complex *x, integer *ldx, real *rcond, real *berr, integer *n_err_bnds__,
+void csyrfsx_(char *uplo, char *equed, integer *n, integer *nrhs, scomplex *a, integer *lda,
+              scomplex *af, integer *ldaf, integer *ipiv, real *s, scomplex *b, integer *ldb,
+              scomplex *x, integer *ldx, real *rcond, real *berr, integer *n_err_bnds__,
               real *err_bnds_norm__, real *err_bnds_comp__, integer *nparams, real *params,
-              complex *work, real *rwork, integer *info)
+              scomplex *work, real *rwork, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -441,28 +441,28 @@ void csyrfsx_(char *uplo, char *equed, integer *n, integer *nrhs, complex *a, in
     real cwise_wrong__;
     extern /* Subroutine */
         void
-        cla_syrfsx_extended_(integer *, char *, integer *, integer *, complex *, integer *,
-                             complex *, integer *, integer *, logical *, real *, complex *,
-                             integer *, complex *, integer *, real *, integer *, real *, real *,
-                             complex *, real *, complex *, real *, real *, integer *, real *,
+        cla_syrfsx_extended_(integer *, char *, integer *, integer *, scomplex *, integer *,
+                             scomplex *, integer *, integer *, logical *, real *, scomplex *,
+                             integer *, scomplex *, integer *, real *, integer *, real *, real *,
+                             scomplex *, real *, scomplex *, real *, real *, integer *, real *,
                              real *, logical *, integer *);
     char norm[1];
     logical ignore_cwise__;
     extern logical lsame_(char *, char *, integer, integer);
     real anorm;
     logical rcequ;
-    extern real cla_syrcond_c_(char *, integer *, complex *, integer *, complex *, integer *,
-                               integer *, real *, logical *, integer *, complex *, real *),
-        cla_syrcond_x_(char *, integer *, complex *, integer *, complex *, integer *, integer *,
-                       complex *, integer *, complex *, real *),
+    extern real cla_syrcond_c_(char *, integer *, scomplex *, integer *, scomplex *, integer *,
+                               integer *, real *, logical *, integer *, scomplex *, real *),
+        cla_syrcond_x_(char *, integer *, scomplex *, integer *, scomplex *, integer *, integer *,
+                       scomplex *, integer *, scomplex *, real *),
         slamch_(char *);
     extern /* Subroutine */
         void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    extern real clansy_(char *, char *, integer *, complex *, integer *, real *);
+    extern real clansy_(char *, char *, integer *, scomplex *, integer *, real *);
     extern /* Subroutine */
         void
-        csycon_(char *, integer *, complex *, integer *, integer *, real *, real *, complex *,
+        csycon_(char *, integer *, scomplex *, integer *, integer *, real *, real *, scomplex *,
                 integer *);
     extern integer ilaprec_(char *);
     integer ithresh, n_norms__;

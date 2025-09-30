@@ -1,23 +1,23 @@
 #include "FLA_f2c.h"
 #include "FLA_lapack2flame_return_defs.h"
-static integer c__1 = 1;
-static integer c_n1 = -1;
+static aocl_int64_t c__1 = 1;
+static aocl_int64_t c_n1 = -1;
 
-int cunmtr_check(char *side, char *uplo, char *trans, integer *m, integer *n, scomplex *a,
-                 integer *lda, scomplex *tau, scomplex *c__, integer *ldc, scomplex *work,
-                 integer *lwork, integer *info)
+int cunmtr_check(char *side, char *uplo, char *trans, aocl_int64_t *m, aocl_int64_t *n, scomplex *a,
+                 aocl_int64_t *lda, scomplex *tau, scomplex *c__, aocl_int64_t *ldc, scomplex *work,
+                 aocl_int64_t *lwork, aocl_int64_t *info)
 {
     /* System generated locals */
-    integer a_dim1, a_offset, c_dim1, c_offset, i__2, i__3;
+    aocl_int64_t a_dim1, a_offset, c_dim1, c_offset, i__2, i__3;
     char ch__1[2];
     /* Builtin functions */
     /* Subroutine */
 
     /* Local variables */
-    integer nb, nq, nw;
+    aocl_int64_t nb, nq, nw;
     logical left;
     logical upper;
-    integer lwkopt;
+    aocl_int64_t lwkopt;
     logical lquery;
 
     /* Parameter adjustments */
@@ -116,7 +116,7 @@ int cunmtr_check(char *side, char *uplo, char *trans, integer *m, integer *n, sc
     if(*info != 0)
     {
         i__2 = -(*info);
-        xerbla_("CUNMTR", &i__2, (ftnlen)6);
+        aocl_blas_xerbla("CUNMTR", &i__2, (ftnlen)6);
         return LAPACK_FAILURE;
     }
     else if(lquery)

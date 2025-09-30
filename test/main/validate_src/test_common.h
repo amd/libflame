@@ -26,8 +26,8 @@
 #define USE_ABS_EIGEN_VALUES 1
 #define USE_SIGNED_EIGEN_VALUES 0
 
-#ifndef fla_size_t
-typedef int64_t fla_size_t;
+#ifndef aocl_int64_t
+typedef int64_t aocl_int64_t;
 #endif
 
 // --- Complex type definitions -----------------------------------------------
@@ -300,7 +300,7 @@ void copy_sym_tridiag_matrix(integer datatype, void *D, void *E, integer M, inte
 void get_sym_tridiagonal_matrix(integer datatype, char *uplo, integer n, void *A, integer lda,
                                 void *D, void *E, integer *info);
 
-/* Division of complex types */
+/* Division of scomplex types */
 void c_div_t(scomplex *cp, scomplex *ap, scomplex *bp);
 void z_div_t(dcomplex *cp, dcomplex *ap, dcomplex *bp);
 
@@ -318,7 +318,7 @@ void set_transpose(integer datatype, char *uplo, char *trans_A, char *trans_B);
 /* Create diagonal matrix by copying elements from vector to matrix */
 void diagonalize_realtype_vector(integer datatype, void *s, void *sigma, integer m, integer n,
                                  integer LDA);
-/* To calculate matrix multiplication with real and complex datatypes */
+/* To calculate matrix multiplication with real and scomplex datatypes */
 void scgemv(char TRANS, integer real_alpha, integer m, integer n, scomplex *alpha, float *a,
             integer lda, scomplex *v, integer incv, float beta, scomplex *c, integer inc);
 
@@ -350,7 +350,7 @@ void get_hessenberg_matrix(integer datatype, integer n, void *A, integer lda, vo
    On output: A has upper hessenberg matrix.
               Z has orthogonal matrix.
               wr_in has eigen values.
-              wi_in has eigen values for imaginary parts of complex conjugate pairs
+              wi_in has eigen values for imaginary parts of scomplex conjugate pairs
               for real/double datatypes. */
 void get_hessenberg_matrix_from_EVs(integer datatype, integer n, void *A, integer lda, void *Z,
                                     integer ldz, integer *ilo, integer *ihi, integer *info,
@@ -482,7 +482,7 @@ void get_min_from_matrix(integer datatype, void *A, void *min_val, integer m, in
                          integer lda);
 /* Sort the given vector in specified order */
 void sort_vector(integer datatype, char *order, integer vect_len, void *w, integer incw);
-/* Generate a block diagonal matrix with complex conjugate eigen value pairs as
+/* Generate a block diagonal matrix with scomplex conjugate eigen value pairs as
    2 * 2 blocks along the diagonal. This is used for generating asymmetric matrix */
 void create_realtype_block_diagonal_matrix(integer datatype, void *A, integer n, integer lda);
 /* Create input matrix A(Asymmetric) by randomly generating eigen values(EVs) */
@@ -496,7 +496,7 @@ integer compare_vector(integer datatype, integer vect_len, void *A, integer inca
 /* Create diagonal matrix by copying elements from a vector to matrix */
 void diagonalize_vector(integer datatype, void *s, void *sigma, integer m, integer n, integer LDA);
 /* Find negative value of each element and store in next location
-   Used to store imaginary parts of complex conjuate pair of eigen values
+   Used to store imaginary parts of scomplex conjuate pair of eigen values
    in asymmetric matrix eigen decomposition APIs
    Ex: input vector {a, 0, -b, 0 ...}
        output vector {a, -a, -b, b, ...} */

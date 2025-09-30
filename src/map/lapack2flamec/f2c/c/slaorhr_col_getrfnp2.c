@@ -5,7 +5,7 @@
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static real c_b3 = 1.f;
-static integer c__1 = 1;
+static aocl_int64_t c__1 = 1;
 static real c_b19 = -1.f;
 /* > \brief \b SLAORHR_COL_GETRFNP2 */
 /* =========== DOCUMENTATION =========== */
@@ -169,32 +169,39 @@ the unit diagonal elements of L are not stored. */
 /* > \endverbatim */
 /* ===================================================================== */
 /* Subroutine */
-void slaorhr_col_getrfnp2_(integer *m, integer *n, real *a, integer *lda, real *d__, integer *info)
+/** Generated wrapper function */
+void slaorhr_col_getrfnp2_(aocl_int_t *m, aocl_int_t *n, real *a, aocl_int_t *lda, real *d__,
+                           aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_slaorhr_col_getrfnp2(m, n, a, lda, d__, info);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_slaorhr_col_getrfnp2(&m_64, &n_64, a, &lda_64, d__, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_slaorhr_col_getrfnp2(aocl_int64_t *m, aocl_int64_t *n, real *a, aocl_int64_t *lda,
+                                      real *d__, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("slaorhr_col_getrfnp2 inputs: m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS "",
                       *m, *n, *lda);
     /* System generated locals */
-    integer a_dim1, a_offset, i__1;
+    aocl_int64_t a_dim1, a_offset, i__1;
     real r__1;
     /* Builtin functions */
     double r_sign(real *, real *);
     /* Local variables */
-    integer i__, n1, n2, iinfo;
-    extern /* Subroutine */
-        void
-        sscal_(integer *, real *, real *, integer *),
-        sgemm_(char *, char *, integer *, integer *, integer *, real *, real *, integer *, real *,
-               integer *, real *, real *, integer *);
+    aocl_int64_t i__, n1, n2, iinfo;
     real sfmin;
-    extern /* Subroutine */
-        void
-        strsm_(char *, char *, char *, char *, integer *, integer *, real *, real *, integer *,
-               real *, integer *);
     extern real slamch_(char *);
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.9.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -238,7 +245,7 @@ void slaorhr_col_getrfnp2_(integer *m, integer *n, real *a, integer *lda, real *
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("SLAORHR_COL_GETRFNP2", &i__1, (ftnlen)20);
+        aocl_blas_xerbla("SLAORHR_COL_GETRFNP2", &i__1, (ftnlen)20);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -273,7 +280,7 @@ void slaorhr_col_getrfnp2_(integer *m, integer *n, real *a, integer *lda, real *
         {
             i__1 = *m - 1;
             r__1 = 1.f / a[a_dim1 + 1];
-            sscal_(&i__1, &r__1, &a[a_dim1 + 2], &c__1);
+            aocl_blas_sscal(&i__1, &r__1, &a[a_dim1 + 2], &c__1);
         }
         else
         {
@@ -290,22 +297,23 @@ void slaorhr_col_getrfnp2_(integer *m, integer *n, real *a, integer *lda, real *
         n1 = fla_min(*m, *n) / 2;
         n2 = *n - n1;
         /* Factor B11, recursive call */
-        slaorhr_col_getrfnp2_(&n1, &n1, &a[a_offset], lda, &d__[1], &iinfo);
+        aocl_lapack_slaorhr_col_getrfnp2(&n1, &n1, &a[a_offset], lda, &d__[1], &iinfo);
         /* Solve for B21 */
         i__1 = *m - n1;
-        strsm_("R", "U", "N", "N", &i__1, &n1, &c_b3, &a[a_offset], lda, &a[n1 + 1 + a_dim1], lda);
+        aocl_blas_strsm("R", "U", "N", "N", &i__1, &n1, &c_b3, &a[a_offset], lda,
+                        &a[n1 + 1 + a_dim1], lda);
         /* Solve for B12 */
-        strsm_("L", "L", "N", "U", &n1, &n2, &c_b3, &a[a_offset], lda, &a[(n1 + 1) * a_dim1 + 1],
-               lda);
+        aocl_blas_strsm("L", "L", "N", "U", &n1, &n2, &c_b3, &a[a_offset], lda,
+                        &a[(n1 + 1) * a_dim1 + 1], lda);
         /* Update B22, i.e. compute the Schur complement */
         /* B22 := B22 - B21*B12 */
         i__1 = *m - n1;
-        sgemm_("N", "N", &i__1, &n2, &n1, &c_b19, &a[n1 + 1 + a_dim1], lda,
-               &a[(n1 + 1) * a_dim1 + 1], lda, &c_b3, &a[n1 + 1 + (n1 + 1) * a_dim1], lda);
+        aocl_blas_sgemm("N", "N", &i__1, &n2, &n1, &c_b19, &a[n1 + 1 + a_dim1], lda,
+                        &a[(n1 + 1) * a_dim1 + 1], lda, &c_b3, &a[n1 + 1 + (n1 + 1) * a_dim1], lda);
         /* Factor B22, recursive call */
         i__1 = *m - n1;
-        slaorhr_col_getrfnp2_(&i__1, &n2, &a[n1 + 1 + (n1 + 1) * a_dim1], lda, &d__[n1 + 1],
-                              &iinfo);
+        aocl_lapack_slaorhr_col_getrfnp2(&i__1, &n2, &a[n1 + 1 + (n1 + 1) * a_dim1], lda,
+                                         &d__[n1 + 1], &iinfo);
     }
     AOCL_DTL_TRACE_LOG_EXIT
     return;

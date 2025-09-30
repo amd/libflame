@@ -4,13 +4,13 @@
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
  /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__4 = 4;
+static aocl_int64_t c__4 = 4;
 static real c_b5 = 0.f;
-static integer c__1 = 1;
-static integer c__2 = 2;
+static aocl_int64_t c__1 = 1;
+static aocl_int64_t c__2 = 2;
 static real c_b42 = 1.f;
 static real c_b48 = -1.f;
-static integer c__0 = 0;
+static aocl_int64_t c__0 = 0;
 /* > \brief \b STGEX2 swaps adjacent diagonal blocks in an upper (quasi) triangular matrix pair by
  * an orthogon al equivalence transformation. */
 /* =========== DOCUMENTATION =========== */
@@ -226,22 +226,50 @@ Computing Eigenspaces with Specified */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void stgex2_(logical *wantq, logical *wantz, integer *n, real *a, integer *lda, real *b,
-             integer *ldb, real *q, integer *ldq, real *z__, integer *ldz, integer *j1, integer *n1,
-             integer *n2, real *work, integer *lwork, integer *info)
+/** Generated wrapper function */
+void stgex2_(logical *wantq, logical *wantz, aocl_int_t *n, real *a, aocl_int_t *lda, real *b,
+             aocl_int_t *ldb, real *q, aocl_int_t *ldq, real *z__, aocl_int_t *ldz, aocl_int_t *j1,
+             aocl_int_t *n1, aocl_int_t *n2, real *work, aocl_int_t *lwork, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_stgex2(wantq, wantz, n, a, lda, b, ldb, q, ldq, z__, ldz, j1, n1, n2, work, lwork,
+                       info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t ldb_64 = *ldb;
+    aocl_int64_t ldq_64 = *ldq;
+    aocl_int64_t ldz_64 = *ldz;
+    aocl_int64_t j1_64 = *j1;
+    aocl_int64_t n1_64 = *n1;
+    aocl_int64_t n2_64 = *n2;
+    aocl_int64_t lwork_64 = *lwork;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_stgex2(wantq, wantz, &n_64, a, &lda_64, b, &ldb_64, q, &ldq_64, z__, &ldz_64,
+                       &j1_64, &n1_64, &n2_64, work, &lwork_64, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_stgex2(logical *wantq, logical *wantz, aocl_int64_t *n, real *a, aocl_int64_t *lda,
+                        real *b, aocl_int64_t *ldb, real *q, aocl_int64_t *ldq, real *z__,
+                        aocl_int64_t *ldz, aocl_int64_t *j1, aocl_int64_t *n1, aocl_int64_t *n2,
+                        real *work, aocl_int64_t *lwork, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("stgex2 inputs: n %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS ", ldq %" FLA_IS
                       ", ldz %" FLA_IS ", j1 %" FLA_IS ", n1 %" FLA_IS ", n2 %" FLA_IS "",
                       *n, *lda, *ldb, *ldq, *ldz, *j1, *n1, *n2);
     /* System generated locals */
-    integer a_dim1, a_offset, b_dim1, b_offset, q_dim1, q_offset, z_dim1, z_offset, i__1, i__2;
+    aocl_int64_t a_dim1, a_offset, b_dim1, b_offset, q_dim1, q_offset, z_dim1, z_offset, i__1, i__2;
     real r__1;
     /* Builtin functions */
     double sqrt(doublereal);
     /* Local variables */
     real f, g;
-    integer i__, m;
+    aocl_int64_t i__, m;
     real s[16] /* was [4][4] */
         ,
         t[16] /* was [4][4] */
@@ -253,54 +281,21 @@ void stgex2_(logical *wantq, logical *wantz, integer *n, real *a, integer *lda, 
         eps;
     logical weak;
     real ddum;
-    integer idum;
+    aocl_int64_t idum;
     real taul[4], dsum, taur[4], scpy[16] /* was [4][4] */
         ,
         tcpy[16] /* was [4][4] */
         ;
-    extern /* Subroutine */
-        void
-        srot_(integer *, real *, integer *, real *, integer *, real *, real *);
     real scale, bqra21, brqa21;
-    extern /* Subroutine */
-        void
-        sscal_(integer *, real *, real *, integer *);
     real licop[16] /* was [4][4] */
         ;
-    integer linfo;
-    extern /* Subroutine */
-        void
-        sgemm_(char *, char *, integer *, integer *, integer *, real *, real *, integer *, real *,
-               integer *, real *, real *, integer *);
+    aocl_int64_t linfo;
     real ircop[16] /* was [4][4] */
         ;
     integer iwork[6];
-    extern /* Subroutine */
-        void
-        slagv2_(real *, integer *, real *, integer *, real *, real *, real *, real *, real *,
-                real *, real *),
-        sgeqr2_(integer *, integer *, real *, integer *, real *, real *, integer *),
-        sgerq2_(integer *, integer *, real *, integer *, real *, real *, integer *),
-        sorg2r_(integer *, integer *, integer *, real *, integer *, real *, real *, integer *),
-        sorgr2_(integer *, integer *, integer *, real *, integer *, real *, real *, integer *),
-        sorm2r_(char *, char *, integer *, integer *, integer *, real *, integer *, real *, real *,
-                integer *, real *, integer *),
-        sormr2_(char *, char *, integer *, integer *, integer *, real *, integer *, real *, real *,
-                integer *, real *, integer *);
     real dscale;
-    extern /* Subroutine */
-        void
-        stgsy2_(char *, integer *, integer *, integer *, real *, integer *, real *, integer *,
-                real *, integer *, real *, integer *, real *, integer *, real *, integer *, real *,
-                real *, real *, integer *, integer *, integer *);
     extern real slamch_(char *);
     real dnorma, dnormb;
-    extern /* Subroutine */
-        void
-        slacpy_(char *, integer *, integer *, real *, integer *, real *, integer *),
-        slartg_(real *, real *, real *, real *, real *),
-        slaset_(char *, integer *, integer *, real *, real *, real *, integer *),
-        slassq_(integer *, real *, integer *, real *, real *);
     real smlnum;
     logical strong;
     real thresha, threshb;
@@ -371,24 +366,24 @@ void stgex2_(logical *wantq, logical *wantz, integer *n, real *a, integer *lda, 
     weak = FALSE_;
     strong = FALSE_;
     /* Make a local copy of selected block */
-    slaset_("Full", &c__4, &c__4, &c_b5, &c_b5, li, &c__4);
-    slaset_("Full", &c__4, &c__4, &c_b5, &c_b5, ir, &c__4);
-    slacpy_("Full", &m, &m, &a[*j1 + *j1 * a_dim1], lda, s, &c__4);
-    slacpy_("Full", &m, &m, &b[*j1 + *j1 * b_dim1], ldb, t, &c__4);
+    aocl_lapack_slaset("Full", &c__4, &c__4, &c_b5, &c_b5, li, &c__4);
+    aocl_lapack_slaset("Full", &c__4, &c__4, &c_b5, &c_b5, ir, &c__4);
+    aocl_lapack_slacpy("Full", &m, &m, &a[*j1 + *j1 * a_dim1], lda, s, &c__4);
+    aocl_lapack_slacpy("Full", &m, &m, &b[*j1 + *j1 * b_dim1], ldb, t, &c__4);
     /* Compute threshold for testing acceptance of swapping. */
     eps = slamch_("P");
     smlnum = slamch_("S") / eps;
     dscale = 0.f;
     dsum = 1.f;
-    slacpy_("Full", &m, &m, s, &c__4, &work[1], &m);
+    aocl_lapack_slacpy("Full", &m, &m, s, &c__4, &work[1], &m);
     i__1 = m * m;
-    slassq_(&i__1, &work[1], &c__1, &dscale, &dsum);
+    aocl_lapack_slassq(&i__1, &work[1], &c__1, &dscale, &dsum);
     dnorma = dscale * sqrt(dsum);
     dscale = 0.f;
     dsum = 1.f;
-    slacpy_("Full", &m, &m, t, &c__4, &work[1], &m);
+    aocl_lapack_slacpy("Full", &m, &m, t, &c__4, &work[1], &m);
     i__1 = m * m;
-    slassq_(&i__1, &work[1], &c__1, &dscale, &dsum);
+    aocl_lapack_slassq(&i__1, &work[1], &c__1, &dscale, &dsum);
     dnormb = dscale * sqrt(dsum);
     /* THRES has been changed from */
     /* THRESH = MAX( TEN*EPS*SA, SMLNUM ) */
@@ -415,8 +410,8 @@ void stgex2_(logical *wantq, logical *wantz, integer *n, real *a, integer *lda, 
         slartg_(&f, &g, &ir[4], ir, &ddum);
         ir[1] = -ir[4];
         ir[5] = ir[0];
-        srot_(&c__2, s, &c__1, &s[4], &c__1, ir, &ir[1]);
-        srot_(&c__2, t, &c__1, &t[4], &c__1, ir, &ir[1]);
+        aocl_blas_srot(&c__2, s, &c__1, &s[4], &c__1, ir, &ir[1]);
+        aocl_blas_srot(&c__2, t, &c__1, &t[4], &c__1, ir, &ir[1]);
         if(sa >= sb)
         {
             slartg_(s, &s[1], li, &li[1], &ddum);
@@ -425,8 +420,8 @@ void stgex2_(logical *wantq, logical *wantz, integer *n, real *a, integer *lda, 
         {
             slartg_(t, &t[1], li, &li[1], &ddum);
         }
-        srot_(&c__2, s, &c__4, &s[1], &c__4, li, &li[1]);
-        srot_(&c__2, t, &c__4, &t[1], &c__4, li, &li[1]);
+        aocl_blas_srot(&c__2, s, &c__4, &s[1], &c__4, li, &li[1]);
+        aocl_blas_srot(&c__2, t, &c__4, &t[1], &c__4, li, &li[1]);
         li[5] = li[0];
         li[4] = -li[1];
         /* Weak stability test: |S21| <= O(EPS F-norm((A))) */
@@ -442,23 +437,23 @@ void stgex2_(logical *wantq, logical *wantz, integer *n, real *a, integer *lda, 
             /* F-norm((A-QL**H*S*QR)) <= O(EPS*F-norm((A))) */
             /* and */
             /* F-norm((B-QL**H*T*QR)) <= O(EPS*F-norm((B))) */
-            slacpy_("Full", &m, &m, &a[*j1 + *j1 * a_dim1], lda, &work[m * m + 1], &m);
-            sgemm_("N", "N", &m, &m, &m, &c_b42, li, &c__4, s, &c__4, &c_b5, &work[1], &m);
-            sgemm_("N", "T", &m, &m, &m, &c_b48, &work[1], &m, ir, &c__4, &c_b42, &work[m * m + 1],
-                   &m);
+            aocl_lapack_slacpy("Full", &m, &m, &a[*j1 + *j1 * a_dim1], lda, &work[m * m + 1], &m);
+            aocl_blas_sgemm("N", "N", &m, &m, &m, &c_b42, li, &c__4, s, &c__4, &c_b5, &work[1], &m);
+            aocl_blas_sgemm("N", "T", &m, &m, &m, &c_b48, &work[1], &m, ir, &c__4, &c_b42,
+                            &work[m * m + 1], &m);
             dscale = 0.f;
             dsum = 1.f;
             i__1 = m * m;
-            slassq_(&i__1, &work[m * m + 1], &c__1, &dscale, &dsum);
+            aocl_lapack_slassq(&i__1, &work[m * m + 1], &c__1, &dscale, &dsum);
             sa = dscale * sqrt(dsum);
-            slacpy_("Full", &m, &m, &b[*j1 + *j1 * b_dim1], ldb, &work[m * m + 1], &m);
-            sgemm_("N", "N", &m, &m, &m, &c_b42, li, &c__4, t, &c__4, &c_b5, &work[1], &m);
-            sgemm_("N", "T", &m, &m, &m, &c_b48, &work[1], &m, ir, &c__4, &c_b42, &work[m * m + 1],
-                   &m);
+            aocl_lapack_slacpy("Full", &m, &m, &b[*j1 + *j1 * b_dim1], ldb, &work[m * m + 1], &m);
+            aocl_blas_sgemm("N", "N", &m, &m, &m, &c_b42, li, &c__4, t, &c__4, &c_b5, &work[1], &m);
+            aocl_blas_sgemm("N", "T", &m, &m, &m, &c_b48, &work[1], &m, ir, &c__4, &c_b42,
+                            &work[m * m + 1], &m);
             dscale = 0.f;
             dsum = 1.f;
             i__1 = m * m;
-            slassq_(&i__1, &work[m * m + 1], &c__1, &dscale, &dsum);
+            aocl_lapack_slassq(&i__1, &work[m * m + 1], &c__1, &dscale, &dsum);
             sb = dscale * sqrt(dsum);
             strong = sa <= thresha && sb <= threshb;
             if(!strong)
@@ -469,25 +464,30 @@ void stgex2_(logical *wantq, logical *wantz, integer *n, real *a, integer *lda, 
         /* Update (A(J1:J1+M-1, M+J1:N), B(J1:J1+M-1, M+J1:N)) and */
         /* (A(1:J1-1, J1:J1+M), B(1:J1-1, J1:J1+M)). */
         i__1 = *j1 + 1;
-        srot_(&i__1, &a[*j1 * a_dim1 + 1], &c__1, &a[(*j1 + 1) * a_dim1 + 1], &c__1, ir, &ir[1]);
+        aocl_blas_srot(&i__1, &a[*j1 * a_dim1 + 1], &c__1, &a[(*j1 + 1) * a_dim1 + 1], &c__1, ir,
+                       &ir[1]);
         i__1 = *j1 + 1;
-        srot_(&i__1, &b[*j1 * b_dim1 + 1], &c__1, &b[(*j1 + 1) * b_dim1 + 1], &c__1, ir, &ir[1]);
+        aocl_blas_srot(&i__1, &b[*j1 * b_dim1 + 1], &c__1, &b[(*j1 + 1) * b_dim1 + 1], &c__1, ir,
+                       &ir[1]);
         i__1 = *n - *j1 + 1;
-        srot_(&i__1, &a[*j1 + *j1 * a_dim1], lda, &a[*j1 + 1 + *j1 * a_dim1], lda, li, &li[1]);
+        aocl_blas_srot(&i__1, &a[*j1 + *j1 * a_dim1], lda, &a[*j1 + 1 + *j1 * a_dim1], lda, li,
+                       &li[1]);
         i__1 = *n - *j1 + 1;
-        srot_(&i__1, &b[*j1 + *j1 * b_dim1], ldb, &b[*j1 + 1 + *j1 * b_dim1], ldb, li, &li[1]);
+        aocl_blas_srot(&i__1, &b[*j1 + *j1 * b_dim1], ldb, &b[*j1 + 1 + *j1 * b_dim1], ldb, li,
+                       &li[1]);
         /* Set N1-by-N2 (2,1) - blocks to ZERO. */
         a[*j1 + 1 + *j1 * a_dim1] = 0.f;
         b[*j1 + 1 + *j1 * b_dim1] = 0.f;
         /* Accumulate transformations into Q and Z if requested. */
         if(*wantz)
         {
-            srot_(n, &z__[*j1 * z_dim1 + 1], &c__1, &z__[(*j1 + 1) * z_dim1 + 1], &c__1, ir,
-                  &ir[1]);
+            aocl_blas_srot(n, &z__[*j1 * z_dim1 + 1], &c__1, &z__[(*j1 + 1) * z_dim1 + 1], &c__1,
+                           ir, &ir[1]);
         }
         if(*wantq)
         {
-            srot_(n, &q[*j1 * q_dim1 + 1], &c__1, &q[(*j1 + 1) * q_dim1 + 1], &c__1, li, &li[1]);
+            aocl_blas_srot(n, &q[*j1 * q_dim1 + 1], &c__1, &q[(*j1 + 1) * q_dim1 + 1], &c__1, li,
+                           &li[1]);
         }
         /* Exit with INFO = 0 if swap was successfully performed. */
         AOCL_DTL_TRACE_LOG_EXIT
@@ -501,13 +501,13 @@ void stgex2_(logical *wantq, logical *wantz, integer *n, real *a, integer *lda, 
         /* S11 * R - L * S22 = SCALE * S12 */
         /* T11 * R - L * T22 = SCALE * T12 */
         /* for R and L. Solutions in LI and IR. */
-        slacpy_("Full", n1, n2, &t[(*n1 + 1 << 2) - 4], &c__4, li, &c__4);
-        slacpy_("Full", n1, n2, &s[(*n1 + 1 << 2) - 4], &c__4, &ir[*n2 + 1 + (*n1 + 1 << 2) - 5],
-                &c__4);
-        stgsy2_("N", &c__0, n1, n2, s, &c__4, &s[*n1 + 1 + (*n1 + 1 << 2) - 5], &c__4,
-                &ir[*n2 + 1 + (*n1 + 1 << 2) - 5], &c__4, t, &c__4,
-                &t[*n1 + 1 + (*n1 + 1 << 2) - 5], &c__4, li, &c__4, &scale, &dsum, &dscale, iwork,
-                &idum, &linfo);
+        aocl_lapack_slacpy("Full", n1, n2, &t[(*n1 + 1 << 2) - 4], &c__4, li, &c__4);
+        aocl_lapack_slacpy("Full", n1, n2, &s[(*n1 + 1 << 2) - 4], &c__4,
+                           &ir[*n2 + 1 + (*n1 + 1 << 2) - 5], &c__4);
+        aocl_lapack_stgsy2("N", &c__0, n1, n2, s, &c__4, &s[*n1 + 1 + (*n1 + 1 << 2) - 5], &c__4,
+                           &ir[*n2 + 1 + (*n1 + 1 << 2) - 5], &c__4, t, &c__4,
+                           &t[*n1 + 1 + (*n1 + 1 << 2) - 5], &c__4, li, &c__4, &scale, &dsum,
+                           &dscale, iwork, &idum, &linfo);
         if(linfo != 0)
         {
             goto L70;
@@ -521,16 +521,16 @@ void stgex2_(logical *wantq, logical *wantz, integer *n, real *a, integer *lda, 
         i__1 = *n2;
         for(i__ = 1; i__ <= i__1; ++i__)
         {
-            sscal_(n1, &c_b48, &li[(i__ << 2) - 4], &c__1);
+            aocl_blas_sscal(n1, &c_b48, &li[(i__ << 2) - 4], &c__1);
             li[*n1 + i__ + (i__ << 2) - 5] = scale;
             /* L10: */
         }
-        sgeqr2_(&m, n2, li, &c__4, taul, &work[1], &linfo);
+        aocl_lapack_sgeqr2(&m, n2, li, &c__4, taul, &work[1], &linfo);
         if(linfo != 0)
         {
             goto L70;
         }
-        sorg2r_(&m, &m, n2, li, &c__4, taul, &work[1], &linfo);
+        aocl_lapack_sorg2r(&m, &m, n2, li, &c__4, taul, &work[1], &linfo);
         if(linfo != 0)
         {
             goto L70;
@@ -544,38 +544,38 @@ void stgex2_(logical *wantq, logical *wantz, integer *n, real *a, integer *lda, 
             ir[*n2 + i__ + (i__ << 2) - 5] = scale;
             /* L20: */
         }
-        sgerq2_(n1, &m, &ir[*n2], &c__4, taur, &work[1], &linfo);
+        aocl_lapack_sgerq2(n1, &m, &ir[*n2], &c__4, taur, &work[1], &linfo);
         if(linfo != 0)
         {
             goto L70;
         }
-        sorgr2_(&m, &m, n1, ir, &c__4, taur, &work[1], &linfo);
+        aocl_lapack_sorgr2(&m, &m, n1, ir, &c__4, taur, &work[1], &linfo);
         if(linfo != 0)
         {
             goto L70;
         }
         /* Perform the swapping tentatively: */
-        sgemm_("T", "N", &m, &m, &m, &c_b42, li, &c__4, s, &c__4, &c_b5, &work[1], &m);
-        sgemm_("N", "T", &m, &m, &m, &c_b42, &work[1], &m, ir, &c__4, &c_b5, s, &c__4);
-        sgemm_("T", "N", &m, &m, &m, &c_b42, li, &c__4, t, &c__4, &c_b5, &work[1], &m);
-        sgemm_("N", "T", &m, &m, &m, &c_b42, &work[1], &m, ir, &c__4, &c_b5, t, &c__4);
-        slacpy_("F", &m, &m, s, &c__4, scpy, &c__4);
-        slacpy_("F", &m, &m, t, &c__4, tcpy, &c__4);
-        slacpy_("F", &m, &m, ir, &c__4, ircop, &c__4);
-        slacpy_("F", &m, &m, li, &c__4, licop, &c__4);
+        aocl_blas_sgemm("T", "N", &m, &m, &m, &c_b42, li, &c__4, s, &c__4, &c_b5, &work[1], &m);
+        aocl_blas_sgemm("N", "T", &m, &m, &m, &c_b42, &work[1], &m, ir, &c__4, &c_b5, s, &c__4);
+        aocl_blas_sgemm("T", "N", &m, &m, &m, &c_b42, li, &c__4, t, &c__4, &c_b5, &work[1], &m);
+        aocl_blas_sgemm("N", "T", &m, &m, &m, &c_b42, &work[1], &m, ir, &c__4, &c_b5, t, &c__4);
+        aocl_lapack_slacpy("F", &m, &m, s, &c__4, scpy, &c__4);
+        aocl_lapack_slacpy("F", &m, &m, t, &c__4, tcpy, &c__4);
+        aocl_lapack_slacpy("F", &m, &m, ir, &c__4, ircop, &c__4);
+        aocl_lapack_slacpy("F", &m, &m, li, &c__4, licop, &c__4);
         /* Triangularize the B-part by an RQ factorization. */
         /* Apply transformation (from left) to A-part, giving S. */
-        sgerq2_(&m, &m, t, &c__4, taur, &work[1], &linfo);
+        aocl_lapack_sgerq2(&m, &m, t, &c__4, taur, &work[1], &linfo);
         if(linfo != 0)
         {
             goto L70;
         }
-        sormr2_("R", "T", &m, &m, &m, t, &c__4, taur, s, &c__4, &work[1], &linfo);
+        aocl_lapack_sormr2("R", "T", &m, &m, &m, t, &c__4, taur, s, &c__4, &work[1], &linfo);
         if(linfo != 0)
         {
             goto L70;
         }
-        sormr2_("L", "N", &m, &m, &m, t, &c__4, taur, ir, &c__4, &work[1], &linfo);
+        aocl_lapack_sormr2("L", "N", &m, &m, &m, t, &c__4, taur, ir, &c__4, &work[1], &linfo);
         if(linfo != 0)
         {
             goto L70;
@@ -586,19 +586,19 @@ void stgex2_(logical *wantq, logical *wantz, integer *n, real *a, integer *lda, 
         i__1 = *n2;
         for(i__ = 1; i__ <= i__1; ++i__)
         {
-            slassq_(n1, &s[*n2 + 1 + (i__ << 2) - 5], &c__1, &dscale, &dsum);
+            aocl_lapack_slassq(n1, &s[*n2 + 1 + (i__ << 2) - 5], &c__1, &dscale, &dsum);
             /* L30: */
         }
         brqa21 = dscale * sqrt(dsum);
         /* Triangularize the B-part by a QR factorization. */
         /* Apply transformation (from right) to A-part, giving S. */
-        sgeqr2_(&m, &m, tcpy, &c__4, taul, &work[1], &linfo);
+        aocl_lapack_sgeqr2(&m, &m, tcpy, &c__4, taul, &work[1], &linfo);
         if(linfo != 0)
         {
             goto L70;
         }
-        sorm2r_("L", "T", &m, &m, &m, tcpy, &c__4, taul, scpy, &c__4, &work[1], info);
-        sorm2r_("R", "N", &m, &m, &m, tcpy, &c__4, taul, licop, &c__4, &work[1], info);
+        aocl_lapack_sorm2r("L", "T", &m, &m, &m, tcpy, &c__4, taul, scpy, &c__4, &work[1], info);
+        aocl_lapack_sorm2r("R", "N", &m, &m, &m, tcpy, &c__4, taul, licop, &c__4, &work[1], info);
         if(linfo != 0)
         {
             goto L70;
@@ -609,7 +609,7 @@ void stgex2_(logical *wantq, logical *wantz, integer *n, real *a, integer *lda, 
         i__1 = *n2;
         for(i__ = 1; i__ <= i__1; ++i__)
         {
-            slassq_(n1, &scpy[*n2 + 1 + (i__ << 2) - 5], &c__1, &dscale, &dsum);
+            aocl_lapack_slassq(n1, &scpy[*n2 + 1 + (i__ << 2) - 5], &c__1, &dscale, &dsum);
             /* L40: */
         }
         bqra21 = dscale * sqrt(dsum);
@@ -618,10 +618,10 @@ void stgex2_(logical *wantq, logical *wantz, integer *n, real *a, integer *lda, 
         /* F-norm(S21) <= O(EPS * F-norm((S))) */
         if(bqra21 <= brqa21 && bqra21 <= thresha)
         {
-            slacpy_("F", &m, &m, scpy, &c__4, s, &c__4);
-            slacpy_("F", &m, &m, tcpy, &c__4, t, &c__4);
-            slacpy_("F", &m, &m, ircop, &c__4, ir, &c__4);
-            slacpy_("F", &m, &m, licop, &c__4, li, &c__4);
+            aocl_lapack_slacpy("F", &m, &m, scpy, &c__4, s, &c__4);
+            aocl_lapack_slacpy("F", &m, &m, tcpy, &c__4, t, &c__4);
+            aocl_lapack_slacpy("F", &m, &m, ircop, &c__4, ir, &c__4);
+            aocl_lapack_slacpy("F", &m, &m, licop, &c__4, li, &c__4);
         }
         else if(brqa21 >= thresha)
         {
@@ -630,30 +630,30 @@ void stgex2_(logical *wantq, logical *wantz, integer *n, real *a, integer *lda, 
         /* Set lower triangle of B-part to zero */
         i__1 = m - 1;
         i__2 = m - 1;
-        slaset_("Lower", &i__1, &i__2, &c_b5, &c_b5, &t[1], &c__4);
+        aocl_lapack_slaset("Lower", &i__1, &i__2, &c_b5, &c_b5, &t[1], &c__4);
         if(TRUE_)
         {
             /* Strong stability test: */
             /* F-norm((A-QL**H*S*QR)) <= O(EPS*F-norm((A))) */
             /* and */
             /* F-norm((B-QL**H*T*QR)) <= O(EPS*F-norm((B))) */
-            slacpy_("Full", &m, &m, &a[*j1 + *j1 * a_dim1], lda, &work[m * m + 1], &m);
-            sgemm_("N", "N", &m, &m, &m, &c_b42, li, &c__4, s, &c__4, &c_b5, &work[1], &m);
-            sgemm_("N", "N", &m, &m, &m, &c_b48, &work[1], &m, ir, &c__4, &c_b42, &work[m * m + 1],
-                   &m);
+            aocl_lapack_slacpy("Full", &m, &m, &a[*j1 + *j1 * a_dim1], lda, &work[m * m + 1], &m);
+            aocl_blas_sgemm("N", "N", &m, &m, &m, &c_b42, li, &c__4, s, &c__4, &c_b5, &work[1], &m);
+            aocl_blas_sgemm("N", "N", &m, &m, &m, &c_b48, &work[1], &m, ir, &c__4, &c_b42,
+                            &work[m * m + 1], &m);
             dscale = 0.f;
             dsum = 1.f;
             i__1 = m * m;
-            slassq_(&i__1, &work[m * m + 1], &c__1, &dscale, &dsum);
+            aocl_lapack_slassq(&i__1, &work[m * m + 1], &c__1, &dscale, &dsum);
             sa = dscale * sqrt(dsum);
-            slacpy_("Full", &m, &m, &b[*j1 + *j1 * b_dim1], ldb, &work[m * m + 1], &m);
-            sgemm_("N", "N", &m, &m, &m, &c_b42, li, &c__4, t, &c__4, &c_b5, &work[1], &m);
-            sgemm_("N", "N", &m, &m, &m, &c_b48, &work[1], &m, ir, &c__4, &c_b42, &work[m * m + 1],
-                   &m);
+            aocl_lapack_slacpy("Full", &m, &m, &b[*j1 + *j1 * b_dim1], ldb, &work[m * m + 1], &m);
+            aocl_blas_sgemm("N", "N", &m, &m, &m, &c_b42, li, &c__4, t, &c__4, &c_b5, &work[1], &m);
+            aocl_blas_sgemm("N", "N", &m, &m, &m, &c_b48, &work[1], &m, ir, &c__4, &c_b42,
+                            &work[m * m + 1], &m);
             dscale = 0.f;
             dsum = 1.f;
             i__1 = m * m;
-            slassq_(&i__1, &work[m * m + 1], &c__1, &dscale, &dsum);
+            aocl_lapack_slassq(&i__1, &work[m * m + 1], &c__1, &dscale, &dsum);
             sb = dscale * sqrt(dsum);
             strong = sa <= thresha && sb <= threshb;
             if(!strong)
@@ -663,20 +663,20 @@ void stgex2_(logical *wantq, logical *wantz, integer *n, real *a, integer *lda, 
         }
         /* If the swap is accepted ("weakly" and "strongly"), apply the */
         /* transformations and set N1-by-N2 (2,1)-block to zero. */
-        slaset_("Full", n1, n2, &c_b5, &c_b5, &s[*n2], &c__4);
+        aocl_lapack_slaset("Full", n1, n2, &c_b5, &c_b5, &s[*n2], &c__4);
         /* copy back M-by-M diagonal block starting at index J1 of (A, B) */
-        slacpy_("F", &m, &m, s, &c__4, &a[*j1 + *j1 * a_dim1], lda);
-        slacpy_("F", &m, &m, t, &c__4, &b[*j1 + *j1 * b_dim1], ldb);
-        slaset_("Full", &c__4, &c__4, &c_b5, &c_b5, t, &c__4);
+        aocl_lapack_slacpy("F", &m, &m, s, &c__4, &a[*j1 + *j1 * a_dim1], lda);
+        aocl_lapack_slacpy("F", &m, &m, t, &c__4, &b[*j1 + *j1 * b_dim1], ldb);
+        aocl_lapack_slaset("Full", &c__4, &c__4, &c_b5, &c_b5, t, &c__4);
         /* Standardize existing 2-by-2 blocks. */
-        slaset_("Full", &m, &m, &c_b5, &c_b5, &work[1], &m);
+        aocl_lapack_slaset("Full", &m, &m, &c_b5, &c_b5, &work[1], &m);
         work[1] = 1.f;
         t[0] = 1.f;
         idum = *lwork - m * m - 2;
         if(*n2 > 1)
         {
-            slagv2_(&a[*j1 + *j1 * a_dim1], lda, &b[*j1 + *j1 * b_dim1], ldb, ar, ai, be, &work[1],
-                    &work[2], t, &t[1]);
+            aocl_lapack_slagv2(&a[*j1 + *j1 * a_dim1], lda, &b[*j1 + *j1 * b_dim1], ldb, ar, ai, be,
+                               &work[1], &work[2], t, &t[1]);
             work[m + 1] = -work[2];
             work[m + 2] = work[1];
             t[*n2 + (*n2 << 2) - 5] = t[0];
@@ -686,43 +686,46 @@ void stgex2_(logical *wantq, logical *wantz, integer *n, real *a, integer *lda, 
         t[m + (m << 2) - 5] = 1.f;
         if(*n1 > 1)
         {
-            slagv2_(&a[*j1 + *n2 + (*j1 + *n2) * a_dim1], lda, &b[*j1 + *n2 + (*j1 + *n2) * b_dim1],
-                    ldb, taur, taul, &work[m * m + 1], &work[*n2 * m + *n2 + 1],
-                    &work[*n2 * m + *n2 + 2], &t[*n2 + 1 + (*n2 + 1 << 2) - 5],
-                    &t[m + (m - 1 << 2) - 5]);
+            aocl_lapack_slagv2(&a[*j1 + *n2 + (*j1 + *n2) * a_dim1], lda,
+                               &b[*j1 + *n2 + (*j1 + *n2) * b_dim1], ldb, taur, taul,
+                               &work[m * m + 1], &work[*n2 * m + *n2 + 1], &work[*n2 * m + *n2 + 2],
+                               &t[*n2 + 1 + (*n2 + 1 << 2) - 5], &t[m + (m - 1 << 2) - 5]);
             work[m * m] = work[*n2 * m + *n2 + 1];
             work[m * m - 1] = -work[*n2 * m + *n2 + 2];
             t[m + (m << 2) - 5] = t[*n2 + 1 + (*n2 + 1 << 2) - 5];
             t[m - 1 + (m << 2) - 5] = -t[m + (m - 1 << 2) - 5];
         }
-        sgemm_("T", "N", n2, n1, n2, &c_b42, &work[1], &m, &a[*j1 + (*j1 + *n2) * a_dim1], lda,
-               &c_b5, &work[m * m + 1], n2);
-        slacpy_("Full", n2, n1, &work[m * m + 1], n2, &a[*j1 + (*j1 + *n2) * a_dim1], lda);
-        sgemm_("T", "N", n2, n1, n2, &c_b42, &work[1], &m, &b[*j1 + (*j1 + *n2) * b_dim1], ldb,
-               &c_b5, &work[m * m + 1], n2);
-        slacpy_("Full", n2, n1, &work[m * m + 1], n2, &b[*j1 + (*j1 + *n2) * b_dim1], ldb);
-        sgemm_("N", "N", &m, &m, &m, &c_b42, li, &c__4, &work[1], &m, &c_b5, &work[m * m + 1], &m);
-        slacpy_("Full", &m, &m, &work[m * m + 1], &m, li, &c__4);
-        sgemm_("N", "N", n2, n1, n1, &c_b42, &a[*j1 + (*j1 + *n2) * a_dim1], lda,
-               &t[*n2 + 1 + (*n2 + 1 << 2) - 5], &c__4, &c_b5, &work[1], n2);
-        slacpy_("Full", n2, n1, &work[1], n2, &a[*j1 + (*j1 + *n2) * a_dim1], lda);
-        sgemm_("N", "N", n2, n1, n1, &c_b42, &b[*j1 + (*j1 + *n2) * b_dim1], ldb,
-               &t[*n2 + 1 + (*n2 + 1 << 2) - 5], &c__4, &c_b5, &work[1], n2);
-        slacpy_("Full", n2, n1, &work[1], n2, &b[*j1 + (*j1 + *n2) * b_dim1], ldb);
-        sgemm_("T", "N", &m, &m, &m, &c_b42, ir, &c__4, t, &c__4, &c_b5, &work[1], &m);
-        slacpy_("Full", &m, &m, &work[1], &m, ir, &c__4);
+        aocl_blas_sgemm("T", "N", n2, n1, n2, &c_b42, &work[1], &m, &a[*j1 + (*j1 + *n2) * a_dim1],
+                        lda, &c_b5, &work[m * m + 1], n2);
+        aocl_lapack_slacpy("Full", n2, n1, &work[m * m + 1], n2, &a[*j1 + (*j1 + *n2) * a_dim1],
+                           lda);
+        aocl_blas_sgemm("T", "N", n2, n1, n2, &c_b42, &work[1], &m, &b[*j1 + (*j1 + *n2) * b_dim1],
+                        ldb, &c_b5, &work[m * m + 1], n2);
+        aocl_lapack_slacpy("Full", n2, n1, &work[m * m + 1], n2, &b[*j1 + (*j1 + *n2) * b_dim1],
+                           ldb);
+        aocl_blas_sgemm("N", "N", &m, &m, &m, &c_b42, li, &c__4, &work[1], &m, &c_b5,
+                        &work[m * m + 1], &m);
+        aocl_lapack_slacpy("Full", &m, &m, &work[m * m + 1], &m, li, &c__4);
+        aocl_blas_sgemm("N", "N", n2, n1, n1, &c_b42, &a[*j1 + (*j1 + *n2) * a_dim1], lda,
+                        &t[*n2 + 1 + (*n2 + 1 << 2) - 5], &c__4, &c_b5, &work[1], n2);
+        aocl_lapack_slacpy("Full", n2, n1, &work[1], n2, &a[*j1 + (*j1 + *n2) * a_dim1], lda);
+        aocl_blas_sgemm("N", "N", n2, n1, n1, &c_b42, &b[*j1 + (*j1 + *n2) * b_dim1], ldb,
+                        &t[*n2 + 1 + (*n2 + 1 << 2) - 5], &c__4, &c_b5, &work[1], n2);
+        aocl_lapack_slacpy("Full", n2, n1, &work[1], n2, &b[*j1 + (*j1 + *n2) * b_dim1], ldb);
+        aocl_blas_sgemm("T", "N", &m, &m, &m, &c_b42, ir, &c__4, t, &c__4, &c_b5, &work[1], &m);
+        aocl_lapack_slacpy("Full", &m, &m, &work[1], &m, ir, &c__4);
         /* Accumulate transformations into Q and Z if requested. */
         if(*wantq)
         {
-            sgemm_("N", "N", n, &m, &m, &c_b42, &q[*j1 * q_dim1 + 1], ldq, li, &c__4, &c_b5,
-                   &work[1], n);
-            slacpy_("Full", n, &m, &work[1], n, &q[*j1 * q_dim1 + 1], ldq);
+            aocl_blas_sgemm("N", "N", n, &m, &m, &c_b42, &q[*j1 * q_dim1 + 1], ldq, li, &c__4,
+                            &c_b5, &work[1], n);
+            aocl_lapack_slacpy("Full", n, &m, &work[1], n, &q[*j1 * q_dim1 + 1], ldq);
         }
         if(*wantz)
         {
-            sgemm_("N", "N", n, &m, &m, &c_b42, &z__[*j1 * z_dim1 + 1], ldz, ir, &c__4, &c_b5,
-                   &work[1], n);
-            slacpy_("Full", n, &m, &work[1], n, &z__[*j1 * z_dim1 + 1], ldz);
+            aocl_blas_sgemm("N", "N", n, &m, &m, &c_b42, &z__[*j1 * z_dim1 + 1], ldz, ir, &c__4,
+                            &c_b5, &work[1], n);
+            aocl_lapack_slacpy("Full", n, &m, &work[1], n, &z__[*j1 * z_dim1 + 1], ldz);
         }
         /* Update (A(J1:J1+M-1, M+J1:N), B(J1:J1+M-1, M+J1:N)) and */
         /* (A(1:J1-1, J1:J1+M), B(1:J1-1, J1:J1+M)). */
@@ -730,25 +733,25 @@ void stgex2_(logical *wantq, logical *wantz, integer *n, real *a, integer *lda, 
         if(i__ <= *n)
         {
             i__1 = *n - i__ + 1;
-            sgemm_("T", "N", &m, &i__1, &m, &c_b42, li, &c__4, &a[*j1 + i__ * a_dim1], lda, &c_b5,
-                   &work[1], &m);
+            aocl_blas_sgemm("T", "N", &m, &i__1, &m, &c_b42, li, &c__4, &a[*j1 + i__ * a_dim1], lda,
+                            &c_b5, &work[1], &m);
             i__1 = *n - i__ + 1;
-            slacpy_("Full", &m, &i__1, &work[1], &m, &a[*j1 + i__ * a_dim1], lda);
+            aocl_lapack_slacpy("Full", &m, &i__1, &work[1], &m, &a[*j1 + i__ * a_dim1], lda);
             i__1 = *n - i__ + 1;
-            sgemm_("T", "N", &m, &i__1, &m, &c_b42, li, &c__4, &b[*j1 + i__ * b_dim1], ldb, &c_b5,
-                   &work[1], &m);
+            aocl_blas_sgemm("T", "N", &m, &i__1, &m, &c_b42, li, &c__4, &b[*j1 + i__ * b_dim1], ldb,
+                            &c_b5, &work[1], &m);
             i__1 = *n - i__ + 1;
-            slacpy_("Full", &m, &i__1, &work[1], &m, &b[*j1 + i__ * b_dim1], ldb);
+            aocl_lapack_slacpy("Full", &m, &i__1, &work[1], &m, &b[*j1 + i__ * b_dim1], ldb);
         }
         i__ = *j1 - 1;
         if(i__ > 0)
         {
-            sgemm_("N", "N", &i__, &m, &m, &c_b42, &a[*j1 * a_dim1 + 1], lda, ir, &c__4, &c_b5,
-                   &work[1], &i__);
-            slacpy_("Full", &i__, &m, &work[1], &i__, &a[*j1 * a_dim1 + 1], lda);
-            sgemm_("N", "N", &i__, &m, &m, &c_b42, &b[*j1 * b_dim1 + 1], ldb, ir, &c__4, &c_b5,
-                   &work[1], &i__);
-            slacpy_("Full", &i__, &m, &work[1], &i__, &b[*j1 * b_dim1 + 1], ldb);
+            aocl_blas_sgemm("N", "N", &i__, &m, &m, &c_b42, &a[*j1 * a_dim1 + 1], lda, ir, &c__4,
+                            &c_b5, &work[1], &i__);
+            aocl_lapack_slacpy("Full", &i__, &m, &work[1], &i__, &a[*j1 * a_dim1 + 1], lda);
+            aocl_blas_sgemm("N", "N", &i__, &m, &m, &c_b42, &b[*j1 * b_dim1 + 1], ldb, ir, &c__4,
+                            &c_b5, &work[1], &i__);
+            aocl_lapack_slacpy("Full", &i__, &m, &work[1], &i__, &b[*j1 * b_dim1 + 1], ldb);
         }
         /* Exit with INFO = 0 if swap was successfully performed. */
         AOCL_DTL_TRACE_LOG_EXIT

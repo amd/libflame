@@ -212,10 +212,35 @@
 /* > \ingroup doubleOTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-void dlaln2_(logical *ltrans, integer *na, integer *nw, doublereal *smin, doublereal *ca,
-             doublereal *a, integer *lda, doublereal *d1, doublereal *d2, doublereal *b,
-             integer *ldb, doublereal *wr, doublereal *wi, doublereal *x, integer *ldx,
-             doublereal *scale, doublereal *xnorm, integer *info)
+/** Generated wrapper function */
+void dlaln2_(logical *ltrans, aocl_int_t *na, aocl_int_t *nw, doublereal *smin, doublereal *ca,
+             doublereal *a, aocl_int_t *lda, doublereal *d1, doublereal *d2, doublereal *b,
+             aocl_int_t *ldb, doublereal *wr, doublereal *wi, doublereal *x, aocl_int_t *ldx,
+             doublereal *scale, doublereal *xnorm, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_dlaln2(ltrans, na, nw, smin, ca, a, lda, d1, d2, b, ldb, wr, wi, x, ldx, scale,
+                       xnorm, info);
+#else
+    aocl_int64_t na_64 = *na;
+    aocl_int64_t nw_64 = *nw;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t ldb_64 = *ldb;
+    aocl_int64_t ldx_64 = *ldx;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_dlaln2(ltrans, &na_64, &nw_64, smin, ca, a, &lda_64, d1, d2, b, &ldb_64, wr, wi, x,
+                       &ldx_64, scale, xnorm, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_dlaln2(logical *ltrans, aocl_int64_t *na, aocl_int64_t *nw, doublereal *smin,
+                        doublereal *ca, doublereal *a, aocl_int64_t *lda, doublereal *d1,
+                        doublereal *d2, doublereal *b, aocl_int64_t *ldb, doublereal *wr,
+                        doublereal *wi, doublereal *x, aocl_int64_t *ldx, doublereal *scale,
+                        doublereal *xnorm, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dlaln2 inputs: na %" FLA_IS ", nw %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS

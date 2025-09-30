@@ -117,8 +117,24 @@ static aocl_int64_t c__1 = 1;
 /* > \ingroup doubleOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void dppcon_(char *uplo, integer *n, doublereal *ap, doublereal *anorm, doublereal *rcond,
-             doublereal *work, integer *iwork, integer *info)
+/** Generated wrapper function */
+void dppcon_(char *uplo, aocl_int_t *n, doublereal *ap, doublereal *anorm, doublereal *rcond,
+             doublereal *work, aocl_int_t *iwork, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_dppcon(uplo, n, ap, anorm, rcond, work, iwork, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_dppcon(uplo, &n_64, ap, anorm, rcond, work, iwork, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_dppcon(char *uplo, aocl_int64_t *n, doublereal *ap, doublereal *anorm,
+                        doublereal *rcond, doublereal *work, aocl_int_t *iwork, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dppcon inputs: uplo %c, n %" FLA_IS "", *uplo, *n);
@@ -128,26 +144,12 @@ void dppcon_(char *uplo, integer *n, doublereal *ap, doublereal *anorm, doublere
     /* Local variables */
     aocl_int64_t ix, kase;
     doublereal scale;
-    extern logical lsame_(char *, char *, integer, integer);
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     integer isave[3];
-    extern /* Subroutine */
-        void
-        drscl_(integer *, doublereal *, doublereal *, integer *);
     logical upper;
-    extern /* Subroutine */
-        void
-        dlacn2_(integer *, doublereal *, doublereal *, integer *, doublereal *, integer *,
-                integer *);
     extern doublereal dlamch_(char *);
     doublereal scalel;
     doublereal scaleu;
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    extern /* Subroutine */
-        void
-        dlatps_(char *, char *, char *, char *, integer *, doublereal *, doublereal *, doublereal *,
-                doublereal *, integer *);
     doublereal ainvnm;
     char normin[1];
     doublereal smlnum;
@@ -196,7 +198,7 @@ void dppcon_(char *uplo, integer *n, doublereal *ap, doublereal *anorm, doublere
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("DPPCON", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("DPPCON", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -218,34 +220,34 @@ void dppcon_(char *uplo, integer *n, doublereal *ap, doublereal *anorm, doublere
     kase = 0;
     *(unsigned char *)normin = 'N';
 L10:
-    dlacn2_(n, &work[*n + 1], &work[1], &iwork[1], &ainvnm, &kase, isave);
+    aocl_lapack_dlacn2(n, &work[*n + 1], &work[1], &iwork[1], &ainvnm, &kase, isave);
     if(kase != 0)
     {
         if(upper)
         {
             /* Multiply by inv(U**T). */
-            dlatps_("Upper", "Transpose", "Non-unit", normin, n, &ap[1], &work[1], &scalel,
-                    &work[(*n << 1) + 1], info);
+            aocl_lapack_dlatps("Upper", "Transpose", "Non-unit", normin, n, &ap[1], &work[1],
+                               &scalel, &work[(*n << 1) + 1], info);
             *(unsigned char *)normin = 'Y';
             /* Multiply by inv(U). */
-            dlatps_("Upper", "No transpose", "Non-unit", normin, n, &ap[1], &work[1], &scaleu,
-                    &work[(*n << 1) + 1], info);
+            aocl_lapack_dlatps("Upper", "No transpose", "Non-unit", normin, n, &ap[1], &work[1],
+                               &scaleu, &work[(*n << 1) + 1], info);
         }
         else
         {
             /* Multiply by inv(L). */
-            dlatps_("Lower", "No transpose", "Non-unit", normin, n, &ap[1], &work[1], &scalel,
-                    &work[(*n << 1) + 1], info);
+            aocl_lapack_dlatps("Lower", "No transpose", "Non-unit", normin, n, &ap[1], &work[1],
+                               &scalel, &work[(*n << 1) + 1], info);
             *(unsigned char *)normin = 'Y';
             /* Multiply by inv(L**T). */
-            dlatps_("Lower", "Transpose", "Non-unit", normin, n, &ap[1], &work[1], &scaleu,
-                    &work[(*n << 1) + 1], info);
+            aocl_lapack_dlatps("Lower", "Transpose", "Non-unit", normin, n, &ap[1], &work[1],
+                               &scaleu, &work[(*n << 1) + 1], info);
         }
         /* Multiply by 1/SCALE if doing so will not cause overflow. */
         scale = scalel * scaleu;
         if(scale != 1.)
         {
-            ix = idamax_(n, &work[1], &c__1);
+            ix = aocl_blas_idamax(n, &work[1], &c__1);
             if(scale < (d__1 = work[ix], f2c_dabs(d__1)) * smlnum || scale == 0.)
             {
                 goto L20;

@@ -4,9 +4,9 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
+static aocl_int64_t c__1 = 1;
 /* > \brief \b ZLANHT returns the value of the 1-norm, or the Frobenius norm, or the infinity norm,
- * or the ele ment of largest absolute value of a complex Hermitian tridiagonal matrix. */
+ * or the ele ment of largest absolute value of a scomplex Hermitian tridiagonal matrix. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
@@ -101,6 +101,17 @@ static integer c__1 = 1;
 /** Generated wrapper function */
 doublereal zlanht_(char *norm, aocl_int_t *n, doublereal *d__, dcomplex *e)
 {
+#if FLA_ENABLE_ILP64
+    return aocl_lapack_zlanht(norm, n, d__, e);
+#else
+    aocl_int64_t n_64 = *n;
+
+    return aocl_lapack_zlanht(norm, &n_64, d__, e);
+#endif
+}
+
+doublereal aocl_lapack_zlanht(char *norm, aocl_int64_t *n, doublereal *d__, dcomplex *e)
+{
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zlanht inputs: norm %c, n %" FLA_IS "", *norm, *n);
 
@@ -108,17 +119,13 @@ doublereal zlanht_(char *norm, aocl_int_t *n, doublereal *d__, dcomplex *e)
     aocl_int64_t i__1;
     doublereal ret_val, d__1;
     /* Builtin functions */
-    double z_abs(doublecomplex *), sqrt(doublereal);
+    double z_abs(dcomplex *), sqrt(doublereal);
     /* Local variables */
     aocl_int64_t i__;
     doublereal sum, scale;
-    extern logical lsame_(char *, char *, integer, integer);
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     doublereal anorm;
     extern logical disnan_(doublereal *);
-    extern /* Subroutine */
-        void
-        dlassq_(integer *, doublereal *, integer *, doublereal *, doublereal *),
-        zlassq_(integer *, doublecomplex *, integer *, doublereal *, doublereal *);
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */

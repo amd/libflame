@@ -16,18 +16,18 @@
  * All the computations are done inline without using
  * corresponding BLAS APIs to reduce function overheads.
  */
-integer FLA_LU_piv_small_s_var0( integer *m, integer *n,
-                                   real *a, integer *lda,
-                                   integer *ipiv,
-                                   integer *info)
+fla_dim_t FLA_LU_piv_small_s_var0( fla_dim_t *m, fla_dim_t *n,
+                                   real *a, fla_dim_t *lda,
+                                   aocl_int_t *ipiv,
+                                   fla_dim_t *info)
 {
-    integer mi, ni;
-    integer i, j, i_1;
+    fla_dim_t mi, ni;
+    fla_dim_t i, j, i_1;
 
     real p_val, max_val, t_val;
     real *acur, *apiv, *asrc;
-    integer p_idx;
-    integer min_m_n = fla_min(*m, *n);
+    fla_dim_t p_idx;
+    fla_dim_t min_m_n = fla_min(*m, *n);
 
     for( i = 0; i < min_m_n; i++ )
     {
@@ -52,7 +52,7 @@ integer FLA_LU_piv_small_s_var0( integer *m, integer *n,
 
         apiv = a + p_idx;
         asrc = a + i;
-        ipiv[i] = p_idx + 1;
+        ipiv[i] = (aocl_int_t)(p_idx + 1);
 
         /* Swap rows and calculate a column of L */
         if( max_val != 0 )
@@ -97,22 +97,22 @@ integer FLA_LU_piv_small_s_var0( integer *m, integer *n,
  *
  *  TODO: AVX optimizations to be done 
  */
-integer FLA_LU_piv_small_s_var1( integer *m, integer *n, 
-                                  real *a, integer *lda,
-                                  integer *ipiv,
-                                  integer *info)
+fla_dim_t FLA_LU_piv_small_s_var1( fla_dim_t *m, fla_dim_t *n, 
+                                  real *a, fla_dim_t *lda,
+                                  aocl_int_t *ipiv,
+                                  fla_dim_t *info)
 {
-    integer a_dim1, a_offset, i__1, i__2, i__3;
+    fla_dim_t a_dim1, a_offset, i__1, i__2, i__3;
     real d__1;
-    integer c__1 = 1;
+    fla_dim_t c__1 = 1;
     real c_n1 = -1.;
 
     /* Local variables */
-    integer i__, j, jp;
+    fla_dim_t i__, j, jp;
     extern real slamch_(char *);
-    extern void fla_sscal(integer *n, real *alpha, real *x, integer *incx);
-    extern void fla_sger(integer *m, integer *n, real *alpha, real *x, integer *incx, real *y,
-				              integer *incy, real *a, integer *lda);
+    extern void fla_sscal(fla_dim_t *n, real *alpha, real *x, fla_dim_t *incx);
+    extern void fla_sger(fla_dim_t *m, fla_dim_t *n, real *alpha, real *x, fla_dim_t *incx, real *y,
+				              fla_dim_t *incy, real *a, fla_dim_t *lda);
     real sfmin;
     
     a_dim1 = *lda;
@@ -128,14 +128,14 @@ integer FLA_LU_piv_small_s_var1( integer *m, integer *n,
     {
         /* Find pivot and test for singularity. */
         i__2 = *m - j + 1;
-        jp = j - 1 + isamax_(&i__2, &a[j + j * a_dim1], &c__1);
-        ipiv[j] = jp;
+        jp = j - 1 + aocl_blas_isamax(&i__2, &a[j + j * a_dim1], &c__1);
+        ipiv[j] = (aocl_int_t)jp;
         if (a[jp + j * a_dim1] != 0.)
         {
             /*Apply the interchange to columns 1:N. */
             if (jp != j)
             {
-                sswap_(n, &a[j + a_dim1], lda, &a[jp + a_dim1], lda);
+                aocl_blas_sswap(n, &a[j + a_dim1], lda, &a[jp + a_dim1], lda);
             }
             /*Compute elements J+1:M of J-th column. */
             if (j < *m)

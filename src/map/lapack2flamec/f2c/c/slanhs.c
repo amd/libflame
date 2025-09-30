@@ -4,7 +4,7 @@
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
  /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
+static aocl_int64_t c__1 = 1;
 /* > \brief \b SLANHS returns the value of the 1-norm, Frobenius norm, infinity-norm, or the largest
  * absolute value of any element of an upper Hessenberg matrix. */
 /* =========== DOCUMENTATION =========== */
@@ -106,23 +106,33 @@ otherwise, WORK is not */
 /* > \author NAG Ltd. */
 /* > \ingroup realOTHERauxiliary */
 /* ===================================================================== */
-real slanhs_(char *norm, integer *n, real *a, integer *lda, real *work)
+/** Generated wrapper function */
+real slanhs_(char *norm, aocl_int_t *n, real *a, aocl_int_t *lda, real *work)
+{
+#if FLA_ENABLE_ILP64
+    return aocl_lapack_slanhs(norm, n, a, lda, work);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t lda_64 = *lda;
+
+    return aocl_lapack_slanhs(norm, &n_64, a, &lda_64, work);
+#endif
+}
+
+real aocl_lapack_slanhs(char *norm, aocl_int64_t *n, real *a, aocl_int64_t *lda, real *work)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("slanhs inputs: norm %c, n %" FLA_IS ", lda %" FLA_IS "", *norm, *n, *lda);
     /* System generated locals */
-    integer a_dim1, a_offset, i__1, i__2, i__3, i__4;
+    aocl_int64_t a_dim1, a_offset, i__1, i__2, i__3, i__4;
     real ret_val, r__1;
     /* Builtin functions */
     double sqrt(doublereal);
     /* Local variables */
-    integer i__, j;
+    aocl_int64_t i__, j;
     real sum, scale;
-    extern logical lsame_(char *, char *, integer, integer);
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     real value;
-    extern /* Subroutine */
-        void
-        slassq_(integer *, real *, integer *, real *, real *);
     /* -- LAPACK auxiliary routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -247,7 +257,7 @@ real slanhs_(char *norm, integer *n, real *a, integer *lda, real *work)
             i__3 = *n;
             i__4 = j + 1; // , expr subst
             i__2 = fla_min(i__3, i__4);
-            slassq_(&i__2, &a[j * a_dim1 + 1], &c__1, &scale, &sum);
+            aocl_lapack_slassq(&i__2, &a[j * a_dim1 + 1], &c__1, &scale, &sum);
             /* L90: */
         }
         value = scale * sqrt(sum);

@@ -3,7 +3,7 @@
  .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
  /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
-#include "FLA_f2c.h" /* > \brief \b ZLARGV generates a vector of plane rotations with real cosines and complex sines. */
+#include "FLA_f2c.h" /* > \brief \b ZLARGV generates a vector of plane rotations with real cosines and scomplex sines. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
@@ -116,8 +116,24 @@
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void zlargv_(integer *n, doublecomplex *x, integer *incx, doublecomplex *y, integer *incy,
-             doublereal *c__, integer *incc)
+/** Generated wrapper function */
+void zlargv_(aocl_int_t *n, dcomplex *x, aocl_int_t *incx, dcomplex *y, aocl_int_t *incy,
+             doublereal *c__, aocl_int_t *incc)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_zlargv(n, x, incx, y, incy, c__, incc);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t incx_64 = *incx;
+    aocl_int64_t incy_64 = *incy;
+    aocl_int64_t incc_64 = *incc;
+
+    aocl_lapack_zlargv(&n_64, x, &incx_64, y, &incy_64, c__, &incc_64);
+#endif
+}
+
+void aocl_lapack_zlargv(aocl_int64_t *n, dcomplex *x, aocl_int64_t *incx, dcomplex *y,
+                        aocl_int64_t *incy, doublereal *c__, aocl_int64_t *incc)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zlargv inputs: n %" FLA_IS ", incx %" FLA_IS ", incy %" FLA_IS
@@ -128,9 +144,9 @@ void zlargv_(integer *n, doublecomplex *x, integer *incx, doublecomplex *y, inte
     doublereal d__1, d__2, d__3, d__4, d__5, d__6, d__7, d__8, d__9, d__10;
     dcomplex z__1, z__2, z__3;
     /* Builtin functions */
-    double log(doublereal), pow_di(doublereal *, integer *), d_imag(doublecomplex *),
+    double log(doublereal), pow_di(doublereal *, aocl_int64_t *), d_imag(dcomplex *),
         sqrt(doublereal);
-    void d_cnjg(doublecomplex *, doublecomplex *);
+    void d_cnjg(dcomplex *, dcomplex *);
     /* Local variables */
     doublereal d__;
     dcomplex f, g;
@@ -285,8 +301,8 @@ void zlargv_(integer *n, doublecomplex *x, integer *incx, doublecomplex *y, inte
                 d__2 = g.real;
                 d__3 = d_imag(&g);
                 d__1 = dlapy2_(&d__2, &d__3);
-                r__.real = d__1;
-                r__.imag = 0.; // , expr subst
+                r__.r = d__1;
+                r__.i = 0.; // , expr subst
                 /* Do scomplex/real division explicitly with two real */
                 /* divisions */
                 d__1 = gs.real;
@@ -315,7 +331,7 @@ void zlargv_(integer *n, doublecomplex *x, integer *incx, doublecomplex *y, inte
             /* Therefore, CS = F2S/G2S / sqrt( 1 + (F2S/G2S)**2 ) = F2S/G2S */
             cs = f2s / g2s;
             /* Make sure f2c_dabs(FF) = 1 */
-            /* Do complex/real division explicitly with 2 real divisions */
+            /* Do scomplex/real division explicitly with 2 real divisions */
             /* Computing MAX */
             d__3 = (d__1 = f.r, f2c_dabs(d__1));
             d__4 = (d__2 = d_imag(&f), f2c_dabs(d__2)); // , expr subst
@@ -377,7 +393,7 @@ void zlargv_(integer *n, doublecomplex *x, integer *incx, doublecomplex *y, inte
             cs = 1. / f2s;
             d__ = f2 + g2;
             /* Do scomplex/real division explicitly with two real divisions */
-            d__1 = r__.real / d__;
+            d__1 = r__.r / d__;
             d__2 = d_imag(&r__) / d__;
             z__1.real = d__1;
             z__1.imag = d__2; // , expr subst

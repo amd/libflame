@@ -4,12 +4,12 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static complex c_b1 = {1.f, 0.f};
-static integer c__1 = 1;
-static integer c_n1 = -1;
+static scomplex c_b1 = {{1.f}, {0.f}};
+static aocl_int64_t c__1 = 1;
+static aocl_int64_t c_n1 = -1;
 static real c_b29 = -1.f;
 static real c_b30 = 1.f;
-/* > \brief \b CPSTRF computes the Cholesky factorization with complete pivoting of complex
+/* > \brief \b CPSTRF computes the Cholesky factorization with complete pivoting of scomplex
  * Hermitian positive semidefinite matrix. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -48,7 +48,7 @@ static real c_b30 = 1.f;
 /* > \verbatim */
 /* > */
 /* > CPSTRF computes the Cholesky factorization with complete */
-/* > pivoting of a complex Hermitian positive semidefinite matrix A. */
+/* > pivoting of a scomplex Hermitian positive semidefinite matrix A. */
 /* > */
 /* > The factorization has the form */
 /* > P**T * A * P = U**H * U , if UPLO = 'U', */
@@ -144,8 +144,27 @@ static real c_b30 = 1.f;
 /* > \ingroup complexOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void cpstrf_(char *uplo, integer *n, complex *a, integer *lda, integer *piv, integer *rank,
-             real *tol, real *work, integer *info)
+/** Generated wrapper function */
+void cpstrf_(char *uplo, aocl_int_t *n, scomplex *a, aocl_int_t *lda, aocl_int_t *piv,
+             aocl_int_t *rank, real *tol, real *work, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_cpstrf(uplo, n, a, lda, piv, rank, tol, work, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t rank_64 = *rank;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_cpstrf(uplo, &n_64, a, &lda_64, piv, &rank_64, tol, work, &info_64);
+
+    *rank = (aocl_int_t)rank_64;
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_cpstrf(char *uplo, aocl_int64_t *n, scomplex *a, aocl_int64_t *lda, aocl_int_t *piv,
+                        aocl_int64_t *rank, real *tol, real *work, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -158,45 +177,23 @@ void cpstrf_(char *uplo, integer *n, complex *a, integer *lda, integer *piv, int
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
-    integer a_dim1, a_offset, i__1, i__2, i__3, i__4, i__5;
+    aocl_int64_t a_dim1, a_offset, i__1, i__2, i__3, i__4, i__5;
     real r__1;
-    complex q__1, q__2;
+    scomplex q__1, q__2;
     /* Builtin functions */
-    void r_cnjg(complex *, complex *);
+    void r_cnjg(scomplex *, scomplex *);
     double sqrt(doublereal);
     /* Local variables */
-    integer i__, j, k, jb, nb;
+    aocl_int64_t i__, j, k, jb, nb;
     real ajj;
-    integer pvt;
-    extern /* Subroutine */
-        void
-        cherk_(char *, char *, integer *, integer *, real *, complex *, integer *, real *,
-               complex *, integer *);
-    extern logical lsame_(char *, char *, integer, integer);
-    extern /* Subroutine */
-        void
-        cgemv_(char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *,
-               complex *, complex *, integer *);
-    complex ctemp;
-    extern /* Subroutine */
-        void
-        cswap_(integer *, complex *, integer *, complex *, integer *);
-    integer itemp;
+    aocl_int64_t pvt;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    scomplex ctemp;
+    aocl_int64_t itemp;
     real stemp;
     logical upper;
     real sstop;
-    extern /* Subroutine */
-        void
-        cpstf2_(char *, integer *, complex *, integer *, integer *, integer *, real *, real *,
-                integer *),
-        clacgv_(integer *, complex *, integer *);
     extern real slamch_(char *);
-    extern /* Subroutine */
-        void
-        csscal_(integer *, real *, complex *, integer *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *),
-        smaxloc_(real *, integer *);
     extern logical sisnan_(real *);
     /* -- LAPACK computational routine (version 3.7.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -243,7 +240,7 @@ void cpstrf_(char *uplo, integer *n, complex *a, integer *lda, integer *piv, int
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("CPSTRF", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("CPSTRF", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
@@ -254,11 +251,11 @@ void cpstrf_(char *uplo, integer *n, complex *a, integer *lda, integer *piv, int
         return;
     }
     /* Get block size */
-    nb = ilaenv_(&c__1, "CPOTRF", uplo, n, &c_n1, &c_n1, &c_n1);
+    nb = aocl_lapack_ilaenv(&c__1, "CPOTRF", uplo, n, &c_n1, &c_n1, &c_n1);
     if(nb <= 1 || nb >= *n)
     {
         /* Use unblocked code */
-        cpstf2_(uplo, n, &a[a_dim1 + 1], lda, &piv[1], rank, tol, &work[1], info);
+        aocl_lapack_cpstf2(uplo, n, &a[a_dim1 + 1], lda, &piv[1], rank, tol, &work[1], info);
         goto L230;
     }
     else
@@ -267,7 +264,7 @@ void cpstrf_(char *uplo, integer *n, complex *a, integer *lda, integer *piv, int
         i__1 = *n;
         for(i__ = 1; i__ <= i__1; ++i__)
         {
-            piv[i__] = i__;
+            piv[i__] = (aocl_int_t)(i__);
             /* L100: */
         }
         /* Compute stopping value */
@@ -278,7 +275,7 @@ void cpstrf_(char *uplo, integer *n, complex *a, integer *lda, integer *piv, int
             work[i__] = a[i__2].r;
             /* L110: */
         }
-        pvt = smaxloc_(&work[1], n);
+        pvt = aocl_lapack_smaxloc(&work[1], n);
         i__1 = pvt + pvt * a_dim1;
         ajj = a[i__1].r;
         if(ajj <= 0.f || sisnan_(&ajj))
@@ -340,7 +337,7 @@ void cpstrf_(char *uplo, integer *n, complex *a, integer *lda, integer *piv, int
                     if(j > 1)
                     {
                         i__4 = *n - j + 1;
-                        itemp = smaxloc_(&work[*n + j], &i__4);
+                        itemp = aocl_lapack_smaxloc(&work[*n + j], &i__4);
                         pvt = itemp + j - 1;
                         ajj = work[*n + pvt];
                         if(ajj <= sstop || sisnan_(&ajj))
@@ -359,12 +356,13 @@ void cpstrf_(char *uplo, integer *n, complex *a, integer *lda, integer *piv, int
                         a[i__4].r = a[i__5].r;
                         a[i__4].i = a[i__5].i; // , expr subst
                         i__4 = j - 1;
-                        cswap_(&i__4, &a[j * a_dim1 + 1], &c__1, &a[pvt * a_dim1 + 1], &c__1);
+                        aocl_blas_cswap(&i__4, &a[j * a_dim1 + 1], &c__1, &a[pvt * a_dim1 + 1],
+                                        &c__1);
                         if(pvt < *n)
                         {
                             i__4 = *n - pvt;
-                            cswap_(&i__4, &a[j + (pvt + 1) * a_dim1], lda,
-                                   &a[pvt + (pvt + 1) * a_dim1], lda);
+                            aocl_blas_cswap(&i__4, &a[j + (pvt + 1) * a_dim1], lda,
+                                            &a[pvt + (pvt + 1) * a_dim1], lda);
                         }
                         i__4 = pvt - 1;
                         for(i__ = j + 1; i__ <= i__4; ++i__)
@@ -391,7 +389,7 @@ void cpstrf_(char *uplo, integer *n, complex *a, integer *lda, integer *piv, int
                         work[pvt] = stemp;
                         itemp = piv[pvt];
                         piv[pvt] = piv[j];
-                        piv[j] = itemp;
+                        piv[j] = (aocl_int_t)(itemp);
                     }
                     ajj = sqrt(ajj);
                     i__4 = j + j * a_dim1;
@@ -401,18 +399,19 @@ void cpstrf_(char *uplo, integer *n, complex *a, integer *lda, integer *piv, int
                     if(j < *n)
                     {
                         i__4 = j - 1;
-                        clacgv_(&i__4, &a[j * a_dim1 + 1], &c__1);
+                        aocl_lapack_clacgv(&i__4, &a[j * a_dim1 + 1], &c__1);
                         i__4 = j - k;
                         i__5 = *n - j;
                         q__1.r = -1.f;
                         q__1.i = -0.f; // , expr subst
-                        cgemv_("Trans", &i__4, &i__5, &q__1, &a[k + (j + 1) * a_dim1], lda,
-                               &a[k + j * a_dim1], &c__1, &c_b1, &a[j + (j + 1) * a_dim1], lda);
+                        aocl_blas_cgemv("Trans", &i__4, &i__5, &q__1, &a[k + (j + 1) * a_dim1], lda,
+                                        &a[k + j * a_dim1], &c__1, &c_b1, &a[j + (j + 1) * a_dim1],
+                                        lda);
                         i__4 = j - 1;
-                        clacgv_(&i__4, &a[j * a_dim1 + 1], &c__1);
+                        aocl_lapack_clacgv(&i__4, &a[j * a_dim1 + 1], &c__1);
                         i__4 = *n - j;
                         r__1 = 1.f / ajj;
-                        csscal_(&i__4, &r__1, &a[j + (j + 1) * a_dim1], lda);
+                        aocl_blas_csscal(&i__4, &r__1, &a[j + (j + 1) * a_dim1], lda);
                     }
                     /* L150: */
                 }
@@ -420,8 +419,8 @@ void cpstrf_(char *uplo, integer *n, complex *a, integer *lda, integer *piv, int
                 if(k + jb <= *n)
                 {
                     i__3 = *n - j + 1;
-                    cherk_("Upper", "Conj Trans", &i__3, &jb, &c_b29, &a[k + j * a_dim1], lda,
-                           &c_b30, &a[j + j * a_dim1], lda);
+                    aocl_blas_cherk("Upper", "Conj Trans", &i__3, &jb, &c_b29, &a[k + j * a_dim1],
+                                    lda, &c_b30, &a[j + j * a_dim1], lda);
                 }
                 /* L160: */
             }
@@ -470,7 +469,7 @@ void cpstrf_(char *uplo, integer *n, complex *a, integer *lda, integer *piv, int
                     if(j > 1)
                     {
                         i__4 = *n - j + 1;
-                        itemp = smaxloc_(&work[*n + j], &i__4);
+                        itemp = aocl_lapack_smaxloc(&work[*n + j], &i__4);
                         pvt = itemp + j - 1;
                         ajj = work[*n + pvt];
                         if(ajj <= sstop || sisnan_(&ajj))
@@ -489,12 +488,12 @@ void cpstrf_(char *uplo, integer *n, complex *a, integer *lda, integer *piv, int
                         a[i__4].r = a[i__5].r;
                         a[i__4].i = a[i__5].i; // , expr subst
                         i__4 = j - 1;
-                        cswap_(&i__4, &a[j + a_dim1], lda, &a[pvt + a_dim1], lda);
+                        aocl_blas_cswap(&i__4, &a[j + a_dim1], lda, &a[pvt + a_dim1], lda);
                         if(pvt < *n)
                         {
                             i__4 = *n - pvt;
-                            cswap_(&i__4, &a[pvt + 1 + j * a_dim1], &c__1,
-                                   &a[pvt + 1 + pvt * a_dim1], &c__1);
+                            aocl_blas_cswap(&i__4, &a[pvt + 1 + j * a_dim1], &c__1,
+                                            &a[pvt + 1 + pvt * a_dim1], &c__1);
                         }
                         i__4 = pvt - 1;
                         for(i__ = j + 1; i__ <= i__4; ++i__)
@@ -521,7 +520,7 @@ void cpstrf_(char *uplo, integer *n, complex *a, integer *lda, integer *piv, int
                         work[pvt] = stemp;
                         itemp = piv[pvt];
                         piv[pvt] = piv[j];
-                        piv[j] = itemp;
+                        piv[j] = (aocl_int_t)(itemp);
                     }
                     ajj = sqrt(ajj);
                     i__4 = j + j * a_dim1;
@@ -531,18 +530,19 @@ void cpstrf_(char *uplo, integer *n, complex *a, integer *lda, integer *piv, int
                     if(j < *n)
                     {
                         i__4 = j - 1;
-                        clacgv_(&i__4, &a[j + a_dim1], lda);
+                        aocl_lapack_clacgv(&i__4, &a[j + a_dim1], lda);
                         i__4 = *n - j;
                         i__5 = j - k;
                         q__1.r = -1.f;
                         q__1.i = -0.f; // , expr subst
-                        cgemv_("No Trans", &i__4, &i__5, &q__1, &a[j + 1 + k * a_dim1], lda,
-                               &a[j + k * a_dim1], lda, &c_b1, &a[j + 1 + j * a_dim1], &c__1);
+                        aocl_blas_cgemv("No Trans", &i__4, &i__5, &q__1, &a[j + 1 + k * a_dim1],
+                                        lda, &a[j + k * a_dim1], lda, &c_b1, &a[j + 1 + j * a_dim1],
+                                        &c__1);
                         i__4 = j - 1;
-                        clacgv_(&i__4, &a[j + a_dim1], lda);
+                        aocl_lapack_clacgv(&i__4, &a[j + a_dim1], lda);
                         i__4 = *n - j;
                         r__1 = 1.f / ajj;
-                        csscal_(&i__4, &r__1, &a[j + 1 + j * a_dim1], &c__1);
+                        aocl_blas_csscal(&i__4, &r__1, &a[j + 1 + j * a_dim1], &c__1);
                     }
                     /* L200: */
                 }
@@ -550,8 +550,8 @@ void cpstrf_(char *uplo, integer *n, complex *a, integer *lda, integer *piv, int
                 if(k + jb <= *n)
                 {
                     i__3 = *n - j + 1;
-                    cherk_("Lower", "No Trans", &i__3, &jb, &c_b29, &a[j + k * a_dim1], lda, &c_b30,
-                           &a[j + j * a_dim1], lda);
+                    aocl_blas_cherk("Lower", "No Trans", &i__3, &jb, &c_b29, &a[j + k * a_dim1],
+                                    lda, &c_b30, &a[j + j * a_dim1], lda);
                 }
                 /* L210: */
             }

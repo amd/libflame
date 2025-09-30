@@ -4,7 +4,7 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
+static aocl_int64_t c__1 = 1;
 /* > \brief \b SLAQP2RK computes truncated QR factorization with column pivoting of a real matrix
  * block using Level 2 BLAS and overwrites a real m-by-nrhs matrix B with Q**T * B. */
 /* =========== DOCUMENTATION =========== */
@@ -342,37 +342,56 @@ static integer c__1 = 1;
 /* > \endverbatim */
 /* ===================================================================== */
 /* Subroutine */
-void slaqp2rk_(integer *m, integer *n, integer *nrhs, integer *ioffset, integer *kmax, real *abstol,
-               real *reltol, integer *kp1, real *maxc2nrm, real *a, integer *lda, integer *k,
-               real *maxc2nrmk, real *relmaxc2nrmk, integer *jpiv, real *tau, real *vn1, real *vn2,
-               real *work, integer *info)
+/** Generated wrapper function */
+void slaqp2rk_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *nrhs, aocl_int_t *ioffset,
+               aocl_int_t *kmax, real *abstol, real *reltol, aocl_int_t *kp1, real *maxc2nrm,
+               real *a, aocl_int_t *lda, aocl_int_t *k, real *maxc2nrmk, real *relmaxc2nrmk,
+               aocl_int_t *jpiv, real *tau, real *vn1, real *vn2, real *work, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_slaqp2rk(m, n, nrhs, ioffset, kmax, abstol, reltol, kp1, maxc2nrm, a, lda, k,
+                         maxc2nrmk, relmaxc2nrmk, jpiv, tau, vn1, vn2, work, info);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t nrhs_64 = *nrhs;
+    aocl_int64_t ioffset_64 = *ioffset;
+    aocl_int64_t kmax_64 = *kmax;
+    aocl_int64_t kp1_64 = *kp1;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t k_64 = *k;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_slaqp2rk(&m_64, &n_64, &nrhs_64, &ioffset_64, &kmax_64, abstol, reltol, &kp1_64,
+                         maxc2nrm, a, &lda_64, &k_64, maxc2nrmk, relmaxc2nrmk, jpiv, tau, vn1, vn2,
+                         work, &info_64);
+
+    *k = (aocl_int_t)k_64;
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_slaqp2rk(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *nrhs,
+                          aocl_int64_t *ioffset, aocl_int64_t *kmax, real *abstol, real *reltol,
+                          aocl_int64_t *kp1, real *maxc2nrm, real *a, aocl_int64_t *lda,
+                          aocl_int64_t *k, real *maxc2nrmk, real *relmaxc2nrmk, aocl_int_t *jpiv,
+                          real *tau, real *vn1, real *vn2, real *work, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("slaqp2rk inputs: m %" FLA_IS ",n %" FLA_IS ",nrhs %" FLA_IS
                       ",ioffset %" FLA_IS ",kmax %" FLA_IS ",kp1 %" FLA_IS ",lda %" FLA_IS "",
                       *m, *n, *nrhs, *ioffset, *kmax, *kp1, *lda);
     /* System generated locals */
-    integer a_dim1, a_offset, i__1, i__2, i__3;
+    aocl_int64_t a_dim1, a_offset, i__1, i__2, i__3;
     real r__1, r__2;
     /* Builtin functions */
     double sqrt(doublereal);
     /* Local variables */
-    integer i__, j, jmaxc2nrm, minmnfact, minmnupdt, kk, kp;
+    aocl_int64_t i__, j, jmaxc2nrm, minmnfact, minmnupdt, kk, kp;
     real aikk, temp, temp2;
-    extern real snrm2_(integer *, real *, integer *);
     real tol3z;
-    extern /* Subroutine */
-        void
-        slarf_(char *, integer *, integer *, real *, integer *, real *, real *, integer *, real *);
-    integer itemp;
-    extern /* Subroutine */
-        void
-        sswap_(integer *, real *, integer *, real *, integer *);
+    aocl_int64_t itemp;
     extern real slamch_(char *);
-    extern /* Subroutine */
-        void
-        slarfg_(integer *, real *, real *, integer *, real *);
-    extern integer isamax_(integer *, real *, integer *);
     extern logical sisnan_(real *);
     real hugeval;
     /* -- LAPACK auxiliary routine -- */
@@ -443,7 +462,7 @@ void slaqp2rk_(integer *m, integer *n, integer *nrhs, integer *ioffset, integer 
             /* of the column with the maximum 2-norm in the */
             /* submatrix A(I:M,K:N). */
             i__2 = *n - kk + 1;
-            kp = kk - 1 + isamax_(&i__2, &vn1[kk], &c__1);
+            kp = kk - 1 + aocl_blas_isamax(&i__2, &vn1[kk], &c__1);
             /* Determine the maximum column 2-norm and the relative maximum */
             /* column 2-norm of the submatrix A(I:M,KK:N) in step KK. */
             /* RELMAXC2NRMK will be computed later, after somecondition */
@@ -550,12 +569,12 @@ void slaqp2rk_(integer *m, integer *n, integer *nrhs, integer *ioffset, integer 
         /* the original matrix A, not the block A(1:M,1:N). */
         if(kp != kk)
         {
-            sswap_(m, &a[kp * a_dim1 + 1], &c__1, &a[kk * a_dim1 + 1], &c__1);
+            aocl_blas_sswap(m, &a[kp * a_dim1 + 1], &c__1, &a[kk * a_dim1 + 1], &c__1);
             vn1[kp] = vn1[kk];
             vn2[kp] = vn2[kk];
             itemp = jpiv[kp];
             jpiv[kp] = jpiv[kk];
-            jpiv[kk] = itemp;
+            jpiv[kk] = (aocl_int_t)(itemp);
         }
         /* Generate elementary reflector H(KK) using the column A(I:M,KK), */
         /* if the column has more than one element, otherwise */
@@ -564,7 +583,8 @@ void slaqp2rk_(integer *m, integer *n, integer *nrhs, integer *ioffset, integer 
         if(i__ < *m)
         {
             i__2 = *m - i__ + 1;
-            slarfg_(&i__2, &a[i__ + kk * a_dim1], &a[i__ + 1 + kk * a_dim1], &c__1, &tau[kk]);
+            aocl_lapack_slarfg(&i__2, &a[i__ + kk * a_dim1], &a[i__ + 1 + kk * a_dim1], &c__1,
+                               &tau[kk]);
         }
         else
         {
@@ -608,8 +628,8 @@ void slaqp2rk_(integer *m, integer *n, integer *nrhs, integer *ioffset, integer 
             a[i__ + kk * a_dim1] = 1.f;
             i__2 = *m - i__ + 1;
             i__3 = *n + *nrhs - kk;
-            slarf_("Left", &i__2, &i__3, &a[i__ + kk * a_dim1], &c__1, &tau[kk],
-                   &a[i__ + (kk + 1) * a_dim1], lda, &work[1]);
+            aocl_lapack_slarf("Left", &i__2, &i__3, &a[i__ + kk * a_dim1], &c__1, &tau[kk],
+                              &a[i__ + (kk + 1) * a_dim1], lda, &work[1]);
             a[i__ + kk * a_dim1] = aikk;
         }
         if(kk < minmnfact)
@@ -638,7 +658,7 @@ void slaqp2rk_(integer *m, integer *n, integer *nrhs, integer *ioffset, integer 
                         /* and store it in both partial 2-norm vector VN1 */
                         /* and exact column 2-norm vector VN2. */
                         i__3 = *m - i__;
-                        vn1[j] = snrm2_(&i__3, &a[i__ + 1 + j * a_dim1], &c__1);
+                        vn1[j] = aocl_blas_snrm2(&i__3, &a[i__ + 1 + j * a_dim1], &c__1);
                         vn2[j] = vn1[j];
                     }
                     else
@@ -664,7 +684,7 @@ void slaqp2rk_(integer *m, integer *n, integer *nrhs, integer *ioffset, integer 
     if(*k < minmnfact)
     {
         i__1 = *n - *k;
-        jmaxc2nrm = *k + isamax_(&i__1, &vn1[*k + 1], &c__1);
+        jmaxc2nrm = *k + aocl_blas_isamax(&i__1, &vn1[*k + 1], &c__1);
         *maxc2nrmk = vn1[jmaxc2nrm];
         if(*k == 0)
         {

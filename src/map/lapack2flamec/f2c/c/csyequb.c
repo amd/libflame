@@ -4,7 +4,7 @@
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
  /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
+static aocl_int64_t c__1 = 1;
 /* > \brief \b CSYEQUB */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -129,35 +129,46 @@ static integer c__1 = 1;
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void csyequb_(char *uplo, integer *n, complex *a, integer *lda, real *s, real *scond, real *amax,
-              complex *work, integer *info)
+/** Generated wrapper function */
+void csyequb_(char *uplo, aocl_int_t *n, scomplex *a, aocl_int_t *lda, real *s, real *scond,
+              real *amax, scomplex *work, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_csyequb(uplo, n, a, lda, s, scond, amax, work, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_csyequb(uplo, &n_64, a, &lda_64, s, scond, amax, work, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_csyequb(char *uplo, aocl_int64_t *n, scomplex *a, aocl_int64_t *lda, real *s,
+                         real *scond, real *amax, scomplex *work, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("csyequb inputs: uplo %c, n %" FLA_IS ", lda %" FLA_IS "", *uplo, *n, *lda);
     /* System generated locals */
-    integer a_dim1, a_offset, i__1, i__2, i__3, i__4, i__5;
+    aocl_int64_t a_dim1, a_offset, i__1, i__2, i__3, i__4, i__5;
     real r__1, r__2, r__3, r__4;
-    complex q__1, q__2;
+    scomplex q__1, q__2;
     /* Builtin functions */
-    double r_imag(complex *), sqrt(doublereal), log(doublereal), pow_ri(real *, integer *);
+    double r_imag(scomplex *), sqrt(doublereal), log(doublereal), pow_ri(real *, aocl_int64_t *);
     /* Local variables */
     real d__;
-    integer i__, j;
+    aocl_int64_t i__, j;
     real t, u, c0, c1, c2, si;
     logical up;
     real avg, std, tol, base;
-    integer iter;
+    aocl_int64_t iter;
     real smin, smax, scale;
-    extern logical lsame_(char *, char *, integer, integer);
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     real sumsq;
     extern real slamch_(char *);
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real bignum;
-    extern /* Subroutine */
-        void
-        classq_(integer *, complex *, integer *, real *, real *);
     real smlnum;
     /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -206,7 +217,7 @@ void csyequb_(char *uplo, integer *n, complex *a, integer *lda, real *s, real *s
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("CSYEQUB", &i__1, (ftnlen)7);
+        aocl_blas_xerbla("CSYEQUB", &i__1, (ftnlen)7);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -433,7 +444,7 @@ void csyequb_(char *uplo, integer *n, complex *a, integer *lda, real *s, real *s
             work[i__2].r = q__1.r;
             work[i__2].i = q__1.i; // , expr subst
         }
-        classq_(n, &work[*n + 1], &c__1, &scale, &sumsq);
+        aocl_lapack_classq(n, &work[*n + 1], &c__1, &scale, &sumsq);
         std = scale * sqrt(sumsq / *n);
         if(std < tol * avg)
         {

@@ -4,7 +4,7 @@
  -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for
  libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static doublecomplex c_b1 = {1., 0.};
+static dcomplex c_b1 = {{1.}, {0.}};
 /* > \brief \b ZSYTRS_3 */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -40,7 +40,7 @@ static doublecomplex c_b1 = {1., 0.};
 /* ============= */
 /* > */
 /* > \verbatim */
-/* > ZSYTRS_3 solves a system of linear equations A * X = B with a complex */
+/* > ZSYTRS_3 solves a system of linear equations A * X = B with a scomplex */
 /* > symmetric matrix A using the factorization computed */
 /* > by ZSYTRF_RK or ZSYTRF_BK: */
 /* > */
@@ -163,35 +163,47 @@ static doublecomplex c_b1 = {1., 0.};
 /* > \endverbatim */
 /* ===================================================================== */
 /* Subroutine */
-void zsytrs_3_(char *uplo, integer *n, integer *nrhs, doublecomplex *a, integer *lda,
-               doublecomplex *e, integer *ipiv, doublecomplex *b, integer *ldb, integer *info)
+/** Generated wrapper function */
+void zsytrs_3_(char *uplo, aocl_int_t *n, aocl_int_t *nrhs, dcomplex *a, aocl_int_t *lda,
+               dcomplex *e, aocl_int_t *ipiv, dcomplex *b, aocl_int_t *ldb,
+               aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_zsytrs_3(uplo, n, nrhs, a, lda, e, ipiv, b, ldb, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t nrhs_64 = *nrhs;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t ldb_64 = *ldb;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_zsytrs_3(uplo, &n_64, &nrhs_64, a, &lda_64, e, ipiv, b, &ldb_64, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_zsytrs_3(char *uplo, aocl_int64_t *n, aocl_int64_t *nrhs, dcomplex *a,
+                          aocl_int64_t *lda, dcomplex *e, aocl_int_t *ipiv, dcomplex *b,
+                          aocl_int64_t *ldb, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zsytrs_3 inputs: uplo %c, n %" FLA_IS ", nrhs %" FLA_IS ", lda %" FLA_IS
                       ", ldb %" FLA_IS "",
                       *uplo, *n, *nrhs, *lda, *ldb);
     /* System generated locals */
-    integer a_dim1, a_offset, b_dim1, b_offset, i__1, i__2;
-    doublecomplex z__1, z__2, z__3;
+    aocl_int64_t a_dim1, a_offset, b_dim1, b_offset, i__1, i__2;
+    dcomplex z__1, z__2, z__3;
     /* Builtin functions */
-    void z_div(doublecomplex *, doublecomplex *, doublecomplex *);
+    void z_div(dcomplex *, dcomplex *, dcomplex *);
     /* Local variables */
-    integer i__, j, k;
-    doublecomplex ak, bk;
-    integer kp;
-    doublecomplex akm1, bkm1, akm1k;
-    extern logical lsame_(char *, char *, integer, integer);
-    doublecomplex denom;
-    extern /* Subroutine */
-        void
-        zscal_(integer *, doublecomplex *, doublecomplex *, integer *);
+    aocl_int64_t i__, j, k;
+    dcomplex ak, bk;
+    aocl_int64_t kp;
+    dcomplex akm1, bkm1, akm1k;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    dcomplex denom;
     logical upper;
-    extern /* Subroutine */
-        void
-        zswap_(integer *, doublecomplex *, integer *, doublecomplex *, integer *),
-        ztrsm_(char *, char *, char *, char *, integer *, integer *, doublecomplex *,
-               doublecomplex *, integer *, doublecomplex *, integer *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.7.1) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -247,7 +259,7 @@ void zsytrs_3_(char *uplo, integer *n, integer *nrhs, doublecomplex *a, integer 
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("ZSYTRS_3", &i__1, (ftnlen)8);
+        aocl_blas_xerbla("ZSYTRS_3", &i__1, (ftnlen)8);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -272,11 +284,11 @@ void zsytrs_3_(char *uplo, integer *n, integer *nrhs, doublecomplex *a, integer 
             kp = (i__1 = ipiv[k], f2c_dabs(i__1));
             if(kp != k)
             {
-                zswap_(nrhs, &b[k + b_dim1], ldb, &b[kp + b_dim1], ldb);
+                aocl_blas_zswap(nrhs, &b[k + b_dim1], ldb, &b[kp + b_dim1], ldb);
             }
         }
         /* Compute (U \P**T * B) -> B [ (U \P**T * B) ] */
-        ztrsm_("L", "U", "N", "U", n, nrhs, &c_b1, &a[a_offset], lda, &b[b_offset], ldb);
+        aocl_blas_ztrsm("L", "U", "N", "U", n, nrhs, &c_b1, &a[a_offset], lda, &b[b_offset], ldb);
         /* Compute D \ B -> B [ D \ (U \P**T * B) ] */
         i__ = *n;
         while(i__ >= 1)
@@ -284,7 +296,7 @@ void zsytrs_3_(char *uplo, integer *n, integer *nrhs, doublecomplex *a, integer 
             if(ipiv[i__] > 0)
             {
                 z_div(&z__1, &c_b1, &a[i__ + i__ * a_dim1]);
-                zscal_(nrhs, &z__1, &b[i__ + b_dim1], ldb);
+                aocl_blas_zscal(nrhs, &z__1, &b[i__ + b_dim1], ldb);
             }
             else if(i__ > 1)
             {
@@ -334,7 +346,7 @@ void zsytrs_3_(char *uplo, integer *n, integer *nrhs, doublecomplex *a, integer 
             --i__;
         }
         /* Compute (U**T \ B) -> B [ U**T \ (D \ (U \P**T * B) ) ] */
-        ztrsm_("L", "U", "T", "U", n, nrhs, &c_b1, &a[a_offset], lda, &b[b_offset], ldb);
+        aocl_blas_ztrsm("L", "U", "T", "U", n, nrhs, &c_b1, &a[a_offset], lda, &b[b_offset], ldb);
         /* P * B [ P * (U**T \ (D \ (U \P**T * B) )) ] */
         /* Interchange rows K and IPIV(K) of matrix B in reverse order */
         /* from the formation order of IPIV(I) vector for Upper case. */
@@ -347,7 +359,7 @@ void zsytrs_3_(char *uplo, integer *n, integer *nrhs, doublecomplex *a, integer 
             kp = (i__2 = ipiv[k], f2c_dabs(i__2));
             if(kp != k)
             {
-                zswap_(nrhs, &b[k + b_dim1], ldb, &b[kp + b_dim1], ldb);
+                aocl_blas_zswap(nrhs, &b[k + b_dim1], ldb, &b[kp + b_dim1], ldb);
             }
         }
     }
@@ -367,11 +379,11 @@ void zsytrs_3_(char *uplo, integer *n, integer *nrhs, doublecomplex *a, integer 
             kp = (i__2 = ipiv[k], f2c_dabs(i__2));
             if(kp != k)
             {
-                zswap_(nrhs, &b[k + b_dim1], ldb, &b[kp + b_dim1], ldb);
+                aocl_blas_zswap(nrhs, &b[k + b_dim1], ldb, &b[kp + b_dim1], ldb);
             }
         }
         /* Compute (L \P**T * B) -> B [ (L \P**T * B) ] */
-        ztrsm_("L", "L", "N", "U", n, nrhs, &c_b1, &a[a_offset], lda, &b[b_offset], ldb);
+        aocl_blas_ztrsm("L", "L", "N", "U", n, nrhs, &c_b1, &a[a_offset], lda, &b[b_offset], ldb);
         /* Compute D \ B -> B [ D \ (L \P**T * B) ] */
         i__ = 1;
         while(i__ <= *n)
@@ -379,7 +391,7 @@ void zsytrs_3_(char *uplo, integer *n, integer *nrhs, doublecomplex *a, integer 
             if(ipiv[i__] > 0)
             {
                 z_div(&z__1, &c_b1, &a[i__ + i__ * a_dim1]);
-                zscal_(nrhs, &z__1, &b[i__ + b_dim1], ldb);
+                aocl_blas_zscal(nrhs, &z__1, &b[i__ + b_dim1], ldb);
             }
             else if(i__ < *n)
             {
@@ -429,7 +441,7 @@ void zsytrs_3_(char *uplo, integer *n, integer *nrhs, doublecomplex *a, integer 
             ++i__;
         }
         /* Compute (L**T \ B) -> B [ L**T \ (D \ (L \P**T * B) ) ] */
-        ztrsm_("L", "L", "T", "U", n, nrhs, &c_b1, &a[a_offset], lda, &b[b_offset], ldb);
+        aocl_blas_ztrsm("L", "L", "T", "U", n, nrhs, &c_b1, &a[a_offset], lda, &b[b_offset], ldb);
         /* P * B [ P * (L**T \ (D \ (L \P**T * B) )) ] */
         /* Interchange rows K and IPIV(K) of matrix B in reverse order */
         /* from the formation order of IPIV(I) vector for Lower case. */
@@ -441,7 +453,7 @@ void zsytrs_3_(char *uplo, integer *n, integer *nrhs, doublecomplex *a, integer 
             kp = (i__1 = ipiv[k], f2c_dabs(i__1));
             if(kp != k)
             {
-                zswap_(nrhs, &b[k + b_dim1], ldb, &b[kp + b_dim1], ldb);
+                aocl_blas_zswap(nrhs, &b[k + b_dim1], ldb, &b[kp + b_dim1], ldb);
             }
         }
         /* END Lower */

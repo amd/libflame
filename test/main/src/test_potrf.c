@@ -174,7 +174,7 @@ void fla_test_potrf_experiment(char *tst_api, test_params_t *params, integer dat
     prepare_potrf_run(&uplo, m, A_test, lda, datatype, &info, interfacetype, layout, params);
 
     /* Compute the performance of the best experiment repeat */
-    /* (1/3)m^3 for real and (4/3)m^3 for complex*/
+    /* (1/3)m^3 for real and (4/3)m^3 for scomplex*/
     perf = (double)(1.0 / 3.0 * m * m * m) / time_min / FLOPS_PER_UNIT_PERF;
     if(datatype == COMPLEX || datatype == DOUBLE_COMPLEX)
         perf *= 4.0;

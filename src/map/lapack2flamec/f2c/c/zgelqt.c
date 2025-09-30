@@ -36,7 +36,7 @@
 /* > */
 /* > \verbatim */
 /* > */
-/* > ZGELQT computes a blocked LQ factorization of a complex M-by-N matrix A */
+/* > ZGELQT computes a blocked LQ factorization of a scomplex M-by-N matrix A */
 /* > using the compact WY representation of Q. */
 /* > \endverbatim */
 /* Arguments: */
@@ -135,8 +135,29 @@ the elements above the diagonal */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void zgelqt_(integer *m, integer *n, integer *mb, doublecomplex *a, integer *lda, doublecomplex *t,
-             integer *ldt, doublecomplex *work, integer *info)
+/** Generated wrapper function */
+void zgelqt_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *mb, dcomplex *a, aocl_int_t *lda,
+             dcomplex *t, aocl_int_t *ldt, dcomplex *work, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_zgelqt(m, n, mb, a, lda, t, ldt, work, info);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t mb_64 = *mb;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t ldt_64 = *ldt;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_zgelqt(&m_64, &n_64, &mb_64, a, &lda_64, t, &ldt_64, work, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_zgelqt(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *mb, dcomplex *a,
+                        aocl_int64_t *lda, dcomplex *t, aocl_int64_t *ldt, dcomplex *work,
+                        aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zgelqt inputs: m %" FLA_IS ", n %" FLA_IS ", mb %" FLA_IS ", lda %" FLA_IS
@@ -144,19 +165,9 @@ void zgelqt_(integer *m, integer *n, integer *mb, doublecomplex *a, integer *lda
                       *m, *n, *mb, *lda, *ldt);
 
     /* System generated locals */
-    integer a_dim1, a_offset, t_dim1, t_offset, i__1, i__2, i__3, i__4, i__5;
+    aocl_int64_t a_dim1, a_offset, t_dim1, t_offset, i__1, i__2, i__3, i__4, i__5;
     /* Local variables */
-    integer i__, k, ib, iinfo;
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    extern /* Subroutine */
-        void
-        zlarfb_(char *, char *, char *, char *, integer *, integer *, integer *, doublecomplex *,
-                integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *,
-                integer *),
-        zgelqt3_(integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *,
-                 integer *);
+    aocl_int64_t i__, k, ib, iinfo;
     /* -- LAPACK computational routine (version 3.7.1) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -206,7 +217,7 @@ void zgelqt_(integer *m, integer *n, integer *mb, doublecomplex *a, integer *lda
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("ZGELQT", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("ZGELQT", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -227,15 +238,17 @@ void zgelqt_(integer *m, integer *n, integer *mb, doublecomplex *a, integer *lda
         ib = fla_min(i__3, *mb);
         /* Compute the LQ factorization of the current block A(I:M,I:I+IB-1) */
         i__3 = *n - i__ + 1;
-        zgelqt3_(&ib, &i__3, &a[i__ + i__ * a_dim1], lda, &t[i__ * t_dim1 + 1], ldt, &iinfo);
+        aocl_lapack_zgelqt3(&ib, &i__3, &a[i__ + i__ * a_dim1], lda, &t[i__ * t_dim1 + 1], ldt,
+                            &iinfo);
         if(i__ + ib <= *m)
         {
             /* Update by applying H**T to A(I:M,I+IB:N) from the right */
             i__3 = *m - i__ - ib + 1;
             i__4 = *n - i__ + 1;
             i__5 = *m - i__ - ib + 1;
-            zlarfb_("R", "N", "F", "R", &i__3, &i__4, &ib, &a[i__ + i__ * a_dim1], lda,
-                    &t[i__ * t_dim1 + 1], ldt, &a[i__ + ib + i__ * a_dim1], lda, &work[1], &i__5);
+            aocl_lapack_zlarfb("R", "N", "F", "R", &i__3, &i__4, &ib, &a[i__ + i__ * a_dim1], lda,
+                               &t[i__ * t_dim1 + 1], ldt, &a[i__ + ib + i__ * a_dim1], lda,
+                               &work[1], &i__5);
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT

@@ -4,7 +4,7 @@
  with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for
  libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c_n1 = -1;
+static aocl_int64_t c_n1 = -1;
 /* > \brief <b> ZSYSV_AA_2STAGE computes the solution to system of linear equations A * X = B for SY
  * matrices </b> */
 /* =========== DOCUMENTATION =========== */
@@ -43,7 +43,7 @@ static integer c_n1 = -1;
 /* > */
 /* > \verbatim */
 /* > */
-/* > ZSYSV_AA_2STAGE computes the solution to a complex system of */
+/* > ZSYSV_AA_2STAGE computes the solution to a scomplex system of */
 /* > linear equations */
 /* > A * X = B, */
 /* > where A is an N-by-N symmetric matrix and X and B are N-by-NRHS */
@@ -186,30 +186,47 @@ the */
 /* > \ingroup complex16SYcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void zsysv_aa_2stage_(char *uplo, integer *n, integer *nrhs, doublecomplex *a, integer *lda,
-                      doublecomplex *tb, integer *ltb, integer *ipiv, integer *ipiv2,
-                      doublecomplex *b, integer *ldb, doublecomplex *work, integer *lwork,
-                      integer *info)
+/** Generated wrapper function */
+void zsysv_aa_2stage_(char *uplo, aocl_int_t *n, aocl_int_t *nrhs, dcomplex *a,
+                      aocl_int_t *lda, dcomplex *tb, aocl_int_t *ltb, aocl_int_t *ipiv,
+                      aocl_int_t *ipiv2, dcomplex *b, aocl_int_t *ldb, dcomplex *work,
+                      aocl_int_t *lwork, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_zsysv_aa_2stage(uplo, n, nrhs, a, lda, tb, ltb, ipiv, ipiv2, b, ldb, work, lwork,
+                                info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t nrhs_64 = *nrhs;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t ltb_64 = *ltb;
+    aocl_int64_t ldb_64 = *ldb;
+    aocl_int64_t lwork_64 = *lwork;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_zsysv_aa_2stage(uplo, &n_64, &nrhs_64, a, &lda_64, tb, &ltb_64, ipiv, ipiv2, b,
+                                &ldb_64, work, &lwork_64, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_zsysv_aa_2stage(char *uplo, aocl_int64_t *n, aocl_int64_t *nrhs, dcomplex *a,
+                                 aocl_int64_t *lda, dcomplex *tb, aocl_int64_t *ltb,
+                                 aocl_int_t *ipiv, aocl_int_t *ipiv2, dcomplex *b,
+                                 aocl_int64_t *ldb, dcomplex *work, aocl_int64_t *lwork,
+                                 aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zsysv_aa_2stage inputs: uplo %c, n %" FLA_IS ", nrhs %" FLA_IS
                       ", lda %" FLA_IS ", ltb %" FLA_IS ", ldb %" FLA_IS ", lwork %" FLA_IS "",
                       *uplo, *n, *nrhs, *lda, *ltb, *ldb, *lwork);
     /* System generated locals */
-    integer a_dim1, a_offset, b_dim1, b_offset, i__1;
+    aocl_int64_t a_dim1, a_offset, b_dim1, b_offset, i__1;
     /* Local variables */
-    extern /* Subroutine */
-        void
-        zsytrf_aa_2stage_(char *, integer *, doublecomplex *, integer *, doublecomplex *, integer *,
-                          integer *, integer *, doublecomplex *, integer *, integer *),
-        zsytrs_aa_2stage_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *,
-                          integer *, integer *, integer *, doublecomplex *, integer *, integer *);
-    extern logical lsame_(char *, char *, integer, integer);
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     logical upper;
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    integer lwkopt;
+    aocl_int64_t lwkopt;
     logical tquery, wquery;
     /* -- LAPACK computational routine (version 3.8.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -276,14 +293,14 @@ void zsysv_aa_2stage_(char *uplo, integer *n, integer *nrhs, doublecomplex *a, i
     }
     if(*info == 0)
     {
-        zsytrf_aa_2stage_(uplo, n, &a[a_offset], lda, &tb[1], &c_n1, &ipiv[1], &ipiv2[1], &work[1],
-                          &c_n1, info);
+        aocl_lapack_zsytrf_aa_2stage(uplo, n, &a[a_offset], lda, &tb[1], &c_n1, &ipiv[1], &ipiv2[1],
+                                     &work[1], &c_n1, info);
         lwkopt = (integer)work[1].r;
     }
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("ZSYSV_AA_2STAGE", &i__1, (ftnlen)15);
+        aocl_blas_xerbla("ZSYSV_AA_2STAGE", &i__1, (ftnlen)15);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -293,13 +310,13 @@ void zsysv_aa_2stage_(char *uplo, integer *n, integer *nrhs, doublecomplex *a, i
         return;
     }
     /* Compute the factorization A = U**T*T*U or A = L*T*L**T. */
-    zsytrf_aa_2stage_(uplo, n, &a[a_offset], lda, &tb[1], ltb, &ipiv[1], &ipiv2[1], &work[1], lwork,
-                      info);
+    aocl_lapack_zsytrf_aa_2stage(uplo, n, &a[a_offset], lda, &tb[1], ltb, &ipiv[1], &ipiv2[1],
+                                 &work[1], lwork, info);
     if(*info == 0)
     {
         /* Solve the system A*X = B, overwriting B with X. */
-        zsytrs_aa_2stage_(uplo, n, nrhs, &a[a_offset], lda, &tb[1], ltb, &ipiv[1], &ipiv2[1],
-                          &b[b_offset], ldb, info);
+        aocl_lapack_zsytrs_aa_2stage(uplo, n, nrhs, &a[a_offset], lda, &tb[1], ltb, &ipiv[1],
+                                     &ipiv2[1], &b[b_offset], ldb, info);
     }
     work[1].r = (doublereal)lwkopt;
     work[1].i = 0.; // , expr subst

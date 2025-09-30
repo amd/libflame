@@ -11,15 +11,15 @@
 
 #if FLA_ENABLE_AMD_OPT
 
-static integer c__1 = 1;
+static aocl_int64_t c__1 = 1;
 /* QR for small sizes */
-int fla_dgeqrf_small_avx2(integer *m, integer *n, doublereal *a, integer *lda, doublereal *tau,
+int fla_dgeqrf_small_avx2(aocl_int64_t *m, aocl_int64_t *n, doublereal *a, aocl_int64_t *lda, doublereal *tau,
                           doublereal *work)
 {
     /* Declare and init local variables */
     FLA_GEQRF_INIT_DSMALL();
 
-    integer min_m_n;
+    aocl_int64_t min_m_n;
 
     /* Adjust pointers */
     a -= (1 + *lda * 1);
@@ -32,7 +32,7 @@ int fla_dgeqrf_small_avx2(integer *m, integer *n, doublereal *a, integer *lda, d
         slen = *m - i;
         /* input address */
         doublereal *iptr = &a[i + 1 + i * *lda - 1];
-        integer has_outliers = 0;
+        aocl_int64_t has_outliers = 0;
 
         if(slen <= 0)
         {

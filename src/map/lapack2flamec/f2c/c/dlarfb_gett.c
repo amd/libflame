@@ -4,7 +4,7 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
+static aocl_int64_t c__1 = 1;
 static doublereal c_b9 = 1.;
 static doublereal c_b21 = -1.;
 /* > \brief \b DLARFB_GETT */
@@ -390,30 +390,43 @@ static doublereal c_b21 = -1.;
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void dlarfb_gett_(char *ident, integer *m, integer *n, integer *k, doublereal *t, integer *ldt,
-                  doublereal *a, integer *lda, doublereal *b, integer *ldb, doublereal *work,
-                  integer *ldwork)
+/** Generated wrapper function */
+void dlarfb_gett_(char *ident, aocl_int_t *m, aocl_int_t *n, aocl_int_t *k, doublereal *t,
+                  aocl_int_t *ldt, doublereal *a, aocl_int_t *lda, doublereal *b, aocl_int_t *ldb,
+                  doublereal *work, aocl_int_t *ldwork)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_dlarfb_gett(ident, m, n, k, t, ldt, a, lda, b, ldb, work, ldwork);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t k_64 = *k;
+    aocl_int64_t ldt_64 = *ldt;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t ldb_64 = *ldb;
+    aocl_int64_t ldwork_64 = *ldwork;
+
+    aocl_lapack_dlarfb_gett(ident, &m_64, &n_64, &k_64, t, &ldt_64, a, &lda_64, b, &ldb_64, work,
+                            &ldwork_64);
+#endif
+}
+
+void aocl_lapack_dlarfb_gett(char *ident, aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *k,
+                             doublereal *t, aocl_int64_t *ldt, doublereal *a, aocl_int64_t *lda,
+                             doublereal *b, aocl_int64_t *ldb, doublereal *work,
+                             aocl_int64_t *ldwork)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dlarfb_gett inputs: ident %c, m %" FLA_IS ", n %" FLA_IS ", k %" FLA_IS
                       ", ldt %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS ", ldwork %" FLA_IS "",
                       *ident, *m, *n, *k, *ldt, *lda, *ldb, *ldwork);
     /* System generated locals */
-    integer a_dim1, a_offset, b_dim1, b_offset, t_dim1, t_offset, work_dim1, work_offset, i__1,
+    aocl_int64_t a_dim1, a_offset, b_dim1, b_offset, t_dim1, t_offset, work_dim1, work_offset, i__1,
         i__2;
     /* Local variables */
-    integer i__, j;
+    aocl_int64_t i__, j;
     logical lnotident;
-    extern /* Subroutine */
-        void
-        dgemm_(char *, char *, integer *, integer *, integer *, doublereal *, doublereal *,
-               integer *, doublereal *, integer *, doublereal *, doublereal *, integer *);
-    extern logical lsame_(char *, char *, integer, integer);
-    extern /* Subroutine */
-        void
-        dcopy_(integer *, doublereal *, integer *, doublereal *, integer *),
-        dtrmm_(char *, char *, char *, char *, integer *, integer *, doublereal *, doublereal *,
-               integer *, doublereal *, integer *);
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     /* -- LAPACK auxiliary routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -464,7 +477,7 @@ void dlarfb_gett_(char *ident, integer *m, integer *n, integer *k, doublereal *t
         i__1 = *n - *k;
         for(j = 1; j <= i__1; ++j)
         {
-            dcopy_(k, &a[(*k + j) * a_dim1 + 1], &c__1, &work[j * work_dim1 + 1], &c__1);
+            aocl_blas_dcopy(k, &a[(*k + j) * a_dim1 + 1], &c__1, &work[j * work_dim1 + 1], &c__1);
         }
         if(lnotident)
         {
@@ -472,28 +485,29 @@ void dlarfb_gett_(char *ident, integer *m, integer *n, integer *k, doublereal *t
             /* V1 is not an identy matrix, but unit lower-triangular */
             /* V1 stored in A1 (diagonal ones are not stored). */
             i__1 = *n - *k;
-            dtrmm_("L", "L", "T", "U", k, &i__1, &c_b9, &a[a_offset], lda, &work[work_offset],
-                   ldwork);
+            aocl_blas_dtrmm("L", "L", "T", "U", k, &i__1, &c_b9, &a[a_offset], lda,
+                            &work[work_offset], ldwork);
         }
         /* col2_(3) Compute W2: = W2 + (V2**T) * B2 = W2 + (B1**T) * B2 */
         /* V2 stored in B1. */
         if(*m > 0)
         {
             i__1 = *n - *k;
-            dgemm_("T", "N", k, &i__1, m, &c_b9, &b[b_offset], ldb, &b[(*k + 1) * b_dim1 + 1], ldb,
-                   &c_b9, &work[work_offset], ldwork);
+            aocl_blas_dgemm("T", "N", k, &i__1, m, &c_b9, &b[b_offset], ldb,
+                            &b[(*k + 1) * b_dim1 + 1], ldb, &c_b9, &work[work_offset], ldwork);
         }
         /* col2_(4) Compute W2: = T * W2, */
         /* T is upper-triangular. */
         i__1 = *n - *k;
-        dtrmm_("L", "U", "N", "N", k, &i__1, &c_b9, &t[t_offset], ldt, &work[work_offset], ldwork);
+        aocl_blas_dtrmm("L", "U", "N", "N", k, &i__1, &c_b9, &t[t_offset], ldt, &work[work_offset],
+                        ldwork);
         /* col2_(5) Compute B2: = B2 - V2 * W2 = B2 - B1 * W2, */
         /* V2 stored in B1. */
         if(*m > 0)
         {
             i__1 = *n - *k;
-            dgemm_("N", "N", m, &i__1, k, &c_b21, &b[b_offset], ldb, &work[work_offset], ldwork,
-                   &c_b9, &b[(*k + 1) * b_dim1 + 1], ldb);
+            aocl_blas_dgemm("N", "N", m, &i__1, k, &c_b21, &b[b_offset], ldb, &work[work_offset],
+                            ldwork, &c_b9, &b[(*k + 1) * b_dim1 + 1], ldb);
         }
         if(lnotident)
         {
@@ -501,8 +515,8 @@ void dlarfb_gett_(char *ident, integer *m, integer *n, integer *k, doublereal *t
             /* V1 is not an identity matrix, but unit lower-triangular, */
             /* V1 stored in A1 (diagonal ones are not stored). */
             i__1 = *n - *k;
-            dtrmm_("L", "L", "N", "U", k, &i__1, &c_b9, &a[a_offset], lda, &work[work_offset],
-                   ldwork);
+            aocl_blas_dtrmm("L", "L", "N", "U", k, &i__1, &c_b9, &a[a_offset], lda,
+                            &work[work_offset], ldwork);
         }
         /* col2_(7) Compute A2: = A2 - W2 = */
         /* = A(1:K, K+1:N-K) - WORK(1:K, 1:N-K), */
@@ -528,7 +542,7 @@ void dlarfb_gett_(char *ident, integer *m, integer *n, integer *k, doublereal *t
     i__1 = *k;
     for(j = 1; j <= i__1; ++j)
     {
-        dcopy_(&j, &a[j * a_dim1 + 1], &c__1, &work[j * work_dim1 + 1], &c__1);
+        aocl_blas_dcopy(&j, &a[j * a_dim1 + 1], &c__1, &work[j * work_dim1 + 1], &c__1);
     }
     /* Set the subdiagonal elements of W1 to zero column-by-column. */
     i__1 = *k - 1;
@@ -546,17 +560,19 @@ void dlarfb_gett_(char *ident, integer *m, integer *n, integer *k, doublereal *t
         /* V1 is not an identity matrix, but unit lower-triangular */
         /* V1 stored in A1 (diagonal ones are not stored), */
         /* W1 is upper-triangular with zeroes below the diagonal. */
-        dtrmm_("L", "L", "T", "U", k, k, &c_b9, &a[a_offset], lda, &work[work_offset], ldwork);
+        aocl_blas_dtrmm("L", "L", "T", "U", k, k, &c_b9, &a[a_offset], lda, &work[work_offset],
+                        ldwork);
     }
     /* col1_(3) Compute W1: = T * W1, */
     /* T is upper-triangular, */
     /* W1 is upper-triangular with zeroes below the diagonal. */
-    dtrmm_("L", "U", "N", "N", k, k, &c_b9, &t[t_offset], ldt, &work[work_offset], ldwork);
+    aocl_blas_dtrmm("L", "U", "N", "N", k, k, &c_b9, &t[t_offset], ldt, &work[work_offset], ldwork);
     /* col1_(4) Compute B1: = - V2 * W1 = - B1 * W1, */
     /* V2 = B1, W1 is upper-triangular with zeroes below the diagonal. */
     if(*m > 0)
     {
-        dtrmm_("R", "U", "N", "N", m, k, &c_b21, &work[work_offset], ldwork, &b[b_offset], ldb);
+        aocl_blas_dtrmm("R", "U", "N", "N", m, k, &c_b21, &work[work_offset], ldwork, &b[b_offset],
+                        ldb);
     }
     if(lnotident)
     {
@@ -565,7 +581,8 @@ void dlarfb_gett_(char *ident, integer *m, integer *n, integer *k, doublereal *t
         /* V1 stored in A1 (diagonal ones are not stored), */
         /* W1 is upper-triangular on input with zeroes below the diagonal, */
         /* and square on output. */
-        dtrmm_("L", "L", "N", "U", k, k, &c_b9, &a[a_offset], lda, &work[work_offset], ldwork);
+        aocl_blas_dtrmm("L", "L", "N", "U", k, k, &c_b9, &a[a_offset], lda, &work[work_offset],
+                        ldwork);
         /* col1_(6) Compute A1: = A1 - W1 = A(1:K, 1:K) - WORK(1:K, 1:K) */
         /* column-by-column. A1 is upper-triangular on input. */
         /* If IDENT, A1 is square on output, and W1 is square, */

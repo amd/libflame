@@ -1,11 +1,11 @@
 #include "FLA_f2c.h"
 #include "FLA_lapack2flame_return_defs.h"
 
-int chegst_check(integer *itype, char *uplo, integer *n, scomplex *a, integer *lda, scomplex *b,
-                 integer *ldb, integer *info)
+int chegst_check(aocl_int64_t *itype, char *uplo, aocl_int64_t *n, scomplex *a, aocl_int64_t *lda, scomplex *b,
+                 aocl_int64_t *ldb, aocl_int64_t *info)
 {
     /* System generated locals */
-    integer a_dim1, a_offset, b_dim1, b_offset, i__1;
+    aocl_int64_t a_dim1, a_offset, b_dim1, b_offset, i__1;
     /* Local variables */
     logical upper;
 
@@ -42,7 +42,7 @@ int chegst_check(integer *itype, char *uplo, integer *n, scomplex *a, integer *l
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("CHEGST", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("CHEGST", &i__1, (ftnlen)6);
         return LAPACK_FAILURE;
     }
     /* Quick return if possible */

@@ -1,11 +1,11 @@
 #include "FLA_f2c.h"
 #include "FLA_lapack2flame_return_defs.h"
 
-int zhetd2_check(char *uplo, integer *n, dcomplex *a, integer *lda, double *d__, double *e,
-                 dcomplex *tau, integer *info)
+int zhetd2_check(char *uplo, aocl_int64_t *n, dcomplex *a, aocl_int64_t *lda, double *d__, double *e,
+                 dcomplex *tau, aocl_int64_t *info)
 {
     /* System generated locals */
-    integer a_dim1, a_offset, i__1;
+    aocl_int64_t a_dim1, a_offset, i__1;
     logical upper;
 
     /* Parameter adjustments */
@@ -33,7 +33,7 @@ int zhetd2_check(char *uplo, integer *n, dcomplex *a, integer *lda, double *d__,
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("ZHETD2", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("ZHETD2", &i__1, (ftnlen)6);
         return LAPACK_FAILURE;
     }
     /* Quick return if possible */

@@ -9,8 +9,8 @@
 #ifdef FLA_OPENMP_MULTITHREADING
 #include <omp.h>
 #endif
-static integer c__1 = 1;
-static integer c_n1 = -1;
+static aocl_int64_t c__1 = 1;
+static aocl_int64_t c_n1 = -1;
 /* > \brief \b IPARAM2STAGE */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -157,24 +157,39 @@ static integer c_n1 = -1;
 /* > \endverbatim */
 /* > */
 /* ===================================================================== */
-integer iparam2stage_(integer *ispec, char *name__, char *opts, integer *ni, integer *nbi,
-                      integer *ibi, integer *nxi)
+/** Generated wrapper function */
+aocl_int_t iparam2stage_(aocl_int_t *ispec, char *name__, char *opts, aocl_int_t *ni, aocl_int_t *nbi, aocl_int_t *ibi, aocl_int_t *nxi)
+{
+#if FLA_ENABLE_ILP64
+    return aocl_lapack_iparam2stage(ispec, name__, opts, ni, nbi, ibi, nxi);
+#else
+    aocl_int64_t ispec_64 = *ispec;
+    aocl_int64_t ni_64 = *ni;
+    aocl_int64_t nbi_64 = *nbi;
+    aocl_int64_t ibi_64 = *ibi;
+    aocl_int64_t nxi_64 = *nxi;
+
+    return aocl_lapack_iparam2stage(&ispec_64, name__, opts, &ni_64, &nbi_64, &ibi_64, &nxi_64);
+#endif
+}
+
+aocl_int64_t aocl_lapack_iparam2stage(aocl_int64_t *ispec, char *name__, char *opts, aocl_int64_t *ni,
+                      aocl_int64_t *nbi, aocl_int64_t *ibi, aocl_int64_t *nxi)
 {
     /* System generated locals */
-    integer ret_val, i__1, i__2, i__3;
+    aocl_int64_t ret_val, i__1, i__2, i__3;
     /* Builtin functions */
     /* Subroutine */
     int s_copy(char *, char *, ftnlen, ftnlen);
     integer s_cmp(char *, char *, ftnlen, ftnlen);
     /* Local variables */
-    integer nthreads, i__, factoptnb, ib, ic, kd, iz;
+    aocl_int64_t nthreads, i__, factoptnb, ib, ic, kd, iz;
     char algo[3], prec[1], stag[5], vect[1];
     logical cprec, rprec;
-    extern logical lsame_(char *, char *, integer, integer);
-    integer lhous, lwork;
-    extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    aocl_int64_t lhous, lwork;
     char subnam[12];
-    integer lqoptnb, qroptnb;
+    aocl_int64_t lqoptnb, qroptnb;
     ftnlen name_len = strlen(name__);
     int fla_thread_get_num_threads(void);
     /* -- LAPACK auxiliary routine (version 3.8.0) -- */
@@ -378,9 +393,9 @@ integer iparam2stage_(integer *ispec, char *name__, char *opts, integer *ni, int
         lwork = -1;
         *(unsigned char *)subnam = *(unsigned char *)prec;
         s_copy(subnam + 1, "GEQRF", (ftnlen)5, (ftnlen)5);
-        qroptnb = ilaenv_(&c__1, subnam, " ", ni, nbi, &c_n1, &c_n1);
+        qroptnb = aocl_lapack_ilaenv(&c__1, subnam, " ", ni, nbi, &c_n1, &c_n1);
         s_copy(subnam + 1, "GELQF", (ftnlen)5, (ftnlen)5);
-        lqoptnb = ilaenv_(&c__1, subnam, " ", nbi, ni, &c_n1, &c_n1);
+        lqoptnb = aocl_lapack_ilaenv(&c__1, subnam, " ", nbi, ni, &c_n1, &c_n1);
         /* Could be QR or LQ for TRD and the max for BRD */
         factoptnb = fla_max(qroptnb, lqoptnb);
         if(s_cmp(algo, "TRD", (ftnlen)3, (ftnlen)3) == 0)

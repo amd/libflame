@@ -4,7 +4,7 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static complex c_b5 = {1.f, 0.f};
+static scomplex c_b5 = {{1.f}, {0.f}};
 /* > \brief \b CLARFG generates an elementary reflector (Householder matrix). */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -39,19 +39,19 @@ static complex c_b5 = {1.f, 0.f};
 /* > */
 /* > \verbatim */
 /* > */
-/* > CLARFG generates a complex elementary reflector H of order n, such */
+/* > CLARFG generates a scomplex elementary reflector H of order n, such */
 /* > that */
 /* > */
 /* > H**H * ( alpha ) = ( beta ), H**H * H = I. */
 /* > ( x ) ( 0 ) */
 /* > */
 /* > where alpha and beta are scalars, with beta real, and x is an */
-/* > (n-1)-element complex vector. H is represented in the form */
+/* > (n-1)-element scomplex vector. H is represented in the form */
 /* > */
 /* > H = I - tau * ( 1 ) * ( 1 v**H ) , */
 /* > ( v ) */
 /* > */
-/* > where tau is a complex scalar and v is a complex (n-1)-element */
+/* > where tau is a scomplex scalar and v is a scomplex (n-1)-element */
 /* > vector. Note that H is not hermitian. */
 /* > */
 /* > If the elements of x are all zero and alpha is real, then tau = 0 */
@@ -103,7 +103,21 @@ static complex c_b5 = {1.f, 0.f};
 /* > \ingroup complexOTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-void clarfg_(integer *n, complex *alpha, complex *x, integer *incx, complex *tau)
+/** Generated wrapper function */
+void clarfg_(aocl_int_t *n, scomplex *alpha, scomplex *x, aocl_int_t *incx, scomplex *tau)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_clarfg(n, alpha, x, incx, tau);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t incx_64 = *incx;
+
+    aocl_lapack_clarfg(&n_64, alpha, x, &incx_64, tau);
+#endif
+}
+
+void aocl_lapack_clarfg(aocl_int64_t *n, scomplex *alpha, scomplex *x, aocl_int64_t *incx,
+                        scomplex *tau)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -116,26 +130,20 @@ void clarfg_(integer *n, complex *alpha, complex *x, integer *incx, complex *tau
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
-    integer i__1;
+    aocl_int64_t i__1;
     real r__1, r__2;
-    complex q__1, q__2;
+    scomplex q__1, q__2;
     /* Builtin functions */
     double r_sign(real *, real *);
     /* Local variables */
-    integer j, knt;
+    aocl_int64_t j, knt;
     real beta;
-    extern /* Subroutine */
-        void
-        cscal_(integer *, complex *, complex *, integer *);
     real alphi, alphr, xnorm;
-    extern real scnrm2_(integer *, complex *, integer *), slapy3_(real *, real *, real *);
+    extern real slapy3_(real *, real *, real *);
     extern /* Complex */
         void
-        cladiv_f2c_(complex *, complex *, complex *);
+        cladiv_f2c_(scomplex *, scomplex *, scomplex *);
     extern real slamch_(char *);
-    extern /* Subroutine */
-        void
-        csscal_(integer *, real *, complex *, integer *);
     real safmin, rsafmn;
     /* -- LAPACK auxiliary routine (version 3.8.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -167,7 +175,7 @@ void clarfg_(integer *n, complex *alpha, complex *x, integer *incx, complex *tau
         return;
     }
     i__1 = *n - 1;
-    xnorm = scnrm2_(&i__1, &x[1], incx);
+    xnorm = aocl_blas_scnrm2(&i__1, &x[1], incx);
     alphr = alpha->r;
     alphi = alpha->i;
     if(xnorm == 0.f && alphi == 0.f)
@@ -190,7 +198,7 @@ void clarfg_(integer *n, complex *alpha, complex *x, integer *incx, complex *tau
         L10:
             ++knt;
             i__1 = *n - 1;
-            csscal_(&i__1, &rsafmn, &x[1], incx);
+            aocl_blas_csscal(&i__1, &rsafmn, &x[1], incx);
             beta *= rsafmn;
             alphi *= rsafmn;
             alphr *= rsafmn;
@@ -200,7 +208,7 @@ void clarfg_(integer *n, complex *alpha, complex *x, integer *incx, complex *tau
             }
             /* New BETA is at most 1, at least SAFMIN */
             i__1 = *n - 1;
-            xnorm = scnrm2_(&i__1, &x[1], incx);
+            xnorm = aocl_blas_scnrm2(&i__1, &x[1], incx);
             q__1.r = alphr;
             q__1.i = alphi; // , expr subst
             alpha->r = q__1.r, alpha->i = q__1.i;
@@ -217,7 +225,7 @@ void clarfg_(integer *n, complex *alpha, complex *x, integer *incx, complex *tau
         cladiv_f2c_(&q__1, &c_b5, &q__2);
         alpha->r = q__1.r, alpha->i = q__1.i;
         i__1 = *n - 1;
-        cscal_(&i__1, alpha, &x[1], incx);
+        aocl_blas_cscal(&i__1, alpha, &x[1], incx);
         /* If ALPHA is subnormal, it may lose relative accuracy */
         i__1 = knt;
         for(j = 1; j <= i__1; ++j)

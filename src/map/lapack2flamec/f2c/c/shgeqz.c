@@ -6,8 +6,8 @@
 #include "FLA_f2c.h" /* Table of constant values */
 static real c_b12 = 0.f;
 static real c_b13 = 1.f;
-static integer c__1 = 1;
-static integer c__3 = 3;
+static aocl_int64_t c__1 = 1;
+static aocl_int64_t c__3 = 3;
 /* > \brief \b SHGEQZ */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -66,7 +66,7 @@ static integer c__3 = 3;
 /* > diagonal blocks. */
 /* > */
 /* > The 1-by-1 blocks correspond to real eigenvalues of the matrix pair */
-/* > (H,T) and the 2-by-2 blocks correspond to complex conjugate pairs of */
+/* > (H,T) and the 2-by-2 blocks correspond to scomplex conjugate pairs of */
 /* > eigenvalues. */
 /* > */
 /* > Additionally, the 2-by-2 upper triangular diagonal blocks of P */
@@ -86,7 +86,7 @@ static integer c__3 = 3;
 /* > */
 /* > To avoid overflow, eigenvalues of the matrix pair (H,T) (equivalently, */
 /* > of (A,B)) are computed as a pair of values (alpha,beta), where alpha is */
-/* > complex and beta real. */
+/* > scomplex and beta real. */
 /* > If beta is nonzero, lambda = alpha / beta is an eigenvalue of the */
 /* > generalized nonsymmetric eigenvalue problem (GNEP) */
 /* > A*x = lambda*B*x */
@@ -208,7 +208,7 @@ if N = 0, ILO=1 and IHI=0. */
 /* > If ALPHAI(j) is zero, then the j-th eigenvalue is real;
 if */
 /* > positive, then the j-th and (j+1)-st eigenvalues are a */
-/* > complex conjugate pair, with ALPHAI(j+1) = -ALPHAI(j). */
+/* > scomplex conjugate pair, with ALPHAI(j+1) = -ALPHAI(j). */
 /* > \endverbatim */
 /* > */
 /* > \param[out] BETA */
@@ -310,9 +310,38 @@ the routine */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void shgeqz_(char *job, char *compq, char *compz, integer *n, integer *ilo, integer *ihi, real *h__,
-             integer *ldh, real *t, integer *ldt, real *alphar, real *alphai, real *beta, real *q,
-             integer *ldq, real *z__, integer *ldz, real *work, integer *lwork, integer *info)
+/** Generated wrapper function */
+void shgeqz_(char *job, char *compq, char *compz, aocl_int_t *n, aocl_int_t *ilo, aocl_int_t *ihi,
+             real *h__, aocl_int_t *ldh, real *t, aocl_int_t *ldt, real *alphar, real *alphai,
+             real *beta, real *q, aocl_int_t *ldq, real *z__, aocl_int_t *ldz, real *work,
+             aocl_int_t *lwork, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_shgeqz(job, compq, compz, n, ilo, ihi, h__, ldh, t, ldt, alphar, alphai, beta, q,
+                       ldq, z__, ldz, work, lwork, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t ilo_64 = *ilo;
+    aocl_int64_t ihi_64 = *ihi;
+    aocl_int64_t ldh_64 = *ldh;
+    aocl_int64_t ldt_64 = *ldt;
+    aocl_int64_t ldq_64 = *ldq;
+    aocl_int64_t ldz_64 = *ldz;
+    aocl_int64_t lwork_64 = *lwork;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_shgeqz(job, compq, compz, &n_64, &ilo_64, &ihi_64, h__, &ldh_64, t, &ldt_64, alphar,
+                       alphai, beta, q, &ldq_64, z__, &ldz_64, work, &lwork_64, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_shgeqz(char *job, char *compq, char *compz, aocl_int64_t *n, aocl_int64_t *ilo,
+                        aocl_int64_t *ihi, real *h__, aocl_int64_t *ldh, real *t, aocl_int64_t *ldt,
+                        real *alphar, real *alphai, real *beta, real *q, aocl_int64_t *ldq,
+                        real *z__, aocl_int64_t *ldz, real *work, aocl_int64_t *lwork,
+                        aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("shgeqz inputs: job %c, compq %c, compz %c, n %" FLA_IS ", ilo %" FLA_IS
@@ -320,38 +349,33 @@ void shgeqz_(char *job, char *compq, char *compz, integer *n, integer *ilo, inte
                       ", ldz %" FLA_IS "",
                       *job, *compq, *compz, *n, *ilo, *ihi, *ldh, *ldt, *ldq, *ldz);
     /* System generated locals */
-    integer h_dim1, h_offset, q_dim1, q_offset, t_dim1, t_offset, z_dim1, z_offset, i__1, i__2,
+    aocl_int64_t h_dim1, h_offset, q_dim1, q_offset, t_dim1, t_offset, z_dim1, z_offset, i__1, i__2,
         i__3, i__4;
     real r__1, r__2, r__3, r__4, r__5;
     /* Builtin functions */
     double sqrt(doublereal);
     /* Local variables */
     real c__;
-    integer j;
+    aocl_int64_t j;
     real s, v[3], s1, s2, t1, t2, t3, u1, u2, a11, a12, a21, a22, b11, b22, c12, c21;
-    integer jc;
+    aocl_int64_t jc;
     real an, bn, cl, cq, cr;
-    integer in;
+    aocl_int64_t in;
     real u12, w11, w12, w21;
-    integer jr;
+    aocl_int64_t jr;
     real cz, w22, sl, wi, sr, vs, wr, b1a, b2a, a1i, a2i, b1i, b2i, a1r, a2r, b1r, b2r, wr2, ad11,
         ad12, ad21, ad22, c11i, c22i;
-    integer jch;
+    aocl_int64_t jch;
     real c11r, c22r;
     logical ilq;
     real u12l, tau, sqi;
     logical ilz;
     real ulp, sqr, szi, szr, ad11l, ad12l, ad21l, ad22l, ad32l, wabs, atol, btol, temp;
-    extern /* Subroutine */
-        void
-        srot_(integer *, real *, integer *, real *, integer *, real *, real *),
-        slag2_(real *, integer *, real *, integer *, real *, real *, real *, real *, real *,
-               real *);
     real temp2, s1inv, scale;
-    extern logical lsame_(char *, char *, integer, integer);
-    integer iiter, ilast, jiter;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    aocl_int64_t iiter, ilast, jiter;
     real anorm, bnorm;
-    integer maxit;
+    aocl_int64_t maxit;
     real tempi, tempr;
     logical ilazr2;
     extern real slapy2_(real *, real *), slapy3_(real *, real *, real *);
@@ -361,28 +385,17 @@ void shgeqz_(char *job, char *compq, char *compz, integer *n, integer *ilo, inte
     real ascale, bscale;
     extern real slamch_(char *);
     real safmin;
-    extern /* Subroutine */
-        void
-        slarfg_(integer *, real *, real *, integer *, real *);
     real safmax;
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real eshift;
     logical ilschr;
-    integer icompq, ilastm;
-    extern real slanhs_(char *, integer *, real *, integer *, real *);
+    aocl_int64_t icompq, ilastm;
     extern /* Subroutine */
         void
         slartg_(real *, real *, real *, real *, real *);
-    integer ischur;
-    extern /* Subroutine */
-        void
-        slaset_(char *, integer *, integer *, real *, real *, real *, integer *);
+    aocl_int64_t ischur;
     logical ilazro;
-    integer icompz, ifirst, ifrstm, istart;
+    aocl_int64_t icompz, ifirst, ifrstm, istart;
     logical ilpivt, lquery;
-    extern real sroundup_lwork(integer *);
     /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -530,7 +543,7 @@ void shgeqz_(char *job, char *compq, char *compz, integer *n, integer *ilo, inte
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("SHGEQZ", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("SHGEQZ", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -549,19 +562,19 @@ void shgeqz_(char *job, char *compq, char *compz, integer *n, integer *ilo, inte
     /* Initialize Q and Z */
     if(icompq == 3)
     {
-        slaset_("Full", n, n, &c_b12, &c_b13, &q[q_offset], ldq);
+        aocl_lapack_slaset("Full", n, n, &c_b12, &c_b13, &q[q_offset], ldq);
     }
     if(icompz == 3)
     {
-        slaset_("Full", n, n, &c_b12, &c_b13, &z__[z_offset], ldz);
+        aocl_lapack_slaset("Full", n, n, &c_b12, &c_b13, &z__[z_offset], ldz);
     }
     /* Machine Constants */
     in = *ihi + 1 - *ilo;
     safmin = slamch_("S");
     safmax = 1.f / safmin;
     ulp = slamch_("E") * slamch_("B");
-    anorm = slanhs_("F", &in, &h__[*ilo + *ilo * h_dim1], ldh, &work[1]);
-    bnorm = slanhs_("F", &in, &t[*ilo + *ilo * t_dim1], ldt, &work[1]);
+    anorm = aocl_lapack_slanhs("F", &in, &h__[*ilo + *ilo * h_dim1], ldh, &work[1]);
+    bnorm = aocl_lapack_slanhs("F", &in, &t[*ilo + *ilo * t_dim1], ldt, &work[1]);
     /* Computing MAX */
     r__1 = safmin;
     r__2 = ulp * anorm; // , expr subst
@@ -733,15 +746,15 @@ void shgeqz_(char *job, char *compq, char *compz, integer *n, integer *ilo, inte
                                 &h__[jch + jch * h_dim1]);
                         h__[jch + 1 + jch * h_dim1] = 0.f;
                         i__4 = ilastm - jch;
-                        srot_(&i__4, &h__[jch + (jch + 1) * h_dim1], ldh,
-                              &h__[jch + 1 + (jch + 1) * h_dim1], ldh, &c__, &s);
+                        aocl_blas_srot(&i__4, &h__[jch + (jch + 1) * h_dim1], ldh,
+                                       &h__[jch + 1 + (jch + 1) * h_dim1], ldh, &c__, &s);
                         i__4 = ilastm - jch;
-                        srot_(&i__4, &t[jch + (jch + 1) * t_dim1], ldt,
-                              &t[jch + 1 + (jch + 1) * t_dim1], ldt, &c__, &s);
+                        aocl_blas_srot(&i__4, &t[jch + (jch + 1) * t_dim1], ldt,
+                                       &t[jch + 1 + (jch + 1) * t_dim1], ldt, &c__, &s);
                         if(ilq)
                         {
-                            srot_(n, &q[jch * q_dim1 + 1], &c__1, &q[(jch + 1) * q_dim1 + 1], &c__1,
-                                  &c__, &s);
+                            aocl_blas_srot(n, &q[jch * q_dim1 + 1], &c__1,
+                                           &q[(jch + 1) * q_dim1 + 1], &c__1, &c__, &s);
                         }
                         if(ilazr2)
                         {
@@ -779,31 +792,31 @@ void shgeqz_(char *job, char *compq, char *compz, integer *n, integer *ilo, inte
                         if(jch < ilastm - 1)
                         {
                             i__4 = ilastm - jch - 1;
-                            srot_(&i__4, &t[jch + (jch + 2) * t_dim1], ldt,
-                                  &t[jch + 1 + (jch + 2) * t_dim1], ldt, &c__, &s);
+                            aocl_blas_srot(&i__4, &t[jch + (jch + 2) * t_dim1], ldt,
+                                           &t[jch + 1 + (jch + 2) * t_dim1], ldt, &c__, &s);
                         }
                         i__4 = ilastm - jch + 2;
-                        srot_(&i__4, &h__[jch + (jch - 1) * h_dim1], ldh,
-                              &h__[jch + 1 + (jch - 1) * h_dim1], ldh, &c__, &s);
+                        aocl_blas_srot(&i__4, &h__[jch + (jch - 1) * h_dim1], ldh,
+                                       &h__[jch + 1 + (jch - 1) * h_dim1], ldh, &c__, &s);
                         if(ilq)
                         {
-                            srot_(n, &q[jch * q_dim1 + 1], &c__1, &q[(jch + 1) * q_dim1 + 1], &c__1,
-                                  &c__, &s);
+                            aocl_blas_srot(n, &q[jch * q_dim1 + 1], &c__1,
+                                           &q[(jch + 1) * q_dim1 + 1], &c__1, &c__, &s);
                         }
                         temp = h__[jch + 1 + jch * h_dim1];
                         slartg_(&temp, &h__[jch + 1 + (jch - 1) * h_dim1], &c__, &s,
                                 &h__[jch + 1 + jch * h_dim1]);
                         h__[jch + 1 + (jch - 1) * h_dim1] = 0.f;
                         i__4 = jch + 1 - ifrstm;
-                        srot_(&i__4, &h__[ifrstm + jch * h_dim1], &c__1,
-                              &h__[ifrstm + (jch - 1) * h_dim1], &c__1, &c__, &s);
+                        aocl_blas_srot(&i__4, &h__[ifrstm + jch * h_dim1], &c__1,
+                                       &h__[ifrstm + (jch - 1) * h_dim1], &c__1, &c__, &s);
                         i__4 = jch - ifrstm;
-                        srot_(&i__4, &t[ifrstm + jch * t_dim1], &c__1,
-                              &t[ifrstm + (jch - 1) * t_dim1], &c__1, &c__, &s);
+                        aocl_blas_srot(&i__4, &t[ifrstm + jch * t_dim1], &c__1,
+                                       &t[ifrstm + (jch - 1) * t_dim1], &c__1, &c__, &s);
                         if(ilz)
                         {
-                            srot_(n, &z__[jch * z_dim1 + 1], &c__1, &z__[(jch - 1) * z_dim1 + 1],
-                                  &c__1, &c__, &s);
+                            aocl_blas_srot(n, &z__[jch * z_dim1 + 1], &c__1,
+                                           &z__[(jch - 1) * z_dim1 + 1], &c__1, &c__, &s);
                         }
                         /* L50: */
                     }
@@ -829,15 +842,15 @@ void shgeqz_(char *job, char *compq, char *compz, integer *n, integer *ilo, inte
         slartg_(&temp, &h__[ilast + (ilast - 1) * h_dim1], &c__, &s, &h__[ilast + ilast * h_dim1]);
         h__[ilast + (ilast - 1) * h_dim1] = 0.f;
         i__2 = ilast - ifrstm;
-        srot_(&i__2, &h__[ifrstm + ilast * h_dim1], &c__1, &h__[ifrstm + (ilast - 1) * h_dim1],
-              &c__1, &c__, &s);
+        aocl_blas_srot(&i__2, &h__[ifrstm + ilast * h_dim1], &c__1,
+                       &h__[ifrstm + (ilast - 1) * h_dim1], &c__1, &c__, &s);
         i__2 = ilast - ifrstm;
-        srot_(&i__2, &t[ifrstm + ilast * t_dim1], &c__1, &t[ifrstm + (ilast - 1) * t_dim1], &c__1,
-              &c__, &s);
+        aocl_blas_srot(&i__2, &t[ifrstm + ilast * t_dim1], &c__1, &t[ifrstm + (ilast - 1) * t_dim1],
+                       &c__1, &c__, &s);
         if(ilz)
         {
-            srot_(n, &z__[ilast * z_dim1 + 1], &c__1, &z__[(ilast - 1) * z_dim1 + 1], &c__1, &c__,
-                  &s);
+            aocl_blas_srot(n, &z__[ilast * z_dim1 + 1], &c__1, &z__[(ilast - 1) * z_dim1 + 1],
+                           &c__1, &c__, &s);
         }
     /* H(ILAST,ILAST-1)=0 -- Standardize B, set ALPHAR, ALPHAI, */
     /* and BETA */
@@ -925,8 +938,9 @@ void shgeqz_(char *job, char *compq, char *compz, integer *n, integer *ilo, inte
             /* bottom-right 2x2 block of A and B. The first eigenvalue */
             /* returned by SLAG2 is the Wilkinson shift (AEP p.512), */
             r__1 = safmin * 100.f;
-            slag2_(&h__[ilast - 1 + (ilast - 1) * h_dim1], ldh,
-                   &t[ilast - 1 + (ilast - 1) * t_dim1], ldt, &r__1, &s1, &s2, &wr, &wr2, &wi);
+            aocl_lapack_slag2(&h__[ilast - 1 + (ilast - 1) * h_dim1], ldh,
+                              &t[ilast - 1 + (ilast - 1) * t_dim1], ldt, &r__1, &s1, &s2, &wr, &wr2,
+                              &wi);
             if((r__1 = wr / s1 * t[ilast + ilast * t_dim1] - h__[ilast + ilast * h_dim1],
                 f2c_abs(r__1))
                > (r__2 = wr2 / s2 * t[ilast + ilast * t_dim1] - h__[ilast + ilast * h_dim1],
@@ -1077,7 +1091,7 @@ void shgeqz_(char *job, char *compq, char *compz, integer *n, integer *ilo, inte
     L200:
         if(ifirst + 1 == ilast)
         {
-            /* Special case -- 2x2 block with complex eigenvectors */
+            /* Special case -- 2x2 block with scomplex eigenvectors */
             /* Step 1: Standardize, that is, rotate so that */
             /* ( B11 0 ) */
             /* B = ( ) with B11 non-negative. */
@@ -1092,32 +1106,32 @@ void shgeqz_(char *job, char *compq, char *compz, integer *n, integer *ilo, inte
                 b22 = -b22;
             }
             i__2 = ilastm + 1 - ifirst;
-            srot_(&i__2, &h__[ilast - 1 + (ilast - 1) * h_dim1], ldh,
-                  &h__[ilast + (ilast - 1) * h_dim1], ldh, &cl, &sl);
+            aocl_blas_srot(&i__2, &h__[ilast - 1 + (ilast - 1) * h_dim1], ldh,
+                           &h__[ilast + (ilast - 1) * h_dim1], ldh, &cl, &sl);
             i__2 = ilast + 1 - ifrstm;
-            srot_(&i__2, &h__[ifrstm + (ilast - 1) * h_dim1], &c__1, &h__[ifrstm + ilast * h_dim1],
-                  &c__1, &cr, &sr);
+            aocl_blas_srot(&i__2, &h__[ifrstm + (ilast - 1) * h_dim1], &c__1,
+                           &h__[ifrstm + ilast * h_dim1], &c__1, &cr, &sr);
             if(ilast < ilastm)
             {
                 i__2 = ilastm - ilast;
-                srot_(&i__2, &t[ilast - 1 + (ilast + 1) * t_dim1], ldt,
-                      &t[ilast + (ilast + 1) * t_dim1], ldt, &cl, &sl);
+                aocl_blas_srot(&i__2, &t[ilast - 1 + (ilast + 1) * t_dim1], ldt,
+                               &t[ilast + (ilast + 1) * t_dim1], ldt, &cl, &sl);
             }
             if(ifrstm < ilast - 1)
             {
                 i__2 = ifirst - ifrstm;
-                srot_(&i__2, &t[ifrstm + (ilast - 1) * t_dim1], &c__1, &t[ifrstm + ilast * t_dim1],
-                      &c__1, &cr, &sr);
+                aocl_blas_srot(&i__2, &t[ifrstm + (ilast - 1) * t_dim1], &c__1,
+                               &t[ifrstm + ilast * t_dim1], &c__1, &cr, &sr);
             }
             if(ilq)
             {
-                srot_(n, &q[(ilast - 1) * q_dim1 + 1], &c__1, &q[ilast * q_dim1 + 1], &c__1, &cl,
-                      &sl);
+                aocl_blas_srot(n, &q[(ilast - 1) * q_dim1 + 1], &c__1, &q[ilast * q_dim1 + 1],
+                               &c__1, &cl, &sl);
             }
             if(ilz)
             {
-                srot_(n, &z__[(ilast - 1) * z_dim1 + 1], &c__1, &z__[ilast * z_dim1 + 1], &c__1,
-                      &cr, &sr);
+                aocl_blas_srot(n, &z__[(ilast - 1) * z_dim1 + 1], &c__1, &z__[ilast * z_dim1 + 1],
+                               &c__1, &cr, &sr);
             }
             t[ilast - 1 + (ilast - 1) * t_dim1] = b11;
             t[ilast - 1 + ilast * t_dim1] = 0.f;
@@ -1147,8 +1161,9 @@ void shgeqz_(char *job, char *compq, char *compz, integer *n, integer *ilo, inte
             /* Step 2: Compute ALPHAR, ALPHAI, and BETA (see refs.) */
             /* Recompute shift */
             r__1 = safmin * 100.f;
-            slag2_(&h__[ilast - 1 + (ilast - 1) * h_dim1], ldh,
-                   &t[ilast - 1 + (ilast - 1) * t_dim1], ldt, &r__1, &s1, &temp, &wr, &temp2, &wi);
+            aocl_lapack_slag2(&h__[ilast - 1 + (ilast - 1) * h_dim1], ldh,
+                              &t[ilast - 1 + (ilast - 1) * t_dim1], ldt, &r__1, &s1, &temp, &wr,
+                              &temp2, &wi);
             /* If standardization has perturbed the shift onto real line, */
             /* do another (real single-shift) QR step. */
             if(wi == 0.f)
@@ -1161,7 +1176,7 @@ void shgeqz_(char *job, char *compq, char *compz, integer *n, integer *ilo, inte
             a21 = h__[ilast + (ilast - 1) * h_dim1];
             a12 = h__[ilast - 1 + ilast * h_dim1];
             a22 = h__[ilast + ilast * h_dim1];
-            /* Compute complex Givens rotation on right */
+            /* Compute scomplex Givens rotation on right */
             /* (Assume some element of C = (sA - wB) > unfl ) */
             /* __ */
             /* (sA - wB) ( CZ -SZ ) */
@@ -1305,7 +1320,7 @@ void shgeqz_(char *job, char *compq, char *compz, integer *n, integer *ilo, inte
                    * ad21l;
             v[2] = ad32l * ad21l;
             istart = ifirst;
-            slarfg_(&c__3, v, &v[1], &c__1, &tau);
+            aocl_lapack_slarfg(&c__3, v, &v[1], &c__1, &tau);
             v[0] = 1.f;
             /* Sweep */
             i__2 = ilast - 2;
@@ -1318,7 +1333,7 @@ void shgeqz_(char *job, char *compq, char *compz, integer *n, integer *ilo, inte
                     v[0] = h__[j + (j - 1) * h_dim1];
                     v[1] = h__[j + 1 + (j - 1) * h_dim1];
                     v[2] = h__[j + 2 + (j - 1) * h_dim1];
-                    slarfg_(&c__3, &h__[j + (j - 1) * h_dim1], &v[1], &c__1, &tau);
+                    aocl_lapack_slarfg(&c__3, &h__[j + (j - 1) * h_dim1], &v[1], &c__1, &tau);
                     v[0] = 1.f;
                     h__[j + 1 + (j - 1) * h_dim1] = 0.f;
                     h__[j + 2 + (j - 1) * h_dim1] = 0.f;
@@ -1557,7 +1572,7 @@ void shgeqz_(char *job, char *compq, char *compz, integer *n, integer *ilo, inte
         goto L350;
     /* End of iteration loop */
     L350: /* L360: */
-          ;
+        ;
     }
     /* Drop-through = non-convergence */
     *info = ilast;
@@ -1603,7 +1618,7 @@ L380: /* Set Eigenvalues 1:ILO-1 */
     *info = 0;
 /* Exit (other than argument error) -- return optimal workspace size */
 L420:
-    work[1] = sroundup_lwork(n);
+    work[1] = aocl_lapack_sroundup_lwork(n);
     AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SHGEQZ */

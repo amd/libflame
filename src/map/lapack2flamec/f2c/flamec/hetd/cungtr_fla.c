@@ -123,27 +123,19 @@ the routine */
 /* > \ingroup complexOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void cungtr_fla(char *uplo, integer *n, complex *a, integer *lda, complex *tau, complex *work,
-                integer *lwork, integer *info)
+void cungtr_fla(char *uplo, aocl_int64_t *n, scomplex *a, aocl_int64_t *lda, scomplex *tau,
+                scomplex *work, aocl_int64_t *lwork, aocl_int64_t *info)
 {
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, i__1, i__2, i__3, i__4;
     /* Local variables */
-    integer i__, j, nb;
-    extern logical lsame_(char *, char *, integer, integer);
-    integer iinfo;
+    aocl_int64_t i__, j, nb;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    aocl_int64_t iinfo;
     logical upper;
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
-    extern /* Subroutine */
-        void
-        cungql_(integer *, integer *, integer *, complex *, integer *, complex *, complex *,
-                integer *, integer *),
-        cungqr_fla(integer *, integer *, integer *, complex *, integer *, complex *, complex *,
-                   integer *, integer *);
-    integer lwkopt;
+    extern void cungqr_fla(aocl_int64_t *, aocl_int64_t *, aocl_int64_t *, scomplex *, aocl_int64_t *,
+                 scomplex *, scomplex *, aocl_int64_t *, aocl_int64_t *);
+    aocl_int64_t lwkopt;
     logical lquery;
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -224,7 +216,7 @@ void cungtr_fla(char *uplo, integer *n, complex *a, integer *lda, complex *tau, 
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("CUNGTR", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("CUNGTR", &i__1, (ftnlen)6);
         return;
     }
     else if(lquery)

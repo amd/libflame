@@ -101,7 +101,7 @@ void slartgp_(real *f, real *g, real *cs, real *sn, real *r__)
     /* Local variables */
     aocl_int64_t i__;
     real f1, g1, eps, scale;
-    integer count, i__1;
+    aocl_int64_t count, i__1;
     real safmn2, safmx2;
     extern real slamch_(char *);
     real safmin;

@@ -130,8 +130,24 @@ static aocl_int64_t c__1 = 1;
 /* > \ingroup doubleOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void dtpcon_(char *norm, char *uplo, char *diag, integer *n, doublereal *ap, doublereal *rcond,
-             doublereal *work, integer *iwork, integer *info)
+/** Generated wrapper function */
+void dtpcon_(char *norm, char *uplo, char *diag, aocl_int_t *n, doublereal *ap, doublereal *rcond,
+             doublereal *work, aocl_int_t *iwork, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_dtpcon(norm, uplo, diag, n, ap, rcond, work, iwork, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_dtpcon(norm, uplo, diag, &n_64, ap, rcond, work, iwork, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_dtpcon(char *norm, char *uplo, char *diag, aocl_int64_t *n, doublereal *ap,
+                        doublereal *rcond, doublereal *work, aocl_int_t *iwork, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dtpcon inputs: norm %c, uplo %c, diag %c, n %" FLA_IS "", *norm, *uplo,
@@ -142,29 +158,13 @@ void dtpcon_(char *norm, char *uplo, char *diag, integer *n, doublereal *ap, dou
     /* Local variables */
     aocl_int64_t ix, kase, kase1;
     doublereal scale;
-    extern logical lsame_(char *, char *, integer, integer);
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     integer isave[3];
-    extern /* Subroutine */
-        void
-        drscl_(integer *, doublereal *, doublereal *, integer *);
     doublereal anorm;
     logical upper;
     doublereal xnorm;
-    extern /* Subroutine */
-        void
-        dlacn2_(integer *, doublereal *, doublereal *, integer *, doublereal *, integer *,
-                integer *);
     extern doublereal dlamch_(char *);
-    extern integer idamax_(integer *, doublereal *, integer *);
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    extern doublereal dlantp_(char *, char *, char *, integer *, doublereal *, doublereal *);
     doublereal ainvnm;
-    extern /* Subroutine */
-        void
-        dlatps_(char *, char *, char *, char *, integer *, doublereal *, doublereal *, doublereal *,
-                doublereal *, integer *);
     logical onenrm;
     char normin[1];
     doublereal smlnum;
@@ -220,7 +220,7 @@ void dtpcon_(char *norm, char *uplo, char *diag, integer *n, doublereal *ap, dou
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("DTPCON", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("DTPCON", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -251,26 +251,26 @@ void dtpcon_(char *norm, char *uplo, char *diag, integer *n, doublereal *ap, dou
         }
         kase = 0;
     L10:
-        dlacn2_(n, &work[*n + 1], &work[1], &iwork[1], &ainvnm, &kase, isave);
+        aocl_lapack_dlacn2(n, &work[*n + 1], &work[1], &iwork[1], &ainvnm, &kase, isave);
         if(kase != 0)
         {
             if(kase == kase1)
             {
                 /* Multiply by inv(A). */
-                dlatps_(uplo, "No transpose", diag, normin, n, &ap[1], &work[1], &scale,
-                        &work[(*n << 1) + 1], info);
+                aocl_lapack_dlatps(uplo, "No transpose", diag, normin, n, &ap[1], &work[1], &scale,
+                                   &work[(*n << 1) + 1], info);
             }
             else
             {
                 /* Multiply by inv(A**T). */
-                dlatps_(uplo, "Transpose", diag, normin, n, &ap[1], &work[1], &scale,
-                        &work[(*n << 1) + 1], info);
+                aocl_lapack_dlatps(uplo, "Transpose", diag, normin, n, &ap[1], &work[1], &scale,
+                                   &work[(*n << 1) + 1], info);
             }
             *(unsigned char *)normin = 'Y';
             /* Multiply by 1/SCALE if doing so will not cause overflow. */
             if(scale != 1.)
             {
-                ix = idamax_(n, &work[1], &c__1);
+                ix = aocl_blas_idamax(n, &work[1], &c__1);
                 xnorm = (d__1 = work[ix], f2c_dabs(d__1));
                 if(scale < xnorm * smlnum || scale == 0.)
                 {

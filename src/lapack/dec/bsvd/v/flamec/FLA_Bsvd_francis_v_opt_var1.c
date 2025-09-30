@@ -13,11 +13,11 @@
 FLA_Error FLA_Bsvd_francis_v_opt_var1( FLA_Obj shift, FLA_Obj g, FLA_Obj h, FLA_Obj d, FLA_Obj e )
 {
     FLA_Datatype datatype;
-    integer          m_A;
-    integer          inc_g;
-    integer          inc_h;
-    integer          inc_d;
-    integer          inc_e;
+    fla_dim_t          m_A;
+    fla_dim_t          inc_g;
+    fla_dim_t          inc_h;
+    fla_dim_t          inc_d;
+    fla_dim_t          inc_e;
 
     datatype = FLA_Obj_datatype( d );
 
@@ -73,16 +73,16 @@ FLA_Error FLA_Bsvd_francis_v_opt_var1( FLA_Obj shift, FLA_Obj g, FLA_Obj h, FLA_
 
 
 
-FLA_Error FLA_Bsvd_francis_v_ops_var1( integer       m_A,
+FLA_Error FLA_Bsvd_francis_v_ops_var1( fla_dim_t       m_A,
                                        float     shift,
-                                       scomplex* buff_g, integer inc_g,
-                                       scomplex* buff_h, integer inc_h,
-                                       float*    buff_d, integer inc_d,
-                                       float*    buff_e, integer inc_e )
+                                       scomplex* buff_g, fla_dim_t inc_g,
+                                       scomplex* buff_h, fla_dim_t inc_h,
+                                       float*    buff_d, fla_dim_t inc_d,
+                                       float*    buff_e, fla_dim_t inc_e )
 {
     float     one   = bl1_s1();
     float     bulge = 0.0F;
-    integer       i;
+    fla_dim_t       i;
 
     // If the shift is zero, perform a simplified Francis step.
     if ( shift == 0.0F )
@@ -161,7 +161,7 @@ FLA_Error FLA_Bsvd_francis_v_ops_var1( integer       m_A,
         float     alpha01_new;
         float     alpha11_new;
 
-        integer       mn_ahead  = m_A - i - 2;
+        fla_dim_t       mn_ahead  = m_A - i - 2;
 
         /*------------------------------------------------------------*/
 
@@ -258,16 +258,16 @@ FLA_Error FLA_Bsvd_francis_v_ops_var1( integer       m_A,
 
 
 
-FLA_Error FLA_Bsvd_francis_v_opd_var1( integer       m_A,
+FLA_Error FLA_Bsvd_francis_v_opd_var1( fla_dim_t       m_A,
                                        double    shift,
-                                       dcomplex* buff_g, integer inc_g,
-                                       dcomplex* buff_h, integer inc_h,
-                                       double*   buff_d, integer inc_d,
-                                       double*   buff_e, integer inc_e )
+                                       dcomplex* buff_g, fla_dim_t inc_g,
+                                       dcomplex* buff_h, fla_dim_t inc_h,
+                                       double*   buff_d, fla_dim_t inc_d,
+                                       double*   buff_e, fla_dim_t inc_e )
 {
     double    one   = bl1_d1();
     double    bulge = 0.0;
-    integer       i;
+    fla_dim_t       i;
 
     // If the shift is zero, perform a simplified Francis step.
     if ( shift == 0.0 )
@@ -346,7 +346,7 @@ FLA_Error FLA_Bsvd_francis_v_opd_var1( integer       m_A,
         double    alpha01_new;
         double    alpha11_new;
 
-        integer       mn_ahead  = m_A - i - 2;
+        fla_dim_t       mn_ahead  = m_A - i - 2;
 
         /*------------------------------------------------------------*/
 

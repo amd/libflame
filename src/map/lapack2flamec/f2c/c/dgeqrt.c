@@ -137,25 +137,38 @@ the elements below the diagonal */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void dgeqrt_(integer *m, integer *n, integer *nb, doublereal *a, integer *lda, doublereal *t,
-             integer *ldt, doublereal *work, integer *info)
+/** Generated wrapper function */
+void dgeqrt_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *nb, doublereal *a, aocl_int_t *lda,
+             doublereal *t, aocl_int_t *ldt, doublereal *work, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_dgeqrt(m, n, nb, a, lda, t, ldt, work, info);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t nb_64 = *nb;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t ldt_64 = *ldt;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_dgeqrt(&m_64, &n_64, &nb_64, a, &lda_64, t, &ldt_64, work, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_dgeqrt(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *nb, doublereal *a,
+                        aocl_int64_t *lda, doublereal *t, aocl_int64_t *ldt, doublereal *work,
+                        aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dgeqrt inputs: m %" FLA_IS ", n %" FLA_IS ", nb %" FLA_IS ", lda %" FLA_IS
                       ", ldt %" FLA_IS "",
                       *m, *n, *nb, *lda, *ldt);
     /* System generated locals */
-    integer a_dim1, a_offset, t_dim1, t_offset, i__1, i__2, i__3, i__4, i__5;
+    aocl_int64_t a_dim1, a_offset, t_dim1, t_offset, i__1, i__2, i__3, i__4, i__5;
     /* Local variables */
-    integer i__, k, ib, iinfo;
-    extern /* Subroutine */
-        void
-        dlarfb_(char *, char *, char *, char *, integer *, integer *, integer *, doublereal *,
-                integer *, doublereal *, integer *, doublereal *, integer *, doublereal *,
-                integer *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
-        dgeqrt2_(integer *, integer *, doublereal *, integer *, doublereal *, integer *, integer *),
-        dgeqrt3_(integer *, integer *, doublereal *, integer *, doublereal *, integer *, integer *);
+    aocl_int64_t i__, k, ib, iinfo;
     /* -- LAPACK computational routine (version 3.7.1) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -205,7 +218,7 @@ void dgeqrt_(integer *m, integer *n, integer *nb, doublereal *a, integer *lda, d
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("DGEQRT", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("DGEQRT", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -228,12 +241,14 @@ void dgeqrt_(integer *m, integer *n, integer *nb, doublereal *a, integer *lda, d
         if(TRUE_)
         {
             i__3 = *m - i__ + 1;
-            dgeqrt3_(&i__3, &ib, &a[i__ + i__ * a_dim1], lda, &t[i__ * t_dim1 + 1], ldt, &iinfo);
+            aocl_lapack_dgeqrt3(&i__3, &ib, &a[i__ + i__ * a_dim1], lda, &t[i__ * t_dim1 + 1], ldt,
+                                &iinfo);
         }
         else
         {
             i__3 = *m - i__ + 1;
-            dgeqrt2_(&i__3, &ib, &a[i__ + i__ * a_dim1], lda, &t[i__ * t_dim1 + 1], ldt, &iinfo);
+            aocl_lapack_dgeqrt2(&i__3, &ib, &a[i__ + i__ * a_dim1], lda, &t[i__ * t_dim1 + 1], ldt,
+                                &iinfo);
         }
         if(i__ + ib <= *n)
         {
@@ -241,8 +256,9 @@ void dgeqrt_(integer *m, integer *n, integer *nb, doublereal *a, integer *lda, d
             i__3 = *m - i__ + 1;
             i__4 = *n - i__ - ib + 1;
             i__5 = *n - i__ - ib + 1;
-            dlarfb_("L", "T", "F", "C", &i__3, &i__4, &ib, &a[i__ + i__ * a_dim1], lda,
-                    &t[i__ * t_dim1 + 1], ldt, &a[i__ + (i__ + ib) * a_dim1], lda, &work[1], &i__5);
+            aocl_lapack_dlarfb("L", "T", "F", "C", &i__3, &i__4, &ib, &a[i__ + i__ * a_dim1], lda,
+                               &t[i__ * t_dim1 + 1], ldt, &a[i__ + (i__ + ib) * a_dim1], lda,
+                               &work[1], &i__5);
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT

@@ -151,8 +151,25 @@
 /* > \ingroup auxOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void dlagtf_(integer *n, doublereal *a, doublereal *lambda, doublereal *b, doublereal *c__,
-             doublereal *tol, doublereal *d__, integer *in, integer *info)
+/** Generated wrapper function */
+void dlagtf_(aocl_int_t *n, doublereal *a, doublereal *lambda, doublereal *b, doublereal *c__,
+             doublereal *tol, doublereal *d__, aocl_int_t *in, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_dlagtf(n, a, lambda, b, c__, tol, d__, in, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_dlagtf(&n_64, a, lambda, b, c__, tol, d__, in, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_dlagtf(aocl_int64_t *n, doublereal *a, doublereal *lambda, doublereal *b,
+                        doublereal *c__, doublereal *tol, doublereal *d__, aocl_int_t *in,
+                        aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dlagtf inputs: n %" FLA_IS "", *n);
@@ -163,9 +180,6 @@ void dlagtf_(integer *n, doublereal *a, doublereal *lambda, doublereal *b, doubl
     aocl_int64_t k;
     doublereal tl, eps, piv1, piv2, temp, mult, scale1, scale2;
     extern doublereal dlamch_(char *);
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -198,7 +212,7 @@ void dlagtf_(integer *n, doublereal *a, doublereal *lambda, doublereal *b, doubl
     {
         *info = -1;
         i__1 = -(*info);
-        xerbla_("DLAGTF", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("DLAGTF", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }

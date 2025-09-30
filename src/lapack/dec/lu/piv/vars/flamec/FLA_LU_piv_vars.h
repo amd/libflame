@@ -20,55 +20,55 @@ FLA_Error FLA_LU_piv_unb_var4( FLA_Obj A, FLA_Obj p );
 FLA_Error FLA_LU_piv_unb_var5( FLA_Obj A, FLA_Obj p );
 
 FLA_Error FLA_LU_piv_opt_var3( FLA_Obj A, FLA_Obj p );
-FLA_Error FLA_LU_piv_ops_var3( integer m_A,
-                               integer n_A,
-                               float*    buff_A, integer rs_A, integer cs_A,
-                               integer*      buff_p, integer inc_p );
-FLA_Error FLA_LU_piv_opd_var3( integer m_A,
-                               integer n_A,
-                               double*   buff_A, integer rs_A, integer cs_A,
-                               integer*      buff_p, integer inc_p );
-FLA_Error FLA_LU_piv_opc_var3( integer m_A,
-                               integer n_A,
-                               scomplex* buff_A, integer rs_A, integer cs_A,
-                               integer*      buff_p, integer inc_p );
-FLA_Error FLA_LU_piv_opz_var3( integer m_A,
-                               integer n_A,
-                               dcomplex* buff_A, integer rs_A, integer cs_A,
-                               integer*      buff_p, integer inc_p );
+FLA_Error FLA_LU_piv_ops_var3( fla_dim_t m_A,
+                               fla_dim_t n_A,
+                               float*    buff_A, fla_dim_t rs_A, fla_dim_t cs_A,
+                               fla_dim_t*      buff_p, fla_dim_t inc_p );
+FLA_Error FLA_LU_piv_opd_var3( fla_dim_t m_A,
+                               fla_dim_t n_A,
+                               double*   buff_A, fla_dim_t rs_A, fla_dim_t cs_A,
+                               fla_dim_t*      buff_p, fla_dim_t inc_p );
+FLA_Error FLA_LU_piv_opc_var3( fla_dim_t m_A,
+                               fla_dim_t n_A,
+                               scomplex* buff_A, fla_dim_t rs_A, fla_dim_t cs_A,
+                               fla_dim_t*      buff_p, fla_dim_t inc_p );
+FLA_Error FLA_LU_piv_opz_var3( fla_dim_t m_A,
+                               fla_dim_t n_A,
+                               dcomplex* buff_A, fla_dim_t rs_A, fla_dim_t cs_A,
+                               fla_dim_t*      buff_p, fla_dim_t inc_p );
 
 FLA_Error FLA_LU_piv_opt_var4( FLA_Obj A, FLA_Obj p );
-FLA_Error FLA_LU_piv_ops_var4( integer m_A,
-                               integer n_A,
-                               float*    buff_A, integer rs_A, integer cs_A,
-                               integer*      buff_p, integer inc_p );
-FLA_Error FLA_LU_piv_opd_var4( integer m_A,
-                               integer n_A,
-                               double*   buff_A, integer rs_A, integer cs_A,
-                               integer*      buff_p, integer inc_p );
-FLA_Error FLA_LU_piv_opc_var4( integer m_A,
-                               integer n_A,
-                               scomplex* buff_A, integer rs_A, integer cs_A,
-                               integer*      buff_p, integer inc_p );
-FLA_Error FLA_LU_piv_opz_var4( integer m_A,
-                               integer n_A,
-                               dcomplex* buff_A, integer rs_A, integer cs_A,
-                               integer*      buff_p, integer inc_p );
+FLA_Error FLA_LU_piv_ops_var4( fla_dim_t m_A,
+                               fla_dim_t n_A,
+                               float*    buff_A, fla_dim_t rs_A, fla_dim_t cs_A,
+                               fla_dim_t*      buff_p, fla_dim_t inc_p );
+FLA_Error FLA_LU_piv_opd_var4( fla_dim_t m_A,
+                               fla_dim_t n_A,
+                               double*   buff_A, fla_dim_t rs_A, fla_dim_t cs_A,
+                               fla_dim_t*      buff_p, fla_dim_t inc_p );
+FLA_Error FLA_LU_piv_opc_var4( fla_dim_t m_A,
+                               fla_dim_t n_A,
+                               scomplex* buff_A, fla_dim_t rs_A, fla_dim_t cs_A,
+                               fla_dim_t*      buff_p, fla_dim_t inc_p );
+FLA_Error FLA_LU_piv_opz_var4( fla_dim_t m_A,
+                               fla_dim_t n_A,
+                               dcomplex* buff_A, fla_dim_t rs_A, fla_dim_t cs_A,
+                               fla_dim_t*      buff_p, fla_dim_t inc_p );
 
 FLA_Error FLA_LU_piv_opt_var5( FLA_Obj A, FLA_Obj p );
-FLA_Error FLA_LU_piv_ops_var5( integer m_A,
-                               integer n_A,
-                               float*    buff_A, integer rs_A, integer cs_A,
-                               integer*      buff_p, integer inc_p );
-FLA_Error FLA_LU_piv_opd_var5( integer m_A,
-                               integer n_A,
-                               double*   buff_A, integer rs_A, integer cs_A,
-                               integer*      buff_p, integer inc_p );
-FLA_Error FLA_LU_piv_opc_var5( integer m_A,
-                               integer n_A,
-                               scomplex* buff_A, integer rs_A, integer cs_A,
-                               integer*      buff_p, integer inc_p );
-FLA_Error FLA_LU_piv_opz_var5( integer m_A,
-                               integer n_A,
-                               dcomplex* buff_A, integer rs_A, integer cs_A,
-                               integer*      buff_p, integer inc_p );
+FLA_Error FLA_LU_piv_ops_var5( fla_dim_t m_A,
+                               fla_dim_t n_A,
+                               float*    buff_A, fla_dim_t rs_A, fla_dim_t cs_A,
+                               fla_dim_t*      buff_p, fla_dim_t inc_p );
+FLA_Error FLA_LU_piv_opd_var5( fla_dim_t m_A,
+                               fla_dim_t n_A,
+                               double*   buff_A, fla_dim_t rs_A, fla_dim_t cs_A,
+                               fla_dim_t*      buff_p, fla_dim_t inc_p );
+FLA_Error FLA_LU_piv_opc_var5( fla_dim_t m_A,
+                               fla_dim_t n_A,
+                               scomplex* buff_A, fla_dim_t rs_A, fla_dim_t cs_A,
+                               fla_dim_t*      buff_p, fla_dim_t inc_p );
+FLA_Error FLA_LU_piv_opz_var5( fla_dim_t m_A,
+                               fla_dim_t n_A,
+                               dcomplex* buff_A, fla_dim_t rs_A, fla_dim_t cs_A,
+                               fla_dim_t*      buff_p, fla_dim_t inc_p );

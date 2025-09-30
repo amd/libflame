@@ -4,9 +4,6 @@
 
 #include "FLA_f2c.h"
 
-extern void dspr_(char *, integer *, doublereal *, doublereal *, integer *, doublereal *);
-extern void dscal_(integer *, doublereal *, doublereal *, integer *);
-
 /*! @brief Partial LDL' factorization without pivoting
     *
     * @details
@@ -69,12 +66,13 @@ extern void dscal_(integer *, doublereal *, doublereal *, integer *);
     \endverbatim
     *  */
 
-void dspffrtx_fla(doublereal *ap, integer *n, integer *ncolm, doublereal *work, doublereal *work2)
+void dspffrtx_fla(doublereal *ap, aocl_int64_t *n, aocl_int64_t *ncolm, doublereal *work,
+                  doublereal *work2)
 {
     doublereal d__1;
-    integer i__1, k, kc;
+    aocl_int64_t i__1, k, kc;
     doublereal r1;
-    integer c__1 = 1;
+    aocl_int64_t c__1 = 1;
 
     --ap;
     /* Factorize A as L*D*L**T using the lower triangle of A */
@@ -97,8 +95,8 @@ void dspffrtx_fla(doublereal *ap, integer *n, integer *ncolm, doublereal *work, 
         /* Perform a rank-1 update of A(k+1:n,k+1:n) as */
         /* A := A - L(k)*D(k)*L(k)**T = A - W(k)*(1/D(k))*W(k)**T */
         i__1 = *n - k;
-        dspr_("Lower", &i__1, &d__1, &ap[kc + 1], &c__1, &ap[kc + *n - k + 1]);
-        dscal_(&i__1, &r1, &ap[kc + 1], &c__1);
+        aocl_blas_dspr("Lower", &i__1, &d__1, &ap[kc + 1], &c__1, &ap[kc + *n - k + 1]);
+        aocl_blas_dscal(&i__1, &r1, &ap[kc + 1], &c__1);
 
         kc = kc + *n - k + 1;
     }

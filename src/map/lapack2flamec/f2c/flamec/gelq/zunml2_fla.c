@@ -154,9 +154,9 @@
 /* > \ingroup complex16OTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void zunml2_fla(char *side, char *trans, integer *m, integer *n, integer *k, doublecomplex *a,
-                integer *lda, doublecomplex *tau, doublecomplex *c__, integer *ldc,
-                doublecomplex *work, integer *info)
+void zunml2_fla(char *side, char *trans, aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *k,
+                dcomplex *a, aocl_int64_t *lda, dcomplex *tau, dcomplex *c__,
+                aocl_int64_t *ldc, dcomplex *work, aocl_int64_t *info)
 {
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, c_dim1, c_offset, i__1, i__2, i__3;
@@ -167,14 +167,8 @@ void zunml2_fla(char *side, char *trans, integer *m, integer *n, integer *k, dou
     aocl_int64_t i__, i1, i2, i3, ic, jc, mi, ni, nq;
     dcomplex aii;
     logical left;
-    doublecomplex taui;
-    extern logical lsame_(char *, char *, integer, integer);
-    extern /* Subroutine */
-        void
-        zlarf_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *,
-               doublecomplex *, integer *, doublecomplex *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
-        zlacgv_(integer *, doublecomplex *, integer *);
+    dcomplex taui;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     logical notran;
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -250,7 +244,7 @@ void zunml2_fla(char *side, char *trans, integer *m, integer *n, integer *k, dou
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("ZUNML2", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("ZUNML2", &i__1, (ftnlen)6);
         return;
     }
     /* Quick return if possible */
@@ -320,8 +314,8 @@ void zunml2_fla(char *side, char *trans, integer *m, integer *n, integer *k, dou
         i__3 = i__ + i__ * a_dim1;
         a[i__3].r = 1.;
         a[i__3].i = 0.; // , expr subst
-        zlarf_(side, &mi, &ni, &a[i__ + i__ * a_dim1], lda, &taui, &c__[ic + jc * c_dim1], ldc,
-               &work[1]);
+        aocl_lapack_zlarf(side, &mi, &ni, &a[i__ + i__ * a_dim1], lda, &taui,
+                          &c__[ic + jc * c_dim1], ldc, &work[1]);
         i__3 = i__ + i__ * a_dim1;
         a[i__3].r = aii.r;
         a[i__3].i = aii.i; // , expr subst

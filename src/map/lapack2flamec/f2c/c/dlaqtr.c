@@ -10,7 +10,7 @@ static aocl_int64_t c__2 = 2;
 static doublereal c_b21 = 1.;
 static doublereal c_b25 = 0.;
 static logical c_true = TRUE_;
-/* > \brief \b DLAQTR solves a real quasi-triangular system of equations, or a complex
+/* > \brief \b DLAQTR solves a real quasi-triangular system of equations, or a scomplex
  * quasi-triangular system of special form, in real arithmetic. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -167,8 +167,27 @@ static logical c_true = TRUE_;
 /* > \ingroup doubleOTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-void dlaqtr_(logical *ltran, logical *lreal, integer *n, doublereal *t, integer *ldt, doublereal *b,
-             doublereal *w, doublereal *scale, doublereal *x, doublereal *work, integer *info)
+/** Generated wrapper function */
+void dlaqtr_(logical *ltran, logical *lreal, aocl_int_t *n, doublereal *t, aocl_int_t *ldt,
+             doublereal *b, doublereal *w, doublereal *scale, doublereal *x, doublereal *work,
+             aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_dlaqtr(ltran, lreal, n, t, ldt, b, w, scale, x, work, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t ldt_64 = *ldt;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_dlaqtr(ltran, lreal, &n_64, t, &ldt_64, b, w, scale, x, work, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_dlaqtr(logical *ltran, logical *lreal, aocl_int64_t *n, doublereal *t,
+                        aocl_int64_t *ldt, doublereal *b, doublereal *w, doublereal *scale,
+                        doublereal *x, doublereal *work, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dlaqtr inputs: n %" FLA_IS ", ldt %" FLA_IS "", *n, *ldt);
@@ -178,31 +197,16 @@ void dlaqtr_(logical *ltran, logical *lreal, integer *n, doublereal *t, integer 
     /* Local variables */
     doublereal d__[4] /* was [2][2] */
         ;
-    integer i__, j, k;
+    aocl_int64_t i__, j, k;
     doublereal v[4] /* was [2][2] */
         ,
         z__;
-    integer j1, j2, n1, n2;
+    aocl_int64_t j1, j2, n1, n2;
     doublereal si, xj, sr, rec, eps, tjj, tmp;
     aocl_int64_t ierr;
     doublereal smin, xmax;
-    extern /* Subroutine */
-        void
-        dscal_(integer *, doublereal *, doublereal *, integer *);
-    extern doublereal dasum_(integer *, doublereal *, integer *);
-    extern /* Subroutine */
-        void
-        daxpy_(integer *, doublereal *, doublereal *, integer *, doublereal *, integer *);
-    integer jnext;
+    aocl_int64_t jnext;
     doublereal sminw, xnorm;
-    extern /* Subroutine */
-        void
-        dlaln2_(logical *, integer *, integer *, doublereal *, doublereal *, doublereal *,
-                integer *, doublereal *, doublereal *, doublereal *, integer *, doublereal *,
-                doublereal *, doublereal *, integer *, doublereal *, doublereal *, integer *);
-    extern doublereal dlamch_(char *),
-        dlange_(char *, integer *, integer *, doublereal *, integer *, doublereal *);
-    extern integer idamax_(integer *, doublereal *, integer *);
     doublereal scaloc;
     extern /* Subroutine */
         void
@@ -253,13 +257,13 @@ void dlaqtr_(logical *ltran, logical *lreal, integer *n, doublereal *t, integer 
     eps = dlamch_("P");
     smlnum = dlamch_("S") / eps;
     bignum = 1. / smlnum;
-    xnorm = dlange_("M", n, n, &t[t_offset], ldt, d__);
+    xnorm = aocl_lapack_dlange("M", n, n, &t[t_offset], ldt, d__);
     if(!(*lreal))
     {
         /* Computing MAX */
         d__1 = xnorm, d__2 = f2c_dabs(*w);
         d__1 = fla_max(d__1, d__2);
-        d__2 = dlange_("M", n, &c__1, &b[1], n, d__); // ; expr subst
+        d__2 = aocl_lapack_dlange("M", n, &c__1, &b[1], n, d__); // ; expr subst
         xnorm = fla_max(d__1, d__2);
     }
     /* Computing MAX */
@@ -291,7 +295,7 @@ void dlaqtr_(logical *ltran, logical *lreal, integer *n, doublereal *t, integer 
     {
         n1 = n2;
     }
-    k = idamax_(&n1, &x[1], &c__1);
+    k = aocl_blas_idamax(&n1, &x[1], &c__1);
     xmax = (d__1 = x[k], f2c_dabs(d__1));
     *scale = 1.;
     if(xmax > bignum)
@@ -368,9 +372,9 @@ void dlaqtr_(logical *ltran, logical *lreal, integer *n, doublereal *t, integer 
                     {
                         i__1 = j1 - 1;
                         d__1 = -x[j1];
-                        daxpy_(&i__1, &d__1, &t[j1 * t_dim1 + 1], &c__1, &x[1], &c__1);
+                        aocl_blas_daxpy(&i__1, &d__1, &t[j1 * t_dim1 + 1], &c__1, &x[1], &c__1);
                         i__1 = j1 - 1;
-                        k = idamax_(&i__1, &x[1], &c__1);
+                        k = aocl_blas_idamax(&i__1, &x[1], &c__1);
                         xmax = (d__1 = x[k], f2c_dabs(d__1));
                     }
                 }
@@ -381,9 +385,9 @@ void dlaqtr_(logical *ltran, logical *lreal, integer *n, doublereal *t, integer 
                     /* care of possible overflow by scaling factor. */
                     d__[0] = x[j1];
                     d__[1] = x[j2];
-                    dlaln2_(&c_false, &c__2, &c__1, &smin, &c_b21, &t[j1 + j1 * t_dim1], ldt,
-                            &c_b21, &c_b21, d__, &c__2, &c_b25, &c_b25, v, &c__2, &scaloc, &xnorm,
-                            &ierr);
+                    aocl_lapack_dlaln2(&c_false, &c__2, &c__1, &smin, &c_b21, &t[j1 + j1 * t_dim1],
+                                       ldt, &c_b21, &c_b21, d__, &c__2, &c_b25, &c_b25, v, &c__2,
+                                       &scaloc, &xnorm, &ierr);
                     if(ierr != 0)
                     {
                         *info = 2;
@@ -418,12 +422,12 @@ void dlaqtr_(logical *ltran, logical *lreal, integer *n, doublereal *t, integer 
                     {
                         i__1 = j1 - 1;
                         d__1 = -x[j1];
-                        daxpy_(&i__1, &d__1, &t[j1 * t_dim1 + 1], &c__1, &x[1], &c__1);
+                        aocl_blas_daxpy(&i__1, &d__1, &t[j1 * t_dim1 + 1], &c__1, &x[1], &c__1);
                         i__1 = j1 - 1;
                         d__1 = -x[j2];
-                        daxpy_(&i__1, &d__1, &t[j2 * t_dim1 + 1], &c__1, &x[1], &c__1);
+                        aocl_blas_daxpy(&i__1, &d__1, &t[j2 * t_dim1 + 1], &c__1, &x[1], &c__1);
                         i__1 = j1 - 1;
-                        k = idamax_(&i__1, &x[1], &c__1);
+                        k = aocl_blas_idamax(&i__1, &x[1], &c__1);
                         xmax = (d__1 = x[k], f2c_dabs(d__1));
                     }
                 }
@@ -469,7 +473,7 @@ void dlaqtr_(logical *ltran, logical *lreal, integer *n, doublereal *t, integer 
                         }
                     }
                     i__2 = j1 - 1;
-                    x[j1] -= ddot_(&i__2, &t[j1 * t_dim1 + 1], &c__1, &x[1], &c__1);
+                    x[j1] -= aocl_blas_ddot(&i__2, &t[j1 * t_dim1 + 1], &c__1, &x[1], &c__1);
                     xj = (d__1 = x[j1], f2c_dabs(d__1));
                     tjj = (d__1 = t[j1 + j1 * t_dim1], f2c_dabs(d__1));
                     tmp = t[j1 + j1 * t_dim1];
@@ -521,9 +525,11 @@ void dlaqtr_(logical *ltran, logical *lreal, integer *n, doublereal *t, integer 
                     d__[0]
                         = x[j1] - aocl_blas_ddot(&i__2, &t[j1 * t_dim1 + 1], &c__1, &x[1], &c__1);
                     i__2 = j1 - 1;
-                    d__[1] = x[j2] - ddot_(&i__2, &t[j2 * t_dim1 + 1], &c__1, &x[1], &c__1);
-                    dlaln2_(&c_true, &c__2, &c__1, &smin, &c_b21, &t[j1 + j1 * t_dim1], ldt, &c_b21,
-                            &c_b21, d__, &c__2, &c_b25, &c_b25, v, &c__2, &scaloc, &xnorm, &ierr);
+                    d__[1]
+                        = x[j2] - aocl_blas_ddot(&i__2, &t[j2 * t_dim1 + 1], &c__1, &x[1], &c__1);
+                    aocl_lapack_dlaln2(&c_true, &c__2, &c__1, &smin, &c_b21, &t[j1 + j1 * t_dim1],
+                                       ldt, &c_b21, &c_b21, d__, &c__2, &c_b25, &c_b25, v, &c__2,
+                                       &scaloc, &xnorm, &ierr);
                     if(ierr != 0)
                     {
                         *info = 2;
@@ -622,10 +628,11 @@ void dlaqtr_(logical *ltran, logical *lreal, integer *n, doublereal *t, integer 
                     {
                         i__1 = j1 - 1;
                         d__1 = -x[j1];
-                        daxpy_(&i__1, &d__1, &t[j1 * t_dim1 + 1], &c__1, &x[1], &c__1);
+                        aocl_blas_daxpy(&i__1, &d__1, &t[j1 * t_dim1 + 1], &c__1, &x[1], &c__1);
                         i__1 = j1 - 1;
                         d__1 = -x[*n + j1];
-                        daxpy_(&i__1, &d__1, &t[j1 * t_dim1 + 1], &c__1, &x[*n + 1], &c__1);
+                        aocl_blas_daxpy(&i__1, &d__1, &t[j1 * t_dim1 + 1], &c__1, &x[*n + 1],
+                                        &c__1);
                         x[1] += b[j1] * x[*n + j1];
                         x[*n + 1] -= b[j1] * x[j1];
                         xmax = 0.;
@@ -649,9 +656,9 @@ void dlaqtr_(logical *ltran, logical *lreal, integer *n, doublereal *t, integer 
                     d__[2] = x[*n + j1];
                     d__[3] = x[*n + j2];
                     d__1 = -(*w);
-                    dlaln2_(&c_false, &c__2, &c__2, &sminw, &c_b21, &t[j1 + j1 * t_dim1], ldt,
-                            &c_b21, &c_b21, d__, &c__2, &c_b25, &d__1, v, &c__2, &scaloc, &xnorm,
-                            &ierr);
+                    aocl_lapack_dlaln2(&c_false, &c__2, &c__2, &sminw, &c_b21, &t[j1 + j1 * t_dim1],
+                                       ldt, &c_b21, &c_b21, d__, &c__2, &c_b25, &d__1, v, &c__2,
+                                       &scaloc, &xnorm, &ierr);
                     if(ierr != 0)
                     {
                         *info = 2;
@@ -689,16 +696,18 @@ void dlaqtr_(logical *ltran, logical *lreal, integer *n, doublereal *t, integer 
                     {
                         i__1 = j1 - 1;
                         d__1 = -x[j1];
-                        daxpy_(&i__1, &d__1, &t[j1 * t_dim1 + 1], &c__1, &x[1], &c__1);
+                        aocl_blas_daxpy(&i__1, &d__1, &t[j1 * t_dim1 + 1], &c__1, &x[1], &c__1);
                         i__1 = j1 - 1;
                         d__1 = -x[j2];
-                        daxpy_(&i__1, &d__1, &t[j2 * t_dim1 + 1], &c__1, &x[1], &c__1);
+                        aocl_blas_daxpy(&i__1, &d__1, &t[j2 * t_dim1 + 1], &c__1, &x[1], &c__1);
                         i__1 = j1 - 1;
                         d__1 = -x[*n + j1];
-                        daxpy_(&i__1, &d__1, &t[j1 * t_dim1 + 1], &c__1, &x[*n + 1], &c__1);
+                        aocl_blas_daxpy(&i__1, &d__1, &t[j1 * t_dim1 + 1], &c__1, &x[*n + 1],
+                                        &c__1);
                         i__1 = j1 - 1;
                         d__1 = -x[*n + j2];
-                        daxpy_(&i__1, &d__1, &t[j2 * t_dim1 + 1], &c__1, &x[*n + 1], &c__1);
+                        aocl_blas_daxpy(&i__1, &d__1, &t[j2 * t_dim1 + 1], &c__1, &x[*n + 1],
+                                        &c__1);
                         x[1] = x[1] + b[j1] * x[*n + j1] + b[j2] * x[*n + j2];
                         x[*n + 1] = x[*n + 1] - b[j1] * x[j1] - b[j2] * x[j2];
                         xmax = 0.;
@@ -755,9 +764,10 @@ void dlaqtr_(logical *ltran, logical *lreal, integer *n, doublereal *t, integer 
                         }
                     }
                     i__2 = j1 - 1;
-                    x[j1] -= ddot_(&i__2, &t[j1 * t_dim1 + 1], &c__1, &x[1], &c__1);
+                    x[j1] -= aocl_blas_ddot(&i__2, &t[j1 * t_dim1 + 1], &c__1, &x[1], &c__1);
                     i__2 = j1 - 1;
-                    x[*n + j1] -= ddot_(&i__2, &t[j1 * t_dim1 + 1], &c__1, &x[*n + 1], &c__1);
+                    x[*n + j1]
+                        -= aocl_blas_ddot(&i__2, &t[j1 * t_dim1 + 1], &c__1, &x[*n + 1], &c__1);
                     if(j1 > 1)
                     {
                         x[j1] -= b[j1] * x[*n + 1];
@@ -770,7 +780,7 @@ void dlaqtr_(logical *ltran, logical *lreal, integer *n, doublereal *t, integer 
                         z__ = b[1];
                     }
                     /* Scale if necessary to avoid overflow in */
-                    /* complex division */
+                    /* scomplex division */
                     tjj = (d__1 = t[j1 + j1 * t_dim1], f2c_dabs(d__1)) + f2c_dabs(z__);
                     tmp = t[j1 + j1 * t_dim1];
                     if(tjj < sminw)
@@ -827,18 +837,18 @@ void dlaqtr_(logical *ltran, logical *lreal, integer *n, doublereal *t, integer 
                     d__[1]
                         = x[j2] - aocl_blas_ddot(&i__2, &t[j2 * t_dim1 + 1], &c__1, &x[1], &c__1);
                     i__2 = j1 - 1;
-                    d__[2]
-                        = x[*n + j1] - ddot_(&i__2, &t[j1 * t_dim1 + 1], &c__1, &x[*n + 1], &c__1);
+                    d__[2] = x[*n + j1]
+                             - aocl_blas_ddot(&i__2, &t[j1 * t_dim1 + 1], &c__1, &x[*n + 1], &c__1);
                     i__2 = j1 - 1;
-                    d__[3]
-                        = x[*n + j2] - ddot_(&i__2, &t[j2 * t_dim1 + 1], &c__1, &x[*n + 1], &c__1);
+                    d__[3] = x[*n + j2]
+                             - aocl_blas_ddot(&i__2, &t[j2 * t_dim1 + 1], &c__1, &x[*n + 1], &c__1);
                     d__[0] -= b[j1] * x[*n + 1];
                     d__[1] -= b[j2] * x[*n + 1];
                     d__[2] += b[j1] * x[1];
                     d__[3] += b[j2] * x[1];
-                    dlaln2_(&c_true, &c__2, &c__2, &sminw, &c_b21, &t[j1 + j1 * t_dim1], ldt,
-                            &c_b21, &c_b21, d__, &c__2, &c_b25, w, v, &c__2, &scaloc, &xnorm,
-                            &ierr);
+                    aocl_lapack_dlaln2(&c_true, &c__2, &c__2, &sminw, &c_b21, &t[j1 + j1 * t_dim1],
+                                       ldt, &c_b21, &c_b21, d__, &c__2, &c_b25, w, v, &c__2,
+                                       &scaloc, &xnorm, &ierr);
                     if(ierr != 0)
                     {
                         *info = 2;

@@ -116,8 +116,8 @@ typedef struct { double real, imag; } _lapack_complex_double;
 
 #elif defined(LAPACK_COMPLEX_CPP)
 
-#define lapack_complex_float std::complex<float>
-#define lapack_complex_double std::complex<double>
+#define lapack_complex_float std::scomplex<float>
+#define lapack_complex_double std::scomplex<double>
 #define lapack_complex_float_real(z)       ((z).real())
 #define lapack_complex_float_imag(z)       ((z).imag())
 #define lapack_complex_double_real(z)       ((z).real())

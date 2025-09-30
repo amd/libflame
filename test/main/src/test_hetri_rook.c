@@ -276,7 +276,7 @@ void prepare_hetri_rook_run(integer datatype, integer n, void *A, char uplo, int
 
 /*
 HETRI_ROOK_API calls LAPACK interface for factorization
-of a complex hermitian matrix A using the bounded
+of a scomplex hermitian matrix A using the bounded
 Bunch-Kaufman("rook") diagonal pivoting method
 (A = L*D*L**H or A = U*D*U**H)
 */

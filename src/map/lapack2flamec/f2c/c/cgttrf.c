@@ -121,8 +121,24 @@ IPIV(i) = i indicates a row interchange was not */
 /* > \ingroup complexGTcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void cgttrf_(integer *n, complex *dl, complex *d__, complex *du, complex *du2, integer *ipiv,
-             integer *info)
+/** Generated wrapper function */
+void cgttrf_(aocl_int_t *n, scomplex *dl, scomplex *d__, scomplex *du, scomplex *du2, aocl_int_t *ipiv,
+             aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_cgttrf(n, dl, d__, du, du2, ipiv, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_cgttrf(&n_64, dl, d__, du, du2, ipiv, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_cgttrf(aocl_int64_t *n, scomplex *dl, scomplex *d__, scomplex *du, scomplex *du2,
+                        aocl_int_t *ipiv, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -142,11 +158,8 @@ void cgttrf_(integer *n, complex *dl, complex *d__, complex *du, complex *du2, i
     double r_imag(scomplex *);
     void c_div(scomplex *, scomplex *, scomplex *);
     /* Local variables */
-    integer i__;
-    complex fact, temp;
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    aocl_int64_t i__;
+    scomplex fact, temp;
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -181,7 +194,7 @@ void cgttrf_(integer *n, complex *dl, complex *d__, complex *du, complex *du2, i
     {
         *info = -1;
         i__1 = -(*info);
-        xerbla_("CGTTRF", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("CGTTRF", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
@@ -272,10 +285,10 @@ void cgttrf_(integer *n, complex *dl, complex *d__, complex *du, complex *du2, i
             q__2.real = -fact.real;
             q__2.imag = -fact.imag; // , expr subst
             i__3 = i__ + 1;
-            q__1.real = q__2.real * du[i__3].real - q__2.imag * du[i__3].imag;
-            q__1.imag = q__2.real * du[i__3].imag + q__2.imag * du[i__3].real; // , expr subst
-            du[i__2].real = q__1.real;
-            du[i__2].imag = q__1.imag; // , expr subst
+            q__1.r = q__2.r * du[i__3].r - q__2.i * du[i__3].i;
+            q__1.i = q__2.r * du[i__3].i + q__2.i * du[i__3].r; // , expr subst
+            du[i__2].r = q__1.r;
+            du[i__2].i = q__1.i; // , expr subst
             ipiv[i__] = (aocl_int_t)(i__ + 1);
         }
         /* L30: */
@@ -330,12 +343,12 @@ void cgttrf_(integer *n, complex *dl, complex *d__, complex *du, complex *du2, i
             du[i__1].imag = d__[i__2].imag; // , expr subst
             i__1 = i__ + 1;
             i__2 = i__ + 1;
-            q__2.real = fact.real * d__[i__2].real - fact.imag * d__[i__2].imag;
-            q__2.imag = fact.real * d__[i__2].imag + fact.imag * d__[i__2].real; // , expr subst
-            q__1.real = temp.real - q__2.real;
-            q__1.imag = temp.imag - q__2.imag; // , expr subst
-            d__[i__1].real = q__1.real;
-            d__[i__1].imag = q__1.imag; // , expr subst
+            q__2.r = fact.r * d__[i__2].r - fact.i * d__[i__2].i;
+            q__2.i = fact.r * d__[i__2].i + fact.i * d__[i__2].r; // , expr subst
+            q__1.r = temp.r - q__2.r;
+            q__1.i = temp.i - q__2.i; // , expr subst
+            d__[i__1].r = q__1.r;
+            d__[i__1].i = q__1.i; // , expr subst
             ipiv[i__] = (aocl_int_t)(i__ + 1);
         }
     }

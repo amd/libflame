@@ -14,14 +14,14 @@
 #define FLA_ALG_FRONT     1
 
 void time_QR_UT(
-                 integer variant, integer type, integer n_repeats, integer m, integer n,
+                 aocl_int64_t variant, aocl_int64_t type, aocl_int64_t n_repeats, aocl_int64_t m, aocl_int64_t n,
                  FLA_Obj A, FLA_Obj A_ref, FLA_Obj t, FLA_Obj T, FLA_Obj W, FLA_Obj b, FLA_Obj b_ref,
                  double *dtime, double *diff, double *gflops );
 
 
 int main(int argc, char *argv[])
 {
-  integer 
+  aocl_int64_t 
     datatype,
     m_input, n_input,
     m, n, min_m_n,

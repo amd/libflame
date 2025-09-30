@@ -16,18 +16,18 @@
 #include "blis.h"
 #endif
 
-void bl1_srandmr( uplo1_t uplo, diag1_t diag, integer m, integer n, float* a, integer a_rs, integer a_cs )
+void bl1_srandmr( uplo1_t uplo, diag1_t diag, fla_dim_t m, fla_dim_t n, float* a, fla_dim_t a_rs, fla_dim_t a_cs )
 {
 	float*    a_begin;
 	float*    ajj;
 	float     one;
 	float     zero;
 	float     ord;
-	integer       lda, inca;
-	integer       n_iter;
-	integer       n_elem_max;
-	integer       n_elem;
-	integer       j;
+	fla_dim_t       lda, inca;
+	fla_dim_t       n_iter;
+	fla_dim_t       n_elem_max;
+	fla_dim_t       n_elem;
+	fla_dim_t       j;
 
 	// Return early if possible.
 	if ( bl1_zero_dim2( m, n ) ) return;
@@ -137,18 +137,18 @@ void bl1_srandmr( uplo1_t uplo, diag1_t diag, integer m, integer n, float* a, in
 	}
 }
 
-void bl1_drandmr( uplo1_t uplo, diag1_t diag, integer m, integer n, double* a, integer a_rs, integer a_cs )
+void bl1_drandmr( uplo1_t uplo, diag1_t diag, fla_dim_t m, fla_dim_t n, double* a, fla_dim_t a_rs, fla_dim_t a_cs )
 {
 	double*   a_begin;
 	double*   ajj;
 	double    one;
 	double    zero;
 	double    ord;
-	integer       lda, inca;
-	integer       n_iter;
-	integer       n_elem_max;
-	integer       n_elem;
-	integer       j;
+	fla_dim_t       lda, inca;
+	fla_dim_t       n_iter;
+	fla_dim_t       n_elem_max;
+	fla_dim_t       n_elem;
+	fla_dim_t       j;
 
 	// Return early if possible.
 	if ( bl1_zero_dim2( m, n ) ) return;
@@ -258,18 +258,18 @@ void bl1_drandmr( uplo1_t uplo, diag1_t diag, integer m, integer n, double* a, i
 	}
 }
 
-void bl1_crandmr( uplo1_t uplo, diag1_t diag, integer m, integer n, scomplex* a, integer a_rs, integer a_cs )
+void bl1_crandmr( uplo1_t uplo, diag1_t diag, fla_dim_t m, fla_dim_t n, scomplex* a, fla_dim_t a_rs, fla_dim_t a_cs )
 {
 	scomplex* a_begin;
 	scomplex* ajj;
 	scomplex  one;
 	scomplex  zero;
 	scomplex  ord;
-	integer       lda, inca;
-	integer       n_iter;
-	integer       n_elem_max;
-	integer       n_elem;
-	integer       j;
+	fla_dim_t       lda, inca;
+	fla_dim_t       n_iter;
+	fla_dim_t       n_elem_max;
+	fla_dim_t       n_elem;
+	fla_dim_t       j;
 
 	// Return early if possible.
 	if ( bl1_zero_dim2( m, n ) ) return;
@@ -380,18 +380,18 @@ void bl1_crandmr( uplo1_t uplo, diag1_t diag, integer m, integer n, scomplex* a,
 	}
 }
 
-void bl1_zrandmr( uplo1_t uplo, diag1_t diag, integer m, integer n, dcomplex* a, integer a_rs, integer a_cs )
+void bl1_zrandmr( uplo1_t uplo, diag1_t diag, fla_dim_t m, fla_dim_t n, dcomplex* a, fla_dim_t a_rs, fla_dim_t a_cs )
 {
 	dcomplex* a_begin;
 	dcomplex* ajj;
 	dcomplex  one;
 	dcomplex  zero;
 	dcomplex  ord;
-	integer       lda, inca;
-	integer       n_iter;
-	integer       n_elem_max;
-	integer       n_elem;
-	integer       j;
+	fla_dim_t       lda, inca;
+	fla_dim_t       n_iter;
+	fla_dim_t       n_elem_max;
+	fla_dim_t       n_elem;
+	fla_dim_t       j;
 
 	// Return early if possible.
 	if ( bl1_zero_dim2( m, n ) ) return;

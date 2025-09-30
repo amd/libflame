@@ -14,61 +14,61 @@
 
 // --- FLA_Tevd_find_submatrix() -----------------------------------------------
 
-FLA_Error FLA_Tevd_find_submatrix_ops( integer       m_A,
-                                       integer       ij_begin,
-                                       float*    buff_d, integer inc_d, 
-                                       float*    buff_e, integer inc_e,
-                                       integer*      ijTL,
-                                       integer*      ijBR );
-FLA_Error FLA_Tevd_find_submatrix_opd( integer       m_A,
-                                       integer       ij_begin,
-                                       double*   buff_d, integer inc_d, 
-                                       double*   buff_e, integer inc_e,
-                                       integer*      ijTL,
-                                       integer*      ijBR );
+FLA_Error FLA_Tevd_find_submatrix_ops( fla_dim_t       m_A,
+                                       fla_dim_t       ij_begin,
+                                       float*    buff_d, fla_dim_t inc_d, 
+                                       float*    buff_e, fla_dim_t inc_e,
+                                       fla_dim_t*      ijTL,
+                                       fla_dim_t*      ijBR );
+FLA_Error FLA_Tevd_find_submatrix_opd( fla_dim_t       m_A,
+                                       fla_dim_t       ij_begin,
+                                       double*   buff_d, fla_dim_t inc_d, 
+                                       double*   buff_e, fla_dim_t inc_e,
+                                       fla_dim_t*      ijTL,
+                                       fla_dim_t*      ijBR );
 
 // --- FLA_Norm1_tridiag() -----------------------------------------------------
 
 FLA_Error FLA_Norm1_tridiag( FLA_Obj d, FLA_Obj e, FLA_Obj norm );
-FLA_Error FLA_Norm1_tridiag_ops( integer       m_A,
-                                 float*    buff_d, integer inc_d, 
-                                 float*    buff_e, integer inc_e,
+FLA_Error FLA_Norm1_tridiag_ops( fla_dim_t       m_A,
+                                 float*    buff_d, fla_dim_t inc_d, 
+                                 float*    buff_e, fla_dim_t inc_e,
                                  float*    norm );
-FLA_Error FLA_Norm1_tridiag_opd( integer       m_A,
-                                 double*   buff_d, integer inc_d, 
-                                 double*   buff_e, integer inc_e,
+FLA_Error FLA_Norm1_tridiag_opd( fla_dim_t       m_A,
+                                 double*   buff_d, fla_dim_t inc_d, 
+                                 double*   buff_e, fla_dim_t inc_e,
                                  double*   norm );
 
 // --- FLA_Tevd_n_opt_var1() ---------------------------------------------------
 
 FLA_Error FLA_Tevd_n_opt_var1( fla_dim_t n_iter_max, FLA_Obj d, FLA_Obj e, FLA_Obj G, FLA_Obj U );
-FLA_Error FLA_Tevd_n_ops_var1( integer       m_A,
-                               integer       m_U,
-                               integer       n_G,
-                               integer       n_iter_max,
-                               float*    buff_d, integer inc_d, 
-                               float*    buff_e, integer inc_e,
-                               scomplex* buff_G, integer rs_G, integer cs_G );
-FLA_Error FLA_Tevd_n_opd_var1( integer       m_A,
-                               integer       m_U,
-                               integer       n_G,
-                               integer       n_iter_max,
-                               double*   buff_d, integer inc_d, 
-                               double*   buff_e, integer inc_e,
-                               dcomplex* buff_G, integer rs_G, integer cs_G );
-FLA_Error FLA_Tevd_n_opc_var1( integer       m_A,
-                               integer       m_U,
-                               integer       n_G,
-                               integer       n_iter_max,
-                               float*    buff_d, integer inc_d, 
-                               float*    buff_e, integer inc_e,
-                               scomplex* buff_G, integer rs_G, integer cs_G );
-FLA_Error FLA_Tevd_n_opz_var1( integer       m_A,
-                               integer       m_U,
-                               integer       n_G,
-                               integer       n_iter_max,
-                               double*   buff_d, integer inc_d, 
-                               double*   buff_e, integer inc_e,
-                               dcomplex* buff_G, integer rs_G, integer cs_G );
+FLA_Error FLA_Tevd_n_ops_var1( fla_dim_t       m_A,
+                               fla_dim_t       m_U,
+                               fla_dim_t       n_G,
+                               fla_dim_t       n_iter_max,
+                               float*    buff_d, fla_dim_t inc_d, 
+                               float*    buff_e, fla_dim_t inc_e,
+                               scomplex* buff_G, fla_dim_t rs_G, fla_dim_t cs_G );
+FLA_Error FLA_Tevd_n_opd_var1( fla_dim_t       m_A,
+                               fla_dim_t       m_U,
+                               fla_dim_t       n_G,
+                               fla_dim_t       n_iter_max,
+                               double*   buff_d, fla_dim_t inc_d, 
+                               double*   buff_e, fla_dim_t inc_e,
+                               dcomplex* buff_G, fla_dim_t rs_G, fla_dim_t cs_G );
+FLA_Error FLA_Tevd_n_opc_var1( fla_dim_t       m_A,
+                               fla_dim_t       m_U,
+                               fla_dim_t       n_G,
+                               fla_dim_t       n_iter_max,
+                               float*    buff_d, fla_dim_t inc_d, 
+                               float*    buff_e, fla_dim_t inc_e,
+                               scomplex* buff_G, fla_dim_t rs_G, fla_dim_t cs_G );
+FLA_Error FLA_Tevd_n_opz_var1( fla_dim_t       m_A,
+                               fla_dim_t       m_U,
+                               fla_dim_t       n_G,
+                               fla_dim_t       n_iter_max,
+                               double*   buff_d, fla_dim_t inc_d, 
+                               double*   buff_e, fla_dim_t inc_e,
+                               dcomplex* buff_G, fla_dim_t rs_G, fla_dim_t cs_G );
 
 

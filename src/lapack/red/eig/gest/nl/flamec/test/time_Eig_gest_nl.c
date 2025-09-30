@@ -18,7 +18,7 @@
 
 FLA_Error REF_Eig_gest_nl( FLA_Obj A, FLA_Obj B );
 void time_Eig_gest_nl(
-               integer variant, integer type, integer n_repeats, integer n, integer b_alg,
+               aocl_int64_t variant, aocl_int64_t type, aocl_int64_t n_repeats, aocl_int64_t n, aocl_int64_t b_alg,
                FLA_Inv inv, FLA_Uplo uplo, FLA_Obj A, FLA_Obj Y, FLA_Obj B,
                double *dtime, double *diff, double *gflops );
 
@@ -30,11 +30,11 @@ extern TLS_CLASS_SPEC fla_trmm_t*  fla_trmm_cntl_blas;
 extern TLS_CLASS_SPEC fla_trsm_t*  fla_trsm_cntl_blas;
 
 void time_Eig_gest_nl(
-               integer variant, integer type, integer n_repeats, integer n, integer b_alg,
+               aocl_int64_t variant, aocl_int64_t type, aocl_int64_t n_repeats, aocl_int64_t n, aocl_int64_t b_alg,
                FLA_Inv inv, FLA_Uplo uplo, FLA_Obj A, FLA_Obj Y, FLA_Obj B,
                double *dtime, double *diff, double *gflops )
 {
-  integer
+  aocl_int64_t
     irep;
 
   double

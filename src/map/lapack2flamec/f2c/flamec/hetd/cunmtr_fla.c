@@ -176,9 +176,9 @@ the routine */
 /* > \ingroup complexOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void cunmtr_fla(char *side, char *uplo, char *trans, integer *m, integer *n, complex *a,
-                integer *lda, complex *tau, complex *c__, integer *ldc, complex *work,
-                integer *lwork, integer *info)
+void cunmtr_fla(char *side, char *uplo, char *trans, aocl_int64_t *m, aocl_int64_t *n, scomplex *a,
+                aocl_int64_t *lda, scomplex *tau, scomplex *c__, aocl_int64_t *ldc, scomplex *work,
+                aocl_int64_t *lwork, aocl_int64_t *info)
 {
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, c_dim1, c_offset, i__2, i__3;
@@ -189,20 +189,13 @@ void cunmtr_fla(char *side, char *uplo, char *trans, integer *m, integer *n, com
     /* Local variables */
     aocl_int64_t i1, i2, nb, mi, ni, nq, nw;
     logical left;
-    extern logical lsame_(char *, char *, integer, integer);
-    integer iinfo;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    aocl_int64_t iinfo;
     logical upper;
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
-    extern /* Subroutine */
-        void
-        cunmql_(char *, char *, integer *, integer *, integer *, complex *, integer *, complex *,
-                complex *, integer *, complex *, integer *, integer *),
-        cunmqr_fla(char *, char *, integer *, integer *, integer *, complex *, integer *, complex *,
-                   complex *, integer *, complex *, integer *, integer *);
-    integer lwkopt;
+    extern void cunmqr_fla(char *, char *, aocl_int64_t *, aocl_int64_t *, aocl_int64_t *, scomplex *,
+                 aocl_int64_t *, scomplex *, scomplex *, aocl_int64_t *, scomplex *, aocl_int64_t *,
+                 aocl_int64_t *);
+    aocl_int64_t lwkopt;
     logical lquery;
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -319,7 +312,7 @@ void cunmtr_fla(char *side, char *uplo, char *trans, integer *m, integer *n, com
     if(*info != 0)
     {
         i__2 = -(*info);
-        xerbla_("CUNMTR", &i__2, (ftnlen)6);
+        aocl_blas_xerbla("CUNMTR", &i__2, (ftnlen)6);
         return;
     }
     else if(lquery)
@@ -347,8 +340,8 @@ void cunmtr_fla(char *side, char *uplo, char *trans, integer *m, integer *n, com
     {
         /* Q was determined by a call to CHETRD with UPLO = 'U' */
         i__2 = nq - 1;
-        cunmql_(side, trans, &mi, &ni, &i__2, &a[(a_dim1 << 1) + 1], lda, &tau[1], &c__[c_offset],
-                ldc, &work[1], lwork, &iinfo);
+        aocl_lapack_cunmql(side, trans, &mi, &ni, &i__2, &a[(a_dim1 << 1) + 1], lda, &tau[1],
+                           &c__[c_offset], ldc, &work[1], lwork, &iinfo);
     }
     else
     {

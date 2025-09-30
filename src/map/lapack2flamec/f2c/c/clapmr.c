@@ -99,7 +99,23 @@
 /* > \ingroup complexOTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-void clapmr_(logical *forwrd, integer *m, integer *n, complex *x, integer *ldx, integer *k)
+/** Generated wrapper function */
+void clapmr_(logical *forwrd, aocl_int_t *m, aocl_int_t *n, scomplex *x, aocl_int_t *ldx,
+             aocl_int_t *k)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_clapmr(forwrd, m, n, x, ldx, k);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t ldx_64 = *ldx;
+
+    aocl_lapack_clapmr(forwrd, &m_64, &n_64, x, &ldx_64, k);
+#endif
+}
+
+void aocl_lapack_clapmr(logical *forwrd, aocl_int64_t *m, aocl_int64_t *n, scomplex *x,
+                        aocl_int64_t *ldx, aocl_int_t *k)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -183,7 +199,7 @@ void clapmr_(logical *forwrd, integer *m, integer *n, complex *x, integer *ldx, 
             in = k[in];
             goto L20;
         L40: /* L50: */
-             ;
+            ;
         }
     }
     else
@@ -222,7 +238,7 @@ void clapmr_(logical *forwrd, integer *m, integer *n, complex *x, integer *ldx, 
             j = k[j];
             goto L60;
         L80: /* L90: */
-             ;
+            ;
         }
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);

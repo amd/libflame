@@ -167,35 +167,47 @@
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void dgemqr_(char *side, char *trans, integer *m, integer *n, integer *k, doublereal *a,
-             integer *lda, doublereal *t, integer *tsize, doublereal *c__, integer *ldc,
-             doublereal *work, integer *lwork, integer *info)
+/** Generated wrapper function */
+void dgemqr_(char *side, char *trans, aocl_int_t *m, aocl_int_t *n, aocl_int_t *k, doublereal *a,
+             aocl_int_t *lda, doublereal *t, aocl_int_t *tsize, doublereal *c__, aocl_int_t *ldc,
+             doublereal *work, aocl_int_t *lwork, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_dgemqr(side, trans, m, n, k, a, lda, t, tsize, c__, ldc, work, lwork, info);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t k_64 = *k;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t tsize_64 = *tsize;
+    aocl_int64_t ldc_64 = *ldc;
+    aocl_int64_t lwork_64 = *lwork;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_dgemqr(side, trans, &m_64, &n_64, &k_64, a, &lda_64, t, &tsize_64, c__, &ldc_64,
+                       work, &lwork_64, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_dgemqr(char *side, char *trans, aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *k,
+                        doublereal *a, aocl_int64_t *lda, doublereal *t, aocl_int64_t *tsize,
+                        doublereal *c__, aocl_int64_t *ldc, doublereal *work, aocl_int64_t *lwork,
+                        aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dgemqr inputs: side %c, trans %c, m %" FLA_IS ", n %" FLA_IS ", k %" FLA_IS
                       ", lda %" FLA_IS ", tsize %" FLA_IS ", ldc %" FLA_IS ", lwork %" FLA_IS "",
                       *side, *trans, *m, *n, *k, *lda, *tsize, *ldc, *lwork);
     /* System generated locals */
-    integer a_dim1, a_offset, c_dim1, c_offset, i__1;
+    aocl_int64_t a_dim1, a_offset, c_dim1, c_offset, i__1;
     /* Local variables */
-    extern /* Subroutine */
-        void
-        dlamtsqr_(char *, char *, integer *, integer *, integer *, integer *, integer *,
-                  doublereal *, integer *, doublereal *, integer *, doublereal *, integer *,
-                  doublereal *, integer *, integer *);
-    integer mb, nb, mn, lw;
+    aocl_int64_t mb, nb, mn, lw;
     logical left, tran;
-    extern logical lsame_(char *, char *, integer, integer);
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     logical right;
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical notran, lquery;
-    extern /* Subroutine */
-        void
-        dgemqrt_(char *, char *, integer *, integer *, integer *, integer *, doublereal *,
-                 integer *, doublereal *, integer *, doublereal *, integer *, doublereal *,
-                 integer *);
     /* -- LAPACK computational routine (version 3.7.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -287,7 +299,7 @@ void dgemqr_(char *side, char *trans, integer *m, integer *n, integer *k, double
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("DGEMQR", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("DGEMQR", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -308,13 +320,13 @@ void dgemqr_(char *side, char *trans, integer *m, integer *n, integer *k, double
     i__1 = fla_max(*m, *n);
     if(left && *m <= *k || right && *n <= *k || mb <= *k || mb >= fla_max(i__1, *k))
     {
-        dgemqrt_(side, trans, m, n, k, &nb, &a[a_offset], lda, &t[6], &nb, &c__[c_offset], ldc,
-                 &work[1], info);
+        aocl_lapack_dgemqrt(side, trans, m, n, k, &nb, &a[a_offset], lda, &t[6], &nb,
+                            &c__[c_offset], ldc, &work[1], info);
     }
     else
     {
-        dlamtsqr_(side, trans, m, n, k, &mb, &nb, &a[a_offset], lda, &t[6], &nb, &c__[c_offset],
-                  ldc, &work[1], lwork, info);
+        aocl_lapack_dlamtsqr(side, trans, m, n, k, &mb, &nb, &a[a_offset], lda, &t[6], &nb,
+                             &c__[c_offset], ldc, &work[1], lwork, info);
     }
     work[1] = (doublereal)lw;
     AOCL_DTL_TRACE_LOG_EXIT

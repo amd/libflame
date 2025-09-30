@@ -94,12 +94,25 @@ the array */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void zlarnv_(integer *idist, integer *iseed, integer *n, doublecomplex *x)
+/** Generated wrapper function */
+void zlarnv_(aocl_int_t *idist, aocl_int_t *iseed, aocl_int_t *n, dcomplex *x)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_zlarnv(idist, iseed, n, x);
+#else
+    aocl_int64_t idist_64 = *idist;
+    aocl_int64_t n_64 = *n;
+
+    aocl_lapack_zlarnv(&idist_64, iseed, &n_64, x);
+#endif
+}
+
+void aocl_lapack_zlarnv(aocl_int64_t *idist, aocl_int_t *iseed, aocl_int64_t *n, dcomplex *x)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zlarnv inputs: idist %" FLA_IS ", n %" FLA_IS "", *idist, *n);
     /* System generated locals */
-    integer i__1, i__2, i__3, i__4, i__5;
+    aocl_int64_t i__1, i__2, i__3, i__4, i__5;
     doublereal d__1, d__2;
     dcomplex z__1, z__2, z__3;
     /* Builtin functions */
@@ -108,10 +121,7 @@ void zlarnv_(integer *idist, integer *iseed, integer *n, doublecomplex *x)
     /* Local variables */
     aocl_int64_t i__;
     doublereal u[128];
-    integer il, iv;
-    extern /* Subroutine */
-        void
-        dlaruv_(integer *, integer *, doublereal *);
+    aocl_int64_t il, iv;
     /* -- LAPACK auxiliary routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -145,7 +155,7 @@ void zlarnv_(integer *idist, integer *iseed, integer *n, doublecomplex *x)
         /* Call DLARUV to generate 2*IL real numbers from a uniform (0,1) */
         /* distribution (2*IL <= LV) */
         i__2 = il << 1;
-        dlaruv_(&iseed[1], &i__2, u);
+        aocl_lapack_dlaruv(&iseed[1], &i__2, u);
         if(*idist == 1)
         {
             /* Copy generated numbers */

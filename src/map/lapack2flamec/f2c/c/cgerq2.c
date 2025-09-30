@@ -121,8 +121,26 @@ conjg(v(1:n-k+i-1)) is stored on */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void cgerq2_(integer *m, integer *n, complex *a, integer *lda, complex *tau, complex *work,
-             integer *info)
+/** Generated wrapper function */
+void cgerq2_(aocl_int_t *m, aocl_int_t *n, scomplex *a, aocl_int_t *lda, scomplex *tau, scomplex *work,
+             aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_cgerq2(m, n, a, lda, tau, work, info);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_cgerq2(&m_64, &n_64, a, &lda_64, tau, work, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_cgerq2(aocl_int64_t *m, aocl_int64_t *n, scomplex *a, aocl_int64_t *lda,
+                        scomplex *tau, scomplex *work, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -137,15 +155,8 @@ void cgerq2_(integer *m, integer *n, complex *a, integer *lda, complex *tau, com
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, i__1, i__2;
     /* Local variables */
-    integer i__, k;
-    complex alpha;
-    extern /* Subroutine */
-        void
-        clarf_(char *, integer *, integer *, complex *, integer *, complex *, complex *, integer *,
-               complex *),
-        clarfg_(integer *, complex *, complex *, integer *, complex *),
-        clacgv_(integer *, complex *, integer *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    aocl_int64_t i__, k;
+    scomplex alpha;
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -188,7 +199,7 @@ void cgerq2_(integer *m, integer *n, complex *a, integer *lda, complex *tau, com
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("CGERQ2", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("CGERQ2", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
@@ -210,8 +221,8 @@ void cgerq2_(integer *m, integer *n, complex *a, integer *lda, complex *tau, com
         a[i__1].imag = 0.f; // , expr subst
         i__1 = *m - k + i__ - 1;
         i__2 = *n - k + i__;
-        clarf_("Right", &i__1, &i__2, &a[*m - k + i__ + a_dim1], lda, &tau[i__], &a[a_offset], lda,
-               &work[1]);
+        aocl_lapack_clarf("Right", &i__1, &i__2, &a[*m - k + i__ + a_dim1], lda, &tau[i__],
+                          &a[a_offset], lda, &work[1]);
         i__1 = *m - k + i__ + (*n - k + i__) * a_dim1;
         a[i__1].real = alpha.real;
         a[i__1].imag = alpha.imag; // , expr subst

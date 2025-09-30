@@ -8,7 +8,7 @@
  */
 #include "FLA_f2c.h" /* Table of constant values */
 
-static integer c__1 = 1;
+static aocl_int64_t c__1 = 1;
 /* > \brief \b CLANGE returns the value of the 1-norm, Frobenius norm, infinity-norm, or the largest
  * absolute value of any element of a general rectangular matrix. */
 /* =========== DOCUMENTATION =========== */
@@ -47,7 +47,7 @@ static integer c__1 = 1;
 /* > */
 /* > CLANGE returns the value of the one norm, or the Frobenius norm, or */
 /* > the infinity norm, or the element of largest absolute value of a */
-/* > complex matrix A. */
+/* > scomplex matrix A. */
 /* > \endverbatim */
 /* > */
 /* > \return CLANGE */
@@ -116,9 +116,24 @@ otherwise, WORK is not */
 /* > \author NAG Ltd. */
 /* > \ingroup complexGEauxiliary */
 /* ===================================================================== */
-real clange_(char *norm, integer *m, integer *n, complex *a, integer *lda, real *work)
+/** Generated wrapper function */
+real clange_(char *norm, aocl_int_t *m, aocl_int_t *n, scomplex *a, aocl_int_t *lda, real *work)
 {
-    real fla_get_max_cabs_element_vector(integer m, complex * a, integer a_dim);
+#if FLA_ENABLE_ILP64
+    return aocl_lapack_clange(norm, m, n, a, lda, work);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t lda_64 = *lda;
+
+    return aocl_lapack_clange(norm, &m_64, &n_64, a, &lda_64, work);
+#endif
+}
+
+real aocl_lapack_clange(char *norm, aocl_int64_t *m, aocl_int64_t *n, scomplex *a, aocl_int64_t *lda,
+                        real *work)
+{
+    real fla_get_max_cabs_element_vector(aocl_int64_t m, scomplex * a, aocl_int64_t a_dim);
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
     char buffer[256];
@@ -130,18 +145,15 @@ real clange_(char *norm, integer *m, integer *n, complex *a, integer *lda, real 
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
-    integer a_dim1, a_offset, i__1, i__2;
+    aocl_int64_t a_dim1, a_offset, i__1, i__2;
     real ret_val;
     /* Builtin functions */
-    double c_abs(complex *), sqrt(doublereal);
+    double c_abs(scomplex *), sqrt(doublereal);
     /* Local variables */
-    integer i__, j, j_a_dim;
+    aocl_int64_t i__, j, j_a_dim;
     real sum, temp, scale;
-    extern logical lsame_(char *, char *, integer, integer);
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     real value;
-    extern /* Subroutine */
-        void
-        classq_(integer *, complex *, integer *, real *, real *);
     extern logical sisnan_(real *);
     /* -- LAPACK auxiliary routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -268,7 +280,7 @@ real clange_(char *norm, integer *m, integer *n, complex *a, integer *lda, real 
         i__1 = *n;
         for(j = 1; j <= i__1; ++j)
         {
-            classq_(m, &a[j * a_dim1 + 1], &c__1, &scale, &sum);
+            aocl_lapack_classq(m, &a[j * a_dim1 + 1], &c__1, &scale, &sum);
             /* L90: */
         }
         value = scale * sqrt(sum);

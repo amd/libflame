@@ -151,10 +151,10 @@ double computeDiff_d(int size, double *Out, double *Out_ref);
 /*Compute difference of two buffers of float type */
 float computeDiff_s(int size, float *Out, float *Out_ref);
 
-/*Compute difference of two buffers of single precision complex type */
+/*Compute difference of two buffers of single precision scomplex type */
 float computeDiff_c(int size, lapack_complex_float *Out, lapack_complex_float *Out_ref);
 
-/*Compute difference of two buffers of double precision complex type */
+/*Compute difference of two buffers of double precision scomplex type */
 double computeDiff_z(int size, lapack_complex_double *Out, lapack_complex_double *Out_ref);
 
 /*Compute difference of two buffers of int type */

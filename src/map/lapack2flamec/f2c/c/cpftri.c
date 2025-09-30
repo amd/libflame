@@ -4,7 +4,7 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static complex c_b1 = {1.f, 0.f};
+static scomplex c_b1 = {{1.f}, {0.f}};
 static real c_b12 = 1.f;
 /* > \brief \b CPFTRI */
 /* =========== DOCUMENTATION =========== */
@@ -215,7 +215,22 @@ k=N/2. IF TRANSR = 'C' then RFP is */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void cpftri_(char *transr, char *uplo, integer *n, complex *a, integer *info)
+/** Generated wrapper function */
+void cpftri_(char *transr, char *uplo, aocl_int_t *n, scomplex *a, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_cpftri(transr, uplo, n, a, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_cpftri(transr, uplo, &n_64, a, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_cpftri(char *transr, char *uplo, aocl_int64_t *n, scomplex *a, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -232,24 +247,9 @@ void cpftri_(char *transr, char *uplo, integer *n, complex *a, integer *info)
     /* Local variables */
     aocl_int64_t k, n1, n2;
     logical normaltransr;
-    extern /* Subroutine */
-        void
-        cherk_(char *, char *, integer *, integer *, real *, complex *, integer *, real *,
-               complex *, integer *);
-    extern logical lsame_(char *, char *, integer, integer);
-    extern /* Subroutine */
-        void
-        ctrmm_(char *, char *, char *, char *, integer *, integer *, complex *, complex *,
-               integer *, complex *, integer *);
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     logical lower;
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical nisodd;
-    extern /* Subroutine */
-        void
-        clauum_(char *, integer *, complex *, integer *, integer *),
-        ctftri_(char *, char *, char *, integer *, complex *, integer *);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -288,7 +288,7 @@ void cpftri_(char *transr, char *uplo, integer *n, complex *a, integer *info)
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("CPFTRI", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("CPFTRI", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
@@ -299,7 +299,7 @@ void cpftri_(char *transr, char *uplo, integer *n, complex *a, integer *info)
         return;
     }
     /* Invert the triangular Cholesky factor U or L. */
-    ctftri_(transr, uplo, "N", n, a, info);
+    aocl_lapack_ctftri(transr, uplo, "N", n, a, info);
     if(*info > 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
@@ -372,10 +372,10 @@ void cpftri_(char *transr, char *uplo, integer *n, complex *a, integer *info)
             {
                 /* SRPA for UPPER, TRANSPOSE, and N is odd */
                 /* T1 -> a(0+N2*N2), T2 -> a(0+N1*N2), S -> a(0) */
-                clauum_("U", &n1, &a[n2 * n2], &n2, info);
-                cherk_("U", "C", &n1, &n2, &c_b12, a, &n2, &c_b12, &a[n2 * n2], &n2);
-                ctrmm_("L", "L", "C", "N", &n2, &n1, &c_b1, &a[n1 * n2], &n2, a, &n2);
-                clauum_("L", &n2, &a[n1 * n2], &n2, info);
+                aocl_lapack_clauum("U", &n1, &a[n2 * n2], &n2, info);
+                aocl_blas_cherk("U", "C", &n1, &n2, &c_b12, a, &n2, &c_b12, &a[n2 * n2], &n2);
+                aocl_blas_ctrmm("L", "L", "C", "N", &n2, &n1, &c_b1, &a[n1 * n2], &n2, a, &n2);
+                aocl_lapack_clauum("L", &n2, &a[n1 * n2], &n2, info);
             }
         }
     }
@@ -394,7 +394,7 @@ void cpftri_(char *transr, char *uplo, integer *n, complex *a, integer *info)
                 aocl_lapack_clauum("L", &k, &a[1], &i__1, info);
                 i__1 = *n + 1;
                 i__2 = *n + 1;
-                cherk_("L", "C", &k, &k, &c_b12, &a[k + 1], &i__1, &c_b12, &a[1], &i__2);
+                aocl_blas_cherk("L", "C", &k, &k, &c_b12, &a[k + 1], &i__1, &c_b12, &a[1], &i__2);
                 i__1 = *n + 1;
                 i__2 = *n + 1;
                 aocl_blas_ctrmm("L", "U", "N", "N", &k, &k, &c_b1, a, &i__1, &a[k + 1], &i__2);
@@ -413,7 +413,7 @@ void cpftri_(char *transr, char *uplo, integer *n, complex *a, integer *info)
                 aocl_blas_cherk("L", "N", &k, &k, &c_b12, a, &i__1, &c_b12, &a[k + 1], &i__2);
                 i__1 = *n + 1;
                 i__2 = *n + 1;
-                ctrmm_("R", "U", "C", "N", &k, &k, &c_b1, &a[k], &i__1, a, &i__2);
+                aocl_blas_ctrmm("R", "U", "C", "N", &k, &k, &c_b1, &a[k], &i__1, a, &i__2);
                 i__1 = *n + 1;
                 aocl_lapack_clauum("U", &k, &a[k], &i__1, info);
             }
@@ -438,10 +438,10 @@ void cpftri_(char *transr, char *uplo, integer *n, complex *a, integer *info)
                 /* T1 -> B(0,k+1), T2 -> B(0,k), S -> B(0,0), */
                 /* T1 -> a(0+k*(k+1)), T2 -> a(0+k*k), S -> a(0+0));
                 lda=k */
-                clauum_("U", &k, &a[k * (k + 1)], &k, info);
-                cherk_("U", "C", &k, &k, &c_b12, a, &k, &c_b12, &a[k * (k + 1)], &k);
-                ctrmm_("L", "L", "C", "N", &k, &k, &c_b1, &a[k * k], &k, a, &k);
-                clauum_("L", &k, &a[k * k], &k, info);
+                aocl_lapack_clauum("U", &k, &a[k * (k + 1)], &k, info);
+                aocl_blas_cherk("U", "C", &k, &k, &c_b12, a, &k, &c_b12, &a[k * (k + 1)], &k);
+                aocl_blas_ctrmm("L", "L", "C", "N", &k, &k, &c_b1, &a[k * k], &k, a, &k);
+                aocl_lapack_clauum("L", &k, &a[k * k], &k, info);
             }
         }
     }

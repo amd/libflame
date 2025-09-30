@@ -12,13 +12,13 @@
 #if FLA_ENABLE_AMD_OPT
 
 /* Application of 2x2 Plane Rotation on two vectors */
-int fla_drot_avx512(integer *n, doublereal *dx, integer *incx, doublereal *dy, integer *incy,
+int fla_drot_avx512(aocl_int64_t *n, doublereal *dx, aocl_int64_t *incx, doublereal *dy, aocl_int64_t *incy,
                     doublereal *c__, doublereal *s)
 {
-    integer i__1;
+    aocl_int64_t i__1;
 
-    integer i__;
-    integer ix, iy;
+    aocl_int64_t i__;
+    aocl_int64_t ix, iy;
 
     __m512d vd8_c, vd8_s;
     __m512d vd8_idx0, vd8_idx1, vd8_odx0, vd8_odx1;

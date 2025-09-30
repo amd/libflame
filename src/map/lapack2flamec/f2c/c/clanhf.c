@@ -4,7 +4,7 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
+static aocl_int64_t c__1 = 1;
 /* > \brief \b CLANHF returns the value of the 1-norm, or the Frobenius norm, or the infinity norm,
  * or the ele ment of largest absolute value of a Hermitian matrix in RFP format. */
 /* =========== DOCUMENTATION =========== */
@@ -43,7 +43,7 @@ static integer c__1 = 1;
 /* > */
 /* > CLANHF returns the value of the one norm, or the Frobenius norm, or */
 /* > the infinity norm, or the element of largest absolute value of a */
-/* > complex Hermitian matrix A in RFP format. */
+/* > scomplex Hermitian matrix A in RFP format. */
 /* > \endverbatim */
 /* > */
 /* > \return CLANHF */
@@ -247,7 +247,20 @@ otherwise, */
 /* > \endverbatim */
 /* > */
 /* ===================================================================== */
-real clanhf_(char *norm, char *transr, char *uplo, integer *n, complex *a, real *work)
+/** Generated wrapper function */
+real clanhf_(char *norm, char *transr, char *uplo, aocl_int_t *n, scomplex *a, real *work)
+{
+#if FLA_ENABLE_ILP64
+    return aocl_lapack_clanhf(norm, transr, uplo, n, a, work);
+#else
+    aocl_int64_t n_64 = *n;
+
+    return aocl_lapack_clanhf(norm, transr, uplo, &n_64, a, work);
+#endif
+}
+
+real aocl_lapack_clanhf(char *norm, char *transr, char *uplo, aocl_int64_t *n, scomplex *a,
+                        real *work)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -262,22 +275,19 @@ real clanhf_(char *norm, char *transr, char *uplo, integer *n, complex *a, real 
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
-    integer i__1, i__2;
+    aocl_int64_t i__1, i__2;
     real ret_val, r__1;
     /* Builtin functions */
-    double c_abs(complex *), sqrt(doublereal);
+    double c_abs(scomplex *), sqrt(doublereal);
     /* Local variables */
-    integer i__, j, k, l;
+    aocl_int64_t i__, j, k, l;
     real s;
-    integer n1;
+    aocl_int64_t n1;
     real aa;
-    integer lda, ifm, noe, ilu;
+    aocl_int64_t lda, ifm, noe, ilu;
     real temp, scale;
-    extern logical lsame_(char *, char *, integer, integer);
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     real value;
-    extern /* Subroutine */
-        void
-        classq_(integer *, complex *, integer *, real *, real *);
     extern logical sisnan_(real *);
     /* -- LAPACK computational routine (version 3.7.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -1592,14 +1602,14 @@ real clanhf_(char *norm, char *transr, char *uplo, integer *n, complex *a, real 
                     for(j = 0; j <= i__1; ++j)
                     {
                         i__2 = k - j - 2;
-                        classq_(&i__2, &a[k + j + 1 + j * lda], &c__1, &scale, &s);
+                        aocl_lapack_classq(&i__2, &a[k + j + 1 + j * lda], &c__1, &scale, &s);
                         /* L at A(k,0) */
                     }
                     i__1 = k - 1;
                     for(j = 0; j <= i__1; ++j)
                     {
                         i__2 = k + j - 1;
-                        classq_(&i__2, &a[j * lda], &c__1, &scale, &s);
+                        aocl_lapack_classq(&i__2, &a[j * lda], &c__1, &scale, &s);
                         /* trap U at A(0,0) */
                     }
                     s += s;
@@ -1676,13 +1686,13 @@ real clanhf_(char *norm, char *transr, char *uplo, integer *n, complex *a, real 
                     for(j = 0; j <= i__1; ++j)
                     {
                         i__2 = *n - j - 1;
-                        classq_(&i__2, &a[j + 1 + j * lda], &c__1, &scale, &s);
+                        aocl_lapack_classq(&i__2, &a[j + 1 + j * lda], &c__1, &scale, &s);
                         /* trap L at A(0,0) */
                     }
                     i__1 = k - 2;
                     for(j = 1; j <= i__1; ++j)
                     {
-                        classq_(&j, &a[(j + 1) * lda], &c__1, &scale, &s);
+                        aocl_lapack_classq(&j, &a[(j + 1) * lda], &c__1, &scale, &s);
                         /* U at A(0,1) */
                     }
                     s += s;
@@ -1761,20 +1771,20 @@ real clanhf_(char *norm, char *transr, char *uplo, integer *n, complex *a, real 
                     i__1 = k - 2;
                     for(j = 1; j <= i__1; ++j)
                     {
-                        classq_(&j, &a[(k + j) * lda], &c__1, &scale, &s);
+                        aocl_lapack_classq(&j, &a[(k + j) * lda], &c__1, &scale, &s);
                         /* U at A(0,k) */
                     }
                     i__1 = k - 2;
                     for(j = 0; j <= i__1; ++j)
                     {
-                        classq_(&k, &a[j * lda], &c__1, &scale, &s);
+                        aocl_lapack_classq(&k, &a[j * lda], &c__1, &scale, &s);
                         /* k by k-1 rect. at A(0,0) */
                     }
                     i__1 = k - 2;
                     for(j = 0; j <= i__1; ++j)
                     {
                         i__2 = k - j - 1;
-                        classq_(&i__2, &a[j + 1 + (j + k - 1) * lda], &c__1, &scale, &s);
+                        aocl_lapack_classq(&i__2, &a[j + 1 + (j + k - 1) * lda], &c__1, &scale, &s);
                         /* L at A(0,k-1) */
                     }
                     s += s;
@@ -1852,20 +1862,20 @@ real clanhf_(char *norm, char *transr, char *uplo, integer *n, complex *a, real 
                     i__1 = k - 1;
                     for(j = 1; j <= i__1; ++j)
                     {
-                        classq_(&j, &a[j * lda], &c__1, &scale, &s);
+                        aocl_lapack_classq(&j, &a[j * lda], &c__1, &scale, &s);
                         /* U at A(0,0) */
                     }
                     i__1 = *n - 1;
                     for(j = k; j <= i__1; ++j)
                     {
-                        classq_(&k, &a[j * lda], &c__1, &scale, &s);
+                        aocl_lapack_classq(&k, &a[j * lda], &c__1, &scale, &s);
                         /* k by k-1 rect. at A(0,k) */
                     }
                     i__1 = k - 3;
                     for(j = 0; j <= i__1; ++j)
                     {
                         i__2 = k - j - 2;
-                        classq_(&i__2, &a[j + 2 + j * lda], &c__1, &scale, &s);
+                        aocl_lapack_classq(&i__2, &a[j + 2 + j * lda], &c__1, &scale, &s);
                         /* L at A(1,0) */
                     }
                     s += s;
@@ -1951,14 +1961,14 @@ real clanhf_(char *norm, char *transr, char *uplo, integer *n, complex *a, real 
                     for(j = 0; j <= i__1; ++j)
                     {
                         i__2 = k - j - 1;
-                        classq_(&i__2, &a[k + j + 2 + j * lda], &c__1, &scale, &s);
+                        aocl_lapack_classq(&i__2, &a[k + j + 2 + j * lda], &c__1, &scale, &s);
                         /* L at A(k+1,0) */
                     }
                     i__1 = k - 1;
                     for(j = 0; j <= i__1; ++j)
                     {
                         i__2 = k + j;
-                        classq_(&i__2, &a[j * lda], &c__1, &scale, &s);
+                        aocl_lapack_classq(&i__2, &a[j * lda], &c__1, &scale, &s);
                         /* trap U at A(0,0) */
                     }
                     s += s;
@@ -2016,13 +2026,13 @@ real clanhf_(char *norm, char *transr, char *uplo, integer *n, complex *a, real 
                     for(j = 0; j <= i__1; ++j)
                     {
                         i__2 = *n - j - 1;
-                        classq_(&i__2, &a[j + 2 + j * lda], &c__1, &scale, &s);
+                        aocl_lapack_classq(&i__2, &a[j + 2 + j * lda], &c__1, &scale, &s);
                         /* trap L at A(1,0) */
                     }
                     i__1 = k - 1;
                     for(j = 1; j <= i__1; ++j)
                     {
-                        classq_(&j, &a[j * lda], &c__1, &scale, &s);
+                        aocl_lapack_classq(&j, &a[j * lda], &c__1, &scale, &s);
                         /* U at A(0,0) */
                     }
                     s += s;
@@ -2083,20 +2093,20 @@ real clanhf_(char *norm, char *transr, char *uplo, integer *n, complex *a, real 
                     i__1 = k - 1;
                     for(j = 1; j <= i__1; ++j)
                     {
-                        classq_(&j, &a[(k + 1 + j) * lda], &c__1, &scale, &s);
+                        aocl_lapack_classq(&j, &a[(k + 1 + j) * lda], &c__1, &scale, &s);
                         /* U at A(0,k+1) */
                     }
                     i__1 = k - 1;
                     for(j = 0; j <= i__1; ++j)
                     {
-                        classq_(&k, &a[j * lda], &c__1, &scale, &s);
+                        aocl_lapack_classq(&k, &a[j * lda], &c__1, &scale, &s);
                         /* k by k rect. at A(0,0) */
                     }
                     i__1 = k - 2;
                     for(j = 0; j <= i__1; ++j)
                     {
                         i__2 = k - j - 1;
-                        classq_(&i__2, &a[j + 1 + (j + k) * lda], &c__1, &scale, &s);
+                        aocl_lapack_classq(&i__2, &a[j + 1 + (j + k) * lda], &c__1, &scale, &s);
                         /* L at A(0,k) */
                     }
                     s += s;
@@ -2195,20 +2205,20 @@ real clanhf_(char *norm, char *transr, char *uplo, integer *n, complex *a, real 
                     i__1 = k - 1;
                     for(j = 1; j <= i__1; ++j)
                     {
-                        classq_(&j, &a[(j + 1) * lda], &c__1, &scale, &s);
+                        aocl_lapack_classq(&j, &a[(j + 1) * lda], &c__1, &scale, &s);
                         /* U at A(0,1) */
                     }
                     i__1 = *n;
                     for(j = k + 1; j <= i__1; ++j)
                     {
-                        classq_(&k, &a[j * lda], &c__1, &scale, &s);
+                        aocl_lapack_classq(&k, &a[j * lda], &c__1, &scale, &s);
                         /* k by k rect. at A(0,k+1) */
                     }
                     i__1 = k - 2;
                     for(j = 0; j <= i__1; ++j)
                     {
                         i__2 = k - j - 1;
-                        classq_(&i__2, &a[j + 1 + j * lda], &c__1, &scale, &s);
+                        aocl_lapack_classq(&i__2, &a[j + 1 + j * lda], &c__1, &scale, &s);
                         /* L at A(0,0) */
                     }
                     s += s;

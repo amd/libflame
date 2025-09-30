@@ -13,9 +13,9 @@
 FLA_Error FLA_Apply_G_rf_blk_var5b( FLA_Obj G, FLA_Obj A, dim_t b_alg )
 {
 	FLA_Datatype datatype;
-	integer          k_G, m_A, n_A;
-	integer          rs_G, cs_G;
-	integer          rs_A, cs_A;
+	aocl_int64_t          k_G, m_A, n_A;
+	aocl_int64_t          rs_G, cs_G;
+	aocl_int64_t          rs_A, cs_A;
 
 	datatype = FLA_Obj_datatype( A );
 
@@ -100,34 +100,34 @@ FLA_Error FLA_Apply_G_rf_blk_var5b( FLA_Obj G, FLA_Obj A, dim_t b_alg )
 }
 
 
-FLA_Error FLA_Apply_G_rf_bls_var5b( integer       k_G,
-                                   integer       m_A,
-                                   integer       n_A,
-                                   integer       i_k,
-                                   scomplex* buff_G, integer rs_G, integer cs_G,
-                                   float*    buff_A, integer rs_A, integer cs_A,
-                                   integer       b_alg )
+FLA_Error FLA_Apply_G_rf_bls_var5b( aocl_int64_t       k_G,
+                                   aocl_int64_t       m_A,
+                                   aocl_int64_t       n_A,
+                                   aocl_int64_t       i_k,
+                                   scomplex* buff_G, aocl_int64_t rs_G, aocl_int64_t cs_G,
+                                   float*    buff_A, aocl_int64_t rs_A, aocl_int64_t cs_A,
+                                   aocl_int64_t       b_alg )
 {
 	return FLA_SUCCESS;
 }
 
-FLA_Error FLA_Apply_G_rf_bld_var5b( integer       k_G,
-                                   integer       m_A,
-                                   integer       n_A,
-                                   integer       i_k,
-                                   dcomplex* buff_G, integer rs_G, integer cs_G,
-                                   double*   buff_A, integer rs_A, integer cs_A,
-                                   integer       b_alg )
+FLA_Error FLA_Apply_G_rf_bld_var5b( aocl_int64_t       k_G,
+                                   aocl_int64_t       m_A,
+                                   aocl_int64_t       n_A,
+                                   aocl_int64_t       i_k,
+                                   dcomplex* buff_G, aocl_int64_t rs_G, aocl_int64_t cs_G,
+                                   double*   buff_A, aocl_int64_t rs_A, aocl_int64_t cs_A,
+                                   aocl_int64_t       b_alg )
 {
-	integer i;
-	integer b = 0;
+	aocl_int64_t i;
+	aocl_int64_t b = 0;
 
 	for ( i = 0; i < m_A; i += b )
 	{
 		double*   A1       = buff_A + (0  )*cs_A + (i  )*rs_A;
 
-		integer       m_behind = i;
-		integer       m_ahead  = fla_max( 0, m_A - i );
+		aocl_int64_t       m_behind = i;
+		aocl_int64_t       m_ahead  = fla_max( 0, m_A - i );
 
 		b = fla_min( b_alg, m_ahead );
 
@@ -144,24 +144,24 @@ FLA_Error FLA_Apply_G_rf_bld_var5b( integer       k_G,
 	return FLA_SUCCESS;
 }
 
-FLA_Error FLA_Apply_G_rf_blc_var5b( integer       k_G,
-                                   integer       m_A,
-                                   integer       n_A,
-                                   integer       i_k,
-                                   scomplex* buff_G, integer rs_G, integer cs_G,
-                                   scomplex* buff_A, integer rs_A, integer cs_A,
-                                   integer       b_alg )
+FLA_Error FLA_Apply_G_rf_blc_var5b( aocl_int64_t       k_G,
+                                   aocl_int64_t       m_A,
+                                   aocl_int64_t       n_A,
+                                   aocl_int64_t       i_k,
+                                   scomplex* buff_G, aocl_int64_t rs_G, aocl_int64_t cs_G,
+                                   scomplex* buff_A, aocl_int64_t rs_A, aocl_int64_t cs_A,
+                                   aocl_int64_t       b_alg )
 {
 	return FLA_SUCCESS;
 }
 
-FLA_Error FLA_Apply_G_rf_blz_var5b( integer       k_G,
-                                   integer       m_A,
-                                   integer       n_A,
-                                   integer       i_k,
-                                   dcomplex* buff_G, integer rs_G, integer cs_G,
-                                   dcomplex* buff_A, integer rs_A, integer cs_A,
-                                   integer       b_alg )
+FLA_Error FLA_Apply_G_rf_blz_var5b( aocl_int64_t       k_G,
+                                   aocl_int64_t       m_A,
+                                   aocl_int64_t       n_A,
+                                   aocl_int64_t       i_k,
+                                   dcomplex* buff_G, aocl_int64_t rs_G, aocl_int64_t cs_G,
+                                   dcomplex* buff_A, aocl_int64_t rs_A, aocl_int64_t cs_A,
+                                   aocl_int64_t       b_alg )
 {
 	return FLA_SUCCESS;
 }

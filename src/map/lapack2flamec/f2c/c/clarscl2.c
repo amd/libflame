@@ -86,7 +86,22 @@
 /* > \ingroup complexOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void clarscl2_(integer *m, integer *n, real *d__, complex *x, integer *ldx)
+/** Generated wrapper function */
+void clarscl2_(aocl_int_t *m, aocl_int_t *n, real *d__, scomplex *x, aocl_int_t *ldx)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_clarscl2(m, n, d__, x, ldx);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t ldx_64 = *ldx;
+
+    aocl_lapack_clarscl2(&m_64, &n_64, d__, x, &ldx_64);
+#endif
+}
+
+void aocl_lapack_clarscl2(aocl_int64_t *m, aocl_int64_t *n, real *d__, scomplex *x,
+                          aocl_int64_t *ldx)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE

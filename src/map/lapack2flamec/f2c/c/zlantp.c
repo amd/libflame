@@ -4,7 +4,7 @@
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
  /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
+static aocl_int64_t c__1 = 1;
 /* > \brief \b ZLANTP returns the value of the 1-norm, or the Frobenius norm, or the infinity norm,
  * or the ele ment of largest absolute value of a triangular matrix supplied in packed form. */
 /* =========== DOCUMENTATION =========== */
@@ -123,27 +123,37 @@ otherwise, WORK is not */
 /* > \author NAG Ltd. */
 /* > \ingroup complex16OTHERauxiliary */
 /* ===================================================================== */
-doublereal zlantp_(char *norm, char *uplo, char *diag, integer *n, doublecomplex *ap,
+/** Generated wrapper function */
+doublereal zlantp_(char *norm, char *uplo, char *diag, aocl_int_t *n, dcomplex *ap,
                    doublereal *work)
+{
+#if FLA_ENABLE_ILP64
+    return aocl_lapack_zlantp(norm, uplo, diag, n, ap, work);
+#else
+    aocl_int64_t n_64 = *n;
+
+    return aocl_lapack_zlantp(norm, uplo, diag, &n_64, ap, work);
+#endif
+}
+
+doublereal aocl_lapack_zlantp(char *norm, char *uplo, char *diag, aocl_int64_t *n,
+                              dcomplex *ap, doublereal *work)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zlantp inputs: norm %c, uplo %c, diag %c, n %" FLA_IS "", *norm, *uplo,
                       *diag, *n);
     /* System generated locals */
-    integer i__1, i__2;
+    aocl_int64_t i__1, i__2;
     doublereal ret_val;
     /* Builtin functions */
-    double z_abs(doublecomplex *), sqrt(doublereal);
+    double z_abs(dcomplex *), sqrt(doublereal);
     /* Local variables */
-    integer i__, j, k;
+    aocl_int64_t i__, j, k;
     doublereal sum, scale;
     logical udiag;
-    extern logical lsame_(char *, char *, integer, integer);
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     doublereal value;
     extern logical disnan_(doublereal *);
-    extern /* Subroutine */
-        void
-        zlassq_(integer *, doublecomplex *, integer *, doublereal *, doublereal *);
     /* -- LAPACK auxiliary routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -456,7 +466,7 @@ doublereal zlantp_(char *norm, char *uplo, char *diag, integer *n, doublecomplex
                 for(j = 2; j <= i__1; ++j)
                 {
                     i__2 = j - 1;
-                    zlassq_(&i__2, &ap[k], &c__1, &scale, &sum);
+                    aocl_lapack_zlassq(&i__2, &ap[k], &c__1, &scale, &sum);
                     k += j;
                     /* L280: */
                 }
@@ -469,7 +479,7 @@ doublereal zlantp_(char *norm, char *uplo, char *diag, integer *n, doublecomplex
                 i__1 = *n;
                 for(j = 1; j <= i__1; ++j)
                 {
-                    zlassq_(&j, &ap[k], &c__1, &scale, &sum);
+                    aocl_lapack_zlassq(&j, &ap[k], &c__1, &scale, &sum);
                     k += j;
                     /* L290: */
                 }
@@ -486,7 +496,7 @@ doublereal zlantp_(char *norm, char *uplo, char *diag, integer *n, doublecomplex
                 for(j = 1; j <= i__1; ++j)
                 {
                     i__2 = *n - j;
-                    zlassq_(&i__2, &ap[k], &c__1, &scale, &sum);
+                    aocl_lapack_zlassq(&i__2, &ap[k], &c__1, &scale, &sum);
                     k = k + *n - j + 1;
                     /* L300: */
                 }
@@ -500,7 +510,7 @@ doublereal zlantp_(char *norm, char *uplo, char *diag, integer *n, doublecomplex
                 for(j = 1; j <= i__1; ++j)
                 {
                     i__2 = *n - j + 1;
-                    zlassq_(&i__2, &ap[k], &c__1, &scale, &sum);
+                    aocl_lapack_zlassq(&i__2, &ap[k], &c__1, &scale, &sum);
                     k = k + *n - j + 1;
                     /* L310: */
                 }

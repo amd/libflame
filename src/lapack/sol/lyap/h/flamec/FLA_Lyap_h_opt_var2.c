@@ -13,10 +13,10 @@
 FLA_Error FLA_Lyap_h_opt_var2( FLA_Obj isgn, FLA_Obj A, FLA_Obj C )
 {
   FLA_Datatype datatype;
-  integer          m_AC;
-  integer          rs_A, cs_A;
-  integer          rs_W, cs_W;
-  integer          rs_C, cs_C;
+  fla_dim_t          m_AC;
+  fla_dim_t          rs_A, cs_A;
+  fla_dim_t          rs_W, cs_W;
+  fla_dim_t          rs_C, cs_C;
   FLA_Obj      W;
 
   FLA_Obj_create_conf_to( FLA_NO_TRANSPOSE, A, &W );
@@ -108,15 +108,15 @@ FLA_Error FLA_Lyap_h_opt_var2( FLA_Obj isgn, FLA_Obj A, FLA_Obj C )
 
 
 
-FLA_Error FLA_Lyap_h_ops_var2( integer m_AC,
+FLA_Error FLA_Lyap_h_ops_var2( fla_dim_t m_AC,
                                float* buff_sgn,
-                               float* buff_A, integer rs_A, integer cs_A, 
-                               float* buff_W, integer rs_W, integer cs_W, 
-                               float* buff_C, integer rs_C, integer cs_C )
+                               float* buff_A, fla_dim_t rs_A, fla_dim_t cs_A, 
+                               float* buff_W, fla_dim_t rs_W, fla_dim_t cs_W, 
+                               float* buff_C, fla_dim_t rs_C, fla_dim_t cs_C )
 {
   float*    buff_1   = FLA_FLOAT_PTR( FLA_ONE );
   float*    buff_m1  = FLA_FLOAT_PTR( FLA_MINUS_ONE );
-  integer       i;
+  fla_dim_t       i;
 
   bl1_sscalm( BLIS1_NO_CONJUGATE,
               m_AC,
@@ -141,8 +141,8 @@ FLA_Error FLA_Lyap_h_ops_var2( integer m_AC,
 
     float     omega;
 
-    integer       m_behind = i;
-    integer       m_ahead  = m_AC - i - 1;
+    fla_dim_t       m_behind = i;
+    fla_dim_t       m_ahead  = m_AC - i - 1;
 
     /*------------------------------------------------------------*/
 
@@ -223,15 +223,15 @@ FLA_Error FLA_Lyap_h_ops_var2( integer m_AC,
 
 
 
-FLA_Error FLA_Lyap_h_opd_var2( integer m_AC,
+FLA_Error FLA_Lyap_h_opd_var2( fla_dim_t m_AC,
                                double* buff_sgn,
-                               double* buff_A, integer rs_A, integer cs_A, 
-                               double* buff_W, integer rs_W, integer cs_W, 
-                               double* buff_C, integer rs_C, integer cs_C )
+                               double* buff_A, fla_dim_t rs_A, fla_dim_t cs_A, 
+                               double* buff_W, fla_dim_t rs_W, fla_dim_t cs_W, 
+                               double* buff_C, fla_dim_t rs_C, fla_dim_t cs_C )
 {
   double*   buff_1   = FLA_DOUBLE_PTR( FLA_ONE );
   double*   buff_m1  = FLA_DOUBLE_PTR( FLA_MINUS_ONE );
-  integer       i;
+  fla_dim_t       i;
 
   bl1_dscalm( BLIS1_NO_CONJUGATE,
               m_AC,
@@ -256,8 +256,8 @@ FLA_Error FLA_Lyap_h_opd_var2( integer m_AC,
 
     double    omega;
 
-    integer       m_behind = i;
-    integer       m_ahead  = m_AC - i - 1;
+    fla_dim_t       m_behind = i;
+    fla_dim_t       m_ahead  = m_AC - i - 1;
 
     /*------------------------------------------------------------*/
 
@@ -338,15 +338,15 @@ FLA_Error FLA_Lyap_h_opd_var2( integer m_AC,
 
 
 
-FLA_Error FLA_Lyap_h_opc_var2( integer m_AC,
+FLA_Error FLA_Lyap_h_opc_var2( fla_dim_t m_AC,
                                scomplex* buff_sgn,
-                               scomplex* buff_A, integer rs_A, integer cs_A, 
-                               scomplex* buff_W, integer rs_W, integer cs_W, 
-                               scomplex* buff_C, integer rs_C, integer cs_C )
+                               scomplex* buff_A, fla_dim_t rs_A, fla_dim_t cs_A, 
+                               scomplex* buff_W, fla_dim_t rs_W, fla_dim_t cs_W, 
+                               scomplex* buff_C, fla_dim_t rs_C, fla_dim_t cs_C )
 {
   scomplex* buff_1   = FLA_COMPLEX_PTR( FLA_ONE );
   scomplex* buff_m1  = FLA_COMPLEX_PTR( FLA_MINUS_ONE );
-  integer       i;
+  fla_dim_t       i;
 
   bl1_cscalm( BLIS1_NO_CONJUGATE,
               m_AC,
@@ -371,8 +371,8 @@ FLA_Error FLA_Lyap_h_opc_var2( integer m_AC,
 
     scomplex  omega;
 
-    integer       m_behind = i;
-    integer       m_ahead  = m_AC - i - 1;
+    fla_dim_t       m_behind = i;
+    fla_dim_t       m_ahead  = m_AC - i - 1;
 
     /*------------------------------------------------------------*/
 
@@ -453,15 +453,15 @@ FLA_Error FLA_Lyap_h_opc_var2( integer m_AC,
 
 
 
-FLA_Error FLA_Lyap_h_opz_var2( integer m_AC,
+FLA_Error FLA_Lyap_h_opz_var2( fla_dim_t m_AC,
                                dcomplex* buff_sgn,
-                               dcomplex* buff_A, integer rs_A, integer cs_A, 
-                               dcomplex* buff_W, integer rs_W, integer cs_W, 
-                               dcomplex* buff_C, integer rs_C, integer cs_C )
+                               dcomplex* buff_A, fla_dim_t rs_A, fla_dim_t cs_A, 
+                               dcomplex* buff_W, fla_dim_t rs_W, fla_dim_t cs_W, 
+                               dcomplex* buff_C, fla_dim_t rs_C, fla_dim_t cs_C )
 {
   dcomplex* buff_1   = FLA_DOUBLE_COMPLEX_PTR( FLA_ONE );
   dcomplex* buff_m1  = FLA_DOUBLE_COMPLEX_PTR( FLA_MINUS_ONE );
-  integer       i;
+  fla_dim_t       i;
 
   bl1_zscalm( BLIS1_NO_CONJUGATE,
               m_AC,
@@ -486,8 +486,8 @@ FLA_Error FLA_Lyap_h_opz_var2( integer m_AC,
 
     dcomplex  omega;
 
-    integer       m_behind = i;
-    integer       m_ahead  = m_AC - i - 1;
+    fla_dim_t       m_behind = i;
+    fla_dim_t       m_ahead  = m_AC - i - 1;
 
     /*------------------------------------------------------------*/
 

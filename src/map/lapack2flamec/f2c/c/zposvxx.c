@@ -48,7 +48,7 @@
 /* > \verbatim */
 /* > */
 /* > ZPOSVXX uses the Cholesky factorization A = U**T*U or A = L*L**T */
-/* > to compute the solution to a complex*16 system of linear equations */
+/* > to compute the solution to a scomplex*16 system of linear equations */
 /* > A * X = B, where A is an N-by-N Hermitian positive definite matrix */
 /* > and X and B are N-by-NRHS matrices. */
 /* > */
@@ -496,12 +496,12 @@ defaults */
 /* > \ingroup complex16POsolve */
 /* ===================================================================== */
 /* Subroutine */
-void zposvxx_(char *fact, char *uplo, integer *n, integer *nrhs, doublecomplex *a, integer *lda,
-              doublecomplex *af, integer *ldaf, char *equed, doublereal *s, doublecomplex *b,
-              integer *ldb, doublecomplex *x, integer *ldx, doublereal *rcond, doublereal *rpvgrw,
+void zposvxx_(char *fact, char *uplo, integer *n, integer *nrhs, dcomplex *a, integer *lda,
+              dcomplex *af, integer *ldaf, char *equed, doublereal *s, dcomplex *b,
+              integer *ldb, dcomplex *x, integer *ldx, doublereal *rcond, doublereal *rpvgrw,
               doublereal *berr, integer *n_err_bnds__, doublereal *err_bnds_norm__,
               doublereal *err_bnds_comp__, integer *nparams, doublereal *params,
-              doublecomplex *work, doublereal *rwork, integer *info)
+              dcomplex *work, doublereal *rwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zposvxx inputs: fact %c, uplo %c, n %" FLA_IS ", nrhs %" FLA_IS
@@ -516,7 +516,7 @@ void zposvxx_(char *fact, char *uplo, integer *n, integer *nrhs, doublecomplex *
     /* Local variables */
     integer j;
     doublereal amax, smin, smax;
-    extern doublereal zla_porpvgrw_(char *, integer *, doublecomplex *, integer *, doublecomplex *,
+    extern doublereal zla_porpvgrw_(char *, integer *, dcomplex *, integer *, dcomplex *,
                                     integer *, doublereal *);
     extern logical lsame_(char *, char *, integer, integer);
     doublereal scond;
@@ -529,26 +529,26 @@ void zposvxx_(char *fact, char *uplo, integer *n, integer *nrhs, doublecomplex *
     doublereal bignum;
     extern /* Subroutine */
         void
-        zlaqhe_(char *, integer *, doublecomplex *, integer *, doublereal *, doublereal *,
+        zlaqhe_(char *, integer *, dcomplex *, integer *, doublereal *, doublereal *,
                 doublereal *, char *);
     integer infequ;
     extern /* Subroutine */
         void
-        zlacpy_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *,
+        zlacpy_(char *, integer *, integer *, dcomplex *, integer *, dcomplex *,
                 integer *);
     doublereal smlnum;
     extern /* Subroutine */
         void
-        zpotrf_(char *, integer *, doublecomplex *, integer *, integer *),
-        zpotrs_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *,
+        zpotrf_(char *, integer *, dcomplex *, integer *, integer *),
+        zpotrs_(char *, integer *, integer *, dcomplex *, integer *, dcomplex *,
                 integer *, integer *),
-        zlascl2_(integer *, integer *, doublereal *, doublecomplex *, integer *),
-        zpoequb_(integer *, doublecomplex *, integer *, doublereal *, doublereal *, doublereal *,
+        zlascl2_(integer *, integer *, doublereal *, dcomplex *, integer *),
+        zpoequb_(integer *, dcomplex *, integer *, doublereal *, doublereal *, doublereal *,
                  integer *),
-        zporfsx_(char *, char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *,
-                 integer *, doublereal *, doublecomplex *, integer *, doublecomplex *, integer *,
+        zporfsx_(char *, char *, integer *, integer *, dcomplex *, integer *, dcomplex *,
+                 integer *, doublereal *, dcomplex *, integer *, dcomplex *, integer *,
                  doublereal *, doublereal *, integer *, doublereal *, doublereal *, integer *,
-                 doublereal *, doublecomplex *, doublereal *, integer *);
+                 doublereal *, dcomplex *, doublereal *, integer *);
     /* -- LAPACK driver routine (version 3.7.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */

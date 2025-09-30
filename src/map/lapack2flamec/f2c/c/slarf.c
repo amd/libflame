@@ -123,8 +123,24 @@ static aocl_int64_t c__1 = 1;
 /* > \ingroup realOTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-void slarf_(char *side, integer *m, integer *n, real *v, integer *incv, real *tau, real *c__,
-            integer *ldc, real *work)
+/** Generated wrapper function */
+void slarf_(char *side, aocl_int_t *m, aocl_int_t *n, real *v, aocl_int_t *incv, real *tau,
+            real *c__, aocl_int_t *ldc, real *work)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_slarf(side, m, n, v, incv, tau, c__, ldc, work);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t incv_64 = *incv;
+    aocl_int64_t ldc_64 = *ldc;
+
+    aocl_lapack_slarf(side, &m_64, &n_64, v, &incv_64, tau, c__, &ldc_64, work);
+#endif
+}
+
+void aocl_lapack_slarf(char *side, aocl_int64_t *m, aocl_int64_t *n, real *v, aocl_int64_t *incv,
+                       real *tau, real *c__, aocl_int64_t *ldc, real *work)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("slarf inputs: side %c, m %" FLA_IS ", n %" FLA_IS ", incv %" FLA_IS
@@ -136,19 +152,9 @@ void slarf_(char *side, integer *m, integer *n, real *v, integer *incv, real *ta
     /* Local variables */
     aocl_int64_t i__;
     logical applyleft;
-    extern /* Subroutine */
-        void
-        sger_(integer *, integer *, real *, real *, integer *, real *, integer *, real *,
-              integer *);
-    extern logical lsame_(char *, char *, integer, integer);
-    integer lastc;
-    extern /* Subroutine */
-        void
-        sgemv_(char *, integer *, integer *, real *, real *, integer *, real *, integer *, real *,
-               real *, integer *);
-    integer lastv;
-    extern integer ilaslc_(integer *, integer *, real *, integer *),
-        ilaslr_(integer *, integer *, real *, integer *);
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    aocl_int64_t lastc;
+    aocl_int64_t lastv;
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -223,11 +229,12 @@ void slarf_(char *side, integer *m, integer *n, real *v, integer *incv, real *ta
         if(lastv > 0)
         {
             /* w(1:lastc,1) := C(1:lastv,1:lastc)**T * v(1:lastv,1) */
-            sgemv_("Transpose", &lastv, &lastc, &c_b4, &c__[c_offset], ldc, &v[1], incv, &c_b5,
-                   &work[1], &c__1);
+            aocl_blas_sgemv("Transpose", &lastv, &lastc, &c_b4, &c__[c_offset], ldc, &v[1], incv,
+                            &c_b5, &work[1], &c__1);
             /* C(1:lastv,1:lastc) := C(...) - v(1:lastv,1) * w(1:lastc,1)**T */
             r__1 = -(*tau);
-            sger_(&lastv, &lastc, &r__1, &v[1], incv, &work[1], &c__1, &c__[c_offset], ldc);
+            aocl_blas_sger(&lastv, &lastc, &r__1, &v[1], incv, &work[1], &c__1, &c__[c_offset],
+                           ldc);
         }
     }
     else
@@ -236,11 +243,12 @@ void slarf_(char *side, integer *m, integer *n, real *v, integer *incv, real *ta
         if(lastv > 0)
         {
             /* w(1:lastc,1) := C(1:lastc,1:lastv) * v(1:lastv,1) */
-            sgemv_("No transpose", &lastc, &lastv, &c_b4, &c__[c_offset], ldc, &v[1], incv, &c_b5,
-                   &work[1], &c__1);
+            aocl_blas_sgemv("No transpose", &lastc, &lastv, &c_b4, &c__[c_offset], ldc, &v[1], incv,
+                            &c_b5, &work[1], &c__1);
             /* C(1:lastc,1:lastv) := C(...) - w(1:lastc,1) * v(1:lastv,1)**T */
             r__1 = -(*tau);
-            sger_(&lastc, &lastv, &r__1, &work[1], &c__1, &v[1], incv, &c__[c_offset], ldc);
+            aocl_blas_sger(&lastc, &lastv, &r__1, &work[1], &c__1, &v[1], incv, &c__[c_offset],
+                           ldc);
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT

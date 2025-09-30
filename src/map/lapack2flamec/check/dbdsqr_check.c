@@ -1,12 +1,12 @@
 #include "FLA_f2c.h"
 #include "FLA_lapack2flame_return_defs.h"
 
-int dbdsqr_check(char *uplo, integer *n, integer *ncvt, integer *nru, integer *ncc, double *d__,
-                 double *e, double *vt, integer *ldvt, double *u, integer *ldu, double *c__,
-                 integer *ldc, double *work, integer *info)
+int dbdsqr_check(char *uplo, aocl_int64_t *n, aocl_int64_t *ncvt, aocl_int64_t *nru, aocl_int64_t *ncc, double *d__,
+                 double *e, double *vt, aocl_int64_t *ldvt, double *u, aocl_int64_t *ldu, double *c__,
+                 aocl_int64_t *ldc, double *work, aocl_int64_t *info)
 {
     /* System generated locals */
-    integer c_dim1, c_offset, u_dim1, u_offset, vt_dim1, vt_offset, i__1;
+    aocl_int64_t c_dim1, c_offset, u_dim1, u_offset, vt_dim1, vt_offset, i__1;
     logical lower;
 
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -68,7 +68,7 @@ int dbdsqr_check(char *uplo, integer *n, integer *ncvt, integer *nru, integer *n
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("DBDSQR", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("DBDSQR", &i__1, (ftnlen)6);
         return LAPACK_FAILURE;
     }
     if(*n == 0)

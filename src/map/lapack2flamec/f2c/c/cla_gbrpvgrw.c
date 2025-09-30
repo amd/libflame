@@ -110,8 +110,27 @@
 /* > \date September 2012 */
 /* > \ingroup complexGBcomputational */
 /* ===================================================================== */
-real cla_gbrpvgrw_(integer *n, integer *kl, integer *ku, integer *ncols, complex *ab, integer *ldab,
-                   complex *afb, integer *ldafb)
+/** Generated wrapper function */
+real cla_gbrpvgrw_(aocl_int_t *n, aocl_int_t *kl, aocl_int_t *ku, aocl_int_t *ncols, scomplex *ab,
+                   aocl_int_t *ldab, scomplex *afb, aocl_int_t *ldafb)
+{
+#if FLA_ENABLE_ILP64
+    return aocl_lapack_cla_gbrpvgrw(n, kl, ku, ncols, ab, ldab, afb, ldafb);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t kl_64 = *kl;
+    aocl_int64_t ku_64 = *ku;
+    aocl_int64_t ncols_64 = *ncols;
+    aocl_int64_t ldab_64 = *ldab;
+    aocl_int64_t ldafb_64 = *ldafb;
+
+    return aocl_lapack_cla_gbrpvgrw(&n_64, &kl_64, &ku_64, &ncols_64, ab, &ldab_64, afb, &ldafb_64);
+#endif
+}
+
+real aocl_lapack_cla_gbrpvgrw(aocl_int64_t *n, aocl_int64_t *kl, aocl_int64_t *ku,
+                              aocl_int64_t *ncols, scomplex *ab, aocl_int64_t *ldab, scomplex *afb,
+                              aocl_int64_t *ldafb)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE

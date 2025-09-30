@@ -175,9 +175,9 @@ the routine */
 /* > \ingroup complex16OTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void zunmtr_fla(char *side, char *uplo, char *trans, integer *m, integer *n, doublecomplex *a,
-                integer *lda, doublecomplex *tau, doublecomplex *c__, integer *ldc,
-                doublecomplex *work, integer *lwork, integer *info)
+void zunmtr_fla(char *side, char *uplo, char *trans, aocl_int64_t *m, aocl_int64_t *n,
+                dcomplex *a, aocl_int64_t *lda, dcomplex *tau, dcomplex *c__,
+                aocl_int64_t *ldc, dcomplex *work, aocl_int64_t *lwork, aocl_int64_t *info)
 {
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, c_dim1, c_offset, i__2, i__3;
@@ -188,22 +188,14 @@ void zunmtr_fla(char *side, char *uplo, char *trans, integer *m, integer *n, dou
     /* Local variables */
     aocl_int64_t i1, i2, nb, mi, ni, nq, nw;
     logical left;
-    extern logical lsame_(char *, char *, integer, integer);
-    integer iinfo;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    aocl_int64_t iinfo;
     logical upper;
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
-    integer lwkopt;
+    aocl_int64_t lwkopt;
     logical lquery;
-    extern /* Subroutine */
-        void
-        zunmql_(char *, char *, integer *, integer *, integer *, doublecomplex *, integer *,
-                doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, integer *),
-        zunmqr_fla(char *, char *, integer *, integer *, integer *, doublecomplex *, integer *,
-                   doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *,
-                   integer *);
+    extern void zunmqr_fla(char *, char *, aocl_int64_t *, aocl_int64_t *, aocl_int64_t *, dcomplex *,
+                 aocl_int64_t *, dcomplex *, dcomplex *, aocl_int64_t *, dcomplex *,
+                 aocl_int64_t *, aocl_int64_t *);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -319,7 +311,7 @@ void zunmtr_fla(char *side, char *uplo, char *trans, integer *m, integer *n, dou
     if(*info != 0)
     {
         i__2 = -(*info);
-        xerbla_("ZUNMTR", &i__2, (ftnlen)6);
+        aocl_blas_xerbla("ZUNMTR", &i__2, (ftnlen)6);
         return;
     }
     else if(lquery)
@@ -347,8 +339,8 @@ void zunmtr_fla(char *side, char *uplo, char *trans, integer *m, integer *n, dou
     {
         /* Q was determined by a call to ZHETRD with UPLO = 'U' */
         i__2 = nq - 1;
-        zunmql_(side, trans, &mi, &ni, &i__2, &a[(a_dim1 << 1) + 1], lda, &tau[1], &c__[c_offset],
-                ldc, &work[1], lwork, &iinfo);
+        aocl_lapack_zunmql(side, trans, &mi, &ni, &i__2, &a[(a_dim1 << 1) + 1], lda, &tau[1],
+                           &c__[c_offset], ldc, &work[1], lwork, &iinfo);
     }
     else
     {

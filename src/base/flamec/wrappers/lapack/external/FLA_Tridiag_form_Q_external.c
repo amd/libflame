@@ -12,12 +12,12 @@
 
 FLA_Error FLA_Tridiag_form_Q_external( FLA_Uplo uplo, FLA_Obj A, FLA_Obj t )
 {
-  integer      info = 0;
+  fla_dim_t      info = 0;
 #ifdef FLA_ENABLE_EXTERNAL_LAPACK_INTERFACES
   FLA_Datatype datatype;
-  integer          m_A;
-  integer          cs_A;
-  integer          lwork;
+  fla_dim_t          m_A;
+  fla_dim_t          cs_A;
+  fla_dim_t          lwork;
   char         blas_uplo;
   FLA_Obj      work;
 

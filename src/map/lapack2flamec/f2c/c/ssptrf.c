@@ -161,7 +161,22 @@ static aocl_int64_t c__1 = 1;
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void ssptrf_(char *uplo, integer *n, real *ap, integer *ipiv, integer *info)
+/** Generated wrapper function */
+void ssptrf_(char *uplo, aocl_int_t *n, real *ap, aocl_int_t *ipiv, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_ssptrf(uplo, n, ap, ipiv, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_ssptrf(uplo, &n_64, ap, ipiv, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_ssptrf(char *uplo, aocl_int64_t *n, real *ap, aocl_int_t *ipiv, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("ssptrf inputs: uplo %c, n %" FLA_IS "", *uplo, *n);
@@ -177,25 +192,12 @@ void ssptrf_(char *uplo, integer *n, real *ap, integer *ipiv, integer *info)
     real wk;
     aocl_int64_t kx, knc, kpc, npp;
     real wkm1, wkp1;
-    integer imax, jmax;
-    extern /* Subroutine */
-        void
-        sspr_(char *, integer *, real *, real *, integer *, real *);
+    aocl_int64_t imax, jmax;
     real alpha;
-    extern logical lsame_(char *, char *, integer, integer);
-    extern /* Subroutine */
-        void
-        sscal_(integer *, real *, real *, integer *);
-    integer kstep;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    aocl_int64_t kstep;
     logical upper;
-    extern /* Subroutine */
-        void
-        sswap_(integer *, real *, integer *, real *, integer *);
     real absakk;
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    extern integer isamax_(integer *, real *, integer *);
     real colmax, rowmax;
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -237,7 +239,7 @@ void ssptrf_(char *uplo, integer *n, real *ap, integer *ipiv, integer *info)
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("SSPTRF", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("SSPTRF", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -266,7 +268,7 @@ void ssptrf_(char *uplo, integer *n, real *ap, integer *ipiv, integer *info)
         if(k > 1)
         {
             i__1 = k - 1;
-            imax = isamax_(&i__1, &ap[kc], &c__1);
+            imax = aocl_blas_isamax(&i__1, &ap[kc], &c__1);
             colmax = (r__1 = ap[kc + imax - 1], f2c_abs(r__1));
         }
         else
@@ -453,7 +455,7 @@ void ssptrf_(char *uplo, integer *n, real *ap, integer *ipiv, integer *info)
         if(k < *n)
         {
             i__1 = *n - k;
-            imax = k + isamax_(&i__1, &ap[kc + 1], &c__1);
+            imax = k + aocl_blas_isamax(&i__1, &ap[kc + 1], &c__1);
             colmax = (r__1 = ap[kc + imax - k], f2c_abs(r__1));
         }
         else

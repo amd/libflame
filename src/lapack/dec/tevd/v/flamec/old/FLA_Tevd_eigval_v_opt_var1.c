@@ -13,10 +13,10 @@
 FLA_Error FLA_Tevd_eigval_v_opt_var1( FLA_Obj G, FLA_Obj d, FLA_Obj e, FLA_Obj k )
 {
 	FLA_Datatype datatype;
-	integer          m_A, n_G;
-	integer          rs_G, cs_G;
-	integer          inc_d;
-	integer          inc_e;
+	aocl_int64_t          m_A, n_G;
+	aocl_int64_t          rs_G, cs_G;
+	aocl_int64_t          inc_d;
+	aocl_int64_t          inc_e;
 
 	datatype = FLA_Obj_datatype( d );
 
@@ -37,7 +37,7 @@ FLA_Error FLA_Tevd_eigval_v_opt_var1( FLA_Obj G, FLA_Obj d, FLA_Obj e, FLA_Obj k
 			scomplex* buff_G = FLA_COMPLEX_PTR( G );
 			float*    buff_d = FLA_FLOAT_PTR( d );
 			float*    buff_e = FLA_FLOAT_PTR( e );
-			integer*      buff_k = FLA_INT_PTR( k );
+			aocl_int64_t*      buff_k = FLA_INT_PTR( k );
 
 			FLA_Tevd_eigval_v_ops_var1( m_A,
 			                            n_G,
@@ -54,7 +54,7 @@ FLA_Error FLA_Tevd_eigval_v_opt_var1( FLA_Obj G, FLA_Obj d, FLA_Obj e, FLA_Obj k
 			dcomplex* buff_G = FLA_DOUBLE_COMPLEX_PTR( G );
 			double*   buff_d = FLA_DOUBLE_PTR( d );
 			double*   buff_e = FLA_DOUBLE_PTR( e );
-			integer*      buff_k = FLA_INT_PTR( k );
+			aocl_int64_t*      buff_k = FLA_INT_PTR( k );
 
 			FLA_Tevd_eigval_v_opd_var1( m_A,
 			                            n_G,
@@ -72,24 +72,24 @@ FLA_Error FLA_Tevd_eigval_v_opt_var1( FLA_Obj G, FLA_Obj d, FLA_Obj e, FLA_Obj k
 
 
 
-FLA_Error FLA_Tevd_eigval_v_ops_var1( integer       m_A,
-                                      integer       n_G,
-                                      scomplex* buff_G, integer rs_G, integer cs_G,
-                                      float*    buff_d, integer inc_d, 
-                                      float*    buff_e, integer inc_e,
-                                      integer*      n_iter )
+FLA_Error FLA_Tevd_eigval_v_ops_var1( aocl_int64_t       m_A,
+                                      aocl_int64_t       n_G,
+                                      scomplex* buff_G, aocl_int64_t rs_G, aocl_int64_t cs_G,
+                                      float*    buff_d, aocl_int64_t inc_d, 
+                                      float*    buff_e, aocl_int64_t inc_e,
+                                      aocl_int64_t*      n_iter )
 {
 	return FLA_SUCCESS;
 }
 
 //#define PRINTF
 
-FLA_Error FLA_Tevd_eigval_v_opd_var1( integer       m_A,
-                                      integer       n_G,
-                                      dcomplex* buff_G, integer rs_G, integer cs_G,
-                                      double*   buff_d, integer inc_d, 
-                                      double*   buff_e, integer inc_e,
-                                      integer*      n_iter )
+FLA_Error FLA_Tevd_eigval_v_opd_var1( aocl_int64_t       m_A,
+                                      aocl_int64_t       n_G,
+                                      dcomplex* buff_G, aocl_int64_t rs_G, aocl_int64_t cs_G,
+                                      double*   buff_d, aocl_int64_t inc_d, 
+                                      double*   buff_e, aocl_int64_t inc_e,
+                                      aocl_int64_t*      n_iter )
 {
 	FLA_Error r_val;
 	double    eps;
@@ -98,8 +98,8 @@ FLA_Error FLA_Tevd_eigval_v_opd_var1( integer       m_A,
 	double*   d_last;
 	double*   d_last_m1;
 	double    shift;
-	integer       n_iter_max;
-	integer       k;
+	aocl_int64_t       n_iter_max;
+	aocl_int64_t       k;
 
 	// Query epsilon and safmin, which are used in the test for convergence.
 	eps    = FLA_Mach_params_opd( FLA_MACH_EPS );
@@ -146,8 +146,8 @@ FLA_Error FLA_Tevd_eigval_v_opd_var1( integer       m_A,
 		if ( r_val != FLA_SUCCESS )
 		{
 			dcomplex  one      = bl1_z1();
-			integer       i_begin  = r_val + 1;
-			integer       m_g1     = m_A - 1 - i_begin;
+			aocl_int64_t       i_begin  = r_val + 1;
+			aocl_int64_t       m_g1     = m_A - 1 - i_begin;
 			dcomplex* g1_begin = g1 + i_begin*rs_G;
 
 #ifdef PRINTF

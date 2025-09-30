@@ -4,7 +4,7 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
+static aocl_int64_t c__1 = 1;
 /* > \brief \b CLACN2 estimates the 1-norm of a square matrix, using reverse communication for
  * evaluating matr ix-vector products. */
 /* =========== DOCUMENTATION =========== */
@@ -41,7 +41,7 @@ static integer c__1 = 1;
 /* > */
 /* > \verbatim */
 /* > */
-/* > CLACN2 estimates the 1-norm of a square, complex matrix A. */
+/* > CLACN2 estimates the 1-norm of a square, scomplex matrix A. */
 /* > Reverse communication is used for evaluating matrix-vector products. */
 /* > \endverbatim */
 /* Arguments: */
@@ -124,12 +124,28 @@ static integer c__1 = 1;
 /* ================ */
 /* > */
 /* > N.J. Higham, "FORTRAN codes for estimating the one-norm of */
-/* > a real or complex matrix, with applications to condition estimation", */
+/* > a real or scomplex matrix, with applications to condition estimation", */
 /* > ACM Trans. Math. Soft., vol. 14, no. 4, pp. 381-396, December 1988. */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void clacn2_(integer *n, complex *v, complex *x, real *est, integer *kase, integer *isave)
+/** Generated wrapper function */
+void clacn2_(aocl_int_t *n, scomplex *v, scomplex *x, real *est, aocl_int_t *kase, aocl_int_t *isave)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_clacn2(n, v, x, est, kase, isave);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t kase_64 = *kase;
+
+    aocl_lapack_clacn2(&n_64, v, x, est, &kase_64, isave);
+
+    *kase = (aocl_int_t)kase_64;
+#endif
+}
+
+void aocl_lapack_clacn2(aocl_int64_t *n, scomplex *v, scomplex *x, real *est, aocl_int64_t *kase,
+                        aocl_int_t *isave)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -142,20 +158,16 @@ void clacn2_(integer *n, complex *v, complex *x, real *est, integer *kase, integ
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
-    integer i__1, i__2, i__3;
+    aocl_int64_t i__1, i__2, i__3;
     real r__1, r__2;
-    complex q__1;
+    scomplex q__1;
     /* Builtin functions */
-    double c_abs(complex *), r_imag(complex *);
+    double c_abs(scomplex *), r_imag(scomplex *);
     /* Local variables */
-    integer i__;
+    aocl_int64_t i__;
     real temp, absxi;
-    integer jlast;
-    extern /* Subroutine */
-        void
-        ccopy_(integer *, complex *, integer *, complex *, integer *);
-    extern integer icmax1_(integer *, complex *, integer *);
-    extern real scsum1_(integer *, complex *, integer *), slamch_(char *);
+    aocl_int64_t jlast;
+    extern real slamch_(char *);
     real safmin, altsgn, estold;
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -225,7 +237,7 @@ L20:
         /* ... QUIT */
         goto L130;
     }
-    *est = scsum1_(n, &x[1], &c__1);
+    *est = aocl_lapack_scsum1(n, &x[1], &c__1);
     i__1 = *n;
     for(i__ = 1; i__ <= i__1; ++i__)
     {
@@ -256,7 +268,7 @@ L20:
     /* ................ ENTRY (ISAVE( 1 ) = 2) */
     /* FIRST ITERATION. X HAS BEEN OVERWRITTEN BY CTRANS(A)*X. */
 L40:
-    isave[2] = icmax1_(n, &x[1], &c__1);
+    isave[2] = aocl_lapack_icmax1(n, &x[1], &c__1);
     isave[3] = 2;
     /* MAIN LOOP - ITERATIONS 2,3,...,ITMAX. */
 L50:
@@ -278,9 +290,9 @@ L50:
     /* ................ ENTRY (ISAVE( 1 ) = 3) */
     /* X HAS BEEN OVERWRITTEN BY A*X. */
 L70:
-    ccopy_(n, &x[1], &c__1, &v[1], &c__1);
+    aocl_blas_ccopy(n, &x[1], &c__1, &v[1], &c__1);
     estold = *est;
-    *est = scsum1_(n, &v[1], &c__1);
+    *est = aocl_lapack_scsum1(n, &v[1], &c__1);
     /* TEST FOR CYCLING. */
     if(*est <= estold)
     {
@@ -317,7 +329,7 @@ L70:
     /* X HAS BEEN OVERWRITTEN BY CTRANS(A)*X. */
 L90:
     jlast = isave[2];
-    isave[2] = icmax1_(n, &x[1], &c__1);
+    isave[2] = aocl_lapack_icmax1(n, &x[1], &c__1);
     if(c_abs(&x[jlast]) != c_abs(&x[isave[2]]) && isave[3] < 5)
     {
         ++isave[3];
@@ -345,10 +357,10 @@ L100:
     /* ................ ENTRY (ISAVE( 1 ) = 5) */
     /* X HAS BEEN OVERWRITTEN BY A*X. */
 L120:
-    temp = scsum1_(n, &x[1], &c__1) / (real)(*n * 3) * 2.f;
+    temp = aocl_lapack_scsum1(n, &x[1], &c__1) / (real)(*n * 3) * 2.f;
     if(temp > *est)
     {
-        ccopy_(n, &x[1], &c__1, &v[1], &c__1);
+        aocl_blas_ccopy(n, &x[1], &c__1, &v[1], &c__1);
         *est = temp;
     }
 L130:

@@ -141,25 +141,41 @@
 /* > \ingroup complex16GEcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void zgeequb_(integer *m, integer *n, doublecomplex *a, integer *lda, doublereal *r__,
+/** Generated wrapper function */
+void zgeequb_(aocl_int_t *m, aocl_int_t *n, dcomplex *a, aocl_int_t *lda, doublereal *r__,
               doublereal *c__, doublereal *rowcnd, doublereal *colcnd, doublereal *amax,
-              integer *info)
+              aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_zgeequb(m, n, a, lda, r__, c__, rowcnd, colcnd, amax, info);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_zgeequb(&m_64, &n_64, a, &lda_64, r__, c__, rowcnd, colcnd, amax, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_zgeequb(aocl_int64_t *m, aocl_int64_t *n, dcomplex *a, aocl_int64_t *lda,
+                         doublereal *r__, doublereal *c__, doublereal *rowcnd, doublereal *colcnd,
+                         doublereal *amax, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zgeequb inputs: m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS "", *m, *n,
                       *lda);
     /* System generated locals */
-    integer a_dim1, a_offset, i__1, i__2, i__3;
+    aocl_int64_t a_dim1, a_offset, i__1, i__2, i__3;
     doublereal d__1, d__2, d__3, d__4;
     /* Builtin functions */
-    double log(doublereal), d_imag(doublecomplex *), pow_di(doublereal *, integer *);
+    double log(doublereal), d_imag(dcomplex *), pow_di(doublereal *, aocl_int64_t *);
     /* Local variables */
-    integer i__, j;
+    aocl_int64_t i__, j;
     doublereal radix, rcmin, rcmax;
     extern doublereal dlamch_(char *);
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal bignum, logrdx, smlnum;
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -209,7 +225,7 @@ void zgeequb_(integer *m, integer *n, doublecomplex *a, integer *lda, doublereal
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("ZGEEQUB", &i__1, (ftnlen)7);
+        aocl_blas_xerbla("ZGEEQUB", &i__1, (ftnlen)7);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }

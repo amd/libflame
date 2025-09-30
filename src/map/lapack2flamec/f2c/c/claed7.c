@@ -4,9 +4,9 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__2 = 2;
-static integer c__1 = 1;
-static integer c_n1 = -1;
+static aocl_int64_t c__2 = 2;
+static aocl_int64_t c__1 = 1;
+static aocl_int64_t c_n1 = -1;
 /* > \brief \b CLAED7 used by sstedc. Computes the updated eigensystem of a diagonal matrix after
  * modification by a rank-one symmetric matrix. Used when the original matrix is dense. */
 /* =========== DOCUMENTATION =========== */
@@ -246,11 +246,40 @@ static integer c_n1 = -1;
 /* > \ingroup complexOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void claed7_(integer *n, integer *cutpnt, integer *qsiz, integer *tlvls, integer *curlvl,
-             integer *curpbm, real *d__, complex *q, integer *ldq, real *rho, integer *indxq,
-             real *qstore, integer *qptr, integer *prmptr, integer *perm, integer *givptr,
-             integer *givcol, real *givnum, complex *work, real *rwork, integer *iwork,
-             integer *info)
+/** Generated wrapper function */
+void claed7_(aocl_int_t *n, aocl_int_t *cutpnt, aocl_int_t *qsiz, aocl_int_t *tlvls,
+             aocl_int_t *curlvl, aocl_int_t *curpbm, real *d__, scomplex *q, aocl_int_t *ldq,
+             real *rho, aocl_int_t *indxq, real *qstore, aocl_int_t *qptr, aocl_int_t *prmptr,
+             aocl_int_t *perm, aocl_int_t *givptr, aocl_int_t *givcol, real *givnum, scomplex *work,
+             real *rwork, aocl_int_t *iwork, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_claed7(n, cutpnt, qsiz, tlvls, curlvl, curpbm, d__, q, ldq, rho, indxq, qstore,
+                       qptr, prmptr, perm, givptr, givcol, givnum, work, rwork, iwork, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t cutpnt_64 = *cutpnt;
+    aocl_int64_t qsiz_64 = *qsiz;
+    aocl_int64_t tlvls_64 = *tlvls;
+    aocl_int64_t curlvl_64 = *curlvl;
+    aocl_int64_t curpbm_64 = *curpbm;
+    aocl_int64_t ldq_64 = *ldq;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_claed7(&n_64, &cutpnt_64, &qsiz_64, &tlvls_64, &curlvl_64, &curpbm_64, d__, q,
+                       &ldq_64, rho, indxq, qstore, qptr, prmptr, perm, givptr, givcol, givnum,
+                       work, rwork, iwork, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_claed7(aocl_int64_t *n, aocl_int64_t *cutpnt, aocl_int64_t *qsiz,
+                        aocl_int64_t *tlvls, aocl_int64_t *curlvl, aocl_int64_t *curpbm, real *d__,
+                        scomplex *q, aocl_int64_t *ldq, real *rho, aocl_int_t *indxq, real *qstore,
+                        aocl_int_t *qptr, aocl_int_t *prmptr, aocl_int_t *perm, aocl_int_t *givptr,
+                        aocl_int_t *givcol, real *givnum, scomplex *work, real *rwork,
+                        aocl_int_t *iwork, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -269,28 +298,13 @@ void claed7_(integer *n, integer *cutpnt, integer *qsiz, integer *tlvls, integer
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
-    integer q_dim1, q_offset, i__1, i__2;
+    aocl_int64_t q_dim1, q_offset, i__1, i__2;
     /* Builtin functions */
-    integer pow_ii(integer *, integer *);
+    integer pow_ii(aocl_int64_t *, aocl_int64_t *);
     /* Local variables */
-    integer i__, k, n1, n2, iq, iw, iz, ptr, indx, curr, indxc, indxp;
-    extern /* Subroutine */
-        void
-        claed8_(integer *, integer *, integer *, complex *, integer *, real *, real *, integer *,
-                real *, real *, complex *, integer *, real *, integer *, integer *, integer *,
-                integer *, integer *, integer *, real *, integer *),
-        slaed9_(integer *, integer *, integer *, integer *, real *, real *, integer *, real *,
-                real *, real *, real *, integer *, integer *),
-        slaeda_(integer *, integer *, integer *, integer *, integer *, integer *, integer *,
-                integer *, real *, real *, integer *, real *, real *, integer *);
-    integer idlmda;
-    extern /* Subroutine */
-        void
-        clacrm_(integer *, integer *, complex *, integer *, real *, integer *, complex *, integer *,
-                real *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
-        slamrg_(integer *, integer *, real *, integer *, integer *, integer *);
-    integer coltyp;
+    aocl_int64_t i__, k, n1, n2, iq, iw, iz, ptr, indx, curr, indxc, indxp;
+    aocl_int64_t idlmda;
+    aocl_int64_t coltyp;
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -348,7 +362,7 @@ void claed7_(integer *n, integer *cutpnt, integer *qsiz, integer *tlvls, integer
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("CLAED7", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("CLAED7", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
@@ -380,8 +394,8 @@ void claed7_(integer *n, integer *cutpnt, integer *qsiz, integer *tlvls, integer
         /* L10: */
     }
     curr = ptr + *curpbm;
-    slaeda_(n, tlvls, curlvl, curpbm, &prmptr[1], &perm[1], &givptr[1], &givcol[3], &givnum[3],
-            &qstore[1], &qptr[1], &rwork[iz], &rwork[iz + *n], info);
+    aocl_lapack_slaeda(n, tlvls, curlvl, curpbm, &prmptr[1], &perm[1], &givptr[1], &givcol[3],
+                       &givnum[3], &qstore[1], &qptr[1], &rwork[iz], &rwork[iz + *n], info);
     /* When solving the final problem, we no longer need the stored data, */
     /* so we will overwrite the data from this level onto the previously */
     /* used storage space. */
@@ -392,21 +406,24 @@ void claed7_(integer *n, integer *cutpnt, integer *qsiz, integer *tlvls, integer
         givptr[curr] = 1;
     }
     /* Sort and Deflate eigenvalues. */
-    claed8_(&k, n, qsiz, &q[q_offset], ldq, &d__[1], rho, cutpnt, &rwork[iz], &rwork[idlmda],
-            &work[1], qsiz, &rwork[iw], &iwork[indxp], &iwork[indx], &indxq[1], &perm[prmptr[curr]],
-            &givptr[curr + 1], &givcol[(givptr[curr] << 1) + 1], &givnum[(givptr[curr] << 1) + 1],
-            info);
-    prmptr[curr + 1] = prmptr[curr] + *n;
+    aocl_int64_t givptr_curr1_64 = (aocl_int64_t)givptr[curr + 1];
+    aocl_lapack_claed8(&k, n, qsiz, &q[q_offset], ldq, &d__[1], rho, cutpnt, &rwork[iz],
+                       &rwork[idlmda], &work[1], qsiz, &rwork[iw], &iwork[indxp], &iwork[indx],
+                       &indxq[1], &perm[prmptr[curr]], &givptr_curr1_64,
+                       &givcol[(givptr[curr] << 1) + 1], &givnum[(givptr[curr] << 1) + 1], info);
+    givptr[curr + 1] = (aocl_int_t)givptr_curr1_64;
+    prmptr[curr + 1] = (aocl_int_t)(prmptr[curr] + *n);
     givptr[curr + 1] += givptr[curr];
     /* Solve Secular Equation. */
     if(k != 0)
     {
-        slaed9_(&k, &c__1, &k, n, &d__[1], &rwork[iq], &k, rho, &rwork[idlmda], &rwork[iw],
-                &qstore[qptr[curr]], &k, info);
-        clacrm_(qsiz, &k, &work[1], qsiz, &qstore[qptr[curr]], &k, &q[q_offset], ldq, &rwork[iq]);
+        aocl_lapack_slaed9(&k, &c__1, &k, n, &d__[1], &rwork[iq], &k, rho, &rwork[idlmda],
+                           &rwork[iw], &qstore[qptr[curr]], &k, info);
+        aocl_lapack_clacrm(qsiz, &k, &work[1], qsiz, &qstore[qptr[curr]], &k, &q[q_offset], ldq,
+                           &rwork[iq]);
         /* Computing 2nd power */
         i__1 = k;
-        qptr[curr + 1] = qptr[curr] + i__1 * i__1;
+        qptr[curr + 1] = (aocl_int_t)(qptr[curr] + i__1 * i__1);
         if(*info != 0)
         {
             AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
@@ -415,7 +432,7 @@ void claed7_(integer *n, integer *cutpnt, integer *qsiz, integer *tlvls, integer
         /* Prepare the INDXQ sorting premutation. */
         n1 = k;
         n2 = *n - k;
-        slamrg_(&n1, &n2, &d__[1], &c__1, &c_n1, &indxq[1]);
+        aocl_lapack_slamrg(&n1, &n2, &d__[1], &c__1, &c_n1, &indxq[1]);
     }
     else
     {
@@ -423,7 +440,7 @@ void claed7_(integer *n, integer *cutpnt, integer *qsiz, integer *tlvls, integer
         i__1 = *n;
         for(i__ = 1; i__ <= i__1; ++i__)
         {
-            indxq[i__] = i__;
+            indxq[i__] = (aocl_int_t)(i__);
             /* L20: */
         }
     }

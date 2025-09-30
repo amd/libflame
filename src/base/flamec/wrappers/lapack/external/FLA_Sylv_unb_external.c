@@ -12,12 +12,12 @@
 
 FLA_Error FLA_Sylv_unb_external( FLA_Trans transa, FLA_Trans transb, FLA_Obj isgn, FLA_Obj A, FLA_Obj B, FLA_Obj C, FLA_Obj scale )
 {
-  integer      info = 0;
+  fla_dim_t      info = 0;
 #ifdef FLA_ENABLE_EXTERNAL_LAPACK_INTERFACES
   FLA_Datatype datatype;
-  integer          cs_A;
-  integer          cs_B;
-  integer          m_C, n_C, cs_C;
+  fla_dim_t          cs_A;
+  fla_dim_t          cs_B;
+  fla_dim_t          m_C, n_C, cs_C;
   char         blas_transa; 
   char         blas_transb;
 
@@ -46,7 +46,7 @@ FLA_Error FLA_Sylv_unb_external( FLA_Trans transa, FLA_Trans transb, FLA_Obj isg
 
   case FLA_FLOAT:
   {
-    integer   *buff_isgn  = ( integer   * ) FLA_INT_PTR( isgn );
+    fla_dim_t   *buff_isgn  = ( fla_dim_t   * ) FLA_INT_PTR( isgn );
     float *buff_A     = ( float * ) FLA_FLOAT_PTR( A );
     float *buff_B     = ( float * ) FLA_FLOAT_PTR( B );
     float *buff_C     = ( float * ) FLA_FLOAT_PTR( C );
@@ -68,7 +68,7 @@ FLA_Error FLA_Sylv_unb_external( FLA_Trans transa, FLA_Trans transb, FLA_Obj isg
 
   case FLA_DOUBLE:
   {
-    integer    *buff_isgn  = ( integer    * ) FLA_INT_PTR( isgn );
+    fla_dim_t    *buff_isgn  = ( fla_dim_t    * ) FLA_INT_PTR( isgn );
     double *buff_A     = ( double * ) FLA_DOUBLE_PTR( A );
     double *buff_B     = ( double * ) FLA_DOUBLE_PTR( B );
     double *buff_C     = ( double * ) FLA_DOUBLE_PTR( C );
@@ -90,7 +90,7 @@ FLA_Error FLA_Sylv_unb_external( FLA_Trans transa, FLA_Trans transb, FLA_Obj isg
 
   case FLA_COMPLEX:
   {
-    integer      *buff_isgn  = ( integer      * ) FLA_INT_PTR( isgn );
+    fla_dim_t      *buff_isgn  = ( fla_dim_t      * ) FLA_INT_PTR( isgn );
     scomplex *buff_A     = ( scomplex * ) FLA_COMPLEX_PTR( A );
     scomplex *buff_B     = ( scomplex * ) FLA_COMPLEX_PTR( B );
     scomplex *buff_C     = ( scomplex * ) FLA_COMPLEX_PTR( C );
@@ -112,7 +112,7 @@ FLA_Error FLA_Sylv_unb_external( FLA_Trans transa, FLA_Trans transb, FLA_Obj isg
 
   case FLA_DOUBLE_COMPLEX:
   {
-    integer      *buff_isgn  = ( integer      * ) FLA_INT_PTR( isgn );
+    fla_dim_t      *buff_isgn  = ( fla_dim_t      * ) FLA_INT_PTR( isgn );
     dcomplex *buff_A     = ( dcomplex * ) FLA_DOUBLE_COMPLEX_PTR( A );
     dcomplex *buff_B     = ( dcomplex * ) FLA_DOUBLE_COMPLEX_PTR( B );
     dcomplex *buff_C     = ( dcomplex * ) FLA_DOUBLE_COMPLEX_PTR( C );

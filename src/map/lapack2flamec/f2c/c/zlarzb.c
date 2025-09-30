@@ -4,8 +4,8 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static doublecomplex c_b1 = {1., 0.};
-static integer c__1 = 1;
+static dcomplex c_b1 = {{1.}, {0.}};
+static aocl_int64_t c__1 = 1;
 /* > \brief \b ZLARZB applies a block reflector or its conjugate-transpose to a general matrix. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -42,8 +42,8 @@ static integer c__1 = 1;
 /* > */
 /* > \verbatim */
 /* > */
-/* > ZLARZB applies a complex block reflector H or its transpose H**H */
-/* > to a complex distributed M-by-N C from the left or the right. */
+/* > ZLARZB applies a scomplex block reflector H or its transpose H**H */
+/* > to a scomplex distributed M-by-N C from the left or the right. */
 /* > */
 /* > Currently, only STOREV = 'R' and DIRECT = 'B' are supported. */
 /* > \endverbatim */
@@ -182,9 +182,34 @@ if STOREV = 'R', LDV >= K. */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void zlarzb_(char *side, char *trans, char *direct, char *storev, integer *m, integer *n,
-             integer *k, integer *l, doublecomplex *v, integer *ldv, doublecomplex *t, integer *ldt,
-             doublecomplex *c__, integer *ldc, doublecomplex *work, integer *ldwork)
+/** Generated wrapper function */
+void zlarzb_(char *side, char *trans, char *direct, char *storev, aocl_int_t *m, aocl_int_t *n,
+             aocl_int_t *k, aocl_int_t *l, dcomplex *v, aocl_int_t *ldv, dcomplex *t,
+             aocl_int_t *ldt, dcomplex *c__, aocl_int_t *ldc, dcomplex *work,
+             aocl_int_t *ldwork)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_zlarzb(side, trans, direct, storev, m, n, k, l, v, ldv, t, ldt, c__, ldc, work,
+                       ldwork);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t k_64 = *k;
+    aocl_int64_t l_64 = *l;
+    aocl_int64_t ldv_64 = *ldv;
+    aocl_int64_t ldt_64 = *ldt;
+    aocl_int64_t ldc_64 = *ldc;
+    aocl_int64_t ldwork_64 = *ldwork;
+
+    aocl_lapack_zlarzb(side, trans, direct, storev, &m_64, &n_64, &k_64, &l_64, v, &ldv_64, t,
+                       &ldt_64, c__, &ldc_64, work, &ldwork_64);
+#endif
+}
+
+void aocl_lapack_zlarzb(char *side, char *trans, char *direct, char *storev, aocl_int64_t *m,
+                        aocl_int64_t *n, aocl_int64_t *k, aocl_int64_t *l, dcomplex *v,
+                        aocl_int64_t *ldv, dcomplex *t, aocl_int64_t *ldt, dcomplex *c__,
+                        aocl_int64_t *ldc, dcomplex *work, aocl_int64_t *ldwork)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zlarzb inputs: side %c, trans %c, direct %c, storev %c, m %" FLA_IS
@@ -193,21 +218,12 @@ void zlarzb_(char *side, char *trans, char *direct, char *storev, integer *m, in
                       *side, *trans, *direct, *storev, *m, *n, *k, *l, *ldv, *ldt, *ldc, *ldwork);
 
     /* System generated locals */
-    integer c_dim1, c_offset, t_dim1, t_offset, v_dim1, v_offset, work_dim1, work_offset, i__1,
+    aocl_int64_t c_dim1, c_offset, t_dim1, t_offset, v_dim1, v_offset, work_dim1, work_offset, i__1,
         i__2, i__3, i__4, i__5;
-    doublecomplex z__1;
+    dcomplex z__1;
     /* Local variables */
-    integer i__, j, info;
-    extern logical lsame_(char *, char *, integer, integer);
-    extern /* Subroutine */
-        void
-        zgemm_(char *, char *, integer *, integer *, integer *, doublecomplex *, doublecomplex *,
-               integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *),
-        zcopy_(integer *, doublecomplex *, integer *, doublecomplex *, integer *),
-        ztrmm_(char *, char *, char *, char *, integer *, integer *, doublecomplex *,
-               doublecomplex *, integer *, doublecomplex *, integer *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
-        zlacgv_(integer *, doublecomplex *, integer *);
+    aocl_int64_t i__, j, info;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     char transt[1];
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -260,7 +276,7 @@ void zlarzb_(char *side, char *trans, char *direct, char *storev, integer *m, in
     if(info != 0)
     {
         i__1 = -info;
-        xerbla_("ZLARZB", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("ZLARZB", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -279,19 +295,20 @@ void zlarzb_(char *side, char *trans, char *direct, char *storev, integer *m, in
         i__1 = *k;
         for(j = 1; j <= i__1; ++j)
         {
-            zcopy_(n, &c__[j + c_dim1], ldc, &work[j * work_dim1 + 1], &c__1);
+            aocl_blas_zcopy(n, &c__[j + c_dim1], ldc, &work[j * work_dim1 + 1], &c__1);
             /* L10: */
         }
         /* W( 1:n, 1:k ) = W( 1:n, 1:k ) + ... */
         /* C( m-l+1:m, 1:n )**H * V( 1:k, 1:l )**T */
         if(*l > 0)
         {
-            zgemm_("Transpose", "Conjugate transpose", n, k, l, &c_b1, &c__[*m - *l + 1 + c_dim1],
-                   ldc, &v[v_offset], ldv, &c_b1, &work[work_offset], ldwork);
+            aocl_blas_zgemm("Transpose", "Conjugate transpose", n, k, l, &c_b1,
+                            &c__[*m - *l + 1 + c_dim1], ldc, &v[v_offset], ldv, &c_b1,
+                            &work[work_offset], ldwork);
         }
         /* W( 1:n, 1:k ) = W( 1:n, 1:k ) * T**T or W( 1:m, 1:k ) * T */
-        ztrmm_("Right", "Lower", transt, "Non-unit", n, k, &c_b1, &t[t_offset], ldt,
-               &work[work_offset], ldwork);
+        aocl_blas_ztrmm("Right", "Lower", transt, "Non-unit", n, k, &c_b1, &t[t_offset], ldt,
+                        &work[work_offset], ldwork);
         /* C( 1:k, 1:n ) = C( 1:k, 1:n ) - W( 1:n, 1:k )**H */
         i__1 = *n;
         for(j = 1; j <= i__1; ++j)
@@ -316,8 +333,8 @@ void zlarzb_(char *side, char *trans, char *direct, char *storev, integer *m, in
         {
             z__1.r = -1.;
             z__1.i = -0.; // , expr subst
-            zgemm_("Transpose", "Transpose", l, n, k, &z__1, &v[v_offset], ldv, &work[work_offset],
-                   ldwork, &c_b1, &c__[*m - *l + 1 + c_dim1], ldc);
+            aocl_blas_zgemm("Transpose", "Transpose", l, n, k, &z__1, &v[v_offset], ldv,
+                            &work[work_offset], ldwork, &c_b1, &c__[*m - *l + 1 + c_dim1], ldc);
         }
     }
     else if(lsame_(side, "R", 1, 1))
@@ -327,15 +344,16 @@ void zlarzb_(char *side, char *trans, char *direct, char *storev, integer *m, in
         i__1 = *k;
         for(j = 1; j <= i__1; ++j)
         {
-            zcopy_(m, &c__[j * c_dim1 + 1], &c__1, &work[j * work_dim1 + 1], &c__1);
+            aocl_blas_zcopy(m, &c__[j * c_dim1 + 1], &c__1, &work[j * work_dim1 + 1], &c__1);
             /* L40: */
         }
         /* W( 1:m, 1:k ) = W( 1:m, 1:k ) + ... */
         /* C( 1:m, n-l+1:n ) * V( 1:k, 1:l )**H */
         if(*l > 0)
         {
-            zgemm_("No transpose", "Transpose", m, k, l, &c_b1, &c__[(*n - *l + 1) * c_dim1 + 1],
-                   ldc, &v[v_offset], ldv, &c_b1, &work[work_offset], ldwork);
+            aocl_blas_zgemm("No transpose", "Transpose", m, k, l, &c_b1,
+                            &c__[(*n - *l + 1) * c_dim1 + 1], ldc, &v[v_offset], ldv, &c_b1,
+                            &work[work_offset], ldwork);
         }
         /* W( 1:m, 1:k ) = W( 1:m, 1:k ) * conjg( T ) or */
         /* W( 1:m, 1:k ) * T**H */
@@ -343,16 +361,16 @@ void zlarzb_(char *side, char *trans, char *direct, char *storev, integer *m, in
         for(j = 1; j <= i__1; ++j)
         {
             i__2 = *k - j + 1;
-            zlacgv_(&i__2, &t[j + j * t_dim1], &c__1);
+            aocl_lapack_zlacgv(&i__2, &t[j + j * t_dim1], &c__1);
             /* L50: */
         }
-        ztrmm_("Right", "Lower", trans, "Non-unit", m, k, &c_b1, &t[t_offset], ldt,
-               &work[work_offset], ldwork);
+        aocl_blas_ztrmm("Right", "Lower", trans, "Non-unit", m, k, &c_b1, &t[t_offset], ldt,
+                        &work[work_offset], ldwork);
         i__1 = *k;
         for(j = 1; j <= i__1; ++j)
         {
             i__2 = *k - j + 1;
-            zlacgv_(&i__2, &t[j + j * t_dim1], &c__1);
+            aocl_lapack_zlacgv(&i__2, &t[j + j * t_dim1], &c__1);
             /* L60: */
         }
         /* C( 1:m, 1:k ) = C( 1:m, 1:k ) - W( 1:m, 1:k ) */
@@ -378,20 +396,21 @@ void zlarzb_(char *side, char *trans, char *direct, char *storev, integer *m, in
         i__1 = *l;
         for(j = 1; j <= i__1; ++j)
         {
-            zlacgv_(k, &v[j * v_dim1 + 1], &c__1);
+            aocl_lapack_zlacgv(k, &v[j * v_dim1 + 1], &c__1);
             /* L90: */
         }
         if(*l > 0)
         {
             z__1.r = -1.;
             z__1.i = -0.; // , expr subst
-            zgemm_("No transpose", "No transpose", m, l, k, &z__1, &work[work_offset], ldwork,
-                   &v[v_offset], ldv, &c_b1, &c__[(*n - *l + 1) * c_dim1 + 1], ldc);
+            aocl_blas_zgemm("No transpose", "No transpose", m, l, k, &z__1, &work[work_offset],
+                            ldwork, &v[v_offset], ldv, &c_b1, &c__[(*n - *l + 1) * c_dim1 + 1],
+                            ldc);
         }
         i__1 = *l;
         for(j = 1; j <= i__1; ++j)
         {
-            zlacgv_(k, &v[j * v_dim1 + 1], &c__1);
+            aocl_lapack_zlacgv(k, &v[j * v_dim1 + 1], &c__1);
             /* L100: */
         }
     }

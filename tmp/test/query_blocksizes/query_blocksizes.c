@@ -27,7 +27,7 @@ int main()
 	         FLA_Blocksize_extract( FLA_DOUBLE, bp_k ), 
 	         FLA_Blocksize_extract( FLA_DOUBLE, bp_n ), 
 	         FLA_Blocksize_extract( FLA_DOUBLE, bp_min ) ); 
-	fprintf( stdout, "complex  %5d  %5d  %5d  %5d\n", 
+	fprintf( stdout, "scomplex  %5d  %5d  %5d  %5d\n", 
 	         FLA_Blocksize_extract( FLA_COMPLEX, bp_m ), 
 	         FLA_Blocksize_extract( FLA_COMPLEX, bp_k ), 
 	         FLA_Blocksize_extract( FLA_COMPLEX, bp_n ), 

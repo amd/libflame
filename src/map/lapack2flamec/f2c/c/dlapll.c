@@ -97,25 +97,32 @@
 /* > \ingroup doubleOTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-void dlapll_(integer *n, doublereal *x, integer *incx, doublereal *y, integer *incy,
+/** Generated wrapper function */
+void dlapll_(aocl_int_t *n, doublereal *x, aocl_int_t *incx, doublereal *y, aocl_int_t *incy,
              doublereal *ssmin)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_dlapll(n, x, incx, y, incy, ssmin);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t incx_64 = *incx;
+    aocl_int64_t incy_64 = *incy;
+
+    aocl_lapack_dlapll(&n_64, x, &incx_64, y, &incy_64, ssmin);
+#endif
+}
+
+void aocl_lapack_dlapll(aocl_int64_t *n, doublereal *x, aocl_int64_t *incx, doublereal *y,
+                        aocl_int64_t *incy, doublereal *ssmin)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dlapll inputs: n %" FLA_IS ", incx %" FLA_IS ", incy %" FLA_IS "", *n, *incx,
                       *incy);
     /* System generated locals */
-    integer i__1;
+    aocl_int64_t i__1;
     /* Local variables */
     doublereal c__, a11, a12, a22, tau;
-    extern doublereal ddot_(integer *, doublereal *, integer *, doublereal *, integer *);
-    extern /* Subroutine */
-        void
-        dlas2_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *),
-        daxpy_(integer *, doublereal *, doublereal *, integer *, doublereal *, integer *);
     doublereal ssmax;
-    extern /* Subroutine */
-        void
-        dlarfg_(integer *, doublereal *, doublereal *, integer *, doublereal *);
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -146,13 +153,13 @@ void dlapll_(integer *n, doublereal *x, integer *incx, doublereal *y, integer *i
         return;
     }
     /* Compute the QR factorization of the N-by-2 matrix ( X Y ) */
-    dlarfg_(n, &x[1], &x[*incx + 1], incx, &tau);
+    aocl_lapack_dlarfg(n, &x[1], &x[*incx + 1], incx, &tau);
     a11 = x[1];
     x[1] = 1.;
-    c__ = -tau * ddot_(n, &x[1], incx, &y[1], incy);
-    daxpy_(n, &c__, &x[1], incx, &y[1], incy);
+    c__ = -tau * aocl_blas_ddot(n, &x[1], incx, &y[1], incy);
+    aocl_blas_daxpy(n, &c__, &x[1], incx, &y[1], incy);
     i__1 = *n - 1;
-    dlarfg_(&i__1, &y[*incy + 1], &y[(*incy << 1) + 1], incy, &tau);
+    aocl_lapack_dlarfg(&i__1, &y[*incy + 1], &y[(*incy << 1) + 1], incy, &tau);
     a12 = y[1];
     a22 = y[*incy + 1];
     /* Compute the SVD of 2-by-2 Upper triangular matrix. */

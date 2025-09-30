@@ -4,9 +4,9 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static doublecomplex c_b1 = {1., 0.};
-static doublecomplex c_b2 = {0., 0.};
-static integer c__1 = 1;
+static dcomplex c_b1 = {{1.}, {0.}};
+static dcomplex c_b2 = {{0.}, {0.}};
+static aocl_int64_t c__1 = 1;
 /* > \brief \b ZGGHRD */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -43,7 +43,7 @@ static integer c__1 = 1;
 /* > */
 /* > \verbatim */
 /* > */
-/* > ZGGHRD reduces a pair of complex matrices (A,B) to generalized upper */
+/* > ZGGHRD reduces a pair of scomplex matrices (A,B) to generalized upper */
 /* > Hessenberg form using unitary transformations, where A is a */
 /* > general matrix and B is upper triangular. The form of the */
 /* > generalized eigenvalue problem is */
@@ -210,9 +210,34 @@ LDZ >= 1 otherwise. */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void zgghrd_(char *compq, char *compz, integer *n, integer *ilo, integer *ihi, doublecomplex *a,
-             integer *lda, doublecomplex *b, integer *ldb, doublecomplex *q, integer *ldq,
-             doublecomplex *z__, integer *ldz, integer *info)
+/** Generated wrapper function */
+void zgghrd_(char *compq, char *compz, aocl_int_t *n, aocl_int_t *ilo, aocl_int_t *ihi,
+             dcomplex *a, aocl_int_t *lda, dcomplex *b, aocl_int_t *ldb, dcomplex *q,
+             aocl_int_t *ldq, dcomplex *z__, aocl_int_t *ldz, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_zgghrd(compq, compz, n, ilo, ihi, a, lda, b, ldb, q, ldq, z__, ldz, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t ilo_64 = *ilo;
+    aocl_int64_t ihi_64 = *ihi;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t ldb_64 = *ldb;
+    aocl_int64_t ldq_64 = *ldq;
+    aocl_int64_t ldz_64 = *ldz;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_zgghrd(compq, compz, &n_64, &ilo_64, &ihi_64, a, &lda_64, b, &ldb_64, q, &ldq_64,
+                       z__, &ldz_64, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_zgghrd(char *compq, char *compz, aocl_int64_t *n, aocl_int64_t *ilo,
+                        aocl_int64_t *ihi, dcomplex *a, aocl_int64_t *lda, dcomplex *b,
+                        aocl_int64_t *ldb, dcomplex *q, aocl_int64_t *ldq, dcomplex *z__,
+                        aocl_int64_t *ldz, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zgghrd inputs: compq %c, compz %c, n %" FLA_IS ", ilo %" FLA_IS
@@ -220,31 +245,20 @@ void zgghrd_(char *compq, char *compz, integer *n, integer *ilo, integer *ihi, d
                       ", ldz %" FLA_IS "",
                       *compq, *compz, *n, *ilo, *ihi, *lda, *ldb, *ldq, *ldz);
     /* System generated locals */
-    integer a_dim1, a_offset, b_dim1, b_offset, q_dim1, q_offset, z_dim1, z_offset, i__1, i__2,
+    aocl_int64_t a_dim1, a_offset, b_dim1, b_offset, q_dim1, q_offset, z_dim1, z_offset, i__1, i__2,
         i__3;
-    doublecomplex z__1;
+    dcomplex z__1;
     /* Builtin functions */
-    void d_cnjg(doublecomplex *, doublecomplex *);
+    void d_cnjg(dcomplex *, dcomplex *);
     /* Local variables */
     doublereal c__;
-    doublecomplex s;
+    dcomplex s;
     logical ilq, ilz;
-    integer jcol, jrow;
-    extern /* Subroutine */
-        void
-        zrot_(integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublereal *,
-              doublecomplex *);
-    extern logical lsame_(char *, char *, integer, integer);
-    doublecomplex ctemp;
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    integer icompq, icompz;
-    extern /* Subroutine */
-        void
-        zlaset_(char *, integer *, integer *, doublecomplex *, doublecomplex *, doublecomplex *,
-                integer *),
-        zlartg_(doublecomplex *, doublecomplex *, doublereal *, doublecomplex *, doublecomplex *);
+    aocl_int64_t jcol, jrow;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    dcomplex ctemp;
+    aocl_int64_t icompq, icompz;
+    extern void zlartg_(dcomplex *, dcomplex *, doublereal *, dcomplex *, dcomplex *);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -360,18 +374,18 @@ void zgghrd_(char *compq, char *compz, integer *n, integer *ilo, integer *ihi, d
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("ZGGHRD", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("ZGGHRD", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Initialize Q and Z if desired. */
     if(icompq == 3)
     {
-        zlaset_("Full", n, n, &c_b2, &c_b1, &q[q_offset], ldq);
+        aocl_lapack_zlaset("Full", n, n, &c_b2, &c_b1, &q[q_offset], ldq);
     }
     if(icompz == 3)
     {
-        zlaset_("Full", n, n, &c_b2, &c_b1, &z__[z_offset], ldz);
+        aocl_lapack_zlaset("Full", n, n, &c_b2, &c_b1, &z__[z_offset], ldz);
     }
     /* Quick return if possible */
     if(*n <= 1)
@@ -409,16 +423,16 @@ void zgghrd_(char *compq, char *compz, integer *n, integer *ilo, integer *ihi, d
             a[i__3].r = 0.;
             a[i__3].i = 0.; // , expr subst
             i__3 = *n - jcol;
-            zrot_(&i__3, &a[jrow - 1 + (jcol + 1) * a_dim1], lda, &a[jrow + (jcol + 1) * a_dim1],
-                  lda, &c__, &s);
+            aocl_lapack_zrot(&i__3, &a[jrow - 1 + (jcol + 1) * a_dim1], lda,
+                             &a[jrow + (jcol + 1) * a_dim1], lda, &c__, &s);
             i__3 = *n + 2 - jrow;
-            zrot_(&i__3, &b[jrow - 1 + (jrow - 1) * b_dim1], ldb, &b[jrow + (jrow - 1) * b_dim1],
-                  ldb, &c__, &s);
+            aocl_lapack_zrot(&i__3, &b[jrow - 1 + (jrow - 1) * b_dim1], ldb,
+                             &b[jrow + (jrow - 1) * b_dim1], ldb, &c__, &s);
             if(ilq)
             {
                 d_cnjg(&z__1, &s);
-                zrot_(n, &q[(jrow - 1) * q_dim1 + 1], &c__1, &q[jrow * q_dim1 + 1], &c__1, &c__,
-                      &z__1);
+                aocl_lapack_zrot(n, &q[(jrow - 1) * q_dim1 + 1], &c__1, &q[jrow * q_dim1 + 1],
+                                 &c__1, &c__, &z__1);
             }
             /* Step 2: rotate columns JROW, JROW-1 to kill B(JROW,JROW-1) */
             i__3 = jrow + jrow * b_dim1;
@@ -428,14 +442,15 @@ void zgghrd_(char *compq, char *compz, integer *n, integer *ilo, integer *ihi, d
             i__3 = jrow + (jrow - 1) * b_dim1;
             b[i__3].r = 0.;
             b[i__3].i = 0.; // , expr subst
-            zrot_(ihi, &a[jrow * a_dim1 + 1], &c__1, &a[(jrow - 1) * a_dim1 + 1], &c__1, &c__, &s);
+            aocl_lapack_zrot(ihi, &a[jrow * a_dim1 + 1], &c__1, &a[(jrow - 1) * a_dim1 + 1], &c__1,
+                             &c__, &s);
             i__3 = jrow - 1;
-            zrot_(&i__3, &b[jrow * b_dim1 + 1], &c__1, &b[(jrow - 1) * b_dim1 + 1], &c__1, &c__,
-                  &s);
+            aocl_lapack_zrot(&i__3, &b[jrow * b_dim1 + 1], &c__1, &b[(jrow - 1) * b_dim1 + 1],
+                             &c__1, &c__, &s);
             if(ilz)
             {
-                zrot_(n, &z__[jrow * z_dim1 + 1], &c__1, &z__[(jrow - 1) * z_dim1 + 1], &c__1, &c__,
-                      &s);
+                aocl_lapack_zrot(n, &z__[jrow * z_dim1 + 1], &c__1, &z__[(jrow - 1) * z_dim1 + 1],
+                                 &c__1, &c__, &s);
             }
             /* L30: */
         }

@@ -146,7 +146,7 @@ void slasv2_(real *f, real *g, real *h__, real *ssmin, real *ssmax, real *snr, r
     double sqrt(doublereal), r_sign(real *, real *);
     /* Local variables */
     real a, d__, l, m, r__, s, t, fa, ga, ha, ft, gt, ht, mm, tt, clt, crt, slt, srt;
-    integer pmax;
+    aocl_int64_t pmax;
     real temp;
     logical swap;
     real tsign;

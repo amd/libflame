@@ -4,8 +4,8 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
-/* > \brief \b CHETF2 computes the factorization of a complex Hermitian matrix, using the diagonal
+static aocl_int64_t c__1 = 1;
+/* > \brief \b CHETF2 computes the factorization of a scomplex Hermitian matrix, using the diagonal
  * pivoting me thod (unblocked algorithm calling Level 2 BLAS). */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -41,7 +41,7 @@ static integer c__1 = 1;
 /* > */
 /* > \verbatim */
 /* > */
-/* > CHETF2 computes the factorization of a complex Hermitian matrix A */
+/* > CHETF2 computes the factorization of a scomplex Hermitian matrix A */
 /* > using the Bunch-Kaufman diagonal pivoting method: */
 /* > */
 /* > A = U*D*U**H or A = L*D*L**H */
@@ -184,7 +184,25 @@ static integer c__1 = 1;
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void chetf2_(char *uplo, integer *n, complex *a, integer *lda, integer *ipiv, integer *info)
+/** Generated wrapper function */
+void chetf2_(char *uplo, aocl_int_t *n, scomplex *a, aocl_int_t *lda, aocl_int_t *ipiv,
+             aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_chetf2(uplo, n, a, lda, ipiv, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_chetf2(uplo, &n_64, a, &lda_64, ipiv, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_chetf2(char *uplo, aocl_int64_t *n, scomplex *a, aocl_int64_t *lda,
+                        aocl_int_t *ipiv, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -197,42 +215,31 @@ void chetf2_(char *uplo, integer *n, complex *a, integer *lda, integer *ipiv, in
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
-    integer a_dim1, a_offset, i__1, i__2, i__3, i__4, i__5, i__6;
+    aocl_int64_t a_dim1, a_offset, i__1, i__2, i__3, i__4, i__5, i__6;
     real r__1, r__2, r__3, r__4;
-    complex q__1, q__2, q__3, q__4, q__5, q__6;
+    scomplex q__1, q__2, q__3, q__4, q__5, q__6;
     /* Builtin functions */
-    double sqrt(doublereal), r_imag(complex *);
-    void r_cnjg(complex *, complex *);
+    double sqrt(doublereal), r_imag(scomplex *);
+    void r_cnjg(scomplex *, scomplex *);
     /* Local variables */
     real d__;
-    integer i__, j, k;
-    complex t;
+    aocl_int64_t i__, j, k;
+    scomplex t;
     real r1, d11;
-    complex d12;
+    scomplex d12;
     real d22;
-    complex d21;
-    integer kk, kp;
-    complex wk;
+    scomplex d21;
+    aocl_int64_t kk, kp;
+    scomplex wk;
     real tt;
-    complex wkm1, wkp1;
-    extern /* Subroutine */
-        void
-        cher_(char *, integer *, real *, complex *, integer *, complex *, integer *);
-    integer imax, jmax;
+    scomplex wkm1, wkp1;
+    aocl_int64_t imax, jmax;
     real alpha;
-    extern logical lsame_(char *, char *, integer, integer);
-    extern /* Subroutine */
-        void
-        cswap_(integer *, complex *, integer *, complex *, integer *);
-    integer kstep;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    aocl_int64_t kstep;
     logical upper;
     extern real slapy2_(real *, real *);
     real absakk;
-    extern integer icamax_(integer *, complex *, integer *);
-    extern /* Subroutine */
-        void
-        csscal_(integer *, real *, complex *, integer *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real colmax;
     extern logical sisnan_(real *);
     real rowmax;
@@ -286,7 +293,7 @@ void chetf2_(char *uplo, integer *n, complex *a, integer *lda, integer *ipiv, in
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("CHETF2", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("CHETF2", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
@@ -314,7 +321,7 @@ void chetf2_(char *uplo, integer *n, complex *a, integer *lda, integer *ipiv, in
         if(k > 1)
         {
             i__1 = k - 1;
-            imax = icamax_(&i__1, &a[k * a_dim1 + 1], &c__1);
+            imax = aocl_blas_icamax(&i__1, &a[k * a_dim1 + 1], &c__1);
             i__1 = imax + k * a_dim1;
             colmax = (r__1 = a[i__1].r, f2c_abs(r__1))
                      + (r__2 = r_imag(&a[imax + k * a_dim1]), f2c_abs(r__2));
@@ -350,14 +357,14 @@ void chetf2_(char *uplo, integer *n, complex *a, integer *lda, integer *ipiv, in
                 /* JMAX is the column-index of the largest off-diagonal */
                 /* element in row IMAX, and ROWMAX is its absolute value */
                 i__1 = k - imax;
-                jmax = imax + icamax_(&i__1, &a[imax + (imax + 1) * a_dim1], lda);
+                jmax = imax + aocl_blas_icamax(&i__1, &a[imax + (imax + 1) * a_dim1], lda);
                 i__1 = imax + jmax * a_dim1;
                 rowmax = (r__1 = a[i__1].r, f2c_abs(r__1))
                          + (r__2 = r_imag(&a[imax + jmax * a_dim1]), f2c_abs(r__2));
                 if(imax > 1)
                 {
                     i__1 = imax - 1;
-                    jmax = icamax_(&i__1, &a[imax * a_dim1 + 1], &c__1);
+                    jmax = aocl_blas_icamax(&i__1, &a[imax * a_dim1 + 1], &c__1);
                     /* Computing MAX */
                     i__1 = jmax + imax * a_dim1;
                     r__3 = rowmax;
@@ -395,7 +402,7 @@ void chetf2_(char *uplo, integer *n, complex *a, integer *lda, integer *ipiv, in
                 /* Interchange rows and columns KK and KP in the leading */
                 /* submatrix A(1:k,1:k) */
                 i__1 = kp - 1;
-                cswap_(&i__1, &a[kk * a_dim1 + 1], &c__1, &a[kp * a_dim1 + 1], &c__1);
+                aocl_blas_cswap(&i__1, &a[kk * a_dim1 + 1], &c__1, &a[kp * a_dim1 + 1], &c__1);
                 i__1 = kk - 1;
                 for(j = kp + 1; j <= i__1; ++j)
                 {
@@ -472,10 +479,10 @@ void chetf2_(char *uplo, integer *n, complex *a, integer *lda, integer *ipiv, in
                 r1 = 1.f / a[i__1].r;
                 i__1 = k - 1;
                 r__1 = -r1;
-                cher_(uplo, &i__1, &r__1, &a[k * a_dim1 + 1], &c__1, &a[a_offset], lda);
+                aocl_blas_cher(uplo, &i__1, &r__1, &a[k * a_dim1 + 1], &c__1, &a[a_offset], lda);
                 /* Store U(k) in column k */
                 i__1 = k - 1;
-                csscal_(&i__1, &r1, &a[k * a_dim1 + 1], &c__1);
+                aocl_blas_csscal(&i__1, &r1, &a[k * a_dim1 + 1], &c__1);
             }
             else
             {
@@ -571,12 +578,12 @@ void chetf2_(char *uplo, integer *n, complex *a, integer *lda, integer *ipiv, in
         /* Store details of the interchanges in IPIV */
         if(kstep == 1)
         {
-            ipiv[k] = kp;
+            ipiv[k] = (aocl_int_t)(kp);
         }
         else
         {
-            ipiv[k] = -kp;
-            ipiv[k - 1] = -kp;
+            ipiv[k] = (aocl_int_t)(-kp);
+            ipiv[k - 1] = (aocl_int_t)(-kp);
         }
         /* Decrease K and return to the start of the main loop */
         k -= kstep;
@@ -604,7 +611,7 @@ void chetf2_(char *uplo, integer *n, complex *a, integer *lda, integer *ipiv, in
         if(k < *n)
         {
             i__1 = *n - k;
-            imax = k + icamax_(&i__1, &a[k + 1 + k * a_dim1], &c__1);
+            imax = k + aocl_blas_icamax(&i__1, &a[k + 1 + k * a_dim1], &c__1);
             i__1 = imax + k * a_dim1;
             colmax = (r__1 = a[i__1].r, f2c_abs(r__1))
                      + (r__2 = r_imag(&a[imax + k * a_dim1]), f2c_abs(r__2));
@@ -640,14 +647,14 @@ void chetf2_(char *uplo, integer *n, complex *a, integer *lda, integer *ipiv, in
                 /* JMAX is the column-index of the largest off-diagonal */
                 /* element in row IMAX, and ROWMAX is its absolute value */
                 i__1 = imax - k;
-                jmax = k - 1 + icamax_(&i__1, &a[imax + k * a_dim1], lda);
+                jmax = k - 1 + aocl_blas_icamax(&i__1, &a[imax + k * a_dim1], lda);
                 i__1 = imax + jmax * a_dim1;
                 rowmax = (r__1 = a[i__1].r, f2c_abs(r__1))
                          + (r__2 = r_imag(&a[imax + jmax * a_dim1]), f2c_abs(r__2));
                 if(imax < *n)
                 {
                     i__1 = *n - imax;
-                    jmax = imax + icamax_(&i__1, &a[imax + 1 + imax * a_dim1], &c__1);
+                    jmax = imax + aocl_blas_icamax(&i__1, &a[imax + 1 + imax * a_dim1], &c__1);
                     /* Computing MAX */
                     i__1 = jmax + imax * a_dim1;
                     r__3 = rowmax;
@@ -687,7 +694,8 @@ void chetf2_(char *uplo, integer *n, complex *a, integer *lda, integer *ipiv, in
                 if(kp < *n)
                 {
                     i__1 = *n - kp;
-                    cswap_(&i__1, &a[kp + 1 + kk * a_dim1], &c__1, &a[kp + 1 + kp * a_dim1], &c__1);
+                    aocl_blas_cswap(&i__1, &a[kp + 1 + kk * a_dim1], &c__1,
+                                    &a[kp + 1 + kp * a_dim1], &c__1);
                 }
                 i__1 = kp - 1;
                 for(j = kk + 1; j <= i__1; ++j)
@@ -767,11 +775,11 @@ void chetf2_(char *uplo, integer *n, complex *a, integer *lda, integer *ipiv, in
                     r1 = 1.f / a[i__1].r;
                     i__1 = *n - k;
                     r__1 = -r1;
-                    cher_(uplo, &i__1, &r__1, &a[k + 1 + k * a_dim1], &c__1,
-                          &a[k + 1 + (k + 1) * a_dim1], lda);
+                    aocl_blas_cher(uplo, &i__1, &r__1, &a[k + 1 + k * a_dim1], &c__1,
+                                   &a[k + 1 + (k + 1) * a_dim1], lda);
                     /* Store L(k) in column K */
                     i__1 = *n - k;
-                    csscal_(&i__1, &r1, &a[k + 1 + k * a_dim1], &c__1);
+                    aocl_blas_csscal(&i__1, &r1, &a[k + 1 + k * a_dim1], &c__1);
                 }
             }
             else
@@ -869,12 +877,12 @@ void chetf2_(char *uplo, integer *n, complex *a, integer *lda, integer *ipiv, in
         /* Store details of the interchanges in IPIV */
         if(kstep == 1)
         {
-            ipiv[k] = kp;
+            ipiv[k] = (aocl_int_t)(kp);
         }
         else
         {
-            ipiv[k] = -kp;
-            ipiv[k + 1] = -kp;
+            ipiv[k] = (aocl_int_t)(-kp);
+            ipiv[k + 1] = (aocl_int_t)(-kp);
         }
         /* Increase K and return to the start of the main loop */
         k += kstep;

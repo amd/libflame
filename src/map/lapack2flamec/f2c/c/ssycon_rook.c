@@ -4,7 +4,7 @@
  -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for
  libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
+static aocl_int64_t c__1 = 1;
 /* > \brief \b SSYCON_ROOK */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -140,27 +140,37 @@ static integer c__1 = 1;
 /* > \endverbatim */
 /* ===================================================================== */
 /* Subroutine */
-void ssycon_rook_(char *uplo, integer *n, real *a, integer *lda, integer *ipiv, real *anorm,
-                  real *rcond, real *work, integer *iwork, integer *info)
+/** Generated wrapper function */
+void ssycon_rook_(char *uplo, aocl_int_t *n, real *a, aocl_int_t *lda, aocl_int_t *ipiv,
+                  real *anorm, real *rcond, real *work, aocl_int_t *iwork, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_ssycon_rook(uplo, n, a, lda, ipiv, anorm, rcond, work, iwork, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_ssycon_rook(uplo, &n_64, a, &lda_64, ipiv, anorm, rcond, work, iwork, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_ssycon_rook(char *uplo, aocl_int64_t *n, real *a, aocl_int64_t *lda,
+                             aocl_int_t *ipiv, real *anorm, real *rcond, real *work,
+                             aocl_int_t *iwork, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("ssycon_rook inputs: uplo %c, n %" FLA_IS ", lda %" FLA_IS "", *uplo, *n,
-             *lda);
+                      *lda);
     /* System generated locals */
-    integer a_dim1, a_offset, i__1;
+    aocl_int64_t a_dim1, a_offset, i__1;
     /* Local variables */
-    integer i__, kase;
-    extern /* Subroutine */
-        void
-        ssytrs_rook_(char *, integer *, integer *, real *, integer *, integer *, real *, integer *,
-                     integer *);
-    extern logical lsame_(char *, char *, integer, integer);
+    aocl_int64_t i__, kase;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     integer isave[3];
     logical upper;
-    extern /* Subroutine */
-        void
-        slacn2_(integer *, real *, real *, integer *, real *, integer *, integer *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real ainvnm;
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -214,7 +224,7 @@ void ssycon_rook_(char *uplo, integer *n, real *a, integer *lda, integer *ipiv, 
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("SSYCON_ROOK", &i__1, (ftnlen)11);
+        aocl_blas_xerbla("SSYCON_ROOK", &i__1, (ftnlen)11);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -262,11 +272,11 @@ void ssycon_rook_(char *uplo, integer *n, real *a, integer *lda, integer *ipiv, 
     /* Estimate the 1-norm of the inverse. */
     kase = 0;
 L30:
-    slacn2_(n, &work[*n + 1], &work[1], &iwork[1], &ainvnm, &kase, isave);
+    aocl_lapack_slacn2(n, &work[*n + 1], &work[1], &iwork[1], &ainvnm, &kase, isave);
     if(kase != 0)
     {
         /* Multiply by inv(L*D*L**T) or inv(U*D*U**T). */
-        ssytrs_rook_(uplo, n, &c__1, &a[a_offset], lda, &ipiv[1], &work[1], n, info);
+        aocl_lapack_ssytrs_rook(uplo, n, &c__1, &a[a_offset], lda, &ipiv[1], &work[1], n, info);
         goto L30;
     }
     /* Compute the estimate of the reciprocal condition number. */

@@ -4,9 +4,9 @@
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
  /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
-static integer c__0 = 0;
-static integer c_n1 = -1;
+static aocl_int64_t c__1 = 1;
+static aocl_int64_t c__0 = 0;
+static aocl_int64_t c_n1 = -1;
 /* > \brief <b> CGEES computes the eigenvalues, the Schur form, and, optionally, the matrix of Schur
  * vectors f or GE matrices</b> */
 /* =========== DOCUMENTATION =========== */
@@ -49,7 +49,7 @@ static integer c_n1 = -1;
 /* > */
 /* > \verbatim */
 /* > */
-/* > CGEES computes for an N-by-N complex nonsymmetric matrix A, the */
+/* > CGEES computes for an N-by-N scomplex nonsymmetric matrix A, the */
 /* > eigenvalues, the Schur form T, and, optionally, the matrix of Schur */
 /* > vectors Z. This gives the Schur factorization A = Z*T*(Z**H). */
 /* > */
@@ -58,7 +58,7 @@ static integer c_n1 = -1;
 /* > The leading columns of Z then form an orthonormal basis for the */
 /* > invariant subspace corresponding to the selected eigenvalues. */
 /* > */
-/* > A complex matrix is in Schur form if it is upper triangular. */
+/* > A scomplex matrix is in Schur form if it is upper triangular. */
 /* > \endverbatim */
 /* Arguments: */
 /* ========== */
@@ -187,7 +187,7 @@ elements 1:ILO-1 and i+1:N of W */
 /* > problem is very ill-conditioned);
  */
 /* > = N+2: after reordering, roundoff changed values of */
-/* > some complex eigenvalues so that leading */
+/* > some scomplex eigenvalues so that leading */
 /* > eigenvalues in the Schur form no longer satisfy */
 /* > SELECT = .TRUE.. This could also be caused by */
 /* > underflow due to scaling. */
@@ -201,63 +201,61 @@ elements 1:ILO-1 and i+1:N of W */
 /* > \ingroup gees */
 /* ===================================================================== */
 /* Subroutine */
-void cgees_(char *jobvs, char *sort, L_fp1 select, integer *n, complex *a, integer *lda,
-            integer *sdim, complex *w, complex *vs, integer *ldvs, complex *work, integer *lwork,
-            real *rwork, logical *bwork, integer *info)
+/** Generated wrapper function */
+void cgees_(char *jobvs, char *sort, L_fp1 select, aocl_int_t *n, scomplex *a, aocl_int_t *lda,
+            aocl_int_t *sdim, scomplex *w, scomplex *vs, aocl_int_t *ldvs, scomplex *work,
+            aocl_int_t *lwork, real *rwork, logical *bwork, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_cgees(jobvs, sort, select, n, a, lda, sdim, w, vs, ldvs, work, lwork, rwork, bwork,
+                      info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t sdim_64 = *sdim;
+    aocl_int64_t ldvs_64 = *ldvs;
+    aocl_int64_t lwork_64 = *lwork;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_cgees(jobvs, sort, select, &n_64, a, &lda_64, &sdim_64, w, vs, &ldvs_64, work,
+                      &lwork_64, rwork, bwork, &info_64);
+
+    *sdim = (aocl_int_t)sdim_64;
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_cgees(char *jobvs, char *sort, L_fp1 select, aocl_int64_t *n, scomplex *a,
+                       aocl_int64_t *lda, aocl_int64_t *sdim, scomplex *w, scomplex *vs,
+                       aocl_int64_t *ldvs, scomplex *work, aocl_int64_t *lwork, real *rwork,
+                       logical *bwork, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("cgees inputs: jobvs %c, sort %c, n %" FLA_IS ", lda %" FLA_IS
                       ", ldvs %" FLA_IS "",
                       *jobvs, *sort, *n, *lda, *ldvs);
     /* System generated locals */
-    integer a_dim1, a_offset, vs_dim1, vs_offset, i__1, i__2;
+    aocl_int64_t a_dim1, a_offset, vs_dim1, vs_offset, i__1, i__2;
     real r__1;
     /* Builtin functions */
     double sqrt(doublereal);
     /* Local variables */
-    integer i__;
+    aocl_int64_t i__;
     real s;
-    integer ihi, ilo;
+    aocl_int64_t ihi, ilo;
     real dum[1], eps, sep;
-    integer ibal;
+    aocl_int64_t ibal;
     real anrm;
-    integer ierr, itau, iwrk, icond, ieval;
-    extern logical lsame_(char *, char *, integer, integer);
-    extern /* Subroutine */
-        void
-        ccopy_(integer *, complex *, integer *, complex *, integer *),
-        cgebak_(char *, char *, integer *, integer *, integer *, real *, integer *, complex *,
-                integer *, integer *),
-        cgebal_(char *, integer *, complex *, integer *, integer *, integer *, real *, integer *);
+    aocl_int64_t ierr, itau, iwrk, icond, ieval;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     logical scalea;
-    extern real clange_(char *, integer *, integer *, complex *, integer *, real *);
     real cscale;
-    extern /* Subroutine */
-        void
-        cgehrd_(integer *, integer *, integer *, complex *, integer *, complex *, complex *,
-                integer *, integer *),
-        clascl_(char *, integer *, integer *, real *, real *, integer *, integer *, complex *,
-                integer *, integer *);
     extern real slamch_(char *);
-    extern /* Subroutine */
-        void
-        clacpy_(char *, integer *, integer *, complex *, integer *, complex *, integer *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     real bignum;
-    extern /* Subroutine */
-        void
-        chseqr_(char *, char *, integer *, integer *, integer *, complex *, integer *, complex *,
-                complex *, integer *, complex *, integer *, integer *),
-        cunghr_(integer *, integer *, integer *, complex *, integer *, complex *, complex *,
-                integer *, integer *),
-        ctrsen_(char *, char *, logical *, integer *, complex *, integer *, complex *, integer *,
-                complex *, integer *, real *, real *, complex *, integer *, integer *);
-    integer minwrk, maxwrk;
+    aocl_int64_t minwrk, maxwrk;
     real smlnum;
-    integer hswork;
+    aocl_int64_t hswork;
     logical wantst, lquery, wantvs;
-    extern real sroundup_lwork(integer *);
     /* -- LAPACK driver routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -322,7 +320,7 @@ void cgees_(char *jobvs, char *sort, L_fp1 select, integer *n, complex *a, integ
     /* (Note: Comments in the code beginning "Workspace:" describe the */
     /* minimal amount of workspace needed at that point in the code, */
     /* as well as the preferred amount for good performance. */
-    /* CWorkspace refers to complex workspace, and RWorkspace to real */
+    /* CWorkspace refers to scomplex workspace, and RWorkspace to real */
     /* workspace. NB refers to the optimal block size for the */
     /* immediately following subroutine, as returned by ILAENV. */
     /* HSWORK refers to the workspace preferred by CHSEQR, as */
@@ -337,10 +335,10 @@ void cgees_(char *jobvs, char *sort, L_fp1 select, integer *n, complex *a, integ
         }
         else
         {
-            maxwrk = *n + *n * ilaenv_(&c__1, "CGEHRD", " ", n, &c__1, n, &c__0);
+            maxwrk = *n + *n * aocl_lapack_ilaenv(&c__1, "CGEHRD", " ", n, &c__1, n, &c__0);
             minwrk = *n << 1;
-            chseqr_("S", jobvs, n, &c__1, n, &a[a_offset], lda, &w[1], &vs[vs_offset], ldvs,
-                    &work[1], &c_n1, &ieval);
+            aocl_lapack_chseqr("S", jobvs, n, &c__1, n, &a[a_offset], lda, &w[1], &vs[vs_offset],
+                               ldvs, &work[1], &c_n1, &ieval);
             hswork = (integer)work[1].r;
             if(!wantvs)
             {
@@ -352,12 +350,13 @@ void cgees_(char *jobvs, char *sort, L_fp1 select, integer *n, complex *a, integ
                 i__1 = maxwrk;
                 i__2 = *n
                        + (*n - 1)
-                             * ilaenv_(&c__1, "CUNGHR", " ", n, &c__1, n, &c_n1); // , expr subst
+                             * aocl_lapack_ilaenv(&c__1, "CUNGHR", " ", n, &c__1, n,
+                                                  &c_n1); // , expr subst
                 maxwrk = fla_max(i__1, i__2);
                 maxwrk = fla_max(maxwrk, hswork);
             }
         }
-        r__1 = sroundup_lwork(&maxwrk);
+        r__1 = aocl_lapack_sroundup_lwork(&maxwrk);
         work[1].r = r__1;
         work[1].i = 0.f; // , expr subst
         if(*lwork < minwrk && !lquery)
@@ -368,7 +367,7 @@ void cgees_(char *jobvs, char *sort, L_fp1 select, integer *n, complex *a, integ
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("CGEES ", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("CGEES ", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -391,7 +390,7 @@ void cgees_(char *jobvs, char *sort, L_fp1 select, integer *n, complex *a, integ
     smlnum = sqrt(smlnum) / eps;
     bignum = 1.f / smlnum;
     /* Scale A if max element outside range [SMLNUM,BIGNUM] */
-    anrm = clange_("M", n, n, &a[a_offset], lda, dum);
+    anrm = aocl_lapack_clange("M", n, n, &a[a_offset], lda, dum);
     scalea = FALSE_;
     if(anrm > 0.f && anrm < smlnum)
     {
@@ -405,29 +404,30 @@ void cgees_(char *jobvs, char *sort, L_fp1 select, integer *n, complex *a, integ
     }
     if(scalea)
     {
-        clascl_("G", &c__0, &c__0, &anrm, &cscale, n, n, &a[a_offset], lda, &ierr);
+        aocl_lapack_clascl("G", &c__0, &c__0, &anrm, &cscale, n, n, &a[a_offset], lda, &ierr);
     }
     /* Permute the matrix to make it more nearly triangular */
     /* (CWorkspace: none) */
     /* (RWorkspace: need N) */
     ibal = 1;
-    cgebal_("P", n, &a[a_offset], lda, &ilo, &ihi, &rwork[ibal], &ierr);
+    aocl_lapack_cgebal("P", n, &a[a_offset], lda, &ilo, &ihi, &rwork[ibal], &ierr);
     /* Reduce to upper Hessenberg form */
     /* (CWorkspace: need 2*N, prefer N+N*NB) */
     /* (RWorkspace: none) */
     itau = 1;
     iwrk = *n + itau;
     i__1 = *lwork - iwrk + 1;
-    cgehrd_(n, &ilo, &ihi, &a[a_offset], lda, &work[itau], &work[iwrk], &i__1, &ierr);
+    aocl_lapack_cgehrd(n, &ilo, &ihi, &a[a_offset], lda, &work[itau], &work[iwrk], &i__1, &ierr);
     if(wantvs)
     {
         /* Copy Householder vectors to VS */
-        clacpy_("L", n, n, &a[a_offset], lda, &vs[vs_offset], ldvs);
+        aocl_lapack_clacpy("L", n, n, &a[a_offset], lda, &vs[vs_offset], ldvs);
         /* Generate unitary matrix in VS */
         /* (CWorkspace: need 2*N-1, prefer N+(N-1)*NB) */
         /* (RWorkspace: none) */
         i__1 = *lwork - iwrk + 1;
-        cunghr_(n, &ilo, &ihi, &vs[vs_offset], ldvs, &work[itau], &work[iwrk], &i__1, &ierr);
+        aocl_lapack_cunghr(n, &ilo, &ihi, &vs[vs_offset], ldvs, &work[itau], &work[iwrk], &i__1,
+                           &ierr);
     }
     *sdim = 0;
     /* Perform QR iteration, accumulating Schur vectors in VS if desired */
@@ -435,8 +435,8 @@ void cgees_(char *jobvs, char *sort, L_fp1 select, integer *n, complex *a, integ
     /* (RWorkspace: none) */
     iwrk = itau;
     i__1 = *lwork - iwrk + 1;
-    chseqr_("S", jobvs, n, &ilo, &ihi, &a[a_offset], lda, &w[1], &vs[vs_offset], ldvs, &work[iwrk],
-            &i__1, &ieval);
+    aocl_lapack_chseqr("S", jobvs, n, &ilo, &ihi, &a[a_offset], lda, &w[1], &vs[vs_offset], ldvs,
+                       &work[iwrk], &i__1, &ieval);
     if(ieval > 0)
     {
         *info = ieval;
@@ -446,7 +446,7 @@ void cgees_(char *jobvs, char *sort, L_fp1 select, integer *n, complex *a, integ
     {
         if(scalea)
         {
-            clascl_("G", &c__0, &c__0, &cscale, &anrm, n, &c__1, &w[1], n, &ierr);
+            aocl_lapack_clascl("G", &c__0, &c__0, &cscale, &anrm, n, &c__1, &w[1], n, &ierr);
         }
         i__1 = *n;
         for(i__ = 1; i__ <= i__1; ++i__)
@@ -458,24 +458,24 @@ void cgees_(char *jobvs, char *sort, L_fp1 select, integer *n, complex *a, integ
         /* (CWorkspace: none) */
         /* (RWorkspace: none) */
         i__1 = *lwork - iwrk + 1;
-        ctrsen_("N", jobvs, &bwork[1], n, &a[a_offset], lda, &vs[vs_offset], ldvs, &w[1], sdim, &s,
-                &sep, &work[iwrk], &i__1, &icond);
+        aocl_lapack_ctrsen("N", jobvs, &bwork[1], n, &a[a_offset], lda, &vs[vs_offset], ldvs, &w[1],
+                           sdim, &s, &sep, &work[iwrk], &i__1, &icond);
     }
     if(wantvs)
     {
         /* Undo balancing */
         /* (CWorkspace: none) */
         /* (RWorkspace: need N) */
-        cgebak_("P", "R", n, &ilo, &ihi, &rwork[ibal], n, &vs[vs_offset], ldvs, &ierr);
+        aocl_lapack_cgebak("P", "R", n, &ilo, &ihi, &rwork[ibal], n, &vs[vs_offset], ldvs, &ierr);
     }
     if(scalea)
     {
         /* Undo scaling for the Schur form of A */
-        clascl_("U", &c__0, &c__0, &cscale, &anrm, n, n, &a[a_offset], lda, &ierr);
+        aocl_lapack_clascl("U", &c__0, &c__0, &cscale, &anrm, n, n, &a[a_offset], lda, &ierr);
         i__1 = *lda + 1;
-        ccopy_(n, &a[a_offset], &i__1, &w[1], &c__1);
+        aocl_blas_ccopy(n, &a[a_offset], &i__1, &w[1], &c__1);
     }
-    r__1 = sroundup_lwork(&maxwrk);
+    r__1 = aocl_lapack_sroundup_lwork(&maxwrk);
     work[1].r = r__1;
     work[1].i = 0.f; // , expr subst
     AOCL_DTL_TRACE_LOG_EXIT

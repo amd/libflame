@@ -4,8 +4,8 @@
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
  /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__2 = 2;
-static integer c__1 = 1;
+static aocl_int64_t c__2 = 2;
+static aocl_int64_t c__1 = 1;
 /* > \brief \b ZTGEX2 swaps adjacent diagonal blocks in an upper (quasi) triangular matrix pair by
  * an unitary equivalence transformation. */
 /* =========== DOCUMENTATION =========== */
@@ -192,50 +192,63 @@ Computing Eigenspaces with Specified */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void ztgex2_(logical *wantq, logical *wantz, integer *n, doublecomplex *a, integer *lda,
-             doublecomplex *b, integer *ldb, doublecomplex *q, integer *ldq, doublecomplex *z__,
-             integer *ldz, integer *j1, integer *info)
+/** Generated wrapper function */
+void ztgex2_(logical *wantq, logical *wantz, aocl_int_t *n, dcomplex *a, aocl_int_t *lda,
+             dcomplex *b, aocl_int_t *ldb, dcomplex *q, aocl_int_t *ldq,
+             dcomplex *z__, aocl_int_t *ldz, aocl_int_t *j1, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_ztgex2(wantq, wantz, n, a, lda, b, ldb, q, ldq, z__, ldz, j1, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t ldb_64 = *ldb;
+    aocl_int64_t ldq_64 = *ldq;
+    aocl_int64_t ldz_64 = *ldz;
+    aocl_int64_t j1_64 = *j1;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_ztgex2(wantq, wantz, &n_64, a, &lda_64, b, &ldb_64, q, &ldq_64, z__, &ldz_64,
+                       &j1_64, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_ztgex2(logical *wantq, logical *wantz, aocl_int64_t *n, dcomplex *a,
+                        aocl_int64_t *lda, dcomplex *b, aocl_int64_t *ldb, dcomplex *q,
+                        aocl_int64_t *ldq, dcomplex *z__, aocl_int64_t *ldz, aocl_int64_t *j1,
+                        aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("ztgex2 inputs: n %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS ", ldq %" FLA_IS
                       ", ldz %" FLA_IS ", j1 %" FLA_IS "",
                       *n, *lda, *ldb, *ldq, *ldz, *j1);
     /* System generated locals */
-    integer a_dim1, a_offset, b_dim1, b_offset, q_dim1, q_offset, z_dim1, z_offset, i__1, i__2,
+    aocl_int64_t a_dim1, a_offset, b_dim1, b_offset, q_dim1, q_offset, z_dim1, z_offset, i__1, i__2,
         i__3;
     doublereal d__1;
-    doublecomplex z__1, z__2, z__3;
+    dcomplex z__1, z__2, z__3;
     /* Builtin functions */
-    double sqrt(doublereal), z_abs(doublecomplex *);
-    void d_cnjg(doublecomplex *, doublecomplex *);
+    double sqrt(doublereal), z_abs(dcomplex *);
+    void d_cnjg(dcomplex *, dcomplex *);
     /* Local variables */
-    doublecomplex f, g;
-    integer i__, m;
-    doublecomplex s[4] /* was [2][2] */
+    dcomplex f, g;
+    aocl_int64_t i__, m;
+    dcomplex s[4] /* was [2][2] */
         ,
         t[4] /* was [2][2] */
         ;
     doublereal cq, sa, sb, cz;
-    doublecomplex sq, sz;
+    dcomplex sq, sz;
     doublereal eps, sum;
     logical weak;
-    doublecomplex cdum, work[8];
-    extern /* Subroutine */
-        void
-        zrot_(integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublereal *,
-              doublecomplex *);
+    dcomplex cdum, work[8];
     doublereal scale;
     extern doublereal dlamch_(char *);
-    extern /* Subroutine */
-        void
-        zlacpy_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *,
-                integer *),
-        zlartg_(doublecomplex *, doublecomplex *, doublereal *, doublecomplex *, doublecomplex *);
+    extern void zlartg_(dcomplex *, dcomplex *, doublereal *, dcomplex *, dcomplex *);
     doublereal smlnum;
     logical strong;
-    extern /* Subroutine */
-        void
-        zlassq_(integer *, doublecomplex *, integer *, doublereal *, doublereal *);
     doublereal thresha, threshb;
     /* -- LAPACK auxiliary routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -283,22 +296,22 @@ void ztgex2_(logical *wantq, logical *wantz, integer *n, doublecomplex *a, integ
     weak = FALSE_;
     strong = FALSE_;
     /* Make a local copy of selected block in (A, B) */
-    zlacpy_("Full", &m, &m, &a[*j1 + *j1 * a_dim1], lda, s, &c__2);
-    zlacpy_("Full", &m, &m, &b[*j1 + *j1 * b_dim1], ldb, t, &c__2);
+    aocl_lapack_zlacpy("Full", &m, &m, &a[*j1 + *j1 * a_dim1], lda, s, &c__2);
+    aocl_lapack_zlacpy("Full", &m, &m, &b[*j1 + *j1 * b_dim1], ldb, t, &c__2);
     /* Compute the threshold for testing the acceptance of swapping. */
     eps = dlamch_("P");
     smlnum = dlamch_("S") / eps;
     scale = 0.;
     sum = 1.;
-    zlacpy_("Full", &m, &m, s, &c__2, work, &m);
-    zlacpy_("Full", &m, &m, t, &c__2, &work[m * m], &m);
+    aocl_lapack_zlacpy("Full", &m, &m, s, &c__2, work, &m);
+    aocl_lapack_zlacpy("Full", &m, &m, t, &c__2, &work[m * m], &m);
     i__1 = m * m;
-    zlassq_(&i__1, work, &c__1, &scale, &sum);
+    aocl_lapack_zlassq(&i__1, work, &c__1, &scale, &sum);
     sa = scale * sqrt(sum);
     scale = 0.;
     sum = 1.;
     i__1 = m * m;
-    zlassq_(&i__1, &work[m * m], &c__1, &scale, &sum);
+    aocl_lapack_zlassq(&i__1, &work[m * m], &c__1, &scale, &sum);
     sb = scale * sqrt(sum);
     /* THRES has been changed from */
     /* THRESH = MAX( TEN*EPS*SA, SMLNUM ) */
@@ -339,9 +352,9 @@ void ztgex2_(logical *wantq, logical *wantz, integer *n, doublecomplex *a, integ
     sz.r = z__1.r;
     sz.i = z__1.i; // , expr subst
     d_cnjg(&z__1, &sz);
-    zrot_(&c__2, s, &c__1, &s[2], &c__1, &cz, &z__1);
+    aocl_lapack_zrot(&c__2, s, &c__1, &s[2], &c__1, &cz, &z__1);
     d_cnjg(&z__1, &sz);
-    zrot_(&c__2, t, &c__1, &t[2], &c__1, &cz, &z__1);
+    aocl_lapack_zrot(&c__2, t, &c__1, &t[2], &c__1, &cz, &z__1);
     if(sa >= sb)
     {
         zlartg_(s, &s[1], &cq, &sq, &cdum);
@@ -350,8 +363,8 @@ void ztgex2_(logical *wantq, logical *wantz, integer *n, doublecomplex *a, integ
     {
         zlartg_(t, &t[1], &cq, &sq, &cdum);
     }
-    zrot_(&c__2, s, &c__2, &s[1], &c__2, &cq, &sq);
-    zrot_(&c__2, t, &c__2, &t[1], &c__2, &cq, &sq);
+    aocl_lapack_zrot(&c__2, s, &c__2, &s[1], &c__2, &cq, &sq);
+    aocl_lapack_zrot(&c__2, t, &c__2, &t[1], &c__2, &cq, &sq);
     /* Weak stability test: |S21| <= O(EPS F-norm((A))) */
     /* and |T21| <= O(EPS F-norm((B))) */
     weak = z_abs(&s[1]) <= thresha && z_abs(&t[1]) <= threshb;
@@ -365,22 +378,22 @@ void ztgex2_(logical *wantq, logical *wantz, integer *n, doublecomplex *a, integ
         /* F-norm((A-QL**H*S*QR)) <= O(EPS*F-norm((A))) */
         /* and */
         /* F-norm((B-QL**H*T*QR)) <= O(EPS*F-norm((B))) */
-        zlacpy_("Full", &m, &m, s, &c__2, work, &m);
-        zlacpy_("Full", &m, &m, t, &c__2, &work[m * m], &m);
+        aocl_lapack_zlacpy("Full", &m, &m, s, &c__2, work, &m);
+        aocl_lapack_zlacpy("Full", &m, &m, t, &c__2, &work[m * m], &m);
         d_cnjg(&z__2, &sz);
         z__1.r = -z__2.r;
         z__1.i = -z__2.i; // , expr subst
-        zrot_(&c__2, work, &c__1, &work[2], &c__1, &cz, &z__1);
+        aocl_lapack_zrot(&c__2, work, &c__1, &work[2], &c__1, &cz, &z__1);
         d_cnjg(&z__2, &sz);
         z__1.r = -z__2.r;
         z__1.i = -z__2.i; // , expr subst
-        zrot_(&c__2, &work[4], &c__1, &work[6], &c__1, &cz, &z__1);
+        aocl_lapack_zrot(&c__2, &work[4], &c__1, &work[6], &c__1, &cz, &z__1);
         z__1.r = -sq.r;
         z__1.i = -sq.i; // , expr subst
-        zrot_(&c__2, work, &c__2, &work[1], &c__2, &cq, &z__1);
+        aocl_lapack_zrot(&c__2, work, &c__2, &work[1], &c__2, &cq, &z__1);
         z__1.r = -sq.r;
         z__1.i = -sq.i; // , expr subst
-        zrot_(&c__2, &work[4], &c__2, &work[5], &c__2, &cq, &z__1);
+        aocl_lapack_zrot(&c__2, &work[4], &c__2, &work[5], &c__2, &cq, &z__1);
         for(i__ = 1; i__ <= 2; ++i__)
         {
             i__1 = i__ - 1;
@@ -416,12 +429,12 @@ void ztgex2_(logical *wantq, logical *wantz, integer *n, doublecomplex *a, integ
         scale = 0.;
         sum = 1.;
         i__1 = m * m;
-        zlassq_(&i__1, work, &c__1, &scale, &sum);
+        aocl_lapack_zlassq(&i__1, work, &c__1, &scale, &sum);
         sa = scale * sqrt(sum);
         scale = 0.;
         sum = 1.;
         i__1 = m * m;
-        zlassq_(&i__1, &work[m * m], &c__1, &scale, &sum);
+        aocl_lapack_zlassq(&i__1, &work[m * m], &c__1, &scale, &sum);
         sb = scale * sqrt(sum);
         strong = sa <= thresha && sb <= threshb;
         if(!strong)
@@ -433,14 +446,16 @@ void ztgex2_(logical *wantq, logical *wantz, integer *n, doublecomplex *a, integ
     /* equivalence transformations to the original matrix pair (A,B) */
     i__1 = *j1 + 1;
     d_cnjg(&z__1, &sz);
-    zrot_(&i__1, &a[*j1 * a_dim1 + 1], &c__1, &a[(*j1 + 1) * a_dim1 + 1], &c__1, &cz, &z__1);
+    aocl_lapack_zrot(&i__1, &a[*j1 * a_dim1 + 1], &c__1, &a[(*j1 + 1) * a_dim1 + 1], &c__1, &cz,
+                     &z__1);
     i__1 = *j1 + 1;
     d_cnjg(&z__1, &sz);
-    zrot_(&i__1, &b[*j1 * b_dim1 + 1], &c__1, &b[(*j1 + 1) * b_dim1 + 1], &c__1, &cz, &z__1);
+    aocl_lapack_zrot(&i__1, &b[*j1 * b_dim1 + 1], &c__1, &b[(*j1 + 1) * b_dim1 + 1], &c__1, &cz,
+                     &z__1);
     i__1 = *n - *j1 + 1;
-    zrot_(&i__1, &a[*j1 + *j1 * a_dim1], lda, &a[*j1 + 1 + *j1 * a_dim1], lda, &cq, &sq);
+    aocl_lapack_zrot(&i__1, &a[*j1 + *j1 * a_dim1], lda, &a[*j1 + 1 + *j1 * a_dim1], lda, &cq, &sq);
     i__1 = *n - *j1 + 1;
-    zrot_(&i__1, &b[*j1 + *j1 * b_dim1], ldb, &b[*j1 + 1 + *j1 * b_dim1], ldb, &cq, &sq);
+    aocl_lapack_zrot(&i__1, &b[*j1 + *j1 * b_dim1], ldb, &b[*j1 + 1 + *j1 * b_dim1], ldb, &cq, &sq);
     /* Set N1 by N2 (2,1) blocks to 0 */
     i__1 = *j1 + 1 + *j1 * a_dim1;
     a[i__1].r = 0.;
@@ -452,12 +467,14 @@ void ztgex2_(logical *wantq, logical *wantz, integer *n, doublecomplex *a, integ
     if(*wantz)
     {
         d_cnjg(&z__1, &sz);
-        zrot_(n, &z__[*j1 * z_dim1 + 1], &c__1, &z__[(*j1 + 1) * z_dim1 + 1], &c__1, &cz, &z__1);
+        aocl_lapack_zrot(n, &z__[*j1 * z_dim1 + 1], &c__1, &z__[(*j1 + 1) * z_dim1 + 1], &c__1, &cz,
+                         &z__1);
     }
     if(*wantq)
     {
         d_cnjg(&z__1, &sq);
-        zrot_(n, &q[*j1 * q_dim1 + 1], &c__1, &q[(*j1 + 1) * q_dim1 + 1], &c__1, &cq, &z__1);
+        aocl_lapack_zrot(n, &q[*j1 * q_dim1 + 1], &c__1, &q[(*j1 + 1) * q_dim1 + 1], &c__1, &cq,
+                         &z__1);
     }
     /* Exit with INFO = 0 if swap was successfully performed. */
     AOCL_DTL_TRACE_LOG_EXIT

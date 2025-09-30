@@ -107,18 +107,36 @@ if INFO>0, the content of */
 /* > \ingroup doubleOTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-void dlat2s_(char *uplo, integer *n, doublereal *a, integer *lda, real *sa, integer *ldsa,
-             integer *info)
+/** Generated wrapper function */
+void dlat2s_(char *uplo, aocl_int_t *n, doublereal *a, aocl_int_t *lda, real *sa, aocl_int_t *ldsa,
+             aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_dlat2s(uplo, n, a, lda, sa, ldsa, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t ldsa_64 = *ldsa;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_dlat2s(uplo, &n_64, a, &lda_64, sa, &ldsa_64, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_dlat2s(char *uplo, aocl_int64_t *n, doublereal *a, aocl_int64_t *lda, real *sa,
+                        aocl_int64_t *ldsa, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dlat2s inputs: uplo %c, n %" FLA_IS ", lda %" FLA_IS ", ldsa %" FLA_IS "",
                       *uplo, *n, *lda, *ldsa);
     /* System generated locals */
-    integer sa_dim1, sa_offset, a_dim1, a_offset, i__1, i__2;
+    aocl_int64_t sa_dim1, sa_offset, a_dim1, a_offset, i__1, i__2;
     /* Local variables */
-    integer i__, j;
+    aocl_int64_t i__, j;
     doublereal rmax;
-    extern logical lsame_(char *, char *, integer, integer);
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     logical upper;
     extern real slamch_(char *);
     /* -- LAPACK auxiliary routine -- */

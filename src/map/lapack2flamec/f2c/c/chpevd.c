@@ -4,7 +4,7 @@
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
  /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
+static aocl_int64_t c__1 = 1;
 /* > \brief <b> CHPEVD computes the eigenvalues and, optionally, the left and/or right eigenvectors
  * for OTHER matrices</b> */
 /* =========== DOCUMENTATION =========== */
@@ -44,7 +44,7 @@ static integer c__1 = 1;
 /* > \verbatim */
 /* > */
 /* > CHPEVD computes all the eigenvalues and, optionally, eigenvectors of */
-/* > a complex Hermitian matrix A in packed storage. If eigenvectors are */
+/* > a scomplex Hermitian matrix A in packed storage. If eigenvectors are */
 /* > desired, it uses a divide and conquer algorithm. */
 /* > */
 /* > \endverbatim */
@@ -197,9 +197,33 @@ i */
 /* > \ingroup hpevd */
 /* ===================================================================== */
 /* Subroutine */
-void chpevd_(char *jobz, char *uplo, integer *n, complex *ap, real *w, complex *z__, integer *ldz,
-             complex *work, integer *lwork, real *rwork, integer *lrwork, integer *iwork,
-             integer *liwork, integer *info)
+/** Generated wrapper function */
+void chpevd_(char *jobz, char *uplo, aocl_int_t *n, scomplex *ap, real *w, scomplex *z__,
+             aocl_int_t *ldz, scomplex *work, aocl_int_t *lwork, real *rwork, aocl_int_t *lrwork,
+             aocl_int_t *iwork, aocl_int_t *liwork, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_chpevd(jobz, uplo, n, ap, w, z__, ldz, work, lwork, rwork, lrwork, iwork, liwork,
+                       info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t ldz_64 = *ldz;
+    aocl_int64_t lwork_64 = *lwork;
+    aocl_int64_t lrwork_64 = *lrwork;
+    aocl_int64_t liwork_64 = *liwork;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_chpevd(jobz, uplo, &n_64, ap, w, z__, &ldz_64, work, &lwork_64, rwork, &lrwork_64,
+                       iwork, &liwork_64, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_chpevd(char *jobz, char *uplo, aocl_int64_t *n, scomplex *ap, real *w, scomplex *z__,
+                        aocl_int64_t *ldz, scomplex *work, aocl_int64_t *lwork, real *rwork,
+                        aocl_int64_t *lrwork, aocl_int_t *iwork, aocl_int64_t *liwork,
+                        aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -217,54 +241,29 @@ void chpevd_(char *jobz, char *uplo, integer *n, complex *ap, real *w, complex *
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
-    integer z_dim1, z_offset, i__1;
+    aocl_int64_t z_dim1, z_offset, i__1;
     real r__1;
     /* Builtin functions */
     double sqrt(doublereal);
     /* Local variables */
     real eps;
-    integer inde;
+    aocl_int64_t inde;
     real anrm;
-    integer imax;
+    aocl_int64_t imax;
     real rmin, rmax, sigma;
-    extern logical lsame_(char *, char *, integer, integer);
-    integer iinfo;
-    extern /* Subroutine */
-        void
-        sscal_(integer *, real *, real *, integer *);
-    integer lwmin, llrwk, llwrk;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    aocl_int64_t iinfo;
+    aocl_int64_t lwmin, llrwk, llwrk;
     logical wantz;
-    integer iscale;
-    extern real clanhp_(char *, char *, integer *, complex *, real *);
-    extern /* Subroutine */
-        void
-        cstedc_(char *, integer *, real *, real *, complex *, integer *, complex *, integer *,
-                real *, integer *, integer *, integer *, integer *);
+    aocl_int64_t iscale;
     extern real slamch_(char *);
-    extern /* Subroutine */
-        void
-        csscal_(integer *, real *, complex *, integer *);
     real safmin;
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real bignum;
-    integer indtau;
-    extern /* Subroutine */
-        void
-        chptrd_(char *, integer *, complex *, real *, real *, complex *, integer *);
-    integer indrwk, indwrk, liwmin;
-    extern /* Subroutine */
-        void
-        ssterf_(integer *, real *, real *, integer *);
-    integer lrwmin;
-    extern /* Subroutine */
-        void
-        cupmtr_(char *, char *, char *, integer *, integer *, complex *, complex *, complex *,
-                integer *, complex *, integer *);
+    aocl_int64_t indtau;
+    aocl_int64_t indrwk, indwrk, liwmin;
+    aocl_int64_t lrwmin;
     real smlnum;
     logical lquery;
-    extern real sroundup_lwork(integer *);
     /* -- LAPACK driver routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -339,11 +338,11 @@ void chpevd_(char *jobz, char *uplo, integer *n, complex *ap, real *w, complex *
                 liwmin = 1;
             }
         }
-        r__1 = sroundup_lwork(&lwmin);
+        r__1 = aocl_lapack_sroundup_lwork(&lwmin);
         work[1].r = r__1;
         work[1].i = 0.f; // , expr subst
         rwork[1] = (real)lrwmin;
-        iwork[1] = liwmin;
+        iwork[1] = (aocl_int_t)(liwmin);
         if(*lwork < lwmin && !lquery)
         {
             *info = -9;
@@ -360,7 +359,7 @@ void chpevd_(char *jobz, char *uplo, integer *n, complex *ap, real *w, complex *
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("CHPEVD", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("CHPEVD", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
@@ -395,7 +394,7 @@ void chpevd_(char *jobz, char *uplo, integer *n, complex *ap, real *w, complex *
     rmin = sqrt(smlnum);
     rmax = sqrt(bignum);
     /* Scale matrix to allowable range, if necessary. */
-    anrm = clanhp_("M", uplo, n, &ap[1], &rwork[1]);
+    anrm = aocl_lapack_clanhp("M", uplo, n, &ap[1], &rwork[1]);
     iscale = 0;
     if(anrm > 0.f && anrm < rmin)
     {
@@ -410,7 +409,7 @@ void chpevd_(char *jobz, char *uplo, integer *n, complex *ap, real *w, complex *
     if(iscale == 1)
     {
         i__1 = *n * (*n + 1) / 2;
-        csscal_(&i__1, &sigma, &ap[1], &c__1);
+        aocl_blas_csscal(&i__1, &sigma, &ap[1], &c__1);
     }
     /* Call CHPTRD to reduce Hermitian packed matrix to tridiagonal form. */
     inde = 1;
@@ -419,19 +418,19 @@ void chpevd_(char *jobz, char *uplo, integer *n, complex *ap, real *w, complex *
     indwrk = indtau + *n;
     llwrk = *lwork - indwrk + 1;
     llrwk = *lrwork - indrwk + 1;
-    chptrd_(uplo, n, &ap[1], &w[1], &rwork[inde], &work[indtau], &iinfo);
+    aocl_lapack_chptrd(uplo, n, &ap[1], &w[1], &rwork[inde], &work[indtau], &iinfo);
     /* For eigenvalues only, call SSTERF. For eigenvectors, first call */
     /* CUPGTR to generate the orthogonal matrix, then call CSTEDC. */
     if(!wantz)
     {
-        ssterf_(n, &w[1], &rwork[inde], info);
+        aocl_lapack_ssterf(n, &w[1], &rwork[inde], info);
     }
     else
     {
-        cstedc_("I", n, &w[1], &rwork[inde], &z__[z_offset], ldz, &work[indwrk], &llwrk,
-                &rwork[indrwk], &llrwk, &iwork[1], liwork, info);
-        cupmtr_("L", uplo, "N", n, n, &ap[1], &work[indtau], &z__[z_offset], ldz, &work[indwrk],
-                &iinfo);
+        aocl_lapack_cstedc("I", n, &w[1], &rwork[inde], &z__[z_offset], ldz, &work[indwrk], &llwrk,
+                           &rwork[indrwk], &llrwk, &iwork[1], liwork, info);
+        aocl_lapack_cupmtr("L", uplo, "N", n, n, &ap[1], &work[indtau], &z__[z_offset], ldz,
+                           &work[indwrk], &iinfo);
     }
     /* If matrix was scaled, then rescale eigenvalues appropriately. */
     if(iscale == 1)
@@ -445,13 +444,13 @@ void chpevd_(char *jobz, char *uplo, integer *n, complex *ap, real *w, complex *
             imax = *info - 1;
         }
         r__1 = 1.f / sigma;
-        sscal_(&imax, &r__1, &w[1], &c__1);
+        aocl_blas_sscal(&imax, &r__1, &w[1], &c__1);
     }
-    r__1 = sroundup_lwork(&lwmin);
+    r__1 = aocl_lapack_sroundup_lwork(&lwmin);
     work[1].r = r__1;
     work[1].i = 0.f; // , expr subst
     rwork[1] = (real)lrwmin;
-    iwork[1] = liwmin;
+    iwork[1] = (aocl_int_t)(liwmin);
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
     return;
     /* End of CHPEVD */

@@ -18,8 +18,8 @@
 /*
 typedef real          lapack_stype;
 typedef doublereal    lapack_dtype;
-typedef complex       lapack_ctype;
-typedef doublecomplex lapack_ztype;
+typedef scomplex       lapack_ctype;
+typedef dcomplex lapack_ztype;
 
 typedef real          lapack_sreal;
 typedef doublereal    lapack_dreal;

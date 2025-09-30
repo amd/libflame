@@ -1599,7 +1599,7 @@ namespace libflame
     *     *  */
     template <typename T>
     void bdsdc(char *uplo, char *compq, integer *n, T *d, T *e, T *u, integer *ldu, T *vt,
-               integer *ldvt, T *q, T *iq, T *work, integer *iwork, integer *info)
+               integer *ldvt, T *q, integer *iq, T *work, integer *iwork, integer *info)
     {
         bdsdc(uplo, compq, n, d, e, u, ldu, vt, ldvt, q, iq, work, iwork, info);
     }

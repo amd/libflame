@@ -4,7 +4,7 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
+static aocl_int64_t c__1 = 1;
 /* > \brief \b SGTCON */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -145,27 +145,36 @@ IPIV(i) = i indicates a row interchange was not */
 /* > \ingroup realGTcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void sgtcon_(char *norm, integer *n, real *dl, real *d__, real *du, real *du2, integer *ipiv,
-             real *anorm, real *rcond, real *work, integer *iwork, integer *info)
+/** Generated wrapper function */
+void sgtcon_(char *norm, aocl_int_t *n, real *dl, real *d__, real *du, real *du2, aocl_int_t *ipiv,
+             real *anorm, real *rcond, real *work, aocl_int_t *iwork, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_sgtcon(norm, n, dl, d__, du, du2, ipiv, anorm, rcond, work, iwork, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_sgtcon(norm, &n_64, dl, d__, du, du2, ipiv, anorm, rcond, work, iwork, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_sgtcon(char *norm, aocl_int64_t *n, real *dl, real *d__, real *du, real *du2,
+                        aocl_int_t *ipiv, real *anorm, real *rcond, real *work, aocl_int_t *iwork,
+                        aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("sgtcon inputs: norm %c, n %" FLA_IS "", *norm, *n);
     /* System generated locals */
-    integer i__1;
+    aocl_int64_t i__1;
     /* Local variables */
-    integer i__, kase, kase1;
-    extern logical lsame_(char *, char *, integer, integer);
+    aocl_int64_t i__, kase, kase1;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     integer isave[3];
-    extern /* Subroutine */
-        void
-        slacn2_(integer *, real *, real *, integer *, real *, integer *, integer *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real ainvnm;
     logical onenrm;
-    extern /* Subroutine */
-        void
-        sgttrs_(char *, integer *, integer *, real *, real *, real *, real *, integer *, real *,
-                integer *, integer *);
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -213,7 +222,7 @@ void sgtcon_(char *norm, integer *n, real *dl, real *d__, real *du, real *du2, i
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("SGTCON", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("SGTCON", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -252,20 +261,20 @@ void sgtcon_(char *norm, integer *n, real *dl, real *d__, real *du, real *du2, i
     }
     kase = 0;
 L20:
-    slacn2_(n, &work[*n + 1], &work[1], &iwork[1], &ainvnm, &kase, isave);
+    aocl_lapack_slacn2(n, &work[*n + 1], &work[1], &iwork[1], &ainvnm, &kase, isave);
     if(kase != 0)
     {
         if(kase == kase1)
         {
             /* Multiply by inv(U)*inv(L). */
-            sgttrs_("No transpose", n, &c__1, &dl[1], &d__[1], &du[1], &du2[1], &ipiv[1], &work[1],
-                    n, info);
+            aocl_lapack_sgttrs("No transpose", n, &c__1, &dl[1], &d__[1], &du[1], &du2[1], &ipiv[1],
+                               &work[1], n, info);
         }
         else
         {
             /* Multiply by inv(L**T)*inv(U**T). */
-            sgttrs_("Transpose", n, &c__1, &dl[1], &d__[1], &du[1], &du2[1], &ipiv[1], &work[1], n,
-                    info);
+            aocl_lapack_sgttrs("Transpose", n, &c__1, &dl[1], &d__[1], &du[1], &du2[1], &ipiv[1],
+                               &work[1], n, info);
         }
         goto L20;
     }

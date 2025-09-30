@@ -6,8 +6,8 @@
 #include "FLA_f2c.h" /* Table of constant values */
 static real c_b11 = 0.f;
 static real c_b12 = 1.f;
-static integer c__12 = 12;
-static integer c__49 = 49;
+static aocl_int64_t c__12 = 12;
+static aocl_int64_t c__49 = 49;
 /* > \brief \b SHSEQR */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -108,7 +108,7 @@ static integer c__49 = 49;
 /* > upper quasi-triangular matrix T from the Schur decomposition */
 /* > (the Schur form);
 2-by-2 diagonal blocks (corresponding to */
-/* > complex conjugate pairs of eigenvalues) are returned in */
+/* > scomplex conjugate pairs of eigenvalues) are returned in */
 /* > standard form, with H(i,i) = H(i+1,i+1) and */
 /* > H(i+1,i)*H(i,i+1) < 0. If INFO = 0 and JOB = 'E', the */
 /* > contents of H are unspecified on exit. (The output value of */
@@ -136,7 +136,7 @@ static integer c__49 = 49;
 /* > WI is REAL array, dimension (N) */
 /* > */
 /* > The real and imaginary parts, respectively, of the computed */
-/* > eigenvalues. If two eigenvalues are computed as a complex */
+/* > eigenvalues. If two eigenvalues are computed as a scomplex */
 /* > conjugate pair, they are stored in consecutive elements of */
 /* > WR and WI, say the i-th and (i+1)th, with WI(i) > 0 and */
 /* > WI(i+1) < 0. If JOB = 'S', the eigenvalues are stored in */
@@ -315,44 +315,55 @@ static integer c__49 = 49;
 /* > of Matrix Analysis, volume 23, pages 948--973, 2002. */
 /* ===================================================================== */
 /* Subroutine */
-void shseqr_(char *job, char *compz, integer *n, integer *ilo, integer *ihi, real *h__,
-             integer *ldh, real *wr, real *wi, real *z__, integer *ldz, real *work, integer *lwork,
-             integer *info)
+/** Generated wrapper function */
+void shseqr_(char *job, char *compz, aocl_int_t *n, aocl_int_t *ilo, aocl_int_t *ihi, real *h__,
+             aocl_int_t *ldh, real *wr, real *wi, real *z__, aocl_int_t *ldz, real *work,
+             aocl_int_t *lwork, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_shseqr(job, compz, n, ilo, ihi, h__, ldh, wr, wi, z__, ldz, work, lwork, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t ilo_64 = *ilo;
+    aocl_int64_t ihi_64 = *ihi;
+    aocl_int64_t ldh_64 = *ldh;
+    aocl_int64_t ldz_64 = *ldz;
+    aocl_int64_t lwork_64 = *lwork;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_shseqr(job, compz, &n_64, &ilo_64, &ihi_64, h__, &ldh_64, wr, wi, z__, &ldz_64,
+                       work, &lwork_64, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_shseqr(char *job, char *compz, aocl_int64_t *n, aocl_int64_t *ilo,
+                        aocl_int64_t *ihi, real *h__, aocl_int64_t *ldh, real *wr, real *wi,
+                        real *z__, aocl_int64_t *ldz, real *work, aocl_int64_t *lwork,
+                        aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("shseqr inputs: job %c, compz %c, n %" FLA_IS ", ilo %" FLA_IS
                       ", ihi %" FLA_IS ", ldh %" FLA_IS ", ldz %" FLA_IS "",
                       *job, *compz, *n, *ilo, *ihi, *ldh, *ldz);
     /* System generated locals */
-    integer h_dim1, h_offset, z_dim1, z_offset, i__1, i__3;
+    aocl_int64_t h_dim1, h_offset, z_dim1, z_offset, i__1, i__3;
     real r__1;
     char ch__1[2];
     /* Builtin functions */
     /* Subroutine */
 
     /* Local variables */
-    integer i__;
+    aocl_int64_t i__;
     real hl[2401] /* was [49][49] */
         ;
-    integer kbot, nmin;
-    extern logical lsame_(char *, char *, integer, integer);
+    aocl_int64_t kbot, nmin;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     logical initz;
     real workl[49];
     logical wantt, wantz;
-    extern /* Subroutine */
-        void
-        slaqr0_(logical *, logical *, integer *, integer *, integer *, real *, integer *, real *,
-                real *, integer *, integer *, real *, integer *, real *, integer *, integer *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
-    extern /* Subroutine */
-        void
-        slahqr_(logical *, logical *, integer *, integer *, integer *, real *, integer *, real *,
-                real *, integer *, integer *, real *, integer *, integer *),
-        slacpy_(char *, integer *, integer *, real *, integer *, real *, integer *),
-        slaset_(char *, integer *, integer *, real *, real *, real *, integer *);
     logical lquery;
-    extern real sroundup_lwork(integer *);
     /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -399,7 +410,7 @@ void shseqr_(char *job, char *compz, integer *n, integer *ilo, integer *ihi, rea
     initz = lsame_(compz, "I", 1, 1);
     wantz = initz || lsame_(compz, "V", 1, 1);
     i__1 = fla_max(1, *n);
-    work[1] = sroundup_lwork(&i__1);
+    work[1] = aocl_lapack_sroundup_lwork(&i__1);
     lquery = *lwork == -1;
     *info = 0;
     if(!lsame_(job, "E", 1, 1) && !wantt)
@@ -438,7 +449,7 @@ void shseqr_(char *job, char *compz, integer *n, integer *ilo, integer *ihi, rea
     {
         /* ==== Quick return in case of invalid argument. ==== */
         i__1 = -(*info);
-        xerbla_("SHSEQR", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("SHSEQR", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -452,8 +463,8 @@ void shseqr_(char *job, char *compz, integer *n, integer *ilo, integer *ihi, rea
     else if(lquery)
     {
         /* ==== Quick return in case of a workspace query ==== */
-        slaqr0_(&wantt, &wantz, n, ilo, ihi, &h__[h_offset], ldh, &wr[1], &wi[1], ilo, ihi,
-                &z__[z_offset], ldz, &work[1], lwork, info);
+        aocl_lapack_slaqr0(&wantt, &wantz, n, ilo, ihi, &h__[h_offset], ldh, &wr[1], &wi[1], ilo,
+                           ihi, &z__[z_offset], ldz, &work[1], lwork, info);
         /* ==== Ensure reported workspace size is backward-compatible with */
         /* . previous LAPACK versions. ==== */
         /* Computing MAX */
@@ -482,7 +493,7 @@ void shseqr_(char *job, char *compz, integer *n, integer *ilo, integer *ihi, rea
         /* ==== Initialize Z, if requested ==== */
         if(initz)
         {
-            slaset_("A", n, n, &c_b11, &c_b12, &z__[z_offset], ldz);
+            aocl_lapack_slaset("A", n, n, &c_b11, &c_b12, &z__[z_offset], ldz);
         }
         /* ==== Quick return if possible ==== */
         if(*ilo == *ihi)
@@ -493,20 +504,20 @@ void shseqr_(char *job, char *compz, integer *n, integer *ilo, integer *ihi, rea
             return;
         }
         /* ==== SLAHQR/SLAQR0 crossover point ==== */
-        nmin = ilaenv_(&c__12, "SHSEQR", ch__1, n, ilo, ihi, lwork);
+        nmin = aocl_lapack_ilaenv(&c__12, "SHSEQR", ch__1, n, ilo, ihi, lwork);
         nmin = fla_max(15, nmin);
         /* ==== SLAQR0 for big matrices;
         SLAHQR for small ones ==== */
         if(*n > nmin)
         {
-            slaqr0_(&wantt, &wantz, n, ilo, ihi, &h__[h_offset], ldh, &wr[1], &wi[1], ilo, ihi,
-                    &z__[z_offset], ldz, &work[1], lwork, info);
+            aocl_lapack_slaqr0(&wantt, &wantz, n, ilo, ihi, &h__[h_offset], ldh, &wr[1], &wi[1],
+                               ilo, ihi, &z__[z_offset], ldz, &work[1], lwork, info);
         }
         else
         {
             /* ==== Small matrix ==== */
-            slahqr_(&wantt, &wantz, n, ilo, ihi, &h__[h_offset], ldh, &wr[1], &wi[1], ilo, ihi,
-                    &z__[z_offset], ldz, info);
+            aocl_lapack_slahqr(&wantt, &wantz, n, ilo, ihi, &h__[h_offset], ldh, &wr[1], &wi[1],
+                               ilo, ihi, &z__[z_offset], ldz, info);
             if(*info > 0)
             {
                 /* ==== A rare SLAHQR failure! SLAQR0 sometimes succeeds */
@@ -516,8 +527,9 @@ void shseqr_(char *job, char *compz, integer *n, integer *ilo, integer *ihi, rea
                 {
                     /* ==== Larger matrices have enough subdiagonal scratch */
                     /* . space to call SLAQR0 directly. ==== */
-                    slaqr0_(&wantt, &wantz, n, ilo, &kbot, &h__[h_offset], ldh, &wr[1], &wi[1], ilo,
-                            ihi, &z__[z_offset], ldz, &work[1], lwork, info);
+                    aocl_lapack_slaqr0(&wantt, &wantz, n, ilo, &kbot, &h__[h_offset], ldh, &wr[1],
+                                       &wi[1], ilo, ihi, &z__[z_offset], ldz, &work[1], lwork,
+                                       info);
                 }
                 else
                 {
@@ -525,15 +537,16 @@ void shseqr_(char *job, char *compz, integer *n, integer *ilo, integer *ihi, rea
                     /* . scratch space to benefit from SLAQR0. Hence, */
                     /* . tiny matrices must be copied into a larger */
                     /* . array before calling SLAQR0. ==== */
-                    slacpy_("A", n, n, &h__[h_offset], ldh, hl, &c__49);
+                    aocl_lapack_slacpy("A", n, n, &h__[h_offset], ldh, hl, &c__49);
                     hl[*n + 1 + *n * 49 - 50] = 0.f;
                     i__1 = 49 - *n;
-                    slaset_("A", &c__49, &i__1, &c_b11, &c_b11, &hl[(*n + 1) * 49 - 49], &c__49);
-                    slaqr0_(&wantt, &wantz, &c__49, ilo, &kbot, hl, &c__49, &wr[1], &wi[1], ilo,
-                            ihi, &z__[z_offset], ldz, workl, &c__49, info);
+                    aocl_lapack_slaset("A", &c__49, &i__1, &c_b11, &c_b11, &hl[(*n + 1) * 49 - 49],
+                                       &c__49);
+                    aocl_lapack_slaqr0(&wantt, &wantz, &c__49, ilo, &kbot, hl, &c__49, &wr[1],
+                                       &wi[1], ilo, ihi, &z__[z_offset], ldz, workl, &c__49, info);
                     if(wantt || *info != 0)
                     {
-                        slacpy_("A", n, n, hl, &c__49, &h__[h_offset], ldh);
+                        aocl_lapack_slacpy("A", n, n, hl, &c__49, &h__[h_offset], ldh);
                     }
                 }
             }
@@ -543,7 +556,7 @@ void shseqr_(char *job, char *compz, integer *n, integer *ilo, integer *ihi, rea
         {
             i__1 = *n - 2;
             i__3 = *n - 2;
-            slaset_("L", &i__1, &i__3, &c_b11, &c_b11, &h__[h_dim1 + 3], ldh);
+            aocl_lapack_slaset("L", &i__1, &i__3, &c_b11, &c_b11, &h__[h_dim1 + 3], ldh);
         }
         /* ==== Ensure reported workspace size is backward-compatible with */
         /* . previous LAPACK versions. ==== */

@@ -1,13 +1,13 @@
 /* zswap.f -- translated by f2c (version 19991025). You must link the resulting object file with the libraries: -lf2c -lm (in that order) */
 #include "FLA_f2c.h"
 /* Subroutine */
-int zswap_(integer *n, doublecomplex *zx, integer *incx, doublecomplex *zy, integer *incy)
+int zswap_(integer *n, dcomplex *zx, integer *incx, dcomplex *zy, integer *incy)
 {
     /* System generated locals */
     integer i__1, i__2, i__3;
     /* Local variables */
     integer i__;
-    doublecomplex ztemp;
+    dcomplex ztemp;
     integer ix, iy;
     /* interchanges two vectors. */
     /* jack dongarra, 3/11/78. */

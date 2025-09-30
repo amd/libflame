@@ -4,8 +4,8 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
-static integer c_n1 = -1;
+static aocl_int64_t c__1 = 1;
+static aocl_int64_t c_n1 = -1;
 /* > \brief \b CHESV_ROOK computes the solution to a system of linear equations A * X = B for HE
  * matrices usin g the bounded Bunch-Kaufman ("rook") diagonal pivoting method */
 /* =========== DOCUMENTATION =========== */
@@ -43,7 +43,7 @@ static integer c_n1 = -1;
 /* > */
 /* > \verbatim */
 /* > */
-/* > CHESV_ROOK computes the solution to a complex system of linear equations */
+/* > CHESV_ROOK computes the solution to a scomplex system of linear equations */
 /* > A * X = B, */
 /* > where A is an N-by-N Hermitian matrix and X and B are N-by-NRHS */
 /* > matrices. */
@@ -56,7 +56,7 @@ static integer c_n1 = -1;
 /* > triangular matrices, and D is Hermitian and block diagonal with */
 /* > 1-by-1 and 2-by-2 diagonal blocks. */
 /* > */
-/* > CHETRF_ROOK is called to compute the factorization of a complex */
+/* > CHETRF_ROOK is called to compute the factorization of a scomplex */
 /* > Hermition matrix A using the bounded Bunch-Kaufman ("rook") diagonal */
 /* > pivoting method. */
 /* > */
@@ -203,8 +203,31 @@ the routine */
 /* > \endverbatim */
 /* ===================================================================== */
 /* Subroutine */
-void chesv_rook_(char *uplo, integer *n, integer *nrhs, complex *a, integer *lda, integer *ipiv,
-                 complex *b, integer *ldb, complex *work, integer *lwork, integer *info)
+/** Generated wrapper function */
+void chesv_rook_(char *uplo, aocl_int_t *n, aocl_int_t *nrhs, scomplex *a, aocl_int_t *lda,
+                 aocl_int_t *ipiv, scomplex *b, aocl_int_t *ldb, scomplex *work, aocl_int_t *lwork,
+                 aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_chesv_rook(uplo, n, nrhs, a, lda, ipiv, b, ldb, work, lwork, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t nrhs_64 = *nrhs;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t ldb_64 = *ldb;
+    aocl_int64_t lwork_64 = *lwork;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_chesv_rook(uplo, &n_64, &nrhs_64, a, &lda_64, ipiv, b, &ldb_64, work, &lwork_64,
+                           &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_chesv_rook(char *uplo, aocl_int64_t *n, aocl_int64_t *nrhs, scomplex *a,
+                            aocl_int64_t *lda, aocl_int_t *ipiv, scomplex *b, aocl_int64_t *ldb,
+                            scomplex *work, aocl_int64_t *lwork, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -220,24 +243,13 @@ void chesv_rook_(char *uplo, integer *n, integer *nrhs, complex *a, integer *lda
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
-    integer a_dim1, a_offset, b_dim1, b_offset, i__1;
+    aocl_int64_t a_dim1, a_offset, b_dim1, b_offset, i__1;
     real r__1;
     /* Local variables */
-    integer nb;
-    extern /* Subroutine */
-        void
-        chetrf_rook_(char *, integer *, complex *, integer *, integer *, complex *, integer *,
-                     integer *),
-        chetrs_rook_(char *, integer *, integer *, complex *, integer *, integer *, complex *,
-                     integer *, integer *);
-    extern logical lsame_(char *, char *, integer, integer);
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
-    integer lwkopt;
+    aocl_int64_t nb;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    aocl_int64_t lwkopt;
     logical lquery;
-    extern real sroundup_lwork(integer *);
     /* -- LAPACK driver routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -300,17 +312,17 @@ void chesv_rook_(char *uplo, integer *n, integer *nrhs, complex *a, integer *lda
         }
         else
         {
-            nb = ilaenv_(&c__1, "CHETRF_ROOK", uplo, n, &c_n1, &c_n1, &c_n1);
+            nb = aocl_lapack_ilaenv(&c__1, "CHETRF_ROOK", uplo, n, &c_n1, &c_n1, &c_n1);
             lwkopt = *n * nb;
         }
-        r__1 = sroundup_lwork(&lwkopt);
+        r__1 = aocl_lapack_sroundup_lwork(&lwkopt);
         work[1].r = r__1;
         work[1].i = 0.f; // , expr subst
     }
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("CHESV_ROOK", &i__1, (ftnlen)10);
+        aocl_blas_xerbla("CHESV_ROOK", &i__1, (ftnlen)10);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
@@ -320,14 +332,15 @@ void chesv_rook_(char *uplo, integer *n, integer *nrhs, complex *a, integer *lda
         return;
     }
     /* Compute the factorization A = U*D*U**H or A = L*D*L**H. */
-    chetrf_rook_(uplo, n, &a[a_offset], lda, &ipiv[1], &work[1], lwork, info);
+    aocl_lapack_chetrf_rook(uplo, n, &a[a_offset], lda, &ipiv[1], &work[1], lwork, info);
     if(*info == 0)
     {
         /* Solve the system A*X = B, overwriting B with X. */
         /* Solve with TRS ( Use Level BLAS 2) */
-        chetrs_rook_(uplo, n, nrhs, &a[a_offset], lda, &ipiv[1], &b[b_offset], ldb, info);
+        aocl_lapack_chetrs_rook(uplo, n, nrhs, &a[a_offset], lda, &ipiv[1], &b[b_offset], ldb,
+                                info);
     }
-    r__1 = sroundup_lwork(&lwkopt);
+    r__1 = aocl_lapack_sroundup_lwork(&lwkopt);
     work[1].r = r__1;
     work[1].i = 0.f; // , expr subst
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);

@@ -4,9 +4,9 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static doublecomplex c_b1 = {0., 0.};
-static doublecomplex c_b2 = {1., 0.};
-static integer c__1 = 1;
+static dcomplex c_b1 = {{0.}, {0.}};
+static dcomplex c_b2 = {{1.}, {0.}};
+static aocl_int64_t c__1 = 1;
 /* > \brief \b ZLAHRD reduces the first nb columns of a general rectangular matrix A so that
  * elements below th e k-th subdiagonal are zero, and returns auxiliary matrices which are needed to
  * apply the transformati on to the unreduced part of A. */
@@ -43,7 +43,7 @@ static integer c__1 = 1;
 /* > */
 /* > \verbatim */
 /* > */
-/* > ZLAHRD reduces the first NB columns of a complex general n-by-(n-k+1) */
+/* > ZLAHRD reduces the first NB columns of a scomplex general n-by-(n-k+1) */
 /* > matrix A so that elements below the k-th subdiagonal are zero. The */
 /* > reduction is performed by a unitary similarity transformation */
 /* > Q**H * A * Q. The routine returns the matrices V and T which determine */
@@ -144,7 +144,7 @@ the elements below the k-th */
 /* > */
 /* > H(i) = I - tau * v * v**H */
 /* > */
-/* > where tau is a complex scalar, and v is a complex vector with */
+/* > where tau is a scomplex scalar, and v is a scomplex vector with */
 /* > v(1:i+k-1) = 0, v(i+k) = 1;
 v(i+k+1:n) is stored on exit in */
 /* > A(i+k+1:n,i), and tau in TAU(i). */
@@ -172,30 +172,37 @@ v(i+k+1:n) is stored on exit in */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void zlahrd_(integer *n, integer *k, integer *nb, doublecomplex *a, integer *lda,
-             doublecomplex *tau, doublecomplex *t, integer *ldt, doublecomplex *y, integer *ldy)
+/** Generated wrapper function */
+void zlahrd_(aocl_int_t *n, aocl_int_t *k, aocl_int_t *nb, dcomplex *a, aocl_int_t *lda, dcomplex *tau, dcomplex *t, aocl_int_t *ldt, dcomplex *y, aocl_int_t *ldy)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_zlahrd(n, k, nb, a, lda, tau, t, ldt, y, ldy);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t k_64 = *k;
+    aocl_int64_t nb_64 = *nb;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t ldt_64 = *ldt;
+    aocl_int64_t ldy_64 = *ldy;
+
+    aocl_lapack_zlahrd(&n_64, &k_64, &nb_64, a, &lda_64, tau, t, &ldt_64, y, &ldy_64);
+#endif
+}
+
+void aocl_lapack_zlahrd(aocl_int64_t *n, aocl_int64_t *k, aocl_int64_t *nb, dcomplex *a,
+             aocl_int64_t *lda, dcomplex *tau, dcomplex *t, aocl_int64_t *ldt,
+             dcomplex *y, aocl_int64_t *ldy)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zlahrd inputs: n %" FLA_IS ", k %" FLA_IS ", nb %" FLA_IS ", lda %" FLA_IS
                       ", ldt %" FLA_IS ", ldy %" FLA_IS "",
                       *n, *k, *nb, *lda, *ldt, *ldy);
     /* System generated locals */
-    integer a_dim1, a_offset, t_dim1, t_offset, y_dim1, y_offset, i__1, i__2, i__3;
-    doublecomplex z__1;
+    aocl_int64_t a_dim1, a_offset, t_dim1, t_offset, y_dim1, y_offset, i__1, i__2, i__3;
+    dcomplex z__1;
     /* Local variables */
-    integer i__;
-    doublecomplex ei;
-    extern /* Subroutine */
-        void
-        zscal_(integer *, doublecomplex *, doublecomplex *, integer *),
-        zgemv_(char *, integer *, integer *, doublecomplex *, doublecomplex *, integer *,
-               doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *),
-        zcopy_(integer *, doublecomplex *, integer *, doublecomplex *, integer *),
-        zaxpy_(integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *),
-        ztrmv_(char *, char *, char *, integer *, doublecomplex *, integer *, doublecomplex *,
-               integer *),
-        zlarfg_(integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *),
-        zlacgv_(integer *, doublecomplex *, integer *);
+    aocl_int64_t i__;
+    dcomplex ei;
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -240,14 +247,14 @@ void zlahrd_(integer *n, integer *k, integer *nb, doublecomplex *a, integer *lda
             /* Update A(1:n,i) */
             /* Compute i-th column of A - Y * V**H */
             i__2 = i__ - 1;
-            zlacgv_(&i__2, &a[*k + i__ - 1 + a_dim1], lda);
+            aocl_lapack_zlacgv(&i__2, &a[*k + i__ - 1 + a_dim1], lda);
             i__2 = i__ - 1;
             z__1.r = -1.;
             z__1.i = -0.; // , expr subst
-            zgemv_("No transpose", n, &i__2, &z__1, &y[y_offset], ldy, &a[*k + i__ - 1 + a_dim1],
-                   lda, &c_b2, &a[i__ * a_dim1 + 1], &c__1);
+            aocl_blas_zgemv("No transpose", n, &i__2, &z__1, &y[y_offset], ldy,
+                            &a[*k + i__ - 1 + a_dim1], lda, &c_b2, &a[i__ * a_dim1 + 1], &c__1);
             i__2 = i__ - 1;
-            zlacgv_(&i__2, &a[*k + i__ - 1 + a_dim1], lda);
+            aocl_lapack_zlacgv(&i__2, &a[*k + i__ - 1 + a_dim1], lda);
             /* Apply I - V * T**H * V**H to this column (call it b) from the */
             /* left, using the last column of T as workspace */
             /* Let V = ( V1 ) and b = ( b1 ) (first I-1 rows) */
@@ -255,34 +262,35 @@ void zlahrd_(integer *n, integer *k, integer *nb, doublecomplex *a, integer *lda
             /* where V1 is unit lower triangular */
             /* w := V1**H * b1 */
             i__2 = i__ - 1;
-            zcopy_(&i__2, &a[*k + 1 + i__ * a_dim1], &c__1, &t[*nb * t_dim1 + 1], &c__1);
+            aocl_blas_zcopy(&i__2, &a[*k + 1 + i__ * a_dim1], &c__1, &t[*nb * t_dim1 + 1], &c__1);
             i__2 = i__ - 1;
-            ztrmv_("Lower", "Conjugate transpose", "Unit", &i__2, &a[*k + 1 + a_dim1], lda,
-                   &t[*nb * t_dim1 + 1], &c__1);
+            aocl_blas_ztrmv("Lower", "Conjugate transpose", "Unit", &i__2, &a[*k + 1 + a_dim1], lda,
+                            &t[*nb * t_dim1 + 1], &c__1);
             /* w := w + V2**H *b2 */
             i__2 = *n - *k - i__ + 1;
             i__3 = i__ - 1;
-            zgemv_("Conjugate transpose", &i__2, &i__3, &c_b2, &a[*k + i__ + a_dim1], lda,
-                   &a[*k + i__ + i__ * a_dim1], &c__1, &c_b2, &t[*nb * t_dim1 + 1], &c__1);
+            aocl_blas_zgemv("Conjugate transpose", &i__2, &i__3, &c_b2, &a[*k + i__ + a_dim1], lda,
+                            &a[*k + i__ + i__ * a_dim1], &c__1, &c_b2, &t[*nb * t_dim1 + 1], &c__1);
             /* w := T**H *w */
             i__2 = i__ - 1;
-            ztrmv_("Upper", "Conjugate transpose", "Non-unit", &i__2, &t[t_offset], ldt,
-                   &t[*nb * t_dim1 + 1], &c__1);
+            aocl_blas_ztrmv("Upper", "Conjugate transpose", "Non-unit", &i__2, &t[t_offset], ldt,
+                            &t[*nb * t_dim1 + 1], &c__1);
             /* b2 := b2 - V2*w */
             i__2 = *n - *k - i__ + 1;
             i__3 = i__ - 1;
             z__1.r = -1.;
             z__1.i = -0.; // , expr subst
-            zgemv_("No transpose", &i__2, &i__3, &z__1, &a[*k + i__ + a_dim1], lda,
-                   &t[*nb * t_dim1 + 1], &c__1, &c_b2, &a[*k + i__ + i__ * a_dim1], &c__1);
+            aocl_blas_zgemv("No transpose", &i__2, &i__3, &z__1, &a[*k + i__ + a_dim1], lda,
+                            &t[*nb * t_dim1 + 1], &c__1, &c_b2, &a[*k + i__ + i__ * a_dim1], &c__1);
             /* b1 := b1 - V1*w */
             i__2 = i__ - 1;
-            ztrmv_("Lower", "No transpose", "Unit", &i__2, &a[*k + 1 + a_dim1], lda,
-                   &t[*nb * t_dim1 + 1], &c__1);
+            aocl_blas_ztrmv("Lower", "No transpose", "Unit", &i__2, &a[*k + 1 + a_dim1], lda,
+                            &t[*nb * t_dim1 + 1], &c__1);
             i__2 = i__ - 1;
             z__1.r = -1.;
             z__1.i = -0.; // , expr subst
-            zaxpy_(&i__2, &z__1, &t[*nb * t_dim1 + 1], &c__1, &a[*k + 1 + i__ * a_dim1], &c__1);
+            aocl_blas_zaxpy(&i__2, &z__1, &t[*nb * t_dim1 + 1], &c__1, &a[*k + 1 + i__ * a_dim1],
+                            &c__1);
             i__2 = *k + i__ - 1 + (i__ - 1) * a_dim1;
             a[i__2].r = ei.r;
             a[i__2].i = ei.i; // , expr subst
@@ -295,33 +303,33 @@ void zlahrd_(integer *n, integer *k, integer *nb, doublecomplex *a, integer *lda
         i__2 = *n - *k - i__ + 1;
         /* Computing MIN */
         i__3 = *k + i__ + 1;
-        zlarfg_(&i__2, &ei, &a[fla_min(i__3, *n) + i__ * a_dim1], &c__1, &tau[i__]);
+        aocl_lapack_zlarfg(&i__2, &ei, &a[fla_min(i__3, *n) + i__ * a_dim1], &c__1, &tau[i__]);
         i__2 = *k + i__ + i__ * a_dim1;
         a[i__2].r = 1.;
         a[i__2].i = 0.; // , expr subst
         /* Compute Y(1:n,i) */
         i__2 = *n - *k - i__ + 1;
-        zgemv_("No transpose", n, &i__2, &c_b2, &a[(i__ + 1) * a_dim1 + 1], lda,
-               &a[*k + i__ + i__ * a_dim1], &c__1, &c_b1, &y[i__ * y_dim1 + 1], &c__1);
+        aocl_blas_zgemv("No transpose", n, &i__2, &c_b2, &a[(i__ + 1) * a_dim1 + 1], lda,
+                        &a[*k + i__ + i__ * a_dim1], &c__1, &c_b1, &y[i__ * y_dim1 + 1], &c__1);
         i__2 = *n - *k - i__ + 1;
         i__3 = i__ - 1;
-        zgemv_("Conjugate transpose", &i__2, &i__3, &c_b2, &a[*k + i__ + a_dim1], lda,
-               &a[*k + i__ + i__ * a_dim1], &c__1, &c_b1, &t[i__ * t_dim1 + 1], &c__1);
+        aocl_blas_zgemv("Conjugate transpose", &i__2, &i__3, &c_b2, &a[*k + i__ + a_dim1], lda,
+                        &a[*k + i__ + i__ * a_dim1], &c__1, &c_b1, &t[i__ * t_dim1 + 1], &c__1);
         i__2 = i__ - 1;
         z__1.r = -1.;
         z__1.i = -0.; // , expr subst
-        zgemv_("No transpose", n, &i__2, &z__1, &y[y_offset], ldy, &t[i__ * t_dim1 + 1], &c__1,
-               &c_b2, &y[i__ * y_dim1 + 1], &c__1);
-        zscal_(n, &tau[i__], &y[i__ * y_dim1 + 1], &c__1);
+        aocl_blas_zgemv("No transpose", n, &i__2, &z__1, &y[y_offset], ldy, &t[i__ * t_dim1 + 1],
+                        &c__1, &c_b2, &y[i__ * y_dim1 + 1], &c__1);
+        aocl_blas_zscal(n, &tau[i__], &y[i__ * y_dim1 + 1], &c__1);
         /* Compute T(1:i,i) */
         i__2 = i__ - 1;
         i__3 = i__;
         z__1.r = -tau[i__3].r;
         z__1.i = -tau[i__3].i; // , expr subst
-        zscal_(&i__2, &z__1, &t[i__ * t_dim1 + 1], &c__1);
+        aocl_blas_zscal(&i__2, &z__1, &t[i__ * t_dim1 + 1], &c__1);
         i__2 = i__ - 1;
-        ztrmv_("Upper", "No transpose", "Non-unit", &i__2, &t[t_offset], ldt, &t[i__ * t_dim1 + 1],
-               &c__1);
+        aocl_blas_ztrmv("Upper", "No transpose", "Non-unit", &i__2, &t[t_offset], ldt,
+                        &t[i__ * t_dim1 + 1], &c__1);
         i__2 = i__ + i__ * t_dim1;
         i__3 = i__;
         t[i__2].r = tau[i__3].r;

@@ -4,8 +4,8 @@
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
  /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static complex c_b2 = {1.f, 0.f};
-static integer c__1 = 1;
+static scomplex c_b2 = {{1.f}, {0.f}};
+static aocl_int64_t c__1 = 1;
 /* > \brief \b CTREVC */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -45,9 +45,9 @@ static integer c__1 = 1;
 /* > \verbatim */
 /* > */
 /* > CTREVC computes some or all of the right and/or left eigenvectors of */
-/* > a complex upper triangular matrix T. */
+/* > a scomplex upper triangular matrix T. */
 /* > Matrices of this type are produced by the Schur factorization of */
-/* > a complex general matrix: A = Q*T*Q**H, as computed by CHSEQR. */
+/* > a scomplex general matrix: A = Q*T*Q**H, as computed by CHSEQR. */
 /* > */
 /* > The right eigenvector x and the left eigenvector y of T corresponding */
 /* > to an eigenvalue w are defined by: */
@@ -218,15 +218,41 @@ LDVR >= N. */
 /* > */
 /* > Each eigenvector is normalized so that the element of largest */
 /* > magnitude has magnitude 1;
-here the magnitude of a complex number */
+here the magnitude of a scomplex number */
 /* > (x,y) is taken to be |x| + |y|. */
 /* > \endverbatim */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void ctrevc_(char *side, char *howmny, logical *select, integer *n, complex *t, integer *ldt,
-             complex *vl, integer *ldvl, complex *vr, integer *ldvr, integer *mm, integer *m,
-             complex *work, real *rwork, integer *info)
+/** Generated wrapper function */
+void ctrevc_(char *side, char *howmny, logical *select, aocl_int_t *n, scomplex *t, aocl_int_t *ldt,
+             scomplex *vl, aocl_int_t *ldvl, scomplex *vr, aocl_int_t *ldvr, aocl_int_t *mm,
+             aocl_int_t *m, scomplex *work, real *rwork, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_ctrevc(side, howmny, select, n, t, ldt, vl, ldvl, vr, ldvr, mm, m, work, rwork,
+                       info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t ldt_64 = *ldt;
+    aocl_int64_t ldvl_64 = *ldvl;
+    aocl_int64_t ldvr_64 = *ldvr;
+    aocl_int64_t mm_64 = *mm;
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_ctrevc(side, howmny, select, &n_64, t, &ldt_64, vl, &ldvl_64, vr, &ldvr_64, &mm_64,
+                       &m_64, work, rwork, &info_64);
+
+    *m = (aocl_int_t)m_64;
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_ctrevc(char *side, char *howmny, logical *select, aocl_int64_t *n, scomplex *t,
+                        aocl_int64_t *ldt, scomplex *vl, aocl_int64_t *ldvl, scomplex *vr,
+                        aocl_int64_t *ldvr, aocl_int64_t *mm, aocl_int64_t *m, scomplex *work,
+                        real *rwork, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -243,38 +269,24 @@ void ctrevc_(char *side, char *howmny, logical *select, integer *n, complex *t, 
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
-    integer t_dim1, t_offset, vl_dim1, vl_offset, vr_dim1, vr_offset, i__1, i__2, i__3, i__4, i__5;
+    aocl_int64_t t_dim1, t_offset, vl_dim1, vl_offset, vr_dim1, vr_offset, i__1, i__2, i__3, i__4,
+        i__5;
     real r__1, r__2, r__3;
-    complex q__1, q__2;
+    scomplex q__1, q__2;
     /* Builtin functions */
-    double r_imag(complex *);
-    void r_cnjg(complex *, complex *);
+    double r_imag(scomplex *);
+    void r_cnjg(scomplex *, scomplex *);
     /* Local variables */
-    integer i__, j, k, ii, ki, is;
+    aocl_int64_t i__, j, k, ii, ki, is;
     real ulp;
     logical allv;
     real unfl, smin;
     logical over;
     real scale;
-    extern logical lsame_(char *, char *, integer, integer);
-    extern /* Subroutine */
-        void
-        cgemv_(char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *,
-               complex *, complex *, integer *);
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     real remax;
-    extern /* Subroutine */
-        void
-        ccopy_(integer *, complex *, integer *, complex *, integer *);
     logical leftv, bothv, somev;
-    extern integer icamax_(integer *, complex *, integer *);
     extern real slamch_(char *);
-    extern /* Subroutine */
-        void
-        csscal_(integer *, real *, complex *, integer *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
-        clatrs_(char *, char *, char *, char *, integer *, complex *, integer *, complex *, real *,
-                real *, integer *);
-    extern real scasum_(integer *, complex *, integer *);
     logical rightv;
     real smlnum;
     /* -- LAPACK computational routine -- */
@@ -372,7 +384,7 @@ void ctrevc_(char *side, char *howmny, logical *select, integer *n, complex *t, 
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("CTREVC", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("CTREVC", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
@@ -403,7 +415,7 @@ void ctrevc_(char *side, char *howmny, logical *select, integer *n, complex *t, 
     for(j = 2; j <= i__1; ++j)
     {
         i__2 = j - 1;
-        rwork[j] = scasum_(&i__2, &t[j * t_dim1 + 1], &c__1);
+        rwork[j] = aocl_blas_scasum(&i__2, &t[j * t_dim1 + 1], &c__1);
         /* L30: */
     }
     if(rightv)
@@ -465,8 +477,8 @@ void ctrevc_(char *side, char *howmny, logical *select, integer *n, complex *t, 
             if(ki > 1)
             {
                 i__1 = ki - 1;
-                clatrs_("Upper", "No transpose", "Non-unit", "Y", &i__1, &t[t_offset], ldt,
-                        &work[1], &scale, &rwork[1], info);
+                aocl_lapack_clatrs("Upper", "No transpose", "Non-unit", "Y", &i__1, &t[t_offset],
+                                   ldt, &work[1], &scale, &rwork[1], info);
                 i__1 = ki;
                 work[i__1].r = scale;
                 work[i__1].i = 0.f; // , expr subst
@@ -474,13 +486,13 @@ void ctrevc_(char *side, char *howmny, logical *select, integer *n, complex *t, 
             /* Copy the vector x or Q*x to VR and normalize. */
             if(!over)
             {
-                ccopy_(&ki, &work[1], &c__1, &vr[is * vr_dim1 + 1], &c__1);
-                ii = icamax_(&ki, &vr[is * vr_dim1 + 1], &c__1);
+                aocl_blas_ccopy(&ki, &work[1], &c__1, &vr[is * vr_dim1 + 1], &c__1);
+                ii = aocl_blas_icamax(&ki, &vr[is * vr_dim1 + 1], &c__1);
                 i__1 = ii + is * vr_dim1;
                 remax = 1.f
                         / ((r__1 = vr[i__1].r, f2c_abs(r__1))
                            + (r__2 = r_imag(&vr[ii + is * vr_dim1]), f2c_abs(r__2)));
-                csscal_(&ki, &remax, &vr[is * vr_dim1 + 1], &c__1);
+                aocl_blas_csscal(&ki, &remax, &vr[is * vr_dim1 + 1], &c__1);
                 i__1 = *n;
                 for(k = ki + 1; k <= i__1; ++k)
                 {
@@ -497,15 +509,15 @@ void ctrevc_(char *side, char *howmny, logical *select, integer *n, complex *t, 
                     i__1 = ki - 1;
                     q__1.r = scale;
                     q__1.i = 0.f; // , expr subst
-                    cgemv_("N", n, &i__1, &c_b2, &vr[vr_offset], ldvr, &work[1], &c__1, &q__1,
-                           &vr[ki * vr_dim1 + 1], &c__1);
+                    aocl_blas_cgemv("N", n, &i__1, &c_b2, &vr[vr_offset], ldvr, &work[1], &c__1,
+                                    &q__1, &vr[ki * vr_dim1 + 1], &c__1);
                 }
-                ii = icamax_(n, &vr[ki * vr_dim1 + 1], &c__1);
+                ii = aocl_blas_icamax(n, &vr[ki * vr_dim1 + 1], &c__1);
                 i__1 = ii + ki * vr_dim1;
                 remax = 1.f
                         / ((r__1 = vr[i__1].r, f2c_abs(r__1))
                            + (r__2 = r_imag(&vr[ii + ki * vr_dim1]), f2c_abs(r__2)));
-                csscal_(n, &remax, &vr[ki * vr_dim1 + 1], &c__1);
+                aocl_blas_csscal(n, &remax, &vr[ki * vr_dim1 + 1], &c__1);
             }
             /* Set back the original diagonal elements of T. */
             i__1 = ki - 1;
@@ -582,9 +594,9 @@ void ctrevc_(char *side, char *howmny, logical *select, integer *n, complex *t, 
             if(ki < *n)
             {
                 i__2 = *n - ki;
-                clatrs_("Upper", "Conjugate transpose", "Non-unit", "Y", &i__2,
-                        &t[ki + 1 + (ki + 1) * t_dim1], ldt, &work[ki + 1], &scale, &rwork[1],
-                        info);
+                aocl_lapack_clatrs("Upper", "Conjugate transpose", "Non-unit", "Y", &i__2,
+                                   &t[ki + 1 + (ki + 1) * t_dim1], ldt, &work[ki + 1], &scale,
+                                   &rwork[1], info);
                 i__2 = ki;
                 work[i__2].r = scale;
                 work[i__2].i = 0.f; // , expr subst
@@ -593,15 +605,15 @@ void ctrevc_(char *side, char *howmny, logical *select, integer *n, complex *t, 
             if(!over)
             {
                 i__2 = *n - ki + 1;
-                ccopy_(&i__2, &work[ki], &c__1, &vl[ki + is * vl_dim1], &c__1);
+                aocl_blas_ccopy(&i__2, &work[ki], &c__1, &vl[ki + is * vl_dim1], &c__1);
                 i__2 = *n - ki + 1;
-                ii = icamax_(&i__2, &vl[ki + is * vl_dim1], &c__1) + ki - 1;
+                ii = aocl_blas_icamax(&i__2, &vl[ki + is * vl_dim1], &c__1) + ki - 1;
                 i__2 = ii + is * vl_dim1;
                 remax = 1.f
                         / ((r__1 = vl[i__2].r, f2c_abs(r__1))
                            + (r__2 = r_imag(&vl[ii + is * vl_dim1]), f2c_abs(r__2)));
                 i__2 = *n - ki + 1;
-                csscal_(&i__2, &remax, &vl[ki + is * vl_dim1], &c__1);
+                aocl_blas_csscal(&i__2, &remax, &vl[ki + is * vl_dim1], &c__1);
                 i__2 = ki - 1;
                 for(k = 1; k <= i__2; ++k)
                 {
@@ -618,15 +630,15 @@ void ctrevc_(char *side, char *howmny, logical *select, integer *n, complex *t, 
                     i__2 = *n - ki;
                     q__1.r = scale;
                     q__1.i = 0.f; // , expr subst
-                    cgemv_("N", n, &i__2, &c_b2, &vl[(ki + 1) * vl_dim1 + 1], ldvl, &work[ki + 1],
-                           &c__1, &q__1, &vl[ki * vl_dim1 + 1], &c__1);
+                    aocl_blas_cgemv("N", n, &i__2, &c_b2, &vl[(ki + 1) * vl_dim1 + 1], ldvl,
+                                    &work[ki + 1], &c__1, &q__1, &vl[ki * vl_dim1 + 1], &c__1);
                 }
-                ii = icamax_(n, &vl[ki * vl_dim1 + 1], &c__1);
+                ii = aocl_blas_icamax(n, &vl[ki * vl_dim1 + 1], &c__1);
                 i__2 = ii + ki * vl_dim1;
                 remax = 1.f
                         / ((r__1 = vl[i__2].r, f2c_abs(r__1))
                            + (r__2 = r_imag(&vl[ii + ki * vl_dim1]), f2c_abs(r__2)));
-                csscal_(n, &remax, &vl[ki * vl_dim1 + 1], &c__1);
+                aocl_blas_csscal(n, &remax, &vl[ki * vl_dim1 + 1], &c__1);
             }
             /* Set back the original diagonal elements of T. */
             i__2 = *n;

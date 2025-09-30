@@ -4,10 +4,10 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static doublecomplex c_b2 = {1., 0.};
-static integer c__1 = 1;
-static integer c_n1 = -1;
-static integer c__2 = 2;
+static dcomplex c_b2 = {{1.}, {0.}};
+static aocl_int64_t c__1 = 1;
+static aocl_int64_t c_n1 = -1;
+static aocl_int64_t c__2 = 2;
 /* > \brief \b ZGETRI */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -117,34 +117,38 @@ the matrix is */
 /* > \ingroup complex16GEcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void zgetri_(integer *n, doublecomplex *a, integer *lda, integer *ipiv, doublecomplex *work,
-             integer *lwork, integer *info)
+/** Generated wrapper function */
+void zgetri_(aocl_int_t *n, dcomplex *a, aocl_int_t *lda, aocl_int_t *ipiv,
+             dcomplex *work, aocl_int_t *lwork, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_zgetri(n, a, lda, ipiv, work, lwork, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t lwork_64 = *lwork;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_zgetri(&n_64, a, &lda_64, ipiv, work, &lwork_64, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_zgetri(aocl_int64_t *n, dcomplex *a, aocl_int64_t *lda, aocl_int_t *ipiv,
+                        dcomplex *work, aocl_int64_t *lwork, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zgetri inputs: n %" FLA_IS ", lda %" FLA_IS ", lwork %" FLA_IS "", *n, *lda,
                       *lwork);
 
     /* System generated locals */
-    integer a_dim1, a_offset, i__1, i__2, i__3, i__4, i__5;
-    doublecomplex z__1;
+    aocl_int64_t a_dim1, a_offset, i__1, i__2, i__3, i__4, i__5;
+    dcomplex z__1;
     /* Local variables */
-    integer i__, j, jb, nb, jj, jp, nn, iws, nbmin;
-    extern /* Subroutine */
-        void
-        zgemm_(char *, char *, integer *, integer *, integer *, doublecomplex *, doublecomplex *,
-               integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *),
-        zgemv_(char *, integer *, integer *, doublecomplex *, doublecomplex *, integer *,
-               doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *),
-        zswap_(integer *, doublecomplex *, integer *, doublecomplex *, integer *),
-        ztrsm_(char *, char *, char *, char *, integer *, integer *, doublecomplex *,
-               doublecomplex *, integer *, doublecomplex *, integer *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
-    integer ldwork, lwkopt;
+    aocl_int64_t i__, j, jb, nb, jj, jp, nn, iws, nbmin;
+    aocl_int64_t ldwork, lwkopt;
     logical lquery;
-    extern /* Subroutine */
-        void
-        ztrtri_(char *, char *, integer *, doublecomplex *, integer *, integer *);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -174,7 +178,7 @@ void zgetri_(integer *n, doublecomplex *a, integer *lda, integer *ipiv, doubleco
     --work;
     /* Function Body */
     *info = 0;
-    nb = ilaenv_(&c__1, "ZGETRI", " ", n, &c_n1, &c_n1, &c_n1);
+    nb = aocl_lapack_ilaenv(&c__1, "ZGETRI", " ", n, &c_n1, &c_n1, &c_n1);
     lwkopt = *n * nb;
     work[1].r = (doublereal)lwkopt;
     work[1].i = 0.; // , expr subst
@@ -194,7 +198,7 @@ void zgetri_(integer *n, doublecomplex *a, integer *lda, integer *ipiv, doubleco
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("ZGETRI", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("ZGETRI", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -211,7 +215,7 @@ void zgetri_(integer *n, doublecomplex *a, integer *lda, integer *ipiv, doubleco
     }
     /* Form inv(U). If INFO > 0 from ZTRTRI, then U is singular, */
     /* and the inverse is not computed. */
-    ztrtri_("Upper", "Non-unit", n, &a[a_offset], lda, info);
+    aocl_lapack_ztrtri("Upper", "Non-unit", n, &a[a_offset], lda, info);
     if(*info > 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
@@ -229,7 +233,7 @@ void zgetri_(integer *n, doublecomplex *a, integer *lda, integer *ipiv, doubleco
             nb = *lwork / ldwork;
             /* Computing MAX */
             i__1 = 2;
-            i__2 = ilaenv_(&c__2, "ZGETRI", " ", n, &c_n1, &c_n1, &c_n1); // , expr subst
+            i__2 = aocl_lapack_ilaenv(&c__2, "ZGETRI", " ", n, &c_n1, &c_n1, &c_n1); // , expr subst
             nbmin = fla_max(i__1, i__2);
         }
     }
@@ -262,8 +266,8 @@ void zgetri_(integer *n, doublecomplex *a, integer *lda, integer *ipiv, doubleco
                 i__1 = *n - j;
                 z__1.r = -1.;
                 z__1.i = -0.; // , expr subst
-                zgemv_("No transpose", n, &i__1, &z__1, &a[(j + 1) * a_dim1 + 1], lda, &work[j + 1],
-                       &c__1, &c_b2, &a[j * a_dim1 + 1], &c__1);
+                aocl_blas_zgemv("No transpose", n, &i__1, &z__1, &a[(j + 1) * a_dim1 + 1], lda,
+                                &work[j + 1], &c__1, &c_b2, &a[j * a_dim1 + 1], &c__1);
             }
             /* L20: */
         }
@@ -304,12 +308,12 @@ void zgetri_(integer *n, doublecomplex *a, integer *lda, integer *ipiv, doubleco
                 i__2 = *n - j - jb + 1;
                 z__1.r = -1.;
                 z__1.i = -0.; // , expr subst
-                zgemm_("No transpose", "No transpose", n, &jb, &i__2, &z__1,
-                       &a[(j + jb) * a_dim1 + 1], lda, &work[j + jb], &ldwork, &c_b2,
-                       &a[j * a_dim1 + 1], lda);
+                aocl_blas_zgemm("No transpose", "No transpose", n, &jb, &i__2, &z__1,
+                                &a[(j + jb) * a_dim1 + 1], lda, &work[j + jb], &ldwork, &c_b2,
+                                &a[j * a_dim1 + 1], lda);
             }
-            ztrsm_("Right", "Lower", "No transpose", "Unit", n, &jb, &c_b2, &work[j], &ldwork,
-                   &a[j * a_dim1 + 1], lda);
+            aocl_blas_ztrsm("Right", "Lower", "No transpose", "Unit", n, &jb, &c_b2, &work[j],
+                            &ldwork, &a[j * a_dim1 + 1], lda);
             /* L50: */
         }
     }
@@ -319,7 +323,7 @@ void zgetri_(integer *n, doublecomplex *a, integer *lda, integer *ipiv, doubleco
         jp = ipiv[j];
         if(jp != j)
         {
-            zswap_(n, &a[j * a_dim1 + 1], &c__1, &a[jp * a_dim1 + 1], &c__1);
+            aocl_blas_zswap(n, &a[j * a_dim1 + 1], &c__1, &a[jp * a_dim1 + 1], &c__1);
         }
         /* L60: */
     }

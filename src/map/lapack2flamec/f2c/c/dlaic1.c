@@ -4,7 +4,7 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
+static aocl_int64_t c__1 = 1;
 static doublereal c_b5 = 1.;
 /* > \brief \b DLAIC1 applies one step of incremental condition estimation. */
 /* =========== DOCUMENTATION =========== */
@@ -132,8 +132,23 @@ static doublereal c_b5 = 1.;
 /* > \ingroup doubleOTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-void dlaic1_(integer *job, integer *j, doublereal *x, doublereal *sest, doublereal *w,
+/** Generated wrapper function */
+void dlaic1_(aocl_int_t *job, aocl_int_t *j, doublereal *x, doublereal *sest, doublereal *w,
              doublereal *gamma, doublereal *sestpr, doublereal *s, doublereal *c__)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_dlaic1(job, j, x, sest, w, gamma, sestpr, s, c__);
+#else
+    aocl_int64_t job_64 = *job;
+    aocl_int64_t j_64 = *j;
+
+    aocl_lapack_dlaic1(&job_64, &j_64, x, sest, w, gamma, sestpr, s, c__);
+#endif
+}
+
+void aocl_lapack_dlaic1(aocl_int64_t *job, aocl_int64_t *j, doublereal *x, doublereal *sest,
+                        doublereal *w, doublereal *gamma, doublereal *sestpr, doublereal *s,
+                        doublereal *c__)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dlaic1 inputs: job %" FLA_IS ", j %" FLA_IS "", *job, *j);
@@ -143,7 +158,6 @@ void dlaic1_(integer *job, integer *j, doublereal *x, doublereal *sest, doublere
     double sqrt(doublereal), d_sign(doublereal *, doublereal *);
     /* Local variables */
     doublereal b, t, s1, s2, eps, tmp;
-    extern doublereal ddot_(integer *, doublereal *, integer *, doublereal *, integer *);
     doublereal sine, test, zeta1, zeta2, alpha, norma;
     extern doublereal dlamch_(char *);
     doublereal absgam, absalp, cosine, absest;
@@ -170,7 +184,7 @@ void dlaic1_(integer *job, integer *j, doublereal *x, doublereal *sest, doublere
     --x;
     /* Function Body */
     eps = dlamch_("Epsilon");
-    alpha = ddot_(j, &x[1], &c__1, &w[1], &c__1);
+    alpha = aocl_blas_ddot(j, &x[1], &c__1, &w[1], &c__1);
     absalp = f2c_dabs(alpha);
     absgam = f2c_dabs(*gamma);
     absest = f2c_dabs(*sest);

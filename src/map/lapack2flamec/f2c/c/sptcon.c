@@ -4,7 +4,7 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
+static aocl_int64_t c__1 = 1;
 /* > \brief \b SPTCON */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -115,19 +115,32 @@ static integer c__1 = 1;
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void sptcon_(integer *n, real *d__, real *e, real *anorm, real *rcond, real *work, integer *info)
+/** Generated wrapper function */
+void sptcon_(aocl_int_t *n, real *d__, real *e, real *anorm, real *rcond, real *work,
+             aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_sptcon(n, d__, e, anorm, rcond, work, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_sptcon(&n_64, d__, e, anorm, rcond, work, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_sptcon(aocl_int64_t *n, real *d__, real *e, real *anorm, real *rcond, real *work,
+                        aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("sptcon inputs: n %" FLA_IS "", *n);
     /* System generated locals */
-    integer i__1;
+    aocl_int64_t i__1;
     real r__1;
     /* Local variables */
-    integer i__, ix;
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    extern integer isamax_(integer *, real *, integer *);
+    aocl_int64_t i__, ix;
     real ainvnm;
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -167,7 +180,7 @@ void sptcon_(integer *n, real *d__, real *e, real *anorm, real *rcond, real *wor
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("SPTCON", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("SPTCON", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -215,7 +228,7 @@ void sptcon_(integer *n, real *d__, real *e, real *anorm, real *rcond, real *wor
         /* L30: */
     }
     /* Compute AINVNM = fla_max(x(i)), 1<=i<=n. */
-    ix = isamax_(n, &work[1], &c__1);
+    ix = aocl_blas_isamax(n, &work[1], &c__1);
     ainvnm = (r__1 = work[ix], f2c_abs(r__1));
     /* Compute the reciprocal condition number. */
     if(ainvnm != 0.f)

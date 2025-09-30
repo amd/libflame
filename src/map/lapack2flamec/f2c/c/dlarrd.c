@@ -4,11 +4,11 @@
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
  /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
-static integer c_n1 = -1;
-static integer c__3 = 3;
-static integer c__2 = 2;
-static integer c__0 = 0;
+static aocl_int64_t c__1 = 1;
+static aocl_int64_t c_n1 = -1;
+static aocl_int64_t c__3 = 3;
+static aocl_int64_t c__2 = 2;
+static aocl_int64_t c__0 = 0;
 /* > \brief \b DLARRD computes the eigenvalues of a symmetric tridiagonal matrix to suitable
  * accuracy. */
 /* =========== DOCUMENTATION =========== */
@@ -331,49 +331,72 @@ these eigenvalues are flagged by a */
 /* > \ingroup larrd */
 /* ===================================================================== */
 /* Subroutine */
-void dlarrd_(char *range, char *order, integer *n, doublereal *vl, doublereal *vu, integer *il,
-             integer *iu, doublereal *gers, doublereal *reltol, doublereal *d__, doublereal *e,
-             doublereal *e2, doublereal *pivmin, integer *nsplit, integer *isplit, integer *m,
-             doublereal *w, doublereal *werr, doublereal *wl, doublereal *wu, integer *iblock,
-             integer *indexw, doublereal *work, integer *iwork, integer *info)
+/** Generated wrapper function */
+void dlarrd_(char *range, char *order, aocl_int_t *n, doublereal *vl, doublereal *vu,
+             aocl_int_t *il, aocl_int_t *iu, doublereal *gers, doublereal *reltol, doublereal *d__,
+             doublereal *e, doublereal *e2, doublereal *pivmin, aocl_int_t *nsplit,
+             aocl_int_t *isplit, aocl_int_t *m, doublereal *w, doublereal *werr, doublereal *wl,
+             doublereal *wu, aocl_int_t *iblock, aocl_int_t *indexw, doublereal *work,
+             aocl_int_t *iwork, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_dlarrd(range, order, n, vl, vu, il, iu, gers, reltol, d__, e, e2, pivmin, nsplit,
+                       isplit, m, w, werr, wl, wu, iblock, indexw, work, iwork, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t il_64 = *il;
+    aocl_int64_t iu_64 = *iu;
+    aocl_int64_t nsplit_64 = *nsplit;
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_dlarrd(range, order, &n_64, vl, vu, &il_64, &iu_64, gers, reltol, d__, e, e2,
+                       pivmin, &nsplit_64, isplit, &m_64, w, werr, wl, wu, iblock, indexw, work,
+                       iwork, &info_64);
+
+    *m = (aocl_int_t)m_64;
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_dlarrd(char *range, char *order, aocl_int64_t *n, doublereal *vl, doublereal *vu,
+                        aocl_int64_t *il, aocl_int64_t *iu, doublereal *gers, doublereal *reltol,
+                        doublereal *d__, doublereal *e, doublereal *e2, doublereal *pivmin,
+                        aocl_int64_t *nsplit, aocl_int_t *isplit, aocl_int64_t *m, doublereal *w,
+                        doublereal *werr, doublereal *wl, doublereal *wu, aocl_int_t *iblock,
+                        aocl_int_t *indexw, doublereal *work, aocl_int_t *iwork, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dlarrd inputs: range %c, order %c, n %" FLA_IS ", il %" FLA_IS
                       ", iu %" FLA_IS ", nsplit %" FLA_IS ", isplit %" FLA_IS "",
                       *range, *order, *n, *il, *iu, *nsplit, *isplit);
     /* System generated locals */
-    integer i__1, i__2, i__3;
+    aocl_int64_t i__1, i__2, i__3;
     doublereal d__1, d__2;
     /* Builtin functions */
     double log(doublereal);
     /* Local variables */
-    integer i__, j, ib, ie, je, nb;
+    aocl_int64_t i__, j, ib, ie, je, nb;
     doublereal gl;
-    integer im, in;
+    aocl_int64_t im, in;
     doublereal gu;
-    integer iw, jee;
+    aocl_int64_t iw, jee;
     doublereal eps;
-    integer nwl;
+    aocl_int64_t nwl;
     doublereal wlu, wul;
-    integer nwu;
+    aocl_int64_t nwu;
     doublereal tmp1, tmp2;
-    integer iend, jblk, ioff, iout, itmp1, itmp2, jdisc;
-    extern logical lsame_(char *, char *, integer, integer);
-    integer iinfo;
+    aocl_int64_t iend, jblk, ioff, iout, itmp1, itmp2, jdisc;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    aocl_int64_t iinfo;
     doublereal atoli;
-    integer iwoff, itmax;
+    aocl_int64_t iwoff, itmax;
     doublereal wkill, rtoli, uflow, tnorm;
     extern doublereal dlamch_(char *);
-    integer ibegin;
-    extern /* Subroutine */
-        void
-        dlaebz_(integer *, integer *, integer *, integer *, integer *, integer *, doublereal *,
-                doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, integer *,
-                doublereal *, doublereal *, integer *, integer *, doublereal *, integer *,
-                integer *);
-    integer irange, idiscl, idumma[1] = {0};
-    extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
-    integer idiscu;
+    aocl_int64_t ibegin;
+    aocl_int64_t irange, idiscl;
+    aocl_int_t idumma[1] = {0};
+    aocl_int64_t idiscu;
     logical ncnvrg, toofew;
     /* -- LAPACK auxiliary routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -499,7 +522,7 @@ void dlarrd_(char *range, char *order, integer *n, doublereal *vl, doublereal *v
     }
     /* NB is the minimum vector length for vector bisection, or 0 */
     /* if only scalar is to be done. */
-    nb = ilaenv_(&c__1, "DSTEBZ", " ", n, &c_n1, &c_n1, &c_n1);
+    nb = aocl_lapack_ilaenv(&c__1, "DSTEBZ", " ", n, &c_n1, &c_n1, &c_n1);
     if(nb <= 1)
     {
         nb = 0;
@@ -554,13 +577,13 @@ void dlarrd_(char *range, char *order, integer *n, doublereal *vl, doublereal *v
         work[*n + 6] = gu;
         iwork[1] = -1;
         iwork[2] = -1;
-        iwork[3] = *n + 1;
-        iwork[4] = *n + 1;
-        iwork[5] = *il - 1;
-        iwork[6] = *iu;
-        dlaebz_(&c__3, &itmax, n, &c__2, &c__2, &nb, &atoli, &rtoli, pivmin, &d__[1], &e[1], &e2[1],
-                &iwork[5], &work[*n + 1], &work[*n + 5], &iout, &iwork[1], &w[1], &iblock[1],
-                &iinfo);
+        iwork[3] = (aocl_int_t)(*n + 1);
+        iwork[4] = (aocl_int_t)(*n + 1);
+        iwork[5] = (aocl_int_t)(*il - 1);
+        iwork[6] = (aocl_int_t)(*iu);
+        aocl_lapack_dlaebz(&c__3, &itmax, n, &c__2, &c__2, &nb, &atoli, &rtoli, pivmin, &d__[1],
+                           &e[1], &e2[1], &iwork[5], &work[*n + 1], &work[*n + 5], &iout, &iwork[1],
+                           &w[1], &iblock[1], &iinfo);
         if(iinfo != 0)
         {
             *info = iinfo;
@@ -638,7 +661,7 @@ void dlarrd_(char *range, char *order, integer *n, doublereal *vl, doublereal *v
                 werr[*m] = 0.;
                 /* The gap for a single block doesn't matter for the later */
                 /* algorithm and is assigned an arbitrary large value */
-                iblock[*m] = jblk;
+                iblock[*m] = (aocl_int_t)(jblk);
                 indexw[*m] = 1;
             }
             /* Disabled 2x2 case because of a failure on the following matrix */
@@ -738,9 +761,10 @@ void dlarrd_(char *range, char *order, integer *n, doublereal *vl, doublereal *v
             /* Find negcount of initial interval boundaries GL and GU */
             work[*n + 1] = gl;
             work[*n + in + 1] = gu;
-            dlaebz_(&c__1, &c__0, &in, &in, &c__1, &nb, &atoli, &rtoli, pivmin, &d__[ibegin],
-                    &e[ibegin], &e2[ibegin], idumma, &work[*n + 1], &work[*n + (in << 1) + 1], &im,
-                    &iwork[1], &w[*m + 1], &iblock[*m + 1], &iinfo);
+            aocl_lapack_dlaebz(&c__1, &c__0, &in, &in, &c__1, &nb, &atoli, &rtoli, pivmin,
+                               &d__[ibegin], &e[ibegin], &e2[ibegin], idumma, &work[*n + 1],
+                               &work[*n + (in << 1) + 1], &im, &iwork[1], &w[*m + 1],
+                               &iblock[*m + 1], &iinfo);
             if(iinfo != 0)
             {
                 *info = iinfo;
@@ -752,9 +776,10 @@ void dlarrd_(char *range, char *order, integer *n, doublereal *vl, doublereal *v
             iwoff = *m - iwork[1];
             /* Compute Eigenvalues */
             itmax = (integer)((log(gu - gl + *pivmin) - log(*pivmin)) / log(2.)) + 2;
-            dlaebz_(&c__2, &itmax, &in, &in, &c__1, &nb, &atoli, &rtoli, pivmin, &d__[ibegin],
-                    &e[ibegin], &e2[ibegin], idumma, &work[*n + 1], &work[*n + (in << 1) + 1],
-                    &iout, &iwork[1], &w[*m + 1], &iblock[*m + 1], &iinfo);
+            aocl_lapack_dlaebz(&c__2, &itmax, &in, &in, &c__1, &nb, &atoli, &rtoli, pivmin,
+                               &d__[ibegin], &e[ibegin], &e2[ibegin], idumma, &work[*n + 1],
+                               &work[*n + (in << 1) + 1], &iout, &iwork[1], &w[*m + 1],
+                               &iblock[*m + 1], &iinfo);
             if(iinfo != 0)
             {
                 *info = iinfo;
@@ -786,8 +811,8 @@ void dlarrd_(char *range, char *order, integer *n, doublereal *vl, doublereal *v
                 {
                     w[je] = tmp1;
                     werr[je] = tmp2;
-                    indexw[je] = je - iwoff;
-                    iblock[je] = ib;
+                    indexw[je] = (aocl_int_t)(je - iwoff);
+                    iblock[je] = (aocl_int_t)(ib);
                     /* L50: */
                 }
                 /* L60: */
@@ -967,8 +992,8 @@ void dlarrd_(char *range, char *order, integer *n, doublereal *vl, doublereal *v
                 indexw[ie] = indexw[je];
                 w[je] = tmp1;
                 werr[je] = tmp2;
-                iblock[je] = itmp1;
-                indexw[je] = itmp2;
+                iblock[je] = (aocl_int_t)(itmp1);
+                indexw[je] = (aocl_int_t)(itmp2);
             }
             /* L150: */
         }

@@ -4,11 +4,11 @@
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
  /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
-static integer c_n1 = -1;
-static integer c__0 = 0;
+static aocl_int64_t c__1 = 1;
+static aocl_int64_t c_n1 = -1;
+static aocl_int64_t c__0 = 0;
 static doublereal c_b31 = 0.;
-static integer c__2 = 2;
+static aocl_int64_t c__2 = 2;
 static doublereal c_b54 = 1.;
 /* > \brief <b> DGELSY solves overdetermined or underdetermined systems for GE matrices</b> */
 /* =========== DOCUMENTATION =========== */
@@ -208,64 +208,56 @@ the routine */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void dgelsy_(integer *m, integer *n, integer *nrhs, doublereal *a, integer *lda, doublereal *b,
-             integer *ldb, integer *jpvt, doublereal *rcond, integer *rank, doublereal *work,
-             integer *lwork, integer *info)
+/** Generated wrapper function */
+void dgelsy_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *nrhs, doublereal *a, aocl_int_t *lda,
+             doublereal *b, aocl_int_t *ldb, aocl_int_t *jpvt, doublereal *rcond, aocl_int_t *rank,
+             doublereal *work, aocl_int_t *lwork, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_dgelsy(m, n, nrhs, a, lda, b, ldb, jpvt, rcond, rank, work, lwork, info);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t nrhs_64 = *nrhs;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t ldb_64 = *ldb;
+    aocl_int64_t rank_64 = *rank;
+    aocl_int64_t lwork_64 = *lwork;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_dgelsy(&m_64, &n_64, &nrhs_64, a, &lda_64, b, &ldb_64, jpvt, rcond, &rank_64, work,
+                       &lwork_64, &info_64);
+
+    *rank = (aocl_int_t)rank_64;
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_dgelsy(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *nrhs, doublereal *a,
+                        aocl_int64_t *lda, doublereal *b, aocl_int64_t *ldb, aocl_int_t *jpvt,
+                        doublereal *rcond, aocl_int64_t *rank, doublereal *work,
+                        aocl_int64_t *lwork, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dgelsy inputs: m %" FLA_IS ", n %" FLA_IS ", nrhs %" FLA_IS ", lda %" FLA_IS
                       ", ldb %" FLA_IS "",
                       *m, *n, *nrhs, *lda, *ldb);
     /* System generated locals */
-    integer a_dim1, a_offset, b_dim1, b_offset, i__1, i__2;
+    aocl_int64_t a_dim1, a_offset, b_dim1, b_offset, i__1, i__2;
     doublereal d__1, d__2;
     /* Local variables */
-    integer i__, j;
+    aocl_int64_t i__, j;
     doublereal c1, c2, s1, s2;
-    integer nb, mn, nb1, nb2, nb3, nb4;
+    aocl_int64_t nb, mn, nb1, nb2, nb3, nb4;
     doublereal anrm, bnrm, smin, smax;
-    integer iascl, ibscl;
-    extern /* Subroutine */
-        void
-        dcopy_(integer *, doublereal *, integer *, doublereal *, integer *);
-    integer ismin, ismax;
-    extern /* Subroutine */
-        void
-        dtrsm_(char *, char *, char *, char *, integer *, integer *, doublereal *, doublereal *,
-               integer *, doublereal *, integer *),
-        dlaic1_(integer *, integer *, doublereal *, doublereal *, doublereal *, doublereal *,
-                doublereal *, doublereal *, doublereal *);
+    aocl_int64_t iascl, ibscl;
+    aocl_int64_t ismin, ismax;
     doublereal wsize;
-    extern /* Subroutine */
-        void
-        dgeqp3_(integer *, integer *, doublereal *, integer *, integer *, doublereal *,
-                doublereal *, integer *, integer *);
-    extern doublereal dlamch_(char *),
-        dlange_(char *, integer *, integer *, doublereal *, integer *, doublereal *);
-    extern /* Subroutine */
-        void
-        dlascl_(char *, integer *, integer *, doublereal *, doublereal *, integer *, integer *,
-                doublereal *, integer *, integer *),
-        dlaset_(char *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     doublereal bignum;
-    integer lwkmin;
-    extern /* Subroutine */
-        void
-        dormqr_(char *, char *, integer *, integer *, integer *, doublereal *, integer *,
-                doublereal *, doublereal *, integer *, doublereal *, integer *, integer *);
+    aocl_int64_t lwkmin;
     doublereal sminpr, smaxpr, smlnum;
-    extern /* Subroutine */
-        void
-        dormrz_(char *, char *, integer *, integer *, integer *, integer *, doublereal *, integer *,
-                doublereal *, doublereal *, integer *, doublereal *, integer *, integer *);
-    integer lwkopt;
+    aocl_int64_t lwkopt;
     logical lquery;
-    extern /* Subroutine */
-        void
-        dtzrzf_(integer *, integer *, doublereal *, integer *, doublereal *, doublereal *,
-                integer *, integer *);
     /* -- LAPACK driver routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -336,10 +328,10 @@ void dgelsy_(integer *m, integer *n, integer *nrhs, doublereal *a, integer *lda,
         }
         else
         {
-            nb1 = ilaenv_(&c__1, "DGEQRF", " ", m, n, &c_n1, &c_n1);
-            nb2 = ilaenv_(&c__1, "DGERQF", " ", m, n, &c_n1, &c_n1);
-            nb3 = ilaenv_(&c__1, "DORMQR", " ", m, n, nrhs, &c_n1);
-            nb4 = ilaenv_(&c__1, "DORMRQ", " ", m, n, nrhs, &c_n1);
+            nb1 = aocl_lapack_ilaenv(&c__1, "DGEQRF", " ", m, n, &c_n1, &c_n1);
+            nb2 = aocl_lapack_ilaenv(&c__1, "DGERQF", " ", m, n, &c_n1, &c_n1);
+            nb3 = aocl_lapack_ilaenv(&c__1, "DORMQR", " ", m, n, nrhs, &c_n1);
+            nb4 = aocl_lapack_ilaenv(&c__1, "DORMRQ", " ", m, n, nrhs, &c_n1);
             /* Computing MAX */
             i__1 = fla_max(nb1, nb2);
             i__1 = fla_max(i__1, nb3); // , expr subst
@@ -364,7 +356,7 @@ void dgelsy_(integer *m, integer *n, integer *nrhs, doublereal *a, integer *lda,
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("DGELSY", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("DGELSY", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -384,46 +376,46 @@ void dgelsy_(integer *m, integer *n, integer *nrhs, doublereal *a, integer *lda,
     smlnum = dlamch_("S") / dlamch_("P");
     bignum = 1. / smlnum;
     /* Scale A, B if max entries outside range [SMLNUM,BIGNUM] */
-    anrm = dlange_("M", m, n, &a[a_offset], lda, &work[1]);
+    anrm = aocl_lapack_dlange("M", m, n, &a[a_offset], lda, &work[1]);
     iascl = 0;
     if(anrm > 0. && anrm < smlnum)
     {
         /* Scale matrix norm up to SMLNUM */
-        dlascl_("G", &c__0, &c__0, &anrm, &smlnum, m, n, &a[a_offset], lda, info);
+        aocl_lapack_dlascl("G", &c__0, &c__0, &anrm, &smlnum, m, n, &a[a_offset], lda, info);
         iascl = 1;
     }
     else if(anrm > bignum)
     {
         /* Scale matrix norm down to BIGNUM */
-        dlascl_("G", &c__0, &c__0, &anrm, &bignum, m, n, &a[a_offset], lda, info);
+        aocl_lapack_dlascl("G", &c__0, &c__0, &anrm, &bignum, m, n, &a[a_offset], lda, info);
         iascl = 2;
     }
     else if(anrm == 0.)
     {
         /* Matrix all zero. Return zero solution. */
         i__1 = fla_max(*m, *n);
-        dlaset_("F", &i__1, nrhs, &c_b31, &c_b31, &b[b_offset], ldb);
+        aocl_lapack_dlaset("F", &i__1, nrhs, &c_b31, &c_b31, &b[b_offset], ldb);
         *rank = 0;
         goto L70;
     }
-    bnrm = dlange_("M", m, nrhs, &b[b_offset], ldb, &work[1]);
+    bnrm = aocl_lapack_dlange("M", m, nrhs, &b[b_offset], ldb, &work[1]);
     ibscl = 0;
     if(bnrm > 0. && bnrm < smlnum)
     {
         /* Scale matrix norm up to SMLNUM */
-        dlascl_("G", &c__0, &c__0, &bnrm, &smlnum, m, nrhs, &b[b_offset], ldb, info);
+        aocl_lapack_dlascl("G", &c__0, &c__0, &bnrm, &smlnum, m, nrhs, &b[b_offset], ldb, info);
         ibscl = 1;
     }
     else if(bnrm > bignum)
     {
         /* Scale matrix norm down to BIGNUM */
-        dlascl_("G", &c__0, &c__0, &bnrm, &bignum, m, nrhs, &b[b_offset], ldb, info);
+        aocl_lapack_dlascl("G", &c__0, &c__0, &bnrm, &bignum, m, nrhs, &b[b_offset], ldb, info);
         ibscl = 2;
     }
     /* Compute QR factorization with column pivoting of A: */
     /* A * P = Q * R */
     i__1 = *lwork - mn;
-    dgeqp3_(m, n, &a[a_offset], lda, &jpvt[1], &work[1], &work[mn + 1], &i__1, info);
+    aocl_lapack_dgeqp3(m, n, &a[a_offset], lda, &jpvt[1], &work[1], &work[mn + 1], &i__1, info);
     wsize = mn + work[mn + 1];
     /* workspace: MN+2*N+NB*(N+1). */
     /* Details of Householder rotations stored in WORK(1:MN). */
@@ -436,7 +428,7 @@ void dgelsy_(integer *m, integer *n, integer *nrhs, doublereal *a, integer *lda,
     {
         *rank = 0;
         i__1 = fla_max(*m, *n);
-        dlaset_("F", &i__1, nrhs, &c_b31, &c_b31, &b[b_offset], ldb);
+        aocl_lapack_dlaset("F", &i__1, nrhs, &c_b31, &c_b31, &b[b_offset], ldb);
         goto L70;
     }
     else
@@ -447,10 +439,10 @@ L10:
     if(*rank < mn)
     {
         i__ = *rank + 1;
-        dlaic1_(&c__2, rank, &work[ismin], &smin, &a[i__ * a_dim1 + 1], &a[i__ + i__ * a_dim1],
-                &sminpr, &s1, &c1);
-        dlaic1_(&c__1, rank, &work[ismax], &smax, &a[i__ * a_dim1 + 1], &a[i__ + i__ * a_dim1],
-                &smaxpr, &s2, &c2);
+        aocl_lapack_dlaic1(&c__2, rank, &work[ismin], &smin, &a[i__ * a_dim1 + 1],
+                           &a[i__ + i__ * a_dim1], &sminpr, &s1, &c1);
+        aocl_lapack_dlaic1(&c__1, rank, &work[ismax], &smax, &a[i__ * a_dim1 + 1],
+                           &a[i__ + i__ * a_dim1], &smaxpr, &s2, &c2);
         if(smaxpr * *rcond <= sminpr)
         {
             i__1 = *rank;
@@ -476,22 +468,23 @@ L10:
     if(*rank < *n)
     {
         i__1 = *lwork - (mn << 1);
-        dtzrzf_(rank, n, &a[a_offset], lda, &work[mn + 1], &work[(mn << 1) + 1], &i__1, info);
+        aocl_lapack_dtzrzf(rank, n, &a[a_offset], lda, &work[mn + 1], &work[(mn << 1) + 1], &i__1,
+                           info);
     }
     /* workspace: 2*MN. */
     /* Details of Householder rotations stored in WORK(MN+1:2*MN) */
     /* B(1:M,1:NRHS) := Q**T * B(1:M,1:NRHS) */
     i__1 = *lwork - (mn << 1);
-    dormqr_("Left", "Transpose", m, nrhs, &mn, &a[a_offset], lda, &work[1], &b[b_offset], ldb,
-            &work[(mn << 1) + 1], &i__1, info);
+    aocl_lapack_dormqr("Left", "Transpose", m, nrhs, &mn, &a[a_offset], lda, &work[1], &b[b_offset],
+                       ldb, &work[(mn << 1) + 1], &i__1, info);
     /* Computing MAX */
     d__1 = wsize;
     d__2 = (mn << 1) + work[(mn << 1) + 1]; // , expr subst
     wsize = fla_max(d__1, d__2);
     /* workspace: 2*MN+NB*NRHS. */
     /* B(1:RANK,1:NRHS) := inv(T11) * B(1:RANK,1:NRHS) */
-    dtrsm_("Left", "Upper", "No transpose", "Non-unit", rank, nrhs, &c_b54, &a[a_offset], lda,
-           &b[b_offset], ldb);
+    aocl_blas_dtrsm("Left", "Upper", "No transpose", "Non-unit", rank, nrhs, &c_b54, &a[a_offset],
+                    lda, &b[b_offset], ldb);
     i__1 = *nrhs;
     for(j = 1; j <= i__1; ++j)
     {
@@ -508,8 +501,8 @@ L10:
     {
         i__1 = *n - *rank;
         i__2 = *lwork - (mn << 1);
-        dormrz_("Left", "Transpose", n, nrhs, rank, &i__1, &a[a_offset], lda, &work[mn + 1],
-                &b[b_offset], ldb, &work[(mn << 1) + 1], &i__2, info);
+        aocl_lapack_dormrz("Left", "Transpose", n, nrhs, rank, &i__1, &a[a_offset], lda,
+                           &work[mn + 1], &b[b_offset], ldb, &work[(mn << 1) + 1], &i__2, info);
     }
     /* workspace: 2*MN+NRHS. */
     /* B(1:N,1:NRHS) := P * B(1:N,1:NRHS) */
@@ -522,28 +515,28 @@ L10:
             work[jpvt[i__]] = b[i__ + j * b_dim1];
             /* L50: */
         }
-        dcopy_(n, &work[1], &c__1, &b[j * b_dim1 + 1], &c__1);
+        aocl_blas_dcopy(n, &work[1], &c__1, &b[j * b_dim1 + 1], &c__1);
         /* L60: */
     }
     /* workspace: N. */
     /* Undo scaling */
     if(iascl == 1)
     {
-        dlascl_("G", &c__0, &c__0, &anrm, &smlnum, n, nrhs, &b[b_offset], ldb, info);
-        dlascl_("U", &c__0, &c__0, &smlnum, &anrm, rank, rank, &a[a_offset], lda, info);
+        aocl_lapack_dlascl("G", &c__0, &c__0, &anrm, &smlnum, n, nrhs, &b[b_offset], ldb, info);
+        aocl_lapack_dlascl("U", &c__0, &c__0, &smlnum, &anrm, rank, rank, &a[a_offset], lda, info);
     }
     else if(iascl == 2)
     {
-        dlascl_("G", &c__0, &c__0, &anrm, &bignum, n, nrhs, &b[b_offset], ldb, info);
-        dlascl_("U", &c__0, &c__0, &bignum, &anrm, rank, rank, &a[a_offset], lda, info);
+        aocl_lapack_dlascl("G", &c__0, &c__0, &anrm, &bignum, n, nrhs, &b[b_offset], ldb, info);
+        aocl_lapack_dlascl("U", &c__0, &c__0, &bignum, &anrm, rank, rank, &a[a_offset], lda, info);
     }
     if(ibscl == 1)
     {
-        dlascl_("G", &c__0, &c__0, &smlnum, &bnrm, n, nrhs, &b[b_offset], ldb, info);
+        aocl_lapack_dlascl("G", &c__0, &c__0, &smlnum, &bnrm, n, nrhs, &b[b_offset], ldb, info);
     }
     else if(ibscl == 2)
     {
-        dlascl_("G", &c__0, &c__0, &bignum, &bnrm, n, nrhs, &b[b_offset], ldb, info);
+        aocl_lapack_dlascl("G", &c__0, &c__0, &bignum, &bnrm, n, nrhs, &b[b_offset], ldb, info);
     }
 L70:
     work[1] = (doublereal)lwkopt;

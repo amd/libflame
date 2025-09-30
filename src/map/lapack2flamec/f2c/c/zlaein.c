@@ -4,7 +4,7 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
+static aocl_int64_t c__1 = 1;
 /* > \brief \b ZLAEIN computes a specified right or left eigenvector of an upper Hessenberg matrix
  * by inverse iteration. */
 /* =========== DOCUMENTATION =========== */
@@ -45,7 +45,7 @@ static integer c__1 = 1;
 /* > \verbatim */
 /* > */
 /* > ZLAEIN uses inverse iteration to find a right or left eigenvector */
-/* > corresponding to the eigenvalue W of a complex upper Hessenberg */
+/* > corresponding to the eigenvalue W of a scomplex upper Hessenberg */
 /* > matrix H. */
 /* > \endverbatim */
 /* Arguments: */
@@ -99,7 +99,7 @@ otherwise V need not be set. */
 /* > On exit, V contains the computed eigenvector, normalized so */
 /* > that the component of largest magnitude has magnitude 1;
 here */
-/* > the magnitude of a complex number (x,y) is taken to be */
+/* > the magnitude of a scomplex number (x,y) is taken to be */
 /* > |x| + |y|. */
 /* > \endverbatim */
 /* > */
@@ -150,42 +150,53 @@ V is set to the */
 /* > \ingroup complex16OTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-void zlaein_(logical *rightv, logical *noinit, integer *n, doublecomplex *h__, integer *ldh,
-             doublecomplex *w, doublecomplex *v, doublecomplex *b, integer *ldb, doublereal *rwork,
-             doublereal *eps3, doublereal *smlnum, integer *info)
+/** Generated wrapper function */
+void zlaein_(logical *rightv, logical *noinit, aocl_int_t *n, dcomplex *h__, aocl_int_t *ldh,
+             dcomplex *w, dcomplex *v, dcomplex *b, aocl_int_t *ldb,
+             doublereal *rwork, doublereal *eps3, doublereal *smlnum, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_zlaein(rightv, noinit, n, h__, ldh, w, v, b, ldb, rwork, eps3, smlnum, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t ldh_64 = *ldh;
+    aocl_int64_t ldb_64 = *ldb;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_zlaein(rightv, noinit, &n_64, h__, &ldh_64, w, v, b, &ldb_64, rwork, eps3, smlnum,
+                       &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_zlaein(logical *rightv, logical *noinit, aocl_int64_t *n, dcomplex *h__,
+                        aocl_int64_t *ldh, dcomplex *w, dcomplex *v, dcomplex *b,
+                        aocl_int64_t *ldb, doublereal *rwork, doublereal *eps3, doublereal *smlnum,
+                        aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zlaein inputs: n %" FLA_IS ", ldh %" FLA_IS ", ldb %" FLA_IS "", *n, *ldh,
                       *ldb);
     /* System generated locals */
-    integer b_dim1, b_offset, h_dim1, h_offset, i__1, i__2, i__3, i__4, i__5;
+    aocl_int64_t b_dim1, b_offset, h_dim1, h_offset, i__1, i__2, i__3, i__4, i__5;
     doublereal d__1, d__2, d__3, d__4;
-    doublecomplex z__1, z__2;
+    dcomplex z__1, z__2;
     /* Builtin functions */
-    double sqrt(doublereal), d_imag(doublecomplex *);
+    double sqrt(doublereal), d_imag(dcomplex *);
     /* Local variables */
-    integer i__, j;
-    doublecomplex x, ei, ej;
-    integer its, ierr;
-    doublecomplex temp;
+    aocl_int64_t i__, j;
+    dcomplex x, ei, ej;
+    aocl_int64_t its, ierr;
+    dcomplex temp;
     doublereal scale;
     char trans[1];
     doublereal rtemp, rootn, vnorm;
-    extern doublereal dznrm2_(integer *, doublecomplex *, integer *);
-    extern /* Subroutine */
-        void
-        zdscal_(integer *, doublereal *, doublecomplex *, integer *);
-    extern integer izamax_(integer *, doublecomplex *, integer *);
     extern /* Double Complex */
         void
-        zladiv_f2c_(doublecomplex *, doublecomplex *, doublecomplex *);
+        zladiv_f2c_(dcomplex *, dcomplex *, dcomplex *);
     char normin[1];
-    extern doublereal dzasum_(integer *, doublecomplex *, integer *);
     doublereal nrmsml;
-    extern /* Subroutine */
-        void
-        zlatrs_(char *, char *, char *, char *, integer *, doublecomplex *, integer *,
-                doublecomplex *, doublereal *, doublereal *, integer *);
     doublereal growto;
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -267,9 +278,9 @@ void zlaein_(logical *rightv, logical *noinit, integer *n, doublecomplex *h__, i
     else
     {
         /* Scale supplied initial vector. */
-        vnorm = dznrm2_(n, &v[1], &c__1);
+        vnorm = aocl_blas_dznrm2(n, &v[1], &c__1);
         d__1 = *eps3 * rootn / fla_max(vnorm, nrmsml);
-        zdscal_(n, &d__1, &v[1], &c__1);
+        aocl_blas_zdscal(n, &d__1, &v[1], &c__1);
     }
     if(*rightv)
     {
@@ -445,11 +456,11 @@ void zlaein_(logical *rightv, logical *noinit, integer *n, doublecomplex *h__, i
         /* Solve U*x = scale*v for a right eigenvector */
         /* or U**H *x = scale*v for a left eigenvector, */
         /* overwriting x on v. */
-        zlatrs_("Upper", trans, "Nonunit", normin, n, &b[b_offset], ldb, &v[1], &scale, &rwork[1],
-                &ierr);
+        aocl_lapack_zlatrs("Upper", trans, "Nonunit", normin, n, &b[b_offset], ldb, &v[1], &scale,
+                           &rwork[1], &ierr);
         *(unsigned char *)normin = 'Y';
         /* Test for sufficient growth in the norm of v. */
-        vnorm = dzasum_(n, &v[1], &c__1);
+        vnorm = aocl_blas_dzasum(n, &v[1], &c__1);
         if(vnorm >= growto * scale)
         {
             goto L120;
@@ -478,10 +489,10 @@ void zlaein_(logical *rightv, logical *noinit, integer *n, doublecomplex *h__, i
     /* Failure to find eigenvector in N iterations. */
     *info = 1;
 L120: /* Normalize eigenvector. */
-    i__ = izamax_(n, &v[1], &c__1);
+    i__ = aocl_blas_izamax(n, &v[1], &c__1);
     i__1 = i__;
     d__3 = 1. / ((d__1 = v[i__1].r, f2c_dabs(d__1)) + (d__2 = d_imag(&v[i__]), f2c_dabs(d__2)));
-    zdscal_(n, &d__3, &v[1], &c__1);
+    aocl_blas_zdscal(n, &d__3, &v[1], &c__1);
     AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of ZLAEIN */

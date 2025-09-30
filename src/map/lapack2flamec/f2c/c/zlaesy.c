@@ -4,9 +4,9 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static doublecomplex c_b1 = {1., 0.};
-static integer c__2 = 2;
-/* > \brief \b ZLAESY computes the eigenvalues and eigenvectors of a 2-by-2 complex symmetric
+static dcomplex c_b1 = {{1.}, {0.}};
+static aocl_int64_t c__2 = 2;
+/* > \brief \b ZLAESY computes the eigenvalues and eigenvectors of a 2-by-2 scomplex symmetric
  * matrix. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -86,7 +86,7 @@ static integer c__2 = 2;
 /* > \param[out] EVSCAL */
 /* > \verbatim */
 /* > EVSCAL is COMPLEX*16 */
-/* > The complex value by which the eigenvector matrix was scaled */
+/* > The scomplex value by which the eigenvector matrix was scaled */
 /* > to make it orthonormal. If EVSCAL is zero, the eigenvectors */
 /* > were not computed. This means one of two things: the 2-by-2 */
 /* > matrix could not be diagonalized, or the norm of the matrix */
@@ -115,22 +115,22 @@ static integer c__2 = 2;
 /* > \ingroup complex16SYauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-void zlaesy_(doublecomplex *a, doublecomplex *b, doublecomplex *c__, doublecomplex *rt1,
-             doublecomplex *rt2, doublecomplex *evscal, doublecomplex *cs1, doublecomplex *sn1)
+void zlaesy_(dcomplex *a, dcomplex *b, dcomplex *c__, dcomplex *rt1,
+             dcomplex *rt2, dcomplex *evscal, dcomplex *cs1, dcomplex *sn1)
 {
     AOCL_DTL_TRACE_ENTRY_INDENT
     /* System generated locals */
     doublereal d__1, d__2;
-    doublecomplex z__1, z__2, z__3, z__4, z__5, z__6, z__7;
+    dcomplex z__1, z__2, z__3, z__4, z__5, z__6, z__7;
     /* Builtin functions */
-    double z_abs(doublecomplex *);
-    void pow_zi(doublecomplex *, doublecomplex *, integer *),
-        z_sqrt(doublecomplex *, doublecomplex *),
-        z_div(doublecomplex *, doublecomplex *, doublecomplex *);
+    double z_abs(dcomplex *);
+    void pow_zi(dcomplex *, dcomplex *, aocl_int64_t *),
+        z_sqrt(dcomplex *, dcomplex *),
+        z_div(dcomplex *, dcomplex *, dcomplex *);
     /* Local variables */
-    doublecomplex s, t;
+    dcomplex s, t;
     doublereal z__;
-    doublecomplex tmp;
+    dcomplex tmp;
     doublereal babs, tabs, evnorm;
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */

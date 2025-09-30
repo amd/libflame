@@ -11,16 +11,16 @@
 #include "FLAME.h"
 
 
-FLA_Error FLA_Bsvd_find_submatrix_ops( integer       mn_A,
-                                       integer       ij_begin,
-                                       float*    buff_d, integer inc_d,
-                                       float*    buff_e, integer inc_e,
-                                       integer*      ijTL,
-                                       integer*      ijBR )
+FLA_Error FLA_Bsvd_find_submatrix_ops( fla_dim_t       mn_A,
+                                       fla_dim_t       ij_begin,
+                                       float*    buff_d, fla_dim_t inc_d,
+                                       float*    buff_e, fla_dim_t inc_e,
+                                       fla_dim_t*      ijTL,
+                                       fla_dim_t*      ijBR )
 {
     float  rzero = bl1_s0();
-    integer    ij_tl;
-    integer    ij_br;
+    fla_dim_t    ij_tl;
+    fla_dim_t    ij_br;
 
     // Search for the first non-zero superdiagonal element starting at
     // the index specified by ij_begin.
@@ -70,16 +70,16 @@ FLA_Error FLA_Bsvd_find_submatrix_ops( integer       mn_A,
 
 //#define PRINTF
 
-FLA_Error FLA_Bsvd_find_submatrix_opd( integer       mn_A,
-                                       integer       ij_begin,
-                                       double*   buff_d, integer inc_d,
-                                       double*   buff_e, integer inc_e,
-                                       integer*      ijTL,
-                                       integer*      ijBR )
+FLA_Error FLA_Bsvd_find_submatrix_opd( fla_dim_t       mn_A,
+                                       fla_dim_t       ij_begin,
+                                       double*   buff_d, fla_dim_t inc_d,
+                                       double*   buff_e, fla_dim_t inc_e,
+                                       fla_dim_t*      ijTL,
+                                       fla_dim_t*      ijBR )
 {
     double rzero = bl1_d0();
-    integer    ij_tl;
-    integer    ij_br;
+    fla_dim_t    ij_tl;
+    fla_dim_t    ij_br;
 
     // Search for the first non-zero superdiagonal element starting at
     // the index specified by ij_begin.

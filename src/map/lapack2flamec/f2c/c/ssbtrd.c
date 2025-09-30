@@ -6,7 +6,7 @@
 #include "FLA_f2c.h" /* Table of constant values */
 static real c_b9 = 0.f;
 static real c_b10 = 1.f;
-static integer c__1 = 1;
+static aocl_int64_t c__1 = 1;
 /* > \brief \b SSBTRD */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -171,39 +171,43 @@ if VECT = 'N' or 'V', then Q need not be set. */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void ssbtrd_(char *vect, char *uplo, integer *n, integer *kd, real *ab, integer *ldab, real *d__,
-             real *e, real *q, integer *ldq, real *work, integer *info)
+/** Generated wrapper function */
+void ssbtrd_(char *vect, char *uplo, aocl_int_t *n, aocl_int_t *kd, real *ab, aocl_int_t *ldab,
+             real *d__, real *e, real *q, aocl_int_t *ldq, real *work, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_ssbtrd(vect, uplo, n, kd, ab, ldab, d__, e, q, ldq, work, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t kd_64 = *kd;
+    aocl_int64_t ldab_64 = *ldab;
+    aocl_int64_t ldq_64 = *ldq;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_ssbtrd(vect, uplo, &n_64, &kd_64, ab, &ldab_64, d__, e, q, &ldq_64, work, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_ssbtrd(char *vect, char *uplo, aocl_int64_t *n, aocl_int64_t *kd, real *ab,
+                        aocl_int64_t *ldab, real *d__, real *e, real *q, aocl_int64_t *ldq,
+                        real *work, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF(
-             "ssbtrd inputs: vect %c, uplo %c, n %" FLA_IS ", kd %" FLA_IS ", ldab %" FLA_IS
-             ", ldq %" FLA_IS "",
-             *vect, *uplo, *n, *kd, *ldab, *ldq);
+    AOCL_DTL_SNPRINTF("ssbtrd inputs: vect %c, uplo %c, n %" FLA_IS ", kd %" FLA_IS
+                      ", ldab %" FLA_IS ", ldq %" FLA_IS "",
+                      *vect, *uplo, *n, *kd, *ldab, *ldq);
     /* System generated locals */
-    integer ab_dim1, ab_offset, q_dim1, q_offset, i__1, i__2, i__3, i__4, i__5;
+    aocl_int64_t ab_dim1, ab_offset, q_dim1, q_offset, i__1, i__2, i__3, i__4, i__5;
     /* Local variables */
-    integer i__, j, k, l, i2, j1, j2, nq, nr, kd1, ibl, iqb, kdn, jin, nrt, kdm1, inca, jend, lend,
-        jinc, incx, last;
+    aocl_int64_t i__, j, k, l, i2, j1, j2, nq, nr, kd1, ibl, iqb, kdn, jin, nrt, kdm1, inca, jend,
+        lend, jinc, incx, last;
     real temp;
-    extern /* Subroutine */
-        void
-        srot_(integer *, real *, integer *, real *, integer *, real *, real *);
-    integer j1end, j1inc, iqend;
-    extern logical lsame_(char *, char *, integer, integer);
+    aocl_int64_t j1end, j1inc, iqend;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     logical initq, wantq, upper;
-    extern /* Subroutine */
-        void
-        slar2v_(integer *, real *, real *, real *, integer *, real *, real *, integer *);
-    integer iqaend;
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    extern /* Subroutine */
-        void
-        slaset_(char *, integer *, integer *, real *, real *, real *, integer *),
-        slartg_(real *, real *, real *, real *, real *),
-        slargv_(integer *, real *, integer *, real *, integer *, real *, integer *),
-        slartv_(integer *, real *, integer *, real *, integer *, real *, real *, integer *);
+    aocl_int64_t iqaend;
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -271,7 +275,7 @@ void ssbtrd_(char *vect, char *uplo, integer *n, integer *kd, real *ab, integer 
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("SSBTRD", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("SSBTRD", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -284,7 +288,7 @@ void ssbtrd_(char *vect, char *uplo, integer *n, integer *kd, real *ab, integer 
     /* Initialize Q to the unit matrix, if needed */
     if(initq)
     {
-        slaset_("Full", n, n, &c_b9, &c_b10, &q[q_offset], ldq);
+        aocl_lapack_slaset("Full", n, n, &c_b9, &c_b10, &q[q_offset], ldq);
     }
     /* Wherever possible, plane rotations are generated and applied in */
     /* vector operations of length NR over the index set J1:J2:KD1. */
@@ -314,8 +318,8 @@ void ssbtrd_(char *vect, char *uplo, integer *n, integer *kd, real *ab, integer 
                     {
                         /* generate plane rotations to annihilate nonzero */
                         /* elements which have been created outside the band */
-                        slargv_(&nr, &ab[(j1 - 1) * ab_dim1 + 1], &inca, &work[j1], &kd1, &d__[j1],
-                                &kd1);
+                        aocl_lapack_slargv(&nr, &ab[(j1 - 1) * ab_dim1 + 1], &inca, &work[j1], &kd1,
+                                           &d__[j1], &kd1);
                         /* apply rotations from the right */
                         /* Dependent on the the number of diagonals either */
                         /* SLARTV or SROT is used */
@@ -324,8 +328,9 @@ void ssbtrd_(char *vect, char *uplo, integer *n, integer *kd, real *ab, integer 
                             i__2 = *kd - 1;
                             for(l = 1; l <= i__2; ++l)
                             {
-                                slartv_(&nr, &ab[l + 1 + (j1 - 1) * ab_dim1], &inca,
-                                        &ab[l + j1 * ab_dim1], &inca, &d__[j1], &work[j1], &kd1);
+                                aocl_lapack_slartv(&nr, &ab[l + 1 + (j1 - 1) * ab_dim1], &inca,
+                                                   &ab[l + j1 * ab_dim1], &inca, &d__[j1],
+                                                   &work[j1], &kd1);
                                 /* L10: */
                             }
                         }
@@ -336,8 +341,9 @@ void ssbtrd_(char *vect, char *uplo, integer *n, integer *kd, real *ab, integer 
                             i__3 = kd1;
                             for(jinc = j1; i__3 < 0 ? jinc >= i__2 : jinc <= i__2; jinc += i__3)
                             {
-                                srot_(&kdm1, &ab[(jinc - 1) * ab_dim1 + 2], &c__1,
-                                      &ab[jinc * ab_dim1 + 1], &c__1, &d__[jinc], &work[jinc]);
+                                aocl_blas_srot(&kdm1, &ab[(jinc - 1) * ab_dim1 + 2], &c__1,
+                                               &ab[jinc * ab_dim1 + 1], &c__1, &d__[jinc],
+                                               &work[jinc]);
                                 /* L20: */
                             }
                         }
@@ -354,9 +360,9 @@ void ssbtrd_(char *vect, char *uplo, integer *n, integer *kd, real *ab, integer 
                             ab[*kd - k + 3 + (i__ + k - 2) * ab_dim1] = temp;
                             /* apply rotation from the right */
                             i__3 = k - 3;
-                            srot_(&i__3, &ab[*kd - k + 4 + (i__ + k - 2) * ab_dim1], &c__1,
-                                  &ab[*kd - k + 3 + (i__ + k - 1) * ab_dim1], &c__1,
-                                  &d__[i__ + k - 1], &work[i__ + k - 1]);
+                            aocl_blas_srot(&i__3, &ab[*kd - k + 4 + (i__ + k - 2) * ab_dim1], &c__1,
+                                           &ab[*kd - k + 3 + (i__ + k - 1) * ab_dim1], &c__1,
+                                           &d__[i__ + k - 1], &work[i__ + k - 1]);
                         }
                         ++nr;
                         j1 = j1 - kdn - 1;
@@ -365,8 +371,9 @@ void ssbtrd_(char *vect, char *uplo, integer *n, integer *kd, real *ab, integer 
                     /* blocks */
                     if(nr > 0)
                     {
-                        slar2v_(&nr, &ab[kd1 + (j1 - 1) * ab_dim1], &ab[kd1 + j1 * ab_dim1],
-                                &ab[*kd + j1 * ab_dim1], &inca, &d__[j1], &work[j1], &kd1);
+                        aocl_lapack_slar2v(&nr, &ab[kd1 + (j1 - 1) * ab_dim1],
+                                           &ab[kd1 + j1 * ab_dim1], &ab[*kd + j1 * ab_dim1], &inca,
+                                           &d__[j1], &work[j1], &kd1);
                     }
                     /* apply plane rotations from the left */
                     if(nr > 0)
@@ -388,9 +395,9 @@ void ssbtrd_(char *vect, char *uplo, integer *n, integer *kd, real *ab, integer 
                                 }
                                 if(nrt > 0)
                                 {
-                                    slartv_(&nrt, &ab[*kd - l + (j1 + l) * ab_dim1], &inca,
-                                            &ab[*kd - l + 1 + (j1 + l) * ab_dim1], &inca, &d__[j1],
-                                            &work[j1], &kd1);
+                                    aocl_lapack_slartv(&nrt, &ab[*kd - l + (j1 + l) * ab_dim1],
+                                                       &inca, &ab[*kd - l + 1 + (j1 + l) * ab_dim1],
+                                                       &inca, &d__[j1], &work[j1], &kd1);
                                 }
                                 /* L30: */
                             }
@@ -405,9 +412,9 @@ void ssbtrd_(char *vect, char *uplo, integer *n, integer *kd, real *ab, integer 
                                 for(jin = j1; i__2 < 0 ? jin >= i__3 : jin <= i__3; jin += i__2)
                                 {
                                     i__4 = *kd - 1;
-                                    srot_(&i__4, &ab[*kd - 1 + (jin + 1) * ab_dim1], &incx,
-                                          &ab[*kd + (jin + 1) * ab_dim1], &incx, &d__[jin],
-                                          &work[jin]);
+                                    aocl_blas_srot(&i__4, &ab[*kd - 1 + (jin + 1) * ab_dim1], &incx,
+                                                   &ab[*kd + (jin + 1) * ab_dim1], &incx, &d__[jin],
+                                                   &work[jin]);
                                     /* L40: */
                                 }
                             }
@@ -418,9 +425,9 @@ void ssbtrd_(char *vect, char *uplo, integer *n, integer *kd, real *ab, integer 
                             last = j1end + kd1;
                             if(lend > 0)
                             {
-                                srot_(&lend, &ab[*kd - 1 + (last + 1) * ab_dim1], &incx,
-                                      &ab[*kd + (last + 1) * ab_dim1], &incx, &d__[last],
-                                      &work[last]);
+                                aocl_blas_srot(&lend, &ab[*kd - 1 + (last + 1) * ab_dim1], &incx,
+                                               &ab[*kd + (last + 1) * ab_dim1], &incx, &d__[last],
+                                               &work[last]);
                             }
                         }
                     }
@@ -456,8 +463,8 @@ void ssbtrd_(char *vect, char *uplo, integer *n, integer *kd, real *ab, integer 
                                 /* Computing MIN */
                                 i__4 = iqaend + *kd;
                                 iqaend = fla_min(i__4, iqend);
-                                srot_(&nq, &q[iqb + (j - 1) * q_dim1], &c__1, &q[iqb + j * q_dim1],
-                                      &c__1, &d__[j], &work[j]);
+                                aocl_blas_srot(&nq, &q[iqb + (j - 1) * q_dim1], &c__1,
+                                               &q[iqb + j * q_dim1], &c__1, &d__[j], &work[j]);
                                 /* L50: */
                             }
                         }
@@ -467,8 +474,8 @@ void ssbtrd_(char *vect, char *uplo, integer *n, integer *kd, real *ab, integer 
                             i__2 = kd1;
                             for(j = j1; i__2 < 0 ? j >= i__3 : j <= i__3; j += i__2)
                             {
-                                srot_(n, &q[(j - 1) * q_dim1 + 1], &c__1, &q[j * q_dim1 + 1], &c__1,
-                                      &d__[j], &work[j]);
+                                aocl_blas_srot(n, &q[(j - 1) * q_dim1 + 1], &c__1,
+                                               &q[j * q_dim1 + 1], &c__1, &d__[j], &work[j]);
                                 /* L60: */
                             }
                         }
@@ -542,8 +549,8 @@ void ssbtrd_(char *vect, char *uplo, integer *n, integer *kd, real *ab, integer 
                     {
                         /* generate plane rotations to annihilate nonzero */
                         /* elements which have been created outside the band */
-                        slargv_(&nr, &ab[kd1 + (j1 - kd1) * ab_dim1], &inca, &work[j1], &kd1,
-                                &d__[j1], &kd1);
+                        aocl_lapack_slargv(&nr, &ab[kd1 + (j1 - kd1) * ab_dim1], &inca, &work[j1],
+                                           &kd1, &d__[j1], &kd1);
                         /* apply plane rotations from one side */
                         /* Dependent on the the number of diagonals either */
                         /* SLARTV or SROT is used */
@@ -552,9 +559,10 @@ void ssbtrd_(char *vect, char *uplo, integer *n, integer *kd, real *ab, integer 
                             i__3 = *kd - 1;
                             for(l = 1; l <= i__3; ++l)
                             {
-                                slartv_(&nr, &ab[kd1 - l + (j1 - kd1 + l) * ab_dim1], &inca,
-                                        &ab[kd1 - l + 1 + (j1 - kd1 + l) * ab_dim1], &inca,
-                                        &d__[j1], &work[j1], &kd1);
+                                aocl_lapack_slartv(&nr, &ab[kd1 - l + (j1 - kd1 + l) * ab_dim1],
+                                                   &inca,
+                                                   &ab[kd1 - l + 1 + (j1 - kd1 + l) * ab_dim1],
+                                                   &inca, &d__[j1], &work[j1], &kd1);
                                 /* L130: */
                             }
                         }
@@ -565,9 +573,9 @@ void ssbtrd_(char *vect, char *uplo, integer *n, integer *kd, real *ab, integer 
                             i__2 = kd1;
                             for(jinc = j1; i__2 < 0 ? jinc >= i__3 : jinc <= i__3; jinc += i__2)
                             {
-                                srot_(&kdm1, &ab[*kd + (jinc - *kd) * ab_dim1], &incx,
-                                      &ab[kd1 + (jinc - *kd) * ab_dim1], &incx, &d__[jinc],
-                                      &work[jinc]);
+                                aocl_blas_srot(&kdm1, &ab[*kd + (jinc - *kd) * ab_dim1], &incx,
+                                               &ab[kd1 + (jinc - *kd) * ab_dim1], &incx, &d__[jinc],
+                                               &work[jinc]);
                                 /* L140: */
                             }
                         }
@@ -585,9 +593,9 @@ void ssbtrd_(char *vect, char *uplo, integer *n, integer *kd, real *ab, integer 
                             i__2 = k - 3;
                             i__3 = *ldab - 1;
                             i__4 = *ldab - 1;
-                            srot_(&i__2, &ab[k - 2 + (i__ + 1) * ab_dim1], &i__3,
-                                  &ab[k - 1 + (i__ + 1) * ab_dim1], &i__4, &d__[i__ + k - 1],
-                                  &work[i__ + k - 1]);
+                            aocl_blas_srot(&i__2, &ab[k - 2 + (i__ + 1) * ab_dim1], &i__3,
+                                           &ab[k - 1 + (i__ + 1) * ab_dim1], &i__4,
+                                           &d__[i__ + k - 1], &work[i__ + k - 1]);
                         }
                         ++nr;
                         j1 = j1 - kdn - 1;
@@ -596,8 +604,9 @@ void ssbtrd_(char *vect, char *uplo, integer *n, integer *kd, real *ab, integer 
                     /* blocks */
                     if(nr > 0)
                     {
-                        slar2v_(&nr, &ab[(j1 - 1) * ab_dim1 + 1], &ab[j1 * ab_dim1 + 1],
-                                &ab[(j1 - 1) * ab_dim1 + 2], &inca, &d__[j1], &work[j1], &kd1);
+                        aocl_lapack_slar2v(&nr, &ab[(j1 - 1) * ab_dim1 + 1], &ab[j1 * ab_dim1 + 1],
+                                           &ab[(j1 - 1) * ab_dim1 + 2], &inca, &d__[j1], &work[j1],
+                                           &kd1);
                     }
                     /* apply plane rotations from the right */
                     /* Dependent on the the number of diagonals either */
@@ -619,9 +628,9 @@ void ssbtrd_(char *vect, char *uplo, integer *n, integer *kd, real *ab, integer 
                                 }
                                 if(nrt > 0)
                                 {
-                                    slartv_(&nrt, &ab[l + 2 + (j1 - 1) * ab_dim1], &inca,
-                                            &ab[l + 1 + j1 * ab_dim1], &inca, &d__[j1], &work[j1],
-                                            &kd1);
+                                    aocl_lapack_slartv(&nrt, &ab[l + 2 + (j1 - 1) * ab_dim1], &inca,
+                                                       &ab[l + 1 + j1 * ab_dim1], &inca, &d__[j1],
+                                                       &work[j1], &kd1);
                                 }
                                 /* L150: */
                             }
@@ -636,9 +645,9 @@ void ssbtrd_(char *vect, char *uplo, integer *n, integer *kd, real *ab, integer 
                                 for(j1inc = j1; i__3 < 0 ? j1inc >= i__2 : j1inc <= i__2;
                                     j1inc += i__3)
                                 {
-                                    srot_(&kdm1, &ab[(j1inc - 1) * ab_dim1 + 3], &c__1,
-                                          &ab[j1inc * ab_dim1 + 2], &c__1, &d__[j1inc],
-                                          &work[j1inc]);
+                                    aocl_blas_srot(&kdm1, &ab[(j1inc - 1) * ab_dim1 + 3], &c__1,
+                                                   &ab[j1inc * ab_dim1 + 2], &c__1, &d__[j1inc],
+                                                   &work[j1inc]);
                                     /* L160: */
                                 }
                             }
@@ -649,8 +658,9 @@ void ssbtrd_(char *vect, char *uplo, integer *n, integer *kd, real *ab, integer 
                             last = j1end + kd1;
                             if(lend > 0)
                             {
-                                srot_(&lend, &ab[(last - 1) * ab_dim1 + 3], &c__1,
-                                      &ab[last * ab_dim1 + 2], &c__1, &d__[last], &work[last]);
+                                aocl_blas_srot(&lend, &ab[(last - 1) * ab_dim1 + 3], &c__1,
+                                               &ab[last * ab_dim1 + 2], &c__1, &d__[last],
+                                               &work[last]);
                             }
                         }
                     }
@@ -686,8 +696,8 @@ void ssbtrd_(char *vect, char *uplo, integer *n, integer *kd, real *ab, integer 
                                 /* Computing MIN */
                                 i__4 = iqaend + *kd;
                                 iqaend = fla_min(i__4, iqend);
-                                srot_(&nq, &q[iqb + (j - 1) * q_dim1], &c__1, &q[iqb + j * q_dim1],
-                                      &c__1, &d__[j], &work[j]);
+                                aocl_blas_srot(&nq, &q[iqb + (j - 1) * q_dim1], &c__1,
+                                               &q[iqb + j * q_dim1], &c__1, &d__[j], &work[j]);
                                 /* L170: */
                             }
                         }
@@ -697,8 +707,8 @@ void ssbtrd_(char *vect, char *uplo, integer *n, integer *kd, real *ab, integer 
                             i__3 = kd1;
                             for(j = j1; i__3 < 0 ? j >= i__2 : j <= i__2; j += i__3)
                             {
-                                srot_(n, &q[(j - 1) * q_dim1 + 1], &c__1, &q[j * q_dim1 + 1], &c__1,
-                                      &d__[j], &work[j]);
+                                aocl_blas_srot(n, &q[(j - 1) * q_dim1 + 1], &c__1,
+                                               &q[j * q_dim1 + 1], &c__1, &d__[j], &work[j]);
                                 /* L180: */
                             }
                         }

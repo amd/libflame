@@ -86,7 +86,21 @@
 /* > \ingroup complexOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void clascl2_(integer *m, integer *n, real *d__, complex *x, integer *ldx)
+/** Generated wrapper function */
+void clascl2_(aocl_int_t *m, aocl_int_t *n, real *d__, scomplex *x, aocl_int_t *ldx)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_clascl2(m, n, d__, x, ldx);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t ldx_64 = *ldx;
+
+    aocl_lapack_clascl2(&m_64, &n_64, d__, x, &ldx_64);
+#endif
+}
+
+void aocl_lapack_clascl2(aocl_int64_t *m, aocl_int64_t *n, real *d__, scomplex *x, aocl_int64_t *ldx)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -99,10 +113,10 @@ void clascl2_(integer *m, integer *n, real *d__, complex *x, integer *ldx)
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
-    integer x_dim1, x_offset, i__1, i__2, i__3, i__4, i__5;
-    complex q__1;
+    aocl_int64_t x_dim1, x_offset, i__1, i__2, i__3, i__4, i__5;
+    scomplex q__1;
     /* Local variables */
-    integer i__, j;
+    aocl_int64_t i__, j;
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */

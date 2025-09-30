@@ -1,27 +1,27 @@
 #include "FLA_f2c.h"
 #include "FLA_lapack2flame_return_defs.h"
-static integer c__9 = 9;
-static integer c__0 = 0;
-static integer c__6 = 6;
-static integer c_n1 = -1;
-static integer c__1 = 1;
+static aocl_int64_t c__9 = 9;
+static aocl_int64_t c__0 = 0;
+static aocl_int64_t c__6 = 6;
+static aocl_int64_t c_n1 = -1;
+static aocl_int64_t c__1 = 1;
 
-int cgelsd_check(integer *m, integer *n, integer *nrhs, scomplex *a, integer *lda, scomplex *b,
-                 integer *ldb, float *s, float *rcond, integer *rank, scomplex *work,
-                 integer *lwork, float *rwork, integer *iwork, integer *info)
+int cgelsd_check(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *nrhs, scomplex *a, aocl_int64_t *lda, scomplex *b,
+                 aocl_int64_t *ldb, float *s, float *rcond, aocl_int64_t *rank, scomplex *work,
+                 aocl_int64_t *lwork, float *rwork, aocl_int64_t *iwork, aocl_int64_t *info)
 {
     /* System generated locals */
-    integer a_dim1, a_offset, b_dim1, b_offset, i__1, i__2, i__3, i__4;
+    aocl_int64_t a_dim1, a_offset, b_dim1, b_offset, i__1, i__2, i__3, i__4;
     /* Builtin functions */
     double log(double);
     /* Local variables */
-    integer mm;
-    integer nlvl;
-    integer minmn, maxmn, mnthr;
-    integer liwork, minwrk, maxwrk;
-    integer lrwork;
+    aocl_int64_t mm;
+    aocl_int64_t nlvl;
+    aocl_int64_t minmn, maxmn, mnthr;
+    aocl_int64_t liwork, minwrk, maxwrk;
+    aocl_int64_t lrwork;
     logical lquery;
-    integer smlsiz;
+    aocl_int64_t smlsiz;
 
     /* Parameter adjustments */
     a_dim1 = *lda;
@@ -73,8 +73,8 @@ int cgelsd_check(integer *m, integer *n, integer *nrhs, scomplex *a, integer *ld
         lrwork = 1;
         if(minmn > 0)
         {
-            smlsiz = ilaenv_(&c__9, "CGELSD", " ", &c__0, &c__0, &c__0, &c__0);
-            mnthr = ilaenv_(&c__6, "CGELSD", " ", m, n, nrhs, &c_n1);
+            smlsiz = aocl_lapack_ilaenv(&c__9, "CGELSD", " ", &c__0, &c__0, &c__0, &c__0);
+            mnthr = aocl_lapack_ilaenv(&c__6, "CGELSD", " ", m, n, nrhs, &c_n1);
             /* Computing MAX */
             i__1 = (integer)(log((float)minmn / (float)(smlsiz + 1)) / log(2.f)) + 1;
             nlvl = fla_max(i__1, 0);
@@ -87,11 +87,11 @@ int cgelsd_check(integer *m, integer *n, integer *nrhs, scomplex *a, integer *ld
                 mm = *n;
                 /* Computing MAX */
                 i__1 = maxwrk;
-                i__2 = *n * ilaenv_(&c__1, "CGEQRF", " ", m, n, &c_n1, &c_n1); // , expr subst
+                i__2 = *n * aocl_lapack_ilaenv(&c__1, "CGEQRF", " ", m, n, &c_n1, &c_n1); // , expr subst
                 maxwrk = fla_max(i__1, i__2);
                 /* Computing MAX */
                 i__1 = maxwrk;
-                i__2 = *nrhs * ilaenv_(&c__1, "CUNMQR", "LC", m, nrhs, n, &c_n1); // , expr subst
+                i__2 = *nrhs * aocl_lapack_ilaenv(&c__1, "CUNMQR", "LC", m, nrhs, n, &c_n1); // , expr subst
                 maxwrk = fla_max(i__1, i__2);
             }
             if(*m >= *n)
@@ -108,19 +108,19 @@ int cgelsd_check(integer *m, integer *n, integer *nrhs, scomplex *a, integer *ld
                 i__1 = maxwrk;
                 i__2 = (*n << 1)
                        + (mm + *n)
-                             * ilaenv_(&c__1, "CGEBRD", " ", &mm, n, &c_n1, &c_n1); // , expr subst
+                             * aocl_lapack_ilaenv(&c__1, "CGEBRD", " ", &mm, n, &c_n1, &c_n1); // , expr subst
                 maxwrk = fla_max(i__1, i__2);
                 /* Computing MAX */
                 i__1 = maxwrk;
                 i__2 = (*n << 1)
                        + *nrhs
-                             * ilaenv_(&c__1, "CUNMBR", "QLC", &mm, nrhs, n, &c_n1); // , expr subst
+                             * aocl_lapack_ilaenv(&c__1, "CUNMBR", "QLC", &mm, nrhs, n, &c_n1); // , expr subst
                 maxwrk = fla_max(i__1, i__2);
                 /* Computing MAX */
                 i__1 = maxwrk;
                 i__2 = (*n << 1)
                        + (*n - 1)
-                             * ilaenv_(&c__1, "CUNMBR", "PLN", n, nrhs, n, &c_n1); // , expr subst
+                             * aocl_lapack_ilaenv(&c__1, "CUNMBR", "PLN", n, nrhs, n, &c_n1); // , expr subst
                 maxwrk = fla_max(i__1, i__2);
                 /* Computing MAX */
                 i__1 = maxwrk;
@@ -144,19 +144,19 @@ int cgelsd_check(integer *m, integer *n, integer *nrhs, scomplex *a, integer *ld
                 {
                     /* Path 2a - underdetermined, with many more columns */
                     /* than rows. */
-                    maxwrk = *m + *m * ilaenv_(&c__1, "CGELQF", " ", m, n, &c_n1, &c_n1);
+                    maxwrk = *m + *m * aocl_lapack_ilaenv(&c__1, "CGELQF", " ", m, n, &c_n1, &c_n1);
                     /* Computing MAX */
                     i__1 = maxwrk;
                     i__2
                         = *m * *m + (*m << 2)
                           + (*m << 1)
-                                * ilaenv_(&c__1, "CGEBRD", " ", m, m, &c_n1, &c_n1); // , expr subst
+                                * aocl_lapack_ilaenv(&c__1, "CGEBRD", " ", m, m, &c_n1, &c_n1); // , expr subst
                     maxwrk = fla_max(i__1, i__2);
                     /* Computing MAX */
                     i__1 = maxwrk;
                     i__2 = *m * *m + (*m << 2)
                            + *nrhs
-                                 * ilaenv_(&c__1, "CUNMBR", "QLC", m, nrhs, m,
+                                 * aocl_lapack_ilaenv(&c__1, "CUNMBR", "QLC", m, nrhs, m,
                                            &c_n1); // , expr subst
                     maxwrk = fla_max(i__1, i__2);
                     /* Computing MAX */
@@ -164,7 +164,7 @@ int cgelsd_check(integer *m, integer *n, integer *nrhs, scomplex *a, integer *ld
                     i__2
                         = *m * *m + (*m << 2)
                           + (*m - 1)
-                                * ilaenv_(&c__1, "CUNMLQ", "LC", n, nrhs, m, &c_n1); // , expr subst
+                                * aocl_lapack_ilaenv(&c__1, "CUNMLQ", "LC", n, nrhs, m, &c_n1); // , expr subst
                     maxwrk = fla_max(i__1, i__2);
                     if(*nrhs > 1)
                     {
@@ -199,19 +199,19 @@ int cgelsd_check(integer *m, integer *n, integer *nrhs, scomplex *a, integer *ld
                 {
                     /* Path 2 - underdetermined. */
                     maxwrk
-                        = (*m << 1) + (*n + *m) * ilaenv_(&c__1, "CGEBRD", " ", m, n, &c_n1, &c_n1);
+                        = (*m << 1) + (*n + *m) * aocl_lapack_ilaenv(&c__1, "CGEBRD", " ", m, n, &c_n1, &c_n1);
                     /* Computing MAX */
                     i__1 = maxwrk;
                     i__2 = (*m << 1)
                            + *nrhs
-                                 * ilaenv_(&c__1, "CUNMBR", "QLC", m, nrhs, m,
+                                 * aocl_lapack_ilaenv(&c__1, "CUNMBR", "QLC", m, nrhs, m,
                                            &c_n1); // , expr subst
                     maxwrk = fla_max(i__1, i__2);
                     /* Computing MAX */
                     i__1 = maxwrk;
                     i__2
                         = (*m << 1)
-                          + *m * ilaenv_(&c__1, "CUNMBR", "PLN", n, nrhs, m, &c_n1); // , expr subst
+                          + *m * aocl_lapack_ilaenv(&c__1, "CUNMBR", "PLN", n, nrhs, m, &c_n1); // , expr subst
                     maxwrk = fla_max(i__1, i__2);
                     /* Computing MAX */
                     i__1 = maxwrk;
@@ -237,7 +237,7 @@ int cgelsd_check(integer *m, integer *n, integer *nrhs, scomplex *a, integer *ld
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("CGELSD", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("CGELSD", &i__1, (ftnlen)6);
         return LAPACK_FAILURE;
     }
     else if(lquery)

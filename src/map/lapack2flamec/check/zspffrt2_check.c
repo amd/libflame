@@ -6,9 +6,9 @@
 #include "FLA_f2c.h"
 #include "FLA_lapack2flame_return_defs.h"
 
-int zspffrt2_check(dcomplex *ap, integer *n, integer *ncolm, dcomplex *work, dcomplex *work2)
+int zspffrt2_check(dcomplex *ap, aocl_int64_t *n, aocl_int64_t *ncolm, dcomplex *work, dcomplex *work2)
 {
-    integer ret_val = LAPACK_SUCCESS;
+    aocl_int64_t ret_val = LAPACK_SUCCESS;
 
     if(*n < 0)
     {

@@ -100,19 +100,33 @@
 /* > \ingroup realOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void strttp_(char *uplo, integer *n, real *a, integer *lda, real *ap, integer *info)
+/** Generated wrapper function */
+void strttp_(char *uplo, aocl_int_t *n, real *a, aocl_int_t *lda, real *ap, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_strttp(uplo, n, a, lda, ap, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_strttp(uplo, &n_64, a, &lda_64, ap, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_strttp(char *uplo, aocl_int64_t *n, real *a, aocl_int64_t *lda, real *ap,
+                        aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("strttp inputs: uplo %c ,n %" FLA_IS ",lda %" FLA_IS "", *uplo, *n, *lda);
     /* System generated locals */
-    integer a_dim1, a_offset, i__1, i__2;
+    aocl_int64_t a_dim1, a_offset, i__1, i__2;
     /* Local variables */
-    integer i__, j, k;
-    extern logical lsame_(char *, char *, integer, integer);
+    aocl_int64_t i__, j, k;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     logical lower;
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -155,7 +169,7 @@ void strttp_(char *uplo, integer *n, real *a, integer *lda, real *ap, integer *i
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("STRTTP", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("STRTTP", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }

@@ -4,10 +4,10 @@
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
  /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static complex c_b1 = {0.f, 0.f};
-static complex c_b2 = {1.f, 0.f};
-static integer c__1 = 1;
-static integer c__2 = 2;
+static scomplex c_b1 = {{0.f}, {0.f}};
+static scomplex c_b2 = {{1.f}, {0.f}};
+static aocl_int64_t c__1 = 1;
+static aocl_int64_t c__2 = 2;
 /* > \brief \b CHGEQZ */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -47,11 +47,11 @@ static integer c__2 = 2;
 /* > */
 /* > \verbatim */
 /* > */
-/* > CHGEQZ computes the eigenvalues of a complex matrix pair (H,T), */
+/* > CHGEQZ computes the eigenvalues of a scomplex matrix pair (H,T), */
 /* > where H is an upper Hessenberg matrix and T is upper triangular, */
 /* > using the single-shift QZ method. */
 /* > Matrix pairs of this type are produced by the reduction to */
-/* > generalized upper Hessenberg form of a complex matrix pair (A,B): */
+/* > generalized upper Hessenberg form of a scomplex matrix pair (A,B): */
 /* > */
 /* > A = Q1*H*Z1**H, B = Q1*T*Z1**H, */
 /* > */
@@ -75,7 +75,7 @@ static integer c__2 = 2;
 /* > A = (Q1*Q)*S*(Z1*Z)**H, B = (Q1*Q)*P*(Z1*Z)**H. */
 /* > */
 /* > To avoid overflow, eigenvalues of the matrix pair (H,T) */
-/* > (equivalently, of (A,B)) are computed as a pair of complex values */
+/* > (equivalently, of (A,B)) are computed as a pair of scomplex values */
 /* > (alpha,beta). If beta is nonzero, lambda = alpha / beta is an */
 /* > eigenvalue of the generalized nonsymmetric eigenvalue problem (GNEP) */
 /* > A*x = lambda*B*x */
@@ -180,7 +180,7 @@ if N = 0, ILO=1 and IHI=0. */
 /* > \param[out] ALPHA */
 /* > \verbatim */
 /* > ALPHA is COMPLEX array, dimension (N) */
-/* > The complex scalars alpha that define the eigenvalues of */
+/* > The scomplex scalars alpha that define the eigenvalues of */
 /* > GNEP. ALPHA(i) = S(i,i) in the generalized Schur */
 /* > factorization. */
 /* > \endverbatim */
@@ -282,16 +282,44 @@ the routine */
 /* > */
 /* > \verbatim */
 /* > */
-/* > We assume that complex ABS works as long as its value is less than */
+/* > We assume that scomplex ABS works as long as its value is less than */
 /* > overflow. */
 /* > \endverbatim */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void chgeqz_(char *job, char *compq, char *compz, integer *n, integer *ilo, integer *ihi,
-             complex *h__, integer *ldh, complex *t, integer *ldt, complex *alpha, complex *beta,
-             complex *q, integer *ldq, complex *z__, integer *ldz, complex *work, integer *lwork,
-             real *rwork, integer *info)
+/** Generated wrapper function */
+void chgeqz_(char *job, char *compq, char *compz, aocl_int_t *n, aocl_int_t *ilo, aocl_int_t *ihi,
+             scomplex *h__, aocl_int_t *ldh, scomplex *t, aocl_int_t *ldt, scomplex *alpha,
+             scomplex *beta, scomplex *q, aocl_int_t *ldq, scomplex *z__, aocl_int_t *ldz,
+             scomplex *work, aocl_int_t *lwork, real *rwork, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_chgeqz(job, compq, compz, n, ilo, ihi, h__, ldh, t, ldt, alpha, beta, q, ldq, z__,
+                       ldz, work, lwork, rwork, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t ilo_64 = *ilo;
+    aocl_int64_t ihi_64 = *ihi;
+    aocl_int64_t ldh_64 = *ldh;
+    aocl_int64_t ldt_64 = *ldt;
+    aocl_int64_t ldq_64 = *ldq;
+    aocl_int64_t ldz_64 = *ldz;
+    aocl_int64_t lwork_64 = *lwork;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_chgeqz(job, compq, compz, &n_64, &ilo_64, &ihi_64, h__, &ldh_64, t, &ldt_64, alpha,
+                       beta, q, &ldq_64, z__, &ldz_64, work, &lwork_64, rwork, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_chgeqz(char *job, char *compq, char *compz, aocl_int64_t *n, aocl_int64_t *ilo,
+                        aocl_int64_t *ihi, scomplex *h__, aocl_int64_t *ldh, scomplex *t,
+                        aocl_int64_t *ldt, scomplex *alpha, scomplex *beta, scomplex *q,
+                        aocl_int64_t *ldq, scomplex *z__, aocl_int64_t *ldz, scomplex *work,
+                        aocl_int64_t *lwork, real *rwork, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("chgeqz inputs: job %c, compq %c, compz %c, n %" FLA_IS ", ilo %" FLA_IS
@@ -299,64 +327,51 @@ void chgeqz_(char *job, char *compq, char *compz, integer *n, integer *ilo, inte
                       ", ldz %" FLA_IS ", lwork %" FLA_IS "",
                       *job, *compq, *compz, *n, *ilo, *ihi, *ldh, *ldt, *ldq, *ldz, *lwork);
     /* System generated locals */
-    integer h_dim1, h_offset, q_dim1, q_offset, t_dim1, t_offset, z_dim1, z_offset, i__1, i__2,
+    aocl_int64_t h_dim1, h_offset, q_dim1, q_offset, t_dim1, t_offset, z_dim1, z_offset, i__1, i__2,
         i__3, i__4, i__5, i__6;
     real r__1, r__2, r__3, r__4, r__5, r__6, r__7, r__8;
-    complex q__1, q__2, q__3, q__4, q__5, q__6, q__7;
+    scomplex q__1, q__2, q__3, q__4, q__5, q__6, q__7;
     /* Builtin functions */
-    double c_abs(complex *);
-    void r_cnjg(complex *, complex *);
-    double r_imag(complex *);
-    void c_div(complex *, complex *, complex *), c_sqrt(complex *, complex *),
-        pow_ci(complex *, complex *, integer *);
+    double c_abs(scomplex *);
+    void r_cnjg(scomplex *, scomplex *);
+    double r_imag(scomplex *);
+    void c_div(scomplex *, scomplex *, scomplex *), c_sqrt(scomplex *, scomplex *),
+        pow_ci(scomplex *, scomplex *, aocl_int64_t *);
     /* Local variables */
     real c__;
-    integer j;
-    complex s, x, y;
-    integer jc, in;
-    complex u12;
-    integer jr;
-    complex ad11, ad12, ad21, ad22;
-    integer jch;
+    aocl_int64_t j;
+    scomplex s, x, y;
+    aocl_int64_t jc, in;
+    scomplex u12;
+    aocl_int64_t jr;
+    scomplex ad11, ad12, ad21, ad22;
+    aocl_int64_t jch;
     logical ilq, ilz;
     real ulp;
-    complex abi12, abi22;
+    scomplex abi12, abi22;
     real absb, atol, btol, temp;
-    extern /* Subroutine */
-        void
-        crot_(integer *, complex *, integer *, complex *, integer *, real *, complex *);
     real temp2;
-    extern /* Subroutine */
-        void
-        cscal_(integer *, complex *, complex *, integer *);
-    extern logical lsame_(char *, char *, integer, integer);
-    complex ctemp;
-    integer iiter, ilast, jiter;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    scomplex ctemp;
+    aocl_int64_t iiter, ilast, jiter;
     real anorm, bnorm;
-    integer maxit;
-    complex shift;
+    aocl_int64_t maxit;
+    scomplex shift;
     real tempr;
-    complex ctemp2, ctemp3;
+    scomplex ctemp2, ctemp3;
     logical ilazr2;
     real ascale, bscale;
     extern /* Complex */
-        VOID
-        cladiv_f2c_(complex *, complex *, complex *);
-    complex signbc;
-    extern real slamch_(char *), clanhs_(char *, integer *, complex *, integer *, real *);
-    extern /* Subroutine */
         void
-        claset_(char *, integer *, integer *, complex *, complex *, complex *, integer *),
-        clartg_(complex *, complex *, real *, complex *, complex *);
+        cladiv_f2c_(scomplex *, scomplex *, scomplex *);
+    scomplex signbc;
+    extern void clartg_(scomplex *, scomplex *, real *, scomplex *, scomplex *);
     real safmin;
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    complex eshift;
+    scomplex eshift;
     logical ilschr;
-    integer icompq, ilastm, ischur;
+    aocl_int64_t icompq, ilastm, ischur;
     logical ilazro;
-    integer icompz, ifirst, ifrstm, istart;
+    aocl_int64_t icompz, ifirst, ifrstm, istart;
     logical lquery;
     /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -509,7 +524,7 @@ void chgeqz_(char *job, char *compq, char *compz, integer *n, integer *ilo, inte
     {
         i__1 = -(*info);
         AOCL_DTL_TRACE_LOG_EXIT
-        xerbla_("CHGEQZ", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("CHGEQZ", &i__1, (ftnlen)6);
         return;
     }
     else if(lquery)
@@ -529,18 +544,18 @@ void chgeqz_(char *job, char *compq, char *compz, integer *n, integer *ilo, inte
     /* Initialize Q and Z */
     if(icompq == 3)
     {
-        claset_("Full", n, n, &c_b1, &c_b2, &q[q_offset], ldq);
+        aocl_lapack_claset("Full", n, n, &c_b1, &c_b2, &q[q_offset], ldq);
     }
     if(icompz == 3)
     {
-        claset_("Full", n, n, &c_b1, &c_b2, &z__[z_offset], ldz);
+        aocl_lapack_claset("Full", n, n, &c_b1, &c_b2, &z__[z_offset], ldz);
     }
     /* Machine Constants */
     in = *ihi + 1 - *ilo;
     safmin = slamch_("S");
     ulp = slamch_("E") * slamch_("B");
-    anorm = clanhs_("F", &in, &h__[*ilo + *ilo * h_dim1], ldh, &rwork[1]);
-    bnorm = clanhs_("F", &in, &t[*ilo + *ilo * t_dim1], ldt, &rwork[1]);
+    anorm = aocl_lapack_clanhs("F", &in, &h__[*ilo + *ilo * h_dim1], ldh, &rwork[1]);
+    bnorm = aocl_lapack_clanhs("F", &in, &t[*ilo + *ilo * t_dim1], ldt, &rwork[1]);
     /* Computing MAX */
     r__1 = safmin;
     r__2 = ulp * anorm; // , expr subst
@@ -570,16 +585,16 @@ void chgeqz_(char *job, char *compq, char *compz, integer *n, integer *ilo, inte
             if(ilschr)
             {
                 i__2 = j - 1;
-                cscal_(&i__2, &signbc, &t[j * t_dim1 + 1], &c__1);
-                cscal_(&j, &signbc, &h__[j * h_dim1 + 1], &c__1);
+                aocl_blas_cscal(&i__2, &signbc, &t[j * t_dim1 + 1], &c__1);
+                aocl_blas_cscal(&j, &signbc, &h__[j * h_dim1 + 1], &c__1);
             }
             else
             {
-                cscal_(&c__1, &signbc, &h__[j + j * h_dim1], &c__1);
+                aocl_blas_cscal(&c__1, &signbc, &h__[j + j * h_dim1], &c__1);
             }
             if(ilz)
             {
-                cscal_(n, &signbc, &z__[j * z_dim1 + 1], &c__1);
+                aocl_blas_cscal(n, &signbc, &z__[j * z_dim1 + 1], &c__1);
             }
         }
         else
@@ -757,16 +772,16 @@ void chgeqz_(char *job, char *compq, char *compz, integer *n, integer *ilo, inte
                         h__[i__4].r = 0.f;
                         h__[i__4].i = 0.f; // , expr subst
                         i__4 = ilastm - jch;
-                        crot_(&i__4, &h__[jch + (jch + 1) * h_dim1], ldh,
-                              &h__[jch + 1 + (jch + 1) * h_dim1], ldh, &c__, &s);
+                        aocl_lapack_crot(&i__4, &h__[jch + (jch + 1) * h_dim1], ldh,
+                                         &h__[jch + 1 + (jch + 1) * h_dim1], ldh, &c__, &s);
                         i__4 = ilastm - jch;
-                        crot_(&i__4, &t[jch + (jch + 1) * t_dim1], ldt,
-                              &t[jch + 1 + (jch + 1) * t_dim1], ldt, &c__, &s);
+                        aocl_lapack_crot(&i__4, &t[jch + (jch + 1) * t_dim1], ldt,
+                                         &t[jch + 1 + (jch + 1) * t_dim1], ldt, &c__, &s);
                         if(ilq)
                         {
                             r_cnjg(&q__1, &s);
-                            crot_(n, &q[jch * q_dim1 + 1], &c__1, &q[(jch + 1) * q_dim1 + 1], &c__1,
-                                  &c__, &q__1);
+                            aocl_lapack_crot(n, &q[jch * q_dim1 + 1], &c__1,
+                                             &q[(jch + 1) * q_dim1 + 1], &c__1, &c__, &q__1);
                         }
                         if(ilazr2)
                         {
@@ -818,17 +833,17 @@ void chgeqz_(char *job, char *compq, char *compz, integer *n, integer *ilo, inte
                         if(jch < ilastm - 1)
                         {
                             i__4 = ilastm - jch - 1;
-                            crot_(&i__4, &t[jch + (jch + 2) * t_dim1], ldt,
-                                  &t[jch + 1 + (jch + 2) * t_dim1], ldt, &c__, &s);
+                            aocl_lapack_crot(&i__4, &t[jch + (jch + 2) * t_dim1], ldt,
+                                             &t[jch + 1 + (jch + 2) * t_dim1], ldt, &c__, &s);
                         }
                         i__4 = ilastm - jch + 2;
-                        crot_(&i__4, &h__[jch + (jch - 1) * h_dim1], ldh,
-                              &h__[jch + 1 + (jch - 1) * h_dim1], ldh, &c__, &s);
+                        aocl_lapack_crot(&i__4, &h__[jch + (jch - 1) * h_dim1], ldh,
+                                         &h__[jch + 1 + (jch - 1) * h_dim1], ldh, &c__, &s);
                         if(ilq)
                         {
                             r_cnjg(&q__1, &s);
-                            crot_(n, &q[jch * q_dim1 + 1], &c__1, &q[(jch + 1) * q_dim1 + 1], &c__1,
-                                  &c__, &q__1);
+                            aocl_lapack_crot(n, &q[jch * q_dim1 + 1], &c__1,
+                                             &q[(jch + 1) * q_dim1 + 1], &c__1, &c__, &q__1);
                         }
                         i__4 = jch + 1 + jch * h_dim1;
                         ctemp.r = h__[i__4].r;
@@ -839,15 +854,15 @@ void chgeqz_(char *job, char *compq, char *compz, integer *n, integer *ilo, inte
                         h__[i__4].r = 0.f;
                         h__[i__4].i = 0.f; // , expr subst
                         i__4 = jch + 1 - ifrstm;
-                        crot_(&i__4, &h__[ifrstm + jch * h_dim1], &c__1,
-                              &h__[ifrstm + (jch - 1) * h_dim1], &c__1, &c__, &s);
+                        aocl_lapack_crot(&i__4, &h__[ifrstm + jch * h_dim1], &c__1,
+                                         &h__[ifrstm + (jch - 1) * h_dim1], &c__1, &c__, &s);
                         i__4 = jch - ifrstm;
-                        crot_(&i__4, &t[ifrstm + jch * t_dim1], &c__1,
-                              &t[ifrstm + (jch - 1) * t_dim1], &c__1, &c__, &s);
+                        aocl_lapack_crot(&i__4, &t[ifrstm + jch * t_dim1], &c__1,
+                                         &t[ifrstm + (jch - 1) * t_dim1], &c__1, &c__, &s);
                         if(ilz)
                         {
-                            crot_(n, &z__[jch * z_dim1 + 1], &c__1, &z__[(jch - 1) * z_dim1 + 1],
-                                  &c__1, &c__, &s);
+                            aocl_lapack_crot(n, &z__[jch * z_dim1 + 1], &c__1,
+                                             &z__[(jch - 1) * z_dim1 + 1], &c__1, &c__, &s);
                         }
                         /* L30: */
                     }
@@ -877,15 +892,15 @@ void chgeqz_(char *job, char *compq, char *compz, integer *n, integer *ilo, inte
         h__[i__2].r = 0.f;
         h__[i__2].i = 0.f; // , expr subst
         i__2 = ilast - ifrstm;
-        crot_(&i__2, &h__[ifrstm + ilast * h_dim1], &c__1, &h__[ifrstm + (ilast - 1) * h_dim1],
-              &c__1, &c__, &s);
+        aocl_lapack_crot(&i__2, &h__[ifrstm + ilast * h_dim1], &c__1,
+                         &h__[ifrstm + (ilast - 1) * h_dim1], &c__1, &c__, &s);
         i__2 = ilast - ifrstm;
-        crot_(&i__2, &t[ifrstm + ilast * t_dim1], &c__1, &t[ifrstm + (ilast - 1) * t_dim1], &c__1,
-              &c__, &s);
+        aocl_lapack_crot(&i__2, &t[ifrstm + ilast * t_dim1], &c__1,
+                         &t[ifrstm + (ilast - 1) * t_dim1], &c__1, &c__, &s);
         if(ilz)
         {
-            crot_(n, &z__[ilast * z_dim1 + 1], &c__1, &z__[(ilast - 1) * z_dim1 + 1], &c__1, &c__,
-                  &s);
+            aocl_lapack_crot(n, &z__[ilast * z_dim1 + 1], &c__1, &z__[(ilast - 1) * z_dim1 + 1],
+                             &c__1, &c__, &s);
         }
         /* H(ILAST,ILAST-1)=0 -- Standardize B, set ALPHA and BETA */
     L60:
@@ -904,17 +919,17 @@ void chgeqz_(char *job, char *compq, char *compz, integer *n, integer *ilo, inte
             if(ilschr)
             {
                 i__2 = ilast - ifrstm;
-                cscal_(&i__2, &signbc, &t[ifrstm + ilast * t_dim1], &c__1);
+                aocl_blas_cscal(&i__2, &signbc, &t[ifrstm + ilast * t_dim1], &c__1);
                 i__2 = ilast + 1 - ifrstm;
-                cscal_(&i__2, &signbc, &h__[ifrstm + ilast * h_dim1], &c__1);
+                aocl_blas_cscal(&i__2, &signbc, &h__[ifrstm + ilast * h_dim1], &c__1);
             }
             else
             {
-                cscal_(&c__1, &signbc, &h__[ilast + ilast * h_dim1], &c__1);
+                aocl_blas_cscal(&c__1, &signbc, &h__[ilast + ilast * h_dim1], &c__1);
             }
             if(ilz)
             {
-                cscal_(n, &signbc, &z__[ilast * z_dim1 + 1], &c__1);
+                aocl_blas_cscal(n, &signbc, &z__[ilast * z_dim1 + 1], &c__1);
             }
         }
         else
@@ -1406,7 +1421,7 @@ void chgeqz_(char *job, char *compq, char *compz, integer *n, integer *ilo, inte
             /* L150: */
         }
     L160: /* L170: */
-          ;
+        ;
     }
     /* Drop-through = non-convergence */
 L180:
@@ -1432,16 +1447,16 @@ L190: /* Set Eigenvalues 1:ILO-1 */
             if(ilschr)
             {
                 i__2 = j - 1;
-                cscal_(&i__2, &signbc, &t[j * t_dim1 + 1], &c__1);
-                cscal_(&j, &signbc, &h__[j * h_dim1 + 1], &c__1);
+                aocl_blas_cscal(&i__2, &signbc, &t[j * t_dim1 + 1], &c__1);
+                aocl_blas_cscal(&j, &signbc, &h__[j * h_dim1 + 1], &c__1);
             }
             else
             {
-                cscal_(&c__1, &signbc, &h__[j + j * h_dim1], &c__1);
+                aocl_blas_cscal(&c__1, &signbc, &h__[j + j * h_dim1], &c__1);
             }
             if(ilz)
             {
-                cscal_(n, &signbc, &z__[j * z_dim1 + 1], &c__1);
+                aocl_blas_cscal(n, &signbc, &z__[j * z_dim1 + 1], &c__1);
             }
         }
         else

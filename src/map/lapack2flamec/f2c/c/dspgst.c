@@ -4,7 +4,7 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
+static aocl_int64_t c__1 = 1;
 static doublereal c_b9 = -1.;
 static doublereal c_b11 = 1.;
 /* > \brief \b DSPGST */
@@ -115,39 +115,41 @@ static doublereal c_b11 = 1.;
 /* > \ingroup doubleOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void dspgst_(integer *itype, char *uplo, integer *n, doublereal *ap, doublereal *bp, integer *info)
+/** Generated wrapper function */
+void dspgst_(aocl_int_t *itype, char *uplo, aocl_int_t *n, doublereal *ap, doublereal *bp,
+             aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_dspgst(itype, uplo, n, ap, bp, info);
+#else
+    aocl_int64_t itype_64 = *itype;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_dspgst(&itype_64, uplo, &n_64, ap, bp, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_dspgst(aocl_int64_t *itype, char *uplo, aocl_int64_t *n, doublereal *ap,
+                        doublereal *bp, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dspgst inputs: itype %" FLA_IS ", uplo %c, n %" FLA_IS "", *itype, *uplo,
                       *n);
     /* System generated locals */
-    integer i__1, i__2;
+    aocl_int64_t i__1, i__2;
     doublereal d__1;
     /* Local variables */
-    integer j, k, j1, k1, jj, kk;
+    aocl_int64_t j, k, j1, k1, jj, kk;
     doublereal ct, ajj;
-    integer j1j1;
+    aocl_int64_t j1j1;
     doublereal akk;
-    integer k1k1;
+    aocl_int64_t k1k1;
     doublereal bjj, bkk;
-    extern doublereal ddot_(integer *, doublereal *, integer *, doublereal *, integer *);
-    extern /* Subroutine */
-        void
-        dspr2_(char *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *,
-               doublereal *),
-        dscal_(integer *, doublereal *, doublereal *, integer *);
-    extern logical lsame_(char *, char *, integer, integer);
-    extern /* Subroutine */
-        void
-        daxpy_(integer *, doublereal *, doublereal *, integer *, doublereal *, integer *),
-        dspmv_(char *, integer *, doublereal *, doublereal *, doublereal *, integer *, doublereal *,
-               doublereal *, integer *);
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     logical upper;
-    extern /* Subroutine */
-        void
-        dtpmv_(char *, char *, char *, integer *, doublereal *, doublereal *, integer *),
-        dtpsv_(char *, char *, char *, integer *, doublereal *, doublereal *, integer *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -188,7 +190,7 @@ void dspgst_(integer *itype, char *uplo, integer *n, doublereal *ap, doublereal 
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("DSPGST", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("DSPGST", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -206,14 +208,14 @@ void dspgst_(integer *itype, char *uplo, integer *n, doublereal *ap, doublereal 
                 jj += j;
                 /* Compute the j-th column of the upper triangle of A */
                 bjj = bp[jj];
-                dtpsv_(uplo, "Transpose", "Nonunit", &j, &bp[1], &ap[j1], &c__1);
+                aocl_blas_dtpsv(uplo, "Transpose", "Nonunit", &j, &bp[1], &ap[j1], &c__1);
                 i__2 = j - 1;
-                dspmv_(uplo, &i__2, &c_b9, &ap[1], &bp[j1], &c__1, &c_b11, &ap[j1], &c__1);
+                aocl_blas_dspmv(uplo, &i__2, &c_b9, &ap[1], &bp[j1], &c__1, &c_b11, &ap[j1], &c__1);
                 i__2 = j - 1;
                 d__1 = 1. / bjj;
-                dscal_(&i__2, &d__1, &ap[j1], &c__1);
+                aocl_blas_dscal(&i__2, &d__1, &ap[j1], &c__1);
                 i__2 = j - 1;
-                ap[jj] = (ap[jj] - ddot_(&i__2, &ap[j1], &c__1, &bp[j1], &c__1)) / bjj;
+                ap[jj] = (ap[jj] - aocl_blas_ddot(&i__2, &ap[j1], &c__1, &bp[j1], &c__1)) / bjj;
                 /* L10: */
             }
         }
@@ -237,16 +239,18 @@ void dspgst_(integer *itype, char *uplo, integer *n, doublereal *ap, doublereal 
                 {
                     i__2 = *n - k;
                     d__1 = 1. / bkk;
-                    dscal_(&i__2, &d__1, &ap[kk + 1], &c__1);
+                    aocl_blas_dscal(&i__2, &d__1, &ap[kk + 1], &c__1);
                     ct = akk * -.5;
                     i__2 = *n - k;
-                    daxpy_(&i__2, &ct, &bp[kk + 1], &c__1, &ap[kk + 1], &c__1);
+                    aocl_blas_daxpy(&i__2, &ct, &bp[kk + 1], &c__1, &ap[kk + 1], &c__1);
                     i__2 = *n - k;
-                    dspr2_(uplo, &i__2, &c_b9, &ap[kk + 1], &c__1, &bp[kk + 1], &c__1, &ap[k1k1]);
+                    aocl_blas_dspr2(uplo, &i__2, &c_b9, &ap[kk + 1], &c__1, &bp[kk + 1], &c__1,
+                                    &ap[k1k1]);
                     i__2 = *n - k;
-                    daxpy_(&i__2, &ct, &bp[kk + 1], &c__1, &ap[kk + 1], &c__1);
+                    aocl_blas_daxpy(&i__2, &ct, &bp[kk + 1], &c__1, &ap[kk + 1], &c__1);
                     i__2 = *n - k;
-                    dtpsv_(uplo, "No transpose", "Non-unit", &i__2, &bp[k1k1], &ap[kk + 1], &c__1);
+                    aocl_blas_dtpsv(uplo, "No transpose", "Non-unit", &i__2, &bp[k1k1], &ap[kk + 1],
+                                    &c__1);
                 }
                 kk = k1k1;
                 /* L20: */
@@ -269,16 +273,16 @@ void dspgst_(integer *itype, char *uplo, integer *n, doublereal *ap, doublereal 
                 akk = ap[kk];
                 bkk = bp[kk];
                 i__2 = k - 1;
-                dtpmv_(uplo, "No transpose", "Non-unit", &i__2, &bp[1], &ap[k1], &c__1);
+                aocl_blas_dtpmv(uplo, "No transpose", "Non-unit", &i__2, &bp[1], &ap[k1], &c__1);
                 ct = akk * .5;
                 i__2 = k - 1;
-                daxpy_(&i__2, &ct, &bp[k1], &c__1, &ap[k1], &c__1);
+                aocl_blas_daxpy(&i__2, &ct, &bp[k1], &c__1, &ap[k1], &c__1);
                 i__2 = k - 1;
-                dspr2_(uplo, &i__2, &c_b11, &ap[k1], &c__1, &bp[k1], &c__1, &ap[1]);
+                aocl_blas_dspr2(uplo, &i__2, &c_b11, &ap[k1], &c__1, &bp[k1], &c__1, &ap[1]);
                 i__2 = k - 1;
-                daxpy_(&i__2, &ct, &bp[k1], &c__1, &ap[k1], &c__1);
+                aocl_blas_daxpy(&i__2, &ct, &bp[k1], &c__1, &ap[k1], &c__1);
                 i__2 = k - 1;
-                dscal_(&i__2, &bkk, &ap[k1], &c__1);
+                aocl_blas_dscal(&i__2, &bkk, &ap[k1], &c__1);
                 /* Computing 2nd power */
                 d__1 = bkk;
                 ap[kk] = akk * (d__1 * d__1);
@@ -298,14 +302,14 @@ void dspgst_(integer *itype, char *uplo, integer *n, doublereal *ap, doublereal 
                 ajj = ap[jj];
                 bjj = bp[jj];
                 i__2 = *n - j;
-                ap[jj] = ajj * bjj + ddot_(&i__2, &ap[jj + 1], &c__1, &bp[jj + 1], &c__1);
+                ap[jj] = ajj * bjj + aocl_blas_ddot(&i__2, &ap[jj + 1], &c__1, &bp[jj + 1], &c__1);
                 i__2 = *n - j;
-                dscal_(&i__2, &bjj, &ap[jj + 1], &c__1);
+                aocl_blas_dscal(&i__2, &bjj, &ap[jj + 1], &c__1);
                 i__2 = *n - j;
-                dspmv_(uplo, &i__2, &c_b11, &ap[j1j1], &bp[jj + 1], &c__1, &c_b11, &ap[jj + 1],
-                       &c__1);
+                aocl_blas_dspmv(uplo, &i__2, &c_b11, &ap[j1j1], &bp[jj + 1], &c__1, &c_b11,
+                                &ap[jj + 1], &c__1);
                 i__2 = *n - j + 1;
-                dtpmv_(uplo, "Transpose", "Non-unit", &i__2, &bp[jj], &ap[jj], &c__1);
+                aocl_blas_dtpmv(uplo, "Transpose", "Non-unit", &i__2, &bp[jj], &ap[jj], &c__1);
                 jj = j1j1;
                 /* L40: */
             }

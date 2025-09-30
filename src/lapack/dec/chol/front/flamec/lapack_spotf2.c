@@ -9,25 +9,24 @@
 
 /* Table of constant values */
 
-static integer c__1 = 1;
+static aocl_int64_t c__1 = 1;
 static real c_b10 = -1.f;
 static real c_b12 = 1.f;
 
-/* Subroutine */ int lapack_spotf2(char *uplo, integer *n, real *a, integer *lda,
-	integer *info)
+/* Subroutine */ int lapack_spotf2(char *uplo, aocl_int64_t *n, real *a, aocl_int64_t *lda,
+	aocl_int64_t *info)
 {
     /* System generated locals */
-    integer a_dim1, a_offset, i__1, i__2, i__3;
+    aocl_int64_t a_dim1, a_offset, i__1, i__2, i__3;
     real r__1;
 
     /* Builtin functions */
     double sqrt(doublereal);
 #ifndef FLA_ENABLE_AOCL_BLAS
-	void xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-	logical lsame_(char *ca, char *cb, integer a, integer b);
+	logical lsame_(char *ca, char *cb, aocl_int64_t a, aocl_int64_t b);
 #endif
     /* Local variables */
-    integer j;
+    aocl_int64_t j;
     real ajj;
     logical upper;
 
@@ -94,7 +93,7 @@ static real c_b12 = 1.f;
     }
     if (*info != 0) {
 	i__1 = -(*info);
-	xerbla_("LAPACK_SPOTF2", &i__1, (ftnlen)13);
+	aocl_blas_xerbla("LAPACK_SPOTF2", &i__1, (ftnlen)13);
 	return 0;
     }
 
@@ -114,7 +113,7 @@ static real c_b12 = 1.f;
 /*           Compute U(J,J) and test for non-positive-definiteness. */
 
 	    i__2 = j - 1;
-	    ajj = a[j + j * a_dim1] - sdot_(&i__2, &a[j * a_dim1 + 1], &c__1,
+	    ajj = a[j + j * a_dim1] - aocl_blas_sdot(&i__2, &a[j * a_dim1 + 1], &c__1,
 		    &a[j * a_dim1 + 1], &c__1);
 	    if (ajj <= 0.f || sisnan_(&ajj)) {
 		a[j + j * a_dim1] = ajj;
@@ -128,12 +127,12 @@ static real c_b12 = 1.f;
 	    if (j < *n) {
 		i__2 = j - 1;
 		i__3 = *n - j;
-		sgemv_("Transpose", &i__2, &i__3, &c_b10, &a[(j + 1) * a_dim1
+		aocl_blas_sgemv("Transpose", &i__2, &i__3, &c_b10, &a[(j + 1) * a_dim1
 			+ 1], lda, &a[j * a_dim1 + 1], &c__1, &c_b12, &a[j + (
 			j + 1) * a_dim1], lda);
 		i__2 = *n - j;
 		r__1 = 1.f / ajj;
-		sscal_(&i__2, &r__1, &a[j + (j + 1) * a_dim1], lda);
+		aocl_blas_sscal(&i__2, &r__1, &a[j + (j + 1) * a_dim1], lda);
 	    }
 /* L10: */
 	}
@@ -147,7 +146,7 @@ static real c_b12 = 1.f;
 /*           Compute L(J,J) and test for non-positive-definiteness. */
 
 	    i__2 = j - 1;
-	    ajj = a[j + j * a_dim1] - sdot_(&i__2, &a[j + a_dim1], lda, &a[j
+	    ajj = a[j + j * a_dim1] - aocl_blas_sdot(&i__2, &a[j + a_dim1], lda, &a[j
 		    + a_dim1], lda);
 	    if (ajj <= 0.f || sisnan_(&ajj)) {
 		a[j + j * a_dim1] = ajj;
@@ -161,12 +160,12 @@ static real c_b12 = 1.f;
 	    if (j < *n) {
 		i__2 = *n - j;
 		i__3 = j - 1;
-		sgemv_("No transpose", &i__2, &i__3, &c_b10, &a[j + 1 +
+		aocl_blas_sgemv("No transpose", &i__2, &i__3, &c_b10, &a[j + 1 +
 			a_dim1], lda, &a[j + a_dim1], lda, &c_b12, &a[j + 1 +
 			j * a_dim1], &c__1);
 		i__2 = *n - j;
 		r__1 = 1.f / ajj;
-		sscal_(&i__2, &r__1, &a[j + 1 + j * a_dim1], &c__1);
+		aocl_blas_sscal(&i__2, &r__1, &a[j + 1 + j * a_dim1], &c__1);
 	    }
 /* L20: */
 	}

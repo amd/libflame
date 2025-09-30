@@ -18,13 +18,13 @@ FLA_Error FLA_Apply_pivots_unb_external( FLA_Side side, FLA_Trans trans, FLA_Obj
 {
 #ifdef FLA_ENABLE_EXTERNAL_LAPACK_INTERFACES
   FLA_Datatype datatype;
-  integer          n_A, cs_A;
-  integer          m_p;
-  integer          inc_p;
-  integer*         buff_p;
-  integer          k1_1, k2_1;
-  integer*         pivots_lapack;
-  integer          i;
+  fla_dim_t          n_A, cs_A;
+  fla_dim_t          m_p;
+  fla_dim_t          inc_p;
+  fla_dim_t*         buff_p;
+  fla_dim_t          k1_1, k2_1;
+  fla_dim_t*         pivots_lapack;
+  fla_dim_t          i;
 
   if ( FLA_Check_error_level() == FLA_FULL_ERROR_CHECKING )
     FLA_Apply_pivots_check( side, trans, p, A );
@@ -50,9 +50,9 @@ FLA_Error FLA_Apply_pivots_unb_external( FLA_Side side, FLA_Trans trans, FLA_Obj
   // FLA_Shift_pivots_to(), is NOT in-place, but rather done separately
   // in a temporary buffer.
 #ifdef FLA_ENABLE_WINDOWS_BUILD
-  pivots_lapack = ( integer * ) _alloca( m_p * sizeof( integer ) );
+  pivots_lapack = ( fla_dim_t * ) _alloca( m_p * sizeof( fla_dim_t ) );
 #else
-  pivots_lapack = ( integer * ) malloc( m_p * sizeof( integer ) );
+  pivots_lapack = ( fla_dim_t * ) malloc( m_p * sizeof( fla_dim_t ) );
 #endif
 
   // Check if memory is allocated properly
@@ -70,7 +70,7 @@ FLA_Error FLA_Apply_pivots_unb_external( FLA_Side side, FLA_Trans trans, FLA_Obj
   {
     float* buff_A = ( float * ) FLA_FLOAT_PTR( A );
 
-    F77_slaswp( &n_A,
+    aocl_lapack_slaswp64( &n_A,
                 buff_A, &cs_A,
                 &k1_1, 
                 &k2_1,
@@ -83,7 +83,7 @@ FLA_Error FLA_Apply_pivots_unb_external( FLA_Side side, FLA_Trans trans, FLA_Obj
   {
     double* buff_A = ( double * ) FLA_DOUBLE_PTR( A );
 
-    F77_dlaswp( &n_A,
+    aocl_lapack_dlaswp64( &n_A,
                 buff_A, &cs_A,
                 &k1_1, 
                 &k2_1,
@@ -96,7 +96,7 @@ FLA_Error FLA_Apply_pivots_unb_external( FLA_Side side, FLA_Trans trans, FLA_Obj
   {
     scomplex* buff_A = ( scomplex * ) FLA_COMPLEX_PTR( A );
 
-    F77_claswp( &n_A,
+    aocl_lapack_claswp64( &n_A,
                 buff_A, &cs_A,
                 &k1_1, 
                 &k2_1,
@@ -109,7 +109,7 @@ FLA_Error FLA_Apply_pivots_unb_external( FLA_Side side, FLA_Trans trans, FLA_Obj
   {
     dcomplex* buff_A = ( dcomplex * ) FLA_DOUBLE_COMPLEX_PTR( A );
 
-    F77_zlaswp( &n_A,
+    aocl_lapack_zlaswp64( &n_A,
                 buff_A, &cs_A,
                 &k1_1, 
                 &k2_1,

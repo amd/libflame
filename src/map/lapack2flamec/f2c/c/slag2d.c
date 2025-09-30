@@ -99,17 +99,36 @@
 /* > \ingroup auxOTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-void slag2d_(integer *m, integer *n, real *sa, integer *ldsa, doublereal *a, integer *lda,
-             integer *info)
+/** Generated wrapper function */
+void slag2d_(aocl_int_t *m, aocl_int_t *n, real *sa, aocl_int_t *ldsa, doublereal *a,
+             aocl_int_t *lda, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_slag2d(m, n, sa, ldsa, a, lda, info);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t ldsa_64 = *ldsa;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_slag2d(&m_64, &n_64, sa, &ldsa_64, a, &lda_64, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_slag2d(aocl_int64_t *m, aocl_int64_t *n, real *sa, aocl_int64_t *ldsa,
+                        doublereal *a, aocl_int64_t *lda, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("slag2d_ inputs: *m %" FLA_IS ", *n %" FLA_IS ", *ldsa %" FLA_IS
                       ", *lda %" FLA_IS "",
                       *m, *n, *ldsa, *lda);
     /* System generated locals */
-    integer sa_dim1, sa_offset, a_dim1, a_offset, i__1, i__2;
+    aocl_int64_t sa_dim1, sa_offset, a_dim1, a_offset, i__1, i__2;
     /* Local variables */
-    integer i__, j;
+    aocl_int64_t i__, j;
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */

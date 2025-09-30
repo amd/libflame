@@ -119,8 +119,26 @@
 /* > \ingroup complexGTsolve */
 /* ===================================================================== */
 /* Subroutine */
-void cgtsv_(integer *n, integer *nrhs, complex *dl, complex *d__, complex *du, complex *b,
-            integer *ldb, integer *info)
+/** Generated wrapper function */
+void cgtsv_(aocl_int_t *n, aocl_int_t *nrhs, scomplex *dl, scomplex *d__, scomplex *du, scomplex *b,
+            aocl_int_t *ldb, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_cgtsv(n, nrhs, dl, d__, du, b, ldb, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t nrhs_64 = *nrhs;
+    aocl_int64_t ldb_64 = *ldb;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_cgtsv(&n_64, &nrhs_64, dl, d__, du, b, &ldb_64, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_cgtsv(aocl_int64_t *n, aocl_int64_t *nrhs, scomplex *dl, scomplex *d__, scomplex *du,
+                       scomplex *b, aocl_int64_t *ldb, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -133,18 +151,15 @@ void cgtsv_(integer *n, integer *nrhs, complex *dl, complex *d__, complex *du, c
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
-    integer b_dim1, b_offset, i__1, i__2, i__3, i__4, i__5, i__6, i__7;
+    aocl_int64_t b_dim1, b_offset, i__1, i__2, i__3, i__4, i__5, i__6, i__7;
     real r__1, r__2, r__3, r__4;
-    complex q__1, q__2, q__3, q__4, q__5;
+    scomplex q__1, q__2, q__3, q__4, q__5;
     /* Builtin functions */
-    double r_imag(complex *);
-    void c_div(complex *, complex *, complex *);
+    double r_imag(scomplex *);
+    void c_div(scomplex *, scomplex *, scomplex *);
     /* Local variables */
-    integer j, k;
-    complex temp, mult;
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    aocl_int64_t j, k;
+    scomplex temp, mult;
     /* -- LAPACK driver routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -191,7 +206,7 @@ void cgtsv_(integer *n, integer *nrhs, complex *dl, complex *d__, complex *du, c
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("CGTSV ", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("CGTSV ", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }

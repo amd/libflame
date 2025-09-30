@@ -4,7 +4,7 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
+static aocl_int64_t c__1 = 1;
 /* > \brief \b SLAQP2 computes a QR factorization with column pivoting of the matrix block. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -144,38 +144,44 @@ if JPVT(i) = 0, */
 /* > \endhtmlonly */
 /* ===================================================================== */
 /* Subroutine */
-void slaqp2_(integer *m, integer *n, integer *offset, real *a, integer *lda, integer *jpvt,
-             real *tau, real *vn1, real *vn2, real *work)
+/** Generated wrapper function */
+void slaqp2_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *offset, real *a, aocl_int_t *lda,
+             aocl_int_t *jpvt, real *tau, real *vn1, real *vn2, real *work)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_slaqp2(m, n, offset, a, lda, jpvt, tau, vn1, vn2, work);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t offset_64 = *offset;
+    aocl_int64_t lda_64 = *lda;
+
+    aocl_lapack_slaqp2(&m_64, &n_64, &offset_64, a, &lda_64, jpvt, tau, vn1, vn2, work);
+#endif
+}
+
+void aocl_lapack_slaqp2(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *offset, real *a,
+                        aocl_int64_t *lda, aocl_int_t *jpvt, real *tau, real *vn1, real *vn2,
+                        real *work)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("slaqp2 inputs: m %" FLA_IS ",n %" FLA_IS ",offset %" FLA_IS ",lda %" FLA_IS
                       "",
                       *m, *n, *offset, *lda);
     /* System generated locals */
-    integer a_dim1, a_offset, i__1, i__2, i__3;
+    aocl_int64_t a_dim1, a_offset, i__1, i__2, i__3;
     real r__1, r__2;
     /* Builtin functions */
     double sqrt(doublereal);
     /* Local variables */
-    integer i__, j, mn;
+    aocl_int64_t i__, j, mn;
     real aii;
-    integer pvt;
+    aocl_int64_t pvt;
     real temp, temp2;
-    extern real snrm2_(integer *, real *, integer *);
     real tol3z;
-    integer offpi;
-    extern /* Subroutine */
-        void
-        slarf_(char *, integer *, integer *, real *, integer *, real *, real *, integer *, real *);
-    integer itemp;
-    extern /* Subroutine */
-        void
-        sswap_(integer *, real *, integer *, real *, integer *);
+    aocl_int64_t offpi;
+    aocl_int64_t itemp;
     extern real slamch_(char *);
-    extern /* Subroutine */
-        void
-        slarfg_(integer *, real *, real *, integer *, real *);
-    extern integer isamax_(integer *, real *, integer *);
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -217,13 +223,13 @@ void slaqp2_(integer *m, integer *n, integer *offset, real *a, integer *lda, int
         offpi = *offset + i__;
         /* Determine ith pivot column and swap if necessary. */
         i__2 = *n - i__ + 1;
-        pvt = i__ - 1 + isamax_(&i__2, &vn1[i__], &c__1);
+        pvt = i__ - 1 + aocl_blas_isamax(&i__2, &vn1[i__], &c__1);
         if(pvt != i__)
         {
-            sswap_(m, &a[pvt * a_dim1 + 1], &c__1, &a[i__ * a_dim1 + 1], &c__1);
+            aocl_blas_sswap(m, &a[pvt * a_dim1 + 1], &c__1, &a[i__ * a_dim1 + 1], &c__1);
             itemp = jpvt[pvt];
             jpvt[pvt] = jpvt[i__];
-            jpvt[i__] = itemp;
+            jpvt[i__] = (aocl_int_t)(itemp);
             vn1[pvt] = vn1[i__];
             vn2[pvt] = vn2[i__];
         }
@@ -231,12 +237,13 @@ void slaqp2_(integer *m, integer *n, integer *offset, real *a, integer *lda, int
         if(offpi < *m)
         {
             i__2 = *m - offpi + 1;
-            slarfg_(&i__2, &a[offpi + i__ * a_dim1], &a[offpi + 1 + i__ * a_dim1], &c__1,
-                    &tau[i__]);
+            aocl_lapack_slarfg(&i__2, &a[offpi + i__ * a_dim1], &a[offpi + 1 + i__ * a_dim1], &c__1,
+                               &tau[i__]);
         }
         else
         {
-            slarfg_(&c__1, &a[*m + i__ * a_dim1], &a[*m + i__ * a_dim1], &c__1, &tau[i__]);
+            aocl_lapack_slarfg(&c__1, &a[*m + i__ * a_dim1], &a[*m + i__ * a_dim1], &c__1,
+                               &tau[i__]);
         }
         if(i__ < *n)
         {
@@ -245,8 +252,8 @@ void slaqp2_(integer *m, integer *n, integer *offset, real *a, integer *lda, int
             a[offpi + i__ * a_dim1] = 1.f;
             i__2 = *m - offpi + 1;
             i__3 = *n - i__;
-            slarf_("Left", &i__2, &i__3, &a[offpi + i__ * a_dim1], &c__1, &tau[i__],
-                   &a[offpi + (i__ + 1) * a_dim1], lda, &work[1]);
+            aocl_lapack_slarf("Left", &i__2, &i__3, &a[offpi + i__ * a_dim1], &c__1, &tau[i__],
+                              &a[offpi + (i__ + 1) * a_dim1], lda, &work[1]);
             a[offpi + i__ * a_dim1] = aii;
         }
         /* Update partial column norms. */
@@ -269,7 +276,7 @@ void slaqp2_(integer *m, integer *n, integer *offset, real *a, integer *lda, int
                     if(offpi < *m)
                     {
                         i__3 = *m - offpi;
-                        vn1[j] = snrm2_(&i__3, &a[offpi + 1 + j * a_dim1], &c__1);
+                        vn1[j] = aocl_blas_snrm2(&i__3, &a[offpi + 1 + j * a_dim1], &c__1);
                         vn2[j] = vn1[j];
                     }
                     else

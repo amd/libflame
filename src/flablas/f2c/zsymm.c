@@ -1,14 +1,14 @@
 /* zsymm.f -- translated by f2c (version 19991025). You must link the resulting object file with the libraries: -lf2c -lm (in that order) */
 #include "FLA_f2c.h"
 /* Subroutine */
-int zsymm_(char *side, char *uplo, integer *m, integer *n, doublecomplex *alpha, doublecomplex *a, integer *lda, doublecomplex * b, integer *ldb, doublecomplex *beta, doublecomplex *c__, integer * ldc)
+int zsymm_(char *side, char *uplo, integer *m, integer *n, dcomplex *alpha, dcomplex *a, integer *lda, dcomplex * b, integer *ldb, dcomplex *beta, dcomplex *c__, integer * ldc)
 {
     /* System generated locals */
     integer a_dim1, a_offset, b_dim1, b_offset, c_dim1, c_offset, i__1, i__2, i__3, i__4, i__5, i__6;
-    doublecomplex z__1, z__2, z__3, z__4, z__5;
+    dcomplex z__1, z__2, z__3, z__4, z__5;
     /* Local variables */
     integer info;
-    doublecomplex temp1, temp2;
+    dcomplex temp1, temp2;
     integer i__, j, k;
     extern logical lsame_(char *, char *, integer, integer);
     integer nrowa;

@@ -18,9 +18,9 @@ FLA_Error FLA_Chol_blk_external( FLA_Uplo uplo, FLA_Obj A )
 {
   FLA_Error    r_val = FLA_SUCCESS;
 #ifdef FLA_ENABLE_EXTERNAL_LAPACK_INTERFACES
-  integer          info;
+  fla_dim_t          info;
   FLA_Datatype datatype;
-  integer          m_A, cs_A;
+  fla_dim_t          m_A, cs_A;
   char         blas_uplo;
 
   if ( FLA_Check_error_level() == FLA_FULL_ERROR_CHECKING )

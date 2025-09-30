@@ -6,8 +6,8 @@
  libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
-static complex c_b6 = {-1.f, 0.f};
-static complex c_b8 = {1.f, 0.f};
+static scomplex c_b6 = {{-1.f}, {0.f}};
+static scomplex c_b8 = {{1.f}, {0.f}};
 static real c_b31 = 1.f;
 /* > \brief \b CLA_GBRFSX_EXTENDED improves the computed solution to a system of linear equations
  * for general banded matrices by performing extra-precise iterative refinement and provides error
@@ -417,11 +417,11 @@ i+1}
 /* ===================================================================== */
 /* Subroutine */
 void cla_gbrfsx_extended_(integer *prec_type__, integer *trans_type__, integer *n, integer *kl,
-                          integer *ku, integer *nrhs, complex *ab, integer *ldab, complex *afb,
-                          integer *ldafb, integer *ipiv, logical *colequ, real *c__, complex *b,
-                          integer *ldb, complex *y, integer *ldy, real *berr_out__,
+                          integer *ku, integer *nrhs, scomplex *ab, integer *ldab, scomplex *afb,
+                          integer *ldafb, integer *ipiv, logical *colequ, real *c__, scomplex *b,
+                          integer *ldb, scomplex *y, integer *ldy, real *berr_out__,
                           integer *n_norms__, real *err_bnds_norm__, real *err_bnds_comp__,
-                          complex *res, real *ayb, complex *dy, complex *y_tail__, real *rcond,
+                          scomplex *res, real *ayb, scomplex *dy, scomplex *y_tail__, real *rcond,
                           integer *ithresh, real *rthresh, real *dz_ub__, logical *ignore_cwise__,
                           integer *info)
 {
@@ -451,53 +451,53 @@ void cla_gbrfsx_extended_(integer *prec_type__, integer *trans_type__, integer *
     real r__1, r__2;
     char ch__1[1];
     /* Builtin functions */
-    double r_imag(complex *);
+    double r_imag(scomplex *);
     /* Local variables */
     real dxratmax, dzratmax;
     integer i__, j, m;
     extern /* Subroutine */
         void
-        cla_gbamv_(integer *, integer *, integer *, integer *, integer *, real *, complex *,
-                   integer *, complex *, integer *, real *, real *, integer *);
+        cla_gbamv_(integer *, integer *, integer *, integer *, integer *, real *, scomplex *,
+                   integer *, scomplex *, integer *, real *, real *, integer *);
     logical incr_prec__;
     real prev_dz_z__, yk, final_dx_x__;
     extern /* Subroutine */
         void
-        cla_wwaddw_(integer *, complex *, complex *, complex *);
+        cla_wwaddw_(integer *, scomplex *, scomplex *, scomplex *);
     real final_dz_z__, prevnormdx;
     integer cnt;
     real dyk, eps, incr_thresh__, dx_x__, dz_z__;
     extern /* Subroutine */
         void
-        cla_lin_berr_(integer *, integer *, integer *, complex *, real *, real *);
+        cla_lin_berr_(integer *, integer *, integer *, scomplex *, real *, real *);
     real ymin;
     extern /* Subroutine */
         int
-        blas_cgbmv_x_(integer *, integer *, integer *, integer *, integer *, complex *, complex *,
-                      integer *, complex *, integer *, complex *, complex *, integer *, integer *);
+        blas_cgbmv_x_(integer *, integer *, integer *, integer *, integer *, scomplex *, scomplex *,
+                      integer *, scomplex *, integer *, scomplex *, scomplex *, integer *, integer *);
     integer y_prec_state__;
     extern /* Subroutine */
         int
-        blas_cgbmv2_x_(integer *, integer *, integer *, integer *, integer *, complex *, complex *,
-                       integer *, complex *, complex *, integer *, complex *, complex *, integer *,
+        blas_cgbmv2_x_(integer *, integer *, integer *, integer *, integer *, scomplex *, scomplex *,
+                       integer *, scomplex *, scomplex *, integer *, scomplex *, scomplex *, integer *,
                        integer *),
-        cgbmv_(char *, integer *, integer *, integer *, integer *, complex *, complex *, integer *,
-               complex *, integer *, complex *, complex *, integer *),
-        ccopy_(integer *, complex *, integer *, complex *, integer *);
+        cgbmv_(char *, integer *, integer *, integer *, integer *, scomplex *, scomplex *, integer *,
+               scomplex *, integer *, scomplex *, scomplex *, integer *),
+        ccopy_(integer *, scomplex *, integer *, scomplex *, integer *);
     real dxrat, dzrat;
     extern /* Subroutine */
         void
-        caxpy_(integer *, complex *, complex *, integer *, complex *, integer *);
+        caxpy_(integer *, scomplex *, scomplex *, integer *, scomplex *, integer *);
     char trans[1];
     real normx, normy;
     extern real slamch_(char *);
     extern /* Subroutine */
         void
-        cgbtrs_(char *, integer *, integer *, integer *, integer *, complex *, integer *, integer *,
-                complex *, integer *, integer *);
+        cgbtrs_(char *, integer *, integer *, integer *, integer *, scomplex *, integer *, integer *,
+                scomplex *, integer *, integer *);
     real normdx;
     extern /* Character */
-        VOID
+        void
         chla_transtype_(char *, integer *);
     real hugeval;
     integer x_state__, z_state__;

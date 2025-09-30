@@ -88,17 +88,32 @@ E(N) is set to ZERO. */
 /* > Christof Voemel, University of California, Berkeley, USA */
 /* ===================================================================== */
 /* Subroutine */
-void dlarrr_(integer *n, doublereal *d__, doublereal *e, integer *info)
+/** Generated wrapper function */
+void dlarrr_(aocl_int_t *n, doublereal *d__, doublereal *e, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_dlarrr(n, d__, e, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_dlarrr(&n_64, d__, e, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_dlarrr(aocl_int64_t *n, doublereal *d__, doublereal *e, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dlarrr inputs: n %" FLA_IS "", *n);
     /* System generated locals */
-    integer i__1;
+    aocl_int64_t i__1;
     doublereal d__1;
     /* Builtin functions */
     double sqrt(doublereal);
     /* Local variables */
-    integer i__;
+    aocl_int64_t i__;
     doublereal eps, tmp, tmp2, rmin;
     extern doublereal dlamch_(char *);
     doublereal offdig, safmin;

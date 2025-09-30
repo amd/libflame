@@ -120,16 +120,29 @@
 /* > \ingroup realOTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-void slaqsp_(char *uplo, integer *n, real *ap, real *s, real *scond, real *amax, char *equed)
+/** Generated wrapper function */
+void slaqsp_(char *uplo, aocl_int_t *n, real *ap, real *s, real *scond, real *amax, char *equed)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_slaqsp(uplo, n, ap, s, scond, amax, equed);
+#else
+    aocl_int64_t n_64 = *n;
+
+    aocl_lapack_slaqsp(uplo, &n_64, ap, s, scond, amax, equed);
+#endif
+}
+
+void aocl_lapack_slaqsp(char *uplo, aocl_int64_t *n, real *ap, real *s, real *scond, real *amax,
+                        char *equed)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("slaqsp inputs: uplo %c, n %" FLA_IS "", *uplo, *n);
     /* System generated locals */
-    integer i__1, i__2;
+    aocl_int64_t i__1, i__2;
     /* Local variables */
-    integer i__, j, jc;
+    aocl_int64_t i__, j, jc;
     real cj, large;
-    extern logical lsame_(char *, char *, integer, integer);
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     real small_val;
     extern real slamch_(char *);
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */

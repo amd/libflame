@@ -214,8 +214,25 @@
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void ctrttf_(char *transr, char *uplo, integer *n, complex *a, integer *lda, complex *arf,
-             integer *info)
+/** Generated wrapper function */
+void ctrttf_(char *transr, char *uplo, aocl_int_t *n, scomplex *a, aocl_int_t *lda, scomplex *arf,
+             aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_ctrttf(transr, uplo, n, a, lda, arf, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_ctrttf(transr, uplo, &n_64, a, &lda_64, arf, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_ctrttf(char *transr, char *uplo, aocl_int64_t *n, scomplex *a, aocl_int64_t *lda,
+                        scomplex *arf, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -230,18 +247,15 @@ void ctrttf_(char *transr, char *uplo, integer *n, complex *a, integer *lda, com
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
-    integer a_dim1, a_offset, i__1, i__2, i__3, i__4;
-    complex q__1;
+    aocl_int64_t a_dim1, a_offset, i__1, i__2, i__3, i__4;
+    scomplex q__1;
     /* Builtin functions */
-    void r_cnjg(complex *, complex *);
+    void r_cnjg(scomplex *, scomplex *);
     /* Local variables */
-    integer i__, j, k, l, n1, n2, ij, nt, nx2, np1x2;
+    aocl_int64_t i__, j, k, l, n1, n2, ij, nt, nx2, np1x2;
     logical normaltransr;
-    extern logical lsame_(char *, char *, integer, integer);
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     logical lower;
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical nisodd;
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -291,7 +305,7 @@ void ctrttf_(char *transr, char *uplo, integer *n, complex *a, integer *lda, com
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("CTRTTF", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("CTRTTF", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }

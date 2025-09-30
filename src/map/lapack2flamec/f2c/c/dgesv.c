@@ -119,22 +119,35 @@ the unit diagonal elements of L are not stored. */
 /* > \ingroup doubleGEsolve */
 /* ===================================================================== */
 /* Subroutine */
-void dgesv_(integer *n, integer *nrhs, doublereal *a, integer *lda, integer *ipiv, doublereal *b,
-            integer *ldb, integer *info)
+/** Generated wrapper function */
+void dgesv_(aocl_int_t *n, aocl_int_t *nrhs, doublereal *a, aocl_int_t *lda, aocl_int_t *ipiv,
+            doublereal *b, aocl_int_t *ldb, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_dgesv(n, nrhs, a, lda, ipiv, b, ldb, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t nrhs_64 = *nrhs;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t ldb_64 = *ldb;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_dgesv(&n_64, &nrhs_64, a, &lda_64, ipiv, b, &ldb_64, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_dgesv(aocl_int64_t *n, aocl_int64_t *nrhs, doublereal *a, aocl_int64_t *lda,
+                       aocl_int_t *ipiv, doublereal *b, aocl_int64_t *ldb, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dgesv inputs: n %" FLA_IS ", nrhs %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS
                       "",
                       *n, *nrhs, *lda, *ldb);
     /* System generated locals */
-    integer a_dim1, a_offset, b_dim1, b_offset, i__1;
+    aocl_int64_t a_dim1, a_offset, b_dim1, b_offset, i__1;
     /* Local variables */
-    extern /* Subroutine */
-        void
-        dgetrf_(integer *, integer *, doublereal *, integer *, integer *, integer *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
-        dgetrs_(char *, integer *, integer *, doublereal *, integer *, integer *, doublereal *,
-                integer *, integer *);
     /* -- LAPACK driver routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -179,16 +192,17 @@ void dgesv_(integer *n, integer *nrhs, doublereal *a, integer *lda, integer *ipi
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("DGESV ", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("DGESV ", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Compute the LU factorization of A. */
-    dgetrf_(n, n, &a[a_offset], lda, &ipiv[1], info);
+    aocl_lapack_dgetrf(n, n, &a[a_offset], lda, &ipiv[1], info);
     if(*info == 0)
     {
         /* Solve the system A*X = B, overwriting B with X. */
-        dgetrs_("No transpose", n, nrhs, &a[a_offset], lda, &ipiv[1], &b[b_offset], ldb, info);
+        aocl_lapack_dgetrs("No transpose", n, nrhs, &a[a_offset], lda, &ipiv[1], &b[b_offset], ldb,
+                           info);
     }
     AOCL_DTL_TRACE_LOG_EXIT
     return;

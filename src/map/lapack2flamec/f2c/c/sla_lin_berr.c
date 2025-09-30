@@ -96,16 +96,32 @@
 /* > \ingroup realOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void sla_lin_berr_(integer *n, integer *nz, integer *nrhs, real *res, real *ayb, real *berr)
+/** Generated wrapper function */
+void sla_lin_berr_(aocl_int_t *n, aocl_int_t *nz, aocl_int_t *nrhs, real *res, real *ayb,
+                   real *berr)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_sla_lin_berr(n, nz, nrhs, res, ayb, berr);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t nz_64 = *nz;
+    aocl_int64_t nrhs_64 = *nrhs;
+
+    aocl_lapack_sla_lin_berr(&n_64, &nz_64, &nrhs_64, res, ayb, berr);
+#endif
+}
+
+void aocl_lapack_sla_lin_berr(aocl_int64_t *n, aocl_int64_t *nz, aocl_int64_t *nrhs, real *res,
+                              real *ayb, real *berr)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("sla_lin_berr inputs: n %" FLA_IS ",nz %" FLA_IS ",nrhs %" FLA_IS "", *n, *nz,
                       *nrhs);
     /* System generated locals */
-    integer ayb_dim1, ayb_offset, res_dim1, res_offset, i__1, i__2;
+    aocl_int64_t ayb_dim1, ayb_offset, res_dim1, res_offset, i__1, i__2;
     real r__1;
     /* Local variables */
-    integer i__, j;
+    aocl_int64_t i__, j;
     real tmp, safe1;
     extern real slamch_(char *);
     /* -- LAPACK computational routine (version 3.4.2) -- */

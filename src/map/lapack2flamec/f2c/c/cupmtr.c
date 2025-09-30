@@ -4,7 +4,7 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
+static aocl_int64_t c__1 = 1;
 /* > \brief \b CUPMTR */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -40,13 +40,13 @@ static integer c__1 = 1;
 /* > */
 /* > \verbatim */
 /* > */
-/* > CUPMTR overwrites the general complex M-by-N matrix C with */
+/* > CUPMTR overwrites the general scomplex M-by-N matrix C with */
 /* > */
 /* > SIDE = 'L' SIDE = 'R' */
 /* > TRANS = 'N': Q * C C * Q */
 /* > TRANS = 'C': Q**H * C C * Q**H */
 /* > */
-/* > where Q is a complex unitary matrix of order nq, with nq = m if */
+/* > where Q is a scomplex unitary matrix of order nq, with nq = m if */
 /* > SIDE = 'L' and nq = n if SIDE = 'R'. Q is defined as the product of */
 /* > nq-1 elementary reflectors, as returned by CHPTRD using packed */
 /* > storage: */
@@ -150,8 +150,27 @@ static integer c__1 = 1;
 /* > \ingroup complexOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void cupmtr_(char *side, char *uplo, char *trans, integer *m, integer *n, complex *ap, complex *tau,
-             complex *c__, integer *ldc, complex *work, integer *info)
+/** Generated wrapper function */
+void cupmtr_(char *side, char *uplo, char *trans, aocl_int_t *m, aocl_int_t *n, scomplex *ap,
+             scomplex *tau, scomplex *c__, aocl_int_t *ldc, scomplex *work, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_cupmtr(side, uplo, trans, m, n, ap, tau, c__, ldc, work, info);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t ldc_64 = *ldc;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_cupmtr(side, uplo, trans, &m_64, &n_64, ap, tau, c__, &ldc_64, work, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_cupmtr(char *side, char *uplo, char *trans, aocl_int64_t *m, aocl_int64_t *n,
+                        scomplex *ap, scomplex *tau, scomplex *c__, aocl_int64_t *ldc, scomplex *work,
+                        aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -163,24 +182,17 @@ void cupmtr_(char *side, char *uplo, char *trans, integer *m, integer *n, comple
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
-    integer c_dim1, c_offset, i__1, i__2, i__3;
-    complex q__1;
+    aocl_int64_t c_dim1, c_offset, i__1, i__2, i__3;
+    scomplex q__1;
     /* Builtin functions */
-    void r_cnjg(complex *, complex *);
+    void r_cnjg(scomplex *, scomplex *);
     /* Local variables */
-    integer i__, i1, i2, i3, ic, jc, ii, mi, ni, nq;
-    complex aii;
+    aocl_int64_t i__, i1, i2, i3, ic, jc, ii, mi, ni, nq;
+    scomplex aii;
     logical left;
-    complex taui;
-    extern /* Subroutine */
-        void
-        clarf_(char *, integer *, integer *, complex *, integer *, complex *, complex *, integer *,
-               complex *);
-    extern logical lsame_(char *, char *, integer, integer);
+    scomplex taui;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     logical upper;
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical notran, forwrd;
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -251,7 +263,7 @@ void cupmtr_(char *side, char *uplo, char *trans, integer *m, integer *n, comple
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("CUPMTR", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("CUPMTR", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
@@ -320,7 +332,8 @@ void cupmtr_(char *side, char *uplo, char *trans, integer *m, integer *n, comple
             i__3 = ii;
             ap[i__3].r = 1.f;
             ap[i__3].i = 0.f; // , expr subst
-            clarf_(side, &mi, &ni, &ap[ii - i__ + 1], &c__1, &taui, &c__[c_offset], ldc, &work[1]);
+            aocl_lapack_clarf(side, &mi, &ni, &ap[ii - i__ + 1], &c__1, &taui, &c__[c_offset], ldc,
+                              &work[1]);
             i__3 = ii;
             ap[i__3].r = aii.r;
             ap[i__3].i = aii.i; // , expr subst
@@ -398,7 +411,8 @@ void cupmtr_(char *side, char *uplo, char *trans, integer *m, integer *n, comple
                 taui.r = q__1.r;
                 taui.i = q__1.i; // , expr subst
             }
-            clarf_(side, &mi, &ni, &ap[ii], &c__1, &taui, &c__[ic + jc * c_dim1], ldc, &work[1]);
+            aocl_lapack_clarf(side, &mi, &ni, &ap[ii], &c__1, &taui, &c__[ic + jc * c_dim1], ldc,
+                              &work[1]);
             i__3 = ii;
             ap[i__3].r = aii.r;
             ap[i__3].i = aii.i; // , expr subst

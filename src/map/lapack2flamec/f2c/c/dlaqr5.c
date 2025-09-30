@@ -6,9 +6,9 @@
 #include "FLA_f2c.h" /* Table of constant values */
 static doublereal c_b7 = 0.;
 static doublereal c_b8 = 1.;
-static integer c__2 = 2;
-static integer c__1 = 1;
-static integer c__3 = 3;
+static aocl_int64_t c__2 = 2;
+static aocl_int64_t c__1 = 1;
+static aocl_int64_t c__3 = 3;
 /* > \brief \b DLAQR5 performs a single small-bulge multi-shift QR sweep. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -262,11 +262,46 @@ static integer c__3 = 3;
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void dlaqr5_(logical *wantt, logical *wantz, integer *kacc22, integer *n, integer *ktop,
-             integer *kbot, integer *nshfts, doublereal *sr, doublereal *si, doublereal *h__,
-             integer *ldh, integer *iloz, integer *ihiz, doublereal *z__, integer *ldz,
-             doublereal *v, integer *ldv, doublereal *u, integer *ldu, integer *nv, doublereal *wv,
-             integer *ldwv, integer *nh, doublereal *wh, integer *ldwh)
+/** Generated wrapper function */
+void dlaqr5_(logical *wantt, logical *wantz, aocl_int_t *kacc22, aocl_int_t *n, aocl_int_t *ktop,
+             aocl_int_t *kbot, aocl_int_t *nshfts, doublereal *sr, doublereal *si, doublereal *h__,
+             aocl_int_t *ldh, aocl_int_t *iloz, aocl_int_t *ihiz, doublereal *z__, aocl_int_t *ldz,
+             doublereal *v, aocl_int_t *ldv, doublereal *u, aocl_int_t *ldu, aocl_int_t *nv,
+             doublereal *wv, aocl_int_t *ldwv, aocl_int_t *nh, doublereal *wh, aocl_int_t *ldwh)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_dlaqr5(wantt, wantz, kacc22, n, ktop, kbot, nshfts, sr, si, h__, ldh, iloz, ihiz,
+                       z__, ldz, v, ldv, u, ldu, nv, wv, ldwv, nh, wh, ldwh);
+#else
+    aocl_int64_t kacc22_64 = *kacc22;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t ktop_64 = *ktop;
+    aocl_int64_t kbot_64 = *kbot;
+    aocl_int64_t nshfts_64 = *nshfts;
+    aocl_int64_t ldh_64 = *ldh;
+    aocl_int64_t iloz_64 = *iloz;
+    aocl_int64_t ihiz_64 = *ihiz;
+    aocl_int64_t ldz_64 = *ldz;
+    aocl_int64_t ldv_64 = *ldv;
+    aocl_int64_t ldu_64 = *ldu;
+    aocl_int64_t nv_64 = *nv;
+    aocl_int64_t ldwv_64 = *ldwv;
+    aocl_int64_t nh_64 = *nh;
+    aocl_int64_t ldwh_64 = *ldwh;
+
+    aocl_lapack_dlaqr5(wantt, wantz, &kacc22_64, &n_64, &ktop_64, &kbot_64, &nshfts_64, sr, si, h__,
+                       &ldh_64, &iloz_64, &ihiz_64, z__, &ldz_64, v, &ldv_64, u, &ldu_64, &nv_64,
+                       wv, &ldwv_64, &nh_64, wh, &ldwh_64);
+#endif
+}
+
+void aocl_lapack_dlaqr5(logical *wantt, logical *wantz, aocl_int64_t *kacc22, aocl_int64_t *n,
+                        aocl_int64_t *ktop, aocl_int64_t *kbot, aocl_int64_t *nshfts,
+                        doublereal *sr, doublereal *si, doublereal *h__, aocl_int64_t *ldh,
+                        aocl_int64_t *iloz, aocl_int64_t *ihiz, doublereal *z__, aocl_int64_t *ldz,
+                        doublereal *v, aocl_int64_t *ldv, doublereal *u, aocl_int64_t *ldu,
+                        aocl_int64_t *nv, doublereal *wv, aocl_int64_t *ldwv, aocl_int64_t *nh,
+                        doublereal *wh, aocl_int64_t *ldwh)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dlaqr5 inputs: kacc22 %" FLA_IS ", n %" FLA_IS ", ktop %" FLA_IS
@@ -276,40 +311,25 @@ void dlaqr5_(logical *wantt, logical *wantz, integer *kacc22, integer *n, intege
                       *kacc22, *n, *ktop, *kbot, *nshfts, *ldh, *iloz, *ihiz, *ldz, *ldv, *ldu, *nv,
                       *ldwv, *nh, *ldwh);
     /* System generated locals */
-    integer h_dim1, h_offset, u_dim1, u_offset, v_dim1, v_offset, wh_dim1, wh_offset, wv_dim1,
+    aocl_int64_t h_dim1, h_offset, u_dim1, u_offset, v_dim1, v_offset, wh_dim1, wh_offset, wv_dim1,
         wv_offset, z_dim1, z_offset, i__1, i__2, i__3, i__4, i__5, i__6, i__7;
     doublereal d__1, d__2, d__3, d__4, d__5;
     /* Local variables */
-    integer i__, j, k, m, i2, k1, i4;
+    aocl_int64_t i__, j, k, m, i2, k1, i4;
     doublereal t1, t2, t3, h11, h12, h21, h22;
-    integer m22, ns, nu;
+    aocl_int64_t m22, ns, nu;
     doublereal vt[3], scl;
-    integer kdu, kms;
+    aocl_int64_t kdu, kms;
     doublereal ulp, tst1, tst2, beta;
     logical bmp22;
-    integer jcol, jlen, jbot, mbot;
+    aocl_int64_t jcol, jlen, jbot, mbot;
     doublereal swap;
-    integer jtop, jrow, mtop;
+    aocl_int64_t jtop, jrow, mtop;
     doublereal alpha;
     logical accum;
-    extern /* Subroutine */
-        void
-        dgemm_(char *, char *, integer *, integer *, integer *, doublereal *, doublereal *,
-               integer *, doublereal *, integer *, doublereal *, doublereal *, integer *);
-    integer ndcol, incol, krcol, nbmps;
-    extern /* Subroutine */
-        void
-        dlaqr1_(integer *, doublereal *, integer *, doublereal *, doublereal *, doublereal *,
-                doublereal *, doublereal *);
+    aocl_int64_t ndcol, incol, krcol, nbmps;
     extern doublereal dlamch_(char *);
-    extern /* Subroutine */
-        void
-        dlarfg_(integer *, doublereal *, doublereal *, integer *, doublereal *),
-        dlacpy_(char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *);
     doublereal safmin;
-    extern /* Subroutine */
-        void
-        dlaset_(char *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *);
     doublereal refsum, smlnum;
     /* -- LAPACK auxiliary routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -368,7 +388,7 @@ void dlaqr5_(logical *wantt, logical *wantz, integer *kacc22, integer *n, intege
         return;
     }
     /* ==== Shuffle shifts into pairs of real shifts and pairs */
-    /* . of complex conjugate shifts assuming complex */
+    /* . of scomplex conjugate shifts assuming scomplex */
     /* . conjugate shifts are already adjacent to one */
     /* . another. ==== */
     i__1 = *nshfts - 2;
@@ -429,7 +449,7 @@ void dlaqr5_(logical *wantt, logical *wantz, integer *kacc22, integer *n, intege
         ndcol = incol + kdu;
         if(accum)
         {
-            dlaset_("ALL", &kdu, &kdu, &c_b7, &c_b8, &u[u_offset], ldu);
+            aocl_lapack_dlaset("ALL", &kdu, &kdu, &c_b7, &c_b8, &u[u_offset], ldu);
         }
         /* ==== Near-the-diagonal bulge chase. The following loop */
         /* . performs the near-the-diagonal part of a small bulge */
@@ -473,16 +493,19 @@ void dlaqr5_(logical *wantt, logical *wantz, integer *kacc22, integer *n, intege
                 k = krcol + (m22 - 1 << 1);
                 if(k == *ktop - 1)
                 {
-                    dlaqr1_(&c__2, &h__[k + 1 + (k + 1) * h_dim1], ldh, &sr[(m22 << 1) - 1],
-                            &si[(m22 << 1) - 1], &sr[m22 * 2], &si[m22 * 2], &v[m22 * v_dim1 + 1]);
+                    aocl_lapack_dlaqr1(&c__2, &h__[k + 1 + (k + 1) * h_dim1], ldh,
+                                       &sr[(m22 << 1) - 1], &si[(m22 << 1) - 1], &sr[m22 * 2],
+                                       &si[m22 * 2], &v[m22 * v_dim1 + 1]);
                     beta = v[m22 * v_dim1 + 1];
-                    dlarfg_(&c__2, &beta, &v[m22 * v_dim1 + 2], &c__1, &v[m22 * v_dim1 + 1]);
+                    aocl_lapack_dlarfg(&c__2, &beta, &v[m22 * v_dim1 + 2], &c__1,
+                                       &v[m22 * v_dim1 + 1]);
                 }
                 else
                 {
                     beta = h__[k + 1 + k * h_dim1];
                     v[m22 * v_dim1 + 2] = h__[k + 2 + k * h_dim1];
-                    dlarfg_(&c__2, &beta, &v[m22 * v_dim1 + 2], &c__1, &v[m22 * v_dim1 + 1]);
+                    aocl_lapack_dlarfg(&c__2, &beta, &v[m22 * v_dim1 + 2], &c__1,
+                                       &v[m22 * v_dim1 + 1]);
                     h__[k + 1 + k * h_dim1] = beta;
                     h__[k + 2 + k * h_dim1] = 0.;
                 }
@@ -646,10 +669,12 @@ void dlaqr5_(logical *wantt, logical *wantz, integer *kacc22, integer *n, intege
                 k = krcol + (m - 1 << 1);
                 if(k == *ktop - 1)
                 {
-                    dlaqr1_(&c__3, &h__[*ktop + *ktop * h_dim1], ldh, &sr[(m << 1) - 1],
-                            &si[(m << 1) - 1], &sr[m * 2], &si[m * 2], &v[m * v_dim1 + 1]);
+                    aocl_lapack_dlaqr1(&c__3, &h__[*ktop + *ktop * h_dim1], ldh, &sr[(m << 1) - 1],
+                                       &si[(m << 1) - 1], &sr[m * 2], &si[m * 2],
+                                       &v[m * v_dim1 + 1]);
                     alpha = v[m * v_dim1 + 1];
-                    dlarfg_(&c__3, &alpha, &v[m * v_dim1 + 2], &c__1, &v[m * v_dim1 + 1]);
+                    aocl_lapack_dlarfg(&c__3, &alpha, &v[m * v_dim1 + 2], &c__1,
+                                       &v[m * v_dim1 + 1]);
                 }
                 else
                 {
@@ -668,7 +693,7 @@ void dlaqr5_(logical *wantt, logical *wantz, integer *kacc22, integer *n, intege
                     beta = h__[k + 1 + k * h_dim1];
                     v[m * v_dim1 + 2] = h__[k + 2 + k * h_dim1];
                     v[m * v_dim1 + 3] = h__[k + 3 + k * h_dim1];
-                    dlarfg_(&c__3, &beta, &v[m * v_dim1 + 2], &c__1, &v[m * v_dim1 + 1]);
+                    aocl_lapack_dlarfg(&c__3, &beta, &v[m * v_dim1 + 2], &c__1, &v[m * v_dim1 + 1]);
                     /* ==== A Bulge may collapse because of vigilant */
                     /* . deflation or destructive underflow. In the */
                     /* . underflow case, try the two-small-subdiagonals */
@@ -688,10 +713,11 @@ void dlaqr5_(logical *wantt, logical *wantz, integer *kacc22, integer *n, intege
                         /* . If the fill resulting from the new */
                         /* . reflector is too large, then abandon it. */
                         /* . Otherwise, use the new one. ==== */
-                        dlaqr1_(&c__3, &h__[k + 1 + (k + 1) * h_dim1], ldh, &sr[(m << 1) - 1],
-                                &si[(m << 1) - 1], &sr[m * 2], &si[m * 2], vt);
+                        aocl_lapack_dlaqr1(&c__3, &h__[k + 1 + (k + 1) * h_dim1], ldh,
+                                           &sr[(m << 1) - 1], &si[(m << 1) - 1], &sr[m * 2],
+                                           &si[m * 2], vt);
                         alpha = vt[0];
-                        dlarfg_(&c__3, &alpha, &vt[1], &c__1, vt);
+                        aocl_lapack_dlarfg(&c__3, &alpha, &vt[1], &c__1, vt);
                         t1 = vt[0];
                         t2 = t1 * vt[1];
                         t3 = t1 * vt[2];
@@ -971,10 +997,10 @@ void dlaqr5_(logical *wantt, logical *wantz, integer *kacc22, integer *n, intege
                 i__7 = *nh;
                 i__4 = jbot - jcol + 1; // , expr subst
                 jlen = fla_min(i__7, i__4);
-                dgemm_("C", "N", &nu, &jlen, &nu, &c_b8, &u[k1 + k1 * u_dim1], ldu,
-                       &h__[incol + k1 + jcol * h_dim1], ldh, &c_b7, &wh[wh_offset], ldwh);
-                dlacpy_("ALL", &nu, &jlen, &wh[wh_offset], ldwh, &h__[incol + k1 + jcol * h_dim1],
-                        ldh);
+                aocl_blas_dgemm("C", "N", &nu, &jlen, &nu, &c_b8, &u[k1 + k1 * u_dim1], ldu,
+                                &h__[incol + k1 + jcol * h_dim1], ldh, &c_b7, &wh[wh_offset], ldwh);
+                aocl_lapack_dlacpy("ALL", &nu, &jlen, &wh[wh_offset], ldwh,
+                                   &h__[incol + k1 + jcol * h_dim1], ldh);
                 /* L150: */
             }
             /* ==== Vertical multiply ==== */
@@ -986,10 +1012,11 @@ void dlaqr5_(logical *wantt, logical *wantz, integer *kacc22, integer *n, intege
                 i__7 = *nv;
                 i__4 = fla_max(*ktop, incol) - jrow; // , expr subst
                 jlen = fla_min(i__7, i__4);
-                dgemm_("N", "N", &jlen, &nu, &nu, &c_b8, &h__[jrow + (incol + k1) * h_dim1], ldh,
-                       &u[k1 + k1 * u_dim1], ldu, &c_b7, &wv[wv_offset], ldwv);
-                dlacpy_("ALL", &jlen, &nu, &wv[wv_offset], ldwv, &h__[jrow + (incol + k1) * h_dim1],
-                        ldh);
+                aocl_blas_dgemm("N", "N", &jlen, &nu, &nu, &c_b8,
+                                &h__[jrow + (incol + k1) * h_dim1], ldh, &u[k1 + k1 * u_dim1], ldu,
+                                &c_b7, &wv[wv_offset], ldwv);
+                aocl_lapack_dlacpy("ALL", &jlen, &nu, &wv[wv_offset], ldwv,
+                                   &h__[jrow + (incol + k1) * h_dim1], ldh);
                 /* L160: */
             }
             /* ==== Z multiply (also vertical) ==== */
@@ -1003,10 +1030,11 @@ void dlaqr5_(logical *wantt, logical *wantz, integer *kacc22, integer *n, intege
                     i__7 = *nv;
                     i__4 = *ihiz - jrow + 1; // , expr subst
                     jlen = fla_min(i__7, i__4);
-                    dgemm_("N", "N", &jlen, &nu, &nu, &c_b8, &z__[jrow + (incol + k1) * z_dim1],
-                           ldz, &u[k1 + k1 * u_dim1], ldu, &c_b7, &wv[wv_offset], ldwv);
-                    dlacpy_("ALL", &jlen, &nu, &wv[wv_offset], ldwv,
-                            &z__[jrow + (incol + k1) * z_dim1], ldz);
+                    aocl_blas_dgemm("N", "N", &jlen, &nu, &nu, &c_b8,
+                                    &z__[jrow + (incol + k1) * z_dim1], ldz, &u[k1 + k1 * u_dim1],
+                                    ldu, &c_b7, &wv[wv_offset], ldwv);
+                    aocl_lapack_dlacpy("ALL", &jlen, &nu, &wv[wv_offset], ldwv,
+                                       &z__[jrow + (incol + k1) * z_dim1], ldz);
                     /* L170: */
                 }
             }

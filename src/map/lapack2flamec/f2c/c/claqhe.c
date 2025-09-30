@@ -128,8 +128,22 @@
 /* > \ingroup complexHEauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-void claqhe_(char *uplo, integer *n, complex *a, integer *lda, real *s, real *scond, real *amax,
-             char *equed)
+/** Generated wrapper function */
+void claqhe_(char *uplo, aocl_int_t *n, scomplex *a, aocl_int_t *lda, real *s, real *scond,
+             real *amax, char *equed)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_claqhe(uplo, n, a, lda, s, scond, amax, equed);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t lda_64 = *lda;
+
+    aocl_lapack_claqhe(uplo, &n_64, a, &lda_64, s, scond, amax, equed);
+#endif
+}
+
+void aocl_lapack_claqhe(char *uplo, aocl_int64_t *n, scomplex *a, aocl_int64_t *lda, real *s,
+                        real *scond, real *amax, char *equed)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -142,13 +156,13 @@ void claqhe_(char *uplo, integer *n, complex *a, integer *lda, real *s, real *sc
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
-    integer a_dim1, a_offset, i__1, i__2, i__3, i__4;
+    aocl_int64_t a_dim1, a_offset, i__1, i__2, i__3, i__4;
     real r__1;
-    complex q__1;
+    scomplex q__1;
     /* Local variables */
-    integer i__, j;
+    aocl_int64_t i__, j;
     real cj, large;
-    extern logical lsame_(char *, char *, integer, integer);
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     real small_val;
     extern real slamch_(char *);
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */

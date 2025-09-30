@@ -17,8 +17,8 @@ extern TLS_CLASS_SPEC fla_blocksize_t* fla_trinv_var3_bsize;
 FLA_Error FLA_Trinv( FLA_Uplo uplo, FLA_Diag diag, FLA_Obj A )
 {
   FLA_Datatype datatype;
-  integer          m_A, r_val = 0;
-  integer          FLA_TRINV_VAR3_BLOCKSIZE;
+  fla_dim_t          m_A, r_val = 0;
+  fla_dim_t          FLA_TRINV_VAR3_BLOCKSIZE;
 
   // Check parameters.
   if ( FLA_Check_error_level() >= FLA_MIN_ERROR_CHECKING )

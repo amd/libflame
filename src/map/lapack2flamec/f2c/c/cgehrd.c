@@ -4,12 +4,12 @@
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
  /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static complex c_b2 = {1.f, 0.f};
-static integer c__1 = 1;
-static integer c_n1 = -1;
-static integer c__3 = 3;
-static integer c__2 = 2;
-static integer c__65 = 65;
+static scomplex c_b2 = {{1.f}, {0.f}};
+static aocl_int64_t c__1 = 1;
+static aocl_int64_t c_n1 = -1;
+static aocl_int64_t c__3 = 3;
+static aocl_int64_t c__2 = 2;
+static aocl_int64_t c__65 = 65;
 /* > \brief \b CGEHRD */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -43,7 +43,7 @@ static integer c__65 = 65;
 /* > */
 /* > \verbatim */
 /* > */
-/* > CGEHRD reduces a complex general matrix A to upper Hessenberg form H by */
+/* > CGEHRD reduces a scomplex general matrix A to upper Hessenberg form H by */
 /* > an unitary similarity transformation: Q**H * A * Q = H . */
 /* > \endverbatim */
 /* Arguments: */
@@ -143,7 +143,7 @@ the routine */
 /* > */
 /* > H(i) = I - tau * v * v**H */
 /* > */
-/* > where tau is a complex scalar, and v is a complex vector with */
+/* > where tau is a scomplex scalar, and v is a scomplex vector with */
 /* > v(1:i) = 0, v(i+1) = 1 and v(ihi+1:n) = 0;
 v(i+2:ihi) is stored on */
 /* > exit in A(i+2:ihi,i), and tau in TAU(i). */
@@ -172,8 +172,29 @@ v(i+2:ihi) is stored on */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void cgehrd_(integer *n, integer *ilo, integer *ihi, complex *a, integer *lda, complex *tau,
-             complex *work, integer *lwork, integer *info)
+/** Generated wrapper function */
+void cgehrd_(aocl_int_t *n, aocl_int_t *ilo, aocl_int_t *ihi, scomplex *a, aocl_int_t *lda,
+             scomplex *tau, scomplex *work, aocl_int_t *lwork, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_cgehrd(n, ilo, ihi, a, lda, tau, work, lwork, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t ilo_64 = *ilo;
+    aocl_int64_t ihi_64 = *ihi;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t lwork_64 = *lwork;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_cgehrd(&n_64, &ilo_64, &ihi_64, a, &lda_64, tau, work, &lwork_64, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_cgehrd(aocl_int64_t *n, aocl_int64_t *ilo, aocl_int64_t *ihi, scomplex *a,
+                        aocl_int64_t *lda, scomplex *tau, scomplex *work, aocl_int64_t *lwork,
+                        aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -188,34 +209,16 @@ void cgehrd_(integer *n, integer *ilo, integer *ihi, complex *a, integer *lda, c
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
-    integer a_dim1, a_offset, i__1, i__2, i__3, i__4;
+    aocl_int64_t a_dim1, a_offset, i__1, i__2, i__3, i__4;
     real r__1;
-    complex q__1;
+    scomplex q__1;
     /* Local variables */
-    integer i__, j, ib;
-    complex ei;
-    integer nb, nh, nx, iwt;
-    extern /* Subroutine */
-        void
-        cgemm_(char *, char *, integer *, integer *, integer *, complex *, complex *, integer *,
-               complex *, integer *, complex *, complex *, integer *);
-    integer nbmin, iinfo;
-    extern /* Subroutine */
-        void
-        ctrmm_(char *, char *, char *, char *, integer *, integer *, complex *, complex *,
-               integer *, complex *, integer *),
-        caxpy_(integer *, complex *, complex *, integer *, complex *, integer *),
-        cgehd2_(integer *, integer *, integer *, complex *, integer *, complex *, complex *,
-                integer *),
-        clahr2_(integer *, integer *, integer *, complex *, integer *, complex *, complex *,
-                integer *, complex *, integer *),
-        clarfb_(char *, char *, char *, char *, integer *, integer *, integer *, complex *,
-                integer *, complex *, integer *, complex *, integer *, complex *, integer *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
-    integer ldwork, lwkopt;
+    aocl_int64_t i__, j, ib;
+    scomplex ei;
+    aocl_int64_t nb, nh, nx, iwt;
+    aocl_int64_t nbmin, iinfo;
+    aocl_int64_t ldwork, lwkopt;
     logical lquery;
-    extern real sroundup_lwork(integer *);
     /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -271,17 +274,17 @@ void cgehrd_(integer *n, integer *ilo, integer *ihi, complex *a, integer *lda, c
         /* Compute the workspace requirements */
         /* Computing MIN */
         i__1 = 64;
-        i__2 = ilaenv_(&c__1, "CGEHRD", " ", n, ilo, ihi, &c_n1); // , expr subst
+        i__2 = aocl_lapack_ilaenv(&c__1, "CGEHRD", " ", n, ilo, ihi, &c_n1); // , expr subst
         nb = fla_min(i__1, i__2);
         lwkopt = *n * nb + 4160;
-        r__1 = sroundup_lwork(&lwkopt);
+        r__1 = aocl_lapack_sroundup_lwork(&lwkopt);
         work[1].r = r__1;
         work[1].i = 0.f; // , expr subst
     }
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("CGEHRD", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("CGEHRD", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
@@ -319,7 +322,7 @@ void cgehrd_(integer *n, integer *ilo, integer *ihi, complex *a, integer *lda, c
     /* Determine the block size */
     /* Computing MIN */
     i__1 = 64;
-    i__2 = ilaenv_(&c__1, "CGEHRD", " ", n, ilo, ihi, &c_n1); // , expr subst
+    i__2 = aocl_lapack_ilaenv(&c__1, "CGEHRD", " ", n, ilo, ihi, &c_n1); // , expr subst
     nb = fla_min(i__1, i__2);
     nbmin = 2;
     if(nb > 1 && nb < nh)
@@ -328,7 +331,7 @@ void cgehrd_(integer *n, integer *ilo, integer *ihi, complex *a, integer *lda, c
         /* (last block is always handled by unblocked code) */
         /* Computing MAX */
         i__1 = nb;
-        i__2 = ilaenv_(&c__3, "CGEHRD", " ", n, ilo, ihi, &c_n1); // , expr subst
+        i__2 = aocl_lapack_ilaenv(&c__3, "CGEHRD", " ", n, ilo, ihi, &c_n1); // , expr subst
         nx = fla_max(i__1, i__2);
         if(nx < nh)
         {
@@ -340,7 +343,7 @@ void cgehrd_(integer *n, integer *ilo, integer *ihi, complex *a, integer *lda, c
                 /* unblocked code */
                 /* Computing MAX */
                 i__1 = 2;
-                i__2 = ilaenv_(&c__2, "CGEHRD", " ", n, ilo, ihi, &c_n1); // , expr subst
+                i__2 = aocl_lapack_ilaenv(&c__2, "CGEHRD", " ", n, ilo, ihi, &c_n1); // , expr subst
                 nbmin = fla_max(i__1, i__2);
                 if(*lwork >= *n * nbmin + 4160)
                 {
@@ -374,8 +377,8 @@ void cgehrd_(integer *n, integer *ilo, integer *ihi, complex *a, integer *lda, c
             /* Reduce columns i:i+ib-1 to Hessenberg form, returning the */
             /* matrices V and T of the block reflector H = I - V*T*V**H */
             /* which performs the reduction, and also the matrix Y = A*V*T */
-            clahr2_(ihi, &i__, &ib, &a[i__ * a_dim1 + 1], lda, &tau[i__], &work[iwt], &c__65,
-                    &work[1], &ldwork);
+            aocl_lapack_clahr2(ihi, &i__, &ib, &a[i__ * a_dim1 + 1], lda, &tau[i__], &work[iwt],
+                               &c__65, &work[1], &ldwork);
             /* Apply the block reflector H to A(1:ihi,i+ib:ihi) from the */
             /* right, computing A := A - Y * V**H. V(i+ib,ib-1) must be set */
             /* to 1 */
@@ -388,38 +391,39 @@ void cgehrd_(integer *n, integer *ilo, integer *ihi, complex *a, integer *lda, c
             i__3 = *ihi - i__ - ib + 1;
             q__1.r = -1.f;
             q__1.i = -0.f; // , expr subst
-            cgemm_("No transpose", "Conjugate transpose", ihi, &i__3, &ib, &q__1, &work[1], &ldwork,
-                   &a[i__ + ib + i__ * a_dim1], lda, &c_b2, &a[(i__ + ib) * a_dim1 + 1], lda);
+            aocl_blas_cgemm("No transpose", "Conjugate transpose", ihi, &i__3, &ib, &q__1, &work[1],
+                            &ldwork, &a[i__ + ib + i__ * a_dim1], lda, &c_b2,
+                            &a[(i__ + ib) * a_dim1 + 1], lda);
             i__3 = i__ + ib + (i__ + ib - 1) * a_dim1;
             a[i__3].r = ei.r;
             a[i__3].i = ei.i; // , expr subst
             /* Apply the block reflector H to A(1:i,i+1:i+ib-1) from the */
             /* right */
             i__3 = ib - 1;
-            ctrmm_("Right", "Lower", "Conjugate transpose", "Unit", &i__, &i__3, &c_b2,
-                   &a[i__ + 1 + i__ * a_dim1], lda, &work[1], &ldwork);
+            aocl_blas_ctrmm("Right", "Lower", "Conjugate transpose", "Unit", &i__, &i__3, &c_b2,
+                            &a[i__ + 1 + i__ * a_dim1], lda, &work[1], &ldwork);
             i__3 = ib - 2;
             for(j = 0; j <= i__3; ++j)
             {
                 q__1.r = -1.f;
                 q__1.i = -0.f; // , expr subst
-                caxpy_(&i__, &q__1, &work[ldwork * j + 1], &c__1, &a[(i__ + j + 1) * a_dim1 + 1],
-                       &c__1);
+                aocl_blas_caxpy(&i__, &q__1, &work[ldwork * j + 1], &c__1,
+                                &a[(i__ + j + 1) * a_dim1 + 1], &c__1);
                 /* L30: */
             }
             /* Apply the block reflector H to A(i+1:ihi,i+ib:n) from the */
             /* left */
             i__3 = *ihi - i__;
             i__4 = *n - i__ - ib + 1;
-            clarfb_("Left", "Conjugate transpose", "Forward", "Columnwise", &i__3, &i__4, &ib,
-                    &a[i__ + 1 + i__ * a_dim1], lda, &work[iwt], &c__65,
-                    &a[i__ + 1 + (i__ + ib) * a_dim1], lda, &work[1], &ldwork);
+            aocl_lapack_clarfb("Left", "Conjugate transpose", "Forward", "Columnwise", &i__3, &i__4,
+                               &ib, &a[i__ + 1 + i__ * a_dim1], lda, &work[iwt], &c__65,
+                               &a[i__ + 1 + (i__ + ib) * a_dim1], lda, &work[1], &ldwork);
             /* L40: */
         }
     }
     /* Use unblocked code to reduce the rest of the matrix */
-    cgehd2_(n, &i__, ihi, &a[a_offset], lda, &tau[1], &work[1], &iinfo);
-    r__1 = sroundup_lwork(&lwkopt);
+    aocl_lapack_cgehd2(n, &i__, ihi, &a[a_offset], lda, &tau[1], &work[1], &iinfo);
+    r__1 = aocl_lapack_sroundup_lwork(&lwkopt);
     work[1].r = r__1;
     work[1].i = 0.f; // , expr subst
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);

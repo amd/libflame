@@ -1,20 +1,20 @@
 #include "FLA_f2c.h"
 #include "FLA_lapack2flame_return_defs.h"
-static integer c__1 = 1;
-static integer c_n1 = -1;
+static aocl_int64_t c__1 = 1;
+static aocl_int64_t c_n1 = -1;
 
-int cgesdd_check(char *jobz, integer *m, integer *n, scomplex *a, integer *lda, float *s,
-                 scomplex *u, integer *ldu, scomplex *vt, integer *ldvt, scomplex *work,
-                 integer *lwork, float *rwork, integer *iwork, integer *info)
+int cgesdd_check(char *jobz, aocl_int64_t *m, aocl_int64_t *n, scomplex *a, aocl_int64_t *lda, float *s,
+                 scomplex *u, aocl_int64_t *ldu, scomplex *vt, aocl_int64_t *ldvt, scomplex *work,
+                 aocl_int64_t *lwork, float *rwork, aocl_int64_t *iwork, aocl_int64_t *info)
 {
     /* System generated locals */
-    integer a_dim1, a_offset, u_dim1, u_offset, vt_dim1, vt_offset, i__1, i__2;
+    aocl_int64_t a_dim1, a_offset, u_dim1, u_offset, vt_dim1, vt_offset, i__1, i__2;
     /* Local variables */
-    integer minmn, wrkbl;
+    aocl_int64_t minmn, wrkbl;
     logical wntqa;
     logical wntqn, wntqo, wntqs;
-    integer mnthr1, mnthr2;
-    integer minwrk, maxwrk;
+    aocl_int64_t mnthr1, mnthr2;
+    aocl_int64_t minwrk, maxwrk;
     logical wntqas;
 
     /* Parameter adjustments */
@@ -91,40 +91,40 @@ int cgesdd_check(char *jobz, integer *m, integer *n, scomplex *a, integer *lda, 
                 if(wntqn)
                 {
                     /* Path 1 (M much larger than N, JOBZ='N') */
-                    maxwrk = *n + *n * ilaenv_(&c__1, "CGEQRF", " ", m, n, &c_n1, &c_n1);
+                    maxwrk = *n + *n * aocl_lapack_ilaenv(&c__1, "CGEQRF", " ", m, n, &c_n1, &c_n1);
                     /* Computing MAX */
                     i__1 = maxwrk;
                     i__2
                         = (*n << 1)
                           + (*n << 1)
-                                * ilaenv_(&c__1, "CGEBRD", " ", n, n, &c_n1, &c_n1); // , expr subst
+                                * aocl_lapack_ilaenv(&c__1, "CGEBRD", " ", n, n, &c_n1, &c_n1); // , expr subst
                     maxwrk = fla_max(i__1, i__2);
                     minwrk = *n * 3;
                 }
                 else if(wntqo)
                 {
                     /* Path 2 (M much larger than N, JOBZ='O') */
-                    wrkbl = *n + *n * ilaenv_(&c__1, "CGEQRF", " ", m, n, &c_n1, &c_n1);
+                    wrkbl = *n + *n * aocl_lapack_ilaenv(&c__1, "CGEQRF", " ", m, n, &c_n1, &c_n1);
                     /* Computing MAX */
                     i__1 = wrkbl;
-                    i__2 = *n + *n * ilaenv_(&c__1, "CUNGQR", " ", m, n, n, &c_n1); // , expr subst
+                    i__2 = *n + *n * aocl_lapack_ilaenv(&c__1, "CUNGQR", " ", m, n, n, &c_n1); // , expr subst
                     wrkbl = fla_max(i__1, i__2);
                     /* Computing MAX */
                     i__1 = wrkbl;
                     i__2
                         = (*n << 1)
                           + (*n << 1)
-                                * ilaenv_(&c__1, "CGEBRD", " ", n, n, &c_n1, &c_n1); // , expr subst
+                                * aocl_lapack_ilaenv(&c__1, "CGEBRD", " ", n, n, &c_n1, &c_n1); // , expr subst
                     wrkbl = fla_max(i__1, i__2);
                     /* Computing MAX */
                     i__1 = wrkbl;
                     i__2 = (*n << 1)
-                           + *n * ilaenv_(&c__1, "CUNMBR", "QLN", n, n, n, &c_n1); // , expr subst
+                           + *n * aocl_lapack_ilaenv(&c__1, "CUNMBR", "QLN", n, n, n, &c_n1); // , expr subst
                     wrkbl = fla_max(i__1, i__2);
                     /* Computing MAX */
                     i__1 = wrkbl;
                     i__2 = (*n << 1)
-                           + *n * ilaenv_(&c__1, "CUNMBR", "PRC", n, n, n, &c_n1); // , expr subst
+                           + *n * aocl_lapack_ilaenv(&c__1, "CUNMBR", "PRC", n, n, n, &c_n1); // , expr subst
                     wrkbl = fla_max(i__1, i__2);
                     maxwrk = *m * *n + *n * *n + wrkbl;
                     minwrk = (*n << 1) * *n + *n * 3;
@@ -132,27 +132,27 @@ int cgesdd_check(char *jobz, integer *m, integer *n, scomplex *a, integer *lda, 
                 else if(wntqs)
                 {
                     /* Path 3 (M much larger than N, JOBZ='S') */
-                    wrkbl = *n + *n * ilaenv_(&c__1, "CGEQRF", " ", m, n, &c_n1, &c_n1);
+                    wrkbl = *n + *n * aocl_lapack_ilaenv(&c__1, "CGEQRF", " ", m, n, &c_n1, &c_n1);
                     /* Computing MAX */
                     i__1 = wrkbl;
-                    i__2 = *n + *n * ilaenv_(&c__1, "CUNGQR", " ", m, n, n, &c_n1); // , expr subst
+                    i__2 = *n + *n * aocl_lapack_ilaenv(&c__1, "CUNGQR", " ", m, n, n, &c_n1); // , expr subst
                     wrkbl = fla_max(i__1, i__2);
                     /* Computing MAX */
                     i__1 = wrkbl;
                     i__2
                         = (*n << 1)
                           + (*n << 1)
-                                * ilaenv_(&c__1, "CGEBRD", " ", n, n, &c_n1, &c_n1); // , expr subst
+                                * aocl_lapack_ilaenv(&c__1, "CGEBRD", " ", n, n, &c_n1, &c_n1); // , expr subst
                     wrkbl = fla_max(i__1, i__2);
                     /* Computing MAX */
                     i__1 = wrkbl;
                     i__2 = (*n << 1)
-                           + *n * ilaenv_(&c__1, "CUNMBR", "QLN", n, n, n, &c_n1); // , expr subst
+                           + *n * aocl_lapack_ilaenv(&c__1, "CUNMBR", "QLN", n, n, n, &c_n1); // , expr subst
                     wrkbl = fla_max(i__1, i__2);
                     /* Computing MAX */
                     i__1 = wrkbl;
                     i__2 = (*n << 1)
-                           + *n * ilaenv_(&c__1, "CUNMBR", "PRC", n, n, n, &c_n1); // , expr subst
+                           + *n * aocl_lapack_ilaenv(&c__1, "CUNMBR", "PRC", n, n, n, &c_n1); // , expr subst
                     wrkbl = fla_max(i__1, i__2);
                     maxwrk = *n * *n + wrkbl;
                     minwrk = *n * *n + *n * 3;
@@ -160,27 +160,27 @@ int cgesdd_check(char *jobz, integer *m, integer *n, scomplex *a, integer *lda, 
                 else if(wntqa)
                 {
                     /* Path 4 (M much larger than N, JOBZ='A') */
-                    wrkbl = *n + *n * ilaenv_(&c__1, "CGEQRF", " ", m, n, &c_n1, &c_n1);
+                    wrkbl = *n + *n * aocl_lapack_ilaenv(&c__1, "CGEQRF", " ", m, n, &c_n1, &c_n1);
                     /* Computing MAX */
                     i__1 = wrkbl;
-                    i__2 = *n + *m * ilaenv_(&c__1, "CUNGQR", " ", m, m, n, &c_n1); // , expr subst
+                    i__2 = *n + *m * aocl_lapack_ilaenv(&c__1, "CUNGQR", " ", m, m, n, &c_n1); // , expr subst
                     wrkbl = fla_max(i__1, i__2);
                     /* Computing MAX */
                     i__1 = wrkbl;
                     i__2
                         = (*n << 1)
                           + (*n << 1)
-                                * ilaenv_(&c__1, "CGEBRD", " ", n, n, &c_n1, &c_n1); // , expr subst
+                                * aocl_lapack_ilaenv(&c__1, "CGEBRD", " ", n, n, &c_n1, &c_n1); // , expr subst
                     wrkbl = fla_max(i__1, i__2);
                     /* Computing MAX */
                     i__1 = wrkbl;
                     i__2 = (*n << 1)
-                           + *n * ilaenv_(&c__1, "CUNMBR", "QLN", n, n, n, &c_n1); // , expr subst
+                           + *n * aocl_lapack_ilaenv(&c__1, "CUNMBR", "QLN", n, n, n, &c_n1); // , expr subst
                     wrkbl = fla_max(i__1, i__2);
                     /* Computing MAX */
                     i__1 = wrkbl;
                     i__2 = (*n << 1)
-                           + *n * ilaenv_(&c__1, "CUNMBR", "PRC", n, n, n, &c_n1); // , expr subst
+                           + *n * aocl_lapack_ilaenv(&c__1, "CUNMBR", "PRC", n, n, n, &c_n1); // , expr subst
                     wrkbl = fla_max(i__1, i__2);
                     maxwrk = *n * *n + wrkbl;
                     minwrk = *n * *n + (*n << 1) + *m;
@@ -189,19 +189,19 @@ int cgesdd_check(char *jobz, integer *m, integer *n, scomplex *a, integer *lda, 
             else if(*m >= mnthr2)
             {
                 /* Path 5 (M much larger than N, but not as much as MNTHR1) */
-                maxwrk = (*n << 1) + (*m + *n) * ilaenv_(&c__1, "CGEBRD", " ", m, n, &c_n1, &c_n1);
+                maxwrk = (*n << 1) + (*m + *n) * aocl_lapack_ilaenv(&c__1, "CGEBRD", " ", m, n, &c_n1, &c_n1);
                 minwrk = (*n << 1) + *m;
                 if(wntqo)
                 {
                     /* Computing MAX */
                     i__1 = maxwrk;
                     i__2 = (*n << 1)
-                           + *n * ilaenv_(&c__1, "CUNGBR", "P", n, n, n, &c_n1); // , expr subst
+                           + *n * aocl_lapack_ilaenv(&c__1, "CUNGBR", "P", n, n, n, &c_n1); // , expr subst
                     maxwrk = fla_max(i__1, i__2);
                     /* Computing MAX */
                     i__1 = maxwrk;
                     i__2 = (*n << 1)
-                           + *n * ilaenv_(&c__1, "CUNGBR", "Q", m, n, n, &c_n1); // , expr subst
+                           + *n * aocl_lapack_ilaenv(&c__1, "CUNGBR", "Q", m, n, n, &c_n1); // , expr subst
                     maxwrk = fla_max(i__1, i__2);
                     maxwrk += *m * *n;
                     minwrk += *n * *n;
@@ -211,12 +211,12 @@ int cgesdd_check(char *jobz, integer *m, integer *n, scomplex *a, integer *lda, 
                     /* Computing MAX */
                     i__1 = maxwrk;
                     i__2 = (*n << 1)
-                           + *n * ilaenv_(&c__1, "CUNGBR", "P", n, n, n, &c_n1); // , expr subst
+                           + *n * aocl_lapack_ilaenv(&c__1, "CUNGBR", "P", n, n, n, &c_n1); // , expr subst
                     maxwrk = fla_max(i__1, i__2);
                     /* Computing MAX */
                     i__1 = maxwrk;
                     i__2 = (*n << 1)
-                           + *n * ilaenv_(&c__1, "CUNGBR", "Q", m, n, n, &c_n1); // , expr subst
+                           + *n * aocl_lapack_ilaenv(&c__1, "CUNGBR", "Q", m, n, n, &c_n1); // , expr subst
                     maxwrk = fla_max(i__1, i__2);
                 }
                 else if(wntqa)
@@ -224,31 +224,31 @@ int cgesdd_check(char *jobz, integer *m, integer *n, scomplex *a, integer *lda, 
                     /* Computing MAX */
                     i__1 = maxwrk;
                     i__2 = (*n << 1)
-                           + *n * ilaenv_(&c__1, "CUNGBR", "P", n, n, n, &c_n1); // , expr subst
+                           + *n * aocl_lapack_ilaenv(&c__1, "CUNGBR", "P", n, n, n, &c_n1); // , expr subst
                     maxwrk = fla_max(i__1, i__2);
                     /* Computing MAX */
                     i__1 = maxwrk;
                     i__2 = (*n << 1)
-                           + *m * ilaenv_(&c__1, "CUNGBR", "Q", m, m, n, &c_n1); // , expr subst
+                           + *m * aocl_lapack_ilaenv(&c__1, "CUNGBR", "Q", m, m, n, &c_n1); // , expr subst
                     maxwrk = fla_max(i__1, i__2);
                 }
             }
             else
             {
                 /* Path 6 (M at least N, but not much larger) */
-                maxwrk = (*n << 1) + (*m + *n) * ilaenv_(&c__1, "CGEBRD", " ", m, n, &c_n1, &c_n1);
+                maxwrk = (*n << 1) + (*m + *n) * aocl_lapack_ilaenv(&c__1, "CGEBRD", " ", m, n, &c_n1, &c_n1);
                 minwrk = (*n << 1) + *m;
                 if(wntqo)
                 {
                     /* Computing MAX */
                     i__1 = maxwrk;
                     i__2 = (*n << 1)
-                           + *n * ilaenv_(&c__1, "CUNMBR", "PRC", n, n, n, &c_n1); // , expr subst
+                           + *n * aocl_lapack_ilaenv(&c__1, "CUNMBR", "PRC", n, n, n, &c_n1); // , expr subst
                     maxwrk = fla_max(i__1, i__2);
                     /* Computing MAX */
                     i__1 = maxwrk;
                     i__2 = (*n << 1)
-                           + *n * ilaenv_(&c__1, "CUNMBR", "QLN", m, n, n, &c_n1); // , expr subst
+                           + *n * aocl_lapack_ilaenv(&c__1, "CUNMBR", "QLN", m, n, n, &c_n1); // , expr subst
                     maxwrk = fla_max(i__1, i__2);
                     maxwrk += *m * *n;
                     minwrk += *n * *n;
@@ -258,12 +258,12 @@ int cgesdd_check(char *jobz, integer *m, integer *n, scomplex *a, integer *lda, 
                     /* Computing MAX */
                     i__1 = maxwrk;
                     i__2 = (*n << 1)
-                           + *n * ilaenv_(&c__1, "CUNMBR", "PRC", n, n, n, &c_n1); // , expr subst
+                           + *n * aocl_lapack_ilaenv(&c__1, "CUNMBR", "PRC", n, n, n, &c_n1); // , expr subst
                     maxwrk = fla_max(i__1, i__2);
                     /* Computing MAX */
                     i__1 = maxwrk;
                     i__2 = (*n << 1)
-                           + *n * ilaenv_(&c__1, "CUNMBR", "QLN", m, n, n, &c_n1); // , expr subst
+                           + *n * aocl_lapack_ilaenv(&c__1, "CUNMBR", "QLN", m, n, n, &c_n1); // , expr subst
                     maxwrk = fla_max(i__1, i__2);
                 }
                 else if(wntqa)
@@ -271,12 +271,12 @@ int cgesdd_check(char *jobz, integer *m, integer *n, scomplex *a, integer *lda, 
                     /* Computing MAX */
                     i__1 = maxwrk;
                     i__2 = (*n << 1)
-                           + *n * ilaenv_(&c__1, "CUNGBR", "PRC", n, n, n, &c_n1); // , expr subst
+                           + *n * aocl_lapack_ilaenv(&c__1, "CUNGBR", "PRC", n, n, n, &c_n1); // , expr subst
                     maxwrk = fla_max(i__1, i__2);
                     /* Computing MAX */
                     i__1 = maxwrk;
                     i__2 = (*n << 1)
-                           + *m * ilaenv_(&c__1, "CUNGBR", "QLN", m, m, n, &c_n1); // , expr subst
+                           + *m * aocl_lapack_ilaenv(&c__1, "CUNGBR", "QLN", m, m, n, &c_n1); // , expr subst
                     maxwrk = fla_max(i__1, i__2);
                 }
             }
@@ -295,40 +295,40 @@ int cgesdd_check(char *jobz, integer *m, integer *n, scomplex *a, integer *lda, 
                 if(wntqn)
                 {
                     /* Path 1t (N much larger than M, JOBZ='N') */
-                    maxwrk = *m + *m * ilaenv_(&c__1, "CGELQF", " ", m, n, &c_n1, &c_n1);
+                    maxwrk = *m + *m * aocl_lapack_ilaenv(&c__1, "CGELQF", " ", m, n, &c_n1, &c_n1);
                     /* Computing MAX */
                     i__1 = maxwrk;
                     i__2
                         = (*m << 1)
                           + (*m << 1)
-                                * ilaenv_(&c__1, "CGEBRD", " ", m, m, &c_n1, &c_n1); // , expr subst
+                                * aocl_lapack_ilaenv(&c__1, "CGEBRD", " ", m, m, &c_n1, &c_n1); // , expr subst
                     maxwrk = fla_max(i__1, i__2);
                     minwrk = *m * 3;
                 }
                 else if(wntqo)
                 {
                     /* Path 2t (N much larger than M, JOBZ='O') */
-                    wrkbl = *m + *m * ilaenv_(&c__1, "CGELQF", " ", m, n, &c_n1, &c_n1);
+                    wrkbl = *m + *m * aocl_lapack_ilaenv(&c__1, "CGELQF", " ", m, n, &c_n1, &c_n1);
                     /* Computing MAX */
                     i__1 = wrkbl;
-                    i__2 = *m + *m * ilaenv_(&c__1, "CUNGLQ", " ", m, n, m, &c_n1); // , expr subst
+                    i__2 = *m + *m * aocl_lapack_ilaenv(&c__1, "CUNGLQ", " ", m, n, m, &c_n1); // , expr subst
                     wrkbl = fla_max(i__1, i__2);
                     /* Computing MAX */
                     i__1 = wrkbl;
                     i__2
                         = (*m << 1)
                           + (*m << 1)
-                                * ilaenv_(&c__1, "CGEBRD", " ", m, m, &c_n1, &c_n1); // , expr subst
+                                * aocl_lapack_ilaenv(&c__1, "CGEBRD", " ", m, m, &c_n1, &c_n1); // , expr subst
                     wrkbl = fla_max(i__1, i__2);
                     /* Computing MAX */
                     i__1 = wrkbl;
                     i__2 = (*m << 1)
-                           + *m * ilaenv_(&c__1, "CUNMBR", "PRC", m, m, m, &c_n1); // , expr subst
+                           + *m * aocl_lapack_ilaenv(&c__1, "CUNMBR", "PRC", m, m, m, &c_n1); // , expr subst
                     wrkbl = fla_max(i__1, i__2);
                     /* Computing MAX */
                     i__1 = wrkbl;
                     i__2 = (*m << 1)
-                           + *m * ilaenv_(&c__1, "CUNMBR", "QLN", m, m, m, &c_n1); // , expr subst
+                           + *m * aocl_lapack_ilaenv(&c__1, "CUNMBR", "QLN", m, m, m, &c_n1); // , expr subst
                     wrkbl = fla_max(i__1, i__2);
                     maxwrk = *m * *n + *m * *m + wrkbl;
                     minwrk = (*m << 1) * *m + *m * 3;
@@ -336,27 +336,27 @@ int cgesdd_check(char *jobz, integer *m, integer *n, scomplex *a, integer *lda, 
                 else if(wntqs)
                 {
                     /* Path 3t (N much larger than M, JOBZ='S') */
-                    wrkbl = *m + *m * ilaenv_(&c__1, "CGELQF", " ", m, n, &c_n1, &c_n1);
+                    wrkbl = *m + *m * aocl_lapack_ilaenv(&c__1, "CGELQF", " ", m, n, &c_n1, &c_n1);
                     /* Computing MAX */
                     i__1 = wrkbl;
-                    i__2 = *m + *m * ilaenv_(&c__1, "CUNGLQ", " ", m, n, m, &c_n1); // , expr subst
+                    i__2 = *m + *m * aocl_lapack_ilaenv(&c__1, "CUNGLQ", " ", m, n, m, &c_n1); // , expr subst
                     wrkbl = fla_max(i__1, i__2);
                     /* Computing MAX */
                     i__1 = wrkbl;
                     i__2
                         = (*m << 1)
                           + (*m << 1)
-                                * ilaenv_(&c__1, "CGEBRD", " ", m, m, &c_n1, &c_n1); // , expr subst
+                                * aocl_lapack_ilaenv(&c__1, "CGEBRD", " ", m, m, &c_n1, &c_n1); // , expr subst
                     wrkbl = fla_max(i__1, i__2);
                     /* Computing MAX */
                     i__1 = wrkbl;
                     i__2 = (*m << 1)
-                           + *m * ilaenv_(&c__1, "CUNMBR", "PRC", m, m, m, &c_n1); // , expr subst
+                           + *m * aocl_lapack_ilaenv(&c__1, "CUNMBR", "PRC", m, m, m, &c_n1); // , expr subst
                     wrkbl = fla_max(i__1, i__2);
                     /* Computing MAX */
                     i__1 = wrkbl;
                     i__2 = (*m << 1)
-                           + *m * ilaenv_(&c__1, "CUNMBR", "QLN", m, m, m, &c_n1); // , expr subst
+                           + *m * aocl_lapack_ilaenv(&c__1, "CUNMBR", "QLN", m, m, m, &c_n1); // , expr subst
                     wrkbl = fla_max(i__1, i__2);
                     maxwrk = *m * *m + wrkbl;
                     minwrk = *m * *m + *m * 3;
@@ -364,27 +364,27 @@ int cgesdd_check(char *jobz, integer *m, integer *n, scomplex *a, integer *lda, 
                 else if(wntqa)
                 {
                     /* Path 4t (N much larger than M, JOBZ='A') */
-                    wrkbl = *m + *m * ilaenv_(&c__1, "CGELQF", " ", m, n, &c_n1, &c_n1);
+                    wrkbl = *m + *m * aocl_lapack_ilaenv(&c__1, "CGELQF", " ", m, n, &c_n1, &c_n1);
                     /* Computing MAX */
                     i__1 = wrkbl;
-                    i__2 = *m + *n * ilaenv_(&c__1, "CUNGLQ", " ", n, n, m, &c_n1); // , expr subst
+                    i__2 = *m + *n * aocl_lapack_ilaenv(&c__1, "CUNGLQ", " ", n, n, m, &c_n1); // , expr subst
                     wrkbl = fla_max(i__1, i__2);
                     /* Computing MAX */
                     i__1 = wrkbl;
                     i__2
                         = (*m << 1)
                           + (*m << 1)
-                                * ilaenv_(&c__1, "CGEBRD", " ", m, m, &c_n1, &c_n1); // , expr subst
+                                * aocl_lapack_ilaenv(&c__1, "CGEBRD", " ", m, m, &c_n1, &c_n1); // , expr subst
                     wrkbl = fla_max(i__1, i__2);
                     /* Computing MAX */
                     i__1 = wrkbl;
                     i__2 = (*m << 1)
-                           + *m * ilaenv_(&c__1, "CUNMBR", "PRC", m, m, m, &c_n1); // , expr subst
+                           + *m * aocl_lapack_ilaenv(&c__1, "CUNMBR", "PRC", m, m, m, &c_n1); // , expr subst
                     wrkbl = fla_max(i__1, i__2);
                     /* Computing MAX */
                     i__1 = wrkbl;
                     i__2 = (*m << 1)
-                           + *m * ilaenv_(&c__1, "CUNMBR", "QLN", m, m, m, &c_n1); // , expr subst
+                           + *m * aocl_lapack_ilaenv(&c__1, "CUNMBR", "QLN", m, m, m, &c_n1); // , expr subst
                     wrkbl = fla_max(i__1, i__2);
                     maxwrk = *m * *m + wrkbl;
                     minwrk = *m * *m + (*m << 1) + *n;
@@ -393,19 +393,19 @@ int cgesdd_check(char *jobz, integer *m, integer *n, scomplex *a, integer *lda, 
             else if(*n >= mnthr2)
             {
                 /* Path 5t (N much larger than M, but not as much as MNTHR1) */
-                maxwrk = (*m << 1) + (*m + *n) * ilaenv_(&c__1, "CGEBRD", " ", m, n, &c_n1, &c_n1);
+                maxwrk = (*m << 1) + (*m + *n) * aocl_lapack_ilaenv(&c__1, "CGEBRD", " ", m, n, &c_n1, &c_n1);
                 minwrk = (*m << 1) + *n;
                 if(wntqo)
                 {
                     /* Computing MAX */
                     i__1 = maxwrk;
                     i__2 = (*m << 1)
-                           + *m * ilaenv_(&c__1, "CUNGBR", "P", m, n, m, &c_n1); // , expr subst
+                           + *m * aocl_lapack_ilaenv(&c__1, "CUNGBR", "P", m, n, m, &c_n1); // , expr subst
                     maxwrk = fla_max(i__1, i__2);
                     /* Computing MAX */
                     i__1 = maxwrk;
                     i__2 = (*m << 1)
-                           + *m * ilaenv_(&c__1, "CUNGBR", "Q", m, m, n, &c_n1); // , expr subst
+                           + *m * aocl_lapack_ilaenv(&c__1, "CUNGBR", "Q", m, m, n, &c_n1); // , expr subst
                     maxwrk = fla_max(i__1, i__2);
                     maxwrk += *m * *n;
                     minwrk += *m * *m;
@@ -415,12 +415,12 @@ int cgesdd_check(char *jobz, integer *m, integer *n, scomplex *a, integer *lda, 
                     /* Computing MAX */
                     i__1 = maxwrk;
                     i__2 = (*m << 1)
-                           + *m * ilaenv_(&c__1, "CUNGBR", "P", m, n, m, &c_n1); // , expr subst
+                           + *m * aocl_lapack_ilaenv(&c__1, "CUNGBR", "P", m, n, m, &c_n1); // , expr subst
                     maxwrk = fla_max(i__1, i__2);
                     /* Computing MAX */
                     i__1 = maxwrk;
                     i__2 = (*m << 1)
-                           + *m * ilaenv_(&c__1, "CUNGBR", "Q", m, m, n, &c_n1); // , expr subst
+                           + *m * aocl_lapack_ilaenv(&c__1, "CUNGBR", "Q", m, m, n, &c_n1); // , expr subst
                     maxwrk = fla_max(i__1, i__2);
                 }
                 else if(wntqa)
@@ -428,31 +428,31 @@ int cgesdd_check(char *jobz, integer *m, integer *n, scomplex *a, integer *lda, 
                     /* Computing MAX */
                     i__1 = maxwrk;
                     i__2 = (*m << 1)
-                           + *n * ilaenv_(&c__1, "CUNGBR", "P", n, n, m, &c_n1); // , expr subst
+                           + *n * aocl_lapack_ilaenv(&c__1, "CUNGBR", "P", n, n, m, &c_n1); // , expr subst
                     maxwrk = fla_max(i__1, i__2);
                     /* Computing MAX */
                     i__1 = maxwrk;
                     i__2 = (*m << 1)
-                           + *m * ilaenv_(&c__1, "CUNGBR", "Q", m, m, n, &c_n1); // , expr subst
+                           + *m * aocl_lapack_ilaenv(&c__1, "CUNGBR", "Q", m, m, n, &c_n1); // , expr subst
                     maxwrk = fla_max(i__1, i__2);
                 }
             }
             else
             {
                 /* Path 6t (N greater than M, but not much larger) */
-                maxwrk = (*m << 1) + (*m + *n) * ilaenv_(&c__1, "CGEBRD", " ", m, n, &c_n1, &c_n1);
+                maxwrk = (*m << 1) + (*m + *n) * aocl_lapack_ilaenv(&c__1, "CGEBRD", " ", m, n, &c_n1, &c_n1);
                 minwrk = (*m << 1) + *n;
                 if(wntqo)
                 {
                     /* Computing MAX */
                     i__1 = maxwrk;
                     i__2 = (*m << 1)
-                           + *m * ilaenv_(&c__1, "CUNMBR", "PRC", m, n, m, &c_n1); // , expr subst
+                           + *m * aocl_lapack_ilaenv(&c__1, "CUNMBR", "PRC", m, n, m, &c_n1); // , expr subst
                     maxwrk = fla_max(i__1, i__2);
                     /* Computing MAX */
                     i__1 = maxwrk;
                     i__2 = (*m << 1)
-                           + *m * ilaenv_(&c__1, "CUNMBR", "QLN", m, m, n, &c_n1); // , expr subst
+                           + *m * aocl_lapack_ilaenv(&c__1, "CUNMBR", "QLN", m, m, n, &c_n1); // , expr subst
                     maxwrk = fla_max(i__1, i__2);
                     maxwrk += *m * *n;
                     minwrk += *m * *m;
@@ -462,12 +462,12 @@ int cgesdd_check(char *jobz, integer *m, integer *n, scomplex *a, integer *lda, 
                     /* Computing MAX */
                     i__1 = maxwrk;
                     i__2 = (*m << 1)
-                           + *m * ilaenv_(&c__1, "CUNGBR", "PRC", m, n, m, &c_n1); // , expr subst
+                           + *m * aocl_lapack_ilaenv(&c__1, "CUNGBR", "PRC", m, n, m, &c_n1); // , expr subst
                     maxwrk = fla_max(i__1, i__2);
                     /* Computing MAX */
                     i__1 = maxwrk;
                     i__2 = (*m << 1)
-                           + *m * ilaenv_(&c__1, "CUNGBR", "QLN", m, m, n, &c_n1); // , expr subst
+                           + *m * aocl_lapack_ilaenv(&c__1, "CUNGBR", "QLN", m, m, n, &c_n1); // , expr subst
                     maxwrk = fla_max(i__1, i__2);
                 }
                 else if(wntqa)
@@ -475,12 +475,12 @@ int cgesdd_check(char *jobz, integer *m, integer *n, scomplex *a, integer *lda, 
                     /* Computing MAX */
                     i__1 = maxwrk;
                     i__2 = (*m << 1)
-                           + *n * ilaenv_(&c__1, "CUNGBR", "PRC", n, n, m, &c_n1); // , expr subst
+                           + *n * aocl_lapack_ilaenv(&c__1, "CUNGBR", "PRC", n, n, m, &c_n1); // , expr subst
                     maxwrk = fla_max(i__1, i__2);
                     /* Computing MAX */
                     i__1 = maxwrk;
                     i__2 = (*m << 1)
-                           + *m * ilaenv_(&c__1, "CUNGBR", "QLN", m, m, n, &c_n1); // , expr subst
+                           + *m * aocl_lapack_ilaenv(&c__1, "CUNGBR", "QLN", m, m, n, &c_n1); // , expr subst
                     maxwrk = fla_max(i__1, i__2);
                 }
             }
@@ -500,7 +500,7 @@ int cgesdd_check(char *jobz, integer *m, integer *n, scomplex *a, integer *lda, 
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("CGESDD", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("CGESDD", &i__1, (ftnlen)6);
         return LAPACK_FAILURE;
     }
     if(*lwork == -1)

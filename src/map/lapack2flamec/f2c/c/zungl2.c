@@ -36,7 +36,7 @@
 /* > */
 /* > \verbatim */
 /* > */
-/* > ZUNGL2 generates an m-by-n complex matrix Q with orthonormal rows, */
+/* > ZUNGL2 generates an m-by-n scomplex matrix Q with orthonormal rows, */
 /* > which is defined as the first m rows of a product of k elementary */
 /* > reflectors of order n */
 /* > */
@@ -108,26 +108,39 @@
 /* > \ingroup complex16OTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void zungl2_(integer *m, integer *n, integer *k, doublecomplex *a, integer *lda, doublecomplex *tau,
-             doublecomplex *work, integer *info)
+/** Generated wrapper function */
+void zungl2_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *k, dcomplex *a, aocl_int_t *lda,
+             dcomplex *tau, dcomplex *work, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_zungl2(m, n, k, a, lda, tau, work, info);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t k_64 = *k;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_zungl2(&m_64, &n_64, &k_64, a, &lda_64, tau, work, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_zungl2(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *k, dcomplex *a,
+                        aocl_int64_t *lda, dcomplex *tau, dcomplex *work,
+                        aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zungl2 inputs: m %" FLA_IS ", n %" FLA_IS ", k %" FLA_IS ", lda %" FLA_IS "",
                       *m, *n, *k, *lda);
     /* System generated locals */
-    integer a_dim1, a_offset, i__1, i__2, i__3;
-    doublecomplex z__1, z__2;
+    aocl_int64_t a_dim1, a_offset, i__1, i__2, i__3;
+    dcomplex z__1, z__2;
     /* Builtin functions */
-    void d_cnjg(doublecomplex *, doublecomplex *);
+    void d_cnjg(dcomplex *, dcomplex *);
     /* Local variables */
-    integer i__, j, l;
-    extern /* Subroutine */
-        void
-        zscal_(integer *, doublecomplex *, doublecomplex *, integer *),
-        zlarf_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *,
-               doublecomplex *, integer *, doublecomplex *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
-        zlacgv_(integer *, doublecomplex *, integer *);
+    aocl_int64_t i__, j, l;
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -174,7 +187,7 @@ void zungl2_(integer *m, integer *n, integer *k, doublecomplex *a, integer *lda,
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("ZUNGL2", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("ZUNGL2", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -213,7 +226,7 @@ void zungl2_(integer *m, integer *n, integer *k, doublecomplex *a, integer *lda,
         if(i__ < *n)
         {
             i__1 = *n - i__;
-            zlacgv_(&i__1, &a[i__ + (i__ + 1) * a_dim1], lda);
+            aocl_lapack_zlacgv(&i__1, &a[i__ + (i__ + 1) * a_dim1], lda);
             if(i__ < *m)
             {
                 i__1 = i__ + i__ * a_dim1;
@@ -222,16 +235,16 @@ void zungl2_(integer *m, integer *n, integer *k, doublecomplex *a, integer *lda,
                 i__1 = *m - i__;
                 i__2 = *n - i__ + 1;
                 d_cnjg(&z__1, &tau[i__]);
-                zlarf_("Right", &i__1, &i__2, &a[i__ + i__ * a_dim1], lda, &z__1,
-                       &a[i__ + 1 + i__ * a_dim1], lda, &work[1]);
+                aocl_lapack_zlarf("Right", &i__1, &i__2, &a[i__ + i__ * a_dim1], lda, &z__1,
+                                  &a[i__ + 1 + i__ * a_dim1], lda, &work[1]);
             }
             i__1 = *n - i__;
             i__2 = i__;
             z__1.r = -tau[i__2].r;
             z__1.i = -tau[i__2].i; // , expr subst
-            zscal_(&i__1, &z__1, &a[i__ + (i__ + 1) * a_dim1], lda);
+            aocl_blas_zscal(&i__1, &z__1, &a[i__ + (i__ + 1) * a_dim1], lda);
             i__1 = *n - i__;
-            zlacgv_(&i__1, &a[i__ + (i__ + 1) * a_dim1], lda);
+            aocl_lapack_zlacgv(&i__1, &a[i__ + (i__ + 1) * a_dim1], lda);
         }
         i__1 = i__ + i__ * a_dim1;
         d_cnjg(&z__2, &tau[i__]);

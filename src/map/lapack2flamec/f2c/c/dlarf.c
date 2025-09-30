@@ -13,7 +13,7 @@
 
 static doublereal c_b4 = 1.;
 static doublereal c_b5 = 0.;
-static integer c__1 = 1;
+static aocl_int64_t c__1 = 1;
 /* > \brief \b DLARF applies an elementary reflector to a general rectangular matrix. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -130,45 +130,50 @@ static integer c__1 = 1;
 /* > \ingroup doubleOTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-void dlarf_(char *side, integer *m, integer *n, doublereal *v, integer *incv, doublereal *tau,
-            doublereal *c__, integer *ldc, doublereal *work)
+/** Generated wrapper function */
+void dlarf_(char *side, aocl_int_t *m, aocl_int_t *n, doublereal *v, aocl_int_t *incv,
+            doublereal *tau, doublereal *c__, aocl_int_t *ldc, doublereal *work)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_dlarf(side, m, n, v, incv, tau, c__, ldc, work);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t incv_64 = *incv;
+    aocl_int64_t ldc_64 = *ldc;
+
+    aocl_lapack_dlarf(side, &m_64, &n_64, v, &incv_64, tau, c__, &ldc_64, work);
+#endif
+}
+
+void aocl_lapack_dlarf(char *side, aocl_int64_t *m, aocl_int64_t *n, doublereal *v,
+                       aocl_int64_t *incv, doublereal *tau, doublereal *c__, aocl_int64_t *ldc,
+                       doublereal *work)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dlarf inputs: side %c, m %" FLA_IS ", n %" FLA_IS ", incv %" FLA_IS
                       ", ldc %" FLA_IS "",
                       *side, *m, *n, *incv, *ldc);
     /* System generated locals */
-    integer c_dim1, c_offset;
+    aocl_int64_t c_dim1, c_offset;
     doublereal d__1;
     /* Local variables */
-    integer i__;
+    aocl_int64_t i__;
     logical applyleft;
 #ifdef FLA_ENABLE_AMD_OPT
-    extern void fla_dlarf_small_incv1_simd(integer lastv, integer lastc, double *c__, integer ldc,
-                                           double *v, double tau, double *work);
+    extern void fla_dlarf_small_incv1_simd(aocl_int64_t lastv, aocl_int64_t lastc, double *c__,
+                                           aocl_int64_t ldc, double *v, double tau, double *work);
 #if !FLA_ENABLE_AOCL_BLAS
-    extern doublereal ddot_(integer *, doublereal *, integer *, doublereal *, integer *);
-    extern void daxpy_(integer *, doublereal *, doublereal *, integer *, doublereal *, integer *);
 #endif
-    void fla_dlarf_left_tuning_params(integer m, integer n, FLA_Bool * use_blocked_flag,
-                                      integer * nthreads);
-    void fla_dlarf_right_tuning_params(integer m, integer n, integer * block_size,
-                                       integer * nthreads);
+    void fla_dlarf_left_tuning_params(aocl_int64_t m, aocl_int64_t n, FLA_Bool * use_blocked_flag,
+                                      aocl_int64_t * nthreads);
+    void fla_dlarf_right_tuning_params(aocl_int64_t m, aocl_int64_t n, aocl_int64_t * block_size,
+                                       aocl_int64_t * nthreads);
 #endif
 #if !FLA_ENABLE_AOCL_BLAS
-    extern /* Subroutine */
-        void
-        dger_(integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *,
-              doublereal *, integer *);
-    extern logical lsame_(char *, char *, integer, integer);
-    extern /* Subroutine */
-        void
-        dgemv_(char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *,
-               integer *, doublereal *, doublereal *, integer *);
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
 #endif
-    integer lastc, lastv;
-    extern integer iladlc_(integer *, integer *, doublereal *, integer *),
-        iladlr_(integer *, integer *, doublereal *, integer *);
+    aocl_int64_t lastc, lastv;
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -226,12 +231,12 @@ void dlarf_(char *side, integer *m, integer *n, doublereal *v, integer *incv, do
         if(applyleft)
         {
             /* Scan for the last non-zero column in C(1:lastv,:). */
-            lastc = iladlc_(&lastv, n, &c__[c_offset], ldc);
+            lastc = aocl_lapack_iladlc(&lastv, n, &c__[c_offset], ldc);
         }
         else
         {
             /* Scan for the last non-zero row in C(:,1:lastv). */
-            lastc = iladlr_(m, &lastv, &c__[c_offset], ldc);
+            lastc = aocl_lapack_iladlr(m, &lastv, &c__[c_offset], ldc);
         }
     }
     /* Note that lastc.eq.0 renders the BLAS operations null;
@@ -246,11 +251,12 @@ void dlarf_(char *side, integer *m, integer *n, doublereal *v, integer *incv, do
 
 #ifndef FLA_ENABLE_AMD_OPT
             /* w(1:lastc,1) := C(1:lastv,1:lastc)**T * v(1:lastv,1) */
-            dgemv_("Transpose", &lastv, &lastc, &c_b4, &c__[c_offset], ldc, &v[1], incv, &c_b5,
-                   &work[1], &c__1);
+            aocl_blas_dgemv("Transpose", &lastv, &lastc, &c_b4, &c__[c_offset], ldc, &v[1], incv,
+                            &c_b5, &work[1], &c__1);
 
             /* C(1:lastv,1:lastc) := C(...) - v(1:lastv,1) * w(1:lastc,1)**T */
-            dger_(&lastv, &lastc, &d__1, &v[1], incv, &work[1], &c__1, &c__[c_offset], ldc);
+            aocl_blas_dger(&lastv, &lastc, &d__1, &v[1], incv, &work[1], &c__1, &c__[c_offset],
+                           ldc);
 #else
             /* Get threshold sizes to take optimized path*/
             FLA_Bool min_lastc_lastv = (lastc <= FLA_DGEMV_DGER_SIMD_SMALL_THRESH)
@@ -270,7 +276,7 @@ void dlarf_(char *side, integer *m, integer *n, doublereal *v, integer *incv, do
             {
 
                 FLA_Bool use_blocked = 0;
-                integer opt_nthreads = 1;
+                aocl_int64_t opt_nthreads = 1;
 
                 fla_dlarf_left_tuning_params(lastv, lastc, &use_blocked, &opt_nthreads);
 
@@ -285,10 +291,11 @@ void dlarf_(char *side, integer *m, integer *n, doublereal *v, integer *incv, do
                     for(i__ = 1; i__ <= lastc; ++i__)
                     {
                         /* W(i) =  C(1:lastv,i)**T * v(1:lastv,1)  */
-                        work[i__] = ddot_(&lastv, &v[1], incv, &c__[i__ * *ldc + 1], &c__1);
+                        work[i__]
+                            = aocl_blas_ddot(&lastv, &v[1], incv, &c__[i__ * *ldc + 1], &c__1);
                         /* C(1:lastv,i) = C(1:lastv,i) - v(1:lastv,1) * -tau * W(i) */
                         doublereal d__2 = -(*tau) * work[i__];
-                        daxpy_(&lastv, &d__2, &v[1], incv, &c__[i__ * *ldc + 1], &c__1);
+                        aocl_blas_daxpy(&lastv, &d__2, &v[1], incv, &c__[i__ * *ldc + 1], &c__1);
                     }
                 }
                 else
@@ -309,16 +316,17 @@ void dlarf_(char *side, integer *m, integer *n, doublereal *v, integer *incv, do
 #pragma omp teams num_teams(1) thread_limit(1)
 #endif
                         {
-                            dgemv_("Transpose", &lastv, &lastc, &c_b4, &c__[c_offset], ldc, &v[1],
-                                   incv, &c_b5, &work[1], &c__1);
+                            aocl_blas_dgemv("Transpose", &lastv, &lastc, &c_b4, &c__[c_offset], ldc,
+                                            &v[1], incv, &c_b5, &work[1], &c__1);
                         }
                     }
 #else
-                    dgemv_("Transpose", &lastv, &lastc, &c_b4, &c__[c_offset], ldc, &v[1], incv,
-                           &c_b5, &work[1], &c__1);
+                    aocl_blas_dgemv("Transpose", &lastv, &lastc, &c_b4, &c__[c_offset], ldc, &v[1],
+                                    incv, &c_b5, &work[1], &c__1);
 #endif
                     /* C(1:lastv,1:lastc) := C(...) - v(1:lastv,1) * w(1:lastc,1)**T*/
-                    dger_(&lastv, &lastc, &d__1, &v[1], incv, &work[1], &c__1, &c__[c_offset], ldc);
+                    aocl_blas_dger(&lastv, &lastc, &d__1, &v[1], incv, &work[1], &c__1,
+                                   &c__[c_offset], ldc);
                 }
             }
 #endif /* FLA_ENABLE_AMD_OPT */
@@ -331,14 +339,15 @@ void dlarf_(char *side, integer *m, integer *n, doublereal *v, integer *incv, do
         {
 #ifndef FLA_ENABLE_AMD_OPT
             /* w(1:lastc,1) := C(1:lastc,1:lastv) * v(1:lastv,1) */
-            dgemv_("No transpose", &lastc, &lastv, &c_b4, &c__[c_offset], ldc, &v[1], incv, &c_b5,
-                   &work[1], &c__1);
+            aocl_blas_dgemv("No transpose", &lastc, &lastv, &c_b4, &c__[c_offset], ldc, &v[1], incv,
+                            &c_b5, &work[1], &c__1);
             /* C(1:lastc,1:lastv) := C(...) - w(1:lastc,1) * v(1:lastv,1)**T */
             d__1 = -(*tau);
-            dger_(&lastc, &lastv, &d__1, &work[1], &c__1, &v[1], incv, &c__[c_offset], ldc);
+            aocl_blas_dger(&lastc, &lastv, &d__1, &work[1], &c__1, &v[1], incv, &c__[c_offset],
+                           ldc);
 #else
-            integer opt_nthreads = 1;
-            integer nb = 0;
+            aocl_int64_t opt_nthreads = 1;
+            aocl_int64_t nb = 0;
 
             fla_dlarf_right_tuning_params(lastc, lastv, &nb, &opt_nthreads);
 
@@ -352,9 +361,9 @@ void dlarf_(char *side, integer *m, integer *n, doublereal *v, integer *incv, do
                  */
                 uint64_t unaligned_bytes
                     = ((uint64_t)(c__ + c_offset)) % ((nb * sizeof(doublereal)));
-                integer first_thread_rows
+                aocl_int64_t first_thread_rows
                     = fla_min((nb - (unaligned_bytes / sizeof(doublereal))), lastc);
-                integer panels
+                aocl_int64_t panels
                     = (!!first_thread_rows) + (((lastc - first_thread_rows) + (nb - 1)) / nb);
 
 #ifdef FLA_OPENMP_MULTITHREADING
@@ -362,15 +371,16 @@ void dlarf_(char *side, integer *m, integer *n, doublereal *v, integer *incv, do
 #endif
                 for(i__ = 1; i__ <= panels; i__ += 1)
                 {
-                    integer completed_rows = i__ == 1 ? 0 : (i__ - 2) * nb + first_thread_rows;
-                    integer current_block_size
+                    aocl_int64_t completed_rows = i__ == 1 ? 0 : (i__ - 2) * nb + first_thread_rows;
+                    aocl_int64_t current_block_size
                         = i__ == 1 ? first_thread_rows : fla_min(nb, lastc - completed_rows);
-                    integer cur_idx = completed_rows + 1;
+                    aocl_int64_t cur_idx = completed_rows + 1;
                     /* w(1:lastc,1) := C(1:lastc,1:lastv) * v(1:lastv,1) */
-                    dgemv_("No transpose", &current_block_size, &lastv, &c_b4,
-                           &c__[c_dim1 + cur_idx], ldc, &v[1], incv, &c_b5, &work[cur_idx], &c__1);
-                    dger_(&current_block_size, &lastv, &d__1, &work[cur_idx], &c__1, &v[1], incv,
-                          &c__[c_dim1 + cur_idx], ldc);
+                    aocl_blas_dgemv("No transpose", &current_block_size, &lastv, &c_b4,
+                                    &c__[c_dim1 + cur_idx], ldc, &v[1], incv, &c_b5, &work[cur_idx],
+                                    &c__1);
+                    aocl_blas_dger(&current_block_size, &lastv, &d__1, &work[cur_idx], &c__1, &v[1],
+                                   incv, &c__[c_dim1 + cur_idx], ldc);
                 }
             }
             else
@@ -386,16 +396,17 @@ void dlarf_(char *side, integer *m, integer *n, doublereal *v, integer *incv, do
                 }
                 else
                 {
-                    dgemv_("No transpose", &lastc, &lastv, &c_b4, &c__[c_offset], ldc, &v[1], incv,
-                           &c_b5, &work[1], &c__1);
+                    aocl_blas_dgemv("No transpose", &lastc, &lastv, &c_b4, &c__[c_offset], ldc,
+                                    &v[1], incv, &c_b5, &work[1], &c__1);
                 }
 #else
-                dgemv_("No transpose", &lastc, &lastv, &c_b4, &c__[c_offset], ldc, &v[1], incv,
-                       &c_b5, &work[1], &c__1);
+                aocl_blas_dgemv("No transpose", &lastc, &lastv, &c_b4, &c__[c_offset], ldc, &v[1],
+                                incv, &c_b5, &work[1], &c__1);
 #endif
                 /* C(1:lastc,1:lastv) := C(...) - w(1:lastc,1) * v(1:lastv,1)**T */
                 d__1 = -(*tau);
-                dger_(&lastc, &lastv, &d__1, &work[1], &c__1, &v[1], incv, &c__[c_offset], ldc);
+                aocl_blas_dger(&lastc, &lastv, &d__1, &work[1], &c__1, &v[1], incv, &c__[c_offset],
+                               ldc);
             }
 #endif /* FLA_ENABLE_AMD_OPT */
         }
@@ -407,18 +418,18 @@ void dlarf_(char *side, integer *m, integer *n, doublereal *v, integer *incv, do
 /* dlarf_ */
 
 #ifdef FLA_ENABLE_AMD_OPT
-void fla_dlarf_left_tuning_params(integer m, integer n, FLA_Bool *use_blocked_flag,
-                                  integer *nthreads)
+void fla_dlarf_left_tuning_params(aocl_int64_t m, aocl_int64_t n, FLA_Bool *use_blocked_flag,
+                                  aocl_int64_t *nthreads)
 {
     extern int fla_thread_get_num_threads(void);
-    integer num_elems = m * n;
+    aocl_int64_t num_elems = m * n;
     if(num_elems < FLA_DLARF_L_THRESH_UNBLOCKED)
     {
         *use_blocked_flag = 0;
         return;
     }
 
-    integer max_available_threads = fla_thread_get_num_threads();
+    aocl_int64_t max_available_threads = fla_thread_get_num_threads();
 
     /* Special case for 1 thread */
     if(max_available_threads == 1)
@@ -438,7 +449,7 @@ void fla_dlarf_left_tuning_params(integer m, integer n, FLA_Bool *use_blocked_fl
 
     /* General case */
 
-    integer opt_n_threads = 1;
+    aocl_int64_t opt_n_threads = 1;
 
     if(num_elems < FLA_DLARF_L_THRESH_THREAD_8)
     {
@@ -457,10 +468,11 @@ void fla_dlarf_left_tuning_params(integer m, integer n, FLA_Bool *use_blocked_fl
     *nthreads = fla_min(opt_n_threads, max_available_threads);
 }
 
-void fla_dlarf_right_tuning_params(integer m, integer n, integer *block_size, integer *nthreads)
+void fla_dlarf_right_tuning_params(aocl_int64_t m, aocl_int64_t n, aocl_int64_t *block_size,
+                                   aocl_int64_t *nthreads)
 {
     extern int fla_thread_get_num_threads(void);
-    integer num_elems = m * n;
+    aocl_int64_t num_elems = m * n;
 
     if(num_elems < FLA_DLARF_R_THRESH_UNBLOCKED)
     {
@@ -468,8 +480,8 @@ void fla_dlarf_right_tuning_params(integer m, integer n, integer *block_size, in
         return;
     }
 
-    integer max_available_threads = fla_thread_get_num_threads();
-    integer opt_n_threads = 1;
+    aocl_int64_t max_available_threads = fla_thread_get_num_threads();
+    aocl_int64_t opt_n_threads = 1;
 
     if(num_elems < FLA_DLARF_R_THRESH_THREAD_8)
     {

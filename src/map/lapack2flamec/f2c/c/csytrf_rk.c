@@ -4,10 +4,10 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
-static integer c_n1 = -1;
-static integer c__2 = 2;
-/* > \brief \b CSYTRF_RK computes the factorization of a complex symmetric indefinite matrix using
+static aocl_int64_t c__1 = 1;
+static aocl_int64_t c_n1 = -1;
+static aocl_int64_t c__2 = 2;
+/* > \brief \b CSYTRF_RK computes the factorization of a scomplex symmetric indefinite matrix using
  * the bounded Bunch-Kaufman (rook) diagonal pivoting method (BLAS3 blocked algorithm). */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -43,7 +43,7 @@ static integer c__2 = 2;
 /* ============= */
 /* > */
 /* > \verbatim */
-/* > CSYTRF_RK computes the factorization of a complex symmetric matrix A */
+/* > CSYTRF_RK computes the factorization of a scomplex symmetric matrix A */
 /* > using the bounded Bunch-Kaufman (rook) diagonal pivoting method: */
 /* > */
 /* > A = P*U*D*(U**T)*(P**T) or A = P*L*D*(L**T)*(P**T), */
@@ -259,8 +259,26 @@ static integer c__2 = 2;
 /* > \endverbatim */
 /* ===================================================================== */
 /* Subroutine */
-void csytrf_rk_(char *uplo, integer *n, complex *a, integer *lda, complex *e, integer *ipiv,
-                complex *work, integer *lwork, integer *info)
+/** Generated wrapper function */
+void csytrf_rk_(char *uplo, aocl_int_t *n, scomplex *a, aocl_int_t *lda, scomplex *e,
+                aocl_int_t *ipiv, scomplex *work, aocl_int_t *lwork, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_csytrf_rk(uplo, n, a, lda, e, ipiv, work, lwork, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t lwork_64 = *lwork;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_csytrf_rk(uplo, &n_64, a, &lda_64, e, ipiv, work, &lwork_64, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_csytrf_rk(char *uplo, aocl_int64_t *n, scomplex *a, aocl_int64_t *lda, scomplex *e,
+                           aocl_int_t *ipiv, scomplex *work, aocl_int64_t *lwork, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -275,29 +293,16 @@ void csytrf_rk_(char *uplo, integer *n, complex *a, integer *lda, complex *e, in
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
-    integer a_dim1, a_offset, i__1, i__2;
+    aocl_int64_t a_dim1, a_offset, i__1, i__2;
     real r__1;
     /* Local variables */
-    integer i__, k;
-    extern /* Subroutine */
-        void
-        csytf2_rk_(char *, integer *, complex *, integer *, complex *, integer *, integer *),
-        clasyf_rk_(char *, integer *, integer *, integer *, complex *, integer *, complex *,
-                   integer *, complex *, integer *, integer *);
-    integer kb, nb, ip, iws;
-    extern logical lsame_(char *, char *, integer, integer);
-    integer nbmin, iinfo;
-    extern /* Subroutine */
-        void
-        cswap_(integer *, complex *, integer *, complex *, integer *);
+    aocl_int64_t i__, k;
+    aocl_int64_t kb, nb, ip, iws;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    aocl_int64_t nbmin, iinfo;
     logical upper;
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
-    integer ldwork, lwkopt;
+    aocl_int64_t ldwork, lwkopt;
     logical lquery;
-    extern real sroundup_lwork(integer *);
     /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -346,19 +351,19 @@ void csytrf_rk_(char *uplo, integer *n, complex *a, integer *lda, complex *e, in
     if(*info == 0)
     {
         /* Determine the block size */
-        nb = ilaenv_(&c__1, "CSYTRF_RK", uplo, n, &c_n1, &c_n1, &c_n1);
+        nb = aocl_lapack_ilaenv(&c__1, "CSYTRF_RK", uplo, n, &c_n1, &c_n1, &c_n1);
         /* Computing MAX */
         i__1 = 1;
         i__2 = *n * nb; // , expr subst
         lwkopt = fla_max(i__1, i__2);
-        r__1 = sroundup_lwork(&lwkopt);
+        r__1 = aocl_lapack_sroundup_lwork(&lwkopt);
         work[1].r = r__1;
         work[1].i = 0.f; // , expr subst
     }
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("CSYTRF_RK", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("CSYTRF_RK", &i__1, (ftnlen)9);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
@@ -379,7 +384,8 @@ void csytrf_rk_(char *uplo, integer *n, complex *a, integer *lda, complex *e, in
             nb = fla_max(i__1, 1);
             /* Computing MAX */
             i__1 = 2;
-            i__2 = ilaenv_(&c__2, "CSYTRF_RK", uplo, n, &c_n1, &c_n1, &c_n1); // , expr subst
+            i__2 = aocl_lapack_ilaenv(&c__2, "CSYTRF_RK", uplo, n, &c_n1, &c_n1,
+                                      &c_n1); // , expr subst
             nbmin = fla_max(i__1, i__2);
         }
     }
@@ -408,13 +414,13 @@ void csytrf_rk_(char *uplo, integer *n, complex *a, integer *lda, complex *e, in
         {
             /* Factorize columns k-kb+1:k of A and use blocked code to */
             /* update columns 1:k-kb */
-            clasyf_rk_(uplo, &k, &nb, &kb, &a[a_offset], lda, &e[1], &ipiv[1], &work[1], &ldwork,
-                       &iinfo);
+            aocl_lapack_clasyf_rk(uplo, &k, &nb, &kb, &a[a_offset], lda, &e[1], &ipiv[1], &work[1],
+                                  &ldwork, &iinfo);
         }
         else
         {
             /* Use unblocked code to factorize columns 1:k of A */
-            csytf2_rk_(uplo, &k, &a[a_offset], lda, &e[1], &ipiv[1], &iinfo);
+            aocl_lapack_csytf2_rk(uplo, &k, &a[a_offset], lda, &e[1], &ipiv[1], &iinfo);
             kb = k;
         }
         /* Set INFO on the first occurrence of a zero pivot */
@@ -439,7 +445,8 @@ void csytrf_rk_(char *uplo, integer *n, complex *a, integer *lda, complex *e, in
                 if(ip != i__)
                 {
                     i__2 = *n - k;
-                    cswap_(&i__2, &a[i__ + (k + 1) * a_dim1], lda, &a[ip + (k + 1) * a_dim1], lda);
+                    aocl_blas_cswap(&i__2, &a[i__ + (k + 1) * a_dim1], lda,
+                                    &a[ip + (k + 1) * a_dim1], lda);
                 }
             }
         }
@@ -468,14 +475,14 @@ void csytrf_rk_(char *uplo, integer *n, complex *a, integer *lda, complex *e, in
             /* Factorize columns k:k+kb-1 of A and use blocked code to */
             /* update columns k+kb:n */
             i__1 = *n - k + 1;
-            clasyf_rk_(uplo, &i__1, &nb, &kb, &a[k + k * a_dim1], lda, &e[k], &ipiv[k], &work[1],
-                       &ldwork, &iinfo);
+            aocl_lapack_clasyf_rk(uplo, &i__1, &nb, &kb, &a[k + k * a_dim1], lda, &e[k], &ipiv[k],
+                                  &work[1], &ldwork, &iinfo);
         }
         else
         {
             /* Use unblocked code to factorize columns k:n of A */
             i__1 = *n - k + 1;
-            csytf2_rk_(uplo, &i__1, &a[k + k * a_dim1], lda, &e[k], &ipiv[k], &iinfo);
+            aocl_lapack_csytf2_rk(uplo, &i__1, &a[k + k * a_dim1], lda, &e[k], &ipiv[k], &iinfo);
             kb = *n - k + 1;
         }
         /* Set INFO on the first occurrence of a zero pivot */
@@ -489,11 +496,11 @@ void csytrf_rk_(char *uplo, integer *n, complex *a, integer *lda, complex *e, in
         {
             if(ipiv[i__] > 0)
             {
-                ipiv[i__] = ipiv[i__] + k - 1;
+                ipiv[i__] = (aocl_int_t)(ipiv[i__] + k - 1);
             }
             else
             {
-                ipiv[i__] = ipiv[i__] - k + 1;
+                ipiv[i__] = (aocl_int_t)(ipiv[i__] - k + 1);
             }
         }
         /* Apply permutations to the leading panel 1:k-1 */
@@ -512,7 +519,7 @@ void csytrf_rk_(char *uplo, integer *n, complex *a, integer *lda, complex *e, in
                 if(ip != i__)
                 {
                     i__2 = k - 1;
-                    cswap_(&i__2, &a[i__ + a_dim1], lda, &a[ip + a_dim1], lda);
+                    aocl_blas_cswap(&i__2, &a[i__ + a_dim1], lda, &a[ip + a_dim1], lda);
                 }
             }
         }
@@ -522,9 +529,9 @@ void csytrf_rk_(char *uplo, integer *n, complex *a, integer *lda, complex *e, in
     /* This label is the exit from main loop over K increasing */
     /* from 1 to N in steps of KB */
     L35: /* End Lower */
-         ;
+        ;
     }
-    r__1 = sroundup_lwork(&lwkopt);
+    r__1 = aocl_lapack_sroundup_lwork(&lwkopt);
     work[1].r = r__1;
     work[1].i = 0.f; // , expr subst
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);

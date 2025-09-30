@@ -50,7 +50,7 @@
 /* > \verbatim */
 /* > */
 /* > CGESVXX uses the LU factorization to compute the solution to a */
-/* > complex system of linear equations A * X = B, where A is an */
+/* > scomplex system of linear equations A * X = B, where A is an */
 /* > N-by-N matrix and X and B are N-by-NRHS matrices. */
 /* > */
 /* > If requested, both normwise and maximum componentwise error bounds */
@@ -548,11 +548,11 @@ defaults */
 /* > \ingroup complexGEsolve */
 /* ===================================================================== */
 /* Subroutine */
-void cgesvxx_(char *fact, char *trans, integer *n, integer *nrhs, complex *a, integer *lda,
-              complex *af, integer *ldaf, integer *ipiv, char *equed, real *r__, real *c__,
-              complex *b, integer *ldb, complex *x, integer *ldx, real *rcond, real *rpvgrw,
+void cgesvxx_(char *fact, char *trans, integer *n, integer *nrhs, scomplex *a, integer *lda,
+              scomplex *af, integer *ldaf, integer *ipiv, char *equed, real *r__, real *c__,
+              scomplex *b, integer *ldb, scomplex *x, integer *ldx, real *rcond, real *rpvgrw,
               real *berr, integer *n_err_bnds__, real *err_bnds_norm__, real *err_bnds_comp__,
-              integer *nparams, real *params, complex *work, real *rwork, integer *info)
+              integer *nparams, real *params, scomplex *work, real *rwork, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -577,28 +577,28 @@ void cgesvxx_(char *fact, char *trans, integer *n, integer *nrhs, complex *a, in
     /* Local variables */
     integer j;
     real amax;
-    extern real cla_gerpvgrw_(integer *, integer *, complex *, integer *, complex *, integer *);
+    extern real cla_gerpvgrw_(integer *, integer *, scomplex *, integer *, scomplex *, integer *);
     extern logical lsame_(char *, char *, integer, integer);
     real rcmin, rcmax;
     logical equil;
     extern /* Subroutine */
         void
-        claqge_(integer *, integer *, complex *, integer *, real *, real *, real *, real *, real *,
+        claqge_(integer *, integer *, scomplex *, integer *, real *, real *, real *, real *, real *,
                 char *);
     real colcnd;
     extern real slamch_(char *);
     logical nofact;
     extern /* Subroutine */
         void
-        cgetrf_(integer *, integer *, complex *, integer *, integer *, integer *),
-        clacpy_(char *, integer *, integer *, complex *, integer *, complex *, integer *),
+        cgetrf_(integer *, integer *, scomplex *, integer *, integer *, integer *),
+        clacpy_(char *, integer *, integer *, scomplex *, integer *, scomplex *, integer *),
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real bignum;
     integer infequ;
     logical colequ;
     extern /* Subroutine */
         void
-        cgetrs_(char *, integer *, integer *, complex *, integer *, integer *, complex *, integer *,
+        cgetrs_(char *, integer *, integer *, scomplex *, integer *, integer *, scomplex *, integer *,
                 integer *);
     real rowcnd;
     logical notran;
@@ -606,12 +606,12 @@ void cgesvxx_(char *fact, char *trans, integer *n, integer *nrhs, complex *a, in
     logical rowequ;
     extern /* Subroutine */
         void
-        clascl2_(integer *, integer *, real *, complex *, integer *),
-        cgeequb_(integer *, integer *, complex *, integer *, real *, real *, real *, real *, real *,
+        clascl2_(integer *, integer *, real *, scomplex *, integer *),
+        cgeequb_(integer *, integer *, scomplex *, integer *, real *, real *, real *, real *, real *,
                  integer *),
-        cgerfsx_(char *, char *, integer *, integer *, complex *, integer *, complex *, integer *,
-                 integer *, real *, real *, complex *, integer *, complex *, integer *, real *,
-                 real *, integer *, real *, real *, integer *, real *, complex *, real *,
+        cgerfsx_(char *, char *, integer *, integer *, scomplex *, integer *, scomplex *, integer *,
+                 integer *, real *, real *, scomplex *, integer *, scomplex *, integer *, real *,
+                 real *, integer *, real *, real *, integer *, real *, scomplex *, real *,
                  integer *);
     /* -- LAPACK driver routine (version 3.4.1) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */

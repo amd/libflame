@@ -4,9 +4,9 @@
  with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for
  libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__4 = 4;
-static integer c_n1 = -1;
-static integer c__1 = 1;
+static aocl_int64_t c__4 = 4;
+static aocl_int64_t c_n1 = -1;
+static aocl_int64_t c__1 = 1;
 static doublereal c_b17 = 0.;
 static doublereal c_b23 = 1.;
 static doublereal c_b39 = -.5;
@@ -249,47 +249,46 @@ v(i+kd+2:n) is stored on exit in */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void dsytrd_sy2sb_(char *uplo, integer *n, integer *kd, doublereal *a, integer *lda, doublereal *ab,
-                   integer *ldab, doublereal *tau, doublereal *work, integer *lwork, integer *info)
+/** Generated wrapper function */
+void dsytrd_sy2sb_(char *uplo, aocl_int_t *n, aocl_int_t *kd, doublereal *a, aocl_int_t *lda,
+                   doublereal *ab, aocl_int_t *ldab, doublereal *tau, doublereal *work,
+                   aocl_int_t *lwork, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_dsytrd_sy2sb(uplo, n, kd, a, lda, ab, ldab, tau, work, lwork, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t kd_64 = *kd;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t ldab_64 = *ldab;
+    aocl_int64_t lwork_64 = *lwork;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_dsytrd_sy2sb(uplo, &n_64, &kd_64, a, &lda_64, ab, &ldab_64, tau, work, &lwork_64,
+                             &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_dsytrd_sy2sb(char *uplo, aocl_int64_t *n, aocl_int64_t *kd, doublereal *a,
+                              aocl_int64_t *lda, doublereal *ab, aocl_int64_t *ldab,
+                              doublereal *tau, doublereal *work, aocl_int64_t *lwork,
+                              aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dsytrd_sy2sb inputs: uplo %c, n %" FLA_IS ", kd %" FLA_IS ", lda %" FLA_IS
                       ", ldab %" FLA_IS ", lwork %" FLA_IS "",
                       *uplo, *n, *kd, *lda, *ldab, *lwork);
     /* System generated locals */
-    integer a_dim1, a_offset, ab_dim1, ab_offset, i__1, i__2, i__3, i__4, i__5;
+    aocl_int64_t a_dim1, a_offset, ab_dim1, ab_offset, i__1, i__2, i__3, i__4, i__5;
     /* Local variables */
-    integer i__, j, lk, pk, pn, lt, lw, ls1, ls2, ldt, ldw, lds1, lds2;
-    extern integer ilaenv2stage_(integer *, char *, char *, integer *, integer *, integer *,
-                                 integer *);
-    integer tpos, wpos, s1pos, s2pos;
-    extern /* Subroutine */
-        void
-        dgemm_(char *, char *, integer *, integer *, integer *, doublereal *, doublereal *,
-               integer *, doublereal *, integer *, doublereal *, doublereal *, integer *);
-    extern logical lsame_(char *, char *, integer, integer);
-    integer iinfo;
-    extern /* Subroutine */
-        void
-        dcopy_(integer *, doublereal *, integer *, doublereal *, integer *);
-    integer lwmin;
-    extern /* Subroutine */
-        void
-        dsymm_(char *, char *, integer *, integer *, doublereal *, doublereal *, integer *,
-               doublereal *, integer *, doublereal *, doublereal *, integer *);
+    aocl_int64_t i__, j, lk, pk, pn, lt, lw, ls1, ls2, ldt, ldw, lds1, lds2;
+    aocl_int64_t tpos, wpos, s1pos, s2pos;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    aocl_int64_t iinfo;
+    aocl_int64_t lwmin;
     logical upper;
-    extern /* Subroutine */
-        void
-        dsyr2k_(char *, char *, integer *, integer *, doublereal *, doublereal *, integer *,
-                doublereal *, integer *, doublereal *, doublereal *, integer *),
-        dgelqf_(integer *, integer *, doublereal *, integer *, doublereal *, doublereal *,
-                integer *, integer *),
-        dgeqrf_(integer *, integer *, doublereal *, integer *, doublereal *, doublereal *,
-                integer *, integer *),
-        dlarft_(char *, char *, integer *, integer *, doublereal *, integer *, doublereal *,
-                doublereal *, integer *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
-        dlaset_(char *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *);
     logical lquery;
     /* -- LAPACK computational routine (version 3.8.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -326,7 +325,7 @@ void dsytrd_sy2sb_(char *uplo, integer *n, integer *kd, doublereal *a, integer *
     *info = 0;
     upper = lsame_(uplo, "U", 1, 1);
     lquery = *lwork == -1;
-    lwmin = ilaenv2stage_(&c__4, "DSYTRD_SY2SB", "", n, kd, &c_n1, &c_n1);
+    lwmin = aocl_lapack_ilaenv2stage(&c__4, "DSYTRD_SY2SB", "", n, kd, &c_n1, &c_n1);
     if(!upper && !lsame_(uplo, "L", 1, 1))
     {
         *info = -1;
@@ -360,7 +359,7 @@ void dsytrd_sy2sb_(char *uplo, integer *n, integer *kd, doublereal *a, integer *
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("DSYTRD_SY2SB", &i__1, (ftnlen)12);
+        aocl_blas_xerbla("DSYTRD_SY2SB", &i__1, (ftnlen)12);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -382,8 +381,8 @@ void dsytrd_sy2sb_(char *uplo, integer *n, integer *kd, doublereal *a, integer *
                 /* Computing MIN */
                 i__2 = *kd + 1;
                 lk = fla_min(i__2, i__);
-                dcopy_(&lk, &a[i__ - lk + 1 + i__ * a_dim1], &c__1,
-                       &ab[*kd + 1 - lk + 1 + i__ * ab_dim1], &c__1);
+                aocl_blas_dcopy(&lk, &a[i__ - lk + 1 + i__ * a_dim1], &c__1,
+                                &ab[*kd + 1 - lk + 1 + i__ * ab_dim1], &c__1);
                 /* L100: */
             }
         }
@@ -396,7 +395,7 @@ void dsytrd_sy2sb_(char *uplo, integer *n, integer *kd, doublereal *a, integer *
                 i__2 = *kd + 1;
                 i__3 = *n - i__ + 1; // , expr subst
                 lk = fla_min(i__2, i__3);
-                dcopy_(&lk, &a[i__ + i__ * a_dim1], &c__1, &ab[i__ * ab_dim1 + 1], &c__1);
+                aocl_blas_dcopy(&lk, &a[i__ + i__ * a_dim1], &c__1, &ab[i__ * ab_dim1 + 1], &c__1);
                 /* L110: */
             }
         }
@@ -428,7 +427,7 @@ void dsytrd_sy2sb_(char *uplo, integer *n, integer *kd, doublereal *a, integer *
     }
     /* Set the workspace of the triangular matrix T to zero once such a */
     /* way every time T is generated the upper/lower portion will be always zero */
-    dlaset_("A", &ldt, kd, &c_b17, &c_b17, &work[tpos], &ldt);
+    aocl_lapack_dlaset("A", &ldt, kd, &c_b17, &c_b17, &work[tpos], &ldt);
     if(upper)
     {
         i__1 = *n - *kd;
@@ -440,8 +439,8 @@ void dsytrd_sy2sb_(char *uplo, integer *n, integer *kd, doublereal *a, integer *
             i__3 = *n - i__ - *kd + 1;
             pk = fla_min(i__3, *kd);
             /* Compute the LQ factorization of the current block */
-            dgelqf_(kd, &pn, &a[i__ + (i__ + *kd) * a_dim1], lda, &tau[i__], &work[s2pos], &ls2,
-                    &iinfo);
+            aocl_lapack_dgelqf(kd, &pn, &a[i__ + (i__ + *kd) * a_dim1], lda, &tau[i__],
+                               &work[s2pos], &ls2, &iinfo);
             /* Copy the upper portion of A into AB */
             i__3 = i__ + pk - 1;
             for(j = i__; j <= i__3; ++j)
@@ -451,26 +450,28 @@ void dsytrd_sy2sb_(char *uplo, integer *n, integer *kd, doublereal *a, integer *
                 i__5 = *n - j; // , expr subst
                 lk = fla_min(i__4, i__5) + 1;
                 i__4 = *ldab - 1;
-                dcopy_(&lk, &a[j + j * a_dim1], lda, &ab[*kd + 1 + j * ab_dim1], &i__4);
+                aocl_blas_dcopy(&lk, &a[j + j * a_dim1], lda, &ab[*kd + 1 + j * ab_dim1], &i__4);
                 /* L20: */
             }
-            dlaset_("Lower", &pk, &pk, &c_b17, &c_b23, &a[i__ + (i__ + *kd) * a_dim1], lda);
+            aocl_lapack_dlaset("Lower", &pk, &pk, &c_b17, &c_b23, &a[i__ + (i__ + *kd) * a_dim1],
+                               lda);
             /* Form the matrix T */
-            dlarft_("Forward", "Rowwise", &pn, &pk, &a[i__ + (i__ + *kd) * a_dim1], lda, &tau[i__],
-                    &work[tpos], &ldt);
+            aocl_lapack_dlarft("Forward", "Rowwise", &pn, &pk, &a[i__ + (i__ + *kd) * a_dim1], lda,
+                               &tau[i__], &work[tpos], &ldt);
             /* Compute W: */
-            dgemm_("Conjugate", "No transpose", &pk, &pn, &pk, &c_b23, &work[tpos], &ldt,
-                   &a[i__ + (i__ + *kd) * a_dim1], lda, &c_b17, &work[s2pos], &lds2);
-            dsymm_("Right", uplo, &pk, &pn, &c_b23, &a[i__ + *kd + (i__ + *kd) * a_dim1], lda,
-                   &work[s2pos], &lds2, &c_b17, &work[wpos], &ldw);
-            dgemm_("No transpose", "Conjugate", &pk, &pk, &pn, &c_b23, &work[wpos], &ldw,
-                   &work[s2pos], &lds2, &c_b17, &work[s1pos], &lds1);
-            dgemm_("No transpose", "No transpose", &pk, &pn, &pk, &c_b39, &work[s1pos], &lds1,
-                   &a[i__ + (i__ + *kd) * a_dim1], lda, &c_b23, &work[wpos], &ldw);
+            aocl_blas_dgemm("Conjugate", "No transpose", &pk, &pn, &pk, &c_b23, &work[tpos], &ldt,
+                            &a[i__ + (i__ + *kd) * a_dim1], lda, &c_b17, &work[s2pos], &lds2);
+            aocl_blas_dsymm("Right", uplo, &pk, &pn, &c_b23, &a[i__ + *kd + (i__ + *kd) * a_dim1],
+                            lda, &work[s2pos], &lds2, &c_b17, &work[wpos], &ldw);
+            aocl_blas_dgemm("No transpose", "Conjugate", &pk, &pk, &pn, &c_b23, &work[wpos], &ldw,
+                            &work[s2pos], &lds2, &c_b17, &work[s1pos], &lds1);
+            aocl_blas_dgemm("No transpose", "No transpose", &pk, &pn, &pk, &c_b39, &work[s1pos],
+                            &lds1, &a[i__ + (i__ + *kd) * a_dim1], lda, &c_b23, &work[wpos], &ldw);
             /* Update the unreduced submatrix A(i+kd:n,i+kd:n), using */
             /* an update of the form: A := A - V'*W - W'*V */
-            dsyr2k_(uplo, "Conjugate", &pn, &pk, &c_b42, &a[i__ + (i__ + *kd) * a_dim1], lda,
-                    &work[wpos], &ldw, &c_b23, &a[i__ + *kd + (i__ + *kd) * a_dim1], lda);
+            aocl_blas_dsyr2k(uplo, "Conjugate", &pn, &pk, &c_b42, &a[i__ + (i__ + *kd) * a_dim1],
+                             lda, &work[wpos], &ldw, &c_b23, &a[i__ + *kd + (i__ + *kd) * a_dim1],
+                             lda);
             /* L10: */
         }
         /* Copy the upper band to AB which is the band storage matrix */
@@ -482,7 +483,7 @@ void dsytrd_sy2sb_(char *uplo, integer *n, integer *kd, doublereal *a, integer *
             i__3 = *n - j; // , expr subst
             lk = fla_min(i__1, i__3) + 1;
             i__1 = *ldab - 1;
-            dcopy_(&lk, &a[j + j * a_dim1], lda, &ab[*kd + 1 + j * ab_dim1], &i__1);
+            aocl_blas_dcopy(&lk, &a[j + j * a_dim1], lda, &ab[*kd + 1 + j * ab_dim1], &i__1);
             /* L30: */
         }
     }
@@ -498,8 +499,8 @@ void dsytrd_sy2sb_(char *uplo, integer *n, integer *kd, doublereal *a, integer *
             i__3 = *n - i__ - *kd + 1;
             pk = fla_min(i__3, *kd);
             /* Compute the QR factorization of the current block */
-            dgeqrf_(&pn, kd, &a[i__ + *kd + i__ * a_dim1], lda, &tau[i__], &work[s2pos], &ls2,
-                    &iinfo);
+            aocl_lapack_dgeqrf(&pn, kd, &a[i__ + *kd + i__ * a_dim1], lda, &tau[i__], &work[s2pos],
+                               &ls2, &iinfo);
             /* Copy the upper portion of A into AB */
             i__3 = i__ + pk - 1;
             for(j = i__; j <= i__3; ++j)
@@ -508,28 +509,30 @@ void dsytrd_sy2sb_(char *uplo, integer *n, integer *kd, doublereal *a, integer *
                 i__4 = *kd;
                 i__5 = *n - j; // , expr subst
                 lk = fla_min(i__4, i__5) + 1;
-                dcopy_(&lk, &a[j + j * a_dim1], &c__1, &ab[j * ab_dim1 + 1], &c__1);
+                aocl_blas_dcopy(&lk, &a[j + j * a_dim1], &c__1, &ab[j * ab_dim1 + 1], &c__1);
                 /* L50: */
             }
-            dlaset_("Upper", &pk, &pk, &c_b17, &c_b23, &a[i__ + *kd + i__ * a_dim1], lda);
+            aocl_lapack_dlaset("Upper", &pk, &pk, &c_b17, &c_b23, &a[i__ + *kd + i__ * a_dim1],
+                               lda);
             /* Form the matrix T */
-            dlarft_("Forward", "Columnwise", &pn, &pk, &a[i__ + *kd + i__ * a_dim1], lda, &tau[i__],
-                    &work[tpos], &ldt);
+            aocl_lapack_dlarft("Forward", "Columnwise", &pn, &pk, &a[i__ + *kd + i__ * a_dim1], lda,
+                               &tau[i__], &work[tpos], &ldt);
             /* Compute W: */
-            dgemm_("No transpose", "No transpose", &pn, &pk, &pk, &c_b23,
-                   &a[i__ + *kd + i__ * a_dim1], lda, &work[tpos], &ldt, &c_b17, &work[s2pos],
-                   &lds2);
-            dsymm_("Left", uplo, &pn, &pk, &c_b23, &a[i__ + *kd + (i__ + *kd) * a_dim1], lda,
-                   &work[s2pos], &lds2, &c_b17, &work[wpos], &ldw);
-            dgemm_("Conjugate", "No transpose", &pk, &pk, &pn, &c_b23, &work[s2pos], &lds2,
-                   &work[wpos], &ldw, &c_b17, &work[s1pos], &lds1);
-            dgemm_("No transpose", "No transpose", &pn, &pk, &pk, &c_b39,
-                   &a[i__ + *kd + i__ * a_dim1], lda, &work[s1pos], &lds1, &c_b23, &work[wpos],
-                   &ldw);
+            aocl_blas_dgemm("No transpose", "No transpose", &pn, &pk, &pk, &c_b23,
+                            &a[i__ + *kd + i__ * a_dim1], lda, &work[tpos], &ldt, &c_b17,
+                            &work[s2pos], &lds2);
+            aocl_blas_dsymm("Left", uplo, &pn, &pk, &c_b23, &a[i__ + *kd + (i__ + *kd) * a_dim1],
+                            lda, &work[s2pos], &lds2, &c_b17, &work[wpos], &ldw);
+            aocl_blas_dgemm("Conjugate", "No transpose", &pk, &pk, &pn, &c_b23, &work[s2pos], &lds2,
+                            &work[wpos], &ldw, &c_b17, &work[s1pos], &lds1);
+            aocl_blas_dgemm("No transpose", "No transpose", &pn, &pk, &pk, &c_b39,
+                            &a[i__ + *kd + i__ * a_dim1], lda, &work[s1pos], &lds1, &c_b23,
+                            &work[wpos], &ldw);
             /* Update the unreduced submatrix A(i+kd:n,i+kd:n), using */
             /* an update of the form: A := A - V*W' - W*V' */
-            dsyr2k_(uplo, "No transpose", &pn, &pk, &c_b42, &a[i__ + *kd + i__ * a_dim1], lda,
-                    &work[wpos], &ldw, &c_b23, &a[i__ + *kd + (i__ + *kd) * a_dim1], lda);
+            aocl_blas_dsyr2k(uplo, "No transpose", &pn, &pk, &c_b42, &a[i__ + *kd + i__ * a_dim1],
+                             lda, &work[wpos], &ldw, &c_b23, &a[i__ + *kd + (i__ + *kd) * a_dim1],
+                             lda);
             /* ================================================================== */
             /* RESTORE A FOR COMPARISON AND CHECKING TO BE REMOVED */
             /* DO 45 J = I, I+PK-1 */
@@ -547,7 +550,7 @@ void dsytrd_sy2sb_(char *uplo, integer *n, integer *kd, doublereal *a, integer *
             i__2 = *kd;
             i__3 = *n - j; // , expr subst
             lk = fla_min(i__2, i__3) + 1;
-            dcopy_(&lk, &a[j + j * a_dim1], &c__1, &ab[j * ab_dim1 + 1], &c__1);
+            aocl_blas_dcopy(&lk, &a[j + j * a_dim1], &c__1, &ab[j * ab_dim1 + 1], &c__1);
             /* L60: */
         }
     }

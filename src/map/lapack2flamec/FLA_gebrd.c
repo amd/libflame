@@ -17,35 +17,111 @@
 #include "FLA_lapack2flame_util_defs.h"
 
 /*
-  GEBRD reduces a general complex M-by-N matrix A to upper or lower
+  GEBRD reduces a general scomplex M-by-N matrix A to upper or lower
   bidiagonal form B by a unitary transformation: Q**H * A * P = B.
   If m >= n, B is upper bidiagonal; if m < n, B is lower bidiagonal.
 
   The interface of this function is different from LAPACK as
   FLA_Bidiag_UT does not produce real (sub)diagonals. LAPACK should
-  be fixed to use complex datatypes for those diagonals.
+  be fixed to use scomplex datatypes for those diagonals.
 */
 
 extern TLS_CLASS_SPEC fla_bidiagut_t *fla_bidiagut_cntl_plain;
 
+/** Generated wrapper function */
+void sgebrd_(aocl_int_t *m, aocl_int_t *n, real *buff_A, aocl_int_t *ldim_A, real *buff_d, real *buff_e, real *buff_tu, real *buff_tv, real *buff_w, aocl_int_t *lwork, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_sgebrd(m, n, buff_A, ldim_A, buff_d, buff_e, buff_tu, buff_tv, buff_w, lwork, info);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t ldim_A_64 = *ldim_A;
+    aocl_int64_t lwork_64 = *lwork;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_sgebrd(&m_64, &n_64, buff_A, &ldim_A_64, buff_d, buff_e, buff_tu, buff_tv, buff_w, &lwork_64, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+/** Generated wrapper function */
+void dgebrd_(aocl_int_t *m, aocl_int_t *n, doublereal *buff_A, aocl_int_t *ldim_A, doublereal *buff_d, doublereal *buff_e, doublereal *buff_tu, doublereal *buff_tv, doublereal *buff_w, aocl_int_t *lwork, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_dgebrd(m, n, buff_A, ldim_A, buff_d, buff_e, buff_tu, buff_tv, buff_w, lwork, info);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t ldim_A_64 = *ldim_A;
+    aocl_int64_t lwork_64 = *lwork;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_dgebrd(&m_64, &n_64, buff_A, &ldim_A_64, buff_d, buff_e, buff_tu, buff_tv, buff_w, &lwork_64, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+/** Generated wrapper function */
+void sgebd2_(aocl_int_t *m, aocl_int_t *n, real *buff_A, aocl_int_t *ldim_A,
+             real *buff_d, real *buff_e, real *buff_tu,
+             real *buff_tv, real *buff_w, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_sgebd2(m, n, buff_A, ldim_A, buff_d, buff_e, buff_tu, buff_tv, buff_w, info);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t ldim_A_64 = *ldim_A;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_sgebd2(&m_64, &n_64, buff_A, &ldim_A_64, buff_d, buff_e, buff_tu, buff_tv, buff_w,
+                       &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+/** Generated wrapper function */
+void dgebd2_(aocl_int_t *m, aocl_int_t *n, doublereal *buff_A, aocl_int_t *ldim_A,
+             doublereal *buff_d, doublereal *buff_e, doublereal *buff_tu,
+             doublereal *buff_tv, doublereal *buff_w, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_dgebd2(m, n, buff_A, ldim_A, buff_d, buff_e, buff_tu, buff_tv, buff_w, info);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t ldim_A_64 = *ldim_A;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_dgebd2(&m_64, &n_64, buff_A, &ldim_A_64, buff_d, buff_e, buff_tu, buff_tv, buff_w,
+                       &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
 #define LAPACK_gebrd(prefix)                                                              \
-    void F77_##prefix##gebrd(                                                             \
-        integer *m, integer *n, PREFIX2LAPACK_TYPEDEF(prefix) * buff_A, integer * ldim_A, \
+    void aocl_lapack_##prefix##gebrd(                                                      \
+        aocl_int64_t *m, aocl_int64_t *n, PREFIX2LAPACK_TYPEDEF(prefix) * buff_A, aocl_int64_t * ldim_A, \
         PREFIX2LAPACK_REALDEF(prefix) * buff_d, PREFIX2LAPACK_REALDEF(prefix) * buff_e,   \
         PREFIX2LAPACK_TYPEDEF(prefix) * buff_tu, PREFIX2LAPACK_TYPEDEF(prefix) * buff_tv, \
-        PREFIX2LAPACK_TYPEDEF(prefix) * buff_w, integer * lwork, integer * info)
+        PREFIX2LAPACK_TYPEDEF(prefix) * buff_w, aocl_int64_t * lwork, aocl_int64_t * info)
 
 #define LAPACK_gebrd_body(prefix)                                                            \
     FLA_Datatype datatype = PREFIX2FLAME_DATATYPE(prefix);                                   \
     FLA_Datatype dtype_re = PREFIX2FLAME_REALTYPE(prefix);                                   \
-    fla_dim_t min_m_n = fla_min(*m, *n);                                                         \
-    fla_dim_t m_d = min_m_n;                                                                     \
-    fla_dim_t m_e = min_m_n - 1;                                                                 \
-    fla_dim_t m_t = min_m_n;                                                                     \
+    fla_dim_t min_m_n = fla_min(*m, *n);                                                     \
+    fla_dim_t m_d = min_m_n;                                                                 \
+    fla_dim_t m_e = min_m_n - 1;                                                             \
+    fla_dim_t m_t = min_m_n;                                                                 \
     FLA_Obj A, d, e, tu, tv, TU, TV, alpha;                                                  \
     FLA_Error init_result;                                                                   \
     FLA_Uplo uplo;                                                                           \
-    integer apply_scale;                                                                     \
+    fla_dim_t apply_scale;                                                                     \
                                                                                              \
     FLA_Init_safe(&init_result);                                                             \
                                                                                              \
@@ -232,11 +308,11 @@ LAPACK_gebrd(z)
 #endif
 
 #define LAPACK_gebd2(prefix)                                                              \
-    void F77_##prefix##gebd2(                                                             \
-        integer *m, integer *n, PREFIX2LAPACK_TYPEDEF(prefix) * buff_A, integer * ldim_A, \
+    void aocl_lapack_##prefix##gebd2(                                                             \
+        aocl_int64_t *m, aocl_int64_t *n, PREFIX2LAPACK_TYPEDEF(prefix) * buff_A, aocl_int64_t * ldim_A, \
         PREFIX2LAPACK_REALDEF(prefix) * buff_d, PREFIX2LAPACK_REALDEF(prefix) * buff_e,   \
         PREFIX2LAPACK_TYPEDEF(prefix) * buff_tu, PREFIX2LAPACK_TYPEDEF(prefix) * buff_tv, \
-        PREFIX2LAPACK_TYPEDEF(prefix) * buff_w, integer * info)
+        PREFIX2LAPACK_TYPEDEF(prefix) * buff_w, aocl_int64_t * info)
 
 LAPACK_gebd2(s)
 {

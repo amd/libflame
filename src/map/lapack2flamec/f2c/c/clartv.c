@@ -3,7 +3,7 @@
  on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
-#include "FLA_f2c.h" /* > \brief \b CLARTV applies a vector of plane rotations with real cosines and complex sines to the elements of a pair of vectors. */
+#include "FLA_f2c.h" /* > \brief \b CLARTV applies a vector of plane rotations with real cosines and scomplex sines to the elements of a pair of vectors. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
@@ -37,8 +37,8 @@
 /* > */
 /* > \verbatim */
 /* > */
-/* > CLARTV applies a vector of complex plane rotations with real cosines */
-/* > to elements of the complex vectors x and y. For i = 1,2,...,n */
+/* > CLARTV applies a vector of scomplex plane rotations with real cosines */
+/* > to elements of the scomplex vectors x and y. For i = 1,2,...,n */
 /* > */
 /* > ( x(i) ) := ( c(i) s(i) ) ( x(i) ) */
 /* > ( y(i) ) ( -conjg(s(i)) c(i) ) ( y(i) ) */
@@ -102,8 +102,24 @@
 /* > \ingroup complexOTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-void clartv_(integer *n, complex *x, integer *incx, complex *y, integer *incy, real *c__,
-             complex *s, integer *incc)
+/** Generated wrapper function */
+void clartv_(aocl_int_t *n, scomplex *x, aocl_int_t *incx, scomplex *y, aocl_int_t *incy, real *c__,
+             scomplex *s, aocl_int_t *incc)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_clartv(n, x, incx, y, incy, c__, s, incc);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t incx_64 = *incx;
+    aocl_int64_t incy_64 = *incy;
+    aocl_int64_t incc_64 = *incc;
+
+    aocl_lapack_clartv(&n_64, x, &incx_64, y, &incy_64, c__, s, &incc_64);
+#endif
+}
+
+void aocl_lapack_clartv(aocl_int64_t *n, scomplex *x, aocl_int64_t *incx, scomplex *y,
+                        aocl_int64_t *incy, real *c__, scomplex *s, aocl_int64_t *incc)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -118,13 +134,13 @@ void clartv_(integer *n, complex *x, integer *incx, complex *y, integer *incy, r
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
-    integer i__1, i__2, i__3, i__4;
-    complex q__1, q__2, q__3, q__4;
+    aocl_int64_t i__1, i__2, i__3, i__4;
+    scomplex q__1, q__2, q__3, q__4;
     /* Builtin functions */
-    void r_cnjg(complex *, complex *);
+    void r_cnjg(scomplex *, scomplex *);
     /* Local variables */
-    integer i__, ic, ix, iy;
-    complex xi, yi;
+    aocl_int64_t i__, ic, ix, iy;
+    scomplex xi, yi;
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */

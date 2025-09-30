@@ -4,7 +4,7 @@
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
  /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
+static aocl_int64_t c__1 = 1;
 /* > \brief \b SSPGVD */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -207,39 +207,48 @@ the */
 /* > Mark Fahey, Department of Mathematics, Univ. of Kentucky, USA */
 /* ===================================================================== */
 /* Subroutine */
-void sspgvd_(integer *itype, char *jobz, char *uplo, integer *n, real *ap, real *bp, real *w,
-             real *z__, integer *ldz, real *work, integer *lwork, integer *iwork, integer *liwork,
-             integer *info)
+/** Generated wrapper function */
+void sspgvd_(aocl_int_t *itype, char *jobz, char *uplo, aocl_int_t *n, real *ap, real *bp, real *w,
+             real *z__, aocl_int_t *ldz, real *work, aocl_int_t *lwork, aocl_int_t *iwork,
+             aocl_int_t *liwork, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_sspgvd(itype, jobz, uplo, n, ap, bp, w, z__, ldz, work, lwork, iwork, liwork, info);
+#else
+    aocl_int64_t itype_64 = *itype;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t ldz_64 = *ldz;
+    aocl_int64_t lwork_64 = *lwork;
+    aocl_int64_t liwork_64 = *liwork;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_sspgvd(&itype_64, jobz, uplo, &n_64, ap, bp, w, z__, &ldz_64, work, &lwork_64,
+                       iwork, &liwork_64, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_sspgvd(aocl_int64_t *itype, char *jobz, char *uplo, aocl_int64_t *n, real *ap,
+                        real *bp, real *w, real *z__, aocl_int64_t *ldz, real *work,
+                        aocl_int64_t *lwork, aocl_int_t *iwork, aocl_int64_t *liwork,
+                        aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF(
-             "sspgvd inputs: itype %" FLA_IS ", jobz %c, uplo %c, n %" FLA_IS ", ldz %" FLA_IS "",
-             *itype, *jobz, *uplo, *n, *ldz);
+    AOCL_DTL_SNPRINTF("sspgvd inputs: itype %" FLA_IS ", jobz %c, uplo %c, n %" FLA_IS
+                      ", ldz %" FLA_IS "",
+                      *itype, *jobz, *uplo, *n, *ldz);
     /* System generated locals */
-    integer z_dim1, z_offset, i__1;
+    aocl_int64_t z_dim1, z_offset, i__1;
     real r__1, r__2;
     /* Local variables */
-    integer j, neig;
-    extern logical lsame_(char *, char *, integer, integer);
-    integer lwmin;
+    aocl_int64_t j, neig;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    aocl_int64_t lwmin;
     char trans[1];
     logical upper, wantz;
-    extern /* Subroutine */
-        void
-        stpmv_(char *, char *, char *, integer *, real *, real *, integer *),
-        stpsv_(char *, char *, char *, integer *, real *, real *, integer *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    integer liwmin;
-    extern /* Subroutine */
-        void
-        sspevd_(char *, char *, integer *, real *, real *, real *, integer *, real *, integer *,
-                integer *, integer *, integer *),
-        spptrf_(char *, integer *, real *, integer *);
+    aocl_int64_t liwmin;
     logical lquery;
-    extern /* Subroutine */
-        void
-        sspgst_(integer *, char *, integer *, real *, real *, integer *);
-    extern real sroundup_lwork(integer *);
     /* -- LAPACK driver routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -314,8 +323,8 @@ void sspgvd_(integer *itype, char *jobz, char *uplo, integer *n, real *ap, real 
                 lwmin = *n << 1;
             }
         }
-        work[1] = sroundup_lwork(&lwmin);
-        iwork[1] = liwmin;
+        work[1] = aocl_lapack_sroundup_lwork(&lwmin);
+        iwork[1] = (aocl_int_t)(liwmin);
         if(*lwork < lwmin && !lquery)
         {
             *info = -11;
@@ -328,7 +337,7 @@ void sspgvd_(integer *itype, char *jobz, char *uplo, integer *n, real *ap, real 
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("SSPGVD", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("SSPGVD", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -344,7 +353,7 @@ void sspgvd_(integer *itype, char *jobz, char *uplo, integer *n, real *ap, real 
         return;
     }
     /* Form a Cholesky factorization of BP. */
-    spptrf_(uplo, n, &bp[1], info);
+    aocl_lapack_spptrf(uplo, n, &bp[1], info);
     if(*info != 0)
     {
         *info = *n + *info;
@@ -352,9 +361,9 @@ void sspgvd_(integer *itype, char *jobz, char *uplo, integer *n, real *ap, real 
         return;
     }
     /* Transform problem to standard eigenvalue problem and solve. */
-    sspgst_(itype, uplo, n, &ap[1], &bp[1], info);
-    sspevd_(jobz, uplo, n, &ap[1], &w[1], &z__[z_offset], ldz, &work[1], lwork, &iwork[1], liwork,
-            info);
+    aocl_lapack_sspgst(itype, uplo, n, &ap[1], &bp[1], info);
+    aocl_lapack_sspevd(jobz, uplo, n, &ap[1], &w[1], &z__[z_offset], ldz, &work[1], lwork,
+                       &iwork[1], liwork, info);
     /* Computing MAX */
     r__1 = (real)lwmin;
     lwmin = (integer)fla_max(r__1, work[1]);
@@ -386,7 +395,7 @@ void sspgvd_(integer *itype, char *jobz, char *uplo, integer *n, real *ap, real 
             i__1 = neig;
             for(j = 1; j <= i__1; ++j)
             {
-                stpsv_(uplo, trans, "Non-unit", n, &bp[1], &z__[j * z_dim1 + 1], &c__1);
+                aocl_blas_stpsv(uplo, trans, "Non-unit", n, &bp[1], &z__[j * z_dim1 + 1], &c__1);
                 /* L10: */
             }
         }
@@ -406,13 +415,13 @@ void sspgvd_(integer *itype, char *jobz, char *uplo, integer *n, real *ap, real 
             i__1 = neig;
             for(j = 1; j <= i__1; ++j)
             {
-                stpmv_(uplo, trans, "Non-unit", n, &bp[1], &z__[j * z_dim1 + 1], &c__1);
+                aocl_blas_stpmv(uplo, trans, "Non-unit", n, &bp[1], &z__[j * z_dim1 + 1], &c__1);
                 /* L20: */
             }
         }
     }
-    work[1] = sroundup_lwork(&lwmin);
-    iwork[1] = liwmin;
+    work[1] = aocl_lapack_sroundup_lwork(&lwmin);
+    iwork[1] = (aocl_int_t)(liwmin);
     AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SSPGVD */

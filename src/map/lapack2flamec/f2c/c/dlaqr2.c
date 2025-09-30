@@ -4,8 +4,8 @@
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
  /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
-static integer c_n1 = -1;
+static aocl_int64_t c__1 = 1;
+static aocl_int64_t c_n1 = -1;
 static doublereal c_b12 = 0.;
 static doublereal c_b13 = 1.;
 static logical c_true = TRUE_;
@@ -279,11 +279,51 @@ DLAQR2 */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void dlaqr2_(logical *wantt, logical *wantz, integer *n, integer *ktop, integer *kbot, integer *nw,
-             doublereal *h__, integer *ldh, integer *iloz, integer *ihiz, doublereal *z__,
-             integer *ldz, integer *ns, integer *nd, doublereal *sr, doublereal *si, doublereal *v,
-             integer *ldv, integer *nh, doublereal *t, integer *ldt, integer *nv, doublereal *wv,
-             integer *ldwv, doublereal *work, integer *lwork)
+/** Generated wrapper function */
+void dlaqr2_(logical *wantt, logical *wantz, aocl_int_t *n, aocl_int_t *ktop, aocl_int_t *kbot,
+             aocl_int_t *nw, doublereal *h__, aocl_int_t *ldh, aocl_int_t *iloz, aocl_int_t *ihiz,
+             doublereal *z__, aocl_int_t *ldz, aocl_int_t *ns, aocl_int_t *nd, doublereal *sr,
+             doublereal *si, doublereal *v, aocl_int_t *ldv, aocl_int_t *nh, doublereal *t,
+             aocl_int_t *ldt, aocl_int_t *nv, doublereal *wv, aocl_int_t *ldwv, doublereal *work,
+             aocl_int_t *lwork)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_dlaqr2(wantt, wantz, n, ktop, kbot, nw, h__, ldh, iloz, ihiz, z__, ldz, ns, nd, sr,
+                       si, v, ldv, nh, t, ldt, nv, wv, ldwv, work, lwork);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t ktop_64 = *ktop;
+    aocl_int64_t kbot_64 = *kbot;
+    aocl_int64_t nw_64 = *nw;
+    aocl_int64_t ldh_64 = *ldh;
+    aocl_int64_t iloz_64 = *iloz;
+    aocl_int64_t ihiz_64 = *ihiz;
+    aocl_int64_t ldz_64 = *ldz;
+    aocl_int64_t ns_64 = *ns;
+    aocl_int64_t nd_64 = *nd;
+    aocl_int64_t ldv_64 = *ldv;
+    aocl_int64_t nh_64 = *nh;
+    aocl_int64_t ldt_64 = *ldt;
+    aocl_int64_t nv_64 = *nv;
+    aocl_int64_t ldwv_64 = *ldwv;
+    aocl_int64_t lwork_64 = *lwork;
+
+    aocl_lapack_dlaqr2(wantt, wantz, &n_64, &ktop_64, &kbot_64, &nw_64, h__, &ldh_64, &iloz_64,
+                       &ihiz_64, z__, &ldz_64, &ns_64, &nd_64, sr, si, v, &ldv_64, &nh_64, t,
+                       &ldt_64, &nv_64, wv, &ldwv_64, work, &lwork_64);
+
+    *ns = (aocl_int_t)ns_64;
+    *nd = (aocl_int_t)nd_64;
+#endif
+}
+
+void aocl_lapack_dlaqr2(logical *wantt, logical *wantz, aocl_int64_t *n, aocl_int64_t *ktop,
+                        aocl_int64_t *kbot, aocl_int64_t *nw, doublereal *h__, aocl_int64_t *ldh,
+                        aocl_int64_t *iloz, aocl_int64_t *ihiz, doublereal *z__, aocl_int64_t *ldz,
+                        aocl_int64_t *ns, aocl_int64_t *nd, doublereal *sr, doublereal *si,
+                        doublereal *v, aocl_int64_t *ldv, aocl_int64_t *nh, doublereal *t,
+                        aocl_int64_t *ldt, aocl_int64_t *nv, doublereal *wv, aocl_int64_t *ldwv,
+                        doublereal *work, aocl_int64_t *lwork)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dlaqr2 inputs: n %" FLA_IS ", ktop %" FLA_IS ", kbot %" FLA_IS
@@ -294,59 +334,32 @@ void dlaqr2_(logical *wantt, logical *wantz, integer *n, integer *ktop, integer 
                       *n, *ktop, *kbot, *nw, *ldh, *iloz, *ihiz, *ldz, *ns, *nd, *ldv, *nh, *ldt,
                       *nv, *ldwv, *lwork);
     /* System generated locals */
-    integer h_dim1, h_offset, t_dim1, t_offset, v_dim1, v_offset, wv_dim1, wv_offset, z_dim1,
+    aocl_int64_t h_dim1, h_offset, t_dim1, t_offset, v_dim1, v_offset, wv_dim1, wv_offset, z_dim1,
         z_offset, i__1, i__2, i__3, i__4;
     doublereal d__1, d__2, d__3, d__4, d__5, d__6;
     /* Builtin functions */
     double sqrt(doublereal);
     /* Local variables */
-    integer i__, j, k;
+    aocl_int64_t i__, j, k;
     doublereal s, aa, bb, cc, dd, cs, sn;
-    integer jw;
+    aocl_int64_t jw;
     doublereal evi, evk, foo;
-    integer kln;
+    aocl_int64_t kln;
     doublereal tau, ulp;
-    integer lwk1, lwk2;
+    aocl_int64_t lwk1, lwk2;
     doublereal beta;
-    integer kend, kcol, info, ifst, ilst, ltop, krow;
-    extern /* Subroutine */
-        void
-        dlarf_(char *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *,
-               integer *, doublereal *),
-        dgemm_(char *, char *, integer *, integer *, integer *, doublereal *, doublereal *,
-               integer *, doublereal *, integer *, doublereal *, doublereal *, integer *);
+    aocl_int64_t kend, kcol, info, ifst, ilst, ltop, krow;
     logical bulge;
-    extern /* Subroutine */
-        void
-        dcopy_(integer *, doublereal *, integer *, doublereal *, integer *);
-    integer infqr, kwtop;
+    aocl_int64_t infqr, kwtop;
     extern /* Subroutine */
         void
         dlanv2_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *,
                 doublereal *, doublereal *, doublereal *, doublereal *);
     extern doublereal dlamch_(char *);
-    extern /* Subroutine */
-        void
-        dgehrd_(integer *, integer *, integer *, doublereal *, integer *, doublereal *,
-                doublereal *, integer *, integer *),
-        dlarfg_(integer *, doublereal *, doublereal *, integer *, doublereal *),
-        dlahqr_(logical *, logical *, integer *, integer *, integer *, doublereal *, integer *,
-                doublereal *, doublereal *, integer *, integer *, doublereal *, integer *,
-                integer *),
-        dlacpy_(char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *);
     doublereal safmin;
-    extern /* Subroutine */
-        void
-        dlaset_(char *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *);
-    extern /* Subroutine */
-        void
-        dtrexc_(char *, integer *, doublereal *, integer *, doublereal *, integer *, integer *,
-                integer *, doublereal *, integer *),
-        dormhr_(char *, char *, integer *, integer *, integer *, integer *, doublereal *, integer *,
-                doublereal *, doublereal *, integer *, doublereal *, integer *, integer *);
     logical sorted;
     doublereal smlnum;
-    integer lwkopt;
+    aocl_int64_t lwkopt;
     /* -- LAPACK auxiliary routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -399,12 +412,12 @@ void dlaqr2_(logical *wantt, logical *wantz, integer *n, integer *ktop, integer 
     {
         /* ==== Workspace query call to DGEHRD ==== */
         i__1 = jw - 1;
-        dgehrd_(&jw, &c__1, &i__1, &t[t_offset], ldt, &work[1], &work[1], &c_n1, &info);
+        aocl_lapack_dgehrd(&jw, &c__1, &i__1, &t[t_offset], ldt, &work[1], &work[1], &c_n1, &info);
         lwk1 = (integer)work[1];
         /* ==== Workspace query call to DORMHR ==== */
         i__1 = jw - 1;
-        dormhr_("R", "N", &jw, &jw, &c__1, &i__1, &t[t_offset], ldt, &work[1], &v[v_offset], ldv,
-                &work[1], &c_n1, &info);
+        aocl_lapack_dormhr("R", "N", &jw, &jw, &c__1, &i__1, &t[t_offset], ldt, &work[1],
+                           &v[v_offset], ldv, &work[1], &c_n1, &info);
         lwk2 = (integer)work[1];
         /* ==== Optimal workspace ==== */
         lwkopt = jw + fla_max(lwk1, lwk2);
@@ -478,14 +491,14 @@ void dlaqr2_(logical *wantt, logical *wantz, integer *n, integer *ktop, integer 
     /* . aggressive early deflation using that part of */
     /* . the deflation window that converged using INFQR */
     /* . here and there to keep track.) ==== */
-    dlacpy_("U", &jw, &jw, &h__[kwtop + kwtop * h_dim1], ldh, &t[t_offset], ldt);
+    aocl_lapack_dlacpy("U", &jw, &jw, &h__[kwtop + kwtop * h_dim1], ldh, &t[t_offset], ldt);
     i__1 = jw - 1;
     i__2 = *ldh + 1;
     i__3 = *ldt + 1;
-    dcopy_(&i__1, &h__[kwtop + 1 + kwtop * h_dim1], &i__2, &t[t_dim1 + 2], &i__3);
-    dlaset_("A", &jw, &jw, &c_b12, &c_b13, &v[v_offset], ldv);
-    dlahqr_(&c_true, &c_true, &jw, &c__1, &jw, &t[t_offset], ldt, &sr[kwtop], &si[kwtop], &c__1,
-            &jw, &v[v_offset], ldv, &infqr);
+    aocl_blas_dcopy(&i__1, &h__[kwtop + 1 + kwtop * h_dim1], &i__2, &t[t_dim1 + 2], &i__3);
+    aocl_lapack_dlaset("A", &jw, &jw, &c_b12, &c_b13, &v[v_offset], ldv);
+    aocl_lapack_dlahqr(&c_true, &c_true, &jw, &c__1, &jw, &t[t_offset], ldt, &sr[kwtop], &si[kwtop],
+                       &c__1, &jw, &v[v_offset], ldv, &infqr);
     /* ==== DTREXC needs a clean margin near the diagonal ==== */
     i__1 = jw - 3;
     for(j = 1; j <= i__1; ++j)
@@ -534,8 +547,8 @@ L20:
                 /* ==== Undeflatable. Move it up out of the way. */
                 /* . (DTREXC can not fail in this case.) ==== */
                 ifst = *ns;
-                dtrexc_("V", &jw, &t[t_offset], ldt, &v[v_offset], ldv, &ifst, &ilst, &work[1],
-                        &info);
+                aocl_lapack_dtrexc("V", &jw, &t[t_offset], ldt, &v[v_offset], ldv, &ifst, &ilst,
+                                   &work[1], &info);
                 ++ilst;
             }
         }
@@ -566,8 +579,8 @@ L20:
                 /* . Fortunately, DTREXC does the right thing with */
                 /* . ILST in case of a rare exchange failure. ==== */
                 ifst = *ns;
-                dtrexc_("V", &jw, &t[t_offset], ldt, &v[v_offset], ldv, &ifst, &ilst, &work[1],
-                        &info);
+                aocl_lapack_dtrexc("V", &jw, &t[t_offset], ldt, &v[v_offset], ldv, &ifst, &ilst,
+                                   &work[1], &info);
                 ilst += 2;
             }
         }
@@ -642,8 +655,8 @@ L20:
                 sorted = FALSE_;
                 ifst = i__;
                 ilst = k;
-                dtrexc_("V", &jw, &t[t_offset], ldt, &v[v_offset], ldv, &ifst, &ilst, &work[1],
-                        &info);
+                aocl_lapack_dtrexc("V", &jw, &t[t_offset], ldt, &v[v_offset], ldv, &ifst, &ilst,
+                                   &work[1], &info);
                 if(info == 0)
                 {
                     i__ = ilst;
@@ -704,36 +717,39 @@ L60:
         if(*ns > 1 && s != 0.)
         {
             /* ==== Reflect spike back into lower triangle ==== */
-            dcopy_(ns, &v[v_offset], ldv, &work[1], &c__1);
+            aocl_blas_dcopy(ns, &v[v_offset], ldv, &work[1], &c__1);
             beta = work[1];
-            dlarfg_(ns, &beta, &work[2], &c__1, &tau);
+            aocl_lapack_dlarfg(ns, &beta, &work[2], &c__1, &tau);
             work[1] = 1.;
             i__1 = jw - 2;
             i__2 = jw - 2;
-            dlaset_("L", &i__1, &i__2, &c_b12, &c_b12, &t[t_dim1 + 3], ldt);
-            dlarf_("L", ns, &jw, &work[1], &c__1, &tau, &t[t_offset], ldt, &work[jw + 1]);
-            dlarf_("R", ns, ns, &work[1], &c__1, &tau, &t[t_offset], ldt, &work[jw + 1]);
-            dlarf_("R", &jw, ns, &work[1], &c__1, &tau, &v[v_offset], ldv, &work[jw + 1]);
+            aocl_lapack_dlaset("L", &i__1, &i__2, &c_b12, &c_b12, &t[t_dim1 + 3], ldt);
+            aocl_lapack_dlarf("L", ns, &jw, &work[1], &c__1, &tau, &t[t_offset], ldt,
+                              &work[jw + 1]);
+            aocl_lapack_dlarf("R", ns, ns, &work[1], &c__1, &tau, &t[t_offset], ldt, &work[jw + 1]);
+            aocl_lapack_dlarf("R", &jw, ns, &work[1], &c__1, &tau, &v[v_offset], ldv,
+                              &work[jw + 1]);
             i__1 = *lwork - jw;
-            dgehrd_(&jw, &c__1, ns, &t[t_offset], ldt, &work[1], &work[jw + 1], &i__1, &info);
+            aocl_lapack_dgehrd(&jw, &c__1, ns, &t[t_offset], ldt, &work[1], &work[jw + 1], &i__1,
+                               &info);
         }
         /* ==== Copy updated reduced window into place ==== */
         if(kwtop > 1)
         {
             h__[kwtop + (kwtop - 1) * h_dim1] = s * v[v_dim1 + 1];
         }
-        dlacpy_("U", &jw, &jw, &t[t_offset], ldt, &h__[kwtop + kwtop * h_dim1], ldh);
+        aocl_lapack_dlacpy("U", &jw, &jw, &t[t_offset], ldt, &h__[kwtop + kwtop * h_dim1], ldh);
         i__1 = jw - 1;
         i__2 = *ldt + 1;
         i__3 = *ldh + 1;
-        dcopy_(&i__1, &t[t_dim1 + 2], &i__2, &h__[kwtop + 1 + kwtop * h_dim1], &i__3);
+        aocl_blas_dcopy(&i__1, &t[t_dim1 + 2], &i__2, &h__[kwtop + 1 + kwtop * h_dim1], &i__3);
         /* ==== Accumulate orthogonal matrix in order update */
         /* . H and Z, if requested. ==== */
         if(*ns > 1 && s != 0.)
         {
             i__1 = *lwork - jw;
-            dormhr_("R", "N", &jw, ns, &c__1, ns, &t[t_offset], ldt, &work[1], &v[v_offset], ldv,
-                    &work[jw + 1], &i__1, &info);
+            aocl_lapack_dormhr("R", "N", &jw, ns, &c__1, ns, &t[t_offset], ldt, &work[1],
+                               &v[v_offset], ldv, &work[jw + 1], &i__1, &info);
         }
         /* ==== Update vertical slab in H ==== */
         if(*wantt)
@@ -752,9 +768,10 @@ L60:
             i__3 = *nv;
             i__4 = kwtop - krow; // , expr subst
             kln = fla_min(i__3, i__4);
-            dgemm_("N", "N", &kln, &jw, &jw, &c_b13, &h__[krow + kwtop * h_dim1], ldh, &v[v_offset],
-                   ldv, &c_b12, &wv[wv_offset], ldwv);
-            dlacpy_("A", &kln, &jw, &wv[wv_offset], ldwv, &h__[krow + kwtop * h_dim1], ldh);
+            aocl_blas_dgemm("N", "N", &kln, &jw, &jw, &c_b13, &h__[krow + kwtop * h_dim1], ldh,
+                            &v[v_offset], ldv, &c_b12, &wv[wv_offset], ldwv);
+            aocl_lapack_dlacpy("A", &kln, &jw, &wv[wv_offset], ldwv, &h__[krow + kwtop * h_dim1],
+                               ldh);
             /* L70: */
         }
         /* ==== Update horizontal slab in H ==== */
@@ -768,9 +785,10 @@ L60:
                 i__3 = *nh;
                 i__4 = *n - kcol + 1; // , expr subst
                 kln = fla_min(i__3, i__4);
-                dgemm_("C", "N", &jw, &kln, &jw, &c_b13, &v[v_offset], ldv,
-                       &h__[kwtop + kcol * h_dim1], ldh, &c_b12, &t[t_offset], ldt);
-                dlacpy_("A", &jw, &kln, &t[t_offset], ldt, &h__[kwtop + kcol * h_dim1], ldh);
+                aocl_blas_dgemm("C", "N", &jw, &kln, &jw, &c_b13, &v[v_offset], ldv,
+                                &h__[kwtop + kcol * h_dim1], ldh, &c_b12, &t[t_offset], ldt);
+                aocl_lapack_dlacpy("A", &jw, &kln, &t[t_offset], ldt, &h__[kwtop + kcol * h_dim1],
+                                   ldh);
                 /* L80: */
             }
         }
@@ -785,9 +803,10 @@ L60:
                 i__3 = *nv;
                 i__4 = *ihiz - krow + 1; // , expr subst
                 kln = fla_min(i__3, i__4);
-                dgemm_("N", "N", &kln, &jw, &jw, &c_b13, &z__[krow + kwtop * z_dim1], ldz,
-                       &v[v_offset], ldv, &c_b12, &wv[wv_offset], ldwv);
-                dlacpy_("A", &kln, &jw, &wv[wv_offset], ldwv, &z__[krow + kwtop * z_dim1], ldz);
+                aocl_blas_dgemm("N", "N", &kln, &jw, &jw, &c_b13, &z__[krow + kwtop * z_dim1], ldz,
+                                &v[v_offset], ldv, &c_b12, &wv[wv_offset], ldwv);
+                aocl_lapack_dlacpy("A", &kln, &jw, &wv[wv_offset], ldwv,
+                                   &z__[krow + kwtop * z_dim1], ldz);
                 /* L90: */
             }
         }

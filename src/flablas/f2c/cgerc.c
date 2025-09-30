@@ -1,16 +1,16 @@
 /* cgerc.f -- translated by f2c (version 19991025). You must link the resulting object file with the libraries: -lf2c -lm (in that order) */
 #include "FLA_f2c.h"
 /* Subroutine */
-int cgerc_(integer *m, integer *n, complex *alpha, complex * x, integer *incx, complex *y, integer *incy, complex *a, integer *lda)
+int cgerc_(integer *m, integer *n, scomplex *alpha, scomplex * x, integer *incx, scomplex *y, integer *incy, scomplex *a, integer *lda)
 {
     /* System generated locals */
     integer a_dim1, a_offset, i__1, i__2, i__3, i__4, i__5;
-    complex q__1, q__2;
+    scomplex q__1, q__2;
     /* Builtin functions */
-    void r_cnjg(complex *, complex *);
+    void r_cnjg(scomplex *, scomplex *);
     /* Local variables */
     integer info;
-    complex temp;
+    scomplex temp;
     integer i__, j, ix, jy, kx;
     extern /* Subroutine */
     int xerbla_(const char *srname, const integer *info, ftnlen srname_len);

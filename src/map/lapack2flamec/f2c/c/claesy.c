@@ -4,9 +4,9 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static complex c_b1 = {1.f, 0.f};
-static integer c__2 = 2;
-/* > \brief \b CLAESY computes the eigenvalues and eigenvectors of a 2-by-2 complex symmetric
+static scomplex c_b1 = {{1.f}, {0.f}};
+static aocl_int64_t c__2 = 2;
+/* > \brief \b CLAESY computes the eigenvalues and eigenvectors of a 2-by-2 scomplex symmetric
  * matrix. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -86,7 +86,7 @@ static integer c__2 = 2;
 /* > \param[out] EVSCAL */
 /* > \verbatim */
 /* > EVSCAL is COMPLEX */
-/* > The complex value by which the eigenvector matrix was scaled */
+/* > The scomplex value by which the eigenvector matrix was scaled */
 /* > to make it orthonormal. If EVSCAL is zero, the eigenvectors */
 /* > were not computed. This means one of two things: the 2-by-2 */
 /* > matrix could not be diagonalized, or the norm of the matrix */
@@ -115,21 +115,21 @@ static integer c__2 = 2;
 /* > \ingroup complexSYauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-void claesy_(complex *a, complex *b, complex *c__, complex *rt1, complex *rt2, complex *evscal,
-             complex *cs1, complex *sn1)
+void claesy_(scomplex *a, scomplex *b, scomplex *c__, scomplex *rt1, scomplex *rt2, scomplex *evscal,
+             scomplex *cs1, scomplex *sn1)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
     /* System generated locals */
     real r__1, r__2;
-    complex q__1, q__2, q__3, q__4, q__5, q__6, q__7;
+    scomplex q__1, q__2, q__3, q__4, q__5, q__6, q__7;
     /* Builtin functions */
-    double c_abs(complex *);
-    void pow_ci(complex *, complex *, integer *), c_sqrt(complex *, complex *),
-        c_div(complex *, complex *, complex *);
+    double c_abs(scomplex *);
+    void pow_ci(scomplex *, scomplex *, aocl_int64_t *), c_sqrt(scomplex *, scomplex *),
+        c_div(scomplex *, scomplex *, scomplex *);
     /* Local variables */
-    complex s, t;
+    scomplex s, t;
     real z__;
-    complex tmp;
+    scomplex tmp;
     real babs, tabs, evnorm;
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */

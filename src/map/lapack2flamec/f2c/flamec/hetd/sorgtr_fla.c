@@ -4,8 +4,8 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
-static integer c_n1 = -1;
+static aocl_int64_t c__1 = 1;
+static aocl_int64_t c_n1 = -1;
 /* > \brief \b SORGTR */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -123,29 +123,20 @@ the routine */
 /* > \ingroup realOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void sorgtr_fla(char *uplo, integer *n, real *a, integer *lda, real *tau, real *work,
-                integer *lwork, integer *info)
+void sorgtr_fla(char *uplo, aocl_int64_t *n, real *a, aocl_int64_t *lda, real *tau, real *work,
+                aocl_int64_t *lwork, aocl_int64_t *info)
 {
     /* System generated locals */
-    integer a_dim1, a_offset, i__1, i__2, i__3;
+    aocl_int64_t a_dim1, a_offset, i__1, i__2, i__3;
     /* Local variables */
-    integer i__, j, nb;
-    extern logical lsame_(char *, char *, integer, integer);
-    integer iinfo;
+    aocl_int64_t i__, j, nb;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    aocl_int64_t iinfo;
     logical upper;
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
-    extern /* Subroutine */
-        void
-        sorgql_(integer *, integer *, integer *, real *, integer *, real *, real *, integer *,
-                integer *),
-        sorgqr_fla(integer *, integer *, integer *, real *, integer *, real *, real *, integer *,
-                   integer *);
+    extern void sorgqr_fla(aocl_int64_t *, aocl_int64_t *, aocl_int64_t *, real *, aocl_int64_t *, real *,
+                 real *, aocl_int64_t *, aocl_int64_t *);
     logical lquery;
-    integer lwkopt;
-    extern real sroundup_lwork(integer *);
+    aocl_int64_t lwkopt;
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -206,25 +197,25 @@ void sorgtr_fla(char *uplo, integer *n, real *a, integer *lda, real *tau, real *
             i__1 = *n - 1;
             i__2 = *n - 1;
             i__3 = *n - 1;
-            nb = ilaenv_(&c__1, "SORGQL", " ", &i__1, &i__2, &i__3, &c_n1);
+            nb = aocl_lapack_ilaenv(&c__1, "SORGQL", " ", &i__1, &i__2, &i__3, &c_n1);
         }
         else
         {
             i__1 = *n - 1;
             i__2 = *n - 1;
             i__3 = *n - 1;
-            nb = ilaenv_(&c__1, "SORGQR", " ", &i__1, &i__2, &i__3, &c_n1);
+            nb = aocl_lapack_ilaenv(&c__1, "SORGQR", " ", &i__1, &i__2, &i__3, &c_n1);
         }
         /* Computing MAX */
         i__1 = 1;
         i__2 = *n - 1; // , expr subst
         lwkopt = fla_max(i__1, i__2) * nb;
-        work[1] = sroundup_lwork(&lwkopt);
+        work[1] = aocl_lapack_sroundup_lwork(&lwkopt);
     }
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("SORGTR", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("SORGTR", &i__1, (ftnlen)6);
         return;
     }
     else if(lquery)
@@ -266,7 +257,8 @@ void sorgtr_fla(char *uplo, integer *n, real *a, integer *lda, real *tau, real *
         i__1 = *n - 1;
         i__2 = *n - 1;
         i__3 = *n - 1;
-        sorgql_(&i__1, &i__2, &i__3, &a[a_offset], lda, &tau[1], &work[1], lwork, &iinfo);
+        aocl_lapack_sorgql(&i__1, &i__2, &i__3, &a[a_offset], lda, &tau[1], &work[1], lwork,
+                           &iinfo);
     }
     else
     {
@@ -302,7 +294,7 @@ void sorgtr_fla(char *uplo, integer *n, real *a, integer *lda, real *tau, real *
                        &iinfo);
         }
     }
-    work[1] = sroundup_lwork(&lwkopt);
+    work[1] = aocl_lapack_sroundup_lwork(&lwkopt);
     return;
     /* End of SORGTR */
 }

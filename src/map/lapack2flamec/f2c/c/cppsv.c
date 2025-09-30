@@ -37,7 +37,7 @@
 /* > */
 /* > \verbatim */
 /* > */
-/* > CPPSV computes the solution to a complex system of linear equations */
+/* > CPPSV computes the solution to a scomplex system of linear equations */
 /* > A * X = B, */
 /* > where A is an N-by-N Hermitian positive definite matrix stored in */
 /* > packed format and X and B are N-by-NRHS matrices. */
@@ -141,8 +141,26 @@
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void cppsv_(char *uplo, integer *n, integer *nrhs, complex *ap, complex *b, integer *ldb,
-            integer *info)
+/** Generated wrapper function */
+void cppsv_(char *uplo, aocl_int_t *n, aocl_int_t *nrhs, scomplex *ap, scomplex *b, aocl_int_t *ldb,
+            aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_cppsv(uplo, n, nrhs, ap, b, ldb, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t nrhs_64 = *nrhs;
+    aocl_int64_t ldb_64 = *ldb;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_cppsv(uplo, &n_64, &nrhs_64, ap, b, &ldb_64, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_cppsv(char *uplo, aocl_int64_t *n, aocl_int64_t *nrhs, scomplex *ap, scomplex *b,
+                       aocl_int64_t *ldb, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -156,16 +174,9 @@ void cppsv_(char *uplo, integer *n, integer *nrhs, complex *ap, complex *b, inte
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
-    integer b_dim1, b_offset, i__1;
+    aocl_int64_t b_dim1, b_offset, i__1;
     /* Local variables */
-    extern logical lsame_(char *, char *, integer, integer);
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    extern /* Subroutine */
-        void
-        cpptrf_(char *, integer *, complex *, integer *),
-        cpptrs_(char *, integer *, integer *, complex *, complex *, integer *, integer *);
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     /* -- LAPACK driver routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -209,16 +220,16 @@ void cppsv_(char *uplo, integer *n, integer *nrhs, complex *ap, complex *b, inte
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("CPPSV ", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("CPPSV ", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
     /* Compute the Cholesky factorization A = U**H *U or A = L*L**H. */
-    cpptrf_(uplo, n, &ap[1], info);
+    aocl_lapack_cpptrf(uplo, n, &ap[1], info);
     if(*info == 0)
     {
         /* Solve the system A*X = B, overwriting B with X. */
-        cpptrs_(uplo, n, nrhs, &ap[1], &b[b_offset], ldb, info);
+        aocl_lapack_cpptrs(uplo, n, nrhs, &ap[1], &b[b_offset], ldb, info);
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
     return;

@@ -5,10 +5,10 @@
  /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static logical c_false = FALSE_;
-static integer c__1 = 1;
+static aocl_int64_t c__1 = 1;
 static real c_b22 = 1.f;
 static real c_b25 = 0.f;
-static integer c__2 = 2;
+static aocl_int64_t c__2 = 2;
 static logical c_true = TRUE_;
 /* > \brief \b STREVC */
 /* =========== DOCUMENTATION =========== */
@@ -99,7 +99,7 @@ static logical c_true = TRUE_;
 /* > If w(j) is a real eigenvalue, the corresponding real */
 /* > eigenvector is computed if SELECT(j) is .TRUE.. */
 /* > If w(j) and w(j+1) are the real and imaginary parts of a */
-/* > complex eigenvalue, the corresponding complex eigenvector is */
+/* > scomplex eigenvalue, the corresponding scomplex eigenvector is */
 /* > computed if either SELECT(j) or SELECT(j+1) is .TRUE., and */
 /* > on exit SELECT(j) is set to .TRUE. and SELECT(j+1) is set to */
 /* > .FALSE.. */
@@ -139,7 +139,7 @@ static logical c_true = TRUE_;
 /* > SELECT, stored consecutively in the columns */
 /* > of VL, in the same order as their */
 /* > eigenvalues. */
-/* > A complex eigenvector corresponding to a complex eigenvalue */
+/* > A scomplex eigenvector corresponding to a scomplex eigenvalue */
 /* > is stored in two consecutive columns, the first holding the */
 /* > real part, and the second the imaginary part. */
 /* > Not referenced if SIDE = 'R'. */
@@ -167,7 +167,7 @@ static logical c_true = TRUE_;
 /* > SELECT, stored consecutively in the columns */
 /* > of VR, in the same order as their */
 /* > eigenvalues. */
-/* > A complex eigenvector corresponding to a complex eigenvalue */
+/* > A scomplex eigenvector corresponding to a scomplex eigenvalue */
 /* > is stored in two consecutive columns, the first holding the */
 /* > real part and the second the imaginary part. */
 /* > Not referenced if SIDE = 'L'. */
@@ -193,7 +193,7 @@ static logical c_true = TRUE_;
 /* > used to store the eigenvectors. */
 /* > If HOWMNY = 'A' or 'B', M is set to N. */
 /* > Each selected real eigenvector occupies one column and each */
-/* > selected complex eigenvector occupies two columns. */
+/* > selected scomplex eigenvector occupies two columns. */
 /* > \endverbatim */
 /* > */
 /* > \param[out] WORK */
@@ -225,67 +225,72 @@ static logical c_true = TRUE_;
 /* > */
 /* > Each eigenvector is normalized so that the element of largest */
 /* > magnitude has magnitude 1;
-here the magnitude of a complex number */
+here the magnitude of a scomplex number */
 /* > (x,y) is taken to be |x| + |y|. */
 /* > \endverbatim */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void strevc_(char *side, char *howmny, logical *select, integer *n, real *t, integer *ldt, real *vl,
-             integer *ldvl, real *vr, integer *ldvr, integer *mm, integer *m, real *work,
-             integer *info)
+/** Generated wrapper function */
+void strevc_(char *side, char *howmny, logical *select, aocl_int_t *n, real *t, aocl_int_t *ldt,
+             real *vl, aocl_int_t *ldvl, real *vr, aocl_int_t *ldvr, aocl_int_t *mm, aocl_int_t *m,
+             real *work, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_strevc(side, howmny, select, n, t, ldt, vl, ldvl, vr, ldvr, mm, m, work, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t ldt_64 = *ldt;
+    aocl_int64_t ldvl_64 = *ldvl;
+    aocl_int64_t ldvr_64 = *ldvr;
+    aocl_int64_t mm_64 = *mm;
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_strevc(side, howmny, select, &n_64, t, &ldt_64, vl, &ldvl_64, vr, &ldvr_64, &mm_64,
+                       &m_64, work, &info_64);
+
+    *m = (aocl_int_t)m_64;
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_strevc(char *side, char *howmny, logical *select, aocl_int64_t *n, real *t,
+                        aocl_int64_t *ldt, real *vl, aocl_int64_t *ldvl, real *vr,
+                        aocl_int64_t *ldvr, aocl_int64_t *mm, aocl_int64_t *m, real *work,
+                        aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("strevc inputs: side %c, howmny %c, n %" FLA_IS ", ldt %" FLA_IS
                       ", ldvl %" FLA_IS ", ldvr %" FLA_IS ", mm %" FLA_IS "",
                       *side, *howmny, *n, *ldt, *ldvl, *ldvr, *mm);
     /* System generated locals */
-    integer t_dim1, t_offset, vl_dim1, vl_offset, vr_dim1, vr_offset, i__1, i__2, i__3;
+    aocl_int64_t t_dim1, t_offset, vl_dim1, vl_offset, vr_dim1, vr_offset, i__1, i__2, i__3;
     real r__1, r__2, r__3, r__4;
     /* Builtin functions */
     double sqrt(doublereal);
     /* Local variables */
-    integer i__, j, k;
+    aocl_int64_t i__, j, k;
     real x[4] /* was [2][2] */
         ;
-    integer j1, j2, n2, ii, ki, ip, is;
+    aocl_int64_t j1, j2, n2, ii, ki, ip, is;
     real wi, wr, rec, ulp, beta, emax;
     logical pair, allv;
-    integer ierr;
+    aocl_int64_t ierr;
     real unfl, smin;
-    extern real sdot_(integer *, real *, integer *, real *, integer *);
     logical over;
     real vmax;
-    integer jnxt;
+    aocl_int64_t jnxt;
     real scale;
-    extern logical lsame_(char *, char *, integer, integer);
-    extern /* Subroutine */
-        void
-        sscal_(integer *, real *, real *, integer *);
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     real remax;
     logical leftv;
-    extern /* Subroutine */
-        void
-        sgemv_(char *, integer *, integer *, real *, real *, integer *, real *, integer *, real *,
-               real *, integer *);
     logical bothv;
     real vcrit;
     logical somev;
-    extern /* Subroutine */
-        void
-        scopy_(integer *, real *, integer *, real *, integer *);
     real xnorm;
-    extern /* Subroutine */
-        void
-        saxpy_(integer *, real *, real *, integer *, real *, integer *),
-        slaln2_(logical *, integer *, integer *, real *, real *, real *, integer *, real *, real *,
-                real *, integer *, real *, real *, real *, integer *, real *, real *, integer *);
     extern real slamch_(char *);
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real bignum;
-    extern integer isamax_(integer *, real *, integer *);
     logical rightv;
     real smlnum;
     /* -- LAPACK computational routine -- */
@@ -415,7 +420,7 @@ void strevc_(char *side, char *howmny, logical *select, integer *n, real *t, int
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("STREVC", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("STREVC", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -445,10 +450,10 @@ void strevc_(char *side, char *howmny, logical *select, integer *n, real *t, int
         }
         /* L30: */
     }
-    /* Index IP is used to specify the real or complex eigenvalue: */
+    /* Index IP is used to specify the real or scomplex eigenvalue: */
     /* IP = 0, real eigenvalue, */
-    /* 1, first of conjugate complex pair: (wr,wi) */
-    /* -1, second of conjugate complex pair: (wr,wi) */
+    /* 1, first of conjugate scomplex pair: (wr,wi) */
+    /* -1, second of conjugate scomplex pair: (wr,wi) */
     n2 = *n << 1;
     if(rightv)
     {
@@ -533,9 +538,9 @@ void strevc_(char *side, char *howmny, logical *select, integer *n, real *t, int
                     if(j1 == j2)
                     {
                         /* 1-by-1 diagonal block */
-                        slaln2_(&c_false, &c__1, &c__1, &smin, &c_b22, &t[j + j * t_dim1], ldt,
-                                &c_b22, &c_b22, &work[j + *n], n, &wr, &c_b25, x, &c__2, &scale,
-                                &xnorm, &ierr);
+                        aocl_lapack_slaln2(&c_false, &c__1, &c__1, &smin, &c_b22,
+                                           &t[j + j * t_dim1], ldt, &c_b22, &c_b22, &work[j + *n],
+                                           n, &wr, &c_b25, x, &c__2, &scale, &xnorm, &ierr);
                         /* Scale X(1,1) to avoid overflow when updating */
                         /* the right-hand side. */
                         if(xnorm > 1.f)
@@ -549,20 +554,22 @@ void strevc_(char *side, char *howmny, logical *select, integer *n, real *t, int
                         /* Scale if necessary */
                         if(scale != 1.f)
                         {
-                            sscal_(&ki, &scale, &work[*n + 1], &c__1);
+                            aocl_blas_sscal(&ki, &scale, &work[*n + 1], &c__1);
                         }
                         work[j + *n] = x[0];
                         /* Update right-hand side */
                         i__1 = j - 1;
                         r__1 = -x[0];
-                        saxpy_(&i__1, &r__1, &t[j * t_dim1 + 1], &c__1, &work[*n + 1], &c__1);
+                        aocl_blas_saxpy(&i__1, &r__1, &t[j * t_dim1 + 1], &c__1, &work[*n + 1],
+                                        &c__1);
                     }
                     else
                     {
                         /* 2-by-2 diagonal block */
-                        slaln2_(&c_false, &c__2, &c__1, &smin, &c_b22, &t[j - 1 + (j - 1) * t_dim1],
-                                ldt, &c_b22, &c_b22, &work[j - 1 + *n], n, &wr, &c_b25, x, &c__2,
-                                &scale, &xnorm, &ierr);
+                        aocl_lapack_slaln2(&c_false, &c__2, &c__1, &smin, &c_b22,
+                                           &t[j - 1 + (j - 1) * t_dim1], ldt, &c_b22, &c_b22,
+                                           &work[j - 1 + *n], n, &wr, &c_b25, x, &c__2, &scale,
+                                           &xnorm, &ierr);
                         /* Scale X(1,1) and X(2,1) to avoid overflow when */
                         /* updating the right-hand side. */
                         if(xnorm > 1.f)
@@ -581,27 +588,29 @@ void strevc_(char *side, char *howmny, logical *select, integer *n, real *t, int
                         /* Scale if necessary */
                         if(scale != 1.f)
                         {
-                            sscal_(&ki, &scale, &work[*n + 1], &c__1);
+                            aocl_blas_sscal(&ki, &scale, &work[*n + 1], &c__1);
                         }
                         work[j - 1 + *n] = x[0];
                         work[j + *n] = x[1];
                         /* Update right-hand side */
                         i__1 = j - 2;
                         r__1 = -x[0];
-                        saxpy_(&i__1, &r__1, &t[(j - 1) * t_dim1 + 1], &c__1, &work[*n + 1], &c__1);
+                        aocl_blas_saxpy(&i__1, &r__1, &t[(j - 1) * t_dim1 + 1], &c__1,
+                                        &work[*n + 1], &c__1);
                         i__1 = j - 2;
                         r__1 = -x[1];
-                        saxpy_(&i__1, &r__1, &t[j * t_dim1 + 1], &c__1, &work[*n + 1], &c__1);
+                        aocl_blas_saxpy(&i__1, &r__1, &t[j * t_dim1 + 1], &c__1, &work[*n + 1],
+                                        &c__1);
                     }
                 L60:;
                 }
                 /* Copy the vector x or Q*x to VR and normalize. */
                 if(!over)
                 {
-                    scopy_(&ki, &work[*n + 1], &c__1, &vr[is * vr_dim1 + 1], &c__1);
-                    ii = isamax_(&ki, &vr[is * vr_dim1 + 1], &c__1);
+                    aocl_blas_scopy(&ki, &work[*n + 1], &c__1, &vr[is * vr_dim1 + 1], &c__1);
+                    ii = aocl_blas_isamax(&ki, &vr[is * vr_dim1 + 1], &c__1);
                     remax = 1.f / (r__1 = vr[ii + is * vr_dim1], f2c_abs(r__1));
-                    sscal_(&ki, &remax, &vr[is * vr_dim1 + 1], &c__1);
+                    aocl_blas_sscal(&ki, &remax, &vr[is * vr_dim1 + 1], &c__1);
                     i__1 = *n;
                     for(k = ki + 1; k <= i__1; ++k)
                     {
@@ -614,12 +623,12 @@ void strevc_(char *side, char *howmny, logical *select, integer *n, real *t, int
                     if(ki > 1)
                     {
                         i__1 = ki - 1;
-                        sgemv_("N", n, &i__1, &c_b22, &vr[vr_offset], ldvr, &work[*n + 1], &c__1,
-                               &work[ki + *n], &vr[ki * vr_dim1 + 1], &c__1);
+                        aocl_blas_sgemv("N", n, &i__1, &c_b22, &vr[vr_offset], ldvr, &work[*n + 1],
+                                        &c__1, &work[ki + *n], &vr[ki * vr_dim1 + 1], &c__1);
                     }
-                    ii = isamax_(n, &vr[ki * vr_dim1 + 1], &c__1);
+                    ii = aocl_blas_isamax(n, &vr[ki * vr_dim1 + 1], &c__1);
                     remax = 1.f / (r__1 = vr[ii + ki * vr_dim1], f2c_abs(r__1));
-                    sscal_(n, &remax, &vr[ki * vr_dim1 + 1], &c__1);
+                    aocl_blas_sscal(n, &remax, &vr[ki * vr_dim1 + 1], &c__1);
                 }
             }
             else
@@ -672,9 +681,9 @@ void strevc_(char *side, char *howmny, logical *select, integer *n, real *t, int
                     if(j1 == j2)
                     {
                         /* 1-by-1 diagonal block */
-                        slaln2_(&c_false, &c__1, &c__2, &smin, &c_b22, &t[j + j * t_dim1], ldt,
-                                &c_b22, &c_b22, &work[j + *n], n, &wr, &wi, x, &c__2, &scale,
-                                &xnorm, &ierr);
+                        aocl_lapack_slaln2(&c_false, &c__1, &c__2, &smin, &c_b22,
+                                           &t[j + j * t_dim1], ldt, &c_b22, &c_b22, &work[j + *n],
+                                           n, &wr, &wi, x, &c__2, &scale, &xnorm, &ierr);
                         /* Scale X(1,1) and X(1,2) to avoid overflow when */
                         /* updating the right-hand side. */
                         if(xnorm > 1.f)
@@ -689,25 +698,28 @@ void strevc_(char *side, char *howmny, logical *select, integer *n, real *t, int
                         /* Scale if necessary */
                         if(scale != 1.f)
                         {
-                            sscal_(&ki, &scale, &work[*n + 1], &c__1);
-                            sscal_(&ki, &scale, &work[n2 + 1], &c__1);
+                            aocl_blas_sscal(&ki, &scale, &work[*n + 1], &c__1);
+                            aocl_blas_sscal(&ki, &scale, &work[n2 + 1], &c__1);
                         }
                         work[j + *n] = x[0];
                         work[j + n2] = x[2];
                         /* Update the right-hand side */
                         i__1 = j - 1;
                         r__1 = -x[0];
-                        saxpy_(&i__1, &r__1, &t[j * t_dim1 + 1], &c__1, &work[*n + 1], &c__1);
+                        aocl_blas_saxpy(&i__1, &r__1, &t[j * t_dim1 + 1], &c__1, &work[*n + 1],
+                                        &c__1);
                         i__1 = j - 1;
                         r__1 = -x[2];
-                        saxpy_(&i__1, &r__1, &t[j * t_dim1 + 1], &c__1, &work[n2 + 1], &c__1);
+                        aocl_blas_saxpy(&i__1, &r__1, &t[j * t_dim1 + 1], &c__1, &work[n2 + 1],
+                                        &c__1);
                     }
                     else
                     {
                         /* 2-by-2 diagonal block */
-                        slaln2_(&c_false, &c__2, &c__2, &smin, &c_b22, &t[j - 1 + (j - 1) * t_dim1],
-                                ldt, &c_b22, &c_b22, &work[j - 1 + *n], n, &wr, &wi, x, &c__2,
-                                &scale, &xnorm, &ierr);
+                        aocl_lapack_slaln2(&c_false, &c__2, &c__2, &smin, &c_b22,
+                                           &t[j - 1 + (j - 1) * t_dim1], ldt, &c_b22, &c_b22,
+                                           &work[j - 1 + *n], n, &wr, &wi, x, &c__2, &scale, &xnorm,
+                                           &ierr);
                         /* Scale X to avoid overflow when updating */
                         /* the right-hand side. */
                         if(xnorm > 1.f)
@@ -729,8 +741,8 @@ void strevc_(char *side, char *howmny, logical *select, integer *n, real *t, int
                         /* Scale if necessary */
                         if(scale != 1.f)
                         {
-                            sscal_(&ki, &scale, &work[*n + 1], &c__1);
-                            sscal_(&ki, &scale, &work[n2 + 1], &c__1);
+                            aocl_blas_sscal(&ki, &scale, &work[*n + 1], &c__1);
+                            aocl_blas_sscal(&ki, &scale, &work[n2 + 1], &c__1);
                         }
                         work[j - 1 + *n] = x[0];
                         work[j + *n] = x[1];
@@ -739,24 +751,28 @@ void strevc_(char *side, char *howmny, logical *select, integer *n, real *t, int
                         /* Update the right-hand side */
                         i__1 = j - 2;
                         r__1 = -x[0];
-                        saxpy_(&i__1, &r__1, &t[(j - 1) * t_dim1 + 1], &c__1, &work[*n + 1], &c__1);
+                        aocl_blas_saxpy(&i__1, &r__1, &t[(j - 1) * t_dim1 + 1], &c__1,
+                                        &work[*n + 1], &c__1);
                         i__1 = j - 2;
                         r__1 = -x[1];
-                        saxpy_(&i__1, &r__1, &t[j * t_dim1 + 1], &c__1, &work[*n + 1], &c__1);
+                        aocl_blas_saxpy(&i__1, &r__1, &t[j * t_dim1 + 1], &c__1, &work[*n + 1],
+                                        &c__1);
                         i__1 = j - 2;
                         r__1 = -x[2];
-                        saxpy_(&i__1, &r__1, &t[(j - 1) * t_dim1 + 1], &c__1, &work[n2 + 1], &c__1);
+                        aocl_blas_saxpy(&i__1, &r__1, &t[(j - 1) * t_dim1 + 1], &c__1,
+                                        &work[n2 + 1], &c__1);
                         i__1 = j - 2;
                         r__1 = -x[3];
-                        saxpy_(&i__1, &r__1, &t[j * t_dim1 + 1], &c__1, &work[n2 + 1], &c__1);
+                        aocl_blas_saxpy(&i__1, &r__1, &t[j * t_dim1 + 1], &c__1, &work[n2 + 1],
+                                        &c__1);
                     }
                 L90:;
                 }
                 /* Copy the vector x or Q*x to VR and normalize. */
                 if(!over)
                 {
-                    scopy_(&ki, &work[*n + 1], &c__1, &vr[(is - 1) * vr_dim1 + 1], &c__1);
-                    scopy_(&ki, &work[n2 + 1], &c__1, &vr[is * vr_dim1 + 1], &c__1);
+                    aocl_blas_scopy(&ki, &work[*n + 1], &c__1, &vr[(is - 1) * vr_dim1 + 1], &c__1);
+                    aocl_blas_scopy(&ki, &work[n2 + 1], &c__1, &vr[is * vr_dim1 + 1], &c__1);
                     emax = 0.f;
                     i__1 = ki;
                     for(k = 1; k <= i__1; ++k)
@@ -769,8 +785,8 @@ void strevc_(char *side, char *howmny, logical *select, integer *n, real *t, int
                         /* L100: */
                     }
                     remax = 1.f / emax;
-                    sscal_(&ki, &remax, &vr[(is - 1) * vr_dim1 + 1], &c__1);
-                    sscal_(&ki, &remax, &vr[is * vr_dim1 + 1], &c__1);
+                    aocl_blas_sscal(&ki, &remax, &vr[(is - 1) * vr_dim1 + 1], &c__1);
+                    aocl_blas_sscal(&ki, &remax, &vr[is * vr_dim1 + 1], &c__1);
                     i__1 = *n;
                     for(k = ki + 1; k <= i__1; ++k)
                     {
@@ -784,16 +800,17 @@ void strevc_(char *side, char *howmny, logical *select, integer *n, real *t, int
                     if(ki > 2)
                     {
                         i__1 = ki - 2;
-                        sgemv_("N", n, &i__1, &c_b22, &vr[vr_offset], ldvr, &work[*n + 1], &c__1,
-                               &work[ki - 1 + *n], &vr[(ki - 1) * vr_dim1 + 1], &c__1);
+                        aocl_blas_sgemv("N", n, &i__1, &c_b22, &vr[vr_offset], ldvr, &work[*n + 1],
+                                        &c__1, &work[ki - 1 + *n], &vr[(ki - 1) * vr_dim1 + 1],
+                                        &c__1);
                         i__1 = ki - 2;
-                        sgemv_("N", n, &i__1, &c_b22, &vr[vr_offset], ldvr, &work[n2 + 1], &c__1,
-                               &work[ki + n2], &vr[ki * vr_dim1 + 1], &c__1);
+                        aocl_blas_sgemv("N", n, &i__1, &c_b22, &vr[vr_offset], ldvr, &work[n2 + 1],
+                                        &c__1, &work[ki + n2], &vr[ki * vr_dim1 + 1], &c__1);
                     }
                     else
                     {
-                        sscal_(n, &work[ki - 1 + *n], &vr[(ki - 1) * vr_dim1 + 1], &c__1);
-                        sscal_(n, &work[ki + n2], &vr[ki * vr_dim1 + 1], &c__1);
+                        aocl_blas_sscal(n, &work[ki - 1 + *n], &vr[(ki - 1) * vr_dim1 + 1], &c__1);
+                        aocl_blas_sscal(n, &work[ki + n2], &vr[ki * vr_dim1 + 1], &c__1);
                     }
                     emax = 0.f;
                     i__1 = *n;
@@ -807,8 +824,8 @@ void strevc_(char *side, char *howmny, logical *select, integer *n, real *t, int
                         /* L120: */
                     }
                     remax = 1.f / emax;
-                    sscal_(n, &remax, &vr[(ki - 1) * vr_dim1 + 1], &c__1);
-                    sscal_(n, &remax, &vr[ki * vr_dim1 + 1], &c__1);
+                    aocl_blas_sscal(n, &remax, &vr[(ki - 1) * vr_dim1 + 1], &c__1);
+                    aocl_blas_sscal(n, &remax, &vr[ki * vr_dim1 + 1], &c__1);
                 }
             }
             --is;
@@ -911,22 +928,22 @@ void strevc_(char *side, char *howmny, logical *select, integer *n, real *t, int
                         {
                             rec = 1.f / vmax;
                             i__3 = *n - ki + 1;
-                            sscal_(&i__3, &rec, &work[ki + *n], &c__1);
+                            aocl_blas_sscal(&i__3, &rec, &work[ki + *n], &c__1);
                             vmax = 1.f;
                             vcrit = bignum;
                         }
                         i__3 = j - ki - 1;
-                        work[j + *n] -= sdot_(&i__3, &t[ki + 1 + j * t_dim1], &c__1,
-                                              &work[ki + 1 + *n], &c__1);
+                        work[j + *n] -= aocl_blas_sdot(&i__3, &t[ki + 1 + j * t_dim1], &c__1,
+                                                       &work[ki + 1 + *n], &c__1);
                         /* Solve (T(J,J)-WR)**T*X = WORK */
-                        slaln2_(&c_false, &c__1, &c__1, &smin, &c_b22, &t[j + j * t_dim1], ldt,
-                                &c_b22, &c_b22, &work[j + *n], n, &wr, &c_b25, x, &c__2, &scale,
-                                &xnorm, &ierr);
+                        aocl_lapack_slaln2(&c_false, &c__1, &c__1, &smin, &c_b22,
+                                           &t[j + j * t_dim1], ldt, &c_b22, &c_b22, &work[j + *n],
+                                           n, &wr, &c_b25, x, &c__2, &scale, &xnorm, &ierr);
                         /* Scale if necessary */
                         if(scale != 1.f)
                         {
                             i__3 = *n - ki + 1;
-                            sscal_(&i__3, &scale, &work[ki + *n], &c__1);
+                            aocl_blas_sscal(&i__3, &scale, &work[ki + *n], &c__1);
                         }
                         work[j + *n] = x[0];
                         /* Computing MAX */
@@ -947,27 +964,27 @@ void strevc_(char *side, char *howmny, logical *select, integer *n, real *t, int
                         {
                             rec = 1.f / vmax;
                             i__3 = *n - ki + 1;
-                            sscal_(&i__3, &rec, &work[ki + *n], &c__1);
+                            aocl_blas_sscal(&i__3, &rec, &work[ki + *n], &c__1);
                             vmax = 1.f;
                             vcrit = bignum;
                         }
                         i__3 = j - ki - 1;
-                        work[j + *n] -= sdot_(&i__3, &t[ki + 1 + j * t_dim1], &c__1,
-                                              &work[ki + 1 + *n], &c__1);
+                        work[j + *n] -= aocl_blas_sdot(&i__3, &t[ki + 1 + j * t_dim1], &c__1,
+                                                       &work[ki + 1 + *n], &c__1);
                         i__3 = j - ki - 1;
-                        work[j + 1 + *n] -= sdot_(&i__3, &t[ki + 1 + (j + 1) * t_dim1], &c__1,
-                                                  &work[ki + 1 + *n], &c__1);
+                        work[j + 1 + *n] -= aocl_blas_sdot(&i__3, &t[ki + 1 + (j + 1) * t_dim1],
+                                                           &c__1, &work[ki + 1 + *n], &c__1);
                         /* Solve */
                         /* [T(J,J)-WR T(J,J+1) ]**T* X = SCALE*( WORK1 ) */
                         /* [T(J+1,J) T(J+1,J+1)-WR] ( WORK2 ) */
-                        slaln2_(&c_true, &c__2, &c__1, &smin, &c_b22, &t[j + j * t_dim1], ldt,
-                                &c_b22, &c_b22, &work[j + *n], n, &wr, &c_b25, x, &c__2, &scale,
-                                &xnorm, &ierr);
+                        aocl_lapack_slaln2(&c_true, &c__2, &c__1, &smin, &c_b22, &t[j + j * t_dim1],
+                                           ldt, &c_b22, &c_b22, &work[j + *n], n, &wr, &c_b25, x,
+                                           &c__2, &scale, &xnorm, &ierr);
                         /* Scale if necessary */
                         if(scale != 1.f)
                         {
                             i__3 = *n - ki + 1;
-                            sscal_(&i__3, &scale, &work[ki + *n], &c__1);
+                            aocl_blas_sscal(&i__3, &scale, &work[ki + *n], &c__1);
                         }
                         work[j + *n] = x[0];
                         work[j + 1 + *n] = x[1];
@@ -984,12 +1001,12 @@ void strevc_(char *side, char *howmny, logical *select, integer *n, real *t, int
                 if(!over)
                 {
                     i__2 = *n - ki + 1;
-                    scopy_(&i__2, &work[ki + *n], &c__1, &vl[ki + is * vl_dim1], &c__1);
+                    aocl_blas_scopy(&i__2, &work[ki + *n], &c__1, &vl[ki + is * vl_dim1], &c__1);
                     i__2 = *n - ki + 1;
-                    ii = isamax_(&i__2, &vl[ki + is * vl_dim1], &c__1) + ki - 1;
+                    ii = aocl_blas_isamax(&i__2, &vl[ki + is * vl_dim1], &c__1) + ki - 1;
                     remax = 1.f / (r__1 = vl[ii + is * vl_dim1], f2c_abs(r__1));
                     i__2 = *n - ki + 1;
-                    sscal_(&i__2, &remax, &vl[ki + is * vl_dim1], &c__1);
+                    aocl_blas_sscal(&i__2, &remax, &vl[ki + is * vl_dim1], &c__1);
                     i__2 = ki - 1;
                     for(k = 1; k <= i__2; ++k)
                     {
@@ -1002,13 +1019,13 @@ void strevc_(char *side, char *howmny, logical *select, integer *n, real *t, int
                     if(ki < *n)
                     {
                         i__2 = *n - ki;
-                        sgemv_("N", n, &i__2, &c_b22, &vl[(ki + 1) * vl_dim1 + 1], ldvl,
-                               &work[ki + 1 + *n], &c__1, &work[ki + *n], &vl[ki * vl_dim1 + 1],
-                               &c__1);
+                        aocl_blas_sgemv("N", n, &i__2, &c_b22, &vl[(ki + 1) * vl_dim1 + 1], ldvl,
+                                        &work[ki + 1 + *n], &c__1, &work[ki + *n],
+                                        &vl[ki * vl_dim1 + 1], &c__1);
                     }
-                    ii = isamax_(n, &vl[ki * vl_dim1 + 1], &c__1);
+                    ii = aocl_blas_isamax(n, &vl[ki * vl_dim1 + 1], &c__1);
                     remax = 1.f / (r__1 = vl[ii + ki * vl_dim1], f2c_abs(r__1));
-                    sscal_(n, &remax, &vl[ki * vl_dim1 + 1], &c__1);
+                    aocl_blas_sscal(n, &remax, &vl[ki * vl_dim1 + 1], &c__1);
                 }
             }
             else
@@ -1038,7 +1055,7 @@ void strevc_(char *side, char *howmny, logical *select, integer *n, real *t, int
                     work[k + n2] = -work[ki + 1 + n2] * t[ki + 1 + k * t_dim1];
                     /* L190: */
                 }
-                /* Solve complex quasi-triangular system: */
+                /* Solve scomplex quasi-triangular system: */
                 /* ( T(KI+2,N:KI+2,N) - (WR-i*WI) )*X = WORK1+i*WORK2 */
                 vmax = 1.f;
                 vcrit = bignum;
@@ -1070,30 +1087,30 @@ void strevc_(char *side, char *howmny, logical *select, integer *n, real *t, int
                         {
                             rec = 1.f / vmax;
                             i__3 = *n - ki + 1;
-                            sscal_(&i__3, &rec, &work[ki + *n], &c__1);
+                            aocl_blas_sscal(&i__3, &rec, &work[ki + *n], &c__1);
                             i__3 = *n - ki + 1;
-                            sscal_(&i__3, &rec, &work[ki + n2], &c__1);
+                            aocl_blas_sscal(&i__3, &rec, &work[ki + n2], &c__1);
                             vmax = 1.f;
                             vcrit = bignum;
                         }
                         i__3 = j - ki - 2;
-                        work[j + *n] -= sdot_(&i__3, &t[ki + 2 + j * t_dim1], &c__1,
-                                              &work[ki + 2 + *n], &c__1);
+                        work[j + *n] -= aocl_blas_sdot(&i__3, &t[ki + 2 + j * t_dim1], &c__1,
+                                                       &work[ki + 2 + *n], &c__1);
                         i__3 = j - ki - 2;
-                        work[j + n2] -= sdot_(&i__3, &t[ki + 2 + j * t_dim1], &c__1,
-                                              &work[ki + 2 + n2], &c__1);
+                        work[j + n2] -= aocl_blas_sdot(&i__3, &t[ki + 2 + j * t_dim1], &c__1,
+                                                       &work[ki + 2 + n2], &c__1);
                         /* Solve (T(J,J)-(WR-i*WI))*(X11+i*X12)= WK+I*WK2 */
                         r__1 = -wi;
-                        slaln2_(&c_false, &c__1, &c__2, &smin, &c_b22, &t[j + j * t_dim1], ldt,
-                                &c_b22, &c_b22, &work[j + *n], n, &wr, &r__1, x, &c__2, &scale,
-                                &xnorm, &ierr);
+                        aocl_lapack_slaln2(&c_false, &c__1, &c__2, &smin, &c_b22,
+                                           &t[j + j * t_dim1], ldt, &c_b22, &c_b22, &work[j + *n],
+                                           n, &wr, &r__1, x, &c__2, &scale, &xnorm, &ierr);
                         /* Scale if necessary */
                         if(scale != 1.f)
                         {
                             i__3 = *n - ki + 1;
-                            sscal_(&i__3, &scale, &work[ki + *n], &c__1);
+                            aocl_blas_sscal(&i__3, &scale, &work[ki + *n], &c__1);
                             i__3 = *n - ki + 1;
-                            sscal_(&i__3, &scale, &work[ki + n2], &c__1);
+                            aocl_blas_sscal(&i__3, &scale, &work[ki + n2], &c__1);
                         }
                         work[j + *n] = x[0];
                         work[j + n2] = x[2];
@@ -1117,38 +1134,38 @@ void strevc_(char *side, char *howmny, logical *select, integer *n, real *t, int
                         {
                             rec = 1.f / vmax;
                             i__3 = *n - ki + 1;
-                            sscal_(&i__3, &rec, &work[ki + *n], &c__1);
+                            aocl_blas_sscal(&i__3, &rec, &work[ki + *n], &c__1);
                             i__3 = *n - ki + 1;
-                            sscal_(&i__3, &rec, &work[ki + n2], &c__1);
+                            aocl_blas_sscal(&i__3, &rec, &work[ki + n2], &c__1);
                             vmax = 1.f;
                             vcrit = bignum;
                         }
                         i__3 = j - ki - 2;
-                        work[j + *n] -= sdot_(&i__3, &t[ki + 2 + j * t_dim1], &c__1,
-                                              &work[ki + 2 + *n], &c__1);
+                        work[j + *n] -= aocl_blas_sdot(&i__3, &t[ki + 2 + j * t_dim1], &c__1,
+                                                       &work[ki + 2 + *n], &c__1);
                         i__3 = j - ki - 2;
-                        work[j + n2] -= sdot_(&i__3, &t[ki + 2 + j * t_dim1], &c__1,
-                                              &work[ki + 2 + n2], &c__1);
+                        work[j + n2] -= aocl_blas_sdot(&i__3, &t[ki + 2 + j * t_dim1], &c__1,
+                                                       &work[ki + 2 + n2], &c__1);
                         i__3 = j - ki - 2;
-                        work[j + 1 + *n] -= sdot_(&i__3, &t[ki + 2 + (j + 1) * t_dim1], &c__1,
-                                                  &work[ki + 2 + *n], &c__1);
+                        work[j + 1 + *n] -= aocl_blas_sdot(&i__3, &t[ki + 2 + (j + 1) * t_dim1],
+                                                           &c__1, &work[ki + 2 + *n], &c__1);
                         i__3 = j - ki - 2;
-                        work[j + 1 + n2] -= sdot_(&i__3, &t[ki + 2 + (j + 1) * t_dim1], &c__1,
-                                                  &work[ki + 2 + n2], &c__1);
-                        /* Solve 2-by-2 complex linear equation */
+                        work[j + 1 + n2] -= aocl_blas_sdot(&i__3, &t[ki + 2 + (j + 1) * t_dim1],
+                                                           &c__1, &work[ki + 2 + n2], &c__1);
+                        /* Solve 2-by-2 scomplex linear equation */
                         /* ([T(j,j) T(j,j+1) ]**T-(wr-i*wi)*I)*X = SCALE*B */
                         /* ([T(j+1,j) T(j+1,j+1)] ) */
                         r__1 = -wi;
-                        slaln2_(&c_true, &c__2, &c__2, &smin, &c_b22, &t[j + j * t_dim1], ldt,
-                                &c_b22, &c_b22, &work[j + *n], n, &wr, &r__1, x, &c__2, &scale,
-                                &xnorm, &ierr);
+                        aocl_lapack_slaln2(&c_true, &c__2, &c__2, &smin, &c_b22, &t[j + j * t_dim1],
+                                           ldt, &c_b22, &c_b22, &work[j + *n], n, &wr, &r__1, x,
+                                           &c__2, &scale, &xnorm, &ierr);
                         /* Scale if necessary */
                         if(scale != 1.f)
                         {
                             i__3 = *n - ki + 1;
-                            sscal_(&i__3, &scale, &work[ki + *n], &c__1);
+                            aocl_blas_sscal(&i__3, &scale, &work[ki + *n], &c__1);
                             i__3 = *n - ki + 1;
-                            sscal_(&i__3, &scale, &work[ki + n2], &c__1);
+                            aocl_blas_sscal(&i__3, &scale, &work[ki + n2], &c__1);
                         }
                         work[j + *n] = x[0];
                         work[j + n2] = x[2];
@@ -1168,9 +1185,10 @@ void strevc_(char *side, char *howmny, logical *select, integer *n, real *t, int
                 if(!over)
                 {
                     i__2 = *n - ki + 1;
-                    scopy_(&i__2, &work[ki + *n], &c__1, &vl[ki + is * vl_dim1], &c__1);
+                    aocl_blas_scopy(&i__2, &work[ki + *n], &c__1, &vl[ki + is * vl_dim1], &c__1);
                     i__2 = *n - ki + 1;
-                    scopy_(&i__2, &work[ki + n2], &c__1, &vl[ki + (is + 1) * vl_dim1], &c__1);
+                    aocl_blas_scopy(&i__2, &work[ki + n2], &c__1, &vl[ki + (is + 1) * vl_dim1],
+                                    &c__1);
                     emax = 0.f;
                     i__2 = *n;
                     for(k = ki; k <= i__2; ++k)
@@ -1184,9 +1202,9 @@ void strevc_(char *side, char *howmny, logical *select, integer *n, real *t, int
                     }
                     remax = 1.f / emax;
                     i__2 = *n - ki + 1;
-                    sscal_(&i__2, &remax, &vl[ki + is * vl_dim1], &c__1);
+                    aocl_blas_sscal(&i__2, &remax, &vl[ki + is * vl_dim1], &c__1);
                     i__2 = *n - ki + 1;
-                    sscal_(&i__2, &remax, &vl[ki + (is + 1) * vl_dim1], &c__1);
+                    aocl_blas_sscal(&i__2, &remax, &vl[ki + (is + 1) * vl_dim1], &c__1);
                     i__2 = ki - 1;
                     for(k = 1; k <= i__2; ++k)
                     {
@@ -1200,18 +1218,18 @@ void strevc_(char *side, char *howmny, logical *select, integer *n, real *t, int
                     if(ki < *n - 1)
                     {
                         i__2 = *n - ki - 1;
-                        sgemv_("N", n, &i__2, &c_b22, &vl[(ki + 2) * vl_dim1 + 1], ldvl,
-                               &work[ki + 2 + *n], &c__1, &work[ki + *n], &vl[ki * vl_dim1 + 1],
-                               &c__1);
+                        aocl_blas_sgemv("N", n, &i__2, &c_b22, &vl[(ki + 2) * vl_dim1 + 1], ldvl,
+                                        &work[ki + 2 + *n], &c__1, &work[ki + *n],
+                                        &vl[ki * vl_dim1 + 1], &c__1);
                         i__2 = *n - ki - 1;
-                        sgemv_("N", n, &i__2, &c_b22, &vl[(ki + 2) * vl_dim1 + 1], ldvl,
-                               &work[ki + 2 + n2], &c__1, &work[ki + 1 + n2],
-                               &vl[(ki + 1) * vl_dim1 + 1], &c__1);
+                        aocl_blas_sgemv("N", n, &i__2, &c_b22, &vl[(ki + 2) * vl_dim1 + 1], ldvl,
+                                        &work[ki + 2 + n2], &c__1, &work[ki + 1 + n2],
+                                        &vl[(ki + 1) * vl_dim1 + 1], &c__1);
                     }
                     else
                     {
-                        sscal_(n, &work[ki + *n], &vl[ki * vl_dim1 + 1], &c__1);
-                        sscal_(n, &work[ki + 1 + n2], &vl[(ki + 1) * vl_dim1 + 1], &c__1);
+                        aocl_blas_sscal(n, &work[ki + *n], &vl[ki * vl_dim1 + 1], &c__1);
+                        aocl_blas_sscal(n, &work[ki + 1 + n2], &vl[(ki + 1) * vl_dim1 + 1], &c__1);
                     }
                     emax = 0.f;
                     i__2 = *n;
@@ -1225,8 +1243,8 @@ void strevc_(char *side, char *howmny, logical *select, integer *n, real *t, int
                         /* L240: */
                     }
                     remax = 1.f / emax;
-                    sscal_(n, &remax, &vl[ki * vl_dim1 + 1], &c__1);
-                    sscal_(n, &remax, &vl[(ki + 1) * vl_dim1 + 1], &c__1);
+                    aocl_blas_sscal(n, &remax, &vl[ki * vl_dim1 + 1], &c__1);
+                    aocl_blas_sscal(n, &remax, &vl[(ki + 1) * vl_dim1 + 1], &c__1);
                 }
             }
             ++is;

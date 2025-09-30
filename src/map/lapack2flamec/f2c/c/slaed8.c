@@ -5,7 +5,7 @@
  /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static real c_b3 = -1.f;
-static integer c__1 = 1;
+static aocl_int64_t c__1 = 1;
 /* > \brief \b SLAED8 used by SSTEDC. Merges eigenvalues and deflates secular equation. Used when
  * the original matrix is dense. */
 /* =========== DOCUMENTATION =========== */
@@ -238,10 +238,43 @@ static integer c__1 = 1;
 /* > at Berkeley, USA */
 /* ===================================================================== */
 /* Subroutine */
-void slaed8_(integer *icompq, integer *k, integer *n, integer *qsiz, real *d__, real *q,
-             integer *ldq, integer *indxq, real *rho, integer *cutpnt, real *z__, real *dlambda,
-             real *q2, integer *ldq2, real *w, integer *perm, integer *givptr, integer *givcol,
-             real *givnum, integer *indxp, integer *indx, integer *info)
+/** Generated wrapper function */
+void slaed8_(aocl_int_t *icompq, aocl_int_t *k, aocl_int_t *n, aocl_int_t *qsiz, real *d__, real *q,
+             aocl_int_t *ldq, aocl_int_t *indxq, real *rho, aocl_int_t *cutpnt, real *z__,
+             real *dlambda, real *q2, aocl_int_t *ldq2, real *w, aocl_int_t *perm,
+             aocl_int_t *givptr, aocl_int_t *givcol, real *givnum, aocl_int_t *indxp,
+             aocl_int_t *indx, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_slaed8(icompq, k, n, qsiz, d__, q, ldq, indxq, rho, cutpnt, z__, dlambda, q2, ldq2,
+                       w, perm, givptr, givcol, givnum, indxp, indx, info);
+#else
+    aocl_int64_t icompq_64 = *icompq;
+    aocl_int64_t k_64 = *k;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t qsiz_64 = *qsiz;
+    aocl_int64_t ldq_64 = *ldq;
+    aocl_int64_t cutpnt_64 = *cutpnt;
+    aocl_int64_t ldq2_64 = *ldq2;
+    aocl_int64_t givptr_64 = *givptr;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_slaed8(&icompq_64, &k_64, &n_64, &qsiz_64, d__, q, &ldq_64, indxq, rho, &cutpnt_64,
+                       z__, dlambda, q2, &ldq2_64, w, perm, &givptr_64, givcol, givnum, indxp, indx,
+                       &info_64);
+
+    *k = (aocl_int_t)k_64;
+    *givptr = (aocl_int_t)givptr_64;
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_slaed8(aocl_int64_t *icompq, aocl_int64_t *k, aocl_int64_t *n, aocl_int64_t *qsiz,
+                        real *d__, real *q, aocl_int64_t *ldq, aocl_int_t *indxq, real *rho,
+                        aocl_int64_t *cutpnt, real *z__, real *dlambda, real *q2,
+                        aocl_int64_t *ldq2, real *w, aocl_int_t *perm, aocl_int64_t *givptr,
+                        aocl_int_t *givcol, real *givnum, aocl_int_t *indxp, aocl_int_t *indx,
+                        aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("slaed8 inputs: icompq %" FLA_IS ",n %" FLA_IS ",qsiz %" FLA_IS
@@ -249,31 +282,18 @@ void slaed8_(integer *icompq, integer *k, integer *n, integer *qsiz, real *d__, 
                       ",indx %" FLA_IS "",
                       *icompq, *n, *qsiz, *ldq, *indxq, *cutpnt, *ldq2, *indx);
     /* System generated locals */
-    integer q_dim1, q_offset, q2_dim1, q2_offset, i__1;
+    aocl_int64_t q_dim1, q_offset, q2_dim1, q2_offset, i__1;
     real r__1;
     /* Builtin functions */
     double sqrt(doublereal);
     /* Local variables */
     real c__;
-    integer i__, j;
+    aocl_int64_t i__, j;
     real s, t;
-    integer k2, n1, n2, jp, n1p1;
+    aocl_int64_t k2, n1, n2, jp, n1p1;
     real eps, tau, tol;
-    integer jlam, imax, jmax;
-    extern /* Subroutine */
-        void
-        srot_(integer *, real *, integer *, real *, integer *, real *, real *),
-        sscal_(integer *, real *, real *, integer *),
-        scopy_(integer *, real *, integer *, real *, integer *);
+    aocl_int64_t jlam, imax, jmax;
     extern real slapy2_(real *, real *), slamch_(char *);
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    extern integer isamax_(integer *, real *, integer *);
-    extern /* Subroutine */
-        void
-        slamrg_(integer *, integer *, real *, integer *, integer *, integer *),
-        slacpy_(char *, integer *, integer *, real *, integer *, real *, integer *);
     /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -341,7 +361,7 @@ void slaed8_(integer *icompq, integer *k, integer *n, integer *qsiz, real *d__, 
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("SLAED8", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("SLAED8", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -361,23 +381,23 @@ void slaed8_(integer *icompq, integer *k, integer *n, integer *qsiz, real *d__, 
     n1p1 = n1 + 1;
     if(*rho < 0.f)
     {
-        sscal_(&n2, &c_b3, &z__[n1p1], &c__1);
+        aocl_blas_sscal(&n2, &c_b3, &z__[n1p1], &c__1);
     }
     /* Normalize z so that norm(z) = 1 */
     t = 1.f / sqrt(2.f);
     i__1 = *n;
     for(j = 1; j <= i__1; ++j)
     {
-        indx[j] = j;
+        indx[j] = (aocl_int_t)(j);
         /* L10: */
     }
-    sscal_(n, &t, &z__[1], &c__1);
+    aocl_blas_sscal(n, &t, &z__[1], &c__1);
     *rho = (r__1 = *rho * 2.f, f2c_abs(r__1));
     /* Sort the eigenvalues into increasing order */
     i__1 = *n;
     for(i__ = *cutpnt + 1; i__ <= i__1; ++i__)
     {
-        indxq[i__] += *cutpnt;
+        indxq[i__] += (aocl_int_t)(*cutpnt);
         /* L20: */
     }
     i__1 = *n;
@@ -389,7 +409,7 @@ void slaed8_(integer *icompq, integer *k, integer *n, integer *qsiz, real *d__, 
     }
     i__ = 1;
     j = *cutpnt + 1;
-    slamrg_(&n1, &n2, &dlambda[1], &c__1, &c__1, &indx[1]);
+    aocl_lapack_slamrg(&n1, &n2, &dlambda[1], &c__1, &c__1, &indx[1]);
     i__1 = *n;
     for(i__ = 1; i__ <= i__1; ++i__)
     {
@@ -398,8 +418,8 @@ void slaed8_(integer *icompq, integer *k, integer *n, integer *qsiz, real *d__, 
         /* L40: */
     }
     /* Calculate the allowable deflation tolerance */
-    imax = isamax_(n, &z__[1], &c__1);
-    jmax = isamax_(n, &d__[1], &c__1);
+    imax = aocl_blas_isamax(n, &z__[1], &c__1);
+    jmax = aocl_blas_isamax(n, &d__[1], &c__1);
     eps = slamch_("Epsilon");
     tol = eps * 8.f * (r__1 = d__[jmax], f2c_abs(r__1));
     /* If the rank-1 modifier is small enough, no more needs to be done */
@@ -423,10 +443,10 @@ void slaed8_(integer *icompq, integer *k, integer *n, integer *qsiz, real *d__, 
             for(j = 1; j <= i__1; ++j)
             {
                 perm[j] = indxq[indx[j]];
-                scopy_(qsiz, &q[perm[j] * q_dim1 + 1], &c__1, &q2[j * q2_dim1 + 1], &c__1);
+                aocl_blas_scopy(qsiz, &q[perm[j] * q_dim1 + 1], &c__1, &q2[j * q2_dim1 + 1], &c__1);
                 /* L60: */
             }
-            slacpy_("A", qsiz, n, &q2[q2_dim1 + 1], ldq2, &q[q_dim1 + 1], ldq);
+            aocl_lapack_slacpy("A", qsiz, n, &q2[q2_dim1 + 1], ldq2, &q[q_dim1 + 1], ldq);
         }
         AOCL_DTL_TRACE_LOG_EXIT
         return;
@@ -445,7 +465,7 @@ void slaed8_(integer *icompq, integer *k, integer *n, integer *qsiz, real *d__, 
         {
             /* Deflate due to small z component. */
             --k2;
-            indxp[k2] = j;
+            indxp[k2] = (aocl_int_t)(j);
             if(j == *n)
             {
                 goto L110;
@@ -468,7 +488,7 @@ L80:
     {
         /* Deflate due to small z component. */
         --k2;
-        indxp[k2] = j;
+        indxp[k2] = (aocl_int_t)(j);
     }
     else
     {
@@ -494,8 +514,8 @@ L80:
             givnum[(*givptr << 1) + 2] = s;
             if(*icompq == 1)
             {
-                srot_(qsiz, &q[indxq[indx[jlam]] * q_dim1 + 1], &c__1,
-                      &q[indxq[indx[j]] * q_dim1 + 1], &c__1, &c__, &s);
+                aocl_blas_srot(qsiz, &q[indxq[indx[jlam]] * q_dim1 + 1], &c__1,
+                               &q[indxq[indx[j]] * q_dim1 + 1], &c__1, &c__, &s);
             }
             t = d__[jlam] * c__ * c__ + d__[j] * s * s;
             d__[j] = d__[jlam] * s * s + d__[j] * c__ * c__;
@@ -508,18 +528,18 @@ L80:
                 if(d__[jlam] < d__[indxp[k2 + i__]])
                 {
                     indxp[k2 + i__ - 1] = indxp[k2 + i__];
-                    indxp[k2 + i__] = jlam;
+                    indxp[k2 + i__] = (aocl_int_t)(jlam);
                     ++i__;
                     goto L90;
                 }
                 else
                 {
-                    indxp[k2 + i__ - 1] = jlam;
+                    indxp[k2 + i__ - 1] = (aocl_int_t)(jlam);
                 }
             }
             else
             {
-                indxp[k2 + i__ - 1] = jlam;
+                indxp[k2 + i__ - 1] = (aocl_int_t)(jlam);
             }
             jlam = j;
         }
@@ -528,7 +548,7 @@ L80:
             ++(*k);
             w[*k] = z__[jlam];
             dlambda[*k] = d__[jlam];
-            indxp[*k] = jlam;
+            indxp[*k] = (aocl_int_t)(jlam);
             jlam = j;
         }
     }
@@ -537,7 +557,7 @@ L100: /* Record the last eigenvalue. */
     ++(*k);
     w[*k] = z__[jlam];
     dlambda[*k] = d__[jlam];
-    indxp[*k] = jlam;
+    indxp[*k] = (aocl_int_t)(jlam);
 L110: /* Sort the eigenvalues and corresponding eigenvectors into DLAMBDA */
     /* and Q2 respectively. The eigenvalues/vectors which were not */
     /* deflated go into the first K slots of DLAMBDA and Q2 respectively, */
@@ -561,7 +581,7 @@ L110: /* Sort the eigenvalues and corresponding eigenvectors into DLAMBDA */
             jp = indxp[j];
             dlambda[j] = d__[jp];
             perm[j] = indxq[indx[jp]];
-            scopy_(qsiz, &q[perm[j] * q_dim1 + 1], &c__1, &q2[j * q2_dim1 + 1], &c__1);
+            aocl_blas_scopy(qsiz, &q[perm[j] * q_dim1 + 1], &c__1, &q2[j * q2_dim1 + 1], &c__1);
             /* L130: */
         }
     }
@@ -572,15 +592,15 @@ L110: /* Sort the eigenvalues and corresponding eigenvectors into DLAMBDA */
         if(*icompq == 0)
         {
             i__1 = *n - *k;
-            scopy_(&i__1, &dlambda[*k + 1], &c__1, &d__[*k + 1], &c__1);
+            aocl_blas_scopy(&i__1, &dlambda[*k + 1], &c__1, &d__[*k + 1], &c__1);
         }
         else
         {
             i__1 = *n - *k;
-            scopy_(&i__1, &dlambda[*k + 1], &c__1, &d__[*k + 1], &c__1);
+            aocl_blas_scopy(&i__1, &dlambda[*k + 1], &c__1, &d__[*k + 1], &c__1);
             i__1 = *n - *k;
-            slacpy_("A", qsiz, &i__1, &q2[(*k + 1) * q2_dim1 + 1], ldq2, &q[(*k + 1) * q_dim1 + 1],
-                    ldq);
+            aocl_lapack_slacpy("A", qsiz, &i__1, &q2[(*k + 1) * q2_dim1 + 1], ldq2,
+                               &q[(*k + 1) * q_dim1 + 1], ldq);
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT

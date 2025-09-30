@@ -4,7 +4,7 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
+static aocl_int64_t c__1 = 1;
 /* > \brief <b> ZSPSVX computes the solution to system of linear equations A * X = B for OTHER
  * matrices</b> */
 /* =========== DOCUMENTATION =========== */
@@ -46,7 +46,7 @@ static integer c__1 = 1;
 /* > \verbatim */
 /* > */
 /* > ZSPSVX uses the diagonal pivoting factorization A = U*D*U**T or */
-/* > A = L*D*L**T to compute the solution to a complex system of linear */
+/* > A = L*D*L**T to compute the solution to a scomplex system of linear */
 /* > equations A * X = B, where A is an N-by-N symmetric matrix stored */
 /* > in packed format and X and B are N-by-NRHS matrices. */
 /* > */
@@ -275,10 +275,34 @@ static integer c__1 = 1;
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void zspsvx_(char *fact, char *uplo, integer *n, integer *nrhs, doublecomplex *ap,
-             doublecomplex *afp, integer *ipiv, doublecomplex *b, integer *ldb, doublecomplex *x,
-             integer *ldx, doublereal *rcond, doublereal *ferr, doublereal *berr,
-             doublecomplex *work, doublereal *rwork, integer *info)
+/** Generated wrapper function */
+void zspsvx_(char *fact, char *uplo, aocl_int_t *n, aocl_int_t *nrhs, dcomplex *ap,
+             dcomplex *afp, aocl_int_t *ipiv, dcomplex *b, aocl_int_t *ldb,
+             dcomplex *x, aocl_int_t *ldx, doublereal *rcond, doublereal *ferr,
+             doublereal *berr, dcomplex *work, doublereal *rwork, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_zspsvx(fact, uplo, n, nrhs, ap, afp, ipiv, b, ldb, x, ldx, rcond, ferr, berr, work,
+                       rwork, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t nrhs_64 = *nrhs;
+    aocl_int64_t ldb_64 = *ldb;
+    aocl_int64_t ldx_64 = *ldx;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_zspsvx(fact, uplo, &n_64, &nrhs_64, ap, afp, ipiv, b, &ldb_64, x, &ldx_64, rcond,
+                       ferr, berr, work, rwork, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_zspsvx(char *fact, char *uplo, aocl_int64_t *n, aocl_int64_t *nrhs,
+                        dcomplex *ap, dcomplex *afp, aocl_int_t *ipiv, dcomplex *b,
+                        aocl_int64_t *ldb, dcomplex *x, aocl_int64_t *ldx, doublereal *rcond,
+                        doublereal *ferr, doublereal *berr, dcomplex *work, doublereal *rwork,
+                        aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zspsvx inputs: fact %c, uplo %c, n %" FLA_IS ", nrhs %" FLA_IS
@@ -286,33 +310,12 @@ void zspsvx_(char *fact, char *uplo, integer *n, integer *nrhs, doublecomplex *a
                       *fact, *uplo, *n, *nrhs, *ldb, *ldx);
 
     /* System generated locals */
-    integer b_dim1, b_offset, x_dim1, x_offset, i__1;
+    aocl_int64_t b_dim1, b_offset, x_dim1, x_offset, i__1;
     /* Local variables */
-    extern logical lsame_(char *, char *, integer, integer);
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     doublereal anorm;
-    extern /* Subroutine */
-        void
-        zcopy_(integer *, doublecomplex *, integer *, doublecomplex *, integer *);
     extern doublereal dlamch_(char *);
     logical nofact;
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    extern /* Subroutine */
-        void
-        zlacpy_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *,
-                integer *);
-    extern doublereal zlansp_(char *, char *, integer *, doublecomplex *, doublereal *);
-    extern /* Subroutine */
-        void
-        zspcon_(char *, integer *, doublecomplex *, integer *, doublereal *, doublereal *,
-                doublecomplex *, integer *),
-        zsprfs_(char *, integer *, integer *, doublecomplex *, doublecomplex *, integer *,
-                doublecomplex *, integer *, doublecomplex *, integer *, doublereal *, doublereal *,
-                doublecomplex *, doublereal *, integer *),
-        zsptrf_(char *, integer *, doublecomplex *, integer *, integer *),
-        zsptrs_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *,
-                integer *, integer *);
     /* -- LAPACK driver routine (version 3.4.1) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -378,7 +381,7 @@ void zspsvx_(char *fact, char *uplo, integer *n, integer *nrhs, doublecomplex *a
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("ZSPSVX", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("ZSPSVX", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -386,8 +389,8 @@ void zspsvx_(char *fact, char *uplo, integer *n, integer *nrhs, doublecomplex *a
     {
         /* Compute the factorization A = U*D*U**T or A = L*D*L**T. */
         i__1 = *n * (*n + 1) / 2;
-        zcopy_(&i__1, &ap[1], &c__1, &afp[1], &c__1);
-        zsptrf_(uplo, n, &afp[1], &ipiv[1], info);
+        aocl_blas_zcopy(&i__1, &ap[1], &c__1, &afp[1], &c__1);
+        aocl_lapack_zsptrf(uplo, n, &afp[1], &ipiv[1], info);
         /* Return if INFO is non-zero. */
         if(*info > 0)
         {
@@ -397,16 +400,16 @@ void zspsvx_(char *fact, char *uplo, integer *n, integer *nrhs, doublecomplex *a
         }
     }
     /* Compute the norm of the matrix A. */
-    anorm = zlansp_("I", uplo, n, &ap[1], &rwork[1]);
+    anorm = aocl_lapack_zlansp("I", uplo, n, &ap[1], &rwork[1]);
     /* Compute the reciprocal of the condition number of A. */
-    zspcon_(uplo, n, &afp[1], &ipiv[1], &anorm, rcond, &work[1], info);
+    aocl_lapack_zspcon(uplo, n, &afp[1], &ipiv[1], &anorm, rcond, &work[1], info);
     /* Compute the solution vectors X. */
-    zlacpy_("Full", n, nrhs, &b[b_offset], ldb, &x[x_offset], ldx);
-    zsptrs_(uplo, n, nrhs, &afp[1], &ipiv[1], &x[x_offset], ldx, info);
+    aocl_lapack_zlacpy("Full", n, nrhs, &b[b_offset], ldb, &x[x_offset], ldx);
+    aocl_lapack_zsptrs(uplo, n, nrhs, &afp[1], &ipiv[1], &x[x_offset], ldx, info);
     /* Use iterative refinement to improve the computed solutions and */
     /* compute error bounds and backward error estimates for them. */
-    zsprfs_(uplo, n, nrhs, &ap[1], &afp[1], &ipiv[1], &b[b_offset], ldb, &x[x_offset], ldx,
-            &ferr[1], &berr[1], &work[1], &rwork[1], info);
+    aocl_lapack_zsprfs(uplo, n, nrhs, &ap[1], &afp[1], &ipiv[1], &b[b_offset], ldb, &x[x_offset],
+                       ldx, &ferr[1], &berr[1], &work[1], &rwork[1], info);
     /* Set INFO = N+1 if the matrix is singular to working precision. */
     if(*rcond < dlamch_("Epsilon"))
     {

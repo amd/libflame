@@ -14,21 +14,21 @@
 #define FLA_ALG_FRONT     1
 
 
-FLA_Error REF_Hess( FLA_Obj A, FLA_Obj t, integer ilo, integer ihi );
+FLA_Error REF_Hess( FLA_Obj A, FLA_Obj t, aocl_int64_t ilo, aocl_int64_t ihi );
 void time_Hess(
-              integer variant, integer type, integer nrepeats, integer m,
-              integer nfc, integer nlc,
+              aocl_int64_t variant, aocl_int64_t type, aocl_int64_t nrepeats, aocl_int64_t m,
+              aocl_int64_t nfc, aocl_int64_t nlc,
               FLA_Obj A, FLA_Obj A_ref, FLA_Obj t,
               double *dtime, double *diff, double *gflops );
 
 
 void time_Hess(
-              integer variant, integer type, integer nrepeats, integer m,
-              integer nfc, integer nlc,
+              aocl_int64_t variant, aocl_int64_t type, aocl_int64_t nrepeats, aocl_int64_t m,
+              aocl_int64_t nfc, aocl_int64_t nlc,
               FLA_Obj A, FLA_Obj A_ref, FLA_Obj t,
               double *dtime, double *diff, double *gflops )
 {
-  integer
+  aocl_int64_t
     irep, rn, ilo, ihi;
 
   double

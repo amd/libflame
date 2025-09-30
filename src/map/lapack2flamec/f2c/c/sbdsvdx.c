@@ -6,9 +6,9 @@
 #include "FLA_f2c.h" /* Table of constant values */
 static real c_b10 = 1.f;
 static doublereal c_b14 = -.125;
-static integer c__1 = 1;
+static aocl_int64_t c__1 = 1;
 static real c_b20 = 0.f;
-static integer c__2 = 2;
+static aocl_int64_t c__2 = 2;
 /* > \brief \b SBDSVDX */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -238,81 +238,82 @@ if RANGE = 'V', the exact value of */
 /* > \ingroup realOTHEReigen */
 /* ===================================================================== */
 /* Subroutine */
-void sbdsvdx_(char *uplo, char *jobz, char *range, integer *n, real *d__, real *e, real *vl,
-              real *vu, integer *il, integer *iu, integer *ns, real *s, real *z__, integer *ldz,
-              real *work, integer *iwork, integer *info)
+/** Generated wrapper function */
+void sbdsvdx_(char *uplo, char *jobz, char *range, aocl_int_t *n, real *d__, real *e, real *vl,
+              real *vu, aocl_int_t *il, aocl_int_t *iu, aocl_int_t *ns, real *s, real *z__,
+              aocl_int_t *ldz, real *work, aocl_int_t *iwork, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_sbdsvdx(uplo, jobz, range, n, d__, e, vl, vu, il, iu, ns, s, z__, ldz, work, iwork,
+                        info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t il_64 = *il;
+    aocl_int64_t iu_64 = *iu;
+    aocl_int64_t ns_64 = *ns;
+    aocl_int64_t ldz_64 = *ldz;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_sbdsvdx(uplo, jobz, range, &n_64, d__, e, vl, vu, &il_64, &iu_64, &ns_64, s, z__,
+                        &ldz_64, work, iwork, &info_64);
+
+    *ns = (aocl_int_t)ns_64;
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_sbdsvdx(char *uplo, char *jobz, char *range, aocl_int64_t *n, real *d__, real *e,
+                         real *vl, real *vu, aocl_int64_t *il, aocl_int64_t *iu, aocl_int64_t *ns,
+                         real *s, real *z__, aocl_int64_t *ldz, real *work, aocl_int_t *iwork,
+                         aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("sbdsvdx inputs: uplo %c ,jobz %c ,range %c ,n %" FLA_IS ",il %" FLA_IS
                       ",iu %" FLA_IS ",ldz %" FLA_IS "",
                       *uplo, *jobz, *range, *n, *il, *iu, *ldz);
     /* System generated locals */
-    integer z_dim1, z_offset, i__1, i__2, i__3, i__4, i__5;
+    aocl_int64_t z_dim1, z_offset, i__1, i__2, i__3, i__4, i__5;
     real r__1, r__2, r__3, r__4;
     doublereal d__1;
     /* Builtin functions */
     double r_sign(real *, real *), sqrt(doublereal), pow_dd(doublereal *, doublereal *);
     /* Local variables */
-    integer i__, j, k;
+    aocl_int64_t i__, j, k;
     real d1;
-    integer j1, j2;
+    aocl_int64_t j1, j2;
     real mu, eps;
-    integer nsl;
+    aocl_int64_t nsl;
     real tol, ulp;
-    integer nru, nrv;
+    aocl_int64_t nru, nrv;
     real emin;
-    integer ntgk;
+    aocl_int64_t ntgk;
     real smin, smax;
-    extern real sdot_(integer *, real *, integer *, real *, integer *);
     real nrmu, nrmv;
     logical sveq0;
-    extern real snrm2_(integer *, real *, integer *);
-    integer idbeg;
+    aocl_int64_t idbeg;
     real sqrt2;
-    integer idend, isbeg;
-    extern logical lsame_(char *, char *, integer, integer);
-    integer idtgk, ietgk;
-    extern /* Subroutine */
-        void
-        sscal_(integer *, real *, real *, integer *);
-    integer iltgk, itemp, icolz;
+    aocl_int64_t idend, isbeg;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    aocl_int64_t idtgk, ietgk;
+    aocl_int64_t iltgk, itemp, icolz;
     logical allsv;
-    integer idptr;
+    aocl_int64_t idptr;
     logical indsv;
-    integer ieptr, iutgk;
+    aocl_int64_t ieptr, iutgk;
     real vltgk;
     logical lower;
     real zjtji;
     logical split, valsv;
-    integer isplt;
+    aocl_int64_t isplt;
     real ortol, vutgk;
-    extern /* Subroutine */
-        void
-        scopy_(integer *, real *, integer *, real *, integer *),
-        sswap_(integer *, real *, integer *, real *, integer *);
     logical wantz;
     char rngvx[1];
-    integer irowu, irowv;
-    extern /* Subroutine */
-        void
-        saxpy_(integer *, real *, real *, integer *, real *, integer *);
-    integer irowz, iifail;
+    aocl_int64_t irowu, irowv;
+    aocl_int64_t irowz, iifail;
     extern real slamch_(char *);
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    extern integer isamax_(integer *, real *, integer *);
     real abstol;
-    extern /* Subroutine */
-        void
-        slaset_(char *, integer *, integer *, real *, real *, real *, integer *);
     real thresh;
-    integer iiwork;
-    extern /* Subroutine */
-        void
-        sstevx_(char *, char *, integer *, real *, real *, real *, real *, integer *, integer *,
-                real *, integer *, real *, real *, integer *, real *, integer *, integer *,
-                integer *);
+    aocl_int64_t iiwork;
     /* -- LAPACK driver routine (version 3.8.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -401,7 +402,7 @@ void sbdsvdx_(char *uplo, char *jobz, char *range, integer *n, real *d__, real *
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("SBDSVDX", &i__1, (ftnlen)7);
+        aocl_blas_xerbla("SBDSVDX", &i__1, (ftnlen)7);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -453,10 +454,10 @@ void sbdsvdx_(char *uplo, char *jobz, char *range, integer *n, real *d__, real *
     r__2 = fla_min(r__3, r__4); // , expr subst
     tol = fla_max(r__1, r__2) * eps;
     /* Compute approximate maximum, minimum singular values. */
-    i__ = isamax_(n, &d__[1], &c__1);
+    i__ = aocl_blas_isamax(n, &d__[1], &c__1);
     smax = (r__1 = d__[i__], f2c_abs(r__1));
     i__1 = *n - 1;
-    i__ = isamax_(&i__1, &e[1], &c__1);
+    i__ = aocl_blas_isamax(&i__1, &e[1], &c__1);
     /* Computing MAX */
     r__2 = smax;
     r__3 = (r__1 = e[i__], f2c_abs(r__1)); // , expr subst
@@ -522,7 +523,7 @@ void sbdsvdx_(char *uplo, char *jobz, char *range, integer *n, real *d__, real *
         {
             i__1 = *n << 1;
             i__2 = *n + 1;
-            slaset_("F", &i__1, &i__2, &c_b20, &c_b20, &z__[z_offset], ldz);
+            aocl_lapack_slaset("F", &i__1, &i__2, &c_b20, &c_b20, &z__[z_offset], ldz);
         }
     }
     else if(valsv)
@@ -539,13 +540,13 @@ void sbdsvdx_(char *uplo, char *jobz, char *range, integer *n, real *d__, real *
         {
             work[idtgk - 1 + j1] = 0.f;
         }
-        scopy_(n, &d__[1], &c__1, &work[ietgk], &c__2);
+        aocl_blas_scopy(n, &d__[1], &c__1, &work[ietgk], &c__2);
         i__1 = *n - 1;
-        scopy_(&i__1, &e[1], &c__1, &work[ietgk + 1], &c__2);
+        aocl_blas_scopy(&i__1, &e[1], &c__1, &work[ietgk + 1], &c__2);
         i__1 = *n << 1;
-        sstevx_("N", "V", &i__1, &work[idtgk], &work[ietgk], &vltgk, &vutgk, &iltgk, &iltgk,
-                &abstol, ns, &s[1], &z__[z_offset], ldz, &work[itemp], &iwork[iiwork],
-                &iwork[iifail], info);
+        aocl_lapack_sstevx("N", "V", &i__1, &work[idtgk], &work[ietgk], &vltgk, &vutgk, &iltgk,
+                           &iltgk, &abstol, ns, &s[1], &z__[z_offset], ldz, &work[itemp],
+                           &iwork[iiwork], &iwork[iifail], info);
         if(*ns == 0)
         {
             AOCL_DTL_TRACE_LOG_EXIT
@@ -556,7 +557,7 @@ void sbdsvdx_(char *uplo, char *jobz, char *range, integer *n, real *d__, real *
             if(wantz)
             {
                 i__1 = *n << 1;
-                slaset_("F", &i__1, ns, &c_b20, &c_b20, &z__[z_offset], ldz);
+                aocl_lapack_slaset("F", &i__1, ns, &c_b20, &c_b20, &z__[z_offset], ldz);
             }
         }
     }
@@ -576,13 +577,13 @@ void sbdsvdx_(char *uplo, char *jobz, char *range, integer *n, real *d__, real *
         {
             work[idtgk - 1 + j1] = 0.f;
         }
-        scopy_(n, &d__[1], &c__1, &work[ietgk], &c__2);
+        aocl_blas_scopy(n, &d__[1], &c__1, &work[ietgk], &c__2);
         i__1 = *n - 1;
-        scopy_(&i__1, &e[1], &c__1, &work[ietgk + 1], &c__2);
+        aocl_blas_scopy(&i__1, &e[1], &c__1, &work[ietgk + 1], &c__2);
         i__1 = *n << 1;
-        sstevx_("N", "I", &i__1, &work[idtgk], &work[ietgk], &vltgk, &vltgk, &iltgk, &iltgk,
-                &abstol, ns, &s[1], &z__[z_offset], ldz, &work[itemp], &iwork[iiwork],
-                &iwork[iifail], info);
+        aocl_lapack_sstevx("N", "I", &i__1, &work[idtgk], &work[ietgk], &vltgk, &vltgk, &iltgk,
+                           &iltgk, &abstol, ns, &s[1], &z__[z_offset], ldz, &work[itemp],
+                           &iwork[iiwork], &iwork[iifail], info);
         vltgk = s[1] - smax * 2.f * ulp * *n;
         /* WORK( IDTGK:IDTGK+2*N-1 ) = ZERO */
         i__1 = *n << 1;
@@ -590,13 +591,13 @@ void sbdsvdx_(char *uplo, char *jobz, char *range, integer *n, real *d__, real *
         {
             work[idtgk - 1 + j1] = 0.f;
         }
-        scopy_(n, &d__[1], &c__1, &work[ietgk], &c__2);
+        aocl_blas_scopy(n, &d__[1], &c__1, &work[ietgk], &c__2);
         i__1 = *n - 1;
-        scopy_(&i__1, &e[1], &c__1, &work[ietgk + 1], &c__2);
+        aocl_blas_scopy(&i__1, &e[1], &c__1, &work[ietgk + 1], &c__2);
         i__1 = *n << 1;
-        sstevx_("N", "I", &i__1, &work[idtgk], &work[ietgk], &vutgk, &vutgk, &iutgk, &iutgk,
-                &abstol, ns, &s[1], &z__[z_offset], ldz, &work[itemp], &iwork[iiwork],
-                &iwork[iifail], info);
+        aocl_lapack_sstevx("N", "I", &i__1, &work[idtgk], &work[ietgk], &vutgk, &vutgk, &iutgk,
+                           &iutgk, &abstol, ns, &s[1], &z__[z_offset], ldz, &work[itemp],
+                           &iwork[iiwork], &iwork[iifail], info);
         vutgk = s[1] + smax * 2.f * ulp * *n;
         vutgk = fla_min(vutgk, 0.f);
         /* If VLTGK=VUTGK, SSTEVX returns an error message, */
@@ -609,7 +610,7 @@ void sbdsvdx_(char *uplo, char *jobz, char *range, integer *n, real *d__, real *
         {
             i__1 = *n << 1;
             i__2 = *iu - *il + 1;
-            slaset_("F", &i__1, &i__2, &c_b20, &c_b20, &z__[z_offset], ldz);
+            aocl_lapack_slaset("F", &i__1, &i__2, &c_b20, &c_b20, &z__[z_offset], ldz);
         }
     }
     /* Initialize variables and pointers for S, Z, and WORK. */
@@ -642,9 +643,9 @@ void sbdsvdx_(char *uplo, char *jobz, char *range, integer *n, real *d__, real *
     {
         work[idtgk - 1 + j1] = 0.f;
     }
-    scopy_(n, &d__[1], &c__1, &work[ietgk], &c__2);
+    aocl_blas_scopy(n, &d__[1], &c__1, &work[ietgk], &c__2);
     i__1 = *n - 1;
-    scopy_(&i__1, &e[1], &c__1, &work[ietgk + 1], &c__2);
+    aocl_blas_scopy(&i__1, &e[1], &c__1, &work[ietgk + 1], &c__2);
     /* Check for splits in two levels, outer level */
     /* in E and inner level in D. */
     i__1 = *n << 1;
@@ -738,10 +739,10 @@ void sbdsvdx_(char *uplo, char *jobz, char *range, integer *n, real *d__, real *
                     /* Workspace needed by SSTEVX: */
                     /* WORK( ITEMP: ): 2*5*NTGK */
                     /* IWORK( 1: ): 2*6*NTGK */
-                    sstevx_(jobz, rngvx, &ntgk, &work[idtgk + isplt - 1], &work[ietgk + isplt - 1],
-                            &vltgk, &vutgk, &iltgk, &iutgk, &abstol, &nsl, &s[isbeg],
-                            &z__[irowz + icolz * z_dim1], ldz, &work[itemp], &iwork[iiwork],
-                            &iwork[iifail], info);
+                    aocl_lapack_sstevx(jobz, rngvx, &ntgk, &work[idtgk + isplt - 1],
+                                       &work[ietgk + isplt - 1], &vltgk, &vutgk, &iltgk, &iutgk,
+                                       &abstol, &nsl, &s[isbeg], &z__[irowz + icolz * z_dim1], ldz,
+                                       &work[itemp], &iwork[iiwork], &iwork[iifail], info);
                     if(*info != 0)
                     {
                         /* Exit with the error code from SSTEVX. */
@@ -798,7 +799,7 @@ void sbdsvdx_(char *uplo, char *jobz, char *range, integer *n, real *d__, real *
                         i__3 = fla_min(i__4, i__5);
                         for(i__ = 0; i__ <= i__3; ++i__)
                         {
-                            nrmu = snrm2_(&nru, &z__[irowu + (icolz + i__) * z_dim1], &c__2);
+                            nrmu = aocl_blas_snrm2(&nru, &z__[irowu + (icolz + i__) * z_dim1], &c__2);
                             if(nrmu == 0.f)
                             {
                                 *info = (*n << 1) + 1;
@@ -806,20 +807,24 @@ void sbdsvdx_(char *uplo, char *jobz, char *range, integer *n, real *d__, real *
                                 return;
                             }
                             r__1 = 1.f / nrmu;
-                            sscal_(&nru, &r__1, &z__[irowu + (icolz + i__) * z_dim1], &c__2);
+                            aocl_blas_sscal(&nru, &r__1, &z__[irowu + (icolz + i__) * z_dim1],
+                                            &c__2);
                             if(nrmu != 1.f && (r__1 = nrmu - ortol, f2c_abs(r__1)) * sqrt2 > 1.f)
                             {
                                 i__4 = i__ - 1;
                                 for(j = 0; j <= i__4; ++j)
                                 {
-                                    zjtji = -sdot_(&nru, &z__[irowu + (icolz + j) * z_dim1], &c__2,
-                                                   &z__[irowu + (icolz + i__) * z_dim1], &c__2);
-                                    saxpy_(&nru, &zjtji, &z__[irowu + (icolz + j) * z_dim1], &c__2,
-                                           &z__[irowu + (icolz + i__) * z_dim1], &c__2);
+                                    zjtji = -aocl_blas_sdot(
+                                        &nru, &z__[irowu + (icolz + j) * z_dim1], &c__2,
+                                        &z__[irowu + (icolz + i__) * z_dim1], &c__2);
+                                    aocl_blas_saxpy(&nru, &zjtji,
+                                                    &z__[irowu + (icolz + j) * z_dim1], &c__2,
+                                                    &z__[irowu + (icolz + i__) * z_dim1], &c__2);
                                 }
-                                nrmu = snrm2_(&nru, &z__[irowu + (icolz + i__) * z_dim1], &c__2);
+                                nrmu = aocl_blas_snrm2(&nru, &z__[irowu + (icolz + i__) * z_dim1], &c__2);
                                 r__1 = 1.f / nrmu;
-                                sscal_(&nru, &r__1, &z__[irowu + (icolz + i__) * z_dim1], &c__2);
+                                aocl_blas_sscal(&nru, &r__1, &z__[irowu + (icolz + i__) * z_dim1],
+                                                &c__2);
                             }
                         }
                         /* Computing MIN */
@@ -828,7 +833,7 @@ void sbdsvdx_(char *uplo, char *jobz, char *range, integer *n, real *d__, real *
                         i__3 = fla_min(i__4, i__5);
                         for(i__ = 0; i__ <= i__3; ++i__)
                         {
-                            nrmv = snrm2_(&nrv, &z__[irowv + (icolz + i__) * z_dim1], &c__2);
+                            nrmv = aocl_blas_snrm2(&nrv, &z__[irowv + (icolz + i__) * z_dim1], &c__2);
                             if(nrmv == 0.f)
                             {
                                 *info = (*n << 1) + 1;
@@ -836,20 +841,24 @@ void sbdsvdx_(char *uplo, char *jobz, char *range, integer *n, real *d__, real *
                                 return;
                             }
                             r__1 = -1.f / nrmv;
-                            sscal_(&nrv, &r__1, &z__[irowv + (icolz + i__) * z_dim1], &c__2);
+                            aocl_blas_sscal(&nrv, &r__1, &z__[irowv + (icolz + i__) * z_dim1],
+                                            &c__2);
                             if(nrmv != 1.f && (r__1 = nrmv - ortol, f2c_abs(r__1)) * sqrt2 > 1.f)
                             {
                                 i__4 = i__ - 1;
                                 for(j = 0; j <= i__4; ++j)
                                 {
-                                    zjtji = -sdot_(&nrv, &z__[irowv + (icolz + j) * z_dim1], &c__2,
-                                                   &z__[irowv + (icolz + i__) * z_dim1], &c__2);
-                                    saxpy_(&nru, &zjtji, &z__[irowv + (icolz + j) * z_dim1], &c__2,
-                                           &z__[irowv + (icolz + i__) * z_dim1], &c__2);
+                                    zjtji = -aocl_blas_sdot(
+                                        &nrv, &z__[irowv + (icolz + j) * z_dim1], &c__2,
+                                        &z__[irowv + (icolz + i__) * z_dim1], &c__2);
+                                    aocl_blas_saxpy(&nru, &zjtji,
+                                                    &z__[irowv + (icolz + j) * z_dim1], &c__2,
+                                                    &z__[irowv + (icolz + i__) * z_dim1], &c__2);
                                 }
-                                nrmv = snrm2_(&nrv, &z__[irowv + (icolz + i__) * z_dim1], &c__2);
+                                nrmv = aocl_blas_snrm2(&nrv, &z__[irowv + (icolz + i__) * z_dim1], &c__2);
                                 r__1 = 1.f / nrmv;
-                                sscal_(&nrv, &r__1, &z__[irowv + (icolz + i__) * z_dim1], &c__2);
+                                aocl_blas_sscal(&nrv, &r__1, &z__[irowv + (icolz + i__) * z_dim1],
+                                                &c__2);
                             }
                         }
                         if(vutgk == 0.f && idptr < idend && ntgk % 2 > 0)
@@ -952,8 +961,8 @@ void sbdsvdx_(char *uplo, char *jobz, char *range, integer *n, real *d__, real *
             if(wantz)
             {
                 i__2 = *n << 1;
-                sswap_(&i__2, &z__[k * z_dim1 + 1], &c__1, &z__[(*ns + 1 - i__) * z_dim1 + 1],
-                       &c__1);
+                aocl_blas_sswap(&i__2, &z__[k * z_dim1 + 1], &c__1,
+                                &z__[(*ns + 1 - i__) * z_dim1 + 1], &c__1);
             }
         }
     }
@@ -993,16 +1002,16 @@ void sbdsvdx_(char *uplo, char *jobz, char *range, integer *n, real *d__, real *
         for(i__ = 1; i__ <= i__1; ++i__)
         {
             i__2 = *n << 1;
-            scopy_(&i__2, &z__[i__ * z_dim1 + 1], &c__1, &work[1], &c__1);
+            aocl_blas_scopy(&i__2, &z__[i__ * z_dim1 + 1], &c__1, &work[1], &c__1);
             if(lower)
             {
-                scopy_(n, &work[2], &c__2, &z__[*n + 1 + i__ * z_dim1], &c__1);
-                scopy_(n, &work[1], &c__2, &z__[i__ * z_dim1 + 1], &c__1);
+                aocl_blas_scopy(n, &work[2], &c__2, &z__[*n + 1 + i__ * z_dim1], &c__1);
+                aocl_blas_scopy(n, &work[1], &c__2, &z__[i__ * z_dim1 + 1], &c__1);
             }
             else
             {
-                scopy_(n, &work[2], &c__2, &z__[i__ * z_dim1 + 1], &c__1);
-                scopy_(n, &work[1], &c__2, &z__[*n + 1 + i__ * z_dim1], &c__1);
+                aocl_blas_scopy(n, &work[2], &c__2, &z__[i__ * z_dim1 + 1], &c__1);
+                aocl_blas_scopy(n, &work[1], &c__2, &z__[*n + 1 + i__ * z_dim1], &c__1);
             }
         }
     }

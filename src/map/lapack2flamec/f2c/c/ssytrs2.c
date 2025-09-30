@@ -129,36 +129,45 @@ static real c_b10 = 1.f;
 /* > \ingroup realSYcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void ssytrs2_(char *uplo, integer *n, integer *nrhs, real *a, integer *lda, integer *ipiv, real *b,
-              integer *ldb, real *work, integer *info)
+/** Generated wrapper function */
+void ssytrs2_(char *uplo, aocl_int_t *n, aocl_int_t *nrhs, real *a, aocl_int_t *lda,
+              aocl_int_t *ipiv, real *b, aocl_int_t *ldb, real *work, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_ssytrs2(uplo, n, nrhs, a, lda, ipiv, b, ldb, work, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t nrhs_64 = *nrhs;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t ldb_64 = *ldb;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_ssytrs2(uplo, &n_64, &nrhs_64, a, &lda_64, ipiv, b, &ldb_64, work, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_ssytrs2(char *uplo, aocl_int64_t *n, aocl_int64_t *nrhs, real *a,
+                         aocl_int64_t *lda, aocl_int_t *ipiv, real *b, aocl_int64_t *ldb,
+                         real *work, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF(
-             "ssytrs2 inputs: uplo %c, n %" FLA_IS ", nrhs %" FLA_IS ", lda %" FLA_IS
-             ", ldb %" FLA_IS "",
-             *uplo, *n, *nrhs, *lda, *ldb);
+    AOCL_DTL_SNPRINTF("ssytrs2 inputs: uplo %c, n %" FLA_IS ", nrhs %" FLA_IS ", lda %" FLA_IS
+                      ", ldb %" FLA_IS "",
+                      *uplo, *n, *nrhs, *lda, *ldb);
     /* System generated locals */
-    integer a_dim1, a_offset, b_dim1, b_offset, i__1;
+    aocl_int64_t a_dim1, a_offset, b_dim1, b_offset, i__1;
     real r__1;
     /* Local variables */
-    integer i__, j, k;
+    aocl_int64_t i__, j, k;
     real ak, bk;
-    integer kp;
+    aocl_int64_t kp;
     real akm1, bkm1, akm1k;
-    extern logical lsame_(char *, char *, integer, integer);
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     real denom;
-    integer iinfo;
-    extern /* Subroutine */
-        void
-        sscal_(integer *, real *, real *, integer *);
+    aocl_int64_t iinfo;
     logical upper;
-    extern /* Subroutine */
-        void
-        sswap_(integer *, real *, integer *, real *, integer *),
-        strsm_(char *, char *, char *, char *, integer *, integer *, real *, real *, integer *,
-               real *, integer *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
-        ssyconv_(char *, char *, integer *, real *, integer *, integer *, real *, integer *);
     /* -- LAPACK computational routine (version 3.7.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -214,7 +223,7 @@ void ssytrs2_(char *uplo, integer *n, integer *nrhs, real *a, integer *lda, inte
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("SSYTRS2", &i__1, (ftnlen)7);
+        aocl_blas_xerbla("SSYTRS2", &i__1, (ftnlen)7);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -225,7 +234,7 @@ void ssytrs2_(char *uplo, integer *n, integer *nrhs, real *a, integer *lda, inte
         return;
     }
     /* Convert A */
-    ssyconv_(uplo, "C", n, &a[a_offset], lda, &ipiv[1], &work[1], &iinfo);
+    aocl_lapack_ssyconv(uplo, "C", n, &a[a_offset], lda, &ipiv[1], &work[1], &iinfo);
     if(upper)
     {
         /* Solve A*X = B, where A = U*D*U**T. */
@@ -240,7 +249,7 @@ void ssytrs2_(char *uplo, integer *n, integer *nrhs, real *a, integer *lda, inte
                 kp = ipiv[k];
                 if(kp != k)
                 {
-                    sswap_(nrhs, &b[k + b_dim1], ldb, &b[kp + b_dim1], ldb);
+                    aocl_blas_sswap(nrhs, &b[k + b_dim1], ldb, &b[kp + b_dim1], ldb);
                 }
                 --k;
             }
@@ -251,13 +260,13 @@ void ssytrs2_(char *uplo, integer *n, integer *nrhs, real *a, integer *lda, inte
                 kp = -ipiv[k];
                 if(kp == -ipiv[k - 1])
                 {
-                    sswap_(nrhs, &b[k - 1 + b_dim1], ldb, &b[kp + b_dim1], ldb);
+                    aocl_blas_sswap(nrhs, &b[k - 1 + b_dim1], ldb, &b[kp + b_dim1], ldb);
                 }
                 k += -2;
             }
         }
         /* Compute (U \P**T * B) -> B [ (U \P**T * B) ] */
-        strsm_("L", "U", "N", "U", n, nrhs, &c_b10, &a[a_offset], lda, &b[b_offset], ldb);
+        aocl_blas_strsm("L", "U", "N", "U", n, nrhs, &c_b10, &a[a_offset], lda, &b[b_offset], ldb);
         /* Compute D \ B -> B [ D \ (U \P**T * B) ] */
         i__ = *n;
         while(i__ >= 1)
@@ -265,7 +274,7 @@ void ssytrs2_(char *uplo, integer *n, integer *nrhs, real *a, integer *lda, inte
             if(ipiv[i__] > 0)
             {
                 r__1 = 1.f / a[i__ + i__ * a_dim1];
-                sscal_(nrhs, &r__1, &b[i__ + b_dim1], ldb);
+                aocl_blas_sscal(nrhs, &r__1, &b[i__ + b_dim1], ldb);
             }
             else if(i__ > 1)
             {
@@ -290,7 +299,7 @@ void ssytrs2_(char *uplo, integer *n, integer *nrhs, real *a, integer *lda, inte
             --i__;
         }
         /* Compute (U**T \ B) -> B [ U**T \ (D \ (U \P**T * B) ) ] */
-        strsm_("L", "U", "T", "U", n, nrhs, &c_b10, &a[a_offset], lda, &b[b_offset], ldb);
+        aocl_blas_strsm("L", "U", "T", "U", n, nrhs, &c_b10, &a[a_offset], lda, &b[b_offset], ldb);
         /* P * B [ P * (U**T \ (D \ (U \P**T * B) )) ] */
         k = 1;
         while(k <= *n)
@@ -302,7 +311,7 @@ void ssytrs2_(char *uplo, integer *n, integer *nrhs, real *a, integer *lda, inte
                 kp = ipiv[k];
                 if(kp != k)
                 {
-                    sswap_(nrhs, &b[k + b_dim1], ldb, &b[kp + b_dim1], ldb);
+                    aocl_blas_sswap(nrhs, &b[k + b_dim1], ldb, &b[kp + b_dim1], ldb);
                 }
                 ++k;
             }
@@ -313,7 +322,7 @@ void ssytrs2_(char *uplo, integer *n, integer *nrhs, real *a, integer *lda, inte
                 kp = -ipiv[k];
                 if(k < *n && kp == -ipiv[k + 1])
                 {
-                    sswap_(nrhs, &b[k + b_dim1], ldb, &b[kp + b_dim1], ldb);
+                    aocl_blas_sswap(nrhs, &b[k + b_dim1], ldb, &b[kp + b_dim1], ldb);
                 }
                 k += 2;
             }
@@ -333,7 +342,7 @@ void ssytrs2_(char *uplo, integer *n, integer *nrhs, real *a, integer *lda, inte
                 kp = ipiv[k];
                 if(kp != k)
                 {
-                    sswap_(nrhs, &b[k + b_dim1], ldb, &b[kp + b_dim1], ldb);
+                    aocl_blas_sswap(nrhs, &b[k + b_dim1], ldb, &b[kp + b_dim1], ldb);
                 }
                 ++k;
             }
@@ -344,13 +353,13 @@ void ssytrs2_(char *uplo, integer *n, integer *nrhs, real *a, integer *lda, inte
                 kp = -ipiv[k + 1];
                 if(kp == -ipiv[k])
                 {
-                    sswap_(nrhs, &b[k + 1 + b_dim1], ldb, &b[kp + b_dim1], ldb);
+                    aocl_blas_sswap(nrhs, &b[k + 1 + b_dim1], ldb, &b[kp + b_dim1], ldb);
                 }
                 k += 2;
             }
         }
         /* Compute (L \P**T * B) -> B [ (L \P**T * B) ] */
-        strsm_("L", "L", "N", "U", n, nrhs, &c_b10, &a[a_offset], lda, &b[b_offset], ldb);
+        aocl_blas_strsm("L", "L", "N", "U", n, nrhs, &c_b10, &a[a_offset], lda, &b[b_offset], ldb);
         /* Compute D \ B -> B [ D \ (L \P**T * B) ] */
         i__ = 1;
         while(i__ <= *n)
@@ -358,7 +367,7 @@ void ssytrs2_(char *uplo, integer *n, integer *nrhs, real *a, integer *lda, inte
             if(ipiv[i__] > 0)
             {
                 r__1 = 1.f / a[i__ + i__ * a_dim1];
-                sscal_(nrhs, &r__1, &b[i__ + b_dim1], ldb);
+                aocl_blas_sscal(nrhs, &r__1, &b[i__ + b_dim1], ldb);
             }
             else
             {
@@ -380,7 +389,7 @@ void ssytrs2_(char *uplo, integer *n, integer *nrhs, real *a, integer *lda, inte
             ++i__;
         }
         /* Compute (L**T \ B) -> B [ L**T \ (D \ (L \P**T * B) ) ] */
-        strsm_("L", "L", "T", "U", n, nrhs, &c_b10, &a[a_offset], lda, &b[b_offset], ldb);
+        aocl_blas_strsm("L", "L", "T", "U", n, nrhs, &c_b10, &a[a_offset], lda, &b[b_offset], ldb);
         /* P * B [ P * (L**T \ (D \ (L \P**T * B) )) ] */
         k = *n;
         while(k >= 1)
@@ -392,7 +401,7 @@ void ssytrs2_(char *uplo, integer *n, integer *nrhs, real *a, integer *lda, inte
                 kp = ipiv[k];
                 if(kp != k)
                 {
-                    sswap_(nrhs, &b[k + b_dim1], ldb, &b[kp + b_dim1], ldb);
+                    aocl_blas_sswap(nrhs, &b[k + b_dim1], ldb, &b[kp + b_dim1], ldb);
                 }
                 --k;
             }
@@ -403,14 +412,14 @@ void ssytrs2_(char *uplo, integer *n, integer *nrhs, real *a, integer *lda, inte
                 kp = -ipiv[k];
                 if(k > 1 && kp == -ipiv[k - 1])
                 {
-                    sswap_(nrhs, &b[k + b_dim1], ldb, &b[kp + b_dim1], ldb);
+                    aocl_blas_sswap(nrhs, &b[k + b_dim1], ldb, &b[kp + b_dim1], ldb);
                 }
                 k += -2;
             }
         }
     }
     /* Revert A */
-    ssyconv_(uplo, "R", n, &a[a_offset], lda, &ipiv[1], &work[1], &iinfo);
+    aocl_lapack_ssyconv(uplo, "R", n, &a[a_offset], lda, &ipiv[1], &work[1], &iinfo);
     AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SSYTRS2 */

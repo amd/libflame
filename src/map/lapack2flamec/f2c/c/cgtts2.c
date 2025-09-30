@@ -125,8 +125,25 @@ IPIV(i) = i indicates a row interchange was not */
 /* > \ingroup complexGTcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void cgtts2_(integer *itrans, integer *n, integer *nrhs, complex *dl, complex *d__, complex *du,
-             complex *du2, integer *ipiv, complex *b, integer *ldb)
+/** Generated wrapper function */
+void cgtts2_(aocl_int_t *itrans, aocl_int_t *n, aocl_int_t *nrhs, scomplex *dl, scomplex *d__,
+             scomplex *du, scomplex *du2, aocl_int_t *ipiv, scomplex *b, aocl_int_t *ldb)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_cgtts2(itrans, n, nrhs, dl, d__, du, du2, ipiv, b, ldb);
+#else
+    aocl_int64_t itrans_64 = *itrans;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t nrhs_64 = *nrhs;
+    aocl_int64_t ldb_64 = *ldb;
+
+    aocl_lapack_cgtts2(&itrans_64, &n_64, &nrhs_64, dl, d__, du, du2, ipiv, b, &ldb_64);
+#endif
+}
+
+void aocl_lapack_cgtts2(aocl_int64_t *itrans, aocl_int64_t *n, aocl_int64_t *nrhs, scomplex *dl,
+                        scomplex *d__, scomplex *du, scomplex *du2, aocl_int_t *ipiv, scomplex *b,
+                        aocl_int64_t *ldb)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -141,13 +158,13 @@ void cgtts2_(integer *itrans, integer *n, integer *nrhs, complex *dl, complex *d
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
-    integer b_dim1, b_offset, i__1, i__2, i__3, i__4, i__5, i__6, i__7, i__8;
-    complex q__1, q__2, q__3, q__4, q__5, q__6, q__7, q__8;
+    aocl_int64_t b_dim1, b_offset, i__1, i__2, i__3, i__4, i__5, i__6, i__7, i__8;
+    scomplex q__1, q__2, q__3, q__4, q__5, q__6, q__7, q__8;
     /* Builtin functions */
-    void c_div(complex *, complex *, complex *), r_cnjg(complex *, complex *);
+    void c_div(scomplex *, scomplex *, scomplex *), r_cnjg(scomplex *, scomplex *);
     /* Local variables */
-    integer i__, j;
-    complex temp;
+    aocl_int64_t i__, j;
+    scomplex temp;
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */

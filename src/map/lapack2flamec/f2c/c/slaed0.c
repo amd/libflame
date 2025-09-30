@@ -4,12 +4,12 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__9 = 9;
-static integer c__0 = 0;
-static integer c__2 = 2;
+static aocl_int64_t c__9 = 9;
+static aocl_int64_t c__0 = 0;
+static aocl_int64_t c__2 = 2;
 static real c_b23 = 1.f;
 static real c_b24 = 0.f;
-static integer c__1 = 1;
+static aocl_int64_t c__1 = 1;
 /* > \brief \b SLAED0 used by sstedc. Computes all eigenvalues and corresponding eigenvectors of an
  * unreduced symmetric tridiagonal matrix using the divide and conquer method. */
 /* =========== DOCUMENTATION =========== */
@@ -173,52 +173,51 @@ static integer c__1 = 1;
 /* > at Berkeley, USA */
 /* ===================================================================== */
 /* Subroutine */
-void slaed0_(integer *icompq, integer *qsiz, integer *n, real *d__, real *e, real *q, integer *ldq,
-             real *qstore, integer *ldqs, real *work, integer *iwork, integer *info)
+/** Generated wrapper function */
+void slaed0_(aocl_int_t *icompq, aocl_int_t *qsiz, aocl_int_t *n, real *d__, real *e, real *q,
+             aocl_int_t *ldq, real *qstore, aocl_int_t *ldqs, real *work, aocl_int_t *iwork,
+             aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_slaed0(icompq, qsiz, n, d__, e, q, ldq, qstore, ldqs, work, iwork, info);
+#else
+    aocl_int64_t icompq_64 = *icompq;
+    aocl_int64_t qsiz_64 = *qsiz;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t ldq_64 = *ldq;
+    aocl_int64_t ldqs_64 = *ldqs;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_slaed0(&icompq_64, &qsiz_64, &n_64, d__, e, q, &ldq_64, qstore, &ldqs_64, work,
+                       iwork, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_slaed0(aocl_int64_t *icompq, aocl_int64_t *qsiz, aocl_int64_t *n, real *d__,
+                        real *e, real *q, aocl_int64_t *ldq, real *qstore, aocl_int64_t *ldqs,
+                        real *work, aocl_int_t *iwork, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("slaed0 inputs: icompq %" FLA_IS ",qsiz %" FLA_IS ",n %" FLA_IS
                       ",ldq %" FLA_IS ",ldqs %" FLA_IS "",
                       *icompq, *qsiz, *n, *ldq, *ldqs);
     /* System generated locals */
-    integer q_dim1, q_offset, qstore_dim1, qstore_offset, i__1, i__2;
+    aocl_int64_t q_dim1, q_offset, qstore_dim1, qstore_offset, i__1, i__2;
     real r__1;
     /* Builtin functions */
     double log(doublereal);
-    integer pow_ii(integer *, integer *);
+    integer pow_ii(aocl_int64_t *, aocl_int64_t *);
     /* Local variables */
-    integer i__, j, k, iq, lgn, msd2, smm1, spm1, spm2;
+    aocl_int64_t i__, j, k, iq, lgn, msd2, smm1, spm1, spm2;
     real temp;
-    integer curr;
-    extern /* Subroutine */
-        void
-        sgemm_(char *, char *, integer *, integer *, integer *, real *, real *, integer *, real *,
-               integer *, real *, real *, integer *);
-    integer iperm, indxq, iwrem;
-    extern /* Subroutine */
-        void
-        scopy_(integer *, real *, integer *, real *, integer *);
-    integer iqptr, tlvls;
-    extern /* Subroutine */
-        void
-        slaed1_(integer *, real *, real *, integer *, integer *, real *, integer *, real *,
-                integer *, integer *),
-        slaed7_(integer *, integer *, integer *, integer *, integer *, integer *, real *, real *,
-                integer *, integer *, real *, integer *, real *, integer *, integer *, integer *,
-                integer *, integer *, real *, real *, integer *, integer *);
-    integer igivcl;
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
-    integer igivnm, submat;
-    extern /* Subroutine */
-        void
-        slacpy_(char *, integer *, integer *, real *, integer *, real *, integer *);
-    integer curprb, subpbs, igivpt, curlvl, matsiz, iprmpt, smlsiz;
-    extern /* Subroutine */
-        void
-        ssteqr_(char *, integer *, real *, real *, real *, integer *, real *, integer *);
+    aocl_int64_t curr;
+    aocl_int64_t iperm, indxq, iwrem;
+    aocl_int64_t iqptr, tlvls;
+    aocl_int64_t igivcl;
+    aocl_int64_t igivnm, submat;
+    aocl_int64_t curprb, subpbs, igivpt, curlvl, matsiz, iprmpt, smlsiz;
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -283,7 +282,7 @@ void slaed0_(integer *icompq, integer *qsiz, integer *n, real *d__, real *e, rea
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("SLAED0", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("SLAED0", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -293,10 +292,10 @@ void slaed0_(integer *icompq, integer *qsiz, integer *n, real *d__, real *e, rea
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
-    smlsiz = ilaenv_(&c__9, "SLAED0", " ", &c__0, &c__0, &c__0, &c__0);
+    smlsiz = aocl_lapack_ilaenv(&c__9, "SLAED0", " ", &c__0, &c__0, &c__0, &c__0);
     /* Determine the size and placement of the submatrices, and save in */
     /* the leading elements of IWORK. */
-    iwork[1] = *n;
+    iwork[1] = (aocl_int_t)(*n);
     subpbs = 1;
     tlvls = 0;
 L10:
@@ -383,8 +382,8 @@ L10:
         }
         if(*icompq == 2)
         {
-            ssteqr_("I", &matsiz, &d__[submat], &e[submat], &q[submat + submat * q_dim1], ldq,
-                    &work[1], info);
+            aocl_lapack_ssteqr("I", &matsiz, &d__[submat], &e[submat], &q[submat + submat * q_dim1],
+                               ldq, &work[1], info);
             if(*info != 0)
             {
                 goto L130;
@@ -392,28 +391,28 @@ L10:
         }
         else
         {
-            ssteqr_("I", &matsiz, &d__[submat], &e[submat], &work[iq - 1 + iwork[iqptr + curr]],
-                    &matsiz, &work[1], info);
+            aocl_lapack_ssteqr("I", &matsiz, &d__[submat], &e[submat],
+                               &work[iq - 1 + iwork[iqptr + curr]], &matsiz, &work[1], info);
             if(*info != 0)
             {
                 goto L130;
             }
             if(*icompq == 1)
             {
-                sgemm_("N", "N", qsiz, &matsiz, &matsiz, &c_b23, &q[submat * q_dim1 + 1], ldq,
-                       &work[iq - 1 + iwork[iqptr + curr]], &matsiz, &c_b24,
-                       &qstore[submat * qstore_dim1 + 1], ldqs);
+                aocl_blas_sgemm("N", "N", qsiz, &matsiz, &matsiz, &c_b23, &q[submat * q_dim1 + 1],
+                                ldq, &work[iq - 1 + iwork[iqptr + curr]], &matsiz, &c_b24,
+                                &qstore[submat * qstore_dim1 + 1], ldqs);
             }
             /* Computing 2nd power */
             i__2 = matsiz;
-            iwork[iqptr + curr + 1] = iwork[iqptr + curr] + i__2 * i__2;
+            iwork[iqptr + curr + 1] = (aocl_int_t)(iwork[iqptr + curr] + i__2 * i__2);
             ++curr;
         }
         k = 1;
         i__2 = iwork[i__ + 1];
         for(j = submat; j <= i__2; ++j)
         {
-            iwork[indxq + j] = k;
+            iwork[indxq + j] = (aocl_int_t)(k);
             ++k;
             /* L60: */
         }
@@ -453,17 +452,17 @@ L80:
             /* tridiagonal form) are desired. */
             if(*icompq == 2)
             {
-                slaed1_(&matsiz, &d__[submat], &q[submat + submat * q_dim1], ldq,
-                        &iwork[indxq + submat], &e[submat + msd2 - 1], &msd2, &work[1],
-                        &iwork[subpbs + 1], info);
+                aocl_lapack_slaed1(&matsiz, &d__[submat], &q[submat + submat * q_dim1], ldq,
+                                   &iwork[indxq + submat], &e[submat + msd2 - 1], &msd2, &work[1],
+                                   &iwork[subpbs + 1], info);
             }
             else
             {
-                slaed7_(icompq, &matsiz, qsiz, &tlvls, &curlvl, &curprb, &d__[submat],
-                        &qstore[submat * qstore_dim1 + 1], ldqs, &iwork[indxq + submat],
-                        &e[submat + msd2 - 1], &msd2, &work[iq], &iwork[iqptr], &iwork[iprmpt],
-                        &iwork[iperm], &iwork[igivpt], &iwork[igivcl], &work[igivnm], &work[iwrem],
-                        &iwork[subpbs + 1], info);
+                aocl_lapack_slaed7(icompq, &matsiz, qsiz, &tlvls, &curlvl, &curprb, &d__[submat],
+                                   &qstore[submat * qstore_dim1 + 1], ldqs, &iwork[indxq + submat],
+                                   &e[submat + msd2 - 1], &msd2, &work[iq], &iwork[iqptr],
+                                   &iwork[iprmpt], &iwork[iperm], &iwork[igivpt], &iwork[igivcl],
+                                   &work[igivnm], &work[iwrem], &iwork[subpbs + 1], info);
             }
             if(*info != 0)
             {
@@ -486,10 +485,10 @@ L80:
         {
             j = iwork[indxq + i__];
             work[i__] = d__[j];
-            scopy_(qsiz, &qstore[j * qstore_dim1 + 1], &c__1, &q[i__ * q_dim1 + 1], &c__1);
+            aocl_blas_scopy(qsiz, &qstore[j * qstore_dim1 + 1], &c__1, &q[i__ * q_dim1 + 1], &c__1);
             /* L100: */
         }
-        scopy_(n, &work[1], &c__1, &d__[1], &c__1);
+        aocl_blas_scopy(n, &work[1], &c__1, &d__[1], &c__1);
     }
     else if(*icompq == 2)
     {
@@ -498,11 +497,11 @@ L80:
         {
             j = iwork[indxq + i__];
             work[i__] = d__[j];
-            scopy_(n, &q[j * q_dim1 + 1], &c__1, &work[*n * i__ + 1], &c__1);
+            aocl_blas_scopy(n, &q[j * q_dim1 + 1], &c__1, &work[*n * i__ + 1], &c__1);
             /* L110: */
         }
-        scopy_(n, &work[1], &c__1, &d__[1], &c__1);
-        slacpy_("A", n, n, &work[*n + 1], n, &q[q_offset], ldq);
+        aocl_blas_scopy(n, &work[1], &c__1, &d__[1], &c__1);
+        aocl_lapack_slacpy("A", n, n, &work[*n + 1], n, &q[q_offset], ldq);
     }
     else
     {
@@ -513,7 +512,7 @@ L80:
             work[i__] = d__[j];
             /* L120: */
         }
-        scopy_(n, &work[1], &c__1, &d__[1], &c__1);
+        aocl_blas_scopy(n, &work[1], &c__1, &d__[1], &c__1);
     }
     goto L140;
 L130:

@@ -465,7 +465,7 @@ void dla_gerfsx_extended_(integer *prec_type__, integer *trans_type__, integer *
                 integer *, integer *);
     doublereal normdx;
     extern /* Character */
-        VOID
+        void
         chla_transtype_(char *, integer *);
     doublereal hugeval;
     integer x_state__, z_state__;

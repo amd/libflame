@@ -6,8 +6,8 @@
  libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
-static complex c_b14 = {-1.f, 0.f};
-static complex c_b15 = {1.f, 0.f};
+static scomplex c_b14 = {{-1.f}, {0.f}};
+static scomplex c_b15 = {{1.f}, {0.f}};
 static real c_b37 = 1.f;
 /* > \brief \b CLA_HERFSX_EXTENDED improves the computed solution to a system of linear equations
  * for Hermitia n indefinite matrices by performing extra-precise iterative refinement and provides
@@ -402,12 +402,12 @@ i+1}
 /* > \ingroup complexHEcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void cla_herfsx_extended_(integer *prec_type__, char *uplo, integer *n, integer *nrhs, complex *a,
-                          integer *lda, complex *af, integer *ldaf, integer *ipiv, logical *colequ,
-                          real *c__, complex *b, integer *ldb, complex *y, integer *ldy,
+void cla_herfsx_extended_(integer *prec_type__, char *uplo, integer *n, integer *nrhs, scomplex *a,
+                          integer *lda, scomplex *af, integer *ldaf, integer *ipiv, logical *colequ,
+                          real *c__, scomplex *b, integer *ldb, scomplex *y, integer *ldy,
                           real *berr_out__, integer *n_norms__, real *err_bnds_norm__,
-                          real *err_bnds_comp__, complex *res, real *ayb, complex *dy,
-                          complex *y_tail__, real *rcond, integer *ithresh, real *rthresh,
+                          real *err_bnds_comp__, scomplex *res, real *ayb, scomplex *dy,
+                          scomplex *y_tail__, real *rcond, integer *ithresh, real *rthresh,
                           real *dz_ub__, logical *ignore_cwise__, integer *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
@@ -432,45 +432,45 @@ void cla_herfsx_extended_(integer *prec_type__, char *uplo, integer *n, integer 
         i__2, i__3, i__4;
     real r__1, r__2;
     /* Builtin functions */
-    double r_imag(complex *);
+    double r_imag(scomplex *);
     /* Local variables */
     real dxratmax, dzratmax;
     integer i__, j;
     extern /* Subroutine */
         void
-        cla_heamv_(integer *, integer *, real *, complex *, integer *, complex *, integer *, real *,
+        cla_heamv_(integer *, integer *, real *, scomplex *, integer *, scomplex *, integer *, real *,
                    real *, integer *);
     logical incr_prec__;
     real prev_dz_z__, yk, final_dx_x__;
     extern /* Subroutine */
         void
-        cla_wwaddw_(integer *, complex *, complex *, complex *);
+        cla_wwaddw_(integer *, scomplex *, scomplex *, scomplex *);
     real final_dz_z__, prevnormdx;
     integer cnt;
     real dyk, eps, incr_thresh__, dx_x__, dz_z__;
     extern /* Subroutine */
         void
-        cla_lin_berr_(integer *, integer *, integer *, complex *, real *, real *);
+        cla_lin_berr_(integer *, integer *, integer *, scomplex *, real *, real *);
     real ymin;
     extern /* Subroutine */
         int
-        blas_chemv_x_(integer *, integer *, complex *, complex *, integer *, complex *, integer *,
-                      complex *, complex *, integer *, integer *);
+        blas_chemv_x_(integer *, integer *, scomplex *, scomplex *, integer *, scomplex *, integer *,
+                      scomplex *, scomplex *, integer *, integer *);
     integer y_prec_state__, uplo2;
     extern /* Subroutine */
         int
-        blas_chemv2_x_(integer *, integer *, complex *, complex *, integer *, complex *, complex *,
-                       integer *, complex *, complex *, integer *, integer *);
+        blas_chemv2_x_(integer *, integer *, scomplex *, scomplex *, integer *, scomplex *, scomplex *,
+                       integer *, scomplex *, scomplex *, integer *, integer *);
     extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
         void
-        chemv_(char *, integer *, complex *, complex *, integer *, complex *, integer *, complex *,
-               complex *, integer *),
-        ccopy_(integer *, complex *, integer *, complex *, integer *);
+        chemv_(char *, integer *, scomplex *, scomplex *, integer *, scomplex *, integer *, scomplex *,
+               scomplex *, integer *),
+        ccopy_(integer *, scomplex *, integer *, scomplex *, integer *);
     real dxrat, dzrat;
     extern /* Subroutine */
         void
-        caxpy_(integer *, complex *, complex *, integer *, complex *, integer *);
+        caxpy_(integer *, scomplex *, scomplex *, integer *, scomplex *, integer *);
     logical upper;
     real normx, normy;
     extern real slamch_(char *);
@@ -479,7 +479,7 @@ void cla_herfsx_extended_(integer *prec_type__, char *uplo, integer *n, integer 
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     extern /* Subroutine */
         void
-        chetrs_(char *, integer *, integer *, complex *, integer *, integer *, complex *, integer *,
+        chetrs_(char *, integer *, integer *, scomplex *, integer *, integer *, scomplex *, integer *,
                 integer *);
     real normdx, hugeval;
     extern integer ilauplo_(char *);

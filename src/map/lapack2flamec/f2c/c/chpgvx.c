@@ -4,7 +4,7 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
+static aocl_int64_t c__1 = 1;
 /* > \brief \b CHPGVX */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -45,7 +45,7 @@ static integer c__1 = 1;
 /* > \verbatim */
 /* > */
 /* > CHPGVX computes selected eigenvalues and, optionally, eigenvectors */
-/* > of a complex generalized Hermitian-definite eigenproblem, of the form */
+/* > of a scomplex generalized Hermitian-definite eigenproblem, of the form */
 /* > A*x=(lambda)*B*x, A*Bx=(lambda)*x, or B*A*x=(lambda)*x. Here A and */
 /* > B are assumed to be Hermitian, stored in packed format, and B is also */
 /* > positive definite. Eigenvalues and eigenvectors can be selected by */
@@ -282,10 +282,37 @@ if RANGE = 'V', the exact value of M */
 /* > Mark Fahey, Department of Mathematics, Univ. of Kentucky, USA */
 /* ===================================================================== */
 /* Subroutine */
-void chpgvx_(integer *itype, char *jobz, char *range, char *uplo, integer *n, complex *ap,
-             complex *bp, real *vl, real *vu, integer *il, integer *iu, real *abstol, integer *m,
-             real *w, complex *z__, integer *ldz, complex *work, real *rwork, integer *iwork,
-             integer *ifail, integer *info)
+/** Generated wrapper function */
+void chpgvx_(aocl_int_t *itype, char *jobz, char *range, char *uplo, aocl_int_t *n, scomplex *ap,
+             scomplex *bp, real *vl, real *vu, aocl_int_t *il, aocl_int_t *iu, real *abstol,
+             aocl_int_t *m, real *w, scomplex *z__, aocl_int_t *ldz, scomplex *work, real *rwork,
+             aocl_int_t *iwork, aocl_int_t *ifail, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_chpgvx(itype, jobz, range, uplo, n, ap, bp, vl, vu, il, iu, abstol, m, w, z__, ldz,
+                       work, rwork, iwork, ifail, info);
+#else
+    aocl_int64_t itype_64 = *itype;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t il_64 = *il;
+    aocl_int64_t iu_64 = *iu;
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t ldz_64 = *ldz;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_chpgvx(&itype_64, jobz, range, uplo, &n_64, ap, bp, vl, vu, &il_64, &iu_64, abstol,
+                       &m_64, w, z__, &ldz_64, work, rwork, iwork, ifail, &info_64);
+
+    *m = (aocl_int_t)m_64;
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_chpgvx(aocl_int64_t *itype, char *jobz, char *range, char *uplo, aocl_int64_t *n,
+                        scomplex *ap, scomplex *bp, real *vl, real *vu, aocl_int64_t *il,
+                        aocl_int64_t *iu, real *abstol, aocl_int64_t *m, real *w, scomplex *z__,
+                        aocl_int64_t *ldz, scomplex *work, real *rwork, aocl_int_t *iwork,
+                        aocl_int_t *ifail, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -304,29 +331,13 @@ void chpgvx_(integer *itype, char *jobz, char *range, char *uplo, integer *n, co
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
-    integer z_dim1, z_offset, i__1;
+    aocl_int64_t z_dim1, z_offset, i__1;
     /* Local variables */
-    integer j;
-    extern logical lsame_(char *, char *, integer, integer);
+    aocl_int64_t j;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     char trans[1];
-    extern /* Subroutine */
-        void
-        ctpmv_(char *, char *, char *, integer *, complex *, complex *, integer *);
     logical upper;
-    extern /* Subroutine */
-        void
-        ctpsv_(char *, char *, char *, integer *, complex *, complex *, integer *);
     logical wantz, alleig, indeig, valeig;
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    extern /* Subroutine */
-        void
-        chpgst_(integer *, char *, integer *, complex *, complex *, integer *),
-        chpevx_(char *, char *, char *, integer *, complex *, real *, real *, integer *, integer *,
-                real *, integer *, real *, complex *, integer *, complex *, real *, integer *,
-                integer *, integer *),
-        cpptrf_(char *, integer *, complex *, integer *);
     /* -- LAPACK driver routine (version 3.7.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -415,7 +426,7 @@ void chpgvx_(integer *itype, char *jobz, char *range, char *uplo, integer *n, co
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("CHPGVX", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("CHPGVX", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
@@ -426,7 +437,7 @@ void chpgvx_(integer *itype, char *jobz, char *range, char *uplo, integer *n, co
         return;
     }
     /* Form a Cholesky factorization of B. */
-    cpptrf_(uplo, n, &bp[1], info);
+    aocl_lapack_cpptrf(uplo, n, &bp[1], info);
     if(*info != 0)
     {
         *info = *n + *info;
@@ -434,9 +445,9 @@ void chpgvx_(integer *itype, char *jobz, char *range, char *uplo, integer *n, co
         return;
     }
     /* Transform problem to standard eigenvalue problem and solve. */
-    chpgst_(itype, uplo, n, &ap[1], &bp[1], info);
-    chpevx_(jobz, range, uplo, n, &ap[1], vl, vu, il, iu, abstol, m, &w[1], &z__[z_offset], ldz,
-            &work[1], &rwork[1], &iwork[1], &ifail[1], info);
+    aocl_lapack_chpgst(itype, uplo, n, &ap[1], &bp[1], info);
+    aocl_lapack_chpevx(jobz, range, uplo, n, &ap[1], vl, vu, il, iu, abstol, m, &w[1],
+                       &z__[z_offset], ldz, &work[1], &rwork[1], &iwork[1], &ifail[1], info);
     if(wantz)
     {
         /* Backtransform eigenvectors to the original problem. */
@@ -460,7 +471,7 @@ void chpgvx_(integer *itype, char *jobz, char *range, char *uplo, integer *n, co
             i__1 = *m;
             for(j = 1; j <= i__1; ++j)
             {
-                ctpsv_(uplo, trans, "Non-unit", n, &bp[1], &z__[j * z_dim1 + 1], &c__1);
+                aocl_blas_ctpsv(uplo, trans, "Non-unit", n, &bp[1], &z__[j * z_dim1 + 1], &c__1);
                 /* L10: */
             }
         }
@@ -480,7 +491,7 @@ void chpgvx_(integer *itype, char *jobz, char *range, char *uplo, integer *n, co
             i__1 = *m;
             for(j = 1; j <= i__1; ++j)
             {
-                ctpmv_(uplo, trans, "Non-unit", n, &bp[1], &z__[j * z_dim1 + 1], &c__1);
+                aocl_blas_ctpmv(uplo, trans, "Non-unit", n, &bp[1], &z__[j * z_dim1 + 1], &c__1);
                 /* L20: */
             }
         }

@@ -4,11 +4,11 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
-static integer c_n1 = -1;
-static integer c__2 = 2;
-static integer c__3 = 3;
-static integer c__4 = 4;
+static aocl_int64_t c__1 = 1;
+static aocl_int64_t c_n1 = -1;
+static aocl_int64_t c__2 = 2;
+static aocl_int64_t c__3 = 3;
+static aocl_int64_t c__4 = 4;
 /* > \brief <b> CHEEVX_2STAGE computes the eigenvalues and, optionally, the left and/or right
  * eigenvectors for HE matrices</b> */
 /* @generated from zheevx_2stage.f, fortran z -> c, Sat Nov 5 23:18:09 2016 */
@@ -52,7 +52,7 @@ static integer c__4 = 4;
 /* > \verbatim */
 /* > */
 /* > CHEEVX_2STAGE computes selected eigenvalues and, optionally, eigenvectors */
-/* > of a complex Hermitian matrix A using the 2stage technique for */
+/* > of a scomplex Hermitian matrix A using the 2stage technique for */
 /* > the reduction to tridiagonal. Eigenvalues and eigenvectors can */
 /* > be selected by specifying either a range of values or a range of */
 /* > indices for the desired eigenvalues. */
@@ -309,10 +309,40 @@ the routine */
 /* > \endverbatim */
 /* ===================================================================== */
 /* Subroutine */
-void cheevx_2stage_(char *jobz, char *range, char *uplo, integer *n, complex *a, integer *lda,
-                    real *vl, real *vu, integer *il, integer *iu, real *abstol, integer *m, real *w,
-                    complex *z__, integer *ldz, complex *work, integer *lwork, real *rwork,
-                    integer *iwork, integer *ifail, integer *info)
+/** Generated wrapper function */
+void cheevx_2stage_(char *jobz, char *range, char *uplo, aocl_int_t *n, scomplex *a, aocl_int_t *lda,
+                    real *vl, real *vu, aocl_int_t *il, aocl_int_t *iu, real *abstol, aocl_int_t *m,
+                    real *w, scomplex *z__, aocl_int_t *ldz, scomplex *work, aocl_int_t *lwork,
+                    real *rwork, aocl_int_t *iwork, aocl_int_t *ifail, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_cheevx_2stage(jobz, range, uplo, n, a, lda, vl, vu, il, iu, abstol, m, w, z__, ldz,
+                              work, lwork, rwork, iwork, ifail, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t il_64 = *il;
+    aocl_int64_t iu_64 = *iu;
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t ldz_64 = *ldz;
+    aocl_int64_t lwork_64 = *lwork;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_cheevx_2stage(jobz, range, uplo, &n_64, a, &lda_64, vl, vu, &il_64, &iu_64, abstol,
+                              &m_64, w, z__, &ldz_64, work, &lwork_64, rwork, iwork, ifail,
+                              &info_64);
+
+    *m = (aocl_int_t)m_64;
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_cheevx_2stage(char *jobz, char *range, char *uplo, aocl_int64_t *n, scomplex *a,
+                               aocl_int64_t *lda, real *vl, real *vu, aocl_int64_t *il,
+                               aocl_int64_t *iu, real *abstol, aocl_int64_t *m, real *w,
+                               scomplex *z__, aocl_int64_t *ldz, scomplex *work, aocl_int64_t *lwork,
+                               real *rwork, aocl_int_t *iwork, aocl_int_t *ifail,
+                               aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -331,82 +361,41 @@ void cheevx_2stage_(char *jobz, char *range, char *uplo, integer *n, complex *a,
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
-    integer a_dim1, a_offset, z_dim1, z_offset, i__1, i__2;
+    aocl_int64_t a_dim1, a_offset, z_dim1, z_offset, i__1, i__2;
     real r__1, r__2;
     /* Builtin functions */
     double sqrt(doublereal);
     /* Local variables */
-    integer i__, j, ib, kd, jj;
+    aocl_int64_t i__, j, ib, kd, jj;
     real eps, vll, vuu, tmp1;
-    integer indd, inde;
-    extern integer ilaenv2stage_(integer *, char *, char *, integer *, integer *, integer *,
-                                 integer *);
+    aocl_int64_t indd, inde;
     real anrm;
-    integer imax;
+    aocl_int64_t imax;
     real rmin, rmax;
     logical test;
-    integer itmp1;
-    extern /* Subroutine */
-        void
-        chetrd_2stage_(char *, char *, integer *, complex *, integer *, real *, real *, complex *,
-                       complex *, integer *, complex *, integer *, integer *);
-    integer indee;
+    aocl_int64_t itmp1;
+    aocl_int64_t indee;
     real sigma;
-    extern logical lsame_(char *, char *, integer, integer);
-    integer iinfo;
-    extern /* Subroutine */
-        void
-        sscal_(integer *, real *, real *, integer *);
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    aocl_int64_t iinfo;
     char order[1];
-    integer lhtrd;
-    extern /* Subroutine */
-        void
-        cswap_(integer *, complex *, integer *, complex *, integer *);
-    integer lwmin;
+    aocl_int64_t lhtrd;
+    aocl_int64_t lwmin;
     logical lower;
-    integer lwtrd;
-    extern /* Subroutine */
-        void
-        scopy_(integer *, real *, integer *, real *, integer *);
+    aocl_int64_t lwtrd;
     logical wantz;
-    extern real clanhe_(char *, char *, integer *, complex *, integer *, real *);
     logical alleig, indeig;
-    integer iscale, indibl;
+    aocl_int64_t iscale, indibl;
     logical valeig;
     extern real slamch_(char *);
-    extern /* Subroutine */
-        void
-        csscal_(integer *, real *, complex *, integer *),
-        clacpy_(char *, integer *, integer *, complex *, integer *, complex *, integer *);
     real safmin;
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real abstll, bignum;
-    integer indiwk, indisp, indtau;
-    extern /* Subroutine */
-        void
-        cstein_(integer *, real *, real *, integer *, real *, integer *, integer *, complex *,
-                integer *, real *, integer *, integer *, integer *);
-    integer indrwk, indwrk;
-    extern /* Subroutine */
-        void
-        csteqr_(char *, integer *, real *, real *, complex *, integer *, real *, integer *),
-        cungtr_(char *, integer *, complex *, integer *, complex *, complex *, integer *,
-                integer *),
-        ssterf_(integer *, real *, real *, integer *),
-        cunmtr_(char *, char *, char *, integer *, integer *, complex *, integer *, complex *,
-                complex *, integer *, complex *, integer *, integer *);
-    integer nsplit, llwork;
+    aocl_int64_t indiwk, indisp, indtau;
+    aocl_int64_t indrwk, indwrk;
+    aocl_int64_t nsplit, llwork;
     real smlnum;
-    extern /* Subroutine */
-        void
-        sstebz_(char *, char *, integer *, real *, real *, integer *, integer *, real *, real *,
-                real *, integer *, integer *, real *, integer *, integer *, real *, integer *,
-                integer *);
     logical lquery;
-    extern real sroundup_lwork(integer *);
-    integer indhous;
+    aocl_int64_t indhous;
     /* -- LAPACK driver routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -500,18 +489,18 @@ void cheevx_2stage_(char *jobz, char *range, char *uplo, integer *n, complex *a,
         if(*n <= 1)
         {
             lwmin = 1;
-            r__1 = sroundup_lwork(&lwmin);
+            r__1 = aocl_lapack_sroundup_lwork(&lwmin);
             work[1].r = r__1;
             work[1].i = 0.f; // , expr subst
         }
         else
         {
-            kd = ilaenv2stage_(&c__1, "CHETRD_2STAGE", jobz, n, &c_n1, &c_n1, &c_n1);
-            ib = ilaenv2stage_(&c__2, "CHETRD_2STAGE", jobz, n, &kd, &c_n1, &c_n1);
-            lhtrd = ilaenv2stage_(&c__3, "CHETRD_2STAGE", jobz, n, &kd, &ib, &c_n1);
-            lwtrd = ilaenv2stage_(&c__4, "CHETRD_2STAGE", jobz, n, &kd, &ib, &c_n1);
+            kd = aocl_lapack_ilaenv2stage(&c__1, "CHETRD_2STAGE", jobz, n, &c_n1, &c_n1, &c_n1);
+            ib = aocl_lapack_ilaenv2stage(&c__2, "CHETRD_2STAGE", jobz, n, &kd, &c_n1, &c_n1);
+            lhtrd = aocl_lapack_ilaenv2stage(&c__3, "CHETRD_2STAGE", jobz, n, &kd, &ib, &c_n1);
+            lwtrd = aocl_lapack_ilaenv2stage(&c__4, "CHETRD_2STAGE", jobz, n, &kd, &ib, &c_n1);
             lwmin = *n + lhtrd + lwtrd;
-            r__1 = sroundup_lwork(&lwmin);
+            r__1 = aocl_lapack_sroundup_lwork(&lwmin);
             work[1].r = r__1;
             work[1].i = 0.f; // , expr subst
         }
@@ -523,7 +512,7 @@ void cheevx_2stage_(char *jobz, char *range, char *uplo, integer *n, complex *a,
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("CHEEVX_2STAGE", &i__1, (ftnlen)13);
+        aocl_blas_xerbla("CHEEVX_2STAGE", &i__1, (ftnlen)13);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
@@ -585,7 +574,7 @@ void cheevx_2stage_(char *jobz, char *range, char *uplo, integer *n, complex *a,
         vll = *vl;
         vuu = *vu;
     }
-    anrm = clanhe_("M", uplo, n, &a[a_offset], lda, &rwork[1]);
+    anrm = aocl_lapack_clanhe("M", uplo, n, &a[a_offset], lda, &rwork[1]);
     if(anrm > 0.f && anrm < rmin)
     {
         iscale = 1;
@@ -604,7 +593,7 @@ void cheevx_2stage_(char *jobz, char *range, char *uplo, integer *n, complex *a,
             for(j = 1; j <= i__1; ++j)
             {
                 i__2 = *n - j + 1;
-                csscal_(&i__2, &sigma, &a[j + j * a_dim1], &c__1);
+                aocl_blas_csscal(&i__2, &sigma, &a[j + j * a_dim1], &c__1);
                 /* L10: */
             }
         }
@@ -613,7 +602,7 @@ void cheevx_2stage_(char *jobz, char *range, char *uplo, integer *n, complex *a,
             i__1 = *n;
             for(j = 1; j <= i__1; ++j)
             {
-                csscal_(&j, &sigma, &a[j * a_dim1 + 1], &c__1);
+                aocl_blas_csscal(&j, &sigma, &a[j * a_dim1 + 1], &c__1);
                 /* L20: */
             }
         }
@@ -635,8 +624,9 @@ void cheevx_2stage_(char *jobz, char *range, char *uplo, integer *n, complex *a,
     indhous = indtau + *n;
     indwrk = indhous + lhtrd;
     llwork = *lwork - indwrk + 1;
-    chetrd_2stage_(jobz, uplo, n, &a[a_offset], lda, &rwork[indd], &rwork[inde], &work[indtau],
-                   &work[indhous], &lhtrd, &work[indwrk], &llwork, &iinfo);
+    aocl_lapack_chetrd_2stage(jobz, uplo, n, &a[a_offset], lda, &rwork[indd], &rwork[inde],
+                              &work[indtau], &work[indhous], &lhtrd, &work[indwrk], &llwork,
+                              &iinfo);
     /* If all eigenvalues are desired and ABSTOL is less than or equal to */
     /* zero, then call SSTERF or CUNGTR and CSTEQR. If this fails for */
     /* some eigenvalue, then try SSTEBZ. */
@@ -650,21 +640,23 @@ void cheevx_2stage_(char *jobz, char *range, char *uplo, integer *n, complex *a,
     }
     if((alleig || test) && *abstol <= 0.f)
     {
-        scopy_(n, &rwork[indd], &c__1, &w[1], &c__1);
+        aocl_blas_scopy(n, &rwork[indd], &c__1, &w[1], &c__1);
         indee = indrwk + (*n << 1);
         if(!wantz)
         {
             i__1 = *n - 1;
-            scopy_(&i__1, &rwork[inde], &c__1, &rwork[indee], &c__1);
-            ssterf_(n, &w[1], &rwork[indee], info);
+            aocl_blas_scopy(&i__1, &rwork[inde], &c__1, &rwork[indee], &c__1);
+            aocl_lapack_ssterf(n, &w[1], &rwork[indee], info);
         }
         else
         {
-            clacpy_("A", n, n, &a[a_offset], lda, &z__[z_offset], ldz);
-            cungtr_(uplo, n, &z__[z_offset], ldz, &work[indtau], &work[indwrk], &llwork, &iinfo);
+            aocl_lapack_clacpy("A", n, n, &a[a_offset], lda, &z__[z_offset], ldz);
+            aocl_lapack_cungtr(uplo, n, &z__[z_offset], ldz, &work[indtau], &work[indwrk], &llwork,
+                               &iinfo);
             i__1 = *n - 1;
-            scopy_(&i__1, &rwork[inde], &c__1, &rwork[indee], &c__1);
-            csteqr_(jobz, n, &w[1], &rwork[indee], &z__[z_offset], ldz, &rwork[indrwk], info);
+            aocl_blas_scopy(&i__1, &rwork[inde], &c__1, &rwork[indee], &c__1);
+            aocl_lapack_csteqr(jobz, n, &w[1], &rwork[indee], &z__[z_offset], ldz, &rwork[indrwk],
+                               info);
             if(*info == 0)
             {
                 i__1 = *n;
@@ -694,16 +686,17 @@ void cheevx_2stage_(char *jobz, char *range, char *uplo, integer *n, complex *a,
     indibl = 1;
     indisp = indibl + *n;
     indiwk = indisp + *n;
-    sstebz_(range, order, n, &vll, &vuu, il, iu, &abstll, &rwork[indd], &rwork[inde], m, &nsplit,
-            &w[1], &iwork[indibl], &iwork[indisp], &rwork[indrwk], &iwork[indiwk], info);
+    aocl_lapack_sstebz(range, order, n, &vll, &vuu, il, iu, &abstll, &rwork[indd], &rwork[inde], m,
+                       &nsplit, &w[1], &iwork[indibl], &iwork[indisp], &rwork[indrwk],
+                       &iwork[indiwk], info);
     if(wantz)
     {
-        cstein_(n, &rwork[indd], &rwork[inde], m, &w[1], &iwork[indibl], &iwork[indisp],
-                &z__[z_offset], ldz, &rwork[indrwk], &iwork[indiwk], &ifail[1], info);
+        aocl_lapack_cstein(n, &rwork[indd], &rwork[inde], m, &w[1], &iwork[indibl], &iwork[indisp],
+                           &z__[z_offset], ldz, &rwork[indrwk], &iwork[indiwk], &ifail[1], info);
         /* Apply unitary matrix used in reduction to tridiagonal */
         /* form to eigenvectors returned by CSTEIN. */
-        cunmtr_("L", uplo, "N", n, m, &a[a_offset], lda, &work[indtau], &z__[z_offset], ldz,
-                &work[indwrk], &llwork, &iinfo);
+        aocl_lapack_cunmtr("L", uplo, "N", n, m, &a[a_offset], lda, &work[indtau], &z__[z_offset],
+                           ldz, &work[indwrk], &llwork, &iinfo);
     }
 /* If matrix was scaled, then rescale eigenvalues appropriately. */
 L40:
@@ -718,7 +711,7 @@ L40:
             imax = *info - 1;
         }
         r__1 = 1.f / sigma;
-        sscal_(&imax, &r__1, &w[1], &c__1);
+        aocl_blas_sscal(&imax, &r__1, &w[1], &c__1);
     }
     /* If eigenvalues are not in order, then sort them, along with */
     /* eigenvectors. */
@@ -745,20 +738,20 @@ L40:
                 w[i__] = w[j];
                 iwork[indibl + i__ - 1] = iwork[indibl + j - 1];
                 w[j] = tmp1;
-                iwork[indibl + j - 1] = itmp1;
-                cswap_(n, &z__[i__ * z_dim1 + 1], &c__1, &z__[j * z_dim1 + 1], &c__1);
+                iwork[indibl + j - 1] = (aocl_int_t)(itmp1);
+                aocl_blas_cswap(n, &z__[i__ * z_dim1 + 1], &c__1, &z__[j * z_dim1 + 1], &c__1);
                 if(*info != 0)
                 {
                     itmp1 = ifail[i__];
                     ifail[i__] = ifail[j];
-                    ifail[j] = itmp1;
+                    ifail[j] = (aocl_int_t)(itmp1);
                 }
             }
             /* L60: */
         }
     }
-    /* Set WORK(1) to optimal complex workspace size. */
-    r__1 = sroundup_lwork(&lwmin);
+    /* Set WORK(1) to optimal scomplex workspace size. */
+    r__1 = aocl_lapack_sroundup_lwork(&lwmin);
     work[1].r = r__1;
     work[1].i = 0.f; // , expr subst
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);

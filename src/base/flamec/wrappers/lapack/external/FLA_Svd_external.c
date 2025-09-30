@@ -12,19 +12,19 @@
 
 FLA_Error FLA_Svd_external( FLA_Svd_type jobu, FLA_Svd_type jobv, FLA_Obj A, FLA_Obj s, FLA_Obj U, FLA_Obj V )
 {
-  integer      info = 0;
+  fla_dim_t      info = 0;
 #ifdef FLA_ENABLE_EXTERNAL_LAPACK_INTERFACES
   FLA_Datatype datatype;
   FLA_Datatype dt_real;
-  integer          m_A, n_A, cs_A;
-  integer          cs_U;
-  integer          cs_V;
-  integer          min_m_n;
-  integer          lwork, lrwork;
+  fla_dim_t          m_A, n_A, cs_A;
+  fla_dim_t          cs_U;
+  fla_dim_t          cs_V;
+  fla_dim_t          min_m_n;
+  fla_dim_t          lwork, lrwork;
   FLA_Obj      work, rwork;
   char         blas_jobu;
   char         blas_jobv;
-  integer          i;
+  fla_dim_t          i;
 
   if ( FLA_Check_error_level() == FLA_FULL_ERROR_CHECKING )
     FLA_Svd_check( jobu, jobv, A, s, U, V );
@@ -65,9 +65,9 @@ FLA_Error FLA_Svd_external( FLA_Svd_type jobu, FLA_Svd_type jobv, FLA_Obj A, FLA
       // Grab the queried ideal workspace size from the work array, free the
       // work object, and then re-allocate the workspace with the ideal size.
       if      ( datatype == FLA_FLOAT || datatype == FLA_COMPLEX )
-        lwork = ( integer ) *FLA_FLOAT_PTR( work );
+        lwork = ( fla_dim_t ) *FLA_FLOAT_PTR( work );
       else if ( datatype == FLA_DOUBLE || datatype == FLA_DOUBLE_COMPLEX )
-        lwork = ( integer ) *FLA_DOUBLE_PTR( work );
+        lwork = ( fla_dim_t ) *FLA_DOUBLE_PTR( work );
 
       FLA_Obj_free( &work );
       FLA_Obj_create( datatype, lwork, 1, 0, 0, &work );

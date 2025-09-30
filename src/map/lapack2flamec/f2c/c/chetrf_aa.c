@@ -4,9 +4,9 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static complex c_b2 = {1.f, 0.f};
-static integer c__1 = 1;
-static integer c_n1 = -1;
+static scomplex c_b2 = {{1.f}, {0.f}};
+static aocl_int64_t c__1 = 1;
+static aocl_int64_t c_n1 = -1;
 /* > \brief \b CHETRF_AA */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -42,7 +42,7 @@ static integer c_n1 = -1;
 /* > */
 /* > \verbatim */
 /* > */
-/* > CHETRF_AA computes the factorization of a complex hermitian matrix A */
+/* > CHETRF_AA computes the factorization of a scomplex hermitian matrix A */
 /* > using the Aasen's algorithm. The form of the factorization is */
 /* > */
 /* > A = U**H*T*U or A = L*T*L**H */
@@ -133,42 +133,42 @@ the routine */
 /* > \ingroup hetrf_aa */
 /* ===================================================================== */
 /* Subroutine */
-void chetrf_aa_(char *uplo, integer *n, complex *a, integer *lda, integer *ipiv, complex *work,
-                integer *lwork, integer *info)
+/** Generated wrapper function */
+void chetrf_aa_(char *uplo, aocl_int_t *n, scomplex *a, aocl_int_t *lda, aocl_int_t *ipiv,
+                scomplex *work, aocl_int_t *lwork, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_chetrf_aa(uplo, n, a, lda, ipiv, work, lwork, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t lwork_64 = *lwork;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_chetrf_aa(uplo, &n_64, a, &lda_64, ipiv, work, &lwork_64, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_chetrf_aa(char *uplo, aocl_int64_t *n, scomplex *a, aocl_int64_t *lda,
+                           aocl_int_t *ipiv, scomplex *work, aocl_int64_t *lwork, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("chetrf inputs: uplo %c, n %" FLA_IS ", lda %" FLA_IS "", *uplo, *n, *lda);
     /* System generated locals */
-    integer a_dim1, a_offset, i__1, i__2, i__3, i__4;
+    aocl_int64_t a_dim1, a_offset, i__1, i__2, i__3, i__4;
     real r__1;
-    complex q__1;
+    scomplex q__1;
     /* Builtin functions */
-    void r_cnjg(complex *, complex *);
+    void r_cnjg(scomplex *, scomplex *);
     /* Local variables */
-    extern /* Subroutine */
-        void
-        clahef_aa_(char *, integer *, integer *, integer *, complex *, integer *, integer *,
-                   complex *, integer *, complex *);
-    integer j, j1, k1, k2, j2, j3, jb, nb, mj, nj;
-    complex alpha;
-    extern /* Subroutine */
-        void
-        cscal_(integer *, complex *, complex *, integer *),
-        cgemm_(char *, char *, integer *, integer *, integer *, complex *, complex *, integer *,
-               complex *, integer *, complex *, complex *, integer *);
-    extern logical lsame_(char *, char *, integer, integer);
-    extern /* Subroutine */
-        void
-        ccopy_(integer *, complex *, integer *, complex *, integer *),
-        cswap_(integer *, complex *, integer *, complex *, integer *);
+    aocl_int64_t j, j1, k1, k2, j2, j3, jb, nb, mj, nj;
+    scomplex alpha;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     logical upper;
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
-    integer lwkopt;
+    aocl_int64_t lwkopt;
     logical lquery;
-    extern real sroundup_lwork(integer *);
     /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -195,7 +195,7 @@ void chetrf_aa_(char *uplo, integer *n, complex *a, integer *lda, integer *ipiv,
     --ipiv;
     --work;
     /* Function Body */
-    nb = ilaenv_(&c__1, "CHETRF_AA", uplo, n, &c_n1, &c_n1, &c_n1);
+    nb = aocl_lapack_ilaenv(&c__1, "CHETRF_AA", uplo, n, &c_n1, &c_n1, &c_n1);
     /* Test the input parameters. */
     *info = 0;
     upper = lsame_(uplo, "U", 1, 1);
@@ -219,14 +219,14 @@ void chetrf_aa_(char *uplo, integer *n, complex *a, integer *lda, integer *ipiv,
     if(*info == 0)
     {
         lwkopt = (nb + 1) * *n;
-        r__1 = sroundup_lwork(&lwkopt);
+        r__1 = aocl_lapack_sroundup_lwork(&lwkopt);
         work[1].r = r__1;
         work[1].i = 0.f; // , expr subst
     }
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("CHETRF_AA", &i__1, (ftnlen)9);
+        aocl_blas_xerbla("CHETRF_AA", &i__1, (ftnlen)9);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -263,7 +263,7 @@ void chetrf_aa_(char *uplo, integer *n, complex *a, integer *lda, integer *ipiv,
         /* Factorize A as U**H*D*U using the upper triangle of A */
         /* ..................................................... */
         /* copy first row A(1, 1:N) into H(1:n) (stored in WORK(1:N)) */
-        ccopy_(n, &a[a_dim1 + 1], lda, &work[1], &c__1);
+        aocl_blas_ccopy(n, &a[a_dim1 + 1], lda, &work[1], &c__1);
         /* J is the main loop index, increasing from 1 to N in steps of */
         /* JB, where JB is the number of columns factorized by CLAHEF;
          */
@@ -288,8 +288,8 @@ void chetrf_aa_(char *uplo, integer *n, complex *a, integer *lda, integer *ipiv,
         /* Panel factorization */
         i__1 = 2 - k1;
         i__2 = *n - j;
-        clahef_aa_(uplo, &i__1, &i__2, &jb, &a[fla_max(1, j) + (j + 1) * a_dim1], lda, &ipiv[j + 1],
-                   &work[1], n, &work[*n * nb + 1]);
+        aocl_lapack_clahef_aa(uplo, &i__1, &i__2, &jb, &a[fla_max(1, j) + (j + 1) * a_dim1], lda,
+                              &ipiv[j + 1], &work[1], n, &work[*n * nb + 1]);
         /* Adjust IPIV and apply it back (J-th step picks (J+1)-th pivot) */
         /* Computing MIN */
         i__2 = *n;
@@ -297,11 +297,12 @@ void chetrf_aa_(char *uplo, integer *n, complex *a, integer *lda, integer *ipiv,
         i__1 = fla_min(i__2, i__3);
         for(j2 = j + 2; j2 <= i__1; ++j2)
         {
-            ipiv[j2] += j;
+            ipiv[j2] += (aocl_int_t)(j);
             if(j2 != ipiv[j2] && j1 - k1 > 2)
             {
                 i__2 = j1 - k1 - 2;
-                cswap_(&i__2, &a[j2 * a_dim1 + 1], &c__1, &a[ipiv[j2] * a_dim1 + 1], &c__1);
+                aocl_blas_cswap(&i__2, &a[j2 * a_dim1 + 1], &c__1, &a[ipiv[j2] * a_dim1 + 1],
+                                &c__1);
             }
         }
         j += jb;
@@ -321,10 +322,10 @@ void chetrf_aa_(char *uplo, integer *n, complex *a, integer *lda, integer *ipiv,
                 a[i__1].r = 1.f;
                 a[i__1].i = 0.f; // , expr subst
                 i__1 = *n - j;
-                ccopy_(&i__1, &a[j - 1 + (j + 1) * a_dim1], lda, &work[j + 1 - j1 + 1 + jb * *n],
-                       &c__1);
+                aocl_blas_ccopy(&i__1, &a[j - 1 + (j + 1) * a_dim1], lda,
+                                &work[j + 1 - j1 + 1 + jb * *n], &c__1);
                 i__1 = *n - j;
-                cscal_(&i__1, &alpha, &work[j + 1 - j1 + 1 + jb * *n], &c__1);
+                aocl_blas_cscal(&i__1, &alpha, &work[j + 1 - j1 + 1 + jb * *n], &c__1);
                 /* K1 identifies if the previous column of the panel has been */
                 /* explicitly stored, e.g., K1=0 and K2=1 for the first panel, */
                 /* and K1=1 and K2=0 for the rest */
@@ -355,9 +356,10 @@ void chetrf_aa_(char *uplo, integer *n, complex *a, integer *lda, integer *ipiv,
                         i__3 = jb + 1;
                         q__1.r = -1.f;
                         q__1.i = -0.f; // , expr subst
-                        cgemm_("Conjugate transpose", "Transpose", &c__1, &mj, &i__3, &q__1,
-                               &a[j1 - k2 + j3 * a_dim1], lda, &work[j3 - j1 + 1 + k1 * *n], n,
-                               &c_b2, &a[j3 + j3 * a_dim1], lda);
+                        aocl_blas_cgemm("Conjugate transpose", "Transpose", &c__1, &mj, &i__3,
+                                        &q__1, &a[j1 - k2 + j3 * a_dim1], lda,
+                                        &work[j3 - j1 + 1 + k1 * *n], n, &c_b2,
+                                        &a[j3 + j3 * a_dim1], lda);
                         ++j3;
                     }
                     /* Update off-diagonal block of J2-th block row with CGEMM */
@@ -365,9 +367,9 @@ void chetrf_aa_(char *uplo, integer *n, complex *a, integer *lda, integer *ipiv,
                     i__4 = jb + 1;
                     q__1.r = -1.f;
                     q__1.i = -0.f; // , expr subst
-                    cgemm_("Conjugate transpose", "Transpose", &nj, &i__3, &i__4, &q__1,
-                           &a[j1 - k2 + j2 * a_dim1], lda, &work[j3 - j1 + 1 + k1 * *n], n, &c_b2,
-                           &a[j2 + j3 * a_dim1], lda);
+                    aocl_blas_cgemm("Conjugate transpose", "Transpose", &nj, &i__3, &i__4, &q__1,
+                                    &a[j1 - k2 + j2 * a_dim1], lda, &work[j3 - j1 + 1 + k1 * *n], n,
+                                    &c_b2, &a[j2 + j3 * a_dim1], lda);
                 }
                 /* Recover T( J, J+1 ) */
                 i__2 = j + (j + 1) * a_dim1;
@@ -377,7 +379,7 @@ void chetrf_aa_(char *uplo, integer *n, complex *a, integer *lda, integer *ipiv,
             }
             /* WORK(J+1, 1) stores H(J+1, 1) */
             i__2 = *n - j;
-            ccopy_(&i__2, &a[j + 1 + (j + 1) * a_dim1], lda, &work[1], &c__1);
+            aocl_blas_ccopy(&i__2, &a[j + 1 + (j + 1) * a_dim1], lda, &work[1], &c__1);
         }
         goto L10;
     }
@@ -388,7 +390,7 @@ void chetrf_aa_(char *uplo, integer *n, complex *a, integer *lda, integer *ipiv,
         /* ..................................................... */
         /* copy first column A(1:N, 1) into H(1:N, 1) */
         /* (stored in WORK(1:N)) */
-        ccopy_(n, &a[a_dim1 + 1], &c__1, &work[1], &c__1);
+        aocl_blas_ccopy(n, &a[a_dim1 + 1], &c__1, &work[1], &c__1);
         /* J is the main loop index, increasing from 1 to N in steps of */
         /* JB, where JB is the number of columns factorized by CLAHEF;
          */
@@ -413,8 +415,8 @@ void chetrf_aa_(char *uplo, integer *n, complex *a, integer *lda, integer *ipiv,
         /* Panel factorization */
         i__2 = 2 - k1;
         i__1 = *n - j;
-        clahef_aa_(uplo, &i__2, &i__1, &jb, &a[j + 1 + fla_max(1, j) * a_dim1], lda, &ipiv[j + 1],
-                   &work[1], n, &work[*n * nb + 1]);
+        aocl_lapack_clahef_aa(uplo, &i__2, &i__1, &jb, &a[j + 1 + fla_max(1, j) * a_dim1], lda,
+                              &ipiv[j + 1], &work[1], n, &work[*n * nb + 1]);
         /* Adjust IPIV and apply it back (J-th step picks (J+1)-th pivot) */
         /* Computing MIN */
         i__1 = *n;
@@ -422,11 +424,11 @@ void chetrf_aa_(char *uplo, integer *n, complex *a, integer *lda, integer *ipiv,
         i__2 = fla_min(i__1, i__3);
         for(j2 = j + 2; j2 <= i__2; ++j2)
         {
-            ipiv[j2] += j;
+            ipiv[j2] += (aocl_int_t)(j);
             if(j2 != ipiv[j2] && j1 - k1 > 2)
             {
                 i__1 = j1 - k1 - 2;
-                cswap_(&i__1, &a[j2 + a_dim1], lda, &a[ipiv[j2] + a_dim1], lda);
+                aocl_blas_cswap(&i__1, &a[j2 + a_dim1], lda, &a[ipiv[j2] + a_dim1], lda);
             }
         }
         j += jb;
@@ -446,10 +448,10 @@ void chetrf_aa_(char *uplo, integer *n, complex *a, integer *lda, integer *ipiv,
                 a[i__2].r = 1.f;
                 a[i__2].i = 0.f; // , expr subst
                 i__2 = *n - j;
-                ccopy_(&i__2, &a[j + 1 + (j - 1) * a_dim1], &c__1, &work[j + 1 - j1 + 1 + jb * *n],
-                       &c__1);
+                aocl_blas_ccopy(&i__2, &a[j + 1 + (j - 1) * a_dim1], &c__1,
+                                &work[j + 1 - j1 + 1 + jb * *n], &c__1);
                 i__2 = *n - j;
-                cscal_(&i__2, &alpha, &work[j + 1 - j1 + 1 + jb * *n], &c__1);
+                aocl_blas_cscal(&i__2, &alpha, &work[j + 1 - j1 + 1 + jb * *n], &c__1);
                 /* K1 identifies if the previous column of the panel has been */
                 /* explicitly stored, e.g., K1=0 and K2=1 for the first panel, */
                 /* and K1=1 and K2=0 for the rest */
@@ -480,9 +482,10 @@ void chetrf_aa_(char *uplo, integer *n, complex *a, integer *lda, integer *ipiv,
                         i__3 = jb + 1;
                         q__1.r = -1.f;
                         q__1.i = -0.f; // , expr subst
-                        cgemm_("No transpose", "Conjugate transpose", &mj, &c__1, &i__3, &q__1,
-                               &work[j3 - j1 + 1 + k1 * *n], n, &a[j3 + (j1 - k2) * a_dim1], lda,
-                               &c_b2, &a[j3 + j3 * a_dim1], lda);
+                        aocl_blas_cgemm("No transpose", "Conjugate transpose", &mj, &c__1, &i__3,
+                                        &q__1, &work[j3 - j1 + 1 + k1 * *n], n,
+                                        &a[j3 + (j1 - k2) * a_dim1], lda, &c_b2,
+                                        &a[j3 + j3 * a_dim1], lda);
                         ++j3;
                     }
                     /* Update off-diagonal block of J2-th block column with CGEMM */
@@ -490,9 +493,9 @@ void chetrf_aa_(char *uplo, integer *n, complex *a, integer *lda, integer *ipiv,
                     i__4 = jb + 1;
                     q__1.r = -1.f;
                     q__1.i = -0.f; // , expr subst
-                    cgemm_("No transpose", "Conjugate transpose", &i__3, &nj, &i__4, &q__1,
-                           &work[j3 - j1 + 1 + k1 * *n], n, &a[j2 + (j1 - k2) * a_dim1], lda, &c_b2,
-                           &a[j3 + j2 * a_dim1], lda);
+                    aocl_blas_cgemm("No transpose", "Conjugate transpose", &i__3, &nj, &i__4, &q__1,
+                                    &work[j3 - j1 + 1 + k1 * *n], n, &a[j2 + (j1 - k2) * a_dim1],
+                                    lda, &c_b2, &a[j3 + j2 * a_dim1], lda);
                 }
                 /* Recover T( J+1, J ) */
                 i__1 = j + 1 + j * a_dim1;
@@ -502,12 +505,12 @@ void chetrf_aa_(char *uplo, integer *n, complex *a, integer *lda, integer *ipiv,
             }
             /* WORK(J+1, 1) stores H(J+1, 1) */
             i__1 = *n - j;
-            ccopy_(&i__1, &a[j + 1 + (j + 1) * a_dim1], &c__1, &work[1], &c__1);
+            aocl_blas_ccopy(&i__1, &a[j + 1 + (j + 1) * a_dim1], &c__1, &work[1], &c__1);
         }
         goto L11;
     }
 L20:
-    r__1 = sroundup_lwork(&lwkopt);
+    r__1 = aocl_lapack_sroundup_lwork(&lwkopt);
     work[1].r = r__1;
     work[1].i = 0.f; // , expr subst
     AOCL_DTL_TRACE_LOG_EXIT

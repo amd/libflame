@@ -4,7 +4,7 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
+static aocl_int64_t c__1 = 1;
 /* > \brief \b DGBCON */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -144,42 +144,48 @@ for 1 <= i <= N, row i of the matrix was */
 /* > \ingroup doubleGBcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void dgbcon_(char *norm, integer *n, integer *kl, integer *ku, doublereal *ab, integer *ldab,
-             integer *ipiv, doublereal *anorm, doublereal *rcond, doublereal *work, integer *iwork,
-             integer *info)
+/** Generated wrapper function */
+void dgbcon_(char *norm, aocl_int_t *n, aocl_int_t *kl, aocl_int_t *ku, doublereal *ab,
+             aocl_int_t *ldab, aocl_int_t *ipiv, doublereal *anorm, doublereal *rcond,
+             doublereal *work, aocl_int_t *iwork, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_dgbcon(norm, n, kl, ku, ab, ldab, ipiv, anorm, rcond, work, iwork, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t kl_64 = *kl;
+    aocl_int64_t ku_64 = *ku;
+    aocl_int64_t ldab_64 = *ldab;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_dgbcon(norm, &n_64, &kl_64, &ku_64, ab, &ldab_64, ipiv, anorm, rcond, work, iwork,
+                       &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_dgbcon(char *norm, aocl_int64_t *n, aocl_int64_t *kl, aocl_int64_t *ku,
+                        doublereal *ab, aocl_int64_t *ldab, aocl_int_t *ipiv, doublereal *anorm,
+                        doublereal *rcond, doublereal *work, aocl_int_t *iwork, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dgbcon inputs: norm %c, n %" FLA_IS ", kl %" FLA_IS ", ku %" FLA_IS
                       ", ldab %" FLA_IS "",
                       *norm, *n, *kl, *ku, *ldab);
     /* System generated locals */
-    integer ab_dim1, ab_offset, i__1, i__2, i__3;
+    aocl_int64_t ab_dim1, ab_offset, i__1, i__2, i__3;
     doublereal d__1;
     /* Local variables */
-    integer j;
+    aocl_int64_t j;
     doublereal t;
-    integer kd, lm, jp, ix, kase;
-    extern doublereal ddot_(integer *, doublereal *, integer *, doublereal *, integer *);
-    integer kase1;
+    aocl_int64_t kd, lm, jp, ix, kase;
+    aocl_int64_t kase1;
     doublereal scale;
-    extern logical lsame_(char *, char *, integer, integer);
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     integer isave[3];
-    extern /* Subroutine */
-        void
-        drscl_(integer *, doublereal *, doublereal *, integer *);
     logical lnoti;
-    extern /* Subroutine */
-        void
-        daxpy_(integer *, doublereal *, doublereal *, integer *, doublereal *, integer *),
-        dlacn2_(integer *, doublereal *, doublereal *, integer *, doublereal *, integer *,
-                integer *);
     extern doublereal dlamch_(char *);
-    extern integer idamax_(integer *, doublereal *, integer *);
-    extern /* Subroutine */
-        void
-        dlatbs_(char *, char *, char *, char *, integer *, integer *, doublereal *, integer *,
-                doublereal *, doublereal *, doublereal *, integer *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal ainvnm;
     logical onenrm;
     char normin[1];
@@ -244,7 +250,7 @@ void dgbcon_(char *norm, integer *n, integer *kl, integer *ku, doublereal *ab, i
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("DGBCON", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("DGBCON", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -277,7 +283,7 @@ void dgbcon_(char *norm, integer *n, integer *kl, integer *ku, doublereal *ab, i
     lnoti = *kl > 0;
     kase = 0;
 L10:
-    dlacn2_(n, &work[*n + 1], &work[1], &iwork[1], &ainvnm, &kase, isave);
+    aocl_lapack_dlacn2(n, &work[*n + 1], &work[1], &iwork[1], &ainvnm, &kase, isave);
     if(kase != 0)
     {
         if(kase == kase1)
@@ -300,21 +306,22 @@ L10:
                         work[j] = t;
                     }
                     d__1 = -t;
-                    daxpy_(&lm, &d__1, &ab[kd + 1 + j * ab_dim1], &c__1, &work[j + 1], &c__1);
+                    aocl_blas_daxpy(&lm, &d__1, &ab[kd + 1 + j * ab_dim1], &c__1, &work[j + 1],
+                                    &c__1);
                     /* L20: */
                 }
             }
             /* Multiply by inv(U). */
             i__1 = *kl + *ku;
-            dlatbs_("Upper", "No transpose", "Non-unit", normin, n, &i__1, &ab[ab_offset], ldab,
-                    &work[1], &scale, &work[(*n << 1) + 1], info);
+            aocl_lapack_dlatbs("Upper", "No transpose", "Non-unit", normin, n, &i__1,
+                               &ab[ab_offset], ldab, &work[1], &scale, &work[(*n << 1) + 1], info);
         }
         else
         {
             /* Multiply by inv(U**T). */
             i__1 = *kl + *ku;
-            dlatbs_("Upper", "Transpose", "Non-unit", normin, n, &i__1, &ab[ab_offset], ldab,
-                    &work[1], &scale, &work[(*n << 1) + 1], info);
+            aocl_lapack_dlatbs("Upper", "Transpose", "Non-unit", normin, n, &i__1, &ab[ab_offset],
+                               ldab, &work[1], &scale, &work[(*n << 1) + 1], info);
             /* Multiply by inv(L**T). */
             if(lnoti)
             {
@@ -324,7 +331,8 @@ L10:
                     i__1 = *kl;
                     i__2 = *n - j; // , expr subst
                     lm = fla_min(i__1, i__2);
-                    work[j] -= ddot_(&lm, &ab[kd + 1 + j * ab_dim1], &c__1, &work[j + 1], &c__1);
+                    work[j] -= aocl_blas_ddot(&lm, &ab[kd + 1 + j * ab_dim1], &c__1, &work[j + 1],
+                                              &c__1);
                     jp = ipiv[j];
                     if(jp != j)
                     {
@@ -340,12 +348,12 @@ L10:
         *(unsigned char *)normin = 'Y';
         if(scale != 1.)
         {
-            ix = idamax_(n, &work[1], &c__1);
+            ix = aocl_blas_idamax(n, &work[1], &c__1);
             if(scale < (d__1 = work[ix], f2c_dabs(d__1)) * smlnum || scale == 0.)
             {
                 goto L40;
             }
-            drscl_(n, &scale, &work[1], &c__1);
+            aocl_lapack_drscl(n, &scale, &work[1], &c__1);
         }
         goto L10;
     }

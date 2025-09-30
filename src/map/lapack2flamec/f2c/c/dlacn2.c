@@ -4,7 +4,7 @@
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
  /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
+static aocl_int64_t c__1 = 1;
 /* > \brief \b DLACN2 estimates the 1-norm of a square matrix, using reverse communication for
  * evaluating matr ix-vector products. */
 /* =========== DOCUMENTATION =========== */
@@ -126,32 +126,43 @@ static integer c__1 = 1;
 /* ================ */
 /* > */
 /* > N.J. Higham, "FORTRAN codes for estimating the one-norm of */
-/* > a real or complex matrix, with applications to condition estimation", */
+/* > a real or scomplex matrix, with applications to condition estimation", */
 /* > ACM Trans. Math. Soft., vol. 14, no. 4, pp. 381-396, December 1988. */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void dlacn2_(integer *n, doublereal *v, doublereal *x, integer *isgn, doublereal *est,
-             integer *kase, integer *isave)
+/** Generated wrapper function */
+void dlacn2_(aocl_int_t *n, doublereal *v, doublereal *x, aocl_int_t *isgn, doublereal *est,
+             aocl_int_t *kase, aocl_int_t *isave)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_dlacn2(n, v, x, isgn, est, kase, isave);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t kase_64 = *kase;
+
+    aocl_lapack_dlacn2(&n_64, v, x, isgn, est, &kase_64, isave);
+
+    *kase = (aocl_int_t)kase_64;
+#endif
+}
+
+void aocl_lapack_dlacn2(aocl_int64_t *n, doublereal *v, doublereal *x, aocl_int_t *isgn,
+                        doublereal *est, aocl_int64_t *kase, aocl_int_t *isave)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dlacn2 inputs: n %" FLA_IS ", isgn %" FLA_IS ", kase %" FLA_IS
                       ", isave %" FLA_IS "",
                       *n, *isgn, *kase, *isave);
     /* System generated locals */
-    integer i__1;
+    aocl_int64_t i__1;
     doublereal d__1;
     /* Builtin functions */
     integer i_dnnt(doublereal *);
     /* Local variables */
-    integer i__;
+    aocl_int64_t i__;
     doublereal xs, temp;
-    extern doublereal dasum_(integer *, doublereal *, integer *);
-    integer jlast;
-    extern /* Subroutine */
-        void
-        dcopy_(integer *, doublereal *, integer *, doublereal *, integer *);
-    extern integer idamax_(integer *, doublereal *, integer *);
+    aocl_int64_t jlast;
     doublereal altsgn, estold;
     /* -- LAPACK auxiliary routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -214,7 +225,7 @@ L20:
         /* ... QUIT */
         goto L150;
     }
-    *est = dasum_(n, &x[1], &c__1);
+    *est = aocl_blas_dasum(n, &x[1], &c__1);
     i__1 = *n;
     for(i__ = 1; i__ <= i__1; ++i__)
     {
@@ -236,7 +247,7 @@ L20:
     /* ................ ENTRY (ISAVE( 1 ) = 2) */
     /* FIRST ITERATION. X HAS BEEN OVERWRITTEN BY TRANSPOSE(A)*X. */
 L40:
-    isave[2] = idamax_(n, &x[1], &c__1);
+    isave[2] = aocl_blas_idamax(n, &x[1], &c__1);
     isave[3] = 2;
     /* MAIN LOOP - ITERATIONS 2,3,...,ITMAX. */
 L50:
@@ -254,9 +265,9 @@ L50:
     /* ................ ENTRY (ISAVE( 1 ) = 3) */
     /* X HAS BEEN OVERWRITTEN BY A*X. */
 L70:
-    dcopy_(n, &x[1], &c__1, &v[1], &c__1);
+    aocl_blas_dcopy(n, &x[1], &c__1, &v[1], &c__1);
     estold = *est;
-    *est = dasum_(n, &v[1], &c__1);
+    *est = aocl_blas_dasum(n, &v[1], &c__1);
     i__1 = *n;
     for(i__ = 1; i__ <= i__1; ++i__)
     {
@@ -303,7 +314,7 @@ L90: /* TEST FOR CYCLING. */
     /* X HAS BEEN OVERWRITTEN BY TRANSPOSE(A)*X. */
 L110:
     jlast = isave[2];
-    isave[2] = idamax_(n, &x[1], &c__1);
+    isave[2] = aocl_blas_idamax(n, &x[1], &c__1);
     if(x[jlast] != (d__1 = x[isave[2]], f2c_dabs(d__1)) && isave[3] < 5)
     {
         ++isave[3];
@@ -326,10 +337,10 @@ L120:
     /* ................ ENTRY (ISAVE( 1 ) = 5) */
     /* X HAS BEEN OVERWRITTEN BY A*X. */
 L140:
-    temp = dasum_(n, &x[1], &c__1) / (doublereal)(*n * 3) * 2.;
+    temp = aocl_blas_dasum(n, &x[1], &c__1) / (doublereal)(*n * 3) * 2.;
     if(temp > *est)
     {
-        dcopy_(n, &x[1], &c__1, &v[1], &c__1);
+        aocl_blas_dcopy(n, &x[1], &c__1, &v[1], &c__1);
         *est = temp;
     }
 L150:

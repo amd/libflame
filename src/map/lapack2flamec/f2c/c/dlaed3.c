@@ -4,7 +4,7 @@
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
  /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
+static aocl_int64_t c__1 = 1;
 static doublereal c_b21 = 1.;
 static doublereal c_b22 = 0.;
 /* > \brief \b DLAED3 used by DSTEDC. Finds the roots of the secular equation and updates the
@@ -175,33 +175,44 @@ static doublereal c_b22 = 0.;
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void dlaed3_(integer *k, integer *n, integer *n1, doublereal *d__, doublereal *q, integer *ldq,
-             doublereal *rho, doublereal *dlambda, doublereal *q2, integer *indx, integer *ctot,
-             doublereal *w, doublereal *s, integer *info)
+/** Generated wrapper function */
+void dlaed3_(aocl_int_t *k, aocl_int_t *n, aocl_int_t *n1, doublereal *d__, doublereal *q,
+             aocl_int_t *ldq, doublereal *rho, doublereal *dlambda, doublereal *q2,
+             aocl_int_t *indx, aocl_int_t *ctot, doublereal *w, doublereal *s, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_dlaed3(k, n, n1, d__, q, ldq, rho, dlambda, q2, indx, ctot, w, s, info);
+#else
+    aocl_int64_t k_64 = *k;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t n1_64 = *n1;
+    aocl_int64_t ldq_64 = *ldq;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_dlaed3(&k_64, &n_64, &n1_64, d__, q, &ldq_64, rho, dlambda, q2, indx, ctot, w, s,
+                       &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_dlaed3(aocl_int64_t *k, aocl_int64_t *n, aocl_int64_t *n1, doublereal *d__,
+                        doublereal *q, aocl_int64_t *ldq, doublereal *rho, doublereal *dlambda,
+                        doublereal *q2, aocl_int_t *indx, aocl_int_t *ctot, doublereal *w,
+                        doublereal *s, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dlaed3 inputs: k %" FLA_IS ", n %" FLA_IS ", n1 %" FLA_IS ", ldq %" FLA_IS
                       ", indx %" FLA_IS ", ctot %" FLA_IS "",
                       *k, *n, *n1, *ldq, *indx, *ctot);
     /* System generated locals */
-    integer q_dim1, q_offset, i__1, i__2;
+    aocl_int64_t q_dim1, q_offset, i__1, i__2;
     doublereal d__1;
     /* Builtin functions */
     double sqrt(doublereal), d_sign(doublereal *, doublereal *);
     /* Local variables */
-    integer i__, j, n2, n12, ii, n23, iq2;
+    aocl_int64_t i__, j, n2, n12, ii, n23, iq2;
     doublereal temp;
-    extern doublereal dnrm2_(integer *, doublereal *, integer *);
-    extern /* Subroutine */
-        void
-        dgemm_(char *, char *, integer *, integer *, integer *, doublereal *, doublereal *,
-               integer *, doublereal *, integer *, doublereal *, doublereal *, integer *),
-        dcopy_(integer *, doublereal *, integer *, doublereal *, integer *),
-        dlaed4_(integer *, integer *, doublereal *, doublereal *, doublereal *, doublereal *,
-                doublereal *, integer *),
-        dlacpy_(char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *),
-        dlaset_(char *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -250,7 +261,7 @@ void dlaed3_(integer *k, integer *n, integer *n1, doublereal *d__, doublereal *q
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("DLAED3", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("DLAED3", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -263,7 +274,7 @@ void dlaed3_(integer *k, integer *n, integer *n1, doublereal *d__, doublereal *q
     i__1 = *k;
     for(j = 1; j <= i__1; ++j)
     {
-        dlaed4_(k, &j, &dlambda[1], &w[1], &q[j * q_dim1 + 1], rho, &d__[j], info);
+        aocl_lapack_dlaed4(k, &j, &dlambda[1], &w[1], &q[j * q_dim1 + 1], rho, &d__[j], info);
         /* If the zero finder fails, the computation is terminated. */
         if(*info != 0)
         {
@@ -291,10 +302,10 @@ void dlaed3_(integer *k, integer *n, integer *n1, doublereal *d__, doublereal *q
         goto L110;
     }
     /* Compute updated W. */
-    dcopy_(k, &w[1], &c__1, &s[1], &c__1);
+    aocl_blas_dcopy(k, &w[1], &c__1, &s[1], &c__1);
     /* Initialize W(I) = Q(I,I) */
     i__1 = *ldq + 1;
-    dcopy_(k, &q[q_offset], &i__1, &w[1], &c__1);
+    aocl_blas_dcopy(k, &q[q_offset], &i__1, &w[1], &c__1);
     i__1 = *k;
     for(j = 1; j <= i__1; ++j)
     {
@@ -329,7 +340,7 @@ void dlaed3_(integer *k, integer *n, integer *n1, doublereal *d__, doublereal *q
             s[i__] = w[i__] / q[i__ + j * q_dim1];
             /* L80: */
         }
-        temp = dnrm2_(k, &s[1], &c__1);
+        temp = aocl_blas_dnrm2(k, &s[1], &c__1);
         i__2 = *k;
         for(i__ = 1; i__ <= i__2; ++i__)
         {
@@ -344,25 +355,26 @@ L110:
     n2 = *n - *n1;
     n12 = ctot[1] + ctot[2];
     n23 = ctot[2] + ctot[3];
-    dlacpy_("A", &n23, k, &q[ctot[1] + 1 + q_dim1], ldq, &s[1], &n23);
+    aocl_lapack_dlacpy("A", &n23, k, &q[ctot[1] + 1 + q_dim1], ldq, &s[1], &n23);
     iq2 = *n1 * n12 + 1;
     if(n23 != 0)
     {
-        dgemm_("N", "N", &n2, k, &n23, &c_b21, &q2[iq2], &n2, &s[1], &n23, &c_b22,
-               &q[*n1 + 1 + q_dim1], ldq);
+        aocl_blas_dgemm("N", "N", &n2, k, &n23, &c_b21, &q2[iq2], &n2, &s[1], &n23, &c_b22,
+                        &q[*n1 + 1 + q_dim1], ldq);
     }
     else
     {
-        dlaset_("A", &n2, k, &c_b22, &c_b22, &q[*n1 + 1 + q_dim1], ldq);
+        aocl_lapack_dlaset("A", &n2, k, &c_b22, &c_b22, &q[*n1 + 1 + q_dim1], ldq);
     }
-    dlacpy_("A", &n12, k, &q[q_offset], ldq, &s[1], &n12);
+    aocl_lapack_dlacpy("A", &n12, k, &q[q_offset], ldq, &s[1], &n12);
     if(n12 != 0)
     {
-        dgemm_("N", "N", n1, k, &n12, &c_b21, &q2[1], n1, &s[1], &n12, &c_b22, &q[q_offset], ldq);
+        aocl_blas_dgemm("N", "N", n1, k, &n12, &c_b21, &q2[1], n1, &s[1], &n12, &c_b22,
+                        &q[q_offset], ldq);
     }
     else
     {
-        dlaset_("A", n1, k, &c_b22, &c_b22, &q[q_dim1 + 1], ldq);
+        aocl_lapack_dlaset("A", n1, k, &c_b22, &c_b22, &q[q_dim1 + 1], ldq);
     }
 L120:
     AOCL_DTL_TRACE_LOG_EXIT

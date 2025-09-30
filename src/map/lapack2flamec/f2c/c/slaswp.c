@@ -110,8 +110,25 @@
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void slaswp_(integer *n, real *a, integer *lda, integer *k1, integer *k2, integer *ipiv,
-             integer *incx)
+/** Generated wrapper function */
+void slaswp_(aocl_int_t *n, real *a, aocl_int_t *lda, aocl_int_t *k1, aocl_int_t *k2,
+             aocl_int_t *ipiv, aocl_int_t *incx)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_slaswp(n, a, lda, k1, k2, ipiv, incx);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t k1_64 = *k1;
+    aocl_int64_t k2_64 = *k2;
+    aocl_int64_t incx_64 = *incx;
+
+    aocl_lapack_slaswp(&n_64, a, &lda_64, &k1_64, &k2_64, ipiv, &incx_64);
+#endif
+}
+
+void aocl_lapack_slaswp(aocl_int64_t *n, real *a, aocl_int64_t *lda, aocl_int64_t *k1,
+                        aocl_int64_t *k2, aocl_int_t *ipiv, aocl_int64_t *incx)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("slaswp inputs: n %" FLA_IS ", lda %" FLA_IS ", k1 %" FLA_IS ", k2 %" FLA_IS
@@ -119,9 +136,9 @@ void slaswp_(integer *n, real *a, integer *lda, integer *k1, integer *k2, intege
                       *n, *lda, *k1, *k2, *incx);
 
     /* System generated locals */
-    integer a_dim1, a_offset, i__1, i__2, i__3, i__4;
+    aocl_int64_t a_dim1, a_offset, i__1, i__2, i__3, i__4;
     /* Local variables */
-    integer i__, j, k, i1, i2, n32, ip, ix, ix0, inc;
+    aocl_int64_t i__, j, k, i1, i2, n32, ip, ix, ix0, inc;
     real temp;
     /* -- LAPACK auxiliary routine (version 3.7.1) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -220,3 +237,115 @@ void slaswp_(integer *n, real *a, integer *lda, integer *k1, integer *k2, intege
     /* End of SLASWP */
 }
 /* slaswp_ */
+
+void aocl_lapack_slaswp64(aocl_int64_t *n, real *a, aocl_int64_t *lda, aocl_int64_t *k1,
+                        aocl_int64_t *k2, aocl_int64_t *ipiv, aocl_int64_t *incx)
+{
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("slaswp inputs: n %" FLA_IS ", lda %" FLA_IS ", k1 %" FLA_IS ", k2 %" FLA_IS
+                      ", incx %" FLA_IS " ",
+                      *n, *lda, *k1, *k2, *incx);
+
+    /* System generated locals */
+    aocl_int64_t a_dim1, a_offset, i__1, i__2, i__3, i__4;
+    /* Local variables */
+    aocl_int64_t i__, j, k, i1, i2, n32, ip, ix, ix0, inc;
+    real temp;
+    /* -- LAPACK auxiliary routine (version 3.7.1) -- */
+    /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
+    /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
+    /* June 2017 */
+    /* .. Scalar Arguments .. */
+    /* .. */
+    /* .. Array Arguments .. */
+    /* .. */
+    /* ===================================================================== */
+    /* .. Local Scalars .. */
+    /* .. */
+    /* .. Executable Statements .. */
+    /* Interchange row I with row IPIV(K1+(I-K1)*f2c_abs(INCX)) for each of rows */
+    /* K1 through K2. */
+    /* Parameter adjustments */
+    a_dim1 = *lda;
+    a_offset = 1 + a_dim1;
+    a -= a_offset;
+    --ipiv;
+    /* Function Body */
+    if(*incx > 0)
+    {
+        ix0 = *k1;
+        i1 = *k1;
+        i2 = *k2;
+        inc = 1;
+    }
+    else if(*incx < 0)
+    {
+        ix0 = *k1 + (*k1 - *k2) * *incx;
+        i1 = *k2;
+        i2 = *k1;
+        inc = -1;
+    }
+    else
+    {
+        AOCL_DTL_TRACE_LOG_EXIT
+        return;
+    }
+    n32 = *n / 32 << 5;
+    if(n32 != 0)
+    {
+        i__1 = n32;
+        for(j = 1; j <= i__1; j += 32)
+        {
+            ix = ix0;
+            i__2 = i2;
+            i__3 = inc;
+            for(i__ = i1; i__3 < 0 ? i__ >= i__2 : i__ <= i__2; i__ += i__3)
+            {
+                ip = ipiv[ix];
+                if(ip != i__)
+                {
+                    i__4 = j + 31;
+                    for(k = j; k <= i__4; ++k)
+                    {
+                        temp = a[i__ + k * a_dim1];
+                        a[i__ + k * a_dim1] = a[ip + k * a_dim1];
+                        a[ip + k * a_dim1] = temp;
+                        /* L10: */
+                    }
+                }
+                ix += *incx;
+                /* L20: */
+            }
+            /* L30: */
+        }
+    }
+    if(n32 != *n)
+    {
+        ++n32;
+        ix = ix0;
+        i__1 = i2;
+        i__3 = inc;
+        for(i__ = i1; i__3 < 0 ? i__ >= i__1 : i__ <= i__1; i__ += i__3)
+        {
+            ip = ipiv[ix];
+            if(ip != i__)
+            {
+                i__2 = *n;
+                for(k = n32; k <= i__2; ++k)
+                {
+                    temp = a[i__ + k * a_dim1];
+                    a[i__ + k * a_dim1] = a[ip + k * a_dim1];
+                    a[ip + k * a_dim1] = temp;
+                    /* L40: */
+                }
+            }
+            ix += *incx;
+            /* L50: */
+        }
+    }
+    AOCL_DTL_TRACE_LOG_EXIT
+    return;
+    /* End of SLASWP */
+}
+/* slaswp_ */
+

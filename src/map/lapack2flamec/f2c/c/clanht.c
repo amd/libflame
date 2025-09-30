@@ -4,9 +4,9 @@
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
  /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
+static aocl_int64_t c__1 = 1;
 /* > \brief \b CLANHT returns the value of the 1-norm, or the Frobenius norm, or the infinity norm,
- * or the ele ment of largest absolute value of a complex Hermitian tridiagonal matrix. */
+ * or the ele ment of largest absolute value of a scomplex Hermitian tridiagonal matrix. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
@@ -43,7 +43,7 @@ static integer c__1 = 1;
 /* > */
 /* > CLANHT returns the value of the one norm, or the Frobenius norm, or */
 /* > the infinity norm, or the element of largest absolute value of a */
-/* > complex Hermitian tridiagonal matrix A. */
+/* > scomplex Hermitian tridiagonal matrix A. */
 /* > \endverbatim */
 /* > */
 /* > \return CLANHT */
@@ -97,27 +97,33 @@ static integer c__1 = 1;
 /* > \author NAG Ltd. */
 /* > \ingroup complexOTHERauxiliary */
 /* ===================================================================== */
-real clanht_(char *norm, integer *n, real *d__, complex *e)
+/** Generated wrapper function */
+real clanht_(char *norm, aocl_int_t *n, real *d__, scomplex *e)
+{
+#if FLA_ENABLE_ILP64
+    return aocl_lapack_clanht(norm, n, d__, e);
+#else
+    aocl_int64_t n_64 = *n;
+
+    return aocl_lapack_clanht(norm, &n_64, d__, e);
+#endif
+}
+
+real aocl_lapack_clanht(char *norm, aocl_int64_t *n, real *d__, scomplex *e)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("clanht inputs: norm %c, n %" FLA_IS "", *norm, *n);
     /* System generated locals */
-    integer i__1;
+    aocl_int64_t i__1;
     real ret_val, r__1;
     /* Builtin functions */
-    double c_abs(complex *), sqrt(doublereal);
+    double c_abs(scomplex *), sqrt(doublereal);
     /* Local variables */
-    integer i__;
+    aocl_int64_t i__;
     real sum, scale;
-    extern logical lsame_(char *, char *, integer, integer);
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     real anorm;
-    extern /* Subroutine */
-        void
-        classq_(integer *, complex *, integer *, real *, real *);
     extern logical sisnan_(real *);
-    extern /* Subroutine */
-        void
-        slassq_(integer *, real *, integer *, real *, real *);
     /* -- LAPACK auxiliary routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -201,10 +207,10 @@ real clanht_(char *norm, integer *n, real *d__, complex *e)
         if(*n > 1)
         {
             i__1 = *n - 1;
-            classq_(&i__1, &e[1], &c__1, &scale, &sum);
+            aocl_lapack_classq(&i__1, &e[1], &c__1, &scale, &sum);
             sum *= 2;
         }
-        slassq_(n, &d__[1], &c__1, &scale, &sum);
+        aocl_lapack_slassq(n, &d__[1], &c__1, &scale, &sum);
         anorm = scale * sqrt(sum);
     }
     ret_val = anorm;

@@ -1,20 +1,20 @@
 #include "FLA_f2c.h"
 #include "FLA_lapack2flame_return_defs.h"
 
-static integer c__1 = 1;
-static integer c_n1 = -1;
+static aocl_int64_t c__1 = 1;
+static aocl_int64_t c_n1 = -1;
 
-int cgebrd_check(integer *m, integer *n, scomplex *a, integer *lda, real *d__, real *e,
-                 scomplex *tauq, scomplex *taup, scomplex *work, integer *lwork, integer *info)
+int cgebrd_check(aocl_int64_t *m, aocl_int64_t *n, scomplex *a, aocl_int64_t *lda, real *d__, real *e,
+                 scomplex *tauq, scomplex *taup, scomplex *work, aocl_int64_t *lwork, aocl_int64_t *info)
 {
     /* System generated locals */
-    integer a_dim1, a_offset, i__1, i__2;
+    aocl_int64_t a_dim1, a_offset, i__1, i__2;
     real r__1;
 
     /* Local variables */
-    integer nb;
-    integer minmn;
-    integer lwkopt;
+    aocl_int64_t nb;
+    aocl_int64_t minmn;
+    aocl_int64_t lwkopt;
     logical lquery;
 
     /* Parameter adjustments */
@@ -30,7 +30,7 @@ int cgebrd_check(integer *m, integer *n, scomplex *a, integer *lda, real *d__, r
     *info = 0;
     /* Computing MAX */
     i__1 = 1;
-    i__2 = ilaenv_(&c__1, "CGEBRD", " ", m, n, &c_n1, &c_n1); // , expr subst
+    i__2 = aocl_lapack_ilaenv(&c__1, "CGEBRD", " ", m, n, &c_n1, &c_n1); // , expr subst
     nb = fla_max(i__1, i__2);
     lwkopt = (*m + *n) * nb;
     r__1 = (real)lwkopt;
@@ -61,7 +61,7 @@ int cgebrd_check(integer *m, integer *n, scomplex *a, integer *lda, real *d__, r
     if(*info < 0)
     {
         i__1 = -(*info);
-        xerbla_("CGEBRD", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("CGEBRD", &i__1, (ftnlen)6);
         return LAPACK_FAILURE;
     }
     else if(lquery)

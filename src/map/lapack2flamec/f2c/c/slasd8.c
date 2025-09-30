@@ -4,8 +4,8 @@
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
  /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
-static integer c__0 = 0;
+static aocl_int64_t c__1 = 1;
+static aocl_int64_t c__0 = 0;
 static real c_b7 = 1.f;
 /* > \brief \b SLASD8 finds the square roots of the roots of the secular equation, and stores, for
  * each elemen t in D, the distance to its two nearest poles. Used by sbdsdc. */
@@ -162,40 +162,46 @@ static real c_b7 = 1.f;
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void slasd8_(integer *icompq, integer *k, real *d__, real *z__, real *vf, real *vl, real *difl,
-             real *difr, integer *lddifr, real *dsigma, real *work, integer *info)
+/** Generated wrapper function */
+void slasd8_(aocl_int_t *icompq, aocl_int_t *k, real *d__, real *z__, real *vf, real *vl,
+             real *difl, real *difr, aocl_int_t *lddifr, real *dsigma, real *work, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_slasd8(icompq, k, d__, z__, vf, vl, difl, difr, lddifr, dsigma, work, info);
+#else
+    aocl_int64_t icompq_64 = *icompq;
+    aocl_int64_t k_64 = *k;
+    aocl_int64_t lddifr_64 = *lddifr;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_slasd8(&icompq_64, &k_64, d__, z__, vf, vl, difl, difr, &lddifr_64, dsigma, work,
+                       &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_slasd8(aocl_int64_t *icompq, aocl_int64_t *k, real *d__, real *z__, real *vf,
+                        real *vl, real *difl, real *difr, aocl_int64_t *lddifr, real *dsigma,
+                        real *work, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("slasd8 inputs: icompq %" FLA_IS ", k %" FLA_IS ", lddifr %" FLA_IS "",
                       *icompq, *k, *lddifr);
     /* System generated locals */
-    integer difr_dim1, difr_offset, i__1, i__2;
+    aocl_int64_t difr_dim1, difr_offset, i__1, i__2;
     real r__1, r__2;
     /* Builtin functions */
     double sqrt(doublereal), r_sign(real *, real *);
     /* Local variables */
-    integer i__, j;
+    aocl_int64_t i__, j;
     real dj, rho;
-    integer iwk1, iwk2, iwk3;
+    aocl_int64_t iwk1, iwk2, iwk3;
     real temp;
-    extern real sdot_(integer *, real *, integer *, real *, integer *);
-    integer iwk2i, iwk3i;
-    extern real snrm2_(integer *, real *, integer *);
+    aocl_int64_t iwk2i, iwk3i;
     real diflj, difrj, dsigj;
-    extern /* Subroutine */
-        void
-        scopy_(integer *, real *, integer *, real *, integer *);
     extern real slamc3_(real *, real *);
-    extern /* Subroutine */
-        void
-        slasd4_(integer *, integer *, real *, real *, real *, real *, real *, real *, integer *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real dsigjp;
-    extern /* Subroutine */
-        void
-        slascl_(char *, integer *, integer *, real *, real *, integer *, integer *, real *,
-                integer *, integer *),
-        slaset_(char *, integer *, integer *, real *, real *, real *, integer *);
     /* -- LAPACK auxiliary routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -245,7 +251,7 @@ void slasd8_(integer *icompq, integer *k, real *d__, real *z__, real *vf, real *
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("SLASD8", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("SLASD8", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -269,17 +275,18 @@ void slasd8_(integer *icompq, integer *k, real *d__, real *z__, real *vf, real *
     iwk2i = iwk2 - 1;
     iwk3i = iwk3 - 1;
     /* Normalize Z. */
-    rho = snrm2_(k, &z__[1], &c__1);
-    slascl_("G", &c__0, &c__0, &rho, &c_b7, k, &c__1, &z__[1], k, info);
+    rho = aocl_blas_snrm2(k, &z__[1], &c__1);
+    aocl_lapack_slascl("G", &c__0, &c__0, &rho, &c_b7, k, &c__1, &z__[1], k, info);
     rho *= rho;
     /* Initialize WORK(IWK3). */
-    slaset_("A", k, &c__1, &c_b7, &c_b7, &work[iwk3], k);
+    aocl_lapack_slaset("A", k, &c__1, &c_b7, &c_b7, &work[iwk3], k);
     /* Compute the updated singular values, the arrays DIFL, DIFR, */
     /* and the updated Z. */
     i__1 = *k;
     for(j = 1; j <= i__1; ++j)
     {
-        slasd4_(k, &j, &dsigma[1], &z__[1], &work[iwk1], &rho, &d__[j], &work[iwk2], info);
+        aocl_lapack_slasd4(k, &j, &dsigma[1], &z__[1], &work[iwk1], &rho, &d__[j], &work[iwk2],
+                           info);
         /* If the root finder fails, report the convergence failure. */
         if(*info != 0)
         {
@@ -341,17 +348,17 @@ void slasd8_(integer *icompq, integer *k, real *d__, real *z__, real *vf, real *
             work[i__] = z__[i__] / (slamc3_(&dsigma[i__], &dsigjp) + difrj) / (dsigma[i__] + dj);
             /* L70: */
         }
-        temp = snrm2_(k, &work[1], &c__1);
-        work[iwk2i + j] = sdot_(k, &work[1], &c__1, &vf[1], &c__1) / temp;
-        work[iwk3i + j] = sdot_(k, &work[1], &c__1, &vl[1], &c__1) / temp;
+        temp = aocl_blas_snrm2(k, &work[1], &c__1);
+        work[iwk2i + j] = aocl_blas_sdot(k, &work[1], &c__1, &vf[1], &c__1) / temp;
+        work[iwk3i + j] = aocl_blas_sdot(k, &work[1], &c__1, &vl[1], &c__1) / temp;
         if(*icompq == 1)
         {
             difr[j + (difr_dim1 << 1)] = temp;
         }
         /* L80: */
     }
-    scopy_(k, &work[iwk2], &c__1, &vf[1], &c__1);
-    scopy_(k, &work[iwk3], &c__1, &vl[1], &c__1);
+    aocl_blas_scopy(k, &work[iwk2], &c__1, &vf[1], &c__1);
+    aocl_blas_scopy(k, &work[iwk3], &c__1, &vl[1], &c__1);
     AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SLASD8 */

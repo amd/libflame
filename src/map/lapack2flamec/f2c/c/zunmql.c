@@ -4,10 +4,10 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
-static integer c_n1 = -1;
-static integer c__2 = 2;
-static integer c__65 = 65;
+static aocl_int64_t c__1 = 1;
+static aocl_int64_t c_n1 = -1;
+static aocl_int64_t c__2 = 2;
+static aocl_int64_t c__65 = 65;
 /* > \brief \b ZUNMQL */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -43,13 +43,13 @@ static integer c__65 = 65;
 /* > */
 /* > \verbatim */
 /* > */
-/* > ZUNMQL overwrites the general complex M-by-N matrix C with */
+/* > ZUNMQL overwrites the general scomplex M-by-N matrix C with */
 /* > */
 /* > SIDE = 'L' SIDE = 'R' */
 /* > TRANS = 'N': Q * C C * Q */
 /* > TRANS = 'C': Q**H * C C * Q**H */
 /* > */
-/* > where Q is a complex unitary matrix defined as the product of k */
+/* > where Q is a scomplex unitary matrix defined as the product of k */
 /* > elementary reflectors */
 /* > */
 /* > Q = H(k) . . . H(2) H(1) */
@@ -172,43 +172,52 @@ the routine */
 /* > \ingroup complex16OTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void zunmql_(char *side, char *trans, integer *m, integer *n, integer *k, doublecomplex *a,
-             integer *lda, doublecomplex *tau, doublecomplex *c__, integer *ldc,
-             doublecomplex *work, integer *lwork, integer *info)
+/** Generated wrapper function */
+void zunmql_(char *side, char *trans, aocl_int_t *m, aocl_int_t *n, aocl_int_t *k, dcomplex *a,
+             aocl_int_t *lda, dcomplex *tau, dcomplex *c__, aocl_int_t *ldc,
+             dcomplex *work, aocl_int_t *lwork, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_zunmql(side, trans, m, n, k, a, lda, tau, c__, ldc, work, lwork, info);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t k_64 = *k;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t ldc_64 = *ldc;
+    aocl_int64_t lwork_64 = *lwork;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_zunmql(side, trans, &m_64, &n_64, &k_64, a, &lda_64, tau, c__, &ldc_64, work,
+                       &lwork_64, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_zunmql(char *side, char *trans, aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *k,
+                        dcomplex *a, aocl_int64_t *lda, dcomplex *tau, dcomplex *c__,
+                        aocl_int64_t *ldc, dcomplex *work, aocl_int64_t *lwork,
+                        aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zunmql inputs: side %c, trans %c, m %" FLA_IS ", n %" FLA_IS ", k %" FLA_IS
                       ", lda %" FLA_IS ", ldc %" FLA_IS ", lwork %" FLA_IS "",
                       *side, *trans, *m, *n, *k, *lda, *ldc, *lwork);
     /* System generated locals */
-    integer a_dim1, a_offset, c_dim1, c_offset, i__1, i__2, i__4, i__5;
+    aocl_int64_t a_dim1, a_offset, c_dim1, c_offset, i__1, i__2, i__4, i__5;
     char ch__1[2];
     /* Builtin functions */
     /* Subroutine */
 
     /* Local variables */
-    integer i__, i1, i2, i3, ib, nb, mi, ni, nq, nw, iwt;
+    aocl_int64_t i__, i1, i2, i3, ib, nb, mi, ni, nq, nw, iwt;
     logical left;
-    extern logical lsame_(char *, char *, integer, integer);
-    integer nbmin, iinfo;
-    extern /* Subroutine */
-        void
-        zunm2l_(char *, char *, integer *, integer *, integer *, doublecomplex *, integer *,
-                doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
-    extern /* Subroutine */
-        void
-        zlarfb_(char *, char *, char *, char *, integer *, integer *, integer *, doublecomplex *,
-                integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *,
-                integer *);
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    aocl_int64_t nbmin, iinfo;
     logical notran;
-    integer ldwork;
-    extern /* Subroutine */
-        void
-        zlarft_(char *, char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *,
-                doublecomplex *, integer *);
-    integer lwkopt;
+    aocl_int64_t ldwork;
+    aocl_int64_t lwkopt;
     logical lquery;
     /* -- LAPACK computational routine (version 3.7.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -300,7 +309,7 @@ void zunmql_(char *side, char *trans, integer *m, integer *n, integer *k, double
         {
             /* Computing MIN */
             i__1 = 64;
-            i__2 = ilaenv_(&c__1, "ZUNMQL", ch__1, m, n, k, &c_n1); // , expr subst
+            i__2 = aocl_lapack_ilaenv(&c__1, "ZUNMQL", ch__1, m, n, k, &c_n1); // , expr subst
             nb = fla_min(i__1, i__2);
             lwkopt = nw * nb + 4160;
         }
@@ -310,7 +319,7 @@ void zunmql_(char *side, char *trans, integer *m, integer *n, integer *k, double
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("ZUNMQL", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("ZUNMQL", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -334,15 +343,15 @@ void zunmql_(char *side, char *trans, integer *m, integer *n, integer *k, double
             nb = (*lwork - 4160) / ldwork;
             /* Computing MAX */
             i__1 = 2;
-            i__2 = ilaenv_(&c__2, "ZUNMQL", ch__1, m, n, k, &c_n1); // , expr subst
+            i__2 = aocl_lapack_ilaenv(&c__2, "ZUNMQL", ch__1, m, n, k, &c_n1); // , expr subst
             nbmin = fla_max(i__1, i__2);
         }
     }
     if(nb < nbmin || nb >= *k)
     {
         /* Use unblocked code */
-        zunm2l_(side, trans, m, n, k, &a[a_offset], lda, &tau[1], &c__[c_offset], ldc, &work[1],
-                &iinfo);
+        aocl_lapack_zunm2l(side, trans, m, n, k, &a[a_offset], lda, &tau[1], &c__[c_offset], ldc,
+                           &work[1], &iinfo);
     }
     else
     {
@@ -379,8 +388,8 @@ void zunmql_(char *side, char *trans, integer *m, integer *n, integer *k, double
             /* Form the triangular factor of the block reflector */
             /* H = H(i+ib-1) . . . H(i+1) H(i) */
             i__4 = nq - *k + i__ + ib - 1;
-            zlarft_("Backward", "Columnwise", &i__4, &ib, &a[i__ * a_dim1 + 1], lda, &tau[i__],
-                    &work[iwt], &c__65);
+            aocl_lapack_zlarft("Backward", "Columnwise", &i__4, &ib, &a[i__ * a_dim1 + 1], lda,
+                               &tau[i__], &work[iwt], &c__65);
             if(left)
             {
                 /* H or H**H is applied to C(1:m-k+i+ib-1,1:n) */
@@ -392,8 +401,9 @@ void zunmql_(char *side, char *trans, integer *m, integer *n, integer *k, double
                 ni = *n - *k + i__ + ib - 1;
             }
             /* Apply H or H**H */
-            zlarfb_(side, trans, "Backward", "Columnwise", &mi, &ni, &ib, &a[i__ * a_dim1 + 1], lda,
-                    &work[iwt], &c__65, &c__[c_offset], ldc, &work[1], &ldwork);
+            aocl_lapack_zlarfb(side, trans, "Backward", "Columnwise", &mi, &ni, &ib,
+                               &a[i__ * a_dim1 + 1], lda, &work[iwt], &c__65, &c__[c_offset], ldc,
+                               &work[1], &ldwork);
             /* L10: */
         }
     }

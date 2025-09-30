@@ -1,13 +1,13 @@
 /* izamax.f -- translated by f2c (version 19991025). You must link the resulting object file with the libraries: -lf2c -lm (in that order) */
 #include "FLA_f2c.h"
-integer izamax_(integer *n, doublecomplex *zx, integer *incx)
+integer izamax_(integer *n, dcomplex *zx, integer *incx)
 {
     /* System generated locals */
     integer ret_val, i__1;
     /* Local variables */
     doublereal smax;
     integer i__;
-    extern doublereal dcabs1_(doublecomplex *);
+    extern doublereal dcabs1_(dcomplex *);
     integer ix;
     /* finds the index of element having max. absolute value. */
     /* jack dongarra, 1/15/85. */

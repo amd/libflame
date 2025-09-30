@@ -4,7 +4,7 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
+static aocl_int64_t c__1 = 1;
 /* > \brief \b SORG2R generates all or part of the orthogonal matrix Q from a QR factorization
  * determined by s geqrf (unblocked algorithm). */
 /* =========== DOCUMENTATION =========== */
@@ -112,19 +112,14 @@ static integer c__1 = 1;
 /* > \ingroup realOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void sorg2r_fla(integer *m, integer *n, integer *k, real *a, integer *lda, real *tau, real *work,
-                integer *info)
+void sorg2r_fla(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *k, real *a, aocl_int64_t *lda,
+                real *tau, real *work, aocl_int64_t *info)
 {
     /* System generated locals */
-    integer a_dim1, a_offset, i__1, i__2;
+    aocl_int64_t a_dim1, a_offset, i__1, i__2;
     real r__1;
     /* Local variables */
-    integer i__, j, l;
-    extern /* Subroutine */
-        void
-        sscal_(integer *, real *, real *, integer *),
-        slarf_(char *, integer *, integer *, real *, integer *, real *, real *, integer *, real *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    aocl_int64_t i__, j, l;
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -171,7 +166,7 @@ void sorg2r_fla(integer *m, integer *n, integer *k, real *a, integer *lda, real 
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("SORG2R", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("SORG2R", &i__1, (ftnlen)6);
         return;
     }
     /* Quick return if possible */
@@ -200,14 +195,14 @@ void sorg2r_fla(integer *m, integer *n, integer *k, real *a, integer *lda, real 
             a[i__ + i__ * a_dim1] = 1.f;
             i__1 = *m - i__ + 1;
             i__2 = *n - i__;
-            slarf_("Left", &i__1, &i__2, &a[i__ + i__ * a_dim1], &c__1, &tau[i__],
-                   &a[i__ + (i__ + 1) * a_dim1], lda, &work[1]);
+            aocl_lapack_slarf("Left", &i__1, &i__2, &a[i__ + i__ * a_dim1], &c__1, &tau[i__],
+                              &a[i__ + (i__ + 1) * a_dim1], lda, &work[1]);
         }
         if(i__ < *m)
         {
             i__1 = *m - i__;
             r__1 = -tau[i__];
-            sscal_(&i__1, &r__1, &a[i__ + 1 + i__ * a_dim1], &c__1);
+            aocl_blas_sscal(&i__1, &r__1, &a[i__ + 1 + i__ * a_dim1], &c__1);
         }
         a[i__ + i__ * a_dim1] = 1.f - tau[i__];
         /* Set A(1:i-1,i) to zero */

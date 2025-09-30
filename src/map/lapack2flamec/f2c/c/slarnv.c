@@ -92,22 +92,32 @@ the array */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void slarnv_(integer *idist, integer *iseed, integer *n, real *x)
+/** Generated wrapper function */
+void slarnv_(aocl_int_t *idist, aocl_int_t *iseed, aocl_int_t *n, real *x)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_slarnv(idist, iseed, n, x);
+#else
+    aocl_int64_t idist_64 = *idist;
+    aocl_int64_t n_64 = *n;
+
+    aocl_lapack_slarnv(&idist_64, iseed, &n_64, x);
+#endif
+}
+
+void aocl_lapack_slarnv(aocl_int64_t *idist, aocl_int_t *iseed, aocl_int64_t *n, real *x)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("slarnv inputs: idist %" FLA_IS ", iseed %" FLA_IS ", n %" FLA_IS "", *idist,
                       *iseed, *n);
     /* System generated locals */
-    integer i__1, i__2, i__3;
+    aocl_int64_t i__1, i__2, i__3;
     /* Builtin functions */
     double log(doublereal), sqrt(doublereal), cos(doublereal);
     /* Local variables */
-    integer i__;
+    aocl_int64_t i__;
     real u[128];
-    integer il, iv, il2;
-    extern /* Subroutine */
-        void
-        slaruv_(integer *, integer *, real *);
+    aocl_int64_t il, iv, il2;
     /* -- LAPACK auxiliary routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -148,7 +158,7 @@ void slarnv_(integer *idist, integer *iseed, integer *n, real *x)
         }
         /* Call SLARUV to generate IL2 numbers from a uniform (0,1) */
         /* distribution (IL2 <= LV) */
-        slaruv_(&iseed[1], &il2, u);
+        aocl_lapack_slaruv(&iseed[1], &il2, u);
         if(*idist == 1)
         {
             /* Copy generated numbers */

@@ -37,7 +37,7 @@
 /* > */
 /* > \verbatim */
 /* > */
-/* > ZGESV computes the solution to a complex system of linear equations */
+/* > ZGESV computes the solution to a scomplex system of linear equations */
 /* > A * X = B, */
 /* > where A is an N-by-N matrix and X and B are N-by-NRHS matrices. */
 /* > */
@@ -119,8 +119,27 @@ the unit diagonal elements of L are not stored. */
 /* > \ingroup complex16GEsolve */
 /* ===================================================================== */
 /* Subroutine */
-void zgesv_(integer *n, integer *nrhs, doublecomplex *a, integer *lda, integer *ipiv,
-            doublecomplex *b, integer *ldb, integer *info)
+/** Generated wrapper function */
+void zgesv_(aocl_int_t *n, aocl_int_t *nrhs, dcomplex *a, aocl_int_t *lda, aocl_int_t *ipiv,
+            dcomplex *b, aocl_int_t *ldb, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_zgesv(n, nrhs, a, lda, ipiv, b, ldb, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t nrhs_64 = *nrhs;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t ldb_64 = *ldb;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_zgesv(&n_64, &nrhs_64, a, &lda_64, ipiv, b, &ldb_64, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_zgesv(aocl_int64_t *n, aocl_int64_t *nrhs, dcomplex *a, aocl_int64_t *lda,
+                       aocl_int_t *ipiv, dcomplex *b, aocl_int64_t *ldb, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zgesv inputs: n %" FLA_IS ", nrhs %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS
@@ -128,16 +147,8 @@ void zgesv_(integer *n, integer *nrhs, doublecomplex *a, integer *lda, integer *
                       *n, *nrhs, *lda, *ldb);
 
     /* System generated locals */
-    integer a_dim1, a_offset, b_dim1, b_offset, i__1;
+    aocl_int64_t a_dim1, a_offset, b_dim1, b_offset, i__1;
     /* Local variables */
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    extern /* Subroutine */
-        void
-        zgetrf_(integer *, integer *, doublecomplex *, integer *, integer *, integer *),
-        zgetrs_(char *, integer *, integer *, doublecomplex *, integer *, integer *,
-                doublecomplex *, integer *, integer *);
     /* -- LAPACK driver routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -182,16 +193,17 @@ void zgesv_(integer *n, integer *nrhs, doublecomplex *a, integer *lda, integer *
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("ZGESV ", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("ZGESV ", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Compute the LU factorization of A. */
-    zgetrf_(n, n, &a[a_offset], lda, &ipiv[1], info);
+    aocl_lapack_zgetrf(n, n, &a[a_offset], lda, &ipiv[1], info);
     if(*info == 0)
     {
         /* Solve the system A*X = B, overwriting B with X. */
-        zgetrs_("No transpose", n, nrhs, &a[a_offset], lda, &ipiv[1], &b[b_offset], ldb, info);
+        aocl_lapack_zgetrs("No transpose", n, nrhs, &a[a_offset], lda, &ipiv[1], &b[b_offset], ldb,
+                           info);
     }
     AOCL_DTL_TRACE_LOG_EXIT
     return;

@@ -4,8 +4,8 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
-static integer c_n1 = -1;
+static aocl_int64_t c__1 = 1;
+static aocl_int64_t c_n1 = -1;
 /* > \brief \b ZGTTRS */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -137,25 +137,38 @@ IPIV(i) = i indicates a row interchange was not */
 /* > \ingroup complex16GTcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void zgttrs_(char *trans, integer *n, integer *nrhs, doublecomplex *dl, doublecomplex *d__,
-             doublecomplex *du, doublecomplex *du2, integer *ipiv, doublecomplex *b, integer *ldb,
-             integer *info)
+/** Generated wrapper function */
+void zgttrs_(char *trans, aocl_int_t *n, aocl_int_t *nrhs, dcomplex *dl, dcomplex *d__,
+             dcomplex *du, dcomplex *du2, aocl_int_t *ipiv, dcomplex *b,
+             aocl_int_t *ldb, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_zgttrs(trans, n, nrhs, dl, d__, du, du2, ipiv, b, ldb, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t nrhs_64 = *nrhs;
+    aocl_int64_t ldb_64 = *ldb;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_zgttrs(trans, &n_64, &nrhs_64, dl, d__, du, du2, ipiv, b, &ldb_64, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_zgttrs(char *trans, aocl_int64_t *n, aocl_int64_t *nrhs, dcomplex *dl,
+                        dcomplex *d__, dcomplex *du, dcomplex *du2, aocl_int_t *ipiv,
+                        dcomplex *b, aocl_int64_t *ldb, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zgttrs inputs: trans %c, n %" FLA_IS ", nrhs %" FLA_IS ", ldb %" FLA_IS "",
                       *trans, *n, *nrhs, *ldb);
 
     /* System generated locals */
-    integer b_dim1, b_offset, i__1, i__2, i__3;
+    aocl_int64_t b_dim1, b_offset, i__1, i__2, i__3;
     /* Local variables */
-    integer j, jb, nb;
-    extern /* Subroutine */
-        void
-        zgtts2_(integer *, integer *, integer *, doublecomplex *, doublecomplex *, doublecomplex *,
-                doublecomplex *, integer *, doublecomplex *, integer *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
-    integer itrans;
+    aocl_int64_t j, jb, nb;
+    aocl_int64_t itrans;
     logical notran;
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -207,7 +220,7 @@ void zgttrs_(char *trans, integer *n, integer *nrhs, doublecomplex *dl, doubleco
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("ZGTTRS", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("ZGTTRS", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -239,12 +252,13 @@ void zgttrs_(char *trans, integer *n, integer *nrhs, doublecomplex *dl, doubleco
     {
         /* Computing MAX */
         i__1 = 1;
-        i__2 = ilaenv_(&c__1, "ZGTTRS", trans, n, nrhs, &c_n1, &c_n1); // , expr subst
+        i__2 = aocl_lapack_ilaenv(&c__1, "ZGTTRS", trans, n, nrhs, &c_n1, &c_n1); // , expr subst
         nb = fla_max(i__1, i__2);
     }
     if(nb >= *nrhs)
     {
-        zgtts2_(&itrans, n, nrhs, &dl[1], &d__[1], &du[1], &du2[1], &ipiv[1], &b[b_offset], ldb);
+        aocl_lapack_zgtts2(&itrans, n, nrhs, &dl[1], &d__[1], &du[1], &du2[1], &ipiv[1],
+                           &b[b_offset], ldb);
     }
     else
     {
@@ -255,8 +269,8 @@ void zgttrs_(char *trans, integer *n, integer *nrhs, doublecomplex *dl, doubleco
             /* Computing MIN */
             i__3 = *nrhs - j + 1;
             jb = fla_min(i__3, nb);
-            zgtts2_(&itrans, n, &jb, &dl[1], &d__[1], &du[1], &du2[1], &ipiv[1], &b[j * b_dim1 + 1],
-                    ldb);
+            aocl_lapack_zgtts2(&itrans, n, &jb, &dl[1], &d__[1], &du[1], &du2[1], &ipiv[1],
+                               &b[j * b_dim1 + 1], ldb);
             /* L10: */
         }
     }

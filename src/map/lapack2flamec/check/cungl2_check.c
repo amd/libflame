@@ -1,10 +1,10 @@
 #include "FLA_f2c.h"
 #include "FLA_lapack2flame_return_defs.h"
-int cungl2_check(integer *m, integer *n, integer *k, scomplex *a, integer *lda, scomplex *tau,
-                 scomplex *work, integer *info)
+int cungl2_check(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *k, scomplex *a, aocl_int64_t *lda, scomplex *tau,
+                 scomplex *work, aocl_int64_t *info)
 {
     /* System generated locals */
-    integer a_dim1, a_offset, i__1;
+    aocl_int64_t a_dim1, a_offset, i__1;
 
     /* Builtin functions */
     /* Parameter adjustments */
@@ -34,7 +34,7 @@ int cungl2_check(integer *m, integer *n, integer *k, scomplex *a, integer *lda, 
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("CUNGL2", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("CUNGL2", &i__1, (ftnlen)6);
         return LAPACK_FAILURE;
     }
     /* Quick return if possible */

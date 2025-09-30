@@ -141,8 +141,25 @@ otherwise, */
 /* > \ingroup complexOTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-void clagtm_(char *trans, integer *n, integer *nrhs, real *alpha, complex *dl, complex *d__,
-             complex *du, complex *x, integer *ldx, real *beta, complex *b, integer *ldb)
+/** Generated wrapper function */
+void clagtm_(char *trans, aocl_int_t *n, aocl_int_t *nrhs, real *alpha, scomplex *dl, scomplex *d__,
+             scomplex *du, scomplex *x, aocl_int_t *ldx, real *beta, scomplex *b, aocl_int_t *ldb)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_clagtm(trans, n, nrhs, alpha, dl, d__, du, x, ldx, beta, b, ldb);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t nrhs_64 = *nrhs;
+    aocl_int64_t ldx_64 = *ldx;
+    aocl_int64_t ldb_64 = *ldb;
+
+    aocl_lapack_clagtm(trans, &n_64, &nrhs_64, alpha, dl, d__, du, x, &ldx_64, beta, b, &ldb_64);
+#endif
+}
+
+void aocl_lapack_clagtm(char *trans, aocl_int64_t *n, aocl_int64_t *nrhs, real *alpha, scomplex *dl,
+                        scomplex *d__, scomplex *du, scomplex *x, aocl_int64_t *ldx, real *beta,
+                        scomplex *b, aocl_int64_t *ldb)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -157,14 +174,14 @@ void clagtm_(char *trans, integer *n, integer *nrhs, real *alpha, complex *dl, c
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
-    integer b_dim1, b_offset, x_dim1, x_offset, i__1, i__2, i__3, i__4, i__5, i__6, i__7, i__8,
+    aocl_int64_t b_dim1, b_offset, x_dim1, x_offset, i__1, i__2, i__3, i__4, i__5, i__6, i__7, i__8,
         i__9, i__10;
-    complex q__1, q__2, q__3, q__4, q__5, q__6, q__7, q__8, q__9;
+    scomplex q__1, q__2, q__3, q__4, q__5, q__6, q__7, q__8, q__9;
     /* Builtin functions */
-    void r_cnjg(complex *, complex *);
+    void r_cnjg(scomplex *, scomplex *);
     /* Local variables */
-    integer i__, j;
-    extern logical lsame_(char *, char *, integer, integer);
+    aocl_int64_t i__, j;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */

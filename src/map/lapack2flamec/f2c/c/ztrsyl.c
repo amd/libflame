@@ -4,7 +4,7 @@
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
  /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
+static aocl_int64_t c__1 = 1;
 /* > \brief \b ZTRSYL */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -41,7 +41,7 @@ static integer c__1 = 1;
 /* > */
 /* > \verbatim */
 /* > */
-/* > ZTRSYL solves the complex Sylvester matrix equation: */
+/* > ZTRSYL solves the scomplex Sylvester matrix equation: */
 /* > */
 /* > op(A)*X + X*op(B) = scale*C or */
 /* > op(A)*X - X*op(B) = scale*C, */
@@ -155,51 +155,61 @@ perturbed */
 /* > \ingroup trsyl */
 /* ===================================================================== */
 /* Subroutine */
-void ztrsyl_(char *trana, char *tranb, integer *isgn, integer *m, integer *n, doublecomplex *a,
-             integer *lda, doublecomplex *b, integer *ldb, doublecomplex *c__, integer *ldc,
-             doublereal *scale, integer *info)
+/** Generated wrapper function */
+void ztrsyl_(char *trana, char *tranb, aocl_int_t *isgn, aocl_int_t *m, aocl_int_t *n,
+             dcomplex *a, aocl_int_t *lda, dcomplex *b, aocl_int_t *ldb,
+             dcomplex *c__, aocl_int_t *ldc, doublereal *scale, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_ztrsyl(trana, tranb, isgn, m, n, a, lda, b, ldb, c__, ldc, scale, info);
+#else
+    aocl_int64_t isgn_64 = *isgn;
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t ldb_64 = *ldb;
+    aocl_int64_t ldc_64 = *ldc;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_ztrsyl(trana, tranb, &isgn_64, &m_64, &n_64, a, &lda_64, b, &ldb_64, c__, &ldc_64,
+                       scale, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_ztrsyl(char *trana, char *tranb, aocl_int64_t *isgn, aocl_int64_t *m,
+                        aocl_int64_t *n, dcomplex *a, aocl_int64_t *lda, dcomplex *b,
+                        aocl_int64_t *ldb, dcomplex *c__, aocl_int64_t *ldc, doublereal *scale,
+                        aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("ztrsyl inputs: trana %c, tranb %c, isgn %" FLA_IS ", m %" FLA_IS
                       ", n %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS ", ldc %" FLA_IS "",
                       *trana, *tranb, *isgn, *m, *n, *lda, *ldb, *ldc);
     /* System generated locals */
-    integer a_dim1, a_offset, b_dim1, b_offset, c_dim1, c_offset, i__1, i__2, i__3, i__4;
+    aocl_int64_t a_dim1, a_offset, b_dim1, b_offset, c_dim1, c_offset, i__1, i__2, i__3, i__4;
     doublereal d__1, d__2;
-    doublecomplex z__1, z__2, z__3, z__4;
+    dcomplex z__1, z__2, z__3, z__4;
     /* Builtin functions */
-    double d_imag(doublecomplex *);
-    void d_cnjg(doublecomplex *, doublecomplex *);
+    double d_imag(dcomplex *);
+    void d_cnjg(dcomplex *, dcomplex *);
     /* Local variables */
-    integer j, k, l;
-    doublecomplex a11;
+    aocl_int64_t j, k, l;
+    dcomplex a11;
     doublereal db;
-    doublecomplex x11;
+    dcomplex x11;
     doublereal da11;
-    doublecomplex vec;
+    dcomplex vec;
     doublereal dum[1], eps, sgn, smin;
-    doublecomplex suml, sumr;
-    extern logical lsame_(char *, char *, integer, integer);
-    extern /* Double Complex */
-        void
-        zdotc_f2c_(doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *,
-                   integer *),
-        zdotu_f2c_(doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *,
-                   integer *);
+    dcomplex suml, sumr;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     extern doublereal dlamch_(char *);
     doublereal scaloc;
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    extern doublereal zlange_(char *, integer *, integer *, doublecomplex *, integer *,
-                              doublereal *);
     doublereal bignum;
-    extern /* Subroutine */
-        void
-        zdscal_(integer *, doublereal *, doublecomplex *, integer *);
     extern /* Double Complex */
         void
-        zladiv_f2c_(doublecomplex *, doublecomplex *, doublecomplex *);
+        zladiv_f2c_(dcomplex *, dcomplex *, dcomplex *);
     logical notrna, notrnb;
     doublereal smlnum;
     /* -- LAPACK computational routine -- */
@@ -273,7 +283,7 @@ void ztrsyl_(char *trana, char *tranb, integer *isgn, integer *m, integer *n, do
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("ZTRSYL", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("ZTRSYL", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -291,9 +301,9 @@ void ztrsyl_(char *trana, char *tranb, integer *isgn, integer *m, integer *n, do
     smlnum = smlnum * (doublereal)(*m * *n) / eps;
     bignum = 1. / smlnum;
     /* Computing MAX */
-    d__1 = smlnum, d__2 = eps * zlange_("M", m, m, &a[a_offset], lda, dum);
+    d__1 = smlnum, d__2 = eps * aocl_lapack_zlange("M", m, m, &a[a_offset], lda, dum);
     d__1 = fla_max(d__1, d__2);
-    d__2 = eps * zlange_("M", n, n, &b[b_offset], ldb, dum); // ; expr subst
+    d__2 = eps * aocl_lapack_zlange("M", n, n, &b[b_offset], ldb, dum); // ; expr subst
     smin = fla_max(d__1, d__2);
     sgn = (doublereal)(*isgn);
     if(notrna && notrnb)
@@ -316,12 +326,12 @@ void ztrsyl_(char *trana, char *tranb, integer *isgn, integer *m, integer *n, do
                 i__3 = k + 1;
                 /* Computing MIN */
                 i__4 = k + 1;
-                zdotu_f2c_(&z__1, &i__2, &a[k + fla_min(i__3, *m) * a_dim1], lda,
+                aocl_lapack_zdotu_f2c(&z__1, &i__2, &a[k + fla_min(i__3, *m) * a_dim1], lda,
                            &c__[fla_min(i__4, *m) + l * c_dim1], &c__1);
                 suml.r = z__1.r;
                 suml.i = z__1.i; // , expr subst
                 i__2 = l - 1;
-                zdotu_f2c_(&z__1, &i__2, &c__[k + c_dim1], ldc, &b[l * b_dim1 + 1], &c__1);
+                aocl_lapack_zdotu_f2c(&z__1, &i__2, &c__[k + c_dim1], ldc, &b[l * b_dim1 + 1], &c__1);
                 sumr.r = z__1.r;
                 sumr.i = z__1.i; // , expr subst
                 i__2 = k + l * c_dim1;
@@ -370,7 +380,7 @@ void ztrsyl_(char *trana, char *tranb, integer *isgn, integer *m, integer *n, do
                     i__2 = *n;
                     for(j = 1; j <= i__2; ++j)
                     {
-                        zdscal_(m, &scaloc, &c__[j * c_dim1 + 1], &c__1);
+                        aocl_blas_zdscal(m, &scaloc, &c__[j * c_dim1 + 1], &c__1);
                         /* L10: */
                     }
                     *scale *= scaloc;
@@ -400,11 +410,11 @@ void ztrsyl_(char *trana, char *tranb, integer *isgn, integer *m, integer *n, do
             for(k = 1; k <= i__2; ++k)
             {
                 i__3 = k - 1;
-                zdotc_f2c_(&z__1, &i__3, &a[k * a_dim1 + 1], &c__1, &c__[l * c_dim1 + 1], &c__1);
+                aocl_lapack_zdotc_f2c(&z__1, &i__3, &a[k * a_dim1 + 1], &c__1, &c__[l * c_dim1 + 1], &c__1);
                 suml.r = z__1.r;
                 suml.i = z__1.i; // , expr subst
                 i__3 = l - 1;
-                zdotu_f2c_(&z__1, &i__3, &c__[k + c_dim1], ldc, &b[l * b_dim1 + 1], &c__1);
+                aocl_lapack_zdotu_f2c(&z__1, &i__3, &c__[k + c_dim1], ldc, &b[l * b_dim1 + 1], &c__1);
                 sumr.r = z__1.r;
                 sumr.i = z__1.i; // , expr subst
                 i__3 = k + l * c_dim1;
@@ -453,7 +463,7 @@ void ztrsyl_(char *trana, char *tranb, integer *isgn, integer *m, integer *n, do
                     i__3 = *n;
                     for(j = 1; j <= i__3; ++j)
                     {
-                        zdscal_(m, &scaloc, &c__[j * c_dim1 + 1], &c__1);
+                        aocl_blas_zdscal(m, &scaloc, &c__[j * c_dim1 + 1], &c__1);
                         /* L40: */
                     }
                     *scale *= scaloc;
@@ -485,7 +495,7 @@ void ztrsyl_(char *trana, char *tranb, integer *isgn, integer *m, integer *n, do
             for(k = 1; k <= i__1; ++k)
             {
                 i__2 = k - 1;
-                zdotc_f2c_(&z__1, &i__2, &a[k * a_dim1 + 1], &c__1, &c__[l * c_dim1 + 1], &c__1);
+                aocl_lapack_zdotc_f2c(&z__1, &i__2, &a[k * a_dim1 + 1], &c__1, &c__[l * c_dim1 + 1], &c__1);
                 suml.r = z__1.r;
                 suml.i = z__1.i; // , expr subst
                 i__2 = *n - l;
@@ -493,7 +503,7 @@ void ztrsyl_(char *trana, char *tranb, integer *isgn, integer *m, integer *n, do
                 i__3 = l + 1;
                 /* Computing MIN */
                 i__4 = l + 1;
-                zdotc_f2c_(&z__1, &i__2, &c__[k + fla_min(i__3, *n) * c_dim1], ldc,
+                aocl_lapack_zdotc_f2c(&z__1, &i__2, &c__[k + fla_min(i__3, *n) * c_dim1], ldc,
                            &b[l + fla_min(i__4, *n) * b_dim1], ldb);
                 sumr.r = z__1.r;
                 sumr.i = z__1.i; // , expr subst
@@ -545,7 +555,7 @@ void ztrsyl_(char *trana, char *tranb, integer *isgn, integer *m, integer *n, do
                     i__2 = *n;
                     for(j = 1; j <= i__2; ++j)
                     {
-                        zdscal_(m, &scaloc, &c__[j * c_dim1 + 1], &c__1);
+                        aocl_blas_zdscal(m, &scaloc, &c__[j * c_dim1 + 1], &c__1);
                         /* L70: */
                     }
                     *scale *= scaloc;
@@ -577,7 +587,7 @@ void ztrsyl_(char *trana, char *tranb, integer *isgn, integer *m, integer *n, do
                 i__2 = k + 1;
                 /* Computing MIN */
                 i__3 = k + 1;
-                zdotu_f2c_(&z__1, &i__1, &a[k + fla_min(i__2, *m) * a_dim1], lda,
+                aocl_lapack_zdotu_f2c(&z__1, &i__1, &a[k + fla_min(i__2, *m) * a_dim1], lda,
                            &c__[fla_min(i__3, *m) + l * c_dim1], &c__1);
                 suml.r = z__1.r;
                 suml.i = z__1.i; // , expr subst
@@ -586,7 +596,7 @@ void ztrsyl_(char *trana, char *tranb, integer *isgn, integer *m, integer *n, do
                 i__2 = l + 1;
                 /* Computing MIN */
                 i__3 = l + 1;
-                zdotc_f2c_(&z__1, &i__1, &c__[k + fla_min(i__2, *n) * c_dim1], ldc,
+                aocl_lapack_zdotc_f2c(&z__1, &i__1, &c__[k + fla_min(i__2, *n) * c_dim1], ldc,
                            &b[l + fla_min(i__3, *n) * b_dim1], ldb);
                 sumr.r = z__1.r;
                 sumr.i = z__1.i; // , expr subst
@@ -637,7 +647,7 @@ void ztrsyl_(char *trana, char *tranb, integer *isgn, integer *m, integer *n, do
                     i__1 = *n;
                     for(j = 1; j <= i__1; ++j)
                     {
-                        zdscal_(m, &scaloc, &c__[j * c_dim1 + 1], &c__1);
+                        aocl_blas_zdscal(m, &scaloc, &c__[j * c_dim1 + 1], &c__1);
                         /* L100: */
                     }
                     *scale *= scaloc;

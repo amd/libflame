@@ -4,7 +4,7 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
+static aocl_int64_t c__1 = 1;
 /* > \brief \b CLARFX applies an elementary reflector to a general rectangular matrix, with loop
  * unrolling whe n the reflector has order ≤ 10. */
 /* =========== DOCUMENTATION =========== */
@@ -41,13 +41,13 @@ static integer c__1 = 1;
 /* > */
 /* > \verbatim */
 /* > */
-/* > CLARFX applies a complex elementary reflector H to a complex m by n */
+/* > CLARFX applies a scomplex elementary reflector H to a scomplex m by n */
 /* > matrix C, from either the left or the right. H is represented in the */
 /* > form */
 /* > */
 /* > H = I - tau * v * v**H */
 /* > */
-/* > where tau is a complex scalar and v is a complex vector. */
+/* > where tau is a scomplex scalar and v is a scomplex vector. */
 /* > */
 /* > If tau = 0, then H is taken to be the unit matrix */
 /* > */
@@ -117,8 +117,23 @@ static integer c__1 = 1;
 /* > \ingroup complexOTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-void clarfx_(char *side, integer *m, integer *n, complex *v, complex *tau, complex *c__,
-             integer *ldc, complex *work)
+/** Generated wrapper function */
+void clarfx_(char *side, aocl_int_t *m, aocl_int_t *n, scomplex *v, scomplex *tau, scomplex *c__,
+             aocl_int_t *ldc, scomplex *work)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_clarfx(side, m, n, v, tau, c__, ldc, work);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t ldc_64 = *ldc;
+
+    aocl_lapack_clarfx(side, &m_64, &n_64, v, tau, c__, &ldc_64, work);
+#endif
+}
+
+void aocl_lapack_clarfx(char *side, aocl_int64_t *m, aocl_int64_t *n, scomplex *v, scomplex *tau,
+                        scomplex *c__, aocl_int64_t *ldc, scomplex *work)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -131,19 +146,16 @@ void clarfx_(char *side, integer *m, integer *n, complex *v, complex *tau, compl
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
-    integer c_dim1, c_offset, i__1, i__2, i__3, i__4, i__5, i__6, i__7, i__8, i__9, i__10, i__11;
-    complex q__1, q__2, q__3, q__4, q__5, q__6, q__7, q__8, q__9, q__10, q__11, q__12, q__13, q__14,
+    aocl_int64_t c_dim1, c_offset, i__1, i__2, i__3, i__4, i__5, i__6, i__7, i__8, i__9, i__10,
+        i__11;
+    scomplex q__1, q__2, q__3, q__4, q__5, q__6, q__7, q__8, q__9, q__10, q__11, q__12, q__13, q__14,
         q__15, q__16, q__17, q__18, q__19;
     /* Builtin functions */
-    void r_cnjg(complex *, complex *);
+    void r_cnjg(scomplex *, scomplex *);
     /* Local variables */
-    integer j;
-    complex t1, t2, t3, t4, t5, t6, t7, t8, t9, v1, v2, v3, v4, v5, v6, v7, v8, v9, t10, v10, sum;
-    extern /* Subroutine */
-        void
-        clarf_(char *, integer *, integer *, complex *, integer *, complex *, complex *, integer *,
-               complex *);
-    extern logical lsame_(char *, char *, integer, integer);
+    aocl_int64_t j;
+    scomplex t1, t2, t3, t4, t5, t6, t7, t8, t9, v1, v2, v3, v4, v5, v6, v7, v8, v9, t10, v10, sum;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -203,7 +215,7 @@ void clarfx_(char *side, integer *m, integer *n, complex *v, complex *tau, compl
                 goto L190;
         }
         /* Code for general M */
-        clarf_(side, m, n, &v[1], &c__1, tau, &c__[c_offset], ldc, &work[1]);
+        aocl_lapack_clarf(side, m, n, &v[1], &c__1, tau, &c__[c_offset], ldc, &work[1]);
         goto L410;
     L10: /* Special code for 1 x 1 Householder */
         q__3.r = tau->r * v[1].r - tau->i * v[1].i;
@@ -1452,7 +1464,7 @@ void clarfx_(char *side, integer *m, integer *n, complex *v, complex *tau, compl
                 goto L390;
         }
         /* Code for general N */
-        clarf_(side, m, n, &v[1], &c__1, tau, &c__[c_offset], ldc, &work[1]);
+        aocl_lapack_clarf(side, m, n, &v[1], &c__1, tau, &c__[c_offset], ldc, &work[1]);
         goto L410;
     L210: /* Special code for 1 x 1 Householder */
         q__3.r = tau->r * v[1].r - tau->i * v[1].i;

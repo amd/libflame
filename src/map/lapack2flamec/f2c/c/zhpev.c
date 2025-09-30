@@ -4,7 +4,7 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
+static aocl_int64_t c__1 = 1;
 /* > \brief <b> ZHPEV computes the eigenvalues and, optionally, the left and/or right eigenvectors
  * for OTHER m atrices</b> */
 /* =========== DOCUMENTATION =========== */
@@ -43,7 +43,7 @@ static integer c__1 = 1;
 /* > \verbatim */
 /* > */
 /* > ZHPEV computes all the eigenvalues and, optionally, eigenvectors of a */
-/* > complex Hermitian matrix in packed storage. */
+/* > scomplex Hermitian matrix in packed storage. */
 /* > \endverbatim */
 /* Arguments: */
 /* ========== */
@@ -139,55 +139,53 @@ i */
 /* > \ingroup complex16OTHEReigen */
 /* ===================================================================== */
 /* Subroutine */
-void zhpev_(char *jobz, char *uplo, integer *n, doublecomplex *ap, doublereal *w,
-            doublecomplex *z__, integer *ldz, doublecomplex *work, doublereal *rwork, integer *info)
+/** Generated wrapper function */
+void zhpev_(char *jobz, char *uplo, aocl_int_t *n, dcomplex *ap, doublereal *w,
+            dcomplex *z__, aocl_int_t *ldz, dcomplex *work, doublereal *rwork,
+            aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_zhpev(jobz, uplo, n, ap, w, z__, ldz, work, rwork, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t ldz_64 = *ldz;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_zhpev(jobz, uplo, &n_64, ap, w, z__, &ldz_64, work, rwork, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_zhpev(char *jobz, char *uplo, aocl_int64_t *n, dcomplex *ap, doublereal *w,
+                       dcomplex *z__, aocl_int64_t *ldz, dcomplex *work,
+                       doublereal *rwork, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zhpev inputs: jobz %c, uplo %c, n %" FLA_IS ", ldz %" FLA_IS "", *jobz,
                       *uplo, *n, *ldz);
     /* System generated locals */
-    integer z_dim1, z_offset, i__1;
+    aocl_int64_t z_dim1, z_offset, i__1;
     doublereal d__1;
     /* Builtin functions */
     double sqrt(doublereal);
     /* Local variables */
     doublereal eps;
-    integer inde;
+    aocl_int64_t inde;
     doublereal anrm;
-    integer imax;
+    aocl_int64_t imax;
     doublereal rmin, rmax;
-    extern /* Subroutine */
-        void
-        dscal_(integer *, doublereal *, doublereal *, integer *);
     doublereal sigma;
-    extern logical lsame_(char *, char *, integer, integer);
-    integer iinfo;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    aocl_int64_t iinfo;
     logical wantz;
     extern doublereal dlamch_(char *);
-    integer iscale;
+    aocl_int64_t iscale;
     doublereal safmin;
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    extern /* Subroutine */
-        void
-        zdscal_(integer *, doublereal *, doublecomplex *, integer *);
     doublereal bignum;
-    integer indtau;
-    extern /* Subroutine */
-        void
-        dsterf_(integer *, doublereal *, doublereal *, integer *);
-    extern doublereal zlanhp_(char *, char *, integer *, doublecomplex *, doublereal *);
-    integer indrwk, indwrk;
+    aocl_int64_t indtau;
+    aocl_int64_t indrwk, indwrk;
     doublereal smlnum;
-    extern /* Subroutine */
-        void
-        zhptrd_(char *, integer *, doublecomplex *, doublereal *, doublereal *, doublecomplex *,
-                integer *),
-        zsteqr_(char *, integer *, doublereal *, doublereal *, doublecomplex *, integer *,
-                doublereal *, integer *),
-        zupgtr_(char *, integer *, doublecomplex *, doublecomplex *, doublecomplex *, integer *,
-                doublecomplex *, integer *);
     /* -- LAPACK driver routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -239,7 +237,7 @@ void zhpev_(char *jobz, char *uplo, integer *n, doublecomplex *ap, doublereal *w
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("ZHPEV ", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("ZHPEV ", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -270,7 +268,7 @@ void zhpev_(char *jobz, char *uplo, integer *n, doublecomplex *ap, doublereal *w
     rmin = sqrt(smlnum);
     rmax = sqrt(bignum);
     /* Scale matrix to allowable range, if necessary. */
-    anrm = zlanhp_("M", uplo, n, &ap[1], &rwork[1]);
+    anrm = aocl_lapack_zlanhp("M", uplo, n, &ap[1], &rwork[1]);
     iscale = 0;
     if(anrm > 0. && anrm < rmin)
     {
@@ -285,24 +283,25 @@ void zhpev_(char *jobz, char *uplo, integer *n, doublecomplex *ap, doublereal *w
     if(iscale == 1)
     {
         i__1 = *n * (*n + 1) / 2;
-        zdscal_(&i__1, &sigma, &ap[1], &c__1);
+        aocl_blas_zdscal(&i__1, &sigma, &ap[1], &c__1);
     }
     /* Call ZHPTRD to reduce Hermitian packed matrix to tridiagonal form. */
     inde = 1;
     indtau = 1;
-    zhptrd_(uplo, n, &ap[1], &w[1], &rwork[inde], &work[indtau], &iinfo);
+    aocl_lapack_zhptrd(uplo, n, &ap[1], &w[1], &rwork[inde], &work[indtau], &iinfo);
     /* For eigenvalues only, call DSTERF. For eigenvectors, first call */
     /* ZUPGTR to generate the orthogonal matrix, then call ZSTEQR. */
     if(!wantz)
     {
-        dsterf_(n, &w[1], &rwork[inde], info);
+        aocl_lapack_dsterf(n, &w[1], &rwork[inde], info);
     }
     else
     {
         indwrk = indtau + *n;
-        zupgtr_(uplo, n, &ap[1], &work[indtau], &z__[z_offset], ldz, &work[indwrk], &iinfo);
+        aocl_lapack_zupgtr(uplo, n, &ap[1], &work[indtau], &z__[z_offset], ldz, &work[indwrk],
+                           &iinfo);
         indrwk = inde + *n;
-        zsteqr_(jobz, n, &w[1], &rwork[inde], &z__[z_offset], ldz, &rwork[indrwk], info);
+        aocl_lapack_zsteqr(jobz, n, &w[1], &rwork[inde], &z__[z_offset], ldz, &rwork[indrwk], info);
     }
     /* If matrix was scaled, then rescale eigenvalues appropriately. */
     if(iscale == 1)
@@ -316,7 +315,7 @@ void zhpev_(char *jobz, char *uplo, integer *n, doublecomplex *ap, doublereal *w
             imax = *info - 1;
         }
         d__1 = 1. / sigma;
-        dscal_(&imax, &d__1, &w[1], &c__1);
+        aocl_blas_dscal(&imax, &d__1, &w[1], &c__1);
     }
     AOCL_DTL_TRACE_LOG_EXIT
     return;

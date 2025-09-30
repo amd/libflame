@@ -1,17 +1,17 @@
 /* chpmv.f -- translated by f2c (version 19991025). You must link the resulting object file with the libraries: -lf2c -lm (in that order) */
 #include "FLA_f2c.h"
 /* Subroutine */
-int chpmv_(char *uplo, integer *n, complex *alpha, complex * ap, complex *x, integer *incx, complex *beta, complex *y, integer * incy)
+int chpmv_(char *uplo, integer *n, scomplex *alpha, scomplex * ap, scomplex *x, integer *incx, scomplex *beta, scomplex *y, integer * incy)
 {
     /* System generated locals */
     integer i__1, i__2, i__3, i__4, i__5;
     real r__1;
-    complex q__1, q__2, q__3, q__4;
+    scomplex q__1, q__2, q__3, q__4;
     /* Builtin functions */
-    void r_cnjg(complex *, complex *);
+    void r_cnjg(scomplex *, scomplex *);
     /* Local variables */
     integer info;
-    complex temp1, temp2;
+    scomplex temp1, temp2;
     integer i__, j, k;
     extern logical lsame_(char *, char *, integer, integer);
     integer kk, ix, iy, jx, jy, kx, ky;

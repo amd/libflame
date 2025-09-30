@@ -1,11 +1,11 @@
 /* cscal.f -- translated by f2c (version 19991025). You must link the resulting object file with the libraries: -lf2c -lm (in that order) */
 #include "FLA_f2c.h"
 /* Subroutine */
-int cscal_(integer *n, complex *ca, complex *cx, integer * incx)
+int cscal_(integer *n, scomplex *ca, scomplex *cx, integer * incx)
 {
     /* System generated locals */
     integer i__1, i__2, i__3, i__4;
-    complex q__1;
+    scomplex q__1;
     /* Local variables */
     integer i__, nincx;
     /* scales a vector by a constant. */

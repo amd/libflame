@@ -4,10 +4,10 @@
  -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for
  libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
-static integer c_n1 = -1;
-static integer c__2 = 2;
-/* > \brief \b ZHETRF_RK computes the factorization of a complex Hermitian indefinite matrix using
+static aocl_int64_t c__1 = 1;
+static aocl_int64_t c_n1 = -1;
+static aocl_int64_t c__2 = 2;
+/* > \brief \b ZHETRF_RK computes the factorization of a scomplex Hermitian indefinite matrix using
  * the bounded Bunch-Kaufman (rook) diagonal pivoting method (BLAS3 blocked algorithm). */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -43,7 +43,7 @@ static integer c__2 = 2;
 /* ============= */
 /* > */
 /* > \verbatim */
-/* > ZHETRF_RK computes the factorization of a complex Hermitian matrix A */
+/* > ZHETRF_RK computes the factorization of a scomplex Hermitian matrix A */
 /* > using the bounded Bunch-Kaufman (rook) diagonal pivoting method: */
 /* > */
 /* > A = P*U*D*(U**H)*(P**T) or A = P*L*D*(L**H)*(P**T), */
@@ -260,33 +260,41 @@ static integer c__2 = 2;
 /* > \endverbatim */
 /* ===================================================================== */
 /* Subroutine */
-void zhetrf_rk_(char *uplo, integer *n, doublecomplex *a, integer *lda, doublecomplex *e,
-                integer *ipiv, doublecomplex *work, integer *lwork, integer *info)
+/** Generated wrapper function */
+void zhetrf_rk_(char *uplo, aocl_int_t *n, dcomplex *a, aocl_int_t *lda, dcomplex *e,
+                aocl_int_t *ipiv, dcomplex *work, aocl_int_t *lwork, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_zhetrf_rk(uplo, n, a, lda, e, ipiv, work, lwork, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t lwork_64 = *lwork;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_zhetrf_rk(uplo, &n_64, a, &lda_64, e, ipiv, work, &lwork_64, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_zhetrf_rk(char *uplo, aocl_int64_t *n, dcomplex *a, aocl_int64_t *lda,
+                           dcomplex *e, aocl_int_t *ipiv, dcomplex *work,
+                           aocl_int64_t *lwork, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zhetrf_rk inputs: uplo %c, n %" FLA_IS ", lda %" FLA_IS ", lwork %" FLA_IS
                       "",
                       *uplo, *n, *lda, *lwork);
     /* System generated locals */
-    integer a_dim1, a_offset, i__1, i__2;
+    aocl_int64_t a_dim1, a_offset, i__1, i__2;
     /* Local variables */
-    integer i__, k;
-    extern /* Subroutine */
-        void
-        zhetf2_rk_(char *, integer *, doublecomplex *, integer *, doublecomplex *, integer *,
-                   integer *),
-        zlahef_rk_(char *, integer *, integer *, integer *, doublecomplex *, integer *,
-                   doublecomplex *, integer *, doublecomplex *, integer *, integer *);
-    integer kb, nb, ip, iws;
-    extern logical lsame_(char *, char *, integer, integer);
-    integer nbmin, iinfo;
+    aocl_int64_t i__, k;
+    aocl_int64_t kb, nb, ip, iws;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    aocl_int64_t nbmin, iinfo;
     logical upper;
-    extern /* Subroutine */
-        void
-        zswap_(integer *, doublecomplex *, integer *, doublecomplex *, integer *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
-    integer ldwork, lwkopt;
+    aocl_int64_t ldwork, lwkopt;
     logical lquery;
     /* -- LAPACK computational routine (version 3.7.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -337,7 +345,7 @@ void zhetrf_rk_(char *uplo, integer *n, doublecomplex *a, integer *lda, doubleco
     if(*info == 0)
     {
         /* Determine the block size */
-        nb = ilaenv_(&c__1, "ZHETRF_RK", uplo, n, &c_n1, &c_n1, &c_n1);
+        nb = aocl_lapack_ilaenv(&c__1, "ZHETRF_RK", uplo, n, &c_n1, &c_n1, &c_n1);
         lwkopt = *n * nb;
         work[1].r = (doublereal)lwkopt;
         work[1].i = 0.; // , expr subst
@@ -345,7 +353,7 @@ void zhetrf_rk_(char *uplo, integer *n, doublecomplex *a, integer *lda, doubleco
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("ZHETRF_RK", &i__1, (ftnlen)9);
+        aocl_blas_xerbla("ZHETRF_RK", &i__1, (ftnlen)9);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -366,7 +374,8 @@ void zhetrf_rk_(char *uplo, integer *n, doublecomplex *a, integer *lda, doubleco
             nb = fla_max(i__1, 1);
             /* Computing MAX */
             i__1 = 2;
-            i__2 = ilaenv_(&c__2, "ZHETRF_RK", uplo, n, &c_n1, &c_n1, &c_n1); // , expr subst
+            i__2 = aocl_lapack_ilaenv(&c__2, "ZHETRF_RK", uplo, n, &c_n1, &c_n1,
+                                      &c_n1); // , expr subst
             nbmin = fla_max(i__1, i__2);
         }
     }
@@ -395,13 +404,13 @@ void zhetrf_rk_(char *uplo, integer *n, doublecomplex *a, integer *lda, doubleco
         {
             /* Factorize columns k-kb+1:k of A and use blocked code to */
             /* update columns 1:k-kb */
-            zlahef_rk_(uplo, &k, &nb, &kb, &a[a_offset], lda, &e[1], &ipiv[1], &work[1], &ldwork,
-                       &iinfo);
+            aocl_lapack_zlahef_rk(uplo, &k, &nb, &kb, &a[a_offset], lda, &e[1], &ipiv[1], &work[1],
+                                  &ldwork, &iinfo);
         }
         else
         {
             /* Use unblocked code to factorize columns 1:k of A */
-            zhetf2_rk_(uplo, &k, &a[a_offset], lda, &e[1], &ipiv[1], &iinfo);
+            aocl_lapack_zhetf2_rk(uplo, &k, &a[a_offset], lda, &e[1], &ipiv[1], &iinfo);
             kb = k;
         }
         /* Set INFO on the first occurrence of a zero pivot */
@@ -426,7 +435,8 @@ void zhetrf_rk_(char *uplo, integer *n, doublecomplex *a, integer *lda, doubleco
                 if(ip != i__)
                 {
                     i__2 = *n - k;
-                    zswap_(&i__2, &a[i__ + (k + 1) * a_dim1], lda, &a[ip + (k + 1) * a_dim1], lda);
+                    aocl_blas_zswap(&i__2, &a[i__ + (k + 1) * a_dim1], lda,
+                                    &a[ip + (k + 1) * a_dim1], lda);
                 }
             }
         }
@@ -455,14 +465,14 @@ void zhetrf_rk_(char *uplo, integer *n, doublecomplex *a, integer *lda, doubleco
             /* Factorize columns k:k+kb-1 of A and use blocked code to */
             /* update columns k+kb:n */
             i__1 = *n - k + 1;
-            zlahef_rk_(uplo, &i__1, &nb, &kb, &a[k + k * a_dim1], lda, &e[k], &ipiv[k], &work[1],
-                       &ldwork, &iinfo);
+            aocl_lapack_zlahef_rk(uplo, &i__1, &nb, &kb, &a[k + k * a_dim1], lda, &e[k], &ipiv[k],
+                                  &work[1], &ldwork, &iinfo);
         }
         else
         {
             /* Use unblocked code to factorize columns k:n of A */
             i__1 = *n - k + 1;
-            zhetf2_rk_(uplo, &i__1, &a[k + k * a_dim1], lda, &e[k], &ipiv[k], &iinfo);
+            aocl_lapack_zhetf2_rk(uplo, &i__1, &a[k + k * a_dim1], lda, &e[k], &ipiv[k], &iinfo);
             kb = *n - k + 1;
         }
         /* Set INFO on the first occurrence of a zero pivot */
@@ -476,11 +486,11 @@ void zhetrf_rk_(char *uplo, integer *n, doublecomplex *a, integer *lda, doubleco
         {
             if(ipiv[i__] > 0)
             {
-                ipiv[i__] = ipiv[i__] + k - 1;
+                ipiv[i__] = (aocl_int_t)(ipiv[i__] + k - 1);
             }
             else
             {
-                ipiv[i__] = ipiv[i__] - k + 1;
+                ipiv[i__] = (aocl_int_t)(ipiv[i__] - k + 1);
             }
         }
         /* Apply permutations to the leading panel 1:k-1 */
@@ -499,7 +509,7 @@ void zhetrf_rk_(char *uplo, integer *n, doublecomplex *a, integer *lda, doubleco
                 if(ip != i__)
                 {
                     i__2 = k - 1;
-                    zswap_(&i__2, &a[i__ + a_dim1], lda, &a[ip + a_dim1], lda);
+                    aocl_blas_zswap(&i__2, &a[i__ + a_dim1], lda, &a[ip + a_dim1], lda);
                 }
             }
         }
@@ -509,7 +519,7 @@ void zhetrf_rk_(char *uplo, integer *n, doublecomplex *a, integer *lda, doubleco
         /* This label is the exit from main loop over K increasing */
         /* from 1 to N in steps of KB */
     L35: /* End Lower */
-         ;
+        ;
     }
     work[1].r = (doublereal)lwkopt;
     work[1].i = 0.; // , expr subst

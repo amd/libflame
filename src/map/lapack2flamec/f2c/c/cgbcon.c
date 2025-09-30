@@ -4,7 +4,7 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
+static aocl_int64_t c__1 = 1;
 /* > \brief \b CGBCON */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -43,7 +43,7 @@ static integer c__1 = 1;
 /* > */
 /* > \verbatim */
 /* > */
-/* > CGBCON estimates the reciprocal of the condition number of a complex */
+/* > CGBCON estimates the reciprocal of the condition number of a scomplex */
 /* > general band matrix A, in either the 1-norm or the infinity-norm, */
 /* > using the LU factorization computed by CGBTRF. */
 /* > */
@@ -145,8 +145,30 @@ for 1 <= i <= N, row i of the matrix was */
 /* > \ingroup complexGBcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void cgbcon_(char *norm, integer *n, integer *kl, integer *ku, complex *ab, integer *ldab,
-             integer *ipiv, real *anorm, real *rcond, complex *work, real *rwork, integer *info)
+/** Generated wrapper function */
+void cgbcon_(char *norm, aocl_int_t *n, aocl_int_t *kl, aocl_int_t *ku, scomplex *ab,
+             aocl_int_t *ldab, aocl_int_t *ipiv, real *anorm, real *rcond, scomplex *work,
+             real *rwork, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_cgbcon(norm, n, kl, ku, ab, ldab, ipiv, anorm, rcond, work, rwork, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t kl_64 = *kl;
+    aocl_int64_t ku_64 = *ku;
+    aocl_int64_t ldab_64 = *ldab;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_cgbcon(norm, &n_64, &kl_64, &ku_64, ab, &ldab_64, ipiv, anorm, rcond, work, rwork,
+                       &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_cgbcon(char *norm, aocl_int64_t *n, aocl_int64_t *kl, aocl_int64_t *ku,
+                        scomplex *ab, aocl_int64_t *ldab, aocl_int_t *ipiv, real *anorm, real *rcond,
+                        scomplex *work, real *rwork, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -161,39 +183,21 @@ void cgbcon_(char *norm, integer *n, integer *kl, integer *ku, complex *ab, inte
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
-    integer ab_dim1, ab_offset, i__1, i__2, i__3;
+    aocl_int64_t ab_dim1, ab_offset, i__1, i__2, i__3;
     real r__1, r__2;
-    complex q__1, q__2;
+    scomplex q__1, q__2;
     /* Builtin functions */
-    double r_imag(complex *);
+    double r_imag(scomplex *);
     /* Local variables */
-    integer j;
-    complex t;
-    integer kd, lm, jp, ix, kase, kase1;
+    aocl_int64_t j;
+    scomplex t;
+    aocl_int64_t kd, lm, jp, ix, kase, kase1;
     real scale;
-    extern /* Complex */
-        VOID
-        cdotc_f2c_(complex *, integer *, complex *, integer *, complex *, integer *);
-    extern logical lsame_(char *, char *, integer, integer);
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     integer isave[3];
-    extern /* Subroutine */
-        void
-        caxpy_(integer *, complex *, complex *, integer *, complex *, integer *);
     logical lnoti;
-    extern /* Subroutine */
-        void
-        clacn2_(integer *, complex *, complex *, real *, integer *, integer *);
-    extern integer icamax_(integer *, complex *, integer *);
     extern real slamch_(char *);
-    extern /* Subroutine */
-        void
-        clatbs_(char *, char *, char *, char *, integer *, integer *, complex *, integer *,
-                complex *, real *, real *, integer *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real ainvnm;
-    extern /* Subroutine */
-        void
-        csrscl_(integer *, real *, complex *, integer *);
     logical onenrm;
     char normin[1];
     real smlnum;
@@ -261,7 +265,7 @@ void cgbcon_(char *norm, integer *n, integer *kl, integer *ku, complex *ab, inte
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("CGBCON", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("CGBCON", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
@@ -294,7 +298,7 @@ void cgbcon_(char *norm, integer *n, integer *kl, integer *ku, complex *ab, inte
     lnoti = *kl > 0;
     kase = 0;
 L10:
-    clacn2_(n, &work[*n + 1], &work[1], &ainvnm, &kase, isave);
+    aocl_lapack_clacn2(n, &work[*n + 1], &work[1], &ainvnm, &kase, isave);
     if(kase != 0)
     {
         if(kase == kase1)
@@ -325,21 +329,22 @@ L10:
                     }
                     q__1.r = -t.r;
                     q__1.i = -t.i; // , expr subst
-                    caxpy_(&lm, &q__1, &ab[kd + 1 + j * ab_dim1], &c__1, &work[j + 1], &c__1);
+                    aocl_blas_caxpy(&lm, &q__1, &ab[kd + 1 + j * ab_dim1], &c__1, &work[j + 1],
+                                    &c__1);
                     /* L20: */
                 }
             }
             /* Multiply by inv(U). */
             i__1 = *kl + *ku;
-            clatbs_("Upper", "No transpose", "Non-unit", normin, n, &i__1, &ab[ab_offset], ldab,
-                    &work[1], &scale, &rwork[1], info);
+            aocl_lapack_clatbs("Upper", "No transpose", "Non-unit", normin, n, &i__1,
+                               &ab[ab_offset], ldab, &work[1], &scale, &rwork[1], info);
         }
         else
         {
             /* Multiply by inv(U**H). */
             i__1 = *kl + *ku;
-            clatbs_("Upper", "Conjugate transpose", "Non-unit", normin, n, &i__1, &ab[ab_offset],
-                    ldab, &work[1], &scale, &rwork[1], info);
+            aocl_lapack_clatbs("Upper", "Conjugate transpose", "Non-unit", normin, n, &i__1,
+                               &ab[ab_offset], ldab, &work[1], &scale, &rwork[1], info);
             /* Multiply by inv(L**H). */
             if(lnoti)
             {
@@ -351,7 +356,7 @@ L10:
                     lm = fla_min(i__1, i__2);
                     i__1 = j;
                     i__2 = j;
-                    cdotc_f2c_(&q__2, &lm, &ab[kd + 1 + j * ab_dim1], &c__1, &work[j + 1], &c__1);
+                    aocl_lapack_cdotc_f2c(&q__2, &lm, &ab[kd + 1 + j * ab_dim1], &c__1, &work[j + 1], &c__1);
                     q__1.r = work[i__2].r - q__2.r;
                     q__1.i = work[i__2].i - q__2.i; // , expr subst
                     work[i__1].r = q__1.r;
@@ -378,7 +383,7 @@ L10:
         *(unsigned char *)normin = 'Y';
         if(scale != 1.f)
         {
-            ix = icamax_(n, &work[1], &c__1);
+            ix = aocl_blas_icamax(n, &work[1], &c__1);
             i__1 = ix;
             if(scale < ((r__1 = work[i__1].r, f2c_abs(r__1))
                         + (r__2 = r_imag(&work[ix]), f2c_abs(r__2)))
@@ -387,7 +392,7 @@ L10:
             {
                 goto L40;
             }
-            csrscl_(n, &scale, &work[1], &c__1);
+            aocl_lapack_csrscl(n, &scale, &work[1], &c__1);
         }
         goto L10;
     }

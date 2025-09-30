@@ -112,22 +112,36 @@
 /* > Jason Riedy, University of California, Berkeley, USA \n */
 /* > */
 /* ===================================================================== */
-integer dlaneg_(integer *n, doublereal *d__, doublereal *lld, doublereal *sigma, doublereal *pivmin,
-                integer *r__)
+/** Generated wrapper function */
+aocl_int_t dlaneg_(aocl_int_t *n, doublereal *d__, doublereal *lld, doublereal *sigma,
+                   doublereal *pivmin, aocl_int_t *r__)
+{
+#if FLA_ENABLE_ILP64
+    return aocl_lapack_dlaneg(n, d__, lld, sigma, pivmin, r__);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t r___64 = *r__;
+
+    return aocl_lapack_dlaneg(&n_64, d__, lld, sigma, pivmin, &r___64);
+#endif
+}
+
+aocl_int64_t aocl_lapack_dlaneg(aocl_int64_t *n, doublereal *d__, doublereal *lld,
+                                doublereal *sigma, doublereal *pivmin, aocl_int64_t *r__)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dlaneg inputs: n %" FLA_IS ", r__ %" FLA_IS "", *n, *r__);
     /* System generated locals */
-    integer ret_val, i__1, i__2, i__3, i__4;
+    aocl_int64_t ret_val, i__1, i__2, i__3, i__4;
     /* Local variables */
-    integer j;
+    aocl_int64_t j;
     doublereal p, t;
-    integer bj;
+    aocl_int64_t bj;
     doublereal tmp;
-    integer neg1, neg2;
+    aocl_int64_t neg1, neg2;
     doublereal bsav, gamma, dplus;
     extern logical disnan_(doublereal *);
-    integer negcnt;
+    aocl_int64_t negcnt;
     logical sawnan;
     doublereal dminus;
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */

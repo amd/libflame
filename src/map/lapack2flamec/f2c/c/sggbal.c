@@ -4,7 +4,7 @@
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
  /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
+static aocl_int64_t c__1 = 1;
 static real c_b35 = 10.f;
 static real c_b71 = .5f;
 /* > \brief \b SGGBAL */
@@ -177,53 +177,64 @@ and second, applying a diagonal similarity */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void sggbal_(char *job, integer *n, real *a, integer *lda, real *b, integer *ldb, integer *ilo,
-             integer *ihi, real *lscale, real *rscale, real *work, integer *info)
+/** Generated wrapper function */
+void sggbal_(char *job, aocl_int_t *n, real *a, aocl_int_t *lda, real *b, aocl_int_t *ldb,
+             aocl_int_t *ilo, aocl_int_t *ihi, real *lscale, real *rscale, real *work,
+             aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_sggbal(job, n, a, lda, b, ldb, ilo, ihi, lscale, rscale, work, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t ldb_64 = *ldb;
+    aocl_int64_t ilo_64 = *ilo;
+    aocl_int64_t ihi_64 = *ihi;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_sggbal(job, &n_64, a, &lda_64, b, &ldb_64, &ilo_64, &ihi_64, lscale, rscale, work,
+                       &info_64);
+
+    *ilo = (aocl_int_t)ilo_64;
+    *ihi = (aocl_int_t)ihi_64;
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_sggbal(char *job, aocl_int64_t *n, real *a, aocl_int64_t *lda, real *b,
+                        aocl_int64_t *ldb, aocl_int64_t *ilo, aocl_int64_t *ihi, real *lscale,
+                        real *rscale, real *work, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("sggbal inputs: job %c, n %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS
                       ", ilo %" FLA_IS ", ihi %" FLA_IS "",
                       *job, *n, *lda, *ldb, *ilo, *ihi);
     /* System generated locals */
-    integer a_dim1, a_offset, b_dim1, b_offset, i__1, i__2, i__3;
+    aocl_int64_t a_dim1, a_offset, b_dim1, b_offset, i__1, i__2, i__3;
     real r__1, r__2, r__3;
     /* Builtin functions */
-    double r_lg10(real *), r_sign(real *, real *), pow_ri(real *, integer *);
+    double r_lg10(real *), r_sign(real *, real *), pow_ri(real *, aocl_int64_t *);
     /* Local variables */
-    integer i__, j, k, l, m;
+    aocl_int64_t i__, j, k, l, m;
     real t;
-    integer jc;
+    aocl_int64_t jc;
     real ta, tb, tc;
-    integer ir;
+    aocl_int64_t ir;
     real ew;
-    integer it, nr, ip1, jp1, lm1;
+    aocl_int64_t it, nr, ip1, jp1, lm1;
     real cab, rab, ewc, cor, sum;
-    integer nrp2, icab, lcab;
+    aocl_int64_t nrp2, icab, lcab;
     real beta, coef;
-    integer irab, lrab;
+    aocl_int64_t irab, lrab;
     real basl, cmax;
-    extern real sdot_(integer *, real *, integer *, real *, integer *);
     real coef2, coef5, gamma, alpha;
-    extern logical lsame_(char *, char *, integer, integer);
-    extern /* Subroutine */
-        void
-        sscal_(integer *, real *, real *, integer *);
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     real sfmin, sfmax;
-    integer iflow;
-    extern /* Subroutine */
-        void
-        sswap_(integer *, real *, integer *, real *, integer *);
-    integer kount;
-    extern /* Subroutine */
-        void
-        saxpy_(integer *, real *, real *, integer *, real *, integer *);
+    aocl_int64_t iflow;
+    aocl_int64_t kount;
     real pgamma;
     extern real slamch_(char *);
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    extern integer isamax_(integer *, real *, integer *);
-    integer lsfmin, lsfmax;
+    aocl_int64_t lsfmin, lsfmax;
     /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -276,7 +287,7 @@ void sggbal_(char *job, integer *n, real *a, integer *lda, real *b, integer *ldb
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("SGGBAL", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("SGGBAL", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -408,9 +419,9 @@ L160:
         goto L170;
     }
     i__1 = *n - k + 1;
-    sswap_(&i__1, &a[i__ + k * a_dim1], lda, &a[m + k * a_dim1], lda);
+    aocl_blas_sswap(&i__1, &a[i__ + k * a_dim1], lda, &a[m + k * a_dim1], lda);
     i__1 = *n - k + 1;
-    sswap_(&i__1, &b[i__ + k * b_dim1], ldb, &b[m + k * b_dim1], ldb);
+    aocl_blas_sswap(&i__1, &b[i__ + k * b_dim1], ldb, &b[m + k * b_dim1], ldb);
     /* Permute columns M and J */
 L170:
     rscale[m] = (real)j;
@@ -418,8 +429,8 @@ L170:
     {
         goto L180;
     }
-    sswap_(&l, &a[j * a_dim1 + 1], &c__1, &a[m * a_dim1 + 1], &c__1);
-    sswap_(&l, &b[j * b_dim1 + 1], &c__1, &b[m * b_dim1 + 1], &c__1);
+    aocl_blas_sswap(&l, &a[j * a_dim1 + 1], &c__1, &a[m * a_dim1 + 1], &c__1);
+    aocl_blas_sswap(&l, &b[j * b_dim1 + 1], &c__1, &b[m * b_dim1 + 1], &c__1);
 L180:
     switch(iflow)
     {
@@ -501,8 +512,8 @@ L190:
     it = 1;
     /* Start generalized conjugate gradient iteration */
 L250:
-    gamma = sdot_(&nr, &work[*ilo + (*n << 2)], &c__1, &work[*ilo + (*n << 2)], &c__1)
-            + sdot_(&nr, &work[*ilo + *n * 5], &c__1, &work[*ilo + *n * 5], &c__1);
+    gamma = aocl_blas_sdot(&nr, &work[*ilo + (*n << 2)], &c__1, &work[*ilo + (*n << 2)], &c__1)
+            + aocl_blas_sdot(&nr, &work[*ilo + *n * 5], &c__1, &work[*ilo + *n * 5], &c__1);
     ew = 0.f;
     ewc = 0.f;
     i__1 = *ihi;
@@ -529,10 +540,10 @@ L250:
     }
     t = coef5 * (ewc - ew * 3.f);
     tc = coef5 * (ew - ewc * 3.f);
-    sscal_(&nr, &beta, &work[*ilo], &c__1);
-    sscal_(&nr, &beta, &work[*ilo + *n], &c__1);
-    saxpy_(&nr, &coef, &work[*ilo + (*n << 2)], &c__1, &work[*ilo + *n], &c__1);
-    saxpy_(&nr, &coef, &work[*ilo + *n * 5], &c__1, &work[*ilo], &c__1);
+    aocl_blas_sscal(&nr, &beta, &work[*ilo], &c__1);
+    aocl_blas_sscal(&nr, &beta, &work[*ilo + *n], &c__1);
+    aocl_blas_saxpy(&nr, &coef, &work[*ilo + (*n << 2)], &c__1, &work[*ilo + *n], &c__1);
+    aocl_blas_saxpy(&nr, &coef, &work[*ilo + *n * 5], &c__1, &work[*ilo], &c__1);
     i__1 = *ihi;
     for(i__ = *ilo; i__ <= i__1; ++i__)
     {
@@ -593,8 +604,8 @@ L250:
         work[j + *n * 3] = (real)kount * work[j] + sum;
         /* L330: */
     }
-    sum = sdot_(&nr, &work[*ilo + *n], &c__1, &work[*ilo + (*n << 1)], &c__1)
-          + sdot_(&nr, &work[*ilo], &c__1, &work[*ilo + *n * 3], &c__1);
+    sum = aocl_blas_sdot(&nr, &work[*ilo + *n], &c__1, &work[*ilo + (*n << 1)], &c__1)
+          + aocl_blas_sdot(&nr, &work[*ilo], &c__1, &work[*ilo + *n * 3], &c__1);
     alpha = gamma / sum;
     /* Determine correction to current iteration */
     cmax = 0.f;
@@ -620,9 +631,9 @@ L250:
         goto L350;
     }
     r__1 = -alpha;
-    saxpy_(&nr, &r__1, &work[*ilo + (*n << 1)], &c__1, &work[*ilo + (*n << 2)], &c__1);
+    aocl_blas_saxpy(&nr, &r__1, &work[*ilo + (*n << 1)], &c__1, &work[*ilo + (*n << 2)], &c__1);
     r__1 = -alpha;
-    saxpy_(&nr, &r__1, &work[*ilo + *n * 3], &c__1, &work[*ilo + *n * 5], &c__1);
+    aocl_blas_saxpy(&nr, &r__1, &work[*ilo + *n * 3], &c__1, &work[*ilo + *n * 5], &c__1);
     pgamma = gamma;
     ++it;
     if(it <= nrp2)
@@ -639,10 +650,10 @@ L350:
     for(i__ = *ilo; i__ <= i__1; ++i__)
     {
         i__2 = *n - *ilo + 1;
-        irab = isamax_(&i__2, &a[i__ + *ilo * a_dim1], lda);
+        irab = aocl_blas_isamax(&i__2, &a[i__ + *ilo * a_dim1], lda);
         rab = (r__1 = a[i__ + (irab + *ilo - 1) * a_dim1], f2c_abs(r__1));
         i__2 = *n - *ilo + 1;
-        irab = isamax_(&i__2, &b[i__ + *ilo * b_dim1], ldb);
+        irab = aocl_blas_isamax(&i__2, &b[i__ + *ilo * b_dim1], ldb);
         /* Computing MAX */
         r__2 = rab;
         r__3 = (r__1 = b[i__ + (irab + *ilo - 1) * b_dim1], f2c_abs(r__1)); // , expr subst
@@ -656,9 +667,9 @@ L350:
         i__3 = lsfmax - lrab; // ; expr subst
         ir = fla_min(i__2, i__3);
         lscale[i__] = pow_ri(&c_b35, &ir);
-        icab = isamax_(ihi, &a[i__ * a_dim1 + 1], &c__1);
+        icab = aocl_blas_isamax(ihi, &a[i__ * a_dim1 + 1], &c__1);
         cab = (r__1 = a[icab + i__ * a_dim1], f2c_abs(r__1));
-        icab = isamax_(ihi, &b[i__ * b_dim1 + 1], &c__1);
+        icab = aocl_blas_isamax(ihi, &b[i__ * b_dim1 + 1], &c__1);
         /* Computing MAX */
         r__2 = cab;
         r__3 = (r__1 = b[icab + i__ * b_dim1], f2c_abs(r__1)); // , expr subst
@@ -679,17 +690,17 @@ L350:
     for(i__ = *ilo; i__ <= i__1; ++i__)
     {
         i__2 = *n - *ilo + 1;
-        sscal_(&i__2, &lscale[i__], &a[i__ + *ilo * a_dim1], lda);
+        aocl_blas_sscal(&i__2, &lscale[i__], &a[i__ + *ilo * a_dim1], lda);
         i__2 = *n - *ilo + 1;
-        sscal_(&i__2, &lscale[i__], &b[i__ + *ilo * b_dim1], ldb);
+        aocl_blas_sscal(&i__2, &lscale[i__], &b[i__ + *ilo * b_dim1], ldb);
         /* L370: */
     }
     /* Column scaling of matrices A and B */
     i__1 = *ihi;
     for(j = *ilo; j <= i__1; ++j)
     {
-        sscal_(ihi, &rscale[j], &a[j * a_dim1 + 1], &c__1);
-        sscal_(ihi, &rscale[j], &b[j * b_dim1 + 1], &c__1);
+        aocl_blas_sscal(ihi, &rscale[j], &a[j * a_dim1 + 1], &c__1);
+        aocl_blas_sscal(ihi, &rscale[j], &b[j * b_dim1 + 1], &c__1);
         /* L380: */
     }
     AOCL_DTL_TRACE_LOG_EXIT

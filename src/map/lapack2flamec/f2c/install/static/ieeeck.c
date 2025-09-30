@@ -99,10 +99,22 @@ f"> */
 /* > \ingroup auxOTHERauxiliary */
 
 /*  ===================================================================== */
-integer ieeeck_(integer *ispec, real *zero, real *one)
+/** Generated wrapper function */
+aocl_int_t ieeeck_(aocl_int_t *ispec, real *zero, real *one)
+{
+#if FLA_ENABLE_ILP64
+    return aocl_lapack_ieeeck(ispec, zero, one);
+#else
+    aocl_int64_t ispec_64 = *ispec;
+
+    return aocl_lapack_ieeeck(&ispec_64, zero, one);
+#endif
+}
+
+aocl_int64_t aocl_lapack_ieeeck(aocl_int64_t *ispec, real *zero, real *one)
 {
     /* System generated locals */
-    integer ret_val;
+    aocl_int64_t ret_val;
 
     /* Local variables */
     real nan1, nan2, nan3, nan4, nan5, nan6, neginf, posinf, negzro, newzro;

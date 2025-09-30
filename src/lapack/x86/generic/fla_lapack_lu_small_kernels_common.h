@@ -17,7 +17,7 @@
 #define FLA_LU_PIV_SMALL_GEN_2x2(datatype, i, n, buff_A, ldim_A, buff_p, info) \
     datatype max_val_2 = 0.0, t_val_2 = 0.0;                                   \
     datatype *acur_2, *apiv_2, *asrc_2;                                        \
-    integer i_2, p_idx_2 = i, lda2 = *ldim_A;                                  \
+    aocl_int64_t i_2, p_idx_2 = i, lda2 = *ldim_A;                                  \
     /* #####################     First iteration     ###################### */ \
     acur_2 = &buff_A[i + lda2 * i];                                            \
                                                                                \
@@ -33,7 +33,7 @@
     }                                                                          \
     apiv_2 = buff_A + p_idx_2;                                                 \
     asrc_2 = buff_A + i;                                                       \
-    buff_p[i] = p_idx_2 + 1;                                                   \
+    buff_p[i] = (aocl_int_t)(p_idx_2 + 1);                                                   \
     /* Swap rows and calculate a column of L */                                \
     if(max_val_2 != 0.0)                                                       \
     {                                                                          \
@@ -46,12 +46,12 @@
             t_val_2 = apiv_2[lda2];                                            \
             apiv_2[lda2] = asrc_2[lda2];                                       \
             asrc_2[lda2] = t_val_2;                                            \
-            if(*n >= 3)                                                        \
+            if(n >= 3)                                                        \
             {                                                                  \
                 t_val_2 = apiv_2[2 * lda2];                                    \
                 apiv_2[2 * lda2] = asrc_2[2 * lda2];                           \
                 asrc_2[2 * lda2] = t_val_2;                                    \
-                if(*n == 4)                                                    \
+                if(n == 4)                                                    \
                 {                                                              \
                     t_val_2 = apiv_2[3 * lda2];                                \
                     apiv_2[3 * lda2] = asrc_2[3 * lda2];                       \
@@ -65,7 +65,7 @@
     }                                                                          \
     else                                                                       \
     {                                                                          \
-        *info = (*info == 0) ? p_idx_2 + 1 : *info;                            \
+        info = (info == 0) ? p_idx_2 + 1 : info;                            \
     }                                                                          \
     /* #####################     second iteration #########################*/  \
     i = i + 1;                                                                 \
@@ -82,7 +82,7 @@
                                                                                \
     apiv_2 = buff_A + p_idx_2;                                                 \
     asrc_2 = buff_A + i;                                                       \
-    buff_p[i] = p_idx_2 + 1;                                                   \
+    buff_p[i] = (aocl_int_t)(p_idx_2 + 1);                                                   \
     /* Swap rows and calculate a column of L */                                \
     if(max_val_2 != 0.0)                                                       \
     {                                                                          \
@@ -95,12 +95,12 @@
             t_val_2 = apiv_2[lda2];                                            \
             apiv_2[lda2] = asrc_2[lda2];                                       \
             asrc_2[lda2] = t_val_2;                                            \
-            if(*n >= 3)                                                        \
+            if(n >= 3)                                                        \
             {                                                                  \
                 t_val_2 = apiv_2[2 * lda2];                                    \
                 apiv_2[2 * lda2] = asrc_2[2 * lda2];                           \
                 asrc_2[2 * lda2] = t_val_2;                                    \
-                if(*n == 4)                                                    \
+                if(n == 4)                                                    \
                 {                                                              \
                     t_val_2 = apiv_2[3 * lda2];                                \
                     apiv_2[3 * lda2] = asrc_2[3 * lda2];                       \
@@ -111,16 +111,16 @@
     }                                                                          \
     else                                                                       \
     {                                                                          \
-        *info = (*info == 0) ? p_idx_2 + 1 : *info;                            \
+        info = (info == 0) ? p_idx_2 + 1 : info;                            \
     }
 /*
  * LU 3x3 with partial pivoting for tiny matrices
  */
 #define FLA_LU_PIV_SMALL_GEN_3x3(datatype, i, n, buff_A, ldim_A, buff_p, info)      \
-    integer i_3;                                                                    \
+    aocl_int64_t i_3;                                                                    \
     datatype max_val_3, t_val_3 = 0.0;                                              \
     datatype *acur_3, *apiv_3, *asrc_3;                                             \
-    integer p_idx_3 = i, lda3 = *ldim_A;                                            \
+    aocl_int64_t p_idx_3 = i, lda3 = *ldim_A;                                            \
     /* ################### 1st loop coputation  (i = 0) ####################*/      \
     acur_3 = &buff_A[i + lda3 * i];                                                 \
     /* Find the pivot element */                                                    \
@@ -137,7 +137,7 @@
     }                                                                               \
     apiv_3 = buff_A + p_idx_3;                                                      \
     asrc_3 = buff_A + i;                                                            \
-    buff_p[i] = p_idx_3 + 1;                                                        \
+    buff_p[i] = (aocl_int_t)(p_idx_3 + 1);                                                        \
     /* Swap rows and calculate a column of L */                                     \
     if(max_val_3 != 0.0)                                                            \
     {                                                                               \
@@ -153,7 +153,7 @@
             t_val_3 = apiv_3[2 * lda3];                                             \
             apiv_3[2 * lda3] = asrc_3[2 * lda3];                                    \
             asrc_3[2 * lda3] = t_val_3;                                             \
-            if(*n == 4)                                                             \
+            if(n == 4)                                                             \
             {                                                                       \
                 t_val_3 = apiv_3[3 * lda3];                                         \
                 apiv_3[3 * lda3] = asrc_3[3 * lda3];                                \
@@ -171,7 +171,7 @@
     }                                                                               \
     else                                                                            \
     {                                                                               \
-        *info = (*info == 0) ? p_idx_3 + 1 : *info;                                 \
+        info = (info == 0) ? p_idx_3 + 1 : info;                                 \
     }                                                                               \
     i = i + 1;                                                                      \
     FLA_LU_PIV_SMALL_GEN_2x2(datatype, i, n, buff_A, ldim_A, buff_p, info);
@@ -179,10 +179,10 @@
  * LU 4x4 with partial pivoting for tiny matrices
  */
 #define FLA_LU_PIV_SMALL_GEN_4x4(datatype, i, n, buff_A, ldim_A, buff_p, info) \
-    integer i_1;                                                               \
+    aocl_int64_t i_1;                                                               \
     datatype max_val, t_val = 0.0;                                             \
     datatype *acur, *apiv, *asrc;                                              \
-    integer p_idx, lda = *ldim_A;                                              \
+    aocl_int64_t p_idx, lda = *ldim_A;                                              \
     /* ########### 1st loop coputation  (i = 0) ####################*/         \
     acur = &buff_A[i + lda * i];                                               \
                                                                                \
@@ -201,7 +201,7 @@
                                                                                \
     apiv = buff_A + p_idx;                                                     \
     asrc = buff_A + i;                                                         \
-    buff_p[i] = p_idx + 1;                                                     \
+    buff_p[i] = (aocl_int_t)(p_idx + 1);                                                     \
                                                                                \
     /* Swap rows and calculate a column of L */                                \
     if(max_val != 0.0)                                                         \
@@ -239,7 +239,7 @@
     }                                                                          \
     else                                                                       \
     {                                                                          \
-        *info = (*info == 0) ? p_idx + 1 : *info;                              \
+        info = (info == 0) ? p_idx + 1 : info;                              \
     }                                                                          \
     i = i + 1;                                                                 \
     FLA_LU_PIV_SMALL_GEN_3x3(datatype, i, n, buff_A, ldim_A, buff_p, info);

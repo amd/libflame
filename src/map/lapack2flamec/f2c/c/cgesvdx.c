@@ -4,11 +4,11 @@
  -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for
  libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static complex c_b1 = {0.f, 0.f};
-static integer c__6 = 6;
-static integer c__0 = 0;
-static integer c__1 = 1;
-static integer c_n1 = -1;
+static scomplex c_b1 = {{0.f}, {0.f}};
+static aocl_int64_t c__6 = 6;
+static aocl_int64_t c__0 = 0;
+static aocl_int64_t c__1 = 1;
+static aocl_int64_t c_n1 = -1;
 /* > \brief <b> CGESVDX computes the singular value decomposition (SVD) for GE matrices</b> */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -49,7 +49,7 @@ static integer c_n1 = -1;
 /* > */
 /* > \verbatim */
 /* > */
-/* > CGESVDX computes the singular value decomposition (SVD) of a complex */
+/* > CGESVDX computes the singular value decomposition (SVD) of a scomplex */
 /* > M-by-N matrix A, optionally computing the left and/or right singular */
 /* > vectors. The SVD is written */
 /* > */
@@ -280,10 +280,41 @@ the routine */
 /* > \ingroup complexGEsing */
 /* ===================================================================== */
 /* Subroutine */
-void cgesvdx_(char *jobu, char *jobvt, char *range, integer *m, integer *n, complex *a,
-              integer *lda, real *vl, real *vu, integer *il, integer *iu, integer *ns, real *s,
-              complex *u, integer *ldu, complex *vt, integer *ldvt, complex *work, integer *lwork,
-              real *rwork, integer *iwork, integer *info)
+/** Generated wrapper function */
+void cgesvdx_(char *jobu, char *jobvt, char *range, aocl_int_t *m, aocl_int_t *n, scomplex *a,
+              aocl_int_t *lda, real *vl, real *vu, aocl_int_t *il, aocl_int_t *iu, aocl_int_t *ns,
+              real *s, scomplex *u, aocl_int_t *ldu, scomplex *vt, aocl_int_t *ldvt, scomplex *work,
+              aocl_int_t *lwork, real *rwork, aocl_int_t *iwork, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_cgesvdx(jobu, jobvt, range, m, n, a, lda, vl, vu, il, iu, ns, s, u, ldu, vt, ldvt,
+                        work, lwork, rwork, iwork, info);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t il_64 = *il;
+    aocl_int64_t iu_64 = *iu;
+    aocl_int64_t ns_64 = *ns;
+    aocl_int64_t ldu_64 = *ldu;
+    aocl_int64_t ldvt_64 = *ldvt;
+    aocl_int64_t lwork_64 = *lwork;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_cgesvdx(jobu, jobvt, range, &m_64, &n_64, a, &lda_64, vl, vu, &il_64, &iu_64,
+                        &ns_64, s, u, &ldu_64, vt, &ldvt_64, work, &lwork_64, rwork, iwork,
+                        &info_64);
+
+    *ns = (aocl_int_t)ns_64;
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_cgesvdx(char *jobu, char *jobvt, char *range, aocl_int64_t *m, aocl_int64_t *n,
+                         scomplex *a, aocl_int64_t *lda, real *vl, real *vu, aocl_int64_t *il,
+                         aocl_int64_t *iu, aocl_int64_t *ns, real *s, scomplex *u, aocl_int64_t *ldu,
+                         scomplex *vt, aocl_int64_t *ldvt, scomplex *work, aocl_int64_t *lwork,
+                         real *rwork, aocl_int_t *iwork, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -302,73 +333,34 @@ void cgesvdx_(char *jobu, char *jobvt, char *range, integer *m, integer *n, comp
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
-    integer a_dim1, a_offset, u_dim1, u_offset, vt_dim1, vt_offset, i__2, i__3, i__4, i__5;
+    aocl_int64_t a_dim1, a_offset, u_dim1, u_offset, vt_dim1, vt_offset, i__2, i__3, i__4, i__5;
     real r__1;
-    complex q__1;
+    scomplex q__1;
     char ch__1[2];
     /* Builtin functions */
     /* Subroutine */
 
     double sqrt(doublereal);
     /* Local variables */
-    integer i__, j, k, id, ie;
+    aocl_int64_t i__, j, k, id, ie;
     real dum[1], eps;
-    integer iscl;
+    aocl_int64_t iscl;
     logical alls, inds;
-    integer ilqf;
+    aocl_int64_t ilqf;
     real anrm;
-    integer ierr, iqrf, itau;
+    aocl_int64_t ierr, iqrf, itau;
     char jobz[1];
     logical vals;
-    extern logical lsame_(char *, char *, integer, integer);
-    integer iltgk, itemp, minmn, itaup, itauq, iutgk, itgkz, mnthr;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    aocl_int64_t iltgk, itemp, minmn, itaup, itauq, iutgk, itgkz, mnthr;
     logical wantu;
-    extern /* Subroutine */
-        void
-        cgebrd_(integer *, integer *, complex *, integer *, real *, real *, complex *, complex *,
-                complex *, integer *, integer *);
-    extern real clange_(char *, integer *, integer *, complex *, integer *, real *);
-    extern /* Subroutine */
-        void
-        cgelqf_(integer *, integer *, complex *, integer *, complex *, complex *, integer *,
-                integer *),
-        clascl_(char *, integer *, integer *, real *, real *, integer *, integer *, complex *,
-                integer *, integer *),
-        cgeqrf_(integer *, integer *, complex *, integer *, complex *, complex *, integer *,
-                integer *);
     extern real slamch_(char *);
-    extern /* Subroutine */
-        void
-        claset_(char *, integer *, integer *, complex *, complex *, complex *, integer *),
-        clacpy_(char *, integer *, integer *, complex *, integer *, complex *, integer *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     real bignum;
-    extern /* Subroutine */
-        void
-        slascl_(char *, integer *, integer *, real *, real *, integer *, integer *, real *,
-                integer *, integer *);
-    extern /* Subroutine */
-        void
-        cunmbr_(char *, char *, char *, integer *, integer *, integer *, complex *, integer *,
-                complex *, complex *, integer *, complex *, integer *, integer *);
     char rngtgk[1];
-    extern /* Subroutine */
-        void
-        cunmlq_(char *, char *, integer *, integer *, integer *, complex *, integer *, complex *,
-                complex *, integer *, complex *, integer *, integer *);
-    integer itempr;
-    extern /* Subroutine */
-        void
-        cunmqr_(char *, char *, integer *, integer *, integer *, complex *, integer *, complex *,
-                complex *, integer *, complex *, integer *, integer *);
-    integer minwrk, maxwrk;
+    aocl_int64_t itempr;
+    aocl_int64_t minwrk, maxwrk;
     real smlnum;
     logical lquery, wantvt;
-    extern /* Subroutine */
-        void
-        sbdsvdx_(char *, char *, char *, integer *, real *, real *, real *, real *, integer *,
-                 integer *, integer *, real *, real *, integer *, real *, integer *, integer *);
     /* -- LAPACK driver routine (version 3.8.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -510,26 +502,27 @@ void cgesvdx_(char *jobu, char *jobvt, char *range, integer *m, integer *n, comp
         {
             if(*m >= *n)
             {
-                mnthr = ilaenv_(&c__6, "CGESVD", ch__1, m, n, &c__0, &c__0);
+                mnthr = aocl_lapack_ilaenv(&c__6, "CGESVD", ch__1, m, n, &c__0, &c__0);
                 if(*m >= mnthr)
                 {
                     /* Path 1 (M much larger than N) */
                     minwrk = *n * (*n + 5);
-                    maxwrk = *n + *n * ilaenv_(&c__1, "CGEQRF", " ", m, n, &c_n1, &c_n1);
+                    maxwrk = *n + *n * aocl_lapack_ilaenv(&c__1, "CGEQRF", " ", m, n, &c_n1, &c_n1);
                     /* Computing MAX */
                     i__2 = maxwrk;
-                    i__3
-                        = *n * *n + (*n << 1)
-                          + (*n << 1)
-                                * ilaenv_(&c__1, "CGEBRD", " ", n, n, &c_n1, &c_n1); // , expr subst
+                    i__3 = *n * *n + (*n << 1)
+                           + (*n << 1)
+                                 * aocl_lapack_ilaenv(&c__1, "CGEBRD", " ", n, n, &c_n1,
+                                                      &c_n1); // , expr subst
                     maxwrk = fla_max(i__2, i__3);
                     if(wantu || wantvt)
                     {
                         /* Computing MAX */
                         i__2 = maxwrk;
-                        i__3
-                            = *n * *n + (*n << 1)
-                              + *n * ilaenv_(&c__1, "CUNMQR", "LN", n, n, n, &c_n1); // , expr subst
+                        i__3 = *n * *n + (*n << 1)
+                               + *n
+                                     * aocl_lapack_ilaenv(&c__1, "CUNMQR", "LN", n, n, n,
+                                                          &c_n1); // , expr subst
                         maxwrk = fla_max(i__2, i__3);
                     }
                 }
@@ -537,41 +530,44 @@ void cgesvdx_(char *jobu, char *jobvt, char *range, integer *m, integer *n, comp
                 {
                     /* Path 2 (M at least N, but not much larger) */
                     minwrk = *n * 3 + *m;
-                    maxwrk
-                        = (*n << 1) + (*m + *n) * ilaenv_(&c__1, "CGEBRD", " ", m, n, &c_n1, &c_n1);
+                    maxwrk = (*n << 1)
+                             + (*m + *n)
+                                   * aocl_lapack_ilaenv(&c__1, "CGEBRD", " ", m, n, &c_n1, &c_n1);
                     if(wantu || wantvt)
                     {
                         /* Computing MAX */
                         i__2 = maxwrk;
-                        i__3
-                            = (*n << 1)
-                              + *n * ilaenv_(&c__1, "CUNMQR", "LN", n, n, n, &c_n1); // , expr subst
+                        i__3 = (*n << 1)
+                               + *n
+                                     * aocl_lapack_ilaenv(&c__1, "CUNMQR", "LN", n, n, n,
+                                                          &c_n1); // , expr subst
                         maxwrk = fla_max(i__2, i__3);
                     }
                 }
             }
             else
             {
-                mnthr = ilaenv_(&c__6, "CGESVD", ch__1, m, n, &c__0, &c__0);
+                mnthr = aocl_lapack_ilaenv(&c__6, "CGESVD", ch__1, m, n, &c__0, &c__0);
                 if(*n >= mnthr)
                 {
                     /* Path 1t (N much larger than M) */
                     minwrk = *m * (*m + 5);
-                    maxwrk = *m + *m * ilaenv_(&c__1, "CGELQF", " ", m, n, &c_n1, &c_n1);
+                    maxwrk = *m + *m * aocl_lapack_ilaenv(&c__1, "CGELQF", " ", m, n, &c_n1, &c_n1);
                     /* Computing MAX */
                     i__2 = maxwrk;
-                    i__3
-                        = *m * *m + (*m << 1)
-                          + (*m << 1)
-                                * ilaenv_(&c__1, "CGEBRD", " ", m, m, &c_n1, &c_n1); // , expr subst
+                    i__3 = *m * *m + (*m << 1)
+                           + (*m << 1)
+                                 * aocl_lapack_ilaenv(&c__1, "CGEBRD", " ", m, m, &c_n1,
+                                                      &c_n1); // , expr subst
                     maxwrk = fla_max(i__2, i__3);
                     if(wantu || wantvt)
                     {
                         /* Computing MAX */
                         i__2 = maxwrk;
-                        i__3
-                            = *m * *m + (*m << 1)
-                              + *m * ilaenv_(&c__1, "CUNMQR", "LN", m, m, m, &c_n1); // , expr subst
+                        i__3 = *m * *m + (*m << 1)
+                               + *m
+                                     * aocl_lapack_ilaenv(&c__1, "CUNMQR", "LN", m, m, m,
+                                                          &c_n1); // , expr subst
                         maxwrk = fla_max(i__2, i__3);
                     }
                 }
@@ -579,15 +575,17 @@ void cgesvdx_(char *jobu, char *jobvt, char *range, integer *m, integer *n, comp
                 {
                     /* Path 2t (N greater than M, but not much larger) */
                     minwrk = *m * 3 + *n;
-                    maxwrk
-                        = (*m << 1) + (*m + *n) * ilaenv_(&c__1, "CGEBRD", " ", m, n, &c_n1, &c_n1);
+                    maxwrk = (*m << 1)
+                             + (*m + *n)
+                                   * aocl_lapack_ilaenv(&c__1, "CGEBRD", " ", m, n, &c_n1, &c_n1);
                     if(wantu || wantvt)
                     {
                         /* Computing MAX */
                         i__2 = maxwrk;
-                        i__3
-                            = (*m << 1)
-                              + *m * ilaenv_(&c__1, "CUNMQR", "LN", m, m, m, &c_n1); // , expr subst
+                        i__3 = (*m << 1)
+                               + *m
+                                     * aocl_lapack_ilaenv(&c__1, "CUNMQR", "LN", m, m, m,
+                                                          &c_n1); // , expr subst
                         maxwrk = fla_max(i__2, i__3);
                     }
                 }
@@ -607,7 +605,7 @@ void cgesvdx_(char *jobu, char *jobvt, char *range, integer *m, integer *n, comp
     if(*info != 0)
     {
         i__2 = -(*info);
-        xerbla_("CGESVDX", &i__2, (ftnlen)7);
+        aocl_blas_xerbla("CGESVDX", &i__2, (ftnlen)7);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
@@ -646,17 +644,17 @@ void cgesvdx_(char *jobu, char *jobvt, char *range, integer *m, integer *n, comp
     smlnum = sqrt(slamch_("S")) / eps;
     bignum = 1.f / smlnum;
     /* Scale A if max element outside range [SMLNUM,BIGNUM] */
-    anrm = clange_("M", m, n, &a[a_offset], lda, dum);
+    anrm = aocl_lapack_clange("M", m, n, &a[a_offset], lda, dum);
     iscl = 0;
     if(anrm > 0.f && anrm < smlnum)
     {
         iscl = 1;
-        clascl_("G", &c__0, &c__0, &anrm, &smlnum, m, n, &a[a_offset], lda, info);
+        aocl_lapack_clascl("G", &c__0, &c__0, &anrm, &smlnum, m, n, &a[a_offset], lda, info);
     }
     else if(anrm > bignum)
     {
         iscl = 1;
-        clascl_("G", &c__0, &c__0, &anrm, &bignum, m, n, &a[a_offset], lda, info);
+        aocl_lapack_clascl("G", &c__0, &c__0, &anrm, &bignum, m, n, &a[a_offset], lda, info);
     }
     if(*m >= *n)
     {
@@ -675,7 +673,7 @@ void cgesvdx_(char *jobu, char *jobvt, char *range, integer *m, integer *n, comp
             itau = 1;
             itemp = itau + *n;
             i__2 = *lwork - itemp + 1;
-            cgeqrf_(m, n, &a[a_offset], lda, &work[itau], &work[itemp], &i__2, info);
+            aocl_lapack_cgeqrf(m, n, &a[a_offset], lda, &work[itau], &work[itemp], &i__2, info);
             /* Copy R into WORK and bidiagonalize it: */
             /* (Workspace: need N*N+3*N, prefer N*N+N+2*N*NB) */
             iqrf = itemp;
@@ -685,19 +683,20 @@ void cgesvdx_(char *jobu, char *jobvt, char *range, integer *m, integer *n, comp
             id = 1;
             ie = id + *n;
             itgkz = ie + *n;
-            clacpy_("U", n, n, &a[a_offset], lda, &work[iqrf], n);
+            aocl_lapack_clacpy("U", n, n, &a[a_offset], lda, &work[iqrf], n);
             i__2 = *n - 1;
             i__3 = *n - 1;
-            claset_("L", &i__2, &i__3, &c_b1, &c_b1, &work[iqrf + 1], n);
+            aocl_lapack_claset("L", &i__2, &i__3, &c_b1, &c_b1, &work[iqrf + 1], n);
             i__2 = *lwork - itemp + 1;
-            cgebrd_(n, n, &work[iqrf], n, &rwork[id], &rwork[ie], &work[itauq], &work[itaup],
-                    &work[itemp], &i__2, info);
+            aocl_lapack_cgebrd(n, n, &work[iqrf], n, &rwork[id], &rwork[ie], &work[itauq],
+                               &work[itaup], &work[itemp], &i__2, info);
             itempr = itgkz + *n * ((*n << 1) + 1);
             /* Solve eigenvalue problem TGK*Z=Z*S. */
             /* (Workspace: need 2*N*N+14*N) */
             i__2 = *n << 1;
-            sbdsvdx_("U", jobz, rngtgk, n, &rwork[id], &rwork[ie], vl, vu, &iltgk, &iutgk, ns,
-                     &s[1], &rwork[itgkz], &i__2, &rwork[itempr], &iwork[1], info);
+            aocl_lapack_sbdsvdx("U", jobz, rngtgk, n, &rwork[id], &rwork[ie], vl, vu, &iltgk,
+                                &iutgk, ns, &s[1], &rwork[itgkz], &i__2, &rwork[itempr], &iwork[1],
+                                info);
             /* If needed, compute left singular vectors. */
             if(wantu)
             {
@@ -719,17 +718,17 @@ void cgesvdx_(char *jobu, char *jobvt, char *range, integer *m, integer *n, comp
                     k += *n;
                 }
                 i__2 = *m - *n;
-                claset_("A", &i__2, ns, &c_b1, &c_b1, &u[*n + 1 + u_dim1], ldu);
+                aocl_lapack_claset("A", &i__2, ns, &c_b1, &c_b1, &u[*n + 1 + u_dim1], ldu);
                 /* Call CUNMBR to compute QB*UB. */
                 /* (Workspace in WORK( ITEMP ): need N, prefer N*NB) */
                 i__2 = *lwork - itemp + 1;
-                cunmbr_("Q", "L", "N", n, ns, n, &work[iqrf], n, &work[itauq], &u[u_offset], ldu,
-                        &work[itemp], &i__2, info);
+                aocl_lapack_cunmbr("Q", "L", "N", n, ns, n, &work[iqrf], n, &work[itauq],
+                                   &u[u_offset], ldu, &work[itemp], &i__2, info);
                 /* Call CUNMQR to compute Q*(QB*UB). */
                 /* (Workspace in WORK( ITEMP ): need N, prefer N*NB) */
                 i__2 = *lwork - itemp + 1;
-                cunmqr_("L", "N", m, ns, n, &a[a_offset], lda, &work[itau], &u[u_offset], ldu,
-                        &work[itemp], &i__2, info);
+                aocl_lapack_cunmqr("L", "N", m, ns, n, &a[a_offset], lda, &work[itau], &u[u_offset],
+                                   ldu, &work[itemp], &i__2, info);
             }
             /* If needed, compute right singular vectors. */
             if(wantvt)
@@ -754,8 +753,8 @@ void cgesvdx_(char *jobu, char *jobvt, char *range, integer *m, integer *n, comp
                 /* Call CUNMBR to compute VB**T * PB**T */
                 /* (Workspace in WORK( ITEMP ): need N, prefer N*NB) */
                 i__2 = *lwork - itemp + 1;
-                cunmbr_("P", "R", "C", ns, n, n, &work[iqrf], n, &work[itaup], &vt[vt_offset], ldvt,
-                        &work[itemp], &i__2, info);
+                aocl_lapack_cunmbr("P", "R", "C", ns, n, n, &work[iqrf], n, &work[itaup],
+                                   &vt[vt_offset], ldvt, &work[itemp], &i__2, info);
             }
         }
         else
@@ -774,14 +773,15 @@ void cgesvdx_(char *jobu, char *jobvt, char *range, integer *m, integer *n, comp
             ie = id + *n;
             itgkz = ie + *n;
             i__2 = *lwork - itemp + 1;
-            cgebrd_(m, n, &a[a_offset], lda, &rwork[id], &rwork[ie], &work[itauq], &work[itaup],
-                    &work[itemp], &i__2, info);
+            aocl_lapack_cgebrd(m, n, &a[a_offset], lda, &rwork[id], &rwork[ie], &work[itauq],
+                               &work[itaup], &work[itemp], &i__2, info);
             itempr = itgkz + *n * ((*n << 1) + 1);
             /* Solve eigenvalue problem TGK*Z=Z*S. */
             /* (Workspace: need 2*N*N+14*N) */
             i__2 = *n << 1;
-            sbdsvdx_("U", jobz, rngtgk, n, &rwork[id], &rwork[ie], vl, vu, &iltgk, &iutgk, ns,
-                     &s[1], &rwork[itgkz], &i__2, &rwork[itempr], &iwork[1], info);
+            aocl_lapack_sbdsvdx("U", jobz, rngtgk, n, &rwork[id], &rwork[ie], vl, vu, &iltgk,
+                                &iutgk, ns, &s[1], &rwork[itgkz], &i__2, &rwork[itempr], &iwork[1],
+                                info);
             /* If needed, compute left singular vectors. */
             if(wantu)
             {
@@ -803,12 +803,12 @@ void cgesvdx_(char *jobu, char *jobvt, char *range, integer *m, integer *n, comp
                     k += *n;
                 }
                 i__2 = *m - *n;
-                claset_("A", &i__2, ns, &c_b1, &c_b1, &u[*n + 1 + u_dim1], ldu);
+                aocl_lapack_claset("A", &i__2, ns, &c_b1, &c_b1, &u[*n + 1 + u_dim1], ldu);
                 /* Call CUNMBR to compute QB*UB. */
                 /* (Workspace in WORK( ITEMP ): need N, prefer N*NB) */
                 i__2 = *lwork - itemp + 1;
-                cunmbr_("Q", "L", "N", m, ns, n, &a[a_offset], lda, &work[itauq], &u[u_offset], ldu,
-                        &work[itemp], &i__2, &ierr);
+                aocl_lapack_cunmbr("Q", "L", "N", m, ns, n, &a[a_offset], lda, &work[itauq],
+                                   &u[u_offset], ldu, &work[itemp], &i__2, &ierr);
             }
             /* If needed, compute right singular vectors. */
             if(wantvt)
@@ -833,8 +833,8 @@ void cgesvdx_(char *jobu, char *jobvt, char *range, integer *m, integer *n, comp
                 /* Call CUNMBR to compute VB**T * PB**T */
                 /* (Workspace in WORK( ITEMP ): need N, prefer N*NB) */
                 i__2 = *lwork - itemp + 1;
-                cunmbr_("P", "R", "C", ns, n, n, &a[a_offset], lda, &work[itaup], &vt[vt_offset],
-                        ldvt, &work[itemp], &i__2, &ierr);
+                aocl_lapack_cunmbr("P", "R", "C", ns, n, n, &a[a_offset], lda, &work[itaup],
+                                   &vt[vt_offset], ldvt, &work[itemp], &i__2, &ierr);
             }
         }
     }
@@ -854,7 +854,7 @@ void cgesvdx_(char *jobu, char *jobvt, char *range, integer *m, integer *n, comp
             itau = 1;
             itemp = itau + *m;
             i__2 = *lwork - itemp + 1;
-            cgelqf_(m, n, &a[a_offset], lda, &work[itau], &work[itemp], &i__2, info);
+            aocl_lapack_cgelqf(m, n, &a[a_offset], lda, &work[itau], &work[itemp], &i__2, info);
             /* Copy L into WORK and bidiagonalize it: */
             /* (Workspace in WORK( ITEMP ): need M*M+3*M, prefer M*M+M+2*M*NB) */
             ilqf = itemp;
@@ -864,19 +864,20 @@ void cgesvdx_(char *jobu, char *jobvt, char *range, integer *m, integer *n, comp
             id = 1;
             ie = id + *m;
             itgkz = ie + *m;
-            clacpy_("L", m, m, &a[a_offset], lda, &work[ilqf], m);
+            aocl_lapack_clacpy("L", m, m, &a[a_offset], lda, &work[ilqf], m);
             i__2 = *m - 1;
             i__3 = *m - 1;
-            claset_("U", &i__2, &i__3, &c_b1, &c_b1, &work[ilqf + *m], m);
+            aocl_lapack_claset("U", &i__2, &i__3, &c_b1, &c_b1, &work[ilqf + *m], m);
             i__2 = *lwork - itemp + 1;
-            cgebrd_(m, m, &work[ilqf], m, &rwork[id], &rwork[ie], &work[itauq], &work[itaup],
-                    &work[itemp], &i__2, info);
+            aocl_lapack_cgebrd(m, m, &work[ilqf], m, &rwork[id], &rwork[ie], &work[itauq],
+                               &work[itaup], &work[itemp], &i__2, info);
             itempr = itgkz + *m * ((*m << 1) + 1);
             /* Solve eigenvalue problem TGK*Z=Z*S. */
             /* (Workspace: need 2*M*M+14*M) */
             i__2 = *m << 1;
-            sbdsvdx_("U", jobz, rngtgk, m, &rwork[id], &rwork[ie], vl, vu, &iltgk, &iutgk, ns,
-                     &s[1], &rwork[itgkz], &i__2, &rwork[itempr], &iwork[1], info);
+            aocl_lapack_sbdsvdx("U", jobz, rngtgk, m, &rwork[id], &rwork[ie], vl, vu, &iltgk,
+                                &iutgk, ns, &s[1], &rwork[itgkz], &i__2, &rwork[itempr], &iwork[1],
+                                info);
             /* If needed, compute left singular vectors. */
             if(wantu)
             {
@@ -900,8 +901,8 @@ void cgesvdx_(char *jobu, char *jobvt, char *range, integer *m, integer *n, comp
                 /* Call CUNMBR to compute QB*UB. */
                 /* (Workspace in WORK( ITEMP ): need M, prefer M*NB) */
                 i__2 = *lwork - itemp + 1;
-                cunmbr_("Q", "L", "N", m, ns, m, &work[ilqf], m, &work[itauq], &u[u_offset], ldu,
-                        &work[itemp], &i__2, info);
+                aocl_lapack_cunmbr("Q", "L", "N", m, ns, m, &work[ilqf], m, &work[itauq],
+                                   &u[u_offset], ldu, &work[itemp], &i__2, info);
             }
             /* If needed, compute right singular vectors. */
             if(wantvt)
@@ -924,17 +925,17 @@ void cgesvdx_(char *jobu, char *jobvt, char *range, integer *m, integer *n, comp
                     k += *m;
                 }
                 i__2 = *n - *m;
-                claset_("A", ns, &i__2, &c_b1, &c_b1, &vt[(*m + 1) * vt_dim1 + 1], ldvt);
+                aocl_lapack_claset("A", ns, &i__2, &c_b1, &c_b1, &vt[(*m + 1) * vt_dim1 + 1], ldvt);
                 /* Call CUNMBR to compute (VB**T)*(PB**T) */
                 /* (Workspace in WORK( ITEMP ): need M, prefer M*NB) */
                 i__2 = *lwork - itemp + 1;
-                cunmbr_("P", "R", "C", ns, m, m, &work[ilqf], m, &work[itaup], &vt[vt_offset], ldvt,
-                        &work[itemp], &i__2, info);
+                aocl_lapack_cunmbr("P", "R", "C", ns, m, m, &work[ilqf], m, &work[itaup],
+                                   &vt[vt_offset], ldvt, &work[itemp], &i__2, info);
                 /* Call CUNMLQ to compute ((VB**T)*(PB**T))*Q. */
                 /* (Workspace in WORK( ITEMP ): need M, prefer M*NB) */
                 i__2 = *lwork - itemp + 1;
-                cunmlq_("R", "N", ns, n, m, &a[a_offset], lda, &work[itau], &vt[vt_offset], ldvt,
-                        &work[itemp], &i__2, info);
+                aocl_lapack_cunmlq("R", "N", ns, n, m, &a[a_offset], lda, &work[itau],
+                                   &vt[vt_offset], ldvt, &work[itemp], &i__2, info);
             }
         }
         else
@@ -953,14 +954,15 @@ void cgesvdx_(char *jobu, char *jobvt, char *range, integer *m, integer *n, comp
             ie = id + *m;
             itgkz = ie + *m;
             i__2 = *lwork - itemp + 1;
-            cgebrd_(m, n, &a[a_offset], lda, &rwork[id], &rwork[ie], &work[itauq], &work[itaup],
-                    &work[itemp], &i__2, info);
+            aocl_lapack_cgebrd(m, n, &a[a_offset], lda, &rwork[id], &rwork[ie], &work[itauq],
+                               &work[itaup], &work[itemp], &i__2, info);
             itempr = itgkz + *m * ((*m << 1) + 1);
             /* Solve eigenvalue problem TGK*Z=Z*S. */
             /* (Workspace: need 2*M*M+14*M) */
             i__2 = *m << 1;
-            sbdsvdx_("L", jobz, rngtgk, m, &rwork[id], &rwork[ie], vl, vu, &iltgk, &iutgk, ns,
-                     &s[1], &rwork[itgkz], &i__2, &rwork[itempr], &iwork[1], info);
+            aocl_lapack_sbdsvdx("L", jobz, rngtgk, m, &rwork[id], &rwork[ie], vl, vu, &iltgk,
+                                &iutgk, ns, &s[1], &rwork[itgkz], &i__2, &rwork[itempr], &iwork[1],
+                                info);
             /* If needed, compute left singular vectors. */
             if(wantu)
             {
@@ -984,8 +986,8 @@ void cgesvdx_(char *jobu, char *jobvt, char *range, integer *m, integer *n, comp
                 /* Call CUNMBR to compute QB*UB. */
                 /* (Workspace in WORK( ITEMP ): need M, prefer M*NB) */
                 i__2 = *lwork - itemp + 1;
-                cunmbr_("Q", "L", "N", m, ns, n, &a[a_offset], lda, &work[itauq], &u[u_offset], ldu,
-                        &work[itemp], &i__2, info);
+                aocl_lapack_cunmbr("Q", "L", "N", m, ns, n, &a[a_offset], lda, &work[itauq],
+                                   &u[u_offset], ldu, &work[itemp], &i__2, info);
             }
             /* If needed, compute right singular vectors. */
             if(wantvt)
@@ -1008,12 +1010,12 @@ void cgesvdx_(char *jobu, char *jobvt, char *range, integer *m, integer *n, comp
                     k += *m;
                 }
                 i__2 = *n - *m;
-                claset_("A", ns, &i__2, &c_b1, &c_b1, &vt[(*m + 1) * vt_dim1 + 1], ldvt);
+                aocl_lapack_claset("A", ns, &i__2, &c_b1, &c_b1, &vt[(*m + 1) * vt_dim1 + 1], ldvt);
                 /* Call CUNMBR to compute VB**T * PB**T */
                 /* (Workspace in WORK( ITEMP ): need M, prefer M*NB) */
                 i__2 = *lwork - itemp + 1;
-                cunmbr_("P", "R", "C", ns, n, m, &a[a_offset], lda, &work[itaup], &vt[vt_offset],
-                        ldvt, &work[itemp], &i__2, info);
+                aocl_lapack_cunmbr("P", "R", "C", ns, n, m, &a[a_offset], lda, &work[itaup],
+                                   &vt[vt_offset], ldvt, &work[itemp], &i__2, info);
             }
         }
     }
@@ -1022,11 +1024,13 @@ void cgesvdx_(char *jobu, char *jobvt, char *range, integer *m, integer *n, comp
     {
         if(anrm > bignum)
         {
-            slascl_("G", &c__0, &c__0, &bignum, &anrm, &minmn, &c__1, &s[1], &minmn, info);
+            aocl_lapack_slascl("G", &c__0, &c__0, &bignum, &anrm, &minmn, &c__1, &s[1], &minmn,
+                               info);
         }
         if(anrm < smlnum)
         {
-            slascl_("G", &c__0, &c__0, &smlnum, &anrm, &minmn, &c__1, &s[1], &minmn, info);
+            aocl_lapack_slascl("G", &c__0, &c__0, &smlnum, &anrm, &minmn, &c__1, &s[1], &minmn,
+                               info);
         }
     }
     /* Return optimal workspace in WORK(1) */

@@ -3,7 +3,7 @@
  on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
-#include "FLA_f2c.h" /* > \brief \b CSYMV computes a matrix-vector product for a complex symmetric matrix. */
+#include "FLA_f2c.h" /* > \brief \b CSYMV computes a matrix-vector product for a scomplex symmetric matrix. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
@@ -152,8 +152,25 @@
 /* > \ingroup complexSYauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-void csymv_(char *uplo, integer *n, complex *alpha, complex *a, integer *lda, complex *x,
-            integer *incx, complex *beta, complex *y, integer *incy)
+/** Generated wrapper function */
+void csymv_(char *uplo, aocl_int_t *n, scomplex *alpha, scomplex *a, aocl_int_t *lda, scomplex *x,
+            aocl_int_t *incx, scomplex *beta, scomplex *y, aocl_int_t *incy)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_csymv(uplo, n, alpha, a, lda, x, incx, beta, y, incy);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t incx_64 = *incx;
+    aocl_int64_t incy_64 = *incy;
+
+    aocl_lapack_csymv(uplo, &n_64, alpha, a, &lda_64, x, &incx_64, beta, y, &incy_64);
+#endif
+}
+
+void aocl_lapack_csymv(char *uplo, aocl_int64_t *n, scomplex *alpha, scomplex *a, aocl_int64_t *lda,
+                       scomplex *x, aocl_int64_t *incx, scomplex *beta, scomplex *y,
+                       aocl_int64_t *incy)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -168,15 +185,12 @@ void csymv_(char *uplo, integer *n, complex *alpha, complex *a, integer *lda, co
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
-    integer a_dim1, a_offset, i__1, i__2, i__3, i__4, i__5;
-    complex q__1, q__2, q__3, q__4;
+    aocl_int64_t a_dim1, a_offset, i__1, i__2, i__3, i__4, i__5;
+    scomplex q__1, q__2, q__3, q__4;
     /* Local variables */
-    integer i__, j, ix, iy, jx, jy, kx, ky, info;
-    complex temp1, temp2;
-    extern logical lsame_(char *, char *, integer, integer);
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    aocl_int64_t i__, j, ix, iy, jx, jy, kx, ky, info;
+    scomplex temp1, temp2;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -228,7 +242,7 @@ void csymv_(char *uplo, integer *n, complex *alpha, complex *a, integer *lda, co
     }
     if(info != 0)
     {
-        xerbla_("CSYMV ", &info, (ftnlen)6);
+        aocl_blas_xerbla("CSYMV ", &info, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }

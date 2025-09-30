@@ -9,7 +9,7 @@
  */
 
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
+static aocl_int64_t c__1 = 1;
 static doublereal c_b9 = -1.;
 static doublereal c_b10 = 1.;
 /* > \brief \b DLASYF_RK computes a partial factorization of a real symmetric indefinite matrix
@@ -268,45 +268,54 @@ static doublereal c_b10 = 1.;
 /* > \endverbatim */
 /* ===================================================================== */
 /* Subroutine */
-void dlasyf_rk_(char *uplo, integer *n, integer *nb, integer *kb, doublereal *a, integer *lda,
-                doublereal *e, integer *ipiv, doublereal *w, integer *ldw, integer *info)
+/** Generated wrapper function */
+void dlasyf_rk_(char *uplo, aocl_int_t *n, aocl_int_t *nb, aocl_int_t *kb, doublereal *a,
+                aocl_int_t *lda, doublereal *e, aocl_int_t *ipiv, doublereal *w, aocl_int_t *ldw,
+                aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_dlasyf_rk(uplo, n, nb, kb, a, lda, e, ipiv, w, ldw, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t nb_64 = *nb;
+    aocl_int64_t kb_64 = *kb;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t ldw_64 = *ldw;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_dlasyf_rk(uplo, &n_64, &nb_64, &kb_64, a, &lda_64, e, ipiv, w, &ldw_64, &info_64);
+
+    *kb = (aocl_int_t)kb_64;
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_dlasyf_rk(char *uplo, aocl_int64_t *n, aocl_int64_t *nb, aocl_int64_t *kb,
+                           doublereal *a, aocl_int64_t *lda, doublereal *e, aocl_int_t *ipiv,
+                           doublereal *w, aocl_int64_t *ldw, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dlasyf_rk inputs: uplo %c, n %" FLA_IS ", nb %" FLA_IS ", lda %" FLA_IS
                       ", ldw %" FLA_IS "",
                       *uplo, *n, *nb, *lda, *ldw);
     /* System generated locals */
-    integer a_dim1, a_offset, w_dim1, w_offset, i__1, i__2, i__3, i__4, i__5;
+    aocl_int64_t a_dim1, a_offset, w_dim1, w_offset, i__1, i__2, i__3, i__4, i__5;
     doublereal d__1;
     /* Builtin functions */
     double sqrt(doublereal);
     /* Local variables */
-    integer j, k, p;
+    aocl_int64_t j, k, p;
     doublereal t, r1, d11, d12, d21, d22;
-    integer jb, ii, jj, kk, kp, kw, kkw;
+    aocl_int64_t jb, ii, jj, kk, kp, kw, kkw;
     logical done;
-    integer imax, jmax;
+    aocl_int64_t imax, jmax;
     doublereal alpha;
-    extern /* Subroutine */
-        void
-        dscal_(integer *, doublereal *, doublereal *, integer *),
-        dgemm_(char *, char *, integer *, integer *, integer *, doublereal *, doublereal *,
-               integer *, doublereal *, integer *, doublereal *, doublereal *, integer *);
-    extern logical lsame_(char *, char *, integer, integer);
-    extern /* Subroutine */
-        void
-        dgemv_(char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *,
-               integer *, doublereal *, doublereal *, integer *);
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     doublereal dtemp, sfmin;
-    integer itemp;
-    extern /* Subroutine */
-        void
-        dcopy_(integer *, doublereal *, integer *, doublereal *, integer *),
-        dswap_(integer *, doublereal *, integer *, doublereal *, integer *);
-    integer kstep;
+    aocl_int64_t itemp;
+    aocl_int64_t kstep;
     extern doublereal dlamch_(char *);
     doublereal absakk;
-    extern integer idamax_(integer *, doublereal *, integer *);
     doublereal colmax, rowmax;
     /* -- LAPACK computational routine (version 3.7.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -365,12 +374,12 @@ void dlasyf_rk_(char *uplo, integer *n, integer *nb, integer *kb, doublereal *a,
         kstep = 1;
         p = k;
         /* Copy column K of A to column KW of W and update it */
-        dcopy_(&k, &a[k * a_dim1 + 1], &c__1, &w[kw * w_dim1 + 1], &c__1);
+        aocl_blas_dcopy(&k, &a[k * a_dim1 + 1], &c__1, &w[kw * w_dim1 + 1], &c__1);
         if(k < *n)
         {
             i__1 = *n - k;
-            dgemv_("No transpose", &k, &i__1, &c_b9, &a[(k + 1) * a_dim1 + 1], lda,
-                   &w[k + (kw + 1) * w_dim1], ldw, &c_b10, &w[kw * w_dim1 + 1], &c__1);
+            aocl_blas_dgemv("No transpose", &k, &i__1, &c_b9, &a[(k + 1) * a_dim1 + 1], lda,
+                            &w[k + (kw + 1) * w_dim1], ldw, &c_b10, &w[kw * w_dim1 + 1], &c__1);
         }
         /* Determine rows and columns to be interchanged and whether */
         /* a 1-by-1 or 2-by-2 pivot block will be used */
@@ -381,7 +390,7 @@ void dlasyf_rk_(char *uplo, integer *n, integer *nb, integer *kb, doublereal *a,
         if(k > 1)
         {
             i__1 = k - 1;
-            imax = idamax_(&i__1, &w[kw * w_dim1 + 1], &c__1);
+            imax = aocl_blas_idamax(&i__1, &w[kw * w_dim1 + 1], &c__1);
             colmax = (d__1 = w[imax + kw * w_dim1], f2c_dabs(d__1));
         }
         else
@@ -396,7 +405,7 @@ void dlasyf_rk_(char *uplo, integer *n, integer *nb, integer *kb, doublereal *a,
                 *info = k;
             }
             kp = k;
-            dcopy_(&k, &w[kw * w_dim1 + 1], &c__1, &a[k * a_dim1 + 1], &c__1);
+            aocl_blas_dcopy(&k, &w[kw * w_dim1 + 1], &c__1, &a[k * a_dim1 + 1], &c__1);
             /* Set E( K ) to zero */
             if(k > 1)
             {
@@ -420,16 +429,17 @@ void dlasyf_rk_(char *uplo, integer *n, integer *nb, integer *kb, doublereal *a,
                 /* Loop until pivot found */
             L12: /* Begin pivot search loop body */
                 /* Copy column IMAX to column KW-1 of W and update it */
-                dcopy_(&imax, &a[imax * a_dim1 + 1], &c__1, &w[(kw - 1) * w_dim1 + 1], &c__1);
+                aocl_blas_dcopy(&imax, &a[imax * a_dim1 + 1], &c__1, &w[(kw - 1) * w_dim1 + 1],
+                                &c__1);
                 i__1 = k - imax;
-                dcopy_(&i__1, &a[imax + (imax + 1) * a_dim1], lda, &w[imax + 1 + (kw - 1) * w_dim1],
-                       &c__1);
+                aocl_blas_dcopy(&i__1, &a[imax + (imax + 1) * a_dim1], lda,
+                                &w[imax + 1 + (kw - 1) * w_dim1], &c__1);
                 if(k < *n)
                 {
                     i__1 = *n - k;
-                    dgemv_("No transpose", &k, &i__1, &c_b9, &a[(k + 1) * a_dim1 + 1], lda,
-                           &w[imax + (kw + 1) * w_dim1], ldw, &c_b10, &w[(kw - 1) * w_dim1 + 1],
-                           &c__1);
+                    aocl_blas_dgemv("No transpose", &k, &i__1, &c_b9, &a[(k + 1) * a_dim1 + 1], lda,
+                                    &w[imax + (kw + 1) * w_dim1], ldw, &c_b10,
+                                    &w[(kw - 1) * w_dim1 + 1], &c__1);
                 }
                 /* JMAX is the column-index of the largest off-diagonal */
                 /* element in row IMAX, and ROWMAX is its absolute value. */
@@ -437,7 +447,7 @@ void dlasyf_rk_(char *uplo, integer *n, integer *nb, integer *kb, doublereal *a,
                 if(imax != k)
                 {
                     i__1 = k - imax;
-                    jmax = imax + idamax_(&i__1, &w[imax + 1 + (kw - 1) * w_dim1], &c__1);
+                    jmax = imax + aocl_blas_idamax(&i__1, &w[imax + 1 + (kw - 1) * w_dim1], &c__1);
                     rowmax = (d__1 = w[jmax + (kw - 1) * w_dim1], f2c_dabs(d__1));
                 }
                 else
@@ -447,7 +457,7 @@ void dlasyf_rk_(char *uplo, integer *n, integer *nb, integer *kb, doublereal *a,
                 if(imax > 1)
                 {
                     i__1 = imax - 1;
-                    itemp = idamax_(&i__1, &w[(kw - 1) * w_dim1 + 1], &c__1);
+                    itemp = aocl_blas_idamax(&i__1, &w[(kw - 1) * w_dim1 + 1], &c__1);
                     dtemp = (d__1 = w[itemp + (kw - 1) * w_dim1], f2c_dabs(d__1));
                     if(dtemp > rowmax)
                     {
@@ -464,7 +474,8 @@ void dlasyf_rk_(char *uplo, integer *n, integer *nb, integer *kb, doublereal *a,
                     /* use 1-by-1 pivot block */
                     kp = imax;
                     /* copy column KW-1 of W to column KW of W */
-                    dcopy_(&k, &w[(kw - 1) * w_dim1 + 1], &c__1, &w[kw * w_dim1 + 1], &c__1);
+                    aocl_blas_dcopy(&k, &w[(kw - 1) * w_dim1 + 1], &c__1, &w[kw * w_dim1 + 1],
+                                    &c__1);
                     done = TRUE_;
                     /* Equivalent to testing for ROWMAX.EQ.COLMAX, */
                     /* (used to handle NaN and Inf) */
@@ -484,7 +495,8 @@ void dlasyf_rk_(char *uplo, integer *n, integer *nb, integer *kb, doublereal *a,
                     colmax = rowmax;
                     imax = jmax;
                     /* Copy updated JMAXth (next IMAXth) column to Kth of W */
-                    dcopy_(&k, &w[(kw - 1) * w_dim1 + 1], &c__1, &w[kw * w_dim1 + 1], &c__1);
+                    aocl_blas_dcopy(&k, &w[(kw - 1) * w_dim1 + 1], &c__1, &w[kw * w_dim1 + 1],
+                                    &c__1);
                 }
                 /* End pivot search loop body */
                 if(!done)
@@ -500,14 +512,15 @@ void dlasyf_rk_(char *uplo, integer *n, integer *nb, integer *kb, doublereal *a,
             {
                 /* Copy non-updated column K to column P */
                 i__1 = k - p;
-                dcopy_(&i__1, &a[p + 1 + k * a_dim1], &c__1, &a[p + (p + 1) * a_dim1], lda);
-                dcopy_(&p, &a[k * a_dim1 + 1], &c__1, &a[p * a_dim1 + 1], &c__1);
+                aocl_blas_dcopy(&i__1, &a[p + 1 + k * a_dim1], &c__1, &a[p + (p + 1) * a_dim1],
+                                lda);
+                aocl_blas_dcopy(&p, &a[k * a_dim1 + 1], &c__1, &a[p * a_dim1 + 1], &c__1);
                 /* Interchange rows K and P in last N-K+1 columns of A */
                 /* and last N-K+2 columns of W */
                 i__1 = *n - k + 1;
-                dswap_(&i__1, &a[k + k * a_dim1], lda, &a[p + k * a_dim1], lda);
+                aocl_blas_dswap(&i__1, &a[k + k * a_dim1], lda, &a[p + k * a_dim1], lda);
                 i__1 = *n - kk + 1;
-                dswap_(&i__1, &w[k + kkw * w_dim1], ldw, &w[p + kkw * w_dim1], ldw);
+                aocl_blas_dswap(&i__1, &w[k + kkw * w_dim1], ldw, &w[p + kkw * w_dim1], ldw);
             }
             /* Updated column KP is already stored in column KKW of W */
             if(kp != kk)
@@ -515,14 +528,15 @@ void dlasyf_rk_(char *uplo, integer *n, integer *nb, integer *kb, doublereal *a,
                 /* Copy non-updated column KK to column KP */
                 a[kp + k * a_dim1] = a[kk + k * a_dim1];
                 i__1 = k - 1 - kp;
-                dcopy_(&i__1, &a[kp + 1 + kk * a_dim1], &c__1, &a[kp + (kp + 1) * a_dim1], lda);
-                dcopy_(&kp, &a[kk * a_dim1 + 1], &c__1, &a[kp * a_dim1 + 1], &c__1);
+                aocl_blas_dcopy(&i__1, &a[kp + 1 + kk * a_dim1], &c__1, &a[kp + (kp + 1) * a_dim1],
+                                lda);
+                aocl_blas_dcopy(&kp, &a[kk * a_dim1 + 1], &c__1, &a[kp * a_dim1 + 1], &c__1);
                 /* Interchange rows KK and KP in last N-KK+1 columns */
                 /* of A and W */
                 i__1 = *n - kk + 1;
-                dswap_(&i__1, &a[kk + kk * a_dim1], lda, &a[kp + kk * a_dim1], lda);
+                aocl_blas_dswap(&i__1, &a[kk + kk * a_dim1], lda, &a[kp + kk * a_dim1], lda);
                 i__1 = *n - kk + 1;
-                dswap_(&i__1, &w[kk + kkw * w_dim1], ldw, &w[kp + kkw * w_dim1], ldw);
+                aocl_blas_dswap(&i__1, &w[kk + kkw * w_dim1], ldw, &w[kp + kkw * w_dim1], ldw);
             }
             if(kstep == 1)
             {
@@ -530,14 +544,14 @@ void dlasyf_rk_(char *uplo, integer *n, integer *nb, integer *kb, doublereal *a,
                 /* W(k) = U(k)*D(k) */
                 /* where U(k) is the k-th column of U */
                 /* Store U(k) in column k of A */
-                dcopy_(&k, &w[kw * w_dim1 + 1], &c__1, &a[k * a_dim1 + 1], &c__1);
+                aocl_blas_dcopy(&k, &w[kw * w_dim1 + 1], &c__1, &a[k * a_dim1 + 1], &c__1);
                 if(k > 1)
                 {
                     if((d__1 = a[k + k * a_dim1], f2c_dabs(d__1)) >= sfmin)
                     {
                         r1 = 1. / a[k + k * a_dim1];
                         i__1 = k - 1;
-                        dscal_(&i__1, &r1, &a[k * a_dim1 + 1], &c__1);
+                        aocl_blas_dscal(&i__1, &r1, &a[k * a_dim1 + 1], &c__1);
                     }
                     else if(a[k + k * a_dim1] != 0.)
                     {
@@ -590,12 +604,12 @@ void dlasyf_rk_(char *uplo, integer *n, integer *nb, integer *kb, doublereal *a,
         /* Store details of the interchanges in IPIV */
         if(kstep == 1)
         {
-            ipiv[k] = kp;
+            ipiv[k] = (aocl_int_t)(kp);
         }
         else
         {
-            ipiv[k] = -p;
-            ipiv[k - 1] = -kp;
+            ipiv[k] = (aocl_int_t)(-p);
+            ipiv[k - 1] = (aocl_int_t)(-kp);
         }
         /* Decrease K and return to the start of the main loop */
         k -= kstep;
@@ -616,8 +630,9 @@ void dlasyf_rk_(char *uplo, integer *n, integer *nb, integer *kb, doublereal *a,
             {
                 i__3 = jj - j + 1;
                 i__4 = *n - k;
-                dgemv_("No transpose", &i__3, &i__4, &c_b9, &a[j + (k + 1) * a_dim1], lda,
-                       &w[jj + (kw + 1) * w_dim1], ldw, &c_b10, &a[j + jj * a_dim1], &c__1);
+                aocl_blas_dgemv("No transpose", &i__3, &i__4, &c_b9, &a[j + (k + 1) * a_dim1], lda,
+                                &w[jj + (kw + 1) * w_dim1], ldw, &c_b10, &a[j + jj * a_dim1],
+                                &c__1);
                 /* L40: */
             }
             /* Update the rectangular superdiagonal block */
@@ -625,9 +640,9 @@ void dlasyf_rk_(char *uplo, integer *n, integer *nb, integer *kb, doublereal *a,
             {
                 i__2 = j - 1;
                 i__3 = *n - k;
-                dgemm_("No transpose", "Transpose", &i__2, &jb, &i__3, &c_b9,
-                       &a[(k + 1) * a_dim1 + 1], lda, &w[j + (kw + 1) * w_dim1], ldw, &c_b10,
-                       &a[j * a_dim1 + 1], lda);
+                aocl_blas_dgemm("No transpose", "Transpose", &i__2, &jb, &i__3, &c_b9,
+                                &a[(k + 1) * a_dim1 + 1], lda, &w[j + (kw + 1) * w_dim1], ldw,
+                                &c_b10, &a[j * a_dim1 + 1], lda);
             }
             /* L50: */
         }
@@ -652,13 +667,13 @@ void dlasyf_rk_(char *uplo, integer *n, integer *nb, integer *kb, doublereal *a,
         p = k;
         /* Copy column K of A to column K of W and update it */
         i__1 = *n - k + 1;
-        dcopy_(&i__1, &a[k + k * a_dim1], &c__1, &w[k + k * w_dim1], &c__1);
+        aocl_blas_dcopy(&i__1, &a[k + k * a_dim1], &c__1, &w[k + k * w_dim1], &c__1);
         if(k > 1)
         {
             i__1 = *n - k + 1;
             i__2 = k - 1;
-            dgemv_("No transpose", &i__1, &i__2, &c_b9, &a[k + a_dim1], lda, &w[k + w_dim1], ldw,
-                   &c_b10, &w[k + k * w_dim1], &c__1);
+            aocl_blas_dgemv("No transpose", &i__1, &i__2, &c_b9, &a[k + a_dim1], lda,
+                            &w[k + w_dim1], ldw, &c_b10, &w[k + k * w_dim1], &c__1);
         }
         /* Determine rows and columns to be interchanged and whether */
         /* a 1-by-1 or 2-by-2 pivot block will be used */
@@ -669,7 +684,7 @@ void dlasyf_rk_(char *uplo, integer *n, integer *nb, integer *kb, doublereal *a,
         if(k < *n)
         {
             i__1 = *n - k;
-            imax = k + idamax_(&i__1, &w[k + 1 + k * w_dim1], &c__1);
+            imax = k + aocl_blas_idamax(&i__1, &w[k + 1 + k * w_dim1], &c__1);
             colmax = (d__1 = w[imax + k * w_dim1], f2c_dabs(d__1));
         }
         else
@@ -685,7 +700,7 @@ void dlasyf_rk_(char *uplo, integer *n, integer *nb, integer *kb, doublereal *a,
             }
             kp = k;
             i__1 = *n - k + 1;
-            dcopy_(&i__1, &w[k + k * w_dim1], &c__1, &a[k + k * a_dim1], &c__1);
+            aocl_blas_dcopy(&i__1, &w[k + k * w_dim1], &c__1, &a[k + k * a_dim1], &c__1);
             /* Set E( K ) to zero */
             if(k < *n)
             {
@@ -710,15 +725,17 @@ void dlasyf_rk_(char *uplo, integer *n, integer *nb, integer *kb, doublereal *a,
             L72: /* Begin pivot search loop body */
                 /* Copy column IMAX to column K+1 of W and update it */
                 i__1 = imax - k;
-                dcopy_(&i__1, &a[imax + k * a_dim1], lda, &w[k + (k + 1) * w_dim1], &c__1);
+                aocl_blas_dcopy(&i__1, &a[imax + k * a_dim1], lda, &w[k + (k + 1) * w_dim1], &c__1);
                 i__1 = *n - imax + 1;
-                dcopy_(&i__1, &a[imax + imax * a_dim1], &c__1, &w[imax + (k + 1) * w_dim1], &c__1);
+                aocl_blas_dcopy(&i__1, &a[imax + imax * a_dim1], &c__1, &w[imax + (k + 1) * w_dim1],
+                                &c__1);
                 if(k > 1)
                 {
                     i__1 = *n - k + 1;
                     i__2 = k - 1;
-                    dgemv_("No transpose", &i__1, &i__2, &c_b9, &a[k + a_dim1], lda,
-                           &w[imax + w_dim1], ldw, &c_b10, &w[k + (k + 1) * w_dim1], &c__1);
+                    aocl_blas_dgemv("No transpose", &i__1, &i__2, &c_b9, &a[k + a_dim1], lda,
+                                    &w[imax + w_dim1], ldw, &c_b10, &w[k + (k + 1) * w_dim1],
+                                    &c__1);
                 }
                 /* JMAX is the column-index of the largest off-diagonal */
                 /* element in row IMAX, and ROWMAX is its absolute value. */
@@ -726,7 +743,7 @@ void dlasyf_rk_(char *uplo, integer *n, integer *nb, integer *kb, doublereal *a,
                 if(imax != k)
                 {
                     i__1 = imax - k;
-                    jmax = k - 1 + idamax_(&i__1, &w[k + (k + 1) * w_dim1], &c__1);
+                    jmax = k - 1 + aocl_blas_idamax(&i__1, &w[k + (k + 1) * w_dim1], &c__1);
                     rowmax = (d__1 = w[jmax + (k + 1) * w_dim1], f2c_dabs(d__1));
                 }
                 else
@@ -736,7 +753,7 @@ void dlasyf_rk_(char *uplo, integer *n, integer *nb, integer *kb, doublereal *a,
                 if(imax < *n)
                 {
                     i__1 = *n - imax;
-                    itemp = imax + idamax_(&i__1, &w[imax + 1 + (k + 1) * w_dim1], &c__1);
+                    itemp = imax + aocl_blas_idamax(&i__1, &w[imax + 1 + (k + 1) * w_dim1], &c__1);
                     dtemp = (d__1 = w[itemp + (k + 1) * w_dim1], f2c_dabs(d__1));
                     if(dtemp > rowmax)
                     {
@@ -754,7 +771,8 @@ void dlasyf_rk_(char *uplo, integer *n, integer *nb, integer *kb, doublereal *a,
                     kp = imax;
                     /* copy column K+1 of W to column K of W */
                     i__1 = *n - k + 1;
-                    dcopy_(&i__1, &w[k + (k + 1) * w_dim1], &c__1, &w[k + k * w_dim1], &c__1);
+                    aocl_blas_dcopy(&i__1, &w[k + (k + 1) * w_dim1], &c__1, &w[k + k * w_dim1],
+                                    &c__1);
                     done = TRUE_;
                     /* Equivalent to testing for ROWMAX.EQ.COLMAX, */
                     /* (used to handle NaN and Inf) */
@@ -775,7 +793,8 @@ void dlasyf_rk_(char *uplo, integer *n, integer *nb, integer *kb, doublereal *a,
                     imax = jmax;
                     /* Copy updated JMAXth (next IMAXth) column to Kth of W */
                     i__1 = *n - k + 1;
-                    dcopy_(&i__1, &w[k + (k + 1) * w_dim1], &c__1, &w[k + k * w_dim1], &c__1);
+                    aocl_blas_dcopy(&i__1, &w[k + (k + 1) * w_dim1], &c__1, &w[k + k * w_dim1],
+                                    &c__1);
                 }
                 /* End pivot search loop body */
                 if(!done)
@@ -789,13 +808,13 @@ void dlasyf_rk_(char *uplo, integer *n, integer *nb, integer *kb, doublereal *a,
             {
                 /* Copy non-updated column K to column P */
                 i__1 = p - k;
-                dcopy_(&i__1, &a[k + k * a_dim1], &c__1, &a[p + k * a_dim1], lda);
+                aocl_blas_dcopy(&i__1, &a[k + k * a_dim1], &c__1, &a[p + k * a_dim1], lda);
                 i__1 = *n - p + 1;
-                dcopy_(&i__1, &a[p + k * a_dim1], &c__1, &a[p + p * a_dim1], &c__1);
+                aocl_blas_dcopy(&i__1, &a[p + k * a_dim1], &c__1, &a[p + p * a_dim1], &c__1);
                 /* Interchange rows K and P in first K columns of A */
                 /* and first K+1 columns of W */
-                dswap_(&k, &a[k + a_dim1], lda, &a[p + a_dim1], lda);
-                dswap_(&kk, &w[k + w_dim1], ldw, &w[p + w_dim1], ldw);
+                aocl_blas_dswap(&k, &a[k + a_dim1], lda, &a[p + a_dim1], lda);
+                aocl_blas_dswap(&kk, &w[k + w_dim1], ldw, &w[p + w_dim1], ldw);
             }
             /* Updated column KP is already stored in column KK of W */
             if(kp != kk)
@@ -803,12 +822,13 @@ void dlasyf_rk_(char *uplo, integer *n, integer *nb, integer *kb, doublereal *a,
                 /* Copy non-updated column KK to column KP */
                 a[kp + k * a_dim1] = a[kk + k * a_dim1];
                 i__1 = kp - k - 1;
-                dcopy_(&i__1, &a[k + 1 + kk * a_dim1], &c__1, &a[kp + (k + 1) * a_dim1], lda);
+                aocl_blas_dcopy(&i__1, &a[k + 1 + kk * a_dim1], &c__1, &a[kp + (k + 1) * a_dim1],
+                                lda);
                 i__1 = *n - kp + 1;
-                dcopy_(&i__1, &a[kp + kk * a_dim1], &c__1, &a[kp + kp * a_dim1], &c__1);
+                aocl_blas_dcopy(&i__1, &a[kp + kk * a_dim1], &c__1, &a[kp + kp * a_dim1], &c__1);
                 /* Interchange rows KK and KP in first KK columns of A and W */
-                dswap_(&kk, &a[kk + a_dim1], lda, &a[kp + a_dim1], lda);
-                dswap_(&kk, &w[kk + w_dim1], ldw, &w[kp + w_dim1], ldw);
+                aocl_blas_dswap(&kk, &a[kk + a_dim1], lda, &a[kp + a_dim1], lda);
+                aocl_blas_dswap(&kk, &w[kk + w_dim1], ldw, &w[kp + w_dim1], ldw);
             }
             if(kstep == 1)
             {
@@ -817,14 +837,14 @@ void dlasyf_rk_(char *uplo, integer *n, integer *nb, integer *kb, doublereal *a,
                 /* where L(k) is the k-th column of L */
                 /* Store L(k) in column k of A */
                 i__1 = *n - k + 1;
-                dcopy_(&i__1, &w[k + k * w_dim1], &c__1, &a[k + k * a_dim1], &c__1);
+                aocl_blas_dcopy(&i__1, &w[k + k * w_dim1], &c__1, &a[k + k * a_dim1], &c__1);
                 if(k < *n)
                 {
                     if((d__1 = a[k + k * a_dim1], f2c_dabs(d__1)) >= sfmin)
                     {
                         r1 = 1. / a[k + k * a_dim1];
                         i__1 = *n - k;
-                        dscal_(&i__1, &r1, &a[k + 1 + k * a_dim1], &c__1);
+                        aocl_blas_dscal(&i__1, &r1, &a[k + 1 + k * a_dim1], &c__1);
                     }
                     else if(a[k + k * a_dim1] != 0.)
                     {
@@ -876,12 +896,12 @@ void dlasyf_rk_(char *uplo, integer *n, integer *nb, integer *kb, doublereal *a,
         /* Store details of the interchanges in IPIV */
         if(kstep == 1)
         {
-            ipiv[k] = kp;
+            ipiv[k] = (aocl_int_t)(kp);
         }
         else
         {
-            ipiv[k] = -p;
-            ipiv[k + 1] = -kp;
+            ipiv[k] = (aocl_int_t)(-p);
+            ipiv[k + 1] = (aocl_int_t)(-kp);
         }
         /* Increase K and return to the start of the main loop */
         k += kstep;
@@ -903,8 +923,8 @@ void dlasyf_rk_(char *uplo, integer *n, integer *nb, integer *kb, doublereal *a,
             {
                 i__4 = j + jb - jj;
                 i__5 = k - 1;
-                dgemv_("No transpose", &i__4, &i__5, &c_b9, &a[jj + a_dim1], lda, &w[jj + w_dim1],
-                       ldw, &c_b10, &a[jj + jj * a_dim1], &c__1);
+                aocl_blas_dgemv("No transpose", &i__4, &i__5, &c_b9, &a[jj + a_dim1], lda,
+                                &w[jj + w_dim1], ldw, &c_b10, &a[jj + jj * a_dim1], &c__1);
                 /* L100: */
             }
             /* Update the rectangular subdiagonal block */
@@ -912,8 +932,9 @@ void dlasyf_rk_(char *uplo, integer *n, integer *nb, integer *kb, doublereal *a,
             {
                 i__3 = *n - j - jb + 1;
                 i__4 = k - 1;
-                dgemm_("No transpose", "Transpose", &i__3, &jb, &i__4, &c_b9, &a[j + jb + a_dim1],
-                       lda, &w[j + w_dim1], ldw, &c_b10, &a[j + jb + j * a_dim1], lda);
+                aocl_blas_dgemm("No transpose", "Transpose", &i__3, &jb, &i__4, &c_b9,
+                                &a[j + jb + a_dim1], lda, &w[j + w_dim1], ldw, &c_b10,
+                                &a[j + jb + j * a_dim1], lda);
             }
             /* L110: */
         }

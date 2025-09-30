@@ -5,7 +5,7 @@
  /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static doublereal c_b3 = -1.;
-static integer c__1 = 1;
+static aocl_int64_t c__1 = 1;
 /* > \brief \b DLAED2 used by DSTEDC. Merges eigenvalues and deflates secular equation. Used when
  * the original matrix is tridiagonal. */
 /* =========== DOCUMENTATION =========== */
@@ -212,43 +212,54 @@ static integer c__1 = 1;
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void dlaed2_(integer *k, integer *n, integer *n1, doublereal *d__, doublereal *q, integer *ldq,
-             integer *indxq, doublereal *rho, doublereal *z__, doublereal *dlambda, doublereal *w,
-             doublereal *q2, integer *indx, integer *indxc, integer *indxp, integer *coltyp,
-             integer *info)
+/** Generated wrapper function */
+void dlaed2_(aocl_int_t *k, aocl_int_t *n, aocl_int_t *n1, doublereal *d__, doublereal *q,
+             aocl_int_t *ldq, aocl_int_t *indxq, doublereal *rho, doublereal *z__,
+             doublereal *dlambda, doublereal *w, doublereal *q2, aocl_int_t *indx,
+             aocl_int_t *indxc, aocl_int_t *indxp, aocl_int_t *coltyp, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_dlaed2(k, n, n1, d__, q, ldq, indxq, rho, z__, dlambda, w, q2, indx, indxc, indxp,
+                       coltyp, info);
+#else
+    aocl_int64_t k_64 = *k;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t n1_64 = *n1;
+    aocl_int64_t ldq_64 = *ldq;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_dlaed2(&k_64, &n_64, &n1_64, d__, q, &ldq_64, indxq, rho, z__, dlambda, w, q2, indx,
+                       indxc, indxp, coltyp, &info_64);
+
+    *k = (aocl_int_t)k_64;
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_dlaed2(aocl_int64_t *k, aocl_int64_t *n, aocl_int64_t *n1, doublereal *d__,
+                        doublereal *q, aocl_int64_t *ldq, aocl_int_t *indxq, doublereal *rho,
+                        doublereal *z__, doublereal *dlambda, doublereal *w, doublereal *q2,
+                        aocl_int_t *indx, aocl_int_t *indxc, aocl_int_t *indxp, aocl_int_t *coltyp,
+                        aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dlaed2 inputs: n %" FLA_IS ", n1 %" FLA_IS ", ldq %" FLA_IS
                       ", indxq %" FLA_IS "",
                       *n, *n1, *ldq, *indxq);
     /* System generated locals */
-    integer q_dim1, q_offset, i__1, i__2;
+    aocl_int64_t q_dim1, q_offset, i__1, i__2;
     doublereal d__1, d__2, d__3, d__4;
     /* Builtin functions */
     double sqrt(doublereal);
     /* Local variables */
     doublereal c__;
-    integer i__, j;
+    aocl_int64_t i__, j;
     doublereal s, t;
-    integer k2, n2, ct, nj, pj, js, iq1, iq2, n1p1;
+    aocl_int64_t k2, n2, ct, nj, pj, js, iq1, iq2, n1p1;
     doublereal eps, tau, tol;
-    integer psm[4], imax, jmax;
-    extern /* Subroutine */
-        void
-        drot_(integer *, doublereal *, integer *, doublereal *, integer *, doublereal *,
-              doublereal *);
-    integer ctot[4];
-    extern /* Subroutine */
-        void
-        dscal_(integer *, doublereal *, doublereal *, integer *),
-        dcopy_(integer *, doublereal *, integer *, doublereal *, integer *);
+    aocl_int64_t psm[4], imax, jmax;
+    aocl_int64_t ctot[4];
     extern doublereal dlapy2_(doublereal *, doublereal *), dlamch_(char *);
-    extern integer idamax_(integer *, doublereal *, integer *);
-    extern /* Subroutine */
-        void
-        dlamrg_(integer *, integer *, doublereal *, integer *, integer *, integer *),
-        dlacpy_(char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -309,7 +320,7 @@ void dlaed2_(integer *k, integer *n, integer *n1, doublereal *d__, doublereal *q
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("DLAED2", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("DLAED2", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -323,19 +334,19 @@ void dlaed2_(integer *k, integer *n, integer *n1, doublereal *d__, doublereal *q
     n1p1 = *n1 + 1;
     if(*rho < 0.)
     {
-        dscal_(&n2, &c_b3, &z__[n1p1], &c__1);
+        aocl_blas_dscal(&n2, &c_b3, &z__[n1p1], &c__1);
     }
     /* Normalize z so that norm(z) = 1. Since z is the concatenation of */
     /* two normalized vectors, norm2(z) = sqrt(2). */
     t = 1. / sqrt(2.);
-    dscal_(n, &t, &z__[1], &c__1);
+    aocl_blas_dscal(n, &t, &z__[1], &c__1);
     /* RHO = ABS( norm(z)**2 * RHO ) */
     *rho = (d__1 = *rho * 2., f2c_abs(d__1));
     /* Sort the eigenvalues into increasing order */
     i__1 = *n;
     for(i__ = n1p1; i__ <= i__1; ++i__)
     {
-        indxq[i__] += *n1;
+        indxq[i__] += (aocl_int_t)(*n1);
         /* L10: */
     }
     /* re-integrate the deflated parts from the last pass */
@@ -345,7 +356,7 @@ void dlaed2_(integer *k, integer *n, integer *n1, doublereal *d__, doublereal *q
         dlambda[i__] = d__[indxq[i__]];
         /* L20: */
     }
-    dlamrg_(n1, &n2, &dlambda[1], &c__1, &c__1, &indxc[1]);
+    aocl_lapack_dlamrg(n1, &n2, &dlambda[1], &c__1, &c__1, &indxc[1]);
     i__1 = *n;
     for(i__ = 1; i__ <= i__1; ++i__)
     {
@@ -353,8 +364,8 @@ void dlaed2_(integer *k, integer *n, integer *n1, doublereal *d__, doublereal *q
         /* L30: */
     }
     /* Calculate the allowable deflation tolerance */
-    imax = idamax_(n, &z__[1], &c__1);
-    jmax = idamax_(n, &d__[1], &c__1);
+    imax = aocl_blas_idamax(n, &z__[1], &c__1);
+    jmax = aocl_blas_idamax(n, &d__[1], &c__1);
     eps = dlamch_("Epsilon");
     /* Computing MAX */
     d__3 = (d__1 = d__[jmax], f2c_abs(d__1));
@@ -371,13 +382,13 @@ void dlaed2_(integer *k, integer *n, integer *n1, doublereal *d__, doublereal *q
         for(j = 1; j <= i__1; ++j)
         {
             i__ = indx[j];
-            dcopy_(n, &q[i__ * q_dim1 + 1], &c__1, &q2[iq2], &c__1);
+            aocl_blas_dcopy(n, &q[i__ * q_dim1 + 1], &c__1, &q2[iq2], &c__1);
             dlambda[j] = d__[i__];
             iq2 += *n;
             /* L40: */
         }
-        dlacpy_("A", n, n, &q2[1], n, &q[q_offset], ldq);
-        dcopy_(n, &dlambda[1], &c__1, &d__[1], &c__1);
+        aocl_lapack_dlacpy("A", n, n, &q2[1], n, &q[q_offset], ldq);
+        aocl_blas_dcopy(n, &dlambda[1], &c__1, &d__[1], &c__1);
         goto L190;
     }
     /* If there are multiple eigenvalues then the problem deflates. Here */
@@ -408,7 +419,7 @@ void dlaed2_(integer *k, integer *n, integer *n1, doublereal *d__, doublereal *q
             /* Deflate due to small z component. */
             --k2;
             coltyp[nj] = 4;
-            indxp[k2] = nj;
+            indxp[k2] = (aocl_int_t)(nj);
             if(j == *n)
             {
                 goto L100;
@@ -433,7 +444,7 @@ L80:
         /* Deflate due to small z component. */
         --k2;
         coltyp[nj] = 4;
-        indxp[k2] = nj;
+        indxp[k2] = (aocl_int_t)(nj);
     }
     else
     {
@@ -456,7 +467,7 @@ L80:
                 coltyp[nj] = 2;
             }
             coltyp[pj] = 4;
-            drot_(n, &q[pj * q_dim1 + 1], &c__1, &q[nj * q_dim1 + 1], &c__1, &c__, &s);
+            aocl_blas_drot(n, &q[pj * q_dim1 + 1], &c__1, &q[nj * q_dim1 + 1], &c__1, &c__, &s);
             /* Computing 2nd power */
             d__1 = c__;
             /* Computing 2nd power */
@@ -476,18 +487,18 @@ L80:
                 if(d__[pj] < d__[indxp[k2 + i__]])
                 {
                     indxp[k2 + i__ - 1] = indxp[k2 + i__];
-                    indxp[k2 + i__] = pj;
+                    indxp[k2 + i__] = (aocl_int_t)(pj);
                     ++i__;
                     goto L90;
                 }
                 else
                 {
-                    indxp[k2 + i__ - 1] = pj;
+                    indxp[k2 + i__ - 1] = (aocl_int_t)(pj);
                 }
             }
             else
             {
-                indxp[k2 + i__ - 1] = pj;
+                indxp[k2 + i__ - 1] = (aocl_int_t)(pj);
             }
             pj = nj;
         }
@@ -496,7 +507,7 @@ L80:
             ++(*k);
             dlambda[*k] = d__[pj];
             w[*k] = z__[pj];
-            indxp[*k] = pj;
+            indxp[*k] = (aocl_int_t)(pj);
             pj = nj;
         }
     }
@@ -505,7 +516,7 @@ L100: /* Record the last eigenvalue. */
     ++(*k);
     dlambda[*k] = d__[pj];
     w[*k] = z__[pj];
-    indxp[*k] = pj;
+    indxp[*k] = (aocl_int_t)(pj);
     /* Count up the total number of the various types of columns, then */
     /* form a permutation which positions the four column types into */
     /* four uniform groups (although one or more of these groups may be */
@@ -536,8 +547,8 @@ L100: /* Record the last eigenvalue. */
     {
         js = indxp[j];
         ct = coltyp[js];
-        indx[psm[ct - 1]] = js;
-        indxc[psm[ct - 1]] = j;
+        indx[psm[ct - 1]] = (aocl_int_t)(js);
+        indxc[psm[ct - 1]] = (aocl_int_t)(j);
         ++psm[ct - 1];
         /* L130: */
     }
@@ -552,7 +563,7 @@ L100: /* Record the last eigenvalue. */
     for(j = 1; j <= i__1; ++j)
     {
         js = indx[i__];
-        dcopy_(n1, &q[js * q_dim1 + 1], &c__1, &q2[iq1], &c__1);
+        aocl_blas_dcopy(n1, &q[js * q_dim1 + 1], &c__1, &q2[iq1], &c__1);
         z__[i__] = d__[js];
         ++i__;
         iq1 += *n1;
@@ -562,8 +573,8 @@ L100: /* Record the last eigenvalue. */
     for(j = 1; j <= i__1; ++j)
     {
         js = indx[i__];
-        dcopy_(n1, &q[js * q_dim1 + 1], &c__1, &q2[iq1], &c__1);
-        dcopy_(&n2, &q[*n1 + 1 + js * q_dim1], &c__1, &q2[iq2], &c__1);
+        aocl_blas_dcopy(n1, &q[js * q_dim1 + 1], &c__1, &q2[iq1], &c__1);
+        aocl_blas_dcopy(&n2, &q[*n1 + 1 + js * q_dim1], &c__1, &q2[iq2], &c__1);
         z__[i__] = d__[js];
         ++i__;
         iq1 += *n1;
@@ -574,7 +585,7 @@ L100: /* Record the last eigenvalue. */
     for(j = 1; j <= i__1; ++j)
     {
         js = indx[i__];
-        dcopy_(&n2, &q[*n1 + 1 + js * q_dim1], &c__1, &q2[iq2], &c__1);
+        aocl_blas_dcopy(&n2, &q[*n1 + 1 + js * q_dim1], &c__1, &q2[iq2], &c__1);
         z__[i__] = d__[js];
         ++i__;
         iq2 += n2;
@@ -585,7 +596,7 @@ L100: /* Record the last eigenvalue. */
     for(j = 1; j <= i__1; ++j)
     {
         js = indx[i__];
-        dcopy_(n, &q[js * q_dim1 + 1], &c__1, &q2[iq2], &c__1);
+        aocl_blas_dcopy(n, &q[js * q_dim1 + 1], &c__1, &q2[iq2], &c__1);
         iq2 += *n;
         z__[i__] = d__[js];
         ++i__;
@@ -595,9 +606,9 @@ L100: /* Record the last eigenvalue. */
     /* into the last N - K slots of D and Q respectively. */
     if(*k < *n)
     {
-        dlacpy_("A", n, &ctot[3], &q2[iq1], n, &q[(*k + 1) * q_dim1 + 1], ldq);
+        aocl_lapack_dlacpy("A", n, &ctot[3], &q2[iq1], n, &q[(*k + 1) * q_dim1 + 1], ldq);
         i__1 = *n - *k;
-        dcopy_(&i__1, &z__[*k + 1], &c__1, &d__[*k + 1], &c__1);
+        aocl_blas_dcopy(&i__1, &z__[*k + 1], &c__1, &d__[*k + 1], &c__1);
     }
     /* Copy CTOT into COLTYP for referencing in DLAED3. */
     for(j = 1; j <= 4; ++j)

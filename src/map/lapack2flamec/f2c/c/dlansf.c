@@ -4,7 +4,7 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
+static aocl_int64_t c__1 = 1;
 /* > \brief \b DLANSF returns the value of the 1-norm, or the Frobenius norm, or the infinity norm,
  * or the ele ment of largest absolute value of a symmetric matrix in RFP format. */
 /* =========== DOCUMENTATION =========== */
@@ -209,30 +209,40 @@ otherwise, */
 /* > 04 14 24 34 44 43 44 22 32 42 52 */
 /* > \endverbatim */
 /* ===================================================================== */
-doublereal dlansf_(char *norm, char *transr, char *uplo, integer *n, doublereal *a,
+/** Generated wrapper function */
+doublereal dlansf_(char *norm, char *transr, char *uplo, aocl_int_t *n, doublereal *a,
                    doublereal *work)
+{
+#if FLA_ENABLE_ILP64
+    return aocl_lapack_dlansf(norm, transr, uplo, n, a, work);
+#else
+    aocl_int64_t n_64 = *n;
+
+    return aocl_lapack_dlansf(norm, transr, uplo, &n_64, a, work);
+#endif
+}
+
+doublereal aocl_lapack_dlansf(char *norm, char *transr, char *uplo, aocl_int64_t *n, doublereal *a,
+                              doublereal *work)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dlansf inputs: norm %c, transr %c, uplo %c, n %" FLA_IS "", *norm, *transr,
                       *uplo, *n);
     /* System generated locals */
-    integer i__1, i__2;
+    aocl_int64_t i__1, i__2;
     doublereal ret_val, d__1;
     /* Builtin functions */
     double sqrt(doublereal);
     /* Local variables */
-    integer i__, j, k, l;
+    aocl_int64_t i__, j, k, l;
     doublereal s;
-    integer n1;
+    aocl_int64_t n1;
     doublereal aa;
-    integer lda, ifm, noe, ilu;
+    aocl_int64_t lda, ifm, noe, ilu;
     doublereal temp, scale;
-    extern logical lsame_(char *, char *, integer, integer);
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     doublereal value;
     extern logical disnan_(doublereal *);
-    extern /* Subroutine */
-        void
-        dlassq_(integer *, doublereal *, integer *, doublereal *, doublereal *);
     /* -- LAPACK computational routine (version 3.7.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -997,24 +1007,24 @@ doublereal dlansf_(char *norm, char *transr, char *uplo, integer *n, doublereal 
                     for(j = 0; j <= i__1; ++j)
                     {
                         i__2 = k - j - 2;
-                        dlassq_(&i__2, &a[k + j + 1 + j * lda], &c__1, &scale, &s);
+                        aocl_lapack_dlassq(&i__2, &a[k + j + 1 + j * lda], &c__1, &scale, &s);
                         /* L at A(k,0) */
                     }
                     i__1 = k - 1;
                     for(j = 0; j <= i__1; ++j)
                     {
                         i__2 = k + j - 1;
-                        dlassq_(&i__2, &a[j * lda], &c__1, &scale, &s);
+                        aocl_lapack_dlassq(&i__2, &a[j * lda], &c__1, &scale, &s);
                         /* trap U at A(0,0) */
                     }
                     s += s;
                     /* double s for the off diagonal elements */
                     i__1 = k - 1;
                     i__2 = lda + 1;
-                    dlassq_(&i__1, &a[k], &i__2, &scale, &s);
+                    aocl_lapack_dlassq(&i__1, &a[k], &i__2, &scale, &s);
                     /* tri L at A(k,0) */
                     i__1 = lda + 1;
-                    dlassq_(&k, &a[k - 1], &i__1, &scale, &s);
+                    aocl_lapack_dlassq(&k, &a[k - 1], &i__1, &scale, &s);
                     /* tri U at A(k-1,0) */
                 }
                 else
@@ -1024,23 +1034,23 @@ doublereal dlansf_(char *norm, char *transr, char *uplo, integer *n, doublereal 
                     for(j = 0; j <= i__1; ++j)
                     {
                         i__2 = *n - j - 1;
-                        dlassq_(&i__2, &a[j + 1 + j * lda], &c__1, &scale, &s);
+                        aocl_lapack_dlassq(&i__2, &a[j + 1 + j * lda], &c__1, &scale, &s);
                         /* trap L at A(0,0) */
                     }
                     i__1 = k - 2;
                     for(j = 0; j <= i__1; ++j)
                     {
-                        dlassq_(&j, &a[(j + 1) * lda], &c__1, &scale, &s);
+                        aocl_lapack_dlassq(&j, &a[(j + 1) * lda], &c__1, &scale, &s);
                         /* U at A(0,1) */
                     }
                     s += s;
                     /* double s for the off diagonal elements */
                     i__1 = lda + 1;
-                    dlassq_(&k, a, &i__1, &scale, &s);
+                    aocl_lapack_dlassq(&k, a, &i__1, &scale, &s);
                     /* tri L at A(0,0) */
                     i__1 = k - 1;
                     i__2 = lda + 1;
-                    dlassq_(&i__1, &a[lda], &i__2, &scale, &s);
+                    aocl_lapack_dlassq(&i__1, &a[lda], &i__2, &scale, &s);
                     /* tri U at A(0,1) */
                 }
             }
@@ -1053,30 +1063,30 @@ doublereal dlansf_(char *norm, char *transr, char *uplo, integer *n, doublereal 
                     i__1 = k - 2;
                     for(j = 1; j <= i__1; ++j)
                     {
-                        dlassq_(&j, &a[(k + j) * lda], &c__1, &scale, &s);
+                        aocl_lapack_dlassq(&j, &a[(k + j) * lda], &c__1, &scale, &s);
                         /* U at A(0,k) */
                     }
                     i__1 = k - 2;
                     for(j = 0; j <= i__1; ++j)
                     {
-                        dlassq_(&k, &a[j * lda], &c__1, &scale, &s);
+                        aocl_lapack_dlassq(&k, &a[j * lda], &c__1, &scale, &s);
                         /* k by k-1 rect. at A(0,0) */
                     }
                     i__1 = k - 2;
                     for(j = 0; j <= i__1; ++j)
                     {
                         i__2 = k - j - 1;
-                        dlassq_(&i__2, &a[j + 1 + (j + k - 1) * lda], &c__1, &scale, &s);
+                        aocl_lapack_dlassq(&i__2, &a[j + 1 + (j + k - 1) * lda], &c__1, &scale, &s);
                         /* L at A(0,k-1) */
                     }
                     s += s;
                     /* double s for the off diagonal elements */
                     i__1 = k - 1;
                     i__2 = lda + 1;
-                    dlassq_(&i__1, &a[k * lda], &i__2, &scale, &s);
+                    aocl_lapack_dlassq(&i__1, &a[k * lda], &i__2, &scale, &s);
                     /* tri U at A(0,k) */
                     i__1 = lda + 1;
-                    dlassq_(&k, &a[(k - 1) * lda], &i__1, &scale, &s);
+                    aocl_lapack_dlassq(&k, &a[(k - 1) * lda], &i__1, &scale, &s);
                     /* tri L at A(0,k-1) */
                 }
                 else
@@ -1085,30 +1095,30 @@ doublereal dlansf_(char *norm, char *transr, char *uplo, integer *n, doublereal 
                     i__1 = k - 1;
                     for(j = 1; j <= i__1; ++j)
                     {
-                        dlassq_(&j, &a[j * lda], &c__1, &scale, &s);
+                        aocl_lapack_dlassq(&j, &a[j * lda], &c__1, &scale, &s);
                         /* U at A(0,0) */
                     }
                     i__1 = *n - 1;
                     for(j = k; j <= i__1; ++j)
                     {
-                        dlassq_(&k, &a[j * lda], &c__1, &scale, &s);
+                        aocl_lapack_dlassq(&k, &a[j * lda], &c__1, &scale, &s);
                         /* k by k-1 rect. at A(0,k) */
                     }
                     i__1 = k - 3;
                     for(j = 0; j <= i__1; ++j)
                     {
                         i__2 = k - j - 2;
-                        dlassq_(&i__2, &a[j + 2 + j * lda], &c__1, &scale, &s);
+                        aocl_lapack_dlassq(&i__2, &a[j + 2 + j * lda], &c__1, &scale, &s);
                         /* L at A(1,0) */
                     }
                     s += s;
                     /* double s for the off diagonal elements */
                     i__1 = lda + 1;
-                    dlassq_(&k, a, &i__1, &scale, &s);
+                    aocl_lapack_dlassq(&k, a, &i__1, &scale, &s);
                     /* tri U at A(0,0) */
                     i__1 = k - 1;
                     i__2 = lda + 1;
-                    dlassq_(&i__1, &a[1], &i__2, &scale, &s);
+                    aocl_lapack_dlassq(&i__1, &a[1], &i__2, &scale, &s);
                     /* tri L at A(1,0) */
                 }
             }
@@ -1126,23 +1136,23 @@ doublereal dlansf_(char *norm, char *transr, char *uplo, integer *n, doublereal 
                     for(j = 0; j <= i__1; ++j)
                     {
                         i__2 = k - j - 1;
-                        dlassq_(&i__2, &a[k + j + 2 + j * lda], &c__1, &scale, &s);
+                        aocl_lapack_dlassq(&i__2, &a[k + j + 2 + j * lda], &c__1, &scale, &s);
                         /* L at A(k+1,0) */
                     }
                     i__1 = k - 1;
                     for(j = 0; j <= i__1; ++j)
                     {
                         i__2 = k + j;
-                        dlassq_(&i__2, &a[j * lda], &c__1, &scale, &s);
+                        aocl_lapack_dlassq(&i__2, &a[j * lda], &c__1, &scale, &s);
                         /* trap U at A(0,0) */
                     }
                     s += s;
                     /* double s for the off diagonal elements */
                     i__1 = lda + 1;
-                    dlassq_(&k, &a[k + 1], &i__1, &scale, &s);
+                    aocl_lapack_dlassq(&k, &a[k + 1], &i__1, &scale, &s);
                     /* tri L at A(k+1,0) */
                     i__1 = lda + 1;
-                    dlassq_(&k, &a[k], &i__1, &scale, &s);
+                    aocl_lapack_dlassq(&k, &a[k], &i__1, &scale, &s);
                     /* tri U at A(k,0) */
                 }
                 else
@@ -1152,22 +1162,22 @@ doublereal dlansf_(char *norm, char *transr, char *uplo, integer *n, doublereal 
                     for(j = 0; j <= i__1; ++j)
                     {
                         i__2 = *n - j - 1;
-                        dlassq_(&i__2, &a[j + 2 + j * lda], &c__1, &scale, &s);
+                        aocl_lapack_dlassq(&i__2, &a[j + 2 + j * lda], &c__1, &scale, &s);
                         /* trap L at A(1,0) */
                     }
                     i__1 = k - 1;
                     for(j = 1; j <= i__1; ++j)
                     {
-                        dlassq_(&j, &a[j * lda], &c__1, &scale, &s);
+                        aocl_lapack_dlassq(&j, &a[j * lda], &c__1, &scale, &s);
                         /* U at A(0,0) */
                     }
                     s += s;
                     /* double s for the off diagonal elements */
                     i__1 = lda + 1;
-                    dlassq_(&k, &a[1], &i__1, &scale, &s);
+                    aocl_lapack_dlassq(&k, &a[1], &i__1, &scale, &s);
                     /* tri L at A(1,0) */
                     i__1 = lda + 1;
-                    dlassq_(&k, a, &i__1, &scale, &s);
+                    aocl_lapack_dlassq(&k, a, &i__1, &scale, &s);
                     /* tri U at A(0,0) */
                 }
             }
@@ -1180,29 +1190,29 @@ doublereal dlansf_(char *norm, char *transr, char *uplo, integer *n, doublereal 
                     i__1 = k - 1;
                     for(j = 1; j <= i__1; ++j)
                     {
-                        dlassq_(&j, &a[(k + 1 + j) * lda], &c__1, &scale, &s);
+                        aocl_lapack_dlassq(&j, &a[(k + 1 + j) * lda], &c__1, &scale, &s);
                         /* U at A(0,k+1) */
                     }
                     i__1 = k - 1;
                     for(j = 0; j <= i__1; ++j)
                     {
-                        dlassq_(&k, &a[j * lda], &c__1, &scale, &s);
+                        aocl_lapack_dlassq(&k, &a[j * lda], &c__1, &scale, &s);
                         /* k by k rect. at A(0,0) */
                     }
                     i__1 = k - 2;
                     for(j = 0; j <= i__1; ++j)
                     {
                         i__2 = k - j - 1;
-                        dlassq_(&i__2, &a[j + 1 + (j + k) * lda], &c__1, &scale, &s);
+                        aocl_lapack_dlassq(&i__2, &a[j + 1 + (j + k) * lda], &c__1, &scale, &s);
                         /* L at A(0,k) */
                     }
                     s += s;
                     /* double s for the off diagonal elements */
                     i__1 = lda + 1;
-                    dlassq_(&k, &a[(k + 1) * lda], &i__1, &scale, &s);
+                    aocl_lapack_dlassq(&k, &a[(k + 1) * lda], &i__1, &scale, &s);
                     /* tri U at A(0,k+1) */
                     i__1 = lda + 1;
-                    dlassq_(&k, &a[k * lda], &i__1, &scale, &s);
+                    aocl_lapack_dlassq(&k, &a[k * lda], &i__1, &scale, &s);
                     /* tri L at A(0,k) */
                 }
                 else
@@ -1211,29 +1221,29 @@ doublereal dlansf_(char *norm, char *transr, char *uplo, integer *n, doublereal 
                     i__1 = k - 1;
                     for(j = 1; j <= i__1; ++j)
                     {
-                        dlassq_(&j, &a[(j + 1) * lda], &c__1, &scale, &s);
+                        aocl_lapack_dlassq(&j, &a[(j + 1) * lda], &c__1, &scale, &s);
                         /* U at A(0,1) */
                     }
                     i__1 = *n;
                     for(j = k + 1; j <= i__1; ++j)
                     {
-                        dlassq_(&k, &a[j * lda], &c__1, &scale, &s);
+                        aocl_lapack_dlassq(&k, &a[j * lda], &c__1, &scale, &s);
                         /* k by k rect. at A(0,k+1) */
                     }
                     i__1 = k - 2;
                     for(j = 0; j <= i__1; ++j)
                     {
                         i__2 = k - j - 1;
-                        dlassq_(&i__2, &a[j + 1 + j * lda], &c__1, &scale, &s);
+                        aocl_lapack_dlassq(&i__2, &a[j + 1 + j * lda], &c__1, &scale, &s);
                         /* L at A(0,0) */
                     }
                     s += s;
                     /* double s for the off diagonal elements */
                     i__1 = lda + 1;
-                    dlassq_(&k, &a[lda], &i__1, &scale, &s);
+                    aocl_lapack_dlassq(&k, &a[lda], &i__1, &scale, &s);
                     /* tri L at A(0,1) */
                     i__1 = lda + 1;
-                    dlassq_(&k, a, &i__1, &scale, &s);
+                    aocl_lapack_dlassq(&k, a, &i__1, &scale, &s);
                     /* tri U at A(0,0) */
                 }
             }

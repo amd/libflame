@@ -4,7 +4,7 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
+static aocl_int64_t c__1 = 1;
 static real c_b5 = 1.f;
 /* > \brief \b SLAIC1 applies one step of incremental condition estimation. */
 /* =========== DOCUMENTATION =========== */
@@ -132,8 +132,22 @@ static real c_b5 = 1.f;
 /* > \ingroup realOTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-void slaic1_(integer *job, integer *j, real *x, real *sest, real *w, real *gamma, real *sestpr,
-             real *s, real *c__)
+/** Generated wrapper function */
+void slaic1_(aocl_int_t *job, aocl_int_t *j, real *x, real *sest, real *w, real *gamma,
+             real *sestpr, real *s, real *c__)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_slaic1(job, j, x, sest, w, gamma, sestpr, s, c__);
+#else
+    aocl_int64_t job_64 = *job;
+    aocl_int64_t j_64 = *j;
+
+    aocl_lapack_slaic1(&job_64, &j_64, x, sest, w, gamma, sestpr, s, c__);
+#endif
+}
+
+void aocl_lapack_slaic1(aocl_int64_t *job, aocl_int64_t *j, real *x, real *sest, real *w,
+                        real *gamma, real *sestpr, real *s, real *c__)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("slaic1_ inputs: *job %" FLA_IS ", *j %" FLA_IS "", *job, *j);
@@ -143,7 +157,6 @@ void slaic1_(integer *job, integer *j, real *x, real *sest, real *w, real *gamma
     double sqrt(doublereal), r_sign(real *, real *);
     /* Local variables */
     real b, t, s1, s2, eps, tmp, sine;
-    extern real sdot_(integer *, real *, integer *, real *, integer *);
     real test, zeta1, zeta2, alpha, norma, absgam, absalp;
     extern real slamch_(char *);
     real cosine, absest;
@@ -170,7 +183,7 @@ void slaic1_(integer *job, integer *j, real *x, real *sest, real *w, real *gamma
     --x;
     /* Function Body */
     eps = slamch_("Epsilon");
-    alpha = sdot_(j, &x[1], &c__1, &w[1], &c__1);
+    alpha = aocl_blas_sdot(j, &x[1], &c__1, &w[1], &c__1);
     absalp = f2c_abs(alpha);
     absgam = f2c_abs(*gamma);
     absest = f2c_abs(*sest);

@@ -4,7 +4,7 @@
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
  /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
+static aocl_int64_t c__1 = 1;
 static real c_b46 = .5f;
 /* > \brief \b SLATRS solves a triangular system of equations with the scale factor set to prevent
  * overflow. */
@@ -240,45 +240,48 @@ b(i), i=1,..,n}
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void slatrs_(char *uplo, char *trans, char *diag, char *normin, integer *n, real *a, integer *lda,
-             real *x, real *scale, real *cnorm, integer *info)
+/** Generated wrapper function */
+void slatrs_(char *uplo, char *trans, char *diag, char *normin, aocl_int_t *n, real *a,
+             aocl_int_t *lda, real *x, real *scale, real *cnorm, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_slatrs(uplo, trans, diag, normin, n, a, lda, x, scale, cnorm, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_slatrs(uplo, trans, diag, normin, &n_64, a, &lda_64, x, scale, cnorm, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_slatrs(char *uplo, char *trans, char *diag, char *normin, aocl_int64_t *n, real *a,
+                        aocl_int64_t *lda, real *x, real *scale, real *cnorm, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("slatrs inputs: uplo %c ,trans %c ,diag %c ,normin %c ,n %" FLA_IS
                       ",lda %" FLA_IS "",
                       *uplo, *trans, *diag, *normin, *n, *lda);
     /* System generated locals */
-    integer a_dim1, a_offset, i__1, i__2, i__3;
+    aocl_int64_t a_dim1, a_offset, i__1, i__2, i__3;
     real r__1, r__2, r__3;
     /* Local variables */
-    integer i__, j;
+    aocl_int64_t i__, j;
     real xj, rec, tjj;
-    integer jinc;
+    aocl_int64_t jinc;
     real xbnd;
-    integer imax;
+    aocl_int64_t imax;
     real tmax, tjjs;
-    extern real sdot_(integer *, real *, integer *, real *, integer *);
     real xmax, grow, sumj, work[1];
-    extern logical lsame_(char *, char *, integer, integer);
-    extern /* Subroutine */
-        void
-        sscal_(integer *, real *, real *, integer *);
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     real tscal, uscal;
-    integer jlast;
-    extern real sasum_(integer *, real *, integer *);
+    aocl_int64_t jlast;
     logical upper;
-    extern /* Subroutine */
-        void
-        saxpy_(integer *, real *, real *, integer *, real *, integer *),
-        strsv_(char *, char *, char *, integer *, real *, integer *, real *, integer *);
-    extern real slamch_(char *), slange_(char *, integer *, integer *, real *, integer *, real *);
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real bignum;
-    extern integer isamax_(integer *, real *, integer *);
     logical notran;
-    integer jfirst;
+    aocl_int64_t jfirst;
     real smlnum;
     logical nounit;
     /* -- LAPACK auxiliary routine -- */
@@ -342,7 +345,7 @@ void slatrs_(char *uplo, char *trans, char *diag, char *normin, integer *n, real
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("SLATRS", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("SLATRS", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -366,7 +369,7 @@ void slatrs_(char *uplo, char *trans, char *diag, char *normin, integer *n, real
             for(j = 1; j <= i__1; ++j)
             {
                 i__2 = j - 1;
-                cnorm[j] = sasum_(&i__2, &a[j * a_dim1 + 1], &c__1);
+                cnorm[j] = aocl_blas_sasum(&i__2, &a[j * a_dim1 + 1], &c__1);
                 /* L10: */
             }
         }
@@ -377,7 +380,7 @@ void slatrs_(char *uplo, char *trans, char *diag, char *normin, integer *n, real
             for(j = 1; j <= i__1; ++j)
             {
                 i__2 = *n - j;
-                cnorm[j] = sasum_(&i__2, &a[j + 1 + j * a_dim1], &c__1);
+                cnorm[j] = aocl_blas_sasum(&i__2, &a[j + 1 + j * a_dim1], &c__1);
                 /* L20: */
             }
             cnorm[*n] = 0.f;
@@ -385,7 +388,7 @@ void slatrs_(char *uplo, char *trans, char *diag, char *normin, integer *n, real
     }
     /* Scale the column norms by TSCAL if the maximum element in CNORM is */
     /* greater than BIGNUM. */
-    imax = isamax_(n, &cnorm[1], &c__1);
+    imax = aocl_blas_isamax(n, &cnorm[1], &c__1);
     tmax = cnorm[imax];
     if(tmax <= bignum)
     {
@@ -399,7 +402,7 @@ void slatrs_(char *uplo, char *trans, char *diag, char *normin, integer *n, real
         {
             /* Case 1: All entries in CNORM are valid floating-point numbers */
             tscal = 1.f / (smlnum * tmax);
-            sscal_(n, &tscal, &cnorm[1], &c__1);
+            aocl_blas_sscal(n, &tscal, &cnorm[1], &c__1);
         }
         else
         {
@@ -416,7 +419,7 @@ void slatrs_(char *uplo, char *trans, char *diag, char *normin, integer *n, real
                 {
                     /* Computing MAX */
                     i__2 = j - 1;
-                    r__1 = slange_("M", &i__2, &c__1, &a[j * a_dim1 + 1], &c__1, work);
+                    r__1 = aocl_lapack_slange("M", &i__2, &c__1, &a[j * a_dim1 + 1], &c__1, work);
                     tmax = fla_max(r__1, tmax);
                 }
             }
@@ -428,7 +431,8 @@ void slatrs_(char *uplo, char *trans, char *diag, char *normin, integer *n, real
                 {
                     /* Computing MAX */
                     i__2 = *n - j;
-                    r__1 = slange_("M", &i__2, &c__1, &a[j + 1 + j * a_dim1], &c__1, work);
+                    r__1 = aocl_lapack_slange("M", &i__2, &c__1, &a[j + 1 + j * a_dim1], &c__1,
+                                              work);
                     tmax = fla_max(r__1, tmax);
                 }
             }
@@ -470,7 +474,7 @@ void slatrs_(char *uplo, char *trans, char *diag, char *normin, integer *n, real
             {
                 /* At least one entry of A is not a valid floating-point entry. */
                 /* Rely on TRSV to propagate Inf and NaN. */
-                strsv_(uplo, trans, diag, n, &a[a_offset], lda, &x[1], &c__1);
+                aocl_blas_strsv(uplo, trans, diag, n, &a[a_offset], lda, &x[1], &c__1);
                 AOCL_DTL_TRACE_LOG_EXIT
                 return;
             }
@@ -478,7 +482,7 @@ void slatrs_(char *uplo, char *trans, char *diag, char *normin, integer *n, real
     }
     /* Compute a bound on the computed solution vector to see if the */
     /* Level 2 BLAS routine STRSV can be used. */
-    j = isamax_(n, &x[1], &c__1);
+    j = aocl_blas_isamax(n, &x[1], &c__1);
     xmax = (r__1 = x[j], f2c_abs(r__1));
     xbnd = xmax;
     if(notran)
@@ -650,7 +654,7 @@ void slatrs_(char *uplo, char *trans, char *diag, char *normin, integer *n, real
     {
         /* Use the Level 2 BLAS solve if the reciprocal of the bound on */
         /* elements of X is not too small. */
-        strsv_(uplo, trans, diag, n, &a[a_offset], lda, &x[1], &c__1);
+        aocl_blas_strsv(uplo, trans, diag, n, &a[a_offset], lda, &x[1], &c__1);
     }
     else
     {
@@ -660,7 +664,7 @@ void slatrs_(char *uplo, char *trans, char *diag, char *normin, integer *n, real
             /* Scale X so that its components are less than or equal to */
             /* BIGNUM in absolute value. */
             *scale = bignum / xmax;
-            sscal_(n, scale, &x[1], &c__1);
+            aocl_blas_sscal(n, scale, &x[1], &c__1);
             xmax = bignum;
         }
         if(notran)
@@ -694,7 +698,7 @@ void slatrs_(char *uplo, char *trans, char *diag, char *normin, integer *n, real
                         {
                             /* Scale x by 1/b(j). */
                             rec = 1.f / xj;
-                            sscal_(n, &rec, &x[1], &c__1);
+                            aocl_blas_sscal(n, &rec, &x[1], &c__1);
                             *scale *= rec;
                             xmax *= rec;
                         }
@@ -716,7 +720,7 @@ void slatrs_(char *uplo, char *trans, char *diag, char *normin, integer *n, real
                             /* multiplying x(j) times column j. */
                             rec /= cnorm[j];
                         }
-                        sscal_(n, &rec, &x[1], &c__1);
+                        aocl_blas_sscal(n, &rec, &x[1], &c__1);
                         *scale *= rec;
                         xmax *= rec;
                     }
@@ -747,14 +751,14 @@ void slatrs_(char *uplo, char *trans, char *diag, char *normin, integer *n, real
                     {
                         /* Scale x by 1/(2*abs(x(j))). */
                         rec *= .5f;
-                        sscal_(n, &rec, &x[1], &c__1);
+                        aocl_blas_sscal(n, &rec, &x[1], &c__1);
                         *scale *= rec;
                     }
                 }
                 else if(xj * cnorm[j] > bignum - xmax)
                 {
                     /* Scale x by 1/2. */
-                    sscal_(n, &c_b46, &x[1], &c__1);
+                    aocl_blas_sscal(n, &c_b46, &x[1], &c__1);
                     *scale *= .5f;
                 }
                 if(upper)
@@ -765,9 +769,9 @@ void slatrs_(char *uplo, char *trans, char *diag, char *normin, integer *n, real
                         /* x(1:j-1) := x(1:j-1) - x(j) * A(1:j-1,j) */
                         i__3 = j - 1;
                         r__1 = -x[j] * tscal;
-                        saxpy_(&i__3, &r__1, &a[j * a_dim1 + 1], &c__1, &x[1], &c__1);
+                        aocl_blas_saxpy(&i__3, &r__1, &a[j * a_dim1 + 1], &c__1, &x[1], &c__1);
                         i__3 = j - 1;
-                        i__ = isamax_(&i__3, &x[1], &c__1);
+                        i__ = aocl_blas_isamax(&i__3, &x[1], &c__1);
                         xmax = (r__1 = x[i__], f2c_abs(r__1));
                     }
                 }
@@ -779,9 +783,10 @@ void slatrs_(char *uplo, char *trans, char *diag, char *normin, integer *n, real
                         /* x(j+1:n) := x(j+1:n) - x(j) * A(j+1:n,j) */
                         i__3 = *n - j;
                         r__1 = -x[j] * tscal;
-                        saxpy_(&i__3, &r__1, &a[j + 1 + j * a_dim1], &c__1, &x[j + 1], &c__1);
+                        aocl_blas_saxpy(&i__3, &r__1, &a[j + 1 + j * a_dim1], &c__1, &x[j + 1],
+                                        &c__1);
                         i__3 = *n - j;
-                        i__ = j + isamax_(&i__3, &x[j + 1], &c__1);
+                        i__ = j + aocl_blas_isamax(&i__3, &x[j + 1], &c__1);
                         xmax = (r__1 = x[i__], f2c_abs(r__1));
                     }
                 }
@@ -824,7 +829,7 @@ void slatrs_(char *uplo, char *trans, char *diag, char *normin, integer *n, real
                     }
                     if(rec < 1.f)
                     {
-                        sscal_(n, &rec, &x[1], &c__1);
+                        aocl_blas_sscal(n, &rec, &x[1], &c__1);
                         *scale *= rec;
                         xmax *= rec;
                     }
@@ -837,12 +842,13 @@ void slatrs_(char *uplo, char *trans, char *diag, char *normin, integer *n, real
                     if(upper)
                     {
                         i__3 = j - 1;
-                        sumj = sdot_(&i__3, &a[j * a_dim1 + 1], &c__1, &x[1], &c__1);
+                        sumj = aocl_blas_sdot(&i__3, &a[j * a_dim1 + 1], &c__1, &x[1], &c__1);
                     }
                     else if(j < *n)
                     {
                         i__3 = *n - j;
-                        sumj = sdot_(&i__3, &a[j + 1 + j * a_dim1], &c__1, &x[j + 1], &c__1);
+                        sumj = aocl_blas_sdot(&i__3, &a[j + 1 + j * a_dim1], &c__1, &x[j + 1],
+                                              &c__1);
                     }
                 }
                 else
@@ -896,7 +902,7 @@ void slatrs_(char *uplo, char *trans, char *diag, char *normin, integer *n, real
                             {
                                 /* Scale X by 1/abs(x(j)). */
                                 rec = 1.f / xj;
-                                sscal_(n, &rec, &x[1], &c__1);
+                                aocl_blas_sscal(n, &rec, &x[1], &c__1);
                                 *scale *= rec;
                                 xmax *= rec;
                             }
@@ -910,7 +916,7 @@ void slatrs_(char *uplo, char *trans, char *diag, char *normin, integer *n, real
                         {
                             /* Scale x by (1/abs(x(j)))*abs(A(j,j))*BIGNUM. */
                             rec = tjj * bignum / xj;
-                            sscal_(n, &rec, &x[1], &c__1);
+                            aocl_blas_sscal(n, &rec, &x[1], &c__1);
                             *scale *= rec;
                             xmax *= rec;
                         }
@@ -951,7 +957,7 @@ void slatrs_(char *uplo, char *trans, char *diag, char *normin, integer *n, real
     if(tscal != 1.f)
     {
         r__1 = 1.f / tscal;
-        sscal_(n, &r__1, &cnorm[1], &c__1);
+        aocl_blas_sscal(n, &r__1, &cnorm[1], &c__1);
     }
     AOCL_DTL_TRACE_LOG_EXIT
     return;

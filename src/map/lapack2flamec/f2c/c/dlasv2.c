@@ -147,7 +147,7 @@ void dlasv2_(doublereal *f, doublereal *g, doublereal *h__, doublereal *ssmin, d
     double sqrt(doublereal), d_sign(doublereal *, doublereal *);
     /* Local variables */
     doublereal a, d__, l, m, r__, s, t, fa, ga, ha, ft, gt, ht, mm, tt, clt, crt, slt, srt;
-    integer pmax;
+    aocl_int64_t pmax;
     doublereal temp;
     logical swap;
     doublereal tsign;

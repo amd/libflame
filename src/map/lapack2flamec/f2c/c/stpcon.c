@@ -4,7 +4,7 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
+static aocl_int64_t c__1 = 1;
 /* > \brief \b STPCON */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -130,42 +130,43 @@ static integer c__1 = 1;
 /* > \ingroup realOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void stpcon_(char *norm, char *uplo, char *diag, integer *n, real *ap, real *rcond, real *work,
-             integer *iwork, integer *info)
+/** Generated wrapper function */
+void stpcon_(char *norm, char *uplo, char *diag, aocl_int_t *n, real *ap, real *rcond, real *work,
+             aocl_int_t *iwork, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_stpcon(norm, uplo, diag, n, ap, rcond, work, iwork, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_stpcon(norm, uplo, diag, &n_64, ap, rcond, work, iwork, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_stpcon(char *norm, char *uplo, char *diag, aocl_int64_t *n, real *ap, real *rcond,
+                        real *work, aocl_int_t *iwork, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("stpcon inputs: norm %c, uplo %c, diag %c, n %" FLA_IS "", *norm, *uplo,
-             *diag, *n);
+                      *diag, *n);
     /* System generated locals */
-    integer i__1;
+    aocl_int64_t i__1;
     real r__1;
     /* Local variables */
-    integer ix, kase, kase1;
+    aocl_int64_t ix, kase, kase1;
     real scale;
-    extern logical lsame_(char *, char *, integer, integer);
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     integer isave[3];
     real anorm;
-    extern /* Subroutine */
-        void
-        srscl_(integer *, real *, real *, integer *);
     logical upper;
     real xnorm;
-    extern /* Subroutine */
-        void
-        slacn2_(integer *, real *, real *, integer *, real *, integer *, integer *);
     extern real slamch_(char *);
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    extern integer isamax_(integer *, real *, integer *);
     real ainvnm;
     logical onenrm;
-    extern real slantp_(char *, char *, char *, integer *, real *, real *);
     char normin[1];
-    extern /* Subroutine */
-        void
-        slatps_(char *, char *, char *, char *, integer *, real *, real *, real *, real *,
-                integer *);
     real smlnum;
     logical nounit;
     /* -- LAPACK computational routine (version 3.4.0) -- */
@@ -219,7 +220,7 @@ void stpcon_(char *norm, char *uplo, char *diag, integer *n, real *ap, real *rco
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("STPCON", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("STPCON", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -233,7 +234,7 @@ void stpcon_(char *norm, char *uplo, char *diag, integer *n, real *ap, real *rco
     *rcond = 0.f;
     smlnum = slamch_("Safe minimum") * (real)fla_max(1, *n);
     /* Compute the norm of the triangular matrix A. */
-    anorm = slantp_(norm, uplo, diag, n, &ap[1], &work[1]);
+    anorm = aocl_lapack_slantp(norm, uplo, diag, n, &ap[1], &work[1]);
     /* Continue only if ANORM > 0. */
     if(anorm > 0.f)
     {
@@ -250,32 +251,32 @@ void stpcon_(char *norm, char *uplo, char *diag, integer *n, real *ap, real *rco
         }
         kase = 0;
     L10:
-        slacn2_(n, &work[*n + 1], &work[1], &iwork[1], &ainvnm, &kase, isave);
+        aocl_lapack_slacn2(n, &work[*n + 1], &work[1], &iwork[1], &ainvnm, &kase, isave);
         if(kase != 0)
         {
             if(kase == kase1)
             {
                 /* Multiply by inv(A). */
-                slatps_(uplo, "No transpose", diag, normin, n, &ap[1], &work[1], &scale,
-                        &work[(*n << 1) + 1], info);
+                aocl_lapack_slatps(uplo, "No transpose", diag, normin, n, &ap[1], &work[1], &scale,
+                                   &work[(*n << 1) + 1], info);
             }
             else
             {
                 /* Multiply by inv(A**T). */
-                slatps_(uplo, "Transpose", diag, normin, n, &ap[1], &work[1], &scale,
-                        &work[(*n << 1) + 1], info);
+                aocl_lapack_slatps(uplo, "Transpose", diag, normin, n, &ap[1], &work[1], &scale,
+                                   &work[(*n << 1) + 1], info);
             }
             *(unsigned char *)normin = 'Y';
             /* Multiply by 1/SCALE if doing so will not cause overflow. */
             if(scale != 1.f)
             {
-                ix = isamax_(n, &work[1], &c__1);
+                ix = aocl_blas_isamax(n, &work[1], &c__1);
                 xnorm = (r__1 = work[ix], f2c_abs(r__1));
                 if(scale < xnorm * smlnum || scale == 0.f)
                 {
                     goto L20;
                 }
-                srscl_(n, &scale, &work[1], &c__1);
+                aocl_lapack_srscl(n, &scale, &work[1], &c__1);
             }
             goto L10;
         }

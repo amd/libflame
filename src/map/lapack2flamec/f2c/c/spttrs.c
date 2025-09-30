@@ -4,8 +4,8 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
-static integer c_n1 = -1;
+static aocl_int64_t c__1 = 1;
+static aocl_int64_t c_n1 = -1;
 /* > \brief \b SPTTRS */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -107,20 +107,34 @@ static integer c_n1 = -1;
 /* > \ingroup realPTcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void spttrs_(integer *n, integer *nrhs, real *d__, real *e, real *b, integer *ldb, integer *info)
+/** Generated wrapper function */
+void spttrs_(aocl_int_t *n, aocl_int_t *nrhs, real *d__, real *e, real *b, aocl_int_t *ldb,
+             aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_spttrs(n, nrhs, d__, e, b, ldb, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t nrhs_64 = *nrhs;
+    aocl_int64_t ldb_64 = *ldb;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_spttrs(&n_64, &nrhs_64, d__, e, b, &ldb_64, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_spttrs(aocl_int64_t *n, aocl_int64_t *nrhs, real *d__, real *e, real *b,
+                        aocl_int64_t *ldb, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("spttrs inputs: n %" FLA_IS ", nrhs %" FLA_IS ", ldb %" FLA_IS "", *n,
-             *nrhs, *ldb);
+    AOCL_DTL_SNPRINTF("spttrs inputs: n %" FLA_IS ", nrhs %" FLA_IS ", ldb %" FLA_IS "", *n, *nrhs,
+                      *ldb);
     /* System generated locals */
-    integer b_dim1, b_offset, i__1, i__2, i__3;
+    aocl_int64_t b_dim1, b_offset, i__1, i__2, i__3;
     /* Local variables */
-    integer j, jb, nb;
-    extern /* Subroutine */
-        void
-        sptts2_(integer *, integer *, real *, real *, real *, integer *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
+    aocl_int64_t j, jb, nb;
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -163,7 +177,7 @@ void spttrs_(integer *n, integer *nrhs, real *d__, real *e, real *b, integer *ld
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("SPTTRS", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("SPTTRS", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -182,12 +196,12 @@ void spttrs_(integer *n, integer *nrhs, real *d__, real *e, real *b, integer *ld
     {
         /* Computing MAX */
         i__1 = 1;
-        i__2 = ilaenv_(&c__1, "SPTTRS", " ", n, nrhs, &c_n1, &c_n1); // , expr subst
+        i__2 = aocl_lapack_ilaenv(&c__1, "SPTTRS", " ", n, nrhs, &c_n1, &c_n1); // , expr subst
         nb = fla_max(i__1, i__2);
     }
     if(nb >= *nrhs)
     {
-        sptts2_(n, nrhs, &d__[1], &e[1], &b[b_offset], ldb);
+        aocl_lapack_sptts2(n, nrhs, &d__[1], &e[1], &b[b_offset], ldb);
     }
     else
     {
@@ -198,7 +212,7 @@ void spttrs_(integer *n, integer *nrhs, real *d__, real *e, real *b, integer *ld
             /* Computing MIN */
             i__3 = *nrhs - j + 1;
             jb = fla_min(i__3, nb);
-            sptts2_(n, &jb, &d__[1], &e[1], &b[j * b_dim1 + 1], ldb);
+            aocl_lapack_sptts2(n, &jb, &d__[1], &e[1], &b[j * b_dim1 + 1], ldb);
             /* L10: */
         }
     }

@@ -168,30 +168,47 @@
 /* > \ingroup realGEcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void sla_geamv_(integer *trans, integer *m, integer *n, real *alpha, real *a, integer *lda, real *x,
-                integer *incx, real *beta, real *y, integer *incy)
+/** Generated wrapper function */
+void sla_geamv_(aocl_int_t *trans, aocl_int_t *m, aocl_int_t *n, real *alpha, real *a,
+                aocl_int_t *lda, real *x, aocl_int_t *incx, real *beta, real *y, aocl_int_t *incy)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_sla_geamv(trans, m, n, alpha, a, lda, x, incx, beta, y, incy);
+#else
+    aocl_int64_t trans_64 = *trans;
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t incx_64 = *incx;
+    aocl_int64_t incy_64 = *incy;
+
+    aocl_lapack_sla_geamv(&trans_64, &m_64, &n_64, alpha, a, &lda_64, x, &incx_64, beta, y,
+                          &incy_64);
+#endif
+}
+
+void aocl_lapack_sla_geamv(aocl_int64_t *trans, aocl_int64_t *m, aocl_int64_t *n, real *alpha,
+                           real *a, aocl_int64_t *lda, real *x, aocl_int64_t *incx, real *beta,
+                           real *y, aocl_int64_t *incy)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("sla_geamv inputs: trans %" FLA_IS ",m %" FLA_IS ",n %" FLA_IS ",lda %" FLA_IS
                       ",incx %" FLA_IS ",incy %" FLA_IS "",
                       *trans, *m, *n, *lda, *incx, *incy);
     /* System generated locals */
-    integer a_dim1, a_offset, i__1, i__2;
+    aocl_int64_t a_dim1, a_offset, i__1, i__2;
     real r__1;
     /* Builtin functions */
     double r_sign(real *, real *);
     /* Local variables */
     extern integer ilatrans_(char *);
-    integer i__, j;
+    aocl_int64_t i__, j;
     logical symb_zero__;
-    integer iy, jx, kx, ky, info;
+    aocl_int64_t iy, jx, kx, ky, info;
     real temp;
-    integer lenx, leny;
+    aocl_int64_t lenx, leny;
     real safe1;
     extern real slamch_(char *);
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -247,7 +264,7 @@ void sla_geamv_(integer *trans, integer *m, integer *n, real *alpha, real *a, in
     }
     if(info != 0)
     {
-        xerbla_("SLA_GEAMV ", &info, (ftnlen)10);
+        aocl_blas_xerbla("SLA_GEAMV ", &info, (ftnlen)10);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }

@@ -113,24 +113,37 @@
 /* > \ingroup doubleOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void dppequ_(char *uplo, integer *n, doublereal *ap, doublereal *s, doublereal *scond,
-             doublereal *amax, integer *info)
+/** Generated wrapper function */
+void dppequ_(char *uplo, aocl_int_t *n, doublereal *ap, doublereal *s, doublereal *scond,
+             doublereal *amax, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_dppequ(uplo, n, ap, s, scond, amax, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_dppequ(uplo, &n_64, ap, s, scond, amax, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_dppequ(char *uplo, aocl_int64_t *n, doublereal *ap, doublereal *s,
+                        doublereal *scond, doublereal *amax, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dppequ inputs: uplo %c, n %" FLA_IS "", *uplo, *n);
     /* System generated locals */
-    integer i__1;
+    aocl_int64_t i__1;
     doublereal d__1, d__2;
     /* Builtin functions */
     double sqrt(doublereal);
     /* Local variables */
-    integer i__, jj;
+    aocl_int64_t i__, jj;
     doublereal smin;
-    extern logical lsame_(char *, char *, integer, integer);
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     logical upper;
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -169,7 +182,7 @@ void dppequ_(char *uplo, integer *n, doublereal *ap, doublereal *s, doublereal *
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("DPPEQU", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("DPPEQU", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }

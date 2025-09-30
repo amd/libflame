@@ -4,7 +4,7 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
+static aocl_int64_t c__1 = 1;
 /* > \brief \b DSPGST */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -265,10 +265,37 @@ if RANGE = 'V', the exact value of M */
 /* > Mark Fahey, Department of Mathematics, Univ. of Kentucky, USA */
 /* ===================================================================== */
 /* Subroutine */
-void dspgvx_(integer *itype, char *jobz, char *range, char *uplo, integer *n, doublereal *ap,
-             doublereal *bp, doublereal *vl, doublereal *vu, integer *il, integer *iu,
-             doublereal *abstol, integer *m, doublereal *w, doublereal *z__, integer *ldz,
-             doublereal *work, integer *iwork, integer *ifail, integer *info)
+/** Generated wrapper function */
+void dspgvx_(aocl_int_t *itype, char *jobz, char *range, char *uplo, aocl_int_t *n, doublereal *ap,
+             doublereal *bp, doublereal *vl, doublereal *vu, aocl_int_t *il, aocl_int_t *iu,
+             doublereal *abstol, aocl_int_t *m, doublereal *w, doublereal *z__, aocl_int_t *ldz,
+             doublereal *work, aocl_int_t *iwork, aocl_int_t *ifail, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_dspgvx(itype, jobz, range, uplo, n, ap, bp, vl, vu, il, iu, abstol, m, w, z__, ldz,
+                       work, iwork, ifail, info);
+#else
+    aocl_int64_t itype_64 = *itype;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t il_64 = *il;
+    aocl_int64_t iu_64 = *iu;
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t ldz_64 = *ldz;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_dspgvx(&itype_64, jobz, range, uplo, &n_64, ap, bp, vl, vu, &il_64, &iu_64, abstol,
+                       &m_64, w, z__, &ldz_64, work, iwork, ifail, &info_64);
+
+    *m = (aocl_int_t)m_64;
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_dspgvx(aocl_int64_t *itype, char *jobz, char *range, char *uplo, aocl_int64_t *n,
+                        doublereal *ap, doublereal *bp, doublereal *vl, doublereal *vu,
+                        aocl_int64_t *il, aocl_int64_t *iu, doublereal *abstol, aocl_int64_t *m,
+                        doublereal *w, doublereal *z__, aocl_int64_t *ldz, doublereal *work,
+                        aocl_int_t *iwork, aocl_int_t *ifail, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dspgvx inputs: itype %" FLA_IS ", jobz %c, range %c, uplo %c, n %" FLA_IS
@@ -276,27 +303,13 @@ void dspgvx_(integer *itype, char *jobz, char *range, char *uplo, integer *n, do
                       ", ifail %" FLA_IS "",
                       *itype, *jobz, *range, *uplo, *n, *il, *iu, *ldz);
     /* System generated locals */
-    integer z_dim1, z_offset, i__1;
+    aocl_int64_t z_dim1, z_offset, i__1;
     /* Local variables */
-    integer j;
-    extern logical lsame_(char *, char *, integer, integer);
+    aocl_int64_t j;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     char trans[1];
     logical upper;
-    extern /* Subroutine */
-        void
-        dtpmv_(char *, char *, char *, integer *, doublereal *, doublereal *, integer *),
-        dtpsv_(char *, char *, char *, integer *, doublereal *, doublereal *, integer *);
     logical wantz, alleig, indeig, valeig;
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    extern /* Subroutine */
-        void
-        dpptrf_(char *, integer *, doublereal *, integer *),
-        dspgst_(integer *, char *, integer *, doublereal *, doublereal *, integer *),
-        dspevx_(char *, char *, char *, integer *, doublereal *, doublereal *, doublereal *,
-                integer *, integer *, doublereal *, integer *, doublereal *, doublereal *,
-                integer *, doublereal *, integer *, integer *, integer *);
     /* -- LAPACK driver routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -384,7 +397,7 @@ void dspgvx_(integer *itype, char *jobz, char *range, char *uplo, integer *n, do
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("DSPGVX", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("DSPGVX", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -396,7 +409,7 @@ void dspgvx_(integer *itype, char *jobz, char *range, char *uplo, integer *n, do
         return;
     }
     /* Form a Cholesky factorization of B. */
-    dpptrf_(uplo, n, &bp[1], info);
+    aocl_lapack_dpptrf(uplo, n, &bp[1], info);
     if(*info != 0)
     {
         *info = *n + *info;
@@ -404,9 +417,9 @@ void dspgvx_(integer *itype, char *jobz, char *range, char *uplo, integer *n, do
         return;
     }
     /* Transform problem to standard eigenvalue problem and solve. */
-    dspgst_(itype, uplo, n, &ap[1], &bp[1], info);
-    dspevx_(jobz, range, uplo, n, &ap[1], vl, vu, il, iu, abstol, m, &w[1], &z__[z_offset], ldz,
-            &work[1], &iwork[1], &ifail[1], info);
+    aocl_lapack_dspgst(itype, uplo, n, &ap[1], &bp[1], info);
+    aocl_lapack_dspevx(jobz, range, uplo, n, &ap[1], vl, vu, il, iu, abstol, m, &w[1],
+                       &z__[z_offset], ldz, &work[1], &iwork[1], &ifail[1], info);
     if(wantz)
     {
         /* Backtransform eigenvectors to the original problem. */
@@ -430,7 +443,7 @@ void dspgvx_(integer *itype, char *jobz, char *range, char *uplo, integer *n, do
             i__1 = *m;
             for(j = 1; j <= i__1; ++j)
             {
-                dtpsv_(uplo, trans, "Non-unit", n, &bp[1], &z__[j * z_dim1 + 1], &c__1);
+                aocl_blas_dtpsv(uplo, trans, "Non-unit", n, &bp[1], &z__[j * z_dim1 + 1], &c__1);
                 /* L10: */
             }
         }
@@ -450,7 +463,7 @@ void dspgvx_(integer *itype, char *jobz, char *range, char *uplo, integer *n, do
             i__1 = *m;
             for(j = 1; j <= i__1; ++j)
             {
-                dtpmv_(uplo, trans, "Non-unit", n, &bp[1], &z__[j * z_dim1 + 1], &c__1);
+                aocl_blas_dtpmv(uplo, trans, "Non-unit", n, &bp[1], &z__[j * z_dim1 + 1], &c__1);
                 /* L20: */
             }
         }

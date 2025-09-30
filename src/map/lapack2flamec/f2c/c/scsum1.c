@@ -3,7 +3,7 @@
  on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
-#include "FLA_f2c.h" /* > \brief \b SCSUM1 forms the 1-norm of the complex vector using the true absolute value. */
+#include "FLA_f2c.h" /* > \brief \b SCSUM1 forms the 1-norm of the scomplex vector using the true absolute value. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
@@ -36,7 +36,7 @@
 /* > */
 /* > \verbatim */
 /* > */
-/* > SCSUM1 takes the sum of the absolute values of a complex */
+/* > SCSUM1 takes the sum of the absolute values of a scomplex */
 /* > vector and returns a single precision result. */
 /* > */
 /* > Based on SCASUM from the Level 1 BLAS. */
@@ -74,17 +74,30 @@
 /* > */
 /* > Nick Higham for use with CLACON. */
 /* ===================================================================== */
-real scsum1_(integer *n, complex *cx, integer *incx)
+/** Generated wrapper function */
+real scsum1_(aocl_int_t *n, scomplex *cx, aocl_int_t *incx)
+{
+#if FLA_ENABLE_ILP64
+    return aocl_lapack_scsum1(n, cx, incx);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t incx_64 = *incx;
+
+    return aocl_lapack_scsum1(&n_64, cx, &incx_64);
+#endif
+}
+
+real aocl_lapack_scsum1(aocl_int64_t *n, scomplex *cx, aocl_int64_t *incx)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("scsum1 inputs: n %" FLA_IS ", incx %" FLA_IS "", *n, *incx);
     /* System generated locals */
-    integer i__1, i__2;
+    aocl_int64_t i__1, i__2;
     real ret_val;
     /* Builtin functions */
-    double c_abs(complex *);
+    double c_abs(scomplex *);
     /* Local variables */
-    integer i__, nincx;
+    aocl_int64_t i__, nincx;
     real stemp;
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */

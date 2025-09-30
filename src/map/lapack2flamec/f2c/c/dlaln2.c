@@ -44,11 +44,11 @@
 /* > perturbation of A. (A**T means A-transpose.) */
 /* > */
 /* > A is an NA x NA real matrix, ca is a real scalar, D is an NA x NA */
-/* > real diagonal matrix, w is a real or complex value, and X and B are */
-/* > NA x 1 matrices -- real if w is real, complex if w is complex. NA */
+/* > real diagonal matrix, w is a real or scomplex value, and X and B are */
+/* > NA x 1 matrices -- real if w is real, scomplex if w is scomplex. NA */
 /* > may be 1 or 2. */
 /* > */
-/* > If w is complex, X and B are represented as NA x 2 matrices, */
+/* > If w is scomplex, X and B are represented as NA x 2 matrices, */
 /* > the first column of each being the real part and the second */
 /* > being the imaginary part. */
 /* > */
@@ -88,7 +88,7 @@
 /* > \param[in] NW */
 /* > \verbatim */
 /* > NW is INTEGER */
-/* > 1 if "w" is real, 2 if "w" is complex. It may only be 1 */
+/* > 1 if "w" is real, 2 if "w" is scomplex. It may only be 1 */
 /* > or 2. */
 /* > \endverbatim */
 /* > */
@@ -135,7 +135,7 @@
 /* > \verbatim */
 /* > B is DOUBLE PRECISION array, dimension (LDB,NW) */
 /* > The NA x NW matrix B (right-hand side). If NW=2 ("w" is */
-/* > complex), column 1 contains the real part of B and column 2 */
+/* > scomplex), column 1 contains the real part of B and column 2 */
 /* > contains the imaginary part. */
 /* > \endverbatim */
 /* > */
@@ -161,7 +161,7 @@
 /* > \verbatim */
 /* > X is DOUBLE PRECISION array, dimension (LDX,NW) */
 /* > The NA x NW matrix X (unknowns), as computed by DLALN2. */
-/* > If NW=2 ("w" is complex), on exit, column 1 will contain */
+/* > If NW=2 ("w" is scomplex), on exit, column 1 will contain */
 /* > the real part of X and column 2 will contain the imaginary */
 /* > part. */
 /* > \endverbatim */
@@ -212,10 +212,35 @@
 /* > \ingroup doubleOTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-void dlaln2_(logical *ltrans, integer *na, integer *nw, doublereal *smin, doublereal *ca,
-             doublereal *a, integer *lda, doublereal *d1, doublereal *d2, doublereal *b,
-             integer *ldb, doublereal *wr, doublereal *wi, doublereal *x, integer *ldx,
-             doublereal *scale, doublereal *xnorm, integer *info)
+/** Generated wrapper function */
+void dlaln2_(logical *ltrans, aocl_int_t *na, aocl_int_t *nw, doublereal *smin, doublereal *ca,
+             doublereal *a, aocl_int_t *lda, doublereal *d1, doublereal *d2, doublereal *b,
+             aocl_int_t *ldb, doublereal *wr, doublereal *wi, doublereal *x, aocl_int_t *ldx,
+             doublereal *scale, doublereal *xnorm, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_dlaln2(ltrans, na, nw, smin, ca, a, lda, d1, d2, b, ldb, wr, wi, x, ldx, scale,
+                       xnorm, info);
+#else
+    aocl_int64_t na_64 = *na;
+    aocl_int64_t nw_64 = *nw;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t ldb_64 = *ldb;
+    aocl_int64_t ldx_64 = *ldx;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_dlaln2(ltrans, &na_64, &nw_64, smin, ca, a, &lda_64, d1, d2, b, &ldb_64, wr, wi, x,
+                       &ldx_64, scale, xnorm, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_dlaln2(logical *ltrans, aocl_int64_t *na, aocl_int64_t *nw, doublereal *smin,
+                        doublereal *ca, doublereal *a, aocl_int64_t *lda, doublereal *d1,
+                        doublereal *d2, doublereal *b, aocl_int64_t *ldb, doublereal *wr,
+                        doublereal *wi, doublereal *x, aocl_int64_t *ldx, doublereal *scale,
+                        doublereal *xnorm, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dlaln2 inputs: na %" FLA_IS ", nw %" FLA_IS ", lda %" FLA_IS ", ldb %" FLA_IS
@@ -227,11 +252,11 @@ void dlaln2_(logical *ltrans, integer *na, integer *nw, doublereal *smin, double
     integer ipivot[16] /* was [4][4] */
         = {1, 2, 3, 4, 2, 1, 4, 3, 3, 4, 1, 2, 4, 3, 2, 1};
     /* System generated locals */
-    integer a_dim1, a_offset, b_dim1, b_offset, x_dim1, x_offset;
+    aocl_int64_t a_dim1, a_offset, b_dim1, b_offset, x_dim1, x_offset;
     doublereal d__1, d__2, d__3, d__4, d__5, d__6;
     doublereal equiv_0[4], equiv_1[4];
     /* Local variables */
-    integer j;
+    aocl_int64_t j;
 #define ci (equiv_0)
 #define cr (equiv_1)
     doublereal bi1, bi2, br1, br2, xi1, xi2, xr1, xr2, ci21, ci22, cr21, cr22, li21, csi, ui11,
@@ -240,7 +265,7 @@ void dlaln2_(logical *ltrans, integer *na, integer *nw, doublereal *smin, double
     doublereal csr, ur11, ur12, ur22;
 #define crv (equiv_1)
     doublereal bbnd, cmax, ui11r, ui12s, temp, ur11r, ur12s, u22abs;
-    integer icmax;
+    aocl_int64_t icmax;
     doublereal bnorm, cnorm, smini;
     extern doublereal dlamch_(char *);
     extern /* Subroutine */
@@ -323,7 +348,7 @@ void dlaln2_(logical *ltrans, integer *na, integer *nw, doublereal *smin, double
         }
         else
         {
-            /* Complex 1x1 system (w is complex) */
+            /* Complex 1x1 system (w is scomplex) */
             /* C = ca A - w D */
             csr = *ca * a[a_dim1 + 1] - *wr * *d1;
             csi = -(*wi) * *d1;
@@ -474,7 +499,7 @@ void dlaln2_(logical *ltrans, integer *na, integer *nw, doublereal *smin, double
         }
         else
         {
-            /* Complex 2x2 system (w is complex) */
+            /* Complex 2x2 system (w is scomplex) */
             /* Find the largest element in C */
             ci[0] = -(*wi) * *d1;
             ci[1] = 0.;

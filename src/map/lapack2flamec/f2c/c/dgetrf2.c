@@ -4,7 +4,7 @@
  -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for
  libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
+static aocl_int64_t c__1 = 1;
 static doublereal c_b13 = 1.;
 static doublereal c_b16 = -1.;
 
@@ -111,36 +111,39 @@ for 1 <= i <= fla_min(M,N), row i of the */
 /* ===================================================================== */
 /* Subroutine */
 
-void dgetrf2_(integer *m, integer *n, doublereal *a, integer *lda, integer *ipiv, integer *info)
+/** Generated wrapper function */
+void dgetrf2_(aocl_int_t *m, aocl_int_t *n, doublereal *a, aocl_int_t *lda, aocl_int_t *ipiv,
+              aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_dgetrf2(m, n, a, lda, ipiv, info);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_dgetrf2(&m_64, &n_64, a, &lda_64, ipiv, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_dgetrf2(aocl_int64_t *m, aocl_int64_t *n, doublereal *a, aocl_int64_t *lda,
+                         aocl_int_t *ipiv, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dgetrf2 inputs: m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS "", *m, *n,
                       *lda);
     /* System generated locals */
-    integer a_dim1, a_offset, i__1, i__2;
+    aocl_int64_t a_dim1, a_offset, i__1, i__2;
     doublereal d__1;
     /* Local variables */
-    integer i__, n1, n2;
+    aocl_int64_t i__, n1, n2;
     doublereal temp;
-    extern /* Subroutine */
-        void
-        dscal_(integer *, doublereal *, doublereal *, integer *),
-        dgemm_(char *, char *, integer *, integer *, integer *, doublereal *, doublereal *,
-               integer *, doublereal *, integer *, doublereal *, doublereal *, integer *);
-    integer iinfo;
+    aocl_int64_t iinfo;
     doublereal sfmin;
-    extern /* Subroutine */
-        void
-        dtrsm_(char *, char *, char *, char *, integer *, integer *, doublereal *, doublereal *,
-               integer *, doublereal *, integer *);
     extern doublereal dlamch_(char *);
-    extern integer idamax_(integer *, doublereal *, integer *);
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    extern /* Subroutine */
-        void
-        dlaswp_(integer *, doublereal *, integer *, integer *, integer *, integer *, integer *);
 
     /* -- LAPACK computational routine (version 3.7.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -166,7 +169,7 @@ void dgetrf2_(integer *m, integer *n, doublereal *a, integer *lda, integer *ipiv
     /* Parameter adjustments */
 #if AOCL_FLA_PROGRESS_H
     AOCL_FLA_PROGRESS_VAR;
-    static TLS_CLASS_SPEC integer progress_size = 0;
+    static TLS_CLASS_SPEC aocl_int64_t progress_size = 0;
 #endif
     a_dim1 = *lda;
     a_offset = 1 + a_dim1;
@@ -189,7 +192,7 @@ void dgetrf2_(integer *m, integer *n, doublereal *a, integer *lda, integer *ipiv
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("DGETRF2", &i__1, (ftnlen)7);
+        aocl_blas_xerbla("DGETRF2", &i__1, (ftnlen)7);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -216,8 +219,8 @@ void dgetrf2_(integer *m, integer *n, doublereal *a, integer *lda, integer *ipiv
         /* Compute machine safe minimum */
         sfmin = dlamch_("S");
         /* Find pivot and test for singularity */
-        i__ = idamax_(m, &a[a_dim1 + 1], &c__1);
-        ipiv[1] = i__;
+        i__ = aocl_blas_idamax(m, &a[a_dim1 + 1], &c__1);
+        ipiv[1] = (aocl_int_t)(i__);
         if(a[i__ + a_dim1] != 0.)
         {
             /* Apply the interchange */
@@ -232,7 +235,7 @@ void dgetrf2_(integer *m, integer *n, doublereal *a, integer *lda, integer *ipiv
             {
                 i__1 = *m - 1;
                 d__1 = 1. / a[a_dim1 + 1];
-                dscal_(&i__1, &d__1, &a[a_dim1 + 2], &c__1);
+                aocl_blas_dscal(&i__1, &d__1, &a[a_dim1 + 2], &c__1);
             }
             else
             {
@@ -277,7 +280,7 @@ void dgetrf2_(integer *m, integer *n, doublereal *a, integer *lda, integer *ipiv
             }
         }
 #endif
-        dgetrf2_(m, &n1, &a[a_offset], lda, &ipiv[1], &iinfo);
+        aocl_lapack_dgetrf2(m, &n1, &a[a_offset], lda, &ipiv[1], &iinfo);
         if(*info == 0 && iinfo > 0)
         {
             *info = iinfo;
@@ -285,17 +288,18 @@ void dgetrf2_(integer *m, integer *n, doublereal *a, integer *lda, integer *ipiv
         /* [ A12 ] */
         /* Apply interchanges to [ --- ] */
         /* [ A22 ] */
-        dlaswp_(&n2, &a[(n1 + 1) * a_dim1 + 1], lda, &c__1, &n1, &ipiv[1], &c__1);
+        aocl_lapack_dlaswp(&n2, &a[(n1 + 1) * a_dim1 + 1], lda, &c__1, &n1, &ipiv[1], &c__1);
         /* Solve A12 */
-        dtrsm_("L", "L", "N", "U", &n1, &n2, &c_b13, &a[a_offset], lda, &a[(n1 + 1) * a_dim1 + 1],
-               lda);
+        aocl_blas_dtrsm("L", "L", "N", "U", &n1, &n2, &c_b13, &a[a_offset], lda,
+                        &a[(n1 + 1) * a_dim1 + 1], lda);
         /* Update A22 */
         i__1 = *m - n1;
-        dgemm_("N", "N", &i__1, &n2, &n1, &c_b16, &a[n1 + 1 + a_dim1], lda,
-               &a[(n1 + 1) * a_dim1 + 1], lda, &c_b13, &a[n1 + 1 + (n1 + 1) * a_dim1], lda);
+        aocl_blas_dgemm("N", "N", &i__1, &n2, &n1, &c_b16, &a[n1 + 1 + a_dim1], lda,
+                        &a[(n1 + 1) * a_dim1 + 1], lda, &c_b13, &a[n1 + 1 + (n1 + 1) * a_dim1],
+                        lda);
         /* Factor A22 */
         i__1 = *m - n1;
-        dgetrf2_(&i__1, &n2, &a[n1 + 1 + (n1 + 1) * a_dim1], lda, &ipiv[n1 + 1], &iinfo);
+        aocl_lapack_dgetrf2(&i__1, &n2, &a[n1 + 1 + (n1 + 1) * a_dim1], lda, &ipiv[n1 + 1], &iinfo);
         /* Adjust INFO and the pivot indices */
         if(*info == 0 && iinfo > 0)
         {
@@ -304,13 +308,13 @@ void dgetrf2_(integer *m, integer *n, doublereal *a, integer *lda, integer *ipiv
         i__1 = fla_min(*m, *n);
         for(i__ = n1 + 1; i__ <= i__1; ++i__)
         {
-            ipiv[i__] += n1;
+            ipiv[i__] += (aocl_int_t)(n1);
             /* L20: */
         }
         /* Apply interchanges to A21 */
         i__1 = n1 + 1;
         i__2 = fla_min(*m, *n);
-        dlaswp_(&n1, &a[a_dim1 + 1], lda, &i__1, &i__2, &ipiv[1], &c__1);
+        aocl_lapack_dlaswp(&n1, &a[a_dim1 + 1], lda, &i__1, &i__2, &ipiv[1], &c__1);
     }
     AOCL_DTL_TRACE_LOG_EXIT
     return;

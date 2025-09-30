@@ -151,21 +151,34 @@
 /* > \ingroup auxOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void slagtf_(integer *n, real *a, real *lambda, real *b, real *c__, real *tol, real *d__,
-             integer *in, integer *info)
+/** Generated wrapper function */
+void slagtf_(aocl_int_t *n, real *a, real *lambda, real *b, real *c__, real *tol, real *d__,
+             aocl_int_t *in, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_slagtf(n, a, lambda, b, c__, tol, d__, in, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_slagtf(&n_64, a, lambda, b, c__, tol, d__, in, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_slagtf(aocl_int64_t *n, real *a, real *lambda, real *b, real *c__, real *tol,
+                        real *d__, aocl_int_t *in, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("slagtf inputs: n %" FLA_IS "", *n);
     /* System generated locals */
-    integer i__1;
+    aocl_int64_t i__1;
     real r__1, r__2;
     /* Local variables */
-    integer k;
+    aocl_int64_t k;
     real tl, eps, piv1, piv2, temp, mult, scale1, scale2;
     extern real slamch_(char *);
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -198,7 +211,7 @@ void slagtf_(integer *n, real *a, real *lambda, real *b, real *c__, real *tol, r
     {
         *info = -1;
         i__1 = -(*info);
-        xerbla_("SLAGTF", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("SLAGTF", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -280,13 +293,13 @@ void slagtf_(integer *n, real *a, real *lambda, real *b, real *c__, real *tol, r
         }
         if(fla_max(piv1, piv2) <= tl && in[*n] == 0)
         {
-            in[*n] = k;
+            in[*n] = (aocl_int_t)(k);
         }
         /* L10: */
     }
     if((r__1 = a[*n], f2c_abs(r__1)) <= scale1 * tl && in[*n] == 0)
     {
-        in[*n] = *n;
+        in[*n] = (aocl_int_t)(*n);
     }
     AOCL_DTL_TRACE_LOG_EXIT
     return;

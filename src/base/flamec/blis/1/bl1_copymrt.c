@@ -16,17 +16,17 @@
 #include "blis.h"
 #endif
 
-void bl1_scopymrt( uplo1_t uplo, trans1_t trans, integer m, integer n, float* a, integer a_rs, integer a_cs, float* b, integer b_rs, integer b_cs )
+void bl1_scopymrt( uplo1_t uplo, trans1_t trans, fla_dim_t m, fla_dim_t n, float* a, fla_dim_t a_rs, fla_dim_t a_cs, float* b, fla_dim_t b_rs, fla_dim_t b_cs )
 {
 	float*    a_begin;
 	float*    b_begin;
-	integer       lda, inca;
-	integer       ldb, incb;
-	integer       n_iter;
-	integer       n_elem;
-	integer       n_elem_max;
-	integer       n_elem_is_descending;
-	integer       j;
+	fla_dim_t       lda, inca;
+	fla_dim_t       ldb, incb;
+	fla_dim_t       n_iter;
+	fla_dim_t       n_elem;
+	fla_dim_t       n_elem_max;
+	fla_dim_t       n_elem_is_descending;
+	fla_dim_t       j;
 	conj1_t    conj;
 
 	// Return early if possible.
@@ -121,17 +121,17 @@ void bl1_scopymrt( uplo1_t uplo, trans1_t trans, integer m, integer n, float* a,
 	}
 }
 
-void bl1_dcopymrt( uplo1_t uplo, trans1_t trans, integer m, integer n, double* a, integer a_rs, integer a_cs, double* b, integer b_rs, integer b_cs )
+void bl1_dcopymrt( uplo1_t uplo, trans1_t trans, fla_dim_t m, fla_dim_t n, double* a, fla_dim_t a_rs, fla_dim_t a_cs, double* b, fla_dim_t b_rs, fla_dim_t b_cs )
 {
 	double*   a_begin;
 	double*   b_begin;
-	integer       lda, inca;
-	integer       ldb, incb;
-	integer       n_iter;
-	integer       n_elem;
-	integer       n_elem_max;
-	integer       n_elem_is_descending;
-	integer       j;
+	fla_dim_t       lda, inca;
+	fla_dim_t       ldb, incb;
+	fla_dim_t       n_iter;
+	fla_dim_t       n_elem;
+	fla_dim_t       n_elem_max;
+	fla_dim_t       n_elem_is_descending;
+	fla_dim_t       j;
 	conj1_t    conj;
 
 	// Return early if possible.
@@ -226,17 +226,17 @@ void bl1_dcopymrt( uplo1_t uplo, trans1_t trans, integer m, integer n, double* a
 	}
 }
 
-void bl1_ccopymrt( uplo1_t uplo, trans1_t trans, integer m, integer n, scomplex* a, integer a_rs, integer a_cs, scomplex* b, integer b_rs, integer b_cs )
+void bl1_ccopymrt( uplo1_t uplo, trans1_t trans, fla_dim_t m, fla_dim_t n, scomplex* a, fla_dim_t a_rs, fla_dim_t a_cs, scomplex* b, fla_dim_t b_rs, fla_dim_t b_cs )
 {
 	scomplex* a_begin;
 	scomplex* b_begin;
-	integer       lda, inca;
-	integer       ldb, incb;
-	integer       n_iter;
-	integer       n_elem;
-	integer       n_elem_max;
-	integer       n_elem_is_descending;
-	integer       j;
+	fla_dim_t       lda, inca;
+	fla_dim_t       ldb, incb;
+	fla_dim_t       n_iter;
+	fla_dim_t       n_elem;
+	fla_dim_t       n_elem_max;
+	fla_dim_t       n_elem_is_descending;
+	fla_dim_t       j;
 	conj1_t    conj;
 
 	// Return early if possible.
@@ -331,17 +331,17 @@ void bl1_ccopymrt( uplo1_t uplo, trans1_t trans, integer m, integer n, scomplex*
 	}
 }
 
-void bl1_zcopymrt( uplo1_t uplo, trans1_t trans, integer m, integer n, dcomplex* a, integer a_rs, integer a_cs, dcomplex* b, integer b_rs, integer b_cs )
+void bl1_zcopymrt( uplo1_t uplo, trans1_t trans, fla_dim_t m, fla_dim_t n, dcomplex* a, fla_dim_t a_rs, fla_dim_t a_cs, dcomplex* b, fla_dim_t b_rs, fla_dim_t b_cs )
 {
 	dcomplex* a_begin;
 	dcomplex* b_begin;
-	integer       lda, inca;
-	integer       ldb, incb;
-	integer       n_iter;
-	integer       n_elem;
-	integer       n_elem_max;
-	integer       n_elem_is_descending;
-	integer       j;
+	fla_dim_t       lda, inca;
+	fla_dim_t       ldb, incb;
+	fla_dim_t       n_iter;
+	fla_dim_t       n_elem;
+	fla_dim_t       n_elem_max;
+	fla_dim_t       n_elem_is_descending;
+	fla_dim_t       j;
 	conj1_t    conj;
 
 	// Return early if possible.
@@ -439,17 +439,17 @@ void bl1_zcopymrt( uplo1_t uplo, trans1_t trans, integer m, integer n, dcomplex*
 // --- Mixed-datatype and general stride copy routines---------------
 
 // ss
-void bl1_sscopymrt( uplo1_t uplo, trans1_t trans, integer m, integer n, float* a, integer a_rs, integer a_cs, float* b, integer b_rs, integer b_cs )
+void bl1_sscopymrt( uplo1_t uplo, trans1_t trans, fla_dim_t m, fla_dim_t n, float* a, fla_dim_t a_rs, fla_dim_t a_cs, float* b, fla_dim_t b_rs, fla_dim_t b_cs )
 {
 	float*    a_begin;
 	float*    b_begin;
-	integer       lda, inca;
-	integer       ldb, incb;
-	integer       n_iter;
-	integer       n_elem;
-	integer       n_elem_max;
-	integer       n_elem_is_descending;
-	integer       j;
+	fla_dim_t       lda, inca;
+	fla_dim_t       ldb, incb;
+	fla_dim_t       n_iter;
+	fla_dim_t       n_elem;
+	fla_dim_t       n_elem_max;
+	fla_dim_t       n_elem_is_descending;
+	fla_dim_t       j;
 	conj1_t    conj;
 
 	// Return early if possible.
@@ -545,17 +545,17 @@ void bl1_sscopymrt( uplo1_t uplo, trans1_t trans, integer m, integer n, float* a
 }
 
 // sd
-void bl1_sdcopymrt( uplo1_t uplo, trans1_t trans, integer m, integer n, float* a, integer a_rs, integer a_cs, double* b, integer b_rs, integer b_cs )
+void bl1_sdcopymrt( uplo1_t uplo, trans1_t trans, fla_dim_t m, fla_dim_t n, float* a, fla_dim_t a_rs, fla_dim_t a_cs, double* b, fla_dim_t b_rs, fla_dim_t b_cs )
 {
 	float*    a_begin;
 	double*   b_begin;
-	integer       lda, inca;
-	integer       ldb, incb;
-	integer       n_iter;
-	integer       n_elem;
-	integer       n_elem_max;
-	integer       n_elem_is_descending;
-	integer       j;
+	fla_dim_t       lda, inca;
+	fla_dim_t       ldb, incb;
+	fla_dim_t       n_iter;
+	fla_dim_t       n_elem;
+	fla_dim_t       n_elem_max;
+	fla_dim_t       n_elem_is_descending;
+	fla_dim_t       j;
 	conj1_t    conj;
 
 	// Return early if possible.
@@ -651,17 +651,17 @@ void bl1_sdcopymrt( uplo1_t uplo, trans1_t trans, integer m, integer n, float* a
 }
 
 // sc
-void bl1_sccopymrt( uplo1_t uplo, trans1_t trans, integer m, integer n, float* a, integer a_rs, integer a_cs, scomplex* b, integer b_rs, integer b_cs )
+void bl1_sccopymrt( uplo1_t uplo, trans1_t trans, fla_dim_t m, fla_dim_t n, float* a, fla_dim_t a_rs, fla_dim_t a_cs, scomplex* b, fla_dim_t b_rs, fla_dim_t b_cs )
 {
 	float*    a_begin;
 	scomplex* b_begin;
-	integer       lda, inca;
-	integer       ldb, incb;
-	integer       n_iter;
-	integer       n_elem;
-	integer       n_elem_max;
-	integer       n_elem_is_descending;
-	integer       j;
+	fla_dim_t       lda, inca;
+	fla_dim_t       ldb, incb;
+	fla_dim_t       n_iter;
+	fla_dim_t       n_elem;
+	fla_dim_t       n_elem_max;
+	fla_dim_t       n_elem_is_descending;
+	fla_dim_t       j;
 	conj1_t    conj;
 
 	// Return early if possible.
@@ -757,17 +757,17 @@ void bl1_sccopymrt( uplo1_t uplo, trans1_t trans, integer m, integer n, float* a
 }
 
 // sz
-void bl1_szcopymrt( uplo1_t uplo, trans1_t trans, integer m, integer n, float* a, integer a_rs, integer a_cs, dcomplex* b, integer b_rs, integer b_cs )
+void bl1_szcopymrt( uplo1_t uplo, trans1_t trans, fla_dim_t m, fla_dim_t n, float* a, fla_dim_t a_rs, fla_dim_t a_cs, dcomplex* b, fla_dim_t b_rs, fla_dim_t b_cs )
 {
 	float*    a_begin;
 	dcomplex* b_begin;
-	integer       lda, inca;
-	integer       ldb, incb;
-	integer       n_iter;
-	integer       n_elem;
-	integer       n_elem_max;
-	integer       n_elem_is_descending;
-	integer       j;
+	fla_dim_t       lda, inca;
+	fla_dim_t       ldb, incb;
+	fla_dim_t       n_iter;
+	fla_dim_t       n_elem;
+	fla_dim_t       n_elem_max;
+	fla_dim_t       n_elem_is_descending;
+	fla_dim_t       j;
 	conj1_t    conj;
 
 	// Return early if possible.
@@ -863,17 +863,17 @@ void bl1_szcopymrt( uplo1_t uplo, trans1_t trans, integer m, integer n, float* a
 }
 
 // ds
-void bl1_dscopymrt( uplo1_t uplo, trans1_t trans, integer m, integer n, double* a, integer a_rs, integer a_cs, float* b, integer b_rs, integer b_cs )
+void bl1_dscopymrt( uplo1_t uplo, trans1_t trans, fla_dim_t m, fla_dim_t n, double* a, fla_dim_t a_rs, fla_dim_t a_cs, float* b, fla_dim_t b_rs, fla_dim_t b_cs )
 {
 	double*   a_begin;
 	float*    b_begin;
-	integer       lda, inca;
-	integer       ldb, incb;
-	integer       n_iter;
-	integer       n_elem;
-	integer       n_elem_max;
-	integer       n_elem_is_descending;
-	integer       j;
+	fla_dim_t       lda, inca;
+	fla_dim_t       ldb, incb;
+	fla_dim_t       n_iter;
+	fla_dim_t       n_elem;
+	fla_dim_t       n_elem_max;
+	fla_dim_t       n_elem_is_descending;
+	fla_dim_t       j;
 	conj1_t    conj;
 
 	// Return early if possible.
@@ -969,17 +969,17 @@ void bl1_dscopymrt( uplo1_t uplo, trans1_t trans, integer m, integer n, double* 
 }
 
 // dd
-void bl1_ddcopymrt( uplo1_t uplo, trans1_t trans, integer m, integer n, double* a, integer a_rs, integer a_cs, double* b, integer b_rs, integer b_cs )
+void bl1_ddcopymrt( uplo1_t uplo, trans1_t trans, fla_dim_t m, fla_dim_t n, double* a, fla_dim_t a_rs, fla_dim_t a_cs, double* b, fla_dim_t b_rs, fla_dim_t b_cs )
 {
 	double*   a_begin;
 	double*   b_begin;
-	integer       lda, inca;
-	integer       ldb, incb;
-	integer       n_iter;
-	integer       n_elem;
-	integer       n_elem_max;
-	integer       n_elem_is_descending;
-	integer       j;
+	fla_dim_t       lda, inca;
+	fla_dim_t       ldb, incb;
+	fla_dim_t       n_iter;
+	fla_dim_t       n_elem;
+	fla_dim_t       n_elem_max;
+	fla_dim_t       n_elem_is_descending;
+	fla_dim_t       j;
 	conj1_t    conj;
 
 	// Return early if possible.
@@ -1075,17 +1075,17 @@ void bl1_ddcopymrt( uplo1_t uplo, trans1_t trans, integer m, integer n, double* 
 }
 
 // dc
-void bl1_dccopymrt( uplo1_t uplo, trans1_t trans, integer m, integer n, double* a, integer a_rs, integer a_cs, scomplex* b, integer b_rs, integer b_cs )
+void bl1_dccopymrt( uplo1_t uplo, trans1_t trans, fla_dim_t m, fla_dim_t n, double* a, fla_dim_t a_rs, fla_dim_t a_cs, scomplex* b, fla_dim_t b_rs, fla_dim_t b_cs )
 {
 	double*   a_begin;
 	scomplex* b_begin;
-	integer       lda, inca;
-	integer       ldb, incb;
-	integer       n_iter;
-	integer       n_elem;
-	integer       n_elem_max;
-	integer       n_elem_is_descending;
-	integer       j;
+	fla_dim_t       lda, inca;
+	fla_dim_t       ldb, incb;
+	fla_dim_t       n_iter;
+	fla_dim_t       n_elem;
+	fla_dim_t       n_elem_max;
+	fla_dim_t       n_elem_is_descending;
+	fla_dim_t       j;
 	conj1_t    conj;
 
 	// Return early if possible.
@@ -1181,17 +1181,17 @@ void bl1_dccopymrt( uplo1_t uplo, trans1_t trans, integer m, integer n, double* 
 }
 
 // dz
-void bl1_dzcopymrt( uplo1_t uplo, trans1_t trans, integer m, integer n, double* a, integer a_rs, integer a_cs, dcomplex* b, integer b_rs, integer b_cs )
+void bl1_dzcopymrt( uplo1_t uplo, trans1_t trans, fla_dim_t m, fla_dim_t n, double* a, fla_dim_t a_rs, fla_dim_t a_cs, dcomplex* b, fla_dim_t b_rs, fla_dim_t b_cs )
 {
 	double*   a_begin;
 	dcomplex* b_begin;
-	integer       lda, inca;
-	integer       ldb, incb;
-	integer       n_iter;
-	integer       n_elem;
-	integer       n_elem_max;
-	integer       n_elem_is_descending;
-	integer       j;
+	fla_dim_t       lda, inca;
+	fla_dim_t       ldb, incb;
+	fla_dim_t       n_iter;
+	fla_dim_t       n_elem;
+	fla_dim_t       n_elem_max;
+	fla_dim_t       n_elem_is_descending;
+	fla_dim_t       j;
 	conj1_t    conj;
 
 	// Return early if possible.
@@ -1287,17 +1287,17 @@ void bl1_dzcopymrt( uplo1_t uplo, trans1_t trans, integer m, integer n, double* 
 }
 
 // cs
-void bl1_cscopymrt( uplo1_t uplo, trans1_t trans, integer m, integer n, scomplex* a, integer a_rs, integer a_cs, float* b, integer b_rs, integer b_cs )
+void bl1_cscopymrt( uplo1_t uplo, trans1_t trans, fla_dim_t m, fla_dim_t n, scomplex* a, fla_dim_t a_rs, fla_dim_t a_cs, float* b, fla_dim_t b_rs, fla_dim_t b_cs )
 {
 	scomplex* a_begin;
 	float*    b_begin;
-	integer       lda, inca;
-	integer       ldb, incb;
-	integer       n_iter;
-	integer       n_elem;
-	integer       n_elem_max;
-	integer       n_elem_is_descending;
-	integer       j;
+	fla_dim_t       lda, inca;
+	fla_dim_t       ldb, incb;
+	fla_dim_t       n_iter;
+	fla_dim_t       n_elem;
+	fla_dim_t       n_elem_max;
+	fla_dim_t       n_elem_is_descending;
+	fla_dim_t       j;
 	conj1_t    conj;
 
 	// Return early if possible.
@@ -1393,17 +1393,17 @@ void bl1_cscopymrt( uplo1_t uplo, trans1_t trans, integer m, integer n, scomplex
 }
 
 // cd
-void bl1_cdcopymrt( uplo1_t uplo, trans1_t trans, integer m, integer n, scomplex* a, integer a_rs, integer a_cs, double* b, integer b_rs, integer b_cs )
+void bl1_cdcopymrt( uplo1_t uplo, trans1_t trans, fla_dim_t m, fla_dim_t n, scomplex* a, fla_dim_t a_rs, fla_dim_t a_cs, double* b, fla_dim_t b_rs, fla_dim_t b_cs )
 {
 	scomplex* a_begin;
 	double*   b_begin;
-	integer       lda, inca;
-	integer       ldb, incb;
-	integer       n_iter;
-	integer       n_elem;
-	integer       n_elem_max;
-	integer       n_elem_is_descending;
-	integer       j;
+	fla_dim_t       lda, inca;
+	fla_dim_t       ldb, incb;
+	fla_dim_t       n_iter;
+	fla_dim_t       n_elem;
+	fla_dim_t       n_elem_max;
+	fla_dim_t       n_elem_is_descending;
+	fla_dim_t       j;
 	conj1_t    conj;
 
 	// Return early if possible.
@@ -1499,17 +1499,17 @@ void bl1_cdcopymrt( uplo1_t uplo, trans1_t trans, integer m, integer n, scomplex
 }
 
 // cc
-void bl1_cccopymrt( uplo1_t uplo, trans1_t trans, integer m, integer n, scomplex* a, integer a_rs, integer a_cs, scomplex* b, integer b_rs, integer b_cs )
+void bl1_cccopymrt( uplo1_t uplo, trans1_t trans, fla_dim_t m, fla_dim_t n, scomplex* a, fla_dim_t a_rs, fla_dim_t a_cs, scomplex* b, fla_dim_t b_rs, fla_dim_t b_cs )
 {
 	scomplex* a_begin;
 	scomplex* b_begin;
-	integer       lda, inca;
-	integer       ldb, incb;
-	integer       n_iter;
-	integer       n_elem;
-	integer       n_elem_max;
-	integer       n_elem_is_descending;
-	integer       j;
+	fla_dim_t       lda, inca;
+	fla_dim_t       ldb, incb;
+	fla_dim_t       n_iter;
+	fla_dim_t       n_elem;
+	fla_dim_t       n_elem_max;
+	fla_dim_t       n_elem_is_descending;
+	fla_dim_t       j;
 	conj1_t    conj;
 
 	// Return early if possible.
@@ -1605,17 +1605,17 @@ void bl1_cccopymrt( uplo1_t uplo, trans1_t trans, integer m, integer n, scomplex
 }
 
 // cz
-void bl1_czcopymrt( uplo1_t uplo, trans1_t trans, integer m, integer n, scomplex* a, integer a_rs, integer a_cs, dcomplex* b, integer b_rs, integer b_cs )
+void bl1_czcopymrt( uplo1_t uplo, trans1_t trans, fla_dim_t m, fla_dim_t n, scomplex* a, fla_dim_t a_rs, fla_dim_t a_cs, dcomplex* b, fla_dim_t b_rs, fla_dim_t b_cs )
 {
 	scomplex* a_begin;
 	dcomplex* b_begin;
-	integer       lda, inca;
-	integer       ldb, incb;
-	integer       n_iter;
-	integer       n_elem;
-	integer       n_elem_max;
-	integer       n_elem_is_descending;
-	integer       j;
+	fla_dim_t       lda, inca;
+	fla_dim_t       ldb, incb;
+	fla_dim_t       n_iter;
+	fla_dim_t       n_elem;
+	fla_dim_t       n_elem_max;
+	fla_dim_t       n_elem_is_descending;
+	fla_dim_t       j;
 	conj1_t    conj;
 
 	// Return early if possible.
@@ -1711,17 +1711,17 @@ void bl1_czcopymrt( uplo1_t uplo, trans1_t trans, integer m, integer n, scomplex
 }
 
 // zs
-void bl1_zscopymrt( uplo1_t uplo, trans1_t trans, integer m, integer n, dcomplex* a, integer a_rs, integer a_cs, float* b, integer b_rs, integer b_cs )
+void bl1_zscopymrt( uplo1_t uplo, trans1_t trans, fla_dim_t m, fla_dim_t n, dcomplex* a, fla_dim_t a_rs, fla_dim_t a_cs, float* b, fla_dim_t b_rs, fla_dim_t b_cs )
 {
 	dcomplex* a_begin;
 	float*    b_begin;
-	integer       lda, inca;
-	integer       ldb, incb;
-	integer       n_iter;
-	integer       n_elem;
-	integer       n_elem_max;
-	integer       n_elem_is_descending;
-	integer       j;
+	fla_dim_t       lda, inca;
+	fla_dim_t       ldb, incb;
+	fla_dim_t       n_iter;
+	fla_dim_t       n_elem;
+	fla_dim_t       n_elem_max;
+	fla_dim_t       n_elem_is_descending;
+	fla_dim_t       j;
 	conj1_t    conj;
 
 	// Return early if possible.
@@ -1817,17 +1817,17 @@ void bl1_zscopymrt( uplo1_t uplo, trans1_t trans, integer m, integer n, dcomplex
 }
 
 // zd
-void bl1_zdcopymrt( uplo1_t uplo, trans1_t trans, integer m, integer n, dcomplex* a, integer a_rs, integer a_cs, double* b, integer b_rs, integer b_cs )
+void bl1_zdcopymrt( uplo1_t uplo, trans1_t trans, fla_dim_t m, fla_dim_t n, dcomplex* a, fla_dim_t a_rs, fla_dim_t a_cs, double* b, fla_dim_t b_rs, fla_dim_t b_cs )
 {
 	dcomplex* a_begin;
 	double*   b_begin;
-	integer       lda, inca;
-	integer       ldb, incb;
-	integer       n_iter;
-	integer       n_elem;
-	integer       n_elem_max;
-	integer       n_elem_is_descending;
-	integer       j;
+	fla_dim_t       lda, inca;
+	fla_dim_t       ldb, incb;
+	fla_dim_t       n_iter;
+	fla_dim_t       n_elem;
+	fla_dim_t       n_elem_max;
+	fla_dim_t       n_elem_is_descending;
+	fla_dim_t       j;
 	conj1_t    conj;
 
 	// Return early if possible.
@@ -1923,17 +1923,17 @@ void bl1_zdcopymrt( uplo1_t uplo, trans1_t trans, integer m, integer n, dcomplex
 }
 
 // zc
-void bl1_zccopymrt( uplo1_t uplo, trans1_t trans, integer m, integer n, dcomplex* a, integer a_rs, integer a_cs, scomplex* b, integer b_rs, integer b_cs )
+void bl1_zccopymrt( uplo1_t uplo, trans1_t trans, fla_dim_t m, fla_dim_t n, dcomplex* a, fla_dim_t a_rs, fla_dim_t a_cs, scomplex* b, fla_dim_t b_rs, fla_dim_t b_cs )
 {
 	dcomplex* a_begin;
 	scomplex* b_begin;
-	integer       lda, inca;
-	integer       ldb, incb;
-	integer       n_iter;
-	integer       n_elem;
-	integer       n_elem_max;
-	integer       n_elem_is_descending;
-	integer       j;
+	fla_dim_t       lda, inca;
+	fla_dim_t       ldb, incb;
+	fla_dim_t       n_iter;
+	fla_dim_t       n_elem;
+	fla_dim_t       n_elem_max;
+	fla_dim_t       n_elem_is_descending;
+	fla_dim_t       j;
 	conj1_t    conj;
 
 	// Return early if possible.
@@ -2029,17 +2029,17 @@ void bl1_zccopymrt( uplo1_t uplo, trans1_t trans, integer m, integer n, dcomplex
 }
 
 // zz
-void bl1_zzcopymrt( uplo1_t uplo, trans1_t trans, integer m, integer n, dcomplex* a, integer a_rs, integer a_cs, dcomplex* b, integer b_rs, integer b_cs )
+void bl1_zzcopymrt( uplo1_t uplo, trans1_t trans, fla_dim_t m, fla_dim_t n, dcomplex* a, fla_dim_t a_rs, fla_dim_t a_cs, dcomplex* b, fla_dim_t b_rs, fla_dim_t b_cs )
 {
 	dcomplex* a_begin;
 	dcomplex* b_begin;
-	integer       lda, inca;
-	integer       ldb, incb;
-	integer       n_iter;
-	integer       n_elem;
-	integer       n_elem_max;
-	integer       n_elem_is_descending;
-	integer       j;
+	fla_dim_t       lda, inca;
+	fla_dim_t       ldb, incb;
+	fla_dim_t       n_iter;
+	fla_dim_t       n_elem;
+	fla_dim_t       n_elem_max;
+	fla_dim_t       n_elem_is_descending;
+	fla_dim_t       j;
 	conj1_t    conj;
 
 	// Return early if possible.

@@ -6,7 +6,7 @@
 #include "FLA_f2c.h" /* Table of constant values */
 static real c_b9 = 1.f;
 static real c_b10 = 0.f;
-static integer c__2 = 2;
+static aocl_int64_t c__2 = 2;
 /* > \brief \b CLALSA computes the SVD of the coefficient matrix in compact form. Used by sgelsd. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -264,11 +264,41 @@ and if */
 /* > Osni Marques, LBNL/NERSC, USA \n */
 /* ===================================================================== */
 /* Subroutine */
-void clalsa_(integer *icompq, integer *smlsiz, integer *n, integer *nrhs, complex *b, integer *ldb,
-             complex *bx, integer *ldbx, real *u, integer *ldu, real *vt, integer *k, real *difl,
-             real *difr, real *z__, real *poles, integer *givptr, integer *givcol, integer *ldgcol,
-             integer *perm, real *givnum, real *c__, real *s, real *rwork, integer *iwork,
-             integer *info)
+/** Generated wrapper function */
+void clalsa_(aocl_int_t *icompq, aocl_int_t *smlsiz, aocl_int_t *n, aocl_int_t *nrhs, scomplex *b,
+             aocl_int_t *ldb, scomplex *bx, aocl_int_t *ldbx, real *u, aocl_int_t *ldu, real *vt,
+             aocl_int_t *k, real *difl, real *difr, real *z__, real *poles, aocl_int_t *givptr,
+             aocl_int_t *givcol, aocl_int_t *ldgcol, aocl_int_t *perm, real *givnum, real *c__,
+             real *s, real *rwork, aocl_int_t *iwork, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_clalsa(icompq, smlsiz, n, nrhs, b, ldb, bx, ldbx, u, ldu, vt, k, difl, difr, z__,
+                       poles, givptr, givcol, ldgcol, perm, givnum, c__, s, rwork, iwork, info);
+#else
+    aocl_int64_t icompq_64 = *icompq;
+    aocl_int64_t smlsiz_64 = *smlsiz;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t nrhs_64 = *nrhs;
+    aocl_int64_t ldb_64 = *ldb;
+    aocl_int64_t ldbx_64 = *ldbx;
+    aocl_int64_t ldu_64 = *ldu;
+    aocl_int64_t ldgcol_64 = *ldgcol;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_clalsa(&icompq_64, &smlsiz_64, &n_64, &nrhs_64, b, &ldb_64, bx, &ldbx_64, u,
+                       &ldu_64, vt, k, difl, difr, z__, poles, givptr, givcol, &ldgcol_64, perm,
+                       givnum, c__, s, rwork, iwork, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_clalsa(aocl_int64_t *icompq, aocl_int64_t *smlsiz, aocl_int64_t *n,
+                        aocl_int64_t *nrhs, scomplex *b, aocl_int64_t *ldb, scomplex *bx,
+                        aocl_int64_t *ldbx, real *u, aocl_int64_t *ldu, real *vt, aocl_int_t *k,
+                        real *difl, real *difr, real *z__, real *poles, aocl_int_t *givptr,
+                        aocl_int_t *givcol, aocl_int64_t *ldgcol, aocl_int_t *perm, real *givnum,
+                        real *c__, real *s, real *rwork, aocl_int_t *iwork, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -287,30 +317,18 @@ void clalsa_(integer *icompq, integer *smlsiz, integer *n, integer *nrhs, comple
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
-    integer givcol_dim1, givcol_offset, perm_dim1, perm_offset, difl_dim1, difl_offset, difr_dim1,
-        difr_offset, givnum_dim1, givnum_offset, poles_dim1, poles_offset, u_dim1, u_offset,
-        vt_dim1, vt_offset, z_dim1, z_offset, b_dim1, b_offset, bx_dim1, bx_offset, i__1, i__2,
-        i__3, i__4, i__5, i__6;
-    complex q__1;
+    aocl_int64_t givcol_dim1, givcol_offset, perm_dim1, perm_offset, difl_dim1, difl_offset,
+        difr_dim1, difr_offset, givnum_dim1, givnum_offset, poles_dim1, poles_offset, u_dim1,
+        u_offset, vt_dim1, vt_offset, z_dim1, z_offset, b_dim1, b_offset, bx_dim1, bx_offset, i__1,
+        i__2, i__3, i__4, i__5, i__6;
+    scomplex q__1;
     /* Builtin functions */
-    double r_imag(complex *);
-    integer pow_ii(integer *, integer *);
+    double r_imag(scomplex *);
+    integer pow_ii(aocl_int64_t *, aocl_int64_t *);
     /* Local variables */
-    integer i__, j, i1, ic, lf, nd, ll, nl, nr, im1, nlf, nrf, lvl, ndb1, nlp1, lvl2, nrp1, jcol,
-        nlvl, sqre, jrow, jimag, jreal, inode, ndiml;
-    extern /* Subroutine */
-        void
-        sgemm_(char *, char *, integer *, integer *, integer *, real *, real *, integer *, real *,
-               integer *, real *, real *, integer *);
-    integer ndimr;
-    extern /* Subroutine */
-        void
-        ccopy_(integer *, complex *, integer *, complex *, integer *),
-        clals0_(integer *, integer *, integer *, integer *, integer *, complex *, integer *,
-                complex *, integer *, integer *, integer *, integer *, integer *, real *, integer *,
-                real *, real *, real *, real *, integer *, real *, real *, real *, integer *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
-        slasdt_(integer *, integer *, integer *, integer *, integer *, integer *, integer *);
+    aocl_int64_t i__, j, i1, ic, lf, nd, ll, nl, nr, im1, nlf, nrf, lvl, ndb1, nlp1, lvl2, nrp1,
+        jcol, nlvl, sqre, jrow, jimag, jreal, inode, ndiml,  givptr_sca, k_sca;
+    aocl_int64_t ndimr;
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -407,7 +425,7 @@ void clalsa_(integer *icompq, integer *smlsiz, integer *n, integer *nrhs, comple
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("CLALSA", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("CLALSA", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
@@ -415,7 +433,7 @@ void clalsa_(integer *icompq, integer *smlsiz, integer *n, integer *nrhs, comple
     inode = 1;
     ndiml = inode + *n;
     ndimr = ndiml + *n;
-    slasdt_(n, &nlvl, &nd, &iwork[inode], &iwork[ndiml], &iwork[ndimr], smlsiz);
+    aocl_lapack_slasdt(n, &nlvl, &nd, &iwork[inode], &iwork[ndiml], &iwork[ndimr], smlsiz);
     /* The following code applies back the left singular vector factors. */
     /* For applying back the right singular vector factors, go to 170. */
     if(*icompq == 1)
@@ -441,7 +459,7 @@ void clalsa_(integer *icompq, integer *smlsiz, integer *n, integer *nrhs, comple
         nr = iwork[ndimr + i1];
         nlf = ic - nl;
         nrf = ic + 1;
-        /* Since B and BX are complex, the following call to SGEMM */
+        /* Since B and BX are scomplex, the following call to SGEMM */
         /* is performed in two steps (real and imaginary parts). */
         /* CALL SGEMM( 'T', 'N', NL, NRHS, NL, ONE, U( NLF, 1 ), LDU, */
         /* $ B( NLF, 1 ), LDB, ZERO, BX( NLF, 1 ), LDBX ) */
@@ -459,8 +477,8 @@ void clalsa_(integer *icompq, integer *smlsiz, integer *n, integer *nrhs, comple
             }
             /* L20: */
         }
-        sgemm_("T", "N", &nl, nrhs, &nl, &c_b9, &u[nlf + u_dim1], ldu,
-               &rwork[(nl * *nrhs << 1) + 1], &nl, &c_b10, &rwork[1], &nl);
+        aocl_blas_sgemm("T", "N", &nl, nrhs, &nl, &c_b9, &u[nlf + u_dim1], ldu,
+                        &rwork[(nl * *nrhs << 1) + 1], &nl, &c_b10, &rwork[1], &nl);
         j = nl * *nrhs << 1;
         i__2 = *nrhs;
         for(jcol = 1; jcol <= i__2; ++jcol)
@@ -474,8 +492,8 @@ void clalsa_(integer *icompq, integer *smlsiz, integer *n, integer *nrhs, comple
             }
             /* L40: */
         }
-        sgemm_("T", "N", &nl, nrhs, &nl, &c_b9, &u[nlf + u_dim1], ldu,
-               &rwork[(nl * *nrhs << 1) + 1], &nl, &c_b10, &rwork[nl * *nrhs + 1], &nl);
+        aocl_blas_sgemm("T", "N", &nl, nrhs, &nl, &c_b9, &u[nlf + u_dim1], ldu,
+                        &rwork[(nl * *nrhs << 1) + 1], &nl, &c_b10, &rwork[nl * *nrhs + 1], &nl);
         jreal = 0;
         jimag = nl * *nrhs;
         i__2 = *nrhs;
@@ -497,7 +515,7 @@ void clalsa_(integer *icompq, integer *smlsiz, integer *n, integer *nrhs, comple
             }
             /* L60: */
         }
-        /* Since B and BX are complex, the following call to SGEMM */
+        /* Since B and BX are scomplex, the following call to SGEMM */
         /* is performed in two steps (real and imaginary parts). */
         /* CALL SGEMM( 'T', 'N', NR, NRHS, NR, ONE, U( NRF, 1 ), LDU, */
         /* $ B( NRF, 1 ), LDB, ZERO, BX( NRF, 1 ), LDBX ) */
@@ -515,8 +533,8 @@ void clalsa_(integer *icompq, integer *smlsiz, integer *n, integer *nrhs, comple
             }
             /* L80: */
         }
-        sgemm_("T", "N", &nr, nrhs, &nr, &c_b9, &u[nrf + u_dim1], ldu,
-               &rwork[(nr * *nrhs << 1) + 1], &nr, &c_b10, &rwork[1], &nr);
+        aocl_blas_sgemm("T", "N", &nr, nrhs, &nr, &c_b9, &u[nrf + u_dim1], ldu,
+                        &rwork[(nr * *nrhs << 1) + 1], &nr, &c_b10, &rwork[1], &nr);
         j = nr * *nrhs << 1;
         i__2 = *nrhs;
         for(jcol = 1; jcol <= i__2; ++jcol)
@@ -530,8 +548,8 @@ void clalsa_(integer *icompq, integer *smlsiz, integer *n, integer *nrhs, comple
             }
             /* L100: */
         }
-        sgemm_("T", "N", &nr, nrhs, &nr, &c_b9, &u[nrf + u_dim1], ldu,
-               &rwork[(nr * *nrhs << 1) + 1], &nr, &c_b10, &rwork[nr * *nrhs + 1], &nr);
+        aocl_blas_sgemm("T", "N", &nr, nrhs, &nr, &c_b9, &u[nrf + u_dim1], ldu,
+                        &rwork[(nr * *nrhs << 1) + 1], &nr, &c_b10, &rwork[nr * *nrhs + 1], &nr);
         jreal = 0;
         jimag = nr * *nrhs;
         i__2 = *nrhs;
@@ -561,7 +579,7 @@ void clalsa_(integer *icompq, integer *smlsiz, integer *n, integer *nrhs, comple
     for(i__ = 1; i__ <= i__1; ++i__)
     {
         ic = iwork[inode + i__ - 1];
-        ccopy_(nrhs, &b[ic + b_dim1], ldb, &bx[ic + bx_dim1], ldbx);
+        aocl_blas_ccopy(nrhs, &b[ic + b_dim1], ldb, &bx[ic + bx_dim1], ldbx);
         /* L140: */
     }
     /* Finally go through the left singular vector matrices of all */
@@ -594,11 +612,16 @@ void clalsa_(integer *icompq, integer *smlsiz, integer *n, integer *nrhs, comple
             nlf = ic - nl;
             nrf = ic + 1;
             --j;
-            clals0_(icompq, &nl, &nr, &sqre, nrhs, &bx[nlf + bx_dim1], ldbx, &b[nlf + b_dim1], ldb,
-                    &perm[nlf + lvl * perm_dim1], &givptr[j], &givcol[nlf + lvl2 * givcol_dim1],
-                    ldgcol, &givnum[nlf + lvl2 * givnum_dim1], ldu, &poles[nlf + lvl2 * poles_dim1],
-                    &difl[nlf + lvl * difl_dim1], &difr[nlf + lvl2 * difr_dim1],
-                    &z__[nlf + lvl * z_dim1], &k[j], &c__[j], &s[j], &rwork[1], info);
+            givptr_sca = givptr[j];
+            k_sca = k[j];
+            aocl_lapack_clals0(
+                icompq, &nl, &nr, &sqre, nrhs, &bx[nlf + bx_dim1], ldbx, &b[nlf + b_dim1], ldb,
+                &perm[nlf + lvl * perm_dim1], &givptr_sca, &givcol[nlf + lvl2 * givcol_dim1], ldgcol,
+                &givnum[nlf + lvl2 * givnum_dim1], ldu, &poles[nlf + lvl2 * poles_dim1],
+                &difl[nlf + lvl * difl_dim1], &difr[nlf + lvl2 * difr_dim1],
+                &z__[nlf + lvl * z_dim1], &k_sca, &c__[j], &s[j], &rwork[1], info);
+            givptr[j] = (aocl_int_t)givptr_sca;
+            k[j] = (aocl_int_t)k_sca;
             /* L150: */
         }
         /* L160: */
@@ -643,11 +666,16 @@ L170: /* First now go through the right singular vector matrices of all */
                 sqre = 1;
             }
             ++j;
-            clals0_(icompq, &nl, &nr, &sqre, nrhs, &b[nlf + b_dim1], ldb, &bx[nlf + bx_dim1], ldbx,
-                    &perm[nlf + lvl * perm_dim1], &givptr[j], &givcol[nlf + lvl2 * givcol_dim1],
-                    ldgcol, &givnum[nlf + lvl2 * givnum_dim1], ldu, &poles[nlf + lvl2 * poles_dim1],
-                    &difl[nlf + lvl * difl_dim1], &difr[nlf + lvl2 * difr_dim1],
-                    &z__[nlf + lvl * z_dim1], &k[j], &c__[j], &s[j], &rwork[1], info);
+            givptr_sca = givptr[j];
+            k_sca = k[j];
+            aocl_lapack_clals0(
+                icompq, &nl, &nr, &sqre, nrhs, &b[nlf + b_dim1], ldb, &bx[nlf + bx_dim1], ldbx,
+                &perm[nlf + lvl * perm_dim1], &givptr_sca, &givcol[nlf + lvl2 * givcol_dim1], ldgcol,
+                &givnum[nlf + lvl2 * givnum_dim1], ldu, &poles[nlf + lvl2 * poles_dim1],
+                &difl[nlf + lvl * difl_dim1], &difr[nlf + lvl2 * difr_dim1],
+                &z__[nlf + lvl * z_dim1], &k_sca, &c__[j], &s[j], &rwork[1], info);
+            givptr[j] = (aocl_int_t)givptr_sca;
+            k[j] = (aocl_int_t)k_sca;
             /* L180: */
         }
         /* L190: */
@@ -674,7 +702,7 @@ L170: /* First now go through the right singular vector matrices of all */
         }
         nlf = ic - nl;
         nrf = ic + 1;
-        /* Since B and BX are complex, the following call to SGEMM is */
+        /* Since B and BX are scomplex, the following call to SGEMM is */
         /* performed in two steps (real and imaginary parts). */
         /* CALL SGEMM( 'T', 'N', NLP1, NRHS, NLP1, ONE, VT( NLF, 1 ), LDU, */
         /* $ B( NLF, 1 ), LDB, ZERO, BX( NLF, 1 ), LDBX ) */
@@ -692,8 +720,8 @@ L170: /* First now go through the right singular vector matrices of all */
             }
             /* L210: */
         }
-        sgemm_("T", "N", &nlp1, nrhs, &nlp1, &c_b9, &vt[nlf + vt_dim1], ldu,
-               &rwork[(nlp1 * *nrhs << 1) + 1], &nlp1, &c_b10, &rwork[1], &nlp1);
+        aocl_blas_sgemm("T", "N", &nlp1, nrhs, &nlp1, &c_b9, &vt[nlf + vt_dim1], ldu,
+                        &rwork[(nlp1 * *nrhs << 1) + 1], &nlp1, &c_b10, &rwork[1], &nlp1);
         j = nlp1 * *nrhs << 1;
         i__2 = *nrhs;
         for(jcol = 1; jcol <= i__2; ++jcol)
@@ -707,8 +735,9 @@ L170: /* First now go through the right singular vector matrices of all */
             }
             /* L230: */
         }
-        sgemm_("T", "N", &nlp1, nrhs, &nlp1, &c_b9, &vt[nlf + vt_dim1], ldu,
-               &rwork[(nlp1 * *nrhs << 1) + 1], &nlp1, &c_b10, &rwork[nlp1 * *nrhs + 1], &nlp1);
+        aocl_blas_sgemm("T", "N", &nlp1, nrhs, &nlp1, &c_b9, &vt[nlf + vt_dim1], ldu,
+                        &rwork[(nlp1 * *nrhs << 1) + 1], &nlp1, &c_b10, &rwork[nlp1 * *nrhs + 1],
+                        &nlp1);
         jreal = 0;
         jimag = nlp1 * *nrhs;
         i__2 = *nrhs;
@@ -730,7 +759,7 @@ L170: /* First now go through the right singular vector matrices of all */
             }
             /* L250: */
         }
-        /* Since B and BX are complex, the following call to SGEMM is */
+        /* Since B and BX are scomplex, the following call to SGEMM is */
         /* performed in two steps (real and imaginary parts). */
         /* CALL SGEMM( 'T', 'N', NRP1, NRHS, NRP1, ONE, VT( NRF, 1 ), LDU, */
         /* $ B( NRF, 1 ), LDB, ZERO, BX( NRF, 1 ), LDBX ) */
@@ -748,8 +777,8 @@ L170: /* First now go through the right singular vector matrices of all */
             }
             /* L270: */
         }
-        sgemm_("T", "N", &nrp1, nrhs, &nrp1, &c_b9, &vt[nrf + vt_dim1], ldu,
-               &rwork[(nrp1 * *nrhs << 1) + 1], &nrp1, &c_b10, &rwork[1], &nrp1);
+        aocl_blas_sgemm("T", "N", &nrp1, nrhs, &nrp1, &c_b9, &vt[nrf + vt_dim1], ldu,
+                        &rwork[(nrp1 * *nrhs << 1) + 1], &nrp1, &c_b10, &rwork[1], &nrp1);
         j = nrp1 * *nrhs << 1;
         i__2 = *nrhs;
         for(jcol = 1; jcol <= i__2; ++jcol)
@@ -763,8 +792,9 @@ L170: /* First now go through the right singular vector matrices of all */
             }
             /* L290: */
         }
-        sgemm_("T", "N", &nrp1, nrhs, &nrp1, &c_b9, &vt[nrf + vt_dim1], ldu,
-               &rwork[(nrp1 * *nrhs << 1) + 1], &nrp1, &c_b10, &rwork[nrp1 * *nrhs + 1], &nrp1);
+        aocl_blas_sgemm("T", "N", &nrp1, nrhs, &nrp1, &c_b9, &vt[nrf + vt_dim1], ldu,
+                        &rwork[(nrp1 * *nrhs << 1) + 1], &nrp1, &c_b10, &rwork[nrp1 * *nrhs + 1],
+                        &nrp1);
         jreal = 0;
         jimag = nrp1 * *nrhs;
         i__2 = *nrhs;

@@ -4,9 +4,9 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
-static integer c_n1 = -1;
-static integer c__0 = 0;
+static aocl_int64_t c__1 = 1;
+static aocl_int64_t c_n1 = -1;
+static aocl_int64_t c__0 = 0;
 static doublereal c_b17 = 1.;
 /* > \brief <b> DSYEV computes the eigenvalues and, optionally, the left and/or right eigenvectors
  * for SY matr ices</b> */
@@ -137,57 +137,52 @@ i */
 /* > \ingroup doubleSYeigen */
 /* ===================================================================== */
 /* Subroutine */
-void dsyev_(char *jobz, char *uplo, integer *n, doublereal *a, integer *lda, doublereal *w,
-            doublereal *work, integer *lwork, integer *info)
+/** Generated wrapper function */
+void dsyev_(char *jobz, char *uplo, aocl_int_t *n, doublereal *a, aocl_int_t *lda, doublereal *w,
+            doublereal *work, aocl_int_t *lwork, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_dsyev(jobz, uplo, n, a, lda, w, work, lwork, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t lwork_64 = *lwork;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_dsyev(jobz, uplo, &n_64, a, &lda_64, w, work, &lwork_64, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_dsyev(char *jobz, char *uplo, aocl_int64_t *n, doublereal *a, aocl_int64_t *lda,
+                       doublereal *w, doublereal *work, aocl_int64_t *lwork, aocl_int64_t *info)
 {
     /* System generated locals */
-    integer a_dim1, a_offset, i__1, i__2;
+    aocl_int64_t a_dim1, a_offset, i__1, i__2;
     doublereal d__1;
     /* Builtin functions */
     double sqrt(doublereal);
     /* Local variables */
-    integer nb;
+    aocl_int64_t nb;
     doublereal eps;
-    integer inde;
+    aocl_int64_t inde;
     doublereal anrm;
-    integer imax;
+    aocl_int64_t imax;
     doublereal rmin, rmax;
-    extern /* Subroutine */
-        void
-        dscal_(integer *, doublereal *, doublereal *, integer *);
     doublereal sigma;
-    extern logical lsame_(char *, char *, integer, integer);
-    integer iinfo;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    aocl_int64_t iinfo;
     logical lower, wantz;
     extern doublereal dlamch_(char *);
-    integer iscale;
-    extern /* Subroutine */
-        void
-        dlascl_(char *, integer *, integer *, doublereal *, doublereal *, integer *, integer *,
-                doublereal *, integer *, integer *);
+    aocl_int64_t iscale;
     doublereal safmin;
-    extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal bignum;
-    integer indtau;
-    extern /* Subroutine */
-        void
-        dsterf_(integer *, doublereal *, doublereal *, integer *);
-    extern doublereal dlansy_(char *, char *, integer *, doublereal *, integer *, doublereal *);
-    integer indwrk;
-    extern /* Subroutine */
-        void
-        dorgtr_(char *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *,
-                integer *),
-        dsteqr_(char *, integer *, doublereal *, doublereal *, doublereal *, integer *,
-                doublereal *, integer *),
-        dsytrd_(char *, integer *, doublereal *, integer *, doublereal *, doublereal *,
-                doublereal *, doublereal *, integer *, integer *);
-    integer llwork;
+    aocl_int64_t indtau;
+    aocl_int64_t indwrk;
+    aocl_int64_t llwork;
     doublereal smlnum;
-    integer lwkopt;
+    aocl_int64_t lwkopt;
     logical lquery;
 
     AOCL_DTL_TRACE_LOG_INIT
@@ -243,7 +238,7 @@ void dsyev_(char *jobz, char *uplo, integer *n, doublereal *a, integer *lda, dou
     }
     if(*info == 0)
     {
-        nb = ilaenv_(&c__1, "DSYTRD", uplo, n, &c_n1, &c_n1, &c_n1);
+        nb = aocl_lapack_ilaenv(&c__1, "DSYTRD", uplo, n, &c_n1, &c_n1, &c_n1);
         /* Computing MAX */
         i__1 = 1;
         i__2 = (nb + 2) * *n; // , expr subst
@@ -260,7 +255,7 @@ void dsyev_(char *jobz, char *uplo, integer *n, doublereal *a, integer *lda, dou
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("DSYEV ", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("DSYEV ", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -294,7 +289,7 @@ void dsyev_(char *jobz, char *uplo, integer *n, doublereal *a, integer *lda, dou
     rmin = sqrt(smlnum);
     rmax = sqrt(bignum);
     /* Scale matrix to allowable range, if necessary. */
-    anrm = dlansy_("M", uplo, n, &a[a_offset], lda, &work[1]);
+    anrm = aocl_lapack_dlansy("M", uplo, n, &a[a_offset], lda, &work[1]);
     iscale = 0;
     if(anrm > 0. && anrm < rmin)
     {
@@ -308,25 +303,26 @@ void dsyev_(char *jobz, char *uplo, integer *n, doublereal *a, integer *lda, dou
     }
     if(iscale == 1)
     {
-        dlascl_(uplo, &c__0, &c__0, &c_b17, &sigma, n, n, &a[a_offset], lda, info);
+        aocl_lapack_dlascl(uplo, &c__0, &c__0, &c_b17, &sigma, n, n, &a[a_offset], lda, info);
     }
     /* Call DSYTRD to reduce symmetric matrix to tridiagonal form. */
     inde = 1;
     indtau = inde + *n;
     indwrk = indtau + *n;
     llwork = *lwork - indwrk + 1;
-    dsytrd_(uplo, n, &a[a_offset], lda, &w[1], &work[inde], &work[indtau], &work[indwrk], &llwork,
-            &iinfo);
+    aocl_lapack_dsytrd(uplo, n, &a[a_offset], lda, &w[1], &work[inde], &work[indtau], &work[indwrk],
+                       &llwork, &iinfo);
     /* For eigenvalues only, call DSTERF. For eigenvectors, first call */
     /* DORGTR to generate the orthogonal matrix, then call DSTEQR. */
     if(!wantz)
     {
-        dsterf_(n, &w[1], &work[inde], info);
+        aocl_lapack_dsterf(n, &w[1], &work[inde], info);
     }
     else
     {
-        dorgtr_(uplo, n, &a[a_offset], lda, &work[indtau], &work[indwrk], &llwork, &iinfo);
-        dsteqr_(jobz, n, &w[1], &work[inde], &a[a_offset], lda, &work[indtau], info);
+        aocl_lapack_dorgtr(uplo, n, &a[a_offset], lda, &work[indtau], &work[indwrk], &llwork,
+                           &iinfo);
+        aocl_lapack_dsteqr(jobz, n, &w[1], &work[inde], &a[a_offset], lda, &work[indtau], info);
     }
     /* If matrix was scaled, then rescale eigenvalues appropriately. */
     if(iscale == 1)
@@ -340,7 +336,7 @@ void dsyev_(char *jobz, char *uplo, integer *n, doublereal *a, integer *lda, dou
             imax = *info - 1;
         }
         d__1 = 1. / sigma;
-        dscal_(&imax, &d__1, &w[1], &c__1);
+        aocl_blas_dscal(&imax, &d__1, &w[1], &c__1);
     }
     /* Set WORK(1) to optimal workspace size. */
     work[1] = (doublereal)lwkopt;

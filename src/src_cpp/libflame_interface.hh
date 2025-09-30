@@ -775,11 +775,19 @@ namespace libflame
 
 	 inline void cladiv(scomplex *ret_val, scomplex *x, scomplex *y)
 	 {
+	 #ifdef FLA_ENABLE_VOID_RETURN_COMPLEX_FUNCTION
 	   cladiv_(ret_val, x, y);
+	 #else
+	   *ret_val = cladiv_(x, y);
+	 #endif
 	 }
 	 inline void zladiv(dcomplex *ret_val, dcomplex *x, dcomplex *y)
 	 {
+	 #ifdef FLA_ENABLE_VOID_RETURN_COMPLEX_FUNCTION
 	   zladiv_(ret_val, x, y);
+	 #else
+	   *ret_val = zladiv_(x, y);
+	 #endif
 	 }
 
 	 template< typename T >

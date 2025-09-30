@@ -37,7 +37,6 @@ typedef int integer;
 typedef unsigned long uinteger;
 #endif
 
-
 // --- Basic type definitions -------------------------------------------------
 
 /*

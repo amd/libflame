@@ -28,7 +28,7 @@ FLA_Error FLA_Bidiag_UT_realify_diagonals( FLA_Uplo uplo, FLA_Obj a, FLA_Obj b, 
 FLA_Error FLA_Bidiag_UT_realify_diagonals_opt( FLA_Obj a, FLA_Obj b, FLA_Obj d, FLA_Obj e ) 
 {
   FLA_Datatype datatype;
-  integer          i, m, inc_a, inc_b, inc_d, inc_e;
+  fla_dim_t          i, m, inc_a, inc_b, inc_d, inc_e;
 
   datatype = FLA_Obj_datatype( a );
 

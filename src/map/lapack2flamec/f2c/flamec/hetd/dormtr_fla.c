@@ -4,8 +4,8 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
-static integer c_n1 = -1;
+static aocl_int64_t c__1 = 1;
+static aocl_int64_t c_n1 = -1;
 /* > \brief \b DORMTR */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -175,33 +175,26 @@ the routine */
 /* > \ingroup doubleOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void dormtr_fla(char *side, char *uplo, char *trans, integer *m, integer *n, doublereal *a,
-                integer *lda, doublereal *tau, doublereal *c__, integer *ldc, doublereal *work,
-                integer *lwork, integer *info)
+void dormtr_fla(char *side, char *uplo, char *trans, aocl_int64_t *m, aocl_int64_t *n,
+                doublereal *a, aocl_int64_t *lda, doublereal *tau, doublereal *c__,
+                aocl_int64_t *ldc, doublereal *work, aocl_int64_t *lwork, aocl_int64_t *info)
 {
     /* System generated locals */
-    integer a_dim1, a_offset, c_dim1, c_offset, i__2, i__3;
+    aocl_int64_t a_dim1, a_offset, c_dim1, c_offset, i__2, i__3;
     char ch__1[2];
     /* Builtin functions */
     /* Subroutine */
 
     /* Local variables */
-    integer i1, i2, nb, mi, ni, nq, nw;
+    aocl_int64_t i1, i2, nb, mi, ni, nq, nw;
     logical left;
-    extern logical lsame_(char *, char *, integer, integer);
-    integer iinfo;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    aocl_int64_t iinfo;
     logical upper;
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
-    extern /* Subroutine */
-        void
-        dormql_(char *, char *, integer *, integer *, integer *, doublereal *, integer *,
-                doublereal *, doublereal *, integer *, doublereal *, integer *, integer *),
-        dormqr_fla(char *, char *, integer *, integer *, integer *, doublereal *, integer *,
-                   doublereal *, doublereal *, integer *, doublereal *, integer *, integer *);
-    integer lwkopt;
+    extern void dormqr_fla(char *, char *, aocl_int64_t *, aocl_int64_t *, aocl_int64_t *, doublereal *,
+                 aocl_int64_t *, doublereal *, doublereal *, aocl_int64_t *, doublereal *,
+                 aocl_int64_t *, aocl_int64_t *);
+    aocl_int64_t lwkopt;
     logical lquery;
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -287,13 +280,13 @@ void dormtr_fla(char *side, char *uplo, char *trans, integer *m, integer *n, dou
             {
                 i__2 = *m - 1;
                 i__3 = *m - 1;
-                nb = ilaenv_(&c__1, "DORMQL", ch__1, &i__2, n, &i__3, &c_n1);
+                nb = aocl_lapack_ilaenv(&c__1, "DORMQL", ch__1, &i__2, n, &i__3, &c_n1);
             }
             else
             {
                 i__2 = *n - 1;
                 i__3 = *n - 1;
-                nb = ilaenv_(&c__1, "DORMQL", ch__1, m, &i__2, &i__3, &c_n1);
+                nb = aocl_lapack_ilaenv(&c__1, "DORMQL", ch__1, m, &i__2, &i__3, &c_n1);
             }
         }
         else
@@ -302,13 +295,13 @@ void dormtr_fla(char *side, char *uplo, char *trans, integer *m, integer *n, dou
             {
                 i__2 = *m - 1;
                 i__3 = *m - 1;
-                nb = ilaenv_(&c__1, "DORMQR", ch__1, &i__2, n, &i__3, &c_n1);
+                nb = aocl_lapack_ilaenv(&c__1, "DORMQR", ch__1, &i__2, n, &i__3, &c_n1);
             }
             else
             {
                 i__2 = *n - 1;
                 i__3 = *n - 1;
-                nb = ilaenv_(&c__1, "DORMQR", ch__1, m, &i__2, &i__3, &c_n1);
+                nb = aocl_lapack_ilaenv(&c__1, "DORMQR", ch__1, m, &i__2, &i__3, &c_n1);
             }
         }
         lwkopt = fla_max(1, nw) * nb;
@@ -317,7 +310,7 @@ void dormtr_fla(char *side, char *uplo, char *trans, integer *m, integer *n, dou
     if(*info != 0)
     {
         i__2 = -(*info);
-        xerbla_("DORMTR", &i__2, (ftnlen)6);
+        aocl_blas_xerbla("DORMTR", &i__2, (ftnlen)6);
         return;
     }
     else if(lquery)
@@ -344,8 +337,8 @@ void dormtr_fla(char *side, char *uplo, char *trans, integer *m, integer *n, dou
     {
         /* Q was determined by a call to DSYTRD with UPLO = 'U' */
         i__2 = nq - 1;
-        dormql_(side, trans, &mi, &ni, &i__2, &a[(a_dim1 << 1) + 1], lda, &tau[1], &c__[c_offset],
-                ldc, &work[1], lwork, &iinfo);
+        aocl_lapack_dormql(side, trans, &mi, &ni, &i__2, &a[(a_dim1 << 1) + 1], lda, &tau[1],
+                           &c__[c_offset], ldc, &work[1], lwork, &iinfo);
     }
     else
     {

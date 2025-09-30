@@ -4,8 +4,8 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
-static integer c_n1 = -1;
+static aocl_int64_t c__1 = 1;
+static aocl_int64_t c_n1 = -1;
 /* > \brief \b ZGGRQF */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -192,7 +192,7 @@ the routine */
 /* > */
 /* > H(i) = I - taua * v * v**H */
 /* > */
-/* > where taua is a complex scalar, and v is a complex vector with */
+/* > where taua is a scomplex scalar, and v is a scomplex vector with */
 /* > v(n-k+i+1:n) = 0 and v(n-k+i) = 1;
 v(1:n-k+i-1) is stored on exit in */
 /* > A(m-k+i,1:n-k+i-1), and taua in TAUA(i). */
@@ -207,7 +207,7 @@ v(1:n-k+i-1) is stored on exit in */
 /* > */
 /* > H(i) = I - taub * v * v**H */
 /* > */
-/* > where taub is a complex scalar, and v is a complex vector with */
+/* > where taub is a scomplex scalar, and v is a scomplex vector with */
 /* > v(1:i-1) = 0 and v(i) = 1;
 v(i+1:p) is stored on exit in B(i+1:p,i), */
 /* > and taub in TAUB(i). */
@@ -217,34 +217,44 @@ v(i+1:p) is stored on exit in B(i+1:p,i), */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void zggrqf_(integer *m, integer *p, integer *n, doublecomplex *a, integer *lda,
-             doublecomplex *taua, doublecomplex *b, integer *ldb, doublecomplex *taub,
-             doublecomplex *work, integer *lwork, integer *info)
+/** Generated wrapper function */
+void zggrqf_(aocl_int_t *m, aocl_int_t *p, aocl_int_t *n, dcomplex *a, aocl_int_t *lda,
+             dcomplex *taua, dcomplex *b, aocl_int_t *ldb, dcomplex *taub,
+             dcomplex *work, aocl_int_t *lwork, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_zggrqf(m, p, n, a, lda, taua, b, ldb, taub, work, lwork, info);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t p_64 = *p;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t ldb_64 = *ldb;
+    aocl_int64_t lwork_64 = *lwork;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_zggrqf(&m_64, &p_64, &n_64, a, &lda_64, taua, b, &ldb_64, taub, work, &lwork_64,
+                       &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_zggrqf(aocl_int64_t *m, aocl_int64_t *p, aocl_int64_t *n, dcomplex *a,
+                        aocl_int64_t *lda, dcomplex *taua, dcomplex *b, aocl_int64_t *ldb,
+                        dcomplex *taub, dcomplex *work, aocl_int64_t *lwork,
+                        aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zggrqf inputs: m %" FLA_IS ", p %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS
                       ", ldb %" FLA_IS "",
                       *m, *p, *n, *lda, *ldb);
     /* System generated locals */
-    integer a_dim1, a_offset, b_dim1, b_offset, i__1, i__2, i__3;
+    aocl_int64_t a_dim1, a_offset, b_dim1, b_offset, i__1, i__2, i__3;
     /* Local variables */
-    integer nb, nb1, nb2, nb3, lopt;
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
-    extern /* Subroutine */
-        void
-        zgeqrf_(integer *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *,
-                integer *, integer *),
-        zgerqf_(integer *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *,
-                integer *, integer *);
-    integer lwkopt;
+    aocl_int64_t nb, nb1, nb2, nb3, lopt;
+    aocl_int64_t lwkopt;
     logical lquery;
-    extern /* Subroutine */
-        void
-        zunmrq_(char *, char *, integer *, integer *, integer *, doublecomplex *, integer *,
-                doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, integer *);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -276,9 +286,9 @@ void zggrqf_(integer *m, integer *p, integer *n, doublecomplex *a, integer *lda,
     --work;
     /* Function Body */
     *info = 0;
-    nb1 = ilaenv_(&c__1, "ZGERQF", " ", m, n, &c_n1, &c_n1);
-    nb2 = ilaenv_(&c__1, "ZGEQRF", " ", p, n, &c_n1, &c_n1);
-    nb3 = ilaenv_(&c__1, "ZUNMRQ", " ", m, n, p, &c_n1);
+    nb1 = aocl_lapack_ilaenv(&c__1, "ZGERQF", " ", m, n, &c_n1, &c_n1);
+    nb2 = aocl_lapack_ilaenv(&c__1, "ZGEQRF", " ", p, n, &c_n1, &c_n1);
+    nb3 = aocl_lapack_ilaenv(&c__1, "ZUNMRQ", " ", m, n, p, &c_n1);
     /* Computing MAX */
     i__1 = fla_max(nb1, nb2);
     nb = fla_max(i__1, nb3);
@@ -321,7 +331,7 @@ void zggrqf_(integer *m, integer *p, integer *n, doublecomplex *a, integer *lda,
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("ZGGRQF", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("ZGGRQF", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -331,21 +341,22 @@ void zggrqf_(integer *m, integer *p, integer *n, doublecomplex *a, integer *lda,
         return;
     }
     /* RQ factorization of M-by-N matrix A: A = R*Q */
-    zgerqf_(m, n, &a[a_offset], lda, &taua[1], &work[1], lwork, info);
+    aocl_lapack_zgerqf(m, n, &a[a_offset], lda, &taua[1], &work[1], lwork, info);
     lopt = (integer)work[1].r;
     /* Update B := B*Q**H */
     i__1 = fla_min(*m, *n);
     /* Computing MAX */
     i__2 = 1;
     i__3 = *m - *n + 1; // , expr subst
-    zunmrq_("Right", "Conjugate Transpose", p, n, &i__1, &a[fla_max(i__2, i__3) + a_dim1], lda,
-            &taua[1], &b[b_offset], ldb, &work[1], lwork, info);
+    aocl_lapack_zunmrq("Right", "Conjugate Transpose", p, n, &i__1,
+                       &a[fla_max(i__2, i__3) + a_dim1], lda, &taua[1], &b[b_offset], ldb, &work[1],
+                       lwork, info);
     /* Computing MAX */
     i__1 = lopt;
     i__2 = (integer)work[1].r; // , expr subst
     lopt = fla_max(i__1, i__2);
     /* QR factorization of P-by-N matrix B: B = Z*T */
-    zgeqrf_(p, n, &b[b_offset], ldb, &taub[1], &work[1], lwork, info);
+    aocl_lapack_zgeqrf(p, n, &b[b_offset], ldb, &taub[1], &work[1], lwork, info);
     /* Computing MAX */
     i__2 = lopt;
     i__3 = (integer)work[1].r; // , expr subst

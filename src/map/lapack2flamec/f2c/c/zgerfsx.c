@@ -418,12 +418,12 @@ defaults */
 /* > \ingroup complex16GEcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void zgerfsx_(char *trans, char *equed, integer *n, integer *nrhs, doublecomplex *a, integer *lda,
-              doublecomplex *af, integer *ldaf, integer *ipiv, doublereal *r__, doublereal *c__,
-              doublecomplex *b, integer *ldb, doublecomplex *x, integer *ldx, doublereal *rcond,
+void zgerfsx_(char *trans, char *equed, integer *n, integer *nrhs, dcomplex *a, integer *lda,
+              dcomplex *af, integer *ldaf, integer *ipiv, doublereal *r__, doublereal *c__,
+              dcomplex *b, integer *ldb, dcomplex *x, integer *ldx, doublereal *rcond,
               doublereal *berr, integer *n_err_bnds__, doublereal *err_bnds_norm__,
               doublereal *err_bnds_comp__, integer *nparams, doublereal *params,
-              doublecomplex *work, doublereal *rwork, integer *info)
+              dcomplex *work, doublereal *rwork, integer *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zgerfsx inputs: trans %c, equed %c, n %" FLA_IS ", nrhs %" FLA_IS
@@ -446,31 +446,31 @@ void zgerfsx_(char *trans, char *equed, integer *n, integer *nrhs, doublecomplex
     doublereal cwise_wrong__;
     extern /* Subroutine */
         void
-        zla_gerfsx_extended_(integer *, integer *, integer *, integer *, doublecomplex *, integer *,
-                             doublecomplex *, integer *, integer *, logical *, doublereal *,
-                             doublecomplex *, integer *, doublecomplex *, integer *, doublereal *,
-                             integer *, doublereal *, doublereal *, doublecomplex *, doublereal *,
-                             doublecomplex *, doublereal *, doublereal *, integer *, doublereal *,
+        zla_gerfsx_extended_(integer *, integer *, integer *, integer *, dcomplex *, integer *,
+                             dcomplex *, integer *, integer *, logical *, doublereal *,
+                             dcomplex *, integer *, dcomplex *, integer *, doublereal *,
+                             integer *, doublereal *, doublereal *, dcomplex *, doublereal *,
+                             dcomplex *, doublereal *, doublereal *, integer *, doublereal *,
                              doublereal *, logical *, integer *);
     char norm[1];
     logical ignore_cwise__;
     extern logical lsame_(char *, char *, integer, integer);
     doublereal anorm;
-    extern doublereal zla_gercond_c_(char *, integer *, doublecomplex *, integer *, doublecomplex *,
+    extern doublereal zla_gercond_c_(char *, integer *, dcomplex *, integer *, dcomplex *,
                                      integer *, integer *, doublereal *, logical *, integer *,
-                                     doublecomplex *, doublereal *),
-        zla_gercond_x_(char *, integer *, doublecomplex *, integer *, doublecomplex *, integer *,
-                       integer *, doublecomplex *, integer *, doublecomplex *, doublereal *),
+                                     dcomplex *, doublereal *),
+        zla_gercond_x_(char *, integer *, dcomplex *, integer *, dcomplex *, integer *,
+                       integer *, dcomplex *, integer *, dcomplex *, doublereal *),
         dlamch_(char *);
     extern /* Subroutine */
         void
         xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    extern doublereal zlange_(char *, integer *, integer *, doublecomplex *, integer *,
+    extern doublereal zlange_(char *, integer *, integer *, dcomplex *, integer *,
                               doublereal *);
     extern /* Subroutine */
         void
-        zgecon_(char *, integer *, doublecomplex *, integer *, doublereal *, doublereal *,
-                doublecomplex *, doublereal *, integer *);
+        zgecon_(char *, integer *, dcomplex *, integer *, doublereal *, doublereal *,
+                dcomplex *, doublereal *, integer *);
     logical colequ, notran, rowequ;
     extern integer ilaprec_(char *);
     integer ithresh, n_norms__;

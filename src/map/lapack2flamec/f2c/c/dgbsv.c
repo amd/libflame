@@ -160,23 +160,38 @@ elements marked */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void dgbsv_(integer *n, integer *kl, integer *ku, integer *nrhs, doublereal *ab, integer *ldab,
-            integer *ipiv, doublereal *b, integer *ldb, integer *info)
+/** Generated wrapper function */
+void dgbsv_(aocl_int_t *n, aocl_int_t *kl, aocl_int_t *ku, aocl_int_t *nrhs, doublereal *ab,
+            aocl_int_t *ldab, aocl_int_t *ipiv, doublereal *b, aocl_int_t *ldb, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_dgbsv(n, kl, ku, nrhs, ab, ldab, ipiv, b, ldb, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t kl_64 = *kl;
+    aocl_int64_t ku_64 = *ku;
+    aocl_int64_t nrhs_64 = *nrhs;
+    aocl_int64_t ldab_64 = *ldab;
+    aocl_int64_t ldb_64 = *ldb;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_dgbsv(&n_64, &kl_64, &ku_64, &nrhs_64, ab, &ldab_64, ipiv, b, &ldb_64, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_dgbsv(aocl_int64_t *n, aocl_int64_t *kl, aocl_int64_t *ku, aocl_int64_t *nrhs,
+                       doublereal *ab, aocl_int64_t *ldab, aocl_int_t *ipiv, doublereal *b,
+                       aocl_int64_t *ldb, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dgbsv inputs: n %" FLA_IS ", kl %" FLA_IS ", ku %" FLA_IS ", nrhs %" FLA_IS
                       ", ldab %" FLA_IS ", ldb %" FLA_IS "",
                       *n, *kl, *ku, *nrhs, *ldab, *ldb);
     /* System generated locals */
-    integer ab_dim1, ab_offset, b_dim1, b_offset, i__1;
+    aocl_int64_t ab_dim1, ab_offset, b_dim1, b_offset, i__1;
     /* Local variables */
-    extern /* Subroutine */
-        void
-        dgbtrf_(integer *, integer *, integer *, integer *, doublereal *, integer *, integer *,
-                integer *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
-        dgbtrs_(char *, integer *, integer *, integer *, integer *, doublereal *, integer *,
-                integer *, doublereal *, integer *, integer *);
     /* -- LAPACK driver routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -229,17 +244,17 @@ void dgbsv_(integer *n, integer *kl, integer *ku, integer *nrhs, doublereal *ab,
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("DGBSV ", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("DGBSV ", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Compute the LU factorization of the band matrix A. */
-    dgbtrf_(n, n, kl, ku, &ab[ab_offset], ldab, &ipiv[1], info);
+    aocl_lapack_dgbtrf(n, n, kl, ku, &ab[ab_offset], ldab, &ipiv[1], info);
     if(*info == 0)
     {
         /* Solve the system A*X = B, overwriting B with X. */
-        dgbtrs_("No transpose", n, kl, ku, nrhs, &ab[ab_offset], ldab, &ipiv[1], &b[b_offset], ldb,
-                info);
+        aocl_lapack_dgbtrs("No transpose", n, kl, ku, nrhs, &ab[ab_offset], ldab, &ipiv[1],
+                           &b[b_offset], ldb, info);
     }
     AOCL_DTL_TRACE_LOG_EXIT
     return;

@@ -4,9 +4,9 @@
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
  /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
-static complex c_b13 = {1.f, 0.f};
-static integer c_n1 = -1;
+static aocl_int64_t c__1 = 1;
+static scomplex c_b13 = {{1.f}, {0.f}};
+static aocl_int64_t c_n1 = -1;
 /* > \brief \b CGESC2 solves a system of linear equations using the LU factorization with complete
  * pivoting co mputed by sgetc2. */
 /* =========== DOCUMENTATION =========== */
@@ -115,8 +115,22 @@ for 1 <= j <= N, column j of the */
 /* > Umea University, S-901 87 Umea, Sweden. */
 /* ===================================================================== */
 /* Subroutine */
-void cgesc2_(integer *n, complex *a, integer *lda, complex *rhs, integer *ipiv, integer *jpiv,
-             real *scale)
+/** Generated wrapper function */
+void cgesc2_(aocl_int_t *n, scomplex *a, aocl_int_t *lda, scomplex *rhs, aocl_int_t *ipiv,
+             aocl_int_t *jpiv, real *scale)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_cgesc2(n, a, lda, rhs, ipiv, jpiv, scale);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t lda_64 = *lda;
+
+    aocl_lapack_cgesc2(&n_64, a, &lda_64, rhs, ipiv, jpiv, scale);
+#endif
+}
+
+void aocl_lapack_cgesc2(aocl_int64_t *n, scomplex *a, aocl_int64_t *lda, scomplex *rhs,
+                        aocl_int_t *ipiv, aocl_int_t *jpiv, real *scale)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -129,24 +143,17 @@ void cgesc2_(integer *n, complex *a, integer *lda, complex *rhs, integer *ipiv, 
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
-    integer a_dim1, a_offset, i__1, i__2, i__3, i__4, i__5, i__6;
+    aocl_int64_t a_dim1, a_offset, i__1, i__2, i__3, i__4, i__5, i__6;
     real r__1;
-    complex q__1, q__2, q__3;
+    scomplex q__1, q__2, q__3;
     /* Builtin functions */
-    double c_abs(complex *);
-    void c_div(complex *, complex *, complex *);
+    double c_abs(scomplex *);
+    void c_div(scomplex *, scomplex *, scomplex *);
     /* Local variables */
-    integer i__, j;
+    aocl_int64_t i__, j;
     real eps;
-    complex temp;
-    extern /* Subroutine */
-        void
-        cscal_(integer *, complex *, complex *, integer *);
-    extern integer icamax_(integer *, complex *, integer *);
+    scomplex temp;
     extern real slamch_(char *);
-    extern /* Subroutine */
-        void
-        claswp_(integer *, complex *, integer *, integer *, integer *, integer *, integer *);
     real smlnum;
     /* -- LAPACK auxiliary routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -180,7 +187,7 @@ void cgesc2_(integer *n, complex *a, integer *lda, complex *rhs, integer *ipiv, 
     smlnum = slamch_("S") / eps;
     /* Apply permutations IPIV to RHS */
     i__1 = *n - 1;
-    claswp_(&c__1, &rhs[1], lda, &c__1, &i__1, &ipiv[1], &c__1);
+    aocl_lapack_claswp(&c__1, &rhs[1], lda, &c__1, &i__1, &ipiv[1], &c__1);
     /* Solve for L part */
     i__1 = *n - 1;
     for(i__ = 1; i__ <= i__1; ++i__)
@@ -205,7 +212,7 @@ void cgesc2_(integer *n, complex *a, integer *lda, complex *rhs, integer *ipiv, 
     /* Solve for U part */
     *scale = 1.f;
     /* Check for scaling */
-    i__ = icamax_(n, &rhs[1], &c__1);
+    i__ = aocl_blas_icamax(n, &rhs[1], &c__1);
     if(smlnum * 2.f * c_abs(&rhs[i__]) > c_abs(&a[*n + *n * a_dim1]))
     {
         r__1 = c_abs(&rhs[i__]);
@@ -213,7 +220,7 @@ void cgesc2_(integer *n, complex *a, integer *lda, complex *rhs, integer *ipiv, 
         q__1.i = 0.f / r__1; // , expr subst
         temp.r = q__1.r;
         temp.i = q__1.i; // , expr subst
-        cscal_(n, &temp, &rhs[1], &c__1);
+        aocl_blas_cscal(n, &temp, &rhs[1], &c__1);
         *scale *= temp.r;
     }
     for(i__ = *n; i__ >= 1; --i__)
@@ -248,7 +255,7 @@ void cgesc2_(integer *n, complex *a, integer *lda, complex *rhs, integer *ipiv, 
     }
     /* Apply permutations JPIV to the solution (RHS) */
     i__1 = *n - 1;
-    claswp_(&c__1, &rhs[1], lda, &c__1, &i__1, &jpiv[1], &c_n1);
+    aocl_lapack_claswp(&c__1, &rhs[1], lda, &c__1, &i__1, &jpiv[1], &c_n1);
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
     return;
     /* End of CGESC2 */

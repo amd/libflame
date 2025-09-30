@@ -135,15 +135,31 @@
 /* > \ingroup doubleGEauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-void dlaqge_(integer *m, integer *n, doublereal *a, integer *lda, doublereal *r__, doublereal *c__,
-             doublereal *rowcnd, doublereal *colcnd, doublereal *amax, char *equed)
+/** Generated wrapper function */
+void dlaqge_(aocl_int_t *m, aocl_int_t *n, doublereal *a, aocl_int_t *lda, doublereal *r__,
+             doublereal *c__, doublereal *rowcnd, doublereal *colcnd, doublereal *amax, char *equed)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_dlaqge(m, n, a, lda, r__, c__, rowcnd, colcnd, amax, equed);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t lda_64 = *lda;
+
+    aocl_lapack_dlaqge(&m_64, &n_64, a, &lda_64, r__, c__, rowcnd, colcnd, amax, equed);
+#endif
+}
+
+void aocl_lapack_dlaqge(aocl_int64_t *m, aocl_int64_t *n, doublereal *a, aocl_int64_t *lda,
+                        doublereal *r__, doublereal *c__, doublereal *rowcnd, doublereal *colcnd,
+                        doublereal *amax, char *equed)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dlaqge inputs: m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS "", *m, *n, *lda);
     /* System generated locals */
-    integer a_dim1, a_offset, i__1, i__2;
+    aocl_int64_t a_dim1, a_offset, i__1, i__2;
     /* Local variables */
-    integer i__, j;
+    aocl_int64_t i__, j;
     doublereal cj, large, small_val;
     extern doublereal dlamch_(char *);
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */

@@ -38,7 +38,7 @@
 /* > */
 /* > \verbatim */
 /* > */
-/* > CLASCL multiplies the M by N complex matrix A by the real scalar */
+/* > CLASCL multiplies the M by N scomplex matrix A by the real scalar */
 /* > CTO/CFROM. This is done without over/underflow as long as the final */
 /* > result CTO*A(I,J)/CFROM does not over/underflow. TYPE specifies that */
 /* > A may be full, upper triangular, lower triangular, upper Hessenberg, */
@@ -140,29 +140,47 @@
 /* > \ingroup complexOTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-void clascl_(char *type__, integer *kl, integer *ku, real *cfrom, real *cto, integer *m, integer *n,
-             complex *a, integer *lda, integer *info)
+/** Generated wrapper function */
+void clascl_(char *type__, aocl_int_t *kl, aocl_int_t *ku, real *cfrom, real *cto, aocl_int_t *m,
+             aocl_int_t *n, scomplex *a, aocl_int_t *lda, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_clascl(type__, kl, ku, cfrom, cto, m, n, a, lda, info);
+#else
+    aocl_int64_t kl_64 = *kl;
+    aocl_int64_t ku_64 = *ku;
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_clascl(type__, &kl_64, &ku_64, cfrom, cto, &m_64, &n_64, a, &lda_64, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_clascl(char *type__, aocl_int64_t *kl, aocl_int64_t *ku, real *cfrom, real *cto,
+                        aocl_int64_t *m, aocl_int64_t *n, scomplex *a, aocl_int64_t *lda,
+                        aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("clascl inputs: type__ %c, kl %" FLA_IS ", ku %" FLA_IS ", m %" FLA_IS
                       ", n %" FLA_IS ", lda %" FLA_IS "",
                       *type__, *kl, *ku, *m, *n, *lda);
     /* System generated locals */
-    integer a_dim1, a_offset, i__1, i__2, i__3, i__4, i__5;
-    complex q__1;
+    aocl_int64_t a_dim1, a_offset, i__1, i__2, i__3, i__4, i__5;
+    scomplex q__1;
     /* Local variables */
-    integer i__, j, k1, k2, k3, k4;
+    aocl_int64_t i__, j, k1, k2, k3, k4;
     real mul, cto1;
     logical done;
     real ctoc;
-    extern logical lsame_(char *, char *, integer, integer);
-    integer itype;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    aocl_int64_t itype;
     real cfrom1;
     extern real slamch_(char *);
     real cfromc;
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real bignum;
     extern logical sisnan_(real *);
     real smlnum;
@@ -274,7 +292,7 @@ void clascl_(char *type__, integer *kl, integer *ku, real *cfrom, real *cto, int
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("CLASCL", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("CLASCL", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }

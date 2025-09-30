@@ -312,22 +312,50 @@
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void slaebz_(integer *ijob, integer *nitmax, integer *n, integer *mmax, integer *minp,
-             integer *nbmin, real *abstol, real *reltol, real *pivmin, real *d__, real *e, real *e2,
-             integer *nval, real *ab, real *c__, integer *mout, integer *nab, real *work,
-             integer *iwork, integer *info)
+/** Generated wrapper function */
+void slaebz_(aocl_int_t *ijob, aocl_int_t *nitmax, aocl_int_t *n, aocl_int_t *mmax,
+             aocl_int_t *minp, aocl_int_t *nbmin, real *abstol, real *reltol, real *pivmin,
+             real *d__, real *e, real *e2, aocl_int_t *nval, real *ab, real *c__, aocl_int_t *mout,
+             aocl_int_t *nab, real *work, aocl_int_t *iwork, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_slaebz(ijob, nitmax, n, mmax, minp, nbmin, abstol, reltol, pivmin, d__, e, e2, nval,
+                       ab, c__, mout, nab, work, iwork, info);
+#else
+    aocl_int64_t ijob_64 = *ijob;
+    aocl_int64_t nitmax_64 = *nitmax;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t mmax_64 = *mmax;
+    aocl_int64_t minp_64 = *minp;
+    aocl_int64_t nbmin_64 = *nbmin;
+    aocl_int64_t mout_64 = *mout;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_slaebz(&ijob_64, &nitmax_64, &n_64, &mmax_64, &minp_64, &nbmin_64, abstol, reltol,
+                       pivmin, d__, e, e2, nval, ab, c__, &mout_64, nab, work, iwork, &info_64);
+
+    *mout = (aocl_int_t)mout_64;
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_slaebz(aocl_int64_t *ijob, aocl_int64_t *nitmax, aocl_int64_t *n,
+                        aocl_int64_t *mmax, aocl_int64_t *minp, aocl_int64_t *nbmin, real *abstol,
+                        real *reltol, real *pivmin, real *d__, real *e, real *e2, aocl_int_t *nval,
+                        real *ab, real *c__, aocl_int64_t *mout, aocl_int_t *nab, real *work,
+                        aocl_int_t *iwork, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("slaebz inputs: ijob %" FLA_IS ",nitmax %" FLA_IS ",n %" FLA_IS
                       ",mmax %" FLA_IS ",minp %" FLA_IS ",nbmin %" FLA_IS "",
                       *ijob, *nitmax, *n, *mmax, *minp, *nbmin);
     /* System generated locals */
-    integer nab_dim1, nab_offset, ab_dim1, ab_offset, i__1, i__2, i__3, i__4, i__5, i__6;
+    aocl_int64_t nab_dim1, nab_offset, ab_dim1, ab_offset, i__1, i__2, i__3, i__4, i__5, i__6;
     real r__1, r__2, r__3, r__4;
     /* Local variables */
-    integer j, kf, ji, kl, jp, jit;
+    aocl_int64_t j, kf, ji, kl, jp, jit;
     real tmp1, tmp2;
-    integer itmp1, itmp2, kfnew, klnew;
+    aocl_int64_t itmp1, itmp2, kfnew, klnew;
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -607,9 +635,9 @@ void slaebz_(integer *ijob, integer *nitmax, integer *n, integer *mmax, integer 
                         ab[klnew + (ab_dim1 << 1)] = ab[ji + (ab_dim1 << 1)];
                         nab[klnew + (nab_dim1 << 1)] = nab[ji + (nab_dim1 << 1)];
                         ab[klnew + ab_dim1] = tmp1;
-                        nab[klnew + nab_dim1] = itmp1;
+                        nab[klnew + nab_dim1] = (aocl_int_t)(itmp1);
                         ab[ji + (ab_dim1 << 1)] = tmp1;
-                        nab[ji + (nab_dim1 << 1)] = itmp1;
+                        nab[ji + (nab_dim1 << 1)] = (aocl_int_t)(itmp1);
                     }
                     else
                     {
@@ -625,12 +653,12 @@ void slaebz_(integer *ijob, integer *nitmax, integer *n, integer *mmax, integer 
                     if(itmp1 <= nval[ji])
                     {
                         ab[ji + ab_dim1] = tmp1;
-                        nab[ji + nab_dim1] = itmp1;
+                        nab[ji + nab_dim1] = (aocl_int_t)(itmp1);
                     }
                     if(itmp1 >= nval[ji])
                     {
                         ab[ji + (ab_dim1 << 1)] = tmp1;
-                        nab[ji + (nab_dim1 << 1)] = itmp1;
+                        nab[ji + (nab_dim1 << 1)] = (aocl_int_t)(itmp1);
                     }
                 }
                 /* L100: */
@@ -666,13 +694,13 @@ void slaebz_(integer *ijob, integer *nitmax, integer *n, integer *mmax, integer 
                     nab[ji + (nab_dim1 << 1)] = nab[kfnew + (nab_dim1 << 1)];
                     ab[kfnew + ab_dim1] = tmp1;
                     ab[kfnew + (ab_dim1 << 1)] = tmp2;
-                    nab[kfnew + nab_dim1] = itmp1;
-                    nab[kfnew + (nab_dim1 << 1)] = itmp2;
+                    nab[kfnew + nab_dim1] = (aocl_int_t)(itmp1);
+                    nab[kfnew + (nab_dim1 << 1)] = (aocl_int_t)(itmp2);
                     if(*ijob == 3)
                     {
                         itmp1 = nval[ji];
                         nval[ji] = nval[kfnew];
-                        nval[kfnew] = itmp1;
+                        nval[kfnew] = (aocl_int_t)(itmp1);
                     }
                 }
                 ++kfnew;

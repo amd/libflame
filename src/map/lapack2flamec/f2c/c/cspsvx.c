@@ -4,7 +4,7 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
+static aocl_int64_t c__1 = 1;
 /* > \brief <b> CSPSVX computes the solution to system of linear equations A * X = B for OTHER
  * matrices</b> */
 /* =========== DOCUMENTATION =========== */
@@ -46,7 +46,7 @@ static integer c__1 = 1;
 /* > \verbatim */
 /* > */
 /* > CSPSVX uses the diagonal pivoting factorization A = U*D*U**T or */
-/* > A = L*D*L**T to compute the solution to a complex system of linear */
+/* > A = L*D*L**T to compute the solution to a scomplex system of linear */
 /* > equations A * X = B, where A is an N-by-N symmetric matrix stored */
 /* > in packed format and X and B are N-by-NRHS matrices. */
 /* > */
@@ -275,9 +275,32 @@ static integer c__1 = 1;
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void cspsvx_(char *fact, char *uplo, integer *n, integer *nrhs, complex *ap, complex *afp,
-             integer *ipiv, complex *b, integer *ldb, complex *x, integer *ldx, real *rcond,
-             real *ferr, real *berr, complex *work, real *rwork, integer *info)
+/** Generated wrapper function */
+void cspsvx_(char *fact, char *uplo, aocl_int_t *n, aocl_int_t *nrhs, scomplex *ap, scomplex *afp,
+             aocl_int_t *ipiv, scomplex *b, aocl_int_t *ldb, scomplex *x, aocl_int_t *ldx,
+             real *rcond, real *ferr, real *berr, scomplex *work, real *rwork, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_cspsvx(fact, uplo, n, nrhs, ap, afp, ipiv, b, ldb, x, ldx, rcond, ferr, berr, work,
+                       rwork, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t nrhs_64 = *nrhs;
+    aocl_int64_t ldb_64 = *ldb;
+    aocl_int64_t ldx_64 = *ldx;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_cspsvx(fact, uplo, &n_64, &nrhs_64, ap, afp, ipiv, b, &ldb_64, x, &ldx_64, rcond,
+                       ferr, berr, work, rwork, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_cspsvx(char *fact, char *uplo, aocl_int64_t *n, aocl_int64_t *nrhs, scomplex *ap,
+                        scomplex *afp, aocl_int_t *ipiv, scomplex *b, aocl_int64_t *ldb, scomplex *x,
+                        aocl_int64_t *ldx, real *rcond, real *ferr, real *berr, scomplex *work,
+                        real *rwork, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -292,28 +315,12 @@ void cspsvx_(char *fact, char *uplo, integer *n, integer *nrhs, complex *ap, com
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
-    integer b_dim1, b_offset, x_dim1, x_offset, i__1;
+    aocl_int64_t b_dim1, b_offset, x_dim1, x_offset, i__1;
     /* Local variables */
-    extern logical lsame_(char *, char *, integer, integer);
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     real anorm;
-    extern /* Subroutine */
-        void
-        ccopy_(integer *, complex *, integer *, complex *, integer *);
     extern real slamch_(char *);
     logical nofact;
-    extern /* Subroutine */
-        void
-        clacpy_(char *, integer *, integer *, complex *, integer *, complex *, integer *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    extern real clansp_(char *, char *, integer *, complex *, real *);
-    extern /* Subroutine */
-        void
-        cspcon_(char *, integer *, complex *, integer *, real *, real *, complex *, integer *),
-        csprfs_(char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *,
-                complex *, integer *, real *, real *, complex *, real *, integer *),
-        csptrf_(char *, integer *, complex *, integer *, integer *),
-        csptrs_(char *, integer *, integer *, complex *, integer *, complex *, integer *,
-                integer *);
     /* -- LAPACK driver routine (version 3.4.1) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -379,7 +386,7 @@ void cspsvx_(char *fact, char *uplo, integer *n, integer *nrhs, complex *ap, com
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("CSPSVX", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("CSPSVX", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
@@ -387,8 +394,8 @@ void cspsvx_(char *fact, char *uplo, integer *n, integer *nrhs, complex *ap, com
     {
         /* Compute the factorization A = U*D*U**T or A = L*D*L**T. */
         i__1 = *n * (*n + 1) / 2;
-        ccopy_(&i__1, &ap[1], &c__1, &afp[1], &c__1);
-        csptrf_(uplo, n, &afp[1], &ipiv[1], info);
+        aocl_blas_ccopy(&i__1, &ap[1], &c__1, &afp[1], &c__1);
+        aocl_lapack_csptrf(uplo, n, &afp[1], &ipiv[1], info);
         /* Return if INFO is non-zero. */
         if(*info > 0)
         {
@@ -398,16 +405,16 @@ void cspsvx_(char *fact, char *uplo, integer *n, integer *nrhs, complex *ap, com
         }
     }
     /* Compute the norm of the matrix A. */
-    anorm = clansp_("I", uplo, n, &ap[1], &rwork[1]);
+    anorm = aocl_lapack_clansp("I", uplo, n, &ap[1], &rwork[1]);
     /* Compute the reciprocal of the condition number of A. */
-    cspcon_(uplo, n, &afp[1], &ipiv[1], &anorm, rcond, &work[1], info);
+    aocl_lapack_cspcon(uplo, n, &afp[1], &ipiv[1], &anorm, rcond, &work[1], info);
     /* Compute the solution vectors X. */
-    clacpy_("Full", n, nrhs, &b[b_offset], ldb, &x[x_offset], ldx);
-    csptrs_(uplo, n, nrhs, &afp[1], &ipiv[1], &x[x_offset], ldx, info);
+    aocl_lapack_clacpy("Full", n, nrhs, &b[b_offset], ldb, &x[x_offset], ldx);
+    aocl_lapack_csptrs(uplo, n, nrhs, &afp[1], &ipiv[1], &x[x_offset], ldx, info);
     /* Use iterative refinement to improve the computed solutions and */
     /* compute error bounds and backward error estimates for them. */
-    csprfs_(uplo, n, nrhs, &ap[1], &afp[1], &ipiv[1], &b[b_offset], ldb, &x[x_offset], ldx,
-            &ferr[1], &berr[1], &work[1], &rwork[1], info);
+    aocl_lapack_csprfs(uplo, n, nrhs, &ap[1], &afp[1], &ipiv[1], &b[b_offset], ldb, &x[x_offset],
+                       ldx, &ferr[1], &berr[1], &work[1], &rwork[1], info);
     /* Set INFO = N+1 if the matrix is singular to working precision. */
     if(*rcond < slamch_("Epsilon"))
     {

@@ -91,13 +91,30 @@
 /* > \date November 2011 */
 /* > \ingroup realGEcomputational */
 /* ===================================================================== */
-real sla_gerpvgrw_(integer *n, integer *ncols, real *a, integer *lda, real *af, integer *ldaf)
+/** Generated wrapper function */
+real sla_gerpvgrw_(aocl_int_t *n, aocl_int_t *ncols, real *a, aocl_int_t *lda, real *af,
+                   aocl_int_t *ldaf)
+{
+#if FLA_ENABLE_ILP64
+    return aocl_lapack_sla_gerpvgrw(n, ncols, a, lda, af, ldaf);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t ncols_64 = *ncols;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t ldaf_64 = *ldaf;
+
+    return aocl_lapack_sla_gerpvgrw(&n_64, &ncols_64, a, &lda_64, af, &ldaf_64);
+#endif
+}
+
+real aocl_lapack_sla_gerpvgrw(aocl_int64_t *n, aocl_int64_t *ncols, real *a, aocl_int64_t *lda,
+                              real *af, aocl_int64_t *ldaf)
 {
     /* System generated locals */
-    integer a_dim1, a_offset, af_dim1, af_offset, i__1, i__2;
+    aocl_int64_t a_dim1, a_offset, af_dim1, af_offset, i__1, i__2;
     real ret_val, r__1, r__2;
     /* Local variables */
-    integer i__, j;
+    aocl_int64_t i__, j;
     real amax, umax, rpvgrw;
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */

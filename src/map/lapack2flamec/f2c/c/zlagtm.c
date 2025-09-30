@@ -141,23 +141,40 @@ otherwise, */
 /* > \ingroup complex16OTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-void zlagtm_(char *trans, integer *n, integer *nrhs, doublereal *alpha, doublecomplex *dl,
-             doublecomplex *d__, doublecomplex *du, doublecomplex *x, integer *ldx,
-             doublereal *beta, doublecomplex *b, integer *ldb)
+/** Generated wrapper function */
+void zlagtm_(char *trans, aocl_int_t *n, aocl_int_t *nrhs, doublereal *alpha, dcomplex *dl,
+             dcomplex *d__, dcomplex *du, dcomplex *x, aocl_int_t *ldx,
+             doublereal *beta, dcomplex *b, aocl_int_t *ldb)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_zlagtm(trans, n, nrhs, alpha, dl, d__, du, x, ldx, beta, b, ldb);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t nrhs_64 = *nrhs;
+    aocl_int64_t ldx_64 = *ldx;
+    aocl_int64_t ldb_64 = *ldb;
+
+    aocl_lapack_zlagtm(trans, &n_64, &nrhs_64, alpha, dl, d__, du, x, &ldx_64, beta, b, &ldb_64);
+#endif
+}
+
+void aocl_lapack_zlagtm(char *trans, aocl_int64_t *n, aocl_int64_t *nrhs, doublereal *alpha,
+                        dcomplex *dl, dcomplex *d__, dcomplex *du, dcomplex *x,
+                        aocl_int64_t *ldx, doublereal *beta, dcomplex *b, aocl_int64_t *ldb)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zlagtm inputs: trans %c, n %" FLA_IS ", nrhs %" FLA_IS ", ldx %" FLA_IS
                       ", ldb %" FLA_IS "",
                       *trans, *n, *nrhs, *ldx, *ldb);
     /* System generated locals */
-    integer b_dim1, b_offset, x_dim1, x_offset, i__1, i__2, i__3, i__4, i__5, i__6, i__7, i__8,
+    aocl_int64_t b_dim1, b_offset, x_dim1, x_offset, i__1, i__2, i__3, i__4, i__5, i__6, i__7, i__8,
         i__9, i__10;
-    doublecomplex z__1, z__2, z__3, z__4, z__5, z__6, z__7, z__8, z__9;
+    dcomplex z__1, z__2, z__3, z__4, z__5, z__6, z__7, z__8, z__9;
     /* Builtin functions */
-    void d_cnjg(doublecomplex *, doublecomplex *);
+    void d_cnjg(dcomplex *, dcomplex *);
     /* Local variables */
-    integer i__, j;
-    extern logical lsame_(char *, char *, integer, integer);
+    aocl_int64_t i__, j;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */

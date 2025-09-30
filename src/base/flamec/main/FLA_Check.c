@@ -1002,7 +1002,7 @@ FLA_Error FLA_Check_pivot_index_range( FLA_Obj p, fla_dim_t k1, fla_dim_t k2 )
     return e_val;
 
   // FGVZ: Note that we don't need to test if k1 < 0 since the type is an
-  // unsigned integer. Same goes for k2 < 0. If we ever wanted to allow
+  // unsigned fla_dim_t. Same goes for k2 < 0. If we ever wanted to allow
   // the caller to specify the index range k1:k2 == -1:0, which would
   // result in no action. If this "no-op" behavior is needed, then k1 and
   // k2 should be type re-declared as ints.

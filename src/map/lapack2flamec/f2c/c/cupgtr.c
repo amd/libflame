@@ -37,7 +37,7 @@
 /* > */
 /* > \verbatim */
 /* > */
-/* > CUPGTR generates a complex unitary matrix Q which is defined as the */
+/* > CUPGTR generates a scomplex unitary matrix Q which is defined as the */
 /* > product of n-1 elementary reflectors H(i) of order n, as returned by */
 /* > CHPTRD using packed storage: */
 /* > */
@@ -110,8 +110,25 @@
 /* > \ingroup complexOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void cupgtr_(char *uplo, integer *n, complex *ap, complex *tau, complex *q, integer *ldq,
-             complex *work, integer *info)
+/** Generated wrapper function */
+void cupgtr_(char *uplo, aocl_int_t *n, scomplex *ap, scomplex *tau, scomplex *q, aocl_int_t *ldq,
+             scomplex *work, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_cupgtr(uplo, n, ap, tau, q, ldq, work, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t ldq_64 = *ldq;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_cupgtr(uplo, &n_64, ap, tau, q, &ldq_64, work, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_cupgtr(char *uplo, aocl_int64_t *n, scomplex *ap, scomplex *tau, scomplex *q,
+                        aocl_int64_t *ldq, scomplex *work, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -121,19 +138,12 @@ void cupgtr_(char *uplo, integer *n, complex *ap, complex *tau, complex *q, inte
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
-    integer q_dim1, q_offset, i__1, i__2, i__3, i__4;
+    aocl_int64_t q_dim1, q_offset, i__1, i__2, i__3, i__4;
     /* Local variables */
-    integer i__, j, ij;
-    extern logical lsame_(char *, char *, integer, integer);
-    integer iinfo;
+    aocl_int64_t i__, j, ij;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    aocl_int64_t iinfo;
     logical upper;
-    extern /* Subroutine */
-        void
-        cung2l_(integer *, integer *, integer *, complex *, integer *, complex *, complex *,
-                integer *),
-        cung2r_(integer *, integer *, integer *, complex *, integer *, complex *, complex *,
-                integer *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -180,7 +190,7 @@ void cupgtr_(char *uplo, integer *n, complex *ap, complex *tau, complex *q, inte
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("CUPGTR", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("CUPGTR", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
@@ -231,7 +241,7 @@ void cupgtr_(char *uplo, integer *n, complex *ap, complex *tau, complex *q, inte
         i__1 = *n - 1;
         i__2 = *n - 1;
         i__3 = *n - 1;
-        cung2l_(&i__1, &i__2, &i__3, &q[q_offset], ldq, &tau[1], &work[1], &iinfo);
+        aocl_lapack_cung2l(&i__1, &i__2, &i__3, &q[q_offset], ldq, &tau[1], &work[1], &iinfo);
     }
     else
     {
@@ -276,7 +286,8 @@ void cupgtr_(char *uplo, integer *n, complex *ap, complex *tau, complex *q, inte
             i__1 = *n - 1;
             i__2 = *n - 1;
             i__3 = *n - 1;
-            cung2r_(&i__1, &i__2, &i__3, &q[(q_dim1 << 1) + 2], ldq, &tau[1], &work[1], &iinfo);
+            aocl_lapack_cung2r(&i__1, &i__2, &i__3, &q[(q_dim1 << 1) + 2], ldq, &tau[1], &work[1],
+                               &iinfo);
         }
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);

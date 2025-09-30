@@ -95,7 +95,7 @@ if a diagonal is smaller */
 /* > SCALE1 is DOUBLE PRECISION */
 /* > A scaling factor used to avoid over-/underflow in the */
 /* > eigenvalue equation which defines the first eigenvalue. If */
-/* > the eigenvalues are complex, then the eigenvalues are */
+/* > the eigenvalues are scomplex, then the eigenvalues are */
 /* > ( WR1 +/- WI i ) / SCALE1 (which may lie outside the */
 /* > exponent range of the machine), SCALE1=SCALE2, and SCALE1 */
 /* > will always be positive. If the eigenvalues are real, then */
@@ -110,7 +110,7 @@ if a diagonal is smaller */
 /* > SCALE2 is DOUBLE PRECISION */
 /* > A scaling factor used to avoid over-/underflow in the */
 /* > eigenvalue equation which defines the second eigenvalue. If */
-/* > the eigenvalues are complex, then SCALE2=SCALE1. If the */
+/* > the eigenvalues are scomplex, then SCALE2=SCALE1. If the */
 /* > eigenvalues are real, then the second (real) eigenvalue is */
 /* > WR2 / SCALE2 , but this may overflow or underflow, and in */
 /* > fact, SCALE2 may be zero or less than the underflow */
@@ -122,7 +122,7 @@ if a diagonal is smaller */
 /* > WR1 is DOUBLE PRECISION */
 /* > If the eigenvalue is real, then WR1 is SCALE1 times the */
 /* > eigenvalue closest to the (2,2) element of A B**(-1). If the */
-/* > eigenvalue is complex, then WR1=WR2 is SCALE1 times the real */
+/* > eigenvalue is scomplex, then WR1=WR2 is SCALE1 times the real */
 /* > part of the eigenvalues. */
 /* > \endverbatim */
 /* > */
@@ -130,7 +130,7 @@ if a diagonal is smaller */
 /* > \verbatim */
 /* > WR2 is DOUBLE PRECISION */
 /* > If the eigenvalue is real, then WR2 is SCALE2 times the */
-/* > other eigenvalue. If the eigenvalue is complex, then */
+/* > other eigenvalue. If the eigenvalue is scomplex, then */
 /* > WR1=WR2 is SCALE1 times the real part of the eigenvalues. */
 /* > \endverbatim */
 /* > */
@@ -138,7 +138,7 @@ if a diagonal is smaller */
 /* > \verbatim */
 /* > WI is DOUBLE PRECISION */
 /* > If the eigenvalue is real, then WI is zero. If the */
-/* > eigenvalue is complex, then WI is SCALE1 times the imaginary */
+/* > eigenvalue is scomplex, then WI is SCALE1 times the imaginary */
 /* > part of the eigenvalues. WI will always be non-negative. */
 /* > \endverbatim */
 /* Authors: */
@@ -151,14 +151,29 @@ if a diagonal is smaller */
 /* > \ingroup doubleOTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-void dlag2_(doublereal *a, integer *lda, doublereal *b, integer *ldb, doublereal *safmin,
+/** Generated wrapper function */
+void dlag2_(doublereal *a, aocl_int_t *lda, doublereal *b, aocl_int_t *ldb, doublereal *safmin,
             doublereal *scale1, doublereal *scale2, doublereal *wr1, doublereal *wr2,
             doublereal *wi)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_dlag2(a, lda, b, ldb, safmin, scale1, scale2, wr1, wr2, wi);
+#else
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t ldb_64 = *ldb;
+
+    aocl_lapack_dlag2(a, &lda_64, b, &ldb_64, safmin, scale1, scale2, wr1, wr2, wi);
+#endif
+}
+
+void aocl_lapack_dlag2(doublereal *a, aocl_int64_t *lda, doublereal *b, aocl_int64_t *ldb,
+                       doublereal *safmin, doublereal *scale1, doublereal *scale2, doublereal *wr1,
+                       doublereal *wr2, doublereal *wi)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dlag2 inputs: lda %" FLA_IS ", ldb %" FLA_IS "", *lda, *ldb);
     /* System generated locals */
-    integer a_dim1, a_offset, b_dim1, b_offset;
+    aocl_int64_t a_dim1, a_offset, b_dim1, b_offset;
     doublereal d__1, d__2, d__3, d__4, d__5, d__6;
     /* Builtin functions */
     double sqrt(doublereal), d_sign(doublereal *, doublereal *);

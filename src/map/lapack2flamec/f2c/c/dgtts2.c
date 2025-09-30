@@ -125,17 +125,34 @@ IPIV(i) = i indicates a row interchange was not */
 /* > \ingroup doubleGTcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void dgtts2_(integer *itrans, integer *n, integer *nrhs, doublereal *dl, doublereal *d__,
-             doublereal *du, doublereal *du2, integer *ipiv, doublereal *b, integer *ldb)
+/** Generated wrapper function */
+void dgtts2_(aocl_int_t *itrans, aocl_int_t *n, aocl_int_t *nrhs, doublereal *dl, doublereal *d__,
+             doublereal *du, doublereal *du2, aocl_int_t *ipiv, doublereal *b, aocl_int_t *ldb)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_dgtts2(itrans, n, nrhs, dl, d__, du, du2, ipiv, b, ldb);
+#else
+    aocl_int64_t itrans_64 = *itrans;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t nrhs_64 = *nrhs;
+    aocl_int64_t ldb_64 = *ldb;
+
+    aocl_lapack_dgtts2(&itrans_64, &n_64, &nrhs_64, dl, d__, du, du2, ipiv, b, &ldb_64);
+#endif
+}
+
+void aocl_lapack_dgtts2(aocl_int64_t *itrans, aocl_int64_t *n, aocl_int64_t *nrhs, doublereal *dl,
+                        doublereal *d__, doublereal *du, doublereal *du2, aocl_int_t *ipiv,
+                        doublereal *b, aocl_int64_t *ldb)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dgtts2 inputs: itrans %" FLA_IS ", n %" FLA_IS ", nrhs %" FLA_IS
                       ", ldb %" FLA_IS "",
                       *itrans, *n, *nrhs, *ldb);
     /* System generated locals */
-    integer b_dim1, b_offset, i__1, i__2;
+    aocl_int64_t b_dim1, b_offset, i__1, i__2;
     /* Local variables */
-    integer i__, j, ip;
+    aocl_int64_t i__, j, ip;
     doublereal temp;
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */

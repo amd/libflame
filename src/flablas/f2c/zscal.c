@@ -1,11 +1,11 @@
 /* zscal.f -- translated by f2c (version 19991025). You must link the resulting object file with the libraries: -lf2c -lm (in that order) */
 #include "FLA_f2c.h"
 /* Subroutine */
-int zscal_(integer *n, doublecomplex *za, doublecomplex *zx, integer *incx)
+int zscal_(integer *n, dcomplex *za, dcomplex *zx, integer *incx)
 {
     /* System generated locals */
     integer i__1, i__2, i__3;
-    doublecomplex z__1;
+    dcomplex z__1;
     /* Local variables */
     integer i__, ix;
     /* scales a vector by a constant. */

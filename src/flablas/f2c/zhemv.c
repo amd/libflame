@@ -1,17 +1,17 @@
 /* zhemv.f -- translated by f2c (version 19991025). You must link the resulting object file with the libraries: -lf2c -lm (in that order) */
 #include "FLA_f2c.h"
 /* Subroutine */
-int zhemv_(char *uplo, integer *n, doublecomplex *alpha, doublecomplex *a, integer *lda, doublecomplex *x, integer *incx, doublecomplex *beta, doublecomplex *y, integer *incy)
+int zhemv_(char *uplo, integer *n, dcomplex *alpha, dcomplex *a, integer *lda, dcomplex *x, integer *incx, dcomplex *beta, dcomplex *y, integer *incy)
 {
     /* System generated locals */
     integer a_dim1, a_offset, i__1, i__2, i__3, i__4, i__5;
     doublereal d__1;
-    doublecomplex z__1, z__2, z__3, z__4;
+    dcomplex z__1, z__2, z__3, z__4;
     /* Builtin functions */
-    void d_cnjg(doublecomplex *, doublecomplex *);
+    void d_cnjg(dcomplex *, dcomplex *);
     /* Local variables */
     integer info;
-    doublecomplex temp1, temp2;
+    dcomplex temp1, temp2;
     integer i__, j;
     extern logical lsame_(char *, char *, integer, integer);
     integer ix, iy, jx, jy, kx, ky;

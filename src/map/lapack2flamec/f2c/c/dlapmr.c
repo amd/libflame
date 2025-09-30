@@ -99,16 +99,32 @@
 /* > \ingroup doubleOTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-void dlapmr_(logical *forwrd, integer *m, integer *n, doublereal *x, integer *ldx, integer *k)
+/** Generated wrapper function */
+void dlapmr_(logical *forwrd, aocl_int_t *m, aocl_int_t *n, doublereal *x, aocl_int_t *ldx,
+             aocl_int_t *k)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_dlapmr(forwrd, m, n, x, ldx, k);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t ldx_64 = *ldx;
+
+    aocl_lapack_dlapmr(forwrd, &m_64, &n_64, x, &ldx_64, k);
+#endif
+}
+
+void aocl_lapack_dlapmr(logical *forwrd, aocl_int64_t *m, aocl_int64_t *n, doublereal *x,
+                        aocl_int64_t *ldx, aocl_int_t *k)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dlapmr inputs: forward %" FLA_IS ", m %" FLA_IS ", n %" FLA_IS
                       ", ldx %" FLA_IS ", k %" FLA_IS "",
                       *forwrd, *m, *n, *ldx, *k);
     /* System generated locals */
-    integer x_dim1, x_offset, i__1, i__2;
+    aocl_int64_t x_dim1, x_offset, i__1, i__2;
     /* Local variables */
-    integer i__, j, jj, in;
+    aocl_int64_t i__, j, jj, in;
     doublereal temp;
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -170,7 +186,7 @@ void dlapmr_(logical *forwrd, integer *m, integer *n, doublereal *x, integer *ld
             in = k[in];
             goto L20;
         L40: /* L50: */
-             ;
+            ;
         }
     }
     else
@@ -202,7 +218,7 @@ void dlapmr_(logical *forwrd, integer *m, integer *n, doublereal *x, integer *ld
             j = k[j];
             goto L60;
         L80: /* L90: */
-             ;
+            ;
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT

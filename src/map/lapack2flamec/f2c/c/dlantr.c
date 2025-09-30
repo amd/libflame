@@ -4,7 +4,7 @@
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
  /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
+static aocl_int64_t c__1 = 1;
 /* > \brief \b DLANTR returns the value of the 1-norm, or the Frobenius norm, or the infinity norm,
  * or the ele ment of largest absolute value of a trapezoidal or triangular matrix. */
 /* =========== DOCUMENTATION =========== */
@@ -137,8 +137,23 @@ otherwise, WORK is not */
 /* > \author NAG Ltd. */
 /* > \ingroup doubleOTHERauxiliary */
 /* ===================================================================== */
-doublereal dlantr_(char *norm, char *uplo, char *diag, integer *m, integer *n, doublereal *a,
-                   integer *lda, doublereal *work)
+/** Generated wrapper function */
+doublereal dlantr_(char *norm, char *uplo, char *diag, aocl_int_t *m, aocl_int_t *n, doublereal *a,
+                   aocl_int_t *lda, doublereal *work)
+{
+#if FLA_ENABLE_ILP64
+    return aocl_lapack_dlantr(norm, uplo, diag, m, n, a, lda, work);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t lda_64 = *lda;
+
+    return aocl_lapack_dlantr(norm, uplo, diag, &m_64, &n_64, a, &lda_64, work);
+#endif
+}
+
+doublereal aocl_lapack_dlantr(char *norm, char *uplo, char *diag, aocl_int64_t *m, aocl_int64_t *n,
+                              doublereal *a, aocl_int64_t *lda, doublereal *work)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dlantr inputs: norm %c, uplo %c, diag %c, m %" FLA_IS ", n %" FLA_IS
@@ -146,19 +161,16 @@ doublereal dlantr_(char *norm, char *uplo, char *diag, integer *m, integer *n, d
                       *norm, *uplo, *diag, *m, *n, *lda);
 
     /* System generated locals */
-    integer a_dim1, a_offset, i__1, i__2, i__3, i__4;
+    aocl_int64_t a_dim1, a_offset, i__1, i__2, i__3, i__4;
     doublereal ret_val, d__1;
     /* Builtin functions */
     double sqrt(doublereal);
     /* Local variables */
-    integer i__, j;
+    aocl_int64_t i__, j;
     doublereal sum, scale;
     logical udiag;
-    extern logical lsame_(char *, char *, integer, integer);
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     doublereal value;
-    extern /* Subroutine */
-        void
-        dlassq_(integer *, doublereal *, integer *, doublereal *, doublereal *);
     /* -- LAPACK auxiliary routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -472,7 +484,7 @@ doublereal dlantr_(char *norm, char *uplo, char *diag, integer *m, integer *n, d
                     i__3 = *m;
                     i__4 = j - 1; // , expr subst
                     i__2 = fla_min(i__3, i__4);
-                    dlassq_(&i__2, &a[j * a_dim1 + 1], &c__1, &scale, &sum);
+                    aocl_lapack_dlassq(&i__2, &a[j * a_dim1 + 1], &c__1, &scale, &sum);
                     /* L290: */
                 }
             }
@@ -484,7 +496,7 @@ doublereal dlantr_(char *norm, char *uplo, char *diag, integer *m, integer *n, d
                 for(j = 1; j <= i__1; ++j)
                 {
                     i__2 = fla_min(*m, j);
-                    dlassq_(&i__2, &a[j * a_dim1 + 1], &c__1, &scale, &sum);
+                    aocl_lapack_dlassq(&i__2, &a[j * a_dim1 + 1], &c__1, &scale, &sum);
                     /* L300: */
                 }
             }
@@ -502,7 +514,7 @@ doublereal dlantr_(char *norm, char *uplo, char *diag, integer *m, integer *n, d
                     /* Computing MIN */
                     i__3 = *m;
                     i__4 = j + 1; // , expr subst
-                    dlassq_(&i__2, &a[fla_min(i__3, i__4) + j * a_dim1], &c__1, &scale, &sum);
+                    aocl_lapack_dlassq(&i__2, &a[fla_min(i__3, i__4) + j * a_dim1], &c__1, &scale, &sum);
                     /* L310: */
                 }
             }
@@ -514,7 +526,7 @@ doublereal dlantr_(char *norm, char *uplo, char *diag, integer *m, integer *n, d
                 for(j = 1; j <= i__1; ++j)
                 {
                     i__2 = *m - j + 1;
-                    dlassq_(&i__2, &a[j + j * a_dim1], &c__1, &scale, &sum);
+                    aocl_lapack_dlassq(&i__2, &a[j + j * a_dim1], &c__1, &scale, &sum);
                     /* L320: */
                 }
             }

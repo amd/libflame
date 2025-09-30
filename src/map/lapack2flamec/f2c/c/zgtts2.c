@@ -125,8 +125,26 @@ IPIV(i) = i indicates a row interchange was not */
 /* > \ingroup complex16GTcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void zgtts2_(integer *itrans, integer *n, integer *nrhs, doublecomplex *dl, doublecomplex *d__,
-             doublecomplex *du, doublecomplex *du2, integer *ipiv, doublecomplex *b, integer *ldb)
+/** Generated wrapper function */
+void zgtts2_(aocl_int_t *itrans, aocl_int_t *n, aocl_int_t *nrhs, dcomplex *dl,
+             dcomplex *d__, dcomplex *du, dcomplex *du2, aocl_int_t *ipiv,
+             dcomplex *b, aocl_int_t *ldb)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_zgtts2(itrans, n, nrhs, dl, d__, du, du2, ipiv, b, ldb);
+#else
+    aocl_int64_t itrans_64 = *itrans;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t nrhs_64 = *nrhs;
+    aocl_int64_t ldb_64 = *ldb;
+
+    aocl_lapack_zgtts2(&itrans_64, &n_64, &nrhs_64, dl, d__, du, du2, ipiv, b, &ldb_64);
+#endif
+}
+
+void aocl_lapack_zgtts2(aocl_int64_t *itrans, aocl_int64_t *n, aocl_int64_t *nrhs,
+                        dcomplex *dl, dcomplex *d__, dcomplex *du,
+                        dcomplex *du2, aocl_int_t *ipiv, dcomplex *b, aocl_int64_t *ldb)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zgtts2 inputs: itrans %" FLA_IS ", n %" FLA_IS ", nrhs %" FLA_IS
@@ -134,14 +152,14 @@ void zgtts2_(integer *itrans, integer *n, integer *nrhs, doublecomplex *dl, doub
                       *itrans, *n, *nrhs, *ldb);
 
     /* System generated locals */
-    integer b_dim1, b_offset, i__1, i__2, i__3, i__4, i__5, i__6, i__7, i__8;
-    doublecomplex z__1, z__2, z__3, z__4, z__5, z__6, z__7, z__8;
+    aocl_int64_t b_dim1, b_offset, i__1, i__2, i__3, i__4, i__5, i__6, i__7, i__8;
+    dcomplex z__1, z__2, z__3, z__4, z__5, z__6, z__7, z__8;
     /* Builtin functions */
-    void z_div(doublecomplex *, doublecomplex *, doublecomplex *),
-        d_cnjg(doublecomplex *, doublecomplex *);
+    void z_div(dcomplex *, dcomplex *, dcomplex *),
+        d_cnjg(dcomplex *, dcomplex *);
     /* Local variables */
-    integer i__, j;
-    doublecomplex temp;
+    aocl_int64_t i__, j;
+    dcomplex temp;
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */

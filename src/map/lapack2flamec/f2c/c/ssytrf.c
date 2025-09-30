@@ -4,9 +4,9 @@
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
  /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
-static integer c_n1 = -1;
-static integer c__2 = 2;
+static aocl_int64_t c__1 = 1;
+static aocl_int64_t c_n1 = -1;
+static aocl_int64_t c__2 = 2;
 /* > \brief \b SSYTRF */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -182,31 +182,38 @@ the routine */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void ssytrf_(char *uplo, integer *n, real *a, integer *lda, integer *ipiv, real *work,
-             integer *lwork, integer *info)
+/** Generated wrapper function */
+void ssytrf_(char *uplo, aocl_int_t *n, real *a, aocl_int_t *lda, aocl_int_t *ipiv, real *work,
+             aocl_int_t *lwork, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_ssytrf(uplo, n, a, lda, ipiv, work, lwork, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t lwork_64 = *lwork;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_ssytrf(uplo, &n_64, a, &lda_64, ipiv, work, &lwork_64, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_ssytrf(char *uplo, aocl_int64_t *n, real *a, aocl_int64_t *lda, aocl_int_t *ipiv,
+                        real *work, aocl_int64_t *lwork, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF("ssytrf inputs: uplo %c, n %" FLA_IS ", lda %" FLA_IS "", *uplo, *n,
-             *lda);
+    AOCL_DTL_SNPRINTF("ssytrf inputs: uplo %c, n %" FLA_IS ", lda %" FLA_IS "", *uplo, *n, *lda);
     /* System generated locals */
-    integer a_dim1, a_offset, i__1, i__2;
+    aocl_int64_t a_dim1, a_offset, i__1, i__2;
     /* Local variables */
-    integer j, k, kb, nb, iws;
-    extern logical lsame_(char *, char *, integer, integer);
-    integer nbmin, iinfo;
+    aocl_int64_t j, k, kb, nb, iws;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    aocl_int64_t nbmin, iinfo;
     logical upper;
-    extern /* Subroutine */
-        void
-        ssytf2_(char *, integer *, real *, integer *, integer *, integer *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
-    extern /* Subroutine */
-        void
-        slasyf_(char *, integer *, integer *, integer *, real *, integer *, integer *, real *,
-                integer *, integer *);
-    integer ldwork, lwkopt;
+    aocl_int64_t ldwork, lwkopt;
     logical lquery;
-    extern real sroundup_lwork(integer *);
     /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -254,17 +261,17 @@ void ssytrf_(char *uplo, integer *n, real *a, integer *lda, integer *ipiv, real 
     if(*info == 0)
     {
         /* Determine the block size */
-        nb = ilaenv_(&c__1, "SSYTRF", uplo, n, &c_n1, &c_n1, &c_n1);
+        nb = aocl_lapack_ilaenv(&c__1, "SSYTRF", uplo, n, &c_n1, &c_n1, &c_n1);
         /* Computing MAX */
         i__1 = 1;
         i__2 = *n * nb; // , expr subst
         lwkopt = fla_max(i__1, i__2);
-        work[1] = sroundup_lwork(&lwkopt);
+        work[1] = aocl_lapack_sroundup_lwork(&lwkopt);
     }
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("SSYTRF", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("SSYTRF", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -285,7 +292,8 @@ void ssytrf_(char *uplo, integer *n, real *a, integer *lda, integer *ipiv, real 
             nb = fla_max(i__1, 1);
             /* Computing MAX */
             i__1 = 2;
-            i__2 = ilaenv_(&c__2, "SSYTRF", uplo, n, &c_n1, &c_n1, &c_n1); // , expr subst
+            i__2
+                = aocl_lapack_ilaenv(&c__2, "SSYTRF", uplo, n, &c_n1, &c_n1, &c_n1); // , expr subst
             nbmin = fla_max(i__1, i__2);
         }
     }
@@ -314,12 +322,13 @@ void ssytrf_(char *uplo, integer *n, real *a, integer *lda, integer *ipiv, real 
         {
             /* Factorize columns k-kb+1:k of A and use blocked code to */
             /* update columns 1:k-kb */
-            slasyf_(uplo, &k, &nb, &kb, &a[a_offset], lda, &ipiv[1], &work[1], &ldwork, &iinfo);
+            aocl_lapack_slasyf(uplo, &k, &nb, &kb, &a[a_offset], lda, &ipiv[1], &work[1], &ldwork,
+                               &iinfo);
         }
         else
         {
             /* Use unblocked code to factorize columns 1:k of A */
-            ssytf2_(uplo, &k, &a[a_offset], lda, &ipiv[1], &iinfo);
+            aocl_lapack_ssytf2(uplo, &k, &a[a_offset], lda, &ipiv[1], &iinfo);
             kb = k;
         }
         /* Set INFO on the first occurrence of a zero pivot */
@@ -349,14 +358,14 @@ void ssytrf_(char *uplo, integer *n, real *a, integer *lda, integer *ipiv, real 
             /* Factorize columns k:k+kb-1 of A and use blocked code to */
             /* update columns k+kb:n */
             i__1 = *n - k + 1;
-            slasyf_(uplo, &i__1, &nb, &kb, &a[k + k * a_dim1], lda, &ipiv[k], &work[1], &ldwork,
-                    &iinfo);
+            aocl_lapack_slasyf(uplo, &i__1, &nb, &kb, &a[k + k * a_dim1], lda, &ipiv[k], &work[1],
+                               &ldwork, &iinfo);
         }
         else
         {
             /* Use unblocked code to factorize columns k:n of A */
             i__1 = *n - k + 1;
-            ssytf2_(uplo, &i__1, &a[k + k * a_dim1], lda, &ipiv[k], &iinfo);
+            aocl_lapack_ssytf2(uplo, &i__1, &a[k + k * a_dim1], lda, &ipiv[k], &iinfo);
             kb = *n - k + 1;
         }
         /* Set INFO on the first occurrence of a zero pivot */
@@ -370,11 +379,11 @@ void ssytrf_(char *uplo, integer *n, real *a, integer *lda, integer *ipiv, real 
         {
             if(ipiv[j] > 0)
             {
-                ipiv[j] = ipiv[j] + k - 1;
+                ipiv[j] = (aocl_int_t)(ipiv[j] + k - 1);
             }
             else
             {
-                ipiv[j] = ipiv[j] - k + 1;
+                ipiv[j] = (aocl_int_t)(ipiv[j] - k + 1);
             }
             /* L30: */
         }
@@ -383,7 +392,7 @@ void ssytrf_(char *uplo, integer *n, real *a, integer *lda, integer *ipiv, real 
         goto L20;
     }
 L40:
-    work[1] = sroundup_lwork(&lwkopt);
+    work[1] = aocl_lapack_sroundup_lwork(&lwkopt);
     AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SSYTRF */

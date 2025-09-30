@@ -38,7 +38,7 @@
 /* > */
 /* > \verbatim */
 /* > */
-/* > CLASR applies a sequence of real plane rotations to a complex matrix */
+/* > CLASR applies a sequence of real plane rotations to a scomplex matrix */
 /* > A, from either the left or the right. */
 /* > */
 /* > When SIDE = 'L', the transformation takes the form */
@@ -195,8 +195,23 @@
 /* > \ingroup complexOTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-void clasr_(char *side, char *pivot, char *direct, integer *m, integer *n, real *c__, real *s,
-            complex *a, integer *lda)
+/** Generated wrapper function */
+void clasr_(char *side, char *pivot, char *direct, aocl_int_t *m, aocl_int_t *n, real *c__, real *s,
+            scomplex *a, aocl_int_t *lda)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_clasr(side, pivot, direct, m, n, c__, s, a, lda);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t lda_64 = *lda;
+
+    aocl_lapack_clasr(side, pivot, direct, &m_64, &n_64, c__, s, a, &lda_64);
+#endif
+}
+
+void aocl_lapack_clasr(char *side, char *pivot, char *direct, aocl_int64_t *m, aocl_int64_t *n,
+                       real *c__, real *s, scomplex *a, aocl_int64_t *lda)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -211,16 +226,13 @@ void clasr_(char *side, char *pivot, char *direct, integer *m, integer *n, real 
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
-    integer a_dim1, a_offset, i__1, i__2, i__3, i__4;
-    complex q__1, q__2, q__3;
+    aocl_int64_t a_dim1, a_offset, i__1, i__2, i__3, i__4;
+    scomplex q__1, q__2, q__3;
     /* Local variables */
-    integer i__, j, info;
-    complex temp;
-    extern logical lsame_(char *, char *, integer, integer);
+    aocl_int64_t i__, j, info;
+    scomplex temp;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     real ctemp, stemp;
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -276,7 +288,7 @@ void clasr_(char *side, char *pivot, char *direct, integer *m, integer *n, real 
     }
     if(info != 0)
     {
-        xerbla_("CLASR ", &info, (ftnlen)6);
+        aocl_blas_xerbla("CLASR ", &info, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }

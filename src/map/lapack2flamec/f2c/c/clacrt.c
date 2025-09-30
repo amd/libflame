@@ -3,7 +3,7 @@
  on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
-#include "FLA_f2c.h" /* > \brief \b CLACRT performs a linear transformation of a pair of complex vectors. */
+#include "FLA_f2c.h" /* > \brief \b CLACRT performs a linear transformation of a pair of scomplex vectors. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
@@ -42,7 +42,7 @@
 /* > ( c s )( x ) ==> ( x ) */
 /* > ( -s c )( y ) ( y ) */
 /* > */
-/* > where c and s are complex and the vectors x and y are complex. */
+/* > where c and s are scomplex and the vectors x and y are scomplex. */
 /* > \endverbatim */
 /* Arguments: */
 /* ========== */
@@ -100,8 +100,23 @@
 /* > \ingroup complexOTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-void clacrt_(integer *n, complex *cx, integer *incx, complex *cy, integer *incy, complex *c__,
-             complex *s)
+/** Generated wrapper function */
+void clacrt_(aocl_int_t *n, scomplex *cx, aocl_int_t *incx, scomplex *cy, aocl_int_t *incy,
+             scomplex *c__, scomplex *s)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_clacrt(n, cx, incx, cy, incy, c__, s);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t incx_64 = *incx;
+    aocl_int64_t incy_64 = *incy;
+
+    aocl_lapack_clacrt(&n_64, cx, &incx_64, cy, &incy_64, c__, s);
+#endif
+}
+
+void aocl_lapack_clacrt(aocl_int64_t *n, scomplex *cx, aocl_int64_t *incx, scomplex *cy,
+                        aocl_int64_t *incy, scomplex *c__, scomplex *s)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -114,11 +129,11 @@ void clacrt_(integer *n, complex *cx, integer *incx, complex *cy, integer *incy,
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
-    integer i__1, i__2, i__3, i__4;
-    complex q__1, q__2, q__3;
+    aocl_int64_t i__1, i__2, i__3, i__4;
+    scomplex q__1, q__2, q__3;
     /* Local variables */
-    integer i__, ix, iy;
-    complex ctemp;
+    aocl_int64_t i__, ix, iy;
+    scomplex ctemp;
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */

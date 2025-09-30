@@ -4,8 +4,8 @@
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
  /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
-static integer c_n1 = -1;
+static aocl_int64_t c__1 = 1;
+static aocl_int64_t c_n1 = -1;
 /* > \brief <b> SSYSVX computes the solution to system of linear equations A * X = B for SY
  * matrices</b> */
 /* =========== DOCUMENTATION =========== */
@@ -281,46 +281,53 @@ the routine */
 /* > \ingroup hesvx */
 /* ===================================================================== */
 /* Subroutine */
-void ssysvx_(char *fact, char *uplo, integer *n, integer *nrhs, real *a, integer *lda, real *af,
-             integer *ldaf, integer *ipiv, real *b, integer *ldb, real *x, integer *ldx,
-             real *rcond, real *ferr, real *berr, real *work, integer *lwork, integer *iwork,
-             integer *info)
+/** Generated wrapper function */
+void ssysvx_(char *fact, char *uplo, aocl_int_t *n, aocl_int_t *nrhs, real *a, aocl_int_t *lda,
+             real *af, aocl_int_t *ldaf, aocl_int_t *ipiv, real *b, aocl_int_t *ldb, real *x,
+             aocl_int_t *ldx, real *rcond, real *ferr, real *berr, real *work, aocl_int_t *lwork,
+             aocl_int_t *iwork, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_ssysvx(fact, uplo, n, nrhs, a, lda, af, ldaf, ipiv, b, ldb, x, ldx, rcond, ferr,
+                       berr, work, lwork, iwork, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t nrhs_64 = *nrhs;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t ldaf_64 = *ldaf;
+    aocl_int64_t ldb_64 = *ldb;
+    aocl_int64_t ldx_64 = *ldx;
+    aocl_int64_t lwork_64 = *lwork;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_ssysvx(fact, uplo, &n_64, &nrhs_64, a, &lda_64, af, &ldaf_64, ipiv, b, &ldb_64, x,
+                       &ldx_64, rcond, ferr, berr, work, &lwork_64, iwork, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_ssysvx(char *fact, char *uplo, aocl_int64_t *n, aocl_int64_t *nrhs, real *a,
+                        aocl_int64_t *lda, real *af, aocl_int64_t *ldaf, aocl_int_t *ipiv, real *b,
+                        aocl_int64_t *ldb, real *x, aocl_int64_t *ldx, real *rcond, real *ferr,
+                        real *berr, real *work, aocl_int64_t *lwork, aocl_int_t *iwork,
+                        aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF(
-             "ssysvx inputs: fact %c, uplo %c, n %" FLA_IS ", nrhs %" FLA_IS ", lda %" FLA_IS
-             ", ldaf %" FLA_IS ", ldb %" FLA_IS ", ldx %" FLA_IS "",
-             *fact, *uplo, *n, *nrhs, *lda, *ldaf, *ldb, *ldx);
+    AOCL_DTL_SNPRINTF("ssysvx inputs: fact %c, uplo %c, n %" FLA_IS ", nrhs %" FLA_IS
+                      ", lda %" FLA_IS ", ldaf %" FLA_IS ", ldb %" FLA_IS ", ldx %" FLA_IS "",
+                      *fact, *uplo, *n, *nrhs, *lda, *ldaf, *ldb, *ldx);
     /* System generated locals */
-    integer a_dim1, a_offset, af_dim1, af_offset, b_dim1, b_offset, x_dim1, x_offset, i__1, i__2;
+    aocl_int64_t a_dim1, a_offset, af_dim1, af_offset, b_dim1, b_offset, x_dim1, x_offset, i__1,
+        i__2;
     /* Local variables */
-    integer nb;
-    extern logical lsame_(char *, char *, integer, integer);
+    aocl_int64_t nb;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     real anorm;
     extern real slamch_(char *);
     logical nofact;
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
-    extern /* Subroutine */
-        void
-        slacpy_(char *, integer *, integer *, real *, integer *, real *, integer *);
-    extern real slansy_(char *, char *, integer *, real *, integer *, real *);
-    extern /* Subroutine */
-        void
-        ssycon_(char *, integer *, real *, integer *, integer *, real *, real *, real *, integer *,
-                integer *);
-    integer lwkopt;
+    aocl_int64_t lwkopt;
     logical lquery;
-    extern /* Subroutine */
-        void
-        ssyrfs_(char *, integer *, integer *, real *, integer *, real *, integer *, integer *,
-                real *, integer *, real *, integer *, real *, real *, real *, integer *, integer *),
-        ssytrf_(char *, integer *, real *, integer *, integer *, real *, integer *, integer *),
-        ssytrs_(char *, integer *, integer *, real *, integer *, integer *, real *, integer *,
-                integer *);
-    extern real sroundup_lwork(integer *);
     /* -- LAPACK driver routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -413,18 +420,18 @@ void ssysvx_(char *fact, char *uplo, integer *n, integer *nrhs, real *a, integer
         lwkopt = fla_max(i__1, i__2);
         if(nofact)
         {
-            nb = ilaenv_(&c__1, "SSYTRF", uplo, n, &c_n1, &c_n1, &c_n1);
+            nb = aocl_lapack_ilaenv(&c__1, "SSYTRF", uplo, n, &c_n1, &c_n1, &c_n1);
             /* Computing MAX */
             i__1 = lwkopt;
             i__2 = *n * nb; // , expr subst
             lwkopt = fla_max(i__1, i__2);
         }
-        work[1] = sroundup_lwork(&lwkopt);
+        work[1] = aocl_lapack_sroundup_lwork(&lwkopt);
     }
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("SSYSVX", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("SSYSVX", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -436,8 +443,8 @@ void ssysvx_(char *fact, char *uplo, integer *n, integer *nrhs, real *a, integer
     if(nofact)
     {
         /* Compute the factorization A = U*D*U**T or A = L*D*L**T. */
-        slacpy_(uplo, n, n, &a[a_offset], lda, &af[af_offset], ldaf);
-        ssytrf_(uplo, n, &af[af_offset], ldaf, &ipiv[1], &work[1], lwork, info);
+        aocl_lapack_slacpy(uplo, n, n, &a[a_offset], lda, &af[af_offset], ldaf);
+        aocl_lapack_ssytrf(uplo, n, &af[af_offset], ldaf, &ipiv[1], &work[1], lwork, info);
         /* Return if INFO is non-zero. */
         if(*info > 0)
         {
@@ -447,22 +454,24 @@ void ssysvx_(char *fact, char *uplo, integer *n, integer *nrhs, real *a, integer
         }
     }
     /* Compute the norm of the matrix A. */
-    anorm = slansy_("I", uplo, n, &a[a_offset], lda, &work[1]);
+    anorm = aocl_lapack_slansy("I", uplo, n, &a[a_offset], lda, &work[1]);
     /* Compute the reciprocal of the condition number of A. */
-    ssycon_(uplo, n, &af[af_offset], ldaf, &ipiv[1], &anorm, rcond, &work[1], &iwork[1], info);
+    aocl_lapack_ssycon(uplo, n, &af[af_offset], ldaf, &ipiv[1], &anorm, rcond, &work[1], &iwork[1],
+                       info);
     /* Compute the solution vectors X. */
-    slacpy_("Full", n, nrhs, &b[b_offset], ldb, &x[x_offset], ldx);
-    ssytrs_(uplo, n, nrhs, &af[af_offset], ldaf, &ipiv[1], &x[x_offset], ldx, info);
+    aocl_lapack_slacpy("Full", n, nrhs, &b[b_offset], ldb, &x[x_offset], ldx);
+    aocl_lapack_ssytrs(uplo, n, nrhs, &af[af_offset], ldaf, &ipiv[1], &x[x_offset], ldx, info);
     /* Use iterative refinement to improve the computed solutions and */
     /* compute error bounds and backward error estimates for them. */
-    ssyrfs_(uplo, n, nrhs, &a[a_offset], lda, &af[af_offset], ldaf, &ipiv[1], &b[b_offset], ldb,
-            &x[x_offset], ldx, &ferr[1], &berr[1], &work[1], &iwork[1], info);
+    aocl_lapack_ssyrfs(uplo, n, nrhs, &a[a_offset], lda, &af[af_offset], ldaf, &ipiv[1],
+                       &b[b_offset], ldb, &x[x_offset], ldx, &ferr[1], &berr[1], &work[1],
+                       &iwork[1], info);
     /* Set INFO = N+1 if the matrix is singular to working precision. */
     if(*rcond < slamch_("Epsilon"))
     {
         *info = *n + 1;
     }
-    work[1] = sroundup_lwork(&lwkopt);
+    work[1] = aocl_lapack_sroundup_lwork(&lwkopt);
     AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of SSYSVX */

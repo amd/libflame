@@ -13,10 +13,10 @@
 FLA_Error FLA_Eig_gest_il_opt_var2( FLA_Obj A, FLA_Obj Y, FLA_Obj B )
 {
   FLA_Datatype datatype;
-  integer          m_AB;
-  integer          rs_A, cs_A;
-  integer          rs_B, cs_B;
-  integer          inc_y;
+  fla_dim_t          m_AB;
+  fla_dim_t          rs_A, cs_A;
+  fla_dim_t          rs_B, cs_B;
+  fla_dim_t          inc_y;
   FLA_Obj      yT, yB;
 
   datatype = FLA_Obj_datatype( A );
@@ -98,16 +98,16 @@ FLA_Error FLA_Eig_gest_il_opt_var2( FLA_Obj A, FLA_Obj Y, FLA_Obj B )
 
 
 
-FLA_Error FLA_Eig_gest_il_ops_var2( integer m_AB,
-                                    float* buff_A, integer rs_A, integer cs_A, 
-                                    float* buff_y, integer inc_y, 
-                                    float* buff_B, integer rs_B, integer cs_B )
+FLA_Error FLA_Eig_gest_il_ops_var2( fla_dim_t m_AB,
+                                    float* buff_A, fla_dim_t rs_A, fla_dim_t cs_A, 
+                                    float* buff_y, fla_dim_t inc_y, 
+                                    float* buff_B, fla_dim_t rs_B, fla_dim_t cs_B )
 {
   float*    buff_1   = FLA_FLOAT_PTR( FLA_ONE );
   float*    buff_1h  = FLA_FLOAT_PTR( FLA_ONE_HALF );
   float*    buff_0   = FLA_FLOAT_PTR( FLA_ZERO );
   float*    buff_m1  = FLA_FLOAT_PTR( FLA_MINUS_ONE );
-  integer       i;
+  fla_dim_t       i;
 
   for ( i = 0; i < m_AB; ++i )
   {
@@ -122,8 +122,8 @@ FLA_Error FLA_Eig_gest_il_ops_var2( integer m_AB,
     float*    b10t     = buff_B + (0  )*cs_B + (i  )*rs_B;
     float*    beta11   = buff_B + (i  )*cs_B + (i  )*rs_B;
 
-    integer       m_ahead  = m_AB - i - 1;
-    integer       m_behind = i;
+    fla_dim_t       m_ahead  = m_AB - i - 1;
+    fla_dim_t       m_behind = i;
 
     /*------------------------------------------------------------*/
 
@@ -199,16 +199,16 @@ FLA_Error FLA_Eig_gest_il_ops_var2( integer m_AB,
 
 
 
-FLA_Error FLA_Eig_gest_il_opd_var2( integer m_AB,
-                                    double* buff_A, integer rs_A, integer cs_A, 
-                                    double* buff_y, integer inc_y, 
-                                    double* buff_B, integer rs_B, integer cs_B )
+FLA_Error FLA_Eig_gest_il_opd_var2( fla_dim_t m_AB,
+                                    double* buff_A, fla_dim_t rs_A, fla_dim_t cs_A, 
+                                    double* buff_y, fla_dim_t inc_y, 
+                                    double* buff_B, fla_dim_t rs_B, fla_dim_t cs_B )
 {
   double*   buff_1   = FLA_DOUBLE_PTR( FLA_ONE );
   double*   buff_1h  = FLA_DOUBLE_PTR( FLA_ONE_HALF );
   double*   buff_0   = FLA_DOUBLE_PTR( FLA_ZERO );
   double*   buff_m1  = FLA_DOUBLE_PTR( FLA_MINUS_ONE );
-  integer       i;
+  fla_dim_t       i;
 
   for ( i = 0; i < m_AB; ++i )
   {
@@ -223,8 +223,8 @@ FLA_Error FLA_Eig_gest_il_opd_var2( integer m_AB,
     double*   b10t     = buff_B + (0  )*cs_B + (i  )*rs_B;
     double*   beta11   = buff_B + (i  )*cs_B + (i  )*rs_B;
 
-    integer       m_ahead  = m_AB - i - 1;
-    integer       m_behind = i;
+    fla_dim_t       m_ahead  = m_AB - i - 1;
+    fla_dim_t       m_behind = i;
 
     /*------------------------------------------------------------*/
 
@@ -300,16 +300,16 @@ FLA_Error FLA_Eig_gest_il_opd_var2( integer m_AB,
 
 
 
-FLA_Error FLA_Eig_gest_il_opc_var2( integer m_AB,
-                                    scomplex* buff_A, integer rs_A, integer cs_A, 
-                                    scomplex* buff_y, integer inc_y, 
-                                    scomplex* buff_B, integer rs_B, integer cs_B )
+FLA_Error FLA_Eig_gest_il_opc_var2( fla_dim_t m_AB,
+                                    scomplex* buff_A, fla_dim_t rs_A, fla_dim_t cs_A, 
+                                    scomplex* buff_y, fla_dim_t inc_y, 
+                                    scomplex* buff_B, fla_dim_t rs_B, fla_dim_t cs_B )
 {
   scomplex* buff_1   = FLA_COMPLEX_PTR( FLA_ONE );
   scomplex* buff_1h  = FLA_COMPLEX_PTR( FLA_ONE_HALF );
   scomplex* buff_0   = FLA_COMPLEX_PTR( FLA_ZERO );
   scomplex* buff_m1  = FLA_COMPLEX_PTR( FLA_MINUS_ONE );
-  integer       i;
+  fla_dim_t       i;
 
   for ( i = 0; i < m_AB; ++i )
   {
@@ -324,8 +324,8 @@ FLA_Error FLA_Eig_gest_il_opc_var2( integer m_AB,
     scomplex* b10t     = buff_B + (0  )*cs_B + (i  )*rs_B;
     scomplex* beta11   = buff_B + (i  )*cs_B + (i  )*rs_B;
 
-    integer       m_ahead  = m_AB - i - 1;
-    integer       m_behind = i;
+    fla_dim_t       m_ahead  = m_AB - i - 1;
+    fla_dim_t       m_behind = i;
 
     /*------------------------------------------------------------*/
 
@@ -401,16 +401,16 @@ FLA_Error FLA_Eig_gest_il_opc_var2( integer m_AB,
 
 
 
-FLA_Error FLA_Eig_gest_il_opz_var2( integer m_AB,
-                                    dcomplex* buff_A, integer rs_A, integer cs_A, 
-                                    dcomplex* buff_y, integer inc_y, 
-                                    dcomplex* buff_B, integer rs_B, integer cs_B )
+FLA_Error FLA_Eig_gest_il_opz_var2( fla_dim_t m_AB,
+                                    dcomplex* buff_A, fla_dim_t rs_A, fla_dim_t cs_A, 
+                                    dcomplex* buff_y, fla_dim_t inc_y, 
+                                    dcomplex* buff_B, fla_dim_t rs_B, fla_dim_t cs_B )
 {
   dcomplex* buff_1   = FLA_DOUBLE_COMPLEX_PTR( FLA_ONE );
   dcomplex* buff_1h  = FLA_DOUBLE_COMPLEX_PTR( FLA_ONE_HALF );
   dcomplex* buff_0   = FLA_DOUBLE_COMPLEX_PTR( FLA_ZERO );
   dcomplex* buff_m1  = FLA_DOUBLE_COMPLEX_PTR( FLA_MINUS_ONE );
-  integer       i;
+  fla_dim_t       i;
 
   for ( i = 0; i < m_AB; ++i )
   {
@@ -425,8 +425,8 @@ FLA_Error FLA_Eig_gest_il_opz_var2( integer m_AB,
     dcomplex* b10t     = buff_B + (0  )*cs_B + (i  )*rs_B;
     dcomplex* beta11   = buff_B + (i  )*cs_B + (i  )*rs_B;
 
-    integer       m_ahead  = m_AB - i - 1;
-    integer       m_behind = i;
+    fla_dim_t       m_ahead  = m_AB - i - 1;
+    fla_dim_t       m_behind = i;
 
     /*------------------------------------------------------------*/
 

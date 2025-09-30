@@ -4,9 +4,9 @@
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
  /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static doublecomplex c_b1 = {0., 0.};
-static doublecomplex c_b2 = {1., 0.};
-static integer c__1 = 1;
+static dcomplex c_b1 = {{0.}, {0.}};
+static dcomplex c_b2 = {{1.}, {0.}};
+static aocl_int64_t c__1 = 1;
 /* > \brief \b ZTGEVC */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -46,9 +46,9 @@ static integer c__1 = 1;
 /* > \verbatim */
 /* > */
 /* > ZTGEVC computes some or all of the right and/or left eigenvectors of */
-/* > a pair of complex matrices (S,P), where S and P are upper triangular. */
+/* > a pair of scomplex matrices (S,P), where S and P are upper triangular. */
 /* > Matrix pairs of this type are produced by the generalized Schur */
-/* > factorization of a complex matrix pair (A,B): */
+/* > factorization of a scomplex matrix pair (A,B): */
 /* > */
 /* > A = Q*S*Z**H, B = Q*P*Z**H */
 /* > */
@@ -223,10 +223,38 @@ static integer c__1 = 1;
 /* > \ingroup tgevc */
 /* ===================================================================== */
 /* Subroutine */
-void ztgevc_(char *side, char *howmny, logical *select, integer *n, doublecomplex *s, integer *lds,
-             doublecomplex *p, integer *ldp, doublecomplex *vl, integer *ldvl, doublecomplex *vr,
-             integer *ldvr, integer *mm, integer *m, doublecomplex *work, doublereal *rwork,
-             integer *info)
+/** Generated wrapper function */
+void ztgevc_(char *side, char *howmny, logical *select, aocl_int_t *n, dcomplex *s,
+             aocl_int_t *lds, dcomplex *p, aocl_int_t *ldp, dcomplex *vl,
+             aocl_int_t *ldvl, dcomplex *vr, aocl_int_t *ldvr, aocl_int_t *mm, aocl_int_t *m,
+             dcomplex *work, doublereal *rwork, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_ztgevc(side, howmny, select, n, s, lds, p, ldp, vl, ldvl, vr, ldvr, mm, m, work,
+                       rwork, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t lds_64 = *lds;
+    aocl_int64_t ldp_64 = *ldp;
+    aocl_int64_t ldvl_64 = *ldvl;
+    aocl_int64_t ldvr_64 = *ldvr;
+    aocl_int64_t mm_64 = *mm;
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_ztgevc(side, howmny, select, &n_64, s, &lds_64, p, &ldp_64, vl, &ldvl_64, vr,
+                       &ldvr_64, &mm_64, &m_64, work, rwork, &info_64);
+
+    *m = (aocl_int_t)m_64;
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_ztgevc(char *side, char *howmny, logical *select, aocl_int64_t *n,
+                        dcomplex *s, aocl_int64_t *lds, dcomplex *p, aocl_int64_t *ldp,
+                        dcomplex *vl, aocl_int64_t *ldvl, dcomplex *vr,
+                        aocl_int64_t *ldvr, aocl_int64_t *mm, aocl_int64_t *m, dcomplex *work,
+                        doublereal *rwork, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("ztgevc inputs: side %c, howmny %c, n %" FLA_IS ", lds %" FLA_IS
@@ -234,57 +262,50 @@ void ztgevc_(char *side, char *howmny, logical *select, integer *n, doublecomple
                       ", m %" FLA_IS "",
                       *side, *howmny, *n, *lds, *ldp, *ldvl, *ldvr, *mm, *m);
     /* System generated locals */
-    integer p_dim1, p_offset, s_dim1, s_offset, vl_dim1, vl_offset, vr_dim1, vr_offset, i__1, i__2,
-        i__3, i__4, i__5;
+    aocl_int64_t p_dim1, p_offset, s_dim1, s_offset, vl_dim1, vl_offset, vr_dim1, vr_offset, i__1,
+        i__2, i__3, i__4, i__5;
     doublereal d__1, d__2, d__3, d__4, d__5, d__6;
-    doublecomplex z__1, z__2, z__3, z__4;
+    dcomplex z__1, z__2, z__3, z__4;
     /* Builtin functions */
-    double d_imag(doublecomplex *);
-    void d_cnjg(doublecomplex *, doublecomplex *);
+    double d_imag(dcomplex *);
+    void d_cnjg(dcomplex *, dcomplex *);
     /* Local variables */
-    doublecomplex d__;
-    integer i__, j;
-    doublecomplex ca, cb;
-    integer je, im, jr;
+    dcomplex d__;
+    aocl_int64_t i__, j;
+    dcomplex ca, cb;
+    aocl_int64_t je, im, jr;
     doublereal big;
     logical lsa, lsb;
     doublereal ulp;
-    doublecomplex sum;
-    integer ibeg, ieig, iend;
+    dcomplex sum;
+    aocl_int64_t ibeg, ieig, iend;
     doublereal dmin__;
-    integer isrc;
+    aocl_int64_t isrc;
     doublereal temp;
-    doublecomplex suma, sumb;
+    dcomplex suma, sumb;
     doublereal xmax, scale;
     logical ilall;
-    integer iside;
+    aocl_int64_t iside;
     doublereal sbeta;
-    extern logical lsame_(char *, char *, integer, integer);
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     doublereal small_val;
     logical compl ;
     doublereal anorm, bnorm;
     logical compr;
-    extern /* Subroutine */
-        void
-        zgemv_(char *, integer *, integer *, doublecomplex *, doublecomplex *, integer *,
-               doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *);
     logical ilbbad;
     doublereal acoefa, bcoefa, acoeff;
-    doublecomplex bcoeff;
+    dcomplex bcoeff;
     logical ilback;
     doublereal ascale, bscale;
     extern doublereal dlamch_(char *);
-    doublecomplex salpha;
+    dcomplex salpha;
     doublereal safmin;
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal bignum;
     logical ilcomp;
     extern /* Double Complex */
         void
-        zladiv_f2c_(doublecomplex *, doublecomplex *, doublecomplex *);
-    integer ihwmny;
+        zladiv_f2c_(dcomplex *, dcomplex *, dcomplex *);
+    aocl_int64_t ihwmny;
     /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -396,7 +417,7 @@ void ztgevc_(char *side, char *howmny, logical *select, integer *n, doublecomple
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("ZTGEVC", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("ZTGEVC", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -448,7 +469,7 @@ void ztgevc_(char *side, char *howmny, logical *select, integer *n, doublecomple
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("ZTGEVC", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("ZTGEVC", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -580,7 +601,8 @@ void ztgevc_(char *side, char *howmny, logical *select, integer *n, doublecomple
                 lsa = f2c_dabs(sbeta) >= safmin && f2c_dabs(acoeff) < small_val;
                 lsb = (d__1 = salpha.r, f2c_dabs(d__1)) + (d__2 = d_imag(&salpha), f2c_dabs(d__2))
                           >= safmin
-                      && (d__3 = bcoeff.r, f2c_dabs(d__3)) + (d__4 = d_imag(&bcoeff), f2c_dabs(d__4))
+                      && (d__3 = bcoeff.r, f2c_dabs(d__3))
+                                 + (d__4 = d_imag(&bcoeff), f2c_dabs(d__4))
                              < small_val;
                 scale = 1.;
                 if(lsa)
@@ -634,7 +656,8 @@ void ztgevc_(char *side, char *howmny, logical *select, integer *n, doublecomple
                     }
                 }
                 acoefa = f2c_dabs(acoeff);
-                bcoefa = (d__1 = bcoeff.r, f2c_dabs(d__1)) + (d__2 = d_imag(&bcoeff), f2c_dabs(d__2));
+                bcoefa
+                    = (d__1 = bcoeff.r, f2c_dabs(d__1)) + (d__2 = d_imag(&bcoeff), f2c_dabs(d__2));
                 xmax = 1.;
                 i__2 = *n;
                 for(jr = 1; jr <= i__2; ++jr)
@@ -781,8 +804,8 @@ void ztgevc_(char *side, char *howmny, logical *select, integer *n, doublecomple
                 if(ilback)
                 {
                     i__2 = *n + 1 - je;
-                    zgemv_("N", n, &i__2, &c_b2, &vl[je * vl_dim1 + 1], ldvl, &work[je], &c__1,
-                           &c_b1, &work[*n + 1], &c__1);
+                    aocl_blas_zgemv("N", n, &i__2, &c_b2, &vl[je * vl_dim1 + 1], ldvl, &work[je],
+                                    &c__1, &c_b1, &work[*n + 1], &c__1);
                     isrc = 2;
                     ibeg = 1;
                 }
@@ -905,7 +928,8 @@ void ztgevc_(char *side, char *howmny, logical *select, integer *n, doublecomple
                 lsa = f2c_dabs(sbeta) >= safmin && f2c_dabs(acoeff) < small_val;
                 lsb = (d__1 = salpha.r, f2c_dabs(d__1)) + (d__2 = d_imag(&salpha), f2c_dabs(d__2))
                           >= safmin
-                      && (d__3 = bcoeff.r, f2c_dabs(d__3)) + (d__4 = d_imag(&bcoeff), f2c_dabs(d__4))
+                      && (d__3 = bcoeff.r, f2c_dabs(d__3))
+                                 + (d__4 = d_imag(&bcoeff), f2c_dabs(d__4))
                              < small_val;
                 scale = 1.;
                 if(lsa)
@@ -959,7 +983,8 @@ void ztgevc_(char *side, char *howmny, logical *select, integer *n, doublecomple
                     }
                 }
                 acoefa = f2c_dabs(acoeff);
-                bcoefa = (d__1 = bcoeff.r, f2c_dabs(d__1)) + (d__2 = d_imag(&bcoeff), f2c_dabs(d__2));
+                bcoefa
+                    = (d__1 = bcoeff.r, f2c_dabs(d__1)) + (d__2 = d_imag(&bcoeff), f2c_dabs(d__2));
                 xmax = 1.;
                 i__1 = *n;
                 for(jr = 1; jr <= i__1; ++jr)
@@ -1116,8 +1141,8 @@ void ztgevc_(char *side, char *howmny, logical *select, integer *n, doublecomple
                 /* Back transform eigenvector if HOWMNY='B'. */
                 if(ilback)
                 {
-                    zgemv_("N", n, &je, &c_b2, &vr[vr_offset], ldvr, &work[1], &c__1, &c_b1,
-                           &work[*n + 1], &c__1);
+                    aocl_blas_zgemv("N", n, &je, &c_b2, &vr[vr_offset], ldvr, &work[1], &c__1,
+                                    &c_b1, &work[*n + 1], &c__1);
                     isrc = 2;
                     iend = *n;
                 }

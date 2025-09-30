@@ -11,10 +11,10 @@
 
 #if FLA_ENABLE_AMD_OPT
 
-int fla_zscal_ix1_avx512(integer *n, doublecomplex *alpha, doublecomplex *x)
+int fla_zscal_ix1_avx512(aocl_int64_t *n, dcomplex *alpha, dcomplex *x)
 {
     /* Local variables */
-    integer i__1, i;
+    aocl_int64_t i__1, i;
     __m512d alpha512_real, alpha512_img, ar512, ai512;
     __m256d alpha256_real, alpha256_img, ar256, ai256;
     __m128d alpha128_real, alpha128_img, ar128, ai128;
@@ -49,7 +49,7 @@ int fla_zscal_ix1_avx512(integer *n, doublecomplex *alpha, doublecomplex *x)
     /* Code for increments equal to 1 only */
     for(i = 0; i < (i__1 - 7); i += 8)
     {
-        /* load complex inputs */
+        /* load scomplex inputs */
         xv512[0] = _mm512_loadu_pd((double const *)&x[i]);
         xv512[1] = _mm512_loadu_pd((double const *)&x[i + 4]);
 
@@ -72,7 +72,7 @@ int fla_zscal_ix1_avx512(integer *n, doublecomplex *alpha, doublecomplex *x)
 
     for(; i < (i__1 - 3); i += 4)
     {
-        /* load complex inputs */
+        /* load scomplex inputs */
         xv512[0] = _mm512_loadu_pd((double const *)&x[i]);
 
         /* shuffle the loaded inputs */
@@ -89,7 +89,7 @@ int fla_zscal_ix1_avx512(integer *n, doublecomplex *alpha, doublecomplex *x)
 
     for(; i < (i__1 - 1); i += 2)
     {
-        /* load complex inputs */
+        /* load scomplex inputs */
         xv256[0] = _mm256_loadu_pd((double const *)&x[i]);
 
         /* shuffle the loaded inputs */

@@ -4,13 +4,13 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static doublecomplex c_b1 = {0., 0.};
-static integer c__2 = 2;
-static integer c_n1 = -1;
-static integer c__5 = 5;
-static integer c__1 = 1;
-static doublecomplex c_b44 = {-1., 0.};
-static doublecomplex c_b45 = {1., 0.};
+static dcomplex c_b1 = {{0.}, {0.}};
+static aocl_int64_t c__2 = 2;
+static aocl_int64_t c_n1 = -1;
+static aocl_int64_t c__5 = 5;
+static aocl_int64_t c__1 = 1;
+static dcomplex c_b44 = {{-1.}, {0.}};
+static dcomplex c_b45 = {{1.}, {0.}};
 /* > \brief \b ZTGSYL */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -59,7 +59,7 @@ static doublecomplex c_b45 = {1., 0.};
 /* > */
 /* > where R and L are unknown m-by-n matrices, (A, D), (B, E) and */
 /* > (C, F) are given matrix pairs of size m-by-m, n-by-n and m-by-n, */
-/* > respectively, with complex entries. A, B, D and E are upper */
+/* > respectively, with scomplex entries. A, B, D and E are upper */
 /* > triangular (i.e., (A,D) and (B,E) in generalized Schur form). */
 /* > */
 /* > The solution (R, L) overwrites (C, F). 0 <= SCALE <= 1 */
@@ -296,11 +296,43 @@ the routine */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void ztgsyl_(char *trans, integer *ijob, integer *m, integer *n, doublecomplex *a, integer *lda,
-             doublecomplex *b, integer *ldb, doublecomplex *c__, integer *ldc, doublecomplex *d__,
-             integer *ldd, doublecomplex *e, integer *lde, doublecomplex *f, integer *ldf,
-             doublereal *scale, doublereal *dif, doublecomplex *work, integer *lwork,
-             integer *iwork, integer *info)
+/** Generated wrapper function */
+void ztgsyl_(char *trans, aocl_int_t *ijob, aocl_int_t *m, aocl_int_t *n, dcomplex *a,
+             aocl_int_t *lda, dcomplex *b, aocl_int_t *ldb, dcomplex *c__,
+             aocl_int_t *ldc, dcomplex *d__, aocl_int_t *ldd, dcomplex *e,
+             aocl_int_t *lde, dcomplex *f, aocl_int_t *ldf, doublereal *scale, doublereal *dif,
+             dcomplex *work, aocl_int_t *lwork, aocl_int_t *iwork, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_ztgsyl(trans, ijob, m, n, a, lda, b, ldb, c__, ldc, d__, ldd, e, lde, f, ldf, scale,
+                       dif, work, lwork, iwork, info);
+#else
+    aocl_int64_t ijob_64 = *ijob;
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t ldb_64 = *ldb;
+    aocl_int64_t ldc_64 = *ldc;
+    aocl_int64_t ldd_64 = *ldd;
+    aocl_int64_t lde_64 = *lde;
+    aocl_int64_t ldf_64 = *ldf;
+    aocl_int64_t lwork_64 = *lwork;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_ztgsyl(trans, &ijob_64, &m_64, &n_64, a, &lda_64, b, &ldb_64, c__, &ldc_64, d__,
+                       &ldd_64, e, &lde_64, f, &ldf_64, scale, dif, work, &lwork_64, iwork,
+                       &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_ztgsyl(char *trans, aocl_int64_t *ijob, aocl_int64_t *m, aocl_int64_t *n,
+                        dcomplex *a, aocl_int64_t *lda, dcomplex *b, aocl_int64_t *ldb,
+                        dcomplex *c__, aocl_int64_t *ldc, dcomplex *d__,
+                        aocl_int64_t *ldd, dcomplex *e, aocl_int64_t *lde, dcomplex *f,
+                        aocl_int64_t *ldf, doublereal *scale, doublereal *dif, dcomplex *work,
+                        aocl_int64_t *lwork, aocl_int_t *iwork, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("ztgsyl inputs: trans %c, ijob %" FLA_IS ", m %" FLA_IS ", n %" FLA_IS
@@ -308,43 +340,22 @@ void ztgsyl_(char *trans, integer *ijob, integer *m, integer *n, doublecomplex *
                       ", lde %" FLA_IS ", ldf %" FLA_IS "",
                       *trans, *ijob, *m, *n, *lda, *ldb, *ldc, *ldd, *lde, *ldf);
     /* System generated locals */
-    integer a_dim1, a_offset, b_dim1, b_offset, c_dim1, c_offset, d_dim1, d_offset, e_dim1,
+    aocl_int64_t a_dim1, a_offset, b_dim1, b_offset, c_dim1, c_offset, d_dim1, d_offset, e_dim1,
         e_offset, f_dim1, f_offset, i__1, i__2, i__3, i__4;
-    doublecomplex z__1;
+    dcomplex z__1;
     /* Builtin functions */
     double sqrt(doublereal);
     /* Local variables */
-    integer i__, j, k, p, q, ie, je, mb, nb, is, js, pq;
+    aocl_int64_t i__, j, k, p, q, ie, je, mb, nb, is, js, pq;
     doublereal dsum;
-    extern logical lsame_(char *, char *, integer, integer);
-    integer ifunc, linfo;
-    extern /* Subroutine */
-        void
-        zscal_(integer *, doublecomplex *, doublecomplex *, integer *),
-        zgemm_(char *, char *, integer *, integer *, integer *, doublecomplex *, doublecomplex *,
-               integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *);
-    integer lwmin;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    aocl_int64_t ifunc, linfo;
+    aocl_int64_t lwmin;
     doublereal scale2, dscale;
-    extern /* Subroutine */
-        void
-        ztgsy2_(char *, integer *, integer *, integer *, doublecomplex *, integer *,
-                doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *,
-                doublecomplex *, integer *, doublecomplex *, integer *, doublereal *, doublereal *,
-                doublereal *, integer *);
     doublereal scaloc;
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
-    integer iround;
+    aocl_int64_t iround;
     logical notran;
-    integer isolve;
-    extern /* Subroutine */
-        void
-        zlacpy_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *,
-                integer *),
-        zlaset_(char *, integer *, integer *, doublecomplex *, doublecomplex *, doublecomplex *,
-                integer *);
+    aocl_int64_t isolve;
     logical lquery;
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -471,7 +482,7 @@ void ztgsyl_(char *trans, integer *ijob, integer *m, integer *n, doublecomplex *
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("ZTGSYL", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("ZTGSYL", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -495,8 +506,8 @@ void ztgsyl_(char *trans, integer *ijob, integer *m, integer *n, doublecomplex *
         return;
     }
     /* Determine optimal block sizes MB and NB */
-    mb = ilaenv_(&c__2, "ZTGSYL", trans, m, n, &c_n1, &c_n1);
-    nb = ilaenv_(&c__5, "ZTGSYL", trans, m, n, &c_n1, &c_n1);
+    mb = aocl_lapack_ilaenv(&c__2, "ZTGSYL", trans, m, n, &c_n1, &c_n1);
+    nb = aocl_lapack_ilaenv(&c__5, "ZTGSYL", trans, m, n, &c_n1, &c_n1);
     isolve = 1;
     ifunc = 0;
     if(notran)
@@ -504,8 +515,8 @@ void ztgsyl_(char *trans, integer *ijob, integer *m, integer *n, doublecomplex *
         if(*ijob >= 3)
         {
             ifunc = *ijob - 2;
-            zlaset_("F", m, n, &c_b1, &c_b1, &c__[c_offset], ldc);
-            zlaset_("F", m, n, &c_b1, &c_b1, &f[f_offset], ldf);
+            aocl_lapack_zlaset("F", m, n, &c_b1, &c_b1, &c__[c_offset], ldc);
+            aocl_lapack_zlaset("F", m, n, &c_b1, &c_b1, &f[f_offset], ldf);
         }
         else if(*ijob >= 1 && notran)
         {
@@ -522,9 +533,9 @@ void ztgsyl_(char *trans, integer *ijob, integer *m, integer *n, doublecomplex *
             dscale = 0.;
             dsum = 1.;
             pq = *m * *n;
-            ztgsy2_(trans, &ifunc, m, n, &a[a_offset], lda, &b[b_offset], ldb, &c__[c_offset], ldc,
-                    &d__[d_offset], ldd, &e[e_offset], lde, &f[f_offset], ldf, scale, &dsum,
-                    &dscale, info);
+            aocl_lapack_ztgsy2(trans, &ifunc, m, n, &a[a_offset], lda, &b[b_offset], ldb,
+                               &c__[c_offset], ldc, &d__[d_offset], ldd, &e[e_offset], lde,
+                               &f[f_offset], ldf, scale, &dsum, &dscale, info);
             if(dscale != 0.)
             {
                 if(*ijob == 1 || *ijob == 3)
@@ -543,15 +554,15 @@ void ztgsyl_(char *trans, integer *ijob, integer *m, integer *n, doublecomplex *
                     ifunc = *ijob;
                 }
                 scale2 = *scale;
-                zlacpy_("F", m, n, &c__[c_offset], ldc, &work[1], m);
-                zlacpy_("F", m, n, &f[f_offset], ldf, &work[*m * *n + 1], m);
-                zlaset_("F", m, n, &c_b1, &c_b1, &c__[c_offset], ldc);
-                zlaset_("F", m, n, &c_b1, &c_b1, &f[f_offset], ldf);
+                aocl_lapack_zlacpy("F", m, n, &c__[c_offset], ldc, &work[1], m);
+                aocl_lapack_zlacpy("F", m, n, &f[f_offset], ldf, &work[*m * *n + 1], m);
+                aocl_lapack_zlaset("F", m, n, &c_b1, &c_b1, &c__[c_offset], ldc);
+                aocl_lapack_zlaset("F", m, n, &c_b1, &c_b1, &f[f_offset], ldf);
             }
             else if(isolve == 2 && iround == 2)
             {
-                zlacpy_("F", m, n, &work[1], m, &c__[c_offset], ldc);
-                zlacpy_("F", m, n, &work[*m * *n + 1], m, &f[f_offset], ldf);
+                aocl_lapack_zlacpy("F", m, n, &work[1], m, &c__[c_offset], ldc);
+                aocl_lapack_zlacpy("F", m, n, &work[*m * *n + 1], m, &f[f_offset], ldf);
                 *scale = scale2;
             }
             /* L30: */
@@ -568,7 +579,7 @@ L40:
         goto L50;
     }
     ++p;
-    iwork[p] = i__;
+    iwork[p] = (aocl_int_t)(i__);
     i__ += mb;
     if(i__ >= *m)
     {
@@ -576,7 +587,7 @@ L40:
     }
     goto L40;
 L50:
-    iwork[p + 1] = *m + 1;
+    iwork[p + 1] = (aocl_int_t)(*m + 1);
     if(iwork[p] == iwork[p + 1])
     {
         --p;
@@ -590,7 +601,7 @@ L60:
         goto L70;
     }
     ++q;
-    iwork[q] = j;
+    iwork[q] = (aocl_int_t)(j);
     j += nb;
     if(j >= *n)
     {
@@ -598,7 +609,7 @@ L60:
     }
     goto L60;
 L70:
-    iwork[q + 1] = *n + 1;
+    iwork[q + 1] = (aocl_int_t)(*n + 1);
     if(iwork[q] == iwork[q + 1])
     {
         --q;
@@ -628,10 +639,10 @@ L70:
                     is = iwork[i__];
                     ie = iwork[i__ + 1] - 1;
                     mb = ie - is + 1;
-                    ztgsy2_(trans, &ifunc, &mb, &nb, &a[is + is * a_dim1], lda,
-                            &b[js + js * b_dim1], ldb, &c__[is + js * c_dim1], ldc,
-                            &d__[is + is * d_dim1], ldd, &e[js + js * e_dim1], lde,
-                            &f[is + js * f_dim1], ldf, &scaloc, &dsum, &dscale, &linfo);
+                    aocl_lapack_ztgsy2(trans, &ifunc, &mb, &nb, &a[is + is * a_dim1], lda,
+                                       &b[js + js * b_dim1], ldb, &c__[is + js * c_dim1], ldc,
+                                       &d__[is + is * d_dim1], ldd, &e[js + js * e_dim1], lde,
+                                       &f[is + js * f_dim1], ldf, &scaloc, &dsum, &dscale, &linfo);
                     if(linfo > 0)
                     {
                         *info = linfo;
@@ -644,10 +655,10 @@ L70:
                         {
                             z__1.r = scaloc;
                             z__1.i = 0.; // , expr subst
-                            zscal_(m, &z__1, &c__[k * c_dim1 + 1], &c__1);
+                            aocl_blas_zscal(m, &z__1, &c__[k * c_dim1 + 1], &c__1);
                             z__1.r = scaloc;
                             z__1.i = 0.; // , expr subst
-                            zscal_(m, &z__1, &f[k * f_dim1 + 1], &c__1);
+                            aocl_blas_zscal(m, &z__1, &f[k * f_dim1 + 1], &c__1);
                             /* L80: */
                         }
                         i__3 = je;
@@ -656,11 +667,11 @@ L70:
                             i__4 = is - 1;
                             z__1.r = scaloc;
                             z__1.i = 0.; // , expr subst
-                            zscal_(&i__4, &z__1, &c__[k * c_dim1 + 1], &c__1);
+                            aocl_blas_zscal(&i__4, &z__1, &c__[k * c_dim1 + 1], &c__1);
                             i__4 = is - 1;
                             z__1.r = scaloc;
                             z__1.i = 0.; // , expr subst
-                            zscal_(&i__4, &z__1, &f[k * f_dim1 + 1], &c__1);
+                            aocl_blas_zscal(&i__4, &z__1, &f[k * f_dim1 + 1], &c__1);
                             /* L90: */
                         }
                         i__3 = je;
@@ -669,11 +680,11 @@ L70:
                             i__4 = *m - ie;
                             z__1.r = scaloc;
                             z__1.i = 0.; // , expr subst
-                            zscal_(&i__4, &z__1, &c__[ie + 1 + k * c_dim1], &c__1);
+                            aocl_blas_zscal(&i__4, &z__1, &c__[ie + 1 + k * c_dim1], &c__1);
                             i__4 = *m - ie;
                             z__1.r = scaloc;
                             z__1.i = 0.; // , expr subst
-                            zscal_(&i__4, &z__1, &f[ie + 1 + k * f_dim1], &c__1);
+                            aocl_blas_zscal(&i__4, &z__1, &f[ie + 1 + k * f_dim1], &c__1);
                             /* L100: */
                         }
                         i__3 = *n;
@@ -681,10 +692,10 @@ L70:
                         {
                             z__1.r = scaloc;
                             z__1.i = 0.; // , expr subst
-                            zscal_(m, &z__1, &c__[k * c_dim1 + 1], &c__1);
+                            aocl_blas_zscal(m, &z__1, &c__[k * c_dim1 + 1], &c__1);
                             z__1.r = scaloc;
                             z__1.i = 0.; // , expr subst
-                            zscal_(m, &z__1, &f[k * f_dim1 + 1], &c__1);
+                            aocl_blas_zscal(m, &z__1, &f[k * f_dim1 + 1], &c__1);
                             /* L110: */
                         }
                         *scale *= scaloc;
@@ -693,22 +704,24 @@ L70:
                     if(i__ > 1)
                     {
                         i__3 = is - 1;
-                        zgemm_("N", "N", &i__3, &nb, &mb, &c_b44, &a[is * a_dim1 + 1], lda,
-                               &c__[is + js * c_dim1], ldc, &c_b45, &c__[js * c_dim1 + 1], ldc);
+                        aocl_blas_zgemm("N", "N", &i__3, &nb, &mb, &c_b44, &a[is * a_dim1 + 1], lda,
+                                        &c__[is + js * c_dim1], ldc, &c_b45, &c__[js * c_dim1 + 1],
+                                        ldc);
                         i__3 = is - 1;
-                        zgemm_("N", "N", &i__3, &nb, &mb, &c_b44, &d__[is * d_dim1 + 1], ldd,
-                               &c__[is + js * c_dim1], ldc, &c_b45, &f[js * f_dim1 + 1], ldf);
+                        aocl_blas_zgemm("N", "N", &i__3, &nb, &mb, &c_b44, &d__[is * d_dim1 + 1],
+                                        ldd, &c__[is + js * c_dim1], ldc, &c_b45,
+                                        &f[js * f_dim1 + 1], ldf);
                     }
                     if(j < q)
                     {
                         i__3 = *n - je;
-                        zgemm_("N", "N", &mb, &i__3, &nb, &c_b45, &f[is + js * f_dim1], ldf,
-                               &b[js + (je + 1) * b_dim1], ldb, &c_b45,
-                               &c__[is + (je + 1) * c_dim1], ldc);
+                        aocl_blas_zgemm("N", "N", &mb, &i__3, &nb, &c_b45, &f[is + js * f_dim1],
+                                        ldf, &b[js + (je + 1) * b_dim1], ldb, &c_b45,
+                                        &c__[is + (je + 1) * c_dim1], ldc);
                         i__3 = *n - je;
-                        zgemm_("N", "N", &mb, &i__3, &nb, &c_b45, &f[is + js * f_dim1], ldf,
-                               &e[js + (je + 1) * e_dim1], lde, &c_b45, &f[is + (je + 1) * f_dim1],
-                               ldf);
+                        aocl_blas_zgemm("N", "N", &mb, &i__3, &nb, &c_b45, &f[is + js * f_dim1],
+                                        ldf, &e[js + (je + 1) * e_dim1], lde, &c_b45,
+                                        &f[is + (je + 1) * f_dim1], ldf);
                     }
                     /* L120: */
                 }
@@ -732,15 +745,15 @@ L70:
                     ifunc = *ijob;
                 }
                 scale2 = *scale;
-                zlacpy_("F", m, n, &c__[c_offset], ldc, &work[1], m);
-                zlacpy_("F", m, n, &f[f_offset], ldf, &work[*m * *n + 1], m);
-                zlaset_("F", m, n, &c_b1, &c_b1, &c__[c_offset], ldc);
-                zlaset_("F", m, n, &c_b1, &c_b1, &f[f_offset], ldf);
+                aocl_lapack_zlacpy("F", m, n, &c__[c_offset], ldc, &work[1], m);
+                aocl_lapack_zlacpy("F", m, n, &f[f_offset], ldf, &work[*m * *n + 1], m);
+                aocl_lapack_zlaset("F", m, n, &c_b1, &c_b1, &c__[c_offset], ldc);
+                aocl_lapack_zlaset("F", m, n, &c_b1, &c_b1, &f[f_offset], ldf);
             }
             else if(isolve == 2 && iround == 2)
             {
-                zlacpy_("F", m, n, &work[1], m, &c__[c_offset], ldc);
-                zlacpy_("F", m, n, &work[*m * *n + 1], m, &f[f_offset], ldf);
+                aocl_lapack_zlacpy("F", m, n, &work[1], m, &c__[c_offset], ldc);
+                aocl_lapack_zlacpy("F", m, n, &work[*m * *n + 1], m, &f[f_offset], ldf);
                 *scale = scale2;
             }
             /* L150: */
@@ -766,10 +779,10 @@ L70:
                 js = iwork[j];
                 je = iwork[j + 1] - 1;
                 nb = je - js + 1;
-                ztgsy2_(trans, &ifunc, &mb, &nb, &a[is + is * a_dim1], lda, &b[js + js * b_dim1],
-                        ldb, &c__[is + js * c_dim1], ldc, &d__[is + is * d_dim1], ldd,
-                        &e[js + js * e_dim1], lde, &f[is + js * f_dim1], ldf, &scaloc, &dsum,
-                        &dscale, &linfo);
+                aocl_lapack_ztgsy2(trans, &ifunc, &mb, &nb, &a[is + is * a_dim1], lda,
+                                   &b[js + js * b_dim1], ldb, &c__[is + js * c_dim1], ldc,
+                                   &d__[is + is * d_dim1], ldd, &e[js + js * e_dim1], lde,
+                                   &f[is + js * f_dim1], ldf, &scaloc, &dsum, &dscale, &linfo);
                 if(linfo > 0)
                 {
                     *info = linfo;
@@ -781,10 +794,10 @@ L70:
                     {
                         z__1.r = scaloc;
                         z__1.i = 0.; // , expr subst
-                        zscal_(m, &z__1, &c__[k * c_dim1 + 1], &c__1);
+                        aocl_blas_zscal(m, &z__1, &c__[k * c_dim1 + 1], &c__1);
                         z__1.r = scaloc;
                         z__1.i = 0.; // , expr subst
-                        zscal_(m, &z__1, &f[k * f_dim1 + 1], &c__1);
+                        aocl_blas_zscal(m, &z__1, &f[k * f_dim1 + 1], &c__1);
                         /* L160: */
                     }
                     i__3 = je;
@@ -793,11 +806,11 @@ L70:
                         i__4 = is - 1;
                         z__1.r = scaloc;
                         z__1.i = 0.; // , expr subst
-                        zscal_(&i__4, &z__1, &c__[k * c_dim1 + 1], &c__1);
+                        aocl_blas_zscal(&i__4, &z__1, &c__[k * c_dim1 + 1], &c__1);
                         i__4 = is - 1;
                         z__1.r = scaloc;
                         z__1.i = 0.; // , expr subst
-                        zscal_(&i__4, &z__1, &f[k * f_dim1 + 1], &c__1);
+                        aocl_blas_zscal(&i__4, &z__1, &f[k * f_dim1 + 1], &c__1);
                         /* L170: */
                     }
                     i__3 = je;
@@ -806,11 +819,11 @@ L70:
                         i__4 = *m - ie;
                         z__1.r = scaloc;
                         z__1.i = 0.; // , expr subst
-                        zscal_(&i__4, &z__1, &c__[ie + 1 + k * c_dim1], &c__1);
+                        aocl_blas_zscal(&i__4, &z__1, &c__[ie + 1 + k * c_dim1], &c__1);
                         i__4 = *m - ie;
                         z__1.r = scaloc;
                         z__1.i = 0.; // , expr subst
-                        zscal_(&i__4, &z__1, &f[ie + 1 + k * f_dim1], &c__1);
+                        aocl_blas_zscal(&i__4, &z__1, &f[ie + 1 + k * f_dim1], &c__1);
                         /* L180: */
                     }
                     i__3 = *n;
@@ -818,10 +831,10 @@ L70:
                     {
                         z__1.r = scaloc;
                         z__1.i = 0.; // , expr subst
-                        zscal_(m, &z__1, &c__[k * c_dim1 + 1], &c__1);
+                        aocl_blas_zscal(m, &z__1, &c__[k * c_dim1 + 1], &c__1);
                         z__1.r = scaloc;
                         z__1.i = 0.; // , expr subst
-                        zscal_(m, &z__1, &f[k * f_dim1 + 1], &c__1);
+                        aocl_blas_zscal(m, &z__1, &f[k * f_dim1 + 1], &c__1);
                         /* L190: */
                     }
                     *scale *= scaloc;
@@ -830,20 +843,22 @@ L70:
                 if(j > p + 2)
                 {
                     i__3 = js - 1;
-                    zgemm_("N", "C", &mb, &i__3, &nb, &c_b45, &c__[is + js * c_dim1], ldc,
-                           &b[js * b_dim1 + 1], ldb, &c_b45, &f[is + f_dim1], ldf);
+                    aocl_blas_zgemm("N", "C", &mb, &i__3, &nb, &c_b45, &c__[is + js * c_dim1], ldc,
+                                    &b[js * b_dim1 + 1], ldb, &c_b45, &f[is + f_dim1], ldf);
                     i__3 = js - 1;
-                    zgemm_("N", "C", &mb, &i__3, &nb, &c_b45, &f[is + js * f_dim1], ldf,
-                           &e[js * e_dim1 + 1], lde, &c_b45, &f[is + f_dim1], ldf);
+                    aocl_blas_zgemm("N", "C", &mb, &i__3, &nb, &c_b45, &f[is + js * f_dim1], ldf,
+                                    &e[js * e_dim1 + 1], lde, &c_b45, &f[is + f_dim1], ldf);
                 }
                 if(i__ < p)
                 {
                     i__3 = *m - ie;
-                    zgemm_("C", "N", &i__3, &nb, &mb, &c_b44, &a[is + (ie + 1) * a_dim1], lda,
-                           &c__[is + js * c_dim1], ldc, &c_b45, &c__[ie + 1 + js * c_dim1], ldc);
+                    aocl_blas_zgemm("C", "N", &i__3, &nb, &mb, &c_b44, &a[is + (ie + 1) * a_dim1],
+                                    lda, &c__[is + js * c_dim1], ldc, &c_b45,
+                                    &c__[ie + 1 + js * c_dim1], ldc);
                     i__3 = *m - ie;
-                    zgemm_("C", "N", &i__3, &nb, &mb, &c_b44, &d__[is + (ie + 1) * d_dim1], ldd,
-                           &f[is + js * f_dim1], ldf, &c_b45, &c__[ie + 1 + js * c_dim1], ldc);
+                    aocl_blas_zgemm("C", "N", &i__3, &nb, &mb, &c_b44, &d__[is + (ie + 1) * d_dim1],
+                                    ldd, &f[is + js * f_dim1], ldf, &c_b45,
+                                    &c__[ie + 1 + js * c_dim1], ldc);
                 }
                 /* L200: */
             }

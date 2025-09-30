@@ -4,8 +4,8 @@
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
  /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static complex c_b1 = {1.f, 0.f};
-static integer c__1 = 1;
+static scomplex c_b1 = {{1.f}, {0.f}};
+static aocl_int64_t c__1 = 1;
 /* > \brief \b CHEGS2 reduces a Hermitian definite generalized eigenproblem to standard form, using
  * the factor ization results obtained from cpotrf (unblocked algorithm). */
 /* =========== DOCUMENTATION =========== */
@@ -41,7 +41,7 @@ static integer c__1 = 1;
 /* > */
 /* > \verbatim */
 /* > */
-/* > CHEGS2 reduces a complex Hermitian-definite generalized */
+/* > CHEGS2 reduces a scomplex Hermitian-definite generalized */
 /* > eigenproblem to standard form. */
 /* > */
 /* > If ITYPE = 1, the problem is A*x = lambda*B*x, */
@@ -127,32 +127,19 @@ static integer c__1 = 1;
 /* > \ingroup complexHEcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void chegs2_fla(integer *itype, char *uplo, integer *n, complex *a, integer *lda, complex *b,
-                integer *ldb, integer *info)
+void chegs2_fla(aocl_int64_t *itype, char *uplo, aocl_int64_t *n, scomplex *a, aocl_int64_t *lda,
+                scomplex *b, aocl_int64_t *ldb, aocl_int64_t *info)
 {
     /* System generated locals */
-    integer a_dim1, a_offset, b_dim1, b_offset, i__1, i__2;
+    aocl_int64_t a_dim1, a_offset, b_dim1, b_offset, i__1, i__2;
     real r__1, r__2;
-    complex q__1;
+    scomplex q__1;
     /* Local variables */
-    integer k;
-    complex ct;
+    aocl_int64_t k;
+    scomplex ct;
     real akk, bkk;
-    extern /* Subroutine */
-        void
-        cher2_(char *, integer *, complex *, complex *, integer *, complex *, integer *, complex *,
-               integer *);
-    extern logical lsame_(char *, char *, integer, integer);
-    extern /* Subroutine */
-        void
-        caxpy_(integer *, complex *, complex *, integer *, complex *, integer *);
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     logical upper;
-    extern /* Subroutine */
-        void
-        ctrmv_(char *, char *, char *, integer *, complex *, integer *, complex *, integer *),
-        ctrsv_(char *, char *, char *, integer *, complex *, integer *, complex *, integer *),
-        clacgv_(integer *, complex *, integer *), csscal_(integer *, real *, complex *, integer *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -206,7 +193,7 @@ void chegs2_fla(integer *itype, char *uplo, integer *n, complex *a, integer *lda
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("CHEGS2", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("CHEGS2", &i__1, (ftnlen)6);
         return;
     }
     if(*itype == 1)
@@ -232,32 +219,34 @@ void chegs2_fla(integer *itype, char *uplo, integer *n, complex *a, integer *lda
                 {
                     i__2 = *n - k;
                     r__1 = 1.f / bkk;
-                    csscal_(&i__2, &r__1, &a[k + (k + 1) * a_dim1], lda);
+                    aocl_blas_csscal(&i__2, &r__1, &a[k + (k + 1) * a_dim1], lda);
                     r__1 = akk * -.5f;
                     ct.r = r__1;
                     ct.i = 0.f; // , expr subst
                     i__2 = *n - k;
-                    clacgv_(&i__2, &a[k + (k + 1) * a_dim1], lda);
+                    aocl_lapack_clacgv(&i__2, &a[k + (k + 1) * a_dim1], lda);
                     i__2 = *n - k;
-                    clacgv_(&i__2, &b[k + (k + 1) * b_dim1], ldb);
+                    aocl_lapack_clacgv(&i__2, &b[k + (k + 1) * b_dim1], ldb);
                     i__2 = *n - k;
-                    caxpy_(&i__2, &ct, &b[k + (k + 1) * b_dim1], ldb, &a[k + (k + 1) * a_dim1],
-                           lda);
+                    aocl_blas_caxpy(&i__2, &ct, &b[k + (k + 1) * b_dim1], ldb,
+                                    &a[k + (k + 1) * a_dim1], lda);
                     i__2 = *n - k;
                     q__1.r = -1.f;
                     q__1.i = -0.f; // , expr subst
-                    cher2_(uplo, &i__2, &q__1, &a[k + (k + 1) * a_dim1], lda,
-                           &b[k + (k + 1) * b_dim1], ldb, &a[k + 1 + (k + 1) * a_dim1], lda);
+                    aocl_blas_cher2(uplo, &i__2, &q__1, &a[k + (k + 1) * a_dim1], lda,
+                                    &b[k + (k + 1) * b_dim1], ldb, &a[k + 1 + (k + 1) * a_dim1],
+                                    lda);
                     i__2 = *n - k;
-                    caxpy_(&i__2, &ct, &b[k + (k + 1) * b_dim1], ldb, &a[k + (k + 1) * a_dim1],
-                           lda);
+                    aocl_blas_caxpy(&i__2, &ct, &b[k + (k + 1) * b_dim1], ldb,
+                                    &a[k + (k + 1) * a_dim1], lda);
                     i__2 = *n - k;
-                    clacgv_(&i__2, &b[k + (k + 1) * b_dim1], ldb);
+                    aocl_lapack_clacgv(&i__2, &b[k + (k + 1) * b_dim1], ldb);
                     i__2 = *n - k;
-                    ctrsv_(uplo, "Conjugate transpose", "Non-unit", &i__2,
-                           &b[k + 1 + (k + 1) * b_dim1], ldb, &a[k + (k + 1) * a_dim1], lda);
+                    aocl_blas_ctrsv(uplo, "Conjugate transpose", "Non-unit", &i__2,
+                                    &b[k + 1 + (k + 1) * b_dim1], ldb, &a[k + (k + 1) * a_dim1],
+                                    lda);
                     i__2 = *n - k;
-                    clacgv_(&i__2, &a[k + (k + 1) * a_dim1], lda);
+                    aocl_lapack_clacgv(&i__2, &a[k + (k + 1) * a_dim1], lda);
                 }
                 /* L10: */
             }
@@ -283,24 +272,26 @@ void chegs2_fla(integer *itype, char *uplo, integer *n, complex *a, integer *lda
                 {
                     i__2 = *n - k;
                     r__1 = 1.f / bkk;
-                    csscal_(&i__2, &r__1, &a[k + 1 + k * a_dim1], &c__1);
+                    aocl_blas_csscal(&i__2, &r__1, &a[k + 1 + k * a_dim1], &c__1);
                     r__1 = akk * -.5f;
                     ct.r = r__1;
                     ct.i = 0.f; // , expr subst
                     i__2 = *n - k;
-                    caxpy_(&i__2, &ct, &b[k + 1 + k * b_dim1], &c__1, &a[k + 1 + k * a_dim1],
-                           &c__1);
+                    aocl_blas_caxpy(&i__2, &ct, &b[k + 1 + k * b_dim1], &c__1,
+                                    &a[k + 1 + k * a_dim1], &c__1);
                     i__2 = *n - k;
                     q__1.r = -1.f;
                     q__1.i = -0.f; // , expr subst
-                    cher2_(uplo, &i__2, &q__1, &a[k + 1 + k * a_dim1], &c__1,
-                           &b[k + 1 + k * b_dim1], &c__1, &a[k + 1 + (k + 1) * a_dim1], lda);
+                    aocl_blas_cher2(uplo, &i__2, &q__1, &a[k + 1 + k * a_dim1], &c__1,
+                                    &b[k + 1 + k * b_dim1], &c__1, &a[k + 1 + (k + 1) * a_dim1],
+                                    lda);
                     i__2 = *n - k;
-                    caxpy_(&i__2, &ct, &b[k + 1 + k * b_dim1], &c__1, &a[k + 1 + k * a_dim1],
-                           &c__1);
+                    aocl_blas_caxpy(&i__2, &ct, &b[k + 1 + k * b_dim1], &c__1,
+                                    &a[k + 1 + k * a_dim1], &c__1);
                     i__2 = *n - k;
-                    ctrsv_(uplo, "No transpose", "Non-unit", &i__2, &b[k + 1 + (k + 1) * b_dim1],
-                           ldb, &a[k + 1 + k * a_dim1], &c__1);
+                    aocl_blas_ctrsv(uplo, "No transpose", "Non-unit", &i__2,
+                                    &b[k + 1 + (k + 1) * b_dim1], ldb, &a[k + 1 + k * a_dim1],
+                                    &c__1);
                 }
                 /* L20: */
             }
@@ -320,20 +311,20 @@ void chegs2_fla(integer *itype, char *uplo, integer *n, complex *a, integer *lda
                 i__2 = k + k * b_dim1;
                 bkk = b[i__2].r;
                 i__2 = k - 1;
-                ctrmv_(uplo, "No transpose", "Non-unit", &i__2, &b[b_offset], ldb,
-                       &a[k * a_dim1 + 1], &c__1);
+                aocl_blas_ctrmv(uplo, "No transpose", "Non-unit", &i__2, &b[b_offset], ldb,
+                                &a[k * a_dim1 + 1], &c__1);
                 r__1 = akk * .5f;
                 ct.r = r__1;
                 ct.i = 0.f; // , expr subst
                 i__2 = k - 1;
-                caxpy_(&i__2, &ct, &b[k * b_dim1 + 1], &c__1, &a[k * a_dim1 + 1], &c__1);
+                aocl_blas_caxpy(&i__2, &ct, &b[k * b_dim1 + 1], &c__1, &a[k * a_dim1 + 1], &c__1);
                 i__2 = k - 1;
-                cher2_(uplo, &i__2, &c_b1, &a[k * a_dim1 + 1], &c__1, &b[k * b_dim1 + 1], &c__1,
-                       &a[a_offset], lda);
+                aocl_blas_cher2(uplo, &i__2, &c_b1, &a[k * a_dim1 + 1], &c__1, &b[k * b_dim1 + 1],
+                                &c__1, &a[a_offset], lda);
                 i__2 = k - 1;
-                caxpy_(&i__2, &ct, &b[k * b_dim1 + 1], &c__1, &a[k * a_dim1 + 1], &c__1);
+                aocl_blas_caxpy(&i__2, &ct, &b[k * b_dim1 + 1], &c__1, &a[k * a_dim1 + 1], &c__1);
                 i__2 = k - 1;
-                csscal_(&i__2, &bkk, &a[k * a_dim1 + 1], &c__1);
+                aocl_blas_csscal(&i__2, &bkk, &a[k * a_dim1 + 1], &c__1);
                 i__2 = k + k * a_dim1;
                 /* Computing 2nd power */
                 r__2 = bkk;
@@ -355,28 +346,28 @@ void chegs2_fla(integer *itype, char *uplo, integer *n, complex *a, integer *lda
                 i__2 = k + k * b_dim1;
                 bkk = b[i__2].r;
                 i__2 = k - 1;
-                clacgv_(&i__2, &a[k + a_dim1], lda);
+                aocl_lapack_clacgv(&i__2, &a[k + a_dim1], lda);
                 i__2 = k - 1;
-                ctrmv_(uplo, "Conjugate transpose", "Non-unit", &i__2, &b[b_offset], ldb,
-                       &a[k + a_dim1], lda);
+                aocl_blas_ctrmv(uplo, "Conjugate transpose", "Non-unit", &i__2, &b[b_offset], ldb,
+                                &a[k + a_dim1], lda);
                 r__1 = akk * .5f;
                 ct.r = r__1;
                 ct.i = 0.f; // , expr subst
                 i__2 = k - 1;
-                clacgv_(&i__2, &b[k + b_dim1], ldb);
+                aocl_lapack_clacgv(&i__2, &b[k + b_dim1], ldb);
                 i__2 = k - 1;
-                caxpy_(&i__2, &ct, &b[k + b_dim1], ldb, &a[k + a_dim1], lda);
+                aocl_blas_caxpy(&i__2, &ct, &b[k + b_dim1], ldb, &a[k + a_dim1], lda);
                 i__2 = k - 1;
-                cher2_(uplo, &i__2, &c_b1, &a[k + a_dim1], lda, &b[k + b_dim1], ldb, &a[a_offset],
-                       lda);
+                aocl_blas_cher2(uplo, &i__2, &c_b1, &a[k + a_dim1], lda, &b[k + b_dim1], ldb,
+                                &a[a_offset], lda);
                 i__2 = k - 1;
-                caxpy_(&i__2, &ct, &b[k + b_dim1], ldb, &a[k + a_dim1], lda);
+                aocl_blas_caxpy(&i__2, &ct, &b[k + b_dim1], ldb, &a[k + a_dim1], lda);
                 i__2 = k - 1;
-                clacgv_(&i__2, &b[k + b_dim1], ldb);
+                aocl_lapack_clacgv(&i__2, &b[k + b_dim1], ldb);
                 i__2 = k - 1;
-                csscal_(&i__2, &bkk, &a[k + a_dim1], lda);
+                aocl_blas_csscal(&i__2, &bkk, &a[k + a_dim1], lda);
                 i__2 = k - 1;
-                clacgv_(&i__2, &a[k + a_dim1], lda);
+                aocl_lapack_clacgv(&i__2, &a[k + a_dim1], lda);
                 i__2 = k + k * a_dim1;
                 /* Computing 2nd power */
                 r__2 = bkk;

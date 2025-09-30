@@ -14,14 +14,14 @@ double d_log(doublereal *x)
 }
 
 #ifdef _WIN32
-void c_log(complex *r, complex *z)
+void c_log(scomplex *r, scomplex *z)
 {
     _Fcomplex z_ = {z->r, z->i};
     _Fcomplex ret_val = clogf(z_);
     r->r = crealf(ret_val);
     r->i = cimagf(ret_val);
 }
-void z_log(doublecomplex *r, doublecomplex *z)
+void z_log(dcomplex *r, dcomplex *z)
 {
     _Dcomplex z_ = {z->r, z->i};
     _Dcomplex ret_val = clog(z_);
@@ -29,13 +29,13 @@ void z_log(doublecomplex *r, doublecomplex *z)
     r->i = cimag(ret_val);
 }
 #else
-void c_log(complex *r, complex *z)
+void c_log(scomplex *r, scomplex *z)
 {
     double _Complex ret_val = clog(z->r + I * z->i);
     r->r = creal(ret_val);
     r->i = cimag(ret_val);
 }
-void z_log(doublecomplex *r, doublecomplex *z)
+void z_log(dcomplex *r, dcomplex *z)
 {
     double _Complex ret_val = clog(z->r + I * z->i);
     r->r = creal(ret_val);

@@ -78,16 +78,26 @@
 /* > \ingroup rscl */
 /* ===================================================================== */
 /* Subroutine */
-void drscl_(integer *n, doublereal *sa, doublereal *sx, integer *incx)
+/** Generated wrapper function */
+void drscl_(aocl_int_t *n, doublereal *sa, doublereal *sx, aocl_int_t *incx)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_drscl(n, sa, sx, incx);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t incx_64 = *incx;
+
+    aocl_lapack_drscl(&n_64, sa, sx, &incx_64);
+#endif
+}
+
+void aocl_lapack_drscl(aocl_int64_t *n, doublereal *sa, doublereal *sx, aocl_int64_t *incx)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("drscl inputs: n %d, incx %dn", *n, *incx);
     doublereal mul, cden;
     logical done;
     doublereal cnum, cden1, cnum1;
-    extern /* Subroutine */
-        void
-        dscal_(integer *, doublereal *, doublereal *, integer *);
     extern doublereal dlamch_(char *);
     doublereal bignum, smlnum;
     /* -- LAPACK auxiliary routine -- */
@@ -148,7 +158,7 @@ L10:
         done = TRUE_;
     }
     /* Scale the vector X by MUL */
-    dscal_(n, &mul, &sx[1], incx);
+    aocl_blas_dscal(n, &mul, &sx[1], incx);
     if(!done)
     {
         goto L10;

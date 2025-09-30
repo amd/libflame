@@ -5,7 +5,7 @@
  /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static doublereal c_b3 = -1.;
-static integer c__1 = 1;
+static aocl_int64_t c__1 = 1;
 /* > \brief \b ZLAED8 used by ZSTEDC. Merges eigenvalues and deflates secular equation. Used when
  * the original matrix is dense. */
 /* =========== DOCUMENTATION =========== */
@@ -224,43 +224,59 @@ static integer c__1 = 1;
 /* > \ingroup laed8 */
 /* ===================================================================== */
 /* Subroutine */
-void zlaed8_(integer *k, integer *n, integer *qsiz, doublecomplex *q, integer *ldq, doublereal *d__,
-             doublereal *rho, integer *cutpnt, doublereal *z__, doublereal *dlambda,
-             doublecomplex *q2, integer *ldq2, doublereal *w, integer *indxp, integer *indx,
-             integer *indxq, integer *perm, integer *givptr, integer *givcol, doublereal *givnum,
-             integer *info)
+/** Generated wrapper function */
+void zlaed8_(aocl_int_t *k, aocl_int_t *n, aocl_int_t *qsiz, dcomplex *q, aocl_int_t *ldq,
+             doublereal *d__, doublereal *rho, aocl_int_t *cutpnt, doublereal *z__,
+             doublereal *dlambda, dcomplex *q2, aocl_int_t *ldq2, doublereal *w,
+             aocl_int_t *indxp, aocl_int_t *indx, aocl_int_t *indxq, aocl_int_t *perm,
+             aocl_int_t *givptr, aocl_int_t *givcol, doublereal *givnum, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_zlaed8(k, n, qsiz, q, ldq, d__, rho, cutpnt, z__, dlambda, q2, ldq2, w, indxp, indx,
+                       indxq, perm, givptr, givcol, givnum, info);
+#else
+    aocl_int64_t k_64 = *k;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t qsiz_64 = *qsiz;
+    aocl_int64_t ldq_64 = *ldq;
+    aocl_int64_t cutpnt_64 = *cutpnt;
+    aocl_int64_t ldq2_64 = *ldq2;
+    aocl_int64_t givptr_64 = *givptr;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_zlaed8(&k_64, &n_64, &qsiz_64, q, &ldq_64, d__, rho, &cutpnt_64, z__, dlambda, q2,
+                       &ldq2_64, w, indxp, indx, indxq, perm, &givptr_64, givcol, givnum, &info_64);
+
+    *k = (aocl_int_t)k_64;
+    *givptr = (aocl_int_t)givptr_64;
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_zlaed8(aocl_int64_t *k, aocl_int64_t *n, aocl_int64_t *qsiz, dcomplex *q,
+                        aocl_int64_t *ldq, doublereal *d__, doublereal *rho, aocl_int64_t *cutpnt,
+                        doublereal *z__, doublereal *dlambda, dcomplex *q2, aocl_int64_t *ldq2,
+                        doublereal *w, aocl_int_t *indxp, aocl_int_t *indx, aocl_int_t *indxq,
+                        aocl_int_t *perm, aocl_int64_t *givptr, aocl_int_t *givcol,
+                        doublereal *givnum, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zlaed8 inputs: k %" FLA_IS ", n %" FLA_IS ", qsiz %" FLA_IS ", ldq %" FLA_IS
                       ", cutpnt %" FLA_IS ", ldq2 %" FLA_IS "",
                       *k, *n, *qsiz, *ldq, *cutpnt, *ldq2);
     /* System generated locals */
-    integer q_dim1, q_offset, q2_dim1, q2_offset, i__1;
+    aocl_int64_t q_dim1, q_offset, q2_dim1, q2_offset, i__1;
     doublereal d__1;
     /* Builtin functions */
     double sqrt(doublereal);
     /* Local variables */
     doublereal c__;
-    integer i__, j;
+    aocl_int64_t i__, j;
     doublereal s, t;
-    integer k2, n1, n2, jp, n1p1;
+    aocl_int64_t k2, n1, n2, jp, n1p1;
     doublereal eps, tau, tol;
-    integer jlam, imax, jmax;
-    extern /* Subroutine */
-        void
-        dscal_(integer *, doublereal *, doublereal *, integer *),
-        dcopy_(integer *, doublereal *, integer *, doublereal *, integer *),
-        zdrot_(integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublereal *,
-               doublereal *),
-        zcopy_(integer *, doublecomplex *, integer *, doublecomplex *, integer *);
+    aocl_int64_t jlam, imax, jmax;
     extern doublereal dlapy2_(doublereal *, doublereal *), dlamch_(char *);
-    extern integer idamax_(integer *, doublereal *, integer *);
-    extern /* Subroutine */
-        void
-        dlamrg_(integer *, integer *, doublereal *, integer *, integer *, integer *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
-        zlacpy_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *,
-                integer *);
     /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -324,7 +340,7 @@ void zlaed8_(integer *k, integer *n, integer *qsiz, doublecomplex *q, integer *l
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("ZLAED8", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("ZLAED8", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -344,23 +360,23 @@ void zlaed8_(integer *k, integer *n, integer *qsiz, doublecomplex *q, integer *l
     n1p1 = n1 + 1;
     if(*rho < 0.)
     {
-        dscal_(&n2, &c_b3, &z__[n1p1], &c__1);
+        aocl_blas_dscal(&n2, &c_b3, &z__[n1p1], &c__1);
     }
     /* Normalize z so that norm(z) = 1 */
     t = 1. / sqrt(2.);
     i__1 = *n;
     for(j = 1; j <= i__1; ++j)
     {
-        indx[j] = j;
+        indx[j] = (aocl_int_t)(j);
         /* L10: */
     }
-    dscal_(n, &t, &z__[1], &c__1);
+    aocl_blas_dscal(n, &t, &z__[1], &c__1);
     *rho = (d__1 = *rho * 2., f2c_dabs(d__1));
     /* Sort the eigenvalues into increasing order */
     i__1 = *n;
     for(i__ = *cutpnt + 1; i__ <= i__1; ++i__)
     {
-        indxq[i__] += *cutpnt;
+        indxq[i__] += (aocl_int_t)(*cutpnt);
         /* L20: */
     }
     i__1 = *n;
@@ -372,7 +388,7 @@ void zlaed8_(integer *k, integer *n, integer *qsiz, doublecomplex *q, integer *l
     }
     i__ = 1;
     j = *cutpnt + 1;
-    dlamrg_(&n1, &n2, &dlambda[1], &c__1, &c__1, &indx[1]);
+    aocl_lapack_dlamrg(&n1, &n2, &dlambda[1], &c__1, &c__1, &indx[1]);
     i__1 = *n;
     for(i__ = 1; i__ <= i__1; ++i__)
     {
@@ -381,8 +397,8 @@ void zlaed8_(integer *k, integer *n, integer *qsiz, doublecomplex *q, integer *l
         /* L40: */
     }
     /* Calculate the allowable deflation tolerance */
-    imax = idamax_(n, &z__[1], &c__1);
-    jmax = idamax_(n, &d__[1], &c__1);
+    imax = aocl_blas_idamax(n, &z__[1], &c__1);
+    jmax = aocl_blas_idamax(n, &d__[1], &c__1);
     eps = dlamch_("Epsilon");
     tol = eps * 8. * (d__1 = d__[jmax], f2c_dabs(d__1));
     /* If the rank-1 modifier is small enough, no more needs to be done */
@@ -395,10 +411,10 @@ void zlaed8_(integer *k, integer *n, integer *qsiz, doublecomplex *q, integer *l
         for(j = 1; j <= i__1; ++j)
         {
             perm[j] = indxq[indx[j]];
-            zcopy_(qsiz, &q[perm[j] * q_dim1 + 1], &c__1, &q2[j * q2_dim1 + 1], &c__1);
+            aocl_blas_zcopy(qsiz, &q[perm[j] * q_dim1 + 1], &c__1, &q2[j * q2_dim1 + 1], &c__1);
             /* L50: */
         }
-        zlacpy_("A", qsiz, n, &q2[q2_dim1 + 1], ldq2, &q[q_dim1 + 1], ldq);
+        aocl_lapack_zlacpy("A", qsiz, n, &q2[q2_dim1 + 1], ldq2, &q[q_dim1 + 1], ldq);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -416,7 +432,7 @@ void zlaed8_(integer *k, integer *n, integer *qsiz, doublecomplex *q, integer *l
         {
             /* Deflate due to small z component. */
             --k2;
-            indxp[k2] = j;
+            indxp[k2] = (aocl_int_t)(j);
             if(j == *n)
             {
                 goto L100;
@@ -439,7 +455,7 @@ L70:
     {
         /* Deflate due to small z component. */
         --k2;
-        indxp[k2] = j;
+        indxp[k2] = (aocl_int_t)(j);
     }
     else
     {
@@ -463,8 +479,8 @@ L70:
             givcol[(*givptr << 1) + 2] = indxq[indx[j]];
             givnum[(*givptr << 1) + 1] = c__;
             givnum[(*givptr << 1) + 2] = s;
-            zdrot_(qsiz, &q[indxq[indx[jlam]] * q_dim1 + 1], &c__1, &q[indxq[indx[j]] * q_dim1 + 1],
-                   &c__1, &c__, &s);
+            aocl_blas_zdrot(qsiz, &q[indxq[indx[jlam]] * q_dim1 + 1], &c__1,
+                            &q[indxq[indx[j]] * q_dim1 + 1], &c__1, &c__, &s);
             t = d__[jlam] * c__ * c__ + d__[j] * s * s;
             d__[j] = d__[jlam] * s * s + d__[j] * c__ * c__;
             d__[jlam] = t;
@@ -476,18 +492,18 @@ L70:
                 if(d__[jlam] < d__[indxp[k2 + i__]])
                 {
                     indxp[k2 + i__ - 1] = indxp[k2 + i__];
-                    indxp[k2 + i__] = jlam;
+                    indxp[k2 + i__] = (aocl_int_t)(jlam);
                     ++i__;
                     goto L80;
                 }
                 else
                 {
-                    indxp[k2 + i__ - 1] = jlam;
+                    indxp[k2 + i__ - 1] = (aocl_int_t)(jlam);
                 }
             }
             else
             {
-                indxp[k2 + i__ - 1] = jlam;
+                indxp[k2 + i__ - 1] = (aocl_int_t)(jlam);
             }
             jlam = j;
         }
@@ -496,7 +512,7 @@ L70:
             ++(*k);
             w[*k] = z__[jlam];
             dlambda[*k] = d__[jlam];
-            indxp[*k] = jlam;
+            indxp[*k] = (aocl_int_t)(jlam);
             jlam = j;
         }
     }
@@ -505,7 +521,7 @@ L90: /* Record the last eigenvalue. */
     ++(*k);
     w[*k] = z__[jlam];
     dlambda[*k] = d__[jlam];
-    indxp[*k] = jlam;
+    indxp[*k] = (aocl_int_t)(jlam);
 L100: /* Sort the eigenvalues and corresponding eigenvectors into DLAMBDA */
     /* and Q2 respectively. The eigenvalues/vectors which were not */
     /* deflated go into the first K slots of DLAMBDA and Q2 respectively, */
@@ -516,7 +532,7 @@ L100: /* Sort the eigenvalues and corresponding eigenvectors into DLAMBDA */
         jp = indxp[j];
         dlambda[j] = d__[jp];
         perm[j] = indxq[indx[jp]];
-        zcopy_(qsiz, &q[perm[j] * q_dim1 + 1], &c__1, &q2[j * q2_dim1 + 1], &c__1);
+        aocl_blas_zcopy(qsiz, &q[perm[j] * q_dim1 + 1], &c__1, &q2[j * q2_dim1 + 1], &c__1);
         /* L110: */
     }
     /* The deflated eigenvalues and their corresponding vectors go back */
@@ -524,10 +540,10 @@ L100: /* Sort the eigenvalues and corresponding eigenvectors into DLAMBDA */
     if(*k < *n)
     {
         i__1 = *n - *k;
-        dcopy_(&i__1, &dlambda[*k + 1], &c__1, &d__[*k + 1], &c__1);
+        aocl_blas_dcopy(&i__1, &dlambda[*k + 1], &c__1, &d__[*k + 1], &c__1);
         i__1 = *n - *k;
-        zlacpy_("A", qsiz, &i__1, &q2[(*k + 1) * q2_dim1 + 1], ldq2, &q[(*k + 1) * q_dim1 + 1],
-                ldq);
+        aocl_lapack_zlacpy("A", qsiz, &i__1, &q2[(*k + 1) * q2_dim1 + 1], ldq2,
+                           &q[(*k + 1) * q_dim1 + 1], ldq);
     }
     AOCL_DTL_TRACE_LOG_EXIT
     return;

@@ -13,9 +13,9 @@
 FLA_Error FLA_Trmv_external( FLA_Uplo uplo, FLA_Trans trans, FLA_Diag diag, FLA_Obj A, FLA_Obj x ) 
 {
   FLA_Datatype datatype;
-  integer          m_A;
-  integer          rs_A, cs_A;
-  integer          inc_x;
+  fla_dim_t          m_A;
+  fla_dim_t          rs_A, cs_A;
+  fla_dim_t          inc_x;
   uplo1_t       blis_uplo;
   trans1_t      blis_trans;
   diag1_t       blis_diag;

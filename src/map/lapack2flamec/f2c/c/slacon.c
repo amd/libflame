@@ -4,7 +4,7 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
+static aocl_int64_t c__1 = 1;
 static real c_b11 = 1.f;
 /* > \brief \b SLACON estimates the 1-norm of a square matrix, using reverse communication for
  * evaluating matr ix-vector products. */
@@ -108,33 +108,43 @@ static real c_b11 = 1.f;
 /* ================ */
 /* > */
 /* > N.J. Higham, "FORTRAN codes for estimating the one-norm of */
-/* > a real or complex matrix, with applications to condition estimation", */
+/* > a real or scomplex matrix, with applications to condition estimation", */
 /* > ACM Trans. Math. Soft., vol. 14, no. 4, pp. 381-396, December 1988. */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void slacon_(integer *n, real *v, real *x, integer *isgn, real *est, integer *kase)
+/** Generated wrapper function */
+void slacon_(aocl_int_t *n, real *v, real *x, aocl_int_t *isgn, real *est, aocl_int_t *kase)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_slacon(n, v, x, isgn, est, kase);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t kase_64 = *kase;
+
+    aocl_lapack_slacon(&n_64, v, x, isgn, est, &kase_64);
+
+    *kase = (aocl_int_t)kase_64;
+#endif
+}
+
+void aocl_lapack_slacon(aocl_int64_t *n, real *v, real *x, aocl_int_t *isgn, real *est,
+                        aocl_int64_t *kase)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("slacon inputs: n %" FLA_IS "", *n);
     /* System generated locals */
-    integer i__1;
+    aocl_int64_t i__1;
     real r__1;
     /* Builtin functions */
     double r_sign(real *, real *);
-    integer fla_i_nint(real *);
     /* Local variables */
-    integer i__;
+    aocl_int64_t i__;
     real temp;
-    static integer jump = 0;
-    static integer j = 0;
-    static integer iter = 0;
-    integer jlast;
-    extern real sasum_(integer *, real *, integer *);
-    extern /* Subroutine */
-        void
-        scopy_(integer *, real *, integer *, real *, integer *);
-    extern integer isamax_(integer *, real *, integer *);
+    static aocl_int64_t jump = 0;
+    static aocl_int64_t j = 0;
+    static aocl_int64_t iter = 0;
+    aocl_int64_t jlast;
     real altsgn, estold;
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -201,7 +211,7 @@ L20:
         /* ... QUIT */
         goto L150;
     }
-    *est = sasum_(n, &x[1], &c__1);
+    *est = aocl_blas_sasum(n, &x[1], &c__1);
     i__1 = *n;
     for(i__ = 1; i__ <= i__1; ++i__)
     {
@@ -216,7 +226,7 @@ L20:
     /* ................ ENTRY (JUMP = 2) */
     /* FIRST ITERATION. X HAS BEEN OVERWRITTEN BY TRANSPOSE(A)*X. */
 L40:
-    j = isamax_(n, &x[1], &c__1);
+    j = aocl_blas_isamax(n, &x[1], &c__1);
     iter = 2;
     /* MAIN LOOP - ITERATIONS 2,3,...,ITMAX. */
 L50:
@@ -234,9 +244,9 @@ L50:
     /* ................ ENTRY (JUMP = 3) */
     /* X HAS BEEN OVERWRITTEN BY A*X. */
 L70:
-    scopy_(n, &x[1], &c__1, &v[1], &c__1);
+    aocl_blas_scopy(n, &x[1], &c__1, &v[1], &c__1);
     estold = *est;
-    *est = sasum_(n, &v[1], &c__1);
+    *est = aocl_blas_sasum(n, &v[1], &c__1);
     i__1 = *n;
     for(i__ = 1; i__ <= i__1; ++i__)
     {
@@ -269,7 +279,7 @@ L90: /* TEST FOR CYCLING. */
     /* X HAS BEEN OVERWRITTEN BY TRANSPOSE(A)*X. */
 L110:
     jlast = j;
-    j = isamax_(n, &x[1], &c__1);
+    j = aocl_blas_isamax(n, &x[1], &c__1);
     if(x[jlast] != (r__1 = x[j], f2c_abs(r__1)) && iter < 5)
     {
         ++iter;
@@ -292,10 +302,10 @@ L120:
     /* ................ ENTRY (JUMP = 5) */
     /* X HAS BEEN OVERWRITTEN BY A*X. */
 L140:
-    temp = sasum_(n, &x[1], &c__1) / (real)(*n * 3) * 2.f;
+    temp = aocl_blas_sasum(n, &x[1], &c__1) / (real)(*n * 3) * 2.f;
     if(temp > *est)
     {
-        scopy_(n, &x[1], &c__1, &v[1], &c__1);
+        aocl_blas_scopy(n, &x[1], &c__1, &v[1], &c__1);
         *est = temp;
     }
 L150:

@@ -4,8 +4,8 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
-static integer c_n1 = -1;
+static aocl_int64_t c__1 = 1;
+static aocl_int64_t c_n1 = -1;
 /* > \brief \b DORMHR */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -181,30 +181,52 @@ the routine */
 /* > \ingroup doubleOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void dormhr_(char *side, char *trans, integer *m, integer *n, integer *ilo, integer *ihi,
-             doublereal *a, integer *lda, doublereal *tau, doublereal *c__, integer *ldc,
-             doublereal *work, integer *lwork, integer *info)
+/** Generated wrapper function */
+void dormhr_(char *side, char *trans, aocl_int_t *m, aocl_int_t *n, aocl_int_t *ilo,
+             aocl_int_t *ihi, doublereal *a, aocl_int_t *lda, doublereal *tau, doublereal *c__,
+             aocl_int_t *ldc, doublereal *work, aocl_int_t *lwork, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_dormhr(side, trans, m, n, ilo, ihi, a, lda, tau, c__, ldc, work, lwork, info);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t ilo_64 = *ilo;
+    aocl_int64_t ihi_64 = *ihi;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t ldc_64 = *ldc;
+    aocl_int64_t lwork_64 = *lwork;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_dormhr(side, trans, &m_64, &n_64, &ilo_64, &ihi_64, a, &lda_64, tau, c__, &ldc_64,
+                       work, &lwork_64, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_dormhr(char *side, char *trans, aocl_int64_t *m, aocl_int64_t *n,
+                        aocl_int64_t *ilo, aocl_int64_t *ihi, doublereal *a, aocl_int64_t *lda,
+                        doublereal *tau, doublereal *c__, aocl_int64_t *ldc, doublereal *work,
+                        aocl_int64_t *lwork, aocl_int64_t *info)
 {
     /* System generated locals */
-    integer a_dim1, a_offset, c_dim1, c_offset, i__2;
+    aocl_int64_t a_dim1, a_offset, c_dim1, c_offset, i__2;
     char ch__1[2];
     /* Builtin functions */
     /* Subroutine */
 
     /* Local variables */
-    integer i1, i2, nb, mi, nh, ni, nq, nw;
+    aocl_int64_t i1, i2, nb, mi, nh, ni, nq, nw;
     logical left;
-    extern logical lsame_(char *, char *, integer, integer);
-    integer iinfo;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    aocl_int64_t iinfo;
     extern /* Subroutine */
         void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
-    extern /* Subroutine */
-        void
-        dormqr_fla(char *, char *, integer *, integer *, integer *, doublereal *, integer *,
-                   doublereal *, doublereal *, integer *, doublereal *, integer *, integer *);
-    integer lwkopt;
+        dormqr_fla(char *, char *, aocl_int64_t *, aocl_int64_t *, aocl_int64_t *, doublereal *,
+                   aocl_int64_t *, doublereal *, doublereal *, aocl_int64_t *, doublereal *,
+                   aocl_int64_t *, aocl_int64_t *);
+    aocl_int64_t lwkopt;
     logical lquery;
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -290,11 +312,11 @@ void dormhr_(char *side, char *trans, integer *m, integer *n, integer *ilo, inte
     {
         if(left)
         {
-            nb = ilaenv_(&c__1, "DORMQR", ch__1, &nh, n, &nh, &c_n1);
+            nb = aocl_lapack_ilaenv(&c__1, "DORMQR", ch__1, &nh, n, &nh, &c_n1);
         }
         else
         {
-            nb = ilaenv_(&c__1, "DORMQR", ch__1, m, &nh, &nh, &c_n1);
+            nb = aocl_lapack_ilaenv(&c__1, "DORMQR", ch__1, m, &nh, &nh, &c_n1);
         }
         lwkopt = fla_max(1, nw) * nb;
         work[1] = (doublereal)lwkopt;
@@ -302,7 +324,7 @@ void dormhr_(char *side, char *trans, integer *m, integer *n, integer *ilo, inte
     if(*info != 0)
     {
         i__2 = -(*info);
-        xerbla_("DORMHR", &i__2, (ftnlen)6);
+        aocl_blas_xerbla("DORMHR", &i__2, (ftnlen)6);
         return;
     }
     else if(lquery)

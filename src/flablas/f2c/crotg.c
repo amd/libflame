@@ -1,17 +1,17 @@
 /* crotg.f -- translated by f2c (version 19991025). You must link the resulting object file with the libraries: -lf2c -lm (in that order) */
 #include "FLA_f2c.h"
 /* Subroutine */
-int crotg_(complex *ca, complex *cb, real *c__, complex *s)
+int crotg_(scomplex *ca, scomplex *cb, real *c__, scomplex *s)
 {
     /* System generated locals */
     real r__1, r__2;
-    complex q__1, q__2, q__3;
+    scomplex q__1, q__2, q__3;
     /* Builtin functions */
-    double c_f2c_abs(complex *), sqrt(doublereal);
-    void r_cnjg(complex *, complex *);
+    double c_f2c_abs(scomplex *), sqrt(doublereal);
+    void r_cnjg(scomplex *, scomplex *);
     /* Local variables */
     real norm;
-    complex alpha;
+    scomplex alpha;
     real scale;
     if (c_f2c_abs(ca) != 0.f)
     {

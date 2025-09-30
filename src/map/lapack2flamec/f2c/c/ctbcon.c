@@ -4,7 +4,7 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
+static aocl_int64_t c__1 = 1;
 /* > \brief \b CTBCON */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -143,8 +143,27 @@ static integer c__1 = 1;
 /* > \ingroup complexOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void ctbcon_(char *norm, char *uplo, char *diag, integer *n, integer *kd, complex *ab,
-             integer *ldab, real *rcond, complex *work, real *rwork, integer *info)
+/** Generated wrapper function */
+void ctbcon_(char *norm, char *uplo, char *diag, aocl_int_t *n, aocl_int_t *kd, scomplex *ab,
+             aocl_int_t *ldab, real *rcond, scomplex *work, real *rwork, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_ctbcon(norm, uplo, diag, n, kd, ab, ldab, rcond, work, rwork, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t kd_64 = *kd;
+    aocl_int64_t ldab_64 = *ldab;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_ctbcon(norm, uplo, diag, &n_64, &kd_64, ab, &ldab_64, rcond, work, rwork, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_ctbcon(char *norm, char *uplo, char *diag, aocl_int64_t *n, aocl_int64_t *kd,
+                        scomplex *ab, aocl_int64_t *ldab, real *rcond, scomplex *work, real *rwork,
+                        aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -159,33 +178,20 @@ void ctbcon_(char *norm, char *uplo, char *diag, integer *n, integer *kd, comple
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
-    integer ab_dim1, ab_offset, i__1;
+    aocl_int64_t ab_dim1, ab_offset, i__1;
     real r__1, r__2;
     /* Builtin functions */
-    double r_imag(complex *);
+    double r_imag(scomplex *);
     /* Local variables */
-    integer ix, kase, kase1;
+    aocl_int64_t ix, kase, kase1;
     real scale;
-    extern logical lsame_(char *, char *, integer, integer);
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     integer isave[3];
     real anorm;
     logical upper;
-    extern /* Subroutine */
-        void
-        clacn2_(integer *, complex *, complex *, real *, integer *, integer *);
     real xnorm;
-    extern integer icamax_(integer *, complex *, integer *);
-    extern real clantb_(char *, char *, char *, integer *, integer *, complex *, integer *, real *),
-        slamch_(char *);
-    extern /* Subroutine */
-        void
-        clatbs_(char *, char *, char *, char *, integer *, integer *, complex *, integer *,
-                complex *, real *, real *, integer *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    extern real slamch_(char *);
     real ainvnm;
-    extern /* Subroutine */
-        void
-        csrscl_(integer *, real *, complex *, integer *);
     logical onenrm;
     char normin[1];
     real smlnum;
@@ -255,7 +261,7 @@ void ctbcon_(char *norm, char *uplo, char *diag, integer *n, integer *kd, comple
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("CTBCON", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("CTBCON", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
@@ -269,7 +275,7 @@ void ctbcon_(char *norm, char *uplo, char *diag, integer *n, integer *kd, comple
     *rcond = 0.f;
     smlnum = slamch_("Safe minimum") * (real)fla_max(*n, 1);
     /* Compute the 1-norm of the triangular matrix A or A**H. */
-    anorm = clantb_(norm, uplo, diag, n, kd, &ab[ab_offset], ldab, &rwork[1]);
+    anorm = aocl_lapack_clantb(norm, uplo, diag, n, kd, &ab[ab_offset], ldab, &rwork[1]);
     /* Continue only if ANORM > 0. */
     if(anorm > 0.f)
     {
@@ -286,26 +292,26 @@ void ctbcon_(char *norm, char *uplo, char *diag, integer *n, integer *kd, comple
         }
         kase = 0;
     L10:
-        clacn2_(n, &work[*n + 1], &work[1], &ainvnm, &kase, isave);
+        aocl_lapack_clacn2(n, &work[*n + 1], &work[1], &ainvnm, &kase, isave);
         if(kase != 0)
         {
             if(kase == kase1)
             {
                 /* Multiply by inv(A). */
-                clatbs_(uplo, "No transpose", diag, normin, n, kd, &ab[ab_offset], ldab, &work[1],
-                        &scale, &rwork[1], info);
+                aocl_lapack_clatbs(uplo, "No transpose", diag, normin, n, kd, &ab[ab_offset], ldab,
+                                   &work[1], &scale, &rwork[1], info);
             }
             else
             {
                 /* Multiply by inv(A**H). */
-                clatbs_(uplo, "Conjugate transpose", diag, normin, n, kd, &ab[ab_offset], ldab,
-                        &work[1], &scale, &rwork[1], info);
+                aocl_lapack_clatbs(uplo, "Conjugate transpose", diag, normin, n, kd, &ab[ab_offset],
+                                   ldab, &work[1], &scale, &rwork[1], info);
             }
             *(unsigned char *)normin = 'Y';
             /* Multiply by 1/SCALE if doing so will not cause overflow. */
             if(scale != 1.f)
             {
-                ix = icamax_(n, &work[1], &c__1);
+                ix = aocl_blas_icamax(n, &work[1], &c__1);
                 i__1 = ix;
                 xnorm = (r__1 = work[i__1].r, f2c_abs(r__1))
                         + (r__2 = r_imag(&work[ix]), f2c_abs(r__2));
@@ -313,7 +319,7 @@ void ctbcon_(char *norm, char *uplo, char *diag, integer *n, integer *kd, comple
                 {
                     goto L20;
                 }
-                csrscl_(n, &scale, &work[1], &c__1);
+                aocl_lapack_csrscl(n, &scale, &work[1], &c__1);
             }
             goto L10;
         }

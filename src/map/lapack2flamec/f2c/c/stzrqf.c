@@ -4,7 +4,7 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
+static aocl_int64_t c__1 = 1;
 static real c_b8 = 1.f;
 /* > \brief \b STZRQF */
 /* =========== DOCUMENTATION =========== */
@@ -136,25 +136,33 @@ static real c_b8 = 1.f;
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void stzrqf_(integer *m, integer *n, real *a, integer *lda, real *tau, integer *info)
+/** Generated wrapper function */
+void stzrqf_(aocl_int_t *m, aocl_int_t *n, real *a, aocl_int_t *lda, real *tau, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_stzrqf(m, n, a, lda, tau, info);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_stzrqf(&m_64, &n_64, a, &lda_64, tau, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_stzrqf(aocl_int64_t *m, aocl_int64_t *n, real *a, aocl_int64_t *lda, real *tau,
+             aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("stzrqf inputs: m %" FLA_IS ",n %" FLA_IS ",lda %" FLA_IS "", *m, *n, *lda);
     /* System generated locals */
-    integer a_dim1, a_offset, i__1, i__2;
+    aocl_int64_t a_dim1, a_offset, i__1, i__2;
     real r__1;
     /* Local variables */
-    integer i__, k, m1;
-    extern /* Subroutine */
-        void
-        sger_(integer *, integer *, real *, real *, integer *, real *, integer *, real *,
-              integer *),
-        sgemv_(char *, integer *, integer *, real *, real *, integer *, real *, integer *, real *,
-               real *, integer *),
-        scopy_(integer *, real *, integer *, real *, integer *),
-        saxpy_(integer *, real *, real *, integer *, real *, integer *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
-        slarfg_(integer *, real *, real *, integer *, real *);
+    aocl_int64_t i__, k, m1;
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -196,7 +204,7 @@ void stzrqf_(integer *m, integer *n, real *a, integer *lda, real *tau, integer *
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("STZRQF", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("STZRQF", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -225,7 +233,7 @@ void stzrqf_(integer *m, integer *n, real *a, integer *lda, real *tau, integer *
             /* Use a Householder reflection to zero the kth row of A. */
             /* First set up the reflection. */
             i__1 = *n - *m + 1;
-            slarfg_(&i__1, &a[k + k * a_dim1], &a[k + m1 * a_dim1], lda, &tau[k]);
+            aocl_lapack_slarfg(&i__1, &a[k + k * a_dim1], &a[k + m1 * a_dim1], lda, &tau[k]);
             if(tau[k] != 0.f && k > 1)
             {
                 /* We now perform the operation A := A*P( k ). */
@@ -234,22 +242,22 @@ void stzrqf_(integer *m, integer *n, real *a, integer *lda, real *tau, integer *
                 /* the kth column of A. Also let B denote the first */
                 /* ( k - 1 ) rows of the last ( n - m ) columns of A. */
                 i__1 = k - 1;
-                scopy_(&i__1, &a[k * a_dim1 + 1], &c__1, &tau[1], &c__1);
+                aocl_blas_scopy(&i__1, &a[k * a_dim1 + 1], &c__1, &tau[1], &c__1);
                 /* Form w = a( k ) + B*z( k ) in TAU. */
                 i__1 = k - 1;
                 i__2 = *n - *m;
-                sgemv_("No transpose", &i__1, &i__2, &c_b8, &a[m1 * a_dim1 + 1], lda,
-                       &a[k + m1 * a_dim1], lda, &c_b8, &tau[1], &c__1);
+                aocl_blas_sgemv("No transpose", &i__1, &i__2, &c_b8, &a[m1 * a_dim1 + 1], lda,
+                                &a[k + m1 * a_dim1], lda, &c_b8, &tau[1], &c__1);
                 /* Now form a( k ) := a( k ) - tau*w */
                 /* and B := B - tau*w*z( k )**T. */
                 i__1 = k - 1;
                 r__1 = -tau[k];
-                saxpy_(&i__1, &r__1, &tau[1], &c__1, &a[k * a_dim1 + 1], &c__1);
+                aocl_blas_saxpy(&i__1, &r__1, &tau[1], &c__1, &a[k * a_dim1 + 1], &c__1);
                 i__1 = k - 1;
                 i__2 = *n - *m;
                 r__1 = -tau[k];
-                sger_(&i__1, &i__2, &r__1, &tau[1], &c__1, &a[k + m1 * a_dim1], lda,
-                      &a[m1 * a_dim1 + 1], lda);
+                aocl_blas_sger(&i__1, &i__2, &r__1, &tau[1], &c__1, &a[k + m1 * a_dim1], lda,
+                               &a[m1 * a_dim1 + 1], lda);
             }
             /* L20: */
         }

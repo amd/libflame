@@ -1,12 +1,12 @@
 #include "FLA_f2c.h"
 #include "FLA_lapack2flame_return_defs.h"
 
-int cbdsqr_check(char *uplo, integer *n, integer *ncvt, integer *nru, integer *ncc, float *d__,
-                 float *e, scomplex *vt, integer *ldvt, scomplex *u, integer *ldu, scomplex *c__,
-                 integer *ldc, float *rwork, integer *info)
+int cbdsqr_check(char *uplo, aocl_int64_t *n, aocl_int64_t *ncvt, aocl_int64_t *nru, aocl_int64_t *ncc, float *d__,
+                 float *e, scomplex *vt, aocl_int64_t *ldvt, scomplex *u, aocl_int64_t *ldu, scomplex *c__,
+                 aocl_int64_t *ldc, float *rwork, aocl_int64_t *info)
 {
     /* System generated locals */
-    integer c_dim1, c_offset, u_dim1, u_offset, vt_dim1, vt_offset, i__1;
+    aocl_int64_t c_dim1, c_offset, u_dim1, u_offset, vt_dim1, vt_offset, i__1;
     logical lower;
 
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -68,7 +68,7 @@ int cbdsqr_check(char *uplo, integer *n, integer *ncvt, integer *nru, integer *n
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("CBDSQR", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("CBDSQR", &i__1, (ftnlen)6);
         return LAPACK_FAILURE;
     }
     if(*n == 0)

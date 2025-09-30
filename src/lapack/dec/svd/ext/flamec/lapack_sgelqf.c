@@ -1,20 +1,27 @@
-/* ../netlib/sgelqf.f -- translated by f2c (version 20000121). You must link the resulting object file with the libraries: -lf2c -lm (in that order) */
+/* ../netlib/sgelqf.f -- translated by f2c (version 20000121). You must link the resulting object
+ * file with the libraries: -lf2c -lm (in that order) */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
-static integer c_n1 = -1;
-static integer c__3 = 3;
-static integer c__2 = 2;
+static aocl_int64_t c__1 = 1;
+static aocl_int64_t c_n1 = -1;
+static aocl_int64_t c__3 = 3;
+static aocl_int64_t c__2 = 2;
 /* > \brief \b SGELQF */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
 /* > \htmlonly */
 /* > Download SGELQF + dependencies */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/sgelqf. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.tgz?format=tgz&filename=/lapack/lapack_routine/sgelqf.
+ * f"> */
 /* > [TGZ]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/sgelqf. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.zip?format=zip&filename=/lapack/lapack_routine/sgelqf.
+ * f"> */
 /* > [ZIP]</a> */
-/* > <a href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sgelqf. f"> */
+/* > <a
+ * href="http://www.netlib.org/cgi-bin/netlibfiles.txt?format=txt&filename=/lapack/lapack_routine/sgelqf.
+ * f"> */
 /* > [TXT]</a> */
 /* > \endhtmlonly */
 /* Definition: */
@@ -38,9 +45,9 @@ static integer c__2 = 2;
 /* > where: */
 /* > */
 /* > Q is a N-by-N orthogonal matrix;
-*/
+ */
 /* > L is a lower-triangular M-by-M matrix;
-*/
+ */
 /* > 0 is a M-by-(N-M) zero matrix, if M < N. */
 /* > */
 /* > \endverbatim */
@@ -137,24 +144,21 @@ v(i+1:n) is stored on exit in A(i,i+1:n), */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-int lapack_sgelqf(integer *m, integer *n, real *a, integer *lda, real *tau, real *work, integer *lwork, integer *info)
+int lapack_sgelqf(aocl_int64_t *m, aocl_int64_t *n, real *a, aocl_int64_t *lda, real *tau,
+                  real *work, aocl_int64_t *lwork, aocl_int64_t *info)
 {
     /* System generated locals */
-    integer a_dim1, a_offset, i__1, i__2, i__3, i__4;
+    aocl_int64_t a_dim1, a_offset, i__1, i__2, i__3, i__4;
     /* Local variables */
-    integer i__, k, nbmin, iinfo;
+    aocl_int64_t i__, k, nbmin, iinfo;
     extern /* Subroutine */
-    int lapack_sgelq2(integer *, integer *, real *, integer *, real *, real *, integer *);
-    integer ib, nb, nx;
-    extern /* Subroutine */
-    void slarfb_(char *, char *, char *, char *, integer *, integer *, integer *, real *, integer *, real *, integer *, real *, integer *, real *, integer *), xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
-    extern /* Subroutine */
-    void slarft_(char *, char *, integer *, integer *, real *, integer *, real *, real *, integer *);
-    integer ldwork, lwkopt;
+        int
+        lapack_sgelq2(aocl_int64_t *, aocl_int64_t *, real *, aocl_int64_t *, real *, real *,
+                      aocl_int64_t *);
+    aocl_int64_t ib, nb, nx;
+    aocl_int64_t ldwork, lwkopt;
     logical lquery;
-    integer iws;
-    extern real sroundup_lwork(integer *);
+    aocl_int64_t iws;
     /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -181,39 +185,39 @@ int lapack_sgelqf(integer *m, integer *n, real *a, integer *lda, real *tau, real
     --work;
     /* Function Body */
     *info = 0;
-    nb = ilaenv_(&c__1, "SGELQF", " ", m, n, &c_n1, &c_n1);
+    nb = aocl_lapack_ilaenv(&c__1, "SGELQF", " ", m, n, &c_n1, &c_n1);
     lwkopt = *m * nb;
-    work[1] = sroundup_lwork(&lwkopt);
+    work[1] = aocl_lapack_sroundup_lwork(&lwkopt);
     lquery = *lwork == -1;
-    if (*m < 0)
+    if(*m < 0)
     {
         *info = -1;
     }
-    else if (*n < 0)
+    else if(*n < 0)
     {
         *info = -2;
     }
-    else if (*lda < fla_max(1,*m))
+    else if(*lda < fla_max(1, *m))
     {
         *info = -4;
     }
-    else if (*lwork < fla_max(1,*m) && ! lquery)
+    else if(*lwork < fla_max(1, *m) && !lquery)
     {
         *info = -7;
     }
-    if (*info != 0)
+    if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("SGELQF", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("SGELQF", &i__1, (ftnlen)6);
         return 0;
     }
-    else if (lquery)
+    else if(lquery)
     {
         return 0;
     }
     /* Quick return if possible */
-    k = fla_min(*m,*n);
-    if (k == 0)
+    k = fla_min(*m, *n);
+    if(k == 0)
     {
         work[1] = 1.f;
         return 0;
@@ -221,56 +225,57 @@ int lapack_sgelqf(integer *m, integer *n, real *a, integer *lda, real *tau, real
     nbmin = 2;
     nx = 0;
     iws = *m;
-    if (nb > 1 && nb < k)
+    if(nb > 1 && nb < k)
     {
         /* Determine when to cross over from blocked to unblocked code. */
         /* Computing MAX */
         i__1 = 0;
-        i__2 = ilaenv_(&c__3, "SGELQF", " ", m, n, &c_n1, &c_n1); // , expr subst
-        nx = fla_max(i__1,i__2);
-        if (nx < k)
+        i__2 = aocl_lapack_ilaenv(&c__3, "SGELQF", " ", m, n, &c_n1, &c_n1); // , expr subst
+        nx = fla_max(i__1, i__2);
+        if(nx < k)
         {
             /* Determine if workspace is large enough for blocked code. */
             ldwork = *m;
             iws = ldwork * nb;
-            if (*lwork < iws)
+            if(*lwork < iws)
             {
                 /* Not enough workspace to use optimal NB: reduce NB and */
                 /* determine the minimum value of NB. */
                 nb = *lwork / ldwork;
                 /* Computing MAX */
                 i__1 = 2;
-                i__2 = ilaenv_(&c__2, "SGELQF", " ", m, n, &c_n1, & c_n1); // , expr subst
-                nbmin = fla_max(i__1,i__2);
+                i__2 = aocl_lapack_ilaenv(&c__2, "SGELQF", " ", m, n, &c_n1, &c_n1); // , expr subst
+                nbmin = fla_max(i__1, i__2);
             }
         }
     }
-    if (nb >= nbmin && nb < k && nx < k)
+    if(nb >= nbmin && nb < k && nx < k)
     {
         /* Use blocked code initially */
         i__1 = k - nx;
         i__2 = nb;
-        for (i__ = 1;
-                i__2 < 0 ? i__ >= i__1 : i__ <= i__1;
-                i__ += i__2)
+        for(i__ = 1; i__2 < 0 ? i__ >= i__1 : i__ <= i__1; i__ += i__2)
         {
             /* Computing MIN */
             i__3 = k - i__ + 1;
-            ib = fla_min(i__3,nb);
+            ib = fla_min(i__3, nb);
             /* Compute the LQ factorization of the current block */
             /* A(i:i+ib-1,i:n) */
             i__3 = *n - i__ + 1;
-            lapack_sgelq2(&ib, &i__3, &a[i__ + i__ * a_dim1], lda, &tau[i__], &work[ 1], &iinfo);
-            if (i__ + ib <= *m)
+            lapack_sgelq2(&ib, &i__3, &a[i__ + i__ * a_dim1], lda, &tau[i__], &work[1], &iinfo);
+            if(i__ + ib <= *m)
             {
                 /* Form the triangular factor of the block reflector */
                 /* H = H(i) H(i+1) . . . H(i+ib-1) */
                 i__3 = *n - i__ + 1;
-                slarft_("Forward", "Rowwise", &i__3, &ib, &a[i__ + i__ * a_dim1], lda, &tau[i__], &work[1], &ldwork);
+                aocl_lapack_slarft("Forward", "Rowwise", &i__3, &ib, &a[i__ + i__ * a_dim1], lda,
+                                   &tau[i__], &work[1], &ldwork);
                 /* Apply H to A(i+ib:m,i:n) from the right */
                 i__3 = *m - i__ - ib + 1;
                 i__4 = *n - i__ + 1;
-                slarfb_("Right", "No transpose", "Forward", "Rowwise", &i__3, &i__4, &ib, &a[i__ + i__ * a_dim1], lda, &work[1], & ldwork, &a[i__ + ib + i__ * a_dim1], lda, &work[ib + 1], &ldwork);
+                aocl_lapack_slarfb("Right", "No transpose", "Forward", "Rowwise", &i__3, &i__4, &ib,
+                                   &a[i__ + i__ * a_dim1], lda, &work[1], &ldwork,
+                                   &a[i__ + ib + i__ * a_dim1], lda, &work[ib + 1], &ldwork);
             }
             /* L10: */
         }
@@ -280,13 +285,13 @@ int lapack_sgelqf(integer *m, integer *n, real *a, integer *lda, real *tau, real
         i__ = 1;
     }
     /* Use unblocked code to factor the last or only block. */
-    if (i__ <= k)
+    if(i__ <= k)
     {
         i__2 = *m - i__ + 1;
         i__1 = *n - i__ + 1;
         lapack_sgelq2(&i__2, &i__1, &a[i__ + i__ * a_dim1], lda, &tau[i__], &work[1], &iinfo);
     }
-    work[1] = sroundup_lwork(&iws);
+    work[1] = aocl_lapack_sroundup_lwork(&iws);
     return 0;
     /* End of SGELQF */
 }

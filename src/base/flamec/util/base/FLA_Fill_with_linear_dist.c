@@ -35,7 +35,7 @@ FLA_Error FLA_Fill_with_linear_dist( FLA_Obj shift, FLA_Obj delta, FLA_Obj x )
 
 	// Create a local real scalar alpha2 of the same precision as
 	// alpha. Then copy alpha to alpha2, which will convert the
-	// complex value to real, if necessary (ie: if alpha is complex).
+	// scomplex value to real, if necessary (ie: if alpha is scomplex).
 	FLA_Obj_create( dt_real, 1,   1, 0, 0, &delta2 );
 	FLA_Copy( delta, delta2 );
 
@@ -75,7 +75,7 @@ FLA_Error FLA_Fill_with_linear_dist( FLA_Obj shift, FLA_Obj delta, FLA_Obj x )
 	//FLA_Inv_scal( lB, l );
 
 	// Overwrite x with the distribution we created in l.
-	// If x is complex, then this is where the conversion between
+	// If x is scomplex, then this is where the conversion between
 	// datatypes happens.
 	FLA_Copy( l, x );
 

@@ -16,7 +16,7 @@
 #include "blis.h"
 #endif
 
-void bl1_snrm2( integer n, float* x, integer incx, float* norm )
+void bl1_snrm2( fla_dim_t n, float* x, fla_dim_t incx, float* norm )
 {
 #ifdef BLIS1_ENABLE_CBLAS_INTERFACES
 	*norm = cblas_snrm2( n,
@@ -27,7 +27,7 @@ void bl1_snrm2( integer n, float* x, integer incx, float* norm )
 #endif
 }
 
-void bl1_dnrm2( integer n, double* x, integer incx, double* norm )
+void bl1_dnrm2( fla_dim_t n, double* x, fla_dim_t incx, double* norm )
 {
 #ifdef BLIS1_ENABLE_CBLAS_INTERFACES
 	*norm = cblas_dnrm2( n,
@@ -38,7 +38,7 @@ void bl1_dnrm2( integer n, double* x, integer incx, double* norm )
 #endif
 }
 
-void bl1_cnrm2( integer n, scomplex* x, integer incx, float* norm )
+void bl1_cnrm2( fla_dim_t n, scomplex* x, fla_dim_t incx, float* norm )
 {
 #ifdef BLIS1_ENABLE_CBLAS_INTERFACES
 	*norm = cblas_scnrm2( n,
@@ -49,7 +49,7 @@ void bl1_cnrm2( integer n, scomplex* x, integer incx, float* norm )
 #endif
 }
 
-void bl1_znrm2( integer n, dcomplex* x, integer incx, double* norm )
+void bl1_znrm2( fla_dim_t n, dcomplex* x, fla_dim_t incx, double* norm )
 {
 #ifdef BLIS1_ENABLE_CBLAS_INTERFACES
 	*norm = cblas_dznrm2( n,

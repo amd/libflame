@@ -147,38 +147,50 @@
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void dlasd4_(integer *n, integer *i__, doublereal *d__, doublereal *z__, doublereal *delta,
-             doublereal *rho, doublereal *sigma, doublereal *work, integer *info)
+/** Generated wrapper function */
+void dlasd4_(aocl_int_t *n, aocl_int_t *i__, doublereal *d__, doublereal *z__, doublereal *delta,
+             doublereal *rho, doublereal *sigma, doublereal *work, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_dlasd4(n, i__, d__, z__, delta, rho, sigma, work, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t i___64 = *i__;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_dlasd4(&n_64, &i___64, d__, z__, delta, rho, sigma, work, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_dlasd4(aocl_int64_t *n, aocl_int64_t *i__, doublereal *d__, doublereal *z__,
+                        doublereal *delta, doublereal *rho, doublereal *sigma, doublereal *work,
+                        aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dlasd4 inputs: n %" FLA_IS ", i__ %" FLA_IS "", *n, *i__);
     /* System generated locals */
-    integer i__1;
+    aocl_int64_t i__1;
     doublereal d__1;
     /* Builtin functions */
     double sqrt(doublereal);
     /* Local variables */
     doublereal a, b, c__;
-    integer j;
+    aocl_int64_t j;
     doublereal w, dd[3];
-    integer ii;
+    aocl_int64_t ii;
     doublereal dw, zz[3];
-    integer ip1;
+    aocl_int64_t ip1;
     doublereal sq2, eta, phi, eps, tau, psi;
-    integer iim1, iip1;
+    aocl_int64_t iim1, iip1;
     doublereal tau2, dphi, sglb, dpsi, sgub;
-    integer iter;
+    aocl_int64_t iter;
     doublereal temp, prew, temp1, temp2, dtiim, delsq, dtiip;
-    integer niter;
+    aocl_int64_t niter;
     doublereal dtisq;
     logical swtch;
     doublereal dtnsq;
-    extern /* Subroutine */
-        void
-        dlaed6_(integer *, logical *, doublereal *, doublereal *, doublereal *, doublereal *,
-                doublereal *, integer *),
-        dlasd5_(integer *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *,
-                doublereal *);
     doublereal delsq2, dtnsq1;
     logical swtch3;
     extern doublereal dlamch_(char *);
@@ -228,7 +240,7 @@ void dlasd4_(integer *n, integer *i__, doublereal *d__, doublereal *z__, doubler
     }
     if(*n == 2)
     {
-        dlasd5_(i__, &d__[1], &z__[1], &delta[1], rho, sigma, &work[1]);
+        aocl_lapack_dlasd5(i__, &d__[1], &z__[1], &delta[1], rho, sigma, &work[1]);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -748,7 +760,7 @@ void dlasd4_(integer *n, integer *i__, doublereal *d__, doublereal *z__, doubler
             dd[0] = dtiim;
             dd[1] = delta[ii] * work[ii];
             dd[2] = dtiip;
-            dlaed6_(&niter, &orgati, &c__, dd, zz, &w, &eta, info);
+            aocl_lapack_dlaed6(&niter, &orgati, &c__, dd, zz, &w, &eta, info);
             if(*info != 0)
             {
                 /* If INFO is not 0, i.e., DLAED6 failed, switch back */
@@ -1027,7 +1039,7 @@ void dlasd4_(integer *n, integer *i__, doublereal *d__, doublereal *z__, doubler
                 dd[0] = dtiim;
                 dd[1] = delta[ii] * work[ii];
                 dd[2] = dtiip;
-                dlaed6_(&niter, &orgati, &c__, dd, zz, &w, &eta, info);
+                aocl_lapack_dlaed6(&niter, &orgati, &c__, dd, zz, &w, &eta, info);
                 if(*info != 0)
                 {
                     /* If INFO is not 0, i.e., DLAED6 failed, switch */

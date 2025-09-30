@@ -4,8 +4,8 @@
  -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for
  libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
-/* > \brief \b CHETF2_ROOK computes the factorization of a complex Hermitian indefinite matrix using
+static aocl_int64_t c__1 = 1;
+/* > \brief \b CHETF2_ROOK computes the factorization of a scomplex Hermitian indefinite matrix using
  * the bound ed Bunch-Kaufman ("rook") diagonal pivoting method (unblocked algorithm). */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -41,7 +41,7 @@ static integer c__1 = 1;
 /* > */
 /* > \verbatim */
 /* > */
-/* > CHETF2_ROOK computes the factorization of a complex Hermitian matrix A */
+/* > CHETF2_ROOK computes the factorization of a scomplex Hermitian matrix A */
 /* > using the bounded Bunch-Kaufman ("rook") diagonal pivoting method: */
 /* > */
 /* > A = U*D*U**H or A = L*D*L**H */
@@ -190,7 +190,25 @@ static integer c__1 = 1;
 /* > \endverbatim */
 /* ===================================================================== */
 /* Subroutine */
-void chetf2_rook_(char *uplo, integer *n, complex *a, integer *lda, integer *ipiv, integer *info)
+/** Generated wrapper function */
+void chetf2_rook_(char *uplo, aocl_int_t *n, scomplex *a, aocl_int_t *lda, aocl_int_t *ipiv,
+                  aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_chetf2_rook(uplo, n, a, lda, ipiv, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_chetf2_rook(uplo, &n_64, a, &lda_64, ipiv, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_chetf2_rook(char *uplo, aocl_int64_t *n, scomplex *a, aocl_int64_t *lda,
+                             aocl_int_t *ipiv, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -203,46 +221,35 @@ void chetf2_rook_(char *uplo, integer *n, complex *a, integer *lda, integer *ipi
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
-    integer a_dim1, a_offset, i__1, i__2, i__3, i__4, i__5, i__6;
+    aocl_int64_t a_dim1, a_offset, i__1, i__2, i__3, i__4, i__5, i__6;
     real r__1, r__2;
-    complex q__1, q__2, q__3, q__4, q__5, q__6, q__7, q__8;
+    scomplex q__1, q__2, q__3, q__4, q__5, q__6, q__7, q__8;
     /* Builtin functions */
-    double sqrt(doublereal), r_imag(complex *);
-    void r_cnjg(complex *, complex *);
+    double sqrt(doublereal), r_imag(scomplex *);
+    void r_cnjg(scomplex *, scomplex *);
     /* Local variables */
     real d__;
-    integer i__, j, k, p;
-    complex t;
+    aocl_int64_t i__, j, k, p;
+    scomplex t;
     real r1, d11;
-    complex d12;
+    scomplex d12;
     real d22;
-    complex d21;
-    integer ii, kk, kp;
-    complex wk;
+    scomplex d21;
+    aocl_int64_t ii, kk, kp;
+    scomplex wk;
     real tt;
-    complex wkm1, wkp1;
-    extern /* Subroutine */
-        void
-        cher_(char *, integer *, real *, complex *, integer *, complex *, integer *);
+    scomplex wkm1, wkp1;
     logical done;
-    integer imax, jmax;
+    aocl_int64_t imax, jmax;
     real alpha;
-    extern logical lsame_(char *, char *, integer, integer);
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     real sfmin;
-    extern /* Subroutine */
-        void
-        cswap_(integer *, complex *, integer *, complex *, integer *);
-    integer itemp, kstep;
+    aocl_int64_t itemp, kstep;
     real stemp;
     logical upper;
     extern real slapy2_(real *, real *);
     real absakk;
-    extern integer icamax_(integer *, complex *, integer *);
     extern real slamch_(char *);
-    extern /* Subroutine */
-        void
-        csscal_(integer *, real *, complex *, integer *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real colmax, rowmax;
     /* -- LAPACK computational routine (version 3.5.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -294,7 +301,7 @@ void chetf2_rook_(char *uplo, integer *n, complex *a, integer *lda, integer *ipi
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("CHETF2_ROOK", &i__1, (ftnlen)11);
+        aocl_blas_xerbla("CHETF2_ROOK", &i__1, (ftnlen)11);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
@@ -325,7 +332,7 @@ void chetf2_rook_(char *uplo, integer *n, complex *a, integer *lda, integer *ipi
         if(k > 1)
         {
             i__1 = k - 1;
-            imax = icamax_(&i__1, &a[k * a_dim1 + 1], &c__1);
+            imax = aocl_blas_icamax(&i__1, &a[k * a_dim1 + 1], &c__1);
             i__1 = imax + k * a_dim1;
             colmax = (r__1 = a[i__1].r, f2c_abs(r__1))
                      + (r__2 = r_imag(&a[imax + k * a_dim1]), f2c_abs(r__2));
@@ -371,7 +378,7 @@ void chetf2_rook_(char *uplo, integer *n, complex *a, integer *lda, integer *ipi
                 if(imax != k)
                 {
                     i__1 = k - imax;
-                    jmax = imax + icamax_(&i__1, &a[imax + (imax + 1) * a_dim1], lda);
+                    jmax = imax + aocl_blas_icamax(&i__1, &a[imax + (imax + 1) * a_dim1], lda);
                     i__1 = imax + jmax * a_dim1;
                     rowmax = (r__1 = a[i__1].r, f2c_abs(r__1))
                              + (r__2 = r_imag(&a[imax + jmax * a_dim1]), f2c_abs(r__2));
@@ -383,7 +390,7 @@ void chetf2_rook_(char *uplo, integer *n, complex *a, integer *lda, integer *ipi
                 if(imax > 1)
                 {
                     i__1 = imax - 1;
-                    itemp = icamax_(&i__1, &a[imax * a_dim1 + 1], &c__1);
+                    itemp = aocl_blas_icamax(&i__1, &a[imax * a_dim1 + 1], &c__1);
                     i__1 = itemp + imax * a_dim1;
                     stemp = (r__1 = a[i__1].r, f2c_abs(r__1))
                             + (r__2 = r_imag(&a[itemp + imax * a_dim1]), f2c_abs(r__2));
@@ -442,7 +449,7 @@ void chetf2_rook_(char *uplo, integer *n, complex *a, integer *lda, integer *ipi
                 if(p > 1)
                 {
                     i__1 = p - 1;
-                    cswap_(&i__1, &a[k * a_dim1 + 1], &c__1, &a[p * a_dim1 + 1], &c__1);
+                    aocl_blas_cswap(&i__1, &a[k * a_dim1 + 1], &c__1, &a[p * a_dim1 + 1], &c__1);
                 }
                 /* (2) Swap and conjugate middle parts */
                 i__1 = k - 1;
@@ -485,7 +492,7 @@ void chetf2_rook_(char *uplo, integer *n, complex *a, integer *lda, integer *ipi
                 if(kp > 1)
                 {
                     i__1 = kp - 1;
-                    cswap_(&i__1, &a[kk * a_dim1 + 1], &c__1, &a[kp * a_dim1 + 1], &c__1);
+                    aocl_blas_cswap(&i__1, &a[kk * a_dim1 + 1], &c__1, &a[kp * a_dim1 + 1], &c__1);
                 }
                 /* (2) Swap and conjugate middle parts */
                 i__1 = kk - 1;
@@ -577,10 +584,11 @@ void chetf2_rook_(char *uplo, integer *n, complex *a, integer *lda, integer *ipi
                         d11 = 1.f / a[i__1].r;
                         i__1 = k - 1;
                         r__1 = -d11;
-                        cher_(uplo, &i__1, &r__1, &a[k * a_dim1 + 1], &c__1, &a[a_offset], lda);
+                        aocl_blas_cher(uplo, &i__1, &r__1, &a[k * a_dim1 + 1], &c__1, &a[a_offset],
+                                       lda);
                         /* Store U(k) in column k */
                         i__1 = k - 1;
-                        csscal_(&i__1, &d11, &a[k * a_dim1 + 1], &c__1);
+                        aocl_blas_csscal(&i__1, &d11, &a[k * a_dim1 + 1], &c__1);
                     }
                     else
                     {
@@ -604,7 +612,8 @@ void chetf2_rook_(char *uplo, integer *n, complex *a, integer *lda, integer *ipi
                         /* = A - (W(k)/D(k))*(D(k))*(W(k)/D(K))**T */
                         i__1 = k - 1;
                         r__1 = -d11;
-                        cher_(uplo, &i__1, &r__1, &a[k * a_dim1 + 1], &c__1, &a[a_offset], lda);
+                        aocl_blas_cher(uplo, &i__1, &r__1, &a[k * a_dim1 + 1], &c__1, &a[a_offset],
+                                       lda);
                     }
                 }
             }
@@ -719,12 +728,12 @@ void chetf2_rook_(char *uplo, integer *n, complex *a, integer *lda, integer *ipi
         /* Store details of the interchanges in IPIV */
         if(kstep == 1)
         {
-            ipiv[k] = kp;
+            ipiv[k] = (aocl_int_t)(kp);
         }
         else
         {
-            ipiv[k] = -p;
-            ipiv[k - 1] = -kp;
+            ipiv[k] = (aocl_int_t)(-p);
+            ipiv[k - 1] = (aocl_int_t)(-kp);
         }
         /* Decrease K and return to the start of the main loop */
         k -= kstep;
@@ -753,7 +762,7 @@ void chetf2_rook_(char *uplo, integer *n, complex *a, integer *lda, integer *ipi
         if(k < *n)
         {
             i__1 = *n - k;
-            imax = k + icamax_(&i__1, &a[k + 1 + k * a_dim1], &c__1);
+            imax = k + aocl_blas_icamax(&i__1, &a[k + 1 + k * a_dim1], &c__1);
             i__1 = imax + k * a_dim1;
             colmax = (r__1 = a[i__1].r, f2c_abs(r__1))
                      + (r__2 = r_imag(&a[imax + k * a_dim1]), f2c_abs(r__2));
@@ -799,7 +808,7 @@ void chetf2_rook_(char *uplo, integer *n, complex *a, integer *lda, integer *ipi
                 if(imax != k)
                 {
                     i__1 = imax - k;
-                    jmax = k - 1 + icamax_(&i__1, &a[imax + k * a_dim1], lda);
+                    jmax = k - 1 + aocl_blas_icamax(&i__1, &a[imax + k * a_dim1], lda);
                     i__1 = imax + jmax * a_dim1;
                     rowmax = (r__1 = a[i__1].r, f2c_abs(r__1))
                              + (r__2 = r_imag(&a[imax + jmax * a_dim1]), f2c_abs(r__2));
@@ -811,7 +820,7 @@ void chetf2_rook_(char *uplo, integer *n, complex *a, integer *lda, integer *ipi
                 if(imax < *n)
                 {
                     i__1 = *n - imax;
-                    itemp = imax + icamax_(&i__1, &a[imax + 1 + imax * a_dim1], &c__1);
+                    itemp = imax + aocl_blas_icamax(&i__1, &a[imax + 1 + imax * a_dim1], &c__1);
                     i__1 = itemp + imax * a_dim1;
                     stemp = (r__1 = a[i__1].r, f2c_abs(r__1))
                             + (r__2 = r_imag(&a[itemp + imax * a_dim1]), f2c_abs(r__2));
@@ -870,7 +879,8 @@ void chetf2_rook_(char *uplo, integer *n, complex *a, integer *lda, integer *ipi
                 if(p < *n)
                 {
                     i__1 = *n - p;
-                    cswap_(&i__1, &a[p + 1 + k * a_dim1], &c__1, &a[p + 1 + p * a_dim1], &c__1);
+                    aocl_blas_cswap(&i__1, &a[p + 1 + k * a_dim1], &c__1, &a[p + 1 + p * a_dim1],
+                                    &c__1);
                 }
                 /* (2) Swap and conjugate middle parts */
                 i__1 = p - 1;
@@ -913,7 +923,8 @@ void chetf2_rook_(char *uplo, integer *n, complex *a, integer *lda, integer *ipi
                 if(kp < *n)
                 {
                     i__1 = *n - kp;
-                    cswap_(&i__1, &a[kp + 1 + kk * a_dim1], &c__1, &a[kp + 1 + kp * a_dim1], &c__1);
+                    aocl_blas_cswap(&i__1, &a[kp + 1 + kk * a_dim1], &c__1,
+                                    &a[kp + 1 + kp * a_dim1], &c__1);
                 }
                 /* (2) Swap and conjugate middle parts */
                 i__1 = kp - 1;
@@ -1006,11 +1017,11 @@ void chetf2_rook_(char *uplo, integer *n, complex *a, integer *lda, integer *ipi
                         d11 = 1.f / a[i__1].r;
                         i__1 = *n - k;
                         r__1 = -d11;
-                        cher_(uplo, &i__1, &r__1, &a[k + 1 + k * a_dim1], &c__1,
-                              &a[k + 1 + (k + 1) * a_dim1], lda);
+                        aocl_blas_cher(uplo, &i__1, &r__1, &a[k + 1 + k * a_dim1], &c__1,
+                                       &a[k + 1 + (k + 1) * a_dim1], lda);
                         /* Store L(k) in column k */
                         i__1 = *n - k;
-                        csscal_(&i__1, &d11, &a[k + 1 + k * a_dim1], &c__1);
+                        aocl_blas_csscal(&i__1, &d11, &a[k + 1 + k * a_dim1], &c__1);
                     }
                     else
                     {
@@ -1034,8 +1045,8 @@ void chetf2_rook_(char *uplo, integer *n, complex *a, integer *lda, integer *ipi
                         /* = A - (W(k)/D(k))*(D(k))*(W(k)/D(K))**T */
                         i__1 = *n - k;
                         r__1 = -d11;
-                        cher_(uplo, &i__1, &r__1, &a[k + 1 + k * a_dim1], &c__1,
-                              &a[k + 1 + (k + 1) * a_dim1], lda);
+                        aocl_blas_cher(uplo, &i__1, &r__1, &a[k + 1 + k * a_dim1], &c__1,
+                                       &a[k + 1 + (k + 1) * a_dim1], lda);
                     }
                 }
             }
@@ -1148,12 +1159,12 @@ void chetf2_rook_(char *uplo, integer *n, complex *a, integer *lda, integer *ipi
         /* Store details of the interchanges in IPIV */
         if(kstep == 1)
         {
-            ipiv[k] = kp;
+            ipiv[k] = (aocl_int_t)(kp);
         }
         else
         {
-            ipiv[k] = -p;
-            ipiv[k + 1] = -kp;
+            ipiv[k] = (aocl_int_t)(-p);
+            ipiv[k + 1] = (aocl_int_t)(-kp);
         }
         /* Increase K and return to the start of the main loop */
         k += kstep;

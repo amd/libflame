@@ -4,8 +4,8 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static complex c_b1 = {1.f, 0.f};
-static integer c__1 = 1;
+static scomplex c_b1 = {{1.f}, {0.f}};
+static aocl_int64_t c__1 = 1;
 /* > \brief \b CTZRQF */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -41,7 +41,7 @@ static integer c__1 = 1;
 /* > */
 /* > This routine is deprecated and has been replaced by routine CTZRZF. */
 /* > */
-/* > CTZRQF reduces the M-by-N ( M<=N ) complex upper trapezoidal matrix A */
+/* > CTZRQF reduces the M-by-N ( M<=N ) scomplex upper trapezoidal matrix A */
 /* > to upper triangular form by means of unitary transformations. */
 /* > */
 /* > The upper trapezoidal matrix A is factored as */
@@ -136,7 +136,25 @@ static integer c__1 = 1;
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void ctzrqf_(integer *m, integer *n, complex *a, integer *lda, complex *tau, integer *info)
+/** Generated wrapper function */
+void ctzrqf_(aocl_int_t *m, aocl_int_t *n, scomplex *a, aocl_int_t *lda, scomplex *tau, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_ctzrqf(m, n, a, lda, tau, info);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_ctzrqf(&m_64, &n_64, a, &lda_64, tau, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_ctzrqf(aocl_int64_t *m, aocl_int64_t *n, scomplex *a, aocl_int64_t *lda, scomplex *tau,
+             aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -149,26 +167,13 @@ void ctzrqf_(integer *m, integer *n, complex *a, integer *lda, complex *tau, int
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
-    integer a_dim1, a_offset, i__1, i__2;
-    complex q__1, q__2;
+    aocl_int64_t a_dim1, a_offset, i__1, i__2;
+    scomplex q__1, q__2;
     /* Builtin functions */
-    void r_cnjg(complex *, complex *);
+    void r_cnjg(scomplex *, scomplex *);
     /* Local variables */
-    integer i__, k, m1;
-    extern /* Subroutine */
-        void
-        cgerc_(integer *, integer *, complex *, complex *, integer *, complex *, integer *,
-               complex *, integer *);
-    complex alpha;
-    extern /* Subroutine */
-        void
-        cgemv_(char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *,
-               complex *, complex *, integer *),
-        ccopy_(integer *, complex *, integer *, complex *, integer *),
-        caxpy_(integer *, complex *, complex *, integer *, complex *, integer *),
-        clarfg_(integer *, complex *, complex *, integer *, complex *),
-        clacgv_(integer *, complex *, integer *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    aocl_int64_t i__, k, m1;
+    scomplex alpha;
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -210,7 +215,7 @@ void ctzrqf_(integer *m, integer *n, complex *a, integer *lda, complex *tau, int
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("CTZRQF", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("CTZRQF", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
@@ -245,12 +250,12 @@ void ctzrqf_(integer *m, integer *n, complex *a, integer *lda, complex *tau, int
             a[i__1].r = q__1.r;
             a[i__1].i = q__1.i; // , expr subst
             i__1 = *n - *m;
-            clacgv_(&i__1, &a[k + m1 * a_dim1], lda);
+            aocl_lapack_clacgv(&i__1, &a[k + m1 * a_dim1], lda);
             i__1 = k + k * a_dim1;
             alpha.r = a[i__1].r;
             alpha.i = a[i__1].i; // , expr subst
             i__1 = *n - *m + 1;
-            clarfg_(&i__1, &alpha, &a[k + m1 * a_dim1], lda, &tau[k]);
+            aocl_lapack_clarfg(&i__1, &alpha, &a[k + m1 * a_dim1], lda, &tau[k]);
             i__1 = k + k * a_dim1;
             a[i__1].r = alpha.r;
             a[i__1].i = alpha.i; // , expr subst
@@ -267,26 +272,26 @@ void ctzrqf_(integer *m, integer *n, complex *a, integer *lda, complex *tau, int
                 /* the kth column of A. Also let B denote the first */
                 /* ( k - 1 ) rows of the last ( n - m ) columns of A. */
                 i__1 = k - 1;
-                ccopy_(&i__1, &a[k * a_dim1 + 1], &c__1, &tau[1], &c__1);
+                aocl_blas_ccopy(&i__1, &a[k * a_dim1 + 1], &c__1, &tau[1], &c__1);
                 /* Form w = a( k ) + B*z( k ) in TAU. */
                 i__1 = k - 1;
                 i__2 = *n - *m;
-                cgemv_("No transpose", &i__1, &i__2, &c_b1, &a[m1 * a_dim1 + 1], lda,
-                       &a[k + m1 * a_dim1], lda, &c_b1, &tau[1], &c__1);
+                aocl_blas_cgemv("No transpose", &i__1, &i__2, &c_b1, &a[m1 * a_dim1 + 1], lda,
+                                &a[k + m1 * a_dim1], lda, &c_b1, &tau[1], &c__1);
                 /* Now form a( k ) := a( k ) - conjg(tau)*w */
                 /* and B := B - conjg(tau)*w*z( k )**H. */
                 i__1 = k - 1;
                 r_cnjg(&q__2, &tau[k]);
                 q__1.r = -q__2.r;
                 q__1.i = -q__2.i; // , expr subst
-                caxpy_(&i__1, &q__1, &tau[1], &c__1, &a[k * a_dim1 + 1], &c__1);
+                aocl_blas_caxpy(&i__1, &q__1, &tau[1], &c__1, &a[k * a_dim1 + 1], &c__1);
                 i__1 = k - 1;
                 i__2 = *n - *m;
                 r_cnjg(&q__2, &tau[k]);
                 q__1.r = -q__2.r;
                 q__1.i = -q__2.i; // , expr subst
-                cgerc_(&i__1, &i__2, &q__1, &tau[1], &c__1, &a[k + m1 * a_dim1], lda,
-                       &a[m1 * a_dim1 + 1], lda);
+                aocl_blas_cgerc(&i__1, &i__2, &q__1, &tau[1], &c__1, &a[k + m1 * a_dim1], lda,
+                                &a[m1 * a_dim1 + 1], lda);
             }
             /* L20: */
         }

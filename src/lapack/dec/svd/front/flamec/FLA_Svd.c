@@ -48,7 +48,7 @@ FLA_Error FLA_Svd( FLA_Svd_type jobu, FLA_Svd_type jobv, FLA_Obj A, FLA_Obj s, F
                                     A, s, V, U,
                                     k_accum, b_alg );
     
-    // Recover A and conjugate U and V for complex cases
+    // Recover A and conjugate U and V for scomplex cases
     FLA_Obj_flip_base( &A );
     
     if ( FLA_Obj_is_complex( A ) )

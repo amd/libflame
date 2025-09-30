@@ -1,16 +1,16 @@
 #include "FLA_f2c.h"
 #include "FLA_lapack2flame_return_defs.h"
-static integer c__1 = 1;
-static integer c_n1 = -1;
+static aocl_int64_t c__1 = 1;
+static aocl_int64_t c_n1 = -1;
 
-int dgeqrf_check(integer *m, integer *n, double *a, integer *lda, double *tau, double *work,
-                 integer *lwork, integer *info)
+int dgeqrf_check(aocl_int64_t *m, aocl_int64_t *n, double *a, aocl_int64_t *lda, double *tau, double *work,
+                 aocl_int64_t *lwork, aocl_int64_t *info)
 {
     /* System generated locals */
-    integer a_dim1, a_offset, i__1;
+    aocl_int64_t a_dim1, a_offset, i__1;
     /* Local variables */
-    integer k, nb;
-    integer lwkopt;
+    aocl_int64_t k, nb;
+    aocl_int64_t lwkopt;
     logical lquery;
 
     /* Parameter adjustments */
@@ -21,7 +21,7 @@ int dgeqrf_check(integer *m, integer *n, double *a, integer *lda, double *tau, d
     --work;
     /* Function Body */
     *info = 0;
-    nb = ilaenv_(&c__1, "DGEQRF", " ", m, n, &c_n1, &c_n1);
+    nb = aocl_lapack_ilaenv(&c__1, "DGEQRF", " ", m, n, &c_n1, &c_n1);
     lwkopt = *n * nb;
     work[1] = (double)lwkopt;
     lquery = *lwork == -1;
@@ -44,7 +44,7 @@ int dgeqrf_check(integer *m, integer *n, double *a, integer *lda, double *tau, d
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("DGEQRF", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("DGEQRF", &i__1, (ftnlen)6);
         return LAPACK_FAILURE;
     }
     else if(lquery)

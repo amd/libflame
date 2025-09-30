@@ -4,7 +4,7 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static doublecomplex c_b1 = {1., 0.};
+static dcomplex c_b1 = {{1.}, {0.}};
 static doublereal c_b12 = 1.;
 /* > \brief \b ZPFTRI */
 /* =========== DOCUMENTATION =========== */
@@ -39,7 +39,7 @@ static doublereal c_b12 = 1.;
 /* > */
 /* > \verbatim */
 /* > */
-/* > ZPFTRI computes the inverse of a complex Hermitian positive definite */
+/* > ZPFTRI computes the inverse of a scomplex Hermitian positive definite */
 /* > matrix A using the Cholesky factorization A = U**H*U or A = L*L**H */
 /* > computed by ZPFTRF. */
 /* > \endverbatim */
@@ -215,32 +215,35 @@ k=N/2. IF TRANSR = 'C' then RFP is */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void zpftri_(char *transr, char *uplo, integer *n, doublecomplex *a, integer *info)
+/** Generated wrapper function */
+void zpftri_(char *transr, char *uplo, aocl_int_t *n, dcomplex *a, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_zpftri(transr, uplo, n, a, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_zpftri(transr, uplo, &n_64, a, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_zpftri(char *transr, char *uplo, aocl_int64_t *n, dcomplex *a,
+                        aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zpftri inputs: transr %c, uplo %c, n %" FLA_IS "", *transr, *uplo, *n);
 
     /* System generated locals */
-    integer i__1, i__2;
+    aocl_int64_t i__1, i__2;
     /* Local variables */
-    integer k, n1, n2;
+    aocl_int64_t k, n1, n2;
     logical normaltransr;
-    extern logical lsame_(char *, char *, integer, integer);
-    extern /* Subroutine */
-        void
-        zherk_(char *, char *, integer *, integer *, doublereal *, doublecomplex *, integer *,
-               doublereal *, doublecomplex *, integer *);
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     logical lower;
-    extern /* Subroutine */
-        void
-        ztrmm_(char *, char *, char *, char *, integer *, integer *, doublecomplex *,
-               doublecomplex *, integer *, doublecomplex *, integer *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical nisodd;
-    extern /* Subroutine */
-        void
-        zlauum_(char *, integer *, doublecomplex *, integer *, integer *),
-        ztftri_(char *, char *, char *, integer *, doublecomplex *, integer *);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -279,7 +282,7 @@ void zpftri_(char *transr, char *uplo, integer *n, doublecomplex *a, integer *in
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("ZPFTRI", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("ZPFTRI", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -290,7 +293,7 @@ void zpftri_(char *transr, char *uplo, integer *n, doublecomplex *a, integer *in
         return;
     }
     /* Invert the triangular Cholesky factor U or L. */
-    ztftri_(transr, uplo, "N", n, a, info);
+    aocl_lapack_ztftri(transr, uplo, "N", n, a, info);
     if(*info > 0)
     {
         AOCL_DTL_TRACE_LOG_EXIT
@@ -331,20 +334,20 @@ void zpftri_(char *transr, char *uplo, integer *n, doublecomplex *a, integer *in
                 /* SRPA for LOWER, NORMAL and N is odd ( a(0:n-1,0:N1-1) ) */
                 /* T1 -> a(0,0), T2 -> a(0,1), S -> a(N1,0) */
                 /* T1 -> a(0), T2 -> a(n), S -> a(N1) */
-                zlauum_("L", &n1, a, n, info);
-                zherk_("L", "C", &n1, &n2, &c_b12, &a[n1], n, &c_b12, a, n);
-                ztrmm_("L", "U", "N", "N", &n2, &n1, &c_b1, &a[*n], n, &a[n1], n);
-                zlauum_("U", &n2, &a[*n], n, info);
+                aocl_lapack_zlauum("L", &n1, a, n, info);
+                aocl_blas_zherk("L", "C", &n1, &n2, &c_b12, &a[n1], n, &c_b12, a, n);
+                aocl_blas_ztrmm("L", "U", "N", "N", &n2, &n1, &c_b1, &a[*n], n, &a[n1], n);
+                aocl_lapack_zlauum("U", &n2, &a[*n], n, info);
             }
             else
             {
                 /* SRPA for UPPER, NORMAL and N is odd ( a(0:n-1,0:N2-1) */
                 /* T1 -> a(N1+1,0), T2 -> a(N1,0), S -> a(0,0) */
                 /* T1 -> a(N2), T2 -> a(N1), S -> a(0) */
-                zlauum_("L", &n1, &a[n2], n, info);
-                zherk_("L", "N", &n1, &n2, &c_b12, a, n, &c_b12, &a[n2], n);
-                ztrmm_("R", "U", "C", "N", &n1, &n2, &c_b1, &a[n1], n, a, n);
-                zlauum_("U", &n2, &a[n1], n, info);
+                aocl_lapack_zlauum("L", &n1, &a[n2], n, info);
+                aocl_blas_zherk("L", "N", &n1, &n2, &c_b12, a, n, &c_b12, &a[n2], n);
+                aocl_blas_ztrmm("R", "U", "C", "N", &n1, &n2, &c_b1, &a[n1], n, a, n);
+                aocl_lapack_zlauum("U", &n2, &a[n1], n, info);
             }
         }
         else
@@ -354,19 +357,19 @@ void zpftri_(char *transr, char *uplo, integer *n, doublecomplex *a, integer *in
             {
                 /* SRPA for LOWER, TRANSPOSE, and N is odd */
                 /* T1 -> a(0), T2 -> a(1), S -> a(0+N1*N1) */
-                zlauum_("U", &n1, a, &n1, info);
-                zherk_("U", "N", &n1, &n2, &c_b12, &a[n1 * n1], &n1, &c_b12, a, &n1);
-                ztrmm_("R", "L", "N", "N", &n1, &n2, &c_b1, &a[1], &n1, &a[n1 * n1], &n1);
-                zlauum_("L", &n2, &a[1], &n1, info);
+                aocl_lapack_zlauum("U", &n1, a, &n1, info);
+                aocl_blas_zherk("U", "N", &n1, &n2, &c_b12, &a[n1 * n1], &n1, &c_b12, a, &n1);
+                aocl_blas_ztrmm("R", "L", "N", "N", &n1, &n2, &c_b1, &a[1], &n1, &a[n1 * n1], &n1);
+                aocl_lapack_zlauum("L", &n2, &a[1], &n1, info);
             }
             else
             {
                 /* SRPA for UPPER, TRANSPOSE, and N is odd */
                 /* T1 -> a(0+N2*N2), T2 -> a(0+N1*N2), S -> a(0) */
-                zlauum_("U", &n1, &a[n2 * n2], &n2, info);
-                zherk_("U", "C", &n1, &n2, &c_b12, a, &n2, &c_b12, &a[n2 * n2], &n2);
-                ztrmm_("L", "L", "C", "N", &n2, &n1, &c_b1, &a[n1 * n2], &n2, a, &n2);
-                zlauum_("L", &n2, &a[n1 * n2], &n2, info);
+                aocl_lapack_zlauum("U", &n1, &a[n2 * n2], &n2, info);
+                aocl_blas_zherk("U", "C", &n1, &n2, &c_b12, a, &n2, &c_b12, &a[n2 * n2], &n2);
+                aocl_blas_ztrmm("L", "L", "C", "N", &n2, &n1, &c_b1, &a[n1 * n2], &n2, a, &n2);
+                aocl_lapack_zlauum("L", &n2, &a[n1 * n2], &n2, info);
             }
         }
     }
@@ -382,15 +385,15 @@ void zpftri_(char *transr, char *uplo, integer *n, doublecomplex *a, integer *in
                 /* T1 -> a(1,0), T2 -> a(0,0), S -> a(k+1,0) */
                 /* T1 -> a(1), T2 -> a(0), S -> a(k+1) */
                 i__1 = *n + 1;
-                zlauum_("L", &k, &a[1], &i__1, info);
+                aocl_lapack_zlauum("L", &k, &a[1], &i__1, info);
                 i__1 = *n + 1;
                 i__2 = *n + 1;
-                zherk_("L", "C", &k, &k, &c_b12, &a[k + 1], &i__1, &c_b12, &a[1], &i__2);
+                aocl_blas_zherk("L", "C", &k, &k, &c_b12, &a[k + 1], &i__1, &c_b12, &a[1], &i__2);
                 i__1 = *n + 1;
                 i__2 = *n + 1;
-                ztrmm_("L", "U", "N", "N", &k, &k, &c_b1, a, &i__1, &a[k + 1], &i__2);
+                aocl_blas_ztrmm("L", "U", "N", "N", &k, &k, &c_b1, a, &i__1, &a[k + 1], &i__2);
                 i__1 = *n + 1;
-                zlauum_("U", &k, a, &i__1, info);
+                aocl_lapack_zlauum("U", &k, a, &i__1, info);
             }
             else
             {
@@ -398,15 +401,15 @@ void zpftri_(char *transr, char *uplo, integer *n, doublecomplex *a, integer *in
                 /* T1 -> a(k+1,0) , T2 -> a(k,0), S -> a(0,0) */
                 /* T1 -> a(k+1), T2 -> a(k), S -> a(0) */
                 i__1 = *n + 1;
-                zlauum_("L", &k, &a[k + 1], &i__1, info);
+                aocl_lapack_zlauum("L", &k, &a[k + 1], &i__1, info);
                 i__1 = *n + 1;
                 i__2 = *n + 1;
-                zherk_("L", "N", &k, &k, &c_b12, a, &i__1, &c_b12, &a[k + 1], &i__2);
+                aocl_blas_zherk("L", "N", &k, &k, &c_b12, a, &i__1, &c_b12, &a[k + 1], &i__2);
                 i__1 = *n + 1;
                 i__2 = *n + 1;
-                ztrmm_("R", "U", "C", "N", &k, &k, &c_b1, &a[k], &i__1, a, &i__2);
+                aocl_blas_ztrmm("R", "U", "C", "N", &k, &k, &c_b1, &a[k], &i__1, a, &i__2);
                 i__1 = *n + 1;
-                zlauum_("U", &k, &a[k], &i__1, info);
+                aocl_lapack_zlauum("U", &k, &a[k], &i__1, info);
             }
         }
         else
@@ -418,10 +421,10 @@ void zpftri_(char *transr, char *uplo, integer *n, doublecomplex *a, integer *in
                 /* T1 -> B(0,1), T2 -> B(0,0), S -> B(0,k+1), */
                 /* T1 -> a(0+k), T2 -> a(0+0), S -> a(0+k*(k+1));
                 lda=k */
-                zlauum_("U", &k, &a[k], &k, info);
-                zherk_("U", "N", &k, &k, &c_b12, &a[k * (k + 1)], &k, &c_b12, &a[k], &k);
-                ztrmm_("R", "L", "N", "N", &k, &k, &c_b1, a, &k, &a[k * (k + 1)], &k);
-                zlauum_("L", &k, a, &k, info);
+                aocl_lapack_zlauum("U", &k, &a[k], &k, info);
+                aocl_blas_zherk("U", "N", &k, &k, &c_b12, &a[k * (k + 1)], &k, &c_b12, &a[k], &k);
+                aocl_blas_ztrmm("R", "L", "N", "N", &k, &k, &c_b1, a, &k, &a[k * (k + 1)], &k);
+                aocl_lapack_zlauum("L", &k, a, &k, info);
             }
             else
             {
@@ -429,10 +432,10 @@ void zpftri_(char *transr, char *uplo, integer *n, doublecomplex *a, integer *in
                 /* T1 -> B(0,k+1), T2 -> B(0,k), S -> B(0,0), */
                 /* T1 -> a(0+k*(k+1)), T2 -> a(0+k*k), S -> a(0+0));
                 lda=k */
-                zlauum_("U", &k, &a[k * (k + 1)], &k, info);
-                zherk_("U", "C", &k, &k, &c_b12, a, &k, &c_b12, &a[k * (k + 1)], &k);
-                ztrmm_("L", "L", "C", "N", &k, &k, &c_b1, &a[k * k], &k, a, &k);
-                zlauum_("L", &k, &a[k * k], &k, info);
+                aocl_lapack_zlauum("U", &k, &a[k * (k + 1)], &k, info);
+                aocl_blas_zherk("U", "C", &k, &k, &c_b12, a, &k, &c_b12, &a[k * (k + 1)], &k);
+                aocl_blas_ztrmm("L", "L", "C", "N", &k, &k, &c_b1, &a[k * k], &k, a, &k);
+                aocl_lapack_zlauum("L", &k, &a[k * k], &k, info);
             }
         }
     }

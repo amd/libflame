@@ -1,14 +1,14 @@
 /* caxpy.f -- translated by f2c (version 19991025). You must link the resulting object file with the libraries: -lf2c -lm (in that order) */
 #include "FLA_f2c.h"
 /* Subroutine */
-int caxpy_(integer *n, complex *ca, complex *cx, integer * incx, complex *cy, integer *incy)
+int caxpy_(integer *n, scomplex *ca, scomplex *cx, integer * incx, scomplex *cy, integer *incy)
 {
     /* System generated locals */
     integer i__1, i__2, i__3, i__4;
     real r__1, r__2;
-    complex q__1, q__2;
+    scomplex q__1, q__2;
     /* Builtin functions */
-    double r_imag(complex *);
+    double r_imag(scomplex *);
     /* Local variables */
     integer i__, ix, iy;
     /* constant times a vector plus a vector. */

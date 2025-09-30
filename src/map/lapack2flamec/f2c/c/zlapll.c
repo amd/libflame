@@ -95,33 +95,40 @@
 /* > \ingroup complex16OTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-void zlapll_(integer *n, doublecomplex *x, integer *incx, doublecomplex *y, integer *incy,
+/** Generated wrapper function */
+void zlapll_(aocl_int_t *n, dcomplex *x, aocl_int_t *incx, dcomplex *y, aocl_int_t *incy,
              doublereal *ssmin)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_zlapll(n, x, incx, y, incy, ssmin);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t incx_64 = *incx;
+    aocl_int64_t incy_64 = *incy;
+
+    aocl_lapack_zlapll(&n_64, x, &incx_64, y, &incy_64, ssmin);
+#endif
+}
+
+void aocl_lapack_zlapll(aocl_int64_t *n, dcomplex *x, aocl_int64_t *incx, dcomplex *y,
+                        aocl_int64_t *incy, doublereal *ssmin)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zlapll inputs: n %" FLA_IS ", incx %" FLA_IS ", incy %" FLA_IS "", *n, *incx,
                       *incy);
     /* System generated locals */
-    integer i__1;
+    aocl_int64_t i__1;
     doublereal d__1, d__2, d__3;
-    doublecomplex z__1, z__2, z__3, z__4;
+    dcomplex z__1, z__2, z__3, z__4;
     /* Builtin functions */
-    void d_cnjg(doublecomplex *, doublecomplex *);
-    double z_abs(doublecomplex *);
+    void d_cnjg(dcomplex *, dcomplex *);
+    double z_abs(dcomplex *);
     /* Local variables */
-    doublecomplex c__, a11, a12, a22, tau;
+    dcomplex c__, a11, a12, a22, tau;
     extern /* Subroutine */
         void
         dlas2_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *);
-    extern /* Double Complex */
-        VOID
-        zdotc_f2c_(doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *,
-                   integer *);
     doublereal ssmax;
-    extern /* Subroutine */
-        void
-        zaxpy_(integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *),
-        zlarfg_(integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *);
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -154,7 +161,7 @@ void zlapll_(integer *n, doublecomplex *x, integer *incx, doublecomplex *y, inte
         return;
     }
     /* Compute the QR factorization of the N-by-2 matrix ( X Y ) */
-    zlarfg_(n, &x[1], &x[*incx + 1], incx, &tau);
+    aocl_lapack_zlarfg(n, &x[1], &x[*incx + 1], incx, &tau);
     a11.r = x[1].r;
     a11.i = x[1].i; // , expr subst
     x[1].r = 1.;
@@ -162,14 +169,14 @@ void zlapll_(integer *n, doublecomplex *x, integer *incx, doublecomplex *y, inte
     d_cnjg(&z__3, &tau);
     z__2.r = -z__3.r;
     z__2.i = -z__3.i; // , expr subst
-    zdotc_f2c_(&z__4, n, &x[1], incx, &y[1], incy);
+    aocl_lapack_zdotc_f2c(&z__4, n, &x[1], incx, &y[1], incy);
     z__1.r = z__2.r * z__4.r - z__2.i * z__4.i;
     z__1.i = z__2.r * z__4.i + z__2.i * z__4.r; // , expr subst
     c__.r = z__1.r;
     c__.i = z__1.i; // , expr subst
-    zaxpy_(n, &c__, &x[1], incx, &y[1], incy);
+    aocl_blas_zaxpy(n, &c__, &x[1], incx, &y[1], incy);
     i__1 = *n - 1;
-    zlarfg_(&i__1, &y[*incy + 1], &y[(*incy << 1) + 1], incy, &tau);
+    aocl_lapack_zlarfg(&i__1, &y[*incy + 1], &y[(*incy << 1) + 1], incy, &tau);
     a12.r = y[1].r;
     a12.i = y[1].i; // , expr subst
     i__1 = *incy + 1;

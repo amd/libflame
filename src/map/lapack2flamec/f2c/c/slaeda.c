@@ -4,8 +4,8 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__2 = 2;
-static integer c__1 = 1;
+static aocl_int64_t c__2 = 2;
+static aocl_int64_t c__1 = 1;
 static real c_b24 = 1.f;
 static real c_b26 = 0.f;
 /* > \brief \b SLAEDA used by sstedc. Computes the Z vector determining the rank-one modification of
@@ -165,9 +165,32 @@ static real c_b26 = 0.f;
 /* > at Berkeley, USA */
 /* ===================================================================== */
 /* Subroutine */
-void slaeda_(integer *n, integer *tlvls, integer *curlvl, integer *curpbm, integer *prmptr,
-             integer *perm, integer *givptr, integer *givcol, real *givnum, real *q, integer *qptr,
-             real *z__, real *ztemp, integer *info)
+/** Generated wrapper function */
+void slaeda_(aocl_int_t *n, aocl_int_t *tlvls, aocl_int_t *curlvl, aocl_int_t *curpbm,
+             aocl_int_t *prmptr, aocl_int_t *perm, aocl_int_t *givptr, aocl_int_t *givcol,
+             real *givnum, real *q, aocl_int_t *qptr, real *z__, real *ztemp, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_slaeda(n, tlvls, curlvl, curpbm, prmptr, perm, givptr, givcol, givnum, q, qptr, z__,
+                       ztemp, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t tlvls_64 = *tlvls;
+    aocl_int64_t curlvl_64 = *curlvl;
+    aocl_int64_t curpbm_64 = *curpbm;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_slaeda(&n_64, &tlvls_64, &curlvl_64, &curpbm_64, prmptr, perm, givptr, givcol,
+                       givnum, q, qptr, z__, ztemp, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_slaeda(aocl_int64_t *n, aocl_int64_t *tlvls, aocl_int64_t *curlvl,
+                        aocl_int64_t *curpbm, aocl_int_t *prmptr, aocl_int_t *perm,
+                        aocl_int_t *givptr, aocl_int_t *givcol, real *givnum, real *q,
+                        aocl_int_t *qptr, real *z__, real *ztemp, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("slaeda inputs: n %" FLA_IS ",tlvls %" FLA_IS ",curlvl %" FLA_IS
@@ -175,22 +198,13 @@ void slaeda_(integer *n, integer *tlvls, integer *curlvl, integer *curpbm, integ
                       ",givcol %" FLA_IS ",qptr %" FLA_IS "",
                       *n, *tlvls, *curlvl, *curpbm, *prmptr, *perm, *givptr, *givcol, *qptr);
     /* System generated locals */
-    integer i__1, i__2, i__3;
+    aocl_int64_t i__1, i__2, i__3;
     /* Builtin functions */
-    integer pow_ii(integer *, integer *);
+    integer pow_ii(aocl_int64_t *, aocl_int64_t *);
     double sqrt(doublereal);
     /* Local variables */
-    integer i__, k, mid, ptr, curr;
-    extern /* Subroutine */
-        void
-        srot_(integer *, real *, integer *, real *, integer *, real *, real *);
-    integer bsiz1, bsiz2, psiz1, psiz2, zptr1;
-    extern /* Subroutine */
-        void
-        sgemv_(char *, integer *, integer *, real *, real *, integer *, real *, integer *, real *,
-               real *, integer *),
-        scopy_(integer *, real *, integer *, real *, integer *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    aocl_int64_t i__, k, mid, ptr, curr;
+    aocl_int64_t bsiz1, bsiz2, psiz1, psiz2, zptr1;
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -229,7 +243,7 @@ void slaeda_(integer *n, integer *tlvls, integer *curlvl, integer *curpbm, integ
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("SLAEDA", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("SLAEDA", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -258,8 +272,8 @@ void slaeda_(integer *n, integer *tlvls, integer *curlvl, integer *curpbm, integ
         z__[k] = 0.f;
         /* L10: */
     }
-    scopy_(&bsiz1, &q[qptr[curr] + bsiz1 - 1], &bsiz1, &z__[mid - bsiz1], &c__1);
-    scopy_(&bsiz2, &q[qptr[curr + 1]], &bsiz2, &z__[mid], &c__1);
+    aocl_blas_scopy(&bsiz1, &q[qptr[curr] + bsiz1 - 1], &bsiz1, &z__[mid - bsiz1], &c__1);
+    aocl_blas_scopy(&bsiz2, &q[qptr[curr + 1]], &bsiz2, &z__[mid], &c__1);
     i__1 = *n;
     for(k = mid + bsiz2; k <= i__1; ++k)
     {
@@ -283,17 +297,17 @@ void slaeda_(integer *n, integer *tlvls, integer *curlvl, integer *curpbm, integ
         i__2 = givptr[curr + 1] - 1;
         for(i__ = givptr[curr]; i__ <= i__2; ++i__)
         {
-            srot_(&c__1, &z__[zptr1 + givcol[(i__ << 1) + 1] - 1], &c__1,
-                  &z__[zptr1 + givcol[(i__ << 1) + 2] - 1], &c__1, &givnum[(i__ << 1) + 1],
-                  &givnum[(i__ << 1) + 2]);
+            aocl_blas_srot(&c__1, &z__[zptr1 + givcol[(i__ << 1) + 1] - 1], &c__1,
+                           &z__[zptr1 + givcol[(i__ << 1) + 2] - 1], &c__1, &givnum[(i__ << 1) + 1],
+                           &givnum[(i__ << 1) + 2]);
             /* L30: */
         }
         i__2 = givptr[curr + 2] - 1;
         for(i__ = givptr[curr + 1]; i__ <= i__2; ++i__)
         {
-            srot_(&c__1, &z__[mid - 1 + givcol[(i__ << 1) + 1]], &c__1,
-                  &z__[mid - 1 + givcol[(i__ << 1) + 2]], &c__1, &givnum[(i__ << 1) + 1],
-                  &givnum[(i__ << 1) + 2]);
+            aocl_blas_srot(&c__1, &z__[mid - 1 + givcol[(i__ << 1) + 1]], &c__1,
+                           &z__[mid - 1 + givcol[(i__ << 1) + 2]], &c__1, &givnum[(i__ << 1) + 1],
+                           &givnum[(i__ << 1) + 2]);
             /* L40: */
         }
         psiz1 = prmptr[curr + 1] - prmptr[curr];
@@ -318,18 +332,18 @@ void slaeda_(integer *n, integer *tlvls, integer *curlvl, integer *curpbm, integ
         bsiz2 = (integer)(sqrt((real)(qptr[curr + 2] - qptr[curr + 1])) + .5f);
         if(bsiz1 > 0)
         {
-            sgemv_("T", &bsiz1, &bsiz1, &c_b24, &q[qptr[curr]], &bsiz1, &ztemp[1], &c__1, &c_b26,
-                   &z__[zptr1], &c__1);
+            aocl_blas_sgemv("T", &bsiz1, &bsiz1, &c_b24, &q[qptr[curr]], &bsiz1, &ztemp[1], &c__1,
+                            &c_b26, &z__[zptr1], &c__1);
         }
         i__2 = psiz1 - bsiz1;
-        scopy_(&i__2, &ztemp[bsiz1 + 1], &c__1, &z__[zptr1 + bsiz1], &c__1);
+        aocl_blas_scopy(&i__2, &ztemp[bsiz1 + 1], &c__1, &z__[zptr1 + bsiz1], &c__1);
         if(bsiz2 > 0)
         {
-            sgemv_("T", &bsiz2, &bsiz2, &c_b24, &q[qptr[curr + 1]], &bsiz2, &ztemp[psiz1 + 1],
-                   &c__1, &c_b26, &z__[mid], &c__1);
+            aocl_blas_sgemv("T", &bsiz2, &bsiz2, &c_b24, &q[qptr[curr + 1]], &bsiz2,
+                            &ztemp[psiz1 + 1], &c__1, &c_b26, &z__[mid], &c__1);
         }
         i__2 = psiz2 - bsiz2;
-        scopy_(&i__2, &ztemp[psiz1 + bsiz2 + 1], &c__1, &z__[mid + bsiz2], &c__1);
+        aocl_blas_scopy(&i__2, &ztemp[psiz1 + bsiz2 + 1], &c__1, &z__[mid + bsiz2], &c__1);
         i__2 = *tlvls - k;
         ptr += pow_ii(&c__2, &i__2);
         /* L70: */

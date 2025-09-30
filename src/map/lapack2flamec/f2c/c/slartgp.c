@@ -96,11 +96,12 @@ void slartgp_(real *f, real *g, real *cs, real *sn, real *r__)
     AOCL_DTL_TRACE_LOG_INIT
     real r__1, r__2;
     /* Builtin functions */
-    double log(doublereal), pow_ri(real *, integer *), r_sign(real *, real *), sqrt(doublereal);
+    double log(doublereal), pow_ri(real *, aocl_int64_t *), r_sign(real *, real *),
+        sqrt(doublereal);
     /* Local variables */
-    integer i__;
+    aocl_int64_t i__;
     real f1, g1, eps, scale;
-    integer count, i__1;
+    aocl_int64_t count, i__1;
     real safmn2, safmx2;
     extern real slamch_(char *);
     real safmin;

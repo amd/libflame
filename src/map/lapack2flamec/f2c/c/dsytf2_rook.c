@@ -4,7 +4,7 @@
  -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for
  libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
+static aocl_int64_t c__1 = 1;
 /* > \brief \b DSYTF2_ROOK computes the factorization of a real symmetric indefinite matrix using
  * the bounded Bunch-Kaufman ("rook") diagonal pivoting method (unblocked algorithm). */
 /* =========== DOCUMENTATION =========== */
@@ -190,44 +190,49 @@ static integer c__1 = 1;
 /* > \endverbatim */
 /* ===================================================================== */
 /* Subroutine */
-void dsytf2_rook_(char *uplo, integer *n, doublereal *a, integer *lda, integer *ipiv, integer *info)
+/** Generated wrapper function */
+void dsytf2_rook_(char *uplo, aocl_int_t *n, doublereal *a, aocl_int_t *lda, aocl_int_t *ipiv,
+                  aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_dsytf2_rook(uplo, n, a, lda, ipiv, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_dsytf2_rook(uplo, &n_64, a, &lda_64, ipiv, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_dsytf2_rook(char *uplo, aocl_int64_t *n, doublereal *a, aocl_int64_t *lda,
+                             aocl_int_t *ipiv, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dsytf2_rook inputs: uplo %c, n %" FLA_IS ", lda %" FLA_IS "", *uplo, *n,
                       *lda);
     /* System generated locals */
-    integer a_dim1, a_offset, i__1, i__2;
+    aocl_int64_t a_dim1, a_offset, i__1, i__2;
     doublereal d__1;
     /* Builtin functions */
     double sqrt(doublereal);
     /* Local variables */
-    integer i__, j, k, p;
+    aocl_int64_t i__, j, k, p;
     doublereal t, d11, d12, d21, d22;
-    integer ii, kk, kp;
+    aocl_int64_t ii, kk, kp;
     doublereal wk, wkm1, wkp1;
     logical done;
-    integer imax, jmax;
-    extern /* Subroutine */
-        void
-        dsyr_(char *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *);
+    aocl_int64_t imax, jmax;
     doublereal alpha;
-    extern /* Subroutine */
-        void
-        dscal_(integer *, doublereal *, doublereal *, integer *);
-    extern logical lsame_(char *, char *, integer, integer);
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     doublereal dtemp, sfmin;
-    integer itemp;
-    extern /* Subroutine */
-        void
-        dswap_(integer *, doublereal *, integer *, doublereal *, integer *);
-    integer kstep;
+    aocl_int64_t itemp;
+    aocl_int64_t kstep;
     logical upper;
     extern doublereal dlamch_(char *);
     doublereal absakk;
-    extern integer idamax_(integer *, doublereal *, integer *);
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal colmax, rowmax;
     /* -- LAPACK computational routine (version 3.5.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -275,7 +280,7 @@ void dsytf2_rook_(char *uplo, integer *n, doublereal *a, integer *lda, integer *
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("DSYTF2_ROOK", &i__1, (ftnlen)11);
+        aocl_blas_xerbla("DSYTF2_ROOK", &i__1, (ftnlen)11);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -305,7 +310,7 @@ void dsytf2_rook_(char *uplo, integer *n, doublereal *a, integer *lda, integer *
         if(k > 1)
         {
             i__1 = k - 1;
-            imax = idamax_(&i__1, &a[k * a_dim1 + 1], &c__1);
+            imax = aocl_blas_idamax(&i__1, &a[k * a_dim1 + 1], &c__1);
             colmax = (d__1 = a[imax + k * a_dim1], f2c_dabs(d__1));
         }
         else
@@ -343,7 +348,7 @@ void dsytf2_rook_(char *uplo, integer *n, doublereal *a, integer *lda, integer *
                 if(imax != k)
                 {
                     i__1 = k - imax;
-                    jmax = imax + idamax_(&i__1, &a[imax + (imax + 1) * a_dim1], lda);
+                    jmax = imax + aocl_blas_idamax(&i__1, &a[imax + (imax + 1) * a_dim1], lda);
                     rowmax = (d__1 = a[imax + jmax * a_dim1], f2c_dabs(d__1));
                 }
                 else
@@ -353,7 +358,7 @@ void dsytf2_rook_(char *uplo, integer *n, doublereal *a, integer *lda, integer *
                 if(imax > 1)
                 {
                     i__1 = imax - 1;
-                    itemp = idamax_(&i__1, &a[imax * a_dim1 + 1], &c__1);
+                    itemp = aocl_blas_idamax(&i__1, &a[imax * a_dim1 + 1], &c__1);
                     dtemp = (d__1 = a[itemp + imax * a_dim1], f2c_dabs(d__1));
                     if(dtemp > rowmax)
                     {
@@ -402,12 +407,13 @@ void dsytf2_rook_(char *uplo, integer *n, doublereal *a, integer *lda, integer *
                 if(p > 1)
                 {
                     i__1 = p - 1;
-                    dswap_(&i__1, &a[k * a_dim1 + 1], &c__1, &a[p * a_dim1 + 1], &c__1);
+                    aocl_blas_dswap(&i__1, &a[k * a_dim1 + 1], &c__1, &a[p * a_dim1 + 1], &c__1);
                 }
                 if(p < k - 1)
                 {
                     i__1 = k - p - 1;
-                    dswap_(&i__1, &a[p + 1 + k * a_dim1], &c__1, &a[p + (p + 1) * a_dim1], lda);
+                    aocl_blas_dswap(&i__1, &a[p + 1 + k * a_dim1], &c__1, &a[p + (p + 1) * a_dim1],
+                                    lda);
                 }
                 t = a[k + k * a_dim1];
                 a[k + k * a_dim1] = a[p + p * a_dim1];
@@ -422,12 +428,13 @@ void dsytf2_rook_(char *uplo, integer *n, doublereal *a, integer *lda, integer *
                 if(kp > 1)
                 {
                     i__1 = kp - 1;
-                    dswap_(&i__1, &a[kk * a_dim1 + 1], &c__1, &a[kp * a_dim1 + 1], &c__1);
+                    aocl_blas_dswap(&i__1, &a[kk * a_dim1 + 1], &c__1, &a[kp * a_dim1 + 1], &c__1);
                 }
                 if(kk > 1 && kp < kk - 1)
                 {
                     i__1 = kk - kp - 1;
-                    dswap_(&i__1, &a[kp + 1 + kk * a_dim1], &c__1, &a[kp + (kp + 1) * a_dim1], lda);
+                    aocl_blas_dswap(&i__1, &a[kp + 1 + kk * a_dim1], &c__1,
+                                    &a[kp + (kp + 1) * a_dim1], lda);
                 }
                 t = a[kk + kk * a_dim1];
                 a[kk + kk * a_dim1] = a[kp + kp * a_dim1];
@@ -457,10 +464,11 @@ void dsytf2_rook_(char *uplo, integer *n, doublereal *a, integer *lda, integer *
                         d11 = 1. / a[k + k * a_dim1];
                         i__1 = k - 1;
                         d__1 = -d11;
-                        dsyr_(uplo, &i__1, &d__1, &a[k * a_dim1 + 1], &c__1, &a[a_offset], lda);
+                        aocl_blas_dsyr(uplo, &i__1, &d__1, &a[k * a_dim1 + 1], &c__1, &a[a_offset],
+                                       lda);
                         /* Store U(k) in column k */
                         i__1 = k - 1;
-                        dscal_(&i__1, &d11, &a[k * a_dim1 + 1], &c__1);
+                        aocl_blas_dscal(&i__1, &d11, &a[k * a_dim1 + 1], &c__1);
                     }
                     else
                     {
@@ -478,7 +486,8 @@ void dsytf2_rook_(char *uplo, integer *n, doublereal *a, integer *lda, integer *
                         /* = A - (W(k)/D(k))*(D(k))*(W(k)/D(K))**T */
                         i__1 = k - 1;
                         d__1 = -d11;
-                        dsyr_(uplo, &i__1, &d__1, &a[k * a_dim1 + 1], &c__1, &a[a_offset], lda);
+                        aocl_blas_dsyr(uplo, &i__1, &d__1, &a[k * a_dim1 + 1], &c__1, &a[a_offset],
+                                       lda);
                     }
                 }
             }
@@ -520,12 +529,12 @@ void dsytf2_rook_(char *uplo, integer *n, doublereal *a, integer *lda, integer *
         /* Store details of the interchanges in IPIV */
         if(kstep == 1)
         {
-            ipiv[k] = kp;
+            ipiv[k] = (aocl_int_t)(kp);
         }
         else
         {
-            ipiv[k] = -p;
-            ipiv[k - 1] = -kp;
+            ipiv[k] = (aocl_int_t)(-p);
+            ipiv[k - 1] = (aocl_int_t)(-kp);
         }
         /* Decrease K and return to the start of the main loop */
         k -= kstep;
@@ -553,7 +562,7 @@ void dsytf2_rook_(char *uplo, integer *n, doublereal *a, integer *lda, integer *
         if(k < *n)
         {
             i__1 = *n - k;
-            imax = k + idamax_(&i__1, &a[k + 1 + k * a_dim1], &c__1);
+            imax = k + aocl_blas_idamax(&i__1, &a[k + 1 + k * a_dim1], &c__1);
             colmax = (d__1 = a[imax + k * a_dim1], f2c_dabs(d__1));
         }
         else
@@ -590,7 +599,7 @@ void dsytf2_rook_(char *uplo, integer *n, doublereal *a, integer *lda, integer *
                 if(imax != k)
                 {
                     i__1 = imax - k;
-                    jmax = k - 1 + idamax_(&i__1, &a[imax + k * a_dim1], lda);
+                    jmax = k - 1 + aocl_blas_idamax(&i__1, &a[imax + k * a_dim1], lda);
                     rowmax = (d__1 = a[imax + jmax * a_dim1], f2c_dabs(d__1));
                 }
                 else
@@ -600,7 +609,7 @@ void dsytf2_rook_(char *uplo, integer *n, doublereal *a, integer *lda, integer *
                 if(imax < *n)
                 {
                     i__1 = *n - imax;
-                    itemp = imax + idamax_(&i__1, &a[imax + 1 + imax * a_dim1], &c__1);
+                    itemp = imax + aocl_blas_idamax(&i__1, &a[imax + 1 + imax * a_dim1], &c__1);
                     dtemp = (d__1 = a[itemp + imax * a_dim1], f2c_dabs(d__1));
                     if(dtemp > rowmax)
                     {
@@ -649,12 +658,14 @@ void dsytf2_rook_(char *uplo, integer *n, doublereal *a, integer *lda, integer *
                 if(p < *n)
                 {
                     i__1 = *n - p;
-                    dswap_(&i__1, &a[p + 1 + k * a_dim1], &c__1, &a[p + 1 + p * a_dim1], &c__1);
+                    aocl_blas_dswap(&i__1, &a[p + 1 + k * a_dim1], &c__1, &a[p + 1 + p * a_dim1],
+                                    &c__1);
                 }
                 if(p > k + 1)
                 {
                     i__1 = p - k - 1;
-                    dswap_(&i__1, &a[k + 1 + k * a_dim1], &c__1, &a[p + (k + 1) * a_dim1], lda);
+                    aocl_blas_dswap(&i__1, &a[k + 1 + k * a_dim1], &c__1, &a[p + (k + 1) * a_dim1],
+                                    lda);
                 }
                 t = a[k + k * a_dim1];
                 a[k + k * a_dim1] = a[p + p * a_dim1];
@@ -669,12 +680,14 @@ void dsytf2_rook_(char *uplo, integer *n, doublereal *a, integer *lda, integer *
                 if(kp < *n)
                 {
                     i__1 = *n - kp;
-                    dswap_(&i__1, &a[kp + 1 + kk * a_dim1], &c__1, &a[kp + 1 + kp * a_dim1], &c__1);
+                    aocl_blas_dswap(&i__1, &a[kp + 1 + kk * a_dim1], &c__1,
+                                    &a[kp + 1 + kp * a_dim1], &c__1);
                 }
                 if(kk < *n && kp > kk + 1)
                 {
                     i__1 = kp - kk - 1;
-                    dswap_(&i__1, &a[kk + 1 + kk * a_dim1], &c__1, &a[kp + (kk + 1) * a_dim1], lda);
+                    aocl_blas_dswap(&i__1, &a[kk + 1 + kk * a_dim1], &c__1,
+                                    &a[kp + (kk + 1) * a_dim1], lda);
                 }
                 t = a[kk + kk * a_dim1];
                 a[kk + kk * a_dim1] = a[kp + kp * a_dim1];
@@ -704,11 +717,11 @@ void dsytf2_rook_(char *uplo, integer *n, doublereal *a, integer *lda, integer *
                         d11 = 1. / a[k + k * a_dim1];
                         i__1 = *n - k;
                         d__1 = -d11;
-                        dsyr_(uplo, &i__1, &d__1, &a[k + 1 + k * a_dim1], &c__1,
-                              &a[k + 1 + (k + 1) * a_dim1], lda);
+                        aocl_blas_dsyr(uplo, &i__1, &d__1, &a[k + 1 + k * a_dim1], &c__1,
+                                       &a[k + 1 + (k + 1) * a_dim1], lda);
                         /* Store L(k) in column k */
                         i__1 = *n - k;
-                        dscal_(&i__1, &d11, &a[k + 1 + k * a_dim1], &c__1);
+                        aocl_blas_dscal(&i__1, &d11, &a[k + 1 + k * a_dim1], &c__1);
                     }
                     else
                     {
@@ -726,8 +739,8 @@ void dsytf2_rook_(char *uplo, integer *n, doublereal *a, integer *lda, integer *
                         /* = A - (W(k)/D(k))*(D(k))*(W(k)/D(K))**T */
                         i__1 = *n - k;
                         d__1 = -d11;
-                        dsyr_(uplo, &i__1, &d__1, &a[k + 1 + k * a_dim1], &c__1,
-                              &a[k + 1 + (k + 1) * a_dim1], lda);
+                        aocl_blas_dsyr(uplo, &i__1, &d__1, &a[k + 1 + k * a_dim1], &c__1,
+                                       &a[k + 1 + (k + 1) * a_dim1], lda);
                     }
                 }
             }
@@ -773,12 +786,12 @@ void dsytf2_rook_(char *uplo, integer *n, doublereal *a, integer *lda, integer *
         /* Store details of the interchanges in IPIV */
         if(kstep == 1)
         {
-            ipiv[k] = kp;
+            ipiv[k] = (aocl_int_t)(kp);
         }
         else
         {
-            ipiv[k] = -p;
-            ipiv[k + 1] = -kp;
+            ipiv[k] = (aocl_int_t)(-p);
+            ipiv[k + 1] = (aocl_int_t)(-kp);
         }
         /* Increase K and return to the start of the main loop */
         k += kstep;

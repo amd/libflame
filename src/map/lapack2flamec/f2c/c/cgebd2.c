@@ -4,7 +4,7 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
+static aocl_int64_t c__1 = 1;
 /* > \brief \b CGEBD2 reduces a general matrix to bidiagonal form using an unblocked algorithm. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -39,7 +39,7 @@ static integer c__1 = 1;
 /* > */
 /* > \verbatim */
 /* > */
-/* > CGEBD2 reduces a complex general m by n matrix A to upper or lower */
+/* > CGEBD2 reduces a scomplex general m by n matrix A to upper or lower */
 /* > real bidiagonal form B by a unitary transformation: Q**H * A * P = B. */
 /* > */
 /* > If m >= n, B is upper bidiagonal;
@@ -156,7 +156,7 @@ the */
 /* > */
 /* > H(i) = I - tauq * v * v**H and G(i) = I - taup * u * u**H */
 /* > */
-/* > where tauq and taup are complex scalars, and v and u are complex */
+/* > where tauq and taup are scomplex scalars, and v and u are scomplex */
 /* > vectors;
 v(1:i-1) = 0, v(i) = 1, and v(i+1:m) is stored on exit in */
 /* > A(i+1:m,i);
@@ -172,7 +172,7 @@ tauq is stored in TAUQ(i) and taup in TAUP(i). */
 /* > */
 /* > H(i) = I - tauq * v * v**H and G(i) = I - taup * u * u**H */
 /* > */
-/* > where tauq and taup are complex scalars, v and u are complex vectors;
+/* > where tauq and taup are scomplex scalars, v and u are scomplex vectors;
  */
 /* > v(1:i) = 0, v(i+1) = 1, and v(i+2:m) is stored on exit in A(i+2:m,i);
  */
@@ -198,8 +198,26 @@ tauq is stored in TAUQ(i) and taup in TAUP(i). */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void cgebd2_(integer *m, integer *n, complex *a, integer *lda, real *d__, real *e, complex *tauq,
-             complex *taup, complex *work, integer *info)
+/** Generated wrapper function */
+void cgebd2_(aocl_int_t *m, aocl_int_t *n, scomplex *a, aocl_int_t *lda, real *d__, real *e,
+             scomplex *tauq, scomplex *taup, scomplex *work, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_cgebd2(m, n, a, lda, d__, e, tauq, taup, work, info);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_cgebd2(&m_64, &n_64, a, &lda_64, d__, e, tauq, taup, work, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_cgebd2(aocl_int64_t *m, aocl_int64_t *n, scomplex *a, aocl_int64_t *lda, real *d__,
+                        real *e, scomplex *tauq, scomplex *taup, scomplex *work, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -212,20 +230,13 @@ void cgebd2_(integer *m, integer *n, complex *a, integer *lda, real *d__, real *
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
-    integer a_dim1, a_offset, i__1, i__2, i__3;
-    complex q__1;
+    aocl_int64_t a_dim1, a_offset, i__1, i__2, i__3;
+    scomplex q__1;
     /* Builtin functions */
-    void r_cnjg(complex *, complex *);
+    void r_cnjg(scomplex *, scomplex *);
     /* Local variables */
-    integer i__;
-    complex alpha;
-    extern /* Subroutine */
-        void
-        clarf_(char *, integer *, integer *, complex *, integer *, complex *, complex *, integer *,
-               complex *),
-        clarfg_(integer *, complex *, complex *, integer *, complex *),
-        clacgv_(integer *, complex *, integer *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    aocl_int64_t i__;
+    scomplex alpha;
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -271,7 +282,7 @@ void cgebd2_(integer *m, integer *n, complex *a, integer *lda, real *d__, real *
     if(*info < 0)
     {
         i__1 = -(*info);
-        xerbla_("CGEBD2", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("CGEBD2", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
@@ -288,7 +299,8 @@ void cgebd2_(integer *m, integer *n, complex *a, integer *lda, real *d__, real *
             i__2 = *m - i__ + 1;
             /* Computing MIN */
             i__3 = i__ + 1;
-            clarfg_(&i__2, &alpha, &a[fla_min(i__3, *m) + i__ * a_dim1], &c__1, &tauq[i__]);
+            aocl_lapack_clarfg(&i__2, &alpha, &a[fla_min(i__3, *m) + i__ * a_dim1], &c__1,
+                               &tauq[i__]);
             i__2 = i__;
             d__[i__2] = alpha.r;
             i__2 = i__ + i__ * a_dim1;
@@ -300,8 +312,8 @@ void cgebd2_(integer *m, integer *n, complex *a, integer *lda, real *d__, real *
                 i__2 = *m - i__ + 1;
                 i__3 = *n - i__;
                 r_cnjg(&q__1, &tauq[i__]);
-                clarf_("Left", &i__2, &i__3, &a[i__ + i__ * a_dim1], &c__1, &q__1,
-                       &a[i__ + (i__ + 1) * a_dim1], lda, &work[1]);
+                aocl_lapack_clarf("Left", &i__2, &i__3, &a[i__ + i__ * a_dim1], &c__1, &q__1,
+                                  &a[i__ + (i__ + 1) * a_dim1], lda, &work[1]);
             }
             i__2 = i__ + i__ * a_dim1;
             i__3 = i__;
@@ -312,14 +324,15 @@ void cgebd2_(integer *m, integer *n, complex *a, integer *lda, real *d__, real *
                 /* Generate elementary reflector G(i) to annihilate */
                 /* A(i,i+2:n) */
                 i__2 = *n - i__;
-                clacgv_(&i__2, &a[i__ + (i__ + 1) * a_dim1], lda);
+                aocl_lapack_clacgv(&i__2, &a[i__ + (i__ + 1) * a_dim1], lda);
                 i__2 = i__ + (i__ + 1) * a_dim1;
                 alpha.r = a[i__2].r;
                 alpha.i = a[i__2].i; // , expr subst
                 i__2 = *n - i__;
                 /* Computing MIN */
                 i__3 = i__ + 2;
-                clarfg_(&i__2, &alpha, &a[i__ + fla_min(i__3, *n) * a_dim1], lda, &taup[i__]);
+                aocl_lapack_clarfg(&i__2, &alpha, &a[i__ + fla_min(i__3, *n) * a_dim1], lda,
+                                   &taup[i__]);
                 i__2 = i__;
                 e[i__2] = alpha.r;
                 i__2 = i__ + (i__ + 1) * a_dim1;
@@ -328,10 +341,10 @@ void cgebd2_(integer *m, integer *n, complex *a, integer *lda, real *d__, real *
                 /* Apply G(i) to A(i+1:m,i+1:n) from the right */
                 i__2 = *m - i__;
                 i__3 = *n - i__;
-                clarf_("Right", &i__2, &i__3, &a[i__ + (i__ + 1) * a_dim1], lda, &taup[i__],
-                       &a[i__ + 1 + (i__ + 1) * a_dim1], lda, &work[1]);
+                aocl_lapack_clarf("Right", &i__2, &i__3, &a[i__ + (i__ + 1) * a_dim1], lda,
+                                  &taup[i__], &a[i__ + 1 + (i__ + 1) * a_dim1], lda, &work[1]);
                 i__2 = *n - i__;
-                clacgv_(&i__2, &a[i__ + (i__ + 1) * a_dim1], lda);
+                aocl_lapack_clacgv(&i__2, &a[i__ + (i__ + 1) * a_dim1], lda);
                 i__2 = i__ + (i__ + 1) * a_dim1;
                 i__3 = i__;
                 a[i__2].r = e[i__3];
@@ -354,14 +367,15 @@ void cgebd2_(integer *m, integer *n, complex *a, integer *lda, real *d__, real *
         {
             /* Generate elementary reflector G(i) to annihilate A(i,i+1:n) */
             i__2 = *n - i__ + 1;
-            clacgv_(&i__2, &a[i__ + i__ * a_dim1], lda);
+            aocl_lapack_clacgv(&i__2, &a[i__ + i__ * a_dim1], lda);
             i__2 = i__ + i__ * a_dim1;
             alpha.r = a[i__2].r;
             alpha.i = a[i__2].i; // , expr subst
             i__2 = *n - i__ + 1;
             /* Computing MIN */
             i__3 = i__ + 1;
-            clarfg_(&i__2, &alpha, &a[i__ + fla_min(i__3, *n) * a_dim1], lda, &taup[i__]);
+            aocl_lapack_clarfg(&i__2, &alpha, &a[i__ + fla_min(i__3, *n) * a_dim1], lda,
+                               &taup[i__]);
             i__2 = i__;
             d__[i__2] = alpha.r;
             i__2 = i__ + i__ * a_dim1;
@@ -372,11 +386,11 @@ void cgebd2_(integer *m, integer *n, complex *a, integer *lda, real *d__, real *
             {
                 i__2 = *m - i__;
                 i__3 = *n - i__ + 1;
-                clarf_("Right", &i__2, &i__3, &a[i__ + i__ * a_dim1], lda, &taup[i__],
-                       &a[i__ + 1 + i__ * a_dim1], lda, &work[1]);
+                aocl_lapack_clarf("Right", &i__2, &i__3, &a[i__ + i__ * a_dim1], lda, &taup[i__],
+                                  &a[i__ + 1 + i__ * a_dim1], lda, &work[1]);
             }
             i__2 = *n - i__ + 1;
-            clacgv_(&i__2, &a[i__ + i__ * a_dim1], lda);
+            aocl_lapack_clacgv(&i__2, &a[i__ + i__ * a_dim1], lda);
             i__2 = i__ + i__ * a_dim1;
             i__3 = i__;
             a[i__2].r = d__[i__3];
@@ -391,7 +405,8 @@ void cgebd2_(integer *m, integer *n, complex *a, integer *lda, real *d__, real *
                 i__2 = *m - i__;
                 /* Computing MIN */
                 i__3 = i__ + 2;
-                clarfg_(&i__2, &alpha, &a[fla_min(i__3, *m) + i__ * a_dim1], &c__1, &tauq[i__]);
+                aocl_lapack_clarfg(&i__2, &alpha, &a[fla_min(i__3, *m) + i__ * a_dim1], &c__1,
+                                   &tauq[i__]);
                 i__2 = i__;
                 e[i__2] = alpha.r;
                 i__2 = i__ + 1 + i__ * a_dim1;
@@ -401,8 +416,8 @@ void cgebd2_(integer *m, integer *n, complex *a, integer *lda, real *d__, real *
                 i__2 = *m - i__;
                 i__3 = *n - i__;
                 r_cnjg(&q__1, &tauq[i__]);
-                clarf_("Left", &i__2, &i__3, &a[i__ + 1 + i__ * a_dim1], &c__1, &q__1,
-                       &a[i__ + 1 + (i__ + 1) * a_dim1], lda, &work[1]);
+                aocl_lapack_clarf("Left", &i__2, &i__3, &a[i__ + 1 + i__ * a_dim1], &c__1, &q__1,
+                                  &a[i__ + 1 + (i__ + 1) * a_dim1], lda, &work[1]);
                 i__2 = i__ + 1 + i__ * a_dim1;
                 i__3 = i__;
                 a[i__2].r = e[i__3];

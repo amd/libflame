@@ -3,7 +3,7 @@
  on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
-#include "FLA_f2c.h" /* > \brief \b ZLAR2V applies a vector of plane rotations with real cosines and complex sines from both sides to a sequence of 2-by-2 symmetric/Hermitian matrices. */
+#include "FLA_f2c.h" /* > \brief \b ZLAR2V applies a vector of plane rotations with real cosines and scomplex sines from both sides to a sequence of 2-by-2 symmetric/Hermitian matrices. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
@@ -37,8 +37,8 @@
 /* > */
 /* > \verbatim */
 /* > */
-/* > ZLAR2V applies a vector of complex plane rotations with real cosines */
-/* > from both sides to a sequence of 2-by-2 complex Hermitian matrices, */
+/* > ZLAR2V applies a vector of scomplex plane rotations with real cosines */
+/* > from both sides to a sequence of 2-by-2 scomplex Hermitian matrices, */
 /* > defined by the elements of the vectors x, y and z. For i = 1,2,...,n */
 /* > */
 /* > ( x(i) z(i) ) := */
@@ -108,29 +108,44 @@ the elements of y are assumed to be real. */
 /* > \ingroup complex16OTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-void zlar2v_(integer *n, doublecomplex *x, doublecomplex *y, doublecomplex *z__, integer *incx,
-             doublereal *c__, doublecomplex *s, integer *incc)
+/** Generated wrapper function */
+void zlar2v_(aocl_int_t *n, dcomplex *x, dcomplex *y, dcomplex *z__,
+             aocl_int_t *incx, doublereal *c__, dcomplex *s, aocl_int_t *incc)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_zlar2v(n, x, y, z__, incx, c__, s, incc);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t incx_64 = *incx;
+    aocl_int64_t incc_64 = *incc;
+
+    aocl_lapack_zlar2v(&n_64, x, y, z__, &incx_64, c__, s, &incc_64);
+#endif
+}
+
+void aocl_lapack_zlar2v(aocl_int64_t *n, dcomplex *x, dcomplex *y, dcomplex *z__,
+                        aocl_int64_t *incx, doublereal *c__, dcomplex *s, aocl_int64_t *incc)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zlar2v inputs: n %" FLA_IS ", incx %" FLA_IS ", incc %" FLA_IS "", *n, *incx,
                       *incc);
     /* System generated locals */
-    integer i__1, i__2;
+    aocl_int64_t i__1, i__2;
     doublereal d__1;
-    doublecomplex z__1, z__2, z__3, z__4, z__5;
+    dcomplex z__1, z__2, z__3, z__4, z__5;
     /* Builtin functions */
-    double d_imag(doublecomplex *);
-    void d_cnjg(doublecomplex *, doublecomplex *);
+    double d_imag(dcomplex *);
+    void d_cnjg(dcomplex *, dcomplex *);
     /* Local variables */
-    integer i__;
-    doublecomplex t2, t3, t4;
+    aocl_int64_t i__;
+    dcomplex t2, t3, t4;
     doublereal t5, t6;
-    integer ic;
+    aocl_int64_t ic;
     doublereal ci;
-    doublecomplex si;
-    integer ix;
+    dcomplex si;
+    aocl_int64_t ix;
     doublereal xi, yi;
-    doublecomplex zi;
+    dcomplex zi;
     doublereal t1i, t1r, sii, zii, sir, zir;
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */

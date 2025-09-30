@@ -16,10 +16,10 @@
  * Memory locations of a and b are assumed to be different
  * without any overlapping memory
  * */
-void fla_dtranspose(integer *m, integer *n, doublereal *a, integer *lda, doublereal *b,
-                    integer *ldb)
+void fla_dtranspose(aocl_int64_t *m, aocl_int64_t *n, doublereal *a, aocl_int64_t *lda, doublereal *b,
+                    aocl_int64_t *ldb)
 {
-    integer i, j;
+    aocl_int64_t i, j;
 
     /* Offset adjustments */
     a -= (1 + *lda);
@@ -35,7 +35,7 @@ void fla_dtranspose(integer *m, integer *n, doublereal *a, integer *lda, doubler
     }
 }
 /* 3x3 Householder Rotation */
-int fla_dhrot3(integer *n, doublereal *a, integer *lda, doublereal *v, doublereal *tau)
+int fla_dhrot3(aocl_int64_t *n, doublereal *a, aocl_int64_t *lda, doublereal *v, doublereal *tau)
 {
     if(FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX512))
     {
@@ -48,12 +48,10 @@ int fla_dhrot3(integer *n, doublereal *a, integer *lda, doublereal *v, doublerea
     return 0;
 }
 /* 2x2 Plane Rotation */
-int fla_drot(integer *n, doublereal *dx, integer *incx, doublereal *dy, integer *incy,
+int fla_drot(aocl_int64_t *n, doublereal *dx, aocl_int64_t *incx, doublereal *dy, aocl_int64_t *incy,
              doublereal *c__, doublereal *s)
 {
 #ifndef FLA_ENABLE_AOCL_BLAS
-    extern void drot_(integer *, doublereal *, integer *, doublereal *, integer *, doublereal *,
-                      doublereal *);
 #endif
 
     if(FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX512))
@@ -66,12 +64,12 @@ int fla_drot(integer *n, doublereal *dx, integer *incx, doublereal *dy, integer 
     }
     else
     {
-        drot_(n, dx, incx, dy, incy, c__, s);
+        aocl_blas_drot(n, dx, incx, dy, incy, c__, s);
     }
     return 0;
 }
-void fla_zrot(integer *n, doublecomplex *cx, integer *incx, doublecomplex *cy, integer *incy,
-              doublereal *c__, doublecomplex *s)
+void fla_zrot(aocl_int64_t *n, dcomplex *cx, aocl_int64_t *incx, dcomplex *cy, aocl_int64_t *incy,
+              doublereal *c__, dcomplex *s)
 {
     if(FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX512))
     {
@@ -83,12 +81,12 @@ void fla_zrot(integer *n, doublecomplex *cx, integer *incx, doublecomplex *cy, i
     }
     else
     {
-        zrot_(n, (dcomplex *)cx, incx, (dcomplex *)cy, incy, c__, (dcomplex *)s);
+        aocl_lapack_zrot(n, (dcomplex *)cx, incx, (dcomplex *)cy, incy, c__, (dcomplex *)s);
     }
     return;
 }
-/* complex vector scaling when increment is 1 and specific threshold */
-int fla_zscal(integer *n, doublecomplex *alpha, doublecomplex *x, integer *incx)
+/* scomplex vector scaling when increment is 1 and specific threshold */
+int fla_zscal(aocl_int64_t *n, dcomplex *alpha, dcomplex *x, aocl_int64_t *incx)
 {
     /* Initialize global context data */
     aocl_fla_init();
@@ -107,12 +105,12 @@ int fla_zscal(integer *n, doublecomplex *alpha, doublecomplex *x, integer *incx)
     }
     else
     {
-        zscal_(n, (dcomplex *)alpha, (dcomplex *)x, incx);
+        aocl_blas_zscal(n, (dcomplex *)alpha, (dcomplex *)x, incx);
     }
     return 0;
 }
 /* scales a vector by a constant when threshold <= 128 */
-void fla_dscal(integer *n, doublereal *da, doublereal *dx, integer *incx)
+void fla_dscal(aocl_int64_t *n, doublereal *da, doublereal *dx, aocl_int64_t *incx)
 {
     /* Initialize global context data */
     aocl_fla_init();
@@ -131,12 +129,12 @@ void fla_dscal(integer *n, doublereal *da, doublereal *dx, integer *incx)
     }
     else
     {
-        dscal_(n, da, dx, incx);
+        aocl_blas_dscal(n, da, dx, incx);
     }
     return;
 }
 /* Double QR (DGEQRF) for small sizes */
-int fla_dgeqrf_small(integer *m, integer *n, doublereal *a, integer *lda, doublereal *tau,
+int fla_dgeqrf_small(aocl_int64_t *m, aocl_int64_t *n, doublereal *a, aocl_int64_t *lda, doublereal *tau,
                      doublereal *work)
 {
     if(FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX2))
@@ -146,7 +144,7 @@ int fla_dgeqrf_small(integer *m, integer *n, doublereal *a, integer *lda, double
     return 0;
 }
 /* Double QR (DGEQRF) for small sizes */
-int fla_dgelqf_small(integer *m, integer *n, doublereal *a, integer *lda, doublereal *tau,
+int fla_dgelqf_small(aocl_int64_t *m, aocl_int64_t *n, doublereal *a, aocl_int64_t *lda, doublereal *tau,
                      doublereal *work)
 {
     if(FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX2))
@@ -171,7 +169,7 @@ int fla_dgelqf_small(integer *m, integer *n, doublereal *a, integer *lda, double
     return 0;
 }
 /* real vector scaling when increment is 1 */
-void fla_sscal(integer *n, real *alpha, real *x, integer *incx)
+void fla_sscal(aocl_int64_t *n, real *alpha, real *x, aocl_int64_t *incx)
 {
     /* Initialize global context data */
     aocl_fla_init();
@@ -191,13 +189,13 @@ void fla_sscal(integer *n, real *alpha, real *x, integer *incx)
     }
     else
     {
-        sscal_(n, (real *)alpha, (real *)x, incx);
+        aocl_blas_sscal(n, (real *)alpha, (real *)x, incx);
     }
     return;
 }
 /* Rank 1 Operation */
-void fla_sger(integer *m, integer *n, real *alpha, real *x, integer *incx, real *y, integer *incy,
-              real *a, integer *lda)
+void fla_sger(aocl_int64_t *m, aocl_int64_t *n, real *alpha, real *x, aocl_int64_t *incx, real *y, aocl_int64_t *incy,
+              real *a, aocl_int64_t *lda)
 {
     if(FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX2))
     {
@@ -205,7 +203,7 @@ void fla_sger(integer *m, integer *n, real *alpha, real *x, integer *incx, real 
     }
     else
     {
-        sger_(m, n, alpha, x, incx, y, incy, a, lda);
+        aocl_blas_sger(m, n, alpha, x, incx, y, incy, a, lda);
     }
     return;
 }
@@ -213,8 +211,8 @@ void fla_sger(integer *m, integer *n, real *alpha, real *x, integer *incx, real 
 /* LU factorization.
  * To be used only when vectorized code via avx2/avx512 is enabled
  * */
-int fla_dgetrf_small_simd(integer *m, integer *n, doublereal *a, integer *lda, integer *ipiv,
-                          integer *info)
+int fla_dgetrf_small_simd(aocl_int64_t *m, aocl_int64_t *n, doublereal *a, aocl_int64_t *lda, aocl_int_t *ipiv,
+                          aocl_int64_t *info)
 {
     if(FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX512))
     {
@@ -230,8 +228,8 @@ int fla_dgetrf_small_simd(integer *m, integer *n, doublereal *a, integer *lda, i
 /* Double Complex LU for small sizes,
  * Optimized for AVX2 and AVX512 ISAs
  */
-int fla_zgetrf_small_simd(integer *m, integer *n, dcomplex *a, integer *lda, integer *ipiv,
-                          integer *info)
+int fla_zgetrf_small_simd(aocl_int64_t *m, aocl_int64_t *n, dcomplex *a, aocl_int64_t *lda, aocl_int_t *ipiv,
+                          aocl_int64_t *info)
 {
     if(FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX512))
     {
@@ -250,9 +248,9 @@ int fla_zgetrf_small_simd(integer *m, integer *n, dcomplex *a, integer *lda, int
 
 /* SVD for small tall-matrices in DGESVD
  */
-void fla_dgesvd_xx_small10(integer wntus, integer wntvs, integer *m, integer *n, integer *ncu, doublereal *a,
-                           integer *lda, doublereal *s, doublereal *u, integer *ldu, doublereal *vt,
-                           integer *ldvt, doublereal *work, integer *info)
+void fla_dgesvd_xx_small10(aocl_int64_t wntus, aocl_int64_t wntvs, aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *ncu, doublereal *a,
+                           aocl_int64_t *lda, doublereal *s, doublereal *u, aocl_int64_t *ldu, doublereal *vt,
+                           aocl_int64_t *ldvt, doublereal *work, aocl_int64_t *info)
 {
     if(FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX2))
     {
@@ -263,9 +261,9 @@ void fla_dgesvd_xx_small10(integer wntus, integer wntvs, integer *m, integer *n,
 
 /* SVD for small fat-matrices in DGESVD
  */
-void fla_dgesvd_xs_small10T(integer *m, integer *n, doublereal *a, integer *lda, doublereal *s,
-                            doublereal *u, integer *ldu, doublereal *vt, integer *ldvt,
-                            doublereal *work, integer *info)
+void fla_dgesvd_xs_small10T(aocl_int64_t *m, aocl_int64_t *n, doublereal *a, aocl_int64_t *lda, doublereal *s,
+                            doublereal *u, aocl_int64_t *ldu, doublereal *vt, aocl_int64_t *ldvt,
+                            doublereal *work, aocl_int64_t *info)
 {
     if(FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX2))
     {
@@ -277,9 +275,9 @@ void fla_dgesvd_xs_small10T(integer *m, integer *n, doublereal *a, integer *lda,
 /* SVD for small fat-matrices with LQ factorization
  * already computed
  */
-void fla_dgesvd_small6(integer wntus, integer wntvs, integer *m, integer *n, doublereal *a,
-                       integer *lda, doublereal *qr, integer *ldqr, doublereal *s, doublereal *u,
-                       integer *ldu, doublereal *vt, integer *ldvt, doublereal *work, integer *info)
+void fla_dgesvd_small6(aocl_int64_t wntus, aocl_int64_t wntvs, aocl_int64_t *m, aocl_int64_t *n, doublereal *a,
+                       aocl_int64_t *lda, doublereal *qr, aocl_int64_t *ldqr, doublereal *s, doublereal *u,
+                       aocl_int64_t *ldu, doublereal *vt, aocl_int64_t *ldvt, doublereal *work, aocl_int64_t *info)
 {
     if(FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX2))
     {
@@ -291,8 +289,8 @@ void fla_dgesvd_small6(integer wntus, integer wntvs, integer *m, integer *n, dou
 
 /* SVD for small fat-matrices for path 1T in DGESVD
  */
-void fla_dgesvd_nn_small1T(integer *m, integer *n, doublereal *a, integer *lda, doublereal *s,
-                           doublereal *work, integer *info)
+void fla_dgesvd_nn_small1T(aocl_int64_t *m, aocl_int64_t *n, doublereal *a, aocl_int64_t *lda, doublereal *s,
+                           doublereal *work, aocl_int64_t *info)
 {
     if(FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX2))
     {
@@ -304,9 +302,9 @@ void fla_dgesvd_nn_small1T(integer *m, integer *n, doublereal *a, integer *lda, 
 /* SVD for small fat-matrices with LQ factorization
  * already computed
  */
-void fla_dgesvd_small6T(integer *m, integer *n, doublereal *a, integer *lda, doublereal *ql,
-                        integer *ldql, doublereal *s, doublereal *u, integer *ldu, doublereal *vt,
-                        integer *ldvt, doublereal *work, integer *info)
+void fla_dgesvd_small6T(aocl_int64_t *m, aocl_int64_t *n, doublereal *a, aocl_int64_t *lda, doublereal *ql,
+                        aocl_int64_t *ldql, doublereal *s, doublereal *u, aocl_int64_t *ldu, doublereal *vt,
+                        aocl_int64_t *ldvt, doublereal *work, aocl_int64_t *info)
 {
     if(FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX2))
     {
@@ -316,8 +314,8 @@ void fla_dgesvd_small6T(integer *m, integer *n, doublereal *a, integer *lda, dou
 }
 
 /* Small DGETRS path (NOTRANS) should only be used for size between 3 to 8 and NRHS <= N */
-int fla_dgetrs_small_notrans(char *trans, integer *n, integer *nrhs, doublereal *a, integer *lda,
-                             integer *ipiv, doublereal *b, integer *ldb, integer *info)
+int fla_dgetrs_small_notrans(char *trans, aocl_int64_t *n, aocl_int64_t *nrhs, doublereal *a, aocl_int64_t *lda,
+                             aocl_int_t *ipiv, doublereal *b, aocl_int64_t *ldb, aocl_int64_t *info)
 {
     if(FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX2))
     {
@@ -327,10 +325,10 @@ int fla_dgetrs_small_notrans(char *trans, integer *n, integer *nrhs, doublereal 
 }
 
 /* Find the maximum element from absolute values of a real vector */
-real fla_get_max_sabs_element_vector(integer m, real *a, integer a_diml)
+real fla_get_max_sabs_element_vector(aocl_int64_t m, real *a, aocl_int64_t a_diml)
 {
     real max_value = 0.0, temp;
-    integer i__;
+    aocl_int64_t i__;
     /* Path when AVX512 ISA is supported */
     if(FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX512))
     {
@@ -356,10 +354,10 @@ real fla_get_max_sabs_element_vector(integer m, real *a, integer a_diml)
 }
 
 /* Find the maximum element from absolute values of a doublereal vector */
-doublereal fla_get_max_dabs_element_vector(integer m, doublereal *a, integer a_diml)
+doublereal fla_get_max_dabs_element_vector(aocl_int64_t m, doublereal *a, aocl_int64_t a_diml)
 {
     doublereal max_value = 0.0, temp;
-    integer i__;
+    aocl_int64_t i__;
     /* Path when AVX512 ISA is supported */
     if(FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX512))
     {
@@ -381,12 +379,12 @@ doublereal fla_get_max_dabs_element_vector(integer m, doublereal *a, integer a_d
     return max_value;
 }
 
-/* Find the maximum element from absolute values of a complex vector */
-real fla_get_max_cabs_element_vector(integer m, complex *a, integer a_diml)
+/* Find the maximum element from absolute values of a scomplex vector */
+real fla_get_max_cabs_element_vector(aocl_int64_t m, scomplex *a, aocl_int64_t a_diml)
 {
-    double c_abs(complex *);
+    double c_abs(scomplex *);
     real max_value = 0.0, temp;
-    integer i__;
+    aocl_int64_t i__;
     /* Path when AVX512 ISA is supported */
     if(m > FLA_CLANGEM_SIMD_AVX512_THRESH_M &&  FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX512))
     {
@@ -408,12 +406,12 @@ real fla_get_max_cabs_element_vector(integer m, complex *a, integer a_diml)
     return max_value;
 }
 
-/* Find the maximum element from absolute values of a doublecomplex vector */
-doublereal fla_get_max_zabs_element_vector(integer m, doublecomplex *a, integer a_diml)
+/* Find the maximum element from absolute values of a dcomplex vector */
+doublereal fla_get_max_zabs_element_vector(aocl_int64_t m, dcomplex *a, aocl_int64_t a_diml)
 {
-    double z_abs(doublecomplex *);
+    double z_abs(dcomplex *);
     doublereal max_value = 0.0, temp;
-    integer i__;
+    aocl_int64_t i__;
     /* Path when AVX512 ISA is supported */
     if(m > FLA_ZLANGEM_SIMD_AVX512_THRESH_M && FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX512))
     {
@@ -438,7 +436,7 @@ doublereal fla_get_max_zabs_element_vector(integer m, doublecomplex *a, integer 
 /* DLARF for small sizes
  * To be used only when vectorized code via avx2/avx512 is enabled
  * */
-void fla_dlarf_small_incv1_simd(integer m, integer n, doublereal *a_buff, integer ldr,
+void fla_dlarf_small_incv1_simd(aocl_int64_t m, aocl_int64_t n, doublereal *a_buff, aocl_int64_t ldr,
                                 doublereal *v, doublereal ntau, doublereal *work)
 {
     /* Select AVX512 kernel based on preset threshold and ISA support  */
@@ -454,7 +452,7 @@ void fla_dlarf_small_incv1_simd(integer m, integer n, doublereal *a_buff, intege
 }
 
 /* dnrm2 for small input sizes */
-doublereal fla_dnrm2_blas_kernel(integer *sd, doublereal *a, integer *inc)
+doublereal fla_dnrm2_blas_kernel(aocl_int64_t *sd, doublereal *a, aocl_int64_t *inc)
 {
     doublereal value = 0.;
     /* TODO : Call DNRM2 AVX2 and AVX512 kernels using AOCL_BLAS_ENABLE 
@@ -469,14 +467,14 @@ doublereal fla_dnrm2_blas_kernel(integer *sd, doublereal *a, integer *inc)
     }
     else
     {
-        value = dnrm2_(sd, a, inc);
+        value = aocl_blas_dnrm2(sd, a, inc);
     }
     return value;
 }
 
 /* ZLARF optimized */
-void fla_zlarf_left_invc1_opt(integer m, integer n, doublecomplex *a_buff, integer ldr,
-                              doublecomplex *v, doublecomplex *ntau, doublecomplex *work)
+void fla_zlarf_left_invc1_opt(aocl_int64_t m, aocl_int64_t n, dcomplex *a_buff, aocl_int64_t ldr,
+                              dcomplex *v, dcomplex *ntau, dcomplex *work)
 {
     if(m < FLA_ZGEMV_ZGER_SIMD_AXV2_THRESH_M && FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX2))
     {
@@ -491,16 +489,16 @@ void fla_zlarf_left_invc1_opt(integer m, integer n, doublecomplex *a_buff, integ
     else
     {
         /* Original code */
-        dcomplex c_b1 = {1., 0.};
-        dcomplex c_b2 = {0., 0.};
-        integer c__1 = 1;
-        integer a_offset = 1 + ldr;
+        dcomplex c_b1 = {{1.}, {0.}};
+        dcomplex c_b2 = {{0.}, {0.}};
+        aocl_int64_t c__1 = 1;
+        aocl_int64_t a_offset = 1 + ldr;
 
         /* w(1:lastc,1) := C(1:lastv,1:lastc)**H * v(1:lastv,1) */
-        zgemv_("Conjugate transpose", &m, &n, &c_b1, (dcomplex *)&a_buff[a_offset], &ldr,
+        aocl_blas_zgemv("Conjugate transpose", &m, &n, &c_b1, (dcomplex *)&a_buff[a_offset], &ldr,
                (dcomplex *)&v[1], &c__1, (dcomplex *)&c_b2, (dcomplex *)&work[1], &c__1);
         /* C(1:lastv,1:lastc) := C(...) - v(1:lastv,1) * w(1:lastc,1)**H */
-        zgerc_(&m, &n, (dcomplex *)ntau, (dcomplex *)&v[1], &c__1, (dcomplex *)&work[1], &c__1,
+        aocl_blas_zgerc(&m, &n, (dcomplex *)ntau, (dcomplex *)&v[1], &c__1, (dcomplex *)&work[1], &c__1,
                (dcomplex *)&a_buff[a_offset], &ldr);
     }
 }

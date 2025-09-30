@@ -3,7 +3,7 @@
  on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
-#include "FLA_f2c.h" /* > \brief \b DZSUM1 forms the 1-norm of the complex vector using the true absolute value. */
+#include "FLA_f2c.h" /* > \brief \b DZSUM1 forms the 1-norm of the scomplex vector using the true absolute value. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
@@ -36,7 +36,7 @@
 /* > */
 /* > \verbatim */
 /* > */
-/* > DZSUM1 takes the sum of the absolute values of a complex */
+/* > DZSUM1 takes the sum of the absolute values of a scomplex */
 /* > vector and returns a double precision result. */
 /* > */
 /* > Based on DZASUM from the Level 1 BLAS. */
@@ -74,15 +74,28 @@
 /* > */
 /* > Nick Higham for use with ZLACON. */
 /* ===================================================================== */
-doublereal dzsum1_(integer *n, doublecomplex *cx, integer *incx)
+/** Generated wrapper function */
+doublereal dzsum1_(aocl_int_t *n, dcomplex *cx, aocl_int_t *incx)
+{
+#if FLA_ENABLE_ILP64
+    return aocl_lapack_dzsum1(n, cx, incx);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t incx_64 = *incx;
+
+    return aocl_lapack_dzsum1(&n_64, cx, &incx_64);
+#endif
+}
+
+doublereal aocl_lapack_dzsum1(aocl_int64_t *n, dcomplex *cx, aocl_int64_t *incx)
 {
     /* System generated locals */
-    integer i__1, i__2;
+    aocl_int64_t i__1, i__2;
     doublereal ret_val;
     /* Builtin functions */
-    double z_abs(doublecomplex *);
+    double z_abs(dcomplex *);
     /* Local variables */
-    integer i__, nincx;
+    aocl_int64_t i__, nincx;
     doublereal stemp;
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */

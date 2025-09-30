@@ -44,7 +44,7 @@ static real c_b6 = 1.f;
 /* > */
 /* > where either */
 /* > 1) CC = 0 so that AA and DD are real eigenvalues of the matrix, or */
-/* > 2) AA = DD and BB*CC < 0, so that AA + or - sqrt(BB*CC) are complex */
+/* > 2) AA = DD and BB*CC < 0, so that AA + or - sqrt(BB*CC) are scomplex */
 /* > conjugate eigenvalues. */
 /* > \endverbatim */
 /* Arguments: */
@@ -91,7 +91,7 @@ static real c_b6 = 1.f;
 /* > \verbatim */
 /* > RT2I is REAL */
 /* > The real and imaginary parts of the eigenvalues. If the */
-/* > eigenvalues are a complex conjugate pair, RT1I > 0. */
+/* > eigenvalues are a scomplex conjugate pair, RT1I > 0. */
 /* > \endverbatim */
 /* > */
 /* > \param[out] CS */
@@ -130,10 +130,11 @@ void slanv2_(real *a, real *b, real *c__, real *d__, real *rt1r, real *rt1i, rea
     AOCL_DTL_TRACE_LOG_INIT
     real r__1, r__2;
     /* Builtin functions */
-    double log(doublereal), pow_ri(real *, integer *), r_sign(real *, real *), sqrt(doublereal);
+    double log(doublereal), pow_ri(real *, aocl_int64_t *), r_sign(real *, real *),
+        sqrt(doublereal);
     /* Local variables */
     real p, z__, aa, bb, cc, dd, cs1, sn1, sab, sac, eps, tau, temp, scale, bcmax, bcmis, sigma;
-    integer count, i__1;
+    aocl_int64_t count, i__1;
     real safmn2, safmx2;
     extern real slapy2_(real *, real *), slamch_(char *);
     real safmin;

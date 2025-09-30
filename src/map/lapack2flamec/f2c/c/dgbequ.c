@@ -147,24 +147,44 @@
 /* > \ingroup doubleGBcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void dgbequ_(integer *m, integer *n, integer *kl, integer *ku, doublereal *ab, integer *ldab,
-             doublereal *r__, doublereal *c__, doublereal *rowcnd, doublereal *colcnd,
-             doublereal *amax, integer *info)
+/** Generated wrapper function */
+void dgbequ_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *kl, aocl_int_t *ku, doublereal *ab,
+             aocl_int_t *ldab, doublereal *r__, doublereal *c__, doublereal *rowcnd,
+             doublereal *colcnd, doublereal *amax, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_dgbequ(m, n, kl, ku, ab, ldab, r__, c__, rowcnd, colcnd, amax, info);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t kl_64 = *kl;
+    aocl_int64_t ku_64 = *ku;
+    aocl_int64_t ldab_64 = *ldab;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_dgbequ(&m_64, &n_64, &kl_64, &ku_64, ab, &ldab_64, r__, c__, rowcnd, colcnd, amax,
+                       &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_dgbequ(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *kl, aocl_int64_t *ku,
+                        doublereal *ab, aocl_int64_t *ldab, doublereal *r__, doublereal *c__,
+                        doublereal *rowcnd, doublereal *colcnd, doublereal *amax,
+                        aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dgbequ inputs: m %" FLA_IS ", n %" FLA_IS ", kl %" FLA_IS ", ku %" FLA_IS
                       ", ldab %" FLA_IS "",
                       *m, *n, *kl, *ku, *ldab);
     /* System generated locals */
-    integer ab_dim1, ab_offset, i__1, i__2, i__3, i__4;
+    aocl_int64_t ab_dim1, ab_offset, i__1, i__2, i__3, i__4;
     doublereal d__1, d__2, d__3;
     /* Local variables */
-    integer i__, j, kd;
+    aocl_int64_t i__, j, kd;
     doublereal rcmin, rcmax;
     extern doublereal dlamch_(char *);
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal bignum, smlnum;
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -218,7 +238,7 @@ void dgbequ_(integer *m, integer *n, integer *kl, integer *ku, doublereal *ab, i
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("DGBEQU", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("DGBEQU", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }

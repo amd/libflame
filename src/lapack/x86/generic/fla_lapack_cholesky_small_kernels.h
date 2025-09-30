@@ -16,7 +16,7 @@
 #define FLA_POTRI_SMALL_2X2(datatype, uplo, n, buff_A, ldim_A, info) \
     char u = toupper(*(uplo)); \
     datatype invL[2][2] = {0}, *A = buff_A; \
-    integer lda = *ldim_A; \
+    aocl_int64_t lda = *ldim_A; \
     \
     if (u == 'L') { \
         /* Invert lower triangular matrix L */ \
@@ -46,7 +46,7 @@
 
 #define FLA_POTRI_SMALL_3X3(datatype, uplo, n, buff_A, ldim_A, info) \
     char u = toupper(*(uplo)); \
-    integer lda = *ldim_A; \
+    aocl_int64_t lda = *ldim_A; \
     datatype *A = buff_A; \
     \
     if (u == 'L') { \
@@ -87,7 +87,7 @@
 
 #define FLA_POTRI_SMALL_4X4(datatype, uplo, n, buff_A, ldim_A, info) \
     char u = toupper(*(uplo)); \
-    integer lda = *ldim_A; \
+    aocl_int64_t lda = *ldim_A; \
     datatype *A = buff_A; \
     \
     if (u == 'L') { \

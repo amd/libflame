@@ -4,10 +4,10 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__9 = 9;
-static integer c__0 = 0;
-static integer c__2 = 2;
-static integer c__1 = 1;
+static aocl_int64_t c__9 = 9;
+static aocl_int64_t c__0 = 0;
+static aocl_int64_t c__2 = 2;
+static aocl_int64_t c__1 = 1;
 /* > \brief \b CLAED0 used by sstedc. Computes all eigenvalues and corresponding eigenvectors of an
  * unreduced symmetric tridiagonal matrix using the divide and conquer method. */
 /* =========== DOCUMENTATION =========== */
@@ -145,8 +145,29 @@ static integer c__1 = 1;
 /* > \ingroup complexOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void claed0_(integer *qsiz, integer *n, real *d__, real *e, complex *q, integer *ldq,
-             complex *qstore, integer *ldqs, real *rwork, integer *iwork, integer *info)
+/** Generated wrapper function */
+void claed0_(aocl_int_t *qsiz, aocl_int_t *n, real *d__, real *e, scomplex *q, aocl_int_t *ldq,
+             scomplex *qstore, aocl_int_t *ldqs, real *rwork, aocl_int_t *iwork, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_claed0(qsiz, n, d__, e, q, ldq, qstore, ldqs, rwork, iwork, info);
+#else
+    aocl_int64_t qsiz_64 = *qsiz;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t ldq_64 = *ldq;
+    aocl_int64_t ldqs_64 = *ldqs;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_claed0(&qsiz_64, &n_64, d__, e, q, &ldq_64, qstore, &ldqs_64, rwork, iwork,
+                       &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_claed0(aocl_int64_t *qsiz, aocl_int64_t *n, real *d__, real *e, scomplex *q,
+                        aocl_int64_t *ldq, scomplex *qstore, aocl_int64_t *ldqs, real *rwork,
+                        aocl_int_t *iwork, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -160,42 +181,20 @@ void claed0_(integer *qsiz, integer *n, real *d__, real *e, complex *q, integer 
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
-    integer q_dim1, q_offset, qstore_dim1, qstore_offset, i__1, i__2;
+    aocl_int64_t q_dim1, q_offset, qstore_dim1, qstore_offset, i__1, i__2;
     real r__1;
     /* Builtin functions */
     double log(doublereal);
-    integer pow_ii(integer *, integer *);
+    integer pow_ii(aocl_int64_t *, aocl_int64_t *);
     /* Local variables */
-    integer i__, j, k, ll, iq, lgn, msd2, smm1, spm1, spm2;
+    aocl_int64_t i__, j, k, ll, iq, lgn, msd2, smm1, spm1, spm2;
     real temp;
-    integer curr, iperm;
-    extern /* Subroutine */
-        void
-        ccopy_(integer *, complex *, integer *, complex *, integer *);
-    integer indxq, iwrem;
-    extern /* Subroutine */
-        void
-        scopy_(integer *, real *, integer *, real *, integer *);
-    integer iqptr;
-    extern /* Subroutine */
-        void
-        claed7_(integer *, integer *, integer *, integer *, integer *, integer *, real *, complex *,
-                integer *, real *, integer *, real *, integer *, integer *, integer *, integer *,
-                integer *, real *, complex *, real *, integer *, integer *);
-    integer tlvls;
-    extern /* Subroutine */
-        void
-        clacrm_(integer *, integer *, complex *, integer *, real *, integer *, complex *, integer *,
-                real *);
-    integer igivcl;
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
-    integer igivnm, submat, curprb, subpbs, igivpt, curlvl, matsiz, iprmpt, smlsiz;
-    extern /* Subroutine */
-        void
-        ssteqr_(char *, integer *, real *, real *, real *, integer *, real *, integer *);
+    aocl_int64_t curr, iperm;
+    aocl_int64_t indxq, iwrem;
+    aocl_int64_t iqptr;
+    aocl_int64_t tlvls;
+    aocl_int64_t igivcl;
+    aocl_int64_t igivnm, submat, curprb, subpbs, igivpt, curlvl, matsiz, iprmpt, smlsiz;
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -254,7 +253,7 @@ void claed0_(integer *qsiz, integer *n, real *d__, real *e, complex *q, integer 
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("CLAED0", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("CLAED0", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
@@ -264,10 +263,10 @@ void claed0_(integer *qsiz, integer *n, real *d__, real *e, complex *q, integer 
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
-    smlsiz = ilaenv_(&c__9, "CLAED0", " ", &c__0, &c__0, &c__0, &c__0);
+    smlsiz = aocl_lapack_ilaenv(&c__9, "CLAED0", " ", &c__0, &c__0, &c__0, &c__0);
     /* Determine the size and placement of the submatrices, and save in */
     /* the leading elements of IWORK. */
-    iwork[1] = *n;
+    iwork[1] = (aocl_int_t)(*n);
     subpbs = 1;
     tlvls = 0;
 L10:
@@ -350,12 +349,13 @@ L10:
             matsiz = iwork[i__ + 1] - iwork[i__];
         }
         ll = iq - 1 + iwork[iqptr + curr];
-        ssteqr_("I", &matsiz, &d__[submat], &e[submat], &rwork[ll], &matsiz, &rwork[1], info);
-        clacrm_(qsiz, &matsiz, &q[submat * q_dim1 + 1], ldq, &rwork[ll], &matsiz,
-                &qstore[submat * qstore_dim1 + 1], ldqs, &rwork[iwrem]);
+        aocl_lapack_ssteqr("I", &matsiz, &d__[submat], &e[submat], &rwork[ll], &matsiz, &rwork[1],
+                           info);
+        aocl_lapack_clacrm(qsiz, &matsiz, &q[submat * q_dim1 + 1], ldq, &rwork[ll], &matsiz,
+                           &qstore[submat * qstore_dim1 + 1], ldqs, &rwork[iwrem]);
         /* Computing 2nd power */
         i__2 = matsiz;
-        iwork[iqptr + curr + 1] = iwork[iqptr + curr] + i__2 * i__2;
+        iwork[iqptr + curr + 1] = (aocl_int_t)(iwork[iqptr + curr] + i__2 * i__2);
         ++curr;
         if(*info > 0)
         {
@@ -367,7 +367,7 @@ L10:
         i__2 = iwork[i__ + 1];
         for(j = submat; j <= i__2; ++j)
         {
-            iwork[indxq + j] = k;
+            iwork[indxq + j] = (aocl_int_t)(k);
             ++k;
             /* L60: */
         }
@@ -403,11 +403,11 @@ L80:
             /* when the eigenvectors of a full or band Hermitian matrix (which */
             /* was reduced to tridiagonal form) are desired. */
             /* I am free to use Q as a valuable working space until Loop 150. */
-            claed7_(&matsiz, &msd2, qsiz, &tlvls, &curlvl, &curprb, &d__[submat],
-                    &qstore[submat * qstore_dim1 + 1], ldqs, &e[submat + msd2 - 1],
-                    &iwork[indxq + submat], &rwork[iq], &iwork[iqptr], &iwork[iprmpt],
-                    &iwork[iperm], &iwork[igivpt], &iwork[igivcl], &rwork[igivnm],
-                    &q[submat * q_dim1 + 1], &rwork[iwrem], &iwork[subpbs + 1], info);
+            aocl_lapack_claed7(&matsiz, &msd2, qsiz, &tlvls, &curlvl, &curprb, &d__[submat],
+                               &qstore[submat * qstore_dim1 + 1], ldqs, &e[submat + msd2 - 1],
+                               &iwork[indxq + submat], &rwork[iq], &iwork[iqptr], &iwork[iprmpt],
+                               &iwork[iperm], &iwork[igivpt], &iwork[igivcl], &rwork[igivnm],
+                               &q[submat * q_dim1 + 1], &rwork[iwrem], &iwork[subpbs + 1], info);
             if(*info > 0)
             {
                 *info = submat * (*n + 1) + submat + matsiz - 1;
@@ -429,10 +429,10 @@ L80:
     {
         j = iwork[indxq + i__];
         rwork[i__] = d__[j];
-        ccopy_(qsiz, &qstore[j * qstore_dim1 + 1], &c__1, &q[i__ * q_dim1 + 1], &c__1);
+        aocl_blas_ccopy(qsiz, &qstore[j * qstore_dim1 + 1], &c__1, &q[i__ * q_dim1 + 1], &c__1);
         /* L100: */
     }
-    scopy_(n, &rwork[1], &c__1, &d__[1], &c__1);
+    aocl_blas_scopy(n, &rwork[1], &c__1, &d__[1], &c__1);
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
     return;
     /* End of CLAED0 */

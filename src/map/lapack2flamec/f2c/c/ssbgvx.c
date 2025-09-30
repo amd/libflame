@@ -4,7 +4,7 @@
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
  /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
+static aocl_int64_t c__1 = 1;
 static real c_b25 = 1.f;
 static real c_b27 = 0.f;
 /* > \brief \b SSBGVX */
@@ -296,64 +296,68 @@ i.e., */
 /* > Mark Fahey, Department of Mathematics, Univ. of Kentucky, USA */
 /* ===================================================================== */
 /* Subroutine */
-void ssbgvx_(char *jobz, char *range, char *uplo, integer *n, integer *ka, integer *kb, real *ab,
-             integer *ldab, real *bb, integer *ldbb, real *q, integer *ldq, real *vl, real *vu,
-             integer *il, integer *iu, real *abstol, integer *m, real *w, real *z__, integer *ldz,
-             real *work, integer *iwork, integer *ifail, integer *info)
+/** Generated wrapper function */
+void ssbgvx_(char *jobz, char *range, char *uplo, aocl_int_t *n, aocl_int_t *ka, aocl_int_t *kb,
+             real *ab, aocl_int_t *ldab, real *bb, aocl_int_t *ldbb, real *q, aocl_int_t *ldq,
+             real *vl, real *vu, aocl_int_t *il, aocl_int_t *iu, real *abstol, aocl_int_t *m,
+             real *w, real *z__, aocl_int_t *ldz, real *work, aocl_int_t *iwork, aocl_int_t *ifail,
+             aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_ssbgvx(jobz, range, uplo, n, ka, kb, ab, ldab, bb, ldbb, q, ldq, vl, vu, il, iu,
+                       abstol, m, w, z__, ldz, work, iwork, ifail, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t ka_64 = *ka;
+    aocl_int64_t kb_64 = *kb;
+    aocl_int64_t ldab_64 = *ldab;
+    aocl_int64_t ldbb_64 = *ldbb;
+    aocl_int64_t ldq_64 = *ldq;
+    aocl_int64_t il_64 = *il;
+    aocl_int64_t iu_64 = *iu;
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t ldz_64 = *ldz;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_ssbgvx(jobz, range, uplo, &n_64, &ka_64, &kb_64, ab, &ldab_64, bb, &ldbb_64, q,
+                       &ldq_64, vl, vu, &il_64, &iu_64, abstol, &m_64, w, z__, &ldz_64, work, iwork,
+                       ifail, &info_64);
+
+    *m = (aocl_int_t)m_64;
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_ssbgvx(char *jobz, char *range, char *uplo, aocl_int64_t *n, aocl_int64_t *ka,
+                        aocl_int64_t *kb, real *ab, aocl_int64_t *ldab, real *bb,
+                        aocl_int64_t *ldbb, real *q, aocl_int64_t *ldq, real *vl, real *vu,
+                        aocl_int64_t *il, aocl_int64_t *iu, real *abstol, aocl_int64_t *m, real *w,
+                        real *z__, aocl_int64_t *ldz, real *work, aocl_int_t *iwork,
+                        aocl_int_t *ifail, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF(
-             "ssbgvx inputs: jobz %c, range %c, uplo %c, n %" FLA_IS ", ka %" FLA_IS ", kb %" FLA_IS
-             ", ldab %" FLA_IS ", ldbb %" FLA_IS ", ldq %" FLA_IS ", il %" FLA_IS ", iu %" FLA_IS
-             ", ldz %" FLA_IS "",
-             *jobz, *range, *uplo, *n, *ka, *kb, *ldab, *ldbb, *ldq, *il, *iu, *ldz);
+    AOCL_DTL_SNPRINTF("ssbgvx inputs: jobz %c, range %c, uplo %c, n %" FLA_IS ", ka %" FLA_IS
+                      ", kb %" FLA_IS ", ldab %" FLA_IS ", ldbb %" FLA_IS ", ldq %" FLA_IS
+                      ", il %" FLA_IS ", iu %" FLA_IS ", ldz %" FLA_IS "",
+                      *jobz, *range, *uplo, *n, *ka, *kb, *ldab, *ldbb, *ldq, *il, *iu, *ldz);
     /* System generated locals */
-    integer ab_dim1, ab_offset, bb_dim1, bb_offset, q_dim1, q_offset, z_dim1, z_offset, i__1, i__2;
+    aocl_int64_t ab_dim1, ab_offset, bb_dim1, bb_offset, q_dim1, q_offset, z_dim1, z_offset, i__1,
+        i__2;
     /* Local variables */
-    integer i__, j, jj;
+    aocl_int64_t i__, j, jj;
     real tmp1;
-    integer indd, inde;
+    aocl_int64_t indd, inde;
     char vect[1];
     logical test;
-    integer itmp1, indee;
-    extern logical lsame_(char *, char *, integer, integer);
-    integer iinfo;
+    aocl_int64_t itmp1, indee;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    aocl_int64_t iinfo;
     char order[1];
-    extern /* Subroutine */
-        void
-        sgemv_(char *, integer *, integer *, real *, real *, integer *, real *, integer *, real *,
-               real *, integer *);
     logical upper;
-    extern /* Subroutine */
-        void
-        scopy_(integer *, real *, integer *, real *, integer *),
-        sswap_(integer *, real *, integer *, real *, integer *);
     logical wantz, alleig, indeig, valeig;
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    integer indisp, indiwo;
-    extern /* Subroutine */
-        void
-        slacpy_(char *, integer *, integer *, real *, integer *, real *, integer *);
-    integer indwrk;
-    extern /* Subroutine */
-        void
-        spbstf_(char *, integer *, integer *, real *, integer *, integer *),
-        ssbtrd_(char *, char *, integer *, integer *, real *, integer *, real *, real *, real *,
-                integer *, real *, integer *),
-        ssbgst_(char *, char *, integer *, integer *, integer *, real *, integer *, real *,
-                integer *, real *, integer *, real *, integer *),
-        sstein_(integer *, real *, real *, integer *, real *, integer *, integer *, real *,
-                integer *, real *, integer *, integer *, integer *),
-        ssterf_(integer *, real *, real *, integer *);
-    integer nsplit;
-    extern /* Subroutine */
-        void
-        sstebz_(char *, char *, integer *, real *, real *, integer *, integer *, real *, real *,
-                real *, integer *, integer *, real *, integer *, integer *, real *, integer *,
-                integer *),
-        ssteqr_(char *, integer *, real *, real *, real *, integer *, real *, integer *);
+    aocl_int64_t indisp, indiwo;
+    aocl_int64_t indwrk;
+    aocl_int64_t nsplit;
     /* -- LAPACK driver routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -465,7 +469,7 @@ void ssbgvx_(char *jobz, char *range, char *uplo, integer *n, integer *ka, integ
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("SSBGVX", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("SSBGVX", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -477,7 +481,7 @@ void ssbgvx_(char *jobz, char *range, char *uplo, integer *n, integer *ka, integ
         return;
     }
     /* Form a split Cholesky factorization of B. */
-    spbstf_(uplo, n, kb, &bb[bb_offset], ldbb, info);
+    aocl_lapack_spbstf(uplo, n, kb, &bb[bb_offset], ldbb, info);
     if(*info != 0)
     {
         *info = *n + *info;
@@ -485,8 +489,8 @@ void ssbgvx_(char *jobz, char *range, char *uplo, integer *n, integer *ka, integ
         return;
     }
     /* Transform problem to standard eigenvalue problem. */
-    ssbgst_(jobz, uplo, n, ka, kb, &ab[ab_offset], ldab, &bb[bb_offset], ldbb, &q[q_offset], ldq,
-            &work[1], &iinfo);
+    aocl_lapack_ssbgst(jobz, uplo, n, ka, kb, &ab[ab_offset], ldab, &bb[bb_offset], ldbb,
+                       &q[q_offset], ldq, &work[1], &iinfo);
     /* Reduce symmetric band matrix to tridiagonal form. */
     indd = 1;
     inde = indd + *n;
@@ -499,8 +503,8 @@ void ssbgvx_(char *jobz, char *range, char *uplo, integer *n, integer *ka, integ
     {
         *(unsigned char *)vect = 'N';
     }
-    ssbtrd_(vect, uplo, n, ka, &ab[ab_offset], ldab, &work[indd], &work[inde], &q[q_offset], ldq,
-            &work[indwrk], &iinfo);
+    aocl_lapack_ssbtrd(vect, uplo, n, ka, &ab[ab_offset], ldab, &work[indd], &work[inde],
+                       &q[q_offset], ldq, &work[indwrk], &iinfo);
     /* If all eigenvalues are desired and ABSTOL is less than or equal */
     /* to zero, then call SSTERF or SSTEQR. If this fails for some */
     /* eigenvalue, then try SSTEBZ. */
@@ -514,18 +518,19 @@ void ssbgvx_(char *jobz, char *range, char *uplo, integer *n, integer *ka, integ
     }
     if((alleig || test) && *abstol <= 0.f)
     {
-        scopy_(n, &work[indd], &c__1, &w[1], &c__1);
+        aocl_blas_scopy(n, &work[indd], &c__1, &w[1], &c__1);
         indee = indwrk + (*n << 1);
         i__1 = *n - 1;
-        scopy_(&i__1, &work[inde], &c__1, &work[indee], &c__1);
+        aocl_blas_scopy(&i__1, &work[inde], &c__1, &work[indee], &c__1);
         if(!wantz)
         {
-            ssterf_(n, &w[1], &work[indee], info);
+            aocl_lapack_ssterf(n, &w[1], &work[indee], info);
         }
         else
         {
-            slacpy_("A", n, n, &q[q_offset], ldq, &z__[z_offset], ldz);
-            ssteqr_(jobz, n, &w[1], &work[indee], &z__[z_offset], ldz, &work[indwrk], info);
+            aocl_lapack_slacpy("A", n, n, &q[q_offset], ldq, &z__[z_offset], ldz);
+            aocl_lapack_ssteqr(jobz, n, &w[1], &work[indee], &z__[z_offset], ldz, &work[indwrk],
+                               info);
             if(*info == 0)
             {
                 i__1 = *n;
@@ -555,20 +560,21 @@ void ssbgvx_(char *jobz, char *range, char *uplo, integer *n, integer *ka, integ
     }
     indisp = *n + 1;
     indiwo = indisp + *n;
-    sstebz_(range, order, n, vl, vu, il, iu, abstol, &work[indd], &work[inde], m, &nsplit, &w[1],
-            &iwork[1], &iwork[indisp], &work[indwrk], &iwork[indiwo], info);
+    aocl_lapack_sstebz(range, order, n, vl, vu, il, iu, abstol, &work[indd], &work[inde], m,
+                       &nsplit, &w[1], &iwork[1], &iwork[indisp], &work[indwrk], &iwork[indiwo],
+                       info);
     if(wantz)
     {
-        sstein_(n, &work[indd], &work[inde], m, &w[1], &iwork[1], &iwork[indisp], &z__[z_offset],
-                ldz, &work[indwrk], &iwork[indiwo], &ifail[1], info);
+        aocl_lapack_sstein(n, &work[indd], &work[inde], m, &w[1], &iwork[1], &iwork[indisp],
+                           &z__[z_offset], ldz, &work[indwrk], &iwork[indiwo], &ifail[1], info);
         /* Apply transformation matrix used in reduction to tridiagonal */
         /* form to eigenvectors returned by SSTEIN. */
         i__1 = *m;
         for(j = 1; j <= i__1; ++j)
         {
-            scopy_(n, &z__[j * z_dim1 + 1], &c__1, &work[1], &c__1);
-            sgemv_("N", n, n, &c_b25, &q[q_offset], ldq, &work[1], &c__1, &c_b27,
-                   &z__[j * z_dim1 + 1], &c__1);
+            aocl_blas_scopy(n, &z__[j * z_dim1 + 1], &c__1, &work[1], &c__1);
+            aocl_blas_sgemv("N", n, n, &c_b25, &q[q_offset], ldq, &work[1], &c__1, &c_b27,
+                            &z__[j * z_dim1 + 1], &c__1);
             /* L20: */
         }
     }
@@ -597,13 +603,13 @@ L30: /* If eigenvalues are not in order, then sort them, along with */
                 w[i__] = w[j];
                 iwork[i__] = iwork[j];
                 w[j] = tmp1;
-                iwork[j] = itmp1;
-                sswap_(n, &z__[i__ * z_dim1 + 1], &c__1, &z__[j * z_dim1 + 1], &c__1);
+                iwork[j] = (aocl_int_t)(itmp1);
+                aocl_blas_sswap(n, &z__[i__ * z_dim1 + 1], &c__1, &z__[j * z_dim1 + 1], &c__1);
                 if(*info != 0)
                 {
                     itmp1 = ifail[i__];
                     ifail[i__] = ifail[j];
-                    ifail[j] = itmp1;
+                    ifail[j] = (aocl_int_t)(itmp1);
                 }
             }
             /* L50: */

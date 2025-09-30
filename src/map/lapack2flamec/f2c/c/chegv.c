@@ -4,9 +4,9 @@
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
  /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static complex c_b1 = {1.f, 0.f};
-static integer c__1 = 1;
-static integer c_n1 = -1;
+static scomplex c_b1 = {{1.f}, {0.f}};
+static aocl_int64_t c__1 = 1;
+static aocl_int64_t c_n1 = -1;
 /* > \brief \b CHEGV */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -44,7 +44,7 @@ static integer c_n1 = -1;
 /* > \verbatim */
 /* > */
 /* > CHEGV computes all the eigenvalues, and optionally, the eigenvectors */
-/* > of a complex generalized Hermitian-definite eigenproblem, of the form */
+/* > of a scomplex generalized Hermitian-definite eigenproblem, of the form */
 /* > A*x=(lambda)*B*x, A*Bx=(lambda)*x, or B*A*x=(lambda)*x. */
 /* > Here A and B are assumed to be Hermitian and B is also */
 /* > positive definite. */
@@ -184,9 +184,31 @@ the routine */
 /* > \ingroup hegv */
 /* ===================================================================== */
 /* Subroutine */
-void chegv_(integer *itype, char *jobz, char *uplo, integer *n, complex *a, integer *lda,
-            complex *b, integer *ldb, real *w, complex *work, integer *lwork, real *rwork,
-            integer *info)
+/** Generated wrapper function */
+void chegv_(aocl_int_t *itype, char *jobz, char *uplo, aocl_int_t *n, scomplex *a, aocl_int_t *lda,
+            scomplex *b, aocl_int_t *ldb, real *w, scomplex *work, aocl_int_t *lwork, real *rwork,
+            aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_chegv(itype, jobz, uplo, n, a, lda, b, ldb, w, work, lwork, rwork, info);
+#else
+    aocl_int64_t itype_64 = *itype;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t ldb_64 = *ldb;
+    aocl_int64_t lwork_64 = *lwork;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_chegv(&itype_64, jobz, uplo, &n_64, a, &lda_64, b, &ldb_64, w, work, &lwork_64,
+                      rwork, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_chegv(aocl_int64_t *itype, char *jobz, char *uplo, aocl_int64_t *n, scomplex *a,
+                       aocl_int64_t *lda, scomplex *b, aocl_int64_t *ldb, real *w, scomplex *work,
+                       aocl_int64_t *lwork, real *rwork, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -203,37 +225,15 @@ void chegv_(integer *itype, char *jobz, char *uplo, integer *n, complex *a, inte
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
-    integer a_dim1, a_offset, b_dim1, b_offset, i__1, i__2;
+    aocl_int64_t a_dim1, a_offset, b_dim1, b_offset, i__1, i__2;
     real r__1;
     /* Local variables */
-    integer nb, neig;
-    extern /* Subroutine */
-        void
-        cheev_(char *, char *, integer *, complex *, integer *, real *, complex *, integer *,
-               real *, integer *);
-    extern logical lsame_(char *, char *, integer, integer);
-    extern /* Subroutine */
-        void
-        ctrmm_(char *, char *, char *, char *, integer *, integer *, complex *, complex *,
-               integer *, complex *, integer *);
+    aocl_int64_t nb, neig;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     char trans[1];
-    extern /* Subroutine */
-        void
-        ctrsm_(char *, char *, char *, char *, integer *, integer *, complex *, complex *,
-               integer *, complex *, integer *);
     logical upper, wantz;
-    extern /* Subroutine */
-        void
-        chegst_(integer *, char *, integer *, complex *, integer *, complex *, integer *,
-                integer *);
-    extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
-        cpotrf_(char *, integer *, complex *, integer *, integer *);
-    integer lwkopt;
+    aocl_int64_t lwkopt;
     logical lquery;
-    extern real sroundup_lwork(integer *);
     /* -- LAPACK driver routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -295,12 +295,12 @@ void chegv_(integer *itype, char *jobz, char *uplo, integer *n, complex *a, inte
     }
     if(*info == 0)
     {
-        nb = ilaenv_(&c__1, "CHETRD", uplo, n, &c_n1, &c_n1, &c_n1);
+        nb = aocl_lapack_ilaenv(&c__1, "CHETRD", uplo, n, &c_n1, &c_n1, &c_n1);
         /* Computing MAX */
         i__1 = 1;
         i__2 = (nb + 1) * *n; // , expr subst
         lwkopt = fla_max(i__1, i__2);
-        r__1 = sroundup_lwork(&lwkopt);
+        r__1 = aocl_lapack_sroundup_lwork(&lwkopt);
         work[1].r = r__1;
         work[1].i = 0.f; // , expr subst
         /* Computing MAX */
@@ -314,7 +314,7 @@ void chegv_(integer *itype, char *jobz, char *uplo, integer *n, complex *a, inte
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("CHEGV ", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("CHEGV ", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
@@ -330,7 +330,7 @@ void chegv_(integer *itype, char *jobz, char *uplo, integer *n, complex *a, inte
         return;
     }
     /* Form a Cholesky factorization of B. */
-    cpotrf_(uplo, n, &b[b_offset], ldb, info);
+    aocl_lapack_cpotrf(uplo, n, &b[b_offset], ldb, info);
     if(*info != 0)
     {
         *info = *n + *info;
@@ -338,8 +338,8 @@ void chegv_(integer *itype, char *jobz, char *uplo, integer *n, complex *a, inte
         return;
     }
     /* Transform problem to standard eigenvalue problem and solve. */
-    chegst_(itype, uplo, n, &a[a_offset], lda, &b[b_offset], ldb, info);
-    cheev_(jobz, uplo, n, &a[a_offset], lda, &w[1], &work[1], lwork, &rwork[1], info);
+    aocl_lapack_chegst(itype, uplo, n, &a[a_offset], lda, &b[b_offset], ldb, info);
+    aocl_lapack_cheev(jobz, uplo, n, &a[a_offset], lda, &w[1], &work[1], lwork, &rwork[1], info);
     if(wantz)
     {
         /* Backtransform eigenvectors to the original problem. */
@@ -361,8 +361,8 @@ void chegv_(integer *itype, char *jobz, char *uplo, integer *n, complex *a, inte
             {
                 *(unsigned char *)trans = 'C';
             }
-            ctrsm_("Left", uplo, trans, "Non-unit", n, &neig, &c_b1, &b[b_offset], ldb,
-                   &a[a_offset], lda);
+            aocl_blas_ctrsm("Left", uplo, trans, "Non-unit", n, &neig, &c_b1, &b[b_offset], ldb,
+                            &a[a_offset], lda);
         }
         else if(*itype == 3)
         {
@@ -377,11 +377,11 @@ void chegv_(integer *itype, char *jobz, char *uplo, integer *n, complex *a, inte
             {
                 *(unsigned char *)trans = 'N';
             }
-            ctrmm_("Left", uplo, trans, "Non-unit", n, &neig, &c_b1, &b[b_offset], ldb,
-                   &a[a_offset], lda);
+            aocl_blas_ctrmm("Left", uplo, trans, "Non-unit", n, &neig, &c_b1, &b[b_offset], ldb,
+                            &a[a_offset], lda);
         }
     }
-    r__1 = sroundup_lwork(&lwkopt);
+    r__1 = aocl_lapack_sroundup_lwork(&lwkopt);
     work[1].r = r__1;
     work[1].i = 0.f; // , expr subst
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);

@@ -9,7 +9,7 @@
  */
 
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
+static aocl_int64_t c__1 = 1;
 static real c_b36 = .5f;
 /* > \brief \b CLATBS solves a triangular banded system of equations. */
 /* =========== DOCUMENTATION =========== */
@@ -250,8 +250,28 @@ b(i), i=1,..,n}
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void clatbs_(char *uplo, char *trans, char *diag, char *normin, integer *n, integer *kd,
-             complex *ab, integer *ldab, complex *x, real *scale, real *cnorm, integer *info)
+/** Generated wrapper function */
+void clatbs_(char *uplo, char *trans, char *diag, char *normin, aocl_int_t *n, aocl_int_t *kd,
+             scomplex *ab, aocl_int_t *ldab, scomplex *x, real *scale, real *cnorm, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_clatbs(uplo, trans, diag, normin, n, kd, ab, ldab, x, scale, cnorm, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t kd_64 = *kd;
+    aocl_int64_t ldab_64 = *ldab;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_clatbs(uplo, trans, diag, normin, &n_64, &kd_64, ab, &ldab_64, x, scale, cnorm,
+                       &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_clatbs(char *uplo, char *trans, char *diag, char *normin, aocl_int64_t *n,
+                        aocl_int64_t *kd, scomplex *ab, aocl_int64_t *ldab, scomplex *x, real *scale,
+                        real *cnorm, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -268,56 +288,35 @@ void clatbs_(char *uplo, char *trans, char *diag, char *normin, integer *n, inte
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
-    integer ab_dim1, ab_offset, i__1, i__2, i__3, i__4, i__5;
+    aocl_int64_t ab_dim1, ab_offset, i__1, i__2, i__3, i__4, i__5;
     real r__1, r__2, r__3, r__4;
-    complex q__1, q__2, q__3, q__4;
+    scomplex q__1, q__2, q__3, q__4;
     /* Builtin functions */
-    double r_imag(complex *);
-    void r_cnjg(complex *, complex *);
+    double r_imag(scomplex *);
+    void r_cnjg(scomplex *, scomplex *);
     /* Local variables */
-    integer i__, j;
+    aocl_int64_t i__, j;
     real xj, rec, tjj;
-    integer jinc, jlen;
+    aocl_int64_t jinc, jlen;
     real xbnd;
-    integer imax;
+    aocl_int64_t imax;
     real tmax;
-    complex tjjs;
+    scomplex tjjs;
     real xmax, grow;
-    integer maind;
-    extern /* Complex */
-        VOID
-        cdotc_f2c_(complex *, integer *, complex *, integer *, complex *, integer *);
-    extern logical lsame_(char *, char *, integer, integer);
-    extern /* Subroutine */
-        void
-        sscal_(integer *, real *, real *, integer *);
+    aocl_int64_t maind;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     real tscal;
-    complex uscal;
-    integer jlast;
-    extern /* Complex */
-        VOID
-        cdotu_f2c_(complex *, integer *, complex *, integer *, complex *, integer *);
-    complex csumj;
-    extern /* Subroutine */
-        void
-        ctbsv_(char *, char *, char *, integer *, integer *, complex *, integer *, complex *,
-               integer *),
-        caxpy_(integer *, complex *, complex *, integer *, complex *, integer *);
+    scomplex uscal;
+    aocl_int64_t jlast;
+    scomplex csumj;
     logical upper;
-    extern integer icamax_(integer *, complex *, integer *);
     extern /* Complex */
         void
-        cladiv_f2c_(complex *, complex *, complex *);
+        cladiv_f2c_(scomplex *, scomplex *, scomplex *);
     extern real slamch_(char *);
-    extern /* Subroutine */
-        void
-        csscal_(integer *, real *, complex *, integer *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real bignum;
-    extern integer isamax_(integer *, real *, integer *);
-    extern real scasum_(integer *, complex *, integer *);
     logical notran;
-    integer jfirst;
+    aocl_int64_t jfirst;
     real smlnum;
     logical nounit;
     /* -- LAPACK auxiliary routine -- */
@@ -353,7 +352,7 @@ void clatbs_(char *uplo, char *trans, char *diag, char *normin, integer *n, inte
     *info = 0;
     // initializing as {1, 0} because it is
     // used as divisor
-    tjjs = (complex){.r = 1.f, .i = 0.f};
+    tjjs = (scomplex){.r = 1.f, .i = 0.f};
     upper = lsame_(uplo, "U", 1, 1);
     notran = lsame_(trans, "N", 1, 1);
     nounit = lsame_(diag, "N", 1, 1);
@@ -389,7 +388,7 @@ void clatbs_(char *uplo, char *trans, char *diag, char *normin, integer *n, inte
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("CLATBS", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("CLATBS", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
@@ -416,7 +415,7 @@ void clatbs_(char *uplo, char *trans, char *diag, char *normin, integer *n, inte
                 i__2 = *kd;
                 i__3 = j - 1; // , expr subst
                 jlen = fla_min(i__2, i__3);
-                cnorm[j] = scasum_(&jlen, &ab[*kd + 1 - jlen + j * ab_dim1], &c__1);
+                cnorm[j] = aocl_blas_scasum(&jlen, &ab[*kd + 1 - jlen + j * ab_dim1], &c__1);
                 /* L10: */
             }
         }
@@ -432,7 +431,7 @@ void clatbs_(char *uplo, char *trans, char *diag, char *normin, integer *n, inte
                 jlen = fla_min(i__2, i__3);
                 if(jlen > 0)
                 {
-                    cnorm[j] = scasum_(&jlen, &ab[j * ab_dim1 + 2], &c__1);
+                    cnorm[j] = aocl_blas_scasum(&jlen, &ab[j * ab_dim1 + 2], &c__1);
                 }
                 else
                 {
@@ -444,7 +443,7 @@ void clatbs_(char *uplo, char *trans, char *diag, char *normin, integer *n, inte
     }
     /* Scale the column norms by TSCAL if the maximum element in CNORM is */
     /* greater than BIGNUM/2. */
-    imax = isamax_(n, &cnorm[1], &c__1);
+    imax = aocl_blas_isamax(n, &cnorm[1], &c__1);
     tmax = cnorm[imax];
     if(tmax <= bignum * .5f)
     {
@@ -453,7 +452,7 @@ void clatbs_(char *uplo, char *trans, char *diag, char *normin, integer *n, inte
     else
     {
         tscal = .5f / (smlnum * tmax);
-        sscal_(n, &tscal, &cnorm[1], &c__1);
+        aocl_blas_sscal(n, &tscal, &cnorm[1], &c__1);
     }
     /* Compute a bound on the computed solution vector to see if the */
     /* Level 2 BLAS routine CTBSV can be used. */
@@ -665,7 +664,7 @@ void clatbs_(char *uplo, char *trans, char *diag, char *normin, integer *n, inte
     {
         /* Use the Level 2 BLAS solve if the reciprocal of the bound on */
         /* elements of X is not too small. */
-        ctbsv_(uplo, trans, diag, n, kd, &ab[ab_offset], ldab, &x[1], &c__1);
+        aocl_blas_ctbsv(uplo, trans, diag, n, kd, &ab[ab_offset], ldab, &x[1], &c__1);
     }
     else
     {
@@ -675,7 +674,7 @@ void clatbs_(char *uplo, char *trans, char *diag, char *normin, integer *n, inte
             /* Scale X so that its components are less than or equal to */
             /* BIGNUM in absolute value. */
             *scale = bignum * .5f / xmax;
-            csscal_(n, scale, &x[1], &c__1);
+            aocl_blas_csscal(n, scale, &x[1], &c__1);
             xmax = bignum;
         }
         else
@@ -719,7 +718,7 @@ void clatbs_(char *uplo, char *trans, char *diag, char *normin, integer *n, inte
                         {
                             /* Scale x by 1/b(j). */
                             rec = 1.f / xj;
-                            csscal_(n, &rec, &x[1], &c__1);
+                            aocl_blas_csscal(n, &rec, &x[1], &c__1);
                             *scale *= rec;
                             xmax *= rec;
                         }
@@ -745,7 +744,7 @@ void clatbs_(char *uplo, char *trans, char *diag, char *normin, integer *n, inte
                             /* multiplying x(j) times column j. */
                             rec /= cnorm[j];
                         }
-                        csscal_(n, &rec, &x[1], &c__1);
+                        aocl_blas_csscal(n, &rec, &x[1], &c__1);
                         *scale *= rec;
                         xmax *= rec;
                     }
@@ -784,14 +783,14 @@ void clatbs_(char *uplo, char *trans, char *diag, char *normin, integer *n, inte
                     {
                         /* Scale x by 1/(2*abs(x(j))). */
                         rec *= .5f;
-                        csscal_(n, &rec, &x[1], &c__1);
+                        aocl_blas_csscal(n, &rec, &x[1], &c__1);
                         *scale *= rec;
                     }
                 }
                 else if(xj * cnorm[j] > bignum - xmax)
                 {
                     /* Scale x by 1/2. */
-                    csscal_(n, &c_b36, &x[1], &c__1);
+                    aocl_blas_csscal(n, &c_b36, &x[1], &c__1);
                     *scale *= .5f;
                 }
                 if(upper)
@@ -810,10 +809,10 @@ void clatbs_(char *uplo, char *trans, char *diag, char *normin, integer *n, inte
                         q__2.i = -x[i__3].i; // , expr subst
                         q__1.r = tscal * q__2.r;
                         q__1.i = tscal * q__2.i; // , expr subst
-                        caxpy_(&jlen, &q__1, &ab[*kd + 1 - jlen + j * ab_dim1], &c__1, &x[j - jlen],
-                               &c__1);
+                        aocl_blas_caxpy(&jlen, &q__1, &ab[*kd + 1 - jlen + j * ab_dim1], &c__1,
+                                        &x[j - jlen], &c__1);
                         i__3 = j - 1;
-                        i__ = icamax_(&i__3, &x[1], &c__1);
+                        i__ = aocl_blas_icamax(&i__3, &x[1], &c__1);
                         i__3 = i__;
                         xmax = (r__1 = x[i__3].r, f2c_abs(r__1))
                                + (r__2 = r_imag(&x[i__]), f2c_abs(r__2));
@@ -835,10 +834,11 @@ void clatbs_(char *uplo, char *trans, char *diag, char *normin, integer *n, inte
                         q__2.i = -x[i__3].i; // , expr subst
                         q__1.r = tscal * q__2.r;
                         q__1.i = tscal * q__2.i; // , expr subst
-                        caxpy_(&jlen, &q__1, &ab[j * ab_dim1 + 2], &c__1, &x[j + 1], &c__1);
+                        aocl_blas_caxpy(&jlen, &q__1, &ab[j * ab_dim1 + 2], &c__1, &x[j + 1],
+                                        &c__1);
                     }
                     i__3 = *n - j;
-                    i__ = j + icamax_(&i__3, &x[j + 1], &c__1);
+                    i__ = j + aocl_blas_icamax(&i__3, &x[j + 1], &c__1);
                     i__3 = i__;
                     xmax = (r__1 = x[i__3].r, f2c_abs(r__1))
                            + (r__2 = r_imag(&x[i__]), f2c_abs(r__2));
@@ -891,7 +891,7 @@ void clatbs_(char *uplo, char *trans, char *diag, char *normin, integer *n, inte
                     }
                     if(rec < 1.f)
                     {
-                        csscal_(n, &rec, &x[1], &c__1);
+                        aocl_blas_csscal(n, &rec, &x[1], &c__1);
                         *scale *= rec;
                         xmax *= rec;
                     }
@@ -908,7 +908,7 @@ void clatbs_(char *uplo, char *trans, char *diag, char *normin, integer *n, inte
                         i__3 = *kd;
                         i__4 = j - 1; // , expr subst
                         jlen = fla_min(i__3, i__4);
-                        cdotu_f2c_(&q__1, &jlen, &ab[*kd + 1 - jlen + j * ab_dim1], &c__1,
+                        aocl_lapack_cdotu_f2c(&q__1, &jlen, &ab[*kd + 1 - jlen + j * ab_dim1], &c__1,
                                    &x[j - jlen], &c__1);
                         csumj.r = q__1.r;
                         csumj.i = q__1.i; // , expr subst
@@ -921,7 +921,7 @@ void clatbs_(char *uplo, char *trans, char *diag, char *normin, integer *n, inte
                         jlen = fla_min(i__3, i__4);
                         if(jlen > 1)
                         {
-                            cdotu_f2c_(&q__1, &jlen, &ab[j * ab_dim1 + 2], &c__1, &x[j + 1], &c__1);
+                            aocl_lapack_cdotu_f2c(&q__1, &jlen, &ab[j * ab_dim1 + 2], &c__1, &x[j + 1], &c__1);
                             csumj.r = q__1.r;
                             csumj.i = q__1.i; // , expr subst
                         }
@@ -1017,7 +1017,7 @@ void clatbs_(char *uplo, char *trans, char *diag, char *normin, integer *n, inte
                             {
                                 /* Scale X by 1/abs(x(j)). */
                                 rec = 1.f / xj;
-                                csscal_(n, &rec, &x[1], &c__1);
+                                aocl_blas_csscal(n, &rec, &x[1], &c__1);
                                 *scale *= rec;
                                 xmax *= rec;
                             }
@@ -1034,7 +1034,7 @@ void clatbs_(char *uplo, char *trans, char *diag, char *normin, integer *n, inte
                         {
                             /* Scale x by (1/abs(x(j)))*abs(A(j,j))*BIGNUM. */
                             rec = tjj * bignum / xj;
-                            csscal_(n, &rec, &x[1], &c__1);
+                            aocl_blas_csscal(n, &rec, &x[1], &c__1);
                             *scale *= rec;
                             xmax *= rec;
                         }
@@ -1128,7 +1128,7 @@ void clatbs_(char *uplo, char *trans, char *diag, char *normin, integer *n, inte
                     }
                     if(rec < 1.f)
                     {
-                        csscal_(n, &rec, &x[1], &c__1);
+                        aocl_blas_csscal(n, &rec, &x[1], &c__1);
                         *scale *= rec;
                         xmax *= rec;
                     }
@@ -1145,7 +1145,7 @@ void clatbs_(char *uplo, char *trans, char *diag, char *normin, integer *n, inte
                         i__3 = *kd;
                         i__4 = j - 1; // , expr subst
                         jlen = fla_min(i__3, i__4);
-                        cdotc_f2c_(&q__1, &jlen, &ab[*kd + 1 - jlen + j * ab_dim1], &c__1,
+                        aocl_lapack_cdotc_f2c(&q__1, &jlen, &ab[*kd + 1 - jlen + j * ab_dim1], &c__1,
                                    &x[j - jlen], &c__1);
                         csumj.r = q__1.r;
                         csumj.i = q__1.i; // , expr subst
@@ -1158,7 +1158,7 @@ void clatbs_(char *uplo, char *trans, char *diag, char *normin, integer *n, inte
                         jlen = fla_min(i__3, i__4);
                         if(jlen > 1)
                         {
-                            cdotc_f2c_(&q__1, &jlen, &ab[j * ab_dim1 + 2], &c__1, &x[j + 1], &c__1);
+                            aocl_lapack_cdotc_f2c(&q__1, &jlen, &ab[j * ab_dim1 + 2], &c__1, &x[j + 1], &c__1);
                             csumj.r = q__1.r;
                             csumj.i = q__1.i; // , expr subst
                         }
@@ -1254,7 +1254,7 @@ void clatbs_(char *uplo, char *trans, char *diag, char *normin, integer *n, inte
                             {
                                 /* Scale X by 1/abs(x(j)). */
                                 rec = 1.f / xj;
-                                csscal_(n, &rec, &x[1], &c__1);
+                                aocl_blas_csscal(n, &rec, &x[1], &c__1);
                                 *scale *= rec;
                                 xmax *= rec;
                             }
@@ -1271,7 +1271,7 @@ void clatbs_(char *uplo, char *trans, char *diag, char *normin, integer *n, inte
                         {
                             /* Scale x by (1/abs(x(j)))*abs(A(j,j))*BIGNUM. */
                             rec = tjj * bignum / xj;
-                            csscal_(n, &rec, &x[1], &c__1);
+                            aocl_blas_csscal(n, &rec, &x[1], &c__1);
                             *scale *= rec;
                             xmax *= rec;
                         }
@@ -1326,7 +1326,7 @@ void clatbs_(char *uplo, char *trans, char *diag, char *normin, integer *n, inte
     if(tscal != 1.f)
     {
         r__1 = 1.f / tscal;
-        sscal_(n, &r__1, &cnorm[1], &c__1);
+        aocl_blas_sscal(n, &r__1, &cnorm[1], &c__1);
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
     return;

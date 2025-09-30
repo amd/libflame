@@ -35,12 +35,63 @@
   TODO:: Complete FLA_Accum_T_UT for FLA_BACKWARD.
 */
 
+extern void sormtr_fla(char *side, char *uplo, char *trans, aocl_int64_t *m, aocl_int64_t *n, real *a,
+                       aocl_int64_t *lda, real *tau, real *c__, aocl_int64_t *ldc, real *work, aocl_int64_t *lwork,
+                       aocl_int64_t *info);
+extern void dormtr_fla(char *side, char *uplo, char *trans, aocl_int64_t *m, aocl_int64_t *n, doublereal *a,
+                       aocl_int64_t *lda, doublereal *tau, doublereal *c__, aocl_int64_t *ldc,
+                       doublereal *work, aocl_int64_t *lwork, aocl_int64_t *info);
+extern void cunmtr_fla(char *side, char *uplo, char *trans, aocl_int64_t *m, aocl_int64_t *n, scomplex *a,
+                       aocl_int64_t *lda, scomplex *tau, scomplex *c__, aocl_int64_t *ldc, scomplex *work,
+                       aocl_int64_t *lwork, aocl_int64_t *info);
+extern void zunmtr_fla(char *side, char *uplo, char *trans, aocl_int64_t *m, aocl_int64_t *n,
+                       dcomplex *a, aocl_int64_t *lda, dcomplex *tau, dcomplex *c__,
+                       aocl_int64_t *ldc, dcomplex *work, aocl_int64_t *lwork, aocl_int64_t *info);
+
+/** Generated wrapper function */
+void sormtr_(char *side, char *uplo, char *trans, aocl_int_t *m, aocl_int_t *n, real *buff_A, aocl_int_t *ldim_A, real *buff_t, real *buff_C, aocl_int_t *ldim_C, real *buff_w, aocl_int_t *lwork, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_sormtr(side, uplo, trans, m, n, buff_A, ldim_A, buff_t, buff_C, ldim_C, buff_w, lwork, info);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t ldim_A_64 = *ldim_A;
+    aocl_int64_t ldim_C_64 = *ldim_C;
+    aocl_int64_t lwork_64 = *lwork;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_sormtr(side, uplo, trans, &m_64, &n_64, buff_A, &ldim_A_64, buff_t, buff_C, &ldim_C_64, buff_w, &lwork_64, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+/** Generated wrapper function */
+void dormtr_(char *side, char *uplo, char *trans, aocl_int_t *m, aocl_int_t *n, doublereal *buff_A, aocl_int_t *ldim_A, doublereal *buff_t, doublereal *buff_C, aocl_int_t *ldim_C, doublereal *buff_w, aocl_int_t *lwork, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_dormtr(side, uplo, trans, m, n, buff_A, ldim_A, buff_t, buff_C, ldim_C, buff_w, lwork, info);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t ldim_A_64 = *ldim_A;
+    aocl_int64_t ldim_C_64 = *ldim_C;
+    aocl_int64_t lwork_64 = *lwork;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_dormtr(side, uplo, trans, &m_64, &n_64, buff_A, &ldim_A_64, buff_t, buff_C, &ldim_C_64, buff_w, &lwork_64, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
 #define LAPACK_ormtr(prefix, name)                                                      \
-    void F77_##prefix##name##tr(                                                        \
-        char *side, char *uplo, char *trans, integer *m, integer *n,                    \
-        PREFIX2LAPACK_TYPEDEF(prefix) * buff_A, integer * ldim_A,                       \
+    void aocl_lapack_##prefix##name##tr(                                                        \
+        char *side, char *uplo, char *trans, aocl_int64_t *m, aocl_int64_t *n,                    \
+        PREFIX2LAPACK_TYPEDEF(prefix) * buff_A, aocl_int64_t * ldim_A,                       \
         PREFIX2LAPACK_TYPEDEF(prefix) * buff_t, PREFIX2LAPACK_TYPEDEF(prefix) * buff_C, \
-        integer * ldim_C, PREFIX2LAPACK_TYPEDEF(prefix) * buff_w, integer * lwork, integer * info)
+        aocl_int64_t * ldim_C, PREFIX2LAPACK_TYPEDEF(prefix) * buff_w, aocl_int64_t * lwork, aocl_int64_t * info)
 
 #define LAPACK_ormtr_body(prefix)                                                    \
     FLA_Datatype datatype = PREFIX2FLAME_DATATYPE(prefix);                           \
@@ -113,7 +164,7 @@
             /* Temporary vectors to store realifying transformation */               \
             FLA_Obj_create(datatype, m_d, 1, 0, 0, &r);                              \
                                                                                      \
-            /* Extract diagonals (complex) and realify them. */                      \
+            /* Extract diagonals (scomplex) and realify them. */                      \
             FLA_Tridiag_UT_extract_diagonals(uplo_fla, A, d2, e2);                   \
             FLA_Tridiag_UT_realify_subdiagonal(e2, r);                               \
                                                                                      \
@@ -151,19 +202,6 @@
     FLA_Finalize_safe(init_result);                                                  \
                                                                                      \
     *info = 0;
-
-extern void sormtr_fla(char *side, char *uplo, char *trans, integer *m, integer *n, real *a,
-                       integer *lda, real *tau, real *c__, integer *ldc, real *work, integer *lwork,
-                       integer *info);
-extern void dormtr_fla(char *side, char *uplo, char *trans, integer *m, integer *n, doublereal *a,
-                       integer *lda, doublereal *tau, doublereal *c__, integer *ldc,
-                       doublereal *work, integer *lwork, integer *info);
-extern void cunmtr_fla(char *side, char *uplo, char *trans, integer *m, integer *n, complex *a,
-                       integer *lda, complex *tau, complex *c__, integer *ldc, complex *work,
-                       integer *lwork, integer *info);
-extern void zunmtr_fla(char *side, char *uplo, char *trans, integer *m, integer *n,
-                       doublecomplex *a, integer *lda, doublecomplex *tau, doublecomplex *c__,
-                       integer *ldc, doublecomplex *work, integer *lwork, integer *info);
 
 LAPACK_ormtr(s, orm)
 {
@@ -241,8 +279,8 @@ LAPACK_ormtr(c, unm)
     {
         if(*uplo == 'U' || *uplo == 'u')
         {
-            cunmtr_fla(side, uplo, trans, m, n, (complex *)buff_A, ldim_A, (complex *)buff_t,
-                       (complex *)buff_C, ldim_C, (complex *)buff_w, lwork, info);
+            cunmtr_fla(side, uplo, trans, m, n, (scomplex *)buff_A, ldim_A, (scomplex *)buff_t,
+                       (scomplex *)buff_C, ldim_C, (scomplex *)buff_w, lwork, info);
             AOCL_DTL_TRACE_LOG_EXIT
             return;
         }
@@ -272,9 +310,9 @@ LAPACK_ormtr(z, unm)
     {
         if(*uplo == 'U' || *uplo == 'u')
         {
-            zunmtr_fla(side, uplo, trans, m, n, (doublecomplex *)buff_A, ldim_A,
-                       (doublecomplex *)buff_t, (doublecomplex *)buff_C, ldim_C,
-                       (doublecomplex *)buff_w, lwork, info);
+            zunmtr_fla(side, uplo, trans, m, n, (dcomplex *)buff_A, ldim_A,
+                       (dcomplex *)buff_t, (dcomplex *)buff_C, ldim_C,
+                       (dcomplex *)buff_w, lwork, info);
             AOCL_DTL_TRACE_LOG_EXIT
             return;
         }

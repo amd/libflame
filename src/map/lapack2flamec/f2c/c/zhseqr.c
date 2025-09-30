@@ -4,11 +4,11 @@
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
  /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static doublecomplex c_b1 = {0., 0.};
-static doublecomplex c_b2 = {1., 0.};
-static integer c__1 = 1;
-static integer c__12 = 12;
-static integer c__49 = 49;
+static dcomplex c_b1 = {{0.}, {0.}};
+static dcomplex c_b2 = {{1.}, {0.}};
+static aocl_int64_t c__1 = 1;
+static aocl_int64_t c__12 = 12;
+static aocl_int64_t c__49 = 49;
 /* > \brief \b ZHSEQR */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -298,46 +298,54 @@ static integer c__49 = 49;
 /* > of Matrix Analysis, volume 23, pages 948--973, 2002. */
 /* ===================================================================== */
 /* Subroutine */
-void zhseqr_(char *job, char *compz, integer *n, integer *ilo, integer *ihi, doublecomplex *h__,
-             integer *ldh, doublecomplex *w, doublecomplex *z__, integer *ldz, doublecomplex *work,
-             integer *lwork, integer *info)
+/** Generated wrapper function */
+void zhseqr_(char *job, char *compz, aocl_int_t *n, aocl_int_t *ilo, aocl_int_t *ihi,
+             dcomplex *h__, aocl_int_t *ldh, dcomplex *w, dcomplex *z__,
+             aocl_int_t *ldz, dcomplex *work, aocl_int_t *lwork, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_zhseqr(job, compz, n, ilo, ihi, h__, ldh, w, z__, ldz, work, lwork, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t ilo_64 = *ilo;
+    aocl_int64_t ihi_64 = *ihi;
+    aocl_int64_t ldh_64 = *ldh;
+    aocl_int64_t ldz_64 = *ldz;
+    aocl_int64_t lwork_64 = *lwork;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_zhseqr(job, compz, &n_64, &ilo_64, &ihi_64, h__, &ldh_64, w, z__, &ldz_64, work,
+                       &lwork_64, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_zhseqr(char *job, char *compz, aocl_int64_t *n, aocl_int64_t *ilo,
+                        aocl_int64_t *ihi, dcomplex *h__, aocl_int64_t *ldh, dcomplex *w,
+                        dcomplex *z__, aocl_int64_t *ldz, dcomplex *work,
+                        aocl_int64_t *lwork, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zhseqr inputs: job %c, compz %c, n %" FLA_IS ", ilo %" FLA_IS
                       ", ihi %" FLA_IS ", ldh %" FLA_IS ", ldz %" FLA_IS ", lwork %" FLA_IS "",
                       *job, *compz, *n, *ilo, *ihi, *ldh, *ldz, *lwork);
     /* System generated locals */
-    integer h_dim1, h_offset, z_dim1, z_offset, i__1, i__2;
+    aocl_int64_t h_dim1, h_offset, z_dim1, z_offset, i__1, i__2;
     doublereal d__1, d__2, d__3;
-    doublecomplex z__1;
+    dcomplex z__1;
     char ch__1[2];
     /* Builtin functions */
     /* Subroutine */
 
     /* Local variables */
-    doublecomplex hl[2401] /* was [49][49] */
+    dcomplex hl[2401] /* was [49][49] */
         ;
-    integer kbot, nmin;
-    extern logical lsame_(char *, char *, integer, integer);
+    aocl_int64_t kbot, nmin;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     logical initz;
-    doublecomplex workl[49];
+    dcomplex workl[49];
     logical wantt, wantz;
-    extern /* Subroutine */
-        void
-        zcopy_(integer *, doublecomplex *, integer *, doublecomplex *, integer *),
-        zlaqr0_(logical *, logical *, integer *, integer *, integer *, doublecomplex *, integer *,
-                doublecomplex *, integer *, integer *, doublecomplex *, integer *, doublecomplex *,
-                integer *, integer *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
-    extern /* Subroutine */
-        void
-        zlahqr_(logical *, logical *, integer *, integer *, integer *, doublecomplex *, integer *,
-                doublecomplex *, integer *, integer *, doublecomplex *, integer *, integer *),
-        zlacpy_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *,
-                integer *),
-        zlaset_(char *, integer *, integer *, doublecomplex *, doublecomplex *, doublecomplex *,
-                integer *);
     logical lquery;
     /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -426,7 +434,7 @@ void zhseqr_(char *job, char *compz, integer *n, integer *ilo, integer *ihi, dou
     {
         /* ==== Quick return in case of invalid argument. ==== */
         i__1 = -(*info);
-        xerbla_("ZHSEQR", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("ZHSEQR", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -440,8 +448,8 @@ void zhseqr_(char *job, char *compz, integer *n, integer *ilo, integer *ihi, dou
     else if(lquery)
     {
         /* ==== Quick return in case of a workspace query ==== */
-        zlaqr0_(&wantt, &wantz, n, ilo, ihi, &h__[h_offset], ldh, &w[1], ilo, ihi, &z__[z_offset],
-                ldz, &work[1], lwork, info);
+        aocl_lapack_zlaqr0(&wantt, &wantz, n, ilo, ihi, &h__[h_offset], ldh, &w[1], ilo, ihi,
+                           &z__[z_offset], ldz, &work[1], lwork, info);
         /* ==== Ensure reported workspace size is backward-compatible with */
         /* . previous LAPACK versions. ==== */
         /* Computing MAX */
@@ -462,18 +470,19 @@ void zhseqr_(char *job, char *compz, integer *n, integer *ilo, integer *ihi, dou
         {
             i__1 = *ilo - 1;
             i__2 = *ldh + 1;
-            zcopy_(&i__1, &h__[h_offset], &i__2, &w[1], &c__1);
+            aocl_blas_zcopy(&i__1, &h__[h_offset], &i__2, &w[1], &c__1);
         }
         if(*ihi < *n)
         {
             i__1 = *n - *ihi;
             i__2 = *ldh + 1;
-            zcopy_(&i__1, &h__[*ihi + 1 + (*ihi + 1) * h_dim1], &i__2, &w[*ihi + 1], &c__1);
+            aocl_blas_zcopy(&i__1, &h__[*ihi + 1 + (*ihi + 1) * h_dim1], &i__2, &w[*ihi + 1],
+                            &c__1);
         }
         /* ==== Initialize Z, if requested ==== */
         if(initz)
         {
-            zlaset_("A", n, n, &c_b1, &c_b2, &z__[z_offset], ldz);
+            aocl_lapack_zlaset("A", n, n, &c_b1, &c_b2, &z__[z_offset], ldz);
         }
         /* ==== Quick return if possible ==== */
         if(*ilo == *ihi)
@@ -486,20 +495,20 @@ void zhseqr_(char *job, char *compz, integer *n, integer *ilo, integer *ihi, dou
             return;
         }
         /* ==== ZLAHQR/ZLAQR0 crossover point ==== */
-        nmin = ilaenv_(&c__12, "ZHSEQR", ch__1, n, ilo, ihi, lwork);
+        nmin = aocl_lapack_ilaenv(&c__12, "ZHSEQR", ch__1, n, ilo, ihi, lwork);
         nmin = fla_max(15, nmin);
         /* ==== ZLAQR0 for big matrices;
         ZLAHQR for small ones ==== */
         if(*n > nmin)
         {
-            zlaqr0_(&wantt, &wantz, n, ilo, ihi, &h__[h_offset], ldh, &w[1], ilo, ihi,
-                    &z__[z_offset], ldz, &work[1], lwork, info);
+            aocl_lapack_zlaqr0(&wantt, &wantz, n, ilo, ihi, &h__[h_offset], ldh, &w[1], ilo, ihi,
+                               &z__[z_offset], ldz, &work[1], lwork, info);
         }
         else
         {
             /* ==== Small matrix ==== */
-            zlahqr_(&wantt, &wantz, n, ilo, ihi, &h__[h_offset], ldh, &w[1], ilo, ihi,
-                    &z__[z_offset], ldz, info);
+            aocl_lapack_zlahqr(&wantt, &wantz, n, ilo, ihi, &h__[h_offset], ldh, &w[1], ilo, ihi,
+                               &z__[z_offset], ldz, info);
             if(*info > 0)
             {
                 /* ==== A rare ZLAHQR failure! ZLAQR0 sometimes succeeds */
@@ -509,8 +518,8 @@ void zhseqr_(char *job, char *compz, integer *n, integer *ilo, integer *ihi, dou
                 {
                     /* ==== Larger matrices have enough subdiagonal scratch */
                     /* . space to call ZLAQR0 directly. ==== */
-                    zlaqr0_(&wantt, &wantz, n, ilo, &kbot, &h__[h_offset], ldh, &w[1], ilo, ihi,
-                            &z__[z_offset], ldz, &work[1], lwork, info);
+                    aocl_lapack_zlaqr0(&wantt, &wantz, n, ilo, &kbot, &h__[h_offset], ldh, &w[1],
+                                       ilo, ihi, &z__[z_offset], ldz, &work[1], lwork, info);
                 }
                 else
                 {
@@ -518,17 +527,18 @@ void zhseqr_(char *job, char *compz, integer *n, integer *ilo, integer *ihi, dou
                     /* . scratch space to benefit from ZLAQR0. Hence, */
                     /* . tiny matrices must be copied into a larger */
                     /* . array before calling ZLAQR0. ==== */
-                    zlacpy_("A", n, n, &h__[h_offset], ldh, hl, &c__49);
+                    aocl_lapack_zlacpy("A", n, n, &h__[h_offset], ldh, hl, &c__49);
                     i__1 = *n + 1 + *n * 49 - 50;
                     hl[i__1].r = 0.;
                     hl[i__1].i = 0.; // , expr subst
                     i__1 = 49 - *n;
-                    zlaset_("A", &c__49, &i__1, &c_b1, &c_b1, &hl[(*n + 1) * 49 - 49], &c__49);
-                    zlaqr0_(&wantt, &wantz, &c__49, ilo, &kbot, hl, &c__49, &w[1], ilo, ihi,
-                            &z__[z_offset], ldz, workl, &c__49, info);
+                    aocl_lapack_zlaset("A", &c__49, &i__1, &c_b1, &c_b1, &hl[(*n + 1) * 49 - 49],
+                                       &c__49);
+                    aocl_lapack_zlaqr0(&wantt, &wantz, &c__49, ilo, &kbot, hl, &c__49, &w[1], ilo,
+                                       ihi, &z__[z_offset], ldz, workl, &c__49, info);
                     if(wantt || *info != 0)
                     {
-                        zlacpy_("A", n, n, hl, &c__49, &h__[h_offset], ldh);
+                        aocl_lapack_zlacpy("A", n, n, hl, &c__49, &h__[h_offset], ldh);
                     }
                 }
             }
@@ -538,7 +548,7 @@ void zhseqr_(char *job, char *compz, integer *n, integer *ilo, integer *ihi, dou
         {
             i__1 = *n - 2;
             i__2 = *n - 2;
-            zlaset_("L", &i__1, &i__2, &c_b1, &c_b1, &h__[h_dim1 + 3], ldh);
+            aocl_lapack_zlaset("L", &i__1, &i__2, &c_b1, &c_b1, &h__[h_dim1 + 3], ldh);
         }
         /* ==== Ensure reported workspace size is backward-compatible with */
         /* . previous LAPACK versions. ==== */

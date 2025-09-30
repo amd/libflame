@@ -145,26 +145,41 @@ ILO=1 and IHI=0, if N=0. */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void sggbak_(char *job, char *side, integer *n, integer *ilo, integer *ihi, real *lscale,
-             real *rscale, integer *m, real *v, integer *ldv, integer *info)
+/** Generated wrapper function */
+void sggbak_(char *job, char *side, aocl_int_t *n, aocl_int_t *ilo, aocl_int_t *ihi, real *lscale,
+             real *rscale, aocl_int_t *m, real *v, aocl_int_t *ldv, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_sggbak(job, side, n, ilo, ihi, lscale, rscale, m, v, ldv, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t ilo_64 = *ilo;
+    aocl_int64_t ihi_64 = *ihi;
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t ldv_64 = *ldv;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_sggbak(job, side, &n_64, &ilo_64, &ihi_64, lscale, rscale, &m_64, v, &ldv_64,
+                       &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_sggbak(char *job, char *side, aocl_int64_t *n, aocl_int64_t *ilo,
+                        aocl_int64_t *ihi, real *lscale, real *rscale, aocl_int64_t *m, real *v,
+                        aocl_int64_t *ldv, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("sggbak inputs: job %c, side %c, n %" FLA_IS ", ilo %" FLA_IS ", ihi %" FLA_IS
                       ", m %" FLA_IS ", ldv %" FLA_IS "",
                       *job, *side, *n, *ilo, *ihi, *m, *ldv);
     /* System generated locals */
-    integer v_dim1, v_offset, i__1;
+    aocl_int64_t v_dim1, v_offset, i__1;
     /* Local variables */
-    integer i__, k;
-    extern logical lsame_(char *, char *, integer, integer);
-    extern /* Subroutine */
-        void
-        sscal_(integer *, real *, real *, integer *);
+    aocl_int64_t i__, k;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     logical leftv;
-    extern /* Subroutine */
-        void
-        sswap_(integer *, real *, integer *, real *, integer *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical rightv;
     /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -234,7 +249,7 @@ void sggbak_(char *job, char *side, integer *n, integer *ilo, integer *ihi, real
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("SGGBAK", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("SGGBAK", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -267,7 +282,7 @@ void sggbak_(char *job, char *side, integer *n, integer *ilo, integer *ihi, real
             i__1 = *ihi;
             for(i__ = *ilo; i__ <= i__1; ++i__)
             {
-                sscal_(m, &rscale[i__], &v[i__ + v_dim1], ldv);
+                aocl_blas_sscal(m, &rscale[i__], &v[i__ + v_dim1], ldv);
                 /* L10: */
             }
         }
@@ -277,7 +292,7 @@ void sggbak_(char *job, char *side, integer *n, integer *ilo, integer *ihi, real
             i__1 = *ihi;
             for(i__ = *ilo; i__ <= i__1; ++i__)
             {
-                sscal_(m, &lscale[i__], &v[i__ + v_dim1], ldv);
+                aocl_blas_sscal(m, &lscale[i__], &v[i__ + v_dim1], ldv);
                 /* L20: */
             }
         }
@@ -300,7 +315,7 @@ L30:
                 {
                     goto L40;
                 }
-                sswap_(m, &v[i__ + v_dim1], ldv, &v[k + v_dim1], ldv);
+                aocl_blas_sswap(m, &v[i__ + v_dim1], ldv, &v[k + v_dim1], ldv);
             L40:;
             }
         L50:
@@ -316,7 +331,7 @@ L30:
                 {
                     goto L60;
                 }
-                sswap_(m, &v[i__ + v_dim1], ldv, &v[k + v_dim1], ldv);
+                aocl_blas_sswap(m, &v[i__ + v_dim1], ldv, &v[k + v_dim1], ldv);
             L60:;
             }
         }
@@ -335,7 +350,7 @@ L30:
                 {
                     goto L80;
                 }
-                sswap_(m, &v[i__ + v_dim1], ldv, &v[k + v_dim1], ldv);
+                aocl_blas_sswap(m, &v[i__ + v_dim1], ldv, &v[k + v_dim1], ldv);
             L80:;
             }
         L90:
@@ -351,7 +366,7 @@ L30:
                 {
                     goto L100;
                 }
-                sswap_(m, &v[i__ + v_dim1], ldv, &v[k + v_dim1], ldv);
+                aocl_blas_sswap(m, &v[i__ + v_dim1], ldv, &v[k + v_dim1], ldv);
             L100:;
             }
         }

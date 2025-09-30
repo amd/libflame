@@ -16,7 +16,7 @@
 #include "blis.h"
 #endif
 
-void bl1_sherk( uplo1_t uplo, trans1_t trans, integer m, integer k, float* alpha, float* a, integer a_rs, integer a_cs, float* beta, float* c, integer c_rs, integer c_cs )
+void bl1_sherk( uplo1_t uplo, trans1_t trans, fla_dim_t m, fla_dim_t k, float* alpha, float* a, fla_dim_t a_rs, fla_dim_t a_cs, float* beta, float* c, fla_dim_t c_rs, fla_dim_t c_cs )
 {
 	bl1_ssyrk( uplo,
 	           trans,
@@ -27,7 +27,7 @@ void bl1_sherk( uplo1_t uplo, trans1_t trans, integer m, integer k, float* alpha
 	           beta,
 	           c, c_rs, c_cs );
 }
-void bl1_dherk( uplo1_t uplo, trans1_t trans, integer m, integer k, double* alpha, double* a, integer a_rs, integer a_cs, double* beta, double* c, integer c_rs, integer c_cs )
+void bl1_dherk( uplo1_t uplo, trans1_t trans, fla_dim_t m, fla_dim_t k, double* alpha, double* a, fla_dim_t a_rs, fla_dim_t a_cs, double* beta, double* c, fla_dim_t c_rs, fla_dim_t c_cs )
 {
 	bl1_dsyrk( uplo,
 	           trans,
@@ -39,23 +39,23 @@ void bl1_dherk( uplo1_t uplo, trans1_t trans, integer m, integer k, double* alph
 	           c, c_rs, c_cs );
 }
 
-void bl1_cherk( uplo1_t uplo, trans1_t trans, integer m, integer k, float* alpha, scomplex* a, integer a_rs, integer a_cs, float* beta, scomplex* c, integer c_rs, integer c_cs )
+void bl1_cherk( uplo1_t uplo, trans1_t trans, fla_dim_t m, fla_dim_t k, float* alpha, scomplex* a, fla_dim_t a_rs, fla_dim_t a_cs, float* beta, scomplex* c, fla_dim_t c_rs, fla_dim_t c_cs )
 {
 	uplo1_t    uplo_save = uplo;
-	integer       m_save    = m;
+	fla_dim_t       m_save    = m;
 	scomplex* a_save    = a;
 	scomplex* c_save    = c;
-	integer       a_rs_save = a_rs;
-	integer       a_cs_save = a_cs;
-	integer       c_rs_save = c_rs;
-	integer       c_cs_save = c_cs;
+	fla_dim_t       a_rs_save = a_rs;
+	fla_dim_t       a_cs_save = a_cs;
+	fla_dim_t       c_rs_save = c_rs;
+	fla_dim_t       c_cs_save = c_cs;
 	float     zero_r = bl1_s0();
 	scomplex  one    = bl1_c1();
 	scomplex* c_conj;
-	integer       lda, inca;
-	integer       ldc, incc;
-	integer       ldc_conj, incc_conj;
-	integer       herk_needs_conj = FALSE;
+	fla_dim_t       lda, inca;
+	fla_dim_t       ldc, incc;
+	fla_dim_t       ldc_conj, incc_conj;
+	fla_dim_t       herk_needs_conj = FALSE;
 	
 	// Return early if possible.
 	if ( bl1_zero_dim2( m, k ) ) return;
@@ -187,23 +187,23 @@ void bl1_cherk( uplo1_t uplo, trans1_t trans, integer m, integer k, float* alpha
 	                          &c,     &c_rs,     &c_cs );
 }
 
-void bl1_zherk( uplo1_t uplo, trans1_t trans, integer m, integer k, double* alpha, dcomplex* a, integer a_rs, integer a_cs, double* beta, dcomplex* c, integer c_rs, integer c_cs )
+void bl1_zherk( uplo1_t uplo, trans1_t trans, fla_dim_t m, fla_dim_t k, double* alpha, dcomplex* a, fla_dim_t a_rs, fla_dim_t a_cs, double* beta, dcomplex* c, fla_dim_t c_rs, fla_dim_t c_cs )
 {
 	uplo1_t    uplo_save = uplo;
-	integer       m_save    = m;
+	fla_dim_t       m_save    = m;
 	dcomplex* a_save    = a;
 	dcomplex* c_save    = c;
-	integer       a_rs_save = a_rs;
-	integer       a_cs_save = a_cs;
-	integer       c_rs_save = c_rs;
-	integer       c_cs_save = c_cs;
+	fla_dim_t       a_rs_save = a_rs;
+	fla_dim_t       a_cs_save = a_cs;
+	fla_dim_t       c_rs_save = c_rs;
+	fla_dim_t       c_cs_save = c_cs;
 	double    zero_r = bl1_d0();
 	dcomplex  one    = bl1_z1();
 	dcomplex* c_conj;
-	integer       lda, inca;
-	integer       ldc, incc;
-	integer       ldc_conj, incc_conj;
-	integer       herk_needs_conj = FALSE;
+	fla_dim_t       lda, inca;
+	fla_dim_t       ldc, incc;
+	fla_dim_t       ldc_conj, incc_conj;
+	fla_dim_t       herk_needs_conj = FALSE;
 	
 	// Return early if possible.
 	if ( bl1_zero_dim2( m, k ) ) return;
@@ -337,7 +337,7 @@ void bl1_zherk( uplo1_t uplo, trans1_t trans, integer m, integer k, double* alph
 
 // --- Classic routine wrappers ---
 
-void bl1_cherk_blas( uplo1_t uplo, trans1_t trans, integer m, integer k, float* alpha, scomplex* a, integer lda, float* beta, scomplex* c, integer ldc )
+void bl1_cherk_blas( uplo1_t uplo, trans1_t trans, fla_dim_t m, fla_dim_t k, float* alpha, scomplex* a, fla_dim_t lda, float* beta, scomplex* c, fla_dim_t ldc )
 {
 #ifdef BLIS1_ENABLE_CBLAS_INTERFACES
 	enum CBLAS_ORDER     cblas_order = CblasColMajor;
@@ -374,7 +374,7 @@ void bl1_cherk_blas( uplo1_t uplo, trans1_t trans, integer m, integer k, float* 
 #endif
 }
 
-void bl1_zherk_blas( uplo1_t uplo, trans1_t trans, integer m, integer k, double* alpha, dcomplex* a, integer lda, double* beta, dcomplex* c, integer ldc )
+void bl1_zherk_blas( uplo1_t uplo, trans1_t trans, fla_dim_t m, fla_dim_t k, double* alpha, dcomplex* a, fla_dim_t lda, double* beta, dcomplex* c, fla_dim_t ldc )
 {
 #ifdef BLIS1_ENABLE_CBLAS_INTERFACES
 	enum CBLAS_ORDER     cblas_order = CblasColMajor;

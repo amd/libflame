@@ -4,7 +4,7 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
+static aocl_int64_t c__1 = 1;
 /* > \brief \b ZTREXC */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -39,7 +39,7 @@ static integer c__1 = 1;
 /* > */
 /* > \verbatim */
 /* > */
-/* > ZTREXC reorders the Schur factorization of a complex matrix */
+/* > ZTREXC reorders the Schur factorization of a scomplex matrix */
 /* > A = Q*T*Q**H, so that the diagonal element of T with row index IFST */
 /* > is moved to row ILST. */
 /* > */
@@ -125,34 +125,48 @@ static integer c__1 = 1;
 /* > \ingroup complex16OTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void ztrexc_(char *compq, integer *n, doublecomplex *t, integer *ldt, doublecomplex *q,
-             integer *ldq, integer *ifst, integer *ilst, integer *info)
+/** Generated wrapper function */
+void ztrexc_(char *compq, aocl_int_t *n, dcomplex *t, aocl_int_t *ldt, dcomplex *q,
+             aocl_int_t *ldq, aocl_int_t *ifst, aocl_int_t *ilst, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_ztrexc(compq, n, t, ldt, q, ldq, ifst, ilst, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t ldt_64 = *ldt;
+    aocl_int64_t ldq_64 = *ldq;
+    aocl_int64_t ifst_64 = *ifst;
+    aocl_int64_t ilst_64 = *ilst;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_ztrexc(compq, &n_64, t, &ldt_64, q, &ldq_64, &ifst_64, &ilst_64, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_ztrexc(char *compq, aocl_int64_t *n, dcomplex *t, aocl_int64_t *ldt,
+                        dcomplex *q, aocl_int64_t *ldq, aocl_int64_t *ifst, aocl_int64_t *ilst,
+                        aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("ztrexc inputs: compq %c, n %" FLA_IS ", ldt %" FLA_IS ", ldq %" FLA_IS
                       ", ifst %" FLA_IS ", ilst %" FLA_IS "",
                       *compq, *n, *ldt, *ldq, *ifst, *ilst);
     /* System generated locals */
-    integer q_dim1, q_offset, t_dim1, t_offset, i__1, i__2, i__3;
-    doublecomplex z__1;
+    aocl_int64_t q_dim1, q_offset, t_dim1, t_offset, i__1, i__2, i__3;
+    dcomplex z__1;
     /* Builtin functions */
-    void d_cnjg(doublecomplex *, doublecomplex *);
+    void d_cnjg(dcomplex *, dcomplex *);
     /* Local variables */
-    integer k, m1, m2, m3;
+    aocl_int64_t k, m1, m2, m3;
     doublereal cs;
-    doublecomplex t11, t22, sn, temp;
-    extern /* Subroutine */
-        void
-        zrot_(integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublereal *,
-              doublecomplex *);
-    extern logical lsame_(char *, char *, integer, integer);
+    dcomplex t11, t22, sn, temp;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     logical wantq;
     extern /* Subroutine */
         void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    extern /* Subroutine */
-        void
-        zlartg_(doublecomplex *, doublecomplex *, doublereal *, doublecomplex *, doublecomplex *);
+        zlartg_(dcomplex *, dcomplex *, doublereal *, dcomplex *, dcomplex *);
     /* -- LAPACK computational routine (version 3.7.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -209,7 +223,7 @@ void ztrexc_(char *compq, integer *n, doublecomplex *t, integer *ldt, doublecomp
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("ZTREXC", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("ZTREXC", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -252,12 +266,13 @@ void ztrexc_(char *compq, integer *n, doublecomplex *t, integer *ldt, doublecomp
         if(k + 2 <= *n)
         {
             i__3 = *n - k - 1;
-            zrot_(&i__3, &t[k + (k + 2) * t_dim1], ldt, &t[k + 1 + (k + 2) * t_dim1], ldt, &cs,
-                  &sn);
+            aocl_lapack_zrot(&i__3, &t[k + (k + 2) * t_dim1], ldt, &t[k + 1 + (k + 2) * t_dim1],
+                             ldt, &cs, &sn);
         }
         i__3 = k - 1;
         d_cnjg(&z__1, &sn);
-        zrot_(&i__3, &t[k * t_dim1 + 1], &c__1, &t[(k + 1) * t_dim1 + 1], &c__1, &cs, &z__1);
+        aocl_lapack_zrot(&i__3, &t[k * t_dim1 + 1], &c__1, &t[(k + 1) * t_dim1 + 1], &c__1, &cs,
+                         &z__1);
         i__3 = k + k * t_dim1;
         t[i__3].r = t22.r;
         t[i__3].i = t22.i; // , expr subst
@@ -268,7 +283,8 @@ void ztrexc_(char *compq, integer *n, doublecomplex *t, integer *ldt, doublecomp
         {
             /* Accumulate transformation in the matrix Q. */
             d_cnjg(&z__1, &sn);
-            zrot_(n, &q[k * q_dim1 + 1], &c__1, &q[(k + 1) * q_dim1 + 1], &c__1, &cs, &z__1);
+            aocl_lapack_zrot(n, &q[k * q_dim1 + 1], &c__1, &q[(k + 1) * q_dim1 + 1], &c__1, &cs,
+                             &z__1);
         }
         /* L10: */
     }

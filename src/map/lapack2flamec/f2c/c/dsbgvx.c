@@ -4,7 +4,7 @@
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
  /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
+static aocl_int64_t c__1 = 1;
 static doublereal c_b25 = 1.;
 static doublereal c_b27 = 0.;
 /* > \brief \b DSBGVX */
@@ -296,11 +296,44 @@ i.e., */
 /* > Mark Fahey, Department of Mathematics, Univ. of Kentucky, USA */
 /* ===================================================================== */
 /* Subroutine */
-void dsbgvx_(char *jobz, char *range, char *uplo, integer *n, integer *ka, integer *kb,
-             doublereal *ab, integer *ldab, doublereal *bb, integer *ldbb, doublereal *q,
-             integer *ldq, doublereal *vl, doublereal *vu, integer *il, integer *iu,
-             doublereal *abstol, integer *m, doublereal *w, doublereal *z__, integer *ldz,
-             doublereal *work, integer *iwork, integer *ifail, integer *info)
+/** Generated wrapper function */
+void dsbgvx_(char *jobz, char *range, char *uplo, aocl_int_t *n, aocl_int_t *ka, aocl_int_t *kb,
+             doublereal *ab, aocl_int_t *ldab, doublereal *bb, aocl_int_t *ldbb, doublereal *q,
+             aocl_int_t *ldq, doublereal *vl, doublereal *vu, aocl_int_t *il, aocl_int_t *iu,
+             doublereal *abstol, aocl_int_t *m, doublereal *w, doublereal *z__, aocl_int_t *ldz,
+             doublereal *work, aocl_int_t *iwork, aocl_int_t *ifail, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_dsbgvx(jobz, range, uplo, n, ka, kb, ab, ldab, bb, ldbb, q, ldq, vl, vu, il, iu,
+                       abstol, m, w, z__, ldz, work, iwork, ifail, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t ka_64 = *ka;
+    aocl_int64_t kb_64 = *kb;
+    aocl_int64_t ldab_64 = *ldab;
+    aocl_int64_t ldbb_64 = *ldbb;
+    aocl_int64_t ldq_64 = *ldq;
+    aocl_int64_t il_64 = *il;
+    aocl_int64_t iu_64 = *iu;
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t ldz_64 = *ldz;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_dsbgvx(jobz, range, uplo, &n_64, &ka_64, &kb_64, ab, &ldab_64, bb, &ldbb_64, q,
+                       &ldq_64, vl, vu, &il_64, &iu_64, abstol, &m_64, w, z__, &ldz_64, work, iwork,
+                       ifail, &info_64);
+
+    *m = (aocl_int_t)m_64;
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_dsbgvx(char *jobz, char *range, char *uplo, aocl_int64_t *n, aocl_int64_t *ka,
+                        aocl_int64_t *kb, doublereal *ab, aocl_int64_t *ldab, doublereal *bb,
+                        aocl_int64_t *ldbb, doublereal *q, aocl_int64_t *ldq, doublereal *vl,
+                        doublereal *vu, aocl_int64_t *il, aocl_int64_t *iu, doublereal *abstol,
+                        aocl_int64_t *m, doublereal *w, doublereal *z__, aocl_int64_t *ldz,
+                        doublereal *work, aocl_int_t *iwork, aocl_int_t *ifail, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dsbgvx inputs: jobz %c, range %c, uplo %c, n %" FLA_IS ", ka %" FLA_IS
@@ -308,53 +341,23 @@ void dsbgvx_(char *jobz, char *range, char *uplo, integer *n, integer *ka, integ
                       ", il %" FLA_IS ", iu %" FLA_IS ", ldz %" FLA_IS "",
                       *jobz, *range, *uplo, *n, *ka, *kb, *ldab, *ldbb, *ldq, *il, *iu, *ldz);
     /* System generated locals */
-    integer ab_dim1, ab_offset, bb_dim1, bb_offset, q_dim1, q_offset, z_dim1, z_offset, i__1, i__2;
+    aocl_int64_t ab_dim1, ab_offset, bb_dim1, bb_offset, q_dim1, q_offset, z_dim1, z_offset, i__1,
+        i__2;
     /* Local variables */
-    integer i__, j, jj;
+    aocl_int64_t i__, j, jj;
     doublereal tmp1;
-    integer indd, inde;
+    aocl_int64_t indd, inde;
     char vect[1];
     logical test;
-    integer itmp1, indee;
-    extern logical lsame_(char *, char *, integer, integer);
-    extern /* Subroutine */
-        void
-        dgemv_(char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *,
-               integer *, doublereal *, doublereal *, integer *);
-    integer iinfo;
+    aocl_int64_t itmp1, indee;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    aocl_int64_t iinfo;
     char order[1];
-    extern /* Subroutine */
-        void
-        dcopy_(integer *, doublereal *, integer *, doublereal *, integer *),
-        dswap_(integer *, doublereal *, integer *, doublereal *, integer *);
     logical upper, wantz, alleig, indeig, valeig;
-    extern /* Subroutine */
-        void
-        dlacpy_(char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
-        dpbstf_(char *, integer *, integer *, doublereal *, integer *, integer *),
-        dsbtrd_(char *, char *, integer *, integer *, doublereal *, integer *, doublereal *,
-                doublereal *, doublereal *, integer *, doublereal *, integer *);
-    integer indisp;
-    extern /* Subroutine */
-        void
-        dsbgst_(char *, char *, integer *, integer *, integer *, doublereal *, integer *,
-                doublereal *, integer *, doublereal *, integer *, doublereal *, integer *),
-        dstein_(integer *, doublereal *, doublereal *, integer *, doublereal *, integer *,
-                integer *, doublereal *, integer *, doublereal *, integer *, integer *, integer *);
-    integer indiwo;
-    extern /* Subroutine */
-        void
-        dsterf_(integer *, doublereal *, doublereal *, integer *),
-        dstebz_(char *, char *, integer *, doublereal *, doublereal *, integer *, integer *,
-                doublereal *, doublereal *, doublereal *, integer *, integer *, doublereal *,
-                integer *, integer *, doublereal *, integer *, integer *);
-    integer indwrk;
-    extern /* Subroutine */
-        void
-        dsteqr_(char *, integer *, doublereal *, doublereal *, doublereal *, integer *,
-                doublereal *, integer *);
-    integer nsplit;
+    aocl_int64_t indisp;
+    aocl_int64_t indiwo;
+    aocl_int64_t indwrk;
+    aocl_int64_t nsplit;
     /* -- LAPACK driver routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -466,7 +469,7 @@ void dsbgvx_(char *jobz, char *range, char *uplo, integer *n, integer *ka, integ
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("DSBGVX", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("DSBGVX", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -478,7 +481,7 @@ void dsbgvx_(char *jobz, char *range, char *uplo, integer *n, integer *ka, integ
         return;
     }
     /* Form a split Cholesky factorization of B. */
-    dpbstf_(uplo, n, kb, &bb[bb_offset], ldbb, info);
+    aocl_lapack_dpbstf(uplo, n, kb, &bb[bb_offset], ldbb, info);
     if(*info != 0)
     {
         *info = *n + *info;
@@ -486,8 +489,8 @@ void dsbgvx_(char *jobz, char *range, char *uplo, integer *n, integer *ka, integ
         return;
     }
     /* Transform problem to standard eigenvalue problem. */
-    dsbgst_(jobz, uplo, n, ka, kb, &ab[ab_offset], ldab, &bb[bb_offset], ldbb, &q[q_offset], ldq,
-            &work[1], &iinfo);
+    aocl_lapack_dsbgst(jobz, uplo, n, ka, kb, &ab[ab_offset], ldab, &bb[bb_offset], ldbb,
+                       &q[q_offset], ldq, &work[1], &iinfo);
     /* Reduce symmetric band matrix to tridiagonal form. */
     indd = 1;
     inde = indd + *n;
@@ -500,8 +503,8 @@ void dsbgvx_(char *jobz, char *range, char *uplo, integer *n, integer *ka, integ
     {
         *(unsigned char *)vect = 'N';
     }
-    dsbtrd_(vect, uplo, n, ka, &ab[ab_offset], ldab, &work[indd], &work[inde], &q[q_offset], ldq,
-            &work[indwrk], &iinfo);
+    aocl_lapack_dsbtrd(vect, uplo, n, ka, &ab[ab_offset], ldab, &work[indd], &work[inde],
+                       &q[q_offset], ldq, &work[indwrk], &iinfo);
     /* If all eigenvalues are desired and ABSTOL is less than or equal */
     /* to zero, then call DSTERF or SSTEQR. If this fails for some */
     /* eigenvalue, then try DSTEBZ. */
@@ -515,18 +518,19 @@ void dsbgvx_(char *jobz, char *range, char *uplo, integer *n, integer *ka, integ
     }
     if((alleig || test) && *abstol <= 0.)
     {
-        dcopy_(n, &work[indd], &c__1, &w[1], &c__1);
+        aocl_blas_dcopy(n, &work[indd], &c__1, &w[1], &c__1);
         indee = indwrk + (*n << 1);
         i__1 = *n - 1;
-        dcopy_(&i__1, &work[inde], &c__1, &work[indee], &c__1);
+        aocl_blas_dcopy(&i__1, &work[inde], &c__1, &work[indee], &c__1);
         if(!wantz)
         {
-            dsterf_(n, &w[1], &work[indee], info);
+            aocl_lapack_dsterf(n, &w[1], &work[indee], info);
         }
         else
         {
-            dlacpy_("A", n, n, &q[q_offset], ldq, &z__[z_offset], ldz);
-            dsteqr_(jobz, n, &w[1], &work[indee], &z__[z_offset], ldz, &work[indwrk], info);
+            aocl_lapack_dlacpy("A", n, n, &q[q_offset], ldq, &z__[z_offset], ldz);
+            aocl_lapack_dsteqr(jobz, n, &w[1], &work[indee], &z__[z_offset], ldz, &work[indwrk],
+                               info);
             if(*info == 0)
             {
                 i__1 = *n;
@@ -556,20 +560,21 @@ void dsbgvx_(char *jobz, char *range, char *uplo, integer *n, integer *ka, integ
     }
     indisp = *n + 1;
     indiwo = indisp + *n;
-    dstebz_(range, order, n, vl, vu, il, iu, abstol, &work[indd], &work[inde], m, &nsplit, &w[1],
-            &iwork[1], &iwork[indisp], &work[indwrk], &iwork[indiwo], info);
+    aocl_lapack_dstebz(range, order, n, vl, vu, il, iu, abstol, &work[indd], &work[inde], m,
+                       &nsplit, &w[1], &iwork[1], &iwork[indisp], &work[indwrk], &iwork[indiwo],
+                       info);
     if(wantz)
     {
-        dstein_(n, &work[indd], &work[inde], m, &w[1], &iwork[1], &iwork[indisp], &z__[z_offset],
-                ldz, &work[indwrk], &iwork[indiwo], &ifail[1], info);
+        aocl_lapack_dstein(n, &work[indd], &work[inde], m, &w[1], &iwork[1], &iwork[indisp],
+                           &z__[z_offset], ldz, &work[indwrk], &iwork[indiwo], &ifail[1], info);
         /* Apply transformation matrix used in reduction to tridiagonal */
         /* form to eigenvectors returned by DSTEIN. */
         i__1 = *m;
         for(j = 1; j <= i__1; ++j)
         {
-            dcopy_(n, &z__[j * z_dim1 + 1], &c__1, &work[1], &c__1);
-            dgemv_("N", n, n, &c_b25, &q[q_offset], ldq, &work[1], &c__1, &c_b27,
-                   &z__[j * z_dim1 + 1], &c__1);
+            aocl_blas_dcopy(n, &z__[j * z_dim1 + 1], &c__1, &work[1], &c__1);
+            aocl_blas_dgemv("N", n, n, &c_b25, &q[q_offset], ldq, &work[1], &c__1, &c_b27,
+                            &z__[j * z_dim1 + 1], &c__1);
             /* L20: */
         }
     }
@@ -598,13 +603,13 @@ L30: /* If eigenvalues are not in order, then sort them, along with */
                 w[i__] = w[j];
                 iwork[i__] = iwork[j];
                 w[j] = tmp1;
-                iwork[j] = itmp1;
-                dswap_(n, &z__[i__ * z_dim1 + 1], &c__1, &z__[j * z_dim1 + 1], &c__1);
+                iwork[j] = (aocl_int_t)(itmp1);
+                aocl_blas_dswap(n, &z__[i__ * z_dim1 + 1], &c__1, &z__[j * z_dim1 + 1], &c__1);
                 if(*info != 0)
                 {
                     itmp1 = ifail[i__];
                     ifail[i__] = ifail[j];
-                    ifail[j] = itmp1;
+                    ifail[j] = (aocl_int_t)(itmp1);
                 }
             }
             /* L50: */

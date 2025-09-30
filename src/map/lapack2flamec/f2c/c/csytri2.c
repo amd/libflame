@@ -4,8 +4,8 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
-static integer c_n1 = -1;
+static aocl_int64_t c__1 = 1;
+static aocl_int64_t c_n1 = -1;
 /* > \brief \b CSYTRI2 */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -129,8 +129,26 @@ the matrix is singular and its */
 /* > \ingroup complexSYcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void csytri2_(char *uplo, integer *n, complex *a, integer *lda, integer *ipiv, complex *work,
-              integer *lwork, integer *info)
+/** Generated wrapper function */
+void csytri2_(char *uplo, aocl_int_t *n, scomplex *a, aocl_int_t *lda, aocl_int_t *ipiv,
+              scomplex *work, aocl_int_t *lwork, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_csytri2(uplo, n, a, lda, ipiv, work, lwork, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t lwork_64 = *lwork;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_csytri2(uplo, &n_64, a, &lda_64, ipiv, work, &lwork_64, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_csytri2(char *uplo, aocl_int64_t *n, scomplex *a, aocl_int64_t *lda,
+                         aocl_int_t *ipiv, scomplex *work, aocl_int64_t *lwork, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -145,24 +163,13 @@ void csytri2_(char *uplo, integer *n, complex *a, integer *lda, integer *ipiv, c
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
-    integer a_dim1, a_offset, i__1;
+    aocl_int64_t a_dim1, a_offset, i__1;
     /* Local variables */
-    extern /* Subroutine */
-        void
-        csytri2x_(char *, integer *, complex *, integer *, integer *, complex *, integer *,
-                  integer *);
-    extern logical lsame_(char *, char *, integer, integer);
-    integer nbmax;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    aocl_int64_t nbmax;
     logical upper;
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
-    extern /* Subroutine */
-        void
-        csytri_(char *, integer *, complex *, integer *, integer *, complex *, integer *);
     logical lquery;
-    integer minsize;
+    aocl_int64_t minsize;
     /* -- LAPACK computational routine (version 3.8.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -191,7 +198,7 @@ void csytri2_(char *uplo, integer *n, complex *a, integer *lda, integer *ipiv, c
     upper = lsame_(uplo, "U", 1, 1);
     lquery = *lwork == -1;
     /* Get blocksize */
-    nbmax = ilaenv_(&c__1, "CSYTRI2", uplo, n, &c_n1, &c_n1, &c_n1);
+    nbmax = aocl_lapack_ilaenv(&c__1, "CSYTRI2", uplo, n, &c_n1, &c_n1, &c_n1);
     if(nbmax >= *n)
     {
         minsize = *n;
@@ -220,7 +227,7 @@ void csytri2_(char *uplo, integer *n, complex *a, integer *lda, integer *ipiv, c
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("CSYTRI2", &i__1, (ftnlen)7);
+        aocl_blas_xerbla("CSYTRI2", &i__1, (ftnlen)7);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
@@ -238,11 +245,11 @@ void csytri2_(char *uplo, integer *n, complex *a, integer *lda, integer *ipiv, c
     }
     if(nbmax >= *n)
     {
-        csytri_(uplo, n, &a[a_offset], lda, &ipiv[1], &work[1], info);
+        aocl_lapack_csytri(uplo, n, &a[a_offset], lda, &ipiv[1], &work[1], info);
     }
     else
     {
-        csytri2x_(uplo, n, &a[a_offset], lda, &ipiv[1], &work[1], &nbmax, info);
+        aocl_lapack_csytri2x(uplo, n, &a[a_offset], lda, &ipiv[1], &work[1], &nbmax, info);
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
     return;

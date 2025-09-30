@@ -9,9 +9,9 @@
 #include "blis.h"
 #endif
 
-static integer c__1 = 1;
+static aocl_int64_t c__1 = 1;
 static doublereal c_b12 = 1.;
-static integer c_n1 = -1;
+static aocl_int64_t c_n1 = -1;
 /* > \brief \b DGETRS */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -126,8 +126,28 @@ for 1<=i<=N, row i of the */
 /* > \ingroup doubleGEcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void dgetrs_(char *trans, integer *n, integer *nrhs, doublereal *a, integer *lda, integer *ipiv,
-             doublereal *b, integer *ldb, integer *info)
+/** Generated wrapper function */
+void dgetrs_(char *trans, aocl_int_t *n, aocl_int_t *nrhs, doublereal *a, aocl_int_t *lda,
+             aocl_int_t *ipiv, doublereal *b, aocl_int_t *ldb, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_dgetrs(trans, n, nrhs, a, lda, ipiv, b, ldb, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t nrhs_64 = *nrhs;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t ldb_64 = *ldb;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_dgetrs(trans, &n_64, &nrhs_64, a, &lda_64, ipiv, b, &ldb_64, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_dgetrs(char *trans, aocl_int64_t *n, aocl_int64_t *nrhs, doublereal *a,
+                        aocl_int64_t *lda, aocl_int_t *ipiv, doublereal *b, aocl_int64_t *ldb,
+                        aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dgetrs inputs: trans %c, n %" FLA_IS ", nrhs %" FLA_IS ", lda %" FLA_IS
@@ -138,26 +158,19 @@ void dgetrs_(char *trans, integer *n, integer *nrhs, doublereal *a, integer *lda
     aocl_fla_init();
 
     /* System generated locals */
-    integer a_dim1, a_offset, b_dim1, b_offset, i__1, i__2;
-    integer i, j;
-    void dtrsm_LLNU_small(integer * m, integer * n, double *alpha, double *a, integer *lda,
-                          double *b, integer *ldb);
-    void dtrsm_LUNN_small(integer * m, integer * n, double *alpha, double *a, integer *lda,
-                          double *b, integer *ldb);
+    aocl_int64_t a_dim1, a_offset, b_dim1, b_offset, i__1, i__2;
+    aocl_int64_t i, j;
+    void dtrsm_LLNU_small(aocl_int64_t * m, aocl_int64_t * n, double *alpha, double *a,
+                          aocl_int64_t *lda, double *b, aocl_int64_t *ldb);
+    void dtrsm_LUNN_small(aocl_int64_t * m, aocl_int64_t * n, double *alpha, double *a,
+                          aocl_int64_t *lda, double *b, aocl_int64_t *ldb);
     /* Local variables */
 #ifndef FLA_ENABLE_AOCL_BLAS
-    extern logical lsame_(char *, char *, integer a, integer b);
-    extern /* Subroutine */
-        int
-        dtrsm_(char *, char *, char *, char *, integer *, integer *, doublereal *, doublereal *,
-               integer *, doublereal *, integer *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    extern logical lsame_(char *, char *, aocl_int64_t a, aocl_int64_t b);
 #endif
-    extern void dlaswp_(integer *, doublereal *, integer *, integer *, integer *, integer *,
-                        integer *);
-    extern int fla_dgetrs_small_notrans(char *trans, integer *n, integer *nrhs, doublereal *a,
-                                        integer *lda, integer *ipiv, doublereal *b, integer *ldb,
-                                        integer *info);
+    extern int fla_dgetrs_small_notrans(char *trans, aocl_int64_t *n, aocl_int64_t *nrhs,
+                                        doublereal *a, aocl_int64_t *lda, aocl_int_t *ipiv,
+                                        doublereal *b, aocl_int64_t *ldb, aocl_int64_t *info);
     logical notran;
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -192,7 +205,7 @@ void dgetrs_(char *trans, integer *n, integer *nrhs, doublereal *a, integer *lda
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("DGETRS", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("DGETRS", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -232,10 +245,10 @@ void dgetrs_(char *trans, integer *n, integer *nrhs, doublereal *a, integer *lda
         // Apply row interchanges to the right-hand sides.
         for(j = 1; j <= i__2; j++)
         {
-            integer b_index = j * b_dim1;
+            aocl_int64_t b_index = j * b_dim1;
             for(i = 1; i <= i__1; i++)
             {
-                integer ip = ipiv[i];
+                aocl_int64_t ip = ipiv[i];
                 if(ip != i)
                 {
                     doublereal temp = b[ip + b_index];
@@ -255,25 +268,25 @@ void dgetrs_(char *trans, integer *n, integer *nrhs, doublereal *a, integer *lda
     {
         /* Solve A * X = B. */
         /* Apply row interchanges to the right hand sides. */
-        dlaswp_(nrhs, &b[b_offset], ldb, &c__1, n, &ipiv[1], &c__1);
+        aocl_lapack_dlaswp(nrhs, &b[b_offset], ldb, &c__1, n, &ipiv[1], &c__1);
         /* Solve L*X = B, overwriting B with X. */
-        dtrsm_("Left", "Lower", "No transpose", "Unit", n, nrhs, &c_b12, &a[a_offset], lda,
-               &b[b_offset], ldb);
+        aocl_blas_dtrsm("Left", "Lower", "No transpose", "Unit", n, nrhs, &c_b12, &a[a_offset], lda,
+                        &b[b_offset], ldb);
         /* Solve U*X = B, overwriting B with X. */
-        dtrsm_("Left", "Upper", "No transpose", "Non-unit", n, nrhs, &c_b12, &a[a_offset], lda,
-               &b[b_offset], ldb);
+        aocl_blas_dtrsm("Left", "Upper", "No transpose", "Non-unit", n, nrhs, &c_b12, &a[a_offset],
+                        lda, &b[b_offset], ldb);
     }
     else
     {
         /* Solve A**T * X = B. */
         /* Solve U**T *X = B, overwriting B with X. */
-        dtrsm_("Left", "Upper", "Transpose", "Non-unit", n, nrhs, &c_b12, &a[a_offset], lda,
-               &b[b_offset], ldb);
+        aocl_blas_dtrsm("Left", "Upper", "Transpose", "Non-unit", n, nrhs, &c_b12, &a[a_offset],
+                        lda, &b[b_offset], ldb);
         /* Solve L**T *X = B, overwriting B with X. */
-        dtrsm_("Left", "Lower", "Transpose", "Unit", n, nrhs, &c_b12, &a[a_offset], lda,
-               &b[b_offset], ldb);
+        aocl_blas_dtrsm("Left", "Lower", "Transpose", "Unit", n, nrhs, &c_b12, &a[a_offset], lda,
+                        &b[b_offset], ldb);
         /* Apply row interchanges to the solution vectors. */
-        dlaswp_(nrhs, &b[b_offset], ldb, &c__1, n, &ipiv[1], &c_n1);
+        aocl_lapack_dlaswp(nrhs, &b[b_offset], ldb, &c__1, n, &ipiv[1], &c_n1);
     }
     AOCL_DTL_TRACE_LOG_EXIT
     return;
@@ -282,11 +295,11 @@ void dgetrs_(char *trans, integer *n, integer *nrhs, doublereal *a, integer *lda
 /* dgetrs_ */
 
 // Function for dtrsm with SIDE='L', UPLO='L', TRANSA='N', DIAG='U'
-void dtrsm_LLNU_small(integer *m, integer *n, double *alpha, double *a, integer *lda, double *b,
-                      integer *ldb)
+void dtrsm_LLNU_small(aocl_int64_t *m, aocl_int64_t *n, double *alpha, double *a, aocl_int64_t *lda,
+                      double *b, aocl_int64_t *ldb)
 {
-    integer j, k, i__1, i__, i__2, i__3;
-    integer a_dim1, a_offset, b_dim1, b_offset;
+    aocl_int64_t j, k, i__1, i__, i__2, i__3;
+    aocl_int64_t a_dim1, a_offset, b_dim1, b_offset;
 
     /* Parameter adjustments */
     a_dim1 = *lda;
@@ -314,11 +327,11 @@ void dtrsm_LLNU_small(integer *m, integer *n, double *alpha, double *a, integer 
 }
 
 // Function for dtrsm with SIDE='L', UPLO='U', TRANSA='N', DIAG='N'
-void dtrsm_LUNN_small(integer *m, integer *n, double *alpha, double *a, integer *lda, double *b,
-                      integer *ldb)
+void dtrsm_LUNN_small(aocl_int64_t *m, aocl_int64_t *n, double *alpha, double *a, aocl_int64_t *lda,
+                      double *b, aocl_int64_t *ldb)
 {
-    integer j, k, i__1, i__, i__2;
-    integer a_dim1, a_offset, b_dim1, b_offset;
+    aocl_int64_t j, k, i__1, i__, i__2;
+    aocl_int64_t a_dim1, a_offset, b_dim1, b_offset;
 
     /* Parameter adjustments */
     a_dim1 = *lda;

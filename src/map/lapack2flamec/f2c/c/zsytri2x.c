@@ -4,8 +4,8 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static doublecomplex c_b1 = {1., 0.};
-static doublecomplex c_b2 = {0., 0.};
+static dcomplex c_b1 = {{1.}, {0.}};
+static dcomplex c_b2 = {{0.}, {0.}};
 /* > \brief \b ZSYTRI2X */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -41,7 +41,7 @@ static doublecomplex c_b2 = {0., 0.};
 /* > */
 /* > \verbatim */
 /* > */
-/* > ZSYTRI2X computes the inverse of a complex symmetric indefinite matrix */
+/* > ZSYTRI2X computes the inverse of a scomplex symmetric indefinite matrix */
 /* > A using the factorization A = U*D*U**T or A = L*D*L**T computed by */
 /* > ZSYTRF. */
 /* > \endverbatim */
@@ -121,52 +121,50 @@ the matrix is singular and its */
 /* > \ingroup complex16SYcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void zsytri2x_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *ipiv,
-               doublecomplex *work, integer *nb, integer *info)
+/** Generated wrapper function */
+void zsytri2x_(char *uplo, aocl_int_t *n, dcomplex *a, aocl_int_t *lda, aocl_int_t *ipiv,
+               dcomplex *work, aocl_int_t *nb, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_zsytri2x(uplo, n, a, lda, ipiv, work, nb, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t nb_64 = *nb;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_zsytri2x(uplo, &n_64, a, &lda_64, ipiv, work, &nb_64, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_zsytri2x(char *uplo, aocl_int64_t *n, dcomplex *a, aocl_int64_t *lda,
+                          aocl_int_t *ipiv, dcomplex *work, aocl_int64_t *nb,
+                          aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zsytri2x inputs: uplo %c, n %" FLA_IS ", lda %" FLA_IS ", nb %" FLA_IS "",
                       *uplo, *n, *lda, *nb);
     /* System generated locals */
-    integer a_dim1, a_offset, work_dim1, work_offset, i__1, i__2, i__3, i__4, i__5, i__6;
-    doublecomplex z__1, z__2, z__3;
+    aocl_int64_t a_dim1, a_offset, work_dim1, work_offset, i__1, i__2, i__3, i__4, i__5, i__6;
+    dcomplex z__1, z__2, z__3;
     /* Builtin functions */
-    void z_div(doublecomplex *, doublecomplex *, doublecomplex *);
+    void z_div(dcomplex *, dcomplex *, dcomplex *);
     /* Local variables */
-    doublecomplex d__;
-    integer i__, j, k;
-    extern /* Subroutine */
-        void
-        zsyswapr_(char *, integer *, doublecomplex *, integer *, integer *, integer *);
-    doublecomplex t, ak;
-    integer u11, ip, nnb, cut;
-    doublecomplex akp1;
-    integer invd;
-    doublecomplex akkp1;
-    extern logical lsame_(char *, char *, integer, integer);
-    integer iinfo;
-    extern /* Subroutine */
-        void
-        zgemm_(char *, char *, integer *, integer *, integer *, doublecomplex *, doublecomplex *,
-               integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *);
-    integer count;
+    dcomplex d__;
+    aocl_int64_t i__, j, k;
+    dcomplex t, ak;
+    aocl_int64_t u11, ip, nnb, cut;
+    dcomplex akp1;
+    aocl_int64_t invd;
+    dcomplex akkp1;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    aocl_int64_t iinfo;
+    aocl_int64_t count;
     logical upper;
-    extern /* Subroutine */
-        void
-        ztrmm_(char *, char *, char *, char *, integer *, integer *, doublecomplex *,
-               doublecomplex *, integer *, doublecomplex *, integer *);
-    doublecomplex u01_i_j__, u11_i_j__;
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    extern /* Subroutine */
-        void
-        ztrtri_(char *, char *, integer *, doublecomplex *, integer *, integer *);
-    doublecomplex u01_ip1_j__, u11_ip1_j__;
-    extern /* Subroutine */
-        void
-        zsyconv_(char *, char *, integer *, doublecomplex *, integer *, integer *, doublecomplex *,
-                 integer *);
+    dcomplex u01_i_j__, u11_i_j__;
+    dcomplex u01_ip1_j__, u11_ip1_j__;
     /* -- LAPACK computational routine (version 3.7.1) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -215,7 +213,7 @@ void zsytri2x_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("ZSYTRI2X", &i__1, (ftnlen)8);
+        aocl_blas_xerbla("ZSYTRI2X", &i__1, (ftnlen)8);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -226,7 +224,7 @@ void zsytri2x_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *
     }
     /* Convert A */
     /* Workspace got Non-diag elements of D */
-    zsyconv_(uplo, "C", n, &a[a_offset], lda, &ipiv[1], &work[work_offset], &iinfo);
+    aocl_lapack_zsyconv(uplo, "C", n, &a[a_offset], lda, &ipiv[1], &work[work_offset], &iinfo);
     /* Check that the diagonal matrix D is nonsingular. */
     if(upper)
     {
@@ -268,7 +266,7 @@ void zsytri2x_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *
     if(upper)
     {
         /* invA = P * inv(U**T)*inv(D)*inv(U)*P**T. */
-        ztrtri_(uplo, "U", n, &a[a_offset], lda, info);
+        aocl_lapack_ztrtri(uplo, "U", n, &a[a_offset], lda, info);
         /* inv(D) and inv(D)*inv(U) */
         k = 1;
         while(k <= *n)
@@ -522,8 +520,8 @@ void zsytri2x_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *
             }
             /* U11**T*invD1*U11->U11 */
             i__1 = *n + *nb + 1;
-            ztrmm_("L", "U", "T", "U", &nnb, &nnb, &c_b1, &a[cut + 1 + (cut + 1) * a_dim1], lda,
-                   &work[u11 + 1 + work_dim1], &i__1);
+            aocl_blas_ztrmm("L", "U", "T", "U", &nnb, &nnb, &c_b1, &a[cut + 1 + (cut + 1) * a_dim1],
+                            lda, &work[u11 + 1 + work_dim1], &i__1);
             i__1 = nnb;
             for(i__ = 1; i__ <= i__1; ++i__)
             {
@@ -539,8 +537,8 @@ void zsytri2x_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *
             /* U01**T*invD*U01->A(CUT+I,CUT+J) */
             i__1 = *n + *nb + 1;
             i__2 = *n + *nb + 1;
-            zgemm_("T", "N", &nnb, &nnb, &cut, &c_b1, &a[(cut + 1) * a_dim1 + 1], lda,
-                   &work[work_offset], &i__1, &c_b2, &work[u11 + 1 + work_dim1], &i__2);
+            aocl_blas_zgemm("T", "N", &nnb, &nnb, &cut, &c_b1, &a[(cut + 1) * a_dim1 + 1], lda,
+                            &work[work_offset], &i__1, &c_b2, &work[u11 + 1 + work_dim1], &i__2);
             /* U11 = U11**T*invD1*U11 + U01**T*invD*U01 */
             i__1 = nnb;
             for(i__ = 1; i__ <= i__1; ++i__)
@@ -559,8 +557,8 @@ void zsytri2x_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *
             }
             /* U01 = U00**T*invD0*U01 */
             i__1 = *n + *nb + 1;
-            ztrmm_("L", uplo, "T", "U", &cut, &nnb, &c_b1, &a[a_offset], lda, &work[work_offset],
-                   &i__1);
+            aocl_blas_ztrmm("L", uplo, "T", "U", &cut, &nnb, &c_b1, &a[a_offset], lda,
+                            &work[work_offset], &i__1);
             /* Update U01 */
             i__1 = cut;
             for(i__ = 1; i__ <= i__1; ++i__)
@@ -585,11 +583,11 @@ void zsytri2x_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *
                 ip = ipiv[i__];
                 if(i__ < ip)
                 {
-                    zsyswapr_(uplo, n, &a[a_offset], lda, &i__, &ip);
+                    aocl_lapack_zsyswapr(uplo, n, &a[a_offset], lda, &i__, &ip);
                 }
                 if(i__ > ip)
                 {
-                    zsyswapr_(uplo, n, &a[a_offset], lda, &ip, &i__);
+                    aocl_lapack_zsyswapr(uplo, n, &a[a_offset], lda, &ip, &i__);
                 }
             }
             else
@@ -599,12 +597,12 @@ void zsytri2x_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *
                 if(i__ - 1 < ip)
                 {
                     i__1 = i__ - 1;
-                    zsyswapr_(uplo, n, &a[a_offset], lda, &i__1, &ip);
+                    aocl_lapack_zsyswapr(uplo, n, &a[a_offset], lda, &i__1, &ip);
                 }
                 if(i__ - 1 > ip)
                 {
                     i__1 = i__ - 1;
-                    zsyswapr_(uplo, n, &a[a_offset], lda, &ip, &i__1);
+                    aocl_lapack_zsyswapr(uplo, n, &a[a_offset], lda, &ip, &i__1);
                 }
             }
             ++i__;
@@ -614,7 +612,7 @@ void zsytri2x_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *
     {
         /* LOWER... */
         /* invA = P * inv(U**T)*inv(D)*inv(U)*P**T. */
-        ztrtri_(uplo, "U", n, &a[a_offset], lda, info);
+        aocl_lapack_ztrtri(uplo, "U", n, &a[a_offset], lda, info);
         /* inv(D) and inv(D)*inv(U) */
         k = *n;
         while(k >= 1)
@@ -866,8 +864,9 @@ void zsytri2x_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *
             }
             /* L11**T*invD1*L11->L11 */
             i__1 = *n + *nb + 1;
-            ztrmm_("L", uplo, "T", "U", &nnb, &nnb, &c_b1, &a[cut + 1 + (cut + 1) * a_dim1], lda,
-                   &work[u11 + 1 + work_dim1], &i__1);
+            aocl_blas_ztrmm("L", uplo, "T", "U", &nnb, &nnb, &c_b1,
+                            &a[cut + 1 + (cut + 1) * a_dim1], lda, &work[u11 + 1 + work_dim1],
+                            &i__1);
             i__1 = nnb;
             for(i__ = 1; i__ <= i__1; ++i__)
             {
@@ -886,8 +885,9 @@ void zsytri2x_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *
                 i__1 = *n - nnb - cut;
                 i__2 = *n + *nb + 1;
                 i__3 = *n + *nb + 1;
-                zgemm_("T", "N", &nnb, &nnb, &i__1, &c_b1, &a[cut + nnb + 1 + (cut + 1) * a_dim1],
-                       lda, &work[work_offset], &i__2, &c_b2, &work[u11 + 1 + work_dim1], &i__3);
+                aocl_blas_zgemm("T", "N", &nnb, &nnb, &i__1, &c_b1,
+                                &a[cut + nnb + 1 + (cut + 1) * a_dim1], lda, &work[work_offset],
+                                &i__2, &c_b2, &work[u11 + 1 + work_dim1], &i__3);
                 /* L11 = L11**T*invD1*L11 + U01**T*invD*U01 */
                 i__1 = nnb;
                 for(i__ = 1; i__ <= i__1; ++i__)
@@ -907,9 +907,9 @@ void zsytri2x_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *
                 /* U01 = L22**T*invD2*L21 */
                 i__1 = *n - nnb - cut;
                 i__2 = *n + *nb + 1;
-                ztrmm_("L", uplo, "T", "U", &i__1, &nnb, &c_b1,
-                       &a[cut + nnb + 1 + (cut + nnb + 1) * a_dim1], lda, &work[work_offset],
-                       &i__2);
+                aocl_blas_ztrmm("L", uplo, "T", "U", &i__1, &nnb, &c_b1,
+                                &a[cut + nnb + 1 + (cut + nnb + 1) * a_dim1], lda,
+                                &work[work_offset], &i__2);
                 /* Update L21 */
                 i__1 = *n - cut - nnb;
                 for(i__ = 1; i__ <= i__1; ++i__)
@@ -952,11 +952,11 @@ void zsytri2x_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *
                 ip = ipiv[i__];
                 if(i__ < ip)
                 {
-                    zsyswapr_(uplo, n, &a[a_offset], lda, &i__, &ip);
+                    aocl_lapack_zsyswapr(uplo, n, &a[a_offset], lda, &i__, &ip);
                 }
                 if(i__ > ip)
                 {
-                    zsyswapr_(uplo, n, &a[a_offset], lda, &ip, &i__);
+                    aocl_lapack_zsyswapr(uplo, n, &a[a_offset], lda, &ip, &i__);
                 }
             }
             else
@@ -964,11 +964,11 @@ void zsytri2x_(char *uplo, integer *n, doublecomplex *a, integer *lda, integer *
                 ip = -ipiv[i__];
                 if(i__ < ip)
                 {
-                    zsyswapr_(uplo, n, &a[a_offset], lda, &i__, &ip);
+                    aocl_lapack_zsyswapr(uplo, n, &a[a_offset], lda, &i__, &ip);
                 }
                 if(i__ > ip)
                 {
-                    zsyswapr_(uplo, n, &a[a_offset], lda, &ip, &i__);
+                    aocl_lapack_zsyswapr(uplo, n, &a[a_offset], lda, &ip, &i__);
                 }
                 --i__;
             }

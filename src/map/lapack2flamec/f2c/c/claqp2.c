@@ -4,7 +4,7 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
+static aocl_int64_t c__1 = 1;
 /* > \brief \b CLAQP2 computes a QR factorization with column pivoting of the matrix block. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -144,8 +144,25 @@ if JPVT(i) = 0, */
 /* > \endhtmlonly */
 /* ===================================================================== */
 /* Subroutine */
-void claqp2_(integer *m, integer *n, integer *offset, complex *a, integer *lda, integer *jpvt,
-             complex *tau, real *vn1, real *vn2, complex *work)
+/** Generated wrapper function */
+void claqp2_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *offset, scomplex *a, aocl_int_t *lda,
+             aocl_int_t *jpvt, scomplex *tau, real *vn1, real *vn2, scomplex *work)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_claqp2(m, n, offset, a, lda, jpvt, tau, vn1, vn2, work);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t offset_64 = *offset;
+    aocl_int64_t lda_64 = *lda;
+
+    aocl_lapack_claqp2(&m_64, &n_64, &offset_64, a, &lda_64, jpvt, tau, vn1, vn2, work);
+#endif
+}
+
+void aocl_lapack_claqp2(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *offset, scomplex *a,
+                        aocl_int64_t *lda, aocl_int_t *jpvt, scomplex *tau, real *vn1, real *vn2,
+                        scomplex *work)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -159,33 +176,21 @@ void claqp2_(integer *m, integer *n, integer *offset, complex *a, integer *lda, 
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
-    integer a_dim1, a_offset, i__1, i__2, i__3;
+    aocl_int64_t a_dim1, a_offset, i__1, i__2, i__3;
     real r__1;
-    complex q__1;
+    scomplex q__1;
     /* Builtin functions */
     double sqrt(doublereal);
-    void r_cnjg(complex *, complex *);
-    double c_abs(complex *);
+    void r_cnjg(scomplex *, scomplex *);
+    double c_abs(scomplex *);
     /* Local variables */
-    integer i__, j, mn;
-    complex aii;
-    integer pvt;
+    aocl_int64_t i__, j, mn;
+    scomplex aii;
+    aocl_int64_t pvt;
     real temp, temp2, tol3z;
-    extern /* Subroutine */
-        void
-        clarf_(char *, integer *, integer *, complex *, integer *, complex *, complex *, integer *,
-               complex *);
-    integer offpi;
-    extern /* Subroutine */
-        void
-        cswap_(integer *, complex *, integer *, complex *, integer *);
-    integer itemp;
-    extern real scnrm2_(integer *, complex *, integer *);
-    extern /* Subroutine */
-        void
-        clarfg_(integer *, complex *, complex *, integer *, complex *);
+    aocl_int64_t offpi;
+    aocl_int64_t itemp;
     extern real slamch_(char *);
-    extern integer isamax_(integer *, real *, integer *);
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -227,13 +232,13 @@ void claqp2_(integer *m, integer *n, integer *offset, complex *a, integer *lda, 
         offpi = *offset + i__;
         /* Determine ith pivot column and swap if necessary. */
         i__2 = *n - i__ + 1;
-        pvt = i__ - 1 + isamax_(&i__2, &vn1[i__], &c__1);
+        pvt = i__ - 1 + aocl_blas_isamax(&i__2, &vn1[i__], &c__1);
         if(pvt != i__)
         {
-            cswap_(m, &a[pvt * a_dim1 + 1], &c__1, &a[i__ * a_dim1 + 1], &c__1);
+            aocl_blas_cswap(m, &a[pvt * a_dim1 + 1], &c__1, &a[i__ * a_dim1 + 1], &c__1);
             itemp = jpvt[pvt];
             jpvt[pvt] = jpvt[i__];
-            jpvt[i__] = itemp;
+            jpvt[i__] = (aocl_int_t)(itemp);
             vn1[pvt] = vn1[i__];
             vn2[pvt] = vn2[i__];
         }
@@ -241,12 +246,13 @@ void claqp2_(integer *m, integer *n, integer *offset, complex *a, integer *lda, 
         if(offpi < *m)
         {
             i__2 = *m - offpi + 1;
-            clarfg_(&i__2, &a[offpi + i__ * a_dim1], &a[offpi + 1 + i__ * a_dim1], &c__1,
-                    &tau[i__]);
+            aocl_lapack_clarfg(&i__2, &a[offpi + i__ * a_dim1], &a[offpi + 1 + i__ * a_dim1], &c__1,
+                               &tau[i__]);
         }
         else
         {
-            clarfg_(&c__1, &a[*m + i__ * a_dim1], &a[*m + i__ * a_dim1], &c__1, &tau[i__]);
+            aocl_lapack_clarfg(&c__1, &a[*m + i__ * a_dim1], &a[*m + i__ * a_dim1], &c__1,
+                               &tau[i__]);
         }
         if(i__ < *n)
         {
@@ -260,8 +266,8 @@ void claqp2_(integer *m, integer *n, integer *offset, complex *a, integer *lda, 
             i__2 = *m - offpi + 1;
             i__3 = *n - i__;
             r_cnjg(&q__1, &tau[i__]);
-            clarf_("Left", &i__2, &i__3, &a[offpi + i__ * a_dim1], &c__1, &q__1,
-                   &a[offpi + (i__ + 1) * a_dim1], lda, &work[1]);
+            aocl_lapack_clarf("Left", &i__2, &i__3, &a[offpi + i__ * a_dim1], &c__1, &q__1,
+                              &a[offpi + (i__ + 1) * a_dim1], lda, &work[1]);
             i__2 = offpi + i__ * a_dim1;
             a[i__2].r = aii.r;
             a[i__2].i = aii.i; // , expr subst
@@ -286,7 +292,7 @@ void claqp2_(integer *m, integer *n, integer *offset, complex *a, integer *lda, 
                     if(offpi < *m)
                     {
                         i__3 = *m - offpi;
-                        vn1[j] = scnrm2_(&i__3, &a[offpi + 1 + j * a_dim1], &c__1);
+                        vn1[j] = aocl_blas_scnrm2(&i__3, &a[offpi + 1 + j * a_dim1], &c__1);
                         vn2[j] = vn1[j];
                     }
                     else

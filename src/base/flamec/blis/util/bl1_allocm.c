@@ -28,9 +28,9 @@ void*     bl1_vallocm( uinteger m, uinteger n, uinteger elem_size )
 	return ( void* ) BLIS1_MALLOC( m * n * elem_size );
 }
 
-integer*      bl1_iallocm( uinteger m, uinteger n )
+fla_dim_t*      bl1_iallocm( uinteger m, uinteger n )
 {
-	return ( integer* ) BLIS1_MALLOC( m * n * sizeof( integer ) );
+	return ( fla_dim_t* ) BLIS1_MALLOC( m * n * sizeof( fla_dim_t ) );
 }
 
 float*    bl1_sallocm( uinteger m, uinteger n )

@@ -4,8 +4,8 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static doublecomplex c_b1 = {1., 0.};
-static integer c__1 = 1;
+static dcomplex c_b1 = {{1.}, {0.}};
+static aocl_int64_t c__1 = 1;
 /* > \brief \b ZHPGST */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -40,7 +40,7 @@ static integer c__1 = 1;
 /* > */
 /* > \verbatim */
 /* > */
-/* > ZHPGST reduces a complex Hermitian-definite generalized */
+/* > ZHPGST reduces a scomplex Hermitian-definite generalized */
 /* > eigenproblem to standard form, using packed storage. */
 /* > */
 /* > If ITYPE = 1, the problem is A*x = lambda*B*x, */
@@ -114,43 +114,43 @@ static integer c__1 = 1;
 /* > \ingroup complex16OTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void zhpgst_(integer *itype, char *uplo, integer *n, doublecomplex *ap, doublecomplex *bp,
-             integer *info)
+/** Generated wrapper function */
+void zhpgst_(aocl_int_t *itype, char *uplo, aocl_int_t *n, dcomplex *ap, dcomplex *bp,
+             aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_zhpgst(itype, uplo, n, ap, bp, info);
+#else
+    aocl_int64_t itype_64 = *itype;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_zhpgst(&itype_64, uplo, &n_64, ap, bp, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_zhpgst(aocl_int64_t *itype, char *uplo, aocl_int64_t *n, dcomplex *ap,
+                        dcomplex *bp, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("zhpgst inputs: itype %" FLA_IS ", uplo %c, n %" FLA_IS "", *itype, *uplo,
                       *n);
     /* System generated locals */
-    integer i__1, i__2, i__3, i__4;
+    aocl_int64_t i__1, i__2, i__3, i__4;
     doublereal d__1, d__2;
-    doublecomplex z__1, z__2, z__3;
+    dcomplex z__1, z__2, z__3;
     /* Local variables */
-    integer j, k, j1, k1, jj, kk;
-    doublecomplex ct;
+    aocl_int64_t j, k, j1, k1, jj, kk;
+    dcomplex ct;
     doublereal ajj;
-    integer j1j1;
+    aocl_int64_t j1j1;
     doublereal akk;
-    integer k1k1;
+    aocl_int64_t k1k1;
     doublereal bjj, bkk;
-    extern /* Subroutine */
-        void
-        zhpr2_(char *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *,
-               integer *, doublecomplex *);
-    extern logical lsame_(char *, char *, integer, integer);
-    extern /* Double Complex */
-        VOID
-        zdotc_f2c_(doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *,
-                   integer *);
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     logical upper;
-    extern /* Subroutine */
-        void
-        zhpmv_(char *, integer *, doublecomplex *, doublecomplex *, doublecomplex *, integer *,
-               doublecomplex *, doublecomplex *, integer *),
-        zaxpy_(integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *),
-        ztpmv_(char *, char *, char *, integer *, doublecomplex *, doublecomplex *, integer *),
-        ztpsv_(char *, char *, char *, integer *, doublecomplex *, doublecomplex *, integer *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
-        zdscal_(integer *, doublereal *, doublecomplex *, integer *);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -193,7 +193,7 @@ void zhpgst_(integer *itype, char *uplo, integer *n, doublecomplex *ap, doubleco
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("ZHPGST", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("ZHPGST", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -217,18 +217,19 @@ void zhpgst_(integer *itype, char *uplo, integer *n, doublecomplex *ap, doubleco
                 ap[i__2].i = 0.; // , expr subst
                 i__2 = jj;
                 bjj = bp[i__2].r;
-                ztpsv_(uplo, "Conjugate transpose", "Non-unit", &j, &bp[1], &ap[j1], &c__1);
+                aocl_blas_ztpsv(uplo, "Conjugate transpose", "Non-unit", &j, &bp[1], &ap[j1],
+                                &c__1);
                 i__2 = j - 1;
                 z__1.r = -1.;
                 z__1.i = -0.; // , expr subst
-                zhpmv_(uplo, &i__2, &z__1, &ap[1], &bp[j1], &c__1, &c_b1, &ap[j1], &c__1);
+                aocl_blas_zhpmv(uplo, &i__2, &z__1, &ap[1], &bp[j1], &c__1, &c_b1, &ap[j1], &c__1);
                 i__2 = j - 1;
                 d__1 = 1. / bjj;
-                zdscal_(&i__2, &d__1, &ap[j1], &c__1);
+                aocl_blas_zdscal(&i__2, &d__1, &ap[j1], &c__1);
                 i__2 = jj;
                 i__3 = jj;
                 i__4 = j - 1;
-                zdotc_f2c_(&z__3, &i__4, &ap[j1], &c__1, &bp[j1], &c__1);
+                aocl_lapack_zdotc_f2c(&z__3, &i__4, &ap[j1], &c__1, &bp[j1], &c__1);
                 z__2.r = ap[i__3].r - z__3.r;
                 z__2.i = ap[i__3].i - z__3.i; // , expr subst
                 z__1.r = z__2.r / bjj;
@@ -262,20 +263,22 @@ void zhpgst_(integer *itype, char *uplo, integer *n, doublecomplex *ap, doubleco
                 {
                     i__2 = *n - k;
                     d__1 = 1. / bkk;
-                    zdscal_(&i__2, &d__1, &ap[kk + 1], &c__1);
+                    aocl_blas_zdscal(&i__2, &d__1, &ap[kk + 1], &c__1);
                     d__1 = akk * -.5;
                     ct.r = d__1;
                     ct.i = 0.; // , expr subst
                     i__2 = *n - k;
-                    zaxpy_(&i__2, &ct, &bp[kk + 1], &c__1, &ap[kk + 1], &c__1);
+                    aocl_blas_zaxpy(&i__2, &ct, &bp[kk + 1], &c__1, &ap[kk + 1], &c__1);
                     i__2 = *n - k;
                     z__1.r = -1.;
                     z__1.i = -0.; // , expr subst
-                    zhpr2_(uplo, &i__2, &z__1, &ap[kk + 1], &c__1, &bp[kk + 1], &c__1, &ap[k1k1]);
+                    aocl_blas_zhpr2(uplo, &i__2, &z__1, &ap[kk + 1], &c__1, &bp[kk + 1], &c__1,
+                                    &ap[k1k1]);
                     i__2 = *n - k;
-                    zaxpy_(&i__2, &ct, &bp[kk + 1], &c__1, &ap[kk + 1], &c__1);
+                    aocl_blas_zaxpy(&i__2, &ct, &bp[kk + 1], &c__1, &ap[kk + 1], &c__1);
                     i__2 = *n - k;
-                    ztpsv_(uplo, "No transpose", "Non-unit", &i__2, &bp[k1k1], &ap[kk + 1], &c__1);
+                    aocl_blas_ztpsv(uplo, "No transpose", "Non-unit", &i__2, &bp[k1k1], &ap[kk + 1],
+                                    &c__1);
                 }
                 kk = k1k1;
                 /* L20: */
@@ -300,18 +303,18 @@ void zhpgst_(integer *itype, char *uplo, integer *n, doublecomplex *ap, doubleco
                 i__2 = kk;
                 bkk = bp[i__2].r;
                 i__2 = k - 1;
-                ztpmv_(uplo, "No transpose", "Non-unit", &i__2, &bp[1], &ap[k1], &c__1);
+                aocl_blas_ztpmv(uplo, "No transpose", "Non-unit", &i__2, &bp[1], &ap[k1], &c__1);
                 d__1 = akk * .5;
                 ct.r = d__1;
                 ct.i = 0.; // , expr subst
                 i__2 = k - 1;
-                zaxpy_(&i__2, &ct, &bp[k1], &c__1, &ap[k1], &c__1);
+                aocl_blas_zaxpy(&i__2, &ct, &bp[k1], &c__1, &ap[k1], &c__1);
                 i__2 = k - 1;
-                zhpr2_(uplo, &i__2, &c_b1, &ap[k1], &c__1, &bp[k1], &c__1, &ap[1]);
+                aocl_blas_zhpr2(uplo, &i__2, &c_b1, &ap[k1], &c__1, &bp[k1], &c__1, &ap[1]);
                 i__2 = k - 1;
-                zaxpy_(&i__2, &ct, &bp[k1], &c__1, &ap[k1], &c__1);
+                aocl_blas_zaxpy(&i__2, &ct, &bp[k1], &c__1, &ap[k1], &c__1);
                 i__2 = k - 1;
-                zdscal_(&i__2, &bkk, &ap[k1], &c__1);
+                aocl_blas_zdscal(&i__2, &bkk, &ap[k1], &c__1);
                 i__2 = kk;
                 /* Computing 2nd power */
                 d__2 = bkk;
@@ -338,18 +341,19 @@ void zhpgst_(integer *itype, char *uplo, integer *n, doublecomplex *ap, doubleco
                 i__2 = jj;
                 d__1 = ajj * bjj;
                 i__3 = *n - j;
-                zdotc_f2c_(&z__2, &i__3, &ap[jj + 1], &c__1, &bp[jj + 1], &c__1);
+                aocl_lapack_zdotc_f2c(&z__2, &i__3, &ap[jj + 1], &c__1, &bp[jj + 1], &c__1);
                 z__1.r = d__1 + z__2.r;
                 z__1.i = z__2.i; // , expr subst
                 ap[i__2].r = z__1.r;
                 ap[i__2].i = z__1.i; // , expr subst
                 i__2 = *n - j;
-                zdscal_(&i__2, &bjj, &ap[jj + 1], &c__1);
+                aocl_blas_zdscal(&i__2, &bjj, &ap[jj + 1], &c__1);
                 i__2 = *n - j;
-                zhpmv_(uplo, &i__2, &c_b1, &ap[j1j1], &bp[jj + 1], &c__1, &c_b1, &ap[jj + 1],
-                       &c__1);
+                aocl_blas_zhpmv(uplo, &i__2, &c_b1, &ap[j1j1], &bp[jj + 1], &c__1, &c_b1,
+                                &ap[jj + 1], &c__1);
                 i__2 = *n - j + 1;
-                ztpmv_(uplo, "Conjugate transpose", "Non-unit", &i__2, &bp[jj], &ap[jj], &c__1);
+                aocl_blas_ztpmv(uplo, "Conjugate transpose", "Non-unit", &i__2, &bp[jj], &ap[jj],
+                                &c__1);
                 jj = j1j1;
                 /* L40: */
             }

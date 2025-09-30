@@ -4,13 +4,13 @@
 extern "C" {
 #endif
 
-VOID d_cnjg(doublecomplex *r, doublecomplex *z)
+void d_cnjg(dcomplex *r, dcomplex *z)
 {
     doublereal zi = z->i;
     r->r = z->r;
     r->i = -zi;
 }
-VOID r_cnjg(complex *r, complex *z)
+void r_cnjg(scomplex *r, scomplex *z)
 {
     real zi = z->i;
     r->r = z->r;

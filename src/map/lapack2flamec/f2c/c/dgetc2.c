@@ -4,7 +4,7 @@
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
  /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
+static aocl_int64_t c__1 = 1;
 static doublereal c_b10 = -1.;
 /* > \brief \b DGETC2 computes the LU factorization with complete pivoting of the general n-by-n
  * matrix. */
@@ -111,25 +111,36 @@ for 1 <= j <= N, column j of the */
 /* > Umea University, S-901 87 Umea, Sweden. */
 /* ===================================================================== */
 /* Subroutine */
-void dgetc2_(integer *n, doublereal *a, integer *lda, integer *ipiv, integer *jpiv, integer *info)
+/** Generated wrapper function */
+void dgetc2_(aocl_int_t *n, doublereal *a, aocl_int_t *lda, aocl_int_t *ipiv, aocl_int_t *jpiv,
+             aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_dgetc2(n, a, lda, ipiv, jpiv, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_dgetc2(&n_64, a, &lda_64, ipiv, jpiv, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_dgetc2(aocl_int64_t *n, doublereal *a, aocl_int64_t *lda, aocl_int_t *ipiv,
+                        aocl_int_t *jpiv, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dgetc2 inputs: n %" FLA_IS ", lda %" FLA_IS "", *n, *lda);
     /* System generated locals */
-    integer a_dim1, a_offset, i__1, i__2, i__3;
+    aocl_int64_t a_dim1, a_offset, i__1, i__2, i__3;
     doublereal d__1;
     /* Local variables */
-    integer i__, j, ip, jp;
+    aocl_int64_t i__, j, ip, jp;
     doublereal eps;
-    integer ipv, jpv;
-    extern /* Subroutine */
-        void
-        dger_(integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *,
-              doublereal *, integer *);
+    aocl_int64_t ipv, jpv;
     doublereal smin, xmax;
-    extern /* Subroutine */
-        void
-        dswap_(integer *, doublereal *, integer *, doublereal *, integer *);
     extern doublereal dlamch_(char *);
     doublereal smlnum;
     /* -- LAPACK auxiliary routine -- */
@@ -216,15 +227,15 @@ void dgetc2_(integer *n, doublereal *a, integer *lda, integer *ipiv, integer *jp
         /* Swap rows */
         if(ipv != i__)
         {
-            dswap_(n, &a[ipv + a_dim1], lda, &a[i__ + a_dim1], lda);
+            aocl_blas_dswap(n, &a[ipv + a_dim1], lda, &a[i__ + a_dim1], lda);
         }
-        ipiv[i__] = ipv;
+        ipiv[i__] = (aocl_int_t)(ipv);
         /* Swap columns */
         if(jpv != i__)
         {
-            dswap_(n, &a[jpv * a_dim1 + 1], &c__1, &a[i__ * a_dim1 + 1], &c__1);
+            aocl_blas_dswap(n, &a[jpv * a_dim1 + 1], &c__1, &a[i__ * a_dim1 + 1], &c__1);
         }
-        jpiv[i__] = jpv;
+        jpiv[i__] = (aocl_int_t)(jpv);
         /* Check for singularity */
         if((d__1 = a[i__ + i__ * a_dim1], f2c_abs(d__1)) < smin)
         {
@@ -239,8 +250,8 @@ void dgetc2_(integer *n, doublereal *a, integer *lda, integer *ipiv, integer *jp
         }
         i__2 = *n - i__;
         i__3 = *n - i__;
-        dger_(&i__2, &i__3, &c_b10, &a[i__ + 1 + i__ * a_dim1], &c__1, &a[i__ + (i__ + 1) * a_dim1],
-              lda, &a[i__ + 1 + (i__ + 1) * a_dim1], lda);
+        aocl_blas_dger(&i__2, &i__3, &c_b10, &a[i__ + 1 + i__ * a_dim1], &c__1,
+                       &a[i__ + (i__ + 1) * a_dim1], lda, &a[i__ + 1 + (i__ + 1) * a_dim1], lda);
         /* L40: */
     }
     if((d__1 = a[*n + *n * a_dim1], f2c_abs(d__1)) < smin)
@@ -249,8 +260,8 @@ void dgetc2_(integer *n, doublereal *a, integer *lda, integer *ipiv, integer *jp
         a[*n + *n * a_dim1] = smin;
     }
     /* Set last pivots to N */
-    ipiv[*n] = *n;
-    jpiv[*n] = *n;
+    ipiv[*n] = (aocl_int_t)(*n);
+    jpiv[*n] = (aocl_int_t)(*n);
     AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of DGETC2 */

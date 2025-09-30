@@ -4,8 +4,8 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
-static complex c_b16 = {1.f, 0.f};
+static aocl_int64_t c__1 = 1;
+static scomplex c_b16 = {{1.f}, {0.f}};
 /* > \brief \b CPTRFS */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -180,9 +180,32 @@ static complex c_b16 = {1.f, 0.f};
 /* > \ingroup complexPTcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void cptrfs_(char *uplo, integer *n, integer *nrhs, real *d__, complex *e, real *df, complex *ef,
-             complex *b, integer *ldb, complex *x, integer *ldx, real *ferr, real *berr,
-             complex *work, real *rwork, integer *info)
+/** Generated wrapper function */
+void cptrfs_(char *uplo, aocl_int_t *n, aocl_int_t *nrhs, real *d__, scomplex *e, real *df,
+             scomplex *ef, scomplex *b, aocl_int_t *ldb, scomplex *x, aocl_int_t *ldx, real *ferr,
+             real *berr, scomplex *work, real *rwork, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_cptrfs(uplo, n, nrhs, d__, e, df, ef, b, ldb, x, ldx, ferr, berr, work, rwork,
+                       info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t nrhs_64 = *nrhs;
+    aocl_int64_t ldb_64 = *ldb;
+    aocl_int64_t ldx_64 = *ldx;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_cptrfs(uplo, &n_64, &nrhs_64, d__, e, df, ef, b, &ldb_64, x, &ldx_64, ferr, berr,
+                       work, rwork, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_cptrfs(char *uplo, aocl_int64_t *n, aocl_int64_t *nrhs, real *d__, scomplex *e,
+                        real *df, scomplex *ef, scomplex *b, aocl_int64_t *ldb, scomplex *x,
+                        aocl_int64_t *ldx, real *ferr, real *berr, scomplex *work, real *rwork,
+                        aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -197,35 +220,25 @@ void cptrfs_(char *uplo, integer *n, integer *nrhs, real *d__, complex *e, real 
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
-    integer b_dim1, b_offset, x_dim1, x_offset, i__1, i__2, i__3, i__4, i__5, i__6;
+    aocl_int64_t b_dim1, b_offset, x_dim1, x_offset, i__1, i__2, i__3, i__4, i__5, i__6;
     real r__1, r__2, r__3, r__4, r__5, r__6, r__7, r__8, r__9, r__10, r__11, r__12;
-    complex q__1, q__2, q__3;
+    scomplex q__1, q__2, q__3;
     /* Builtin functions */
-    double r_imag(complex *);
-    void r_cnjg(complex *, complex *);
-    double c_abs(complex *);
+    double r_imag(scomplex *);
+    void r_cnjg(scomplex *, scomplex *);
+    double c_abs(scomplex *);
     /* Local variables */
-    integer i__, j;
+    aocl_int64_t i__, j;
     real s;
-    complex bi, cx, dx, ex;
-    integer ix, nz;
+    scomplex bi, cx, dx, ex;
+    aocl_int64_t ix, nz;
     real eps, safe1, safe2;
-    extern logical lsame_(char *, char *, integer, integer);
-    extern /* Subroutine */
-        void
-        caxpy_(integer *, complex *, complex *, integer *, complex *, integer *);
-    integer count;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    aocl_int64_t count;
     logical upper;
     extern real slamch_(char *);
     real safmin;
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    extern integer isamax_(integer *, real *, integer *);
     real lstres;
-    extern /* Subroutine */
-        void
-        cpttrs_(char *, integer *, integer *, real *, complex *, complex *, integer *, integer *);
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -292,7 +305,7 @@ void cptrfs_(char *uplo, integer *n, integer *nrhs, real *d__, complex *e, real 
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("CPTRFS", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("CPTRFS", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
@@ -624,8 +637,8 @@ void cptrfs_(char *uplo, integer *n, integer *nrhs, real *d__, complex *e, real 
         if(berr[j] > eps && berr[j] * 2.f <= lstres && count <= 5)
         {
             /* Update solution and try again. */
-            cpttrs_(uplo, n, &c__1, &df[1], &ef[1], &work[1], n, info);
-            caxpy_(n, &c_b16, &work[1], &c__1, &x[j * x_dim1 + 1], &c__1);
+            aocl_lapack_cpttrs(uplo, n, &c__1, &df[1], &ef[1], &work[1], n, info);
+            aocl_blas_caxpy(n, &c_b16, &work[1], &c__1, &x[j * x_dim1 + 1], &c__1);
             lstres = berr[j];
             ++count;
             goto L20;
@@ -662,7 +675,7 @@ void cptrfs_(char *uplo, integer *n, integer *nrhs, real *d__, complex *e, real 
             }
             /* L60: */
         }
-        ix = isamax_(n, &rwork[1], &c__1);
+        ix = aocl_blas_isamax(n, &rwork[1], &c__1);
         ferr[j] = rwork[ix];
         /* Estimate the norm of inv(A). */
         /* Solve M(A) * x = e, where M(A) = (m(i,j)) is given by */
@@ -685,7 +698,7 @@ void cptrfs_(char *uplo, integer *n, integer *nrhs, real *d__, complex *e, real 
             /* L80: */
         }
         /* Compute norm(inv(A)) = fla_max(x(i)), 1<=i<=n. */
-        ix = isamax_(n, &rwork[1], &c__1);
+        ix = aocl_blas_isamax(n, &rwork[1], &c__1);
         ferr[j] *= (r__1 = rwork[ix], f2c_abs(r__1));
         /* Normalize error. */
         lstres = 0.f;

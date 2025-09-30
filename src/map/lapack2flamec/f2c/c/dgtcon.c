@@ -4,7 +4,7 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
+static aocl_int64_t c__1 = 1;
 /* > \brief \b DGTCON */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -145,29 +145,37 @@ IPIV(i) = i indicates a row interchange was not */
 /* > \ingroup doubleGTcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void dgtcon_(char *norm, integer *n, doublereal *dl, doublereal *d__, doublereal *du,
-             doublereal *du2, integer *ipiv, doublereal *anorm, doublereal *rcond, doublereal *work,
-             integer *iwork, integer *info)
+/** Generated wrapper function */
+void dgtcon_(char *norm, aocl_int_t *n, doublereal *dl, doublereal *d__, doublereal *du,
+             doublereal *du2, aocl_int_t *ipiv, doublereal *anorm, doublereal *rcond,
+             doublereal *work, aocl_int_t *iwork, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_dgtcon(norm, n, dl, d__, du, du2, ipiv, anorm, rcond, work, iwork, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_dgtcon(norm, &n_64, dl, d__, du, du2, ipiv, anorm, rcond, work, iwork, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_dgtcon(char *norm, aocl_int64_t *n, doublereal *dl, doublereal *d__,
+                        doublereal *du, doublereal *du2, aocl_int_t *ipiv, doublereal *anorm,
+                        doublereal *rcond, doublereal *work, aocl_int_t *iwork, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dgtcon inputs: norm %c, n %" FLA_IS "", *norm, *n);
     /* System generated locals */
-    integer i__1;
+    aocl_int64_t i__1;
     /* Local variables */
-    integer i__, kase, kase1;
-    extern logical lsame_(char *, char *, integer, integer);
+    aocl_int64_t i__, kase, kase1;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     integer isave[3];
-    extern /* Subroutine */
-        void
-        dlacn2_(integer *, doublereal *, doublereal *, integer *, doublereal *, integer *,
-                integer *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal ainvnm;
     logical onenrm;
-    extern /* Subroutine */
-        void
-        dgttrs_(char *, integer *, integer *, doublereal *, doublereal *, doublereal *,
-                doublereal *, integer *, doublereal *, integer *, integer *);
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -215,7 +223,7 @@ void dgtcon_(char *norm, integer *n, doublereal *dl, doublereal *d__, doublereal
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("DGTCON", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("DGTCON", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -254,20 +262,20 @@ void dgtcon_(char *norm, integer *n, doublereal *dl, doublereal *d__, doublereal
     }
     kase = 0;
 L20:
-    dlacn2_(n, &work[*n + 1], &work[1], &iwork[1], &ainvnm, &kase, isave);
+    aocl_lapack_dlacn2(n, &work[*n + 1], &work[1], &iwork[1], &ainvnm, &kase, isave);
     if(kase != 0)
     {
         if(kase == kase1)
         {
             /* Multiply by inv(U)*inv(L). */
-            dgttrs_("No transpose", n, &c__1, &dl[1], &d__[1], &du[1], &du2[1], &ipiv[1], &work[1],
-                    n, info);
+            aocl_lapack_dgttrs("No transpose", n, &c__1, &dl[1], &d__[1], &du[1], &du2[1], &ipiv[1],
+                               &work[1], n, info);
         }
         else
         {
             /* Multiply by inv(L**T)*inv(U**T). */
-            dgttrs_("Transpose", n, &c__1, &dl[1], &d__[1], &du[1], &du2[1], &ipiv[1], &work[1], n,
-                    info);
+            aocl_lapack_dgttrs("Transpose", n, &c__1, &dl[1], &d__[1], &du[1], &du2[1], &ipiv[1],
+                               &work[1], n, info);
         }
         goto L20;
     }

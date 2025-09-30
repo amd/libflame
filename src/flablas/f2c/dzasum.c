@@ -1,6 +1,6 @@
 /* dzasum.f -- translated by f2c (version 19991025). You must link the resulting object file with the libraries: -lf2c -lm (in that order) */
 #include "FLA_f2c.h"
-doublereal dzasum_(integer *n, doublecomplex *zx, integer *incx)
+doublereal dzasum_(integer *n, dcomplex *zx, integer *incx)
 {
     /* System generated locals */
     integer i__1;
@@ -8,7 +8,7 @@ doublereal dzasum_(integer *n, doublecomplex *zx, integer *incx)
     /* Local variables */
     integer i__;
     doublereal stemp;
-    extern doublereal dcabs1_(doublecomplex *);
+    extern doublereal dcabs1_(dcomplex *);
     integer ix;
     /* takes the sum of the absolute values. */
     /* jack dongarra, 3/11/78. */

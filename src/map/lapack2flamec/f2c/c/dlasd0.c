@@ -4,8 +4,8 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__0 = 0;
-static integer c__2 = 2;
+static aocl_int64_t c__0 = 0;
+static aocl_int64_t c__2 = 2;
 /* > \brief \b DLASD0 computes the singular values of a real upper bidiagonal n-by-m matrix B with
  * diagonal d and off-diagonal e. Used by sbdsdc. */
 /* =========== DOCUMENTATION =========== */
@@ -152,34 +152,48 @@ static integer c__2 = 2;
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void dlasd0_(integer *n, integer *sqre, doublereal *d__, doublereal *e, doublereal *u, integer *ldu,
-             doublereal *vt, integer *ldvt, integer *smlsiz, integer *iwork, doublereal *work,
-             integer *info)
+/** Generated wrapper function */
+void dlasd0_(aocl_int_t *n, aocl_int_t *sqre, doublereal *d__, doublereal *e, doublereal *u,
+             aocl_int_t *ldu, doublereal *vt, aocl_int_t *ldvt, aocl_int_t *smlsiz,
+             aocl_int_t *iwork, doublereal *work, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_dlasd0(n, sqre, d__, e, u, ldu, vt, ldvt, smlsiz, iwork, work, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t sqre_64 = *sqre;
+    aocl_int64_t ldu_64 = *ldu;
+    aocl_int64_t ldvt_64 = *ldvt;
+    aocl_int64_t smlsiz_64 = *smlsiz;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_dlasd0(&n_64, &sqre_64, d__, e, u, &ldu_64, vt, &ldvt_64, &smlsiz_64, iwork, work,
+                       &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_dlasd0(aocl_int64_t *n, aocl_int64_t *sqre, doublereal *d__, doublereal *e,
+                        doublereal *u, aocl_int64_t *ldu, doublereal *vt, aocl_int64_t *ldvt,
+                        aocl_int64_t *smlsiz, aocl_int_t *iwork, doublereal *work,
+                        aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dlasd0 inputs: n %" FLA_IS ", sqre %" FLA_IS ", ldu %" FLA_IS
                       ", ldvt %" FLA_IS ", smlsiz %" FLA_IS "",
                       *n, *sqre, *ldu, *ldvt, *smlsiz);
     /* System generated locals */
-    integer u_dim1, u_offset, vt_dim1, vt_offset, i__1, i__2;
+    aocl_int64_t u_dim1, u_offset, vt_dim1, vt_offset, i__1, i__2;
     /* Builtin functions */
-    integer pow_ii(integer *, integer *);
+    integer pow_ii(aocl_int64_t *, aocl_int64_t *);
     /* Local variables */
-    integer i__, j, m, i1, ic, lf, nd, ll, nl, nr, im1, ncc, nlf, nrf, iwk, lvl, ndb1, nlp1, nrp1;
+    aocl_int64_t i__, j, m, i1, ic, lf, nd, ll, nl, nr, im1, ncc, nlf, nrf, iwk, lvl, ndb1, nlp1,
+        nrp1;
     doublereal beta;
-    integer idxq, nlvl;
+    aocl_int64_t idxq, nlvl;
     doublereal alpha;
-    integer inode, ndiml, idxqc, ndimr, itemp, sqrei;
-    extern /* Subroutine */
-        void
-        dlasd1_(integer *, integer *, integer *, doublereal *, doublereal *, doublereal *,
-                doublereal *, integer *, doublereal *, integer *, integer *, integer *,
-                doublereal *, integer *),
-        dlasdq_(char *, integer *, integer *, integer *, integer *, integer *, doublereal *,
-                doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *,
-                integer *, doublereal *, integer *),
-        dlasdt_(integer *, integer *, integer *, integer *, integer *, integer *, integer *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+    aocl_int64_t inode, ndiml, idxqc, ndimr, itemp, sqrei;
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -232,15 +246,15 @@ void dlasd0_(integer *n, integer *sqre, doublereal *d__, doublereal *e, doublere
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("DLASD0", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("DLASD0", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* If the input matrix is too small, call DLASDQ to find the SVD. */
     if(*n <= *smlsiz)
     {
-        dlasdq_("U", sqre, n, &m, n, &c__0, &d__[1], &e[1], &vt[vt_offset], ldvt, &u[u_offset], ldu,
-                &u[u_offset], ldu, &work[1], info);
+        aocl_lapack_dlasdq("U", sqre, n, &m, n, &c__0, &d__[1], &e[1], &vt[vt_offset], ldvt,
+                           &u[u_offset], ldu, &u[u_offset], ldu, &work[1], info);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -250,7 +264,7 @@ void dlasd0_(integer *n, integer *sqre, doublereal *d__, doublereal *e, doublere
     ndimr = ndiml + *n;
     idxq = ndimr + *n;
     iwk = idxq + *n;
-    dlasdt_(n, &nlvl, &nd, &iwork[inode], &iwork[ndiml], &iwork[ndimr], smlsiz);
+    aocl_lapack_dlasdt(n, &nlvl, &nd, &iwork[inode], &iwork[ndiml], &iwork[ndimr], smlsiz);
     /* For the nodes on bottom level of the tree, solve */
     /* their subproblems by DLASDQ. */
     ndb1 = (nd + 1) / 2;
@@ -272,8 +286,9 @@ void dlasd0_(integer *n, integer *sqre, doublereal *d__, doublereal *e, doublere
         nlf = ic - nl;
         nrf = ic + 1;
         sqrei = 1;
-        dlasdq_("U", &sqrei, &nl, &nlp1, &nl, &ncc, &d__[nlf], &e[nlf], &vt[nlf + nlf * vt_dim1],
-                ldvt, &u[nlf + nlf * u_dim1], ldu, &u[nlf + nlf * u_dim1], ldu, &work[1], info);
+        aocl_lapack_dlasdq("U", &sqrei, &nl, &nlp1, &nl, &ncc, &d__[nlf], &e[nlf],
+                           &vt[nlf + nlf * vt_dim1], ldvt, &u[nlf + nlf * u_dim1], ldu,
+                           &u[nlf + nlf * u_dim1], ldu, &work[1], info);
         if(*info != 0)
         {
             AOCL_DTL_TRACE_LOG_EXIT
@@ -283,7 +298,7 @@ void dlasd0_(integer *n, integer *sqre, doublereal *d__, doublereal *e, doublere
         i__2 = nl;
         for(j = 1; j <= i__2; ++j)
         {
-            iwork[itemp + j] = j;
+            iwork[itemp + j] = (aocl_int_t)(j);
             /* L10: */
         }
         if(i__ == nd)
@@ -295,8 +310,9 @@ void dlasd0_(integer *n, integer *sqre, doublereal *d__, doublereal *e, doublere
             sqrei = 1;
         }
         nrp1 = nr + sqrei;
-        dlasdq_("U", &sqrei, &nr, &nrp1, &nr, &ncc, &d__[nrf], &e[nrf], &vt[nrf + nrf * vt_dim1],
-                ldvt, &u[nrf + nrf * u_dim1], ldu, &u[nrf + nrf * u_dim1], ldu, &work[1], info);
+        aocl_lapack_dlasdq("U", &sqrei, &nr, &nrp1, &nr, &ncc, &d__[nrf], &e[nrf],
+                           &vt[nrf + nrf * vt_dim1], ldvt, &u[nrf + nrf * u_dim1], ldu,
+                           &u[nrf + nrf * u_dim1], ldu, &work[1], info);
         if(*info != 0)
         {
             AOCL_DTL_TRACE_LOG_EXIT
@@ -306,7 +322,7 @@ void dlasd0_(integer *n, integer *sqre, doublereal *d__, doublereal *e, doublere
         i__2 = nr;
         for(j = 1; j <= i__2; ++j)
         {
-            iwork[itemp + j - 1] = j;
+            iwork[itemp + j - 1] = (aocl_int_t)(j);
             /* L20: */
         }
         /* L30: */
@@ -346,8 +362,9 @@ void dlasd0_(integer *n, integer *sqre, doublereal *d__, doublereal *e, doublere
             idxqc = idxq + nlf - 1;
             alpha = d__[ic];
             beta = e[ic];
-            dlasd1_(&nl, &nr, &sqrei, &d__[nlf], &alpha, &beta, &u[nlf + nlf * u_dim1], ldu,
-                    &vt[nlf + nlf * vt_dim1], ldvt, &iwork[idxqc], &iwork[iwk], &work[1], info);
+            aocl_lapack_dlasd1(&nl, &nr, &sqrei, &d__[nlf], &alpha, &beta, &u[nlf + nlf * u_dim1],
+                               ldu, &vt[nlf + nlf * vt_dim1], ldvt, &iwork[idxqc], &iwork[iwk],
+                               &work[1], info);
             if(*info != 0)
             {
                 AOCL_DTL_TRACE_LOG_EXIT

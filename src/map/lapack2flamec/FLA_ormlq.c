@@ -16,12 +16,12 @@
 #include "FLA_lapack2flame_return_defs.h"
 #include "FLA_lapack2flame_util_defs.h"
 
-extern void sormlq_fla(char *side, char *trans, integer *m, integer *n, integer *k, real *a,
-                       integer *lda, real *tau, real *c__, integer *ldc, real *work, integer *lwork,
-                       integer *info);
-extern void dormlq_fla(char *side, char *trans, integer *m, integer *n, integer *k, doublereal *a,
-                       integer *lda, doublereal *tau, doublereal *c__, integer *ldc,
-                       doublereal *work, integer *lwork, integer *info);
+extern void sormlq_fla(char *side, char *trans, aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *k, real *a,
+                       aocl_int64_t *lda, real *tau, real *c__, aocl_int64_t *ldc, real *work, aocl_int64_t *lwork,
+                       aocl_int64_t *info);
+extern void dormlq_fla(char *side, char *trans, aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *k, doublereal *a,
+                       aocl_int64_t *lda, doublereal *tau, doublereal *c__, aocl_int64_t *ldc,
+                       doublereal *work, aocl_int64_t *lwork, aocl_int64_t *info);
 /*
   DORMLQ overwrites the general real M-by-N matrix C with
   SIDE = 'L' SIDE = 'R'
@@ -37,12 +37,90 @@ extern void dormlq_fla(char *side, char *trans, integer *m, integer *n, integer 
   if SIDE = 'R'.
 */
 
+/** Generated wrapper function */
+void sormlq_(char *side, char *trans, aocl_int_t *m, aocl_int_t *n, aocl_int_t *k, real *buff_A, aocl_int_t *ldim_A, real *buff_t, real *buff_B, aocl_int_t *ldim_B, real *buff_w, aocl_int_t *lwork, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_sormlq(side, trans, m, n, k, buff_A, ldim_A, buff_t, buff_B, ldim_B, buff_w, lwork, info);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t k_64 = *k;
+    aocl_int64_t ldim_A_64 = *ldim_A;
+    aocl_int64_t ldim_B_64 = *ldim_B;
+    aocl_int64_t lwork_64 = *lwork;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_sormlq(side, trans, &m_64, &n_64, &k_64, buff_A, &ldim_A_64, buff_t, buff_B, &ldim_B_64, buff_w, &lwork_64, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+/** Generated wrapper function */
+void dormlq_(char *side, char *trans, aocl_int_t *m, aocl_int_t *n, aocl_int_t *k, doublereal *buff_A, aocl_int_t *ldim_A, doublereal *buff_t, doublereal *buff_B, aocl_int_t *ldim_B, doublereal *buff_w, aocl_int_t *lwork, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_dormlq(side, trans, m, n, k, buff_A, ldim_A, buff_t, buff_B, ldim_B, buff_w, lwork, info);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t k_64 = *k;
+    aocl_int64_t ldim_A_64 = *ldim_A;
+    aocl_int64_t ldim_B_64 = *ldim_B;
+    aocl_int64_t lwork_64 = *lwork;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_dormlq(side, trans, &m_64, &n_64, &k_64, buff_A, &ldim_A_64, buff_t, buff_B, &ldim_B_64, buff_w, &lwork_64, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+/** Generated wrapper function */
+void sorml2_(char *side, char *trans, aocl_int_t *m, aocl_int_t *n, aocl_int_t *k, real *buff_A, aocl_int_t *ldim_A, real *buff_t, real *buff_B, aocl_int_t *ldim_B, real *buff_w, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_sorml2(side, trans, m, n, k, buff_A, ldim_A, buff_t, buff_B, ldim_B, buff_w, info);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t k_64 = *k;
+    aocl_int64_t ldim_A_64 = *ldim_A;
+    aocl_int64_t ldim_B_64 = *ldim_B;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_sorml2(side, trans, &m_64, &n_64, &k_64, buff_A, &ldim_A_64, buff_t, buff_B, &ldim_B_64, buff_w, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+/** Generated wrapper function */
+void dorml2_(char *side, char *trans, aocl_int_t *m, aocl_int_t *n, aocl_int_t *k, doublereal *buff_A, aocl_int_t *ldim_A, doublereal *buff_t, doublereal *buff_B, aocl_int_t *ldim_B, doublereal *buff_w, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_dorml2(side, trans, m, n, k, buff_A, ldim_A, buff_t, buff_B, ldim_B, buff_w, info);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t k_64 = *k;
+    aocl_int64_t ldim_A_64 = *ldim_A;
+    aocl_int64_t ldim_B_64 = *ldim_B;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_dorml2(side, trans, &m_64, &n_64, &k_64, buff_A, &ldim_A_64, buff_t, buff_B, &ldim_B_64, buff_w, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
 #define LAPACK_ormlq(prefix, name)                                                      \
-    void F77_##prefix##name##lq(                                                        \
-        char *side, char *trans, integer *m, integer *n, integer *k,                    \
-        PREFIX2LAPACK_TYPEDEF(prefix) * buff_A, integer * ldim_A,                       \
+    void aocl_lapack_##prefix##name##lq(                                                        \
+        char *side, char *trans, aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *k,                    \
+        PREFIX2LAPACK_TYPEDEF(prefix) * buff_A, aocl_int64_t * ldim_A,                       \
         PREFIX2LAPACK_TYPEDEF(prefix) * buff_t, PREFIX2LAPACK_TYPEDEF(prefix) * buff_B, \
-        integer * ldim_B, PREFIX2LAPACK_TYPEDEF(prefix) * buff_w, integer * lwork, integer * info)
+        aocl_int64_t * ldim_B, PREFIX2LAPACK_TYPEDEF(prefix) * buff_w, aocl_int64_t * lwork, aocl_int64_t * info)
 
 #define LAPACK_ormlq_body(prefix)                                                   \
     FLA_Datatype datatype = PREFIX2FLAME_DATATYPE(prefix);                          \
@@ -208,11 +286,11 @@ LAPACK_ormlq(z, unm)
 #endif
 
 #define LAPACK_orml2(prefix, name)                                                           \
-    void F77_##prefix##name##l2(char *side, char *trans, integer *m, integer *n, integer *k, \
-                                PREFIX2LAPACK_TYPEDEF(prefix) * buff_A, integer * ldim_A,    \
+    void aocl_lapack_##prefix##name##l2(char *side, char *trans, aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *k, \
+                                PREFIX2LAPACK_TYPEDEF(prefix) * buff_A, aocl_int64_t * ldim_A,    \
                                 PREFIX2LAPACK_TYPEDEF(prefix) * buff_t,                      \
-                                PREFIX2LAPACK_TYPEDEF(prefix) * buff_B, integer * ldim_B,    \
-                                PREFIX2LAPACK_TYPEDEF(prefix) * buff_w, integer * info)
+                                PREFIX2LAPACK_TYPEDEF(prefix) * buff_B, aocl_int64_t * ldim_B,    \
+                                PREFIX2LAPACK_TYPEDEF(prefix) * buff_w, aocl_int64_t * info)
 
 LAPACK_orml2(s, orm)
 {

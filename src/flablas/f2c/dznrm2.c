@@ -1,12 +1,12 @@
 /* dznrm2.f -- translated by f2c (version 19991025). You must link the resulting object file with the libraries: -lf2c -lm (in that order) */
 #include "FLA_f2c.h"
-doublereal dznrm2_(integer *n, doublecomplex *x, integer *incx)
+doublereal dznrm2_(integer *n, dcomplex *x, integer *incx)
 {
     /* System generated locals */
     integer i__1, i__2, i__3;
     doublereal ret_val, d__1;
     /* Builtin functions */
-    double d_imag(doublecomplex *), sqrt(doublereal);
+    double d_imag(dcomplex *), sqrt(doublereal);
     /* Local variables */
     doublereal temp, norm, scale;
     integer ix;

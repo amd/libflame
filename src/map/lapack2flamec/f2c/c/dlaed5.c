@@ -103,8 +103,21 @@
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void dlaed5_(integer *i__, doublereal *d__, doublereal *z__, doublereal *delta, doublereal *rho,
+/** Generated wrapper function */
+void dlaed5_(aocl_int_t *i__, doublereal *d__, doublereal *z__, doublereal *delta, doublereal *rho,
              doublereal *dlam)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_dlaed5(i__, d__, z__, delta, rho, dlam);
+#else
+    aocl_int64_t i___64 = *i__;
+
+    aocl_lapack_dlaed5(&i___64, d__, z__, delta, rho, dlam);
+#endif
+}
+
+void aocl_lapack_dlaed5(aocl_int64_t *i__, doublereal *d__, doublereal *z__, doublereal *delta,
+                        doublereal *rho, doublereal *dlam)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dlaed5 inputs: i__ %" FLA_IS "", *i__);

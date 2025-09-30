@@ -190,7 +190,7 @@ void libfla_test_her2k_experiment( test_params_t params,
 
 	// Currently, all flamec variants for her2k compute the wrong answer
 	// if the imaginary component of alpha is non-zero. Only the BLIS
-	// handles complex alphas correctly, so we will only test with them
+	// handles scomplex alphas correctly, so we will only test with them
 	// when it will succeed.
 	if ( impl == FLA_TEST_HIER_FRONT_END ||
 	     impl == FLA_TEST_FLAT_FRONT_END ||

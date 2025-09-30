@@ -5,7 +5,7 @@
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static real c_b8 = 1.f;
-static integer c__1 = 1;
+static aocl_int64_t c__1 = 1;
 /* > \brief \b CPPTRI */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -40,7 +40,7 @@ static integer c__1 = 1;
 /* > */
 /* > \verbatim */
 /* > */
-/* > CPPTRI computes the inverse of a complex Hermitian positive definite */
+/* > CPPTRI computes the inverse of a scomplex Hermitian positive definite */
 /* > matrix A using the Cholesky factorization A = U**H*U or A = L*L**H */
 /* > computed by CPPTRF. */
 /* > \endverbatim */
@@ -93,7 +93,22 @@ static integer c__1 = 1;
 /* > \ingroup complexOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void cpptri_(char *uplo, integer *n, complex *ap, integer *info)
+/** Generated wrapper function */
+void cpptri_(char *uplo, aocl_int_t *n, scomplex *ap, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_cpptri(uplo, n, ap, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_cpptri(uplo, &n_64, ap, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_cpptri(char *uplo, aocl_int64_t *n, scomplex *ap, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -106,29 +121,15 @@ void cpptri_(char *uplo, integer *n, complex *ap, integer *info)
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
-    integer i__1, i__2, i__3;
+    aocl_int64_t i__1, i__2, i__3;
     real r__1;
-    complex q__1;
+    scomplex q__1;
     /* Local variables */
-    integer j, jc, jj;
+    aocl_int64_t j, jc, jj;
     real ajj;
-    integer jjn;
-    extern /* Subroutine */
-        void
-        chpr_(char *, integer *, real *, complex *, integer *, complex *);
-    extern /* Complex */
-        VOID
-        cdotc_f2c_(complex *, integer *, complex *, integer *, complex *, integer *);
-    extern logical lsame_(char *, char *, integer, integer);
-    extern /* Subroutine */
-        void
-        ctpmv_(char *, char *, char *, integer *, complex *, complex *, integer *);
+    aocl_int64_t jjn;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     logical upper;
-    extern /* Subroutine */
-        void
-        csscal_(integer *, real *, complex *, integer *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len),
-        ctptri_(char *, char *, integer *, complex *, integer *);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -166,7 +167,7 @@ void cpptri_(char *uplo, integer *n, complex *ap, integer *info)
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("CPPTRI", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("CPPTRI", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
@@ -177,7 +178,7 @@ void cpptri_(char *uplo, integer *n, complex *ap, integer *info)
         return;
     }
     /* Invert the triangular Cholesky factor U or L. */
-    ctptri_(uplo, "Non-unit", n, &ap[1], info);
+    aocl_lapack_ctptri(uplo, "Non-unit", n, &ap[1], info);
     if(*info > 0)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
@@ -195,11 +196,11 @@ void cpptri_(char *uplo, integer *n, complex *ap, integer *info)
             if(j > 1)
             {
                 i__2 = j - 1;
-                chpr_("Upper", &i__2, &c_b8, &ap[jc], &c__1, &ap[1]);
+                aocl_blas_chpr("Upper", &i__2, &c_b8, &ap[jc], &c__1, &ap[1]);
             }
             i__2 = jj;
             ajj = ap[i__2].r;
-            csscal_(&j, &ajj, &ap[jc], &c__1);
+            aocl_blas_csscal(&j, &ajj, &ap[jc], &c__1);
             /* L10: */
         }
     }
@@ -213,15 +214,15 @@ void cpptri_(char *uplo, integer *n, complex *ap, integer *info)
             jjn = jj + *n - j + 1;
             i__2 = jj;
             i__3 = *n - j + 1;
-            cdotc_f2c_(&q__1, &i__3, &ap[jj], &c__1, &ap[jj], &c__1);
+            aocl_lapack_cdotc_f2c(&q__1, &i__3, &ap[jj], &c__1, &ap[jj], &c__1);
             r__1 = q__1.r;
             ap[i__2].r = r__1;
             ap[i__2].i = 0.f; // , expr subst
             if(j < *n)
             {
                 i__2 = *n - j;
-                ctpmv_("Lower", "Conjugate transpose", "Non-unit", &i__2, &ap[jjn], &ap[jj + 1],
-                       &c__1);
+                aocl_blas_ctpmv("Lower", "Conjugate transpose", "Non-unit", &i__2, &ap[jjn],
+                                &ap[jj + 1], &c__1);
             }
             jj = jjn;
             /* L20: */

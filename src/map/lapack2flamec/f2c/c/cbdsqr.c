@@ -5,7 +5,7 @@
  /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static doublereal c_b15 = -.125;
-static integer c__1 = 1;
+static aocl_int64_t c__1 = 1;
 static real c_b49 = 1.f;
 static real c_b72 = -1.f;
 /* > \brief \b CBDSQR */
@@ -56,14 +56,14 @@ static real c_b72 = -1.f;
 /* > right singular vectors. If left singular vectors are requested, this */
 /* > subroutine actually returns U*Q instead of Q, and, if right singular */
 /* > vectors are requested, this subroutine returns P**H*VT instead of */
-/* > P**H, for given complex input matrices U and VT. When U and VT are */
+/* > P**H, for given scomplex input matrices U and VT. When U and VT are */
 /* > the unitary matrices that reduce a general matrix A to bidiagonal */
 /* > form: A = U*B*VT, as computed by CGEBRD, then */
 /* > */
 /* > A = (U*Q) * S * (P**H*VT) */
 /* > */
 /* > is the SVD of A. Optionally, the subroutine may also compute Q**H*C */
-/* > for a given complex input matrix C. */
+/* > for a given scomplex input matrix C. */
 /* > */
 /* > See "Computing Small Singular Values of Bidiagonal Matrices With */
 /* > Guaranteed High Relative Accuracy," by J. Demmel and W. Kahan, */
@@ -235,9 +235,34 @@ if INFO = i, i */
 /* > \ingroup bdsqr */
 /* ===================================================================== */
 /* Subroutine */
-void cbdsqr_(char *uplo, integer *n, integer *ncvt, integer *nru, integer *ncc, real *d__, real *e,
-             complex *vt, integer *ldvt, complex *u, integer *ldu, complex *c__, integer *ldc,
-             real *rwork, integer *info)
+/** Generated wrapper function */
+void cbdsqr_(char *uplo, aocl_int_t *n, aocl_int_t *ncvt, aocl_int_t *nru, aocl_int_t *ncc,
+             real *d__, real *e, scomplex *vt, aocl_int_t *ldvt, scomplex *u, aocl_int_t *ldu,
+             scomplex *c__, aocl_int_t *ldc, real *rwork, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_cbdsqr(uplo, n, ncvt, nru, ncc, d__, e, vt, ldvt, u, ldu, c__, ldc, rwork, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t ncvt_64 = *ncvt;
+    aocl_int64_t nru_64 = *nru;
+    aocl_int64_t ncc_64 = *ncc;
+    aocl_int64_t ldvt_64 = *ldvt;
+    aocl_int64_t ldu_64 = *ldu;
+    aocl_int64_t ldc_64 = *ldc;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_cbdsqr(uplo, &n_64, &ncvt_64, &nru_64, &ncc_64, d__, e, vt, &ldvt_64, u, &ldu_64,
+                       c__, &ldc_64, rwork, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_cbdsqr(char *uplo, aocl_int64_t *n, aocl_int64_t *ncvt, aocl_int64_t *nru,
+                        aocl_int64_t *ncc, real *d__, real *e, scomplex *vt, aocl_int64_t *ldvt,
+                        scomplex *u, aocl_int64_t *ldu, scomplex *c__, aocl_int64_t *ldc, real *rwork,
+                        aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -255,53 +280,40 @@ void cbdsqr_(char *uplo, integer *n, integer *ncvt, integer *nru, integer *ncc, 
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
-    integer c_dim1, c_offset, u_dim1, u_offset, vt_dim1, vt_offset, i__1, i__2;
+    aocl_int64_t c_dim1, c_offset, u_dim1, u_offset, vt_dim1, vt_offset, i__1, i__2;
     real r__1, r__2, r__3, r__4;
     doublereal d__1;
     /* Builtin functions */
     double pow_dd(doublereal *, doublereal *), sqrt(doublereal), r_sign(real *, real *);
     /* Local variables */
-    integer iterdivn;
+    aocl_int64_t iterdivn;
     real f, g, h__;
-    integer i__, j, m;
+    aocl_int64_t i__, j, m;
     real r__;
-    integer maxitdivn;
+    aocl_int64_t maxitdivn;
     real cs;
-    integer ll;
+    aocl_int64_t ll;
     real sn, mu;
-    integer nm1, nm12, nm13, lll;
+    aocl_int64_t nm1, nm12, nm13, lll;
     real eps, sll, tol, abse;
-    integer idir;
+    aocl_int64_t idir;
     real abss;
-    integer oldm;
+    aocl_int64_t oldm;
     real cosl;
-    integer isub, iter;
+    aocl_int64_t isub, iter;
     real unfl, sinl, cosr, smin, smax, sinr;
     extern /* Subroutine */
         void
         slas2_(real *, real *, real *, real *, real *);
-    extern logical lsame_(char *, char *, integer, integer);
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     real oldcs;
-    extern /* Subroutine */
-        void
-        clasr_(char *, char *, char *, integer *, integer *, real *, real *, complex *, integer *);
-    integer oldll;
+    aocl_int64_t oldll;
     real shift, sigmn, oldsn;
-    extern /* Subroutine */
-        void
-        cswap_(integer *, complex *, integer *, complex *, integer *);
     real sigmx;
     logical lower;
-    extern /* Subroutine */
-        void
-        csrot_(integer *, complex *, integer *, complex *, integer *, real *, real *),
-        slasq1_(integer *, real *, real *, real *, integer *),
-        slasv2_(real *, real *, real *, real *, real *, real *, real *, real *, real *);
+    extern void
+     slasv2_(real *, real *, real *, real *, real *, real *, real *, real *, real *);
     extern real slamch_(char *);
-    extern /* Subroutine */
-        void
-        csscal_(integer *, real *, complex *, integer *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     real sminoa;
     extern /* Subroutine */
         void
@@ -380,7 +392,7 @@ void cbdsqr_(char *uplo, integer *n, integer *ncvt, integer *nru, integer *ncc, 
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("CBDSQR", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("CBDSQR", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
@@ -398,7 +410,7 @@ void cbdsqr_(char *uplo, integer *n, integer *ncvt, integer *nru, integer *ncc, 
     /* If no singular vectors desired, use qd algorithm */
     if(!rotate)
     {
-        slasq1_(n, &d__[1], &e[1], &rwork[1], info);
+        aocl_lapack_slasq1(n, &d__[1], &e[1], &rwork[1], info);
         /* If INFO equals 2, dqds didn't finish, try to finish */
         if(*info != 2)
         {
@@ -432,11 +444,11 @@ void cbdsqr_(char *uplo, integer *n, integer *ncvt, integer *nru, integer *ncc, 
         /* Update singular vectors if desired */
         if(*nru > 0)
         {
-            clasr_("R", "V", "F", nru, n, &rwork[1], &rwork[*n], &u[u_offset], ldu);
+            aocl_lapack_clasr("R", "V", "F", nru, n, &rwork[1], &rwork[*n], &u[u_offset], ldu);
         }
         if(*ncc > 0)
         {
-            clasr_("L", "V", "F", n, ncc, &rwork[1], &rwork[*n], &c__[c_offset], ldc);
+            aocl_lapack_clasr("L", "V", "F", n, ncc, &rwork[1], &rwork[*n], &c__[c_offset], ldc);
         }
     }
     /* Compute singular values to relative accuracy TOL */
@@ -582,15 +594,16 @@ L90:
         /* Compute singular vectors, if desired */
         if(*ncvt > 0)
         {
-            csrot_(ncvt, &vt[m - 1 + vt_dim1], ldvt, &vt[m + vt_dim1], ldvt, &cosr, &sinr);
+            aocl_blas_csrot(ncvt, &vt[m - 1 + vt_dim1], ldvt, &vt[m + vt_dim1], ldvt, &cosr, &sinr);
         }
         if(*nru > 0)
         {
-            csrot_(nru, &u[(m - 1) * u_dim1 + 1], &c__1, &u[m * u_dim1 + 1], &c__1, &cosl, &sinl);
+            aocl_blas_csrot(nru, &u[(m - 1) * u_dim1 + 1], &c__1, &u[m * u_dim1 + 1], &c__1, &cosl,
+                            &sinl);
         }
         if(*ncc > 0)
         {
-            csrot_(ncc, &c__[m - 1 + c_dim1], ldc, &c__[m + c_dim1], ldc, &cosl, &sinl);
+            aocl_blas_csrot(ncc, &c__[m - 1 + c_dim1], ldc, &c__[m + c_dim1], ldc, &cosl, &sinl);
         }
         m += -2;
         goto L60;
@@ -746,19 +759,20 @@ L90:
             if(*ncvt > 0)
             {
                 i__1 = m - ll + 1;
-                clasr_("L", "V", "F", &i__1, ncvt, &rwork[1], &rwork[*n], &vt[ll + vt_dim1], ldvt);
+                aocl_lapack_clasr("L", "V", "F", &i__1, ncvt, &rwork[1], &rwork[*n],
+                                  &vt[ll + vt_dim1], ldvt);
             }
             if(*nru > 0)
             {
                 i__1 = m - ll + 1;
-                clasr_("R", "V", "F", nru, &i__1, &rwork[nm12 + 1], &rwork[nm13 + 1],
-                       &u[ll * u_dim1 + 1], ldu);
+                aocl_lapack_clasr("R", "V", "F", nru, &i__1, &rwork[nm12 + 1], &rwork[nm13 + 1],
+                                  &u[ll * u_dim1 + 1], ldu);
             }
             if(*ncc > 0)
             {
                 i__1 = m - ll + 1;
-                clasr_("L", "V", "F", &i__1, ncc, &rwork[nm12 + 1], &rwork[nm13 + 1],
-                       &c__[ll + c_dim1], ldc);
+                aocl_lapack_clasr("L", "V", "F", &i__1, ncc, &rwork[nm12 + 1], &rwork[nm13 + 1],
+                                  &c__[ll + c_dim1], ldc);
             }
             /* Test convergence */
             if((r__1 = e[m - 1], f2c_abs(r__1)) <= thresh)
@@ -797,18 +811,20 @@ L90:
             if(*ncvt > 0)
             {
                 i__1 = m - ll + 1;
-                clasr_("L", "V", "B", &i__1, ncvt, &rwork[nm12 + 1], &rwork[nm13 + 1],
-                       &vt[ll + vt_dim1], ldvt);
+                aocl_lapack_clasr("L", "V", "B", &i__1, ncvt, &rwork[nm12 + 1], &rwork[nm13 + 1],
+                                  &vt[ll + vt_dim1], ldvt);
             }
             if(*nru > 0)
             {
                 i__1 = m - ll + 1;
-                clasr_("R", "V", "B", nru, &i__1, &rwork[1], &rwork[*n], &u[ll * u_dim1 + 1], ldu);
+                aocl_lapack_clasr("R", "V", "B", nru, &i__1, &rwork[1], &rwork[*n],
+                                  &u[ll * u_dim1 + 1], ldu);
             }
             if(*ncc > 0)
             {
                 i__1 = m - ll + 1;
-                clasr_("L", "V", "B", &i__1, ncc, &rwork[1], &rwork[*n], &c__[ll + c_dim1], ldc);
+                aocl_lapack_clasr("L", "V", "B", &i__1, ncc, &rwork[1], &rwork[*n],
+                                  &c__[ll + c_dim1], ldc);
             }
             /* Test convergence */
             if((r__1 = e[ll], f2c_abs(r__1)) <= thresh)
@@ -859,19 +875,20 @@ L90:
             if(*ncvt > 0)
             {
                 i__1 = m - ll + 1;
-                clasr_("L", "V", "F", &i__1, ncvt, &rwork[1], &rwork[*n], &vt[ll + vt_dim1], ldvt);
+                aocl_lapack_clasr("L", "V", "F", &i__1, ncvt, &rwork[1], &rwork[*n],
+                                  &vt[ll + vt_dim1], ldvt);
             }
             if(*nru > 0)
             {
                 i__1 = m - ll + 1;
-                clasr_("R", "V", "F", nru, &i__1, &rwork[nm12 + 1], &rwork[nm13 + 1],
-                       &u[ll * u_dim1 + 1], ldu);
+                aocl_lapack_clasr("R", "V", "F", nru, &i__1, &rwork[nm12 + 1], &rwork[nm13 + 1],
+                                  &u[ll * u_dim1 + 1], ldu);
             }
             if(*ncc > 0)
             {
                 i__1 = m - ll + 1;
-                clasr_("L", "V", "F", &i__1, ncc, &rwork[nm12 + 1], &rwork[nm13 + 1],
-                       &c__[ll + c_dim1], ldc);
+                aocl_lapack_clasr("L", "V", "F", &i__1, ncc, &rwork[nm12 + 1], &rwork[nm13 + 1],
+                                  &c__[ll + c_dim1], ldc);
             }
             /* Test convergence */
             if((r__1 = e[m - 1], f2c_abs(r__1)) <= thresh)
@@ -923,18 +940,20 @@ L90:
             if(*ncvt > 0)
             {
                 i__1 = m - ll + 1;
-                clasr_("L", "V", "B", &i__1, ncvt, &rwork[nm12 + 1], &rwork[nm13 + 1],
-                       &vt[ll + vt_dim1], ldvt);
+                aocl_lapack_clasr("L", "V", "B", &i__1, ncvt, &rwork[nm12 + 1], &rwork[nm13 + 1],
+                                  &vt[ll + vt_dim1], ldvt);
             }
             if(*nru > 0)
             {
                 i__1 = m - ll + 1;
-                clasr_("R", "V", "B", nru, &i__1, &rwork[1], &rwork[*n], &u[ll * u_dim1 + 1], ldu);
+                aocl_lapack_clasr("R", "V", "B", nru, &i__1, &rwork[1], &rwork[*n],
+                                  &u[ll * u_dim1 + 1], ldu);
             }
             if(*ncc > 0)
             {
                 i__1 = m - ll + 1;
-                clasr_("L", "V", "B", &i__1, ncc, &rwork[1], &rwork[*n], &c__[ll + c_dim1], ldc);
+                aocl_lapack_clasr("L", "V", "B", &i__1, ncc, &rwork[1], &rwork[*n],
+                                  &c__[ll + c_dim1], ldc);
             }
         }
     }
@@ -951,7 +970,7 @@ L160:
             /* Change sign of singular vectors, if desired */
             if(*ncvt > 0)
             {
-                csscal_(ncvt, &c_b72, &vt[i__ + vt_dim1], ldvt);
+                aocl_blas_csscal(ncvt, &c_b72, &vt[i__ + vt_dim1], ldvt);
             }
         }
         /* L170: */
@@ -981,15 +1000,16 @@ L160:
             d__[*n + 1 - i__] = smin;
             if(*ncvt > 0)
             {
-                cswap_(ncvt, &vt[isub + vt_dim1], ldvt, &vt[*n + 1 - i__ + vt_dim1], ldvt);
+                aocl_blas_cswap(ncvt, &vt[isub + vt_dim1], ldvt, &vt[*n + 1 - i__ + vt_dim1], ldvt);
             }
             if(*nru > 0)
             {
-                cswap_(nru, &u[isub * u_dim1 + 1], &c__1, &u[(*n + 1 - i__) * u_dim1 + 1], &c__1);
+                aocl_blas_cswap(nru, &u[isub * u_dim1 + 1], &c__1, &u[(*n + 1 - i__) * u_dim1 + 1],
+                                &c__1);
             }
             if(*ncc > 0)
             {
-                cswap_(ncc, &c__[isub + c_dim1], ldc, &c__[*n + 1 - i__ + c_dim1], ldc);
+                aocl_blas_cswap(ncc, &c__[isub + c_dim1], ldc, &c__[*n + 1 - i__ + c_dim1], ldc);
             }
         }
         /* L190: */

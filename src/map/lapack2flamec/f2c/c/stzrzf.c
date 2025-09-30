@@ -4,10 +4,10 @@
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
  /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
-static integer c_n1 = -1;
-static integer c__3 = 3;
-static integer c__2 = 2;
+static aocl_int64_t c__1 = 1;
+static aocl_int64_t c_n1 = -1;
+static aocl_int64_t c__3 = 3;
+static aocl_int64_t c__2 = 2;
 /* > \brief \b STZRZF */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -150,35 +150,39 @@ the routine */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void stzrzf_(integer *m, integer *n, real *a, integer *lda, real *tau, real *work, integer *lwork,
-             integer *info)
+/** Generated wrapper function */
+void stzrzf_(aocl_int_t *m, aocl_int_t *n, real *a, aocl_int_t *lda, real *tau, real *work,
+             aocl_int_t *lwork, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_stzrzf(m, n, a, lda, tau, work, lwork, info);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t lwork_64 = *lwork;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_stzrzf(&m_64, &n_64, a, &lda_64, tau, work, &lwork_64, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_stzrzf(aocl_int64_t *m, aocl_int64_t *n, real *a, aocl_int64_t *lda, real *tau,
+                        real *work, aocl_int64_t *lwork, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
-    AOCL_DTL_SNPRINTF(
-             "stzrzf inputs: m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS ", lwork %" FLA_IS "", *m,
-             *n, *lda, *lwork);
+    AOCL_DTL_SNPRINTF("stzrzf inputs: m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS ", lwork %" FLA_IS
+                      "",
+                      *m, *n, *lda, *lwork);
     /* System generated locals */
-    integer a_dim1, a_offset, i__1, i__2, i__3, i__4, i__5;
+    aocl_int64_t a_dim1, a_offset, i__1, i__2, i__3, i__4, i__5;
     /* Local variables */
-    integer i__, m1, ib, nb, ki, kk, mu, nx, iws, nbmin;
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
-    extern /* Subroutine */
-        void
-        slarzb_(char *, char *, char *, char *, integer *, integer *, integer *, integer *, real *,
-                integer *, real *, integer *, real *, integer *, real *, integer *);
-    integer lwkmin, ldwork;
-    extern /* Subroutine */
-        void
-        slarzt_(char *, char *, integer *, integer *, real *, integer *, real *, real *, integer *);
-    integer lwkopt;
+    aocl_int64_t i__, m1, ib, nb, ki, kk, mu, nx, iws, nbmin;
+    aocl_int64_t lwkmin, ldwork;
+    aocl_int64_t lwkopt;
     logical lquery;
-    extern /* Subroutine */
-        void
-        slatrz_(integer *, integer *, integer *, real *, integer *, real *, real *);
-    extern real sroundup_lwork(integer *);
     /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -220,7 +224,7 @@ void stzrzf_(integer *m, integer *n, real *a, integer *lda, real *tau, real *wor
     {
         *info = -4;
     }
-    nb = ilaenv_(&c__1, "SGERQF", " ", m, n, &c_n1, &c_n1);
+    nb = aocl_lapack_ilaenv(&c__1, "SGERQF", " ", m, n, &c_n1, &c_n1);
     if(*info == 0)
     {
         if(*m == 0 || *m == *n)
@@ -234,7 +238,7 @@ void stzrzf_(integer *m, integer *n, real *a, integer *lda, real *tau, real *wor
             lwkopt = *m * nb;
             lwkmin = fla_max(1, *m);
         }
-        work[1] = sroundup_lwork(&lwkopt);
+        work[1] = aocl_lapack_sroundup_lwork(&lwkopt);
         if(*lwork < lwkmin && !lquery)
         {
             *info = -7;
@@ -243,7 +247,7 @@ void stzrzf_(integer *m, integer *n, real *a, integer *lda, real *tau, real *wor
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("STZRZF", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("STZRZF", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -277,7 +281,7 @@ void stzrzf_(integer *m, integer *n, real *a, integer *lda, real *tau, real *wor
         /* Determine when to cross over from blocked to unblocked code. */
         /* Computing MAX */
         i__1 = 0;
-        i__2 = ilaenv_(&c__3, "SGERQF", " ", m, n, &c_n1, &c_n1); // , expr subst
+        i__2 = aocl_lapack_ilaenv(&c__3, "SGERQF", " ", m, n, &c_n1, &c_n1); // , expr subst
         nx = fla_max(i__1, i__2);
         if(nx < *m)
         {
@@ -291,7 +295,7 @@ void stzrzf_(integer *m, integer *n, real *a, integer *lda, real *tau, real *wor
                 nb = *lwork / ldwork;
                 /* Computing MAX */
                 i__1 = 2;
-                i__2 = ilaenv_(&c__2, "SGERQF", " ", m, n, &c_n1, &c_n1); // , expr subst
+                i__2 = aocl_lapack_ilaenv(&c__2, "SGERQF", " ", m, n, &c_n1, &c_n1); // , expr subst
                 nbmin = fla_max(i__1, i__2);
             }
         }
@@ -319,21 +323,21 @@ void stzrzf_(integer *m, integer *n, real *a, integer *lda, real *tau, real *wor
             /* A(i:i+ib-1,i:n) */
             i__3 = *n - i__ + 1;
             i__4 = *n - *m;
-            slatrz_(&ib, &i__3, &i__4, &a[i__ + i__ * a_dim1], lda, &tau[i__], &work[1]);
+            aocl_lapack_slatrz(&ib, &i__3, &i__4, &a[i__ + i__ * a_dim1], lda, &tau[i__], &work[1]);
             if(i__ > 1)
             {
                 /* Form the triangular factor of the block reflector */
                 /* H = H(i+ib-1) . . . H(i+1) H(i) */
                 i__3 = *n - *m;
-                slarzt_("Backward", "Rowwise", &i__3, &ib, &a[i__ + m1 * a_dim1], lda, &tau[i__],
-                        &work[1], &ldwork);
+                aocl_lapack_slarzt("Backward", "Rowwise", &i__3, &ib, &a[i__ + m1 * a_dim1], lda,
+                                   &tau[i__], &work[1], &ldwork);
                 /* Apply H to A(1:i-1,i:n) from the right */
                 i__3 = i__ - 1;
                 i__4 = *n - i__ + 1;
                 i__5 = *n - *m;
-                slarzb_("Right", "No transpose", "Backward", "Rowwise", &i__3, &i__4, &ib, &i__5,
-                        &a[i__ + m1 * a_dim1], lda, &work[1], &ldwork, &a[i__ * a_dim1 + 1], lda,
-                        &work[ib + 1], &ldwork);
+                aocl_lapack_slarzb("Right", "No transpose", "Backward", "Rowwise", &i__3, &i__4,
+                                   &ib, &i__5, &a[i__ + m1 * a_dim1], lda, &work[1], &ldwork,
+                                   &a[i__ * a_dim1 + 1], lda, &work[ib + 1], &ldwork);
             }
             /* L20: */
         }
@@ -347,9 +351,9 @@ void stzrzf_(integer *m, integer *n, real *a, integer *lda, real *tau, real *wor
     if(mu > 0)
     {
         i__2 = *n - *m;
-        slatrz_(&mu, n, &i__2, &a[a_offset], lda, &tau[1], &work[1]);
+        aocl_lapack_slatrz(&mu, n, &i__2, &a[a_offset], lda, &tau[1], &work[1]);
     }
-    work[1] = sroundup_lwork(&lwkopt);
+    work[1] = aocl_lapack_sroundup_lwork(&lwkopt);
     AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of STZRZF */

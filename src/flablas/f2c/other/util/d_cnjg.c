@@ -1,5 +1,5 @@
 #include "FLA_f2c.h"
- void d_cnjg(doublecomplex *dest, doublecomplex *src) {
+ void d_cnjg(dcomplex *dest, dcomplex *src) {
  dest->r = src->r ;
  dest->i = -(src->i);
  }

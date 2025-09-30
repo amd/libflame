@@ -13,13 +13,13 @@ double d_acos(doublereal *x)
     return (acos(*x));
 }
 /*
-void c_acos(complex *r, complex *z)
+void c_acos(scomplex *r, scomplex *z)
 {
   double _Complex ret_val = cacos(*z);
   r->r = creal(ret_val);
   r->i = cimag(ret_val);
 }
-void z_acos(doublecomplex *r, doublecomplex *z)
+void z_acos(dcomplex *r, dcomplex *z)
 {
   double _Complex ret_val = cacos(*z);
   r->r = creal(ret_val);

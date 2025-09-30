@@ -4,9 +4,9 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static complex c_b1 = {1.f, 0.f};
-static complex c_b2 = {0.f, 0.f};
-static integer c__1 = 1;
+static scomplex c_b1 = {{1.f}, {0.f}};
+static scomplex c_b2 = {{0.f}, {0.f}};
+static aocl_int64_t c__1 = 1;
 /* > \brief \b CSPTRI */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -42,7 +42,7 @@ static integer c__1 = 1;
 /* > */
 /* > \verbatim */
 /* > */
-/* > CSPTRI computes the inverse of a complex symmetric indefinite matrix */
+/* > CSPTRI computes the inverse of a scomplex symmetric indefinite matrix */
 /* > A in packed storage using the factorization A = U*D*U**T or */
 /* > A = L*D*L**T computed by CSPTRF. */
 /* > \endverbatim */
@@ -111,7 +111,24 @@ the matrix is singular and its */
 /* > \ingroup complexOTHERcomputational */
 /* ===================================================================== */
 /* Subroutine */
-void csptri_(char *uplo, integer *n, complex *ap, integer *ipiv, complex *work, integer *info)
+/** Generated wrapper function */
+void csptri_(char *uplo, aocl_int_t *n, scomplex *ap, aocl_int_t *ipiv, scomplex *work,
+             aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_csptri(uplo, n, ap, ipiv, work, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_csptri(uplo, &n_64, ap, ipiv, work, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_csptri(char *uplo, aocl_int64_t *n, scomplex *ap, aocl_int_t *ipiv, scomplex *work,
+                        aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -124,36 +141,20 @@ void csptri_(char *uplo, integer *n, complex *ap, integer *ipiv, complex *work, 
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
-    integer i__1, i__2, i__3;
-    complex q__1, q__2, q__3;
+    aocl_int64_t i__1, i__2, i__3;
+    scomplex q__1, q__2, q__3;
     /* Builtin functions */
-    void c_div(complex *, complex *, complex *);
+    void c_div(scomplex *, scomplex *, scomplex *);
     /* Local variables */
-    complex d__;
-    integer j, k;
-    complex t, ak;
-    integer kc, kp, kx, kpc, npp;
-    complex akp1, temp, akkp1;
-    extern logical lsame_(char *, char *, integer, integer);
-    extern /* Subroutine */
-        void
-        ccopy_(integer *, complex *, integer *, complex *, integer *);
-    extern /* Complex */
-        VOID
-        cdotu_f2c_(complex *, integer *, complex *, integer *, complex *, integer *);
-    extern /* Subroutine */
-        void
-        cswap_(integer *, complex *, integer *, complex *, integer *);
-    integer kstep;
-    extern /* Subroutine */
-        void
-        cspmv_(char *, integer *, complex *, complex *, complex *, integer *, complex *, complex *,
-               integer *);
+    scomplex d__;
+    aocl_int64_t j, k;
+    scomplex t, ak;
+    aocl_int64_t kc, kp, kx, kpc, npp;
+    scomplex akp1, temp, akkp1;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    aocl_int64_t kstep;
     logical upper;
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    integer kcnext;
+    aocl_int64_t kcnext;
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -193,7 +194,7 @@ void csptri_(char *uplo, integer *n, complex *ap, integer *ipiv, complex *work, 
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("CSPTRI", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("CSPTRI", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
@@ -263,15 +264,16 @@ void csptri_(char *uplo, integer *n, complex *ap, integer *ipiv, complex *work, 
             if(k > 1)
             {
                 i__1 = k - 1;
-                ccopy_(&i__1, &ap[kc], &c__1, &work[1], &c__1);
+                aocl_blas_ccopy(&i__1, &ap[kc], &c__1, &work[1], &c__1);
                 i__1 = k - 1;
                 q__1.r = -1.f;
                 q__1.i = -0.f; // , expr subst
-                cspmv_(uplo, &i__1, &q__1, &ap[1], &work[1], &c__1, &c_b2, &ap[kc], &c__1);
+                aocl_lapack_cspmv(uplo, &i__1, &q__1, &ap[1], &work[1], &c__1, &c_b2, &ap[kc],
+                                  &c__1);
                 i__1 = kc + k - 1;
                 i__2 = kc + k - 1;
                 i__3 = k - 1;
-                cdotu_f2c_(&q__2, &i__3, &work[1], &c__1, &ap[kc], &c__1);
+                aocl_lapack_cdotu_f2c(&q__2, &i__3, &work[1], &c__1, &ap[kc], &c__1);
                 q__1.r = ap[i__2].r - q__2.r;
                 q__1.i = ap[i__2].i - q__2.i; // , expr subst
                 ap[i__1].r = q__1.r;
@@ -321,15 +323,16 @@ void csptri_(char *uplo, integer *n, complex *ap, integer *ipiv, complex *work, 
             if(k > 1)
             {
                 i__1 = k - 1;
-                ccopy_(&i__1, &ap[kc], &c__1, &work[1], &c__1);
+                aocl_blas_ccopy(&i__1, &ap[kc], &c__1, &work[1], &c__1);
                 i__1 = k - 1;
                 q__1.r = -1.f;
                 q__1.i = -0.f; // , expr subst
-                cspmv_(uplo, &i__1, &q__1, &ap[1], &work[1], &c__1, &c_b2, &ap[kc], &c__1);
+                aocl_lapack_cspmv(uplo, &i__1, &q__1, &ap[1], &work[1], &c__1, &c_b2, &ap[kc],
+                                  &c__1);
                 i__1 = kc + k - 1;
                 i__2 = kc + k - 1;
                 i__3 = k - 1;
-                cdotu_f2c_(&q__2, &i__3, &work[1], &c__1, &ap[kc], &c__1);
+                aocl_lapack_cdotu_f2c(&q__2, &i__3, &work[1], &c__1, &ap[kc], &c__1);
                 q__1.r = ap[i__2].r - q__2.r;
                 q__1.i = ap[i__2].i - q__2.i; // , expr subst
                 ap[i__1].r = q__1.r;
@@ -337,21 +340,22 @@ void csptri_(char *uplo, integer *n, complex *ap, integer *ipiv, complex *work, 
                 i__1 = kcnext + k - 1;
                 i__2 = kcnext + k - 1;
                 i__3 = k - 1;
-                cdotu_f2c_(&q__2, &i__3, &ap[kc], &c__1, &ap[kcnext], &c__1);
+                aocl_lapack_cdotu_f2c(&q__2, &i__3, &ap[kc], &c__1, &ap[kcnext], &c__1);
                 q__1.r = ap[i__2].r - q__2.r;
                 q__1.i = ap[i__2].i - q__2.i; // , expr subst
                 ap[i__1].r = q__1.r;
                 ap[i__1].i = q__1.i; // , expr subst
                 i__1 = k - 1;
-                ccopy_(&i__1, &ap[kcnext], &c__1, &work[1], &c__1);
+                aocl_blas_ccopy(&i__1, &ap[kcnext], &c__1, &work[1], &c__1);
                 i__1 = k - 1;
                 q__1.r = -1.f;
                 q__1.i = -0.f; // , expr subst
-                cspmv_(uplo, &i__1, &q__1, &ap[1], &work[1], &c__1, &c_b2, &ap[kcnext], &c__1);
+                aocl_lapack_cspmv(uplo, &i__1, &q__1, &ap[1], &work[1], &c__1, &c_b2, &ap[kcnext],
+                                  &c__1);
                 i__1 = kcnext + k;
                 i__2 = kcnext + k;
                 i__3 = k - 1;
-                cdotu_f2c_(&q__2, &i__3, &work[1], &c__1, &ap[kcnext], &c__1);
+                aocl_lapack_cdotu_f2c(&q__2, &i__3, &work[1], &c__1, &ap[kcnext], &c__1);
                 q__1.r = ap[i__2].r - q__2.r;
                 q__1.i = ap[i__2].i - q__2.i; // , expr subst
                 ap[i__1].r = q__1.r;
@@ -367,7 +371,7 @@ void csptri_(char *uplo, integer *n, complex *ap, integer *ipiv, complex *work, 
             /* submatrix A(1:k+1,1:k+1) */
             kpc = (kp - 1) * kp / 2 + 1;
             i__1 = kp - 1;
-            cswap_(&i__1, &ap[kc], &c__1, &ap[kpc], &c__1);
+            aocl_blas_cswap(&i__1, &ap[kc], &c__1, &ap[kpc], &c__1);
             kx = kpc + kp - 1;
             i__1 = k - 1;
             for(j = kp + 1; j <= i__1; ++j)
@@ -440,16 +444,16 @@ void csptri_(char *uplo, integer *n, complex *ap, integer *ipiv, complex *work, 
             if(k < *n)
             {
                 i__1 = *n - k;
-                ccopy_(&i__1, &ap[kc + 1], &c__1, &work[1], &c__1);
+                aocl_blas_ccopy(&i__1, &ap[kc + 1], &c__1, &work[1], &c__1);
                 i__1 = *n - k;
                 q__1.r = -1.f;
                 q__1.i = -0.f; // , expr subst
-                cspmv_(uplo, &i__1, &q__1, &ap[kc + *n - k + 1], &work[1], &c__1, &c_b2,
-                       &ap[kc + 1], &c__1);
+                aocl_lapack_cspmv(uplo, &i__1, &q__1, &ap[kc + *n - k + 1], &work[1], &c__1, &c_b2,
+                                  &ap[kc + 1], &c__1);
                 i__1 = kc;
                 i__2 = kc;
                 i__3 = *n - k;
-                cdotu_f2c_(&q__2, &i__3, &work[1], &c__1, &ap[kc + 1], &c__1);
+                aocl_lapack_cdotu_f2c(&q__2, &i__3, &work[1], &c__1, &ap[kc + 1], &c__1);
                 q__1.r = ap[i__2].r - q__2.r;
                 q__1.i = ap[i__2].i - q__2.i; // , expr subst
                 ap[i__1].r = q__1.r;
@@ -499,16 +503,16 @@ void csptri_(char *uplo, integer *n, complex *ap, integer *ipiv, complex *work, 
             if(k < *n)
             {
                 i__1 = *n - k;
-                ccopy_(&i__1, &ap[kc + 1], &c__1, &work[1], &c__1);
+                aocl_blas_ccopy(&i__1, &ap[kc + 1], &c__1, &work[1], &c__1);
                 i__1 = *n - k;
                 q__1.r = -1.f;
                 q__1.i = -0.f; // , expr subst
-                cspmv_(uplo, &i__1, &q__1, &ap[kc + (*n - k + 1)], &work[1], &c__1, &c_b2,
-                       &ap[kc + 1], &c__1);
+                aocl_lapack_cspmv(uplo, &i__1, &q__1, &ap[kc + (*n - k + 1)], &work[1], &c__1,
+                                  &c_b2, &ap[kc + 1], &c__1);
                 i__1 = kc;
                 i__2 = kc;
                 i__3 = *n - k;
-                cdotu_f2c_(&q__2, &i__3, &work[1], &c__1, &ap[kc + 1], &c__1);
+                aocl_lapack_cdotu_f2c(&q__2, &i__3, &work[1], &c__1, &ap[kc + 1], &c__1);
                 q__1.r = ap[i__2].r - q__2.r;
                 q__1.i = ap[i__2].i - q__2.i; // , expr subst
                 ap[i__1].r = q__1.r;
@@ -516,22 +520,22 @@ void csptri_(char *uplo, integer *n, complex *ap, integer *ipiv, complex *work, 
                 i__1 = kcnext + 1;
                 i__2 = kcnext + 1;
                 i__3 = *n - k;
-                cdotu_f2c_(&q__2, &i__3, &ap[kc + 1], &c__1, &ap[kcnext + 2], &c__1);
+                aocl_lapack_cdotu_f2c(&q__2, &i__3, &ap[kc + 1], &c__1, &ap[kcnext + 2], &c__1);
                 q__1.r = ap[i__2].r - q__2.r;
                 q__1.i = ap[i__2].i - q__2.i; // , expr subst
                 ap[i__1].r = q__1.r;
                 ap[i__1].i = q__1.i; // , expr subst
                 i__1 = *n - k;
-                ccopy_(&i__1, &ap[kcnext + 2], &c__1, &work[1], &c__1);
+                aocl_blas_ccopy(&i__1, &ap[kcnext + 2], &c__1, &work[1], &c__1);
                 i__1 = *n - k;
                 q__1.r = -1.f;
                 q__1.i = -0.f; // , expr subst
-                cspmv_(uplo, &i__1, &q__1, &ap[kc + (*n - k + 1)], &work[1], &c__1, &c_b2,
-                       &ap[kcnext + 2], &c__1);
+                aocl_lapack_cspmv(uplo, &i__1, &q__1, &ap[kc + (*n - k + 1)], &work[1], &c__1,
+                                  &c_b2, &ap[kcnext + 2], &c__1);
                 i__1 = kcnext;
                 i__2 = kcnext;
                 i__3 = *n - k;
-                cdotu_f2c_(&q__2, &i__3, &work[1], &c__1, &ap[kcnext + 2], &c__1);
+                aocl_lapack_cdotu_f2c(&q__2, &i__3, &work[1], &c__1, &ap[kcnext + 2], &c__1);
                 q__1.r = ap[i__2].r - q__2.r;
                 q__1.i = ap[i__2].i - q__2.i; // , expr subst
                 ap[i__1].r = q__1.r;
@@ -549,7 +553,7 @@ void csptri_(char *uplo, integer *n, complex *ap, integer *ipiv, complex *work, 
             if(kp < *n)
             {
                 i__1 = *n - kp;
-                cswap_(&i__1, &ap[kc + kp - k + 1], &c__1, &ap[kpc + 1], &c__1);
+                aocl_blas_cswap(&i__1, &ap[kc + kp - k + 1], &c__1, &ap[kpc + 1], &c__1);
             }
             kx = kc + kp - k;
             i__1 = kp - 1;

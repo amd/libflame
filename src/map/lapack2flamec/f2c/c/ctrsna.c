@@ -4,7 +4,7 @@
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
  /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
+static aocl_int64_t c__1 = 1;
 /* > \brief \b CTRSNA */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -45,7 +45,7 @@ static integer c__1 = 1;
 /* > \verbatim */
 /* > */
 /* > CTRSNA estimates reciprocal condition numbers for specified */
-/* > eigenvalues and/or right eigenvectors of a complex upper triangular */
+/* > eigenvalues and/or right eigenvectors of a scomplex upper triangular */
 /* > matrix T (or of any matrix Q*T*Q**H with Q unitary). */
 /* > \endverbatim */
 /* Arguments: */
@@ -250,9 +250,37 @@ v**H denotes the conjugate transpose of v, and norm(u) */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void ctrsna_(char *job, char *howmny, logical *select, integer *n, complex *t, integer *ldt,
-             complex *vl, integer *ldvl, complex *vr, integer *ldvr, real *s, real *sep,
-             integer *mm, integer *m, complex *work, integer *ldwork, real *rwork, integer *info)
+/** Generated wrapper function */
+void ctrsna_(char *job, char *howmny, logical *select, aocl_int_t *n, scomplex *t, aocl_int_t *ldt,
+             scomplex *vl, aocl_int_t *ldvl, scomplex *vr, aocl_int_t *ldvr, real *s, real *sep,
+             aocl_int_t *mm, aocl_int_t *m, scomplex *work, aocl_int_t *ldwork, real *rwork,
+             aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_ctrsna(job, howmny, select, n, t, ldt, vl, ldvl, vr, ldvr, s, sep, mm, m, work,
+                       ldwork, rwork, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t ldt_64 = *ldt;
+    aocl_int64_t ldvl_64 = *ldvl;
+    aocl_int64_t ldvr_64 = *ldvr;
+    aocl_int64_t mm_64 = *mm;
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t ldwork_64 = *ldwork;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_ctrsna(job, howmny, select, &n_64, t, &ldt_64, vl, &ldvl_64, vr, &ldvr_64, s, sep,
+                       &mm_64, &m_64, work, &ldwork_64, rwork, &info_64);
+
+    *m = (aocl_int_t)m_64;
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_ctrsna(char *job, char *howmny, logical *select, aocl_int64_t *n, scomplex *t,
+                        aocl_int64_t *ldt, scomplex *vl, aocl_int64_t *ldvl, scomplex *vr,
+                        aocl_int64_t *ldvr, real *s, real *sep, aocl_int64_t *mm, aocl_int64_t *m,
+                        scomplex *work, aocl_int64_t *ldwork, real *rwork, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -270,44 +298,25 @@ void ctrsna_(char *job, char *howmny, logical *select, integer *n, complex *t, i
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
-    integer t_dim1, t_offset, vl_dim1, vl_offset, vr_dim1, vr_offset, work_dim1, work_offset, i__1,
-        i__2, i__3, i__4, i__5;
+    aocl_int64_t t_dim1, t_offset, vl_dim1, vl_offset, vr_dim1, vr_offset, work_dim1, work_offset,
+        i__1, i__2, i__3, i__4, i__5;
     real r__1, r__2;
-    complex q__1;
+    scomplex q__1;
     /* Builtin functions */
-    double c_abs(complex *), r_imag(complex *);
+    double c_abs(scomplex *), r_imag(scomplex *);
     /* Local variables */
-    integer i__, j, k, ks, ix;
+    aocl_int64_t i__, j, k, ks, ix;
     real eps, est;
-    integer kase, ierr;
-    complex prod;
+    aocl_int64_t kase, ierr;
+    scomplex prod;
     real lnrm, rnrm, scale;
-    extern /* Complex */
-        void
-        cdotc_f2c_(complex *, integer *, complex *, integer *, complex *, integer *);
-    extern logical lsame_(char *, char *, integer, integer);
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     integer isave[3];
-    complex dummy[1];
+    scomplex dummy[1];
     logical wants;
-    extern /* Subroutine */
-        void
-        clacn2_(integer *, complex *, complex *, real *, integer *, integer *);
     real xnorm;
-    extern real scnrm2_(integer *, complex *, integer *);
-    extern integer icamax_(integer *, complex *, integer *);
     extern real slamch_(char *);
-    extern /* Subroutine */
-        void
-        clacpy_(char *, integer *, integer *, complex *, integer *, complex *, integer *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     logical wantbh;
-    extern /* Subroutine */
-        void
-        clatrs_(char *, char *, char *, char *, integer *, complex *, integer *, complex *, real *,
-                real *, integer *),
-        csrscl_(integer *, real *, complex *, integer *),
-        ctrexc_(char *, integer *, complex *, integer *, complex *, integer *, integer *, integer *,
-                integer *);
     logical somcon;
     char normin[1];
     real smlnum;
@@ -415,7 +424,7 @@ void ctrsna_(char *job, char *howmny, logical *select, integer *n, complex *t, i
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("CTRSNA", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("CTRSNA", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
@@ -464,11 +473,11 @@ void ctrsna_(char *job, char *howmny, logical *select, integer *n, complex *t, i
         {
             /* Compute the reciprocal condition number of the k-th */
             /* eigenvalue. */
-            cdotc_f2c_(&q__1, n, &vr[ks * vr_dim1 + 1], &c__1, &vl[ks * vl_dim1 + 1], &c__1);
+            aocl_lapack_cdotc_f2c(&q__1, n, &vr[ks * vr_dim1 + 1], &c__1, &vl[ks * vl_dim1 + 1], &c__1);
             prod.r = q__1.r;
             prod.i = q__1.i; // , expr subst
-            rnrm = scnrm2_(n, &vr[ks * vr_dim1 + 1], &c__1);
-            lnrm = scnrm2_(n, &vl[ks * vl_dim1 + 1], &c__1);
+            rnrm = aocl_blas_scnrm2(n, &vr[ks * vr_dim1 + 1], &c__1);
+            lnrm = aocl_blas_scnrm2(n, &vl[ks * vl_dim1 + 1], &c__1);
             s[ks] = c_abs(&prod) / (rnrm * lnrm);
         }
         if(wantsp)
@@ -477,8 +486,9 @@ void ctrsna_(char *job, char *howmny, logical *select, integer *n, complex *t, i
             /* eigenvector. */
             /* Copy the matrix T to the array WORK and swap the k-th */
             /* diagonal element to the (1,1) position. */
-            clacpy_("Full", n, n, &t[t_offset], ldt, &work[work_offset], ldwork);
-            ctrexc_("No Q", n, &work[work_offset], ldwork, dummy, &c__1, &k, &c__1, &ierr);
+            aocl_lapack_clacpy("Full", n, n, &t[t_offset], ldt, &work[work_offset], ldwork);
+            aocl_lapack_ctrexc("No Q", n, &work[work_offset], ldwork, dummy, &c__1, &k, &c__1,
+                               &ierr);
             /* Form C = T22 - lambda*I in WORK(2:N,2:N). */
             i__2 = *n;
             for(i__ = 2; i__ <= i__2; ++i__)
@@ -500,24 +510,25 @@ void ctrsna_(char *job, char *howmny, logical *select, integer *n, complex *t, i
             *(unsigned char *)normin = 'N';
         L30:
             i__2 = *n - 1;
-            clacn2_(&i__2, &work[(*n + 1) * work_dim1 + 1], &work[work_offset], &est, &kase, isave);
+            aocl_lapack_clacn2(&i__2, &work[(*n + 1) * work_dim1 + 1], &work[work_offset], &est,
+                               &kase, isave);
             if(kase != 0)
             {
                 if(kase == 1)
                 {
                     /* Solve C**H*x = scale*b */
                     i__2 = *n - 1;
-                    clatrs_("Upper", "Conjugate transpose", "Nonunit", normin, &i__2,
-                            &work[(work_dim1 << 1) + 2], ldwork, &work[work_offset], &scale,
-                            &rwork[1], &ierr);
+                    aocl_lapack_clatrs("Upper", "Conjugate transpose", "Nonunit", normin, &i__2,
+                                       &work[(work_dim1 << 1) + 2], ldwork, &work[work_offset],
+                                       &scale, &rwork[1], &ierr);
                 }
                 else
                 {
                     /* Solve C*x = scale*b */
                     i__2 = *n - 1;
-                    clatrs_("Upper", "No transpose", "Nonunit", normin, &i__2,
-                            &work[(work_dim1 << 1) + 2], ldwork, &work[work_offset], &scale,
-                            &rwork[1], &ierr);
+                    aocl_lapack_clatrs("Upper", "No transpose", "Nonunit", normin, &i__2,
+                                       &work[(work_dim1 << 1) + 2], ldwork, &work[work_offset],
+                                       &scale, &rwork[1], &ierr);
                 }
                 *(unsigned char *)normin = 'Y';
                 if(scale != 1.f)
@@ -525,7 +536,7 @@ void ctrsna_(char *job, char *howmny, logical *select, integer *n, complex *t, i
                     /* Multiply by 1/SCALE if doing so will not cause */
                     /* overflow. */
                     i__2 = *n - 1;
-                    ix = icamax_(&i__2, &work[work_offset], &c__1);
+                    ix = aocl_blas_icamax(&i__2, &work[work_offset], &c__1);
                     i__2 = ix + work_dim1;
                     xnorm = (r__1 = work[i__2].r, f2c_abs(r__1))
                             + (r__2 = r_imag(&work[ix + work_dim1]), f2c_abs(r__2));
@@ -533,7 +544,7 @@ void ctrsna_(char *job, char *howmny, logical *select, integer *n, complex *t, i
                     {
                         goto L40;
                     }
-                    csrscl_(n, &scale, &work[work_offset], &c__1);
+                    aocl_lapack_csrscl(n, &scale, &work[work_offset], &c__1);
                 }
                 goto L30;
             }

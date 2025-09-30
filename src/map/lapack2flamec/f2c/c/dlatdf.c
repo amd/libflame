@@ -4,8 +4,8 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
-static integer c_n1 = -1;
+static aocl_int64_t c__1 = 1;
+static aocl_int64_t c_n1 = -1;
 static doublereal c_b23 = 1.;
 static doublereal c_b37 = -1.;
 /* > \brief \b DLATDF uses the LU factorization of the n-by-n matrix computed by sgetc2 and computes
@@ -171,43 +171,42 @@ for 1 <= j <= N, column j of the */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void dlatdf_(integer *ijob, integer *n, doublereal *z__, integer *ldz, doublereal *rhs,
-             doublereal *rdsum, doublereal *rdscal, integer *ipiv, integer *jpiv)
+/** Generated wrapper function */
+void dlatdf_(aocl_int_t *ijob, aocl_int_t *n, doublereal *z__, aocl_int_t *ldz, doublereal *rhs,
+             doublereal *rdsum, doublereal *rdscal, aocl_int_t *ipiv, aocl_int_t *jpiv)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_dlatdf(ijob, n, z__, ldz, rhs, rdsum, rdscal, ipiv, jpiv);
+#else
+    aocl_int64_t ijob_64 = *ijob;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t ldz_64 = *ldz;
+
+    aocl_lapack_dlatdf(&ijob_64, &n_64, z__, &ldz_64, rhs, rdsum, rdscal, ipiv, jpiv);
+#endif
+}
+
+void aocl_lapack_dlatdf(aocl_int64_t *ijob, aocl_int64_t *n, doublereal *z__, aocl_int64_t *ldz,
+                        doublereal *rhs, doublereal *rdsum, doublereal *rdscal, aocl_int_t *ipiv,
+                        aocl_int_t *jpiv)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dlatdf inputs: ijob %" FLA_IS ", n %" FLA_IS ", ldz %" FLA_IS "", *ijob, *n,
                       *ldz);
     /* System generated locals */
-    integer z_dim1, z_offset, i__1, i__2;
+    aocl_int64_t z_dim1, z_offset, i__1, i__2;
     doublereal d__1;
     /* Builtin functions */
     double sqrt(doublereal);
     /* Local variables */
-    integer i__, j, k;
+    aocl_int64_t i__, j, k;
     doublereal bm, bp, xm[8], xp[8];
-    extern doublereal ddot_(integer *, doublereal *, integer *, doublereal *, integer *);
-    integer info;
+    aocl_int64_t info;
     doublereal temp, work[32];
-    extern /* Subroutine */
-        void
-        dscal_(integer *, doublereal *, doublereal *, integer *);
-    extern doublereal dasum_(integer *, doublereal *, integer *);
     doublereal pmone;
-    extern /* Subroutine */
-        void
-        dcopy_(integer *, doublereal *, integer *, doublereal *, integer *),
-        daxpy_(integer *, doublereal *, doublereal *, integer *, doublereal *, integer *);
     doublereal sminu;
     integer iwork[8];
     doublereal splus;
-    extern /* Subroutine */
-        void
-        dgesc2_(integer *, doublereal *, integer *, doublereal *, integer *, integer *,
-                doublereal *),
-        dgecon_(char *, integer *, doublereal *, integer *, doublereal *, doublereal *,
-                doublereal *, integer *, integer *),
-        dlassq_(integer *, doublereal *, integer *, doublereal *, doublereal *),
-        dlaswp_(integer *, doublereal *, integer *, integer *, integer *, integer *, integer *);
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -242,7 +241,7 @@ void dlatdf_(integer *ijob, integer *n, doublereal *z__, integer *ldz, doublerea
     {
         /* Apply permutations IPIV to RHS */
         i__1 = *n - 1;
-        dlaswp_(&c__1, &rhs[1], ldz, &c__1, &i__1, &ipiv[1], &c__1);
+        aocl_lapack_dlaswp(&c__1, &rhs[1], ldz, &c__1, &i__1, &ipiv[1], &c__1);
         /* Solve for L-part choosing RHS either to +1 or -1. */
         pmone = -1.;
         i__1 = *n - 1;
@@ -254,9 +253,10 @@ void dlatdf_(integer *ijob, integer *n, doublereal *z__, integer *ldz, doublerea
             /* Look-ahead for L-part RHS(1:N-1) = + or -1, SPLUS and */
             /* SMIN computed more efficiently than in BSOLVE [1]. */
             i__2 = *n - j;
-            splus += ddot_(&i__2, &z__[j + 1 + j * z_dim1], &c__1, &z__[j + 1 + j * z_dim1], &c__1);
+            splus += aocl_blas_ddot(&i__2, &z__[j + 1 + j * z_dim1], &c__1,
+                                    &z__[j + 1 + j * z_dim1], &c__1);
             i__2 = *n - j;
-            sminu = ddot_(&i__2, &z__[j + 1 + j * z_dim1], &c__1, &rhs[j + 1], &c__1);
+            sminu = aocl_blas_ddot(&i__2, &z__[j + 1 + j * z_dim1], &c__1, &rhs[j + 1], &c__1);
             splus *= rhs[j];
             if(splus > sminu)
             {
@@ -279,7 +279,7 @@ void dlatdf_(integer *ijob, integer *n, doublereal *z__, integer *ldz, doublerea
             /* Compute the remaining r.h.s. */
             temp = -rhs[j];
             i__2 = *n - j;
-            daxpy_(&i__2, &temp, &z__[j + 1 + j * z_dim1], &c__1, &rhs[j + 1], &c__1);
+            aocl_blas_daxpy(&i__2, &temp, &z__[j + 1 + j * z_dim1], &c__1, &rhs[j + 1], &c__1);
             /* L10: */
         }
         /* Solve for U-part, look-ahead for RHS(N) = +-1. This is not done */
@@ -287,7 +287,7 @@ void dlatdf_(integer *ijob, integer *n, doublereal *z__, integer *ldz, doublerea
         /* any ill-conditioning of the original matrix is transfered to U */
         /* and not to L. U(N, N) is an approximation to sigma_min(LU). */
         i__1 = *n - 1;
-        dcopy_(&i__1, &rhs[1], &c__1, xp, &c__1);
+        aocl_blas_dcopy(&i__1, &rhs[1], &c__1, xp, &c__1);
         xp[*n - 1] = rhs[*n] + 1.;
         rhs[*n] += -1.;
         splus = 0.;
@@ -310,35 +310,35 @@ void dlatdf_(integer *ijob, integer *n, doublereal *z__, integer *ldz, doublerea
         }
         if(splus > sminu)
         {
-            dcopy_(n, xp, &c__1, &rhs[1], &c__1);
+            aocl_blas_dcopy(n, xp, &c__1, &rhs[1], &c__1);
         }
         /* Apply the permutations JPIV to the computed solution (RHS) */
         i__1 = *n - 1;
-        dlaswp_(&c__1, &rhs[1], ldz, &c__1, &i__1, &jpiv[1], &c_n1);
+        aocl_lapack_dlaswp(&c__1, &rhs[1], ldz, &c__1, &i__1, &jpiv[1], &c_n1);
         /* Compute the sum of squares */
-        dlassq_(n, &rhs[1], &c__1, rdscal, rdsum);
+        aocl_lapack_dlassq(n, &rhs[1], &c__1, rdscal, rdsum);
     }
     else
     {
         /* IJOB = 2, Compute approximate nullvector XM of Z */
-        dgecon_("I", n, &z__[z_offset], ldz, &c_b23, &temp, work, iwork, &info);
-        dcopy_(n, &work[*n], &c__1, xm, &c__1);
+        aocl_lapack_dgecon("I", n, &z__[z_offset], ldz, &c_b23, &temp, work, iwork, &info);
+        aocl_blas_dcopy(n, &work[*n], &c__1, xm, &c__1);
         /* Compute RHS */
         i__1 = *n - 1;
-        dlaswp_(&c__1, xm, ldz, &c__1, &i__1, &ipiv[1], &c_n1);
-        temp = 1. / sqrt(ddot_(n, xm, &c__1, xm, &c__1));
-        dscal_(n, &temp, xm, &c__1);
-        dcopy_(n, xm, &c__1, xp, &c__1);
-        daxpy_(n, &c_b23, &rhs[1], &c__1, xp, &c__1);
-        daxpy_(n, &c_b37, xm, &c__1, &rhs[1], &c__1);
-        dgesc2_(n, &z__[z_offset], ldz, &rhs[1], &ipiv[1], &jpiv[1], &temp);
-        dgesc2_(n, &z__[z_offset], ldz, xp, &ipiv[1], &jpiv[1], &temp);
-        if(dasum_(n, xp, &c__1) > dasum_(n, &rhs[1], &c__1))
+        aocl_lapack_dlaswp(&c__1, xm, ldz, &c__1, &i__1, &ipiv[1], &c_n1);
+        temp = 1. / sqrt(aocl_blas_ddot(n, xm, &c__1, xm, &c__1));
+        aocl_blas_dscal(n, &temp, xm, &c__1);
+        aocl_blas_dcopy(n, xm, &c__1, xp, &c__1);
+        aocl_blas_daxpy(n, &c_b23, &rhs[1], &c__1, xp, &c__1);
+        aocl_blas_daxpy(n, &c_b37, xm, &c__1, &rhs[1], &c__1);
+        aocl_lapack_dgesc2(n, &z__[z_offset], ldz, &rhs[1], &ipiv[1], &jpiv[1], &temp);
+        aocl_lapack_dgesc2(n, &z__[z_offset], ldz, xp, &ipiv[1], &jpiv[1], &temp);
+        if(aocl_blas_dasum(n, xp, &c__1) > aocl_blas_dasum(n, &rhs[1], &c__1))
         {
-            dcopy_(n, xp, &c__1, &rhs[1], &c__1);
+            aocl_blas_dcopy(n, xp, &c__1, &rhs[1], &c__1);
         }
         /* Compute the sum of squares */
-        dlassq_(n, &rhs[1], &c__1, rdscal, rdsum);
+        aocl_lapack_dlassq(n, &rhs[1], &c__1, rdscal, rdsum);
     }
     AOCL_DTL_TRACE_LOG_EXIT
     return;

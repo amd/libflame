@@ -230,7 +230,7 @@ void fla_test_steqr_experiment(char *tst_api, test_params_t *params, integer dat
     /* performance computation
     24 n^2 flops for eigen vectors of Z, compz = 'N'
     7 n^3 flops for eigen vectors of Z, compz = 'V' or 'I'
-    14 n^3 flops for eigen vectors of Z for complex, compz = 'V' or 'I' */
+    14 n^3 flops for eigen vectors of Z for scomplex, compz = 'V' or 'I' */
 
     if(same_char(compz, 'V') || same_char(compz, 'I'))
         perf = (double)(7.0 * n * n * n) / time_min / FLOPS_PER_UNIT_PERF;

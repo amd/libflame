@@ -4,7 +4,7 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
+static aocl_int64_t c__1 = 1;
 /* > \brief \b CLAIC1 applies one step of incremental condition estimation. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -132,8 +132,22 @@ static integer c__1 = 1;
 /* > \ingroup complexOTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-void claic1_(integer *job, integer *j, complex *x, real *sest, complex *w, complex *gamma,
-             real *sestpr, complex *s, complex *c__)
+/** Generated wrapper function */
+void claic1_(aocl_int_t *job, aocl_int_t *j, scomplex *x, real *sest, scomplex *w, scomplex *gamma,
+             real *sestpr, scomplex *s, scomplex *c__)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_claic1(job, j, x, sest, w, gamma, sestpr, s, c__);
+#else
+    aocl_int64_t job_64 = *job;
+    aocl_int64_t j_64 = *j;
+
+    aocl_lapack_claic1(&job_64, &j_64, x, sest, w, gamma, sestpr, s, c__);
+#endif
+}
+
+void aocl_lapack_claic1(aocl_int64_t *job, aocl_int64_t *j, scomplex *x, real *sest, scomplex *w,
+                        scomplex *gamma, real *sestpr, scomplex *s, scomplex *c__)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -147,23 +161,20 @@ void claic1_(integer *job, integer *j, complex *x, real *sest, complex *w, compl
 #endif
     /* System generated locals */
     real r__1, r__2;
-    complex q__1, q__2, q__3, q__4, q__5, q__6;
+    scomplex q__1, q__2, q__3, q__4, q__5, q__6;
     /* Builtin functions */
-    double c_abs(complex *);
-    void r_cnjg(complex *, complex *), c_sqrt(complex *, complex *);
+    double c_abs(scomplex *);
+    void r_cnjg(scomplex *, scomplex *), c_sqrt(scomplex *, scomplex *);
     double sqrt(doublereal);
-    void c_div(complex *, complex *, complex *);
+    void c_div(scomplex *, scomplex *, scomplex *);
     /* Local variables */
     real b, t, s1, s2, scl, eps, tmp;
-    complex sine;
+    scomplex sine;
     real test, zeta1, zeta2;
-    complex alpha;
-    extern /* Complex */
-        VOID
-        cdotc_f2c_(complex *, integer *, complex *, integer *, complex *, integer *);
+    scomplex alpha;
     real norma, absgam, absalp;
     extern real slamch_(char *);
-    complex cosine;
+    scomplex cosine;
     real absest;
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -188,7 +199,7 @@ void claic1_(integer *job, integer *j, complex *x, real *sest, complex *w, compl
     --x;
     /* Function Body */
     eps = slamch_("Epsilon");
-    cdotc_f2c_(&q__1, j, &x[1], &c__1, &w[1], &c__1);
+    aocl_lapack_cdotc_f2c(&q__1, j, &x[1], &c__1, &w[1], &c__1);
     alpha.r = q__1.r;
     alpha.i = q__1.i; // , expr subst
     absalp = c_abs(&alpha);

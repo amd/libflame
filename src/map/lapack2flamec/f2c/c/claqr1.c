@@ -102,7 +102,21 @@
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void claqr1_(integer *n, complex *h__, integer *ldh, complex *s1, complex *s2, complex *v)
+/** Generated wrapper function */
+void claqr1_(aocl_int_t *n, scomplex *h__, aocl_int_t *ldh, scomplex *s1, scomplex *s2, scomplex *v)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_claqr1(n, h__, ldh, s1, s2, v);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t ldh_64 = *ldh;
+
+    aocl_lapack_claqr1(&n_64, h__, &ldh_64, s1, s2, v);
+#endif
+}
+
+void aocl_lapack_claqr1(aocl_int64_t *n, scomplex *h__, aocl_int64_t *ldh, scomplex *s1, scomplex *s2,
+                        scomplex *v)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -115,12 +129,12 @@ void claqr1_(integer *n, complex *h__, integer *ldh, complex *s1, complex *s2, c
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
-    integer h_dim1, h_offset, i__1, i__2, i__3, i__4;
+    aocl_int64_t h_dim1, h_offset, i__1, i__2, i__3, i__4;
     real r__1, r__2, r__3, r__4, r__5, r__6;
-    complex q__1, q__2, q__3, q__4, q__5, q__6, q__7, q__8;
+    scomplex q__1, q__2, q__3, q__4, q__5, q__6, q__7, q__8;
     /* Local variables */
     real s;
-    complex h21s, h31s;
+    scomplex h21s, h31s;
     /* -- LAPACK auxiliary routine (version 3.7.1) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */

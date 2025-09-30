@@ -136,8 +136,23 @@
 /* > \ingroup complexGEauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-void claqge_(integer *m, integer *n, complex *a, integer *lda, real *r__, real *c__, real *rowcnd,
-             real *colcnd, real *amax, char *equed)
+/** Generated wrapper function */
+void claqge_(aocl_int_t *m, aocl_int_t *n, scomplex *a, aocl_int_t *lda, real *r__, real *c__,
+             real *rowcnd, real *colcnd, real *amax, char *equed)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_claqge(m, n, a, lda, r__, c__, rowcnd, colcnd, amax, equed);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t lda_64 = *lda;
+
+    aocl_lapack_claqge(&m_64, &n_64, a, &lda_64, r__, c__, rowcnd, colcnd, amax, equed);
+#endif
+}
+
+void aocl_lapack_claqge(aocl_int64_t *m, aocl_int64_t *n, scomplex *a, aocl_int64_t *lda, real *r__,
+                        real *c__, real *rowcnd, real *colcnd, real *amax, char *equed)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -150,11 +165,11 @@ void claqge_(integer *m, integer *n, complex *a, integer *lda, real *r__, real *
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
-    integer a_dim1, a_offset, i__1, i__2, i__3, i__4, i__5;
+    aocl_int64_t a_dim1, a_offset, i__1, i__2, i__3, i__4, i__5;
     real r__1;
-    complex q__1;
+    scomplex q__1;
     /* Local variables */
-    integer i__, j;
+    aocl_int64_t i__, j;
     real cj, large, small_val;
     extern real slamch_(char *);
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */

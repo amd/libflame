@@ -1,17 +1,17 @@
 /* zdrot.f -- translated by f2c (version 19991025). You must link the resulting object file with the libraries: -lf2c -lm (in that order) */
 #include "FLA_f2c.h"
 /* Subroutine */
-int zdrot_(integer *n, doublecomplex *zx, integer *incx, doublecomplex *zy, integer *incy, doublereal *c__, doublereal *s)
+int zdrot_(integer *n, dcomplex *zx, integer *incx, dcomplex *zy, integer *incy, doublereal *c__, doublereal *s)
 {
     /* System generated locals */
     integer i__1, i__2, i__3, i__4;
-    doublecomplex z__1, z__2, z__3;
+    dcomplex z__1, z__2, z__3;
     /* Local variables */
     integer i__;
-    doublecomplex ztemp;
+    dcomplex ztemp;
     integer ix, iy;
     /* applies a plane rotation, where the cos and sin (c and s) are */
-    /* double precision and the vectors zx and zy are double complex. */
+    /* double precision and the vectors zx and zy are double scomplex. */
     /* jack dongarra, linpack, 3/11/78. */
     /* Parameter adjustments */
     --zy;

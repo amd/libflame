@@ -194,23 +194,35 @@
 /* > \ingroup auxOTHERauxiliary */
 /* ===================================================================== */
 /* Subroutine */
-void dlasr_(char *side, char *pivot, char *direct, integer *m, integer *n, doublereal *c__,
-            doublereal *s, doublereal *a, integer *lda)
+/** Generated wrapper function */
+void dlasr_(char *side, char *pivot, char *direct, aocl_int_t *m, aocl_int_t *n, doublereal *c__,
+            doublereal *s, doublereal *a, aocl_int_t *lda)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_dlasr(side, pivot, direct, m, n, c__, s, a, lda);
+#else
+    aocl_int64_t m_64 = *m;
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t lda_64 = *lda;
+
+    aocl_lapack_dlasr(side, pivot, direct, &m_64, &n_64, c__, s, a, &lda_64);
+#endif
+}
+
+void aocl_lapack_dlasr(char *side, char *pivot, char *direct, aocl_int64_t *m, aocl_int64_t *n,
+                       doublereal *c__, doublereal *s, doublereal *a, aocl_int64_t *lda)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dlasr inputs: side %c, pivot %c, direct %c, m %" FLA_IS ", n %" FLA_IS
                       ", lda %" FLA_IS "",
                       *side, *pivot, *direct, *m, *n, *lda);
     /* System generated locals */
-    integer a_dim1, a_offset, i__1, i__2;
+    aocl_int64_t a_dim1, a_offset, i__1, i__2;
     /* Local variables */
-    integer i__, j, info;
+    aocl_int64_t i__, j, info;
     doublereal temp;
-    extern logical lsame_(char *, char *, integer, integer);
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     doublereal ctemp, stemp;
-    extern /* Subroutine */
-        void
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -266,7 +278,7 @@ void dlasr_(char *side, char *pivot, char *direct, integer *m, integer *n, doubl
     }
     if(info != 0)
     {
-        xerbla_("DLASR ", &info, (ftnlen)6);
+        aocl_blas_xerbla("DLASR ", &info, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }

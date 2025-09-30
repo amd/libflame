@@ -4,8 +4,8 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static complex c_b2 = {0.f, 0.f};
-static integer c__1 = 1;
+static scomplex c_b2 = {{0.f}, {0.f}};
+static aocl_int64_t c__1 = 1;
 /* > \brief \b CHETD2 reduces a Hermitian matrix to real symmetric tridiagonal form by an unitary
  * similarity t ransformation (unblocked algorithm). */
 /* =========== DOCUMENTATION =========== */
@@ -42,7 +42,7 @@ static integer c__1 = 1;
 /* > */
 /* > \verbatim */
 /* > */
-/* > CHETD2 reduces a complex Hermitian matrix A to real symmetric */
+/* > CHETD2 reduces a scomplex Hermitian matrix A to real symmetric */
 /* > tridiagonal form T by a unitary similarity transformation: */
 /* > Q**H * A * Q = T. */
 /* > \endverbatim */
@@ -141,7 +141,7 @@ if UPLO */
 /* > */
 /* > H(i) = I - tau * v * v**H */
 /* > */
-/* > where tau is a complex scalar, and v is a complex vector with */
+/* > where tau is a scomplex scalar, and v is a scomplex vector with */
 /* > v(i+1:n) = 0 and v(i) = 1;
 v(1:i-1) is stored on exit in */
 /* > A(1:i-1,i+1), and tau in TAU(i). */
@@ -155,7 +155,7 @@ v(1:i-1) is stored on exit in */
 /* > */
 /* > H(i) = I - tau * v * v**H */
 /* > */
-/* > where tau is a complex scalar, and v is a complex vector with */
+/* > where tau is a scomplex scalar, and v is a scomplex vector with */
 /* > v(1:i) = 0 and v(i+1) = 1;
 v(i+2:n) is stored on exit in A(i+2:n,i), */
 /* > and tau in TAU(i). */
@@ -177,35 +177,19 @@ v(i+2:n) is stored on exit in A(i+2:n,i), */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void chetd2_fla(char *uplo, integer *n, complex *a, integer *lda, real *d__, real *e, complex *tau,
-                integer *info)
+void chetd2_fla(char *uplo, aocl_int64_t *n, scomplex *a, aocl_int64_t *lda, real *d__, real *e,
+                scomplex *tau, aocl_int64_t *info)
 {
     /* System generated locals */
-    integer a_dim1, a_offset, i__1, i__2, i__3;
+    aocl_int64_t a_dim1, a_offset, i__1, i__2, i__3;
     real r__1;
-    complex q__1, q__2, q__3, q__4;
+    scomplex q__1, q__2, q__3, q__4;
     /* Local variables */
-    integer i__;
-    complex taui;
-    extern /* Subroutine */
-        void
-        cher2_(char *, integer *, complex *, complex *, integer *, complex *, integer *, complex *,
-               integer *);
-    complex alpha;
-    extern /* Complex */
-        VOID
-        cdotc_f2c_(complex *, integer *, complex *, integer *, complex *, integer *);
-    extern logical lsame_(char *, char *, integer, integer);
-    extern /* Subroutine */
-        void
-        chemv_(char *, integer *, complex *, complex *, integer *, complex *, integer *, complex *,
-               complex *, integer *),
-        caxpy_(integer *, complex *, complex *, integer *, complex *, integer *);
+    aocl_int64_t i__;
+    scomplex taui;
+    scomplex alpha;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     logical upper;
-    extern /* Subroutine */
-        void
-        clarfg_(integer *, complex *, complex *, integer *, complex *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -252,7 +236,7 @@ void chetd2_fla(char *uplo, integer *n, complex *a, integer *lda, real *d__, rea
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("CHETD2", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("CHETD2", &i__1, (ftnlen)6);
         return;
     }
     /* Quick return if possible */
@@ -275,7 +259,7 @@ void chetd2_fla(char *uplo, integer *n, complex *a, integer *lda, real *d__, rea
             i__1 = i__ + (i__ + 1) * a_dim1;
             alpha.r = a[i__1].r;
             alpha.i = a[i__1].i; // , expr subst
-            clarfg_(&i__, &alpha, &a[(i__ + 1) * a_dim1 + 1], &c__1, &taui);
+            aocl_lapack_clarfg(&i__, &alpha, &a[(i__ + 1) * a_dim1 + 1], &c__1, &taui);
             i__1 = i__;
             e[i__1] = alpha.r;
             if(taui.r != 0.f || taui.i != 0.f)
@@ -285,25 +269,25 @@ void chetd2_fla(char *uplo, integer *n, complex *a, integer *lda, real *d__, rea
                 a[i__1].r = 1.f;
                 a[i__1].i = 0.f; // , expr subst
                 /* Compute x := tau * A * v storing x in TAU(1:i) */
-                chemv_(uplo, &i__, &taui, &a[a_offset], lda, &a[(i__ + 1) * a_dim1 + 1], &c__1,
-                       &c_b2, &tau[1], &c__1);
+                aocl_blas_chemv(uplo, &i__, &taui, &a[a_offset], lda, &a[(i__ + 1) * a_dim1 + 1],
+                                &c__1, &c_b2, &tau[1], &c__1);
                 /* Compute w := x - 1/2 * tau * (x**H * v) * v */
                 q__3.r = -.5f;
                 q__3.i = -0.f; // , expr subst
                 q__2.r = q__3.r * taui.r - q__3.i * taui.i;
                 q__2.i = q__3.r * taui.i + q__3.i * taui.r; // , expr subst
-                cdotc_f2c_(&q__4, &i__, &tau[1], &c__1, &a[(i__ + 1) * a_dim1 + 1], &c__1);
+                aocl_lapack_cdotc_f2c(&q__4, &i__, &tau[1], &c__1, &a[(i__ + 1) * a_dim1 + 1], &c__1);
                 q__1.r = q__2.r * q__4.r - q__2.i * q__4.i;
                 q__1.i = q__2.r * q__4.i + q__2.i * q__4.r; // , expr subst
                 alpha.r = q__1.r;
                 alpha.i = q__1.i; // , expr subst
-                caxpy_(&i__, &alpha, &a[(i__ + 1) * a_dim1 + 1], &c__1, &tau[1], &c__1);
+                aocl_blas_caxpy(&i__, &alpha, &a[(i__ + 1) * a_dim1 + 1], &c__1, &tau[1], &c__1);
                 /* Apply the transformation as a rank-2 update: */
                 /* A := A - v * w**H - w * v**H */
                 q__1.r = -1.f;
                 q__1.i = -0.f; // , expr subst
-                cher2_(uplo, &i__, &q__1, &a[(i__ + 1) * a_dim1 + 1], &c__1, &tau[1], &c__1,
-                       &a[a_offset], lda);
+                aocl_blas_cher2(uplo, &i__, &q__1, &a[(i__ + 1) * a_dim1 + 1], &c__1, &tau[1],
+                                &c__1, &a[a_offset], lda);
             }
             else
             {
@@ -347,7 +331,7 @@ void chetd2_fla(char *uplo, integer *n, complex *a, integer *lda, real *d__, rea
             i__2 = *n - i__;
             /* Computing MIN */
             i__3 = i__ + 2;
-            clarfg_(&i__2, &alpha, &a[fla_min(i__3, *n) + i__ * a_dim1], &c__1, &taui);
+            aocl_lapack_clarfg(&i__2, &alpha, &a[fla_min(i__3, *n) + i__ * a_dim1], &c__1, &taui);
             i__2 = i__;
             e[i__2] = alpha.r;
             if(taui.r != 0.f || taui.i != 0.f)
@@ -358,28 +342,28 @@ void chetd2_fla(char *uplo, integer *n, complex *a, integer *lda, real *d__, rea
                 a[i__2].i = 0.f; // , expr subst
                 /* Compute x := tau * A * v storing y in TAU(i:n-1) */
                 i__2 = *n - i__;
-                chemv_(uplo, &i__2, &taui, &a[i__ + 1 + (i__ + 1) * a_dim1], lda,
-                       &a[i__ + 1 + i__ * a_dim1], &c__1, &c_b2, &tau[i__], &c__1);
+                aocl_blas_chemv(uplo, &i__2, &taui, &a[i__ + 1 + (i__ + 1) * a_dim1], lda,
+                                &a[i__ + 1 + i__ * a_dim1], &c__1, &c_b2, &tau[i__], &c__1);
                 /* Compute w := x - 1/2 * tau * (x**H * v) * v */
                 q__3.r = -.5f;
                 q__3.i = -0.f; // , expr subst
                 q__2.r = q__3.r * taui.r - q__3.i * taui.i;
                 q__2.i = q__3.r * taui.i + q__3.i * taui.r; // , expr subst
                 i__2 = *n - i__;
-                cdotc_f2c_(&q__4, &i__2, &tau[i__], &c__1, &a[i__ + 1 + i__ * a_dim1], &c__1);
+                aocl_lapack_cdotc_f2c(&q__4, &i__2, &tau[i__], &c__1, &a[i__ + 1 + i__ * a_dim1], &c__1);
                 q__1.r = q__2.r * q__4.r - q__2.i * q__4.i;
                 q__1.i = q__2.r * q__4.i + q__2.i * q__4.r; // , expr subst
                 alpha.r = q__1.r;
                 alpha.i = q__1.i; // , expr subst
                 i__2 = *n - i__;
-                caxpy_(&i__2, &alpha, &a[i__ + 1 + i__ * a_dim1], &c__1, &tau[i__], &c__1);
+                aocl_blas_caxpy(&i__2, &alpha, &a[i__ + 1 + i__ * a_dim1], &c__1, &tau[i__], &c__1);
                 /* Apply the transformation as a rank-2 update: */
                 /* A := A - v * w**H - w * v**H */
                 i__2 = *n - i__;
                 q__1.r = -1.f;
                 q__1.i = -0.f; // , expr subst
-                cher2_(uplo, &i__2, &q__1, &a[i__ + 1 + i__ * a_dim1], &c__1, &tau[i__], &c__1,
-                       &a[i__ + 1 + (i__ + 1) * a_dim1], lda);
+                aocl_blas_cher2(uplo, &i__2, &q__1, &a[i__ + 1 + i__ * a_dim1], &c__1, &tau[i__],
+                                &c__1, &a[i__ + 1 + (i__ + 1) * a_dim1], lda);
             }
             else
             {

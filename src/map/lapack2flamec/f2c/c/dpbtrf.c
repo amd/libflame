@@ -4,11 +4,11 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
-static integer c_n1 = -1;
+static aocl_int64_t c__1 = 1;
+static aocl_int64_t c_n1 = -1;
 static doublereal c_b18 = 1.;
 static doublereal c_b21 = -1.;
-static integer c__33 = 33;
+static aocl_int64_t c__33 = 33;
 /* > \brief \b DPBTRF */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -143,32 +143,37 @@ static integer c__33 = 33;
 /* > Peter Mayes and Giuseppe Radicati, IBM ECSEC, Rome, March 23, 1989 */
 /* ===================================================================== */
 /* Subroutine */
-void dpbtrf_(char *uplo, integer *n, integer *kd, doublereal *ab, integer *ldab, integer *info)
+/** Generated wrapper function */
+void dpbtrf_(char *uplo, aocl_int_t *n, aocl_int_t *kd, doublereal *ab, aocl_int_t *ldab,
+             aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_dpbtrf(uplo, n, kd, ab, ldab, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t kd_64 = *kd;
+    aocl_int64_t ldab_64 = *ldab;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_dpbtrf(uplo, &n_64, &kd_64, ab, &ldab_64, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_dpbtrf(char *uplo, aocl_int64_t *n, aocl_int64_t *kd, doublereal *ab,
+                        aocl_int64_t *ldab, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dpbtrf inputs: uplo %c, n %" FLA_IS ", kd %" FLA_IS ", ldab %" FLA_IS "",
                       *uplo, *n, *kd, *ldab);
     /* System generated locals */
-    integer ab_dim1, ab_offset, i__1, i__2, i__3, i__4;
+    aocl_int64_t ab_dim1, ab_offset, i__1, i__2, i__3, i__4;
     /* Local variables */
-    integer i__, j, i2, i3, ib, nb, ii, jj;
+    aocl_int64_t i__, j, i2, i3, ib, nb, ii, jj;
     doublereal work[1056] /* was [33][32] */
         ;
-    extern /* Subroutine */
-        void
-        dgemm_(char *, char *, integer *, integer *, integer *, doublereal *, doublereal *,
-               integer *, doublereal *, integer *, doublereal *, doublereal *, integer *);
-    extern logical lsame_(char *, char *, integer, integer);
-    extern /* Subroutine */
-        void
-        dtrsm_(char *, char *, char *, char *, integer *, integer *, doublereal *, doublereal *,
-               integer *, doublereal *, integer *),
-        dsyrk_(char *, char *, integer *, integer *, doublereal *, doublereal *, integer *,
-               doublereal *, doublereal *, integer *),
-        dpbtf2_(char *, integer *, integer *, doublereal *, integer *, integer *),
-        dpotf2_(char *, integer *, doublereal *, integer *, integer *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -217,7 +222,7 @@ void dpbtrf_(char *uplo, integer *n, integer *kd, doublereal *ab, integer *ldab,
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("DPBTRF", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("DPBTRF", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -228,14 +233,14 @@ void dpbtrf_(char *uplo, integer *n, integer *kd, doublereal *ab, integer *ldab,
         return;
     }
     /* Determine the block size for this environment */
-    nb = ilaenv_(&c__1, "DPBTRF", uplo, n, kd, &c_n1, &c_n1);
+    nb = aocl_lapack_ilaenv(&c__1, "DPBTRF", uplo, n, kd, &c_n1, &c_n1);
     /* The block size must not exceed the semi-bandwidth KD, and must not */
     /* exceed the limit set by the size of the local array WORK. */
     nb = fla_min(nb, 32);
     if(nb <= 1 || nb > *kd)
     {
         /* Use unblocked code */
-        dpbtf2_(uplo, n, kd, &ab[ab_offset], ldab, info);
+        aocl_lapack_dpbtf2(uplo, n, kd, &ab[ab_offset], ldab, info);
     }
     else
     {
@@ -268,7 +273,7 @@ void dpbtrf_(char *uplo, integer *n, integer *kd, doublereal *ab, integer *ldab,
                 ib = fla_min(i__3, i__4);
                 /* Factorize the diagonal block */
                 i__3 = *ldab - 1;
-                dpotf2_(uplo, &ib, &ab[*kd + 1 + i__ * ab_dim1], &i__3, &ii);
+                aocl_lapack_dpotf2(uplo, &ib, &ab[*kd + 1 + i__ * ab_dim1], &i__3, &ii);
                 if(ii != 0)
                 {
                     *info = i__ + ii - 1;
@@ -300,15 +305,15 @@ void dpbtrf_(char *uplo, integer *n, integer *kd, doublereal *ab, integer *ldab,
                         /* Update A12 */
                         i__3 = *ldab - 1;
                         i__4 = *ldab - 1;
-                        dtrsm_("Left", "Upper", "Transpose", "Non-unit", &ib, &i2, &c_b18,
-                               &ab[*kd + 1 + i__ * ab_dim1], &i__3,
-                               &ab[*kd + 1 - ib + (i__ + ib) * ab_dim1], &i__4);
+                        aocl_blas_dtrsm("Left", "Upper", "Transpose", "Non-unit", &ib, &i2, &c_b18,
+                                        &ab[*kd + 1 + i__ * ab_dim1], &i__3,
+                                        &ab[*kd + 1 - ib + (i__ + ib) * ab_dim1], &i__4);
                         /* Update A22 */
                         i__3 = *ldab - 1;
                         i__4 = *ldab - 1;
-                        dsyrk_("Upper", "Transpose", &i2, &ib, &c_b21,
-                               &ab[*kd + 1 - ib + (i__ + ib) * ab_dim1], &i__3, &c_b18,
-                               &ab[*kd + 1 + (i__ + ib) * ab_dim1], &i__4);
+                        aocl_blas_dsyrk("Upper", "Transpose", &i2, &ib, &c_b21,
+                                        &ab[*kd + 1 - ib + (i__ + ib) * ab_dim1], &i__3, &c_b18,
+                                        &ab[*kd + 1 + (i__ + ib) * ab_dim1], &i__4);
                     }
                     if(i3 > 0)
                     {
@@ -327,21 +332,22 @@ void dpbtrf_(char *uplo, integer *n, integer *kd, doublereal *ab, integer *ldab,
                         }
                         /* Update A13 (in the work array). */
                         i__3 = *ldab - 1;
-                        dtrsm_("Left", "Upper", "Transpose", "Non-unit", &ib, &i3, &c_b18,
-                               &ab[*kd + 1 + i__ * ab_dim1], &i__3, work, &c__33);
+                        aocl_blas_dtrsm("Left", "Upper", "Transpose", "Non-unit", &ib, &i3, &c_b18,
+                                        &ab[*kd + 1 + i__ * ab_dim1], &i__3, work, &c__33);
                         /* Update A23 */
                         if(i2 > 0)
                         {
                             i__3 = *ldab - 1;
                             i__4 = *ldab - 1;
-                            dgemm_("Transpose", "No Transpose", &i2, &i3, &ib, &c_b21,
-                                   &ab[*kd + 1 - ib + (i__ + ib) * ab_dim1], &i__3, work, &c__33,
-                                   &c_b18, &ab[ib + 1 + (i__ + *kd) * ab_dim1], &i__4);
+                            aocl_blas_dgemm("Transpose", "No Transpose", &i2, &i3, &ib, &c_b21,
+                                            &ab[*kd + 1 - ib + (i__ + ib) * ab_dim1], &i__3, work,
+                                            &c__33, &c_b18, &ab[ib + 1 + (i__ + *kd) * ab_dim1],
+                                            &i__4);
                         }
                         /* Update A33 */
                         i__3 = *ldab - 1;
-                        dsyrk_("Upper", "Transpose", &i3, &ib, &c_b21, work, &c__33, &c_b18,
-                               &ab[*kd + 1 + (i__ + *kd) * ab_dim1], &i__3);
+                        aocl_blas_dsyrk("Upper", "Transpose", &i3, &ib, &c_b21, work, &c__33,
+                                        &c_b18, &ab[*kd + 1 + (i__ + *kd) * ab_dim1], &i__3);
                         /* Copy the lower triangle of A13 back into place. */
                         i__3 = i3;
                         for(jj = 1; jj <= i__3; ++jj)
@@ -388,7 +394,7 @@ void dpbtrf_(char *uplo, integer *n, integer *kd, doublereal *ab, integer *ldab,
                 ib = fla_min(i__3, i__4);
                 /* Factorize the diagonal block */
                 i__3 = *ldab - 1;
-                dpotf2_(uplo, &ib, &ab[i__ * ab_dim1 + 1], &i__3, &ii);
+                aocl_lapack_dpotf2(uplo, &ib, &ab[i__ * ab_dim1 + 1], &i__3, &ii);
                 if(ii != 0)
                 {
                     *info = i__ + ii - 1;
@@ -420,14 +426,15 @@ void dpbtrf_(char *uplo, integer *n, integer *kd, doublereal *ab, integer *ldab,
                         /* Update A21 */
                         i__3 = *ldab - 1;
                         i__4 = *ldab - 1;
-                        dtrsm_("Right", "Lower", "Transpose", "Non-unit", &i2, &ib, &c_b18,
-                               &ab[i__ * ab_dim1 + 1], &i__3, &ab[ib + 1 + i__ * ab_dim1], &i__4);
+                        aocl_blas_dtrsm("Right", "Lower", "Transpose", "Non-unit", &i2, &ib, &c_b18,
+                                        &ab[i__ * ab_dim1 + 1], &i__3, &ab[ib + 1 + i__ * ab_dim1],
+                                        &i__4);
                         /* Update A22 */
                         i__3 = *ldab - 1;
                         i__4 = *ldab - 1;
-                        dsyrk_("Lower", "No Transpose", &i2, &ib, &c_b21,
-                               &ab[ib + 1 + i__ * ab_dim1], &i__3, &c_b18,
-                               &ab[(i__ + ib) * ab_dim1 + 1], &i__4);
+                        aocl_blas_dsyrk("Lower", "No Transpose", &i2, &ib, &c_b21,
+                                        &ab[ib + 1 + i__ * ab_dim1], &i__3, &c_b18,
+                                        &ab[(i__ + ib) * ab_dim1 + 1], &i__4);
                     }
                     if(i3 > 0)
                     {
@@ -446,21 +453,22 @@ void dpbtrf_(char *uplo, integer *n, integer *kd, doublereal *ab, integer *ldab,
                         }
                         /* Update A31 (in the work array). */
                         i__3 = *ldab - 1;
-                        dtrsm_("Right", "Lower", "Transpose", "Non-unit", &i3, &ib, &c_b18,
-                               &ab[i__ * ab_dim1 + 1], &i__3, work, &c__33);
+                        aocl_blas_dtrsm("Right", "Lower", "Transpose", "Non-unit", &i3, &ib, &c_b18,
+                                        &ab[i__ * ab_dim1 + 1], &i__3, work, &c__33);
                         /* Update A32 */
                         if(i2 > 0)
                         {
                             i__3 = *ldab - 1;
                             i__4 = *ldab - 1;
-                            dgemm_("No transpose", "Transpose", &i3, &i2, &ib, &c_b21, work, &c__33,
-                                   &ab[ib + 1 + i__ * ab_dim1], &i__3, &c_b18,
-                                   &ab[*kd + 1 - ib + (i__ + ib) * ab_dim1], &i__4);
+                            aocl_blas_dgemm("No transpose", "Transpose", &i3, &i2, &ib, &c_b21,
+                                            work, &c__33, &ab[ib + 1 + i__ * ab_dim1], &i__3,
+                                            &c_b18, &ab[*kd + 1 - ib + (i__ + ib) * ab_dim1],
+                                            &i__4);
                         }
                         /* Update A33 */
                         i__3 = *ldab - 1;
-                        dsyrk_("Lower", "No Transpose", &i3, &ib, &c_b21, work, &c__33, &c_b18,
-                               &ab[(i__ + *kd) * ab_dim1 + 1], &i__3);
+                        aocl_blas_dsyrk("Lower", "No Transpose", &i3, &ib, &c_b21, work, &c__33,
+                                        &c_b18, &ab[(i__ + *kd) * ab_dim1 + 1], &i__3);
                         /* Copy the upper triangle of A31 back into place. */
                         i__3 = ib;
                         for(jj = 1; jj <= i__3; ++jj)

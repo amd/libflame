@@ -4,9 +4,9 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static complex c_b1 = {1.f, 0.f};
-static integer c__1 = 1;
-/* > \brief \b CLAHEF computes a partial factorization of a complex Hermitian indefinite matrix
+static scomplex c_b1 = {{1.f}, {0.f}};
+static aocl_int64_t c__1 = 1;
+/* > \brief \b CLAHEF computes a partial factorization of a scomplex Hermitian indefinite matrix
  * using the Bunc h-Kaufman diagonal pivoting method (blocked algorithm, calling Level 3 BLAS). */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -42,7 +42,7 @@ static integer c__1 = 1;
 /* > */
 /* > \verbatim */
 /* > */
-/* > CLAHEF computes a partial factorization of a complex Hermitian */
+/* > CLAHEF computes a partial factorization of a scomplex Hermitian */
 /* > matrix A using the Bunch-Kaufman diagonal pivoting method. The */
 /* > partial factorization has the form: */
 /* > */
@@ -175,8 +175,30 @@ static integer c__1 = 1;
 /* > \endverbatim */
 /* ===================================================================== */
 /* Subroutine */
-void clahef_(char *uplo, integer *n, integer *nb, integer *kb, complex *a, integer *lda,
-             integer *ipiv, complex *w, integer *ldw, integer *info)
+/** Generated wrapper function */
+void clahef_(char *uplo, aocl_int_t *n, aocl_int_t *nb, aocl_int_t *kb, scomplex *a, aocl_int_t *lda,
+             aocl_int_t *ipiv, scomplex *w, aocl_int_t *ldw, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_clahef(uplo, n, nb, kb, a, lda, ipiv, w, ldw, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t nb_64 = *nb;
+    aocl_int64_t kb_64 = *kb;
+    aocl_int64_t lda_64 = *lda;
+    aocl_int64_t ldw_64 = *ldw;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_clahef(uplo, &n_64, &nb_64, &kb_64, a, &lda_64, ipiv, w, &ldw_64, &info_64);
+
+    *kb = (aocl_int_t)kb_64;
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_clahef(char *uplo, aocl_int64_t *n, aocl_int64_t *nb, aocl_int64_t *kb, scomplex *a,
+                        aocl_int64_t *lda, aocl_int_t *ipiv, scomplex *w, aocl_int64_t *ldw,
+                        aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_ENTRY(AOCL_DTL_LEVEL_TRACE_5);
 #if LF_AOCL_DTL_LOG_ENABLE
@@ -191,38 +213,21 @@ void clahef_(char *uplo, integer *n, integer *nb, integer *kb, complex *a, integ
     AOCL_DTL_LOG(AOCL_DTL_LEVEL_TRACE_5, buffer);
 #endif
     /* System generated locals */
-    integer a_dim1, a_offset, w_dim1, w_offset, i__1, i__2, i__3, i__4, i__5;
+    aocl_int64_t a_dim1, a_offset, w_dim1, w_offset, i__1, i__2, i__3, i__4, i__5;
     real r__1, r__2, r__3, r__4;
-    complex q__1, q__2, q__3, q__4;
+    scomplex q__1, q__2, q__3, q__4;
     /* Builtin functions */
-    double sqrt(doublereal), r_imag(complex *);
-    void r_cnjg(complex *, complex *), c_div(complex *, complex *, complex *);
+    double sqrt(doublereal), r_imag(scomplex *);
+    void r_cnjg(scomplex *, scomplex *), c_div(scomplex *, scomplex *, scomplex *);
     /* Local variables */
-    integer j, k;
+    aocl_int64_t j, k;
     real t, r1;
-    complex d11, d21, d22;
-    integer jb, jj, kk, jp, kp, kw, kkw, imax, jmax;
+    scomplex d11, d21, d22;
+    aocl_int64_t jb, jj, kk, jp, kp, kw, kkw, imax, jmax;
     real alpha;
-    extern /* Subroutine */
-        void
-        cgemm_(char *, char *, integer *, integer *, integer *, complex *, complex *, integer *,
-               complex *, integer *, complex *, complex *, integer *);
-    extern logical lsame_(char *, char *, integer, integer);
-    extern /* Subroutine */
-        void
-        cgemv_(char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *,
-               complex *, complex *, integer *),
-        ccopy_(integer *, complex *, integer *, complex *, integer *),
-        cswap_(integer *, complex *, integer *, complex *, integer *);
-    integer kstep;
+    extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
+    aocl_int64_t kstep;
     real absakk;
-    extern /* Subroutine */
-        void
-        clacgv_(integer *, complex *, integer *);
-    extern integer icamax_(integer *, complex *, integer *);
-    extern /* Subroutine */
-        void
-        csscal_(integer *, real *, complex *, integer *);
     real colmax, rowmax;
     /* -- LAPACK computational routine (version 3.5.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -278,7 +283,7 @@ void clahef_(char *uplo, integer *n, integer *nb, integer *kb, complex *a, integ
         kstep = 1;
         /* Copy column K of A to column KW of W and update it */
         i__1 = k - 1;
-        ccopy_(&i__1, &a[k * a_dim1 + 1], &c__1, &w[kw * w_dim1 + 1], &c__1);
+        aocl_blas_ccopy(&i__1, &a[k * a_dim1 + 1], &c__1, &w[kw * w_dim1 + 1], &c__1);
         i__1 = k + kw * w_dim1;
         i__2 = k + k * a_dim1;
         r__1 = a[i__2].r;
@@ -289,8 +294,8 @@ void clahef_(char *uplo, integer *n, integer *nb, integer *kb, complex *a, integ
             i__1 = *n - k;
             q__1.r = -1.f;
             q__1.i = -0.f; // , expr subst
-            cgemv_("No transpose", &k, &i__1, &q__1, &a[(k + 1) * a_dim1 + 1], lda,
-                   &w[k + (kw + 1) * w_dim1], ldw, &c_b1, &w[kw * w_dim1 + 1], &c__1);
+            aocl_blas_cgemv("No transpose", &k, &i__1, &q__1, &a[(k + 1) * a_dim1 + 1], lda,
+                            &w[k + (kw + 1) * w_dim1], ldw, &c_b1, &w[kw * w_dim1 + 1], &c__1);
             i__1 = k + kw * w_dim1;
             i__2 = k + kw * w_dim1;
             r__1 = w[i__2].r;
@@ -307,7 +312,7 @@ void clahef_(char *uplo, integer *n, integer *nb, integer *kb, complex *a, integ
         if(k > 1)
         {
             i__1 = k - 1;
-            imax = icamax_(&i__1, &w[kw * w_dim1 + 1], &c__1);
+            imax = aocl_blas_icamax(&i__1, &w[kw * w_dim1 + 1], &c__1);
             i__1 = imax + kw * w_dim1;
             colmax = (r__1 = w[i__1].r, f2c_abs(r__1))
                      + (r__2 = r_imag(&w[imax + kw * w_dim1]), f2c_abs(r__2));
@@ -345,25 +350,26 @@ void clahef_(char *uplo, integer *n, integer *nb, integer *kb, complex *a, integ
                 /* BEGIN pivot search along IMAX row */
                 /* Copy column IMAX to column KW-1 of W and update it */
                 i__1 = imax - 1;
-                ccopy_(&i__1, &a[imax * a_dim1 + 1], &c__1, &w[(kw - 1) * w_dim1 + 1], &c__1);
+                aocl_blas_ccopy(&i__1, &a[imax * a_dim1 + 1], &c__1, &w[(kw - 1) * w_dim1 + 1],
+                                &c__1);
                 i__1 = imax + (kw - 1) * w_dim1;
                 i__2 = imax + imax * a_dim1;
                 r__1 = a[i__2].r;
                 w[i__1].r = r__1;
                 w[i__1].i = 0.f; // , expr subst
                 i__1 = k - imax;
-                ccopy_(&i__1, &a[imax + (imax + 1) * a_dim1], lda, &w[imax + 1 + (kw - 1) * w_dim1],
-                       &c__1);
+                aocl_blas_ccopy(&i__1, &a[imax + (imax + 1) * a_dim1], lda,
+                                &w[imax + 1 + (kw - 1) * w_dim1], &c__1);
                 i__1 = k - imax;
-                clacgv_(&i__1, &w[imax + 1 + (kw - 1) * w_dim1], &c__1);
+                aocl_lapack_clacgv(&i__1, &w[imax + 1 + (kw - 1) * w_dim1], &c__1);
                 if(k < *n)
                 {
                     i__1 = *n - k;
                     q__1.r = -1.f;
                     q__1.i = -0.f; // , expr subst
-                    cgemv_("No transpose", &k, &i__1, &q__1, &a[(k + 1) * a_dim1 + 1], lda,
-                           &w[imax + (kw + 1) * w_dim1], ldw, &c_b1, &w[(kw - 1) * w_dim1 + 1],
-                           &c__1);
+                    aocl_blas_cgemv("No transpose", &k, &i__1, &q__1, &a[(k + 1) * a_dim1 + 1], lda,
+                                    &w[imax + (kw + 1) * w_dim1], ldw, &c_b1,
+                                    &w[(kw - 1) * w_dim1 + 1], &c__1);
                     i__1 = imax + (kw - 1) * w_dim1;
                     i__2 = imax + (kw - 1) * w_dim1;
                     r__1 = w[i__2].r;
@@ -374,14 +380,14 @@ void clahef_(char *uplo, integer *n, integer *nb, integer *kb, complex *a, integ
                 /* element in row IMAX, and ROWMAX is its absolute value. */
                 /* Determine only ROWMAX. */
                 i__1 = k - imax;
-                jmax = imax + icamax_(&i__1, &w[imax + 1 + (kw - 1) * w_dim1], &c__1);
+                jmax = imax + aocl_blas_icamax(&i__1, &w[imax + 1 + (kw - 1) * w_dim1], &c__1);
                 i__1 = jmax + (kw - 1) * w_dim1;
                 rowmax = (r__1 = w[i__1].r, f2c_abs(r__1))
                          + (r__2 = r_imag(&w[jmax + (kw - 1) * w_dim1]), f2c_abs(r__2));
                 if(imax > 1)
                 {
                     i__1 = imax - 1;
-                    jmax = icamax_(&i__1, &w[(kw - 1) * w_dim1 + 1], &c__1);
+                    jmax = aocl_blas_icamax(&i__1, &w[(kw - 1) * w_dim1 + 1], &c__1);
                     /* Computing MAX */
                     i__1 = jmax + (kw - 1) * w_dim1;
                     r__3 = rowmax;
@@ -406,7 +412,8 @@ void clahef_(char *uplo, integer *n, integer *nb, integer *kb, complex *a, integ
                         /* pivot block */
                         kp = imax;
                         /* copy column KW-1 of W to column KW of W */
-                        ccopy_(&k, &w[(kw - 1) * w_dim1 + 1], &c__1, &w[kw * w_dim1 + 1], &c__1);
+                        aocl_blas_ccopy(&k, &w[(kw - 1) * w_dim1 + 1], &c__1, &w[kw * w_dim1 + 1],
+                                        &c__1);
                         /* Case(4) */
                     }
                     else
@@ -439,13 +446,14 @@ void clahef_(char *uplo, integer *n, integer *nb, integer *kb, complex *a, integ
                 a[i__1].r = r__1;
                 a[i__1].i = 0.f; // , expr subst
                 i__1 = kk - 1 - kp;
-                ccopy_(&i__1, &a[kp + 1 + kk * a_dim1], &c__1, &a[kp + (kp + 1) * a_dim1], lda);
+                aocl_blas_ccopy(&i__1, &a[kp + 1 + kk * a_dim1], &c__1, &a[kp + (kp + 1) * a_dim1],
+                                lda);
                 i__1 = kk - 1 - kp;
-                clacgv_(&i__1, &a[kp + (kp + 1) * a_dim1], lda);
+                aocl_lapack_clacgv(&i__1, &a[kp + (kp + 1) * a_dim1], lda);
                 if(kp > 1)
                 {
                     i__1 = kp - 1;
-                    ccopy_(&i__1, &a[kk * a_dim1 + 1], &c__1, &a[kp * a_dim1 + 1], &c__1);
+                    aocl_blas_ccopy(&i__1, &a[kk * a_dim1 + 1], &c__1, &a[kp * a_dim1 + 1], &c__1);
                 }
                 /* Interchange rows KK and KP in last K+1 to N columns of A */
                 /* (columns K (or K and K-1 for 2-by-2 pivot) of A will be */
@@ -454,10 +462,11 @@ void clahef_(char *uplo, integer *n, integer *nb, integer *kb, complex *a, integ
                 if(k < *n)
                 {
                     i__1 = *n - k;
-                    cswap_(&i__1, &a[kk + (k + 1) * a_dim1], lda, &a[kp + (k + 1) * a_dim1], lda);
+                    aocl_blas_cswap(&i__1, &a[kk + (k + 1) * a_dim1], lda,
+                                    &a[kp + (k + 1) * a_dim1], lda);
                 }
                 i__1 = *n - kk + 1;
-                cswap_(&i__1, &w[kk + kkw * w_dim1], ldw, &w[kp + kkw * w_dim1], ldw);
+                aocl_blas_cswap(&i__1, &w[kk + kkw * w_dim1], ldw, &w[kp + kkw * w_dim1], ldw);
             }
             if(kstep == 1)
             {
@@ -473,7 +482,7 @@ void clahef_(char *uplo, integer *n, integer *nb, integer *kb, complex *a, integ
                 /* (NOTE: No need to use for Hermitian matrix */
                 /* A( K, K ) = DBLE( W( K, K) ) to separately copy diagonal */
                 /* element D(k,k) from W (potentially saves only one load)) */
-                ccopy_(&k, &w[kw * w_dim1 + 1], &c__1, &a[k * a_dim1 + 1], &c__1);
+                aocl_blas_ccopy(&k, &w[kw * w_dim1 + 1], &c__1, &a[k * a_dim1 + 1], &c__1);
                 if(k > 1)
                 {
                     /* (NOTE: No need to check if A(k,k) is NOT ZERO, */
@@ -482,10 +491,10 @@ void clahef_(char *uplo, integer *n, integer *nb, integer *kb, complex *a, integ
                     i__1 = k + k * a_dim1;
                     r1 = 1.f / a[i__1].r;
                     i__1 = k - 1;
-                    csscal_(&i__1, &r1, &a[k * a_dim1 + 1], &c__1);
+                    aocl_blas_csscal(&i__1, &r1, &a[k * a_dim1 + 1], &c__1);
                     /* (2) Conjugate column W(kw) */
                     i__1 = k - 1;
-                    clacgv_(&i__1, &w[kw * w_dim1 + 1], &c__1);
+                    aocl_lapack_clacgv(&i__1, &w[kw * w_dim1 + 1], &c__1);
                 }
             }
             else
@@ -599,20 +608,20 @@ void clahef_(char *uplo, integer *n, integer *nb, integer *kb, complex *a, integ
                 a[i__1].i = w[i__2].i; // , expr subst
                 /* (2) Conjugate columns W(kw) and W(kw-1) */
                 i__1 = k - 1;
-                clacgv_(&i__1, &w[kw * w_dim1 + 1], &c__1);
+                aocl_lapack_clacgv(&i__1, &w[kw * w_dim1 + 1], &c__1);
                 i__1 = k - 2;
-                clacgv_(&i__1, &w[(kw - 1) * w_dim1 + 1], &c__1);
+                aocl_lapack_clacgv(&i__1, &w[(kw - 1) * w_dim1 + 1], &c__1);
             }
         }
         /* Store details of the interchanges in IPIV */
         if(kstep == 1)
         {
-            ipiv[k] = kp;
+            ipiv[k] = (aocl_int_t)(kp);
         }
         else
         {
-            ipiv[k] = -kp;
-            ipiv[k - 1] = -kp;
+            ipiv[k] = (aocl_int_t)(-kp);
+            ipiv[k - 1] = (aocl_int_t)(-kp);
         }
         /* Decrease K and return to the start of the main loop */
         k -= kstep;
@@ -641,8 +650,8 @@ void clahef_(char *uplo, integer *n, integer *nb, integer *kb, complex *a, integ
                 i__4 = *n - k;
                 q__1.r = -1.f;
                 q__1.i = -0.f; // , expr subst
-                cgemv_("No transpose", &i__3, &i__4, &q__1, &a[j + (k + 1) * a_dim1], lda,
-                       &w[jj + (kw + 1) * w_dim1], ldw, &c_b1, &a[j + jj * a_dim1], &c__1);
+                aocl_blas_cgemv("No transpose", &i__3, &i__4, &q__1, &a[j + (k + 1) * a_dim1], lda,
+                                &w[jj + (kw + 1) * w_dim1], ldw, &c_b1, &a[j + jj * a_dim1], &c__1);
                 i__3 = jj + jj * a_dim1;
                 i__4 = jj + jj * a_dim1;
                 r__1 = a[i__4].r;
@@ -655,8 +664,9 @@ void clahef_(char *uplo, integer *n, integer *nb, integer *kb, complex *a, integ
             i__3 = *n - k;
             q__1.r = -1.f;
             q__1.i = -0.f; // , expr subst
-            cgemm_("No transpose", "Transpose", &i__2, &jb, &i__3, &q__1, &a[(k + 1) * a_dim1 + 1],
-                   lda, &w[j + (kw + 1) * w_dim1], ldw, &c_b1, &a[j * a_dim1 + 1], lda);
+            aocl_blas_cgemm("No transpose", "Transpose", &i__2, &jb, &i__3, &q__1,
+                            &a[(k + 1) * a_dim1 + 1], lda, &w[j + (kw + 1) * w_dim1], ldw, &c_b1,
+                            &a[j * a_dim1 + 1], lda);
             /* L50: */
         }
         /* Put U12 in standard form by partially undoing the interchanges */
@@ -679,7 +689,7 @@ void clahef_(char *uplo, integer *n, integer *nb, integer *kb, complex *a, integ
         if(jp != jj && j <= *n)
         {
             i__1 = *n - j + 1;
-            cswap_(&i__1, &a[jp + j * a_dim1], lda, &a[jj + j * a_dim1], lda);
+            aocl_blas_cswap(&i__1, &a[jp + j * a_dim1], lda, &a[jj + j * a_dim1], lda);
         }
         if(j <= *n)
         {
@@ -710,14 +720,14 @@ void clahef_(char *uplo, integer *n, integer *nb, integer *kb, complex *a, integ
         if(k < *n)
         {
             i__1 = *n - k;
-            ccopy_(&i__1, &a[k + 1 + k * a_dim1], &c__1, &w[k + 1 + k * w_dim1], &c__1);
+            aocl_blas_ccopy(&i__1, &a[k + 1 + k * a_dim1], &c__1, &w[k + 1 + k * w_dim1], &c__1);
         }
         i__1 = *n - k + 1;
         i__2 = k - 1;
         q__1.r = -1.f;
         q__1.i = -0.f; // , expr subst
-        cgemv_("No transpose", &i__1, &i__2, &q__1, &a[k + a_dim1], lda, &w[k + w_dim1], ldw, &c_b1,
-               &w[k + k * w_dim1], &c__1);
+        aocl_blas_cgemv("No transpose", &i__1, &i__2, &q__1, &a[k + a_dim1], lda, &w[k + w_dim1],
+                        ldw, &c_b1, &w[k + k * w_dim1], &c__1);
         i__1 = k + k * w_dim1;
         i__2 = k + k * w_dim1;
         r__1 = w[i__2].r;
@@ -733,7 +743,7 @@ void clahef_(char *uplo, integer *n, integer *nb, integer *kb, complex *a, integ
         if(k < *n)
         {
             i__1 = *n - k;
-            imax = k + icamax_(&i__1, &w[k + 1 + k * w_dim1], &c__1);
+            imax = k + aocl_blas_icamax(&i__1, &w[k + 1 + k * w_dim1], &c__1);
             i__1 = imax + k * w_dim1;
             colmax = (r__1 = w[i__1].r, f2c_abs(r__1))
                      + (r__2 = r_imag(&w[imax + k * w_dim1]), f2c_abs(r__2));
@@ -771,9 +781,9 @@ void clahef_(char *uplo, integer *n, integer *nb, integer *kb, complex *a, integ
                 /* BEGIN pivot search along IMAX row */
                 /* Copy column IMAX to column K+1 of W and update it */
                 i__1 = imax - k;
-                ccopy_(&i__1, &a[imax + k * a_dim1], lda, &w[k + (k + 1) * w_dim1], &c__1);
+                aocl_blas_ccopy(&i__1, &a[imax + k * a_dim1], lda, &w[k + (k + 1) * w_dim1], &c__1);
                 i__1 = imax - k;
-                clacgv_(&i__1, &w[k + (k + 1) * w_dim1], &c__1);
+                aocl_lapack_clacgv(&i__1, &w[k + (k + 1) * w_dim1], &c__1);
                 i__1 = imax + (k + 1) * w_dim1;
                 i__2 = imax + imax * a_dim1;
                 r__1 = a[i__2].r;
@@ -782,15 +792,15 @@ void clahef_(char *uplo, integer *n, integer *nb, integer *kb, complex *a, integ
                 if(imax < *n)
                 {
                     i__1 = *n - imax;
-                    ccopy_(&i__1, &a[imax + 1 + imax * a_dim1], &c__1,
-                           &w[imax + 1 + (k + 1) * w_dim1], &c__1);
+                    aocl_blas_ccopy(&i__1, &a[imax + 1 + imax * a_dim1], &c__1,
+                                    &w[imax + 1 + (k + 1) * w_dim1], &c__1);
                 }
                 i__1 = *n - k + 1;
                 i__2 = k - 1;
                 q__1.r = -1.f;
                 q__1.i = -0.f; // , expr subst
-                cgemv_("No transpose", &i__1, &i__2, &q__1, &a[k + a_dim1], lda, &w[imax + w_dim1],
-                       ldw, &c_b1, &w[k + (k + 1) * w_dim1], &c__1);
+                aocl_blas_cgemv("No transpose", &i__1, &i__2, &q__1, &a[k + a_dim1], lda,
+                                &w[imax + w_dim1], ldw, &c_b1, &w[k + (k + 1) * w_dim1], &c__1);
                 i__1 = imax + (k + 1) * w_dim1;
                 i__2 = imax + (k + 1) * w_dim1;
                 r__1 = w[i__2].r;
@@ -800,14 +810,14 @@ void clahef_(char *uplo, integer *n, integer *nb, integer *kb, complex *a, integ
                 /* element in row IMAX, and ROWMAX is its absolute value. */
                 /* Determine only ROWMAX. */
                 i__1 = imax - k;
-                jmax = k - 1 + icamax_(&i__1, &w[k + (k + 1) * w_dim1], &c__1);
+                jmax = k - 1 + aocl_blas_icamax(&i__1, &w[k + (k + 1) * w_dim1], &c__1);
                 i__1 = jmax + (k + 1) * w_dim1;
                 rowmax = (r__1 = w[i__1].r, f2c_abs(r__1))
                          + (r__2 = r_imag(&w[jmax + (k + 1) * w_dim1]), f2c_abs(r__2));
                 if(imax < *n)
                 {
                     i__1 = *n - imax;
-                    jmax = imax + icamax_(&i__1, &w[imax + 1 + (k + 1) * w_dim1], &c__1);
+                    jmax = imax + aocl_blas_icamax(&i__1, &w[imax + 1 + (k + 1) * w_dim1], &c__1);
                     /* Computing MAX */
                     i__1 = jmax + (k + 1) * w_dim1;
                     r__3 = rowmax;
@@ -833,7 +843,8 @@ void clahef_(char *uplo, integer *n, integer *nb, integer *kb, complex *a, integ
                         kp = imax;
                         /* copy column K+1 of W to column K of W */
                         i__1 = *n - k + 1;
-                        ccopy_(&i__1, &w[k + (k + 1) * w_dim1], &c__1, &w[k + k * w_dim1], &c__1);
+                        aocl_blas_ccopy(&i__1, &w[k + (k + 1) * w_dim1], &c__1, &w[k + k * w_dim1],
+                                        &c__1);
                         /* Case(4) */
                     }
                     else
@@ -864,13 +875,15 @@ void clahef_(char *uplo, integer *n, integer *nb, integer *kb, complex *a, integ
                 a[i__1].r = r__1;
                 a[i__1].i = 0.f; // , expr subst
                 i__1 = kp - kk - 1;
-                ccopy_(&i__1, &a[kk + 1 + kk * a_dim1], &c__1, &a[kp + (kk + 1) * a_dim1], lda);
+                aocl_blas_ccopy(&i__1, &a[kk + 1 + kk * a_dim1], &c__1, &a[kp + (kk + 1) * a_dim1],
+                                lda);
                 i__1 = kp - kk - 1;
-                clacgv_(&i__1, &a[kp + (kk + 1) * a_dim1], lda);
+                aocl_lapack_clacgv(&i__1, &a[kp + (kk + 1) * a_dim1], lda);
                 if(kp < *n)
                 {
                     i__1 = *n - kp;
-                    ccopy_(&i__1, &a[kp + 1 + kk * a_dim1], &c__1, &a[kp + 1 + kp * a_dim1], &c__1);
+                    aocl_blas_ccopy(&i__1, &a[kp + 1 + kk * a_dim1], &c__1,
+                                    &a[kp + 1 + kp * a_dim1], &c__1);
                 }
                 /* Interchange rows KK and KP in first K-1 columns of A */
                 /* (columns K (or K and K+1 for 2-by-2 pivot) of A will be */
@@ -879,9 +892,9 @@ void clahef_(char *uplo, integer *n, integer *nb, integer *kb, complex *a, integ
                 if(k > 1)
                 {
                     i__1 = k - 1;
-                    cswap_(&i__1, &a[kk + a_dim1], lda, &a[kp + a_dim1], lda);
+                    aocl_blas_cswap(&i__1, &a[kk + a_dim1], lda, &a[kp + a_dim1], lda);
                 }
-                cswap_(&kk, &w[kk + w_dim1], ldw, &w[kp + w_dim1], ldw);
+                aocl_blas_cswap(&kk, &w[kk + w_dim1], ldw, &w[kp + w_dim1], ldw);
             }
             if(kstep == 1)
             {
@@ -898,7 +911,7 @@ void clahef_(char *uplo, integer *n, integer *nb, integer *kb, complex *a, integ
                 /* A( K, K ) = DBLE( W( K, K) ) to separately copy diagonal */
                 /* element D(k,k) from W (potentially saves only one load)) */
                 i__1 = *n - k + 1;
-                ccopy_(&i__1, &w[k + k * w_dim1], &c__1, &a[k + k * a_dim1], &c__1);
+                aocl_blas_ccopy(&i__1, &w[k + k * w_dim1], &c__1, &a[k + k * a_dim1], &c__1);
                 if(k < *n)
                 {
                     /* (NOTE: No need to check if A(k,k) is NOT ZERO, */
@@ -907,10 +920,10 @@ void clahef_(char *uplo, integer *n, integer *nb, integer *kb, complex *a, integ
                     i__1 = k + k * a_dim1;
                     r1 = 1.f / a[i__1].r;
                     i__1 = *n - k;
-                    csscal_(&i__1, &r1, &a[k + 1 + k * a_dim1], &c__1);
+                    aocl_blas_csscal(&i__1, &r1, &a[k + 1 + k * a_dim1], &c__1);
                     /* (2) Conjugate column W(k) */
                     i__1 = *n - k;
-                    clacgv_(&i__1, &w[k + 1 + k * w_dim1], &c__1);
+                    aocl_lapack_clacgv(&i__1, &w[k + 1 + k * w_dim1], &c__1);
                 }
             }
             else
@@ -1024,20 +1037,20 @@ void clahef_(char *uplo, integer *n, integer *nb, integer *kb, complex *a, integ
                 a[i__1].i = w[i__2].i; // , expr subst
                 /* (2) Conjugate columns W(k) and W(k+1) */
                 i__1 = *n - k;
-                clacgv_(&i__1, &w[k + 1 + k * w_dim1], &c__1);
+                aocl_lapack_clacgv(&i__1, &w[k + 1 + k * w_dim1], &c__1);
                 i__1 = *n - k - 1;
-                clacgv_(&i__1, &w[k + 2 + (k + 1) * w_dim1], &c__1);
+                aocl_lapack_clacgv(&i__1, &w[k + 2 + (k + 1) * w_dim1], &c__1);
             }
         }
         /* Store details of the interchanges in IPIV */
         if(kstep == 1)
         {
-            ipiv[k] = kp;
+            ipiv[k] = (aocl_int_t)(kp);
         }
         else
         {
-            ipiv[k] = -kp;
-            ipiv[k + 1] = -kp;
+            ipiv[k] = (aocl_int_t)(-kp);
+            ipiv[k + 1] = (aocl_int_t)(-kp);
         }
         /* Increase K and return to the start of the main loop */
         k += kstep;
@@ -1067,8 +1080,8 @@ void clahef_(char *uplo, integer *n, integer *nb, integer *kb, complex *a, integ
                 i__5 = k - 1;
                 q__1.r = -1.f;
                 q__1.i = -0.f; // , expr subst
-                cgemv_("No transpose", &i__4, &i__5, &q__1, &a[jj + a_dim1], lda, &w[jj + w_dim1],
-                       ldw, &c_b1, &a[jj + jj * a_dim1], &c__1);
+                aocl_blas_cgemv("No transpose", &i__4, &i__5, &q__1, &a[jj + a_dim1], lda,
+                                &w[jj + w_dim1], ldw, &c_b1, &a[jj + jj * a_dim1], &c__1);
                 i__4 = jj + jj * a_dim1;
                 i__5 = jj + jj * a_dim1;
                 r__1 = a[i__5].r;
@@ -1083,8 +1096,9 @@ void clahef_(char *uplo, integer *n, integer *nb, integer *kb, complex *a, integ
                 i__4 = k - 1;
                 q__1.r = -1.f;
                 q__1.i = -0.f; // , expr subst
-                cgemm_("No transpose", "Transpose", &i__3, &jb, &i__4, &q__1, &a[j + jb + a_dim1],
-                       lda, &w[j + w_dim1], ldw, &c_b1, &a[j + jb + j * a_dim1], lda);
+                aocl_blas_cgemm("No transpose", "Transpose", &i__3, &jb, &i__4, &q__1,
+                                &a[j + jb + a_dim1], lda, &w[j + w_dim1], ldw, &c_b1,
+                                &a[j + jb + j * a_dim1], lda);
             }
             /* L110: */
         }
@@ -1107,7 +1121,7 @@ void clahef_(char *uplo, integer *n, integer *nb, integer *kb, complex *a, integ
         --j;
         if(jp != jj && j >= 1)
         {
-            cswap_(&j, &a[jp + a_dim1], lda, &a[jj + a_dim1], lda);
+            aocl_blas_cswap(&j, &a[jp + a_dim1], lda, &a[jj + a_dim1], lda);
         }
         if(j >= 1)
         {

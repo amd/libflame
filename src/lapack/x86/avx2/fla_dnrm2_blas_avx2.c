@@ -24,7 +24,7 @@ static inline int bli_horizontal_or_df(__m256d a)
     return !_mm256_testz_pd(a, a);
 }
 
-doublereal fla_dnrm2_blas_avx2(integer *sd, doublereal *a, integer *incx)
+doublereal fla_dnrm2_blas_avx2(aocl_int64_t *sd, doublereal *a, aocl_int64_t *incx)
 {
     double sumsq = 0;
 
@@ -47,7 +47,7 @@ doublereal fla_dnrm2_blas_avx2(integer *sd, doublereal *a, integer *incx)
     double scale;
     int isbig = FALSE;
 
-    integer i = 0;
+    aocl_int64_t i = 0;
 
     if(*incx == 1)
     {

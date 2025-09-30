@@ -4,8 +4,8 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
-static integer c_n1 = -1;
+static aocl_int64_t c__1 = 1;
+static aocl_int64_t c_n1 = -1;
 /* > \brief \b DLAED1 used by sstedc. Computes the updated eigensystem of a diagonal matrix after
  * modification by a rank-one symmetric matrix. Used when the original matrix is tridiagonal. */
 /* =========== DOCUMENTATION =========== */
@@ -161,35 +161,40 @@ static integer c_n1 = -1;
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void dlaed1_(integer *n, doublereal *d__, doublereal *q, integer *ldq, integer *indxq,
-             doublereal *rho, integer *cutpnt, doublereal *work, integer *iwork, integer *info)
+/** Generated wrapper function */
+void dlaed1_(aocl_int_t *n, doublereal *d__, doublereal *q, aocl_int_t *ldq, aocl_int_t *indxq,
+             doublereal *rho, aocl_int_t *cutpnt, doublereal *work, aocl_int_t *iwork,
+             aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_dlaed1(n, d__, q, ldq, indxq, rho, cutpnt, work, iwork, info);
+#else
+    aocl_int64_t n_64 = *n;
+    aocl_int64_t ldq_64 = *ldq;
+    aocl_int64_t cutpnt_64 = *cutpnt;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_dlaed1(&n_64, d__, q, &ldq_64, indxq, rho, &cutpnt_64, work, iwork, &info_64);
+
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_dlaed1(aocl_int64_t *n, doublereal *d__, doublereal *q, aocl_int64_t *ldq,
+                        aocl_int_t *indxq, doublereal *rho, aocl_int64_t *cutpnt, doublereal *work,
+                        aocl_int_t *iwork, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dlaed1 inputs: n %" FLA_IS ", ldq %" FLA_IS ", indxq %" FLA_IS
                       ", cutpnt %" FLA_IS "",
                       *n, *ldq, *indxq, *cutpnt);
     /* System generated locals */
-    integer q_dim1, q_offset, i__1, i__2;
+    aocl_int64_t q_dim1, q_offset, i__1, i__2;
     /* Local variables */
-    integer i__, k, n1, n2, is, iw, iz, iq2, zpp1, indx, indxc;
-    extern /* Subroutine */
-        void
-        dcopy_(integer *, doublereal *, integer *, doublereal *, integer *);
-    integer indxp;
-    extern /* Subroutine */
-        void
-        dlaed2_(integer *, integer *, integer *, doublereal *, doublereal *, integer *, integer *,
-                doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, integer *,
-                integer *, integer *, integer *, integer *),
-        dlaed3_(integer *, integer *, integer *, doublereal *, doublereal *, integer *,
-                doublereal *, doublereal *, doublereal *, integer *, integer *, doublereal *,
-                doublereal *, integer *);
-    integer idlmda;
-    extern /* Subroutine */
-        void
-        dlamrg_(integer *, integer *, doublereal *, integer *, integer *, integer *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
-    integer coltyp;
+    aocl_int64_t i__, k, n1, n2, is, iw, iz, iq2, zpp1, indx, indxc;
+    aocl_int64_t indxp;
+    aocl_int64_t idlmda;
+    aocl_int64_t coltyp;
     /* -- LAPACK computational routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -238,7 +243,7 @@ void dlaed1_(integer *n, doublereal *d__, doublereal *q, integer *ldq, integer *
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("DLAED1", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("DLAED1", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -261,14 +266,14 @@ void dlaed1_(integer *n, doublereal *d__, doublereal *q, integer *ldq, integer *
     indxp = coltyp + *n;
     /* Form the z-vector which consists of the last row of Q_1 and the */
     /* first row of Q_2. */
-    dcopy_(cutpnt, &q[*cutpnt + q_dim1], ldq, &work[iz], &c__1);
+    aocl_blas_dcopy(cutpnt, &q[*cutpnt + q_dim1], ldq, &work[iz], &c__1);
     zpp1 = *cutpnt + 1;
     i__1 = *n - *cutpnt;
-    dcopy_(&i__1, &q[zpp1 + zpp1 * q_dim1], ldq, &work[iz + *cutpnt], &c__1);
+    aocl_blas_dcopy(&i__1, &q[zpp1 + zpp1 * q_dim1], ldq, &work[iz + *cutpnt], &c__1);
     /* Deflate eigenvalues. */
-    dlaed2_(&k, n, cutpnt, &d__[1], &q[q_offset], ldq, &indxq[1], rho, &work[iz], &work[idlmda],
-            &work[iw], &work[iq2], &iwork[indx], &iwork[indxc], &iwork[indxp], &iwork[coltyp],
-            info);
+    aocl_lapack_dlaed2(&k, n, cutpnt, &d__[1], &q[q_offset], ldq, &indxq[1], rho, &work[iz],
+                       &work[idlmda], &work[iw], &work[iq2], &iwork[indx], &iwork[indxc],
+                       &iwork[indxp], &iwork[coltyp], info);
     if(*info != 0)
     {
         goto L20;
@@ -278,8 +283,8 @@ void dlaed1_(integer *n, doublereal *d__, doublereal *q, integer *ldq, integer *
     {
         is = (iwork[coltyp] + iwork[coltyp + 1]) * *cutpnt
              + (iwork[coltyp + 1] + iwork[coltyp + 2]) * (*n - *cutpnt) + iq2;
-        dlaed3_(&k, n, cutpnt, &d__[1], &q[q_offset], ldq, rho, &work[idlmda], &work[iq2],
-                &iwork[indxc], &iwork[coltyp], &work[iw], &work[is], info);
+        aocl_lapack_dlaed3(&k, n, cutpnt, &d__[1], &q[q_offset], ldq, rho, &work[idlmda],
+                           &work[iq2], &iwork[indxc], &iwork[coltyp], &work[iw], &work[is], info);
         if(*info != 0)
         {
             goto L20;
@@ -287,14 +292,14 @@ void dlaed1_(integer *n, doublereal *d__, doublereal *q, integer *ldq, integer *
         /* Prepare the INDXQ sorting permutation. */
         n1 = k;
         n2 = *n - k;
-        dlamrg_(&n1, &n2, &d__[1], &c__1, &c_n1, &indxq[1]);
+        aocl_lapack_dlamrg(&n1, &n2, &d__[1], &c__1, &c_n1, &indxq[1]);
     }
     else
     {
         i__1 = *n;
         for(i__ = 1; i__ <= i__1; ++i__)
         {
-            indxq[i__] = i__;
+            indxq[i__] = (aocl_int_t)(i__);
             /* L10: */
         }
     }

@@ -4,7 +4,7 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static integer c__1 = 1;
+static aocl_int64_t c__1 = 1;
 static doublereal c_b30 = 0.;
 /* > \brief \b DLASD2 merges the two sets of singular values together into a single sorted set. Used
  * by sbdsdc . */
@@ -272,11 +272,42 @@ and entries in the second half */
 /* > */
 /* ===================================================================== */
 /* Subroutine */
-void dlasd2_(integer *nl, integer *nr, integer *sqre, integer *k, doublereal *d__, doublereal *z__,
-             doublereal *alpha, doublereal *beta, doublereal *u, integer *ldu, doublereal *vt,
-             integer *ldvt, doublereal *dsigma, doublereal *u2, integer *ldu2, doublereal *vt2,
-             integer *ldvt2, integer *idxp, integer *idx, integer *idxc, integer *idxq,
-             integer *coltyp, integer *info)
+/** Generated wrapper function */
+void dlasd2_(aocl_int_t *nl, aocl_int_t *nr, aocl_int_t *sqre, aocl_int_t *k, doublereal *d__,
+             doublereal *z__, doublereal *alpha, doublereal *beta, doublereal *u, aocl_int_t *ldu,
+             doublereal *vt, aocl_int_t *ldvt, doublereal *dsigma, doublereal *u2, aocl_int_t *ldu2,
+             doublereal *vt2, aocl_int_t *ldvt2, aocl_int_t *idxp, aocl_int_t *idx,
+             aocl_int_t *idxc, aocl_int_t *idxq, aocl_int_t *coltyp, aocl_int_t *info)
+{
+#if FLA_ENABLE_ILP64
+    aocl_lapack_dlasd2(nl, nr, sqre, k, d__, z__, alpha, beta, u, ldu, vt, ldvt, dsigma, u2, ldu2,
+                       vt2, ldvt2, idxp, idx, idxc, idxq, coltyp, info);
+#else
+    aocl_int64_t nl_64 = *nl;
+    aocl_int64_t nr_64 = *nr;
+    aocl_int64_t sqre_64 = *sqre;
+    aocl_int64_t k_64 = *k;
+    aocl_int64_t ldu_64 = *ldu;
+    aocl_int64_t ldvt_64 = *ldvt;
+    aocl_int64_t ldu2_64 = *ldu2;
+    aocl_int64_t ldvt2_64 = *ldvt2;
+    aocl_int64_t info_64 = *info;
+
+    aocl_lapack_dlasd2(&nl_64, &nr_64, &sqre_64, &k_64, d__, z__, alpha, beta, u, &ldu_64, vt,
+                       &ldvt_64, dsigma, u2, &ldu2_64, vt2, &ldvt2_64, idxp, idx, idxc, idxq,
+                       coltyp, &info_64);
+
+    *k = (aocl_int_t)k_64;
+    *info = (aocl_int_t)info_64;
+#endif
+}
+
+void aocl_lapack_dlasd2(aocl_int64_t *nl, aocl_int64_t *nr, aocl_int64_t *sqre, aocl_int64_t *k,
+                        doublereal *d__, doublereal *z__, doublereal *alpha, doublereal *beta,
+                        doublereal *u, aocl_int64_t *ldu, doublereal *vt, aocl_int64_t *ldvt,
+                        doublereal *dsigma, doublereal *u2, aocl_int64_t *ldu2, doublereal *vt2,
+                        aocl_int64_t *ldvt2, aocl_int_t *idxp, aocl_int_t *idx, aocl_int_t *idxc,
+                        aocl_int_t *idxq, aocl_int_t *coltyp, aocl_int64_t *info)
 {
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dlasd2 inputs: nl %" FLA_IS ", nr %" FLA_IS ", sqre %" FLA_IS
@@ -284,33 +315,21 @@ void dlasd2_(integer *nl, integer *nr, integer *sqre, integer *k, doublereal *d_
                       ", idxq %" FLA_IS "",
                       *nl, *nr, *sqre, *ldu, *ldvt, *ldu2, *ldvt2, *idxq);
     /* System generated locals */
-    integer u_dim1, u_offset, u2_dim1, u2_offset, vt_dim1, vt_offset, vt2_dim1, vt2_offset, i__1;
+    aocl_int64_t u_dim1, u_offset, u2_dim1, u2_offset, vt_dim1, vt_offset, vt2_dim1, vt2_offset,
+        i__1;
     doublereal d__1, d__2;
     /* Local variables */
     doublereal c__;
-    integer i__, j, m, n;
+    aocl_int64_t i__, j, m, n;
     doublereal s;
-    integer k2;
+    aocl_int64_t k2;
     doublereal z1;
-    integer ct, jp;
+    aocl_int64_t ct, jp;
     doublereal eps, tau, tol;
-    integer psm[4], nlp1, nlp2, idxi, idxj;
-    extern /* Subroutine */
-        void
-        drot_(integer *, doublereal *, integer *, doublereal *, integer *, doublereal *,
-              doublereal *);
-    integer ctot[4], idxjp;
-    extern /* Subroutine */
-        void
-        dcopy_(integer *, doublereal *, integer *, doublereal *, integer *);
-    integer jprev;
+    aocl_int64_t psm[4], nlp1, nlp2, idxi, idxj;
+    aocl_int64_t ctot[4], idxjp;
+    aocl_int64_t jprev;
     extern doublereal dlapy2_(doublereal *, doublereal *), dlamch_(char *);
-    extern /* Subroutine */
-        void
-        dlamrg_(integer *, integer *, doublereal *, integer *, integer *, integer *),
-        dlacpy_(char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *),
-        dlaset_(char *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *),
-        xerbla_(const char *srname, const integer *info, ftnlen srname_len);
     doublereal hlftol;
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -394,7 +413,7 @@ void dlasd2_(integer *nl, integer *nr, integer *sqre, integer *k, doublereal *d_
     if(*info != 0)
     {
         i__1 = -(*info);
-        xerbla_("DLASD2", &i__1, (ftnlen)6);
+        aocl_blas_xerbla("DLASD2", &i__1, (ftnlen)6);
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -436,7 +455,7 @@ void dlasd2_(integer *nl, integer *nr, integer *sqre, integer *k, doublereal *d_
     i__1 = n;
     for(i__ = nlp2; i__ <= i__1; ++i__)
     {
-        idxq[i__] += nlp1;
+        idxq[i__] += (aocl_int_t)(nlp1);
         /* L50: */
     }
     /* DSIGMA, IDXC, IDXC, and the first column of U2 */
@@ -449,7 +468,7 @@ void dlasd2_(integer *nl, integer *nr, integer *sqre, integer *k, doublereal *d_
         idxc[i__] = coltyp[idxq[i__]];
         /* L60: */
     }
-    dlamrg_(nl, nr, &dsigma[2], &c__1, &c__1, &idx[2]);
+    aocl_lapack_dlamrg(nl, nr, &dsigma[2], &c__1, &c__1, &idx[2]);
     i__1 = n;
     for(i__ = 2; i__ <= i__1; ++i__)
     {
@@ -492,7 +511,7 @@ void dlasd2_(integer *nl, integer *nr, integer *sqre, integer *k, doublereal *d_
         {
             /* Deflate due to small z component. */
             --k2;
-            idxp[k2] = j;
+            idxp[k2] = (aocl_int_t)(j);
             coltyp[j] = 4;
             if(j == n)
             {
@@ -518,7 +537,7 @@ L100:
     {
         /* Deflate due to small z component. */
         --k2;
-        idxp[k2] = j;
+        idxp[k2] = (aocl_int_t)(j);
         coltyp[j] = 4;
     }
     else
@@ -548,15 +567,16 @@ L100:
             {
                 --idxj;
             }
-            drot_(&n, &u[idxjp * u_dim1 + 1], &c__1, &u[idxj * u_dim1 + 1], &c__1, &c__, &s);
-            drot_(&m, &vt[idxjp + vt_dim1], ldvt, &vt[idxj + vt_dim1], ldvt, &c__, &s);
+            aocl_blas_drot(&n, &u[idxjp * u_dim1 + 1], &c__1, &u[idxj * u_dim1 + 1], &c__1, &c__,
+                           &s);
+            aocl_blas_drot(&m, &vt[idxjp + vt_dim1], ldvt, &vt[idxj + vt_dim1], ldvt, &c__, &s);
             if(coltyp[j] != coltyp[jprev])
             {
                 coltyp[j] = 3;
             }
             coltyp[jprev] = 4;
             --k2;
-            idxp[k2] = jprev;
+            idxp[k2] = (aocl_int_t)(jprev);
             jprev = j;
         }
         else
@@ -564,7 +584,7 @@ L100:
             ++(*k);
             u2[*k + u2_dim1] = z__[jprev];
             dsigma[*k] = d__[jprev];
-            idxp[*k] = jprev;
+            idxp[*k] = (aocl_int_t)(jprev);
             jprev = j;
         }
     }
@@ -573,7 +593,7 @@ L110: /* Record the last singular value. */
     ++(*k);
     u2[*k + u2_dim1] = z__[jprev];
     dsigma[*k] = d__[jprev];
-    idxp[*k] = jprev;
+    idxp[*k] = (aocl_int_t)(jprev);
 L120: /* Count up the total number of the various types of columns, then */
     /* form a permutation which positions the four column types into */
     /* four groups of uniform structure (although one or more of these */
@@ -604,7 +624,7 @@ L120: /* Count up the total number of the various types of columns, then */
     {
         jp = idxp[j];
         ct = coltyp[jp];
-        idxc[psm[ct - 1]] = j;
+        idxc[psm[ct - 1]] = (aocl_int_t)(j);
         ++psm[ct - 1];
         /* L150: */
     }
@@ -624,8 +644,8 @@ L120: /* Count up the total number of the various types of columns, then */
         {
             --idxj;
         }
-        dcopy_(&n, &u[idxj * u_dim1 + 1], &c__1, &u2[j * u2_dim1 + 1], &c__1);
-        dcopy_(&m, &vt[idxj + vt_dim1], ldvt, &vt2[j + vt2_dim1], ldvt2);
+        aocl_blas_dcopy(&n, &u[idxj * u_dim1 + 1], &c__1, &u2[j * u2_dim1 + 1], &c__1);
+        aocl_blas_dcopy(&m, &vt[idxj + vt_dim1], ldvt, &vt2[j + vt2_dim1], ldvt2);
         /* L160: */
     }
     /* Determine DSIGMA(1), DSIGMA(2) and Z(1) */
@@ -663,10 +683,10 @@ L120: /* Count up the total number of the various types of columns, then */
     }
     /* Move the rest of the updating row to Z. */
     i__1 = *k - 1;
-    dcopy_(&i__1, &u2[u2_dim1 + 2], &c__1, &z__[2], &c__1);
+    aocl_blas_dcopy(&i__1, &u2[u2_dim1 + 2], &c__1, &z__[2], &c__1);
     /* Determine the first column of U2, the first row of VT2 and the */
     /* last row of VT. */
-    dlaset_("A", &n, &c__1, &c_b30, &c_b30, &u2[u2_offset], ldu2);
+    aocl_lapack_dlaset("A", &n, &c__1, &c_b30, &c_b30, &u2[u2_offset], ldu2);
     u2[nlp1 + u2_dim1] = 1.;
     if(m > n)
     {
@@ -687,27 +707,29 @@ L120: /* Count up the total number of the various types of columns, then */
     }
     else
     {
-        dcopy_(&m, &vt[nlp1 + vt_dim1], ldvt, &vt2[vt2_dim1 + 1], ldvt2);
+        aocl_blas_dcopy(&m, &vt[nlp1 + vt_dim1], ldvt, &vt2[vt2_dim1 + 1], ldvt2);
     }
     if(m > n)
     {
-        dcopy_(&m, &vt[m + vt_dim1], ldvt, &vt2[m + vt2_dim1], ldvt2);
+        aocl_blas_dcopy(&m, &vt[m + vt_dim1], ldvt, &vt2[m + vt2_dim1], ldvt2);
     }
     /* The deflated singular values and their corresponding vectors go */
     /* into the back of D, U, and V respectively. */
     if(n > *k)
     {
         i__1 = n - *k;
-        dcopy_(&i__1, &dsigma[*k + 1], &c__1, &d__[*k + 1], &c__1);
+        aocl_blas_dcopy(&i__1, &dsigma[*k + 1], &c__1, &d__[*k + 1], &c__1);
         i__1 = n - *k;
-        dlacpy_("A", &n, &i__1, &u2[(*k + 1) * u2_dim1 + 1], ldu2, &u[(*k + 1) * u_dim1 + 1], ldu);
+        aocl_lapack_dlacpy("A", &n, &i__1, &u2[(*k + 1) * u2_dim1 + 1], ldu2,
+                           &u[(*k + 1) * u_dim1 + 1], ldu);
         i__1 = n - *k;
-        dlacpy_("A", &i__1, &m, &vt2[*k + 1 + vt2_dim1], ldvt2, &vt[*k + 1 + vt_dim1], ldvt);
+        aocl_lapack_dlacpy("A", &i__1, &m, &vt2[*k + 1 + vt2_dim1], ldvt2, &vt[*k + 1 + vt_dim1],
+                           ldvt);
     }
     /* Copy CTOT into COLTYP for referencing in DLASD3. */
     for(j = 1; j <= 4; ++j)
     {
-        coltyp[j] = ctot[j - 1];
+        coltyp[j] = (aocl_int_t)(ctot[j - 1]);
         /* L190: */
     }
     AOCL_DTL_TRACE_LOG_EXIT

@@ -391,8 +391,8 @@ void aocl_lapack_zheevd_2stage(char *jobz, char *uplo, aocl_int64_t *n, dcomplex
                 liwmin = 1;
             }
         }
-        work[1].r = (doublereal)lwmin;
-        work[1].i = 0.; // , expr subst
+        work[1].real = (doublereal)lwmin;
+        work[1].imag = 0.; // , expr subst
         rwork[1] = (doublereal)lrwmin;
         iwork[1] = (aocl_int_t)(liwmin);
         if(*lwork < lwmin && !lquery)
@@ -429,12 +429,12 @@ void aocl_lapack_zheevd_2stage(char *jobz, char *uplo, aocl_int64_t *n, dcomplex
     if(*n == 1)
     {
         i__1 = a_dim1 + 1;
-        w[1] = a[i__1].r;
+        w[1] = a[i__1].real;
         if(wantz)
         {
             i__1 = a_dim1 + 1;
-            a[i__1].r = 1.;
-            a[i__1].i = 0.; // , expr subst
+            a[i__1].real = 1.;
+            a[i__1].imag = 0.; // , expr subst
         }
         AOCL_DTL_TRACE_LOG_EXIT
         return;
@@ -506,8 +506,8 @@ void aocl_lapack_zheevd_2stage(char *jobz, char *uplo, aocl_int64_t *n, dcomplex
         d__1 = 1. / sigma;
         aocl_blas_dscal(&imax, &d__1, &w[1], &c__1);
     }
-    work[1].r = (doublereal)lwmin;
-    work[1].i = 0.; // , expr subst
+    work[1].real = (doublereal)lwmin;
+    work[1].imag = 0.; // , expr subst
     rwork[1] = (doublereal)lrwmin;
     iwork[1] = (aocl_int_t)(liwmin);
     AOCL_DTL_TRACE_LOG_EXIT

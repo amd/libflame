@@ -4,8 +4,8 @@
  -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for
  libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static scomplex c_b1 = {{0.f}, {0.f}};
-static scomplex c_b2 = {{1.f}, {0.f}};
+static scomplex c_b1 = {0.f, 0.f};
+static scomplex c_b2 = {1.f, 0.f};
 /* > \brief \b CTPLQT2 */
 /* Definition: */
 /* =========== */
@@ -282,8 +282,8 @@ void aocl_lapack_ctplqt2(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *l, scom
                            &t[i__ * t_dim1 + 1]);
         i__2 = i__ * t_dim1 + 1;
         r_cnjg(&q__1, &t[i__ * t_dim1 + 1]);
-        t[i__2].r = q__1.r;
-        t[i__2].i = q__1.i; // , expr subst
+        t[i__2].real = q__1.real;
+        t[i__2].imag = q__1.imag; // , expr subst
         if(i__ < *m)
         {
             i__2 = p;
@@ -291,8 +291,8 @@ void aocl_lapack_ctplqt2(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *l, scom
             {
                 i__3 = i__ + j * b_dim1;
                 r_cnjg(&q__1, &b[i__ + j * b_dim1]);
-                b[i__3].r = q__1.r;
-                b[i__3].i = q__1.i; // , expr subst
+                b[i__3].real = q__1.real;
+                b[i__3].imag = q__1.imag; // , expr subst
             }
             /* W(M-I:1) := C(I+1:M,I:N) * C(I,I:N) [use W = T(M,:)] */
             i__2 = *m - i__;
@@ -300,34 +300,34 @@ void aocl_lapack_ctplqt2(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *l, scom
             {
                 i__3 = *m + j * t_dim1;
                 i__4 = i__ + j + i__ * a_dim1;
-                t[i__3].r = a[i__4].r;
-                t[i__3].i = a[i__4].i; // , expr subst
+                t[i__3].real = a[i__4].real;
+                t[i__3].imag = a[i__4].imag; // , expr subst
             }
             i__2 = *m - i__;
             aocl_blas_cgemv("N", &i__2, &p, &c_b2, &b[i__ + 1 + b_dim1], ldb, &b[i__ + b_dim1], ldb,
                             &c_b2, &t[*m + t_dim1], ldt);
             /* C(I+1:M,I:N) = C(I+1:M,I:N) + alpha * C(I,I:N)*W(M-1:1)^H */
             i__2 = i__ * t_dim1 + 1;
-            q__1.r = -t[i__2].r;
-            q__1.i = -t[i__2].i; // , expr subst
-            alpha.r = q__1.r;
-            alpha.i = q__1.i; // , expr subst
+            q__1.real = -t[i__2].real;
+            q__1.imag = -t[i__2].imag; // , expr subst
+            alpha.real = q__1.real;
+            alpha.imag = q__1.imag; // , expr subst
             i__2 = *m - i__;
             for(j = 1; j <= i__2; ++j)
             {
                 i__3 = i__ + j + i__ * a_dim1;
                 i__4 = i__ + j + i__ * a_dim1;
                 i__5 = *m + j * t_dim1;
-                q__2.r = alpha.r * t[i__5].r - alpha.i * t[i__5].i;
-                q__2.i = alpha.r * t[i__5].i + alpha.i * t[i__5].r; // , expr subst
-                q__1.r = a[i__4].r + q__2.r;
-                q__1.i = a[i__4].i + q__2.i; // , expr subst
-                a[i__3].r = q__1.r;
-                a[i__3].i = q__1.i; // , expr subst
+                q__2.real = alpha.real * t[i__5].real - alpha.imag * t[i__5].imag;
+                q__2.imag = alpha.real * t[i__5].imag + alpha.imag * t[i__5].real; // , expr subst
+                q__1.real = a[i__4].real + q__2.real;
+                q__1.imag = a[i__4].imag + q__2.imag; // , expr subst
+                a[i__3].real = q__1.real;
+                a[i__3].imag = q__1.imag; // , expr subst
             }
             i__2 = *m - i__;
-            q__1.r = alpha.r;
-            q__1.i = alpha.i; // , expr subst
+            q__1.real = alpha.real;
+            q__1.imag = alpha.imag; // , expr subst
             aocl_blas_cgerc(&i__2, &p, &q__1, &t[*m + t_dim1], ldt, &b[i__ + b_dim1], ldb,
                             &b[i__ + 1 + b_dim1], ldb);
             i__2 = p;
@@ -335,8 +335,8 @@ void aocl_lapack_ctplqt2(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *l, scom
             {
                 i__3 = i__ + j * b_dim1;
                 r_cnjg(&q__1, &b[i__ + j * b_dim1]);
-                b[i__3].r = q__1.r;
-                b[i__3].i = q__1.i; // , expr subst
+                b[i__3].real = q__1.real;
+                b[i__3].imag = q__1.imag; // , expr subst
             }
         }
     }
@@ -345,16 +345,16 @@ void aocl_lapack_ctplqt2(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *l, scom
     {
         /* T(I,1:I-1) := C(I:I-1,1:N)**H * (alpha * C(I,I:N)) */
         i__2 = i__ * t_dim1 + 1;
-        q__1.r = -t[i__2].r;
-        q__1.i = -t[i__2].i; // , expr subst
-        alpha.r = q__1.r;
-        alpha.i = q__1.i; // , expr subst
+        q__1.real = -t[i__2].real;
+        q__1.imag = -t[i__2].imag; // , expr subst
+        alpha.real = q__1.real;
+        alpha.imag = q__1.imag; // , expr subst
         i__2 = i__ - 1;
         for(j = 1; j <= i__2; ++j)
         {
             i__3 = i__ + j * t_dim1;
-            t[i__3].r = 0.f;
-            t[i__3].i = 0.f; // , expr subst
+            t[i__3].real = 0.f;
+            t[i__3].imag = 0.f; // , expr subst
         }
         /* Computing MIN */
         i__2 = i__ - 1;
@@ -370,8 +370,8 @@ void aocl_lapack_ctplqt2(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *l, scom
         {
             i__3 = i__ + j * b_dim1;
             r_cnjg(&q__1, &b[i__ + j * b_dim1]);
-            b[i__3].r = q__1.r;
-            b[i__3].i = q__1.i; // , expr subst
+            b[i__3].real = q__1.real;
+            b[i__3].imag = q__1.imag; // , expr subst
         }
         /* Triangular part of B2 */
         i__2 = p;
@@ -379,10 +379,10 @@ void aocl_lapack_ctplqt2(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *l, scom
         {
             i__3 = i__ + j * t_dim1;
             i__4 = i__ + (*n - *l + j) * b_dim1;
-            q__1.r = alpha.r * b[i__4].r - alpha.i * b[i__4].i;
-            q__1.i = alpha.r * b[i__4].i + alpha.i * b[i__4].r; // , expr subst
-            t[i__3].r = q__1.r;
-            t[i__3].i = q__1.i; // , expr subst
+            q__1.real = alpha.real * b[i__4].real - alpha.imag * b[i__4].imag;
+            q__1.imag = alpha.real * b[i__4].imag + alpha.imag * b[i__4].real; // , expr subst
+            t[i__3].real = q__1.real;
+            t[i__3].imag = q__1.imag; // , expr subst
         }
         aocl_blas_ctrmv("L", "N", "N", &p, &b[np * b_dim1 + 1], ldb, &t[i__ + t_dim1], ldt);
         /* Rectangular part of B2 */
@@ -400,8 +400,8 @@ void aocl_lapack_ctplqt2(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *l, scom
         {
             i__3 = i__ + j * t_dim1;
             r_cnjg(&q__1, &t[i__ + j * t_dim1]);
-            t[i__3].r = q__1.r;
-            t[i__3].i = q__1.i; // , expr subst
+            t[i__3].real = q__1.real;
+            t[i__3].imag = q__1.imag; // , expr subst
         }
         i__2 = i__ - 1;
         aocl_blas_ctrmv("L", "C", "N", &i__2, &t[t_offset], ldt, &t[i__ + t_dim1], ldt);
@@ -410,25 +410,25 @@ void aocl_lapack_ctplqt2(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *l, scom
         {
             i__3 = i__ + j * t_dim1;
             r_cnjg(&q__1, &t[i__ + j * t_dim1]);
-            t[i__3].r = q__1.r;
-            t[i__3].i = q__1.i; // , expr subst
+            t[i__3].real = q__1.real;
+            t[i__3].imag = q__1.imag; // , expr subst
         }
         i__2 = *n - *l + p;
         for(j = 1; j <= i__2; ++j)
         {
             i__3 = i__ + j * b_dim1;
             r_cnjg(&q__1, &b[i__ + j * b_dim1]);
-            b[i__3].r = q__1.r;
-            b[i__3].i = q__1.i; // , expr subst
+            b[i__3].real = q__1.real;
+            b[i__3].imag = q__1.imag; // , expr subst
         }
         /* T(I,I) = tau(I) */
         i__2 = i__ + i__ * t_dim1;
         i__3 = i__ * t_dim1 + 1;
-        t[i__2].r = t[i__3].r;
-        t[i__2].i = t[i__3].i; // , expr subst
+        t[i__2].real = t[i__3].real;
+        t[i__2].imag = t[i__3].imag; // , expr subst
         i__2 = i__ * t_dim1 + 1;
-        t[i__2].r = 0.f;
-        t[i__2].i = 0.f; // , expr subst
+        t[i__2].real = 0.f;
+        t[i__2].imag = 0.f; // , expr subst
     }
     i__1 = *m;
     for(i__ = 1; i__ <= i__1; ++i__)
@@ -438,11 +438,11 @@ void aocl_lapack_ctplqt2(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *l, scom
         {
             i__3 = i__ + j * t_dim1;
             i__4 = j + i__ * t_dim1;
-            t[i__3].r = t[i__4].r;
-            t[i__3].i = t[i__4].i; // , expr subst
+            t[i__3].real = t[i__4].real;
+            t[i__3].imag = t[i__4].imag; // , expr subst
             i__3 = j + i__ * t_dim1;
-            t[i__3].r = 0.f;
-            t[i__3].i = 0.f; // , expr subst
+            t[i__3].real = 0.f;
+            t[i__3].imag = 0.f; // , expr subst
         }
     }
     /* End of CTPLQT2 */

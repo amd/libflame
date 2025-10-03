@@ -4,8 +4,8 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static dcomplex c_b1 = {{0.}, {0.}};
-static dcomplex c_b2 = {{1.}, {0.}};
+static dcomplex c_b1 = {0., 0.};
+static dcomplex c_b2 = {1., 0.};
 static aocl_int64_t c__0 = 0;
 static aocl_int64_t c__2 = 2;
 static aocl_int64_t c__1 = 1;
@@ -358,8 +358,8 @@ void aocl_lapack_zgelsx(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *nrhs, dc
     work[i__1].real = 1.;
     work[i__1].imag = 0.; // , expr subst
     i__1 = ismax;
-    work[i__1].r = 1.;
-    work[i__1].i = 0.; // , expr subst
+    work[i__1].real = 1.;
+    work[i__1].imag = 0.; // , expr subst
     smax = z_abs(&a[a_dim1 + 1]);
     smin = smax;
     if(z_abs(&a[a_dim1 + 1]) == 0.)
@@ -471,7 +471,7 @@ L10:
         for(i__ = 1; i__ <= i__2; ++i__)
         {
             i__3 = (mn << 1) + i__;
-            if(work[i__3].r == 1. && work[i__3].i == 0.)
+            if(work[i__3].real == 1. && work[i__3].imag == 0.)
             {
                 if(jpvt[i__] != i__)
                 {
@@ -480,8 +480,8 @@ L10:
                     t1.real = b[i__3].real;
                     t1.imag = b[i__3].imag; // , expr subst
                     i__3 = jpvt[k] + j * b_dim1;
-                    t2.r = b[i__3].r;
-                    t2.i = b[i__3].i; // , expr subst
+                    t2.real = b[i__3].real;
+                    t2.imag = b[i__3].imag; // , expr subst
                 L70:
                     i__3 = jpvt[k] + j * b_dim1;
                     b[i__3].real = t1.real;
@@ -493,8 +493,8 @@ L10:
                     t1.imag = t2.imag; // , expr subst
                     k = jpvt[k];
                     i__3 = jpvt[k] + j * b_dim1;
-                    t2.r = b[i__3].r;
-                    t2.i = b[i__3].i; // , expr subst
+                    t2.real = b[i__3].real;
+                    t2.imag = b[i__3].imag; // , expr subst
                     if(jpvt[k] != i__)
                     {
                         goto L70;

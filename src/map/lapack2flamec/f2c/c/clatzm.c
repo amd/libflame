@@ -4,7 +4,7 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static scomplex c_b1 = {{1.f}, {0.f}};
+static scomplex c_b1 = {1.f, 0.f};
 static aocl_int64_t c__1 = 1;
 /* > \brief \b CLATZM */
 /* =========== DOCUMENTATION =========== */
@@ -213,7 +213,7 @@ void aocl_lapack_clatzm(char *side, aocl_int64_t *m, aocl_int64_t *n, scomplex *
     c1 -= c1_offset;
     --work;
     /* Function Body */
-    if(fla_min(*m, *n) == 0 || tau->r == 0.f && tau->i == 0.f)
+    if(fla_min(*m, *n) == 0 || tau->real == 0.f && tau->imag == 0.f)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
@@ -229,12 +229,12 @@ void aocl_lapack_clatzm(char *side, aocl_int64_t *m, aocl_int64_t *n, scomplex *
         /* [ C1 ] := [ C1 ] - tau* [ 1 ] * w**H */
         /* [ C2 ] [ C2 ] [ v ] */
         aocl_lapack_clacgv(n, &work[1], &c__1);
-        q__1.r = -tau->r;
-        q__1.i = -tau->i; // , expr subst
+        q__1.real = -tau->real;
+        q__1.imag = -tau->imag; // , expr subst
         aocl_blas_caxpy(n, &q__1, &work[1], &c__1, &c1[c1_offset], ldc);
         i__1 = *m - 1;
-        q__1.r = -tau->r;
-        q__1.i = -tau->i; // , expr subst
+        q__1.real = -tau->real;
+        q__1.imag = -tau->imag; // , expr subst
         aocl_blas_cgeru(&i__1, n, &q__1, &v[1], incv, &work[1], &c__1, &c2[c2_offset], ldc);
     }
     else if(lsame_(side, "R", 1, 1))
@@ -245,12 +245,12 @@ void aocl_lapack_clatzm(char *side, aocl_int64_t *m, aocl_int64_t *n, scomplex *
         aocl_blas_cgemv("No transpose", m, &i__1, &c_b1, &c2[c2_offset], ldc, &v[1], incv, &c_b1,
                         &work[1], &c__1);
         /* [ C1, C2 ] := [ C1, C2 ] - tau* w * [ 1 , v**H] */
-        q__1.r = -tau->r;
-        q__1.i = -tau->i; // , expr subst
+        q__1.real = -tau->real;
+        q__1.imag = -tau->imag; // , expr subst
         aocl_blas_caxpy(m, &q__1, &work[1], &c__1, &c1[c1_offset], &c__1);
         i__1 = *n - 1;
-        q__1.r = -tau->r;
-        q__1.i = -tau->i; // , expr subst
+        q__1.real = -tau->real;
+        q__1.imag = -tau->imag; // , expr subst
         aocl_blas_cgerc(m, &i__1, &q__1, &work[1], &c__1, &v[1], incv, &c2[c2_offset], ldc);
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);

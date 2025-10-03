@@ -303,10 +303,10 @@ void aocl_lapack_zsysv_rook(char *uplo, aocl_int64_t *n, aocl_int64_t *nrhs, dco
         else
         {
             aocl_lapack_zsytrf_rook(uplo, n, &a[a_offset], lda, &ipiv[1], &work[1], &c_n1, info);
-            lwkopt = (integer)work[1].r;
+            lwkopt = (integer)work[1].real;
         }
-        work[1].r = (doublereal)lwkopt;
-        work[1].i = 0.; // , expr subst
+        work[1].real = (doublereal)lwkopt;
+        work[1].imag = 0.; // , expr subst
     }
     if(*info != 0)
     {
@@ -329,8 +329,8 @@ void aocl_lapack_zsysv_rook(char *uplo, aocl_int64_t *n, aocl_int64_t *nrhs, dco
         aocl_lapack_zsytrs_rook(uplo, n, nrhs, &a[a_offset], lda, &ipiv[1], &b[b_offset], ldb,
                                 info);
     }
-    work[1].r = (doublereal)lwkopt;
-    work[1].i = 0.; // , expr subst
+    work[1].real = (doublereal)lwkopt;
+    work[1].imag = 0.; // , expr subst
     AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of ZSYSV_ROOK */

@@ -349,8 +349,8 @@ void aocl_lapack_chbev_2stage(char *jobz, char *uplo, aocl_int64_t *n, aocl_int6
         {
             lwmin = 1;
             r__1 = aocl_lapack_sroundup_lwork(&lwmin);
-            work[1].r = r__1;
-            work[1].i = 0.f; // , expr subst
+            work[1].real = r__1;
+            work[1].imag = 0.f; // , expr subst
         }
         else
         {
@@ -359,8 +359,8 @@ void aocl_lapack_chbev_2stage(char *jobz, char *uplo, aocl_int64_t *n, aocl_int6
             lwtrd = aocl_lapack_ilaenv2stage(&c__4, "CHETRD_HB2ST", jobz, n, kd, &ib, &c_n1);
             lwmin = lhtrd + lwtrd;
             r__1 = aocl_lapack_sroundup_lwork(&lwmin);
-            work[1].r = r__1;
-            work[1].i = 0.f; // , expr subst
+            work[1].real = r__1;
+            work[1].imag = 0.f; // , expr subst
         }
         if(*lwork < lwmin && !lquery)
         {
@@ -390,18 +390,18 @@ void aocl_lapack_chbev_2stage(char *jobz, char *uplo, aocl_int64_t *n, aocl_int6
         if(lower)
         {
             i__1 = ab_dim1 + 1;
-            w[1] = ab[i__1].r;
+            w[1] = ab[i__1].real;
         }
         else
         {
             i__1 = *kd + 1 + ab_dim1;
-            w[1] = ab[i__1].r;
+            w[1] = ab[i__1].real;
         }
         if(wantz)
         {
             i__1 = z_dim1 + 1;
-            z__[i__1].r = 1.f;
-            z__[i__1].i = 0.f; // , expr subst
+            z__[i__1].real = 1.f;
+            z__[i__1].imag = 0.f; // , expr subst
         }
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
@@ -470,8 +470,8 @@ void aocl_lapack_chbev_2stage(char *jobz, char *uplo, aocl_int64_t *n, aocl_int6
     }
     /* Set WORK(1) to optimal workspace size. */
     r__1 = aocl_lapack_sroundup_lwork(&lwmin);
-    work[1].r = r__1;
-    work[1].i = 0.f; // , expr subst
+    work[1].real = r__1;
+    work[1].imag = 0.f; // , expr subst
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
     return;
     /* End of CHBEV_2STAGE */

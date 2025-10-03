@@ -372,8 +372,8 @@ void aocl_lapack_zstedc(char *compz, aocl_int64_t *n, doublereal *d__, doublerea
             lrwmin = (*n << 2) + 1 + (i__1 * i__1 << 1);
             liwmin = *n * 5 + 3;
         }
-        work[1].r = (doublereal)lwmin;
-        work[1].i = 0.; // , expr subst
+        work[1].real = (doublereal)lwmin;
+        work[1].imag = 0.; // , expr subst
         rwork[1] = (doublereal)lrwmin;
         iwork[1] = (aocl_int_t)(liwmin);
         if(*lwork < lwmin && !lquery)
@@ -412,8 +412,8 @@ void aocl_lapack_zstedc(char *compz, aocl_int64_t *n, doublereal *d__, doublerea
         if(icompz != 0)
         {
             i__1 = z_dim1 + 1;
-            z__[i__1].r = 1.;
-            z__[i__1].i = 0.; // , expr subst
+            z__[i__1].real = 1.;
+            z__[i__1].imag = 0.; // , expr subst
         }
         AOCL_DTL_TRACE_LOG_EXIT
         return;
@@ -456,8 +456,8 @@ void aocl_lapack_zstedc(char *compz, aocl_int64_t *n, doublereal *d__, doublerea
                 {
                     i__3 = i__ + j * z_dim1;
                     i__4 = (j - 1) * *n + i__;
-                    z__[i__3].r = rwork[i__4];
-                    z__[i__3].i = 0.; // , expr subst
+                    z__[i__3].real = rwork[i__4];
+                    z__[i__3].imag = 0.; // , expr subst
                     /* L10: */
                 }
                 /* L20: */
@@ -562,8 +562,8 @@ void aocl_lapack_zstedc(char *compz, aocl_int64_t *n, doublereal *d__, doublerea
         }
     }
 L70:
-    work[1].r = (doublereal)lwmin;
-    work[1].i = 0.; // , expr subst
+    work[1].real = (doublereal)lwmin;
+    work[1].imag = 0.; // , expr subst
     rwork[1] = (doublereal)lrwmin;
     iwork[1] = (aocl_int_t)(liwmin);
     AOCL_DTL_TRACE_LOG_EXIT

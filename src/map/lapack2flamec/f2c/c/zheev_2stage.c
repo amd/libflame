@@ -302,8 +302,8 @@ void aocl_lapack_zheev_2stage(char *jobz, char *uplo, aocl_int64_t *n, dcomplex 
         lhtrd = aocl_lapack_ilaenv2stage(&c__3, "ZHETRD_2STAGE", jobz, n, &kd, &ib, &c_n1);
         lwtrd = aocl_lapack_ilaenv2stage(&c__4, "ZHETRD_2STAGE", jobz, n, &kd, &ib, &c_n1);
         lwmin = *n + lhtrd + lwtrd;
-        work[1].r = (doublereal)lwmin;
-        work[1].i = 0.; // , expr subst
+        work[1].real = (doublereal)lwmin;
+        work[1].imag = 0.; // , expr subst
         if(*lwork < lwmin && !lquery)
         {
             *info = -8;
@@ -330,14 +330,14 @@ void aocl_lapack_zheev_2stage(char *jobz, char *uplo, aocl_int64_t *n, dcomplex 
     if(*n == 1)
     {
         i__1 = a_dim1 + 1;
-        w[1] = a[i__1].r;
-        work[1].r = 1.;
-        work[1].i = 0.; // , expr subst
+        w[1] = a[i__1].real;
+        work[1].real = 1.;
+        work[1].imag = 0.; // , expr subst
         if(wantz)
         {
             i__1 = a_dim1 + 1;
-            a[i__1].r = 1.;
-            a[i__1].i = 0.; // , expr subst
+            a[i__1].real = 1.;
+            a[i__1].imag = 0.; // , expr subst
         }
         AOCL_DTL_TRACE_LOG_EXIT
         return;
@@ -402,8 +402,8 @@ void aocl_lapack_zheev_2stage(char *jobz, char *uplo, aocl_int64_t *n, dcomplex 
         aocl_blas_dscal(&imax, &d__1, &w[1], &c__1);
     }
     /* Set WORK(1) to optimal scomplex workspace size. */
-    work[1].r = (doublereal)lwmin;
-    work[1].i = 0.; // , expr subst
+    work[1].real = (doublereal)lwmin;
+    work[1].imag = 0.; // , expr subst
     AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of ZHEEV_2STAGE */

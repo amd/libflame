@@ -278,10 +278,10 @@ void aocl_lapack_zlaqgb(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *kl, aocl
                 i__4 = *ku + 1 + i__ - j + j * ab_dim1;
                 i__2 = i__;
                 i__5 = *ku + 1 + i__ - j + j * ab_dim1;
-                z__1.r = r__[i__2] * ab[i__5].r;
-                z__1.i = r__[i__2] * ab[i__5].i; // , expr subst
-                ab[i__4].r = z__1.r;
-                ab[i__4].i = z__1.i; // , expr subst
+                z__1.real = r__[i__2] * ab[i__5].real;
+                z__1.imag = r__[i__2] * ab[i__5].imag; // , expr subst
+                ab[i__4].real = z__1.real;
+                ab[i__4].imag = z__1.imag; // , expr subst
                 /* L30: */
             }
             /* L40: */

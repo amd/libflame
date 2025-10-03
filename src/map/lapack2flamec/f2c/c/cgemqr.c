@@ -258,8 +258,8 @@ void aocl_lapack_cgemqr(char *side, char *trans, aocl_int64_t *m, aocl_int64_t *
     tran = lsame_(trans, "C", 1, 1);
     left = lsame_(side, "L", 1, 1);
     right = lsame_(side, "R", 1, 1);
-    mb = (integer)t[2].r;
-    nb = (integer)t[3].r;
+    mb = (integer)t[2].real;
+    nb = (integer)t[3].real;
     if(left)
     {
         lw = *n * nb;
@@ -309,8 +309,8 @@ void aocl_lapack_cgemqr(char *side, char *trans, aocl_int64_t *m, aocl_int64_t *
     }
     if(*info == 0)
     {
-        work[1].r = (real)lw;
-        work[1].i = 0.f; // , expr subst
+        work[1].real = (real)lw;
+        work[1].imag = 0.f; // , expr subst
     }
     if(*info != 0)
     {
@@ -344,8 +344,8 @@ void aocl_lapack_cgemqr(char *side, char *trans, aocl_int64_t *m, aocl_int64_t *
         aocl_lapack_clamtsqr(side, trans, m, n, k, &mb, &nb, &a[a_offset], lda, &t[6], &nb,
                              &c__[c_offset], ldc, &work[1], lwork, info);
     }
-    work[1].r = (real)lw;
-    work[1].i = 0.f; // , expr subst
+    work[1].real = (real)lw;
+    work[1].imag = 0.f; // , expr subst
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
     return;
     /* End of CGEMQR */

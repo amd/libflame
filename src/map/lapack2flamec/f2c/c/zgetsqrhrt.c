@@ -339,20 +339,20 @@ void aocl_lapack_zgetsqrhrt(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *mb1,
     }
     else if(lquery)
     {
-        z__1.r = (doublereal)lworkopt;
-        z__1.i = 0.; // , expr subst
-        work[1].r = z__1.r;
-        work[1].i = z__1.i; // , expr subst
+        z__1.real = (doublereal)lworkopt;
+        z__1.imag = 0.; // , expr subst
+        work[1].real = z__1.real;
+        work[1].imag = z__1.imag; // , expr subst
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Quick return if possible */
     if(fla_min(*m, *n) == 0)
     {
-        z__1.r = (doublereal)lworkopt;
-        z__1.i = 0.; // , expr subst
-        work[1].r = z__1.r;
-        work[1].i = z__1.i; // , expr subst
+        z__1.real = (doublereal)lworkopt;
+        z__1.imag = 0.; // , expr subst
+        work[1].real = z__1.real;
+        work[1].imag = z__1.imag; // , expr subst
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -391,21 +391,21 @@ void aocl_lapack_zgetsqrhrt(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *mb1,
     for(i__ = 1; i__ <= i__1; ++i__)
     {
         i__2 = lwt + *n * *n + i__;
-        z__1.r = -1.;
-        z__1.i = -0.; // , expr subst
-        if(work[i__2].r == z__1.r && work[i__2].i == z__1.i)
+        z__1.real = -1.;
+        z__1.imag = -0.; // , expr subst
+        if(work[i__2].real == z__1.real && work[i__2].imag == z__1.imag)
         {
             i__2 = *n;
             for(j = i__; j <= i__2; ++j)
             {
                 i__3 = i__ + j * a_dim1;
-                z__2.r = -1.;
-                z__2.i = -0.; // , expr subst
+                z__2.real = -1.;
+                z__2.imag = -0.; // , expr subst
                 i__4 = lwt + *n * (j - 1) + i__;
-                z__1.r = z__2.r * work[i__4].r - z__2.i * work[i__4].i;
-                z__1.i = z__2.r * work[i__4].i + z__2.i * work[i__4].r; // , expr subst
-                a[i__3].r = z__1.r;
-                a[i__3].i = z__1.i; // , expr subst
+                z__1.real = z__2.real * work[i__4].real - z__2.imag * work[i__4].imag;
+                z__1.imag = z__2.real * work[i__4].imag + z__2.imag * work[i__4].real; // , expr subst
+                a[i__3].real = z__1.real;
+                a[i__3].imag = z__1.imag; // , expr subst
             }
         }
         else
@@ -415,10 +415,10 @@ void aocl_lapack_zgetsqrhrt(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *mb1,
                             lda);
         }
     }
-    z__1.r = (doublereal)lworkopt;
-    z__1.i = 0.; // , expr subst
-    work[1].r = z__1.r;
-    work[1].i = z__1.i; // , expr subst
+    z__1.real = (doublereal)lworkopt;
+    z__1.imag = 0.; // , expr subst
+    work[1].real = z__1.real;
+    work[1].imag = z__1.imag; // , expr subst
     AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of ZGETSQRHRT */

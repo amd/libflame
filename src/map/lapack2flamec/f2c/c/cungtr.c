@@ -234,8 +234,8 @@ void aocl_lapack_cungtr(char *uplo, aocl_int64_t *n, scomplex *a, aocl_int64_t *
         i__2 = *n - 1; // , expr subst
         lwkopt = fla_max(i__1, i__2) * nb;
         r__1 = aocl_lapack_sroundup_lwork(&lwkopt);
-        work[1].r = r__1;
-        work[1].i = 0.f; // , expr subst
+        work[1].real = r__1;
+        work[1].imag = 0.f; // , expr subst
     }
     if(*info != 0)
     {
@@ -252,8 +252,8 @@ void aocl_lapack_cungtr(char *uplo, aocl_int64_t *n, scomplex *a, aocl_int64_t *
     /* Quick return if possible */
     if(*n == 0)
     {
-        work[1].r = 1.f;
-        work[1].i = 0.f; // , expr subst
+        work[1].real = 1.f;
+        work[1].imag = 0.f; // , expr subst
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
@@ -342,8 +342,8 @@ void aocl_lapack_cungtr(char *uplo, aocl_int64_t *n, scomplex *a, aocl_int64_t *
         }
     }
     r__1 = aocl_lapack_sroundup_lwork(&lwkopt);
-    work[1].r = r__1;
-    work[1].i = 0.f; // , expr subst
+    work[1].real = r__1;
+    work[1].imag = 0.f; // , expr subst
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
     return;
     /* End of CUNGTR */

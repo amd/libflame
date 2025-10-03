@@ -236,8 +236,8 @@ void aocl_lapack_cung2l(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *k, scomp
                           lda, &work[1]);
         i__2 = *m - *n + ii - 1;
         i__3 = i__;
-        q__1.r = -tau[i__3].r;
-        q__1.i = -tau[i__3].i; // , expr subst
+        q__1.real = -tau[i__3].real;
+        q__1.imag = -tau[i__3].imag; // , expr subst
         aocl_blas_cscal(&i__2, &q__1, &a[ii * a_dim1 + 1], &c__1);
         i__2 = *m - *n + ii + ii * a_dim1;
         i__3 = i__;

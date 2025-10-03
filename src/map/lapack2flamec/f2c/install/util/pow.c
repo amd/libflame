@@ -38,47 +38,47 @@ double pow_di(doublereal *ap, integer *bp)
 /* Complex */
 void pow_ci(scomplex *p, scomplex *a, integer *b)
 {
-    _Fcomplex a_ = {a->r, a->i};
+    _Fcomplex a_ = {a->real, a->imag};
     _Fcomplex b_ = {*b, 0};
     _Fcomplex ret_val = cpowf(a_, b_);
-    p->r = crealf(ret_val);
-    p->i = cimagf(ret_val);
+    p->real = crealf(ret_val);
+    p->imag = cimagf(ret_val);
 }
 void pow_zz(dcomplex *r, dcomplex *a, dcomplex *b)
 {
-    _Dcomplex a_ = {a->r, a->i};
-    _Dcomplex b_ = {a->r, a->i};
+    _Dcomplex a_ = {a->real, a->imag};
+    _Dcomplex b_ = {a->real, a->imag};
     _Dcomplex ret_val = cpow(a_, b_);
-    r->r = creal(ret_val);
-    r->i = cimag(ret_val);
+    r->real = creal(ret_val);
+    r->imag = cimag(ret_val);
 }
 void pow_zi(dcomplex *p, dcomplex *a, integer *b)
 {
-    _Dcomplex a_ = {a->r, a->i};
+    _Dcomplex a_ = {a->real, a->imag};
     _Dcomplex b_ = {*b, 0};
     _Dcomplex ret_val = cpow(a_, b_);
-    p->r = creal(ret_val);
-    p->i = cimag(ret_val);
+    p->real = creal(ret_val);
+    p->imag = cimag(ret_val);
 }
 #else
 /* Complex */
 void pow_ci(scomplex *p, scomplex *a, integer *b)
 {
-    double _Complex ret_val = cpow(a->r + I * a->i, *b);
-    p->r = creal(ret_val);
-    p->i = cimag(ret_val);
+    double _Complex ret_val = cpow(a->real + I * a->imag, *b);
+    p->real = creal(ret_val);
+    p->imag = cimag(ret_val);
 }
 void pow_zz(dcomplex *r, dcomplex *a, dcomplex *b)
 {
-    double _Complex ret_val = cpow(a->r + I * a->i, b->r + I * b->i);
-    r->r = creal(ret_val);
-    r->i = cimag(ret_val);
+    double _Complex ret_val = cpow(a->real + I * a->imag, b->real + I * b->imag);
+    r->real = creal(ret_val);
+    r->imag = cimag(ret_val);
 }
 void pow_zi(dcomplex *p, dcomplex *a, integer *b)
 {
-    double _Complex ret_val = cpow(a->r + I * a->i, *b);
-    p->r = creal(ret_val);
-    p->i = cimag(ret_val);
+    double _Complex ret_val = cpow(a->real + I * a->imag, *b);
+    p->real = creal(ret_val);
+    p->imag = cimag(ret_val);
 }
 #endif
 

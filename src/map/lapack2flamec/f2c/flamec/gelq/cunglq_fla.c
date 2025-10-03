@@ -169,8 +169,8 @@ void cunglq_fla(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *k, scomplex *a, 
     *info = 0;
     nb = aocl_lapack_ilaenv(&c__1, "CUNGLQ", " ", m, n, k, &c_n1);
     lwkopt = fla_max(1, *m) * nb;
-    work[1].r = (real)lwkopt;
-    work[1].i = 0.f; // , expr subst
+    work[1].real = (real)lwkopt;
+    work[1].imag = 0.f; // , expr subst
     lquery = *lwork == -1;
     if(*m < 0)
     {
@@ -205,8 +205,8 @@ void cunglq_fla(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *k, scomplex *a, 
     /* Quick return if possible */
     if(*m <= 0)
     {
-        work[1].r = 1.f;
-        work[1].i = 0.f; // , expr subst
+        work[1].real = 1.f;
+        work[1].imag = 0.f; // , expr subst
         return;
     }
     nbmin = 2;
@@ -317,8 +317,8 @@ void cunglq_fla(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *k, scomplex *a, 
             /* L50: */
         }
     }
-    work[1].r = (real)iws;
-    work[1].i = 0.f; // , expr subst
+    work[1].real = (real)iws;
+    work[1].imag = 0.f; // , expr subst
     return;
     /* End of CUNGLQ */
 }

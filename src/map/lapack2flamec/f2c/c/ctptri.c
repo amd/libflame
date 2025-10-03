@@ -4,7 +4,7 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static scomplex c_b1 = {{1.f}, {0.f}};
+static scomplex c_b1 = {1.f, 0.f};
 static aocl_int64_t c__1 = 1;
 /* > \brief \b CTPTRI */
 /* =========== DOCUMENTATION =========== */
@@ -213,7 +213,7 @@ void aocl_lapack_ctptri(char *uplo, char *diag, aocl_int64_t *n, scomplex *ap, a
             {
                 jj += *info;
                 i__2 = jj;
-                if(ap[i__2].r == 0.f && ap[i__2].i == 0.f)
+                if(ap[i__2].real == 0.f && ap[i__2].imag == 0.f)
                 {
                     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
                     return;
@@ -228,7 +228,7 @@ void aocl_lapack_ctptri(char *uplo, char *diag, aocl_int64_t *n, scomplex *ap, a
             for(*info = 1; *info <= i__1; ++(*info))
             {
                 i__2 = jj;
-                if(ap[i__2].r == 0.f && ap[i__2].i == 0.f)
+                if(ap[i__2].real == 0.f && ap[i__2].imag == 0.f)
                 {
                     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
                     return;

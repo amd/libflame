@@ -183,7 +183,7 @@ void aocl_lapack_clarfx(char *side, aocl_int64_t *m, aocl_int64_t *n, scomplex *
     c__ -= c_offset;
     --work;
     /* Function Body */
-    if(tau->r == 0.f && tau->i == 0.f)
+    if(tau->real == 0.f && tau->imag == 0.f)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
@@ -218,8 +218,8 @@ void aocl_lapack_clarfx(char *side, aocl_int64_t *m, aocl_int64_t *n, scomplex *
         aocl_lapack_clarf(side, m, n, &v[1], &c__1, tau, &c__[c_offset], ldc, &work[1]);
         goto L410;
     L10: /* Special code for 1 x 1 Householder */
-        q__3.r = tau->r * v[1].r - tau->i * v[1].i;
-        q__3.i = tau->r * v[1].i + tau->i * v[1].r; // , expr subst
+        q__3.real = tau->real * v[1].real - tau->imag * v[1].imag;
+        q__3.imag = tau->real * v[1].imag + tau->imag * v[1].real; // , expr subst
         r_cnjg(&q__4, &v[1]);
         q__2.real = q__3.real * q__4.real - q__3.imag * q__4.imag;
         q__2.imag = q__3.real * q__4.imag + q__3.imag * q__4.real; // , expr subst
@@ -1467,8 +1467,8 @@ void aocl_lapack_clarfx(char *side, aocl_int64_t *m, aocl_int64_t *n, scomplex *
         aocl_lapack_clarf(side, m, n, &v[1], &c__1, tau, &c__[c_offset], ldc, &work[1]);
         goto L410;
     L210: /* Special code for 1 x 1 Householder */
-        q__3.r = tau->r * v[1].r - tau->i * v[1].i;
-        q__3.i = tau->r * v[1].i + tau->i * v[1].r; // , expr subst
+        q__3.real = tau->real * v[1].real - tau->imag * v[1].imag;
+        q__3.imag = tau->real * v[1].imag + tau->imag * v[1].real; // , expr subst
         r_cnjg(&q__4, &v[1]);
         q__2.real = q__3.real * q__4.real - q__3.imag * q__4.imag;
         q__2.imag = q__3.real * q__4.imag + q__3.imag * q__4.real; // , expr subst
@@ -1489,8 +1489,8 @@ void aocl_lapack_clarfx(char *side, aocl_int64_t *m, aocl_int64_t *n, scomplex *
         }
         goto L410;
     L230: /* Special code for 2 x 2 Householder */
-        v1.r = v[1].r;
-        v1.i = v[1].i; // , expr subst
+        v1.real = v[1].real;
+        v1.imag = v[1].imag; // , expr subst
         r_cnjg(&q__2, &v1);
         q__1.real = tau->real * q__2.real - tau->imag * q__2.imag;
         q__1.imag = tau->real * q__2.imag + tau->imag * q__2.real; // , expr subst
@@ -1536,8 +1536,8 @@ void aocl_lapack_clarfx(char *side, aocl_int64_t *m, aocl_int64_t *n, scomplex *
         }
         goto L410;
     L250: /* Special code for 3 x 3 Householder */
-        v1.r = v[1].r;
-        v1.i = v[1].i; // , expr subst
+        v1.real = v[1].real;
+        v1.imag = v[1].imag; // , expr subst
         r_cnjg(&q__2, &v1);
         q__1.real = tau->real * q__2.real - tau->imag * q__2.imag;
         q__1.imag = tau->real * q__2.imag + tau->imag * q__2.real; // , expr subst
@@ -1603,8 +1603,8 @@ void aocl_lapack_clarfx(char *side, aocl_int64_t *m, aocl_int64_t *n, scomplex *
         }
         goto L410;
     L270: /* Special code for 4 x 4 Householder */
-        v1.r = v[1].r;
-        v1.i = v[1].i; // , expr subst
+        v1.real = v[1].real;
+        v1.imag = v[1].imag; // , expr subst
         r_cnjg(&q__2, &v1);
         q__1.real = tau->real * q__2.real - tau->imag * q__2.imag;
         q__1.imag = tau->real * q__2.imag + tau->imag * q__2.real; // , expr subst
@@ -1690,8 +1690,8 @@ void aocl_lapack_clarfx(char *side, aocl_int64_t *m, aocl_int64_t *n, scomplex *
         }
         goto L410;
     L290: /* Special code for 5 x 5 Householder */
-        v1.r = v[1].r;
-        v1.i = v[1].i; // , expr subst
+        v1.real = v[1].real;
+        v1.imag = v[1].imag; // , expr subst
         r_cnjg(&q__2, &v1);
         q__1.real = tau->real * q__2.real - tau->imag * q__2.imag;
         q__1.imag = tau->real * q__2.imag + tau->imag * q__2.real; // , expr subst
@@ -1797,8 +1797,8 @@ void aocl_lapack_clarfx(char *side, aocl_int64_t *m, aocl_int64_t *n, scomplex *
         }
         goto L410;
     L310: /* Special code for 6 x 6 Householder */
-        v1.r = v[1].r;
-        v1.i = v[1].i; // , expr subst
+        v1.real = v[1].real;
+        v1.imag = v[1].imag; // , expr subst
         r_cnjg(&q__2, &v1);
         q__1.real = tau->real * q__2.real - tau->imag * q__2.imag;
         q__1.imag = tau->real * q__2.imag + tau->imag * q__2.real; // , expr subst
@@ -1924,8 +1924,8 @@ void aocl_lapack_clarfx(char *side, aocl_int64_t *m, aocl_int64_t *n, scomplex *
         }
         goto L410;
     L330: /* Special code for 7 x 7 Householder */
-        v1.r = v[1].r;
-        v1.i = v[1].i; // , expr subst
+        v1.real = v[1].real;
+        v1.imag = v[1].imag; // , expr subst
         r_cnjg(&q__2, &v1);
         q__1.real = tau->real * q__2.real - tau->imag * q__2.imag;
         q__1.imag = tau->real * q__2.imag + tau->imag * q__2.real; // , expr subst
@@ -2071,8 +2071,8 @@ void aocl_lapack_clarfx(char *side, aocl_int64_t *m, aocl_int64_t *n, scomplex *
         }
         goto L410;
     L350: /* Special code for 8 x 8 Householder */
-        v1.r = v[1].r;
-        v1.i = v[1].i; // , expr subst
+        v1.real = v[1].real;
+        v1.imag = v[1].imag; // , expr subst
         r_cnjg(&q__2, &v1);
         q__1.real = tau->real * q__2.real - tau->imag * q__2.imag;
         q__1.imag = tau->real * q__2.imag + tau->imag * q__2.real; // , expr subst
@@ -2238,8 +2238,8 @@ void aocl_lapack_clarfx(char *side, aocl_int64_t *m, aocl_int64_t *n, scomplex *
         }
         goto L410;
     L370: /* Special code for 9 x 9 Householder */
-        v1.r = v[1].r;
-        v1.i = v[1].i; // , expr subst
+        v1.real = v[1].real;
+        v1.imag = v[1].imag; // , expr subst
         r_cnjg(&q__2, &v1);
         q__1.real = tau->real * q__2.real - tau->imag * q__2.imag;
         q__1.imag = tau->real * q__2.imag + tau->imag * q__2.real; // , expr subst
@@ -2425,8 +2425,8 @@ void aocl_lapack_clarfx(char *side, aocl_int64_t *m, aocl_int64_t *n, scomplex *
         }
         goto L410;
     L390: /* Special code for 10 x 10 Householder */
-        v1.r = v[1].r;
-        v1.i = v[1].i; // , expr subst
+        v1.real = v[1].real;
+        v1.imag = v[1].imag; // , expr subst
         r_cnjg(&q__2, &v1);
         q__1.real = tau->real * q__2.real - tau->imag * q__2.imag;
         q__1.imag = tau->real * q__2.imag + tau->imag * q__2.real; // , expr subst

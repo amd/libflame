@@ -265,8 +265,8 @@ void chetrd_fla(char *uplo, aocl_int64_t *n, scomplex *a, aocl_int64_t *lda, rea
         /* Determine the block size. */
         nb = aocl_lapack_ilaenv(&c__1, "CHETRD", uplo, n, &c_n1, &c_n1, &c_n1);
         lwkopt = *n * nb;
-        work[1].r = (real)lwkopt;
-        work[1].i = 0.f; // , expr subst
+        work[1].real = (real)lwkopt;
+        work[1].imag = 0.f; // , expr subst
     }
     if(*info != 0)
     {
@@ -281,8 +281,8 @@ void chetrd_fla(char *uplo, aocl_int64_t *n, scomplex *a, aocl_int64_t *lda, rea
     /* Quick return if possible */
     if(*n == 0)
     {
-        work[1].r = 1.f;
-        work[1].i = 0.f; // , expr subst
+        work[1].real = 1.f;
+        work[1].imag = 0.f; // , expr subst
         return;
     }
     nx = *n;
@@ -342,8 +342,8 @@ void chetrd_fla(char *uplo, aocl_int64_t *n, scomplex *a, aocl_int64_t *lda, rea
             /* Update the unreduced submatrix A(1:i-1,1:i-1), using an */
             /* update of the form: A := A - V*W**H - W*V**H */
             i__3 = i__ - 1;
-            q__1.r = -1.f;
-            q__1.i = -0.f; // , expr subst
+            q__1.real = -1.f;
+            q__1.imag = -0.f; // , expr subst
             aocl_blas_cher2k(uplo, "No transpose", &i__3, &nb, &q__1, &a[i__ * a_dim1 + 1], lda,
                              &work[1], &ldwork, &c_b23, &a[a_offset], lda);
             /* Copy superdiagonal elements back into A, and diagonal */
@@ -381,8 +381,8 @@ void chetrd_fla(char *uplo, aocl_int64_t *n, scomplex *a, aocl_int64_t *lda, rea
             /* Update the unreduced submatrix A(i+nb:n,i+nb:n), using */
             /* an update of the form: A := A - V*W**H - W*V**H */
             i__3 = *n - i__ - nb + 1;
-            q__1.r = -1.f;
-            q__1.i = -0.f; // , expr subst
+            q__1.real = -1.f;
+            q__1.imag = -0.f; // , expr subst
             aocl_blas_cher2k(uplo, "No transpose", &i__3, &nb, &q__1, &a[i__ + nb + i__ * a_dim1],
                              lda, &work[nb + 1], &ldwork, &c_b23,
                              &a[i__ + nb + (i__ + nb) * a_dim1], lda);
@@ -406,8 +406,8 @@ void chetrd_fla(char *uplo, aocl_int64_t *n, scomplex *a, aocl_int64_t *lda, rea
         i__1 = *n - i__ + 1;
         chetd2_fla(uplo, &i__1, &a[i__ + i__ * a_dim1], lda, &d__[i__], &e[i__], &tau[i__], &iinfo);
     }
-    work[1].r = (real)lwkopt;
-    work[1].i = 0.f; // , expr subst
+    work[1].real = (real)lwkopt;
+    work[1].imag = 0.f; // , expr subst
     return;
     /* End of CHETRD */
 }

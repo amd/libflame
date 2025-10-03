@@ -317,8 +317,8 @@ void aocl_lapack_cgeqpf(aocl_int64_t *m, aocl_int64_t *n, scomplex *a, aocl_int6
             i__3 = i__ + 1;
             aocl_lapack_clarfg(&i__2, &aii, &a[fla_min(i__3, *m) + i__ * a_dim1], &c__1, &tau[i__]);
             i__2 = i__ + i__ * a_dim1;
-            a[i__2].r = aii.r;
-            a[i__2].i = aii.i; // , expr subst
+            a[i__2].real = aii.real;
+            a[i__2].imag = aii.imag; // , expr subst
             if(i__ < *n)
             {
                 /* Apply H(i) to A(i:m,i+1:n) from the left */

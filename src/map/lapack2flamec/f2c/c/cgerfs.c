@@ -4,7 +4,7 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static scomplex c_b1 = {{1.f}, {0.f}};
+static scomplex c_b1 = {1.f, 0.f};
 static aocl_int64_t c__1 = 1;
 /* > \brief \b CGERFS */
 /* =========== DOCUMENTATION =========== */
@@ -369,8 +369,8 @@ void aocl_lapack_cgerfs(char *trans, aocl_int64_t *n, aocl_int64_t *nrhs, scompl
         /* Compute residual R = B - op(A) * X, */
         /* where op(A) = A, A**T, or A**H, depending on TRANS. */
         aocl_blas_ccopy(n, &b[j * b_dim1 + 1], &c__1, &work[1], &c__1);
-        q__1.r = -1.f;
-        q__1.i = -0.f; // , expr subst
+        q__1.real = -1.f;
+        q__1.imag = -0.f; // , expr subst
         aocl_blas_cgemv(trans, n, n, &q__1, &a[a_offset], lda, &x[j * x_dim1 + 1], &c__1, &c_b1,
                         &work[1], &c__1);
         /* Compute componentwise relative backward error from formula */
@@ -383,7 +383,7 @@ void aocl_lapack_cgerfs(char *trans, aocl_int64_t *n, aocl_int64_t *nrhs, scompl
         for(i__ = 1; i__ <= i__2; ++i__)
         {
             i__3 = i__ + j * b_dim1;
-            rwork[i__] = (r__1 = b[i__3].r, f2c_abs(r__1))
+            rwork[i__] = (r__1 = b[i__3].real, f2c_abs(r__1))
                          + (r__2 = r_imag(&b[i__ + j * b_dim1]), f2c_abs(r__2));
             /* L30: */
         }
@@ -394,13 +394,13 @@ void aocl_lapack_cgerfs(char *trans, aocl_int64_t *n, aocl_int64_t *nrhs, scompl
             for(k = 1; k <= i__2; ++k)
             {
                 i__3 = k + j * x_dim1;
-                xk = (r__1 = x[i__3].r, f2c_abs(r__1))
+                xk = (r__1 = x[i__3].real, f2c_abs(r__1))
                      + (r__2 = r_imag(&x[k + j * x_dim1]), f2c_abs(r__2));
                 i__3 = *n;
                 for(i__ = 1; i__ <= i__3; ++i__)
                 {
                     i__4 = i__ + k * a_dim1;
-                    rwork[i__] += ((r__1 = a[i__4].r, f2c_abs(r__1))
+                    rwork[i__] += ((r__1 = a[i__4].real, f2c_abs(r__1))
                                    + (r__2 = r_imag(&a[i__ + k * a_dim1]), f2c_abs(r__2)))
                                   * xk;
                     /* L40: */
@@ -419,9 +419,9 @@ void aocl_lapack_cgerfs(char *trans, aocl_int64_t *n, aocl_int64_t *nrhs, scompl
                 {
                     i__4 = i__ + k * a_dim1;
                     i__5 = i__ + j * x_dim1;
-                    s += ((r__1 = a[i__4].r, f2c_abs(r__1))
+                    s += ((r__1 = a[i__4].real, f2c_abs(r__1))
                           + (r__2 = r_imag(&a[i__ + k * a_dim1]), f2c_abs(r__2)))
-                         * ((r__3 = x[i__5].r, f2c_abs(r__3))
+                         * ((r__3 = x[i__5].real, f2c_abs(r__3))
                             + (r__4 = r_imag(&x[i__ + j * x_dim1]), f2c_abs(r__4)));
                     /* L60: */
                 }
@@ -438,7 +438,7 @@ void aocl_lapack_cgerfs(char *trans, aocl_int64_t *n, aocl_int64_t *nrhs, scompl
                 /* Computing MAX */
                 i__3 = i__;
                 r__3 = s;
-                r__4 = ((r__1 = work[i__3].r, f2c_abs(r__1))
+                r__4 = ((r__1 = work[i__3].real, f2c_abs(r__1))
                         + (r__2 = r_imag(&work[i__]), f2c_abs(r__2)))
                        / rwork[i__]; // , expr subst
                 s = fla_max(r__3, r__4);
@@ -448,7 +448,7 @@ void aocl_lapack_cgerfs(char *trans, aocl_int64_t *n, aocl_int64_t *nrhs, scompl
                 /* Computing MAX */
                 i__3 = i__;
                 r__3 = s;
-                r__4 = ((r__1 = work[i__3].r, f2c_abs(r__1))
+                r__4 = ((r__1 = work[i__3].real, f2c_abs(r__1))
                         + (r__2 = r_imag(&work[i__]), f2c_abs(r__2)) + safe1)
                        / (rwork[i__] + safe1); // , expr subst
                 s = fla_max(r__3, r__4);
@@ -493,13 +493,13 @@ void aocl_lapack_cgerfs(char *trans, aocl_int64_t *n, aocl_int64_t *nrhs, scompl
             if(rwork[i__] > safe2)
             {
                 i__3 = i__;
-                rwork[i__] = (r__1 = work[i__3].r, f2c_abs(r__1))
+                rwork[i__] = (r__1 = work[i__3].real, f2c_abs(r__1))
                              + (r__2 = r_imag(&work[i__]), f2c_abs(r__2)) + nz * eps * rwork[i__];
             }
             else
             {
                 i__3 = i__;
-                rwork[i__] = (r__1 = work[i__3].r, f2c_abs(r__1))
+                rwork[i__] = (r__1 = work[i__3].real, f2c_abs(r__1))
                              + (r__2 = r_imag(&work[i__]), f2c_abs(r__2)) + nz * eps * rwork[i__]
                              + safe1;
             }
@@ -556,7 +556,7 @@ void aocl_lapack_cgerfs(char *trans, aocl_int64_t *n, aocl_int64_t *nrhs, scompl
             /* Computing MAX */
             i__3 = i__ + j * x_dim1;
             r__3 = lstres;
-            r__4 = (r__1 = x[i__3].r, f2c_abs(r__1))
+            r__4 = (r__1 = x[i__3].real, f2c_abs(r__1))
                    + (r__2 = r_imag(&x[i__ + j * x_dim1]), f2c_abs(r__2)); // , expr subst
             lstres = fla_max(r__3, r__4);
             /* L130: */

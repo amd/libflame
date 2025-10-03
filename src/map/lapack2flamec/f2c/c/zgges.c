@@ -4,8 +4,8 @@
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
  /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static dcomplex c_b1 = {{0.}, {0.}};
-static dcomplex c_b2 = {{1.}, {0.}};
+static dcomplex c_b1 = {0., 0.};
+static dcomplex c_b2 = {1., 0.};
 static aocl_int64_t c__1 = 1;
 static aocl_int64_t c__0 = 0;
 static aocl_int64_t c_n1 = -1;
@@ -483,8 +483,8 @@ void aocl_lapack_zgges(char *jobvsl, char *jobvsr, char *sort, L_fpz2 selctg, ao
                                               &c_n1); // , expr subst
             lwkopt = fla_max(i__1, i__2);
         }
-        work[1].r = (doublereal)lwkopt;
-        work[1].i = 0.; // , expr subst
+        work[1].real = (doublereal)lwkopt;
+        work[1].imag = 0.; // , expr subst
         if(*lwork < lwkmin && !lquery)
         {
             *info = -18;
@@ -694,8 +694,8 @@ void aocl_lapack_zgges(char *jobvsl, char *jobvsr, char *sort, L_fpz2 selctg, ao
         }
     }
 L30:
-    work[1].r = (doublereal)lwkopt;
-    work[1].i = 0.; // , expr subst
+    work[1].real = (doublereal)lwkopt;
+    work[1].imag = 0.; // , expr subst
     AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of ZGGES */

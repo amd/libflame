@@ -4,8 +4,8 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static scomplex c_b1 = {{0.f}, {0.f}};
-static scomplex c_b2 = {{1.f}, {0.f}};
+static scomplex c_b1 = {0.f, 0.f};
+static scomplex c_b2 = {1.f, 0.f};
 static aocl_int64_t c__1 = 1;
 /* > \brief \b CGBBRD */
 /* =========== DOCUMENTATION =========== */
@@ -456,8 +456,8 @@ void aocl_lapack_cgbbrd(char *vect, aocl_int64_t *m, aocl_int64_t *n, aocl_int64
                         clartg_(&ab[*ku + ml - 1 + i__ * ab_dim1], &ab[*ku + ml + i__ * ab_dim1],
                                 &rwork[i__ + ml - 1], &work[i__ + ml - 1], &ra);
                         i__3 = *ku + ml - 1 + i__ * ab_dim1;
-                        ab[i__3].r = ra.r;
-                        ab[i__3].i = ra.i; // , expr subst
+                        ab[i__3].real = ra.real;
+                        ab[i__3].imag = ra.imag; // , expr subst
                         if(i__ < *n)
                         {
                             /* Computing MIN */
@@ -514,10 +514,10 @@ void aocl_lapack_cgbbrd(char *vect, aocl_int64_t *m, aocl_int64_t *n, aocl_int64
                     i__5 = j + kun;
                     i__6 = j;
                     i__7 = (j + kun) * ab_dim1 + 1;
-                    q__1.r = work[i__6].r * ab[i__7].r - work[i__6].i * ab[i__7].i;
-                    q__1.i = work[i__6].r * ab[i__7].i + work[i__6].i * ab[i__7].r; // , expr subst
-                    work[i__5].r = q__1.r;
-                    work[i__5].i = q__1.i; // , expr subst
+                    q__1.real = work[i__6].real * ab[i__7].real - work[i__6].imag * ab[i__7].imag;
+                    q__1.imag = work[i__6].real * ab[i__7].imag + work[i__6].imag * ab[i__7].real; // , expr subst
+                    work[i__5].real = q__1.real;
+                    work[i__5].imag = q__1.imag; // , expr subst
                     i__5 = (j + kun) * ab_dim1 + 1;
                     i__6 = j;
                     i__7 = (j + kun) * ab_dim1 + 1;
@@ -605,10 +605,10 @@ void aocl_lapack_cgbbrd(char *vect, aocl_int64_t *m, aocl_int64_t *n, aocl_int64
                     i__5 = j + kb;
                     i__6 = j + kun;
                     i__7 = klu1 + (j + kun) * ab_dim1;
-                    q__1.r = work[i__6].r * ab[i__7].r - work[i__6].i * ab[i__7].i;
-                    q__1.i = work[i__6].r * ab[i__7].i + work[i__6].i * ab[i__7].r; // , expr subst
-                    work[i__5].r = q__1.r;
-                    work[i__5].i = q__1.i; // , expr subst
+                    q__1.real = work[i__6].real * ab[i__7].real - work[i__6].imag * ab[i__7].imag;
+                    q__1.imag = work[i__6].real * ab[i__7].imag + work[i__6].imag * ab[i__7].real; // , expr subst
+                    work[i__5].real = q__1.real;
+                    work[i__5].imag = q__1.imag; // , expr subst
                     i__5 = klu1 + (j + kun) * ab_dim1;
                     i__6 = j + kun;
                     i__7 = klu1 + (j + kun) * ab_dim1;
@@ -644,8 +644,8 @@ void aocl_lapack_cgbbrd(char *vect, aocl_int64_t *m, aocl_int64_t *n, aocl_int64
         {
             clartg_(&ab[i__ * ab_dim1 + 1], &ab[i__ * ab_dim1 + 2], &rc, &rs, &ra);
             i__2 = i__ * ab_dim1 + 1;
-            ab[i__2].r = ra.r;
-            ab[i__2].i = ra.i; // , expr subst
+            ab[i__2].real = ra.real;
+            ab[i__2].imag = ra.imag; // , expr subst
             if(i__ < *n)
             {
                 i__2 = i__ * ab_dim1 + 2;
@@ -684,24 +684,24 @@ void aocl_lapack_cgbbrd(char *vect, aocl_int64_t *m, aocl_int64_t *n, aocl_int64
             /* Annihilate a(m,m+1) by applying plane rotations from the */
             /* right */
             i__1 = *ku + (*m + 1) * ab_dim1;
-            rb.r = ab[i__1].r;
-            rb.i = ab[i__1].i; // , expr subst
+            rb.real = ab[i__1].real;
+            rb.imag = ab[i__1].imag; // , expr subst
             for(i__ = *m; i__ >= 1; --i__)
             {
                 clartg_(&ab[*ku + 1 + i__ * ab_dim1], &rb, &rc, &rs, &ra);
                 i__1 = *ku + 1 + i__ * ab_dim1;
-                ab[i__1].r = ra.r;
-                ab[i__1].i = ra.i; // , expr subst
+                ab[i__1].real = ra.real;
+                ab[i__1].imag = ra.imag; // , expr subst
                 if(i__ > 1)
                 {
                     r_cnjg(&q__3, &rs);
                     q__2.real = -q__3.real;
                     q__2.imag = -q__3.imag; // , expr subst
                     i__1 = *ku + i__ * ab_dim1;
-                    q__1.r = q__2.r * ab[i__1].r - q__2.i * ab[i__1].i;
-                    q__1.i = q__2.r * ab[i__1].i + q__2.i * ab[i__1].r; // , expr subst
-                    rb.r = q__1.r;
-                    rb.i = q__1.i; // , expr subst
+                    q__1.real = q__2.real * ab[i__1].real - q__2.imag * ab[i__1].imag;
+                    q__1.imag = q__2.real * ab[i__1].imag + q__2.imag * ab[i__1].real; // , expr subst
+                    rb.real = q__1.real;
+                    rb.imag = q__1.imag; // , expr subst
                     i__1 = *ku + i__ * ab_dim1;
                     i__2 = *ku + i__ * ab_dim1;
                     q__1.real = rc * ab[i__2].real;

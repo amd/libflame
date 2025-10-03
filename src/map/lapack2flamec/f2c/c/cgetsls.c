@@ -4,7 +4,7 @@
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
  /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static scomplex c_b1 = {{0.f}, {0.f}};
+static scomplex c_b1 = {0.f, 0.f};
 static aocl_int64_t c_n1 = -1;
 static aocl_int64_t c_n2 = -2;
 static aocl_int64_t c__0 = 0;
@@ -291,22 +291,22 @@ void aocl_lapack_cgetsls(char *trans, aocl_int64_t *m, aocl_int64_t *n, aocl_int
         if(*m >= *n)
         {
             aocl_lapack_cgeqr(m, n, &a[a_offset], lda, tq, &c_n1, workq, &c_n1, &info2);
-            tszo = (integer)tq[0].r;
-            lwo = (integer)workq[0].r;
+            tszo = (integer)tq[0].real;
+            lwo = (integer)workq[0].real;
             aocl_lapack_cgemqr("L", trans, m, nrhs, n, &a[a_offset], lda, tq, &tszo, &b[b_offset],
                                ldb, workq, &c_n1, &info2);
             /* Computing MAX */
             i__1 = lwo;
-            i__2 = (integer)workq[0].r; // , expr subst
+            i__2 = (integer)workq[0].real; // , expr subst
             lwo = fla_max(i__1, i__2);
             aocl_lapack_cgeqr(m, n, &a[a_offset], lda, tq, &c_n2, workq, &c_n2, &info2);
-            tszm = (integer)tq[0].r;
-            lwm = (integer)workq[0].r;
+            tszm = (integer)tq[0].real;
+            lwm = (integer)workq[0].real;
             aocl_lapack_cgemqr("L", trans, m, nrhs, n, &a[a_offset], lda, tq, &tszm, &b[b_offset],
                                ldb, workq, &c_n1, &info2);
             /* Computing MAX */
             i__1 = lwm;
-            i__2 = (integer)workq[0].r; // , expr subst
+            i__2 = (integer)workq[0].real; // , expr subst
             lwm = fla_max(i__1, i__2);
             wsizeo = tszo + lwo;
             wsizem = tszm + lwm;
@@ -314,22 +314,22 @@ void aocl_lapack_cgetsls(char *trans, aocl_int64_t *m, aocl_int64_t *n, aocl_int
         else
         {
             aocl_lapack_cgelq(m, n, &a[a_offset], lda, tq, &c_n1, workq, &c_n1, &info2);
-            tszo = (integer)tq[0].r;
-            lwo = (integer)workq[0].r;
+            tszo = (integer)tq[0].real;
+            lwo = (integer)workq[0].real;
             aocl_lapack_cgemlq("L", trans, n, nrhs, m, &a[a_offset], lda, tq, &tszo, &b[b_offset],
                                ldb, workq, &c_n1, &info2);
             /* Computing MAX */
             i__1 = lwo;
-            i__2 = (integer)workq[0].r; // , expr subst
+            i__2 = (integer)workq[0].real; // , expr subst
             lwo = fla_max(i__1, i__2);
             aocl_lapack_cgelq(m, n, &a[a_offset], lda, tq, &c_n2, workq, &c_n2, &info2);
-            tszm = (integer)tq[0].r;
-            lwm = (integer)workq[0].r;
+            tszm = (integer)tq[0].real;
+            lwm = (integer)workq[0].real;
             aocl_lapack_cgemlq("L", trans, n, nrhs, m, &a[a_offset], lda, tq, &tszm, &b[b_offset],
                                ldb, workq, &c_n1, &info2);
             /* Computing MAX */
             i__1 = lwm;
-            i__2 = (integer)workq[0].r; // , expr subst
+            i__2 = (integer)workq[0].real; // , expr subst
             lwm = fla_max(i__1, i__2);
             wsizeo = tszo + lwo;
             wsizem = tszm + lwm;
@@ -339,8 +339,8 @@ void aocl_lapack_cgetsls(char *trans, aocl_int64_t *m, aocl_int64_t *n, aocl_int
             *info = -10;
         }
         r__1 = aocl_lapack_sroundup_lwork(&wsizeo);
-        work[1].r = r__1;
-        work[1].i = 0.f; // , expr subst
+        work[1].real = r__1;
+        work[1].imag = 0.f; // , expr subst
     }
     if(*info != 0)
     {
@@ -354,8 +354,8 @@ void aocl_lapack_cgetsls(char *trans, aocl_int64_t *m, aocl_int64_t *n, aocl_int
         if(*lwork == -2)
         {
             r__1 = aocl_lapack_sroundup_lwork(&wsizem);
-            work[1].r = r__1;
-            work[1].i = 0.f; // , expr subst
+            work[1].real = r__1;
+            work[1].imag = 0.f; // , expr subst
         }
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
@@ -460,8 +460,8 @@ void aocl_lapack_cgetsls(char *trans, aocl_int64_t *m, aocl_int64_t *n, aocl_int
                 for(i__ = *n + 1; i__ <= i__2; ++i__)
                 {
                     i__3 = i__ + j * b_dim1;
-                    b[i__3].r = 0.f;
-                    b[i__3].i = 0.f; // , expr subst
+                    b[i__3].real = 0.f;
+                    b[i__3].imag = 0.f; // , expr subst
                     /* L10: */
                 }
                 /* L20: */
@@ -495,8 +495,8 @@ void aocl_lapack_cgetsls(char *trans, aocl_int64_t *m, aocl_int64_t *n, aocl_int
                 for(i__ = *m + 1; i__ <= i__2; ++i__)
                 {
                     i__3 = i__ + j * b_dim1;
-                    b[i__3].r = 0.f;
-                    b[i__3].i = 0.f; // , expr subst
+                    b[i__3].real = 0.f;
+                    b[i__3].imag = 0.f; // , expr subst
                     /* L30: */
                 }
                 /* L40: */
@@ -548,8 +548,8 @@ void aocl_lapack_cgetsls(char *trans, aocl_int64_t *m, aocl_int64_t *n, aocl_int
 L50:
     i__1 = tszo + lwo;
     r__1 = aocl_lapack_sroundup_lwork(&i__1);
-    work[1].r = r__1;
-    work[1].i = 0.f; // , expr subst
+    work[1].real = r__1;
+    work[1].imag = 0.f; // , expr subst
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
     return;
     /* End of CGETSLS */

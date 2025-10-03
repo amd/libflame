@@ -215,8 +215,8 @@ void aocl_lapack_zunghr(aocl_int64_t *n, aocl_int64_t *ilo, aocl_int64_t *ihi, d
     {
         nb = aocl_lapack_ilaenv(&c__1, "ZUNGQR", " ", &nh, &nh, &nh, &c_n1);
         lwkopt = fla_max(1, nh) * nb;
-        work[1].r = (doublereal)lwkopt;
-        work[1].i = 0.; // , expr subst
+        work[1].real = (doublereal)lwkopt;
+        work[1].imag = 0.; // , expr subst
     }
     if(*info != 0)
     {
@@ -233,8 +233,8 @@ void aocl_lapack_zunghr(aocl_int64_t *n, aocl_int64_t *ilo, aocl_int64_t *ihi, d
     /* Quick return if possible */
     if(*n == 0)
     {
-        work[1].r = 1.;
-        work[1].i = 0.; // , expr subst
+        work[1].real = 1.;
+        work[1].imag = 0.; // , expr subst
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -309,8 +309,8 @@ void aocl_lapack_zunghr(aocl_int64_t *n, aocl_int64_t *ilo, aocl_int64_t *ihi, d
         aocl_lapack_zungqr(&nh, &nh, &nh, &a[*ilo + 1 + (*ilo + 1) * a_dim1], lda, &tau[*ilo],
                            &work[1], lwork, &iinfo);
     }
-    work[1].r = (doublereal)lwkopt;
-    work[1].i = 0.; // , expr subst
+    work[1].real = (doublereal)lwkopt;
+    work[1].imag = 0.; // , expr subst
     AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of ZUNGHR */

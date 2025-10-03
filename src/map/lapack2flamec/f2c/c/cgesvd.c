@@ -4,8 +4,8 @@
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
  /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static scomplex c_b1 = {{0.f}, {0.f}};
-static scomplex c_b2 = {{1.f}, {0.f}};
+static scomplex c_b1 = {0.f, 0.f};
+static scomplex c_b2 = {1.f, 0.f};
 static aocl_int64_t c__6 = 6;
 static aocl_int64_t c__0 = 0;
 static aocl_int64_t c_n1 = -1;
@@ -396,20 +396,20 @@ void aocl_lapack_cgesvd(char *jobu, char *jobvt, aocl_int64_t *m, aocl_int64_t *
             mnthr = aocl_lapack_ilaenv(&c__6, "CGESVD", ch__1, m, n, &c__0, &c__0);
             /* Compute space needed for CGEQRF */
             aocl_lapack_cgeqrf(m, n, &a[a_offset], lda, cdum, cdum, &c_n1, &ierr);
-            lwork_cgeqrf__ = (integer)cdum[0].r;
+            lwork_cgeqrf__ = (integer)cdum[0].real;
             /* Compute space needed for CUNGQR */
             aocl_lapack_cungqr(m, n, n, &a[a_offset], lda, cdum, cdum, &c_n1, &ierr);
-            lwork_cungqr_n__ = (integer)cdum[0].r;
+            lwork_cungqr_n__ = (integer)cdum[0].real;
             aocl_lapack_cungqr(m, m, n, &a[a_offset], lda, cdum, cdum, &c_n1, &ierr);
-            lwork_cungqr_m__ = (integer)cdum[0].r;
+            lwork_cungqr_m__ = (integer)cdum[0].real;
             /* Compute space needed for CGEBRD */
             aocl_lapack_cgebrd(n, n, &a[a_offset], lda, &s[1], dum, cdum, cdum, cdum, &c_n1, &ierr);
-            lwork_cgebrd__ = (integer)cdum[0].r;
+            lwork_cgebrd__ = (integer)cdum[0].real;
             /* Compute space needed for CUNGBR */
             aocl_lapack_cungbr("P", n, n, n, &a[a_offset], lda, cdum, cdum, &c_n1, &ierr);
-            lwork_cungbr_p__ = (integer)cdum[0].r;
+            lwork_cungbr_p__ = (integer)cdum[0].real;
             aocl_lapack_cungbr("Q", n, n, n, &a[a_offset], lda, cdum, cdum, &c_n1, &ierr);
-            lwork_cungbr_q__ = (integer)cdum[0].r;
+            lwork_cungbr_q__ = (integer)cdum[0].real;
             mnthr = aocl_lapack_ilaenv(&c__6, "CGESVD", ch__1, m, n, &c__0, &c__0);
             if(*m >= mnthr)
             {
@@ -617,12 +617,12 @@ void aocl_lapack_cgesvd(char *jobu, char *jobvt, aocl_int64_t *m, aocl_int64_t *
                 /* Path 10 (M at least N, but not much larger) */
                 aocl_lapack_cgebrd(m, n, &a[a_offset], lda, &s[1], dum, cdum, cdum, cdum, &c_n1,
                                    &ierr);
-                lwork_cgebrd__ = (integer)cdum[0].r;
+                lwork_cgebrd__ = (integer)cdum[0].real;
                 maxwrk = (*n << 1) + lwork_cgebrd__;
                 if(wntus || wntuo)
                 {
                     aocl_lapack_cungbr("Q", m, n, n, &a[a_offset], lda, cdum, cdum, &c_n1, &ierr);
-                    lwork_cungbr_q__ = (integer)cdum[0].r;
+                    lwork_cungbr_q__ = (integer)cdum[0].real;
                     /* Computing MAX */
                     i__2 = maxwrk;
                     i__3 = (*n << 1) + lwork_cungbr_q__; // , expr subst
@@ -631,7 +631,7 @@ void aocl_lapack_cgesvd(char *jobu, char *jobvt, aocl_int64_t *m, aocl_int64_t *
                 if(wntua)
                 {
                     aocl_lapack_cungbr("Q", m, m, n, &a[a_offset], lda, cdum, cdum, &c_n1, &ierr);
-                    lwork_cungbr_q__ = (integer)cdum[0].r;
+                    lwork_cungbr_q__ = (integer)cdum[0].real;
                     /* Computing MAX */
                     i__2 = maxwrk;
                     i__3 = (*n << 1) + lwork_cungbr_q__; // , expr subst
@@ -653,21 +653,21 @@ void aocl_lapack_cgesvd(char *jobu, char *jobvt, aocl_int64_t *m, aocl_int64_t *
             mnthr = aocl_lapack_ilaenv(&c__6, "CGESVD", ch__1, m, n, &c__0, &c__0);
             /* Compute space needed for CGELQF */
             aocl_lapack_cgelqf(m, n, &a[a_offset], lda, cdum, cdum, &c_n1, &ierr);
-            lwork_cgelqf__ = (integer)cdum[0].r;
+            lwork_cgelqf__ = (integer)cdum[0].real;
             /* Compute space needed for CUNGLQ */
             aocl_lapack_cunglq(n, n, m, cdum, n, cdum, cdum, &c_n1, &ierr);
-            lwork_cunglq_n__ = (integer)cdum[0].r;
+            lwork_cunglq_n__ = (integer)cdum[0].real;
             aocl_lapack_cunglq(m, n, m, &a[a_offset], lda, cdum, cdum, &c_n1, &ierr);
-            lwork_cunglq_m__ = (integer)cdum[0].r;
+            lwork_cunglq_m__ = (integer)cdum[0].real;
             /* Compute space needed for CGEBRD */
             aocl_lapack_cgebrd(m, m, &a[a_offset], lda, &s[1], dum, cdum, cdum, cdum, &c_n1, &ierr);
-            lwork_cgebrd__ = (integer)cdum[0].r;
+            lwork_cgebrd__ = (integer)cdum[0].real;
             /* Compute space needed for CUNGBR P */
             aocl_lapack_cungbr("P", m, m, m, &a[a_offset], n, cdum, cdum, &c_n1, &ierr);
-            lwork_cungbr_p__ = (integer)cdum[0].r;
+            lwork_cungbr_p__ = (integer)cdum[0].real;
             /* Compute space needed for CUNGBR Q */
             aocl_lapack_cungbr("Q", m, m, m, &a[a_offset], n, cdum, cdum, &c_n1, &ierr);
-            lwork_cungbr_q__ = (integer)cdum[0].r;
+            lwork_cungbr_q__ = (integer)cdum[0].real;
             if(*n >= mnthr)
             {
                 if(wntvn)
@@ -874,13 +874,13 @@ void aocl_lapack_cgesvd(char *jobu, char *jobvt, aocl_int64_t *m, aocl_int64_t *
                 /* Path 10t(N greater than M, but not much larger) */
                 aocl_lapack_cgebrd(m, n, &a[a_offset], lda, &s[1], dum, cdum, cdum, cdum, &c_n1,
                                    &ierr);
-                lwork_cgebrd__ = (integer)cdum[0].r;
+                lwork_cgebrd__ = (integer)cdum[0].real;
                 maxwrk = (*m << 1) + lwork_cgebrd__;
                 if(wntvs || wntvo)
                 {
                     /* Compute space needed for CUNGBR P */
                     aocl_lapack_cungbr("P", m, n, m, &a[a_offset], n, cdum, cdum, &c_n1, &ierr);
-                    lwork_cungbr_p__ = (integer)cdum[0].r;
+                    lwork_cungbr_p__ = (integer)cdum[0].real;
                     /* Computing MAX */
                     i__2 = maxwrk;
                     i__3 = (*m << 1) + lwork_cungbr_p__; // , expr subst
@@ -889,7 +889,7 @@ void aocl_lapack_cgesvd(char *jobu, char *jobvt, aocl_int64_t *m, aocl_int64_t *
                 if(wntva)
                 {
                     aocl_lapack_cungbr("P", n, n, m, &a[a_offset], n, cdum, cdum, &c_n1, &ierr);
-                    lwork_cungbr_p__ = (integer)cdum[0].r;
+                    lwork_cungbr_p__ = (integer)cdum[0].real;
                     /* Computing MAX */
                     i__2 = maxwrk;
                     i__3 = (*m << 1) + lwork_cungbr_p__; // , expr subst
@@ -907,8 +907,8 @@ void aocl_lapack_cgesvd(char *jobu, char *jobvt, aocl_int64_t *m, aocl_int64_t *
         }
         maxwrk = fla_max(minwrk, maxwrk);
         r__1 = aocl_lapack_sroundup_lwork(&maxwrk);
-        work[1].r = r__1;
-        work[1].i = 0.f; // , expr subst
+        work[1].real = r__1;
+        work[1].imag = 0.f; // , expr subst
         if(*lwork < minwrk && !lquery)
         {
             *info = -13;
@@ -3602,8 +3602,8 @@ void aocl_lapack_cgesvd(char *jobu, char *jobvt, aocl_int64_t *m, aocl_int64_t *
     }
     /* Return optimal workspace in WORK(1) */
     r__1 = aocl_lapack_sroundup_lwork(&maxwrk);
-    work[1].r = r__1;
-    work[1].i = 0.f; // , expr subst
+    work[1].real = r__1;
+    work[1].imag = 0.f; // , expr subst
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
     return;
     /* End of CGESVD */

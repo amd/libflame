@@ -329,8 +329,8 @@ void fla_zunmqr(char *side, char *trans, aocl_int64_t *m, aocl_int64_t *n, aocl_
         i__2 = aocl_lapack_ilaenv(&c__1, "ZUNMQR", ch__1, m, n, k, &c_n1); // , expr subst
         nb = fla_min(i__1, i__2);
         lwkopt = fla_max(1, nw) * nb + 4160;
-        work[1].r = (doublereal)lwkopt;
-        work[1].i = 0.; // , expr subst
+        work[1].real = (doublereal)lwkopt;
+        work[1].imag = 0.; // , expr subst
     }
     if(*info != 0)
     {
@@ -345,8 +345,8 @@ void fla_zunmqr(char *side, char *trans, aocl_int64_t *m, aocl_int64_t *n, aocl_
     /* Quick return if possible */
     if(*m == 0 || *n == 0 || *k == 0)
     {
-        work[1].r = 1.;
-        work[1].i = 0.; // , expr subst
+        work[1].real = 1.;
+        work[1].imag = 0.; // , expr subst
         return;
     }
     nbmin = 2;
@@ -467,8 +467,8 @@ void fla_zunmqr(char *side, char *trans, aocl_int64_t *m, aocl_int64_t *n, aocl_
             }
         }
     }
-    work[1].r = (doublereal)lwkopt;
-    work[1].i = 0.; // , expr subst
+    work[1].real = (doublereal)lwkopt;
+    work[1].imag = 0.; // , expr subst
     return;
     /* End of ZUNMQR */
 }

@@ -4,8 +4,8 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static scomplex c_b1 = {{1.f}, {0.f}};
-static scomplex c_b2 = {{0.f}, {0.f}};
+static scomplex c_b1 = {1.f, 0.f};
+static scomplex c_b2 = {0.f, 0.f};
 static aocl_int64_t c__0 = 0;
 static aocl_int64_t c__1 = 1;
 /* > \brief \b CUNGTSQR_ROW */
@@ -311,19 +311,19 @@ void aocl_lapack_cungtsqr_row(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *mb
     }
     else if(lquery)
     {
-        q__1.r = (real)lworkopt;
-        q__1.i = 0.f; // , expr subst
-        work[1].r = q__1.r;
-        work[1].i = q__1.i; // , expr subst
+        q__1.real = (real)lworkopt;
+        q__1.imag = 0.f; // , expr subst
+        work[1].real = q__1.real;
+        work[1].imag = q__1.imag; // , expr subst
         return;
     }
     /* Quick return if possible */
     if(fla_min(*m, *n) == 0)
     {
-        q__1.r = (real)lworkopt;
-        q__1.i = 0.f; // , expr subst
-        work[1].r = q__1.r;
-        work[1].i = q__1.i; // , expr subst
+        q__1.real = (real)lworkopt;
+        q__1.imag = 0.f; // , expr subst
+        work[1].real = q__1.real;
+        work[1].imag = q__1.imag; // , expr subst
         return;
     }
     /* (0) Set the upper-triangular part of the matrix A to zero and */
@@ -416,10 +416,10 @@ void aocl_lapack_cungtsqr_row(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *mb
                                     &work[1], &knb);
         }
     }
-    q__1.r = (real)lworkopt;
-    q__1.i = 0.f; // , expr subst
-    work[1].r = q__1.r;
-    work[1].i = q__1.i; // , expr subst
+    q__1.real = (real)lworkopt;
+    q__1.imag = 0.f; // , expr subst
+    work[1].real = q__1.real;
+    work[1].imag = q__1.imag; // , expr subst
     return;
     /* End of CUNGTSQR_ROW */
 }

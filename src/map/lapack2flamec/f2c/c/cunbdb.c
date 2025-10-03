@@ -487,8 +487,8 @@ void aocl_lapack_cunbdb(char *trans, char *signs, aocl_int64_t *m, aocl_int64_t 
         lworkopt = *m - *q;
         lworkmin = *m - *q;
         r__1 = aocl_lapack_sroundup_lwork(&lworkopt);
-        work[1].r = r__1;
-        work[1].i = 0.f; // , expr subst
+        work[1].real = r__1;
+        work[1].imag = 0.f; // , expr subst
         if(*lwork < lworkmin && !lquery)
         {
             *info = -21;
@@ -516,42 +516,42 @@ void aocl_lapack_cunbdb(char *trans, char *signs, aocl_int64_t *m, aocl_int64_t 
             if(i__ == 1)
             {
                 i__2 = *p - i__ + 1;
-                q__1.r = z1;
-                q__1.i = 0.f; // , expr subst
+                q__1.real = z1;
+                q__1.imag = 0.f; // , expr subst
                 aocl_blas_cscal(&i__2, &q__1, &x11[i__ + i__ * x11_dim1], &c__1);
             }
             else
             {
                 i__2 = *p - i__ + 1;
                 r__1 = z1 * cos(phi[i__ - 1]);
-                q__1.r = r__1;
-                q__1.i = 0.f; // , expr subst
+                q__1.real = r__1;
+                q__1.imag = 0.f; // , expr subst
                 aocl_blas_cscal(&i__2, &q__1, &x11[i__ + i__ * x11_dim1], &c__1);
                 i__2 = *p - i__ + 1;
                 r__1 = -z1 * z3 * z4 * sin(phi[i__ - 1]);
-                q__1.r = r__1;
-                q__1.i = 0.f; // , expr subst
+                q__1.real = r__1;
+                q__1.imag = 0.f; // , expr subst
                 aocl_blas_caxpy(&i__2, &q__1, &x12[i__ + (i__ - 1) * x12_dim1], &c__1,
                                 &x11[i__ + i__ * x11_dim1], &c__1);
             }
             if(i__ == 1)
             {
                 i__2 = *m - *p - i__ + 1;
-                q__1.r = z2;
-                q__1.i = 0.f; // , expr subst
+                q__1.real = z2;
+                q__1.imag = 0.f; // , expr subst
                 aocl_blas_cscal(&i__2, &q__1, &x21[i__ + i__ * x21_dim1], &c__1);
             }
             else
             {
                 i__2 = *m - *p - i__ + 1;
                 r__1 = z2 * cos(phi[i__ - 1]);
-                q__1.r = r__1;
-                q__1.i = 0.f; // , expr subst
+                q__1.real = r__1;
+                q__1.imag = 0.f; // , expr subst
                 aocl_blas_cscal(&i__2, &q__1, &x21[i__ + i__ * x21_dim1], &c__1);
                 i__2 = *m - *p - i__ + 1;
                 r__1 = -z2 * z3 * z4 * sin(phi[i__ - 1]);
-                q__1.r = r__1;
-                q__1.i = 0.f; // , expr subst
+                q__1.real = r__1;
+                q__1.imag = 0.f; // , expr subst
                 aocl_blas_caxpy(&i__2, &q__1, &x22[i__ + (i__ - 1) * x22_dim1], &c__1,
                                 &x21[i__ + i__ * x21_dim1], &c__1);
             }
@@ -572,8 +572,8 @@ void aocl_lapack_cunbdb(char *trans, char *signs, aocl_int64_t *m, aocl_int64_t 
                                     &c__1, &taup1[i__]);
             }
             i__2 = i__ + i__ * x11_dim1;
-            x11[i__2].r = 1.f;
-            x11[i__2].i = 0.f; // , expr subst
+            x11[i__2].real = 1.f;
+            x11[i__2].imag = 0.f; // , expr subst
             if(*m - *p > i__)
             {
                 i__2 = *m - *p - i__ + 1;
@@ -587,8 +587,8 @@ void aocl_lapack_cunbdb(char *trans, char *signs, aocl_int64_t *m, aocl_int64_t 
                                     &c__1, &taup2[i__]);
             }
             i__2 = i__ + i__ * x21_dim1;
-            x21[i__2].r = 1.f;
-            x21[i__2].i = 0.f; // , expr subst
+            x21[i__2].real = 1.f;
+            x21[i__2].imag = 0.f; // , expr subst
             if(*q > i__)
             {
                 i__2 = *p - i__ + 1;
@@ -619,25 +619,25 @@ void aocl_lapack_cunbdb(char *trans, char *signs, aocl_int64_t *m, aocl_int64_t 
             {
                 i__2 = *q - i__;
                 r__1 = -z1 * z3 * sin(theta[i__]);
-                q__1.r = r__1;
-                q__1.i = 0.f; // , expr subst
+                q__1.real = r__1;
+                q__1.imag = 0.f; // , expr subst
                 aocl_blas_cscal(&i__2, &q__1, &x11[i__ + (i__ + 1) * x11_dim1], ldx11);
                 i__2 = *q - i__;
                 r__1 = z2 * z3 * cos(theta[i__]);
-                q__1.r = r__1;
-                q__1.i = 0.f; // , expr subst
+                q__1.real = r__1;
+                q__1.imag = 0.f; // , expr subst
                 aocl_blas_caxpy(&i__2, &q__1, &x21[i__ + (i__ + 1) * x21_dim1], ldx21,
                                 &x11[i__ + (i__ + 1) * x11_dim1], ldx11);
             }
             i__2 = *m - *q - i__ + 1;
             r__1 = -z1 * z4 * sin(theta[i__]);
-            q__1.r = r__1;
-            q__1.i = 0.f; // , expr subst
+            q__1.real = r__1;
+            q__1.imag = 0.f; // , expr subst
             aocl_blas_cscal(&i__2, &q__1, &x12[i__ + i__ * x12_dim1], ldx12);
             i__2 = *m - *q - i__ + 1;
             r__1 = z2 * z4 * cos(theta[i__]);
-            q__1.r = r__1;
-            q__1.i = 0.f; // , expr subst
+            q__1.real = r__1;
+            q__1.imag = 0.f; // , expr subst
             aocl_blas_caxpy(&i__2, &q__1, &x22[i__ + i__ * x22_dim1], ldx22,
                             &x12[i__ + i__ * x12_dim1], ldx12);
             if(i__ < *q)
@@ -664,8 +664,8 @@ void aocl_lapack_cunbdb(char *trans, char *signs, aocl_int64_t *m, aocl_int64_t 
                                         &x11[i__ + (i__ + 2) * x11_dim1], ldx11, &tauq1[i__]);
                 }
                 i__2 = i__ + (i__ + 1) * x11_dim1;
-                x11[i__2].r = 1.f;
-                x11[i__2].i = 0.f; // , expr subst
+                x11[i__2].real = 1.f;
+                x11[i__2].imag = 0.f; // , expr subst
             }
             if(*m - *q + 1 > i__)
             {
@@ -685,8 +685,8 @@ void aocl_lapack_cunbdb(char *trans, char *signs, aocl_int64_t *m, aocl_int64_t 
                 }
             }
             i__2 = i__ + i__ * x12_dim1;
-            x12[i__2].r = 1.f;
-            x12[i__2].i = 0.f; // , expr subst
+            x12[i__2].real = 1.f;
+            x12[i__2].imag = 0.f; // , expr subst
             if(i__ < *q)
             {
                 i__2 = *p - i__;
@@ -728,8 +728,8 @@ void aocl_lapack_cunbdb(char *trans, char *signs, aocl_int64_t *m, aocl_int64_t 
         {
             i__2 = *m - *q - i__ + 1;
             r__1 = -z1 * z4;
-            q__1.r = r__1;
-            q__1.i = 0.f; // , expr subst
+            q__1.real = r__1;
+            q__1.imag = 0.f; // , expr subst
             aocl_blas_cscal(&i__2, &q__1, &x12[i__ + i__ * x12_dim1], ldx12);
             i__2 = *m - *q - i__ + 1;
             aocl_lapack_clacgv(&i__2, &x12[i__ + i__ * x12_dim1], ldx12);
@@ -746,8 +746,8 @@ void aocl_lapack_cunbdb(char *trans, char *signs, aocl_int64_t *m, aocl_int64_t 
                                     &x12[i__ + (i__ + 1) * x12_dim1], ldx12, &tauq2[i__]);
             }
             i__2 = i__ + i__ * x12_dim1;
-            x12[i__2].r = 1.f;
-            x12[i__2].i = 0.f; // , expr subst
+            x12[i__2].real = 1.f;
+            x12[i__2].imag = 0.f; // , expr subst
             if(*p > i__)
             {
                 i__2 = *p - i__;
@@ -771,8 +771,8 @@ void aocl_lapack_cunbdb(char *trans, char *signs, aocl_int64_t *m, aocl_int64_t 
         {
             i__2 = *m - *p - *q - i__ + 1;
             r__1 = z2 * z4;
-            q__1.r = r__1;
-            q__1.i = 0.f; // , expr subst
+            q__1.real = r__1;
+            q__1.imag = 0.f; // , expr subst
             aocl_blas_cscal(&i__2, &q__1, &x22[*q + i__ + (*p + i__) * x22_dim1], ldx22);
             i__2 = *m - *p - *q - i__ + 1;
             aocl_lapack_clacgv(&i__2, &x22[*q + i__ + (*p + i__) * x22_dim1], ldx22);
@@ -781,8 +781,8 @@ void aocl_lapack_cunbdb(char *trans, char *signs, aocl_int64_t *m, aocl_int64_t 
                                 &x22[*q + i__ + (*p + i__ + 1) * x22_dim1], ldx22,
                                 &tauq2[*p + i__]);
             i__2 = *q + i__ + (*p + i__) * x22_dim1;
-            x22[i__2].r = 1.f;
-            x22[i__2].i = 0.f; // , expr subst
+            x22[i__2].real = 1.f;
+            x22[i__2].imag = 0.f; // , expr subst
             i__2 = *m - *p - *q - i__;
             i__3 = *m - *p - *q - i__ + 1;
             aocl_lapack_clarf("R", &i__2, &i__3, &x22[*q + i__ + (*p + i__) * x22_dim1], ldx22,
@@ -801,42 +801,42 @@ void aocl_lapack_cunbdb(char *trans, char *signs, aocl_int64_t *m, aocl_int64_t 
             if(i__ == 1)
             {
                 i__2 = *p - i__ + 1;
-                q__1.r = z1;
-                q__1.i = 0.f; // , expr subst
+                q__1.real = z1;
+                q__1.imag = 0.f; // , expr subst
                 aocl_blas_cscal(&i__2, &q__1, &x11[i__ + i__ * x11_dim1], ldx11);
             }
             else
             {
                 i__2 = *p - i__ + 1;
                 r__1 = z1 * cos(phi[i__ - 1]);
-                q__1.r = r__1;
-                q__1.i = 0.f; // , expr subst
+                q__1.real = r__1;
+                q__1.imag = 0.f; // , expr subst
                 aocl_blas_cscal(&i__2, &q__1, &x11[i__ + i__ * x11_dim1], ldx11);
                 i__2 = *p - i__ + 1;
                 r__1 = -z1 * z3 * z4 * sin(phi[i__ - 1]);
-                q__1.r = r__1;
-                q__1.i = 0.f; // , expr subst
+                q__1.real = r__1;
+                q__1.imag = 0.f; // , expr subst
                 aocl_blas_caxpy(&i__2, &q__1, &x12[i__ - 1 + i__ * x12_dim1], ldx12,
                                 &x11[i__ + i__ * x11_dim1], ldx11);
             }
             if(i__ == 1)
             {
                 i__2 = *m - *p - i__ + 1;
-                q__1.r = z2;
-                q__1.i = 0.f; // , expr subst
+                q__1.real = z2;
+                q__1.imag = 0.f; // , expr subst
                 aocl_blas_cscal(&i__2, &q__1, &x21[i__ + i__ * x21_dim1], ldx21);
             }
             else
             {
                 i__2 = *m - *p - i__ + 1;
                 r__1 = z2 * cos(phi[i__ - 1]);
-                q__1.r = r__1;
-                q__1.i = 0.f; // , expr subst
+                q__1.real = r__1;
+                q__1.imag = 0.f; // , expr subst
                 aocl_blas_cscal(&i__2, &q__1, &x21[i__ + i__ * x21_dim1], ldx21);
                 i__2 = *m - *p - i__ + 1;
                 r__1 = -z2 * z3 * z4 * sin(phi[i__ - 1]);
-                q__1.r = r__1;
-                q__1.i = 0.f; // , expr subst
+                q__1.real = r__1;
+                q__1.imag = 0.f; // , expr subst
                 aocl_blas_caxpy(&i__2, &q__1, &x22[i__ - 1 + i__ * x22_dim1], ldx22,
                                 &x21[i__ + i__ * x21_dim1], ldx21);
             }
@@ -852,8 +852,8 @@ void aocl_lapack_cunbdb(char *trans, char *signs, aocl_int64_t *m, aocl_int64_t 
             aocl_lapack_clarfgp(&i__2, &x11[i__ + i__ * x11_dim1], &x11[i__ + (i__ + 1) * x11_dim1],
                                 ldx11, &taup1[i__]);
             i__2 = i__ + i__ * x11_dim1;
-            x11[i__2].r = 1.f;
-            x11[i__2].i = 0.f; // , expr subst
+            x11[i__2].real = 1.f;
+            x11[i__2].imag = 0.f; // , expr subst
             if(i__ == *m - *p)
             {
                 i__2 = *m - *p - i__ + 1;
@@ -867,8 +867,8 @@ void aocl_lapack_cunbdb(char *trans, char *signs, aocl_int64_t *m, aocl_int64_t 
                                     &x21[i__ + (i__ + 1) * x21_dim1], ldx21, &taup2[i__]);
             }
             i__2 = i__ + i__ * x21_dim1;
-            x21[i__2].r = 1.f;
-            x21[i__2].i = 0.f; // , expr subst
+            x21[i__2].real = 1.f;
+            x21[i__2].imag = 0.f; // , expr subst
             i__2 = *q - i__;
             i__3 = *p - i__ + 1;
             aocl_lapack_clarf("R", &i__2, &i__3, &x11[i__ + i__ * x11_dim1], ldx11, &taup1[i__],
@@ -893,25 +893,25 @@ void aocl_lapack_cunbdb(char *trans, char *signs, aocl_int64_t *m, aocl_int64_t 
             {
                 i__2 = *q - i__;
                 r__1 = -z1 * z3 * sin(theta[i__]);
-                q__1.r = r__1;
-                q__1.i = 0.f; // , expr subst
+                q__1.real = r__1;
+                q__1.imag = 0.f; // , expr subst
                 aocl_blas_cscal(&i__2, &q__1, &x11[i__ + 1 + i__ * x11_dim1], &c__1);
                 i__2 = *q - i__;
                 r__1 = z2 * z3 * cos(theta[i__]);
-                q__1.r = r__1;
-                q__1.i = 0.f; // , expr subst
+                q__1.real = r__1;
+                q__1.imag = 0.f; // , expr subst
                 aocl_blas_caxpy(&i__2, &q__1, &x21[i__ + 1 + i__ * x21_dim1], &c__1,
                                 &x11[i__ + 1 + i__ * x11_dim1], &c__1);
             }
             i__2 = *m - *q - i__ + 1;
             r__1 = -z1 * z4 * sin(theta[i__]);
-            q__1.r = r__1;
-            q__1.i = 0.f; // , expr subst
+            q__1.real = r__1;
+            q__1.imag = 0.f; // , expr subst
             aocl_blas_cscal(&i__2, &q__1, &x12[i__ + i__ * x12_dim1], &c__1);
             i__2 = *m - *q - i__ + 1;
             r__1 = z2 * z4 * cos(theta[i__]);
-            q__1.r = r__1;
-            q__1.i = 0.f; // , expr subst
+            q__1.real = r__1;
+            q__1.imag = 0.f; // , expr subst
             aocl_blas_caxpy(&i__2, &q__1, &x22[i__ + i__ * x22_dim1], &c__1,
                             &x12[i__ + i__ * x12_dim1], &c__1);
             if(i__ < *q)
@@ -927,15 +927,15 @@ void aocl_lapack_cunbdb(char *trans, char *signs, aocl_int64_t *m, aocl_int64_t 
                 aocl_lapack_clarfgp(&i__2, &x11[i__ + 1 + i__ * x11_dim1],
                                     &x11[i__ + 2 + i__ * x11_dim1], &c__1, &tauq1[i__]);
                 i__2 = i__ + 1 + i__ * x11_dim1;
-                x11[i__2].r = 1.f;
-                x11[i__2].i = 0.f; // , expr subst
+                x11[i__2].real = 1.f;
+                x11[i__2].imag = 0.f; // , expr subst
             }
             i__2 = *m - *q - i__ + 1;
             aocl_lapack_clarfgp(&i__2, &x12[i__ + i__ * x12_dim1], &x12[i__ + 1 + i__ * x12_dim1],
                                 &c__1, &tauq2[i__]);
             i__2 = i__ + i__ * x12_dim1;
-            x12[i__2].r = 1.f;
-            x12[i__2].i = 0.f; // , expr subst
+            x12[i__2].real = 1.f;
+            x12[i__2].imag = 0.f; // , expr subst
             if(i__ < *q)
             {
                 i__2 = *q - i__;
@@ -969,15 +969,15 @@ void aocl_lapack_cunbdb(char *trans, char *signs, aocl_int64_t *m, aocl_int64_t 
         {
             i__2 = *m - *q - i__ + 1;
             r__1 = -z1 * z4;
-            q__1.r = r__1;
-            q__1.i = 0.f; // , expr subst
+            q__1.real = r__1;
+            q__1.imag = 0.f; // , expr subst
             aocl_blas_cscal(&i__2, &q__1, &x12[i__ + i__ * x12_dim1], &c__1);
             i__2 = *m - *q - i__ + 1;
             aocl_lapack_clarfgp(&i__2, &x12[i__ + i__ * x12_dim1], &x12[i__ + 1 + i__ * x12_dim1],
                                 &c__1, &tauq2[i__]);
             i__2 = i__ + i__ * x12_dim1;
-            x12[i__2].r = 1.f;
-            x12[i__2].i = 0.f; // , expr subst
+            x12[i__2].real = 1.f;
+            x12[i__2].imag = 0.f; // , expr subst
             if(*p > i__)
             {
                 i__2 = *m - *q - i__ + 1;
@@ -1001,16 +1001,16 @@ void aocl_lapack_cunbdb(char *trans, char *signs, aocl_int64_t *m, aocl_int64_t 
         {
             i__2 = *m - *p - *q - i__ + 1;
             r__1 = z2 * z4;
-            q__1.r = r__1;
-            q__1.i = 0.f; // , expr subst
+            q__1.real = r__1;
+            q__1.imag = 0.f; // , expr subst
             aocl_blas_cscal(&i__2, &q__1, &x22[*p + i__ + (*q + i__) * x22_dim1], &c__1);
             i__2 = *m - *p - *q - i__ + 1;
             aocl_lapack_clarfgp(&i__2, &x22[*p + i__ + (*q + i__) * x22_dim1],
                                 &x22[*p + i__ + 1 + (*q + i__) * x22_dim1], &c__1,
                                 &tauq2[*p + i__]);
             i__2 = *p + i__ + (*q + i__) * x22_dim1;
-            x22[i__2].r = 1.f;
-            x22[i__2].i = 0.f; // , expr subst
+            x22[i__2].real = 1.f;
+            x22[i__2].imag = 0.f; // , expr subst
             if(*m - *p - *q != i__)
             {
                 i__2 = *m - *p - *q - i__ + 1;

@@ -350,8 +350,8 @@ void aocl_lapack_cheevd(char *jobz, char *uplo, aocl_int64_t *n, scomplex *a, ao
             liopt = liwmin;
         }
         r__1 = aocl_lapack_sroundup_lwork(&lopt);
-        work[1].r = r__1;
-        work[1].i = 0.f; // , expr subst
+        work[1].real = r__1;
+        work[1].imag = 0.f; // , expr subst
         rwork[1] = aocl_lapack_sroundup_lwork(&lropt);
         iwork[1] = (aocl_int_t)(liopt);
         if(*lwork < lwmin && !lquery)
@@ -388,12 +388,12 @@ void aocl_lapack_cheevd(char *jobz, char *uplo, aocl_int64_t *n, scomplex *a, ao
     if(*n == 1)
     {
         i__1 = a_dim1 + 1;
-        w[1] = a[i__1].r;
+        w[1] = a[i__1].real;
         if(wantz)
         {
             i__1 = a_dim1 + 1;
-            a[i__1].r = 1.f;
-            a[i__1].i = 0.f; // , expr subst
+            a[i__1].real = 1.f;
+            a[i__1].imag = 0.f; // , expr subst
         }
         AOCL_DTL_TRACE_LOG_EXIT
         return;
@@ -465,8 +465,8 @@ void aocl_lapack_cheevd(char *jobz, char *uplo, aocl_int64_t *n, scomplex *a, ao
         aocl_blas_sscal(&imax, &r__1, &w[1], &c__1);
     }
     r__1 = aocl_lapack_sroundup_lwork(&lopt);
-    work[1].r = r__1;
-    work[1].i = 0.f; // , expr subst
+    work[1].real = r__1;
+    work[1].imag = 0.f; // , expr subst
     rwork[1] = aocl_lapack_sroundup_lwork(&lropt);
     iwork[1] = (aocl_int_t)(liopt);
     AOCL_DTL_TRACE_LOG_EXIT

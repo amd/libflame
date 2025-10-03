@@ -4,7 +4,7 @@
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
  /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static scomplex c_b1 = {{0.f}, {0.f}};
+static scomplex c_b1 = {0.f, 0.f};
 static aocl_int64_t c_n1 = -1;
 /* > \brief \b CGEDMDQ computes the Dynamic Mode Decomposition (DMD) for a pair of data snapshot
  * matrices. */
@@ -800,7 +800,7 @@ void aocl_lapack_cgedmdq(char *jobs, char *jobz, char *jobr, char *jobq, char *j
         if(lquery)
         {
             aocl_lapack_cgeqrf(m, n, &f[f_offset], ldf, &zwork[1], &zwork[1], &c_n1, &info1);
-            olwqr = (integer)zwork[1].r;
+            olwqr = (integer)zwork[1].real;
             /* Computing MAX */
             i__1 = 2;
             i__2 = minmn + olwqr; // , expr subst
@@ -811,7 +811,7 @@ void aocl_lapack_cgedmdq(char *jobs, char *jobz, char *jobr, char *jobq, char *j
                 ldy, nrnk, tol, k, &eigs[1], &z__[z_offset], ldz, &res[1], &b[b_offset], ldb,
                 &v[v_offset], ldv, &s[s_offset], lds, &zwork[1], lzwork, &work[1], &c_n1, &iwork[1],
                 liwork, &info1);
-        mlwdmd = (integer)zwork[1].r;
+        mlwdmd = (integer)zwork[1].real;
         /* Computing MAX */
         i__1 = mlwork;
         i__2 = minmn + mlwdmd; // , expr subst
@@ -823,7 +823,7 @@ void aocl_lapack_cgedmdq(char *jobs, char *jobz, char *jobr, char *jobq, char *j
         iminwr = fla_max(1, iwork[1]);
         if(lquery)
         {
-            olwdmd = (integer)zwork[2].r;
+            olwdmd = (integer)zwork[2].real;
             /* Computing MAX */
             i__1 = olwork;
             i__2 = minmn + olwdmd; // , expr subst
@@ -840,7 +840,7 @@ void aocl_lapack_cgedmdq(char *jobs, char *jobz, char *jobr, char *jobq, char *j
             {
                 aocl_lapack_cunmqr("L", "N", m, n, &minmn, &f[f_offset], ldf, &zwork[1],
                                    &z__[z_offset], ldz, &zwork[1], &c_n1, &info1);
-                olwmqr = (integer)zwork[1].r;
+                olwmqr = (integer)zwork[1].real;
                 /* Computing MAX */
                 i__1 = olwork;
                 i__2 = minmn + olwmqr; // , expr subst
@@ -858,7 +858,7 @@ void aocl_lapack_cgedmdq(char *jobs, char *jobz, char *jobr, char *jobq, char *j
             {
                 aocl_lapack_cungqr(m, &minmn, &minmn, &f[f_offset], ldf, &zwork[1], &zwork[1],
                                    &c_n1, &info1);
-                olwgqr = (integer)zwork[1].r;
+                olwgqr = (integer)zwork[1].real;
                 /* Computing MAX */
                 i__1 = olwork;
                 i__2 = minmn + olwgqr; // , expr subst
@@ -889,10 +889,10 @@ void aocl_lapack_cgedmdq(char *jobs, char *jobz, char *jobr, char *jobq, char *j
     {
         /* Return minimal and optimal workspace sizes */
         iwork[1] = (aocl_int_t)(iminwr);
-        zwork[1].r = (real)mlwork;
-        zwork[1].i = 0.f; // , expr subst
-        zwork[2].r = (real)olwork;
-        zwork[2].i = 0.f; // , expr subst
+        zwork[1].real = (real)mlwork;
+        zwork[1].imag = 0.f; // , expr subst
+        zwork[2].real = (real)olwork;
+        zwork[2].imag = 0.f; // , expr subst
         work[1] = (real)mlrwrk;
         work[2] = (real)mlrwrk;
         AOCL_DTL_TRACE_LOG_EXIT

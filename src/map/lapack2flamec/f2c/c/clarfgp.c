@@ -4,7 +4,7 @@
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
  /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static scomplex c_b6 = {{1.f}, {0.f}};
+static scomplex c_b6 = {1.f, 0.f};
 /* > \brief \b CLARFGP generates an elementary reflector (Householder matrix) with non-negative
  * beta. */
 /* =========== DOCUMENTATION =========== */
@@ -171,14 +171,14 @@ void aocl_lapack_clarfgp(aocl_int64_t *n, scomplex *alpha, scomplex *x, aocl_int
     /* Function Body */
     if(*n <= 0)
     {
-        tau->r = 0.f, tau->i = 0.f;
+        tau->real = 0.f, tau->imag = 0.f;
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
     eps = slamch_("Precision");
     i__1 = *n - 1;
     xnorm = aocl_blas_scnrm2(&i__1, &x[1], incx);
-    alphr = alpha->r;
+    alphr = alpha->real;
     alphi = r_imag(alpha);
     if(xnorm <= eps * c_abs(alpha))
     {
@@ -191,23 +191,23 @@ void aocl_lapack_clarfgp(aocl_int64_t *n, scomplex *alpha, scomplex *x, aocl_int
                 /* When TAU.eq.ZERO, the vector is special-cased to be */
                 /* all zeros in the application routines. We do not need */
                 /* to clear it. */
-                tau->r = 0.f, tau->i = 0.f;
+                tau->real = 0.f, tau->imag = 0.f;
             }
             else
             {
                 /* However, the application routines rely on explicit */
                 /* zero checks when TAU.ne.ZERO, and we must clear X. */
-                tau->r = 2.f, tau->i = 0.f;
+                tau->real = 2.f, tau->imag = 0.f;
                 i__1 = *n - 1;
                 for(j = 1; j <= i__1; ++j)
                 {
                     i__2 = (j - 1) * *incx + 1;
-                    x[i__2].r = 0.f;
-                    x[i__2].i = 0.f; // , expr subst
+                    x[i__2].real = 0.f;
+                    x[i__2].imag = 0.f; // , expr subst
                 }
-                q__1.r = -alpha->r;
-                q__1.i = -alpha->i; // , expr subst
-                alpha->r = q__1.r, alpha->i = q__1.i;
+                q__1.real = -alpha->real;
+                q__1.imag = -alpha->imag; // , expr subst
+                alpha->real = q__1.real, alpha->imag = q__1.imag;
             }
         }
         else
@@ -216,17 +216,17 @@ void aocl_lapack_clarfgp(aocl_int64_t *n, scomplex *alpha, scomplex *x, aocl_int
             xnorm = slapy2_(&alphr, &alphi);
             r__1 = 1.f - alphr / xnorm;
             r__2 = -alphi / xnorm;
-            q__1.r = r__1;
-            q__1.i = r__2; // , expr subst
-            tau->r = q__1.r, tau->i = q__1.i;
+            q__1.real = r__1;
+            q__1.imag = r__2; // , expr subst
+            tau->real = q__1.real, tau->imag = q__1.imag;
             i__1 = *n - 1;
             for(j = 1; j <= i__1; ++j)
             {
                 i__2 = (j - 1) * *incx + 1;
-                x[i__2].r = 0.f;
-                x[i__2].i = 0.f; // , expr subst
+                x[i__2].real = 0.f;
+                x[i__2].imag = 0.f; // , expr subst
             }
-            alpha->r = xnorm, alpha->i = 0.f;
+            alpha->real = xnorm, alpha->imag = 0.f;
         }
     }
     else
@@ -255,42 +255,42 @@ void aocl_lapack_clarfgp(aocl_int64_t *n, scomplex *alpha, scomplex *x, aocl_int
             /* New BETA is at most 1, at least SMLNUM */
             i__1 = *n - 1;
             xnorm = aocl_blas_scnrm2(&i__1, &x[1], incx);
-            q__1.r = alphr;
-            q__1.i = alphi; // , expr subst
-            alpha->r = q__1.r, alpha->i = q__1.i;
+            q__1.real = alphr;
+            q__1.imag = alphi; // , expr subst
+            alpha->real = q__1.real, alpha->imag = q__1.imag;
             r__1 = slapy3_(&alphr, &alphi, &xnorm);
             beta = r_sign(&r__1, &alphr);
         }
-        savealpha.r = alpha->r;
-        savealpha.i = alpha->i; // , expr subst
-        q__1.r = alpha->r + beta;
-        q__1.i = alpha->i; // , expr subst
-        alpha->r = q__1.r, alpha->i = q__1.i;
+        savealpha.real = alpha->real;
+        savealpha.imag = alpha->imag; // , expr subst
+        q__1.real = alpha->real + beta;
+        q__1.imag = alpha->imag; // , expr subst
+        alpha->real = q__1.real, alpha->imag = q__1.imag;
         if(beta < 0.f)
         {
             beta = -beta;
-            q__2.r = -alpha->r;
-            q__2.i = -alpha->i; // , expr subst
-            q__1.r = q__2.r / beta;
-            q__1.i = q__2.i / beta; // , expr subst
-            tau->r = q__1.r, tau->i = q__1.i;
+            q__2.real = -alpha->real;
+            q__2.imag = -alpha->imag; // , expr subst
+            q__1.real = q__2.real / beta;
+            q__1.imag = q__2.imag / beta; // , expr subst
+            tau->real = q__1.real, tau->imag = q__1.imag;
         }
         else
         {
-            alphr = alphi * (alphi / alpha->r);
-            alphr += xnorm * (xnorm / alpha->r);
+            alphr = alphi * (alphi / alpha->real);
+            alphr += xnorm * (xnorm / alpha->real);
             r__1 = alphr / beta;
             r__2 = -alphi / beta;
-            q__1.r = r__1;
-            q__1.i = r__2; // , expr subst
-            tau->r = q__1.r, tau->i = q__1.i;
+            q__1.real = r__1;
+            q__1.imag = r__2; // , expr subst
+            tau->real = q__1.real, tau->imag = q__1.imag;
             r__1 = -alphr;
-            q__1.r = r__1;
-            q__1.i = alphi; // , expr subst
-            alpha->r = q__1.r, alpha->i = q__1.i;
+            q__1.real = r__1;
+            q__1.imag = alphi; // , expr subst
+            alpha->real = q__1.real, alpha->imag = q__1.imag;
         }
         cladiv_f2c_(&q__1, &c_b6, alpha);
-        alpha->r = q__1.r, alpha->i = q__1.i;
+        alpha->real = q__1.real, alpha->imag = q__1.imag;
         if(c_abs(tau) <= smlnum)
         {
             /* In the case where the computed TAU ends up being a denormalized number, */
@@ -298,27 +298,27 @@ void aocl_lapack_clarfgp(aocl_int64_t *n, scomplex *alpha, scomplex *x, aocl_int
             /* to ZERO (or TWO or whatever makes a nonnegative real number for BETA). */
             /* (Bug report provided by Pat Quillen from MathWorks on Jul 29, 2009.) */
             /* (Thanks Pat. Thanks MathWorks.) */
-            alphr = savealpha.r;
+            alphr = savealpha.real;
             alphi = r_imag(&savealpha);
             if(alphi == 0.f)
             {
                 if(alphr >= 0.f)
                 {
-                    tau->r = 0.f, tau->i = 0.f;
+                    tau->real = 0.f, tau->imag = 0.f;
                 }
                 else
                 {
-                    tau->r = 2.f, tau->i = 0.f;
+                    tau->real = 2.f, tau->imag = 0.f;
                     i__1 = *n - 1;
                     for(j = 1; j <= i__1; ++j)
                     {
                         i__2 = (j - 1) * *incx + 1;
-                        x[i__2].r = 0.f;
-                        x[i__2].i = 0.f; // , expr subst
+                        x[i__2].real = 0.f;
+                        x[i__2].imag = 0.f; // , expr subst
                     }
-                    q__1.r = -savealpha.r;
-                    q__1.i = -savealpha.i; // , expr subst
-                    beta = q__1.r;
+                    q__1.real = -savealpha.real;
+                    q__1.imag = -savealpha.imag; // , expr subst
+                    beta = q__1.real;
                 }
             }
             else
@@ -326,15 +326,15 @@ void aocl_lapack_clarfgp(aocl_int64_t *n, scomplex *alpha, scomplex *x, aocl_int
                 xnorm = slapy2_(&alphr, &alphi);
                 r__1 = 1.f - alphr / xnorm;
                 r__2 = -alphi / xnorm;
-                q__1.r = r__1;
-                q__1.i = r__2; // , expr subst
-                tau->r = q__1.r, tau->i = q__1.i;
+                q__1.real = r__1;
+                q__1.imag = r__2; // , expr subst
+                tau->real = q__1.real, tau->imag = q__1.imag;
                 i__1 = *n - 1;
                 for(j = 1; j <= i__1; ++j)
                 {
                     i__2 = (j - 1) * *incx + 1;
-                    x[i__2].r = 0.f;
-                    x[i__2].i = 0.f; // , expr subst
+                    x[i__2].real = 0.f;
+                    x[i__2].imag = 0.f; // , expr subst
                 }
                 beta = xnorm;
             }
@@ -352,7 +352,7 @@ void aocl_lapack_clarfgp(aocl_int64_t *n, scomplex *alpha, scomplex *x, aocl_int
             beta *= smlnum;
             /* L20: */
         }
-        alpha->r = beta, alpha->i = 0.f;
+        alpha->real = beta, alpha->imag = 0.f;
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
     return;

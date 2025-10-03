@@ -233,8 +233,8 @@ void aocl_lapack_chetri2(char *uplo, aocl_int64_t *n, scomplex *a, aocl_int64_t 
     }
     else if(lquery)
     {
-        work[1].r = (real)minsize;
-        work[1].i = 0.f; // , expr subst
+        work[1].real = (real)minsize;
+        work[1].imag = 0.f; // , expr subst
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }

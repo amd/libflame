@@ -4,8 +4,8 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static scomplex c_b1 = {{1.f}, {0.f}};
-static scomplex c_b2 = {{0.f}, {0.f}};
+static scomplex c_b1 = {1.f, 0.f};
+static scomplex c_b2 = {0.f, 0.f};
 static aocl_int64_t c__1 = 1;
 /* > \brief \b CGGHRD */
 /* =========== DOCUMENTATION =========== */
@@ -451,8 +451,8 @@ void aocl_lapack_cgghrd(char *compq, char *compz, aocl_int64_t *n, aocl_int64_t 
             ctemp.imag = b[i__3].imag; // , expr subst
             clartg_(&ctemp, &b[jrow + (jrow - 1) * b_dim1], &c__, &s, &b[jrow + jrow * b_dim1]);
             i__3 = jrow + (jrow - 1) * b_dim1;
-            b[i__3].r = 0.f;
-            b[i__3].i = 0.f; // , expr subst
+            b[i__3].real = 0.f;
+            b[i__3].imag = 0.f; // , expr subst
             aocl_lapack_crot(ihi, &a[jrow * a_dim1 + 1], &c__1, &a[(jrow - 1) * a_dim1 + 1], &c__1,
                              &c__, &s);
             i__3 = jrow - 1;

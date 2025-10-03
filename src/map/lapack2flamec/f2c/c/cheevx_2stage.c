@@ -490,8 +490,8 @@ void aocl_lapack_cheevx_2stage(char *jobz, char *range, char *uplo, aocl_int64_t
         {
             lwmin = 1;
             r__1 = aocl_lapack_sroundup_lwork(&lwmin);
-            work[1].r = r__1;
-            work[1].i = 0.f; // , expr subst
+            work[1].real = r__1;
+            work[1].imag = 0.f; // , expr subst
         }
         else
         {
@@ -501,8 +501,8 @@ void aocl_lapack_cheevx_2stage(char *jobz, char *range, char *uplo, aocl_int64_t
             lwtrd = aocl_lapack_ilaenv2stage(&c__4, "CHETRD_2STAGE", jobz, n, &kd, &ib, &c_n1);
             lwmin = *n + lhtrd + lwtrd;
             r__1 = aocl_lapack_sroundup_lwork(&lwmin);
-            work[1].r = r__1;
-            work[1].i = 0.f; // , expr subst
+            work[1].real = r__1;
+            work[1].imag = 0.f; // , expr subst
         }
         if(*lwork < lwmin && !lquery)
         {
@@ -534,24 +534,24 @@ void aocl_lapack_cheevx_2stage(char *jobz, char *range, char *uplo, aocl_int64_t
         {
             *m = 1;
             i__1 = a_dim1 + 1;
-            w[1] = a[i__1].r;
+            w[1] = a[i__1].real;
         }
         else if(valeig)
         {
             i__1 = a_dim1 + 1;
             i__2 = a_dim1 + 1;
-            if(*vl < a[i__1].r && *vu >= a[i__2].r)
+            if(*vl < a[i__1].real && *vu >= a[i__2].real)
             {
                 *m = 1;
                 i__1 = a_dim1 + 1;
-                w[1] = a[i__1].r;
+                w[1] = a[i__1].real;
             }
         }
         if(wantz)
         {
             i__1 = z_dim1 + 1;
-            z__[i__1].r = 1.f;
-            z__[i__1].i = 0.f; // , expr subst
+            z__[i__1].real = 1.f;
+            z__[i__1].imag = 0.f; // , expr subst
         }
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
@@ -752,8 +752,8 @@ L40:
     }
     /* Set WORK(1) to optimal scomplex workspace size. */
     r__1 = aocl_lapack_sroundup_lwork(&lwmin);
-    work[1].r = r__1;
-    work[1].i = 0.f; // , expr subst
+    work[1].real = r__1;
+    work[1].imag = 0.f; // , expr subst
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
     return;
     /* End of CHEEVX_2STAGE */

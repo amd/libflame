@@ -210,8 +210,8 @@ void cungtr_fla(char *uplo, aocl_int64_t *n, scomplex *a, aocl_int64_t *lda, sco
         i__1 = 1;
         i__2 = *n - 1; // , expr subst
         lwkopt = fla_max(i__1, i__2) * nb;
-        work[1].r = (real)lwkopt;
-        work[1].i = 0.f; // , expr subst
+        work[1].real = (real)lwkopt;
+        work[1].imag = 0.f; // , expr subst
     }
     if(*info != 0)
     {
@@ -226,8 +226,8 @@ void cungtr_fla(char *uplo, aocl_int64_t *n, scomplex *a, aocl_int64_t *lda, sco
     /* Quick return if possible */
     if(*n == 0)
     {
-        work[1].r = 1.f;
-        work[1].i = 0.f; // , expr subst
+        work[1].real = 1.f;
+        work[1].imag = 0.f; // , expr subst
         return;
     }
     if(upper)
@@ -314,8 +314,8 @@ void cungtr_fla(char *uplo, aocl_int64_t *n, scomplex *a, aocl_int64_t *lda, sco
                        &iinfo);
         }
     }
-    work[1].r = (real)lwkopt;
-    work[1].i = 0.f; // , expr subst
+    work[1].real = (real)lwkopt;
+    work[1].imag = 0.f; // , expr subst
     return;
     /* End of CUNGTR */
 }

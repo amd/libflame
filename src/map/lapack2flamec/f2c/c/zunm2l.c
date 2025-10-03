@@ -335,8 +335,8 @@ void aocl_lapack_zunm2l(char *side, char *trans, aocl_int64_t *m, aocl_int64_t *
         aii.real = a[i__3].real;
         aii.imag = a[i__3].imag; // , expr subst
         i__3 = nq - *k + i__ + i__ * a_dim1;
-        a[i__3].r = 1.;
-        a[i__3].i = 0.; // , expr subst
+        a[i__3].real = 1.;
+        a[i__3].imag = 0.; // , expr subst
         aocl_lapack_zlarf(side, &mi, &ni, &a[i__ * a_dim1 + 1], &c__1, &taui, &c__[c_offset], ldc,
                           &work[1]);
         i__3 = nq - *k + i__ + i__ * a_dim1;

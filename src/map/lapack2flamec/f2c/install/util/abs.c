@@ -27,23 +27,23 @@ double d_abs(doublereal *x)
 /* Complex */
 double c_abs(scomplex *z)
 {
-    _Fcomplex z_ = {z->r, z->i};
+    _Fcomplex z_ = {z->real, z->imag};
     return (cabsf(z_));
 }
 double z_abs(dcomplex *z)
 {
-    _Dcomplex z_ = {z->r, z->i};
+    _Dcomplex z_ = {z->real, z->imag};
     return (cabs(z_));
 }
 #else
 /* Complex */
 double c_abs(scomplex *z)
 {
-    return (cabs(z->r + I * z->i));
+    return (cabs(z->real + I * z->imag));
 }
 double z_abs(dcomplex *z)
 {
-    return (cabs(z->r + I * z->i));
+    return (cabs(z->real + I * z->imag));
 }
 #endif
 

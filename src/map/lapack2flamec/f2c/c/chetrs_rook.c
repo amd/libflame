@@ -4,7 +4,7 @@
  -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for
  libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static scomplex c_b1 = {{1.f}, {0.f}};
+static scomplex c_b1 = {1.f, 0.f};
 static aocl_int64_t c__1 = 1;
 /* > \brief \b CHETRS_ROOK computes the solution to a system of linear equations A * X = B for HE
  * matrices us ing factorization obtained with one of the bounded diagonal pivoting methods (max 2
@@ -272,13 +272,13 @@ void aocl_lapack_chetrs_rook(char *uplo, aocl_int64_t *n, aocl_int64_t *nrhs, sc
             /* Multiply by inv(U(K)), where U(K) is the transformation */
             /* stored in column K of A. */
             i__1 = k - 1;
-            q__1.r = -1.f;
-            q__1.i = -0.f; // , expr subst
+            q__1.real = -1.f;
+            q__1.imag = -0.f; // , expr subst
             aocl_blas_cgeru(&i__1, nrhs, &q__1, &a[k * a_dim1 + 1], &c__1, &b[k + b_dim1], ldb,
                             &b[b_dim1 + 1], ldb);
             /* Multiply by the inverse of the diagonal block. */
             i__1 = k + k * a_dim1;
-            s = 1.f / a[i__1].r;
+            s = 1.f / a[i__1].real;
             aocl_blas_csscal(nrhs, &s, &b[k + b_dim1], ldb);
             --k;
         }
@@ -299,13 +299,13 @@ void aocl_lapack_chetrs_rook(char *uplo, aocl_int64_t *n, aocl_int64_t *nrhs, sc
             /* Multiply by inv(U(K)), where U(K) is the transformation */
             /* stored in columns K-1 and K of A. */
             i__1 = k - 2;
-            q__1.r = -1.f;
-            q__1.i = -0.f; // , expr subst
+            q__1.real = -1.f;
+            q__1.imag = -0.f; // , expr subst
             aocl_blas_cgeru(&i__1, nrhs, &q__1, &a[k * a_dim1 + 1], &c__1, &b[k + b_dim1], ldb,
                             &b[b_dim1 + 1], ldb);
             i__1 = k - 2;
-            q__1.r = -1.f;
-            q__1.i = -0.f; // , expr subst
+            q__1.real = -1.f;
+            q__1.imag = -0.f; // , expr subst
             aocl_blas_cgeru(&i__1, nrhs, &q__1, &a[(k - 1) * a_dim1 + 1], &c__1, &b[k - 1 + b_dim1],
                             ldb, &b[b_dim1 + 1], ldb);
             /* Multiply by the inverse of the diagonal block. */
@@ -374,8 +374,8 @@ void aocl_lapack_chetrs_rook(char *uplo, aocl_int64_t *n, aocl_int64_t *nrhs, sc
             {
                 aocl_lapack_clacgv(nrhs, &b[k + b_dim1], ldb);
                 i__1 = k - 1;
-                q__1.r = -1.f;
-                q__1.i = -0.f; // , expr subst
+                q__1.real = -1.f;
+                q__1.imag = -0.f; // , expr subst
                 aocl_blas_cgemv("Conjugate transpose", &i__1, nrhs, &q__1, &b[b_offset], ldb,
                                 &a[k * a_dim1 + 1], &c__1, &c_b1, &b[k + b_dim1], ldb);
                 aocl_lapack_clacgv(nrhs, &b[k + b_dim1], ldb);
@@ -397,15 +397,15 @@ void aocl_lapack_chetrs_rook(char *uplo, aocl_int64_t *n, aocl_int64_t *nrhs, sc
             {
                 aocl_lapack_clacgv(nrhs, &b[k + b_dim1], ldb);
                 i__1 = k - 1;
-                q__1.r = -1.f;
-                q__1.i = -0.f; // , expr subst
+                q__1.real = -1.f;
+                q__1.imag = -0.f; // , expr subst
                 aocl_blas_cgemv("Conjugate transpose", &i__1, nrhs, &q__1, &b[b_offset], ldb,
                                 &a[k * a_dim1 + 1], &c__1, &c_b1, &b[k + b_dim1], ldb);
                 aocl_lapack_clacgv(nrhs, &b[k + b_dim1], ldb);
                 aocl_lapack_clacgv(nrhs, &b[k + 1 + b_dim1], ldb);
                 i__1 = k - 1;
-                q__1.r = -1.f;
-                q__1.i = -0.f; // , expr subst
+                q__1.real = -1.f;
+                q__1.imag = -0.f; // , expr subst
                 aocl_blas_cgemv("Conjugate transpose", &i__1, nrhs, &q__1, &b[b_offset], ldb,
                                 &a[(k + 1) * a_dim1 + 1], &c__1, &c_b1, &b[k + 1 + b_dim1], ldb);
                 aocl_lapack_clacgv(nrhs, &b[k + 1 + b_dim1], ldb);
@@ -452,14 +452,14 @@ void aocl_lapack_chetrs_rook(char *uplo, aocl_int64_t *n, aocl_int64_t *nrhs, sc
             if(k < *n)
             {
                 i__1 = *n - k;
-                q__1.r = -1.f;
-                q__1.i = -0.f; // , expr subst
+                q__1.real = -1.f;
+                q__1.imag = -0.f; // , expr subst
                 aocl_blas_cgeru(&i__1, nrhs, &q__1, &a[k + 1 + k * a_dim1], &c__1, &b[k + b_dim1],
                                 ldb, &b[k + 1 + b_dim1], ldb);
             }
             /* Multiply by the inverse of the diagonal block. */
             i__1 = k + k * a_dim1;
-            s = 1.f / a[i__1].r;
+            s = 1.f / a[i__1].real;
             aocl_blas_csscal(nrhs, &s, &b[k + b_dim1], ldb);
             ++k;
         }
@@ -482,13 +482,13 @@ void aocl_lapack_chetrs_rook(char *uplo, aocl_int64_t *n, aocl_int64_t *nrhs, sc
             if(k < *n - 1)
             {
                 i__1 = *n - k - 1;
-                q__1.r = -1.f;
-                q__1.i = -0.f; // , expr subst
+                q__1.real = -1.f;
+                q__1.imag = -0.f; // , expr subst
                 aocl_blas_cgeru(&i__1, nrhs, &q__1, &a[k + 2 + k * a_dim1], &c__1, &b[k + b_dim1],
                                 ldb, &b[k + 2 + b_dim1], ldb);
                 i__1 = *n - k - 1;
-                q__1.r = -1.f;
-                q__1.i = -0.f; // , expr subst
+                q__1.real = -1.f;
+                q__1.imag = -0.f; // , expr subst
                 aocl_blas_cgeru(&i__1, nrhs, &q__1, &a[k + 2 + (k + 1) * a_dim1], &c__1,
                                 &b[k + 1 + b_dim1], ldb, &b[k + 2 + b_dim1], ldb);
             }
@@ -558,8 +558,8 @@ void aocl_lapack_chetrs_rook(char *uplo, aocl_int64_t *n, aocl_int64_t *nrhs, sc
             {
                 aocl_lapack_clacgv(nrhs, &b[k + b_dim1], ldb);
                 i__1 = *n - k;
-                q__1.r = -1.f;
-                q__1.i = -0.f; // , expr subst
+                q__1.real = -1.f;
+                q__1.imag = -0.f; // , expr subst
                 aocl_blas_cgemv("Conjugate transpose", &i__1, nrhs, &q__1, &b[k + 1 + b_dim1], ldb,
                                 &a[k + 1 + k * a_dim1], &c__1, &c_b1, &b[k + b_dim1], ldb);
                 aocl_lapack_clacgv(nrhs, &b[k + b_dim1], ldb);
@@ -581,15 +581,15 @@ void aocl_lapack_chetrs_rook(char *uplo, aocl_int64_t *n, aocl_int64_t *nrhs, sc
             {
                 aocl_lapack_clacgv(nrhs, &b[k + b_dim1], ldb);
                 i__1 = *n - k;
-                q__1.r = -1.f;
-                q__1.i = -0.f; // , expr subst
+                q__1.real = -1.f;
+                q__1.imag = -0.f; // , expr subst
                 aocl_blas_cgemv("Conjugate transpose", &i__1, nrhs, &q__1, &b[k + 1 + b_dim1], ldb,
                                 &a[k + 1 + k * a_dim1], &c__1, &c_b1, &b[k + b_dim1], ldb);
                 aocl_lapack_clacgv(nrhs, &b[k + b_dim1], ldb);
                 aocl_lapack_clacgv(nrhs, &b[k - 1 + b_dim1], ldb);
                 i__1 = *n - k;
-                q__1.r = -1.f;
-                q__1.i = -0.f; // , expr subst
+                q__1.real = -1.f;
+                q__1.imag = -0.f; // , expr subst
                 aocl_blas_cgemv("Conjugate transpose", &i__1, nrhs, &q__1, &b[k + 1 + b_dim1], ldb,
                                 &a[k + 1 + (k - 1) * a_dim1], &c__1, &c_b1, &b[k - 1 + b_dim1],
                                 ldb);

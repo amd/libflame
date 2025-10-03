@@ -293,14 +293,14 @@ void aocl_lapack_zlaein(logical *rightv, logical *noinit, aocl_int64_t *n, dcomp
             ei.real = h__[i__2].real;
             ei.imag = h__[i__2].imag; // , expr subst
             i__2 = i__ + i__ * b_dim1;
-            if((d__1 = b[i__2].r, f2c_dabs(d__1))
+            if((d__1 = b[i__2].real, f2c_dabs(d__1))
                    + (d__2 = d_imag(&b[i__ + i__ * b_dim1]), f2c_dabs(d__2))
-               < (d__3 = ei.r, f2c_dabs(d__3)) + (d__4 = d_imag(&ei), f2c_dabs(d__4)))
+               < (d__3 = ei.real, f2c_dabs(d__3)) + (d__4 = d_imag(&ei), f2c_dabs(d__4)))
             {
                 /* Interchange rows and eliminate. */
                 zladiv_f2c_(&z__1, &b[i__ + i__ * b_dim1], &ei);
-                x.r = z__1.r;
-                x.i = z__1.i; // , expr subst
+                x.real = z__1.real;
+                x.imag = z__1.imag; // , expr subst
                 i__2 = i__ + i__ * b_dim1;
                 b[i__2].real = ei.real;
                 b[i__2].imag = ei.imag; // , expr subst
@@ -328,16 +328,16 @@ void aocl_lapack_zlaein(logical *rightv, logical *noinit, aocl_int64_t *n, dcomp
             {
                 /* Eliminate without interchange. */
                 i__2 = i__ + i__ * b_dim1;
-                if(b[i__2].r == 0. && b[i__2].i == 0.)
+                if(b[i__2].real == 0. && b[i__2].imag == 0.)
                 {
                     i__3 = i__ + i__ * b_dim1;
                     b[i__3].real = *eps3;
                     b[i__3].imag = 0.; // , expr subst
                 }
                 zladiv_f2c_(&z__1, &ei, &b[i__ + i__ * b_dim1]);
-                x.r = z__1.r;
-                x.i = z__1.i; // , expr subst
-                if(x.r != 0. || x.i != 0.)
+                x.real = z__1.real;
+                x.imag = z__1.imag; // , expr subst
+                if(x.real != 0. || x.imag != 0.)
                 {
                     i__2 = *n;
                     for(j = i__ + 1; j <= i__2; ++j)
@@ -358,7 +358,7 @@ void aocl_lapack_zlaein(logical *rightv, logical *noinit, aocl_int64_t *n, dcomp
             /* L60: */
         }
         i__1 = *n + *n * b_dim1;
-        if(b[i__1].r == 0. && b[i__1].i == 0.)
+        if(b[i__1].real == 0. && b[i__1].imag == 0.)
         {
             i__2 = *n + *n * b_dim1;
             b[i__2].real = *eps3;
@@ -376,14 +376,14 @@ void aocl_lapack_zlaein(logical *rightv, logical *noinit, aocl_int64_t *n, dcomp
             ej.real = h__[i__1].real;
             ej.imag = h__[i__1].imag; // , expr subst
             i__1 = j + j * b_dim1;
-            if((d__1 = b[i__1].r, f2c_dabs(d__1))
+            if((d__1 = b[i__1].real, f2c_dabs(d__1))
                    + (d__2 = d_imag(&b[j + j * b_dim1]), f2c_dabs(d__2))
-               < (d__3 = ej.r, f2c_dabs(d__3)) + (d__4 = d_imag(&ej), f2c_dabs(d__4)))
+               < (d__3 = ej.real, f2c_dabs(d__3)) + (d__4 = d_imag(&ej), f2c_dabs(d__4)))
             {
                 /* Interchange columns and eliminate. */
                 zladiv_f2c_(&z__1, &b[j + j * b_dim1], &ej);
-                x.r = z__1.r;
-                x.i = z__1.i; // , expr subst
+                x.real = z__1.real;
+                x.imag = z__1.imag; // , expr subst
                 i__1 = j + j * b_dim1;
                 b[i__1].real = ej.real;
                 b[i__1].imag = ej.imag; // , expr subst
@@ -411,16 +411,16 @@ void aocl_lapack_zlaein(logical *rightv, logical *noinit, aocl_int64_t *n, dcomp
             {
                 /* Eliminate without interchange. */
                 i__1 = j + j * b_dim1;
-                if(b[i__1].r == 0. && b[i__1].i == 0.)
+                if(b[i__1].real == 0. && b[i__1].imag == 0.)
                 {
                     i__2 = j + j * b_dim1;
                     b[i__2].real = *eps3;
                     b[i__2].imag = 0.; // , expr subst
                 }
                 zladiv_f2c_(&z__1, &ej, &b[j + j * b_dim1]);
-                x.r = z__1.r;
-                x.i = z__1.i; // , expr subst
-                if(x.r != 0. || x.i != 0.)
+                x.real = z__1.real;
+                x.imag = z__1.imag; // , expr subst
+                if(x.real != 0. || x.imag != 0.)
                 {
                     i__1 = j - 1;
                     for(i__ = 1; i__ <= i__1; ++i__)
@@ -441,7 +441,7 @@ void aocl_lapack_zlaein(logical *rightv, logical *noinit, aocl_int64_t *n, dcomp
             /* L90: */
         }
         i__1 = b_dim1 + 1;
-        if(b[i__1].r == 0. && b[i__1].i == 0.)
+        if(b[i__1].real == 0. && b[i__1].imag == 0.)
         {
             i__2 = b_dim1 + 1;
             b[i__2].real = *eps3;
@@ -491,7 +491,7 @@ void aocl_lapack_zlaein(logical *rightv, logical *noinit, aocl_int64_t *n, dcomp
 L120: /* Normalize eigenvector. */
     i__ = aocl_blas_izamax(n, &v[1], &c__1);
     i__1 = i__;
-    d__3 = 1. / ((d__1 = v[i__1].r, f2c_dabs(d__1)) + (d__2 = d_imag(&v[i__]), f2c_dabs(d__2)));
+    d__3 = 1. / ((d__1 = v[i__1].real, f2c_dabs(d__1)) + (d__2 = d_imag(&v[i__]), f2c_dabs(d__2)));
     aocl_blas_zdscal(n, &d__3, &v[1], &c__1);
     AOCL_DTL_TRACE_LOG_EXIT
     return;

@@ -10,8 +10,8 @@
  *     Modifications Copyright (c) 2025 Advanced Micro Devices, Inc.  All rights reserved.
  */
 #include "FLA_f2c.h" /* Table of constant values */
-static dcomplex c_b1 = {{1.}, {0.}};
-static dcomplex c_b2 = {{0.}, {0.}};
+static dcomplex c_b1 = {1., 0.};
+static dcomplex c_b2 = {0., 0.};
 static aocl_int64_t c__1 = 1;
 /* > \brief \b ZLARF applies an elementary reflector to a general rectangular matrix. */
 /* =========== DOCUMENTATION =========== */
@@ -200,7 +200,7 @@ void aocl_lapack_zlarf(char *side, aocl_int64_t *m, aocl_int64_t *n, dcomplex *v
     applyleft = lsame_(side, "L", 1, 1);
     lastv = 0;
     lastc = 0;
-    if(tau->r != 0. || tau->i != 0.)
+    if(tau->real != 0. || tau->imag != 0.)
     {
         /* Set up variables for scanning V. LASTV begins pointing to the end */
         /* of V. */
@@ -225,7 +225,7 @@ void aocl_lapack_zlarf(char *side, aocl_int64_t *m, aocl_int64_t *n, dcomplex *v
         {
             /* while(complicated condition) */
             i__1 = i__;
-            if(!(lastv > 0 && (v[i__1].r == 0. && v[i__1].i == 0.)))
+            if(!(lastv > 0 && (v[i__1].real == 0. && v[i__1].imag == 0.)))
                 break;
             --lastv;
             i__ -= *incv;
@@ -249,8 +249,8 @@ void aocl_lapack_zlarf(char *side, aocl_int64_t *m, aocl_int64_t *n, dcomplex *v
         /* Form H * C */
         if(lastv > 0)
         {
-            z__1.r = -tau->r;
-            z__1.i = -tau->i; // , expr subst
+            z__1.real = -tau->real;
+            z__1.imag = -tau->imag; // , expr subst
 #ifdef FLA_ENABLE_AMD_OPT
             if(*incv == c__1 /*  && lastc < FLA_ZGEMV_ZGER_SMALL_THRESH_C */)
             {
@@ -287,8 +287,8 @@ void aocl_lapack_zlarf(char *side, aocl_int64_t *m, aocl_int64_t *n, dcomplex *v
             aocl_blas_zgemv("No transpose", &lastc, &lastv, &c_b1, &c__[c_offset], ldc, &v[1], incv,
                             &c_b2, &work[1], &c__1);
             /* C(1:lastc,1:lastv) := C(...) - w(1:lastc,1) * v(1:lastv,1)**H */
-            z__1.r = -tau->r;
-            z__1.i = -tau->i; // , expr subst
+            z__1.real = -tau->real;
+            z__1.imag = -tau->imag; // , expr subst
             aocl_blas_zgerc(&lastc, &lastv, &z__1, &work[1], &c__1, &v[1], incv, &c__[c_offset],
                             ldc);
         }

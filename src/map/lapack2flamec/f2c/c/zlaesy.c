@@ -4,7 +4,7 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static dcomplex c_b1 = {{1.}, {0.}};
+static dcomplex c_b1 = {1., 0.};
 static aocl_int64_t c__2 = 2;
 /* > \brief \b ZLAESY computes the eigenvalues and eigenvectors of a 2-by-2 scomplex symmetric
  * matrix. */
@@ -150,8 +150,8 @@ void zlaesy_(dcomplex *a, dcomplex *b, dcomplex *c__, dcomplex *rt1,
     /* To avoid divide by zero later, we treat this case separately. */
     if(z_abs(b) == 0.)
     {
-        rt1->r = a->r, rt1->i = a->i;
-        rt2->r = c__->r, rt2->i = c__->i;
+        rt1->real = a->real, rt1->imag = a->imag;
+        rt2->real = c__->real, rt2->imag = c__->imag;
         if(z_abs(rt1) < z_abs(rt2))
         {
             tmp.real = rt1->real;
@@ -207,12 +207,12 @@ void zlaesy_(dcomplex *a, dcomplex *b, dcomplex *c__, dcomplex *rt1,
         }
         /* Compute the two eigenvalues. RT1 and RT2 are exchanged */
         /* if necessary so that RT1 will have the greater magnitude. */
-        z__1.r = s.r + t.r;
-        z__1.i = s.i + t.i; // , expr subst
-        rt1->r = z__1.r, rt1->i = z__1.i;
-        z__1.r = s.r - t.r;
-        z__1.i = s.i - t.i; // , expr subst
-        rt2->r = z__1.r, rt2->i = z__1.i;
+        z__1.real = s.real + t.real;
+        z__1.imag = s.imag + t.imag; // , expr subst
+        rt1->real = z__1.real, rt1->imag = z__1.imag;
+        z__1.real = s.real - t.real;
+        z__1.imag = s.imag - t.imag; // , expr subst
+        rt2->real = z__1.real, rt2->imag = z__1.imag;
         if(z_abs(rt1) < z_abs(rt2))
         {
             tmp.real = rt1->real;
@@ -227,7 +227,7 @@ void zlaesy_(dcomplex *a, dcomplex *b, dcomplex *c__, dcomplex *rt1,
         z__2.real = rt1->real - a->real;
         z__2.imag = rt1->imag - a->imag; // , expr subst
         z_div(&z__1, &z__2, b);
-        sn1->r = z__1.r, sn1->i = z__1.i;
+        sn1->real = z__1.real, sn1->imag = z__1.imag;
         tabs = z_abs(sn1);
         if(tabs > 1.)
         {

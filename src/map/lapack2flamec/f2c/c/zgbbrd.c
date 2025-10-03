@@ -4,8 +4,8 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static dcomplex c_b1 = {{0.}, {0.}};
-static dcomplex c_b2 = {{1.}, {0.}};
+static dcomplex c_b1 = {0., 0.};
+static dcomplex c_b2 = {1., 0.};
 static aocl_int64_t c__1 = 1;
 /* > \brief \b ZGBBRD */
 /* =========== DOCUMENTATION =========== */
@@ -447,8 +447,8 @@ void aocl_lapack_zgbbrd(char *vect, aocl_int64_t *m, aocl_int64_t *n, aocl_int64
                         zlartg_(&ab[*ku + ml - 1 + i__ * ab_dim1], &ab[*ku + ml + i__ * ab_dim1],
                                 &rwork[i__ + ml - 1], &work[i__ + ml - 1], &ra);
                         i__3 = *ku + ml - 1 + i__ * ab_dim1;
-                        ab[i__3].r = ra.r;
-                        ab[i__3].i = ra.i; // , expr subst
+                        ab[i__3].real = ra.real;
+                        ab[i__3].imag = ra.imag; // , expr subst
                         if(i__ < *n)
                         {
                             /* Computing MIN */
@@ -505,10 +505,10 @@ void aocl_lapack_zgbbrd(char *vect, aocl_int64_t *m, aocl_int64_t *n, aocl_int64
                     i__5 = j + kun;
                     i__6 = j;
                     i__7 = (j + kun) * ab_dim1 + 1;
-                    z__1.r = work[i__6].r * ab[i__7].r - work[i__6].i * ab[i__7].i;
-                    z__1.i = work[i__6].r * ab[i__7].i + work[i__6].i * ab[i__7].r; // , expr subst
-                    work[i__5].r = z__1.r;
-                    work[i__5].i = z__1.i; // , expr subst
+                    z__1.real = work[i__6].real * ab[i__7].real - work[i__6].imag * ab[i__7].imag;
+                    z__1.imag = work[i__6].real * ab[i__7].imag + work[i__6].imag * ab[i__7].real; // , expr subst
+                    work[i__5].real = z__1.real;
+                    work[i__5].imag = z__1.imag; // , expr subst
                     i__5 = (j + kun) * ab_dim1 + 1;
                     i__6 = j;
                     i__7 = (j + kun) * ab_dim1 + 1;
@@ -596,10 +596,10 @@ void aocl_lapack_zgbbrd(char *vect, aocl_int64_t *m, aocl_int64_t *n, aocl_int64
                     i__5 = j + kb;
                     i__6 = j + kun;
                     i__7 = klu1 + (j + kun) * ab_dim1;
-                    z__1.r = work[i__6].r * ab[i__7].r - work[i__6].i * ab[i__7].i;
-                    z__1.i = work[i__6].r * ab[i__7].i + work[i__6].i * ab[i__7].r; // , expr subst
-                    work[i__5].r = z__1.r;
-                    work[i__5].i = z__1.i; // , expr subst
+                    z__1.real = work[i__6].real * ab[i__7].real - work[i__6].imag * ab[i__7].imag;
+                    z__1.imag = work[i__6].real * ab[i__7].imag + work[i__6].imag * ab[i__7].real; // , expr subst
+                    work[i__5].real = z__1.real;
+                    work[i__5].imag = z__1.imag; // , expr subst
                     i__5 = klu1 + (j + kun) * ab_dim1;
                     i__6 = j + kun;
                     i__7 = klu1 + (j + kun) * ab_dim1;
@@ -635,8 +635,8 @@ void aocl_lapack_zgbbrd(char *vect, aocl_int64_t *m, aocl_int64_t *n, aocl_int64
         {
             zlartg_(&ab[i__ * ab_dim1 + 1], &ab[i__ * ab_dim1 + 2], &rc, &rs, &ra);
             i__2 = i__ * ab_dim1 + 1;
-            ab[i__2].r = ra.r;
-            ab[i__2].i = ra.i; // , expr subst
+            ab[i__2].real = ra.real;
+            ab[i__2].imag = ra.imag; // , expr subst
             if(i__ < *n)
             {
                 i__2 = i__ * ab_dim1 + 2;
@@ -675,24 +675,24 @@ void aocl_lapack_zgbbrd(char *vect, aocl_int64_t *m, aocl_int64_t *n, aocl_int64
             /* Annihilate a(m,m+1) by applying plane rotations from the */
             /* right */
             i__1 = *ku + (*m + 1) * ab_dim1;
-            rb.r = ab[i__1].r;
-            rb.i = ab[i__1].i; // , expr subst
+            rb.real = ab[i__1].real;
+            rb.imag = ab[i__1].imag; // , expr subst
             for(i__ = *m; i__ >= 1; --i__)
             {
                 zlartg_(&ab[*ku + 1 + i__ * ab_dim1], &rb, &rc, &rs, &ra);
                 i__1 = *ku + 1 + i__ * ab_dim1;
-                ab[i__1].r = ra.r;
-                ab[i__1].i = ra.i; // , expr subst
+                ab[i__1].real = ra.real;
+                ab[i__1].imag = ra.imag; // , expr subst
                 if(i__ > 1)
                 {
                     d_cnjg(&z__3, &rs);
                     z__2.real = -z__3.real;
                     z__2.imag = -z__3.imag; // , expr subst
                     i__1 = *ku + i__ * ab_dim1;
-                    z__1.r = z__2.r * ab[i__1].r - z__2.i * ab[i__1].i;
-                    z__1.i = z__2.r * ab[i__1].i + z__2.i * ab[i__1].r; // , expr subst
-                    rb.r = z__1.r;
-                    rb.i = z__1.i; // , expr subst
+                    z__1.real = z__2.real * ab[i__1].real - z__2.imag * ab[i__1].imag;
+                    z__1.imag = z__2.real * ab[i__1].imag + z__2.imag * ab[i__1].real; // , expr subst
+                    rb.real = z__1.real;
+                    rb.imag = z__1.imag; // , expr subst
                     i__1 = *ku + i__ * ab_dim1;
                     i__2 = *ku + i__ * ab_dim1;
                     z__1.real = rc * ab[i__2].real;

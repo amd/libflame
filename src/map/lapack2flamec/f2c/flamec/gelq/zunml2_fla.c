@@ -312,13 +312,13 @@ void zunml2_fla(char *side, char *trans, aocl_int64_t *m, aocl_int64_t *n, aocl_
         aii.real = a[i__3].real;
         aii.imag = a[i__3].imag; // , expr subst
         i__3 = i__ + i__ * a_dim1;
-        a[i__3].r = 1.;
-        a[i__3].i = 0.; // , expr subst
+        a[i__3].real = 1.;
+        a[i__3].imag = 0.; // , expr subst
         aocl_lapack_zlarf(side, &mi, &ni, &a[i__ + i__ * a_dim1], lda, &taui,
                           &c__[ic + jc * c_dim1], ldc, &work[1]);
         i__3 = i__ + i__ * a_dim1;
-        a[i__3].r = aii.r;
-        a[i__3].i = aii.i; // , expr subst
+        a[i__3].real = aii.real;
+        a[i__3].imag = aii.imag; // , expr subst
         if(i__ < nq)
         {
             i__3 = nq - i__;

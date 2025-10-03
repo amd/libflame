@@ -7,7 +7,7 @@
 #ifdef FLA_OPENMP_MULTITHREADING
 #include <omp.h>
 #endif
-static dcomplex c_b1 = {{0.}, {0.}};
+static dcomplex c_b1 = {0., 0.};
 static aocl_int64_t c__2 = 2;
 static aocl_int64_t c_n1 = -1;
 static aocl_int64_t c__3 = 3;
@@ -367,10 +367,10 @@ void aocl_lapack_zhetrd_hb2st(char *stage1, char *vect, char *uplo, aocl_int64_t
     }
     if(*info == 0)
     {
-        hous[1].r = (doublereal)lhmin;
-        hous[1].i = 0.; // , expr subst
-        work[1].r = (doublereal)lwmin;
-        work[1].i = 0.; // , expr subst
+        hous[1].real = (doublereal)lhmin;
+        hous[1].imag = 0.; // , expr subst
+        work[1].real = (doublereal)lwmin;
+        work[1].imag = 0.; // , expr subst
     }
     if(*info != 0)
     {
@@ -387,10 +387,10 @@ void aocl_lapack_zhetrd_hb2st(char *stage1, char *vect, char *uplo, aocl_int64_t
     /* Quick return if possible */
     if(*n == 0)
     {
-        hous[1].r = 1.;
-        hous[1].i = 0.; // , expr subst
-        work[1].r = 1.;
-        work[1].i = 0.; // , expr subst
+        hous[1].real = 1.;
+        hous[1].imag = 0.; // , expr subst
+        work[1].real = 1.;
+        work[1].imag = 0.; // , expr subst
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -433,7 +433,7 @@ void aocl_lapack_zhetrd_hb2st(char *stage1, char *vect, char *uplo, aocl_int64_t
         for(i__ = 1; i__ <= i__1; ++i__)
         {
             i__2 = abdpos + i__ * ab_dim1;
-            d__[i__] = ab[i__2].r;
+            d__[i__] = ab[i__2].real;
             /* L30: */
         }
         i__1 = *n - 1;
@@ -442,10 +442,10 @@ void aocl_lapack_zhetrd_hb2st(char *stage1, char *vect, char *uplo, aocl_int64_t
             e[i__] = 0.;
             /* L40: */
         }
-        hous[1].r = 1.;
-        hous[1].i = 0.; // , expr subst
-        work[1].r = 1.;
-        work[1].i = 0.; // , expr subst
+        hous[1].real = 1.;
+        hous[1].imag = 0.; // , expr subst
+        work[1].real = 1.;
+        work[1].imag = 0.; // , expr subst
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -464,7 +464,7 @@ void aocl_lapack_zhetrd_hb2st(char *stage1, char *vect, char *uplo, aocl_int64_t
         for(i__ = 1; i__ <= i__1; ++i__)
         {
             i__2 = abdpos + i__ * ab_dim1;
-            d__[i__] = ab[i__2].r;
+            d__[i__] = ab[i__2].real;
             /* L50: */
         }
         /* make off-diagonal elements real and copy them to E */
@@ -474,33 +474,33 @@ void aocl_lapack_zhetrd_hb2st(char *stage1, char *vect, char *uplo, aocl_int64_t
             for(i__ = 1; i__ <= i__1; ++i__)
             {
                 i__2 = abofdpos + (i__ + 1) * ab_dim1;
-                tmp.r = ab[i__2].r;
-                tmp.i = ab[i__2].i; // , expr subst
+                tmp.real = ab[i__2].real;
+                tmp.imag = ab[i__2].imag; // , expr subst
                 abstmp = z_abs(&tmp);
                 i__2 = abofdpos + (i__ + 1) * ab_dim1;
-                ab[i__2].r = abstmp;
-                ab[i__2].i = 0.; // , expr subst
+                ab[i__2].real = abstmp;
+                ab[i__2].imag = 0.; // , expr subst
                 e[i__] = abstmp;
                 if(abstmp != 0.)
                 {
-                    z__1.r = tmp.r / abstmp;
-                    z__1.i = tmp.i / abstmp; // , expr subst
-                    tmp.r = z__1.r;
-                    tmp.i = z__1.i; // , expr subst
+                    z__1.real = tmp.real / abstmp;
+                    z__1.imag = tmp.imag / abstmp; // , expr subst
+                    tmp.real = z__1.real;
+                    tmp.imag = z__1.imag; // , expr subst
                 }
                 else
                 {
-                    tmp.r = 1.;
-                    tmp.i = 0.; // , expr subst
+                    tmp.real = 1.;
+                    tmp.imag = 0.; // , expr subst
                 }
                 if(i__ < *n - 1)
                 {
                     i__2 = abofdpos + (i__ + 2) * ab_dim1;
                     i__3 = abofdpos + (i__ + 2) * ab_dim1;
-                    z__1.r = ab[i__3].r * tmp.r - ab[i__3].i * tmp.i;
-                    z__1.i = ab[i__3].r * tmp.i + ab[i__3].i * tmp.r; // , expr subst
-                    ab[i__2].r = z__1.r;
-                    ab[i__2].i = z__1.i; // , expr subst
+                    z__1.real = ab[i__3].real * tmp.real - ab[i__3].imag * tmp.imag;
+                    z__1.imag = ab[i__3].real * tmp.imag + ab[i__3].imag * tmp.real; // , expr subst
+                    ab[i__2].real = z__1.real;
+                    ab[i__2].imag = z__1.imag; // , expr subst
                 }
                 /* IF( WANTZ ) THEN */
                 /* CALL ZSCAL( N, DCONJG( TMP ), Q( 1, I+1 ), 1 ) */
@@ -514,33 +514,33 @@ void aocl_lapack_zhetrd_hb2st(char *stage1, char *vect, char *uplo, aocl_int64_t
             for(i__ = 1; i__ <= i__1; ++i__)
             {
                 i__2 = abofdpos + i__ * ab_dim1;
-                tmp.r = ab[i__2].r;
-                tmp.i = ab[i__2].i; // , expr subst
+                tmp.real = ab[i__2].real;
+                tmp.imag = ab[i__2].imag; // , expr subst
                 abstmp = z_abs(&tmp);
                 i__2 = abofdpos + i__ * ab_dim1;
-                ab[i__2].r = abstmp;
-                ab[i__2].i = 0.; // , expr subst
+                ab[i__2].real = abstmp;
+                ab[i__2].imag = 0.; // , expr subst
                 e[i__] = abstmp;
                 if(abstmp != 0.)
                 {
-                    z__1.r = tmp.r / abstmp;
-                    z__1.i = tmp.i / abstmp; // , expr subst
-                    tmp.r = z__1.r;
-                    tmp.i = z__1.i; // , expr subst
+                    z__1.real = tmp.real / abstmp;
+                    z__1.imag = tmp.imag / abstmp; // , expr subst
+                    tmp.real = z__1.real;
+                    tmp.imag = z__1.imag; // , expr subst
                 }
                 else
                 {
-                    tmp.r = 1.;
-                    tmp.i = 0.; // , expr subst
+                    tmp.real = 1.;
+                    tmp.imag = 0.; // , expr subst
                 }
                 if(i__ < *n - 1)
                 {
                     i__2 = abofdpos + (i__ + 1) * ab_dim1;
                     i__3 = abofdpos + (i__ + 1) * ab_dim1;
-                    z__1.r = ab[i__3].r * tmp.r - ab[i__3].i * tmp.i;
-                    z__1.i = ab[i__3].r * tmp.i + ab[i__3].i * tmp.r; // , expr subst
-                    ab[i__2].r = z__1.r;
-                    ab[i__2].i = z__1.i; // , expr subst
+                    z__1.real = ab[i__3].real * tmp.real - ab[i__3].imag * tmp.imag;
+                    z__1.imag = ab[i__3].real * tmp.imag + ab[i__3].imag * tmp.real; // , expr subst
+                    ab[i__2].real = z__1.real;
+                    ab[i__2].imag = z__1.imag; // , expr subst
                 }
                 /* IF( WANTQ ) THEN */
                 /* CALL ZSCAL( N, TMP, Q( 1, I+1 ), 1 ) */
@@ -548,10 +548,10 @@ void aocl_lapack_zhetrd_hb2st(char *stage1, char *vect, char *uplo, aocl_int64_t
                 /* L70: */
             }
         }
-        hous[1].r = 1.;
-        hous[1].i = 0.; // , expr subst
-        work[1].r = 1.;
-        work[1].i = 0.; // , expr subst
+        hous[1].real = 1.;
+        hous[1].imag = 0.; // , expr subst
+        work[1].real = 1.;
+        work[1].imag = 0.; // , expr subst
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -709,7 +709,7 @@ void aocl_lapack_zhetrd_hb2st(char *stage1, char *vect, char *uplo, aocl_int64_t
     for(i__ = 1; i__ <= i__1; ++i__)
     {
         i__2 = dpos + (i__ - 1) * lda;
-        d__[i__] = work[i__2].r;
+        d__[i__] = work[i__2].real;
         /* L150: */
     }
     /* Copy the off diagonal from A to E. Note that E is REAL thus only */
@@ -720,7 +720,7 @@ void aocl_lapack_zhetrd_hb2st(char *stage1, char *vect, char *uplo, aocl_int64_t
         for(i__ = 1; i__ <= i__1; ++i__)
         {
             i__2 = ofdpos + i__ * lda;
-            e[i__] = work[i__2].r;
+            e[i__] = work[i__2].real;
             /* L160: */
         }
     }
@@ -730,14 +730,14 @@ void aocl_lapack_zhetrd_hb2st(char *stage1, char *vect, char *uplo, aocl_int64_t
         for(i__ = 1; i__ <= i__1; ++i__)
         {
             i__2 = ofdpos + (i__ - 1) * lda;
-            e[i__] = work[i__2].r;
+            e[i__] = work[i__2].real;
             /* L170: */
         }
     }
-    hous[1].r = (doublereal)lhmin;
-    hous[1].i = 0.; // , expr subst
-    work[1].r = (doublereal)lwmin;
-    work[1].i = 0.; // , expr subst
+    hous[1].real = (doublereal)lhmin;
+    hous[1].imag = 0.; // , expr subst
+    work[1].real = (doublereal)lwmin;
+    work[1].imag = 0.; // , expr subst
     AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of ZHETRD_HB2ST */

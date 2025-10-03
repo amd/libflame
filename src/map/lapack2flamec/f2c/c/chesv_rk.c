@@ -329,11 +329,11 @@ void aocl_lapack_chesv_rk(char *uplo, aocl_int64_t *n, aocl_int64_t *nrhs, scomp
         {
             aocl_lapack_chetrf_rk(uplo, n, &a[a_offset], lda, &e[1], &ipiv[1], &work[1], &c_n1,
                                   info);
-            lwkopt = (integer)work[1].r;
+            lwkopt = (integer)work[1].real;
         }
         r__1 = aocl_lapack_sroundup_lwork(&lwkopt);
-        work[1].r = r__1;
-        work[1].i = 0.f; // , expr subst
+        work[1].real = r__1;
+        work[1].imag = 0.f; // , expr subst
     }
     if(*info != 0)
     {
@@ -356,8 +356,8 @@ void aocl_lapack_chesv_rk(char *uplo, aocl_int64_t *n, aocl_int64_t *nrhs, scomp
                              info);
     }
     r__1 = aocl_lapack_sroundup_lwork(&lwkopt);
-    work[1].r = r__1;
-    work[1].i = 0.f; // , expr subst
+    work[1].real = r__1;
+    work[1].imag = 0.f; // , expr subst
     AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of CHESV_RK */

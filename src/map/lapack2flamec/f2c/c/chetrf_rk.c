@@ -354,8 +354,8 @@ void aocl_lapack_chetrf_rk(char *uplo, aocl_int64_t *n, scomplex *a, aocl_int64_
         nb = aocl_lapack_ilaenv(&c__1, "CHETRF_RK", uplo, n, &c_n1, &c_n1, &c_n1);
         lwkopt = *n * nb;
         r__1 = aocl_lapack_sroundup_lwork(&lwkopt);
-        work[1].r = r__1;
-        work[1].i = 0.f; // , expr subst
+        work[1].real = r__1;
+        work[1].imag = 0.f; // , expr subst
     }
     if(*info != 0)
     {
@@ -529,8 +529,8 @@ void aocl_lapack_chetrf_rk(char *uplo, aocl_int64_t *n, scomplex *a, aocl_int64_
         ;
     }
     r__1 = aocl_lapack_sroundup_lwork(&lwkopt);
-    work[1].r = r__1;
-    work[1].i = 0.f; // , expr subst
+    work[1].real = r__1;
+    work[1].imag = 0.f; // , expr subst
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
     return;
     /* End of CHETRF_RK */

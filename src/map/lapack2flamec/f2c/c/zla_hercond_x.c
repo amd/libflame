@@ -256,22 +256,22 @@ doublereal aocl_lapack_zla_hercond_x(char *uplo, aocl_int64_t *n, dcomplex *a,
             {
                 i__3 = j + i__ * a_dim1;
                 i__4 = j;
-                z__2.r = a[i__3].r * x[i__4].r - a[i__3].i * x[i__4].i;
-                z__2.i = a[i__3].r * x[i__4].i + a[i__3].i * x[i__4].r; // , expr subst
-                z__1.r = z__2.r;
-                z__1.i = z__2.i; // , expr subst
-                tmp += (d__1 = z__1.r, f2c_dabs(d__1)) + (d__2 = d_imag(&z__1), f2c_dabs(d__2));
+                z__2.real = a[i__3].real * x[i__4].real - a[i__3].imag * x[i__4].imag;
+                z__2.imag = a[i__3].real * x[i__4].imag + a[i__3].imag * x[i__4].real; // , expr subst
+                z__1.real = z__2.real;
+                z__1.imag = z__2.imag; // , expr subst
+                tmp += (d__1 = z__1.real, f2c_dabs(d__1)) + (d__2 = d_imag(&z__1), f2c_dabs(d__2));
             }
             i__2 = *n;
             for(j = i__ + 1; j <= i__2; ++j)
             {
                 i__3 = i__ + j * a_dim1;
                 i__4 = j;
-                z__2.r = a[i__3].r * x[i__4].r - a[i__3].i * x[i__4].i;
-                z__2.i = a[i__3].r * x[i__4].i + a[i__3].i * x[i__4].r; // , expr subst
-                z__1.r = z__2.r;
-                z__1.i = z__2.i; // , expr subst
-                tmp += (d__1 = z__1.r, f2c_dabs(d__1)) + (d__2 = d_imag(&z__1), f2c_dabs(d__2));
+                z__2.real = a[i__3].real * x[i__4].real - a[i__3].imag * x[i__4].imag;
+                z__2.imag = a[i__3].real * x[i__4].imag + a[i__3].imag * x[i__4].real; // , expr subst
+                z__1.real = z__2.real;
+                z__1.imag = z__2.imag; // , expr subst
+                tmp += (d__1 = z__1.real, f2c_dabs(d__1)) + (d__2 = d_imag(&z__1), f2c_dabs(d__2));
             }
             rwork[i__] = tmp;
             anorm = fla_max(anorm, tmp);
@@ -288,22 +288,22 @@ doublereal aocl_lapack_zla_hercond_x(char *uplo, aocl_int64_t *n, dcomplex *a,
             {
                 i__3 = i__ + j * a_dim1;
                 i__4 = j;
-                z__2.r = a[i__3].r * x[i__4].r - a[i__3].i * x[i__4].i;
-                z__2.i = a[i__3].r * x[i__4].i + a[i__3].i * x[i__4].r; // , expr subst
-                z__1.r = z__2.r;
-                z__1.i = z__2.i; // , expr subst
-                tmp += (d__1 = z__1.r, f2c_dabs(d__1)) + (d__2 = d_imag(&z__1), f2c_dabs(d__2));
+                z__2.real = a[i__3].real * x[i__4].real - a[i__3].imag * x[i__4].imag;
+                z__2.imag = a[i__3].real * x[i__4].imag + a[i__3].imag * x[i__4].real; // , expr subst
+                z__1.real = z__2.real;
+                z__1.imag = z__2.imag; // , expr subst
+                tmp += (d__1 = z__1.real, f2c_dabs(d__1)) + (d__2 = d_imag(&z__1), f2c_dabs(d__2));
             }
             i__2 = *n;
             for(j = i__ + 1; j <= i__2; ++j)
             {
                 i__3 = j + i__ * a_dim1;
                 i__4 = j;
-                z__2.r = a[i__3].r * x[i__4].r - a[i__3].i * x[i__4].i;
-                z__2.i = a[i__3].r * x[i__4].i + a[i__3].i * x[i__4].r; // , expr subst
-                z__1.r = z__2.r;
-                z__1.i = z__2.i; // , expr subst
-                tmp += (d__1 = z__1.r, f2c_dabs(d__1)) + (d__2 = d_imag(&z__1), f2c_dabs(d__2));
+                z__2.real = a[i__3].real * x[i__4].real - a[i__3].imag * x[i__4].imag;
+                z__2.imag = a[i__3].real * x[i__4].imag + a[i__3].imag * x[i__4].real; // , expr subst
+                z__1.real = z__2.real;
+                z__1.imag = z__2.imag; // , expr subst
+                tmp += (d__1 = z__1.real, f2c_dabs(d__1)) + (d__2 = d_imag(&z__1), f2c_dabs(d__2));
             }
             rwork[i__] = tmp;
             anorm = fla_max(anorm, tmp);

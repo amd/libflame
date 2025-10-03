@@ -4,8 +4,8 @@
  -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for
  libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static dcomplex c_b1 = {{0.}, {0.}};
-static dcomplex c_b2 = {{1.}, {0.}};
+static dcomplex c_b1 = {0., 0.};
+static dcomplex c_b2 = {1., 0.};
 static aocl_int64_t c__1 = 1;
 /* > \brief \b ZLAHEF_AA */
 /* =========== DOCUMENTATION =========== */
@@ -249,8 +249,8 @@ void aocl_lapack_zlahef_aa(char *uplo, aocl_int64_t *j1, aocl_int64_t *m, aocl_i
             i__1 = j - k1;
             aocl_lapack_zlacgv(&i__1, &a[j * a_dim1 + 1], &c__1);
             i__1 = j - k1;
-            z__1.r = -1.;
-            z__1.i = -0.; // , expr subst
+            z__1.real = -1.;
+            z__1.imag = -0.; // , expr subst
             aocl_blas_zgemv("No transpose", &mj, &i__1, &z__1, &h__[j + k1 * h_dim1], ldh,
                             &a[j * a_dim1 + 1], &c__1, &c_b2, &h__[j + j * h_dim1], &c__1);
             i__1 = j - k1;
@@ -263,17 +263,17 @@ void aocl_lapack_zlahef_aa(char *uplo, aocl_int64_t *j1, aocl_int64_t *m, aocl_i
             /* Compute WORK := WORK - L(J-1, J:N) * T(J-1,J), */
             /* where A(J-1, J) stores T(J-1, J) and A(J-2, J:N) stores U(J-1, J:N) */
             d_cnjg(&z__2, &a[k - 1 + j * a_dim1]);
-            z__1.r = -z__2.r;
-            z__1.i = -z__2.i; // , expr subst
-            alpha.r = z__1.r;
-            alpha.i = z__1.i; // , expr subst
+            z__1.real = -z__2.real;
+            z__1.imag = -z__2.imag; // , expr subst
+            alpha.real = z__1.real;
+            alpha.imag = z__1.imag; // , expr subst
             aocl_blas_zaxpy(&mj, &alpha, &a[k - 2 + j * a_dim1], lda, &work[1], &c__1);
         }
         /* Set A(J, J) = T(J, J) */
         i__1 = k + j * a_dim1;
-        d__1 = work[1].r;
-        a[i__1].r = d__1;
-        a[i__1].i = 0.; // , expr subst
+        d__1 = work[1].real;
+        a[i__1].real = d__1;
+        a[i__1].imag = 0.; // , expr subst
         if(j < *m)
         {
             /* Compute WORK(2:N) = T(J, J) L(J, (J+1):N) */
@@ -281,10 +281,10 @@ void aocl_lapack_zlahef_aa(char *uplo, aocl_int64_t *j1, aocl_int64_t *m, aocl_i
             if(k > 1)
             {
                 i__1 = k + j * a_dim1;
-                z__1.r = -a[i__1].r;
-                z__1.i = -a[i__1].i; // , expr subst
-                alpha.r = z__1.r;
-                alpha.i = z__1.i; // , expr subst
+                z__1.real = -a[i__1].real;
+                z__1.imag = -a[i__1].imag; // , expr subst
+                alpha.real = z__1.real;
+                alpha.imag = z__1.imag; // , expr subst
                 i__1 = *m - j;
                 aocl_blas_zaxpy(&i__1, &alpha, &a[k - 1 + (j + 1) * a_dim1], lda, &work[2], &c__1);
             }
@@ -292,20 +292,20 @@ void aocl_lapack_zlahef_aa(char *uplo, aocl_int64_t *j1, aocl_int64_t *m, aocl_i
             i__1 = *m - j;
             i2 = aocl_blas_izamax(&i__1, &work[2], &c__1) + 1;
             i__1 = i2;
-            piv.r = work[i__1].r;
-            piv.i = work[i__1].i; // , expr subst
+            piv.real = work[i__1].real;
+            piv.imag = work[i__1].imag; // , expr subst
             /* Apply hermitian pivot */
-            if(i2 != 2 && (piv.r != 0. || piv.i != 0.))
+            if(i2 != 2 && (piv.real != 0. || piv.imag != 0.))
             {
                 /* Swap WORK(I1) and WORK(I2) */
                 i1 = 2;
                 i__1 = i2;
                 i__2 = i1;
-                work[i__1].r = work[i__2].r;
-                work[i__1].i = work[i__2].i; // , expr subst
+                work[i__1].real = work[i__2].real;
+                work[i__1].imag = work[i__2].imag; // , expr subst
                 i__1 = i1;
-                work[i__1].r = piv.r;
-                work[i__1].i = piv.i; // , expr subst
+                work[i__1].real = piv.real;
+                work[i__1].imag = piv.imag; // , expr subst
                 /* Swap A(I1, I1+1:N) with A(I1+1:N, I2) */
                 i1 = i1 + j - 1;
                 i2 = i2 + j - 1;
@@ -325,15 +325,15 @@ void aocl_lapack_zlahef_aa(char *uplo, aocl_int64_t *j1, aocl_int64_t *m, aocl_i
                 }
                 /* Swap A(I1, I1) with A(I2,I2) */
                 i__1 = i1 + *j1 - 1 + i1 * a_dim1;
-                piv.r = a[i__1].r;
-                piv.i = a[i__1].i; // , expr subst
+                piv.real = a[i__1].real;
+                piv.imag = a[i__1].imag; // , expr subst
                 i__1 = *j1 + i1 - 1 + i1 * a_dim1;
                 i__2 = *j1 + i2 - 1 + i2 * a_dim1;
-                a[i__1].r = a[i__2].r;
-                a[i__1].i = a[i__2].i; // , expr subst
+                a[i__1].real = a[i__2].real;
+                a[i__1].imag = a[i__2].imag; // , expr subst
                 i__1 = *j1 + i2 - 1 + i2 * a_dim1;
-                a[i__1].r = piv.r;
-                a[i__1].i = piv.i; // , expr subst
+                a[i__1].real = piv.real;
+                a[i__1].imag = piv.imag; // , expr subst
                 /* Swap H(I1, 1:J1) with H(I2, 1:J1) */
                 i__1 = i1 - 1;
                 aocl_blas_zswap(&i__1, &h__[i1 + h_dim1], ldh, &h__[i2 + h_dim1], ldh);
@@ -352,8 +352,8 @@ void aocl_lapack_zlahef_aa(char *uplo, aocl_int64_t *j1, aocl_int64_t *m, aocl_i
             }
             /* Set A(J, J+1) = T(J, J+1) */
             i__1 = k + (j + 1) * a_dim1;
-            a[i__1].r = work[2].r;
-            a[i__1].i = work[2].i; // , expr subst
+            a[i__1].real = work[2].real;
+            a[i__1].imag = work[2].imag; // , expr subst
             if(j < *nb)
             {
                 /* Copy A(J+1:N, J+1) into H(J:N, J), */
@@ -366,11 +366,11 @@ void aocl_lapack_zlahef_aa(char *uplo, aocl_int64_t *j1, aocl_int64_t *m, aocl_i
             if(j < *m - 1)
             {
                 i__1 = k + (j + 1) * a_dim1;
-                if(a[i__1].r != 0. || a[i__1].i != 0.)
+                if(a[i__1].real != 0. || a[i__1].imag != 0.)
                 {
                     z_div(&z__1, &c_b2, &a[k + (j + 1) * a_dim1]);
-                    alpha.r = z__1.r;
-                    alpha.i = z__1.i; // , expr subst
+                    alpha.real = z__1.real;
+                    alpha.imag = z__1.imag; // , expr subst
                     i__1 = *m - j - 1;
                     aocl_blas_zcopy(&i__1, &work[3], &c__1, &a[k + (j + 2) * a_dim1], lda);
                     i__1 = *m - j - 1;
@@ -424,8 +424,8 @@ void aocl_lapack_zlahef_aa(char *uplo, aocl_int64_t *j1, aocl_int64_t *m, aocl_i
             i__1 = j - k1;
             aocl_lapack_zlacgv(&i__1, &a[j + a_dim1], lda);
             i__1 = j - k1;
-            z__1.r = -1.;
-            z__1.i = -0.; // , expr subst
+            z__1.real = -1.;
+            z__1.imag = -0.; // , expr subst
             aocl_blas_zgemv("No transpose", &mj, &i__1, &z__1, &h__[j + k1 * h_dim1], ldh,
                             &a[j + a_dim1], lda, &c_b2, &h__[j + j * h_dim1], &c__1);
             i__1 = j - k1;
@@ -438,17 +438,17 @@ void aocl_lapack_zlahef_aa(char *uplo, aocl_int64_t *j1, aocl_int64_t *m, aocl_i
             /* Compute WORK := WORK - L(J:N, J-1) * T(J-1,J), */
             /* where A(J-1, J) = T(J-1, J) and A(J, J-2) = L(J, J-1) */
             d_cnjg(&z__2, &a[j + (k - 1) * a_dim1]);
-            z__1.r = -z__2.r;
-            z__1.i = -z__2.i; // , expr subst
-            alpha.r = z__1.r;
-            alpha.i = z__1.i; // , expr subst
+            z__1.real = -z__2.real;
+            z__1.imag = -z__2.imag; // , expr subst
+            alpha.real = z__1.real;
+            alpha.imag = z__1.imag; // , expr subst
             aocl_blas_zaxpy(&mj, &alpha, &a[j + (k - 2) * a_dim1], &c__1, &work[1], &c__1);
         }
         /* Set A(J, J) = T(J, J) */
         i__1 = j + k * a_dim1;
-        d__1 = work[1].r;
-        a[i__1].r = d__1;
-        a[i__1].i = 0.; // , expr subst
+        d__1 = work[1].real;
+        a[i__1].real = d__1;
+        a[i__1].imag = 0.; // , expr subst
         if(j < *m)
         {
             /* Compute WORK(2:N) = T(J, J) L((J+1):N, J) */
@@ -456,10 +456,10 @@ void aocl_lapack_zlahef_aa(char *uplo, aocl_int64_t *j1, aocl_int64_t *m, aocl_i
             if(k > 1)
             {
                 i__1 = j + k * a_dim1;
-                z__1.r = -a[i__1].r;
-                z__1.i = -a[i__1].i; // , expr subst
-                alpha.r = z__1.r;
-                alpha.i = z__1.i; // , expr subst
+                z__1.real = -a[i__1].real;
+                z__1.imag = -a[i__1].imag; // , expr subst
+                alpha.real = z__1.real;
+                alpha.imag = z__1.imag; // , expr subst
                 i__1 = *m - j;
                 aocl_blas_zaxpy(&i__1, &alpha, &a[j + 1 + (k - 1) * a_dim1], &c__1, &work[2],
                                 &c__1);
@@ -468,20 +468,20 @@ void aocl_lapack_zlahef_aa(char *uplo, aocl_int64_t *j1, aocl_int64_t *m, aocl_i
             i__1 = *m - j;
             i2 = aocl_blas_izamax(&i__1, &work[2], &c__1) + 1;
             i__1 = i2;
-            piv.r = work[i__1].r;
-            piv.i = work[i__1].i; // , expr subst
+            piv.real = work[i__1].real;
+            piv.imag = work[i__1].imag; // , expr subst
             /* Apply hermitian pivot */
-            if(i2 != 2 && (piv.r != 0. || piv.i != 0.))
+            if(i2 != 2 && (piv.real != 0. || piv.imag != 0.))
             {
                 /* Swap WORK(I1) and WORK(I2) */
                 i1 = 2;
                 i__1 = i2;
                 i__2 = i1;
-                work[i__1].r = work[i__2].r;
-                work[i__1].i = work[i__2].i; // , expr subst
+                work[i__1].real = work[i__2].real;
+                work[i__1].imag = work[i__2].imag; // , expr subst
                 i__1 = i1;
-                work[i__1].r = piv.r;
-                work[i__1].i = piv.i; // , expr subst
+                work[i__1].real = piv.real;
+                work[i__1].imag = piv.imag; // , expr subst
                 /* Swap A(I1+1:N, I1) with A(I2, I1+1:N) */
                 i1 = i1 + j - 1;
                 i2 = i2 + j - 1;
@@ -501,15 +501,15 @@ void aocl_lapack_zlahef_aa(char *uplo, aocl_int64_t *j1, aocl_int64_t *m, aocl_i
                 }
                 /* Swap A(I1, I1) with A(I2, I2) */
                 i__1 = i1 + (*j1 + i1 - 1) * a_dim1;
-                piv.r = a[i__1].r;
-                piv.i = a[i__1].i; // , expr subst
+                piv.real = a[i__1].real;
+                piv.imag = a[i__1].imag; // , expr subst
                 i__1 = i1 + (*j1 + i1 - 1) * a_dim1;
                 i__2 = i2 + (*j1 + i2 - 1) * a_dim1;
-                a[i__1].r = a[i__2].r;
-                a[i__1].i = a[i__2].i; // , expr subst
+                a[i__1].real = a[i__2].real;
+                a[i__1].imag = a[i__2].imag; // , expr subst
                 i__1 = i2 + (*j1 + i2 - 1) * a_dim1;
-                a[i__1].r = piv.r;
-                a[i__1].i = piv.i; // , expr subst
+                a[i__1].real = piv.real;
+                a[i__1].imag = piv.imag; // , expr subst
                 /* Swap H(I1, I1:J1) with H(I2, I2:J1) */
                 i__1 = i1 - 1;
                 aocl_blas_zswap(&i__1, &h__[i1 + h_dim1], ldh, &h__[i2 + h_dim1], ldh);
@@ -528,8 +528,8 @@ void aocl_lapack_zlahef_aa(char *uplo, aocl_int64_t *j1, aocl_int64_t *m, aocl_i
             }
             /* Set A(J+1, J) = T(J+1, J) */
             i__1 = j + 1 + k * a_dim1;
-            a[i__1].r = work[2].r;
-            a[i__1].i = work[2].i; // , expr subst
+            a[i__1].real = work[2].real;
+            a[i__1].imag = work[2].imag; // , expr subst
             if(j < *nb)
             {
                 /* Copy A(J+1:N, J+1) into H(J+1:N, J), */
@@ -542,11 +542,11 @@ void aocl_lapack_zlahef_aa(char *uplo, aocl_int64_t *j1, aocl_int64_t *m, aocl_i
             if(j < *m - 1)
             {
                 i__1 = j + 1 + k * a_dim1;
-                if(a[i__1].r != 0. || a[i__1].i != 0.)
+                if(a[i__1].real != 0. || a[i__1].imag != 0.)
                 {
                     z_div(&z__1, &c_b2, &a[j + 1 + k * a_dim1]);
-                    alpha.r = z__1.r;
-                    alpha.i = z__1.i; // , expr subst
+                    alpha.real = z__1.real;
+                    alpha.imag = z__1.imag; // , expr subst
                     i__1 = *m - j - 1;
                     aocl_blas_zcopy(&i__1, &work[3], &c__1, &a[j + 2 + k * a_dim1], &c__1);
                     i__1 = *m - j - 1;

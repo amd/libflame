@@ -4,7 +4,7 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static dcomplex c_b2 = {{0.}, {0.}};
+static dcomplex c_b2 = {0., 0.};
 static aocl_int64_t c__1 = 1;
 /* > \brief \b ZHETD2 reduces a Hermitian matrix to real symmetric tridiagonal form by an unitary
  * similarity t ransformation (unblocked algorithm). */
@@ -270,20 +270,20 @@ void aocl_lapack_zhetd2(char *uplo, aocl_int64_t *n, dcomplex *a, aocl_int64_t *
         /* Reduce the upper triangle of A */
         i__1 = *n + *n * a_dim1;
         i__2 = *n + *n * a_dim1;
-        d__1 = a[i__2].r;
-        a[i__1].r = d__1;
-        a[i__1].i = 0.; // , expr subst
+        d__1 = a[i__2].real;
+        a[i__1].real = d__1;
+        a[i__1].imag = 0.; // , expr subst
         for(i__ = *n - 1; i__ >= 1; --i__)
         {
             /* Generate elementary reflector H(i) = I - tau * v * v**H */
             /* to annihilate A(1:i-1,i+1) */
             i__1 = i__ + (i__ + 1) * a_dim1;
-            alpha.r = a[i__1].r;
-            alpha.i = a[i__1].i; // , expr subst
+            alpha.real = a[i__1].real;
+            alpha.imag = a[i__1].imag; // , expr subst
             aocl_lapack_zlarfg(&i__, &alpha, &a[(i__ + 1) * a_dim1 + 1], &c__1, &taui);
             i__1 = i__;
-            e[i__1] = alpha.r;
-            if(taui.r != 0. || taui.i != 0.)
+            e[i__1] = alpha.real;
+            if(taui.real != 0. || taui.imag != 0.)
             {
                 /* Apply H(i) from both sides to A(1:i,1:i) */
                 i__1 = i__ + (i__ + 1) * a_dim1;
@@ -293,20 +293,20 @@ void aocl_lapack_zhetd2(char *uplo, aocl_int64_t *n, dcomplex *a, aocl_int64_t *
                 aocl_blas_zhemv(uplo, &i__, &taui, &a[a_offset], lda, &a[(i__ + 1) * a_dim1 + 1],
                                 &c__1, &c_b2, &tau[1], &c__1);
                 /* Compute w := x - 1/2 * tau * (x**H * v) * v */
-                z__3.r = -.5;
-                z__3.i = -0.; // , expr subst
-                z__2.r = z__3.r * taui.r - z__3.i * taui.i;
-                z__2.i = z__3.r * taui.i + z__3.i * taui.r; // , expr subst
+                z__3.real = -.5;
+                z__3.imag = -0.; // , expr subst
+                z__2.real = z__3.real * taui.real - z__3.imag * taui.imag;
+                z__2.imag = z__3.real * taui.imag + z__3.imag * taui.real; // , expr subst
                 aocl_lapack_zdotc_f2c(&z__4, &i__, &tau[1], &c__1, &a[(i__ + 1) * a_dim1 + 1], &c__1);
-                z__1.r = z__2.r * z__4.r - z__2.i * z__4.i;
-                z__1.i = z__2.r * z__4.i + z__2.i * z__4.r; // , expr subst
-                alpha.r = z__1.r;
-                alpha.i = z__1.i; // , expr subst
+                z__1.real = z__2.real * z__4.real - z__2.imag * z__4.imag;
+                z__1.imag = z__2.real * z__4.imag + z__2.imag * z__4.real; // , expr subst
+                alpha.real = z__1.real;
+                alpha.imag = z__1.imag; // , expr subst
                 aocl_blas_zaxpy(&i__, &alpha, &a[(i__ + 1) * a_dim1 + 1], &c__1, &tau[1], &c__1);
                 /* Apply the transformation as a rank-2 update: */
                 /* A := A - v * w**H - w * v**H */
-                z__1.r = -1.;
-                z__1.i = -0.; // , expr subst
+                z__1.real = -1.;
+                z__1.imag = -0.; // , expr subst
                 aocl_blas_zher2(uplo, &i__, &z__1, &a[(i__ + 1) * a_dim1 + 1], &c__1, &tau[1],
                                 &c__1, &a[a_offset], lda);
             }
@@ -354,8 +354,8 @@ void aocl_lapack_zhetd2(char *uplo, aocl_int64_t *n, dcomplex *a, aocl_int64_t *
             i__3 = i__ + 2;
             aocl_lapack_zlarfg(&i__2, &alpha, &a[fla_min(i__3, *n) + i__ * a_dim1], &c__1, &taui);
             i__2 = i__;
-            e[i__2] = alpha.r;
-            if(taui.r != 0. || taui.i != 0.)
+            e[i__2] = alpha.real;
+            if(taui.real != 0. || taui.imag != 0.)
             {
                 /* Apply H(i) from both sides to A(i+1:n,i+1:n) */
                 i__2 = i__ + 1 + i__ * a_dim1;
@@ -372,17 +372,17 @@ void aocl_lapack_zhetd2(char *uplo, aocl_int64_t *n, dcomplex *a, aocl_int64_t *
                 z__2.imag = z__3.real * taui.imag + z__3.imag * taui.real; // , expr subst
                 i__2 = *n - i__;
                 aocl_lapack_zdotc_f2c(&z__4, &i__2, &tau[i__], &c__1, &a[i__ + 1 + i__ * a_dim1], &c__1);
-                z__1.r = z__2.r * z__4.r - z__2.i * z__4.i;
-                z__1.i = z__2.r * z__4.i + z__2.i * z__4.r; // , expr subst
-                alpha.r = z__1.r;
-                alpha.i = z__1.i; // , expr subst
+                z__1.real = z__2.real * z__4.real - z__2.imag * z__4.imag;
+                z__1.imag = z__2.real * z__4.imag + z__2.imag * z__4.real; // , expr subst
+                alpha.real = z__1.real;
+                alpha.imag = z__1.imag; // , expr subst
                 i__2 = *n - i__;
                 aocl_blas_zaxpy(&i__2, &alpha, &a[i__ + 1 + i__ * a_dim1], &c__1, &tau[i__], &c__1);
                 /* Apply the transformation as a rank-2 update: */
                 /* A := A - v * w**H - w * v**H */
                 i__2 = *n - i__;
-                z__1.r = -1.;
-                z__1.i = -0.; // , expr subst
+                z__1.real = -1.;
+                z__1.imag = -0.; // , expr subst
                 aocl_blas_zher2(uplo, &i__2, &z__1, &a[i__ + 1 + i__ * a_dim1], &c__1, &tau[i__],
                                 &c__1, &a[i__ + 1 + (i__ + 1) * a_dim1], lda);
             }

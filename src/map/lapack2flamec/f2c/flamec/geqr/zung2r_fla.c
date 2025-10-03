@@ -207,8 +207,8 @@ void zung2r_fla(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *k, dcomplex *a,
         {
             i__1 = *m - i__;
             i__2 = i__;
-            z__1.r = -tau[i__2].r;
-            z__1.i = -tau[i__2].i; // , expr subst
+            z__1.real = -tau[i__2].real;
+            z__1.imag = -tau[i__2].imag; // , expr subst
             aocl_blas_zscal(&i__1, &z__1, &a[i__ + 1 + i__ * a_dim1], &c__1);
         }
         i__1 = i__ + i__ * a_dim1;

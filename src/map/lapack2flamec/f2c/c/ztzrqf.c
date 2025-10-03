@@ -4,7 +4,7 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static dcomplex c_b1 = {{1.}, {0.}};
+static dcomplex c_b1 = {1., 0.};
 static aocl_int64_t c__1 = 1;
 /* > \brief \b ZTZRQF */
 /* =========== DOCUMENTATION =========== */
@@ -256,7 +256,7 @@ void aocl_lapack_ztzrqf(aocl_int64_t *m, aocl_int64_t *n, dcomplex *a, aocl_int6
             tau[i__1].real = z__1.real;
             tau[i__1].imag = z__1.imag; // , expr subst
             i__1 = k;
-            if((tau[i__1].r != 0. || tau[i__1].i != 0.) && k > 1)
+            if((tau[i__1].real != 0. || tau[i__1].imag != 0.) && k > 1)
             {
                 /* We now perform the operation A := A*P( k )**H. */
                 /* Use the first ( k - 1 ) elements of TAU to store a( k ), */
@@ -274,14 +274,14 @@ void aocl_lapack_ztzrqf(aocl_int64_t *m, aocl_int64_t *n, dcomplex *a, aocl_int6
                 /* and B := B - conjg(tau)*w*z( k )**H. */
                 i__1 = k - 1;
                 d_cnjg(&z__2, &tau[k]);
-                z__1.r = -z__2.r;
-                z__1.i = -z__2.i; // , expr subst
+                z__1.real = -z__2.real;
+                z__1.imag = -z__2.imag; // , expr subst
                 aocl_blas_zaxpy(&i__1, &z__1, &tau[1], &c__1, &a[k * a_dim1 + 1], &c__1);
                 i__1 = k - 1;
                 i__2 = *n - *m;
                 d_cnjg(&z__2, &tau[k]);
-                z__1.r = -z__2.r;
-                z__1.i = -z__2.i; // , expr subst
+                z__1.real = -z__2.real;
+                z__1.imag = -z__2.imag; // , expr subst
                 aocl_blas_zgerc(&i__1, &i__2, &z__1, &tau[1], &c__1, &a[k + m1 * a_dim1], lda,
                                 &a[m1 * a_dim1 + 1], lda);
             }

@@ -241,8 +241,8 @@ void aocl_lapack_zgemlq(char *side, char *trans, aocl_int64_t *m, aocl_int64_t *
     tran = lsame_(trans, "C", 1, 1);
     left = lsame_(side, "L", 1, 1);
     right = lsame_(side, "R", 1, 1);
-    mb = (integer)t[2].r;
-    nb = (integer)t[3].r;
+    mb = (integer)t[2].real;
+    nb = (integer)t[3].real;
     if(left)
     {
         lw = *n * mb;
@@ -292,8 +292,8 @@ void aocl_lapack_zgemlq(char *side, char *trans, aocl_int64_t *m, aocl_int64_t *
     }
     if(*info == 0)
     {
-        work[1].r = (doublereal)lw;
-        work[1].i = 0.; // , expr subst
+        work[1].real = (doublereal)lw;
+        work[1].imag = 0.; // , expr subst
     }
     if(*info != 0)
     {
@@ -327,8 +327,8 @@ void aocl_lapack_zgemlq(char *side, char *trans, aocl_int64_t *m, aocl_int64_t *
         aocl_lapack_zlamswlq(side, trans, m, n, k, &mb, &nb, &a[a_offset], lda, &t[6], &mb,
                              &c__[c_offset], ldc, &work[1], lwork, info);
     }
-    work[1].r = (doublereal)lw;
-    work[1].i = 0.; // , expr subst
+    work[1].real = (doublereal)lw;
+    work[1].imag = 0.; // , expr subst
     AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of ZGEMLQ */

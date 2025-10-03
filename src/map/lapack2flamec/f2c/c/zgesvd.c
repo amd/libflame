@@ -4,8 +4,8 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static dcomplex c_b1 = {{0.}, {0.}};
-static dcomplex c_b2 = {{1.}, {0.}};
+static dcomplex c_b1 = {0., 0.};
+static dcomplex c_b2 = {1., 0.};
 static aocl_int64_t c__6 = 6;
 static aocl_int64_t c__0 = 0;
 static aocl_int64_t c_n1 = -1;
@@ -390,20 +390,20 @@ void aocl_lapack_zgesvd(char *jobu, char *jobvt, aocl_int64_t *m, aocl_int64_t *
             mnthr = aocl_lapack_ilaenv(&c__6, "ZGESVD", ch__1, m, n, &c__0, &c__0);
             /* Compute space needed for ZGEQRF */
             aocl_lapack_zgeqrf(m, n, &a[a_offset], lda, cdum, cdum, &c_n1, &ierr);
-            lwork_zgeqrf__ = (integer)cdum[0].r;
+            lwork_zgeqrf__ = (integer)cdum[0].real;
             /* Compute space needed for ZUNGQR */
             aocl_lapack_zungqr(m, n, n, &a[a_offset], lda, cdum, cdum, &c_n1, &ierr);
-            lwork_zungqr_n__ = (integer)cdum[0].r;
+            lwork_zungqr_n__ = (integer)cdum[0].real;
             aocl_lapack_zungqr(m, m, n, &a[a_offset], lda, cdum, cdum, &c_n1, &ierr);
-            lwork_zungqr_m__ = (integer)cdum[0].r;
+            lwork_zungqr_m__ = (integer)cdum[0].real;
             /* Compute space needed for ZGEBRD */
             aocl_lapack_zgebrd(n, n, &a[a_offset], lda, &s[1], dum, cdum, cdum, cdum, &c_n1, &ierr);
-            lwork_zgebrd__ = (integer)cdum[0].r;
+            lwork_zgebrd__ = (integer)cdum[0].real;
             /* Compute space needed for ZUNGBR */
             aocl_lapack_zungbr("P", n, n, n, &a[a_offset], lda, cdum, cdum, &c_n1, &ierr);
-            lwork_zungbr_p__ = (integer)cdum[0].r;
+            lwork_zungbr_p__ = (integer)cdum[0].real;
             aocl_lapack_zungbr("Q", n, n, n, &a[a_offset], lda, cdum, cdum, &c_n1, &ierr);
-            lwork_zungbr_q__ = (integer)cdum[0].r;
+            lwork_zungbr_q__ = (integer)cdum[0].real;
             if(*m >= mnthr)
             {
                 if(wntun)
@@ -610,12 +610,12 @@ void aocl_lapack_zgesvd(char *jobu, char *jobvt, aocl_int64_t *m, aocl_int64_t *
                 /* Path 10 (M at least N, but not much larger) */
                 aocl_lapack_zgebrd(m, n, &a[a_offset], lda, &s[1], dum, cdum, cdum, cdum, &c_n1,
                                    &ierr);
-                lwork_zgebrd__ = (integer)cdum[0].r;
+                lwork_zgebrd__ = (integer)cdum[0].real;
                 maxwrk = (*n << 1) + lwork_zgebrd__;
                 if(wntus || wntuo)
                 {
                     aocl_lapack_zungbr("Q", m, n, n, &a[a_offset], lda, cdum, cdum, &c_n1, &ierr);
-                    lwork_zungbr_q__ = (integer)cdum[0].r;
+                    lwork_zungbr_q__ = (integer)cdum[0].real;
                     /* Computing MAX */
                     i__2 = maxwrk;
                     i__3 = (*n << 1) + lwork_zungbr_q__; // , expr subst
@@ -624,7 +624,7 @@ void aocl_lapack_zgesvd(char *jobu, char *jobvt, aocl_int64_t *m, aocl_int64_t *
                 if(wntua)
                 {
                     aocl_lapack_zungbr("Q", m, m, n, &a[a_offset], lda, cdum, cdum, &c_n1, &ierr);
-                    lwork_zungbr_q__ = (integer)cdum[0].r;
+                    lwork_zungbr_q__ = (integer)cdum[0].real;
                     /* Computing MAX */
                     i__2 = maxwrk;
                     i__3 = (*n << 1) + lwork_zungbr_q__; // , expr subst
@@ -646,21 +646,21 @@ void aocl_lapack_zgesvd(char *jobu, char *jobvt, aocl_int64_t *m, aocl_int64_t *
             mnthr = aocl_lapack_ilaenv(&c__6, "ZGESVD", ch__1, m, n, &c__0, &c__0);
             /* Compute space needed for ZGELQF */
             aocl_lapack_zgelqf(m, n, &a[a_offset], lda, cdum, cdum, &c_n1, &ierr);
-            lwork_zgelqf__ = (integer)cdum[0].r;
+            lwork_zgelqf__ = (integer)cdum[0].real;
             /* Compute space needed for ZUNGLQ */
             aocl_lapack_zunglq(n, n, m, cdum, n, cdum, cdum, &c_n1, &ierr);
-            lwork_zunglq_n__ = (integer)cdum[0].r;
+            lwork_zunglq_n__ = (integer)cdum[0].real;
             aocl_lapack_zunglq(m, n, m, &a[a_offset], lda, cdum, cdum, &c_n1, &ierr);
-            lwork_zunglq_m__ = (integer)cdum[0].r;
+            lwork_zunglq_m__ = (integer)cdum[0].real;
             /* Compute space needed for ZGEBRD */
             aocl_lapack_zgebrd(m, m, &a[a_offset], lda, &s[1], dum, cdum, cdum, cdum, &c_n1, &ierr);
-            lwork_zgebrd__ = (integer)cdum[0].r;
+            lwork_zgebrd__ = (integer)cdum[0].real;
             /* Compute space needed for ZUNGBR P */
             aocl_lapack_zungbr("P", m, m, m, &a[a_offset], n, cdum, cdum, &c_n1, &ierr);
-            lwork_zungbr_p__ = (integer)cdum[0].r;
+            lwork_zungbr_p__ = (integer)cdum[0].real;
             /* Compute space needed for ZUNGBR Q */
             aocl_lapack_zungbr("Q", m, m, m, &a[a_offset], n, cdum, cdum, &c_n1, &ierr);
-            lwork_zungbr_q__ = (integer)cdum[0].r;
+            lwork_zungbr_q__ = (integer)cdum[0].real;
             if(*n >= mnthr)
             {
                 if(wntvn)
@@ -867,13 +867,13 @@ void aocl_lapack_zgesvd(char *jobu, char *jobvt, aocl_int64_t *m, aocl_int64_t *
                 /* Path 10t(N greater than M, but not much larger) */
                 aocl_lapack_zgebrd(m, n, &a[a_offset], lda, &s[1], dum, cdum, cdum, cdum, &c_n1,
                                    &ierr);
-                lwork_zgebrd__ = (integer)cdum[0].r;
+                lwork_zgebrd__ = (integer)cdum[0].real;
                 maxwrk = (*m << 1) + lwork_zgebrd__;
                 if(wntvs || wntvo)
                 {
                     /* Compute space needed for ZUNGBR P */
                     aocl_lapack_zungbr("P", m, n, m, &a[a_offset], n, cdum, cdum, &c_n1, &ierr);
-                    lwork_zungbr_p__ = (integer)cdum[0].r;
+                    lwork_zungbr_p__ = (integer)cdum[0].real;
                     /* Computing MAX */
                     i__2 = maxwrk;
                     i__3 = (*m << 1) + lwork_zungbr_p__; // , expr subst
@@ -882,7 +882,7 @@ void aocl_lapack_zgesvd(char *jobu, char *jobvt, aocl_int64_t *m, aocl_int64_t *
                 if(wntva)
                 {
                     aocl_lapack_zungbr("P", n, n, m, &a[a_offset], n, cdum, cdum, &c_n1, &ierr);
-                    lwork_zungbr_p__ = (integer)cdum[0].r;
+                    lwork_zungbr_p__ = (integer)cdum[0].real;
                     /* Computing MAX */
                     i__2 = maxwrk;
                     i__3 = (*m << 1) + lwork_zungbr_p__; // , expr subst
@@ -899,8 +899,8 @@ void aocl_lapack_zgesvd(char *jobu, char *jobvt, aocl_int64_t *m, aocl_int64_t *
             }
         }
         maxwrk = fla_max(maxwrk, minwrk);
-        work[1].r = (doublereal)maxwrk;
-        work[1].i = 0.; // , expr subst
+        work[1].real = (doublereal)maxwrk;
+        work[1].imag = 0.; // , expr subst
         if(*lwork < minwrk && !lquery)
         {
             *info = -13;
@@ -3593,8 +3593,8 @@ void aocl_lapack_zgesvd(char *jobu, char *jobvt, aocl_int64_t *m, aocl_int64_t *
         }
     }
     /* Return optimal workspace in WORK(1) */
-    work[1].r = (doublereal)maxwrk;
-    work[1].i = 0.; // , expr subst
+    work[1].real = (doublereal)maxwrk;
+    work[1].imag = 0.; // , expr subst
     AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of ZGESVD */

@@ -170,138 +170,138 @@ void aocl_lapack_claqr1(aocl_int64_t *n, scomplex *h__, aocl_int64_t *ldh, scomp
     if(*n == 2)
     {
         i__1 = h_dim1 + 1;
-        q__2.r = h__[i__1].r - s2->r;
-        q__2.i = h__[i__1].i - s2->i; // , expr subst
-        q__1.r = q__2.r;
-        q__1.i = q__2.i; // , expr subst
+        q__2.real = h__[i__1].real - s2->real;
+        q__2.imag = h__[i__1].imag - s2->imag; // , expr subst
+        q__1.real = q__2.real;
+        q__1.imag = q__2.imag; // , expr subst
         i__2 = h_dim1 + 2;
-        s = (r__1 = q__1.r, f2c_abs(r__1)) + (r__2 = q__1.i, f2c_abs(r__2))
-            + ((r__3 = h__[i__2].r, f2c_abs(r__3)) + (r__4 = h__[i__2].i, f2c_abs(r__4)));
+        s = (r__1 = q__1.real, f2c_abs(r__1)) + (r__2 = q__1.imag, f2c_abs(r__2))
+            + ((r__3 = h__[i__2].real, f2c_abs(r__3)) + (r__4 = h__[i__2].imag, f2c_abs(r__4)));
         if(s == 0.f)
         {
-            v[1].r = 0.f;
-            v[1].i = 0.f; // , expr subst
-            v[2].r = 0.f;
-            v[2].i = 0.f; // , expr subst
+            v[1].real = 0.f;
+            v[1].imag = 0.f; // , expr subst
+            v[2].real = 0.f;
+            v[2].imag = 0.f; // , expr subst
         }
         else
         {
-            q__1.r = h__[i__2].r / s;
-            q__1.i = h__[i__2].i / s; // , expr subst
-            h21s.r = q__1.r;
-            h21s.i = q__1.i; // , expr subst
+            q__1.real = h__[i__2].real / s;
+            q__1.imag = h__[i__2].imag / s; // , expr subst
+            h21s.real = q__1.real;
+            h21s.imag = q__1.imag; // , expr subst
             i__2 = (h_dim1 << 1) + 1;
-            q__2.r = h21s.r * h__[i__2].r - h21s.i * h__[i__2].i;
-            q__2.i = h21s.r * h__[i__2].i + h21s.i * h__[i__2].r; // , expr subst
-            q__4.r = h__[i__1].r - s1->r;
-            q__4.i = h__[i__1].i - s1->i; // , expr subst
-            q__6.r = h__[i__1].r - s2->r;
-            q__6.i = h__[i__1].i - s2->i; // , expr subst
-            q__5.r = q__6.r / s;
-            q__5.i = q__6.i / s; // , expr subst
-            q__3.r = q__4.r * q__5.r - q__4.i * q__5.i;
-            q__3.i = q__4.r * q__5.i + q__4.i * q__5.r; // , expr subst
-            q__1.r = q__2.r + q__3.r;
-            q__1.i = q__2.i + q__3.i; // , expr subst
-            v[1].r = q__1.r;
-            v[1].i = q__1.i; // , expr subst
+            q__2.real = h21s.real * h__[i__2].real - h21s.imag * h__[i__2].imag;
+            q__2.imag = h21s.real * h__[i__2].imag + h21s.imag * h__[i__2].real; // , expr subst
+            q__4.real = h__[i__1].real - s1->real;
+            q__4.imag = h__[i__1].imag - s1->imag; // , expr subst
+            q__6.real = h__[i__1].real - s2->real;
+            q__6.imag = h__[i__1].imag - s2->imag; // , expr subst
+            q__5.real = q__6.real / s;
+            q__5.imag = q__6.imag / s; // , expr subst
+            q__3.real = q__4.real * q__5.real - q__4.imag * q__5.imag;
+            q__3.imag = q__4.real * q__5.imag + q__4.imag * q__5.real; // , expr subst
+            q__1.real = q__2.real + q__3.real;
+            q__1.imag = q__2.imag + q__3.imag; // , expr subst
+            v[1].real = q__1.real;
+            v[1].imag = q__1.imag; // , expr subst
             i__2 = (h_dim1 << 1) + 2;
-            q__4.r = h__[i__1].r + h__[i__2].r;
-            q__4.i = h__[i__1].i + h__[i__2].i; // , expr subst
-            q__3.r = q__4.r - s1->r;
-            q__3.i = q__4.i - s1->i; // , expr subst
-            q__2.r = q__3.r - s2->r;
-            q__2.i = q__3.i - s2->i; // , expr subst
-            q__1.r = h21s.r * q__2.r - h21s.i * q__2.i;
-            q__1.i = h21s.r * q__2.i + h21s.i * q__2.r; // , expr subst
-            v[2].r = q__1.r;
-            v[2].i = q__1.i; // , expr subst
+            q__4.real = h__[i__1].real + h__[i__2].real;
+            q__4.imag = h__[i__1].imag + h__[i__2].imag; // , expr subst
+            q__3.real = q__4.real - s1->real;
+            q__3.imag = q__4.imag - s1->imag; // , expr subst
+            q__2.real = q__3.real - s2->real;
+            q__2.imag = q__3.imag - s2->imag; // , expr subst
+            q__1.real = h21s.real * q__2.real - h21s.imag * q__2.imag;
+            q__1.imag = h21s.real * q__2.imag + h21s.imag * q__2.real; // , expr subst
+            v[2].real = q__1.real;
+            v[2].imag = q__1.imag; // , expr subst
         }
     }
     else
     {
         i__1 = h_dim1 + 1;
-        q__2.r = h__[i__1].r - s2->r;
-        q__2.i = h__[i__1].i - s2->i; // , expr subst
-        q__1.r = q__2.r;
-        q__1.i = q__2.i; // , expr subst
+        q__2.real = h__[i__1].real - s2->real;
+        q__2.imag = h__[i__1].imag - s2->imag; // , expr subst
+        q__1.real = q__2.real;
+        q__1.imag = q__2.imag; // , expr subst
         i__2 = h_dim1 + 2;
         i__3 = h_dim1 + 3;
-        s = (r__1 = q__1.r, f2c_abs(r__1)) + (r__2 = q__1.i, f2c_abs(r__2))
-            + ((r__3 = h__[i__2].r, f2c_abs(r__3)) + (r__4 = h__[i__2].i, f2c_abs(r__4)))
-            + ((r__5 = h__[i__3].r, f2c_abs(r__5)) + (r__6 = h__[i__3].i, f2c_abs(r__6)));
+        s = (r__1 = q__1.real, f2c_abs(r__1)) + (r__2 = q__1.imag, f2c_abs(r__2))
+            + ((r__3 = h__[i__2].real, f2c_abs(r__3)) + (r__4 = h__[i__2].imag, f2c_abs(r__4)))
+            + ((r__5 = h__[i__3].real, f2c_abs(r__5)) + (r__6 = h__[i__3].imag, f2c_abs(r__6)));
         if(s == 0.f)
         {
-            v[1].r = 0.f;
-            v[1].i = 0.f; // , expr subst
-            v[2].r = 0.f;
-            v[2].i = 0.f; // , expr subst
-            v[3].r = 0.f;
-            v[3].i = 0.f; // , expr subst
+            v[1].real = 0.f;
+            v[1].imag = 0.f; // , expr subst
+            v[2].real = 0.f;
+            v[2].imag = 0.f; // , expr subst
+            v[3].real = 0.f;
+            v[3].imag = 0.f; // , expr subst
         }
         else
         {
-            q__1.r = h__[i__2].r / s;
-            q__1.i = h__[i__2].i / s; // , expr subst
-            h21s.r = q__1.r;
-            h21s.i = q__1.i; // , expr subst
-            q__1.r = h__[i__3].r / s;
-            q__1.i = h__[i__3].i / s; // , expr subst
-            h31s.r = q__1.r;
-            h31s.i = q__1.i; // , expr subst
-            q__4.r = h__[i__1].r - s1->r;
-            q__4.i = h__[i__1].i - s1->i; // , expr subst
-            q__6.r = h__[i__1].r - s2->r;
-            q__6.i = h__[i__1].i - s2->i; // , expr subst
-            q__5.r = q__6.r / s;
-            q__5.i = q__6.i / s; // , expr subst
-            q__3.r = q__4.r * q__5.r - q__4.i * q__5.i;
-            q__3.i = q__4.r * q__5.i + q__4.i * q__5.r; // , expr subst
+            q__1.real = h__[i__2].real / s;
+            q__1.imag = h__[i__2].imag / s; // , expr subst
+            h21s.real = q__1.real;
+            h21s.imag = q__1.imag; // , expr subst
+            q__1.real = h__[i__3].real / s;
+            q__1.imag = h__[i__3].imag / s; // , expr subst
+            h31s.real = q__1.real;
+            h31s.imag = q__1.imag; // , expr subst
+            q__4.real = h__[i__1].real - s1->real;
+            q__4.imag = h__[i__1].imag - s1->imag; // , expr subst
+            q__6.real = h__[i__1].real - s2->real;
+            q__6.imag = h__[i__1].imag - s2->imag; // , expr subst
+            q__5.real = q__6.real / s;
+            q__5.imag = q__6.imag / s; // , expr subst
+            q__3.real = q__4.real * q__5.real - q__4.imag * q__5.imag;
+            q__3.imag = q__4.real * q__5.imag + q__4.imag * q__5.real; // , expr subst
             i__3 = (h_dim1 << 1) + 1;
-            q__7.r = h__[i__3].r * h21s.r - h__[i__3].i * h21s.i;
-            q__7.i = h__[i__3].r * h21s.i + h__[i__3].i * h21s.r; // , expr subst
-            q__2.r = q__3.r + q__7.r;
-            q__2.i = q__3.i + q__7.i; // , expr subst
+            q__7.real = h__[i__3].real * h21s.real - h__[i__3].imag * h21s.imag;
+            q__7.imag = h__[i__3].real * h21s.imag + h__[i__3].imag * h21s.real; // , expr subst
+            q__2.real = q__3.real + q__7.real;
+            q__2.imag = q__3.imag + q__7.imag; // , expr subst
             i__4 = h_dim1 * 3 + 1;
-            q__8.r = h__[i__4].r * h31s.r - h__[i__4].i * h31s.i;
-            q__8.i = h__[i__4].r * h31s.i + h__[i__4].i * h31s.r; // , expr subst
-            q__1.r = q__2.r + q__8.r;
-            q__1.i = q__2.i + q__8.i; // , expr subst
-            v[1].r = q__1.r;
-            v[1].i = q__1.i; // , expr subst
+            q__8.real = h__[i__4].real * h31s.real - h__[i__4].imag * h31s.imag;
+            q__8.imag = h__[i__4].real * h31s.imag + h__[i__4].imag * h31s.real; // , expr subst
+            q__1.real = q__2.real + q__8.real;
+            q__1.imag = q__2.imag + q__8.imag; // , expr subst
+            v[1].real = q__1.real;
+            v[1].imag = q__1.imag; // , expr subst
             i__2 = (h_dim1 << 1) + 2;
-            q__5.r = h__[i__1].r + h__[i__2].r;
-            q__5.i = h__[i__1].i + h__[i__2].i; // , expr subst
-            q__4.r = q__5.r - s1->r;
-            q__4.i = q__5.i - s1->i; // , expr subst
-            q__3.r = q__4.r - s2->r;
-            q__3.i = q__4.i - s2->i; // , expr subst
-            q__2.r = h21s.r * q__3.r - h21s.i * q__3.i;
-            q__2.i = h21s.r * q__3.i + h21s.i * q__3.r; // , expr subst
+            q__5.real = h__[i__1].real + h__[i__2].real;
+            q__5.imag = h__[i__1].imag + h__[i__2].imag; // , expr subst
+            q__4.real = q__5.real - s1->real;
+            q__4.imag = q__5.imag - s1->imag; // , expr subst
+            q__3.real = q__4.real - s2->real;
+            q__3.imag = q__4.imag - s2->imag; // , expr subst
+            q__2.real = h21s.real * q__3.real - h21s.imag * q__3.imag;
+            q__2.imag = h21s.real * q__3.imag + h21s.imag * q__3.real; // , expr subst
             i__3 = h_dim1 * 3 + 2;
-            q__6.r = h__[i__3].r * h31s.r - h__[i__3].i * h31s.i;
-            q__6.i = h__[i__3].r * h31s.i + h__[i__3].i * h31s.r; // , expr subst
-            q__1.r = q__2.r + q__6.r;
-            q__1.i = q__2.i + q__6.i; // , expr subst
-            v[2].r = q__1.r;
-            v[2].i = q__1.i; // , expr subst
+            q__6.real = h__[i__3].real * h31s.real - h__[i__3].imag * h31s.imag;
+            q__6.imag = h__[i__3].real * h31s.imag + h__[i__3].imag * h31s.real; // , expr subst
+            q__1.real = q__2.real + q__6.real;
+            q__1.imag = q__2.imag + q__6.imag; // , expr subst
+            v[2].real = q__1.real;
+            v[2].imag = q__1.imag; // , expr subst
             i__1 = h_dim1 + 1;
             i__2 = h_dim1 * 3 + 3;
-            q__5.r = h__[i__1].r + h__[i__2].r;
-            q__5.i = h__[i__1].i + h__[i__2].i; // , expr subst
-            q__4.r = q__5.r - s1->r;
-            q__4.i = q__5.i - s1->i; // , expr subst
-            q__3.r = q__4.r - s2->r;
-            q__3.i = q__4.i - s2->i; // , expr subst
-            q__2.r = h31s.r * q__3.r - h31s.i * q__3.i;
-            q__2.i = h31s.r * q__3.i + h31s.i * q__3.r; // , expr subst
+            q__5.real = h__[i__1].real + h__[i__2].real;
+            q__5.imag = h__[i__1].imag + h__[i__2].imag; // , expr subst
+            q__4.real = q__5.real - s1->real;
+            q__4.imag = q__5.imag - s1->imag; // , expr subst
+            q__3.real = q__4.real - s2->real;
+            q__3.imag = q__4.imag - s2->imag; // , expr subst
+            q__2.real = h31s.real * q__3.real - h31s.imag * q__3.imag;
+            q__2.imag = h31s.real * q__3.imag + h31s.imag * q__3.real; // , expr subst
             i__3 = (h_dim1 << 1) + 3;
-            q__6.r = h21s.r * h__[i__3].r - h21s.i * h__[i__3].i;
-            q__6.i = h21s.r * h__[i__3].i + h21s.i * h__[i__3].r; // , expr subst
-            q__1.r = q__2.r + q__6.r;
-            q__1.i = q__2.i + q__6.i; // , expr subst
-            v[3].r = q__1.r;
-            v[3].i = q__1.i; // , expr subst
+            q__6.real = h21s.real * h__[i__3].real - h21s.imag * h__[i__3].imag;
+            q__6.imag = h21s.real * h__[i__3].imag + h21s.imag * h__[i__3].real; // , expr subst
+            q__1.real = q__2.real + q__6.real;
+            q__1.imag = q__2.imag + q__6.imag; // , expr subst
+            v[3].real = q__1.real;
+            v[3].imag = q__1.imag; // , expr subst
         }
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);

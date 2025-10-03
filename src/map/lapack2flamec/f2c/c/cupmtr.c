@@ -330,13 +330,13 @@ void aocl_lapack_cupmtr(char *side, char *uplo, char *trans, aocl_int64_t *m, ao
             aii.real = ap[i__3].real;
             aii.imag = ap[i__3].imag; // , expr subst
             i__3 = ii;
-            ap[i__3].r = 1.f;
-            ap[i__3].i = 0.f; // , expr subst
+            ap[i__3].real = 1.f;
+            ap[i__3].imag = 0.f; // , expr subst
             aocl_lapack_clarf(side, &mi, &ni, &ap[ii - i__ + 1], &c__1, &taui, &c__[c_offset], ldc,
                               &work[1]);
             i__3 = ii;
-            ap[i__3].r = aii.r;
-            ap[i__3].i = aii.i; // , expr subst
+            ap[i__3].real = aii.real;
+            ap[i__3].imag = aii.imag; // , expr subst
             if(forwrd)
             {
                 ii = ii + i__ + 2;
@@ -384,8 +384,8 @@ void aocl_lapack_cupmtr(char *side, char *uplo, char *trans, aocl_int64_t *m, ao
             aii.real = ap[i__3].real;
             aii.imag = ap[i__3].imag; // , expr subst
             i__3 = ii;
-            ap[i__3].r = 1.f;
-            ap[i__3].i = 0.f; // , expr subst
+            ap[i__3].real = 1.f;
+            ap[i__3].imag = 0.f; // , expr subst
             if(left)
             {
                 /* H(i) or H(i)**H is applied to C(i+1:m,1:n) */
@@ -414,8 +414,8 @@ void aocl_lapack_cupmtr(char *side, char *uplo, char *trans, aocl_int64_t *m, ao
             aocl_lapack_clarf(side, &mi, &ni, &ap[ii], &c__1, &taui, &c__[ic + jc * c_dim1], ldc,
                               &work[1]);
             i__3 = ii;
-            ap[i__3].r = aii.r;
-            ap[i__3].i = aii.i; // , expr subst
+            ap[i__3].real = aii.real;
+            ap[i__3].imag = aii.imag; // , expr subst
             if(forwrd)
             {
                 ii = ii + nq - i__ + 1;

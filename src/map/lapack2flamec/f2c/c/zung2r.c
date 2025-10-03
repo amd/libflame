@@ -240,8 +240,8 @@ void aocl_lapack_zung2r(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *k, dcomp
         {
             i__1 = *m - i__;
             i__2 = i__;
-            z__1.r = -tau[i__2].r;
-            z__1.i = -tau[i__2].i; // , expr subst
+            z__1.real = -tau[i__2].real;
+            z__1.imag = -tau[i__2].imag; // , expr subst
 #ifdef FLA_ENABLE_AMD_OPT
             if(i__1 <= FLA_ZSCAL_INLINE_SMALL)
             {

@@ -8,8 +8,8 @@
  */
 #include "FLA_f2c.h" /* Table of constant values */
 
-static scomplex c_b1 = {{0.f}, {0.f}};
-static scomplex c_b2 = {{1.f}, {0.f}};
+static scomplex c_b1 = {0.f, 0.f};
+static scomplex c_b2 = {1.f, 0.f};
 static aocl_int64_t c__1 = 1;
 /* > \brief \b CLABRD reduces the first nb rows and columns of a general matrix to a bidiagonal
  * form. */
@@ -352,38 +352,38 @@ void fla_clabrd(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *nb, scomplex *a,
                     aocl_lapack_clacgv(&i__2, &y[i__ + y_dim1], ldy);
                     i__2 = *m - i__ + 1;
                     i__3 = i__ - 1;
-                    q__1.r = -1.f;
-                    q__1.i = -0.f; // , expr subst
+                    q__1.real = -1.f;
+                    q__1.imag = -0.f; // , expr subst
                     aocl_blas_cgemv("No transpose", &i__2, &i__3, &q__1, &a[i__ + a_dim1], lda,
                                     &y[i__ + y_dim1], ldy, &c_b2, &a[i__ + i__ * a_dim1], &c__1);
                     i__2 = i__ - 1;
                     aocl_lapack_clacgv(&i__2, &y[i__ + y_dim1], ldy);
                     i__2 = *m - i__ + 1;
                     i__3 = i__ - 1;
-                    q__1.r = -1.f;
-                    q__1.i = -0.f; // , expr subst
+                    q__1.real = -1.f;
+                    q__1.imag = -0.f; // , expr subst
                     aocl_blas_cgemv("No transpose", &i__2, &i__3, &q__1, &x[i__ + x_dim1], ldx,
                                     &a[i__ * a_dim1 + 1], &c__1, &c_b2, &a[i__ + i__ * a_dim1],
                                     &c__1);
                     /* Generate reflection Q(i) to annihilate A(i+1:m,i) */
                     i__2 = i__ + i__ * a_dim1;
-                    alpha.r = a[i__2].r;
-                    alpha.i = a[i__2].i; // , expr subst
+                    alpha.real = a[i__2].real;
+                    alpha.imag = a[i__2].imag; // , expr subst
                     i__2 = *m - i__ + 1;
                     /* Computing MIN */
                     i__3 = i__ + 1;
                     aocl_lapack_clarfg(&i__2, &alpha, &a[fla_min(i__3, *m) + i__ * a_dim1], &c__1,
                                        &tauq[i__]);
                     i__2 = i__;
-                    d__[i__2] = alpha.r;
+                    d__[i__2] = alpha.real;
                 }
                 if(i__ < *n)
                 {
                     if(thread_id == 0)
                     {
                         i__2 = i__ + i__ * a_dim1;
-                        a[i__2].r = 1.f;
-                        a[i__2].i = 0.f; // , expr subst
+                        a[i__2].real = 1.f;
+                        a[i__2].imag = 0.f; // , expr subst
                     }
                     /* Compute Y(i+1:n,i) */
                     i__2 = *m - i__ + 1;
@@ -411,8 +411,8 @@ void fla_clabrd(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *nb, scomplex *a,
                                         &y[i__ * y_dim1 + 1], &c__1);
                         i__2 = *n - i__;
                         i__3 = i__ - 1;
-                        q__1.r = -1.f;
-                        q__1.i = -0.f; // , expr subst
+                        q__1.real = -1.f;
+                        q__1.imag = -0.f; // , expr subst
                         aocl_blas_cgemv("No transpose", &i__2, &i__3, &q__1, &y[i__ + 1 + y_dim1],
                                         ldy, &y[i__ * y_dim1 + 1], &c__1, &c_b2,
                                         &y[i__ + 1 + i__ * y_dim1], &c__1);
@@ -423,8 +423,8 @@ void fla_clabrd(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *nb, scomplex *a,
                                         &y[i__ * y_dim1 + 1], &c__1);
                         i__2 = i__ - 1;
                         i__3 = *n - i__;
-                        q__1.r = -1.f;
-                        q__1.i = -0.f; // , expr subst
+                        q__1.real = -1.f;
+                        q__1.imag = -0.f; // , expr subst
                         aocl_blas_cgemv("Conjugate transpose", &i__2, &i__3, &q__1,
                                         &a[(i__ + 1) * a_dim1 + 1], lda, &y[i__ * y_dim1 + 1],
                                         &c__1, &c_b2, &y[i__ + 1 + i__ * y_dim1], &c__1);
@@ -435,8 +435,8 @@ void fla_clabrd(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *nb, scomplex *a,
                         aocl_lapack_clacgv(&i__2, &a[i__ + (i__ + 1) * a_dim1], lda);
                         aocl_lapack_clacgv(&i__, &a[i__ + a_dim1], lda);
                         i__2 = *n - i__;
-                        q__1.r = -1.f;
-                        q__1.i = -0.f; // , expr subst
+                        q__1.real = -1.f;
+                        q__1.imag = -0.f; // , expr subst
                         aocl_blas_cgemv("No transpose", &i__2, &i__, &q__1, &y[i__ + 1 + y_dim1],
                                         ldy, &a[i__ + a_dim1], lda, &c_b2,
                                         &a[i__ + (i__ + 1) * a_dim1], lda);
@@ -445,8 +445,8 @@ void fla_clabrd(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *nb, scomplex *a,
                         aocl_lapack_clacgv(&i__2, &x[i__ + x_dim1], ldx);
                         i__2 = i__ - 1;
                         i__3 = *n - i__;
-                        q__1.r = -1.f;
-                        q__1.i = -0.f; // , expr subst
+                        q__1.real = -1.f;
+                        q__1.imag = -0.f; // , expr subst
                         aocl_blas_cgemv("Conjugate transpose", &i__2, &i__3, &q__1,
                                         &a[(i__ + 1) * a_dim1 + 1], lda, &x[i__ + x_dim1], ldx,
                                         &c_b2, &a[i__ + (i__ + 1) * a_dim1], lda);
@@ -454,18 +454,18 @@ void fla_clabrd(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *nb, scomplex *a,
                         aocl_lapack_clacgv(&i__2, &x[i__ + x_dim1], ldx);
                         /* Generate reflection P(i) to annihilate A(i,i+2:n) */
                         i__2 = i__ + (i__ + 1) * a_dim1;
-                        alpha.r = a[i__2].r;
-                        alpha.i = a[i__2].i; // , expr subst
+                        alpha.real = a[i__2].real;
+                        alpha.imag = a[i__2].imag; // , expr subst
                         i__2 = *n - i__;
                         /* Computing MIN */
                         i__3 = i__ + 2;
                         aocl_lapack_clarfg(&i__2, &alpha, &a[i__ + fla_min(i__3, *n) * a_dim1], lda,
                                            &taup[i__]);
                         i__2 = i__;
-                        e[i__2] = alpha.r;
+                        e[i__2] = alpha.real;
                         i__2 = i__ + (i__ + 1) * a_dim1;
-                        a[i__2].r = 1.f;
-                        a[i__2].i = 0.f; // , expr subst
+                        a[i__2].real = 1.f;
+                        a[i__2].imag = 0.f; // , expr subst
                     }
                     /* Compute X(i+1:m,i) */
                     i__2 = *m - i__;
@@ -492,8 +492,8 @@ void fla_clabrd(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *nb, scomplex *a,
                                         &y[i__ + 1 + y_dim1], ldy, &a[i__ + (i__ + 1) * a_dim1],
                                         lda, &c_b1, &x[i__ * x_dim1 + 1], &c__1);
                         i__2 = *m - i__;
-                        q__1.r = -1.f;
-                        q__1.i = -0.f; // , expr subst
+                        q__1.real = -1.f;
+                        q__1.imag = -0.f; // , expr subst
                         aocl_blas_cgemv("No transpose", &i__2, &i__, &q__1, &a[i__ + 1 + a_dim1],
                                         lda, &x[i__ * x_dim1 + 1], &c__1, &c_b2,
                                         &x[i__ + 1 + i__ * x_dim1], &c__1);
@@ -504,8 +504,8 @@ void fla_clabrd(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *nb, scomplex *a,
                             &a[i__ + (i__ + 1) * a_dim1], lda, &c_b1, &x[i__ * x_dim1 + 1], &c__1);
                         i__2 = *m - i__;
                         i__3 = i__ - 1;
-                        q__1.r = -1.f;
-                        q__1.i = -0.f; // , expr subst
+                        q__1.real = -1.f;
+                        q__1.imag = -0.f; // , expr subst
                         aocl_blas_cgemv("No transpose", &i__2, &i__3, &q__1, &x[i__ + 1 + x_dim1],
                                         ldx, &x[i__ * x_dim1 + 1], &c__1, &c_b2,
                                         &x[i__ + 1 + i__ * x_dim1], &c__1);
@@ -542,8 +542,8 @@ void fla_clabrd(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *nb, scomplex *a,
                     aocl_lapack_clacgv(&i__2, &a[i__ + a_dim1], lda);
                     i__2 = *n - i__ + 1;
                     i__3 = i__ - 1;
-                    q__1.r = -1.f;
-                    q__1.i = -0.f; // , expr subst
+                    q__1.real = -1.f;
+                    q__1.imag = -0.f; // , expr subst
                     aocl_blas_cgemv("No transpose", &i__2, &i__3, &q__1, &y[i__ + y_dim1], ldy,
                                     &a[i__ + a_dim1], lda, &c_b2, &a[i__ + i__ * a_dim1], lda);
                     i__2 = i__ - 1;
@@ -552,8 +552,8 @@ void fla_clabrd(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *nb, scomplex *a,
                     aocl_lapack_clacgv(&i__2, &x[i__ + x_dim1], ldx);
                     i__2 = i__ - 1;
                     i__3 = *n - i__ + 1;
-                    q__1.r = -1.f;
-                    q__1.i = -0.f; // , expr subst
+                    q__1.real = -1.f;
+                    q__1.imag = -0.f; // , expr subst
                     aocl_blas_cgemv("Conjugate transpose", &i__2, &i__3, &q__1,
                                     &a[i__ * a_dim1 + 1], lda, &x[i__ + x_dim1], ldx, &c_b2,
                                     &a[i__ + i__ * a_dim1], lda);
@@ -561,23 +561,23 @@ void fla_clabrd(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *nb, scomplex *a,
                     aocl_lapack_clacgv(&i__2, &x[i__ + x_dim1], ldx);
                     /* Generate reflection P(i) to annihilate A(i,i+1:n) */
                     i__2 = i__ + i__ * a_dim1;
-                    alpha.r = a[i__2].r;
-                    alpha.i = a[i__2].i; // , expr subst
+                    alpha.real = a[i__2].real;
+                    alpha.imag = a[i__2].imag; // , expr subst
                     i__2 = *n - i__ + 1;
                     /* Computing MIN */
                     i__3 = i__ + 1;
                     aocl_lapack_clarfg(&i__2, &alpha, &a[i__ + fla_min(i__3, *n) * a_dim1], lda,
                                        &taup[i__]);
                     i__2 = i__;
-                    d__[i__2] = alpha.r;
+                    d__[i__2] = alpha.real;
                 }
                 if(i__ < *m)
                 {
                     if(thread_id == 0)
                     {
                         i__2 = i__ + i__ * a_dim1;
-                        a[i__2].r = 1.f;
-                        a[i__2].i = 0.f; // , expr subst
+                        a[i__2].real = 1.f;
+                        a[i__2].imag = 0.f; // , expr subst
                     }
                     /* Compute X(i+1:m,i) */
                     i__2 = *m - i__;
@@ -604,8 +604,8 @@ void fla_clabrd(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *nb, scomplex *a,
                                         &x[i__ * x_dim1 + 1], &c__1);
                         i__2 = *m - i__;
                         i__3 = i__ - 1;
-                        q__1.r = -1.f;
-                        q__1.i = -0.f; // , expr subst
+                        q__1.real = -1.f;
+                        q__1.imag = -0.f; // , expr subst
                         aocl_blas_cgemv("No transpose", &i__2, &i__3, &q__1, &a[i__ + 1 + a_dim1],
                                         lda, &x[i__ * x_dim1 + 1], &c__1, &c_b2,
                                         &x[i__ + 1 + i__ * x_dim1], &c__1);
@@ -616,8 +616,8 @@ void fla_clabrd(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *nb, scomplex *a,
                                         &x[i__ * x_dim1 + 1], &c__1);
                         i__2 = *m - i__;
                         i__3 = i__ - 1;
-                        q__1.r = -1.f;
-                        q__1.i = -0.f; // , expr subst
+                        q__1.real = -1.f;
+                        q__1.imag = -0.f; // , expr subst
                         aocl_blas_cgemv("No transpose", &i__2, &i__3, &q__1, &x[i__ + 1 + x_dim1],
                                         ldx, &x[i__ * x_dim1 + 1], &c__1, &c_b2,
                                         &x[i__ + 1 + i__ * x_dim1], &c__1);
@@ -630,33 +630,33 @@ void fla_clabrd(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *nb, scomplex *a,
                         aocl_lapack_clacgv(&i__2, &y[i__ + y_dim1], ldy);
                         i__2 = *m - i__;
                         i__3 = i__ - 1;
-                        q__1.r = -1.f;
-                        q__1.i = -0.f; // , expr subst
+                        q__1.real = -1.f;
+                        q__1.imag = -0.f; // , expr subst
                         aocl_blas_cgemv("No transpose", &i__2, &i__3, &q__1, &a[i__ + 1 + a_dim1],
                                         lda, &y[i__ + y_dim1], ldy, &c_b2,
                                         &a[i__ + 1 + i__ * a_dim1], &c__1);
                         i__2 = i__ - 1;
                         aocl_lapack_clacgv(&i__2, &y[i__ + y_dim1], ldy);
                         i__2 = *m - i__;
-                        q__1.r = -1.f;
-                        q__1.i = -0.f; // , expr subst
+                        q__1.real = -1.f;
+                        q__1.imag = -0.f; // , expr subst
                         aocl_blas_cgemv("No transpose", &i__2, &i__, &q__1, &x[i__ + 1 + x_dim1],
                                         ldx, &a[i__ * a_dim1 + 1], &c__1, &c_b2,
                                         &a[i__ + 1 + i__ * a_dim1], &c__1);
                         /* Generate reflection Q(i) to annihilate A(i+2:m,i) */
                         i__2 = i__ + 1 + i__ * a_dim1;
-                        alpha.r = a[i__2].r;
-                        alpha.i = a[i__2].i; // , expr subst
+                        alpha.real = a[i__2].real;
+                        alpha.imag = a[i__2].imag; // , expr subst
                         i__2 = *m - i__;
                         /* Computing MIN */
                         i__3 = i__ + 2;
                         aocl_lapack_clarfg(&i__2, &alpha, &a[fla_min(i__3, *m) + i__ * a_dim1],
                                            &c__1, &tauq[i__]);
                         i__2 = i__;
-                        e[i__2] = alpha.r;
+                        e[i__2] = alpha.real;
                         i__2 = i__ + 1 + i__ * a_dim1;
-                        a[i__2].r = 1.f;
-                        a[i__2].i = 0.f; // , expr subst
+                        a[i__2].real = 1.f;
+                        a[i__2].imag = 0.f; // , expr subst
                     }
                     /* Compute Y(i+1:n,i) */
                     i__2 = *m - i__;
@@ -685,8 +685,8 @@ void fla_clabrd(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *nb, scomplex *a,
                                         &c__1, &c_b1, &y[i__ * y_dim1 + 1], &c__1);
                         i__2 = *n - i__;
                         i__3 = i__ - 1;
-                        q__1.r = -1.f;
-                        q__1.i = -0.f; // , expr subst
+                        q__1.real = -1.f;
+                        q__1.imag = -0.f; // , expr subst
                         aocl_blas_cgemv("No transpose", &i__2, &i__3, &q__1, &y[i__ + 1 + y_dim1],
                                         ldy, &y[i__ * y_dim1 + 1], &c__1, &c_b2,
                                         &y[i__ + 1 + i__ * y_dim1], &c__1);
@@ -695,8 +695,8 @@ void fla_clabrd(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *nb, scomplex *a,
                                         &x[i__ + 1 + x_dim1], ldx, &a[i__ + 1 + i__ * a_dim1],
                                         &c__1, &c_b1, &y[i__ * y_dim1 + 1], &c__1);
                         i__2 = *n - i__;
-                        q__1.r = -1.f;
-                        q__1.i = -0.f; // , expr subst
+                        q__1.real = -1.f;
+                        q__1.imag = -0.f; // , expr subst
                         aocl_blas_cgemv("Conjugate transpose", &i__, &i__2, &q__1,
                                         &a[(i__ + 1) * a_dim1 + 1], lda, &y[i__ * y_dim1 + 1],
                                         &c__1, &c_b2, &y[i__ + 1 + i__ * y_dim1], &c__1);

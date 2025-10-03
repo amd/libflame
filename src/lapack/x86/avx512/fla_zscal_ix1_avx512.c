@@ -29,14 +29,14 @@ int fla_zscal_ix1_avx512(aocl_int64_t *n, dcomplex *alpha, dcomplex *x)
     }
 
     /* load scale factor in 128 bit register */
-    alpha128_real = _mm_loaddup_pd((double const *)&alpha->r);
-    alpha128_img = _mm_loaddup_pd((double const *)&alpha->i);
+    alpha128_real = _mm_loaddup_pd((double const *)&alpha->real);
+    alpha128_img = _mm_loaddup_pd((double const *)&alpha->imag);
     ai128 = _mm_shuffle_pd(alpha128_real, alpha128_img, 0x2);
     ar128 = _mm_shuffle_pd(alpha128_img, alpha128_real, 0x1);
 
     /* load scale factor in 256 bit register */
-    alpha256_real = _mm256_broadcast_sd((double const *)&alpha->r);
-    alpha256_img = _mm256_broadcast_sd((double const *)&alpha->i);
+    alpha256_real = _mm256_broadcast_sd((double const *)&alpha->real);
+    alpha256_img = _mm256_broadcast_sd((double const *)&alpha->imag);
     ai256 = _mm256_shuffle_pd(alpha256_real, alpha256_img, 0xA);
     ar256 = _mm256_shuffle_pd(alpha256_img, alpha256_real, 0x5);
 

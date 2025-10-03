@@ -238,8 +238,8 @@ void aocl_lapack_zungr2(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *k, dcomp
                           &work[1]);
         i__2 = *n - *m + ii - 1;
         i__3 = i__;
-        z__1.r = -tau[i__3].r;
-        z__1.i = -tau[i__3].i; // , expr subst
+        z__1.real = -tau[i__3].real;
+        z__1.imag = -tau[i__3].imag; // , expr subst
         aocl_blas_zscal(&i__2, &z__1, &a[ii + a_dim1], lda);
         i__2 = *n - *m + ii - 1;
         aocl_lapack_zlacgv(&i__2, &a[ii + a_dim1], lda);

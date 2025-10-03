@@ -4,7 +4,7 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static dcomplex c_b1 = {{1.}, {0.}};
+static dcomplex c_b1 = {1., 0.};
 /* > \brief \b ZHEGST */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -389,8 +389,8 @@ void aocl_lapack_zhegvd(aocl_int64_t *itype, char *jobz, char *uplo, aocl_int64_
     }
     if(*info == 0)
     {
-        work[1].r = aocl_lapack_droundup_lwork(&lopt);
-        work[1].i = 0.; // , expr subst
+        work[1].real = aocl_lapack_droundup_lwork(&lopt);
+        work[1].imag = 0.; // , expr subst
         rwork[1] = aocl_lapack_droundup_lwork(&lropt);
         iwork[1] = (aocl_int_t)(liopt);
         if(*lwork < lwmin && !lquery)
@@ -438,7 +438,7 @@ void aocl_lapack_zhegvd(aocl_int64_t *itype, char *jobz, char *uplo, aocl_int64_
                        &iwork[1], liwork, info);
     /* Computing MAX */
     d__1 = (doublereal)lopt;
-    d__2 = work[1].r; // , expr subst
+    d__2 = work[1].real; // , expr subst
     lopt = (integer)fla_max(d__1, d__2);
     /* Computing MAX */
     d__1 = (doublereal)lropt;
@@ -483,8 +483,8 @@ void aocl_lapack_zhegvd(aocl_int64_t *itype, char *jobz, char *uplo, aocl_int64_
                             &a[a_offset], lda);
         }
     }
-    work[1].r = aocl_lapack_droundup_lwork(&lopt);
-    work[1].i = 0.; // , expr subst
+    work[1].real = aocl_lapack_droundup_lwork(&lopt);
+    work[1].imag = 0.; // , expr subst
     rwork[1] = aocl_lapack_droundup_lwork(&lropt);
     iwork[1] = (aocl_int_t)(liopt);
     AOCL_DTL_TRACE_LOG_EXIT

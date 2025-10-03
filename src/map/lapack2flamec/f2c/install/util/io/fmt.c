@@ -76,8 +76,8 @@ static int op_gen(int a, int b, int c, int d)
     }
     p->op = a;
     p->p1 = b;
-    p->p2.i[0] = c;
-    p->p2.i[1] = d;
+    p->p2.imag[0] = c;
+    p->p2.imag[1] = d;
     return (f__pc++);
 }
 

@@ -268,7 +268,7 @@ real aocl_lapack_cla_gercond_c(char *trans, aocl_int64_t *n, scomplex *a, aocl_i
                 for(j = 1; j <= i__2; ++j)
                 {
                     i__3 = i__ + j * a_dim1;
-                    tmp += ((r__1 = a[i__3].r, f2c_abs(r__1))
+                    tmp += ((r__1 = a[i__3].real, f2c_abs(r__1))
                             + (r__2 = r_imag(&a[i__ + j * a_dim1]), f2c_abs(r__2)))
                            / c__[j];
                 }
@@ -279,7 +279,7 @@ real aocl_lapack_cla_gercond_c(char *trans, aocl_int64_t *n, scomplex *a, aocl_i
                 for(j = 1; j <= i__2; ++j)
                 {
                     i__3 = i__ + j * a_dim1;
-                    tmp += (r__1 = a[i__3].r, f2c_abs(r__1))
+                    tmp += (r__1 = a[i__3].real, f2c_abs(r__1))
                            + (r__2 = r_imag(&a[i__ + j * a_dim1]), f2c_abs(r__2));
                 }
             }
@@ -299,7 +299,7 @@ real aocl_lapack_cla_gercond_c(char *trans, aocl_int64_t *n, scomplex *a, aocl_i
                 for(j = 1; j <= i__2; ++j)
                 {
                     i__3 = j + i__ * a_dim1;
-                    tmp += ((r__1 = a[i__3].r, f2c_abs(r__1))
+                    tmp += ((r__1 = a[i__3].real, f2c_abs(r__1))
                             + (r__2 = r_imag(&a[j + i__ * a_dim1]), f2c_abs(r__2)))
                            / c__[j];
                 }
@@ -310,7 +310,7 @@ real aocl_lapack_cla_gercond_c(char *trans, aocl_int64_t *n, scomplex *a, aocl_i
                 for(j = 1; j <= i__2; ++j)
                 {
                     i__3 = j + i__ * a_dim1;
-                    tmp += (r__1 = a[i__3].r, f2c_abs(r__1))
+                    tmp += (r__1 = a[i__3].real, f2c_abs(r__1))
                            + (r__2 = r_imag(&a[j + i__ * a_dim1]), f2c_abs(r__2));
                 }
             }

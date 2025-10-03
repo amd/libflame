@@ -169,49 +169,49 @@ void aocl_lapack_zheswapr(char *uplo, aocl_int64_t *n, dcomplex *a, aocl_int64_t
         /* - swap row I1 from I1+1 to I2-1 with col I2 from I1+1 to I2-1 */
         /* - swap A(I2,I1) and A(I1,I2) */
         i__1 = *i1 + *i1 * a_dim1;
-        tmp.r = a[i__1].r;
-        tmp.i = a[i__1].i; // , expr subst
+        tmp.real = a[i__1].real;
+        tmp.imag = a[i__1].imag; // , expr subst
         i__1 = *i1 + *i1 * a_dim1;
         i__2 = *i2 + *i2 * a_dim1;
-        a[i__1].r = a[i__2].r;
-        a[i__1].i = a[i__2].i; // , expr subst
+        a[i__1].real = a[i__2].real;
+        a[i__1].imag = a[i__2].imag; // , expr subst
         i__1 = *i2 + *i2 * a_dim1;
-        a[i__1].r = tmp.r;
-        a[i__1].i = tmp.i; // , expr subst
+        a[i__1].real = tmp.real;
+        a[i__1].imag = tmp.imag; // , expr subst
         i__1 = *i2 - *i1 - 1;
         for(i__ = 1; i__ <= i__1; ++i__)
         {
             i__2 = *i1 + (*i1 + i__) * a_dim1;
-            tmp.r = a[i__2].r;
-            tmp.i = a[i__2].i; // , expr subst
+            tmp.real = a[i__2].real;
+            tmp.imag = a[i__2].imag; // , expr subst
             i__2 = *i1 + (*i1 + i__) * a_dim1;
             d_cnjg(&z__1, &a[*i1 + i__ + *i2 * a_dim1]);
-            a[i__2].r = z__1.r;
-            a[i__2].i = z__1.i; // , expr subst
+            a[i__2].real = z__1.real;
+            a[i__2].imag = z__1.imag; // , expr subst
             i__2 = *i1 + i__ + *i2 * a_dim1;
             d_cnjg(&z__1, &tmp);
-            a[i__2].r = z__1.r;
-            a[i__2].i = z__1.i; // , expr subst
+            a[i__2].real = z__1.real;
+            a[i__2].imag = z__1.imag; // , expr subst
         }
         i__1 = *i1 + *i2 * a_dim1;
         d_cnjg(&z__1, &a[*i1 + *i2 * a_dim1]);
-        a[i__1].r = z__1.r;
-        a[i__1].i = z__1.i; // , expr subst
+        a[i__1].real = z__1.real;
+        a[i__1].imag = z__1.imag; // , expr subst
         /* third swap */
         /* - swap row I1 and I2 from I2+1 to N */
         i__1 = *n;
         for(i__ = *i2 + 1; i__ <= i__1; ++i__)
         {
             i__2 = *i1 + i__ * a_dim1;
-            tmp.r = a[i__2].r;
-            tmp.i = a[i__2].i; // , expr subst
+            tmp.real = a[i__2].real;
+            tmp.imag = a[i__2].imag; // , expr subst
             i__2 = *i1 + i__ * a_dim1;
             i__3 = *i2 + i__ * a_dim1;
-            a[i__2].r = a[i__3].r;
-            a[i__2].i = a[i__3].i; // , expr subst
+            a[i__2].real = a[i__3].real;
+            a[i__2].imag = a[i__3].imag; // , expr subst
             i__2 = *i2 + i__ * a_dim1;
-            a[i__2].r = tmp.r;
-            a[i__2].i = tmp.i; // , expr subst
+            a[i__2].real = tmp.real;
+            a[i__2].imag = tmp.imag; // , expr subst
         }
     }
     else
@@ -226,49 +226,49 @@ void aocl_lapack_zheswapr(char *uplo, aocl_int64_t *n, dcomplex *a, aocl_int64_t
         /* - swap col I1 from I1+1 to I2-1 with row I2 from I1+1 to I2-1 */
         /* - swap A(I2,I1) and A(I1,I2) */
         i__1 = *i1 + *i1 * a_dim1;
-        tmp.r = a[i__1].r;
-        tmp.i = a[i__1].i; // , expr subst
+        tmp.real = a[i__1].real;
+        tmp.imag = a[i__1].imag; // , expr subst
         i__1 = *i1 + *i1 * a_dim1;
         i__2 = *i2 + *i2 * a_dim1;
-        a[i__1].r = a[i__2].r;
-        a[i__1].i = a[i__2].i; // , expr subst
+        a[i__1].real = a[i__2].real;
+        a[i__1].imag = a[i__2].imag; // , expr subst
         i__1 = *i2 + *i2 * a_dim1;
-        a[i__1].r = tmp.r;
-        a[i__1].i = tmp.i; // , expr subst
+        a[i__1].real = tmp.real;
+        a[i__1].imag = tmp.imag; // , expr subst
         i__1 = *i2 - *i1 - 1;
         for(i__ = 1; i__ <= i__1; ++i__)
         {
             i__2 = *i1 + i__ + *i1 * a_dim1;
-            tmp.r = a[i__2].r;
-            tmp.i = a[i__2].i; // , expr subst
+            tmp.real = a[i__2].real;
+            tmp.imag = a[i__2].imag; // , expr subst
             i__2 = *i1 + i__ + *i1 * a_dim1;
             d_cnjg(&z__1, &a[*i2 + (*i1 + i__) * a_dim1]);
-            a[i__2].r = z__1.r;
-            a[i__2].i = z__1.i; // , expr subst
+            a[i__2].real = z__1.real;
+            a[i__2].imag = z__1.imag; // , expr subst
             i__2 = *i2 + (*i1 + i__) * a_dim1;
             d_cnjg(&z__1, &tmp);
-            a[i__2].r = z__1.r;
-            a[i__2].i = z__1.i; // , expr subst
+            a[i__2].real = z__1.real;
+            a[i__2].imag = z__1.imag; // , expr subst
         }
         i__1 = *i2 + *i1 * a_dim1;
         d_cnjg(&z__1, &a[*i2 + *i1 * a_dim1]);
-        a[i__1].r = z__1.r;
-        a[i__1].i = z__1.i; // , expr subst
+        a[i__1].real = z__1.real;
+        a[i__1].imag = z__1.imag; // , expr subst
         /* third swap */
         /* - swap col I1 and I2 from I2+1 to N */
         i__1 = *n;
         for(i__ = *i2 + 1; i__ <= i__1; ++i__)
         {
             i__2 = i__ + *i1 * a_dim1;
-            tmp.r = a[i__2].r;
-            tmp.i = a[i__2].i; // , expr subst
+            tmp.real = a[i__2].real;
+            tmp.imag = a[i__2].imag; // , expr subst
             i__2 = i__ + *i1 * a_dim1;
             i__3 = i__ + *i2 * a_dim1;
-            a[i__2].r = a[i__3].r;
-            a[i__2].i = a[i__3].i; // , expr subst
+            a[i__2].real = a[i__3].real;
+            a[i__2].imag = a[i__3].imag; // , expr subst
             i__2 = i__ + *i2 * a_dim1;
-            a[i__2].r = tmp.r;
-            a[i__2].i = tmp.i; // , expr subst
+            a[i__2].real = tmp.real;
+            a[i__2].imag = tmp.imag; // , expr subst
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT

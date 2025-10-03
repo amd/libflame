@@ -4,9 +4,9 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static dcomplex c_b14 = {{1.}, {0.}};
-static dcomplex c_b22 = {{0.}, {0.}};
-static dcomplex c_b29 = {{-1.}, {-0.}};
+static dcomplex c_b14 = {1., 0.};
+static dcomplex c_b22 = {0., 0.};
+static dcomplex c_b29 = {-1., -0.};
 /* > \brief \b ZTPRFB applies a real or scomplex "triangular-pentagonal" blocked reflector to a real
  * or scomplex matrix, which is composed of two blocks. */
 /* =========== DOCUMENTATION =========== */
@@ -417,8 +417,8 @@ void aocl_lapack_ztprfb(char *side, char *trans, char *direct, char *storev, aoc
             {
                 i__3 = i__ + j * work_dim1;
                 i__4 = *m - *l + i__ + j * b_dim1;
-                work[i__3].r = b[i__4].r;
-                work[i__3].i = b[i__4].i; // , expr subst
+                work[i__3].real = b[i__4].real;
+                work[i__3].imag = b[i__4].imag; // , expr subst
             }
         }
         aocl_blas_ztrmm("L", "U", "C", "N", l, n, &c_b14, &v[mp + v_dim1], ldv, &work[work_offset],
@@ -438,10 +438,10 @@ void aocl_lapack_ztprfb(char *side, char *trans, char *direct, char *storev, aoc
                 i__3 = i__ + j * work_dim1;
                 i__4 = i__ + j * work_dim1;
                 i__5 = i__ + j * a_dim1;
-                z__1.r = work[i__4].r + a[i__5].r;
-                z__1.i = work[i__4].i + a[i__5].i; // , expr subst
-                work[i__3].r = z__1.r;
-                work[i__3].i = z__1.i; // , expr subst
+                z__1.real = work[i__4].real + a[i__5].real;
+                z__1.imag = work[i__4].imag + a[i__5].imag; // , expr subst
+                work[i__3].real = z__1.real;
+                work[i__3].imag = z__1.imag; // , expr subst
             }
         }
         aocl_blas_ztrmm("L", "U", trans, "N", k, n, &c_b14, &t[t_offset], ldt, &work[work_offset],
@@ -455,10 +455,10 @@ void aocl_lapack_ztprfb(char *side, char *trans, char *direct, char *storev, aoc
                 i__3 = i__ + j * a_dim1;
                 i__4 = i__ + j * a_dim1;
                 i__5 = i__ + j * work_dim1;
-                z__1.r = a[i__4].r - work[i__5].r;
-                z__1.i = a[i__4].i - work[i__5].i; // , expr subst
-                a[i__3].r = z__1.r;
-                a[i__3].i = z__1.i; // , expr subst
+                z__1.real = a[i__4].real - work[i__5].real;
+                z__1.imag = a[i__4].imag - work[i__5].imag; // , expr subst
+                a[i__3].real = z__1.real;
+                a[i__3].imag = z__1.imag; // , expr subst
             }
         }
         i__1 = *m - *l;
@@ -478,10 +478,10 @@ void aocl_lapack_ztprfb(char *side, char *trans, char *direct, char *storev, aoc
                 i__3 = *m - *l + i__ + j * b_dim1;
                 i__4 = *m - *l + i__ + j * b_dim1;
                 i__5 = i__ + j * work_dim1;
-                z__1.r = b[i__4].r - work[i__5].r;
-                z__1.i = b[i__4].i - work[i__5].i; // , expr subst
-                b[i__3].r = z__1.r;
-                b[i__3].i = z__1.i; // , expr subst
+                z__1.real = b[i__4].real - work[i__5].real;
+                z__1.imag = b[i__4].imag - work[i__5].imag; // , expr subst
+                b[i__3].real = z__1.real;
+                b[i__3].imag = z__1.imag; // , expr subst
             }
         }
         /* --------------------------------------------------------------------------- */
@@ -510,8 +510,8 @@ void aocl_lapack_ztprfb(char *side, char *trans, char *direct, char *storev, aoc
             {
                 i__3 = i__ + j * work_dim1;
                 i__4 = i__ + (*n - *l + j) * b_dim1;
-                work[i__3].r = b[i__4].r;
-                work[i__3].i = b[i__4].i; // , expr subst
+                work[i__3].real = b[i__4].real;
+                work[i__3].imag = b[i__4].imag; // , expr subst
             }
         }
         aocl_blas_ztrmm("R", "U", "N", "N", m, l, &c_b14, &v[np + v_dim1], ldv, &work[work_offset],
@@ -531,10 +531,10 @@ void aocl_lapack_ztprfb(char *side, char *trans, char *direct, char *storev, aoc
                 i__3 = i__ + j * work_dim1;
                 i__4 = i__ + j * work_dim1;
                 i__5 = i__ + j * a_dim1;
-                z__1.r = work[i__4].r + a[i__5].r;
-                z__1.i = work[i__4].i + a[i__5].i; // , expr subst
-                work[i__3].r = z__1.r;
-                work[i__3].i = z__1.i; // , expr subst
+                z__1.real = work[i__4].real + a[i__5].real;
+                z__1.imag = work[i__4].imag + a[i__5].imag; // , expr subst
+                work[i__3].real = z__1.real;
+                work[i__3].imag = z__1.imag; // , expr subst
             }
         }
         aocl_blas_ztrmm("R", "U", trans, "N", m, k, &c_b14, &t[t_offset], ldt, &work[work_offset],
@@ -548,10 +548,10 @@ void aocl_lapack_ztprfb(char *side, char *trans, char *direct, char *storev, aoc
                 i__3 = i__ + j * a_dim1;
                 i__4 = i__ + j * a_dim1;
                 i__5 = i__ + j * work_dim1;
-                z__1.r = a[i__4].r - work[i__5].r;
-                z__1.i = a[i__4].i - work[i__5].i; // , expr subst
-                a[i__3].r = z__1.r;
-                a[i__3].i = z__1.i; // , expr subst
+                z__1.real = a[i__4].real - work[i__5].real;
+                z__1.imag = a[i__4].imag - work[i__5].imag; // , expr subst
+                a[i__3].real = z__1.real;
+                a[i__3].imag = z__1.imag; // , expr subst
             }
         }
         i__1 = *n - *l;
@@ -571,10 +571,10 @@ void aocl_lapack_ztprfb(char *side, char *trans, char *direct, char *storev, aoc
                 i__3 = i__ + (*n - *l + j) * b_dim1;
                 i__4 = i__ + (*n - *l + j) * b_dim1;
                 i__5 = i__ + j * work_dim1;
-                z__1.r = b[i__4].r - work[i__5].r;
-                z__1.i = b[i__4].i - work[i__5].i; // , expr subst
-                b[i__3].r = z__1.r;
-                b[i__3].i = z__1.i; // , expr subst
+                z__1.real = b[i__4].real - work[i__5].real;
+                z__1.imag = b[i__4].imag - work[i__5].imag; // , expr subst
+                b[i__3].real = z__1.real;
+                b[i__3].imag = z__1.imag; // , expr subst
             }
         }
         /* --------------------------------------------------------------------------- */
@@ -604,8 +604,8 @@ void aocl_lapack_ztprfb(char *side, char *trans, char *direct, char *storev, aoc
             {
                 i__3 = *k - *l + i__ + j * work_dim1;
                 i__4 = i__ + j * b_dim1;
-                work[i__3].r = b[i__4].r;
-                work[i__3].i = b[i__4].i; // , expr subst
+                work[i__3].real = b[i__4].real;
+                work[i__3].imag = b[i__4].imag; // , expr subst
             }
         }
         aocl_blas_ztrmm("L", "L", "C", "N", l, n, &c_b14, &v[kp * v_dim1 + 1], ldv,
@@ -625,10 +625,10 @@ void aocl_lapack_ztprfb(char *side, char *trans, char *direct, char *storev, aoc
                 i__3 = i__ + j * work_dim1;
                 i__4 = i__ + j * work_dim1;
                 i__5 = i__ + j * a_dim1;
-                z__1.r = work[i__4].r + a[i__5].r;
-                z__1.i = work[i__4].i + a[i__5].i; // , expr subst
-                work[i__3].r = z__1.r;
-                work[i__3].i = z__1.i; // , expr subst
+                z__1.real = work[i__4].real + a[i__5].real;
+                z__1.imag = work[i__4].imag + a[i__5].imag; // , expr subst
+                work[i__3].real = z__1.real;
+                work[i__3].imag = z__1.imag; // , expr subst
             }
         }
         aocl_blas_ztrmm("L", "L", trans, "N", k, n, &c_b14, &t[t_offset], ldt, &work[work_offset],
@@ -642,10 +642,10 @@ void aocl_lapack_ztprfb(char *side, char *trans, char *direct, char *storev, aoc
                 i__3 = i__ + j * a_dim1;
                 i__4 = i__ + j * a_dim1;
                 i__5 = i__ + j * work_dim1;
-                z__1.r = a[i__4].r - work[i__5].r;
-                z__1.i = a[i__4].i - work[i__5].i; // , expr subst
-                a[i__3].r = z__1.r;
-                a[i__3].i = z__1.i; // , expr subst
+                z__1.real = a[i__4].real - work[i__5].real;
+                z__1.imag = a[i__4].imag - work[i__5].imag; // , expr subst
+                a[i__3].real = z__1.real;
+                a[i__3].imag = z__1.imag; // , expr subst
             }
         }
         i__1 = *m - *l;
@@ -665,10 +665,10 @@ void aocl_lapack_ztprfb(char *side, char *trans, char *direct, char *storev, aoc
                 i__3 = i__ + j * b_dim1;
                 i__4 = i__ + j * b_dim1;
                 i__5 = *k - *l + i__ + j * work_dim1;
-                z__1.r = b[i__4].r - work[i__5].r;
-                z__1.i = b[i__4].i - work[i__5].i; // , expr subst
-                b[i__3].r = z__1.r;
-                b[i__3].i = z__1.i; // , expr subst
+                z__1.real = b[i__4].real - work[i__5].real;
+                z__1.imag = b[i__4].imag - work[i__5].imag; // , expr subst
+                b[i__3].real = z__1.real;
+                b[i__3].imag = z__1.imag; // , expr subst
             }
         }
         /* --------------------------------------------------------------------------- */
@@ -697,8 +697,8 @@ void aocl_lapack_ztprfb(char *side, char *trans, char *direct, char *storev, aoc
             {
                 i__3 = i__ + (*k - *l + j) * work_dim1;
                 i__4 = i__ + j * b_dim1;
-                work[i__3].r = b[i__4].r;
-                work[i__3].i = b[i__4].i; // , expr subst
+                work[i__3].real = b[i__4].real;
+                work[i__3].imag = b[i__4].imag; // , expr subst
             }
         }
         aocl_blas_ztrmm("R", "L", "N", "N", m, l, &c_b14, &v[kp * v_dim1 + 1], ldv,
@@ -718,10 +718,10 @@ void aocl_lapack_ztprfb(char *side, char *trans, char *direct, char *storev, aoc
                 i__3 = i__ + j * work_dim1;
                 i__4 = i__ + j * work_dim1;
                 i__5 = i__ + j * a_dim1;
-                z__1.r = work[i__4].r + a[i__5].r;
-                z__1.i = work[i__4].i + a[i__5].i; // , expr subst
-                work[i__3].r = z__1.r;
-                work[i__3].i = z__1.i; // , expr subst
+                z__1.real = work[i__4].real + a[i__5].real;
+                z__1.imag = work[i__4].imag + a[i__5].imag; // , expr subst
+                work[i__3].real = z__1.real;
+                work[i__3].imag = z__1.imag; // , expr subst
             }
         }
         aocl_blas_ztrmm("R", "L", trans, "N", m, k, &c_b14, &t[t_offset], ldt, &work[work_offset],
@@ -735,10 +735,10 @@ void aocl_lapack_ztprfb(char *side, char *trans, char *direct, char *storev, aoc
                 i__3 = i__ + j * a_dim1;
                 i__4 = i__ + j * a_dim1;
                 i__5 = i__ + j * work_dim1;
-                z__1.r = a[i__4].r - work[i__5].r;
-                z__1.i = a[i__4].i - work[i__5].i; // , expr subst
-                a[i__3].r = z__1.r;
-                a[i__3].i = z__1.i; // , expr subst
+                z__1.real = a[i__4].real - work[i__5].real;
+                z__1.imag = a[i__4].imag - work[i__5].imag; // , expr subst
+                a[i__3].real = z__1.real;
+                a[i__3].imag = z__1.imag; // , expr subst
             }
         }
         i__1 = *n - *l;
@@ -758,10 +758,10 @@ void aocl_lapack_ztprfb(char *side, char *trans, char *direct, char *storev, aoc
                 i__3 = i__ + j * b_dim1;
                 i__4 = i__ + j * b_dim1;
                 i__5 = i__ + (*k - *l + j) * work_dim1;
-                z__1.r = b[i__4].r - work[i__5].r;
-                z__1.i = b[i__4].i - work[i__5].i; // , expr subst
-                b[i__3].r = z__1.r;
-                b[i__3].i = z__1.i; // , expr subst
+                z__1.real = b[i__4].real - work[i__5].real;
+                z__1.imag = b[i__4].imag - work[i__5].imag; // , expr subst
+                b[i__3].real = z__1.real;
+                b[i__3].imag = z__1.imag; // , expr subst
             }
         }
         /* --------------------------------------------------------------------------- */
@@ -790,8 +790,8 @@ void aocl_lapack_ztprfb(char *side, char *trans, char *direct, char *storev, aoc
             {
                 i__3 = i__ + j * work_dim1;
                 i__4 = *m - *l + i__ + j * b_dim1;
-                work[i__3].r = b[i__4].r;
-                work[i__3].i = b[i__4].i; // , expr subst
+                work[i__3].real = b[i__4].real;
+                work[i__3].imag = b[i__4].imag; // , expr subst
             }
         }
         aocl_blas_ztrmm("L", "L", "N", "N", l, n, &c_b14, &v[mp * v_dim1 + 1], ldv,
@@ -811,10 +811,10 @@ void aocl_lapack_ztprfb(char *side, char *trans, char *direct, char *storev, aoc
                 i__3 = i__ + j * work_dim1;
                 i__4 = i__ + j * work_dim1;
                 i__5 = i__ + j * a_dim1;
-                z__1.r = work[i__4].r + a[i__5].r;
-                z__1.i = work[i__4].i + a[i__5].i; // , expr subst
-                work[i__3].r = z__1.r;
-                work[i__3].i = z__1.i; // , expr subst
+                z__1.real = work[i__4].real + a[i__5].real;
+                z__1.imag = work[i__4].imag + a[i__5].imag; // , expr subst
+                work[i__3].real = z__1.real;
+                work[i__3].imag = z__1.imag; // , expr subst
             }
         }
         aocl_blas_ztrmm("L", "U", trans, "N", k, n, &c_b14, &t[t_offset], ldt, &work[work_offset],
@@ -828,10 +828,10 @@ void aocl_lapack_ztprfb(char *side, char *trans, char *direct, char *storev, aoc
                 i__3 = i__ + j * a_dim1;
                 i__4 = i__ + j * a_dim1;
                 i__5 = i__ + j * work_dim1;
-                z__1.r = a[i__4].r - work[i__5].r;
-                z__1.i = a[i__4].i - work[i__5].i; // , expr subst
-                a[i__3].r = z__1.r;
-                a[i__3].i = z__1.i; // , expr subst
+                z__1.real = a[i__4].real - work[i__5].real;
+                z__1.imag = a[i__4].imag - work[i__5].imag; // , expr subst
+                a[i__3].real = z__1.real;
+                a[i__3].imag = z__1.imag; // , expr subst
             }
         }
         i__1 = *m - *l;
@@ -851,10 +851,10 @@ void aocl_lapack_ztprfb(char *side, char *trans, char *direct, char *storev, aoc
                 i__3 = *m - *l + i__ + j * b_dim1;
                 i__4 = *m - *l + i__ + j * b_dim1;
                 i__5 = i__ + j * work_dim1;
-                z__1.r = b[i__4].r - work[i__5].r;
-                z__1.i = b[i__4].i - work[i__5].i; // , expr subst
-                b[i__3].r = z__1.r;
-                b[i__3].i = z__1.i; // , expr subst
+                z__1.real = b[i__4].real - work[i__5].real;
+                z__1.imag = b[i__4].imag - work[i__5].imag; // , expr subst
+                b[i__3].real = z__1.real;
+                b[i__3].imag = z__1.imag; // , expr subst
             }
         }
         /* --------------------------------------------------------------------------- */
@@ -882,8 +882,8 @@ void aocl_lapack_ztprfb(char *side, char *trans, char *direct, char *storev, aoc
             {
                 i__3 = i__ + j * work_dim1;
                 i__4 = i__ + (*n - *l + j) * b_dim1;
-                work[i__3].r = b[i__4].r;
-                work[i__3].i = b[i__4].i; // , expr subst
+                work[i__3].real = b[i__4].real;
+                work[i__3].imag = b[i__4].imag; // , expr subst
             }
         }
         aocl_blas_ztrmm("R", "L", "C", "N", m, l, &c_b14, &v[np * v_dim1 + 1], ldv,
@@ -903,10 +903,10 @@ void aocl_lapack_ztprfb(char *side, char *trans, char *direct, char *storev, aoc
                 i__3 = i__ + j * work_dim1;
                 i__4 = i__ + j * work_dim1;
                 i__5 = i__ + j * a_dim1;
-                z__1.r = work[i__4].r + a[i__5].r;
-                z__1.i = work[i__4].i + a[i__5].i; // , expr subst
-                work[i__3].r = z__1.r;
-                work[i__3].i = z__1.i; // , expr subst
+                z__1.real = work[i__4].real + a[i__5].real;
+                z__1.imag = work[i__4].imag + a[i__5].imag; // , expr subst
+                work[i__3].real = z__1.real;
+                work[i__3].imag = z__1.imag; // , expr subst
             }
         }
         aocl_blas_ztrmm("R", "U", trans, "N", m, k, &c_b14, &t[t_offset], ldt, &work[work_offset],
@@ -920,10 +920,10 @@ void aocl_lapack_ztprfb(char *side, char *trans, char *direct, char *storev, aoc
                 i__3 = i__ + j * a_dim1;
                 i__4 = i__ + j * a_dim1;
                 i__5 = i__ + j * work_dim1;
-                z__1.r = a[i__4].r - work[i__5].r;
-                z__1.i = a[i__4].i - work[i__5].i; // , expr subst
-                a[i__3].r = z__1.r;
-                a[i__3].i = z__1.i; // , expr subst
+                z__1.real = a[i__4].real - work[i__5].real;
+                z__1.imag = a[i__4].imag - work[i__5].imag; // , expr subst
+                a[i__3].real = z__1.real;
+                a[i__3].imag = z__1.imag; // , expr subst
             }
         }
         i__1 = *n - *l;
@@ -943,10 +943,10 @@ void aocl_lapack_ztprfb(char *side, char *trans, char *direct, char *storev, aoc
                 i__3 = i__ + (*n - *l + j) * b_dim1;
                 i__4 = i__ + (*n - *l + j) * b_dim1;
                 i__5 = i__ + j * work_dim1;
-                z__1.r = b[i__4].r - work[i__5].r;
-                z__1.i = b[i__4].i - work[i__5].i; // , expr subst
-                b[i__3].r = z__1.r;
-                b[i__3].i = z__1.i; // , expr subst
+                z__1.real = b[i__4].real - work[i__5].real;
+                z__1.imag = b[i__4].imag - work[i__5].imag; // , expr subst
+                b[i__3].real = z__1.real;
+                b[i__3].imag = z__1.imag; // , expr subst
             }
         }
         /* --------------------------------------------------------------------------- */
@@ -975,8 +975,8 @@ void aocl_lapack_ztprfb(char *side, char *trans, char *direct, char *storev, aoc
             {
                 i__3 = *k - *l + i__ + j * work_dim1;
                 i__4 = i__ + j * b_dim1;
-                work[i__3].r = b[i__4].r;
-                work[i__3].i = b[i__4].i; // , expr subst
+                work[i__3].real = b[i__4].real;
+                work[i__3].imag = b[i__4].imag; // , expr subst
             }
         }
         aocl_blas_ztrmm("L", "U", "N", "N", l, n, &c_b14, &v[kp + v_dim1], ldv,
@@ -996,10 +996,10 @@ void aocl_lapack_ztprfb(char *side, char *trans, char *direct, char *storev, aoc
                 i__3 = i__ + j * work_dim1;
                 i__4 = i__ + j * work_dim1;
                 i__5 = i__ + j * a_dim1;
-                z__1.r = work[i__4].r + a[i__5].r;
-                z__1.i = work[i__4].i + a[i__5].i; // , expr subst
-                work[i__3].r = z__1.r;
-                work[i__3].i = z__1.i; // , expr subst
+                z__1.real = work[i__4].real + a[i__5].real;
+                z__1.imag = work[i__4].imag + a[i__5].imag; // , expr subst
+                work[i__3].real = z__1.real;
+                work[i__3].imag = z__1.imag; // , expr subst
             }
         }
         aocl_blas_ztrmm("L", "L ", trans, "N", k, n, &c_b14, &t[t_offset], ldt, &work[work_offset],
@@ -1013,10 +1013,10 @@ void aocl_lapack_ztprfb(char *side, char *trans, char *direct, char *storev, aoc
                 i__3 = i__ + j * a_dim1;
                 i__4 = i__ + j * a_dim1;
                 i__5 = i__ + j * work_dim1;
-                z__1.r = a[i__4].r - work[i__5].r;
-                z__1.i = a[i__4].i - work[i__5].i; // , expr subst
-                a[i__3].r = z__1.r;
-                a[i__3].i = z__1.i; // , expr subst
+                z__1.real = a[i__4].real - work[i__5].real;
+                z__1.imag = a[i__4].imag - work[i__5].imag; // , expr subst
+                a[i__3].real = z__1.real;
+                a[i__3].imag = z__1.imag; // , expr subst
             }
         }
         i__1 = *m - *l;
@@ -1036,10 +1036,10 @@ void aocl_lapack_ztprfb(char *side, char *trans, char *direct, char *storev, aoc
                 i__3 = i__ + j * b_dim1;
                 i__4 = i__ + j * b_dim1;
                 i__5 = *k - *l + i__ + j * work_dim1;
-                z__1.r = b[i__4].r - work[i__5].r;
-                z__1.i = b[i__4].i - work[i__5].i; // , expr subst
-                b[i__3].r = z__1.r;
-                b[i__3].i = z__1.i; // , expr subst
+                z__1.real = b[i__4].real - work[i__5].real;
+                z__1.imag = b[i__4].imag - work[i__5].imag; // , expr subst
+                b[i__3].real = z__1.real;
+                b[i__3].imag = z__1.imag; // , expr subst
             }
         }
         /* --------------------------------------------------------------------------- */
@@ -1067,8 +1067,8 @@ void aocl_lapack_ztprfb(char *side, char *trans, char *direct, char *storev, aoc
             {
                 i__3 = i__ + (*k - *l + j) * work_dim1;
                 i__4 = i__ + j * b_dim1;
-                work[i__3].r = b[i__4].r;
-                work[i__3].i = b[i__4].i; // , expr subst
+                work[i__3].real = b[i__4].real;
+                work[i__3].imag = b[i__4].imag; // , expr subst
             }
         }
         aocl_blas_ztrmm("R", "U", "C", "N", m, l, &c_b14, &v[kp + v_dim1], ldv,
@@ -1088,10 +1088,10 @@ void aocl_lapack_ztprfb(char *side, char *trans, char *direct, char *storev, aoc
                 i__3 = i__ + j * work_dim1;
                 i__4 = i__ + j * work_dim1;
                 i__5 = i__ + j * a_dim1;
-                z__1.r = work[i__4].r + a[i__5].r;
-                z__1.i = work[i__4].i + a[i__5].i; // , expr subst
-                work[i__3].r = z__1.r;
-                work[i__3].i = z__1.i; // , expr subst
+                z__1.real = work[i__4].real + a[i__5].real;
+                z__1.imag = work[i__4].imag + a[i__5].imag; // , expr subst
+                work[i__3].real = z__1.real;
+                work[i__3].imag = z__1.imag; // , expr subst
             }
         }
         aocl_blas_ztrmm("R", "L", trans, "N", m, k, &c_b14, &t[t_offset], ldt, &work[work_offset],
@@ -1105,10 +1105,10 @@ void aocl_lapack_ztprfb(char *side, char *trans, char *direct, char *storev, aoc
                 i__3 = i__ + j * a_dim1;
                 i__4 = i__ + j * a_dim1;
                 i__5 = i__ + j * work_dim1;
-                z__1.r = a[i__4].r - work[i__5].r;
-                z__1.i = a[i__4].i - work[i__5].i; // , expr subst
-                a[i__3].r = z__1.r;
-                a[i__3].i = z__1.i; // , expr subst
+                z__1.real = a[i__4].real - work[i__5].real;
+                z__1.imag = a[i__4].imag - work[i__5].imag; // , expr subst
+                a[i__3].real = z__1.real;
+                a[i__3].imag = z__1.imag; // , expr subst
             }
         }
         i__1 = *n - *l;
@@ -1128,10 +1128,10 @@ void aocl_lapack_ztprfb(char *side, char *trans, char *direct, char *storev, aoc
                 i__3 = i__ + j * b_dim1;
                 i__4 = i__ + j * b_dim1;
                 i__5 = i__ + (*k - *l + j) * work_dim1;
-                z__1.r = b[i__4].r - work[i__5].r;
-                z__1.i = b[i__4].i - work[i__5].i; // , expr subst
-                b[i__3].r = z__1.r;
-                b[i__3].i = z__1.i; // , expr subst
+                z__1.real = b[i__4].real - work[i__5].real;
+                z__1.imag = b[i__4].imag - work[i__5].imag; // , expr subst
+                b[i__3].real = z__1.real;
+                b[i__3].imag = z__1.imag; // , expr subst
             }
         }
     }

@@ -4,8 +4,8 @@
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
  /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static dcomplex c_b1 = {{0.}, {0.}};
-static dcomplex c_b2 = {{1.}, {0.}};
+static dcomplex c_b1 = {0., 0.};
+static dcomplex c_b2 = {1., 0.};
 static aocl_int64_t c__1 = 1;
 static aocl_int64_t c_n1 = -1;
 static logical c_true = TRUE_;
@@ -405,12 +405,12 @@ void aocl_lapack_zlaqr2(logical *wantt, logical *wantz, aocl_int64_t *n, aocl_in
         /* ==== Workspace query call to ZGEHRD ==== */
         i__1 = jw - 1;
         aocl_lapack_zgehrd(&jw, &c__1, &i__1, &t[t_offset], ldt, &work[1], &work[1], &c_n1, &info);
-        lwk1 = (integer)work[1].r;
+        lwk1 = (integer)work[1].real;
         /* ==== Workspace query call to ZUNMHR ==== */
         i__1 = jw - 1;
         aocl_lapack_zunmhr("R", "N", &jw, &jw, &c__1, &i__1, &t[t_offset], ldt, &work[1],
                            &v[v_offset], ldv, &work[1], &c_n1, &info);
-        lwk2 = (integer)work[1].r;
+        lwk2 = (integer)work[1].real;
         /* ==== Optimal workspace ==== */
         lwkopt = jw + fla_max(lwk1, lwk2);
     }
@@ -418,10 +418,10 @@ void aocl_lapack_zlaqr2(logical *wantt, logical *wantz, aocl_int64_t *n, aocl_in
     if(*lwork == -1)
     {
         d__1 = (doublereal)lwkopt;
-        z__1.r = d__1;
-        z__1.i = 0.; // , expr subst
-        work[1].r = z__1.r;
-        work[1].i = z__1.i; // , expr subst
+        z__1.real = d__1;
+        z__1.imag = 0.; // , expr subst
+        work[1].real = z__1.real;
+        work[1].imag = z__1.imag; // , expr subst
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -429,8 +429,8 @@ void aocl_lapack_zlaqr2(logical *wantt, logical *wantz, aocl_int64_t *n, aocl_in
     /* ... for an empty active block ... ==== */
     *ns = 0;
     *nd = 0;
-    work[1].r = 1.;
-    work[1].i = 0.; // , expr subst
+    work[1].real = 1.;
+    work[1].imag = 0.; // , expr subst
     if(*ktop > *kbot)
     {
         AOCL_DTL_TRACE_LOG_EXIT
@@ -476,9 +476,9 @@ void aocl_lapack_zlaqr2(logical *wantt, logical *wantz, aocl_int64_t *n, aocl_in
         i__1 = kwtop + kwtop * h_dim1;
         d__5 = smlnum;
         d__6 = ulp
-               * ((d__1 = h__[i__1].r, f2c_dabs(d__1))
+               * ((d__1 = h__[i__1].real, f2c_dabs(d__1))
                   + (d__2 = d_imag(&h__[kwtop + kwtop * h_dim1]), f2c_dabs(d__2))); // , expr subst
-        if((d__3 = s.r, f2c_dabs(d__3)) + (d__4 = d_imag(&s), f2c_dabs(d__4))
+        if((d__3 = s.real, f2c_dabs(d__3)) + (d__4 = d_imag(&s), f2c_dabs(d__4))
            <= fla_max(d__5, d__6))
         {
             *ns = 0;
@@ -490,8 +490,8 @@ void aocl_lapack_zlaqr2(logical *wantt, logical *wantz, aocl_int64_t *n, aocl_in
                 h__[i__1].imag = 0.; // , expr subst
             }
         }
-        work[1].r = 1.;
-        work[1].i = 0.; // , expr subst
+        work[1].real = 1.;
+        work[1].imag = 0.; // , expr subst
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -516,18 +516,18 @@ void aocl_lapack_zlaqr2(logical *wantt, logical *wantz, aocl_int64_t *n, aocl_in
     {
         /* ==== Small spike tip deflation test ==== */
         i__2 = *ns + *ns * t_dim1;
-        foo = (d__1 = t[i__2].r, f2c_dabs(d__1))
+        foo = (d__1 = t[i__2].real, f2c_dabs(d__1))
               + (d__2 = d_imag(&t[*ns + *ns * t_dim1]), f2c_dabs(d__2));
         if(foo == 0.)
         {
-            foo = (d__1 = s.r, f2c_dabs(d__1)) + (d__2 = d_imag(&s), f2c_dabs(d__2));
+            foo = (d__1 = s.real, f2c_dabs(d__1)) + (d__2 = d_imag(&s), f2c_dabs(d__2));
         }
         i__2 = *ns * v_dim1 + 1;
         /* Computing MAX */
         d__5 = smlnum;
         d__6 = ulp * foo; // , expr subst
-        if(((d__1 = s.r, f2c_dabs(d__1)) + (d__2 = d_imag(&s), f2c_dabs(d__2)))
-               * ((d__3 = v[i__2].r, f2c_dabs(d__3))
+        if(((d__1 = s.real, f2c_dabs(d__1)) + (d__2 = d_imag(&s), f2c_dabs(d__2)))
+               * ((d__3 = v[i__2].real, f2c_dabs(d__3))
                   + (d__4 = d_imag(&v[*ns * v_dim1 + 1]), f2c_dabs(d__4)))
            <= fla_max(d__5, d__6))
         {
@@ -563,9 +563,9 @@ void aocl_lapack_zlaqr2(logical *wantt, logical *wantz, aocl_int64_t *n, aocl_in
             {
                 i__3 = j + j * t_dim1;
                 i__4 = ifst + ifst * t_dim1;
-                if((d__1 = t[i__3].r, f2c_dabs(d__1))
+                if((d__1 = t[i__3].real, f2c_dabs(d__1))
                        + (d__2 = d_imag(&t[j + j * t_dim1]), f2c_dabs(d__2))
-                   > (d__3 = t[i__4].r, f2c_dabs(d__3))
+                   > (d__3 = t[i__4].real, f2c_dabs(d__3))
                          + (d__4 = d_imag(&t[ifst + ifst * t_dim1]), f2c_dabs(d__4)))
                 {
                     ifst = j;
@@ -591,9 +591,9 @@ void aocl_lapack_zlaqr2(logical *wantt, logical *wantz, aocl_int64_t *n, aocl_in
         sh[i__2].imag = t[i__3].imag; // , expr subst
         /* L40: */
     }
-    if(*ns < jw || s.r == 0. && s.i == 0.)
+    if(*ns < jw || s.real == 0. && s.imag == 0.)
     {
-        if(*ns > 1 && (s.r != 0. || s.i != 0.))
+        if(*ns > 1 && (s.real != 0. || s.imag != 0.))
         {
             /* ==== Reflect spike back into lower triangle ==== */
             aocl_blas_zcopy(ns, &v[v_offset], ldv, &work[1], &c__1);
@@ -606,11 +606,11 @@ void aocl_lapack_zlaqr2(logical *wantt, logical *wantz, aocl_int64_t *n, aocl_in
                 work[i__2].imag = z__1.imag; // , expr subst
                 /* L50: */
             }
-            beta.r = work[1].r;
-            beta.i = work[1].i; // , expr subst
+            beta.real = work[1].real;
+            beta.imag = work[1].imag; // , expr subst
             aocl_lapack_zlarfg(ns, &beta, &work[2], &c__1, &tau);
-            work[1].r = 1.;
-            work[1].i = 0.; // , expr subst
+            work[1].real = 1.;
+            work[1].imag = 0.; // , expr subst
             i__1 = jw - 2;
             i__2 = jw - 2;
             aocl_lapack_zlaset("L", &i__1, &i__2, &c_b1, &c_b1, &t[t_dim1 + 3], ldt);
@@ -641,7 +641,7 @@ void aocl_lapack_zlaqr2(logical *wantt, logical *wantz, aocl_int64_t *n, aocl_in
         aocl_blas_zcopy(&i__1, &t[t_dim1 + 2], &i__2, &h__[kwtop + 1 + kwtop * h_dim1], &i__3);
         /* ==== Accumulate orthogonal matrix in order update */
         /* . H and Z, if requested. ==== */
-        if(*ns > 1 && (s.r != 0. || s.i != 0.))
+        if(*ns > 1 && (s.real != 0. || s.imag != 0.))
         {
             i__1 = *lwork - jw;
             aocl_lapack_zunmhr("R", "N", &jw, ns, &c__1, ns, &t[t_offset], ldt, &work[1],
@@ -717,10 +717,10 @@ void aocl_lapack_zlaqr2(logical *wantt, logical *wantz, aocl_int64_t *n, aocl_in
     *ns -= infqr;
     /* ==== Return optimal workspace. ==== */
     d__1 = (doublereal)lwkopt;
-    z__1.r = d__1;
-    z__1.i = 0.; // , expr subst
-    work[1].r = z__1.r;
-    work[1].i = z__1.i; // , expr subst
+    z__1.real = d__1;
+    z__1.imag = 0.; // , expr subst
+    work[1].real = z__1.real;
+    work[1].imag = z__1.imag; // , expr subst
     /* ==== End of ZLAQR2 ==== */
     AOCL_DTL_TRACE_LOG_EXIT
     return;

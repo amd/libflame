@@ -683,7 +683,7 @@ void aocl_lapack_cuncsd(char *jobu1, char *jobu2, char *jobv1t, char *jobv2t, ch
         i__4 = fla_max(i__5, i__6);
         aocl_lapack_cungqr(&i__1, &i__2, &i__3, &u1[u1_offset], &i__4, &u1[u1_offset], &work[1],
                            &c_n1, &childinfo);
-        lorgqrworkopt = (integer)work[1].r;
+        lorgqrworkopt = (integer)work[1].real;
         /* Computing MAX */
         i__1 = 1;
         i__2 = *m - *q; // , expr subst
@@ -701,7 +701,7 @@ void aocl_lapack_cuncsd(char *jobu1, char *jobu2, char *jobv1t, char *jobv2t, ch
         i__4 = fla_max(i__5, i__6);
         aocl_lapack_cunglq(&i__1, &i__2, &i__3, &u1[u1_offset], &i__4, &u1[u1_offset], &work[1],
                            &c_n1, &childinfo);
-        lorglqworkopt = (integer)work[1].r;
+        lorglqworkopt = (integer)work[1].real;
         /* Computing MAX */
         i__1 = 1;
         i__2 = *m - *q; // , expr subst
@@ -714,7 +714,7 @@ void aocl_lapack_cuncsd(char *jobu1, char *jobu2, char *jobv1t, char *jobv2t, ch
                            &x21[x21_offset], ldx21, &x22[x22_offset], ldx22, &theta[1], &theta[1],
                            &u1[u1_offset], &u2[u2_offset], &v1t[v1t_offset], &v2t[v2t_offset],
                            &work[1], &c_n1, &childinfo);
-        lorbdbworkopt = (integer)work[1].r;
+        lorbdbworkopt = (integer)work[1].real;
         lorbdbworkmin = lorbdbworkopt;
         /* Computing MAX */
         i__1 = iorgqr + lorgqrworkopt, i__2 = iorglq + lorglqworkopt;
@@ -728,8 +728,8 @@ void aocl_lapack_cuncsd(char *jobu1, char *jobu2, char *jobv1t, char *jobv2t, ch
         lworkmin = fla_max(i__1, i__2) - 1;
         lworkopt = fla_max(lworkopt, lworkmin);
         r__1 = aocl_lapack_sroundup_lwork(&lworkopt);
-        work[1].r = r__1;
-        work[1].i = 0.f; // , expr subst
+        work[1].real = r__1;
+        work[1].imag = 0.f; // , expr subst
         if(*lwork < lworkmin && !(lquery || lrquery))
         {
             *info = -22;
@@ -789,17 +789,17 @@ void aocl_lapack_cuncsd(char *jobu1, char *jobu2, char *jobv1t, char *jobv2t, ch
             aocl_lapack_clacpy("U", &i__1, &i__2, &x11[(x11_dim1 << 1) + 1], ldx11,
                                &v1t[(v1t_dim1 << 1) + 2], ldv1t);
             i__1 = v1t_dim1 + 1;
-            v1t[i__1].r = 1.f;
-            v1t[i__1].i = 0.f; // , expr subst
+            v1t[i__1].real = 1.f;
+            v1t[i__1].imag = 0.f; // , expr subst
             i__1 = *q;
             for(j = 2; j <= i__1; ++j)
             {
                 i__2 = j * v1t_dim1 + 1;
-                v1t[i__2].r = 0.f;
-                v1t[i__2].i = 0.f; // , expr subst
+                v1t[i__2].real = 0.f;
+                v1t[i__2].imag = 0.f; // , expr subst
                 i__2 = j + v1t_dim1;
-                v1t[i__2].r = 0.f;
-                v1t[i__2].i = 0.f; // , expr subst
+                v1t[i__2].real = 0.f;
+                v1t[i__2].imag = 0.f; // , expr subst
             }
             i__1 = *q - 1;
             i__2 = *q - 1;
@@ -852,17 +852,17 @@ void aocl_lapack_cuncsd(char *jobu1, char *jobu2, char *jobv1t, char *jobv2t, ch
             aocl_lapack_clacpy("L", &i__1, &i__2, &x11[x11_dim1 + 2], ldx11,
                                &v1t[(v1t_dim1 << 1) + 2], ldv1t);
             i__1 = v1t_dim1 + 1;
-            v1t[i__1].r = 1.f;
-            v1t[i__1].i = 0.f; // , expr subst
+            v1t[i__1].real = 1.f;
+            v1t[i__1].imag = 0.f; // , expr subst
             i__1 = *q;
             for(j = 2; j <= i__1; ++j)
             {
                 i__2 = j * v1t_dim1 + 1;
-                v1t[i__2].r = 0.f;
-                v1t[i__2].i = 0.f; // , expr subst
+                v1t[i__2].real = 0.f;
+                v1t[i__2].imag = 0.f; // , expr subst
                 i__2 = j + v1t_dim1;
-                v1t[i__2].r = 0.f;
-                v1t[i__2].i = 0.f; // , expr subst
+                v1t[i__2].real = 0.f;
+                v1t[i__2].imag = 0.f; // , expr subst
             }
             i__1 = *q - 1;
             i__2 = *q - 1;

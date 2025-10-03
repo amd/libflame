@@ -295,8 +295,8 @@ void aocl_lapack_zsytrf_rook(char *uplo, aocl_int64_t *n, dcomplex *a, aocl_int6
         i__1 = 1;
         i__2 = *n * nb; // , expr subst
         lwkopt = fla_max(i__1, i__2);
-        work[1].r = (doublereal)lwkopt;
-        work[1].i = 0.; // , expr subst
+        work[1].real = (doublereal)lwkopt;
+        work[1].imag = 0.; // , expr subst
     }
     if(*info != 0)
     {
@@ -423,8 +423,8 @@ void aocl_lapack_zsytrf_rook(char *uplo, aocl_int64_t *n, dcomplex *a, aocl_int6
         goto L20;
     }
 L40:
-    work[1].r = (doublereal)lwkopt;
-    work[1].i = 0.; // , expr subst
+    work[1].real = (doublereal)lwkopt;
+    work[1].imag = 0.; // , expr subst
     AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of ZSYTRF_ROOK */

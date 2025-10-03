@@ -4,7 +4,7 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static scomplex c_b1 = {{1.f}, {0.f}};
+static scomplex c_b1 = {1.f, 0.f};
 /* > \brief \b CHETRS2 */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -280,7 +280,7 @@ void aocl_lapack_chetrs2(char *uplo, aocl_int64_t *n, aocl_int64_t *nrhs, scompl
             if(ipiv[i__] > 0)
             {
                 i__1 = i__ + i__ * a_dim1;
-                s = 1.f / a[i__1].r;
+                s = 1.f / a[i__1].real;
                 aocl_blas_csscal(nrhs, &s, &b[i__ + b_dim1], ldb);
             }
             else if(i__ > 1)
@@ -288,47 +288,47 @@ void aocl_lapack_chetrs2(char *uplo, aocl_int64_t *n, aocl_int64_t *nrhs, scompl
                 if(ipiv[i__ - 1] == ipiv[i__])
                 {
                     i__1 = i__;
-                    akm1k.r = work[i__1].r;
-                    akm1k.i = work[i__1].i; // , expr subst
+                    akm1k.real = work[i__1].real;
+                    akm1k.imag = work[i__1].imag; // , expr subst
                     c_div(&q__1, &a[i__ - 1 + (i__ - 1) * a_dim1], &akm1k);
-                    akm1.r = q__1.r;
-                    akm1.i = q__1.i; // , expr subst
+                    akm1.real = q__1.real;
+                    akm1.imag = q__1.imag; // , expr subst
                     r_cnjg(&q__2, &akm1k);
                     c_div(&q__1, &a[i__ + i__ * a_dim1], &q__2);
-                    ak.r = q__1.r;
-                    ak.i = q__1.i; // , expr subst
-                    q__2.r = akm1.r * ak.r - akm1.i * ak.i;
-                    q__2.i = akm1.r * ak.i + akm1.i * ak.r; // , expr subst
-                    q__1.r = q__2.r - 1.f;
-                    q__1.i = q__2.i - 0.f; // , expr subst
-                    denom.r = q__1.r;
-                    denom.i = q__1.i; // , expr subst
+                    ak.real = q__1.real;
+                    ak.imag = q__1.imag; // , expr subst
+                    q__2.real = akm1.real * ak.real - akm1.imag * ak.imag;
+                    q__2.imag = akm1.real * ak.imag + akm1.imag * ak.real; // , expr subst
+                    q__1.real = q__2.real - 1.f;
+                    q__1.imag = q__2.imag - 0.f; // , expr subst
+                    denom.real = q__1.real;
+                    denom.imag = q__1.imag; // , expr subst
                     i__1 = *nrhs;
                     for(j = 1; j <= i__1; ++j)
                     {
                         c_div(&q__1, &b[i__ - 1 + j * b_dim1], &akm1k);
-                        bkm1.r = q__1.r;
-                        bkm1.i = q__1.i; // , expr subst
+                        bkm1.real = q__1.real;
+                        bkm1.imag = q__1.imag; // , expr subst
                         r_cnjg(&q__2, &akm1k);
                         c_div(&q__1, &b[i__ + j * b_dim1], &q__2);
-                        bk.r = q__1.r;
-                        bk.i = q__1.i; // , expr subst
+                        bk.real = q__1.real;
+                        bk.imag = q__1.imag; // , expr subst
                         i__2 = i__ - 1 + j * b_dim1;
-                        q__3.r = ak.r * bkm1.r - ak.i * bkm1.i;
-                        q__3.i = ak.r * bkm1.i + ak.i * bkm1.r; // , expr subst
-                        q__2.r = q__3.r - bk.r;
-                        q__2.i = q__3.i - bk.i; // , expr subst
+                        q__3.real = ak.real * bkm1.real - ak.imag * bkm1.imag;
+                        q__3.imag = ak.real * bkm1.imag + ak.imag * bkm1.real; // , expr subst
+                        q__2.real = q__3.real - bk.real;
+                        q__2.imag = q__3.imag - bk.imag; // , expr subst
                         c_div(&q__1, &q__2, &denom);
-                        b[i__2].r = q__1.r;
-                        b[i__2].i = q__1.i; // , expr subst
+                        b[i__2].real = q__1.real;
+                        b[i__2].imag = q__1.imag; // , expr subst
                         i__2 = i__ + j * b_dim1;
-                        q__3.r = akm1.r * bk.r - akm1.i * bk.i;
-                        q__3.i = akm1.r * bk.i + akm1.i * bk.r; // , expr subst
-                        q__2.r = q__3.r - bkm1.r;
-                        q__2.i = q__3.i - bkm1.i; // , expr subst
+                        q__3.real = akm1.real * bk.real - akm1.imag * bk.imag;
+                        q__3.imag = akm1.real * bk.imag + akm1.imag * bk.real; // , expr subst
+                        q__2.real = q__3.real - bkm1.real;
+                        q__2.imag = q__3.imag - bkm1.imag; // , expr subst
                         c_div(&q__1, &q__2, &denom);
-                        b[i__2].r = q__1.r;
-                        b[i__2].i = q__1.i; // , expr subst
+                        b[i__2].real = q__1.real;
+                        b[i__2].imag = q__1.imag; // , expr subst
                         /* L15: */
                     }
                     --i__;
@@ -405,53 +405,53 @@ void aocl_lapack_chetrs2(char *uplo, aocl_int64_t *n, aocl_int64_t *nrhs, scompl
             if(ipiv[i__] > 0)
             {
                 i__1 = i__ + i__ * a_dim1;
-                s = 1.f / a[i__1].r;
+                s = 1.f / a[i__1].real;
                 aocl_blas_csscal(nrhs, &s, &b[i__ + b_dim1], ldb);
             }
             else
             {
                 i__1 = i__;
-                akm1k.r = work[i__1].r;
-                akm1k.i = work[i__1].i; // , expr subst
+                akm1k.real = work[i__1].real;
+                akm1k.imag = work[i__1].imag; // , expr subst
                 r_cnjg(&q__2, &akm1k);
                 c_div(&q__1, &a[i__ + i__ * a_dim1], &q__2);
-                akm1.r = q__1.r;
-                akm1.i = q__1.i; // , expr subst
+                akm1.real = q__1.real;
+                akm1.imag = q__1.imag; // , expr subst
                 c_div(&q__1, &a[i__ + 1 + (i__ + 1) * a_dim1], &akm1k);
-                ak.r = q__1.r;
-                ak.i = q__1.i; // , expr subst
-                q__2.r = akm1.r * ak.r - akm1.i * ak.i;
-                q__2.i = akm1.r * ak.i + akm1.i * ak.r; // , expr subst
-                q__1.r = q__2.r - 1.f;
-                q__1.i = q__2.i - 0.f; // , expr subst
-                denom.r = q__1.r;
-                denom.i = q__1.i; // , expr subst
+                ak.real = q__1.real;
+                ak.imag = q__1.imag; // , expr subst
+                q__2.real = akm1.real * ak.real - akm1.imag * ak.imag;
+                q__2.imag = akm1.real * ak.imag + akm1.imag * ak.real; // , expr subst
+                q__1.real = q__2.real - 1.f;
+                q__1.imag = q__2.imag - 0.f; // , expr subst
+                denom.real = q__1.real;
+                denom.imag = q__1.imag; // , expr subst
                 i__1 = *nrhs;
                 for(j = 1; j <= i__1; ++j)
                 {
                     r_cnjg(&q__2, &akm1k);
                     c_div(&q__1, &b[i__ + j * b_dim1], &q__2);
-                    bkm1.r = q__1.r;
-                    bkm1.i = q__1.i; // , expr subst
+                    bkm1.real = q__1.real;
+                    bkm1.imag = q__1.imag; // , expr subst
                     c_div(&q__1, &b[i__ + 1 + j * b_dim1], &akm1k);
-                    bk.r = q__1.r;
-                    bk.i = q__1.i; // , expr subst
+                    bk.real = q__1.real;
+                    bk.imag = q__1.imag; // , expr subst
                     i__2 = i__ + j * b_dim1;
-                    q__3.r = ak.r * bkm1.r - ak.i * bkm1.i;
-                    q__3.i = ak.r * bkm1.i + ak.i * bkm1.r; // , expr subst
-                    q__2.r = q__3.r - bk.r;
-                    q__2.i = q__3.i - bk.i; // , expr subst
+                    q__3.real = ak.real * bkm1.real - ak.imag * bkm1.imag;
+                    q__3.imag = ak.real * bkm1.imag + ak.imag * bkm1.real; // , expr subst
+                    q__2.real = q__3.real - bk.real;
+                    q__2.imag = q__3.imag - bk.imag; // , expr subst
                     c_div(&q__1, &q__2, &denom);
-                    b[i__2].r = q__1.r;
-                    b[i__2].i = q__1.i; // , expr subst
+                    b[i__2].real = q__1.real;
+                    b[i__2].imag = q__1.imag; // , expr subst
                     i__2 = i__ + 1 + j * b_dim1;
-                    q__3.r = akm1.r * bk.r - akm1.i * bk.i;
-                    q__3.i = akm1.r * bk.i + akm1.i * bk.r; // , expr subst
-                    q__2.r = q__3.r - bkm1.r;
-                    q__2.i = q__3.i - bkm1.i; // , expr subst
+                    q__3.real = akm1.real * bk.real - akm1.imag * bk.imag;
+                    q__3.imag = akm1.real * bk.imag + akm1.imag * bk.real; // , expr subst
+                    q__2.real = q__3.real - bkm1.real;
+                    q__2.imag = q__3.imag - bkm1.imag; // , expr subst
                     c_div(&q__1, &q__2, &denom);
-                    b[i__2].r = q__1.r;
-                    b[i__2].i = q__1.i; // , expr subst
+                    b[i__2].real = q__1.real;
+                    b[i__2].imag = q__1.imag; // , expr subst
                     /* L25: */
                 }
                 ++i__;

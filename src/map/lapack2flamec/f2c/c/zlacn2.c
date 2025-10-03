@@ -195,10 +195,10 @@ void aocl_lapack_zlacn2(aocl_int64_t *n, dcomplex *v, dcomplex *x, doublereal *e
         {
             i__2 = i__;
             d__1 = 1. / (doublereal)(*n);
-            z__1.r = d__1;
-            z__1.i = 0.; // , expr subst
-            x[i__2].r = z__1.r;
-            x[i__2].i = z__1.i; // , expr subst
+            z__1.real = d__1;
+            z__1.imag = 0.; // , expr subst
+            x[i__2].real = z__1.real;
+            x[i__2].imag = z__1.imag; // , expr subst
             /* L10: */
         }
         *kase = 1;
@@ -224,8 +224,8 @@ void aocl_lapack_zlacn2(aocl_int64_t *n, dcomplex *v, dcomplex *x, doublereal *e
 L20:
     if(*n == 1)
     {
-        v[1].r = x[1].r;
-        v[1].i = x[1].i; // , expr subst
+        v[1].real = x[1].real;
+        v[1].imag = x[1].imag; // , expr subst
         *est = z_abs(&v[1]);
         /* ... QUIT */
         goto L130;
@@ -336,10 +336,10 @@ L100:
     {
         i__2 = i__;
         d__1 = altsgn * ((doublereal)(i__ - 1) / (doublereal)(*n - 1) + 1.);
-        z__1.r = d__1;
-        z__1.i = 0.; // , expr subst
-        x[i__2].r = z__1.r;
-        x[i__2].i = z__1.i; // , expr subst
+        z__1.real = d__1;
+        z__1.imag = 0.; // , expr subst
+        x[i__2].real = z__1.real;
+        x[i__2].imag = z__1.imag; // , expr subst
         altsgn = -altsgn;
         /* L110: */
     }

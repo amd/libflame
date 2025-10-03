@@ -213,11 +213,11 @@ void aocl_lapack_zgtsv(aocl_int64_t *n, aocl_int64_t *nrhs, dcomplex *dl, dcompl
     for(k = 1; k <= i__1; ++k)
     {
         i__2 = k;
-        if(dl[i__2].r == 0. && dl[i__2].i == 0.)
+        if(dl[i__2].real == 0. && dl[i__2].imag == 0.)
         {
             /* Subdiagonal is zero, no elimination is required. */
             i__2 = k;
-            if(d__[i__2].r == 0. && d__[i__2].i == 0.)
+            if(d__[i__2].real == 0. && d__[i__2].imag == 0.)
             {
                 /* Diagonal is zero: set INFO = K and return;
                 a unique */
@@ -231,8 +231,8 @@ void aocl_lapack_zgtsv(aocl_int64_t *n, aocl_int64_t *nrhs, dcomplex *dl, dcompl
         {
             i__2 = k;
             i__3 = k;
-            if((d__1 = d__[i__2].r, f2c_dabs(d__1)) + (d__2 = d_imag(&d__[k]), f2c_dabs(d__2))
-               >= (d__3 = dl[i__3].r, f2c_dabs(d__3)) + (d__4 = d_imag(&dl[k]), f2c_dabs(d__4)))
+            if((d__1 = d__[i__2].real, f2c_dabs(d__1)) + (d__2 = d_imag(&d__[k]), f2c_dabs(d__2))
+               >= (d__3 = dl[i__3].real, f2c_dabs(d__3)) + (d__4 = d_imag(&dl[k]), f2c_dabs(d__4)))
             {
                 /* No row interchange required */
                 z_div(&z__1, &dl[k], &d__[k]);
@@ -283,12 +283,12 @@ void aocl_lapack_zgtsv(aocl_int64_t *n, aocl_int64_t *nrhs, dcomplex *dl, dcompl
                 temp.imag = d__[i__2].imag; // , expr subst
                 i__2 = k + 1;
                 i__3 = k;
-                z__2.r = mult.r * temp.r - mult.i * temp.i;
-                z__2.i = mult.r * temp.i + mult.i * temp.r; // , expr subst
-                z__1.r = du[i__3].r - z__2.r;
-                z__1.i = du[i__3].i - z__2.i; // , expr subst
-                d__[i__2].r = z__1.r;
-                d__[i__2].i = z__1.i; // , expr subst
+                z__2.real = mult.real * temp.real - mult.imag * temp.imag;
+                z__2.imag = mult.real * temp.imag + mult.imag * temp.real; // , expr subst
+                z__1.real = du[i__3].real - z__2.real;
+                z__1.imag = du[i__3].imag - z__2.imag; // , expr subst
+                d__[i__2].real = z__1.real;
+                d__[i__2].imag = z__1.imag; // , expr subst
                 if(k < *n - 1)
                 {
                     i__2 = k;
@@ -299,10 +299,10 @@ void aocl_lapack_zgtsv(aocl_int64_t *n, aocl_int64_t *nrhs, dcomplex *dl, dcompl
                     z__2.real = -mult.real;
                     z__2.imag = -mult.imag; // , expr subst
                     i__3 = k;
-                    z__1.r = z__2.r * dl[i__3].r - z__2.i * dl[i__3].i;
-                    z__1.i = z__2.r * dl[i__3].i + z__2.i * dl[i__3].r; // , expr subst
-                    du[i__2].r = z__1.r;
-                    du[i__2].i = z__1.i; // , expr subst
+                    z__1.real = z__2.real * dl[i__3].real - z__2.imag * dl[i__3].imag;
+                    z__1.imag = z__2.real * dl[i__3].imag + z__2.imag * dl[i__3].real; // , expr subst
+                    du[i__2].real = z__1.real;
+                    du[i__2].imag = z__1.imag; // , expr subst
                 }
                 i__2 = k;
                 du[i__2].real = temp.real;
@@ -332,7 +332,7 @@ void aocl_lapack_zgtsv(aocl_int64_t *n, aocl_int64_t *nrhs, dcomplex *dl, dcompl
         /* L30: */
     }
     i__1 = *n;
-    if(d__[i__1].r == 0. && d__[i__1].i == 0.)
+    if(d__[i__1].real == 0. && d__[i__1].imag == 0.)
     {
         *info = *n;
         AOCL_DTL_TRACE_LOG_EXIT
@@ -344,8 +344,8 @@ void aocl_lapack_zgtsv(aocl_int64_t *n, aocl_int64_t *nrhs, dcomplex *dl, dcompl
     {
         i__2 = *n + j * b_dim1;
         z_div(&z__1, &b[*n + j * b_dim1], &d__[*n]);
-        b[i__2].r = z__1.r;
-        b[i__2].i = z__1.i; // , expr subst
+        b[i__2].real = z__1.real;
+        b[i__2].imag = z__1.imag; // , expr subst
         if(*n > 1)
         {
             i__2 = *n - 1 + j * b_dim1;

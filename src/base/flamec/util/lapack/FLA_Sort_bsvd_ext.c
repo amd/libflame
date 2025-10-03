@@ -208,7 +208,7 @@ FLA_Error FLA_Sort_bsvd_ext_f_opd( fla_dim_t m_s, double* s, fla_dim_t inc_s,
                                    fla_dim_t n_C, double* C, fla_dim_t rs_C, fla_dim_t cs_C )
 {
     fla_dim_t    i, ii, j, k;
-    float  p;
+    double  p;
     FLA_SORT_BSVD_EXT_BODY( FORWARD, bl1_dswapv );
     return FLA_SUCCESS;
 }

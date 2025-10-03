@@ -432,8 +432,8 @@ void aocl_lapack_zsysvx(char *fact, char *uplo, aocl_int64_t *n, aocl_int64_t *n
             i__2 = *n * nb; // , expr subst
             lwkopt = fla_max(i__1, i__2);
         }
-        work[1].r = (doublereal)lwkopt;
-        work[1].i = 0.; // , expr subst
+        work[1].real = (doublereal)lwkopt;
+        work[1].imag = 0.; // , expr subst
     }
     if(*info != 0)
     {
@@ -477,8 +477,8 @@ void aocl_lapack_zsysvx(char *fact, char *uplo, aocl_int64_t *n, aocl_int64_t *n
     {
         *info = *n + 1;
     }
-    work[1].r = (doublereal)lwkopt;
-    work[1].i = 0.; // , expr subst
+    work[1].real = (doublereal)lwkopt;
+    work[1].imag = 0.; // , expr subst
     AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of ZSYSVX */

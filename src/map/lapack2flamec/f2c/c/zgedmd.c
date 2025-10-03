@@ -4,8 +4,8 @@
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
  /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static dcomplex c_b1 = {{1.}, {0.}};
-static dcomplex c_b2 = {{0.}, {0.}};
+static dcomplex c_b1 = {1., 0.};
+static dcomplex c_b2 = {0., 0.};
 static aocl_int64_t c_n1 = -1;
 static aocl_int64_t c__1 = 1;
 static aocl_int64_t c__0 = 0;
@@ -715,10 +715,10 @@ void aocl_lapack_zgedmd(char *jobs, char *jobz, char *jobr, char *jobf, aocl_int
             {
                 iwork[1] = 1;
                 rwork[1] = 1.;
-                zwork[1].r = 2.;
-                zwork[1].i = 0.; // , expr subst
-                zwork[2].r = 2.;
-                zwork[2].i = 0.; // , expr subst
+                zwork[1].real = 2.;
+                zwork[1].imag = 0.; // , expr subst
+                zwork[2].real = 2.;
+                zwork[2].imag = 0.; // , expr subst
             }
             else
             {
@@ -750,7 +750,7 @@ void aocl_lapack_zgedmd(char *jobs, char *jobz, char *jobr, char *jobf, aocl_int
             {
                 aocl_lapack_zgesvd("O", "S", m, n, &x[x_offset], ldx, &rwork[1], &b[b_offset], ldb,
                                    &w[w_offset], ldw, &zwork[1], &c_n1, rdummy, &info1);
-                lwrsvd = (integer)zwork[1].r;
+                lwrsvd = (integer)zwork[1].real;
                 olwork = fla_max(2, lwrsvd);
             }
         }
@@ -784,7 +784,7 @@ void aocl_lapack_zgedmd(char *jobs, char *jobz, char *jobr, char *jobf, aocl_int
                                    &w[w_offset], ldw, &zwork[1], &c_n1, rdummy, &iwork[1], &info1);
                 /* Computing MAX */
                 i__1 = mwrsdd;
-                i__2 = (integer)zwork[1].r; // , expr subst
+                i__2 = (integer)zwork[1].real; // , expr subst
                 lwrsdd = fla_max(i__1, i__2);
                 /* Possible bug in ZGESDD optimal workspace size. */
                 olwork = fla_max(2, lwrsdd);
@@ -796,7 +796,7 @@ void aocl_lapack_zgedmd(char *jobs, char *jobz, char *jobr, char *jobf, aocl_int
                                 &z__[z_offset], ldz, &w[w_offset], ldw, &numrnk, &iwork[1], &c_n1,
                                 &zwork[1], &c_n1, rdummy, &c_n1, &info1);
             iminwr = iwork[1];
-            mwrsvq = (integer)zwork[2].r;
+            mwrsvq = (integer)zwork[2].real;
             mlwork = fla_max(2, mwrsvq);
             /* Computing MAX */
             i__1 = mlrwrk;
@@ -804,7 +804,7 @@ void aocl_lapack_zgedmd(char *jobs, char *jobz, char *jobr, char *jobf, aocl_int
             mlrwrk = fla_max(i__1, i__2);
             if(lquery)
             {
-                lwrsvq = (integer)zwork[1].r;
+                lwrsvq = (integer)zwork[1].real;
                 olwork = fla_max(2, lwrsvq);
             }
         }
@@ -815,7 +815,7 @@ void aocl_lapack_zgedmd(char *jobs, char *jobz, char *jobr, char *jobf, aocl_int
                                &z__[z_offset], ldz, &w[w_offset], ldw, &zwork[1], &c_n1, rdummy,
                                &c_n1, &iwork[1], &info1);
             iminwr = iwork[1];
-            mwrsvj = (integer)zwork[2].r;
+            mwrsvj = (integer)zwork[2].real;
             mlwork = fla_max(2, mwrsvj);
             /* Computing MAX */
             /* Computing MAX */
@@ -826,7 +826,7 @@ void aocl_lapack_zgedmd(char *jobs, char *jobz, char *jobr, char *jobf, aocl_int
             mlrwrk = fla_max(i__1, i__2);
             if(lquery)
             {
-                lwrsvj = (integer)zwork[1].r;
+                lwrsvj = (integer)zwork[1].real;
                 olwork = fla_max(2, lwrsvj);
             }
         }
@@ -852,7 +852,7 @@ void aocl_lapack_zgedmd(char *jobs, char *jobz, char *jobr, char *jobf, aocl_int
         {
             aocl_lapack_zgeev("N", jobzl, n, &s[s_offset], lds, &eigs[1], &w[w_offset], ldw,
                               &w[w_offset], ldw, &zwork[1], &c_n1, &rwork[1], &info1);
-            lwrkev = (integer)zwork[1].r;
+            lwrkev = (integer)zwork[1].real;
             olwork = fla_max(olwork, lwrkev);
         }
         if(*liwork < iminwr && !lquery)
@@ -880,10 +880,10 @@ void aocl_lapack_zgedmd(char *jobs, char *jobz, char *jobr, char *jobf, aocl_int
         /* Return minimal and optimal workspace sizes */
         iwork[1] = (aocl_int_t)(iminwr);
         rwork[1] = (doublereal)mlrwrk;
-        zwork[1].r = (doublereal)mlwork;
-        zwork[1].i = 0.; // , expr subst
-        zwork[2].r = (doublereal)olwork;
-        zwork[2].i = 0.; // , expr subst
+        zwork[1].real = (doublereal)mlwork;
+        zwork[1].imag = 0.; // , expr subst
+        zwork[2].real = (doublereal)olwork;
+        zwork[2].imag = 0.; // , expr subst
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -1240,13 +1240,13 @@ void aocl_lapack_zgedmd(char *jobs, char *jobz, char *jobr, char *jobf, aocl_int
             {
                 i__3 = i__ + j * w_dim1;
                 i__4 = *n + i__;
-                q__2.r = rwork[i__4];
-                q__2.i = 0.; // , expr subst
+                q__2.real = rwork[i__4];
+                q__2.imag = 0.; // , expr subst
                 i__5 = i__ + j * w_dim1;
-                q__1.r = q__2.r * w[i__5].r - q__2.i * w[i__5].i;
-                q__1.i = q__2.r * w[i__5].i + q__2.i * w[i__5].r; // , expr subst
-                w[i__3].r = q__1.r;
-                w[i__3].i = q__1.i; // , expr subst
+                q__1.real = q__2.real * w[i__5].real - q__2.imag * w[i__5].imag;
+                q__1.imag = q__2.real * w[i__5].imag + q__2.imag * w[i__5].real; // , expr subst
+                w[i__3].real = q__1.real;
+                w[i__3].imag = q__1.imag; // , expr subst
             }
         }
     }
@@ -1392,8 +1392,8 @@ void aocl_lapack_zgedmd(char *jobs, char *jobz, char *jobr, char *jobf, aocl_int
             {
                 /* ! BLAS CALL */
                 i__2 = i__;
-                q__1.r = -eigs[i__2].r;
-                q__1.i = -eigs[i__2].i; // , expr subst
+                q__1.real = -eigs[i__2].real;
+                q__1.imag = -eigs[i__2].imag; // , expr subst
                 aocl_blas_zaxpy(m, &q__1, &z__[i__ * z_dim1 + 1], &c__1, &y[i__ * y_dim1 + 1],
                                 &c__1);
                 /* Y(1:M,i) = Y(1:M,i) - EIGS(i) * Z(1:M,i) ! INTR */

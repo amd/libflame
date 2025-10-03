@@ -298,14 +298,14 @@ void aocl_lapack_claein(logical *rightv, logical *noinit, aocl_int64_t *n, scomp
             ei.real = h__[i__2].real;
             ei.imag = h__[i__2].imag; // , expr subst
             i__2 = i__ + i__ * b_dim1;
-            if((r__1 = b[i__2].r, f2c_abs(r__1))
+            if((r__1 = b[i__2].real, f2c_abs(r__1))
                    + (r__2 = r_imag(&b[i__ + i__ * b_dim1]), f2c_abs(r__2))
-               < (r__3 = ei.r, f2c_abs(r__3)) + (r__4 = r_imag(&ei), f2c_abs(r__4)))
+               < (r__3 = ei.real, f2c_abs(r__3)) + (r__4 = r_imag(&ei), f2c_abs(r__4)))
             {
                 /* Interchange rows and eliminate. */
                 cladiv_f2c_(&q__1, &b[i__ + i__ * b_dim1], &ei);
-                x.r = q__1.r;
-                x.i = q__1.i; // , expr subst
+                x.real = q__1.real;
+                x.imag = q__1.imag; // , expr subst
                 i__2 = i__ + i__ * b_dim1;
                 b[i__2].real = ei.real;
                 b[i__2].imag = ei.imag; // , expr subst
@@ -333,16 +333,16 @@ void aocl_lapack_claein(logical *rightv, logical *noinit, aocl_int64_t *n, scomp
             {
                 /* Eliminate without interchange. */
                 i__2 = i__ + i__ * b_dim1;
-                if(b[i__2].r == 0.f && b[i__2].i == 0.f)
+                if(b[i__2].real == 0.f && b[i__2].imag == 0.f)
                 {
                     i__3 = i__ + i__ * b_dim1;
                     b[i__3].real = *eps3;
                     b[i__3].imag = 0.f; // , expr subst
                 }
                 cladiv_f2c_(&q__1, &ei, &b[i__ + i__ * b_dim1]);
-                x.r = q__1.r;
-                x.i = q__1.i; // , expr subst
-                if(x.r != 0.f || x.i != 0.f)
+                x.real = q__1.real;
+                x.imag = q__1.imag; // , expr subst
+                if(x.real != 0.f || x.imag != 0.f)
                 {
                     i__2 = *n;
                     for(j = i__ + 1; j <= i__2; ++j)
@@ -363,7 +363,7 @@ void aocl_lapack_claein(logical *rightv, logical *noinit, aocl_int64_t *n, scomp
             /* L60: */
         }
         i__1 = *n + *n * b_dim1;
-        if(b[i__1].r == 0.f && b[i__1].i == 0.f)
+        if(b[i__1].real == 0.f && b[i__1].imag == 0.f)
         {
             i__2 = *n + *n * b_dim1;
             b[i__2].real = *eps3;
@@ -381,14 +381,14 @@ void aocl_lapack_claein(logical *rightv, logical *noinit, aocl_int64_t *n, scomp
             ej.real = h__[i__1].real;
             ej.imag = h__[i__1].imag; // , expr subst
             i__1 = j + j * b_dim1;
-            if((r__1 = b[i__1].r, f2c_abs(r__1))
+            if((r__1 = b[i__1].real, f2c_abs(r__1))
                    + (r__2 = r_imag(&b[j + j * b_dim1]), f2c_abs(r__2))
-               < (r__3 = ej.r, f2c_abs(r__3)) + (r__4 = r_imag(&ej), f2c_abs(r__4)))
+               < (r__3 = ej.real, f2c_abs(r__3)) + (r__4 = r_imag(&ej), f2c_abs(r__4)))
             {
                 /* Interchange columns and eliminate. */
                 cladiv_f2c_(&q__1, &b[j + j * b_dim1], &ej);
-                x.r = q__1.r;
-                x.i = q__1.i; // , expr subst
+                x.real = q__1.real;
+                x.imag = q__1.imag; // , expr subst
                 i__1 = j + j * b_dim1;
                 b[i__1].real = ej.real;
                 b[i__1].imag = ej.imag; // , expr subst
@@ -416,16 +416,16 @@ void aocl_lapack_claein(logical *rightv, logical *noinit, aocl_int64_t *n, scomp
             {
                 /* Eliminate without interchange. */
                 i__1 = j + j * b_dim1;
-                if(b[i__1].r == 0.f && b[i__1].i == 0.f)
+                if(b[i__1].real == 0.f && b[i__1].imag == 0.f)
                 {
                     i__2 = j + j * b_dim1;
                     b[i__2].real = *eps3;
                     b[i__2].imag = 0.f; // , expr subst
                 }
                 cladiv_f2c_(&q__1, &ej, &b[j + j * b_dim1]);
-                x.r = q__1.r;
-                x.i = q__1.i; // , expr subst
-                if(x.r != 0.f || x.i != 0.f)
+                x.real = q__1.real;
+                x.imag = q__1.imag; // , expr subst
+                if(x.real != 0.f || x.imag != 0.f)
                 {
                     i__1 = j - 1;
                     for(i__ = 1; i__ <= i__1; ++i__)
@@ -446,7 +446,7 @@ void aocl_lapack_claein(logical *rightv, logical *noinit, aocl_int64_t *n, scomp
             /* L90: */
         }
         i__1 = b_dim1 + 1;
-        if(b[i__1].r == 0.f && b[i__1].i == 0.f)
+        if(b[i__1].real == 0.f && b[i__1].imag == 0.f)
         {
             i__2 = b_dim1 + 1;
             b[i__2].real = *eps3;
@@ -496,7 +496,7 @@ void aocl_lapack_claein(logical *rightv, logical *noinit, aocl_int64_t *n, scomp
 L120: /* Normalize eigenvector. */
     i__ = aocl_blas_icamax(n, &v[1], &c__1);
     i__1 = i__;
-    r__3 = 1.f / ((r__1 = v[i__1].r, f2c_abs(r__1)) + (r__2 = r_imag(&v[i__]), f2c_abs(r__2)));
+    r__3 = 1.f / ((r__1 = v[i__1].real, f2c_abs(r__1)) + (r__2 = r_imag(&v[i__]), f2c_abs(r__2)));
     aocl_blas_csscal(n, &r__3, &v[1], &c__1);
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
     return;

@@ -25,18 +25,18 @@ int zrotg_(dcomplex *ca, dcomplex *cb, doublereal * c__, dcomplex *s)
     goto L20;
 L10:
     scale = z_f2c_abs(ca) + z_f2c_abs(cb);
-    z__2.r = scale, z__2.i = 0.;
+    z__2.real = scale, z__2.imag = 0.;
     z_div(&z__1, ca, &z__2);
     /* Computing 2nd power */
     d__1 = z_f2c_abs(&z__1);
-    z__4.r = scale, z__4.i = 0.;
+    z__4.real = scale, z__4.imag = 0.;
     z_div(&z__3, cb, &z__4);
     /* Computing 2nd power */
     d__2 = z_f2c_abs(&z__3);
     norm = scale * sqrt(d__1 * d__1 + d__2 * d__2);
     d__1 = z_f2c_abs(ca);
-    z__1.r = ca->r / d__1, z__1.i = ca->i / d__1;
-    alpha.r = z__1.r, alpha.i = z__1.i;
+    z__1.real = ca->real / d__1, z__1.imag = ca->imag / d__1;
+    alpha.real = z__1.real, alpha.imag = z__1.imag;
     *c__ = z_f2c_abs(ca) / norm;
     d_cnjg(&z__3, cb);
     z__2.real = alpha.real * z__3.real - alpha.imag * z__3.imag, z__2.imag = alpha.real * z__3.imag + alpha.imag * z__3.real;

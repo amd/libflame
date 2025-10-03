@@ -4,8 +4,8 @@
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
  /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static scomplex c_b1 = {{0.f}, {0.f}};
-static scomplex c_b2 = {{1.f}, {0.f}};
+static scomplex c_b1 = {0.f, 0.f};
+static scomplex c_b2 = {1.f, 0.f};
 static aocl_int64_t c__1 = 1;
 static real c_b39 = -1.f;
 static real c_b42 = 1.f;
@@ -602,7 +602,7 @@ void aocl_lapack_ctgsja(char *jobu, char *jobv, char *jobq, aocl_int64_t *m, aoc
                 i__3 = i__ + (*n - *l + i__) * b_dim1;
                 b1 = b[i__3].real;
                 i__3 = j + (*n - *l + j) * b_dim1;
-                b3 = b[i__3].r;
+                b3 = b[i__3].real;
                 if(upper)
                 {
                     if(*k + i__ <= *m)
@@ -773,7 +773,7 @@ L50: /* If ERROR <= MIN(TOLA,TOLB), then the algorithm has converged. */
         i__2 = *k + i__ + (*n - *l + i__) * a_dim1;
         a1 = a[i__2].real;
         i__2 = i__ + (*n - *l + i__) * b_dim1;
-        b1 = b[i__2].r;
+        b1 = b[i__2].real;
         gamma = b1 / a1;
         if(gamma <= hugenum && gamma >= -hugenum)
         {

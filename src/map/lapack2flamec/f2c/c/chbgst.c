@@ -4,8 +4,8 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static scomplex c_b1 = {{0.f}, {0.f}};
-static scomplex c_b2 = {{1.f}, {0.f}};
+static scomplex c_b1 = {0.f, 0.f};
+static scomplex c_b2 = {1.f, 0.f};
 static aocl_int64_t c__1 = 1;
 /* > \brief \b CHBGST */
 /* =========== DOCUMENTATION =========== */
@@ -461,10 +461,10 @@ L10:
                     q__3.imag = ab[i__4].imag - q__4.imag; // , expr subst
                     r_cnjg(&q__7, &bb[k - i__ + kb1 + i__ * bb_dim1]);
                     i__6 = j - i__ + ka1 + i__ * ab_dim1;
-                    q__6.r = q__7.r * ab[i__6].r - q__7.i * ab[i__6].i;
-                    q__6.i = q__7.r * ab[i__6].i + q__7.i * ab[i__6].r; // , expr subst
-                    q__2.r = q__3.r - q__6.r;
-                    q__2.i = q__3.i - q__6.i; // , expr subst
+                    q__6.real = q__7.real * ab[i__6].real - q__7.imag * ab[i__6].imag;
+                    q__6.imag = q__7.real * ab[i__6].imag + q__7.imag * ab[i__6].real; // , expr subst
+                    q__2.real = q__3.real - q__6.real;
+                    q__2.imag = q__3.imag - q__6.imag; // , expr subst
                     i__7 = ka1 + i__ * ab_dim1;
                     r__1 = ab[i__7].real;
                     i__8 = j - i__ + kb1 + i__ * bb_dim1;
@@ -489,12 +489,12 @@ L10:
                     i__2 = j - k + ka1 + k * ab_dim1;
                     r_cnjg(&q__3, &bb[k - i__ + kb1 + i__ * bb_dim1]);
                     i__5 = j - i__ + ka1 + i__ * ab_dim1;
-                    q__2.r = q__3.r * ab[i__5].r - q__3.i * ab[i__5].i;
-                    q__2.i = q__3.r * ab[i__5].i + q__3.i * ab[i__5].r; // , expr subst
-                    q__1.r = ab[i__2].r - q__2.r;
-                    q__1.i = ab[i__2].i - q__2.i; // , expr subst
-                    ab[i__1].r = q__1.r;
-                    ab[i__1].i = q__1.i; // , expr subst
+                    q__2.real = q__3.real * ab[i__5].real - q__3.imag * ab[i__5].imag;
+                    q__2.imag = q__3.real * ab[i__5].imag + q__3.imag * ab[i__5].real; // , expr subst
+                    q__1.real = ab[i__2].real - q__2.real;
+                    q__1.imag = ab[i__2].imag - q__2.imag; // , expr subst
+                    ab[i__1].real = q__1.real;
+                    ab[i__1].imag = q__1.imag; // , expr subst
                     /* L50: */
                 }
                 /* L60: */
@@ -512,12 +512,12 @@ L10:
                     i__1 = k - j + ka1 + j * ab_dim1;
                     i__5 = k - i__ + kb1 + i__ * bb_dim1;
                     i__6 = i__ - j + ka1 + j * ab_dim1;
-                    q__2.r = bb[i__5].r * ab[i__6].r - bb[i__5].i * ab[i__6].i;
-                    q__2.i = bb[i__5].r * ab[i__6].i + bb[i__5].i * ab[i__6].r; // , expr subst
-                    q__1.r = ab[i__1].r - q__2.r;
-                    q__1.i = ab[i__1].i - q__2.i; // , expr subst
-                    ab[i__4].r = q__1.r;
-                    ab[i__4].i = q__1.i; // , expr subst
+                    q__2.real = bb[i__5].real * ab[i__6].real - bb[i__5].imag * ab[i__6].imag;
+                    q__2.imag = bb[i__5].real * ab[i__6].imag + bb[i__5].imag * ab[i__6].real; // , expr subst
+                    q__1.real = ab[i__1].real - q__2.real;
+                    q__1.imag = ab[i__1].imag - q__2.imag; // , expr subst
+                    ab[i__4].real = q__1.real;
+                    ab[i__4].imag = q__1.imag; // , expr subst
                     /* L70: */
                 }
                 /* L80: */
@@ -531,8 +531,8 @@ L10:
                 if(kbt > 0)
                 {
                     i__3 = *n - m;
-                    q__1.r = -1.f;
-                    q__1.i = -0.f; // , expr subst
+                    q__1.real = -1.f;
+                    q__1.imag = -0.f; // , expr subst
                     aocl_blas_cgerc(&i__3, &kbt, &q__1, &x[m + 1 + i__ * x_dim1], &c__1,
                                     &bb[kb1 - kbt + i__ * bb_dim1], &c__1,
                                     &x[m + 1 + (i__ - kbt) * x_dim1], ldx);
@@ -573,12 +573,12 @@ L10:
                     q__2.imag = rwork[i__4] * t.imag; // , expr subst
                     r_cnjg(&q__4, &work[i__ - k + *ka - m]);
                     i__1 = (i__ - k + *ka) * ab_dim1 + 1;
-                    q__3.r = q__4.r * ab[i__1].r - q__4.i * ab[i__1].i;
-                    q__3.i = q__4.r * ab[i__1].i + q__4.i * ab[i__1].r; // , expr subst
-                    q__1.r = q__2.r - q__3.r;
-                    q__1.i = q__2.i - q__3.i; // , expr subst
-                    work[i__2].r = q__1.r;
-                    work[i__2].i = q__1.i; // , expr subst
+                    q__3.real = q__4.real * ab[i__1].real - q__4.imag * ab[i__1].imag;
+                    q__3.imag = q__4.real * ab[i__1].imag + q__4.imag * ab[i__1].real; // , expr subst
+                    q__1.real = q__2.real - q__3.real;
+                    q__1.imag = q__2.imag - q__3.imag; // , expr subst
+                    work[i__2].real = q__1.real;
+                    work[i__2].imag = q__1.imag; // , expr subst
                     i__2 = (i__ - k + *ka) * ab_dim1 + 1;
                     i__4 = i__ - k + *ka - m;
                     q__2.real = work[i__4].real * t.real - work[i__4].imag * t.imag;
@@ -622,17 +622,17 @@ L10:
                 i__1 = j - m;
                 i__5 = j - m;
                 i__6 = (j + 1) * ab_dim1 + 1;
-                q__1.r = work[i__5].r * ab[i__6].r - work[i__5].i * ab[i__6].i;
-                q__1.i = work[i__5].r * ab[i__6].i + work[i__5].i * ab[i__6].r; // , expr subst
-                work[i__1].r = q__1.r;
-                work[i__1].i = q__1.i; // , expr subst
+                q__1.real = work[i__5].real * ab[i__6].real - work[i__5].imag * ab[i__6].imag;
+                q__1.imag = work[i__5].real * ab[i__6].imag + work[i__5].imag * ab[i__6].real; // , expr subst
+                work[i__1].real = q__1.real;
+                work[i__1].imag = q__1.imag; // , expr subst
                 i__1 = (j + 1) * ab_dim1 + 1;
                 i__5 = j - m;
                 i__6 = (j + 1) * ab_dim1 + 1;
-                q__1.r = rwork[i__5] * ab[i__6].r;
-                q__1.i = rwork[i__5] * ab[i__6].i; // , expr subst
-                ab[i__1].r = q__1.r;
-                ab[i__1].i = q__1.i; // , expr subst
+                q__1.real = rwork[i__5] * ab[i__6].real;
+                q__1.imag = rwork[i__5] * ab[i__6].imag; // , expr subst
+                ab[i__1].real = q__1.real;
+                ab[i__1].imag = q__1.imag; // , expr subst
                 /* L90: */
             }
             /* generate rotations in 1st set to annihilate elements which */
@@ -755,17 +755,17 @@ L10:
                 i__4 = j;
                 i__1 = j;
                 i__5 = (j + 1) * ab_dim1 + 1;
-                q__1.r = work[i__1].r * ab[i__5].r - work[i__1].i * ab[i__5].i;
-                q__1.i = work[i__1].r * ab[i__5].i + work[i__1].i * ab[i__5].r; // , expr subst
-                work[i__4].r = q__1.r;
-                work[i__4].i = q__1.i; // , expr subst
+                q__1.real = work[i__1].real * ab[i__5].real - work[i__1].imag * ab[i__5].imag;
+                q__1.imag = work[i__1].real * ab[i__5].imag + work[i__1].imag * ab[i__5].real; // , expr subst
+                work[i__4].real = q__1.real;
+                work[i__4].imag = q__1.imag; // , expr subst
                 i__4 = (j + 1) * ab_dim1 + 1;
                 i__1 = j;
                 i__5 = (j + 1) * ab_dim1 + 1;
-                q__1.r = rwork[i__1] * ab[i__5].r;
-                q__1.i = rwork[i__1] * ab[i__5].i; // , expr subst
-                ab[i__4].r = q__1.r;
-                ab[i__4].i = q__1.i; // , expr subst
+                q__1.real = rwork[i__1] * ab[i__5].real;
+                q__1.imag = rwork[i__1] * ab[i__5].imag; // , expr subst
+                ab[i__4].real = q__1.real;
+                ab[i__4].imag = q__1.imag; // , expr subst
                 /* L160: */
             }
             if(update)
@@ -928,10 +928,10 @@ L10:
                     q__3.imag = ab[i__1].imag - q__4.imag; // , expr subst
                     r_cnjg(&q__7, &bb[i__ - k + 1 + k * bb_dim1]);
                     i__6 = i__ - j + 1 + j * ab_dim1;
-                    q__6.r = q__7.r * ab[i__6].r - q__7.i * ab[i__6].i;
-                    q__6.i = q__7.r * ab[i__6].i + q__7.i * ab[i__6].r; // , expr subst
-                    q__2.r = q__3.r - q__6.r;
-                    q__2.i = q__3.i - q__6.i; // , expr subst
+                    q__6.real = q__7.real * ab[i__6].real - q__7.imag * ab[i__6].imag;
+                    q__6.imag = q__7.real * ab[i__6].imag + q__7.imag * ab[i__6].real; // , expr subst
+                    q__2.real = q__3.real - q__6.real;
+                    q__2.imag = q__3.imag - q__6.imag; // , expr subst
                     i__7 = i__ * ab_dim1 + 1;
                     r__1 = ab[i__7].real;
                     i__8 = i__ - j + 1 + j * bb_dim1;
@@ -956,12 +956,12 @@ L10:
                     i__3 = k - j + 1 + j * ab_dim1;
                     r_cnjg(&q__3, &bb[i__ - k + 1 + k * bb_dim1]);
                     i__5 = i__ - j + 1 + j * ab_dim1;
-                    q__2.r = q__3.r * ab[i__5].r - q__3.i * ab[i__5].i;
-                    q__2.i = q__3.r * ab[i__5].i + q__3.i * ab[i__5].r; // , expr subst
-                    q__1.r = ab[i__3].r - q__2.r;
-                    q__1.i = ab[i__3].i - q__2.i; // , expr subst
-                    ab[i__2].r = q__1.r;
-                    ab[i__2].i = q__1.i; // , expr subst
+                    q__2.real = q__3.real * ab[i__5].real - q__3.imag * ab[i__5].imag;
+                    q__2.imag = q__3.real * ab[i__5].imag + q__3.imag * ab[i__5].real; // , expr subst
+                    q__1.real = ab[i__3].real - q__2.real;
+                    q__1.imag = ab[i__3].imag - q__2.imag; // , expr subst
+                    ab[i__2].real = q__1.real;
+                    ab[i__2].imag = q__1.imag; // , expr subst
                     /* L280: */
                 }
                 /* L290: */
@@ -979,12 +979,12 @@ L10:
                     i__2 = j - k + 1 + k * ab_dim1;
                     i__5 = i__ - k + 1 + k * bb_dim1;
                     i__6 = j - i__ + 1 + i__ * ab_dim1;
-                    q__2.r = bb[i__5].r * ab[i__6].r - bb[i__5].i * ab[i__6].i;
-                    q__2.i = bb[i__5].r * ab[i__6].i + bb[i__5].i * ab[i__6].r; // , expr subst
-                    q__1.r = ab[i__2].r - q__2.r;
-                    q__1.i = ab[i__2].i - q__2.i; // , expr subst
-                    ab[i__1].r = q__1.r;
-                    ab[i__1].i = q__1.i; // , expr subst
+                    q__2.real = bb[i__5].real * ab[i__6].real - bb[i__5].imag * ab[i__6].imag;
+                    q__2.imag = bb[i__5].real * ab[i__6].imag + bb[i__5].imag * ab[i__6].real; // , expr subst
+                    q__1.real = ab[i__2].real - q__2.real;
+                    q__1.imag = ab[i__2].imag - q__2.imag; // , expr subst
+                    ab[i__1].real = q__1.real;
+                    ab[i__1].imag = q__1.imag; // , expr subst
                     /* L300: */
                 }
                 /* L310: */
@@ -1041,12 +1041,12 @@ L10:
                     q__2.imag = rwork[i__1] * t.imag; // , expr subst
                     r_cnjg(&q__4, &work[i__ - k + *ka - m]);
                     i__2 = ka1 + (i__ - k) * ab_dim1;
-                    q__3.r = q__4.r * ab[i__2].r - q__4.i * ab[i__2].i;
-                    q__3.i = q__4.r * ab[i__2].i + q__4.i * ab[i__2].r; // , expr subst
-                    q__1.r = q__2.r - q__3.r;
-                    q__1.i = q__2.i - q__3.i; // , expr subst
-                    work[i__3].r = q__1.r;
-                    work[i__3].i = q__1.i; // , expr subst
+                    q__3.real = q__4.real * ab[i__2].real - q__4.imag * ab[i__2].imag;
+                    q__3.imag = q__4.real * ab[i__2].imag + q__4.imag * ab[i__2].real; // , expr subst
+                    q__1.real = q__2.real - q__3.real;
+                    q__1.imag = q__2.imag - q__3.imag; // , expr subst
+                    work[i__3].real = q__1.real;
+                    work[i__3].imag = q__1.imag; // , expr subst
                     i__3 = ka1 + (i__ - k) * ab_dim1;
                     i__1 = i__ - k + *ka - m;
                     q__2.real = work[i__1].real * t.real - work[i__1].imag * t.imag;
@@ -1090,17 +1090,17 @@ L10:
                 i__2 = j - m;
                 i__5 = j - m;
                 i__6 = ka1 + (j - *ka + 1) * ab_dim1;
-                q__1.r = work[i__5].r * ab[i__6].r - work[i__5].i * ab[i__6].i;
-                q__1.i = work[i__5].r * ab[i__6].i + work[i__5].i * ab[i__6].r; // , expr subst
-                work[i__2].r = q__1.r;
-                work[i__2].i = q__1.i; // , expr subst
+                q__1.real = work[i__5].real * ab[i__6].real - work[i__5].imag * ab[i__6].imag;
+                q__1.imag = work[i__5].real * ab[i__6].imag + work[i__5].imag * ab[i__6].real; // , expr subst
+                work[i__2].real = q__1.real;
+                work[i__2].imag = q__1.imag; // , expr subst
                 i__2 = ka1 + (j - *ka + 1) * ab_dim1;
                 i__5 = j - m;
                 i__6 = ka1 + (j - *ka + 1) * ab_dim1;
-                q__1.r = rwork[i__5] * ab[i__6].r;
-                q__1.i = rwork[i__5] * ab[i__6].i; // , expr subst
-                ab[i__2].r = q__1.r;
-                ab[i__2].i = q__1.i; // , expr subst
+                q__1.real = rwork[i__5] * ab[i__6].real;
+                q__1.imag = rwork[i__5] * ab[i__6].imag; // , expr subst
+                ab[i__2].real = q__1.real;
+                ab[i__2].imag = q__1.imag; // , expr subst
                 /* L320: */
             }
             /* generate rotations in 1st set to annihilate elements which */
@@ -1223,17 +1223,17 @@ L10:
                 i__1 = j;
                 i__2 = j;
                 i__5 = ka1 + (j - *ka + 1) * ab_dim1;
-                q__1.r = work[i__2].r * ab[i__5].r - work[i__2].i * ab[i__5].i;
-                q__1.i = work[i__2].r * ab[i__5].i + work[i__2].i * ab[i__5].r; // , expr subst
-                work[i__1].r = q__1.r;
-                work[i__1].i = q__1.i; // , expr subst
+                q__1.real = work[i__2].real * ab[i__5].real - work[i__2].imag * ab[i__5].imag;
+                q__1.imag = work[i__2].real * ab[i__5].imag + work[i__2].imag * ab[i__5].real; // , expr subst
+                work[i__1].real = q__1.real;
+                work[i__1].imag = q__1.imag; // , expr subst
                 i__1 = ka1 + (j - *ka + 1) * ab_dim1;
                 i__2 = j;
                 i__5 = ka1 + (j - *ka + 1) * ab_dim1;
-                q__1.r = rwork[i__2] * ab[i__5].r;
-                q__1.i = rwork[i__2] * ab[i__5].i; // , expr subst
-                ab[i__1].r = q__1.r;
-                ab[i__1].i = q__1.i; // , expr subst
+                q__1.real = rwork[i__2] * ab[i__5].real;
+                q__1.imag = rwork[i__2] * ab[i__5].imag; // , expr subst
+                ab[i__1].real = q__1.real;
+                ab[i__1].imag = q__1.imag; // , expr subst
                 /* L390: */
             }
             if(update)
@@ -1453,10 +1453,10 @@ L490:
                     q__3.imag = ab[i__2].imag - q__4.imag; // , expr subst
                     r_cnjg(&q__7, &bb[i__ - k + kb1 + k * bb_dim1]);
                     i__6 = i__ - j + ka1 + j * ab_dim1;
-                    q__6.r = q__7.r * ab[i__6].r - q__7.i * ab[i__6].i;
-                    q__6.i = q__7.r * ab[i__6].i + q__7.i * ab[i__6].r; // , expr subst
-                    q__2.r = q__3.r - q__6.r;
-                    q__2.i = q__3.i - q__6.i; // , expr subst
+                    q__6.real = q__7.real * ab[i__6].real - q__7.imag * ab[i__6].imag;
+                    q__6.imag = q__7.real * ab[i__6].imag + q__7.imag * ab[i__6].real; // , expr subst
+                    q__2.real = q__3.real - q__6.real;
+                    q__2.imag = q__3.imag - q__6.imag; // , expr subst
                     i__7 = ka1 + i__ * ab_dim1;
                     r__1 = ab[i__7].real;
                     i__8 = i__ - j + kb1 + j * bb_dim1;
@@ -1481,12 +1481,12 @@ L490:
                     i__2 = k - j + ka1 + j * ab_dim1;
                     r_cnjg(&q__3, &bb[i__ - k + kb1 + k * bb_dim1]);
                     i__5 = i__ - j + ka1 + j * ab_dim1;
-                    q__2.r = q__3.r * ab[i__5].r - q__3.i * ab[i__5].i;
-                    q__2.i = q__3.r * ab[i__5].i + q__3.i * ab[i__5].r; // , expr subst
-                    q__1.r = ab[i__2].r - q__2.r;
-                    q__1.i = ab[i__2].i - q__2.i; // , expr subst
-                    ab[i__1].r = q__1.r;
-                    ab[i__1].i = q__1.i; // , expr subst
+                    q__2.real = q__3.real * ab[i__5].real - q__3.imag * ab[i__5].imag;
+                    q__2.imag = q__3.real * ab[i__5].imag + q__3.imag * ab[i__5].real; // , expr subst
+                    q__1.real = ab[i__2].real - q__2.real;
+                    q__1.imag = ab[i__2].imag - q__2.imag; // , expr subst
+                    ab[i__1].real = q__1.real;
+                    ab[i__1].imag = q__1.imag; // , expr subst
                     /* L530: */
                 }
                 /* L540: */
@@ -1504,12 +1504,12 @@ L490:
                     i__2 = j - k + ka1 + k * ab_dim1;
                     i__5 = i__ - k + kb1 + k * bb_dim1;
                     i__6 = j - i__ + ka1 + i__ * ab_dim1;
-                    q__2.r = bb[i__5].r * ab[i__6].r - bb[i__5].i * ab[i__6].i;
-                    q__2.i = bb[i__5].r * ab[i__6].i + bb[i__5].i * ab[i__6].r; // , expr subst
-                    q__1.r = ab[i__2].r - q__2.r;
-                    q__1.i = ab[i__2].i - q__2.i; // , expr subst
-                    ab[i__1].r = q__1.r;
-                    ab[i__1].i = q__1.i; // , expr subst
+                    q__2.real = bb[i__5].real * ab[i__6].real - bb[i__5].imag * ab[i__6].imag;
+                    q__2.imag = bb[i__5].real * ab[i__6].imag + bb[i__5].imag * ab[i__6].real; // , expr subst
+                    q__1.real = ab[i__2].real - q__2.real;
+                    q__1.imag = ab[i__2].imag - q__2.imag; // , expr subst
+                    ab[i__1].real = q__1.real;
+                    ab[i__1].imag = q__1.imag; // , expr subst
                     /* L550: */
                 }
                 /* L560: */
@@ -1563,12 +1563,12 @@ L490:
                     q__2.imag = rwork[i__1] * t.imag; // , expr subst
                     r_cnjg(&q__4, &work[i__ + k - *ka]);
                     i__2 = (i__ + k) * ab_dim1 + 1;
-                    q__3.r = q__4.r * ab[i__2].r - q__4.i * ab[i__2].i;
-                    q__3.i = q__4.r * ab[i__2].i + q__4.i * ab[i__2].r; // , expr subst
-                    q__1.r = q__2.r - q__3.r;
-                    q__1.i = q__2.i - q__3.i; // , expr subst
-                    work[i__4].r = q__1.r;
-                    work[i__4].i = q__1.i; // , expr subst
+                    q__3.real = q__4.real * ab[i__2].real - q__4.imag * ab[i__2].imag;
+                    q__3.imag = q__4.real * ab[i__2].imag + q__4.imag * ab[i__2].real; // , expr subst
+                    q__1.real = q__2.real - q__3.real;
+                    q__1.imag = q__2.imag - q__3.imag; // , expr subst
+                    work[i__4].real = q__1.real;
+                    work[i__4].imag = q__1.imag; // , expr subst
                     i__4 = (i__ + k) * ab_dim1 + 1;
                     i__1 = i__ + k - *ka;
                     q__2.real = work[i__1].real * t.real - work[i__1].imag * t.imag;
@@ -1612,17 +1612,17 @@ L490:
                 i__2 = j;
                 i__5 = j;
                 i__6 = (j + *ka - 1) * ab_dim1 + 1;
-                q__1.r = work[i__5].r * ab[i__6].r - work[i__5].i * ab[i__6].i;
-                q__1.i = work[i__5].r * ab[i__6].i + work[i__5].i * ab[i__6].r; // , expr subst
-                work[i__2].r = q__1.r;
-                work[i__2].i = q__1.i; // , expr subst
+                q__1.real = work[i__5].real * ab[i__6].real - work[i__5].imag * ab[i__6].imag;
+                q__1.imag = work[i__5].real * ab[i__6].imag + work[i__5].imag * ab[i__6].real; // , expr subst
+                work[i__2].real = q__1.real;
+                work[i__2].imag = q__1.imag; // , expr subst
                 i__2 = (j + *ka - 1) * ab_dim1 + 1;
                 i__5 = j;
                 i__6 = (j + *ka - 1) * ab_dim1 + 1;
-                q__1.r = rwork[i__5] * ab[i__6].r;
-                q__1.i = rwork[i__5] * ab[i__6].i; // , expr subst
-                ab[i__2].r = q__1.r;
-                ab[i__2].i = q__1.i; // , expr subst
+                q__1.real = rwork[i__5] * ab[i__6].real;
+                q__1.imag = rwork[i__5] * ab[i__6].imag; // , expr subst
+                ab[i__2].real = q__1.real;
+                ab[i__2].imag = q__1.imag; // , expr subst
                 /* L570: */
             }
             /* generate rotations in 1st set to annihilate elements which */
@@ -1745,17 +1745,17 @@ L490:
                 i__1 = m - *kb + j;
                 i__2 = m - *kb + j;
                 i__5 = (j + *ka - 1) * ab_dim1 + 1;
-                q__1.r = work[i__2].r * ab[i__5].r - work[i__2].i * ab[i__5].i;
-                q__1.i = work[i__2].r * ab[i__5].i + work[i__2].i * ab[i__5].r; // , expr subst
-                work[i__1].r = q__1.r;
-                work[i__1].i = q__1.i; // , expr subst
+                q__1.real = work[i__2].real * ab[i__5].real - work[i__2].imag * ab[i__5].imag;
+                q__1.imag = work[i__2].real * ab[i__5].imag + work[i__2].imag * ab[i__5].real; // , expr subst
+                work[i__1].real = q__1.real;
+                work[i__1].imag = q__1.imag; // , expr subst
                 i__1 = (j + *ka - 1) * ab_dim1 + 1;
                 i__2 = m - *kb + j;
                 i__5 = (j + *ka - 1) * ab_dim1 + 1;
-                q__1.r = rwork[i__2] * ab[i__5].r;
-                q__1.i = rwork[i__2] * ab[i__5].i; // , expr subst
-                ab[i__1].r = q__1.r;
-                ab[i__1].i = q__1.i; // , expr subst
+                q__1.real = rwork[i__2] * ab[i__5].real;
+                q__1.imag = rwork[i__2] * ab[i__5].imag; // , expr subst
+                ab[i__1].real = q__1.real;
+                ab[i__1].imag = q__1.imag; // , expr subst
                 /* L640: */
             }
             if(update)
@@ -1918,10 +1918,10 @@ L490:
                     q__3.imag = ab[i__2].imag - q__4.imag; // , expr subst
                     r_cnjg(&q__7, &bb[k - i__ + 1 + i__ * bb_dim1]);
                     i__6 = j - i__ + 1 + i__ * ab_dim1;
-                    q__6.r = q__7.r * ab[i__6].r - q__7.i * ab[i__6].i;
-                    q__6.i = q__7.r * ab[i__6].i + q__7.i * ab[i__6].r; // , expr subst
-                    q__2.r = q__3.r - q__6.r;
-                    q__2.i = q__3.i - q__6.i; // , expr subst
+                    q__6.real = q__7.real * ab[i__6].real - q__7.imag * ab[i__6].imag;
+                    q__6.imag = q__7.real * ab[i__6].imag + q__7.imag * ab[i__6].real; // , expr subst
+                    q__2.real = q__3.real - q__6.real;
+                    q__2.imag = q__3.imag - q__6.imag; // , expr subst
                     i__7 = i__ * ab_dim1 + 1;
                     r__1 = ab[i__7].real;
                     i__8 = j - i__ + 1 + i__ * bb_dim1;
@@ -1946,12 +1946,12 @@ L490:
                     i__2 = j - k + 1 + k * ab_dim1;
                     r_cnjg(&q__3, &bb[k - i__ + 1 + i__ * bb_dim1]);
                     i__5 = j - i__ + 1 + i__ * ab_dim1;
-                    q__2.r = q__3.r * ab[i__5].r - q__3.i * ab[i__5].i;
-                    q__2.i = q__3.r * ab[i__5].i + q__3.i * ab[i__5].r; // , expr subst
-                    q__1.r = ab[i__2].r - q__2.r;
-                    q__1.i = ab[i__2].i - q__2.i; // , expr subst
-                    ab[i__1].r = q__1.r;
-                    ab[i__1].i = q__1.i; // , expr subst
+                    q__2.real = q__3.real * ab[i__5].real - q__3.imag * ab[i__5].imag;
+                    q__2.imag = q__3.real * ab[i__5].imag + q__3.imag * ab[i__5].real; // , expr subst
+                    q__1.real = ab[i__2].real - q__2.real;
+                    q__1.imag = ab[i__2].imag - q__2.imag; // , expr subst
+                    ab[i__1].real = q__1.real;
+                    ab[i__1].imag = q__1.imag; // , expr subst
                     /* L760: */
                 }
                 /* L770: */
@@ -1969,12 +1969,12 @@ L490:
                     i__2 = k - j + 1 + j * ab_dim1;
                     i__5 = k - i__ + 1 + i__ * bb_dim1;
                     i__6 = i__ - j + 1 + j * ab_dim1;
-                    q__2.r = bb[i__5].r * ab[i__6].r - bb[i__5].i * ab[i__6].i;
-                    q__2.i = bb[i__5].r * ab[i__6].i + bb[i__5].i * ab[i__6].r; // , expr subst
-                    q__1.r = ab[i__2].r - q__2.r;
-                    q__1.i = ab[i__2].i - q__2.i; // , expr subst
-                    ab[i__1].r = q__1.r;
-                    ab[i__1].i = q__1.i; // , expr subst
+                    q__2.real = bb[i__5].real * ab[i__6].real - bb[i__5].imag * ab[i__6].imag;
+                    q__2.imag = bb[i__5].real * ab[i__6].imag + bb[i__5].imag * ab[i__6].real; // , expr subst
+                    q__1.real = ab[i__2].real - q__2.real;
+                    q__1.imag = ab[i__2].imag - q__2.imag; // , expr subst
+                    ab[i__1].real = q__1.real;
+                    ab[i__1].imag = q__1.imag; // , expr subst
                     /* L780: */
                 }
                 /* L790: */
@@ -1986,8 +1986,8 @@ L490:
                 aocl_blas_csscal(&nx, &r__1, &x[i__ * x_dim1 + 1], &c__1);
                 if(kbt > 0)
                 {
-                    q__1.r = -1.f;
-                    q__1.i = -0.f; // , expr subst
+                    q__1.real = -1.f;
+                    q__1.imag = -0.f; // , expr subst
                     aocl_blas_cgerc(&nx, &kbt, &q__1, &x[i__ * x_dim1 + 1], &c__1,
                                     &bb[i__ * bb_dim1 + 2], &c__1, &x[(i__ + 1) * x_dim1 + 1], ldx);
                 }
@@ -2026,12 +2026,12 @@ L490:
                     q__2.imag = rwork[i__1] * t.imag; // , expr subst
                     r_cnjg(&q__4, &work[i__ + k - *ka]);
                     i__2 = ka1 + (i__ + k - *ka) * ab_dim1;
-                    q__3.r = q__4.r * ab[i__2].r - q__4.i * ab[i__2].i;
-                    q__3.i = q__4.r * ab[i__2].i + q__4.i * ab[i__2].r; // , expr subst
-                    q__1.r = q__2.r - q__3.r;
-                    q__1.i = q__2.i - q__3.i; // , expr subst
-                    work[i__3].r = q__1.r;
-                    work[i__3].i = q__1.i; // , expr subst
+                    q__3.real = q__4.real * ab[i__2].real - q__4.imag * ab[i__2].imag;
+                    q__3.imag = q__4.real * ab[i__2].imag + q__4.imag * ab[i__2].real; // , expr subst
+                    q__1.real = q__2.real - q__3.real;
+                    q__1.imag = q__2.imag - q__3.imag; // , expr subst
+                    work[i__3].real = q__1.real;
+                    work[i__3].imag = q__1.imag; // , expr subst
                     i__3 = ka1 + (i__ + k - *ka) * ab_dim1;
                     i__1 = i__ + k - *ka;
                     q__2.real = work[i__1].real * t.real - work[i__1].imag * t.imag;
@@ -2075,17 +2075,17 @@ L490:
                 i__2 = j;
                 i__5 = j;
                 i__6 = ka1 + (j - 1) * ab_dim1;
-                q__1.r = work[i__5].r * ab[i__6].r - work[i__5].i * ab[i__6].i;
-                q__1.i = work[i__5].r * ab[i__6].i + work[i__5].i * ab[i__6].r; // , expr subst
-                work[i__2].r = q__1.r;
-                work[i__2].i = q__1.i; // , expr subst
+                q__1.real = work[i__5].real * ab[i__6].real - work[i__5].imag * ab[i__6].imag;
+                q__1.imag = work[i__5].real * ab[i__6].imag + work[i__5].imag * ab[i__6].real; // , expr subst
+                work[i__2].real = q__1.real;
+                work[i__2].imag = q__1.imag; // , expr subst
                 i__2 = ka1 + (j - 1) * ab_dim1;
                 i__5 = j;
                 i__6 = ka1 + (j - 1) * ab_dim1;
-                q__1.r = rwork[i__5] * ab[i__6].r;
-                q__1.i = rwork[i__5] * ab[i__6].i; // , expr subst
-                ab[i__2].r = q__1.r;
-                ab[i__2].i = q__1.i; // , expr subst
+                q__1.real = rwork[i__5] * ab[i__6].real;
+                q__1.imag = rwork[i__5] * ab[i__6].imag; // , expr subst
+                ab[i__2].real = q__1.real;
+                ab[i__2].imag = q__1.imag; // , expr subst
                 /* L800: */
             }
             /* generate rotations in 1st set to annihilate elements which */
@@ -2209,17 +2209,17 @@ L490:
                 i__1 = m - *kb + j;
                 i__2 = m - *kb + j;
                 i__5 = ka1 + (j - 1) * ab_dim1;
-                q__1.r = work[i__2].r * ab[i__5].r - work[i__2].i * ab[i__5].i;
-                q__1.i = work[i__2].r * ab[i__5].i + work[i__2].i * ab[i__5].r; // , expr subst
-                work[i__1].r = q__1.r;
-                work[i__1].i = q__1.i; // , expr subst
+                q__1.real = work[i__2].real * ab[i__5].real - work[i__2].imag * ab[i__5].imag;
+                q__1.imag = work[i__2].real * ab[i__5].imag + work[i__2].imag * ab[i__5].real; // , expr subst
+                work[i__1].real = q__1.real;
+                work[i__1].imag = q__1.imag; // , expr subst
                 i__1 = ka1 + (j - 1) * ab_dim1;
                 i__2 = m - *kb + j;
                 i__5 = ka1 + (j - 1) * ab_dim1;
-                q__1.r = rwork[i__2] * ab[i__5].r;
-                q__1.i = rwork[i__2] * ab[i__5].i; // , expr subst
-                ab[i__1].r = q__1.r;
-                ab[i__1].i = q__1.i; // , expr subst
+                q__1.real = rwork[i__2] * ab[i__5].real;
+                q__1.imag = rwork[i__2] * ab[i__5].imag; // , expr subst
+                ab[i__1].real = q__1.real;
+                ab[i__1].imag = q__1.imag; // , expr subst
                 /* L870: */
             }
             if(update)

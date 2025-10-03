@@ -4,8 +4,8 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static scomplex c_b1 = {{0.f}, {0.f}};
-static scomplex c_b2 = {{1.f}, {0.f}};
+static scomplex c_b1 = {0.f, 0.f};
+static scomplex c_b2 = {1.f, 0.f};
 static aocl_int64_t c__1 = 1;
 /* > \brief \b CLAHR2 reduces the specified number of first columns of a general rectangular matrix
  * A so that elements below the specified subdiagonal are zero, and returns auxiliary matrices which
@@ -255,8 +255,8 @@ void aocl_lapack_clahr2(aocl_int64_t *n, aocl_int64_t *k, aocl_int64_t *nb, scom
     y_offset = 1 + y_dim1;
     y -= y_offset;
     /* Function Body */
-    ei.r = 0.f;
-    ei.i = 0.f;
+    ei.real = 0.f;
+    ei.imag = 0.f;
     if(*n <= 1)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
@@ -273,8 +273,8 @@ void aocl_lapack_clahr2(aocl_int64_t *n, aocl_int64_t *k, aocl_int64_t *nb, scom
             aocl_lapack_clacgv(&i__2, &a[*k + i__ - 1 + a_dim1], lda);
             i__2 = *n - *k;
             i__3 = i__ - 1;
-            q__1.r = -1.f;
-            q__1.i = -0.f; // , expr subst
+            q__1.real = -1.f;
+            q__1.imag = -0.f; // , expr subst
             aocl_blas_cgemv("NO TRANSPOSE", &i__2, &i__3, &q__1, &y[*k + 1 + y_dim1], ldy,
                             &a[*k + i__ - 1 + a_dim1], lda, &c_b2, &a[*k + 1 + i__ * a_dim1],
                             &c__1);
@@ -303,8 +303,8 @@ void aocl_lapack_clahr2(aocl_int64_t *n, aocl_int64_t *k, aocl_int64_t *nb, scom
             /* b2 := b2 - V2*w */
             i__2 = *n - *k - i__ + 1;
             i__3 = i__ - 1;
-            q__1.r = -1.f;
-            q__1.i = -0.f; // , expr subst
+            q__1.real = -1.f;
+            q__1.imag = -0.f; // , expr subst
             aocl_blas_cgemv("NO TRANSPOSE", &i__2, &i__3, &q__1, &a[*k + i__ + a_dim1], lda,
                             &t[*nb * t_dim1 + 1], &c__1, &c_b2, &a[*k + i__ + i__ * a_dim1], &c__1);
             /* b1 := b1 - V1*w */
@@ -312,13 +312,13 @@ void aocl_lapack_clahr2(aocl_int64_t *n, aocl_int64_t *k, aocl_int64_t *nb, scom
             aocl_blas_ctrmv("Lower", "NO TRANSPOSE", "UNIT", &i__2, &a[*k + 1 + a_dim1], lda,
                             &t[*nb * t_dim1 + 1], &c__1);
             i__2 = i__ - 1;
-            q__1.r = -1.f;
-            q__1.i = -0.f; // , expr subst
+            q__1.real = -1.f;
+            q__1.imag = -0.f; // , expr subst
             aocl_blas_caxpy(&i__2, &q__1, &t[*nb * t_dim1 + 1], &c__1, &a[*k + 1 + i__ * a_dim1],
                             &c__1);
             i__2 = *k + i__ - 1 + (i__ - 1) * a_dim1;
-            a[i__2].r = ei.r;
-            a[i__2].i = ei.i; // , expr subst
+            a[i__2].real = ei.real;
+            a[i__2].imag = ei.imag; // , expr subst
         }
         /* Generate the elementary reflector H(I) to annihilate */
         /* A(K+I+1:N,I) */
@@ -328,11 +328,11 @@ void aocl_lapack_clahr2(aocl_int64_t *n, aocl_int64_t *k, aocl_int64_t *nb, scom
         aocl_lapack_clarfg(&i__2, &a[*k + i__ + i__ * a_dim1], &a[fla_min(i__3, *n) + i__ * a_dim1],
                            &c__1, &tau[i__]);
         i__2 = *k + i__ + i__ * a_dim1;
-        ei.r = a[i__2].r;
-        ei.i = a[i__2].i; // , expr subst
+        ei.real = a[i__2].real;
+        ei.imag = a[i__2].imag; // , expr subst
         i__2 = *k + i__ + i__ * a_dim1;
-        a[i__2].r = 1.f;
-        a[i__2].i = 0.f; // , expr subst
+        a[i__2].real = 1.f;
+        a[i__2].imag = 0.f; // , expr subst
         /* Compute Y(K+1:N,I) */
         i__2 = *n - *k;
         i__3 = *n - *k - i__ + 1;
@@ -345,8 +345,8 @@ void aocl_lapack_clahr2(aocl_int64_t *n, aocl_int64_t *k, aocl_int64_t *nb, scom
                         &a[*k + i__ + i__ * a_dim1], &c__1, &c_b1, &t[i__ * t_dim1 + 1], &c__1);
         i__2 = *n - *k;
         i__3 = i__ - 1;
-        q__1.r = -1.f;
-        q__1.i = -0.f; // , expr subst
+        q__1.real = -1.f;
+        q__1.imag = -0.f; // , expr subst
         aocl_blas_cgemv("NO TRANSPOSE", &i__2, &i__3, &q__1, &y[*k + 1 + y_dim1], ldy,
                         &t[i__ * t_dim1 + 1], &c__1, &c_b2, &y[*k + 1 + i__ * y_dim1], &c__1);
         i__2 = *n - *k;
@@ -354,21 +354,21 @@ void aocl_lapack_clahr2(aocl_int64_t *n, aocl_int64_t *k, aocl_int64_t *nb, scom
         /* Compute T(1:I,I) */
         i__2 = i__ - 1;
         i__3 = i__;
-        q__1.r = -tau[i__3].r;
-        q__1.i = -tau[i__3].i; // , expr subst
+        q__1.real = -tau[i__3].real;
+        q__1.imag = -tau[i__3].imag; // , expr subst
         aocl_blas_cscal(&i__2, &q__1, &t[i__ * t_dim1 + 1], &c__1);
         i__2 = i__ - 1;
         aocl_blas_ctrmv("Upper", "No Transpose", "NON-UNIT", &i__2, &t[t_offset], ldt,
                         &t[i__ * t_dim1 + 1], &c__1);
         i__2 = i__ + i__ * t_dim1;
         i__3 = i__;
-        t[i__2].r = tau[i__3].r;
-        t[i__2].i = tau[i__3].i; // , expr subst
+        t[i__2].real = tau[i__3].real;
+        t[i__2].imag = tau[i__3].imag; // , expr subst
         /* L10: */
     }
     i__1 = *k + *nb + *nb * a_dim1;
-    a[i__1].r = ei.r;
-    a[i__1].i = ei.i; // , expr subst
+    a[i__1].real = ei.real;
+    a[i__1].imag = ei.imag; // , expr subst
     /* Compute Y(1:K,1:NB) */
     aocl_lapack_clacpy("ALL", k, nb, &a[(a_dim1 << 1) + 1], lda, &y[y_offset], ldy);
     aocl_blas_ctrmm("RIGHT", "Lower", "NO TRANSPOSE", "UNIT", k, nb, &c_b2, &a[*k + 1 + a_dim1],

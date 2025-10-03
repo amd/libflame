@@ -270,14 +270,14 @@ void aocl_lapack_chesv_aa(char *uplo, aocl_int64_t *n, aocl_int64_t *nrhs, scomp
     if(*info == 0)
     {
         aocl_lapack_chetrf_aa(uplo, n, &a[a_offset], lda, &ipiv[1], &work[1], &c_n1, info);
-        lwkopt_hetrf__ = (integer)work[1].r;
+        lwkopt_hetrf__ = (integer)work[1].real;
         aocl_lapack_chetrs_aa(uplo, n, nrhs, &a[a_offset], lda, &ipiv[1], &b[b_offset], ldb,
                               &work[1], &c_n1, info);
-        lwkopt_hetrs__ = (integer)work[1].r;
+        lwkopt_hetrs__ = (integer)work[1].real;
         lwkopt = fla_max(lwkopt_hetrf__, lwkopt_hetrs__);
         r__1 = aocl_lapack_sroundup_lwork(&lwkopt);
-        work[1].r = r__1;
-        work[1].i = 0.f; // , expr subst
+        work[1].real = r__1;
+        work[1].imag = 0.f; // , expr subst
     }
     if(*info != 0)
     {
@@ -300,8 +300,8 @@ void aocl_lapack_chesv_aa(char *uplo, aocl_int64_t *n, aocl_int64_t *nrhs, scomp
                               &work[1], lwork, info);
     }
     r__1 = aocl_lapack_sroundup_lwork(&lwkopt);
-    work[1].r = r__1;
-    work[1].i = 0.f; // , expr subst
+    work[1].real = r__1;
+    work[1].imag = 0.f; // , expr subst
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
     return;
     /* End of CHESV_AA */

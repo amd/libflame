@@ -302,7 +302,7 @@ void aocl_lapack_cgebd2(aocl_int64_t *m, aocl_int64_t *n, scomplex *a, aocl_int6
             aocl_lapack_clarfg(&i__2, &alpha, &a[fla_min(i__3, *m) + i__ * a_dim1], &c__1,
                                &tauq[i__]);
             i__2 = i__;
-            d__[i__2] = alpha.r;
+            d__[i__2] = alpha.real;
             i__2 = i__ + i__ * a_dim1;
             a[i__2].real = 1.f;
             a[i__2].imag = 0.f; // , expr subst
@@ -317,8 +317,8 @@ void aocl_lapack_cgebd2(aocl_int64_t *m, aocl_int64_t *n, scomplex *a, aocl_int6
             }
             i__2 = i__ + i__ * a_dim1;
             i__3 = i__;
-            a[i__2].r = d__[i__3];
-            a[i__2].i = 0.f; // , expr subst
+            a[i__2].real = d__[i__3];
+            a[i__2].imag = 0.f; // , expr subst
             if(i__ < *n)
             {
                 /* Generate elementary reflector G(i) to annihilate */
@@ -393,8 +393,8 @@ void aocl_lapack_cgebd2(aocl_int64_t *m, aocl_int64_t *n, scomplex *a, aocl_int6
             aocl_lapack_clacgv(&i__2, &a[i__ + i__ * a_dim1], lda);
             i__2 = i__ + i__ * a_dim1;
             i__3 = i__;
-            a[i__2].r = d__[i__3];
-            a[i__2].i = 0.f; // , expr subst
+            a[i__2].real = d__[i__3];
+            a[i__2].imag = 0.f; // , expr subst
             if(i__ < *m)
             {
                 /* Generate elementary reflector H(i) to annihilate */

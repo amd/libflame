@@ -286,8 +286,8 @@ void aocl_lapack_chetrd(char *uplo, aocl_int64_t *n, scomplex *a, aocl_int64_t *
         nb = aocl_lapack_ilaenv(&c__1, "CHETRD", uplo, n, &c_n1, &c_n1, &c_n1);
         lwkopt = *n * nb;
         r__1 = aocl_lapack_sroundup_lwork(&lwkopt);
-        work[1].r = r__1;
-        work[1].i = 0.f; // , expr subst
+        work[1].real = r__1;
+        work[1].imag = 0.f; // , expr subst
     }
     if(*info != 0)
     {
@@ -304,8 +304,8 @@ void aocl_lapack_chetrd(char *uplo, aocl_int64_t *n, scomplex *a, aocl_int64_t *
     /* Quick return if possible */
     if(*n == 0)
     {
-        work[1].r = 1.f;
-        work[1].i = 0.f; // , expr subst
+        work[1].real = 1.f;
+        work[1].imag = 0.f; // , expr subst
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -366,8 +366,8 @@ void aocl_lapack_chetrd(char *uplo, aocl_int64_t *n, scomplex *a, aocl_int64_t *
             /* Update the unreduced submatrix A(1:i-1,1:i-1), using an */
             /* update of the form: A := A - V*W**H - W*V**H */
             i__3 = i__ - 1;
-            q__1.r = -1.f;
-            q__1.i = -0.f; // , expr subst
+            q__1.real = -1.f;
+            q__1.imag = -0.f; // , expr subst
             aocl_blas_cher2k(uplo, "No transpose", &i__3, &nb, &q__1, &a[i__ * a_dim1 + 1], lda,
                              &work[1], &ldwork, &c_b23, &a[a_offset], lda);
             /* Copy superdiagonal elements back into A, and diagonal */
@@ -377,10 +377,10 @@ void aocl_lapack_chetrd(char *uplo, aocl_int64_t *n, scomplex *a, aocl_int64_t *
             {
                 i__4 = j - 1 + j * a_dim1;
                 i__5 = j - 1;
-                a[i__4].r = e[i__5];
-                a[i__4].i = 0.f; // , expr subst
+                a[i__4].real = e[i__5];
+                a[i__4].imag = 0.f; // , expr subst
                 i__4 = j + j * a_dim1;
-                d__[j] = a[i__4].r;
+                d__[j] = a[i__4].real;
                 /* L10: */
             }
             /* L20: */
@@ -404,8 +404,8 @@ void aocl_lapack_chetrd(char *uplo, aocl_int64_t *n, scomplex *a, aocl_int64_t *
             /* Update the unreduced submatrix A(i+nb:n,i+nb:n), using */
             /* an update of the form: A := A - V*W**H - W*V**H */
             i__3 = *n - i__ - nb + 1;
-            q__1.r = -1.f;
-            q__1.i = -0.f; // , expr subst
+            q__1.real = -1.f;
+            q__1.imag = -0.f; // , expr subst
             aocl_blas_cher2k(uplo, "No transpose", &i__3, &nb, &q__1, &a[i__ + nb + i__ * a_dim1],
                              lda, &work[nb + 1], &ldwork, &c_b23,
                              &a[i__ + nb + (i__ + nb) * a_dim1], lda);
@@ -416,10 +416,10 @@ void aocl_lapack_chetrd(char *uplo, aocl_int64_t *n, scomplex *a, aocl_int64_t *
             {
                 i__4 = j + 1 + j * a_dim1;
                 i__5 = j;
-                a[i__4].r = e[i__5];
-                a[i__4].i = 0.f; // , expr subst
+                a[i__4].real = e[i__5];
+                a[i__4].imag = 0.f; // , expr subst
                 i__4 = j + j * a_dim1;
-                d__[j] = a[i__4].r;
+                d__[j] = a[i__4].real;
                 /* L30: */
             }
             /* L40: */
@@ -430,8 +430,8 @@ void aocl_lapack_chetrd(char *uplo, aocl_int64_t *n, scomplex *a, aocl_int64_t *
                            &iinfo);
     }
     r__1 = aocl_lapack_sroundup_lwork(&lwkopt);
-    work[1].r = r__1;
-    work[1].i = 0.f; // , expr subst
+    work[1].real = r__1;
+    work[1].imag = 0.f; // , expr subst
     AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of CHETRD */

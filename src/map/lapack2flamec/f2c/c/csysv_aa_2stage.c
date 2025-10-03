@@ -303,7 +303,7 @@ void aocl_lapack_csysv_aa_2stage(char *uplo, aocl_int64_t *n, aocl_int64_t *nrhs
     {
         aocl_lapack_csytrf_aa_2stage(uplo, n, &a[a_offset], lda, &tb[1], &c_n1, &ipiv[1], &ipiv2[1],
                                      &work[1], &c_n1, info);
-        lwkopt = (integer)work[1].r;
+        lwkopt = (integer)work[1].real;
     }
     if(*info != 0)
     {
@@ -327,8 +327,8 @@ void aocl_lapack_csysv_aa_2stage(char *uplo, aocl_int64_t *n, aocl_int64_t *nrhs
                                      &ipiv2[1], &b[b_offset], ldb, info);
     }
     r__1 = aocl_lapack_sroundup_lwork(&lwkopt);
-    work[1].r = r__1;
-    work[1].i = 0.f; // , expr subst
+    work[1].real = r__1;
+    work[1].imag = 0.f; // , expr subst
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
     return;
     /* End of CSYSV_AA_2STAGE */

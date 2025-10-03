@@ -4,7 +4,7 @@
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
  /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static scomplex c_b1 = {{0.f}, {0.f}};
+static scomplex c_b1 = {0.f, 0.f};
 static aocl_int64_t c__1 = 1;
 static aocl_int64_t c__2 = 2;
 static real c_b28 = 0.f;
@@ -542,8 +542,8 @@ void aocl_lapack_clarrv(aocl_int64_t *n, real *vl, real *vu, real *d__, real *l,
         {
             ++done;
             i__2 = ibegin + wbegin * z_dim1;
-            z__[i__2].r = 1.f;
-            z__[i__2].i = 0.f; // , expr subst
+            z__[i__2].real = 1.f;
+            z__[i__2].imag = 0.f; // , expr subst
             isuppz[(wbegin << 1) - 1] = (aocl_int_t)(ibegin);
             isuppz[wbegin * 2] = (aocl_int_t)(ibegin);
             w[wbegin] += sigma;
@@ -651,15 +651,15 @@ void aocl_lapack_clarrv(aocl_int64_t *n, real *vl, real *vu, real *d__, real *l,
                     for(k = 1; k <= i__3; ++k)
                     {
                         i__4 = ibegin + k - 1 + j * z_dim1;
-                        d__[ibegin + k - 1] = z__[i__4].r;
+                        d__[ibegin + k - 1] = z__[i__4].real;
                         i__4 = ibegin + k - 1 + (j + 1) * z_dim1;
-                        l[ibegin + k - 1] = z__[i__4].r;
+                        l[ibegin + k - 1] = z__[i__4].real;
                         /* L45: */
                     }
                     i__3 = iend + j * z_dim1;
-                    d__[iend] = z__[i__3].r;
+                    d__[iend] = z__[i__3].real;
                     i__3 = iend + (j + 1) * z_dim1;
-                    sigma = z__[i__3].r;
+                    sigma = z__[i__3].real;
                     /* Set the corresponding entries in Z to zero */
                     aocl_lapack_claset("Full", &in, &c__2, &c_b1, &c_b1, &z__[ibegin + j * z_dim1],
                                        ldz);
@@ -848,34 +848,34 @@ void aocl_lapack_clarrv(aocl_int64_t *n, real *vl, real *vu, real *d__, real *l,
                         {
                             i__5 = ibegin + k - 1 + newftt * z_dim1;
                             i__6 = indin1 + k - 1;
-                            q__1.r = work[i__6];
-                            q__1.i = 0.f; // , expr subst
-                            z__[i__5].r = q__1.r;
-                            z__[i__5].i = q__1.i; // , expr subst
+                            q__1.real = work[i__6];
+                            q__1.imag = 0.f; // , expr subst
+                            z__[i__5].real = q__1.real;
+                            z__[i__5].imag = q__1.imag; // , expr subst
                             i__5 = ibegin + k - 1 + (newftt + 1) * z_dim1;
                             i__6 = indin2 + k - 1;
-                            q__1.r = work[i__6];
-                            q__1.i = 0.f; // , expr subst
-                            z__[i__5].r = q__1.r;
-                            z__[i__5].i = q__1.i; // , expr subst
+                            q__1.real = work[i__6];
+                            q__1.imag = 0.f; // , expr subst
+                            z__[i__5].real = q__1.real;
+                            z__[i__5].imag = q__1.imag; // , expr subst
                             /* L56: */
                         }
                         i__4 = iend + newftt * z_dim1;
                         i__5 = indin1 + in - 1;
-                        q__1.r = work[i__5];
-                        q__1.i = 0.f; // , expr subst
-                        z__[i__4].r = q__1.r;
-                        z__[i__4].i = q__1.i; // , expr subst
+                        q__1.real = work[i__5];
+                        q__1.imag = 0.f; // , expr subst
+                        z__[i__4].real = q__1.real;
+                        z__[i__4].imag = q__1.imag; // , expr subst
                         if(iinfo == 0)
                         {
                             /* a new RRR for the cluster was found by SLARRF */
                             /* update shift and store it */
                             ssigma = sigma + tau;
                             i__4 = iend + (newftt + 1) * z_dim1;
-                            q__1.r = ssigma;
-                            q__1.i = 0.f; // , expr subst
-                            z__[i__4].r = q__1.r;
-                            z__[i__4].i = q__1.i; // , expr subst
+                            q__1.real = ssigma;
+                            q__1.imag = 0.f; // , expr subst
+                            z__[i__4].real = q__1.real;
+                            z__[i__4].imag = q__1.imag; // , expr subst
                             /* WORK() are the midpoints and WERR() the semi-width */
                             /* Note that the entries in W are unchanged. */
                             i__4 = newlst;
@@ -1178,8 +1178,8 @@ void aocl_lapack_clarrv(aocl_int64_t *n, real *vl, real *vu, real *d__, real *l,
                             for(ii = isupmn; ii <= i__4; ++ii)
                             {
                                 i__5 = ii + windex * z_dim1;
-                                z__[i__5].r = 0.f;
-                                z__[i__5].i = 0.f; // , expr subst
+                                z__[i__5].real = 0.f;
+                                z__[i__5].imag = 0.f; // , expr subst
                                 /* L122: */
                             }
                         }
@@ -1189,8 +1189,8 @@ void aocl_lapack_clarrv(aocl_int64_t *n, real *vl, real *vu, real *d__, real *l,
                             for(ii = zto + 1; ii <= i__4; ++ii)
                             {
                                 i__5 = ii + windex * z_dim1;
-                                z__[i__5].r = 0.f;
-                                z__[i__5].i = 0.f; // , expr subst
+                                z__[i__5].real = 0.f;
+                                z__[i__5].imag = 0.f; // , expr subst
                                 /* L123: */
                             }
                         }

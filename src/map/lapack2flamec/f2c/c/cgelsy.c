@@ -4,8 +4,8 @@
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
  /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static scomplex c_b1 = {{0.f}, {0.f}};
-static scomplex c_b2 = {{1.f}, {0.f}};
+static scomplex c_b1 = {0.f, 0.f};
+static scomplex c_b2 = {1.f, 0.f};
 static aocl_int64_t c__1 = 1;
 static aocl_int64_t c_n1 = -1;
 static aocl_int64_t c__0 = 0;
@@ -324,10 +324,10 @@ void aocl_lapack_cgelsy(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *nrhs, sc
     i__1 = fla_max(i__1, i__2);
     i__2 = (mn << 1) + nb * *nrhs; // ; expr subst
     lwkopt = fla_max(i__1, i__2);
-    q__1.r = (real)lwkopt;
-    q__1.i = 0.f; // , expr subst
-    work[1].r = q__1.r;
-    work[1].i = q__1.i; // , expr subst
+    q__1.real = (real)lwkopt;
+    q__1.imag = 0.f; // , expr subst
+    work[1].real = q__1.real;
+    work[1].imag = q__1.imag; // , expr subst
     lquery = *lwork == -1;
     if(*m < 0)
     {
@@ -432,7 +432,7 @@ void aocl_lapack_cgelsy(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *nrhs, sc
     aocl_lapack_cgeqp3(m, n, &a[a_offset], lda, &jpvt[1], &work[1], &work[mn + 1], &i__1, &rwork[1],
                        info);
     i__1 = mn + 1;
-    wsize = mn + work[i__1].r;
+    wsize = mn + work[i__1].real;
     /* scomplex workspace: MN+NB*(N+1). real workspace 2*N. */
     /* Details of Householder rotations stored in WORK(1:MN). */
     /* Determine RANK using incremental condition estimation */
@@ -440,8 +440,8 @@ void aocl_lapack_cgelsy(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *nrhs, sc
     work[i__1].real = 1.f;
     work[i__1].imag = 0.f; // , expr subst
     i__1 = ismax;
-    work[i__1].r = 1.f;
-    work[i__1].i = 0.f; // , expr subst
+    work[i__1].real = 1.f;
+    work[i__1].imag = 0.f; // , expr subst
     smax = c_abs(&a[a_dim1 + 1]);
     smin = smax;
     if(c_abs(&a[a_dim1 + 1]) == 0.f)
@@ -514,7 +514,7 @@ L10:
     /* Computing MAX */
     i__1 = (mn << 1) + 1;
     r__1 = wsize;
-    r__2 = (mn << 1) + work[i__1].r; // , expr subst
+    r__2 = (mn << 1) + work[i__1].real; // , expr subst
     wsize = fla_max(r__1, r__2);
     /* scomplex workspace: 2*MN+NB*NRHS. */
     /* B(1:RANK,1:NRHS) := inv(T11) * B(1:RANK,1:NRHS) */
@@ -579,10 +579,10 @@ L10:
         aocl_lapack_clascl("G", &c__0, &c__0, &bignum, &bnrm, n, nrhs, &b[b_offset], ldb, info);
     }
 L70:
-    q__1.r = (real)lwkopt;
-    q__1.i = 0.f; // , expr subst
-    work[1].r = q__1.r;
-    work[1].i = q__1.i; // , expr subst
+    q__1.real = (real)lwkopt;
+    q__1.imag = 0.f; // , expr subst
+    work[1].real = q__1.real;
+    work[1].imag = q__1.imag; // , expr subst
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
     return;
     /* End of CGELSY */

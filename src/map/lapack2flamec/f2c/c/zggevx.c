@@ -4,8 +4,8 @@
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
  /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static dcomplex c_b1 = {{0.}, {0.}};
-static dcomplex c_b2 = {{1.}, {0.}};
+static dcomplex c_b1 = {0., 0.};
+static dcomplex c_b2 = {1., 0.};
 static aocl_int64_t c__1 = 1;
 static aocl_int64_t c__0 = 0;
 /* > \brief <b> ZGGEVX computes the eigenvalues and, optionally, the left and/or right eigenvectors
@@ -642,8 +642,8 @@ void aocl_lapack_zggevx(char *balanc, char *jobvl, char *jobvr, char *sense, aoc
                 maxwrk = fla_max(i__1, i__2);
             }
         }
-        work[1].r = (doublereal)maxwrk;
-        work[1].i = 0.; // , expr subst
+        work[1].real = (doublereal)maxwrk;
+        work[1].imag = 0.; // , expr subst
         if(*lwork < minwrk && !lquery)
         {
             *info = -25;
@@ -906,7 +906,7 @@ void aocl_lapack_zggevx(char *balanc, char *jobvl, char *jobvr, char *sense, aoc
                 /* Computing MAX */
                 i__3 = jr + jc * vl_dim1;
                 d__3 = temp;
-                d__4 = (d__1 = vl[i__3].r, f2c_abs(d__1))
+                d__4 = (d__1 = vl[i__3].real, f2c_abs(d__1))
                        + (d__2 = d_imag(&vl[jr + jc * vl_dim1]), f2c_abs(d__2)); // , expr subst
                 temp = fla_max(d__3, d__4);
                 /* L30: */
@@ -921,10 +921,10 @@ void aocl_lapack_zggevx(char *balanc, char *jobvl, char *jobvr, char *sense, aoc
             {
                 i__3 = jr + jc * vl_dim1;
                 i__4 = jr + jc * vl_dim1;
-                z__1.r = temp * vl[i__4].r;
-                z__1.i = temp * vl[i__4].i; // , expr subst
-                vl[i__3].r = z__1.r;
-                vl[i__3].i = z__1.i; // , expr subst
+                z__1.real = temp * vl[i__4].real;
+                z__1.imag = temp * vl[i__4].imag; // , expr subst
+                vl[i__3].real = z__1.real;
+                vl[i__3].imag = z__1.imag; // , expr subst
                 /* L40: */
             }
         L50:;
@@ -944,7 +944,7 @@ void aocl_lapack_zggevx(char *balanc, char *jobvl, char *jobvr, char *sense, aoc
                 /* Computing MAX */
                 i__3 = jr + jc * vr_dim1;
                 d__3 = temp;
-                d__4 = (d__1 = vr[i__3].r, f2c_abs(d__1))
+                d__4 = (d__1 = vr[i__3].real, f2c_abs(d__1))
                        + (d__2 = d_imag(&vr[jr + jc * vr_dim1]), f2c_abs(d__2)); // , expr subst
                 temp = fla_max(d__3, d__4);
                 /* L60: */
@@ -959,10 +959,10 @@ void aocl_lapack_zggevx(char *balanc, char *jobvl, char *jobvr, char *sense, aoc
             {
                 i__3 = jr + jc * vr_dim1;
                 i__4 = jr + jc * vr_dim1;
-                z__1.r = temp * vr[i__4].r;
-                z__1.i = temp * vr[i__4].i; // , expr subst
-                vr[i__3].r = z__1.r;
-                vr[i__3].i = z__1.i; // , expr subst
+                z__1.real = temp * vr[i__4].real;
+                z__1.imag = temp * vr[i__4].imag; // , expr subst
+                vr[i__3].real = z__1.real;
+                vr[i__3].imag = z__1.imag; // , expr subst
                 /* L70: */
             }
         L80:;
@@ -978,8 +978,8 @@ L90:
     {
         aocl_lapack_zlascl("G", &c__0, &c__0, &bnrmto, &bnrm, n, &c__1, &beta[1], n, &ierr);
     }
-    work[1].r = (doublereal)maxwrk;
-    work[1].i = 0.; // , expr subst
+    work[1].real = (doublereal)maxwrk;
+    work[1].imag = 0.; // , expr subst
     AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of ZGGEVX */

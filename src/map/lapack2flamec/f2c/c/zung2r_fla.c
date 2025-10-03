@@ -181,13 +181,13 @@ void zung2r_fla(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *k, dcomplex *a,
         for(l = 1; l <= i__2; ++l)
         {
             i__3 = l + j * a_dim1;
-            a[i__3].r = 0.;
-            a[i__3].i = 0.; // , expr subst
+            a[i__3].real = 0.;
+            a[i__3].imag = 0.; // , expr subst
             /* L10: */
         }
         i__2 = j + j * a_dim1;
-        a[i__2].r = 1.;
-        a[i__2].i = 0.; // , expr subst
+        a[i__2].real = 1.;
+        a[i__2].imag = 0.; // , expr subst
         /* L20: */
     }
     for(i__ = *k; i__ >= 1; --i__)
@@ -196,8 +196,8 @@ void zung2r_fla(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *k, dcomplex *a,
         if(i__ < *n)
         {
             i__1 = i__ + i__ * a_dim1;
-            a[i__1].r = 1.;
-            a[i__1].i = 0.; // , expr subst
+            a[i__1].real = 1.;
+            a[i__1].imag = 0.; // , expr subst
             i__1 = *m - i__ + 1;
             i__2 = *n - i__;
             aocl_lapack_zlarf("Left", &i__1, &i__2, &a[i__ + i__ * a_dim1], &c__1, &tau[i__],
@@ -207,23 +207,23 @@ void zung2r_fla(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *k, dcomplex *a,
         {
             i__1 = *m - i__;
             i__2 = i__;
-            z__1.r = -tau[i__2].r;
-            z__1.i = -tau[i__2].i; // , expr subst
+            z__1.real = -tau[i__2].real;
+            z__1.imag = -tau[i__2].imag; // , expr subst
             aocl_blas_zscal(&i__1, &z__1, &a[i__ + 1 + i__ * a_dim1], &c__1);
         }
         i__1 = i__ + i__ * a_dim1;
         i__2 = i__;
-        z__1.r = 1. - tau[i__2].r;
-        z__1.i = 0. - tau[i__2].i; // , expr subst
-        a[i__1].r = z__1.r;
-        a[i__1].i = z__1.i; // , expr subst
+        z__1.real = 1. - tau[i__2].real;
+        z__1.imag = 0. - tau[i__2].imag; // , expr subst
+        a[i__1].real = z__1.real;
+        a[i__1].imag = z__1.imag; // , expr subst
         /* Set A(1:i-1,i) to zero */
         i__1 = i__ - 1;
         for(l = 1; l <= i__1; ++l)
         {
             i__2 = l + i__ * a_dim1;
-            a[i__2].r = 0.;
-            a[i__2].i = 0.; // , expr subst
+            a[i__2].real = 0.;
+            a[i__2].imag = 0.; // , expr subst
             /* L30: */
         }
         /* L40: */

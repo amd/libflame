@@ -304,29 +304,29 @@ void aocl_lapack_zsyconvf(char *uplo, char *way, aocl_int64_t *n, dcomplex *a,
             /* Assign superdiagonal entries of D to array E and zero out */
             /* corresponding entries in input storage A */
             i__ = *n;
-            e[1].r = 0.;
-            e[1].i = 0.; // , expr subst
+            e[1].real = 0.;
+            e[1].imag = 0.; // , expr subst
             while(i__ > 1)
             {
                 if(ipiv[i__] < 0)
                 {
                     i__1 = i__;
                     i__2 = i__ - 1 + i__ * a_dim1;
-                    e[i__1].r = a[i__2].r;
-                    e[i__1].i = a[i__2].i; // , expr subst
+                    e[i__1].real = a[i__2].real;
+                    e[i__1].imag = a[i__2].imag; // , expr subst
                     i__1 = i__ - 1;
-                    e[i__1].r = 0.;
-                    e[i__1].i = 0.; // , expr subst
+                    e[i__1].real = 0.;
+                    e[i__1].imag = 0.; // , expr subst
                     i__1 = i__ - 1 + i__ * a_dim1;
-                    a[i__1].r = 0.;
-                    a[i__1].i = 0.; // , expr subst
+                    a[i__1].real = 0.;
+                    a[i__1].imag = 0.; // , expr subst
                     --i__;
                 }
                 else
                 {
                     i__1 = i__;
-                    e[i__1].r = 0.;
-                    e[i__1].i = 0.; // , expr subst
+                    e[i__1].real = 0.;
+                    e[i__1].imag = 0.; // , expr subst
                 }
                 --i__;
             }
@@ -432,8 +432,8 @@ void aocl_lapack_zsyconvf(char *uplo, char *way, aocl_int64_t *n, dcomplex *a,
                 {
                     i__1 = i__ - 1 + i__ * a_dim1;
                     i__2 = i__;
-                    a[i__1].r = e[i__2].r;
-                    a[i__1].i = e[i__2].i; // , expr subst
+                    a[i__1].real = e[i__2].real;
+                    a[i__1].imag = e[i__2].imag; // , expr subst
                     --i__;
                 }
                 --i__;
@@ -452,29 +452,29 @@ void aocl_lapack_zsyconvf(char *uplo, char *way, aocl_int64_t *n, dcomplex *a,
             /* corresponding entries in input storage A */
             i__ = 1;
             i__1 = *n;
-            e[i__1].r = 0.;
-            e[i__1].i = 0.; // , expr subst
+            e[i__1].real = 0.;
+            e[i__1].imag = 0.; // , expr subst
             while(i__ <= *n)
             {
                 if(i__ < *n && ipiv[i__] < 0)
                 {
                     i__1 = i__;
                     i__2 = i__ + 1 + i__ * a_dim1;
-                    e[i__1].r = a[i__2].r;
-                    e[i__1].i = a[i__2].i; // , expr subst
+                    e[i__1].real = a[i__2].real;
+                    e[i__1].imag = a[i__2].imag; // , expr subst
                     i__1 = i__ + 1;
-                    e[i__1].r = 0.;
-                    e[i__1].i = 0.; // , expr subst
+                    e[i__1].real = 0.;
+                    e[i__1].imag = 0.; // , expr subst
                     i__1 = i__ + 1 + i__ * a_dim1;
-                    a[i__1].r = 0.;
-                    a[i__1].i = 0.; // , expr subst
+                    a[i__1].real = 0.;
+                    a[i__1].imag = 0.; // , expr subst
                     ++i__;
                 }
                 else
                 {
                     i__1 = i__;
-                    e[i__1].r = 0.;
-                    e[i__1].i = 0.; // , expr subst
+                    e[i__1].real = 0.;
+                    e[i__1].imag = 0.; // , expr subst
                 }
                 ++i__;
             }
@@ -576,8 +576,8 @@ void aocl_lapack_zsyconvf(char *uplo, char *way, aocl_int64_t *n, dcomplex *a,
                 {
                     i__1 = i__ + 1 + i__ * a_dim1;
                     i__2 = i__;
-                    a[i__1].r = e[i__2].r;
-                    a[i__1].i = e[i__2].i; // , expr subst
+                    a[i__1].real = e[i__2].real;
+                    a[i__1].imag = e[i__2].imag; // , expr subst
                     ++i__;
                 }
                 ++i__;

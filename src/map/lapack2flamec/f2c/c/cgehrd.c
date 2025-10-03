@@ -4,7 +4,7 @@
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
  /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static scomplex c_b2 = {{1.f}, {0.f}};
+static scomplex c_b2 = {1.f, 0.f};
 static aocl_int64_t c__1 = 1;
 static aocl_int64_t c_n1 = -1;
 static aocl_int64_t c__3 = 3;
@@ -278,8 +278,8 @@ void aocl_lapack_cgehrd(aocl_int64_t *n, aocl_int64_t *ilo, aocl_int64_t *ihi, s
         nb = fla_min(i__1, i__2);
         lwkopt = *n * nb + 4160;
         r__1 = aocl_lapack_sroundup_lwork(&lwkopt);
-        work[1].r = r__1;
-        work[1].i = 0.f; // , expr subst
+        work[1].real = r__1;
+        work[1].imag = 0.f; // , expr subst
     }
     if(*info != 0)
     {
@@ -298,24 +298,24 @@ void aocl_lapack_cgehrd(aocl_int64_t *n, aocl_int64_t *ilo, aocl_int64_t *ihi, s
     for(i__ = 1; i__ <= i__1; ++i__)
     {
         i__2 = i__;
-        tau[i__2].r = 0.f;
-        tau[i__2].i = 0.f; // , expr subst
+        tau[i__2].real = 0.f;
+        tau[i__2].imag = 0.f; // , expr subst
         /* L10: */
     }
     i__1 = *n - 1;
     for(i__ = fla_max(1, *ihi); i__ <= i__1; ++i__)
     {
         i__2 = i__;
-        tau[i__2].r = 0.f;
-        tau[i__2].i = 0.f; // , expr subst
+        tau[i__2].real = 0.f;
+        tau[i__2].imag = 0.f; // , expr subst
         /* L20: */
     }
     /* Quick return if possible */
     nh = *ihi - *ilo + 1;
     if(nh <= 1)
     {
-        work[1].r = 1.f;
-        work[1].i = 0.f; // , expr subst
+        work[1].real = 1.f;
+        work[1].imag = 0.f; // , expr subst
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
@@ -383,20 +383,20 @@ void aocl_lapack_cgehrd(aocl_int64_t *n, aocl_int64_t *ilo, aocl_int64_t *ihi, s
             /* right, computing A := A - Y * V**H. V(i+ib,ib-1) must be set */
             /* to 1 */
             i__3 = i__ + ib + (i__ + ib - 1) * a_dim1;
-            ei.r = a[i__3].r;
-            ei.i = a[i__3].i; // , expr subst
+            ei.real = a[i__3].real;
+            ei.imag = a[i__3].imag; // , expr subst
             i__3 = i__ + ib + (i__ + ib - 1) * a_dim1;
-            a[i__3].r = 1.f;
-            a[i__3].i = 0.f; // , expr subst
+            a[i__3].real = 1.f;
+            a[i__3].imag = 0.f; // , expr subst
             i__3 = *ihi - i__ - ib + 1;
-            q__1.r = -1.f;
-            q__1.i = -0.f; // , expr subst
+            q__1.real = -1.f;
+            q__1.imag = -0.f; // , expr subst
             aocl_blas_cgemm("No transpose", "Conjugate transpose", ihi, &i__3, &ib, &q__1, &work[1],
                             &ldwork, &a[i__ + ib + i__ * a_dim1], lda, &c_b2,
                             &a[(i__ + ib) * a_dim1 + 1], lda);
             i__3 = i__ + ib + (i__ + ib - 1) * a_dim1;
-            a[i__3].r = ei.r;
-            a[i__3].i = ei.i; // , expr subst
+            a[i__3].real = ei.real;
+            a[i__3].imag = ei.imag; // , expr subst
             /* Apply the block reflector H to A(1:i,i+1:i+ib-1) from the */
             /* right */
             i__3 = ib - 1;
@@ -405,8 +405,8 @@ void aocl_lapack_cgehrd(aocl_int64_t *n, aocl_int64_t *ilo, aocl_int64_t *ihi, s
             i__3 = ib - 2;
             for(j = 0; j <= i__3; ++j)
             {
-                q__1.r = -1.f;
-                q__1.i = -0.f; // , expr subst
+                q__1.real = -1.f;
+                q__1.imag = -0.f; // , expr subst
                 aocl_blas_caxpy(&i__, &q__1, &work[ldwork * j + 1], &c__1,
                                 &a[(i__ + j + 1) * a_dim1 + 1], &c__1);
                 /* L30: */
@@ -424,8 +424,8 @@ void aocl_lapack_cgehrd(aocl_int64_t *n, aocl_int64_t *ilo, aocl_int64_t *ihi, s
     /* Use unblocked code to reduce the rest of the matrix */
     aocl_lapack_cgehd2(n, &i__, ihi, &a[a_offset], lda, &tau[1], &work[1], &iinfo);
     r__1 = aocl_lapack_sroundup_lwork(&lwkopt);
-    work[1].r = r__1;
-    work[1].i = 0.f; // , expr subst
+    work[1].real = r__1;
+    work[1].imag = 0.f; // , expr subst
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
     return;
     /* End of CGEHRD */

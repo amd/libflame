@@ -419,7 +419,7 @@ void aocl_lapack_chpevx(char *jobz, char *range, char *uplo, aocl_int64_t *n, sc
         }
         else
         {
-            if(*vl < ap[1].r && *vu >= ap[1].r)
+            if(*vl < ap[1].real && *vu >= ap[1].real)
             {
                 *m = 1;
                 w[1] = ap[1].real;

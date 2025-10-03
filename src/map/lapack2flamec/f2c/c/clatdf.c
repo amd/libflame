@@ -4,7 +4,7 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static scomplex c_b1 = {{1.f}, {0.f}};
+static scomplex c_b1 = {1.f, 0.f};
 static aocl_int64_t c__1 = 1;
 static aocl_int64_t c_n1 = -1;
 static real c_b24 = 1.f;
@@ -270,12 +270,12 @@ void aocl_lapack_clatdf(aocl_int64_t *ijob, aocl_int64_t *n, scomplex *z__, aocl
             i__2 = *n - j;
             aocl_lapack_cdotc_f2c(&q__1, &i__2, &z__[j + 1 + j * z_dim1], &c__1, &z__[j + 1 + j * z_dim1],
                        &c__1);
-            splus += q__1.r;
+            splus += q__1.real;
             i__2 = *n - j;
             aocl_lapack_cdotc_f2c(&q__1, &i__2, &z__[j + 1 + j * z_dim1], &c__1, &rhs[j + 1], &c__1);
-            sminu = q__1.r;
+            sminu = q__1.real;
             i__2 = j;
-            splus *= rhs[i__2].r;
+            splus *= rhs[i__2].real;
             if(splus > sminu)
             {
                 i__2 = j;
@@ -406,13 +406,13 @@ void aocl_lapack_clatdf(aocl_int64_t *ijob, aocl_int64_t *n, scomplex *z__, aocl
     aocl_lapack_cdotc_f2c(&q__3, n, xm, &c__1, xm, &c__1);
     c_sqrt(&q__2, &q__3);
     c_div(&q__1, &c_b1, &q__2);
-    temp.r = q__1.r;
-    temp.i = q__1.i; // , expr subst
+    temp.real = q__1.real;
+    temp.imag = q__1.imag; // , expr subst
     aocl_blas_cscal(n, &temp, xm, &c__1);
     aocl_blas_ccopy(n, xm, &c__1, xp, &c__1);
     aocl_blas_caxpy(n, &c_b1, &rhs[1], &c__1, xp, &c__1);
-    q__1.r = -1.f;
-    q__1.i = -0.f; // , expr subst
+    q__1.real = -1.f;
+    q__1.imag = -0.f; // , expr subst
     aocl_blas_caxpy(n, &q__1, xm, &c__1, &rhs[1], &c__1);
     aocl_lapack_cgesc2(n, &z__[z_offset], ldz, &rhs[1], &ipiv[1], &jpiv[1], &scale);
     aocl_lapack_cgesc2(n, &z__[z_offset], ldz, xp, &ipiv[1], &jpiv[1], &scale);

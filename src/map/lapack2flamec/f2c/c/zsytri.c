@@ -4,8 +4,8 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static dcomplex c_b1 = {{1.}, {0.}};
-static dcomplex c_b2 = {{0.}, {0.}};
+static dcomplex c_b1 = {1., 0.};
+static dcomplex c_b2 = {0., 0.};
 static aocl_int64_t c__1 = 1;
 /* > \brief \b ZSYTRI */
 /* =========== DOCUMENTATION =========== */
@@ -214,7 +214,7 @@ void aocl_lapack_zsytri(char *uplo, aocl_int64_t *n, dcomplex *a, aocl_int64_t *
         for(*info = *n; *info >= 1; --(*info))
         {
             i__1 = *info + *info * a_dim1;
-            if(ipiv[*info] > 0 && (a[i__1].r == 0. && a[i__1].i == 0.))
+            if(ipiv[*info] > 0 && (a[i__1].real == 0. && a[i__1].imag == 0.))
             {
                 AOCL_DTL_TRACE_LOG_EXIT
                 return;
@@ -229,7 +229,7 @@ void aocl_lapack_zsytri(char *uplo, aocl_int64_t *n, dcomplex *a, aocl_int64_t *
         for(*info = 1; *info <= i__1; ++(*info))
         {
             i__2 = *info + *info * a_dim1;
-            if(ipiv[*info] > 0 && (a[i__2].r == 0. && a[i__2].i == 0.))
+            if(ipiv[*info] > 0 && (a[i__2].real == 0. && a[i__2].imag == 0.))
             {
                 AOCL_DTL_TRACE_LOG_EXIT
                 return;
@@ -263,18 +263,18 @@ void aocl_lapack_zsytri(char *uplo, aocl_int64_t *n, dcomplex *a, aocl_int64_t *
                 i__1 = k - 1;
                 aocl_blas_zcopy(&i__1, &a[k * a_dim1 + 1], &c__1, &work[1], &c__1);
                 i__1 = k - 1;
-                z__1.r = -1.;
-                z__1.i = -0.; // , expr subst
+                z__1.real = -1.;
+                z__1.imag = -0.; // , expr subst
                 aocl_lapack_zsymv(uplo, &i__1, &z__1, &a[a_offset], lda, &work[1], &c__1, &c_b2,
                                   &a[k * a_dim1 + 1], &c__1);
                 i__1 = k + k * a_dim1;
                 i__2 = k + k * a_dim1;
                 i__3 = k - 1;
                 aocl_lapack_zdotu_f2c(&z__2, &i__3, &work[1], &c__1, &a[k * a_dim1 + 1], &c__1);
-                z__1.r = a[i__2].r - z__2.r;
-                z__1.i = a[i__2].i - z__2.i; // , expr subst
-                a[i__1].r = z__1.r;
-                a[i__1].i = z__1.i; // , expr subst
+                z__1.real = a[i__2].real - z__2.real;
+                z__1.imag = a[i__2].imag - z__2.imag; // , expr subst
+                a[i__1].real = z__1.real;
+                a[i__1].imag = z__1.imag; // , expr subst
             }
             kstep = 1;
         }
@@ -322,42 +322,42 @@ void aocl_lapack_zsytri(char *uplo, aocl_int64_t *n, dcomplex *a, aocl_int64_t *
                 i__1 = k - 1;
                 aocl_blas_zcopy(&i__1, &a[k * a_dim1 + 1], &c__1, &work[1], &c__1);
                 i__1 = k - 1;
-                z__1.r = -1.;
-                z__1.i = -0.; // , expr subst
+                z__1.real = -1.;
+                z__1.imag = -0.; // , expr subst
                 aocl_lapack_zsymv(uplo, &i__1, &z__1, &a[a_offset], lda, &work[1], &c__1, &c_b2,
                                   &a[k * a_dim1 + 1], &c__1);
                 i__1 = k + k * a_dim1;
                 i__2 = k + k * a_dim1;
                 i__3 = k - 1;
                 aocl_lapack_zdotu_f2c(&z__2, &i__3, &work[1], &c__1, &a[k * a_dim1 + 1], &c__1);
-                z__1.r = a[i__2].r - z__2.r;
-                z__1.i = a[i__2].i - z__2.i; // , expr subst
-                a[i__1].r = z__1.r;
-                a[i__1].i = z__1.i; // , expr subst
+                z__1.real = a[i__2].real - z__2.real;
+                z__1.imag = a[i__2].imag - z__2.imag; // , expr subst
+                a[i__1].real = z__1.real;
+                a[i__1].imag = z__1.imag; // , expr subst
                 i__1 = k + (k + 1) * a_dim1;
                 i__2 = k + (k + 1) * a_dim1;
                 i__3 = k - 1;
                 aocl_lapack_zdotu_f2c(&z__2, &i__3, &a[k * a_dim1 + 1], &c__1, &a[(k + 1) * a_dim1 + 1],
                            &c__1);
-                z__1.r = a[i__2].r - z__2.r;
-                z__1.i = a[i__2].i - z__2.i; // , expr subst
-                a[i__1].r = z__1.r;
-                a[i__1].i = z__1.i; // , expr subst
+                z__1.real = a[i__2].real - z__2.real;
+                z__1.imag = a[i__2].imag - z__2.imag; // , expr subst
+                a[i__1].real = z__1.real;
+                a[i__1].imag = z__1.imag; // , expr subst
                 i__1 = k - 1;
                 aocl_blas_zcopy(&i__1, &a[(k + 1) * a_dim1 + 1], &c__1, &work[1], &c__1);
                 i__1 = k - 1;
-                z__1.r = -1.;
-                z__1.i = -0.; // , expr subst
+                z__1.real = -1.;
+                z__1.imag = -0.; // , expr subst
                 aocl_lapack_zsymv(uplo, &i__1, &z__1, &a[a_offset], lda, &work[1], &c__1, &c_b2,
                                   &a[(k + 1) * a_dim1 + 1], &c__1);
                 i__1 = k + 1 + (k + 1) * a_dim1;
                 i__2 = k + 1 + (k + 1) * a_dim1;
                 i__3 = k - 1;
                 aocl_lapack_zdotu_f2c(&z__2, &i__3, &work[1], &c__1, &a[(k + 1) * a_dim1 + 1], &c__1);
-                z__1.r = a[i__2].r - z__2.r;
-                z__1.i = a[i__2].i - z__2.i; // , expr subst
-                a[i__1].r = z__1.r;
-                a[i__1].i = z__1.i; // , expr subst
+                z__1.real = a[i__2].real - z__2.real;
+                z__1.imag = a[i__2].imag - z__2.imag; // , expr subst
+                a[i__1].real = z__1.real;
+                a[i__1].imag = z__1.imag; // , expr subst
             }
             kstep = 2;
         }
@@ -378,8 +378,8 @@ void aocl_lapack_zsytri(char *uplo, aocl_int64_t *n, dcomplex *a, aocl_int64_t *
             a[i__1].real = a[i__2].real;
             a[i__1].imag = a[i__2].imag; // , expr subst
             i__1 = kp + kp * a_dim1;
-            a[i__1].r = temp.r;
-            a[i__1].i = temp.i; // , expr subst
+            a[i__1].real = temp.real;
+            a[i__1].imag = temp.imag; // , expr subst
             if(kstep == 2)
             {
                 i__1 = k + (k + 1) * a_dim1;
@@ -423,18 +423,18 @@ void aocl_lapack_zsytri(char *uplo, aocl_int64_t *n, dcomplex *a, aocl_int64_t *
                 i__1 = *n - k;
                 aocl_blas_zcopy(&i__1, &a[k + 1 + k * a_dim1], &c__1, &work[1], &c__1);
                 i__1 = *n - k;
-                z__1.r = -1.;
-                z__1.i = -0.; // , expr subst
+                z__1.real = -1.;
+                z__1.imag = -0.; // , expr subst
                 aocl_lapack_zsymv(uplo, &i__1, &z__1, &a[k + 1 + (k + 1) * a_dim1], lda, &work[1],
                                   &c__1, &c_b2, &a[k + 1 + k * a_dim1], &c__1);
                 i__1 = k + k * a_dim1;
                 i__2 = k + k * a_dim1;
                 i__3 = *n - k;
                 aocl_lapack_zdotu_f2c(&z__2, &i__3, &work[1], &c__1, &a[k + 1 + k * a_dim1], &c__1);
-                z__1.r = a[i__2].r - z__2.r;
-                z__1.i = a[i__2].i - z__2.i; // , expr subst
-                a[i__1].r = z__1.r;
-                a[i__1].i = z__1.i; // , expr subst
+                z__1.real = a[i__2].real - z__2.real;
+                z__1.imag = a[i__2].imag - z__2.imag; // , expr subst
+                a[i__1].real = z__1.real;
+                a[i__1].imag = z__1.imag; // , expr subst
             }
             kstep = 1;
         }
@@ -482,42 +482,42 @@ void aocl_lapack_zsytri(char *uplo, aocl_int64_t *n, dcomplex *a, aocl_int64_t *
                 i__1 = *n - k;
                 aocl_blas_zcopy(&i__1, &a[k + 1 + k * a_dim1], &c__1, &work[1], &c__1);
                 i__1 = *n - k;
-                z__1.r = -1.;
-                z__1.i = -0.; // , expr subst
+                z__1.real = -1.;
+                z__1.imag = -0.; // , expr subst
                 aocl_lapack_zsymv(uplo, &i__1, &z__1, &a[k + 1 + (k + 1) * a_dim1], lda, &work[1],
                                   &c__1, &c_b2, &a[k + 1 + k * a_dim1], &c__1);
                 i__1 = k + k * a_dim1;
                 i__2 = k + k * a_dim1;
                 i__3 = *n - k;
                 aocl_lapack_zdotu_f2c(&z__2, &i__3, &work[1], &c__1, &a[k + 1 + k * a_dim1], &c__1);
-                z__1.r = a[i__2].r - z__2.r;
-                z__1.i = a[i__2].i - z__2.i; // , expr subst
-                a[i__1].r = z__1.r;
-                a[i__1].i = z__1.i; // , expr subst
+                z__1.real = a[i__2].real - z__2.real;
+                z__1.imag = a[i__2].imag - z__2.imag; // , expr subst
+                a[i__1].real = z__1.real;
+                a[i__1].imag = z__1.imag; // , expr subst
                 i__1 = k + (k - 1) * a_dim1;
                 i__2 = k + (k - 1) * a_dim1;
                 i__3 = *n - k;
                 aocl_lapack_zdotu_f2c(&z__2, &i__3, &a[k + 1 + k * a_dim1], &c__1,
                            &a[k + 1 + (k - 1) * a_dim1], &c__1);
-                z__1.r = a[i__2].r - z__2.r;
-                z__1.i = a[i__2].i - z__2.i; // , expr subst
-                a[i__1].r = z__1.r;
-                a[i__1].i = z__1.i; // , expr subst
+                z__1.real = a[i__2].real - z__2.real;
+                z__1.imag = a[i__2].imag - z__2.imag; // , expr subst
+                a[i__1].real = z__1.real;
+                a[i__1].imag = z__1.imag; // , expr subst
                 i__1 = *n - k;
                 aocl_blas_zcopy(&i__1, &a[k + 1 + (k - 1) * a_dim1], &c__1, &work[1], &c__1);
                 i__1 = *n - k;
-                z__1.r = -1.;
-                z__1.i = -0.; // , expr subst
+                z__1.real = -1.;
+                z__1.imag = -0.; // , expr subst
                 aocl_lapack_zsymv(uplo, &i__1, &z__1, &a[k + 1 + (k + 1) * a_dim1], lda, &work[1],
                                   &c__1, &c_b2, &a[k + 1 + (k - 1) * a_dim1], &c__1);
                 i__1 = k - 1 + (k - 1) * a_dim1;
                 i__2 = k - 1 + (k - 1) * a_dim1;
                 i__3 = *n - k;
                 aocl_lapack_zdotu_f2c(&z__2, &i__3, &work[1], &c__1, &a[k + 1 + (k - 1) * a_dim1], &c__1);
-                z__1.r = a[i__2].r - z__2.r;
-                z__1.i = a[i__2].i - z__2.i; // , expr subst
-                a[i__1].r = z__1.r;
-                a[i__1].i = z__1.i; // , expr subst
+                z__1.real = a[i__2].real - z__2.real;
+                z__1.imag = a[i__2].imag - z__2.imag; // , expr subst
+                a[i__1].real = z__1.real;
+                a[i__1].imag = z__1.imag; // , expr subst
             }
             kstep = 2;
         }
@@ -542,8 +542,8 @@ void aocl_lapack_zsytri(char *uplo, aocl_int64_t *n, dcomplex *a, aocl_int64_t *
             a[i__1].real = a[i__2].real;
             a[i__1].imag = a[i__2].imag; // , expr subst
             i__1 = kp + kp * a_dim1;
-            a[i__1].r = temp.r;
-            a[i__1].i = temp.i; // , expr subst
+            a[i__1].real = temp.real;
+            a[i__1].imag = temp.imag; // , expr subst
             if(kstep == 2)
             {
                 i__1 = k + (k - 1) * a_dim1;

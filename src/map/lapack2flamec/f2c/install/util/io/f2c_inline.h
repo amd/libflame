@@ -34,7 +34,7 @@ use or performance of this software.
 
 static inline double c_abs(const scomplex *z)
 {
-    return hypot(z->r, z->i);
+    return hypot(z->real, z->imag);
 }
 static inline double d_abs(const double *x)
 {
@@ -71,8 +71,8 @@ static inline double d_atn2(const double *x, double *y)
 
 static inline void d_cnjg(dcomplex *r, const dcomplex *z)
 {
-    r->r = z->r;
-    r->i = -z->i;
+    r->real = z->real;
+    r->imag = -z->imag;
 }
 
 static inline double d_cos(const double *x)
@@ -96,7 +96,7 @@ static inline double d_exp(const double *x)
 }
 static inline double d_imag(dcomplex *x)
 {
-    return x->i;
+    return x->imag;
 }
 
 static inline double d_int(const double *x)
@@ -252,7 +252,7 @@ static inline ftnint iargc_(void)
 }
 static inline double z_abs(const dcomplex *z)
 {
-    return hypot(z->r, z->i);
+    return hypot(z->real, z->imag);
 }
 
 static int s_copy(char *a, const char *b, ftnlen la, ftnlen lb)

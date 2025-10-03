@@ -262,13 +262,13 @@ void aocl_lapack_zsysv_aa(char *uplo, aocl_int64_t *n, aocl_int64_t *nrhs, dcomp
     if(*info == 0)
     {
         aocl_lapack_zsytrf_aa(uplo, n, &a[a_offset], lda, &ipiv[1], &work[1], &c_n1, info);
-        lwkopt_sytrf__ = (integer)work[1].r;
+        lwkopt_sytrf__ = (integer)work[1].real;
         aocl_lapack_zsytrs_aa(uplo, n, nrhs, &a[a_offset], lda, &ipiv[1], &b[b_offset], ldb,
                               &work[1], &c_n1, info);
-        lwkopt_sytrs__ = (integer)work[1].r;
+        lwkopt_sytrs__ = (integer)work[1].real;
         lwkopt = fla_max(lwkopt_sytrf__, lwkopt_sytrs__);
-        work[1].r = (doublereal)lwkopt;
-        work[1].i = 0.; // , expr subst
+        work[1].real = (doublereal)lwkopt;
+        work[1].imag = 0.; // , expr subst
     }
     if(*info != 0)
     {
@@ -290,8 +290,8 @@ void aocl_lapack_zsysv_aa(char *uplo, aocl_int64_t *n, aocl_int64_t *nrhs, dcomp
         aocl_lapack_zsytrs_aa(uplo, n, nrhs, &a[a_offset], lda, &ipiv[1], &b[b_offset], ldb,
                               &work[1], lwork, info);
     }
-    work[1].r = (doublereal)lwkopt;
-    work[1].i = 0.; // , expr subst
+    work[1].real = (doublereal)lwkopt;
+    work[1].imag = 0.; // , expr subst
     AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of ZSYSV_AA */

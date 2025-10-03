@@ -257,14 +257,14 @@ void aocl_lapack_ctrexc(char *compq, aocl_int64_t *n, scomplex *t, aocl_int64_t 
     {
         /* Interchange the k-th and (k+1)-th diagonal elements. */
         i__3 = k + k * t_dim1;
-        t11.r = t[i__3].r;
-        t11.i = t[i__3].i; // , expr subst
+        t11.real = t[i__3].real;
+        t11.imag = t[i__3].imag; // , expr subst
         i__3 = k + 1 + (k + 1) * t_dim1;
-        t22.r = t[i__3].r;
-        t22.i = t[i__3].i; // , expr subst
+        t22.real = t[i__3].real;
+        t22.imag = t[i__3].imag; // , expr subst
         /* Determine the transformation to perform the interchange. */
-        q__1.r = t22.r - t11.r;
-        q__1.i = t22.i - t11.i; // , expr subst
+        q__1.real = t22.real - t11.real;
+        q__1.imag = t22.imag - t11.imag; // , expr subst
         clartg_(&t[k + (k + 1) * t_dim1], &q__1, &cs, &sn, &temp);
         /* Apply transformation to the matrix T. */
         if(k + 2 <= *n)
@@ -274,16 +274,16 @@ void aocl_lapack_ctrexc(char *compq, aocl_int64_t *n, scomplex *t, aocl_int64_t 
                              ldt, &cs, &sn);
         }
         i__3 = k - 1;
-        q__1.r = sn.r;
-        q__1.i = -sn.i;
+        q__1.real = sn.real;
+        q__1.imag = -sn.imag;
         aocl_lapack_crot(&i__3, &t[k * t_dim1 + 1], &c__1, &t[(k + 1) * t_dim1 + 1], &c__1, &cs,
                          &q__1);
         i__3 = k + k * t_dim1;
-        t[i__3].r = t22.r;
-        t[i__3].i = t22.i; // , expr subst
+        t[i__3].real = t22.real;
+        t[i__3].imag = t22.imag; // , expr subst
         i__3 = k + 1 + (k + 1) * t_dim1;
-        t[i__3].r = t11.r;
-        t[i__3].i = t11.i; // , expr subst
+        t[i__3].real = t11.real;
+        t[i__3].imag = t11.imag; // , expr subst
         if(wantq)
         {
             /* Accumulate transformation in the matrix Q. */

@@ -311,8 +311,8 @@ void aocl_lapack_zgebd2(aocl_int64_t *m, aocl_int64_t *n, dcomplex *a, aocl_int6
             }
             i__2 = i__ + i__ * a_dim1;
             i__3 = i__;
-            a[i__2].r = d__[i__3];
-            a[i__2].i = 0.; // , expr subst
+            a[i__2].real = d__[i__3];
+            a[i__2].imag = 0.; // , expr subst
             if(i__ < *n)
             {
                 /* Generate elementary reflector G(i) to annihilate */
@@ -387,8 +387,8 @@ void aocl_lapack_zgebd2(aocl_int64_t *m, aocl_int64_t *n, dcomplex *a, aocl_int6
             aocl_lapack_zlacgv(&i__2, &a[i__ + i__ * a_dim1], lda);
             i__2 = i__ + i__ * a_dim1;
             i__3 = i__;
-            a[i__2].r = d__[i__3];
-            a[i__2].i = 0.; // , expr subst
+            a[i__2].real = d__[i__3];
+            a[i__2].imag = 0.; // , expr subst
             if(i__ < *m)
             {
                 /* Generate elementary reflector H(i) to annihilate */

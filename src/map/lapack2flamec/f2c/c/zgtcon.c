@@ -242,7 +242,7 @@ void aocl_lapack_zgtcon(char *norm, aocl_int64_t *n, dcomplex *dl, dcomplex *d__
     for(i__ = 1; i__ <= i__1; ++i__)
     {
         i__2 = i__;
-        if(d__[i__2].r == 0. && d__[i__2].i == 0.)
+        if(d__[i__2].real == 0. && d__[i__2].imag == 0.)
         {
             AOCL_DTL_TRACE_LOG_EXIT
             return;

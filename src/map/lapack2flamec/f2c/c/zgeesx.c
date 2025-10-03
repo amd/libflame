@@ -398,7 +398,7 @@ void aocl_lapack_zgeesx(char *jobvs, char *sort, L_fpz1 select, char *sense, aoc
             minwrk = *n << 1;
             aocl_lapack_zhseqr("S", jobvs, n, &c__1, n, &a[a_offset], lda, &w[1], &vs[vs_offset],
                                ldvs, &work[1], &c_n1, &ieval);
-            hswork = (integer)work[1].r;
+            hswork = (integer)work[1].real;
             if(!wantvs)
             {
                 maxwrk = fla_max(maxwrk, hswork);
@@ -423,8 +423,8 @@ void aocl_lapack_zgeesx(char *jobvs, char *sort, L_fpz1 select, char *sense, aoc
                 lwrk = fla_max(i__1, i__2);
             }
         }
-        work[1].r = (doublereal)lwrk;
-        work[1].i = 0.; // , expr subst
+        work[1].real = (doublereal)lwrk;
+        work[1].imag = 0.; // , expr subst
         if(*lwork < minwrk && !lquery)
         {
             *info = -15;
@@ -561,8 +561,8 @@ void aocl_lapack_zgeesx(char *jobvs, char *sort, L_fpz1 select, char *sense, aoc
             *rcondv = dum[0];
         }
     }
-    work[1].r = (doublereal)maxwrk;
-    work[1].i = 0.; // , expr subst
+    work[1].real = (doublereal)maxwrk;
+    work[1].imag = 0.; // , expr subst
     AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of ZGEESX */

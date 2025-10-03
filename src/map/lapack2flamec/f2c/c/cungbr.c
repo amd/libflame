@@ -254,8 +254,8 @@ void aocl_lapack_cungbr(char *vect, aocl_int64_t *m, aocl_int64_t *n, aocl_int64
     }
     if(*info == 0)
     {
-        work[1].r = 1.f;
-        work[1].i = 0.f; // , expr subst
+        work[1].real = 1.f;
+        work[1].imag = 0.f; // , expr subst
         if(wantq)
         {
             if(*m >= *k)
@@ -292,7 +292,7 @@ void aocl_lapack_cungbr(char *vect, aocl_int64_t *m, aocl_int64_t *n, aocl_int64
                 }
             }
         }
-        lwkopt = (integer)work[1].r;
+        lwkopt = (integer)work[1].real;
         lwkopt = fla_max(lwkopt, mn);
     }
     if(*info != 0)
@@ -305,16 +305,16 @@ void aocl_lapack_cungbr(char *vect, aocl_int64_t *m, aocl_int64_t *n, aocl_int64
     else if(lquery)
     {
         r__1 = aocl_lapack_sroundup_lwork(&lwkopt);
-        work[1].r = r__1;
-        work[1].i = 0.f; // , expr subst
+        work[1].real = r__1;
+        work[1].imag = 0.f; // , expr subst
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Quick return if possible */
     if(*m == 0 || *n == 0)
     {
-        work[1].r = 1.f;
-        work[1].i = 0.f; // , expr subst
+        work[1].real = 1.f;
+        work[1].imag = 0.f; // , expr subst
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -336,28 +336,28 @@ void aocl_lapack_cungbr(char *vect, aocl_int64_t *m, aocl_int64_t *n, aocl_int64
             for(j = *m; j >= 2; --j)
             {
                 i__1 = j * a_dim1 + 1;
-                a[i__1].r = 0.f;
-                a[i__1].i = 0.f; // , expr subst
+                a[i__1].real = 0.f;
+                a[i__1].imag = 0.f; // , expr subst
                 i__1 = *m;
                 for(i__ = j + 1; i__ <= i__1; ++i__)
                 {
                     i__2 = i__ + j * a_dim1;
                     i__3 = i__ + (j - 1) * a_dim1;
-                    a[i__2].r = a[i__3].r;
-                    a[i__2].i = a[i__3].i; // , expr subst
+                    a[i__2].real = a[i__3].real;
+                    a[i__2].imag = a[i__3].imag; // , expr subst
                     /* L10: */
                 }
                 /* L20: */
             }
             i__1 = a_dim1 + 1;
-            a[i__1].r = 1.f;
-            a[i__1].i = 0.f; // , expr subst
+            a[i__1].real = 1.f;
+            a[i__1].imag = 0.f; // , expr subst
             i__1 = *m;
             for(i__ = 2; i__ <= i__1; ++i__)
             {
                 i__2 = i__ + a_dim1;
-                a[i__2].r = 0.f;
-                a[i__2].i = 0.f; // , expr subst
+                a[i__2].real = 0.f;
+                a[i__2].imag = 0.f; // , expr subst
                 /* L30: */
             }
             if(*m > 1)
@@ -387,14 +387,14 @@ void aocl_lapack_cungbr(char *vect, aocl_int64_t *m, aocl_int64_t *n, aocl_int64
             /* row downward, and set the first row and column of P**H to */
             /* those of the unit matrix */
             i__1 = a_dim1 + 1;
-            a[i__1].r = 1.f;
-            a[i__1].i = 0.f; // , expr subst
+            a[i__1].real = 1.f;
+            a[i__1].imag = 0.f; // , expr subst
             i__1 = *n;
             for(i__ = 2; i__ <= i__1; ++i__)
             {
                 i__2 = i__ + a_dim1;
-                a[i__2].r = 0.f;
-                a[i__2].i = 0.f; // , expr subst
+                a[i__2].real = 0.f;
+                a[i__2].imag = 0.f; // , expr subst
                 /* L40: */
             }
             i__1 = *n;
@@ -404,13 +404,13 @@ void aocl_lapack_cungbr(char *vect, aocl_int64_t *m, aocl_int64_t *n, aocl_int64
                 {
                     i__2 = i__ + j * a_dim1;
                     i__3 = i__ - 1 + j * a_dim1;
-                    a[i__2].r = a[i__3].r;
-                    a[i__2].i = a[i__3].i; // , expr subst
+                    a[i__2].real = a[i__3].real;
+                    a[i__2].imag = a[i__3].imag; // , expr subst
                     /* L50: */
                 }
                 i__2 = j * a_dim1 + 1;
-                a[i__2].r = 0.f;
-                a[i__2].i = 0.f; // , expr subst
+                a[i__2].real = 0.f;
+                a[i__2].imag = 0.f; // , expr subst
                 /* L60: */
             }
             if(*n > 1)
@@ -425,8 +425,8 @@ void aocl_lapack_cungbr(char *vect, aocl_int64_t *m, aocl_int64_t *n, aocl_int64
         }
     }
     r__1 = aocl_lapack_sroundup_lwork(&lwkopt);
-    work[1].r = r__1;
-    work[1].i = 0.f; // , expr subst
+    work[1].real = r__1;
+    work[1].imag = 0.f; // , expr subst
     AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of CUNGBR */

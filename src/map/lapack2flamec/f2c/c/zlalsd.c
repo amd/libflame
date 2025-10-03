@@ -4,7 +4,7 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static dcomplex c_b1 = {{0.}, {0.}};
+static dcomplex c_b1 = {0., 0.};
 static aocl_int64_t c__1 = 1;
 static aocl_int64_t c__0 = 0;
 static doublereal c_b10 = 1.;
@@ -414,7 +414,7 @@ void aocl_lapack_zlalsd(char *uplo, aocl_int64_t *smlsiz, aocl_int64_t *n, aocl_
             {
                 ++j;
                 i__3 = jrow + jcol * b_dim1;
-                rwork[j] = b[i__3].r;
+                rwork[j] = b[i__3].real;
                 /* L40: */
             }
             /* L50: */
@@ -449,10 +449,10 @@ void aocl_lapack_zlalsd(char *uplo, aocl_int64_t *smlsiz, aocl_int64_t *n, aocl_
                 i__3 = jrow + jcol * b_dim1;
                 i__4 = jreal;
                 i__5 = jimag;
-                z__1.r = rwork[i__4];
-                z__1.i = rwork[i__5]; // , expr subst
-                b[i__3].r = z__1.r;
-                b[i__3].i = z__1.i; // , expr subst
+                z__1.real = rwork[i__4];
+                z__1.imag = rwork[i__5]; // , expr subst
+                b[i__3].real = z__1.real;
+                b[i__3].imag = z__1.imag; // , expr subst
                 /* L80: */
             }
             /* L90: */
@@ -487,7 +487,7 @@ void aocl_lapack_zlalsd(char *uplo, aocl_int64_t *smlsiz, aocl_int64_t *n, aocl_
             {
                 ++j;
                 i__3 = jrow + jcol * b_dim1;
-                rwork[j] = b[i__3].r;
+                rwork[j] = b[i__3].real;
                 /* L110: */
             }
             /* L120: */
@@ -522,10 +522,10 @@ void aocl_lapack_zlalsd(char *uplo, aocl_int64_t *smlsiz, aocl_int64_t *n, aocl_
                 i__3 = jrow + jcol * b_dim1;
                 i__4 = jreal;
                 i__5 = jimag;
-                z__1.r = rwork[i__4];
-                z__1.i = rwork[i__5]; // , expr subst
-                b[i__3].r = z__1.r;
-                b[i__3].i = z__1.i; // , expr subst
+                z__1.real = rwork[i__4];
+                z__1.imag = rwork[i__5]; // , expr subst
+                b[i__3].real = z__1.real;
+                b[i__3].imag = z__1.imag; // , expr subst
                 /* L150: */
             }
             /* L160: */
@@ -639,7 +639,7 @@ void aocl_lapack_zlalsd(char *uplo, aocl_int64_t *smlsiz, aocl_int64_t *n, aocl_
                     {
                         ++j;
                         i__4 = jrow + jcol * b_dim1;
-                        rwork[j] = b[i__4].r;
+                        rwork[j] = b[i__4].real;
                         /* L180: */
                     }
                     /* L190: */
@@ -674,10 +674,10 @@ void aocl_lapack_zlalsd(char *uplo, aocl_int64_t *smlsiz, aocl_int64_t *n, aocl_
                         i__4 = jrow + jcol * b_dim1;
                         i__5 = jreal;
                         i__6 = jimag;
-                        z__1.r = rwork[i__5];
-                        z__1.i = rwork[i__6]; // , expr subst
-                        b[i__4].r = z__1.r;
-                        b[i__4].i = z__1.i; // , expr subst
+                        z__1.real = rwork[i__5];
+                        z__1.imag = rwork[i__6]; // , expr subst
+                        b[i__4].real = z__1.real;
+                        b[i__4].imag = z__1.imag; // , expr subst
                         /* L220: */
                     }
                     /* L230: */
@@ -766,7 +766,7 @@ void aocl_lapack_zlalsd(char *uplo, aocl_int64_t *smlsiz, aocl_int64_t *n, aocl_
                 {
                     ++jreal;
                     i__4 = j + jrow;
-                    rwork[jreal] = work[i__4].r;
+                    rwork[jreal] = work[i__4].real;
                     /* L260: */
                 }
                 /* L270: */
@@ -803,10 +803,10 @@ void aocl_lapack_zlalsd(char *uplo, aocl_int64_t *smlsiz, aocl_int64_t *n, aocl_
                     i__4 = jrow + jcol * b_dim1;
                     i__5 = jreal;
                     i__6 = jimag;
-                    z__1.r = rwork[i__5];
-                    z__1.i = rwork[i__6]; // , expr subst
-                    b[i__4].r = z__1.r;
-                    b[i__4].i = z__1.i; // , expr subst
+                    z__1.real = rwork[i__5];
+                    z__1.imag = rwork[i__6]; // , expr subst
+                    b[i__4].real = z__1.real;
+                    b[i__4].imag = z__1.imag; // , expr subst
                     /* L300: */
                 }
                 /* L310: */

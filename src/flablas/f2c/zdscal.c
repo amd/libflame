@@ -31,10 +31,10 @@ int zdscal_(integer *n, doublereal *da, dcomplex *zx, integer *incx)
             ++i__)
     {
         i__2 = ix;
-        z__2.r = *da, z__2.i = 0.;
+        z__2.real = *da, z__2.imag = 0.;
         i__3 = ix;
-        z__1.r = z__2.r * zx[i__3].r - z__2.i * zx[i__3].i, z__1.i = z__2.r * zx[i__3].i + z__2.i * zx[i__3].r;
-        zx[i__2].r = z__1.r, zx[i__2].i = z__1.i;
+        z__1.real = z__2.real * zx[i__3].real - z__2.imag * zx[i__3].imag, z__1.imag = z__2.real * zx[i__3].imag + z__2.imag * zx[i__3].real;
+        zx[i__2].real = z__1.real, zx[i__2].imag = z__1.imag;
         ix += *incx;
         /* L10: */
     }
@@ -47,10 +47,10 @@ L20:
             ++i__)
     {
         i__2 = i__;
-        z__2.r = *da, z__2.i = 0.;
+        z__2.real = *da, z__2.imag = 0.;
         i__3 = i__;
-        z__1.r = z__2.r * zx[i__3].r - z__2.i * zx[i__3].i, z__1.i = z__2.r * zx[i__3].i + z__2.i * zx[i__3].r;
-        zx[i__2].r = z__1.r, zx[i__2].i = z__1.i;
+        z__1.real = z__2.real * zx[i__3].real - z__2.imag * zx[i__3].imag, z__1.imag = z__2.real * zx[i__3].imag + z__2.imag * zx[i__3].real;
+        zx[i__2].real = z__1.real, zx[i__2].imag = z__1.imag;
         /* L30: */
     }
     return 0;

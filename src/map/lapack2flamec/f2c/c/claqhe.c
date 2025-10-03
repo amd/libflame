@@ -220,17 +220,17 @@ void aocl_lapack_claqhe(char *uplo, aocl_int64_t *n, scomplex *a, aocl_int64_t *
                     i__3 = i__ + j * a_dim1;
                     r__1 = cj * s[i__];
                     i__4 = i__ + j * a_dim1;
-                    q__1.r = r__1 * a[i__4].r;
-                    q__1.i = r__1 * a[i__4].i; // , expr subst
-                    a[i__3].r = q__1.r;
-                    a[i__3].i = q__1.i; // , expr subst
+                    q__1.real = r__1 * a[i__4].real;
+                    q__1.imag = r__1 * a[i__4].imag; // , expr subst
+                    a[i__3].real = q__1.real;
+                    a[i__3].imag = q__1.imag; // , expr subst
                     /* L10: */
                 }
                 i__2 = j + j * a_dim1;
                 i__3 = j + j * a_dim1;
-                r__1 = cj * cj * a[i__3].r;
-                a[i__2].r = r__1;
-                a[i__2].i = 0.f; // , expr subst
+                r__1 = cj * cj * a[i__3].real;
+                a[i__2].real = r__1;
+                a[i__2].imag = 0.f; // , expr subst
                 /* L20: */
             }
         }
@@ -243,19 +243,19 @@ void aocl_lapack_claqhe(char *uplo, aocl_int64_t *n, scomplex *a, aocl_int64_t *
                 cj = s[j];
                 i__2 = j + j * a_dim1;
                 i__3 = j + j * a_dim1;
-                r__1 = cj * cj * a[i__3].r;
-                a[i__2].r = r__1;
-                a[i__2].i = 0.f; // , expr subst
+                r__1 = cj * cj * a[i__3].real;
+                a[i__2].real = r__1;
+                a[i__2].imag = 0.f; // , expr subst
                 i__2 = *n;
                 for(i__ = j + 1; i__ <= i__2; ++i__)
                 {
                     i__3 = i__ + j * a_dim1;
                     r__1 = cj * s[i__];
                     i__4 = i__ + j * a_dim1;
-                    q__1.r = r__1 * a[i__4].r;
-                    q__1.i = r__1 * a[i__4].i; // , expr subst
-                    a[i__3].r = q__1.r;
-                    a[i__3].i = q__1.i; // , expr subst
+                    q__1.real = r__1 * a[i__4].real;
+                    q__1.imag = r__1 * a[i__4].imag; // , expr subst
+                    a[i__3].real = q__1.real;
+                    a[i__3].imag = q__1.imag; // , expr subst
                     /* L30: */
                 }
                 /* L40: */

@@ -282,20 +282,20 @@ void aocl_lapack_zhfrk(char *transr, char *uplo, char *trans, aocl_int64_t *n, a
         for(j = 1; j <= i__1; ++j)
         {
             i__2 = j;
-            c__[i__2].r = 0.;
-            c__[i__2].i = 0.; // , expr subst
+            c__[i__2].real = 0.;
+            c__[i__2].imag = 0.; // , expr subst
         }
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
-    z__1.r = *alpha;
-    z__1.i = 0.; // , expr subst
-    calpha.r = z__1.r;
-    calpha.i = z__1.i; // , expr subst
-    z__1.r = *beta;
-    z__1.i = 0.; // , expr subst
-    cbeta.r = z__1.r;
-    cbeta.i = z__1.i; // , expr subst
+    z__1.real = *alpha;
+    z__1.imag = 0.; // , expr subst
+    calpha.real = z__1.real;
+    calpha.imag = z__1.imag; // , expr subst
+    z__1.real = *beta;
+    z__1.imag = 0.; // , expr subst
+    cbeta.real = z__1.real;
+    cbeta.imag = z__1.imag; // , expr subst
     /* C is N-by-N. */
     /* If N is odd, set NISODD = .TRUE., and N1 and N2. */
     /* If N is even, NISODD = .FALSE., and NK. */

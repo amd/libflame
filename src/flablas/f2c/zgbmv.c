@@ -165,7 +165,7 @@ int zgbmv_(char *trans, integer *m, integer *n, integer *kl, integer *ku, dcompl
         return 0;
     }
     /* Quick return if possible. */
-    if (*m == 0 || *n == 0 || alpha->r == 0. && alpha->i == 0. && (beta->r == 1. && beta->i == 0.))
+    if (*m == 0 || *n == 0 || alpha->real == 0. && alpha->imag == 0. && (beta->real == 1. && beta->imag == 0.))
     {
         return 0;
     }
@@ -201,11 +201,11 @@ int zgbmv_(char *trans, integer *m, integer *n, integer *kl, integer *ku, dcompl
     /* Start the operations. In this version the elements of A are */
     /* accessed sequentially with one pass through the band part of A. */
     /* First form y := beta*y. */
-    if (beta->r != 1. || beta->i != 0.)
+    if (beta->real != 1. || beta->imag != 0.)
     {
         if (*incy == 1)
         {
-            if (beta->r == 0. && beta->i == 0.)
+            if (beta->real == 0. && beta->imag == 0.)
             {
                 i__1 = leny;
                 for (i__ = 1;
@@ -213,7 +213,7 @@ int zgbmv_(char *trans, integer *m, integer *n, integer *kl, integer *ku, dcompl
                         ++i__)
                 {
                     i__2 = i__;
-                    y[i__2].r = 0., y[i__2].i = 0.;
+                    y[i__2].real = 0., y[i__2].imag = 0.;
                     /* L10: */
                 }
             }
@@ -226,8 +226,8 @@ int zgbmv_(char *trans, integer *m, integer *n, integer *kl, integer *ku, dcompl
                 {
                     i__2 = i__;
                     i__3 = i__;
-                    z__1.r = beta->r * y[i__3].r - beta->i * y[i__3].i, z__1.i = beta->r * y[i__3].i + beta->i * y[i__3] .r;
-                    y[i__2].r = z__1.r, y[i__2].i = z__1.i;
+                    z__1.real = beta->real * y[i__3].real - beta->imag * y[i__3].imag, z__1.imag = beta->real * y[i__3].imag + beta->imag * y[i__3] .real;
+                    y[i__2].real = z__1.real, y[i__2].imag = z__1.imag;
                     /* L20: */
                 }
             }
@@ -235,7 +235,7 @@ int zgbmv_(char *trans, integer *m, integer *n, integer *kl, integer *ku, dcompl
         else
         {
             iy = ky;
-            if (beta->r == 0. && beta->i == 0.)
+            if (beta->real == 0. && beta->imag == 0.)
             {
                 i__1 = leny;
                 for (i__ = 1;
@@ -243,7 +243,7 @@ int zgbmv_(char *trans, integer *m, integer *n, integer *kl, integer *ku, dcompl
                         ++i__)
                 {
                     i__2 = iy;
-                    y[i__2].r = 0., y[i__2].i = 0.;
+                    y[i__2].real = 0., y[i__2].imag = 0.;
                     iy += *incy;
                     /* L30: */
                 }
@@ -257,15 +257,15 @@ int zgbmv_(char *trans, integer *m, integer *n, integer *kl, integer *ku, dcompl
                 {
                     i__2 = iy;
                     i__3 = iy;
-                    z__1.r = beta->r * y[i__3].r - beta->i * y[i__3].i, z__1.i = beta->r * y[i__3].i + beta->i * y[i__3] .r;
-                    y[i__2].r = z__1.r, y[i__2].i = z__1.i;
+                    z__1.real = beta->real * y[i__3].real - beta->imag * y[i__3].imag, z__1.imag = beta->real * y[i__3].imag + beta->imag * y[i__3] .real;
+                    y[i__2].real = z__1.real, y[i__2].imag = z__1.imag;
                     iy += *incy;
                     /* L40: */
                 }
             }
         }
     }
-    if (alpha->r == 0. && alpha->i == 0.)
+    if (alpha->real == 0. && alpha->imag == 0.)
     {
         return 0;
     }
@@ -282,11 +282,11 @@ int zgbmv_(char *trans, integer *m, integer *n, integer *kl, integer *ku, dcompl
                     ++j)
             {
                 i__2 = jx;
-                if (x[i__2].r != 0. || x[i__2].i != 0.)
+                if (x[i__2].real != 0. || x[i__2].imag != 0.)
                 {
                     i__2 = jx;
-                    z__1.r = alpha->r * x[i__2].r - alpha->i * x[i__2].i, z__1.i = alpha->r * x[i__2].i + alpha->i * x[i__2] .r;
-                    temp.r = z__1.r, temp.i = z__1.i;
+                    z__1.real = alpha->real * x[i__2].real - alpha->imag * x[i__2].imag, z__1.imag = alpha->real * x[i__2].imag + alpha->imag * x[i__2] .real;
+                    temp.real = z__1.real, temp.imag = z__1.imag;
                     k = kup1 - j;
                     /* Computing MAX */
                     i__2 = 1, i__3 = j - *ku;
@@ -300,9 +300,9 @@ int zgbmv_(char *trans, integer *m, integer *n, integer *kl, integer *ku, dcompl
                         i__2 = i__;
                         i__3 = i__;
                         i__5 = k + i__ + j * a_dim1;
-                        z__2.r = temp.r * a[i__5].r - temp.i * a[i__5].i, z__2.i = temp.r * a[i__5].i + temp.i * a[i__5] .r;
-                        z__1.r = y[i__3].r + z__2.r, z__1.i = y[i__3].i + z__2.i;
-                        y[i__2].r = z__1.r, y[i__2].i = z__1.i;
+                        z__2.real = temp.real * a[i__5].real - temp.imag * a[i__5].imag, z__2.imag = temp.real * a[i__5].imag + temp.imag * a[i__5] .real;
+                        z__1.real = y[i__3].real + z__2.real, z__1.imag = y[i__3].imag + z__2.imag;
+                        y[i__2].real = z__1.real, y[i__2].imag = z__1.imag;
                         /* L50: */
                     }
                 }
@@ -318,11 +318,11 @@ int zgbmv_(char *trans, integer *m, integer *n, integer *kl, integer *ku, dcompl
                     ++j)
             {
                 i__4 = jx;
-                if (x[i__4].r != 0. || x[i__4].i != 0.)
+                if (x[i__4].real != 0. || x[i__4].imag != 0.)
                 {
                     i__4 = jx;
-                    z__1.r = alpha->r * x[i__4].r - alpha->i * x[i__4].i, z__1.i = alpha->r * x[i__4].i + alpha->i * x[i__4] .r;
-                    temp.r = z__1.r, temp.i = z__1.i;
+                    z__1.real = alpha->real * x[i__4].real - alpha->imag * x[i__4].imag, z__1.imag = alpha->real * x[i__4].imag + alpha->imag * x[i__4] .real;
+                    temp.real = z__1.real, temp.imag = z__1.imag;
                     iy = ky;
                     k = kup1 - j;
                     /* Computing MAX */
@@ -337,9 +337,9 @@ int zgbmv_(char *trans, integer *m, integer *n, integer *kl, integer *ku, dcompl
                         i__4 = iy;
                         i__2 = iy;
                         i__5 = k + i__ + j * a_dim1;
-                        z__2.r = temp.r * a[i__5].r - temp.i * a[i__5].i, z__2.i = temp.r * a[i__5].i + temp.i * a[i__5] .r;
-                        z__1.r = y[i__2].r + z__2.r, z__1.i = y[i__2].i + z__2.i;
-                        y[i__4].r = z__1.r, y[i__4].i = z__1.i;
+                        z__2.real = temp.real * a[i__5].real - temp.imag * a[i__5].imag, z__2.imag = temp.real * a[i__5].imag + temp.imag * a[i__5] .real;
+                        z__1.real = y[i__2].real + z__2.real, z__1.imag = y[i__2].imag + z__2.imag;
+                        y[i__4].real = z__1.real, y[i__4].imag = z__1.imag;
                         iy += *incy;
                         /* L70: */
                     }
@@ -364,7 +364,7 @@ int zgbmv_(char *trans, integer *m, integer *n, integer *kl, integer *ku, dcompl
                     j <= i__1;
                     ++j)
             {
-                temp.r = 0., temp.i = 0.;
+                temp.real = 0., temp.imag = 0.;
                 k = kup1 - j;
                 if (noconj)
                 {
@@ -379,9 +379,9 @@ int zgbmv_(char *trans, integer *m, integer *n, integer *kl, integer *ku, dcompl
                     {
                         i__3 = k + i__ + j * a_dim1;
                         i__4 = i__;
-                        z__2.r = a[i__3].r * x[i__4].r - a[i__3].i * x[i__4] .i, z__2.i = a[i__3].r * x[i__4].i + a[i__3] .i * x[i__4].r;
-                        z__1.r = temp.r + z__2.r, z__1.i = temp.i + z__2.i;
-                        temp.r = z__1.r, temp.i = z__1.i;
+                        z__2.real = a[i__3].real * x[i__4].real - a[i__3].imag * x[i__4] .imag, z__2.imag = a[i__3].real * x[i__4].imag + a[i__3] .imag * x[i__4].real;
+                        z__1.real = temp.real + z__2.real, z__1.imag = temp.imag + z__2.imag;
+                        temp.real = z__1.real, temp.imag = z__1.imag;
                         /* L90: */
                     }
                 }
@@ -398,17 +398,17 @@ int zgbmv_(char *trans, integer *m, integer *n, integer *kl, integer *ku, dcompl
                     {
                         d_cnjg(&z__3, &a[k + i__ + j * a_dim1]);
                         i__2 = i__;
-                        z__2.r = z__3.r * x[i__2].r - z__3.i * x[i__2].i, z__2.i = z__3.r * x[i__2].i + z__3.i * x[i__2] .r;
-                        z__1.r = temp.r + z__2.r, z__1.i = temp.i + z__2.i;
-                        temp.r = z__1.r, temp.i = z__1.i;
+                        z__2.real = z__3.real * x[i__2].real - z__3.imag * x[i__2].imag, z__2.imag = z__3.real * x[i__2].imag + z__3.imag * x[i__2] .real;
+                        z__1.real = temp.real + z__2.real, z__1.imag = temp.imag + z__2.imag;
+                        temp.real = z__1.real, temp.imag = z__1.imag;
                         /* L100: */
                     }
                 }
                 i__4 = jy;
                 i__2 = jy;
-                z__2.r = alpha->r * temp.r - alpha->i * temp.i, z__2.i = alpha->r * temp.i + alpha->i * temp.r;
-                z__1.r = y[i__2].r + z__2.r, z__1.i = y[i__2].i + z__2.i;
-                y[i__4].r = z__1.r, y[i__4].i = z__1.i;
+                z__2.real = alpha->real * temp.real - alpha->imag * temp.imag, z__2.imag = alpha->real * temp.imag + alpha->imag * temp.real;
+                z__1.real = y[i__2].real + z__2.real, z__1.imag = y[i__2].imag + z__2.imag;
+                y[i__4].real = z__1.real, y[i__4].imag = z__1.imag;
                 jy += *incy;
                 /* L110: */
             }
@@ -420,7 +420,7 @@ int zgbmv_(char *trans, integer *m, integer *n, integer *kl, integer *ku, dcompl
                     j <= i__1;
                     ++j)
             {
-                temp.r = 0., temp.i = 0.;
+                temp.real = 0., temp.imag = 0.;
                 ix = kx;
                 k = kup1 - j;
                 if (noconj)
@@ -436,9 +436,9 @@ int zgbmv_(char *trans, integer *m, integer *n, integer *kl, integer *ku, dcompl
                     {
                         i__4 = k + i__ + j * a_dim1;
                         i__2 = ix;
-                        z__2.r = a[i__4].r * x[i__2].r - a[i__4].i * x[i__2] .i, z__2.i = a[i__4].r * x[i__2].i + a[i__4] .i * x[i__2].r;
-                        z__1.r = temp.r + z__2.r, z__1.i = temp.i + z__2.i;
-                        temp.r = z__1.r, temp.i = z__1.i;
+                        z__2.real = a[i__4].real * x[i__2].real - a[i__4].imag * x[i__2] .imag, z__2.imag = a[i__4].real * x[i__2].imag + a[i__4] .imag * x[i__2].real;
+                        z__1.real = temp.real + z__2.real, z__1.imag = temp.imag + z__2.imag;
+                        temp.real = z__1.real, temp.imag = z__1.imag;
                         ix += *incx;
                         /* L120: */
                     }
@@ -456,18 +456,18 @@ int zgbmv_(char *trans, integer *m, integer *n, integer *kl, integer *ku, dcompl
                     {
                         d_cnjg(&z__3, &a[k + i__ + j * a_dim1]);
                         i__3 = ix;
-                        z__2.r = z__3.r * x[i__3].r - z__3.i * x[i__3].i, z__2.i = z__3.r * x[i__3].i + z__3.i * x[i__3] .r;
-                        z__1.r = temp.r + z__2.r, z__1.i = temp.i + z__2.i;
-                        temp.r = z__1.r, temp.i = z__1.i;
+                        z__2.real = z__3.real * x[i__3].real - z__3.imag * x[i__3].imag, z__2.imag = z__3.real * x[i__3].imag + z__3.imag * x[i__3] .real;
+                        z__1.real = temp.real + z__2.real, z__1.imag = temp.imag + z__2.imag;
+                        temp.real = z__1.real, temp.imag = z__1.imag;
                         ix += *incx;
                         /* L130: */
                     }
                 }
                 i__2 = jy;
                 i__3 = jy;
-                z__2.r = alpha->r * temp.r - alpha->i * temp.i, z__2.i = alpha->r * temp.i + alpha->i * temp.r;
-                z__1.r = y[i__3].r + z__2.r, z__1.i = y[i__3].i + z__2.i;
-                y[i__2].r = z__1.r, y[i__2].i = z__1.i;
+                z__2.real = alpha->real * temp.real - alpha->imag * temp.imag, z__2.imag = alpha->real * temp.imag + alpha->imag * temp.real;
+                z__1.real = y[i__3].real + z__2.real, z__1.imag = y[i__3].imag + z__2.imag;
+                y[i__2].real = z__1.real, y[i__2].imag = z__1.imag;
                 jy += *incy;
                 if (j > *ku)
                 {

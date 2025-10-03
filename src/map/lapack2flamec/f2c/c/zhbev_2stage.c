@@ -336,8 +336,8 @@ void aocl_lapack_zhbev_2stage(char *jobz, char *uplo, aocl_int64_t *n, aocl_int6
         if(*n <= 1)
         {
             lwmin = 1;
-            work[1].r = (doublereal)lwmin;
-            work[1].i = 0.; // , expr subst
+            work[1].real = (doublereal)lwmin;
+            work[1].imag = 0.; // , expr subst
         }
         else
         {
@@ -345,8 +345,8 @@ void aocl_lapack_zhbev_2stage(char *jobz, char *uplo, aocl_int64_t *n, aocl_int6
             lhtrd = aocl_lapack_ilaenv2stage(&c__3, "ZHETRD_HB2ST", jobz, n, kd, &ib, &c_n1);
             lwtrd = aocl_lapack_ilaenv2stage(&c__4, "ZHETRD_HB2ST", jobz, n, kd, &ib, &c_n1);
             lwmin = lhtrd + lwtrd;
-            work[1].r = (doublereal)lwmin;
-            work[1].i = 0.; // , expr subst
+            work[1].real = (doublereal)lwmin;
+            work[1].imag = 0.; // , expr subst
         }
         if(*lwork < lwmin && !lquery)
         {
@@ -376,18 +376,18 @@ void aocl_lapack_zhbev_2stage(char *jobz, char *uplo, aocl_int64_t *n, aocl_int6
         if(lower)
         {
             i__1 = ab_dim1 + 1;
-            w[1] = ab[i__1].r;
+            w[1] = ab[i__1].real;
         }
         else
         {
             i__1 = *kd + 1 + ab_dim1;
-            w[1] = ab[i__1].r;
+            w[1] = ab[i__1].real;
         }
         if(wantz)
         {
             i__1 = z_dim1 + 1;
-            z__[i__1].r = 1.;
-            z__[i__1].i = 0.; // , expr subst
+            z__[i__1].real = 1.;
+            z__[i__1].imag = 0.; // , expr subst
         }
         AOCL_DTL_TRACE_LOG_EXIT
         return;
@@ -455,8 +455,8 @@ void aocl_lapack_zhbev_2stage(char *jobz, char *uplo, aocl_int64_t *n, aocl_int6
         aocl_blas_dscal(&imax, &d__1, &w[1], &c__1);
     }
     /* Set WORK(1) to optimal workspace size. */
-    work[1].r = (doublereal)lwmin;
-    work[1].i = 0.; // , expr subst
+    work[1].real = (doublereal)lwmin;
+    work[1].imag = 0.; // , expr subst
     AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of ZHBEV_2STAGE */

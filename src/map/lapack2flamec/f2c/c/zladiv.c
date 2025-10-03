@@ -88,14 +88,14 @@ void zladiv_(dcomplex *ret_val, dcomplex *x, dcomplex *y)
     /* .. Intrinsic Functions .. */
     /* .. */
     /* .. Executable Statements .. */
-    d__1 = x->r;
-    d__2 = x->i;
-    d__3 = y->r;
-    d__4 = y->i;
+    d__1 = x->real;
+    d__2 = x->imag;
+    d__3 = y->real;
+    d__4 = y->imag;
     dladiv_(&d__1, &d__2, &d__3, &d__4, &zr, &zi);
-    z__1.r = zr;
-    z__1.i = zi; // , expr subst
-    ret_val->r = z__1.r, ret_val->i = z__1.i;
+    z__1.real = zr;
+    z__1.imag = zi; // , expr subst
+    ret_val->real = z__1.real, ret_val->imag = z__1.imag;
     AOCL_DTL_TRACE_EXIT_INDENT
     return;
     /* End of ZLADIV */
@@ -126,14 +126,14 @@ dcomplex zladiv_(dcomplex *x, dcomplex *y)
     /* .. Intrinsic Functions .. */
     /* .. */
     /* .. Executable Statements .. */
-    d__1 = x->r;
-    d__2 = x->i;
-    d__3 = y->r;
-    d__4 = y->i;
+    d__1 = x->real;
+    d__2 = x->imag;
+    d__3 = y->real;
+    d__4 = y->imag;
     dladiv_(&d__1, &d__2, &d__3, &d__4, &zr, &zi);
-    z__1.r = zr;
-    z__1.i = zi; // , expr subst
-    // ret_val->r = z__1.r, ret_val->i = z__1.i;
+    z__1.real = zr;
+    z__1.imag = zi; // , expr subst
+    // ret_val->real = z__1.real, ret_val->imag = z__1.imag;
     AOCL_DTL_TRACE_EXIT_INDENT
     return z__1;
     /* End of ZLADIV */

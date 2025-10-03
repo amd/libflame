@@ -4,8 +4,8 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static scomplex c_b1 = {{0.f}, {0.f}};
-static scomplex c_b2 = {{1.f}, {0.f}};
+static scomplex c_b1 = {0.f, 0.f};
+static scomplex c_b2 = {1.f, 0.f};
 static aocl_int64_t c__1 = 1;
 /* > \brief \b CHBGST */
 /* =========== DOCUMENTATION =========== */
@@ -414,21 +414,21 @@ L10:
         {
             /* Form inv(S(i))**H * A * inv(S(i)) */
             i__1 = kb1 + i__ * bb_dim1;
-            bii = bb[i__1].r;
+            bii = bb[i__1].real;
             i__1 = ka1 + i__ * ab_dim1;
             i__2 = ka1 + i__ * ab_dim1;
-            r__1 = ab[i__2].r / bii / bii;
-            ab[i__1].r = r__1;
-            ab[i__1].i = 0.f; // , expr subst
+            r__1 = ab[i__2].real / bii / bii;
+            ab[i__1].real = r__1;
+            ab[i__1].imag = 0.f; // , expr subst
             i__1 = i1;
             for(j = i__ + 1; j <= i__1; ++j)
             {
                 i__2 = i__ - j + ka1 + j * ab_dim1;
                 i__3 = i__ - j + ka1 + j * ab_dim1;
-                q__1.r = ab[i__3].r / bii;
-                q__1.i = ab[i__3].i / bii; // , expr subst
-                ab[i__2].r = q__1.r;
-                ab[i__2].i = q__1.i; // , expr subst
+                q__1.real = ab[i__3].real / bii;
+                q__1.imag = ab[i__3].imag / bii; // , expr subst
+                ab[i__2].real = q__1.real;
+                ab[i__2].imag = q__1.imag; // , expr subst
                 /* L20: */
             }
             /* Computing MAX */
@@ -439,10 +439,10 @@ L10:
             {
                 i__1 = j - i__ + ka1 + i__ * ab_dim1;
                 i__2 = j - i__ + ka1 + i__ * ab_dim1;
-                q__1.r = ab[i__2].r / bii;
-                q__1.i = ab[i__2].i / bii; // , expr subst
-                ab[i__1].r = q__1.r;
-                ab[i__1].i = q__1.i; // , expr subst
+                q__1.real = ab[i__2].real / bii;
+                q__1.imag = ab[i__2].imag / bii; // , expr subst
+                ab[i__1].real = q__1.real;
+                ab[i__1].imag = q__1.imag; // , expr subst
                 /* L30: */
             }
             i__3 = i__ - 1;
@@ -455,28 +455,28 @@ L10:
                     i__4 = j - k + ka1 + k * ab_dim1;
                     i__5 = j - i__ + kb1 + i__ * bb_dim1;
                     r_cnjg(&q__5, &ab[k - i__ + ka1 + i__ * ab_dim1]);
-                    q__4.r = bb[i__5].r * q__5.r - bb[i__5].i * q__5.i;
-                    q__4.i = bb[i__5].r * q__5.i + bb[i__5].i * q__5.r; // , expr subst
-                    q__3.r = ab[i__4].r - q__4.r;
-                    q__3.i = ab[i__4].i - q__4.i; // , expr subst
+                    q__4.real = bb[i__5].real * q__5.real - bb[i__5].imag * q__5.imag;
+                    q__4.imag = bb[i__5].real * q__5.imag + bb[i__5].imag * q__5.real; // , expr subst
+                    q__3.real = ab[i__4].real - q__4.real;
+                    q__3.imag = ab[i__4].imag - q__4.imag; // , expr subst
                     r_cnjg(&q__7, &bb[k - i__ + kb1 + i__ * bb_dim1]);
                     i__6 = j - i__ + ka1 + i__ * ab_dim1;
-                    q__6.r = q__7.r * ab[i__6].r - q__7.i * ab[i__6].i;
-                    q__6.i = q__7.r * ab[i__6].i + q__7.i * ab[i__6].r; // , expr subst
-                    q__2.r = q__3.r - q__6.r;
-                    q__2.i = q__3.i - q__6.i; // , expr subst
+                    q__6.real = q__7.real * ab[i__6].real - q__7.imag * ab[i__6].imag;
+                    q__6.imag = q__7.real * ab[i__6].imag + q__7.imag * ab[i__6].real; // , expr subst
+                    q__2.real = q__3.real - q__6.real;
+                    q__2.imag = q__3.imag - q__6.imag; // , expr subst
                     i__7 = ka1 + i__ * ab_dim1;
-                    r__1 = ab[i__7].r;
+                    r__1 = ab[i__7].real;
                     i__8 = j - i__ + kb1 + i__ * bb_dim1;
-                    q__9.r = r__1 * bb[i__8].r;
-                    q__9.i = r__1 * bb[i__8].i; // , expr subst
+                    q__9.real = r__1 * bb[i__8].real;
+                    q__9.imag = r__1 * bb[i__8].imag; // , expr subst
                     r_cnjg(&q__10, &bb[k - i__ + kb1 + i__ * bb_dim1]);
-                    q__8.r = q__9.r * q__10.r - q__9.i * q__10.i;
-                    q__8.i = q__9.r * q__10.i + q__9.i * q__10.r; // , expr subst
-                    q__1.r = q__2.r + q__8.r;
-                    q__1.i = q__2.i + q__8.i; // , expr subst
-                    ab[i__2].r = q__1.r;
-                    ab[i__2].i = q__1.i; // , expr subst
+                    q__8.real = q__9.real * q__10.real - q__9.imag * q__10.imag;
+                    q__8.imag = q__9.real * q__10.imag + q__9.imag * q__10.real; // , expr subst
+                    q__1.real = q__2.real + q__8.real;
+                    q__1.imag = q__2.imag + q__8.imag; // , expr subst
+                    ab[i__2].real = q__1.real;
+                    ab[i__2].imag = q__1.imag; // , expr subst
                     /* L40: */
                 }
                 /* Computing MAX */
@@ -489,12 +489,12 @@ L10:
                     i__2 = j - k + ka1 + k * ab_dim1;
                     r_cnjg(&q__3, &bb[k - i__ + kb1 + i__ * bb_dim1]);
                     i__5 = j - i__ + ka1 + i__ * ab_dim1;
-                    q__2.r = q__3.r * ab[i__5].r - q__3.i * ab[i__5].i;
-                    q__2.i = q__3.r * ab[i__5].i + q__3.i * ab[i__5].r; // , expr subst
-                    q__1.r = ab[i__2].r - q__2.r;
-                    q__1.i = ab[i__2].i - q__2.i; // , expr subst
-                    ab[i__1].r = q__1.r;
-                    ab[i__1].i = q__1.i; // , expr subst
+                    q__2.real = q__3.real * ab[i__5].real - q__3.imag * ab[i__5].imag;
+                    q__2.imag = q__3.real * ab[i__5].imag + q__3.imag * ab[i__5].real; // , expr subst
+                    q__1.real = ab[i__2].real - q__2.real;
+                    q__1.imag = ab[i__2].imag - q__2.imag; // , expr subst
+                    ab[i__1].real = q__1.real;
+                    ab[i__1].imag = q__1.imag; // , expr subst
                     /* L50: */
                 }
                 /* L60: */
@@ -512,12 +512,12 @@ L10:
                     i__1 = k - j + ka1 + j * ab_dim1;
                     i__5 = k - i__ + kb1 + i__ * bb_dim1;
                     i__6 = i__ - j + ka1 + j * ab_dim1;
-                    q__2.r = bb[i__5].r * ab[i__6].r - bb[i__5].i * ab[i__6].i;
-                    q__2.i = bb[i__5].r * ab[i__6].i + bb[i__5].i * ab[i__6].r; // , expr subst
-                    q__1.r = ab[i__1].r - q__2.r;
-                    q__1.i = ab[i__1].i - q__2.i; // , expr subst
-                    ab[i__4].r = q__1.r;
-                    ab[i__4].i = q__1.i; // , expr subst
+                    q__2.real = bb[i__5].real * ab[i__6].real - bb[i__5].imag * ab[i__6].imag;
+                    q__2.imag = bb[i__5].real * ab[i__6].imag + bb[i__5].imag * ab[i__6].real; // , expr subst
+                    q__1.real = ab[i__1].real - q__2.real;
+                    q__1.imag = ab[i__1].imag - q__2.imag; // , expr subst
+                    ab[i__4].real = q__1.real;
+                    ab[i__4].imag = q__1.imag; // , expr subst
                     /* L70: */
                 }
                 /* L80: */
@@ -531,8 +531,8 @@ L10:
                 if(kbt > 0)
                 {
                     i__3 = *n - m;
-                    q__1.r = -1.f;
-                    q__1.i = -0.f; // , expr subst
+                    q__1.real = -1.f;
+                    q__1.imag = -0.f; // , expr subst
                     aocl_blas_cgerc(&i__3, &kbt, &q__1, &x[m + 1 + i__ * x_dim1], &c__1,
                                     &bb[kb1 - kbt + i__ * bb_dim1], &c__1,
                                     &x[m + 1 + (i__ - kbt) * x_dim1], ldx);
@@ -540,8 +540,8 @@ L10:
             }
             /* store a(i,i1) in RA1 for use in next loop over K */
             i__3 = i__ - i1 + ka1 + i1 * ab_dim1;
-            ra1.r = ab[i__3].r;
-            ra1.i = ab[i__3].i; // , expr subst
+            ra1.real = ab[i__3].real;
+            ra1.imag = ab[i__3].imag; // , expr subst
         }
         /* Generate and apply vectors of rotations to chase all the */
         /* existing bulges KA positions down toward the bottom of the */
@@ -561,38 +561,38 @@ L10:
                     /* create nonzero element a(i-k,i-k+ka+1) outside the */
                     /* band and store it in WORK(i-k) */
                     i__2 = kb1 - k + i__ * bb_dim1;
-                    q__2.r = -bb[i__2].r;
-                    q__2.i = -bb[i__2].i; // , expr subst
-                    q__1.r = q__2.r * ra1.r - q__2.i * ra1.i;
-                    q__1.i = q__2.r * ra1.i + q__2.i * ra1.r; // , expr subst
-                    t.r = q__1.r;
-                    t.i = q__1.i; // , expr subst
+                    q__2.real = -bb[i__2].real;
+                    q__2.imag = -bb[i__2].imag; // , expr subst
+                    q__1.real = q__2.real * ra1.real - q__2.imag * ra1.imag;
+                    q__1.imag = q__2.real * ra1.imag + q__2.imag * ra1.real; // , expr subst
+                    t.real = q__1.real;
+                    t.imag = q__1.imag; // , expr subst
                     i__2 = i__ - k;
                     i__4 = i__ - k + *ka - m;
-                    q__2.r = rwork[i__4] * t.r;
-                    q__2.i = rwork[i__4] * t.i; // , expr subst
+                    q__2.real = rwork[i__4] * t.real;
+                    q__2.imag = rwork[i__4] * t.imag; // , expr subst
                     r_cnjg(&q__4, &work[i__ - k + *ka - m]);
                     i__1 = (i__ - k + *ka) * ab_dim1 + 1;
-                    q__3.r = q__4.r * ab[i__1].r - q__4.i * ab[i__1].i;
-                    q__3.i = q__4.r * ab[i__1].i + q__4.i * ab[i__1].r; // , expr subst
-                    q__1.r = q__2.r - q__3.r;
-                    q__1.i = q__2.i - q__3.i; // , expr subst
-                    work[i__2].r = q__1.r;
-                    work[i__2].i = q__1.i; // , expr subst
+                    q__3.real = q__4.real * ab[i__1].real - q__4.imag * ab[i__1].imag;
+                    q__3.imag = q__4.real * ab[i__1].imag + q__4.imag * ab[i__1].real; // , expr subst
+                    q__1.real = q__2.real - q__3.real;
+                    q__1.imag = q__2.imag - q__3.imag; // , expr subst
+                    work[i__2].real = q__1.real;
+                    work[i__2].imag = q__1.imag; // , expr subst
                     i__2 = (i__ - k + *ka) * ab_dim1 + 1;
                     i__4 = i__ - k + *ka - m;
-                    q__2.r = work[i__4].r * t.r - work[i__4].i * t.i;
-                    q__2.i = work[i__4].r * t.i + work[i__4].i * t.r; // , expr subst
+                    q__2.real = work[i__4].real * t.real - work[i__4].imag * t.imag;
+                    q__2.imag = work[i__4].real * t.imag + work[i__4].imag * t.real; // , expr subst
                     i__1 = i__ - k + *ka - m;
                     i__5 = (i__ - k + *ka) * ab_dim1 + 1;
-                    q__3.r = rwork[i__1] * ab[i__5].r;
-                    q__3.i = rwork[i__1] * ab[i__5].i; // , expr subst
-                    q__1.r = q__2.r + q__3.r;
-                    q__1.i = q__2.i + q__3.i; // , expr subst
-                    ab[i__2].r = q__1.r;
-                    ab[i__2].i = q__1.i; // , expr subst
-                    ra1.r = ra.r;
-                    ra1.i = ra.i; // , expr subst
+                    q__3.real = rwork[i__1] * ab[i__5].real;
+                    q__3.imag = rwork[i__1] * ab[i__5].imag; // , expr subst
+                    q__1.real = q__2.real + q__3.real;
+                    q__1.imag = q__2.imag + q__3.imag; // , expr subst
+                    ab[i__2].real = q__1.real;
+                    ab[i__2].imag = q__1.imag; // , expr subst
+                    ra1.real = ra.real;
+                    ra1.imag = ra.imag; // , expr subst
                 }
             }
             /* Computing MAX */
@@ -622,17 +622,17 @@ L10:
                 i__1 = j - m;
                 i__5 = j - m;
                 i__6 = (j + 1) * ab_dim1 + 1;
-                q__1.r = work[i__5].r * ab[i__6].r - work[i__5].i * ab[i__6].i;
-                q__1.i = work[i__5].r * ab[i__6].i + work[i__5].i * ab[i__6].r; // , expr subst
-                work[i__1].r = q__1.r;
-                work[i__1].i = q__1.i; // , expr subst
+                q__1.real = work[i__5].real * ab[i__6].real - work[i__5].imag * ab[i__6].imag;
+                q__1.imag = work[i__5].real * ab[i__6].imag + work[i__5].imag * ab[i__6].real; // , expr subst
+                work[i__1].real = q__1.real;
+                work[i__1].imag = q__1.imag; // , expr subst
                 i__1 = (j + 1) * ab_dim1 + 1;
                 i__5 = j - m;
                 i__6 = (j + 1) * ab_dim1 + 1;
-                q__1.r = rwork[i__5] * ab[i__6].r;
-                q__1.i = rwork[i__5] * ab[i__6].i; // , expr subst
-                ab[i__1].r = q__1.r;
-                ab[i__1].i = q__1.i; // , expr subst
+                q__1.real = rwork[i__5] * ab[i__6].real;
+                q__1.imag = rwork[i__5] * ab[i__6].imag; // , expr subst
+                ab[i__1].real = q__1.real;
+                ab[i__1].imag = q__1.imag; // , expr subst
                 /* L90: */
             }
             /* generate rotations in 1st set to annihilate elements which */
@@ -697,12 +697,12 @@ L10:
                 /* band and store it in WORK(i-kbt) */
                 i__3 = i__ - kbt;
                 i__2 = kb1 - kbt + i__ * bb_dim1;
-                q__2.r = -bb[i__2].r;
-                q__2.i = -bb[i__2].i; // , expr subst
-                q__1.r = q__2.r * ra1.r - q__2.i * ra1.i;
-                q__1.i = q__2.r * ra1.i + q__2.i * ra1.r; // , expr subst
-                work[i__3].r = q__1.r;
-                work[i__3].i = q__1.i; // , expr subst
+                q__2.real = -bb[i__2].real;
+                q__2.imag = -bb[i__2].imag; // , expr subst
+                q__1.real = q__2.real * ra1.real - q__2.imag * ra1.imag;
+                q__1.imag = q__2.real * ra1.imag + q__2.imag * ra1.real; // , expr subst
+                work[i__3].real = q__1.real;
+                work[i__3].imag = q__1.imag; // , expr subst
             }
         }
         for(k = *kb; k >= 1; --k)
@@ -741,8 +741,8 @@ L10:
             {
                 i__4 = j;
                 i__1 = j - *ka;
-                work[i__4].r = work[i__1].r;
-                work[i__4].i = work[i__1].i; // , expr subst
+                work[i__4].real = work[i__1].real;
+                work[i__4].imag = work[i__1].imag; // , expr subst
                 rwork[j] = rwork[j - *ka];
                 /* L150: */
             }
@@ -755,17 +755,17 @@ L10:
                 i__4 = j;
                 i__1 = j;
                 i__5 = (j + 1) * ab_dim1 + 1;
-                q__1.r = work[i__1].r * ab[i__5].r - work[i__1].i * ab[i__5].i;
-                q__1.i = work[i__1].r * ab[i__5].i + work[i__1].i * ab[i__5].r; // , expr subst
-                work[i__4].r = q__1.r;
-                work[i__4].i = q__1.i; // , expr subst
+                q__1.real = work[i__1].real * ab[i__5].real - work[i__1].imag * ab[i__5].imag;
+                q__1.imag = work[i__1].real * ab[i__5].imag + work[i__1].imag * ab[i__5].real; // , expr subst
+                work[i__4].real = q__1.real;
+                work[i__4].imag = q__1.imag; // , expr subst
                 i__4 = (j + 1) * ab_dim1 + 1;
                 i__1 = j;
                 i__5 = (j + 1) * ab_dim1 + 1;
-                q__1.r = rwork[i__1] * ab[i__5].r;
-                q__1.i = rwork[i__1] * ab[i__5].i; // , expr subst
-                ab[i__4].r = q__1.r;
-                ab[i__4].i = q__1.i; // , expr subst
+                q__1.real = rwork[i__1] * ab[i__5].real;
+                q__1.imag = rwork[i__1] * ab[i__5].imag; // , expr subst
+                ab[i__4].real = q__1.real;
+                ab[i__4].imag = q__1.imag; // , expr subst
                 /* L160: */
             }
             if(update)
@@ -774,8 +774,8 @@ L10:
                 {
                     i__3 = i__ - k + *ka;
                     i__2 = i__ - k;
-                    work[i__3].r = work[i__2].r;
-                    work[i__3].i = work[i__2].i; // , expr subst
+                    work[i__3].real = work[i__2].real;
+                    work[i__3].imag = work[i__2].imag; // , expr subst
                 }
             }
             /* L170: */
@@ -868,8 +868,8 @@ L10:
                 rwork[j - m] = rwork[j - *ka - m];
                 i__3 = j - m;
                 i__4 = j - *ka - m;
-                work[i__3].r = work[i__4].r;
-                work[i__3].i = work[i__4].i; // , expr subst
+                work[i__3].real = work[i__4].real;
+                work[i__3].imag = work[i__4].imag; // , expr subst
                 /* L240: */
             }
         }
@@ -881,21 +881,21 @@ L10:
         {
             /* Form inv(S(i))**H * A * inv(S(i)) */
             i__2 = i__ * bb_dim1 + 1;
-            bii = bb[i__2].r;
+            bii = bb[i__2].real;
             i__2 = i__ * ab_dim1 + 1;
             i__3 = i__ * ab_dim1 + 1;
-            r__1 = ab[i__3].r / bii / bii;
-            ab[i__2].r = r__1;
-            ab[i__2].i = 0.f; // , expr subst
+            r__1 = ab[i__3].real / bii / bii;
+            ab[i__2].real = r__1;
+            ab[i__2].imag = 0.f; // , expr subst
             i__2 = i1;
             for(j = i__ + 1; j <= i__2; ++j)
             {
                 i__3 = j - i__ + 1 + i__ * ab_dim1;
                 i__4 = j - i__ + 1 + i__ * ab_dim1;
-                q__1.r = ab[i__4].r / bii;
-                q__1.i = ab[i__4].i / bii; // , expr subst
-                ab[i__3].r = q__1.r;
-                ab[i__3].i = q__1.i; // , expr subst
+                q__1.real = ab[i__4].real / bii;
+                q__1.imag = ab[i__4].imag / bii; // , expr subst
+                ab[i__3].real = q__1.real;
+                ab[i__3].imag = q__1.imag; // , expr subst
                 /* L250: */
             }
             /* Computing MAX */
@@ -906,10 +906,10 @@ L10:
             {
                 i__2 = i__ - j + 1 + j * ab_dim1;
                 i__3 = i__ - j + 1 + j * ab_dim1;
-                q__1.r = ab[i__3].r / bii;
-                q__1.i = ab[i__3].i / bii; // , expr subst
-                ab[i__2].r = q__1.r;
-                ab[i__2].i = q__1.i; // , expr subst
+                q__1.real = ab[i__3].real / bii;
+                q__1.imag = ab[i__3].imag / bii; // , expr subst
+                ab[i__2].real = q__1.real;
+                ab[i__2].imag = q__1.imag; // , expr subst
                 /* L260: */
             }
             i__4 = i__ - 1;
@@ -922,28 +922,28 @@ L10:
                     i__1 = k - j + 1 + j * ab_dim1;
                     i__5 = i__ - j + 1 + j * bb_dim1;
                     r_cnjg(&q__5, &ab[i__ - k + 1 + k * ab_dim1]);
-                    q__4.r = bb[i__5].r * q__5.r - bb[i__5].i * q__5.i;
-                    q__4.i = bb[i__5].r * q__5.i + bb[i__5].i * q__5.r; // , expr subst
-                    q__3.r = ab[i__1].r - q__4.r;
-                    q__3.i = ab[i__1].i - q__4.i; // , expr subst
+                    q__4.real = bb[i__5].real * q__5.real - bb[i__5].imag * q__5.imag;
+                    q__4.imag = bb[i__5].real * q__5.imag + bb[i__5].imag * q__5.real; // , expr subst
+                    q__3.real = ab[i__1].real - q__4.real;
+                    q__3.imag = ab[i__1].imag - q__4.imag; // , expr subst
                     r_cnjg(&q__7, &bb[i__ - k + 1 + k * bb_dim1]);
                     i__6 = i__ - j + 1 + j * ab_dim1;
-                    q__6.r = q__7.r * ab[i__6].r - q__7.i * ab[i__6].i;
-                    q__6.i = q__7.r * ab[i__6].i + q__7.i * ab[i__6].r; // , expr subst
-                    q__2.r = q__3.r - q__6.r;
-                    q__2.i = q__3.i - q__6.i; // , expr subst
+                    q__6.real = q__7.real * ab[i__6].real - q__7.imag * ab[i__6].imag;
+                    q__6.imag = q__7.real * ab[i__6].imag + q__7.imag * ab[i__6].real; // , expr subst
+                    q__2.real = q__3.real - q__6.real;
+                    q__2.imag = q__3.imag - q__6.imag; // , expr subst
                     i__7 = i__ * ab_dim1 + 1;
-                    r__1 = ab[i__7].r;
+                    r__1 = ab[i__7].real;
                     i__8 = i__ - j + 1 + j * bb_dim1;
-                    q__9.r = r__1 * bb[i__8].r;
-                    q__9.i = r__1 * bb[i__8].i; // , expr subst
+                    q__9.real = r__1 * bb[i__8].real;
+                    q__9.imag = r__1 * bb[i__8].imag; // , expr subst
                     r_cnjg(&q__10, &bb[i__ - k + 1 + k * bb_dim1]);
-                    q__8.r = q__9.r * q__10.r - q__9.i * q__10.i;
-                    q__8.i = q__9.r * q__10.i + q__9.i * q__10.r; // , expr subst
-                    q__1.r = q__2.r + q__8.r;
-                    q__1.i = q__2.i + q__8.i; // , expr subst
-                    ab[i__3].r = q__1.r;
-                    ab[i__3].i = q__1.i; // , expr subst
+                    q__8.real = q__9.real * q__10.real - q__9.imag * q__10.imag;
+                    q__8.imag = q__9.real * q__10.imag + q__9.imag * q__10.real; // , expr subst
+                    q__1.real = q__2.real + q__8.real;
+                    q__1.imag = q__2.imag + q__8.imag; // , expr subst
+                    ab[i__3].real = q__1.real;
+                    ab[i__3].imag = q__1.imag; // , expr subst
                     /* L270: */
                 }
                 /* Computing MAX */
@@ -956,12 +956,12 @@ L10:
                     i__3 = k - j + 1 + j * ab_dim1;
                     r_cnjg(&q__3, &bb[i__ - k + 1 + k * bb_dim1]);
                     i__5 = i__ - j + 1 + j * ab_dim1;
-                    q__2.r = q__3.r * ab[i__5].r - q__3.i * ab[i__5].i;
-                    q__2.i = q__3.r * ab[i__5].i + q__3.i * ab[i__5].r; // , expr subst
-                    q__1.r = ab[i__3].r - q__2.r;
-                    q__1.i = ab[i__3].i - q__2.i; // , expr subst
-                    ab[i__2].r = q__1.r;
-                    ab[i__2].i = q__1.i; // , expr subst
+                    q__2.real = q__3.real * ab[i__5].real - q__3.imag * ab[i__5].imag;
+                    q__2.imag = q__3.real * ab[i__5].imag + q__3.imag * ab[i__5].real; // , expr subst
+                    q__1.real = ab[i__3].real - q__2.real;
+                    q__1.imag = ab[i__3].imag - q__2.imag; // , expr subst
+                    ab[i__2].real = q__1.real;
+                    ab[i__2].imag = q__1.imag; // , expr subst
                     /* L280: */
                 }
                 /* L290: */
@@ -979,12 +979,12 @@ L10:
                     i__2 = j - k + 1 + k * ab_dim1;
                     i__5 = i__ - k + 1 + k * bb_dim1;
                     i__6 = j - i__ + 1 + i__ * ab_dim1;
-                    q__2.r = bb[i__5].r * ab[i__6].r - bb[i__5].i * ab[i__6].i;
-                    q__2.i = bb[i__5].r * ab[i__6].i + bb[i__5].i * ab[i__6].r; // , expr subst
-                    q__1.r = ab[i__2].r - q__2.r;
-                    q__1.i = ab[i__2].i - q__2.i; // , expr subst
-                    ab[i__1].r = q__1.r;
-                    ab[i__1].i = q__1.i; // , expr subst
+                    q__2.real = bb[i__5].real * ab[i__6].real - bb[i__5].imag * ab[i__6].imag;
+                    q__2.imag = bb[i__5].real * ab[i__6].imag + bb[i__5].imag * ab[i__6].real; // , expr subst
+                    q__1.real = ab[i__2].real - q__2.real;
+                    q__1.imag = ab[i__2].imag - q__2.imag; // , expr subst
+                    ab[i__1].real = q__1.real;
+                    ab[i__1].imag = q__1.imag; // , expr subst
                     /* L300: */
                 }
                 /* L310: */
@@ -998,8 +998,8 @@ L10:
                 if(kbt > 0)
                 {
                     i__4 = *n - m;
-                    q__1.r = -1.f;
-                    q__1.i = -0.f; // , expr subst
+                    q__1.real = -1.f;
+                    q__1.imag = -0.f; // , expr subst
                     i__3 = *ldbb - 1;
                     aocl_blas_cgeru(&i__4, &kbt, &q__1, &x[m + 1 + i__ * x_dim1], &c__1,
                                     &bb[kbt + 1 + (i__ - kbt) * bb_dim1], &i__3,
@@ -1008,8 +1008,8 @@ L10:
             }
             /* store a(i1,i) in RA1 for use in next loop over K */
             i__4 = i1 - i__ + 1 + i__ * ab_dim1;
-            ra1.r = ab[i__4].r;
-            ra1.i = ab[i__4].i; // , expr subst
+            ra1.real = ab[i__4].real;
+            ra1.imag = ab[i__4].imag; // , expr subst
         }
         /* Generate and apply vectors of rotations to chase all the */
         /* existing bulges KA positions down toward the bottom of the */
@@ -1029,38 +1029,38 @@ L10:
                     /* create nonzero element a(i-k+ka+1,i-k) outside the */
                     /* band and store it in WORK(i-k) */
                     i__3 = k + 1 + (i__ - k) * bb_dim1;
-                    q__2.r = -bb[i__3].r;
-                    q__2.i = -bb[i__3].i; // , expr subst
-                    q__1.r = q__2.r * ra1.r - q__2.i * ra1.i;
-                    q__1.i = q__2.r * ra1.i + q__2.i * ra1.r; // , expr subst
-                    t.r = q__1.r;
-                    t.i = q__1.i; // , expr subst
+                    q__2.real = -bb[i__3].real;
+                    q__2.imag = -bb[i__3].imag; // , expr subst
+                    q__1.real = q__2.real * ra1.real - q__2.imag * ra1.imag;
+                    q__1.imag = q__2.real * ra1.imag + q__2.imag * ra1.real; // , expr subst
+                    t.real = q__1.real;
+                    t.imag = q__1.imag; // , expr subst
                     i__3 = i__ - k;
                     i__1 = i__ - k + *ka - m;
-                    q__2.r = rwork[i__1] * t.r;
-                    q__2.i = rwork[i__1] * t.i; // , expr subst
+                    q__2.real = rwork[i__1] * t.real;
+                    q__2.imag = rwork[i__1] * t.imag; // , expr subst
                     r_cnjg(&q__4, &work[i__ - k + *ka - m]);
                     i__2 = ka1 + (i__ - k) * ab_dim1;
-                    q__3.r = q__4.r * ab[i__2].r - q__4.i * ab[i__2].i;
-                    q__3.i = q__4.r * ab[i__2].i + q__4.i * ab[i__2].r; // , expr subst
-                    q__1.r = q__2.r - q__3.r;
-                    q__1.i = q__2.i - q__3.i; // , expr subst
-                    work[i__3].r = q__1.r;
-                    work[i__3].i = q__1.i; // , expr subst
+                    q__3.real = q__4.real * ab[i__2].real - q__4.imag * ab[i__2].imag;
+                    q__3.imag = q__4.real * ab[i__2].imag + q__4.imag * ab[i__2].real; // , expr subst
+                    q__1.real = q__2.real - q__3.real;
+                    q__1.imag = q__2.imag - q__3.imag; // , expr subst
+                    work[i__3].real = q__1.real;
+                    work[i__3].imag = q__1.imag; // , expr subst
                     i__3 = ka1 + (i__ - k) * ab_dim1;
                     i__1 = i__ - k + *ka - m;
-                    q__2.r = work[i__1].r * t.r - work[i__1].i * t.i;
-                    q__2.i = work[i__1].r * t.i + work[i__1].i * t.r; // , expr subst
+                    q__2.real = work[i__1].real * t.real - work[i__1].imag * t.imag;
+                    q__2.imag = work[i__1].real * t.imag + work[i__1].imag * t.real; // , expr subst
                     i__2 = i__ - k + *ka - m;
                     i__5 = ka1 + (i__ - k) * ab_dim1;
-                    q__3.r = rwork[i__2] * ab[i__5].r;
-                    q__3.i = rwork[i__2] * ab[i__5].i; // , expr subst
-                    q__1.r = q__2.r + q__3.r;
-                    q__1.i = q__2.i + q__3.i; // , expr subst
-                    ab[i__3].r = q__1.r;
-                    ab[i__3].i = q__1.i; // , expr subst
-                    ra1.r = ra.r;
-                    ra1.i = ra.i; // , expr subst
+                    q__3.real = rwork[i__2] * ab[i__5].real;
+                    q__3.imag = rwork[i__2] * ab[i__5].imag; // , expr subst
+                    q__1.real = q__2.real + q__3.real;
+                    q__1.imag = q__2.imag + q__3.imag; // , expr subst
+                    ab[i__3].real = q__1.real;
+                    ab[i__3].imag = q__1.imag; // , expr subst
+                    ra1.real = ra.real;
+                    ra1.imag = ra.imag; // , expr subst
                 }
             }
             /* Computing MAX */
@@ -1090,17 +1090,17 @@ L10:
                 i__2 = j - m;
                 i__5 = j - m;
                 i__6 = ka1 + (j - *ka + 1) * ab_dim1;
-                q__1.r = work[i__5].r * ab[i__6].r - work[i__5].i * ab[i__6].i;
-                q__1.i = work[i__5].r * ab[i__6].i + work[i__5].i * ab[i__6].r; // , expr subst
-                work[i__2].r = q__1.r;
-                work[i__2].i = q__1.i; // , expr subst
+                q__1.real = work[i__5].real * ab[i__6].real - work[i__5].imag * ab[i__6].imag;
+                q__1.imag = work[i__5].real * ab[i__6].imag + work[i__5].imag * ab[i__6].real; // , expr subst
+                work[i__2].real = q__1.real;
+                work[i__2].imag = q__1.imag; // , expr subst
                 i__2 = ka1 + (j - *ka + 1) * ab_dim1;
                 i__5 = j - m;
                 i__6 = ka1 + (j - *ka + 1) * ab_dim1;
-                q__1.r = rwork[i__5] * ab[i__6].r;
-                q__1.i = rwork[i__5] * ab[i__6].i; // , expr subst
-                ab[i__2].r = q__1.r;
-                ab[i__2].i = q__1.i; // , expr subst
+                q__1.real = rwork[i__5] * ab[i__6].real;
+                q__1.imag = rwork[i__5] * ab[i__6].imag; // , expr subst
+                ab[i__2].real = q__1.real;
+                ab[i__2].imag = q__1.imag; // , expr subst
                 /* L320: */
             }
             /* generate rotations in 1st set to annihilate elements which */
@@ -1165,12 +1165,12 @@ L10:
                 /* band and store it in WORK(i-kbt) */
                 i__4 = i__ - kbt;
                 i__3 = kbt + 1 + (i__ - kbt) * bb_dim1;
-                q__2.r = -bb[i__3].r;
-                q__2.i = -bb[i__3].i; // , expr subst
-                q__1.r = q__2.r * ra1.r - q__2.i * ra1.i;
-                q__1.i = q__2.r * ra1.i + q__2.i * ra1.r; // , expr subst
-                work[i__4].r = q__1.r;
-                work[i__4].i = q__1.i; // , expr subst
+                q__2.real = -bb[i__3].real;
+                q__2.imag = -bb[i__3].imag; // , expr subst
+                q__1.real = q__2.real * ra1.real - q__2.imag * ra1.imag;
+                q__1.imag = q__2.real * ra1.imag + q__2.imag * ra1.real; // , expr subst
+                work[i__4].real = q__1.real;
+                work[i__4].imag = q__1.imag; // , expr subst
             }
         }
         for(k = *kb; k >= 1; --k)
@@ -1209,8 +1209,8 @@ L10:
             {
                 i__1 = j;
                 i__2 = j - *ka;
-                work[i__1].r = work[i__2].r;
-                work[i__1].i = work[i__2].i; // , expr subst
+                work[i__1].real = work[i__2].real;
+                work[i__1].imag = work[i__2].imag; // , expr subst
                 rwork[j] = rwork[j - *ka];
                 /* L380: */
             }
@@ -1223,17 +1223,17 @@ L10:
                 i__1 = j;
                 i__2 = j;
                 i__5 = ka1 + (j - *ka + 1) * ab_dim1;
-                q__1.r = work[i__2].r * ab[i__5].r - work[i__2].i * ab[i__5].i;
-                q__1.i = work[i__2].r * ab[i__5].i + work[i__2].i * ab[i__5].r; // , expr subst
-                work[i__1].r = q__1.r;
-                work[i__1].i = q__1.i; // , expr subst
+                q__1.real = work[i__2].real * ab[i__5].real - work[i__2].imag * ab[i__5].imag;
+                q__1.imag = work[i__2].real * ab[i__5].imag + work[i__2].imag * ab[i__5].real; // , expr subst
+                work[i__1].real = q__1.real;
+                work[i__1].imag = q__1.imag; // , expr subst
                 i__1 = ka1 + (j - *ka + 1) * ab_dim1;
                 i__2 = j;
                 i__5 = ka1 + (j - *ka + 1) * ab_dim1;
-                q__1.r = rwork[i__2] * ab[i__5].r;
-                q__1.i = rwork[i__2] * ab[i__5].i; // , expr subst
-                ab[i__1].r = q__1.r;
-                ab[i__1].i = q__1.i; // , expr subst
+                q__1.real = rwork[i__2] * ab[i__5].real;
+                q__1.imag = rwork[i__2] * ab[i__5].imag; // , expr subst
+                ab[i__1].real = q__1.real;
+                ab[i__1].imag = q__1.imag; // , expr subst
                 /* L390: */
             }
             if(update)
@@ -1242,8 +1242,8 @@ L10:
                 {
                     i__4 = i__ - k + *ka;
                     i__3 = i__ - k;
-                    work[i__4].r = work[i__3].r;
-                    work[i__4].i = work[i__3].i; // , expr subst
+                    work[i__4].real = work[i__3].real;
+                    work[i__4].imag = work[i__3].imag; // , expr subst
                 }
             }
             /* L400: */
@@ -1334,8 +1334,8 @@ L10:
                 rwork[j - m] = rwork[j - *ka - m];
                 i__4 = j - m;
                 i__1 = j - *ka - m;
-                work[i__4].r = work[i__1].r;
-                work[i__4].i = work[i__1].i; // , expr subst
+                work[i__4].real = work[i__1].real;
+                work[i__4].imag = work[i__1].imag; // , expr subst
                 /* L470: */
             }
         }
@@ -1406,21 +1406,21 @@ L490:
         {
             /* Form inv(S(i))**H * A * inv(S(i)) */
             i__3 = kb1 + i__ * bb_dim1;
-            bii = bb[i__3].r;
+            bii = bb[i__3].real;
             i__3 = ka1 + i__ * ab_dim1;
             i__4 = ka1 + i__ * ab_dim1;
-            r__1 = ab[i__4].r / bii / bii;
-            ab[i__3].r = r__1;
-            ab[i__3].i = 0.f; // , expr subst
+            r__1 = ab[i__4].real / bii / bii;
+            ab[i__3].real = r__1;
+            ab[i__3].imag = 0.f; // , expr subst
             i__3 = i__ - 1;
             for(j = i1; j <= i__3; ++j)
             {
                 i__4 = j - i__ + ka1 + i__ * ab_dim1;
                 i__1 = j - i__ + ka1 + i__ * ab_dim1;
-                q__1.r = ab[i__1].r / bii;
-                q__1.i = ab[i__1].i / bii; // , expr subst
-                ab[i__4].r = q__1.r;
-                ab[i__4].i = q__1.i; // , expr subst
+                q__1.real = ab[i__1].real / bii;
+                q__1.imag = ab[i__1].imag / bii; // , expr subst
+                ab[i__4].real = q__1.real;
+                ab[i__4].imag = q__1.imag; // , expr subst
                 /* L500: */
             }
             /* Computing MIN */
@@ -1431,10 +1431,10 @@ L490:
             {
                 i__4 = i__ - j + ka1 + j * ab_dim1;
                 i__1 = i__ - j + ka1 + j * ab_dim1;
-                q__1.r = ab[i__1].r / bii;
-                q__1.i = ab[i__1].i / bii; // , expr subst
-                ab[i__4].r = q__1.r;
-                ab[i__4].i = q__1.i; // , expr subst
+                q__1.real = ab[i__1].real / bii;
+                q__1.imag = ab[i__1].imag / bii; // , expr subst
+                ab[i__4].real = q__1.real;
+                ab[i__4].imag = q__1.imag; // , expr subst
                 /* L510: */
             }
             i__3 = i__ + kbt;
@@ -1447,28 +1447,28 @@ L490:
                     i__2 = k - j + ka1 + j * ab_dim1;
                     i__5 = i__ - j + kb1 + j * bb_dim1;
                     r_cnjg(&q__5, &ab[i__ - k + ka1 + k * ab_dim1]);
-                    q__4.r = bb[i__5].r * q__5.r - bb[i__5].i * q__5.i;
-                    q__4.i = bb[i__5].r * q__5.i + bb[i__5].i * q__5.r; // , expr subst
-                    q__3.r = ab[i__2].r - q__4.r;
-                    q__3.i = ab[i__2].i - q__4.i; // , expr subst
+                    q__4.real = bb[i__5].real * q__5.real - bb[i__5].imag * q__5.imag;
+                    q__4.imag = bb[i__5].real * q__5.imag + bb[i__5].imag * q__5.real; // , expr subst
+                    q__3.real = ab[i__2].real - q__4.real;
+                    q__3.imag = ab[i__2].imag - q__4.imag; // , expr subst
                     r_cnjg(&q__7, &bb[i__ - k + kb1 + k * bb_dim1]);
                     i__6 = i__ - j + ka1 + j * ab_dim1;
-                    q__6.r = q__7.r * ab[i__6].r - q__7.i * ab[i__6].i;
-                    q__6.i = q__7.r * ab[i__6].i + q__7.i * ab[i__6].r; // , expr subst
-                    q__2.r = q__3.r - q__6.r;
-                    q__2.i = q__3.i - q__6.i; // , expr subst
+                    q__6.real = q__7.real * ab[i__6].real - q__7.imag * ab[i__6].imag;
+                    q__6.imag = q__7.real * ab[i__6].imag + q__7.imag * ab[i__6].real; // , expr subst
+                    q__2.real = q__3.real - q__6.real;
+                    q__2.imag = q__3.imag - q__6.imag; // , expr subst
                     i__7 = ka1 + i__ * ab_dim1;
-                    r__1 = ab[i__7].r;
+                    r__1 = ab[i__7].real;
                     i__8 = i__ - j + kb1 + j * bb_dim1;
-                    q__9.r = r__1 * bb[i__8].r;
-                    q__9.i = r__1 * bb[i__8].i; // , expr subst
+                    q__9.real = r__1 * bb[i__8].real;
+                    q__9.imag = r__1 * bb[i__8].imag; // , expr subst
                     r_cnjg(&q__10, &bb[i__ - k + kb1 + k * bb_dim1]);
-                    q__8.r = q__9.r * q__10.r - q__9.i * q__10.i;
-                    q__8.i = q__9.r * q__10.i + q__9.i * q__10.r; // , expr subst
-                    q__1.r = q__2.r + q__8.r;
-                    q__1.i = q__2.i + q__8.i; // , expr subst
-                    ab[i__1].r = q__1.r;
-                    ab[i__1].i = q__1.i; // , expr subst
+                    q__8.real = q__9.real * q__10.real - q__9.imag * q__10.imag;
+                    q__8.imag = q__9.real * q__10.imag + q__9.imag * q__10.real; // , expr subst
+                    q__1.real = q__2.real + q__8.real;
+                    q__1.imag = q__2.imag + q__8.imag; // , expr subst
+                    ab[i__1].real = q__1.real;
+                    ab[i__1].imag = q__1.imag; // , expr subst
                     /* L520: */
                 }
                 /* Computing MIN */
@@ -1481,12 +1481,12 @@ L490:
                     i__2 = k - j + ka1 + j * ab_dim1;
                     r_cnjg(&q__3, &bb[i__ - k + kb1 + k * bb_dim1]);
                     i__5 = i__ - j + ka1 + j * ab_dim1;
-                    q__2.r = q__3.r * ab[i__5].r - q__3.i * ab[i__5].i;
-                    q__2.i = q__3.r * ab[i__5].i + q__3.i * ab[i__5].r; // , expr subst
-                    q__1.r = ab[i__2].r - q__2.r;
-                    q__1.i = ab[i__2].i - q__2.i; // , expr subst
-                    ab[i__1].r = q__1.r;
-                    ab[i__1].i = q__1.i; // , expr subst
+                    q__2.real = q__3.real * ab[i__5].real - q__3.imag * ab[i__5].imag;
+                    q__2.imag = q__3.real * ab[i__5].imag + q__3.imag * ab[i__5].real; // , expr subst
+                    q__1.real = ab[i__2].real - q__2.real;
+                    q__1.imag = ab[i__2].imag - q__2.imag; // , expr subst
+                    ab[i__1].real = q__1.real;
+                    ab[i__1].imag = q__1.imag; // , expr subst
                     /* L530: */
                 }
                 /* L540: */
@@ -1504,12 +1504,12 @@ L490:
                     i__2 = j - k + ka1 + k * ab_dim1;
                     i__5 = i__ - k + kb1 + k * bb_dim1;
                     i__6 = j - i__ + ka1 + i__ * ab_dim1;
-                    q__2.r = bb[i__5].r * ab[i__6].r - bb[i__5].i * ab[i__6].i;
-                    q__2.i = bb[i__5].r * ab[i__6].i + bb[i__5].i * ab[i__6].r; // , expr subst
-                    q__1.r = ab[i__2].r - q__2.r;
-                    q__1.i = ab[i__2].i - q__2.i; // , expr subst
-                    ab[i__1].r = q__1.r;
-                    ab[i__1].i = q__1.i; // , expr subst
+                    q__2.real = bb[i__5].real * ab[i__6].real - bb[i__5].imag * ab[i__6].imag;
+                    q__2.imag = bb[i__5].real * ab[i__6].imag + bb[i__5].imag * ab[i__6].real; // , expr subst
+                    q__1.real = ab[i__2].real - q__2.real;
+                    q__1.imag = ab[i__2].imag - q__2.imag; // , expr subst
+                    ab[i__1].real = q__1.real;
+                    ab[i__1].imag = q__1.imag; // , expr subst
                     /* L550: */
                 }
                 /* L560: */
@@ -1521,8 +1521,8 @@ L490:
                 aocl_blas_csscal(&nx, &r__1, &x[i__ * x_dim1 + 1], &c__1);
                 if(kbt > 0)
                 {
-                    q__1.r = -1.f;
-                    q__1.i = -0.f; // , expr subst
+                    q__1.real = -1.f;
+                    q__1.imag = -0.f; // , expr subst
                     i__3 = *ldbb - 1;
                     aocl_blas_cgeru(&nx, &kbt, &q__1, &x[i__ * x_dim1 + 1], &c__1,
                                     &bb[*kb + (i__ + 1) * bb_dim1], &i__3,
@@ -1531,8 +1531,8 @@ L490:
             }
             /* store a(i1,i) in RA1 for use in next loop over K */
             i__3 = i1 - i__ + ka1 + i__ * ab_dim1;
-            ra1.r = ab[i__3].r;
-            ra1.i = ab[i__3].i; // , expr subst
+            ra1.real = ab[i__3].real;
+            ra1.imag = ab[i__3].imag; // , expr subst
         }
         /* Generate and apply vectors of rotations to chase all the */
         /* existing bulges KA positions up toward the top of the band */
@@ -1551,38 +1551,38 @@ L490:
                     /* create nonzero element a(i+k-ka-1,i+k) outside the */
                     /* band and store it in WORK(m-kb+i+k) */
                     i__4 = kb1 - k + (i__ + k) * bb_dim1;
-                    q__2.r = -bb[i__4].r;
-                    q__2.i = -bb[i__4].i; // , expr subst
-                    q__1.r = q__2.r * ra1.r - q__2.i * ra1.i;
-                    q__1.i = q__2.r * ra1.i + q__2.i * ra1.r; // , expr subst
-                    t.r = q__1.r;
-                    t.i = q__1.i; // , expr subst
+                    q__2.real = -bb[i__4].real;
+                    q__2.imag = -bb[i__4].imag; // , expr subst
+                    q__1.real = q__2.real * ra1.real - q__2.imag * ra1.imag;
+                    q__1.imag = q__2.real * ra1.imag + q__2.imag * ra1.real; // , expr subst
+                    t.real = q__1.real;
+                    t.imag = q__1.imag; // , expr subst
                     i__4 = m - *kb + i__ + k;
                     i__1 = i__ + k - *ka;
-                    q__2.r = rwork[i__1] * t.r;
-                    q__2.i = rwork[i__1] * t.i; // , expr subst
+                    q__2.real = rwork[i__1] * t.real;
+                    q__2.imag = rwork[i__1] * t.imag; // , expr subst
                     r_cnjg(&q__4, &work[i__ + k - *ka]);
                     i__2 = (i__ + k) * ab_dim1 + 1;
-                    q__3.r = q__4.r * ab[i__2].r - q__4.i * ab[i__2].i;
-                    q__3.i = q__4.r * ab[i__2].i + q__4.i * ab[i__2].r; // , expr subst
-                    q__1.r = q__2.r - q__3.r;
-                    q__1.i = q__2.i - q__3.i; // , expr subst
-                    work[i__4].r = q__1.r;
-                    work[i__4].i = q__1.i; // , expr subst
+                    q__3.real = q__4.real * ab[i__2].real - q__4.imag * ab[i__2].imag;
+                    q__3.imag = q__4.real * ab[i__2].imag + q__4.imag * ab[i__2].real; // , expr subst
+                    q__1.real = q__2.real - q__3.real;
+                    q__1.imag = q__2.imag - q__3.imag; // , expr subst
+                    work[i__4].real = q__1.real;
+                    work[i__4].imag = q__1.imag; // , expr subst
                     i__4 = (i__ + k) * ab_dim1 + 1;
                     i__1 = i__ + k - *ka;
-                    q__2.r = work[i__1].r * t.r - work[i__1].i * t.i;
-                    q__2.i = work[i__1].r * t.i + work[i__1].i * t.r; // , expr subst
+                    q__2.real = work[i__1].real * t.real - work[i__1].imag * t.imag;
+                    q__2.imag = work[i__1].real * t.imag + work[i__1].imag * t.real; // , expr subst
                     i__2 = i__ + k - *ka;
                     i__5 = (i__ + k) * ab_dim1 + 1;
-                    q__3.r = rwork[i__2] * ab[i__5].r;
-                    q__3.i = rwork[i__2] * ab[i__5].i; // , expr subst
-                    q__1.r = q__2.r + q__3.r;
-                    q__1.i = q__2.i + q__3.i; // , expr subst
-                    ab[i__4].r = q__1.r;
-                    ab[i__4].i = q__1.i; // , expr subst
-                    ra1.r = ra.r;
-                    ra1.i = ra.i; // , expr subst
+                    q__3.real = rwork[i__2] * ab[i__5].real;
+                    q__3.imag = rwork[i__2] * ab[i__5].imag; // , expr subst
+                    q__1.real = q__2.real + q__3.real;
+                    q__1.imag = q__2.imag + q__3.imag; // , expr subst
+                    ab[i__4].real = q__1.real;
+                    ab[i__4].imag = q__1.imag; // , expr subst
+                    ra1.real = ra.real;
+                    ra1.imag = ra.imag; // , expr subst
                 }
             }
             /* Computing MAX */
@@ -1612,17 +1612,17 @@ L490:
                 i__2 = j;
                 i__5 = j;
                 i__6 = (j + *ka - 1) * ab_dim1 + 1;
-                q__1.r = work[i__5].r * ab[i__6].r - work[i__5].i * ab[i__6].i;
-                q__1.i = work[i__5].r * ab[i__6].i + work[i__5].i * ab[i__6].r; // , expr subst
-                work[i__2].r = q__1.r;
-                work[i__2].i = q__1.i; // , expr subst
+                q__1.real = work[i__5].real * ab[i__6].real - work[i__5].imag * ab[i__6].imag;
+                q__1.imag = work[i__5].real * ab[i__6].imag + work[i__5].imag * ab[i__6].real; // , expr subst
+                work[i__2].real = q__1.real;
+                work[i__2].imag = q__1.imag; // , expr subst
                 i__2 = (j + *ka - 1) * ab_dim1 + 1;
                 i__5 = j;
                 i__6 = (j + *ka - 1) * ab_dim1 + 1;
-                q__1.r = rwork[i__5] * ab[i__6].r;
-                q__1.i = rwork[i__5] * ab[i__6].i; // , expr subst
-                ab[i__2].r = q__1.r;
-                ab[i__2].i = q__1.i; // , expr subst
+                q__1.real = rwork[i__5] * ab[i__6].real;
+                q__1.imag = rwork[i__5] * ab[i__6].imag; // , expr subst
+                ab[i__2].real = q__1.real;
+                ab[i__2].imag = q__1.imag; // , expr subst
                 /* L570: */
             }
             /* generate rotations in 1st set to annihilate elements which */
@@ -1685,12 +1685,12 @@ L490:
                 /* band and store it in WORK(m-kb+i+kbt) */
                 i__3 = m - *kb + i__ + kbt;
                 i__4 = kb1 - kbt + (i__ + kbt) * bb_dim1;
-                q__2.r = -bb[i__4].r;
-                q__2.i = -bb[i__4].i; // , expr subst
-                q__1.r = q__2.r * ra1.r - q__2.i * ra1.i;
-                q__1.i = q__2.r * ra1.i + q__2.i * ra1.r; // , expr subst
-                work[i__3].r = q__1.r;
-                work[i__3].i = q__1.i; // , expr subst
+                q__2.real = -bb[i__4].real;
+                q__2.imag = -bb[i__4].imag; // , expr subst
+                q__1.real = q__2.real * ra1.real - q__2.imag * ra1.imag;
+                q__1.imag = q__2.real * ra1.imag + q__2.imag * ra1.real; // , expr subst
+                work[i__3].real = q__1.real;
+                work[i__3].imag = q__1.imag; // , expr subst
             }
         }
         for(k = *kb; k >= 1; --k)
@@ -1731,8 +1731,8 @@ L490:
             {
                 i__1 = m - *kb + j;
                 i__2 = m - *kb + j + *ka;
-                work[i__1].r = work[i__2].r;
-                work[i__1].i = work[i__2].i; // , expr subst
+                work[i__1].real = work[i__2].real;
+                work[i__1].imag = work[i__2].imag; // , expr subst
                 rwork[m - *kb + j] = rwork[m - *kb + j + *ka];
                 /* L630: */
             }
@@ -1745,17 +1745,17 @@ L490:
                 i__1 = m - *kb + j;
                 i__2 = m - *kb + j;
                 i__5 = (j + *ka - 1) * ab_dim1 + 1;
-                q__1.r = work[i__2].r * ab[i__5].r - work[i__2].i * ab[i__5].i;
-                q__1.i = work[i__2].r * ab[i__5].i + work[i__2].i * ab[i__5].r; // , expr subst
-                work[i__1].r = q__1.r;
-                work[i__1].i = q__1.i; // , expr subst
+                q__1.real = work[i__2].real * ab[i__5].real - work[i__2].imag * ab[i__5].imag;
+                q__1.imag = work[i__2].real * ab[i__5].imag + work[i__2].imag * ab[i__5].real; // , expr subst
+                work[i__1].real = q__1.real;
+                work[i__1].imag = q__1.imag; // , expr subst
                 i__1 = (j + *ka - 1) * ab_dim1 + 1;
                 i__2 = m - *kb + j;
                 i__5 = (j + *ka - 1) * ab_dim1 + 1;
-                q__1.r = rwork[i__2] * ab[i__5].r;
-                q__1.i = rwork[i__2] * ab[i__5].i; // , expr subst
-                ab[i__1].r = q__1.r;
-                ab[i__1].i = q__1.i; // , expr subst
+                q__1.real = rwork[i__2] * ab[i__5].real;
+                q__1.imag = rwork[i__2] * ab[i__5].imag; // , expr subst
+                ab[i__1].real = q__1.real;
+                ab[i__1].imag = q__1.imag; // , expr subst
                 /* L640: */
             }
             if(update)
@@ -1764,8 +1764,8 @@ L490:
                 {
                     i__3 = m - *kb + i__ + k - *ka;
                     i__4 = m - *kb + i__ + k;
-                    work[i__3].r = work[i__4].r;
-                    work[i__3].i = work[i__4].i; // , expr subst
+                    work[i__3].real = work[i__4].real;
+                    work[i__3].imag = work[i__4].imag; // , expr subst
                 }
             }
             /* L650: */
@@ -1858,8 +1858,8 @@ L490:
                 rwork[j] = rwork[j + *ka];
                 i__3 = j;
                 i__1 = j + *ka;
-                work[i__3].r = work[i__1].r;
-                work[i__3].i = work[i__1].i; // , expr subst
+                work[i__3].real = work[i__1].real;
+                work[i__3].imag = work[i__1].imag; // , expr subst
                 /* L720: */
             }
         }
@@ -1871,21 +1871,21 @@ L490:
         {
             /* Form inv(S(i))**H * A * inv(S(i)) */
             i__4 = i__ * bb_dim1 + 1;
-            bii = bb[i__4].r;
+            bii = bb[i__4].real;
             i__4 = i__ * ab_dim1 + 1;
             i__3 = i__ * ab_dim1 + 1;
-            r__1 = ab[i__3].r / bii / bii;
-            ab[i__4].r = r__1;
-            ab[i__4].i = 0.f; // , expr subst
+            r__1 = ab[i__3].real / bii / bii;
+            ab[i__4].real = r__1;
+            ab[i__4].imag = 0.f; // , expr subst
             i__4 = i__ - 1;
             for(j = i1; j <= i__4; ++j)
             {
                 i__3 = i__ - j + 1 + j * ab_dim1;
                 i__1 = i__ - j + 1 + j * ab_dim1;
-                q__1.r = ab[i__1].r / bii;
-                q__1.i = ab[i__1].i / bii; // , expr subst
-                ab[i__3].r = q__1.r;
-                ab[i__3].i = q__1.i; // , expr subst
+                q__1.real = ab[i__1].real / bii;
+                q__1.imag = ab[i__1].imag / bii; // , expr subst
+                ab[i__3].real = q__1.real;
+                ab[i__3].imag = q__1.imag; // , expr subst
                 /* L730: */
             }
             /* Computing MIN */
@@ -1896,10 +1896,10 @@ L490:
             {
                 i__3 = j - i__ + 1 + i__ * ab_dim1;
                 i__1 = j - i__ + 1 + i__ * ab_dim1;
-                q__1.r = ab[i__1].r / bii;
-                q__1.i = ab[i__1].i / bii; // , expr subst
-                ab[i__3].r = q__1.r;
-                ab[i__3].i = q__1.i; // , expr subst
+                q__1.real = ab[i__1].real / bii;
+                q__1.imag = ab[i__1].imag / bii; // , expr subst
+                ab[i__3].real = q__1.real;
+                ab[i__3].imag = q__1.imag; // , expr subst
                 /* L740: */
             }
             i__4 = i__ + kbt;
@@ -1912,28 +1912,28 @@ L490:
                     i__2 = j - k + 1 + k * ab_dim1;
                     i__5 = j - i__ + 1 + i__ * bb_dim1;
                     r_cnjg(&q__5, &ab[k - i__ + 1 + i__ * ab_dim1]);
-                    q__4.r = bb[i__5].r * q__5.r - bb[i__5].i * q__5.i;
-                    q__4.i = bb[i__5].r * q__5.i + bb[i__5].i * q__5.r; // , expr subst
-                    q__3.r = ab[i__2].r - q__4.r;
-                    q__3.i = ab[i__2].i - q__4.i; // , expr subst
+                    q__4.real = bb[i__5].real * q__5.real - bb[i__5].imag * q__5.imag;
+                    q__4.imag = bb[i__5].real * q__5.imag + bb[i__5].imag * q__5.real; // , expr subst
+                    q__3.real = ab[i__2].real - q__4.real;
+                    q__3.imag = ab[i__2].imag - q__4.imag; // , expr subst
                     r_cnjg(&q__7, &bb[k - i__ + 1 + i__ * bb_dim1]);
                     i__6 = j - i__ + 1 + i__ * ab_dim1;
-                    q__6.r = q__7.r * ab[i__6].r - q__7.i * ab[i__6].i;
-                    q__6.i = q__7.r * ab[i__6].i + q__7.i * ab[i__6].r; // , expr subst
-                    q__2.r = q__3.r - q__6.r;
-                    q__2.i = q__3.i - q__6.i; // , expr subst
+                    q__6.real = q__7.real * ab[i__6].real - q__7.imag * ab[i__6].imag;
+                    q__6.imag = q__7.real * ab[i__6].imag + q__7.imag * ab[i__6].real; // , expr subst
+                    q__2.real = q__3.real - q__6.real;
+                    q__2.imag = q__3.imag - q__6.imag; // , expr subst
                     i__7 = i__ * ab_dim1 + 1;
-                    r__1 = ab[i__7].r;
+                    r__1 = ab[i__7].real;
                     i__8 = j - i__ + 1 + i__ * bb_dim1;
-                    q__9.r = r__1 * bb[i__8].r;
-                    q__9.i = r__1 * bb[i__8].i; // , expr subst
+                    q__9.real = r__1 * bb[i__8].real;
+                    q__9.imag = r__1 * bb[i__8].imag; // , expr subst
                     r_cnjg(&q__10, &bb[k - i__ + 1 + i__ * bb_dim1]);
-                    q__8.r = q__9.r * q__10.r - q__9.i * q__10.i;
-                    q__8.i = q__9.r * q__10.i + q__9.i * q__10.r; // , expr subst
-                    q__1.r = q__2.r + q__8.r;
-                    q__1.i = q__2.i + q__8.i; // , expr subst
-                    ab[i__1].r = q__1.r;
-                    ab[i__1].i = q__1.i; // , expr subst
+                    q__8.real = q__9.real * q__10.real - q__9.imag * q__10.imag;
+                    q__8.imag = q__9.real * q__10.imag + q__9.imag * q__10.real; // , expr subst
+                    q__1.real = q__2.real + q__8.real;
+                    q__1.imag = q__2.imag + q__8.imag; // , expr subst
+                    ab[i__1].real = q__1.real;
+                    ab[i__1].imag = q__1.imag; // , expr subst
                     /* L750: */
                 }
                 /* Computing MIN */
@@ -1946,12 +1946,12 @@ L490:
                     i__2 = j - k + 1 + k * ab_dim1;
                     r_cnjg(&q__3, &bb[k - i__ + 1 + i__ * bb_dim1]);
                     i__5 = j - i__ + 1 + i__ * ab_dim1;
-                    q__2.r = q__3.r * ab[i__5].r - q__3.i * ab[i__5].i;
-                    q__2.i = q__3.r * ab[i__5].i + q__3.i * ab[i__5].r; // , expr subst
-                    q__1.r = ab[i__2].r - q__2.r;
-                    q__1.i = ab[i__2].i - q__2.i; // , expr subst
-                    ab[i__1].r = q__1.r;
-                    ab[i__1].i = q__1.i; // , expr subst
+                    q__2.real = q__3.real * ab[i__5].real - q__3.imag * ab[i__5].imag;
+                    q__2.imag = q__3.real * ab[i__5].imag + q__3.imag * ab[i__5].real; // , expr subst
+                    q__1.real = ab[i__2].real - q__2.real;
+                    q__1.imag = ab[i__2].imag - q__2.imag; // , expr subst
+                    ab[i__1].real = q__1.real;
+                    ab[i__1].imag = q__1.imag; // , expr subst
                     /* L760: */
                 }
                 /* L770: */
@@ -1969,12 +1969,12 @@ L490:
                     i__2 = k - j + 1 + j * ab_dim1;
                     i__5 = k - i__ + 1 + i__ * bb_dim1;
                     i__6 = i__ - j + 1 + j * ab_dim1;
-                    q__2.r = bb[i__5].r * ab[i__6].r - bb[i__5].i * ab[i__6].i;
-                    q__2.i = bb[i__5].r * ab[i__6].i + bb[i__5].i * ab[i__6].r; // , expr subst
-                    q__1.r = ab[i__2].r - q__2.r;
-                    q__1.i = ab[i__2].i - q__2.i; // , expr subst
-                    ab[i__1].r = q__1.r;
-                    ab[i__1].i = q__1.i; // , expr subst
+                    q__2.real = bb[i__5].real * ab[i__6].real - bb[i__5].imag * ab[i__6].imag;
+                    q__2.imag = bb[i__5].real * ab[i__6].imag + bb[i__5].imag * ab[i__6].real; // , expr subst
+                    q__1.real = ab[i__2].real - q__2.real;
+                    q__1.imag = ab[i__2].imag - q__2.imag; // , expr subst
+                    ab[i__1].real = q__1.real;
+                    ab[i__1].imag = q__1.imag; // , expr subst
                     /* L780: */
                 }
                 /* L790: */
@@ -1986,16 +1986,16 @@ L490:
                 aocl_blas_csscal(&nx, &r__1, &x[i__ * x_dim1 + 1], &c__1);
                 if(kbt > 0)
                 {
-                    q__1.r = -1.f;
-                    q__1.i = -0.f; // , expr subst
+                    q__1.real = -1.f;
+                    q__1.imag = -0.f; // , expr subst
                     aocl_blas_cgerc(&nx, &kbt, &q__1, &x[i__ * x_dim1 + 1], &c__1,
                                     &bb[i__ * bb_dim1 + 2], &c__1, &x[(i__ + 1) * x_dim1 + 1], ldx);
                 }
             }
             /* store a(i,i1) in RA1 for use in next loop over K */
             i__4 = i__ - i1 + 1 + i1 * ab_dim1;
-            ra1.r = ab[i__4].r;
-            ra1.i = ab[i__4].i; // , expr subst
+            ra1.real = ab[i__4].real;
+            ra1.imag = ab[i__4].imag; // , expr subst
         }
         /* Generate and apply vectors of rotations to chase all the */
         /* existing bulges KA positions up toward the top of the band */
@@ -2014,38 +2014,38 @@ L490:
                     /* create nonzero element a(i+k,i+k-ka-1) outside the */
                     /* band and store it in WORK(m-kb+i+k) */
                     i__3 = k + 1 + i__ * bb_dim1;
-                    q__2.r = -bb[i__3].r;
-                    q__2.i = -bb[i__3].i; // , expr subst
-                    q__1.r = q__2.r * ra1.r - q__2.i * ra1.i;
-                    q__1.i = q__2.r * ra1.i + q__2.i * ra1.r; // , expr subst
-                    t.r = q__1.r;
-                    t.i = q__1.i; // , expr subst
+                    q__2.real = -bb[i__3].real;
+                    q__2.imag = -bb[i__3].imag; // , expr subst
+                    q__1.real = q__2.real * ra1.real - q__2.imag * ra1.imag;
+                    q__1.imag = q__2.real * ra1.imag + q__2.imag * ra1.real; // , expr subst
+                    t.real = q__1.real;
+                    t.imag = q__1.imag; // , expr subst
                     i__3 = m - *kb + i__ + k;
                     i__1 = i__ + k - *ka;
-                    q__2.r = rwork[i__1] * t.r;
-                    q__2.i = rwork[i__1] * t.i; // , expr subst
+                    q__2.real = rwork[i__1] * t.real;
+                    q__2.imag = rwork[i__1] * t.imag; // , expr subst
                     r_cnjg(&q__4, &work[i__ + k - *ka]);
                     i__2 = ka1 + (i__ + k - *ka) * ab_dim1;
-                    q__3.r = q__4.r * ab[i__2].r - q__4.i * ab[i__2].i;
-                    q__3.i = q__4.r * ab[i__2].i + q__4.i * ab[i__2].r; // , expr subst
-                    q__1.r = q__2.r - q__3.r;
-                    q__1.i = q__2.i - q__3.i; // , expr subst
-                    work[i__3].r = q__1.r;
-                    work[i__3].i = q__1.i; // , expr subst
+                    q__3.real = q__4.real * ab[i__2].real - q__4.imag * ab[i__2].imag;
+                    q__3.imag = q__4.real * ab[i__2].imag + q__4.imag * ab[i__2].real; // , expr subst
+                    q__1.real = q__2.real - q__3.real;
+                    q__1.imag = q__2.imag - q__3.imag; // , expr subst
+                    work[i__3].real = q__1.real;
+                    work[i__3].imag = q__1.imag; // , expr subst
                     i__3 = ka1 + (i__ + k - *ka) * ab_dim1;
                     i__1 = i__ + k - *ka;
-                    q__2.r = work[i__1].r * t.r - work[i__1].i * t.i;
-                    q__2.i = work[i__1].r * t.i + work[i__1].i * t.r; // , expr subst
+                    q__2.real = work[i__1].real * t.real - work[i__1].imag * t.imag;
+                    q__2.imag = work[i__1].real * t.imag + work[i__1].imag * t.real; // , expr subst
                     i__2 = i__ + k - *ka;
                     i__5 = ka1 + (i__ + k - *ka) * ab_dim1;
-                    q__3.r = rwork[i__2] * ab[i__5].r;
-                    q__3.i = rwork[i__2] * ab[i__5].i; // , expr subst
-                    q__1.r = q__2.r + q__3.r;
-                    q__1.i = q__2.i + q__3.i; // , expr subst
-                    ab[i__3].r = q__1.r;
-                    ab[i__3].i = q__1.i; // , expr subst
-                    ra1.r = ra.r;
-                    ra1.i = ra.i; // , expr subst
+                    q__3.real = rwork[i__2] * ab[i__5].real;
+                    q__3.imag = rwork[i__2] * ab[i__5].imag; // , expr subst
+                    q__1.real = q__2.real + q__3.real;
+                    q__1.imag = q__2.imag + q__3.imag; // , expr subst
+                    ab[i__3].real = q__1.real;
+                    ab[i__3].imag = q__1.imag; // , expr subst
+                    ra1.real = ra.real;
+                    ra1.imag = ra.imag; // , expr subst
                 }
             }
             /* Computing MAX */
@@ -2075,17 +2075,17 @@ L490:
                 i__2 = j;
                 i__5 = j;
                 i__6 = ka1 + (j - 1) * ab_dim1;
-                q__1.r = work[i__5].r * ab[i__6].r - work[i__5].i * ab[i__6].i;
-                q__1.i = work[i__5].r * ab[i__6].i + work[i__5].i * ab[i__6].r; // , expr subst
-                work[i__2].r = q__1.r;
-                work[i__2].i = q__1.i; // , expr subst
+                q__1.real = work[i__5].real * ab[i__6].real - work[i__5].imag * ab[i__6].imag;
+                q__1.imag = work[i__5].real * ab[i__6].imag + work[i__5].imag * ab[i__6].real; // , expr subst
+                work[i__2].real = q__1.real;
+                work[i__2].imag = q__1.imag; // , expr subst
                 i__2 = ka1 + (j - 1) * ab_dim1;
                 i__5 = j;
                 i__6 = ka1 + (j - 1) * ab_dim1;
-                q__1.r = rwork[i__5] * ab[i__6].r;
-                q__1.i = rwork[i__5] * ab[i__6].i; // , expr subst
-                ab[i__2].r = q__1.r;
-                ab[i__2].i = q__1.i; // , expr subst
+                q__1.real = rwork[i__5] * ab[i__6].real;
+                q__1.imag = rwork[i__5] * ab[i__6].imag; // , expr subst
+                ab[i__2].real = q__1.real;
+                ab[i__2].imag = q__1.imag; // , expr subst
                 /* L800: */
             }
             /* generate rotations in 1st set to annihilate elements which */
@@ -2149,12 +2149,12 @@ L490:
                 /* band and store it in WORK(m-kb+i+kbt) */
                 i__4 = m - *kb + i__ + kbt;
                 i__3 = kbt + 1 + i__ * bb_dim1;
-                q__2.r = -bb[i__3].r;
-                q__2.i = -bb[i__3].i; // , expr subst
-                q__1.r = q__2.r * ra1.r - q__2.i * ra1.i;
-                q__1.i = q__2.r * ra1.i + q__2.i * ra1.r; // , expr subst
-                work[i__4].r = q__1.r;
-                work[i__4].i = q__1.i; // , expr subst
+                q__2.real = -bb[i__3].real;
+                q__2.imag = -bb[i__3].imag; // , expr subst
+                q__1.real = q__2.real * ra1.real - q__2.imag * ra1.imag;
+                q__1.imag = q__2.real * ra1.imag + q__2.imag * ra1.real; // , expr subst
+                work[i__4].real = q__1.real;
+                work[i__4].imag = q__1.imag; // , expr subst
             }
         }
         for(k = *kb; k >= 1; --k)
@@ -2195,8 +2195,8 @@ L490:
             {
                 i__1 = m - *kb + j;
                 i__2 = m - *kb + j + *ka;
-                work[i__1].r = work[i__2].r;
-                work[i__1].i = work[i__2].i; // , expr subst
+                work[i__1].real = work[i__2].real;
+                work[i__1].imag = work[i__2].imag; // , expr subst
                 rwork[m - *kb + j] = rwork[m - *kb + j + *ka];
                 /* L860: */
             }
@@ -2209,17 +2209,17 @@ L490:
                 i__1 = m - *kb + j;
                 i__2 = m - *kb + j;
                 i__5 = ka1 + (j - 1) * ab_dim1;
-                q__1.r = work[i__2].r * ab[i__5].r - work[i__2].i * ab[i__5].i;
-                q__1.i = work[i__2].r * ab[i__5].i + work[i__2].i * ab[i__5].r; // , expr subst
-                work[i__1].r = q__1.r;
-                work[i__1].i = q__1.i; // , expr subst
+                q__1.real = work[i__2].real * ab[i__5].real - work[i__2].imag * ab[i__5].imag;
+                q__1.imag = work[i__2].real * ab[i__5].imag + work[i__2].imag * ab[i__5].real; // , expr subst
+                work[i__1].real = q__1.real;
+                work[i__1].imag = q__1.imag; // , expr subst
                 i__1 = ka1 + (j - 1) * ab_dim1;
                 i__2 = m - *kb + j;
                 i__5 = ka1 + (j - 1) * ab_dim1;
-                q__1.r = rwork[i__2] * ab[i__5].r;
-                q__1.i = rwork[i__2] * ab[i__5].i; // , expr subst
-                ab[i__1].r = q__1.r;
-                ab[i__1].i = q__1.i; // , expr subst
+                q__1.real = rwork[i__2] * ab[i__5].real;
+                q__1.imag = rwork[i__2] * ab[i__5].imag; // , expr subst
+                ab[i__1].real = q__1.real;
+                ab[i__1].imag = q__1.imag; // , expr subst
                 /* L870: */
             }
             if(update)
@@ -2228,8 +2228,8 @@ L490:
                 {
                     i__4 = m - *kb + i__ + k - *ka;
                     i__3 = m - *kb + i__ + k;
-                    work[i__4].r = work[i__3].r;
-                    work[i__4].i = work[i__3].i; // , expr subst
+                    work[i__4].real = work[i__3].real;
+                    work[i__4].imag = work[i__3].imag; // , expr subst
                 }
             }
             /* L880: */
@@ -2323,8 +2323,8 @@ L490:
                 rwork[j] = rwork[j + *ka];
                 i__4 = j;
                 i__1 = j + *ka;
-                work[i__4].r = work[i__1].r;
-                work[i__4].i = work[i__1].i; // , expr subst
+                work[i__4].real = work[i__1].real;
+                work[i__4].imag = work[i__1].imag; // , expr subst
                 /* L950: */
             }
         }

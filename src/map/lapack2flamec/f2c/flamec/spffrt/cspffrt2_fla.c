@@ -73,7 +73,7 @@ void cspffrt2_fla(scomplex *ap, aocl_int64_t *n, aocl_int64_t *ncolm, scomplex *
     scomplex c__1;
     aocl_int64_t i__1, k, kc;
     scomplex r1;
-    scomplex c_b1 = {{1.}, {0.}};
+    scomplex c_b1 = {1., 0.};
     aocl_int64_t ic__1 = 1;
 
     --ap;
@@ -87,26 +87,26 @@ void cspffrt2_fla(scomplex *ap, aocl_int64_t *n, aocl_int64_t *ncolm, scomplex *
         /* where L(k) is the k-th column of L */
 
         /* Skip trailing matrix update if zero diagonal element is encountered */
-        if(ap[kc].r == 0 && ap[kc].i == 0)
+        if(ap[kc].real == 0 && ap[kc].imag == 0)
         {
-            c__1.r = 0;
-            c__1.i = 0;
+            c__1.real = 0;
+            c__1.imag = 0;
         }
         else
         {
             c_div(&c__1, &c_b1, &ap[kc]);
         }
 
-        r1.r = -c__1.r;
-        r1.i = -c__1.i;
+        r1.real = -c__1.real;
+        r1.imag = -c__1.imag;
 
         /* Perform a rank-1 update of A(k+1:n,k+1:n) as */
         /* A := A - L(k)*D(k)*L(k)**T = A - W(k)*(1/D(k))*W(k)**T */
         i__1 = *n - k;
         aocl_lapack_cspr("Lower", &i__1, &r1, &ap[kc + 1], &ic__1, &ap[kc + *n - k + 1]);
 
-        ap[kc].r = c__1.r;
-        ap[kc].i = c__1.i;
+        ap[kc].real = c__1.real;
+        ap[kc].imag = c__1.imag;
 
         kc = kc + *n - k + 1;
     }

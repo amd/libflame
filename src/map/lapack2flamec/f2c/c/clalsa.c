@@ -472,7 +472,7 @@ void aocl_lapack_clalsa(aocl_int64_t *icompq, aocl_int64_t *smlsiz, aocl_int64_t
             {
                 ++j;
                 i__4 = jrow + jcol * b_dim1;
-                rwork[j] = b[i__4].r;
+                rwork[j] = b[i__4].real;
                 /* L10: */
             }
             /* L20: */
@@ -507,10 +507,10 @@ void aocl_lapack_clalsa(aocl_int64_t *icompq, aocl_int64_t *smlsiz, aocl_int64_t
                 i__4 = jrow + jcol * bx_dim1;
                 i__5 = jreal;
                 i__6 = jimag;
-                q__1.r = rwork[i__5];
-                q__1.i = rwork[i__6]; // , expr subst
-                bx[i__4].r = q__1.r;
-                bx[i__4].i = q__1.i; // , expr subst
+                q__1.real = rwork[i__5];
+                q__1.imag = rwork[i__6]; // , expr subst
+                bx[i__4].real = q__1.real;
+                bx[i__4].imag = q__1.imag; // , expr subst
                 /* L50: */
             }
             /* L60: */
@@ -528,7 +528,7 @@ void aocl_lapack_clalsa(aocl_int64_t *icompq, aocl_int64_t *smlsiz, aocl_int64_t
             {
                 ++j;
                 i__4 = jrow + jcol * b_dim1;
-                rwork[j] = b[i__4].r;
+                rwork[j] = b[i__4].real;
                 /* L70: */
             }
             /* L80: */
@@ -563,10 +563,10 @@ void aocl_lapack_clalsa(aocl_int64_t *icompq, aocl_int64_t *smlsiz, aocl_int64_t
                 i__4 = jrow + jcol * bx_dim1;
                 i__5 = jreal;
                 i__6 = jimag;
-                q__1.r = rwork[i__5];
-                q__1.i = rwork[i__6]; // , expr subst
-                bx[i__4].r = q__1.r;
-                bx[i__4].i = q__1.i; // , expr subst
+                q__1.real = rwork[i__5];
+                q__1.imag = rwork[i__6]; // , expr subst
+                bx[i__4].real = q__1.real;
+                bx[i__4].imag = q__1.imag; // , expr subst
                 /* L110: */
             }
             /* L120: */
@@ -715,7 +715,7 @@ L170: /* First now go through the right singular vector matrices of all */
             {
                 ++j;
                 i__4 = jrow + jcol * b_dim1;
-                rwork[j] = b[i__4].r;
+                rwork[j] = b[i__4].real;
                 /* L200: */
             }
             /* L210: */
@@ -751,10 +751,10 @@ L170: /* First now go through the right singular vector matrices of all */
                 i__4 = jrow + jcol * bx_dim1;
                 i__5 = jreal;
                 i__6 = jimag;
-                q__1.r = rwork[i__5];
-                q__1.i = rwork[i__6]; // , expr subst
-                bx[i__4].r = q__1.r;
-                bx[i__4].i = q__1.i; // , expr subst
+                q__1.real = rwork[i__5];
+                q__1.imag = rwork[i__6]; // , expr subst
+                bx[i__4].real = q__1.real;
+                bx[i__4].imag = q__1.imag; // , expr subst
                 /* L240: */
             }
             /* L250: */
@@ -772,7 +772,7 @@ L170: /* First now go through the right singular vector matrices of all */
             {
                 ++j;
                 i__4 = jrow + jcol * b_dim1;
-                rwork[j] = b[i__4].r;
+                rwork[j] = b[i__4].real;
                 /* L260: */
             }
             /* L270: */
@@ -808,10 +808,10 @@ L170: /* First now go through the right singular vector matrices of all */
                 i__4 = jrow + jcol * bx_dim1;
                 i__5 = jreal;
                 i__6 = jimag;
-                q__1.r = rwork[i__5];
-                q__1.i = rwork[i__6]; // , expr subst
-                bx[i__4].r = q__1.r;
-                bx[i__4].i = q__1.i; // , expr subst
+                q__1.real = rwork[i__5];
+                q__1.imag = rwork[i__6]; // , expr subst
+                bx[i__4].real = q__1.real;
+                bx[i__4].imag = q__1.imag; // , expr subst
                 /* L300: */
             }
             /* L310: */

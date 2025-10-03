@@ -240,8 +240,8 @@ void aocl_lapack_ztzrzf(aocl_int64_t *m, aocl_int64_t *n, dcomplex *a, aocl_int6
             lwkopt = *m * nb;
             lwkmin = fla_max(1, *m);
         }
-        work[1].r = (doublereal)lwkopt;
-        work[1].i = 0.; // , expr subst
+        work[1].real = (doublereal)lwkopt;
+        work[1].imag = 0.; // , expr subst
         if(*lwork < lwkmin && !lquery)
         {
             *info = -7;
@@ -271,8 +271,8 @@ void aocl_lapack_ztzrzf(aocl_int64_t *m, aocl_int64_t *n, dcomplex *a, aocl_int6
         for(i__ = 1; i__ <= i__1; ++i__)
         {
             i__2 = i__;
-            tau[i__2].r = 0.;
-            tau[i__2].i = 0.; // , expr subst
+            tau[i__2].real = 0.;
+            tau[i__2].imag = 0.; // , expr subst
             /* L10: */
         }
         AOCL_DTL_TRACE_LOG_EXIT
@@ -358,8 +358,8 @@ void aocl_lapack_ztzrzf(aocl_int64_t *m, aocl_int64_t *n, dcomplex *a, aocl_int6
         i__2 = *n - *m;
         aocl_lapack_zlatrz(&mu, n, &i__2, &a[a_offset], lda, &tau[1], &work[1]);
     }
-    work[1].r = (doublereal)lwkopt;
-    work[1].i = 0.; // , expr subst
+    work[1].real = (doublereal)lwkopt;
+    work[1].imag = 0.; // , expr subst
     AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of ZTZRZF */

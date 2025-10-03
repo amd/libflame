@@ -222,23 +222,23 @@ void aocl_lapack_cpptrf(char *uplo, aocl_int64_t *n, scomplex *ap, aocl_int64_t 
             }
             /* Compute U(J,J) and test for non-positive-definiteness. */
             i__2 = jj;
-            r__1 = ap[i__2].r;
+            r__1 = ap[i__2].real;
             i__3 = j - 1;
             aocl_lapack_cdotc_f2c(&q__2, &i__3, &ap[jc], &c__1, &ap[jc], &c__1);
-            q__1.r = r__1 - q__2.r;
-            q__1.i = -q__2.i; // , expr subst
-            ajj = q__1.r;
+            q__1.real = r__1 - q__2.real;
+            q__1.imag = -q__2.imag; // , expr subst
+            ajj = q__1.real;
             if(ajj <= 0.f)
             {
                 i__2 = jj;
-                ap[i__2].r = ajj;
-                ap[i__2].i = 0.f; // , expr subst
+                ap[i__2].real = ajj;
+                ap[i__2].imag = 0.f; // , expr subst
                 goto L30;
             }
             i__2 = jj;
             r__1 = sqrt(ajj);
-            ap[i__2].r = r__1;
-            ap[i__2].i = 0.f; // , expr subst
+            ap[i__2].real = r__1;
+            ap[i__2].imag = 0.f; // , expr subst
             /* L10: */
         }
     }
@@ -251,18 +251,18 @@ void aocl_lapack_cpptrf(char *uplo, aocl_int64_t *n, scomplex *ap, aocl_int64_t 
         {
             /* Compute L(J,J) and test for non-positive-definiteness. */
             i__2 = jj;
-            ajj = ap[i__2].r;
+            ajj = ap[i__2].real;
             if(ajj <= 0.f)
             {
                 i__2 = jj;
-                ap[i__2].r = ajj;
-                ap[i__2].i = 0.f; // , expr subst
+                ap[i__2].real = ajj;
+                ap[i__2].imag = 0.f; // , expr subst
                 goto L30;
             }
             ajj = sqrt(ajj);
             i__2 = jj;
-            ap[i__2].r = ajj;
-            ap[i__2].i = 0.f; // , expr subst
+            ap[i__2].real = ajj;
+            ap[i__2].imag = 0.f; // , expr subst
             /* Compute elements J+1:N of column J and update the trailing */
             /* submatrix. */
             if(j < *n)

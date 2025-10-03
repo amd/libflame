@@ -4,7 +4,7 @@
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
  /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static dcomplex c_b1 = {{1.}, {0.}};
+static dcomplex c_b1 = {1., 0.};
 /* > \brief \b ZGELQT3 recursively computes a LQ factorization of a general real or scomplex matrix
  * using the c ompact WY representation of Q. */
 /* =========== DOCUMENTATION =========== */
@@ -216,8 +216,8 @@ void aocl_lapack_zgelqt3(aocl_int64_t *m, aocl_int64_t *n, dcomplex *a, aocl_int
         aocl_lapack_zlarfg(n, &a[a_offset], &a[fla_min(2, *n) * a_dim1 + 1], lda, &t[t_offset]);
         i__1 = t_dim1 + 1;
         d_cnjg(&z__1, &t[t_dim1 + 1]);
-        t[i__1].r = z__1.r;
-        t[i__1].i = z__1.i; // , expr subst
+        t[i__1].real = z__1.real;
+        t[i__1].imag = z__1.imag; // , expr subst
     }
     else
     {
@@ -241,8 +241,8 @@ void aocl_lapack_zgelqt3(aocl_int64_t *m, aocl_int64_t *n, dcomplex *a, aocl_int
             {
                 i__3 = i__ + m1 + j * t_dim1;
                 i__4 = i__ + m1 + j * a_dim1;
-                t[i__3].r = a[i__4].r;
-                t[i__3].i = a[i__4].i; // , expr subst
+                t[i__3].real = a[i__4].real;
+                t[i__3].imag = a[i__4].imag; // , expr subst
             }
         }
         aocl_blas_ztrmm("R", "U", "C", "U", &m2, &m1, &c_b1, &a[a_offset], lda, &t[i1 + t_dim1],
@@ -253,8 +253,8 @@ void aocl_lapack_zgelqt3(aocl_int64_t *m, aocl_int64_t *n, dcomplex *a, aocl_int
         aocl_blas_ztrmm("R", "U", "N", "N", &m2, &m1, &c_b1, &t[t_offset], ldt, &t[i1 + t_dim1],
                         ldt);
         i__1 = *n - m1;
-        z__1.r = -1.;
-        z__1.i = -0.; // , expr subst
+        z__1.real = -1.;
+        z__1.imag = -0.; // , expr subst
         aocl_blas_zgemm("N", "N", &m2, &i__1, &m1, &z__1, &t[i1 + t_dim1], ldt, &a[i1 * a_dim1 + 1],
                         lda, &c_b1, &a[i1 + i1 * a_dim1], lda);
         aocl_blas_ztrmm("R", "U", "N", "U", &m2, &m1, &c_b1, &a[a_offset], lda, &t[i1 + t_dim1],
@@ -268,13 +268,13 @@ void aocl_lapack_zgelqt3(aocl_int64_t *m, aocl_int64_t *n, dcomplex *a, aocl_int
                 i__3 = i__ + m1 + j * a_dim1;
                 i__4 = i__ + m1 + j * a_dim1;
                 i__5 = i__ + m1 + j * t_dim1;
-                z__1.r = a[i__4].r - t[i__5].r;
-                z__1.i = a[i__4].i - t[i__5].i; // , expr subst
-                a[i__3].r = z__1.r;
-                a[i__3].i = z__1.i; // , expr subst
+                z__1.real = a[i__4].real - t[i__5].real;
+                z__1.imag = a[i__4].imag - t[i__5].imag; // , expr subst
+                a[i__3].real = z__1.real;
+                a[i__3].imag = z__1.imag; // , expr subst
                 i__3 = i__ + m1 + j * t_dim1;
-                t[i__3].r = 0.;
-                t[i__3].i = 0.; // , expr subst
+                t[i__3].real = 0.;
+                t[i__3].imag = 0.; // , expr subst
             }
         }
         /* Compute A(J1:M,J1:N) <- (Y2,R2,T2) where Q2 = I - Y2 T2 Y2^H */
@@ -290,8 +290,8 @@ void aocl_lapack_zgelqt3(aocl_int64_t *m, aocl_int64_t *n, dcomplex *a, aocl_int
             {
                 i__3 = j + (i__ + m1) * t_dim1;
                 i__4 = j + (i__ + m1) * a_dim1;
-                t[i__3].r = a[i__4].r;
-                t[i__3].i = a[i__4].i; // , expr subst
+                t[i__3].real = a[i__4].real;
+                t[i__3].imag = a[i__4].imag; // , expr subst
             }
         }
         aocl_blas_ztrmm("R", "U", "C", "U", &m1, &m2, &c_b1, &a[i1 + i1 * a_dim1], lda,
@@ -299,8 +299,8 @@ void aocl_lapack_zgelqt3(aocl_int64_t *m, aocl_int64_t *n, dcomplex *a, aocl_int
         i__1 = *n - *m;
         aocl_blas_zgemm("N", "C", &m1, &m2, &i__1, &c_b1, &a[j1 * a_dim1 + 1], lda,
                         &a[i1 + j1 * a_dim1], lda, &c_b1, &t[i1 * t_dim1 + 1], ldt);
-        z__1.r = -1.;
-        z__1.i = -0.; // , expr subst
+        z__1.real = -1.;
+        z__1.imag = -0.; // , expr subst
         aocl_blas_ztrmm("L", "U", "N", "N", &m1, &m2, &z__1, &t[t_offset], ldt, &t[i1 * t_dim1 + 1],
                         ldt);
         aocl_blas_ztrmm("R", "U", "N", "N", &m1, &m2, &c_b1, &t[i1 + i1 * t_dim1], ldt,

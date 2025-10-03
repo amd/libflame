@@ -197,7 +197,7 @@ void aocl_lapack_zppequ(char *uplo, aocl_int64_t *n, dcomplex *ap, doublereal *s
         return;
     }
     /* Initialize SMIN and AMAX. */
-    s[1] = ap[1].r;
+    s[1] = ap[1].real;
     smin = s[1];
     *amax = s[1];
     if(upper)
@@ -210,7 +210,7 @@ void aocl_lapack_zppequ(char *uplo, aocl_int64_t *n, dcomplex *ap, doublereal *s
         {
             jj += i__;
             i__2 = jj;
-            s[i__] = ap[i__2].r;
+            s[i__] = ap[i__2].real;
             /* Computing MIN */
             d__1 = smin;
             d__2 = s[i__]; // , expr subst
@@ -232,7 +232,7 @@ void aocl_lapack_zppequ(char *uplo, aocl_int64_t *n, dcomplex *ap, doublereal *s
         {
             jj = jj + *n - i__ + 2;
             i__2 = jj;
-            s[i__] = ap[i__2].r;
+            s[i__] = ap[i__2].real;
             /* Computing MIN */
             d__1 = smin;
             d__2 = s[i__]; // , expr subst

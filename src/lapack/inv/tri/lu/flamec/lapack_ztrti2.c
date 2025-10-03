@@ -245,7 +245,7 @@ f"> */
             for(j = 1; j <= i__1; ++j)
             {
                 dcomplex z__1;
-                dcomplex c_b1 = {{1.0}, {0.0}}; /* Complex constant 1+0i */
+                dcomplex c_b1 = {1.0, 0.0}; /* Complex constant 1+0i */
                 i__2 = j + j * a_dim1;
                 Z_DIV_TRTI2(&z__1, &c_b1, &a[j + j * a_dim1]);
                 a[i__2].real = z__1.real, a[i__2].imag = z__1.imag;
@@ -288,7 +288,7 @@ f"> */
             for(j = *n; j >= 1; --j)
             {
                 dcomplex z__1;
-                dcomplex c_b1 = {{1.0}, {0.0}}; /* Complex constant 1+0i */
+                dcomplex c_b1 = {1.0, 0.0}; /* Complex constant 1+0i */
                 i__2 = j + j * a_dim1;
                 Z_DIV_TRTI2(&z__1, &c_b1, &a[j + j * a_dim1]);
                 a[i__2].real = z__1.real, a[i__2].imag = z__1.imag;

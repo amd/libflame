@@ -230,8 +230,8 @@ void aocl_lapack_zungtr(char *uplo, aocl_int64_t *n, dcomplex *a, aocl_int64_t *
         i__1 = 1;
         i__2 = *n - 1; // , expr subst
         lwkopt = fla_max(i__1, i__2) * nb;
-        work[1].r = (doublereal)lwkopt;
-        work[1].i = 0.; // , expr subst
+        work[1].real = (doublereal)lwkopt;
+        work[1].imag = 0.; // , expr subst
     }
     if(*info != 0)
     {
@@ -248,8 +248,8 @@ void aocl_lapack_zungtr(char *uplo, aocl_int64_t *n, dcomplex *a, aocl_int64_t *
     /* Quick return if possible */
     if(*n == 0)
     {
-        work[1].r = 1.;
-        work[1].i = 0.; // , expr subst
+        work[1].real = 1.;
+        work[1].imag = 0.; // , expr subst
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -267,26 +267,26 @@ void aocl_lapack_zungtr(char *uplo, aocl_int64_t *n, dcomplex *a, aocl_int64_t *
             {
                 i__3 = i__ + j * a_dim1;
                 i__4 = i__ + (j + 1) * a_dim1;
-                a[i__3].r = a[i__4].r;
-                a[i__3].i = a[i__4].i; // , expr subst
+                a[i__3].real = a[i__4].real;
+                a[i__3].imag = a[i__4].imag; // , expr subst
                 /* L10: */
             }
             i__2 = *n + j * a_dim1;
-            a[i__2].r = 0.;
-            a[i__2].i = 0.; // , expr subst
+            a[i__2].real = 0.;
+            a[i__2].imag = 0.; // , expr subst
             /* L20: */
         }
         i__1 = *n - 1;
         for(i__ = 1; i__ <= i__1; ++i__)
         {
             i__2 = i__ + *n * a_dim1;
-            a[i__2].r = 0.;
-            a[i__2].i = 0.; // , expr subst
+            a[i__2].real = 0.;
+            a[i__2].imag = 0.; // , expr subst
             /* L30: */
         }
         i__1 = *n + *n * a_dim1;
-        a[i__1].r = 1.;
-        a[i__1].i = 0.; // , expr subst
+        a[i__1].real = 1.;
+        a[i__1].imag = 0.; // , expr subst
         /* Generate Q(1:n-1,1:n-1) */
         i__1 = *n - 1;
         i__2 = *n - 1;
@@ -303,28 +303,28 @@ void aocl_lapack_zungtr(char *uplo, aocl_int64_t *n, dcomplex *a, aocl_int64_t *
         for(j = *n; j >= 2; --j)
         {
             i__1 = j * a_dim1 + 1;
-            a[i__1].r = 0.;
-            a[i__1].i = 0.; // , expr subst
+            a[i__1].real = 0.;
+            a[i__1].imag = 0.; // , expr subst
             i__1 = *n;
             for(i__ = j + 1; i__ <= i__1; ++i__)
             {
                 i__2 = i__ + j * a_dim1;
                 i__3 = i__ + (j - 1) * a_dim1;
-                a[i__2].r = a[i__3].r;
-                a[i__2].i = a[i__3].i; // , expr subst
+                a[i__2].real = a[i__3].real;
+                a[i__2].imag = a[i__3].imag; // , expr subst
                 /* L40: */
             }
             /* L50: */
         }
         i__1 = a_dim1 + 1;
-        a[i__1].r = 1.;
-        a[i__1].i = 0.; // , expr subst
+        a[i__1].real = 1.;
+        a[i__1].imag = 0.; // , expr subst
         i__1 = *n;
         for(i__ = 2; i__ <= i__1; ++i__)
         {
             i__2 = i__ + a_dim1;
-            a[i__2].r = 0.;
-            a[i__2].i = 0.; // , expr subst
+            a[i__2].real = 0.;
+            a[i__2].imag = 0.; // , expr subst
             /* L60: */
         }
         if(*n > 1)
@@ -337,8 +337,8 @@ void aocl_lapack_zungtr(char *uplo, aocl_int64_t *n, dcomplex *a, aocl_int64_t *
                                lwork, &iinfo);
         }
     }
-    work[1].r = (doublereal)lwkopt;
-    work[1].i = 0.; // , expr subst
+    work[1].real = (doublereal)lwkopt;
+    work[1].imag = 0.; // , expr subst
     AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of ZUNGTR */

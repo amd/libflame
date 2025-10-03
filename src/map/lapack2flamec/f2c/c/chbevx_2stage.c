@@ -4,8 +4,8 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static scomplex c_b1 = {{0.f}, {0.f}};
-static scomplex c_b2 = {{1.f}, {0.f}};
+static scomplex c_b1 = {0.f, 0.f};
+static scomplex c_b2 = {1.f, 0.f};
 static aocl_int64_t c__2 = 2;
 static aocl_int64_t c_n1 = -1;
 static aocl_int64_t c__3 = 3;
@@ -531,8 +531,8 @@ void aocl_lapack_chbevx_2stage(char *jobz, char *range, char *uplo, aocl_int64_t
         {
             lwmin = 1;
             r__1 = aocl_lapack_sroundup_lwork(&lwmin);
-            work[1].r = r__1;
-            work[1].i = 0.f; // , expr subst
+            work[1].real = r__1;
+            work[1].imag = 0.f; // , expr subst
         }
         else
         {
@@ -541,8 +541,8 @@ void aocl_lapack_chbevx_2stage(char *jobz, char *range, char *uplo, aocl_int64_t
             lwtrd = aocl_lapack_ilaenv2stage(&c__4, "CHETRD_HB2ST", jobz, n, kd, &ib, &c_n1);
             lwmin = lhtrd + lwtrd;
             r__1 = aocl_lapack_sroundup_lwork(&lwmin);
-            work[1].r = r__1;
-            work[1].i = 0.f; // , expr subst
+            work[1].real = r__1;
+            work[1].imag = 0.f; // , expr subst
         }
         if(*lwork < lwmin && !lquery)
         {
@@ -574,16 +574,16 @@ void aocl_lapack_chbevx_2stage(char *jobz, char *range, char *uplo, aocl_int64_t
         if(lower)
         {
             i__1 = ab_dim1 + 1;
-            ctmp1.r = ab[i__1].r;
-            ctmp1.i = ab[i__1].i; // , expr subst
+            ctmp1.real = ab[i__1].real;
+            ctmp1.imag = ab[i__1].imag; // , expr subst
         }
         else
         {
             i__1 = *kd + 1 + ab_dim1;
-            ctmp1.r = ab[i__1].r;
-            ctmp1.i = ab[i__1].i; // , expr subst
+            ctmp1.real = ab[i__1].real;
+            ctmp1.imag = ab[i__1].imag; // , expr subst
         }
-        tmp1 = ctmp1.r;
+        tmp1 = ctmp1.real;
         if(valeig)
         {
             if(!(*vl < tmp1 && *vu >= tmp1))
@@ -593,12 +593,12 @@ void aocl_lapack_chbevx_2stage(char *jobz, char *range, char *uplo, aocl_int64_t
         }
         if(*m == 1)
         {
-            w[1] = ctmp1.r;
+            w[1] = ctmp1.real;
             if(wantz)
             {
                 i__1 = z_dim1 + 1;
-                z__[i__1].r = 1.f;
-                z__[i__1].i = 0.f; // , expr subst
+                z__[i__1].real = 1.f;
+                z__[i__1].imag = 0.f; // , expr subst
             }
         }
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
@@ -796,8 +796,8 @@ L30:
     }
     /* Set WORK(1) to optimal workspace size. */
     r__1 = aocl_lapack_sroundup_lwork(&lwmin);
-    work[1].r = r__1;
-    work[1].i = 0.f; // , expr subst
+    work[1].real = r__1;
+    work[1].imag = 0.f; // , expr subst
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
     return;
     /* End of CHBEVX_2STAGE */

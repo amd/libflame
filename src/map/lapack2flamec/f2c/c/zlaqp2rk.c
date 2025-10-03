@@ -516,8 +516,8 @@ void aocl_lapack_zlaqp2rk(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *nrhs,
                 for(j = kk; j <= i__2; ++j)
                 {
                     i__3 = j;
-                    tau[i__3].r = 0.;
-                    tau[i__3].i = 0.; // , expr subst
+                    tau[i__3].real = 0.;
+                    tau[i__3].imag = 0.; // , expr subst
                 }
                 /* Return from the routine. */
                 AOCL_DTL_TRACE_LOG_EXIT
@@ -557,8 +557,8 @@ void aocl_lapack_zlaqp2rk(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *nrhs,
                 for(j = kk; j <= i__2; ++j)
                 {
                     i__3 = j;
-                    tau[i__3].r = 0.;
-                    tau[i__3].i = 0.; // , expr subst
+                    tau[i__3].real = 0.;
+                    tau[i__3].imag = 0.; // , expr subst
                 }
                 /* Return from the routine. */
                 AOCL_DTL_TRACE_LOG_EXIT
@@ -601,8 +601,8 @@ void aocl_lapack_zlaqp2rk(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *nrhs,
         else
         {
             i__2 = kk;
-            tau[i__2].r = 0.;
-            tau[i__2].i = 0.; // , expr subst
+            tau[i__2].real = 0.;
+            tau[i__2].imag = 0.; // , expr subst
         }
         /* Check if TAU(KK) contains NaN, set INFO parameter */
         /* to the column number where NaN is found and return from */
@@ -614,11 +614,11 @@ void aocl_lapack_zlaqp2rk(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *nrhs,
         /* TAU(KK) to contain NaN. Therefore, this case of generating Inf */
         /* by ZLARFG is covered by checking TAU(KK) for NaN. */
         i__2 = kk;
-        d__1 = tau[i__2].r;
+        d__1 = tau[i__2].real;
         if(disnan_(&d__1))
         {
             i__2 = kk;
-            taunan = tau[i__2].r;
+            taunan = tau[i__2].real;
         }
         else /* if(complicated condition) */
         {
@@ -658,19 +658,19 @@ void aocl_lapack_zlaqp2rk(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *nrhs,
         if(kk < minmnupdt)
         {
             i__2 = i__ + kk * a_dim1;
-            aikk.r = a[i__2].r;
-            aikk.i = a[i__2].i; // , expr subst
+            aikk.real = a[i__2].real;
+            aikk.imag = a[i__2].imag; // , expr subst
             i__2 = i__ + kk * a_dim1;
-            a[i__2].r = 1.;
-            a[i__2].i = 0.; // , expr subst
+            a[i__2].real = 1.;
+            a[i__2].imag = 0.; // , expr subst
             i__2 = *m - i__ + 1;
             i__3 = *n + *nrhs - kk;
             d_cnjg(&z__1, &tau[kk]);
             aocl_lapack_zlarf("Left", &i__2, &i__3, &a[i__ + kk * a_dim1], &c__1, &z__1,
                               &a[i__ + (kk + 1) * a_dim1], lda, &work[1]);
             i__2 = i__ + kk * a_dim1;
-            a[i__2].r = aikk.r;
-            a[i__2].i = aikk.i; // , expr subst
+            a[i__2].real = aikk.real;
+            a[i__2].imag = aikk.imag; // , expr subst
         }
         if(kk < minmnfact)
         {
@@ -747,8 +747,8 @@ void aocl_lapack_zlaqp2rk(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *nrhs,
     for(j = *k + 1; j <= i__1; ++j)
     {
         i__2 = j;
-        tau[i__2].r = 0.;
-        tau[i__2].i = 0.; // , expr subst
+        tau[i__2].real = 0.;
+        tau[i__2].imag = 0.; // , expr subst
     }
     AOCL_DTL_TRACE_LOG_EXIT
     return;

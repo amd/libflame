@@ -201,10 +201,10 @@ void aocl_lapack_zlaqsp(char *uplo, aocl_int64_t *n, dcomplex *ap, doublereal *s
                     i__3 = jc + i__ - 1;
                     d__1 = cj * s[i__];
                     i__4 = jc + i__ - 1;
-                    z__1.r = d__1 * ap[i__4].r;
-                    z__1.i = d__1 * ap[i__4].i; // , expr subst
-                    ap[i__3].r = z__1.r;
-                    ap[i__3].i = z__1.i; // , expr subst
+                    z__1.real = d__1 * ap[i__4].real;
+                    z__1.imag = d__1 * ap[i__4].imag; // , expr subst
+                    ap[i__3].real = z__1.real;
+                    ap[i__3].imag = z__1.imag; // , expr subst
                     /* L10: */
                 }
                 jc += j;
@@ -225,10 +225,10 @@ void aocl_lapack_zlaqsp(char *uplo, aocl_int64_t *n, dcomplex *ap, doublereal *s
                     i__3 = jc + i__ - j;
                     d__1 = cj * s[i__];
                     i__4 = jc + i__ - j;
-                    z__1.r = d__1 * ap[i__4].r;
-                    z__1.i = d__1 * ap[i__4].i; // , expr subst
-                    ap[i__3].r = z__1.r;
-                    ap[i__3].i = z__1.i; // , expr subst
+                    z__1.real = d__1 * ap[i__4].real;
+                    z__1.imag = d__1 * ap[i__4].imag; // , expr subst
+                    ap[i__3].real = z__1.real;
+                    ap[i__3].imag = z__1.imag; // , expr subst
                     /* L30: */
                 }
                 jc = jc + *n - j + 1;

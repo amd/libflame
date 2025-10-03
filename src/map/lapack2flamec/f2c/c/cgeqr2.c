@@ -220,19 +220,19 @@ void aocl_lapack_cgeqr2(aocl_int64_t *m, aocl_int64_t *n, scomplex *a, aocl_int6
         {
             /* Apply H(i)**H to A(i:m,i+1:n) from the left */
             i__2 = i__ + i__ * a_dim1;
-            alpha.r = a[i__2].r;
-            alpha.i = a[i__2].i; // , expr subst
+            alpha.real = a[i__2].real;
+            alpha.imag = a[i__2].imag; // , expr subst
             i__2 = i__ + i__ * a_dim1;
-            a[i__2].r = 1.f;
-            a[i__2].i = 0.f; // , expr subst
+            a[i__2].real = 1.f;
+            a[i__2].imag = 0.f; // , expr subst
             i__2 = *m - i__ + 1;
             i__3 = *n - i__;
             r_cnjg(&q__1, &tau[i__]);
             aocl_lapack_clarf("Left", &i__2, &i__3, &a[i__ + i__ * a_dim1], &c__1, &q__1,
                               &a[i__ + (i__ + 1) * a_dim1], lda, &work[1]);
             i__2 = i__ + i__ * a_dim1;
-            a[i__2].r = alpha.r;
-            a[i__2].i = alpha.i; // , expr subst
+            a[i__2].real = alpha.real;
+            a[i__2].imag = alpha.imag; // , expr subst
         }
         /* L10: */
     }

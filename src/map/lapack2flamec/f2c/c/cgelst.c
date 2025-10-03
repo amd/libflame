@@ -4,7 +4,7 @@
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
  /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static scomplex c_b1 = {{0.f}, {0.f}};
+static scomplex c_b1 = {0.f, 0.f};
 static aocl_int64_t c__1 = 1;
 static aocl_int64_t c_n1 = -1;
 static aocl_int64_t c__2 = 2;
@@ -342,8 +342,8 @@ void aocl_lapack_cgelst(char *trans, aocl_int64_t *m, aocl_int64_t *n, aocl_int6
         i__2 = (mn + mnnrhs) * nb; // , expr subst
         lwopt = fla_max(i__1, i__2);
         r__1 = aocl_lapack_sroundup_lwork(&lwopt);
-        work[1].r = r__1;
-        work[1].i = 0.f; // , expr subst
+        work[1].real = r__1;
+        work[1].imag = 0.f; // , expr subst
     }
     if(*info != 0)
     {
@@ -365,8 +365,8 @@ void aocl_lapack_cgelst(char *trans, aocl_int64_t *m, aocl_int64_t *n, aocl_int6
         i__1 = fla_max(*m, *n);
         aocl_lapack_claset("Full", &i__1, nrhs, &c_b1, &c_b1, &b[b_offset], ldb);
         r__1 = aocl_lapack_sroundup_lwork(&lwopt);
-        work[1].r = r__1;
-        work[1].i = 0.f; // , expr subst
+        work[1].real = r__1;
+        work[1].imag = 0.f; // , expr subst
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -415,8 +415,8 @@ void aocl_lapack_cgelst(char *trans, aocl_int64_t *m, aocl_int64_t *n, aocl_int6
         i__1 = fla_max(*m, *n);
         aocl_lapack_claset("Full", &i__1, nrhs, &c_b1, &c_b1, &b[b_offset], ldb);
         r__1 = aocl_lapack_sroundup_lwork(&lwopt);
-        work[1].r = r__1;
-        work[1].i = 0.f; // , expr subst
+        work[1].real = r__1;
+        work[1].imag = 0.f; // , expr subst
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -489,8 +489,8 @@ void aocl_lapack_cgelst(char *trans, aocl_int64_t *m, aocl_int64_t *n, aocl_int6
                 for(i__ = *n + 1; i__ <= i__2; ++i__)
                 {
                     i__3 = i__ + j * b_dim1;
-                    b[i__3].r = 0.f;
-                    b[i__3].i = 0.f; // , expr subst
+                    b[i__3].real = 0.f;
+                    b[i__3].imag = 0.f; // , expr subst
                 }
             }
             /* Compute B(1:M,1:NRHS) := Q(1:N,:) * B(1:N,1:NRHS), */
@@ -531,8 +531,8 @@ void aocl_lapack_cgelst(char *trans, aocl_int64_t *m, aocl_int64_t *n, aocl_int6
                 for(i__ = *m + 1; i__ <= i__2; ++i__)
                 {
                     i__3 = i__ + j * b_dim1;
-                    b[i__3].r = 0.f;
-                    b[i__3].i = 0.f; // , expr subst
+                    b[i__3].real = 0.f;
+                    b[i__3].imag = 0.f; // , expr subst
                 }
             }
             /* Compute B(1:N,1:NRHS) := Q(1:N,:)**T * B(1:M,1:NRHS), */
@@ -585,8 +585,8 @@ void aocl_lapack_cgelst(char *trans, aocl_int64_t *m, aocl_int64_t *n, aocl_int6
                            info);
     }
     r__1 = aocl_lapack_sroundup_lwork(&lwopt);
-    work[1].r = r__1;
-    work[1].i = 0.f; // , expr subst
+    work[1].real = r__1;
+    work[1].imag = 0.f; // , expr subst
     AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of CGELST */

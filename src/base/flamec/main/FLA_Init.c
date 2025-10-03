@@ -35,8 +35,8 @@ FLA_Obj TLS_CLASS_SPEC FLA_OVERFLOW_SQUARE_THRES = {};
 
 const TLS_CLASS_SPEC float    fzero = 0.0f;
 const TLS_CLASS_SPEC double   dzero = 0.0;
-const TLS_CLASS_SPEC scomplex czero = { {0.0f}, {0.0f} };
-const TLS_CLASS_SPEC dcomplex zzero = { {0.0} , {0.0}  };
+const TLS_CLASS_SPEC scomplex czero = { 0.0f, 0.0f };
+const TLS_CLASS_SPEC dcomplex zzero = { 0.0 , 0.0  };
 
 struct _LF_VERSION
 {

@@ -4,8 +4,8 @@
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
  /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static scomplex c_b1 = {{0.f}, {0.f}};
-static scomplex c_b2 = {{1.f}, {0.f}};
+static scomplex c_b1 = {0.f, 0.f};
+static scomplex c_b2 = {1.f, 0.f};
 static aocl_int64_t c__1 = 1;
 static real c_b39 = -1.f;
 static real c_b42 = 1.f;
@@ -586,46 +586,46 @@ void aocl_lapack_ctgsja(char *jobu, char *jobv, char *jobq, aocl_int64_t *m, aoc
             for(j = i__ + 1; j <= i__2; ++j)
             {
                 a1 = 0.f;
-                a2.r = 0.f;
-                a2.i = 0.f; // , expr subst
+                a2.real = 0.f;
+                a2.imag = 0.f; // , expr subst
                 a3 = 0.f;
                 if(*k + i__ <= *m)
                 {
                     i__3 = *k + i__ + (*n - *l + i__) * a_dim1;
-                    a1 = a[i__3].r;
+                    a1 = a[i__3].real;
                 }
                 if(*k + j <= *m)
                 {
                     i__3 = *k + j + (*n - *l + j) * a_dim1;
-                    a3 = a[i__3].r;
+                    a3 = a[i__3].real;
                 }
                 i__3 = i__ + (*n - *l + i__) * b_dim1;
-                b1 = b[i__3].r;
+                b1 = b[i__3].real;
                 i__3 = j + (*n - *l + j) * b_dim1;
-                b3 = b[i__3].r;
+                b3 = b[i__3].real;
                 if(upper)
                 {
                     if(*k + i__ <= *m)
                     {
                         i__3 = *k + i__ + (*n - *l + j) * a_dim1;
-                        a2.r = a[i__3].r;
-                        a2.i = a[i__3].i; // , expr subst
+                        a2.real = a[i__3].real;
+                        a2.imag = a[i__3].imag; // , expr subst
                     }
                     i__3 = i__ + (*n - *l + j) * b_dim1;
-                    b2.r = b[i__3].r;
-                    b2.i = b[i__3].i; // , expr subst
+                    b2.real = b[i__3].real;
+                    b2.imag = b[i__3].imag; // , expr subst
                 }
                 else
                 {
                     if(*k + j <= *m)
                     {
                         i__3 = *k + j + (*n - *l + i__) * a_dim1;
-                        a2.r = a[i__3].r;
-                        a2.i = a[i__3].i; // , expr subst
+                        a2.real = a[i__3].real;
+                        a2.imag = a[i__3].imag; // , expr subst
                     }
                     i__3 = j + (*n - *l + i__) * b_dim1;
-                    b2.r = b[i__3].r;
-                    b2.i = b[i__3].i; // , expr subst
+                    b2.real = b[i__3].real;
+                    b2.imag = b[i__3].imag; // , expr subst
                 }
                 clags2_(&upper, &a1, &a2, &a3, &b1, &b2, &b3, &csu, &snu, &csv, &snv, &csq, &snq);
                 /* Update (K+I)-th and (K+J)-th rows of matrix A: U**H *A */
@@ -653,52 +653,52 @@ void aocl_lapack_ctgsja(char *jobu, char *jobv, char *jobq, aocl_int64_t *m, aoc
                     if(*k + i__ <= *m)
                     {
                         i__3 = *k + i__ + (*n - *l + j) * a_dim1;
-                        a[i__3].r = 0.f;
-                        a[i__3].i = 0.f; // , expr subst
+                        a[i__3].real = 0.f;
+                        a[i__3].imag = 0.f; // , expr subst
                     }
                     i__3 = i__ + (*n - *l + j) * b_dim1;
-                    b[i__3].r = 0.f;
-                    b[i__3].i = 0.f; // , expr subst
+                    b[i__3].real = 0.f;
+                    b[i__3].imag = 0.f; // , expr subst
                 }
                 else
                 {
                     if(*k + j <= *m)
                     {
                         i__3 = *k + j + (*n - *l + i__) * a_dim1;
-                        a[i__3].r = 0.f;
-                        a[i__3].i = 0.f; // , expr subst
+                        a[i__3].real = 0.f;
+                        a[i__3].imag = 0.f; // , expr subst
                     }
                     i__3 = j + (*n - *l + i__) * b_dim1;
-                    b[i__3].r = 0.f;
-                    b[i__3].i = 0.f; // , expr subst
+                    b[i__3].real = 0.f;
+                    b[i__3].imag = 0.f; // , expr subst
                 }
                 /* Ensure that the diagonal elements of A and B are real. */
                 if(*k + i__ <= *m)
                 {
                     i__3 = *k + i__ + (*n - *l + i__) * a_dim1;
                     i__4 = *k + i__ + (*n - *l + i__) * a_dim1;
-                    r__1 = a[i__4].r;
-                    a[i__3].r = r__1;
-                    a[i__3].i = 0.f; // , expr subst
+                    r__1 = a[i__4].real;
+                    a[i__3].real = r__1;
+                    a[i__3].imag = 0.f; // , expr subst
                 }
                 if(*k + j <= *m)
                 {
                     i__3 = *k + j + (*n - *l + j) * a_dim1;
                     i__4 = *k + j + (*n - *l + j) * a_dim1;
-                    r__1 = a[i__4].r;
-                    a[i__3].r = r__1;
-                    a[i__3].i = 0.f; // , expr subst
+                    r__1 = a[i__4].real;
+                    a[i__3].real = r__1;
+                    a[i__3].imag = 0.f; // , expr subst
                 }
                 i__3 = i__ + (*n - *l + i__) * b_dim1;
                 i__4 = i__ + (*n - *l + i__) * b_dim1;
-                r__1 = b[i__4].r;
-                b[i__3].r = r__1;
-                b[i__3].i = 0.f; // , expr subst
+                r__1 = b[i__4].real;
+                b[i__3].real = r__1;
+                b[i__3].imag = 0.f; // , expr subst
                 i__3 = j + (*n - *l + j) * b_dim1;
                 i__4 = j + (*n - *l + j) * b_dim1;
-                r__1 = b[i__4].r;
-                b[i__3].r = r__1;
-                b[i__3].i = 0.f; // , expr subst
+                r__1 = b[i__4].real;
+                b[i__3].real = r__1;
+                b[i__3].imag = 0.f; // , expr subst
                 /* Update unitary matrices U, V, Q, if desired. */
                 if(wantu && *k + j <= *m)
                 {
@@ -771,9 +771,9 @@ L50: /* If ERROR <= MIN(TOLA,TOLB), then the algorithm has converged. */
     for(i__ = 1; i__ <= i__1; ++i__)
     {
         i__2 = *k + i__ + (*n - *l + i__) * a_dim1;
-        a1 = a[i__2].r;
+        a1 = a[i__2].real;
         i__2 = i__ + (*n - *l + i__) * b_dim1;
-        b1 = b[i__2].r;
+        b1 = b[i__2].real;
         gamma = b1 / a1;
         if(gamma <= hugenum && gamma >= -hugenum)
         {

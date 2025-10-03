@@ -213,39 +213,39 @@ void aocl_lapack_clargv(aocl_int64_t *n, scomplex *x, aocl_int64_t *incx, scompl
     for(i__ = 1; i__ <= i__1; ++i__)
     {
         i__2 = ix;
-        f.r = x[i__2].r;
-        f.i = x[i__2].i; // , expr subst
+        f.real = x[i__2].real;
+        f.imag = x[i__2].imag; // , expr subst
         i__2 = iy;
-        g.r = y[i__2].r;
-        g.i = y[i__2].i; // , expr subst
+        g.real = y[i__2].real;
+        g.imag = y[i__2].imag; // , expr subst
         /* Use identical algorithm as in CLARTG */
         /* Computing MAX */
         /* Computing MAX */
-        r__7 = (r__1 = f.r, f2c_abs(r__1));
+        r__7 = (r__1 = f.real, f2c_abs(r__1));
         r__8 = (r__2 = r_imag(&f), f2c_abs(r__2)); // , expr subst
         /* Computing MAX */
-        r__9 = (r__3 = g.r, f2c_abs(r__3));
+        r__9 = (r__3 = g.real, f2c_abs(r__3));
         r__10 = (r__4 = r_imag(&g), f2c_abs(r__4)); // , expr subst
         r__5 = fla_max(r__7, r__8);
         r__6 = fla_max(r__9, r__10); // , expr subst
         scale = fla_max(r__5, r__6);
-        fs.r = f.r;
-        fs.i = f.i; // , expr subst
-        gs.r = g.r;
-        gs.i = g.i; // , expr subst
+        fs.real = f.real;
+        fs.imag = f.imag; // , expr subst
+        gs.real = g.real;
+        gs.imag = g.imag; // , expr subst
         count = 0;
         if(scale >= safmx2)
         {
         L10:
             ++count;
-            q__1.r = safmn2 * fs.r;
-            q__1.i = safmn2 * fs.i; // , expr subst
-            fs.r = q__1.r;
-            fs.i = q__1.i; // , expr subst
-            q__1.r = safmn2 * gs.r;
-            q__1.i = safmn2 * gs.i; // , expr subst
-            gs.r = q__1.r;
-            gs.i = q__1.i; // , expr subst
+            q__1.real = safmn2 * fs.real;
+            q__1.imag = safmn2 * fs.imag; // , expr subst
+            fs.real = q__1.real;
+            fs.imag = q__1.imag; // , expr subst
+            q__1.real = safmn2 * gs.real;
+            q__1.imag = safmn2 * gs.imag; // , expr subst
+            gs.real = q__1.real;
+            gs.imag = q__1.imag; // , expr subst
             scale *= safmn2;
             if(scale >= safmx2 && count < 20)
             {
@@ -254,25 +254,25 @@ void aocl_lapack_clargv(aocl_int64_t *n, scomplex *x, aocl_int64_t *incx, scompl
         }
         else if(scale <= safmn2)
         {
-            if(g.r == 0.f && g.i == 0.f)
+            if(g.real == 0.f && g.imag == 0.f)
             {
                 cs = 1.f;
-                sn.r = 0.f;
-                sn.i = 0.f; // , expr subst
-                r__.r = f.r;
-                r__.i = f.i; // , expr subst
+                sn.real = 0.f;
+                sn.imag = 0.f; // , expr subst
+                r__.real = f.real;
+                r__.imag = f.imag; // , expr subst
                 goto L50;
             }
         L20:
             --count;
-            q__1.r = safmx2 * fs.r;
-            q__1.i = safmx2 * fs.i; // , expr subst
-            fs.r = q__1.r;
-            fs.i = q__1.i; // , expr subst
-            q__1.r = safmx2 * gs.r;
-            q__1.i = safmx2 * gs.i; // , expr subst
-            gs.r = q__1.r;
-            gs.i = q__1.i; // , expr subst
+            q__1.real = safmx2 * fs.real;
+            q__1.imag = safmx2 * fs.imag; // , expr subst
+            fs.real = q__1.real;
+            fs.imag = q__1.imag; // , expr subst
+            q__1.real = safmx2 * gs.real;
+            q__1.imag = safmx2 * gs.imag; // , expr subst
+            gs.real = q__1.real;
+            gs.imag = q__1.imag; // , expr subst
             scale *= safmx2;
             if(scale <= safmn2)
             {
@@ -280,40 +280,40 @@ void aocl_lapack_clargv(aocl_int64_t *n, scomplex *x, aocl_int64_t *incx, scompl
             }
         }
         /* Computing 2nd power */
-        r__1 = fs.r;
+        r__1 = fs.real;
         /* Computing 2nd power */
         r__2 = r_imag(&fs);
         f2 = r__1 * r__1 + r__2 * r__2;
         /* Computing 2nd power */
-        r__1 = gs.r;
+        r__1 = gs.real;
         /* Computing 2nd power */
         r__2 = r_imag(&gs);
         g2 = r__1 * r__1 + r__2 * r__2;
         if(f2 <= fla_max(g2, 1.f) * safmin)
         {
             /* This is a rare case: F is very small. */
-            if(f.r == 0.f && f.i == 0.f)
+            if(f.real == 0.f && f.imag == 0.f)
             {
                 cs = 0.f;
-                r__2 = g.r;
+                r__2 = g.real;
                 r__3 = r_imag(&g);
                 r__1 = slapy2_(&r__2, &r__3);
-                r__.r = r__1;
-                r__.i = 0.f; // , expr subst
+                r__.real = r__1;
+                r__.imag = 0.f; // , expr subst
                 /* Do scomplex/real division explicitly with two real */
                 /* divisions */
-                r__1 = gs.r;
+                r__1 = gs.real;
                 r__2 = r_imag(&gs);
                 d__ = slapy2_(&r__1, &r__2);
-                r__1 = gs.r / d__;
+                r__1 = gs.real / d__;
                 r__2 = -r_imag(&gs) / d__;
-                q__1.r = r__1;
-                q__1.i = r__2; // , expr subst
-                sn.r = q__1.r;
-                sn.i = q__1.i; // , expr subst
+                q__1.real = r__1;
+                q__1.imag = r__2; // , expr subst
+                sn.real = q__1.real;
+                sn.imag = q__1.imag; // , expr subst
                 goto L50;
             }
-            r__1 = fs.r;
+            r__1 = fs.real;
             r__2 = r_imag(&fs);
             f2s = slapy2_(&r__1, &r__2);
             /* G2 and G2S are accurate */
@@ -330,48 +330,48 @@ void aocl_lapack_clargv(aocl_int64_t *n, scomplex *x, aocl_int64_t *incx, scompl
             /* Make sure f2c_abs(FF) = 1 */
             /* Do scomplex/real division explicitly with 2 real divisions */
             /* Computing MAX */
-            r__3 = (r__1 = f.r, f2c_abs(r__1));
+            r__3 = (r__1 = f.real, f2c_abs(r__1));
             r__4 = (r__2 = r_imag(&f), f2c_abs(r__2)); // , expr subst
             if(fla_max(r__3, r__4) > 1.f)
             {
-                r__1 = f.r;
+                r__1 = f.real;
                 r__2 = r_imag(&f);
                 d__ = slapy2_(&r__1, &r__2);
-                r__1 = f.r / d__;
+                r__1 = f.real / d__;
                 r__2 = r_imag(&f) / d__;
-                q__1.r = r__1;
-                q__1.i = r__2; // , expr subst
-                ff.r = q__1.r;
-                ff.i = q__1.i; // , expr subst
+                q__1.real = r__1;
+                q__1.imag = r__2; // , expr subst
+                ff.real = q__1.real;
+                ff.imag = q__1.imag; // , expr subst
             }
             else
             {
-                dr = safmx2 * f.r;
+                dr = safmx2 * f.real;
                 di = safmx2 * r_imag(&f);
                 d__ = slapy2_(&dr, &di);
                 r__1 = dr / d__;
                 r__2 = di / d__;
-                q__1.r = r__1;
-                q__1.i = r__2; // , expr subst
-                ff.r = q__1.r;
-                ff.i = q__1.i; // , expr subst
+                q__1.real = r__1;
+                q__1.imag = r__2; // , expr subst
+                ff.real = q__1.real;
+                ff.imag = q__1.imag; // , expr subst
             }
-            r__1 = gs.r / g2s;
+            r__1 = gs.real / g2s;
             r__2 = -r_imag(&gs) / g2s;
-            q__2.r = r__1;
-            q__2.i = r__2; // , expr subst
-            q__1.r = ff.r * q__2.r - ff.i * q__2.i;
-            q__1.i = ff.r * q__2.i + ff.i * q__2.r; // , expr subst
-            sn.r = q__1.r;
-            sn.i = q__1.i; // , expr subst
-            q__2.r = cs * f.r;
-            q__2.i = cs * f.i; // , expr subst
-            q__3.r = sn.r * g.r - sn.i * g.i;
-            q__3.i = sn.r * g.i + sn.i * g.r; // , expr subst
-            q__1.r = q__2.r + q__3.r;
-            q__1.i = q__2.i + q__3.i; // , expr subst
-            r__.r = q__1.r;
-            r__.i = q__1.i; // , expr subst
+            q__2.real = r__1;
+            q__2.imag = r__2; // , expr subst
+            q__1.real = ff.real * q__2.real - ff.imag * q__2.imag;
+            q__1.imag = ff.real * q__2.imag + ff.imag * q__2.real; // , expr subst
+            sn.real = q__1.real;
+            sn.imag = q__1.imag; // , expr subst
+            q__2.real = cs * f.real;
+            q__2.imag = cs * f.imag; // , expr subst
+            q__3.real = sn.real * g.real - sn.imag * g.imag;
+            q__3.imag = sn.real * g.imag + sn.imag * g.real; // , expr subst
+            q__1.real = q__2.real + q__3.real;
+            q__1.imag = q__2.imag + q__3.imag; // , expr subst
+            r__.real = q__1.real;
+            r__.imag = q__1.imag; // , expr subst
         }
         else
         {
@@ -381,26 +381,26 @@ void aocl_lapack_clargv(aocl_int64_t *n, scomplex *x, aocl_int64_t *incx, scompl
             f2s = sqrt(g2 / f2 + 1.f);
             /* Do the F2S(real)*FS(scomplex) multiply with two real */
             /* multiplies */
-            r__1 = f2s * fs.r;
+            r__1 = f2s * fs.real;
             r__2 = f2s * r_imag(&fs);
-            q__1.r = r__1;
-            q__1.i = r__2; // , expr subst
-            r__.r = q__1.r;
-            r__.i = q__1.i; // , expr subst
+            q__1.real = r__1;
+            q__1.imag = r__2; // , expr subst
+            r__.real = q__1.real;
+            r__.imag = q__1.imag; // , expr subst
             cs = 1.f / f2s;
             d__ = f2 + g2;
             /* Do scomplex/real division explicitly with two real divisions */
-            r__1 = r__.r / d__;
+            r__1 = r__.real / d__;
             r__2 = r_imag(&r__) / d__;
-            q__1.r = r__1;
-            q__1.i = r__2; // , expr subst
-            sn.r = q__1.r;
-            sn.i = q__1.i; // , expr subst
+            q__1.real = r__1;
+            q__1.imag = r__2; // , expr subst
+            sn.real = q__1.real;
+            sn.imag = q__1.imag; // , expr subst
             r_cnjg(&q__2, &gs);
-            q__1.r = sn.r * q__2.r - sn.i * q__2.i;
-            q__1.i = sn.r * q__2.i + sn.i * q__2.r; // , expr subst
-            sn.r = q__1.r;
-            sn.i = q__1.i; // , expr subst
+            q__1.real = sn.real * q__2.real - sn.imag * q__2.imag;
+            q__1.imag = sn.real * q__2.imag + sn.imag * q__2.real; // , expr subst
+            sn.real = q__1.real;
+            sn.imag = q__1.imag; // , expr subst
             if(count != 0)
             {
                 if(count > 0)
@@ -408,10 +408,10 @@ void aocl_lapack_clargv(aocl_int64_t *n, scomplex *x, aocl_int64_t *incx, scompl
                     i__2 = count;
                     for(j = 1; j <= i__2; ++j)
                     {
-                        q__1.r = safmx2 * r__.r;
-                        q__1.i = safmx2 * r__.i; // , expr subst
-                        r__.r = q__1.r;
-                        r__.i = q__1.i; // , expr subst
+                        q__1.real = safmx2 * r__.real;
+                        q__1.imag = safmx2 * r__.imag; // , expr subst
+                        r__.real = q__1.real;
+                        r__.imag = q__1.imag; // , expr subst
                         /* L30: */
                     }
                 }
@@ -420,10 +420,10 @@ void aocl_lapack_clargv(aocl_int64_t *n, scomplex *x, aocl_int64_t *incx, scompl
                     i__2 = -count;
                     for(j = 1; j <= i__2; ++j)
                     {
-                        q__1.r = safmn2 * r__.r;
-                        q__1.i = safmn2 * r__.i; // , expr subst
-                        r__.r = q__1.r;
-                        r__.i = q__1.i; // , expr subst
+                        q__1.real = safmn2 * r__.real;
+                        q__1.imag = safmn2 * r__.imag; // , expr subst
+                        r__.real = q__1.real;
+                        r__.imag = q__1.imag; // , expr subst
                         /* L40: */
                     }
                 }
@@ -432,11 +432,11 @@ void aocl_lapack_clargv(aocl_int64_t *n, scomplex *x, aocl_int64_t *incx, scompl
     L50:
         c__[ic] = cs;
         i__2 = iy;
-        y[i__2].r = sn.r;
-        y[i__2].i = sn.i; // , expr subst
+        y[i__2].real = sn.real;
+        y[i__2].imag = sn.imag; // , expr subst
         i__2 = ix;
-        x[i__2].r = r__.r;
-        x[i__2].i = r__.i; // , expr subst
+        x[i__2].real = r__.real;
+        x[i__2].imag = r__.imag; // , expr subst
         ic += *incc;
         iy += *incy;
         ix += *incx;

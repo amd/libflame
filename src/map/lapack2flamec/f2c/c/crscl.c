@@ -138,7 +138,7 @@ void aocl_lapack_crscl(aocl_int64_t *n, scomplex *a, scomplex *x, aocl_int64_t *
     safmax = 1.f / safmin;
     ov = slamch_("O");
     /* Initialize constants related to A. */
-    ar = a->r;
+    ar = a->real;
     ai = r_imag(a);
     absr = f2c_abs(ar);
     absi = f2c_abs(ai);
@@ -155,23 +155,23 @@ void aocl_lapack_crscl(aocl_int64_t *n, scomplex *a, scomplex *x, aocl_int64_t *
         {
             aocl_blas_csscal(n, &safmin, &x[1], incx);
             r__1 = -safmax / ai;
-            q__1.r = 0.f;
-            q__1.i = r__1; // , expr subst
+            q__1.real = 0.f;
+            q__1.imag = r__1; // , expr subst
             aocl_blas_cscal(n, &q__1, &x[1], incx);
         }
         else if(absi < safmin)
         {
             r__1 = -safmin / ai;
-            q__1.r = 0.f;
-            q__1.i = r__1; // , expr subst
+            q__1.real = 0.f;
+            q__1.imag = r__1; // , expr subst
             aocl_blas_cscal(n, &q__1, &x[1], incx);
             aocl_blas_csscal(n, &safmax, &x[1], incx);
         }
         else
         {
             r__1 = -1.f / ai;
-            q__1.r = 0.f;
-            q__1.i = r__1; // , expr subst
+            q__1.real = 0.f;
+            q__1.imag = r__1; // , expr subst
             aocl_blas_cscal(n, &q__1, &x[1], incx);
         }
     }
@@ -191,8 +191,8 @@ void aocl_lapack_crscl(aocl_int64_t *n, scomplex *a, scomplex *x, aocl_int64_t *
             /* This means that both alphaR and alphaI are very small. */
             r__1 = safmin / ur;
             r__2 = -safmin / ui;
-            q__1.r = r__1;
-            q__1.i = r__2; // , expr subst
+            q__1.real = r__1;
+            q__1.imag = r__2; // , expr subst
             aocl_blas_cscal(n, &q__1, &x[1], incx);
             aocl_blas_csscal(n, &safmax, &x[1], incx);
         }
@@ -203,8 +203,8 @@ void aocl_lapack_crscl(aocl_int64_t *n, scomplex *a, scomplex *x, aocl_int64_t *
                 /* This means that a and b are both Inf. No need for scaling. */
                 r__1 = 1.f / ur;
                 r__2 = -1.f / ui;
-                q__1.r = r__1;
-                q__1.i = r__2; // , expr subst
+                q__1.real = r__1;
+                q__1.imag = r__2; // , expr subst
                 aocl_blas_cscal(n, &q__1, &x[1], incx);
             }
             else
@@ -227,16 +227,16 @@ void aocl_lapack_crscl(aocl_int64_t *n, scomplex *a, scomplex *x, aocl_int64_t *
                     }
                     r__1 = 1.f / ur;
                     r__2 = -1.f / ui;
-                    q__1.r = r__1;
-                    q__1.i = r__2; // , expr subst
+                    q__1.real = r__1;
+                    q__1.imag = r__2; // , expr subst
                     aocl_blas_cscal(n, &q__1, &x[1], incx);
                 }
                 else
                 {
                     r__1 = safmax / ur;
                     r__2 = -safmax / ui;
-                    q__1.r = r__1;
-                    q__1.i = r__2; // , expr subst
+                    q__1.real = r__1;
+                    q__1.imag = r__2; // , expr subst
                     aocl_blas_cscal(n, &q__1, &x[1], incx);
                 }
             }
@@ -245,8 +245,8 @@ void aocl_lapack_crscl(aocl_int64_t *n, scomplex *a, scomplex *x, aocl_int64_t *
         {
             r__1 = 1.f / ur;
             r__2 = -1.f / ui;
-            q__1.r = r__1;
-            q__1.i = r__2; // , expr subst
+            q__1.real = r__1;
+            q__1.imag = r__2; // , expr subst
             aocl_blas_cscal(n, &q__1, &x[1], incx);
         }
     }

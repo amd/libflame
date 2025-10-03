@@ -4,7 +4,7 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static scomplex c_b1 = {{1.f}, {0.f}};
+static scomplex c_b1 = {1.f, 0.f};
 static aocl_int64_t c__1 = 1;
 /* > \brief \b CHPTRS */
 /* =========== DOCUMENTATION =========== */
@@ -244,13 +244,13 @@ void aocl_lapack_chptrs(char *uplo, aocl_int64_t *n, aocl_int64_t *nrhs, scomple
             /* Multiply by inv(U(K)), where U(K) is the transformation */
             /* stored in column K of A. */
             i__1 = k - 1;
-            q__1.r = -1.f;
-            q__1.i = -0.f; // , expr subst
+            q__1.real = -1.f;
+            q__1.imag = -0.f; // , expr subst
             aocl_blas_cgeru(&i__1, nrhs, &q__1, &ap[kc], &c__1, &b[k + b_dim1], ldb, &b[b_dim1 + 1],
                             ldb);
             /* Multiply by the inverse of the diagonal block. */
             i__1 = kc + k - 1;
-            s = 1.f / ap[i__1].r;
+            s = 1.f / ap[i__1].real;
             aocl_blas_csscal(nrhs, &s, &b[k + b_dim1], ldb);
             --k;
         }
@@ -266,58 +266,58 @@ void aocl_lapack_chptrs(char *uplo, aocl_int64_t *n, aocl_int64_t *nrhs, scomple
             /* Multiply by inv(U(K)), where U(K) is the transformation */
             /* stored in columns K-1 and K of A. */
             i__1 = k - 2;
-            q__1.r = -1.f;
-            q__1.i = -0.f; // , expr subst
+            q__1.real = -1.f;
+            q__1.imag = -0.f; // , expr subst
             aocl_blas_cgeru(&i__1, nrhs, &q__1, &ap[kc], &c__1, &b[k + b_dim1], ldb, &b[b_dim1 + 1],
                             ldb);
             i__1 = k - 2;
-            q__1.r = -1.f;
-            q__1.i = -0.f; // , expr subst
+            q__1.real = -1.f;
+            q__1.imag = -0.f; // , expr subst
             aocl_blas_cgeru(&i__1, nrhs, &q__1, &ap[kc - (k - 1)], &c__1, &b[k - 1 + b_dim1], ldb,
                             &b[b_dim1 + 1], ldb);
             /* Multiply by the inverse of the diagonal block. */
             i__1 = kc + k - 2;
-            akm1k.r = ap[i__1].r;
-            akm1k.i = ap[i__1].i; // , expr subst
+            akm1k.real = ap[i__1].real;
+            akm1k.imag = ap[i__1].imag; // , expr subst
             c_div(&q__1, &ap[kc - 1], &akm1k);
-            akm1.r = q__1.r;
-            akm1.i = q__1.i; // , expr subst
+            akm1.real = q__1.real;
+            akm1.imag = q__1.imag; // , expr subst
             r_cnjg(&q__2, &akm1k);
             c_div(&q__1, &ap[kc + k - 1], &q__2);
-            ak.r = q__1.r;
-            ak.i = q__1.i; // , expr subst
-            q__2.r = akm1.r * ak.r - akm1.i * ak.i;
-            q__2.i = akm1.r * ak.i + akm1.i * ak.r; // , expr subst
-            q__1.r = q__2.r - 1.f;
-            q__1.i = q__2.i - 0.f; // , expr subst
-            denom.r = q__1.r;
-            denom.i = q__1.i; // , expr subst
+            ak.real = q__1.real;
+            ak.imag = q__1.imag; // , expr subst
+            q__2.real = akm1.real * ak.real - akm1.imag * ak.imag;
+            q__2.imag = akm1.real * ak.imag + akm1.imag * ak.real; // , expr subst
+            q__1.real = q__2.real - 1.f;
+            q__1.imag = q__2.imag - 0.f; // , expr subst
+            denom.real = q__1.real;
+            denom.imag = q__1.imag; // , expr subst
             i__1 = *nrhs;
             for(j = 1; j <= i__1; ++j)
             {
                 c_div(&q__1, &b[k - 1 + j * b_dim1], &akm1k);
-                bkm1.r = q__1.r;
-                bkm1.i = q__1.i; // , expr subst
+                bkm1.real = q__1.real;
+                bkm1.imag = q__1.imag; // , expr subst
                 r_cnjg(&q__2, &akm1k);
                 c_div(&q__1, &b[k + j * b_dim1], &q__2);
-                bk.r = q__1.r;
-                bk.i = q__1.i; // , expr subst
+                bk.real = q__1.real;
+                bk.imag = q__1.imag; // , expr subst
                 i__2 = k - 1 + j * b_dim1;
-                q__3.r = ak.r * bkm1.r - ak.i * bkm1.i;
-                q__3.i = ak.r * bkm1.i + ak.i * bkm1.r; // , expr subst
-                q__2.r = q__3.r - bk.r;
-                q__2.i = q__3.i - bk.i; // , expr subst
+                q__3.real = ak.real * bkm1.real - ak.imag * bkm1.imag;
+                q__3.imag = ak.real * bkm1.imag + ak.imag * bkm1.real; // , expr subst
+                q__2.real = q__3.real - bk.real;
+                q__2.imag = q__3.imag - bk.imag; // , expr subst
                 c_div(&q__1, &q__2, &denom);
-                b[i__2].r = q__1.r;
-                b[i__2].i = q__1.i; // , expr subst
+                b[i__2].real = q__1.real;
+                b[i__2].imag = q__1.imag; // , expr subst
                 i__2 = k + j * b_dim1;
-                q__3.r = akm1.r * bk.r - akm1.i * bk.i;
-                q__3.i = akm1.r * bk.i + akm1.i * bk.r; // , expr subst
-                q__2.r = q__3.r - bkm1.r;
-                q__2.i = q__3.i - bkm1.i; // , expr subst
+                q__3.real = akm1.real * bk.real - akm1.imag * bk.imag;
+                q__3.imag = akm1.real * bk.imag + akm1.imag * bk.real; // , expr subst
+                q__2.real = q__3.real - bkm1.real;
+                q__2.imag = q__3.imag - bkm1.imag; // , expr subst
                 c_div(&q__1, &q__2, &denom);
-                b[i__2].r = q__1.r;
-                b[i__2].i = q__1.i; // , expr subst
+                b[i__2].real = q__1.real;
+                b[i__2].imag = q__1.imag; // , expr subst
                 /* L20: */
             }
             kc = kc - k + 1;
@@ -343,8 +343,8 @@ void aocl_lapack_chptrs(char *uplo, aocl_int64_t *n, aocl_int64_t *nrhs, scomple
             {
                 aocl_lapack_clacgv(nrhs, &b[k + b_dim1], ldb);
                 i__1 = k - 1;
-                q__1.r = -1.f;
-                q__1.i = -0.f; // , expr subst
+                q__1.real = -1.f;
+                q__1.imag = -0.f; // , expr subst
                 aocl_blas_cgemv("Conjugate transpose", &i__1, nrhs, &q__1, &b[b_offset], ldb,
                                 &ap[kc], &c__1, &c_b1, &b[k + b_dim1], ldb);
                 aocl_lapack_clacgv(nrhs, &b[k + b_dim1], ldb);
@@ -367,15 +367,15 @@ void aocl_lapack_chptrs(char *uplo, aocl_int64_t *n, aocl_int64_t *nrhs, scomple
             {
                 aocl_lapack_clacgv(nrhs, &b[k + b_dim1], ldb);
                 i__1 = k - 1;
-                q__1.r = -1.f;
-                q__1.i = -0.f; // , expr subst
+                q__1.real = -1.f;
+                q__1.imag = -0.f; // , expr subst
                 aocl_blas_cgemv("Conjugate transpose", &i__1, nrhs, &q__1, &b[b_offset], ldb,
                                 &ap[kc], &c__1, &c_b1, &b[k + b_dim1], ldb);
                 aocl_lapack_clacgv(nrhs, &b[k + b_dim1], ldb);
                 aocl_lapack_clacgv(nrhs, &b[k + 1 + b_dim1], ldb);
                 i__1 = k - 1;
-                q__1.r = -1.f;
-                q__1.i = -0.f; // , expr subst
+                q__1.real = -1.f;
+                q__1.imag = -0.f; // , expr subst
                 aocl_blas_cgemv("Conjugate transpose", &i__1, nrhs, &q__1, &b[b_offset], ldb,
                                 &ap[kc + k], &c__1, &c_b1, &b[k + 1 + b_dim1], ldb);
                 aocl_lapack_clacgv(nrhs, &b[k + 1 + b_dim1], ldb);
@@ -419,14 +419,14 @@ void aocl_lapack_chptrs(char *uplo, aocl_int64_t *n, aocl_int64_t *nrhs, scomple
             if(k < *n)
             {
                 i__1 = *n - k;
-                q__1.r = -1.f;
-                q__1.i = -0.f; // , expr subst
+                q__1.real = -1.f;
+                q__1.imag = -0.f; // , expr subst
                 aocl_blas_cgeru(&i__1, nrhs, &q__1, &ap[kc + 1], &c__1, &b[k + b_dim1], ldb,
                                 &b[k + 1 + b_dim1], ldb);
             }
             /* Multiply by the inverse of the diagonal block. */
             i__1 = kc;
-            s = 1.f / ap[i__1].r;
+            s = 1.f / ap[i__1].real;
             aocl_blas_csscal(nrhs, &s, &b[k + b_dim1], ldb);
             kc = kc + *n - k + 1;
             ++k;
@@ -445,59 +445,59 @@ void aocl_lapack_chptrs(char *uplo, aocl_int64_t *n, aocl_int64_t *nrhs, scomple
             if(k < *n - 1)
             {
                 i__1 = *n - k - 1;
-                q__1.r = -1.f;
-                q__1.i = -0.f; // , expr subst
+                q__1.real = -1.f;
+                q__1.imag = -0.f; // , expr subst
                 aocl_blas_cgeru(&i__1, nrhs, &q__1, &ap[kc + 2], &c__1, &b[k + b_dim1], ldb,
                                 &b[k + 2 + b_dim1], ldb);
                 i__1 = *n - k - 1;
-                q__1.r = -1.f;
-                q__1.i = -0.f; // , expr subst
+                q__1.real = -1.f;
+                q__1.imag = -0.f; // , expr subst
                 aocl_blas_cgeru(&i__1, nrhs, &q__1, &ap[kc + *n - k + 2], &c__1, &b[k + 1 + b_dim1],
                                 ldb, &b[k + 2 + b_dim1], ldb);
             }
             /* Multiply by the inverse of the diagonal block. */
             i__1 = kc + 1;
-            akm1k.r = ap[i__1].r;
-            akm1k.i = ap[i__1].i; // , expr subst
+            akm1k.real = ap[i__1].real;
+            akm1k.imag = ap[i__1].imag; // , expr subst
             r_cnjg(&q__2, &akm1k);
             c_div(&q__1, &ap[kc], &q__2);
-            akm1.r = q__1.r;
-            akm1.i = q__1.i; // , expr subst
+            akm1.real = q__1.real;
+            akm1.imag = q__1.imag; // , expr subst
             c_div(&q__1, &ap[kc + *n - k + 1], &akm1k);
-            ak.r = q__1.r;
-            ak.i = q__1.i; // , expr subst
-            q__2.r = akm1.r * ak.r - akm1.i * ak.i;
-            q__2.i = akm1.r * ak.i + akm1.i * ak.r; // , expr subst
-            q__1.r = q__2.r - 1.f;
-            q__1.i = q__2.i - 0.f; // , expr subst
-            denom.r = q__1.r;
-            denom.i = q__1.i; // , expr subst
+            ak.real = q__1.real;
+            ak.imag = q__1.imag; // , expr subst
+            q__2.real = akm1.real * ak.real - akm1.imag * ak.imag;
+            q__2.imag = akm1.real * ak.imag + akm1.imag * ak.real; // , expr subst
+            q__1.real = q__2.real - 1.f;
+            q__1.imag = q__2.imag - 0.f; // , expr subst
+            denom.real = q__1.real;
+            denom.imag = q__1.imag; // , expr subst
             i__1 = *nrhs;
             for(j = 1; j <= i__1; ++j)
             {
                 r_cnjg(&q__2, &akm1k);
                 c_div(&q__1, &b[k + j * b_dim1], &q__2);
-                bkm1.r = q__1.r;
-                bkm1.i = q__1.i; // , expr subst
+                bkm1.real = q__1.real;
+                bkm1.imag = q__1.imag; // , expr subst
                 c_div(&q__1, &b[k + 1 + j * b_dim1], &akm1k);
-                bk.r = q__1.r;
-                bk.i = q__1.i; // , expr subst
+                bk.real = q__1.real;
+                bk.imag = q__1.imag; // , expr subst
                 i__2 = k + j * b_dim1;
-                q__3.r = ak.r * bkm1.r - ak.i * bkm1.i;
-                q__3.i = ak.r * bkm1.i + ak.i * bkm1.r; // , expr subst
-                q__2.r = q__3.r - bk.r;
-                q__2.i = q__3.i - bk.i; // , expr subst
+                q__3.real = ak.real * bkm1.real - ak.imag * bkm1.imag;
+                q__3.imag = ak.real * bkm1.imag + ak.imag * bkm1.real; // , expr subst
+                q__2.real = q__3.real - bk.real;
+                q__2.imag = q__3.imag - bk.imag; // , expr subst
                 c_div(&q__1, &q__2, &denom);
-                b[i__2].r = q__1.r;
-                b[i__2].i = q__1.i; // , expr subst
+                b[i__2].real = q__1.real;
+                b[i__2].imag = q__1.imag; // , expr subst
                 i__2 = k + 1 + j * b_dim1;
-                q__3.r = akm1.r * bk.r - akm1.i * bk.i;
-                q__3.i = akm1.r * bk.i + akm1.i * bk.r; // , expr subst
-                q__2.r = q__3.r - bkm1.r;
-                q__2.i = q__3.i - bkm1.i; // , expr subst
+                q__3.real = akm1.real * bk.real - akm1.imag * bk.imag;
+                q__3.imag = akm1.real * bk.imag + akm1.imag * bk.real; // , expr subst
+                q__2.real = q__3.real - bkm1.real;
+                q__2.imag = q__3.imag - bkm1.imag; // , expr subst
                 c_div(&q__1, &q__2, &denom);
-                b[i__2].r = q__1.r;
-                b[i__2].i = q__1.i; // , expr subst
+                b[i__2].real = q__1.real;
+                b[i__2].imag = q__1.imag; // , expr subst
                 /* L70: */
             }
             kc = kc + (*n - k << 1) + 1;
@@ -524,8 +524,8 @@ void aocl_lapack_chptrs(char *uplo, aocl_int64_t *n, aocl_int64_t *nrhs, scomple
             {
                 aocl_lapack_clacgv(nrhs, &b[k + b_dim1], ldb);
                 i__1 = *n - k;
-                q__1.r = -1.f;
-                q__1.i = -0.f; // , expr subst
+                q__1.real = -1.f;
+                q__1.imag = -0.f; // , expr subst
                 aocl_blas_cgemv("Conjugate transpose", &i__1, nrhs, &q__1, &b[k + 1 + b_dim1], ldb,
                                 &ap[kc + 1], &c__1, &c_b1, &b[k + b_dim1], ldb);
                 aocl_lapack_clacgv(nrhs, &b[k + b_dim1], ldb);
@@ -547,15 +547,15 @@ void aocl_lapack_chptrs(char *uplo, aocl_int64_t *n, aocl_int64_t *nrhs, scomple
             {
                 aocl_lapack_clacgv(nrhs, &b[k + b_dim1], ldb);
                 i__1 = *n - k;
-                q__1.r = -1.f;
-                q__1.i = -0.f; // , expr subst
+                q__1.real = -1.f;
+                q__1.imag = -0.f; // , expr subst
                 aocl_blas_cgemv("Conjugate transpose", &i__1, nrhs, &q__1, &b[k + 1 + b_dim1], ldb,
                                 &ap[kc + 1], &c__1, &c_b1, &b[k + b_dim1], ldb);
                 aocl_lapack_clacgv(nrhs, &b[k + b_dim1], ldb);
                 aocl_lapack_clacgv(nrhs, &b[k - 1 + b_dim1], ldb);
                 i__1 = *n - k;
-                q__1.r = -1.f;
-                q__1.i = -0.f; // , expr subst
+                q__1.real = -1.f;
+                q__1.imag = -0.f; // , expr subst
                 aocl_blas_cgemv("Conjugate transpose", &i__1, nrhs, &q__1, &b[k + 1 + b_dim1], ldb,
                                 &ap[kc - (*n - k)], &c__1, &c_b1, &b[k - 1 + b_dim1], ldb);
                 aocl_lapack_clacgv(nrhs, &b[k - 1 + b_dim1], ldb);

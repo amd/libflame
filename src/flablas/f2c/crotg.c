@@ -18,28 +18,28 @@ int crotg_(scomplex *ca, scomplex *cb, real *c__, scomplex *s)
         goto L10;
     }
     *c__ = 0.f;
-    s->r = 1.f, s->i = 0.f;
-    ca->r = cb->r, ca->i = cb->i;
+    s->real = 1.f, s->imag = 0.f;
+    ca->real = cb->real, ca->imag = cb->imag;
     goto L20;
 L10:
     scale = c_f2c_abs(ca) + c_f2c_abs(cb);
-    q__1.r = ca->r / scale, q__1.i = ca->i / scale;
+    q__1.real = ca->real / scale, q__1.imag = ca->imag / scale;
     /* Computing 2nd power */
     r__1 = c_f2c_abs(&q__1);
-    q__2.r = cb->r / scale, q__2.i = cb->i / scale;
+    q__2.real = cb->real / scale, q__2.imag = cb->imag / scale;
     /* Computing 2nd power */
     r__2 = c_f2c_abs(&q__2);
     norm = scale * sqrt(r__1 * r__1 + r__2 * r__2);
     r__1 = c_f2c_abs(ca);
-    q__1.r = ca->r / r__1, q__1.i = ca->i / r__1;
-    alpha.r = q__1.r, alpha.i = q__1.i;
+    q__1.real = ca->real / r__1, q__1.imag = ca->imag / r__1;
+    alpha.real = q__1.real, alpha.imag = q__1.imag;
     *c__ = c_f2c_abs(ca) / norm;
     r_cnjg(&q__3, cb);
-    q__2.r = alpha.r * q__3.r - alpha.i * q__3.i, q__2.i = alpha.r * q__3.i + alpha.i * q__3.r;
-    q__1.r = q__2.r / norm, q__1.i = q__2.i / norm;
-    s->r = q__1.r, s->i = q__1.i;
-    q__1.r = norm * alpha.r, q__1.i = norm * alpha.i;
-    ca->r = q__1.r, ca->i = q__1.i;
+    q__2.real = alpha.real * q__3.real - alpha.imag * q__3.imag, q__2.imag = alpha.real * q__3.imag + alpha.imag * q__3.real;
+    q__1.real = q__2.real / norm, q__1.imag = q__2.imag / norm;
+    s->real = q__1.real, s->imag = q__1.imag;
+    q__1.real = norm * alpha.real, q__1.imag = norm * alpha.imag;
+    ca->real = q__1.real, ca->imag = q__1.imag;
 L20:
     return 0;
 }

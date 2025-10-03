@@ -4,7 +4,7 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static dcomplex c_b1 = {{1.}, {0.}};
+static dcomplex c_b1 = {1., 0.};
 static aocl_int64_t c__1 = 1;
 /* > \brief \b ZLARZB applies a block reflector or its conjugate-transpose to a general matrix. */
 /* =========== DOCUMENTATION =========== */
@@ -319,10 +319,10 @@ void aocl_lapack_zlarzb(char *side, char *trans, char *direct, char *storev, aoc
                 i__3 = i__ + j * c_dim1;
                 i__4 = i__ + j * c_dim1;
                 i__5 = j + i__ * work_dim1;
-                z__1.r = c__[i__4].r - work[i__5].r;
-                z__1.i = c__[i__4].i - work[i__5].i; // , expr subst
-                c__[i__3].r = z__1.r;
-                c__[i__3].i = z__1.i; // , expr subst
+                z__1.real = c__[i__4].real - work[i__5].real;
+                z__1.imag = c__[i__4].imag - work[i__5].imag; // , expr subst
+                c__[i__3].real = z__1.real;
+                c__[i__3].imag = z__1.imag; // , expr subst
                 /* L20: */
             }
             /* L30: */
@@ -331,8 +331,8 @@ void aocl_lapack_zlarzb(char *side, char *trans, char *direct, char *storev, aoc
         /* V( 1:k, 1:l )**H * W( 1:n, 1:k )**H */
         if(*l > 0)
         {
-            z__1.r = -1.;
-            z__1.i = -0.; // , expr subst
+            z__1.real = -1.;
+            z__1.imag = -0.; // , expr subst
             aocl_blas_zgemm("Transpose", "Transpose", l, n, k, &z__1, &v[v_offset], ldv,
                             &work[work_offset], ldwork, &c_b1, &c__[*m - *l + 1 + c_dim1], ldc);
         }
@@ -383,10 +383,10 @@ void aocl_lapack_zlarzb(char *side, char *trans, char *direct, char *storev, aoc
                 i__3 = i__ + j * c_dim1;
                 i__4 = i__ + j * c_dim1;
                 i__5 = i__ + j * work_dim1;
-                z__1.r = c__[i__4].r - work[i__5].r;
-                z__1.i = c__[i__4].i - work[i__5].i; // , expr subst
-                c__[i__3].r = z__1.r;
-                c__[i__3].i = z__1.i; // , expr subst
+                z__1.real = c__[i__4].real - work[i__5].real;
+                z__1.imag = c__[i__4].imag - work[i__5].imag; // , expr subst
+                c__[i__3].real = z__1.real;
+                c__[i__3].imag = z__1.imag; // , expr subst
                 /* L70: */
             }
             /* L80: */
@@ -401,8 +401,8 @@ void aocl_lapack_zlarzb(char *side, char *trans, char *direct, char *storev, aoc
         }
         if(*l > 0)
         {
-            z__1.r = -1.;
-            z__1.i = -0.; // , expr subst
+            z__1.real = -1.;
+            z__1.imag = -0.; // , expr subst
             aocl_blas_zgemm("No transpose", "No transpose", m, l, k, &z__1, &work[work_offset],
                             ldwork, &v[v_offset], ldv, &c_b1, &c__[(*n - *l + 1) * c_dim1 + 1],
                             ldc);

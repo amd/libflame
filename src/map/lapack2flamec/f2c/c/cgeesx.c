@@ -399,7 +399,7 @@ void aocl_lapack_cgeesx(char *jobvs, char *sort, L_fp1 select, char *sense, aocl
             minwrk = *n << 1;
             aocl_lapack_chseqr("S", jobvs, n, &c__1, n, &a[a_offset], lda, &w[1], &vs[vs_offset],
                                ldvs, &work[1], &c_n1, &ieval);
-            hswork = (integer)work[1].r;
+            hswork = (integer)work[1].real;
             if(!wantvs)
             {
                 maxwrk = fla_max(maxwrk, hswork);
@@ -425,8 +425,8 @@ void aocl_lapack_cgeesx(char *jobvs, char *sort, L_fp1 select, char *sense, aocl
             }
         }
         r__1 = aocl_lapack_sroundup_lwork(&lwrk);
-        work[1].r = r__1;
-        work[1].i = 0.f; // , expr subst
+        work[1].real = r__1;
+        work[1].imag = 0.f; // , expr subst
         if(*lwork < minwrk && !lquery)
         {
             *info = -15;
@@ -564,8 +564,8 @@ void aocl_lapack_cgeesx(char *jobvs, char *sort, L_fp1 select, char *sense, aocl
         }
     }
     r__1 = aocl_lapack_sroundup_lwork(&maxwrk);
-    work[1].r = r__1;
-    work[1].i = 0.f; // , expr subst
+    work[1].real = r__1;
+    work[1].imag = 0.f; // , expr subst
     AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of CGEESX */

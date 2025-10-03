@@ -16,14 +16,14 @@ double d_atan(doublereal *x)
 void c_atan(scomplex *r, scomplex *z)
 {
   double _Complex ret_val = catan(*z);
-  r->r = creal(ret_val);
-  r->i = cimag(ret_val);
+  r->real = creal(ret_val);
+  r->imag = cimag(ret_val);
 }
 void z_atan(dcomplex *r, dcomplex *z)
 {
   double _Complex ret_val = catan(*z);
-  r->r = creal(ret_val);
-  r->i = cimag(ret_val);
+  r->real = creal(ret_val);
+  r->imag = cimag(ret_val);
 }
 */
 #ifdef __cplusplus

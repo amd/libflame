@@ -349,14 +349,14 @@ void aocl_lapack_cunmr3(char *side, char *trans, aocl_int64_t *m, aocl_int64_t *
         if(notran)
         {
             i__3 = i__;
-            taui.r = tau[i__3].r;
-            taui.i = tau[i__3].i; // , expr subst
+            taui.real = tau[i__3].real;
+            taui.imag = tau[i__3].imag; // , expr subst
         }
         else
         {
             r_cnjg(&q__1, &tau[i__]);
-            taui.r = q__1.r;
-            taui.i = q__1.i; // , expr subst
+            taui.real = q__1.real;
+            taui.imag = q__1.imag; // , expr subst
         }
         aocl_lapack_clarz(side, &mi, &ni, l, &a[i__ + ja * a_dim1], lda, &taui,
                           &c__[ic + jc * c_dim1], ldc, &work[1]);

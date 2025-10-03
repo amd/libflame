@@ -4,8 +4,8 @@
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
  /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static dcomplex c_b1 = {{0.}, {0.}};
-static dcomplex c_b2 = {{1.}, {0.}};
+static dcomplex c_b1 = {0., 0.};
+static dcomplex c_b2 = {1., 0.};
 static aocl_int64_t c__1 = 1;
 static aocl_int64_t c_n1 = -1;
 static logical c_true = TRUE_;
@@ -350,14 +350,14 @@ void aocl_lapack_zlaqz2(logical *ilschur, logical *ilq, logical *ilz, aocl_int64
     kwtop = *ihi - jw + 1;
     if(kwtop == *ilo)
     {
-        s.r = 0.;
-        s.i = 0.; // , expr subst
+        s.real = 0.;
+        s.imag = 0.; // , expr subst
     }
     else
     {
         i__1 = kwtop + (kwtop - 1) * a_dim1;
-        s.r = a[i__1].r;
-        s.i = a[i__1].i; // , expr subst
+        s.real = a[i__1].real;
+        s.imag = a[i__1].imag; // , expr subst
     }
     /* Determine required workspace */
     ifst = 1;
@@ -368,7 +368,7 @@ void aocl_lapack_zlaqz2(logical *ilschur, logical *ilq, logical *ilz, aocl_int64
                        &zc[zc_offset], ldzc, &work[1], &c_n1, &rwork[1], &i__1, &qz_small_info__);
     /* Computing 2nd power */
     i__1 = jw;
-    lworkreq = (integer)work[1].r + (i__1 * i__1 << 1);
+    lworkreq = (integer)work[1].real + (i__1 * i__1 << 1);
     /* Computing MAX */
     /* Computing 2nd power */
     i__3 = *nw;
@@ -379,8 +379,8 @@ void aocl_lapack_zlaqz2(logical *ilschur, logical *ilq, logical *ilz, aocl_int64
     if(*lwork == -1)
     {
         /* workspace query, quick return */
-        work[1].r = (doublereal)lworkreq;
-        work[1].i = 0.; // , expr subst
+        work[1].real = (doublereal)lworkreq;
+        work[1].imag = 0.; // , expr subst
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -404,12 +404,12 @@ void aocl_lapack_zlaqz2(logical *ilschur, logical *ilq, logical *ilz, aocl_int64
         /* 1 by 1 deflation window, just try a regular deflation */
         i__1 = kwtop;
         i__2 = kwtop + kwtop * a_dim1;
-        alpha[i__1].r = a[i__2].r;
-        alpha[i__1].i = a[i__2].i; // , expr subst
+        alpha[i__1].real = a[i__2].real;
+        alpha[i__1].imag = a[i__2].imag; // , expr subst
         i__1 = kwtop;
         i__2 = kwtop + kwtop * b_dim1;
-        beta[i__1].r = b[i__2].r;
-        beta[i__1].i = b[i__2].i; // , expr subst
+        beta[i__1].real = b[i__2].real;
+        beta[i__1].imag = b[i__2].imag; // , expr subst
         *ns = 1;
         *nd = 0;
         /* Computing MAX */
@@ -422,8 +422,8 @@ void aocl_lapack_zlaqz2(logical *ilschur, logical *ilq, logical *ilz, aocl_int64
             if(kwtop > *ilo)
             {
                 i__1 = kwtop + (kwtop - 1) * a_dim1;
-                a[i__1].r = 0.;
-                a[i__1].i = 0.; // , expr subst
+                a[i__1].real = 0.;
+                a[i__1].imag = 0.; // , expr subst
             }
         }
     }
@@ -460,7 +460,7 @@ void aocl_lapack_zlaqz2(logical *ilschur, logical *ilq, logical *ilz, aocl_int64
         return;
     }
     /* Deflation detection loop */
-    if(kwtop == *ilo || s.r == 0. && s.i == 0.)
+    if(kwtop == *ilo || s.real == 0. && s.imag == 0.)
     {
         kwbot = kwtop - 1;
     }
@@ -478,8 +478,8 @@ void aocl_lapack_zlaqz2(logical *ilschur, logical *ilq, logical *ilz, aocl_int64
                 tempr = z_abs(&s);
             }
             i__1 = (kwbot - kwtop + 1) * qc_dim1 + 1;
-            z__1.r = s.r * qc[i__1].r - s.i * qc[i__1].i;
-            z__1.i = s.r * qc[i__1].i + s.i * qc[i__1].r; // , expr subst
+            z__1.real = s.real * qc[i__1].real - s.imag * qc[i__1].imag;
+            z__1.imag = s.real * qc[i__1].imag + s.imag * qc[i__1].real; // , expr subst
             /* Computing MAX */
             d__1 = ulp * tempr;
             if(z_abs(&z__1) <= fla_max(d__1, smlnum))
@@ -508,32 +508,32 @@ void aocl_lapack_zlaqz2(logical *ilschur, logical *ilq, logical *ilz, aocl_int64
     {
         i__1 = k;
         i__2 = k + k * a_dim1;
-        alpha[i__1].r = a[i__2].r;
-        alpha[i__1].i = a[i__2].i; // , expr subst
+        alpha[i__1].real = a[i__2].real;
+        alpha[i__1].imag = a[i__2].imag; // , expr subst
         i__1 = k;
         i__2 = k + k * b_dim1;
-        beta[i__1].r = b[i__2].r;
-        beta[i__1].i = b[i__2].i; // , expr subst
+        beta[i__1].real = b[i__2].real;
+        beta[i__1].imag = b[i__2].imag; // , expr subst
         ++k;
     }
-    if(kwtop != *ilo && (s.r != 0. || s.i != 0.))
+    if(kwtop != *ilo && (s.real != 0. || s.imag != 0.))
     {
         /* Reflect spike back, this will create optimally packed bulges */
         /* A( KWTOP:KWBOT, KWTOP-1 ) = A( KWTOP, KWTOP-1 ) *DCONJG( QC( 1, */
         /* $ 1:JW-ND ) ) */
         i__1 = kwtop + (kwtop - 1) * a_dim1;
-        atemp.r = a[i__1].r;
-        atemp.i = a[i__1].i; // , expr subst
+        atemp.real = a[i__1].real;
+        atemp.imag = a[i__1].imag; // , expr subst
         j = 1;
         i__1 = kwbot;
         for(i__ = kwtop; i__ <= i__1; ++i__)
         {
             i__2 = i__ + (kwtop - 1) * a_dim1;
             d_cnjg(&z__2, &qc[j * qc_dim1 + 1]);
-            z__1.r = atemp.r * z__2.r - atemp.i * z__2.i;
-            z__1.i = atemp.r * z__2.i + atemp.i * z__2.r; // , expr subst
-            a[i__2].r = z__1.r;
-            a[i__2].i = z__1.i; // , expr subst
+            z__1.real = atemp.real * z__2.real - atemp.imag * z__2.imag;
+            z__1.imag = atemp.real * z__2.imag + atemp.imag * z__2.real; // , expr subst
+            a[i__2].real = z__1.real;
+            a[i__2].imag = z__1.imag; // , expr subst
             ++j;
         }
         i__1 = kwtop;
@@ -542,11 +542,11 @@ void aocl_lapack_zlaqz2(logical *ilschur, logical *ilq, logical *ilz, aocl_int64
             zlartg_(&a[k + (kwtop - 1) * a_dim1], &a[k + 1 + (kwtop - 1) * a_dim1], &c1, &s1,
                     &temp);
             i__2 = k + (kwtop - 1) * a_dim1;
-            a[i__2].r = temp.r;
-            a[i__2].i = temp.i; // , expr subst
+            a[i__2].real = temp.real;
+            a[i__2].imag = temp.imag; // , expr subst
             i__2 = k + 1 + (kwtop - 1) * a_dim1;
-            a[i__2].r = 0.;
-            a[i__2].i = 0.; // , expr subst
+            a[i__2].real = 0.;
+            a[i__2].imag = 0.; // , expr subst
             /* Computing MAX */
             i__2 = kwtop;
             i__3 = k - 1; // , expr subst

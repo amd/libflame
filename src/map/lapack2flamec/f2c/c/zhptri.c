@@ -4,7 +4,7 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static dcomplex c_b2 = {{0.}, {0.}};
+static dcomplex c_b2 = {0., 0.};
 static aocl_int64_t c__1 = 1;
 /* > \brief \b ZHPTRI */
 /* =========== DOCUMENTATION =========== */
@@ -207,7 +207,7 @@ void aocl_lapack_zhptri(char *uplo, aocl_int64_t *n, dcomplex *ap, aocl_int_t *i
         for(*info = *n; *info >= 1; --(*info))
         {
             i__1 = kp;
-            if(ipiv[*info] > 0 && (ap[i__1].r == 0. && ap[i__1].i == 0.))
+            if(ipiv[*info] > 0 && (ap[i__1].real == 0. && ap[i__1].imag == 0.))
             {
                 AOCL_DTL_TRACE_LOG_EXIT
                 return;
@@ -224,7 +224,7 @@ void aocl_lapack_zhptri(char *uplo, aocl_int64_t *n, dcomplex *ap, aocl_int_t *i
         for(*info = 1; *info <= i__1; ++(*info))
         {
             i__2 = kp;
-            if(ipiv[*info] > 0 && (ap[i__2].r == 0. && ap[i__2].i == 0.))
+            if(ipiv[*info] > 0 && (ap[i__2].real == 0. && ap[i__2].imag == 0.))
             {
                 AOCL_DTL_TRACE_LOG_EXIT
                 return;
@@ -253,27 +253,27 @@ void aocl_lapack_zhptri(char *uplo, aocl_int64_t *n, dcomplex *ap, aocl_int_t *i
             /* Invert the diagonal block. */
             i__1 = kc + k - 1;
             i__2 = kc + k - 1;
-            d__1 = 1. / ap[i__2].r;
-            ap[i__1].r = d__1;
-            ap[i__1].i = 0.; // , expr subst
+            d__1 = 1. / ap[i__2].real;
+            ap[i__1].real = d__1;
+            ap[i__1].imag = 0.; // , expr subst
             /* Compute column K of the inverse. */
             if(k > 1)
             {
                 i__1 = k - 1;
                 aocl_blas_zcopy(&i__1, &ap[kc], &c__1, &work[1], &c__1);
                 i__1 = k - 1;
-                z__1.r = -1.;
-                z__1.i = -0.; // , expr subst
+                z__1.real = -1.;
+                z__1.imag = -0.; // , expr subst
                 aocl_blas_zhpmv(uplo, &i__1, &z__1, &ap[1], &work[1], &c__1, &c_b2, &ap[kc], &c__1);
                 i__1 = kc + k - 1;
                 i__2 = kc + k - 1;
                 i__3 = k - 1;
                 aocl_lapack_zdotc_f2c(&z__2, &i__3, &work[1], &c__1, &ap[kc], &c__1);
-                d__1 = z__2.r;
-                z__1.r = ap[i__2].r - d__1;
-                z__1.i = ap[i__2].i; // , expr subst
-                ap[i__1].r = z__1.r;
-                ap[i__1].i = z__1.i; // , expr subst
+                d__1 = z__2.real;
+                z__1.real = ap[i__2].real - d__1;
+                z__1.imag = ap[i__2].imag; // , expr subst
+                ap[i__1].real = z__1.real;
+                ap[i__1].imag = z__1.imag; // , expr subst
             }
             kstep = 1;
         }
@@ -283,72 +283,72 @@ void aocl_lapack_zhptri(char *uplo, aocl_int64_t *n, dcomplex *ap, aocl_int_t *i
             /* Invert the diagonal block. */
             t = z_abs(&ap[kcnext + k - 1]);
             i__1 = kc + k - 1;
-            ak = ap[i__1].r / t;
+            ak = ap[i__1].real / t;
             i__1 = kcnext + k;
-            akp1 = ap[i__1].r / t;
+            akp1 = ap[i__1].real / t;
             i__1 = kcnext + k - 1;
-            z__1.r = ap[i__1].r / t;
-            z__1.i = ap[i__1].i / t; // , expr subst
-            akkp1.r = z__1.r;
-            akkp1.i = z__1.i; // , expr subst
+            z__1.real = ap[i__1].real / t;
+            z__1.imag = ap[i__1].imag / t; // , expr subst
+            akkp1.real = z__1.real;
+            akkp1.imag = z__1.imag; // , expr subst
             d__ = t * (ak * akp1 - 1.);
             i__1 = kc + k - 1;
             d__1 = akp1 / d__;
-            ap[i__1].r = d__1;
-            ap[i__1].i = 0.; // , expr subst
+            ap[i__1].real = d__1;
+            ap[i__1].imag = 0.; // , expr subst
             i__1 = kcnext + k;
             d__1 = ak / d__;
-            ap[i__1].r = d__1;
-            ap[i__1].i = 0.; // , expr subst
+            ap[i__1].real = d__1;
+            ap[i__1].imag = 0.; // , expr subst
             i__1 = kcnext + k - 1;
-            z__2.r = -akkp1.r;
-            z__2.i = -akkp1.i; // , expr subst
-            z__1.r = z__2.r / d__;
-            z__1.i = z__2.i / d__; // , expr subst
-            ap[i__1].r = z__1.r;
-            ap[i__1].i = z__1.i; // , expr subst
+            z__2.real = -akkp1.real;
+            z__2.imag = -akkp1.imag; // , expr subst
+            z__1.real = z__2.real / d__;
+            z__1.imag = z__2.imag / d__; // , expr subst
+            ap[i__1].real = z__1.real;
+            ap[i__1].imag = z__1.imag; // , expr subst
             /* Compute columns K and K+1 of the inverse. */
             if(k > 1)
             {
                 i__1 = k - 1;
                 aocl_blas_zcopy(&i__1, &ap[kc], &c__1, &work[1], &c__1);
                 i__1 = k - 1;
-                z__1.r = -1.;
-                z__1.i = -0.; // , expr subst
+                z__1.real = -1.;
+                z__1.imag = -0.; // , expr subst
                 aocl_blas_zhpmv(uplo, &i__1, &z__1, &ap[1], &work[1], &c__1, &c_b2, &ap[kc], &c__1);
                 i__1 = kc + k - 1;
                 i__2 = kc + k - 1;
                 i__3 = k - 1;
                 aocl_lapack_zdotc_f2c(&z__2, &i__3, &work[1], &c__1, &ap[kc], &c__1);
-                d__1 = z__2.r;
-                z__1.r = ap[i__2].r - d__1;
-                z__1.i = ap[i__2].i; // , expr subst
-                ap[i__1].r = z__1.r;
-                ap[i__1].i = z__1.i; // , expr subst
+                d__1 = z__2.real;
+                z__1.real = ap[i__2].real - d__1;
+                z__1.imag = ap[i__2].imag; // , expr subst
+                ap[i__1].real = z__1.real;
+                ap[i__1].imag = z__1.imag; // , expr subst
                 i__1 = kcnext + k - 1;
                 i__2 = kcnext + k - 1;
                 i__3 = k - 1;
                 aocl_lapack_zdotc_f2c(&z__2, &i__3, &ap[kc], &c__1, &ap[kcnext], &c__1);
-                z__1.r = ap[i__2].r - z__2.r;
-                z__1.i = ap[i__2].i - z__2.i; // , expr subst
-                ap[i__1].r = z__1.r;
-                ap[i__1].i = z__1.i; // , expr subst
+                z__1.real = ap[i__2].real - z__2.real;
+                z__1.imag = ap[i__2].imag - z__2.imag; // , expr subst
+                ap[i__1].real = z__1.real;
+                ap[i__1].imag = z__1.imag; // , expr subst
                 i__1 = k - 1;
                 aocl_blas_zcopy(&i__1, &ap[kcnext], &c__1, &work[1], &c__1);
                 i__1 = k - 1;
-                z__1.r = -1.;
-                z__1.i = -0.; // , expr subst
+                z__1.real = -1.;
+                z__1.imag = -0.; // , expr subst
                 aocl_blas_zhpmv(uplo, &i__1, &z__1, &ap[1], &work[1], &c__1, &c_b2, &ap[kcnext],
                                 &c__1);
                 i__1 = kcnext + k;
                 i__2 = kcnext + k;
                 i__3 = k - 1;
                 aocl_lapack_zdotc_f2c(&z__2, &i__3, &work[1], &c__1, &ap[kcnext], &c__1);
-                d__1 = z__2.r;
-                z__1.r = ap[i__2].r - d__1;
-                z__1.i = ap[i__2].i; // , expr subst
-                ap[i__1].r = z__1.r;
-                ap[i__1].i = z__1.i; // , expr subst
+                d__1 = z__2.real;
+                z__1.real = ap[i__2].real - d__1;
+                z__1.imag = ap[i__2].imag; // , expr subst
+                ap[i__1].real = z__1.real;
+                ap[i__1].imag = z__1.imag; // , expr subst
             }
             kstep = 2;
             kcnext = kcnext + k + 1;
@@ -367,43 +367,43 @@ void aocl_lapack_zhptri(char *uplo, aocl_int64_t *n, dcomplex *ap, aocl_int_t *i
             {
                 kx = kx + j - 1;
                 d_cnjg(&z__1, &ap[kc + j - 1]);
-                temp.r = z__1.r;
-                temp.i = z__1.i; // , expr subst
+                temp.real = z__1.real;
+                temp.imag = z__1.imag; // , expr subst
                 i__2 = kc + j - 1;
                 d_cnjg(&z__1, &ap[kx]);
-                ap[i__2].r = z__1.r;
-                ap[i__2].i = z__1.i; // , expr subst
+                ap[i__2].real = z__1.real;
+                ap[i__2].imag = z__1.imag; // , expr subst
                 i__2 = kx;
-                ap[i__2].r = temp.r;
-                ap[i__2].i = temp.i; // , expr subst
+                ap[i__2].real = temp.real;
+                ap[i__2].imag = temp.imag; // , expr subst
                 /* L40: */
             }
             i__1 = kc + kp - 1;
             d_cnjg(&z__1, &ap[kc + kp - 1]);
-            ap[i__1].r = z__1.r;
-            ap[i__1].i = z__1.i; // , expr subst
+            ap[i__1].real = z__1.real;
+            ap[i__1].imag = z__1.imag; // , expr subst
             i__1 = kc + k - 1;
-            temp.r = ap[i__1].r;
-            temp.i = ap[i__1].i; // , expr subst
+            temp.real = ap[i__1].real;
+            temp.imag = ap[i__1].imag; // , expr subst
             i__1 = kc + k - 1;
             i__2 = kpc + kp - 1;
-            ap[i__1].r = ap[i__2].r;
-            ap[i__1].i = ap[i__2].i; // , expr subst
+            ap[i__1].real = ap[i__2].real;
+            ap[i__1].imag = ap[i__2].imag; // , expr subst
             i__1 = kpc + kp - 1;
-            ap[i__1].r = temp.r;
-            ap[i__1].i = temp.i; // , expr subst
+            ap[i__1].real = temp.real;
+            ap[i__1].imag = temp.imag; // , expr subst
             if(kstep == 2)
             {
                 i__1 = kc + k + k - 1;
-                temp.r = ap[i__1].r;
-                temp.i = ap[i__1].i; // , expr subst
+                temp.real = ap[i__1].real;
+                temp.imag = ap[i__1].imag; // , expr subst
                 i__1 = kc + k + k - 1;
                 i__2 = kc + k + kp - 1;
-                ap[i__1].r = ap[i__2].r;
-                ap[i__1].i = ap[i__2].i; // , expr subst
+                ap[i__1].real = ap[i__2].real;
+                ap[i__1].imag = ap[i__2].imag; // , expr subst
                 i__1 = kc + k + kp - 1;
-                ap[i__1].r = temp.r;
-                ap[i__1].i = temp.i; // , expr subst
+                ap[i__1].real = temp.real;
+                ap[i__1].imag = temp.imag; // , expr subst
             }
         }
         k += kstep;
@@ -431,28 +431,28 @@ void aocl_lapack_zhptri(char *uplo, aocl_int64_t *n, dcomplex *ap, aocl_int_t *i
             /* Invert the diagonal block. */
             i__1 = kc;
             i__2 = kc;
-            d__1 = 1. / ap[i__2].r;
-            ap[i__1].r = d__1;
-            ap[i__1].i = 0.; // , expr subst
+            d__1 = 1. / ap[i__2].real;
+            ap[i__1].real = d__1;
+            ap[i__1].imag = 0.; // , expr subst
             /* Compute column K of the inverse. */
             if(k < *n)
             {
                 i__1 = *n - k;
                 aocl_blas_zcopy(&i__1, &ap[kc + 1], &c__1, &work[1], &c__1);
                 i__1 = *n - k;
-                z__1.r = -1.;
-                z__1.i = -0.; // , expr subst
+                z__1.real = -1.;
+                z__1.imag = -0.; // , expr subst
                 aocl_blas_zhpmv(uplo, &i__1, &z__1, &ap[kc + *n - k + 1], &work[1], &c__1, &c_b2,
                                 &ap[kc + 1], &c__1);
                 i__1 = kc;
                 i__2 = kc;
                 i__3 = *n - k;
                 aocl_lapack_zdotc_f2c(&z__2, &i__3, &work[1], &c__1, &ap[kc + 1], &c__1);
-                d__1 = z__2.r;
-                z__1.r = ap[i__2].r - d__1;
-                z__1.i = ap[i__2].i; // , expr subst
-                ap[i__1].r = z__1.r;
-                ap[i__1].i = z__1.i; // , expr subst
+                d__1 = z__2.real;
+                z__1.real = ap[i__2].real - d__1;
+                z__1.imag = ap[i__2].imag; // , expr subst
+                ap[i__1].real = z__1.real;
+                ap[i__1].imag = z__1.imag; // , expr subst
             }
             kstep = 1;
         }
@@ -462,73 +462,73 @@ void aocl_lapack_zhptri(char *uplo, aocl_int64_t *n, dcomplex *ap, aocl_int_t *i
             /* Invert the diagonal block. */
             t = z_abs(&ap[kcnext + 1]);
             i__1 = kcnext;
-            ak = ap[i__1].r / t;
+            ak = ap[i__1].real / t;
             i__1 = kc;
-            akp1 = ap[i__1].r / t;
+            akp1 = ap[i__1].real / t;
             i__1 = kcnext + 1;
-            z__1.r = ap[i__1].r / t;
-            z__1.i = ap[i__1].i / t; // , expr subst
-            akkp1.r = z__1.r;
-            akkp1.i = z__1.i; // , expr subst
+            z__1.real = ap[i__1].real / t;
+            z__1.imag = ap[i__1].imag / t; // , expr subst
+            akkp1.real = z__1.real;
+            akkp1.imag = z__1.imag; // , expr subst
             d__ = t * (ak * akp1 - 1.);
             i__1 = kcnext;
             d__1 = akp1 / d__;
-            ap[i__1].r = d__1;
-            ap[i__1].i = 0.; // , expr subst
+            ap[i__1].real = d__1;
+            ap[i__1].imag = 0.; // , expr subst
             i__1 = kc;
             d__1 = ak / d__;
-            ap[i__1].r = d__1;
-            ap[i__1].i = 0.; // , expr subst
+            ap[i__1].real = d__1;
+            ap[i__1].imag = 0.; // , expr subst
             i__1 = kcnext + 1;
-            z__2.r = -akkp1.r;
-            z__2.i = -akkp1.i; // , expr subst
-            z__1.r = z__2.r / d__;
-            z__1.i = z__2.i / d__; // , expr subst
-            ap[i__1].r = z__1.r;
-            ap[i__1].i = z__1.i; // , expr subst
+            z__2.real = -akkp1.real;
+            z__2.imag = -akkp1.imag; // , expr subst
+            z__1.real = z__2.real / d__;
+            z__1.imag = z__2.imag / d__; // , expr subst
+            ap[i__1].real = z__1.real;
+            ap[i__1].imag = z__1.imag; // , expr subst
             /* Compute columns K-1 and K of the inverse. */
             if(k < *n)
             {
                 i__1 = *n - k;
                 aocl_blas_zcopy(&i__1, &ap[kc + 1], &c__1, &work[1], &c__1);
                 i__1 = *n - k;
-                z__1.r = -1.;
-                z__1.i = -0.; // , expr subst
+                z__1.real = -1.;
+                z__1.imag = -0.; // , expr subst
                 aocl_blas_zhpmv(uplo, &i__1, &z__1, &ap[kc + (*n - k + 1)], &work[1], &c__1, &c_b2,
                                 &ap[kc + 1], &c__1);
                 i__1 = kc;
                 i__2 = kc;
                 i__3 = *n - k;
                 aocl_lapack_zdotc_f2c(&z__2, &i__3, &work[1], &c__1, &ap[kc + 1], &c__1);
-                d__1 = z__2.r;
-                z__1.r = ap[i__2].r - d__1;
-                z__1.i = ap[i__2].i; // , expr subst
-                ap[i__1].r = z__1.r;
-                ap[i__1].i = z__1.i; // , expr subst
+                d__1 = z__2.real;
+                z__1.real = ap[i__2].real - d__1;
+                z__1.imag = ap[i__2].imag; // , expr subst
+                ap[i__1].real = z__1.real;
+                ap[i__1].imag = z__1.imag; // , expr subst
                 i__1 = kcnext + 1;
                 i__2 = kcnext + 1;
                 i__3 = *n - k;
                 aocl_lapack_zdotc_f2c(&z__2, &i__3, &ap[kc + 1], &c__1, &ap[kcnext + 2], &c__1);
-                z__1.r = ap[i__2].r - z__2.r;
-                z__1.i = ap[i__2].i - z__2.i; // , expr subst
-                ap[i__1].r = z__1.r;
-                ap[i__1].i = z__1.i; // , expr subst
+                z__1.real = ap[i__2].real - z__2.real;
+                z__1.imag = ap[i__2].imag - z__2.imag; // , expr subst
+                ap[i__1].real = z__1.real;
+                ap[i__1].imag = z__1.imag; // , expr subst
                 i__1 = *n - k;
                 aocl_blas_zcopy(&i__1, &ap[kcnext + 2], &c__1, &work[1], &c__1);
                 i__1 = *n - k;
-                z__1.r = -1.;
-                z__1.i = -0.; // , expr subst
+                z__1.real = -1.;
+                z__1.imag = -0.; // , expr subst
                 aocl_blas_zhpmv(uplo, &i__1, &z__1, &ap[kc + (*n - k + 1)], &work[1], &c__1, &c_b2,
                                 &ap[kcnext + 2], &c__1);
                 i__1 = kcnext;
                 i__2 = kcnext;
                 i__3 = *n - k;
                 aocl_lapack_zdotc_f2c(&z__2, &i__3, &work[1], &c__1, &ap[kcnext + 2], &c__1);
-                d__1 = z__2.r;
-                z__1.r = ap[i__2].r - d__1;
-                z__1.i = ap[i__2].i; // , expr subst
-                ap[i__1].r = z__1.r;
-                ap[i__1].i = z__1.i; // , expr subst
+                d__1 = z__2.real;
+                z__1.real = ap[i__2].real - d__1;
+                z__1.imag = ap[i__2].imag; // , expr subst
+                ap[i__1].real = z__1.real;
+                ap[i__1].imag = z__1.imag; // , expr subst
             }
             kstep = 2;
             kcnext -= *n - k + 3;
@@ -550,43 +550,43 @@ void aocl_lapack_zhptri(char *uplo, aocl_int64_t *n, dcomplex *ap, aocl_int_t *i
             {
                 kx = kx + *n - j + 1;
                 d_cnjg(&z__1, &ap[kc + j - k]);
-                temp.r = z__1.r;
-                temp.i = z__1.i; // , expr subst
+                temp.real = z__1.real;
+                temp.imag = z__1.imag; // , expr subst
                 i__2 = kc + j - k;
                 d_cnjg(&z__1, &ap[kx]);
-                ap[i__2].r = z__1.r;
-                ap[i__2].i = z__1.i; // , expr subst
+                ap[i__2].real = z__1.real;
+                ap[i__2].imag = z__1.imag; // , expr subst
                 i__2 = kx;
-                ap[i__2].r = temp.r;
-                ap[i__2].i = temp.i; // , expr subst
+                ap[i__2].real = temp.real;
+                ap[i__2].imag = temp.imag; // , expr subst
                 /* L70: */
             }
             i__1 = kc + kp - k;
             d_cnjg(&z__1, &ap[kc + kp - k]);
-            ap[i__1].r = z__1.r;
-            ap[i__1].i = z__1.i; // , expr subst
+            ap[i__1].real = z__1.real;
+            ap[i__1].imag = z__1.imag; // , expr subst
             i__1 = kc;
-            temp.r = ap[i__1].r;
-            temp.i = ap[i__1].i; // , expr subst
+            temp.real = ap[i__1].real;
+            temp.imag = ap[i__1].imag; // , expr subst
             i__1 = kc;
             i__2 = kpc;
-            ap[i__1].r = ap[i__2].r;
-            ap[i__1].i = ap[i__2].i; // , expr subst
+            ap[i__1].real = ap[i__2].real;
+            ap[i__1].imag = ap[i__2].imag; // , expr subst
             i__1 = kpc;
-            ap[i__1].r = temp.r;
-            ap[i__1].i = temp.i; // , expr subst
+            ap[i__1].real = temp.real;
+            ap[i__1].imag = temp.imag; // , expr subst
             if(kstep == 2)
             {
                 i__1 = kc - *n + k - 1;
-                temp.r = ap[i__1].r;
-                temp.i = ap[i__1].i; // , expr subst
+                temp.real = ap[i__1].real;
+                temp.imag = ap[i__1].imag; // , expr subst
                 i__1 = kc - *n + k - 1;
                 i__2 = kc - *n + kp - 1;
-                ap[i__1].r = ap[i__2].r;
-                ap[i__1].i = ap[i__2].i; // , expr subst
+                ap[i__1].real = ap[i__2].real;
+                ap[i__1].imag = ap[i__2].imag; // , expr subst
                 i__1 = kc - *n + kp - 1;
-                ap[i__1].r = temp.r;
-                ap[i__1].i = temp.i; // , expr subst
+                ap[i__1].real = temp.real;
+                ap[i__1].imag = temp.imag; // , expr subst
             }
         }
         k -= kstep;

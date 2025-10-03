@@ -254,18 +254,18 @@ void aocl_lapack_cpbtf2(char *uplo, aocl_int64_t *n, aocl_int64_t *kd, scomplex 
         {
             /* Compute U(J,J) and test for non-positive-definiteness. */
             i__2 = *kd + 1 + j * ab_dim1;
-            ajj = ab[i__2].r;
+            ajj = ab[i__2].real;
             if(ajj <= 0.f)
             {
                 i__2 = *kd + 1 + j * ab_dim1;
-                ab[i__2].r = ajj;
-                ab[i__2].i = 0.f; // , expr subst
+                ab[i__2].real = ajj;
+                ab[i__2].imag = 0.f; // , expr subst
                 goto L30;
             }
             ajj = sqrt(ajj);
             i__2 = *kd + 1 + j * ab_dim1;
-            ab[i__2].r = ajj;
-            ab[i__2].i = 0.f; // , expr subst
+            ab[i__2].real = ajj;
+            ab[i__2].imag = 0.f; // , expr subst
             /* Compute elements J+1:J+KN of row J and update the */
             /* trailing submatrix within the band. */
             /* Computing MIN */
@@ -292,18 +292,18 @@ void aocl_lapack_cpbtf2(char *uplo, aocl_int64_t *n, aocl_int64_t *kd, scomplex 
         {
             /* Compute L(J,J) and test for non-positive-definiteness. */
             i__2 = j * ab_dim1 + 1;
-            ajj = ab[i__2].r;
+            ajj = ab[i__2].real;
             if(ajj <= 0.f)
             {
                 i__2 = j * ab_dim1 + 1;
-                ab[i__2].r = ajj;
-                ab[i__2].i = 0.f; // , expr subst
+                ab[i__2].real = ajj;
+                ab[i__2].imag = 0.f; // , expr subst
                 goto L30;
             }
             ajj = sqrt(ajj);
             i__2 = j * ab_dim1 + 1;
-            ab[i__2].r = ajj;
-            ab[i__2].i = 0.f; // , expr subst
+            ab[i__2].real = ajj;
+            ab[i__2].imag = 0.f; // , expr subst
             /* Compute elements J+1:J+KN of column J and update the */
             /* trailing submatrix within the band. */
             /* Computing MIN */

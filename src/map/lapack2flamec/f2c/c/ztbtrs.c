@@ -268,7 +268,7 @@ void aocl_lapack_ztbtrs(char *uplo, char *trans, char *diag, aocl_int64_t *n, ao
             for(*info = 1; *info <= i__1; ++(*info))
             {
                 i__2 = *kd + 1 + *info * ab_dim1;
-                if(ab[i__2].r == 0. && ab[i__2].i == 0.)
+                if(ab[i__2].real == 0. && ab[i__2].imag == 0.)
                 {
                     AOCL_DTL_TRACE_LOG_EXIT
                     return;
@@ -282,7 +282,7 @@ void aocl_lapack_ztbtrs(char *uplo, char *trans, char *diag, aocl_int64_t *n, ao
             for(*info = 1; *info <= i__1; ++(*info))
             {
                 i__2 = *info * ab_dim1 + 1;
-                if(ab[i__2].r == 0. && ab[i__2].i == 0.)
+                if(ab[i__2].real == 0. && ab[i__2].imag == 0.)
                 {
                     AOCL_DTL_TRACE_LOG_EXIT
                     return;

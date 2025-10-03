@@ -42,12 +42,12 @@ int cswap_(integer *n, scomplex *cx, integer *incx, scomplex * cy, integer *incy
             ++i__)
     {
         i__2 = ix;
-        ctemp.r = cx[i__2].r, ctemp.i = cx[i__2].i;
+        ctemp.real = cx[i__2].real, ctemp.imag = cx[i__2].imag;
         i__2 = ix;
         i__3 = iy;
-        cx[i__2].r = cy[i__3].r, cx[i__2].i = cy[i__3].i;
+        cx[i__2].real = cy[i__3].real, cx[i__2].imag = cy[i__3].imag;
         i__2 = iy;
-        cy[i__2].r = ctemp.r, cy[i__2].i = ctemp.i;
+        cy[i__2].real = ctemp.real, cy[i__2].imag = ctemp.imag;
         ix += *incx;
         iy += *incy;
         /* L10: */
@@ -61,12 +61,12 @@ L20:
             ++i__)
     {
         i__2 = i__;
-        ctemp.r = cx[i__2].r, ctemp.i = cx[i__2].i;
+        ctemp.real = cx[i__2].real, ctemp.imag = cx[i__2].imag;
         i__2 = i__;
         i__3 = i__;
-        cx[i__2].r = cy[i__3].r, cx[i__2].i = cy[i__3].i;
+        cx[i__2].real = cy[i__3].real, cx[i__2].imag = cy[i__3].imag;
         i__2 = i__;
-        cy[i__2].r = ctemp.r, cy[i__2].i = ctemp.i;
+        cy[i__2].real = ctemp.real, cy[i__2].imag = ctemp.imag;
         /* L30: */
     }
     return 0;

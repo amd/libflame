@@ -165,7 +165,7 @@ int cgbmv_(char *trans, integer *m, integer *n, integer *kl, integer *ku, scompl
         return 0;
     }
     /* Quick return if possible. */
-    if (*m == 0 || *n == 0 || alpha->r == 0.f && alpha->i == 0.f && (beta->r == 1.f && beta->i == 0.f))
+    if (*m == 0 || *n == 0 || alpha->real == 0.f && alpha->imag == 0.f && (beta->real == 1.f && beta->imag == 0.f))
     {
         return 0;
     }
@@ -201,11 +201,11 @@ int cgbmv_(char *trans, integer *m, integer *n, integer *kl, integer *ku, scompl
     /* Start the operations. In this version the elements of A are */
     /* accessed sequentially with one pass through the band part of A. */
     /* First form y := beta*y. */
-    if (beta->r != 1.f || beta->i != 0.f)
+    if (beta->real != 1.f || beta->imag != 0.f)
     {
         if (*incy == 1)
         {
-            if (beta->r == 0.f && beta->i == 0.f)
+            if (beta->real == 0.f && beta->imag == 0.f)
             {
                 i__1 = leny;
                 for (i__ = 1;
@@ -213,7 +213,7 @@ int cgbmv_(char *trans, integer *m, integer *n, integer *kl, integer *ku, scompl
                         ++i__)
                 {
                     i__2 = i__;
-                    y[i__2].r = 0.f, y[i__2].i = 0.f;
+                    y[i__2].real = 0.f, y[i__2].imag = 0.f;
                     /* L10: */
                 }
             }
@@ -226,8 +226,8 @@ int cgbmv_(char *trans, integer *m, integer *n, integer *kl, integer *ku, scompl
                 {
                     i__2 = i__;
                     i__3 = i__;
-                    q__1.r = beta->r * y[i__3].r - beta->i * y[i__3].i, q__1.i = beta->r * y[i__3].i + beta->i * y[i__3] .r;
-                    y[i__2].r = q__1.r, y[i__2].i = q__1.i;
+                    q__1.real = beta->real * y[i__3].real - beta->imag * y[i__3].imag, q__1.imag = beta->real * y[i__3].imag + beta->imag * y[i__3] .real;
+                    y[i__2].real = q__1.real, y[i__2].imag = q__1.imag;
                     /* L20: */
                 }
             }
@@ -235,7 +235,7 @@ int cgbmv_(char *trans, integer *m, integer *n, integer *kl, integer *ku, scompl
         else
         {
             iy = ky;
-            if (beta->r == 0.f && beta->i == 0.f)
+            if (beta->real == 0.f && beta->imag == 0.f)
             {
                 i__1 = leny;
                 for (i__ = 1;
@@ -243,7 +243,7 @@ int cgbmv_(char *trans, integer *m, integer *n, integer *kl, integer *ku, scompl
                         ++i__)
                 {
                     i__2 = iy;
-                    y[i__2].r = 0.f, y[i__2].i = 0.f;
+                    y[i__2].real = 0.f, y[i__2].imag = 0.f;
                     iy += *incy;
                     /* L30: */
                 }
@@ -257,15 +257,15 @@ int cgbmv_(char *trans, integer *m, integer *n, integer *kl, integer *ku, scompl
                 {
                     i__2 = iy;
                     i__3 = iy;
-                    q__1.r = beta->r * y[i__3].r - beta->i * y[i__3].i, q__1.i = beta->r * y[i__3].i + beta->i * y[i__3] .r;
-                    y[i__2].r = q__1.r, y[i__2].i = q__1.i;
+                    q__1.real = beta->real * y[i__3].real - beta->imag * y[i__3].imag, q__1.imag = beta->real * y[i__3].imag + beta->imag * y[i__3] .real;
+                    y[i__2].real = q__1.real, y[i__2].imag = q__1.imag;
                     iy += *incy;
                     /* L40: */
                 }
             }
         }
     }
-    if (alpha->r == 0.f && alpha->i == 0.f)
+    if (alpha->real == 0.f && alpha->imag == 0.f)
     {
         return 0;
     }
@@ -282,11 +282,11 @@ int cgbmv_(char *trans, integer *m, integer *n, integer *kl, integer *ku, scompl
                     ++j)
             {
                 i__2 = jx;
-                if (x[i__2].r != 0.f || x[i__2].i != 0.f)
+                if (x[i__2].real != 0.f || x[i__2].imag != 0.f)
                 {
                     i__2 = jx;
-                    q__1.r = alpha->r * x[i__2].r - alpha->i * x[i__2].i, q__1.i = alpha->r * x[i__2].i + alpha->i * x[i__2] .r;
-                    temp.r = q__1.r, temp.i = q__1.i;
+                    q__1.real = alpha->real * x[i__2].real - alpha->imag * x[i__2].imag, q__1.imag = alpha->real * x[i__2].imag + alpha->imag * x[i__2] .real;
+                    temp.real = q__1.real, temp.imag = q__1.imag;
                     k = kup1 - j;
                     /* Computing MAX */
                     i__2 = 1, i__3 = j - *ku;
@@ -300,9 +300,9 @@ int cgbmv_(char *trans, integer *m, integer *n, integer *kl, integer *ku, scompl
                         i__2 = i__;
                         i__3 = i__;
                         i__5 = k + i__ + j * a_dim1;
-                        q__2.r = temp.r * a[i__5].r - temp.i * a[i__5].i, q__2.i = temp.r * a[i__5].i + temp.i * a[i__5] .r;
-                        q__1.r = y[i__3].r + q__2.r, q__1.i = y[i__3].i + q__2.i;
-                        y[i__2].r = q__1.r, y[i__2].i = q__1.i;
+                        q__2.real = temp.real * a[i__5].real - temp.imag * a[i__5].imag, q__2.imag = temp.real * a[i__5].imag + temp.imag * a[i__5] .real;
+                        q__1.real = y[i__3].real + q__2.real, q__1.imag = y[i__3].imag + q__2.imag;
+                        y[i__2].real = q__1.real, y[i__2].imag = q__1.imag;
                         /* L50: */
                     }
                 }
@@ -318,11 +318,11 @@ int cgbmv_(char *trans, integer *m, integer *n, integer *kl, integer *ku, scompl
                     ++j)
             {
                 i__4 = jx;
-                if (x[i__4].r != 0.f || x[i__4].i != 0.f)
+                if (x[i__4].real != 0.f || x[i__4].imag != 0.f)
                 {
                     i__4 = jx;
-                    q__1.r = alpha->r * x[i__4].r - alpha->i * x[i__4].i, q__1.i = alpha->r * x[i__4].i + alpha->i * x[i__4] .r;
-                    temp.r = q__1.r, temp.i = q__1.i;
+                    q__1.real = alpha->real * x[i__4].real - alpha->imag * x[i__4].imag, q__1.imag = alpha->real * x[i__4].imag + alpha->imag * x[i__4] .real;
+                    temp.real = q__1.real, temp.imag = q__1.imag;
                     iy = ky;
                     k = kup1 - j;
                     /* Computing MAX */
@@ -337,9 +337,9 @@ int cgbmv_(char *trans, integer *m, integer *n, integer *kl, integer *ku, scompl
                         i__4 = iy;
                         i__2 = iy;
                         i__5 = k + i__ + j * a_dim1;
-                        q__2.r = temp.r * a[i__5].r - temp.i * a[i__5].i, q__2.i = temp.r * a[i__5].i + temp.i * a[i__5] .r;
-                        q__1.r = y[i__2].r + q__2.r, q__1.i = y[i__2].i + q__2.i;
-                        y[i__4].r = q__1.r, y[i__4].i = q__1.i;
+                        q__2.real = temp.real * a[i__5].real - temp.imag * a[i__5].imag, q__2.imag = temp.real * a[i__5].imag + temp.imag * a[i__5] .real;
+                        q__1.real = y[i__2].real + q__2.real, q__1.imag = y[i__2].imag + q__2.imag;
+                        y[i__4].real = q__1.real, y[i__4].imag = q__1.imag;
                         iy += *incy;
                         /* L70: */
                     }
@@ -364,7 +364,7 @@ int cgbmv_(char *trans, integer *m, integer *n, integer *kl, integer *ku, scompl
                     j <= i__1;
                     ++j)
             {
-                temp.r = 0.f, temp.i = 0.f;
+                temp.real = 0.f, temp.imag = 0.f;
                 k = kup1 - j;
                 if (noconj)
                 {
@@ -379,9 +379,9 @@ int cgbmv_(char *trans, integer *m, integer *n, integer *kl, integer *ku, scompl
                     {
                         i__3 = k + i__ + j * a_dim1;
                         i__4 = i__;
-                        q__2.r = a[i__3].r * x[i__4].r - a[i__3].i * x[i__4] .i, q__2.i = a[i__3].r * x[i__4].i + a[i__3] .i * x[i__4].r;
-                        q__1.r = temp.r + q__2.r, q__1.i = temp.i + q__2.i;
-                        temp.r = q__1.r, temp.i = q__1.i;
+                        q__2.real = a[i__3].real * x[i__4].real - a[i__3].imag * x[i__4] .imag, q__2.imag = a[i__3].real * x[i__4].imag + a[i__3] .imag * x[i__4].real;
+                        q__1.real = temp.real + q__2.real, q__1.imag = temp.imag + q__2.imag;
+                        temp.real = q__1.real, temp.imag = q__1.imag;
                         /* L90: */
                     }
                 }
@@ -398,17 +398,17 @@ int cgbmv_(char *trans, integer *m, integer *n, integer *kl, integer *ku, scompl
                     {
                         r_cnjg(&q__3, &a[k + i__ + j * a_dim1]);
                         i__2 = i__;
-                        q__2.r = q__3.r * x[i__2].r - q__3.i * x[i__2].i, q__2.i = q__3.r * x[i__2].i + q__3.i * x[i__2] .r;
-                        q__1.r = temp.r + q__2.r, q__1.i = temp.i + q__2.i;
-                        temp.r = q__1.r, temp.i = q__1.i;
+                        q__2.real = q__3.real * x[i__2].real - q__3.imag * x[i__2].imag, q__2.imag = q__3.real * x[i__2].imag + q__3.imag * x[i__2] .real;
+                        q__1.real = temp.real + q__2.real, q__1.imag = temp.imag + q__2.imag;
+                        temp.real = q__1.real, temp.imag = q__1.imag;
                         /* L100: */
                     }
                 }
                 i__4 = jy;
                 i__2 = jy;
-                q__2.r = alpha->r * temp.r - alpha->i * temp.i, q__2.i = alpha->r * temp.i + alpha->i * temp.r;
-                q__1.r = y[i__2].r + q__2.r, q__1.i = y[i__2].i + q__2.i;
-                y[i__4].r = q__1.r, y[i__4].i = q__1.i;
+                q__2.real = alpha->real * temp.real - alpha->imag * temp.imag, q__2.imag = alpha->real * temp.imag + alpha->imag * temp.real;
+                q__1.real = y[i__2].real + q__2.real, q__1.imag = y[i__2].imag + q__2.imag;
+                y[i__4].real = q__1.real, y[i__4].imag = q__1.imag;
                 jy += *incy;
                 /* L110: */
             }
@@ -420,7 +420,7 @@ int cgbmv_(char *trans, integer *m, integer *n, integer *kl, integer *ku, scompl
                     j <= i__1;
                     ++j)
             {
-                temp.r = 0.f, temp.i = 0.f;
+                temp.real = 0.f, temp.imag = 0.f;
                 ix = kx;
                 k = kup1 - j;
                 if (noconj)
@@ -436,9 +436,9 @@ int cgbmv_(char *trans, integer *m, integer *n, integer *kl, integer *ku, scompl
                     {
                         i__4 = k + i__ + j * a_dim1;
                         i__2 = ix;
-                        q__2.r = a[i__4].r * x[i__2].r - a[i__4].i * x[i__2] .i, q__2.i = a[i__4].r * x[i__2].i + a[i__4] .i * x[i__2].r;
-                        q__1.r = temp.r + q__2.r, q__1.i = temp.i + q__2.i;
-                        temp.r = q__1.r, temp.i = q__1.i;
+                        q__2.real = a[i__4].real * x[i__2].real - a[i__4].imag * x[i__2] .imag, q__2.imag = a[i__4].real * x[i__2].imag + a[i__4] .imag * x[i__2].real;
+                        q__1.real = temp.real + q__2.real, q__1.imag = temp.imag + q__2.imag;
+                        temp.real = q__1.real, temp.imag = q__1.imag;
                         ix += *incx;
                         /* L120: */
                     }
@@ -456,18 +456,18 @@ int cgbmv_(char *trans, integer *m, integer *n, integer *kl, integer *ku, scompl
                     {
                         r_cnjg(&q__3, &a[k + i__ + j * a_dim1]);
                         i__3 = ix;
-                        q__2.r = q__3.r * x[i__3].r - q__3.i * x[i__3].i, q__2.i = q__3.r * x[i__3].i + q__3.i * x[i__3] .r;
-                        q__1.r = temp.r + q__2.r, q__1.i = temp.i + q__2.i;
-                        temp.r = q__1.r, temp.i = q__1.i;
+                        q__2.real = q__3.real * x[i__3].real - q__3.imag * x[i__3].imag, q__2.imag = q__3.real * x[i__3].imag + q__3.imag * x[i__3] .real;
+                        q__1.real = temp.real + q__2.real, q__1.imag = temp.imag + q__2.imag;
+                        temp.real = q__1.real, temp.imag = q__1.imag;
                         ix += *incx;
                         /* L130: */
                     }
                 }
                 i__2 = jy;
                 i__3 = jy;
-                q__2.r = alpha->r * temp.r - alpha->i * temp.i, q__2.i = alpha->r * temp.i + alpha->i * temp.r;
-                q__1.r = y[i__3].r + q__2.r, q__1.i = y[i__3].i + q__2.i;
-                y[i__2].r = q__1.r, y[i__2].i = q__1.i;
+                q__2.real = alpha->real * temp.real - alpha->imag * temp.imag, q__2.imag = alpha->real * temp.imag + alpha->imag * temp.real;
+                q__1.real = y[i__3].real + q__2.real, q__1.imag = y[i__3].imag + q__2.imag;
+                y[i__2].real = q__1.real, y[i__2].imag = q__1.imag;
                 jy += *incy;
                 if (j > *ku)
                 {

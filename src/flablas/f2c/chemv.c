@@ -131,7 +131,7 @@ int chemv_(char *uplo, integer *n, scomplex *alpha, scomplex * a, integer *lda, 
         return 0;
     }
     /* Quick return if possible. */
-    if (*n == 0 || alpha->r == 0.f && alpha->i == 0.f && (beta->r == 1.f && beta->i == 0.f))
+    if (*n == 0 || alpha->real == 0.f && alpha->imag == 0.f && (beta->real == 1.f && beta->imag == 0.f))
     {
         return 0;
     }
@@ -156,11 +156,11 @@ int chemv_(char *uplo, integer *n, scomplex *alpha, scomplex * a, integer *lda, 
     /* accessed sequentially with one pass through the triangular part */
     /* of A. */
     /* First form y := beta*y. */
-    if (beta->r != 1.f || beta->i != 0.f)
+    if (beta->real != 1.f || beta->imag != 0.f)
     {
         if (*incy == 1)
         {
-            if (beta->r == 0.f && beta->i == 0.f)
+            if (beta->real == 0.f && beta->imag == 0.f)
             {
                 i__1 = *n;
                 for (i__ = 1;
@@ -168,7 +168,7 @@ int chemv_(char *uplo, integer *n, scomplex *alpha, scomplex * a, integer *lda, 
                         ++i__)
                 {
                     i__2 = i__;
-                    y[i__2].r = 0.f, y[i__2].i = 0.f;
+                    y[i__2].real = 0.f, y[i__2].imag = 0.f;
                     /* L10: */
                 }
             }
@@ -181,8 +181,8 @@ int chemv_(char *uplo, integer *n, scomplex *alpha, scomplex * a, integer *lda, 
                 {
                     i__2 = i__;
                     i__3 = i__;
-                    q__1.r = beta->r * y[i__3].r - beta->i * y[i__3].i, q__1.i = beta->r * y[i__3].i + beta->i * y[i__3] .r;
-                    y[i__2].r = q__1.r, y[i__2].i = q__1.i;
+                    q__1.real = beta->real * y[i__3].real - beta->imag * y[i__3].imag, q__1.imag = beta->real * y[i__3].imag + beta->imag * y[i__3] .real;
+                    y[i__2].real = q__1.real, y[i__2].imag = q__1.imag;
                     /* L20: */
                 }
             }
@@ -190,7 +190,7 @@ int chemv_(char *uplo, integer *n, scomplex *alpha, scomplex * a, integer *lda, 
         else
         {
             iy = ky;
-            if (beta->r == 0.f && beta->i == 0.f)
+            if (beta->real == 0.f && beta->imag == 0.f)
             {
                 i__1 = *n;
                 for (i__ = 1;
@@ -198,7 +198,7 @@ int chemv_(char *uplo, integer *n, scomplex *alpha, scomplex * a, integer *lda, 
                         ++i__)
                 {
                     i__2 = iy;
-                    y[i__2].r = 0.f, y[i__2].i = 0.f;
+                    y[i__2].real = 0.f, y[i__2].imag = 0.f;
                     iy += *incy;
                     /* L30: */
                 }
@@ -212,15 +212,15 @@ int chemv_(char *uplo, integer *n, scomplex *alpha, scomplex * a, integer *lda, 
                 {
                     i__2 = iy;
                     i__3 = iy;
-                    q__1.r = beta->r * y[i__3].r - beta->i * y[i__3].i, q__1.i = beta->r * y[i__3].i + beta->i * y[i__3] .r;
-                    y[i__2].r = q__1.r, y[i__2].i = q__1.i;
+                    q__1.real = beta->real * y[i__3].real - beta->imag * y[i__3].imag, q__1.imag = beta->real * y[i__3].imag + beta->imag * y[i__3] .real;
+                    y[i__2].real = q__1.real, y[i__2].imag = q__1.imag;
                     iy += *incy;
                     /* L40: */
                 }
             }
         }
     }
-    if (alpha->r == 0.f && alpha->i == 0.f)
+    if (alpha->real == 0.f && alpha->imag == 0.f)
     {
         return 0;
     }
@@ -235,9 +235,9 @@ int chemv_(char *uplo, integer *n, scomplex *alpha, scomplex * a, integer *lda, 
                     ++j)
             {
                 i__2 = j;
-                q__1.r = alpha->r * x[i__2].r - alpha->i * x[i__2].i, q__1.i = alpha->r * x[i__2].i + alpha->i * x[i__2].r;
-                temp1.r = q__1.r, temp1.i = q__1.i;
-                temp2.r = 0.f, temp2.i = 0.f;
+                q__1.real = alpha->real * x[i__2].real - alpha->imag * x[i__2].imag, q__1.imag = alpha->real * x[i__2].imag + alpha->imag * x[i__2].real;
+                temp1.real = q__1.real, temp1.imag = q__1.imag;
+                temp2.real = 0.f, temp2.imag = 0.f;
                 i__2 = j - 1;
                 for (i__ = 1;
                         i__ <= i__2;
@@ -246,25 +246,25 @@ int chemv_(char *uplo, integer *n, scomplex *alpha, scomplex * a, integer *lda, 
                     i__3 = i__;
                     i__4 = i__;
                     i__5 = i__ + j * a_dim1;
-                    q__2.r = temp1.r * a[i__5].r - temp1.i * a[i__5].i, q__2.i = temp1.r * a[i__5].i + temp1.i * a[i__5] .r;
-                    q__1.r = y[i__4].r + q__2.r, q__1.i = y[i__4].i + q__2.i;
-                    y[i__3].r = q__1.r, y[i__3].i = q__1.i;
+                    q__2.real = temp1.real * a[i__5].real - temp1.imag * a[i__5].imag, q__2.imag = temp1.real * a[i__5].imag + temp1.imag * a[i__5] .real;
+                    q__1.real = y[i__4].real + q__2.real, q__1.imag = y[i__4].imag + q__2.imag;
+                    y[i__3].real = q__1.real, y[i__3].imag = q__1.imag;
                     r_cnjg(&q__3, &a[i__ + j * a_dim1]);
                     i__3 = i__;
-                    q__2.r = q__3.r * x[i__3].r - q__3.i * x[i__3].i, q__2.i = q__3.r * x[i__3].i + q__3.i * x[i__3].r;
-                    q__1.r = temp2.r + q__2.r, q__1.i = temp2.i + q__2.i;
-                    temp2.r = q__1.r, temp2.i = q__1.i;
+                    q__2.real = q__3.real * x[i__3].real - q__3.imag * x[i__3].imag, q__2.imag = q__3.real * x[i__3].imag + q__3.imag * x[i__3].real;
+                    q__1.real = temp2.real + q__2.real, q__1.imag = temp2.imag + q__2.imag;
+                    temp2.real = q__1.real, temp2.imag = q__1.imag;
                     /* L50: */
                 }
                 i__2 = j;
                 i__3 = j;
                 i__4 = j + j * a_dim1;
-                r__1 = a[i__4].r;
-                q__3.r = r__1 * temp1.r, q__3.i = r__1 * temp1.i;
-                q__2.r = y[i__3].r + q__3.r, q__2.i = y[i__3].i + q__3.i;
-                q__4.r = alpha->r * temp2.r - alpha->i * temp2.i, q__4.i = alpha->r * temp2.i + alpha->i * temp2.r;
-                q__1.r = q__2.r + q__4.r, q__1.i = q__2.i + q__4.i;
-                y[i__2].r = q__1.r, y[i__2].i = q__1.i;
+                r__1 = a[i__4].real;
+                q__3.real = r__1 * temp1.real, q__3.imag = r__1 * temp1.imag;
+                q__2.real = y[i__3].real + q__3.real, q__2.imag = y[i__3].imag + q__3.imag;
+                q__4.real = alpha->real * temp2.real - alpha->imag * temp2.imag, q__4.imag = alpha->real * temp2.imag + alpha->imag * temp2.real;
+                q__1.real = q__2.real + q__4.real, q__1.imag = q__2.imag + q__4.imag;
+                y[i__2].real = q__1.real, y[i__2].imag = q__1.imag;
                 /* L60: */
             }
         }
@@ -278,9 +278,9 @@ int chemv_(char *uplo, integer *n, scomplex *alpha, scomplex * a, integer *lda, 
                     ++j)
             {
                 i__2 = jx;
-                q__1.r = alpha->r * x[i__2].r - alpha->i * x[i__2].i, q__1.i = alpha->r * x[i__2].i + alpha->i * x[i__2].r;
-                temp1.r = q__1.r, temp1.i = q__1.i;
-                temp2.r = 0.f, temp2.i = 0.f;
+                q__1.real = alpha->real * x[i__2].real - alpha->imag * x[i__2].imag, q__1.imag = alpha->real * x[i__2].imag + alpha->imag * x[i__2].real;
+                temp1.real = q__1.real, temp1.imag = q__1.imag;
+                temp2.real = 0.f, temp2.imag = 0.f;
                 ix = kx;
                 iy = ky;
                 i__2 = j - 1;
@@ -291,14 +291,14 @@ int chemv_(char *uplo, integer *n, scomplex *alpha, scomplex * a, integer *lda, 
                     i__3 = iy;
                     i__4 = iy;
                     i__5 = i__ + j * a_dim1;
-                    q__2.r = temp1.r * a[i__5].r - temp1.i * a[i__5].i, q__2.i = temp1.r * a[i__5].i + temp1.i * a[i__5] .r;
-                    q__1.r = y[i__4].r + q__2.r, q__1.i = y[i__4].i + q__2.i;
-                    y[i__3].r = q__1.r, y[i__3].i = q__1.i;
+                    q__2.real = temp1.real * a[i__5].real - temp1.imag * a[i__5].imag, q__2.imag = temp1.real * a[i__5].imag + temp1.imag * a[i__5] .real;
+                    q__1.real = y[i__4].real + q__2.real, q__1.imag = y[i__4].imag + q__2.imag;
+                    y[i__3].real = q__1.real, y[i__3].imag = q__1.imag;
                     r_cnjg(&q__3, &a[i__ + j * a_dim1]);
                     i__3 = ix;
-                    q__2.r = q__3.r * x[i__3].r - q__3.i * x[i__3].i, q__2.i = q__3.r * x[i__3].i + q__3.i * x[i__3].r;
-                    q__1.r = temp2.r + q__2.r, q__1.i = temp2.i + q__2.i;
-                    temp2.r = q__1.r, temp2.i = q__1.i;
+                    q__2.real = q__3.real * x[i__3].real - q__3.imag * x[i__3].imag, q__2.imag = q__3.real * x[i__3].imag + q__3.imag * x[i__3].real;
+                    q__1.real = temp2.real + q__2.real, q__1.imag = temp2.imag + q__2.imag;
+                    temp2.real = q__1.real, temp2.imag = q__1.imag;
                     ix += *incx;
                     iy += *incy;
                     /* L70: */
@@ -306,12 +306,12 @@ int chemv_(char *uplo, integer *n, scomplex *alpha, scomplex * a, integer *lda, 
                 i__2 = jy;
                 i__3 = jy;
                 i__4 = j + j * a_dim1;
-                r__1 = a[i__4].r;
-                q__3.r = r__1 * temp1.r, q__3.i = r__1 * temp1.i;
-                q__2.r = y[i__3].r + q__3.r, q__2.i = y[i__3].i + q__3.i;
-                q__4.r = alpha->r * temp2.r - alpha->i * temp2.i, q__4.i = alpha->r * temp2.i + alpha->i * temp2.r;
-                q__1.r = q__2.r + q__4.r, q__1.i = q__2.i + q__4.i;
-                y[i__2].r = q__1.r, y[i__2].i = q__1.i;
+                r__1 = a[i__4].real;
+                q__3.real = r__1 * temp1.real, q__3.imag = r__1 * temp1.imag;
+                q__2.real = y[i__3].real + q__3.real, q__2.imag = y[i__3].imag + q__3.imag;
+                q__4.real = alpha->real * temp2.real - alpha->imag * temp2.imag, q__4.imag = alpha->real * temp2.imag + alpha->imag * temp2.real;
+                q__1.real = q__2.real + q__4.real, q__1.imag = q__2.imag + q__4.imag;
+                y[i__2].real = q__1.real, y[i__2].imag = q__1.imag;
                 jx += *incx;
                 jy += *incy;
                 /* L80: */
@@ -329,16 +329,16 @@ int chemv_(char *uplo, integer *n, scomplex *alpha, scomplex * a, integer *lda, 
                     ++j)
             {
                 i__2 = j;
-                q__1.r = alpha->r * x[i__2].r - alpha->i * x[i__2].i, q__1.i = alpha->r * x[i__2].i + alpha->i * x[i__2].r;
-                temp1.r = q__1.r, temp1.i = q__1.i;
-                temp2.r = 0.f, temp2.i = 0.f;
+                q__1.real = alpha->real * x[i__2].real - alpha->imag * x[i__2].imag, q__1.imag = alpha->real * x[i__2].imag + alpha->imag * x[i__2].real;
+                temp1.real = q__1.real, temp1.imag = q__1.imag;
+                temp2.real = 0.f, temp2.imag = 0.f;
                 i__2 = j;
                 i__3 = j;
                 i__4 = j + j * a_dim1;
-                r__1 = a[i__4].r;
-                q__2.r = r__1 * temp1.r, q__2.i = r__1 * temp1.i;
-                q__1.r = y[i__3].r + q__2.r, q__1.i = y[i__3].i + q__2.i;
-                y[i__2].r = q__1.r, y[i__2].i = q__1.i;
+                r__1 = a[i__4].real;
+                q__2.real = r__1 * temp1.real, q__2.imag = r__1 * temp1.imag;
+                q__1.real = y[i__3].real + q__2.real, q__1.imag = y[i__3].imag + q__2.imag;
+                y[i__2].real = q__1.real, y[i__2].imag = q__1.imag;
                 i__2 = *n;
                 for (i__ = j + 1;
                         i__ <= i__2;
@@ -347,21 +347,21 @@ int chemv_(char *uplo, integer *n, scomplex *alpha, scomplex * a, integer *lda, 
                     i__3 = i__;
                     i__4 = i__;
                     i__5 = i__ + j * a_dim1;
-                    q__2.r = temp1.r * a[i__5].r - temp1.i * a[i__5].i, q__2.i = temp1.r * a[i__5].i + temp1.i * a[i__5] .r;
-                    q__1.r = y[i__4].r + q__2.r, q__1.i = y[i__4].i + q__2.i;
-                    y[i__3].r = q__1.r, y[i__3].i = q__1.i;
+                    q__2.real = temp1.real * a[i__5].real - temp1.imag * a[i__5].imag, q__2.imag = temp1.real * a[i__5].imag + temp1.imag * a[i__5] .real;
+                    q__1.real = y[i__4].real + q__2.real, q__1.imag = y[i__4].imag + q__2.imag;
+                    y[i__3].real = q__1.real, y[i__3].imag = q__1.imag;
                     r_cnjg(&q__3, &a[i__ + j * a_dim1]);
                     i__3 = i__;
-                    q__2.r = q__3.r * x[i__3].r - q__3.i * x[i__3].i, q__2.i = q__3.r * x[i__3].i + q__3.i * x[i__3].r;
-                    q__1.r = temp2.r + q__2.r, q__1.i = temp2.i + q__2.i;
-                    temp2.r = q__1.r, temp2.i = q__1.i;
+                    q__2.real = q__3.real * x[i__3].real - q__3.imag * x[i__3].imag, q__2.imag = q__3.real * x[i__3].imag + q__3.imag * x[i__3].real;
+                    q__1.real = temp2.real + q__2.real, q__1.imag = temp2.imag + q__2.imag;
+                    temp2.real = q__1.real, temp2.imag = q__1.imag;
                     /* L90: */
                 }
                 i__2 = j;
                 i__3 = j;
-                q__2.r = alpha->r * temp2.r - alpha->i * temp2.i, q__2.i = alpha->r * temp2.i + alpha->i * temp2.r;
-                q__1.r = y[i__3].r + q__2.r, q__1.i = y[i__3].i + q__2.i;
-                y[i__2].r = q__1.r, y[i__2].i = q__1.i;
+                q__2.real = alpha->real * temp2.real - alpha->imag * temp2.imag, q__2.imag = alpha->real * temp2.imag + alpha->imag * temp2.real;
+                q__1.real = y[i__3].real + q__2.real, q__1.imag = y[i__3].imag + q__2.imag;
+                y[i__2].real = q__1.real, y[i__2].imag = q__1.imag;
                 /* L100: */
             }
         }
@@ -375,16 +375,16 @@ int chemv_(char *uplo, integer *n, scomplex *alpha, scomplex * a, integer *lda, 
                     ++j)
             {
                 i__2 = jx;
-                q__1.r = alpha->r * x[i__2].r - alpha->i * x[i__2].i, q__1.i = alpha->r * x[i__2].i + alpha->i * x[i__2].r;
-                temp1.r = q__1.r, temp1.i = q__1.i;
-                temp2.r = 0.f, temp2.i = 0.f;
+                q__1.real = alpha->real * x[i__2].real - alpha->imag * x[i__2].imag, q__1.imag = alpha->real * x[i__2].imag + alpha->imag * x[i__2].real;
+                temp1.real = q__1.real, temp1.imag = q__1.imag;
+                temp2.real = 0.f, temp2.imag = 0.f;
                 i__2 = jy;
                 i__3 = jy;
                 i__4 = j + j * a_dim1;
-                r__1 = a[i__4].r;
-                q__2.r = r__1 * temp1.r, q__2.i = r__1 * temp1.i;
-                q__1.r = y[i__3].r + q__2.r, q__1.i = y[i__3].i + q__2.i;
-                y[i__2].r = q__1.r, y[i__2].i = q__1.i;
+                r__1 = a[i__4].real;
+                q__2.real = r__1 * temp1.real, q__2.imag = r__1 * temp1.imag;
+                q__1.real = y[i__3].real + q__2.real, q__1.imag = y[i__3].imag + q__2.imag;
+                y[i__2].real = q__1.real, y[i__2].imag = q__1.imag;
                 ix = jx;
                 iy = jy;
                 i__2 = *n;
@@ -397,21 +397,21 @@ int chemv_(char *uplo, integer *n, scomplex *alpha, scomplex * a, integer *lda, 
                     i__3 = iy;
                     i__4 = iy;
                     i__5 = i__ + j * a_dim1;
-                    q__2.r = temp1.r * a[i__5].r - temp1.i * a[i__5].i, q__2.i = temp1.r * a[i__5].i + temp1.i * a[i__5] .r;
-                    q__1.r = y[i__4].r + q__2.r, q__1.i = y[i__4].i + q__2.i;
-                    y[i__3].r = q__1.r, y[i__3].i = q__1.i;
+                    q__2.real = temp1.real * a[i__5].real - temp1.imag * a[i__5].imag, q__2.imag = temp1.real * a[i__5].imag + temp1.imag * a[i__5] .real;
+                    q__1.real = y[i__4].real + q__2.real, q__1.imag = y[i__4].imag + q__2.imag;
+                    y[i__3].real = q__1.real, y[i__3].imag = q__1.imag;
                     r_cnjg(&q__3, &a[i__ + j * a_dim1]);
                     i__3 = ix;
-                    q__2.r = q__3.r * x[i__3].r - q__3.i * x[i__3].i, q__2.i = q__3.r * x[i__3].i + q__3.i * x[i__3].r;
-                    q__1.r = temp2.r + q__2.r, q__1.i = temp2.i + q__2.i;
-                    temp2.r = q__1.r, temp2.i = q__1.i;
+                    q__2.real = q__3.real * x[i__3].real - q__3.imag * x[i__3].imag, q__2.imag = q__3.real * x[i__3].imag + q__3.imag * x[i__3].real;
+                    q__1.real = temp2.real + q__2.real, q__1.imag = temp2.imag + q__2.imag;
+                    temp2.real = q__1.real, temp2.imag = q__1.imag;
                     /* L110: */
                 }
                 i__2 = jy;
                 i__3 = jy;
-                q__2.r = alpha->r * temp2.r - alpha->i * temp2.i, q__2.i = alpha->r * temp2.i + alpha->i * temp2.r;
-                q__1.r = y[i__3].r + q__2.r, q__1.i = y[i__3].i + q__2.i;
-                y[i__2].r = q__1.r, y[i__2].i = q__1.i;
+                q__2.real = alpha->real * temp2.real - alpha->imag * temp2.imag, q__2.imag = alpha->real * temp2.imag + alpha->imag * temp2.real;
+                q__1.real = y[i__3].real + q__2.real, q__1.imag = y[i__3].imag + q__2.imag;
+                y[i__2].real = q__1.real, y[i__2].imag = q__1.imag;
                 jx += *incx;
                 jy += *incy;
                 /* L120: */

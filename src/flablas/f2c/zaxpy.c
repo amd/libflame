@@ -49,9 +49,9 @@ int zaxpy_(integer *n, dcomplex *za, dcomplex *zx, integer *incx, dcomplex *zy, 
         i__2 = iy;
         i__3 = iy;
         i__4 = ix;
-        z__2.r = za->r * zx[i__4].r - za->i * zx[i__4].i, z__2.i = za->r * zx[ i__4].i + za->i * zx[i__4].r;
-        z__1.r = zy[i__3].r + z__2.r, z__1.i = zy[i__3].i + z__2.i;
-        zy[i__2].r = z__1.r, zy[i__2].i = z__1.i;
+        z__2.real = za->real * zx[i__4].real - za->imag * zx[i__4].imag, z__2.imag = za->real * zx[ i__4].imag + za->imag * zx[i__4].real;
+        z__1.real = zy[i__3].real + z__2.real, z__1.imag = zy[i__3].imag + z__2.imag;
+        zy[i__2].real = z__1.real, zy[i__2].imag = z__1.imag;
         ix += *incx;
         iy += *incy;
         /* L10: */
@@ -67,9 +67,9 @@ L20:
         i__2 = i__;
         i__3 = i__;
         i__4 = i__;
-        z__2.r = za->r * zx[i__4].r - za->i * zx[i__4].i, z__2.i = za->r * zx[ i__4].i + za->i * zx[i__4].r;
-        z__1.r = zy[i__3].r + z__2.r, z__1.i = zy[i__3].i + z__2.i;
-        zy[i__2].r = z__1.r, zy[i__2].i = z__1.i;
+        z__2.real = za->real * zx[i__4].real - za->imag * zx[i__4].imag, z__2.imag = za->real * zx[ i__4].imag + za->imag * zx[i__4].real;
+        z__1.real = zy[i__3].real + z__2.real, z__1.imag = zy[i__3].imag + z__2.imag;
+        zy[i__2].real = z__1.real, zy[i__2].imag = z__1.imag;
         /* L30: */
     }
     return 0;

@@ -4,7 +4,7 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static dcomplex c_b1 = {{1.}, {0.}};
+static dcomplex c_b1 = {1., 0.};
 static aocl_int64_t c__1 = 1;
 static aocl_int64_t c__65 = 65;
 /* > \brief \b ZGBTRF */
@@ -291,8 +291,8 @@ void aocl_lapack_zgbtrf(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *kl, aocl
             for(i__ = 1; i__ <= i__2; ++i__)
             {
                 i__3 = i__ + j * 65 - 66;
-                work13[i__3].r = 0.;
-                work13[i__3].i = 0.; // , expr subst
+                work13[i__3].real = 0.;
+                work13[i__3].imag = 0.; // , expr subst
                 /* L10: */
             }
             /* L20: */
@@ -305,8 +305,8 @@ void aocl_lapack_zgbtrf(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *kl, aocl
             for(i__ = j + 1; i__ <= i__2; ++i__)
             {
                 i__3 = i__ + j * 65 - 66;
-                work31[i__3].r = 0.;
-                work31[i__3].i = 0.; // , expr subst
+                work31[i__3].real = 0.;
+                work31[i__3].imag = 0.; // , expr subst
                 /* L30: */
             }
             /* L40: */
@@ -320,8 +320,8 @@ void aocl_lapack_zgbtrf(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *kl, aocl
             for(i__ = kv - j + 2; i__ <= i__2; ++i__)
             {
                 i__3 = i__ + j * ab_dim1;
-                ab[i__3].r = 0.;
-                ab[i__3].i = 0.; // , expr subst
+                ab[i__3].real = 0.;
+                ab[i__3].imag = 0.; // , expr subst
                 /* L50: */
             }
             /* L60: */
@@ -376,8 +376,8 @@ void aocl_lapack_zgbtrf(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *kl, aocl
                     for(i__ = 1; i__ <= i__4; ++i__)
                     {
                         i__5 = i__ + (jj + kv) * ab_dim1;
-                        ab[i__5].r = 0.;
-                        ab[i__5].i = 0.; // , expr subst
+                        ab[i__5].real = 0.;
+                        ab[i__5].imag = 0.; // , expr subst
                         /* L70: */
                     }
                 }
@@ -391,7 +391,7 @@ void aocl_lapack_zgbtrf(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *kl, aocl
                 jp = aocl_blas_izamax(&i__4, &ab[kv + 1 + jj * ab_dim1], &c__1);
                 ipiv[jj] = (aocl_int_t)(jp + jj - j);
                 i__4 = kv + jp + jj * ab_dim1;
-                if(ab[i__4].r != 0. || ab[i__4].i != 0.)
+                if(ab[i__4].real != 0. || ab[i__4].imag != 0.)
                 {
                     /* Computing MAX */
                     /* Computing MIN */
@@ -437,8 +437,8 @@ void aocl_lapack_zgbtrf(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *kl, aocl
                     if(jm > jj)
                     {
                         i__4 = jm - jj;
-                        z__1.r = -1.;
-                        z__1.i = -0.; // , expr subst
+                        z__1.real = -1.;
+                        z__1.imag = -0.; // , expr subst
                         i__5 = *ldab - 1;
                         i__6 = *ldab - 1;
                         aocl_blas_zgeru(&km, &i__4, &z__1, &ab[kv + 2 + jj * ab_dim1], &c__1,
@@ -502,15 +502,15 @@ void aocl_lapack_zgbtrf(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *kl, aocl
                         if(ip != ii)
                         {
                             i__5 = kv + 1 + ii - jj + jj * ab_dim1;
-                            temp.r = ab[i__5].r;
-                            temp.i = ab[i__5].i; // , expr subst
+                            temp.real = ab[i__5].real;
+                            temp.imag = ab[i__5].imag; // , expr subst
                             i__5 = kv + 1 + ii - jj + jj * ab_dim1;
                             i__6 = kv + 1 + ip - jj + jj * ab_dim1;
-                            ab[i__5].r = ab[i__6].r;
-                            ab[i__5].i = ab[i__6].i; // , expr subst
+                            ab[i__5].real = ab[i__6].real;
+                            ab[i__5].imag = ab[i__6].imag; // , expr subst
                             i__5 = kv + 1 + ip - jj + jj * ab_dim1;
-                            ab[i__5].r = temp.r;
-                            ab[i__5].i = temp.i; // , expr subst
+                            ab[i__5].real = temp.real;
+                            ab[i__5].imag = temp.imag; // , expr subst
                         }
                         /* L100: */
                     }
@@ -528,8 +528,8 @@ void aocl_lapack_zgbtrf(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *kl, aocl
                     if(i2 > 0)
                     {
                         /* Update A22 */
-                        z__1.r = -1.;
-                        z__1.i = -0.; // , expr subst
+                        z__1.real = -1.;
+                        z__1.imag = -0.; // , expr subst
                         i__3 = *ldab - 1;
                         i__4 = *ldab - 1;
                         i__5 = *ldab - 1;
@@ -541,8 +541,8 @@ void aocl_lapack_zgbtrf(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *kl, aocl
                     if(i3 > 0)
                     {
                         /* Update A32 */
-                        z__1.r = -1.;
-                        z__1.i = -0.; // , expr subst
+                        z__1.real = -1.;
+                        z__1.imag = -0.; // , expr subst
                         i__3 = *ldab - 1;
                         i__4 = *ldab - 1;
                         aocl_blas_zgemm("No transpose", "No transpose", &i3, &j2, &jb, &z__1,
@@ -563,8 +563,8 @@ void aocl_lapack_zgbtrf(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *kl, aocl
                         {
                             i__5 = ii + jj * 65 - 66;
                             i__6 = ii - jj + 1 + (jj + j + kv - 1) * ab_dim1;
-                            work13[i__5].r = ab[i__6].r;
-                            work13[i__5].i = ab[i__6].i; // , expr subst
+                            work13[i__5].real = ab[i__6].real;
+                            work13[i__5].imag = ab[i__6].imag; // , expr subst
                             /* L120: */
                         }
                         /* L130: */
@@ -576,8 +576,8 @@ void aocl_lapack_zgbtrf(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *kl, aocl
                     if(i2 > 0)
                     {
                         /* Update A23 */
-                        z__1.r = -1.;
-                        z__1.i = -0.; // , expr subst
+                        z__1.real = -1.;
+                        z__1.imag = -0.; // , expr subst
                         i__3 = *ldab - 1;
                         i__4 = *ldab - 1;
                         aocl_blas_zgemm("No transpose", "No transpose", &i2, &j3, &jb, &z__1,
@@ -587,8 +587,8 @@ void aocl_lapack_zgbtrf(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *kl, aocl
                     if(i3 > 0)
                     {
                         /* Update A33 */
-                        z__1.r = -1.;
-                        z__1.i = -0.; // , expr subst
+                        z__1.real = -1.;
+                        z__1.imag = -0.; // , expr subst
                         i__3 = *ldab - 1;
                         aocl_blas_zgemm("No transpose", "No transpose", &i3, &j3, &jb, &z__1,
                                         work31, &c__65, work13, &c__65, &c_b1,
@@ -603,8 +603,8 @@ void aocl_lapack_zgbtrf(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *kl, aocl
                         {
                             i__5 = ii - jj + 1 + (jj + j + kv - 1) * ab_dim1;
                             i__6 = ii + jj * 65 - 66;
-                            ab[i__5].r = work13[i__6].r;
-                            ab[i__5].i = work13[i__6].i; // , expr subst
+                            ab[i__5].real = work13[i__6].real;
+                            ab[i__5].imag = work13[i__6].imag; // , expr subst
                             /* L140: */
                         }
                         /* L150: */

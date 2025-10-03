@@ -464,8 +464,8 @@ void aocl_lapack_ztrsna(char *job, char *howmny, logical *select, aocl_int64_t *
             /* Compute the reciprocal condition number of the k-th */
             /* eigenvalue. */
             aocl_lapack_zdotc_f2c(&z__1, n, &vr[ks * vr_dim1 + 1], &c__1, &vl[ks * vl_dim1 + 1], &c__1);
-            prod.r = z__1.r;
-            prod.i = z__1.i; // , expr subst
+            prod.real = z__1.real;
+            prod.imag = z__1.imag; // , expr subst
             rnrm = aocl_blas_dznrm2(n, &vr[ks * vr_dim1 + 1], &c__1);
             lnrm = aocl_blas_dznrm2(n, &vl[ks * vl_dim1 + 1], &c__1);
             s[ks] = z_abs(&prod) / (rnrm * lnrm);
@@ -486,10 +486,10 @@ void aocl_lapack_ztrsna(char *job, char *howmny, logical *select, aocl_int64_t *
                 i__3 = i__ + i__ * work_dim1;
                 i__4 = i__ + i__ * work_dim1;
                 i__5 = work_dim1 + 1;
-                z__1.r = work[i__4].r - work[i__5].r;
-                z__1.i = work[i__4].i - work[i__5].i; // , expr subst
-                work[i__3].r = z__1.r;
-                work[i__3].i = z__1.i; // , expr subst
+                z__1.real = work[i__4].real - work[i__5].real;
+                z__1.imag = work[i__4].imag - work[i__5].imag; // , expr subst
+                work[i__3].real = z__1.real;
+                work[i__3].imag = z__1.imag; // , expr subst
                 /* L20: */
             }
             /* Estimate a lower bound for the 1-norm of inv(C**H). The 1st */
@@ -528,7 +528,7 @@ void aocl_lapack_ztrsna(char *job, char *howmny, logical *select, aocl_int64_t *
                     i__2 = *n - 1;
                     ix = aocl_blas_izamax(&i__2, &work[work_offset], &c__1);
                     i__2 = ix + work_dim1;
-                    xnorm = (d__1 = work[i__2].r, f2c_abs(d__1))
+                    xnorm = (d__1 = work[i__2].real, f2c_abs(d__1))
                             + (d__2 = d_imag(&work[ix + work_dim1]), f2c_abs(d__2));
                     if(scale < xnorm * smlnum || scale == 0.)
                     {

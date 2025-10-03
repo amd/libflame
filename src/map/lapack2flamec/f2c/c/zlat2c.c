@@ -179,7 +179,7 @@ void aocl_lapack_zlat2c(char *uplo, aocl_int64_t *n, dcomplex *a, aocl_int64_t *
             {
                 i__3 = i__ + j * a_dim1;
                 i__4 = i__ + j * a_dim1;
-                if(a[i__3].r < -rmax || a[i__4].r > rmax || d_imag(&a[i__ + j * a_dim1]) < -rmax
+                if(a[i__3].real < -rmax || a[i__4].real > rmax || d_imag(&a[i__ + j * a_dim1]) < -rmax
                    || d_imag(&a[i__ + j * a_dim1]) > rmax)
                 {
                     *info = 1;
@@ -187,8 +187,8 @@ void aocl_lapack_zlat2c(char *uplo, aocl_int64_t *n, dcomplex *a, aocl_int64_t *
                 }
                 i__3 = i__ + j * sa_dim1;
                 i__4 = i__ + j * a_dim1;
-                sa[i__3].r = a[i__4].r;
-                sa[i__3].i = a[i__4].i; // , expr subst
+                sa[i__3].real = a[i__4].real;
+                sa[i__3].imag = a[i__4].imag; // , expr subst
                 /* L10: */
             }
             /* L20: */
@@ -204,7 +204,7 @@ void aocl_lapack_zlat2c(char *uplo, aocl_int64_t *n, dcomplex *a, aocl_int64_t *
             {
                 i__3 = i__ + j * a_dim1;
                 i__4 = i__ + j * a_dim1;
-                if(a[i__3].r < -rmax || a[i__4].r > rmax || d_imag(&a[i__ + j * a_dim1]) < -rmax
+                if(a[i__3].real < -rmax || a[i__4].real > rmax || d_imag(&a[i__ + j * a_dim1]) < -rmax
                    || d_imag(&a[i__ + j * a_dim1]) > rmax)
                 {
                     *info = 1;
@@ -212,8 +212,8 @@ void aocl_lapack_zlat2c(char *uplo, aocl_int64_t *n, dcomplex *a, aocl_int64_t *
                 }
                 i__3 = i__ + j * sa_dim1;
                 i__4 = i__ + j * a_dim1;
-                sa[i__3].r = a[i__4].r;
-                sa[i__3].i = a[i__4].i; // , expr subst
+                sa[i__3].real = a[i__4].real;
+                sa[i__3].imag = a[i__4].imag; // , expr subst
                 /* L30: */
             }
             /* L40: */

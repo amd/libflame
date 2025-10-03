@@ -239,7 +239,7 @@ void aocl_lapack_ztptrs(char *uplo, char *trans, char *diag, aocl_int64_t *n, ao
             for(*info = 1; *info <= i__1; ++(*info))
             {
                 i__2 = jc + *info - 1;
-                if(ap[i__2].r == 0. && ap[i__2].i == 0.)
+                if(ap[i__2].real == 0. && ap[i__2].imag == 0.)
                 {
                     AOCL_DTL_TRACE_LOG_EXIT
                     return;
@@ -255,7 +255,7 @@ void aocl_lapack_ztptrs(char *uplo, char *trans, char *diag, aocl_int64_t *n, ao
             for(*info = 1; *info <= i__1; ++(*info))
             {
                 i__2 = jc;
-                if(ap[i__2].r == 0. && ap[i__2].i == 0.)
+                if(ap[i__2].real == 0. && ap[i__2].imag == 0.)
                 {
                     AOCL_DTL_TRACE_LOG_EXIT
                     return;

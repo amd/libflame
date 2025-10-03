@@ -211,15 +211,15 @@ void aocl_lapack_cungl2(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *k, scomp
             for(l = *k + 1; l <= i__2; ++l)
             {
                 i__3 = l + j * a_dim1;
-                a[i__3].r = 0.f;
-                a[i__3].i = 0.f; // , expr subst
+                a[i__3].real = 0.f;
+                a[i__3].imag = 0.f; // , expr subst
                 /* L10: */
             }
             if(j > *k && j <= *m)
             {
                 i__2 = j + j * a_dim1;
-                a[i__2].r = 1.f;
-                a[i__2].i = 0.f; // , expr subst
+                a[i__2].real = 1.f;
+                a[i__2].imag = 0.f; // , expr subst
             }
             /* L20: */
         }
@@ -234,8 +234,8 @@ void aocl_lapack_cungl2(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *k, scomp
             if(i__ < *m)
             {
                 i__1 = i__ + i__ * a_dim1;
-                a[i__1].r = 1.f;
-                a[i__1].i = 0.f; // , expr subst
+                a[i__1].real = 1.f;
+                a[i__1].imag = 0.f; // , expr subst
                 i__1 = *m - i__;
                 i__2 = *n - i__ + 1;
                 r_cnjg(&q__1, &tau[i__]);
@@ -244,25 +244,25 @@ void aocl_lapack_cungl2(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *k, scomp
             }
             i__1 = *n - i__;
             i__2 = i__;
-            q__1.r = -tau[i__2].r;
-            q__1.i = -tau[i__2].i; // , expr subst
+            q__1.real = -tau[i__2].real;
+            q__1.imag = -tau[i__2].imag; // , expr subst
             aocl_blas_cscal(&i__1, &q__1, &a[i__ + (i__ + 1) * a_dim1], lda);
             i__1 = *n - i__;
             aocl_lapack_clacgv(&i__1, &a[i__ + (i__ + 1) * a_dim1], lda);
         }
         i__1 = i__ + i__ * a_dim1;
         r_cnjg(&q__2, &tau[i__]);
-        q__1.r = 1.f - q__2.r;
-        q__1.i = 0.f - q__2.i; // , expr subst
-        a[i__1].r = q__1.r;
-        a[i__1].i = q__1.i; // , expr subst
+        q__1.real = 1.f - q__2.real;
+        q__1.imag = 0.f - q__2.imag; // , expr subst
+        a[i__1].real = q__1.real;
+        a[i__1].imag = q__1.imag; // , expr subst
         /* Set A(i,1:i-1,i) to zero */
         i__1 = i__ - 1;
         for(l = 1; l <= i__1; ++l)
         {
             i__2 = i__ + l * a_dim1;
-            a[i__2].r = 0.f;
-            a[i__2].i = 0.f; // , expr subst
+            a[i__2].real = 0.f;
+            a[i__2].imag = 0.f; // , expr subst
             /* L30: */
         }
         /* L40: */

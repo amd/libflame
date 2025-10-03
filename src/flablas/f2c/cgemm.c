@@ -195,14 +195,14 @@ int cgemm_(char *transa, char *transb, integer *m, integer * n, integer *k, scom
         return 0;
     }
     /* Quick return if possible. */
-    if (*m == 0 || *n == 0 || (alpha->r == 0.f && alpha->i == 0.f || *k == 0) && (beta->r == 1.f && beta->i == 0.f))
+    if (*m == 0 || *n == 0 || (alpha->real == 0.f && alpha->imag == 0.f || *k == 0) && (beta->real == 1.f && beta->imag == 0.f))
     {
         return 0;
     }
     /* And when alpha.eq.zero. */
-    if (alpha->r == 0.f && alpha->i == 0.f)
+    if (alpha->real == 0.f && alpha->imag == 0.f)
     {
-        if (beta->r == 0.f && beta->i == 0.f)
+        if (beta->real == 0.f && beta->imag == 0.f)
         {
             i__1 = *n;
             for (j = 1;
@@ -215,7 +215,7 @@ int cgemm_(char *transa, char *transb, integer *m, integer * n, integer *k, scom
                         ++i__)
                 {
                     i__3 = i__ + j * c_dim1;
-                    c__[i__3].r = 0.f, c__[i__3].i = 0.f;
+                    c__[i__3].real = 0.f, c__[i__3].imag = 0.f;
                     /* L10: */
                 }
                 /* L20: */
@@ -235,8 +235,8 @@ int cgemm_(char *transa, char *transb, integer *m, integer * n, integer *k, scom
                 {
                     i__3 = i__ + j * c_dim1;
                     i__4 = i__ + j * c_dim1;
-                    q__1.r = beta->r * c__[i__4].r - beta->i * c__[i__4].i, q__1.i = beta->r * c__[i__4].i + beta->i * c__[ i__4].r;
-                    c__[i__3].r = q__1.r, c__[i__3].i = q__1.i;
+                    q__1.real = beta->real * c__[i__4].real - beta->imag * c__[i__4].imag, q__1.imag = beta->real * c__[i__4].imag + beta->imag * c__[ i__4].real;
+                    c__[i__3].real = q__1.real, c__[i__3].imag = q__1.imag;
                     /* L30: */
                 }
                 /* L40: */
@@ -255,7 +255,7 @@ int cgemm_(char *transa, char *transb, integer *m, integer * n, integer *k, scom
                     j <= i__1;
                     ++j)
             {
-                if (beta->r == 0.f && beta->i == 0.f)
+                if (beta->real == 0.f && beta->imag == 0.f)
                 {
                     i__2 = *m;
                     for (i__ = 1;
@@ -263,11 +263,11 @@ int cgemm_(char *transa, char *transb, integer *m, integer * n, integer *k, scom
                             ++i__)
                     {
                         i__3 = i__ + j * c_dim1;
-                        c__[i__3].r = 0.f, c__[i__3].i = 0.f;
+                        c__[i__3].real = 0.f, c__[i__3].imag = 0.f;
                         /* L50: */
                     }
                 }
-                else if (beta->r != 1.f || beta->i != 0.f)
+                else if (beta->real != 1.f || beta->imag != 0.f)
                 {
                     i__2 = *m;
                     for (i__ = 1;
@@ -276,8 +276,8 @@ int cgemm_(char *transa, char *transb, integer *m, integer * n, integer *k, scom
                     {
                         i__3 = i__ + j * c_dim1;
                         i__4 = i__ + j * c_dim1;
-                        q__1.r = beta->r * c__[i__4].r - beta->i * c__[i__4] .i, q__1.i = beta->r * c__[i__4].i + beta->i * c__[i__4].r;
-                        c__[i__3].r = q__1.r, c__[i__3].i = q__1.i;
+                        q__1.real = beta->real * c__[i__4].real - beta->imag * c__[i__4] .imag, q__1.imag = beta->real * c__[i__4].imag + beta->imag * c__[i__4].real;
+                        c__[i__3].real = q__1.real, c__[i__3].imag = q__1.imag;
                         /* L60: */
                     }
                 }
@@ -287,11 +287,11 @@ int cgemm_(char *transa, char *transb, integer *m, integer * n, integer *k, scom
                         ++l)
                 {
                     i__3 = l + j * b_dim1;
-                    if (b[i__3].r != 0.f || b[i__3].i != 0.f)
+                    if (b[i__3].real != 0.f || b[i__3].imag != 0.f)
                     {
                         i__3 = l + j * b_dim1;
-                        q__1.r = alpha->r * b[i__3].r - alpha->i * b[i__3].i, q__1.i = alpha->r * b[i__3].i + alpha->i * b[ i__3].r;
-                        temp.r = q__1.r, temp.i = q__1.i;
+                        q__1.real = alpha->real * b[i__3].real - alpha->imag * b[i__3].imag, q__1.imag = alpha->real * b[i__3].imag + alpha->imag * b[ i__3].real;
+                        temp.real = q__1.real, temp.imag = q__1.imag;
                         i__3 = *m;
                         for (i__ = 1;
                                 i__ <= i__3;
@@ -300,9 +300,9 @@ int cgemm_(char *transa, char *transb, integer *m, integer * n, integer *k, scom
                             i__4 = i__ + j * c_dim1;
                             i__5 = i__ + j * c_dim1;
                             i__6 = i__ + l * a_dim1;
-                            q__2.r = temp.r * a[i__6].r - temp.i * a[i__6].i, q__2.i = temp.r * a[i__6].i + temp.i * a[ i__6].r;
-                            q__1.r = c__[i__5].r + q__2.r, q__1.i = c__[i__5] .i + q__2.i;
-                            c__[i__4].r = q__1.r, c__[i__4].i = q__1.i;
+                            q__2.real = temp.real * a[i__6].real - temp.imag * a[i__6].imag, q__2.imag = temp.real * a[i__6].imag + temp.imag * a[ i__6].real;
+                            q__1.real = c__[i__5].real + q__2.real, q__1.imag = c__[i__5] .imag + q__2.imag;
+                            c__[i__4].real = q__1.real, c__[i__4].imag = q__1.imag;
                             /* L70: */
                         }
                     }
@@ -324,7 +324,7 @@ int cgemm_(char *transa, char *transb, integer *m, integer * n, integer *k, scom
                         i__ <= i__2;
                         ++i__)
                 {
-                    temp.r = 0.f, temp.i = 0.f;
+                    temp.real = 0.f, temp.imag = 0.f;
                     i__3 = *k;
                     for (l = 1;
                             l <= i__3;
@@ -332,25 +332,25 @@ int cgemm_(char *transa, char *transb, integer *m, integer * n, integer *k, scom
                     {
                         r_cnjg(&q__3, &a[l + i__ * a_dim1]);
                         i__4 = l + j * b_dim1;
-                        q__2.r = q__3.r * b[i__4].r - q__3.i * b[i__4].i, q__2.i = q__3.r * b[i__4].i + q__3.i * b[i__4] .r;
-                        q__1.r = temp.r + q__2.r, q__1.i = temp.i + q__2.i;
-                        temp.r = q__1.r, temp.i = q__1.i;
+                        q__2.real = q__3.real * b[i__4].real - q__3.imag * b[i__4].imag, q__2.imag = q__3.real * b[i__4].imag + q__3.imag * b[i__4] .real;
+                        q__1.real = temp.real + q__2.real, q__1.imag = temp.imag + q__2.imag;
+                        temp.real = q__1.real, temp.imag = q__1.imag;
                         /* L100: */
                     }
-                    if (beta->r == 0.f && beta->i == 0.f)
+                    if (beta->real == 0.f && beta->imag == 0.f)
                     {
                         i__3 = i__ + j * c_dim1;
-                        q__1.r = alpha->r * temp.r - alpha->i * temp.i, q__1.i = alpha->r * temp.i + alpha->i * temp.r;
-                        c__[i__3].r = q__1.r, c__[i__3].i = q__1.i;
+                        q__1.real = alpha->real * temp.real - alpha->imag * temp.imag, q__1.imag = alpha->real * temp.imag + alpha->imag * temp.real;
+                        c__[i__3].real = q__1.real, c__[i__3].imag = q__1.imag;
                     }
                     else
                     {
                         i__3 = i__ + j * c_dim1;
-                        q__2.r = alpha->r * temp.r - alpha->i * temp.i, q__2.i = alpha->r * temp.i + alpha->i * temp.r;
+                        q__2.real = alpha->real * temp.real - alpha->imag * temp.imag, q__2.imag = alpha->real * temp.imag + alpha->imag * temp.real;
                         i__4 = i__ + j * c_dim1;
-                        q__3.r = beta->r * c__[i__4].r - beta->i * c__[i__4] .i, q__3.i = beta->r * c__[i__4].i + beta->i * c__[i__4].r;
-                        q__1.r = q__2.r + q__3.r, q__1.i = q__2.i + q__3.i;
-                        c__[i__3].r = q__1.r, c__[i__3].i = q__1.i;
+                        q__3.real = beta->real * c__[i__4].real - beta->imag * c__[i__4] .imag, q__3.imag = beta->real * c__[i__4].imag + beta->imag * c__[i__4].real;
+                        q__1.real = q__2.real + q__3.real, q__1.imag = q__2.imag + q__3.imag;
+                        c__[i__3].real = q__1.real, c__[i__3].imag = q__1.imag;
                     }
                     /* L110: */
                 }
@@ -370,7 +370,7 @@ int cgemm_(char *transa, char *transb, integer *m, integer * n, integer *k, scom
                         i__ <= i__2;
                         ++i__)
                 {
-                    temp.r = 0.f, temp.i = 0.f;
+                    temp.real = 0.f, temp.imag = 0.f;
                     i__3 = *k;
                     for (l = 1;
                             l <= i__3;
@@ -378,25 +378,25 @@ int cgemm_(char *transa, char *transb, integer *m, integer * n, integer *k, scom
                     {
                         i__4 = l + i__ * a_dim1;
                         i__5 = l + j * b_dim1;
-                        q__2.r = a[i__4].r * b[i__5].r - a[i__4].i * b[i__5] .i, q__2.i = a[i__4].r * b[i__5].i + a[i__4] .i * b[i__5].r;
-                        q__1.r = temp.r + q__2.r, q__1.i = temp.i + q__2.i;
-                        temp.r = q__1.r, temp.i = q__1.i;
+                        q__2.real = a[i__4].real * b[i__5].real - a[i__4].imag * b[i__5] .imag, q__2.imag = a[i__4].real * b[i__5].imag + a[i__4] .imag * b[i__5].real;
+                        q__1.real = temp.real + q__2.real, q__1.imag = temp.imag + q__2.imag;
+                        temp.real = q__1.real, temp.imag = q__1.imag;
                         /* L130: */
                     }
-                    if (beta->r == 0.f && beta->i == 0.f)
+                    if (beta->real == 0.f && beta->imag == 0.f)
                     {
                         i__3 = i__ + j * c_dim1;
-                        q__1.r = alpha->r * temp.r - alpha->i * temp.i, q__1.i = alpha->r * temp.i + alpha->i * temp.r;
-                        c__[i__3].r = q__1.r, c__[i__3].i = q__1.i;
+                        q__1.real = alpha->real * temp.real - alpha->imag * temp.imag, q__1.imag = alpha->real * temp.imag + alpha->imag * temp.real;
+                        c__[i__3].real = q__1.real, c__[i__3].imag = q__1.imag;
                     }
                     else
                     {
                         i__3 = i__ + j * c_dim1;
-                        q__2.r = alpha->r * temp.r - alpha->i * temp.i, q__2.i = alpha->r * temp.i + alpha->i * temp.r;
+                        q__2.real = alpha->real * temp.real - alpha->imag * temp.imag, q__2.imag = alpha->real * temp.imag + alpha->imag * temp.real;
                         i__4 = i__ + j * c_dim1;
-                        q__3.r = beta->r * c__[i__4].r - beta->i * c__[i__4] .i, q__3.i = beta->r * c__[i__4].i + beta->i * c__[i__4].r;
-                        q__1.r = q__2.r + q__3.r, q__1.i = q__2.i + q__3.i;
-                        c__[i__3].r = q__1.r, c__[i__3].i = q__1.i;
+                        q__3.real = beta->real * c__[i__4].real - beta->imag * c__[i__4] .imag, q__3.imag = beta->real * c__[i__4].imag + beta->imag * c__[i__4].real;
+                        q__1.real = q__2.real + q__3.real, q__1.imag = q__2.imag + q__3.imag;
+                        c__[i__3].real = q__1.real, c__[i__3].imag = q__1.imag;
                     }
                     /* L140: */
                 }
@@ -414,7 +414,7 @@ int cgemm_(char *transa, char *transb, integer *m, integer * n, integer *k, scom
                     j <= i__1;
                     ++j)
             {
-                if (beta->r == 0.f && beta->i == 0.f)
+                if (beta->real == 0.f && beta->imag == 0.f)
                 {
                     i__2 = *m;
                     for (i__ = 1;
@@ -422,11 +422,11 @@ int cgemm_(char *transa, char *transb, integer *m, integer * n, integer *k, scom
                             ++i__)
                     {
                         i__3 = i__ + j * c_dim1;
-                        c__[i__3].r = 0.f, c__[i__3].i = 0.f;
+                        c__[i__3].real = 0.f, c__[i__3].imag = 0.f;
                         /* L160: */
                     }
                 }
-                else if (beta->r != 1.f || beta->i != 0.f)
+                else if (beta->real != 1.f || beta->imag != 0.f)
                 {
                     i__2 = *m;
                     for (i__ = 1;
@@ -435,8 +435,8 @@ int cgemm_(char *transa, char *transb, integer *m, integer * n, integer *k, scom
                     {
                         i__3 = i__ + j * c_dim1;
                         i__4 = i__ + j * c_dim1;
-                        q__1.r = beta->r * c__[i__4].r - beta->i * c__[i__4] .i, q__1.i = beta->r * c__[i__4].i + beta->i * c__[i__4].r;
-                        c__[i__3].r = q__1.r, c__[i__3].i = q__1.i;
+                        q__1.real = beta->real * c__[i__4].real - beta->imag * c__[i__4] .imag, q__1.imag = beta->real * c__[i__4].imag + beta->imag * c__[i__4].real;
+                        c__[i__3].real = q__1.real, c__[i__3].imag = q__1.imag;
                         /* L170: */
                     }
                 }
@@ -446,11 +446,11 @@ int cgemm_(char *transa, char *transb, integer *m, integer * n, integer *k, scom
                         ++l)
                 {
                     i__3 = j + l * b_dim1;
-                    if (b[i__3].r != 0.f || b[i__3].i != 0.f)
+                    if (b[i__3].real != 0.f || b[i__3].imag != 0.f)
                     {
                         r_cnjg(&q__2, &b[j + l * b_dim1]);
-                        q__1.r = alpha->r * q__2.r - alpha->i * q__2.i, q__1.i = alpha->r * q__2.i + alpha->i * q__2.r;
-                        temp.r = q__1.r, temp.i = q__1.i;
+                        q__1.real = alpha->real * q__2.real - alpha->imag * q__2.imag, q__1.imag = alpha->real * q__2.imag + alpha->imag * q__2.real;
+                        temp.real = q__1.real, temp.imag = q__1.imag;
                         i__3 = *m;
                         for (i__ = 1;
                                 i__ <= i__3;
@@ -459,9 +459,9 @@ int cgemm_(char *transa, char *transb, integer *m, integer * n, integer *k, scom
                             i__4 = i__ + j * c_dim1;
                             i__5 = i__ + j * c_dim1;
                             i__6 = i__ + l * a_dim1;
-                            q__2.r = temp.r * a[i__6].r - temp.i * a[i__6].i, q__2.i = temp.r * a[i__6].i + temp.i * a[ i__6].r;
-                            q__1.r = c__[i__5].r + q__2.r, q__1.i = c__[i__5] .i + q__2.i;
-                            c__[i__4].r = q__1.r, c__[i__4].i = q__1.i;
+                            q__2.real = temp.real * a[i__6].real - temp.imag * a[i__6].imag, q__2.imag = temp.real * a[i__6].imag + temp.imag * a[ i__6].real;
+                            q__1.real = c__[i__5].real + q__2.real, q__1.imag = c__[i__5] .imag + q__2.imag;
+                            c__[i__4].real = q__1.real, c__[i__4].imag = q__1.imag;
                             /* L180: */
                         }
                     }
@@ -478,7 +478,7 @@ int cgemm_(char *transa, char *transb, integer *m, integer * n, integer *k, scom
                     j <= i__1;
                     ++j)
             {
-                if (beta->r == 0.f && beta->i == 0.f)
+                if (beta->real == 0.f && beta->imag == 0.f)
                 {
                     i__2 = *m;
                     for (i__ = 1;
@@ -486,11 +486,11 @@ int cgemm_(char *transa, char *transb, integer *m, integer * n, integer *k, scom
                             ++i__)
                     {
                         i__3 = i__ + j * c_dim1;
-                        c__[i__3].r = 0.f, c__[i__3].i = 0.f;
+                        c__[i__3].real = 0.f, c__[i__3].imag = 0.f;
                         /* L210: */
                     }
                 }
-                else if (beta->r != 1.f || beta->i != 0.f)
+                else if (beta->real != 1.f || beta->imag != 0.f)
                 {
                     i__2 = *m;
                     for (i__ = 1;
@@ -499,8 +499,8 @@ int cgemm_(char *transa, char *transb, integer *m, integer * n, integer *k, scom
                     {
                         i__3 = i__ + j * c_dim1;
                         i__4 = i__ + j * c_dim1;
-                        q__1.r = beta->r * c__[i__4].r - beta->i * c__[i__4] .i, q__1.i = beta->r * c__[i__4].i + beta->i * c__[i__4].r;
-                        c__[i__3].r = q__1.r, c__[i__3].i = q__1.i;
+                        q__1.real = beta->real * c__[i__4].real - beta->imag * c__[i__4] .imag, q__1.imag = beta->real * c__[i__4].imag + beta->imag * c__[i__4].real;
+                        c__[i__3].real = q__1.real, c__[i__3].imag = q__1.imag;
                         /* L220: */
                     }
                 }
@@ -510,11 +510,11 @@ int cgemm_(char *transa, char *transb, integer *m, integer * n, integer *k, scom
                         ++l)
                 {
                     i__3 = j + l * b_dim1;
-                    if (b[i__3].r != 0.f || b[i__3].i != 0.f)
+                    if (b[i__3].real != 0.f || b[i__3].imag != 0.f)
                     {
                         i__3 = j + l * b_dim1;
-                        q__1.r = alpha->r * b[i__3].r - alpha->i * b[i__3].i, q__1.i = alpha->r * b[i__3].i + alpha->i * b[ i__3].r;
-                        temp.r = q__1.r, temp.i = q__1.i;
+                        q__1.real = alpha->real * b[i__3].real - alpha->imag * b[i__3].imag, q__1.imag = alpha->real * b[i__3].imag + alpha->imag * b[ i__3].real;
+                        temp.real = q__1.real, temp.imag = q__1.imag;
                         i__3 = *m;
                         for (i__ = 1;
                                 i__ <= i__3;
@@ -523,9 +523,9 @@ int cgemm_(char *transa, char *transb, integer *m, integer * n, integer *k, scom
                             i__4 = i__ + j * c_dim1;
                             i__5 = i__ + j * c_dim1;
                             i__6 = i__ + l * a_dim1;
-                            q__2.r = temp.r * a[i__6].r - temp.i * a[i__6].i, q__2.i = temp.r * a[i__6].i + temp.i * a[ i__6].r;
-                            q__1.r = c__[i__5].r + q__2.r, q__1.i = c__[i__5] .i + q__2.i;
-                            c__[i__4].r = q__1.r, c__[i__4].i = q__1.i;
+                            q__2.real = temp.real * a[i__6].real - temp.imag * a[i__6].imag, q__2.imag = temp.real * a[i__6].imag + temp.imag * a[ i__6].real;
+                            q__1.real = c__[i__5].real + q__2.real, q__1.imag = c__[i__5] .imag + q__2.imag;
+                            c__[i__4].real = q__1.real, c__[i__4].imag = q__1.imag;
                             /* L230: */
                         }
                     }
@@ -550,7 +550,7 @@ int cgemm_(char *transa, char *transb, integer *m, integer * n, integer *k, scom
                         i__ <= i__2;
                         ++i__)
                 {
-                    temp.r = 0.f, temp.i = 0.f;
+                    temp.real = 0.f, temp.imag = 0.f;
                     i__3 = *k;
                     for (l = 1;
                             l <= i__3;
@@ -558,25 +558,25 @@ int cgemm_(char *transa, char *transb, integer *m, integer * n, integer *k, scom
                     {
                         r_cnjg(&q__3, &a[l + i__ * a_dim1]);
                         r_cnjg(&q__4, &b[j + l * b_dim1]);
-                        q__2.r = q__3.r * q__4.r - q__3.i * q__4.i, q__2.i = q__3.r * q__4.i + q__3.i * q__4.r;
-                        q__1.r = temp.r + q__2.r, q__1.i = temp.i + q__2.i;
-                        temp.r = q__1.r, temp.i = q__1.i;
+                        q__2.real = q__3.real * q__4.real - q__3.imag * q__4.imag, q__2.imag = q__3.real * q__4.imag + q__3.imag * q__4.real;
+                        q__1.real = temp.real + q__2.real, q__1.imag = temp.imag + q__2.imag;
+                        temp.real = q__1.real, temp.imag = q__1.imag;
                         /* L260: */
                     }
-                    if (beta->r == 0.f && beta->i == 0.f)
+                    if (beta->real == 0.f && beta->imag == 0.f)
                     {
                         i__3 = i__ + j * c_dim1;
-                        q__1.r = alpha->r * temp.r - alpha->i * temp.i, q__1.i = alpha->r * temp.i + alpha->i * temp.r;
-                        c__[i__3].r = q__1.r, c__[i__3].i = q__1.i;
+                        q__1.real = alpha->real * temp.real - alpha->imag * temp.imag, q__1.imag = alpha->real * temp.imag + alpha->imag * temp.real;
+                        c__[i__3].real = q__1.real, c__[i__3].imag = q__1.imag;
                     }
                     else
                     {
                         i__3 = i__ + j * c_dim1;
-                        q__2.r = alpha->r * temp.r - alpha->i * temp.i, q__2.i = alpha->r * temp.i + alpha->i * temp.r;
+                        q__2.real = alpha->real * temp.real - alpha->imag * temp.imag, q__2.imag = alpha->real * temp.imag + alpha->imag * temp.real;
                         i__4 = i__ + j * c_dim1;
-                        q__3.r = beta->r * c__[i__4].r - beta->i * c__[i__4] .i, q__3.i = beta->r * c__[i__4].i + beta->i * c__[i__4].r;
-                        q__1.r = q__2.r + q__3.r, q__1.i = q__2.i + q__3.i;
-                        c__[i__3].r = q__1.r, c__[i__3].i = q__1.i;
+                        q__3.real = beta->real * c__[i__4].real - beta->imag * c__[i__4] .imag, q__3.imag = beta->real * c__[i__4].imag + beta->imag * c__[i__4].real;
+                        q__1.real = q__2.real + q__3.real, q__1.imag = q__2.imag + q__3.imag;
+                        c__[i__3].real = q__1.real, c__[i__3].imag = q__1.imag;
                     }
                     /* L270: */
                 }
@@ -596,7 +596,7 @@ int cgemm_(char *transa, char *transb, integer *m, integer * n, integer *k, scom
                         i__ <= i__2;
                         ++i__)
                 {
-                    temp.r = 0.f, temp.i = 0.f;
+                    temp.real = 0.f, temp.imag = 0.f;
                     i__3 = *k;
                     for (l = 1;
                             l <= i__3;
@@ -604,25 +604,25 @@ int cgemm_(char *transa, char *transb, integer *m, integer * n, integer *k, scom
                     {
                         r_cnjg(&q__3, &a[l + i__ * a_dim1]);
                         i__4 = j + l * b_dim1;
-                        q__2.r = q__3.r * b[i__4].r - q__3.i * b[i__4].i, q__2.i = q__3.r * b[i__4].i + q__3.i * b[i__4] .r;
-                        q__1.r = temp.r + q__2.r, q__1.i = temp.i + q__2.i;
-                        temp.r = q__1.r, temp.i = q__1.i;
+                        q__2.real = q__3.real * b[i__4].real - q__3.imag * b[i__4].imag, q__2.imag = q__3.real * b[i__4].imag + q__3.imag * b[i__4] .real;
+                        q__1.real = temp.real + q__2.real, q__1.imag = temp.imag + q__2.imag;
+                        temp.real = q__1.real, temp.imag = q__1.imag;
                         /* L290: */
                     }
-                    if (beta->r == 0.f && beta->i == 0.f)
+                    if (beta->real == 0.f && beta->imag == 0.f)
                     {
                         i__3 = i__ + j * c_dim1;
-                        q__1.r = alpha->r * temp.r - alpha->i * temp.i, q__1.i = alpha->r * temp.i + alpha->i * temp.r;
-                        c__[i__3].r = q__1.r, c__[i__3].i = q__1.i;
+                        q__1.real = alpha->real * temp.real - alpha->imag * temp.imag, q__1.imag = alpha->real * temp.imag + alpha->imag * temp.real;
+                        c__[i__3].real = q__1.real, c__[i__3].imag = q__1.imag;
                     }
                     else
                     {
                         i__3 = i__ + j * c_dim1;
-                        q__2.r = alpha->r * temp.r - alpha->i * temp.i, q__2.i = alpha->r * temp.i + alpha->i * temp.r;
+                        q__2.real = alpha->real * temp.real - alpha->imag * temp.imag, q__2.imag = alpha->real * temp.imag + alpha->imag * temp.real;
                         i__4 = i__ + j * c_dim1;
-                        q__3.r = beta->r * c__[i__4].r - beta->i * c__[i__4] .i, q__3.i = beta->r * c__[i__4].i + beta->i * c__[i__4].r;
-                        q__1.r = q__2.r + q__3.r, q__1.i = q__2.i + q__3.i;
-                        c__[i__3].r = q__1.r, c__[i__3].i = q__1.i;
+                        q__3.real = beta->real * c__[i__4].real - beta->imag * c__[i__4] .imag, q__3.imag = beta->real * c__[i__4].imag + beta->imag * c__[i__4].real;
+                        q__1.real = q__2.real + q__3.real, q__1.imag = q__2.imag + q__3.imag;
+                        c__[i__3].real = q__1.real, c__[i__3].imag = q__1.imag;
                     }
                     /* L300: */
                 }
@@ -645,7 +645,7 @@ int cgemm_(char *transa, char *transb, integer *m, integer * n, integer *k, scom
                         i__ <= i__2;
                         ++i__)
                 {
-                    temp.r = 0.f, temp.i = 0.f;
+                    temp.real = 0.f, temp.imag = 0.f;
                     i__3 = *k;
                     for (l = 1;
                             l <= i__3;
@@ -653,25 +653,25 @@ int cgemm_(char *transa, char *transb, integer *m, integer * n, integer *k, scom
                     {
                         i__4 = l + i__ * a_dim1;
                         r_cnjg(&q__3, &b[j + l * b_dim1]);
-                        q__2.r = a[i__4].r * q__3.r - a[i__4].i * q__3.i, q__2.i = a[i__4].r * q__3.i + a[i__4].i * q__3.r;
-                        q__1.r = temp.r + q__2.r, q__1.i = temp.i + q__2.i;
-                        temp.r = q__1.r, temp.i = q__1.i;
+                        q__2.real = a[i__4].real * q__3.real - a[i__4].imag * q__3.imag, q__2.imag = a[i__4].real * q__3.imag + a[i__4].imag * q__3.real;
+                        q__1.real = temp.real + q__2.real, q__1.imag = temp.imag + q__2.imag;
+                        temp.real = q__1.real, temp.imag = q__1.imag;
                         /* L320: */
                     }
-                    if (beta->r == 0.f && beta->i == 0.f)
+                    if (beta->real == 0.f && beta->imag == 0.f)
                     {
                         i__3 = i__ + j * c_dim1;
-                        q__1.r = alpha->r * temp.r - alpha->i * temp.i, q__1.i = alpha->r * temp.i + alpha->i * temp.r;
-                        c__[i__3].r = q__1.r, c__[i__3].i = q__1.i;
+                        q__1.real = alpha->real * temp.real - alpha->imag * temp.imag, q__1.imag = alpha->real * temp.imag + alpha->imag * temp.real;
+                        c__[i__3].real = q__1.real, c__[i__3].imag = q__1.imag;
                     }
                     else
                     {
                         i__3 = i__ + j * c_dim1;
-                        q__2.r = alpha->r * temp.r - alpha->i * temp.i, q__2.i = alpha->r * temp.i + alpha->i * temp.r;
+                        q__2.real = alpha->real * temp.real - alpha->imag * temp.imag, q__2.imag = alpha->real * temp.imag + alpha->imag * temp.real;
                         i__4 = i__ + j * c_dim1;
-                        q__3.r = beta->r * c__[i__4].r - beta->i * c__[i__4] .i, q__3.i = beta->r * c__[i__4].i + beta->i * c__[i__4].r;
-                        q__1.r = q__2.r + q__3.r, q__1.i = q__2.i + q__3.i;
-                        c__[i__3].r = q__1.r, c__[i__3].i = q__1.i;
+                        q__3.real = beta->real * c__[i__4].real - beta->imag * c__[i__4] .imag, q__3.imag = beta->real * c__[i__4].imag + beta->imag * c__[i__4].real;
+                        q__1.real = q__2.real + q__3.real, q__1.imag = q__2.imag + q__3.imag;
+                        c__[i__3].real = q__1.real, c__[i__3].imag = q__1.imag;
                     }
                     /* L330: */
                 }
@@ -691,7 +691,7 @@ int cgemm_(char *transa, char *transb, integer *m, integer * n, integer *k, scom
                         i__ <= i__2;
                         ++i__)
                 {
-                    temp.r = 0.f, temp.i = 0.f;
+                    temp.real = 0.f, temp.imag = 0.f;
                     i__3 = *k;
                     for (l = 1;
                             l <= i__3;
@@ -699,25 +699,25 @@ int cgemm_(char *transa, char *transb, integer *m, integer * n, integer *k, scom
                     {
                         i__4 = l + i__ * a_dim1;
                         i__5 = j + l * b_dim1;
-                        q__2.r = a[i__4].r * b[i__5].r - a[i__4].i * b[i__5] .i, q__2.i = a[i__4].r * b[i__5].i + a[i__4] .i * b[i__5].r;
-                        q__1.r = temp.r + q__2.r, q__1.i = temp.i + q__2.i;
-                        temp.r = q__1.r, temp.i = q__1.i;
+                        q__2.real = a[i__4].real * b[i__5].real - a[i__4].imag * b[i__5] .imag, q__2.imag = a[i__4].real * b[i__5].imag + a[i__4] .imag * b[i__5].real;
+                        q__1.real = temp.real + q__2.real, q__1.imag = temp.imag + q__2.imag;
+                        temp.real = q__1.real, temp.imag = q__1.imag;
                         /* L350: */
                     }
-                    if (beta->r == 0.f && beta->i == 0.f)
+                    if (beta->real == 0.f && beta->imag == 0.f)
                     {
                         i__3 = i__ + j * c_dim1;
-                        q__1.r = alpha->r * temp.r - alpha->i * temp.i, q__1.i = alpha->r * temp.i + alpha->i * temp.r;
-                        c__[i__3].r = q__1.r, c__[i__3].i = q__1.i;
+                        q__1.real = alpha->real * temp.real - alpha->imag * temp.imag, q__1.imag = alpha->real * temp.imag + alpha->imag * temp.real;
+                        c__[i__3].real = q__1.real, c__[i__3].imag = q__1.imag;
                     }
                     else
                     {
                         i__3 = i__ + j * c_dim1;
-                        q__2.r = alpha->r * temp.r - alpha->i * temp.i, q__2.i = alpha->r * temp.i + alpha->i * temp.r;
+                        q__2.real = alpha->real * temp.real - alpha->imag * temp.imag, q__2.imag = alpha->real * temp.imag + alpha->imag * temp.real;
                         i__4 = i__ + j * c_dim1;
-                        q__3.r = beta->r * c__[i__4].r - beta->i * c__[i__4] .i, q__3.i = beta->r * c__[i__4].i + beta->i * c__[i__4].r;
-                        q__1.r = q__2.r + q__3.r, q__1.i = q__2.i + q__3.i;
-                        c__[i__3].r = q__1.r, c__[i__3].i = q__1.i;
+                        q__3.real = beta->real * c__[i__4].real - beta->imag * c__[i__4] .imag, q__3.imag = beta->real * c__[i__4].imag + beta->imag * c__[i__4].real;
+                        q__1.real = q__2.real + q__3.real, q__1.imag = q__2.imag + q__3.imag;
+                        c__[i__3].real = q__1.real, c__[i__3].imag = q__1.imag;
                     }
                     /* L360: */
                 }

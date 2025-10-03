@@ -4,8 +4,8 @@
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
  /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static scomplex c_b1 = {{1.f}, {0.f}};
-static scomplex c_b2 = {{0.f}, {0.f}};
+static scomplex c_b1 = {1.f, 0.f};
+static scomplex c_b2 = {0.f, 0.f};
 /* > \brief \b CHBGVD */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -408,8 +408,8 @@ void aocl_lapack_chbgvd(char *jobz, char *uplo, aocl_int64_t *n, aocl_int64_t *k
     if(*info == 0)
     {
         r__1 = aocl_lapack_sroundup_lwork(&lwmin);
-        work[1].r = r__1;
-        work[1].i = 0.f; // , expr subst
+        work[1].real = r__1;
+        work[1].imag = 0.f; // , expr subst
         rwork[1] = (real)lrwmin;
         iwork[1] = (aocl_int_t)(liwmin);
         if(*lwork < lwmin && !lquery)
@@ -484,8 +484,8 @@ void aocl_lapack_chbgvd(char *jobz, char *uplo, aocl_int64_t *n, aocl_int64_t *k
         aocl_lapack_clacpy("A", n, n, &work[indwk2], n, &z__[z_offset], ldz);
     }
     r__1 = aocl_lapack_sroundup_lwork(&lwmin);
-    work[1].r = r__1;
-    work[1].i = 0.f; // , expr subst
+    work[1].real = r__1;
+    work[1].imag = 0.f; // , expr subst
     rwork[1] = (real)lrwmin;
     iwork[1] = (aocl_int_t)(liwmin);
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);

@@ -493,7 +493,7 @@ void aocl_lapack_zuncsd2by1(char *jobu1, char *jobu2, char *jobv1t, aocl_int64_t
         {
             aocl_lapack_zunbdb1(m, p, q, &x11[x11_offset], ldx11, &x21[x21_offset], ldx21,
                                 &theta[1], dum, cdum, cdum, cdum, &work[1], &c_n1, &childinfo);
-            lorbdb = (integer)work[1].r;
+            lorbdb = (integer)work[1].real;
             if(wantu1 && *p > 0)
             {
                 aocl_lapack_zungqr(p, p, q, &u1[u1_offset], ldu1, cdum, &work[1], &c_n1,
@@ -501,7 +501,7 @@ void aocl_lapack_zuncsd2by1(char *jobu1, char *jobu2, char *jobv1t, aocl_int64_t
                 lorgqrmin = fla_max(lorgqrmin, *p);
                 /* Computing MAX */
                 i__1 = lorgqropt;
-                i__2 = (integer)work[1].r; // , expr subst
+                i__2 = (integer)work[1].real; // , expr subst
                 lorgqropt = fla_max(i__1, i__2);
             }
             if(wantu2 && *m - *p > 0)
@@ -516,7 +516,7 @@ void aocl_lapack_zuncsd2by1(char *jobu1, char *jobu2, char *jobv1t, aocl_int64_t
                 lorgqrmin = fla_max(i__1, i__2);
                 /* Computing MAX */
                 i__1 = lorgqropt;
-                i__2 = (integer)work[1].r; // , expr subst
+                i__2 = (integer)work[1].real; // , expr subst
                 lorgqropt = fla_max(i__1, i__2);
             }
             if(wantv1t && *q > 0)
@@ -532,7 +532,7 @@ void aocl_lapack_zuncsd2by1(char *jobu1, char *jobu2, char *jobv1t, aocl_int64_t
                 lorglqmin = fla_max(i__1, i__2);
                 /* Computing MAX */
                 i__1 = lorglqopt;
-                i__2 = (integer)work[1].r; // , expr subst
+                i__2 = (integer)work[1].real; // , expr subst
                 lorglqopt = fla_max(i__1, i__2);
             }
             aocl_lapack_zbbcsd(jobu1, jobu2, jobv1t, "N", "N", m, p, q, &theta[1], dum,
@@ -545,7 +545,7 @@ void aocl_lapack_zuncsd2by1(char *jobu1, char *jobu2, char *jobv1t, aocl_int64_t
         {
             aocl_lapack_zunbdb2(m, p, q, &x11[x11_offset], ldx11, &x21[x21_offset], ldx21,
                                 &theta[1], dum, cdum, cdum, cdum, &work[1], &c_n1, &childinfo);
-            lorbdb = (integer)work[1].r;
+            lorbdb = (integer)work[1].real;
             if(wantu1 && *p > 0)
             {
                 i__1 = *p - 1;
@@ -559,7 +559,7 @@ void aocl_lapack_zuncsd2by1(char *jobu1, char *jobu2, char *jobv1t, aocl_int64_t
                 lorgqrmin = fla_max(i__1, i__2);
                 /* Computing MAX */
                 i__1 = lorgqropt;
-                i__2 = (integer)work[1].r; // , expr subst
+                i__2 = (integer)work[1].real; // , expr subst
                 lorgqropt = fla_max(i__1, i__2);
             }
             if(wantu2 && *m - *p > 0)
@@ -574,7 +574,7 @@ void aocl_lapack_zuncsd2by1(char *jobu1, char *jobu2, char *jobv1t, aocl_int64_t
                 lorgqrmin = fla_max(i__1, i__2);
                 /* Computing MAX */
                 i__1 = lorgqropt;
-                i__2 = (integer)work[1].r; // , expr subst
+                i__2 = (integer)work[1].real; // , expr subst
                 lorgqropt = fla_max(i__1, i__2);
             }
             if(wantv1t && *q > 0)
@@ -584,7 +584,7 @@ void aocl_lapack_zuncsd2by1(char *jobu1, char *jobu2, char *jobv1t, aocl_int64_t
                 lorglqmin = fla_max(lorglqmin, *q);
                 /* Computing MAX */
                 i__1 = lorglqopt;
-                i__2 = (integer)work[1].r; // , expr subst
+                i__2 = (integer)work[1].real; // , expr subst
                 lorglqopt = fla_max(i__1, i__2);
             }
             aocl_lapack_zbbcsd(jobv1t, "N", jobu1, jobu2, "T", m, q, p, &theta[1], dum,
@@ -597,7 +597,7 @@ void aocl_lapack_zuncsd2by1(char *jobu1, char *jobu2, char *jobv1t, aocl_int64_t
         {
             aocl_lapack_zunbdb3(m, p, q, &x11[x11_offset], ldx11, &x21[x21_offset], ldx21,
                                 &theta[1], dum, cdum, cdum, cdum, &work[1], &c_n1, &childinfo);
-            lorbdb = (integer)work[1].r;
+            lorbdb = (integer)work[1].real;
             if(wantu1 && *p > 0)
             {
                 aocl_lapack_zungqr(p, p, q, &u1[u1_offset], ldu1, cdum, &work[1], &c_n1,
@@ -605,7 +605,7 @@ void aocl_lapack_zuncsd2by1(char *jobu1, char *jobu2, char *jobv1t, aocl_int64_t
                 lorgqrmin = fla_max(lorgqrmin, *p);
                 /* Computing MAX */
                 i__1 = lorgqropt;
-                i__2 = (integer)work[1].r; // , expr subst
+                i__2 = (integer)work[1].real; // , expr subst
                 lorgqropt = fla_max(i__1, i__2);
             }
             if(wantu2 && *m - *p > 0)
@@ -621,7 +621,7 @@ void aocl_lapack_zuncsd2by1(char *jobu1, char *jobu2, char *jobv1t, aocl_int64_t
                 lorgqrmin = fla_max(i__1, i__2);
                 /* Computing MAX */
                 i__1 = lorgqropt;
-                i__2 = (integer)work[1].r; // , expr subst
+                i__2 = (integer)work[1].real; // , expr subst
                 lorgqropt = fla_max(i__1, i__2);
             }
             if(wantv1t && *q > 0)
@@ -631,7 +631,7 @@ void aocl_lapack_zuncsd2by1(char *jobu1, char *jobu2, char *jobv1t, aocl_int64_t
                 lorglqmin = fla_max(lorglqmin, *q);
                 /* Computing MAX */
                 i__1 = lorglqopt;
-                i__2 = (integer)work[1].r; // , expr subst
+                i__2 = (integer)work[1].real; // , expr subst
                 lorglqopt = fla_max(i__1, i__2);
             }
             i__1 = *m - *q;
@@ -647,7 +647,7 @@ void aocl_lapack_zuncsd2by1(char *jobu1, char *jobu2, char *jobv1t, aocl_int64_t
             aocl_lapack_zunbdb4(m, p, q, &x11[x11_offset], ldx11, &x21[x21_offset], ldx21,
                                 &theta[1], dum, cdum, cdum, cdum, cdum, &work[1], &c_n1,
                                 &childinfo);
-            lorbdb = *m + (integer)work[1].r;
+            lorbdb = *m + (integer)work[1].real;
             if(wantu1 && *p > 0)
             {
                 i__1 = *m - *q;
@@ -656,7 +656,7 @@ void aocl_lapack_zuncsd2by1(char *jobu1, char *jobu2, char *jobv1t, aocl_int64_t
                 lorgqrmin = fla_max(lorgqrmin, *p);
                 /* Computing MAX */
                 i__1 = lorgqropt;
-                i__2 = (integer)work[1].r; // , expr subst
+                i__2 = (integer)work[1].real; // , expr subst
                 lorgqropt = fla_max(i__1, i__2);
             }
             if(wantu2 && *m - *p > 0)
@@ -672,7 +672,7 @@ void aocl_lapack_zuncsd2by1(char *jobu1, char *jobu2, char *jobv1t, aocl_int64_t
                 lorgqrmin = fla_max(i__1, i__2);
                 /* Computing MAX */
                 i__1 = lorgqropt;
-                i__2 = (integer)work[1].r; // , expr subst
+                i__2 = (integer)work[1].real; // , expr subst
                 lorgqropt = fla_max(i__1, i__2);
             }
             if(wantv1t && *q > 0)
@@ -682,7 +682,7 @@ void aocl_lapack_zuncsd2by1(char *jobu1, char *jobu2, char *jobv1t, aocl_int64_t
                 lorglqmin = fla_max(lorglqmin, *q);
                 /* Computing MAX */
                 i__1 = lorglqopt;
-                i__2 = (integer)work[1].r; // , expr subst
+                i__2 = (integer)work[1].real; // , expr subst
                 lorglqopt = fla_max(i__1, i__2);
             }
             i__1 = *m - *p;
@@ -706,8 +706,8 @@ void aocl_lapack_zuncsd2by1(char *jobu1, char *jobu2, char *jobv1t, aocl_int64_t
         i__1 = fla_max(i__1, i__2);
         i__2 = iorglq + lorglqopt - 1; // ; expr subst
         lworkopt = fla_max(i__1, i__2);
-        work[1].r = (doublereal)lworkopt;
-        work[1].i = 0.; // , expr subst
+        work[1].real = (doublereal)lworkopt;
+        work[1].imag = 0.; // , expr subst
         if(*lwork < lworkmin && !lquery)
         {
             *info = -19;
@@ -759,17 +759,17 @@ void aocl_lapack_zuncsd2by1(char *jobu1, char *jobu2, char *jobv1t, aocl_int64_t
         if(wantv1t && *q > 0)
         {
             i__1 = v1t_dim1 + 1;
-            v1t[i__1].r = 1.;
-            v1t[i__1].i = 0.; // , expr subst
+            v1t[i__1].real = 1.;
+            v1t[i__1].imag = 0.; // , expr subst
             i__1 = *q;
             for(j = 2; j <= i__1; ++j)
             {
                 i__2 = j * v1t_dim1 + 1;
-                v1t[i__2].r = 0.;
-                v1t[i__2].i = 0.; // , expr subst
+                v1t[i__2].real = 0.;
+                v1t[i__2].imag = 0.; // , expr subst
                 i__2 = j + v1t_dim1;
-                v1t[i__2].r = 0.;
-                v1t[i__2].i = 0.; // , expr subst
+                v1t[i__2].real = 0.;
+                v1t[i__2].imag = 0.; // , expr subst
             }
             i__1 = *q - 1;
             i__2 = *q - 1;
@@ -818,17 +818,17 @@ void aocl_lapack_zuncsd2by1(char *jobu1, char *jobu2, char *jobv1t, aocl_int64_t
         if(wantu1 && *p > 0)
         {
             i__1 = u1_dim1 + 1;
-            u1[i__1].r = 1.;
-            u1[i__1].i = 0.; // , expr subst
+            u1[i__1].real = 1.;
+            u1[i__1].imag = 0.; // , expr subst
             i__1 = *p;
             for(j = 2; j <= i__1; ++j)
             {
                 i__2 = j * u1_dim1 + 1;
-                u1[i__2].r = 0.;
-                u1[i__2].i = 0.; // , expr subst
+                u1[i__2].real = 0.;
+                u1[i__2].imag = 0.; // , expr subst
                 i__2 = j + u1_dim1;
-                u1[i__2].r = 0.;
-                u1[i__2].i = 0.; // , expr subst
+                u1[i__2].real = 0.;
+                u1[i__2].imag = 0.; // , expr subst
             }
             i__1 = *p - 1;
             i__2 = *p - 1;
@@ -897,17 +897,17 @@ void aocl_lapack_zuncsd2by1(char *jobu1, char *jobu2, char *jobv1t, aocl_int64_t
         if(wantu2 && *m - *p > 0)
         {
             i__1 = u2_dim1 + 1;
-            u2[i__1].r = 1.;
-            u2[i__1].i = 0.; // , expr subst
+            u2[i__1].real = 1.;
+            u2[i__1].imag = 0.; // , expr subst
             i__1 = *m - *p;
             for(j = 2; j <= i__1; ++j)
             {
                 i__2 = j * u2_dim1 + 1;
-                u2[i__2].r = 0.;
-                u2[i__2].i = 0.; // , expr subst
+                u2[i__2].real = 0.;
+                u2[i__2].imag = 0.; // , expr subst
                 i__2 = j + u2_dim1;
-                u2[i__2].r = 0.;
-                u2[i__2].i = 0.; // , expr subst
+                u2[i__2].real = 0.;
+                u2[i__2].imag = 0.; // , expr subst
             }
             i__1 = *m - *p - 1;
             i__2 = *m - *p - 1;
@@ -979,8 +979,8 @@ void aocl_lapack_zuncsd2by1(char *jobu1, char *jobu2, char *jobv1t, aocl_int64_t
             for(j = 2; j <= i__1; ++j)
             {
                 i__2 = j * u1_dim1 + 1;
-                u1[i__2].r = 0.;
-                u1[i__2].i = 0.; // , expr subst
+                u1[i__2].real = 0.;
+                u1[i__2].imag = 0.; // , expr subst
             }
             i__1 = *p - 1;
             i__2 = *m - *q - 1;
@@ -996,8 +996,8 @@ void aocl_lapack_zuncsd2by1(char *jobu1, char *jobu2, char *jobv1t, aocl_int64_t
             for(j = 2; j <= i__1; ++j)
             {
                 i__2 = j * u2_dim1 + 1;
-                u2[i__2].r = 0.;
-                u2[i__2].i = 0.; // , expr subst
+                u2[i__2].real = 0.;
+                u2[i__2].imag = 0.; // , expr subst
             }
             i__1 = *m - *p - 1;
             i__2 = *m - *q - 1;

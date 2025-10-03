@@ -197,7 +197,7 @@ void aocl_lapack_clacrm(aocl_int64_t *m, aocl_int64_t *n, scomplex *a, aocl_int6
         for(i__ = 1; i__ <= i__2; ++i__)
         {
             i__3 = i__ + j * a_dim1;
-            rwork[(j - 1) * *m + i__] = a[i__3].r;
+            rwork[(j - 1) * *m + i__] = a[i__3].real;
             /* L10: */
         }
         /* L20: */
@@ -212,8 +212,8 @@ void aocl_lapack_clacrm(aocl_int64_t *m, aocl_int64_t *n, scomplex *a, aocl_int6
         {
             i__3 = i__ + j * c_dim1;
             i__4 = l + (j - 1) * *m + i__ - 1;
-            c__[i__3].r = rwork[i__4];
-            c__[i__3].i = 0.f; // , expr subst
+            c__[i__3].real = rwork[i__4];
+            c__[i__3].imag = 0.f; // , expr subst
             /* L30: */
         }
         /* L40: */
@@ -238,12 +238,12 @@ void aocl_lapack_clacrm(aocl_int64_t *m, aocl_int64_t *n, scomplex *a, aocl_int6
         {
             i__3 = i__ + j * c_dim1;
             i__4 = i__ + j * c_dim1;
-            r__1 = c__[i__4].r;
+            r__1 = c__[i__4].real;
             i__5 = l + (j - 1) * *m + i__ - 1;
-            q__1.r = r__1;
-            q__1.i = rwork[i__5]; // , expr subst
-            c__[i__3].r = q__1.r;
-            c__[i__3].i = q__1.i; // , expr subst
+            q__1.real = r__1;
+            q__1.imag = rwork[i__5]; // , expr subst
+            c__[i__3].real = q__1.real;
+            c__[i__3].imag = q__1.imag; // , expr subst
             /* L70: */
         }
         /* L80: */

@@ -275,8 +275,8 @@ void aocl_lapack_zhesv(char *uplo, aocl_int64_t *n, aocl_int64_t *nrhs, dcomplex
             nb = aocl_lapack_ilaenv(&c__1, "ZHETRF", uplo, n, &c_n1, &c_n1, &c_n1);
             lwkopt = *n * nb;
         }
-        work[1].r = (doublereal)lwkopt;
-        work[1].i = 0.; // , expr subst
+        work[1].real = (doublereal)lwkopt;
+        work[1].imag = 0.; // , expr subst
     }
     if(*info != 0)
     {
@@ -307,8 +307,8 @@ void aocl_lapack_zhesv(char *uplo, aocl_int64_t *n, aocl_int64_t *nrhs, dcomplex
                                 &work[1], info);
         }
     }
-    work[1].r = (doublereal)lwkopt;
-    work[1].i = 0.; // , expr subst
+    work[1].real = (doublereal)lwkopt;
+    work[1].imag = 0.; // , expr subst
     AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of ZHESV */

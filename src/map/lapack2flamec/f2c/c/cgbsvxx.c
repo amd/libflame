@@ -884,8 +884,8 @@ void cgbsvxx_(char *fact, char *trans, integer *n, integer *kl, integer *ku, int
             {
                 i__3 = i__ + j * afb_dim1;
                 i__4 = i__ - *kl + j * ab_dim1;
-                afb[i__3].r = ab[i__4].r;
-                afb[i__3].i = ab[i__4].i; // , expr subst
+                afb[i__3].real = ab[i__4].real;
+                afb[i__3].imag = ab[i__4].imag; // , expr subst
                 /* L30: */
             }
             /* L40: */

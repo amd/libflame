@@ -4,8 +4,8 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static dcomplex c_b1 = {{0.}, {0.}};
-static dcomplex c_b2 = {{1.}, {0.}};
+static dcomplex c_b1 = {0., 0.};
+static dcomplex c_b2 = {1., 0.};
 static aocl_int64_t c__1 = 1;
 /* > \brief \b ZLAQPS computes a step of QR factorization with column pivoting of a real m-by-n
  * matrix A by us ing BLAS level 3. */
@@ -293,14 +293,14 @@ L10:
             {
                 i__2 = k + j * f_dim1;
                 d_cnjg(&z__1, &f[k + j * f_dim1]);
-                f[i__2].r = z__1.r;
-                f[i__2].i = z__1.i; // , expr subst
+                f[i__2].real = z__1.real;
+                f[i__2].imag = z__1.imag; // , expr subst
                 /* L20: */
             }
             i__1 = *m - rk + 1;
             i__2 = k - 1;
-            z__1.r = -1.;
-            z__1.i = -0.; // , expr subst
+            z__1.real = -1.;
+            z__1.imag = -0.; // , expr subst
             aocl_blas_zgemv("No transpose", &i__1, &i__2, &z__1, &a[rk + a_dim1], lda,
                             &f[k + f_dim1], ldf, &c_b2, &a[rk + k * a_dim1], &c__1);
             i__1 = k - 1;
@@ -308,8 +308,8 @@ L10:
             {
                 i__2 = k + j * f_dim1;
                 d_cnjg(&z__1, &f[k + j * f_dim1]);
-                f[i__2].r = z__1.r;
-                f[i__2].i = z__1.i; // , expr subst
+                f[i__2].real = z__1.real;
+                f[i__2].imag = z__1.imag; // , expr subst
                 /* L30: */
             }
         }
@@ -324,11 +324,11 @@ L10:
             aocl_lapack_zlarfg(&c__1, &a[rk + k * a_dim1], &a[rk + k * a_dim1], &c__1, &tau[k]);
         }
         i__1 = rk + k * a_dim1;
-        akk.r = a[i__1].r;
-        akk.i = a[i__1].i; // , expr subst
+        akk.real = a[i__1].real;
+        akk.imag = a[i__1].imag; // , expr subst
         i__1 = rk + k * a_dim1;
-        a[i__1].r = 1.;
-        a[i__1].i = 0.; // , expr subst
+        a[i__1].real = 1.;
+        a[i__1].imag = 0.; // , expr subst
         /* Compute Kth column of F: */
         /* Compute F(K+1:N,K) := tau(K)*A(RK:M,K+1:N)**H*A(RK:M,K). */
         if(k < *n)
@@ -343,8 +343,8 @@ L10:
         for(j = 1; j <= i__1; ++j)
         {
             i__2 = j + k * f_dim1;
-            f[i__2].r = 0.;
-            f[i__2].i = 0.; // , expr subst
+            f[i__2].real = 0.;
+            f[i__2].imag = 0.; // , expr subst
             /* L40: */
         }
         /* Incremental updating of F: */
@@ -355,8 +355,8 @@ L10:
             i__1 = *m - rk + 1;
             i__2 = k - 1;
             i__3 = k;
-            z__1.r = -tau[i__3].r;
-            z__1.i = -tau[i__3].i; // , expr subst
+            z__1.real = -tau[i__3].real;
+            z__1.imag = -tau[i__3].imag; // , expr subst
             aocl_blas_zgemv("Conjugate transpose", &i__1, &i__2, &z__1, &a[rk + a_dim1], lda,
                             &a[rk + k * a_dim1], &c__1, &c_b1, &auxv[1], &c__1);
             i__1 = k - 1;
@@ -368,8 +368,8 @@ L10:
         if(k < *n)
         {
             i__1 = *n - k;
-            z__1.r = -1.;
-            z__1.i = -0.; // , expr subst
+            z__1.real = -1.;
+            z__1.imag = -0.; // , expr subst
             aocl_blas_zgemm("No transpose", "Conjugate transpose", &c__1, &i__1, &k, &z__1,
                             &a[rk + a_dim1], lda, &f[k + 1 + f_dim1], ldf, &c_b2,
                             &a[rk + (k + 1) * a_dim1], lda);
@@ -406,8 +406,8 @@ L10:
             }
         }
         i__1 = rk + k * a_dim1;
-        a[i__1].r = akk.r;
-        a[i__1].i = akk.i; // , expr subst
+        a[i__1].real = akk.real;
+        a[i__1].imag = akk.imag; // , expr subst
         /* End of while loop. */
         goto L10;
     }
@@ -423,8 +423,8 @@ L10:
     {
         i__1 = *m - rk;
         i__2 = *n - *kb;
-        z__1.r = -1.;
-        z__1.i = -0.; // , expr subst
+        z__1.real = -1.;
+        z__1.imag = -0.; // , expr subst
         aocl_blas_zgemm("No transpose", "Conjugate transpose", &i__1, &i__2, kb, &z__1,
                         &a[rk + 1 + a_dim1], lda, &f[*kb + 1 + f_dim1], ldf, &c_b2,
                         &a[rk + 1 + (*kb + 1) * a_dim1], lda);

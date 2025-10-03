@@ -659,10 +659,10 @@ void aocl_lapack_cgbsvx(char *fact, char *trans, aocl_int64_t *n, aocl_int64_t *
                     i__3 = i__ + j * b_dim1;
                     i__4 = i__;
                     i__5 = i__ + j * b_dim1;
-                    q__1.r = r__[i__4] * b[i__5].r;
-                    q__1.i = r__[i__4] * b[i__5].i; // , expr subst
-                    b[i__3].r = q__1.r;
-                    b[i__3].i = q__1.i; // , expr subst
+                    q__1.real = r__[i__4] * b[i__5].real;
+                    q__1.imag = r__[i__4] * b[i__5].imag; // , expr subst
+                    b[i__3].real = q__1.real;
+                    b[i__3].imag = q__1.imag; // , expr subst
                     /* L30: */
                 }
                 /* L40: */
@@ -680,10 +680,10 @@ void aocl_lapack_cgbsvx(char *fact, char *trans, aocl_int64_t *n, aocl_int64_t *
                 i__3 = i__ + j * b_dim1;
                 i__4 = i__;
                 i__5 = i__ + j * b_dim1;
-                q__1.r = c__[i__4] * b[i__5].r;
-                q__1.i = c__[i__4] * b[i__5].i; // , expr subst
-                b[i__3].r = q__1.r;
-                b[i__3].i = q__1.i; // , expr subst
+                q__1.real = c__[i__4] * b[i__5].real;
+                q__1.imag = c__[i__4] * b[i__5].imag; // , expr subst
+                b[i__3].real = q__1.real;
+                b[i__3].imag = q__1.imag; // , expr subst
                 /* L50: */
             }
             /* L60: */
@@ -803,10 +803,10 @@ void aocl_lapack_cgbsvx(char *fact, char *trans, aocl_int64_t *n, aocl_int64_t *
                     i__2 = i__ + j * x_dim1;
                     i__4 = i__;
                     i__5 = i__ + j * x_dim1;
-                    q__1.r = c__[i__4] * x[i__5].r;
-                    q__1.i = c__[i__4] * x[i__5].i; // , expr subst
-                    x[i__2].r = q__1.r;
-                    x[i__2].i = q__1.i; // , expr subst
+                    q__1.real = c__[i__4] * x[i__5].real;
+                    q__1.imag = c__[i__4] * x[i__5].imag; // , expr subst
+                    x[i__2].real = q__1.real;
+                    x[i__2].imag = q__1.imag; // , expr subst
                     /* L100: */
                 }
                 /* L110: */
@@ -830,10 +830,10 @@ void aocl_lapack_cgbsvx(char *fact, char *trans, aocl_int64_t *n, aocl_int64_t *
                 i__2 = i__ + j * x_dim1;
                 i__4 = i__;
                 i__5 = i__ + j * x_dim1;
-                q__1.r = r__[i__4] * x[i__5].r;
-                q__1.i = r__[i__4] * x[i__5].i; // , expr subst
-                x[i__2].r = q__1.r;
-                x[i__2].i = q__1.i; // , expr subst
+                q__1.real = r__[i__4] * x[i__5].real;
+                q__1.imag = r__[i__4] * x[i__5].imag; // , expr subst
+                x[i__2].real = q__1.real;
+                x[i__2].imag = q__1.imag; // , expr subst
                 /* L130: */
             }
             /* L140: */

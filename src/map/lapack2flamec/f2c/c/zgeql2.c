@@ -208,22 +208,22 @@ void aocl_lapack_zgeql2(aocl_int64_t *m, aocl_int64_t *n, dcomplex *a, aocl_int6
         /* Generate elementary reflector H(i) to annihilate */
         /* A(1:m-k+i-1,n-k+i) */
         i__1 = *m - k + i__ + (*n - k + i__) * a_dim1;
-        alpha.r = a[i__1].r;
-        alpha.i = a[i__1].i; // , expr subst
+        alpha.real = a[i__1].real;
+        alpha.imag = a[i__1].imag; // , expr subst
         i__1 = *m - k + i__;
         aocl_lapack_zlarfg(&i__1, &alpha, &a[(*n - k + i__) * a_dim1 + 1], &c__1, &tau[i__]);
         /* Apply H(i)**H to A(1:m-k+i,1:n-k+i-1) from the left */
         i__1 = *m - k + i__ + (*n - k + i__) * a_dim1;
-        a[i__1].r = 1.;
-        a[i__1].i = 0.; // , expr subst
+        a[i__1].real = 1.;
+        a[i__1].imag = 0.; // , expr subst
         i__1 = *m - k + i__;
         i__2 = *n - k + i__ - 1;
         d_cnjg(&z__1, &tau[i__]);
         aocl_lapack_zlarf("Left", &i__1, &i__2, &a[(*n - k + i__) * a_dim1 + 1], &c__1, &z__1,
                           &a[a_offset], lda, &work[1]);
         i__1 = *m - k + i__ + (*n - k + i__) * a_dim1;
-        a[i__1].r = alpha.r;
-        a[i__1].i = alpha.i; // , expr subst
+        a[i__1].real = alpha.real;
+        a[i__1].imag = alpha.imag; // , expr subst
         /* L10: */
     }
     AOCL_DTL_TRACE_LOG_EXIT

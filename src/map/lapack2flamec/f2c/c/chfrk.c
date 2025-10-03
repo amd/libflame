@@ -290,20 +290,20 @@ void aocl_lapack_chfrk(char *transr, char *uplo, char *trans, aocl_int64_t *n, a
         for(j = 1; j <= i__1; ++j)
         {
             i__2 = j;
-            c__[i__2].r = 0.f;
-            c__[i__2].i = 0.f; // , expr subst
+            c__[i__2].real = 0.f;
+            c__[i__2].imag = 0.f; // , expr subst
         }
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
-    q__1.r = *alpha;
-    q__1.i = 0.f; // , expr subst
-    calpha.r = q__1.r;
-    calpha.i = q__1.i; // , expr subst
-    q__1.r = *beta;
-    q__1.i = 0.f; // , expr subst
-    cbeta.r = q__1.r;
-    cbeta.i = q__1.i; // , expr subst
+    q__1.real = *alpha;
+    q__1.imag = 0.f; // , expr subst
+    calpha.real = q__1.real;
+    calpha.imag = q__1.imag; // , expr subst
+    q__1.real = *beta;
+    q__1.imag = 0.f; // , expr subst
+    cbeta.real = q__1.real;
+    cbeta.imag = q__1.imag; // , expr subst
     /* C is N-by-N. */
     /* If N is odd, set NISODD = .TRUE., and N1 and N2. */
     /* If N is even, NISODD = .FALSE., and NK. */

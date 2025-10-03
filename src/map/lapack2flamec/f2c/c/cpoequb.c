@@ -203,7 +203,7 @@ void aocl_lapack_cpoequb(aocl_int64_t *n, scomplex *a, aocl_int64_t *lda, real *
     tmp = -.5f / log(base);
     /* Find the minimum and maximum diagonal elements. */
     i__1 = a_dim1 + 1;
-    s[1] = a[i__1].r;
+    s[1] = a[i__1].real;
     smin = s[1];
     *amax = s[1];
     i__1 = *n;
@@ -211,7 +211,7 @@ void aocl_lapack_cpoequb(aocl_int64_t *n, scomplex *a, aocl_int64_t *lda, real *
     {
         i__2 = i__;
         i__3 = i__ + i__ * a_dim1;
-        s[i__2] = a[i__3].r;
+        s[i__2] = a[i__3].real;
         /* Computing MIN */
         r__1 = smin;
         r__2 = s[i__]; // , expr subst

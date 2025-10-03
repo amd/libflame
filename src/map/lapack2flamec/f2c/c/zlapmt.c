@@ -176,15 +176,15 @@ void aocl_lapack_zlapmt(logical *forwrd, aocl_int64_t *m, aocl_int64_t *n, dcomp
             for(ii = 1; ii <= i__2; ++ii)
             {
                 i__3 = ii + j * x_dim1;
-                temp.r = x[i__3].r;
-                temp.i = x[i__3].i; // , expr subst
+                temp.real = x[i__3].real;
+                temp.imag = x[i__3].imag; // , expr subst
                 i__3 = ii + j * x_dim1;
                 i__4 = ii + in * x_dim1;
-                x[i__3].r = x[i__4].r;
-                x[i__3].i = x[i__4].i; // , expr subst
+                x[i__3].real = x[i__4].real;
+                x[i__3].imag = x[i__4].imag; // , expr subst
                 i__3 = ii + in * x_dim1;
-                x[i__3].r = temp.r;
-                x[i__3].i = temp.i; // , expr subst
+                x[i__3].real = temp.real;
+                x[i__3].imag = temp.imag; // , expr subst
                 /* L30: */
             }
             k[in] = -k[in];
@@ -216,15 +216,15 @@ void aocl_lapack_zlapmt(logical *forwrd, aocl_int64_t *m, aocl_int64_t *n, dcomp
             for(ii = 1; ii <= i__2; ++ii)
             {
                 i__3 = ii + i__ * x_dim1;
-                temp.r = x[i__3].r;
-                temp.i = x[i__3].i; // , expr subst
+                temp.real = x[i__3].real;
+                temp.imag = x[i__3].imag; // , expr subst
                 i__3 = ii + i__ * x_dim1;
                 i__4 = ii + j * x_dim1;
-                x[i__3].r = x[i__4].r;
-                x[i__3].i = x[i__4].i; // , expr subst
+                x[i__3].real = x[i__4].real;
+                x[i__3].imag = x[i__4].imag; // , expr subst
                 i__3 = ii + j * x_dim1;
-                x[i__3].r = temp.r;
-                x[i__3].i = temp.i; // , expr subst
+                x[i__3].real = temp.real;
+                x[i__3].imag = temp.imag; // , expr subst
                 /* L70: */
             }
             k[j] = -k[j];

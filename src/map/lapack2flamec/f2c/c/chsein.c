@@ -462,7 +462,7 @@ void aocl_lapack_chsein(char *side, char *eigsrc, char *initv, logical *select, 
                 for(i__ = k; i__ >= i__2; --i__)
                 {
                     i__3 = i__ + (i__ - 1) * h_dim1;
-                    if(h__[i__3].r == 0.f && h__[i__3].i == 0.f)
+                    if(h__[i__3].real == 0.f && h__[i__3].imag == 0.f)
                     {
                         goto L30;
                     }
@@ -476,7 +476,7 @@ void aocl_lapack_chsein(char *side, char *eigsrc, char *initv, logical *select, 
                     for(i__ = k; i__ <= i__2; ++i__)
                     {
                         i__3 = i__ + 1 + i__ * h_dim1;
-                        if(h__[i__3].r == 0.f && h__[i__3].i == 0.f)
+                        if(h__[i__3].real == 0.f && h__[i__3].imag == 0.f)
                         {
                             goto L50;
                         }
@@ -512,31 +512,31 @@ void aocl_lapack_chsein(char *side, char *eigsrc, char *initv, logical *select, 
             /* selected eigenvalues affiliated to the submatrix */
             /* H(KL:KR,KL:KR). Close roots are modified by EPS3. */
             i__2 = k;
-            wk.r = w[i__2].r;
-            wk.i = w[i__2].i; // , expr subst
+            wk.real = w[i__2].real;
+            wk.imag = w[i__2].imag; // , expr subst
         L60:
             i__2 = kl;
             for(i__ = k - 1; i__ >= i__2; --i__)
             {
                 i__3 = i__;
-                q__2.r = w[i__3].r - wk.r;
-                q__2.i = w[i__3].i - wk.i; // , expr subst
-                q__1.r = q__2.r;
-                q__1.i = q__2.i; // , expr subst
+                q__2.real = w[i__3].real - wk.real;
+                q__2.imag = w[i__3].imag - wk.imag; // , expr subst
+                q__1.real = q__2.real;
+                q__1.imag = q__2.imag; // , expr subst
                 if(select[i__]
-                   && (r__1 = q__1.r, f2c_abs(r__1)) + (r__2 = r_imag(&q__1), f2c_abs(r__2)) < eps3)
+                   && (r__1 = q__1.real, f2c_abs(r__1)) + (r__2 = r_imag(&q__1), f2c_abs(r__2)) < eps3)
                 {
-                    q__1.r = wk.r + eps3;
-                    q__1.i = wk.i; // , expr subst
-                    wk.r = q__1.r;
-                    wk.i = q__1.i; // , expr subst
+                    q__1.real = wk.real + eps3;
+                    q__1.imag = wk.imag; // , expr subst
+                    wk.real = q__1.real;
+                    wk.imag = q__1.imag; // , expr subst
                     goto L60;
                 }
                 /* L70: */
             }
             i__2 = k;
-            w[i__2].r = wk.r;
-            w[i__2].i = wk.i; // , expr subst
+            w[i__2].real = wk.real;
+            w[i__2].imag = wk.imag; // , expr subst
             if(leftv)
             {
                 /* Compute left eigenvector. */
@@ -557,8 +557,8 @@ void aocl_lapack_chsein(char *side, char *eigsrc, char *initv, logical *select, 
                 for(i__ = 1; i__ <= i__2; ++i__)
                 {
                     i__3 = i__ + ks * vl_dim1;
-                    vl[i__3].r = 0.f;
-                    vl[i__3].i = 0.f; // , expr subst
+                    vl[i__3].real = 0.f;
+                    vl[i__3].imag = 0.f; // , expr subst
                     /* L80: */
                 }
             }
@@ -581,8 +581,8 @@ void aocl_lapack_chsein(char *side, char *eigsrc, char *initv, logical *select, 
                 for(i__ = kr + 1; i__ <= i__2; ++i__)
                 {
                     i__3 = i__ + ks * vr_dim1;
-                    vr[i__3].r = 0.f;
-                    vr[i__3].i = 0.f; // , expr subst
+                    vr[i__3].real = 0.f;
+                    vr[i__3].imag = 0.f; // , expr subst
                     /* L90: */
                 }
             }

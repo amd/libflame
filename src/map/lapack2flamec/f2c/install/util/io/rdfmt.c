@@ -582,7 +582,7 @@ int rd_ed(struct syl *p, char *ptr, ftnlen len)
         case G:
         case GE:
         case F:
-            ch = rd_F((ufloat *)ptr, p->p1, p->p2.i[0], len);
+            ch = rd_F((ufloat *)ptr, p->p1, p->p2.imag[0], len);
             break;
 
             /* Z and ZM assume 8-bit bytes. */

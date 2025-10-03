@@ -4,8 +4,8 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static dcomplex c_b1 = {{0.}, {0.}};
-static dcomplex c_b2 = {{1.}, {0.}};
+static dcomplex c_b1 = {0., 0.};
+static dcomplex c_b2 = {1., 0.};
 /* > \brief \b ZGGSVP */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -436,7 +436,7 @@ void aocl_lapack_zggsvp(char *jobu, char *jobv, char *jobq, aocl_int64_t *m, aoc
     for(i__ = 1; i__ <= i__1; ++i__)
     {
         i__2 = i__ + i__ * b_dim1;
-        if((d__1 = b[i__2].r, f2c_dabs(d__1))
+        if((d__1 = b[i__2].real, f2c_dabs(d__1))
                + (d__2 = d_imag(&b[i__ + i__ * b_dim1]), f2c_dabs(d__2))
            > *tolb)
         {
@@ -464,8 +464,8 @@ void aocl_lapack_zggsvp(char *jobu, char *jobv, char *jobq, aocl_int64_t *m, aoc
         for(i__ = j + 1; i__ <= i__2; ++i__)
         {
             i__3 = i__ + j * b_dim1;
-            b[i__3].r = 0.;
-            b[i__3].i = 0.; // , expr subst
+            b[i__3].real = 0.;
+            b[i__3].imag = 0.; // , expr subst
             /* L30: */
         }
         /* L40: */
@@ -504,8 +504,8 @@ void aocl_lapack_zggsvp(char *jobu, char *jobv, char *jobq, aocl_int64_t *m, aoc
             for(i__ = j - *n + *l + 1; i__ <= i__2; ++i__)
             {
                 i__3 = i__ + j * b_dim1;
-                b[i__3].r = 0.;
-                b[i__3].i = 0.; // , expr subst
+                b[i__3].real = 0.;
+                b[i__3].imag = 0.; // , expr subst
                 /* L50: */
             }
             /* L60: */
@@ -533,7 +533,7 @@ void aocl_lapack_zggsvp(char *jobu, char *jobv, char *jobq, aocl_int64_t *m, aoc
     for(i__ = 1; i__ <= i__1; ++i__)
     {
         i__2 = i__ + i__ * a_dim1;
-        if((d__1 = a[i__2].r, f2c_dabs(d__1))
+        if((d__1 = a[i__2].real, f2c_dabs(d__1))
                + (d__2 = d_imag(&a[i__ + i__ * a_dim1]), f2c_dabs(d__2))
            > *tola)
         {
@@ -579,8 +579,8 @@ void aocl_lapack_zggsvp(char *jobu, char *jobv, char *jobq, aocl_int64_t *m, aoc
         for(i__ = j + 1; i__ <= i__2; ++i__)
         {
             i__3 = i__ + j * a_dim1;
-            a[i__3].r = 0.;
-            a[i__3].i = 0.; // , expr subst
+            a[i__3].real = 0.;
+            a[i__3].imag = 0.; // , expr subst
             /* L90: */
         }
         /* L100: */
@@ -613,8 +613,8 @@ void aocl_lapack_zggsvp(char *jobu, char *jobv, char *jobq, aocl_int64_t *m, aoc
             for(i__ = j - *n + *l + *k + 1; i__ <= i__2; ++i__)
             {
                 i__3 = i__ + j * a_dim1;
-                a[i__3].r = 0.;
-                a[i__3].i = 0.; // , expr subst
+                a[i__3].real = 0.;
+                a[i__3].imag = 0.; // , expr subst
                 /* L110: */
             }
             /* L120: */
@@ -645,8 +645,8 @@ void aocl_lapack_zggsvp(char *jobu, char *jobv, char *jobq, aocl_int64_t *m, aoc
             for(i__ = j - *n + *k + *l + 1; i__ <= i__2; ++i__)
             {
                 i__3 = i__ + j * a_dim1;
-                a[i__3].r = 0.;
-                a[i__3].i = 0.; // , expr subst
+                a[i__3].real = 0.;
+                a[i__3].imag = 0.; // , expr subst
                 /* L130: */
             }
             /* L140: */

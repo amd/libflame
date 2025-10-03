@@ -169,8 +169,8 @@ void cungqr_fla(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *k, scomplex *a, 
     *info = 0;
     nb = aocl_lapack_ilaenv(&c__1, "CUNGQR", " ", m, n, k, &c_n1);
     lwkopt = fla_max(1, *n) * nb;
-    work[1].r = (real)lwkopt;
-    work[1].i = 0.f; // , expr subst
+    work[1].real = (real)lwkopt;
+    work[1].imag = 0.f; // , expr subst
     lquery = *lwork == -1;
     if(*m < 0)
     {
@@ -205,8 +205,8 @@ void cungqr_fla(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *k, scomplex *a, 
     /* Quick return if possible */
     if(*n <= 0)
     {
-        work[1].r = 1.f;
-        work[1].i = 0.f; // , expr subst
+        work[1].real = 1.f;
+        work[1].imag = 0.f; // , expr subst
         return;
     }
     nbmin = 2;
@@ -253,8 +253,8 @@ void cungqr_fla(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *k, scomplex *a, 
             for(i__ = 1; i__ <= i__2; ++i__)
             {
                 i__3 = i__ + j * a_dim1;
-                a[i__3].r = 0.f;
-                a[i__3].i = 0.f; // , expr subst
+                a[i__3].real = 0.f;
+                a[i__3].imag = 0.f; // , expr subst
                 /* L10: */
             }
             /* L20: */
@@ -308,8 +308,8 @@ void cungqr_fla(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *k, scomplex *a, 
                 for(l = 1; l <= i__3; ++l)
                 {
                     i__4 = l + j * a_dim1;
-                    a[i__4].r = 0.f;
-                    a[i__4].i = 0.f; // , expr subst
+                    a[i__4].real = 0.f;
+                    a[i__4].imag = 0.f; // , expr subst
                     /* L30: */
                 }
                 /* L40: */
@@ -317,8 +317,8 @@ void cungqr_fla(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *k, scomplex *a, 
             /* L50: */
         }
     }
-    work[1].r = (real)iws;
-    work[1].i = 0.f; // , expr subst
+    work[1].real = (real)iws;
+    work[1].imag = 0.f; // , expr subst
     return;
     /* End of CUNGQR */
 }

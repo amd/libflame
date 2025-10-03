@@ -202,8 +202,8 @@ void aocl_lapack_zlatrz(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *l, dcomp
         for(i__ = 1; i__ <= i__1; ++i__)
         {
             i__2 = i__;
-            tau[i__2].r = 0.;
-            tau[i__2].i = 0.; // , expr subst
+            tau[i__2].real = 0.;
+            tau[i__2].imag = 0.; // , expr subst
             /* L10: */
         }
         AOCL_DTL_TRACE_LOG_EXIT
@@ -215,14 +215,14 @@ void aocl_lapack_zlatrz(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *l, dcomp
         /* [ A(i,i) A(i,n-l+1:n) ] */
         aocl_lapack_zlacgv(l, &a[i__ + (*n - *l + 1) * a_dim1], lda);
         d_cnjg(&z__1, &a[i__ + i__ * a_dim1]);
-        alpha.r = z__1.r;
-        alpha.i = z__1.i; // , expr subst
+        alpha.real = z__1.real;
+        alpha.imag = z__1.imag; // , expr subst
         i__1 = *l + 1;
         aocl_lapack_zlarfg(&i__1, &alpha, &a[i__ + (*n - *l + 1) * a_dim1], lda, &tau[i__]);
         i__1 = i__;
         d_cnjg(&z__1, &tau[i__]);
-        tau[i__1].r = z__1.r;
-        tau[i__1].i = z__1.i; // , expr subst
+        tau[i__1].real = z__1.real;
+        tau[i__1].imag = z__1.imag; // , expr subst
         /* Apply H(i) to A(1:i-1,i:n) from the right */
         i__1 = i__ - 1;
         i__2 = *n - i__ + 1;
@@ -231,8 +231,8 @@ void aocl_lapack_zlatrz(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *l, dcomp
                           &a[i__ * a_dim1 + 1], lda, &work[1]);
         i__1 = i__ + i__ * a_dim1;
         d_cnjg(&z__1, &alpha);
-        a[i__1].r = z__1.r;
-        a[i__1].i = z__1.i; // , expr subst
+        a[i__1].real = z__1.real;
+        a[i__1].imag = z__1.imag; // , expr subst
         /* L20: */
     }
     AOCL_DTL_TRACE_LOG_EXIT

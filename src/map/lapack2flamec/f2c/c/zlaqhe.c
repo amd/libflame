@@ -212,17 +212,17 @@ void aocl_lapack_zlaqhe(char *uplo, aocl_int64_t *n, dcomplex *a, aocl_int64_t *
                     i__3 = i__ + j * a_dim1;
                     d__1 = cj * s[i__];
                     i__4 = i__ + j * a_dim1;
-                    z__1.r = d__1 * a[i__4].r;
-                    z__1.i = d__1 * a[i__4].i; // , expr subst
-                    a[i__3].r = z__1.r;
-                    a[i__3].i = z__1.i; // , expr subst
+                    z__1.real = d__1 * a[i__4].real;
+                    z__1.imag = d__1 * a[i__4].imag; // , expr subst
+                    a[i__3].real = z__1.real;
+                    a[i__3].imag = z__1.imag; // , expr subst
                     /* L10: */
                 }
                 i__2 = j + j * a_dim1;
                 i__3 = j + j * a_dim1;
-                d__1 = cj * cj * a[i__3].r;
-                a[i__2].r = d__1;
-                a[i__2].i = 0.; // , expr subst
+                d__1 = cj * cj * a[i__3].real;
+                a[i__2].real = d__1;
+                a[i__2].imag = 0.; // , expr subst
                 /* L20: */
             }
         }
@@ -235,19 +235,19 @@ void aocl_lapack_zlaqhe(char *uplo, aocl_int64_t *n, dcomplex *a, aocl_int64_t *
                 cj = s[j];
                 i__2 = j + j * a_dim1;
                 i__3 = j + j * a_dim1;
-                d__1 = cj * cj * a[i__3].r;
-                a[i__2].r = d__1;
-                a[i__2].i = 0.; // , expr subst
+                d__1 = cj * cj * a[i__3].real;
+                a[i__2].real = d__1;
+                a[i__2].imag = 0.; // , expr subst
                 i__2 = *n;
                 for(i__ = j + 1; i__ <= i__2; ++i__)
                 {
                     i__3 = i__ + j * a_dim1;
                     d__1 = cj * s[i__];
                     i__4 = i__ + j * a_dim1;
-                    z__1.r = d__1 * a[i__4].r;
-                    z__1.i = d__1 * a[i__4].i; // , expr subst
-                    a[i__3].r = z__1.r;
-                    a[i__3].i = z__1.i; // , expr subst
+                    z__1.real = d__1 * a[i__4].real;
+                    z__1.imag = d__1 * a[i__4].imag; // , expr subst
+                    a[i__3].real = z__1.real;
+                    a[i__3].imag = z__1.imag; // , expr subst
                     /* L30: */
                 }
                 /* L40: */

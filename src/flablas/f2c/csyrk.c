@@ -153,16 +153,16 @@ int csyrk_(char *uplo, char *trans, integer *n, integer *k, scomplex *alpha, sco
         return 0;
     }
     /* Quick return if possible. */
-    if (*n == 0 || (alpha->r == 0.f && alpha->i == 0.f || *k == 0) && ( beta->r == 1.f && beta->i == 0.f))
+    if (*n == 0 || (alpha->real == 0.f && alpha->imag == 0.f || *k == 0) && ( beta->real == 1.f && beta->imag == 0.f))
     {
         return 0;
     }
     /* And when alpha.eq.zero. */
-    if (alpha->r == 0.f && alpha->i == 0.f)
+    if (alpha->real == 0.f && alpha->imag == 0.f)
     {
         if (upper)
         {
-            if (beta->r == 0.f && beta->i == 0.f)
+            if (beta->real == 0.f && beta->imag == 0.f)
             {
                 i__1 = *n;
                 for (j = 1;
@@ -175,7 +175,7 @@ int csyrk_(char *uplo, char *trans, integer *n, integer *k, scomplex *alpha, sco
                             ++i__)
                     {
                         i__3 = i__ + j * c_dim1;
-                        c__[i__3].r = 0.f, c__[i__3].i = 0.f;
+                        c__[i__3].real = 0.f, c__[i__3].imag = 0.f;
                         /* L10: */
                     }
                     /* L20: */
@@ -195,8 +195,8 @@ int csyrk_(char *uplo, char *trans, integer *n, integer *k, scomplex *alpha, sco
                     {
                         i__3 = i__ + j * c_dim1;
                         i__4 = i__ + j * c_dim1;
-                        q__1.r = beta->r * c__[i__4].r - beta->i * c__[i__4] .i, q__1.i = beta->r * c__[i__4].i + beta->i * c__[i__4].r;
-                        c__[i__3].r = q__1.r, c__[i__3].i = q__1.i;
+                        q__1.real = beta->real * c__[i__4].real - beta->imag * c__[i__4] .imag, q__1.imag = beta->real * c__[i__4].imag + beta->imag * c__[i__4].real;
+                        c__[i__3].real = q__1.real, c__[i__3].imag = q__1.imag;
                         /* L30: */
                     }
                     /* L40: */
@@ -205,7 +205,7 @@ int csyrk_(char *uplo, char *trans, integer *n, integer *k, scomplex *alpha, sco
         }
         else
         {
-            if (beta->r == 0.f && beta->i == 0.f)
+            if (beta->real == 0.f && beta->imag == 0.f)
             {
                 i__1 = *n;
                 for (j = 1;
@@ -218,7 +218,7 @@ int csyrk_(char *uplo, char *trans, integer *n, integer *k, scomplex *alpha, sco
                             ++i__)
                     {
                         i__3 = i__ + j * c_dim1;
-                        c__[i__3].r = 0.f, c__[i__3].i = 0.f;
+                        c__[i__3].real = 0.f, c__[i__3].imag = 0.f;
                         /* L50: */
                     }
                     /* L60: */
@@ -238,8 +238,8 @@ int csyrk_(char *uplo, char *trans, integer *n, integer *k, scomplex *alpha, sco
                     {
                         i__3 = i__ + j * c_dim1;
                         i__4 = i__ + j * c_dim1;
-                        q__1.r = beta->r * c__[i__4].r - beta->i * c__[i__4] .i, q__1.i = beta->r * c__[i__4].i + beta->i * c__[i__4].r;
-                        c__[i__3].r = q__1.r, c__[i__3].i = q__1.i;
+                        q__1.real = beta->real * c__[i__4].real - beta->imag * c__[i__4] .imag, q__1.imag = beta->real * c__[i__4].imag + beta->imag * c__[i__4].real;
+                        c__[i__3].real = q__1.real, c__[i__3].imag = q__1.imag;
                         /* L70: */
                     }
                     /* L80: */
@@ -259,7 +259,7 @@ int csyrk_(char *uplo, char *trans, integer *n, integer *k, scomplex *alpha, sco
                     j <= i__1;
                     ++j)
             {
-                if (beta->r == 0.f && beta->i == 0.f)
+                if (beta->real == 0.f && beta->imag == 0.f)
                 {
                     i__2 = j;
                     for (i__ = 1;
@@ -267,11 +267,11 @@ int csyrk_(char *uplo, char *trans, integer *n, integer *k, scomplex *alpha, sco
                             ++i__)
                     {
                         i__3 = i__ + j * c_dim1;
-                        c__[i__3].r = 0.f, c__[i__3].i = 0.f;
+                        c__[i__3].real = 0.f, c__[i__3].imag = 0.f;
                         /* L90: */
                     }
                 }
-                else if (beta->r != 1.f || beta->i != 0.f)
+                else if (beta->real != 1.f || beta->imag != 0.f)
                 {
                     i__2 = j;
                     for (i__ = 1;
@@ -280,8 +280,8 @@ int csyrk_(char *uplo, char *trans, integer *n, integer *k, scomplex *alpha, sco
                     {
                         i__3 = i__ + j * c_dim1;
                         i__4 = i__ + j * c_dim1;
-                        q__1.r = beta->r * c__[i__4].r - beta->i * c__[i__4] .i, q__1.i = beta->r * c__[i__4].i + beta->i * c__[i__4].r;
-                        c__[i__3].r = q__1.r, c__[i__3].i = q__1.i;
+                        q__1.real = beta->real * c__[i__4].real - beta->imag * c__[i__4] .imag, q__1.imag = beta->real * c__[i__4].imag + beta->imag * c__[i__4].real;
+                        c__[i__3].real = q__1.real, c__[i__3].imag = q__1.imag;
                         /* L100: */
                     }
                 }
@@ -291,11 +291,11 @@ int csyrk_(char *uplo, char *trans, integer *n, integer *k, scomplex *alpha, sco
                         ++l)
                 {
                     i__3 = j + l * a_dim1;
-                    if (a[i__3].r != 0.f || a[i__3].i != 0.f)
+                    if (a[i__3].real != 0.f || a[i__3].imag != 0.f)
                     {
                         i__3 = j + l * a_dim1;
-                        q__1.r = alpha->r * a[i__3].r - alpha->i * a[i__3].i, q__1.i = alpha->r * a[i__3].i + alpha->i * a[ i__3].r;
-                        temp.r = q__1.r, temp.i = q__1.i;
+                        q__1.real = alpha->real * a[i__3].real - alpha->imag * a[i__3].imag, q__1.imag = alpha->real * a[i__3].imag + alpha->imag * a[ i__3].real;
+                        temp.real = q__1.real, temp.imag = q__1.imag;
                         i__3 = j;
                         for (i__ = 1;
                                 i__ <= i__3;
@@ -304,9 +304,9 @@ int csyrk_(char *uplo, char *trans, integer *n, integer *k, scomplex *alpha, sco
                             i__4 = i__ + j * c_dim1;
                             i__5 = i__ + j * c_dim1;
                             i__6 = i__ + l * a_dim1;
-                            q__2.r = temp.r * a[i__6].r - temp.i * a[i__6].i, q__2.i = temp.r * a[i__6].i + temp.i * a[ i__6].r;
-                            q__1.r = c__[i__5].r + q__2.r, q__1.i = c__[i__5] .i + q__2.i;
-                            c__[i__4].r = q__1.r, c__[i__4].i = q__1.i;
+                            q__2.real = temp.real * a[i__6].real - temp.imag * a[i__6].imag, q__2.imag = temp.real * a[i__6].imag + temp.imag * a[ i__6].real;
+                            q__1.real = c__[i__5].real + q__2.real, q__1.imag = c__[i__5] .imag + q__2.imag;
+                            c__[i__4].real = q__1.real, c__[i__4].imag = q__1.imag;
                             /* L110: */
                         }
                     }
@@ -322,7 +322,7 @@ int csyrk_(char *uplo, char *trans, integer *n, integer *k, scomplex *alpha, sco
                     j <= i__1;
                     ++j)
             {
-                if (beta->r == 0.f && beta->i == 0.f)
+                if (beta->real == 0.f && beta->imag == 0.f)
                 {
                     i__2 = *n;
                     for (i__ = j;
@@ -330,11 +330,11 @@ int csyrk_(char *uplo, char *trans, integer *n, integer *k, scomplex *alpha, sco
                             ++i__)
                     {
                         i__3 = i__ + j * c_dim1;
-                        c__[i__3].r = 0.f, c__[i__3].i = 0.f;
+                        c__[i__3].real = 0.f, c__[i__3].imag = 0.f;
                         /* L140: */
                     }
                 }
-                else if (beta->r != 1.f || beta->i != 0.f)
+                else if (beta->real != 1.f || beta->imag != 0.f)
                 {
                     i__2 = *n;
                     for (i__ = j;
@@ -343,8 +343,8 @@ int csyrk_(char *uplo, char *trans, integer *n, integer *k, scomplex *alpha, sco
                     {
                         i__3 = i__ + j * c_dim1;
                         i__4 = i__ + j * c_dim1;
-                        q__1.r = beta->r * c__[i__4].r - beta->i * c__[i__4] .i, q__1.i = beta->r * c__[i__4].i + beta->i * c__[i__4].r;
-                        c__[i__3].r = q__1.r, c__[i__3].i = q__1.i;
+                        q__1.real = beta->real * c__[i__4].real - beta->imag * c__[i__4] .imag, q__1.imag = beta->real * c__[i__4].imag + beta->imag * c__[i__4].real;
+                        c__[i__3].real = q__1.real, c__[i__3].imag = q__1.imag;
                         /* L150: */
                     }
                 }
@@ -354,11 +354,11 @@ int csyrk_(char *uplo, char *trans, integer *n, integer *k, scomplex *alpha, sco
                         ++l)
                 {
                     i__3 = j + l * a_dim1;
-                    if (a[i__3].r != 0.f || a[i__3].i != 0.f)
+                    if (a[i__3].real != 0.f || a[i__3].imag != 0.f)
                     {
                         i__3 = j + l * a_dim1;
-                        q__1.r = alpha->r * a[i__3].r - alpha->i * a[i__3].i, q__1.i = alpha->r * a[i__3].i + alpha->i * a[ i__3].r;
-                        temp.r = q__1.r, temp.i = q__1.i;
+                        q__1.real = alpha->real * a[i__3].real - alpha->imag * a[i__3].imag, q__1.imag = alpha->real * a[i__3].imag + alpha->imag * a[ i__3].real;
+                        temp.real = q__1.real, temp.imag = q__1.imag;
                         i__3 = *n;
                         for (i__ = j;
                                 i__ <= i__3;
@@ -367,9 +367,9 @@ int csyrk_(char *uplo, char *trans, integer *n, integer *k, scomplex *alpha, sco
                             i__4 = i__ + j * c_dim1;
                             i__5 = i__ + j * c_dim1;
                             i__6 = i__ + l * a_dim1;
-                            q__2.r = temp.r * a[i__6].r - temp.i * a[i__6].i, q__2.i = temp.r * a[i__6].i + temp.i * a[ i__6].r;
-                            q__1.r = c__[i__5].r + q__2.r, q__1.i = c__[i__5] .i + q__2.i;
-                            c__[i__4].r = q__1.r, c__[i__4].i = q__1.i;
+                            q__2.real = temp.real * a[i__6].real - temp.imag * a[i__6].imag, q__2.imag = temp.real * a[i__6].imag + temp.imag * a[ i__6].real;
+                            q__1.real = c__[i__5].real + q__2.real, q__1.imag = c__[i__5] .imag + q__2.imag;
+                            c__[i__4].real = q__1.real, c__[i__4].imag = q__1.imag;
                             /* L160: */
                         }
                     }
@@ -394,7 +394,7 @@ int csyrk_(char *uplo, char *trans, integer *n, integer *k, scomplex *alpha, sco
                         i__ <= i__2;
                         ++i__)
                 {
-                    temp.r = 0.f, temp.i = 0.f;
+                    temp.real = 0.f, temp.imag = 0.f;
                     i__3 = *k;
                     for (l = 1;
                             l <= i__3;
@@ -402,25 +402,25 @@ int csyrk_(char *uplo, char *trans, integer *n, integer *k, scomplex *alpha, sco
                     {
                         i__4 = l + i__ * a_dim1;
                         i__5 = l + j * a_dim1;
-                        q__2.r = a[i__4].r * a[i__5].r - a[i__4].i * a[i__5] .i, q__2.i = a[i__4].r * a[i__5].i + a[i__4] .i * a[i__5].r;
-                        q__1.r = temp.r + q__2.r, q__1.i = temp.i + q__2.i;
-                        temp.r = q__1.r, temp.i = q__1.i;
+                        q__2.real = a[i__4].real * a[i__5].real - a[i__4].imag * a[i__5] .imag, q__2.imag = a[i__4].real * a[i__5].imag + a[i__4] .imag * a[i__5].real;
+                        q__1.real = temp.real + q__2.real, q__1.imag = temp.imag + q__2.imag;
+                        temp.real = q__1.real, temp.imag = q__1.imag;
                         /* L190: */
                     }
-                    if (beta->r == 0.f && beta->i == 0.f)
+                    if (beta->real == 0.f && beta->imag == 0.f)
                     {
                         i__3 = i__ + j * c_dim1;
-                        q__1.r = alpha->r * temp.r - alpha->i * temp.i, q__1.i = alpha->r * temp.i + alpha->i * temp.r;
-                        c__[i__3].r = q__1.r, c__[i__3].i = q__1.i;
+                        q__1.real = alpha->real * temp.real - alpha->imag * temp.imag, q__1.imag = alpha->real * temp.imag + alpha->imag * temp.real;
+                        c__[i__3].real = q__1.real, c__[i__3].imag = q__1.imag;
                     }
                     else
                     {
                         i__3 = i__ + j * c_dim1;
-                        q__2.r = alpha->r * temp.r - alpha->i * temp.i, q__2.i = alpha->r * temp.i + alpha->i * temp.r;
+                        q__2.real = alpha->real * temp.real - alpha->imag * temp.imag, q__2.imag = alpha->real * temp.imag + alpha->imag * temp.real;
                         i__4 = i__ + j * c_dim1;
-                        q__3.r = beta->r * c__[i__4].r - beta->i * c__[i__4] .i, q__3.i = beta->r * c__[i__4].i + beta->i * c__[i__4].r;
-                        q__1.r = q__2.r + q__3.r, q__1.i = q__2.i + q__3.i;
-                        c__[i__3].r = q__1.r, c__[i__3].i = q__1.i;
+                        q__3.real = beta->real * c__[i__4].real - beta->imag * c__[i__4] .imag, q__3.imag = beta->real * c__[i__4].imag + beta->imag * c__[i__4].real;
+                        q__1.real = q__2.real + q__3.real, q__1.imag = q__2.imag + q__3.imag;
+                        c__[i__3].real = q__1.real, c__[i__3].imag = q__1.imag;
                     }
                     /* L200: */
                 }
@@ -439,7 +439,7 @@ int csyrk_(char *uplo, char *trans, integer *n, integer *k, scomplex *alpha, sco
                         i__ <= i__2;
                         ++i__)
                 {
-                    temp.r = 0.f, temp.i = 0.f;
+                    temp.real = 0.f, temp.imag = 0.f;
                     i__3 = *k;
                     for (l = 1;
                             l <= i__3;
@@ -447,25 +447,25 @@ int csyrk_(char *uplo, char *trans, integer *n, integer *k, scomplex *alpha, sco
                     {
                         i__4 = l + i__ * a_dim1;
                         i__5 = l + j * a_dim1;
-                        q__2.r = a[i__4].r * a[i__5].r - a[i__4].i * a[i__5] .i, q__2.i = a[i__4].r * a[i__5].i + a[i__4] .i * a[i__5].r;
-                        q__1.r = temp.r + q__2.r, q__1.i = temp.i + q__2.i;
-                        temp.r = q__1.r, temp.i = q__1.i;
+                        q__2.real = a[i__4].real * a[i__5].real - a[i__4].imag * a[i__5] .imag, q__2.imag = a[i__4].real * a[i__5].imag + a[i__4] .imag * a[i__5].real;
+                        q__1.real = temp.real + q__2.real, q__1.imag = temp.imag + q__2.imag;
+                        temp.real = q__1.real, temp.imag = q__1.imag;
                         /* L220: */
                     }
-                    if (beta->r == 0.f && beta->i == 0.f)
+                    if (beta->real == 0.f && beta->imag == 0.f)
                     {
                         i__3 = i__ + j * c_dim1;
-                        q__1.r = alpha->r * temp.r - alpha->i * temp.i, q__1.i = alpha->r * temp.i + alpha->i * temp.r;
-                        c__[i__3].r = q__1.r, c__[i__3].i = q__1.i;
+                        q__1.real = alpha->real * temp.real - alpha->imag * temp.imag, q__1.imag = alpha->real * temp.imag + alpha->imag * temp.real;
+                        c__[i__3].real = q__1.real, c__[i__3].imag = q__1.imag;
                     }
                     else
                     {
                         i__3 = i__ + j * c_dim1;
-                        q__2.r = alpha->r * temp.r - alpha->i * temp.i, q__2.i = alpha->r * temp.i + alpha->i * temp.r;
+                        q__2.real = alpha->real * temp.real - alpha->imag * temp.imag, q__2.imag = alpha->real * temp.imag + alpha->imag * temp.real;
                         i__4 = i__ + j * c_dim1;
-                        q__3.r = beta->r * c__[i__4].r - beta->i * c__[i__4] .i, q__3.i = beta->r * c__[i__4].i + beta->i * c__[i__4].r;
-                        q__1.r = q__2.r + q__3.r, q__1.i = q__2.i + q__3.i;
-                        c__[i__3].r = q__1.r, c__[i__3].i = q__1.i;
+                        q__3.real = beta->real * c__[i__4].real - beta->imag * c__[i__4] .imag, q__3.imag = beta->real * c__[i__4].imag + beta->imag * c__[i__4].real;
+                        q__1.real = q__2.real + q__3.real, q__1.imag = q__2.imag + q__3.imag;
+                        c__[i__3].real = q__1.real, c__[i__3].imag = q__1.imag;
                     }
                     /* L230: */
                 }

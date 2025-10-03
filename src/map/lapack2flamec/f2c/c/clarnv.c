@@ -166,10 +166,10 @@ void aocl_lapack_clarnv(aocl_int64_t *idist, aocl_int_t *iseed, aocl_int64_t *n,
                 i__3 = iv + i__ - 1;
                 i__4 = (i__ << 1) - 2;
                 i__5 = (i__ << 1) - 1;
-                q__1.r = u[i__4];
-                q__1.i = u[i__5]; // , expr subst
-                x[i__3].r = q__1.r;
-                x[i__3].i = q__1.i; // , expr subst
+                q__1.real = u[i__4];
+                q__1.imag = u[i__5]; // , expr subst
+                x[i__3].real = q__1.real;
+                x[i__3].imag = q__1.imag; // , expr subst
                 /* L10: */
             }
         }
@@ -182,10 +182,10 @@ void aocl_lapack_clarnv(aocl_int64_t *idist, aocl_int_t *iseed, aocl_int64_t *n,
                 i__3 = iv + i__ - 1;
                 r__1 = u[(i__ << 1) - 2] * 2.f - 1.f;
                 r__2 = u[(i__ << 1) - 1] * 2.f - 1.f;
-                q__1.r = r__1;
-                q__1.i = r__2; // , expr subst
-                x[i__3].r = q__1.r;
-                x[i__3].i = q__1.i; // , expr subst
+                q__1.real = r__1;
+                q__1.imag = r__2; // , expr subst
+                x[i__3].real = q__1.real;
+                x[i__3].imag = q__1.imag; // , expr subst
                 /* L20: */
             }
         }
@@ -198,13 +198,13 @@ void aocl_lapack_clarnv(aocl_int64_t *idist, aocl_int_t *iseed, aocl_int64_t *n,
                 i__3 = iv + i__ - 1;
                 r__1 = sqrt(log(u[(i__ << 1) - 2]) * -2.f);
                 r__2 = u[(i__ << 1) - 1] * 6.28318530717958647692528676655900576839f;
-                q__3.r = 0.f;
-                q__3.i = r__2; // , expr subst
+                q__3.real = 0.f;
+                q__3.imag = r__2; // , expr subst
                 c_exp(&q__2, &q__3);
-                q__1.r = r__1 * q__2.r;
-                q__1.i = r__1 * q__2.i; // , expr subst
-                x[i__3].r = q__1.r;
-                x[i__3].i = q__1.i; // , expr subst
+                q__1.real = r__1 * q__2.real;
+                q__1.imag = r__1 * q__2.imag; // , expr subst
+                x[i__3].real = q__1.real;
+                x[i__3].imag = q__1.imag; // , expr subst
                 /* L30: */
             }
         }
@@ -218,13 +218,13 @@ void aocl_lapack_clarnv(aocl_int64_t *idist, aocl_int_t *iseed, aocl_int64_t *n,
                 i__3 = iv + i__ - 1;
                 r__1 = sqrt(u[(i__ << 1) - 2]);
                 r__2 = u[(i__ << 1) - 1] * 6.28318530717958647692528676655900576839f;
-                q__3.r = 0.f;
-                q__3.i = r__2; // , expr subst
+                q__3.real = 0.f;
+                q__3.imag = r__2; // , expr subst
                 c_exp(&q__2, &q__3);
-                q__1.r = r__1 * q__2.r;
-                q__1.i = r__1 * q__2.i; // , expr subst
-                x[i__3].r = q__1.r;
-                x[i__3].i = q__1.i; // , expr subst
+                q__1.real = r__1 * q__2.real;
+                q__1.imag = r__1 * q__2.imag; // , expr subst
+                x[i__3].real = q__1.real;
+                x[i__3].imag = q__1.imag; // , expr subst
                 /* L40: */
             }
         }
@@ -237,11 +237,11 @@ void aocl_lapack_clarnv(aocl_int64_t *idist, aocl_int_t *iseed, aocl_int64_t *n,
             {
                 i__3 = iv + i__ - 1;
                 r__1 = u[(i__ << 1) - 1] * 6.28318530717958647692528676655900576839f;
-                q__2.r = 0.f;
-                q__2.i = r__1; // , expr subst
+                q__2.real = 0.f;
+                q__2.imag = r__1; // , expr subst
                 c_exp(&q__1, &q__2);
-                x[i__3].r = q__1.r;
-                x[i__3].i = q__1.i; // , expr subst
+                x[i__3].real = q__1.real;
+                x[i__3].imag = q__1.imag; // , expr subst
                 /* L50: */
             }
         }

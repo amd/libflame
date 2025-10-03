@@ -306,8 +306,8 @@ void cunmtr_fla(char *side, char *uplo, char *trans, aocl_int64_t *m, aocl_int64
             }
         }
         lwkopt = fla_max(1, nw) * nb;
-        work[1].r = (real)lwkopt;
-        work[1].i = 0.f; // , expr subst
+        work[1].real = (real)lwkopt;
+        work[1].imag = 0.f; // , expr subst
     }
     if(*info != 0)
     {
@@ -322,8 +322,8 @@ void cunmtr_fla(char *side, char *uplo, char *trans, aocl_int64_t *m, aocl_int64
     /* Quick return if possible */
     if(*m == 0 || *n == 0 || nq == 1)
     {
-        work[1].r = 1.f;
-        work[1].i = 0.f; // , expr subst
+        work[1].real = 1.f;
+        work[1].imag = 0.f; // , expr subst
         return;
     }
     if(left)
@@ -360,8 +360,8 @@ void cunmtr_fla(char *side, char *uplo, char *trans, aocl_int64_t *m, aocl_int64
         cunmqr_fla(side, trans, &mi, &ni, &i__2, &a[a_dim1 + 2], lda, &tau[1],
                    &c__[i1 + i2 * c_dim1], ldc, &work[1], lwork, &iinfo);
     }
-    work[1].r = (real)lwkopt;
-    work[1].i = 0.f; // , expr subst
+    work[1].real = (real)lwkopt;
+    work[1].imag = 0.f; // , expr subst
     return;
     /* End of CUNMTR */
 }

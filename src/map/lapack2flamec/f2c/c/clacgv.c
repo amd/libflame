@@ -121,10 +121,10 @@ void aocl_lapack_clacgv(aocl_int64_t *n, scomplex *x, aocl_int64_t *incx)
         i__1 = *n;
         for(i__ = 1; i__ <= i__1; ++i__)
         {
-            q__1.r = x[i__].r;
-            q__1.i = -x[i__].i;
-            x[i__].r = q__1.r;
-            x[i__].i = q__1.i; // , expr subst
+            q__1.real = x[i__].real;
+            q__1.imag = -x[i__].imag;
+            x[i__].real = q__1.real;
+            x[i__].imag = q__1.imag; // , expr subst
             /* L10: */
         }
     }
@@ -138,10 +138,10 @@ void aocl_lapack_clacgv(aocl_int64_t *n, scomplex *x, aocl_int64_t *incx)
         i__1 = *n;
         for(i__ = 1; i__ <= i__1; ++i__)
         {
-            q__1.r = x[ioff].r;
-            q__1.i = -x[ioff].i;
-            x[ioff].r = q__1.r;
-            x[ioff].i = q__1.i; // , expr subst
+            q__1.real = x[ioff].real;
+            q__1.imag = -x[ioff].imag;
+            x[ioff].real = q__1.real;
+            x[ioff].imag = q__1.imag; // , expr subst
             ioff += *incx;
             /* L20: */
         }

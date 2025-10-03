@@ -239,15 +239,15 @@ void aocl_lapack_zgehd2(aocl_int64_t *n, aocl_int64_t *ilo, aocl_int64_t *ihi, d
     {
         /* Compute elementary reflector H(i) to annihilate A(i+2:ihi,i) */
         i__2 = i__ + 1 + i__ * a_dim1;
-        alpha.r = a[i__2].r;
-        alpha.i = a[i__2].i; // , expr subst
+        alpha.real = a[i__2].real;
+        alpha.imag = a[i__2].imag; // , expr subst
         i__2 = *ihi - i__;
         /* Computing MIN */
         i__3 = i__ + 2;
         aocl_lapack_zlarfg(&i__2, &alpha, &a[fla_min(i__3, *n) + i__ * a_dim1], &c__1, &tau[i__]);
         i__2 = i__ + 1 + i__ * a_dim1;
-        a[i__2].r = 1.;
-        a[i__2].i = 0.; // , expr subst
+        a[i__2].real = 1.;
+        a[i__2].imag = 0.; // , expr subst
         /* Apply H(i) to A(1:ihi,i+1:ihi) from the right */
         i__2 = *ihi - i__;
         aocl_lapack_zlarf("Right", ihi, &i__2, &a[i__ + 1 + i__ * a_dim1], &c__1, &tau[i__],
@@ -259,8 +259,8 @@ void aocl_lapack_zgehd2(aocl_int64_t *n, aocl_int64_t *ilo, aocl_int64_t *ihi, d
         aocl_lapack_zlarf("Left", &i__2, &i__3, &a[i__ + 1 + i__ * a_dim1], &c__1, &z__1,
                           &a[i__ + 1 + (i__ + 1) * a_dim1], lda, &work[1]);
         i__2 = i__ + 1 + i__ * a_dim1;
-        a[i__2].r = alpha.r;
-        a[i__2].i = alpha.i; // , expr subst
+        a[i__2].real = alpha.real;
+        a[i__2].imag = alpha.imag; // , expr subst
         /* L10: */
     }
     AOCL_DTL_TRACE_LOG_EXIT

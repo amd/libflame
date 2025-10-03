@@ -4,8 +4,8 @@
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
  /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static dcomplex c_b1 = {{0.}, {0.}};
-static dcomplex c_b2 = {{1.}, {0.}};
+static dcomplex c_b1 = {0., 0.};
+static dcomplex c_b2 = {1., 0.};
 static aocl_int64_t c__1 = 1;
 static aocl_int64_t c__12 = 12;
 static aocl_int64_t c__49 = 49;
@@ -392,10 +392,10 @@ void aocl_lapack_zhseqr(char *job, char *compz, aocl_int64_t *n, aocl_int64_t *i
     initz = lsame_(compz, "I", 1, 1);
     wantz = initz || lsame_(compz, "V", 1, 1);
     d__1 = (doublereal)fla_max(1, *n);
-    z__1.r = d__1;
-    z__1.i = 0.; // , expr subst
-    work[1].r = z__1.r;
-    work[1].i = z__1.i; // , expr subst
+    z__1.real = d__1;
+    z__1.imag = 0.; // , expr subst
+    work[1].real = z__1.real;
+    work[1].imag = z__1.imag; // , expr subst
     lquery = *lwork == -1;
     *info = 0;
     if(!lsame_(job, "E", 1, 1) && !wantt)
@@ -453,13 +453,13 @@ void aocl_lapack_zhseqr(char *job, char *compz, aocl_int64_t *n, aocl_int64_t *i
         /* ==== Ensure reported workspace size is backward-compatible with */
         /* . previous LAPACK versions. ==== */
         /* Computing MAX */
-        d__2 = work[1].r;
+        d__2 = work[1].real;
         d__3 = (doublereal)fla_max(1, *n); // , expr subst
         d__1 = fla_max(d__2, d__3);
-        z__1.r = d__1;
-        z__1.i = 0.; // , expr subst
-        work[1].r = z__1.r;
-        work[1].i = z__1.i; // , expr subst
+        z__1.real = d__1;
+        z__1.imag = 0.; // , expr subst
+        work[1].real = z__1.real;
+        work[1].imag = z__1.imag; // , expr subst
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -489,8 +489,8 @@ void aocl_lapack_zhseqr(char *job, char *compz, aocl_int64_t *n, aocl_int64_t *i
         {
             i__1 = *ilo;
             i__2 = *ilo + *ilo * h_dim1;
-            w[i__1].r = h__[i__2].r;
-            w[i__1].i = h__[i__2].i; // , expr subst
+            w[i__1].real = h__[i__2].real;
+            w[i__1].imag = h__[i__2].imag; // , expr subst
             AOCL_DTL_TRACE_LOG_EXIT
             return;
         }
@@ -529,8 +529,8 @@ void aocl_lapack_zhseqr(char *job, char *compz, aocl_int64_t *n, aocl_int64_t *i
                     /* . array before calling ZLAQR0. ==== */
                     aocl_lapack_zlacpy("A", n, n, &h__[h_offset], ldh, hl, &c__49);
                     i__1 = *n + 1 + *n * 49 - 50;
-                    hl[i__1].r = 0.;
-                    hl[i__1].i = 0.; // , expr subst
+                    hl[i__1].real = 0.;
+                    hl[i__1].imag = 0.; // , expr subst
                     i__1 = 49 - *n;
                     aocl_lapack_zlaset("A", &c__49, &i__1, &c_b1, &c_b1, &hl[(*n + 1) * 49 - 49],
                                        &c__49);
@@ -554,12 +554,12 @@ void aocl_lapack_zhseqr(char *job, char *compz, aocl_int64_t *n, aocl_int64_t *i
         /* . previous LAPACK versions. ==== */
         /* Computing MAX */
         d__2 = (doublereal)fla_max(1, *n);
-        d__3 = work[1].r; // , expr subst
+        d__3 = work[1].real; // , expr subst
         d__1 = fla_max(d__2, d__3);
-        z__1.r = d__1;
-        z__1.i = 0.; // , expr subst
-        work[1].r = z__1.r;
-        work[1].i = z__1.i; // , expr subst
+        z__1.real = d__1;
+        z__1.imag = 0.; // , expr subst
+        work[1].real = z__1.real;
+        work[1].imag = z__1.imag; // , expr subst
     }
     /* ==== End of ZHSEQR ==== */
     AOCL_DTL_TRACE_LOG_EXIT

@@ -128,7 +128,7 @@ aocl_int64_t aocl_lapack_ilazlc(aocl_int64_t *m, aocl_int64_t *n, dcomplex *a,
     {
         i__1 = *n * a_dim1 + 1;
         i__2 = *m + *n * a_dim1;
-        if(a[i__1].r != 0. || a[i__1].i != 0. || (a[i__2].r != 0. || a[i__2].i != 0.))
+        if(a[i__1].real != 0. || a[i__1].imag != 0. || (a[i__2].real != 0. || a[i__2].imag != 0.))
         {
             ret_val = *n;
         }
@@ -141,7 +141,7 @@ aocl_int64_t aocl_lapack_ilazlc(aocl_int64_t *m, aocl_int64_t *n, dcomplex *a,
                 for(i__ = 1; i__ <= i__1; ++i__)
                 {
                     i__2 = i__ + ret_val * a_dim1;
-                    if(a[i__2].r != 0. || a[i__2].i != 0.)
+                    if(a[i__2].real != 0. || a[i__2].imag != 0.)
                     {
                         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
                         return ret_val;

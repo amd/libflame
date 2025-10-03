@@ -437,8 +437,8 @@ void aocl_lapack_cheevx(char *jobz, char *range, char *uplo, aocl_int64_t *n, sc
         if(*n <= 1)
         {
             lwkmin = 1;
-            work[1].r = (real)lwkmin;
-            work[1].i = 0.f; // , expr subst
+            work[1].real = (real)lwkmin;
+            work[1].imag = 0.f; // , expr subst
         }
         else
         {
@@ -454,8 +454,8 @@ void aocl_lapack_cheevx(char *jobz, char *range, char *uplo, aocl_int64_t *n, sc
             i__2 = (nb + 1) * *n; // , expr subst
             lwkopt = fla_max(i__1, i__2);
             r__1 = aocl_lapack_sroundup_lwork(&lwkopt);
-            work[1].r = r__1;
-            work[1].i = 0.f; // , expr subst
+            work[1].real = r__1;
+            work[1].imag = 0.f; // , expr subst
         }
         if(*lwork < lwkmin && !lquery)
         {
@@ -487,24 +487,24 @@ void aocl_lapack_cheevx(char *jobz, char *range, char *uplo, aocl_int64_t *n, sc
         {
             *m = 1;
             i__1 = a_dim1 + 1;
-            w[1] = a[i__1].r;
+            w[1] = a[i__1].real;
         }
         else if(valeig)
         {
             i__1 = a_dim1 + 1;
             i__2 = a_dim1 + 1;
-            if(*vl < a[i__1].r && *vu >= a[i__2].r)
+            if(*vl < a[i__1].real && *vu >= a[i__2].real)
             {
                 *m = 1;
                 i__1 = a_dim1 + 1;
-                w[1] = a[i__1].r;
+                w[1] = a[i__1].real;
             }
         }
         if(wantz)
         {
             i__1 = z_dim1 + 1;
-            z__[i__1].r = 1.f;
-            z__[i__1].i = 0.f; // , expr subst
+            z__[i__1].real = 1.f;
+            z__[i__1].imag = 0.f; // , expr subst
         }
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
@@ -703,8 +703,8 @@ L40:
     }
     /* Set WORK(1) to optimal scomplex workspace size. */
     r__1 = aocl_lapack_sroundup_lwork(&lwkopt);
-    work[1].r = r__1;
-    work[1].i = 0.f; // , expr subst
+    work[1].real = r__1;
+    work[1].imag = 0.f; // , expr subst
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
     return;
     /* End of CHEEVX */

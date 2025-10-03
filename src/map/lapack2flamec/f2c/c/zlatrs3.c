@@ -4,7 +4,7 @@
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
  /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static dcomplex c_b1 = {{1.}, {0.}};
+static dcomplex c_b1 = {1., 0.};
 static aocl_int64_t c__1 = 1;
 static aocl_int64_t c_n1 = -1;
 /* > \brief \b ZLATRS3 solves a triangular system of equations with the scale factors set to prevent
@@ -591,15 +591,15 @@ void aocl_lapack_zlatrs3(char *uplo, char *trans, char *diag, char *normin, aocl
                     for(ii = 1; ii <= i__5; ++ii)
                     {
                         i__6 = ii + kk * x_dim1;
-                        x[i__6].r = 0.;
-                        x[i__6].i = 0.; // , expr subst
+                        x[i__6].real = 0.;
+                        x[i__6].imag = 0.; // , expr subst
                     }
                     i__5 = *n;
                     for(ii = j2; ii <= i__5; ++ii)
                     {
                         i__6 = ii + kk * x_dim1;
-                        x[i__6].r = 0.;
-                        x[i__6].i = 0.; // , expr subst
+                        x[i__6].real = 0.;
+                        x[i__6].imag = 0.; // , expr subst
                     }
                     /* Discard the local scale factors. */
                     i__5 = nba;
@@ -642,8 +642,8 @@ void aocl_lapack_zlatrs3(char *uplo, char *trans, char *diag, char *normin, aocl
                         for(ii = 1; ii <= i__5; ++ii)
                         {
                             i__6 = ii + kk * x_dim1;
-                            x[i__6].r = 0.;
-                            x[i__6].i = 0.; // , expr subst
+                            x[i__6].real = 0.;
+                            x[i__6].imag = 0.; // , expr subst
                         }
                         /* Discard the local scale factors. */
                         i__5 = nba;
@@ -744,8 +744,8 @@ void aocl_lapack_zlatrs3(char *uplo, char *trans, char *diag, char *normin, aocl
                     i__6 = i2 - i1;
                     i__7 = k2 - k1;
                     i__8 = j2 - j1;
-                    z__1.r = -1.;
-                    z__1.i = -0.; // , expr subst
+                    z__1.real = -1.;
+                    z__1.imag = -0.; // , expr subst
                     aocl_blas_zgemm("N", "N", &i__6, &i__7, &i__8, &z__1, &a[i1 + j1 * a_dim1], lda,
                                     &x[j1 + k1 * x_dim1], ldx, &c_b1, &x[i1 + k1 * x_dim1], ldx);
                 }
@@ -755,8 +755,8 @@ void aocl_lapack_zlatrs3(char *uplo, char *trans, char *diag, char *normin, aocl
                     i__6 = i2 - i1;
                     i__7 = k2 - k1;
                     i__8 = j2 - j1;
-                    z__1.r = -1.;
-                    z__1.i = -0.; // , expr subst
+                    z__1.real = -1.;
+                    z__1.imag = -0.; // , expr subst
                     aocl_blas_zgemm("T", "N", &i__6, &i__7, &i__8, &z__1, &a[j1 + i1 * a_dim1], lda,
                                     &x[j1 + k1 * x_dim1], ldx, &c_b1, &x[i1 + k1 * x_dim1], ldx);
                 }
@@ -766,8 +766,8 @@ void aocl_lapack_zlatrs3(char *uplo, char *trans, char *diag, char *normin, aocl
                     i__6 = i2 - i1;
                     i__7 = k2 - k1;
                     i__8 = j2 - j1;
-                    z__1.r = -1.;
-                    z__1.i = -0.; // , expr subst
+                    z__1.real = -1.;
+                    z__1.imag = -0.; // , expr subst
                     aocl_blas_zgemm("C", "N", &i__6, &i__7, &i__8, &z__1, &a[j1 + i1 * a_dim1], lda,
                                     &x[j1 + k1 * x_dim1], ldx, &c_b1, &x[i1 + k1 * x_dim1], ldx);
                 }

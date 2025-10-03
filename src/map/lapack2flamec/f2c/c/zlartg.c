@@ -142,35 +142,35 @@ void zlartg_(dcomplex *f, dcomplex *g, doublereal *c__, dcomplex *s,
     rtmin = sqrt(safmin);
     /* .. */
     /* .. Executable Statements .. */
-    if(g->r == 0. && g->i == 0.)
+    if(g->real == 0. && g->imag == 0.)
     {
         *c__ = 1.;
-        s->r = 0., s->i = 0.;
-        r__->r = f->r, r__->i = f->i;
+        s->real = 0., s->imag = 0.;
+        r__->real = f->real, r__->imag = f->imag;
     }
-    else if(f->r == 0. && f->i == 0.)
+    else if(f->real == 0. && f->imag == 0.)
     {
         *c__ = 0.;
-        if(g->r == 0.)
+        if(g->real == 0.)
         {
             d__2 = (d__1 = d_imag(g), f2c_dabs(d__1));
-            r__->r = d__2, r__->i = 0.;
+            r__->real = d__2, r__->imag = 0.;
             d_cnjg(&z__2, g);
             z_div(&z__1, &z__2, r__);
-            s->r = z__1.r, s->i = z__1.i;
+            s->real = z__1.real, s->imag = z__1.imag;
         }
         else if(d_imag(g) == 0.)
         {
-            d__2 = (d__1 = g->r, f2c_dabs(d__1));
-            r__->r = d__2, r__->i = 0.;
+            d__2 = (d__1 = g->real, f2c_dabs(d__1));
+            r__->real = d__2, r__->imag = 0.;
             d_cnjg(&z__2, g);
             z_div(&z__1, &z__2, r__);
-            s->r = z__1.r, s->i = z__1.i;
+            s->real = z__1.real, s->imag = z__1.imag;
         }
         else
         {
             /* Computing MAX */
-            d__3 = (d__1 = g->r, f2c_dabs(d__1));
+            d__3 = (d__1 = g->real, f2c_dabs(d__1));
             d__4 = (d__2 = d_imag(g), f2c_dabs(d__2)); // , expr subst
             g1 = fla_max(d__3, d__4);
             rtmax = sqrt(safmax / 2);
@@ -180,16 +180,16 @@ void zlartg_(dcomplex *f, dcomplex *g, doublereal *c__, dcomplex *s,
                 /* The following two lines can be replaced by `d = f2c_dabs( g )`. */
                 /* This algorithm do not use the intrinsic scomplex abs. */
                 /* Computing 2nd power */
-                d__1 = g->r;
+                d__1 = g->real;
                 /* Computing 2nd power */
                 d__2 = d_imag(g);
                 g2 = d__1 * d__1 + d__2 * d__2;
                 d__ = sqrt(g2);
                 d_cnjg(&z__2, g);
-                z__1.r = z__2.r / d__;
-                z__1.i = z__2.i / d__; // , expr subst
-                s->r = z__1.r, s->i = z__1.i;
-                r__->r = d__, r__->i = 0.;
+                z__1.real = z__2.real / d__;
+                z__1.imag = z__2.imag / d__; // , expr subst
+                s->real = z__1.real, s->imag = z__1.imag;
+                r__->real = d__, r__->imag = 0.;
             }
             else
             {
@@ -198,35 +198,35 @@ void zlartg_(dcomplex *f, dcomplex *g, doublereal *c__, dcomplex *s,
                 d__1 = safmax;
                 d__2 = fla_max(safmin, g1); // , expr subst
                 u = fla_min(d__1, d__2);
-                z__1.r = g->r / u;
-                z__1.i = g->i / u; // , expr subst
-                gs.r = z__1.r;
-                gs.i = z__1.i; // , expr subst
+                z__1.real = g->real / u;
+                z__1.imag = g->imag / u; // , expr subst
+                gs.real = z__1.real;
+                gs.imag = z__1.imag; // , expr subst
                 /* The following two lines can be replaced by `d = f2c_dabs( gs )`. */
                 /* This algorithm do not use the intrinsic scomplex abs. */
                 /* Computing 2nd power */
-                d__1 = gs.r;
+                d__1 = gs.real;
                 /* Computing 2nd power */
                 d__2 = d_imag(&gs);
                 g2 = d__1 * d__1 + d__2 * d__2;
                 d__ = sqrt(g2);
                 d_cnjg(&z__2, &gs);
-                z__1.r = z__2.r / d__;
-                z__1.i = z__2.i / d__; // , expr subst
-                s->r = z__1.r, s->i = z__1.i;
+                z__1.real = z__2.real / d__;
+                z__1.imag = z__2.imag / d__; // , expr subst
+                s->real = z__1.real, s->imag = z__1.imag;
                 d__1 = d__ * u;
-                r__->r = d__1, r__->i = 0.;
+                r__->real = d__1, r__->imag = 0.;
             }
         }
     }
     else
     {
         /* Computing MAX */
-        d__3 = (d__1 = f->r, f2c_dabs(d__1));
+        d__3 = (d__1 = f->real, f2c_dabs(d__1));
         d__4 = (d__2 = d_imag(f), f2c_dabs(d__2)); // , expr subst
         f1 = fla_max(d__3, d__4);
         /* Computing MAX */
-        d__3 = (d__1 = g->r, f2c_dabs(d__1));
+        d__3 = (d__1 = g->real, f2c_dabs(d__1));
         d__4 = (d__2 = d_imag(g), f2c_dabs(d__2)); // , expr subst
         g1 = fla_max(d__3, d__4);
         rtmax = sqrt(safmax / 4);
@@ -234,12 +234,12 @@ void zlartg_(dcomplex *f, dcomplex *g, doublereal *c__, dcomplex *s,
         {
             /* Use unscaled algorithm */
             /* Computing 2nd power */
-            d__1 = f->r;
+            d__1 = f->real;
             /* Computing 2nd power */
             d__2 = d_imag(f);
             f2 = d__1 * d__1 + d__2 * d__2;
             /* Computing 2nd power */
-            d__1 = g->r;
+            d__1 = g->real;
             /* Computing 2nd power */
             d__2 = d_imag(g);
             g2 = d__1 * d__1 + d__2 * d__2;
@@ -249,29 +249,29 @@ void zlartg_(dcomplex *f, dcomplex *g, doublereal *c__, dcomplex *s,
             {
                 /* safmin <= f2/h2 <= 1, and h2/f2 is finite */
                 *c__ = sqrt(f2 / h2);
-                z__1.r = f->r / *c__;
-                z__1.i = f->i / *c__; // , expr subst
-                r__->r = z__1.r, r__->i = z__1.i;
+                z__1.real = f->real / *c__;
+                z__1.imag = f->imag / *c__; // , expr subst
+                r__->real = z__1.real, r__->imag = z__1.imag;
                 rtmax *= 2;
                 if(f2 > rtmin && h2 < rtmax)
                 {
                     /* safmin <= sqrt( f2*h2 ) <= safmax */
                     d_cnjg(&z__2, g);
                     d__1 = sqrt(f2 * h2);
-                    z__3.r = f->r / d__1;
-                    z__3.i = f->i / d__1; // , expr subst
-                    z__1.r = z__2.r * z__3.r - z__2.i * z__3.i;
-                    z__1.i = z__2.r * z__3.i + z__2.i * z__3.r; // , expr subst
-                    s->r = z__1.r, s->i = z__1.i;
+                    z__3.real = f->real / d__1;
+                    z__3.imag = f->imag / d__1; // , expr subst
+                    z__1.real = z__2.real * z__3.real - z__2.imag * z__3.imag;
+                    z__1.imag = z__2.real * z__3.imag + z__2.imag * z__3.real; // , expr subst
+                    s->real = z__1.real, s->imag = z__1.imag;
                 }
                 else
                 {
                     d_cnjg(&z__2, g);
-                    z__3.r = r__->r / h2;
-                    z__3.i = r__->i / h2; // , expr subst
-                    z__1.r = z__2.r * z__3.r - z__2.i * z__3.i;
-                    z__1.i = z__2.r * z__3.i + z__2.i * z__3.r; // , expr subst
-                    s->r = z__1.r, s->i = z__1.i;
+                    z__3.real = r__->real / h2;
+                    z__3.imag = r__->imag / h2; // , expr subst
+                    z__1.real = z__2.real * z__3.real - z__2.imag * z__3.imag;
+                    z__1.imag = z__2.real * z__3.imag + z__2.imag * z__3.real; // , expr subst
+                    s->real = z__1.real, s->imag = z__1.imag;
                 }
             }
             else
@@ -286,25 +286,25 @@ void zlartg_(dcomplex *f, dcomplex *g, doublereal *c__, dcomplex *s,
                 *c__ = f2 / d__;
                 if(*c__ >= safmin)
                 {
-                    z__1.r = f->r / *c__;
-                    z__1.i = f->i / *c__; // , expr subst
-                    r__->r = z__1.r, r__->i = z__1.i;
+                    z__1.real = f->real / *c__;
+                    z__1.imag = f->imag / *c__; // , expr subst
+                    r__->real = z__1.real, r__->imag = z__1.imag;
                 }
                 else
                 {
                     /* f2 / sqrt(f2 * h2) < safmin, then */
                     /* sqrt(safmin) <= f2 * sqrt(safmax) <= h2 / sqrt(f2 * h2 */
                     d__1 = h2 / d__;
-                    z__1.r = d__1 * f->r;
-                    z__1.i = d__1 * f->i; // , expr subst
-                    r__->r = z__1.r, r__->i = z__1.i;
+                    z__1.real = d__1 * f->real;
+                    z__1.imag = d__1 * f->imag; // , expr subst
+                    r__->real = z__1.real, r__->imag = z__1.imag;
                 }
                 d_cnjg(&z__2, g);
-                z__3.r = f->r / d__;
-                z__3.i = f->i / d__; // , expr subst
-                z__1.r = z__2.r * z__3.r - z__2.i * z__3.i;
-                z__1.i = z__2.r * z__3.i + z__2.i * z__3.r; // , expr subst
-                s->r = z__1.r, s->i = z__1.i;
+                z__3.real = f->real / d__;
+                z__3.imag = f->imag / d__; // , expr subst
+                z__1.real = z__2.real * z__3.real - z__2.imag * z__3.imag;
+                z__1.imag = z__2.real * z__3.imag + z__2.imag * z__3.real; // , expr subst
+                s->real = z__1.real, s->imag = z__1.imag;
             }
         }
         else
@@ -316,12 +316,12 @@ void zlartg_(dcomplex *f, dcomplex *g, doublereal *c__, dcomplex *s,
             d__1 = safmax;
             d__2 = fla_max(d__3, g1); // , expr subst
             u = fla_min(d__1, d__2);
-            z__1.r = g->r / u;
-            z__1.i = g->i / u; // , expr subst
-            gs.r = z__1.r;
-            gs.i = z__1.i; // , expr subst
+            z__1.real = g->real / u;
+            z__1.imag = g->imag / u; // , expr subst
+            gs.real = z__1.real;
+            gs.imag = z__1.imag; // , expr subst
             /* Computing 2nd power */
-            d__1 = gs.r;
+            d__1 = gs.real;
             /* Computing 2nd power */
             d__2 = d_imag(&gs);
             g2 = d__1 * d__1 + d__2 * d__2;
@@ -334,12 +334,12 @@ void zlartg_(dcomplex *f, dcomplex *g, doublereal *c__, dcomplex *s,
                 d__2 = fla_max(safmin, f1); // , expr subst
                 v = fla_min(d__1, d__2);
                 w = v / u;
-                z__1.r = f->r / v;
-                z__1.i = f->i / v; // , expr subst
-                fs.r = z__1.r;
-                fs.i = z__1.i; // , expr subst
+                z__1.real = f->real / v;
+                z__1.imag = f->imag / v; // , expr subst
+                fs.real = z__1.real;
+                fs.imag = z__1.imag; // , expr subst
                 /* Computing 2nd power */
-                d__1 = fs.r;
+                d__1 = fs.real;
                 /* Computing 2nd power */
                 d__2 = d_imag(&fs);
                 f2 = d__1 * d__1 + d__2 * d__2;
@@ -351,12 +351,12 @@ void zlartg_(dcomplex *f, dcomplex *g, doublereal *c__, dcomplex *s,
             {
                 /* Otherwise use the same scaling for f and g. */
                 w = 1.;
-                z__1.r = f->r / u;
-                z__1.i = f->i / u; // , expr subst
-                fs.r = z__1.r;
-                fs.i = z__1.i; // , expr subst
+                z__1.real = f->real / u;
+                z__1.imag = f->imag / u; // , expr subst
+                fs.real = z__1.real;
+                fs.imag = z__1.imag; // , expr subst
                 /* Computing 2nd power */
-                d__1 = fs.r;
+                d__1 = fs.real;
                 /* Computing 2nd power */
                 d__2 = d_imag(&fs);
                 f2 = d__1 * d__1 + d__2 * d__2;
@@ -367,29 +367,29 @@ void zlartg_(dcomplex *f, dcomplex *g, doublereal *c__, dcomplex *s,
             {
                 /* safmin <= f2/h2 <= 1, and h2/f2 is finite */
                 *c__ = sqrt(f2 / h2);
-                z__1.r = fs.r / *c__;
-                z__1.i = fs.i / *c__; // , expr subst
-                r__->r = z__1.r, r__->i = z__1.i;
+                z__1.real = fs.real / *c__;
+                z__1.imag = fs.imag / *c__; // , expr subst
+                r__->real = z__1.real, r__->imag = z__1.imag;
                 rtmax *= 2;
                 if(f2 > rtmin && h2 < rtmax)
                 {
                     /* safmin <= sqrt( f2*h2 ) <= safmax */
                     d_cnjg(&z__2, &gs);
                     d__1 = sqrt(f2 * h2);
-                    z__3.r = fs.r / d__1;
-                    z__3.i = fs.i / d__1; // , expr subst
-                    z__1.r = z__2.r * z__3.r - z__2.i * z__3.i;
-                    z__1.i = z__2.r * z__3.i + z__2.i * z__3.r; // , expr subst
-                    s->r = z__1.r, s->i = z__1.i;
+                    z__3.real = fs.real / d__1;
+                    z__3.imag = fs.imag / d__1; // , expr subst
+                    z__1.real = z__2.real * z__3.real - z__2.imag * z__3.imag;
+                    z__1.imag = z__2.real * z__3.imag + z__2.imag * z__3.real; // , expr subst
+                    s->real = z__1.real, s->imag = z__1.imag;
                 }
                 else
                 {
                     d_cnjg(&z__2, &gs);
-                    z__3.r = r__->r / h2;
-                    z__3.i = r__->i / h2; // , expr subst
-                    z__1.r = z__2.r * z__3.r - z__2.i * z__3.i;
-                    z__1.i = z__2.r * z__3.i + z__2.i * z__3.r; // , expr subst
-                    s->r = z__1.r, s->i = z__1.i;
+                    z__3.real = r__->real / h2;
+                    z__3.imag = r__->imag / h2; // , expr subst
+                    z__1.real = z__2.real * z__3.real - z__2.imag * z__3.imag;
+                    z__1.imag = z__2.real * z__3.imag + z__2.imag * z__3.real; // , expr subst
+                    s->real = z__1.real, s->imag = z__1.imag;
                 }
             }
             else
@@ -404,31 +404,31 @@ void zlartg_(dcomplex *f, dcomplex *g, doublereal *c__, dcomplex *s,
                 *c__ = f2 / d__;
                 if(*c__ >= safmin)
                 {
-                    z__1.r = fs.r / *c__;
-                    z__1.i = fs.i / *c__; // , expr subst
-                    r__->r = z__1.r, r__->i = z__1.i;
+                    z__1.real = fs.real / *c__;
+                    z__1.imag = fs.imag / *c__; // , expr subst
+                    r__->real = z__1.real, r__->imag = z__1.imag;
                 }
                 else
                 {
                     /* f2 / sqrt(f2 * h2) < safmin, then */
                     /* sqrt(safmin) <= f2 * sqrt(safmax) <= h2 / sqrt(f2 * h2 */
                     d__1 = h2 / d__;
-                    z__1.r = d__1 * fs.r;
-                    z__1.i = d__1 * fs.i; // , expr subst
-                    r__->r = z__1.r, r__->i = z__1.i;
+                    z__1.real = d__1 * fs.real;
+                    z__1.imag = d__1 * fs.imag; // , expr subst
+                    r__->real = z__1.real, r__->imag = z__1.imag;
                 }
                 d_cnjg(&z__2, &gs);
-                z__3.r = fs.r / d__;
-                z__3.i = fs.i / d__; // , expr subst
-                z__1.r = z__2.r * z__3.r - z__2.i * z__3.i;
-                z__1.i = z__2.r * z__3.i + z__2.i * z__3.r; // , expr subst
-                s->r = z__1.r, s->i = z__1.i;
+                z__3.real = fs.real / d__;
+                z__3.imag = fs.imag / d__; // , expr subst
+                z__1.real = z__2.real * z__3.real - z__2.imag * z__3.imag;
+                z__1.imag = z__2.real * z__3.imag + z__2.imag * z__3.real; // , expr subst
+                s->real = z__1.real, s->imag = z__1.imag;
             }
             /* Rescale c and r */
             *c__ *= w;
-            z__1.r = u * r__->r;
-            z__1.i = u * r__->i; // , expr subst
-            r__->r = z__1.r, r__->i = z__1.i;
+            z__1.real = u * r__->real;
+            z__1.imag = u * r__->imag; // , expr subst
+            r__->real = z__1.real, r__->imag = z__1.imag;
         }
     }
     AOCL_DTL_TRACE_EXIT_INDENT

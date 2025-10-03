@@ -41,7 +41,7 @@ int ccopy_(integer *n, scomplex *cx, integer *incx, scomplex * cy, integer *incy
     {
         i__2 = iy;
         i__3 = ix;
-        cy[i__2].r = cx[i__3].r, cy[i__2].i = cx[i__3].i;
+        cy[i__2].real = cx[i__3].real, cy[i__2].imag = cx[i__3].imag;
         ix += *incx;
         iy += *incy;
         /* L10: */
@@ -56,7 +56,7 @@ L20:
     {
         i__2 = i__;
         i__3 = i__;
-        cy[i__2].r = cx[i__3].r, cy[i__2].i = cx[i__3].i;
+        cy[i__2].real = cx[i__3].real, cy[i__2].imag = cx[i__3].imag;
         /* L30: */
     }
     return 0;

@@ -211,28 +211,28 @@ void aocl_lapack_zupgtr(char *uplo, aocl_int64_t *n, dcomplex *ap, dcomplex *tau
             {
                 i__3 = i__ + j * q_dim1;
                 i__4 = ij;
-                q[i__3].r = ap[i__4].r;
-                q[i__3].i = ap[i__4].i; // , expr subst
+                q[i__3].real = ap[i__4].real;
+                q[i__3].imag = ap[i__4].imag; // , expr subst
                 ++ij;
                 /* L10: */
             }
             ij += 2;
             i__2 = *n + j * q_dim1;
-            q[i__2].r = 0.;
-            q[i__2].i = 0.; // , expr subst
+            q[i__2].real = 0.;
+            q[i__2].imag = 0.; // , expr subst
             /* L20: */
         }
         i__1 = *n - 1;
         for(i__ = 1; i__ <= i__1; ++i__)
         {
             i__2 = i__ + *n * q_dim1;
-            q[i__2].r = 0.;
-            q[i__2].i = 0.; // , expr subst
+            q[i__2].real = 0.;
+            q[i__2].imag = 0.; // , expr subst
             /* L30: */
         }
         i__1 = *n + *n * q_dim1;
-        q[i__1].r = 1.;
-        q[i__1].i = 0.; // , expr subst
+        q[i__1].real = 1.;
+        q[i__1].imag = 0.; // , expr subst
         /* Generate Q(1:n-1,1:n-1) */
         i__1 = *n - 1;
         i__2 = *n - 1;
@@ -246,14 +246,14 @@ void aocl_lapack_zupgtr(char *uplo, aocl_int64_t *n, dcomplex *ap, dcomplex *tau
         /* set the first row and column of Q equal to those of the unit */
         /* matrix */
         i__1 = q_dim1 + 1;
-        q[i__1].r = 1.;
-        q[i__1].i = 0.; // , expr subst
+        q[i__1].real = 1.;
+        q[i__1].imag = 0.; // , expr subst
         i__1 = *n;
         for(i__ = 2; i__ <= i__1; ++i__)
         {
             i__2 = i__ + q_dim1;
-            q[i__2].r = 0.;
-            q[i__2].i = 0.; // , expr subst
+            q[i__2].real = 0.;
+            q[i__2].imag = 0.; // , expr subst
             /* L40: */
         }
         ij = 3;
@@ -261,15 +261,15 @@ void aocl_lapack_zupgtr(char *uplo, aocl_int64_t *n, dcomplex *ap, dcomplex *tau
         for(j = 2; j <= i__1; ++j)
         {
             i__2 = j * q_dim1 + 1;
-            q[i__2].r = 0.;
-            q[i__2].i = 0.; // , expr subst
+            q[i__2].real = 0.;
+            q[i__2].imag = 0.; // , expr subst
             i__2 = *n;
             for(i__ = j + 1; i__ <= i__2; ++i__)
             {
                 i__3 = i__ + j * q_dim1;
                 i__4 = ij;
-                q[i__3].r = ap[i__4].r;
-                q[i__3].i = ap[i__4].i; // , expr subst
+                q[i__3].real = ap[i__4].real;
+                q[i__3].imag = ap[i__4].imag; // , expr subst
                 ++ij;
                 /* L50: */
             }

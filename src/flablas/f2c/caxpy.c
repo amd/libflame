@@ -22,7 +22,7 @@ int caxpy_(integer *n, scomplex *ca, scomplex *cx, integer * incx, scomplex *cy,
     {
         return 0;
     }
-    if ((r__1 = ca->r, f2c_abs(r__1)) + (r__2 = r_imag(ca), f2c_abs(r__2)) == 0.f)
+    if ((r__1 = ca->real, f2c_abs(r__1)) + (r__2 = r_imag(ca), f2c_abs(r__2)) == 0.f)
     {
         return 0;
     }
@@ -50,9 +50,9 @@ int caxpy_(integer *n, scomplex *ca, scomplex *cx, integer * incx, scomplex *cy,
         i__2 = iy;
         i__3 = iy;
         i__4 = ix;
-        q__2.r = ca->r * cx[i__4].r - ca->i * cx[i__4].i, q__2.i = ca->r * cx[ i__4].i + ca->i * cx[i__4].r;
-        q__1.r = cy[i__3].r + q__2.r, q__1.i = cy[i__3].i + q__2.i;
-        cy[i__2].r = q__1.r, cy[i__2].i = q__1.i;
+        q__2.real = ca->real * cx[i__4].real - ca->imag * cx[i__4].imag, q__2.imag = ca->real * cx[ i__4].imag + ca->imag * cx[i__4].real;
+        q__1.real = cy[i__3].real + q__2.real, q__1.imag = cy[i__3].imag + q__2.imag;
+        cy[i__2].real = q__1.real, cy[i__2].imag = q__1.imag;
         ix += *incx;
         iy += *incy;
         /* L10: */
@@ -68,9 +68,9 @@ L20:
         i__2 = i__;
         i__3 = i__;
         i__4 = i__;
-        q__2.r = ca->r * cx[i__4].r - ca->i * cx[i__4].i, q__2.i = ca->r * cx[ i__4].i + ca->i * cx[i__4].r;
-        q__1.r = cy[i__3].r + q__2.r, q__1.i = cy[i__3].i + q__2.i;
-        cy[i__2].r = q__1.r, cy[i__2].i = q__1.i;
+        q__2.real = ca->real * cx[i__4].real - ca->imag * cx[i__4].imag, q__2.imag = ca->real * cx[ i__4].imag + ca->imag * cx[i__4].real;
+        q__1.real = cy[i__3].real + q__2.real, q__1.imag = cy[i__3].imag + q__2.imag;
+        cy[i__2].real = q__1.real, cy[i__2].imag = q__1.imag;
         /* L30: */
     }
     return 0;

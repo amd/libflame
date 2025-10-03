@@ -326,26 +326,26 @@ void aocl_lapack_zunm2r(char *side, char *trans, aocl_int64_t *m, aocl_int64_t *
         if(notran)
         {
             i__3 = i__;
-            taui.r = tau[i__3].r;
-            taui.i = tau[i__3].i; // , expr subst
+            taui.real = tau[i__3].real;
+            taui.imag = tau[i__3].imag; // , expr subst
         }
         else
         {
             d_cnjg(&z__1, &tau[i__]);
-            taui.r = z__1.r;
-            taui.i = z__1.i; // , expr subst
+            taui.real = z__1.real;
+            taui.imag = z__1.imag; // , expr subst
         }
         i__3 = i__ + i__ * a_dim1;
-        aii.r = a[i__3].r;
-        aii.i = a[i__3].i; // , expr subst
+        aii.real = a[i__3].real;
+        aii.imag = a[i__3].imag; // , expr subst
         i__3 = i__ + i__ * a_dim1;
-        a[i__3].r = 1.;
-        a[i__3].i = 0.; // , expr subst
+        a[i__3].real = 1.;
+        a[i__3].imag = 0.; // , expr subst
         aocl_lapack_zlarf(side, &mi, &ni, &a[i__ + i__ * a_dim1], &c__1, &taui,
                           &c__[ic + jc * c_dim1], ldc, &work[1]);
         i__3 = i__ + i__ * a_dim1;
-        a[i__3].r = aii.r;
-        a[i__3].i = aii.i; // , expr subst
+        a[i__3].real = aii.real;
+        a[i__3].imag = aii.imag; // , expr subst
         /* L10: */
     }
     AOCL_DTL_TRACE_LOG_EXIT

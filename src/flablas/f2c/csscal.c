@@ -36,10 +36,10 @@ int csscal_(integer *n, real *sa, scomplex *cx, integer *incx)
     {
         i__3 = i__;
         i__4 = i__;
-        r__1 = *sa * cx[i__4].r;
+        r__1 = *sa * cx[i__4].real;
         r__2 = *sa * r_imag(&cx[i__]);
-        q__1.r = r__1, q__1.i = r__2;
-        cx[i__3].r = q__1.r, cx[i__3].i = q__1.i;
+        q__1.real = r__1, q__1.imag = r__2;
+        cx[i__3].real = q__1.real, cx[i__3].imag = q__1.imag;
         /* L10: */
     }
     return 0;
@@ -52,10 +52,10 @@ L20:
     {
         i__1 = i__;
         i__3 = i__;
-        r__1 = *sa * cx[i__3].r;
+        r__1 = *sa * cx[i__3].real;
         r__2 = *sa * r_imag(&cx[i__]);
-        q__1.r = r__1, q__1.i = r__2;
-        cx[i__1].r = q__1.r, cx[i__1].i = q__1.i;
+        q__1.real = r__1, q__1.imag = r__2;
+        cx[i__1].real = q__1.real, cx[i__1].imag = q__1.imag;
         /* L30: */
     }
     return 0;

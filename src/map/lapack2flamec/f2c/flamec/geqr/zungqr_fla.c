@@ -171,8 +171,8 @@ void zungqr_fla(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *k, dcomplex *a,
     *info = 0;
     nb = aocl_lapack_ilaenv(&c__1, "ZUNGQR", " ", m, n, k, &c_n1);
     lwkopt = fla_max(1, *n) * nb;
-    work[1].r = (doublereal)lwkopt;
-    work[1].i = 0.; // , expr subst
+    work[1].real = (doublereal)lwkopt;
+    work[1].imag = 0.; // , expr subst
     lquery = *lwork == -1;
     if(*m < 0)
     {
@@ -207,8 +207,8 @@ void zungqr_fla(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *k, dcomplex *a,
     /* Quick return if possible */
     if(*n <= 0)
     {
-        work[1].r = 1.;
-        work[1].i = 0.; // , expr subst
+        work[1].real = 1.;
+        work[1].imag = 0.; // , expr subst
         return;
     }
     nbmin = 2;
@@ -255,8 +255,8 @@ void zungqr_fla(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *k, dcomplex *a,
             for(i__ = 1; i__ <= i__2; ++i__)
             {
                 i__3 = i__ + j * a_dim1;
-                a[i__3].r = 0.;
-                a[i__3].i = 0.; // , expr subst
+                a[i__3].real = 0.;
+                a[i__3].imag = 0.; // , expr subst
                 /* L10: */
             }
             /* L20: */
@@ -310,8 +310,8 @@ void zungqr_fla(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *k, dcomplex *a,
                 for(l = 1; l <= i__3; ++l)
                 {
                     i__4 = l + j * a_dim1;
-                    a[i__4].r = 0.;
-                    a[i__4].i = 0.; // , expr subst
+                    a[i__4].real = 0.;
+                    a[i__4].imag = 0.; // , expr subst
                     /* L30: */
                 }
                 /* L40: */
@@ -319,8 +319,8 @@ void zungqr_fla(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *k, dcomplex *a,
             /* L50: */
         }
     }
-    work[1].r = (doublereal)iws;
-    work[1].i = 0.; // , expr subst
+    work[1].real = (doublereal)iws;
+    work[1].imag = 0.; // , expr subst
     return;
     /* End of ZUNGQR */
 }

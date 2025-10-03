@@ -43,20 +43,20 @@ int csrot_(integer *n, scomplex *cx, integer *incx, scomplex * cy, integer *incy
             ++i__)
     {
         i__2 = ix;
-        q__2.r = *c__ * cx[i__2].r, q__2.i = *c__ * cx[i__2].i;
+        q__2.real = *c__ * cx[i__2].real, q__2.imag = *c__ * cx[i__2].imag;
         i__3 = iy;
-        q__3.r = *s * cy[i__3].r, q__3.i = *s * cy[i__3].i;
-        q__1.r = q__2.r + q__3.r, q__1.i = q__2.i + q__3.i;
-        ctemp.r = q__1.r, ctemp.i = q__1.i;
+        q__3.real = *s * cy[i__3].real, q__3.imag = *s * cy[i__3].imag;
+        q__1.real = q__2.real + q__3.real, q__1.imag = q__2.imag + q__3.imag;
+        ctemp.real = q__1.real, ctemp.imag = q__1.imag;
         i__2 = iy;
         i__3 = iy;
-        q__2.r = *c__ * cy[i__3].r, q__2.i = *c__ * cy[i__3].i;
+        q__2.real = *c__ * cy[i__3].real, q__2.imag = *c__ * cy[i__3].imag;
         i__4 = ix;
-        q__3.r = *s * cx[i__4].r, q__3.i = *s * cx[i__4].i;
-        q__1.r = q__2.r - q__3.r, q__1.i = q__2.i - q__3.i;
-        cy[i__2].r = q__1.r, cy[i__2].i = q__1.i;
+        q__3.real = *s * cx[i__4].real, q__3.imag = *s * cx[i__4].imag;
+        q__1.real = q__2.real - q__3.real, q__1.imag = q__2.imag - q__3.imag;
+        cy[i__2].real = q__1.real, cy[i__2].imag = q__1.imag;
         i__2 = ix;
-        cx[i__2].r = ctemp.r, cx[i__2].i = ctemp.i;
+        cx[i__2].real = ctemp.real, cx[i__2].imag = ctemp.imag;
         ix += *incx;
         iy += *incy;
         /* L10: */
@@ -70,20 +70,20 @@ L20:
             ++i__)
     {
         i__2 = i__;
-        q__2.r = *c__ * cx[i__2].r, q__2.i = *c__ * cx[i__2].i;
+        q__2.real = *c__ * cx[i__2].real, q__2.imag = *c__ * cx[i__2].imag;
         i__3 = i__;
-        q__3.r = *s * cy[i__3].r, q__3.i = *s * cy[i__3].i;
-        q__1.r = q__2.r + q__3.r, q__1.i = q__2.i + q__3.i;
-        ctemp.r = q__1.r, ctemp.i = q__1.i;
+        q__3.real = *s * cy[i__3].real, q__3.imag = *s * cy[i__3].imag;
+        q__1.real = q__2.real + q__3.real, q__1.imag = q__2.imag + q__3.imag;
+        ctemp.real = q__1.real, ctemp.imag = q__1.imag;
         i__2 = i__;
         i__3 = i__;
-        q__2.r = *c__ * cy[i__3].r, q__2.i = *c__ * cy[i__3].i;
+        q__2.real = *c__ * cy[i__3].real, q__2.imag = *c__ * cy[i__3].imag;
         i__4 = i__;
-        q__3.r = *s * cx[i__4].r, q__3.i = *s * cx[i__4].i;
-        q__1.r = q__2.r - q__3.r, q__1.i = q__2.i - q__3.i;
-        cy[i__2].r = q__1.r, cy[i__2].i = q__1.i;
+        q__3.real = *s * cx[i__4].real, q__3.imag = *s * cx[i__4].imag;
+        q__1.real = q__2.real - q__3.real, q__1.imag = q__2.imag - q__3.imag;
+        cy[i__2].real = q__1.real, cy[i__2].imag = q__1.imag;
         i__2 = i__;
-        cx[i__2].r = ctemp.r, cx[i__2].i = ctemp.i;
+        cx[i__2].real = ctemp.real, cx[i__2].imag = ctemp.imag;
         /* L30: */
     }
     return 0;

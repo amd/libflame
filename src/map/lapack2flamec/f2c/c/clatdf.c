@@ -4,7 +4,7 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static scomplex c_b1 = {{1.f}, {0.f}};
+static scomplex c_b1 = {1.f, 0.f};
 static aocl_int64_t c__1 = 1;
 static aocl_int64_t c_n1 = -1;
 static real c_b24 = 1.f;
@@ -247,46 +247,46 @@ void aocl_lapack_clatdf(aocl_int64_t *ijob, aocl_int64_t *n, scomplex *z__, aocl
         i__1 = *n - 1;
         aocl_lapack_claswp(&c__1, &rhs[1], ldz, &c__1, &i__1, &ipiv[1], &c__1);
         /* Solve for L-part choosing RHS either to +1 or -1. */
-        q__1.r = -1.f;
-        q__1.i = -0.f; // , expr subst
-        pmone.r = q__1.r;
-        pmone.i = q__1.i; // , expr subst
+        q__1.real = -1.f;
+        q__1.imag = -0.f; // , expr subst
+        pmone.real = q__1.real;
+        pmone.imag = q__1.imag; // , expr subst
         i__1 = *n - 1;
         for(j = 1; j <= i__1; ++j)
         {
             i__2 = j;
-            q__1.r = rhs[i__2].r + 1.f;
-            q__1.i = rhs[i__2].i + 0.f; // , expr subst
-            bp.r = q__1.r;
-            bp.i = q__1.i; // , expr subst
+            q__1.real = rhs[i__2].real + 1.f;
+            q__1.imag = rhs[i__2].imag + 0.f; // , expr subst
+            bp.real = q__1.real;
+            bp.imag = q__1.imag; // , expr subst
             i__2 = j;
-            q__1.r = rhs[i__2].r - 1.f;
-            q__1.i = rhs[i__2].i - 0.f; // , expr subst
-            bm.r = q__1.r;
-            bm.i = q__1.i; // , expr subst
+            q__1.real = rhs[i__2].real - 1.f;
+            q__1.imag = rhs[i__2].imag - 0.f; // , expr subst
+            bm.real = q__1.real;
+            bm.imag = q__1.imag; // , expr subst
             splus = 1.f;
             /* Lockahead for L- part RHS(1:N-1) = +-1 */
             /* SPLUS and SMIN computed more efficiently than in BSOLVE[1]. */
             i__2 = *n - j;
             aocl_lapack_cdotc_f2c(&q__1, &i__2, &z__[j + 1 + j * z_dim1], &c__1, &z__[j + 1 + j * z_dim1],
                        &c__1);
-            splus += q__1.r;
+            splus += q__1.real;
             i__2 = *n - j;
             aocl_lapack_cdotc_f2c(&q__1, &i__2, &z__[j + 1 + j * z_dim1], &c__1, &rhs[j + 1], &c__1);
-            sminu = q__1.r;
+            sminu = q__1.real;
             i__2 = j;
-            splus *= rhs[i__2].r;
+            splus *= rhs[i__2].real;
             if(splus > sminu)
             {
                 i__2 = j;
-                rhs[i__2].r = bp.r;
-                rhs[i__2].i = bp.i; // , expr subst
+                rhs[i__2].real = bp.real;
+                rhs[i__2].imag = bp.imag; // , expr subst
             }
             else if(sminu > splus)
             {
                 i__2 = j;
-                rhs[i__2].r = bm.r;
-                rhs[i__2].i = bm.i; // , expr subst
+                rhs[i__2].real = bm.real;
+                rhs[i__2].imag = bm.imag; // , expr subst
             }
             else
             {
@@ -297,19 +297,19 @@ void aocl_lapack_clatdf(aocl_int64_t *ijob, aocl_int64_t *n, scomplex *z__, aocl
                 /* (see [1]). (Not done in BSOLVE.) */
                 i__2 = j;
                 i__3 = j;
-                q__1.r = rhs[i__3].r + pmone.r;
-                q__1.i = rhs[i__3].i + pmone.i; // , expr subst
-                rhs[i__2].r = q__1.r;
-                rhs[i__2].i = q__1.i; // , expr subst
-                pmone.r = 1.f;
-                pmone.i = 0.f; // , expr subst
+                q__1.real = rhs[i__3].real + pmone.real;
+                q__1.imag = rhs[i__3].imag + pmone.imag; // , expr subst
+                rhs[i__2].real = q__1.real;
+                rhs[i__2].imag = q__1.imag; // , expr subst
+                pmone.real = 1.f;
+                pmone.imag = 0.f; // , expr subst
             }
             /* Compute the remaining r.h.s. */
             i__2 = j;
-            q__1.r = -rhs[i__2].r;
-            q__1.i = -rhs[i__2].i; // , expr subst
-            temp.r = q__1.r;
-            temp.i = q__1.i; // , expr subst
+            q__1.real = -rhs[i__2].real;
+            q__1.imag = -rhs[i__2].imag; // , expr subst
+            temp.real = q__1.real;
+            temp.imag = q__1.imag; // , expr subst
             i__2 = *n - j;
             aocl_blas_caxpy(&i__2, &temp, &z__[j + 1 + j * z_dim1], &c__1, &rhs[j + 1], &c__1);
             /* L10: */
@@ -322,35 +322,35 @@ void aocl_lapack_clatdf(aocl_int64_t *ijob, aocl_int64_t *n, scomplex *z__, aocl
         aocl_blas_ccopy(&i__1, &rhs[1], &c__1, work, &c__1);
         i__1 = *n - 1;
         i__2 = *n;
-        q__1.r = rhs[i__2].r + 1.f;
-        q__1.i = rhs[i__2].i + 0.f; // , expr subst
-        work[i__1].r = q__1.r;
-        work[i__1].i = q__1.i; // , expr subst
+        q__1.real = rhs[i__2].real + 1.f;
+        q__1.imag = rhs[i__2].imag + 0.f; // , expr subst
+        work[i__1].real = q__1.real;
+        work[i__1].imag = q__1.imag; // , expr subst
         i__1 = *n;
         i__2 = *n;
-        q__1.r = rhs[i__2].r - 1.f;
-        q__1.i = rhs[i__2].i - 0.f; // , expr subst
-        rhs[i__1].r = q__1.r;
-        rhs[i__1].i = q__1.i; // , expr subst
+        q__1.real = rhs[i__2].real - 1.f;
+        q__1.imag = rhs[i__2].imag - 0.f; // , expr subst
+        rhs[i__1].real = q__1.real;
+        rhs[i__1].imag = q__1.imag; // , expr subst
         splus = 0.f;
         sminu = 0.f;
         for(i__ = *n; i__ >= 1; --i__)
         {
             c_div(&q__1, &c_b1, &z__[i__ + i__ * z_dim1]);
-            temp.r = q__1.r;
-            temp.i = q__1.i; // , expr subst
+            temp.real = q__1.real;
+            temp.imag = q__1.imag; // , expr subst
             i__1 = i__ - 1;
             i__2 = i__ - 1;
-            q__1.r = work[i__2].r * temp.r - work[i__2].i * temp.i;
-            q__1.i = work[i__2].r * temp.i + work[i__2].i * temp.r; // , expr subst
-            work[i__1].r = q__1.r;
-            work[i__1].i = q__1.i; // , expr subst
+            q__1.real = work[i__2].real * temp.real - work[i__2].imag * temp.imag;
+            q__1.imag = work[i__2].real * temp.imag + work[i__2].imag * temp.real; // , expr subst
+            work[i__1].real = q__1.real;
+            work[i__1].imag = q__1.imag; // , expr subst
             i__1 = i__;
             i__2 = i__;
-            q__1.r = rhs[i__2].r * temp.r - rhs[i__2].i * temp.i;
-            q__1.i = rhs[i__2].r * temp.i + rhs[i__2].i * temp.r; // , expr subst
-            rhs[i__1].r = q__1.r;
-            rhs[i__1].i = q__1.i; // , expr subst
+            q__1.real = rhs[i__2].real * temp.real - rhs[i__2].imag * temp.imag;
+            q__1.imag = rhs[i__2].real * temp.imag + rhs[i__2].imag * temp.real; // , expr subst
+            rhs[i__1].real = q__1.real;
+            rhs[i__1].imag = q__1.imag; // , expr subst
             i__1 = *n;
             for(k = i__ + 1; k <= i__1; ++k)
             {
@@ -358,26 +358,26 @@ void aocl_lapack_clatdf(aocl_int64_t *ijob, aocl_int64_t *n, scomplex *z__, aocl
                 i__3 = i__ - 1;
                 i__4 = k - 1;
                 i__5 = i__ + k * z_dim1;
-                q__3.r = z__[i__5].r * temp.r - z__[i__5].i * temp.i;
-                q__3.i = z__[i__5].r * temp.i + z__[i__5].i * temp.r; // , expr subst
-                q__2.r = work[i__4].r * q__3.r - work[i__4].i * q__3.i;
-                q__2.i = work[i__4].r * q__3.i + work[i__4].i * q__3.r; // , expr subst
-                q__1.r = work[i__3].r - q__2.r;
-                q__1.i = work[i__3].i - q__2.i; // , expr subst
-                work[i__2].r = q__1.r;
-                work[i__2].i = q__1.i; // , expr subst
+                q__3.real = z__[i__5].real * temp.real - z__[i__5].imag * temp.imag;
+                q__3.imag = z__[i__5].real * temp.imag + z__[i__5].imag * temp.real; // , expr subst
+                q__2.real = work[i__4].real * q__3.real - work[i__4].imag * q__3.imag;
+                q__2.imag = work[i__4].real * q__3.imag + work[i__4].imag * q__3.real; // , expr subst
+                q__1.real = work[i__3].real - q__2.real;
+                q__1.imag = work[i__3].imag - q__2.imag; // , expr subst
+                work[i__2].real = q__1.real;
+                work[i__2].imag = q__1.imag; // , expr subst
                 i__2 = i__;
                 i__3 = i__;
                 i__4 = k;
                 i__5 = i__ + k * z_dim1;
-                q__3.r = z__[i__5].r * temp.r - z__[i__5].i * temp.i;
-                q__3.i = z__[i__5].r * temp.i + z__[i__5].i * temp.r; // , expr subst
-                q__2.r = rhs[i__4].r * q__3.r - rhs[i__4].i * q__3.i;
-                q__2.i = rhs[i__4].r * q__3.i + rhs[i__4].i * q__3.r; // , expr subst
-                q__1.r = rhs[i__3].r - q__2.r;
-                q__1.i = rhs[i__3].i - q__2.i; // , expr subst
-                rhs[i__2].r = q__1.r;
-                rhs[i__2].i = q__1.i; // , expr subst
+                q__3.real = z__[i__5].real * temp.real - z__[i__5].imag * temp.imag;
+                q__3.imag = z__[i__5].real * temp.imag + z__[i__5].imag * temp.real; // , expr subst
+                q__2.real = rhs[i__4].real * q__3.real - rhs[i__4].imag * q__3.imag;
+                q__2.imag = rhs[i__4].real * q__3.imag + rhs[i__4].imag * q__3.real; // , expr subst
+                q__1.real = rhs[i__3].real - q__2.real;
+                q__1.imag = rhs[i__3].imag - q__2.imag; // , expr subst
+                rhs[i__2].real = q__1.real;
+                rhs[i__2].imag = q__1.imag; // , expr subst
                 /* L20: */
             }
             splus += c_abs(&work[i__ - 1]);
@@ -406,13 +406,13 @@ void aocl_lapack_clatdf(aocl_int64_t *ijob, aocl_int64_t *n, scomplex *z__, aocl
     aocl_lapack_cdotc_f2c(&q__3, n, xm, &c__1, xm, &c__1);
     c_sqrt(&q__2, &q__3);
     c_div(&q__1, &c_b1, &q__2);
-    temp.r = q__1.r;
-    temp.i = q__1.i; // , expr subst
+    temp.real = q__1.real;
+    temp.imag = q__1.imag; // , expr subst
     aocl_blas_cscal(n, &temp, xm, &c__1);
     aocl_blas_ccopy(n, xm, &c__1, xp, &c__1);
     aocl_blas_caxpy(n, &c_b1, &rhs[1], &c__1, xp, &c__1);
-    q__1.r = -1.f;
-    q__1.i = -0.f; // , expr subst
+    q__1.real = -1.f;
+    q__1.imag = -0.f; // , expr subst
     aocl_blas_caxpy(n, &q__1, xm, &c__1, &rhs[1], &c__1);
     aocl_lapack_cgesc2(n, &z__[z_offset], ldz, &rhs[1], &ipiv[1], &jpiv[1], &scale);
     aocl_lapack_cgesc2(n, &z__[z_offset], ldz, xp, &ipiv[1], &jpiv[1], &scale);

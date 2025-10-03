@@ -84,14 +84,14 @@ void cladiv_(scomplex *ret_val, scomplex *x, scomplex *y)
     /* .. Intrinsic Functions .. */
     /* .. */
     /* .. Executable Statements .. */
-    r__1 = x->r;
-    r__2 = x->i;
-    r__3 = y->r;
-    r__4 = y->i;
+    r__1 = x->real;
+    r__2 = x->imag;
+    r__3 = y->real;
+    r__4 = y->imag;
     sladiv_(&r__1, &r__2, &r__3, &r__4, &zr, &zi);
-    q__1.r = zr;
-    q__1.i = zi; // , expr subst
-    ret_val->r = q__1.r, ret_val->i = q__1.i;
+    q__1.real = zr;
+    q__1.imag = zi; // , expr subst
+    ret_val->real = q__1.real, ret_val->imag = q__1.imag;
     return;
     /* End of CLADIV */
 }
@@ -122,13 +122,13 @@ scomplex cladiv_(scomplex *x, scomplex *y)
     /* .. Intrinsic Functions .. */
     /* .. */
     /* .. Executable Statements .. */
-    r__1 = x->r;
-    r__2 = x->i;
-    r__3 = y->r;
-    r__4 = y->i;
+    r__1 = x->real;
+    r__2 = x->imag;
+    r__3 = y->real;
+    r__4 = y->imag;
     sladiv_(&r__1, &r__2, &r__3, &r__4, &zr, &zi);
-    q__1.r = zr;
-    q__1.i = zi; // , expr subst
+    q__1.real = zr;
+    q__1.imag = zi; // , expr subst
     return q__1;
     /* End of CLADIV */
 }

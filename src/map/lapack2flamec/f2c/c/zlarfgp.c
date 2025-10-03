@@ -4,7 +4,7 @@
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
  /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static dcomplex c_b6 = {{1.}, {0.}};
+static dcomplex c_b6 = {1., 0.};
 /* > \brief \b ZLARFGP generates an elementary reflector (Householder matrix) with non-negative
  * beta. */
 /* =========== DOCUMENTATION =========== */
@@ -163,14 +163,14 @@ void aocl_lapack_zlarfgp(aocl_int64_t *n, dcomplex *alpha, dcomplex *x,
     /* Function Body */
     if(*n <= 0)
     {
-        tau->r = 0., tau->i = 0.;
+        tau->real = 0., tau->imag = 0.;
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     eps = dlamch_("Precision");
     i__1 = *n - 1;
     xnorm = aocl_blas_dznrm2(&i__1, &x[1], incx);
-    alphr = alpha->r;
+    alphr = alpha->real;
     alphi = d_imag(alpha);
     if(xnorm <= eps * z_abs(alpha))
     {
@@ -183,23 +183,23 @@ void aocl_lapack_zlarfgp(aocl_int64_t *n, dcomplex *alpha, dcomplex *x,
                 /* When TAU.eq.ZERO, the vector is special-cased to be */
                 /* all zeros in the application routines. We do not need */
                 /* to clear it. */
-                tau->r = 0., tau->i = 0.;
+                tau->real = 0., tau->imag = 0.;
             }
             else
             {
                 /* However, the application routines rely on explicit */
                 /* zero checks when TAU.ne.ZERO, and we must clear X. */
-                tau->r = 2., tau->i = 0.;
+                tau->real = 2., tau->imag = 0.;
                 i__1 = *n - 1;
                 for(j = 1; j <= i__1; ++j)
                 {
                     i__2 = (j - 1) * *incx + 1;
-                    x[i__2].r = 0.;
-                    x[i__2].i = 0.; // , expr subst
+                    x[i__2].real = 0.;
+                    x[i__2].imag = 0.; // , expr subst
                 }
-                z__1.r = -alpha->r;
-                z__1.i = -alpha->i; // , expr subst
-                alpha->r = z__1.r, alpha->i = z__1.i;
+                z__1.real = -alpha->real;
+                z__1.imag = -alpha->imag; // , expr subst
+                alpha->real = z__1.real, alpha->imag = z__1.imag;
             }
         }
         else
@@ -208,17 +208,17 @@ void aocl_lapack_zlarfgp(aocl_int64_t *n, dcomplex *alpha, dcomplex *x,
             xnorm = dlapy2_(&alphr, &alphi);
             d__1 = 1. - alphr / xnorm;
             d__2 = -alphi / xnorm;
-            z__1.r = d__1;
-            z__1.i = d__2; // , expr subst
-            tau->r = z__1.r, tau->i = z__1.i;
+            z__1.real = d__1;
+            z__1.imag = d__2; // , expr subst
+            tau->real = z__1.real, tau->imag = z__1.imag;
             i__1 = *n - 1;
             for(j = 1; j <= i__1; ++j)
             {
                 i__2 = (j - 1) * *incx + 1;
-                x[i__2].r = 0.;
-                x[i__2].i = 0.; // , expr subst
+                x[i__2].real = 0.;
+                x[i__2].imag = 0.; // , expr subst
             }
-            alpha->r = xnorm, alpha->i = 0.;
+            alpha->real = xnorm, alpha->imag = 0.;
         }
     }
     else
@@ -247,42 +247,42 @@ void aocl_lapack_zlarfgp(aocl_int64_t *n, dcomplex *alpha, dcomplex *x,
             /* New BETA is at most 1, at least SMLNUM */
             i__1 = *n - 1;
             xnorm = aocl_blas_dznrm2(&i__1, &x[1], incx);
-            z__1.r = alphr;
-            z__1.i = alphi; // , expr subst
-            alpha->r = z__1.r, alpha->i = z__1.i;
+            z__1.real = alphr;
+            z__1.imag = alphi; // , expr subst
+            alpha->real = z__1.real, alpha->imag = z__1.imag;
             d__1 = dlapy3_(&alphr, &alphi, &xnorm);
             beta = d_sign(&d__1, &alphr);
         }
-        savealpha.r = alpha->r;
-        savealpha.i = alpha->i; // , expr subst
-        z__1.r = alpha->r + beta;
-        z__1.i = alpha->i; // , expr subst
-        alpha->r = z__1.r, alpha->i = z__1.i;
+        savealpha.real = alpha->real;
+        savealpha.imag = alpha->imag; // , expr subst
+        z__1.real = alpha->real + beta;
+        z__1.imag = alpha->imag; // , expr subst
+        alpha->real = z__1.real, alpha->imag = z__1.imag;
         if(beta < 0.)
         {
             beta = -beta;
-            z__2.r = -alpha->r;
-            z__2.i = -alpha->i; // , expr subst
-            z__1.r = z__2.r / beta;
-            z__1.i = z__2.i / beta; // , expr subst
-            tau->r = z__1.r, tau->i = z__1.i;
+            z__2.real = -alpha->real;
+            z__2.imag = -alpha->imag; // , expr subst
+            z__1.real = z__2.real / beta;
+            z__1.imag = z__2.imag / beta; // , expr subst
+            tau->real = z__1.real, tau->imag = z__1.imag;
         }
         else
         {
-            alphr = alphi * (alphi / alpha->r);
-            alphr += xnorm * (xnorm / alpha->r);
+            alphr = alphi * (alphi / alpha->real);
+            alphr += xnorm * (xnorm / alpha->real);
             d__1 = alphr / beta;
             d__2 = -alphi / beta;
-            z__1.r = d__1;
-            z__1.i = d__2; // , expr subst
-            tau->r = z__1.r, tau->i = z__1.i;
+            z__1.real = d__1;
+            z__1.imag = d__2; // , expr subst
+            tau->real = z__1.real, tau->imag = z__1.imag;
             d__1 = -alphr;
-            z__1.r = d__1;
-            z__1.i = alphi; // , expr subst
-            alpha->r = z__1.r, alpha->i = z__1.i;
+            z__1.real = d__1;
+            z__1.imag = alphi; // , expr subst
+            alpha->real = z__1.real, alpha->imag = z__1.imag;
         }
         zladiv_f2c_(&z__1, &c_b6, alpha);
-        alpha->r = z__1.r, alpha->i = z__1.i;
+        alpha->real = z__1.real, alpha->imag = z__1.imag;
         if(z_abs(tau) <= smlnum)
         {
             /* In the case where the computed TAU ends up being a denormalized number, */
@@ -290,27 +290,27 @@ void aocl_lapack_zlarfgp(aocl_int64_t *n, dcomplex *alpha, dcomplex *x,
             /* to ZERO (or TWO or whatever makes a nonnegative real number for BETA). */
             /* (Bug report provided by Pat Quillen from MathWorks on Jul 29, 2009.) */
             /* (Thanks Pat. Thanks MathWorks.) */
-            alphr = savealpha.r;
+            alphr = savealpha.real;
             alphi = d_imag(&savealpha);
             if(alphi == 0.)
             {
                 if(alphr >= 0.)
                 {
-                    tau->r = 0., tau->i = 0.;
+                    tau->real = 0., tau->imag = 0.;
                 }
                 else
                 {
-                    tau->r = 2., tau->i = 0.;
+                    tau->real = 2., tau->imag = 0.;
                     i__1 = *n - 1;
                     for(j = 1; j <= i__1; ++j)
                     {
                         i__2 = (j - 1) * *incx + 1;
-                        x[i__2].r = 0.;
-                        x[i__2].i = 0.; // , expr subst
+                        x[i__2].real = 0.;
+                        x[i__2].imag = 0.; // , expr subst
                     }
-                    z__1.r = -savealpha.r;
-                    z__1.i = -savealpha.i; // , expr subst
-                    beta = z__1.r;
+                    z__1.real = -savealpha.real;
+                    z__1.imag = -savealpha.imag; // , expr subst
+                    beta = z__1.real;
                 }
             }
             else
@@ -318,15 +318,15 @@ void aocl_lapack_zlarfgp(aocl_int64_t *n, dcomplex *alpha, dcomplex *x,
                 xnorm = dlapy2_(&alphr, &alphi);
                 d__1 = 1. - alphr / xnorm;
                 d__2 = -alphi / xnorm;
-                z__1.r = d__1;
-                z__1.i = d__2; // , expr subst
-                tau->r = z__1.r, tau->i = z__1.i;
+                z__1.real = d__1;
+                z__1.imag = d__2; // , expr subst
+                tau->real = z__1.real, tau->imag = z__1.imag;
                 i__1 = *n - 1;
                 for(j = 1; j <= i__1; ++j)
                 {
                     i__2 = (j - 1) * *incx + 1;
-                    x[i__2].r = 0.;
-                    x[i__2].i = 0.; // , expr subst
+                    x[i__2].real = 0.;
+                    x[i__2].imag = 0.; // , expr subst
                 }
                 beta = xnorm;
             }
@@ -344,7 +344,7 @@ void aocl_lapack_zlarfgp(aocl_int64_t *n, dcomplex *alpha, dcomplex *x,
             beta *= smlnum;
             /* L20: */
         }
-        alpha->r = beta, alpha->i = 0.;
+        alpha->real = beta, alpha->imag = 0.;
     }
     AOCL_DTL_TRACE_LOG_EXIT
     return;

@@ -6,8 +6,8 @@
  libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
-static dcomplex c_b11 = {{-1.}, {0.}};
-static dcomplex c_b12 = {{1.}, {0.}};
+static dcomplex c_b11 = {-1., 0.};
+static dcomplex c_b12 = {1., 0.};
 static doublereal c_b34 = 1.;
 /* > \brief \b ZLA_PORFSX_EXTENDED improves the computed solution to a system of linear equations
  * for symmetri c or Hermitian positive-definite matrices by performing extra-precise iterative
@@ -548,8 +548,8 @@ void zla_porfsx_extended_(integer *prec_type__, char *uplo, integer *n, integer 
             for(i__ = 1; i__ <= i__2; ++i__)
             {
                 i__3 = i__;
-                y_tail__[i__3].r = 0.;
-                y_tail__[i__3].i = 0.; // , expr subst
+                y_tail__[i__3].real = 0.;
+                y_tail__[i__3].imag = 0.; // , expr subst
             }
         }
         dxrat = 0.;
@@ -599,10 +599,10 @@ void zla_porfsx_extended_(integer *prec_type__, char *uplo, integer *n, integer 
             for(i__ = 1; i__ <= i__3; ++i__)
             {
                 i__4 = i__ + j * y_dim1;
-                yk = (d__1 = y[i__4].r, f2c_dabs(d__1))
+                yk = (d__1 = y[i__4].real, f2c_dabs(d__1))
                      + (d__2 = d_imag(&y[i__ + j * y_dim1]), f2c_dabs(d__2));
                 i__4 = i__;
-                dyk = (d__1 = dy[i__4].r, f2c_dabs(d__1))
+                dyk = (d__1 = dy[i__4].real, f2c_dabs(d__1))
                       + (d__2 = d_imag(&dy[i__]), f2c_dabs(d__2));
                 if(yk != 0.)
                 {
@@ -741,8 +741,8 @@ void zla_porfsx_extended_(integer *prec_type__, char *uplo, integer *n, integer 
                 for(i__ = 1; i__ <= i__3; ++i__)
                 {
                     i__4 = i__;
-                    y_tail__[i__4].r = 0.;
-                    y_tail__[i__4].i = 0.; // , expr subst
+                    y_tail__[i__4].real = 0.;
+                    y_tail__[i__4].imag = 0.; // , expr subst
                 }
             }
             prevnormdx = normdx;
@@ -789,7 +789,7 @@ void zla_porfsx_extended_(integer *prec_type__, char *uplo, integer *n, integer 
         for(i__ = 1; i__ <= i__2; ++i__)
         {
             i__3 = i__ + j * b_dim1;
-            ayb[i__] = (d__1 = b[i__3].r, f2c_dabs(d__1))
+            ayb[i__] = (d__1 = b[i__3].real, f2c_dabs(d__1))
                        + (d__2 = d_imag(&b[i__ + j * b_dim1]), f2c_dabs(d__2));
         }
         /* Compute f2c_dabs(op(A_s))*f2c_dabs(Y) + f2c_dabs(B_s). */

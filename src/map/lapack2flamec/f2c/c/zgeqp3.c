@@ -263,10 +263,10 @@ void aocl_lapack_zgeqp3(aocl_int64_t *m, aocl_int64_t *n, dcomplex *a, aocl_int6
 #endif
             lwkopt = (*n + 1) * nb;
         }
-        z__1.r = (doublereal)lwkopt;
-        z__1.i = 0.; // , expr subst
-        work[1].r = z__1.r;
-        work[1].i = z__1.i; // , expr subst
+        z__1.real = (doublereal)lwkopt;
+        z__1.imag = 0.; // , expr subst
+        work[1].real = z__1.real;
+        work[1].imag = z__1.imag; // , expr subst
         if(*lwork < iws && !lquery)
         {
             *info = -8;
@@ -321,7 +321,7 @@ void aocl_lapack_zgeqp3(aocl_int64_t *m, aocl_int64_t *n, dcomplex *a, aocl_int6
         aocl_lapack_zgeqrf(m, &na, &a[a_offset], lda, &tau[1], &work[1], lwork, info);
         /* Computing MAX */
         i__1 = iws;
-        i__2 = (integer)work[1].r; // , expr subst
+        i__2 = (integer)work[1].real; // , expr subst
         iws = fla_max(i__1, i__2);
         if(na < *n)
         {
@@ -333,7 +333,7 @@ void aocl_lapack_zgeqp3(aocl_int64_t *m, aocl_int64_t *n, dcomplex *a, aocl_int6
                                &tau[1], &a[(na + 1) * a_dim1 + 1], lda, &work[1], lwork, info);
             /* Computing MAX */
             i__1 = iws;
-            i__2 = (integer)work[1].r; // , expr subst
+            i__2 = (integer)work[1].real; // , expr subst
             iws = fla_max(i__1, i__2);
         }
     }
@@ -423,10 +423,10 @@ void aocl_lapack_zgeqp3(aocl_int64_t *m, aocl_int64_t *n, dcomplex *a, aocl_int6
                                &rwork[j], &rwork[*n + j], &work[1]);
         }
     }
-    z__1.r = (doublereal)lwkopt;
-    z__1.i = 0.; // , expr subst
-    work[1].r = z__1.r;
-    work[1].i = z__1.i; // , expr subst
+    z__1.real = (doublereal)lwkopt;
+    z__1.imag = 0.; // , expr subst
+    work[1].real = z__1.real;
+    work[1].imag = z__1.imag; // , expr subst
     AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of ZGEQP3 */

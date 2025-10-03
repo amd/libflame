@@ -4,8 +4,8 @@
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
  /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static scomplex c_b1 = {{1.f}, {0.f}};
-static scomplex c_b2 = {{.5f}, {0.f}};
+static scomplex c_b1 = {1.f, 0.f};
+static scomplex c_b2 = {.5f, 0.f};
 static aocl_int64_t c__1 = 1;
 static aocl_int64_t c_n1 = -1;
 static real c_b18 = 1.f;
@@ -233,20 +233,20 @@ void chegst_fla(aocl_int64_t *itype, char *uplo, aocl_int64_t *n, scomplex *a, a
                                         &c_b1, &b[k + k * b_dim1], ldb, &a[k + (k + kb) * a_dim1],
                                         lda);
                         i__3 = *n - k - kb + 1;
-                        q__1.r = -.5f;
-                        q__1.i = -0.f; // , expr subst
+                        q__1.real = -.5f;
+                        q__1.imag = -0.f; // , expr subst
                         aocl_blas_chemm("Left", uplo, &kb, &i__3, &q__1, &a[k + k * a_dim1], lda,
                                         &b[k + (k + kb) * b_dim1], ldb, &c_b1,
                                         &a[k + (k + kb) * a_dim1], lda);
                         i__3 = *n - k - kb + 1;
-                        q__1.r = -1.f;
-                        q__1.i = -0.f; // , expr subst
+                        q__1.real = -1.f;
+                        q__1.imag = -0.f; // , expr subst
                         aocl_blas_cher2k(uplo, "Conjugate transpose", &i__3, &kb, &q__1,
                                          &a[k + (k + kb) * a_dim1], lda, &b[k + (k + kb) * b_dim1],
                                          ldb, &c_b18, &a[k + kb + (k + kb) * a_dim1], lda);
                         i__3 = *n - k - kb + 1;
-                        q__1.r = -.5f;
-                        q__1.i = -0.f; // , expr subst
+                        q__1.real = -.5f;
+                        q__1.imag = -0.f; // , expr subst
                         aocl_blas_chemm("Left", uplo, &kb, &i__3, &q__1, &a[k + k * a_dim1], lda,
                                         &b[k + (k + kb) * b_dim1], ldb, &c_b1,
                                         &a[k + (k + kb) * a_dim1], lda);
@@ -280,20 +280,20 @@ void chegst_fla(aocl_int64_t *itype, char *uplo, aocl_int64_t *n, scomplex *a, a
                                         &i__3, &kb, &c_b1, &b[k + k * b_dim1], ldb,
                                         &a[k + kb + k * a_dim1], lda);
                         i__3 = *n - k - kb + 1;
-                        q__1.r = -.5f;
-                        q__1.i = -0.f; // , expr subst
+                        q__1.real = -.5f;
+                        q__1.imag = -0.f; // , expr subst
                         aocl_blas_chemm("Right", uplo, &i__3, &kb, &q__1, &a[k + k * a_dim1], lda,
                                         &b[k + kb + k * b_dim1], ldb, &c_b1,
                                         &a[k + kb + k * a_dim1], lda);
                         i__3 = *n - k - kb + 1;
-                        q__1.r = -1.f;
-                        q__1.i = -0.f; // , expr subst
+                        q__1.real = -1.f;
+                        q__1.imag = -0.f; // , expr subst
                         aocl_blas_cher2k(uplo, "No transpose", &i__3, &kb, &q__1,
                                          &a[k + kb + k * a_dim1], lda, &b[k + kb + k * b_dim1], ldb,
                                          &c_b18, &a[k + kb + (k + kb) * a_dim1], lda);
                         i__3 = *n - k - kb + 1;
-                        q__1.r = -.5f;
-                        q__1.i = -0.f; // , expr subst
+                        q__1.real = -.5f;
+                        q__1.imag = -0.f; // , expr subst
                         aocl_blas_chemm("Right", uplo, &i__3, &kb, &q__1, &a[k + k * a_dim1], lda,
                                         &b[k + kb + k * b_dim1], ldb, &c_b1,
                                         &a[k + kb + k * a_dim1], lda);

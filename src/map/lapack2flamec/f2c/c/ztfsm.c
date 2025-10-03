@@ -4,7 +4,7 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static dcomplex c_b1 = {{1.}, {0.}};
+static dcomplex c_b1 = {1., 0.};
 /* > \brief \b ZTFSM solves a matrix equation (one operand is a triangular matrix in RFP format). */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -408,7 +408,7 @@ void aocl_lapack_ztfsm(char *transr, char *side, char *uplo, char *trans, char *
         return;
     }
     /* Quick return when ALPHA.EQ.(0D+0,0D+0) */
-    if(alpha->r == 0. && alpha->i == 0.)
+    if(alpha->real == 0. && alpha->imag == 0.)
     {
         i__1 = *n - 1;
         for(j = 0; j <= i__1; ++j)
@@ -417,8 +417,8 @@ void aocl_lapack_ztfsm(char *transr, char *side, char *uplo, char *trans, char *
             for(i__ = 0; i__ <= i__2; ++i__)
             {
                 i__3 = i__ + j * b_dim1;
-                b[i__3].r = 0.;
-                b[i__3].i = 0.; // , expr subst
+                b[i__3].real = 0.;
+                b[i__3].imag = 0.; // , expr subst
                 /* L10: */
             }
             /* L20: */
@@ -473,8 +473,8 @@ void aocl_lapack_ztfsm(char *transr, char *side, char *uplo, char *trans, char *
                         {
                             aocl_blas_ztrsm("L", "L", "N", diag, &m1, n, alpha, a, m, &b[b_offset],
                                             ldb);
-                            z__1.r = -1.;
-                            z__1.i = -0.; // , expr subst
+                            z__1.real = -1.;
+                            z__1.imag = -0.; // , expr subst
                             aocl_blas_zgemm("N", "N", &m2, n, &m1, &z__1, &a[m1], m, &b[b_offset],
                                             ldb, alpha, &b[m1], ldb);
                             aocl_blas_ztrsm("L", "U", "C", diag, &m2, n, &c_b1, &a[*m], m, &b[m1],
@@ -494,8 +494,8 @@ void aocl_lapack_ztfsm(char *transr, char *side, char *uplo, char *trans, char *
                         {
                             aocl_blas_ztrsm("L", "U", "N", diag, &m2, n, alpha, &a[*m], m, &b[m1],
                                             ldb);
-                            z__1.r = -1.;
-                            z__1.i = -0.; // , expr subst
+                            z__1.real = -1.;
+                            z__1.imag = -0.; // , expr subst
                             aocl_blas_zgemm("C", "N", &m1, n, &m2, &z__1, &a[m1], m, &b[m1], ldb,
                                             alpha, &b[b_offset], ldb);
                             aocl_blas_ztrsm("L", "L", "C", diag, &m1, n, &c_b1, a, m, &b[b_offset],
@@ -512,8 +512,8 @@ void aocl_lapack_ztfsm(char *transr, char *side, char *uplo, char *trans, char *
                         /* TRANS = 'N' */
                         aocl_blas_ztrsm("L", "L", "N", diag, &m1, n, alpha, &a[m2], m, &b[b_offset],
                                         ldb);
-                        z__1.r = -1.;
-                        z__1.i = -0.; // , expr subst
+                        z__1.real = -1.;
+                        z__1.imag = -0.; // , expr subst
                         aocl_blas_zgemm("C", "N", &m2, n, &m1, &z__1, a, m, &b[b_offset], ldb,
                                         alpha, &b[m1], ldb);
                         aocl_blas_ztrsm("L", "U", "C", diag, &m2, n, &c_b1, &a[m1], m, &b[m1], ldb);
@@ -523,8 +523,8 @@ void aocl_lapack_ztfsm(char *transr, char *side, char *uplo, char *trans, char *
                         /* SIDE ='L', N is odd, TRANSR = 'N', UPLO = 'U', and */
                         /* TRANS = 'C' */
                         aocl_blas_ztrsm("L", "U", "N", diag, &m2, n, alpha, &a[m1], m, &b[m1], ldb);
-                        z__1.r = -1.;
-                        z__1.i = -0.; // , expr subst
+                        z__1.real = -1.;
+                        z__1.imag = -0.; // , expr subst
                         aocl_blas_zgemm("N", "N", &m1, n, &m2, &z__1, a, m, &b[m1], ldb, alpha,
                                         &b[b_offset], ldb);
                         aocl_blas_ztrsm("L", "L", "C", diag, &m1, n, &c_b1, &a[m2], m, &b[b_offset],
@@ -551,8 +551,8 @@ void aocl_lapack_ztfsm(char *transr, char *side, char *uplo, char *trans, char *
                         {
                             aocl_blas_ztrsm("L", "U", "C", diag, &m1, n, alpha, a, &m1,
                                             &b[b_offset], ldb);
-                            z__1.r = -1.;
-                            z__1.i = -0.; // , expr subst
+                            z__1.real = -1.;
+                            z__1.imag = -0.; // , expr subst
                             aocl_blas_zgemm("C", "N", &m2, n, &m1, &z__1, &a[m1 * m1], &m1,
                                             &b[b_offset], ldb, alpha, &b[m1], ldb);
                             aocl_blas_ztrsm("L", "L", "N", diag, &m2, n, &c_b1, &a[1], &m1, &b[m1],
@@ -572,8 +572,8 @@ void aocl_lapack_ztfsm(char *transr, char *side, char *uplo, char *trans, char *
                         {
                             aocl_blas_ztrsm("L", "L", "C", diag, &m2, n, alpha, &a[1], &m1, &b[m1],
                                             ldb);
-                            z__1.r = -1.;
-                            z__1.i = -0.; // , expr subst
+                            z__1.real = -1.;
+                            z__1.imag = -0.; // , expr subst
                             aocl_blas_zgemm("N", "N", &m1, n, &m2, &z__1, &a[m1 * m1], &m1, &b[m1],
                                             ldb, alpha, &b[b_offset], ldb);
                             aocl_blas_ztrsm("L", "U", "N", diag, &m1, n, &c_b1, a, &m1,
@@ -590,8 +590,8 @@ void aocl_lapack_ztfsm(char *transr, char *side, char *uplo, char *trans, char *
                         /* TRANS = 'N' */
                         aocl_blas_ztrsm("L", "U", "C", diag, &m1, n, alpha, &a[m2 * m2], &m2,
                                         &b[b_offset], ldb);
-                        z__1.r = -1.;
-                        z__1.i = -0.; // , expr subst
+                        z__1.real = -1.;
+                        z__1.imag = -0.; // , expr subst
                         aocl_blas_zgemm("N", "N", &m2, n, &m1, &z__1, a, &m2, &b[b_offset], ldb,
                                         alpha, &b[m1], ldb);
                         aocl_blas_ztrsm("L", "L", "N", diag, &m2, n, &c_b1, &a[m1 * m2], &m2,
@@ -603,8 +603,8 @@ void aocl_lapack_ztfsm(char *transr, char *side, char *uplo, char *trans, char *
                         /* TRANS = 'C' */
                         aocl_blas_ztrsm("L", "L", "C", diag, &m2, n, alpha, &a[m1 * m2], &m2,
                                         &b[m1], ldb);
-                        z__1.r = -1.;
-                        z__1.i = -0.; // , expr subst
+                        z__1.real = -1.;
+                        z__1.imag = -0.; // , expr subst
                         aocl_blas_zgemm("C", "N", &m1, n, &m2, &z__1, a, &m2, &b[m1], ldb, alpha,
                                         &b[b_offset], ldb);
                         aocl_blas_ztrsm("L", "U", "N", diag, &m1, n, &c_b1, &a[m2 * m2], &m2,
@@ -629,8 +629,8 @@ void aocl_lapack_ztfsm(char *transr, char *side, char *uplo, char *trans, char *
                         i__1 = *m + 1;
                         aocl_blas_ztrsm("L", "L", "N", diag, &k, n, alpha, &a[1], &i__1,
                                         &b[b_offset], ldb);
-                        z__1.r = -1.;
-                        z__1.i = -0.; // , expr subst
+                        z__1.real = -1.;
+                        z__1.imag = -0.; // , expr subst
                         i__1 = *m + 1;
                         aocl_blas_zgemm("N", "N", &k, n, &k, &z__1, &a[k + 1], &i__1, &b[b_offset],
                                         ldb, alpha, &b[k], ldb);
@@ -643,8 +643,8 @@ void aocl_lapack_ztfsm(char *transr, char *side, char *uplo, char *trans, char *
                         /* and TRANS = 'C' */
                         i__1 = *m + 1;
                         aocl_blas_ztrsm("L", "U", "N", diag, &k, n, alpha, a, &i__1, &b[k], ldb);
-                        z__1.r = -1.;
-                        z__1.i = -0.; // , expr subst
+                        z__1.real = -1.;
+                        z__1.imag = -0.; // , expr subst
                         i__1 = *m + 1;
                         aocl_blas_zgemm("C", "N", &k, n, &k, &z__1, &a[k + 1], &i__1, &b[k], ldb,
                                         alpha, &b[b_offset], ldb);
@@ -663,8 +663,8 @@ void aocl_lapack_ztfsm(char *transr, char *side, char *uplo, char *trans, char *
                         i__1 = *m + 1;
                         aocl_blas_ztrsm("L", "L", "N", diag, &k, n, alpha, &a[k + 1], &i__1,
                                         &b[b_offset], ldb);
-                        z__1.r = -1.;
-                        z__1.i = -0.; // , expr subst
+                        z__1.real = -1.;
+                        z__1.imag = -0.; // , expr subst
                         i__1 = *m + 1;
                         aocl_blas_zgemm("C", "N", &k, n, &k, &z__1, a, &i__1, &b[b_offset], ldb,
                                         alpha, &b[k], ldb);
@@ -679,8 +679,8 @@ void aocl_lapack_ztfsm(char *transr, char *side, char *uplo, char *trans, char *
                         i__1 = *m + 1;
                         aocl_blas_ztrsm("L", "U", "N", diag, &k, n, alpha, &a[k], &i__1, &b[k],
                                         ldb);
-                        z__1.r = -1.;
-                        z__1.i = -0.; // , expr subst
+                        z__1.real = -1.;
+                        z__1.imag = -0.; // , expr subst
                         i__1 = *m + 1;
                         aocl_blas_zgemm("N", "N", &k, n, &k, &z__1, a, &i__1, &b[k], ldb, alpha,
                                         &b[b_offset], ldb);
@@ -702,8 +702,8 @@ void aocl_lapack_ztfsm(char *transr, char *side, char *uplo, char *trans, char *
                         /* and TRANS = 'N' */
                         aocl_blas_ztrsm("L", "U", "C", diag, &k, n, alpha, &a[k], &k, &b[b_offset],
                                         ldb);
-                        z__1.r = -1.;
-                        z__1.i = -0.; // , expr subst
+                        z__1.real = -1.;
+                        z__1.imag = -0.; // , expr subst
                         aocl_blas_zgemm("C", "N", &k, n, &k, &z__1, &a[k * (k + 1)], &k,
                                         &b[b_offset], ldb, alpha, &b[k], ldb);
                         aocl_blas_ztrsm("L", "L", "N", diag, &k, n, &c_b1, a, &k, &b[k], ldb);
@@ -713,8 +713,8 @@ void aocl_lapack_ztfsm(char *transr, char *side, char *uplo, char *trans, char *
                         /* SIDE ='L', N is even, TRANSR = 'C', UPLO = 'L', */
                         /* and TRANS = 'C' */
                         aocl_blas_ztrsm("L", "L", "C", diag, &k, n, alpha, a, &k, &b[k], ldb);
-                        z__1.r = -1.;
-                        z__1.i = -0.; // , expr subst
+                        z__1.real = -1.;
+                        z__1.imag = -0.; // , expr subst
                         aocl_blas_zgemm("N", "N", &k, n, &k, &z__1, &a[k * (k + 1)], &k, &b[k], ldb,
                                         alpha, &b[b_offset], ldb);
                         aocl_blas_ztrsm("L", "U", "N", diag, &k, n, &c_b1, &a[k], &k, &b[b_offset],
@@ -730,8 +730,8 @@ void aocl_lapack_ztfsm(char *transr, char *side, char *uplo, char *trans, char *
                         /* and TRANS = 'N' */
                         aocl_blas_ztrsm("L", "U", "C", diag, &k, n, alpha, &a[k * (k + 1)], &k,
                                         &b[b_offset], ldb);
-                        z__1.r = -1.;
-                        z__1.i = -0.; // , expr subst
+                        z__1.real = -1.;
+                        z__1.imag = -0.; // , expr subst
                         aocl_blas_zgemm("N", "N", &k, n, &k, &z__1, a, &k, &b[b_offset], ldb, alpha,
                                         &b[k], ldb);
                         aocl_blas_ztrsm("L", "L", "N", diag, &k, n, &c_b1, &a[k * k], &k, &b[k],
@@ -743,8 +743,8 @@ void aocl_lapack_ztfsm(char *transr, char *side, char *uplo, char *trans, char *
                         /* and TRANS = 'C' */
                         aocl_blas_ztrsm("L", "L", "C", diag, &k, n, alpha, &a[k * k], &k, &b[k],
                                         ldb);
-                        z__1.r = -1.;
-                        z__1.i = -0.; // , expr subst
+                        z__1.real = -1.;
+                        z__1.imag = -0.; // , expr subst
                         aocl_blas_zgemm("C", "N", &k, n, &k, &z__1, a, &k, &b[k], ldb, alpha,
                                         &b[b_offset], ldb);
                         aocl_blas_ztrsm("L", "U", "N", diag, &k, n, &c_b1, &a[k * (k + 1)], &k,
@@ -794,8 +794,8 @@ void aocl_lapack_ztfsm(char *transr, char *side, char *uplo, char *trans, char *
                         /* TRANS = 'N' */
                         aocl_blas_ztrsm("R", "U", "C", diag, m, &n2, alpha, &a[*n], n,
                                         &b[n1 * b_dim1], ldb);
-                        z__1.r = -1.;
-                        z__1.i = -0.; // , expr subst
+                        z__1.real = -1.;
+                        z__1.imag = -0.; // , expr subst
                         aocl_blas_zgemm("N", "N", m, &n1, &n2, &z__1, &b[n1 * b_dim1], ldb, &a[n1],
                                         n, alpha, b, ldb);
                         aocl_blas_ztrsm("R", "L", "N", diag, m, &n1, &c_b1, a, n, b, ldb);
@@ -805,8 +805,8 @@ void aocl_lapack_ztfsm(char *transr, char *side, char *uplo, char *trans, char *
                         /* SIDE ='R', N is odd, TRANSR = 'N', UPLO = 'L', and */
                         /* TRANS = 'C' */
                         aocl_blas_ztrsm("R", "L", "C", diag, m, &n1, alpha, a, n, b, ldb);
-                        z__1.r = -1.;
-                        z__1.i = -0.; // , expr subst
+                        z__1.real = -1.;
+                        z__1.imag = -0.; // , expr subst
                         aocl_blas_zgemm("N", "C", m, &n2, &n1, &z__1, b, ldb, &a[n1], n, alpha,
                                         &b[n1 * b_dim1], ldb);
                         aocl_blas_ztrsm("R", "U", "N", diag, m, &n2, &c_b1, &a[*n], n,
@@ -821,8 +821,8 @@ void aocl_lapack_ztfsm(char *transr, char *side, char *uplo, char *trans, char *
                         /* SIDE ='R', N is odd, TRANSR = 'N', UPLO = 'U', and */
                         /* TRANS = 'N' */
                         aocl_blas_ztrsm("R", "L", "C", diag, m, &n1, alpha, &a[n2], n, b, ldb);
-                        z__1.r = -1.;
-                        z__1.i = -0.; // , expr subst
+                        z__1.real = -1.;
+                        z__1.imag = -0.; // , expr subst
                         aocl_blas_zgemm("N", "N", m, &n2, &n1, &z__1, b, ldb, a, n, alpha,
                                         &b[n1 * b_dim1], ldb);
                         aocl_blas_ztrsm("R", "U", "N", diag, m, &n2, &c_b1, &a[n1], n,
@@ -834,8 +834,8 @@ void aocl_lapack_ztfsm(char *transr, char *side, char *uplo, char *trans, char *
                         /* TRANS = 'C' */
                         aocl_blas_ztrsm("R", "U", "C", diag, m, &n2, alpha, &a[n1], n,
                                         &b[n1 * b_dim1], ldb);
-                        z__1.r = -1.;
-                        z__1.i = -0.; // , expr subst
+                        z__1.real = -1.;
+                        z__1.imag = -0.; // , expr subst
                         aocl_blas_zgemm("N", "C", m, &n1, &n2, &z__1, &b[n1 * b_dim1], ldb, a, n,
                                         alpha, b, ldb);
                         aocl_blas_ztrsm("R", "L", "N", diag, m, &n1, &c_b1, &a[n2], n, b, ldb);
@@ -854,8 +854,8 @@ void aocl_lapack_ztfsm(char *transr, char *side, char *uplo, char *trans, char *
                         /* TRANS = 'N' */
                         aocl_blas_ztrsm("R", "L", "N", diag, m, &n2, alpha, &a[1], &n1,
                                         &b[n1 * b_dim1], ldb);
-                        z__1.r = -1.;
-                        z__1.i = -0.; // , expr subst
+                        z__1.real = -1.;
+                        z__1.imag = -0.; // , expr subst
                         aocl_blas_zgemm("N", "C", m, &n1, &n2, &z__1, &b[n1 * b_dim1], ldb,
                                         &a[n1 * n1], &n1, alpha, b, ldb);
                         aocl_blas_ztrsm("R", "U", "C", diag, m, &n1, &c_b1, a, &n1, b, ldb);
@@ -865,8 +865,8 @@ void aocl_lapack_ztfsm(char *transr, char *side, char *uplo, char *trans, char *
                         /* SIDE ='R', N is odd, TRANSR = 'C', UPLO = 'L', and */
                         /* TRANS = 'C' */
                         aocl_blas_ztrsm("R", "U", "N", diag, m, &n1, alpha, a, &n1, b, ldb);
-                        z__1.r = -1.;
-                        z__1.i = -0.; // , expr subst
+                        z__1.real = -1.;
+                        z__1.imag = -0.; // , expr subst
                         aocl_blas_zgemm("N", "N", m, &n2, &n1, &z__1, b, ldb, &a[n1 * n1], &n1,
                                         alpha, &b[n1 * b_dim1], ldb);
                         aocl_blas_ztrsm("R", "L", "C", diag, m, &n2, &c_b1, &a[1], &n1,
@@ -882,8 +882,8 @@ void aocl_lapack_ztfsm(char *transr, char *side, char *uplo, char *trans, char *
                         /* TRANS = 'N' */
                         aocl_blas_ztrsm("R", "U", "N", diag, m, &n1, alpha, &a[n2 * n2], &n2, b,
                                         ldb);
-                        z__1.r = -1.;
-                        z__1.i = -0.; // , expr subst
+                        z__1.real = -1.;
+                        z__1.imag = -0.; // , expr subst
                         aocl_blas_zgemm("N", "C", m, &n2, &n1, &z__1, b, ldb, a, &n2, alpha,
                                         &b[n1 * b_dim1], ldb);
                         aocl_blas_ztrsm("R", "L", "C", diag, m, &n2, &c_b1, &a[n1 * n2], &n2,
@@ -895,8 +895,8 @@ void aocl_lapack_ztfsm(char *transr, char *side, char *uplo, char *trans, char *
                         /* TRANS = 'C' */
                         aocl_blas_ztrsm("R", "L", "N", diag, m, &n2, alpha, &a[n1 * n2], &n2,
                                         &b[n1 * b_dim1], ldb);
-                        z__1.r = -1.;
-                        z__1.i = -0.; // , expr subst
+                        z__1.real = -1.;
+                        z__1.imag = -0.; // , expr subst
                         aocl_blas_zgemm("N", "N", m, &n1, &n2, &z__1, &b[n1 * b_dim1], ldb, a, &n2,
                                         alpha, b, ldb);
                         aocl_blas_ztrsm("R", "U", "C", diag, m, &n1, &c_b1, &a[n2 * n2], &n2, b,
@@ -921,8 +921,8 @@ void aocl_lapack_ztfsm(char *transr, char *side, char *uplo, char *trans, char *
                         i__1 = *n + 1;
                         aocl_blas_ztrsm("R", "U", "C", diag, m, &k, alpha, a, &i__1, &b[k * b_dim1],
                                         ldb);
-                        z__1.r = -1.;
-                        z__1.i = -0.; // , expr subst
+                        z__1.real = -1.;
+                        z__1.imag = -0.; // , expr subst
                         i__1 = *n + 1;
                         aocl_blas_zgemm("N", "N", m, &k, &k, &z__1, &b[k * b_dim1], ldb, &a[k + 1],
                                         &i__1, alpha, b, ldb);
@@ -935,8 +935,8 @@ void aocl_lapack_ztfsm(char *transr, char *side, char *uplo, char *trans, char *
                         /* and TRANS = 'C' */
                         i__1 = *n + 1;
                         aocl_blas_ztrsm("R", "L", "C", diag, m, &k, alpha, &a[1], &i__1, b, ldb);
-                        z__1.r = -1.;
-                        z__1.i = -0.; // , expr subst
+                        z__1.real = -1.;
+                        z__1.imag = -0.; // , expr subst
                         i__1 = *n + 1;
                         aocl_blas_zgemm("N", "C", m, &k, &k, &z__1, b, ldb, &a[k + 1], &i__1, alpha,
                                         &b[k * b_dim1], ldb);
@@ -955,8 +955,8 @@ void aocl_lapack_ztfsm(char *transr, char *side, char *uplo, char *trans, char *
                         i__1 = *n + 1;
                         aocl_blas_ztrsm("R", "L", "C", diag, m, &k, alpha, &a[k + 1], &i__1, b,
                                         ldb);
-                        z__1.r = -1.;
-                        z__1.i = -0.; // , expr subst
+                        z__1.real = -1.;
+                        z__1.imag = -0.; // , expr subst
                         i__1 = *n + 1;
                         aocl_blas_zgemm("N", "N", m, &k, &k, &z__1, b, ldb, a, &i__1, alpha,
                                         &b[k * b_dim1], ldb);
@@ -971,8 +971,8 @@ void aocl_lapack_ztfsm(char *transr, char *side, char *uplo, char *trans, char *
                         i__1 = *n + 1;
                         aocl_blas_ztrsm("R", "U", "C", diag, m, &k, alpha, &a[k], &i__1,
                                         &b[k * b_dim1], ldb);
-                        z__1.r = -1.;
-                        z__1.i = -0.; // , expr subst
+                        z__1.real = -1.;
+                        z__1.imag = -0.; // , expr subst
                         i__1 = *n + 1;
                         aocl_blas_zgemm("N", "C", m, &k, &k, &z__1, &b[k * b_dim1], ldb, a, &i__1,
                                         alpha, b, ldb);
@@ -994,8 +994,8 @@ void aocl_lapack_ztfsm(char *transr, char *side, char *uplo, char *trans, char *
                         /* and TRANS = 'N' */
                         aocl_blas_ztrsm("R", "L", "N", diag, m, &k, alpha, a, &k, &b[k * b_dim1],
                                         ldb);
-                        z__1.r = -1.;
-                        z__1.i = -0.; // , expr subst
+                        z__1.real = -1.;
+                        z__1.imag = -0.; // , expr subst
                         aocl_blas_zgemm("N", "C", m, &k, &k, &z__1, &b[k * b_dim1], ldb,
                                         &a[(k + 1) * k], &k, alpha, b, ldb);
                         aocl_blas_ztrsm("R", "U", "C", diag, m, &k, &c_b1, &a[k], &k, b, ldb);
@@ -1005,8 +1005,8 @@ void aocl_lapack_ztfsm(char *transr, char *side, char *uplo, char *trans, char *
                         /* SIDE ='R', N is even, TRANSR = 'C', UPLO = 'L', */
                         /* and TRANS = 'C' */
                         aocl_blas_ztrsm("R", "U", "N", diag, m, &k, alpha, &a[k], &k, b, ldb);
-                        z__1.r = -1.;
-                        z__1.i = -0.; // , expr subst
+                        z__1.real = -1.;
+                        z__1.imag = -0.; // , expr subst
                         aocl_blas_zgemm("N", "N", m, &k, &k, &z__1, b, ldb, &a[(k + 1) * k], &k,
                                         alpha, &b[k * b_dim1], ldb);
                         aocl_blas_ztrsm("R", "L", "C", diag, m, &k, &c_b1, a, &k, &b[k * b_dim1],
@@ -1022,8 +1022,8 @@ void aocl_lapack_ztfsm(char *transr, char *side, char *uplo, char *trans, char *
                         /* and TRANS = 'N' */
                         aocl_blas_ztrsm("R", "U", "N", diag, m, &k, alpha, &a[(k + 1) * k], &k, b,
                                         ldb);
-                        z__1.r = -1.;
-                        z__1.i = -0.; // , expr subst
+                        z__1.real = -1.;
+                        z__1.imag = -0.; // , expr subst
                         aocl_blas_zgemm("N", "C", m, &k, &k, &z__1, b, ldb, a, &k, alpha,
                                         &b[k * b_dim1], ldb);
                         aocl_blas_ztrsm("R", "L", "C", diag, m, &k, &c_b1, &a[k * k], &k,
@@ -1035,8 +1035,8 @@ void aocl_lapack_ztfsm(char *transr, char *side, char *uplo, char *trans, char *
                         /* and TRANS = 'C' */
                         aocl_blas_ztrsm("R", "L", "N", diag, m, &k, alpha, &a[k * k], &k,
                                         &b[k * b_dim1], ldb);
-                        z__1.r = -1.;
-                        z__1.i = -0.; // , expr subst
+                        z__1.real = -1.;
+                        z__1.imag = -0.; // , expr subst
                         aocl_blas_zgemm("N", "N", m, &k, &k, &z__1, &b[k * b_dim1], ldb, a, &k,
                                         alpha, b, ldb);
                         aocl_blas_ztrsm("R", "U", "C", diag, m, &k, &c_b1, &a[(k + 1) * k], &k, b,

@@ -316,8 +316,8 @@ void aocl_lapack_zunmhr(char *side, char *trans, aocl_int64_t *m, aocl_int64_t *
             nb = aocl_lapack_ilaenv(&c__1, "ZUNMQR", ch__1, m, &nh, &nh, &c_n1);
         }
         lwkopt = nw * nb;
-        work[1].r = (doublereal)lwkopt;
-        work[1].i = 0.; // , expr subst
+        work[1].real = (doublereal)lwkopt;
+        work[1].imag = 0.; // , expr subst
     }
     if(*info != 0)
     {
@@ -334,8 +334,8 @@ void aocl_lapack_zunmhr(char *side, char *trans, aocl_int64_t *m, aocl_int64_t *
     /* Quick return if possible */
     if(*m == 0 || *n == 0 || nh == 0)
     {
-        work[1].r = 1.;
-        work[1].i = 0.; // , expr subst
+        work[1].real = 1.;
+        work[1].imag = 0.; // , expr subst
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -355,8 +355,8 @@ void aocl_lapack_zunmhr(char *side, char *trans, aocl_int64_t *m, aocl_int64_t *
     }
     aocl_lapack_zunmqr(side, trans, &mi, &ni, &nh, &a[*ilo + 1 + *ilo * a_dim1], lda, &tau[*ilo],
                        &c__[i1 + i2 * c_dim1], ldc, &work[1], lwork, &iinfo);
-    work[1].r = (doublereal)lwkopt;
-    work[1].i = 0.; // , expr subst
+    work[1].real = (doublereal)lwkopt;
+    work[1].imag = 0.; // , expr subst
     AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of ZUNMHR */

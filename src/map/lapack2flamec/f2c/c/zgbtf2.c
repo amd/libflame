@@ -4,7 +4,7 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static dcomplex c_b1 = {{1.}, {0.}};
+static dcomplex c_b1 = {1., 0.};
 static aocl_int64_t c__1 = 1;
 /* > \brief \b ZGBTF2 computes the LU factorization of a general band matrix using the unblocked
  * version of th e algorithm. */
@@ -267,8 +267,8 @@ void aocl_lapack_zgbtf2(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *kl, aocl
         for(i__ = kv - j + 2; i__ <= i__2; ++i__)
         {
             i__3 = i__ + j * ab_dim1;
-            ab[i__3].r = 0.;
-            ab[i__3].i = 0.; // , expr subst
+            ab[i__3].real = 0.;
+            ab[i__3].imag = 0.; // , expr subst
             /* L10: */
         }
         /* L20: */
@@ -298,8 +298,8 @@ void aocl_lapack_zgbtf2(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *kl, aocl
             for(i__ = 1; i__ <= i__2; ++i__)
             {
                 i__3 = i__ + (j + kv) * ab_dim1;
-                ab[i__3].r = 0.;
-                ab[i__3].i = 0.; // , expr subst
+                ab[i__3].real = 0.;
+                ab[i__3].imag = 0.; // , expr subst
                 /* L30: */
             }
         }
@@ -313,7 +313,7 @@ void aocl_lapack_zgbtf2(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *kl, aocl
         jp = aocl_blas_izamax(&i__2, &ab[kv + 1 + j * ab_dim1], &c__1);
         ipiv[j] = (aocl_int_t)(jp + j - 1);
         i__2 = kv + jp + j * ab_dim1;
-        if(ab[i__2].r != 0. || ab[i__2].i != 0.)
+        if(ab[i__2].real != 0. || ab[i__2].imag != 0.)
         {
             /* Computing MAX */
             /* Computing MIN */
@@ -339,8 +339,8 @@ void aocl_lapack_zgbtf2(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *kl, aocl
                 if(ju > j)
                 {
                     i__2 = ju - j;
-                    z__1.r = -1.;
-                    z__1.i = -0.; // , expr subst
+                    z__1.real = -1.;
+                    z__1.imag = -0.; // , expr subst
                     i__3 = *ldab - 1;
                     i__4 = *ldab - 1;
                     aocl_blas_zgeru(&km, &i__2, &z__1, &ab[kv + 2 + j * ab_dim1], &c__1,

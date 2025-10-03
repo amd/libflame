@@ -268,7 +268,7 @@ real aocl_lapack_cla_gercond_c(char *trans, aocl_int64_t *n, scomplex *a, aocl_i
                 for(j = 1; j <= i__2; ++j)
                 {
                     i__3 = i__ + j * a_dim1;
-                    tmp += ((r__1 = a[i__3].r, f2c_abs(r__1))
+                    tmp += ((r__1 = a[i__3].real, f2c_abs(r__1))
                             + (r__2 = r_imag(&a[i__ + j * a_dim1]), f2c_abs(r__2)))
                            / c__[j];
                 }
@@ -279,7 +279,7 @@ real aocl_lapack_cla_gercond_c(char *trans, aocl_int64_t *n, scomplex *a, aocl_i
                 for(j = 1; j <= i__2; ++j)
                 {
                     i__3 = i__ + j * a_dim1;
-                    tmp += (r__1 = a[i__3].r, f2c_abs(r__1))
+                    tmp += (r__1 = a[i__3].real, f2c_abs(r__1))
                            + (r__2 = r_imag(&a[i__ + j * a_dim1]), f2c_abs(r__2));
                 }
             }
@@ -299,7 +299,7 @@ real aocl_lapack_cla_gercond_c(char *trans, aocl_int64_t *n, scomplex *a, aocl_i
                 for(j = 1; j <= i__2; ++j)
                 {
                     i__3 = j + i__ * a_dim1;
-                    tmp += ((r__1 = a[i__3].r, f2c_abs(r__1))
+                    tmp += ((r__1 = a[i__3].real, f2c_abs(r__1))
                             + (r__2 = r_imag(&a[j + i__ * a_dim1]), f2c_abs(r__2)))
                            / c__[j];
                 }
@@ -310,7 +310,7 @@ real aocl_lapack_cla_gercond_c(char *trans, aocl_int64_t *n, scomplex *a, aocl_i
                 for(j = 1; j <= i__2; ++j)
                 {
                     i__3 = j + i__ * a_dim1;
-                    tmp += (r__1 = a[i__3].r, f2c_abs(r__1))
+                    tmp += (r__1 = a[i__3].real, f2c_abs(r__1))
                            + (r__2 = r_imag(&a[j + i__ * a_dim1]), f2c_abs(r__2));
                 }
             }
@@ -346,10 +346,10 @@ L10:
                 i__2 = i__;
                 i__3 = i__;
                 i__4 = i__;
-                q__1.r = rwork[i__4] * work[i__3].r;
-                q__1.i = rwork[i__4] * work[i__3].i; // , expr subst
-                work[i__2].r = q__1.r;
-                work[i__2].i = q__1.i; // , expr subst
+                q__1.real = rwork[i__4] * work[i__3].real;
+                q__1.imag = rwork[i__4] * work[i__3].imag; // , expr subst
+                work[i__2].real = q__1.real;
+                work[i__2].imag = q__1.imag; // , expr subst
             }
             if(notrans)
             {
@@ -370,10 +370,10 @@ L10:
                     i__2 = i__;
                     i__3 = i__;
                     i__4 = i__;
-                    q__1.r = c__[i__4] * work[i__3].r;
-                    q__1.i = c__[i__4] * work[i__3].i; // , expr subst
-                    work[i__2].r = q__1.r;
-                    work[i__2].i = q__1.i; // , expr subst
+                    q__1.real = c__[i__4] * work[i__3].real;
+                    q__1.imag = c__[i__4] * work[i__3].imag; // , expr subst
+                    work[i__2].real = q__1.real;
+                    work[i__2].imag = q__1.imag; // , expr subst
                 }
             }
         }
@@ -388,10 +388,10 @@ L10:
                     i__2 = i__;
                     i__3 = i__;
                     i__4 = i__;
-                    q__1.r = c__[i__4] * work[i__3].r;
-                    q__1.i = c__[i__4] * work[i__3].i; // , expr subst
-                    work[i__2].r = q__1.r;
-                    work[i__2].i = q__1.i; // , expr subst
+                    q__1.real = c__[i__4] * work[i__3].real;
+                    q__1.imag = c__[i__4] * work[i__3].imag; // , expr subst
+                    work[i__2].real = q__1.real;
+                    work[i__2].imag = q__1.imag; // , expr subst
                 }
             }
             if(notrans)
@@ -411,10 +411,10 @@ L10:
                 i__2 = i__;
                 i__3 = i__;
                 i__4 = i__;
-                q__1.r = rwork[i__4] * work[i__3].r;
-                q__1.i = rwork[i__4] * work[i__3].i; // , expr subst
-                work[i__2].r = q__1.r;
-                work[i__2].i = q__1.i; // , expr subst
+                q__1.real = rwork[i__4] * work[i__3].real;
+                q__1.imag = rwork[i__4] * work[i__3].imag; // , expr subst
+                work[i__2].real = q__1.real;
+                work[i__2].imag = q__1.imag; // , expr subst
             }
         }
         goto L10;

@@ -4,7 +4,7 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static scomplex c_b1 = {{1.f}, {0.f}};
+static scomplex c_b1 = {1.f, 0.f};
 static aocl_int64_t c__1 = 1;
 /* > \brief \b CHPGST */
 /* =========== DOCUMENTATION =========== */
@@ -219,16 +219,16 @@ void aocl_lapack_chpgst(aocl_int64_t *itype, char *uplo, aocl_int64_t *n, scompl
                 /* Compute the j-th column of the upper triangle of A */
                 i__2 = jj;
                 i__3 = jj;
-                r__1 = ap[i__3].r;
-                ap[i__2].r = r__1;
-                ap[i__2].i = 0.f; // , expr subst
+                r__1 = ap[i__3].real;
+                ap[i__2].real = r__1;
+                ap[i__2].imag = 0.f; // , expr subst
                 i__2 = jj;
-                bjj = bp[i__2].r;
+                bjj = bp[i__2].real;
                 aocl_blas_ctpsv(uplo, "Conjugate transpose", "Non-unit", &j, &bp[1], &ap[j1],
                                 &c__1);
                 i__2 = j - 1;
-                q__1.r = -1.f;
-                q__1.i = -0.f; // , expr subst
+                q__1.real = -1.f;
+                q__1.imag = -0.f; // , expr subst
                 aocl_blas_chpmv(uplo, &i__2, &q__1, &ap[1], &bp[j1], &c__1, &c_b1, &ap[j1], &c__1);
                 i__2 = j - 1;
                 r__1 = 1.f / bjj;
@@ -237,12 +237,12 @@ void aocl_lapack_chpgst(aocl_int64_t *itype, char *uplo, aocl_int64_t *n, scompl
                 i__3 = jj;
                 i__4 = j - 1;
                 aocl_lapack_cdotc_f2c(&q__3, &i__4, &ap[j1], &c__1, &bp[j1], &c__1);
-                q__2.r = ap[i__3].r - q__3.r;
-                q__2.i = ap[i__3].i - q__3.i; // , expr subst
-                q__1.r = q__2.r / bjj;
-                q__1.i = q__2.i / bjj; // , expr subst
-                ap[i__2].r = q__1.r;
-                ap[i__2].i = q__1.i; // , expr subst
+                q__2.real = ap[i__3].real - q__3.real;
+                q__2.imag = ap[i__3].imag - q__3.imag; // , expr subst
+                q__1.real = q__2.real / bjj;
+                q__1.imag = q__2.imag / bjj; // , expr subst
+                ap[i__2].real = q__1.real;
+                ap[i__2].imag = q__1.imag; // , expr subst
                 /* L10: */
             }
         }
@@ -257,28 +257,28 @@ void aocl_lapack_chpgst(aocl_int64_t *itype, char *uplo, aocl_int64_t *n, scompl
                 k1k1 = kk + *n - k + 1;
                 /* Update the lower triangle of A(k:n,k:n) */
                 i__2 = kk;
-                akk = ap[i__2].r;
+                akk = ap[i__2].real;
                 i__2 = kk;
-                bkk = bp[i__2].r;
+                bkk = bp[i__2].real;
                 /* Computing 2nd power */
                 r__1 = bkk;
                 akk /= r__1 * r__1;
                 i__2 = kk;
-                ap[i__2].r = akk;
-                ap[i__2].i = 0.f; // , expr subst
+                ap[i__2].real = akk;
+                ap[i__2].imag = 0.f; // , expr subst
                 if(k < *n)
                 {
                     i__2 = *n - k;
                     r__1 = 1.f / bkk;
                     aocl_blas_csscal(&i__2, &r__1, &ap[kk + 1], &c__1);
                     r__1 = akk * -.5f;
-                    ct.r = r__1;
-                    ct.i = 0.f; // , expr subst
+                    ct.real = r__1;
+                    ct.imag = 0.f; // , expr subst
                     i__2 = *n - k;
                     aocl_blas_caxpy(&i__2, &ct, &bp[kk + 1], &c__1, &ap[kk + 1], &c__1);
                     i__2 = *n - k;
-                    q__1.r = -1.f;
-                    q__1.i = -0.f; // , expr subst
+                    q__1.real = -1.f;
+                    q__1.imag = -0.f; // , expr subst
                     aocl_blas_chpr2(uplo, &i__2, &q__1, &ap[kk + 1], &c__1, &bp[kk + 1], &c__1,
                                     &ap[k1k1]);
                     i__2 = *n - k;
@@ -306,14 +306,14 @@ void aocl_lapack_chpgst(aocl_int64_t *itype, char *uplo, aocl_int64_t *n, scompl
                 kk += k;
                 /* Update the upper triangle of A(1:k,1:k) */
                 i__2 = kk;
-                akk = ap[i__2].r;
+                akk = ap[i__2].real;
                 i__2 = kk;
-                bkk = bp[i__2].r;
+                bkk = bp[i__2].real;
                 i__2 = k - 1;
                 aocl_blas_ctpmv(uplo, "No transpose", "Non-unit", &i__2, &bp[1], &ap[k1], &c__1);
                 r__1 = akk * .5f;
-                ct.r = r__1;
-                ct.i = 0.f; // , expr subst
+                ct.real = r__1;
+                ct.imag = 0.f; // , expr subst
                 i__2 = k - 1;
                 aocl_blas_caxpy(&i__2, &ct, &bp[k1], &c__1, &ap[k1], &c__1);
                 i__2 = k - 1;
@@ -326,8 +326,8 @@ void aocl_lapack_chpgst(aocl_int64_t *itype, char *uplo, aocl_int64_t *n, scompl
                 /* Computing 2nd power */
                 r__2 = bkk;
                 r__1 = akk * (r__2 * r__2);
-                ap[i__2].r = r__1;
-                ap[i__2].i = 0.f; // , expr subst
+                ap[i__2].real = r__1;
+                ap[i__2].imag = 0.f; // , expr subst
                 /* L30: */
             }
         }
@@ -342,17 +342,17 @@ void aocl_lapack_chpgst(aocl_int64_t *itype, char *uplo, aocl_int64_t *n, scompl
                 j1j1 = jj + *n - j + 1;
                 /* Compute the j-th column of the lower triangle of A */
                 i__2 = jj;
-                ajj = ap[i__2].r;
+                ajj = ap[i__2].real;
                 i__2 = jj;
-                bjj = bp[i__2].r;
+                bjj = bp[i__2].real;
                 i__2 = jj;
                 r__1 = ajj * bjj;
                 i__3 = *n - j;
                 aocl_lapack_cdotc_f2c(&q__2, &i__3, &ap[jj + 1], &c__1, &bp[jj + 1], &c__1);
-                q__1.r = r__1 + q__2.r;
-                q__1.i = q__2.i; // , expr subst
-                ap[i__2].r = q__1.r;
-                ap[i__2].i = q__1.i; // , expr subst
+                q__1.real = r__1 + q__2.real;
+                q__1.imag = q__2.imag; // , expr subst
+                ap[i__2].real = q__1.real;
+                ap[i__2].imag = q__1.imag; // , expr subst
                 i__2 = *n - j;
                 aocl_blas_csscal(&i__2, &bjj, &ap[jj + 1], &c__1);
                 i__2 = *n - j;

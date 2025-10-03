@@ -4,7 +4,7 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static scomplex c_b1 = {{1.f}, {0.f}};
+static scomplex c_b1 = {1.f, 0.f};
 static aocl_int64_t c__1 = 1;
 /* > \brief \b CTZRQF */
 /* =========== DOCUMENTATION =========== */
@@ -231,8 +231,8 @@ void aocl_lapack_ctzrqf(aocl_int64_t *m, aocl_int64_t *n, scomplex *a, aocl_int6
         for(i__ = 1; i__ <= i__1; ++i__)
         {
             i__2 = i__;
-            tau[i__2].r = 0.f;
-            tau[i__2].i = 0.f; // , expr subst
+            tau[i__2].real = 0.f;
+            tau[i__2].imag = 0.f; // , expr subst
             /* L10: */
         }
     }
@@ -247,24 +247,24 @@ void aocl_lapack_ctzrqf(aocl_int64_t *m, aocl_int64_t *n, scomplex *a, aocl_int6
             /* First set up the reflection. */
             i__1 = k + k * a_dim1;
             r_cnjg(&q__1, &a[k + k * a_dim1]);
-            a[i__1].r = q__1.r;
-            a[i__1].i = q__1.i; // , expr subst
+            a[i__1].real = q__1.real;
+            a[i__1].imag = q__1.imag; // , expr subst
             i__1 = *n - *m;
             aocl_lapack_clacgv(&i__1, &a[k + m1 * a_dim1], lda);
             i__1 = k + k * a_dim1;
-            alpha.r = a[i__1].r;
-            alpha.i = a[i__1].i; // , expr subst
+            alpha.real = a[i__1].real;
+            alpha.imag = a[i__1].imag; // , expr subst
             i__1 = *n - *m + 1;
             aocl_lapack_clarfg(&i__1, &alpha, &a[k + m1 * a_dim1], lda, &tau[k]);
             i__1 = k + k * a_dim1;
-            a[i__1].r = alpha.r;
-            a[i__1].i = alpha.i; // , expr subst
+            a[i__1].real = alpha.real;
+            a[i__1].imag = alpha.imag; // , expr subst
             i__1 = k;
             r_cnjg(&q__1, &tau[k]);
-            tau[i__1].r = q__1.r;
-            tau[i__1].i = q__1.i; // , expr subst
+            tau[i__1].real = q__1.real;
+            tau[i__1].imag = q__1.imag; // , expr subst
             i__1 = k;
-            if((tau[i__1].r != 0.f || tau[i__1].i != 0.f) && k > 1)
+            if((tau[i__1].real != 0.f || tau[i__1].imag != 0.f) && k > 1)
             {
                 /* We now perform the operation A := A*P( k )**H. */
                 /* Use the first ( k - 1 ) elements of TAU to store a( k ), */
@@ -282,14 +282,14 @@ void aocl_lapack_ctzrqf(aocl_int64_t *m, aocl_int64_t *n, scomplex *a, aocl_int6
                 /* and B := B - conjg(tau)*w*z( k )**H. */
                 i__1 = k - 1;
                 r_cnjg(&q__2, &tau[k]);
-                q__1.r = -q__2.r;
-                q__1.i = -q__2.i; // , expr subst
+                q__1.real = -q__2.real;
+                q__1.imag = -q__2.imag; // , expr subst
                 aocl_blas_caxpy(&i__1, &q__1, &tau[1], &c__1, &a[k * a_dim1 + 1], &c__1);
                 i__1 = k - 1;
                 i__2 = *n - *m;
                 r_cnjg(&q__2, &tau[k]);
-                q__1.r = -q__2.r;
-                q__1.i = -q__2.i; // , expr subst
+                q__1.real = -q__2.real;
+                q__1.imag = -q__2.imag; // , expr subst
                 aocl_blas_cgerc(&i__1, &i__2, &q__1, &tau[1], &c__1, &a[k + m1 * a_dim1], lda,
                                 &a[m1 * a_dim1 + 1], lda);
             }

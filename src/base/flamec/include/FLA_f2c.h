@@ -18,7 +18,6 @@
 #ifndef __cplusplus
 #include <complex.h>
 #endif
-#undef scomplex
 #include "FLA_config.h"
 #include "FLA_macro_defs.h"
 #include "FLA_type_defs.h"

@@ -4,7 +4,7 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static dcomplex c_b2 = {{1.}, {0.}};
+static dcomplex c_b2 = {1., 0.};
 static aocl_int64_t c__1 = 1;
 static aocl_int64_t c_n1 = -1;
 static aocl_int64_t c__3 = 3;
@@ -269,8 +269,8 @@ void aocl_lapack_zgehrd(aocl_int64_t *n, aocl_int64_t *ilo, aocl_int64_t *ihi, d
         i__2 = aocl_lapack_ilaenv(&c__1, "ZGEHRD", " ", n, ilo, ihi, &c_n1); // , expr subst
         nb = fla_min(i__1, i__2);
         lwkopt = *n * nb + 4160;
-        work[1].r = (doublereal)lwkopt;
-        work[1].i = 0.; // , expr subst
+        work[1].real = (doublereal)lwkopt;
+        work[1].imag = 0.; // , expr subst
     }
     if(*info != 0)
     {
@@ -289,24 +289,24 @@ void aocl_lapack_zgehrd(aocl_int64_t *n, aocl_int64_t *ilo, aocl_int64_t *ihi, d
     for(i__ = 1; i__ <= i__1; ++i__)
     {
         i__2 = i__;
-        tau[i__2].r = 0.;
-        tau[i__2].i = 0.; // , expr subst
+        tau[i__2].real = 0.;
+        tau[i__2].imag = 0.; // , expr subst
         /* L10: */
     }
     i__1 = *n - 1;
     for(i__ = fla_max(1, *ihi); i__ <= i__1; ++i__)
     {
         i__2 = i__;
-        tau[i__2].r = 0.;
-        tau[i__2].i = 0.; // , expr subst
+        tau[i__2].real = 0.;
+        tau[i__2].imag = 0.; // , expr subst
         /* L20: */
     }
     /* Quick return if possible */
     nh = *ihi - *ilo + 1;
     if(nh <= 1)
     {
-        work[1].r = 1.;
-        work[1].i = 0.; // , expr subst
+        work[1].real = 1.;
+        work[1].imag = 0.; // , expr subst
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -374,20 +374,20 @@ void aocl_lapack_zgehrd(aocl_int64_t *n, aocl_int64_t *ilo, aocl_int64_t *ihi, d
             /* right, computing A := A - Y * V**H. V(i+ib,ib-1) must be set */
             /* to 1 */
             i__3 = i__ + ib + (i__ + ib - 1) * a_dim1;
-            ei.r = a[i__3].r;
-            ei.i = a[i__3].i; // , expr subst
+            ei.real = a[i__3].real;
+            ei.imag = a[i__3].imag; // , expr subst
             i__3 = i__ + ib + (i__ + ib - 1) * a_dim1;
-            a[i__3].r = 1.;
-            a[i__3].i = 0.; // , expr subst
+            a[i__3].real = 1.;
+            a[i__3].imag = 0.; // , expr subst
             i__3 = *ihi - i__ - ib + 1;
-            z__1.r = -1.;
-            z__1.i = -0.; // , expr subst
+            z__1.real = -1.;
+            z__1.imag = -0.; // , expr subst
             aocl_blas_zgemm("No transpose", "Conjugate transpose", ihi, &i__3, &ib, &z__1, &work[1],
                             &ldwork, &a[i__ + ib + i__ * a_dim1], lda, &c_b2,
                             &a[(i__ + ib) * a_dim1 + 1], lda);
             i__3 = i__ + ib + (i__ + ib - 1) * a_dim1;
-            a[i__3].r = ei.r;
-            a[i__3].i = ei.i; // , expr subst
+            a[i__3].real = ei.real;
+            a[i__3].imag = ei.imag; // , expr subst
             /* Apply the block reflector H to A(1:i,i+1:i+ib-1) from the */
             /* right */
             i__3 = ib - 1;
@@ -396,8 +396,8 @@ void aocl_lapack_zgehrd(aocl_int64_t *n, aocl_int64_t *ilo, aocl_int64_t *ihi, d
             i__3 = ib - 2;
             for(j = 0; j <= i__3; ++j)
             {
-                z__1.r = -1.;
-                z__1.i = -0.; // , expr subst
+                z__1.real = -1.;
+                z__1.imag = -0.; // , expr subst
                 aocl_blas_zaxpy(&i__, &z__1, &work[ldwork * j + 1], &c__1,
                                 &a[(i__ + j + 1) * a_dim1 + 1], &c__1);
                 /* L30: */
@@ -414,8 +414,8 @@ void aocl_lapack_zgehrd(aocl_int64_t *n, aocl_int64_t *ilo, aocl_int64_t *ihi, d
     }
     /* Use unblocked code to reduce the rest of the matrix */
     aocl_lapack_zgehd2(n, &i__, ihi, &a[a_offset], lda, &tau[1], &work[1], &iinfo);
-    work[1].r = (doublereal)lwkopt;
-    work[1].i = 0.; // , expr subst
+    work[1].real = (doublereal)lwkopt;
+    work[1].imag = 0.; // , expr subst
     AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of ZGEHRD */

@@ -4,9 +4,9 @@
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
  /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static dcomplex c_b1 = {{-1.}, {0.}};
-static dcomplex c_b2 = {{1.}, {0.}};
-static dcomplex c_b3 = {{0.}, {0.}};
+static dcomplex c_b1 = {-1., 0.};
+static dcomplex c_b2 = {1., 0.};
+static dcomplex c_b3 = {0., 0.};
 static aocl_int64_t c__1 = 1;
 /* > \brief \b ZUNBDB6 */
 /* =========== DOCUMENTATION =========== */
@@ -289,8 +289,8 @@ void aocl_lapack_zunbdb6(aocl_int64_t *m1, aocl_int64_t *m2, aocl_int64_t *n, dc
         for(i__ = 1; i__ <= i__1; ++i__)
         {
             i__2 = i__;
-            work[i__2].r = 0.;
-            work[i__2].i = 0.; // , expr subst
+            work[i__2].real = 0.;
+            work[i__2].imag = 0.; // , expr subst
         }
     }
     else
@@ -321,16 +321,16 @@ void aocl_lapack_zunbdb6(aocl_int64_t *m1, aocl_int64_t *m2, aocl_int64_t *n, dc
         for(ix = 1; i__2 < 0 ? ix >= i__1 : ix <= i__1; ix += i__2)
         {
             i__3 = ix;
-            x1[i__3].r = 0.;
-            x1[i__3].i = 0.; // , expr subst
+            x1[i__3].real = 0.;
+            x1[i__3].imag = 0.; // , expr subst
         }
         i__2 = (*m2 - 1) * *incx2 + 1;
         i__1 = *incx2;
         for(ix = 1; i__1 < 0 ? ix >= i__2 : ix <= i__2; ix += i__1)
         {
             i__3 = ix;
-            x2[i__3].r = 0.;
-            x2[i__3].i = 0.; // , expr subst
+            x2[i__3].real = 0.;
+            x2[i__3].imag = 0.; // , expr subst
         }
         AOCL_DTL_TRACE_LOG_EXIT
         return;
@@ -340,8 +340,8 @@ void aocl_lapack_zunbdb6(aocl_int64_t *m1, aocl_int64_t *m2, aocl_int64_t *n, dc
     for(i__ = 1; i__ <= i__1; ++i__)
     {
         i__2 = i__;
-        work[i__2].r = 0.;
-        work[i__2].i = 0.; // , expr subst
+        work[i__2].real = 0.;
+        work[i__2].imag = 0.; // , expr subst
     }
     if(*m1 == 0)
     {
@@ -349,8 +349,8 @@ void aocl_lapack_zunbdb6(aocl_int64_t *m1, aocl_int64_t *m2, aocl_int64_t *n, dc
         for(i__ = 1; i__ <= i__1; ++i__)
         {
             i__2 = i__;
-            work[i__2].r = 0.;
-            work[i__2].i = 0.; // , expr subst
+            work[i__2].real = 0.;
+            work[i__2].imag = 0.; // , expr subst
         }
     }
     else
@@ -376,16 +376,16 @@ void aocl_lapack_zunbdb6(aocl_int64_t *m1, aocl_int64_t *m2, aocl_int64_t *n, dc
         for(ix = 1; i__2 < 0 ? ix >= i__1 : ix <= i__1; ix += i__2)
         {
             i__3 = ix;
-            x1[i__3].r = 0.;
-            x1[i__3].i = 0.; // , expr subst
+            x1[i__3].real = 0.;
+            x1[i__3].imag = 0.; // , expr subst
         }
         i__2 = (*m2 - 1) * *incx2 + 1;
         i__1 = *incx2;
         for(ix = 1; i__1 < 0 ? ix >= i__2 : ix <= i__2; ix += i__1)
         {
             i__3 = ix;
-            x2[i__3].r = 0.;
-            x2[i__3].i = 0.; // , expr subst
+            x2[i__3].real = 0.;
+            x2[i__3].imag = 0.; // , expr subst
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT

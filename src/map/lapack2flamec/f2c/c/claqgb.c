@@ -257,10 +257,10 @@ void aocl_lapack_claqgb(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *kl, aocl
                 {
                     i__2 = *ku + 1 + i__ - j + j * ab_dim1;
                     i__3 = *ku + 1 + i__ - j + j * ab_dim1;
-                    q__1.r = cj * ab[i__3].r;
-                    q__1.i = cj * ab[i__3].i; // , expr subst
-                    ab[i__2].r = q__1.r;
-                    ab[i__2].i = q__1.i; // , expr subst
+                    q__1.real = cj * ab[i__3].real;
+                    q__1.imag = cj * ab[i__3].imag; // , expr subst
+                    ab[i__2].real = q__1.real;
+                    ab[i__2].imag = q__1.imag; // , expr subst
                     /* L10: */
                 }
                 /* L20: */
@@ -286,10 +286,10 @@ void aocl_lapack_claqgb(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *kl, aocl
                 i__4 = *ku + 1 + i__ - j + j * ab_dim1;
                 i__2 = i__;
                 i__5 = *ku + 1 + i__ - j + j * ab_dim1;
-                q__1.r = r__[i__2] * ab[i__5].r;
-                q__1.i = r__[i__2] * ab[i__5].i; // , expr subst
-                ab[i__4].r = q__1.r;
-                ab[i__4].i = q__1.i; // , expr subst
+                q__1.real = r__[i__2] * ab[i__5].real;
+                q__1.imag = r__[i__2] * ab[i__5].imag; // , expr subst
+                ab[i__4].real = q__1.real;
+                ab[i__4].imag = q__1.imag; // , expr subst
                 /* L30: */
             }
             /* L40: */
@@ -315,10 +315,10 @@ void aocl_lapack_claqgb(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *kl, aocl
                 i__3 = *ku + 1 + i__ - j + j * ab_dim1;
                 r__1 = cj * r__[i__];
                 i__4 = *ku + 1 + i__ - j + j * ab_dim1;
-                q__1.r = r__1 * ab[i__4].r;
-                q__1.i = r__1 * ab[i__4].i; // , expr subst
-                ab[i__3].r = q__1.r;
-                ab[i__3].i = q__1.i; // , expr subst
+                q__1.real = r__1 * ab[i__4].real;
+                q__1.imag = r__1 * ab[i__4].imag; // , expr subst
+                ab[i__3].real = q__1.real;
+                ab[i__3].imag = q__1.imag; // , expr subst
                 /* L50: */
             }
             /* L60: */

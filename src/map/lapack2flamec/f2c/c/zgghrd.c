@@ -4,8 +4,8 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static dcomplex c_b1 = {{1.}, {0.}};
-static dcomplex c_b2 = {{0.}, {0.}};
+static dcomplex c_b1 = {1., 0.};
+static dcomplex c_b2 = {0., 0.};
 static aocl_int64_t c__1 = 1;
 /* > \brief \b ZGGHRD */
 /* =========== DOCUMENTATION =========== */
@@ -401,8 +401,8 @@ void aocl_lapack_zgghrd(char *compq, char *compz, aocl_int64_t *n, aocl_int64_t 
         for(jrow = jcol + 1; jrow <= i__2; ++jrow)
         {
             i__3 = jrow + jcol * b_dim1;
-            b[i__3].r = 0.;
-            b[i__3].i = 0.; // , expr subst
+            b[i__3].real = 0.;
+            b[i__3].imag = 0.; // , expr subst
             /* L10: */
         }
         /* L20: */
@@ -416,12 +416,12 @@ void aocl_lapack_zgghrd(char *compq, char *compz, aocl_int64_t *n, aocl_int64_t 
         {
             /* Step 1: rotate rows JROW-1, JROW to kill A(JROW,JCOL) */
             i__3 = jrow - 1 + jcol * a_dim1;
-            ctemp.r = a[i__3].r;
-            ctemp.i = a[i__3].i; // , expr subst
+            ctemp.real = a[i__3].real;
+            ctemp.imag = a[i__3].imag; // , expr subst
             zlartg_(&ctemp, &a[jrow + jcol * a_dim1], &c__, &s, &a[jrow - 1 + jcol * a_dim1]);
             i__3 = jrow + jcol * a_dim1;
-            a[i__3].r = 0.;
-            a[i__3].i = 0.; // , expr subst
+            a[i__3].real = 0.;
+            a[i__3].imag = 0.; // , expr subst
             i__3 = *n - jcol;
             aocl_lapack_zrot(&i__3, &a[jrow - 1 + (jcol + 1) * a_dim1], lda,
                              &a[jrow + (jcol + 1) * a_dim1], lda, &c__, &s);
@@ -436,12 +436,12 @@ void aocl_lapack_zgghrd(char *compq, char *compz, aocl_int64_t *n, aocl_int64_t 
             }
             /* Step 2: rotate columns JROW, JROW-1 to kill B(JROW,JROW-1) */
             i__3 = jrow + jrow * b_dim1;
-            ctemp.r = b[i__3].r;
-            ctemp.i = b[i__3].i; // , expr subst
+            ctemp.real = b[i__3].real;
+            ctemp.imag = b[i__3].imag; // , expr subst
             zlartg_(&ctemp, &b[jrow + (jrow - 1) * b_dim1], &c__, &s, &b[jrow + jrow * b_dim1]);
             i__3 = jrow + (jrow - 1) * b_dim1;
-            b[i__3].r = 0.;
-            b[i__3].i = 0.; // , expr subst
+            b[i__3].real = 0.;
+            b[i__3].imag = 0.; // , expr subst
             aocl_lapack_zrot(ihi, &a[jrow * a_dim1 + 1], &c__1, &a[(jrow - 1) * a_dim1 + 1], &c__1,
                              &c__, &s);
             i__3 = jrow - 1;

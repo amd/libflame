@@ -169,8 +169,8 @@ void aocl_lapack_claset(char *uplo, aocl_int64_t *m, aocl_int64_t *n, scomplex *
             for(i__ = 1; i__ <= i__2; ++i__)
             {
                 i__3 = i__ + j * a_dim1;
-                a[i__3].r = alpha->r;
-                a[i__3].i = alpha->i; // , expr subst
+                a[i__3].real = alpha->real;
+                a[i__3].imag = alpha->imag; // , expr subst
                 /* L10: */
             }
             /* L20: */
@@ -179,8 +179,8 @@ void aocl_lapack_claset(char *uplo, aocl_int64_t *m, aocl_int64_t *n, scomplex *
         for(i__ = 1; i__ <= i__1; ++i__)
         {
             i__2 = i__ + i__ * a_dim1;
-            a[i__2].r = beta->r;
-            a[i__2].i = beta->i; // , expr subst
+            a[i__2].real = beta->real;
+            a[i__2].imag = beta->imag; // , expr subst
             /* L30: */
         }
     }
@@ -195,8 +195,8 @@ void aocl_lapack_claset(char *uplo, aocl_int64_t *m, aocl_int64_t *n, scomplex *
             for(i__ = j + 1; i__ <= i__2; ++i__)
             {
                 i__3 = i__ + j * a_dim1;
-                a[i__3].r = alpha->r;
-                a[i__3].i = alpha->i; // , expr subst
+                a[i__3].real = alpha->real;
+                a[i__3].imag = alpha->imag; // , expr subst
                 /* L40: */
             }
             /* L50: */
@@ -205,8 +205,8 @@ void aocl_lapack_claset(char *uplo, aocl_int64_t *m, aocl_int64_t *n, scomplex *
         for(i__ = 1; i__ <= i__1; ++i__)
         {
             i__2 = i__ + i__ * a_dim1;
-            a[i__2].r = beta->r;
-            a[i__2].i = beta->i; // , expr subst
+            a[i__2].real = beta->real;
+            a[i__2].imag = beta->imag; // , expr subst
             /* L60: */
         }
     }
@@ -221,8 +221,8 @@ void aocl_lapack_claset(char *uplo, aocl_int64_t *m, aocl_int64_t *n, scomplex *
             for(i__ = 1; i__ <= i__2; ++i__)
             {
                 i__3 = i__ + j * a_dim1;
-                a[i__3].r = alpha->r;
-                a[i__3].i = alpha->i; // , expr subst
+                a[i__3].real = alpha->real;
+                a[i__3].imag = alpha->imag; // , expr subst
                 /* L70: */
             }
             /* L80: */
@@ -231,8 +231,8 @@ void aocl_lapack_claset(char *uplo, aocl_int64_t *m, aocl_int64_t *n, scomplex *
         for(i__ = 1; i__ <= i__1; ++i__)
         {
             i__2 = i__ + i__ * a_dim1;
-            a[i__2].r = beta->r;
-            a[i__2].i = beta->i; // , expr subst
+            a[i__2].real = beta->real;
+            a[i__2].imag = beta->imag; // , expr subst
             /* L90: */
         }
     }

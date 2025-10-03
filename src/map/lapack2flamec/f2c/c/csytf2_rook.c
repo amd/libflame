@@ -4,7 +4,7 @@
  -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for
  libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static scomplex c_b1 = {{1.f}, {0.f}};
+static scomplex c_b1 = {1.f, 0.f};
 static aocl_int64_t c__1 = 1;
 /* > \brief \b CSYTF2_ROOK computes the factorization of a scomplex symmetric indefinite matrix using
  * the bound ed Bunch-Kaufman ("rook") diagonal pivoting method (unblocked algorithm). */
@@ -318,7 +318,7 @@ void aocl_lapack_csytf2_rook(char *uplo, aocl_int64_t *n, scomplex *a, aocl_int6
         /* Determine rows and columns to be interchanged and whether */
         /* a 1-by-1 or 2-by-2 pivot block will be used */
         i__1 = k + k * a_dim1;
-        absakk = (r__1 = a[i__1].r, f2c_abs(r__1))
+        absakk = (r__1 = a[i__1].real, f2c_abs(r__1))
                  + (r__2 = r_imag(&a[k + k * a_dim1]), f2c_abs(r__2));
         /* IMAX is the row-index of the largest off-diagonal element in */
         /* column K, and COLMAX is its absolute value. */
@@ -328,7 +328,7 @@ void aocl_lapack_csytf2_rook(char *uplo, aocl_int64_t *n, scomplex *a, aocl_int6
             i__1 = k - 1;
             imax = aocl_blas_icamax(&i__1, &a[k * a_dim1 + 1], &c__1);
             i__1 = imax + k * a_dim1;
-            colmax = (r__1 = a[i__1].r, f2c_abs(r__1))
+            colmax = (r__1 = a[i__1].real, f2c_abs(r__1))
                      + (r__2 = r_imag(&a[imax + k * a_dim1]), f2c_abs(r__2));
         }
         else
@@ -368,7 +368,7 @@ void aocl_lapack_csytf2_rook(char *uplo, aocl_int64_t *n, scomplex *a, aocl_int6
                     i__1 = k - imax;
                     jmax = imax + aocl_blas_icamax(&i__1, &a[imax + (imax + 1) * a_dim1], lda);
                     i__1 = imax + jmax * a_dim1;
-                    rowmax = (r__1 = a[i__1].r, f2c_abs(r__1))
+                    rowmax = (r__1 = a[i__1].real, f2c_abs(r__1))
                              + (r__2 = r_imag(&a[imax + jmax * a_dim1]), f2c_abs(r__2));
                 }
                 else
@@ -380,7 +380,7 @@ void aocl_lapack_csytf2_rook(char *uplo, aocl_int64_t *n, scomplex *a, aocl_int6
                     i__1 = imax - 1;
                     itemp = aocl_blas_icamax(&i__1, &a[imax * a_dim1 + 1], &c__1);
                     i__1 = itemp + imax * a_dim1;
-                    stemp = (r__1 = a[i__1].r, f2c_abs(r__1))
+                    stemp = (r__1 = a[i__1].real, f2c_abs(r__1))
                             + (r__2 = r_imag(&a[itemp + imax * a_dim1]), f2c_abs(r__2));
                     if(stemp > rowmax)
                     {
@@ -391,7 +391,7 @@ void aocl_lapack_csytf2_rook(char *uplo, aocl_int64_t *n, scomplex *a, aocl_int6
                 /* Equivalent to testing for (used to handle NaN and Inf) */
                 /* CABS1( A( IMAX, IMAX ) ).GE.ALPHA*ROWMAX */
                 i__1 = imax + imax * a_dim1;
-                if(!((r__1 = a[i__1].r, f2c_abs(r__1))
+                if(!((r__1 = a[i__1].real, f2c_abs(r__1))
                          + (r__2 = r_imag(&a[imax + imax * a_dim1]), f2c_abs(r__2))
                      < alpha * rowmax))
                 {
@@ -441,15 +441,15 @@ void aocl_lapack_csytf2_rook(char *uplo, aocl_int64_t *n, scomplex *a, aocl_int6
                                     lda);
                 }
                 i__1 = k + k * a_dim1;
-                t.r = a[i__1].r;
-                t.i = a[i__1].i; // , expr subst
+                t.real = a[i__1].real;
+                t.imag = a[i__1].imag; // , expr subst
                 i__1 = k + k * a_dim1;
                 i__2 = p + p * a_dim1;
-                a[i__1].r = a[i__2].r;
-                a[i__1].i = a[i__2].i; // , expr subst
+                a[i__1].real = a[i__2].real;
+                a[i__1].imag = a[i__2].imag; // , expr subst
                 i__1 = p + p * a_dim1;
-                a[i__1].r = t.r;
-                a[i__1].i = t.i; // , expr subst
+                a[i__1].real = t.real;
+                a[i__1].imag = t.imag; // , expr subst
             }
             /* Second swap */
             kk = k - kstep + 1;
@@ -469,27 +469,27 @@ void aocl_lapack_csytf2_rook(char *uplo, aocl_int64_t *n, scomplex *a, aocl_int6
                                     &a[kp + (kp + 1) * a_dim1], lda);
                 }
                 i__1 = kk + kk * a_dim1;
-                t.r = a[i__1].r;
-                t.i = a[i__1].i; // , expr subst
+                t.real = a[i__1].real;
+                t.imag = a[i__1].imag; // , expr subst
                 i__1 = kk + kk * a_dim1;
                 i__2 = kp + kp * a_dim1;
-                a[i__1].r = a[i__2].r;
-                a[i__1].i = a[i__2].i; // , expr subst
+                a[i__1].real = a[i__2].real;
+                a[i__1].imag = a[i__2].imag; // , expr subst
                 i__1 = kp + kp * a_dim1;
-                a[i__1].r = t.r;
-                a[i__1].i = t.i; // , expr subst
+                a[i__1].real = t.real;
+                a[i__1].imag = t.imag; // , expr subst
                 if(kstep == 2)
                 {
                     i__1 = k - 1 + k * a_dim1;
-                    t.r = a[i__1].r;
-                    t.i = a[i__1].i; // , expr subst
+                    t.real = a[i__1].real;
+                    t.imag = a[i__1].imag; // , expr subst
                     i__1 = k - 1 + k * a_dim1;
                     i__2 = kp + k * a_dim1;
-                    a[i__1].r = a[i__2].r;
-                    a[i__1].i = a[i__2].i; // , expr subst
+                    a[i__1].real = a[i__2].real;
+                    a[i__1].imag = a[i__2].imag; // , expr subst
                     i__1 = kp + k * a_dim1;
-                    a[i__1].r = t.r;
-                    a[i__1].i = t.i; // , expr subst
+                    a[i__1].real = t.real;
+                    a[i__1].imag = t.imag; // , expr subst
                 }
             }
             /* Update the leading submatrix */
@@ -503,7 +503,7 @@ void aocl_lapack_csytf2_rook(char *uplo, aocl_int64_t *n, scomplex *a, aocl_int6
                     /* Perform a rank-1 update of A(1:k-1,1:k-1) and */
                     /* store U(k) in column k */
                     i__1 = k + k * a_dim1;
-                    if((r__1 = a[i__1].r, f2c_abs(r__1))
+                    if((r__1 = a[i__1].real, f2c_abs(r__1))
                            + (r__2 = r_imag(&a[k + k * a_dim1]), f2c_abs(r__2))
                        >= sfmin)
                     {
@@ -511,11 +511,11 @@ void aocl_lapack_csytf2_rook(char *uplo, aocl_int64_t *n, scomplex *a, aocl_int6
                         /* A := A - U(k)*D(k)*U(k)**T */
                         /* = A - W(k)*1/D(k)*W(k)**T */
                         c_div(&q__1, &c_b1, &a[k + k * a_dim1]);
-                        d11.r = q__1.r;
-                        d11.i = q__1.i; // , expr subst
+                        d11.real = q__1.real;
+                        d11.imag = q__1.imag; // , expr subst
                         i__1 = k - 1;
-                        q__1.r = -d11.r;
-                        q__1.i = -d11.i; // , expr subst
+                        q__1.real = -d11.real;
+                        q__1.imag = -d11.imag; // , expr subst
                         aocl_lapack_csyr(uplo, &i__1, &q__1, &a[k * a_dim1 + 1], &c__1,
                                          &a[a_offset], lda);
                         /* Store U(k) in column k */
@@ -526,15 +526,15 @@ void aocl_lapack_csytf2_rook(char *uplo, aocl_int64_t *n, scomplex *a, aocl_int6
                     {
                         /* Store L(k) in column K */
                         i__1 = k + k * a_dim1;
-                        d11.r = a[i__1].r;
-                        d11.i = a[i__1].i; // , expr subst
+                        d11.real = a[i__1].real;
+                        d11.imag = a[i__1].imag; // , expr subst
                         i__1 = k - 1;
                         for(ii = 1; ii <= i__1; ++ii)
                         {
                             i__2 = ii + k * a_dim1;
                             c_div(&q__1, &a[ii + k * a_dim1], &d11);
-                            a[i__2].r = q__1.r;
-                            a[i__2].i = q__1.i; // , expr subst
+                            a[i__2].real = q__1.real;
+                            a[i__2].imag = q__1.imag; // , expr subst
                             /* L16: */
                         }
                         /* Perform a rank-1 update of A(k+1:n,k+1:n) as */
@@ -542,8 +542,8 @@ void aocl_lapack_csytf2_rook(char *uplo, aocl_int64_t *n, scomplex *a, aocl_int6
                         /* = A - W(k)*(1/D(k))*W(k)**T */
                         /* = A - (W(k)/D(k))*(D(k))*(W(k)/D(K))**T */
                         i__1 = k - 1;
-                        q__1.r = -d11.r;
-                        q__1.i = -d11.i; // , expr subst
+                        q__1.real = -d11.real;
+                        q__1.imag = -d11.imag; // , expr subst
                         aocl_lapack_csyr(uplo, &i__1, &q__1, &a[k * a_dim1 + 1], &c__1,
                                          &a[a_offset], lda);
                     }
@@ -562,70 +562,70 @@ void aocl_lapack_csytf2_rook(char *uplo, aocl_int64_t *n, scomplex *a, aocl_int6
                 if(k > 2)
                 {
                     i__1 = k - 1 + k * a_dim1;
-                    d12.r = a[i__1].r;
-                    d12.i = a[i__1].i; // , expr subst
+                    d12.real = a[i__1].real;
+                    d12.imag = a[i__1].imag; // , expr subst
                     c_div(&q__1, &a[k - 1 + (k - 1) * a_dim1], &d12);
-                    d22.r = q__1.r;
-                    d22.i = q__1.i; // , expr subst
+                    d22.real = q__1.real;
+                    d22.imag = q__1.imag; // , expr subst
                     c_div(&q__1, &a[k + k * a_dim1], &d12);
-                    d11.r = q__1.r;
-                    d11.i = q__1.i; // , expr subst
-                    q__3.r = d11.r * d22.r - d11.i * d22.i;
-                    q__3.i = d11.r * d22.i + d11.i * d22.r; // , expr subst
-                    q__2.r = q__3.r - 1.f;
-                    q__2.i = q__3.i - 0.f; // , expr subst
+                    d11.real = q__1.real;
+                    d11.imag = q__1.imag; // , expr subst
+                    q__3.real = d11.real * d22.real - d11.imag * d22.imag;
+                    q__3.imag = d11.real * d22.imag + d11.imag * d22.real; // , expr subst
+                    q__2.real = q__3.real - 1.f;
+                    q__2.imag = q__3.imag - 0.f; // , expr subst
                     c_div(&q__1, &c_b1, &q__2);
-                    t.r = q__1.r;
-                    t.i = q__1.i; // , expr subst
+                    t.real = q__1.real;
+                    t.imag = q__1.imag; // , expr subst
                     for(j = k - 2; j >= 1; --j)
                     {
                         i__1 = j + (k - 1) * a_dim1;
-                        q__3.r = d11.r * a[i__1].r - d11.i * a[i__1].i;
-                        q__3.i = d11.r * a[i__1].i + d11.i * a[i__1].r; // , expr subst
+                        q__3.real = d11.real * a[i__1].real - d11.imag * a[i__1].imag;
+                        q__3.imag = d11.real * a[i__1].imag + d11.imag * a[i__1].real; // , expr subst
                         i__2 = j + k * a_dim1;
-                        q__2.r = q__3.r - a[i__2].r;
-                        q__2.i = q__3.i - a[i__2].i; // , expr subst
-                        q__1.r = t.r * q__2.r - t.i * q__2.i;
-                        q__1.i = t.r * q__2.i + t.i * q__2.r; // , expr subst
-                        wkm1.r = q__1.r;
-                        wkm1.i = q__1.i; // , expr subst
+                        q__2.real = q__3.real - a[i__2].real;
+                        q__2.imag = q__3.imag - a[i__2].imag; // , expr subst
+                        q__1.real = t.real * q__2.real - t.imag * q__2.imag;
+                        q__1.imag = t.real * q__2.imag + t.imag * q__2.real; // , expr subst
+                        wkm1.real = q__1.real;
+                        wkm1.imag = q__1.imag; // , expr subst
                         i__1 = j + k * a_dim1;
-                        q__3.r = d22.r * a[i__1].r - d22.i * a[i__1].i;
-                        q__3.i = d22.r * a[i__1].i + d22.i * a[i__1].r; // , expr subst
+                        q__3.real = d22.real * a[i__1].real - d22.imag * a[i__1].imag;
+                        q__3.imag = d22.real * a[i__1].imag + d22.imag * a[i__1].real; // , expr subst
                         i__2 = j + (k - 1) * a_dim1;
-                        q__2.r = q__3.r - a[i__2].r;
-                        q__2.i = q__3.i - a[i__2].i; // , expr subst
-                        q__1.r = t.r * q__2.r - t.i * q__2.i;
-                        q__1.i = t.r * q__2.i + t.i * q__2.r; // , expr subst
-                        wk.r = q__1.r;
-                        wk.i = q__1.i; // , expr subst
+                        q__2.real = q__3.real - a[i__2].real;
+                        q__2.imag = q__3.imag - a[i__2].imag; // , expr subst
+                        q__1.real = t.real * q__2.real - t.imag * q__2.imag;
+                        q__1.imag = t.real * q__2.imag + t.imag * q__2.real; // , expr subst
+                        wk.real = q__1.real;
+                        wk.imag = q__1.imag; // , expr subst
                         for(i__ = j; i__ >= 1; --i__)
                         {
                             i__1 = i__ + j * a_dim1;
                             i__2 = i__ + j * a_dim1;
                             c_div(&q__4, &a[i__ + k * a_dim1], &d12);
-                            q__3.r = q__4.r * wk.r - q__4.i * wk.i;
-                            q__3.i = q__4.r * wk.i + q__4.i * wk.r; // , expr subst
-                            q__2.r = a[i__2].r - q__3.r;
-                            q__2.i = a[i__2].i - q__3.i; // , expr subst
+                            q__3.real = q__4.real * wk.real - q__4.imag * wk.imag;
+                            q__3.imag = q__4.real * wk.imag + q__4.imag * wk.real; // , expr subst
+                            q__2.real = a[i__2].real - q__3.real;
+                            q__2.imag = a[i__2].imag - q__3.imag; // , expr subst
                             c_div(&q__6, &a[i__ + (k - 1) * a_dim1], &d12);
-                            q__5.r = q__6.r * wkm1.r - q__6.i * wkm1.i;
-                            q__5.i = q__6.r * wkm1.i + q__6.i * wkm1.r; // , expr subst
-                            q__1.r = q__2.r - q__5.r;
-                            q__1.i = q__2.i - q__5.i; // , expr subst
-                            a[i__1].r = q__1.r;
-                            a[i__1].i = q__1.i; // , expr subst
+                            q__5.real = q__6.real * wkm1.real - q__6.imag * wkm1.imag;
+                            q__5.imag = q__6.real * wkm1.imag + q__6.imag * wkm1.real; // , expr subst
+                            q__1.real = q__2.real - q__5.real;
+                            q__1.imag = q__2.imag - q__5.imag; // , expr subst
+                            a[i__1].real = q__1.real;
+                            a[i__1].imag = q__1.imag; // , expr subst
                             /* L20: */
                         }
                         /* Store U(k) and U(k-1) in cols k and k-1 for row J */
                         i__1 = j + k * a_dim1;
                         c_div(&q__1, &wk, &d12);
-                        a[i__1].r = q__1.r;
-                        a[i__1].i = q__1.i; // , expr subst
+                        a[i__1].real = q__1.real;
+                        a[i__1].imag = q__1.imag; // , expr subst
                         i__1 = j + (k - 1) * a_dim1;
                         c_div(&q__1, &wkm1, &d12);
-                        a[i__1].r = q__1.r;
-                        a[i__1].i = q__1.i; // , expr subst
+                        a[i__1].real = q__1.real;
+                        a[i__1].imag = q__1.imag; // , expr subst
                         /* L30: */
                     }
                 }
@@ -661,7 +661,7 @@ void aocl_lapack_csytf2_rook(char *uplo, aocl_int64_t *n, scomplex *a, aocl_int6
         /* Determine rows and columns to be interchanged and whether */
         /* a 1-by-1 or 2-by-2 pivot block will be used */
         i__1 = k + k * a_dim1;
-        absakk = (r__1 = a[i__1].r, f2c_abs(r__1))
+        absakk = (r__1 = a[i__1].real, f2c_abs(r__1))
                  + (r__2 = r_imag(&a[k + k * a_dim1]), f2c_abs(r__2));
         /* IMAX is the row-index of the largest off-diagonal element in */
         /* column K, and COLMAX is its absolute value. */
@@ -671,7 +671,7 @@ void aocl_lapack_csytf2_rook(char *uplo, aocl_int64_t *n, scomplex *a, aocl_int6
             i__1 = *n - k;
             imax = k + aocl_blas_icamax(&i__1, &a[k + 1 + k * a_dim1], &c__1);
             i__1 = imax + k * a_dim1;
-            colmax = (r__1 = a[i__1].r, f2c_abs(r__1))
+            colmax = (r__1 = a[i__1].real, f2c_abs(r__1))
                      + (r__2 = r_imag(&a[imax + k * a_dim1]), f2c_abs(r__2));
         }
         else
@@ -710,7 +710,7 @@ void aocl_lapack_csytf2_rook(char *uplo, aocl_int64_t *n, scomplex *a, aocl_int6
                     i__1 = imax - k;
                     jmax = k - 1 + aocl_blas_icamax(&i__1, &a[imax + k * a_dim1], lda);
                     i__1 = imax + jmax * a_dim1;
-                    rowmax = (r__1 = a[i__1].r, f2c_abs(r__1))
+                    rowmax = (r__1 = a[i__1].real, f2c_abs(r__1))
                              + (r__2 = r_imag(&a[imax + jmax * a_dim1]), f2c_abs(r__2));
                 }
                 else
@@ -722,7 +722,7 @@ void aocl_lapack_csytf2_rook(char *uplo, aocl_int64_t *n, scomplex *a, aocl_int6
                     i__1 = *n - imax;
                     itemp = imax + aocl_blas_icamax(&i__1, &a[imax + 1 + imax * a_dim1], &c__1);
                     i__1 = itemp + imax * a_dim1;
-                    stemp = (r__1 = a[i__1].r, f2c_abs(r__1))
+                    stemp = (r__1 = a[i__1].real, f2c_abs(r__1))
                             + (r__2 = r_imag(&a[itemp + imax * a_dim1]), f2c_abs(r__2));
                     if(stemp > rowmax)
                     {
@@ -733,7 +733,7 @@ void aocl_lapack_csytf2_rook(char *uplo, aocl_int64_t *n, scomplex *a, aocl_int6
                 /* Equivalent to testing for (used to handle NaN and Inf) */
                 /* CABS1( A( IMAX, IMAX ) ).GE.ALPHA*ROWMAX */
                 i__1 = imax + imax * a_dim1;
-                if(!((r__1 = a[i__1].r, f2c_abs(r__1))
+                if(!((r__1 = a[i__1].real, f2c_abs(r__1))
                          + (r__2 = r_imag(&a[imax + imax * a_dim1]), f2c_abs(r__2))
                      < alpha * rowmax))
                 {
@@ -784,15 +784,15 @@ void aocl_lapack_csytf2_rook(char *uplo, aocl_int64_t *n, scomplex *a, aocl_int6
                                     lda);
                 }
                 i__1 = k + k * a_dim1;
-                t.r = a[i__1].r;
-                t.i = a[i__1].i; // , expr subst
+                t.real = a[i__1].real;
+                t.imag = a[i__1].imag; // , expr subst
                 i__1 = k + k * a_dim1;
                 i__2 = p + p * a_dim1;
-                a[i__1].r = a[i__2].r;
-                a[i__1].i = a[i__2].i; // , expr subst
+                a[i__1].real = a[i__2].real;
+                a[i__1].imag = a[i__2].imag; // , expr subst
                 i__1 = p + p * a_dim1;
-                a[i__1].r = t.r;
-                a[i__1].i = t.i; // , expr subst
+                a[i__1].real = t.real;
+                a[i__1].imag = t.imag; // , expr subst
             }
             /* Second swap */
             kk = k + kstep - 1;
@@ -813,27 +813,27 @@ void aocl_lapack_csytf2_rook(char *uplo, aocl_int64_t *n, scomplex *a, aocl_int6
                                     &a[kp + (kk + 1) * a_dim1], lda);
                 }
                 i__1 = kk + kk * a_dim1;
-                t.r = a[i__1].r;
-                t.i = a[i__1].i; // , expr subst
+                t.real = a[i__1].real;
+                t.imag = a[i__1].imag; // , expr subst
                 i__1 = kk + kk * a_dim1;
                 i__2 = kp + kp * a_dim1;
-                a[i__1].r = a[i__2].r;
-                a[i__1].i = a[i__2].i; // , expr subst
+                a[i__1].real = a[i__2].real;
+                a[i__1].imag = a[i__2].imag; // , expr subst
                 i__1 = kp + kp * a_dim1;
-                a[i__1].r = t.r;
-                a[i__1].i = t.i; // , expr subst
+                a[i__1].real = t.real;
+                a[i__1].imag = t.imag; // , expr subst
                 if(kstep == 2)
                 {
                     i__1 = k + 1 + k * a_dim1;
-                    t.r = a[i__1].r;
-                    t.i = a[i__1].i; // , expr subst
+                    t.real = a[i__1].real;
+                    t.imag = a[i__1].imag; // , expr subst
                     i__1 = k + 1 + k * a_dim1;
                     i__2 = kp + k * a_dim1;
-                    a[i__1].r = a[i__2].r;
-                    a[i__1].i = a[i__2].i; // , expr subst
+                    a[i__1].real = a[i__2].real;
+                    a[i__1].imag = a[i__2].imag; // , expr subst
                     i__1 = kp + k * a_dim1;
-                    a[i__1].r = t.r;
-                    a[i__1].i = t.i; // , expr subst
+                    a[i__1].real = t.real;
+                    a[i__1].imag = t.imag; // , expr subst
                 }
             }
             /* Update the trailing submatrix */
@@ -847,7 +847,7 @@ void aocl_lapack_csytf2_rook(char *uplo, aocl_int64_t *n, scomplex *a, aocl_int6
                     /* Perform a rank-1 update of A(k+1:n,k+1:n) and */
                     /* store L(k) in column k */
                     i__1 = k + k * a_dim1;
-                    if((r__1 = a[i__1].r, f2c_abs(r__1))
+                    if((r__1 = a[i__1].real, f2c_abs(r__1))
                            + (r__2 = r_imag(&a[k + k * a_dim1]), f2c_abs(r__2))
                        >= sfmin)
                     {
@@ -855,11 +855,11 @@ void aocl_lapack_csytf2_rook(char *uplo, aocl_int64_t *n, scomplex *a, aocl_int6
                         /* A := A - L(k)*D(k)*L(k)**T */
                         /* = A - W(k)*(1/D(k))*W(k)**T */
                         c_div(&q__1, &c_b1, &a[k + k * a_dim1]);
-                        d11.r = q__1.r;
-                        d11.i = q__1.i; // , expr subst
+                        d11.real = q__1.real;
+                        d11.imag = q__1.imag; // , expr subst
                         i__1 = *n - k;
-                        q__1.r = -d11.r;
-                        q__1.i = -d11.i; // , expr subst
+                        q__1.real = -d11.real;
+                        q__1.imag = -d11.imag; // , expr subst
                         aocl_lapack_csyr(uplo, &i__1, &q__1, &a[k + 1 + k * a_dim1], &c__1,
                                          &a[k + 1 + (k + 1) * a_dim1], lda);
                         /* Store L(k) in column k */
@@ -870,15 +870,15 @@ void aocl_lapack_csytf2_rook(char *uplo, aocl_int64_t *n, scomplex *a, aocl_int6
                     {
                         /* Store L(k) in column k */
                         i__1 = k + k * a_dim1;
-                        d11.r = a[i__1].r;
-                        d11.i = a[i__1].i; // , expr subst
+                        d11.real = a[i__1].real;
+                        d11.imag = a[i__1].imag; // , expr subst
                         i__1 = *n;
                         for(ii = k + 1; ii <= i__1; ++ii)
                         {
                             i__2 = ii + k * a_dim1;
                             c_div(&q__1, &a[ii + k * a_dim1], &d11);
-                            a[i__2].r = q__1.r;
-                            a[i__2].i = q__1.i; // , expr subst
+                            a[i__2].real = q__1.real;
+                            a[i__2].imag = q__1.imag; // , expr subst
                             /* L46: */
                         }
                         /* Perform a rank-1 update of A(k+1:n,k+1:n) as */
@@ -886,8 +886,8 @@ void aocl_lapack_csytf2_rook(char *uplo, aocl_int64_t *n, scomplex *a, aocl_int6
                         /* = A - W(k)*(1/D(k))*W(k)**T */
                         /* = A - (W(k)/D(k))*(D(k))*(W(k)/D(K))**T */
                         i__1 = *n - k;
-                        q__1.r = -d11.r;
-                        q__1.i = -d11.i; // , expr subst
+                        q__1.real = -d11.real;
+                        q__1.imag = -d11.imag; // , expr subst
                         aocl_lapack_csyr(uplo, &i__1, &q__1, &a[k + 1 + k * a_dim1], &c__1,
                                          &a[k + 1 + (k + 1) * a_dim1], lda);
                     }
@@ -906,45 +906,45 @@ void aocl_lapack_csytf2_rook(char *uplo, aocl_int64_t *n, scomplex *a, aocl_int6
                 if(k < *n - 1)
                 {
                     i__1 = k + 1 + k * a_dim1;
-                    d21.r = a[i__1].r;
-                    d21.i = a[i__1].i; // , expr subst
+                    d21.real = a[i__1].real;
+                    d21.imag = a[i__1].imag; // , expr subst
                     c_div(&q__1, &a[k + 1 + (k + 1) * a_dim1], &d21);
-                    d11.r = q__1.r;
-                    d11.i = q__1.i; // , expr subst
+                    d11.real = q__1.real;
+                    d11.imag = q__1.imag; // , expr subst
                     c_div(&q__1, &a[k + k * a_dim1], &d21);
-                    d22.r = q__1.r;
-                    d22.i = q__1.i; // , expr subst
-                    q__3.r = d11.r * d22.r - d11.i * d22.i;
-                    q__3.i = d11.r * d22.i + d11.i * d22.r; // , expr subst
-                    q__2.r = q__3.r - 1.f;
-                    q__2.i = q__3.i - 0.f; // , expr subst
+                    d22.real = q__1.real;
+                    d22.imag = q__1.imag; // , expr subst
+                    q__3.real = d11.real * d22.real - d11.imag * d22.imag;
+                    q__3.imag = d11.real * d22.imag + d11.imag * d22.real; // , expr subst
+                    q__2.real = q__3.real - 1.f;
+                    q__2.imag = q__3.imag - 0.f; // , expr subst
                     c_div(&q__1, &c_b1, &q__2);
-                    t.r = q__1.r;
-                    t.i = q__1.i; // , expr subst
+                    t.real = q__1.real;
+                    t.imag = q__1.imag; // , expr subst
                     i__1 = *n;
                     for(j = k + 2; j <= i__1; ++j)
                     {
                         /* Compute D21 * ( W(k)W(k+1) ) * inv(D(k)) for row J */
                         i__2 = j + k * a_dim1;
-                        q__3.r = d11.r * a[i__2].r - d11.i * a[i__2].i;
-                        q__3.i = d11.r * a[i__2].i + d11.i * a[i__2].r; // , expr subst
+                        q__3.real = d11.real * a[i__2].real - d11.imag * a[i__2].imag;
+                        q__3.imag = d11.real * a[i__2].imag + d11.imag * a[i__2].real; // , expr subst
                         i__3 = j + (k + 1) * a_dim1;
-                        q__2.r = q__3.r - a[i__3].r;
-                        q__2.i = q__3.i - a[i__3].i; // , expr subst
-                        q__1.r = t.r * q__2.r - t.i * q__2.i;
-                        q__1.i = t.r * q__2.i + t.i * q__2.r; // , expr subst
-                        wk.r = q__1.r;
-                        wk.i = q__1.i; // , expr subst
+                        q__2.real = q__3.real - a[i__3].real;
+                        q__2.imag = q__3.imag - a[i__3].imag; // , expr subst
+                        q__1.real = t.real * q__2.real - t.imag * q__2.imag;
+                        q__1.imag = t.real * q__2.imag + t.imag * q__2.real; // , expr subst
+                        wk.real = q__1.real;
+                        wk.imag = q__1.imag; // , expr subst
                         i__2 = j + (k + 1) * a_dim1;
-                        q__3.r = d22.r * a[i__2].r - d22.i * a[i__2].i;
-                        q__3.i = d22.r * a[i__2].i + d22.i * a[i__2].r; // , expr subst
+                        q__3.real = d22.real * a[i__2].real - d22.imag * a[i__2].imag;
+                        q__3.imag = d22.real * a[i__2].imag + d22.imag * a[i__2].real; // , expr subst
                         i__3 = j + k * a_dim1;
-                        q__2.r = q__3.r - a[i__3].r;
-                        q__2.i = q__3.i - a[i__3].i; // , expr subst
-                        q__1.r = t.r * q__2.r - t.i * q__2.i;
-                        q__1.i = t.r * q__2.i + t.i * q__2.r; // , expr subst
-                        wkp1.r = q__1.r;
-                        wkp1.i = q__1.i; // , expr subst
+                        q__2.real = q__3.real - a[i__3].real;
+                        q__2.imag = q__3.imag - a[i__3].imag; // , expr subst
+                        q__1.real = t.real * q__2.real - t.imag * q__2.imag;
+                        q__1.imag = t.real * q__2.imag + t.imag * q__2.real; // , expr subst
+                        wkp1.real = q__1.real;
+                        wkp1.imag = q__1.imag; // , expr subst
                         /* Perform a rank-2 update of A(k+2:n,k+2:n) */
                         i__2 = *n;
                         for(i__ = j; i__ <= i__2; ++i__)
@@ -952,28 +952,28 @@ void aocl_lapack_csytf2_rook(char *uplo, aocl_int64_t *n, scomplex *a, aocl_int6
                             i__3 = i__ + j * a_dim1;
                             i__4 = i__ + j * a_dim1;
                             c_div(&q__4, &a[i__ + k * a_dim1], &d21);
-                            q__3.r = q__4.r * wk.r - q__4.i * wk.i;
-                            q__3.i = q__4.r * wk.i + q__4.i * wk.r; // , expr subst
-                            q__2.r = a[i__4].r - q__3.r;
-                            q__2.i = a[i__4].i - q__3.i; // , expr subst
+                            q__3.real = q__4.real * wk.real - q__4.imag * wk.imag;
+                            q__3.imag = q__4.real * wk.imag + q__4.imag * wk.real; // , expr subst
+                            q__2.real = a[i__4].real - q__3.real;
+                            q__2.imag = a[i__4].imag - q__3.imag; // , expr subst
                             c_div(&q__6, &a[i__ + (k + 1) * a_dim1], &d21);
-                            q__5.r = q__6.r * wkp1.r - q__6.i * wkp1.i;
-                            q__5.i = q__6.r * wkp1.i + q__6.i * wkp1.r; // , expr subst
-                            q__1.r = q__2.r - q__5.r;
-                            q__1.i = q__2.i - q__5.i; // , expr subst
-                            a[i__3].r = q__1.r;
-                            a[i__3].i = q__1.i; // , expr subst
+                            q__5.real = q__6.real * wkp1.real - q__6.imag * wkp1.imag;
+                            q__5.imag = q__6.real * wkp1.imag + q__6.imag * wkp1.real; // , expr subst
+                            q__1.real = q__2.real - q__5.real;
+                            q__1.imag = q__2.imag - q__5.imag; // , expr subst
+                            a[i__3].real = q__1.real;
+                            a[i__3].imag = q__1.imag; // , expr subst
                             /* L50: */
                         }
                         /* Store L(k) and L(k+1) in cols k and k+1 for row J */
                         i__2 = j + k * a_dim1;
                         c_div(&q__1, &wk, &d21);
-                        a[i__2].r = q__1.r;
-                        a[i__2].i = q__1.i; // , expr subst
+                        a[i__2].real = q__1.real;
+                        a[i__2].imag = q__1.imag; // , expr subst
                         i__2 = j + (k + 1) * a_dim1;
                         c_div(&q__1, &wkp1, &d21);
-                        a[i__2].r = q__1.r;
-                        a[i__2].i = q__1.i; // , expr subst
+                        a[i__2].real = q__1.real;
+                        a[i__2].imag = q__1.imag; // , expr subst
                         /* L60: */
                     }
                 }

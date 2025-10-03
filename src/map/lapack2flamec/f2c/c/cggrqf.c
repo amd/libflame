@@ -294,8 +294,8 @@ void aocl_lapack_cggrqf(aocl_int64_t *m, aocl_int64_t *p, aocl_int64_t *n, scomp
     i__1 = fla_max(*n, *m);
     lwkopt = fla_max(i__1, *p) * nb;
     r__1 = aocl_lapack_sroundup_lwork(&lwkopt);
-    work[1].r = r__1;
-    work[1].i = 0.f; // , expr subst
+    work[1].real = r__1;
+    work[1].imag = 0.f; // , expr subst
     lquery = *lwork == -1;
     if(*m < 0)
     {
@@ -341,7 +341,7 @@ void aocl_lapack_cggrqf(aocl_int64_t *m, aocl_int64_t *p, aocl_int64_t *n, scomp
     }
     /* RQ factorization of M-by-N matrix A: A = R*Q */
     aocl_lapack_cgerqf(m, n, &a[a_offset], lda, &taua[1], &work[1], lwork, info);
-    lopt = (integer)work[1].r;
+    lopt = (integer)work[1].real;
     /* Update B := B*Q**H */
     i__1 = fla_min(*m, *n);
     /* Computing MAX */
@@ -352,16 +352,16 @@ void aocl_lapack_cggrqf(aocl_int64_t *m, aocl_int64_t *p, aocl_int64_t *n, scomp
                        lwork, info);
     /* Computing MAX */
     i__1 = lopt;
-    i__2 = (integer)work[1].r; // , expr subst
+    i__2 = (integer)work[1].real; // , expr subst
     lopt = fla_max(i__1, i__2);
     /* QR factorization of P-by-N matrix B: B = Z*T */
     aocl_lapack_cgeqrf(p, n, &b[b_offset], ldb, &taub[1], &work[1], lwork, info);
     /* Computing MAX */
     i__2 = lopt;
-    i__3 = (integer)work[1].r; // , expr subst
+    i__3 = (integer)work[1].real; // , expr subst
     i__1 = fla_max(i__2, i__3);
-    work[1].r = (real)i__1;
-    work[1].i = 0.f; // , expr subst
+    work[1].real = (real)i__1;
+    work[1].imag = 0.f; // , expr subst
     AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of CGGRQF */

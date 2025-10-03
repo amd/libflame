@@ -288,11 +288,11 @@ void aocl_lapack_cunbdb5(aocl_int64_t *m1, aocl_int64_t *m2, aocl_int64_t *n, sc
         /* * xLASCL cannot be used because of the vector increments and */
         /* * the round-off error has a negligible impact on */
         /* orthogonalization. */
-        q__1.r = 1.f / norm;
-        q__1.i = 0.f / norm; // , expr subst
+        q__1.real = 1.f / norm;
+        q__1.imag = 0.f / norm; // , expr subst
         aocl_blas_cscal(m1, &q__1, &x1[1], incx1);
-        q__1.r = 1.f / norm;
-        q__1.i = 0.f / norm; // , expr subst
+        q__1.real = 1.f / norm;
+        q__1.imag = 0.f / norm; // , expr subst
         aocl_blas_cscal(m2, &q__1, &x2[1], incx2);
         aocl_lapack_cunbdb6(m1, m2, n, &x1[1], incx1, &x2[1], incx2, &q1[q1_offset], ldq1,
                             &q2[q2_offset], ldq2, &work[1], lwork, &childinfo);
@@ -312,18 +312,18 @@ void aocl_lapack_cunbdb5(aocl_int64_t *m1, aocl_int64_t *m2, aocl_int64_t *n, sc
         for(j = 1; j <= i__2; ++j)
         {
             i__3 = j;
-            x1[i__3].r = 0.f;
-            x1[i__3].i = 0.f; // , expr subst
+            x1[i__3].real = 0.f;
+            x1[i__3].imag = 0.f; // , expr subst
         }
         i__2 = i__;
-        x1[i__2].r = 1.f;
-        x1[i__2].i = 0.f; // , expr subst
+        x1[i__2].real = 1.f;
+        x1[i__2].imag = 0.f; // , expr subst
         i__2 = *m2;
         for(j = 1; j <= i__2; ++j)
         {
             i__3 = j;
-            x2[i__3].r = 0.f;
-            x2[i__3].i = 0.f; // , expr subst
+            x2[i__3].real = 0.f;
+            x2[i__3].imag = 0.f; // , expr subst
         }
         aocl_lapack_cunbdb6(m1, m2, n, &x1[1], incx1, &x2[1], incx2, &q1[q1_offset], ldq1,
                             &q2[q2_offset], ldq2, &work[1], lwork, &childinfo);
@@ -342,19 +342,19 @@ void aocl_lapack_cunbdb5(aocl_int64_t *m1, aocl_int64_t *m2, aocl_int64_t *n, sc
         for(j = 1; j <= i__2; ++j)
         {
             i__3 = j;
-            x1[i__3].r = 0.f;
-            x1[i__3].i = 0.f; // , expr subst
+            x1[i__3].real = 0.f;
+            x1[i__3].imag = 0.f; // , expr subst
         }
         i__2 = *m2;
         for(j = 1; j <= i__2; ++j)
         {
             i__3 = j;
-            x2[i__3].r = 0.f;
-            x2[i__3].i = 0.f; // , expr subst
+            x2[i__3].real = 0.f;
+            x2[i__3].imag = 0.f; // , expr subst
         }
         i__2 = i__;
-        x2[i__2].r = 1.f;
-        x2[i__2].i = 0.f; // , expr subst
+        x2[i__2].real = 1.f;
+        x2[i__2].imag = 0.f; // , expr subst
         aocl_lapack_cunbdb6(m1, m2, n, &x1[1], incx1, &x2[1], incx2, &q1[q1_offset], ldq1,
                             &q2[q2_offset], ldq2, &work[1], lwork, &childinfo);
         if(aocl_blas_scnrm2(m1, &x1[1], incx1) != 0.f || aocl_blas_scnrm2(m2, &x2[1], incx2) != 0.f)

@@ -253,14 +253,14 @@ void aocl_lapack_ztrexc(char *compq, aocl_int64_t *n, dcomplex *t, aocl_int64_t 
     {
         /* Interchange the k-th and (k+1)-th diagonal elements. */
         i__3 = k + k * t_dim1;
-        t11.r = t[i__3].r;
-        t11.i = t[i__3].i; // , expr subst
+        t11.real = t[i__3].real;
+        t11.imag = t[i__3].imag; // , expr subst
         i__3 = k + 1 + (k + 1) * t_dim1;
-        t22.r = t[i__3].r;
-        t22.i = t[i__3].i; // , expr subst
+        t22.real = t[i__3].real;
+        t22.imag = t[i__3].imag; // , expr subst
         /* Determine the transformation to perform the interchange. */
-        z__1.r = t22.r - t11.r;
-        z__1.i = t22.i - t11.i; // , expr subst
+        z__1.real = t22.real - t11.real;
+        z__1.imag = t22.imag - t11.imag; // , expr subst
         zlartg_(&t[k + (k + 1) * t_dim1], &z__1, &cs, &sn, &temp);
         /* Apply transformation to the matrix T. */
         if(k + 2 <= *n)
@@ -274,11 +274,11 @@ void aocl_lapack_ztrexc(char *compq, aocl_int64_t *n, dcomplex *t, aocl_int64_t 
         aocl_lapack_zrot(&i__3, &t[k * t_dim1 + 1], &c__1, &t[(k + 1) * t_dim1 + 1], &c__1, &cs,
                          &z__1);
         i__3 = k + k * t_dim1;
-        t[i__3].r = t22.r;
-        t[i__3].i = t22.i; // , expr subst
+        t[i__3].real = t22.real;
+        t[i__3].imag = t22.imag; // , expr subst
         i__3 = k + 1 + (k + 1) * t_dim1;
-        t[i__3].r = t11.r;
-        t[i__3].i = t11.i; // , expr subst
+        t[i__3].real = t11.real;
+        t[i__3].imag = t11.imag; // , expr subst
         if(wantq)
         {
             /* Accumulate transformation in the matrix Q. */

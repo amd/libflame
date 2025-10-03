@@ -290,7 +290,7 @@ void aocl_lapack_zgebal(char *job, aocl_int64_t *n, dcomplex *a, aocl_int64_t *l
                 for(j = 1; j <= i__1; ++j)
                 {
                     i__2 = i__ + j * a_dim1;
-                    if(i__ != j && (a[i__2].r != 0. || d_imag(&a[i__ + j * a_dim1]) != 0.))
+                    if(i__ != j && (a[i__2].real != 0. || d_imag(&a[i__ + j * a_dim1]) != 0.))
                     {
                         canswap = FALSE_;
                         break;
@@ -330,7 +330,7 @@ void aocl_lapack_zgebal(char *job, aocl_int64_t *n, dcomplex *a, aocl_int64_t *l
                 for(i__ = k; i__ <= i__2; ++i__)
                 {
                     i__3 = i__ + j * a_dim1;
-                    if(i__ != j && (a[i__3].r != 0. || d_imag(&a[i__ + j * a_dim1]) != 0.))
+                    if(i__ != j && (a[i__3].real != 0. || d_imag(&a[i__ + j * a_dim1]) != 0.))
                     {
                         canswap = FALSE_;
                         break;

@@ -270,18 +270,18 @@ void aocl_lapack_cpbstf(char *uplo, aocl_int64_t *n, aocl_int64_t *kd, scomplex 
         {
             /* Compute s(j,j) and test for non-positive-definiteness. */
             i__2 = *kd + 1 + j * ab_dim1;
-            ajj = ab[i__2].r;
+            ajj = ab[i__2].real;
             if(ajj <= 0.f)
             {
                 i__2 = *kd + 1 + j * ab_dim1;
-                ab[i__2].r = ajj;
-                ab[i__2].i = 0.f; // , expr subst
+                ab[i__2].real = ajj;
+                ab[i__2].imag = 0.f; // , expr subst
                 goto L50;
             }
             ajj = sqrt(ajj);
             i__2 = *kd + 1 + j * ab_dim1;
-            ab[i__2].r = ajj;
-            ab[i__2].i = 0.f; // , expr subst
+            ab[i__2].real = ajj;
+            ab[i__2].imag = 0.f; // , expr subst
             /* Computing MIN */
             i__2 = j - 1;
             km = fla_min(i__2, *kd);
@@ -299,18 +299,18 @@ void aocl_lapack_cpbstf(char *uplo, aocl_int64_t *n, aocl_int64_t *kd, scomplex 
         {
             /* Compute s(j,j) and test for non-positive-definiteness. */
             i__2 = *kd + 1 + j * ab_dim1;
-            ajj = ab[i__2].r;
+            ajj = ab[i__2].real;
             if(ajj <= 0.f)
             {
                 i__2 = *kd + 1 + j * ab_dim1;
-                ab[i__2].r = ajj;
-                ab[i__2].i = 0.f; // , expr subst
+                ab[i__2].real = ajj;
+                ab[i__2].imag = 0.f; // , expr subst
                 goto L50;
             }
             ajj = sqrt(ajj);
             i__2 = *kd + 1 + j * ab_dim1;
-            ab[i__2].r = ajj;
-            ab[i__2].i = 0.f; // , expr subst
+            ab[i__2].real = ajj;
+            ab[i__2].imag = 0.f; // , expr subst
             /* Computing MIN */
             i__2 = *kd;
             i__3 = m - j; // , expr subst
@@ -337,18 +337,18 @@ void aocl_lapack_cpbstf(char *uplo, aocl_int64_t *n, aocl_int64_t *kd, scomplex 
         {
             /* Compute s(j,j) and test for non-positive-definiteness. */
             i__2 = j * ab_dim1 + 1;
-            ajj = ab[i__2].r;
+            ajj = ab[i__2].real;
             if(ajj <= 0.f)
             {
                 i__2 = j * ab_dim1 + 1;
-                ab[i__2].r = ajj;
-                ab[i__2].i = 0.f; // , expr subst
+                ab[i__2].real = ajj;
+                ab[i__2].imag = 0.f; // , expr subst
                 goto L50;
             }
             ajj = sqrt(ajj);
             i__2 = j * ab_dim1 + 1;
-            ab[i__2].r = ajj;
-            ab[i__2].i = 0.f; // , expr subst
+            ab[i__2].real = ajj;
+            ab[i__2].imag = 0.f; // , expr subst
             /* Computing MIN */
             i__2 = j - 1;
             km = fla_min(i__2, *kd);
@@ -368,18 +368,18 @@ void aocl_lapack_cpbstf(char *uplo, aocl_int64_t *n, aocl_int64_t *kd, scomplex 
         {
             /* Compute s(j,j) and test for non-positive-definiteness. */
             i__2 = j * ab_dim1 + 1;
-            ajj = ab[i__2].r;
+            ajj = ab[i__2].real;
             if(ajj <= 0.f)
             {
                 i__2 = j * ab_dim1 + 1;
-                ab[i__2].r = ajj;
-                ab[i__2].i = 0.f; // , expr subst
+                ab[i__2].real = ajj;
+                ab[i__2].imag = 0.f; // , expr subst
                 goto L50;
             }
             ajj = sqrt(ajj);
             i__2 = j * ab_dim1 + 1;
-            ab[i__2].r = ajj;
-            ab[i__2].i = 0.f; // , expr subst
+            ab[i__2].real = ajj;
+            ab[i__2].imag = 0.f; // , expr subst
             /* Computing MIN */
             i__2 = *kd;
             i__3 = m - j; // , expr subst

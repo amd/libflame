@@ -4,8 +4,8 @@
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
  /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static scomplex c_b1 = {{0.f}, {0.f}};
-static scomplex c_b2 = {{1.f}, {0.f}};
+static scomplex c_b1 = {0.f, 0.f};
+static scomplex c_b2 = {1.f, 0.f};
 static aocl_int64_t c__1 = 1;
 static logical c_true = TRUE_;
 /* > \brief \b CLAQZ3 */
@@ -307,8 +307,8 @@ void aocl_lapack_claqz3(logical *ilschur, logical *ilq, logical *ilz, aocl_int64
     {
         /* workspace query, quick return */
         i__1 = *n * *nblock_desired__;
-        work[1].r = (real)i__1;
-        work[1].i = 0.f; // , expr subst
+        work[1].real = (real)i__1;
+        work[1].imag = 0.f; // , expr subst
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -363,41 +363,41 @@ void aocl_lapack_claqz3(logical *ilschur, logical *ilq, logical *ilz, aocl_int64
         {
             i__2 = i__;
             i__3 = i__;
-            q__1.r = alpha[i__3].r / scale;
-            q__1.i = alpha[i__3].i / scale; // , expr subst
-            alpha[i__2].r = q__1.r;
-            alpha[i__2].i = q__1.i; // , expr subst
+            q__1.real = alpha[i__3].real / scale;
+            q__1.imag = alpha[i__3].imag / scale; // , expr subst
+            alpha[i__2].real = q__1.real;
+            alpha[i__2].imag = q__1.imag; // , expr subst
             i__2 = i__;
             i__3 = i__;
-            q__1.r = beta[i__3].r / scale;
-            q__1.i = beta[i__3].i / scale; // , expr subst
-            beta[i__2].r = q__1.r;
-            beta[i__2].i = q__1.i; // , expr subst
+            q__1.real = beta[i__3].real / scale;
+            q__1.imag = beta[i__3].imag / scale; // , expr subst
+            beta[i__2].real = q__1.real;
+            beta[i__2].imag = q__1.imag; // , expr subst
         }
         i__2 = i__;
         i__3 = *ilo + *ilo * a_dim1;
-        q__2.r = beta[i__2].r * a[i__3].r - beta[i__2].i * a[i__3].i;
-        q__2.i = beta[i__2].r * a[i__3].i + beta[i__2].i * a[i__3].r; // , expr subst
+        q__2.real = beta[i__2].real * a[i__3].real - beta[i__2].imag * a[i__3].imag;
+        q__2.imag = beta[i__2].real * a[i__3].imag + beta[i__2].imag * a[i__3].real; // , expr subst
         i__4 = i__;
         i__5 = *ilo + *ilo * b_dim1;
-        q__3.r = alpha[i__4].r * b[i__5].r - alpha[i__4].i * b[i__5].i;
-        q__3.i = alpha[i__4].r * b[i__5].i + alpha[i__4].i * b[i__5].r; // , expr subst
-        q__1.r = q__2.r - q__3.r;
-        q__1.i = q__2.i - q__3.i; // , expr subst
-        temp2.r = q__1.r;
-        temp2.i = q__1.i; // , expr subst
+        q__3.real = alpha[i__4].real * b[i__5].real - alpha[i__4].imag * b[i__5].imag;
+        q__3.imag = alpha[i__4].real * b[i__5].imag + alpha[i__4].imag * b[i__5].real; // , expr subst
+        q__1.real = q__2.real - q__3.real;
+        q__1.imag = q__2.imag - q__3.imag; // , expr subst
+        temp2.real = q__1.real;
+        temp2.imag = q__1.imag; // , expr subst
         i__2 = i__;
         i__3 = *ilo + 1 + *ilo * a_dim1;
-        q__1.r = beta[i__2].r * a[i__3].r - beta[i__2].i * a[i__3].i;
-        q__1.i = beta[i__2].r * a[i__3].i + beta[i__2].i * a[i__3].r; // , expr subst
-        temp3.r = q__1.r;
-        temp3.i = q__1.i; // , expr subst
+        q__1.real = beta[i__2].real * a[i__3].real - beta[i__2].imag * a[i__3].imag;
+        q__1.imag = beta[i__2].real * a[i__3].imag + beta[i__2].imag * a[i__3].real; // , expr subst
+        temp3.real = q__1.real;
+        temp3.imag = q__1.imag; // , expr subst
         if(c_abs(&temp2) > safmax || c_abs(&temp3) > safmax)
         {
-            temp2.r = 1.f;
-            temp2.i = 0.f; // , expr subst
-            temp3.r = 0.f;
-            temp3.i = 0.f; // , expr subst
+            temp2.real = 1.f;
+            temp2.imag = 0.f; // , expr subst
+            temp3.real = 0.f;
+            temp3.imag = 0.f; // , expr subst
         }
         clartg_(&temp2, &temp3, &c__, &s, &temp);
         aocl_lapack_crot(&ns, &a[*ilo + *ilo * a_dim1], lda, &a[*ilo + 1 + *ilo * a_dim1], lda,

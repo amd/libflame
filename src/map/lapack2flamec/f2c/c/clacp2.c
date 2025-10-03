@@ -170,8 +170,8 @@ void aocl_lapack_clacp2(char *uplo, aocl_int64_t *m, aocl_int64_t *n, real *a, a
             {
                 i__3 = i__ + j * b_dim1;
                 i__4 = i__ + j * a_dim1;
-                b[i__3].r = a[i__4];
-                b[i__3].i = 0.f; // , expr subst
+                b[i__3].real = a[i__4];
+                b[i__3].imag = 0.f; // , expr subst
                 /* L10: */
             }
             /* L20: */
@@ -187,8 +187,8 @@ void aocl_lapack_clacp2(char *uplo, aocl_int64_t *m, aocl_int64_t *n, real *a, a
             {
                 i__3 = i__ + j * b_dim1;
                 i__4 = i__ + j * a_dim1;
-                b[i__3].r = a[i__4];
-                b[i__3].i = 0.f; // , expr subst
+                b[i__3].real = a[i__4];
+                b[i__3].imag = 0.f; // , expr subst
                 /* L30: */
             }
             /* L40: */
@@ -204,8 +204,8 @@ void aocl_lapack_clacp2(char *uplo, aocl_int64_t *m, aocl_int64_t *n, real *a, a
             {
                 i__3 = i__ + j * b_dim1;
                 i__4 = i__ + j * a_dim1;
-                b[i__3].r = a[i__4];
-                b[i__3].i = 0.f; // , expr subst
+                b[i__3].real = a[i__4];
+                b[i__3].imag = 0.f; // , expr subst
                 /* L50: */
             }
             /* L60: */

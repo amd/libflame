@@ -120,31 +120,31 @@ void aocl_lapack_zla_wwaddw(aocl_int64_t *n, dcomplex *x, dcomplex *y, dcomplex 
     {
         i__2 = i__;
         i__3 = i__;
-        z__1.r = x[i__2].r + w[i__3].r;
-        z__1.i = x[i__2].i + w[i__3].i; // , expr subst
-        s.r = z__1.r;
-        s.i = z__1.i; // , expr subst
-        z__2.r = s.r + s.r;
-        z__2.i = s.i + s.i; // , expr subst
-        z__1.r = z__2.r - s.r;
-        z__1.i = z__2.i - s.i; // , expr subst
-        s.r = z__1.r;
-        s.i = z__1.i; // , expr subst
+        z__1.real = x[i__2].real + w[i__3].real;
+        z__1.imag = x[i__2].imag + w[i__3].imag; // , expr subst
+        s.real = z__1.real;
+        s.imag = z__1.imag; // , expr subst
+        z__2.real = s.real + s.real;
+        z__2.imag = s.imag + s.imag; // , expr subst
+        z__1.real = z__2.real - s.real;
+        z__1.imag = z__2.imag - s.imag; // , expr subst
+        s.real = z__1.real;
+        s.imag = z__1.imag; // , expr subst
         i__2 = i__;
         i__3 = i__;
-        z__3.r = x[i__3].r - s.r;
-        z__3.i = x[i__3].i - s.i; // , expr subst
+        z__3.real = x[i__3].real - s.real;
+        z__3.imag = x[i__3].imag - s.imag; // , expr subst
         i__4 = i__;
-        z__2.r = z__3.r + w[i__4].r;
-        z__2.i = z__3.i + w[i__4].i; // , expr subst
+        z__2.real = z__3.real + w[i__4].real;
+        z__2.imag = z__3.imag + w[i__4].imag; // , expr subst
         i__5 = i__;
-        z__1.r = z__2.r + y[i__5].r;
-        z__1.i = z__2.i + y[i__5].i; // , expr subst
-        y[i__2].r = z__1.r;
-        y[i__2].i = z__1.i; // , expr subst
+        z__1.real = z__2.real + y[i__5].real;
+        z__1.imag = z__2.imag + y[i__5].imag; // , expr subst
+        y[i__2].real = z__1.real;
+        y[i__2].imag = z__1.imag; // , expr subst
         i__2 = i__;
-        x[i__2].r = s.r;
-        x[i__2].i = s.i; // , expr subst
+        x[i__2].real = s.real;
+        x[i__2].imag = s.imag; // , expr subst
         /* L10: */
     }
     AOCL_DTL_TRACE_LOG_EXIT

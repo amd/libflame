@@ -4,7 +4,7 @@
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
  /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static scomplex c_b1 = {{1.f}, {0.f}};
+static scomplex c_b1 = {1.f, 0.f};
 /* > \brief \b CHEGVD */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -377,8 +377,8 @@ void aocl_lapack_chegvd(aocl_int64_t *itype, char *jobz, char *uplo, aocl_int64_
     }
     if(*info == 0)
     {
-        work[1].r = aocl_lapack_sroundup_lwork(&lopt);
-        work[1].i = 0.f; // , expr subst
+        work[1].real = aocl_lapack_sroundup_lwork(&lopt);
+        work[1].imag = 0.f; // , expr subst
         rwork[1] = aocl_lapack_sroundup_lwork(&lropt);
         iwork[1] = (aocl_int_t)(liopt);
         if(*lwork < lwmin && !lquery)
@@ -426,7 +426,7 @@ void aocl_lapack_chegvd(aocl_int64_t *itype, char *jobz, char *uplo, aocl_int64_
                        &iwork[1], liwork, info);
     /* Computing MAX */
     r__1 = (real)lopt;
-    r__2 = work[1].r; // , expr subst
+    r__2 = work[1].real; // , expr subst
     lopt = (integer)fla_max(r__1, r__2);
     /* Computing MAX */
     r__1 = (real)lropt;
@@ -471,8 +471,8 @@ void aocl_lapack_chegvd(aocl_int64_t *itype, char *jobz, char *uplo, aocl_int64_
                             &a[a_offset], lda);
         }
     }
-    work[1].r = aocl_lapack_sroundup_lwork(&lopt);
-    work[1].i = 0.f; // , expr subst
+    work[1].real = aocl_lapack_sroundup_lwork(&lopt);
+    work[1].imag = 0.f; // , expr subst
     rwork[1] = aocl_lapack_sroundup_lwork(&lropt);
     iwork[1] = (aocl_int_t)(liopt);
     AOCL_DTL_TRACE_LOG_EXIT

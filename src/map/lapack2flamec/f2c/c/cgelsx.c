@@ -4,8 +4,8 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static scomplex c_b1 = {{0.f}, {0.f}};
-static scomplex c_b2 = {{1.f}, {0.f}};
+static scomplex c_b1 = {0.f, 0.f};
+static scomplex c_b2 = {1.f, 0.f};
 static aocl_int64_t c__0 = 0;
 static aocl_int64_t c__2 = 2;
 static aocl_int64_t c__1 = 1;
@@ -363,11 +363,11 @@ void aocl_lapack_cgelsx(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *nrhs, sc
     /* rotations stored in WORK(1:MN). */
     /* Determine RANK using incremental condition estimation */
     i__1 = ismin;
-    work[i__1].r = 1.f;
-    work[i__1].i = 0.f; // , expr subst
+    work[i__1].real = 1.f;
+    work[i__1].imag = 0.f; // , expr subst
     i__1 = ismax;
-    work[i__1].r = 1.f;
-    work[i__1].i = 0.f; // , expr subst
+    work[i__1].real = 1.f;
+    work[i__1].imag = 0.f; // , expr subst
     smax = c_abs(&a[a_dim1 + 1]);
     smin = smax;
     if(c_abs(&a[a_dim1 + 1]) == 0.f)
@@ -396,24 +396,24 @@ L10:
             {
                 i__2 = ismin + i__ - 1;
                 i__3 = ismin + i__ - 1;
-                q__1.r = s1.r * work[i__3].r - s1.i * work[i__3].i;
-                q__1.i = s1.r * work[i__3].i + s1.i * work[i__3].r; // , expr subst
-                work[i__2].r = q__1.r;
-                work[i__2].i = q__1.i; // , expr subst
+                q__1.real = s1.real * work[i__3].real - s1.imag * work[i__3].imag;
+                q__1.imag = s1.real * work[i__3].imag + s1.imag * work[i__3].real; // , expr subst
+                work[i__2].real = q__1.real;
+                work[i__2].imag = q__1.imag; // , expr subst
                 i__2 = ismax + i__ - 1;
                 i__3 = ismax + i__ - 1;
-                q__1.r = s2.r * work[i__3].r - s2.i * work[i__3].i;
-                q__1.i = s2.r * work[i__3].i + s2.i * work[i__3].r; // , expr subst
-                work[i__2].r = q__1.r;
-                work[i__2].i = q__1.i; // , expr subst
+                q__1.real = s2.real * work[i__3].real - s2.imag * work[i__3].imag;
+                q__1.imag = s2.real * work[i__3].imag + s2.imag * work[i__3].real; // , expr subst
+                work[i__2].real = q__1.real;
+                work[i__2].imag = q__1.imag; // , expr subst
                 /* L20: */
             }
             i__1 = ismin + *rank;
-            work[i__1].r = c1.r;
-            work[i__1].i = c1.i; // , expr subst
+            work[i__1].real = c1.real;
+            work[i__1].imag = c1.imag; // , expr subst
             i__1 = ismax + *rank;
-            work[i__1].r = c2.r;
-            work[i__1].i = c2.i; // , expr subst
+            work[i__1].real = c2.real;
+            work[i__1].imag = c2.imag; // , expr subst
             smin = sminpr;
             smax = smaxpr;
             ++(*rank);
@@ -443,8 +443,8 @@ L10:
         for(j = 1; j <= i__2; ++j)
         {
             i__3 = i__ + j * b_dim1;
-            b[i__3].r = 0.f;
-            b[i__3].i = 0.f; // , expr subst
+            b[i__3].real = 0.f;
+            b[i__3].imag = 0.f; // , expr subst
             /* L30: */
         }
         /* L40: */
@@ -471,48 +471,48 @@ L10:
         for(i__ = 1; i__ <= i__2; ++i__)
         {
             i__3 = (mn << 1) + i__;
-            work[i__3].r = 1.f;
-            work[i__3].i = 0.f; // , expr subst
+            work[i__3].real = 1.f;
+            work[i__3].imag = 0.f; // , expr subst
             /* L60: */
         }
         i__2 = *n;
         for(i__ = 1; i__ <= i__2; ++i__)
         {
             i__3 = (mn << 1) + i__;
-            if(work[i__3].r == 1.f && work[i__3].i == 0.f)
+            if(work[i__3].real == 1.f && work[i__3].imag == 0.f)
             {
                 if(jpvt[i__] != i__)
                 {
                     k = i__;
                     i__3 = k + j * b_dim1;
-                    t1.r = b[i__3].r;
-                    t1.i = b[i__3].i; // , expr subst
+                    t1.real = b[i__3].real;
+                    t1.imag = b[i__3].imag; // , expr subst
                     i__3 = jpvt[k] + j * b_dim1;
-                    t2.r = b[i__3].r;
-                    t2.i = b[i__3].i; // , expr subst
+                    t2.real = b[i__3].real;
+                    t2.imag = b[i__3].imag; // , expr subst
                 L70:
                     i__3 = jpvt[k] + j * b_dim1;
-                    b[i__3].r = t1.r;
-                    b[i__3].i = t1.i; // , expr subst
+                    b[i__3].real = t1.real;
+                    b[i__3].imag = t1.imag; // , expr subst
                     i__3 = (mn << 1) + k;
-                    work[i__3].r = 0.f;
-                    work[i__3].i = 0.f; // , expr subst
-                    t1.r = t2.r;
-                    t1.i = t2.i; // , expr subst
+                    work[i__3].real = 0.f;
+                    work[i__3].imag = 0.f; // , expr subst
+                    t1.real = t2.real;
+                    t1.imag = t2.imag; // , expr subst
                     k = jpvt[k];
                     i__3 = jpvt[k] + j * b_dim1;
-                    t2.r = b[i__3].r;
-                    t2.i = b[i__3].i; // , expr subst
+                    t2.real = b[i__3].real;
+                    t2.imag = b[i__3].imag; // , expr subst
                     if(jpvt[k] != i__)
                     {
                         goto L70;
                     }
                     i__3 = i__ + j * b_dim1;
-                    b[i__3].r = t1.r;
-                    b[i__3].i = t1.i; // , expr subst
+                    b[i__3].real = t1.real;
+                    b[i__3].imag = t1.imag; // , expr subst
                     i__3 = (mn << 1) + k;
-                    work[i__3].r = 0.f;
-                    work[i__3].i = 0.f; // , expr subst
+                    work[i__3].real = 0.f;
+                    work[i__3].imag = 0.f; // , expr subst
                 }
             }
             /* L80: */

@@ -4,7 +4,7 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static scomplex c_b1 = {{1.f}, {0.f}};
+static scomplex c_b1 = {1.f, 0.f};
 static aocl_int64_t c__2 = 2;
 /* > \brief \b CLAESY computes the eigenvalues and eigenvectors of a 2-by-2 scomplex symmetric
  * matrix. */
@@ -149,21 +149,21 @@ void claesy_(scomplex *a, scomplex *b, scomplex *c__, scomplex *rt1, scomplex *r
     /* To avoid divide by zero later, we treat this case separately. */
     if(c_abs(b) == 0.f)
     {
-        rt1->r = a->r, rt1->i = a->i;
-        rt2->r = c__->r, rt2->i = c__->i;
+        rt1->real = a->real, rt1->imag = a->imag;
+        rt2->real = c__->real, rt2->imag = c__->imag;
         if(c_abs(rt1) < c_abs(rt2))
         {
-            tmp.r = rt1->r;
-            tmp.i = rt1->i; // , expr subst
-            rt1->r = rt2->r, rt1->i = rt2->i;
-            rt2->r = tmp.r, rt2->i = tmp.i;
-            cs1->r = 0.f, cs1->i = 0.f;
-            sn1->r = 1.f, sn1->i = 0.f;
+            tmp.real = rt1->real;
+            tmp.imag = rt1->imag; // , expr subst
+            rt1->real = rt2->real, rt1->imag = rt2->imag;
+            rt2->real = tmp.real, rt2->imag = tmp.imag;
+            cs1->real = 0.f, cs1->imag = 0.f;
+            sn1->real = 1.f, sn1->imag = 0.f;
         }
         else
         {
-            cs1->r = 1.f, cs1->i = 0.f;
-            sn1->r = 0.f, sn1->i = 0.f;
+            cs1->real = 1.f, cs1->imag = 0.f;
+            sn1->real = 0.f, sn1->imag = 0.f;
         }
     }
     else
@@ -172,101 +172,101 @@ void claesy_(scomplex *a, scomplex *b, scomplex *c__, scomplex *rt1, scomplex *r
         /* The characteristic equation is */
         /* lambda **2 - (A+C) lambda + (A*C - B*B) */
         /* and we solve it using the quadratic formula. */
-        q__2.r = a->r + c__->r;
-        q__2.i = a->i + c__->i; // , expr subst
-        q__1.r = q__2.r * .5f;
-        q__1.i = q__2.i * .5f; // , expr subst
-        s.r = q__1.r;
-        s.i = q__1.i; // , expr subst
-        q__2.r = a->r - c__->r;
-        q__2.i = a->i - c__->i; // , expr subst
-        q__1.r = q__2.r * .5f;
-        q__1.i = q__2.i * .5f; // , expr subst
-        t.r = q__1.r;
-        t.i = q__1.i; // , expr subst
+        q__2.real = a->real + c__->real;
+        q__2.imag = a->imag + c__->imag; // , expr subst
+        q__1.real = q__2.real * .5f;
+        q__1.imag = q__2.imag * .5f; // , expr subst
+        s.real = q__1.real;
+        s.imag = q__1.imag; // , expr subst
+        q__2.real = a->real - c__->real;
+        q__2.imag = a->imag - c__->imag; // , expr subst
+        q__1.real = q__2.real * .5f;
+        q__1.imag = q__2.imag * .5f; // , expr subst
+        t.real = q__1.real;
+        t.imag = q__1.imag; // , expr subst
         /* Take the square root carefully to avoid over/under flow. */
         babs = c_abs(b);
         tabs = c_abs(&t);
         z__ = fla_max(babs, tabs);
         if(z__ > 0.f)
         {
-            q__5.r = t.r / z__;
-            q__5.i = t.i / z__; // , expr subst
+            q__5.real = t.real / z__;
+            q__5.imag = t.imag / z__; // , expr subst
             pow_ci(&q__4, &q__5, &c__2);
-            q__7.r = b->r / z__;
-            q__7.i = b->i / z__; // , expr subst
+            q__7.real = b->real / z__;
+            q__7.imag = b->imag / z__; // , expr subst
             pow_ci(&q__6, &q__7, &c__2);
-            q__3.r = q__4.r + q__6.r;
-            q__3.i = q__4.i + q__6.i; // , expr subst
+            q__3.real = q__4.real + q__6.real;
+            q__3.imag = q__4.imag + q__6.imag; // , expr subst
             c_sqrt(&q__2, &q__3);
-            q__1.r = z__ * q__2.r;
-            q__1.i = z__ * q__2.i; // , expr subst
-            t.r = q__1.r;
-            t.i = q__1.i; // , expr subst
+            q__1.real = z__ * q__2.real;
+            q__1.imag = z__ * q__2.imag; // , expr subst
+            t.real = q__1.real;
+            t.imag = q__1.imag; // , expr subst
         }
         /* Compute the two eigenvalues. RT1 and RT2 are exchanged */
         /* if necessary so that RT1 will have the greater magnitude. */
-        q__1.r = s.r + t.r;
-        q__1.i = s.i + t.i; // , expr subst
-        rt1->r = q__1.r, rt1->i = q__1.i;
-        q__1.r = s.r - t.r;
-        q__1.i = s.i - t.i; // , expr subst
-        rt2->r = q__1.r, rt2->i = q__1.i;
+        q__1.real = s.real + t.real;
+        q__1.imag = s.imag + t.imag; // , expr subst
+        rt1->real = q__1.real, rt1->imag = q__1.imag;
+        q__1.real = s.real - t.real;
+        q__1.imag = s.imag - t.imag; // , expr subst
+        rt2->real = q__1.real, rt2->imag = q__1.imag;
         if(c_abs(rt1) < c_abs(rt2))
         {
-            tmp.r = rt1->r;
-            tmp.i = rt1->i; // , expr subst
-            rt1->r = rt2->r, rt1->i = rt2->i;
-            rt2->r = tmp.r, rt2->i = tmp.i;
+            tmp.real = rt1->real;
+            tmp.imag = rt1->imag; // , expr subst
+            rt1->real = rt2->real, rt1->imag = rt2->imag;
+            rt2->real = tmp.real, rt2->imag = tmp.imag;
         }
         /* Choose CS1 = 1 and SN1 to satisfy the first equation, then */
         /* scale the components of this eigenvector so that the matrix */
         /* of eigenvectors X satisfies X * X**T = I . (No scaling is */
         /* done if the norm of the eigenvalue matrix is less than THRESH.) */
-        q__2.r = rt1->r - a->r;
-        q__2.i = rt1->i - a->i; // , expr subst
+        q__2.real = rt1->real - a->real;
+        q__2.imag = rt1->imag - a->imag; // , expr subst
         c_div(&q__1, &q__2, b);
-        sn1->r = q__1.r, sn1->i = q__1.i;
+        sn1->real = q__1.real, sn1->imag = q__1.imag;
         tabs = c_abs(sn1);
         if(tabs > 1.f)
         {
             /* Computing 2nd power */
             r__2 = 1.f / tabs;
             r__1 = r__2 * r__2;
-            q__5.r = sn1->r / tabs;
-            q__5.i = sn1->i / tabs; // , expr subst
+            q__5.real = sn1->real / tabs;
+            q__5.imag = sn1->imag / tabs; // , expr subst
             pow_ci(&q__4, &q__5, &c__2);
-            q__3.r = r__1 + q__4.r;
-            q__3.i = q__4.i; // , expr subst
+            q__3.real = r__1 + q__4.real;
+            q__3.imag = q__4.imag; // , expr subst
             c_sqrt(&q__2, &q__3);
-            q__1.r = tabs * q__2.r;
-            q__1.i = tabs * q__2.i; // , expr subst
-            t.r = q__1.r;
-            t.i = q__1.i; // , expr subst
+            q__1.real = tabs * q__2.real;
+            q__1.imag = tabs * q__2.imag; // , expr subst
+            t.real = q__1.real;
+            t.imag = q__1.imag; // , expr subst
         }
         else
         {
-            q__3.r = sn1->r * sn1->r - sn1->i * sn1->i;
-            q__3.i = sn1->r * sn1->i + sn1->i * sn1->r; // , expr subst
-            q__2.r = q__3.r + 1.f;
-            q__2.i = q__3.i + 0.f; // , expr subst
+            q__3.real = sn1->real * sn1->real - sn1->imag * sn1->imag;
+            q__3.imag = sn1->real * sn1->imag + sn1->imag * sn1->real; // , expr subst
+            q__2.real = q__3.real + 1.f;
+            q__2.imag = q__3.imag + 0.f; // , expr subst
             c_sqrt(&q__1, &q__2);
-            t.r = q__1.r;
-            t.i = q__1.i; // , expr subst
+            t.real = q__1.real;
+            t.imag = q__1.imag; // , expr subst
         }
         evnorm = c_abs(&t);
         if(evnorm >= .1f)
         {
             c_div(&q__1, &c_b1, &t);
-            evscal->r = q__1.r, evscal->i = q__1.i;
-            cs1->r = evscal->r, cs1->i = evscal->i;
-            q__1.r = sn1->r * evscal->r - sn1->i * evscal->i;
-            q__1.i = sn1->r * evscal->i + sn1->i * evscal->r; // , expr subst
-            sn1->r = q__1.r, sn1->i = q__1.i;
+            evscal->real = q__1.real, evscal->imag = q__1.imag;
+            cs1->real = evscal->real, cs1->imag = evscal->imag;
+            q__1.real = sn1->real * evscal->real - sn1->imag * evscal->imag;
+            q__1.imag = sn1->real * evscal->imag + sn1->imag * evscal->real; // , expr subst
+            sn1->real = q__1.real, sn1->imag = q__1.imag;
         }
         else
         {
-            evscal->r = 0.f, evscal->i = 0.f;
+            evscal->real = 0.f, evscal->imag = 0.f;
         }
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);

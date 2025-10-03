@@ -225,10 +225,10 @@ void aocl_lapack_claqge(aocl_int64_t *m, aocl_int64_t *n, scomplex *a, aocl_int6
                 {
                     i__3 = i__ + j * a_dim1;
                     i__4 = i__ + j * a_dim1;
-                    q__1.r = cj * a[i__4].r;
-                    q__1.i = cj * a[i__4].i; // , expr subst
-                    a[i__3].r = q__1.r;
-                    a[i__3].i = q__1.i; // , expr subst
+                    q__1.real = cj * a[i__4].real;
+                    q__1.imag = cj * a[i__4].imag; // , expr subst
+                    a[i__3].real = q__1.real;
+                    a[i__3].imag = q__1.imag; // , expr subst
                     /* L10: */
                 }
                 /* L20: */
@@ -248,10 +248,10 @@ void aocl_lapack_claqge(aocl_int64_t *m, aocl_int64_t *n, scomplex *a, aocl_int6
                 i__3 = i__ + j * a_dim1;
                 i__4 = i__;
                 i__5 = i__ + j * a_dim1;
-                q__1.r = r__[i__4] * a[i__5].r;
-                q__1.i = r__[i__4] * a[i__5].i; // , expr subst
-                a[i__3].r = q__1.r;
-                a[i__3].i = q__1.i; // , expr subst
+                q__1.real = r__[i__4] * a[i__5].real;
+                q__1.imag = r__[i__4] * a[i__5].imag; // , expr subst
+                a[i__3].real = q__1.real;
+                a[i__3].imag = q__1.imag; // , expr subst
                 /* L30: */
             }
             /* L40: */
@@ -271,10 +271,10 @@ void aocl_lapack_claqge(aocl_int64_t *m, aocl_int64_t *n, scomplex *a, aocl_int6
                 i__3 = i__ + j * a_dim1;
                 r__1 = cj * r__[i__];
                 i__4 = i__ + j * a_dim1;
-                q__1.r = r__1 * a[i__4].r;
-                q__1.i = r__1 * a[i__4].i; // , expr subst
-                a[i__3].r = q__1.r;
-                a[i__3].i = q__1.i; // , expr subst
+                q__1.real = r__1 * a[i__4].real;
+                q__1.imag = r__1 * a[i__4].imag; // , expr subst
+                a[i__3].real = q__1.real;
+                a[i__3].imag = q__1.imag; // , expr subst
                 /* L50: */
             }
             /* L60: */

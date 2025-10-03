@@ -4,8 +4,8 @@
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
  /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static scomplex c_b1 = {{0.f}, {0.f}};
-static scomplex c_b2 = {{1.f}, {0.f}};
+static scomplex c_b1 = {0.f, 0.f};
+static scomplex c_b2 = {1.f, 0.f};
 static aocl_int64_t c__1 = 1;
 static aocl_int64_t c__0 = 0;
 /* > \brief <b> CGGEVX computes the eigenvalues and, optionally, the left and/or right eigenvectors
@@ -650,8 +650,8 @@ void aocl_lapack_cggevx(char *balanc, char *jobvl, char *jobvr, char *sense, aoc
             }
         }
         r__1 = aocl_lapack_sroundup_lwork(&maxwrk);
-        work[1].r = r__1;
-        work[1].i = 0.f; // , expr subst
+        work[1].real = r__1;
+        work[1].imag = 0.f; // , expr subst
         if(*lwork < minwrk && !lquery)
         {
             *info = -25;
@@ -914,7 +914,7 @@ void aocl_lapack_cggevx(char *balanc, char *jobvl, char *jobvr, char *sense, aoc
                 /* Computing MAX */
                 i__3 = jr + jc * vl_dim1;
                 r__3 = temp;
-                r__4 = (r__1 = vl[i__3].r, f2c_abs(r__1))
+                r__4 = (r__1 = vl[i__3].real, f2c_abs(r__1))
                        + (r__2 = r_imag(&vl[jr + jc * vl_dim1]), f2c_abs(r__2)); // , expr subst
                 temp = fla_max(r__3, r__4);
                 /* L30: */
@@ -929,10 +929,10 @@ void aocl_lapack_cggevx(char *balanc, char *jobvl, char *jobvr, char *sense, aoc
             {
                 i__3 = jr + jc * vl_dim1;
                 i__4 = jr + jc * vl_dim1;
-                q__1.r = temp * vl[i__4].r;
-                q__1.i = temp * vl[i__4].i; // , expr subst
-                vl[i__3].r = q__1.r;
-                vl[i__3].i = q__1.i; // , expr subst
+                q__1.real = temp * vl[i__4].real;
+                q__1.imag = temp * vl[i__4].imag; // , expr subst
+                vl[i__3].real = q__1.real;
+                vl[i__3].imag = q__1.imag; // , expr subst
                 /* L40: */
             }
         L50:;
@@ -952,7 +952,7 @@ void aocl_lapack_cggevx(char *balanc, char *jobvl, char *jobvr, char *sense, aoc
                 /* Computing MAX */
                 i__3 = jr + jc * vr_dim1;
                 r__3 = temp;
-                r__4 = (r__1 = vr[i__3].r, f2c_abs(r__1))
+                r__4 = (r__1 = vr[i__3].real, f2c_abs(r__1))
                        + (r__2 = r_imag(&vr[jr + jc * vr_dim1]), f2c_abs(r__2)); // , expr subst
                 temp = fla_max(r__3, r__4);
                 /* L60: */
@@ -967,10 +967,10 @@ void aocl_lapack_cggevx(char *balanc, char *jobvl, char *jobvr, char *sense, aoc
             {
                 i__3 = jr + jc * vr_dim1;
                 i__4 = jr + jc * vr_dim1;
-                q__1.r = temp * vr[i__4].r;
-                q__1.i = temp * vr[i__4].i; // , expr subst
-                vr[i__3].r = q__1.r;
-                vr[i__3].i = q__1.i; // , expr subst
+                q__1.real = temp * vr[i__4].real;
+                q__1.imag = temp * vr[i__4].imag; // , expr subst
+                vr[i__3].real = q__1.real;
+                vr[i__3].imag = q__1.imag; // , expr subst
                 /* L70: */
             }
         L80:;
@@ -987,8 +987,8 @@ L90:
         aocl_lapack_clascl("G", &c__0, &c__0, &bnrmto, &bnrm, n, &c__1, &beta[1], n, &ierr);
     }
     r__1 = aocl_lapack_sroundup_lwork(&maxwrk);
-    work[1].r = r__1;
-    work[1].i = 0.f; // , expr subst
+    work[1].real = r__1;
+    work[1].imag = 0.f; // , expr subst
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
     return;
     /* End of CGGEVX */

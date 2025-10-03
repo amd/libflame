@@ -41,7 +41,7 @@ int zcopy_(integer *n, dcomplex *zx, integer *incx, dcomplex *zy, integer *incy)
     {
         i__2 = iy;
         i__3 = ix;
-        zy[i__2].r = zx[i__3].r, zy[i__2].i = zx[i__3].i;
+        zy[i__2].real = zx[i__3].real, zy[i__2].imag = zx[i__3].imag;
         ix += *incx;
         iy += *incy;
         /* L10: */
@@ -56,7 +56,7 @@ L20:
     {
         i__2 = i__;
         i__3 = i__;
-        zy[i__2].r = zx[i__3].r, zy[i__2].i = zx[i__3].i;
+        zy[i__2].real = zx[i__3].real, zy[i__2].imag = zx[i__3].imag;
         /* L30: */
     }
     return 0;

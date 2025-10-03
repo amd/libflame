@@ -236,11 +236,11 @@ void aocl_lapack_zlaqz1(logical *ilq, logical *ilz, aocl_int64_t *k, aocl_int64_
         /* Shift is located on the edge of the matrix, remove it */
         zlartg_(&b[*ihi + *ihi * b_dim1], &b[*ihi + (*ihi - 1) * b_dim1], &c__, &s, &temp);
         i__1 = *ihi + *ihi * b_dim1;
-        b[i__1].r = temp.r;
-        b[i__1].i = temp.i; // , expr subst
+        b[i__1].real = temp.real;
+        b[i__1].imag = temp.imag; // , expr subst
         i__1 = *ihi + (*ihi - 1) * b_dim1;
-        b[i__1].r = 0.;
-        b[i__1].i = 0.; // , expr subst
+        b[i__1].real = 0.;
+        b[i__1].imag = 0.; // , expr subst
         i__1 = *ihi - *istartm;
         aocl_lapack_zrot(&i__1, &b[*istartm + *ihi * b_dim1], &c__1,
                          &b[*istartm + (*ihi - 1) * b_dim1], &c__1, &c__, &s);
@@ -259,11 +259,11 @@ void aocl_lapack_zlaqz1(logical *ilq, logical *ilz, aocl_int64_t *k, aocl_int64_
         /* Apply transformation from the right */
         zlartg_(&b[*k + 1 + (*k + 1) * b_dim1], &b[*k + 1 + *k * b_dim1], &c__, &s, &temp);
         i__1 = *k + 1 + (*k + 1) * b_dim1;
-        b[i__1].r = temp.r;
-        b[i__1].i = temp.i; // , expr subst
+        b[i__1].real = temp.real;
+        b[i__1].imag = temp.imag; // , expr subst
         i__1 = *k + 1 + *k * b_dim1;
-        b[i__1].r = 0.;
-        b[i__1].i = 0.; // , expr subst
+        b[i__1].real = 0.;
+        b[i__1].imag = 0.; // , expr subst
         i__1 = *k + 2 - *istartm + 1;
         aocl_lapack_zrot(&i__1, &a[*istartm + (*k + 1) * a_dim1], &c__1, &a[*istartm + *k * a_dim1],
                          &c__1, &c__, &s);
@@ -278,11 +278,11 @@ void aocl_lapack_zlaqz1(logical *ilq, logical *ilz, aocl_int64_t *k, aocl_int64_
         /* Apply transformation from the left */
         zlartg_(&a[*k + 1 + *k * a_dim1], &a[*k + 2 + *k * a_dim1], &c__, &s, &temp);
         i__1 = *k + 1 + *k * a_dim1;
-        a[i__1].r = temp.r;
-        a[i__1].i = temp.i; // , expr subst
+        a[i__1].real = temp.real;
+        a[i__1].imag = temp.imag; // , expr subst
         i__1 = *k + 2 + *k * a_dim1;
-        a[i__1].r = 0.;
-        a[i__1].i = 0.; // , expr subst
+        a[i__1].real = 0.;
+        a[i__1].imag = 0.; // , expr subst
         i__1 = *istopm - *k;
         aocl_lapack_zrot(&i__1, &a[*k + 1 + (*k + 1) * a_dim1], lda, &a[*k + 2 + (*k + 1) * a_dim1],
                          lda, &c__, &s);

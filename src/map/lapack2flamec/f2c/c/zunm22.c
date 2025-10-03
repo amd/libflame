@@ -4,7 +4,7 @@
  -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for
  libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static dcomplex c_b1 = {{1.}, {0.}};
+static dcomplex c_b1 = {1., 0.};
 /* > \brief \b ZUNM22 multiplies a general matrix by a banded unitary matrix. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -295,10 +295,10 @@ void aocl_lapack_zunm22(char *side, char *trans, aocl_int64_t *m, aocl_int64_t *
     if(*info == 0)
     {
         lwkopt = *m * *n;
-        z__1.r = (doublereal)lwkopt;
-        z__1.i = 0.; // , expr subst
-        work[1].r = z__1.r;
-        work[1].i = z__1.i; // , expr subst
+        z__1.real = (doublereal)lwkopt;
+        z__1.imag = 0.; // , expr subst
+        work[1].real = z__1.real;
+        work[1].imag = z__1.imag; // , expr subst
     }
     if(*info != 0)
     {
@@ -315,8 +315,8 @@ void aocl_lapack_zunm22(char *side, char *trans, aocl_int64_t *m, aocl_int64_t *
     /* Quick return if possible */
     if(*m == 0 || *n == 0)
     {
-        work[1].r = 1.;
-        work[1].i = 0.; // , expr subst
+        work[1].real = 1.;
+        work[1].imag = 0.; // , expr subst
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -325,8 +325,8 @@ void aocl_lapack_zunm22(char *side, char *trans, aocl_int64_t *m, aocl_int64_t *
     {
         aocl_blas_ztrmm(side, "Upper", trans, "Non-Unit", m, n, &c_b1, &q[q_offset], ldq,
                         &c__[c_offset], ldc);
-        work[1].r = 1.;
-        work[1].i = 0.; // , expr subst
+        work[1].real = 1.;
+        work[1].imag = 0.; // , expr subst
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -334,8 +334,8 @@ void aocl_lapack_zunm22(char *side, char *trans, aocl_int64_t *m, aocl_int64_t *
     {
         aocl_blas_ztrmm(side, "Lower", trans, "Non-Unit", m, n, &c_b1, &q[q_offset], ldq,
                         &c__[c_offset], ldc);
-        work[1].r = 1.;
-        work[1].i = 0.; // , expr subst
+        work[1].real = 1.;
+        work[1].imag = 0.; // , expr subst
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -482,10 +482,10 @@ void aocl_lapack_zunm22(char *side, char *trans, aocl_int64_t *m, aocl_int64_t *
             }
         }
     }
-    z__1.r = (doublereal)lwkopt;
-    z__1.i = 0.; // , expr subst
-    work[1].r = z__1.r;
-    work[1].i = z__1.i; // , expr subst
+    z__1.real = (doublereal)lwkopt;
+    z__1.imag = 0.; // , expr subst
+    work[1].real = z__1.real;
+    work[1].imag = z__1.imag; // , expr subst
     AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of ZUNM22 */

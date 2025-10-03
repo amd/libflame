@@ -4,7 +4,7 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static dcomplex c_b1 = {{1.}, {0.}};
+static dcomplex c_b1 = {1., 0.};
 static aocl_int64_t c__1 = 1;
 /* > \brief \b ZHPGST */
 /* =========== DOCUMENTATION =========== */
@@ -212,16 +212,16 @@ void aocl_lapack_zhpgst(aocl_int64_t *itype, char *uplo, aocl_int64_t *n, dcompl
                 /* Compute the j-th column of the upper triangle of A */
                 i__2 = jj;
                 i__3 = jj;
-                d__1 = ap[i__3].r;
-                ap[i__2].r = d__1;
-                ap[i__2].i = 0.; // , expr subst
+                d__1 = ap[i__3].real;
+                ap[i__2].real = d__1;
+                ap[i__2].imag = 0.; // , expr subst
                 i__2 = jj;
-                bjj = bp[i__2].r;
+                bjj = bp[i__2].real;
                 aocl_blas_ztpsv(uplo, "Conjugate transpose", "Non-unit", &j, &bp[1], &ap[j1],
                                 &c__1);
                 i__2 = j - 1;
-                z__1.r = -1.;
-                z__1.i = -0.; // , expr subst
+                z__1.real = -1.;
+                z__1.imag = -0.; // , expr subst
                 aocl_blas_zhpmv(uplo, &i__2, &z__1, &ap[1], &bp[j1], &c__1, &c_b1, &ap[j1], &c__1);
                 i__2 = j - 1;
                 d__1 = 1. / bjj;
@@ -230,12 +230,12 @@ void aocl_lapack_zhpgst(aocl_int64_t *itype, char *uplo, aocl_int64_t *n, dcompl
                 i__3 = jj;
                 i__4 = j - 1;
                 aocl_lapack_zdotc_f2c(&z__3, &i__4, &ap[j1], &c__1, &bp[j1], &c__1);
-                z__2.r = ap[i__3].r - z__3.r;
-                z__2.i = ap[i__3].i - z__3.i; // , expr subst
-                z__1.r = z__2.r / bjj;
-                z__1.i = z__2.i / bjj; // , expr subst
-                ap[i__2].r = z__1.r;
-                ap[i__2].i = z__1.i; // , expr subst
+                z__2.real = ap[i__3].real - z__3.real;
+                z__2.imag = ap[i__3].imag - z__3.imag; // , expr subst
+                z__1.real = z__2.real / bjj;
+                z__1.imag = z__2.imag / bjj; // , expr subst
+                ap[i__2].real = z__1.real;
+                ap[i__2].imag = z__1.imag; // , expr subst
                 /* L10: */
             }
         }
@@ -250,28 +250,28 @@ void aocl_lapack_zhpgst(aocl_int64_t *itype, char *uplo, aocl_int64_t *n, dcompl
                 k1k1 = kk + *n - k + 1;
                 /* Update the lower triangle of A(k:n,k:n) */
                 i__2 = kk;
-                akk = ap[i__2].r;
+                akk = ap[i__2].real;
                 i__2 = kk;
-                bkk = bp[i__2].r;
+                bkk = bp[i__2].real;
                 /* Computing 2nd power */
                 d__1 = bkk;
                 akk /= d__1 * d__1;
                 i__2 = kk;
-                ap[i__2].r = akk;
-                ap[i__2].i = 0.; // , expr subst
+                ap[i__2].real = akk;
+                ap[i__2].imag = 0.; // , expr subst
                 if(k < *n)
                 {
                     i__2 = *n - k;
                     d__1 = 1. / bkk;
                     aocl_blas_zdscal(&i__2, &d__1, &ap[kk + 1], &c__1);
                     d__1 = akk * -.5;
-                    ct.r = d__1;
-                    ct.i = 0.; // , expr subst
+                    ct.real = d__1;
+                    ct.imag = 0.; // , expr subst
                     i__2 = *n - k;
                     aocl_blas_zaxpy(&i__2, &ct, &bp[kk + 1], &c__1, &ap[kk + 1], &c__1);
                     i__2 = *n - k;
-                    z__1.r = -1.;
-                    z__1.i = -0.; // , expr subst
+                    z__1.real = -1.;
+                    z__1.imag = -0.; // , expr subst
                     aocl_blas_zhpr2(uplo, &i__2, &z__1, &ap[kk + 1], &c__1, &bp[kk + 1], &c__1,
                                     &ap[k1k1]);
                     i__2 = *n - k;
@@ -299,14 +299,14 @@ void aocl_lapack_zhpgst(aocl_int64_t *itype, char *uplo, aocl_int64_t *n, dcompl
                 kk += k;
                 /* Update the upper triangle of A(1:k,1:k) */
                 i__2 = kk;
-                akk = ap[i__2].r;
+                akk = ap[i__2].real;
                 i__2 = kk;
-                bkk = bp[i__2].r;
+                bkk = bp[i__2].real;
                 i__2 = k - 1;
                 aocl_blas_ztpmv(uplo, "No transpose", "Non-unit", &i__2, &bp[1], &ap[k1], &c__1);
                 d__1 = akk * .5;
-                ct.r = d__1;
-                ct.i = 0.; // , expr subst
+                ct.real = d__1;
+                ct.imag = 0.; // , expr subst
                 i__2 = k - 1;
                 aocl_blas_zaxpy(&i__2, &ct, &bp[k1], &c__1, &ap[k1], &c__1);
                 i__2 = k - 1;
@@ -319,8 +319,8 @@ void aocl_lapack_zhpgst(aocl_int64_t *itype, char *uplo, aocl_int64_t *n, dcompl
                 /* Computing 2nd power */
                 d__2 = bkk;
                 d__1 = akk * (d__2 * d__2);
-                ap[i__2].r = d__1;
-                ap[i__2].i = 0.; // , expr subst
+                ap[i__2].real = d__1;
+                ap[i__2].imag = 0.; // , expr subst
                 /* L30: */
             }
         }
@@ -335,17 +335,17 @@ void aocl_lapack_zhpgst(aocl_int64_t *itype, char *uplo, aocl_int64_t *n, dcompl
                 j1j1 = jj + *n - j + 1;
                 /* Compute the j-th column of the lower triangle of A */
                 i__2 = jj;
-                ajj = ap[i__2].r;
+                ajj = ap[i__2].real;
                 i__2 = jj;
-                bjj = bp[i__2].r;
+                bjj = bp[i__2].real;
                 i__2 = jj;
                 d__1 = ajj * bjj;
                 i__3 = *n - j;
                 aocl_lapack_zdotc_f2c(&z__2, &i__3, &ap[jj + 1], &c__1, &bp[jj + 1], &c__1);
-                z__1.r = d__1 + z__2.r;
-                z__1.i = z__2.i; // , expr subst
-                ap[i__2].r = z__1.r;
-                ap[i__2].i = z__1.i; // , expr subst
+                z__1.real = d__1 + z__2.real;
+                z__1.imag = z__2.imag; // , expr subst
+                ap[i__2].real = z__1.real;
+                ap[i__2].imag = z__1.imag; // , expr subst
                 i__2 = *n - j;
                 aocl_blas_zdscal(&i__2, &bjj, &ap[jj + 1], &c__1);
                 i__2 = *n - j;

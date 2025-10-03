@@ -427,28 +427,28 @@ void aocl_lapack_ztgsy2(char *trans, aocl_int64_t *ijob, aocl_int64_t *m, aocl_i
             {
                 /* Build 2 by 2 system */
                 i__2 = i__ + i__ * a_dim1;
-                z__[0].r = a[i__2].r;
-                z__[0].i = a[i__2].i; // , expr subst
+                z__[0].real = a[i__2].real;
+                z__[0].imag = a[i__2].imag; // , expr subst
                 i__2 = i__ + i__ * d_dim1;
-                z__[1].r = d__[i__2].r;
-                z__[1].i = d__[i__2].i; // , expr subst
+                z__[1].real = d__[i__2].real;
+                z__[1].imag = d__[i__2].imag; // , expr subst
                 i__2 = j + j * b_dim1;
-                z__1.r = -b[i__2].r;
-                z__1.i = -b[i__2].i; // , expr subst
-                z__[2].r = z__1.r;
-                z__[2].i = z__1.i; // , expr subst
+                z__1.real = -b[i__2].real;
+                z__1.imag = -b[i__2].imag; // , expr subst
+                z__[2].real = z__1.real;
+                z__[2].imag = z__1.imag; // , expr subst
                 i__2 = j + j * e_dim1;
-                z__1.r = -e[i__2].r;
-                z__1.i = -e[i__2].i; // , expr subst
-                z__[3].r = z__1.r;
-                z__[3].i = z__1.i; // , expr subst
+                z__1.real = -e[i__2].real;
+                z__1.imag = -e[i__2].imag; // , expr subst
+                z__[3].real = z__1.real;
+                z__[3].imag = z__1.imag; // , expr subst
                 /* Set up right hand side(s) */
                 i__2 = i__ + j * c_dim1;
-                rhs[0].r = c__[i__2].r;
-                rhs[0].i = c__[i__2].i; // , expr subst
+                rhs[0].real = c__[i__2].real;
+                rhs[0].imag = c__[i__2].imag; // , expr subst
                 i__2 = i__ + j * f_dim1;
-                rhs[1].r = f[i__2].r;
-                rhs[1].i = f[i__2].i; // , expr subst
+                rhs[1].real = f[i__2].real;
+                rhs[1].imag = f[i__2].imag; // , expr subst
                 /* Solve Z * x = RHS */
                 aocl_lapack_zgetc2(&c__2, z__, &c__2, ipiv, jpiv, &ierr);
                 if(ierr > 0)
@@ -463,11 +463,11 @@ void aocl_lapack_ztgsy2(char *trans, aocl_int64_t *ijob, aocl_int64_t *m, aocl_i
                         i__2 = *n;
                         for(k = 1; k <= i__2; ++k)
                         {
-                            z__1.r = scaloc;
-                            z__1.i = 0.; // , expr subst
+                            z__1.real = scaloc;
+                            z__1.imag = 0.; // , expr subst
                             aocl_blas_zscal(m, &z__1, &c__[k * c_dim1 + 1], &c__1);
-                            z__1.r = scaloc;
-                            z__1.i = 0.; // , expr subst
+                            z__1.real = scaloc;
+                            z__1.imag = 0.; // , expr subst
                             aocl_blas_zscal(m, &z__1, &f[k * f_dim1 + 1], &c__1);
                             /* L10: */
                         }
@@ -480,18 +480,18 @@ void aocl_lapack_ztgsy2(char *trans, aocl_int64_t *ijob, aocl_int64_t *m, aocl_i
                 }
                 /* Unpack solution vector(s) */
                 i__2 = i__ + j * c_dim1;
-                c__[i__2].r = rhs[0].r;
-                c__[i__2].i = rhs[0].i; // , expr subst
+                c__[i__2].real = rhs[0].real;
+                c__[i__2].imag = rhs[0].imag; // , expr subst
                 i__2 = i__ + j * f_dim1;
-                f[i__2].r = rhs[1].r;
-                f[i__2].i = rhs[1].i; // , expr subst
+                f[i__2].real = rhs[1].real;
+                f[i__2].imag = rhs[1].imag; // , expr subst
                 /* Substitute R(I, J) and L(I, J) into remaining equation. */
                 if(i__ > 1)
                 {
-                    z__1.r = -rhs[0].r;
-                    z__1.i = -rhs[0].i; // , expr subst
-                    alpha.r = z__1.r;
-                    alpha.i = z__1.i; // , expr subst
+                    z__1.real = -rhs[0].real;
+                    z__1.imag = -rhs[0].imag; // , expr subst
+                    alpha.real = z__1.real;
+                    alpha.imag = z__1.imag; // , expr subst
                     i__2 = i__ - 1;
                     aocl_blas_zaxpy(&i__2, &alpha, &a[i__ * a_dim1 + 1], &c__1,
                                     &c__[j * c_dim1 + 1], &c__1);
@@ -528,28 +528,28 @@ void aocl_lapack_ztgsy2(char *trans, aocl_int64_t *ijob, aocl_int64_t *m, aocl_i
             {
                 /* Build 2 by 2 system Z**H */
                 d_cnjg(&z__1, &a[i__ + i__ * a_dim1]);
-                z__[0].r = z__1.r;
-                z__[0].i = z__1.i; // , expr subst
+                z__[0].real = z__1.real;
+                z__[0].imag = z__1.imag; // , expr subst
                 d_cnjg(&z__2, &b[j + j * b_dim1]);
-                z__1.r = -z__2.r;
-                z__1.i = -z__2.i; // , expr subst
-                z__[1].r = z__1.r;
-                z__[1].i = z__1.i; // , expr subst
+                z__1.real = -z__2.real;
+                z__1.imag = -z__2.imag; // , expr subst
+                z__[1].real = z__1.real;
+                z__[1].imag = z__1.imag; // , expr subst
                 d_cnjg(&z__1, &d__[i__ + i__ * d_dim1]);
-                z__[2].r = z__1.r;
-                z__[2].i = z__1.i; // , expr subst
+                z__[2].real = z__1.real;
+                z__[2].imag = z__1.imag; // , expr subst
                 d_cnjg(&z__2, &e[j + j * e_dim1]);
-                z__1.r = -z__2.r;
-                z__1.i = -z__2.i; // , expr subst
-                z__[3].r = z__1.r;
-                z__[3].i = z__1.i; // , expr subst
+                z__1.real = -z__2.real;
+                z__1.imag = -z__2.imag; // , expr subst
+                z__[3].real = z__1.real;
+                z__[3].imag = z__1.imag; // , expr subst
                 /* Set up right hand side(s) */
                 i__2 = i__ + j * c_dim1;
-                rhs[0].r = c__[i__2].r;
-                rhs[0].i = c__[i__2].i; // , expr subst
+                rhs[0].real = c__[i__2].real;
+                rhs[0].imag = c__[i__2].imag; // , expr subst
                 i__2 = i__ + j * f_dim1;
-                rhs[1].r = f[i__2].r;
-                rhs[1].i = f[i__2].i; // , expr subst
+                rhs[1].real = f[i__2].real;
+                rhs[1].imag = f[i__2].imag; // , expr subst
                 /* Solve Z**H * x = RHS */
                 aocl_lapack_zgetc2(&c__2, z__, &c__2, ipiv, jpiv, &ierr);
                 if(ierr > 0)
@@ -562,11 +562,11 @@ void aocl_lapack_ztgsy2(char *trans, aocl_int64_t *ijob, aocl_int64_t *m, aocl_i
                     i__2 = *n;
                     for(k = 1; k <= i__2; ++k)
                     {
-                        z__1.r = scaloc;
-                        z__1.i = 0.; // , expr subst
+                        z__1.real = scaloc;
+                        z__1.imag = 0.; // , expr subst
                         aocl_blas_zscal(m, &z__1, &c__[k * c_dim1 + 1], &c__1);
-                        z__1.r = scaloc;
-                        z__1.i = 0.; // , expr subst
+                        z__1.real = scaloc;
+                        z__1.imag = 0.; // , expr subst
                         aocl_blas_zscal(m, &z__1, &f[k * f_dim1 + 1], &c__1);
                         /* L40: */
                     }
@@ -574,11 +574,11 @@ void aocl_lapack_ztgsy2(char *trans, aocl_int64_t *ijob, aocl_int64_t *m, aocl_i
                 }
                 /* Unpack solution vector(s) */
                 i__2 = i__ + j * c_dim1;
-                c__[i__2].r = rhs[0].r;
-                c__[i__2].i = rhs[0].i; // , expr subst
+                c__[i__2].real = rhs[0].real;
+                c__[i__2].imag = rhs[0].imag; // , expr subst
                 i__2 = i__ + j * f_dim1;
-                f[i__2].r = rhs[1].r;
-                f[i__2].i = rhs[1].i; // , expr subst
+                f[i__2].real = rhs[1].real;
+                f[i__2].imag = rhs[1].imag; // , expr subst
                 /* Substitute R(I, J) and L(I, J) into remaining equation. */
                 i__2 = j - 1;
                 for(k = 1; k <= i__2; ++k)
@@ -586,17 +586,17 @@ void aocl_lapack_ztgsy2(char *trans, aocl_int64_t *ijob, aocl_int64_t *m, aocl_i
                     i__3 = i__ + k * f_dim1;
                     i__4 = i__ + k * f_dim1;
                     d_cnjg(&z__4, &b[k + j * b_dim1]);
-                    z__3.r = rhs[0].r * z__4.r - rhs[0].i * z__4.i;
-                    z__3.i = rhs[0].r * z__4.i + rhs[0].i * z__4.r; // , expr subst
-                    z__2.r = f[i__4].r + z__3.r;
-                    z__2.i = f[i__4].i + z__3.i; // , expr subst
+                    z__3.real = rhs[0].real * z__4.real - rhs[0].imag * z__4.imag;
+                    z__3.imag = rhs[0].real * z__4.imag + rhs[0].imag * z__4.real; // , expr subst
+                    z__2.real = f[i__4].real + z__3.real;
+                    z__2.imag = f[i__4].imag + z__3.imag; // , expr subst
                     d_cnjg(&z__6, &e[k + j * e_dim1]);
-                    z__5.r = rhs[1].r * z__6.r - rhs[1].i * z__6.i;
-                    z__5.i = rhs[1].r * z__6.i + rhs[1].i * z__6.r; // , expr subst
-                    z__1.r = z__2.r + z__5.r;
-                    z__1.i = z__2.i + z__5.i; // , expr subst
-                    f[i__3].r = z__1.r;
-                    f[i__3].i = z__1.i; // , expr subst
+                    z__5.real = rhs[1].real * z__6.real - rhs[1].imag * z__6.imag;
+                    z__5.imag = rhs[1].real * z__6.imag + rhs[1].imag * z__6.real; // , expr subst
+                    z__1.real = z__2.real + z__5.real;
+                    z__1.imag = z__2.imag + z__5.imag; // , expr subst
+                    f[i__3].real = z__1.real;
+                    f[i__3].imag = z__1.imag; // , expr subst
                     /* L50: */
                 }
                 i__2 = *m;
@@ -605,17 +605,17 @@ void aocl_lapack_ztgsy2(char *trans, aocl_int64_t *ijob, aocl_int64_t *m, aocl_i
                     i__3 = k + j * c_dim1;
                     i__4 = k + j * c_dim1;
                     d_cnjg(&z__4, &a[i__ + k * a_dim1]);
-                    z__3.r = z__4.r * rhs[0].r - z__4.i * rhs[0].i;
-                    z__3.i = z__4.r * rhs[0].i + z__4.i * rhs[0].r; // , expr subst
-                    z__2.r = c__[i__4].r - z__3.r;
-                    z__2.i = c__[i__4].i - z__3.i; // , expr subst
+                    z__3.real = z__4.real * rhs[0].real - z__4.imag * rhs[0].imag;
+                    z__3.imag = z__4.real * rhs[0].imag + z__4.imag * rhs[0].real; // , expr subst
+                    z__2.real = c__[i__4].real - z__3.real;
+                    z__2.imag = c__[i__4].imag - z__3.imag; // , expr subst
                     d_cnjg(&z__6, &d__[i__ + k * d_dim1]);
-                    z__5.r = z__6.r * rhs[1].r - z__6.i * rhs[1].i;
-                    z__5.i = z__6.r * rhs[1].i + z__6.i * rhs[1].r; // , expr subst
-                    z__1.r = z__2.r - z__5.r;
-                    z__1.i = z__2.i - z__5.i; // , expr subst
-                    c__[i__3].r = z__1.r;
-                    c__[i__3].i = z__1.i; // , expr subst
+                    z__5.real = z__6.real * rhs[1].real - z__6.imag * rhs[1].imag;
+                    z__5.imag = z__6.real * rhs[1].imag + z__6.imag * rhs[1].real; // , expr subst
+                    z__1.real = z__2.real - z__5.real;
+                    z__1.imag = z__2.imag - z__5.imag; // , expr subst
+                    c__[i__3].real = z__1.real;
+                    c__[i__3].imag = z__1.imag; // , expr subst
                     /* L60: */
                 }
                 /* L70: */

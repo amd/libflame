@@ -4,7 +4,7 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static dcomplex c_b1 = {{1.}, {0.}};
+static dcomplex c_b1 = {1., 0.};
 /* > \brief \b ZSYTRS2 */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -284,45 +284,45 @@ void aocl_lapack_zsytrs2(char *uplo, aocl_int64_t *n, aocl_int64_t *nrhs, dcompl
                 if(ipiv[i__ - 1] == ipiv[i__])
                 {
                     i__1 = i__;
-                    akm1k.r = work[i__1].r;
-                    akm1k.i = work[i__1].i; // , expr subst
+                    akm1k.real = work[i__1].real;
+                    akm1k.imag = work[i__1].imag; // , expr subst
                     z_div(&z__1, &a[i__ - 1 + (i__ - 1) * a_dim1], &akm1k);
-                    akm1.r = z__1.r;
-                    akm1.i = z__1.i; // , expr subst
+                    akm1.real = z__1.real;
+                    akm1.imag = z__1.imag; // , expr subst
                     z_div(&z__1, &a[i__ + i__ * a_dim1], &akm1k);
-                    ak.r = z__1.r;
-                    ak.i = z__1.i; // , expr subst
-                    z__2.r = akm1.r * ak.r - akm1.i * ak.i;
-                    z__2.i = akm1.r * ak.i + akm1.i * ak.r; // , expr subst
-                    z__1.r = z__2.r - 1.;
-                    z__1.i = z__2.i - 0.; // , expr subst
-                    denom.r = z__1.r;
-                    denom.i = z__1.i; // , expr subst
+                    ak.real = z__1.real;
+                    ak.imag = z__1.imag; // , expr subst
+                    z__2.real = akm1.real * ak.real - akm1.imag * ak.imag;
+                    z__2.imag = akm1.real * ak.imag + akm1.imag * ak.real; // , expr subst
+                    z__1.real = z__2.real - 1.;
+                    z__1.imag = z__2.imag - 0.; // , expr subst
+                    denom.real = z__1.real;
+                    denom.imag = z__1.imag; // , expr subst
                     i__1 = *nrhs;
                     for(j = 1; j <= i__1; ++j)
                     {
                         z_div(&z__1, &b[i__ - 1 + j * b_dim1], &akm1k);
-                        bkm1.r = z__1.r;
-                        bkm1.i = z__1.i; // , expr subst
+                        bkm1.real = z__1.real;
+                        bkm1.imag = z__1.imag; // , expr subst
                         z_div(&z__1, &b[i__ + j * b_dim1], &akm1k);
-                        bk.r = z__1.r;
-                        bk.i = z__1.i; // , expr subst
+                        bk.real = z__1.real;
+                        bk.imag = z__1.imag; // , expr subst
                         i__2 = i__ - 1 + j * b_dim1;
-                        z__3.r = ak.r * bkm1.r - ak.i * bkm1.i;
-                        z__3.i = ak.r * bkm1.i + ak.i * bkm1.r; // , expr subst
-                        z__2.r = z__3.r - bk.r;
-                        z__2.i = z__3.i - bk.i; // , expr subst
+                        z__3.real = ak.real * bkm1.real - ak.imag * bkm1.imag;
+                        z__3.imag = ak.real * bkm1.imag + ak.imag * bkm1.real; // , expr subst
+                        z__2.real = z__3.real - bk.real;
+                        z__2.imag = z__3.imag - bk.imag; // , expr subst
                         z_div(&z__1, &z__2, &denom);
-                        b[i__2].r = z__1.r;
-                        b[i__2].i = z__1.i; // , expr subst
+                        b[i__2].real = z__1.real;
+                        b[i__2].imag = z__1.imag; // , expr subst
                         i__2 = i__ + j * b_dim1;
-                        z__3.r = akm1.r * bk.r - akm1.i * bk.i;
-                        z__3.i = akm1.r * bk.i + akm1.i * bk.r; // , expr subst
-                        z__2.r = z__3.r - bkm1.r;
-                        z__2.i = z__3.i - bkm1.i; // , expr subst
+                        z__3.real = akm1.real * bk.real - akm1.imag * bk.imag;
+                        z__3.imag = akm1.real * bk.imag + akm1.imag * bk.real; // , expr subst
+                        z__2.real = z__3.real - bkm1.real;
+                        z__2.imag = z__3.imag - bkm1.imag; // , expr subst
                         z_div(&z__1, &z__2, &denom);
-                        b[i__2].r = z__1.r;
-                        b[i__2].i = z__1.i; // , expr subst
+                        b[i__2].real = z__1.real;
+                        b[i__2].imag = z__1.imag; // , expr subst
                         /* L15: */
                     }
                     --i__;
@@ -404,45 +404,45 @@ void aocl_lapack_zsytrs2(char *uplo, aocl_int64_t *n, aocl_int64_t *nrhs, dcompl
             else
             {
                 i__1 = i__;
-                akm1k.r = work[i__1].r;
-                akm1k.i = work[i__1].i; // , expr subst
+                akm1k.real = work[i__1].real;
+                akm1k.imag = work[i__1].imag; // , expr subst
                 z_div(&z__1, &a[i__ + i__ * a_dim1], &akm1k);
-                akm1.r = z__1.r;
-                akm1.i = z__1.i; // , expr subst
+                akm1.real = z__1.real;
+                akm1.imag = z__1.imag; // , expr subst
                 z_div(&z__1, &a[i__ + 1 + (i__ + 1) * a_dim1], &akm1k);
-                ak.r = z__1.r;
-                ak.i = z__1.i; // , expr subst
-                z__2.r = akm1.r * ak.r - akm1.i * ak.i;
-                z__2.i = akm1.r * ak.i + akm1.i * ak.r; // , expr subst
-                z__1.r = z__2.r - 1.;
-                z__1.i = z__2.i - 0.; // , expr subst
-                denom.r = z__1.r;
-                denom.i = z__1.i; // , expr subst
+                ak.real = z__1.real;
+                ak.imag = z__1.imag; // , expr subst
+                z__2.real = akm1.real * ak.real - akm1.imag * ak.imag;
+                z__2.imag = akm1.real * ak.imag + akm1.imag * ak.real; // , expr subst
+                z__1.real = z__2.real - 1.;
+                z__1.imag = z__2.imag - 0.; // , expr subst
+                denom.real = z__1.real;
+                denom.imag = z__1.imag; // , expr subst
                 i__1 = *nrhs;
                 for(j = 1; j <= i__1; ++j)
                 {
                     z_div(&z__1, &b[i__ + j * b_dim1], &akm1k);
-                    bkm1.r = z__1.r;
-                    bkm1.i = z__1.i; // , expr subst
+                    bkm1.real = z__1.real;
+                    bkm1.imag = z__1.imag; // , expr subst
                     z_div(&z__1, &b[i__ + 1 + j * b_dim1], &akm1k);
-                    bk.r = z__1.r;
-                    bk.i = z__1.i; // , expr subst
+                    bk.real = z__1.real;
+                    bk.imag = z__1.imag; // , expr subst
                     i__2 = i__ + j * b_dim1;
-                    z__3.r = ak.r * bkm1.r - ak.i * bkm1.i;
-                    z__3.i = ak.r * bkm1.i + ak.i * bkm1.r; // , expr subst
-                    z__2.r = z__3.r - bk.r;
-                    z__2.i = z__3.i - bk.i; // , expr subst
+                    z__3.real = ak.real * bkm1.real - ak.imag * bkm1.imag;
+                    z__3.imag = ak.real * bkm1.imag + ak.imag * bkm1.real; // , expr subst
+                    z__2.real = z__3.real - bk.real;
+                    z__2.imag = z__3.imag - bk.imag; // , expr subst
                     z_div(&z__1, &z__2, &denom);
-                    b[i__2].r = z__1.r;
-                    b[i__2].i = z__1.i; // , expr subst
+                    b[i__2].real = z__1.real;
+                    b[i__2].imag = z__1.imag; // , expr subst
                     i__2 = i__ + 1 + j * b_dim1;
-                    z__3.r = akm1.r * bk.r - akm1.i * bk.i;
-                    z__3.i = akm1.r * bk.i + akm1.i * bk.r; // , expr subst
-                    z__2.r = z__3.r - bkm1.r;
-                    z__2.i = z__3.i - bkm1.i; // , expr subst
+                    z__3.real = akm1.real * bk.real - akm1.imag * bk.imag;
+                    z__3.imag = akm1.real * bk.imag + akm1.imag * bk.real; // , expr subst
+                    z__2.real = z__3.real - bkm1.real;
+                    z__2.imag = z__3.imag - bkm1.imag; // , expr subst
                     z_div(&z__1, &z__2, &denom);
-                    b[i__2].r = z__1.r;
-                    b[i__2].i = z__1.i; // , expr subst
+                    b[i__2].real = z__1.real;
+                    b[i__2].imag = z__1.imag; // , expr subst
                     /* L25: */
                 }
                 ++i__;

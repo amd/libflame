@@ -128,31 +128,31 @@ void aocl_lapack_cla_wwaddw(aocl_int64_t *n, scomplex *x, scomplex *y, scomplex 
     {
         i__2 = i__;
         i__3 = i__;
-        q__1.r = x[i__2].r + w[i__3].r;
-        q__1.i = x[i__2].i + w[i__3].i; // , expr subst
-        s.r = q__1.r;
-        s.i = q__1.i; // , expr subst
-        q__2.r = s.r + s.r;
-        q__2.i = s.i + s.i; // , expr subst
-        q__1.r = q__2.r - s.r;
-        q__1.i = q__2.i - s.i; // , expr subst
-        s.r = q__1.r;
-        s.i = q__1.i; // , expr subst
+        q__1.real = x[i__2].real + w[i__3].real;
+        q__1.imag = x[i__2].imag + w[i__3].imag; // , expr subst
+        s.real = q__1.real;
+        s.imag = q__1.imag; // , expr subst
+        q__2.real = s.real + s.real;
+        q__2.imag = s.imag + s.imag; // , expr subst
+        q__1.real = q__2.real - s.real;
+        q__1.imag = q__2.imag - s.imag; // , expr subst
+        s.real = q__1.real;
+        s.imag = q__1.imag; // , expr subst
         i__2 = i__;
         i__3 = i__;
-        q__3.r = x[i__3].r - s.r;
-        q__3.i = x[i__3].i - s.i; // , expr subst
+        q__3.real = x[i__3].real - s.real;
+        q__3.imag = x[i__3].imag - s.imag; // , expr subst
         i__4 = i__;
-        q__2.r = q__3.r + w[i__4].r;
-        q__2.i = q__3.i + w[i__4].i; // , expr subst
+        q__2.real = q__3.real + w[i__4].real;
+        q__2.imag = q__3.imag + w[i__4].imag; // , expr subst
         i__5 = i__;
-        q__1.r = q__2.r + y[i__5].r;
-        q__1.i = q__2.i + y[i__5].i; // , expr subst
-        y[i__2].r = q__1.r;
-        y[i__2].i = q__1.i; // , expr subst
+        q__1.real = q__2.real + y[i__5].real;
+        q__1.imag = q__2.imag + y[i__5].imag; // , expr subst
+        y[i__2].real = q__1.real;
+        y[i__2].imag = q__1.imag; // , expr subst
         i__2 = i__;
-        x[i__2].r = s.r;
-        x[i__2].i = s.i; // , expr subst
+        x[i__2].real = s.real;
+        x[i__2].imag = s.imag; // , expr subst
         /* L10: */
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);

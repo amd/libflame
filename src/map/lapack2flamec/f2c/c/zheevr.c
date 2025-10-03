@@ -548,8 +548,8 @@ void aocl_lapack_zheevr(char *jobz, char *range, char *uplo, aocl_int64_t *n, dc
         /* Computing MAX */
         i__1 = (nb + 1) * *n;
         lwkopt = fla_max(i__1, lwmin);
-        work[1].r = (doublereal)lwkopt;
-        work[1].i = 0.; // , expr subst
+        work[1].real = (doublereal)lwkopt;
+        work[1].imag = 0.; // , expr subst
         rwork[1] = (doublereal)lrwmin;
         iwork[1] = (aocl_int_t)(liwmin);
         if(*lwork < lwmin && !lquery)
@@ -581,37 +581,37 @@ void aocl_lapack_zheevr(char *jobz, char *range, char *uplo, aocl_int64_t *n, dc
     *m = 0;
     if(*n == 0)
     {
-        work[1].r = 1.;
-        work[1].i = 0.; // , expr subst
+        work[1].real = 1.;
+        work[1].imag = 0.; // , expr subst
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     if(*n == 1)
     {
-        work[1].r = 2.;
-        work[1].i = 0.; // , expr subst
+        work[1].real = 2.;
+        work[1].imag = 0.; // , expr subst
         if(alleig || indeig)
         {
             *m = 1;
             i__1 = a_dim1 + 1;
-            w[1] = a[i__1].r;
+            w[1] = a[i__1].real;
         }
         else
         {
             i__1 = a_dim1 + 1;
             i__2 = a_dim1 + 1;
-            if(*vl < a[i__1].r && *vu >= a[i__2].r)
+            if(*vl < a[i__1].real && *vu >= a[i__2].real)
             {
                 *m = 1;
                 i__1 = a_dim1 + 1;
-                w[1] = a[i__1].r;
+                w[1] = a[i__1].real;
             }
         }
         if(wantz)
         {
             i__1 = z_dim1 + 1;
-            z__[i__1].r = 1.;
-            z__[i__1].i = 0.; // , expr subst
+            z__[i__1].real = 1.;
+            z__[i__1].imag = 0.; // , expr subst
             isuppz[1] = 1;
             isuppz[2] = 1;
         }
@@ -844,8 +844,8 @@ L30:
         }
     }
     /* Set WORK(1) to optimal workspace size. */
-    work[1].r = (doublereal)lwkopt;
-    work[1].i = 0.; // , expr subst
+    work[1].real = (doublereal)lwkopt;
+    work[1].imag = 0.; // , expr subst
     rwork[1] = (doublereal)lrwmin;
     iwork[1] = (aocl_int_t)(liwmin);
     AOCL_DTL_TRACE_LOG_EXIT

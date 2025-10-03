@@ -4,8 +4,8 @@
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
  /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static scomplex c_b1 = {{0.f}, {0.f}};
-static scomplex c_b2 = {{1.f}, {0.f}};
+static scomplex c_b1 = {0.f, 0.f};
+static scomplex c_b2 = {1.f, 0.f};
 static aocl_int64_t c__6 = 6;
 static aocl_int64_t c_n1 = -1;
 static aocl_int64_t c__1 = 1;
@@ -340,14 +340,14 @@ void aocl_lapack_cgelss(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *nrhs, sc
                 /* Compute space needed for CGEBRD */
                 aocl_lapack_cgebrd(&mm, n, &a[a_offset], lda, &s[1], &s[1], dum, dum, dum, &c_n1,
                                    info);
-                lwork_cgebrd__ = (integer)dum[0].r;
+                lwork_cgebrd__ = (integer)dum[0].real;
                 /* Compute space needed for CUNMBR */
                 aocl_lapack_cunmbr("Q", "L", "C", &mm, nrhs, n, &a[a_offset], lda, dum,
                                    &b[b_offset], ldb, dum, &c_n1, info);
-                lwork_cunmbr__ = (integer)dum[0].r;
+                lwork_cunmbr__ = (integer)dum[0].real;
                 /* Compute space needed for CUNGBR */
                 aocl_lapack_cungbr("P", n, n, n, &a[a_offset], lda, dum, dum, &c_n1, info);
-                lwork_cungbr__ = (integer)dum[0].r;
+                lwork_cungbr__ = (integer)dum[0].real;
                 /* Compute total workspace needed */
                 /* Computing MAX */
                 i__1 = maxwrk;
@@ -376,22 +376,22 @@ void aocl_lapack_cgelss(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *nrhs, sc
                     /* than rows */
                     /* Compute space needed for CGELQF */
                     aocl_lapack_cgelqf(m, n, &a[a_offset], lda, dum, dum, &c_n1, info);
-                    lwork_cgelqf__ = (integer)dum[0].r;
+                    lwork_cgelqf__ = (integer)dum[0].real;
                     /* Compute space needed for CGEBRD */
                     aocl_lapack_cgebrd(m, m, &a[a_offset], lda, &s[1], &s[1], dum, dum, dum, &c_n1,
                                        info);
-                    lwork_cgebrd__ = (integer)dum[0].r;
+                    lwork_cgebrd__ = (integer)dum[0].real;
                     /* Compute space needed for CUNMBR */
                     aocl_lapack_cunmbr("Q", "L", "C", m, nrhs, n, &a[a_offset], lda, dum,
                                        &b[b_offset], ldb, dum, &c_n1, info);
-                    lwork_cunmbr__ = (integer)dum[0].r;
+                    lwork_cunmbr__ = (integer)dum[0].real;
                     /* Compute space needed for CUNGBR */
                     aocl_lapack_cungbr("P", m, m, m, &a[a_offset], lda, dum, dum, &c_n1, info);
-                    lwork_cungbr__ = (integer)dum[0].r;
+                    lwork_cungbr__ = (integer)dum[0].real;
                     /* Compute space needed for CUNMLQ */
                     aocl_lapack_cunmlq("L", "C", n, nrhs, m, &a[a_offset], lda, dum, &b[b_offset],
                                        ldb, dum, &c_n1, info);
-                    lwork_cunmlq__ = (integer)dum[0].r;
+                    lwork_cunmlq__ = (integer)dum[0].real;
                     /* Compute total workspace needed */
                     maxwrk = *m + lwork_cgelqf__;
                     /* Computing MAX */
@@ -431,14 +431,14 @@ void aocl_lapack_cgelss(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *nrhs, sc
                     /* Compute space needed for CGEBRD */
                     aocl_lapack_cgebrd(m, n, &a[a_offset], lda, &s[1], &s[1], dum, dum, dum, &c_n1,
                                        info);
-                    lwork_cgebrd__ = (integer)dum[0].r;
+                    lwork_cgebrd__ = (integer)dum[0].real;
                     /* Compute space needed for CUNMBR */
                     aocl_lapack_cunmbr("Q", "L", "C", m, nrhs, m, &a[a_offset], lda, dum,
                                        &b[b_offset], ldb, dum, &c_n1, info);
-                    lwork_cunmbr__ = (integer)dum[0].r;
+                    lwork_cunmbr__ = (integer)dum[0].real;
                     /* Compute space needed for CUNGBR */
                     aocl_lapack_cungbr("P", m, n, m, &a[a_offset], lda, dum, dum, &c_n1, info);
-                    lwork_cungbr__ = (integer)dum[0].r;
+                    lwork_cungbr__ = (integer)dum[0].real;
                     maxwrk = (*m << 1) + lwork_cgebrd__;
                     /* Computing MAX */
                     i__1 = maxwrk;
@@ -457,8 +457,8 @@ void aocl_lapack_cgelss(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *nrhs, sc
             maxwrk = fla_max(minwrk, maxwrk);
         }
         r__1 = aocl_lapack_sroundup_lwork(&maxwrk);
-        work[1].r = r__1;
-        work[1].i = 0.f; // , expr subst
+        work[1].real = r__1;
+        work[1].imag = 0.f; // , expr subst
         if(*lwork < minwrk && !lquery)
         {
             *info = -12;
@@ -897,8 +897,8 @@ void aocl_lapack_cgelss(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *nrhs, sc
     }
 L70:
     r__1 = aocl_lapack_sroundup_lwork(&maxwrk);
-    work[1].r = r__1;
-    work[1].i = 0.f; // , expr subst
+    work[1].real = r__1;
+    work[1].imag = 0.f; // , expr subst
     AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of CGELSS */

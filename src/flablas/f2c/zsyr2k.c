@@ -175,16 +175,16 @@ int zsyr2k_(char *uplo, char *trans, integer *n, integer *k, dcomplex *alpha, dc
         return 0;
     }
     /* Quick return if possible. */
-    if (*n == 0 || (alpha->r == 0. && alpha->i == 0. || *k == 0) && (beta->r == 1. && beta->i == 0.))
+    if (*n == 0 || (alpha->real == 0. && alpha->imag == 0. || *k == 0) && (beta->real == 1. && beta->imag == 0.))
     {
         return 0;
     }
     /* And when alpha.eq.zero. */
-    if (alpha->r == 0. && alpha->i == 0.)
+    if (alpha->real == 0. && alpha->imag == 0.)
     {
         if (upper)
         {
-            if (beta->r == 0. && beta->i == 0.)
+            if (beta->real == 0. && beta->imag == 0.)
             {
                 i__1 = *n;
                 for (j = 1;
@@ -197,7 +197,7 @@ int zsyr2k_(char *uplo, char *trans, integer *n, integer *k, dcomplex *alpha, dc
                             ++i__)
                     {
                         i__3 = i__ + j * c_dim1;
-                        c__[i__3].r = 0., c__[i__3].i = 0.;
+                        c__[i__3].real = 0., c__[i__3].imag = 0.;
                         /* L10: */
                     }
                     /* L20: */
@@ -217,8 +217,8 @@ int zsyr2k_(char *uplo, char *trans, integer *n, integer *k, dcomplex *alpha, dc
                     {
                         i__3 = i__ + j * c_dim1;
                         i__4 = i__ + j * c_dim1;
-                        z__1.r = beta->r * c__[i__4].r - beta->i * c__[i__4] .i, z__1.i = beta->r * c__[i__4].i + beta->i * c__[i__4].r;
-                        c__[i__3].r = z__1.r, c__[i__3].i = z__1.i;
+                        z__1.real = beta->real * c__[i__4].real - beta->imag * c__[i__4] .imag, z__1.imag = beta->real * c__[i__4].imag + beta->imag * c__[i__4].real;
+                        c__[i__3].real = z__1.real, c__[i__3].imag = z__1.imag;
                         /* L30: */
                     }
                     /* L40: */
@@ -227,7 +227,7 @@ int zsyr2k_(char *uplo, char *trans, integer *n, integer *k, dcomplex *alpha, dc
         }
         else
         {
-            if (beta->r == 0. && beta->i == 0.)
+            if (beta->real == 0. && beta->imag == 0.)
             {
                 i__1 = *n;
                 for (j = 1;
@@ -240,7 +240,7 @@ int zsyr2k_(char *uplo, char *trans, integer *n, integer *k, dcomplex *alpha, dc
                             ++i__)
                     {
                         i__3 = i__ + j * c_dim1;
-                        c__[i__3].r = 0., c__[i__3].i = 0.;
+                        c__[i__3].real = 0., c__[i__3].imag = 0.;
                         /* L50: */
                     }
                     /* L60: */
@@ -260,8 +260,8 @@ int zsyr2k_(char *uplo, char *trans, integer *n, integer *k, dcomplex *alpha, dc
                     {
                         i__3 = i__ + j * c_dim1;
                         i__4 = i__ + j * c_dim1;
-                        z__1.r = beta->r * c__[i__4].r - beta->i * c__[i__4] .i, z__1.i = beta->r * c__[i__4].i + beta->i * c__[i__4].r;
-                        c__[i__3].r = z__1.r, c__[i__3].i = z__1.i;
+                        z__1.real = beta->real * c__[i__4].real - beta->imag * c__[i__4] .imag, z__1.imag = beta->real * c__[i__4].imag + beta->imag * c__[i__4].real;
+                        c__[i__3].real = z__1.real, c__[i__3].imag = z__1.imag;
                         /* L70: */
                     }
                     /* L80: */
@@ -281,7 +281,7 @@ int zsyr2k_(char *uplo, char *trans, integer *n, integer *k, dcomplex *alpha, dc
                     j <= i__1;
                     ++j)
             {
-                if (beta->r == 0. && beta->i == 0.)
+                if (beta->real == 0. && beta->imag == 0.)
                 {
                     i__2 = j;
                     for (i__ = 1;
@@ -289,11 +289,11 @@ int zsyr2k_(char *uplo, char *trans, integer *n, integer *k, dcomplex *alpha, dc
                             ++i__)
                     {
                         i__3 = i__ + j * c_dim1;
-                        c__[i__3].r = 0., c__[i__3].i = 0.;
+                        c__[i__3].real = 0., c__[i__3].imag = 0.;
                         /* L90: */
                     }
                 }
-                else if (beta->r != 1. || beta->i != 0.)
+                else if (beta->real != 1. || beta->imag != 0.)
                 {
                     i__2 = j;
                     for (i__ = 1;
@@ -302,8 +302,8 @@ int zsyr2k_(char *uplo, char *trans, integer *n, integer *k, dcomplex *alpha, dc
                     {
                         i__3 = i__ + j * c_dim1;
                         i__4 = i__ + j * c_dim1;
-                        z__1.r = beta->r * c__[i__4].r - beta->i * c__[i__4] .i, z__1.i = beta->r * c__[i__4].i + beta->i * c__[i__4].r;
-                        c__[i__3].r = z__1.r, c__[i__3].i = z__1.i;
+                        z__1.real = beta->real * c__[i__4].real - beta->imag * c__[i__4] .imag, z__1.imag = beta->real * c__[i__4].imag + beta->imag * c__[i__4].real;
+                        c__[i__3].real = z__1.real, c__[i__3].imag = z__1.imag;
                         /* L100: */
                     }
                 }
@@ -314,14 +314,14 @@ int zsyr2k_(char *uplo, char *trans, integer *n, integer *k, dcomplex *alpha, dc
                 {
                     i__3 = j + l * a_dim1;
                     i__4 = j + l * b_dim1;
-                    if (a[i__3].r != 0. || a[i__3].i != 0. || (b[i__4].r != 0. || b[i__4].i != 0.))
+                    if (a[i__3].real != 0. || a[i__3].imag != 0. || (b[i__4].real != 0. || b[i__4].imag != 0.))
                     {
                         i__3 = j + l * b_dim1;
-                        z__1.r = alpha->r * b[i__3].r - alpha->i * b[i__3].i, z__1.i = alpha->r * b[i__3].i + alpha->i * b[ i__3].r;
-                        temp1.r = z__1.r, temp1.i = z__1.i;
+                        z__1.real = alpha->real * b[i__3].real - alpha->imag * b[i__3].imag, z__1.imag = alpha->real * b[i__3].imag + alpha->imag * b[ i__3].real;
+                        temp1.real = z__1.real, temp1.imag = z__1.imag;
                         i__3 = j + l * a_dim1;
-                        z__1.r = alpha->r * a[i__3].r - alpha->i * a[i__3].i, z__1.i = alpha->r * a[i__3].i + alpha->i * a[ i__3].r;
-                        temp2.r = z__1.r, temp2.i = z__1.i;
+                        z__1.real = alpha->real * a[i__3].real - alpha->imag * a[i__3].imag, z__1.imag = alpha->real * a[i__3].imag + alpha->imag * a[ i__3].real;
+                        temp2.real = z__1.real, temp2.imag = z__1.imag;
                         i__3 = j;
                         for (i__ = 1;
                                 i__ <= i__3;
@@ -330,12 +330,12 @@ int zsyr2k_(char *uplo, char *trans, integer *n, integer *k, dcomplex *alpha, dc
                             i__4 = i__ + j * c_dim1;
                             i__5 = i__ + j * c_dim1;
                             i__6 = i__ + l * a_dim1;
-                            z__3.r = a[i__6].r * temp1.r - a[i__6].i * temp1.i, z__3.i = a[i__6].r * temp1.i + a[ i__6].i * temp1.r;
-                            z__2.r = c__[i__5].r + z__3.r, z__2.i = c__[i__5] .i + z__3.i;
+                            z__3.real = a[i__6].real * temp1.real - a[i__6].imag * temp1.imag, z__3.imag = a[i__6].real * temp1.imag + a[ i__6].imag * temp1.real;
+                            z__2.real = c__[i__5].real + z__3.real, z__2.imag = c__[i__5] .imag + z__3.imag;
                             i__7 = i__ + l * b_dim1;
-                            z__4.r = b[i__7].r * temp2.r - b[i__7].i * temp2.i, z__4.i = b[i__7].r * temp2.i + b[ i__7].i * temp2.r;
-                            z__1.r = z__2.r + z__4.r, z__1.i = z__2.i + z__4.i;
-                            c__[i__4].r = z__1.r, c__[i__4].i = z__1.i;
+                            z__4.real = b[i__7].real * temp2.real - b[i__7].imag * temp2.imag, z__4.imag = b[i__7].real * temp2.imag + b[ i__7].imag * temp2.real;
+                            z__1.real = z__2.real + z__4.real, z__1.imag = z__2.imag + z__4.imag;
+                            c__[i__4].real = z__1.real, c__[i__4].imag = z__1.imag;
                             /* L110: */
                         }
                     }
@@ -351,7 +351,7 @@ int zsyr2k_(char *uplo, char *trans, integer *n, integer *k, dcomplex *alpha, dc
                     j <= i__1;
                     ++j)
             {
-                if (beta->r == 0. && beta->i == 0.)
+                if (beta->real == 0. && beta->imag == 0.)
                 {
                     i__2 = *n;
                     for (i__ = j;
@@ -359,11 +359,11 @@ int zsyr2k_(char *uplo, char *trans, integer *n, integer *k, dcomplex *alpha, dc
                             ++i__)
                     {
                         i__3 = i__ + j * c_dim1;
-                        c__[i__3].r = 0., c__[i__3].i = 0.;
+                        c__[i__3].real = 0., c__[i__3].imag = 0.;
                         /* L140: */
                     }
                 }
-                else if (beta->r != 1. || beta->i != 0.)
+                else if (beta->real != 1. || beta->imag != 0.)
                 {
                     i__2 = *n;
                     for (i__ = j;
@@ -372,8 +372,8 @@ int zsyr2k_(char *uplo, char *trans, integer *n, integer *k, dcomplex *alpha, dc
                     {
                         i__3 = i__ + j * c_dim1;
                         i__4 = i__ + j * c_dim1;
-                        z__1.r = beta->r * c__[i__4].r - beta->i * c__[i__4] .i, z__1.i = beta->r * c__[i__4].i + beta->i * c__[i__4].r;
-                        c__[i__3].r = z__1.r, c__[i__3].i = z__1.i;
+                        z__1.real = beta->real * c__[i__4].real - beta->imag * c__[i__4] .imag, z__1.imag = beta->real * c__[i__4].imag + beta->imag * c__[i__4].real;
+                        c__[i__3].real = z__1.real, c__[i__3].imag = z__1.imag;
                         /* L150: */
                     }
                 }
@@ -384,14 +384,14 @@ int zsyr2k_(char *uplo, char *trans, integer *n, integer *k, dcomplex *alpha, dc
                 {
                     i__3 = j + l * a_dim1;
                     i__4 = j + l * b_dim1;
-                    if (a[i__3].r != 0. || a[i__3].i != 0. || (b[i__4].r != 0. || b[i__4].i != 0.))
+                    if (a[i__3].real != 0. || a[i__3].imag != 0. || (b[i__4].real != 0. || b[i__4].imag != 0.))
                     {
                         i__3 = j + l * b_dim1;
-                        z__1.r = alpha->r * b[i__3].r - alpha->i * b[i__3].i, z__1.i = alpha->r * b[i__3].i + alpha->i * b[ i__3].r;
-                        temp1.r = z__1.r, temp1.i = z__1.i;
+                        z__1.real = alpha->real * b[i__3].real - alpha->imag * b[i__3].imag, z__1.imag = alpha->real * b[i__3].imag + alpha->imag * b[ i__3].real;
+                        temp1.real = z__1.real, temp1.imag = z__1.imag;
                         i__3 = j + l * a_dim1;
-                        z__1.r = alpha->r * a[i__3].r - alpha->i * a[i__3].i, z__1.i = alpha->r * a[i__3].i + alpha->i * a[ i__3].r;
-                        temp2.r = z__1.r, temp2.i = z__1.i;
+                        z__1.real = alpha->real * a[i__3].real - alpha->imag * a[i__3].imag, z__1.imag = alpha->real * a[i__3].imag + alpha->imag * a[ i__3].real;
+                        temp2.real = z__1.real, temp2.imag = z__1.imag;
                         i__3 = *n;
                         for (i__ = j;
                                 i__ <= i__3;
@@ -400,12 +400,12 @@ int zsyr2k_(char *uplo, char *trans, integer *n, integer *k, dcomplex *alpha, dc
                             i__4 = i__ + j * c_dim1;
                             i__5 = i__ + j * c_dim1;
                             i__6 = i__ + l * a_dim1;
-                            z__3.r = a[i__6].r * temp1.r - a[i__6].i * temp1.i, z__3.i = a[i__6].r * temp1.i + a[ i__6].i * temp1.r;
-                            z__2.r = c__[i__5].r + z__3.r, z__2.i = c__[i__5] .i + z__3.i;
+                            z__3.real = a[i__6].real * temp1.real - a[i__6].imag * temp1.imag, z__3.imag = a[i__6].real * temp1.imag + a[ i__6].imag * temp1.real;
+                            z__2.real = c__[i__5].real + z__3.real, z__2.imag = c__[i__5] .imag + z__3.imag;
                             i__7 = i__ + l * b_dim1;
-                            z__4.r = b[i__7].r * temp2.r - b[i__7].i * temp2.i, z__4.i = b[i__7].r * temp2.i + b[ i__7].i * temp2.r;
-                            z__1.r = z__2.r + z__4.r, z__1.i = z__2.i + z__4.i;
-                            c__[i__4].r = z__1.r, c__[i__4].i = z__1.i;
+                            z__4.real = b[i__7].real * temp2.real - b[i__7].imag * temp2.imag, z__4.imag = b[i__7].real * temp2.imag + b[ i__7].imag * temp2.real;
+                            z__1.real = z__2.real + z__4.real, z__1.imag = z__2.imag + z__4.imag;
+                            c__[i__4].real = z__1.real, c__[i__4].imag = z__1.imag;
                             /* L160: */
                         }
                     }
@@ -430,8 +430,8 @@ int zsyr2k_(char *uplo, char *trans, integer *n, integer *k, dcomplex *alpha, dc
                         i__ <= i__2;
                         ++i__)
                 {
-                    temp1.r = 0., temp1.i = 0.;
-                    temp2.r = 0., temp2.i = 0.;
+                    temp1.real = 0., temp1.imag = 0.;
+                    temp2.real = 0., temp2.imag = 0.;
                     i__3 = *k;
                     for (l = 1;
                             l <= i__3;
@@ -439,34 +439,34 @@ int zsyr2k_(char *uplo, char *trans, integer *n, integer *k, dcomplex *alpha, dc
                     {
                         i__4 = l + i__ * a_dim1;
                         i__5 = l + j * b_dim1;
-                        z__2.r = a[i__4].r * b[i__5].r - a[i__4].i * b[i__5] .i, z__2.i = a[i__4].r * b[i__5].i + a[i__4] .i * b[i__5].r;
-                        z__1.r = temp1.r + z__2.r, z__1.i = temp1.i + z__2.i;
-                        temp1.r = z__1.r, temp1.i = z__1.i;
+                        z__2.real = a[i__4].real * b[i__5].real - a[i__4].imag * b[i__5] .imag, z__2.imag = a[i__4].real * b[i__5].imag + a[i__4] .imag * b[i__5].real;
+                        z__1.real = temp1.real + z__2.real, z__1.imag = temp1.imag + z__2.imag;
+                        temp1.real = z__1.real, temp1.imag = z__1.imag;
                         i__4 = l + i__ * b_dim1;
                         i__5 = l + j * a_dim1;
-                        z__2.r = b[i__4].r * a[i__5].r - b[i__4].i * a[i__5] .i, z__2.i = b[i__4].r * a[i__5].i + b[i__4] .i * a[i__5].r;
-                        z__1.r = temp2.r + z__2.r, z__1.i = temp2.i + z__2.i;
-                        temp2.r = z__1.r, temp2.i = z__1.i;
+                        z__2.real = b[i__4].real * a[i__5].real - b[i__4].imag * a[i__5] .imag, z__2.imag = b[i__4].real * a[i__5].imag + b[i__4] .imag * a[i__5].real;
+                        z__1.real = temp2.real + z__2.real, z__1.imag = temp2.imag + z__2.imag;
+                        temp2.real = z__1.real, temp2.imag = z__1.imag;
                         /* L190: */
                     }
-                    if (beta->r == 0. && beta->i == 0.)
+                    if (beta->real == 0. && beta->imag == 0.)
                     {
                         i__3 = i__ + j * c_dim1;
-                        z__2.r = alpha->r * temp1.r - alpha->i * temp1.i, z__2.i = alpha->r * temp1.i + alpha->i * temp1.r;
-                        z__3.r = alpha->r * temp2.r - alpha->i * temp2.i, z__3.i = alpha->r * temp2.i + alpha->i * temp2.r;
-                        z__1.r = z__2.r + z__3.r, z__1.i = z__2.i + z__3.i;
-                        c__[i__3].r = z__1.r, c__[i__3].i = z__1.i;
+                        z__2.real = alpha->real * temp1.real - alpha->imag * temp1.imag, z__2.imag = alpha->real * temp1.imag + alpha->imag * temp1.real;
+                        z__3.real = alpha->real * temp2.real - alpha->imag * temp2.imag, z__3.imag = alpha->real * temp2.imag + alpha->imag * temp2.real;
+                        z__1.real = z__2.real + z__3.real, z__1.imag = z__2.imag + z__3.imag;
+                        c__[i__3].real = z__1.real, c__[i__3].imag = z__1.imag;
                     }
                     else
                     {
                         i__3 = i__ + j * c_dim1;
                         i__4 = i__ + j * c_dim1;
-                        z__3.r = beta->r * c__[i__4].r - beta->i * c__[i__4] .i, z__3.i = beta->r * c__[i__4].i + beta->i * c__[i__4].r;
-                        z__4.r = alpha->r * temp1.r - alpha->i * temp1.i, z__4.i = alpha->r * temp1.i + alpha->i * temp1.r;
-                        z__2.r = z__3.r + z__4.r, z__2.i = z__3.i + z__4.i;
-                        z__5.r = alpha->r * temp2.r - alpha->i * temp2.i, z__5.i = alpha->r * temp2.i + alpha->i * temp2.r;
-                        z__1.r = z__2.r + z__5.r, z__1.i = z__2.i + z__5.i;
-                        c__[i__3].r = z__1.r, c__[i__3].i = z__1.i;
+                        z__3.real = beta->real * c__[i__4].real - beta->imag * c__[i__4] .imag, z__3.imag = beta->real * c__[i__4].imag + beta->imag * c__[i__4].real;
+                        z__4.real = alpha->real * temp1.real - alpha->imag * temp1.imag, z__4.imag = alpha->real * temp1.imag + alpha->imag * temp1.real;
+                        z__2.real = z__3.real + z__4.real, z__2.imag = z__3.imag + z__4.imag;
+                        z__5.real = alpha->real * temp2.real - alpha->imag * temp2.imag, z__5.imag = alpha->real * temp2.imag + alpha->imag * temp2.real;
+                        z__1.real = z__2.real + z__5.real, z__1.imag = z__2.imag + z__5.imag;
+                        c__[i__3].real = z__1.real, c__[i__3].imag = z__1.imag;
                     }
                     /* L200: */
                 }
@@ -485,8 +485,8 @@ int zsyr2k_(char *uplo, char *trans, integer *n, integer *k, dcomplex *alpha, dc
                         i__ <= i__2;
                         ++i__)
                 {
-                    temp1.r = 0., temp1.i = 0.;
-                    temp2.r = 0., temp2.i = 0.;
+                    temp1.real = 0., temp1.imag = 0.;
+                    temp2.real = 0., temp2.imag = 0.;
                     i__3 = *k;
                     for (l = 1;
                             l <= i__3;
@@ -494,34 +494,34 @@ int zsyr2k_(char *uplo, char *trans, integer *n, integer *k, dcomplex *alpha, dc
                     {
                         i__4 = l + i__ * a_dim1;
                         i__5 = l + j * b_dim1;
-                        z__2.r = a[i__4].r * b[i__5].r - a[i__4].i * b[i__5] .i, z__2.i = a[i__4].r * b[i__5].i + a[i__4] .i * b[i__5].r;
-                        z__1.r = temp1.r + z__2.r, z__1.i = temp1.i + z__2.i;
-                        temp1.r = z__1.r, temp1.i = z__1.i;
+                        z__2.real = a[i__4].real * b[i__5].real - a[i__4].imag * b[i__5] .imag, z__2.imag = a[i__4].real * b[i__5].imag + a[i__4] .imag * b[i__5].real;
+                        z__1.real = temp1.real + z__2.real, z__1.imag = temp1.imag + z__2.imag;
+                        temp1.real = z__1.real, temp1.imag = z__1.imag;
                         i__4 = l + i__ * b_dim1;
                         i__5 = l + j * a_dim1;
-                        z__2.r = b[i__4].r * a[i__5].r - b[i__4].i * a[i__5] .i, z__2.i = b[i__4].r * a[i__5].i + b[i__4] .i * a[i__5].r;
-                        z__1.r = temp2.r + z__2.r, z__1.i = temp2.i + z__2.i;
-                        temp2.r = z__1.r, temp2.i = z__1.i;
+                        z__2.real = b[i__4].real * a[i__5].real - b[i__4].imag * a[i__5] .imag, z__2.imag = b[i__4].real * a[i__5].imag + b[i__4] .imag * a[i__5].real;
+                        z__1.real = temp2.real + z__2.real, z__1.imag = temp2.imag + z__2.imag;
+                        temp2.real = z__1.real, temp2.imag = z__1.imag;
                         /* L220: */
                     }
-                    if (beta->r == 0. && beta->i == 0.)
+                    if (beta->real == 0. && beta->imag == 0.)
                     {
                         i__3 = i__ + j * c_dim1;
-                        z__2.r = alpha->r * temp1.r - alpha->i * temp1.i, z__2.i = alpha->r * temp1.i + alpha->i * temp1.r;
-                        z__3.r = alpha->r * temp2.r - alpha->i * temp2.i, z__3.i = alpha->r * temp2.i + alpha->i * temp2.r;
-                        z__1.r = z__2.r + z__3.r, z__1.i = z__2.i + z__3.i;
-                        c__[i__3].r = z__1.r, c__[i__3].i = z__1.i;
+                        z__2.real = alpha->real * temp1.real - alpha->imag * temp1.imag, z__2.imag = alpha->real * temp1.imag + alpha->imag * temp1.real;
+                        z__3.real = alpha->real * temp2.real - alpha->imag * temp2.imag, z__3.imag = alpha->real * temp2.imag + alpha->imag * temp2.real;
+                        z__1.real = z__2.real + z__3.real, z__1.imag = z__2.imag + z__3.imag;
+                        c__[i__3].real = z__1.real, c__[i__3].imag = z__1.imag;
                     }
                     else
                     {
                         i__3 = i__ + j * c_dim1;
                         i__4 = i__ + j * c_dim1;
-                        z__3.r = beta->r * c__[i__4].r - beta->i * c__[i__4] .i, z__3.i = beta->r * c__[i__4].i + beta->i * c__[i__4].r;
-                        z__4.r = alpha->r * temp1.r - alpha->i * temp1.i, z__4.i = alpha->r * temp1.i + alpha->i * temp1.r;
-                        z__2.r = z__3.r + z__4.r, z__2.i = z__3.i + z__4.i;
-                        z__5.r = alpha->r * temp2.r - alpha->i * temp2.i, z__5.i = alpha->r * temp2.i + alpha->i * temp2.r;
-                        z__1.r = z__2.r + z__5.r, z__1.i = z__2.i + z__5.i;
-                        c__[i__3].r = z__1.r, c__[i__3].i = z__1.i;
+                        z__3.real = beta->real * c__[i__4].real - beta->imag * c__[i__4] .imag, z__3.imag = beta->real * c__[i__4].imag + beta->imag * c__[i__4].real;
+                        z__4.real = alpha->real * temp1.real - alpha->imag * temp1.imag, z__4.imag = alpha->real * temp1.imag + alpha->imag * temp1.real;
+                        z__2.real = z__3.real + z__4.real, z__2.imag = z__3.imag + z__4.imag;
+                        z__5.real = alpha->real * temp2.real - alpha->imag * temp2.imag, z__5.imag = alpha->real * temp2.imag + alpha->imag * temp2.real;
+                        z__1.real = z__2.real + z__5.real, z__1.imag = z__2.imag + z__5.imag;
+                        c__[i__3].real = z__1.real, c__[i__3].imag = z__1.imag;
                     }
                     /* L230: */
                 }

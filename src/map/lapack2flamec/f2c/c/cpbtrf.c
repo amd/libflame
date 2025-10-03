@@ -4,7 +4,7 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static scomplex c_b1 = {{1.f}, {0.f}};
+static scomplex c_b1 = {1.f, 0.f};
 static aocl_int64_t c__1 = 1;
 static aocl_int64_t c_n1 = -1;
 static real c_b21 = -1.f;
@@ -268,8 +268,8 @@ void aocl_lapack_cpbtrf(char *uplo, aocl_int64_t *n, aocl_int64_t *kd, scomplex 
                 for(i__ = 1; i__ <= i__2; ++i__)
                 {
                     i__3 = i__ + j * 33 - 34;
-                    work[i__3].r = 0.f;
-                    work[i__3].i = 0.f; // , expr subst
+                    work[i__3].real = 0.f;
+                    work[i__3].imag = 0.f; // , expr subst
                     /* L10: */
                 }
                 /* L20: */
@@ -340,8 +340,8 @@ void aocl_lapack_cpbtrf(char *uplo, aocl_int64_t *n, aocl_int64_t *kd, scomplex 
                             {
                                 i__5 = ii + jj * 33 - 34;
                                 i__6 = ii - jj + 1 + (jj + i__ + *kd - 1) * ab_dim1;
-                                work[i__5].r = ab[i__6].r;
-                                work[i__5].i = ab[i__6].i; // , expr subst
+                                work[i__5].real = ab[i__6].real;
+                                work[i__5].imag = ab[i__6].imag; // , expr subst
                                 /* L30: */
                             }
                             /* L40: */
@@ -356,8 +356,8 @@ void aocl_lapack_cpbtrf(char *uplo, aocl_int64_t *n, aocl_int64_t *kd, scomplex 
                         /* Update A23 */
                         if(i2 > 0)
                         {
-                            q__1.r = -1.f;
-                            q__1.i = -0.f; // , expr subst
+                            q__1.real = -1.f;
+                            q__1.imag = -0.f; // , expr subst
                             i__3 = *ldab - 1;
                             i__4 = *ldab - 1;
                             aocl_blas_cgemm("Conjugate transpose", "No transpose", &i2, &i3, &ib,
@@ -379,8 +379,8 @@ void aocl_lapack_cpbtrf(char *uplo, aocl_int64_t *n, aocl_int64_t *kd, scomplex 
                             {
                                 i__5 = ii - jj + 1 + (jj + i__ + *kd - 1) * ab_dim1;
                                 i__6 = ii + jj * 33 - 34;
-                                ab[i__5].r = work[i__6].r;
-                                ab[i__5].i = work[i__6].i; // , expr subst
+                                ab[i__5].real = work[i__6].real;
+                                ab[i__5].imag = work[i__6].imag; // , expr subst
                                 /* L50: */
                             }
                             /* L60: */
@@ -403,8 +403,8 @@ void aocl_lapack_cpbtrf(char *uplo, aocl_int64_t *n, aocl_int64_t *kd, scomplex 
                 for(i__ = j + 1; i__ <= i__1; ++i__)
                 {
                     i__3 = i__ + j * 33 - 34;
-                    work[i__3].r = 0.f;
-                    work[i__3].i = 0.f; // , expr subst
+                    work[i__3].real = 0.f;
+                    work[i__3].imag = 0.f; // , expr subst
                     /* L80: */
                 }
                 /* L90: */
@@ -475,8 +475,8 @@ void aocl_lapack_cpbtrf(char *uplo, aocl_int64_t *n, aocl_int64_t *kd, scomplex 
                             {
                                 i__5 = ii + jj * 33 - 34;
                                 i__6 = *kd + 1 - jj + ii + (jj + i__ - 1) * ab_dim1;
-                                work[i__5].r = ab[i__6].r;
-                                work[i__5].i = ab[i__6].i; // , expr subst
+                                work[i__5].real = ab[i__6].real;
+                                work[i__5].imag = ab[i__6].imag; // , expr subst
                                 /* L100: */
                             }
                             /* L110: */
@@ -491,8 +491,8 @@ void aocl_lapack_cpbtrf(char *uplo, aocl_int64_t *n, aocl_int64_t *kd, scomplex 
                         /* Update A32 */
                         if(i2 > 0)
                         {
-                            q__1.r = -1.f;
-                            q__1.i = -0.f; // , expr subst
+                            q__1.real = -1.f;
+                            q__1.imag = -0.f; // , expr subst
                             i__3 = *ldab - 1;
                             i__4 = *ldab - 1;
                             aocl_blas_cgemm("No transpose", "Conjugate transpose", &i3, &i2, &ib,
@@ -512,8 +512,8 @@ void aocl_lapack_cpbtrf(char *uplo, aocl_int64_t *n, aocl_int64_t *kd, scomplex 
                             {
                                 i__5 = *kd + 1 - jj + ii + (jj + i__ - 1) * ab_dim1;
                                 i__6 = ii + jj * 33 - 34;
-                                ab[i__5].r = work[i__6].r;
-                                ab[i__5].i = work[i__6].i; // , expr subst
+                                ab[i__5].real = work[i__6].real;
+                                ab[i__5].imag = work[i__6].imag; // , expr subst
                                 /* L120: */
                             }
                             /* L130: */

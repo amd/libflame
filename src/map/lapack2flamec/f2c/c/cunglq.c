@@ -199,8 +199,8 @@ void aocl_lapack_cunglq(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *k, scomp
     nb = aocl_lapack_ilaenv(&c__1, "CUNGLQ", " ", m, n, k, &c_n1);
     lwkopt = fla_max(1, *m) * nb;
     r__1 = aocl_lapack_sroundup_lwork(&lwkopt);
-    work[1].r = r__1;
-    work[1].i = 0.f; // , expr subst
+    work[1].real = r__1;
+    work[1].imag = 0.f; // , expr subst
     lquery = *lwork == -1;
     if(*m < 0)
     {
@@ -237,8 +237,8 @@ void aocl_lapack_cunglq(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *k, scomp
     /* Quick return if possible */
     if(*m <= 0)
     {
-        work[1].r = 1.f;
-        work[1].i = 0.f; // , expr subst
+        work[1].real = 1.f;
+        work[1].imag = 0.f; // , expr subst
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
@@ -286,8 +286,8 @@ void aocl_lapack_cunglq(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *k, scomp
             for(i__ = kk + 1; i__ <= i__2; ++i__)
             {
                 i__3 = i__ + j * a_dim1;
-                a[i__3].r = 0.f;
-                a[i__3].i = 0.f; // , expr subst
+                a[i__3].real = 0.f;
+                a[i__3].imag = 0.f; // , expr subst
                 /* L10: */
             }
             /* L20: */
@@ -342,8 +342,8 @@ void aocl_lapack_cunglq(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *k, scomp
                 for(l = i__; l <= i__3; ++l)
                 {
                     i__4 = l + j * a_dim1;
-                    a[i__4].r = 0.f;
-                    a[i__4].i = 0.f; // , expr subst
+                    a[i__4].real = 0.f;
+                    a[i__4].imag = 0.f; // , expr subst
                     /* L30: */
                 }
                 /* L40: */
@@ -352,8 +352,8 @@ void aocl_lapack_cunglq(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *k, scomp
         }
     }
     r__1 = aocl_lapack_sroundup_lwork(&iws);
-    work[1].r = r__1;
-    work[1].i = 0.f; // , expr subst
+    work[1].real = r__1;
+    work[1].imag = 0.f; // , expr subst
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
     return;
     /* End of CUNGLQ */

@@ -43,20 +43,20 @@ int zdrot_(integer *n, dcomplex *zx, integer *incx, dcomplex *zy, integer *incy,
             ++i__)
     {
         i__2 = ix;
-        z__2.r = *c__ * zx[i__2].r, z__2.i = *c__ * zx[i__2].i;
+        z__2.real = *c__ * zx[i__2].real, z__2.imag = *c__ * zx[i__2].imag;
         i__3 = iy;
-        z__3.r = *s * zy[i__3].r, z__3.i = *s * zy[i__3].i;
-        z__1.r = z__2.r + z__3.r, z__1.i = z__2.i + z__3.i;
-        ztemp.r = z__1.r, ztemp.i = z__1.i;
+        z__3.real = *s * zy[i__3].real, z__3.imag = *s * zy[i__3].imag;
+        z__1.real = z__2.real + z__3.real, z__1.imag = z__2.imag + z__3.imag;
+        ztemp.real = z__1.real, ztemp.imag = z__1.imag;
         i__2 = iy;
         i__3 = iy;
-        z__2.r = *c__ * zy[i__3].r, z__2.i = *c__ * zy[i__3].i;
+        z__2.real = *c__ * zy[i__3].real, z__2.imag = *c__ * zy[i__3].imag;
         i__4 = ix;
-        z__3.r = *s * zx[i__4].r, z__3.i = *s * zx[i__4].i;
-        z__1.r = z__2.r - z__3.r, z__1.i = z__2.i - z__3.i;
-        zy[i__2].r = z__1.r, zy[i__2].i = z__1.i;
+        z__3.real = *s * zx[i__4].real, z__3.imag = *s * zx[i__4].imag;
+        z__1.real = z__2.real - z__3.real, z__1.imag = z__2.imag - z__3.imag;
+        zy[i__2].real = z__1.real, zy[i__2].imag = z__1.imag;
         i__2 = ix;
-        zx[i__2].r = ztemp.r, zx[i__2].i = ztemp.i;
+        zx[i__2].real = ztemp.real, zx[i__2].imag = ztemp.imag;
         ix += *incx;
         iy += *incy;
         /* L10: */
@@ -70,20 +70,20 @@ L20:
             ++i__)
     {
         i__2 = i__;
-        z__2.r = *c__ * zx[i__2].r, z__2.i = *c__ * zx[i__2].i;
+        z__2.real = *c__ * zx[i__2].real, z__2.imag = *c__ * zx[i__2].imag;
         i__3 = i__;
-        z__3.r = *s * zy[i__3].r, z__3.i = *s * zy[i__3].i;
-        z__1.r = z__2.r + z__3.r, z__1.i = z__2.i + z__3.i;
-        ztemp.r = z__1.r, ztemp.i = z__1.i;
+        z__3.real = *s * zy[i__3].real, z__3.imag = *s * zy[i__3].imag;
+        z__1.real = z__2.real + z__3.real, z__1.imag = z__2.imag + z__3.imag;
+        ztemp.real = z__1.real, ztemp.imag = z__1.imag;
         i__2 = i__;
         i__3 = i__;
-        z__2.r = *c__ * zy[i__3].r, z__2.i = *c__ * zy[i__3].i;
+        z__2.real = *c__ * zy[i__3].real, z__2.imag = *c__ * zy[i__3].imag;
         i__4 = i__;
-        z__3.r = *s * zx[i__4].r, z__3.i = *s * zx[i__4].i;
-        z__1.r = z__2.r - z__3.r, z__1.i = z__2.i - z__3.i;
-        zy[i__2].r = z__1.r, zy[i__2].i = z__1.i;
+        z__3.real = *s * zx[i__4].real, z__3.imag = *s * zx[i__4].imag;
+        z__1.real = z__2.real - z__3.real, z__1.imag = z__2.imag - z__3.imag;
+        zy[i__2].real = z__1.real, zy[i__2].imag = z__1.imag;
         i__2 = i__;
-        zx[i__2].r = ztemp.r, zx[i__2].i = ztemp.i;
+        zx[i__2].real = ztemp.real, zx[i__2].imag = ztemp.imag;
         /* L30: */
     }
     return 0;

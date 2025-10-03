@@ -180,10 +180,10 @@ void aocl_lapack_zlacon(aocl_int64_t *n, dcomplex *v, dcomplex *x, doublereal *e
         {
             i__2 = i__;
             d__1 = 1. / (doublereal)(*n);
-            z__1.r = d__1;
-            z__1.i = 0.; // , expr subst
-            x[i__2].r = z__1.r;
-            x[i__2].i = z__1.i; // , expr subst
+            z__1.real = d__1;
+            z__1.imag = 0.; // , expr subst
+            x[i__2].real = z__1.real;
+            x[i__2].imag = z__1.imag; // , expr subst
             /* L10: */
         }
         *kase = 1;
@@ -211,8 +211,8 @@ void aocl_lapack_zlacon(aocl_int64_t *n, dcomplex *v, dcomplex *x, doublereal *e
 L20:
     if(*n == 1)
     {
-        v[1].r = x[1].r;
-        v[1].i = x[1].i; // , expr subst
+        v[1].real = x[1].real;
+        v[1].imag = x[1].imag; // , expr subst
         *est = z_abs(&v[1]);
         /* ... QUIT */
         goto L130;
@@ -226,18 +226,18 @@ L20:
         {
             i__2 = i__;
             i__3 = i__;
-            d__1 = x[i__3].r / absxi;
+            d__1 = x[i__3].real / absxi;
             d__2 = d_imag(&x[i__]) / absxi;
-            z__1.r = d__1;
-            z__1.i = d__2; // , expr subst
-            x[i__2].r = z__1.r;
-            x[i__2].i = z__1.i; // , expr subst
+            z__1.real = d__1;
+            z__1.imag = d__2; // , expr subst
+            x[i__2].real = z__1.real;
+            x[i__2].imag = z__1.imag; // , expr subst
         }
         else
         {
             i__2 = i__;
-            x[i__2].r = 1.;
-            x[i__2].i = 0.; // , expr subst
+            x[i__2].real = 1.;
+            x[i__2].imag = 0.; // , expr subst
         }
         /* L30: */
     }
@@ -256,13 +256,13 @@ L50:
     for(i__ = 1; i__ <= i__1; ++i__)
     {
         i__2 = i__;
-        x[i__2].r = 0.;
-        x[i__2].i = 0.; // , expr subst
+        x[i__2].real = 0.;
+        x[i__2].imag = 0.; // , expr subst
         /* L60: */
     }
     i__1 = j;
-    x[i__1].r = 1.;
-    x[i__1].i = 0.; // , expr subst
+    x[i__1].real = 1.;
+    x[i__1].imag = 0.; // , expr subst
     *kase = 1;
     jump = 3;
     AOCL_DTL_TRACE_LOG_EXIT
@@ -286,18 +286,18 @@ L70:
         {
             i__2 = i__;
             i__3 = i__;
-            d__1 = x[i__3].r / absxi;
+            d__1 = x[i__3].real / absxi;
             d__2 = d_imag(&x[i__]) / absxi;
-            z__1.r = d__1;
-            z__1.i = d__2; // , expr subst
-            x[i__2].r = z__1.r;
-            x[i__2].i = z__1.i; // , expr subst
+            z__1.real = d__1;
+            z__1.imag = d__2; // , expr subst
+            x[i__2].real = z__1.real;
+            x[i__2].imag = z__1.imag; // , expr subst
         }
         else
         {
             i__2 = i__;
-            x[i__2].r = 1.;
-            x[i__2].i = 0.; // , expr subst
+            x[i__2].real = 1.;
+            x[i__2].imag = 0.; // , expr subst
         }
         /* L80: */
     }
@@ -323,10 +323,10 @@ L100:
     {
         i__2 = i__;
         d__1 = altsgn * ((doublereal)(i__ - 1) / (doublereal)(*n - 1) + 1.);
-        z__1.r = d__1;
-        z__1.i = 0.; // , expr subst
-        x[i__2].r = z__1.r;
-        x[i__2].i = z__1.i; // , expr subst
+        z__1.real = d__1;
+        z__1.imag = 0.; // , expr subst
+        x[i__2].real = z__1.real;
+        x[i__2].imag = z__1.imag; // , expr subst
         altsgn = -altsgn;
         /* L110: */
     }

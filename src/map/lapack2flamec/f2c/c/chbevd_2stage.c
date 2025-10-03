@@ -4,8 +4,8 @@
  with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for
  libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static scomplex c_b1 = {{0.f}, {0.f}};
-static scomplex c_b2 = {{1.f}, {0.f}};
+static scomplex c_b1 = {0.f, 0.f};
+static scomplex c_b2 = {1.f, 0.f};
 static aocl_int64_t c__2 = 2;
 static aocl_int64_t c_n1 = -1;
 static aocl_int64_t c__3 = 3;
@@ -440,8 +440,8 @@ void aocl_lapack_chbevd_2stage(char *jobz, char *uplo, aocl_int64_t *n, aocl_int
     }
     if(*info == 0)
     {
-        work[1].r = (real)lwmin;
-        work[1].i = 0.f; // , expr subst
+        work[1].real = (real)lwmin;
+        work[1].imag = 0.f; // , expr subst
         rwork[1] = (real)lrwmin;
         iwork[1] = (aocl_int_t)(liwmin);
         if(*lwork < lwmin && !lquery)
@@ -478,12 +478,12 @@ void aocl_lapack_chbevd_2stage(char *jobz, char *uplo, aocl_int64_t *n, aocl_int
     if(*n == 1)
     {
         i__1 = ab_dim1 + 1;
-        w[1] = ab[i__1].r;
+        w[1] = ab[i__1].real;
         if(wantz)
         {
             i__1 = z_dim1 + 1;
-            z__[i__1].r = 1.f;
-            z__[i__1].i = 0.f; // , expr subst
+            z__[i__1].real = 1.f;
+            z__[i__1].imag = 0.f; // , expr subst
         }
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
@@ -557,8 +557,8 @@ void aocl_lapack_chbevd_2stage(char *jobz, char *uplo, aocl_int64_t *n, aocl_int
         r__1 = 1.f / sigma;
         aocl_blas_sscal(&imax, &r__1, &w[1], &c__1);
     }
-    work[1].r = (real)lwmin;
-    work[1].i = 0.f; // , expr subst
+    work[1].real = (real)lwmin;
+    work[1].imag = 0.f; // , expr subst
     rwork[1] = (real)lrwmin;
     iwork[1] = (aocl_int_t)(liwmin);
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);

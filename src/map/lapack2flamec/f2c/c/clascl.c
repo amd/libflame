@@ -362,10 +362,10 @@ L10:
             {
                 i__3 = i__ + j * a_dim1;
                 i__4 = i__ + j * a_dim1;
-                q__1.r = mul * a[i__4].r;
-                q__1.i = mul * a[i__4].i; // , expr subst
-                a[i__3].r = q__1.r;
-                a[i__3].i = q__1.i; // , expr subst
+                q__1.real = mul * a[i__4].real;
+                q__1.imag = mul * a[i__4].imag; // , expr subst
+                a[i__3].real = q__1.real;
+                a[i__3].imag = q__1.imag; // , expr subst
                 /* L20: */
             }
             /* L30: */
@@ -382,10 +382,10 @@ L10:
             {
                 i__3 = i__ + j * a_dim1;
                 i__4 = i__ + j * a_dim1;
-                q__1.r = mul * a[i__4].r;
-                q__1.i = mul * a[i__4].i; // , expr subst
-                a[i__3].r = q__1.r;
-                a[i__3].i = q__1.i; // , expr subst
+                q__1.real = mul * a[i__4].real;
+                q__1.imag = mul * a[i__4].imag; // , expr subst
+                a[i__3].real = q__1.real;
+                a[i__3].imag = q__1.imag; // , expr subst
                 /* L40: */
             }
             /* L50: */
@@ -402,10 +402,10 @@ L10:
             {
                 i__3 = i__ + j * a_dim1;
                 i__4 = i__ + j * a_dim1;
-                q__1.r = mul * a[i__4].r;
-                q__1.i = mul * a[i__4].i; // , expr subst
-                a[i__3].r = q__1.r;
-                a[i__3].i = q__1.i; // , expr subst
+                q__1.real = mul * a[i__4].real;
+                q__1.imag = mul * a[i__4].imag; // , expr subst
+                a[i__3].real = q__1.real;
+                a[i__3].imag = q__1.imag; // , expr subst
                 /* L60: */
             }
             /* L70: */
@@ -424,10 +424,10 @@ L10:
             {
                 i__3 = i__ + j * a_dim1;
                 i__4 = i__ + j * a_dim1;
-                q__1.r = mul * a[i__4].r;
-                q__1.i = mul * a[i__4].i; // , expr subst
-                a[i__3].r = q__1.r;
-                a[i__3].i = q__1.i; // , expr subst
+                q__1.real = mul * a[i__4].real;
+                q__1.imag = mul * a[i__4].imag; // , expr subst
+                a[i__3].real = q__1.real;
+                a[i__3].imag = q__1.imag; // , expr subst
                 /* L80: */
             }
             /* L90: */
@@ -449,10 +449,10 @@ L10:
             {
                 i__3 = i__ + j * a_dim1;
                 i__4 = i__ + j * a_dim1;
-                q__1.r = mul * a[i__4].r;
-                q__1.i = mul * a[i__4].i; // , expr subst
-                a[i__3].r = q__1.r;
-                a[i__3].i = q__1.i; // , expr subst
+                q__1.real = mul * a[i__4].real;
+                q__1.imag = mul * a[i__4].imag; // , expr subst
+                a[i__3].real = q__1.real;
+                a[i__3].imag = q__1.imag; // , expr subst
                 /* L100: */
             }
             /* L110: */
@@ -473,10 +473,10 @@ L10:
             {
                 i__2 = i__ + j * a_dim1;
                 i__4 = i__ + j * a_dim1;
-                q__1.r = mul * a[i__4].r;
-                q__1.i = mul * a[i__4].i; // , expr subst
-                a[i__2].r = q__1.r;
-                a[i__2].i = q__1.i; // , expr subst
+                q__1.real = mul * a[i__4].real;
+                q__1.imag = mul * a[i__4].imag; // , expr subst
+                a[i__2].real = q__1.real;
+                a[i__2].imag = q__1.imag; // , expr subst
                 /* L120: */
             }
             /* L130: */
@@ -502,10 +502,10 @@ L10:
             {
                 i__3 = i__ + j * a_dim1;
                 i__4 = i__ + j * a_dim1;
-                q__1.r = mul * a[i__4].r;
-                q__1.i = mul * a[i__4].i; // , expr subst
-                a[i__3].r = q__1.r;
-                a[i__3].i = q__1.i; // , expr subst
+                q__1.real = mul * a[i__4].real;
+                q__1.imag = mul * a[i__4].imag; // , expr subst
+                a[i__3].real = q__1.real;
+                a[i__3].imag = q__1.imag; // , expr subst
                 /* L140: */
             }
             /* L150: */

@@ -173,15 +173,15 @@ void aocl_lapack_cpttrf(aocl_int64_t *n, real *d__, scomplex *e, aocl_int64_t *i
             goto L20;
         }
         i__2 = i__;
-        eir = e[i__2].r;
+        eir = e[i__2].real;
         eii = r_imag(&e[i__]);
         f = eir / d__[i__];
         g = eii / d__[i__];
         i__2 = i__;
-        q__1.r = f;
-        q__1.i = g; // , expr subst
-        e[i__2].r = q__1.r;
-        e[i__2].i = q__1.i; // , expr subst
+        q__1.real = f;
+        q__1.imag = g; // , expr subst
+        e[i__2].real = q__1.real;
+        e[i__2].imag = q__1.imag; // , expr subst
         d__[i__ + 1] = d__[i__ + 1] - f * eir - g * eii;
         /* L10: */
     }
@@ -197,15 +197,15 @@ void aocl_lapack_cpttrf(aocl_int64_t *n, real *d__, scomplex *e, aocl_int64_t *i
         }
         /* Solve for e(i) and d(i+1). */
         i__2 = i__;
-        eir = e[i__2].r;
+        eir = e[i__2].real;
         eii = r_imag(&e[i__]);
         f = eir / d__[i__];
         g = eii / d__[i__];
         i__2 = i__;
-        q__1.r = f;
-        q__1.i = g; // , expr subst
-        e[i__2].r = q__1.r;
-        e[i__2].i = q__1.i; // , expr subst
+        q__1.real = f;
+        q__1.imag = g; // , expr subst
+        e[i__2].real = q__1.real;
+        e[i__2].imag = q__1.imag; // , expr subst
         d__[i__ + 1] = d__[i__ + 1] - f * eir - g * eii;
         if(d__[i__ + 1] <= 0.f)
         {
@@ -214,15 +214,15 @@ void aocl_lapack_cpttrf(aocl_int64_t *n, real *d__, scomplex *e, aocl_int64_t *i
         }
         /* Solve for e(i+1) and d(i+2). */
         i__2 = i__ + 1;
-        eir = e[i__2].r;
+        eir = e[i__2].real;
         eii = r_imag(&e[i__ + 1]);
         f = eir / d__[i__ + 1];
         g = eii / d__[i__ + 1];
         i__2 = i__ + 1;
-        q__1.r = f;
-        q__1.i = g; // , expr subst
-        e[i__2].r = q__1.r;
-        e[i__2].i = q__1.i; // , expr subst
+        q__1.real = f;
+        q__1.imag = g; // , expr subst
+        e[i__2].real = q__1.real;
+        e[i__2].imag = q__1.imag; // , expr subst
         d__[i__ + 2] = d__[i__ + 2] - f * eir - g * eii;
         if(d__[i__ + 2] <= 0.f)
         {
@@ -231,15 +231,15 @@ void aocl_lapack_cpttrf(aocl_int64_t *n, real *d__, scomplex *e, aocl_int64_t *i
         }
         /* Solve for e(i+2) and d(i+3). */
         i__2 = i__ + 2;
-        eir = e[i__2].r;
+        eir = e[i__2].real;
         eii = r_imag(&e[i__ + 2]);
         f = eir / d__[i__ + 2];
         g = eii / d__[i__ + 2];
         i__2 = i__ + 2;
-        q__1.r = f;
-        q__1.i = g; // , expr subst
-        e[i__2].r = q__1.r;
-        e[i__2].i = q__1.i; // , expr subst
+        q__1.real = f;
+        q__1.imag = g; // , expr subst
+        e[i__2].real = q__1.real;
+        e[i__2].imag = q__1.imag; // , expr subst
         d__[i__ + 3] = d__[i__ + 3] - f * eir - g * eii;
         if(d__[i__ + 3] <= 0.f)
         {
@@ -248,15 +248,15 @@ void aocl_lapack_cpttrf(aocl_int64_t *n, real *d__, scomplex *e, aocl_int64_t *i
         }
         /* Solve for e(i+3) and d(i+4). */
         i__2 = i__ + 3;
-        eir = e[i__2].r;
+        eir = e[i__2].real;
         eii = r_imag(&e[i__ + 3]);
         f = eir / d__[i__ + 3];
         g = eii / d__[i__ + 3];
         i__2 = i__ + 3;
-        q__1.r = f;
-        q__1.i = g; // , expr subst
-        e[i__2].r = q__1.r;
-        e[i__2].i = q__1.i; // , expr subst
+        q__1.real = f;
+        q__1.imag = g; // , expr subst
+        e[i__2].real = q__1.real;
+        e[i__2].imag = q__1.imag; // , expr subst
         d__[i__ + 4] = d__[i__ + 4] - f * eir - g * eii;
         /* L110: */
     }

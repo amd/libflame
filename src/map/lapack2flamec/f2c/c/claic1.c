@@ -200,8 +200,8 @@ void aocl_lapack_claic1(aocl_int64_t *job, aocl_int64_t *j, scomplex *x, real *s
     /* Function Body */
     eps = slamch_("Epsilon");
     aocl_lapack_cdotc_f2c(&q__1, j, &x[1], &c__1, &w[1], &c__1);
-    alpha.r = q__1.r;
-    alpha.i = q__1.i; // , expr subst
+    alpha.real = q__1.real;
+    alpha.imag = q__1.imag; // , expr subst
     absalp = c_abs(&alpha);
     absgam = c_abs(gamma);
     absest = f2c_abs(*sest);
@@ -214,34 +214,34 @@ void aocl_lapack_claic1(aocl_int64_t *job, aocl_int64_t *j, scomplex *x, real *s
             s1 = fla_max(absgam, absalp);
             if(s1 == 0.f)
             {
-                s->r = 0.f, s->i = 0.f;
-                c__->r = 1.f, c__->i = 0.f;
+                s->real = 0.f, s->imag = 0.f;
+                c__->real = 1.f, c__->imag = 0.f;
                 *sestpr = 0.f;
             }
             else
             {
-                q__1.r = alpha.r / s1;
-                q__1.i = alpha.i / s1; // , expr subst
-                s->r = q__1.r, s->i = q__1.i;
-                q__1.r = gamma->r / s1;
-                q__1.i = gamma->i / s1; // , expr subst
-                c__->r = q__1.r, c__->i = q__1.i;
+                q__1.real = alpha.real / s1;
+                q__1.imag = alpha.imag / s1; // , expr subst
+                s->real = q__1.real, s->imag = q__1.imag;
+                q__1.real = gamma->real / s1;
+                q__1.imag = gamma->imag / s1; // , expr subst
+                c__->real = q__1.real, c__->imag = q__1.imag;
                 r_cnjg(&q__4, s);
-                q__3.r = s->r * q__4.r - s->i * q__4.i;
-                q__3.i = s->r * q__4.i + s->i * q__4.r; // , expr subst
+                q__3.real = s->real * q__4.real - s->imag * q__4.imag;
+                q__3.imag = s->real * q__4.imag + s->imag * q__4.real; // , expr subst
                 r_cnjg(&q__6, c__);
-                q__5.r = c__->r * q__6.r - c__->i * q__6.i;
-                q__5.i = c__->r * q__6.i + c__->i * q__6.r; // , expr subst
-                q__2.r = q__3.r + q__5.r;
-                q__2.i = q__3.i + q__5.i; // , expr subst
+                q__5.real = c__->real * q__6.real - c__->imag * q__6.imag;
+                q__5.imag = c__->real * q__6.imag + c__->imag * q__6.real; // , expr subst
+                q__2.real = q__3.real + q__5.real;
+                q__2.imag = q__3.imag + q__5.imag; // , expr subst
                 c_sqrt(&q__1, &q__2);
-                tmp = q__1.r;
-                q__1.r = s->r / tmp;
-                q__1.i = s->i / tmp; // , expr subst
-                s->r = q__1.r, s->i = q__1.i;
-                q__1.r = c__->r / tmp;
-                q__1.i = c__->i / tmp; // , expr subst
-                c__->r = q__1.r, c__->i = q__1.i;
+                tmp = q__1.real;
+                q__1.real = s->real / tmp;
+                q__1.imag = s->imag / tmp; // , expr subst
+                s->real = q__1.real, s->imag = q__1.imag;
+                q__1.real = c__->real / tmp;
+                q__1.imag = c__->imag / tmp; // , expr subst
+                c__->real = q__1.real, c__->imag = q__1.imag;
                 *sestpr = s1 * tmp;
             }
             AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
@@ -249,8 +249,8 @@ void aocl_lapack_claic1(aocl_int64_t *job, aocl_int64_t *j, scomplex *x, real *s
         }
         else if(absgam <= eps * absest)
         {
-            s->r = 1.f, s->i = 0.f;
-            c__->r = 0.f, c__->i = 0.f;
+            s->real = 1.f, s->imag = 0.f;
+            c__->real = 0.f, c__->imag = 0.f;
             tmp = fla_max(absest, absalp);
             s1 = absest / tmp;
             s2 = absalp / tmp;
@@ -264,14 +264,14 @@ void aocl_lapack_claic1(aocl_int64_t *job, aocl_int64_t *j, scomplex *x, real *s
             s2 = absest;
             if(s1 <= s2)
             {
-                s->r = 1.f, s->i = 0.f;
-                c__->r = 0.f, c__->i = 0.f;
+                s->real = 1.f, s->imag = 0.f;
+                c__->real = 0.f, c__->imag = 0.f;
                 *sestpr = s2;
             }
             else
             {
-                s->r = 0.f, s->i = 0.f;
-                c__->r = 1.f, c__->i = 0.f;
+                s->real = 0.f, s->imag = 0.f;
+                c__->real = 1.f, c__->imag = 0.f;
                 *sestpr = s1;
             }
             AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
@@ -286,32 +286,32 @@ void aocl_lapack_claic1(aocl_int64_t *job, aocl_int64_t *j, scomplex *x, real *s
                 tmp = s1 / s2;
                 scl = sqrt(tmp * tmp + 1.f);
                 *sestpr = s2 * scl;
-                q__2.r = alpha.r / s2;
-                q__2.i = alpha.i / s2; // , expr subst
-                q__1.r = q__2.r / scl;
-                q__1.i = q__2.i / scl; // , expr subst
-                s->r = q__1.r, s->i = q__1.i;
-                q__2.r = gamma->r / s2;
-                q__2.i = gamma->i / s2; // , expr subst
-                q__1.r = q__2.r / scl;
-                q__1.i = q__2.i / scl; // , expr subst
-                c__->r = q__1.r, c__->i = q__1.i;
+                q__2.real = alpha.real / s2;
+                q__2.imag = alpha.imag / s2; // , expr subst
+                q__1.real = q__2.real / scl;
+                q__1.imag = q__2.imag / scl; // , expr subst
+                s->real = q__1.real, s->imag = q__1.imag;
+                q__2.real = gamma->real / s2;
+                q__2.imag = gamma->imag / s2; // , expr subst
+                q__1.real = q__2.real / scl;
+                q__1.imag = q__2.imag / scl; // , expr subst
+                c__->real = q__1.real, c__->imag = q__1.imag;
             }
             else
             {
                 tmp = s2 / s1;
                 scl = sqrt(tmp * tmp + 1.f);
                 *sestpr = s1 * scl;
-                q__2.r = alpha.r / s1;
-                q__2.i = alpha.i / s1; // , expr subst
-                q__1.r = q__2.r / scl;
-                q__1.i = q__2.i / scl; // , expr subst
-                s->r = q__1.r, s->i = q__1.i;
-                q__2.r = gamma->r / s1;
-                q__2.i = gamma->i / s1; // , expr subst
-                q__1.r = q__2.r / scl;
-                q__1.i = q__2.i / scl; // , expr subst
-                c__->r = q__1.r, c__->i = q__1.i;
+                q__2.real = alpha.real / s1;
+                q__2.imag = alpha.imag / s1; // , expr subst
+                q__1.real = q__2.real / scl;
+                q__1.imag = q__2.imag / scl; // , expr subst
+                s->real = q__1.real, s->imag = q__1.imag;
+                q__2.real = gamma->real / s1;
+                q__2.imag = gamma->imag / s1; // , expr subst
+                q__1.real = q__2.real / scl;
+                q__1.imag = q__2.imag / scl; // , expr subst
+                c__->real = q__1.real, c__->imag = q__1.imag;
             }
             AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
             return;
@@ -323,61 +323,61 @@ void aocl_lapack_claic1(aocl_int64_t *job, aocl_int64_t *j, scomplex *x, real *s
             zeta2 = absgam / absest;
             b = (1.f - zeta1 * zeta1 - zeta2 * zeta2) * .5f;
             r__1 = zeta1 * zeta1;
-            c__->r = r__1, c__->i = 0.f;
+            c__->real = r__1, c__->imag = 0.f;
             if(b > 0.f)
             {
                 r__1 = b * b;
-                q__4.r = r__1 + c__->r;
-                q__4.i = c__->i; // , expr subst
+                q__4.real = r__1 + c__->real;
+                q__4.imag = c__->imag; // , expr subst
                 c_sqrt(&q__3, &q__4);
-                q__2.r = b + q__3.r;
-                q__2.i = q__3.i; // , expr subst
+                q__2.real = b + q__3.real;
+                q__2.imag = q__3.imag; // , expr subst
                 c_div(&q__1, c__, &q__2);
-                t = q__1.r;
+                t = q__1.real;
             }
             else
             {
                 r__1 = b * b;
-                q__3.r = r__1 + c__->r;
-                q__3.i = c__->i; // , expr subst
+                q__3.real = r__1 + c__->real;
+                q__3.imag = c__->imag; // , expr subst
                 c_sqrt(&q__2, &q__3);
-                q__1.r = q__2.r - b;
-                q__1.i = q__2.i; // , expr subst
-                t = q__1.r;
+                q__1.real = q__2.real - b;
+                q__1.imag = q__2.imag; // , expr subst
+                t = q__1.real;
             }
-            q__3.r = alpha.r / absest;
-            q__3.i = alpha.i / absest; // , expr subst
-            q__2.r = -q__3.r;
-            q__2.i = -q__3.i; // , expr subst
-            q__1.r = q__2.r / t;
-            q__1.i = q__2.i / t; // , expr subst
-            sine.r = q__1.r;
-            sine.i = q__1.i; // , expr subst
-            q__3.r = gamma->r / absest;
-            q__3.i = gamma->i / absest; // , expr subst
-            q__2.r = -q__3.r;
-            q__2.i = -q__3.i; // , expr subst
+            q__3.real = alpha.real / absest;
+            q__3.imag = alpha.imag / absest; // , expr subst
+            q__2.real = -q__3.real;
+            q__2.imag = -q__3.imag; // , expr subst
+            q__1.real = q__2.real / t;
+            q__1.imag = q__2.imag / t; // , expr subst
+            sine.real = q__1.real;
+            sine.imag = q__1.imag; // , expr subst
+            q__3.real = gamma->real / absest;
+            q__3.imag = gamma->imag / absest; // , expr subst
+            q__2.real = -q__3.real;
+            q__2.imag = -q__3.imag; // , expr subst
             r__1 = t + 1.f;
-            q__1.r = q__2.r / r__1;
-            q__1.i = q__2.i / r__1; // , expr subst
-            cosine.r = q__1.r;
-            cosine.i = q__1.i; // , expr subst
+            q__1.real = q__2.real / r__1;
+            q__1.imag = q__2.imag / r__1; // , expr subst
+            cosine.real = q__1.real;
+            cosine.imag = q__1.imag; // , expr subst
             r_cnjg(&q__4, &sine);
-            q__3.r = sine.r * q__4.r - sine.i * q__4.i;
-            q__3.i = sine.r * q__4.i + sine.i * q__4.r; // , expr subst
+            q__3.real = sine.real * q__4.real - sine.imag * q__4.imag;
+            q__3.imag = sine.real * q__4.imag + sine.imag * q__4.real; // , expr subst
             r_cnjg(&q__6, &cosine);
-            q__5.r = cosine.r * q__6.r - cosine.i * q__6.i;
-            q__5.i = cosine.r * q__6.i + cosine.i * q__6.r; // , expr subst
-            q__2.r = q__3.r + q__5.r;
-            q__2.i = q__3.i + q__5.i; // , expr subst
+            q__5.real = cosine.real * q__6.real - cosine.imag * q__6.imag;
+            q__5.imag = cosine.real * q__6.imag + cosine.imag * q__6.real; // , expr subst
+            q__2.real = q__3.real + q__5.real;
+            q__2.imag = q__3.imag + q__5.imag; // , expr subst
             c_sqrt(&q__1, &q__2);
-            tmp = q__1.r;
-            q__1.r = sine.r / tmp;
-            q__1.i = sine.i / tmp; // , expr subst
-            s->r = q__1.r, s->i = q__1.i;
-            q__1.r = cosine.r / tmp;
-            q__1.i = cosine.i / tmp; // , expr subst
-            c__->r = q__1.r, c__->i = q__1.i;
+            tmp = q__1.real;
+            q__1.real = sine.real / tmp;
+            q__1.imag = sine.imag / tmp; // , expr subst
+            s->real = q__1.real, s->imag = q__1.imag;
+            q__1.real = cosine.real / tmp;
+            q__1.imag = cosine.imag / tmp; // , expr subst
+            c__->real = q__1.real, c__->imag = q__1.imag;
             *sestpr = sqrt(t + 1.f) * absest;
             AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
             return;
@@ -392,55 +392,55 @@ void aocl_lapack_claic1(aocl_int64_t *job, aocl_int64_t *j, scomplex *x, real *s
             *sestpr = 0.f;
             if(fla_max(absgam, absalp) == 0.f)
             {
-                sine.r = 1.f;
-                sine.i = 0.f; // , expr subst
-                cosine.r = 0.f;
-                cosine.i = 0.f; // , expr subst
+                sine.real = 1.f;
+                sine.imag = 0.f; // , expr subst
+                cosine.real = 0.f;
+                cosine.imag = 0.f; // , expr subst
             }
             else
             {
                 r_cnjg(&q__2, gamma);
-                q__1.r = -q__2.r;
-                q__1.i = -q__2.i; // , expr subst
-                sine.r = q__1.r;
-                sine.i = q__1.i; // , expr subst
+                q__1.real = -q__2.real;
+                q__1.imag = -q__2.imag; // , expr subst
+                sine.real = q__1.real;
+                sine.imag = q__1.imag; // , expr subst
                 r_cnjg(&q__1, &alpha);
-                cosine.r = q__1.r;
-                cosine.i = q__1.i; // , expr subst
+                cosine.real = q__1.real;
+                cosine.imag = q__1.imag; // , expr subst
             }
             /* Computing MAX */
             r__1 = c_abs(&sine);
             r__2 = c_abs(&cosine); // , expr subst
             s1 = fla_max(r__1, r__2);
-            q__1.r = sine.r / s1;
-            q__1.i = sine.i / s1; // , expr subst
-            s->r = q__1.r, s->i = q__1.i;
-            q__1.r = cosine.r / s1;
-            q__1.i = cosine.i / s1; // , expr subst
-            c__->r = q__1.r, c__->i = q__1.i;
+            q__1.real = sine.real / s1;
+            q__1.imag = sine.imag / s1; // , expr subst
+            s->real = q__1.real, s->imag = q__1.imag;
+            q__1.real = cosine.real / s1;
+            q__1.imag = cosine.imag / s1; // , expr subst
+            c__->real = q__1.real, c__->imag = q__1.imag;
             r_cnjg(&q__4, s);
-            q__3.r = s->r * q__4.r - s->i * q__4.i;
-            q__3.i = s->r * q__4.i + s->i * q__4.r; // , expr subst
+            q__3.real = s->real * q__4.real - s->imag * q__4.imag;
+            q__3.imag = s->real * q__4.imag + s->imag * q__4.real; // , expr subst
             r_cnjg(&q__6, c__);
-            q__5.r = c__->r * q__6.r - c__->i * q__6.i;
-            q__5.i = c__->r * q__6.i + c__->i * q__6.r; // , expr subst
-            q__2.r = q__3.r + q__5.r;
-            q__2.i = q__3.i + q__5.i; // , expr subst
+            q__5.real = c__->real * q__6.real - c__->imag * q__6.imag;
+            q__5.imag = c__->real * q__6.imag + c__->imag * q__6.real; // , expr subst
+            q__2.real = q__3.real + q__5.real;
+            q__2.imag = q__3.imag + q__5.imag; // , expr subst
             c_sqrt(&q__1, &q__2);
-            tmp = q__1.r;
-            q__1.r = s->r / tmp;
-            q__1.i = s->i / tmp; // , expr subst
-            s->r = q__1.r, s->i = q__1.i;
-            q__1.r = c__->r / tmp;
-            q__1.i = c__->i / tmp; // , expr subst
-            c__->r = q__1.r, c__->i = q__1.i;
+            tmp = q__1.real;
+            q__1.real = s->real / tmp;
+            q__1.imag = s->imag / tmp; // , expr subst
+            s->real = q__1.real, s->imag = q__1.imag;
+            q__1.real = c__->real / tmp;
+            q__1.imag = c__->imag / tmp; // , expr subst
+            c__->real = q__1.real, c__->imag = q__1.imag;
             AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
             return;
         }
         else if(absgam <= eps * absest)
         {
-            s->r = 0.f, s->i = 0.f;
-            c__->r = 1.f, c__->i = 0.f;
+            s->real = 0.f, s->imag = 0.f;
+            c__->real = 1.f, c__->imag = 0.f;
             *sestpr = absgam;
             AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
             return;
@@ -451,14 +451,14 @@ void aocl_lapack_claic1(aocl_int64_t *job, aocl_int64_t *j, scomplex *x, real *s
             s2 = absest;
             if(s1 <= s2)
             {
-                s->r = 0.f, s->i = 0.f;
-                c__->r = 1.f, c__->i = 0.f;
+                s->real = 0.f, s->imag = 0.f;
+                c__->real = 1.f, c__->imag = 0.f;
                 *sestpr = s1;
             }
             else
             {
-                s->r = 1.f, s->i = 0.f;
-                c__->r = 0.f, c__->i = 0.f;
+                s->real = 1.f, s->imag = 0.f;
+                c__->real = 0.f, c__->imag = 0.f;
                 *sestpr = s2;
             }
             AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
@@ -474,19 +474,19 @@ void aocl_lapack_claic1(aocl_int64_t *job, aocl_int64_t *j, scomplex *x, real *s
                 scl = sqrt(tmp * tmp + 1.f);
                 *sestpr = absest * (tmp / scl);
                 r_cnjg(&q__4, gamma);
-                q__3.r = q__4.r / s2;
-                q__3.i = q__4.i / s2; // , expr subst
-                q__2.r = -q__3.r;
-                q__2.i = -q__3.i; // , expr subst
-                q__1.r = q__2.r / scl;
-                q__1.i = q__2.i / scl; // , expr subst
-                s->r = q__1.r, s->i = q__1.i;
+                q__3.real = q__4.real / s2;
+                q__3.imag = q__4.imag / s2; // , expr subst
+                q__2.real = -q__3.real;
+                q__2.imag = -q__3.imag; // , expr subst
+                q__1.real = q__2.real / scl;
+                q__1.imag = q__2.imag / scl; // , expr subst
+                s->real = q__1.real, s->imag = q__1.imag;
                 r_cnjg(&q__3, &alpha);
-                q__2.r = q__3.r / s2;
-                q__2.i = q__3.i / s2; // , expr subst
-                q__1.r = q__2.r / scl;
-                q__1.i = q__2.i / scl; // , expr subst
-                c__->r = q__1.r, c__->i = q__1.i;
+                q__2.real = q__3.real / s2;
+                q__2.imag = q__3.imag / s2; // , expr subst
+                q__1.real = q__2.real / scl;
+                q__1.imag = q__2.imag / scl; // , expr subst
+                c__->real = q__1.real, c__->imag = q__1.imag;
             }
             else
             {
@@ -494,19 +494,19 @@ void aocl_lapack_claic1(aocl_int64_t *job, aocl_int64_t *j, scomplex *x, real *s
                 scl = sqrt(tmp * tmp + 1.f);
                 *sestpr = absest / scl;
                 r_cnjg(&q__4, gamma);
-                q__3.r = q__4.r / s1;
-                q__3.i = q__4.i / s1; // , expr subst
-                q__2.r = -q__3.r;
-                q__2.i = -q__3.i; // , expr subst
-                q__1.r = q__2.r / scl;
-                q__1.i = q__2.i / scl; // , expr subst
-                s->r = q__1.r, s->i = q__1.i;
+                q__3.real = q__4.real / s1;
+                q__3.imag = q__4.imag / s1; // , expr subst
+                q__2.real = -q__3.real;
+                q__2.imag = -q__3.imag; // , expr subst
+                q__1.real = q__2.real / scl;
+                q__1.imag = q__2.imag / scl; // , expr subst
+                s->real = q__1.real, s->imag = q__1.imag;
                 r_cnjg(&q__3, &alpha);
-                q__2.r = q__3.r / s1;
-                q__2.i = q__3.i / s1; // , expr subst
-                q__1.r = q__2.r / scl;
-                q__1.i = q__2.i / scl; // , expr subst
-                c__->r = q__1.r, c__->i = q__1.i;
+                q__2.real = q__3.real / s1;
+                q__2.imag = q__3.imag / s1; // , expr subst
+                q__1.real = q__2.real / scl;
+                q__1.imag = q__2.imag / scl; // , expr subst
+                c__->real = q__1.real, c__->imag = q__1.imag;
             }
             AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
             return;
@@ -527,29 +527,29 @@ void aocl_lapack_claic1(aocl_int64_t *job, aocl_int64_t *j, scomplex *x, real *s
                 /* root is close to zero, compute directly */
                 b = (zeta1 * zeta1 + zeta2 * zeta2 + 1.f) * .5f;
                 r__1 = zeta2 * zeta2;
-                c__->r = r__1, c__->i = 0.f;
+                c__->real = r__1, c__->imag = 0.f;
                 r__2 = b * b;
-                q__2.r = r__2 - c__->r;
-                q__2.i = -c__->i; // , expr subst
+                q__2.real = r__2 - c__->real;
+                q__2.imag = -c__->imag; // , expr subst
                 r__1 = b + sqrt(c_abs(&q__2));
-                q__1.r = c__->r / r__1;
-                q__1.i = c__->i / r__1; // , expr subst
-                t = q__1.r;
-                q__2.r = alpha.r / absest;
-                q__2.i = alpha.i / absest; // , expr subst
+                q__1.real = c__->real / r__1;
+                q__1.imag = c__->imag / r__1; // , expr subst
+                t = q__1.real;
+                q__2.real = alpha.real / absest;
+                q__2.imag = alpha.imag / absest; // , expr subst
                 r__1 = 1.f - t;
-                q__1.r = q__2.r / r__1;
-                q__1.i = q__2.i / r__1; // , expr subst
-                sine.r = q__1.r;
-                sine.i = q__1.i; // , expr subst
-                q__3.r = gamma->r / absest;
-                q__3.i = gamma->i / absest; // , expr subst
-                q__2.r = -q__3.r;
-                q__2.i = -q__3.i; // , expr subst
-                q__1.r = q__2.r / t;
-                q__1.i = q__2.i / t; // , expr subst
-                cosine.r = q__1.r;
-                cosine.i = q__1.i; // , expr subst
+                q__1.real = q__2.real / r__1;
+                q__1.imag = q__2.imag / r__1; // , expr subst
+                sine.real = q__1.real;
+                sine.imag = q__1.imag; // , expr subst
+                q__3.real = gamma->real / absest;
+                q__3.imag = gamma->imag / absest; // , expr subst
+                q__2.real = -q__3.real;
+                q__2.imag = -q__3.imag; // , expr subst
+                q__1.real = q__2.real / t;
+                q__1.imag = q__2.imag / t; // , expr subst
+                cosine.real = q__1.real;
+                cosine.imag = q__1.imag; // , expr subst
                 *sestpr = sqrt(t + eps * 4.f * eps * norma) * absest;
             }
             else
@@ -557,65 +557,65 @@ void aocl_lapack_claic1(aocl_int64_t *job, aocl_int64_t *j, scomplex *x, real *s
                 /* root is closer to ONE, shift by that amount */
                 b = (zeta2 * zeta2 + zeta1 * zeta1 - 1.f) * .5f;
                 r__1 = zeta1 * zeta1;
-                c__->r = r__1, c__->i = 0.f;
+                c__->real = r__1, c__->imag = 0.f;
                 if(b >= 0.f)
                 {
-                    q__2.r = -c__->r;
-                    q__2.i = -c__->i; // , expr subst
+                    q__2.real = -c__->real;
+                    q__2.imag = -c__->imag; // , expr subst
                     r__1 = b * b;
-                    q__5.r = r__1 + c__->r;
-                    q__5.i = c__->i; // , expr subst
+                    q__5.real = r__1 + c__->real;
+                    q__5.imag = c__->imag; // , expr subst
                     c_sqrt(&q__4, &q__5);
-                    q__3.r = b + q__4.r;
-                    q__3.i = q__4.i; // , expr subst
+                    q__3.real = b + q__4.real;
+                    q__3.imag = q__4.imag; // , expr subst
                     c_div(&q__1, &q__2, &q__3);
-                    t = q__1.r;
+                    t = q__1.real;
                 }
                 else
                 {
                     r__1 = b * b;
-                    q__3.r = r__1 + c__->r;
-                    q__3.i = c__->i; // , expr subst
+                    q__3.real = r__1 + c__->real;
+                    q__3.imag = c__->imag; // , expr subst
                     c_sqrt(&q__2, &q__3);
-                    q__1.r = b - q__2.r;
-                    q__1.i = -q__2.i; // , expr subst
-                    t = q__1.r;
+                    q__1.real = b - q__2.real;
+                    q__1.imag = -q__2.imag; // , expr subst
+                    t = q__1.real;
                 }
-                q__3.r = alpha.r / absest;
-                q__3.i = alpha.i / absest; // , expr subst
-                q__2.r = -q__3.r;
-                q__2.i = -q__3.i; // , expr subst
-                q__1.r = q__2.r / t;
-                q__1.i = q__2.i / t; // , expr subst
-                sine.r = q__1.r;
-                sine.i = q__1.i; // , expr subst
-                q__3.r = gamma->r / absest;
-                q__3.i = gamma->i / absest; // , expr subst
-                q__2.r = -q__3.r;
-                q__2.i = -q__3.i; // , expr subst
+                q__3.real = alpha.real / absest;
+                q__3.imag = alpha.imag / absest; // , expr subst
+                q__2.real = -q__3.real;
+                q__2.imag = -q__3.imag; // , expr subst
+                q__1.real = q__2.real / t;
+                q__1.imag = q__2.imag / t; // , expr subst
+                sine.real = q__1.real;
+                sine.imag = q__1.imag; // , expr subst
+                q__3.real = gamma->real / absest;
+                q__3.imag = gamma->imag / absest; // , expr subst
+                q__2.real = -q__3.real;
+                q__2.imag = -q__3.imag; // , expr subst
                 r__1 = t + 1.f;
-                q__1.r = q__2.r / r__1;
-                q__1.i = q__2.i / r__1; // , expr subst
-                cosine.r = q__1.r;
-                cosine.i = q__1.i; // , expr subst
+                q__1.real = q__2.real / r__1;
+                q__1.imag = q__2.imag / r__1; // , expr subst
+                cosine.real = q__1.real;
+                cosine.imag = q__1.imag; // , expr subst
                 *sestpr = sqrt(t + 1.f + eps * 4.f * eps * norma) * absest;
             }
             r_cnjg(&q__4, &sine);
-            q__3.r = sine.r * q__4.r - sine.i * q__4.i;
-            q__3.i = sine.r * q__4.i + sine.i * q__4.r; // , expr subst
+            q__3.real = sine.real * q__4.real - sine.imag * q__4.imag;
+            q__3.imag = sine.real * q__4.imag + sine.imag * q__4.real; // , expr subst
             r_cnjg(&q__6, &cosine);
-            q__5.r = cosine.r * q__6.r - cosine.i * q__6.i;
-            q__5.i = cosine.r * q__6.i + cosine.i * q__6.r; // , expr subst
-            q__2.r = q__3.r + q__5.r;
-            q__2.i = q__3.i + q__5.i; // , expr subst
+            q__5.real = cosine.real * q__6.real - cosine.imag * q__6.imag;
+            q__5.imag = cosine.real * q__6.imag + cosine.imag * q__6.real; // , expr subst
+            q__2.real = q__3.real + q__5.real;
+            q__2.imag = q__3.imag + q__5.imag; // , expr subst
             c_sqrt(&q__1, &q__2);
-            tmp = q__1.r;
-            q__1.r = sine.r / tmp;
-            q__1.i = sine.i / tmp; // , expr subst
-            s->r = q__1.r, s->i = q__1.i;
-            q__1.r = cosine.r / tmp;
-            q__1.i = cosine.i / tmp; // , expr subst
-            c__->r = q__1.r, c__->i = q__1.i;
+            tmp = q__1.real;
+            q__1.real = sine.real / tmp;
+            q__1.imag = sine.imag / tmp; // , expr subst
+            s->real = q__1.real, s->imag = q__1.imag;
+            q__1.real = cosine.real / tmp;
+            q__1.imag = cosine.imag / tmp; // , expr subst
+            c__->real = q__1.real, c__->imag = q__1.imag;
             AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
             return;
         }

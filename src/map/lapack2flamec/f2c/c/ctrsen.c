@@ -423,8 +423,8 @@ void aocl_lapack_ctrsen(char *job, char *compq, logical *select, aocl_int64_t *n
     if(*info == 0)
     {
         r__1 = aocl_lapack_sroundup_lwork(&lwmin);
-        work[1].r = r__1;
-        work[1].i = 0.f; // , expr subst
+        work[1].real = r__1;
+        work[1].imag = 0.f; // , expr subst
     }
     if(*info != 0)
     {
@@ -519,13 +519,13 @@ L40: /* Copy reordered eigenvalues to W. */
     {
         i__2 = k;
         i__3 = k + k * t_dim1;
-        w[i__2].r = t[i__3].r;
-        w[i__2].i = t[i__3].i; // , expr subst
+        w[i__2].real = t[i__3].real;
+        w[i__2].imag = t[i__3].imag; // , expr subst
         /* L50: */
     }
     r__1 = aocl_lapack_sroundup_lwork(&lwmin);
-    work[1].r = r__1;
-    work[1].i = 0.f; // , expr subst
+    work[1].real = r__1;
+    work[1].imag = 0.f; // , expr subst
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
     return;
     /* End of CTRSEN */

@@ -33,8 +33,8 @@ int cscal_(integer *n, scomplex *ca, scomplex *cx, integer * incx)
     {
         i__3 = i__;
         i__4 = i__;
-        q__1.r = ca->r * cx[i__4].r - ca->i * cx[i__4].i, q__1.i = ca->r * cx[ i__4].i + ca->i * cx[i__4].r;
-        cx[i__3].r = q__1.r, cx[i__3].i = q__1.i;
+        q__1.real = ca->real * cx[i__4].real - ca->imag * cx[i__4].imag, q__1.imag = ca->real * cx[ i__4].imag + ca->imag * cx[i__4].real;
+        cx[i__3].real = q__1.real, cx[i__3].imag = q__1.imag;
         /* L10: */
     }
     return 0;
@@ -47,8 +47,8 @@ L20:
     {
         i__1 = i__;
         i__3 = i__;
-        q__1.r = ca->r * cx[i__3].r - ca->i * cx[i__3].i, q__1.i = ca->r * cx[ i__3].i + ca->i * cx[i__3].r;
-        cx[i__1].r = q__1.r, cx[i__1].i = q__1.i;
+        q__1.real = ca->real * cx[i__3].real - ca->imag * cx[i__3].imag, q__1.imag = ca->real * cx[ i__3].imag + ca->imag * cx[i__3].real;
+        cx[i__1].real = q__1.real, cx[i__1].imag = q__1.imag;
         /* L30: */
     }
     return 0;

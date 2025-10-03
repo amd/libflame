@@ -208,8 +208,8 @@ void aocl_lapack_zgttrf(aocl_int64_t *n, dcomplex *dl, dcomplex *d__, dcomplex *
     for(i__ = 1; i__ <= i__1; ++i__)
     {
         i__2 = i__;
-        du2[i__2].r = 0.;
-        du2[i__2].i = 0.; // , expr subst
+        du2[i__2].real = 0.;
+        du2[i__2].imag = 0.; // , expr subst
         /* L20: */
     }
     i__1 = *n - 2;
@@ -217,71 +217,71 @@ void aocl_lapack_zgttrf(aocl_int64_t *n, dcomplex *dl, dcomplex *d__, dcomplex *
     {
         i__2 = i__;
         i__3 = i__;
-        if((d__1 = d__[i__2].r, f2c_dabs(d__1)) + (d__2 = d_imag(&d__[i__]), f2c_dabs(d__2))
-           >= (d__3 = dl[i__3].r, f2c_dabs(d__3)) + (d__4 = d_imag(&dl[i__]), f2c_dabs(d__4)))
+        if((d__1 = d__[i__2].real, f2c_dabs(d__1)) + (d__2 = d_imag(&d__[i__]), f2c_dabs(d__2))
+           >= (d__3 = dl[i__3].real, f2c_dabs(d__3)) + (d__4 = d_imag(&dl[i__]), f2c_dabs(d__4)))
         {
             /* No row interchange required, eliminate DL(I) */
             i__2 = i__;
-            if((d__1 = d__[i__2].r, f2c_dabs(d__1)) + (d__2 = d_imag(&d__[i__]), f2c_dabs(d__2))
+            if((d__1 = d__[i__2].real, f2c_dabs(d__1)) + (d__2 = d_imag(&d__[i__]), f2c_dabs(d__2))
                != 0.)
             {
                 z_div(&z__1, &dl[i__], &d__[i__]);
-                fact.r = z__1.r;
-                fact.i = z__1.i; // , expr subst
+                fact.real = z__1.real;
+                fact.imag = z__1.imag; // , expr subst
                 i__2 = i__;
-                dl[i__2].r = fact.r;
-                dl[i__2].i = fact.i; // , expr subst
+                dl[i__2].real = fact.real;
+                dl[i__2].imag = fact.imag; // , expr subst
                 i__2 = i__ + 1;
                 i__3 = i__ + 1;
                 i__4 = i__;
-                z__2.r = fact.r * du[i__4].r - fact.i * du[i__4].i;
-                z__2.i = fact.r * du[i__4].i + fact.i * du[i__4].r; // , expr subst
-                z__1.r = d__[i__3].r - z__2.r;
-                z__1.i = d__[i__3].i - z__2.i; // , expr subst
-                d__[i__2].r = z__1.r;
-                d__[i__2].i = z__1.i; // , expr subst
+                z__2.real = fact.real * du[i__4].real - fact.imag * du[i__4].imag;
+                z__2.imag = fact.real * du[i__4].imag + fact.imag * du[i__4].real; // , expr subst
+                z__1.real = d__[i__3].real - z__2.real;
+                z__1.imag = d__[i__3].imag - z__2.imag; // , expr subst
+                d__[i__2].real = z__1.real;
+                d__[i__2].imag = z__1.imag; // , expr subst
             }
         }
         else
         {
             /* Interchange rows I and I+1, eliminate DL(I) */
             z_div(&z__1, &d__[i__], &dl[i__]);
-            fact.r = z__1.r;
-            fact.i = z__1.i; // , expr subst
+            fact.real = z__1.real;
+            fact.imag = z__1.imag; // , expr subst
             i__2 = i__;
             i__3 = i__;
-            d__[i__2].r = dl[i__3].r;
-            d__[i__2].i = dl[i__3].i; // , expr subst
+            d__[i__2].real = dl[i__3].real;
+            d__[i__2].imag = dl[i__3].imag; // , expr subst
             i__2 = i__;
-            dl[i__2].r = fact.r;
-            dl[i__2].i = fact.i; // , expr subst
+            dl[i__2].real = fact.real;
+            dl[i__2].imag = fact.imag; // , expr subst
             i__2 = i__;
-            temp.r = du[i__2].r;
-            temp.i = du[i__2].i; // , expr subst
+            temp.real = du[i__2].real;
+            temp.imag = du[i__2].imag; // , expr subst
             i__2 = i__;
             i__3 = i__ + 1;
-            du[i__2].r = d__[i__3].r;
-            du[i__2].i = d__[i__3].i; // , expr subst
+            du[i__2].real = d__[i__3].real;
+            du[i__2].imag = d__[i__3].imag; // , expr subst
             i__2 = i__ + 1;
             i__3 = i__ + 1;
-            z__2.r = fact.r * d__[i__3].r - fact.i * d__[i__3].i;
-            z__2.i = fact.r * d__[i__3].i + fact.i * d__[i__3].r; // , expr subst
-            z__1.r = temp.r - z__2.r;
-            z__1.i = temp.i - z__2.i; // , expr subst
-            d__[i__2].r = z__1.r;
-            d__[i__2].i = z__1.i; // , expr subst
+            z__2.real = fact.real * d__[i__3].real - fact.imag * d__[i__3].imag;
+            z__2.imag = fact.real * d__[i__3].imag + fact.imag * d__[i__3].real; // , expr subst
+            z__1.real = temp.real - z__2.real;
+            z__1.imag = temp.imag - z__2.imag; // , expr subst
+            d__[i__2].real = z__1.real;
+            d__[i__2].imag = z__1.imag; // , expr subst
             i__2 = i__;
             i__3 = i__ + 1;
-            du2[i__2].r = du[i__3].r;
-            du2[i__2].i = du[i__3].i; // , expr subst
+            du2[i__2].real = du[i__3].real;
+            du2[i__2].imag = du[i__3].imag; // , expr subst
             i__2 = i__ + 1;
-            z__2.r = -fact.r;
-            z__2.i = -fact.i; // , expr subst
+            z__2.real = -fact.real;
+            z__2.imag = -fact.imag; // , expr subst
             i__3 = i__ + 1;
-            z__1.r = z__2.r * du[i__3].r - z__2.i * du[i__3].i;
-            z__1.i = z__2.r * du[i__3].i + z__2.i * du[i__3].r; // , expr subst
-            du[i__2].r = z__1.r;
-            du[i__2].i = z__1.i; // , expr subst
+            z__1.real = z__2.real * du[i__3].real - z__2.imag * du[i__3].imag;
+            z__1.imag = z__2.real * du[i__3].imag + z__2.imag * du[i__3].real; // , expr subst
+            du[i__2].real = z__1.real;
+            du[i__2].imag = z__1.imag; // , expr subst
             ipiv[i__] = (aocl_int_t)(i__ + 1);
         }
         /* L30: */
@@ -291,57 +291,57 @@ void aocl_lapack_zgttrf(aocl_int64_t *n, dcomplex *dl, dcomplex *d__, dcomplex *
         i__ = *n - 1;
         i__1 = i__;
         i__2 = i__;
-        if((d__1 = d__[i__1].r, f2c_dabs(d__1)) + (d__2 = d_imag(&d__[i__]), f2c_dabs(d__2))
-           >= (d__3 = dl[i__2].r, f2c_dabs(d__3)) + (d__4 = d_imag(&dl[i__]), f2c_dabs(d__4)))
+        if((d__1 = d__[i__1].real, f2c_dabs(d__1)) + (d__2 = d_imag(&d__[i__]), f2c_dabs(d__2))
+           >= (d__3 = dl[i__2].real, f2c_dabs(d__3)) + (d__4 = d_imag(&dl[i__]), f2c_dabs(d__4)))
         {
             i__1 = i__;
-            if((d__1 = d__[i__1].r, f2c_dabs(d__1)) + (d__2 = d_imag(&d__[i__]), f2c_dabs(d__2))
+            if((d__1 = d__[i__1].real, f2c_dabs(d__1)) + (d__2 = d_imag(&d__[i__]), f2c_dabs(d__2))
                != 0.)
             {
                 z_div(&z__1, &dl[i__], &d__[i__]);
-                fact.r = z__1.r;
-                fact.i = z__1.i; // , expr subst
+                fact.real = z__1.real;
+                fact.imag = z__1.imag; // , expr subst
                 i__1 = i__;
-                dl[i__1].r = fact.r;
-                dl[i__1].i = fact.i; // , expr subst
+                dl[i__1].real = fact.real;
+                dl[i__1].imag = fact.imag; // , expr subst
                 i__1 = i__ + 1;
                 i__2 = i__ + 1;
                 i__3 = i__;
-                z__2.r = fact.r * du[i__3].r - fact.i * du[i__3].i;
-                z__2.i = fact.r * du[i__3].i + fact.i * du[i__3].r; // , expr subst
-                z__1.r = d__[i__2].r - z__2.r;
-                z__1.i = d__[i__2].i - z__2.i; // , expr subst
-                d__[i__1].r = z__1.r;
-                d__[i__1].i = z__1.i; // , expr subst
+                z__2.real = fact.real * du[i__3].real - fact.imag * du[i__3].imag;
+                z__2.imag = fact.real * du[i__3].imag + fact.imag * du[i__3].real; // , expr subst
+                z__1.real = d__[i__2].real - z__2.real;
+                z__1.imag = d__[i__2].imag - z__2.imag; // , expr subst
+                d__[i__1].real = z__1.real;
+                d__[i__1].imag = z__1.imag; // , expr subst
             }
         }
         else
         {
             z_div(&z__1, &d__[i__], &dl[i__]);
-            fact.r = z__1.r;
-            fact.i = z__1.i; // , expr subst
+            fact.real = z__1.real;
+            fact.imag = z__1.imag; // , expr subst
             i__1 = i__;
             i__2 = i__;
-            d__[i__1].r = dl[i__2].r;
-            d__[i__1].i = dl[i__2].i; // , expr subst
+            d__[i__1].real = dl[i__2].real;
+            d__[i__1].imag = dl[i__2].imag; // , expr subst
             i__1 = i__;
-            dl[i__1].r = fact.r;
-            dl[i__1].i = fact.i; // , expr subst
+            dl[i__1].real = fact.real;
+            dl[i__1].imag = fact.imag; // , expr subst
             i__1 = i__;
-            temp.r = du[i__1].r;
-            temp.i = du[i__1].i; // , expr subst
+            temp.real = du[i__1].real;
+            temp.imag = du[i__1].imag; // , expr subst
             i__1 = i__;
             i__2 = i__ + 1;
-            du[i__1].r = d__[i__2].r;
-            du[i__1].i = d__[i__2].i; // , expr subst
+            du[i__1].real = d__[i__2].real;
+            du[i__1].imag = d__[i__2].imag; // , expr subst
             i__1 = i__ + 1;
             i__2 = i__ + 1;
-            z__2.r = fact.r * d__[i__2].r - fact.i * d__[i__2].i;
-            z__2.i = fact.r * d__[i__2].i + fact.i * d__[i__2].r; // , expr subst
-            z__1.r = temp.r - z__2.r;
-            z__1.i = temp.i - z__2.i; // , expr subst
-            d__[i__1].r = z__1.r;
-            d__[i__1].i = z__1.i; // , expr subst
+            z__2.real = fact.real * d__[i__2].real - fact.imag * d__[i__2].imag;
+            z__2.imag = fact.real * d__[i__2].imag + fact.imag * d__[i__2].real; // , expr subst
+            z__1.real = temp.real - z__2.real;
+            z__1.imag = temp.imag - z__2.imag; // , expr subst
+            d__[i__1].real = z__1.real;
+            d__[i__1].imag = z__1.imag; // , expr subst
             ipiv[i__] = (aocl_int_t)(i__ + 1);
         }
     }
@@ -350,7 +350,7 @@ void aocl_lapack_zgttrf(aocl_int64_t *n, dcomplex *dl, dcomplex *d__, dcomplex *
     for(i__ = 1; i__ <= i__1; ++i__)
     {
         i__2 = i__;
-        if((d__1 = d__[i__2].r, f2c_dabs(d__1)) + (d__2 = d_imag(&d__[i__]), f2c_dabs(d__2)) == 0.)
+        if((d__1 = d__[i__2].real, f2c_dabs(d__1)) + (d__2 = d_imag(&d__[i__]), f2c_dabs(d__2)) == 0.)
         {
             *info = i__;
             goto L50;

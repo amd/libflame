@@ -4,7 +4,7 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static scomplex c_b1 = {{0.f}, {0.f}};
+static scomplex c_b1 = {0.f, 0.f};
 static aocl_int64_t c__1 = 1;
 /* > \brief \b CLARZT forms the triangular factor T of a block reflector H = I - vtvH. */
 /* =========== DOCUMENTATION =========== */
@@ -270,15 +270,15 @@ void aocl_lapack_clarzt(char *direct, char *storev, aocl_int64_t *n, aocl_int64_
     for(i__ = *k; i__ >= 1; --i__)
     {
         i__1 = i__;
-        if(tau[i__1].r == 0.f && tau[i__1].i == 0.f)
+        if(tau[i__1].real == 0.f && tau[i__1].imag == 0.f)
         {
             /* H(i) = I */
             i__1 = *k;
             for(j = i__; j <= i__1; ++j)
             {
                 i__2 = j + i__ * t_dim1;
-                t[i__2].r = 0.f;
-                t[i__2].i = 0.f; // , expr subst
+                t[i__2].real = 0.f;
+                t[i__2].imag = 0.f; // , expr subst
                 /* L10: */
             }
         }
@@ -291,8 +291,8 @@ void aocl_lapack_clarzt(char *direct, char *storev, aocl_int64_t *n, aocl_int64_
                 aocl_lapack_clacgv(n, &v[i__ + v_dim1], ldv);
                 i__1 = *k - i__;
                 i__2 = i__;
-                q__1.r = -tau[i__2].r;
-                q__1.i = -tau[i__2].i; // , expr subst
+                q__1.real = -tau[i__2].real;
+                q__1.imag = -tau[i__2].imag; // , expr subst
                 aocl_blas_cgemv("No transpose", &i__1, n, &q__1, &v[i__ + 1 + v_dim1], ldv,
                                 &v[i__ + v_dim1], ldv, &c_b1, &t[i__ + 1 + i__ * t_dim1], &c__1);
                 aocl_lapack_clacgv(n, &v[i__ + v_dim1], ldv);
@@ -304,8 +304,8 @@ void aocl_lapack_clarzt(char *direct, char *storev, aocl_int64_t *n, aocl_int64_
             }
             i__1 = i__ + i__ * t_dim1;
             i__2 = i__;
-            t[i__1].r = tau[i__2].r;
-            t[i__1].i = tau[i__2].i; // , expr subst
+            t[i__1].real = tau[i__2].real;
+            t[i__1].imag = tau[i__2].imag; // , expr subst
         }
         /* L20: */
     }

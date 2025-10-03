@@ -248,7 +248,7 @@ void aocl_lapack_cgtcon(char *norm, aocl_int64_t *n, scomplex *dl, scomplex *d__
     for(i__ = 1; i__ <= i__1; ++i__)
     {
         i__2 = i__;
-        if(d__[i__2].r == 0.f && d__[i__2].i == 0.f)
+        if(d__[i__2].real == 0.f && d__[i__2].imag == 0.f)
         {
             AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
             return;

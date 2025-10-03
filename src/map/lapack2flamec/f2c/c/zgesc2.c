@@ -5,7 +5,7 @@
  /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static aocl_int64_t c__1 = 1;
-static dcomplex c_b13 = {{1.}, {0.}};
+static dcomplex c_b13 = {1., 0.};
 static aocl_int64_t c_n1 = -1;
 /* > \brief \b ZGESC2 solves a system of linear equations using the LU factorization with complete
  * pivoting co mputed by sgetc2. */
@@ -191,12 +191,12 @@ void aocl_lapack_zgesc2(aocl_int64_t *n, dcomplex *a, aocl_int64_t *lda, dcomple
             i__4 = j;
             i__5 = j + i__ * a_dim1;
             i__6 = i__;
-            z__2.r = a[i__5].r * rhs[i__6].r - a[i__5].i * rhs[i__6].i;
-            z__2.i = a[i__5].r * rhs[i__6].i + a[i__5].i * rhs[i__6].r; // , expr subst
-            z__1.r = rhs[i__4].r - z__2.r;
-            z__1.i = rhs[i__4].i - z__2.i; // , expr subst
-            rhs[i__3].r = z__1.r;
-            rhs[i__3].i = z__1.i; // , expr subst
+            z__2.real = a[i__5].real * rhs[i__6].real - a[i__5].imag * rhs[i__6].imag;
+            z__2.imag = a[i__5].real * rhs[i__6].imag + a[i__5].imag * rhs[i__6].real; // , expr subst
+            z__1.real = rhs[i__4].real - z__2.real;
+            z__1.imag = rhs[i__4].imag - z__2.imag; // , expr subst
+            rhs[i__3].real = z__1.real;
+            rhs[i__3].imag = z__1.imag; // , expr subst
             /* L10: */
         }
         /* L20: */
@@ -208,24 +208,24 @@ void aocl_lapack_zgesc2(aocl_int64_t *n, dcomplex *a, aocl_int64_t *lda, dcomple
     if(smlnum * 2. * z_abs(&rhs[i__]) > z_abs(&a[*n + *n * a_dim1]))
     {
         d__1 = z_abs(&rhs[i__]);
-        z__1.r = .5 / d__1;
-        z__1.i = 0. / d__1; // , expr subst
-        temp.r = z__1.r;
-        temp.i = z__1.i; // , expr subst
+        z__1.real = .5 / d__1;
+        z__1.imag = 0. / d__1; // , expr subst
+        temp.real = z__1.real;
+        temp.imag = z__1.imag; // , expr subst
         aocl_blas_zscal(n, &temp, &rhs[1], &c__1);
-        *scale *= temp.r;
+        *scale *= temp.real;
     }
     for(i__ = *n; i__ >= 1; --i__)
     {
         z_div(&z__1, &c_b13, &a[i__ + i__ * a_dim1]);
-        temp.r = z__1.r;
-        temp.i = z__1.i; // , expr subst
+        temp.real = z__1.real;
+        temp.imag = z__1.imag; // , expr subst
         i__1 = i__;
         i__2 = i__;
-        z__1.r = rhs[i__2].r * temp.r - rhs[i__2].i * temp.i;
-        z__1.i = rhs[i__2].r * temp.i + rhs[i__2].i * temp.r; // , expr subst
-        rhs[i__1].r = z__1.r;
-        rhs[i__1].i = z__1.i; // , expr subst
+        z__1.real = rhs[i__2].real * temp.real - rhs[i__2].imag * temp.imag;
+        z__1.imag = rhs[i__2].real * temp.imag + rhs[i__2].imag * temp.real; // , expr subst
+        rhs[i__1].real = z__1.real;
+        rhs[i__1].imag = z__1.imag; // , expr subst
         i__1 = *n;
         for(j = i__ + 1; j <= i__1; ++j)
         {
@@ -233,14 +233,14 @@ void aocl_lapack_zgesc2(aocl_int64_t *n, dcomplex *a, aocl_int64_t *lda, dcomple
             i__3 = i__;
             i__4 = j;
             i__5 = i__ + j * a_dim1;
-            z__3.r = a[i__5].r * temp.r - a[i__5].i * temp.i;
-            z__3.i = a[i__5].r * temp.i + a[i__5].i * temp.r; // , expr subst
-            z__2.r = rhs[i__4].r * z__3.r - rhs[i__4].i * z__3.i;
-            z__2.i = rhs[i__4].r * z__3.i + rhs[i__4].i * z__3.r; // , expr subst
-            z__1.r = rhs[i__3].r - z__2.r;
-            z__1.i = rhs[i__3].i - z__2.i; // , expr subst
-            rhs[i__2].r = z__1.r;
-            rhs[i__2].i = z__1.i; // , expr subst
+            z__3.real = a[i__5].real * temp.real - a[i__5].imag * temp.imag;
+            z__3.imag = a[i__5].real * temp.imag + a[i__5].imag * temp.real; // , expr subst
+            z__2.real = rhs[i__4].real * z__3.real - rhs[i__4].imag * z__3.imag;
+            z__2.imag = rhs[i__4].real * z__3.imag + rhs[i__4].imag * z__3.real; // , expr subst
+            z__1.real = rhs[i__3].real - z__2.real;
+            z__1.imag = rhs[i__3].imag - z__2.imag; // , expr subst
+            rhs[i__2].real = z__1.real;
+            rhs[i__2].imag = z__1.imag; // , expr subst
             /* L30: */
         }
         /* L40: */

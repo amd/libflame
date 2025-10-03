@@ -67,7 +67,7 @@
 /* > \param[in] INFO */
 /* > \verbatim */
 /* > INFO is INTEGER */
-/* > The value of INFO returned from SSYTRF, .i.e., the pivot in */
+/* > The value of INFO returned from SSYTRF, .imag.e., the pivot in */
 /* > column INFO is exactly 0. */
 /* > \endverbatim */
 /* > */

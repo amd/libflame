@@ -369,30 +369,30 @@ void aocl_lapack_cgelq(aocl_int64_t *m, aocl_int64_t *n, scomplex *a, aocl_int64
     {
         if(mint)
         {
-            t[1].r = (real)mintsz;
-            t[1].i = 0.f; // , expr subst
+            t[1].real = (real)mintsz;
+            t[1].imag = 0.f; // , expr subst
         }
         else
         {
             i__1 = mb * *m * nblcks + 5;
-            t[1].r = (real)i__1;
-            t[1].i = 0.f; // , expr subst
+            t[1].real = (real)i__1;
+            t[1].imag = 0.f; // , expr subst
         }
-        t[2].r = (real)mb;
-        t[2].i = 0.f; // , expr subst
-        t[3].r = (real)nb;
-        t[3].i = 0.f; // , expr subst
+        t[2].real = (real)mb;
+        t[2].imag = 0.f; // , expr subst
+        t[3].real = (real)nb;
+        t[3].imag = 0.f; // , expr subst
         if(minw)
         {
             r__1 = aocl_lapack_sroundup_lwork(&lwmin);
-            work[1].r = r__1;
-            work[1].i = 0.f; // , expr subst
+            work[1].real = r__1;
+            work[1].imag = 0.f; // , expr subst
         }
         else
         {
             r__1 = aocl_lapack_sroundup_lwork(&lwreq);
-            work[1].r = r__1;
-            work[1].i = 0.f; // , expr subst
+            work[1].real = r__1;
+            work[1].imag = 0.f; // , expr subst
         }
     }
     if(*info != 0)
@@ -423,8 +423,8 @@ void aocl_lapack_cgelq(aocl_int64_t *m, aocl_int64_t *n, scomplex *a, aocl_int64
         aocl_lapack_claswlq(m, n, &mb, &nb, &a[a_offset], lda, &t[6], &mb, &work[1], lwork, info);
     }
     r__1 = aocl_lapack_sroundup_lwork(&lwreq);
-    work[1].r = r__1;
-    work[1].i = 0.f; // , expr subst
+    work[1].real = r__1;
+    work[1].imag = 0.f; // , expr subst
     AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of CGELQ */

@@ -4,7 +4,7 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static scomplex c_b1 = {{1.f}, {0.f}};
+static scomplex c_b1 = {1.f, 0.f};
 static aocl_int64_t c__1 = 1;
 static aocl_int64_t c_n1 = -1;
 static real c_b29 = -1.f;
@@ -272,12 +272,12 @@ void aocl_lapack_cpstrf(char *uplo, aocl_int64_t *n, scomplex *a, aocl_int64_t *
         for(i__ = 1; i__ <= i__1; ++i__)
         {
             i__2 = i__ + i__ * a_dim1;
-            work[i__] = a[i__2].r;
+            work[i__] = a[i__2].real;
             /* L110: */
         }
         pvt = aocl_lapack_smaxloc(&work[1], n);
         i__1 = pvt + pvt * a_dim1;
-        ajj = a[i__1].r;
+        ajj = a[i__1].real;
         if(ajj <= 0.f || sisnan_(&ajj))
         {
             *rank = 0;
@@ -326,12 +326,12 @@ void aocl_lapack_cpstrf(char *uplo, aocl_int64_t *n, scomplex *a, aocl_int64_t *
                         {
                             r_cnjg(&q__2, &a[j - 1 + i__ * a_dim1]);
                             i__5 = j - 1 + i__ * a_dim1;
-                            q__1.r = q__2.r * a[i__5].r - q__2.i * a[i__5].i;
-                            q__1.i = q__2.r * a[i__5].i + q__2.i * a[i__5].r; // , expr subst
-                            work[i__] += q__1.r;
+                            q__1.real = q__2.real * a[i__5].real - q__2.imag * a[i__5].imag;
+                            q__1.imag = q__2.real * a[i__5].imag + q__2.imag * a[i__5].real; // , expr subst
+                            work[i__] += q__1.real;
                         }
                         i__5 = i__ + i__ * a_dim1;
-                        work[*n + i__] = a[i__5].r - work[i__];
+                        work[*n + i__] = a[i__5].real - work[i__];
                         /* L130: */
                     }
                     if(j > 1)
@@ -343,8 +343,8 @@ void aocl_lapack_cpstrf(char *uplo, aocl_int64_t *n, scomplex *a, aocl_int64_t *
                         if(ajj <= sstop || sisnan_(&ajj))
                         {
                             i__4 = j + j * a_dim1;
-                            a[i__4].r = ajj;
-                            a[i__4].i = 0.f; // , expr subst
+                            a[i__4].real = ajj;
+                            a[i__4].imag = 0.f; // , expr subst
                             goto L220;
                         }
                     }
@@ -353,8 +353,8 @@ void aocl_lapack_cpstrf(char *uplo, aocl_int64_t *n, scomplex *a, aocl_int64_t *
                         /* Pivot OK, so can now swap pivot rows and columns */
                         i__4 = pvt + pvt * a_dim1;
                         i__5 = j + j * a_dim1;
-                        a[i__4].r = a[i__5].r;
-                        a[i__4].i = a[i__5].i; // , expr subst
+                        a[i__4].real = a[i__5].real;
+                        a[i__4].imag = a[i__5].imag; // , expr subst
                         i__4 = j - 1;
                         aocl_blas_cswap(&i__4, &a[j * a_dim1 + 1], &c__1, &a[pvt * a_dim1 + 1],
                                         &c__1);
@@ -368,21 +368,21 @@ void aocl_lapack_cpstrf(char *uplo, aocl_int64_t *n, scomplex *a, aocl_int64_t *
                         for(i__ = j + 1; i__ <= i__4; ++i__)
                         {
                             r_cnjg(&q__1, &a[j + i__ * a_dim1]);
-                            ctemp.r = q__1.r;
-                            ctemp.i = q__1.i; // , expr subst
+                            ctemp.real = q__1.real;
+                            ctemp.imag = q__1.imag; // , expr subst
                             i__5 = j + i__ * a_dim1;
                             r_cnjg(&q__1, &a[i__ + pvt * a_dim1]);
-                            a[i__5].r = q__1.r;
-                            a[i__5].i = q__1.i; // , expr subst
+                            a[i__5].real = q__1.real;
+                            a[i__5].imag = q__1.imag; // , expr subst
                             i__5 = i__ + pvt * a_dim1;
-                            a[i__5].r = ctemp.r;
-                            a[i__5].i = ctemp.i; // , expr subst
+                            a[i__5].real = ctemp.real;
+                            a[i__5].imag = ctemp.imag; // , expr subst
                             /* L140: */
                         }
                         i__4 = j + pvt * a_dim1;
                         r_cnjg(&q__1, &a[j + pvt * a_dim1]);
-                        a[i__4].r = q__1.r;
-                        a[i__4].i = q__1.i; // , expr subst
+                        a[i__4].real = q__1.real;
+                        a[i__4].imag = q__1.imag; // , expr subst
                         /* Swap dot products and PIV */
                         stemp = work[j];
                         work[j] = work[pvt];
@@ -393,8 +393,8 @@ void aocl_lapack_cpstrf(char *uplo, aocl_int64_t *n, scomplex *a, aocl_int64_t *
                     }
                     ajj = sqrt(ajj);
                     i__4 = j + j * a_dim1;
-                    a[i__4].r = ajj;
-                    a[i__4].i = 0.f; // , expr subst
+                    a[i__4].real = ajj;
+                    a[i__4].imag = 0.f; // , expr subst
                     /* Compute elements J+1:N of row J. */
                     if(j < *n)
                     {
@@ -402,8 +402,8 @@ void aocl_lapack_cpstrf(char *uplo, aocl_int64_t *n, scomplex *a, aocl_int64_t *
                         aocl_lapack_clacgv(&i__4, &a[j * a_dim1 + 1], &c__1);
                         i__4 = j - k;
                         i__5 = *n - j;
-                        q__1.r = -1.f;
-                        q__1.i = -0.f; // , expr subst
+                        q__1.real = -1.f;
+                        q__1.imag = -0.f; // , expr subst
                         aocl_blas_cgemv("Trans", &i__4, &i__5, &q__1, &a[k + (j + 1) * a_dim1], lda,
                                         &a[k + j * a_dim1], &c__1, &c_b1, &a[j + (j + 1) * a_dim1],
                                         lda);
@@ -458,12 +458,12 @@ void aocl_lapack_cpstrf(char *uplo, aocl_int64_t *n, scomplex *a, aocl_int64_t *
                         {
                             r_cnjg(&q__2, &a[i__ + (j - 1) * a_dim1]);
                             i__5 = i__ + (j - 1) * a_dim1;
-                            q__1.r = q__2.r * a[i__5].r - q__2.i * a[i__5].i;
-                            q__1.i = q__2.r * a[i__5].i + q__2.i * a[i__5].r; // , expr subst
-                            work[i__] += q__1.r;
+                            q__1.real = q__2.real * a[i__5].real - q__2.imag * a[i__5].imag;
+                            q__1.imag = q__2.real * a[i__5].imag + q__2.imag * a[i__5].real; // , expr subst
+                            work[i__] += q__1.real;
                         }
                         i__5 = i__ + i__ * a_dim1;
-                        work[*n + i__] = a[i__5].r - work[i__];
+                        work[*n + i__] = a[i__5].real - work[i__];
                         /* L180: */
                     }
                     if(j > 1)
@@ -475,8 +475,8 @@ void aocl_lapack_cpstrf(char *uplo, aocl_int64_t *n, scomplex *a, aocl_int64_t *
                         if(ajj <= sstop || sisnan_(&ajj))
                         {
                             i__4 = j + j * a_dim1;
-                            a[i__4].r = ajj;
-                            a[i__4].i = 0.f; // , expr subst
+                            a[i__4].real = ajj;
+                            a[i__4].imag = 0.f; // , expr subst
                             goto L220;
                         }
                     }
@@ -485,8 +485,8 @@ void aocl_lapack_cpstrf(char *uplo, aocl_int64_t *n, scomplex *a, aocl_int64_t *
                         /* Pivot OK, so can now swap pivot rows and columns */
                         i__4 = pvt + pvt * a_dim1;
                         i__5 = j + j * a_dim1;
-                        a[i__4].r = a[i__5].r;
-                        a[i__4].i = a[i__5].i; // , expr subst
+                        a[i__4].real = a[i__5].real;
+                        a[i__4].imag = a[i__5].imag; // , expr subst
                         i__4 = j - 1;
                         aocl_blas_cswap(&i__4, &a[j + a_dim1], lda, &a[pvt + a_dim1], lda);
                         if(pvt < *n)
@@ -499,21 +499,21 @@ void aocl_lapack_cpstrf(char *uplo, aocl_int64_t *n, scomplex *a, aocl_int64_t *
                         for(i__ = j + 1; i__ <= i__4; ++i__)
                         {
                             r_cnjg(&q__1, &a[i__ + j * a_dim1]);
-                            ctemp.r = q__1.r;
-                            ctemp.i = q__1.i; // , expr subst
+                            ctemp.real = q__1.real;
+                            ctemp.imag = q__1.imag; // , expr subst
                             i__5 = i__ + j * a_dim1;
                             r_cnjg(&q__1, &a[pvt + i__ * a_dim1]);
-                            a[i__5].r = q__1.r;
-                            a[i__5].i = q__1.i; // , expr subst
+                            a[i__5].real = q__1.real;
+                            a[i__5].imag = q__1.imag; // , expr subst
                             i__5 = pvt + i__ * a_dim1;
-                            a[i__5].r = ctemp.r;
-                            a[i__5].i = ctemp.i; // , expr subst
+                            a[i__5].real = ctemp.real;
+                            a[i__5].imag = ctemp.imag; // , expr subst
                             /* L190: */
                         }
                         i__4 = pvt + j * a_dim1;
                         r_cnjg(&q__1, &a[pvt + j * a_dim1]);
-                        a[i__4].r = q__1.r;
-                        a[i__4].i = q__1.i; // , expr subst
+                        a[i__4].real = q__1.real;
+                        a[i__4].imag = q__1.imag; // , expr subst
                         /* Swap dot products and PIV */
                         stemp = work[j];
                         work[j] = work[pvt];
@@ -524,8 +524,8 @@ void aocl_lapack_cpstrf(char *uplo, aocl_int64_t *n, scomplex *a, aocl_int64_t *
                     }
                     ajj = sqrt(ajj);
                     i__4 = j + j * a_dim1;
-                    a[i__4].r = ajj;
-                    a[i__4].i = 0.f; // , expr subst
+                    a[i__4].real = ajj;
+                    a[i__4].imag = 0.f; // , expr subst
                     /* Compute elements J+1:N of column J. */
                     if(j < *n)
                     {
@@ -533,8 +533,8 @@ void aocl_lapack_cpstrf(char *uplo, aocl_int64_t *n, scomplex *a, aocl_int64_t *
                         aocl_lapack_clacgv(&i__4, &a[j + a_dim1], lda);
                         i__4 = *n - j;
                         i__5 = j - k;
-                        q__1.r = -1.f;
-                        q__1.i = -0.f; // , expr subst
+                        q__1.real = -1.f;
+                        q__1.imag = -0.f; // , expr subst
                         aocl_blas_cgemv("No Trans", &i__4, &i__5, &q__1, &a[j + 1 + k * a_dim1],
                                         lda, &a[j + k * a_dim1], lda, &c_b1, &a[j + 1 + j * a_dim1],
                                         &c__1);

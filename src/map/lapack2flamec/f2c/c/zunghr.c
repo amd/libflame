@@ -215,8 +215,8 @@ void aocl_lapack_zunghr(aocl_int64_t *n, aocl_int64_t *ilo, aocl_int64_t *ihi, d
     {
         nb = aocl_lapack_ilaenv(&c__1, "ZUNGQR", " ", &nh, &nh, &nh, &c_n1);
         lwkopt = fla_max(1, nh) * nb;
-        work[1].r = (doublereal)lwkopt;
-        work[1].i = 0.; // , expr subst
+        work[1].real = (doublereal)lwkopt;
+        work[1].imag = 0.; // , expr subst
     }
     if(*info != 0)
     {
@@ -233,8 +233,8 @@ void aocl_lapack_zunghr(aocl_int64_t *n, aocl_int64_t *ilo, aocl_int64_t *ihi, d
     /* Quick return if possible */
     if(*n == 0)
     {
-        work[1].r = 1.;
-        work[1].i = 0.; // , expr subst
+        work[1].real = 1.;
+        work[1].imag = 0.; // , expr subst
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -248,8 +248,8 @@ void aocl_lapack_zunghr(aocl_int64_t *n, aocl_int64_t *ilo, aocl_int64_t *ihi, d
         for(i__ = 1; i__ <= i__2; ++i__)
         {
             i__3 = i__ + j * a_dim1;
-            a[i__3].r = 0.;
-            a[i__3].i = 0.; // , expr subst
+            a[i__3].real = 0.;
+            a[i__3].imag = 0.; // , expr subst
             /* L10: */
         }
         i__2 = *ihi;
@@ -257,16 +257,16 @@ void aocl_lapack_zunghr(aocl_int64_t *n, aocl_int64_t *ilo, aocl_int64_t *ihi, d
         {
             i__3 = i__ + j * a_dim1;
             i__4 = i__ + (j - 1) * a_dim1;
-            a[i__3].r = a[i__4].r;
-            a[i__3].i = a[i__4].i; // , expr subst
+            a[i__3].real = a[i__4].real;
+            a[i__3].imag = a[i__4].imag; // , expr subst
             /* L20: */
         }
         i__2 = *n;
         for(i__ = *ihi + 1; i__ <= i__2; ++i__)
         {
             i__3 = i__ + j * a_dim1;
-            a[i__3].r = 0.;
-            a[i__3].i = 0.; // , expr subst
+            a[i__3].real = 0.;
+            a[i__3].imag = 0.; // , expr subst
             /* L30: */
         }
         /* L40: */
@@ -278,13 +278,13 @@ void aocl_lapack_zunghr(aocl_int64_t *n, aocl_int64_t *ilo, aocl_int64_t *ihi, d
         for(i__ = 1; i__ <= i__2; ++i__)
         {
             i__3 = i__ + j * a_dim1;
-            a[i__3].r = 0.;
-            a[i__3].i = 0.; // , expr subst
+            a[i__3].real = 0.;
+            a[i__3].imag = 0.; // , expr subst
             /* L50: */
         }
         i__2 = j + j * a_dim1;
-        a[i__2].r = 1.;
-        a[i__2].i = 0.; // , expr subst
+        a[i__2].real = 1.;
+        a[i__2].imag = 0.; // , expr subst
         /* L60: */
     }
     i__1 = *n;
@@ -294,13 +294,13 @@ void aocl_lapack_zunghr(aocl_int64_t *n, aocl_int64_t *ilo, aocl_int64_t *ihi, d
         for(i__ = 1; i__ <= i__2; ++i__)
         {
             i__3 = i__ + j * a_dim1;
-            a[i__3].r = 0.;
-            a[i__3].i = 0.; // , expr subst
+            a[i__3].real = 0.;
+            a[i__3].imag = 0.; // , expr subst
             /* L70: */
         }
         i__2 = j + j * a_dim1;
-        a[i__2].r = 1.;
-        a[i__2].i = 0.; // , expr subst
+        a[i__2].real = 1.;
+        a[i__2].imag = 0.; // , expr subst
         /* L80: */
     }
     if(nh > 0)
@@ -309,8 +309,8 @@ void aocl_lapack_zunghr(aocl_int64_t *n, aocl_int64_t *ilo, aocl_int64_t *ihi, d
         aocl_lapack_zungqr(&nh, &nh, &nh, &a[*ilo + 1 + (*ilo + 1) * a_dim1], lda, &tau[*ilo],
                            &work[1], lwork, &iinfo);
     }
-    work[1].r = (doublereal)lwkopt;
-    work[1].i = 0.; // , expr subst
+    work[1].real = (doublereal)lwkopt;
+    work[1].imag = 0.; // , expr subst
     AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of ZUNGHR */

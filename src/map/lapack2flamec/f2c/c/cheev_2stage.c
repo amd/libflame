@@ -311,8 +311,8 @@ void aocl_lapack_cheev_2stage(char *jobz, char *uplo, aocl_int64_t *n, scomplex 
         lwtrd = aocl_lapack_ilaenv2stage(&c__4, "CHETRD_2STAGE", jobz, n, &kd, &ib, &c_n1);
         lwmin = *n + lhtrd + lwtrd;
         r__1 = aocl_lapack_sroundup_lwork(&lwmin);
-        work[1].r = r__1;
-        work[1].i = 0.f; // , expr subst
+        work[1].real = r__1;
+        work[1].imag = 0.f; // , expr subst
         if(*lwork < lwmin && !lquery)
         {
             *info = -8;
@@ -339,14 +339,14 @@ void aocl_lapack_cheev_2stage(char *jobz, char *uplo, aocl_int64_t *n, scomplex 
     if(*n == 1)
     {
         i__1 = a_dim1 + 1;
-        w[1] = a[i__1].r;
-        work[1].r = 1.f;
-        work[1].i = 0.f; // , expr subst
+        w[1] = a[i__1].real;
+        work[1].real = 1.f;
+        work[1].imag = 0.f; // , expr subst
         if(wantz)
         {
             i__1 = a_dim1 + 1;
-            a[i__1].r = 1.f;
-            a[i__1].i = 0.f; // , expr subst
+            a[i__1].real = 1.f;
+            a[i__1].imag = 0.f; // , expr subst
         }
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
@@ -412,8 +412,8 @@ void aocl_lapack_cheev_2stage(char *jobz, char *uplo, aocl_int64_t *n, scomplex 
     }
     /* Set WORK(1) to optimal scomplex workspace size. */
     r__1 = aocl_lapack_sroundup_lwork(&lwmin);
-    work[1].r = r__1;
-    work[1].i = 0.f; // , expr subst
+    work[1].real = r__1;
+    work[1].imag = 0.f; // , expr subst
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
     return;
     /* End of CHEEV_2STAGE */

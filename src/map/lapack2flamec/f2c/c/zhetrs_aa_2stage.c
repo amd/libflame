@@ -4,7 +4,7 @@
  with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for
  libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static dcomplex c_b1 = {{1.}, {0.}};
+static dcomplex c_b1 = {1., 0.};
 static aocl_int64_t c__1 = 1;
 static aocl_int64_t c_n1 = -1;
 /* > \brief \b ZHETRS_AA_2STAGE */
@@ -247,7 +247,7 @@ void aocl_lapack_zhetrs_aa_2stage(char *uplo, aocl_int64_t *n, aocl_int64_t *nrh
         return;
     }
     /* Read NB and compute LDTB */
-    nb = (integer)tb[1].r;
+    nb = (integer)tb[1].real;
     ldtb = *ltb / *n;
     if(upper)
     {

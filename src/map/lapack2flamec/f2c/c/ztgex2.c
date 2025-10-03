@@ -328,29 +328,29 @@ void aocl_lapack_ztgex2(logical *wantq, logical *wantz, aocl_int64_t *n, dcomple
     threshb = fla_max(d__1, smlnum);
     /* Compute unitary QL and RQ that swap 1-by-1 and 1-by-1 blocks */
     /* using Givens rotations and perform the swap tentatively. */
-    z__2.r = s[3].r * t[0].r - s[3].i * t[0].i;
-    z__2.i = s[3].r * t[0].i + s[3].i * t[0].r; // , expr subst
-    z__3.r = t[3].r * s[0].r - t[3].i * s[0].i;
-    z__3.i = t[3].r * s[0].i + t[3].i * s[0].r; // , expr subst
-    z__1.r = z__2.r - z__3.r;
-    z__1.i = z__2.i - z__3.i; // , expr subst
-    f.r = z__1.r;
-    f.i = z__1.i; // , expr subst
-    z__2.r = s[3].r * t[2].r - s[3].i * t[2].i;
-    z__2.i = s[3].r * t[2].i + s[3].i * t[2].r; // , expr subst
-    z__3.r = t[3].r * s[2].r - t[3].i * s[2].i;
-    z__3.i = t[3].r * s[2].i + t[3].i * s[2].r; // , expr subst
-    z__1.r = z__2.r - z__3.r;
-    z__1.i = z__2.i - z__3.i; // , expr subst
-    g.r = z__1.r;
-    g.i = z__1.i; // , expr subst
+    z__2.real = s[3].real * t[0].real - s[3].imag * t[0].imag;
+    z__2.imag = s[3].real * t[0].imag + s[3].imag * t[0].real; // , expr subst
+    z__3.real = t[3].real * s[0].real - t[3].imag * s[0].imag;
+    z__3.imag = t[3].real * s[0].imag + t[3].imag * s[0].real; // , expr subst
+    z__1.real = z__2.real - z__3.real;
+    z__1.imag = z__2.imag - z__3.imag; // , expr subst
+    f.real = z__1.real;
+    f.imag = z__1.imag; // , expr subst
+    z__2.real = s[3].real * t[2].real - s[3].imag * t[2].imag;
+    z__2.imag = s[3].real * t[2].imag + s[3].imag * t[2].real; // , expr subst
+    z__3.real = t[3].real * s[2].real - t[3].imag * s[2].imag;
+    z__3.imag = t[3].real * s[2].imag + t[3].imag * s[2].real; // , expr subst
+    z__1.real = z__2.real - z__3.real;
+    z__1.imag = z__2.imag - z__3.imag; // , expr subst
+    g.real = z__1.real;
+    g.imag = z__1.imag; // , expr subst
     sa = z_abs(&s[3]) * z_abs(t);
     sb = z_abs(s) * z_abs(&t[3]);
     zlartg_(&g, &f, &cz, &sz, &cdum);
-    z__1.r = -sz.r;
-    z__1.i = -sz.i; // , expr subst
-    sz.r = z__1.r;
-    sz.i = z__1.i; // , expr subst
+    z__1.real = -sz.real;
+    z__1.imag = -sz.imag; // , expr subst
+    sz.real = z__1.real;
+    sz.imag = z__1.imag; // , expr subst
     d_cnjg(&z__1, &sz);
     aocl_lapack_zrot(&c__2, s, &c__1, &s[2], &c__1, &cz, &z__1);
     d_cnjg(&z__1, &sz);
@@ -381,49 +381,49 @@ void aocl_lapack_ztgex2(logical *wantq, logical *wantz, aocl_int64_t *n, dcomple
         aocl_lapack_zlacpy("Full", &m, &m, s, &c__2, work, &m);
         aocl_lapack_zlacpy("Full", &m, &m, t, &c__2, &work[m * m], &m);
         d_cnjg(&z__2, &sz);
-        z__1.r = -z__2.r;
-        z__1.i = -z__2.i; // , expr subst
+        z__1.real = -z__2.real;
+        z__1.imag = -z__2.imag; // , expr subst
         aocl_lapack_zrot(&c__2, work, &c__1, &work[2], &c__1, &cz, &z__1);
         d_cnjg(&z__2, &sz);
-        z__1.r = -z__2.r;
-        z__1.i = -z__2.i; // , expr subst
+        z__1.real = -z__2.real;
+        z__1.imag = -z__2.imag; // , expr subst
         aocl_lapack_zrot(&c__2, &work[4], &c__1, &work[6], &c__1, &cz, &z__1);
-        z__1.r = -sq.r;
-        z__1.i = -sq.i; // , expr subst
+        z__1.real = -sq.real;
+        z__1.imag = -sq.imag; // , expr subst
         aocl_lapack_zrot(&c__2, work, &c__2, &work[1], &c__2, &cq, &z__1);
-        z__1.r = -sq.r;
-        z__1.i = -sq.i; // , expr subst
+        z__1.real = -sq.real;
+        z__1.imag = -sq.imag; // , expr subst
         aocl_lapack_zrot(&c__2, &work[4], &c__2, &work[5], &c__2, &cq, &z__1);
         for(i__ = 1; i__ <= 2; ++i__)
         {
             i__1 = i__ - 1;
             i__2 = i__ - 1;
             i__3 = *j1 + i__ - 1 + *j1 * a_dim1;
-            z__1.r = work[i__2].r - a[i__3].r;
-            z__1.i = work[i__2].i - a[i__3].i; // , expr subst
-            work[i__1].r = z__1.r;
-            work[i__1].i = z__1.i; // , expr subst
+            z__1.real = work[i__2].real - a[i__3].real;
+            z__1.imag = work[i__2].imag - a[i__3].imag; // , expr subst
+            work[i__1].real = z__1.real;
+            work[i__1].imag = z__1.imag; // , expr subst
             i__1 = i__ + 1;
             i__2 = i__ + 1;
             i__3 = *j1 + i__ - 1 + (*j1 + 1) * a_dim1;
-            z__1.r = work[i__2].r - a[i__3].r;
-            z__1.i = work[i__2].i - a[i__3].i; // , expr subst
-            work[i__1].r = z__1.r;
-            work[i__1].i = z__1.i; // , expr subst
+            z__1.real = work[i__2].real - a[i__3].real;
+            z__1.imag = work[i__2].imag - a[i__3].imag; // , expr subst
+            work[i__1].real = z__1.real;
+            work[i__1].imag = z__1.imag; // , expr subst
             i__1 = i__ + 3;
             i__2 = i__ + 3;
             i__3 = *j1 + i__ - 1 + *j1 * b_dim1;
-            z__1.r = work[i__2].r - b[i__3].r;
-            z__1.i = work[i__2].i - b[i__3].i; // , expr subst
-            work[i__1].r = z__1.r;
-            work[i__1].i = z__1.i; // , expr subst
+            z__1.real = work[i__2].real - b[i__3].real;
+            z__1.imag = work[i__2].imag - b[i__3].imag; // , expr subst
+            work[i__1].real = z__1.real;
+            work[i__1].imag = z__1.imag; // , expr subst
             i__1 = i__ + 5;
             i__2 = i__ + 5;
             i__3 = *j1 + i__ - 1 + (*j1 + 1) * b_dim1;
-            z__1.r = work[i__2].r - b[i__3].r;
-            z__1.i = work[i__2].i - b[i__3].i; // , expr subst
-            work[i__1].r = z__1.r;
-            work[i__1].i = z__1.i; // , expr subst
+            z__1.real = work[i__2].real - b[i__3].real;
+            z__1.imag = work[i__2].imag - b[i__3].imag; // , expr subst
+            work[i__1].real = z__1.real;
+            work[i__1].imag = z__1.imag; // , expr subst
             /* L10: */
         }
         scale = 0.;
@@ -458,11 +458,11 @@ void aocl_lapack_ztgex2(logical *wantq, logical *wantz, aocl_int64_t *n, dcomple
     aocl_lapack_zrot(&i__1, &b[*j1 + *j1 * b_dim1], ldb, &b[*j1 + 1 + *j1 * b_dim1], ldb, &cq, &sq);
     /* Set N1 by N2 (2,1) blocks to 0 */
     i__1 = *j1 + 1 + *j1 * a_dim1;
-    a[i__1].r = 0.;
-    a[i__1].i = 0.; // , expr subst
+    a[i__1].real = 0.;
+    a[i__1].imag = 0.; // , expr subst
     i__1 = *j1 + 1 + *j1 * b_dim1;
-    b[i__1].r = 0.;
-    b[i__1].i = 0.; // , expr subst
+    b[i__1].real = 0.;
+    b[i__1].imag = 0.; // , expr subst
     /* Accumulate transformations into Q and Z if requested. */
     if(*wantz)
     {

@@ -281,18 +281,18 @@ void aocl_lapack_zhbev(char *jobz, char *uplo, aocl_int64_t *n, aocl_int64_t *kd
         if(lower)
         {
             i__1 = ab_dim1 + 1;
-            w[1] = ab[i__1].r;
+            w[1] = ab[i__1].real;
         }
         else
         {
             i__1 = *kd + 1 + ab_dim1;
-            w[1] = ab[i__1].r;
+            w[1] = ab[i__1].real;
         }
         if(wantz)
         {
             i__1 = z_dim1 + 1;
-            z__[i__1].r = 1.;
-            z__[i__1].i = 0.; // , expr subst
+            z__[i__1].real = 1.;
+            z__[i__1].imag = 0.; // , expr subst
         }
         AOCL_DTL_TRACE_LOG_EXIT
         return;

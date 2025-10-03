@@ -415,21 +415,21 @@ void aocl_lapack_chpevx(char *jobz, char *range, char *uplo, aocl_int64_t *n, sc
         if(alleig || indeig)
         {
             *m = 1;
-            w[1] = ap[1].r;
+            w[1] = ap[1].real;
         }
         else
         {
-            if(*vl < ap[1].r && *vu >= ap[1].r)
+            if(*vl < ap[1].real && *vu >= ap[1].real)
             {
                 *m = 1;
-                w[1] = ap[1].r;
+                w[1] = ap[1].real;
             }
         }
         if(wantz)
         {
             i__1 = z_dim1 + 1;
-            z__[i__1].r = 1.f;
-            z__[i__1].i = 0.f; // , expr subst
+            z__[i__1].real = 1.f;
+            z__[i__1].imag = 0.f; // , expr subst
         }
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;

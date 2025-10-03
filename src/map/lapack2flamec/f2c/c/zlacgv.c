@@ -117,8 +117,8 @@ void aocl_lapack_zlacgv(aocl_int64_t *n, dcomplex *x, aocl_int64_t *incx)
         {
             i__2 = i__;
             d_cnjg(&z__1, &x[i__]);
-            x[i__2].r = z__1.r;
-            x[i__2].i = z__1.i; // , expr subst
+            x[i__2].real = z__1.real;
+            x[i__2].imag = z__1.imag; // , expr subst
             /* L10: */
         }
     }
@@ -134,8 +134,8 @@ void aocl_lapack_zlacgv(aocl_int64_t *n, dcomplex *x, aocl_int64_t *incx)
         {
             i__2 = ioff;
             d_cnjg(&z__1, &x[ioff]);
-            x[i__2].r = z__1.r;
-            x[i__2].i = z__1.i; // , expr subst
+            x[i__2].real = z__1.real;
+            x[i__2].imag = z__1.imag; // , expr subst
             ioff += *incx;
             /* L20: */
         }

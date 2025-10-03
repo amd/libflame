@@ -230,7 +230,7 @@ void aocl_lapack_cspmv(char *uplo, aocl_int64_t *n, scomplex *alpha, scomplex *a
         return;
     }
     /* Quick return if possible. */
-    if(*n == 0 || alpha->r == 0.f && alpha->i == 0.f && (beta->r == 1.f && beta->i == 0.f))
+    if(*n == 0 || alpha->real == 0.f && alpha->imag == 0.f && (beta->real == 1.f && beta->imag == 0.f))
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
@@ -255,18 +255,18 @@ void aocl_lapack_cspmv(char *uplo, aocl_int64_t *n, scomplex *alpha, scomplex *a
     /* Start the operations. In this version the elements of the array AP */
     /* are accessed sequentially with one pass through AP. */
     /* First form y := beta*y. */
-    if(beta->r != 1.f || beta->i != 0.f)
+    if(beta->real != 1.f || beta->imag != 0.f)
     {
         if(*incy == 1)
         {
-            if(beta->r == 0.f && beta->i == 0.f)
+            if(beta->real == 0.f && beta->imag == 0.f)
             {
                 i__1 = *n;
                 for(i__ = 1; i__ <= i__1; ++i__)
                 {
                     i__2 = i__;
-                    y[i__2].r = 0.f;
-                    y[i__2].i = 0.f; // , expr subst
+                    y[i__2].real = 0.f;
+                    y[i__2].imag = 0.f; // , expr subst
                     /* L10: */
                 }
             }
@@ -277,10 +277,10 @@ void aocl_lapack_cspmv(char *uplo, aocl_int64_t *n, scomplex *alpha, scomplex *a
                 {
                     i__2 = i__;
                     i__3 = i__;
-                    q__1.r = beta->r * y[i__3].r - beta->i * y[i__3].i;
-                    q__1.i = beta->r * y[i__3].i + beta->i * y[i__3].r; // , expr subst
-                    y[i__2].r = q__1.r;
-                    y[i__2].i = q__1.i; // , expr subst
+                    q__1.real = beta->real * y[i__3].real - beta->imag * y[i__3].imag;
+                    q__1.imag = beta->real * y[i__3].imag + beta->imag * y[i__3].real; // , expr subst
+                    y[i__2].real = q__1.real;
+                    y[i__2].imag = q__1.imag; // , expr subst
                     /* L20: */
                 }
             }
@@ -288,14 +288,14 @@ void aocl_lapack_cspmv(char *uplo, aocl_int64_t *n, scomplex *alpha, scomplex *a
         else
         {
             iy = ky;
-            if(beta->r == 0.f && beta->i == 0.f)
+            if(beta->real == 0.f && beta->imag == 0.f)
             {
                 i__1 = *n;
                 for(i__ = 1; i__ <= i__1; ++i__)
                 {
                     i__2 = iy;
-                    y[i__2].r = 0.f;
-                    y[i__2].i = 0.f; // , expr subst
+                    y[i__2].real = 0.f;
+                    y[i__2].imag = 0.f; // , expr subst
                     iy += *incy;
                     /* L30: */
                 }
@@ -307,17 +307,17 @@ void aocl_lapack_cspmv(char *uplo, aocl_int64_t *n, scomplex *alpha, scomplex *a
                 {
                     i__2 = iy;
                     i__3 = iy;
-                    q__1.r = beta->r * y[i__3].r - beta->i * y[i__3].i;
-                    q__1.i = beta->r * y[i__3].i + beta->i * y[i__3].r; // , expr subst
-                    y[i__2].r = q__1.r;
-                    y[i__2].i = q__1.i; // , expr subst
+                    q__1.real = beta->real * y[i__3].real - beta->imag * y[i__3].imag;
+                    q__1.imag = beta->real * y[i__3].imag + beta->imag * y[i__3].real; // , expr subst
+                    y[i__2].real = q__1.real;
+                    y[i__2].imag = q__1.imag; // , expr subst
                     iy += *incy;
                     /* L40: */
                 }
             }
         }
     }
-    if(alpha->r == 0.f && alpha->i == 0.f)
+    if(alpha->real == 0.f && alpha->imag == 0.f)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
@@ -332,12 +332,12 @@ void aocl_lapack_cspmv(char *uplo, aocl_int64_t *n, scomplex *alpha, scomplex *a
             for(j = 1; j <= i__1; ++j)
             {
                 i__2 = j;
-                q__1.r = alpha->r * x[i__2].r - alpha->i * x[i__2].i;
-                q__1.i = alpha->r * x[i__2].i + alpha->i * x[i__2].r; // , expr subst
-                temp1.r = q__1.r;
-                temp1.i = q__1.i; // , expr subst
-                temp2.r = 0.f;
-                temp2.i = 0.f; // , expr subst
+                q__1.real = alpha->real * x[i__2].real - alpha->imag * x[i__2].imag;
+                q__1.imag = alpha->real * x[i__2].imag + alpha->imag * x[i__2].real; // , expr subst
+                temp1.real = q__1.real;
+                temp1.imag = q__1.imag; // , expr subst
+                temp2.real = 0.f;
+                temp2.imag = 0.f; // , expr subst
                 k = kk;
                 i__2 = j - 1;
                 for(i__ = 1; i__ <= i__2; ++i__)
@@ -345,36 +345,36 @@ void aocl_lapack_cspmv(char *uplo, aocl_int64_t *n, scomplex *alpha, scomplex *a
                     i__3 = i__;
                     i__4 = i__;
                     i__5 = k;
-                    q__2.r = temp1.r * ap[i__5].r - temp1.i * ap[i__5].i;
-                    q__2.i = temp1.r * ap[i__5].i + temp1.i * ap[i__5].r; // , expr subst
-                    q__1.r = y[i__4].r + q__2.r;
-                    q__1.i = y[i__4].i + q__2.i; // , expr subst
-                    y[i__3].r = q__1.r;
-                    y[i__3].i = q__1.i; // , expr subst
+                    q__2.real = temp1.real * ap[i__5].real - temp1.imag * ap[i__5].imag;
+                    q__2.imag = temp1.real * ap[i__5].imag + temp1.imag * ap[i__5].real; // , expr subst
+                    q__1.real = y[i__4].real + q__2.real;
+                    q__1.imag = y[i__4].imag + q__2.imag; // , expr subst
+                    y[i__3].real = q__1.real;
+                    y[i__3].imag = q__1.imag; // , expr subst
                     i__3 = k;
                     i__4 = i__;
-                    q__2.r = ap[i__3].r * x[i__4].r - ap[i__3].i * x[i__4].i;
-                    q__2.i = ap[i__3].r * x[i__4].i + ap[i__3].i * x[i__4].r; // , expr subst
-                    q__1.r = temp2.r + q__2.r;
-                    q__1.i = temp2.i + q__2.i; // , expr subst
-                    temp2.r = q__1.r;
-                    temp2.i = q__1.i; // , expr subst
+                    q__2.real = ap[i__3].real * x[i__4].real - ap[i__3].imag * x[i__4].imag;
+                    q__2.imag = ap[i__3].real * x[i__4].imag + ap[i__3].imag * x[i__4].real; // , expr subst
+                    q__1.real = temp2.real + q__2.real;
+                    q__1.imag = temp2.imag + q__2.imag; // , expr subst
+                    temp2.real = q__1.real;
+                    temp2.imag = q__1.imag; // , expr subst
                     ++k;
                     /* L50: */
                 }
                 i__2 = j;
                 i__3 = j;
                 i__4 = kk + j - 1;
-                q__3.r = temp1.r * ap[i__4].r - temp1.i * ap[i__4].i;
-                q__3.i = temp1.r * ap[i__4].i + temp1.i * ap[i__4].r; // , expr subst
-                q__2.r = y[i__3].r + q__3.r;
-                q__2.i = y[i__3].i + q__3.i; // , expr subst
-                q__4.r = alpha->r * temp2.r - alpha->i * temp2.i;
-                q__4.i = alpha->r * temp2.i + alpha->i * temp2.r; // , expr subst
-                q__1.r = q__2.r + q__4.r;
-                q__1.i = q__2.i + q__4.i; // , expr subst
-                y[i__2].r = q__1.r;
-                y[i__2].i = q__1.i; // , expr subst
+                q__3.real = temp1.real * ap[i__4].real - temp1.imag * ap[i__4].imag;
+                q__3.imag = temp1.real * ap[i__4].imag + temp1.imag * ap[i__4].real; // , expr subst
+                q__2.real = y[i__3].real + q__3.real;
+                q__2.imag = y[i__3].imag + q__3.imag; // , expr subst
+                q__4.real = alpha->real * temp2.real - alpha->imag * temp2.imag;
+                q__4.imag = alpha->real * temp2.imag + alpha->imag * temp2.real; // , expr subst
+                q__1.real = q__2.real + q__4.real;
+                q__1.imag = q__2.imag + q__4.imag; // , expr subst
+                y[i__2].real = q__1.real;
+                y[i__2].imag = q__1.imag; // , expr subst
                 kk += j;
                 /* L60: */
             }
@@ -387,12 +387,12 @@ void aocl_lapack_cspmv(char *uplo, aocl_int64_t *n, scomplex *alpha, scomplex *a
             for(j = 1; j <= i__1; ++j)
             {
                 i__2 = jx;
-                q__1.r = alpha->r * x[i__2].r - alpha->i * x[i__2].i;
-                q__1.i = alpha->r * x[i__2].i + alpha->i * x[i__2].r; // , expr subst
-                temp1.r = q__1.r;
-                temp1.i = q__1.i; // , expr subst
-                temp2.r = 0.f;
-                temp2.i = 0.f; // , expr subst
+                q__1.real = alpha->real * x[i__2].real - alpha->imag * x[i__2].imag;
+                q__1.imag = alpha->real * x[i__2].imag + alpha->imag * x[i__2].real; // , expr subst
+                temp1.real = q__1.real;
+                temp1.imag = q__1.imag; // , expr subst
+                temp2.real = 0.f;
+                temp2.imag = 0.f; // , expr subst
                 ix = kx;
                 iy = ky;
                 i__2 = kk + j - 2;
@@ -401,20 +401,20 @@ void aocl_lapack_cspmv(char *uplo, aocl_int64_t *n, scomplex *alpha, scomplex *a
                     i__3 = iy;
                     i__4 = iy;
                     i__5 = k;
-                    q__2.r = temp1.r * ap[i__5].r - temp1.i * ap[i__5].i;
-                    q__2.i = temp1.r * ap[i__5].i + temp1.i * ap[i__5].r; // , expr subst
-                    q__1.r = y[i__4].r + q__2.r;
-                    q__1.i = y[i__4].i + q__2.i; // , expr subst
-                    y[i__3].r = q__1.r;
-                    y[i__3].i = q__1.i; // , expr subst
+                    q__2.real = temp1.real * ap[i__5].real - temp1.imag * ap[i__5].imag;
+                    q__2.imag = temp1.real * ap[i__5].imag + temp1.imag * ap[i__5].real; // , expr subst
+                    q__1.real = y[i__4].real + q__2.real;
+                    q__1.imag = y[i__4].imag + q__2.imag; // , expr subst
+                    y[i__3].real = q__1.real;
+                    y[i__3].imag = q__1.imag; // , expr subst
                     i__3 = k;
                     i__4 = ix;
-                    q__2.r = ap[i__3].r * x[i__4].r - ap[i__3].i * x[i__4].i;
-                    q__2.i = ap[i__3].r * x[i__4].i + ap[i__3].i * x[i__4].r; // , expr subst
-                    q__1.r = temp2.r + q__2.r;
-                    q__1.i = temp2.i + q__2.i; // , expr subst
-                    temp2.r = q__1.r;
-                    temp2.i = q__1.i; // , expr subst
+                    q__2.real = ap[i__3].real * x[i__4].real - ap[i__3].imag * x[i__4].imag;
+                    q__2.imag = ap[i__3].real * x[i__4].imag + ap[i__3].imag * x[i__4].real; // , expr subst
+                    q__1.real = temp2.real + q__2.real;
+                    q__1.imag = temp2.imag + q__2.imag; // , expr subst
+                    temp2.real = q__1.real;
+                    temp2.imag = q__1.imag; // , expr subst
                     ix += *incx;
                     iy += *incy;
                     /* L70: */
@@ -422,16 +422,16 @@ void aocl_lapack_cspmv(char *uplo, aocl_int64_t *n, scomplex *alpha, scomplex *a
                 i__2 = jy;
                 i__3 = jy;
                 i__4 = kk + j - 1;
-                q__3.r = temp1.r * ap[i__4].r - temp1.i * ap[i__4].i;
-                q__3.i = temp1.r * ap[i__4].i + temp1.i * ap[i__4].r; // , expr subst
-                q__2.r = y[i__3].r + q__3.r;
-                q__2.i = y[i__3].i + q__3.i; // , expr subst
-                q__4.r = alpha->r * temp2.r - alpha->i * temp2.i;
-                q__4.i = alpha->r * temp2.i + alpha->i * temp2.r; // , expr subst
-                q__1.r = q__2.r + q__4.r;
-                q__1.i = q__2.i + q__4.i; // , expr subst
-                y[i__2].r = q__1.r;
-                y[i__2].i = q__1.i; // , expr subst
+                q__3.real = temp1.real * ap[i__4].real - temp1.imag * ap[i__4].imag;
+                q__3.imag = temp1.real * ap[i__4].imag + temp1.imag * ap[i__4].real; // , expr subst
+                q__2.real = y[i__3].real + q__3.real;
+                q__2.imag = y[i__3].imag + q__3.imag; // , expr subst
+                q__4.real = alpha->real * temp2.real - alpha->imag * temp2.imag;
+                q__4.imag = alpha->real * temp2.imag + alpha->imag * temp2.real; // , expr subst
+                q__1.real = q__2.real + q__4.real;
+                q__1.imag = q__2.imag + q__4.imag; // , expr subst
+                y[i__2].real = q__1.real;
+                y[i__2].imag = q__1.imag; // , expr subst
                 jx += *incx;
                 jy += *incy;
                 kk += j;
@@ -448,21 +448,21 @@ void aocl_lapack_cspmv(char *uplo, aocl_int64_t *n, scomplex *alpha, scomplex *a
             for(j = 1; j <= i__1; ++j)
             {
                 i__2 = j;
-                q__1.r = alpha->r * x[i__2].r - alpha->i * x[i__2].i;
-                q__1.i = alpha->r * x[i__2].i + alpha->i * x[i__2].r; // , expr subst
-                temp1.r = q__1.r;
-                temp1.i = q__1.i; // , expr subst
-                temp2.r = 0.f;
-                temp2.i = 0.f; // , expr subst
+                q__1.real = alpha->real * x[i__2].real - alpha->imag * x[i__2].imag;
+                q__1.imag = alpha->real * x[i__2].imag + alpha->imag * x[i__2].real; // , expr subst
+                temp1.real = q__1.real;
+                temp1.imag = q__1.imag; // , expr subst
+                temp2.real = 0.f;
+                temp2.imag = 0.f; // , expr subst
                 i__2 = j;
                 i__3 = j;
                 i__4 = kk;
-                q__2.r = temp1.r * ap[i__4].r - temp1.i * ap[i__4].i;
-                q__2.i = temp1.r * ap[i__4].i + temp1.i * ap[i__4].r; // , expr subst
-                q__1.r = y[i__3].r + q__2.r;
-                q__1.i = y[i__3].i + q__2.i; // , expr subst
-                y[i__2].r = q__1.r;
-                y[i__2].i = q__1.i; // , expr subst
+                q__2.real = temp1.real * ap[i__4].real - temp1.imag * ap[i__4].imag;
+                q__2.imag = temp1.real * ap[i__4].imag + temp1.imag * ap[i__4].real; // , expr subst
+                q__1.real = y[i__3].real + q__2.real;
+                q__1.imag = y[i__3].imag + q__2.imag; // , expr subst
+                y[i__2].real = q__1.real;
+                y[i__2].imag = q__1.imag; // , expr subst
                 k = kk + 1;
                 i__2 = *n;
                 for(i__ = j + 1; i__ <= i__2; ++i__)
@@ -470,31 +470,31 @@ void aocl_lapack_cspmv(char *uplo, aocl_int64_t *n, scomplex *alpha, scomplex *a
                     i__3 = i__;
                     i__4 = i__;
                     i__5 = k;
-                    q__2.r = temp1.r * ap[i__5].r - temp1.i * ap[i__5].i;
-                    q__2.i = temp1.r * ap[i__5].i + temp1.i * ap[i__5].r; // , expr subst
-                    q__1.r = y[i__4].r + q__2.r;
-                    q__1.i = y[i__4].i + q__2.i; // , expr subst
-                    y[i__3].r = q__1.r;
-                    y[i__3].i = q__1.i; // , expr subst
+                    q__2.real = temp1.real * ap[i__5].real - temp1.imag * ap[i__5].imag;
+                    q__2.imag = temp1.real * ap[i__5].imag + temp1.imag * ap[i__5].real; // , expr subst
+                    q__1.real = y[i__4].real + q__2.real;
+                    q__1.imag = y[i__4].imag + q__2.imag; // , expr subst
+                    y[i__3].real = q__1.real;
+                    y[i__3].imag = q__1.imag; // , expr subst
                     i__3 = k;
                     i__4 = i__;
-                    q__2.r = ap[i__3].r * x[i__4].r - ap[i__3].i * x[i__4].i;
-                    q__2.i = ap[i__3].r * x[i__4].i + ap[i__3].i * x[i__4].r; // , expr subst
-                    q__1.r = temp2.r + q__2.r;
-                    q__1.i = temp2.i + q__2.i; // , expr subst
-                    temp2.r = q__1.r;
-                    temp2.i = q__1.i; // , expr subst
+                    q__2.real = ap[i__3].real * x[i__4].real - ap[i__3].imag * x[i__4].imag;
+                    q__2.imag = ap[i__3].real * x[i__4].imag + ap[i__3].imag * x[i__4].real; // , expr subst
+                    q__1.real = temp2.real + q__2.real;
+                    q__1.imag = temp2.imag + q__2.imag; // , expr subst
+                    temp2.real = q__1.real;
+                    temp2.imag = q__1.imag; // , expr subst
                     ++k;
                     /* L90: */
                 }
                 i__2 = j;
                 i__3 = j;
-                q__2.r = alpha->r * temp2.r - alpha->i * temp2.i;
-                q__2.i = alpha->r * temp2.i + alpha->i * temp2.r; // , expr subst
-                q__1.r = y[i__3].r + q__2.r;
-                q__1.i = y[i__3].i + q__2.i; // , expr subst
-                y[i__2].r = q__1.r;
-                y[i__2].i = q__1.i; // , expr subst
+                q__2.real = alpha->real * temp2.real - alpha->imag * temp2.imag;
+                q__2.imag = alpha->real * temp2.imag + alpha->imag * temp2.real; // , expr subst
+                q__1.real = y[i__3].real + q__2.real;
+                q__1.imag = y[i__3].imag + q__2.imag; // , expr subst
+                y[i__2].real = q__1.real;
+                y[i__2].imag = q__1.imag; // , expr subst
                 kk += *n - j + 1;
                 /* L100: */
             }
@@ -507,21 +507,21 @@ void aocl_lapack_cspmv(char *uplo, aocl_int64_t *n, scomplex *alpha, scomplex *a
             for(j = 1; j <= i__1; ++j)
             {
                 i__2 = jx;
-                q__1.r = alpha->r * x[i__2].r - alpha->i * x[i__2].i;
-                q__1.i = alpha->r * x[i__2].i + alpha->i * x[i__2].r; // , expr subst
-                temp1.r = q__1.r;
-                temp1.i = q__1.i; // , expr subst
-                temp2.r = 0.f;
-                temp2.i = 0.f; // , expr subst
+                q__1.real = alpha->real * x[i__2].real - alpha->imag * x[i__2].imag;
+                q__1.imag = alpha->real * x[i__2].imag + alpha->imag * x[i__2].real; // , expr subst
+                temp1.real = q__1.real;
+                temp1.imag = q__1.imag; // , expr subst
+                temp2.real = 0.f;
+                temp2.imag = 0.f; // , expr subst
                 i__2 = jy;
                 i__3 = jy;
                 i__4 = kk;
-                q__2.r = temp1.r * ap[i__4].r - temp1.i * ap[i__4].i;
-                q__2.i = temp1.r * ap[i__4].i + temp1.i * ap[i__4].r; // , expr subst
-                q__1.r = y[i__3].r + q__2.r;
-                q__1.i = y[i__3].i + q__2.i; // , expr subst
-                y[i__2].r = q__1.r;
-                y[i__2].i = q__1.i; // , expr subst
+                q__2.real = temp1.real * ap[i__4].real - temp1.imag * ap[i__4].imag;
+                q__2.imag = temp1.real * ap[i__4].imag + temp1.imag * ap[i__4].real; // , expr subst
+                q__1.real = y[i__3].real + q__2.real;
+                q__1.imag = y[i__3].imag + q__2.imag; // , expr subst
+                y[i__2].real = q__1.real;
+                y[i__2].imag = q__1.imag; // , expr subst
                 ix = jx;
                 iy = jy;
                 i__2 = kk + *n - j;
@@ -532,30 +532,30 @@ void aocl_lapack_cspmv(char *uplo, aocl_int64_t *n, scomplex *alpha, scomplex *a
                     i__3 = iy;
                     i__4 = iy;
                     i__5 = k;
-                    q__2.r = temp1.r * ap[i__5].r - temp1.i * ap[i__5].i;
-                    q__2.i = temp1.r * ap[i__5].i + temp1.i * ap[i__5].r; // , expr subst
-                    q__1.r = y[i__4].r + q__2.r;
-                    q__1.i = y[i__4].i + q__2.i; // , expr subst
-                    y[i__3].r = q__1.r;
-                    y[i__3].i = q__1.i; // , expr subst
+                    q__2.real = temp1.real * ap[i__5].real - temp1.imag * ap[i__5].imag;
+                    q__2.imag = temp1.real * ap[i__5].imag + temp1.imag * ap[i__5].real; // , expr subst
+                    q__1.real = y[i__4].real + q__2.real;
+                    q__1.imag = y[i__4].imag + q__2.imag; // , expr subst
+                    y[i__3].real = q__1.real;
+                    y[i__3].imag = q__1.imag; // , expr subst
                     i__3 = k;
                     i__4 = ix;
-                    q__2.r = ap[i__3].r * x[i__4].r - ap[i__3].i * x[i__4].i;
-                    q__2.i = ap[i__3].r * x[i__4].i + ap[i__3].i * x[i__4].r; // , expr subst
-                    q__1.r = temp2.r + q__2.r;
-                    q__1.i = temp2.i + q__2.i; // , expr subst
-                    temp2.r = q__1.r;
-                    temp2.i = q__1.i; // , expr subst
+                    q__2.real = ap[i__3].real * x[i__4].real - ap[i__3].imag * x[i__4].imag;
+                    q__2.imag = ap[i__3].real * x[i__4].imag + ap[i__3].imag * x[i__4].real; // , expr subst
+                    q__1.real = temp2.real + q__2.real;
+                    q__1.imag = temp2.imag + q__2.imag; // , expr subst
+                    temp2.real = q__1.real;
+                    temp2.imag = q__1.imag; // , expr subst
                     /* L110: */
                 }
                 i__2 = jy;
                 i__3 = jy;
-                q__2.r = alpha->r * temp2.r - alpha->i * temp2.i;
-                q__2.i = alpha->r * temp2.i + alpha->i * temp2.r; // , expr subst
-                q__1.r = y[i__3].r + q__2.r;
-                q__1.i = y[i__3].i + q__2.i; // , expr subst
-                y[i__2].r = q__1.r;
-                y[i__2].i = q__1.i; // , expr subst
+                q__2.real = alpha->real * temp2.real - alpha->imag * temp2.imag;
+                q__2.imag = alpha->real * temp2.imag + alpha->imag * temp2.real; // , expr subst
+                q__1.real = y[i__3].real + q__2.real;
+                q__1.imag = y[i__3].imag + q__2.imag; // , expr subst
+                y[i__2].real = q__1.real;
+                y[i__2].imag = q__1.imag; // , expr subst
                 jx += *incx;
                 jy += *incy;
                 kk += *n - j + 1;

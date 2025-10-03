@@ -4,7 +4,7 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static dcomplex c_b1 = {{1.}, {0.}};
+static dcomplex c_b1 = {1., 0.};
 static aocl_int64_t c__1 = 1;
 /* > \brief \b ZTPTRI */
 /* =========== DOCUMENTATION =========== */
@@ -206,7 +206,7 @@ void aocl_lapack_ztptri(char *uplo, char *diag, aocl_int64_t *n, dcomplex *ap,
             {
                 jj += *info;
                 i__2 = jj;
-                if(ap[i__2].r == 0. && ap[i__2].i == 0.)
+                if(ap[i__2].real == 0. && ap[i__2].imag == 0.)
                 {
                     AOCL_DTL_TRACE_LOG_EXIT
                     return;
@@ -221,7 +221,7 @@ void aocl_lapack_ztptri(char *uplo, char *diag, aocl_int64_t *n, dcomplex *ap,
             for(*info = 1; *info <= i__1; ++(*info))
             {
                 i__2 = jj;
-                if(ap[i__2].r == 0. && ap[i__2].i == 0.)
+                if(ap[i__2].real == 0. && ap[i__2].imag == 0.)
                 {
                     AOCL_DTL_TRACE_LOG_EXIT
                     return;
@@ -243,20 +243,20 @@ void aocl_lapack_ztptri(char *uplo, char *diag, aocl_int64_t *n, dcomplex *ap,
             {
                 i__2 = jc + j - 1;
                 z_div(&z__1, &c_b1, &ap[jc + j - 1]);
-                ap[i__2].r = z__1.r;
-                ap[i__2].i = z__1.i; // , expr subst
+                ap[i__2].real = z__1.real;
+                ap[i__2].imag = z__1.imag; // , expr subst
                 i__2 = jc + j - 1;
-                z__1.r = -ap[i__2].r;
-                z__1.i = -ap[i__2].i; // , expr subst
-                ajj.r = z__1.r;
-                ajj.i = z__1.i; // , expr subst
+                z__1.real = -ap[i__2].real;
+                z__1.imag = -ap[i__2].imag; // , expr subst
+                ajj.real = z__1.real;
+                ajj.imag = z__1.imag; // , expr subst
             }
             else
             {
-                z__1.r = -1.;
-                z__1.i = -0.; // , expr subst
-                ajj.r = z__1.r;
-                ajj.i = z__1.i; // , expr subst
+                z__1.real = -1.;
+                z__1.imag = -0.; // , expr subst
+                ajj.real = z__1.real;
+                ajj.imag = z__1.imag; // , expr subst
             }
             /* Compute elements 1:j-1 of j-th column. */
             i__2 = j - 1;
@@ -277,20 +277,20 @@ void aocl_lapack_ztptri(char *uplo, char *diag, aocl_int64_t *n, dcomplex *ap,
             {
                 i__1 = jc;
                 z_div(&z__1, &c_b1, &ap[jc]);
-                ap[i__1].r = z__1.r;
-                ap[i__1].i = z__1.i; // , expr subst
+                ap[i__1].real = z__1.real;
+                ap[i__1].imag = z__1.imag; // , expr subst
                 i__1 = jc;
-                z__1.r = -ap[i__1].r;
-                z__1.i = -ap[i__1].i; // , expr subst
-                ajj.r = z__1.r;
-                ajj.i = z__1.i; // , expr subst
+                z__1.real = -ap[i__1].real;
+                z__1.imag = -ap[i__1].imag; // , expr subst
+                ajj.real = z__1.real;
+                ajj.imag = z__1.imag; // , expr subst
             }
             else
             {
-                z__1.r = -1.;
-                z__1.i = -0.; // , expr subst
-                ajj.r = z__1.r;
-                ajj.i = z__1.i; // , expr subst
+                z__1.real = -1.;
+                z__1.imag = -0.; // , expr subst
+                ajj.real = z__1.real;
+                ajj.imag = z__1.imag; // , expr subst
             }
             if(j < *n)
             {

@@ -1,6 +1,6 @@
 #include "FLA_f2c.h" /* Table of constant values */
-static scomplex c_b1 = {{1.f}, {0.f}};
-static scomplex c_b2 = {{0.f}, {0.f}};
+static scomplex c_b1 = {1.f, 0.f};
+static scomplex c_b2 = {0.f, 0.f};
 static aocl_int64_t c__1 = 1;
 
 void aocl_lapack_clarfy(char *uplo, aocl_int64_t *n, scomplex *v, aocl_int64_t *incv, scomplex *tau,
@@ -47,26 +47,26 @@ void aocl_lapack_clarfy(char *uplo, aocl_int64_t *n, scomplex *v, aocl_int64_t *
     c__ -= c_offset;
     --work;
     /* Function Body */
-    if(tau->r == 0.f && tau->i == 0.f)
+    if(tau->real == 0.f && tau->imag == 0.f)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
     /* Form w:= C * v */
     aocl_blas_chemv(uplo, n, &c_b1, &c__[c_offset], ldc, &v[1], incv, &c_b2, &work[1], &c__1);
-    q__3.r = -.5f;
-    q__3.i = -0.f; // , expr subst
-    q__2.r = q__3.r * tau->r - q__3.i * tau->i;
-    q__2.i = q__3.r * tau->i + q__3.i * tau->r; // , expr subst
+    q__3.real = -.5f;
+    q__3.imag = -0.f; // , expr subst
+    q__2.real = q__3.real * tau->real - q__3.imag * tau->imag;
+    q__2.imag = q__3.real * tau->imag + q__3.imag * tau->real; // , expr subst
     aocl_lapack_cdotc_f2c(&q__4, n, &work[1], &c__1, &v[1], incv);
-    q__1.r = q__2.r * q__4.r - q__2.i * q__4.i;
-    q__1.i = q__2.r * q__4.i + q__2.i * q__4.r; // , expr subst
-    alpha.r = q__1.r;
-    alpha.i = q__1.i; // , expr subst
+    q__1.real = q__2.real * q__4.real - q__2.imag * q__4.imag;
+    q__1.imag = q__2.real * q__4.imag + q__2.imag * q__4.real; // , expr subst
+    alpha.real = q__1.real;
+    alpha.imag = q__1.imag; // , expr subst
     aocl_blas_caxpy(n, &alpha, &v[1], incv, &work[1], &c__1);
     /* C := C - v * w' - w * v' */
-    q__1.r = -tau->r;
-    q__1.i = -tau->i; // , expr subst
+    q__1.real = -tau->real;
+    q__1.imag = -tau->imag; // , expr subst
     aocl_blas_cher2(uplo, n, &q__1, &v[1], incv, &work[1], &c__1, &c__[c_offset], ldc);
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
     return;

@@ -6,8 +6,8 @@
  libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
-static scomplex c_b14 = {{-1.f}, {0.f}};
-static scomplex c_b15 = {{1.f}, {0.f}};
+static scomplex c_b14 = {-1.f, 0.f};
+static scomplex c_b15 = {1.f, 0.f};
 static real c_b37 = 1.f;
 /* > \brief \b CLA_SYRFSX_EXTENDED improves the computed solution to a system of linear equations
  * for symmetri c indefinite matrices by performing extra-precise iterative refinement and provides
@@ -598,8 +598,8 @@ void cla_syrfsx_extended_(integer *prec_type__, char *uplo, integer *n, integer 
             for(i__ = 1; i__ <= i__2; ++i__)
             {
                 i__3 = i__;
-                y_tail__[i__3].r = 0.f;
-                y_tail__[i__3].i = 0.f; // , expr subst
+                y_tail__[i__3].real = 0.f;
+                y_tail__[i__3].imag = 0.f; // , expr subst
             }
         }
         dxrat = 0.f;
@@ -649,10 +649,10 @@ void cla_syrfsx_extended_(integer *prec_type__, char *uplo, integer *n, integer 
             for(i__ = 1; i__ <= i__3; ++i__)
             {
                 i__4 = i__ + j * y_dim1;
-                yk = (r__1 = y[i__4].r, f2c_abs(r__1))
+                yk = (r__1 = y[i__4].real, f2c_abs(r__1))
                      + (r__2 = r_imag(&y[i__ + j * y_dim1]), f2c_abs(r__2));
                 i__4 = i__;
-                dyk = (r__1 = dy[i__4].r, f2c_abs(r__1)) + (r__2 = r_imag(&dy[i__]), f2c_abs(r__2));
+                dyk = (r__1 = dy[i__4].real, f2c_abs(r__1)) + (r__2 = r_imag(&dy[i__]), f2c_abs(r__2));
                 if(yk != 0.f)
                 {
                     /* Computing MAX */
@@ -790,8 +790,8 @@ void cla_syrfsx_extended_(integer *prec_type__, char *uplo, integer *n, integer 
                 for(i__ = 1; i__ <= i__3; ++i__)
                 {
                     i__4 = i__;
-                    y_tail__[i__4].r = 0.f;
-                    y_tail__[i__4].i = 0.f; // , expr subst
+                    y_tail__[i__4].real = 0.f;
+                    y_tail__[i__4].imag = 0.f; // , expr subst
                 }
             }
             prevnormdx = normdx;
@@ -838,7 +838,7 @@ void cla_syrfsx_extended_(integer *prec_type__, char *uplo, integer *n, integer 
         for(i__ = 1; i__ <= i__2; ++i__)
         {
             i__3 = i__ + j * b_dim1;
-            ayb[i__] = (r__1 = b[i__3].r, f2c_abs(r__1))
+            ayb[i__] = (r__1 = b[i__3].real, f2c_abs(r__1))
                        + (r__2 = r_imag(&b[i__ + j * b_dim1]), f2c_abs(r__2));
         }
         /* Compute f2c_abs(op(A_s))*f2c_abs(Y) + f2c_abs(B_s). */

@@ -4,8 +4,8 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static scomplex c_b1 = {{0.f}, {0.f}};
-static scomplex c_b2 = {{1.f}, {0.f}};
+static scomplex c_b1 = {0.f, 0.f};
+static scomplex c_b2 = {1.f, 0.f};
 /* > \brief \b CGGSVP */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -443,7 +443,7 @@ void aocl_lapack_cggsvp(char *jobu, char *jobv, char *jobq, aocl_int64_t *m, aoc
     for(i__ = 1; i__ <= i__1; ++i__)
     {
         i__2 = i__ + i__ * b_dim1;
-        if((r__1 = b[i__2].r, f2c_abs(r__1))
+        if((r__1 = b[i__2].real, f2c_abs(r__1))
                + (r__2 = r_imag(&b[i__ + i__ * b_dim1]), f2c_abs(r__2))
            > *tolb)
         {
@@ -471,8 +471,8 @@ void aocl_lapack_cggsvp(char *jobu, char *jobv, char *jobq, aocl_int64_t *m, aoc
         for(i__ = j + 1; i__ <= i__2; ++i__)
         {
             i__3 = i__ + j * b_dim1;
-            b[i__3].r = 0.f;
-            b[i__3].i = 0.f; // , expr subst
+            b[i__3].real = 0.f;
+            b[i__3].imag = 0.f; // , expr subst
             /* L30: */
         }
         /* L40: */
@@ -511,8 +511,8 @@ void aocl_lapack_cggsvp(char *jobu, char *jobv, char *jobq, aocl_int64_t *m, aoc
             for(i__ = j - *n + *l + 1; i__ <= i__2; ++i__)
             {
                 i__3 = i__ + j * b_dim1;
-                b[i__3].r = 0.f;
-                b[i__3].i = 0.f; // , expr subst
+                b[i__3].real = 0.f;
+                b[i__3].imag = 0.f; // , expr subst
                 /* L50: */
             }
             /* L60: */
@@ -540,7 +540,7 @@ void aocl_lapack_cggsvp(char *jobu, char *jobv, char *jobq, aocl_int64_t *m, aoc
     for(i__ = 1; i__ <= i__1; ++i__)
     {
         i__2 = i__ + i__ * a_dim1;
-        if((r__1 = a[i__2].r, f2c_abs(r__1))
+        if((r__1 = a[i__2].real, f2c_abs(r__1))
                + (r__2 = r_imag(&a[i__ + i__ * a_dim1]), f2c_abs(r__2))
            > *tola)
         {
@@ -586,8 +586,8 @@ void aocl_lapack_cggsvp(char *jobu, char *jobv, char *jobq, aocl_int64_t *m, aoc
         for(i__ = j + 1; i__ <= i__2; ++i__)
         {
             i__3 = i__ + j * a_dim1;
-            a[i__3].r = 0.f;
-            a[i__3].i = 0.f; // , expr subst
+            a[i__3].real = 0.f;
+            a[i__3].imag = 0.f; // , expr subst
             /* L90: */
         }
         /* L100: */
@@ -620,8 +620,8 @@ void aocl_lapack_cggsvp(char *jobu, char *jobv, char *jobq, aocl_int64_t *m, aoc
             for(i__ = j - *n + *l + *k + 1; i__ <= i__2; ++i__)
             {
                 i__3 = i__ + j * a_dim1;
-                a[i__3].r = 0.f;
-                a[i__3].i = 0.f; // , expr subst
+                a[i__3].real = 0.f;
+                a[i__3].imag = 0.f; // , expr subst
                 /* L110: */
             }
             /* L120: */
@@ -652,8 +652,8 @@ void aocl_lapack_cggsvp(char *jobu, char *jobv, char *jobq, aocl_int64_t *m, aoc
             for(i__ = j - *n + *k + *l + 1; i__ <= i__2; ++i__)
             {
                 i__3 = i__ + j * a_dim1;
-                a[i__3].r = 0.f;
-                a[i__3].i = 0.f; // , expr subst
+                a[i__3].real = 0.f;
+                a[i__3].imag = 0.f; // , expr subst
                 /* L130: */
             }
             /* L140: */

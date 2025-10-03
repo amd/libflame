@@ -239,7 +239,7 @@ void aocl_lapack_cpbequ(char *uplo, aocl_int64_t *n, aocl_int64_t *kd, scomplex 
     }
     /* Initialize SMIN and AMAX. */
     i__1 = j + ab_dim1;
-    s[1] = ab[i__1].r;
+    s[1] = ab[i__1].real;
     smin = s[1];
     *amax = s[1];
     /* Find the minimum and maximum diagonal elements. */
@@ -247,7 +247,7 @@ void aocl_lapack_cpbequ(char *uplo, aocl_int64_t *n, aocl_int64_t *kd, scomplex 
     for(i__ = 2; i__ <= i__1; ++i__)
     {
         i__2 = j + i__ * ab_dim1;
-        s[i__] = ab[i__2].r;
+        s[i__] = ab[i__2].real;
         /* Computing MIN */
         r__1 = smin;
         r__2 = s[i__]; // , expr subst

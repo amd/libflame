@@ -360,7 +360,7 @@ L30:
             jp1 = j + 1;
             i__2 = i__ + j * a_dim1;
             i__3 = i__ + j * b_dim1;
-            if(a[i__2].r != 0. || a[i__2].i != 0. || (b[i__3].r != 0. || b[i__3].i != 0.))
+            if(a[i__2].real != 0. || a[i__2].imag != 0. || (b[i__3].real != 0. || b[i__3].imag != 0.))
             {
                 goto L50;
             }
@@ -374,7 +374,7 @@ L30:
         {
             i__2 = i__ + j * a_dim1;
             i__3 = i__ + j * b_dim1;
-            if(a[i__2].r != 0. || a[i__2].i != 0. || (b[i__3].r != 0. || b[i__3].i != 0.))
+            if(a[i__2].real != 0. || a[i__2].imag != 0. || (b[i__3].real != 0. || b[i__3].imag != 0.))
             {
                 goto L80;
             }
@@ -401,7 +401,7 @@ L100:
             ip1 = i__ + 1;
             i__3 = i__ + j * a_dim1;
             i__4 = i__ + j * b_dim1;
-            if(a[i__3].r != 0. || a[i__3].i != 0. || (b[i__4].r != 0. || b[i__4].i != 0.))
+            if(a[i__3].real != 0. || a[i__3].imag != 0. || (b[i__4].real != 0. || b[i__4].imag != 0.))
             {
                 goto L120;
             }
@@ -415,7 +415,7 @@ L100:
         {
             i__3 = i__ + j * a_dim1;
             i__4 = i__ + j * b_dim1;
-            if(a[i__3].r != 0. || a[i__3].i != 0. || (b[i__4].r != 0. || b[i__4].i != 0.))
+            if(a[i__3].real != 0. || a[i__3].imag != 0. || (b[i__4].real != 0. || b[i__4].imag != 0.))
             {
                 goto L150;
             }
@@ -501,24 +501,24 @@ L190:
         for(j = *ilo; j <= i__2; ++j)
         {
             i__3 = i__ + j * a_dim1;
-            if(a[i__3].r == 0. && a[i__3].i == 0.)
+            if(a[i__3].real == 0. && a[i__3].imag == 0.)
             {
                 ta = 0.;
                 goto L210;
             }
             i__3 = i__ + j * a_dim1;
-            d__3 = (d__1 = a[i__3].r, f2c_abs(d__1))
+            d__3 = (d__1 = a[i__3].real, f2c_abs(d__1))
                    + (d__2 = d_imag(&a[i__ + j * a_dim1]), f2c_abs(d__2));
             ta = d_lg10(&d__3) / basl;
         L210:
             i__3 = i__ + j * b_dim1;
-            if(b[i__3].r == 0. && b[i__3].i == 0.)
+            if(b[i__3].real == 0. && b[i__3].imag == 0.)
             {
                 tb = 0.;
                 goto L220;
             }
             i__3 = i__ + j * b_dim1;
-            d__3 = (d__1 = b[i__3].r, f2c_abs(d__1))
+            d__3 = (d__1 = b[i__3].real, f2c_abs(d__1))
                    + (d__2 = d_imag(&b[i__ + j * b_dim1]), f2c_abs(d__2));
             tb = d_lg10(&d__3) / basl;
         L220:
@@ -585,7 +585,7 @@ L250:
         for(j = *ilo; j <= i__2; ++j)
         {
             i__3 = i__ + j * a_dim1;
-            if(a[i__3].r == 0. && a[i__3].i == 0.)
+            if(a[i__3].real == 0. && a[i__3].imag == 0.)
             {
                 goto L280;
             }
@@ -593,7 +593,7 @@ L250:
             sum += work[j];
         L280:
             i__3 = i__ + j * b_dim1;
-            if(b[i__3].r == 0. && b[i__3].i == 0.)
+            if(b[i__3].real == 0. && b[i__3].imag == 0.)
             {
                 goto L290;
             }
@@ -613,7 +613,7 @@ L250:
         for(i__ = *ilo; i__ <= i__2; ++i__)
         {
             i__3 = i__ + j * a_dim1;
-            if(a[i__3].r == 0. && a[i__3].i == 0.)
+            if(a[i__3].real == 0. && a[i__3].imag == 0.)
             {
                 goto L310;
             }
@@ -621,7 +621,7 @@ L250:
             sum += work[i__ + *n];
         L310:
             i__3 = i__ + j * b_dim1;
-            if(b[i__3].r == 0. && b[i__3].i == 0.)
+            if(b[i__3].real == 0. && b[i__3].imag == 0.)
             {
                 goto L320;
             }

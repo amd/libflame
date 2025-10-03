@@ -534,15 +534,15 @@ void aocl_lapack_cggsvd3(char *jobu, char *jobv, char *jobq, aocl_int64_t *m, ao
         aocl_lapack_cggsvp3(jobu, jobv, jobq, m, p, n, &a[a_offset], lda, &b[b_offset], ldb, &tola,
                             &tolb, k, l, &u[u_offset], ldu, &v[v_offset], ldv, &q[q_offset], ldq,
                             &iwork[1], &rwork[1], &work[1], &work[1], &c_n1, info);
-        lwkopt = *n + (integer)work[1].r;
+        lwkopt = *n + (integer)work[1].real;
         /* Computing MAX */
         i__1 = *n << 1;
         lwkopt = fla_max(i__1, lwkopt);
         lwkopt = fla_max(1, lwkopt);
-        q__1.r = (real)lwkopt;
-        q__1.i = 0.f; // , expr subst
-        work[1].r = q__1.r;
-        work[1].i = q__1.i; // , expr subst
+        q__1.real = (real)lwkopt;
+        q__1.imag = 0.f; // , expr subst
+        work[1].real = q__1.real;
+        work[1].imag = q__1.imag; // , expr subst
     }
     if(*info != 0)
     {
@@ -609,10 +609,10 @@ void aocl_lapack_cggsvd3(char *jobu, char *jobv, char *jobq, aocl_int64_t *m, ao
         }
         /* L20: */
     }
-    q__1.r = (real)lwkopt;
-    q__1.i = 0.f; // , expr subst
-    work[1].r = q__1.r;
-    work[1].i = q__1.i; // , expr subst
+    q__1.real = (real)lwkopt;
+    q__1.imag = 0.f; // , expr subst
+    work[1].real = q__1.real;
+    work[1].imag = q__1.imag; // , expr subst
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
     return;
     /* End of CGGSVD3 */

@@ -226,8 +226,8 @@ void aocl_lapack_cungrq(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *k, scomp
             lwkopt = *m * nb;
         }
         r__1 = aocl_lapack_sroundup_lwork(&lwkopt);
-        work[1].r = r__1;
-        work[1].i = 0.f; // , expr subst
+        work[1].real = r__1;
+        work[1].imag = 0.f; // , expr subst
         if(*lwork < fla_max(1, *m) && !lquery)
         {
             *info = -8;
@@ -294,8 +294,8 @@ void aocl_lapack_cungrq(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *k, scomp
             for(i__ = 1; i__ <= i__2; ++i__)
             {
                 i__3 = i__ + j * a_dim1;
-                a[i__3].r = 0.f;
-                a[i__3].i = 0.f; // , expr subst
+                a[i__3].real = 0.f;
+                a[i__3].imag = 0.f; // , expr subst
                 /* L10: */
             }
             /* L20: */
@@ -347,8 +347,8 @@ void aocl_lapack_cungrq(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *k, scomp
                 for(j = ii; j <= i__4; ++j)
                 {
                     i__5 = j + l * a_dim1;
-                    a[i__5].r = 0.f;
-                    a[i__5].i = 0.f; // , expr subst
+                    a[i__5].real = 0.f;
+                    a[i__5].imag = 0.f; // , expr subst
                     /* L30: */
                 }
                 /* L40: */
@@ -357,8 +357,8 @@ void aocl_lapack_cungrq(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *k, scomp
         }
     }
     r__1 = aocl_lapack_sroundup_lwork(&iws);
-    work[1].r = r__1;
-    work[1].i = 0.f; // , expr subst
+    work[1].real = r__1;
+    work[1].imag = 0.f; // , expr subst
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
     return;
     /* End of CUNGRQ */

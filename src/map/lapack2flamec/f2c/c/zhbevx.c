@@ -4,8 +4,8 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static dcomplex c_b1 = {{0.}, {0.}};
-static dcomplex c_b2 = {{1.}, {0.}};
+static dcomplex c_b1 = {0., 0.};
+static dcomplex c_b2 = {1., 0.};
 static doublereal c_b16 = 1.;
 static aocl_int64_t c__1 = 1;
 /* > \brief <b> ZHBEVX computes the eigenvalues and, optionally, the left and/or right eigenvectors
@@ -457,16 +457,16 @@ void aocl_lapack_zhbevx(char *jobz, char *range, char *uplo, aocl_int64_t *n, ao
         if(lower)
         {
             i__1 = ab_dim1 + 1;
-            ctmp1.r = ab[i__1].r;
-            ctmp1.i = ab[i__1].i; // , expr subst
+            ctmp1.real = ab[i__1].real;
+            ctmp1.imag = ab[i__1].imag; // , expr subst
         }
         else
         {
             i__1 = *kd + 1 + ab_dim1;
-            ctmp1.r = ab[i__1].r;
-            ctmp1.i = ab[i__1].i; // , expr subst
+            ctmp1.real = ab[i__1].real;
+            ctmp1.imag = ab[i__1].imag; // , expr subst
         }
-        tmp1 = ctmp1.r;
+        tmp1 = ctmp1.real;
         if(valeig)
         {
             if(!(*vl < tmp1 && *vu >= tmp1))
@@ -476,12 +476,12 @@ void aocl_lapack_zhbevx(char *jobz, char *range, char *uplo, aocl_int64_t *n, ao
         }
         if(*m == 1)
         {
-            w[1] = ctmp1.r;
+            w[1] = ctmp1.real;
             if(wantz)
             {
                 i__1 = z_dim1 + 1;
-                z__[i__1].r = 1.;
-                z__[i__1].i = 0.; // , expr subst
+                z__[i__1].real = 1.;
+                z__[i__1].imag = 0.; // , expr subst
             }
         }
         AOCL_DTL_TRACE_LOG_EXIT

@@ -138,10 +138,10 @@ void aocl_lapack_zlascl2(aocl_int64_t *m, aocl_int64_t *n, doublereal *d__, dcom
             i__3 = i__ + j * x_dim1;
             i__4 = i__ + j * x_dim1;
             i__5 = i__;
-            z__1.r = d__[i__5] * x[i__4].r;
-            z__1.i = d__[i__5] * x[i__4].i; // , expr subst
-            x[i__3].r = z__1.r;
-            x[i__3].i = z__1.i; // , expr subst
+            z__1.real = d__[i__5] * x[i__4].real;
+            z__1.imag = d__[i__5] * x[i__4].imag; // , expr subst
+            x[i__3].real = z__1.real;
+            x[i__3].imag = z__1.imag; // , expr subst
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT

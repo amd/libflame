@@ -252,22 +252,22 @@ real aocl_lapack_cla_porcond_x(char *uplo, aocl_int64_t *n, scomplex *a, aocl_in
             {
                 i__3 = j + i__ * a_dim1;
                 i__4 = j;
-                q__2.r = a[i__3].r * x[i__4].r - a[i__3].i * x[i__4].i;
-                q__2.i = a[i__3].r * x[i__4].i + a[i__3].i * x[i__4].r; // , expr subst
-                q__1.r = q__2.r;
-                q__1.i = q__2.i; // , expr subst
-                tmp += (r__1 = q__1.r, f2c_abs(r__1)) + (r__2 = r_imag(&q__1), f2c_abs(r__2));
+                q__2.real = a[i__3].real * x[i__4].real - a[i__3].imag * x[i__4].imag;
+                q__2.imag = a[i__3].real * x[i__4].imag + a[i__3].imag * x[i__4].real; // , expr subst
+                q__1.real = q__2.real;
+                q__1.imag = q__2.imag; // , expr subst
+                tmp += (r__1 = q__1.real, f2c_abs(r__1)) + (r__2 = r_imag(&q__1), f2c_abs(r__2));
             }
             i__2 = *n;
             for(j = i__ + 1; j <= i__2; ++j)
             {
                 i__3 = i__ + j * a_dim1;
                 i__4 = j;
-                q__2.r = a[i__3].r * x[i__4].r - a[i__3].i * x[i__4].i;
-                q__2.i = a[i__3].r * x[i__4].i + a[i__3].i * x[i__4].r; // , expr subst
-                q__1.r = q__2.r;
-                q__1.i = q__2.i; // , expr subst
-                tmp += (r__1 = q__1.r, f2c_abs(r__1)) + (r__2 = r_imag(&q__1), f2c_abs(r__2));
+                q__2.real = a[i__3].real * x[i__4].real - a[i__3].imag * x[i__4].imag;
+                q__2.imag = a[i__3].real * x[i__4].imag + a[i__3].imag * x[i__4].real; // , expr subst
+                q__1.real = q__2.real;
+                q__1.imag = q__2.imag; // , expr subst
+                tmp += (r__1 = q__1.real, f2c_abs(r__1)) + (r__2 = r_imag(&q__1), f2c_abs(r__2));
             }
             rwork[i__] = tmp;
             anorm = fla_max(anorm, tmp);
@@ -284,22 +284,22 @@ real aocl_lapack_cla_porcond_x(char *uplo, aocl_int64_t *n, scomplex *a, aocl_in
             {
                 i__3 = i__ + j * a_dim1;
                 i__4 = j;
-                q__2.r = a[i__3].r * x[i__4].r - a[i__3].i * x[i__4].i;
-                q__2.i = a[i__3].r * x[i__4].i + a[i__3].i * x[i__4].r; // , expr subst
-                q__1.r = q__2.r;
-                q__1.i = q__2.i; // , expr subst
-                tmp += (r__1 = q__1.r, f2c_abs(r__1)) + (r__2 = r_imag(&q__1), f2c_abs(r__2));
+                q__2.real = a[i__3].real * x[i__4].real - a[i__3].imag * x[i__4].imag;
+                q__2.imag = a[i__3].real * x[i__4].imag + a[i__3].imag * x[i__4].real; // , expr subst
+                q__1.real = q__2.real;
+                q__1.imag = q__2.imag; // , expr subst
+                tmp += (r__1 = q__1.real, f2c_abs(r__1)) + (r__2 = r_imag(&q__1), f2c_abs(r__2));
             }
             i__2 = *n;
             for(j = i__ + 1; j <= i__2; ++j)
             {
                 i__3 = j + i__ * a_dim1;
                 i__4 = j;
-                q__2.r = a[i__3].r * x[i__4].r - a[i__3].i * x[i__4].i;
-                q__2.i = a[i__3].r * x[i__4].i + a[i__3].i * x[i__4].r; // , expr subst
-                q__1.r = q__2.r;
-                q__1.i = q__2.i; // , expr subst
-                tmp += (r__1 = q__1.r, f2c_abs(r__1)) + (r__2 = r_imag(&q__1), f2c_abs(r__2));
+                q__2.real = a[i__3].real * x[i__4].real - a[i__3].imag * x[i__4].imag;
+                q__2.imag = a[i__3].real * x[i__4].imag + a[i__3].imag * x[i__4].real; // , expr subst
+                q__1.real = q__2.real;
+                q__1.imag = q__2.imag; // , expr subst
+                tmp += (r__1 = q__1.real, f2c_abs(r__1)) + (r__2 = r_imag(&q__1), f2c_abs(r__2));
             }
             rwork[i__] = tmp;
             anorm = fla_max(anorm, tmp);
@@ -333,10 +333,10 @@ L10:
                 i__2 = i__;
                 i__3 = i__;
                 i__4 = i__;
-                q__1.r = rwork[i__4] * work[i__3].r;
-                q__1.i = rwork[i__4] * work[i__3].i; // , expr subst
-                work[i__2].r = q__1.r;
-                work[i__2].i = q__1.i; // , expr subst
+                q__1.real = rwork[i__4] * work[i__3].real;
+                q__1.imag = rwork[i__4] * work[i__3].imag; // , expr subst
+                work[i__2].real = q__1.real;
+                work[i__2].imag = q__1.imag; // , expr subst
             }
             if(up)
             {
@@ -352,8 +352,8 @@ L10:
             {
                 i__2 = i__;
                 c_div(&q__1, &work[i__], &x[i__]);
-                work[i__2].r = q__1.r;
-                work[i__2].i = q__1.i; // , expr subst
+                work[i__2].real = q__1.real;
+                work[i__2].imag = q__1.imag; // , expr subst
             }
         }
         else
@@ -364,8 +364,8 @@ L10:
             {
                 i__2 = i__;
                 c_div(&q__1, &work[i__], &x[i__]);
-                work[i__2].r = q__1.r;
-                work[i__2].i = q__1.i; // , expr subst
+                work[i__2].real = q__1.real;
+                work[i__2].imag = q__1.imag; // , expr subst
             }
             if(up)
             {
@@ -382,10 +382,10 @@ L10:
                 i__2 = i__;
                 i__3 = i__;
                 i__4 = i__;
-                q__1.r = rwork[i__4] * work[i__3].r;
-                q__1.i = rwork[i__4] * work[i__3].i; // , expr subst
-                work[i__2].r = q__1.r;
-                work[i__2].i = q__1.i; // , expr subst
+                q__1.real = rwork[i__4] * work[i__3].real;
+                q__1.imag = rwork[i__4] * work[i__3].imag; // , expr subst
+                work[i__2].real = q__1.real;
+                work[i__2].imag = q__1.imag; // , expr subst
             }
         }
         goto L10;

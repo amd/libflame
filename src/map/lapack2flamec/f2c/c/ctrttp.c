@@ -194,8 +194,8 @@ void aocl_lapack_ctrttp(char *uplo, aocl_int64_t *n, scomplex *a, aocl_int64_t *
                 ++k;
                 i__3 = k;
                 i__4 = i__ + j * a_dim1;
-                ap[i__3].r = a[i__4].r;
-                ap[i__3].i = a[i__4].i; // , expr subst
+                ap[i__3].real = a[i__4].real;
+                ap[i__3].imag = a[i__4].imag; // , expr subst
             }
         }
     }
@@ -211,8 +211,8 @@ void aocl_lapack_ctrttp(char *uplo, aocl_int64_t *n, scomplex *a, aocl_int64_t *
                 ++k;
                 i__3 = k;
                 i__4 = i__ + j * a_dim1;
-                ap[i__3].r = a[i__4].r;
-                ap[i__3].i = a[i__4].i; // , expr subst
+                ap[i__3].real = a[i__4].real;
+                ap[i__3].imag = a[i__4].imag; // , expr subst
             }
         }
     }

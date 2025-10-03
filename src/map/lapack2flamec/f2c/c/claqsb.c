@@ -233,10 +233,10 @@ void aocl_lapack_claqsb(char *uplo, aocl_int64_t *n, aocl_int64_t *kd, scomplex 
                     i__2 = *kd + 1 + i__ - j + j * ab_dim1;
                     r__1 = cj * s[i__];
                     i__3 = *kd + 1 + i__ - j + j * ab_dim1;
-                    q__1.r = r__1 * ab[i__3].r;
-                    q__1.i = r__1 * ab[i__3].i; // , expr subst
-                    ab[i__2].r = q__1.r;
-                    ab[i__2].i = q__1.i; // , expr subst
+                    q__1.real = r__1 * ab[i__3].real;
+                    q__1.imag = r__1 * ab[i__3].imag; // , expr subst
+                    ab[i__2].real = q__1.real;
+                    ab[i__2].imag = q__1.imag; // , expr subst
                     /* L10: */
                 }
                 /* L20: */
@@ -258,10 +258,10 @@ void aocl_lapack_claqsb(char *uplo, aocl_int64_t *n, aocl_int64_t *kd, scomplex 
                     i__2 = i__ + 1 - j + j * ab_dim1;
                     r__1 = cj * s[i__];
                     i__3 = i__ + 1 - j + j * ab_dim1;
-                    q__1.r = r__1 * ab[i__3].r;
-                    q__1.i = r__1 * ab[i__3].i; // , expr subst
-                    ab[i__2].r = q__1.r;
-                    ab[i__2].i = q__1.i; // , expr subst
+                    q__1.real = r__1 * ab[i__3].real;
+                    q__1.imag = r__1 * ab[i__3].imag; // , expr subst
+                    ab[i__2].real = q__1.real;
+                    ab[i__2].imag = q__1.imag; // , expr subst
                     /* L30: */
                 }
                 /* L40: */

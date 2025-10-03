@@ -374,8 +374,8 @@ void aocl_lapack_zunmbr(char *vect, char *side, char *trans, aocl_int64_t *m, ao
         {
             lwkopt = 1;
         }
-        work[1].r = (doublereal)lwkopt;
-        work[1].i = 0.; // , expr subst
+        work[1].real = (doublereal)lwkopt;
+        work[1].imag = 0.; // , expr subst
     }
     if(*info != 0)
     {
@@ -465,8 +465,8 @@ void aocl_lapack_zunmbr(char *vect, char *side, char *trans, aocl_int64_t *m, ao
                                &c__[i1 + i2 * c_dim1], ldc, &work[1], lwork, &iinfo);
         }
     }
-    work[1].r = (doublereal)lwkopt;
-    work[1].i = 0.; // , expr subst
+    work[1].real = (doublereal)lwkopt;
+    work[1].imag = 0.; // , expr subst
     AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of ZUNMBR */

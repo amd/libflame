@@ -347,7 +347,7 @@ void aocl_lapack_cgeev(char *jobvl, char *jobvr, aocl_int64_t *n, scomplex *a, a
                 aocl_lapack_ctrevc3("L", "B", select, n, &a[a_offset], lda, &vl[vl_offset], ldvl,
                                     &vr[vr_offset], ldvr, n, &nout, &work[1], &c_n1, &rwork[1],
                                     &c_n1, &ierr);
-                lwork_trevc__ = (integer)work[1].r;
+                lwork_trevc__ = (integer)work[1].real;
                 /* Computing MAX */
                 i__1 = maxwrk;
                 i__2 = *n + lwork_trevc__; // , expr subst
@@ -367,7 +367,7 @@ void aocl_lapack_cgeev(char *jobvl, char *jobvr, aocl_int64_t *n, scomplex *a, a
                 aocl_lapack_ctrevc3("R", "B", select, n, &a[a_offset], lda, &vl[vl_offset], ldvl,
                                     &vr[vr_offset], ldvr, n, &nout, &work[1], &c_n1, &rwork[1],
                                     &c_n1, &ierr);
-                lwork_trevc__ = (integer)work[1].r;
+                lwork_trevc__ = (integer)work[1].real;
                 /* Computing MAX */
                 i__1 = maxwrk;
                 i__2 = *n + lwork_trevc__; // , expr subst
@@ -380,14 +380,14 @@ void aocl_lapack_cgeev(char *jobvl, char *jobvr, aocl_int64_t *n, scomplex *a, a
                 aocl_lapack_chseqr("E", "N", n, &c__1, n, &a[a_offset], lda, &w[1], &vr[vr_offset],
                                    ldvr, &work[1], &c_n1, info);
             }
-            hswork = (integer)work[1].r;
+            hswork = (integer)work[1].real;
             /* Computing MAX */
             i__1 = fla_max(maxwrk, hswork);
             maxwrk = fla_max(i__1, minwrk);
         }
         r__1 = aocl_lapack_sroundup_lwork(&maxwrk);
-        work[1].r = r__1;
-        work[1].i = 0.f; // , expr subst
+        work[1].real = r__1;
+        work[1].imag = 0.f; // , expr subst
         if(*lwork < minwrk && !lquery)
         {
             *info = -12;
@@ -536,7 +536,7 @@ void aocl_lapack_cgeev(char *jobvl, char *jobvr, aocl_int64_t *n, scomplex *a, a
             {
                 i__3 = k + i__ * vl_dim1;
                 /* Computing 2nd power */
-                r__1 = vl[i__3].r;
+                r__1 = vl[i__3].real;
                 /* Computing 2nd power */
                 r__2 = r_imag(&vl[k + i__ * vl_dim1]);
                 rwork[irwork + k - 1] = r__1 * r__1 + r__2 * r__2;
@@ -545,18 +545,18 @@ void aocl_lapack_cgeev(char *jobvl, char *jobvr, aocl_int64_t *n, scomplex *a, a
             k = aocl_blas_isamax(n, &rwork[irwork], &c__1);
             r_cnjg(&q__2, &vl[k + i__ * vl_dim1]);
             r__1 = sqrt(rwork[irwork + k - 1]);
-            q__1.r = q__2.r / r__1;
-            q__1.i = q__2.i / r__1; // , expr subst
-            tmp.r = q__1.r;
-            tmp.i = q__1.i; // , expr subst
+            q__1.real = q__2.real / r__1;
+            q__1.imag = q__2.imag / r__1; // , expr subst
+            tmp.real = q__1.real;
+            tmp.imag = q__1.imag; // , expr subst
             aocl_blas_cscal(n, &tmp, &vl[i__ * vl_dim1 + 1], &c__1);
             i__2 = k + i__ * vl_dim1;
             i__3 = k + i__ * vl_dim1;
-            r__1 = vl[i__3].r;
-            q__1.r = r__1;
-            q__1.i = 0.f; // , expr subst
-            vl[i__2].r = q__1.r;
-            vl[i__2].i = q__1.i; // , expr subst
+            r__1 = vl[i__3].real;
+            q__1.real = r__1;
+            q__1.imag = 0.f; // , expr subst
+            vl[i__2].real = q__1.real;
+            vl[i__2].imag = q__1.imag; // , expr subst
             /* L20: */
         }
     }
@@ -577,7 +577,7 @@ void aocl_lapack_cgeev(char *jobvl, char *jobvr, aocl_int64_t *n, scomplex *a, a
             {
                 i__3 = k + i__ * vr_dim1;
                 /* Computing 2nd power */
-                r__1 = vr[i__3].r;
+                r__1 = vr[i__3].real;
                 /* Computing 2nd power */
                 r__2 = r_imag(&vr[k + i__ * vr_dim1]);
                 rwork[irwork + k - 1] = r__1 * r__1 + r__2 * r__2;
@@ -586,18 +586,18 @@ void aocl_lapack_cgeev(char *jobvl, char *jobvr, aocl_int64_t *n, scomplex *a, a
             k = aocl_blas_isamax(n, &rwork[irwork], &c__1);
             r_cnjg(&q__2, &vr[k + i__ * vr_dim1]);
             r__1 = sqrt(rwork[irwork + k - 1]);
-            q__1.r = q__2.r / r__1;
-            q__1.i = q__2.i / r__1; // , expr subst
-            tmp.r = q__1.r;
-            tmp.i = q__1.i; // , expr subst
+            q__1.real = q__2.real / r__1;
+            q__1.imag = q__2.imag / r__1; // , expr subst
+            tmp.real = q__1.real;
+            tmp.imag = q__1.imag; // , expr subst
             aocl_blas_cscal(n, &tmp, &vr[i__ * vr_dim1 + 1], &c__1);
             i__2 = k + i__ * vr_dim1;
             i__3 = k + i__ * vr_dim1;
-            r__1 = vr[i__3].r;
-            q__1.r = r__1;
-            q__1.i = 0.f; // , expr subst
-            vr[i__2].r = q__1.r;
-            vr[i__2].i = q__1.i; // , expr subst
+            r__1 = vr[i__3].real;
+            q__1.real = r__1;
+            q__1.imag = 0.f; // , expr subst
+            vr[i__2].real = q__1.real;
+            vr[i__2].imag = q__1.imag; // , expr subst
             /* L40: */
         }
     }
@@ -618,8 +618,8 @@ L50:
         }
     }
     r__1 = aocl_lapack_sroundup_lwork(&maxwrk);
-    work[1].r = r__1;
-    work[1].i = 0.f; // , expr subst
+    work[1].real = r__1;
+    work[1].imag = 0.f; // , expr subst
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
     return;
     /* End of CGEEV */

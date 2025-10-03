@@ -4,7 +4,7 @@
  -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for
  libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static scomplex c_b1 = {{0.f}, {0.f}};
+static scomplex c_b1 = {0.f, 0.f};
 static aocl_int64_t c__6 = 6;
 static aocl_int64_t c__0 = 0;
 static aocl_int64_t c__1 = 1;
@@ -593,10 +593,10 @@ void aocl_lapack_cgesvdx(char *jobu, char *jobvt, char *range, aocl_int64_t *m, 
         }
         maxwrk = fla_max(maxwrk, minwrk);
         r__1 = (real)maxwrk;
-        q__1.r = r__1;
-        q__1.i = 0.f; // , expr subst
-        work[1].r = q__1.r;
-        work[1].i = q__1.i; // , expr subst
+        q__1.real = r__1;
+        q__1.imag = 0.f; // , expr subst
+        work[1].real = q__1.real;
+        work[1].imag = q__1.imag; // , expr subst
         if(*lwork < minwrk && !lquery)
         {
             *info = -19;
@@ -709,10 +709,10 @@ void aocl_lapack_cgesvdx(char *jobu, char *jobvt, char *range, aocl_int64_t *m, 
                     {
                         i__4 = j + i__ * u_dim1;
                         i__5 = k;
-                        q__1.r = rwork[i__5];
-                        q__1.i = 0.f; // , expr subst
-                        u[i__4].r = q__1.r;
-                        u[i__4].i = q__1.i; // , expr subst
+                        q__1.real = rwork[i__5];
+                        q__1.imag = 0.f; // , expr subst
+                        u[i__4].real = q__1.real;
+                        u[i__4].imag = q__1.imag; // , expr subst
                         ++k;
                     }
                     k += *n;
@@ -742,10 +742,10 @@ void aocl_lapack_cgesvdx(char *jobu, char *jobvt, char *range, aocl_int64_t *m, 
                     {
                         i__4 = i__ + j * vt_dim1;
                         i__5 = k;
-                        q__1.r = rwork[i__5];
-                        q__1.i = 0.f; // , expr subst
-                        vt[i__4].r = q__1.r;
-                        vt[i__4].i = q__1.i; // , expr subst
+                        q__1.real = rwork[i__5];
+                        q__1.imag = 0.f; // , expr subst
+                        vt[i__4].real = q__1.real;
+                        vt[i__4].imag = q__1.imag; // , expr subst
                         ++k;
                     }
                     k += *n;
@@ -794,10 +794,10 @@ void aocl_lapack_cgesvdx(char *jobu, char *jobvt, char *range, aocl_int64_t *m, 
                     {
                         i__4 = j + i__ * u_dim1;
                         i__5 = k;
-                        q__1.r = rwork[i__5];
-                        q__1.i = 0.f; // , expr subst
-                        u[i__4].r = q__1.r;
-                        u[i__4].i = q__1.i; // , expr subst
+                        q__1.real = rwork[i__5];
+                        q__1.imag = 0.f; // , expr subst
+                        u[i__4].real = q__1.real;
+                        u[i__4].imag = q__1.imag; // , expr subst
                         ++k;
                     }
                     k += *n;
@@ -822,10 +822,10 @@ void aocl_lapack_cgesvdx(char *jobu, char *jobvt, char *range, aocl_int64_t *m, 
                     {
                         i__4 = i__ + j * vt_dim1;
                         i__5 = k;
-                        q__1.r = rwork[i__5];
-                        q__1.i = 0.f; // , expr subst
-                        vt[i__4].r = q__1.r;
-                        vt[i__4].i = q__1.i; // , expr subst
+                        q__1.real = rwork[i__5];
+                        q__1.imag = 0.f; // , expr subst
+                        vt[i__4].real = q__1.real;
+                        vt[i__4].imag = q__1.imag; // , expr subst
                         ++k;
                     }
                     k += *n;
@@ -890,10 +890,10 @@ void aocl_lapack_cgesvdx(char *jobu, char *jobvt, char *range, aocl_int64_t *m, 
                     {
                         i__4 = j + i__ * u_dim1;
                         i__5 = k;
-                        q__1.r = rwork[i__5];
-                        q__1.i = 0.f; // , expr subst
-                        u[i__4].r = q__1.r;
-                        u[i__4].i = q__1.i; // , expr subst
+                        q__1.real = rwork[i__5];
+                        q__1.imag = 0.f; // , expr subst
+                        u[i__4].real = q__1.real;
+                        u[i__4].imag = q__1.imag; // , expr subst
                         ++k;
                     }
                     k += *m;
@@ -916,10 +916,10 @@ void aocl_lapack_cgesvdx(char *jobu, char *jobvt, char *range, aocl_int64_t *m, 
                     {
                         i__4 = i__ + j * vt_dim1;
                         i__5 = k;
-                        q__1.r = rwork[i__5];
-                        q__1.i = 0.f; // , expr subst
-                        vt[i__4].r = q__1.r;
-                        vt[i__4].i = q__1.i; // , expr subst
+                        q__1.real = rwork[i__5];
+                        q__1.imag = 0.f; // , expr subst
+                        vt[i__4].real = q__1.real;
+                        vt[i__4].imag = q__1.imag; // , expr subst
                         ++k;
                     }
                     k += *m;
@@ -975,10 +975,10 @@ void aocl_lapack_cgesvdx(char *jobu, char *jobvt, char *range, aocl_int64_t *m, 
                     {
                         i__4 = j + i__ * u_dim1;
                         i__5 = k;
-                        q__1.r = rwork[i__5];
-                        q__1.i = 0.f; // , expr subst
-                        u[i__4].r = q__1.r;
-                        u[i__4].i = q__1.i; // , expr subst
+                        q__1.real = rwork[i__5];
+                        q__1.imag = 0.f; // , expr subst
+                        u[i__4].real = q__1.real;
+                        u[i__4].imag = q__1.imag; // , expr subst
                         ++k;
                     }
                     k += *m;
@@ -1001,10 +1001,10 @@ void aocl_lapack_cgesvdx(char *jobu, char *jobvt, char *range, aocl_int64_t *m, 
                     {
                         i__4 = i__ + j * vt_dim1;
                         i__5 = k;
-                        q__1.r = rwork[i__5];
-                        q__1.i = 0.f; // , expr subst
-                        vt[i__4].r = q__1.r;
-                        vt[i__4].i = q__1.i; // , expr subst
+                        q__1.real = rwork[i__5];
+                        q__1.imag = 0.f; // , expr subst
+                        vt[i__4].real = q__1.real;
+                        vt[i__4].imag = q__1.imag; // , expr subst
                         ++k;
                     }
                     k += *m;
@@ -1035,10 +1035,10 @@ void aocl_lapack_cgesvdx(char *jobu, char *jobvt, char *range, aocl_int64_t *m, 
     }
     /* Return optimal workspace in WORK(1) */
     r__1 = (real)maxwrk;
-    q__1.r = r__1;
-    q__1.i = 0.f; // , expr subst
-    work[1].r = q__1.r;
-    work[1].i = q__1.i; // , expr subst
+    q__1.real = r__1;
+    q__1.imag = 0.f; // , expr subst
+    work[1].real = q__1.real;
+    work[1].imag = q__1.imag; // , expr subst
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
     return;
     /* End of CGESVDX */

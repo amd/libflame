@@ -301,14 +301,14 @@ void aocl_lapack_ctfttp(char *transr, char *uplo, aocl_int64_t *n, scomplex *arf
     {
         if(normaltransr)
         {
-            ap[0].r = arf[0].r;
-            ap[0].i = arf[0].i; // , expr subst
+            ap[0].real = arf[0].real;
+            ap[0].imag = arf[0].imag; // , expr subst
         }
         else
         {
             r_cnjg(&q__1, arf);
-            ap[0].r = q__1.r;
-            ap[0].i = q__1.i; // , expr subst
+            ap[0].real = q__1.real;
+            ap[0].imag = q__1.imag; // , expr subst
         }
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
@@ -369,8 +369,8 @@ void aocl_lapack_ctfttp(char *transr, char *uplo, aocl_int64_t *n, scomplex *arf
                         ij = i__ + jp;
                         i__3 = ijp;
                         i__4 = ij;
-                        ap[i__3].r = arf[i__4].r;
-                        ap[i__3].i = arf[i__4].i; // , expr subst
+                        ap[i__3].real = arf[i__4].real;
+                        ap[i__3].imag = arf[i__4].imag; // , expr subst
                         ++ijp;
                     }
                     jp += lda;
@@ -384,8 +384,8 @@ void aocl_lapack_ctfttp(char *transr, char *uplo, aocl_int64_t *n, scomplex *arf
                         ij = i__ + j * lda;
                         i__3 = ijp;
                         r_cnjg(&q__1, &arf[ij]);
-                        ap[i__3].r = q__1.r;
-                        ap[i__3].i = q__1.i; // , expr subst
+                        ap[i__3].real = q__1.real;
+                        ap[i__3].imag = q__1.imag; // , expr subst
                         ++ijp;
                     }
                 }
@@ -405,8 +405,8 @@ void aocl_lapack_ctfttp(char *transr, char *uplo, aocl_int64_t *n, scomplex *arf
                     {
                         i__3 = ijp;
                         r_cnjg(&q__1, &arf[ij]);
-                        ap[i__3].r = q__1.r;
-                        ap[i__3].i = q__1.i; // , expr subst
+                        ap[i__3].real = q__1.real;
+                        ap[i__3].imag = q__1.imag; // , expr subst
                         ++ijp;
                         ij += lda;
                     }
@@ -421,8 +421,8 @@ void aocl_lapack_ctfttp(char *transr, char *uplo, aocl_int64_t *n, scomplex *arf
                     {
                         i__3 = ijp;
                         i__4 = ij;
-                        ap[i__3].r = arf[i__4].r;
-                        ap[i__3].i = arf[i__4].i; // , expr subst
+                        ap[i__3].real = arf[i__4].real;
+                        ap[i__3].imag = arf[i__4].imag; // , expr subst
                         ++ijp;
                     }
                     js += lda;
@@ -448,8 +448,8 @@ void aocl_lapack_ctfttp(char *transr, char *uplo, aocl_int64_t *n, scomplex *arf
                     {
                         i__4 = ijp;
                         r_cnjg(&q__1, &arf[ij]);
-                        ap[i__4].r = q__1.r;
-                        ap[i__4].i = q__1.i; // , expr subst
+                        ap[i__4].real = q__1.real;
+                        ap[i__4].imag = q__1.imag; // , expr subst
                         ++ijp;
                     }
                 }
@@ -462,8 +462,8 @@ void aocl_lapack_ctfttp(char *transr, char *uplo, aocl_int64_t *n, scomplex *arf
                     {
                         i__2 = ijp;
                         i__4 = ij;
-                        ap[i__2].r = arf[i__4].r;
-                        ap[i__2].i = arf[i__4].i; // , expr subst
+                        ap[i__2].real = arf[i__4].real;
+                        ap[i__2].imag = arf[i__4].imag; // , expr subst
                         ++ijp;
                     }
                     js = js + lda + 1;
@@ -485,8 +485,8 @@ void aocl_lapack_ctfttp(char *transr, char *uplo, aocl_int64_t *n, scomplex *arf
                     {
                         i__2 = ijp;
                         i__4 = ij;
-                        ap[i__2].r = arf[i__4].r;
-                        ap[i__2].i = arf[i__4].i; // , expr subst
+                        ap[i__2].real = arf[i__4].real;
+                        ap[i__2].imag = arf[i__4].imag; // , expr subst
                         ++ijp;
                     }
                     js += lda;
@@ -500,8 +500,8 @@ void aocl_lapack_ctfttp(char *transr, char *uplo, aocl_int64_t *n, scomplex *arf
                     {
                         i__4 = ijp;
                         r_cnjg(&q__1, &arf[ij]);
-                        ap[i__4].r = q__1.r;
-                        ap[i__4].i = q__1.i; // , expr subst
+                        ap[i__4].real = q__1.real;
+                        ap[i__4].imag = q__1.imag; // , expr subst
                         ++ijp;
                     }
                 }
@@ -530,8 +530,8 @@ void aocl_lapack_ctfttp(char *transr, char *uplo, aocl_int64_t *n, scomplex *arf
                         ij = i__ + 1 + jp;
                         i__3 = ijp;
                         i__4 = ij;
-                        ap[i__3].r = arf[i__4].r;
-                        ap[i__3].i = arf[i__4].i; // , expr subst
+                        ap[i__3].real = arf[i__4].real;
+                        ap[i__3].imag = arf[i__4].imag; // , expr subst
                         ++ijp;
                     }
                     jp += lda;
@@ -545,8 +545,8 @@ void aocl_lapack_ctfttp(char *transr, char *uplo, aocl_int64_t *n, scomplex *arf
                         ij = i__ + j * lda;
                         i__3 = ijp;
                         r_cnjg(&q__1, &arf[ij]);
-                        ap[i__3].r = q__1.r;
-                        ap[i__3].i = q__1.i; // , expr subst
+                        ap[i__3].real = q__1.real;
+                        ap[i__3].imag = q__1.imag; // , expr subst
                         ++ijp;
                     }
                 }
@@ -566,8 +566,8 @@ void aocl_lapack_ctfttp(char *transr, char *uplo, aocl_int64_t *n, scomplex *arf
                     {
                         i__3 = ijp;
                         r_cnjg(&q__1, &arf[ij]);
-                        ap[i__3].r = q__1.r;
-                        ap[i__3].i = q__1.i; // , expr subst
+                        ap[i__3].real = q__1.real;
+                        ap[i__3].imag = q__1.imag; // , expr subst
                         ++ijp;
                         ij += lda;
                     }
@@ -582,8 +582,8 @@ void aocl_lapack_ctfttp(char *transr, char *uplo, aocl_int64_t *n, scomplex *arf
                     {
                         i__3 = ijp;
                         i__4 = ij;
-                        ap[i__3].r = arf[i__4].r;
-                        ap[i__3].i = arf[i__4].i; // , expr subst
+                        ap[i__3].real = arf[i__4].real;
+                        ap[i__3].imag = arf[i__4].imag; // , expr subst
                         ++ijp;
                     }
                     js += lda;
@@ -609,8 +609,8 @@ void aocl_lapack_ctfttp(char *transr, char *uplo, aocl_int64_t *n, scomplex *arf
                     {
                         i__4 = ijp;
                         r_cnjg(&q__1, &arf[ij]);
-                        ap[i__4].r = q__1.r;
-                        ap[i__4].i = q__1.i; // , expr subst
+                        ap[i__4].real = q__1.real;
+                        ap[i__4].imag = q__1.imag; // , expr subst
                         ++ijp;
                     }
                 }
@@ -623,8 +623,8 @@ void aocl_lapack_ctfttp(char *transr, char *uplo, aocl_int64_t *n, scomplex *arf
                     {
                         i__2 = ijp;
                         i__4 = ij;
-                        ap[i__2].r = arf[i__4].r;
-                        ap[i__2].i = arf[i__4].i; // , expr subst
+                        ap[i__2].real = arf[i__4].real;
+                        ap[i__2].imag = arf[i__4].imag; // , expr subst
                         ++ijp;
                     }
                     js = js + lda + 1;
@@ -646,8 +646,8 @@ void aocl_lapack_ctfttp(char *transr, char *uplo, aocl_int64_t *n, scomplex *arf
                     {
                         i__2 = ijp;
                         i__4 = ij;
-                        ap[i__2].r = arf[i__4].r;
-                        ap[i__2].i = arf[i__4].i; // , expr subst
+                        ap[i__2].real = arf[i__4].real;
+                        ap[i__2].imag = arf[i__4].imag; // , expr subst
                         ++ijp;
                     }
                     js += lda;
@@ -661,8 +661,8 @@ void aocl_lapack_ctfttp(char *transr, char *uplo, aocl_int64_t *n, scomplex *arf
                     {
                         i__4 = ijp;
                         r_cnjg(&q__1, &arf[ij]);
-                        ap[i__4].r = q__1.r;
-                        ap[i__4].i = q__1.i; // , expr subst
+                        ap[i__4].real = q__1.real;
+                        ap[i__4].imag = q__1.imag; // , expr subst
                         ++ijp;
                     }
                 }

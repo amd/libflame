@@ -329,8 +329,8 @@ void aocl_lapack_cunmtr(char *side, char *uplo, char *trans, aocl_int64_t *m, ao
         }
         lwkopt = nw * nb;
         r__1 = aocl_lapack_sroundup_lwork(&lwkopt);
-        work[1].r = r__1;
-        work[1].i = 0.f; // , expr subst
+        work[1].real = r__1;
+        work[1].imag = 0.f; // , expr subst
     }
     if(*info != 0)
     {
@@ -347,8 +347,8 @@ void aocl_lapack_cunmtr(char *side, char *uplo, char *trans, aocl_int64_t *m, ao
     /* Quick return if possible */
     if(*m == 0 || *n == 0 || nq == 1)
     {
-        work[1].r = 1.f;
-        work[1].i = 0.f; // , expr subst
+        work[1].real = 1.f;
+        work[1].imag = 0.f; // , expr subst
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -387,8 +387,8 @@ void aocl_lapack_cunmtr(char *side, char *uplo, char *trans, aocl_int64_t *m, ao
                            &c__[i1 + i2 * c_dim1], ldc, &work[1], lwork, &iinfo);
     }
     r__1 = aocl_lapack_sroundup_lwork(&lwkopt);
-    work[1].r = r__1;
-    work[1].i = 0.f; // , expr subst
+    work[1].real = r__1;
+    work[1].imag = 0.f; // , expr subst
     AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of CUNMTR */

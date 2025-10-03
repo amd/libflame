@@ -313,10 +313,10 @@ doublereal aocl_lapack_zlansp(char *norm, char *uplo, aocl_int64_t *n, dcomplex 
         for(i__ = 1; i__ <= i__1; ++i__)
         {
             i__2 = k;
-            if(ap[i__2].r != 0.)
+            if(ap[i__2].real != 0.)
             {
                 i__2 = k;
-                absa = (d__1 = ap[i__2].r, f2c_abs(d__1));
+                absa = (d__1 = ap[i__2].real, f2c_abs(d__1));
                 if(scale < absa)
                 {
                     /* Computing 2nd power */

@@ -256,8 +256,8 @@ void aocl_lapack_zlaswlq(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *mb, aoc
     if(*info == 0)
     {
         i__1 = *mb * *m;
-        work[1].r = (doublereal)i__1;
-        work[1].i = 0.; // , expr subst
+        work[1].real = (doublereal)i__1;
+        work[1].imag = 0.; // , expr subst
     }
     if(*info != 0)
     {
@@ -306,8 +306,8 @@ void aocl_lapack_zlaswlq(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *mb, aoc
                            &t[(ctr * *m + 1) * t_dim1 + 1], ldt, &work[1], info);
     }
     i__2 = *m * *mb;
-    work[1].r = (doublereal)i__2;
-    work[1].i = 0.; // , expr subst
+    work[1].real = (doublereal)i__2;
+    work[1].imag = 0.; // , expr subst
     AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of ZLASWLQ */

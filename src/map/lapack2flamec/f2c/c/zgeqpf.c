@@ -306,32 +306,32 @@ void aocl_lapack_zgeqpf(aocl_int64_t *m, aocl_int64_t *n, dcomplex *a, aocl_int6
             }
             /* Generate elementary reflector H(i) */
             i__2 = i__ + i__ * a_dim1;
-            aii.r = a[i__2].r;
-            aii.i = a[i__2].i; // , expr subst
+            aii.real = a[i__2].real;
+            aii.imag = a[i__2].imag; // , expr subst
             i__2 = *m - i__ + 1;
             /* Computing MIN */
             i__3 = i__ + 1;
             aocl_lapack_zlarfg(&i__2, &aii, &a[fla_min(i__3, *m) + i__ * a_dim1], &c__1, &tau[i__]);
             i__2 = i__ + i__ * a_dim1;
-            a[i__2].r = aii.r;
-            a[i__2].i = aii.i; // , expr subst
+            a[i__2].real = aii.real;
+            a[i__2].imag = aii.imag; // , expr subst
             if(i__ < *n)
             {
                 /* Apply H(i) to A(i:m,i+1:n) from the left */
                 i__2 = i__ + i__ * a_dim1;
-                aii.r = a[i__2].r;
-                aii.i = a[i__2].i; // , expr subst
+                aii.real = a[i__2].real;
+                aii.imag = a[i__2].imag; // , expr subst
                 i__2 = i__ + i__ * a_dim1;
-                a[i__2].r = 1.;
-                a[i__2].i = 0.; // , expr subst
+                a[i__2].real = 1.;
+                a[i__2].imag = 0.; // , expr subst
                 i__2 = *m - i__ + 1;
                 i__3 = *n - i__;
                 d_cnjg(&z__1, &tau[i__]);
                 aocl_lapack_zlarf("Left", &i__2, &i__3, &a[i__ + i__ * a_dim1], &c__1, &z__1,
                                   &a[i__ + (i__ + 1) * a_dim1], lda, &work[1]);
                 i__2 = i__ + i__ * a_dim1;
-                a[i__2].r = aii.r;
-                a[i__2].i = aii.i; // , expr subst
+                a[i__2].real = aii.real;
+                a[i__2].imag = aii.imag; // , expr subst
             }
             /* Update partial column norms */
             i__2 = *n;

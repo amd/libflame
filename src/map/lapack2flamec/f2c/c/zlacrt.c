@@ -167,29 +167,29 @@ void aocl_lapack_zlacrt(aocl_int64_t *n, dcomplex *cx, aocl_int64_t *incx, dcomp
     for(i__ = 1; i__ <= i__1; ++i__)
     {
         i__2 = ix;
-        z__2.r = c__->r * cx[i__2].r - c__->i * cx[i__2].i;
-        z__2.i = c__->r * cx[i__2].i + c__->i * cx[i__2].r; // , expr subst
+        z__2.real = c__->real * cx[i__2].real - c__->imag * cx[i__2].imag;
+        z__2.imag = c__->real * cx[i__2].imag + c__->imag * cx[i__2].real; // , expr subst
         i__3 = iy;
-        z__3.r = s->r * cy[i__3].r - s->i * cy[i__3].i;
-        z__3.i = s->r * cy[i__3].i + s->i * cy[i__3].r; // , expr subst
-        z__1.r = z__2.r + z__3.r;
-        z__1.i = z__2.i + z__3.i; // , expr subst
-        ctemp.r = z__1.r;
-        ctemp.i = z__1.i; // , expr subst
+        z__3.real = s->real * cy[i__3].real - s->imag * cy[i__3].imag;
+        z__3.imag = s->real * cy[i__3].imag + s->imag * cy[i__3].real; // , expr subst
+        z__1.real = z__2.real + z__3.real;
+        z__1.imag = z__2.imag + z__3.imag; // , expr subst
+        ctemp.real = z__1.real;
+        ctemp.imag = z__1.imag; // , expr subst
         i__2 = iy;
         i__3 = iy;
-        z__2.r = c__->r * cy[i__3].r - c__->i * cy[i__3].i;
-        z__2.i = c__->r * cy[i__3].i + c__->i * cy[i__3].r; // , expr subst
+        z__2.real = c__->real * cy[i__3].real - c__->imag * cy[i__3].imag;
+        z__2.imag = c__->real * cy[i__3].imag + c__->imag * cy[i__3].real; // , expr subst
         i__4 = ix;
-        z__3.r = s->r * cx[i__4].r - s->i * cx[i__4].i;
-        z__3.i = s->r * cx[i__4].i + s->i * cx[i__4].r; // , expr subst
-        z__1.r = z__2.r - z__3.r;
-        z__1.i = z__2.i - z__3.i; // , expr subst
-        cy[i__2].r = z__1.r;
-        cy[i__2].i = z__1.i; // , expr subst
+        z__3.real = s->real * cx[i__4].real - s->imag * cx[i__4].imag;
+        z__3.imag = s->real * cx[i__4].imag + s->imag * cx[i__4].real; // , expr subst
+        z__1.real = z__2.real - z__3.real;
+        z__1.imag = z__2.imag - z__3.imag; // , expr subst
+        cy[i__2].real = z__1.real;
+        cy[i__2].imag = z__1.imag; // , expr subst
         i__2 = ix;
-        cx[i__2].r = ctemp.r;
-        cx[i__2].i = ctemp.i; // , expr subst
+        cx[i__2].real = ctemp.real;
+        cx[i__2].imag = ctemp.imag; // , expr subst
         ix += *incx;
         iy += *incy;
         /* L10: */
@@ -202,29 +202,29 @@ L20:
     for(i__ = 1; i__ <= i__1; ++i__)
     {
         i__2 = i__;
-        z__2.r = c__->r * cx[i__2].r - c__->i * cx[i__2].i;
-        z__2.i = c__->r * cx[i__2].i + c__->i * cx[i__2].r; // , expr subst
+        z__2.real = c__->real * cx[i__2].real - c__->imag * cx[i__2].imag;
+        z__2.imag = c__->real * cx[i__2].imag + c__->imag * cx[i__2].real; // , expr subst
         i__3 = i__;
-        z__3.r = s->r * cy[i__3].r - s->i * cy[i__3].i;
-        z__3.i = s->r * cy[i__3].i + s->i * cy[i__3].r; // , expr subst
-        z__1.r = z__2.r + z__3.r;
-        z__1.i = z__2.i + z__3.i; // , expr subst
-        ctemp.r = z__1.r;
-        ctemp.i = z__1.i; // , expr subst
+        z__3.real = s->real * cy[i__3].real - s->imag * cy[i__3].imag;
+        z__3.imag = s->real * cy[i__3].imag + s->imag * cy[i__3].real; // , expr subst
+        z__1.real = z__2.real + z__3.real;
+        z__1.imag = z__2.imag + z__3.imag; // , expr subst
+        ctemp.real = z__1.real;
+        ctemp.imag = z__1.imag; // , expr subst
         i__2 = i__;
         i__3 = i__;
-        z__2.r = c__->r * cy[i__3].r - c__->i * cy[i__3].i;
-        z__2.i = c__->r * cy[i__3].i + c__->i * cy[i__3].r; // , expr subst
+        z__2.real = c__->real * cy[i__3].real - c__->imag * cy[i__3].imag;
+        z__2.imag = c__->real * cy[i__3].imag + c__->imag * cy[i__3].real; // , expr subst
         i__4 = i__;
-        z__3.r = s->r * cx[i__4].r - s->i * cx[i__4].i;
-        z__3.i = s->r * cx[i__4].i + s->i * cx[i__4].r; // , expr subst
-        z__1.r = z__2.r - z__3.r;
-        z__1.i = z__2.i - z__3.i; // , expr subst
-        cy[i__2].r = z__1.r;
-        cy[i__2].i = z__1.i; // , expr subst
+        z__3.real = s->real * cx[i__4].real - s->imag * cx[i__4].imag;
+        z__3.imag = s->real * cx[i__4].imag + s->imag * cx[i__4].real; // , expr subst
+        z__1.real = z__2.real - z__3.real;
+        z__1.imag = z__2.imag - z__3.imag; // , expr subst
+        cy[i__2].real = z__1.real;
+        cy[i__2].imag = z__1.imag; // , expr subst
         i__2 = i__;
-        cx[i__2].r = ctemp.r;
-        cx[i__2].i = ctemp.i; // , expr subst
+        cx[i__2].real = ctemp.real;
+        cx[i__2].imag = ctemp.imag; // , expr subst
         /* L30: */
     }
     AOCL_DTL_TRACE_LOG_EXIT

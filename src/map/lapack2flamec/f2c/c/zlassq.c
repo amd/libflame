@@ -211,7 +211,7 @@ void aocl_lapack_zlassq(aocl_int64_t *n, dcomplex *x, aocl_int64_t *incx, double
     for(i__ = 1; i__ <= i__1; ++i__)
     {
         i__2 = ix;
-        ax = (r__1 = x[i__2].r, f2c_abs(r__1));
+        ax = (r__1 = x[i__2].real, f2c_abs(r__1));
         if(ax > tbig)
         {
             /* Computing 2nd power */

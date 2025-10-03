@@ -247,8 +247,8 @@ void aocl_lapack_ctzrzf(aocl_int64_t *m, aocl_int64_t *n, scomplex *a, aocl_int6
             lwkmin = fla_max(1, *m);
         }
         r__1 = aocl_lapack_sroundup_lwork(&lwkopt);
-        work[1].r = r__1;
-        work[1].i = 0.f; // , expr subst
+        work[1].real = r__1;
+        work[1].imag = 0.f; // , expr subst
         if(*lwork < lwkmin && !lquery)
         {
             *info = -7;
@@ -278,8 +278,8 @@ void aocl_lapack_ctzrzf(aocl_int64_t *m, aocl_int64_t *n, scomplex *a, aocl_int6
         for(i__ = 1; i__ <= i__1; ++i__)
         {
             i__2 = i__;
-            tau[i__2].r = 0.f;
-            tau[i__2].i = 0.f; // , expr subst
+            tau[i__2].real = 0.f;
+            tau[i__2].imag = 0.f; // , expr subst
             /* L10: */
         }
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
@@ -366,8 +366,8 @@ void aocl_lapack_ctzrzf(aocl_int64_t *m, aocl_int64_t *n, scomplex *a, aocl_int6
         aocl_lapack_clatrz(&mu, n, &i__2, &a[a_offset], lda, &tau[1], &work[1]);
     }
     r__1 = aocl_lapack_sroundup_lwork(&lwkopt);
-    work[1].r = r__1;
-    work[1].i = 0.f; // , expr subst
+    work[1].real = r__1;
+    work[1].imag = 0.f; // , expr subst
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
     return;
     /* End of CTZRZF */

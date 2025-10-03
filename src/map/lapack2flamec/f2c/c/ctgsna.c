@@ -5,8 +5,8 @@
  /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static aocl_int64_t c__1 = 1;
-static scomplex c_b19 = {{1.f}, {0.f}};
-static scomplex c_b20 = {{0.f}, {0.f}};
+static scomplex c_b19 = {1.f, 0.f};
+static scomplex c_b20 = {0.f, 0.f};
 static logical c_false = FALSE_;
 static aocl_int64_t c__3 = 3;
 /* > \brief \b CTGSNA */
@@ -499,8 +499,8 @@ void aocl_lapack_ctgsna(char *job, char *howmny, logical *select, aocl_int64_t *
             lwmin = *n;
         }
         r__1 = aocl_lapack_sroundup_lwork(&lwmin);
-        work[1].r = r__1;
-        work[1].i = 0.f; // , expr subst
+        work[1].real = r__1;
+        work[1].imag = 0.f; // , expr subst
         if(*mm < *m)
         {
             *info = -15;
@@ -552,13 +552,13 @@ void aocl_lapack_ctgsna(char *job, char *howmny, logical *select, aocl_int64_t *
             aocl_blas_cgemv("N", n, n, &c_b19, &a[a_offset], lda, &vr[ks * vr_dim1 + 1], &c__1,
                             &c_b20, &work[1], &c__1);
             aocl_lapack_cdotc_f2c(&q__1, n, &work[1], &c__1, &vl[ks * vl_dim1 + 1], &c__1);
-            yhax.r = q__1.r;
-            yhax.i = q__1.i; // , expr subst
+            yhax.real = q__1.real;
+            yhax.imag = q__1.imag; // , expr subst
             aocl_blas_cgemv("N", n, n, &c_b19, &b[b_offset], ldb, &vr[ks * vr_dim1 + 1], &c__1,
                             &c_b20, &work[1], &c__1);
             aocl_lapack_cdotc_f2c(&q__1, n, &work[1], &c__1, &vl[ks * vl_dim1 + 1], &c__1);
-            yhbx.r = q__1.r;
-            yhbx.i = q__1.i; // , expr subst
+            yhbx.real = q__1.real;
+            yhbx.imag = q__1.imag; // , expr subst
             r__1 = c_abs(&yhax);
             r__2 = c_abs(&yhbx);
             cond = slapy2_(&r__1, &r__2);
@@ -616,8 +616,8 @@ void aocl_lapack_ctgsna(char *job, char *howmny, logical *select, aocl_int64_t *
     L20:;
     }
     r__1 = aocl_lapack_sroundup_lwork(&lwmin);
-    work[1].r = r__1;
-    work[1].i = 0.f; // , expr subst
+    work[1].real = r__1;
+    work[1].imag = 0.f; // , expr subst
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
     return;
     /* End of CTGSNA */

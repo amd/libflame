@@ -204,7 +204,7 @@ void aocl_lapack_cppequ(char *uplo, aocl_int64_t *n, scomplex *ap, real *s, real
         return;
     }
     /* Initialize SMIN and AMAX. */
-    s[1] = ap[1].r;
+    s[1] = ap[1].real;
     smin = s[1];
     *amax = s[1];
     if(upper)
@@ -217,7 +217,7 @@ void aocl_lapack_cppequ(char *uplo, aocl_int64_t *n, scomplex *ap, real *s, real
         {
             jj += i__;
             i__2 = jj;
-            s[i__] = ap[i__2].r;
+            s[i__] = ap[i__2].real;
             /* Computing MIN */
             r__1 = smin;
             r__2 = s[i__]; // , expr subst
@@ -239,7 +239,7 @@ void aocl_lapack_cppequ(char *uplo, aocl_int64_t *n, scomplex *ap, real *s, real
         {
             jj = jj + *n - i__ + 2;
             i__2 = jj;
-            s[i__] = ap[i__2].r;
+            s[i__] = ap[i__2].real;
             /* Computing MIN */
             r__1 = smin;
             r__2 = s[i__]; // , expr subst

@@ -235,8 +235,8 @@ void aocl_lapack_cgerqf(aocl_int64_t *m, aocl_int64_t *n, scomplex *a, aocl_int6
             lwkopt = *m * nb;
         }
         r__1 = aocl_lapack_sroundup_lwork(&lwkopt);
-        work[1].r = r__1;
-        work[1].i = 0.f; // , expr subst
+        work[1].real = r__1;
+        work[1].imag = 0.f; // , expr subst
         if(!lquery)
         {
             if(*lwork <= 0 || *n > 0 && *lwork < fla_max(1, *m))
@@ -341,8 +341,8 @@ void aocl_lapack_cgerqf(aocl_int64_t *m, aocl_int64_t *n, scomplex *a, aocl_int6
         aocl_lapack_cgerq2(&mu, &nu, &a[a_offset], lda, &tau[1], &work[1], &iinfo);
     }
     r__1 = aocl_lapack_sroundup_lwork(&iws);
-    work[1].r = r__1;
-    work[1].i = 0.f; // , expr subst
+    work[1].real = r__1;
+    work[1].imag = 0.f; // , expr subst
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
     return;
     /* End of CGERQF */

@@ -4,7 +4,7 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static scomplex c_b1 = {{1.f}, {0.f}};
+static scomplex c_b1 = {1.f, 0.f};
 static aocl_int64_t c__1 = 1;
 /* > \brief \b CPBRFS */
 /* =========== DOCUMENTATION =========== */
@@ -371,8 +371,8 @@ void aocl_lapack_cpbrfs(char *uplo, aocl_int64_t *n, aocl_int64_t *kd, aocl_int6
     L20: /* Loop until stopping criterion is satisfied. */
         /* Compute residual R = B - A * X */
         aocl_blas_ccopy(n, &b[j * b_dim1 + 1], &c__1, &work[1], &c__1);
-        q__1.r = -1.f;
-        q__1.i = -0.f; // , expr subst
+        q__1.real = -1.f;
+        q__1.imag = -0.f; // , expr subst
         aocl_blas_chbmv(uplo, n, kd, &q__1, &ab[ab_offset], ldab, &x[j * x_dim1 + 1], &c__1, &c_b1,
                         &work[1], &c__1);
         /* Compute componentwise relative backward error from formula */
@@ -385,7 +385,7 @@ void aocl_lapack_cpbrfs(char *uplo, aocl_int64_t *n, aocl_int64_t *kd, aocl_int6
         for(i__ = 1; i__ <= i__2; ++i__)
         {
             i__3 = i__ + j * b_dim1;
-            rwork[i__] = (r__1 = b[i__3].r, f2c_abs(r__1))
+            rwork[i__] = (r__1 = b[i__3].real, f2c_abs(r__1))
                          + (r__2 = r_imag(&b[i__ + j * b_dim1]), f2c_abs(r__2));
             /* L30: */
         }
@@ -397,7 +397,7 @@ void aocl_lapack_cpbrfs(char *uplo, aocl_int64_t *n, aocl_int64_t *kd, aocl_int6
             {
                 s = 0.f;
                 i__3 = k + j * x_dim1;
-                xk = (r__1 = x[i__3].r, f2c_abs(r__1))
+                xk = (r__1 = x[i__3].real, f2c_abs(r__1))
                      + (r__2 = r_imag(&x[k + j * x_dim1]), f2c_abs(r__2));
                 l = *kd + 1 - k;
                 /* Computing MAX */
@@ -407,19 +407,19 @@ void aocl_lapack_cpbrfs(char *uplo, aocl_int64_t *n, aocl_int64_t *kd, aocl_int6
                 for(i__ = fla_max(i__3, i__4); i__ <= i__5; ++i__)
                 {
                     i__3 = l + i__ + k * ab_dim1;
-                    rwork[i__] += ((r__1 = ab[i__3].r, f2c_abs(r__1))
+                    rwork[i__] += ((r__1 = ab[i__3].real, f2c_abs(r__1))
                                    + (r__2 = r_imag(&ab[l + i__ + k * ab_dim1]), f2c_abs(r__2)))
                                   * xk;
                     i__3 = l + i__ + k * ab_dim1;
                     i__4 = i__ + j * x_dim1;
-                    s += ((r__1 = ab[i__3].r, f2c_abs(r__1))
+                    s += ((r__1 = ab[i__3].real, f2c_abs(r__1))
                           + (r__2 = r_imag(&ab[l + i__ + k * ab_dim1]), f2c_abs(r__2)))
-                         * ((r__3 = x[i__4].r, f2c_abs(r__3))
+                         * ((r__3 = x[i__4].real, f2c_abs(r__3))
                             + (r__4 = r_imag(&x[i__ + j * x_dim1]), f2c_abs(r__4)));
                     /* L40: */
                 }
                 i__5 = *kd + 1 + k * ab_dim1;
-                rwork[k] = rwork[k] + (r__1 = ab[i__5].r, f2c_abs(r__1)) * xk + s;
+                rwork[k] = rwork[k] + (r__1 = ab[i__5].real, f2c_abs(r__1)) * xk + s;
                 /* L50: */
             }
         }
@@ -430,10 +430,10 @@ void aocl_lapack_cpbrfs(char *uplo, aocl_int64_t *n, aocl_int64_t *kd, aocl_int6
             {
                 s = 0.f;
                 i__5 = k + j * x_dim1;
-                xk = (r__1 = x[i__5].r, f2c_abs(r__1))
+                xk = (r__1 = x[i__5].real, f2c_abs(r__1))
                      + (r__2 = r_imag(&x[k + j * x_dim1]), f2c_abs(r__2));
                 i__5 = k * ab_dim1 + 1;
-                rwork[k] += (r__1 = ab[i__5].r, f2c_abs(r__1)) * xk;
+                rwork[k] += (r__1 = ab[i__5].real, f2c_abs(r__1)) * xk;
                 l = 1 - k;
                 /* Computing MIN */
                 i__3 = *n;
@@ -442,14 +442,14 @@ void aocl_lapack_cpbrfs(char *uplo, aocl_int64_t *n, aocl_int64_t *kd, aocl_int6
                 for(i__ = k + 1; i__ <= i__5; ++i__)
                 {
                     i__3 = l + i__ + k * ab_dim1;
-                    rwork[i__] += ((r__1 = ab[i__3].r, f2c_abs(r__1))
+                    rwork[i__] += ((r__1 = ab[i__3].real, f2c_abs(r__1))
                                    + (r__2 = r_imag(&ab[l + i__ + k * ab_dim1]), f2c_abs(r__2)))
                                   * xk;
                     i__3 = l + i__ + k * ab_dim1;
                     i__4 = i__ + j * x_dim1;
-                    s += ((r__1 = ab[i__3].r, f2c_abs(r__1))
+                    s += ((r__1 = ab[i__3].real, f2c_abs(r__1))
                           + (r__2 = r_imag(&ab[l + i__ + k * ab_dim1]), f2c_abs(r__2)))
-                         * ((r__3 = x[i__4].r, f2c_abs(r__3))
+                         * ((r__3 = x[i__4].real, f2c_abs(r__3))
                             + (r__4 = r_imag(&x[i__ + j * x_dim1]), f2c_abs(r__4)));
                     /* L60: */
                 }
@@ -466,7 +466,7 @@ void aocl_lapack_cpbrfs(char *uplo, aocl_int64_t *n, aocl_int64_t *kd, aocl_int6
                 /* Computing MAX */
                 i__5 = i__;
                 r__3 = s;
-                r__4 = ((r__1 = work[i__5].r, f2c_abs(r__1))
+                r__4 = ((r__1 = work[i__5].real, f2c_abs(r__1))
                         + (r__2 = r_imag(&work[i__]), f2c_abs(r__2)))
                        / rwork[i__]; // , expr subst
                 s = fla_max(r__3, r__4);
@@ -476,7 +476,7 @@ void aocl_lapack_cpbrfs(char *uplo, aocl_int64_t *n, aocl_int64_t *kd, aocl_int6
                 /* Computing MAX */
                 i__5 = i__;
                 r__3 = s;
-                r__4 = ((r__1 = work[i__5].r, f2c_abs(r__1))
+                r__4 = ((r__1 = work[i__5].real, f2c_abs(r__1))
                         + (r__2 = r_imag(&work[i__]), f2c_abs(r__2)) + safe1)
                        / (rwork[i__] + safe1); // , expr subst
                 s = fla_max(r__3, r__4);
@@ -521,13 +521,13 @@ void aocl_lapack_cpbrfs(char *uplo, aocl_int64_t *n, aocl_int64_t *kd, aocl_int6
             if(rwork[i__] > safe2)
             {
                 i__5 = i__;
-                rwork[i__] = (r__1 = work[i__5].r, f2c_abs(r__1))
+                rwork[i__] = (r__1 = work[i__5].real, f2c_abs(r__1))
                              + (r__2 = r_imag(&work[i__]), f2c_abs(r__2)) + nz * eps * rwork[i__];
             }
             else
             {
                 i__5 = i__;
-                rwork[i__] = (r__1 = work[i__5].r, f2c_abs(r__1))
+                rwork[i__] = (r__1 = work[i__5].real, f2c_abs(r__1))
                              + (r__2 = r_imag(&work[i__]), f2c_abs(r__2)) + nz * eps * rwork[i__]
                              + safe1;
             }
@@ -548,10 +548,10 @@ void aocl_lapack_cpbrfs(char *uplo, aocl_int64_t *n, aocl_int64_t *kd, aocl_int6
                     i__5 = i__;
                     i__3 = i__;
                     i__4 = i__;
-                    q__1.r = rwork[i__3] * work[i__4].r;
-                    q__1.i = rwork[i__3] * work[i__4].i; // , expr subst
-                    work[i__5].r = q__1.r;
-                    work[i__5].i = q__1.i; // , expr subst
+                    q__1.real = rwork[i__3] * work[i__4].real;
+                    q__1.imag = rwork[i__3] * work[i__4].imag; // , expr subst
+                    work[i__5].real = q__1.real;
+                    work[i__5].imag = q__1.imag; // , expr subst
                     /* L110: */
                 }
             }
@@ -564,10 +564,10 @@ void aocl_lapack_cpbrfs(char *uplo, aocl_int64_t *n, aocl_int64_t *kd, aocl_int6
                     i__5 = i__;
                     i__3 = i__;
                     i__4 = i__;
-                    q__1.r = rwork[i__3] * work[i__4].r;
-                    q__1.i = rwork[i__3] * work[i__4].i; // , expr subst
-                    work[i__5].r = q__1.r;
-                    work[i__5].i = q__1.i; // , expr subst
+                    q__1.real = rwork[i__3] * work[i__4].real;
+                    q__1.imag = rwork[i__3] * work[i__4].imag; // , expr subst
+                    work[i__5].real = q__1.real;
+                    work[i__5].imag = q__1.imag; // , expr subst
                     /* L120: */
                 }
                 aocl_lapack_cpbtrs(uplo, n, kd, &c__1, &afb[afb_offset], ldafb, &work[1], n, info);
@@ -582,7 +582,7 @@ void aocl_lapack_cpbrfs(char *uplo, aocl_int64_t *n, aocl_int64_t *kd, aocl_int6
             /* Computing MAX */
             i__5 = i__ + j * x_dim1;
             r__3 = lstres;
-            r__4 = (r__1 = x[i__5].r, f2c_abs(r__1))
+            r__4 = (r__1 = x[i__5].real, f2c_abs(r__1))
                    + (r__2 = r_imag(&x[i__ + j * x_dim1]), f2c_abs(r__2)); // , expr subst
             lstres = fla_max(r__3, r__4);
             /* L130: */

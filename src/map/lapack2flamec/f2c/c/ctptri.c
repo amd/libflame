@@ -4,7 +4,7 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static scomplex c_b1 = {{1.f}, {0.f}};
+static scomplex c_b1 = {1.f, 0.f};
 static aocl_int64_t c__1 = 1;
 /* > \brief \b CTPTRI */
 /* =========== DOCUMENTATION =========== */
@@ -213,7 +213,7 @@ void aocl_lapack_ctptri(char *uplo, char *diag, aocl_int64_t *n, scomplex *ap, a
             {
                 jj += *info;
                 i__2 = jj;
-                if(ap[i__2].r == 0.f && ap[i__2].i == 0.f)
+                if(ap[i__2].real == 0.f && ap[i__2].imag == 0.f)
                 {
                     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
                     return;
@@ -228,7 +228,7 @@ void aocl_lapack_ctptri(char *uplo, char *diag, aocl_int64_t *n, scomplex *ap, a
             for(*info = 1; *info <= i__1; ++(*info))
             {
                 i__2 = jj;
-                if(ap[i__2].r == 0.f && ap[i__2].i == 0.f)
+                if(ap[i__2].real == 0.f && ap[i__2].imag == 0.f)
                 {
                     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
                     return;
@@ -250,20 +250,20 @@ void aocl_lapack_ctptri(char *uplo, char *diag, aocl_int64_t *n, scomplex *ap, a
             {
                 i__2 = jc + j - 1;
                 c_div(&q__1, &c_b1, &ap[jc + j - 1]);
-                ap[i__2].r = q__1.r;
-                ap[i__2].i = q__1.i; // , expr subst
+                ap[i__2].real = q__1.real;
+                ap[i__2].imag = q__1.imag; // , expr subst
                 i__2 = jc + j - 1;
-                q__1.r = -ap[i__2].r;
-                q__1.i = -ap[i__2].i; // , expr subst
-                ajj.r = q__1.r;
-                ajj.i = q__1.i; // , expr subst
+                q__1.real = -ap[i__2].real;
+                q__1.imag = -ap[i__2].imag; // , expr subst
+                ajj.real = q__1.real;
+                ajj.imag = q__1.imag; // , expr subst
             }
             else
             {
-                q__1.r = -1.f;
-                q__1.i = -0.f; // , expr subst
-                ajj.r = q__1.r;
-                ajj.i = q__1.i; // , expr subst
+                q__1.real = -1.f;
+                q__1.imag = -0.f; // , expr subst
+                ajj.real = q__1.real;
+                ajj.imag = q__1.imag; // , expr subst
             }
             /* Compute elements 1:j-1 of j-th column. */
             i__2 = j - 1;
@@ -284,20 +284,20 @@ void aocl_lapack_ctptri(char *uplo, char *diag, aocl_int64_t *n, scomplex *ap, a
             {
                 i__1 = jc;
                 c_div(&q__1, &c_b1, &ap[jc]);
-                ap[i__1].r = q__1.r;
-                ap[i__1].i = q__1.i; // , expr subst
+                ap[i__1].real = q__1.real;
+                ap[i__1].imag = q__1.imag; // , expr subst
                 i__1 = jc;
-                q__1.r = -ap[i__1].r;
-                q__1.i = -ap[i__1].i; // , expr subst
-                ajj.r = q__1.r;
-                ajj.i = q__1.i; // , expr subst
+                q__1.real = -ap[i__1].real;
+                q__1.imag = -ap[i__1].imag; // , expr subst
+                ajj.real = q__1.real;
+                ajj.imag = q__1.imag; // , expr subst
             }
             else
             {
-                q__1.r = -1.f;
-                q__1.i = -0.f; // , expr subst
-                ajj.r = q__1.r;
-                ajj.i = q__1.i; // , expr subst
+                q__1.real = -1.f;
+                q__1.imag = -0.f; // , expr subst
+                ajj.real = q__1.real;
+                ajj.imag = q__1.imag; // , expr subst
             }
             if(j < *n)
             {

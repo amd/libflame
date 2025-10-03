@@ -4,7 +4,7 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static dcomplex c_b1 = {{1.}, {0.}};
+static dcomplex c_b1 = {1., 0.};
 static aocl_int64_t c__1 = 1;
 /* > \brief \b ZHETRS */
 /* =========== DOCUMENTATION =========== */
@@ -249,13 +249,13 @@ void aocl_lapack_zhetrs(char *uplo, aocl_int64_t *n, aocl_int64_t *nrhs, dcomple
             /* Multiply by inv(U(K)), where U(K) is the transformation */
             /* stored in column K of A. */
             i__1 = k - 1;
-            z__1.r = -1.;
-            z__1.i = -0.; // , expr subst
+            z__1.real = -1.;
+            z__1.imag = -0.; // , expr subst
             aocl_blas_zgeru(&i__1, nrhs, &z__1, &a[k * a_dim1 + 1], &c__1, &b[k + b_dim1], ldb,
                             &b[b_dim1 + 1], ldb);
             /* Multiply by the inverse of the diagonal block. */
             i__1 = k + k * a_dim1;
-            s = 1. / a[i__1].r;
+            s = 1. / a[i__1].real;
             aocl_blas_zdscal(nrhs, &s, &b[k + b_dim1], ldb);
             --k;
         }
@@ -271,58 +271,58 @@ void aocl_lapack_zhetrs(char *uplo, aocl_int64_t *n, aocl_int64_t *nrhs, dcomple
             /* Multiply by inv(U(K)), where U(K) is the transformation */
             /* stored in columns K-1 and K of A. */
             i__1 = k - 2;
-            z__1.r = -1.;
-            z__1.i = -0.; // , expr subst
+            z__1.real = -1.;
+            z__1.imag = -0.; // , expr subst
             aocl_blas_zgeru(&i__1, nrhs, &z__1, &a[k * a_dim1 + 1], &c__1, &b[k + b_dim1], ldb,
                             &b[b_dim1 + 1], ldb);
             i__1 = k - 2;
-            z__1.r = -1.;
-            z__1.i = -0.; // , expr subst
+            z__1.real = -1.;
+            z__1.imag = -0.; // , expr subst
             aocl_blas_zgeru(&i__1, nrhs, &z__1, &a[(k - 1) * a_dim1 + 1], &c__1, &b[k - 1 + b_dim1],
                             ldb, &b[b_dim1 + 1], ldb);
             /* Multiply by the inverse of the diagonal block. */
             i__1 = k - 1 + k * a_dim1;
-            akm1k.r = a[i__1].r;
-            akm1k.i = a[i__1].i; // , expr subst
+            akm1k.real = a[i__1].real;
+            akm1k.imag = a[i__1].imag; // , expr subst
             z_div(&z__1, &a[k - 1 + (k - 1) * a_dim1], &akm1k);
-            akm1.r = z__1.r;
-            akm1.i = z__1.i; // , expr subst
+            akm1.real = z__1.real;
+            akm1.imag = z__1.imag; // , expr subst
             d_cnjg(&z__2, &akm1k);
             z_div(&z__1, &a[k + k * a_dim1], &z__2);
-            ak.r = z__1.r;
-            ak.i = z__1.i; // , expr subst
-            z__2.r = akm1.r * ak.r - akm1.i * ak.i;
-            z__2.i = akm1.r * ak.i + akm1.i * ak.r; // , expr subst
-            z__1.r = z__2.r - 1.;
-            z__1.i = z__2.i - 0.; // , expr subst
-            denom.r = z__1.r;
-            denom.i = z__1.i; // , expr subst
+            ak.real = z__1.real;
+            ak.imag = z__1.imag; // , expr subst
+            z__2.real = akm1.real * ak.real - akm1.imag * ak.imag;
+            z__2.imag = akm1.real * ak.imag + akm1.imag * ak.real; // , expr subst
+            z__1.real = z__2.real - 1.;
+            z__1.imag = z__2.imag - 0.; // , expr subst
+            denom.real = z__1.real;
+            denom.imag = z__1.imag; // , expr subst
             i__1 = *nrhs;
             for(j = 1; j <= i__1; ++j)
             {
                 z_div(&z__1, &b[k - 1 + j * b_dim1], &akm1k);
-                bkm1.r = z__1.r;
-                bkm1.i = z__1.i; // , expr subst
+                bkm1.real = z__1.real;
+                bkm1.imag = z__1.imag; // , expr subst
                 d_cnjg(&z__2, &akm1k);
                 z_div(&z__1, &b[k + j * b_dim1], &z__2);
-                bk.r = z__1.r;
-                bk.i = z__1.i; // , expr subst
+                bk.real = z__1.real;
+                bk.imag = z__1.imag; // , expr subst
                 i__2 = k - 1 + j * b_dim1;
-                z__3.r = ak.r * bkm1.r - ak.i * bkm1.i;
-                z__3.i = ak.r * bkm1.i + ak.i * bkm1.r; // , expr subst
-                z__2.r = z__3.r - bk.r;
-                z__2.i = z__3.i - bk.i; // , expr subst
+                z__3.real = ak.real * bkm1.real - ak.imag * bkm1.imag;
+                z__3.imag = ak.real * bkm1.imag + ak.imag * bkm1.real; // , expr subst
+                z__2.real = z__3.real - bk.real;
+                z__2.imag = z__3.imag - bk.imag; // , expr subst
                 z_div(&z__1, &z__2, &denom);
-                b[i__2].r = z__1.r;
-                b[i__2].i = z__1.i; // , expr subst
+                b[i__2].real = z__1.real;
+                b[i__2].imag = z__1.imag; // , expr subst
                 i__2 = k + j * b_dim1;
-                z__3.r = akm1.r * bk.r - akm1.i * bk.i;
-                z__3.i = akm1.r * bk.i + akm1.i * bk.r; // , expr subst
-                z__2.r = z__3.r - bkm1.r;
-                z__2.i = z__3.i - bkm1.i; // , expr subst
+                z__3.real = akm1.real * bk.real - akm1.imag * bk.imag;
+                z__3.imag = akm1.real * bk.imag + akm1.imag * bk.real; // , expr subst
+                z__2.real = z__3.real - bkm1.real;
+                z__2.imag = z__3.imag - bkm1.imag; // , expr subst
                 z_div(&z__1, &z__2, &denom);
-                b[i__2].r = z__1.r;
-                b[i__2].i = z__1.i; // , expr subst
+                b[i__2].real = z__1.real;
+                b[i__2].imag = z__1.imag; // , expr subst
                 /* L20: */
             }
             k += -2;
@@ -346,8 +346,8 @@ void aocl_lapack_zhetrs(char *uplo, aocl_int64_t *n, aocl_int64_t *nrhs, dcomple
             {
                 aocl_lapack_zlacgv(nrhs, &b[k + b_dim1], ldb);
                 i__1 = k - 1;
-                z__1.r = -1.;
-                z__1.i = -0.; // , expr subst
+                z__1.real = -1.;
+                z__1.imag = -0.; // , expr subst
                 aocl_blas_zgemv("Conjugate transpose", &i__1, nrhs, &z__1, &b[b_offset], ldb,
                                 &a[k * a_dim1 + 1], &c__1, &c_b1, &b[k + b_dim1], ldb);
                 aocl_lapack_zlacgv(nrhs, &b[k + b_dim1], ldb);
@@ -369,15 +369,15 @@ void aocl_lapack_zhetrs(char *uplo, aocl_int64_t *n, aocl_int64_t *nrhs, dcomple
             {
                 aocl_lapack_zlacgv(nrhs, &b[k + b_dim1], ldb);
                 i__1 = k - 1;
-                z__1.r = -1.;
-                z__1.i = -0.; // , expr subst
+                z__1.real = -1.;
+                z__1.imag = -0.; // , expr subst
                 aocl_blas_zgemv("Conjugate transpose", &i__1, nrhs, &z__1, &b[b_offset], ldb,
                                 &a[k * a_dim1 + 1], &c__1, &c_b1, &b[k + b_dim1], ldb);
                 aocl_lapack_zlacgv(nrhs, &b[k + b_dim1], ldb);
                 aocl_lapack_zlacgv(nrhs, &b[k + 1 + b_dim1], ldb);
                 i__1 = k - 1;
-                z__1.r = -1.;
-                z__1.i = -0.; // , expr subst
+                z__1.real = -1.;
+                z__1.imag = -0.; // , expr subst
                 aocl_blas_zgemv("Conjugate transpose", &i__1, nrhs, &z__1, &b[b_offset], ldb,
                                 &a[(k + 1) * a_dim1 + 1], &c__1, &c_b1, &b[k + 1 + b_dim1], ldb);
                 aocl_lapack_zlacgv(nrhs, &b[k + 1 + b_dim1], ldb);
@@ -419,14 +419,14 @@ void aocl_lapack_zhetrs(char *uplo, aocl_int64_t *n, aocl_int64_t *nrhs, dcomple
             if(k < *n)
             {
                 i__1 = *n - k;
-                z__1.r = -1.;
-                z__1.i = -0.; // , expr subst
+                z__1.real = -1.;
+                z__1.imag = -0.; // , expr subst
                 aocl_blas_zgeru(&i__1, nrhs, &z__1, &a[k + 1 + k * a_dim1], &c__1, &b[k + b_dim1],
                                 ldb, &b[k + 1 + b_dim1], ldb);
             }
             /* Multiply by the inverse of the diagonal block. */
             i__1 = k + k * a_dim1;
-            s = 1. / a[i__1].r;
+            s = 1. / a[i__1].real;
             aocl_blas_zdscal(nrhs, &s, &b[k + b_dim1], ldb);
             ++k;
         }
@@ -444,59 +444,59 @@ void aocl_lapack_zhetrs(char *uplo, aocl_int64_t *n, aocl_int64_t *nrhs, dcomple
             if(k < *n - 1)
             {
                 i__1 = *n - k - 1;
-                z__1.r = -1.;
-                z__1.i = -0.; // , expr subst
+                z__1.real = -1.;
+                z__1.imag = -0.; // , expr subst
                 aocl_blas_zgeru(&i__1, nrhs, &z__1, &a[k + 2 + k * a_dim1], &c__1, &b[k + b_dim1],
                                 ldb, &b[k + 2 + b_dim1], ldb);
                 i__1 = *n - k - 1;
-                z__1.r = -1.;
-                z__1.i = -0.; // , expr subst
+                z__1.real = -1.;
+                z__1.imag = -0.; // , expr subst
                 aocl_blas_zgeru(&i__1, nrhs, &z__1, &a[k + 2 + (k + 1) * a_dim1], &c__1,
                                 &b[k + 1 + b_dim1], ldb, &b[k + 2 + b_dim1], ldb);
             }
             /* Multiply by the inverse of the diagonal block. */
             i__1 = k + 1 + k * a_dim1;
-            akm1k.r = a[i__1].r;
-            akm1k.i = a[i__1].i; // , expr subst
+            akm1k.real = a[i__1].real;
+            akm1k.imag = a[i__1].imag; // , expr subst
             d_cnjg(&z__2, &akm1k);
             z_div(&z__1, &a[k + k * a_dim1], &z__2);
-            akm1.r = z__1.r;
-            akm1.i = z__1.i; // , expr subst
+            akm1.real = z__1.real;
+            akm1.imag = z__1.imag; // , expr subst
             z_div(&z__1, &a[k + 1 + (k + 1) * a_dim1], &akm1k);
-            ak.r = z__1.r;
-            ak.i = z__1.i; // , expr subst
-            z__2.r = akm1.r * ak.r - akm1.i * ak.i;
-            z__2.i = akm1.r * ak.i + akm1.i * ak.r; // , expr subst
-            z__1.r = z__2.r - 1.;
-            z__1.i = z__2.i - 0.; // , expr subst
-            denom.r = z__1.r;
-            denom.i = z__1.i; // , expr subst
+            ak.real = z__1.real;
+            ak.imag = z__1.imag; // , expr subst
+            z__2.real = akm1.real * ak.real - akm1.imag * ak.imag;
+            z__2.imag = akm1.real * ak.imag + akm1.imag * ak.real; // , expr subst
+            z__1.real = z__2.real - 1.;
+            z__1.imag = z__2.imag - 0.; // , expr subst
+            denom.real = z__1.real;
+            denom.imag = z__1.imag; // , expr subst
             i__1 = *nrhs;
             for(j = 1; j <= i__1; ++j)
             {
                 d_cnjg(&z__2, &akm1k);
                 z_div(&z__1, &b[k + j * b_dim1], &z__2);
-                bkm1.r = z__1.r;
-                bkm1.i = z__1.i; // , expr subst
+                bkm1.real = z__1.real;
+                bkm1.imag = z__1.imag; // , expr subst
                 z_div(&z__1, &b[k + 1 + j * b_dim1], &akm1k);
-                bk.r = z__1.r;
-                bk.i = z__1.i; // , expr subst
+                bk.real = z__1.real;
+                bk.imag = z__1.imag; // , expr subst
                 i__2 = k + j * b_dim1;
-                z__3.r = ak.r * bkm1.r - ak.i * bkm1.i;
-                z__3.i = ak.r * bkm1.i + ak.i * bkm1.r; // , expr subst
-                z__2.r = z__3.r - bk.r;
-                z__2.i = z__3.i - bk.i; // , expr subst
+                z__3.real = ak.real * bkm1.real - ak.imag * bkm1.imag;
+                z__3.imag = ak.real * bkm1.imag + ak.imag * bkm1.real; // , expr subst
+                z__2.real = z__3.real - bk.real;
+                z__2.imag = z__3.imag - bk.imag; // , expr subst
                 z_div(&z__1, &z__2, &denom);
-                b[i__2].r = z__1.r;
-                b[i__2].i = z__1.i; // , expr subst
+                b[i__2].real = z__1.real;
+                b[i__2].imag = z__1.imag; // , expr subst
                 i__2 = k + 1 + j * b_dim1;
-                z__3.r = akm1.r * bk.r - akm1.i * bk.i;
-                z__3.i = akm1.r * bk.i + akm1.i * bk.r; // , expr subst
-                z__2.r = z__3.r - bkm1.r;
-                z__2.i = z__3.i - bkm1.i; // , expr subst
+                z__3.real = akm1.real * bk.real - akm1.imag * bk.imag;
+                z__3.imag = akm1.real * bk.imag + akm1.imag * bk.real; // , expr subst
+                z__2.real = z__3.real - bkm1.real;
+                z__2.imag = z__3.imag - bkm1.imag; // , expr subst
                 z_div(&z__1, &z__2, &denom);
-                b[i__2].r = z__1.r;
-                b[i__2].i = z__1.i; // , expr subst
+                b[i__2].real = z__1.real;
+                b[i__2].imag = z__1.imag; // , expr subst
                 /* L70: */
             }
             k += 2;
@@ -520,8 +520,8 @@ void aocl_lapack_zhetrs(char *uplo, aocl_int64_t *n, aocl_int64_t *nrhs, dcomple
             {
                 aocl_lapack_zlacgv(nrhs, &b[k + b_dim1], ldb);
                 i__1 = *n - k;
-                z__1.r = -1.;
-                z__1.i = -0.; // , expr subst
+                z__1.real = -1.;
+                z__1.imag = -0.; // , expr subst
                 aocl_blas_zgemv("Conjugate transpose", &i__1, nrhs, &z__1, &b[k + 1 + b_dim1], ldb,
                                 &a[k + 1 + k * a_dim1], &c__1, &c_b1, &b[k + b_dim1], ldb);
                 aocl_lapack_zlacgv(nrhs, &b[k + b_dim1], ldb);
@@ -543,15 +543,15 @@ void aocl_lapack_zhetrs(char *uplo, aocl_int64_t *n, aocl_int64_t *nrhs, dcomple
             {
                 aocl_lapack_zlacgv(nrhs, &b[k + b_dim1], ldb);
                 i__1 = *n - k;
-                z__1.r = -1.;
-                z__1.i = -0.; // , expr subst
+                z__1.real = -1.;
+                z__1.imag = -0.; // , expr subst
                 aocl_blas_zgemv("Conjugate transpose", &i__1, nrhs, &z__1, &b[k + 1 + b_dim1], ldb,
                                 &a[k + 1 + k * a_dim1], &c__1, &c_b1, &b[k + b_dim1], ldb);
                 aocl_lapack_zlacgv(nrhs, &b[k + b_dim1], ldb);
                 aocl_lapack_zlacgv(nrhs, &b[k - 1 + b_dim1], ldb);
                 i__1 = *n - k;
-                z__1.r = -1.;
-                z__1.i = -0.; // , expr subst
+                z__1.real = -1.;
+                z__1.imag = -0.; // , expr subst
                 aocl_blas_zgemv("Conjugate transpose", &i__1, nrhs, &z__1, &b[k + 1 + b_dim1], ldb,
                                 &a[k + 1 + (k - 1) * a_dim1], &c__1, &c_b1, &b[k - 1 + b_dim1],
                                 ldb);

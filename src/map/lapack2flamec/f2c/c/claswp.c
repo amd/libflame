@@ -204,15 +204,15 @@ void aocl_lapack_claswp(aocl_int64_t *n, scomplex *a, aocl_int64_t *lda, aocl_in
                     for(k = j; k <= i__4; ++k)
                     {
                         i__5 = i__ + k * a_dim1;
-                        temp.r = a[i__5].r;
-                        temp.i = a[i__5].i; // , expr subst
+                        temp.real = a[i__5].real;
+                        temp.imag = a[i__5].imag; // , expr subst
                         i__5 = i__ + k * a_dim1;
                         i__6 = ip + k * a_dim1;
-                        a[i__5].r = a[i__6].r;
-                        a[i__5].i = a[i__6].i; // , expr subst
+                        a[i__5].real = a[i__6].real;
+                        a[i__5].imag = a[i__6].imag; // , expr subst
                         i__5 = ip + k * a_dim1;
-                        a[i__5].r = temp.r;
-                        a[i__5].i = temp.i; // , expr subst
+                        a[i__5].real = temp.real;
+                        a[i__5].imag = temp.imag; // , expr subst
                         /* L10: */
                     }
                 }
@@ -237,15 +237,15 @@ void aocl_lapack_claswp(aocl_int64_t *n, scomplex *a, aocl_int64_t *lda, aocl_in
                 for(k = n32; k <= i__2; ++k)
                 {
                     i__4 = i__ + k * a_dim1;
-                    temp.r = a[i__4].r;
-                    temp.i = a[i__4].i; // , expr subst
+                    temp.real = a[i__4].real;
+                    temp.imag = a[i__4].imag; // , expr subst
                     i__4 = i__ + k * a_dim1;
                     i__5 = ip + k * a_dim1;
-                    a[i__4].r = a[i__5].r;
-                    a[i__4].i = a[i__5].i; // , expr subst
+                    a[i__4].real = a[i__5].real;
+                    a[i__4].imag = a[i__5].imag; // , expr subst
                     i__4 = ip + k * a_dim1;
-                    a[i__4].r = temp.r;
-                    a[i__4].i = temp.i; // , expr subst
+                    a[i__4].real = temp.real;
+                    a[i__4].imag = temp.imag; // , expr subst
                     /* L40: */
                 }
             }
@@ -337,15 +337,15 @@ void aocl_lapack_claswp64(aocl_int64_t *n, scomplex *a, aocl_int64_t *lda, aocl_
                     for(k = j; k <= i__4; ++k)
                     {
                         i__5 = i__ + k * a_dim1;
-                        temp.r = a[i__5].r;
-                        temp.i = a[i__5].i; // , expr subst
+                        temp.real = a[i__5].real;
+                        temp.imag = a[i__5].imag; // , expr subst
                         i__5 = i__ + k * a_dim1;
                         i__6 = ip + k * a_dim1;
-                        a[i__5].r = a[i__6].r;
-                        a[i__5].i = a[i__6].i; // , expr subst
+                        a[i__5].real = a[i__6].real;
+                        a[i__5].imag = a[i__6].imag; // , expr subst
                         i__5 = ip + k * a_dim1;
-                        a[i__5].r = temp.r;
-                        a[i__5].i = temp.i; // , expr subst
+                        a[i__5].real = temp.real;
+                        a[i__5].imag = temp.imag; // , expr subst
                         /* L10: */
                     }
                 }
@@ -370,15 +370,15 @@ void aocl_lapack_claswp64(aocl_int64_t *n, scomplex *a, aocl_int64_t *lda, aocl_
                 for(k = n32; k <= i__2; ++k)
                 {
                     i__4 = i__ + k * a_dim1;
-                    temp.r = a[i__4].r;
-                    temp.i = a[i__4].i; // , expr subst
+                    temp.real = a[i__4].real;
+                    temp.imag = a[i__4].imag; // , expr subst
                     i__4 = i__ + k * a_dim1;
                     i__5 = ip + k * a_dim1;
-                    a[i__4].r = a[i__5].r;
-                    a[i__4].i = a[i__5].i; // , expr subst
+                    a[i__4].real = a[i__5].real;
+                    a[i__4].imag = a[i__5].imag; // , expr subst
                     i__4 = ip + k * a_dim1;
-                    a[i__4].r = temp.r;
-                    a[i__4].i = temp.i; // , expr subst
+                    a[i__4].real = temp.real;
+                    a[i__4].imag = temp.imag; // , expr subst
                     /* L40: */
                 }
             }

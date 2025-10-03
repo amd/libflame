@@ -4,7 +4,7 @@
  -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for
  libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static dcomplex c_b1 = {{1.}, {0.}};
+static dcomplex c_b1 = {1., 0.};
 static aocl_int64_t c__1 = 1;
 /* > \brief \b ZGETRF2 */
 /* =========== DOCUMENTATION =========== */
@@ -207,7 +207,7 @@ void aocl_lapack_zgetrf2(aocl_int64_t *m, aocl_int64_t *n, dcomplex *a, aocl_int
         /* Just need to handle IPIV and INFO */
         ipiv[1] = 1;
         i__1 = a_dim1 + 1;
-        if(a[i__1].r == 0. && a[i__1].i == 0.)
+        if(a[i__1].real == 0. && a[i__1].imag == 0.)
         {
             *info = 1;
         }
@@ -221,21 +221,21 @@ void aocl_lapack_zgetrf2(aocl_int64_t *m, aocl_int64_t *n, dcomplex *a, aocl_int
         i__ = aocl_blas_izamax(m, &a[a_dim1 + 1], &c__1);
         ipiv[1] = (aocl_int_t)(i__);
         i__1 = i__ + a_dim1;
-        if(a[i__1].r != 0. || a[i__1].i != 0.)
+        if(a[i__1].real != 0. || a[i__1].imag != 0.)
         {
             /* Apply the interchange */
             if(i__ != 1)
             {
                 i__1 = a_dim1 + 1;
-                temp.r = a[i__1].r;
-                temp.i = a[i__1].i; // , expr subst
+                temp.real = a[i__1].real;
+                temp.imag = a[i__1].imag; // , expr subst
                 i__1 = a_dim1 + 1;
                 i__2 = i__ + a_dim1;
-                a[i__1].r = a[i__2].r;
-                a[i__1].i = a[i__2].i; // , expr subst
+                a[i__1].real = a[i__2].real;
+                a[i__1].imag = a[i__2].imag; // , expr subst
                 i__1 = i__ + a_dim1;
-                a[i__1].r = temp.r;
-                a[i__1].i = temp.i; // , expr subst
+                a[i__1].real = temp.real;
+                a[i__1].imag = temp.imag; // , expr subst
             }
             /* Compute elements 2:M of the column */
             if(z_abs(&a[a_dim1 + 1]) >= sfmin)
@@ -251,8 +251,8 @@ void aocl_lapack_zgetrf2(aocl_int64_t *m, aocl_int64_t *n, dcomplex *a, aocl_int
                 {
                     i__2 = i__ + 1 + a_dim1;
                     z_div(&z__1, &a[i__ + 1 + a_dim1], &a[a_dim1 + 1]);
-                    a[i__2].r = z__1.r;
-                    a[i__2].i = z__1.i; // , expr subst
+                    a[i__2].real = z__1.real;
+                    a[i__2].imag = z__1.imag; // , expr subst
                     /* L10: */
                 }
             }
@@ -310,8 +310,8 @@ void aocl_lapack_zgetrf2(aocl_int64_t *m, aocl_int64_t *n, dcomplex *a, aocl_int
                         &a[(n1 + 1) * a_dim1 + 1], lda);
         /* Update A22 */
         i__1 = *m - n1;
-        z__1.r = -1.;
-        z__1.i = -0.; // , expr subst
+        z__1.real = -1.;
+        z__1.imag = -0.; // , expr subst
         aocl_blas_zgemm("N", "N", &i__1, &n2, &n1, &z__1, &a[n1 + 1 + a_dim1], lda,
                         &a[(n1 + 1) * a_dim1 + 1], lda, &c_b1, &a[n1 + 1 + (n1 + 1) * a_dim1], lda);
         /* Factor A22 */

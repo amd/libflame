@@ -4,7 +4,7 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static dcomplex c_b1 = {{1.}, {0.}};
+static dcomplex c_b1 = {1., 0.};
 static aocl_int64_t c__1 = 1;
 static aocl_int64_t c_n1 = -1;
 static doublereal c_b24 = 1.;
@@ -244,46 +244,46 @@ void aocl_lapack_zlatdf(aocl_int64_t *ijob, aocl_int64_t *n, dcomplex *z__, aocl
         i__1 = *n - 1;
         aocl_lapack_zlaswp(&c__1, &rhs[1], ldz, &c__1, &i__1, &ipiv[1], &c__1);
         /* Solve for L-part choosing RHS either to +1 or -1. */
-        z__1.r = -1.;
-        z__1.i = -0.; // , expr subst
-        pmone.r = z__1.r;
-        pmone.i = z__1.i; // , expr subst
+        z__1.real = -1.;
+        z__1.imag = -0.; // , expr subst
+        pmone.real = z__1.real;
+        pmone.imag = z__1.imag; // , expr subst
         i__1 = *n - 1;
         for(j = 1; j <= i__1; ++j)
         {
             i__2 = j;
-            z__1.r = rhs[i__2].r + 1.;
-            z__1.i = rhs[i__2].i + 0.; // , expr subst
-            bp.r = z__1.r;
-            bp.i = z__1.i; // , expr subst
+            z__1.real = rhs[i__2].real + 1.;
+            z__1.imag = rhs[i__2].imag + 0.; // , expr subst
+            bp.real = z__1.real;
+            bp.imag = z__1.imag; // , expr subst
             i__2 = j;
-            z__1.r = rhs[i__2].r - 1.;
-            z__1.i = rhs[i__2].i - 0.; // , expr subst
-            bm.r = z__1.r;
-            bm.i = z__1.i; // , expr subst
+            z__1.real = rhs[i__2].real - 1.;
+            z__1.imag = rhs[i__2].imag - 0.; // , expr subst
+            bm.real = z__1.real;
+            bm.imag = z__1.imag; // , expr subst
             splus = 1.;
             /* Lockahead for L- part RHS(1:N-1) = +-1 */
             /* SPLUS and SMIN computed more efficiently than in BSOLVE[1]. */
             i__2 = *n - j;
             aocl_lapack_zdotc_f2c(&z__1, &i__2, &z__[j + 1 + j * z_dim1], &c__1, &z__[j + 1 + j * z_dim1],
                        &c__1);
-            splus += z__1.r;
+            splus += z__1.real;
             i__2 = *n - j;
             aocl_lapack_zdotc_f2c(&z__1, &i__2, &z__[j + 1 + j * z_dim1], &c__1, &rhs[j + 1], &c__1);
-            sminu = z__1.r;
+            sminu = z__1.real;
             i__2 = j;
-            splus *= rhs[i__2].r;
+            splus *= rhs[i__2].real;
             if(splus > sminu)
             {
                 i__2 = j;
-                rhs[i__2].r = bp.r;
-                rhs[i__2].i = bp.i; // , expr subst
+                rhs[i__2].real = bp.real;
+                rhs[i__2].imag = bp.imag; // , expr subst
             }
             else if(sminu > splus)
             {
                 i__2 = j;
-                rhs[i__2].r = bm.r;
-                rhs[i__2].i = bm.i; // , expr subst
+                rhs[i__2].real = bm.real;
+                rhs[i__2].imag = bm.imag; // , expr subst
             }
             else
             {
@@ -294,19 +294,19 @@ void aocl_lapack_zlatdf(aocl_int64_t *ijob, aocl_int64_t *n, dcomplex *z__, aocl
                 /* (see [1]). (Not done in BSOLVE.) */
                 i__2 = j;
                 i__3 = j;
-                z__1.r = rhs[i__3].r + pmone.r;
-                z__1.i = rhs[i__3].i + pmone.i; // , expr subst
-                rhs[i__2].r = z__1.r;
-                rhs[i__2].i = z__1.i; // , expr subst
-                pmone.r = 1.;
-                pmone.i = 0.; // , expr subst
+                z__1.real = rhs[i__3].real + pmone.real;
+                z__1.imag = rhs[i__3].imag + pmone.imag; // , expr subst
+                rhs[i__2].real = z__1.real;
+                rhs[i__2].imag = z__1.imag; // , expr subst
+                pmone.real = 1.;
+                pmone.imag = 0.; // , expr subst
             }
             /* Compute the remaining r.h.s. */
             i__2 = j;
-            z__1.r = -rhs[i__2].r;
-            z__1.i = -rhs[i__2].i; // , expr subst
-            temp.r = z__1.r;
-            temp.i = z__1.i; // , expr subst
+            z__1.real = -rhs[i__2].real;
+            z__1.imag = -rhs[i__2].imag; // , expr subst
+            temp.real = z__1.real;
+            temp.imag = z__1.imag; // , expr subst
             i__2 = *n - j;
             aocl_blas_zaxpy(&i__2, &temp, &z__[j + 1 + j * z_dim1], &c__1, &rhs[j + 1], &c__1);
             /* L10: */
@@ -319,35 +319,35 @@ void aocl_lapack_zlatdf(aocl_int64_t *ijob, aocl_int64_t *n, dcomplex *z__, aocl
         aocl_blas_zcopy(&i__1, &rhs[1], &c__1, work, &c__1);
         i__1 = *n - 1;
         i__2 = *n;
-        z__1.r = rhs[i__2].r + 1.;
-        z__1.i = rhs[i__2].i + 0.; // , expr subst
-        work[i__1].r = z__1.r;
-        work[i__1].i = z__1.i; // , expr subst
+        z__1.real = rhs[i__2].real + 1.;
+        z__1.imag = rhs[i__2].imag + 0.; // , expr subst
+        work[i__1].real = z__1.real;
+        work[i__1].imag = z__1.imag; // , expr subst
         i__1 = *n;
         i__2 = *n;
-        z__1.r = rhs[i__2].r - 1.;
-        z__1.i = rhs[i__2].i - 0.; // , expr subst
-        rhs[i__1].r = z__1.r;
-        rhs[i__1].i = z__1.i; // , expr subst
+        z__1.real = rhs[i__2].real - 1.;
+        z__1.imag = rhs[i__2].imag - 0.; // , expr subst
+        rhs[i__1].real = z__1.real;
+        rhs[i__1].imag = z__1.imag; // , expr subst
         splus = 0.;
         sminu = 0.;
         for(i__ = *n; i__ >= 1; --i__)
         {
             z_div(&z__1, &c_b1, &z__[i__ + i__ * z_dim1]);
-            temp.r = z__1.r;
-            temp.i = z__1.i; // , expr subst
+            temp.real = z__1.real;
+            temp.imag = z__1.imag; // , expr subst
             i__1 = i__ - 1;
             i__2 = i__ - 1;
-            z__1.r = work[i__2].r * temp.r - work[i__2].i * temp.i;
-            z__1.i = work[i__2].r * temp.i + work[i__2].i * temp.r; // , expr subst
-            work[i__1].r = z__1.r;
-            work[i__1].i = z__1.i; // , expr subst
+            z__1.real = work[i__2].real * temp.real - work[i__2].imag * temp.imag;
+            z__1.imag = work[i__2].real * temp.imag + work[i__2].imag * temp.real; // , expr subst
+            work[i__1].real = z__1.real;
+            work[i__1].imag = z__1.imag; // , expr subst
             i__1 = i__;
             i__2 = i__;
-            z__1.r = rhs[i__2].r * temp.r - rhs[i__2].i * temp.i;
-            z__1.i = rhs[i__2].r * temp.i + rhs[i__2].i * temp.r; // , expr subst
-            rhs[i__1].r = z__1.r;
-            rhs[i__1].i = z__1.i; // , expr subst
+            z__1.real = rhs[i__2].real * temp.real - rhs[i__2].imag * temp.imag;
+            z__1.imag = rhs[i__2].real * temp.imag + rhs[i__2].imag * temp.real; // , expr subst
+            rhs[i__1].real = z__1.real;
+            rhs[i__1].imag = z__1.imag; // , expr subst
             i__1 = *n;
             for(k = i__ + 1; k <= i__1; ++k)
             {
@@ -355,26 +355,26 @@ void aocl_lapack_zlatdf(aocl_int64_t *ijob, aocl_int64_t *n, dcomplex *z__, aocl
                 i__3 = i__ - 1;
                 i__4 = k - 1;
                 i__5 = i__ + k * z_dim1;
-                z__3.r = z__[i__5].r * temp.r - z__[i__5].i * temp.i;
-                z__3.i = z__[i__5].r * temp.i + z__[i__5].i * temp.r; // , expr subst
-                z__2.r = work[i__4].r * z__3.r - work[i__4].i * z__3.i;
-                z__2.i = work[i__4].r * z__3.i + work[i__4].i * z__3.r; // , expr subst
-                z__1.r = work[i__3].r - z__2.r;
-                z__1.i = work[i__3].i - z__2.i; // , expr subst
-                work[i__2].r = z__1.r;
-                work[i__2].i = z__1.i; // , expr subst
+                z__3.real = z__[i__5].real * temp.real - z__[i__5].imag * temp.imag;
+                z__3.imag = z__[i__5].real * temp.imag + z__[i__5].imag * temp.real; // , expr subst
+                z__2.real = work[i__4].real * z__3.real - work[i__4].imag * z__3.imag;
+                z__2.imag = work[i__4].real * z__3.imag + work[i__4].imag * z__3.real; // , expr subst
+                z__1.real = work[i__3].real - z__2.real;
+                z__1.imag = work[i__3].imag - z__2.imag; // , expr subst
+                work[i__2].real = z__1.real;
+                work[i__2].imag = z__1.imag; // , expr subst
                 i__2 = i__;
                 i__3 = i__;
                 i__4 = k;
                 i__5 = i__ + k * z_dim1;
-                z__3.r = z__[i__5].r * temp.r - z__[i__5].i * temp.i;
-                z__3.i = z__[i__5].r * temp.i + z__[i__5].i * temp.r; // , expr subst
-                z__2.r = rhs[i__4].r * z__3.r - rhs[i__4].i * z__3.i;
-                z__2.i = rhs[i__4].r * z__3.i + rhs[i__4].i * z__3.r; // , expr subst
-                z__1.r = rhs[i__3].r - z__2.r;
-                z__1.i = rhs[i__3].i - z__2.i; // , expr subst
-                rhs[i__2].r = z__1.r;
-                rhs[i__2].i = z__1.i; // , expr subst
+                z__3.real = z__[i__5].real * temp.real - z__[i__5].imag * temp.imag;
+                z__3.imag = z__[i__5].real * temp.imag + z__[i__5].imag * temp.real; // , expr subst
+                z__2.real = rhs[i__4].real * z__3.real - rhs[i__4].imag * z__3.imag;
+                z__2.imag = rhs[i__4].real * z__3.imag + rhs[i__4].imag * z__3.real; // , expr subst
+                z__1.real = rhs[i__3].real - z__2.real;
+                z__1.imag = rhs[i__3].imag - z__2.imag; // , expr subst
+                rhs[i__2].real = z__1.real;
+                rhs[i__2].imag = z__1.imag; // , expr subst
                 /* L20: */
             }
             splus += z_abs(&work[i__ - 1]);
@@ -403,13 +403,13 @@ void aocl_lapack_zlatdf(aocl_int64_t *ijob, aocl_int64_t *n, dcomplex *z__, aocl
     aocl_lapack_zdotc_f2c(&z__3, n, xm, &c__1, xm, &c__1);
     z_sqrt(&z__2, &z__3);
     z_div(&z__1, &c_b1, &z__2);
-    temp.r = z__1.r;
-    temp.i = z__1.i; // , expr subst
+    temp.real = z__1.real;
+    temp.imag = z__1.imag; // , expr subst
     aocl_blas_zscal(n, &temp, xm, &c__1);
     aocl_blas_zcopy(n, xm, &c__1, xp, &c__1);
     aocl_blas_zaxpy(n, &c_b1, &rhs[1], &c__1, xp, &c__1);
-    z__1.r = -1.;
-    z__1.i = -0.; // , expr subst
+    z__1.real = -1.;
+    z__1.imag = -0.; // , expr subst
     aocl_blas_zaxpy(n, &z__1, xm, &c__1, &rhs[1], &c__1);
     aocl_lapack_zgesc2(n, &z__[z_offset], ldz, &rhs[1], &ipiv[1], &jpiv[1], &scale);
     aocl_lapack_zgesc2(n, &z__[z_offset], ldz, xp, &ipiv[1], &jpiv[1], &scale);

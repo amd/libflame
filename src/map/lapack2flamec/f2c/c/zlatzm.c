@@ -4,7 +4,7 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static dcomplex c_b1 = {{1.}, {0.}};
+static dcomplex c_b1 = {1., 0.};
 static aocl_int64_t c__1 = 1;
 /* > \brief \b ZLATZM */
 /* =========== DOCUMENTATION =========== */
@@ -206,7 +206,7 @@ void aocl_lapack_zlatzm(char *side, aocl_int64_t *m, aocl_int64_t *n, dcomplex *
     c1 -= c1_offset;
     --work;
     /* Function Body */
-    if(fla_min(*m, *n) == 0 || tau->r == 0. && tau->i == 0.)
+    if(fla_min(*m, *n) == 0 || tau->real == 0. && tau->imag == 0.)
     {
         AOCL_DTL_TRACE_LOG_EXIT
         return;
@@ -222,12 +222,12 @@ void aocl_lapack_zlatzm(char *side, aocl_int64_t *m, aocl_int64_t *n, dcomplex *
         /* [ C1 ] := [ C1 ] - tau* [ 1 ] * w**H */
         /* [ C2 ] [ C2 ] [ v ] */
         aocl_lapack_zlacgv(n, &work[1], &c__1);
-        z__1.r = -tau->r;
-        z__1.i = -tau->i; // , expr subst
+        z__1.real = -tau->real;
+        z__1.imag = -tau->imag; // , expr subst
         aocl_blas_zaxpy(n, &z__1, &work[1], &c__1, &c1[c1_offset], ldc);
         i__1 = *m - 1;
-        z__1.r = -tau->r;
-        z__1.i = -tau->i; // , expr subst
+        z__1.real = -tau->real;
+        z__1.imag = -tau->imag; // , expr subst
         aocl_blas_zgeru(&i__1, n, &z__1, &v[1], incv, &work[1], &c__1, &c2[c2_offset], ldc);
     }
     else if(lsame_(side, "R", 1, 1))
@@ -238,12 +238,12 @@ void aocl_lapack_zlatzm(char *side, aocl_int64_t *m, aocl_int64_t *n, dcomplex *
         aocl_blas_zgemv("No transpose", m, &i__1, &c_b1, &c2[c2_offset], ldc, &v[1], incv, &c_b1,
                         &work[1], &c__1);
         /* [ C1, C2 ] := [ C1, C2 ] - tau* w * [ 1 , v**H] */
-        z__1.r = -tau->r;
-        z__1.i = -tau->i; // , expr subst
+        z__1.real = -tau->real;
+        z__1.imag = -tau->imag; // , expr subst
         aocl_blas_zaxpy(m, &z__1, &work[1], &c__1, &c1[c1_offset], &c__1);
         i__1 = *n - 1;
-        z__1.r = -tau->r;
-        z__1.i = -tau->i; // , expr subst
+        z__1.real = -tau->real;
+        z__1.imag = -tau->imag; // , expr subst
         aocl_blas_zgerc(m, &i__1, &z__1, &work[1], &c__1, &v[1], incv, &c2[c2_offset], ldc);
     }
     AOCL_DTL_TRACE_LOG_EXIT

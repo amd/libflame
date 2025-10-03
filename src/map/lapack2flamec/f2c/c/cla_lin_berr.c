@@ -178,16 +178,16 @@ void aocl_lapack_cla_lin_berr(aocl_int64_t *n, aocl_int64_t *nz, aocl_int64_t *n
             if(ayb[i__ + j * ayb_dim1] != 0.f)
             {
                 i__3 = i__ + j * res_dim1;
-                r__3 = (r__1 = res[i__3].r, f2c_abs(r__1))
+                r__3 = (r__1 = res[i__3].real, f2c_abs(r__1))
                        + (r__2 = r_imag(&res[i__ + j * res_dim1]), f2c_abs(r__2));
-                q__3.r = r__3;
-                q__3.i = 0.f; // , expr subst
-                q__2.r = safe1 + q__3.r;
-                q__2.i = q__3.i; // , expr subst
+                q__3.real = r__3;
+                q__3.imag = 0.f; // , expr subst
+                q__2.real = safe1 + q__3.real;
+                q__2.imag = q__3.imag; // , expr subst
                 i__4 = i__ + j * ayb_dim1;
-                q__1.r = q__2.r / ayb[i__4];
-                q__1.i = q__2.i / ayb[i__4]; // , expr subst
-                tmp = q__1.r;
+                q__1.real = q__2.real / ayb[i__4];
+                q__1.imag = q__2.imag / ayb[i__4]; // , expr subst
+                tmp = q__1.real;
                 /* Computing MAX */
                 r__1 = berr[j];
                 berr[j] = fla_max(r__1, tmp);

@@ -4,8 +4,8 @@
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
  /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static scomplex c_b1 = {{0.f}, {0.f}};
-static scomplex c_b2 = {{1.f}, {0.f}};
+static scomplex c_b1 = {0.f, 0.f};
+static scomplex c_b2 = {1.f, 0.f};
 static aocl_int64_t c__1 = 1;
 static aocl_int64_t c_n1 = -1;
 static logical c_true = TRUE_;
@@ -410,16 +410,16 @@ void aocl_lapack_claqr3(logical *wantt, logical *wantz, aocl_int64_t *n, aocl_in
         /* ==== Workspace query call to CGEHRD ==== */
         i__1 = jw - 1;
         aocl_lapack_cgehrd(&jw, &c__1, &i__1, &t[t_offset], ldt, &work[1], &work[1], &c_n1, &info);
-        lwk1 = (integer)work[1].r;
+        lwk1 = (integer)work[1].real;
         /* ==== Workspace query call to CUNMHR ==== */
         i__1 = jw - 1;
         aocl_lapack_cunmhr("R", "N", &jw, &jw, &c__1, &i__1, &t[t_offset], ldt, &work[1],
                            &v[v_offset], ldv, &work[1], &c_n1, &info);
-        lwk2 = (integer)work[1].r;
+        lwk2 = (integer)work[1].real;
         /* ==== Workspace query call to CLAQR4 ==== */
         aocl_lapack_claqr4(&c_true, &c_true, &jw, &c__1, &jw, &t[t_offset], ldt, &sh[1], &c__1, &jw,
                            &v[v_offset], ldv, &work[1], &c_n1, &infqr);
-        lwk3 = (integer)work[1].r;
+        lwk3 = (integer)work[1].real;
         /* ==== Optimal workspace ==== */
         /* Computing MAX */
         i__1 = jw + fla_max(lwk1, lwk2);
@@ -429,10 +429,10 @@ void aocl_lapack_claqr3(logical *wantt, logical *wantz, aocl_int64_t *n, aocl_in
     if(*lwork == -1)
     {
         r__1 = (real)lwkopt;
-        q__1.r = r__1;
-        q__1.i = 0.f; // , expr subst
-        work[1].r = q__1.r;
-        work[1].i = q__1.i; // , expr subst
+        q__1.real = r__1;
+        q__1.imag = 0.f; // , expr subst
+        work[1].real = q__1.real;
+        work[1].imag = q__1.imag; // , expr subst
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
@@ -440,8 +440,8 @@ void aocl_lapack_claqr3(logical *wantt, logical *wantz, aocl_int64_t *n, aocl_in
     /* ... for an empty active block ... ==== */
     *ns = 0;
     *nd = 0;
-    work[1].r = 1.f;
-    work[1].i = 0.f; // , expr subst
+    work[1].real = 1.f;
+    work[1].imag = 0.f; // , expr subst
     if(*ktop > *kbot)
     {
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
@@ -465,43 +465,43 @@ void aocl_lapack_claqr3(logical *wantt, logical *wantz, aocl_int64_t *n, aocl_in
     kwtop = *kbot - jw + 1;
     if(kwtop == *ktop)
     {
-        s.r = 0.f;
-        s.i = 0.f; // , expr subst
+        s.real = 0.f;
+        s.imag = 0.f; // , expr subst
     }
     else
     {
         i__1 = kwtop + (kwtop - 1) * h_dim1;
-        s.r = h__[i__1].r;
-        s.i = h__[i__1].i; // , expr subst
+        s.real = h__[i__1].real;
+        s.imag = h__[i__1].imag; // , expr subst
     }
     if(*kbot == kwtop)
     {
         /* ==== 1-by-1 deflation window: not much to do ==== */
         i__1 = kwtop;
         i__2 = kwtop + kwtop * h_dim1;
-        sh[i__1].r = h__[i__2].r;
-        sh[i__1].i = h__[i__2].i; // , expr subst
+        sh[i__1].real = h__[i__2].real;
+        sh[i__1].imag = h__[i__2].imag; // , expr subst
         *ns = 1;
         *nd = 0;
         /* Computing MAX */
         i__1 = kwtop + kwtop * h_dim1;
         r__5 = smlnum;
         r__6 = ulp
-               * ((r__1 = h__[i__1].r, f2c_abs(r__1))
+               * ((r__1 = h__[i__1].real, f2c_abs(r__1))
                   + (r__2 = r_imag(&h__[kwtop + kwtop * h_dim1]), f2c_abs(r__2))); // , expr subst
-        if((r__3 = s.r, f2c_abs(r__3)) + (r__4 = r_imag(&s), f2c_abs(r__4)) <= fla_max(r__5, r__6))
+        if((r__3 = s.real, f2c_abs(r__3)) + (r__4 = r_imag(&s), f2c_abs(r__4)) <= fla_max(r__5, r__6))
         {
             *ns = 0;
             *nd = 1;
             if(kwtop > *ktop)
             {
                 i__1 = kwtop + (kwtop - 1) * h_dim1;
-                h__[i__1].r = 0.f;
-                h__[i__1].i = 0.f; // , expr subst
+                h__[i__1].real = 0.f;
+                h__[i__1].imag = 0.f; // , expr subst
             }
         }
-        work[1].r = 1.f;
-        work[1].i = 0.f; // , expr subst
+        work[1].real = 1.f;
+        work[1].imag = 0.f; // , expr subst
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
@@ -535,18 +535,18 @@ void aocl_lapack_claqr3(logical *wantt, logical *wantz, aocl_int64_t *n, aocl_in
     {
         /* ==== Small spike tip deflation test ==== */
         i__2 = *ns + *ns * t_dim1;
-        foo = (r__1 = t[i__2].r, f2c_abs(r__1))
+        foo = (r__1 = t[i__2].real, f2c_abs(r__1))
               + (r__2 = r_imag(&t[*ns + *ns * t_dim1]), f2c_abs(r__2));
         if(foo == 0.f)
         {
-            foo = (r__1 = s.r, f2c_abs(r__1)) + (r__2 = r_imag(&s), f2c_abs(r__2));
+            foo = (r__1 = s.real, f2c_abs(r__1)) + (r__2 = r_imag(&s), f2c_abs(r__2));
         }
         i__2 = *ns * v_dim1 + 1;
         /* Computing MAX */
         r__5 = smlnum;
         r__6 = ulp * foo; // , expr subst
-        if(((r__1 = s.r, f2c_abs(r__1)) + (r__2 = r_imag(&s), f2c_abs(r__2)))
-               * ((r__3 = v[i__2].r, f2c_abs(r__3))
+        if(((r__1 = s.real, f2c_abs(r__1)) + (r__2 = r_imag(&s), f2c_abs(r__2)))
+               * ((r__3 = v[i__2].real, f2c_abs(r__3))
                   + (r__4 = r_imag(&v[*ns * v_dim1 + 1]), f2c_abs(r__4)))
            <= fla_max(r__5, r__6))
         {
@@ -566,8 +566,8 @@ void aocl_lapack_claqr3(logical *wantt, logical *wantz, aocl_int64_t *n, aocl_in
     /* ==== Return to Hessenberg form ==== */
     if(*ns == 0)
     {
-        s.r = 0.f;
-        s.i = 0.f; // , expr subst
+        s.real = 0.f;
+        s.imag = 0.f; // , expr subst
     }
     if(*ns < jw)
     {
@@ -582,9 +582,9 @@ void aocl_lapack_claqr3(logical *wantt, logical *wantz, aocl_int64_t *n, aocl_in
             {
                 i__3 = j + j * t_dim1;
                 i__4 = ifst + ifst * t_dim1;
-                if((r__1 = t[i__3].r, f2c_abs(r__1))
+                if((r__1 = t[i__3].real, f2c_abs(r__1))
                        + (r__2 = r_imag(&t[j + j * t_dim1]), f2c_abs(r__2))
-                   > (r__3 = t[i__4].r, f2c_abs(r__3))
+                   > (r__3 = t[i__4].real, f2c_abs(r__3))
                          + (r__4 = r_imag(&t[ifst + ifst * t_dim1]), f2c_abs(r__4)))
                 {
                     ifst = j;
@@ -606,13 +606,13 @@ void aocl_lapack_claqr3(logical *wantt, logical *wantz, aocl_int64_t *n, aocl_in
     {
         i__2 = kwtop + i__ - 1;
         i__3 = i__ + i__ * t_dim1;
-        sh[i__2].r = t[i__3].r;
-        sh[i__2].i = t[i__3].i; // , expr subst
+        sh[i__2].real = t[i__3].real;
+        sh[i__2].imag = t[i__3].imag; // , expr subst
         /* L40: */
     }
-    if(*ns < jw || s.r == 0.f && s.i == 0.f)
+    if(*ns < jw || s.real == 0.f && s.imag == 0.f)
     {
-        if(*ns > 1 && (s.r != 0.f || s.i != 0.f))
+        if(*ns > 1 && (s.real != 0.f || s.imag != 0.f))
         {
             /* ==== Reflect spike back into lower triangle ==== */
             aocl_blas_ccopy(ns, &v[v_offset], ldv, &work[1], &c__1);
@@ -621,15 +621,15 @@ void aocl_lapack_claqr3(logical *wantt, logical *wantz, aocl_int64_t *n, aocl_in
             {
                 i__2 = i__;
                 r_cnjg(&q__1, &work[i__]);
-                work[i__2].r = q__1.r;
-                work[i__2].i = q__1.i; // , expr subst
+                work[i__2].real = q__1.real;
+                work[i__2].imag = q__1.imag; // , expr subst
                 /* L50: */
             }
-            beta.r = work[1].r;
-            beta.i = work[1].i; // , expr subst
+            beta.real = work[1].real;
+            beta.imag = work[1].imag; // , expr subst
             aocl_lapack_clarfg(ns, &beta, &work[2], &c__1, &tau);
-            work[1].r = 1.f;
-            work[1].i = 0.f; // , expr subst
+            work[1].real = 1.f;
+            work[1].imag = 0.f; // , expr subst
             i__1 = jw - 2;
             i__2 = jw - 2;
             aocl_lapack_claset("L", &i__1, &i__2, &c_b1, &c_b1, &t[t_dim1 + 3], ldt);
@@ -648,10 +648,10 @@ void aocl_lapack_claqr3(logical *wantt, logical *wantz, aocl_int64_t *n, aocl_in
         {
             i__1 = kwtop + (kwtop - 1) * h_dim1;
             r_cnjg(&q__2, &v[v_dim1 + 1]);
-            q__1.r = s.r * q__2.r - s.i * q__2.i;
-            q__1.i = s.r * q__2.i + s.i * q__2.r; // , expr subst
-            h__[i__1].r = q__1.r;
-            h__[i__1].i = q__1.i; // , expr subst
+            q__1.real = s.real * q__2.real - s.imag * q__2.imag;
+            q__1.imag = s.real * q__2.imag + s.imag * q__2.real; // , expr subst
+            h__[i__1].real = q__1.real;
+            h__[i__1].imag = q__1.imag; // , expr subst
         }
         aocl_lapack_clacpy("U", &jw, &jw, &t[t_offset], ldt, &h__[kwtop + kwtop * h_dim1], ldh);
         i__1 = jw - 1;
@@ -660,7 +660,7 @@ void aocl_lapack_claqr3(logical *wantt, logical *wantz, aocl_int64_t *n, aocl_in
         aocl_blas_ccopy(&i__1, &t[t_dim1 + 2], &i__2, &h__[kwtop + 1 + kwtop * h_dim1], &i__3);
         /* ==== Accumulate orthogonal matrix in order update */
         /* . H and Z, if requested. ==== */
-        if(*ns > 1 && (s.r != 0.f || s.i != 0.f))
+        if(*ns > 1 && (s.real != 0.f || s.imag != 0.f))
         {
             i__1 = *lwork - jw;
             aocl_lapack_cunmhr("R", "N", &jw, ns, &c__1, ns, &t[t_offset], ldt, &work[1],
@@ -736,10 +736,10 @@ void aocl_lapack_claqr3(logical *wantt, logical *wantz, aocl_int64_t *n, aocl_in
     *ns -= infqr;
     /* ==== Return optimal workspace. ==== */
     r__1 = (real)lwkopt;
-    q__1.r = r__1;
-    q__1.i = 0.f; // , expr subst
-    work[1].r = q__1.r;
-    work[1].i = q__1.i; // , expr subst
+    q__1.real = r__1;
+    q__1.imag = 0.f; // , expr subst
+    work[1].real = q__1.real;
+    work[1].imag = q__1.imag; // , expr subst
     /* ==== End of CLAQR3 ==== */
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
     return;

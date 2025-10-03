@@ -4,8 +4,8 @@
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
  /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static dcomplex c_b1 = {{1.}, {0.}};
-static dcomplex c_b2 = {{.5}, {0.}};
+static dcomplex c_b1 = {1., 0.};
+static dcomplex c_b2 = {.5, 0.};
 static aocl_int64_t c__1 = 1;
 static aocl_int64_t c_n1 = -1;
 static doublereal c_b18 = 1.;
@@ -233,20 +233,20 @@ void zhegst_fla(aocl_int64_t *itype, char *uplo, aocl_int64_t *n, dcomplex *a,
                                         &c_b1, &b[k + k * b_dim1], ldb, &a[k + (k + kb) * a_dim1],
                                         lda);
                         i__3 = *n - k - kb + 1;
-                        z__1.r = -.5;
-                        z__1.i = -0.; // , expr subst
+                        z__1.real = -.5;
+                        z__1.imag = -0.; // , expr subst
                         aocl_blas_zhemm("Left", uplo, &kb, &i__3, &z__1, &a[k + k * a_dim1], lda,
                                         &b[k + (k + kb) * b_dim1], ldb, &c_b1,
                                         &a[k + (k + kb) * a_dim1], lda);
                         i__3 = *n - k - kb + 1;
-                        z__1.r = -1.;
-                        z__1.i = -0.; // , expr subst
+                        z__1.real = -1.;
+                        z__1.imag = -0.; // , expr subst
                         aocl_blas_zher2k(uplo, "Conjugate transpose", &i__3, &kb, &z__1,
                                          &a[k + (k + kb) * a_dim1], lda, &b[k + (k + kb) * b_dim1],
                                          ldb, &c_b18, &a[k + kb + (k + kb) * a_dim1], lda);
                         i__3 = *n - k - kb + 1;
-                        z__1.r = -.5;
-                        z__1.i = -0.; // , expr subst
+                        z__1.real = -.5;
+                        z__1.imag = -0.; // , expr subst
                         aocl_blas_zhemm("Left", uplo, &kb, &i__3, &z__1, &a[k + k * a_dim1], lda,
                                         &b[k + (k + kb) * b_dim1], ldb, &c_b1,
                                         &a[k + (k + kb) * a_dim1], lda);
@@ -280,20 +280,20 @@ void zhegst_fla(aocl_int64_t *itype, char *uplo, aocl_int64_t *n, dcomplex *a,
                                         &i__3, &kb, &c_b1, &b[k + k * b_dim1], ldb,
                                         &a[k + kb + k * a_dim1], lda);
                         i__3 = *n - k - kb + 1;
-                        z__1.r = -.5;
-                        z__1.i = -0.; // , expr subst
+                        z__1.real = -.5;
+                        z__1.imag = -0.; // , expr subst
                         aocl_blas_zhemm("Right", uplo, &i__3, &kb, &z__1, &a[k + k * a_dim1], lda,
                                         &b[k + kb + k * b_dim1], ldb, &c_b1,
                                         &a[k + kb + k * a_dim1], lda);
                         i__3 = *n - k - kb + 1;
-                        z__1.r = -1.;
-                        z__1.i = -0.; // , expr subst
+                        z__1.real = -1.;
+                        z__1.imag = -0.; // , expr subst
                         aocl_blas_zher2k(uplo, "No transpose", &i__3, &kb, &z__1,
                                          &a[k + kb + k * a_dim1], lda, &b[k + kb + k * b_dim1], ldb,
                                          &c_b18, &a[k + kb + (k + kb) * a_dim1], lda);
                         i__3 = *n - k - kb + 1;
-                        z__1.r = -.5;
-                        z__1.i = -0.; // , expr subst
+                        z__1.real = -.5;
+                        z__1.imag = -0.; // , expr subst
                         aocl_blas_zhemm("Right", uplo, &i__3, &kb, &z__1, &a[k + k * a_dim1], lda,
                                         &b[k + kb + k * b_dim1], ldb, &c_b1,
                                         &a[k + kb + k * a_dim1], lda);

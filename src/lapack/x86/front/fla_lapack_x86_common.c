@@ -489,8 +489,8 @@ void fla_zlarf_left_invc1_opt(aocl_int64_t m, aocl_int64_t n, dcomplex *a_buff, 
     else
     {
         /* Original code */
-        dcomplex c_b1 = {{1.}, {0.}};
-        dcomplex c_b2 = {{0.}, {0.}};
+        dcomplex c_b1 = {1., 0.};
+        dcomplex c_b2 = {0., 0.};
         aocl_int64_t c__1 = 1;
         aocl_int64_t a_offset = 1 + ldr;
 

@@ -319,7 +319,7 @@ void aocl_lapack_zlatps(char *uplo, char *trans, char *diag, char *normin, aocl_
     *info = 0;
     // initializing as {1, 0} because it is
     // used as divisor
-    tjjs = (dcomplex){.r = 1., .i = 0.};
+    tjjs = (dcomplex){.real = 1., .imag = 0.};
     upper = lsame_(uplo, "U", 1, 1);
     notran = lsame_(trans, "N", 1, 1);
     nounit = lsame_(diag, "N", 1, 1);
@@ -416,7 +416,7 @@ void aocl_lapack_zlatps(char *uplo, char *trans, char *diag, char *normin, aocl_
         /* Computing MAX */
         i__2 = j;
         d__3 = xmax;
-        d__4 = (d__1 = x[i__2].r / 2., f2c_abs(d__1))
+        d__4 = (d__1 = x[i__2].real / 2., f2c_abs(d__1))
                + (d__2 = d_imag(&x[j]) / 2., f2c_abs(d__2)); // , expr subst
         xmax = fla_max(d__3, d__4);
         /* L30: */
@@ -463,9 +463,9 @@ void aocl_lapack_zlatps(char *uplo, char *trans, char *diag, char *normin, aocl_
                     goto L60;
                 }
                 i__3 = ip;
-                tjjs.r = ap[i__3].r;
-                tjjs.i = ap[i__3].i; // , expr subst
-                tjj = (d__1 = tjjs.r, f2c_abs(d__1)) + (d__2 = d_imag(&tjjs), f2c_abs(d__2));
+                tjjs.real = ap[i__3].real;
+                tjjs.imag = ap[i__3].imag; // , expr subst
+                tjj = (d__1 = tjjs.real, f2c_abs(d__1)) + (d__2 = d_imag(&tjjs), f2c_abs(d__2));
                 if(tjj >= smlnum)
                 {
                     /* M(j) = G(j-1) / f2c_abs(A(j,j)) */
@@ -568,9 +568,9 @@ void aocl_lapack_zlatps(char *uplo, char *trans, char *diag, char *normin, aocl_
                 d__2 = xbnd / xj; // , expr subst
                 grow = fla_min(d__1, d__2);
                 i__3 = ip;
-                tjjs.r = ap[i__3].r;
-                tjjs.i = ap[i__3].i; // , expr subst
-                tjj = (d__1 = tjjs.r, f2c_abs(d__1)) + (d__2 = d_imag(&tjjs), f2c_abs(d__2));
+                tjjs.real = ap[i__3].real;
+                tjjs.imag = ap[i__3].imag; // , expr subst
+                tjj = (d__1 = tjjs.real, f2c_abs(d__1)) + (d__2 = d_imag(&tjjs), f2c_abs(d__2));
                 if(tjj >= smlnum)
                 {
                     /* M(j) = M(j-1)*( 1 + CNORM(j) ) / f2c_abs(A(j,j)) */
@@ -648,25 +648,25 @@ void aocl_lapack_zlatps(char *uplo, char *trans, char *diag, char *normin, aocl_
             {
                 /* Compute x(j) = b(j) / A(j,j), scaling x if necessary. */
                 i__3 = j;
-                xj = (d__1 = x[i__3].r, f2c_abs(d__1)) + (d__2 = d_imag(&x[j]), f2c_abs(d__2));
+                xj = (d__1 = x[i__3].real, f2c_abs(d__1)) + (d__2 = d_imag(&x[j]), f2c_abs(d__2));
                 if(nounit)
                 {
                     i__3 = ip;
-                    z__1.r = tscal * ap[i__3].r;
-                    z__1.i = tscal * ap[i__3].i; // , expr subst
-                    tjjs.r = z__1.r;
-                    tjjs.i = z__1.i; // , expr subst
+                    z__1.real = tscal * ap[i__3].real;
+                    z__1.imag = tscal * ap[i__3].imag; // , expr subst
+                    tjjs.real = z__1.real;
+                    tjjs.imag = z__1.imag; // , expr subst
                 }
                 else
                 {
-                    tjjs.r = tscal;
-                    tjjs.i = 0.; // , expr subst
+                    tjjs.real = tscal;
+                    tjjs.imag = 0.; // , expr subst
                     if(tscal == 1.)
                     {
                         goto L110;
                     }
                 }
-                tjj = (d__1 = tjjs.r, f2c_abs(d__1)) + (d__2 = d_imag(&tjjs), f2c_abs(d__2));
+                tjj = (d__1 = tjjs.real, f2c_abs(d__1)) + (d__2 = d_imag(&tjjs), f2c_abs(d__2));
                 if(tjj > smlnum)
                 {
                     /* f2c_abs(A(j,j)) > SMLNUM: */
@@ -683,10 +683,10 @@ void aocl_lapack_zlatps(char *uplo, char *trans, char *diag, char *normin, aocl_
                     }
                     i__3 = j;
                     zladiv_f2c_(&z__1, &x[j], &tjjs);
-                    x[i__3].r = z__1.r;
-                    x[i__3].i = z__1.i; // , expr subst
+                    x[i__3].real = z__1.real;
+                    x[i__3].imag = z__1.imag; // , expr subst
                     i__3 = j;
-                    xj = (d__1 = x[i__3].r, f2c_abs(d__1)) + (d__2 = d_imag(&x[j]), f2c_abs(d__2));
+                    xj = (d__1 = x[i__3].real, f2c_abs(d__1)) + (d__2 = d_imag(&x[j]), f2c_abs(d__2));
                 }
                 else if(tjj > 0.)
                 {
@@ -708,10 +708,10 @@ void aocl_lapack_zlatps(char *uplo, char *trans, char *diag, char *normin, aocl_
                     }
                     i__3 = j;
                     zladiv_f2c_(&z__1, &x[j], &tjjs);
-                    x[i__3].r = z__1.r;
-                    x[i__3].i = z__1.i; // , expr subst
+                    x[i__3].real = z__1.real;
+                    x[i__3].imag = z__1.imag; // , expr subst
                     i__3 = j;
-                    xj = (d__1 = x[i__3].r, f2c_abs(d__1)) + (d__2 = d_imag(&x[j]), f2c_abs(d__2));
+                    xj = (d__1 = x[i__3].real, f2c_abs(d__1)) + (d__2 = d_imag(&x[j]), f2c_abs(d__2));
                 }
                 else
                 {
@@ -721,13 +721,13 @@ void aocl_lapack_zlatps(char *uplo, char *trans, char *diag, char *normin, aocl_
                     for(i__ = 1; i__ <= i__3; ++i__)
                     {
                         i__4 = i__;
-                        x[i__4].r = 0.;
-                        x[i__4].i = 0.; // , expr subst
+                        x[i__4].real = 0.;
+                        x[i__4].imag = 0.; // , expr subst
                         /* L100: */
                     }
                     i__3 = j;
-                    x[i__3].r = 1.;
-                    x[i__3].i = 0.; // , expr subst
+                    x[i__3].real = 1.;
+                    x[i__3].imag = 0.; // , expr subst
                     xj = 1.;
                     *scale = 0.;
                     xmax = 0.;
@@ -759,15 +759,15 @@ void aocl_lapack_zlatps(char *uplo, char *trans, char *diag, char *normin, aocl_
                         /* x(1:j-1) := x(1:j-1) - x(j) * A(1:j-1,j) */
                         i__3 = j - 1;
                         i__4 = j;
-                        z__2.r = -x[i__4].r;
-                        z__2.i = -x[i__4].i; // , expr subst
-                        z__1.r = tscal * z__2.r;
-                        z__1.i = tscal * z__2.i; // , expr subst
+                        z__2.real = -x[i__4].real;
+                        z__2.imag = -x[i__4].imag; // , expr subst
+                        z__1.real = tscal * z__2.real;
+                        z__1.imag = tscal * z__2.imag; // , expr subst
                         aocl_blas_zaxpy(&i__3, &z__1, &ap[ip - j + 1], &c__1, &x[1], &c__1);
                         i__3 = j - 1;
                         i__ = aocl_blas_izamax(&i__3, &x[1], &c__1);
                         i__3 = i__;
-                        xmax = (d__1 = x[i__3].r, f2c_abs(d__1))
+                        xmax = (d__1 = x[i__3].real, f2c_abs(d__1))
                                + (d__2 = d_imag(&x[i__]), f2c_abs(d__2));
                     }
                     ip -= j;
@@ -780,15 +780,15 @@ void aocl_lapack_zlatps(char *uplo, char *trans, char *diag, char *normin, aocl_
                         /* x(j+1:n) := x(j+1:n) - x(j) * A(j+1:n,j) */
                         i__3 = *n - j;
                         i__4 = j;
-                        z__2.r = -x[i__4].r;
-                        z__2.i = -x[i__4].i; // , expr subst
-                        z__1.r = tscal * z__2.r;
-                        z__1.i = tscal * z__2.i; // , expr subst
+                        z__2.real = -x[i__4].real;
+                        z__2.imag = -x[i__4].imag; // , expr subst
+                        z__1.real = tscal * z__2.real;
+                        z__1.imag = tscal * z__2.imag; // , expr subst
                         aocl_blas_zaxpy(&i__3, &z__1, &ap[ip + 1], &c__1, &x[j + 1], &c__1);
                         i__3 = *n - j;
                         i__ = j + aocl_blas_izamax(&i__3, &x[j + 1], &c__1);
                         i__3 = i__;
-                        xmax = (d__1 = x[i__3].r, f2c_abs(d__1))
+                        xmax = (d__1 = x[i__3].real, f2c_abs(d__1))
                                + (d__2 = d_imag(&x[i__]), f2c_abs(d__2));
                     }
                     ip = ip + *n - j + 1;
@@ -808,9 +808,9 @@ void aocl_lapack_zlatps(char *uplo, char *trans, char *diag, char *normin, aocl_
                 /* Compute x(j) = b(j) - sum A(k,j)*x(k). */
                 /* k<>j */
                 i__3 = j;
-                xj = (d__1 = x[i__3].r, f2c_abs(d__1)) + (d__2 = d_imag(&x[j]), f2c_abs(d__2));
-                uscal.r = tscal;
-                uscal.i = 0.; // , expr subst
+                xj = (d__1 = x[i__3].real, f2c_abs(d__1)) + (d__2 = d_imag(&x[j]), f2c_abs(d__2));
+                uscal.real = tscal;
+                uscal.imag = 0.; // , expr subst
                 rec = 1. / fla_max(xmax, 1.);
                 if(cnorm[j] > (bignum - xj) * rec)
                 {
@@ -819,17 +819,17 @@ void aocl_lapack_zlatps(char *uplo, char *trans, char *diag, char *normin, aocl_
                     if(nounit)
                     {
                         i__3 = ip;
-                        z__1.r = tscal * ap[i__3].r;
-                        z__1.i = tscal * ap[i__3].i; // , expr subst
-                        tjjs.r = z__1.r;
-                        tjjs.i = z__1.i; // , expr subst
+                        z__1.real = tscal * ap[i__3].real;
+                        z__1.imag = tscal * ap[i__3].imag; // , expr subst
+                        tjjs.real = z__1.real;
+                        tjjs.imag = z__1.imag; // , expr subst
                     }
                     else
                     {
-                        tjjs.r = tscal;
-                        tjjs.i = 0.; // , expr subst
+                        tjjs.real = tscal;
+                        tjjs.imag = 0.; // , expr subst
                     }
-                    tjj = (d__1 = tjjs.r, f2c_abs(d__1)) + (d__2 = d_imag(&tjjs), f2c_abs(d__2));
+                    tjj = (d__1 = tjjs.real, f2c_abs(d__1)) + (d__2 = d_imag(&tjjs), f2c_abs(d__2));
                     if(tjj > 1.)
                     {
                         /* Divide by A(j,j) when scaling x if A(j,j) > 1. */
@@ -838,8 +838,8 @@ void aocl_lapack_zlatps(char *uplo, char *trans, char *diag, char *normin, aocl_
                         d__2 = rec * tjj; // , expr subst
                         rec = fla_min(d__1, d__2);
                         zladiv_f2c_(&z__1, &uscal, &tjjs);
-                        uscal.r = z__1.r;
-                        uscal.i = z__1.i; // , expr subst
+                        uscal.real = z__1.real;
+                        uscal.imag = z__1.imag; // , expr subst
                     }
                     if(rec < 1.)
                     {
@@ -848,9 +848,9 @@ void aocl_lapack_zlatps(char *uplo, char *trans, char *diag, char *normin, aocl_
                         xmax *= rec;
                     }
                 }
-                csumj.r = 0.;
-                csumj.i = 0.; // , expr subst
-                if(uscal.r == 1. && uscal.i == 0.)
+                csumj.real = 0.;
+                csumj.imag = 0.; // , expr subst
+                if(uscal.real == 1. && uscal.imag == 0.)
                 {
                     /* If the scaling needed for A in the dot product is 1, */
                     /* call ZDOTU to perform the dot product. */
@@ -858,15 +858,15 @@ void aocl_lapack_zlatps(char *uplo, char *trans, char *diag, char *normin, aocl_
                     {
                         i__3 = j - 1;
                         aocl_lapack_zdotu_f2c(&z__1, &i__3, &ap[ip - j + 1], &c__1, &x[1], &c__1);
-                        csumj.r = z__1.r;
-                        csumj.i = z__1.i; // , expr subst
+                        csumj.real = z__1.real;
+                        csumj.imag = z__1.imag; // , expr subst
                     }
                     else if(j < *n)
                     {
                         i__3 = *n - j;
                         aocl_lapack_zdotu_f2c(&z__1, &i__3, &ap[ip + 1], &c__1, &x[j + 1], &c__1);
-                        csumj.r = z__1.r;
-                        csumj.i = z__1.i; // , expr subst
+                        csumj.real = z__1.real;
+                        csumj.imag = z__1.imag; // , expr subst
                     }
                 }
                 else
@@ -878,15 +878,15 @@ void aocl_lapack_zlatps(char *uplo, char *trans, char *diag, char *normin, aocl_
                         for(i__ = 1; i__ <= i__3; ++i__)
                         {
                             i__4 = ip - j + i__;
-                            z__3.r = ap[i__4].r * uscal.r - ap[i__4].i * uscal.i;
-                            z__3.i = ap[i__4].r * uscal.i + ap[i__4].i * uscal.r; // , expr subst
+                            z__3.real = ap[i__4].real * uscal.real - ap[i__4].imag * uscal.imag;
+                            z__3.imag = ap[i__4].real * uscal.imag + ap[i__4].imag * uscal.real; // , expr subst
                             i__5 = i__;
-                            z__2.r = z__3.r * x[i__5].r - z__3.i * x[i__5].i;
-                            z__2.i = z__3.r * x[i__5].i + z__3.i * x[i__5].r; // , expr subst
-                            z__1.r = csumj.r + z__2.r;
-                            z__1.i = csumj.i + z__2.i; // , expr subst
-                            csumj.r = z__1.r;
-                            csumj.i = z__1.i; // , expr subst
+                            z__2.real = z__3.real * x[i__5].real - z__3.imag * x[i__5].imag;
+                            z__2.imag = z__3.real * x[i__5].imag + z__3.imag * x[i__5].real; // , expr subst
+                            z__1.real = csumj.real + z__2.real;
+                            z__1.imag = csumj.imag + z__2.imag; // , expr subst
+                            csumj.real = z__1.real;
+                            csumj.imag = z__1.imag; // , expr subst
                             /* L130: */
                         }
                     }
@@ -896,52 +896,52 @@ void aocl_lapack_zlatps(char *uplo, char *trans, char *diag, char *normin, aocl_
                         for(i__ = 1; i__ <= i__3; ++i__)
                         {
                             i__4 = ip + i__;
-                            z__3.r = ap[i__4].r * uscal.r - ap[i__4].i * uscal.i;
-                            z__3.i = ap[i__4].r * uscal.i + ap[i__4].i * uscal.r; // , expr subst
+                            z__3.real = ap[i__4].real * uscal.real - ap[i__4].imag * uscal.imag;
+                            z__3.imag = ap[i__4].real * uscal.imag + ap[i__4].imag * uscal.real; // , expr subst
                             i__5 = j + i__;
-                            z__2.r = z__3.r * x[i__5].r - z__3.i * x[i__5].i;
-                            z__2.i = z__3.r * x[i__5].i + z__3.i * x[i__5].r; // , expr subst
-                            z__1.r = csumj.r + z__2.r;
-                            z__1.i = csumj.i + z__2.i; // , expr subst
-                            csumj.r = z__1.r;
-                            csumj.i = z__1.i; // , expr subst
+                            z__2.real = z__3.real * x[i__5].real - z__3.imag * x[i__5].imag;
+                            z__2.imag = z__3.real * x[i__5].imag + z__3.imag * x[i__5].real; // , expr subst
+                            z__1.real = csumj.real + z__2.real;
+                            z__1.imag = csumj.imag + z__2.imag; // , expr subst
+                            csumj.real = z__1.real;
+                            csumj.imag = z__1.imag; // , expr subst
                             /* L140: */
                         }
                     }
                 }
-                z__1.r = tscal;
-                z__1.i = 0.; // , expr subst
-                if(uscal.r == z__1.r && uscal.i == z__1.i)
+                z__1.real = tscal;
+                z__1.imag = 0.; // , expr subst
+                if(uscal.real == z__1.real && uscal.imag == z__1.imag)
                 {
                     /* Compute x(j) := ( x(j) - CSUMJ ) / A(j,j) if 1/A(j,j) */
                     /* was not used to scale the dotproduct. */
                     i__3 = j;
                     i__4 = j;
-                    z__1.r = x[i__4].r - csumj.r;
-                    z__1.i = x[i__4].i - csumj.i; // , expr subst
-                    x[i__3].r = z__1.r;
-                    x[i__3].i = z__1.i; // , expr subst
+                    z__1.real = x[i__4].real - csumj.real;
+                    z__1.imag = x[i__4].imag - csumj.imag; // , expr subst
+                    x[i__3].real = z__1.real;
+                    x[i__3].imag = z__1.imag; // , expr subst
                     i__3 = j;
-                    xj = (d__1 = x[i__3].r, f2c_abs(d__1)) + (d__2 = d_imag(&x[j]), f2c_abs(d__2));
+                    xj = (d__1 = x[i__3].real, f2c_abs(d__1)) + (d__2 = d_imag(&x[j]), f2c_abs(d__2));
                     if(nounit)
                     {
                         /* Compute x(j) = x(j) / A(j,j), scaling if necessary. */
                         i__3 = ip;
-                        z__1.r = tscal * ap[i__3].r;
-                        z__1.i = tscal * ap[i__3].i; // , expr subst
-                        tjjs.r = z__1.r;
-                        tjjs.i = z__1.i; // , expr subst
+                        z__1.real = tscal * ap[i__3].real;
+                        z__1.imag = tscal * ap[i__3].imag; // , expr subst
+                        tjjs.real = z__1.real;
+                        tjjs.imag = z__1.imag; // , expr subst
                     }
                     else
                     {
-                        tjjs.r = tscal;
-                        tjjs.i = 0.; // , expr subst
+                        tjjs.real = tscal;
+                        tjjs.imag = 0.; // , expr subst
                         if(tscal == 1.)
                         {
                             goto L160;
                         }
                     }
-                    tjj = (d__1 = tjjs.r, f2c_abs(d__1)) + (d__2 = d_imag(&tjjs), f2c_abs(d__2));
+                    tjj = (d__1 = tjjs.real, f2c_abs(d__1)) + (d__2 = d_imag(&tjjs), f2c_abs(d__2));
                     if(tjj > smlnum)
                     {
                         /* f2c_abs(A(j,j)) > SMLNUM: */
@@ -958,8 +958,8 @@ void aocl_lapack_zlatps(char *uplo, char *trans, char *diag, char *normin, aocl_
                         }
                         i__3 = j;
                         zladiv_f2c_(&z__1, &x[j], &tjjs);
-                        x[i__3].r = z__1.r;
-                        x[i__3].i = z__1.i; // , expr subst
+                        x[i__3].real = z__1.real;
+                        x[i__3].imag = z__1.imag; // , expr subst
                     }
                     else if(tjj > 0.)
                     {
@@ -974,8 +974,8 @@ void aocl_lapack_zlatps(char *uplo, char *trans, char *diag, char *normin, aocl_
                         }
                         i__3 = j;
                         zladiv_f2c_(&z__1, &x[j], &tjjs);
-                        x[i__3].r = z__1.r;
-                        x[i__3].i = z__1.i; // , expr subst
+                        x[i__3].real = z__1.real;
+                        x[i__3].imag = z__1.imag; // , expr subst
                     }
                     else
                     {
@@ -985,13 +985,13 @@ void aocl_lapack_zlatps(char *uplo, char *trans, char *diag, char *normin, aocl_
                         for(i__ = 1; i__ <= i__3; ++i__)
                         {
                             i__4 = i__;
-                            x[i__4].r = 0.;
-                            x[i__4].i = 0.; // , expr subst
+                            x[i__4].real = 0.;
+                            x[i__4].imag = 0.; // , expr subst
                             /* L150: */
                         }
                         i__3 = j;
-                        x[i__3].r = 1.;
-                        x[i__3].i = 0.; // , expr subst
+                        x[i__3].real = 1.;
+                        x[i__3].imag = 0.; // , expr subst
                         *scale = 0.;
                         xmax = 0.;
                     }
@@ -1003,15 +1003,15 @@ void aocl_lapack_zlatps(char *uplo, char *trans, char *diag, char *normin, aocl_
                     /* product has already been divided by 1/A(j,j). */
                     i__3 = j;
                     zladiv_f2c_(&z__2, &x[j], &tjjs);
-                    z__1.r = z__2.r - csumj.r;
-                    z__1.i = z__2.i - csumj.i; // , expr subst
-                    x[i__3].r = z__1.r;
-                    x[i__3].i = z__1.i; // , expr subst
+                    z__1.real = z__2.real - csumj.real;
+                    z__1.imag = z__2.imag - csumj.imag; // , expr subst
+                    x[i__3].real = z__1.real;
+                    x[i__3].imag = z__1.imag; // , expr subst
                 }
                 /* Computing MAX */
                 i__3 = j;
                 d__3 = xmax;
-                d__4 = (d__1 = x[i__3].r, f2c_abs(d__1))
+                d__4 = (d__1 = x[i__3].real, f2c_abs(d__1))
                        + (d__2 = d_imag(&x[j]), f2c_abs(d__2)); // , expr subst
                 xmax = fla_max(d__3, d__4);
                 ++jlen;
@@ -1031,9 +1031,9 @@ void aocl_lapack_zlatps(char *uplo, char *trans, char *diag, char *normin, aocl_
                 /* Compute x(j) = b(j) - sum A(k,j)*x(k). */
                 /* k<>j */
                 i__3 = j;
-                xj = (d__1 = x[i__3].r, f2c_abs(d__1)) + (d__2 = d_imag(&x[j]), f2c_abs(d__2));
-                uscal.r = tscal;
-                uscal.i = 0.; // , expr subst
+                xj = (d__1 = x[i__3].real, f2c_abs(d__1)) + (d__2 = d_imag(&x[j]), f2c_abs(d__2));
+                uscal.real = tscal;
+                uscal.imag = 0.; // , expr subst
                 rec = 1. / fla_max(xmax, 1.);
                 if(cnorm[j] > (bignum - xj) * rec)
                 {
@@ -1042,17 +1042,17 @@ void aocl_lapack_zlatps(char *uplo, char *trans, char *diag, char *normin, aocl_
                     if(nounit)
                     {
                         d_cnjg(&z__2, &ap[ip]);
-                        z__1.r = tscal * z__2.r;
-                        z__1.i = tscal * z__2.i; // , expr subst
-                        tjjs.r = z__1.r;
-                        tjjs.i = z__1.i; // , expr subst
+                        z__1.real = tscal * z__2.real;
+                        z__1.imag = tscal * z__2.imag; // , expr subst
+                        tjjs.real = z__1.real;
+                        tjjs.imag = z__1.imag; // , expr subst
                     }
                     else
                     {
-                        tjjs.r = tscal;
-                        tjjs.i = 0.; // , expr subst
+                        tjjs.real = tscal;
+                        tjjs.imag = 0.; // , expr subst
                     }
-                    tjj = (d__1 = tjjs.r, f2c_abs(d__1)) + (d__2 = d_imag(&tjjs), f2c_abs(d__2));
+                    tjj = (d__1 = tjjs.real, f2c_abs(d__1)) + (d__2 = d_imag(&tjjs), f2c_abs(d__2));
                     if(tjj > 1.)
                     {
                         /* Divide by A(j,j) when scaling x if A(j,j) > 1. */
@@ -1061,8 +1061,8 @@ void aocl_lapack_zlatps(char *uplo, char *trans, char *diag, char *normin, aocl_
                         d__2 = rec * tjj; // , expr subst
                         rec = fla_min(d__1, d__2);
                         zladiv_f2c_(&z__1, &uscal, &tjjs);
-                        uscal.r = z__1.r;
-                        uscal.i = z__1.i; // , expr subst
+                        uscal.real = z__1.real;
+                        uscal.imag = z__1.imag; // , expr subst
                     }
                     if(rec < 1.)
                     {
@@ -1071,9 +1071,9 @@ void aocl_lapack_zlatps(char *uplo, char *trans, char *diag, char *normin, aocl_
                         xmax *= rec;
                     }
                 }
-                csumj.r = 0.;
-                csumj.i = 0.; // , expr subst
-                if(uscal.r == 1. && uscal.i == 0.)
+                csumj.real = 0.;
+                csumj.imag = 0.; // , expr subst
+                if(uscal.real == 1. && uscal.imag == 0.)
                 {
                     /* If the scaling needed for A in the dot product is 1, */
                     /* call ZDOTC to perform the dot product. */
@@ -1081,15 +1081,15 @@ void aocl_lapack_zlatps(char *uplo, char *trans, char *diag, char *normin, aocl_
                     {
                         i__3 = j - 1;
                         aocl_lapack_zdotc_f2c(&z__1, &i__3, &ap[ip - j + 1], &c__1, &x[1], &c__1);
-                        csumj.r = z__1.r;
-                        csumj.i = z__1.i; // , expr subst
+                        csumj.real = z__1.real;
+                        csumj.imag = z__1.imag; // , expr subst
                     }
                     else if(j < *n)
                     {
                         i__3 = *n - j;
                         aocl_lapack_zdotc_f2c(&z__1, &i__3, &ap[ip + 1], &c__1, &x[j + 1], &c__1);
-                        csumj.r = z__1.r;
-                        csumj.i = z__1.i; // , expr subst
+                        csumj.real = z__1.real;
+                        csumj.imag = z__1.imag; // , expr subst
                     }
                 }
                 else
@@ -1101,15 +1101,15 @@ void aocl_lapack_zlatps(char *uplo, char *trans, char *diag, char *normin, aocl_
                         for(i__ = 1; i__ <= i__3; ++i__)
                         {
                             d_cnjg(&z__4, &ap[ip - j + i__]);
-                            z__3.r = z__4.r * uscal.r - z__4.i * uscal.i;
-                            z__3.i = z__4.r * uscal.i + z__4.i * uscal.r; // , expr subst
+                            z__3.real = z__4.real * uscal.real - z__4.imag * uscal.imag;
+                            z__3.imag = z__4.real * uscal.imag + z__4.imag * uscal.real; // , expr subst
                             i__4 = i__;
-                            z__2.r = z__3.r * x[i__4].r - z__3.i * x[i__4].i;
-                            z__2.i = z__3.r * x[i__4].i + z__3.i * x[i__4].r; // , expr subst
-                            z__1.r = csumj.r + z__2.r;
-                            z__1.i = csumj.i + z__2.i; // , expr subst
-                            csumj.r = z__1.r;
-                            csumj.i = z__1.i; // , expr subst
+                            z__2.real = z__3.real * x[i__4].real - z__3.imag * x[i__4].imag;
+                            z__2.imag = z__3.real * x[i__4].imag + z__3.imag * x[i__4].real; // , expr subst
+                            z__1.real = csumj.real + z__2.real;
+                            z__1.imag = csumj.imag + z__2.imag; // , expr subst
+                            csumj.real = z__1.real;
+                            csumj.imag = z__1.imag; // , expr subst
                             /* L180: */
                         }
                     }
@@ -1119,52 +1119,52 @@ void aocl_lapack_zlatps(char *uplo, char *trans, char *diag, char *normin, aocl_
                         for(i__ = 1; i__ <= i__3; ++i__)
                         {
                             d_cnjg(&z__4, &ap[ip + i__]);
-                            z__3.r = z__4.r * uscal.r - z__4.i * uscal.i;
-                            z__3.i = z__4.r * uscal.i + z__4.i * uscal.r; // , expr subst
+                            z__3.real = z__4.real * uscal.real - z__4.imag * uscal.imag;
+                            z__3.imag = z__4.real * uscal.imag + z__4.imag * uscal.real; // , expr subst
                             i__4 = j + i__;
-                            z__2.r = z__3.r * x[i__4].r - z__3.i * x[i__4].i;
-                            z__2.i = z__3.r * x[i__4].i + z__3.i * x[i__4].r; // , expr subst
-                            z__1.r = csumj.r + z__2.r;
-                            z__1.i = csumj.i + z__2.i; // , expr subst
-                            csumj.r = z__1.r;
-                            csumj.i = z__1.i; // , expr subst
+                            z__2.real = z__3.real * x[i__4].real - z__3.imag * x[i__4].imag;
+                            z__2.imag = z__3.real * x[i__4].imag + z__3.imag * x[i__4].real; // , expr subst
+                            z__1.real = csumj.real + z__2.real;
+                            z__1.imag = csumj.imag + z__2.imag; // , expr subst
+                            csumj.real = z__1.real;
+                            csumj.imag = z__1.imag; // , expr subst
                             /* L190: */
                         }
                     }
                 }
-                z__1.r = tscal;
-                z__1.i = 0.; // , expr subst
-                if(uscal.r == z__1.r && uscal.i == z__1.i)
+                z__1.real = tscal;
+                z__1.imag = 0.; // , expr subst
+                if(uscal.real == z__1.real && uscal.imag == z__1.imag)
                 {
                     /* Compute x(j) := ( x(j) - CSUMJ ) / A(j,j) if 1/A(j,j) */
                     /* was not used to scale the dotproduct. */
                     i__3 = j;
                     i__4 = j;
-                    z__1.r = x[i__4].r - csumj.r;
-                    z__1.i = x[i__4].i - csumj.i; // , expr subst
-                    x[i__3].r = z__1.r;
-                    x[i__3].i = z__1.i; // , expr subst
+                    z__1.real = x[i__4].real - csumj.real;
+                    z__1.imag = x[i__4].imag - csumj.imag; // , expr subst
+                    x[i__3].real = z__1.real;
+                    x[i__3].imag = z__1.imag; // , expr subst
                     i__3 = j;
-                    xj = (d__1 = x[i__3].r, f2c_abs(d__1)) + (d__2 = d_imag(&x[j]), f2c_abs(d__2));
+                    xj = (d__1 = x[i__3].real, f2c_abs(d__1)) + (d__2 = d_imag(&x[j]), f2c_abs(d__2));
                     if(nounit)
                     {
                         /* Compute x(j) = x(j) / A(j,j), scaling if necessary. */
                         d_cnjg(&z__2, &ap[ip]);
-                        z__1.r = tscal * z__2.r;
-                        z__1.i = tscal * z__2.i; // , expr subst
-                        tjjs.r = z__1.r;
-                        tjjs.i = z__1.i; // , expr subst
+                        z__1.real = tscal * z__2.real;
+                        z__1.imag = tscal * z__2.imag; // , expr subst
+                        tjjs.real = z__1.real;
+                        tjjs.imag = z__1.imag; // , expr subst
                     }
                     else
                     {
-                        tjjs.r = tscal;
-                        tjjs.i = 0.; // , expr subst
+                        tjjs.real = tscal;
+                        tjjs.imag = 0.; // , expr subst
                         if(tscal == 1.)
                         {
                             goto L210;
                         }
                     }
-                    tjj = (d__1 = tjjs.r, f2c_abs(d__1)) + (d__2 = d_imag(&tjjs), f2c_abs(d__2));
+                    tjj = (d__1 = tjjs.real, f2c_abs(d__1)) + (d__2 = d_imag(&tjjs), f2c_abs(d__2));
                     if(tjj > smlnum)
                     {
                         /* f2c_abs(A(j,j)) > SMLNUM: */
@@ -1181,8 +1181,8 @@ void aocl_lapack_zlatps(char *uplo, char *trans, char *diag, char *normin, aocl_
                         }
                         i__3 = j;
                         zladiv_f2c_(&z__1, &x[j], &tjjs);
-                        x[i__3].r = z__1.r;
-                        x[i__3].i = z__1.i; // , expr subst
+                        x[i__3].real = z__1.real;
+                        x[i__3].imag = z__1.imag; // , expr subst
                     }
                     else if(tjj > 0.)
                     {
@@ -1197,8 +1197,8 @@ void aocl_lapack_zlatps(char *uplo, char *trans, char *diag, char *normin, aocl_
                         }
                         i__3 = j;
                         zladiv_f2c_(&z__1, &x[j], &tjjs);
-                        x[i__3].r = z__1.r;
-                        x[i__3].i = z__1.i; // , expr subst
+                        x[i__3].real = z__1.real;
+                        x[i__3].imag = z__1.imag; // , expr subst
                     }
                     else
                     {
@@ -1208,13 +1208,13 @@ void aocl_lapack_zlatps(char *uplo, char *trans, char *diag, char *normin, aocl_
                         for(i__ = 1; i__ <= i__3; ++i__)
                         {
                             i__4 = i__;
-                            x[i__4].r = 0.;
-                            x[i__4].i = 0.; // , expr subst
+                            x[i__4].real = 0.;
+                            x[i__4].imag = 0.; // , expr subst
                             /* L200: */
                         }
                         i__3 = j;
-                        x[i__3].r = 1.;
-                        x[i__3].i = 0.; // , expr subst
+                        x[i__3].real = 1.;
+                        x[i__3].imag = 0.; // , expr subst
                         *scale = 0.;
                         xmax = 0.;
                     }
@@ -1226,15 +1226,15 @@ void aocl_lapack_zlatps(char *uplo, char *trans, char *diag, char *normin, aocl_
                     /* product has already been divided by 1/A(j,j). */
                     i__3 = j;
                     zladiv_f2c_(&z__2, &x[j], &tjjs);
-                    z__1.r = z__2.r - csumj.r;
-                    z__1.i = z__2.i - csumj.i; // , expr subst
-                    x[i__3].r = z__1.r;
-                    x[i__3].i = z__1.i; // , expr subst
+                    z__1.real = z__2.real - csumj.real;
+                    z__1.imag = z__2.imag - csumj.imag; // , expr subst
+                    x[i__3].real = z__1.real;
+                    x[i__3].imag = z__1.imag; // , expr subst
                 }
                 /* Computing MAX */
                 i__3 = j;
                 d__3 = xmax;
-                d__4 = (d__1 = x[i__3].r, f2c_abs(d__1))
+                d__4 = (d__1 = x[i__3].real, f2c_abs(d__1))
                        + (d__2 = d_imag(&x[j]), f2c_abs(d__2)); // , expr subst
                 xmax = fla_max(d__3, d__4);
                 ++jlen;

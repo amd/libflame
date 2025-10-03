@@ -18,8 +18,8 @@ dcomplex zdotu_(/*dcomplex * ret_val,*/
     --zy;
     --zx;
     /* Function Body */
-    ztemp.r = 0., ztemp.i = 0.;
-    ret_val.r = 0., ret_val.i = 0.;
+    ztemp.real = 0., ztemp.imag = 0.;
+    ret_val.real = 0., ret_val.imag = 0.;
     if (*n <= 0)
     {
         return ret_val ;
@@ -47,14 +47,14 @@ dcomplex zdotu_(/*dcomplex * ret_val,*/
     {
         i__2 = ix;
         i__3 = iy;
-        z__2.r = zx[i__2].r * zy[i__3].r - zx[i__2].i * zy[i__3].i, z__2.i = zx[i__2].r * zy[i__3].i + zx[i__2].i * zy[i__3].r;
-        z__1.r = ztemp.r + z__2.r, z__1.i = ztemp.i + z__2.i;
-        ztemp.r = z__1.r, ztemp.i = z__1.i;
+        z__2.real = zx[i__2].real * zy[i__3].real - zx[i__2].imag * zy[i__3].imag, z__2.imag = zx[i__2].real * zy[i__3].imag + zx[i__2].imag * zy[i__3].real;
+        z__1.real = ztemp.real + z__2.real, z__1.imag = ztemp.imag + z__2.imag;
+        ztemp.real = z__1.real, ztemp.imag = z__1.imag;
         ix += *incx;
         iy += *incy;
         /* L10: */
     }
-    ret_val.r = ztemp.r, ret_val.i = ztemp.i;
+    ret_val.real = ztemp.real, ret_val.imag = ztemp.imag;
     return ret_val ;
     /* code for both increments equal to 1 */
 L20:
@@ -65,12 +65,12 @@ L20:
     {
         i__2 = i__;
         i__3 = i__;
-        z__2.r = zx[i__2].r * zy[i__3].r - zx[i__2].i * zy[i__3].i, z__2.i = zx[i__2].r * zy[i__3].i + zx[i__2].i * zy[i__3].r;
-        z__1.r = ztemp.r + z__2.r, z__1.i = ztemp.i + z__2.i;
-        ztemp.r = z__1.r, ztemp.i = z__1.i;
+        z__2.real = zx[i__2].real * zy[i__3].real - zx[i__2].imag * zy[i__3].imag, z__2.imag = zx[i__2].real * zy[i__3].imag + zx[i__2].imag * zy[i__3].real;
+        z__1.real = ztemp.real + z__2.real, z__1.imag = ztemp.imag + z__2.imag;
+        ztemp.real = z__1.real, ztemp.imag = z__1.imag;
         /* L30: */
     }
-    ret_val.r = ztemp.r, ret_val.i = ztemp.i;
+    ret_val.real = ztemp.real, ret_val.imag = ztemp.imag;
     return ret_val ;
 }
 /* zdotu_ */

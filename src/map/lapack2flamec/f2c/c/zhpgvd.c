@@ -362,8 +362,8 @@ void aocl_lapack_zhpgvd(aocl_int64_t *itype, char *jobz, char *uplo, aocl_int64_
                 liwmin = 1;
             }
         }
-        work[1].r = (doublereal)lwmin;
-        work[1].i = 0.; // , expr subst
+        work[1].real = (doublereal)lwmin;
+        work[1].imag = 0.; // , expr subst
         rwork[1] = (doublereal)lrwmin;
         iwork[1] = (aocl_int_t)(liwmin);
         if(*lwork < lwmin && !lquery)
@@ -411,7 +411,7 @@ void aocl_lapack_zhpgvd(aocl_int64_t *itype, char *jobz, char *uplo, aocl_int64_
                        &rwork[1], lrwork, &iwork[1], liwork, info);
     /* Computing MAX */
     d__1 = (doublereal)lwmin;
-    d__2 = work[1].r; // , expr subst
+    d__2 = work[1].real; // , expr subst
     lwmin = (integer)fla_max(d__1, d__2);
     /* Computing MAX */
     d__1 = (doublereal)lrwmin;
@@ -469,8 +469,8 @@ void aocl_lapack_zhpgvd(aocl_int64_t *itype, char *jobz, char *uplo, aocl_int64_
             }
         }
     }
-    work[1].r = (doublereal)lwmin;
-    work[1].i = 0.; // , expr subst
+    work[1].real = (doublereal)lwmin;
+    work[1].imag = 0.; // , expr subst
     rwork[1] = (doublereal)lrwmin;
     iwork[1] = (aocl_int_t)(liwmin);
     AOCL_DTL_TRACE_LOG_EXIT

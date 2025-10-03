@@ -50,13 +50,13 @@ void FLA_Error_messages_init( void )
 	sprintf( FLA_Error_string_for_code(FLA_INVALID_DATATYPE),
              "Invalid datatype value." );
 	sprintf( FLA_Error_string_for_code(FLA_INVALID_INTEGER_DATATYPE),
-             "Invalid fla_dim_t datatype value." );
+             "Invalid integer datatype value." );
 	sprintf( FLA_Error_string_for_code(FLA_INVALID_REAL_DATATYPE),
              "Invalid real datatype value." );
 	sprintf( FLA_Error_string_for_code(FLA_INVALID_COMPLEX_DATATYPE),
              "Invalid scomplex datatype value." );
 	sprintf( FLA_Error_string_for_code(FLA_OBJECT_NOT_INTEGER),
-             "Expected fla_dim_t object." );
+             "Expected integer object." );
 	sprintf( FLA_Error_string_for_code(FLA_OBJECT_NOT_REAL),
              "Expected real object." );
 	sprintf( FLA_Error_string_for_code(FLA_OBJECT_NOT_COMPLEX),
@@ -222,7 +222,7 @@ void FLA_Error_messages_init( void )
 	sprintf( FLA_Error_string_for_code(FLA_INVALID_SVD_TYPE_AND_TRANS_COMBINATION),
              "Invalid svd type parameters (FLA_SVD_VECTORS_OVERWRITE) and trans parameters combination." );
 	sprintf( FLA_Error_string_for_code(FLA_OBJECT_NOT_COMPARABLE),
-             "Expected real or fla_dim_t object." );
+             "Expected real or integer object." );
 }
 
 /* ***************************************************************************

@@ -215,7 +215,7 @@ void aocl_lapack_zspcon(char *uplo, aocl_int64_t *n, dcomplex *ap, aocl_int_t *i
         for(i__ = *n; i__ >= 1; --i__)
         {
             i__1 = ip;
-            if(ipiv[i__] > 0 && (ap[i__1].r == 0. && ap[i__1].i == 0.))
+            if(ipiv[i__] > 0 && (ap[i__1].real == 0. && ap[i__1].imag == 0.))
             {
                 AOCL_DTL_TRACE_LOG_EXIT
                 return;
@@ -232,7 +232,7 @@ void aocl_lapack_zspcon(char *uplo, aocl_int64_t *n, dcomplex *ap, aocl_int_t *i
         for(i__ = 1; i__ <= i__1; ++i__)
         {
             i__2 = ip;
-            if(ipiv[i__] > 0 && (ap[i__2].r == 0. && ap[i__2].i == 0.))
+            if(ipiv[i__] > 0 && (ap[i__2].real == 0. && ap[i__2].imag == 0.))
             {
                 AOCL_DTL_TRACE_LOG_EXIT
                 return;

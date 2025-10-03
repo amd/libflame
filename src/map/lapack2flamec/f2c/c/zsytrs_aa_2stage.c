@@ -5,7 +5,7 @@
  libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static aocl_int64_t c__1 = 1;
-static dcomplex c_b11 = {{1.}, {0.}};
+static dcomplex c_b11 = {1., 0.};
 static aocl_int64_t c_n1 = -1;
 /* > \brief \b ZSYTRS_AA_2STAGE */
 /* =========== DOCUMENTATION =========== */
@@ -246,7 +246,7 @@ void aocl_lapack_zsytrs_aa_2stage(char *uplo, aocl_int64_t *n, aocl_int64_t *nrh
         return;
     }
     /* Read NB and compute LDTB */
-    nb = (integer)tb[1].r;
+    nb = (integer)tb[1].real;
     ldtb = *ltb / *n;
     if(upper)
     {

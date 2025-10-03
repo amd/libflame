@@ -256,8 +256,8 @@ void aocl_lapack_cheev(char *jobz, char *uplo, aocl_int64_t *n, scomplex *a, aoc
         i__2 = (nb + 1) * *n; // , expr subst
         lwkopt = fla_max(i__1, i__2);
         r__1 = aocl_lapack_sroundup_lwork(&lwkopt);
-        work[1].r = r__1;
-        work[1].i = 0.f; // , expr subst
+        work[1].real = r__1;
+        work[1].imag = 0.f; // , expr subst
         /* Computing MAX */
         i__1 = 1;
         i__2 = (*n << 1) - 1; // , expr subst
@@ -287,14 +287,14 @@ void aocl_lapack_cheev(char *jobz, char *uplo, aocl_int64_t *n, scomplex *a, aoc
     if(*n == 1)
     {
         i__1 = a_dim1 + 1;
-        w[1] = a[i__1].r;
-        work[1].r = 1.f;
-        work[1].i = 0.f; // , expr subst
+        w[1] = a[i__1].real;
+        work[1].real = 1.f;
+        work[1].imag = 0.f; // , expr subst
         if(wantz)
         {
             i__1 = a_dim1 + 1;
-            a[i__1].r = 1.f;
-            a[i__1].i = 0.f; // , expr subst
+            a[i__1].real = 1.f;
+            a[i__1].imag = 0.f; // , expr subst
         }
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
@@ -359,8 +359,8 @@ void aocl_lapack_cheev(char *jobz, char *uplo, aocl_int64_t *n, scomplex *a, aoc
     }
     /* Set WORK(1) to optimal scomplex workspace size. */
     r__1 = aocl_lapack_sroundup_lwork(&lwkopt);
-    work[1].r = r__1;
-    work[1].i = 0.f; // , expr subst
+    work[1].real = r__1;
+    work[1].imag = 0.f; // , expr subst
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
     return;
     /* End of CHEEV */

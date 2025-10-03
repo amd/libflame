@@ -197,14 +197,14 @@ void aocl_lapack_cpoequ(aocl_int64_t *n, scomplex *a, aocl_int64_t *lda, real *s
     }
     /* Find the minimum and maximum diagonal elements. */
     i__1 = a_dim1 + 1;
-    s[1] = a[i__1].r;
+    s[1] = a[i__1].real;
     smin = s[1];
     *amax = s[1];
     i__1 = *n;
     for(i__ = 2; i__ <= i__1; ++i__)
     {
         i__2 = i__ + i__ * a_dim1;
-        s[i__] = a[i__2].r;
+        s[i__] = a[i__2].real;
         /* Computing MIN */
         r__1 = smin;
         r__2 = s[i__]; // , expr subst

@@ -4,8 +4,8 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static dcomplex c_b1 = {{-1.}, {0.}};
-static dcomplex c_b2 = {{1.}, {0.}};
+static dcomplex c_b1 = {-1., 0.};
+static dcomplex c_b2 = {1., 0.};
 static aocl_int64_t c__1 = 1;
 /* > \brief <b> ZCGESV computes the solution to system of linear equations A * X = B for GE
  * matrices</b> (mixe d precision with iterative refinement) */
@@ -375,11 +375,11 @@ void aocl_lapack_zcgesv(aocl_int64_t *n, aocl_int64_t *nrhs, dcomplex *a, aocl_i
     for(i__ = 1; i__ <= i__1; ++i__)
     {
         i__2 = aocl_blas_izamax(n, &x[i__ * x_dim1 + 1], &c__1) + i__ * x_dim1;
-        xnrm = (d__1 = x[i__2].r, f2c_abs(d__1))
+        xnrm = (d__1 = x[i__2].real, f2c_abs(d__1))
                + (d__2 = d_imag(&x[aocl_blas_izamax(n, &x[i__ * x_dim1 + 1], &c__1) + i__ * x_dim1]),
                   f2c_abs(d__2));
         i__2 = aocl_blas_izamax(n, &work[i__ * work_dim1 + 1], &c__1) + i__ * work_dim1;
-        rnrm = (d__1 = work[i__2].r, f2c_abs(d__1))
+        rnrm = (d__1 = work[i__2].real, f2c_abs(d__1))
                + (d__2
                   = d_imag(&work[aocl_blas_izamax(n, &work[i__ * work_dim1 + 1], &c__1) + i__ * work_dim1]),
                   f2c_abs(d__2));
@@ -426,11 +426,11 @@ L10:
         for(i__ = 1; i__ <= i__1; ++i__)
         {
             i__2 = aocl_blas_izamax(n, &x[i__ * x_dim1 + 1], &c__1) + i__ * x_dim1;
-            xnrm = (d__1 = x[i__2].r, f2c_abs(d__1))
+            xnrm = (d__1 = x[i__2].real, f2c_abs(d__1))
                    + (d__2 = d_imag(&x[aocl_blas_izamax(n, &x[i__ * x_dim1 + 1], &c__1) + i__ * x_dim1]),
                       f2c_abs(d__2));
             i__2 = aocl_blas_izamax(n, &work[i__ * work_dim1 + 1], &c__1) + i__ * work_dim1;
-            rnrm = (d__1 = work[i__2].r, f2c_abs(d__1))
+            rnrm = (d__1 = work[i__2].real, f2c_abs(d__1))
                    + (d__2 = d_imag(
                           &work[aocl_blas_izamax(n, &work[i__ * work_dim1 + 1], &c__1) + i__ * work_dim1]),
                       f2c_abs(d__2));

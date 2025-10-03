@@ -315,20 +315,20 @@ L10:
                     lm = fla_min(i__2, i__3);
                     jp = ipiv[j];
                     i__2 = jp;
-                    t.r = work[i__2].r;
-                    t.i = work[i__2].i; // , expr subst
+                    t.real = work[i__2].real;
+                    t.imag = work[i__2].imag; // , expr subst
                     if(jp != j)
                     {
                         i__2 = jp;
                         i__3 = j;
-                        work[i__2].r = work[i__3].r;
-                        work[i__2].i = work[i__3].i; // , expr subst
+                        work[i__2].real = work[i__3].real;
+                        work[i__2].imag = work[i__3].imag; // , expr subst
                         i__2 = j;
-                        work[i__2].r = t.r;
-                        work[i__2].i = t.i; // , expr subst
+                        work[i__2].real = t.real;
+                        work[i__2].imag = t.imag; // , expr subst
                     }
-                    q__1.r = -t.r;
-                    q__1.i = -t.i; // , expr subst
+                    q__1.real = -t.real;
+                    q__1.imag = -t.imag; // , expr subst
                     aocl_blas_caxpy(&lm, &q__1, &ab[kd + 1 + j * ab_dim1], &c__1, &work[j + 1],
                                     &c__1);
                     /* L20: */
@@ -357,23 +357,23 @@ L10:
                     i__1 = j;
                     i__2 = j;
                     aocl_lapack_cdotc_f2c(&q__2, &lm, &ab[kd + 1 + j * ab_dim1], &c__1, &work[j + 1], &c__1);
-                    q__1.r = work[i__2].r - q__2.r;
-                    q__1.i = work[i__2].i - q__2.i; // , expr subst
-                    work[i__1].r = q__1.r;
-                    work[i__1].i = q__1.i; // , expr subst
+                    q__1.real = work[i__2].real - q__2.real;
+                    q__1.imag = work[i__2].imag - q__2.imag; // , expr subst
+                    work[i__1].real = q__1.real;
+                    work[i__1].imag = q__1.imag; // , expr subst
                     jp = ipiv[j];
                     if(jp != j)
                     {
                         i__1 = jp;
-                        t.r = work[i__1].r;
-                        t.i = work[i__1].i; // , expr subst
+                        t.real = work[i__1].real;
+                        t.imag = work[i__1].imag; // , expr subst
                         i__1 = jp;
                         i__2 = j;
-                        work[i__1].r = work[i__2].r;
-                        work[i__1].i = work[i__2].i; // , expr subst
+                        work[i__1].real = work[i__2].real;
+                        work[i__1].imag = work[i__2].imag; // , expr subst
                         i__1 = j;
-                        work[i__1].r = t.r;
-                        work[i__1].i = t.i; // , expr subst
+                        work[i__1].real = t.real;
+                        work[i__1].imag = t.imag; // , expr subst
                     }
                     /* L30: */
                 }
@@ -385,7 +385,7 @@ L10:
         {
             ix = aocl_blas_icamax(n, &work[1], &c__1);
             i__1 = ix;
-            if(scale < ((r__1 = work[i__1].r, f2c_abs(r__1))
+            if(scale < ((r__1 = work[i__1].real, f2c_abs(r__1))
                         + (r__2 = r_imag(&work[ix]), f2c_abs(r__2)))
                            * smlnum
                || scale == 0.f)

@@ -144,10 +144,10 @@ void aocl_lapack_clascl2(aocl_int64_t *m, aocl_int64_t *n, real *d__, scomplex *
             i__3 = i__ + j * x_dim1;
             i__4 = i__ + j * x_dim1;
             i__5 = i__;
-            q__1.r = d__[i__5] * x[i__4].r;
-            q__1.i = d__[i__5] * x[i__4].i; // , expr subst
-            x[i__3].r = q__1.r;
-            x[i__3].i = q__1.i; // , expr subst
+            q__1.real = d__[i__5] * x[i__4].real;
+            q__1.imag = d__[i__5] * x[i__4].imag; // , expr subst
+            x[i__3].real = q__1.real;
+            x[i__3].imag = q__1.imag; // , expr subst
         }
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);

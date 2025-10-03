@@ -162,26 +162,26 @@ void aocl_lapack_zlapll(aocl_int64_t *n, dcomplex *x, aocl_int64_t *incx, dcompl
     }
     /* Compute the QR factorization of the N-by-2 matrix ( X Y ) */
     aocl_lapack_zlarfg(n, &x[1], &x[*incx + 1], incx, &tau);
-    a11.r = x[1].r;
-    a11.i = x[1].i; // , expr subst
-    x[1].r = 1.;
-    x[1].i = 0.; // , expr subst
+    a11.real = x[1].real;
+    a11.imag = x[1].imag; // , expr subst
+    x[1].real = 1.;
+    x[1].imag = 0.; // , expr subst
     d_cnjg(&z__3, &tau);
-    z__2.r = -z__3.r;
-    z__2.i = -z__3.i; // , expr subst
+    z__2.real = -z__3.real;
+    z__2.imag = -z__3.imag; // , expr subst
     aocl_lapack_zdotc_f2c(&z__4, n, &x[1], incx, &y[1], incy);
-    z__1.r = z__2.r * z__4.r - z__2.i * z__4.i;
-    z__1.i = z__2.r * z__4.i + z__2.i * z__4.r; // , expr subst
-    c__.r = z__1.r;
-    c__.i = z__1.i; // , expr subst
+    z__1.real = z__2.real * z__4.real - z__2.imag * z__4.imag;
+    z__1.imag = z__2.real * z__4.imag + z__2.imag * z__4.real; // , expr subst
+    c__.real = z__1.real;
+    c__.imag = z__1.imag; // , expr subst
     aocl_blas_zaxpy(n, &c__, &x[1], incx, &y[1], incy);
     i__1 = *n - 1;
     aocl_lapack_zlarfg(&i__1, &y[*incy + 1], &y[(*incy << 1) + 1], incy, &tau);
-    a12.r = y[1].r;
-    a12.i = y[1].i; // , expr subst
+    a12.real = y[1].real;
+    a12.imag = y[1].imag; // , expr subst
     i__1 = *incy + 1;
-    a22.r = y[i__1].r;
-    a22.i = y[i__1].i; // , expr subst
+    a22.real = y[i__1].real;
+    a22.imag = y[i__1].imag; // , expr subst
     /* Compute the SVD of 2-by-2 Upper triangular matrix. */
     d__1 = z_abs(&a11);
     d__2 = z_abs(&a12);

@@ -254,13 +254,13 @@ void aocl_lapack_chpev(char *jobz, char *uplo, aocl_int64_t *n, scomplex *ap, re
     }
     if(*n == 1)
     {
-        w[1] = ap[1].r;
+        w[1] = ap[1].real;
         rwork[1] = 1.f;
         if(wantz)
         {
             i__1 = z_dim1 + 1;
-            z__[i__1].r = 1.f;
-            z__[i__1].i = 0.f; // , expr subst
+            z__[i__1].real = 1.f;
+            z__[i__1].imag = 0.f; // , expr subst
         }
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;

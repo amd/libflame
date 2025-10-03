@@ -4,8 +4,8 @@
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
  /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static dcomplex c_b1 = {{0.}, {0.}};
-static dcomplex c_b2 = {{1.}, {0.}};
+static dcomplex c_b1 = {0., 0.};
+static dcomplex c_b2 = {1., 0.};
 static aocl_int64_t c_n1 = -1;
 static aocl_int64_t c__0 = 0;
 static aocl_int64_t c__1 = 1;
@@ -410,29 +410,29 @@ void aocl_lapack_zgesdd(char *jobz, aocl_int64_t *m, aocl_int64_t *n, dcomplex *
             /* not including e, RU, and RVT matrices. */
             /* Compute space preferred for each routine */
             aocl_lapack_zgebrd(m, n, cdum, m, dum, dum, cdum, cdum, cdum, &c_n1, &ierr);
-            lwork_zgebrd_mn__ = (integer)cdum[0].r;
+            lwork_zgebrd_mn__ = (integer)cdum[0].real;
             aocl_lapack_zgebrd(n, n, cdum, n, dum, dum, cdum, cdum, cdum, &c_n1, &ierr);
-            lwork_zgebrd_nn__ = (integer)cdum[0].r;
+            lwork_zgebrd_nn__ = (integer)cdum[0].real;
             aocl_lapack_zgeqrf(m, n, cdum, m, cdum, cdum, &c_n1, &ierr);
-            lwork_zgeqrf_mn__ = (integer)cdum[0].r;
+            lwork_zgeqrf_mn__ = (integer)cdum[0].real;
             aocl_lapack_zungbr("P", n, n, n, cdum, n, cdum, cdum, &c_n1, &ierr);
-            lwork_zungbr_p_nn__ = (integer)cdum[0].r;
+            lwork_zungbr_p_nn__ = (integer)cdum[0].real;
             aocl_lapack_zungbr("Q", m, m, n, cdum, m, cdum, cdum, &c_n1, &ierr);
-            lwork_zungbr_q_mm__ = (integer)cdum[0].r;
+            lwork_zungbr_q_mm__ = (integer)cdum[0].real;
             aocl_lapack_zungbr("Q", m, n, n, cdum, m, cdum, cdum, &c_n1, &ierr);
-            lwork_zungbr_q_mn__ = (integer)cdum[0].r;
+            lwork_zungbr_q_mn__ = (integer)cdum[0].real;
             aocl_lapack_zungqr(m, m, n, cdum, m, cdum, cdum, &c_n1, &ierr);
-            lwork_zungqr_mm__ = (integer)cdum[0].r;
+            lwork_zungqr_mm__ = (integer)cdum[0].real;
             aocl_lapack_zungqr(m, n, n, cdum, m, cdum, cdum, &c_n1, &ierr);
-            lwork_zungqr_mn__ = (integer)cdum[0].r;
+            lwork_zungqr_mn__ = (integer)cdum[0].real;
             aocl_lapack_zunmbr("P", "R", "C", n, n, n, cdum, n, cdum, cdum, n, cdum, &c_n1, &ierr);
-            lwork_zunmbr_prc_nn__ = (integer)cdum[0].r;
+            lwork_zunmbr_prc_nn__ = (integer)cdum[0].real;
             aocl_lapack_zunmbr("Q", "L", "N", m, m, n, cdum, m, cdum, cdum, m, cdum, &c_n1, &ierr);
-            lwork_zunmbr_qln_mm__ = (integer)cdum[0].r;
+            lwork_zunmbr_qln_mm__ = (integer)cdum[0].real;
             aocl_lapack_zunmbr("Q", "L", "N", m, n, n, cdum, m, cdum, cdum, m, cdum, &c_n1, &ierr);
-            lwork_zunmbr_qln_mn__ = (integer)cdum[0].r;
+            lwork_zunmbr_qln_mn__ = (integer)cdum[0].real;
             aocl_lapack_zunmbr("Q", "L", "N", n, n, n, cdum, n, cdum, cdum, n, cdum, &c_n1, &ierr);
-            lwork_zunmbr_qln_nn__ = (integer)cdum[0].r;
+            lwork_zunmbr_qln_nn__ = (integer)cdum[0].real;
             if(*m >= mnthr1)
             {
                 if(wntqn)
@@ -618,29 +618,29 @@ void aocl_lapack_zgesdd(char *jobz, aocl_int64_t *m, aocl_int64_t *n, dcomplex *
             /* not including e, RU, and RVT matrices. */
             /* Compute space preferred for each routine */
             aocl_lapack_zgebrd(m, n, cdum, m, dum, dum, cdum, cdum, cdum, &c_n1, &ierr);
-            lwork_zgebrd_mn__ = (integer)cdum[0].r;
+            lwork_zgebrd_mn__ = (integer)cdum[0].real;
             aocl_lapack_zgebrd(m, m, cdum, m, dum, dum, cdum, cdum, cdum, &c_n1, &ierr);
-            lwork_zgebrd_mm__ = (integer)cdum[0].r;
+            lwork_zgebrd_mm__ = (integer)cdum[0].real;
             aocl_lapack_zgelqf(m, n, cdum, m, cdum, cdum, &c_n1, &ierr);
-            lwork_zgelqf_mn__ = (integer)cdum[0].r;
+            lwork_zgelqf_mn__ = (integer)cdum[0].real;
             aocl_lapack_zungbr("P", m, n, m, cdum, m, cdum, cdum, &c_n1, &ierr);
-            lwork_zungbr_p_mn__ = (integer)cdum[0].r;
+            lwork_zungbr_p_mn__ = (integer)cdum[0].real;
             aocl_lapack_zungbr("P", n, n, m, cdum, n, cdum, cdum, &c_n1, &ierr);
-            lwork_zungbr_p_nn__ = (integer)cdum[0].r;
+            lwork_zungbr_p_nn__ = (integer)cdum[0].real;
             aocl_lapack_zungbr("Q", m, m, n, cdum, m, cdum, cdum, &c_n1, &ierr);
-            lwork_zungbr_q_mm__ = (integer)cdum[0].r;
+            lwork_zungbr_q_mm__ = (integer)cdum[0].real;
             aocl_lapack_zunglq(m, n, m, cdum, m, cdum, cdum, &c_n1, &ierr);
-            lwork_zunglq_mn__ = (integer)cdum[0].r;
+            lwork_zunglq_mn__ = (integer)cdum[0].real;
             aocl_lapack_zunglq(n, n, m, cdum, n, cdum, cdum, &c_n1, &ierr);
-            lwork_zunglq_nn__ = (integer)cdum[0].r;
+            lwork_zunglq_nn__ = (integer)cdum[0].real;
             aocl_lapack_zunmbr("P", "R", "C", m, m, m, cdum, m, cdum, cdum, m, cdum, &c_n1, &ierr);
-            lwork_zunmbr_prc_mm__ = (integer)cdum[0].r;
+            lwork_zunmbr_prc_mm__ = (integer)cdum[0].real;
             aocl_lapack_zunmbr("P", "R", "C", m, n, m, cdum, m, cdum, cdum, m, cdum, &c_n1, &ierr);
-            lwork_zunmbr_prc_mn__ = (integer)cdum[0].r;
+            lwork_zunmbr_prc_mn__ = (integer)cdum[0].real;
             aocl_lapack_zunmbr("P", "R", "C", n, n, m, cdum, n, cdum, cdum, n, cdum, &c_n1, &ierr);
-            lwork_zunmbr_prc_nn__ = (integer)cdum[0].r;
+            lwork_zunmbr_prc_nn__ = (integer)cdum[0].real;
             aocl_lapack_zunmbr("Q", "L", "N", m, m, m, cdum, m, cdum, cdum, m, cdum, &c_n1, &ierr);
-            lwork_zunmbr_qln_mm__ = (integer)cdum[0].r;
+            lwork_zunmbr_qln_mm__ = (integer)cdum[0].real;
             if(*n >= mnthr1)
             {
                 if(wntqn)
@@ -820,8 +820,8 @@ void aocl_lapack_zgesdd(char *jobz, aocl_int64_t *m, aocl_int64_t *n, dcomplex *
     if(*info == 0)
     {
         d__1 = aocl_lapack_droundup_lwork(&maxwrk);
-        work[1].r = d__1;
-        work[1].i = 0.; // , expr subst
+        work[1].real = d__1;
+        work[1].imag = 0.; // , expr subst
         if(*lwork < minwrk && !lquery)
         {
             *info = -12;
@@ -2228,8 +2228,8 @@ void aocl_lapack_zgesdd(char *jobz, aocl_int64_t *m, aocl_int64_t *n, dcomplex *
     }
     /* Return optimal workspace in WORK(1) */
     d__1 = aocl_lapack_droundup_lwork(&maxwrk);
-    work[1].r = d__1;
-    work[1].i = 0.; // , expr subst
+    work[1].real = d__1;
+    work[1].imag = 0.; // , expr subst
     AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of ZGESDD */

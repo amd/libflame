@@ -541,7 +541,7 @@ void aocl_lapack_clals0(aocl_int64_t *icompq, aocl_int64_t *nl, aocl_int64_t *nr
                     {
                         ++i__;
                         i__4 = jrow + jcol * bx_dim1;
-                        rwork[i__] = bx[i__4].r;
+                        rwork[i__] = bx[i__4].real;
                         /* L50: */
                     }
                     /* L60: */
@@ -569,10 +569,10 @@ void aocl_lapack_clals0(aocl_int64_t *icompq, aocl_int64_t *nl, aocl_int64_t *nr
                     i__3 = j + jcol * b_dim1;
                     i__4 = jcol + *k;
                     i__5 = jcol + *k + *nrhs;
-                    q__1.r = rwork[i__4];
-                    q__1.i = rwork[i__5]; // , expr subst
-                    b[i__3].r = q__1.r;
-                    b[i__3].i = q__1.i; // , expr subst
+                    q__1.real = rwork[i__4];
+                    q__1.imag = rwork[i__5]; // , expr subst
+                    b[i__3].real = q__1.real;
+                    b[i__3].imag = q__1.imag; // , expr subst
                     /* L90: */
                 }
                 aocl_lapack_clascl("G", &c__0, &c__0, &temp, &c_b13, &c__1, nrhs, &b[j + b_dim1],
@@ -657,7 +657,7 @@ void aocl_lapack_clals0(aocl_int64_t *icompq, aocl_int64_t *nl, aocl_int64_t *nr
                     {
                         ++i__;
                         i__4 = jrow + jcol * b_dim1;
-                        rwork[i__] = b[i__4].r;
+                        rwork[i__] = b[i__4].real;
                         /* L130: */
                     }
                     /* L140: */
@@ -685,10 +685,10 @@ void aocl_lapack_clals0(aocl_int64_t *icompq, aocl_int64_t *nl, aocl_int64_t *nr
                     i__3 = j + jcol * bx_dim1;
                     i__4 = jcol + *k;
                     i__5 = jcol + *k + *nrhs;
-                    q__1.r = rwork[i__4];
-                    q__1.i = rwork[i__5]; // , expr subst
-                    bx[i__3].r = q__1.r;
-                    bx[i__3].i = q__1.i; // , expr subst
+                    q__1.real = rwork[i__4];
+                    q__1.imag = rwork[i__5]; // , expr subst
+                    bx[i__3].real = q__1.real;
+                    bx[i__3].imag = q__1.imag; // , expr subst
                     /* L170: */
                 }
                 /* L180: */

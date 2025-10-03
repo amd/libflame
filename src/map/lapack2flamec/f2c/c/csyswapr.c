@@ -158,15 +158,15 @@ void aocl_lapack_csyswapr(char *uplo, aocl_int64_t *n, scomplex *a, aocl_int64_t
         /* - swap A(I1,I1) and A(I2,I2) */
         /* - swap row I1 from I1+1 to I2-1 with col I2 from I1+1 to I2-1 */
         i__1 = *i1 + *i1 * a_dim1;
-        tmp.r = a[i__1].r;
-        tmp.i = a[i__1].i; // , expr subst
+        tmp.real = a[i__1].real;
+        tmp.imag = a[i__1].imag; // , expr subst
         i__1 = *i1 + *i1 * a_dim1;
         i__2 = *i2 + *i2 * a_dim1;
-        a[i__1].r = a[i__2].r;
-        a[i__1].i = a[i__2].i; // , expr subst
+        a[i__1].real = a[i__2].real;
+        a[i__1].imag = a[i__2].imag; // , expr subst
         i__1 = *i2 + *i2 * a_dim1;
-        a[i__1].r = tmp.r;
-        a[i__1].i = tmp.i; // , expr subst
+        a[i__1].real = tmp.real;
+        a[i__1].imag = tmp.imag; // , expr subst
         i__1 = *i2 - *i1 - 1;
         aocl_blas_cswap(&i__1, &a[*i1 + (*i1 + 1) * a_dim1], lda, &a[*i1 + 1 + *i2 * a_dim1],
                         &c__1);
@@ -190,15 +190,15 @@ void aocl_lapack_csyswapr(char *uplo, aocl_int64_t *n, scomplex *a, aocl_int64_t
         /* - swap A(I1,I1) and A(I2,I2) */
         /* - swap col I1 from I1+1 to I2-1 with row I2 from I1+1 to I2-1 */
         i__1 = *i1 + *i1 * a_dim1;
-        tmp.r = a[i__1].r;
-        tmp.i = a[i__1].i; // , expr subst
+        tmp.real = a[i__1].real;
+        tmp.imag = a[i__1].imag; // , expr subst
         i__1 = *i1 + *i1 * a_dim1;
         i__2 = *i2 + *i2 * a_dim1;
-        a[i__1].r = a[i__2].r;
-        a[i__1].i = a[i__2].i; // , expr subst
+        a[i__1].real = a[i__2].real;
+        a[i__1].imag = a[i__2].imag; // , expr subst
         i__1 = *i2 + *i2 * a_dim1;
-        a[i__1].r = tmp.r;
-        a[i__1].i = tmp.i; // , expr subst
+        a[i__1].real = tmp.real;
+        a[i__1].imag = tmp.imag; // , expr subst
         i__1 = *i2 - *i1 - 1;
         aocl_blas_cswap(&i__1, &a[*i1 + 1 + *i1 * a_dim1], &c__1, &a[*i2 + (*i1 + 1) * a_dim1],
                         lda);

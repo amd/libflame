@@ -270,8 +270,8 @@ void aocl_lapack_claswlq(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *mb, aoc
     {
         i__1 = *mb * *m;
         r__1 = aocl_lapack_sroundup_lwork(&i__1);
-        work[1].r = r__1;
-        work[1].i = 0.f; // , expr subst
+        work[1].real = r__1;
+        work[1].imag = 0.f; // , expr subst
     }
     if(*info != 0)
     {
@@ -321,8 +321,8 @@ void aocl_lapack_claswlq(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *mb, aoc
     }
     i__2 = *m * *mb;
     r__1 = aocl_lapack_sroundup_lwork(&i__2);
-    work[1].r = r__1;
-    work[1].i = 0.f; // , expr subst
+    work[1].real = r__1;
+    work[1].imag = 0.f; // , expr subst
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
     return;
     /* End of CLASWLQ */

@@ -190,14 +190,14 @@ void aocl_lapack_zpoequ(aocl_int64_t *n, dcomplex *a, aocl_int64_t *lda, doubler
     }
     /* Find the minimum and maximum diagonal elements. */
     i__1 = a_dim1 + 1;
-    s[1] = a[i__1].r;
+    s[1] = a[i__1].real;
     smin = s[1];
     *amax = s[1];
     i__1 = *n;
     for(i__ = 2; i__ <= i__1; ++i__)
     {
         i__2 = i__ + i__ * a_dim1;
-        s[i__] = a[i__2].r;
+        s[i__] = a[i__2].real;
         /* Computing MIN */
         d__1 = smin;
         d__2 = s[i__]; // , expr subst

@@ -198,7 +198,7 @@ void aocl_lapack_zspr(char *uplo, aocl_int64_t *n, dcomplex *alpha, dcomplex *x,
         return;
     }
     /* Quick return if possible. */
-    if(*n == 0 || alpha->r == 0. && alpha->i == 0.)
+    if(*n == 0 || alpha->real == 0. && alpha->imag == 0.)
     {
         AOCL_DTL_TRACE_LOG_EXIT
         return;
@@ -224,13 +224,13 @@ void aocl_lapack_zspr(char *uplo, aocl_int64_t *n, dcomplex *alpha, dcomplex *x,
             for(j = 1; j <= i__1; ++j)
             {
                 i__2 = j;
-                if(x[i__2].r != 0. || x[i__2].i != 0.)
+                if(x[i__2].real != 0. || x[i__2].imag != 0.)
                 {
                     i__2 = j;
-                    z__1.r = alpha->r * x[i__2].r - alpha->i * x[i__2].i;
-                    z__1.i = alpha->r * x[i__2].i + alpha->i * x[i__2].r; // , expr subst
-                    temp.r = z__1.r;
-                    temp.i = z__1.i; // , expr subst
+                    z__1.real = alpha->real * x[i__2].real - alpha->imag * x[i__2].imag;
+                    z__1.imag = alpha->real * x[i__2].imag + alpha->imag * x[i__2].real; // , expr subst
+                    temp.real = z__1.real;
+                    temp.imag = z__1.imag; // , expr subst
                     k = kk;
                     i__2 = j - 1;
                     for(i__ = 1; i__ <= i__2; ++i__)
@@ -238,31 +238,31 @@ void aocl_lapack_zspr(char *uplo, aocl_int64_t *n, dcomplex *alpha, dcomplex *x,
                         i__3 = k;
                         i__4 = k;
                         i__5 = i__;
-                        z__2.r = x[i__5].r * temp.r - x[i__5].i * temp.i;
-                        z__2.i = x[i__5].r * temp.i + x[i__5].i * temp.r; // , expr subst
-                        z__1.r = ap[i__4].r + z__2.r;
-                        z__1.i = ap[i__4].i + z__2.i; // , expr subst
-                        ap[i__3].r = z__1.r;
-                        ap[i__3].i = z__1.i; // , expr subst
+                        z__2.real = x[i__5].real * temp.real - x[i__5].imag * temp.imag;
+                        z__2.imag = x[i__5].real * temp.imag + x[i__5].imag * temp.real; // , expr subst
+                        z__1.real = ap[i__4].real + z__2.real;
+                        z__1.imag = ap[i__4].imag + z__2.imag; // , expr subst
+                        ap[i__3].real = z__1.real;
+                        ap[i__3].imag = z__1.imag; // , expr subst
                         ++k;
                         /* L10: */
                     }
                     i__2 = kk + j - 1;
                     i__3 = kk + j - 1;
                     i__4 = j;
-                    z__2.r = x[i__4].r * temp.r - x[i__4].i * temp.i;
-                    z__2.i = x[i__4].r * temp.i + x[i__4].i * temp.r; // , expr subst
-                    z__1.r = ap[i__3].r + z__2.r;
-                    z__1.i = ap[i__3].i + z__2.i; // , expr subst
-                    ap[i__2].r = z__1.r;
-                    ap[i__2].i = z__1.i; // , expr subst
+                    z__2.real = x[i__4].real * temp.real - x[i__4].imag * temp.imag;
+                    z__2.imag = x[i__4].real * temp.imag + x[i__4].imag * temp.real; // , expr subst
+                    z__1.real = ap[i__3].real + z__2.real;
+                    z__1.imag = ap[i__3].imag + z__2.imag; // , expr subst
+                    ap[i__2].real = z__1.real;
+                    ap[i__2].imag = z__1.imag; // , expr subst
                 }
                 else
                 {
                     i__2 = kk + j - 1;
                     i__3 = kk + j - 1;
-                    ap[i__2].r = ap[i__3].r;
-                    ap[i__2].i = ap[i__3].i; // , expr subst
+                    ap[i__2].real = ap[i__3].real;
+                    ap[i__2].imag = ap[i__3].imag; // , expr subst
                 }
                 kk += j;
                 /* L20: */
@@ -275,13 +275,13 @@ void aocl_lapack_zspr(char *uplo, aocl_int64_t *n, dcomplex *alpha, dcomplex *x,
             for(j = 1; j <= i__1; ++j)
             {
                 i__2 = jx;
-                if(x[i__2].r != 0. || x[i__2].i != 0.)
+                if(x[i__2].real != 0. || x[i__2].imag != 0.)
                 {
                     i__2 = jx;
-                    z__1.r = alpha->r * x[i__2].r - alpha->i * x[i__2].i;
-                    z__1.i = alpha->r * x[i__2].i + alpha->i * x[i__2].r; // , expr subst
-                    temp.r = z__1.r;
-                    temp.i = z__1.i; // , expr subst
+                    z__1.real = alpha->real * x[i__2].real - alpha->imag * x[i__2].imag;
+                    z__1.imag = alpha->real * x[i__2].imag + alpha->imag * x[i__2].real; // , expr subst
+                    temp.real = z__1.real;
+                    temp.imag = z__1.imag; // , expr subst
                     ix = kx;
                     i__2 = kk + j - 2;
                     for(k = kk; k <= i__2; ++k)
@@ -289,31 +289,31 @@ void aocl_lapack_zspr(char *uplo, aocl_int64_t *n, dcomplex *alpha, dcomplex *x,
                         i__3 = k;
                         i__4 = k;
                         i__5 = ix;
-                        z__2.r = x[i__5].r * temp.r - x[i__5].i * temp.i;
-                        z__2.i = x[i__5].r * temp.i + x[i__5].i * temp.r; // , expr subst
-                        z__1.r = ap[i__4].r + z__2.r;
-                        z__1.i = ap[i__4].i + z__2.i; // , expr subst
-                        ap[i__3].r = z__1.r;
-                        ap[i__3].i = z__1.i; // , expr subst
+                        z__2.real = x[i__5].real * temp.real - x[i__5].imag * temp.imag;
+                        z__2.imag = x[i__5].real * temp.imag + x[i__5].imag * temp.real; // , expr subst
+                        z__1.real = ap[i__4].real + z__2.real;
+                        z__1.imag = ap[i__4].imag + z__2.imag; // , expr subst
+                        ap[i__3].real = z__1.real;
+                        ap[i__3].imag = z__1.imag; // , expr subst
                         ix += *incx;
                         /* L30: */
                     }
                     i__2 = kk + j - 1;
                     i__3 = kk + j - 1;
                     i__4 = jx;
-                    z__2.r = x[i__4].r * temp.r - x[i__4].i * temp.i;
-                    z__2.i = x[i__4].r * temp.i + x[i__4].i * temp.r; // , expr subst
-                    z__1.r = ap[i__3].r + z__2.r;
-                    z__1.i = ap[i__3].i + z__2.i; // , expr subst
-                    ap[i__2].r = z__1.r;
-                    ap[i__2].i = z__1.i; // , expr subst
+                    z__2.real = x[i__4].real * temp.real - x[i__4].imag * temp.imag;
+                    z__2.imag = x[i__4].real * temp.imag + x[i__4].imag * temp.real; // , expr subst
+                    z__1.real = ap[i__3].real + z__2.real;
+                    z__1.imag = ap[i__3].imag + z__2.imag; // , expr subst
+                    ap[i__2].real = z__1.real;
+                    ap[i__2].imag = z__1.imag; // , expr subst
                 }
                 else
                 {
                     i__2 = kk + j - 1;
                     i__3 = kk + j - 1;
-                    ap[i__2].r = ap[i__3].r;
-                    ap[i__2].i = ap[i__3].i; // , expr subst
+                    ap[i__2].real = ap[i__3].real;
+                    ap[i__2].imag = ap[i__3].imag; // , expr subst
                 }
                 jx += *incx;
                 kk += j;
@@ -330,22 +330,22 @@ void aocl_lapack_zspr(char *uplo, aocl_int64_t *n, dcomplex *alpha, dcomplex *x,
             for(j = 1; j <= i__1; ++j)
             {
                 i__2 = j;
-                if(x[i__2].r != 0. || x[i__2].i != 0.)
+                if(x[i__2].real != 0. || x[i__2].imag != 0.)
                 {
                     i__2 = j;
-                    z__1.r = alpha->r * x[i__2].r - alpha->i * x[i__2].i;
-                    z__1.i = alpha->r * x[i__2].i + alpha->i * x[i__2].r; // , expr subst
-                    temp.r = z__1.r;
-                    temp.i = z__1.i; // , expr subst
+                    z__1.real = alpha->real * x[i__2].real - alpha->imag * x[i__2].imag;
+                    z__1.imag = alpha->real * x[i__2].imag + alpha->imag * x[i__2].real; // , expr subst
+                    temp.real = z__1.real;
+                    temp.imag = z__1.imag; // , expr subst
                     i__2 = kk;
                     i__3 = kk;
                     i__4 = j;
-                    z__2.r = temp.r * x[i__4].r - temp.i * x[i__4].i;
-                    z__2.i = temp.r * x[i__4].i + temp.i * x[i__4].r; // , expr subst
-                    z__1.r = ap[i__3].r + z__2.r;
-                    z__1.i = ap[i__3].i + z__2.i; // , expr subst
-                    ap[i__2].r = z__1.r;
-                    ap[i__2].i = z__1.i; // , expr subst
+                    z__2.real = temp.real * x[i__4].real - temp.imag * x[i__4].imag;
+                    z__2.imag = temp.real * x[i__4].imag + temp.imag * x[i__4].real; // , expr subst
+                    z__1.real = ap[i__3].real + z__2.real;
+                    z__1.imag = ap[i__3].imag + z__2.imag; // , expr subst
+                    ap[i__2].real = z__1.real;
+                    ap[i__2].imag = z__1.imag; // , expr subst
                     k = kk + 1;
                     i__2 = *n;
                     for(i__ = j + 1; i__ <= i__2; ++i__)
@@ -353,12 +353,12 @@ void aocl_lapack_zspr(char *uplo, aocl_int64_t *n, dcomplex *alpha, dcomplex *x,
                         i__3 = k;
                         i__4 = k;
                         i__5 = i__;
-                        z__2.r = x[i__5].r * temp.r - x[i__5].i * temp.i;
-                        z__2.i = x[i__5].r * temp.i + x[i__5].i * temp.r; // , expr subst
-                        z__1.r = ap[i__4].r + z__2.r;
-                        z__1.i = ap[i__4].i + z__2.i; // , expr subst
-                        ap[i__3].r = z__1.r;
-                        ap[i__3].i = z__1.i; // , expr subst
+                        z__2.real = x[i__5].real * temp.real - x[i__5].imag * temp.imag;
+                        z__2.imag = x[i__5].real * temp.imag + x[i__5].imag * temp.real; // , expr subst
+                        z__1.real = ap[i__4].real + z__2.real;
+                        z__1.imag = ap[i__4].imag + z__2.imag; // , expr subst
+                        ap[i__3].real = z__1.real;
+                        ap[i__3].imag = z__1.imag; // , expr subst
                         ++k;
                         /* L50: */
                     }
@@ -367,8 +367,8 @@ void aocl_lapack_zspr(char *uplo, aocl_int64_t *n, dcomplex *alpha, dcomplex *x,
                 {
                     i__2 = kk;
                     i__3 = kk;
-                    ap[i__2].r = ap[i__3].r;
-                    ap[i__2].i = ap[i__3].i; // , expr subst
+                    ap[i__2].real = ap[i__3].real;
+                    ap[i__2].imag = ap[i__3].imag; // , expr subst
                 }
                 kk = kk + *n - j + 1;
                 /* L60: */
@@ -381,22 +381,22 @@ void aocl_lapack_zspr(char *uplo, aocl_int64_t *n, dcomplex *alpha, dcomplex *x,
             for(j = 1; j <= i__1; ++j)
             {
                 i__2 = jx;
-                if(x[i__2].r != 0. || x[i__2].i != 0.)
+                if(x[i__2].real != 0. || x[i__2].imag != 0.)
                 {
                     i__2 = jx;
-                    z__1.r = alpha->r * x[i__2].r - alpha->i * x[i__2].i;
-                    z__1.i = alpha->r * x[i__2].i + alpha->i * x[i__2].r; // , expr subst
-                    temp.r = z__1.r;
-                    temp.i = z__1.i; // , expr subst
+                    z__1.real = alpha->real * x[i__2].real - alpha->imag * x[i__2].imag;
+                    z__1.imag = alpha->real * x[i__2].imag + alpha->imag * x[i__2].real; // , expr subst
+                    temp.real = z__1.real;
+                    temp.imag = z__1.imag; // , expr subst
                     i__2 = kk;
                     i__3 = kk;
                     i__4 = jx;
-                    z__2.r = temp.r * x[i__4].r - temp.i * x[i__4].i;
-                    z__2.i = temp.r * x[i__4].i + temp.i * x[i__4].r; // , expr subst
-                    z__1.r = ap[i__3].r + z__2.r;
-                    z__1.i = ap[i__3].i + z__2.i; // , expr subst
-                    ap[i__2].r = z__1.r;
-                    ap[i__2].i = z__1.i; // , expr subst
+                    z__2.real = temp.real * x[i__4].real - temp.imag * x[i__4].imag;
+                    z__2.imag = temp.real * x[i__4].imag + temp.imag * x[i__4].real; // , expr subst
+                    z__1.real = ap[i__3].real + z__2.real;
+                    z__1.imag = ap[i__3].imag + z__2.imag; // , expr subst
+                    ap[i__2].real = z__1.real;
+                    ap[i__2].imag = z__1.imag; // , expr subst
                     ix = jx;
                     i__2 = kk + *n - j;
                     for(k = kk + 1; k <= i__2; ++k)
@@ -405,12 +405,12 @@ void aocl_lapack_zspr(char *uplo, aocl_int64_t *n, dcomplex *alpha, dcomplex *x,
                         i__3 = k;
                         i__4 = k;
                         i__5 = ix;
-                        z__2.r = x[i__5].r * temp.r - x[i__5].i * temp.i;
-                        z__2.i = x[i__5].r * temp.i + x[i__5].i * temp.r; // , expr subst
-                        z__1.r = ap[i__4].r + z__2.r;
-                        z__1.i = ap[i__4].i + z__2.i; // , expr subst
-                        ap[i__3].r = z__1.r;
-                        ap[i__3].i = z__1.i; // , expr subst
+                        z__2.real = x[i__5].real * temp.real - x[i__5].imag * temp.imag;
+                        z__2.imag = x[i__5].real * temp.imag + x[i__5].imag * temp.real; // , expr subst
+                        z__1.real = ap[i__4].real + z__2.real;
+                        z__1.imag = ap[i__4].imag + z__2.imag; // , expr subst
+                        ap[i__3].real = z__1.real;
+                        ap[i__3].imag = z__1.imag; // , expr subst
                         /* L70: */
                     }
                 }
@@ -418,8 +418,8 @@ void aocl_lapack_zspr(char *uplo, aocl_int64_t *n, dcomplex *alpha, dcomplex *x,
                 {
                     i__2 = kk;
                     i__3 = kk;
-                    ap[i__2].r = ap[i__3].r;
-                    ap[i__2].i = ap[i__3].i; // , expr subst
+                    ap[i__2].real = ap[i__3].real;
+                    ap[i__2].imag = ap[i__3].imag; // , expr subst
                 }
                 jx += *incx;
                 kk = kk + *n - j + 1;

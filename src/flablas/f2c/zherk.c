@@ -189,7 +189,7 @@ int zherk_(char *uplo, char *trans, integer *n, integer *k, doublereal *alpha, d
                             ++i__)
                     {
                         i__3 = i__ + j * c_dim1;
-                        c__[i__3].r = 0., c__[i__3].i = 0.;
+                        c__[i__3].real = 0., c__[i__3].imag = 0.;
                         /* L10: */
                     }
                     /* L20: */
@@ -209,14 +209,14 @@ int zherk_(char *uplo, char *trans, integer *n, integer *k, doublereal *alpha, d
                     {
                         i__3 = i__ + j * c_dim1;
                         i__4 = i__ + j * c_dim1;
-                        z__1.r = *beta * c__[i__4].r, z__1.i = *beta * c__[ i__4].i;
-                        c__[i__3].r = z__1.r, c__[i__3].i = z__1.i;
+                        z__1.real = *beta * c__[i__4].real, z__1.imag = *beta * c__[ i__4].imag;
+                        c__[i__3].real = z__1.real, c__[i__3].imag = z__1.imag;
                         /* L30: */
                     }
                     i__2 = j + j * c_dim1;
                     i__3 = j + j * c_dim1;
-                    d__1 = *beta * c__[i__3].r;
-                    c__[i__2].r = d__1, c__[i__2].i = 0.;
+                    d__1 = *beta * c__[i__3].real;
+                    c__[i__2].real = d__1, c__[i__2].imag = 0.;
                     /* L40: */
                 }
             }
@@ -236,7 +236,7 @@ int zherk_(char *uplo, char *trans, integer *n, integer *k, doublereal *alpha, d
                             ++i__)
                     {
                         i__3 = i__ + j * c_dim1;
-                        c__[i__3].r = 0., c__[i__3].i = 0.;
+                        c__[i__3].real = 0., c__[i__3].imag = 0.;
                         /* L50: */
                     }
                     /* L60: */
@@ -251,8 +251,8 @@ int zherk_(char *uplo, char *trans, integer *n, integer *k, doublereal *alpha, d
                 {
                     i__2 = j + j * c_dim1;
                     i__3 = j + j * c_dim1;
-                    d__1 = *beta * c__[i__3].r;
-                    c__[i__2].r = d__1, c__[i__2].i = 0.;
+                    d__1 = *beta * c__[i__3].real;
+                    c__[i__2].real = d__1, c__[i__2].imag = 0.;
                     i__2 = *n;
                     for (i__ = j + 1;
                             i__ <= i__2;
@@ -260,8 +260,8 @@ int zherk_(char *uplo, char *trans, integer *n, integer *k, doublereal *alpha, d
                     {
                         i__3 = i__ + j * c_dim1;
                         i__4 = i__ + j * c_dim1;
-                        z__1.r = *beta * c__[i__4].r, z__1.i = *beta * c__[ i__4].i;
-                        c__[i__3].r = z__1.r, c__[i__3].i = z__1.i;
+                        z__1.real = *beta * c__[i__4].real, z__1.imag = *beta * c__[ i__4].imag;
+                        c__[i__3].real = z__1.real, c__[i__3].imag = z__1.imag;
                         /* L70: */
                     }
                     /* L80: */
@@ -289,7 +289,7 @@ int zherk_(char *uplo, char *trans, integer *n, integer *k, doublereal *alpha, d
                             ++i__)
                     {
                         i__3 = i__ + j * c_dim1;
-                        c__[i__3].r = 0., c__[i__3].i = 0.;
+                        c__[i__3].real = 0., c__[i__3].imag = 0.;
                         /* L90: */
                     }
                 }
@@ -302,21 +302,21 @@ int zherk_(char *uplo, char *trans, integer *n, integer *k, doublereal *alpha, d
                     {
                         i__3 = i__ + j * c_dim1;
                         i__4 = i__ + j * c_dim1;
-                        z__1.r = *beta * c__[i__4].r, z__1.i = *beta * c__[ i__4].i;
-                        c__[i__3].r = z__1.r, c__[i__3].i = z__1.i;
+                        z__1.real = *beta * c__[i__4].real, z__1.imag = *beta * c__[ i__4].imag;
+                        c__[i__3].real = z__1.real, c__[i__3].imag = z__1.imag;
                         /* L100: */
                     }
                     i__2 = j + j * c_dim1;
                     i__3 = j + j * c_dim1;
-                    d__1 = *beta * c__[i__3].r;
-                    c__[i__2].r = d__1, c__[i__2].i = 0.;
+                    d__1 = *beta * c__[i__3].real;
+                    c__[i__2].real = d__1, c__[i__2].imag = 0.;
                 }
                 else
                 {
                     i__2 = j + j * c_dim1;
                     i__3 = j + j * c_dim1;
-                    d__1 = c__[i__3].r;
-                    c__[i__2].r = d__1, c__[i__2].i = 0.;
+                    d__1 = c__[i__3].real;
+                    c__[i__2].real = d__1, c__[i__2].imag = 0.;
                 }
                 i__2 = *k;
                 for (l = 1;
@@ -324,11 +324,11 @@ int zherk_(char *uplo, char *trans, integer *n, integer *k, doublereal *alpha, d
                         ++l)
                 {
                     i__3 = j + l * a_dim1;
-                    if (a[i__3].r != 0. || a[i__3].i != 0.)
+                    if (a[i__3].real != 0. || a[i__3].imag != 0.)
                     {
                         d_cnjg(&z__2, &a[j + l * a_dim1]);
-                        z__1.r = *alpha * z__2.r, z__1.i = *alpha * z__2.i;
-                        temp.r = z__1.r, temp.i = z__1.i;
+                        z__1.real = *alpha * z__2.real, z__1.imag = *alpha * z__2.imag;
+                        temp.real = z__1.real, temp.imag = z__1.imag;
                         i__3 = j - 1;
                         for (i__ = 1;
                                 i__ <= i__3;
@@ -337,17 +337,17 @@ int zherk_(char *uplo, char *trans, integer *n, integer *k, doublereal *alpha, d
                             i__4 = i__ + j * c_dim1;
                             i__5 = i__ + j * c_dim1;
                             i__6 = i__ + l * a_dim1;
-                            z__2.r = temp.r * a[i__6].r - temp.i * a[i__6].i, z__2.i = temp.r * a[i__6].i + temp.i * a[ i__6].r;
-                            z__1.r = c__[i__5].r + z__2.r, z__1.i = c__[i__5] .i + z__2.i;
-                            c__[i__4].r = z__1.r, c__[i__4].i = z__1.i;
+                            z__2.real = temp.real * a[i__6].real - temp.imag * a[i__6].imag, z__2.imag = temp.real * a[i__6].imag + temp.imag * a[ i__6].real;
+                            z__1.real = c__[i__5].real + z__2.real, z__1.imag = c__[i__5] .imag + z__2.imag;
+                            c__[i__4].real = z__1.real, c__[i__4].imag = z__1.imag;
                             /* L110: */
                         }
                         i__3 = j + j * c_dim1;
                         i__4 = j + j * c_dim1;
                         i__5 = i__ + l * a_dim1;
-                        z__1.r = temp.r * a[i__5].r - temp.i * a[i__5].i, z__1.i = temp.r * a[i__5].i + temp.i * a[i__5] .r;
-                        d__1 = c__[i__4].r + z__1.r;
-                        c__[i__3].r = d__1, c__[i__3].i = 0.;
+                        z__1.real = temp.real * a[i__5].real - temp.imag * a[i__5].imag, z__1.imag = temp.real * a[i__5].imag + temp.imag * a[i__5] .real;
+                        d__1 = c__[i__4].real + z__1.real;
+                        c__[i__3].real = d__1, c__[i__3].imag = 0.;
                     }
                     /* L120: */
                 }
@@ -369,7 +369,7 @@ int zherk_(char *uplo, char *trans, integer *n, integer *k, doublereal *alpha, d
                             ++i__)
                     {
                         i__3 = i__ + j * c_dim1;
-                        c__[i__3].r = 0., c__[i__3].i = 0.;
+                        c__[i__3].real = 0., c__[i__3].imag = 0.;
                         /* L140: */
                     }
                 }
@@ -377,8 +377,8 @@ int zherk_(char *uplo, char *trans, integer *n, integer *k, doublereal *alpha, d
                 {
                     i__2 = j + j * c_dim1;
                     i__3 = j + j * c_dim1;
-                    d__1 = *beta * c__[i__3].r;
-                    c__[i__2].r = d__1, c__[i__2].i = 0.;
+                    d__1 = *beta * c__[i__3].real;
+                    c__[i__2].real = d__1, c__[i__2].imag = 0.;
                     i__2 = *n;
                     for (i__ = j + 1;
                             i__ <= i__2;
@@ -386,8 +386,8 @@ int zherk_(char *uplo, char *trans, integer *n, integer *k, doublereal *alpha, d
                     {
                         i__3 = i__ + j * c_dim1;
                         i__4 = i__ + j * c_dim1;
-                        z__1.r = *beta * c__[i__4].r, z__1.i = *beta * c__[ i__4].i;
-                        c__[i__3].r = z__1.r, c__[i__3].i = z__1.i;
+                        z__1.real = *beta * c__[i__4].real, z__1.imag = *beta * c__[ i__4].imag;
+                        c__[i__3].real = z__1.real, c__[i__3].imag = z__1.imag;
                         /* L150: */
                     }
                 }
@@ -395,8 +395,8 @@ int zherk_(char *uplo, char *trans, integer *n, integer *k, doublereal *alpha, d
                 {
                     i__2 = j + j * c_dim1;
                     i__3 = j + j * c_dim1;
-                    d__1 = c__[i__3].r;
-                    c__[i__2].r = d__1, c__[i__2].i = 0.;
+                    d__1 = c__[i__3].real;
+                    c__[i__2].real = d__1, c__[i__2].imag = 0.;
                 }
                 i__2 = *k;
                 for (l = 1;
@@ -404,17 +404,17 @@ int zherk_(char *uplo, char *trans, integer *n, integer *k, doublereal *alpha, d
                         ++l)
                 {
                     i__3 = j + l * a_dim1;
-                    if (a[i__3].r != 0. || a[i__3].i != 0.)
+                    if (a[i__3].real != 0. || a[i__3].imag != 0.)
                     {
                         d_cnjg(&z__2, &a[j + l * a_dim1]);
-                        z__1.r = *alpha * z__2.r, z__1.i = *alpha * z__2.i;
-                        temp.r = z__1.r, temp.i = z__1.i;
+                        z__1.real = *alpha * z__2.real, z__1.imag = *alpha * z__2.imag;
+                        temp.real = z__1.real, temp.imag = z__1.imag;
                         i__3 = j + j * c_dim1;
                         i__4 = j + j * c_dim1;
                         i__5 = j + l * a_dim1;
-                        z__1.r = temp.r * a[i__5].r - temp.i * a[i__5].i, z__1.i = temp.r * a[i__5].i + temp.i * a[i__5] .r;
-                        d__1 = c__[i__4].r + z__1.r;
-                        c__[i__3].r = d__1, c__[i__3].i = 0.;
+                        z__1.real = temp.real * a[i__5].real - temp.imag * a[i__5].imag, z__1.imag = temp.real * a[i__5].imag + temp.imag * a[i__5] .real;
+                        d__1 = c__[i__4].real + z__1.real;
+                        c__[i__3].real = d__1, c__[i__3].imag = 0.;
                         i__3 = *n;
                         for (i__ = j + 1;
                                 i__ <= i__3;
@@ -423,9 +423,9 @@ int zherk_(char *uplo, char *trans, integer *n, integer *k, doublereal *alpha, d
                             i__4 = i__ + j * c_dim1;
                             i__5 = i__ + j * c_dim1;
                             i__6 = i__ + l * a_dim1;
-                            z__2.r = temp.r * a[i__6].r - temp.i * a[i__6].i, z__2.i = temp.r * a[i__6].i + temp.i * a[ i__6].r;
-                            z__1.r = c__[i__5].r + z__2.r, z__1.i = c__[i__5] .i + z__2.i;
-                            c__[i__4].r = z__1.r, c__[i__4].i = z__1.i;
+                            z__2.real = temp.real * a[i__6].real - temp.imag * a[i__6].imag, z__2.imag = temp.real * a[i__6].imag + temp.imag * a[ i__6].real;
+                            z__1.real = c__[i__5].real + z__2.real, z__1.imag = c__[i__5] .imag + z__2.imag;
+                            c__[i__4].real = z__1.real, c__[i__4].imag = z__1.imag;
                             /* L160: */
                         }
                     }
@@ -450,7 +450,7 @@ int zherk_(char *uplo, char *trans, integer *n, integer *k, doublereal *alpha, d
                         i__ <= i__2;
                         ++i__)
                 {
-                    temp.r = 0., temp.i = 0.;
+                    temp.real = 0., temp.imag = 0.;
                     i__3 = *k;
                     for (l = 1;
                             l <= i__3;
@@ -458,25 +458,25 @@ int zherk_(char *uplo, char *trans, integer *n, integer *k, doublereal *alpha, d
                     {
                         d_cnjg(&z__3, &a[l + i__ * a_dim1]);
                         i__4 = l + j * a_dim1;
-                        z__2.r = z__3.r * a[i__4].r - z__3.i * a[i__4].i, z__2.i = z__3.r * a[i__4].i + z__3.i * a[i__4] .r;
-                        z__1.r = temp.r + z__2.r, z__1.i = temp.i + z__2.i;
-                        temp.r = z__1.r, temp.i = z__1.i;
+                        z__2.real = z__3.real * a[i__4].real - z__3.imag * a[i__4].imag, z__2.imag = z__3.real * a[i__4].imag + z__3.imag * a[i__4] .real;
+                        z__1.real = temp.real + z__2.real, z__1.imag = temp.imag + z__2.imag;
+                        temp.real = z__1.real, temp.imag = z__1.imag;
                         /* L190: */
                     }
                     if (*beta == 0.)
                     {
                         i__3 = i__ + j * c_dim1;
-                        z__1.r = *alpha * temp.r, z__1.i = *alpha * temp.i;
-                        c__[i__3].r = z__1.r, c__[i__3].i = z__1.i;
+                        z__1.real = *alpha * temp.real, z__1.imag = *alpha * temp.imag;
+                        c__[i__3].real = z__1.real, c__[i__3].imag = z__1.imag;
                     }
                     else
                     {
                         i__3 = i__ + j * c_dim1;
-                        z__2.r = *alpha * temp.r, z__2.i = *alpha * temp.i;
+                        z__2.real = *alpha * temp.real, z__2.imag = *alpha * temp.imag;
                         i__4 = i__ + j * c_dim1;
-                        z__3.r = *beta * c__[i__4].r, z__3.i = *beta * c__[ i__4].i;
-                        z__1.r = z__2.r + z__3.r, z__1.i = z__2.i + z__3.i;
-                        c__[i__3].r = z__1.r, c__[i__3].i = z__1.i;
+                        z__3.real = *beta * c__[i__4].real, z__3.imag = *beta * c__[ i__4].imag;
+                        z__1.real = z__2.real + z__3.real, z__1.imag = z__2.imag + z__3.imag;
+                        c__[i__3].real = z__1.real, c__[i__3].imag = z__1.imag;
                     }
                     /* L200: */
                 }
@@ -488,23 +488,23 @@ int zherk_(char *uplo, char *trans, integer *n, integer *k, doublereal *alpha, d
                 {
                     d_cnjg(&z__3, &a[l + j * a_dim1]);
                     i__3 = l + j * a_dim1;
-                    z__2.r = z__3.r * a[i__3].r - z__3.i * a[i__3].i, z__2.i = z__3.r * a[i__3].i + z__3.i * a[i__3].r;
-                    z__1.r = rtemp + z__2.r, z__1.i = z__2.i;
-                    rtemp = z__1.r;
+                    z__2.real = z__3.real * a[i__3].real - z__3.imag * a[i__3].imag, z__2.imag = z__3.real * a[i__3].imag + z__3.imag * a[i__3].real;
+                    z__1.real = rtemp + z__2.real, z__1.imag = z__2.imag;
+                    rtemp = z__1.real;
                     /* L210: */
                 }
                 if (*beta == 0.)
                 {
                     i__2 = j + j * c_dim1;
                     d__1 = *alpha * rtemp;
-                    c__[i__2].r = d__1, c__[i__2].i = 0.;
+                    c__[i__2].real = d__1, c__[i__2].imag = 0.;
                 }
                 else
                 {
                     i__2 = j + j * c_dim1;
                     i__3 = j + j * c_dim1;
-                    d__1 = *alpha * rtemp + *beta * c__[i__3].r;
-                    c__[i__2].r = d__1, c__[i__2].i = 0.;
+                    d__1 = *alpha * rtemp + *beta * c__[i__3].real;
+                    c__[i__2].real = d__1, c__[i__2].imag = 0.;
                 }
                 /* L220: */
             }
@@ -524,30 +524,30 @@ int zherk_(char *uplo, char *trans, integer *n, integer *k, doublereal *alpha, d
                 {
                     d_cnjg(&z__3, &a[l + j * a_dim1]);
                     i__3 = l + j * a_dim1;
-                    z__2.r = z__3.r * a[i__3].r - z__3.i * a[i__3].i, z__2.i = z__3.r * a[i__3].i + z__3.i * a[i__3].r;
-                    z__1.r = rtemp + z__2.r, z__1.i = z__2.i;
-                    rtemp = z__1.r;
+                    z__2.real = z__3.real * a[i__3].real - z__3.imag * a[i__3].imag, z__2.imag = z__3.real * a[i__3].imag + z__3.imag * a[i__3].real;
+                    z__1.real = rtemp + z__2.real, z__1.imag = z__2.imag;
+                    rtemp = z__1.real;
                     /* L230: */
                 }
                 if (*beta == 0.)
                 {
                     i__2 = j + j * c_dim1;
                     d__1 = *alpha * rtemp;
-                    c__[i__2].r = d__1, c__[i__2].i = 0.;
+                    c__[i__2].real = d__1, c__[i__2].imag = 0.;
                 }
                 else
                 {
                     i__2 = j + j * c_dim1;
                     i__3 = j + j * c_dim1;
-                    d__1 = *alpha * rtemp + *beta * c__[i__3].r;
-                    c__[i__2].r = d__1, c__[i__2].i = 0.;
+                    d__1 = *alpha * rtemp + *beta * c__[i__3].real;
+                    c__[i__2].real = d__1, c__[i__2].imag = 0.;
                 }
                 i__2 = *n;
                 for (i__ = j + 1;
                         i__ <= i__2;
                         ++i__)
                 {
-                    temp.r = 0., temp.i = 0.;
+                    temp.real = 0., temp.imag = 0.;
                     i__3 = *k;
                     for (l = 1;
                             l <= i__3;
@@ -555,25 +555,25 @@ int zherk_(char *uplo, char *trans, integer *n, integer *k, doublereal *alpha, d
                     {
                         d_cnjg(&z__3, &a[l + i__ * a_dim1]);
                         i__4 = l + j * a_dim1;
-                        z__2.r = z__3.r * a[i__4].r - z__3.i * a[i__4].i, z__2.i = z__3.r * a[i__4].i + z__3.i * a[i__4] .r;
-                        z__1.r = temp.r + z__2.r, z__1.i = temp.i + z__2.i;
-                        temp.r = z__1.r, temp.i = z__1.i;
+                        z__2.real = z__3.real * a[i__4].real - z__3.imag * a[i__4].imag, z__2.imag = z__3.real * a[i__4].imag + z__3.imag * a[i__4] .real;
+                        z__1.real = temp.real + z__2.real, z__1.imag = temp.imag + z__2.imag;
+                        temp.real = z__1.real, temp.imag = z__1.imag;
                         /* L240: */
                     }
                     if (*beta == 0.)
                     {
                         i__3 = i__ + j * c_dim1;
-                        z__1.r = *alpha * temp.r, z__1.i = *alpha * temp.i;
-                        c__[i__3].r = z__1.r, c__[i__3].i = z__1.i;
+                        z__1.real = *alpha * temp.real, z__1.imag = *alpha * temp.imag;
+                        c__[i__3].real = z__1.real, c__[i__3].imag = z__1.imag;
                     }
                     else
                     {
                         i__3 = i__ + j * c_dim1;
-                        z__2.r = *alpha * temp.r, z__2.i = *alpha * temp.i;
+                        z__2.real = *alpha * temp.real, z__2.imag = *alpha * temp.imag;
                         i__4 = i__ + j * c_dim1;
-                        z__3.r = *beta * c__[i__4].r, z__3.i = *beta * c__[ i__4].i;
-                        z__1.r = z__2.r + z__3.r, z__1.i = z__2.i + z__3.i;
-                        c__[i__3].r = z__1.r, c__[i__3].i = z__1.i;
+                        z__3.real = *beta * c__[i__4].real, z__3.imag = *beta * c__[ i__4].imag;
+                        z__1.real = z__2.real + z__3.real, z__1.imag = z__2.imag + z__3.imag;
+                        c__[i__3].real = z__1.real, c__[i__3].imag = z__1.imag;
                     }
                     /* L250: */
                 }

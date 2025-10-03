@@ -328,39 +328,39 @@ void aocl_lapack_ztrsyl(char *trana, char *tranb, aocl_int64_t *isgn, aocl_int64
                 i__4 = k + 1;
                 aocl_lapack_zdotu_f2c(&z__1, &i__2, &a[k + fla_min(i__3, *m) * a_dim1], lda,
                            &c__[fla_min(i__4, *m) + l * c_dim1], &c__1);
-                suml.r = z__1.r;
-                suml.i = z__1.i; // , expr subst
+                suml.real = z__1.real;
+                suml.imag = z__1.imag; // , expr subst
                 i__2 = l - 1;
                 aocl_lapack_zdotu_f2c(&z__1, &i__2, &c__[k + c_dim1], ldc, &b[l * b_dim1 + 1], &c__1);
-                sumr.r = z__1.r;
-                sumr.i = z__1.i; // , expr subst
+                sumr.real = z__1.real;
+                sumr.imag = z__1.imag; // , expr subst
                 i__2 = k + l * c_dim1;
-                z__3.r = sgn * sumr.r;
-                z__3.i = sgn * sumr.i; // , expr subst
-                z__2.r = suml.r + z__3.r;
-                z__2.i = suml.i + z__3.i; // , expr subst
-                z__1.r = c__[i__2].r - z__2.r;
-                z__1.i = c__[i__2].i - z__2.i; // , expr subst
-                vec.r = z__1.r;
-                vec.i = z__1.i; // , expr subst
+                z__3.real = sgn * sumr.real;
+                z__3.imag = sgn * sumr.imag; // , expr subst
+                z__2.real = suml.real + z__3.real;
+                z__2.imag = suml.imag + z__3.imag; // , expr subst
+                z__1.real = c__[i__2].real - z__2.real;
+                z__1.imag = c__[i__2].imag - z__2.imag; // , expr subst
+                vec.real = z__1.real;
+                vec.imag = z__1.imag; // , expr subst
                 scaloc = 1.;
                 i__2 = k + k * a_dim1;
                 i__3 = l + l * b_dim1;
-                z__2.r = sgn * b[i__3].r;
-                z__2.i = sgn * b[i__3].i; // , expr subst
-                z__1.r = a[i__2].r + z__2.r;
-                z__1.i = a[i__2].i + z__2.i; // , expr subst
-                a11.r = z__1.r;
-                a11.i = z__1.i; // , expr subst
-                da11 = (d__1 = a11.r, f2c_dabs(d__1)) + (d__2 = d_imag(&a11), f2c_dabs(d__2));
+                z__2.real = sgn * b[i__3].real;
+                z__2.imag = sgn * b[i__3].imag; // , expr subst
+                z__1.real = a[i__2].real + z__2.real;
+                z__1.imag = a[i__2].imag + z__2.imag; // , expr subst
+                a11.real = z__1.real;
+                a11.imag = z__1.imag; // , expr subst
+                da11 = (d__1 = a11.real, f2c_dabs(d__1)) + (d__2 = d_imag(&a11), f2c_dabs(d__2));
                 if(da11 <= smin)
                 {
-                    a11.r = smin;
-                    a11.i = 0.; // , expr subst
+                    a11.real = smin;
+                    a11.imag = 0.; // , expr subst
                     da11 = smin;
                     *info = 1;
                 }
-                db = (d__1 = vec.r, f2c_dabs(d__1)) + (d__2 = d_imag(&vec), f2c_dabs(d__2));
+                db = (d__1 = vec.real, f2c_dabs(d__1)) + (d__2 = d_imag(&vec), f2c_dabs(d__2));
                 if(da11 < 1. && db > 1.)
                 {
                     if(db > bignum * da11)
@@ -368,13 +368,13 @@ void aocl_lapack_ztrsyl(char *trana, char *tranb, aocl_int64_t *isgn, aocl_int64
                         scaloc = 1. / db;
                     }
                 }
-                z__3.r = scaloc;
-                z__3.i = 0.; // , expr subst
-                z__2.r = vec.r * z__3.r - vec.i * z__3.i;
-                z__2.i = vec.r * z__3.i + vec.i * z__3.r; // , expr subst
+                z__3.real = scaloc;
+                z__3.imag = 0.; // , expr subst
+                z__2.real = vec.real * z__3.real - vec.imag * z__3.imag;
+                z__2.imag = vec.real * z__3.imag + vec.imag * z__3.real; // , expr subst
                 zladiv_f2c_(&z__1, &z__2, &a11);
-                x11.r = z__1.r;
-                x11.i = z__1.i; // , expr subst
+                x11.real = z__1.real;
+                x11.imag = z__1.imag; // , expr subst
                 if(scaloc != 1.)
                 {
                     i__2 = *n;
@@ -386,8 +386,8 @@ void aocl_lapack_ztrsyl(char *trana, char *tranb, aocl_int64_t *isgn, aocl_int64
                     *scale *= scaloc;
                 }
                 i__2 = k + l * c_dim1;
-                c__[i__2].r = x11.r;
-                c__[i__2].i = x11.i; // , expr subst
+                c__[i__2].real = x11.real;
+                c__[i__2].imag = x11.imag; // , expr subst
                 /* L20: */
             }
             /* L30: */
@@ -411,39 +411,39 @@ void aocl_lapack_ztrsyl(char *trana, char *tranb, aocl_int64_t *isgn, aocl_int64
             {
                 i__3 = k - 1;
                 aocl_lapack_zdotc_f2c(&z__1, &i__3, &a[k * a_dim1 + 1], &c__1, &c__[l * c_dim1 + 1], &c__1);
-                suml.r = z__1.r;
-                suml.i = z__1.i; // , expr subst
+                suml.real = z__1.real;
+                suml.imag = z__1.imag; // , expr subst
                 i__3 = l - 1;
                 aocl_lapack_zdotu_f2c(&z__1, &i__3, &c__[k + c_dim1], ldc, &b[l * b_dim1 + 1], &c__1);
-                sumr.r = z__1.r;
-                sumr.i = z__1.i; // , expr subst
+                sumr.real = z__1.real;
+                sumr.imag = z__1.imag; // , expr subst
                 i__3 = k + l * c_dim1;
-                z__3.r = sgn * sumr.r;
-                z__3.i = sgn * sumr.i; // , expr subst
-                z__2.r = suml.r + z__3.r;
-                z__2.i = suml.i + z__3.i; // , expr subst
-                z__1.r = c__[i__3].r - z__2.r;
-                z__1.i = c__[i__3].i - z__2.i; // , expr subst
-                vec.r = z__1.r;
-                vec.i = z__1.i; // , expr subst
+                z__3.real = sgn * sumr.real;
+                z__3.imag = sgn * sumr.imag; // , expr subst
+                z__2.real = suml.real + z__3.real;
+                z__2.imag = suml.imag + z__3.imag; // , expr subst
+                z__1.real = c__[i__3].real - z__2.real;
+                z__1.imag = c__[i__3].imag - z__2.imag; // , expr subst
+                vec.real = z__1.real;
+                vec.imag = z__1.imag; // , expr subst
                 scaloc = 1.;
                 d_cnjg(&z__2, &a[k + k * a_dim1]);
                 i__3 = l + l * b_dim1;
-                z__3.r = sgn * b[i__3].r;
-                z__3.i = sgn * b[i__3].i; // , expr subst
-                z__1.r = z__2.r + z__3.r;
-                z__1.i = z__2.i + z__3.i; // , expr subst
-                a11.r = z__1.r;
-                a11.i = z__1.i; // , expr subst
-                da11 = (d__1 = a11.r, f2c_dabs(d__1)) + (d__2 = d_imag(&a11), f2c_dabs(d__2));
+                z__3.real = sgn * b[i__3].real;
+                z__3.imag = sgn * b[i__3].imag; // , expr subst
+                z__1.real = z__2.real + z__3.real;
+                z__1.imag = z__2.imag + z__3.imag; // , expr subst
+                a11.real = z__1.real;
+                a11.imag = z__1.imag; // , expr subst
+                da11 = (d__1 = a11.real, f2c_dabs(d__1)) + (d__2 = d_imag(&a11), f2c_dabs(d__2));
                 if(da11 <= smin)
                 {
-                    a11.r = smin;
-                    a11.i = 0.; // , expr subst
+                    a11.real = smin;
+                    a11.imag = 0.; // , expr subst
                     da11 = smin;
                     *info = 1;
                 }
-                db = (d__1 = vec.r, f2c_dabs(d__1)) + (d__2 = d_imag(&vec), f2c_dabs(d__2));
+                db = (d__1 = vec.real, f2c_dabs(d__1)) + (d__2 = d_imag(&vec), f2c_dabs(d__2));
                 if(da11 < 1. && db > 1.)
                 {
                     if(db > bignum * da11)
@@ -451,13 +451,13 @@ void aocl_lapack_ztrsyl(char *trana, char *tranb, aocl_int64_t *isgn, aocl_int64
                         scaloc = 1. / db;
                     }
                 }
-                z__3.r = scaloc;
-                z__3.i = 0.; // , expr subst
-                z__2.r = vec.r * z__3.r - vec.i * z__3.i;
-                z__2.i = vec.r * z__3.i + vec.i * z__3.r; // , expr subst
+                z__3.real = scaloc;
+                z__3.imag = 0.; // , expr subst
+                z__2.real = vec.real * z__3.real - vec.imag * z__3.imag;
+                z__2.imag = vec.real * z__3.imag + vec.imag * z__3.real; // , expr subst
                 zladiv_f2c_(&z__1, &z__2, &a11);
-                x11.r = z__1.r;
-                x11.i = z__1.i; // , expr subst
+                x11.real = z__1.real;
+                x11.imag = z__1.imag; // , expr subst
                 if(scaloc != 1.)
                 {
                     i__3 = *n;
@@ -469,8 +469,8 @@ void aocl_lapack_ztrsyl(char *trana, char *tranb, aocl_int64_t *isgn, aocl_int64
                     *scale *= scaloc;
                 }
                 i__3 = k + l * c_dim1;
-                c__[i__3].r = x11.r;
-                c__[i__3].i = x11.i; // , expr subst
+                c__[i__3].real = x11.real;
+                c__[i__3].imag = x11.imag; // , expr subst
                 /* L50: */
             }
             /* L60: */
@@ -496,8 +496,8 @@ void aocl_lapack_ztrsyl(char *trana, char *tranb, aocl_int64_t *isgn, aocl_int64
             {
                 i__2 = k - 1;
                 aocl_lapack_zdotc_f2c(&z__1, &i__2, &a[k * a_dim1 + 1], &c__1, &c__[l * c_dim1 + 1], &c__1);
-                suml.r = z__1.r;
-                suml.i = z__1.i; // , expr subst
+                suml.real = z__1.real;
+                suml.imag = z__1.imag; // , expr subst
                 i__2 = *n - l;
                 /* Computing MIN */
                 i__3 = l + 1;
@@ -505,37 +505,37 @@ void aocl_lapack_ztrsyl(char *trana, char *tranb, aocl_int64_t *isgn, aocl_int64
                 i__4 = l + 1;
                 aocl_lapack_zdotc_f2c(&z__1, &i__2, &c__[k + fla_min(i__3, *n) * c_dim1], ldc,
                            &b[l + fla_min(i__4, *n) * b_dim1], ldb);
-                sumr.r = z__1.r;
-                sumr.i = z__1.i; // , expr subst
+                sumr.real = z__1.real;
+                sumr.imag = z__1.imag; // , expr subst
                 i__2 = k + l * c_dim1;
                 d_cnjg(&z__4, &sumr);
-                z__3.r = sgn * z__4.r;
-                z__3.i = sgn * z__4.i; // , expr subst
-                z__2.r = suml.r + z__3.r;
-                z__2.i = suml.i + z__3.i; // , expr subst
-                z__1.r = c__[i__2].r - z__2.r;
-                z__1.i = c__[i__2].i - z__2.i; // , expr subst
-                vec.r = z__1.r;
-                vec.i = z__1.i; // , expr subst
+                z__3.real = sgn * z__4.real;
+                z__3.imag = sgn * z__4.imag; // , expr subst
+                z__2.real = suml.real + z__3.real;
+                z__2.imag = suml.imag + z__3.imag; // , expr subst
+                z__1.real = c__[i__2].real - z__2.real;
+                z__1.imag = c__[i__2].imag - z__2.imag; // , expr subst
+                vec.real = z__1.real;
+                vec.imag = z__1.imag; // , expr subst
                 scaloc = 1.;
                 i__2 = k + k * a_dim1;
                 i__3 = l + l * b_dim1;
-                z__3.r = sgn * b[i__3].r;
-                z__3.i = sgn * b[i__3].i; // , expr subst
-                z__2.r = a[i__2].r + z__3.r;
-                z__2.i = a[i__2].i + z__3.i; // , expr subst
+                z__3.real = sgn * b[i__3].real;
+                z__3.imag = sgn * b[i__3].imag; // , expr subst
+                z__2.real = a[i__2].real + z__3.real;
+                z__2.imag = a[i__2].imag + z__3.imag; // , expr subst
                 d_cnjg(&z__1, &z__2);
-                a11.r = z__1.r;
-                a11.i = z__1.i; // , expr subst
-                da11 = (d__1 = a11.r, f2c_dabs(d__1)) + (d__2 = d_imag(&a11), f2c_dabs(d__2));
+                a11.real = z__1.real;
+                a11.imag = z__1.imag; // , expr subst
+                da11 = (d__1 = a11.real, f2c_dabs(d__1)) + (d__2 = d_imag(&a11), f2c_dabs(d__2));
                 if(da11 <= smin)
                 {
-                    a11.r = smin;
-                    a11.i = 0.; // , expr subst
+                    a11.real = smin;
+                    a11.imag = 0.; // , expr subst
                     da11 = smin;
                     *info = 1;
                 }
-                db = (d__1 = vec.r, f2c_dabs(d__1)) + (d__2 = d_imag(&vec), f2c_dabs(d__2));
+                db = (d__1 = vec.real, f2c_dabs(d__1)) + (d__2 = d_imag(&vec), f2c_dabs(d__2));
                 if(da11 < 1. && db > 1.)
                 {
                     if(db > bignum * da11)
@@ -543,13 +543,13 @@ void aocl_lapack_ztrsyl(char *trana, char *tranb, aocl_int64_t *isgn, aocl_int64
                         scaloc = 1. / db;
                     }
                 }
-                z__3.r = scaloc;
-                z__3.i = 0.; // , expr subst
-                z__2.r = vec.r * z__3.r - vec.i * z__3.i;
-                z__2.i = vec.r * z__3.i + vec.i * z__3.r; // , expr subst
+                z__3.real = scaloc;
+                z__3.imag = 0.; // , expr subst
+                z__2.real = vec.real * z__3.real - vec.imag * z__3.imag;
+                z__2.imag = vec.real * z__3.imag + vec.imag * z__3.real; // , expr subst
                 zladiv_f2c_(&z__1, &z__2, &a11);
-                x11.r = z__1.r;
-                x11.i = z__1.i; // , expr subst
+                x11.real = z__1.real;
+                x11.imag = z__1.imag; // , expr subst
                 if(scaloc != 1.)
                 {
                     i__2 = *n;
@@ -561,8 +561,8 @@ void aocl_lapack_ztrsyl(char *trana, char *tranb, aocl_int64_t *isgn, aocl_int64
                     *scale *= scaloc;
                 }
                 i__2 = k + l * c_dim1;
-                c__[i__2].r = x11.r;
-                c__[i__2].i = x11.i; // , expr subst
+                c__[i__2].real = x11.real;
+                c__[i__2].imag = x11.imag; // , expr subst
                 /* L80: */
             }
             /* L90: */
@@ -589,8 +589,8 @@ void aocl_lapack_ztrsyl(char *trana, char *tranb, aocl_int64_t *isgn, aocl_int64
                 i__3 = k + 1;
                 aocl_lapack_zdotu_f2c(&z__1, &i__1, &a[k + fla_min(i__2, *m) * a_dim1], lda,
                            &c__[fla_min(i__3, *m) + l * c_dim1], &c__1);
-                suml.r = z__1.r;
-                suml.i = z__1.i; // , expr subst
+                suml.real = z__1.real;
+                suml.imag = z__1.imag; // , expr subst
                 i__1 = *n - l;
                 /* Computing MIN */
                 i__2 = l + 1;
@@ -598,36 +598,36 @@ void aocl_lapack_ztrsyl(char *trana, char *tranb, aocl_int64_t *isgn, aocl_int64
                 i__3 = l + 1;
                 aocl_lapack_zdotc_f2c(&z__1, &i__1, &c__[k + fla_min(i__2, *n) * c_dim1], ldc,
                            &b[l + fla_min(i__3, *n) * b_dim1], ldb);
-                sumr.r = z__1.r;
-                sumr.i = z__1.i; // , expr subst
+                sumr.real = z__1.real;
+                sumr.imag = z__1.imag; // , expr subst
                 i__1 = k + l * c_dim1;
                 d_cnjg(&z__4, &sumr);
-                z__3.r = sgn * z__4.r;
-                z__3.i = sgn * z__4.i; // , expr subst
-                z__2.r = suml.r + z__3.r;
-                z__2.i = suml.i + z__3.i; // , expr subst
-                z__1.r = c__[i__1].r - z__2.r;
-                z__1.i = c__[i__1].i - z__2.i; // , expr subst
-                vec.r = z__1.r;
-                vec.i = z__1.i; // , expr subst
+                z__3.real = sgn * z__4.real;
+                z__3.imag = sgn * z__4.imag; // , expr subst
+                z__2.real = suml.real + z__3.real;
+                z__2.imag = suml.imag + z__3.imag; // , expr subst
+                z__1.real = c__[i__1].real - z__2.real;
+                z__1.imag = c__[i__1].imag - z__2.imag; // , expr subst
+                vec.real = z__1.real;
+                vec.imag = z__1.imag; // , expr subst
                 scaloc = 1.;
                 i__1 = k + k * a_dim1;
                 d_cnjg(&z__3, &b[l + l * b_dim1]);
-                z__2.r = sgn * z__3.r;
-                z__2.i = sgn * z__3.i; // , expr subst
-                z__1.r = a[i__1].r + z__2.r;
-                z__1.i = a[i__1].i + z__2.i; // , expr subst
-                a11.r = z__1.r;
-                a11.i = z__1.i; // , expr subst
-                da11 = (d__1 = a11.r, f2c_dabs(d__1)) + (d__2 = d_imag(&a11), f2c_dabs(d__2));
+                z__2.real = sgn * z__3.real;
+                z__2.imag = sgn * z__3.imag; // , expr subst
+                z__1.real = a[i__1].real + z__2.real;
+                z__1.imag = a[i__1].imag + z__2.imag; // , expr subst
+                a11.real = z__1.real;
+                a11.imag = z__1.imag; // , expr subst
+                da11 = (d__1 = a11.real, f2c_dabs(d__1)) + (d__2 = d_imag(&a11), f2c_dabs(d__2));
                 if(da11 <= smin)
                 {
-                    a11.r = smin;
-                    a11.i = 0.; // , expr subst
+                    a11.real = smin;
+                    a11.imag = 0.; // , expr subst
                     da11 = smin;
                     *info = 1;
                 }
-                db = (d__1 = vec.r, f2c_dabs(d__1)) + (d__2 = d_imag(&vec), f2c_dabs(d__2));
+                db = (d__1 = vec.real, f2c_dabs(d__1)) + (d__2 = d_imag(&vec), f2c_dabs(d__2));
                 if(da11 < 1. && db > 1.)
                 {
                     if(db > bignum * da11)
@@ -635,13 +635,13 @@ void aocl_lapack_ztrsyl(char *trana, char *tranb, aocl_int64_t *isgn, aocl_int64
                         scaloc = 1. / db;
                     }
                 }
-                z__3.r = scaloc;
-                z__3.i = 0.; // , expr subst
-                z__2.r = vec.r * z__3.r - vec.i * z__3.i;
-                z__2.i = vec.r * z__3.i + vec.i * z__3.r; // , expr subst
+                z__3.real = scaloc;
+                z__3.imag = 0.; // , expr subst
+                z__2.real = vec.real * z__3.real - vec.imag * z__3.imag;
+                z__2.imag = vec.real * z__3.imag + vec.imag * z__3.real; // , expr subst
                 zladiv_f2c_(&z__1, &z__2, &a11);
-                x11.r = z__1.r;
-                x11.i = z__1.i; // , expr subst
+                x11.real = z__1.real;
+                x11.imag = z__1.imag; // , expr subst
                 if(scaloc != 1.)
                 {
                     i__1 = *n;
@@ -653,8 +653,8 @@ void aocl_lapack_ztrsyl(char *trana, char *tranb, aocl_int64_t *isgn, aocl_int64
                     *scale *= scaloc;
                 }
                 i__1 = k + l * c_dim1;
-                c__[i__1].r = x11.r;
-                c__[i__1].i = x11.i; // , expr subst
+                c__[i__1].real = x11.real;
+                c__[i__1].imag = x11.imag; // , expr subst
                 /* L110: */
             }
             /* L120: */

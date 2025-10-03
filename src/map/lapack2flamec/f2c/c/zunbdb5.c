@@ -280,11 +280,11 @@ void aocl_lapack_zunbdb5(aocl_int64_t *m1, aocl_int64_t *m2, aocl_int64_t *n, dc
         /* * xLASCL cannot be used because of the vector increments and */
         /* * the round-off error has a negligible impact on */
         /* orthogonalization. */
-        z__1.r = 1. / norm;
-        z__1.i = 0. / norm; // , expr subst
+        z__1.real = 1. / norm;
+        z__1.imag = 0. / norm; // , expr subst
         aocl_blas_zscal(m1, &z__1, &x1[1], incx1);
-        z__1.r = 1. / norm;
-        z__1.i = 0. / norm; // , expr subst
+        z__1.real = 1. / norm;
+        z__1.imag = 0. / norm; // , expr subst
         aocl_blas_zscal(m2, &z__1, &x2[1], incx2);
         aocl_lapack_zunbdb6(m1, m2, n, &x1[1], incx1, &x2[1], incx2, &q1[q1_offset], ldq1,
                             &q2[q2_offset], ldq2, &work[1], lwork, &childinfo);
@@ -304,18 +304,18 @@ void aocl_lapack_zunbdb5(aocl_int64_t *m1, aocl_int64_t *m2, aocl_int64_t *n, dc
         for(j = 1; j <= i__2; ++j)
         {
             i__3 = j;
-            x1[i__3].r = 0.;
-            x1[i__3].i = 0.; // , expr subst
+            x1[i__3].real = 0.;
+            x1[i__3].imag = 0.; // , expr subst
         }
         i__2 = i__;
-        x1[i__2].r = 1.;
-        x1[i__2].i = 0.; // , expr subst
+        x1[i__2].real = 1.;
+        x1[i__2].imag = 0.; // , expr subst
         i__2 = *m2;
         for(j = 1; j <= i__2; ++j)
         {
             i__3 = j;
-            x2[i__3].r = 0.;
-            x2[i__3].i = 0.; // , expr subst
+            x2[i__3].real = 0.;
+            x2[i__3].imag = 0.; // , expr subst
         }
         aocl_lapack_zunbdb6(m1, m2, n, &x1[1], incx1, &x2[1], incx2, &q1[q1_offset], ldq1,
                             &q2[q2_offset], ldq2, &work[1], lwork, &childinfo);
@@ -334,19 +334,19 @@ void aocl_lapack_zunbdb5(aocl_int64_t *m1, aocl_int64_t *m2, aocl_int64_t *n, dc
         for(j = 1; j <= i__2; ++j)
         {
             i__3 = j;
-            x1[i__3].r = 0.;
-            x1[i__3].i = 0.; // , expr subst
+            x1[i__3].real = 0.;
+            x1[i__3].imag = 0.; // , expr subst
         }
         i__2 = *m2;
         for(j = 1; j <= i__2; ++j)
         {
             i__3 = j;
-            x2[i__3].r = 0.;
-            x2[i__3].i = 0.; // , expr subst
+            x2[i__3].real = 0.;
+            x2[i__3].imag = 0.; // , expr subst
         }
         i__2 = i__;
-        x2[i__2].r = 1.;
-        x2[i__2].i = 0.; // , expr subst
+        x2[i__2].real = 1.;
+        x2[i__2].imag = 0.; // , expr subst
         aocl_lapack_zunbdb6(m1, m2, n, &x1[1], incx1, &x2[1], incx2, &q1[q1_offset], ldq1,
                             &q2[q2_offset], ldq2, &work[1], lwork, &childinfo);
         if(aocl_blas_dznrm2(m1, &x1[1], incx1) != 0. || aocl_blas_dznrm2(m2, &x2[1], incx2) != 0.)

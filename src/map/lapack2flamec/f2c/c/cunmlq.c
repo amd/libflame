@@ -345,8 +345,8 @@ void fla_cunmlq(char *side, char *trans, aocl_int64_t *m, aocl_int64_t *n, aocl_
             nb = fla_min(i__1, i__2);
             lwkopt = fla_max(1, nw) * nb + 4160;
         }
-        work[1].r = aocl_lapack_sroundup_lwork(&lwkopt);
-        work[1].i = 0.f; // , expr subst
+        work[1].real = aocl_lapack_sroundup_lwork(&lwkopt);
+        work[1].imag = 0.f; // , expr subst
     }
     if(*info != 0)
     {
@@ -491,8 +491,8 @@ void fla_cunmlq(char *side, char *trans, aocl_int64_t *m, aocl_int64_t *n, aocl_
             }
         }
     }
-    work[1].r = aocl_lapack_sroundup_lwork(&lwkopt);
-    work[1].i = 0.f; // , expr subst
+    work[1].real = aocl_lapack_sroundup_lwork(&lwkopt);
+    work[1].imag = 0.f; // , expr subst
     return;
     /* End of CUNMLQ */
 }

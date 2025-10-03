@@ -4,7 +4,7 @@
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
  /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static scomplex c_b1 = {{0.f}, {0.f}};
+static scomplex c_b1 = {0.f, 0.f};
 static aocl_int64_t c__9 = 9;
 static aocl_int64_t c__0 = 0;
 static aocl_int64_t c__6 = 6;
@@ -518,8 +518,8 @@ void aocl_lapack_cgelsd(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *nrhs, sc
         }
         minwrk = fla_min(minwrk, maxwrk);
         r__1 = aocl_lapack_sroundup_lwork(&maxwrk);
-        work[1].r = r__1;
-        work[1].i = 0.f; // , expr subst
+        work[1].real = r__1;
+        work[1].imag = 0.f; // , expr subst
         iwork[1] = (aocl_int_t)(liwork);
         rwork[1] = (real)lrwork;
         if(*lwork < minwrk && !lquery)
@@ -778,8 +778,8 @@ void aocl_lapack_cgelsd(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *nrhs, sc
     }
 L10:
     r__1 = aocl_lapack_sroundup_lwork(&maxwrk);
-    work[1].r = r__1;
-    work[1].i = 0.f; // , expr subst
+    work[1].real = r__1;
+    work[1].imag = 0.f; // , expr subst
     iwork[1] = (aocl_int_t)(liwork);
     rwork[1] = (real)lrwork;
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);

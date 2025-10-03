@@ -222,8 +222,8 @@ void aocl_lapack_cgeqrfp(aocl_int64_t *m, aocl_int64_t *n, scomplex *a, aocl_int
     nb = aocl_lapack_ilaenv(&c__1, "CGEQRF", " ", m, n, &c_n1, &c_n1);
     lwkopt = *n * nb;
     r__1 = aocl_lapack_sroundup_lwork(&lwkopt);
-    work[1].r = r__1;
-    work[1].i = 0.f; // , expr subst
+    work[1].real = r__1;
+    work[1].imag = 0.f; // , expr subst
     lquery = *lwork == -1;
     if(*m < 0)
     {
@@ -257,8 +257,8 @@ void aocl_lapack_cgeqrfp(aocl_int64_t *m, aocl_int64_t *n, scomplex *a, aocl_int
     k = fla_min(*m, *n);
     if(k == 0)
     {
-        work[1].r = 1.f;
-        work[1].i = 0.f; // , expr subst
+        work[1].real = 1.f;
+        work[1].imag = 0.f; // , expr subst
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
@@ -333,8 +333,8 @@ void aocl_lapack_cgeqrfp(aocl_int64_t *m, aocl_int64_t *n, scomplex *a, aocl_int
         aocl_lapack_cgeqr2p(&i__2, &i__1, &a[i__ + i__ * a_dim1], lda, &tau[i__], &work[1], &iinfo);
     }
     r__1 = aocl_lapack_sroundup_lwork(&iws);
-    work[1].r = r__1;
-    work[1].i = 0.f; // , expr subst
+    work[1].real = r__1;
+    work[1].imag = 0.f; // , expr subst
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
     return;
     /* End of CGEQRFP */

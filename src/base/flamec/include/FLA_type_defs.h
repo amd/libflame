@@ -58,16 +58,8 @@ typedef double doublereal;
 #define _DEFINED_SCOMPLEX
 typedef struct scomplex_
 {
-  union
-  {
-    float real;
-    float r;
-  };
-  union
-  {
-    float imag;
-    float i;
-  };
+  float real;
+  float imag;
 } scomplex;
 #endif
 
@@ -75,16 +67,8 @@ typedef struct scomplex_
 #define _DEFINED_DCOMPLEX
 typedef struct dcomplex_
 {
-  union
-  {
-    double real;
-    double r;
-  };
-  union
-  {
-    double imag;
-    double i;
-  };
+  double real;
+  double imag;
 } dcomplex;
 #endif
 

@@ -4,8 +4,8 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static dcomplex c_b1 = {{0.}, {0.}};
-static dcomplex c_b2 = {{1.}, {0.}};
+static dcomplex c_b1 = {0., 0.};
+static dcomplex c_b2 = {1., 0.};
 static aocl_int64_t c__1 = 1;
 /* > \brief \b ZHBTRD */
 /* =========== DOCUMENTATION =========== */
@@ -516,11 +516,11 @@ void aocl_lapack_zhbtrd(char *vect, char *uplo, aocl_int64_t *n, aocl_int64_t *k
                         i__4 = j + *kd;
                         i__5 = j;
                         i__6 = (j + *kd) * ab_dim1 + 1;
-                        z__1.r = work[i__5].r * ab[i__6].r - work[i__5].i * ab[i__6].i;
-                        z__1.i
-                            = work[i__5].r * ab[i__6].i + work[i__5].i * ab[i__6].r; // , expr subst
-                        work[i__4].r = z__1.r;
-                        work[i__4].i = z__1.i; // , expr subst
+                        z__1.real = work[i__5].real * ab[i__6].real - work[i__5].imag * ab[i__6].imag;
+                        z__1.imag
+                            = work[i__5].real * ab[i__6].imag + work[i__5].imag * ab[i__6].real; // , expr subst
+                        work[i__4].real = z__1.real;
+                        work[i__4].imag = z__1.imag; // , expr subst
                         i__4 = (j + *kd) * ab_dim1 + 1;
                         i__5 = j;
                         i__6 = (j + *kd) * ab_dim1 + 1;
@@ -542,8 +542,8 @@ void aocl_lapack_zhbtrd(char *vect, char *uplo, aocl_int64_t *n, aocl_int64_t *k
             for(i__ = 1; i__ <= i__1; ++i__)
             {
                 i__3 = *kd + (i__ + 1) * ab_dim1;
-                t.r = ab[i__3].r;
-                t.i = ab[i__3].i; // , expr subst
+                t.real = ab[i__3].real;
+                t.imag = ab[i__3].imag; // , expr subst
                 abst = z_abs(&t);
                 i__3 = *kd + (i__ + 1) * ab_dim1;
                 ab[i__3].real = abst;
@@ -565,10 +565,10 @@ void aocl_lapack_zhbtrd(char *vect, char *uplo, aocl_int64_t *n, aocl_int64_t *k
                 {
                     i__3 = *kd + (i__ + 2) * ab_dim1;
                     i__2 = *kd + (i__ + 2) * ab_dim1;
-                    z__1.r = ab[i__2].r * t.r - ab[i__2].i * t.i;
-                    z__1.i = ab[i__2].r * t.i + ab[i__2].i * t.r; // , expr subst
-                    ab[i__3].r = z__1.r;
-                    ab[i__3].i = z__1.i; // , expr subst
+                    z__1.real = ab[i__2].real * t.real - ab[i__2].imag * t.imag;
+                    z__1.imag = ab[i__2].real * t.imag + ab[i__2].imag * t.real; // , expr subst
+                    ab[i__3].real = z__1.real;
+                    ab[i__3].imag = z__1.imag; // , expr subst
                 }
                 if(wantq)
                 {
@@ -806,11 +806,11 @@ void aocl_lapack_zhbtrd(char *vect, char *uplo, aocl_int64_t *n, aocl_int64_t *k
                         i__4 = j + *kd;
                         i__5 = j;
                         i__6 = kd1 + j * ab_dim1;
-                        z__1.r = work[i__5].r * ab[i__6].r - work[i__5].i * ab[i__6].i;
-                        z__1.i
-                            = work[i__5].r * ab[i__6].i + work[i__5].i * ab[i__6].r; // , expr subst
-                        work[i__4].r = z__1.r;
-                        work[i__4].i = z__1.i; // , expr subst
+                        z__1.real = work[i__5].real * ab[i__6].real - work[i__5].imag * ab[i__6].imag;
+                        z__1.imag
+                            = work[i__5].real * ab[i__6].imag + work[i__5].imag * ab[i__6].real; // , expr subst
+                        work[i__4].real = z__1.real;
+                        work[i__4].imag = z__1.imag; // , expr subst
                         i__4 = kd1 + j * ab_dim1;
                         i__5 = j;
                         i__6 = kd1 + j * ab_dim1;
@@ -832,8 +832,8 @@ void aocl_lapack_zhbtrd(char *vect, char *uplo, aocl_int64_t *n, aocl_int64_t *k
             for(i__ = 1; i__ <= i__1; ++i__)
             {
                 i__2 = i__ * ab_dim1 + 2;
-                t.r = ab[i__2].r;
-                t.i = ab[i__2].i; // , expr subst
+                t.real = ab[i__2].real;
+                t.imag = ab[i__2].imag; // , expr subst
                 abst = z_abs(&t);
                 i__2 = i__ * ab_dim1 + 2;
                 ab[i__2].real = abst;
@@ -855,10 +855,10 @@ void aocl_lapack_zhbtrd(char *vect, char *uplo, aocl_int64_t *n, aocl_int64_t *k
                 {
                     i__2 = (i__ + 1) * ab_dim1 + 2;
                     i__3 = (i__ + 1) * ab_dim1 + 2;
-                    z__1.r = ab[i__3].r * t.r - ab[i__3].i * t.i;
-                    z__1.i = ab[i__3].r * t.i + ab[i__3].i * t.r; // , expr subst
-                    ab[i__2].r = z__1.r;
-                    ab[i__2].i = z__1.i; // , expr subst
+                    z__1.real = ab[i__3].real * t.real - ab[i__3].imag * t.imag;
+                    z__1.imag = ab[i__3].real * t.imag + ab[i__3].imag * t.real; // , expr subst
+                    ab[i__2].real = z__1.real;
+                    ab[i__2].imag = z__1.imag; // , expr subst
                 }
                 if(wantq)
                 {

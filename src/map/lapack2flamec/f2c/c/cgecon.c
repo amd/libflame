@@ -304,7 +304,7 @@ L10:
         {
             ix = aocl_blas_icamax(n, &work[1], &c__1);
             i__1 = ix;
-            if(scale < ((r__1 = work[i__1].r, f2c_abs(r__1))
+            if(scale < ((r__1 = work[i__1].real, f2c_abs(r__1))
                         + (r__2 = r_imag(&work[ix]), f2c_abs(r__2)))
                            * smlnum
                || scale == 0.f)

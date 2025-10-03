@@ -6,9 +6,9 @@
 #include "FLA_f2c.h" /* Table of constant values */
 static aocl_int64_t c__1 = 1;
 static aocl_int64_t c_n1 = -1;
-static dcomplex c_b14 = {{1.}, {0.}};
-static dcomplex c_b15 = {{0.}, {0.}};
-static dcomplex c_b23 = {{-1.}, {-0.}};
+static dcomplex c_b14 = {1., 0.};
+static dcomplex c_b15 = {0., 0.};
+static dcomplex c_b23 = {-1., -0.};
 /* > \brief \b ZHETRF_AA_2STAGE */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -275,14 +275,14 @@ void aocl_lapack_zhetrf_aa_2stage(char *uplo, aocl_int64_t *n, dcomplex *a, aocl
         if(tquery)
         {
             i__1 = (nb * 3 + 1) * *n;
-            tb[1].r = (doublereal)i__1;
-            tb[1].i = 0.; // , expr subst
+            tb[1].real = (doublereal)i__1;
+            tb[1].imag = 0.; // , expr subst
         }
         if(wquery)
         {
             i__1 = *n * nb;
-            work[1].r = (doublereal)i__1;
-            work[1].i = 0.; // , expr subst
+            work[1].real = (doublereal)i__1;
+            work[1].imag = 0.; // , expr subst
         }
     }
     if(tquery || wquery)
@@ -317,8 +317,8 @@ void aocl_lapack_zhetrf_aa_2stage(char *uplo, aocl_int64_t *n, dcomplex *a, aocl
         ipiv[j] = (aocl_int_t)(j);
     }
     /* Save NB */
-    tb[1].r = (doublereal)nb;
-    tb[1].i = 0.; // , expr subst
+    tb[1].real = (doublereal)nb;
+    tb[1].imag = 0.; // , expr subst
     if(upper)
     {
         /* ..................................................... */
@@ -404,16 +404,16 @@ void aocl_lapack_zhetrf_aa_2stage(char *uplo, aocl_int64_t *n, dcomplex *a, aocl
             {
                 i__3 = td + 1 + (j * nb + i__ - 1) * ldtb;
                 i__4 = td + 1 + (j * nb + i__ - 1) * ldtb;
-                d__1 = tb[i__4].r;
-                tb[i__3].r = d__1;
-                tb[i__3].i = 0.; // , expr subst
+                d__1 = tb[i__4].real;
+                tb[i__3].real = d__1;
+                tb[i__3].imag = 0.; // , expr subst
                 i__3 = kb;
                 for(k = i__ + 1; k <= i__3; ++k)
                 {
                     i__4 = td + (k - i__) + 1 + (j * nb + i__ - 1) * ldtb;
                     d_cnjg(&z__1, &tb[td - (k - (i__ + 1)) + (j * nb + k - 1) * ldtb]);
-                    tb[i__4].r = z__1.r;
-                    tb[i__4].i = z__1.i; // , expr subst
+                    tb[i__4].real = z__1.real;
+                    tb[i__4].imag = z__1.imag; // , expr subst
                 }
             }
             if(j < nt - 1)
@@ -498,8 +498,8 @@ void aocl_lapack_zhetrf_aa_2stage(char *uplo, aocl_int64_t *n, dcomplex *a, aocl
                     {
                         i__4 = td - nb + k - i__ + 1 + (j * nb + nb + i__ - 1) * ldtb;
                         d_cnjg(&z__1, &tb[td + nb + i__ - k + 1 + (j * nb + k - 1) * ldtb]);
-                        tb[i__4].r = z__1.r;
-                        tb[i__4].i = z__1.i; // , expr subst
+                        tb[i__4].real = z__1.real;
+                        tb[i__4].imag = z__1.imag; // , expr subst
                     }
                 }
                 aocl_lapack_zlaset("Lower", &kb, &nb, &c_b15, &c_b14,
@@ -538,15 +538,15 @@ void aocl_lapack_zhetrf_aa_2stage(char *uplo, aocl_int64_t *n, dcomplex *a, aocl
                         }
                         /* > Swap A(I1, I1) with A(I2, I2) */
                         i__3 = i1 + i1 * a_dim1;
-                        piv.r = a[i__3].r;
-                        piv.i = a[i__3].i; // , expr subst
+                        piv.real = a[i__3].real;
+                        piv.imag = a[i__3].imag; // , expr subst
                         i__3 = i1 + i1 * a_dim1;
                         i__4 = i2 + i2 * a_dim1;
-                        a[i__3].r = a[i__4].r;
-                        a[i__3].i = a[i__4].i; // , expr subst
+                        a[i__3].real = a[i__4].real;
+                        a[i__3].imag = a[i__4].imag; // , expr subst
                         i__3 = i2 + i2 * a_dim1;
-                        a[i__3].r = piv.r;
-                        a[i__3].i = piv.i; // , expr subst
+                        a[i__3].real = piv.real;
+                        a[i__3].imag = piv.imag; // , expr subst
                         /* > Apply pivots to previous columns of L */
                         if(j > 0)
                         {
@@ -644,16 +644,16 @@ void aocl_lapack_zhetrf_aa_2stage(char *uplo, aocl_int64_t *n, dcomplex *a, aocl
             {
                 i__3 = td + 1 + (j * nb + i__ - 1) * ldtb;
                 i__4 = td + 1 + (j * nb + i__ - 1) * ldtb;
-                d__1 = tb[i__4].r;
-                tb[i__3].r = d__1;
-                tb[i__3].i = 0.; // , expr subst
+                d__1 = tb[i__4].real;
+                tb[i__3].real = d__1;
+                tb[i__3].imag = 0.; // , expr subst
                 i__3 = kb;
                 for(k = i__ + 1; k <= i__3; ++k)
                 {
                     i__4 = td - (k - (i__ + 1)) + (j * nb + k - 1) * ldtb;
                     d_cnjg(&z__1, &tb[td + (k - i__) + 1 + (j * nb + i__ - 1) * ldtb]);
-                    tb[i__4].r = z__1.r;
-                    tb[i__4].i = z__1.i; // , expr subst
+                    tb[i__4].real = z__1.real;
+                    tb[i__4].imag = z__1.imag; // , expr subst
                 }
             }
             if(j < nt - 1)
@@ -720,8 +720,8 @@ void aocl_lapack_zhetrf_aa_2stage(char *uplo, aocl_int64_t *n, dcomplex *a, aocl
                     {
                         i__4 = td - nb + k - i__ + 1 + (j * nb + nb + i__ - 1) * ldtb;
                         d_cnjg(&z__1, &tb[td + nb + i__ - k + 1 + (j * nb + k - 1) * ldtb]);
-                        tb[i__4].r = z__1.r;
-                        tb[i__4].i = z__1.i; // , expr subst
+                        tb[i__4].real = z__1.real;
+                        tb[i__4].imag = z__1.imag; // , expr subst
                     }
                 }
                 aocl_lapack_zlaset("Upper", &kb, &nb, &c_b15, &c_b14,
@@ -760,15 +760,15 @@ void aocl_lapack_zhetrf_aa_2stage(char *uplo, aocl_int64_t *n, dcomplex *a, aocl
                         }
                         /* > Swap A(I1, I1) with A(I2, I2) */
                         i__3 = i1 + i1 * a_dim1;
-                        piv.r = a[i__3].r;
-                        piv.i = a[i__3].i; // , expr subst
+                        piv.real = a[i__3].real;
+                        piv.imag = a[i__3].imag; // , expr subst
                         i__3 = i1 + i1 * a_dim1;
                         i__4 = i2 + i2 * a_dim1;
-                        a[i__3].r = a[i__4].r;
-                        a[i__3].i = a[i__4].i; // , expr subst
+                        a[i__3].real = a[i__4].real;
+                        a[i__3].imag = a[i__4].imag; // , expr subst
                         i__3 = i2 + i2 * a_dim1;
-                        a[i__3].r = piv.r;
-                        a[i__3].i = piv.i; // , expr subst
+                        a[i__3].real = piv.real;
+                        a[i__3].imag = piv.imag; // , expr subst
                         /* > Apply pivots to previous columns of L */
                         if(j > 0)
                         {

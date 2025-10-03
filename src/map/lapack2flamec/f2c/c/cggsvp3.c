@@ -4,8 +4,8 @@
  -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for
  libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static scomplex c_b1 = {{0.f}, {0.f}};
-static scomplex c_b2 = {{1.f}, {0.f}};
+static scomplex c_b1 = {0.f, 0.f};
+static scomplex c_b2 = {1.f, 0.f};
 static aocl_int64_t c_n1 = -1;
 /* > \brief \b CGGSVP3 */
 /* =========== DOCUMENTATION =========== */
@@ -459,7 +459,7 @@ void aocl_lapack_cggsvp3(char *jobu, char *jobv, char *jobq, aocl_int64_t *m, ao
     {
         aocl_lapack_cgeqp3(p, n, &b[b_offset], ldb, &iwork[1], &tau[1], &work[1], &c_n1, &rwork[1],
                            info);
-        lwkopt = (integer)work[1].r;
+        lwkopt = (integer)work[1].real;
         if(wantv)
         {
             lwkopt = fla_max(lwkopt, *p);
@@ -477,13 +477,13 @@ void aocl_lapack_cggsvp3(char *jobu, char *jobv, char *jobq, aocl_int64_t *m, ao
                            info);
         /* Computing MAX */
         i__1 = lwkopt;
-        i__2 = (integer)work[1].r; // , expr subst
+        i__2 = (integer)work[1].real; // , expr subst
         lwkopt = fla_max(i__1, i__2);
         lwkopt = fla_max(1, lwkopt);
-        q__1.r = (real)lwkopt;
-        q__1.i = 0.f; // , expr subst
-        work[1].r = q__1.r;
-        work[1].i = q__1.i; // , expr subst
+        q__1.real = (real)lwkopt;
+        q__1.imag = 0.f; // , expr subst
+        work[1].real = q__1.real;
+        work[1].imag = q__1.imag; // , expr subst
     }
     if(*info != 0)
     {
@@ -540,8 +540,8 @@ void aocl_lapack_cggsvp3(char *jobu, char *jobv, char *jobq, aocl_int64_t *m, ao
         for(i__ = j + 1; i__ <= i__2; ++i__)
         {
             i__3 = i__ + j * b_dim1;
-            b[i__3].r = 0.f;
-            b[i__3].i = 0.f; // , expr subst
+            b[i__3].real = 0.f;
+            b[i__3].imag = 0.f; // , expr subst
             /* L30: */
         }
         /* L40: */
@@ -580,8 +580,8 @@ void aocl_lapack_cggsvp3(char *jobu, char *jobv, char *jobq, aocl_int64_t *m, ao
             for(i__ = j - *n + *l + 1; i__ <= i__2; ++i__)
             {
                 i__3 = i__ + j * b_dim1;
-                b[i__3].r = 0.f;
-                b[i__3].i = 0.f; // , expr subst
+                b[i__3].real = 0.f;
+                b[i__3].imag = 0.f; // , expr subst
                 /* L50: */
             }
             /* L60: */
@@ -653,8 +653,8 @@ void aocl_lapack_cggsvp3(char *jobu, char *jobv, char *jobq, aocl_int64_t *m, ao
         for(i__ = j + 1; i__ <= i__2; ++i__)
         {
             i__3 = i__ + j * a_dim1;
-            a[i__3].r = 0.f;
-            a[i__3].i = 0.f; // , expr subst
+            a[i__3].real = 0.f;
+            a[i__3].imag = 0.f; // , expr subst
             /* L90: */
         }
         /* L100: */
@@ -687,8 +687,8 @@ void aocl_lapack_cggsvp3(char *jobu, char *jobv, char *jobq, aocl_int64_t *m, ao
             for(i__ = j - *n + *l + *k + 1; i__ <= i__2; ++i__)
             {
                 i__3 = i__ + j * a_dim1;
-                a[i__3].r = 0.f;
-                a[i__3].i = 0.f; // , expr subst
+                a[i__3].real = 0.f;
+                a[i__3].imag = 0.f; // , expr subst
                 /* L110: */
             }
             /* L120: */
@@ -719,17 +719,17 @@ void aocl_lapack_cggsvp3(char *jobu, char *jobv, char *jobq, aocl_int64_t *m, ao
             for(i__ = j - *n + *k + *l + 1; i__ <= i__2; ++i__)
             {
                 i__3 = i__ + j * a_dim1;
-                a[i__3].r = 0.f;
-                a[i__3].i = 0.f; // , expr subst
+                a[i__3].real = 0.f;
+                a[i__3].imag = 0.f; // , expr subst
                 /* L130: */
             }
             /* L140: */
         }
     }
-    q__1.r = (real)lwkopt;
-    q__1.i = 0.f; // , expr subst
-    work[1].r = q__1.r;
-    work[1].i = q__1.i; // , expr subst
+    q__1.real = (real)lwkopt;
+    q__1.imag = 0.f; // , expr subst
+    work[1].real = q__1.real;
+    work[1].imag = q__1.imag; // , expr subst
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
     return;
     /* End of CGGSVP3 */

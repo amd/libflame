@@ -4,7 +4,7 @@
  -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for
  libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static dcomplex c_b1 = {{1.}, {0.}};
+static dcomplex c_b1 = {1., 0.};
 static aocl_int64_t c__1 = 1;
 /* > \brief \b ZUNHR_COL */
 /* =========== DOCUMENTATION =========== */
@@ -430,11 +430,11 @@ void aocl_lapack_zunhr_col(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *nb, d
         for(j = jb; j <= i__3; ++j)
         {
             i__4 = j;
-            if(d__[i__4].r == 1. && d__[i__4].i == 0.)
+            if(d__[i__4].real == 1. && d__[i__4].imag == 0.)
             {
                 i__4 = j - jbtemp1;
-                z__1.r = -1.;
-                z__1.i = -0.; // , expr subst
+                z__1.real = -1.;
+                z__1.imag = -0.; // , expr subst
                 aocl_blas_zscal(&i__4, &z__1, &t[j * t_dim1 + 1], &c__1);
             }
         }
@@ -475,8 +475,8 @@ void aocl_lapack_zunhr_col(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *nb, d
             for(i__ = j - jbtemp2; i__ <= i__4; ++i__)
             {
                 i__5 = i__ + j * t_dim1;
-                t[i__5].r = 0.;
-                t[i__5].i = 0.; // , expr subst
+                t[i__5].real = 0.;
+                t[i__5].imag = 0.; // , expr subst
             }
         }
         /* (2-3b) Perform the triangular solve. */

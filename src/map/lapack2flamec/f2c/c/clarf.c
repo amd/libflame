@@ -4,8 +4,8 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static scomplex c_b1 = {{1.f}, {0.f}};
-static scomplex c_b2 = {{0.f}, {0.f}};
+static scomplex c_b1 = {1.f, 0.f};
+static scomplex c_b2 = {0.f, 0.f};
 static aocl_int64_t c__1 = 1;
 /* > \brief \b CLARF applies an elementary reflector to a general rectangular matrix. */
 /* =========== DOCUMENTATION =========== */
@@ -194,7 +194,7 @@ void aocl_lapack_clarf(char *side, aocl_int64_t *m, aocl_int64_t *n, scomplex *v
     applyleft = lsame_(side, "L", 1, 1);
     lastv = 0;
     lastc = 0;
-    if(tau->r != 0.f || tau->i != 0.f)
+    if(tau->real != 0.f || tau->imag != 0.f)
     {
         /* Set up variables for scanning V. LASTV begins pointing to the end */
         /* of V. */
@@ -219,7 +219,7 @@ void aocl_lapack_clarf(char *side, aocl_int64_t *m, aocl_int64_t *n, scomplex *v
         {
             /* while(complicated condition) */
             i__1 = i__;
-            if(!(lastv > 0 && (v[i__1].r == 0.f && v[i__1].i == 0.f)))
+            if(!(lastv > 0 && (v[i__1].real == 0.f && v[i__1].imag == 0.f)))
                 break;
             --lastv;
             i__ -= *incv;
@@ -247,8 +247,8 @@ void aocl_lapack_clarf(char *side, aocl_int64_t *m, aocl_int64_t *n, scomplex *v
             aocl_blas_cgemv("Conjugate transpose", &lastv, &lastc, &c_b1, &c__[c_offset], ldc,
                             &v[1], incv, &c_b2, &work[1], &c__1);
             /* C(1:lastv,1:lastc) := C(...) - v(1:lastv,1) * w(1:lastc,1)**H */
-            q__1.r = -tau->r;
-            q__1.i = -tau->i; // , expr subst
+            q__1.real = -tau->real;
+            q__1.imag = -tau->imag; // , expr subst
             aocl_blas_cgerc(&lastv, &lastc, &q__1, &v[1], incv, &work[1], &c__1, &c__[c_offset],
                             ldc);
         }
@@ -262,8 +262,8 @@ void aocl_lapack_clarf(char *side, aocl_int64_t *m, aocl_int64_t *n, scomplex *v
             aocl_blas_cgemv("No transpose", &lastc, &lastv, &c_b1, &c__[c_offset], ldc, &v[1], incv,
                             &c_b2, &work[1], &c__1);
             /* C(1:lastc,1:lastv) := C(...) - w(1:lastc,1) * v(1:lastv,1)**H */
-            q__1.r = -tau->r;
-            q__1.i = -tau->i; // , expr subst
+            q__1.real = -tau->real;
+            q__1.imag = -tau->imag; // , expr subst
             aocl_blas_cgerc(&lastc, &lastv, &q__1, &work[1], &c__1, &v[1], incv, &c__[c_offset],
                             ldc);
         }

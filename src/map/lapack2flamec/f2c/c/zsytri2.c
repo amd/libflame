@@ -225,8 +225,8 @@ void aocl_lapack_zsytri2(char *uplo, aocl_int64_t *n, dcomplex *a, aocl_int64_t 
     }
     else if(lquery)
     {
-        work[1].r = (doublereal)minsize;
-        work[1].i = 0.; // , expr subst
+        work[1].real = (doublereal)minsize;
+        work[1].imag = 0.; // , expr subst
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }

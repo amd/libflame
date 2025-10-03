@@ -194,8 +194,8 @@ void aocl_lapack_zlaic1(aocl_int64_t *job, aocl_int64_t *j, dcomplex *x, doubler
     /* Function Body */
     eps = dlamch_("Epsilon");
     aocl_lapack_zdotc_f2c(&z__1, j, &x[1], &c__1, &w[1], &c__1);
-    alpha.r = z__1.r;
-    alpha.i = z__1.i; // , expr subst
+    alpha.real = z__1.real;
+    alpha.imag = z__1.imag; // , expr subst
     absalp = z_abs(&alpha);
     absgam = z_abs(gamma);
     absest = f2c_dabs(*sest);
@@ -243,8 +243,8 @@ void aocl_lapack_zlaic1(aocl_int64_t *job, aocl_int64_t *j, dcomplex *x, doubler
         }
         else if(absgam <= eps * absest)
         {
-            s->r = 1., s->i = 0.;
-            c__->r = 0., c__->i = 0.;
+            s->real = 1., s->imag = 0.;
+            c__->real = 0., c__->imag = 0.;
             tmp = fla_max(absest, absalp);
             s1 = absest / tmp;
             s2 = absalp / tmp;
@@ -317,7 +317,7 @@ void aocl_lapack_zlaic1(aocl_int64_t *job, aocl_int64_t *j, dcomplex *x, doubler
             zeta2 = absgam / absest;
             b = (1. - zeta1 * zeta1 - zeta2 * zeta2) * .5;
             d__1 = zeta1 * zeta1;
-            c__->r = d__1, c__->i = 0.;
+            c__->real = d__1, c__->imag = 0.;
             if(b > 0.)
             {
                 d__1 = b * b;
@@ -406,12 +406,12 @@ void aocl_lapack_zlaic1(aocl_int64_t *job, aocl_int64_t *j, dcomplex *x, doubler
             d__1 = z_abs(&sine);
             d__2 = z_abs(&cosine); // , expr subst
             s1 = fla_max(d__1, d__2);
-            z__1.r = sine.r / s1;
-            z__1.i = sine.i / s1; // , expr subst
-            s->r = z__1.r, s->i = z__1.i;
-            z__1.r = cosine.r / s1;
-            z__1.i = cosine.i / s1; // , expr subst
-            c__->r = z__1.r, c__->i = z__1.i;
+            z__1.real = sine.real / s1;
+            z__1.imag = sine.imag / s1; // , expr subst
+            s->real = z__1.real, s->imag = z__1.imag;
+            z__1.real = cosine.real / s1;
+            z__1.imag = cosine.imag / s1; // , expr subst
+            c__->real = z__1.real, c__->imag = z__1.imag;
             d_cnjg(&z__4, s);
             z__3.real = s->real * z__4.real - s->imag * z__4.imag;
             z__3.imag = s->real * z__4.imag + s->imag * z__4.real; // , expr subst
@@ -421,13 +421,13 @@ void aocl_lapack_zlaic1(aocl_int64_t *job, aocl_int64_t *j, dcomplex *x, doubler
             z__2.real = z__3.real + z__5.real;
             z__2.imag = z__3.imag + z__5.imag; // , expr subst
             z_sqrt(&z__1, &z__2);
-            tmp = z__1.r;
-            z__1.r = s->r / tmp;
-            z__1.i = s->i / tmp; // , expr subst
-            s->r = z__1.r, s->i = z__1.i;
-            z__1.r = c__->r / tmp;
-            z__1.i = c__->i / tmp; // , expr subst
-            c__->r = z__1.r, c__->i = z__1.i;
+            tmp = z__1.real;
+            z__1.real = s->real / tmp;
+            z__1.imag = s->imag / tmp; // , expr subst
+            s->real = z__1.real, s->imag = z__1.imag;
+            z__1.real = c__->real / tmp;
+            z__1.imag = c__->imag / tmp; // , expr subst
+            c__->real = z__1.real, c__->imag = z__1.imag;
             AOCL_DTL_TRACE_LOG_EXIT
             return;
         }
@@ -523,14 +523,14 @@ void aocl_lapack_zlaic1(aocl_int64_t *job, aocl_int64_t *j, dcomplex *x, doubler
                 d__1 = zeta2 * zeta2;
                 c__->real = d__1, c__->imag = 0.;
                 d__2 = b * b;
-                z__2.r = d__2 - c__->r;
-                z__2.i = -c__->i; // , expr subst
+                z__2.real = d__2 - c__->real;
+                z__2.imag = -c__->imag; // , expr subst
                 d__1 = b + sqrt(z_abs(&z__2));
-                z__1.r = c__->r / d__1;
-                z__1.i = c__->i / d__1; // , expr subst
-                t = z__1.r;
-                z__2.r = alpha.r / absest;
-                z__2.i = alpha.i / absest; // , expr subst
+                z__1.real = c__->real / d__1;
+                z__1.imag = c__->imag / d__1; // , expr subst
+                t = z__1.real;
+                z__2.real = alpha.real / absest;
+                z__2.imag = alpha.imag / absest; // , expr subst
                 d__1 = 1. - t;
                 z__1.real = z__2.real / d__1;
                 z__1.imag = z__2.imag / d__1; // , expr subst
@@ -551,7 +551,7 @@ void aocl_lapack_zlaic1(aocl_int64_t *job, aocl_int64_t *j, dcomplex *x, doubler
                 /* root is closer to ONE, shift by that amount */
                 b = (zeta2 * zeta2 + zeta1 * zeta1 - 1.) * .5;
                 d__1 = zeta1 * zeta1;
-                c__->r = d__1, c__->i = 0.;
+                c__->real = d__1, c__->imag = 0.;
                 if(b >= 0.)
                 {
                     z__2.real = -c__->real;
@@ -603,13 +603,13 @@ void aocl_lapack_zlaic1(aocl_int64_t *job, aocl_int64_t *j, dcomplex *x, doubler
             z__2.real = z__3.real + z__5.real;
             z__2.imag = z__3.imag + z__5.imag; // , expr subst
             z_sqrt(&z__1, &z__2);
-            tmp = z__1.r;
-            z__1.r = sine.r / tmp;
-            z__1.i = sine.i / tmp; // , expr subst
-            s->r = z__1.r, s->i = z__1.i;
-            z__1.r = cosine.r / tmp;
-            z__1.i = cosine.i / tmp; // , expr subst
-            c__->r = z__1.r, c__->i = z__1.i;
+            tmp = z__1.real;
+            z__1.real = sine.real / tmp;
+            z__1.imag = sine.imag / tmp; // , expr subst
+            s->real = z__1.real, s->imag = z__1.imag;
+            z__1.real = cosine.real / tmp;
+            z__1.imag = cosine.imag / tmp; // , expr subst
+            c__->real = z__1.real, c__->imag = z__1.imag;
             AOCL_DTL_TRACE_LOG_EXIT
             return;
         }

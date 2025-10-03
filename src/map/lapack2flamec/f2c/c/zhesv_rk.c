@@ -331,10 +331,10 @@ void aocl_lapack_zhesv_rk(char *uplo, aocl_int64_t *n, aocl_int64_t *nrhs, dcomp
         {
             aocl_lapack_zhetrf_rk(uplo, n, &a[a_offset], lda, &e[1], &ipiv[1], &work[1], &c_n1,
                                   info);
-            lwkopt = (integer)work[1].r;
+            lwkopt = (integer)work[1].real;
         }
-        work[1].r = (doublereal)lwkopt;
-        work[1].i = 0.; // , expr subst
+        work[1].real = (doublereal)lwkopt;
+        work[1].imag = 0.; // , expr subst
     }
     if(*info != 0)
     {
@@ -357,8 +357,8 @@ void aocl_lapack_zhesv_rk(char *uplo, aocl_int64_t *n, aocl_int64_t *nrhs, dcomp
         aocl_lapack_zhetrs_3(uplo, n, nrhs, &a[a_offset], lda, &e[1], &ipiv[1], &b[b_offset], ldb,
                              info);
     }
-    work[1].r = (doublereal)lwkopt;
-    work[1].i = 0.; // , expr subst
+    work[1].real = (doublereal)lwkopt;
+    work[1].imag = 0.; // , expr subst
     AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of ZHESV_RK */

@@ -347,24 +347,24 @@ void aocl_lapack_zgeqr(aocl_int64_t *m, aocl_int64_t *n, dcomplex *a, aocl_int64
     {
         if(mint)
         {
-            t[1].r = (doublereal)mintsz;
-            t[1].i = 0.; // , expr subst
+            t[1].real = (doublereal)mintsz;
+            t[1].imag = 0.; // , expr subst
         }
         else
         {
             i__1 = nb * *n * nblcks + 5;
-            t[1].r = (doublereal)i__1;
-            t[1].i = 0.; // , expr subst
+            t[1].real = (doublereal)i__1;
+            t[1].imag = 0.; // , expr subst
         }
-        t[2].r = (doublereal)mb;
-        t[2].i = 0.; // , expr subst
-        t[3].r = (doublereal)nb;
-        t[3].i = 0.; // , expr subst
+        t[2].real = (doublereal)mb;
+        t[2].imag = 0.; // , expr subst
+        t[3].real = (doublereal)nb;
+        t[3].imag = 0.; // , expr subst
         if(minw)
         {
             i__1 = fla_max(1, *n);
-            work[1].r = (doublereal)i__1;
-            work[1].i = 0.; // , expr subst
+            work[1].real = (doublereal)i__1;
+            work[1].imag = 0.; // , expr subst
         }
         else
         {
@@ -372,8 +372,8 @@ void aocl_lapack_zgeqr(aocl_int64_t *m, aocl_int64_t *n, dcomplex *a, aocl_int64
             i__2 = 1;
             i__3 = nb * *n; // , expr subst
             i__1 = fla_max(i__2, i__3);
-            work[1].r = (doublereal)i__1;
-            work[1].i = 0.; // , expr subst
+            work[1].real = (doublereal)i__1;
+            work[1].imag = 0.; // , expr subst
         }
     }
     if(*info != 0)
@@ -407,8 +407,8 @@ void aocl_lapack_zgeqr(aocl_int64_t *m, aocl_int64_t *n, dcomplex *a, aocl_int64
     i__2 = 1;
     i__3 = nb * *n; // , expr subst
     i__1 = fla_max(i__2, i__3);
-    work[1].r = (doublereal)i__1;
-    work[1].i = 0.; // , expr subst
+    work[1].real = (doublereal)i__1;
+    work[1].imag = 0.; // , expr subst
     AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of ZGEQR */

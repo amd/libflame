@@ -4,7 +4,7 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static scomplex c_b1 = {{1.f}, {0.f}};
+static scomplex c_b1 = {1.f, 0.f};
 static aocl_int64_t c__1 = 1;
 /* > \brief \b CLARFB_GETT */
 /* =========== DOCUMENTATION =========== */
@@ -501,8 +501,8 @@ void aocl_lapack_clarfb_gett(char *ident, aocl_int64_t *m, aocl_int64_t *n, aocl
         if(*m > 0)
         {
             i__1 = *n - *k;
-            q__1.r = -1.f;
-            q__1.i = -0.f; // , expr subst
+            q__1.real = -1.f;
+            q__1.imag = -0.f; // , expr subst
             aocl_blas_cgemm("N", "N", m, &i__1, k, &q__1, &b[b_offset], ldb, &work[work_offset],
                             ldwork, &c_b1, &b[(*k + 1) * b_dim1 + 1], ldb);
         }
@@ -527,10 +527,10 @@ void aocl_lapack_clarfb_gett(char *ident, aocl_int64_t *m, aocl_int64_t *n, aocl
                 i__3 = i__ + (*k + j) * a_dim1;
                 i__4 = i__ + (*k + j) * a_dim1;
                 i__5 = i__ + j * work_dim1;
-                q__1.r = a[i__4].r - work[i__5].r;
-                q__1.i = a[i__4].i - work[i__5].i; // , expr subst
-                a[i__3].r = q__1.r;
-                a[i__3].i = q__1.i; // , expr subst
+                q__1.real = a[i__4].real - work[i__5].real;
+                q__1.imag = a[i__4].imag - work[i__5].imag; // , expr subst
+                a[i__3].real = q__1.real;
+                a[i__3].imag = q__1.imag; // , expr subst
             }
         }
     }
@@ -555,8 +555,8 @@ void aocl_lapack_clarfb_gett(char *ident, aocl_int64_t *m, aocl_int64_t *n, aocl
         for(i__ = j + 1; i__ <= i__2; ++i__)
         {
             i__3 = i__ + j * work_dim1;
-            work[i__3].r = 0.f;
-            work[i__3].i = 0.f; // , expr subst
+            work[i__3].real = 0.f;
+            work[i__3].imag = 0.f; // , expr subst
         }
     }
     if(lnotident)
@@ -576,8 +576,8 @@ void aocl_lapack_clarfb_gett(char *ident, aocl_int64_t *m, aocl_int64_t *n, aocl
     /* V2 = B1, W1 is upper-triangular with zeroes below the diagonal. */
     if(*m > 0)
     {
-        q__1.r = -1.f;
-        q__1.i = -0.f; // , expr subst
+        q__1.real = -1.f;
+        q__1.imag = -0.f; // , expr subst
         aocl_blas_ctrmm("R", "U", "N", "N", m, k, &q__1, &work[work_offset], ldwork, &b[b_offset],
                         ldb);
     }
@@ -604,10 +604,10 @@ void aocl_lapack_clarfb_gett(char *ident, aocl_int64_t *m, aocl_int64_t *n, aocl
             {
                 i__3 = i__ + j * a_dim1;
                 i__4 = i__ + j * work_dim1;
-                q__1.r = -work[i__4].r;
-                q__1.i = -work[i__4].i; // , expr subst
-                a[i__3].r = q__1.r;
-                a[i__3].i = q__1.i; // , expr subst
+                q__1.real = -work[i__4].real;
+                q__1.imag = -work[i__4].imag; // , expr subst
+                a[i__3].real = q__1.real;
+                a[i__3].imag = q__1.imag; // , expr subst
             }
         }
     }
@@ -621,10 +621,10 @@ void aocl_lapack_clarfb_gett(char *ident, aocl_int64_t *m, aocl_int64_t *n, aocl
             i__3 = i__ + j * a_dim1;
             i__4 = i__ + j * a_dim1;
             i__5 = i__ + j * work_dim1;
-            q__1.r = a[i__4].r - work[i__5].r;
-            q__1.i = a[i__4].i - work[i__5].i; // , expr subst
-            a[i__3].r = q__1.r;
-            a[i__3].i = q__1.i; // , expr subst
+            q__1.real = a[i__4].real - work[i__5].real;
+            q__1.imag = a[i__4].imag - work[i__5].imag; // , expr subst
+            a[i__3].real = q__1.real;
+            a[i__3].imag = q__1.imag; // , expr subst
         }
     }
     return;

@@ -221,18 +221,18 @@ void aocl_lapack_clargv(aocl_int64_t *n, scomplex *x, aocl_int64_t *incx, scompl
         /* Use identical algorithm as in CLARTG */
         /* Computing MAX */
         /* Computing MAX */
-        r__7 = (r__1 = f.r, f2c_abs(r__1));
+        r__7 = (r__1 = f.real, f2c_abs(r__1));
         r__8 = (r__2 = r_imag(&f), f2c_abs(r__2)); // , expr subst
         /* Computing MAX */
-        r__9 = (r__3 = g.r, f2c_abs(r__3));
+        r__9 = (r__3 = g.real, f2c_abs(r__3));
         r__10 = (r__4 = r_imag(&g), f2c_abs(r__4)); // , expr subst
         r__5 = fla_max(r__7, r__8);
         r__6 = fla_max(r__9, r__10); // , expr subst
         scale = fla_max(r__5, r__6);
-        fs.r = f.r;
-        fs.i = f.i; // , expr subst
-        gs.r = g.r;
-        gs.i = g.i; // , expr subst
+        fs.real = f.real;
+        fs.imag = f.imag; // , expr subst
+        gs.real = g.real;
+        gs.imag = g.imag; // , expr subst
         count = 0;
         if(scale >= safmx2)
         {
@@ -254,7 +254,7 @@ void aocl_lapack_clargv(aocl_int64_t *n, scomplex *x, aocl_int64_t *incx, scompl
         }
         else if(scale <= safmn2)
         {
-            if(g.r == 0.f && g.i == 0.f)
+            if(g.real == 0.f && g.imag == 0.f)
             {
                 cs = 1.f;
                 sn.real = 0.f;
@@ -292,14 +292,14 @@ void aocl_lapack_clargv(aocl_int64_t *n, scomplex *x, aocl_int64_t *incx, scompl
         if(f2 <= fla_max(g2, 1.f) * safmin)
         {
             /* This is a rare case: F is very small. */
-            if(f.r == 0.f && f.i == 0.f)
+            if(f.real == 0.f && f.imag == 0.f)
             {
                 cs = 0.f;
                 r__2 = g.real;
                 r__3 = r_imag(&g);
                 r__1 = slapy2_(&r__2, &r__3);
-                r__.r = r__1;
-                r__.i = 0.f; // , expr subst
+                r__.real = r__1;
+                r__.imag = 0.f; // , expr subst
                 /* Do scomplex/real division explicitly with two real */
                 /* divisions */
                 r__1 = gs.real;
@@ -330,7 +330,7 @@ void aocl_lapack_clargv(aocl_int64_t *n, scomplex *x, aocl_int64_t *incx, scompl
             /* Make sure f2c_abs(FF) = 1 */
             /* Do scomplex/real division explicitly with 2 real divisions */
             /* Computing MAX */
-            r__3 = (r__1 = f.r, f2c_abs(r__1));
+            r__3 = (r__1 = f.real, f2c_abs(r__1));
             r__4 = (r__2 = r_imag(&f), f2c_abs(r__2)); // , expr subst
             if(fla_max(r__3, r__4) > 1.f)
             {
@@ -390,17 +390,17 @@ void aocl_lapack_clargv(aocl_int64_t *n, scomplex *x, aocl_int64_t *incx, scompl
             cs = 1.f / f2s;
             d__ = f2 + g2;
             /* Do scomplex/real division explicitly with two real divisions */
-            r__1 = r__.r / d__;
+            r__1 = r__.real / d__;
             r__2 = r_imag(&r__) / d__;
             q__1.real = r__1;
             q__1.imag = r__2; // , expr subst
             sn.real = q__1.real;
             sn.imag = q__1.imag; // , expr subst
             r_cnjg(&q__2, &gs);
-            q__1.r = sn.r * q__2.r - sn.i * q__2.i;
-            q__1.i = sn.r * q__2.i + sn.i * q__2.r; // , expr subst
-            sn.r = q__1.r;
-            sn.i = q__1.i; // , expr subst
+            q__1.real = sn.real * q__2.real - sn.imag * q__2.imag;
+            q__1.imag = sn.real * q__2.imag + sn.imag * q__2.real; // , expr subst
+            sn.real = q__1.real;
+            sn.imag = q__1.imag; // , expr subst
             if(count != 0)
             {
                 if(count > 0)

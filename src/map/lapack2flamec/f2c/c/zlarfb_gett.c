@@ -4,7 +4,7 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static dcomplex c_b1 = {{1.}, {0.}};
+static dcomplex c_b1 = {1., 0.};
 static aocl_int64_t c__1 = 1;
 /* > \brief \b ZLARFB_GETT */
 /* =========== DOCUMENTATION =========== */
@@ -506,8 +506,8 @@ void aocl_lapack_zlarfb_gett(char *ident, aocl_int64_t *m, aocl_int64_t *n, aocl
         if(*m > 0)
         {
             i__1 = *n - *k;
-            z__1.r = -1.;
-            z__1.i = -0.; // , expr subst
+            z__1.real = -1.;
+            z__1.imag = -0.; // , expr subst
             aocl_blas_zgemm("N", "N", m, &i__1, k, &z__1, &b[b_offset], ldb, &work[work_offset],
                             ldwork, &c_b1, &b[(*k + 1) * b_dim1 + 1], ldb);
         }
@@ -532,10 +532,10 @@ void aocl_lapack_zlarfb_gett(char *ident, aocl_int64_t *m, aocl_int64_t *n, aocl
                 i__3 = i__ + (*k + j) * a_dim1;
                 i__4 = i__ + (*k + j) * a_dim1;
                 i__5 = i__ + j * work_dim1;
-                z__1.r = a[i__4].r - work[i__5].r;
-                z__1.i = a[i__4].i - work[i__5].i; // , expr subst
-                a[i__3].r = z__1.r;
-                a[i__3].i = z__1.i; // , expr subst
+                z__1.real = a[i__4].real - work[i__5].real;
+                z__1.imag = a[i__4].imag - work[i__5].imag; // , expr subst
+                a[i__3].real = z__1.real;
+                a[i__3].imag = z__1.imag; // , expr subst
             }
         }
     }
@@ -560,8 +560,8 @@ void aocl_lapack_zlarfb_gett(char *ident, aocl_int64_t *m, aocl_int64_t *n, aocl
         for(i__ = j + 1; i__ <= i__2; ++i__)
         {
             i__3 = i__ + j * work_dim1;
-            work[i__3].r = 0.;
-            work[i__3].i = 0.; // , expr subst
+            work[i__3].real = 0.;
+            work[i__3].imag = 0.; // , expr subst
         }
     }
     if(lnotident)
@@ -581,8 +581,8 @@ void aocl_lapack_zlarfb_gett(char *ident, aocl_int64_t *m, aocl_int64_t *n, aocl
     /* V2 = B1, W1 is upper-triangular with zeroes below the diagonal. */
     if(*m > 0)
     {
-        z__1.r = -1.;
-        z__1.i = -0.; // , expr subst
+        z__1.real = -1.;
+        z__1.imag = -0.; // , expr subst
         aocl_blas_ztrmm("R", "U", "N", "N", m, k, &z__1, &work[work_offset], ldwork, &b[b_offset],
                         ldb);
     }
@@ -609,10 +609,10 @@ void aocl_lapack_zlarfb_gett(char *ident, aocl_int64_t *m, aocl_int64_t *n, aocl
             {
                 i__3 = i__ + j * a_dim1;
                 i__4 = i__ + j * work_dim1;
-                z__1.r = -work[i__4].r;
-                z__1.i = -work[i__4].i; // , expr subst
-                a[i__3].r = z__1.r;
-                a[i__3].i = z__1.i; // , expr subst
+                z__1.real = -work[i__4].real;
+                z__1.imag = -work[i__4].imag; // , expr subst
+                a[i__3].real = z__1.real;
+                a[i__3].imag = z__1.imag; // , expr subst
             }
         }
     }
@@ -626,10 +626,10 @@ void aocl_lapack_zlarfb_gett(char *ident, aocl_int64_t *m, aocl_int64_t *n, aocl
             i__3 = i__ + j * a_dim1;
             i__4 = i__ + j * a_dim1;
             i__5 = i__ + j * work_dim1;
-            z__1.r = a[i__4].r - work[i__5].r;
-            z__1.i = a[i__4].i - work[i__5].i; // , expr subst
-            a[i__3].r = z__1.r;
-            a[i__3].i = z__1.i; // , expr subst
+            z__1.real = a[i__4].real - work[i__5].real;
+            z__1.imag = a[i__4].imag - work[i__5].imag; // , expr subst
+            a[i__3].real = z__1.real;
+            a[i__3].imag = z__1.imag; // , expr subst
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT

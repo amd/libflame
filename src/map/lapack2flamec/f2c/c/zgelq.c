@@ -367,28 +367,28 @@ void aocl_lapack_zgelq(aocl_int64_t *m, aocl_int64_t *n, dcomplex *a, aocl_int64
     {
         if(mint)
         {
-            t[1].r = (doublereal)mintsz;
-            t[1].i = 0.; // , expr subst
+            t[1].real = (doublereal)mintsz;
+            t[1].imag = 0.; // , expr subst
         }
         else
         {
             i__1 = mb * *m * nblcks + 5;
-            t[1].r = (doublereal)i__1;
-            t[1].i = 0.; // , expr subst
+            t[1].real = (doublereal)i__1;
+            t[1].imag = 0.; // , expr subst
         }
-        t[2].r = (doublereal)mb;
-        t[2].i = 0.; // , expr subst
-        t[3].r = (doublereal)nb;
-        t[3].i = 0.; // , expr subst
+        t[2].real = (doublereal)mb;
+        t[2].imag = 0.; // , expr subst
+        t[3].real = (doublereal)nb;
+        t[3].imag = 0.; // , expr subst
         if(minw)
         {
-            work[1].r = (doublereal)lwmin;
-            work[1].i = 0.; // , expr subst
+            work[1].real = (doublereal)lwmin;
+            work[1].imag = 0.; // , expr subst
         }
         else
         {
-            work[1].r = (doublereal)lwreq;
-            work[1].i = 0.; // , expr subst
+            work[1].real = (doublereal)lwreq;
+            work[1].imag = 0.; // , expr subst
         }
     }
     if(*info != 0)
@@ -418,8 +418,8 @@ void aocl_lapack_zgelq(aocl_int64_t *m, aocl_int64_t *n, dcomplex *a, aocl_int64
     {
         aocl_lapack_zlaswlq(m, n, &mb, &nb, &a[a_offset], lda, &t[6], &mb, &work[1], lwork, info);
     }
-    work[1].r = (doublereal)lwreq;
-    work[1].i = 0.; // , expr subst
+    work[1].real = (doublereal)lwreq;
+    work[1].imag = 0.; // , expr subst
     AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of ZGELQ */

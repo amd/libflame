@@ -259,8 +259,8 @@ void aocl_lapack_cgehd2(aocl_int64_t *n, aocl_int64_t *ilo, aocl_int64_t *ihi, s
         /* Apply H(i)**H to A(i+1:ihi,i+1:n) from the left */
         i__2 = *ihi - i__;
         i__3 = *n - i__;
-        q__1.r = tau[i__].r;
-        q__1.i = -tau[i__].i;
+        q__1.real = tau[i__].real;
+        q__1.imag = -tau[i__].imag;
         aocl_lapack_clarf("Left", &i__2, &i__3, &a[i__ + 1 + i__ * a_dim1], &c__1, &q__1,
                           &a[i__ + 1 + (i__ + 1) * a_dim1], lda, &work[1]);
         i__2 = i__ + 1 + i__ * a_dim1;

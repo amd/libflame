@@ -4,7 +4,7 @@
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
  /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static scomplex c_b2 = {{1.f}, {0.f}};
+static scomplex c_b2 = {1.f, 0.f};
 static aocl_int64_t c__1 = 1;
 static aocl_int64_t c_n1 = -1;
 static aocl_int64_t c__2 = 2;
@@ -188,8 +188,8 @@ void aocl_lapack_cgetri(aocl_int64_t *n, scomplex *a, aocl_int64_t *lda, aocl_in
     nb = aocl_lapack_ilaenv(&c__1, "CGETRI", " ", n, &c_n1, &c_n1, &c_n1);
     lwkopt = *n * nb;
     r__1 = aocl_lapack_sroundup_lwork(&lwkopt);
-    work[1].r = r__1;
-    work[1].i = 0.f; // , expr subst
+    work[1].real = r__1;
+    work[1].imag = 0.f; // , expr subst
     lquery = *lwork == -1;
     if(*n < 0)
     {
@@ -272,8 +272,8 @@ void aocl_lapack_cgetri(aocl_int64_t *n, scomplex *a, aocl_int64_t *lda, aocl_in
             if(j < *n)
             {
                 i__1 = *n - j;
-                q__1.r = -1.f;
-                q__1.i = -0.f; // , expr subst
+                q__1.real = -1.f;
+                q__1.imag = -0.f; // , expr subst
                 aocl_blas_cgemv("No transpose", n, &i__1, &q__1, &a[(j + 1) * a_dim1 + 1], lda,
                                 &work[j + 1], &c__1, &c_b2, &a[j * a_dim1 + 1], &c__1);
             }
@@ -314,8 +314,8 @@ void aocl_lapack_cgetri(aocl_int64_t *n, scomplex *a, aocl_int64_t *lda, aocl_in
             if(j + jb <= *n)
             {
                 i__2 = *n - j - jb + 1;
-                q__1.r = -1.f;
-                q__1.i = -0.f; // , expr subst
+                q__1.real = -1.f;
+                q__1.imag = -0.f; // , expr subst
                 aocl_blas_cgemm("No transpose", "No transpose", n, &jb, &i__2, &q__1,
                                 &a[(j + jb) * a_dim1 + 1], lda, &work[j + jb], &ldwork, &c_b2,
                                 &a[j * a_dim1 + 1], lda);
@@ -336,8 +336,8 @@ void aocl_lapack_cgetri(aocl_int64_t *n, scomplex *a, aocl_int64_t *lda, aocl_in
         /* L60: */
     }
     r__1 = aocl_lapack_sroundup_lwork(&iws);
-    work[1].r = r__1;
-    work[1].i = 0.f; // , expr subst
+    work[1].real = r__1;
+    work[1].imag = 0.f; // , expr subst
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
     return;
     /* End of CGETRI */

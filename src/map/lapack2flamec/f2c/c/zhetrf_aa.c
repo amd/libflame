@@ -4,7 +4,7 @@
  -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for
  libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static dcomplex c_b2 = {{1.}, {0.}};
+static dcomplex c_b2 = {1., 0.};
 static aocl_int64_t c__1 = 1;
 static aocl_int64_t c_n1 = -1;
 /* > \brief \b ZHETRF_AA */
@@ -231,8 +231,8 @@ void aocl_lapack_zhetrf_aa(char *uplo, aocl_int64_t *n, dcomplex *a, aocl_int64_
     if(*info == 0)
     {
         lwkopt = (nb + 1) * *n;
-        work[1].r = (doublereal)lwkopt;
-        work[1].i = 0.; // , expr subst
+        work[1].real = (doublereal)lwkopt;
+        work[1].imag = 0.; // , expr subst
     }
     if(*info != 0)
     {
@@ -257,9 +257,9 @@ void aocl_lapack_zhetrf_aa(char *uplo, aocl_int64_t *n, dcomplex *a, aocl_int64_
     {
         i__1 = a_dim1 + 1;
         i__2 = a_dim1 + 1;
-        d__1 = a[i__2].r;
-        a[i__1].r = d__1;
-        a[i__1].i = 0.; // , expr subst
+        d__1 = a[i__2].real;
+        a[i__1].real = d__1;
+        a[i__1].imag = 0.; // , expr subst
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -327,11 +327,11 @@ void aocl_lapack_zhetrf_aa(char *uplo, aocl_int64_t *n, dcomplex *a, aocl_int64_
             {
                 /* Merge rank-1 update with BLAS-3 update */
                 d_cnjg(&z__1, &a[j + (j + 1) * a_dim1]);
-                alpha.r = z__1.r;
-                alpha.i = z__1.i; // , expr subst
+                alpha.real = z__1.real;
+                alpha.imag = z__1.imag; // , expr subst
                 i__1 = j + (j + 1) * a_dim1;
-                a[i__1].r = 1.;
-                a[i__1].i = 0.; // , expr subst
+                a[i__1].real = 1.;
+                a[i__1].imag = 0.; // , expr subst
                 i__1 = *n - j;
                 aocl_blas_zcopy(&i__1, &a[j - 1 + (j + 1) * a_dim1], lda,
                                 &work[j + 1 - j1 + 1 + jb * *n], &c__1);
@@ -365,8 +365,8 @@ void aocl_lapack_zhetrf_aa(char *uplo, aocl_int64_t *n, dcomplex *a, aocl_int64_
                     for(mj = nj - 1; mj >= 1; --mj)
                     {
                         i__3 = jb + 1;
-                        z__1.r = -1.;
-                        z__1.i = -0.; // , expr subst
+                        z__1.real = -1.;
+                        z__1.imag = -0.; // , expr subst
                         aocl_blas_zgemm("Conjugate transpose", "Transpose", &c__1, &mj, &i__3,
                                         &z__1, &a[j1 - k2 + j3 * a_dim1], lda,
                                         &work[j3 - j1 + 1 + k1 * *n], n, &c_b2,
@@ -376,8 +376,8 @@ void aocl_lapack_zhetrf_aa(char *uplo, aocl_int64_t *n, dcomplex *a, aocl_int64_
                     /* Update off-diagonal block of J2-th block row with ZGEMM */
                     i__3 = *n - j3 + 1;
                     i__4 = jb + 1;
-                    z__1.r = -1.;
-                    z__1.i = -0.; // , expr subst
+                    z__1.real = -1.;
+                    z__1.imag = -0.; // , expr subst
                     aocl_blas_zgemm("Conjugate transpose", "Transpose", &nj, &i__3, &i__4, &z__1,
                                     &a[j1 - k2 + j2 * a_dim1], lda, &work[j3 - j1 + 1 + k1 * *n], n,
                                     &c_b2, &a[j2 + j3 * a_dim1], lda);
@@ -385,8 +385,8 @@ void aocl_lapack_zhetrf_aa(char *uplo, aocl_int64_t *n, dcomplex *a, aocl_int64_
                 /* Recover T( J, J+1 ) */
                 i__2 = j + (j + 1) * a_dim1;
                 d_cnjg(&z__1, &alpha);
-                a[i__2].r = z__1.r;
-                a[i__2].i = z__1.i; // , expr subst
+                a[i__2].real = z__1.real;
+                a[i__2].imag = z__1.imag; // , expr subst
             }
             /* WORK(J+1, 1) stores H(J+1, 1) */
             i__2 = *n - j;
@@ -453,11 +453,11 @@ void aocl_lapack_zhetrf_aa(char *uplo, aocl_int64_t *n, dcomplex *a, aocl_int64_
             {
                 /* Merge rank-1 update with BLAS-3 update */
                 d_cnjg(&z__1, &a[j + 1 + j * a_dim1]);
-                alpha.r = z__1.r;
-                alpha.i = z__1.i; // , expr subst
+                alpha.real = z__1.real;
+                alpha.imag = z__1.imag; // , expr subst
                 i__2 = j + 1 + j * a_dim1;
-                a[i__2].r = 1.;
-                a[i__2].i = 0.; // , expr subst
+                a[i__2].real = 1.;
+                a[i__2].imag = 0.; // , expr subst
                 i__2 = *n - j;
                 aocl_blas_zcopy(&i__2, &a[j + 1 + (j - 1) * a_dim1], &c__1,
                                 &work[j + 1 - j1 + 1 + jb * *n], &c__1);
@@ -491,8 +491,8 @@ void aocl_lapack_zhetrf_aa(char *uplo, aocl_int64_t *n, dcomplex *a, aocl_int64_
                     for(mj = nj - 1; mj >= 1; --mj)
                     {
                         i__3 = jb + 1;
-                        z__1.r = -1.;
-                        z__1.i = -0.; // , expr subst
+                        z__1.real = -1.;
+                        z__1.imag = -0.; // , expr subst
                         aocl_blas_zgemm("No transpose", "Conjugate transpose", &mj, &c__1, &i__3,
                                         &z__1, &work[j3 - j1 + 1 + k1 * *n], n,
                                         &a[j3 + (j1 - k2) * a_dim1], lda, &c_b2,
@@ -502,8 +502,8 @@ void aocl_lapack_zhetrf_aa(char *uplo, aocl_int64_t *n, dcomplex *a, aocl_int64_
                     /* Update off-diagonal block of J2-th block column with ZGEMM */
                     i__3 = *n - j3 + 1;
                     i__4 = jb + 1;
-                    z__1.r = -1.;
-                    z__1.i = -0.; // , expr subst
+                    z__1.real = -1.;
+                    z__1.imag = -0.; // , expr subst
                     aocl_blas_zgemm("No transpose", "Conjugate transpose", &i__3, &nj, &i__4, &z__1,
                                     &work[j3 - j1 + 1 + k1 * *n], n, &a[j2 + (j1 - k2) * a_dim1],
                                     lda, &c_b2, &a[j3 + j2 * a_dim1], lda);
@@ -511,8 +511,8 @@ void aocl_lapack_zhetrf_aa(char *uplo, aocl_int64_t *n, dcomplex *a, aocl_int64_
                 /* Recover T( J+1, J ) */
                 i__1 = j + 1 + j * a_dim1;
                 d_cnjg(&z__1, &alpha);
-                a[i__1].r = z__1.r;
-                a[i__1].i = z__1.i; // , expr subst
+                a[i__1].real = z__1.real;
+                a[i__1].imag = z__1.imag; // , expr subst
             }
             /* WORK(J+1, 1) stores H(J+1, 1) */
             i__1 = *n - j;

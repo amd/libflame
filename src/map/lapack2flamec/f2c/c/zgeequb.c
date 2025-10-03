@@ -260,7 +260,7 @@ void aocl_lapack_zgeequb(aocl_int64_t *m, aocl_int64_t *n, dcomplex *a, aocl_int
             /* Computing MAX */
             i__3 = i__ + j * a_dim1;
             d__3 = r__[i__];
-            d__4 = (d__1 = a[i__3].r, f2c_dabs(d__1))
+            d__4 = (d__1 = a[i__3].real, f2c_dabs(d__1))
                    + (d__2 = d_imag(&a[i__ + j * a_dim1]), f2c_dabs(d__2)); // , expr subst
             r__[i__] = fla_max(d__3, d__4);
             /* L20: */
@@ -342,7 +342,7 @@ void aocl_lapack_zgeequb(aocl_int64_t *m, aocl_int64_t *n, dcomplex *a, aocl_int
             /* Computing MAX */
             i__3 = i__ + j * a_dim1;
             d__3 = c__[j];
-            d__4 = ((d__1 = a[i__3].r, f2c_dabs(d__1))
+            d__4 = ((d__1 = a[i__3].real, f2c_dabs(d__1))
                     + (d__2 = d_imag(&a[i__ + j * a_dim1]), f2c_dabs(d__2)))
                    * r__[i__]; // , expr subst
             c__[j] = fla_max(d__3, d__4);

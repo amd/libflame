@@ -230,8 +230,8 @@ void aocl_lapack_zungtr(char *uplo, aocl_int64_t *n, dcomplex *a, aocl_int64_t *
         i__1 = 1;
         i__2 = *n - 1; // , expr subst
         lwkopt = fla_max(i__1, i__2) * nb;
-        work[1].r = (doublereal)lwkopt;
-        work[1].i = 0.; // , expr subst
+        work[1].real = (doublereal)lwkopt;
+        work[1].imag = 0.; // , expr subst
     }
     if(*info != 0)
     {
@@ -248,8 +248,8 @@ void aocl_lapack_zungtr(char *uplo, aocl_int64_t *n, dcomplex *a, aocl_int64_t *
     /* Quick return if possible */
     if(*n == 0)
     {
-        work[1].r = 1.;
-        work[1].i = 0.; // , expr subst
+        work[1].real = 1.;
+        work[1].imag = 0.; // , expr subst
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -337,8 +337,8 @@ void aocl_lapack_zungtr(char *uplo, aocl_int64_t *n, dcomplex *a, aocl_int64_t *
                                lwork, &iinfo);
         }
     }
-    work[1].r = (doublereal)lwkopt;
-    work[1].i = 0.; // , expr subst
+    work[1].real = (doublereal)lwkopt;
+    work[1].imag = 0.; // , expr subst
     AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of ZUNGTR */

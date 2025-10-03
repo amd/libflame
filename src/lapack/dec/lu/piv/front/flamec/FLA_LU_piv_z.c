@@ -15,8 +15,8 @@
 
 extern void FLA_get_optimum_params_getrf(fla_dim_t m, fla_dim_t n, fla_dim_t *nb, int *n_threads);
 
-static dcomplex z__1 = {{-1}, {0}};
-static dcomplex c_b1 = {{1.}, {0.}};
+static dcomplex z__1 = {-1, 0};
+static dcomplex c_b1 = {1., 0.};
 static fla_dim_t c__1 = 1;
 
 
@@ -520,10 +520,10 @@ int FLA_LU_piv_z_var2_parallel( fla_dim_t *m, fla_dim_t *n, dcomplex *a, fla_dim
 {
     /* System generated locals */
     fla_dim_t a_dim1, a_offset, i__1, i__2, i__3, i__4, i__5, i__6;
-    dcomplex z__1 = {{-1}, {0}};
+    dcomplex z__1 = {-1, 0};
     fla_dim_t i__, j, iinfo;
     fla_dim_t jb, nb;
-    dcomplex c_b1 = {{1.},{0.}};
+    dcomplex c_b1 = {1., 0.};
     fla_dim_t c__1 = 1;
     #define a_subscr(a_1,a_2) (a_2)*a_dim1 + a_1
     #define a_ref(a_1,a_2) a[a_subscr(a_1,a_2)]

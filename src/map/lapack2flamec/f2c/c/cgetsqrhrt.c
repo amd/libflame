@@ -334,19 +334,19 @@ void aocl_lapack_cgetsqrhrt(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *mb1,
     }
     else if(lquery)
     {
-        q__1.r = (real)lworkopt;
-        q__1.i = 0.f; // , expr subst
-        work[1].r = q__1.r;
-        work[1].i = q__1.i; // , expr subst
+        q__1.real = (real)lworkopt;
+        q__1.imag = 0.f; // , expr subst
+        work[1].real = q__1.real;
+        work[1].imag = q__1.imag; // , expr subst
         return;
     }
     /* Quick return if possible */
     if(fla_min(*m, *n) == 0)
     {
-        q__1.r = (real)lworkopt;
-        q__1.i = 0.f; // , expr subst
-        work[1].r = q__1.r;
-        work[1].i = q__1.i; // , expr subst
+        q__1.real = (real)lworkopt;
+        q__1.imag = 0.f; // , expr subst
+        work[1].real = q__1.real;
+        work[1].imag = q__1.imag; // , expr subst
         return;
     }
     nb2local = fla_min(*nb2, *n);
@@ -384,21 +384,21 @@ void aocl_lapack_cgetsqrhrt(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *mb1,
     for(i__ = 1; i__ <= i__1; ++i__)
     {
         i__2 = lwt + *n * *n + i__;
-        q__1.r = -1.f;
-        q__1.i = -0.f; // , expr subst
-        if(work[i__2].r == q__1.r && work[i__2].i == q__1.i)
+        q__1.real = -1.f;
+        q__1.imag = -0.f; // , expr subst
+        if(work[i__2].real == q__1.real && work[i__2].imag == q__1.imag)
         {
             i__2 = *n;
             for(j = i__; j <= i__2; ++j)
             {
                 i__3 = i__ + j * a_dim1;
-                q__2.r = -1.f;
-                q__2.i = -0.f; // , expr subst
+                q__2.real = -1.f;
+                q__2.imag = -0.f; // , expr subst
                 i__4 = lwt + *n * (j - 1) + i__;
-                q__1.r = q__2.r * work[i__4].r - q__2.i * work[i__4].i;
-                q__1.i = q__2.r * work[i__4].i + q__2.i * work[i__4].r; // , expr subst
-                a[i__3].r = q__1.r;
-                a[i__3].i = q__1.i; // , expr subst
+                q__1.real = q__2.real * work[i__4].real - q__2.imag * work[i__4].imag;
+                q__1.imag = q__2.real * work[i__4].imag + q__2.imag * work[i__4].real; // , expr subst
+                a[i__3].real = q__1.real;
+                a[i__3].imag = q__1.imag; // , expr subst
             }
         }
         else
@@ -408,10 +408,10 @@ void aocl_lapack_cgetsqrhrt(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *mb1,
                             lda);
         }
     }
-    q__1.r = (real)lworkopt;
-    q__1.i = 0.f; // , expr subst
-    work[1].r = q__1.r;
-    work[1].i = q__1.i; // , expr subst
+    q__1.real = (real)lworkopt;
+    q__1.imag = 0.f; // , expr subst
+    work[1].real = q__1.real;
+    work[1].imag = q__1.imag; // , expr subst
     return;
     /* End of CGETSQRHRT */
 }

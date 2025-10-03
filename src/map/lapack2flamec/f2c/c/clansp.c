@@ -320,10 +320,10 @@ real aocl_lapack_clansp(char *norm, char *uplo, aocl_int64_t *n, scomplex *ap, r
         for(i__ = 1; i__ <= i__1; ++i__)
         {
             i__2 = k;
-            if(ap[i__2].r != 0.f)
+            if(ap[i__2].real != 0.f)
             {
                 i__2 = k;
-                absa = (r__1 = ap[i__2].r, f2c_abs(r__1));
+                absa = (r__1 = ap[i__2].real, f2c_abs(r__1));
                 if(scale < absa)
                 {
                     /* Computing 2nd power */

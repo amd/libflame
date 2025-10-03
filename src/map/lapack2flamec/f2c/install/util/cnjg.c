@@ -6,15 +6,15 @@ extern "C" {
 
 void d_cnjg(dcomplex *r, dcomplex *z)
 {
-    doublereal zi = z->i;
-    r->r = z->r;
-    r->i = -zi;
+    doublereal zi = z->imag;
+    r->real = z->real;
+    r->imag = -zi;
 }
 void r_cnjg(scomplex *r, scomplex *z)
 {
-    real zi = z->i;
-    r->r = z->r;
-    r->i = -zi;
+    real zi = z->imag;
+    r->real = z->real;
+    r->imag = -zi;
 }
 
 #ifdef __cplusplus

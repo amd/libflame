@@ -280,27 +280,27 @@ void aocl_lapack_chb2st_kernels(char *uplo, logical *wantz, aocl_int64_t *ttype,
         {
             lm = *ed - *st + 1;
             i__1 = vpos;
-            v[i__1].r = 1.f;
-            v[i__1].i = 0.f; // , expr subst
+            v[i__1].real = 1.f;
+            v[i__1].imag = 0.f; // , expr subst
             i__1 = lm - 1;
             for(i__ = 1; i__ <= i__1; ++i__)
             {
                 i__2 = vpos + i__;
                 r_cnjg(&q__1, &a[ofdpos - i__ + (*st + i__) * a_dim1]);
-                v[i__2].r = q__1.r;
-                v[i__2].i = q__1.i; // , expr subst
+                v[i__2].real = q__1.real;
+                v[i__2].imag = q__1.imag; // , expr subst
                 i__2 = ofdpos - i__ + (*st + i__) * a_dim1;
-                a[i__2].r = 0.f;
-                a[i__2].i = 0.f; // , expr subst
+                a[i__2].real = 0.f;
+                a[i__2].imag = 0.f; // , expr subst
                 /* L10: */
             }
             r_cnjg(&q__1, &a[ofdpos + *st * a_dim1]);
-            ctmp.r = q__1.r;
-            ctmp.i = q__1.i; // , expr subst
+            ctmp.real = q__1.real;
+            ctmp.imag = q__1.imag; // , expr subst
             aocl_lapack_clarfg(&lm, &ctmp, &v[vpos + 1], &c__1, &tau[taupos]);
             i__1 = ofdpos + *st * a_dim1;
-            a[i__1].r = ctmp.r;
-            a[i__1].i = ctmp.i; // , expr subst
+            a[i__1].real = ctmp.real;
+            a[i__1].imag = ctmp.imag; // , expr subst
             lm = *ed - *st + 1;
             r_cnjg(&q__1, &tau[taupos]);
             i__1 = *lda - 1;
@@ -340,27 +340,27 @@ void aocl_lapack_chb2st_kernels(char *uplo, logical *wantz, aocl_int64_t *ttype,
                     taupos = (*sweep - 1) % 2 * *n + j1;
                 }
                 i__1 = vpos;
-                v[i__1].r = 1.f;
-                v[i__1].i = 0.f; // , expr subst
+                v[i__1].real = 1.f;
+                v[i__1].imag = 0.f; // , expr subst
                 i__1 = lm - 1;
                 for(i__ = 1; i__ <= i__1; ++i__)
                 {
                     i__2 = vpos + i__;
                     r_cnjg(&q__1, &a[dpos - *nb - i__ + (j1 + i__) * a_dim1]);
-                    v[i__2].r = q__1.r;
-                    v[i__2].i = q__1.i; // , expr subst
+                    v[i__2].real = q__1.real;
+                    v[i__2].imag = q__1.imag; // , expr subst
                     i__2 = dpos - *nb - i__ + (j1 + i__) * a_dim1;
-                    a[i__2].r = 0.f;
-                    a[i__2].i = 0.f; // , expr subst
+                    a[i__2].real = 0.f;
+                    a[i__2].imag = 0.f; // , expr subst
                     /* L30: */
                 }
                 r_cnjg(&q__1, &a[dpos - *nb + j1 * a_dim1]);
-                ctmp.r = q__1.r;
-                ctmp.i = q__1.i; // , expr subst
+                ctmp.real = q__1.real;
+                ctmp.imag = q__1.imag; // , expr subst
                 aocl_lapack_clarfg(&lm, &ctmp, &v[vpos + 1], &c__1, &tau[taupos]);
                 i__1 = dpos - *nb + j1 * a_dim1;
-                a[i__1].r = ctmp.r;
-                a[i__1].i = ctmp.i; // , expr subst
+                a[i__1].real = ctmp.real;
+                a[i__1].imag = ctmp.imag; // , expr subst
                 i__1 = ln - 1;
                 i__2 = *lda - 1;
                 aocl_lapack_clarfx("Right", &i__1, &lm, &v[vpos], &tau[taupos],
@@ -385,18 +385,18 @@ void aocl_lapack_chb2st_kernels(char *uplo, logical *wantz, aocl_int64_t *ttype,
         {
             lm = *ed - *st + 1;
             i__1 = vpos;
-            v[i__1].r = 1.f;
-            v[i__1].i = 0.f; // , expr subst
+            v[i__1].real = 1.f;
+            v[i__1].imag = 0.f; // , expr subst
             i__1 = lm - 1;
             for(i__ = 1; i__ <= i__1; ++i__)
             {
                 i__2 = vpos + i__;
                 i__3 = ofdpos + i__ + (*st - 1) * a_dim1;
-                v[i__2].r = a[i__3].r;
-                v[i__2].i = a[i__3].i; // , expr subst
+                v[i__2].real = a[i__3].real;
+                v[i__2].imag = a[i__3].imag; // , expr subst
                 i__2 = ofdpos + i__ + (*st - 1) * a_dim1;
-                a[i__2].r = 0.f;
-                a[i__2].i = 0.f; // , expr subst
+                a[i__2].real = 0.f;
+                a[i__2].imag = 0.f; // , expr subst
                 /* L20: */
             }
             aocl_lapack_clarfg(&lm, &a[ofdpos + (*st - 1) * a_dim1], &v[vpos + 1], &c__1,
@@ -439,18 +439,18 @@ void aocl_lapack_chb2st_kernels(char *uplo, logical *wantz, aocl_int64_t *ttype,
                     taupos = (*sweep - 1) % 2 * *n + j1;
                 }
                 i__1 = vpos;
-                v[i__1].r = 1.f;
-                v[i__1].i = 0.f; // , expr subst
+                v[i__1].real = 1.f;
+                v[i__1].imag = 0.f; // , expr subst
                 i__1 = lm - 1;
                 for(i__ = 1; i__ <= i__1; ++i__)
                 {
                     i__2 = vpos + i__;
                     i__3 = dpos + *nb + i__ + *st * a_dim1;
-                    v[i__2].r = a[i__3].r;
-                    v[i__2].i = a[i__3].i; // , expr subst
+                    v[i__2].real = a[i__3].real;
+                    v[i__2].imag = a[i__3].imag; // , expr subst
                     i__2 = dpos + *nb + i__ + *st * a_dim1;
-                    a[i__2].r = 0.f;
-                    a[i__2].i = 0.f; // , expr subst
+                    a[i__2].real = 0.f;
+                    a[i__2].imag = 0.f; // , expr subst
                     /* L40: */
                 }
                 aocl_lapack_clarfg(&lm, &a[dpos + *nb + *st * a_dim1], &v[vpos + 1], &c__1,

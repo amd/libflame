@@ -197,8 +197,8 @@ void aocl_lapack_zlarnv(aocl_int64_t *idist, aocl_int_t *iseed, aocl_int64_t *n,
                 i__3 = iv + i__ - 1;
                 d__1 = sqrt(log(u[(i__ << 1) - 2]) * -2.);
                 d__2 = u[(i__ << 1) - 1] * 6.28318530717958647692528676655900576839;
-                z__3.r = 0.;
-                z__3.i = d__2; // , expr subst
+                z__3.real = 0.;
+                z__3.imag = d__2; // , expr subst
                 z_exp(&z__2, &z__3);
                 z__1.real = d__1 * z__2.real;
                 z__1.imag = d__1 * z__2.imag; // , expr subst
@@ -217,8 +217,8 @@ void aocl_lapack_zlarnv(aocl_int64_t *idist, aocl_int_t *iseed, aocl_int64_t *n,
                 i__3 = iv + i__ - 1;
                 d__1 = sqrt(u[(i__ << 1) - 2]);
                 d__2 = u[(i__ << 1) - 1] * 6.28318530717958647692528676655900576839;
-                z__3.r = 0.;
-                z__3.i = d__2; // , expr subst
+                z__3.real = 0.;
+                z__3.imag = d__2; // , expr subst
                 z_exp(&z__2, &z__3);
                 z__1.real = d__1 * z__2.real;
                 z__1.imag = d__1 * z__2.imag; // , expr subst
@@ -236,8 +236,8 @@ void aocl_lapack_zlarnv(aocl_int64_t *idist, aocl_int_t *iseed, aocl_int64_t *n,
             {
                 i__3 = iv + i__ - 1;
                 d__1 = u[(i__ << 1) - 1] * 6.28318530717958647692528676655900576839;
-                z__2.r = 0.;
-                z__2.i = d__1; // , expr subst
+                z__2.real = 0.;
+                z__2.imag = d__1; // , expr subst
                 z_exp(&z__1, &z__2);
                 x[i__3].real = z__1.real;
                 x[i__3].imag = z__1.imag; // , expr subst

@@ -4,7 +4,7 @@
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
  /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static scomplex c_b1 = {{1.f}, {0.f}};
+static scomplex c_b1 = {1.f, 0.f};
 static aocl_int64_t c__1 = 1;
 /* > \brief \b CHEGS2 reduces a Hermitian definite generalized eigenproblem to standard form, using
  * the factor ization results obtained from cpotrf (unblocked algorithm). */
@@ -206,23 +206,23 @@ void chegs2_fla(aocl_int64_t *itype, char *uplo, aocl_int64_t *n, scomplex *a, a
             {
                 /* Update the upper triangle of A(k:n,k:n) */
                 i__2 = k + k * a_dim1;
-                akk = a[i__2].r;
+                akk = a[i__2].real;
                 i__2 = k + k * b_dim1;
-                bkk = b[i__2].r;
+                bkk = b[i__2].real;
                 /* Computing 2nd power */
                 r__1 = bkk;
                 akk /= r__1 * r__1;
                 i__2 = k + k * a_dim1;
-                a[i__2].r = akk;
-                a[i__2].i = 0.f; // , expr subst
+                a[i__2].real = akk;
+                a[i__2].imag = 0.f; // , expr subst
                 if(k < *n)
                 {
                     i__2 = *n - k;
                     r__1 = 1.f / bkk;
                     aocl_blas_csscal(&i__2, &r__1, &a[k + (k + 1) * a_dim1], lda);
                     r__1 = akk * -.5f;
-                    ct.r = r__1;
-                    ct.i = 0.f; // , expr subst
+                    ct.real = r__1;
+                    ct.imag = 0.f; // , expr subst
                     i__2 = *n - k;
                     aocl_lapack_clacgv(&i__2, &a[k + (k + 1) * a_dim1], lda);
                     i__2 = *n - k;
@@ -231,8 +231,8 @@ void chegs2_fla(aocl_int64_t *itype, char *uplo, aocl_int64_t *n, scomplex *a, a
                     aocl_blas_caxpy(&i__2, &ct, &b[k + (k + 1) * b_dim1], ldb,
                                     &a[k + (k + 1) * a_dim1], lda);
                     i__2 = *n - k;
-                    q__1.r = -1.f;
-                    q__1.i = -0.f; // , expr subst
+                    q__1.real = -1.f;
+                    q__1.imag = -0.f; // , expr subst
                     aocl_blas_cher2(uplo, &i__2, &q__1, &a[k + (k + 1) * a_dim1], lda,
                                     &b[k + (k + 1) * b_dim1], ldb, &a[k + 1 + (k + 1) * a_dim1],
                                     lda);
@@ -259,29 +259,29 @@ void chegs2_fla(aocl_int64_t *itype, char *uplo, aocl_int64_t *n, scomplex *a, a
             {
                 /* Update the lower triangle of A(k:n,k:n) */
                 i__2 = k + k * a_dim1;
-                akk = a[i__2].r;
+                akk = a[i__2].real;
                 i__2 = k + k * b_dim1;
-                bkk = b[i__2].r;
+                bkk = b[i__2].real;
                 /* Computing 2nd power */
                 r__1 = bkk;
                 akk /= r__1 * r__1;
                 i__2 = k + k * a_dim1;
-                a[i__2].r = akk;
-                a[i__2].i = 0.f; // , expr subst
+                a[i__2].real = akk;
+                a[i__2].imag = 0.f; // , expr subst
                 if(k < *n)
                 {
                     i__2 = *n - k;
                     r__1 = 1.f / bkk;
                     aocl_blas_csscal(&i__2, &r__1, &a[k + 1 + k * a_dim1], &c__1);
                     r__1 = akk * -.5f;
-                    ct.r = r__1;
-                    ct.i = 0.f; // , expr subst
+                    ct.real = r__1;
+                    ct.imag = 0.f; // , expr subst
                     i__2 = *n - k;
                     aocl_blas_caxpy(&i__2, &ct, &b[k + 1 + k * b_dim1], &c__1,
                                     &a[k + 1 + k * a_dim1], &c__1);
                     i__2 = *n - k;
-                    q__1.r = -1.f;
-                    q__1.i = -0.f; // , expr subst
+                    q__1.real = -1.f;
+                    q__1.imag = -0.f; // , expr subst
                     aocl_blas_cher2(uplo, &i__2, &q__1, &a[k + 1 + k * a_dim1], &c__1,
                                     &b[k + 1 + k * b_dim1], &c__1, &a[k + 1 + (k + 1) * a_dim1],
                                     lda);
@@ -307,15 +307,15 @@ void chegs2_fla(aocl_int64_t *itype, char *uplo, aocl_int64_t *n, scomplex *a, a
             {
                 /* Update the upper triangle of A(1:k,1:k) */
                 i__2 = k + k * a_dim1;
-                akk = a[i__2].r;
+                akk = a[i__2].real;
                 i__2 = k + k * b_dim1;
-                bkk = b[i__2].r;
+                bkk = b[i__2].real;
                 i__2 = k - 1;
                 aocl_blas_ctrmv(uplo, "No transpose", "Non-unit", &i__2, &b[b_offset], ldb,
                                 &a[k * a_dim1 + 1], &c__1);
                 r__1 = akk * .5f;
-                ct.r = r__1;
-                ct.i = 0.f; // , expr subst
+                ct.real = r__1;
+                ct.imag = 0.f; // , expr subst
                 i__2 = k - 1;
                 aocl_blas_caxpy(&i__2, &ct, &b[k * b_dim1 + 1], &c__1, &a[k * a_dim1 + 1], &c__1);
                 i__2 = k - 1;
@@ -329,8 +329,8 @@ void chegs2_fla(aocl_int64_t *itype, char *uplo, aocl_int64_t *n, scomplex *a, a
                 /* Computing 2nd power */
                 r__2 = bkk;
                 r__1 = akk * (r__2 * r__2);
-                a[i__2].r = r__1;
-                a[i__2].i = 0.f; // , expr subst
+                a[i__2].real = r__1;
+                a[i__2].imag = 0.f; // , expr subst
                 /* L30: */
             }
         }
@@ -342,17 +342,17 @@ void chegs2_fla(aocl_int64_t *itype, char *uplo, aocl_int64_t *n, scomplex *a, a
             {
                 /* Update the lower triangle of A(1:k,1:k) */
                 i__2 = k + k * a_dim1;
-                akk = a[i__2].r;
+                akk = a[i__2].real;
                 i__2 = k + k * b_dim1;
-                bkk = b[i__2].r;
+                bkk = b[i__2].real;
                 i__2 = k - 1;
                 aocl_lapack_clacgv(&i__2, &a[k + a_dim1], lda);
                 i__2 = k - 1;
                 aocl_blas_ctrmv(uplo, "Conjugate transpose", "Non-unit", &i__2, &b[b_offset], ldb,
                                 &a[k + a_dim1], lda);
                 r__1 = akk * .5f;
-                ct.r = r__1;
-                ct.i = 0.f; // , expr subst
+                ct.real = r__1;
+                ct.imag = 0.f; // , expr subst
                 i__2 = k - 1;
                 aocl_lapack_clacgv(&i__2, &b[k + b_dim1], ldb);
                 i__2 = k - 1;
@@ -372,8 +372,8 @@ void chegs2_fla(aocl_int64_t *itype, char *uplo, aocl_int64_t *n, scomplex *a, a
                 /* Computing 2nd power */
                 r__2 = bkk;
                 r__1 = akk * (r__2 * r__2);
-                a[i__2].r = r__1;
-                a[i__2].i = 0.f; // , expr subst
+                a[i__2].real = r__1;
+                a[i__2].imag = 0.f; // , expr subst
                 /* L40: */
             }
         }

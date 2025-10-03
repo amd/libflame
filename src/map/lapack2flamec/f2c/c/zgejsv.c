@@ -4,8 +4,8 @@
  -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for
  libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static dcomplex c_b1 = {{0.}, {0.}};
-static dcomplex c_b2 = {{1.}, {0.}};
+static dcomplex c_b1 = {0., 0.};
+static dcomplex c_b2 = {1., 0.};
 static aocl_int64_t c_n1 = -1;
 static aocl_int64_t c__1 = 1;
 static aocl_int64_t c__0 = 0;
@@ -817,11 +817,11 @@ void aocl_lapack_zgejsv(char *joba, char *jobu, char *jobv, char *jobr, char *jo
         {
             aocl_lapack_zgeqp3(m, n, &a[a_offset], lda, &iwork[1], cdummy, cdummy, &c_n1, rdummy,
                                &ierr);
-            lwrk_zgeqp3__ = (integer)cdummy[0].r;
+            lwrk_zgeqp3__ = (integer)cdummy[0].real;
             aocl_lapack_zgeqrf(n, n, &a[a_offset], lda, cdummy, cdummy, &c_n1, &ierr);
-            lwrk_zgeqrf__ = (integer)cdummy[0].r;
+            lwrk_zgeqrf__ = (integer)cdummy[0].real;
             aocl_lapack_zgelqf(n, n, &a[a_offset], lda, cdummy, cdummy, &c_n1, &ierr);
-            lwrk_zgelqf__ = (integer)cdummy[0].r;
+            lwrk_zgelqf__ = (integer)cdummy[0].real;
         }
         minwrk = 2;
         optwrk = 2;
@@ -852,7 +852,7 @@ void aocl_lapack_zgejsv(char *joba, char *jobu, char *jobv, char *jobr, char *jo
             {
                 aocl_lapack_zgesvj("L", "N", "N", n, n, &a[a_offset], lda, &sva[1], n, &v[v_offset],
                                    ldv, cdummy, &c_n1, rdummy, &c_n1, &ierr);
-                lwrk_zgesvj__ = (integer)cdummy[0].r;
+                lwrk_zgesvj__ = (integer)cdummy[0].real;
                 if(errest)
                 {
                     /* Computing MAX */
@@ -941,10 +941,10 @@ void aocl_lapack_zgejsv(char *joba, char *jobu, char *jobv, char *jobr, char *jo
             {
                 aocl_lapack_zgesvj("L", "U", "N", n, n, &u[u_offset], ldu, &sva[1], n, &a[a_offset],
                                    lda, cdummy, &c_n1, rdummy, &c_n1, &ierr);
-                lwrk_zgesvj__ = (integer)cdummy[0].r;
+                lwrk_zgesvj__ = (integer)cdummy[0].real;
                 aocl_lapack_zunmlq("L", "C", n, n, n, &a[a_offset], lda, cdummy, &v[v_offset], ldv,
                                    cdummy, &c_n1, &ierr);
-                lwrk_zunmlq__ = (integer)cdummy[0].r;
+                lwrk_zunmlq__ = (integer)cdummy[0].real;
                 if(errest)
                 {
                     /* Computing MAX */
@@ -1032,10 +1032,10 @@ void aocl_lapack_zgejsv(char *joba, char *jobu, char *jobv, char *jobr, char *jo
             {
                 aocl_lapack_zgesvj("L", "U", "N", n, n, &u[u_offset], ldu, &sva[1], n, &a[a_offset],
                                    lda, cdummy, &c_n1, rdummy, &c_n1, &ierr);
-                lwrk_zgesvj__ = (integer)cdummy[0].r;
+                lwrk_zgesvj__ = (integer)cdummy[0].real;
                 aocl_lapack_zunmqr("L", "N", m, n, n, &a[a_offset], lda, cdummy, &u[u_offset], ldu,
                                    cdummy, &c_n1, &ierr);
-                lwrk_zunmqrm__ = (integer)cdummy[0].r;
+                lwrk_zunmqrm__ = (integer)cdummy[0].real;
                 if(errest)
                 {
                     /* Computing MAX */
@@ -1217,27 +1217,27 @@ void aocl_lapack_zgejsv(char *joba, char *jobu, char *jobv, char *jobr, char *jo
             {
                 aocl_lapack_zunmqr("L", "N", m, n, n, &a[a_offset], lda, cdummy, &u[u_offset], ldu,
                                    cdummy, &c_n1, &ierr);
-                lwrk_zunmqrm__ = (integer)cdummy[0].r;
+                lwrk_zunmqrm__ = (integer)cdummy[0].real;
                 aocl_lapack_zunmqr("L", "N", n, n, n, &a[a_offset], lda, cdummy, &u[u_offset], ldu,
                                    cdummy, &c_n1, &ierr);
-                lwrk_zunmqr__ = (integer)cdummy[0].r;
+                lwrk_zunmqr__ = (integer)cdummy[0].real;
                 if(!jracc)
                 {
                     aocl_lapack_zgeqp3(n, n, &a[a_offset], lda, &iwork[1], cdummy, cdummy, &c_n1,
                                        rdummy, &ierr);
-                    lwrk_zgeqp3n__ = (integer)cdummy[0].r;
+                    lwrk_zgeqp3n__ = (integer)cdummy[0].real;
                     aocl_lapack_zgesvj("L", "U", "N", n, n, &u[u_offset], ldu, &sva[1], n,
                                        &v[v_offset], ldv, cdummy, &c_n1, rdummy, &c_n1, &ierr);
-                    lwrk_zgesvj__ = (integer)cdummy[0].r;
+                    lwrk_zgesvj__ = (integer)cdummy[0].real;
                     aocl_lapack_zgesvj("U", "U", "N", n, n, &u[u_offset], ldu, &sva[1], n,
                                        &v[v_offset], ldv, cdummy, &c_n1, rdummy, &c_n1, &ierr);
-                    lwrk_zgesvju__ = (integer)cdummy[0].r;
+                    lwrk_zgesvju__ = (integer)cdummy[0].real;
                     aocl_lapack_zgesvj("L", "U", "V", n, n, &u[u_offset], ldu, &sva[1], n,
                                        &v[v_offset], ldv, cdummy, &c_n1, rdummy, &c_n1, &ierr);
-                    lwrk_zgesvjv__ = (integer)cdummy[0].r;
+                    lwrk_zgesvjv__ = (integer)cdummy[0].real;
                     aocl_lapack_zunmlq("L", "C", n, n, n, &a[a_offset], lda, cdummy, &v[v_offset],
                                        ldv, cdummy, &c_n1, &ierr);
-                    lwrk_zunmlq__ = (integer)cdummy[0].r;
+                    lwrk_zunmlq__ = (integer)cdummy[0].real;
                     if(errest)
                     {
                         /* Computing MAX */
@@ -1325,13 +1325,13 @@ void aocl_lapack_zgejsv(char *joba, char *jobu, char *jobv, char *jobr, char *jo
                 {
                     aocl_lapack_zgesvj("L", "U", "V", n, n, &u[u_offset], ldu, &sva[1], n,
                                        &v[v_offset], ldv, cdummy, &c_n1, rdummy, &c_n1, &ierr);
-                    lwrk_zgesvjv__ = (integer)cdummy[0].r;
+                    lwrk_zgesvjv__ = (integer)cdummy[0].real;
                     aocl_lapack_zunmqr("L", "N", n, n, n, cdummy, n, cdummy, &v[v_offset], ldv,
                                        cdummy, &c_n1, &ierr);
-                    lwrk_zunmqr__ = (integer)cdummy[0].r;
+                    lwrk_zunmqr__ = (integer)cdummy[0].real;
                     aocl_lapack_zunmqr("L", "N", m, n, n, &a[a_offset], lda, cdummy, &u[u_offset],
                                        ldu, cdummy, &c_n1, &ierr);
-                    lwrk_zunmqrm__ = (integer)cdummy[0].r;
+                    lwrk_zunmqrm__ = (integer)cdummy[0].real;
                     if(errest)
                     {
                         /* Computing MAX */
@@ -1407,10 +1407,10 @@ void aocl_lapack_zgejsv(char *joba, char *jobu, char *jobv, char *jobr, char *jo
     }
     else if(lquery)
     {
-        cwork[1].r = (doublereal)optwrk;
-        cwork[1].i = 0.; // , expr subst
-        cwork[2].r = (doublereal)minwrk;
-        cwork[2].i = 0.; // , expr subst
+        cwork[1].real = (doublereal)optwrk;
+        cwork[1].imag = 0.; // , expr subst
+        cwork[2].real = (doublereal)minwrk;
+        cwork[2].imag = 0.; // , expr subst
         rwork[1] = (doublereal)minrwrk;
         iwork[1] = fla_max(4, miniwrk);
         AOCL_DTL_TRACE_LOG_EXIT
@@ -1580,8 +1580,8 @@ void aocl_lapack_zgejsv(char *joba, char *jobu, char *jobv, char *jobr, char *jo
         if(rsvec)
         {
             i__1 = v_dim1 + 1;
-            v[i__1].r = 1.;
-            v[i__1].i = 0.; // , expr subst
+            v[i__1].real = 1.;
+            v[i__1].imag = 0.; // , expr subst
         }
         if(sva[1] < big * scalem)
         {
@@ -1740,29 +1740,29 @@ void aocl_lapack_zgejsv(char *joba, char *jobu, char *jobv, char *jobr, char *jo
             {
                 i__2 = p + p * a_dim1;
                 d_cnjg(&z__1, &a[p + p * a_dim1]);
-                a[i__2].r = z__1.r;
-                a[i__2].i = z__1.i; // , expr subst
+                a[i__2].real = z__1.real;
+                a[i__2].imag = z__1.imag; // , expr subst
                 i__2 = *n;
                 for(q = p + 1; q <= i__2; ++q)
                 {
                     d_cnjg(&z__1, &a[q + p * a_dim1]);
-                    ctemp.r = z__1.r;
-                    ctemp.i = z__1.i; // , expr subst
+                    ctemp.real = z__1.real;
+                    ctemp.imag = z__1.imag; // , expr subst
                     i__3 = q + p * a_dim1;
                     d_cnjg(&z__1, &a[p + q * a_dim1]);
-                    a[i__3].r = z__1.r;
-                    a[i__3].i = z__1.i; // , expr subst
+                    a[i__3].real = z__1.real;
+                    a[i__3].imag = z__1.imag; // , expr subst
                     i__3 = p + q * a_dim1;
-                    a[i__3].r = ctemp.r;
-                    a[i__3].i = ctemp.i; // , expr subst
+                    a[i__3].real = ctemp.real;
+                    a[i__3].imag = ctemp.imag; // , expr subst
                     /* L1116: */
                 }
                 /* L1115: */
             }
             i__1 = *n + *n * a_dim1;
             d_cnjg(&z__1, &a[*n + *n * a_dim1]);
-            a[i__1].r = z__1.r;
-            a[i__1].i = z__1.i; // , expr subst
+            a[i__1].real = z__1.real;
+            a[i__1].imag = z__1.imag; // , expr subst
             i__1 = *n;
             for(p = 1; p <= i__1; ++p)
             {
@@ -2104,8 +2104,8 @@ void aocl_lapack_zgejsv(char *joba, char *jobu, char *jobv, char *jobr, char *jo
         {
             i__1 = *n + *n * a_dim1;
             d_cnjg(&z__1, &a[*n + *n * a_dim1]);
-            a[i__1].r = z__1.r;
-            a[i__1].i = z__1.i; // , expr subst
+            a[i__1].real = z__1.real;
+            a[i__1].imag = z__1.imag; // , expr subst
         }
         /* The following two DO-loops introduce small relative perturbation */
         /* into the strict upper triangle of the lower triangular matrix. */
@@ -2128,18 +2128,18 @@ void aocl_lapack_zgejsv(char *joba, char *jobu, char *jobv, char *jobr, char *jo
                 for(q = 1; q <= i__1; ++q)
                 {
                     d__1 = xsc * z_abs(&a[q + q * a_dim1]);
-                    z__1.r = d__1;
-                    z__1.i = 0.; // , expr subst
-                    ctemp.r = z__1.r;
-                    ctemp.i = z__1.i; // , expr subst
+                    z__1.real = d__1;
+                    z__1.imag = 0.; // , expr subst
+                    ctemp.real = z__1.real;
+                    ctemp.imag = z__1.imag; // , expr subst
                     i__2 = *n;
                     for(p = 1; p <= i__2; ++p)
                     {
                         if(p > q && z_abs(&a[p + q * a_dim1]) <= temp1 || p < q)
                         {
                             i__3 = p + q * a_dim1;
-                            a[i__3].r = ctemp.r;
-                            a[i__3].i = ctemp.i; // , expr subst
+                            a[i__3].real = ctemp.real;
+                            a[i__3].imag = ctemp.imag; // , expr subst
                         }
                         /* $ A(p,q) = TEMP1 * ( A(p,q) / ABS(A(p,q)) ) */
                         /* L4949: */
@@ -2179,18 +2179,18 @@ void aocl_lapack_zgejsv(char *joba, char *jobu, char *jobv, char *jobr, char *jo
             for(q = 1; q <= i__1; ++q)
             {
                 d__1 = xsc * z_abs(&a[q + q * a_dim1]);
-                z__1.r = d__1;
-                z__1.i = 0.; // , expr subst
-                ctemp.r = z__1.r;
-                ctemp.i = z__1.i; // , expr subst
+                z__1.real = d__1;
+                z__1.imag = 0.; // , expr subst
+                ctemp.real = z__1.real;
+                ctemp.imag = z__1.imag; // , expr subst
                 i__2 = nr;
                 for(p = 1; p <= i__2; ++p)
                 {
                     if(p > q && z_abs(&a[p + q * a_dim1]) <= temp1 || p < q)
                     {
                         i__3 = p + q * a_dim1;
-                        a[i__3].r = ctemp.r;
-                        a[i__3].i = ctemp.i; // , expr subst
+                        a[i__3].real = ctemp.real;
+                        a[i__3].imag = ctemp.imag; // , expr subst
                     }
                     /* $ A(p,q) = TEMP1 * ( A(p,q) / ABS(A(p,q)) ) */
                     /* L1949: */
@@ -2416,28 +2416,28 @@ void aocl_lapack_zgejsv(char *joba, char *jobu, char *jobv, char *jobr, char *jo
                     for(q = 1; q <= i__1; ++q)
                     {
                         d__1 = xsc * z_abs(&v[q + q * v_dim1]);
-                        z__1.r = d__1;
-                        z__1.i = 0.; // , expr subst
-                        ctemp.r = z__1.r;
-                        ctemp.i = z__1.i; // , expr subst
+                        z__1.real = d__1;
+                        z__1.imag = 0.; // , expr subst
+                        ctemp.real = z__1.real;
+                        ctemp.imag = z__1.imag; // , expr subst
                         i__2 = *n;
                         for(p = 1; p <= i__2; ++p)
                         {
                             if(p > q && z_abs(&v[p + q * v_dim1]) <= temp1 || p < q)
                             {
                                 i__3 = p + q * v_dim1;
-                                v[i__3].r = ctemp.r;
-                                v[i__3].i = ctemp.i; // , expr subst
+                                v[i__3].real = ctemp.real;
+                                v[i__3].imag = ctemp.imag; // , expr subst
                             }
                             /* $ V(p,q) = TEMP1 * ( V(p,q) / ABS(V(p,q)) ) */
                             if(p < q)
                             {
                                 i__3 = p + q * v_dim1;
                                 i__4 = p + q * v_dim1;
-                                z__1.r = -v[i__4].r;
-                                z__1.i = -v[i__4].i; // , expr subst
-                                v[i__3].r = z__1.r;
-                                v[i__3].i = z__1.i; // , expr subst
+                                z__1.real = -v[i__4].real;
+                                z__1.imag = -v[i__4].imag; // , expr subst
+                                v[i__3].real = z__1.real;
+                                v[i__3].imag = z__1.imag; // , expr subst
                             }
                             /* L2968: */
                         }
@@ -2495,15 +2495,15 @@ void aocl_lapack_zgejsv(char *joba, char *jobu, char *jobv, char *jobr, char *jo
                                 d__2 = z_abs(&v[p + p * v_dim1]);
                                 d__3 = z_abs(&v[q + q * v_dim1]); // , expr subst
                                 d__1 = xsc * fla_min(d__2, d__3);
-                                z__1.r = d__1;
-                                z__1.i = 0.; // , expr subst
-                                ctemp.r = z__1.r;
-                                ctemp.i = z__1.i; // , expr subst
+                                z__1.real = d__1;
+                                z__1.imag = 0.; // , expr subst
+                                ctemp.real = z__1.real;
+                                ctemp.imag = z__1.imag; // , expr subst
                                 if(z_abs(&v[q + p * v_dim1]) <= temp1)
                                 {
                                     i__3 = q + p * v_dim1;
-                                    v[i__3].r = ctemp.r;
-                                    v[i__3].i = ctemp.i; // , expr subst
+                                    v[i__3].real = ctemp.real;
+                                    v[i__3].imag = ctemp.imag; // , expr subst
                                 }
                                 /* $ V(q,p) = TEMP1 * ( V(q,p) / ABS(V(q,p)) ) */
                                 /* L3958: */
@@ -2530,8 +2530,8 @@ void aocl_lapack_zgejsv(char *joba, char *jobu, char *jobv, char *jobr, char *jo
                     }
                     i__1 = nr + nr * v_dim1;
                     d_cnjg(&z__1, &v[nr + nr * v_dim1]);
-                    v[i__1].r = z__1.r;
-                    v[i__1].i = z__1.i; // , expr subst
+                    v[i__1].real = z__1.real;
+                    v[i__1].imag = z__1.imag; // , expr subst
                     condr2 = condr1;
                 }
                 else
@@ -2567,15 +2567,15 @@ void aocl_lapack_zgejsv(char *joba, char *jobu, char *jobv, char *jobr, char *jo
                                 d__2 = z_abs(&v[p + p * v_dim1]);
                                 d__3 = z_abs(&v[q + q * v_dim1]); // , expr subst
                                 d__1 = xsc * fla_min(d__2, d__3);
-                                z__1.r = d__1;
-                                z__1.i = 0.; // , expr subst
-                                ctemp.r = z__1.r;
-                                ctemp.i = z__1.i; // , expr subst
+                                z__1.real = d__1;
+                                z__1.imag = 0.; // , expr subst
+                                ctemp.real = z__1.real;
+                                ctemp.imag = z__1.imag; // , expr subst
                                 if(z_abs(&v[q + p * v_dim1]) <= temp1)
                                 {
                                     i__3 = q + p * v_dim1;
-                                    v[i__3].r = ctemp.r;
-                                    v[i__3].i = ctemp.i; // , expr subst
+                                    v[i__3].real = ctemp.real;
+                                    v[i__3].imag = ctemp.imag; // , expr subst
                                 }
                                 /* $ V(q,p) = TEMP1 * ( V(q,p) / ABS(V(q,p)) ) */
                                 /* L3968: */
@@ -2597,16 +2597,16 @@ void aocl_lapack_zgejsv(char *joba, char *jobu, char *jobv, char *jobr, char *jo
                                 d__2 = z_abs(&v[p + p * v_dim1]);
                                 d__3 = z_abs(&v[q + q * v_dim1]); // , expr subst
                                 d__1 = xsc * fla_min(d__2, d__3);
-                                z__1.r = d__1;
-                                z__1.i = 0.; // , expr subst
-                                ctemp.r = z__1.r;
-                                ctemp.i = z__1.i; // , expr subst
+                                z__1.real = d__1;
+                                z__1.imag = 0.; // , expr subst
+                                ctemp.real = z__1.real;
+                                ctemp.imag = z__1.imag; // , expr subst
                                 /* V(p,q) = - TEMP1*( V(q,p) / ABS(V(q,p)) ) */
                                 i__3 = p + q * v_dim1;
-                                z__1.r = -ctemp.r;
-                                z__1.i = -ctemp.i; // , expr subst
-                                v[i__3].r = z__1.r;
-                                v[i__3].i = z__1.i; // , expr subst
+                                z__1.real = -ctemp.real;
+                                z__1.imag = -ctemp.imag; // , expr subst
+                                v[i__3].real = z__1.real;
+                                v[i__3].imag = z__1.imag; // , expr subst
                                 /* L8971: */
                             }
                             /* L8970: */
@@ -2656,19 +2656,19 @@ void aocl_lapack_zgejsv(char *joba, char *jobu, char *jobv, char *jobr, char *jo
                     for(q = 2; q <= i__1; ++q)
                     {
                         i__2 = q + q * v_dim1;
-                        z__1.r = xsc * v[i__2].r;
-                        z__1.i = xsc * v[i__2].i; // , expr subst
-                        ctemp.r = z__1.r;
-                        ctemp.i = z__1.i; // , expr subst
+                        z__1.real = xsc * v[i__2].real;
+                        z__1.imag = xsc * v[i__2].imag; // , expr subst
+                        ctemp.real = z__1.real;
+                        ctemp.imag = z__1.imag; // , expr subst
                         i__2 = q - 1;
                         for(p = 1; p <= i__2; ++p)
                         {
                             /* V(p,q) = - TEMP1*( V(p,q) / ABS(V(p,q)) ) */
                             i__3 = p + q * v_dim1;
-                            z__1.r = -ctemp.r;
-                            z__1.i = -ctemp.i; // , expr subst
-                            v[i__3].r = z__1.r;
-                            v[i__3].i = z__1.i; // , expr subst
+                            z__1.real = -ctemp.real;
+                            z__1.imag = -ctemp.imag; // , expr subst
+                            v[i__3].real = z__1.real;
+                            v[i__3].imag = z__1.imag; // , expr subst
                             /* L4969: */
                         }
                         /* L4968: */
@@ -2767,8 +2767,8 @@ void aocl_lapack_zgejsv(char *joba, char *jobu, char *jobv, char *jobr, char *jo
                         {
                             i__3 = (*n << 1) + *n * nr + nr + iwork[*n + p];
                             i__4 = p + q * u_dim1;
-                            cwork[i__3].r = u[i__4].r;
-                            cwork[i__3].i = u[i__4].i; // , expr subst
+                            cwork[i__3].real = u[i__4].real;
+                            cwork[i__3].imag = u[i__4].imag; // , expr subst
                             /* L872: */
                         }
                         i__2 = nr;
@@ -2776,8 +2776,8 @@ void aocl_lapack_zgejsv(char *joba, char *jobu, char *jobv, char *jobr, char *jo
                         {
                             i__3 = p + q * u_dim1;
                             i__4 = (*n << 1) + *n * nr + nr + p;
-                            u[i__3].r = cwork[i__4].r;
-                            u[i__3].i = cwork[i__4].i; // , expr subst
+                            u[i__3].real = cwork[i__4].real;
+                            u[i__3].imag = cwork[i__4].imag; // , expr subst
                             /* L874: */
                         }
                         /* L873: */
@@ -2846,8 +2846,8 @@ void aocl_lapack_zgejsv(char *joba, char *jobu, char *jobv, char *jobr, char *jo
                         {
                             i__3 = (*n << 1) + *n * nr + nr + iwork[*n + p];
                             i__4 = p + q * u_dim1;
-                            cwork[i__3].r = u[i__4].r;
-                            cwork[i__3].i = u[i__4].i; // , expr subst
+                            cwork[i__3].real = u[i__4].real;
+                            cwork[i__3].imag = u[i__4].imag; // , expr subst
                             /* L772: */
                         }
                         i__2 = nr;
@@ -2855,8 +2855,8 @@ void aocl_lapack_zgejsv(char *joba, char *jobu, char *jobv, char *jobr, char *jo
                         {
                             i__3 = p + q * u_dim1;
                             i__4 = (*n << 1) + *n * nr + nr + p;
-                            u[i__3].r = cwork[i__4].r;
-                            u[i__3].i = cwork[i__4].i; // , expr subst
+                            u[i__3].real = cwork[i__4].real;
+                            u[i__3].imag = cwork[i__4].imag; // , expr subst
                             /* L774: */
                         }
                         /* L773: */
@@ -2874,8 +2874,8 @@ void aocl_lapack_zgejsv(char *joba, char *jobu, char *jobv, char *jobr, char *jo
                     {
                         i__3 = (*n << 1) + *n * nr + nr + iwork[p];
                         i__4 = p + q * v_dim1;
-                        cwork[i__3].r = v[i__4].r;
-                        cwork[i__3].i = v[i__4].i; // , expr subst
+                        cwork[i__3].real = v[i__4].real;
+                        cwork[i__3].imag = v[i__4].imag; // , expr subst
                         /* L972: */
                     }
                     i__2 = *n;
@@ -2883,8 +2883,8 @@ void aocl_lapack_zgejsv(char *joba, char *jobu, char *jobv, char *jobr, char *jo
                     {
                         i__3 = p + q * v_dim1;
                         i__4 = (*n << 1) + *n * nr + nr + p;
-                        v[i__3].r = cwork[i__4].r;
-                        v[i__3].i = cwork[i__4].i; // , expr subst
+                        v[i__3].real = cwork[i__4].real;
+                        v[i__3].imag = cwork[i__4].imag; // , expr subst
                         /* L973: */
                     }
                     xsc = 1. / aocl_blas_dznrm2(n, &v[q * v_dim1 + 1], &c__1);
@@ -2949,20 +2949,20 @@ void aocl_lapack_zgejsv(char *joba, char *jobu, char *jobv, char *jobr, char *jo
                     for(p = 2; p <= i__1; ++p)
                     {
                         i__2 = *n + (p - 1) * *n + p;
-                        z__1.r = xsc * cwork[i__2].r;
-                        z__1.i = xsc * cwork[i__2].i; // , expr subst
-                        ctemp.r = z__1.r;
-                        ctemp.i = z__1.i; // , expr subst
+                        z__1.real = xsc * cwork[i__2].real;
+                        z__1.imag = xsc * cwork[i__2].imag; // , expr subst
+                        ctemp.real = z__1.real;
+                        ctemp.imag = z__1.imag; // , expr subst
                         i__2 = p - 1;
                         for(q = 1; q <= i__2; ++q)
                         {
                             /* CWORK(N+(q-1)*N+p)=-TEMP1 * ( CWORK(N+(p-1)*N+q) / */
                             /* $ ABS(CWORK(N+(p-1)*N+q)) ) */
                             i__3 = *n + (q - 1) * *n + p;
-                            z__1.r = -ctemp.r;
-                            z__1.i = -ctemp.i; // , expr subst
-                            cwork[i__3].r = z__1.r;
-                            cwork[i__3].i = z__1.i; // , expr subst
+                            z__1.real = -ctemp.real;
+                            z__1.imag = -ctemp.imag; // , expr subst
+                            cwork[i__3].real = z__1.real;
+                            cwork[i__3].imag = z__1.imag; // , expr subst
                             /* L5971: */
                         }
                         /* L5970: */
@@ -3073,28 +3073,28 @@ void aocl_lapack_zgejsv(char *joba, char *jobu, char *jobv, char *jobr, char *jo
                 for(q = 1; q <= i__1; ++q)
                 {
                     d__1 = xsc * z_abs(&v[q + q * v_dim1]);
-                    z__1.r = d__1;
-                    z__1.i = 0.; // , expr subst
-                    ctemp.r = z__1.r;
-                    ctemp.i = z__1.i; // , expr subst
+                    z__1.real = d__1;
+                    z__1.imag = 0.; // , expr subst
+                    ctemp.real = z__1.real;
+                    ctemp.imag = z__1.imag; // , expr subst
                     i__2 = *n;
                     for(p = 1; p <= i__2; ++p)
                     {
                         if(p > q && z_abs(&v[p + q * v_dim1]) <= temp1 || p < q)
                         {
                             i__3 = p + q * v_dim1;
-                            v[i__3].r = ctemp.r;
-                            v[i__3].i = ctemp.i; // , expr subst
+                            v[i__3].real = ctemp.real;
+                            v[i__3].imag = ctemp.imag; // , expr subst
                         }
                         /* $ V(p,q) = TEMP1 * ( V(p,q) / ABS(V(p,q)) ) */
                         if(p < q)
                         {
                             i__3 = p + q * v_dim1;
                             i__4 = p + q * v_dim1;
-                            z__1.r = -v[i__4].r;
-                            z__1.i = -v[i__4].i; // , expr subst
-                            v[i__3].r = z__1.r;
-                            v[i__3].i = z__1.i; // , expr subst
+                            z__1.real = -v[i__4].real;
+                            z__1.imag = -v[i__4].imag; // , expr subst
+                            v[i__3].real = z__1.real;
+                            v[i__3].imag = z__1.imag; // , expr subst
                         }
                         /* L5968: */
                     }
@@ -3133,16 +3133,16 @@ void aocl_lapack_zgejsv(char *joba, char *jobu, char *jobv, char *jobr, char *jo
                         d__2 = z_abs(&u[p + p * u_dim1]);
                         d__3 = z_abs(&u[q + q * u_dim1]); // , expr subst
                         d__1 = xsc * fla_min(d__2, d__3);
-                        z__1.r = d__1;
-                        z__1.i = 0.; // , expr subst
-                        ctemp.r = z__1.r;
-                        ctemp.i = z__1.i; // , expr subst
+                        z__1.real = d__1;
+                        z__1.imag = 0.; // , expr subst
+                        ctemp.real = z__1.real;
+                        ctemp.imag = z__1.imag; // , expr subst
                         /* U(p,q) = - TEMP1 * ( U(q,p) / ABS(U(q,p)) ) */
                         i__3 = p + q * u_dim1;
-                        z__1.r = -ctemp.r;
-                        z__1.i = -ctemp.i; // , expr subst
-                        u[i__3].r = z__1.r;
-                        u[i__3].i = z__1.i; // , expr subst
+                        z__1.real = -ctemp.real;
+                        z__1.imag = -ctemp.imag; // , expr subst
+                        u[i__3].real = z__1.real;
+                        u[i__3].imag = z__1.imag; // , expr subst
                         /* L9971: */
                     }
                     /* L9970: */
@@ -3187,8 +3187,8 @@ void aocl_lapack_zgejsv(char *joba, char *jobu, char *jobv, char *jobr, char *jo
                 {
                     i__3 = (*n << 1) + *n * nr + nr + iwork[p];
                     i__4 = p + q * v_dim1;
-                    cwork[i__3].r = v[i__4].r;
-                    cwork[i__3].i = v[i__4].i; // , expr subst
+                    cwork[i__3].real = v[i__4].real;
+                    cwork[i__3].imag = v[i__4].imag; // , expr subst
                     /* L8972: */
                 }
                 i__2 = *n;
@@ -3196,8 +3196,8 @@ void aocl_lapack_zgejsv(char *joba, char *jobu, char *jobv, char *jobr, char *jo
                 {
                     i__3 = p + q * v_dim1;
                     i__4 = (*n << 1) + *n * nr + nr + p;
-                    v[i__3].r = cwork[i__4].r;
-                    v[i__3].i = cwork[i__4].i; // , expr subst
+                    v[i__3].real = cwork[i__4].real;
+                    v[i__3].imag = cwork[i__4].imag; // , expr subst
                     /* L8973: */
                 }
                 xsc = 1. / aocl_blas_dznrm2(n, &v[q * v_dim1 + 1], &c__1);

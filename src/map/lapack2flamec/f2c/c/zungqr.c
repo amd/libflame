@@ -202,8 +202,8 @@ void aocl_lapack_zungqr(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *k, dcomp
     nb = aocl_lapack_ilaenv(&c__1, "ZUNGQR", " ", m, n, k, &c_n1);
 #endif
     lwkopt = fla_max(1, *n) * nb;
-    work[1].r = (doublereal)lwkopt;
-    work[1].i = 0.; // , expr subst
+    work[1].real = (doublereal)lwkopt;
+    work[1].imag = 0.; // , expr subst
     lquery = *lwork == -1;
     if(*m < 0)
     {
@@ -240,8 +240,8 @@ void aocl_lapack_zungqr(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *k, dcomp
     /* Quick return if possible */
     if(*n <= 0)
     {
-        work[1].r = 1.;
-        work[1].i = 0.; // , expr subst
+        work[1].real = 1.;
+        work[1].imag = 0.; // , expr subst
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -354,8 +354,8 @@ void aocl_lapack_zungqr(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *k, dcomp
             /* L50: */
         }
     }
-    work[1].r = (doublereal)iws;
-    work[1].i = 0.; // , expr subst
+    work[1].real = (doublereal)iws;
+    work[1].imag = 0.; // , expr subst
     AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of ZUNGQR */

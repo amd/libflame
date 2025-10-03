@@ -4,7 +4,7 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static scomplex c_b5 = {{1.f}, {0.f}};
+static scomplex c_b5 = {1.f, 0.f};
 /* > \brief \b CLARFG generates an elementary reflector (Householder matrix). */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -170,18 +170,18 @@ void aocl_lapack_clarfg(aocl_int64_t *n, scomplex *alpha, scomplex *x, aocl_int6
     /* Function Body */
     if(*n <= 0)
     {
-        tau->r = 0.f, tau->i = 0.f;
+        tau->real = 0.f, tau->imag = 0.f;
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
     i__1 = *n - 1;
     xnorm = aocl_blas_scnrm2(&i__1, &x[1], incx);
-    alphr = alpha->r;
-    alphi = alpha->i;
+    alphr = alpha->real;
+    alphi = alpha->imag;
     if(xnorm == 0.f && alphi == 0.f)
     {
         /* H = I */
-        tau->r = 0.f, tau->i = 0.f;
+        tau->real = 0.f, tau->imag = 0.f;
     }
     else
     {
@@ -209,21 +209,21 @@ void aocl_lapack_clarfg(aocl_int64_t *n, scomplex *alpha, scomplex *x, aocl_int6
             /* New BETA is at most 1, at least SAFMIN */
             i__1 = *n - 1;
             xnorm = aocl_blas_scnrm2(&i__1, &x[1], incx);
-            q__1.r = alphr;
-            q__1.i = alphi; // , expr subst
-            alpha->r = q__1.r, alpha->i = q__1.i;
+            q__1.real = alphr;
+            q__1.imag = alphi; // , expr subst
+            alpha->real = q__1.real, alpha->imag = q__1.imag;
             r__1 = slapy3_(&alphr, &alphi, &xnorm);
             beta = -r_sign(&r__1, &alphr);
         }
         r__1 = (beta - alphr) / beta;
         r__2 = -alphi / beta;
-        q__1.r = r__1;
-        q__1.i = r__2; // , expr subst
-        tau->r = q__1.r, tau->i = q__1.i;
-        q__2.r = alpha->r - beta;
-        q__2.i = alpha->i; // , expr subst
+        q__1.real = r__1;
+        q__1.imag = r__2; // , expr subst
+        tau->real = q__1.real, tau->imag = q__1.imag;
+        q__2.real = alpha->real - beta;
+        q__2.imag = alpha->imag; // , expr subst
         cladiv_f2c_(&q__1, &c_b5, &q__2);
-        alpha->r = q__1.r, alpha->i = q__1.i;
+        alpha->real = q__1.real, alpha->imag = q__1.imag;
         i__1 = *n - 1;
         aocl_blas_cscal(&i__1, alpha, &x[1], incx);
         /* If ALPHA is subnormal, it may lose relative accuracy */
@@ -233,7 +233,7 @@ void aocl_lapack_clarfg(aocl_int64_t *n, scomplex *alpha, scomplex *x, aocl_int6
             beta *= safmin;
             /* L20: */
         }
-        alpha->r = beta, alpha->i = 0.f;
+        alpha->real = beta, alpha->imag = 0.f;
     }
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
     return;

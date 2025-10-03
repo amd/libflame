@@ -4,8 +4,8 @@
  -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for
  libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static dcomplex c_b1 = {{0.}, {0.}};
-static dcomplex c_b2 = {{1.}, {0.}};
+static dcomplex c_b1 = {0., 0.};
+static dcomplex c_b2 = {1., 0.};
 static aocl_int64_t c_n1 = -1;
 /* > \brief \b ZGGSVP3 */
 /* =========== DOCUMENTATION =========== */
@@ -448,7 +448,7 @@ void aocl_lapack_zggsvp3(char *jobu, char *jobv, char *jobq, aocl_int64_t *m, ao
     {
         aocl_lapack_zgeqp3(p, n, &b[b_offset], ldb, &iwork[1], &tau[1], &work[1], &c_n1, &rwork[1],
                            info);
-        lwkopt = (integer)work[1].r;
+        lwkopt = (integer)work[1].real;
         if(wantv)
         {
             lwkopt = fla_max(lwkopt, *p);
@@ -466,13 +466,13 @@ void aocl_lapack_zggsvp3(char *jobu, char *jobv, char *jobq, aocl_int64_t *m, ao
                            info);
         /* Computing MAX */
         i__1 = lwkopt;
-        i__2 = (integer)work[1].r; // , expr subst
+        i__2 = (integer)work[1].real; // , expr subst
         lwkopt = fla_max(i__1, i__2);
         lwkopt = fla_max(1, lwkopt);
-        z__1.r = (doublereal)lwkopt;
-        z__1.i = 0.; // , expr subst
-        work[1].r = z__1.r;
-        work[1].i = z__1.i; // , expr subst
+        z__1.real = (doublereal)lwkopt;
+        z__1.imag = 0.; // , expr subst
+        work[1].real = z__1.real;
+        work[1].imag = z__1.imag; // , expr subst
     }
     if(*info != 0)
     {
@@ -529,8 +529,8 @@ void aocl_lapack_zggsvp3(char *jobu, char *jobv, char *jobq, aocl_int64_t *m, ao
         for(i__ = j + 1; i__ <= i__2; ++i__)
         {
             i__3 = i__ + j * b_dim1;
-            b[i__3].r = 0.;
-            b[i__3].i = 0.; // , expr subst
+            b[i__3].real = 0.;
+            b[i__3].imag = 0.; // , expr subst
             /* L30: */
         }
         /* L40: */
@@ -569,8 +569,8 @@ void aocl_lapack_zggsvp3(char *jobu, char *jobv, char *jobq, aocl_int64_t *m, ao
             for(i__ = j - *n + *l + 1; i__ <= i__2; ++i__)
             {
                 i__3 = i__ + j * b_dim1;
-                b[i__3].r = 0.;
-                b[i__3].i = 0.; // , expr subst
+                b[i__3].real = 0.;
+                b[i__3].imag = 0.; // , expr subst
                 /* L50: */
             }
             /* L60: */
@@ -642,8 +642,8 @@ void aocl_lapack_zggsvp3(char *jobu, char *jobv, char *jobq, aocl_int64_t *m, ao
         for(i__ = j + 1; i__ <= i__2; ++i__)
         {
             i__3 = i__ + j * a_dim1;
-            a[i__3].r = 0.;
-            a[i__3].i = 0.; // , expr subst
+            a[i__3].real = 0.;
+            a[i__3].imag = 0.; // , expr subst
             /* L90: */
         }
         /* L100: */
@@ -676,8 +676,8 @@ void aocl_lapack_zggsvp3(char *jobu, char *jobv, char *jobq, aocl_int64_t *m, ao
             for(i__ = j - *n + *l + *k + 1; i__ <= i__2; ++i__)
             {
                 i__3 = i__ + j * a_dim1;
-                a[i__3].r = 0.;
-                a[i__3].i = 0.; // , expr subst
+                a[i__3].real = 0.;
+                a[i__3].imag = 0.; // , expr subst
                 /* L110: */
             }
             /* L120: */
@@ -708,17 +708,17 @@ void aocl_lapack_zggsvp3(char *jobu, char *jobv, char *jobq, aocl_int64_t *m, ao
             for(i__ = j - *n + *k + *l + 1; i__ <= i__2; ++i__)
             {
                 i__3 = i__ + j * a_dim1;
-                a[i__3].r = 0.;
-                a[i__3].i = 0.; // , expr subst
+                a[i__3].real = 0.;
+                a[i__3].imag = 0.; // , expr subst
                 /* L130: */
             }
             /* L140: */
         }
     }
-    z__1.r = (doublereal)lwkopt;
-    z__1.i = 0.; // , expr subst
-    work[1].r = z__1.r;
-    work[1].i = z__1.i; // , expr subst
+    z__1.real = (doublereal)lwkopt;
+    z__1.imag = 0.; // , expr subst
+    work[1].real = z__1.real;
+    work[1].imag = z__1.imag; // , expr subst
     AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of ZGGSVP3 */

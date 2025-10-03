@@ -4,7 +4,7 @@
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
  /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static dcomplex c_b1 = {{0.}, {0.}};
+static dcomplex c_b1 = {0., 0.};
 static aocl_int64_t c__1 = 1;
 static aocl_int64_t c_n1 = -1;
 static aocl_int64_t c__0 = 0;
@@ -361,8 +361,8 @@ void aocl_lapack_zgels(char *trans, aocl_int64_t *m, aocl_int64_t *n, aocl_int64
         i__2 = mn + fla_max(mn, *nrhs) * nb; // , expr subst
         wsize = fla_max(i__1, i__2);
         d__1 = (doublereal)wsize;
-        work[1].r = d__1;
-        work[1].i = 0.; // , expr subst
+        work[1].real = d__1;
+        work[1].imag = 0.; // , expr subst
     }
     if(*info != 0)
     {
@@ -567,8 +567,8 @@ void aocl_lapack_zgels(char *trans, aocl_int64_t *m, aocl_int64_t *n, aocl_int64
     }
 L50:
     d__1 = (doublereal)wsize;
-    work[1].r = d__1;
-    work[1].i = 0.; // , expr subst
+    work[1].real = d__1;
+    work[1].imag = 0.; // , expr subst
     AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of ZGELS */

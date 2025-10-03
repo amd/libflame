@@ -315,22 +315,22 @@ void aocl_lapack_zlasr(char *side, char *pivot, char *direct, aocl_int64_t *m, a
                             z__2.real = ctemp * temp.real;
                             z__2.imag = ctemp * temp.imag; // , expr subst
                             i__4 = j + i__ * a_dim1;
-                            z__3.r = stemp * a[i__4].r;
-                            z__3.i = stemp * a[i__4].i; // , expr subst
-                            z__1.r = z__2.r - z__3.r;
-                            z__1.i = z__2.i - z__3.i; // , expr subst
-                            a[i__3].r = z__1.r;
-                            a[i__3].i = z__1.i; // , expr subst
+                            z__3.real = stemp * a[i__4].real;
+                            z__3.imag = stemp * a[i__4].imag; // , expr subst
+                            z__1.real = z__2.real - z__3.real;
+                            z__1.imag = z__2.imag - z__3.imag; // , expr subst
+                            a[i__3].real = z__1.real;
+                            a[i__3].imag = z__1.imag; // , expr subst
                             i__3 = j + i__ * a_dim1;
                             z__2.real = stemp * temp.real;
                             z__2.imag = stemp * temp.imag; // , expr subst
                             i__4 = j + i__ * a_dim1;
-                            z__3.r = ctemp * a[i__4].r;
-                            z__3.i = ctemp * a[i__4].i; // , expr subst
-                            z__1.r = z__2.r + z__3.r;
-                            z__1.i = z__2.i + z__3.i; // , expr subst
-                            a[i__3].r = z__1.r;
-                            a[i__3].i = z__1.i; // , expr subst
+                            z__3.real = ctemp * a[i__4].real;
+                            z__3.imag = ctemp * a[i__4].imag; // , expr subst
+                            z__1.real = z__2.real + z__3.real;
+                            z__1.imag = z__2.imag + z__3.imag; // , expr subst
+                            a[i__3].real = z__1.real;
+                            a[i__3].imag = z__1.imag; // , expr subst
                             /* L10: */
                         }
                     }
@@ -355,22 +355,22 @@ void aocl_lapack_zlasr(char *side, char *pivot, char *direct, aocl_int64_t *m, a
                             z__2.real = ctemp * temp.real;
                             z__2.imag = ctemp * temp.imag; // , expr subst
                             i__3 = j + i__ * a_dim1;
-                            z__3.r = stemp * a[i__3].r;
-                            z__3.i = stemp * a[i__3].i; // , expr subst
-                            z__1.r = z__2.r - z__3.r;
-                            z__1.i = z__2.i - z__3.i; // , expr subst
-                            a[i__2].r = z__1.r;
-                            a[i__2].i = z__1.i; // , expr subst
+                            z__3.real = stemp * a[i__3].real;
+                            z__3.imag = stemp * a[i__3].imag; // , expr subst
+                            z__1.real = z__2.real - z__3.real;
+                            z__1.imag = z__2.imag - z__3.imag; // , expr subst
+                            a[i__2].real = z__1.real;
+                            a[i__2].imag = z__1.imag; // , expr subst
                             i__2 = j + i__ * a_dim1;
                             z__2.real = stemp * temp.real;
                             z__2.imag = stemp * temp.imag; // , expr subst
                             i__3 = j + i__ * a_dim1;
-                            z__3.r = ctemp * a[i__3].r;
-                            z__3.i = ctemp * a[i__3].i; // , expr subst
-                            z__1.r = z__2.r + z__3.r;
-                            z__1.i = z__2.i + z__3.i; // , expr subst
-                            a[i__2].r = z__1.r;
-                            a[i__2].i = z__1.i; // , expr subst
+                            z__3.real = ctemp * a[i__3].real;
+                            z__3.imag = ctemp * a[i__3].imag; // , expr subst
+                            z__1.real = z__2.real + z__3.real;
+                            z__1.imag = z__2.imag + z__3.imag; // , expr subst
+                            a[i__2].real = z__1.real;
+                            a[i__2].imag = z__1.imag; // , expr subst
                             /* L30: */
                         }
                     }
@@ -399,22 +399,22 @@ void aocl_lapack_zlasr(char *side, char *pivot, char *direct, aocl_int64_t *m, a
                             z__2.real = ctemp * temp.real;
                             z__2.imag = ctemp * temp.imag; // , expr subst
                             i__4 = i__ * a_dim1 + 1;
-                            z__3.r = stemp * a[i__4].r;
-                            z__3.i = stemp * a[i__4].i; // , expr subst
-                            z__1.r = z__2.r - z__3.r;
-                            z__1.i = z__2.i - z__3.i; // , expr subst
-                            a[i__3].r = z__1.r;
-                            a[i__3].i = z__1.i; // , expr subst
+                            z__3.real = stemp * a[i__4].real;
+                            z__3.imag = stemp * a[i__4].imag; // , expr subst
+                            z__1.real = z__2.real - z__3.real;
+                            z__1.imag = z__2.imag - z__3.imag; // , expr subst
+                            a[i__3].real = z__1.real;
+                            a[i__3].imag = z__1.imag; // , expr subst
                             i__3 = i__ * a_dim1 + 1;
                             z__2.real = stemp * temp.real;
                             z__2.imag = stemp * temp.imag; // , expr subst
                             i__4 = i__ * a_dim1 + 1;
-                            z__3.r = ctemp * a[i__4].r;
-                            z__3.i = ctemp * a[i__4].i; // , expr subst
-                            z__1.r = z__2.r + z__3.r;
-                            z__1.i = z__2.i + z__3.i; // , expr subst
-                            a[i__3].r = z__1.r;
-                            a[i__3].i = z__1.i; // , expr subst
+                            z__3.real = ctemp * a[i__4].real;
+                            z__3.imag = ctemp * a[i__4].imag; // , expr subst
+                            z__1.real = z__2.real + z__3.real;
+                            z__1.imag = z__2.imag + z__3.imag; // , expr subst
+                            a[i__3].real = z__1.real;
+                            a[i__3].imag = z__1.imag; // , expr subst
                             /* L50: */
                         }
                     }
@@ -439,22 +439,22 @@ void aocl_lapack_zlasr(char *side, char *pivot, char *direct, aocl_int64_t *m, a
                             z__2.real = ctemp * temp.real;
                             z__2.imag = ctemp * temp.imag; // , expr subst
                             i__3 = i__ * a_dim1 + 1;
-                            z__3.r = stemp * a[i__3].r;
-                            z__3.i = stemp * a[i__3].i; // , expr subst
-                            z__1.r = z__2.r - z__3.r;
-                            z__1.i = z__2.i - z__3.i; // , expr subst
-                            a[i__2].r = z__1.r;
-                            a[i__2].i = z__1.i; // , expr subst
+                            z__3.real = stemp * a[i__3].real;
+                            z__3.imag = stemp * a[i__3].imag; // , expr subst
+                            z__1.real = z__2.real - z__3.real;
+                            z__1.imag = z__2.imag - z__3.imag; // , expr subst
+                            a[i__2].real = z__1.real;
+                            a[i__2].imag = z__1.imag; // , expr subst
                             i__2 = i__ * a_dim1 + 1;
                             z__2.real = stemp * temp.real;
                             z__2.imag = stemp * temp.imag; // , expr subst
                             i__3 = i__ * a_dim1 + 1;
-                            z__3.r = ctemp * a[i__3].r;
-                            z__3.i = ctemp * a[i__3].i; // , expr subst
-                            z__1.r = z__2.r + z__3.r;
-                            z__1.i = z__2.i + z__3.i; // , expr subst
-                            a[i__2].r = z__1.r;
-                            a[i__2].i = z__1.i; // , expr subst
+                            z__3.real = ctemp * a[i__3].real;
+                            z__3.imag = ctemp * a[i__3].imag; // , expr subst
+                            z__1.real = z__2.real + z__3.real;
+                            z__1.imag = z__2.imag + z__3.imag; // , expr subst
+                            a[i__2].real = z__1.real;
+                            a[i__2].imag = z__1.imag; // , expr subst
                             /* L70: */
                         }
                     }
@@ -481,24 +481,24 @@ void aocl_lapack_zlasr(char *side, char *pivot, char *direct, aocl_int64_t *m, a
                             temp.imag = a[i__3].imag; // , expr subst
                             i__3 = j + i__ * a_dim1;
                             i__4 = *m + i__ * a_dim1;
-                            z__2.r = stemp * a[i__4].r;
-                            z__2.i = stemp * a[i__4].i; // , expr subst
-                            z__3.r = ctemp * temp.r;
-                            z__3.i = ctemp * temp.i; // , expr subst
-                            z__1.r = z__2.r + z__3.r;
-                            z__1.i = z__2.i + z__3.i; // , expr subst
-                            a[i__3].r = z__1.r;
-                            a[i__3].i = z__1.i; // , expr subst
+                            z__2.real = stemp * a[i__4].real;
+                            z__2.imag = stemp * a[i__4].imag; // , expr subst
+                            z__3.real = ctemp * temp.real;
+                            z__3.imag = ctemp * temp.imag; // , expr subst
+                            z__1.real = z__2.real + z__3.real;
+                            z__1.imag = z__2.imag + z__3.imag; // , expr subst
+                            a[i__3].real = z__1.real;
+                            a[i__3].imag = z__1.imag; // , expr subst
                             i__3 = *m + i__ * a_dim1;
                             i__4 = *m + i__ * a_dim1;
-                            z__2.r = ctemp * a[i__4].r;
-                            z__2.i = ctemp * a[i__4].i; // , expr subst
-                            z__3.r = stemp * temp.r;
-                            z__3.i = stemp * temp.i; // , expr subst
-                            z__1.r = z__2.r - z__3.r;
-                            z__1.i = z__2.i - z__3.i; // , expr subst
-                            a[i__3].r = z__1.r;
-                            a[i__3].i = z__1.i; // , expr subst
+                            z__2.real = ctemp * a[i__4].real;
+                            z__2.imag = ctemp * a[i__4].imag; // , expr subst
+                            z__3.real = stemp * temp.real;
+                            z__3.imag = stemp * temp.imag; // , expr subst
+                            z__1.real = z__2.real - z__3.real;
+                            z__1.imag = z__2.imag - z__3.imag; // , expr subst
+                            a[i__3].real = z__1.real;
+                            a[i__3].imag = z__1.imag; // , expr subst
                             /* L90: */
                         }
                     }
@@ -521,24 +521,24 @@ void aocl_lapack_zlasr(char *side, char *pivot, char *direct, aocl_int64_t *m, a
                             temp.imag = a[i__2].imag; // , expr subst
                             i__2 = j + i__ * a_dim1;
                             i__3 = *m + i__ * a_dim1;
-                            z__2.r = stemp * a[i__3].r;
-                            z__2.i = stemp * a[i__3].i; // , expr subst
-                            z__3.r = ctemp * temp.r;
-                            z__3.i = ctemp * temp.i; // , expr subst
-                            z__1.r = z__2.r + z__3.r;
-                            z__1.i = z__2.i + z__3.i; // , expr subst
-                            a[i__2].r = z__1.r;
-                            a[i__2].i = z__1.i; // , expr subst
+                            z__2.real = stemp * a[i__3].real;
+                            z__2.imag = stemp * a[i__3].imag; // , expr subst
+                            z__3.real = ctemp * temp.real;
+                            z__3.imag = ctemp * temp.imag; // , expr subst
+                            z__1.real = z__2.real + z__3.real;
+                            z__1.imag = z__2.imag + z__3.imag; // , expr subst
+                            a[i__2].real = z__1.real;
+                            a[i__2].imag = z__1.imag; // , expr subst
                             i__2 = *m + i__ * a_dim1;
                             i__3 = *m + i__ * a_dim1;
-                            z__2.r = ctemp * a[i__3].r;
-                            z__2.i = ctemp * a[i__3].i; // , expr subst
-                            z__3.r = stemp * temp.r;
-                            z__3.i = stemp * temp.i; // , expr subst
-                            z__1.r = z__2.r - z__3.r;
-                            z__1.i = z__2.i - z__3.i; // , expr subst
-                            a[i__2].r = z__1.r;
-                            a[i__2].i = z__1.i; // , expr subst
+                            z__2.real = ctemp * a[i__3].real;
+                            z__2.imag = ctemp * a[i__3].imag; // , expr subst
+                            z__3.real = stemp * temp.real;
+                            z__3.imag = stemp * temp.imag; // , expr subst
+                            z__1.real = z__2.real - z__3.real;
+                            z__1.imag = z__2.imag - z__3.imag; // , expr subst
+                            a[i__2].real = z__1.real;
+                            a[i__2].imag = z__1.imag; // , expr subst
                             /* L110: */
                         }
                     }
@@ -571,22 +571,22 @@ void aocl_lapack_zlasr(char *side, char *pivot, char *direct, aocl_int64_t *m, a
                             z__2.real = ctemp * temp.real;
                             z__2.imag = ctemp * temp.imag; // , expr subst
                             i__4 = i__ + j * a_dim1;
-                            z__3.r = stemp * a[i__4].r;
-                            z__3.i = stemp * a[i__4].i; // , expr subst
-                            z__1.r = z__2.r - z__3.r;
-                            z__1.i = z__2.i - z__3.i; // , expr subst
-                            a[i__3].r = z__1.r;
-                            a[i__3].i = z__1.i; // , expr subst
+                            z__3.real = stemp * a[i__4].real;
+                            z__3.imag = stemp * a[i__4].imag; // , expr subst
+                            z__1.real = z__2.real - z__3.real;
+                            z__1.imag = z__2.imag - z__3.imag; // , expr subst
+                            a[i__3].real = z__1.real;
+                            a[i__3].imag = z__1.imag; // , expr subst
                             i__3 = i__ + j * a_dim1;
                             z__2.real = stemp * temp.real;
                             z__2.imag = stemp * temp.imag; // , expr subst
                             i__4 = i__ + j * a_dim1;
-                            z__3.r = ctemp * a[i__4].r;
-                            z__3.i = ctemp * a[i__4].i; // , expr subst
-                            z__1.r = z__2.r + z__3.r;
-                            z__1.i = z__2.i + z__3.i; // , expr subst
-                            a[i__3].r = z__1.r;
-                            a[i__3].i = z__1.i; // , expr subst
+                            z__3.real = ctemp * a[i__4].real;
+                            z__3.imag = ctemp * a[i__4].imag; // , expr subst
+                            z__1.real = z__2.real + z__3.real;
+                            z__1.imag = z__2.imag + z__3.imag; // , expr subst
+                            a[i__3].real = z__1.real;
+                            a[i__3].imag = z__1.imag; // , expr subst
                             /* L130: */
                         }
                     }
@@ -611,22 +611,22 @@ void aocl_lapack_zlasr(char *side, char *pivot, char *direct, aocl_int64_t *m, a
                             z__2.real = ctemp * temp.real;
                             z__2.imag = ctemp * temp.imag; // , expr subst
                             i__3 = i__ + j * a_dim1;
-                            z__3.r = stemp * a[i__3].r;
-                            z__3.i = stemp * a[i__3].i; // , expr subst
-                            z__1.r = z__2.r - z__3.r;
-                            z__1.i = z__2.i - z__3.i; // , expr subst
-                            a[i__2].r = z__1.r;
-                            a[i__2].i = z__1.i; // , expr subst
+                            z__3.real = stemp * a[i__3].real;
+                            z__3.imag = stemp * a[i__3].imag; // , expr subst
+                            z__1.real = z__2.real - z__3.real;
+                            z__1.imag = z__2.imag - z__3.imag; // , expr subst
+                            a[i__2].real = z__1.real;
+                            a[i__2].imag = z__1.imag; // , expr subst
                             i__2 = i__ + j * a_dim1;
                             z__2.real = stemp * temp.real;
                             z__2.imag = stemp * temp.imag; // , expr subst
                             i__3 = i__ + j * a_dim1;
-                            z__3.r = ctemp * a[i__3].r;
-                            z__3.i = ctemp * a[i__3].i; // , expr subst
-                            z__1.r = z__2.r + z__3.r;
-                            z__1.i = z__2.i + z__3.i; // , expr subst
-                            a[i__2].r = z__1.r;
-                            a[i__2].i = z__1.i; // , expr subst
+                            z__3.real = ctemp * a[i__3].real;
+                            z__3.imag = ctemp * a[i__3].imag; // , expr subst
+                            z__1.real = z__2.real + z__3.real;
+                            z__1.imag = z__2.imag + z__3.imag; // , expr subst
+                            a[i__2].real = z__1.real;
+                            a[i__2].imag = z__1.imag; // , expr subst
                             /* L150: */
                         }
                     }
@@ -655,22 +655,22 @@ void aocl_lapack_zlasr(char *side, char *pivot, char *direct, aocl_int64_t *m, a
                             z__2.real = ctemp * temp.real;
                             z__2.imag = ctemp * temp.imag; // , expr subst
                             i__4 = i__ + a_dim1;
-                            z__3.r = stemp * a[i__4].r;
-                            z__3.i = stemp * a[i__4].i; // , expr subst
-                            z__1.r = z__2.r - z__3.r;
-                            z__1.i = z__2.i - z__3.i; // , expr subst
-                            a[i__3].r = z__1.r;
-                            a[i__3].i = z__1.i; // , expr subst
+                            z__3.real = stemp * a[i__4].real;
+                            z__3.imag = stemp * a[i__4].imag; // , expr subst
+                            z__1.real = z__2.real - z__3.real;
+                            z__1.imag = z__2.imag - z__3.imag; // , expr subst
+                            a[i__3].real = z__1.real;
+                            a[i__3].imag = z__1.imag; // , expr subst
                             i__3 = i__ + a_dim1;
                             z__2.real = stemp * temp.real;
                             z__2.imag = stemp * temp.imag; // , expr subst
                             i__4 = i__ + a_dim1;
-                            z__3.r = ctemp * a[i__4].r;
-                            z__3.i = ctemp * a[i__4].i; // , expr subst
-                            z__1.r = z__2.r + z__3.r;
-                            z__1.i = z__2.i + z__3.i; // , expr subst
-                            a[i__3].r = z__1.r;
-                            a[i__3].i = z__1.i; // , expr subst
+                            z__3.real = ctemp * a[i__4].real;
+                            z__3.imag = ctemp * a[i__4].imag; // , expr subst
+                            z__1.real = z__2.real + z__3.real;
+                            z__1.imag = z__2.imag + z__3.imag; // , expr subst
+                            a[i__3].real = z__1.real;
+                            a[i__3].imag = z__1.imag; // , expr subst
                             /* L170: */
                         }
                     }
@@ -695,22 +695,22 @@ void aocl_lapack_zlasr(char *side, char *pivot, char *direct, aocl_int64_t *m, a
                             z__2.real = ctemp * temp.real;
                             z__2.imag = ctemp * temp.imag; // , expr subst
                             i__3 = i__ + a_dim1;
-                            z__3.r = stemp * a[i__3].r;
-                            z__3.i = stemp * a[i__3].i; // , expr subst
-                            z__1.r = z__2.r - z__3.r;
-                            z__1.i = z__2.i - z__3.i; // , expr subst
-                            a[i__2].r = z__1.r;
-                            a[i__2].i = z__1.i; // , expr subst
+                            z__3.real = stemp * a[i__3].real;
+                            z__3.imag = stemp * a[i__3].imag; // , expr subst
+                            z__1.real = z__2.real - z__3.real;
+                            z__1.imag = z__2.imag - z__3.imag; // , expr subst
+                            a[i__2].real = z__1.real;
+                            a[i__2].imag = z__1.imag; // , expr subst
                             i__2 = i__ + a_dim1;
                             z__2.real = stemp * temp.real;
                             z__2.imag = stemp * temp.imag; // , expr subst
                             i__3 = i__ + a_dim1;
-                            z__3.r = ctemp * a[i__3].r;
-                            z__3.i = ctemp * a[i__3].i; // , expr subst
-                            z__1.r = z__2.r + z__3.r;
-                            z__1.i = z__2.i + z__3.i; // , expr subst
-                            a[i__2].r = z__1.r;
-                            a[i__2].i = z__1.i; // , expr subst
+                            z__3.real = ctemp * a[i__3].real;
+                            z__3.imag = ctemp * a[i__3].imag; // , expr subst
+                            z__1.real = z__2.real + z__3.real;
+                            z__1.imag = z__2.imag + z__3.imag; // , expr subst
+                            a[i__2].real = z__1.real;
+                            a[i__2].imag = z__1.imag; // , expr subst
                             /* L190: */
                         }
                     }
@@ -737,24 +737,24 @@ void aocl_lapack_zlasr(char *side, char *pivot, char *direct, aocl_int64_t *m, a
                             temp.imag = a[i__3].imag; // , expr subst
                             i__3 = i__ + j * a_dim1;
                             i__4 = i__ + *n * a_dim1;
-                            z__2.r = stemp * a[i__4].r;
-                            z__2.i = stemp * a[i__4].i; // , expr subst
-                            z__3.r = ctemp * temp.r;
-                            z__3.i = ctemp * temp.i; // , expr subst
-                            z__1.r = z__2.r + z__3.r;
-                            z__1.i = z__2.i + z__3.i; // , expr subst
-                            a[i__3].r = z__1.r;
-                            a[i__3].i = z__1.i; // , expr subst
+                            z__2.real = stemp * a[i__4].real;
+                            z__2.imag = stemp * a[i__4].imag; // , expr subst
+                            z__3.real = ctemp * temp.real;
+                            z__3.imag = ctemp * temp.imag; // , expr subst
+                            z__1.real = z__2.real + z__3.real;
+                            z__1.imag = z__2.imag + z__3.imag; // , expr subst
+                            a[i__3].real = z__1.real;
+                            a[i__3].imag = z__1.imag; // , expr subst
                             i__3 = i__ + *n * a_dim1;
                             i__4 = i__ + *n * a_dim1;
-                            z__2.r = ctemp * a[i__4].r;
-                            z__2.i = ctemp * a[i__4].i; // , expr subst
-                            z__3.r = stemp * temp.r;
-                            z__3.i = stemp * temp.i; // , expr subst
-                            z__1.r = z__2.r - z__3.r;
-                            z__1.i = z__2.i - z__3.i; // , expr subst
-                            a[i__3].r = z__1.r;
-                            a[i__3].i = z__1.i; // , expr subst
+                            z__2.real = ctemp * a[i__4].real;
+                            z__2.imag = ctemp * a[i__4].imag; // , expr subst
+                            z__3.real = stemp * temp.real;
+                            z__3.imag = stemp * temp.imag; // , expr subst
+                            z__1.real = z__2.real - z__3.real;
+                            z__1.imag = z__2.imag - z__3.imag; // , expr subst
+                            a[i__3].real = z__1.real;
+                            a[i__3].imag = z__1.imag; // , expr subst
                             /* L210: */
                         }
                     }
@@ -777,24 +777,24 @@ void aocl_lapack_zlasr(char *side, char *pivot, char *direct, aocl_int64_t *m, a
                             temp.imag = a[i__2].imag; // , expr subst
                             i__2 = i__ + j * a_dim1;
                             i__3 = i__ + *n * a_dim1;
-                            z__2.r = stemp * a[i__3].r;
-                            z__2.i = stemp * a[i__3].i; // , expr subst
-                            z__3.r = ctemp * temp.r;
-                            z__3.i = ctemp * temp.i; // , expr subst
-                            z__1.r = z__2.r + z__3.r;
-                            z__1.i = z__2.i + z__3.i; // , expr subst
-                            a[i__2].r = z__1.r;
-                            a[i__2].i = z__1.i; // , expr subst
+                            z__2.real = stemp * a[i__3].real;
+                            z__2.imag = stemp * a[i__3].imag; // , expr subst
+                            z__3.real = ctemp * temp.real;
+                            z__3.imag = ctemp * temp.imag; // , expr subst
+                            z__1.real = z__2.real + z__3.real;
+                            z__1.imag = z__2.imag + z__3.imag; // , expr subst
+                            a[i__2].real = z__1.real;
+                            a[i__2].imag = z__1.imag; // , expr subst
                             i__2 = i__ + *n * a_dim1;
                             i__3 = i__ + *n * a_dim1;
-                            z__2.r = ctemp * a[i__3].r;
-                            z__2.i = ctemp * a[i__3].i; // , expr subst
-                            z__3.r = stemp * temp.r;
-                            z__3.i = stemp * temp.i; // , expr subst
-                            z__1.r = z__2.r - z__3.r;
-                            z__1.i = z__2.i - z__3.i; // , expr subst
-                            a[i__2].r = z__1.r;
-                            a[i__2].i = z__1.i; // , expr subst
+                            z__2.real = ctemp * a[i__3].real;
+                            z__2.imag = ctemp * a[i__3].imag; // , expr subst
+                            z__3.real = stemp * temp.real;
+                            z__3.imag = stemp * temp.imag; // , expr subst
+                            z__1.real = z__2.real - z__3.real;
+                            z__1.imag = z__2.imag - z__3.imag; // , expr subst
+                            a[i__2].real = z__1.real;
+                            a[i__2].imag = z__1.imag; // , expr subst
                             /* L230: */
                         }
                     }

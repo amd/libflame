@@ -287,7 +287,7 @@ void aocl_lapack_ctpcon(char *norm, char *uplo, char *diag, aocl_int64_t *n, sco
             {
                 ix = aocl_blas_icamax(n, &work[1], &c__1);
                 i__1 = ix;
-                xnorm = (r__1 = work[i__1].r, f2c_abs(r__1))
+                xnorm = (r__1 = work[i__1].real, f2c_abs(r__1))
                         + (r__2 = r_imag(&work[ix]), f2c_abs(r__2));
                 if(scale < xnorm * smlnum || scale == 0.f)
                 {

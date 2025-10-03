@@ -347,8 +347,8 @@ void aocl_lapack_zhetrf_rk(char *uplo, aocl_int64_t *n, dcomplex *a, aocl_int64_
         /* Determine the block size */
         nb = aocl_lapack_ilaenv(&c__1, "ZHETRF_RK", uplo, n, &c_n1, &c_n1, &c_n1);
         lwkopt = *n * nb;
-        work[1].r = (doublereal)lwkopt;
-        work[1].i = 0.; // , expr subst
+        work[1].real = (doublereal)lwkopt;
+        work[1].imag = 0.; // , expr subst
     }
     if(*info != 0)
     {
@@ -521,8 +521,8 @@ void aocl_lapack_zhetrf_rk(char *uplo, aocl_int64_t *n, dcomplex *a, aocl_int64_
     L35: /* End Lower */
         ;
     }
-    work[1].r = (doublereal)lwkopt;
-    work[1].i = 0.; // , expr subst
+    work[1].real = (doublereal)lwkopt;
+    work[1].imag = 0.; // , expr subst
     AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of ZHETRF_RK */

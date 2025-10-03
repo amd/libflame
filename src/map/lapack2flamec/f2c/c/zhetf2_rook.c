@@ -317,7 +317,7 @@ void aocl_lapack_zhetf2_rook(char *uplo, aocl_int64_t *n, dcomplex *a, aocl_int6
         /* Determine rows and columns to be interchanged and whether */
         /* a 1-by-1 or 2-by-2 pivot block will be used */
         i__1 = k + k * a_dim1;
-        absakk = (d__1 = a[i__1].r, f2c_dabs(d__1));
+        absakk = (d__1 = a[i__1].real, f2c_dabs(d__1));
         /* IMAX is the row-index of the largest off-diagonal element in */
         /* column K, and COLMAX is its absolute value. */
         /* Determine both COLMAX and IMAX. */
@@ -326,7 +326,7 @@ void aocl_lapack_zhetf2_rook(char *uplo, aocl_int64_t *n, dcomplex *a, aocl_int6
             i__1 = k - 1;
             imax = aocl_blas_izamax(&i__1, &a[k * a_dim1 + 1], &c__1);
             i__1 = imax + k * a_dim1;
-            colmax = (d__1 = a[i__1].r, f2c_dabs(d__1))
+            colmax = (d__1 = a[i__1].real, f2c_dabs(d__1))
                      + (d__2 = d_imag(&a[imax + k * a_dim1]), f2c_dabs(d__2));
         }
         else
@@ -372,7 +372,7 @@ void aocl_lapack_zhetf2_rook(char *uplo, aocl_int64_t *n, dcomplex *a, aocl_int6
                     i__1 = k - imax;
                     jmax = imax + aocl_blas_izamax(&i__1, &a[imax + (imax + 1) * a_dim1], lda);
                     i__1 = imax + jmax * a_dim1;
-                    rowmax = (d__1 = a[i__1].r, f2c_dabs(d__1))
+                    rowmax = (d__1 = a[i__1].real, f2c_dabs(d__1))
                              + (d__2 = d_imag(&a[imax + jmax * a_dim1]), f2c_dabs(d__2));
                 }
                 else
@@ -384,7 +384,7 @@ void aocl_lapack_zhetf2_rook(char *uplo, aocl_int64_t *n, dcomplex *a, aocl_int6
                     i__1 = imax - 1;
                     itemp = aocl_blas_izamax(&i__1, &a[imax * a_dim1 + 1], &c__1);
                     i__1 = itemp + imax * a_dim1;
-                    dtemp = (d__1 = a[i__1].r, f2c_dabs(d__1))
+                    dtemp = (d__1 = a[i__1].real, f2c_dabs(d__1))
                             + (d__2 = d_imag(&a[itemp + imax * a_dim1]), f2c_dabs(d__2));
                     if(dtemp > rowmax)
                     {
@@ -397,7 +397,7 @@ void aocl_lapack_zhetf2_rook(char *uplo, aocl_int64_t *n, dcomplex *a, aocl_int6
                 /* ABS( REAL( W( IMAX,KW-1 ) ) ).GE.ALPHA*ROWMAX */
                 /* (used to handle NaN and Inf) */
                 i__1 = imax + imax * a_dim1;
-                if(!((d__1 = a[i__1].r, f2c_dabs(d__1)) < alpha * rowmax))
+                if(!((d__1 = a[i__1].real, f2c_dabs(d__1)) < alpha * rowmax))
                 {
                     /* interchange rows and columns K and IMAX, */
                     /* use 1-by-1 pivot block */
@@ -516,8 +516,8 @@ void aocl_lapack_zhetf2_rook(char *uplo, aocl_int64_t *n, dcomplex *a, aocl_int6
                 a[i__1].real = d__1;
                 a[i__1].imag = 0.; // , expr subst
                 i__1 = kp + kp * a_dim1;
-                a[i__1].r = r1;
-                a[i__1].i = 0.; // , expr subst
+                a[i__1].real = r1;
+                a[i__1].imag = 0.; // , expr subst
                 if(kstep == 2)
                 {
                     /* (*) Make sure that diagonal element of pivot is real */
@@ -544,9 +544,9 @@ void aocl_lapack_zhetf2_rook(char *uplo, aocl_int64_t *n, dcomplex *a, aocl_int6
                 /* (*) Make sure that diagonal element of pivot is real */
                 i__1 = k + k * a_dim1;
                 i__2 = k + k * a_dim1;
-                d__1 = a[i__2].r;
-                a[i__1].r = d__1;
-                a[i__1].i = 0.; // , expr subst
+                d__1 = a[i__2].real;
+                a[i__1].real = d__1;
+                a[i__1].imag = 0.; // , expr subst
                 if(kstep == 2)
                 {
                     i__1 = k - 1 + (k - 1) * a_dim1;
@@ -567,7 +567,7 @@ void aocl_lapack_zhetf2_rook(char *uplo, aocl_int64_t *n, dcomplex *a, aocl_int6
                     /* Perform a rank-1 update of A(1:k-1,1:k-1) and */
                     /* store U(k) in column k */
                     i__1 = k + k * a_dim1;
-                    if((d__1 = a[i__1].r, f2c_dabs(d__1)) >= sfmin)
+                    if((d__1 = a[i__1].real, f2c_dabs(d__1)) >= sfmin)
                     {
                         /* Perform a rank-1 update of A(1:k-1,1:k-1) as */
                         /* A := A - U(k)*D(k)*U(k)**T */
@@ -648,26 +648,26 @@ void aocl_lapack_zhetf2_rook(char *uplo, aocl_int64_t *n, dcomplex *a, aocl_int6
                         z__3.imag = d11 * a[i__1].imag; // , expr subst
                         d_cnjg(&z__5, &d12);
                         i__2 = j + k * a_dim1;
-                        z__4.r = z__5.r * a[i__2].r - z__5.i * a[i__2].i;
-                        z__4.i = z__5.r * a[i__2].i + z__5.i * a[i__2].r; // , expr subst
-                        z__2.r = z__3.r - z__4.r;
-                        z__2.i = z__3.i - z__4.i; // , expr subst
-                        z__1.r = tt * z__2.r;
-                        z__1.i = tt * z__2.i; // , expr subst
-                        wkm1.r = z__1.r;
-                        wkm1.i = z__1.i; // , expr subst
+                        z__4.real = z__5.real * a[i__2].real - z__5.imag * a[i__2].imag;
+                        z__4.imag = z__5.real * a[i__2].imag + z__5.imag * a[i__2].real; // , expr subst
+                        z__2.real = z__3.real - z__4.real;
+                        z__2.imag = z__3.imag - z__4.imag; // , expr subst
+                        z__1.real = tt * z__2.real;
+                        z__1.imag = tt * z__2.imag; // , expr subst
+                        wkm1.real = z__1.real;
+                        wkm1.imag = z__1.imag; // , expr subst
                         i__1 = j + k * a_dim1;
                         z__3.real = d22 * a[i__1].real;
                         z__3.imag = d22 * a[i__1].imag; // , expr subst
                         i__2 = j + (k - 1) * a_dim1;
-                        z__4.r = d12.r * a[i__2].r - d12.i * a[i__2].i;
-                        z__4.i = d12.r * a[i__2].i + d12.i * a[i__2].r; // , expr subst
-                        z__2.r = z__3.r - z__4.r;
-                        z__2.i = z__3.i - z__4.i; // , expr subst
-                        z__1.r = tt * z__2.r;
-                        z__1.i = tt * z__2.i; // , expr subst
-                        wk.r = z__1.r;
-                        wk.i = z__1.i; // , expr subst
+                        z__4.real = d12.real * a[i__2].real - d12.imag * a[i__2].imag;
+                        z__4.imag = d12.real * a[i__2].imag + d12.imag * a[i__2].real; // , expr subst
+                        z__2.real = z__3.real - z__4.real;
+                        z__2.imag = z__3.imag - z__4.imag; // , expr subst
+                        z__1.real = tt * z__2.real;
+                        z__1.imag = tt * z__2.imag; // , expr subst
+                        wk.real = z__1.real;
+                        wk.imag = z__1.imag; // , expr subst
                         /* Perform a rank-2 update of A(1:k-2,1:k-2) */
                         for(i__ = j; i__ >= 1; --i__)
                         {
@@ -747,7 +747,7 @@ void aocl_lapack_zhetf2_rook(char *uplo, aocl_int64_t *n, dcomplex *a, aocl_int6
         /* Determine rows and columns to be interchanged and whether */
         /* a 1-by-1 or 2-by-2 pivot block will be used */
         i__1 = k + k * a_dim1;
-        absakk = (d__1 = a[i__1].r, f2c_dabs(d__1));
+        absakk = (d__1 = a[i__1].real, f2c_dabs(d__1));
         /* IMAX is the row-index of the largest off-diagonal element in */
         /* column K, and COLMAX is its absolute value. */
         /* Determine both COLMAX and IMAX. */
@@ -756,7 +756,7 @@ void aocl_lapack_zhetf2_rook(char *uplo, aocl_int64_t *n, dcomplex *a, aocl_int6
             i__1 = *n - k;
             imax = k + aocl_blas_izamax(&i__1, &a[k + 1 + k * a_dim1], &c__1);
             i__1 = imax + k * a_dim1;
-            colmax = (d__1 = a[i__1].r, f2c_dabs(d__1))
+            colmax = (d__1 = a[i__1].real, f2c_dabs(d__1))
                      + (d__2 = d_imag(&a[imax + k * a_dim1]), f2c_dabs(d__2));
         }
         else
@@ -802,7 +802,7 @@ void aocl_lapack_zhetf2_rook(char *uplo, aocl_int64_t *n, dcomplex *a, aocl_int6
                     i__1 = imax - k;
                     jmax = k - 1 + aocl_blas_izamax(&i__1, &a[imax + k * a_dim1], lda);
                     i__1 = imax + jmax * a_dim1;
-                    rowmax = (d__1 = a[i__1].r, f2c_dabs(d__1))
+                    rowmax = (d__1 = a[i__1].real, f2c_dabs(d__1))
                              + (d__2 = d_imag(&a[imax + jmax * a_dim1]), f2c_dabs(d__2));
                 }
                 else
@@ -814,7 +814,7 @@ void aocl_lapack_zhetf2_rook(char *uplo, aocl_int64_t *n, dcomplex *a, aocl_int6
                     i__1 = *n - imax;
                     itemp = imax + aocl_blas_izamax(&i__1, &a[imax + 1 + imax * a_dim1], &c__1);
                     i__1 = itemp + imax * a_dim1;
-                    dtemp = (d__1 = a[i__1].r, f2c_dabs(d__1))
+                    dtemp = (d__1 = a[i__1].real, f2c_dabs(d__1))
                             + (d__2 = d_imag(&a[itemp + imax * a_dim1]), f2c_dabs(d__2));
                     if(dtemp > rowmax)
                     {
@@ -827,7 +827,7 @@ void aocl_lapack_zhetf2_rook(char *uplo, aocl_int64_t *n, dcomplex *a, aocl_int6
                 /* ABS( REAL( W( IMAX,KW-1 ) ) ).GE.ALPHA*ROWMAX */
                 /* (used to handle NaN and Inf) */
                 i__1 = imax + imax * a_dim1;
-                if(!((d__1 = a[i__1].r, f2c_dabs(d__1)) < alpha * rowmax))
+                if(!((d__1 = a[i__1].real, f2c_dabs(d__1)) < alpha * rowmax))
                 {
                     /* interchange rows and columns K and IMAX, */
                     /* use 1-by-1 pivot block */
@@ -948,8 +948,8 @@ void aocl_lapack_zhetf2_rook(char *uplo, aocl_int64_t *n, dcomplex *a, aocl_int6
                 a[i__1].real = d__1;
                 a[i__1].imag = 0.; // , expr subst
                 i__1 = kp + kp * a_dim1;
-                a[i__1].r = r1;
-                a[i__1].i = 0.; // , expr subst
+                a[i__1].real = r1;
+                a[i__1].imag = 0.; // , expr subst
                 if(kstep == 2)
                 {
                     /* (*) Make sure that diagonal element of pivot is real */
@@ -976,9 +976,9 @@ void aocl_lapack_zhetf2_rook(char *uplo, aocl_int64_t *n, dcomplex *a, aocl_int6
                 /* (*) Make sure that diagonal element of pivot is real */
                 i__1 = k + k * a_dim1;
                 i__2 = k + k * a_dim1;
-                d__1 = a[i__2].r;
-                a[i__1].r = d__1;
-                a[i__1].i = 0.; // , expr subst
+                d__1 = a[i__2].real;
+                a[i__1].real = d__1;
+                a[i__1].imag = 0.; // , expr subst
                 if(kstep == 2)
                 {
                     i__1 = k + 1 + (k + 1) * a_dim1;
@@ -1000,7 +1000,7 @@ void aocl_lapack_zhetf2_rook(char *uplo, aocl_int64_t *n, dcomplex *a, aocl_int6
                     /* store L(k) in column k */
                     /* Handle division by a small number */
                     i__1 = k + k * a_dim1;
-                    if((d__1 = a[i__1].r, f2c_dabs(d__1)) >= sfmin)
+                    if((d__1 = a[i__1].real, f2c_dabs(d__1)) >= sfmin)
                     {
                         /* Perform a rank-1 update of A(k+1:n,k+1:n) as */
                         /* A := A - L(k)*D(k)*L(k)**T */
@@ -1077,27 +1077,27 @@ void aocl_lapack_zhetf2_rook(char *uplo, aocl_int64_t *n, dcomplex *a, aocl_int6
                         z__3.real = d11 * a[i__2].real;
                         z__3.imag = d11 * a[i__2].imag; // , expr subst
                         i__3 = j + (k + 1) * a_dim1;
-                        z__4.r = d21.r * a[i__3].r - d21.i * a[i__3].i;
-                        z__4.i = d21.r * a[i__3].i + d21.i * a[i__3].r; // , expr subst
-                        z__2.r = z__3.r - z__4.r;
-                        z__2.i = z__3.i - z__4.i; // , expr subst
-                        z__1.r = tt * z__2.r;
-                        z__1.i = tt * z__2.i; // , expr subst
-                        wk.r = z__1.r;
-                        wk.i = z__1.i; // , expr subst
+                        z__4.real = d21.real * a[i__3].real - d21.imag * a[i__3].imag;
+                        z__4.imag = d21.real * a[i__3].imag + d21.imag * a[i__3].real; // , expr subst
+                        z__2.real = z__3.real - z__4.real;
+                        z__2.imag = z__3.imag - z__4.imag; // , expr subst
+                        z__1.real = tt * z__2.real;
+                        z__1.imag = tt * z__2.imag; // , expr subst
+                        wk.real = z__1.real;
+                        wk.imag = z__1.imag; // , expr subst
                         i__2 = j + (k + 1) * a_dim1;
                         z__3.real = d22 * a[i__2].real;
                         z__3.imag = d22 * a[i__2].imag; // , expr subst
                         d_cnjg(&z__5, &d21);
                         i__3 = j + k * a_dim1;
-                        z__4.r = z__5.r * a[i__3].r - z__5.i * a[i__3].i;
-                        z__4.i = z__5.r * a[i__3].i + z__5.i * a[i__3].r; // , expr subst
-                        z__2.r = z__3.r - z__4.r;
-                        z__2.i = z__3.i - z__4.i; // , expr subst
-                        z__1.r = tt * z__2.r;
-                        z__1.i = tt * z__2.i; // , expr subst
-                        wkp1.r = z__1.r;
-                        wkp1.i = z__1.i; // , expr subst
+                        z__4.real = z__5.real * a[i__3].real - z__5.imag * a[i__3].imag;
+                        z__4.imag = z__5.real * a[i__3].imag + z__5.imag * a[i__3].real; // , expr subst
+                        z__2.real = z__3.real - z__4.real;
+                        z__2.imag = z__3.imag - z__4.imag; // , expr subst
+                        z__1.real = tt * z__2.real;
+                        z__1.imag = tt * z__2.imag; // , expr subst
+                        wkp1.real = z__1.real;
+                        wkp1.imag = z__1.imag; // , expr subst
                         /* Perform a rank-2 update of A(k+2:n,k+2:n) */
                         i__2 = *n;
                         for(i__ = j; i__ <= i__2; ++i__)

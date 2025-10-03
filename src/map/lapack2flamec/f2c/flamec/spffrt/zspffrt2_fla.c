@@ -157,7 +157,7 @@ void zsffrk2_fla(dcomplex *au, aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *l
     aocl_int64_t k, kc, kcn;
     aocl_int64_t c__1 = 1;
     dcomplex r1;
-    dcomplex c_b1 = {{1.}, {0.}};
+    dcomplex c_b1 = {1., 0.};
 
     --au;
     --bt;
@@ -168,18 +168,18 @@ void zsffrk2_fla(dcomplex *au, aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *l
         /* D(k) = -1/A(k,k) */
 
         /* Skip trailing matrix update if zero diagonal element is encountered */
-        if(au[kc].r == 0 && au[kc].i == 0)
+        if(au[kc].real == 0 && au[kc].imag == 0)
         {
-            z__1.r = 0;
-            z__1.i = 0;
+            z__1.real = 0;
+            z__1.imag = 0;
         }
         else
         {
             z_div(&z__1, &c_b1, &au[kc]);
         }
 
-        r1.r = -z__1.r;
-        r1.i = -z__1.i;
+        r1.real = -z__1.real;
+        r1.imag = -z__1.imag;
 
         i__1 = *n - k;
         i__2 = *m - k;
@@ -192,8 +192,8 @@ void zsffrk2_fla(dcomplex *au, aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *l
         aocl_blas_zcopy(&i__3, &au[kc + *n - k + 1], &c__1, &bt[k], ldbt);
         aocl_blas_zscal(&i__3, &r1, &bt[k], ldbt);
 
-        au[kc].r = z__1.r;
-        au[kc].i = z__1.i;
+        au[kc].real = z__1.real;
+        au[kc].imag = z__1.imag;
         kc = kcn;
     }
 
@@ -215,7 +215,7 @@ void zsffrk2_fla(dcomplex *au, aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *l
 void zspffrt2_fla_unp_var2(dcomplex *ap, aocl_int64_t *n, aocl_int64_t *ncolm,
                            dcomplex *work)
 {
-    dcomplex d__1 = {{1.}, {0.}};
+    dcomplex d__1 = {1., 0.};
     aocl_int64_t kc, mg, nb;
     aocl_int64_t k, ni, mp;
 
@@ -310,8 +310,8 @@ int lzspr_(char *uplo, aocl_int64_t *n, dcomplex *alpha, dcomplex *x, aocl_int64
 
     for(k = 1; k <= *n; k++)
     {
-        work[k].r = alpha->r * x[k].r - alpha->i * x[k].i;
-        work[k].i = alpha->r * x[k].i + alpha->i * x[k].r;
+        work[k].real = alpha->real * x[k].real - alpha->imag * x[k].imag;
+        work[k].imag = alpha->real * x[k].imag + alpha->imag * x[k].real;
     }
 
     kn = 1;
@@ -331,7 +331,7 @@ void zspffrt2_fla_def(dcomplex *ap, aocl_int64_t *n, aocl_int64_t *ncolm, dcompl
     aocl_int64_t i__1, k, kc;
     aocl_int64_t c__1 = 1;
     dcomplex r1;
-    dcomplex c_b1 = {{1.}, {0.}};
+    dcomplex c_b1 = {1., 0.};
 
     --ap;
     /* Factorize A as L*D*L**T using the lower triangle of A */
@@ -344,26 +344,26 @@ void zspffrt2_fla_def(dcomplex *ap, aocl_int64_t *n, aocl_int64_t *ncolm, dcompl
         /* where L(k) is the k-th column of L */
 
         /* Skip trailing matrix update if zero diagonal element is encountered */
-        if(ap[kc].r == 0 && ap[kc].i == 0)
+        if(ap[kc].real == 0 && ap[kc].imag == 0)
         {
-            z__1.r = 0;
-            z__1.i = 0;
+            z__1.real = 0;
+            z__1.imag = 0;
         }
         else
         {
             z_div(&z__1, &c_b1, &ap[kc]);
         }
 
-        r1.r = -z__1.r;
-        r1.i = -z__1.i;
+        r1.real = -z__1.real;
+        r1.imag = -z__1.imag;
 
         /* Perform a rank-1 update of A(k+1:n,k+1:n) as */
         /* A := A - L(k)*D(k)*L(k)**T = A - W(k)*(1/D(k))*W(k)**T */
         i__1 = *n - k;
         lzspr_("Lower", &i__1, &r1, &ap[kc + 1], &c__1, &ap[kc + *n - k + 1], work);
 
-        ap[kc].r = z__1.r;
-        ap[kc].i = z__1.i;
+        ap[kc].real = z__1.real;
+        ap[kc].imag = z__1.imag;
 
         kc = kc + *n - k + 1;
     }

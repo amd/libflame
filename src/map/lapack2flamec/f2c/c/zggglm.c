@@ -4,7 +4,7 @@
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
  /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static dcomplex c_b2 = {{1.}, {0.}};
+static dcomplex c_b2 = {1., 0.};
 static aocl_int64_t c__1 = 1;
 static aocl_int64_t c_n1 = -1;
 /* > \brief \b ZGGGLM */
@@ -301,8 +301,8 @@ void aocl_lapack_zggglm(aocl_int64_t *n, aocl_int64_t *m, aocl_int64_t *p, dcomp
             lwkmin = *m + *n + *p;
             lwkopt = *m + np + fla_max(*n, *p) * nb;
         }
-        work[1].r = (doublereal)lwkopt;
-        work[1].i = 0.; // , expr subst
+        work[1].real = (doublereal)lwkopt;
+        work[1].imag = 0.; // , expr subst
         if(*lwork < lwkmin && !lquery)
         {
             *info = -12;
@@ -327,15 +327,15 @@ void aocl_lapack_zggglm(aocl_int64_t *n, aocl_int64_t *m, aocl_int64_t *p, dcomp
         for(i__ = 1; i__ <= i__1; ++i__)
         {
             i__2 = i__;
-            x[i__2].r = 0.;
-            x[i__2].i = 0.; // , expr subst
+            x[i__2].real = 0.;
+            x[i__2].imag = 0.; // , expr subst
         }
         i__1 = *p;
         for(i__ = 1; i__ <= i__1; ++i__)
         {
             i__2 = i__;
-            y[i__2].r = 0.;
-            y[i__2].i = 0.; // , expr subst
+            y[i__2].real = 0.;
+            y[i__2].imag = 0.; // , expr subst
         }
         AOCL_DTL_TRACE_LOG_EXIT
         return;
@@ -350,7 +350,7 @@ void aocl_lapack_zggglm(aocl_int64_t *n, aocl_int64_t *m, aocl_int64_t *p, dcomp
     aocl_lapack_zggqrf(n, m, p, &a[a_offset], lda, &work[1], &b[b_offset], ldb, &work[*m + 1],
                        &work[*m + np + 1], &i__1, info);
     i__1 = *m + np + 1;
-    lopt = (integer)work[i__1].r;
+    lopt = (integer)work[i__1].real;
     /* Update left-hand-side vector d = Q**H*d = ( d1 ) M */
     /* ( d2 ) N-M */
     i__1 = fla_max(1, *n);
@@ -360,7 +360,7 @@ void aocl_lapack_zggglm(aocl_int64_t *n, aocl_int64_t *m, aocl_int64_t *p, dcomp
     /* Computing MAX */
     i__3 = *m + np + 1;
     i__1 = lopt;
-    i__2 = (integer)work[i__3].r; // , expr subst
+    i__2 = (integer)work[i__3].real; // , expr subst
     lopt = fla_max(i__1, i__2);
     /* Solve T22*y2 = d2 for y2 */
     if(*n > *m)
@@ -384,14 +384,14 @@ void aocl_lapack_zggglm(aocl_int64_t *n, aocl_int64_t *m, aocl_int64_t *p, dcomp
     for(i__ = 1; i__ <= i__1; ++i__)
     {
         i__2 = i__;
-        y[i__2].r = 0.;
-        y[i__2].i = 0.; // , expr subst
+        y[i__2].real = 0.;
+        y[i__2].imag = 0.; // , expr subst
         /* L10: */
     }
     /* Update d1 = d1 - T12*y2 */
     i__1 = *n - *m;
-    z__1.r = -1.;
-    z__1.i = -0.; // , expr subst
+    z__1.real = -1.;
+    z__1.imag = -0.; // , expr subst
     aocl_blas_zgemv("No transpose", m, &i__1, &z__1, &b[(*m + *p - *n + 1) * b_dim1 + 1], ldb,
                     &y[*m + *p - *n + 1], &c__1, &c_b2, &d__[1], &c__1);
     /* Solve triangular system: R11*x = d1 */
@@ -420,10 +420,10 @@ void aocl_lapack_zggglm(aocl_int64_t *n, aocl_int64_t *m, aocl_int64_t *p, dcomp
     /* Computing MAX */
     i__4 = *m + np + 1;
     i__2 = lopt;
-    i__3 = (integer)work[i__4].r; // , expr subst
+    i__3 = (integer)work[i__4].real; // , expr subst
     i__1 = *m + np + fla_max(i__2, i__3);
-    work[1].r = (doublereal)i__1;
-    work[1].i = 0.; // , expr subst
+    work[1].real = (doublereal)i__1;
+    work[1].imag = 0.; // , expr subst
     AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of ZGGGLM */

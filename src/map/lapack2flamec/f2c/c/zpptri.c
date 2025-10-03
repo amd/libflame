@@ -192,7 +192,7 @@ void aocl_lapack_zpptri(char *uplo, aocl_int64_t *n, dcomplex *ap, aocl_int64_t 
                 aocl_blas_zhpr("Upper", &i__2, &c_b8, &ap[jc], &c__1, &ap[1]);
             }
             i__2 = jj;
-            ajj = ap[i__2].r;
+            ajj = ap[i__2].real;
             aocl_blas_zdscal(&j, &ajj, &ap[jc], &c__1);
             /* L10: */
         }
@@ -208,9 +208,9 @@ void aocl_lapack_zpptri(char *uplo, aocl_int64_t *n, dcomplex *ap, aocl_int64_t 
             i__2 = jj;
             i__3 = *n - j + 1;
             aocl_lapack_zdotc_f2c(&z__1, &i__3, &ap[jj], &c__1, &ap[jj], &c__1);
-            d__1 = z__1.r;
-            ap[i__2].r = d__1;
-            ap[i__2].i = 0.; // , expr subst
+            d__1 = z__1.real;
+            ap[i__2].real = d__1;
+            ap[i__2].imag = 0.; // , expr subst
             if(j < *n)
             {
                 i__2 = *n - j;

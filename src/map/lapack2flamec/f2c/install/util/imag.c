@@ -6,11 +6,11 @@ extern "C" {
 
 double d_imag(dcomplex *z)
 {
-    return (z->i);
+    return (z->imag);
 }
 double r_imag(scomplex *z)
 {
-    return (z->i);
+    return (z->imag);
 }
 
 #ifdef __cplusplus

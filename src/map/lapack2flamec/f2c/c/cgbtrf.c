@@ -4,7 +4,7 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static scomplex c_b1 = {{1.f}, {0.f}};
+static scomplex c_b1 = {1.f, 0.f};
 static aocl_int64_t c__1 = 1;
 static aocl_int64_t c__65 = 65;
 /* > \brief \b CGBTRF */
@@ -399,7 +399,7 @@ void aocl_lapack_cgbtrf(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *kl, aocl
                 jp = aocl_blas_icamax(&i__4, &ab[kv + 1 + jj * ab_dim1], &c__1);
                 ipiv[jj] = (aocl_int_t)(jp + jj - j);
                 i__4 = kv + jp + jj * ab_dim1;
-                if(ab[i__4].r != 0.f || ab[i__4].i != 0.f)
+                if(ab[i__4].real != 0.f || ab[i__4].imag != 0.f)
                 {
                     /* Computing MAX */
                     /* Computing MIN */
@@ -571,8 +571,8 @@ void aocl_lapack_cgbtrf(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *kl, aocl
                         {
                             i__5 = ii + jj * 65 - 66;
                             i__6 = ii - jj + 1 + (jj + j + kv - 1) * ab_dim1;
-                            work13[i__5].r = ab[i__6].r;
-                            work13[i__5].i = ab[i__6].i; // , expr subst
+                            work13[i__5].real = ab[i__6].real;
+                            work13[i__5].imag = ab[i__6].imag; // , expr subst
                             /* L120: */
                         }
                         /* L130: */
@@ -611,8 +611,8 @@ void aocl_lapack_cgbtrf(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *kl, aocl
                         {
                             i__5 = ii - jj + 1 + (jj + j + kv - 1) * ab_dim1;
                             i__6 = ii + jj * 65 - 66;
-                            ab[i__5].r = work13[i__6].r;
-                            ab[i__5].i = work13[i__6].i; // , expr subst
+                            ab[i__5].real = work13[i__6].real;
+                            ab[i__5].imag = work13[i__6].imag; // , expr subst
                             /* L140: */
                         }
                         /* L150: */

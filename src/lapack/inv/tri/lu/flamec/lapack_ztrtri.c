@@ -19,8 +19,8 @@
 
 static aocl_int64_t c__1 = 1;
 static aocl_int64_t c_n1 = -1;
-static dcomplex c_b18 = {{1.}, {0.}};
-static dcomplex c_b22 = {{-1.}, {0.}};
+static dcomplex c_b18 = {1., 0.};
+static dcomplex c_b22 = {-1., 0.};
 
 /* > \brief \b ZTRTRI */
 

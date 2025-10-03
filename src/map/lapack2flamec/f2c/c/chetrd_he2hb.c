@@ -4,8 +4,8 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static scomplex c_b1 = {{0.f}, {0.f}};
-static scomplex c_b2 = {{1.f}, {0.f}};
+static scomplex c_b1 = {0.f, 0.f};
+static scomplex c_b2 = {1.f, 0.f};
 static aocl_int64_t c__4 = 4;
 static aocl_int64_t c_n1 = -1;
 static aocl_int64_t c__1 = 1;
@@ -373,8 +373,8 @@ void aocl_lapack_chetrd_he2hb(char *uplo, aocl_int64_t *n, aocl_int64_t *kd, sco
     else if(lquery)
     {
         r__1 = aocl_lapack_sroundup_lwork(&lwmin);
-        work[1].r = r__1;
-        work[1].i = 0.f; // , expr subst
+        work[1].real = r__1;
+        work[1].imag = 0.f; // , expr subst
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
@@ -408,8 +408,8 @@ void aocl_lapack_chetrd_he2hb(char *uplo, aocl_int64_t *n, aocl_int64_t *kd, sco
                 /* L110: */
             }
         }
-        work[1].r = 1.f;
-        work[1].i = 0.f; // , expr subst
+        work[1].real = 1.f;
+        work[1].imag = 0.f; // , expr subst
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
@@ -475,14 +475,14 @@ void aocl_lapack_chetrd_he2hb(char *uplo, aocl_int64_t *n, aocl_int64_t *kd, sco
                             lda, &work[s2pos], &lds2, &c_b1, &work[wpos], &ldw);
             aocl_blas_cgemm("No transpose", "Conjugate", &pk, &pk, &pn, &c_b2, &work[wpos], &ldw,
                             &work[s2pos], &lds2, &c_b1, &work[s1pos], &lds1);
-            q__1.r = -.5f;
-            q__1.i = -0.f; // , expr subst
+            q__1.real = -.5f;
+            q__1.imag = -0.f; // , expr subst
             aocl_blas_cgemm("No transpose", "No transpose", &pk, &pn, &pk, &q__1, &work[s1pos],
                             &lds1, &a[i__ + (i__ + *kd) * a_dim1], lda, &c_b2, &work[wpos], &ldw);
             /* Update the unreduced submatrix A(i+kd:n,i+kd:n), using */
             /* an update of the form: A := A - V'*W - W'*V */
-            q__1.r = -1.f;
-            q__1.i = -0.f; // , expr subst
+            q__1.real = -1.f;
+            q__1.imag = -0.f; // , expr subst
             aocl_blas_cher2k(uplo, "Conjugate", &pn, &pk, &q__1, &a[i__ + (i__ + *kd) * a_dim1],
                              lda, &work[wpos], &ldw, &c_b33, &a[i__ + *kd + (i__ + *kd) * a_dim1],
                              lda);
@@ -538,15 +538,15 @@ void aocl_lapack_chetrd_he2hb(char *uplo, aocl_int64_t *n, aocl_int64_t *kd, sco
                             lda, &work[s2pos], &lds2, &c_b1, &work[wpos], &ldw);
             aocl_blas_cgemm("Conjugate", "No transpose", &pk, &pk, &pn, &c_b2, &work[s2pos], &lds2,
                             &work[wpos], &ldw, &c_b1, &work[s1pos], &lds1);
-            q__1.r = -.5f;
-            q__1.i = -0.f; // , expr subst
+            q__1.real = -.5f;
+            q__1.imag = -0.f; // , expr subst
             aocl_blas_cgemm("No transpose", "No transpose", &pn, &pk, &pk, &q__1,
                             &a[i__ + *kd + i__ * a_dim1], lda, &work[s1pos], &lds1, &c_b2,
                             &work[wpos], &ldw);
             /* Update the unreduced submatrix A(i+kd:n,i+kd:n), using */
             /* an update of the form: A := A - V*W' - W*V' */
-            q__1.r = -1.f;
-            q__1.i = -0.f; // , expr subst
+            q__1.real = -1.f;
+            q__1.imag = -0.f; // , expr subst
             aocl_blas_cher2k(uplo, "No transpose", &pn, &pk, &q__1, &a[i__ + *kd + i__ * a_dim1],
                              lda, &work[wpos], &ldw, &c_b33, &a[i__ + *kd + (i__ + *kd) * a_dim1],
                              lda);
@@ -572,8 +572,8 @@ void aocl_lapack_chetrd_he2hb(char *uplo, aocl_int64_t *n, aocl_int64_t *kd, sco
         }
     }
     r__1 = aocl_lapack_sroundup_lwork(&lwmin);
-    work[1].r = r__1;
-    work[1].i = 0.f; // , expr subst
+    work[1].real = r__1;
+    work[1].imag = 0.f; // , expr subst
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
     return;
     /* End of CHETRD_HE2HB */

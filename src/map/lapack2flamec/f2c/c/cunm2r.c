@@ -344,8 +344,8 @@ void aocl_lapack_cunm2r(char *side, char *trans, aocl_int64_t *m, aocl_int64_t *
         aii.real = a[i__3].real;
         aii.imag = a[i__3].imag; // , expr subst
         i__3 = i__ + i__ * a_dim1;
-        a[i__3].r = 1.f;
-        a[i__3].i = 0.f; // , expr subst
+        a[i__3].real = 1.f;
+        a[i__3].imag = 0.f; // , expr subst
         aocl_lapack_clarf(side, &mi, &ni, &a[i__ + i__ * a_dim1], &c__1, &taui,
                           &c__[ic + jc * c_dim1], ldc, &work[1]);
         i__3 = i__ + i__ * a_dim1;

@@ -374,8 +374,8 @@ void aocl_lapack_claqr4(logical *wantt, logical *wantz, aocl_int64_t *n, aocl_in
     /* ==== Quick return for N = 0: nothing to do. ==== */
     if(*n == 0)
     {
-        work[1].r = 1.f;
-        work[1].i = 0.f; // , expr subst
+        work[1].real = 1.f;
+        work[1].imag = 0.f; // , expr subst
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
@@ -447,16 +447,16 @@ void aocl_lapack_claqr4(logical *wantt, logical *wantz, aocl_int64_t *n, aocl_in
         /* ==== Optimal workspace = MAX(CLAQR5, CLAQR2) ==== */
         /* Computing MAX */
         i__1 = nsr * 3 / 2;
-        i__2 = (integer)work[1].r; // , expr subst
+        i__2 = (integer)work[1].real; // , expr subst
         lwkopt = fla_max(i__1, i__2);
         /* ==== Quick return in case of workspace query. ==== */
         if(*lwork == -1)
         {
             r__1 = (real)lwkopt;
-            q__1.r = r__1;
-            q__1.i = 0.f; // , expr subst
-            work[1].r = q__1.r;
-            work[1].i = q__1.i; // , expr subst
+            q__1.real = r__1;
+            q__1.imag = 0.f; // , expr subst
+            work[1].real = q__1.real;
+            work[1].imag = q__1.imag; // , expr subst
             AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
             return;
         }
@@ -508,7 +508,7 @@ void aocl_lapack_claqr4(logical *wantt, logical *wantz, aocl_int64_t *n, aocl_in
             for(k = kbot; k >= i__2; --k)
             {
                 i__3 = k + (k - 1) * h_dim1;
-                if(h__[i__3].r == 0.f && h__[i__3].i == 0.f)
+                if(h__[i__3].real == 0.f && h__[i__3].imag == 0.f)
                 {
                     goto L20;
                 }
@@ -556,8 +556,8 @@ void aocl_lapack_claqr4(logical *wantt, logical *wantz, aocl_int64_t *n, aocl_in
                     kwtop = kbot - nw + 1;
                     i__2 = kwtop + (kwtop - 1) * h_dim1;
                     i__3 = kwtop - 1 + (kwtop - 2) * h_dim1;
-                    if((r__1 = h__[i__2].r, f2c_abs(r__1)) + (r__2 = h__[i__2].i, f2c_abs(r__2))
-                       > (r__3 = h__[i__3].r, f2c_abs(r__3)) + (r__4 = h__[i__3].i, f2c_abs(r__4)))
+                    if((r__1 = h__[i__2].real, f2c_abs(r__1)) + (r__2 = h__[i__2].imag, f2c_abs(r__2))
+                       > (r__3 = h__[i__3].real, f2c_abs(r__3)) + (r__4 = h__[i__3].imag, f2c_abs(r__4)))
                     {
                         ++nw;
                     }
@@ -633,13 +633,13 @@ void aocl_lapack_claqr4(logical *wantt, logical *wantz, aocl_int64_t *n, aocl_in
                         i__3 = i__;
                         i__4 = i__ + i__ * h_dim1;
                         i__5 = i__ + (i__ - 1) * h_dim1;
-                        r__3 = ((r__1 = h__[i__5].r, f2c_abs(r__1))
-                                + (r__2 = h__[i__5].i, f2c_abs(r__2)))
+                        r__3 = ((r__1 = h__[i__5].real, f2c_abs(r__1))
+                                + (r__2 = h__[i__5].imag, f2c_abs(r__2)))
                                * .75f;
-                        q__1.r = h__[i__4].r + r__3;
-                        q__1.i = h__[i__4].i; // , expr subst
-                        w[i__3].r = q__1.r;
-                        w[i__3].i = q__1.i; // , expr subst
+                        q__1.real = h__[i__4].real + r__3;
+                        q__1.imag = h__[i__4].imag; // , expr subst
+                        w[i__3].real = q__1.real;
+                        w[i__3].imag = q__1.imag; // , expr subst
                         i__3 = i__ - 1;
                         i__4 = i__;
                         w[i__3].real = w[i__4].real;
@@ -675,14 +675,14 @@ void aocl_lapack_claqr4(logical *wantt, logical *wantz, aocl_int64_t *n, aocl_in
                             i__3 = kbot + (kbot - 1) * h_dim1;
                             i__4 = kbot - 1 + kbot * h_dim1;
                             i__5 = kbot + kbot * h_dim1;
-                            s = (r__1 = h__[i__2].r, f2c_abs(r__1))
-                                + (r__2 = h__[i__2].i, f2c_abs(r__2))
-                                + ((r__3 = h__[i__3].r, f2c_abs(r__3))
-                                   + (r__4 = h__[i__3].i, f2c_abs(r__4)))
-                                + ((r__5 = h__[i__4].r, f2c_abs(r__5))
-                                   + (r__6 = h__[i__4].i, f2c_abs(r__6)))
-                                + ((r__7 = h__[i__5].r, f2c_abs(r__7))
-                                   + (r__8 = h__[i__5].i, f2c_abs(r__8)));
+                            s = (r__1 = h__[i__2].real, f2c_abs(r__1))
+                                + (r__2 = h__[i__2].imag, f2c_abs(r__2))
+                                + ((r__3 = h__[i__3].real, f2c_abs(r__3))
+                                   + (r__4 = h__[i__3].imag, f2c_abs(r__4)))
+                                + ((r__5 = h__[i__4].real, f2c_abs(r__5))
+                                   + (r__6 = h__[i__4].imag, f2c_abs(r__6)))
+                                + ((r__7 = h__[i__5].real, f2c_abs(r__7))
+                                   + (r__8 = h__[i__5].imag, f2c_abs(r__8)));
                             i__2 = kbot - 1 + (kbot - 1) * h_dim1;
                             q__1.real = h__[i__2].real / s;
                             q__1.imag = h__[i__2].imag / s; // , expr subst
@@ -759,18 +759,18 @@ void aocl_lapack_claqr4(logical *wantt, logical *wantz, aocl_int64_t *n, aocl_in
                             for(i__ = ks; i__ <= i__3; ++i__)
                             {
                                 i__5 = i__ + 1;
-                                if((r__1 = w[i__].r, f2c_abs(r__1))
-                                       + (r__2 = w[i__].i, f2c_abs(r__2))
-                                   < (r__3 = w[i__5].r, f2c_abs(r__3))
-                                         + (r__4 = w[i__5].i, f2c_abs(r__4)))
+                                if((r__1 = w[i__].real, f2c_abs(r__1))
+                                       + (r__2 = w[i__].imag, f2c_abs(r__2))
+                                   < (r__3 = w[i__5].real, f2c_abs(r__3))
+                                         + (r__4 = w[i__5].imag, f2c_abs(r__4)))
                                 {
                                     sorted = FALSE_;
-                                    swap.r = w[i__].r;
-                                    swap.i = w[i__].i; // , expr subst
-                                    w[i__].r = w[i__5].r;
-                                    w[i__].i = w[i__5].i; // , expr subst
-                                    w[i__5].r = swap.r;
-                                    w[i__5].i = swap.i; // , expr subst
+                                    swap.real = w[i__].real;
+                                    swap.imag = w[i__].imag; // , expr subst
+                                    w[i__].real = w[i__5].real;
+                                    w[i__].imag = w[i__5].imag; // , expr subst
+                                    w[i__5].real = swap.real;
+                                    w[i__5].imag = swap.imag; // , expr subst
                                 }
                                 /* L40: */
                             }
@@ -790,20 +790,20 @@ void aocl_lapack_claqr4(logical *wantt, logical *wantz, aocl_int64_t *n, aocl_in
                     q__1.real = q__2.real;
                     q__1.imag = q__2.imag; // , expr subst
                     i__4 = kbot - 1;
-                    q__4.r = w[i__4].r - h__[i__3].r;
-                    q__4.i = w[i__4].i - h__[i__3].i; // , expr subst
-                    q__3.r = q__4.r;
-                    q__3.i = q__4.i; // , expr subst
-                    if((r__1 = q__1.r, f2c_abs(r__1)) + (r__2 = q__1.i, f2c_abs(r__2))
-                       < (r__3 = q__3.r, f2c_abs(r__3)) + (r__4 = q__3.i, f2c_abs(r__4)))
+                    q__4.real = w[i__4].real - h__[i__3].real;
+                    q__4.imag = w[i__4].imag - h__[i__3].imag; // , expr subst
+                    q__3.real = q__4.real;
+                    q__3.imag = q__4.imag; // , expr subst
+                    if((r__1 = q__1.real, f2c_abs(r__1)) + (r__2 = q__1.imag, f2c_abs(r__2))
+                       < (r__3 = q__3.real, f2c_abs(r__3)) + (r__4 = q__3.imag, f2c_abs(r__4)))
                     {
-                        w[i__4].r = w[i__2].r;
-                        w[i__4].i = w[i__2].i; // , expr subst
+                        w[i__4].real = w[i__2].real;
+                        w[i__4].imag = w[i__2].imag; // , expr subst
                     }
                     else
                     {
-                        w[i__2].r = w[i__4].r;
-                        w[i__2].i = w[i__4].i; // , expr subst
+                        w[i__2].real = w[i__4].real;
+                        w[i__2].imag = w[i__4].imag; // , expr subst
                     }
                 }
                 /* ==== Use up to NS of the the smallest magnitude */
@@ -857,10 +857,10 @@ void aocl_lapack_claqr4(logical *wantt, logical *wantz, aocl_int64_t *n, aocl_in
     }
     /* ==== Return the optimal value of LWORK. ==== */
     r__1 = (real)lwkopt;
-    q__1.r = r__1;
-    q__1.i = 0.f; // , expr subst
-    work[1].r = q__1.r;
-    work[1].i = q__1.i; // , expr subst
+    q__1.real = r__1;
+    q__1.imag = 0.f; // , expr subst
+    work[1].real = q__1.real;
+    work[1].imag = q__1.imag; // , expr subst
     /* ==== End of CLAQR4 ==== */
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
     return;

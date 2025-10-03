@@ -266,8 +266,8 @@ void aocl_lapack_zhetri_3(char *uplo, aocl_int64_t *n, dcomplex *a, aocl_int64_t
     }
     else if(lquery)
     {
-        work[1].r = (doublereal)lwkopt;
-        work[1].i = 0.; // , expr subst
+        work[1].real = (doublereal)lwkopt;
+        work[1].imag = 0.; // , expr subst
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -278,8 +278,8 @@ void aocl_lapack_zhetri_3(char *uplo, aocl_int64_t *n, dcomplex *a, aocl_int64_t
         return;
     }
     aocl_lapack_zhetri_3x(uplo, n, &a[a_offset], lda, &e[1], &ipiv[1], &work[1], &nb, info);
-    work[1].r = (doublereal)lwkopt;
-    work[1].i = 0.; // , expr subst
+    work[1].real = (doublereal)lwkopt;
+    work[1].imag = 0.; // , expr subst
     AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of ZHETRI_3 */

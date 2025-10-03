@@ -326,15 +326,15 @@ void aocl_lapack_zlamswlq(char *side, char *trans, aocl_int64_t *m, aocl_int64_t
     {
         i__1 = -(*info);
         aocl_blas_xerbla("ZLAMSWLQ", &i__1, (ftnlen)8);
-        work[1].r = (doublereal)lw;
-        work[1].i = 0.; // , expr subst
+        work[1].real = (doublereal)lw;
+        work[1].imag = 0.; // , expr subst
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     else if(lquery)
     {
-        work[1].r = (doublereal)lw;
-        work[1].i = 0.; // , expr subst
+        work[1].real = (doublereal)lw;
+        work[1].imag = 0.; // , expr subst
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -471,8 +471,8 @@ void aocl_lapack_zlamswlq(char *side, char *trans, aocl_int64_t *m, aocl_int64_t
                                 &c__[ii * c_dim1 + 1], ldc, &work[1], info);
         }
     }
-    work[1].r = (doublereal)lw;
-    work[1].i = 0.; // , expr subst
+    work[1].real = (doublereal)lw;
+    work[1].imag = 0.; // , expr subst
     AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of ZLAMSWLQ */

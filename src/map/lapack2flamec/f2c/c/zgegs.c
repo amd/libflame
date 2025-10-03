@@ -4,8 +4,8 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static dcomplex c_b1 = {{0.}, {0.}};
-static dcomplex c_b2 = {{1.}, {0.}};
+static dcomplex c_b1 = {0., 0.};
+static dcomplex c_b2 = {1., 0.};
 static aocl_int64_t c__1 = 1;
 static aocl_int64_t c_n1 = -1;
 /* > \brief <b> ZGEEVX computes the eigenvalues and, optionally, the left and/or right eigenvectors
@@ -356,8 +356,8 @@ void aocl_lapack_zgegs(char *jobvsl, char *jobvsr, aocl_int64_t *n, dcomplex *a,
     i__1 = *n << 1;
     lwkmin = fla_max(i__1, 1);
     lwkopt = lwkmin;
-    work[1].r = (doublereal)lwkopt;
-    work[1].i = 0.; // , expr subst
+    work[1].real = (doublereal)lwkopt;
+    work[1].imag = 0.; // , expr subst
     lquery = *lwork == -1;
     *info = 0;
     if(ijobvl <= 0)
@@ -401,8 +401,8 @@ void aocl_lapack_zgegs(char *jobvsl, char *jobvsr, aocl_int64_t *n, dcomplex *a,
         i__1 = fla_max(nb1, nb2);
         nb = fla_max(i__1, nb3);
         lopt = *n * (nb + 1);
-        work[1].r = (doublereal)lopt;
-        work[1].i = 0.; // , expr subst
+        work[1].real = (doublereal)lopt;
+        work[1].imag = 0.; // , expr subst
     }
     if(*info != 0)
     {
@@ -498,7 +498,7 @@ void aocl_lapack_zgegs(char *jobvsl, char *jobvsr, aocl_int64_t *n, dcomplex *a,
         /* Computing MAX */
         i__3 = iwork;
         i__1 = lwkopt;
-        i__2 = (integer)work[i__3].r + iwork - 1; // , expr subst
+        i__2 = (integer)work[i__3].real + iwork - 1; // , expr subst
         lwkopt = fla_max(i__1, i__2);
     }
     if(iinfo != 0)
@@ -514,7 +514,7 @@ void aocl_lapack_zgegs(char *jobvsl, char *jobvsr, aocl_int64_t *n, dcomplex *a,
         /* Computing MAX */
         i__3 = iwork;
         i__1 = lwkopt;
-        i__2 = (integer)work[i__3].r + iwork - 1; // , expr subst
+        i__2 = (integer)work[i__3].real + iwork - 1; // , expr subst
         lwkopt = fla_max(i__1, i__2);
     }
     if(iinfo != 0)
@@ -537,7 +537,7 @@ void aocl_lapack_zgegs(char *jobvsl, char *jobvsr, aocl_int64_t *n, dcomplex *a,
             /* Computing MAX */
             i__3 = iwork;
             i__1 = lwkopt;
-            i__2 = (integer)work[i__3].r + iwork - 1; // , expr subst
+            i__2 = (integer)work[i__3].real + iwork - 1; // , expr subst
             lwkopt = fla_max(i__1, i__2);
         }
         if(iinfo != 0)
@@ -569,7 +569,7 @@ void aocl_lapack_zgegs(char *jobvsl, char *jobvsr, aocl_int64_t *n, dcomplex *a,
         /* Computing MAX */
         i__3 = iwork;
         i__1 = lwkopt;
-        i__2 = (integer)work[i__3].r + iwork - 1; // , expr subst
+        i__2 = (integer)work[i__3].real + iwork - 1; // , expr subst
         lwkopt = fla_max(i__1, i__2);
     }
     if(iinfo != 0)
@@ -645,8 +645,8 @@ void aocl_lapack_zgegs(char *jobvsl, char *jobvsr, aocl_int64_t *n, dcomplex *a,
         }
     }
 L10:
-    work[1].r = (doublereal)lwkopt;
-    work[1].i = 0.; // , expr subst
+    work[1].real = (doublereal)lwkopt;
+    work[1].imag = 0.; // , expr subst
     AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of ZGEGS */

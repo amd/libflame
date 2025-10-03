@@ -422,8 +422,8 @@ void aocl_lapack_zheevx(char *jobz, char *range, char *uplo, aocl_int64_t *n, dc
         if(*n <= 1)
         {
             lwkmin = 1;
-            work[1].r = (doublereal)lwkmin;
-            work[1].i = 0.; // , expr subst
+            work[1].real = (doublereal)lwkmin;
+            work[1].imag = 0.; // , expr subst
         }
         else
         {
@@ -438,8 +438,8 @@ void aocl_lapack_zheevx(char *jobz, char *range, char *uplo, aocl_int64_t *n, dc
             i__1 = 1;
             i__2 = (nb + 1) * *n; // , expr subst
             lwkopt = fla_max(i__1, i__2);
-            work[1].r = (doublereal)lwkopt;
-            work[1].i = 0.; // , expr subst
+            work[1].real = (doublereal)lwkopt;
+            work[1].imag = 0.; // , expr subst
         }
         if(*lwork < lwkmin && !lquery)
         {
@@ -477,7 +477,7 @@ void aocl_lapack_zheevx(char *jobz, char *range, char *uplo, aocl_int64_t *n, dc
         {
             i__1 = a_dim1 + 1;
             i__2 = a_dim1 + 1;
-            if(*vl < a[i__1].r && *vu >= a[i__2].r)
+            if(*vl < a[i__1].real && *vu >= a[i__2].real)
             {
                 *m = 1;
                 i__1 = a_dim1 + 1;
@@ -686,8 +686,8 @@ L40:
         }
     }
     /* Set WORK(1) to optimal scomplex workspace size. */
-    work[1].r = (doublereal)lwkopt;
-    work[1].i = 0.; // , expr subst
+    work[1].real = (doublereal)lwkopt;
+    work[1].imag = 0.; // , expr subst
     AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of ZHEEVX */

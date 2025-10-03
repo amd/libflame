@@ -8,7 +8,7 @@ doublereal dcabs1_(dcomplex *z__)
     /* Local variables */
 #define t ((doublereal *)equiv_0) 
 #define zz (equiv_0)
-    zz->r = z__->r, zz->i = z__->i;
+    zz->real = z__->real, zz->imag = z__->imag;
     ret_val = f2c_abs(t[0]) + f2c_abs(t[1]);
     return ret_val;
 }

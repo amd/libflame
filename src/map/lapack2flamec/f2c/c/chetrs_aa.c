@@ -4,7 +4,7 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static scomplex c_b9 = {{1.f}, {0.f}};
+static scomplex c_b9 = {1.f, 0.f};
 static aocl_int64_t c__1 = 1;
 /* > \brief \b CHETRS_AA */
 /* =========== DOCUMENTATION =========== */
@@ -248,8 +248,8 @@ void aocl_lapack_chetrs_aa(char *uplo, aocl_int64_t *n, aocl_int64_t *nrhs, scom
     {
         lwkopt = *n * 3 - 2;
         r__1 = aocl_lapack_sroundup_lwork(&lwkopt);
-        work[1].r = r__1;
-        work[1].i = 0.f; // , expr subst
+        work[1].real = r__1;
+        work[1].imag = 0.f; // , expr subst
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }

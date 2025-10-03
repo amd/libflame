@@ -4,7 +4,7 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static scomplex c_b1 = {{1.f}, {0.f}};
+static scomplex c_b1 = {1.f, 0.f};
 static aocl_int64_t c__1 = 1;
 static aocl_int64_t c_n1 = -1;
 static aocl_int64_t c__3 = 3;
@@ -299,8 +299,8 @@ void aocl_lapack_cgebrd(aocl_int64_t *m, aocl_int64_t *n, scomplex *a, aocl_int6
     nb = fla_max(i__1, i__2);
     lwkopt = (*m + *n) * nb;
     r__1 = (real)lwkopt;
-    work[1].r = r__1;
-    work[1].i = 0.f; // , expr subst
+    work[1].real = r__1;
+    work[1].imag = 0.f; // , expr subst
     lquery = *lwork == -1;
     if(*m < 0)
     {
@@ -339,8 +339,8 @@ void aocl_lapack_cgebrd(aocl_int64_t *m, aocl_int64_t *n, scomplex *a, aocl_int6
     minmn = fla_min(*m, *n);
     if(minmn == 0)
     {
-        work[1].r = 1.f;
-        work[1].i = 0.f; // , expr subst
+        work[1].real = 1.f;
+        work[1].imag = 0.f; // , expr subst
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
@@ -395,15 +395,15 @@ void aocl_lapack_cgebrd(aocl_int64_t *m, aocl_int64_t *n, scomplex *a, aocl_int6
         /* an update of the form A := A - V*Y**H - X*U**H */
         i__3 = *m - i__ - nb + 1;
         i__4 = *n - i__ - nb + 1;
-        q__1.r = -1.f;
-        q__1.i = -0.f; // , expr subst
+        q__1.real = -1.f;
+        q__1.imag = -0.f; // , expr subst
         aocl_blas_cgemm("No transpose", "Conjugate transpose", &i__3, &i__4, &nb, &q__1,
                         &a[i__ + nb + i__ * a_dim1], lda, &work[ldwrkx * nb + nb + 1], &ldwrky,
                         &c_b1, &a[i__ + nb + (i__ + nb) * a_dim1], lda);
         i__3 = *m - i__ - nb + 1;
         i__4 = *n - i__ - nb + 1;
-        q__1.r = -1.f;
-        q__1.i = -0.f; // , expr subst
+        q__1.real = -1.f;
+        q__1.imag = -0.f; // , expr subst
         aocl_blas_cgemm("No transpose", "No transpose", &i__3, &i__4, &nb, &q__1, &work[nb + 1],
                         &ldwrkx, &a[i__ + (i__ + nb) * a_dim1], lda, &c_b1,
                         &a[i__ + nb + (i__ + nb) * a_dim1], lda);
@@ -415,12 +415,12 @@ void aocl_lapack_cgebrd(aocl_int64_t *m, aocl_int64_t *n, scomplex *a, aocl_int6
             {
                 i__4 = j + j * a_dim1;
                 i__5 = j;
-                a[i__4].r = d__[i__5];
-                a[i__4].i = 0.f; // , expr subst
+                a[i__4].real = d__[i__5];
+                a[i__4].imag = 0.f; // , expr subst
                 i__4 = j + (j + 1) * a_dim1;
                 i__5 = j;
-                a[i__4].r = e[i__5];
-                a[i__4].i = 0.f; // , expr subst
+                a[i__4].real = e[i__5];
+                a[i__4].imag = 0.f; // , expr subst
                 /* L10: */
             }
         }
@@ -431,12 +431,12 @@ void aocl_lapack_cgebrd(aocl_int64_t *m, aocl_int64_t *n, scomplex *a, aocl_int6
             {
                 i__4 = j + j * a_dim1;
                 i__5 = j;
-                a[i__4].r = d__[i__5];
-                a[i__4].i = 0.f; // , expr subst
+                a[i__4].real = d__[i__5];
+                a[i__4].imag = 0.f; // , expr subst
                 i__4 = j + 1 + j * a_dim1;
                 i__5 = j;
-                a[i__4].r = e[i__5];
-                a[i__4].i = 0.f; // , expr subst
+                a[i__4].real = e[i__5];
+                a[i__4].imag = 0.f; // , expr subst
                 /* L20: */
             }
         }
@@ -447,8 +447,8 @@ void aocl_lapack_cgebrd(aocl_int64_t *m, aocl_int64_t *n, scomplex *a, aocl_int6
     i__1 = *n - i__ + 1;
     aocl_lapack_cgebd2(&i__2, &i__1, &a[i__ + i__ * a_dim1], lda, &d__[i__], &e[i__], &tauq[i__],
                        &taup[i__], &work[1], &iinfo);
-    work[1].r = (real)ws;
-    work[1].i = 0.f; // , expr subst
+    work[1].real = (real)ws;
+    work[1].imag = 0.f; // , expr subst
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
     return;
     /* End of CGEBRD */

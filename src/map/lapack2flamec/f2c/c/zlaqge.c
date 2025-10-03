@@ -241,10 +241,10 @@ void aocl_lapack_zlaqge(aocl_int64_t *m, aocl_int64_t *n, dcomplex *a, aocl_int6
                 i__3 = i__ + j * a_dim1;
                 i__4 = i__;
                 i__5 = i__ + j * a_dim1;
-                z__1.r = r__[i__4] * a[i__5].r;
-                z__1.i = r__[i__4] * a[i__5].i; // , expr subst
-                a[i__3].r = z__1.r;
-                a[i__3].i = z__1.i; // , expr subst
+                z__1.real = r__[i__4] * a[i__5].real;
+                z__1.imag = r__[i__4] * a[i__5].imag; // , expr subst
+                a[i__3].real = z__1.real;
+                a[i__3].imag = z__1.imag; // , expr subst
                 /* L30: */
             }
             /* L40: */

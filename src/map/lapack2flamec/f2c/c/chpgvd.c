@@ -353,8 +353,8 @@ void aocl_lapack_chpgvd(aocl_int64_t *itype, char *jobz, char *uplo, aocl_int64_
             }
         }
         r__1 = aocl_lapack_sroundup_lwork(&lwmin);
-        work[1].r = r__1;
-        work[1].i = 0.f; // , expr subst
+        work[1].real = r__1;
+        work[1].imag = 0.f; // , expr subst
         rwork[1] = (real)lrwmin;
         iwork[1] = (aocl_int_t)(liwmin);
         if(*lwork < lwmin && !lquery)
@@ -402,7 +402,7 @@ void aocl_lapack_chpgvd(aocl_int64_t *itype, char *jobz, char *uplo, aocl_int64_
                        &rwork[1], lrwork, &iwork[1], liwork, info);
     /* Computing MAX */
     r__1 = (real)lwmin;
-    r__2 = work[1].r; // , expr subst
+    r__2 = work[1].real; // , expr subst
     lwmin = (integer)fla_max(r__1, r__2);
     /* Computing MAX */
     r__1 = (real)lrwmin;
@@ -461,8 +461,8 @@ void aocl_lapack_chpgvd(aocl_int64_t *itype, char *jobz, char *uplo, aocl_int64_
         }
     }
     r__1 = aocl_lapack_sroundup_lwork(&lwmin);
-    work[1].r = r__1;
-    work[1].i = 0.f; // , expr subst
+    work[1].real = r__1;
+    work[1].imag = 0.f; // , expr subst
     rwork[1] = (real)lrwmin;
     iwork[1] = (aocl_int_t)(liwmin);
     AOCL_DTL_TRACE_LOG_EXIT

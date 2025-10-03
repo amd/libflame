@@ -578,8 +578,8 @@ void aocl_lapack_zstemr(char *jobz, char *range, aocl_int64_t *n, doublereal *d_
         if(zquery && *info == 0)
         {
             i__1 = z_dim1 + 1;
-            z__[i__1].r = (doublereal)nzcmin;
-            z__[i__1].i = 0.; // , expr subst
+            z__[i__1].real = (doublereal)nzcmin;
+            z__[i__1].imag = 0.; // , expr subst
         }
         else if(*nzc < nzcmin && !zquery)
         {
@@ -623,8 +623,8 @@ void aocl_lapack_zstemr(char *jobz, char *range, aocl_int64_t *n, doublereal *d_
         if(wantz && !zquery)
         {
             i__1 = z_dim1 + 1;
-            z__[i__1].r = 1.;
-            z__[i__1].i = 0.; // , expr subst
+            z__[i__1].real = 1.;
+            z__[i__1].imag = 0.; // , expr subst
             isuppz[1] = 1;
             isuppz[2] = 1;
         }
@@ -660,21 +660,21 @@ void aocl_lapack_zstemr(char *jobz, char *range, aocl_int64_t *n, doublereal *d_
                 if(laeswap)
                 {
                     i__1 = *m * z_dim1 + 1;
-                    z__[i__1].r = cs;
-                    z__[i__1].i = 0.; // , expr subst
+                    z__[i__1].real = cs;
+                    z__[i__1].imag = 0.; // , expr subst
                     i__1 = *m * z_dim1 + 2;
-                    z__[i__1].r = sn;
-                    z__[i__1].i = 0.; // , expr subst
+                    z__[i__1].real = sn;
+                    z__[i__1].imag = 0.; // , expr subst
                 }
                 else
                 {
                     i__1 = *m * z_dim1 + 1;
                     d__1 = -sn;
-                    z__[i__1].r = d__1;
-                    z__[i__1].i = 0.; // , expr subst
+                    z__[i__1].real = d__1;
+                    z__[i__1].imag = 0.; // , expr subst
                     i__1 = *m * z_dim1 + 2;
-                    z__[i__1].r = cs;
-                    z__[i__1].i = 0.; // , expr subst
+                    z__[i__1].real = cs;
+                    z__[i__1].imag = 0.; // , expr subst
                 }
                 /* Note: At most one of SN and CS can be zero. */
                 if(sn != 0.)
@@ -707,20 +707,20 @@ void aocl_lapack_zstemr(char *jobz, char *range, aocl_int64_t *n, doublereal *d_
                 {
                     i__1 = *m * z_dim1 + 1;
                     d__1 = -sn;
-                    z__[i__1].r = d__1;
-                    z__[i__1].i = 0.; // , expr subst
+                    z__[i__1].real = d__1;
+                    z__[i__1].imag = 0.; // , expr subst
                     i__1 = *m * z_dim1 + 2;
-                    z__[i__1].r = cs;
-                    z__[i__1].i = 0.; // , expr subst
+                    z__[i__1].real = cs;
+                    z__[i__1].imag = 0.; // , expr subst
                 }
                 else
                 {
                     i__1 = *m * z_dim1 + 1;
-                    z__[i__1].r = cs;
-                    z__[i__1].i = 0.; // , expr subst
+                    z__[i__1].real = cs;
+                    z__[i__1].imag = 0.; // , expr subst
                     i__1 = *m * z_dim1 + 2;
-                    z__[i__1].r = sn;
-                    z__[i__1].i = 0.; // , expr subst
+                    z__[i__1].real = sn;
+                    z__[i__1].imag = 0.; // , expr subst
                 }
                 /* Note: At most one of SN and CS can be zero. */
                 if(sn != 0.)

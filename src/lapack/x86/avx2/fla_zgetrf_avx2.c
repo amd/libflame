@@ -27,7 +27,7 @@ int fla_zgetrf_small_avx2(aocl_int64_t *m, aocl_int64_t *n, dcomplex *a, aocl_in
 #ifndef _WIN32
     double _Complex pinv;
 #else
-    dcomplex y__1 = {{1}, {0}};
+    dcomplex y__1 = {1, 0};
 #endif
 
     *info = 0;

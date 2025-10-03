@@ -4,7 +4,7 @@
  -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for
  libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static scomplex c_b1 = {{1.f}, {0.f}};
+static scomplex c_b1 = {1.f, 0.f};
 /* > \brief \b CUNM22 multiplies a general matrix by a banded unitary matrix. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -298,10 +298,10 @@ void aocl_lapack_cunm22(char *side, char *trans, aocl_int64_t *m, aocl_int64_t *
     if(*info == 0)
     {
         lwkopt = *m * *n;
-        q__1.r = (real)lwkopt;
-        q__1.i = 0.f; // , expr subst
-        work[1].r = q__1.r;
-        work[1].i = q__1.i; // , expr subst
+        q__1.real = (real)lwkopt;
+        q__1.imag = 0.f; // , expr subst
+        work[1].real = q__1.real;
+        work[1].imag = q__1.imag; // , expr subst
     }
     if(*info != 0)
     {
@@ -318,8 +318,8 @@ void aocl_lapack_cunm22(char *side, char *trans, aocl_int64_t *m, aocl_int64_t *
     /* Quick return if possible */
     if(*m == 0 || *n == 0)
     {
-        work[1].r = 1.f;
-        work[1].i = 0.f; // , expr subst
+        work[1].real = 1.f;
+        work[1].imag = 0.f; // , expr subst
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
@@ -328,8 +328,8 @@ void aocl_lapack_cunm22(char *side, char *trans, aocl_int64_t *m, aocl_int64_t *
     {
         aocl_blas_ctrmm(side, "Upper", trans, "Non-Unit", m, n, &c_b1, &q[q_offset], ldq,
                         &c__[c_offset], ldc);
-        work[1].r = 1.f;
-        work[1].i = 0.f; // , expr subst
+        work[1].real = 1.f;
+        work[1].imag = 0.f; // , expr subst
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
@@ -337,8 +337,8 @@ void aocl_lapack_cunm22(char *side, char *trans, aocl_int64_t *m, aocl_int64_t *
     {
         aocl_blas_ctrmm(side, "Lower", trans, "Non-Unit", m, n, &c_b1, &q[q_offset], ldq,
                         &c__[c_offset], ldc);
-        work[1].r = 1.f;
-        work[1].i = 0.f; // , expr subst
+        work[1].real = 1.f;
+        work[1].imag = 0.f; // , expr subst
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
@@ -485,10 +485,10 @@ void aocl_lapack_cunm22(char *side, char *trans, aocl_int64_t *m, aocl_int64_t *
             }
         }
     }
-    q__1.r = (real)lwkopt;
-    q__1.i = 0.f; // , expr subst
-    work[1].r = q__1.r;
-    work[1].i = q__1.i; // , expr subst
+    q__1.real = (real)lwkopt;
+    q__1.imag = 0.f; // , expr subst
+    work[1].real = q__1.real;
+    work[1].imag = q__1.imag; // , expr subst
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
     return;
     /* End of CUNM22 */

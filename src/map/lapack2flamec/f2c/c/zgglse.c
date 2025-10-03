@@ -4,7 +4,7 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static dcomplex c_b1 = {{1.}, {0.}};
+static dcomplex c_b1 = {1., 0.};
 static aocl_int64_t c__1 = 1;
 static aocl_int64_t c_n1 = -1;
 /* > \brief <b> ZGGLSE solves overdetermined or underdetermined systems for OTHER matrices</b> */
@@ -297,8 +297,8 @@ void aocl_lapack_zgglse(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *p, dcomp
             lwkmin = *m + *n + *p;
             lwkopt = *p + mn + fla_max(*m, *n) * nb;
         }
-        work[1].r = (doublereal)lwkopt;
-        work[1].i = 0.; // , expr subst
+        work[1].real = (doublereal)lwkopt;
+        work[1].imag = 0.; // , expr subst
         if(*lwork < lwkmin && !lquery)
         {
             *info = -12;
@@ -332,7 +332,7 @@ void aocl_lapack_zgglse(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *p, dcomp
     aocl_lapack_zggrqf(p, m, n, &b[b_offset], ldb, &work[1], &a[a_offset], lda, &work[*p + 1],
                        &work[*p + mn + 1], &i__1, info);
     i__1 = *p + mn + 1;
-    lopt = (integer)work[i__1].r;
+    lopt = (integer)work[i__1].real;
     /* Update c = Z**H *c = ( c1 ) N-P */
     /* ( c2 ) M+P-N */
     i__1 = fla_max(1, *m);
@@ -342,7 +342,7 @@ void aocl_lapack_zgglse(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *p, dcomp
     /* Computing MAX */
     i__3 = *p + mn + 1;
     i__1 = lopt;
-    i__2 = (integer)work[i__3].r; // , expr subst
+    i__2 = (integer)work[i__3].real; // , expr subst
     lopt = fla_max(i__1, i__2);
     /* Solve T12*x2 = d for x2 */
     if(*p > 0)
@@ -359,8 +359,8 @@ void aocl_lapack_zgglse(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *p, dcomp
         aocl_blas_zcopy(p, &d__[1], &c__1, &x[*n - *p + 1], &c__1);
         /* Update c1 */
         i__1 = *n - *p;
-        z__1.r = -1.;
-        z__1.i = -0.; // , expr subst
+        z__1.real = -1.;
+        z__1.imag = -0.; // , expr subst
         aocl_blas_zgemv("No transpose", &i__1, p, &z__1, &a[(*n - *p + 1) * a_dim1 + 1], lda,
                         &d__[1], &c__1, &c_b1, &c__[1], &c__1);
     }
@@ -388,8 +388,8 @@ void aocl_lapack_zgglse(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *p, dcomp
         if(nr > 0)
         {
             i__1 = *n - *m;
-            z__1.r = -1.;
-            z__1.i = -0.; // , expr subst
+            z__1.real = -1.;
+            z__1.imag = -0.; // , expr subst
             aocl_blas_zgemv("No transpose", &nr, &i__1, &z__1, &a[*n - *p + 1 + (*m + 1) * a_dim1],
                             lda, &d__[nr + 1], &c__1, &c_b1, &c__[*n - *p + 1], &c__1);
         }
@@ -402,8 +402,8 @@ void aocl_lapack_zgglse(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *p, dcomp
     {
         aocl_blas_ztrmv("Upper", "No transpose", "Non unit", &nr,
                         &a[*n - *p + 1 + (*n - *p + 1) * a_dim1], lda, &d__[1], &c__1);
-        z__1.r = -1.;
-        z__1.i = -0.; // , expr subst
+        z__1.real = -1.;
+        z__1.imag = -0.; // , expr subst
         aocl_blas_zaxpy(&nr, &z__1, &d__[1], &c__1, &c__[*n - *p + 1], &c__1);
     }
     /* Backward transformation x = Q**H*x */
@@ -413,10 +413,10 @@ void aocl_lapack_zgglse(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *p, dcomp
     /* Computing MAX */
     i__4 = *p + mn + 1;
     i__2 = lopt;
-    i__3 = (integer)work[i__4].r; // , expr subst
+    i__3 = (integer)work[i__4].real; // , expr subst
     i__1 = *p + mn + fla_max(i__2, i__3);
-    work[1].r = (doublereal)i__1;
-    work[1].i = 0.; // , expr subst
+    work[1].real = (doublereal)i__1;
+    work[1].imag = 0.; // , expr subst
     AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of ZGGLSE */

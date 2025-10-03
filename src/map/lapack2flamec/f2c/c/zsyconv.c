@@ -205,29 +205,29 @@ void aocl_lapack_zsyconv(char *uplo, char *way, aocl_int64_t *n, dcomplex *a,
             /* Convert A (A is upper) */
             /* Convert VALUE */
             i__ = *n;
-            e[1].r = 0.;
-            e[1].i = 0.; // , expr subst
+            e[1].real = 0.;
+            e[1].imag = 0.; // , expr subst
             while(i__ > 1)
             {
                 if(ipiv[i__] < 0)
                 {
                     i__1 = i__;
                     i__2 = i__ - 1 + i__ * a_dim1;
-                    e[i__1].r = a[i__2].r;
-                    e[i__1].i = a[i__2].i; // , expr subst
+                    e[i__1].real = a[i__2].real;
+                    e[i__1].imag = a[i__2].imag; // , expr subst
                     i__1 = i__ - 1;
-                    e[i__1].r = 0.;
-                    e[i__1].i = 0.; // , expr subst
+                    e[i__1].real = 0.;
+                    e[i__1].imag = 0.; // , expr subst
                     i__1 = i__ - 1 + i__ * a_dim1;
-                    a[i__1].r = 0.;
-                    a[i__1].i = 0.; // , expr subst
+                    a[i__1].real = 0.;
+                    a[i__1].imag = 0.; // , expr subst
                     --i__;
                 }
                 else
                 {
                     i__1 = i__;
-                    e[i__1].r = 0.;
-                    e[i__1].i = 0.; // , expr subst
+                    e[i__1].real = 0.;
+                    e[i__1].imag = 0.; // , expr subst
                 }
                 --i__;
             }
@@ -244,15 +244,15 @@ void aocl_lapack_zsyconv(char *uplo, char *way, aocl_int64_t *n, dcomplex *a,
                         for(j = i__ + 1; j <= i__1; ++j)
                         {
                             i__2 = ip + j * a_dim1;
-                            temp.r = a[i__2].r;
-                            temp.i = a[i__2].i; // , expr subst
+                            temp.real = a[i__2].real;
+                            temp.imag = a[i__2].imag; // , expr subst
                             i__2 = ip + j * a_dim1;
                             i__3 = i__ + j * a_dim1;
-                            a[i__2].r = a[i__3].r;
-                            a[i__2].i = a[i__3].i; // , expr subst
+                            a[i__2].real = a[i__3].real;
+                            a[i__2].imag = a[i__3].imag; // , expr subst
                             i__2 = i__ + j * a_dim1;
-                            a[i__2].r = temp.r;
-                            a[i__2].i = temp.i; // , expr subst
+                            a[i__2].real = temp.real;
+                            a[i__2].imag = temp.imag; // , expr subst
                             /* L12: */
                         }
                     }
@@ -266,15 +266,15 @@ void aocl_lapack_zsyconv(char *uplo, char *way, aocl_int64_t *n, dcomplex *a,
                         for(j = i__ + 1; j <= i__1; ++j)
                         {
                             i__2 = ip + j * a_dim1;
-                            temp.r = a[i__2].r;
-                            temp.i = a[i__2].i; // , expr subst
+                            temp.real = a[i__2].real;
+                            temp.imag = a[i__2].imag; // , expr subst
                             i__2 = ip + j * a_dim1;
                             i__3 = i__ - 1 + j * a_dim1;
-                            a[i__2].r = a[i__3].r;
-                            a[i__2].i = a[i__3].i; // , expr subst
+                            a[i__2].real = a[i__3].real;
+                            a[i__2].imag = a[i__3].imag; // , expr subst
                             i__2 = i__ - 1 + j * a_dim1;
-                            a[i__2].r = temp.r;
-                            a[i__2].i = temp.i; // , expr subst
+                            a[i__2].real = temp.real;
+                            a[i__2].imag = temp.imag; // , expr subst
                             /* L13: */
                         }
                     }
@@ -299,15 +299,15 @@ void aocl_lapack_zsyconv(char *uplo, char *way, aocl_int64_t *n, dcomplex *a,
                         for(j = i__ + 1; j <= i__1; ++j)
                         {
                             i__2 = ip + j * a_dim1;
-                            temp.r = a[i__2].r;
-                            temp.i = a[i__2].i; // , expr subst
+                            temp.real = a[i__2].real;
+                            temp.imag = a[i__2].imag; // , expr subst
                             i__2 = ip + j * a_dim1;
                             i__3 = i__ + j * a_dim1;
-                            a[i__2].r = a[i__3].r;
-                            a[i__2].i = a[i__3].i; // , expr subst
+                            a[i__2].real = a[i__3].real;
+                            a[i__2].imag = a[i__3].imag; // , expr subst
                             i__2 = i__ + j * a_dim1;
-                            a[i__2].r = temp.r;
-                            a[i__2].i = temp.i; // , expr subst
+                            a[i__2].real = temp.real;
+                            a[i__2].imag = temp.imag; // , expr subst
                         }
                     }
                 }
@@ -321,15 +321,15 @@ void aocl_lapack_zsyconv(char *uplo, char *way, aocl_int64_t *n, dcomplex *a,
                         for(j = i__ + 1; j <= i__1; ++j)
                         {
                             i__2 = ip + j * a_dim1;
-                            temp.r = a[i__2].r;
-                            temp.i = a[i__2].i; // , expr subst
+                            temp.real = a[i__2].real;
+                            temp.imag = a[i__2].imag; // , expr subst
                             i__2 = ip + j * a_dim1;
                             i__3 = i__ - 1 + j * a_dim1;
-                            a[i__2].r = a[i__3].r;
-                            a[i__2].i = a[i__3].i; // , expr subst
+                            a[i__2].real = a[i__3].real;
+                            a[i__2].imag = a[i__3].imag; // , expr subst
                             i__2 = i__ - 1 + j * a_dim1;
-                            a[i__2].r = temp.r;
-                            a[i__2].i = temp.i; // , expr subst
+                            a[i__2].real = temp.real;
+                            a[i__2].imag = temp.imag; // , expr subst
                         }
                     }
                 }
@@ -343,8 +343,8 @@ void aocl_lapack_zsyconv(char *uplo, char *way, aocl_int64_t *n, dcomplex *a,
                 {
                     i__1 = i__ - 1 + i__ * a_dim1;
                     i__2 = i__;
-                    a[i__1].r = e[i__2].r;
-                    a[i__1].i = e[i__2].i; // , expr subst
+                    a[i__1].real = e[i__2].real;
+                    a[i__1].imag = e[i__2].imag; // , expr subst
                     --i__;
                 }
                 --i__;
@@ -360,29 +360,29 @@ void aocl_lapack_zsyconv(char *uplo, char *way, aocl_int64_t *n, dcomplex *a,
             /* Convert VALUE */
             i__ = 1;
             i__1 = *n;
-            e[i__1].r = 0.;
-            e[i__1].i = 0.; // , expr subst
+            e[i__1].real = 0.;
+            e[i__1].imag = 0.; // , expr subst
             while(i__ <= *n)
             {
                 if(i__ < *n && ipiv[i__] < 0)
                 {
                     i__1 = i__;
                     i__2 = i__ + 1 + i__ * a_dim1;
-                    e[i__1].r = a[i__2].r;
-                    e[i__1].i = a[i__2].i; // , expr subst
+                    e[i__1].real = a[i__2].real;
+                    e[i__1].imag = a[i__2].imag; // , expr subst
                     i__1 = i__ + 1;
-                    e[i__1].r = 0.;
-                    e[i__1].i = 0.; // , expr subst
+                    e[i__1].real = 0.;
+                    e[i__1].imag = 0.; // , expr subst
                     i__1 = i__ + 1 + i__ * a_dim1;
-                    a[i__1].r = 0.;
-                    a[i__1].i = 0.; // , expr subst
+                    a[i__1].real = 0.;
+                    a[i__1].imag = 0.; // , expr subst
                     ++i__;
                 }
                 else
                 {
                     i__1 = i__;
-                    e[i__1].r = 0.;
-                    e[i__1].i = 0.; // , expr subst
+                    e[i__1].real = 0.;
+                    e[i__1].imag = 0.; // , expr subst
                 }
                 ++i__;
             }
@@ -399,15 +399,15 @@ void aocl_lapack_zsyconv(char *uplo, char *way, aocl_int64_t *n, dcomplex *a,
                         for(j = 1; j <= i__1; ++j)
                         {
                             i__2 = ip + j * a_dim1;
-                            temp.r = a[i__2].r;
-                            temp.i = a[i__2].i; // , expr subst
+                            temp.real = a[i__2].real;
+                            temp.imag = a[i__2].imag; // , expr subst
                             i__2 = ip + j * a_dim1;
                             i__3 = i__ + j * a_dim1;
-                            a[i__2].r = a[i__3].r;
-                            a[i__2].i = a[i__3].i; // , expr subst
+                            a[i__2].real = a[i__3].real;
+                            a[i__2].imag = a[i__3].imag; // , expr subst
                             i__2 = i__ + j * a_dim1;
-                            a[i__2].r = temp.r;
-                            a[i__2].i = temp.i; // , expr subst
+                            a[i__2].real = temp.real;
+                            a[i__2].imag = temp.imag; // , expr subst
                             /* L22: */
                         }
                     }
@@ -421,15 +421,15 @@ void aocl_lapack_zsyconv(char *uplo, char *way, aocl_int64_t *n, dcomplex *a,
                         for(j = 1; j <= i__1; ++j)
                         {
                             i__2 = ip + j * a_dim1;
-                            temp.r = a[i__2].r;
-                            temp.i = a[i__2].i; // , expr subst
+                            temp.real = a[i__2].real;
+                            temp.imag = a[i__2].imag; // , expr subst
                             i__2 = ip + j * a_dim1;
                             i__3 = i__ + 1 + j * a_dim1;
-                            a[i__2].r = a[i__3].r;
-                            a[i__2].i = a[i__3].i; // , expr subst
+                            a[i__2].real = a[i__3].real;
+                            a[i__2].imag = a[i__3].imag; // , expr subst
                             i__2 = i__ + 1 + j * a_dim1;
-                            a[i__2].r = temp.r;
-                            a[i__2].i = temp.i; // , expr subst
+                            a[i__2].real = temp.real;
+                            a[i__2].imag = temp.imag; // , expr subst
                             /* L23: */
                         }
                     }
@@ -454,15 +454,15 @@ void aocl_lapack_zsyconv(char *uplo, char *way, aocl_int64_t *n, dcomplex *a,
                         for(j = 1; j <= i__1; ++j)
                         {
                             i__2 = i__ + j * a_dim1;
-                            temp.r = a[i__2].r;
-                            temp.i = a[i__2].i; // , expr subst
+                            temp.real = a[i__2].real;
+                            temp.imag = a[i__2].imag; // , expr subst
                             i__2 = i__ + j * a_dim1;
                             i__3 = ip + j * a_dim1;
-                            a[i__2].r = a[i__3].r;
-                            a[i__2].i = a[i__3].i; // , expr subst
+                            a[i__2].real = a[i__3].real;
+                            a[i__2].imag = a[i__3].imag; // , expr subst
                             i__2 = ip + j * a_dim1;
-                            a[i__2].r = temp.r;
-                            a[i__2].i = temp.i; // , expr subst
+                            a[i__2].real = temp.real;
+                            a[i__2].imag = temp.imag; // , expr subst
                         }
                     }
                 }
@@ -476,15 +476,15 @@ void aocl_lapack_zsyconv(char *uplo, char *way, aocl_int64_t *n, dcomplex *a,
                         for(j = 1; j <= i__1; ++j)
                         {
                             i__2 = i__ + 1 + j * a_dim1;
-                            temp.r = a[i__2].r;
-                            temp.i = a[i__2].i; // , expr subst
+                            temp.real = a[i__2].real;
+                            temp.imag = a[i__2].imag; // , expr subst
                             i__2 = i__ + 1 + j * a_dim1;
                             i__3 = ip + j * a_dim1;
-                            a[i__2].r = a[i__3].r;
-                            a[i__2].i = a[i__3].i; // , expr subst
+                            a[i__2].real = a[i__3].real;
+                            a[i__2].imag = a[i__3].imag; // , expr subst
                             i__2 = ip + j * a_dim1;
-                            a[i__2].r = temp.r;
-                            a[i__2].i = temp.i; // , expr subst
+                            a[i__2].real = temp.real;
+                            a[i__2].imag = temp.imag; // , expr subst
                         }
                     }
                 }
@@ -498,8 +498,8 @@ void aocl_lapack_zsyconv(char *uplo, char *way, aocl_int64_t *n, dcomplex *a,
                 {
                     i__1 = i__ + 1 + i__ * a_dim1;
                     i__2 = i__;
-                    a[i__1].r = e[i__2].r;
-                    a[i__1].i = e[i__2].i; // , expr subst
+                    a[i__1].real = e[i__2].real;
+                    a[i__1].imag = e[i__2].imag; // , expr subst
                     ++i__;
                 }
                 ++i__;

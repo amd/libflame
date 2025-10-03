@@ -4,8 +4,8 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static scomplex c_b1 = {{0.f}, {0.f}};
-static scomplex c_b2 = {{1.f}, {0.f}};
+static scomplex c_b1 = {0.f, 0.f};
+static scomplex c_b2 = {1.f, 0.f};
 static aocl_int64_t c__1 = 1;
 static aocl_int64_t c_n1 = -1;
 /* > \brief <b> CGEEVX computes the eigenvalues and, optionally, the left and/or right eigenvectors
@@ -367,8 +367,8 @@ void aocl_lapack_cgegs(char *jobvsl, char *jobvsr, aocl_int64_t *n, scomplex *a,
     i__1 = *n << 1;
     lwkmin = fla_max(i__1, 1);
     lwkopt = lwkmin;
-    work[1].r = (real)lwkopt;
-    work[1].i = 0.f; // , expr subst
+    work[1].real = (real)lwkopt;
+    work[1].imag = 0.f; // , expr subst
     lquery = *lwork == -1;
     *info = 0;
     if(ijobvl <= 0)
@@ -412,8 +412,8 @@ void aocl_lapack_cgegs(char *jobvsl, char *jobvsr, aocl_int64_t *n, scomplex *a,
         i__1 = fla_max(nb1, nb2);
         nb = fla_max(i__1, nb3);
         lopt = *n * (nb + 1);
-        work[1].r = (real)lopt;
-        work[1].i = 0.f; // , expr subst
+        work[1].real = (real)lopt;
+        work[1].imag = 0.f; // , expr subst
     }
     if(*info != 0)
     {
@@ -509,7 +509,7 @@ void aocl_lapack_cgegs(char *jobvsl, char *jobvsr, aocl_int64_t *n, scomplex *a,
         /* Computing MAX */
         i__3 = iwork;
         i__1 = lwkopt;
-        i__2 = (integer)work[i__3].r + iwork - 1; // , expr subst
+        i__2 = (integer)work[i__3].real + iwork - 1; // , expr subst
         lwkopt = fla_max(i__1, i__2);
     }
     if(iinfo != 0)
@@ -525,7 +525,7 @@ void aocl_lapack_cgegs(char *jobvsl, char *jobvsr, aocl_int64_t *n, scomplex *a,
         /* Computing MAX */
         i__3 = iwork;
         i__1 = lwkopt;
-        i__2 = (integer)work[i__3].r + iwork - 1; // , expr subst
+        i__2 = (integer)work[i__3].real + iwork - 1; // , expr subst
         lwkopt = fla_max(i__1, i__2);
     }
     if(iinfo != 0)
@@ -548,7 +548,7 @@ void aocl_lapack_cgegs(char *jobvsl, char *jobvsr, aocl_int64_t *n, scomplex *a,
             /* Computing MAX */
             i__3 = iwork;
             i__1 = lwkopt;
-            i__2 = (integer)work[i__3].r + iwork - 1; // , expr subst
+            i__2 = (integer)work[i__3].real + iwork - 1; // , expr subst
             lwkopt = fla_max(i__1, i__2);
         }
         if(iinfo != 0)
@@ -580,7 +580,7 @@ void aocl_lapack_cgegs(char *jobvsl, char *jobvsr, aocl_int64_t *n, scomplex *a,
         /* Computing MAX */
         i__3 = iwork;
         i__1 = lwkopt;
-        i__2 = (integer)work[i__3].r + iwork - 1; // , expr subst
+        i__2 = (integer)work[i__3].real + iwork - 1; // , expr subst
         lwkopt = fla_max(i__1, i__2);
     }
     if(iinfo != 0)
@@ -656,8 +656,8 @@ void aocl_lapack_cgegs(char *jobvsl, char *jobvsr, aocl_int64_t *n, scomplex *a,
         }
     }
 L10:
-    work[1].r = (real)lwkopt;
-    work[1].i = 0.f; // , expr subst
+    work[1].real = (real)lwkopt;
+    work[1].imag = 0.f; // , expr subst
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
     return;
     /* End of CGEGS */

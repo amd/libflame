@@ -4,8 +4,8 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static dcomplex c_b1 = {{0.}, {0.}};
-static dcomplex c_b2 = {{1.}, {0.}};
+static dcomplex c_b1 = {0., 0.};
+static dcomplex c_b2 = {1., 0.};
 static aocl_int64_t c__1 = 1;
 /* > \brief \b ZLAQP3RK computes a step of truncated QR factorization with column pivoting of a
  * scomplex m-by-n matrix A using Level 3 BLAS and overwrites a scomplex m-by-nrhs matrix B with Q**H
@@ -570,8 +570,8 @@ void aocl_lapack_zlaqp3rk(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *nrhs,
                 if(*nrhs > 0 && *kb < *m - *ioffset)
                 {
                     i__1 = *m - if__;
-                    z__1.r = -1.;
-                    z__1.i = -0.; // , expr subst
+                    z__1.real = -1.;
+                    z__1.imag = -0.; // , expr subst
                     aocl_blas_zgemm("No transpose", "Conjugate transpose", &i__1, nrhs, kb, &z__1,
                                     &a[if__ + 1 + a_dim1], lda, &f[*n + 1 + f_dim1], ldf, &c_b2,
                                     &a[if__ + 1 + (*n + 1) * a_dim1], lda);
@@ -613,8 +613,8 @@ void aocl_lapack_zlaqp3rk(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *nrhs,
                 if(*nrhs > 0 && *kb < *m - *ioffset)
                 {
                     i__1 = *m - if__;
-                    z__1.r = -1.;
-                    z__1.i = -0.; // , expr subst
+                    z__1.real = -1.;
+                    z__1.imag = -0.; // , expr subst
                     aocl_blas_zgemm("No transpose", "Conjugate transpose", &i__1, nrhs, kb, &z__1,
                                     &a[if__ + 1 + a_dim1], lda, &f[*n + 1 + f_dim1], ldf, &c_b2,
                                     &a[if__ + 1 + (*n + 1) * a_dim1], lda);
@@ -628,8 +628,8 @@ void aocl_lapack_zlaqp3rk(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *nrhs,
                 for(j = k; j <= i__1; ++j)
                 {
                     i__2 = j;
-                    tau[i__2].r = 0.;
-                    tau[i__2].i = 0.; // , expr subst
+                    tau[i__2].real = 0.;
+                    tau[i__2].imag = 0.; // , expr subst
                 }
                 /* Return from the routine. */
                 AOCL_DTL_TRACE_LOG_EXIT
@@ -683,8 +683,8 @@ void aocl_lapack_zlaqp3rk(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *nrhs,
                 {
                     i__1 = *m - if__;
                     i__2 = *n + *nrhs - *kb;
-                    z__1.r = -1.;
-                    z__1.i = -0.; // , expr subst
+                    z__1.real = -1.;
+                    z__1.imag = -0.; // , expr subst
                     aocl_blas_zgemm("No transpose", "Conjugate transpose", &i__1, &i__2, kb, &z__1,
                                     &a[if__ + 1 + a_dim1], lda, &f[*kb + 1 + f_dim1], ldf, &c_b2,
                                     &a[if__ + 1 + (*kb + 1) * a_dim1], lda);
@@ -698,8 +698,8 @@ void aocl_lapack_zlaqp3rk(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *nrhs,
                 for(j = k; j <= i__1; ++j)
                 {
                     i__2 = j;
-                    tau[i__2].r = 0.;
-                    tau[i__2].i = 0.; // , expr subst
+                    tau[i__2].real = 0.;
+                    tau[i__2].imag = 0.; // , expr subst
                 }
                 /* Return from the routine. */
                 AOCL_DTL_TRACE_LOG_EXIT
@@ -741,13 +741,13 @@ void aocl_lapack_zlaqp3rk(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *nrhs,
             {
                 i__2 = k + j * f_dim1;
                 d_cnjg(&z__1, &f[k + j * f_dim1]);
-                f[i__2].r = z__1.r;
-                f[i__2].i = z__1.i; // , expr subst
+                f[i__2].real = z__1.real;
+                f[i__2].imag = z__1.imag; // , expr subst
             }
             i__1 = *m - i__ + 1;
             i__2 = k - 1;
-            z__1.r = -1.;
-            z__1.i = -0.; // , expr subst
+            z__1.real = -1.;
+            z__1.imag = -0.; // , expr subst
             aocl_blas_zgemv("No transpose", &i__1, &i__2, &z__1, &a[i__ + a_dim1], lda,
                             &f[k + f_dim1], ldf, &c_b2, &a[i__ + k * a_dim1], &c__1);
             i__1 = k - 1;
@@ -755,8 +755,8 @@ void aocl_lapack_zlaqp3rk(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *nrhs,
             {
                 i__2 = k + j * f_dim1;
                 d_cnjg(&z__1, &f[k + j * f_dim1]);
-                f[i__2].r = z__1.r;
-                f[i__2].i = z__1.i; // , expr subst
+                f[i__2].real = z__1.real;
+                f[i__2].imag = z__1.imag; // , expr subst
             }
         }
         /* Generate elementary reflector H(k) using the column A(I:M,K). */
@@ -769,8 +769,8 @@ void aocl_lapack_zlaqp3rk(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *nrhs,
         else
         {
             i__1 = k;
-            tau[i__1].r = 0.;
-            tau[i__1].i = 0.; // , expr subst
+            tau[i__1].real = 0.;
+            tau[i__1].imag = 0.; // , expr subst
         }
         /* Check if TAU(K) contains NaN, set INFO parameter */
         /* to the column number where NaN is found and return from */
@@ -782,11 +782,11 @@ void aocl_lapack_zlaqp3rk(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *nrhs,
         /* TAU(K) to contain NaN. Therefore, this case of generating Inf */
         /* by ZLARFG is covered by checking TAU(K) for NaN. */
         i__1 = k;
-        d__1 = tau[i__1].r;
+        d__1 = tau[i__1].real;
         if(disnan_(&d__1))
         {
             i__1 = k;
-            taunan = tau[i__1].r;
+            taunan = tau[i__1].real;
         }
         else /* if(complicated condition) */
         {
@@ -828,8 +828,8 @@ void aocl_lapack_zlaqp3rk(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *nrhs,
             if(*nrhs > 0 && *kb < *m - *ioffset)
             {
                 i__1 = *m - if__;
-                z__1.r = -1.;
-                z__1.i = -0.; // , expr subst
+                z__1.real = -1.;
+                z__1.imag = -0.; // , expr subst
                 aocl_blas_zgemm("No transpose", "Conjugate transpose", &i__1, nrhs, kb, &z__1,
                                 &a[if__ + 1 + a_dim1], lda, &f[*n + 1 + f_dim1], ldf, &c_b2,
                                 &a[if__ + 1 + (*n + 1) * a_dim1], lda);
@@ -844,11 +844,11 @@ void aocl_lapack_zlaqp3rk(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *nrhs,
         }
         /* =============================================================== */
         i__1 = i__ + k * a_dim1;
-        aik.r = a[i__1].r;
-        aik.i = a[i__1].i; // , expr subst
+        aik.real = a[i__1].real;
+        aik.imag = a[i__1].imag; // , expr subst
         i__1 = i__ + k * a_dim1;
-        a[i__1].r = 1.;
-        a[i__1].i = 0.; // , expr subst
+        a[i__1].real = 1.;
+        a[i__1].imag = 0.; // , expr subst
         /* =============================================================== */
         /* Compute the current K-th column of F: */
         /* 1) F(K+1:N,K) := tau(K) * A(I:M,K+1:N)**H * A(I:M,K). */
@@ -866,8 +866,8 @@ void aocl_lapack_zlaqp3rk(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *nrhs,
         for(j = 1; j <= i__1; ++j)
         {
             i__2 = j + k * f_dim1;
-            f[i__2].r = 0.;
-            f[i__2].i = 0.; // , expr subst
+            f[i__2].real = 0.;
+            f[i__2].imag = 0.; // , expr subst
         }
         /* 3) Incremental updating of the K-th column of F: */
         /* F(1:N,K) := F(1:N,K) - tau(K) * F(1:N,1:K-1) * A(I:M,1:K-1)**H */
@@ -877,8 +877,8 @@ void aocl_lapack_zlaqp3rk(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *nrhs,
             i__1 = *m - i__ + 1;
             i__2 = k - 1;
             i__3 = k;
-            z__1.r = -tau[i__3].r;
-            z__1.i = -tau[i__3].i; // , expr subst
+            z__1.real = -tau[i__3].real;
+            z__1.imag = -tau[i__3].imag; // , expr subst
             aocl_blas_zgemv("Conjugate Transpose", &i__1, &i__2, &z__1, &a[i__ + a_dim1], lda,
                             &a[i__ + k * a_dim1], &c__1, &c_b1, &auxv[1], &c__1);
             i__1 = *n + *nrhs;
@@ -893,15 +893,15 @@ void aocl_lapack_zlaqp3rk(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *nrhs,
         if(k < *n + *nrhs)
         {
             i__1 = *n + *nrhs - k;
-            z__1.r = -1.;
-            z__1.i = -0.; // , expr subst
+            z__1.real = -1.;
+            z__1.imag = -0.; // , expr subst
             aocl_blas_zgemm("No transpose", "Conjugate transpose", &c__1, &i__1, &k, &z__1,
                             &a[i__ + a_dim1], lda, &f[k + 1 + f_dim1], ldf, &c_b2,
                             &a[i__ + (k + 1) * a_dim1], lda);
         }
         i__1 = i__ + k * a_dim1;
-        a[i__1].r = aik.r;
-        a[i__1].i = aik.i; // , expr subst
+        a[i__1].real = aik.real;
+        a[i__1].imag = aik.imag; // , expr subst
         /* Update the partial column 2-norms for the residual matrix, */
         /* only if the residual matrix A(I+1:M,K+1:N) exists, i.e. */
         /* when K < MINMNFACT = fla_min( M-IOFFSET, N ). */
@@ -962,8 +962,8 @@ void aocl_lapack_zlaqp3rk(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *nrhs,
     {
         i__1 = *m - if__;
         i__2 = *n + *nrhs - *kb;
-        z__1.r = -1.;
-        z__1.i = -0.; // , expr subst
+        z__1.real = -1.;
+        z__1.imag = -0.; // , expr subst
         aocl_blas_zgemm("No transpose", "Conjugate transpose", &i__1, &i__2, kb, &z__1,
                         &a[if__ + 1 + a_dim1], lda, &f[*kb + 1 + f_dim1], ldf, &c_b2,
                         &a[if__ + 1 + (*kb + 1) * a_dim1], lda);

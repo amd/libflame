@@ -262,7 +262,7 @@ void aocl_lapack_zpbstf(char *uplo, aocl_int64_t *n, aocl_int64_t *kd, dcomplex 
         {
             /* Compute s(j,j) and test for non-positive-definiteness. */
             i__2 = *kd + 1 + j * ab_dim1;
-            ajj = ab[i__2].r;
+            ajj = ab[i__2].real;
             if(ajj <= 0.)
             {
                 i__2 = *kd + 1 + j * ab_dim1;
@@ -291,7 +291,7 @@ void aocl_lapack_zpbstf(char *uplo, aocl_int64_t *n, aocl_int64_t *kd, dcomplex 
         {
             /* Compute s(j,j) and test for non-positive-definiteness. */
             i__2 = *kd + 1 + j * ab_dim1;
-            ajj = ab[i__2].r;
+            ajj = ab[i__2].real;
             if(ajj <= 0.)
             {
                 i__2 = *kd + 1 + j * ab_dim1;
@@ -329,7 +329,7 @@ void aocl_lapack_zpbstf(char *uplo, aocl_int64_t *n, aocl_int64_t *kd, dcomplex 
         {
             /* Compute s(j,j) and test for non-positive-definiteness. */
             i__2 = j * ab_dim1 + 1;
-            ajj = ab[i__2].r;
+            ajj = ab[i__2].real;
             if(ajj <= 0.)
             {
                 i__2 = j * ab_dim1 + 1;
@@ -360,7 +360,7 @@ void aocl_lapack_zpbstf(char *uplo, aocl_int64_t *n, aocl_int64_t *kd, dcomplex 
         {
             /* Compute s(j,j) and test for non-positive-definiteness. */
             i__2 = j * ab_dim1 + 1;
-            ajj = ab[i__2].r;
+            ajj = ab[i__2].real;
             if(ajj <= 0.)
             {
                 i__2 = j * ab_dim1 + 1;

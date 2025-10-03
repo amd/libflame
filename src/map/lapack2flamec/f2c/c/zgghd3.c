@@ -4,8 +4,8 @@
  -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for
  libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static dcomplex c_b1 = {{1.}, {0.}};
-static dcomplex c_b2 = {{0.}, {0.}};
+static dcomplex c_b1 = {1., 0.};
+static dcomplex c_b2 = {0., 0.};
 static aocl_int64_t c__1 = 1;
 static aocl_int64_t c_n1 = -1;
 static aocl_int64_t c__2 = 2;
@@ -346,10 +346,10 @@ void aocl_lapack_zgghd3(char *compq, char *compz, aocl_int64_t *n, aocl_int64_t 
     /* Computing MAX */
     i__1 = *n * 6 * nb;
     lwkopt = fla_max(i__1, 1);
-    z__1.r = (doublereal)lwkopt;
-    z__1.i = 0.; // , expr subst
-    work[1].r = z__1.r;
-    work[1].i = z__1.i; // , expr subst
+    z__1.real = (doublereal)lwkopt;
+    z__1.imag = 0.; // , expr subst
+    work[1].real = z__1.real;
+    work[1].imag = z__1.imag; // , expr subst
     initq = lsame_(compq, "I", 1, 1);
     wantq = initq || lsame_(compq, "V", 1, 1);
     initz = lsame_(compz, "I", 1, 1);
@@ -427,8 +427,8 @@ void aocl_lapack_zgghd3(char *compq, char *compz, aocl_int64_t *n, aocl_int64_t 
     nh = *ihi - *ilo + 1;
     if(nh <= 1)
     {
-        work[1].r = 1.;
-        work[1].i = 0.; // , expr subst
+        work[1].real = 1.;
+        work[1].imag = 0.; // , expr subst
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -510,17 +510,17 @@ void aocl_lapack_zgghd3(char *compq, char *compz, aocl_int64_t *n, aocl_int64_t 
                 for(i__ = *ihi; i__ >= i__4; --i__)
                 {
                     i__5 = i__ - 1 + j * a_dim1;
-                    temp.r = a[i__5].r;
-                    temp.i = a[i__5].i; // , expr subst
+                    temp.real = a[i__5].real;
+                    temp.imag = a[i__5].imag; // , expr subst
                     zlartg_(&temp, &a[i__ + j * a_dim1], &c__, &s, &a[i__ - 1 + j * a_dim1]);
                     i__5 = i__ + j * a_dim1;
-                    z__1.r = c__;
-                    z__1.i = 0.; // , expr subst
-                    a[i__5].r = z__1.r;
-                    a[i__5].i = z__1.i; // , expr subst
+                    z__1.real = c__;
+                    z__1.imag = 0.; // , expr subst
+                    a[i__5].real = z__1.real;
+                    a[i__5].imag = z__1.imag; // , expr subst
                     i__5 = i__ + j * b_dim1;
-                    b[i__5].r = s.r;
-                    b[i__5].i = s.i; // , expr subst
+                    b[i__5].real = s.real;
+                    b[i__5].imag = s.imag; // , expr subst
                 }
                 /* Accumulate Givens rotations into workspace array. */
                 ppw = (nblst + 1) * (nblst - 2) - j + jcol + 1;
@@ -530,38 +530,38 @@ void aocl_lapack_zgghd3(char *compq, char *compz, aocl_int64_t *n, aocl_int64_t 
                 for(i__ = *ihi; i__ >= i__4; --i__)
                 {
                     i__5 = i__ + j * a_dim1;
-                    ctemp.r = a[i__5].r;
-                    ctemp.i = a[i__5].i; // , expr subst
+                    ctemp.real = a[i__5].real;
+                    ctemp.imag = a[i__5].imag; // , expr subst
                     i__5 = i__ + j * b_dim1;
-                    s.r = b[i__5].r;
-                    s.i = b[i__5].i; // , expr subst
+                    s.real = b[i__5].real;
+                    s.imag = b[i__5].imag; // , expr subst
                     i__5 = ppw + len - 1;
                     for(jj = ppw; jj <= i__5; ++jj)
                     {
                         i__6 = jj + nblst;
-                        temp.r = work[i__6].r;
-                        temp.i = work[i__6].i; // , expr subst
+                        temp.real = work[i__6].real;
+                        temp.imag = work[i__6].imag; // , expr subst
                         i__6 = jj + nblst;
-                        z__2.r = ctemp.r * temp.r - ctemp.i * temp.i;
-                        z__2.i = ctemp.r * temp.i + ctemp.i * temp.r; // , expr subst
+                        z__2.real = ctemp.real * temp.real - ctemp.imag * temp.imag;
+                        z__2.imag = ctemp.real * temp.imag + ctemp.imag * temp.real; // , expr subst
                         i__7 = jj;
-                        z__3.r = s.r * work[i__7].r - s.i * work[i__7].i;
-                        z__3.i = s.r * work[i__7].i + s.i * work[i__7].r; // , expr subst
-                        z__1.r = z__2.r - z__3.r;
-                        z__1.i = z__2.i - z__3.i; // , expr subst
-                        work[i__6].r = z__1.r;
-                        work[i__6].i = z__1.i; // , expr subst
+                        z__3.real = s.real * work[i__7].real - s.imag * work[i__7].imag;
+                        z__3.imag = s.real * work[i__7].imag + s.imag * work[i__7].real; // , expr subst
+                        z__1.real = z__2.real - z__3.real;
+                        z__1.imag = z__2.imag - z__3.imag; // , expr subst
+                        work[i__6].real = z__1.real;
+                        work[i__6].imag = z__1.imag; // , expr subst
                         i__6 = jj;
                         d_cnjg(&z__3, &s);
-                        z__2.r = z__3.r * temp.r - z__3.i * temp.i;
-                        z__2.i = z__3.r * temp.i + z__3.i * temp.r; // , expr subst
+                        z__2.real = z__3.real * temp.real - z__3.imag * temp.imag;
+                        z__2.imag = z__3.real * temp.imag + z__3.imag * temp.real; // , expr subst
                         i__7 = jj;
-                        z__4.r = ctemp.r * work[i__7].r - ctemp.i * work[i__7].i;
-                        z__4.i = ctemp.r * work[i__7].i + ctemp.i * work[i__7].r; // , expr subst
-                        z__1.r = z__2.r + z__4.r;
-                        z__1.i = z__2.i + z__4.i; // , expr subst
-                        work[i__6].r = z__1.r;
-                        work[i__6].i = z__1.i; // , expr subst
+                        z__4.real = ctemp.real * work[i__7].real - ctemp.imag * work[i__7].imag;
+                        z__4.imag = ctemp.real * work[i__7].imag + ctemp.imag * work[i__7].real; // , expr subst
+                        z__1.real = z__2.real + z__4.real;
+                        z__1.imag = z__2.imag + z__4.imag; // , expr subst
+                        work[i__6].real = z__1.real;
+                        work[i__6].imag = z__1.imag; // , expr subst
                     }
                     ++len;
                     ppw = ppw - nblst - 1;
@@ -578,39 +578,39 @@ void aocl_lapack_zgghd3(char *compq, char *compz, aocl_int64_t *n, aocl_int64_t 
                     for(i__ = jrow + nnb - 1; i__ >= i__6; --i__)
                     {
                         i__7 = i__ + j * a_dim1;
-                        ctemp.r = a[i__7].r;
-                        ctemp.i = a[i__7].i; // , expr subst
+                        ctemp.real = a[i__7].real;
+                        ctemp.imag = a[i__7].imag; // , expr subst
                         i__7 = i__ + j * b_dim1;
-                        s.r = b[i__7].r;
-                        s.i = b[i__7].i; // , expr subst
+                        s.real = b[i__7].real;
+                        s.imag = b[i__7].imag; // , expr subst
                         i__7 = ppw + len - 1;
                         for(jj = ppw; jj <= i__7; ++jj)
                         {
                             i__8 = jj + (nnb << 1);
-                            temp.r = work[i__8].r;
-                            temp.i = work[i__8].i; // , expr subst
+                            temp.real = work[i__8].real;
+                            temp.imag = work[i__8].imag; // , expr subst
                             i__8 = jj + (nnb << 1);
-                            z__2.r = ctemp.r * temp.r - ctemp.i * temp.i;
-                            z__2.i = ctemp.r * temp.i + ctemp.i * temp.r; // , expr subst
+                            z__2.real = ctemp.real * temp.real - ctemp.imag * temp.imag;
+                            z__2.imag = ctemp.real * temp.imag + ctemp.imag * temp.real; // , expr subst
                             i__9 = jj;
-                            z__3.r = s.r * work[i__9].r - s.i * work[i__9].i;
-                            z__3.i = s.r * work[i__9].i + s.i * work[i__9].r; // , expr subst
-                            z__1.r = z__2.r - z__3.r;
-                            z__1.i = z__2.i - z__3.i; // , expr subst
-                            work[i__8].r = z__1.r;
-                            work[i__8].i = z__1.i; // , expr subst
+                            z__3.real = s.real * work[i__9].real - s.imag * work[i__9].imag;
+                            z__3.imag = s.real * work[i__9].imag + s.imag * work[i__9].real; // , expr subst
+                            z__1.real = z__2.real - z__3.real;
+                            z__1.imag = z__2.imag - z__3.imag; // , expr subst
+                            work[i__8].real = z__1.real;
+                            work[i__8].imag = z__1.imag; // , expr subst
                             i__8 = jj;
                             d_cnjg(&z__3, &s);
-                            z__2.r = z__3.r * temp.r - z__3.i * temp.i;
-                            z__2.i = z__3.r * temp.i + z__3.i * temp.r; // , expr subst
+                            z__2.real = z__3.real * temp.real - z__3.imag * temp.imag;
+                            z__2.imag = z__3.real * temp.imag + z__3.imag * temp.real; // , expr subst
                             i__9 = jj;
-                            z__4.r = ctemp.r * work[i__9].r - ctemp.i * work[i__9].i;
-                            z__4.i
-                                = ctemp.r * work[i__9].i + ctemp.i * work[i__9].r; // , expr subst
-                            z__1.r = z__2.r + z__4.r;
-                            z__1.i = z__2.i + z__4.i; // , expr subst
-                            work[i__8].r = z__1.r;
-                            work[i__8].i = z__1.i; // , expr subst
+                            z__4.real = ctemp.real * work[i__9].real - ctemp.imag * work[i__9].imag;
+                            z__4.imag
+                                = ctemp.real * work[i__9].imag + ctemp.imag * work[i__9].real; // , expr subst
+                            z__1.real = z__2.real + z__4.real;
+                            z__1.imag = z__2.imag + z__4.imag; // , expr subst
+                            work[i__8].real = z__1.real;
+                            work[i__8].imag = z__1.imag; // , expr subst
                         }
                         ++len;
                         ppw = ppw - (nnb << 1) - 1;
@@ -639,61 +639,61 @@ void aocl_lapack_zgghd3(char *compq, char *compz, aocl_int64_t *n, aocl_int64_t 
                     for(i__ = fla_min(i__4, *ihi); i__ >= i__6; --i__)
                     {
                         i__4 = i__ + j * a_dim1;
-                        ctemp.r = a[i__4].r;
-                        ctemp.i = a[i__4].i; // , expr subst
+                        ctemp.real = a[i__4].real;
+                        ctemp.imag = a[i__4].imag; // , expr subst
                         i__4 = i__ + j * b_dim1;
-                        s.r = b[i__4].r;
-                        s.i = b[i__4].i; // , expr subst
+                        s.real = b[i__4].real;
+                        s.imag = b[i__4].imag; // , expr subst
                         i__4 = i__ + jj * b_dim1;
-                        temp.r = b[i__4].r;
-                        temp.i = b[i__4].i; // , expr subst
+                        temp.real = b[i__4].real;
+                        temp.imag = b[i__4].imag; // , expr subst
                         i__4 = i__ + jj * b_dim1;
-                        z__2.r = ctemp.r * temp.r - ctemp.i * temp.i;
-                        z__2.i = ctemp.r * temp.i + ctemp.i * temp.r; // , expr subst
+                        z__2.real = ctemp.real * temp.real - ctemp.imag * temp.imag;
+                        z__2.imag = ctemp.real * temp.imag + ctemp.imag * temp.real; // , expr subst
                         d_cnjg(&z__4, &s);
                         i__7 = i__ - 1 + jj * b_dim1;
-                        z__3.r = z__4.r * b[i__7].r - z__4.i * b[i__7].i;
-                        z__3.i = z__4.r * b[i__7].i + z__4.i * b[i__7].r; // , expr subst
-                        z__1.r = z__2.r - z__3.r;
-                        z__1.i = z__2.i - z__3.i; // , expr subst
-                        b[i__4].r = z__1.r;
-                        b[i__4].i = z__1.i; // , expr subst
+                        z__3.real = z__4.real * b[i__7].real - z__4.imag * b[i__7].imag;
+                        z__3.imag = z__4.real * b[i__7].imag + z__4.imag * b[i__7].real; // , expr subst
+                        z__1.real = z__2.real - z__3.real;
+                        z__1.imag = z__2.imag - z__3.imag; // , expr subst
+                        b[i__4].real = z__1.real;
+                        b[i__4].imag = z__1.imag; // , expr subst
                         i__4 = i__ - 1 + jj * b_dim1;
-                        z__2.r = s.r * temp.r - s.i * temp.i;
-                        z__2.i = s.r * temp.i + s.i * temp.r; // , expr subst
+                        z__2.real = s.real * temp.real - s.imag * temp.imag;
+                        z__2.imag = s.real * temp.imag + s.imag * temp.real; // , expr subst
                         i__7 = i__ - 1 + jj * b_dim1;
-                        z__3.r = ctemp.r * b[i__7].r - ctemp.i * b[i__7].i;
-                        z__3.i = ctemp.r * b[i__7].i + ctemp.i * b[i__7].r; // , expr subst
-                        z__1.r = z__2.r + z__3.r;
-                        z__1.i = z__2.i + z__3.i; // , expr subst
-                        b[i__4].r = z__1.r;
-                        b[i__4].i = z__1.i; // , expr subst
+                        z__3.real = ctemp.real * b[i__7].real - ctemp.imag * b[i__7].imag;
+                        z__3.imag = ctemp.real * b[i__7].imag + ctemp.imag * b[i__7].real; // , expr subst
+                        z__1.real = z__2.real + z__3.real;
+                        z__1.imag = z__2.imag + z__3.imag; // , expr subst
+                        b[i__4].real = z__1.real;
+                        b[i__4].imag = z__1.imag; // , expr subst
                     }
                     /* Annihilate B( JJ+1, JJ ). */
                     if(jj < *ihi)
                     {
                         i__6 = jj + 1 + (jj + 1) * b_dim1;
-                        temp.r = b[i__6].r;
-                        temp.i = b[i__6].i; // , expr subst
+                        temp.real = b[i__6].real;
+                        temp.imag = b[i__6].imag; // , expr subst
                         zlartg_(&temp, &b[jj + 1 + jj * b_dim1], &c__, &s,
                                 &b[jj + 1 + (jj + 1) * b_dim1]);
                         i__6 = jj + 1 + jj * b_dim1;
-                        b[i__6].r = 0.;
-                        b[i__6].i = 0.; // , expr subst
+                        b[i__6].real = 0.;
+                        b[i__6].imag = 0.; // , expr subst
                         i__6 = jj - top;
                         aocl_lapack_zrot(&i__6, &b[top + 1 + (jj + 1) * b_dim1], &c__1,
                                          &b[top + 1 + jj * b_dim1], &c__1, &c__, &s);
                         i__6 = jj + 1 + j * a_dim1;
-                        z__1.r = c__;
-                        z__1.i = 0.; // , expr subst
-                        a[i__6].r = z__1.r;
-                        a[i__6].i = z__1.i; // , expr subst
+                        z__1.real = c__;
+                        z__1.imag = 0.; // , expr subst
+                        a[i__6].real = z__1.real;
+                        a[i__6].imag = z__1.imag; // , expr subst
                         i__6 = jj + 1 + j * b_dim1;
                         d_cnjg(&z__2, &s);
-                        z__1.r = -z__2.r;
-                        z__1.i = -z__2.i; // , expr subst
-                        b[i__6].r = z__1.r;
-                        b[i__6].i = z__1.i; // , expr subst
+                        z__1.real = -z__2.real;
+                        z__1.imag = -z__2.imag; // , expr subst
+                        b[i__6].real = z__1.real;
+                        b[i__6].imag = z__1.imag; // , expr subst
                     }
                 }
                 /* Update A by transformations from right. */
@@ -702,105 +702,105 @@ void aocl_lapack_zgghd3(char *compq, char *compz, aocl_int64_t *n, aocl_int64_t 
                 for(i__ = *ihi - j - 3; i__ >= i__5; i__ += -3)
                 {
                     i__6 = j + 1 + i__ + j * a_dim1;
-                    ctemp.r = a[i__6].r;
-                    ctemp.i = a[i__6].i; // , expr subst
+                    ctemp.real = a[i__6].real;
+                    ctemp.imag = a[i__6].imag; // , expr subst
                     i__6 = j + 1 + i__ + j * b_dim1;
-                    z__1.r = -b[i__6].r;
-                    z__1.i = -b[i__6].i; // , expr subst
-                    s.r = z__1.r;
-                    s.i = z__1.i; // , expr subst
+                    z__1.real = -b[i__6].real;
+                    z__1.imag = -b[i__6].imag; // , expr subst
+                    s.real = z__1.real;
+                    s.imag = z__1.imag; // , expr subst
                     i__6 = j + 2 + i__ + j * a_dim1;
-                    c1.r = a[i__6].r;
-                    c1.i = a[i__6].i; // , expr subst
+                    c1.real = a[i__6].real;
+                    c1.imag = a[i__6].imag; // , expr subst
                     i__6 = j + 2 + i__ + j * b_dim1;
-                    z__1.r = -b[i__6].r;
-                    z__1.i = -b[i__6].i; // , expr subst
-                    s1.r = z__1.r;
-                    s1.i = z__1.i; // , expr subst
+                    z__1.real = -b[i__6].real;
+                    z__1.imag = -b[i__6].imag; // , expr subst
+                    s1.real = z__1.real;
+                    s1.imag = z__1.imag; // , expr subst
                     i__6 = j + 3 + i__ + j * a_dim1;
-                    c2.r = a[i__6].r;
-                    c2.i = a[i__6].i; // , expr subst
+                    c2.real = a[i__6].real;
+                    c2.imag = a[i__6].imag; // , expr subst
                     i__6 = j + 3 + i__ + j * b_dim1;
-                    z__1.r = -b[i__6].r;
-                    z__1.i = -b[i__6].i; // , expr subst
-                    s2.r = z__1.r;
-                    s2.i = z__1.i; // , expr subst
+                    z__1.real = -b[i__6].real;
+                    z__1.imag = -b[i__6].imag; // , expr subst
+                    s2.real = z__1.real;
+                    s2.imag = z__1.imag; // , expr subst
                     i__6 = *ihi;
                     for(k = top + 1; k <= i__6; ++k)
                     {
                         i__4 = k + (j + i__) * a_dim1;
-                        temp.r = a[i__4].r;
-                        temp.i = a[i__4].i; // , expr subst
+                        temp.real = a[i__4].real;
+                        temp.imag = a[i__4].imag; // , expr subst
                         i__4 = k + (j + i__ + 1) * a_dim1;
-                        temp1.r = a[i__4].r;
-                        temp1.i = a[i__4].i; // , expr subst
+                        temp1.real = a[i__4].real;
+                        temp1.imag = a[i__4].imag; // , expr subst
                         i__4 = k + (j + i__ + 2) * a_dim1;
-                        temp2.r = a[i__4].r;
-                        temp2.i = a[i__4].i; // , expr subst
+                        temp2.real = a[i__4].real;
+                        temp2.imag = a[i__4].imag; // , expr subst
                         i__4 = k + (j + i__ + 3) * a_dim1;
-                        temp3.r = a[i__4].r;
-                        temp3.i = a[i__4].i; // , expr subst
+                        temp3.real = a[i__4].real;
+                        temp3.imag = a[i__4].imag; // , expr subst
                         i__4 = k + (j + i__ + 3) * a_dim1;
-                        z__2.r = c2.r * temp3.r - c2.i * temp3.i;
-                        z__2.i = c2.r * temp3.i + c2.i * temp3.r; // , expr subst
+                        z__2.real = c2.real * temp3.real - c2.imag * temp3.imag;
+                        z__2.imag = c2.real * temp3.imag + c2.imag * temp3.real; // , expr subst
                         d_cnjg(&z__4, &s2);
-                        z__3.r = z__4.r * temp2.r - z__4.i * temp2.i;
-                        z__3.i = z__4.r * temp2.i + z__4.i * temp2.r; // , expr subst
-                        z__1.r = z__2.r + z__3.r;
-                        z__1.i = z__2.i + z__3.i; // , expr subst
-                        a[i__4].r = z__1.r;
-                        a[i__4].i = z__1.i; // , expr subst
-                        z__3.r = -s2.r;
-                        z__3.i = -s2.i; // , expr subst
-                        z__2.r = z__3.r * temp3.r - z__3.i * temp3.i;
-                        z__2.i = z__3.r * temp3.i + z__3.i * temp3.r; // , expr subst
-                        z__4.r = c2.r * temp2.r - c2.i * temp2.i;
-                        z__4.i = c2.r * temp2.i + c2.i * temp2.r; // , expr subst
-                        z__1.r = z__2.r + z__4.r;
-                        z__1.i = z__2.i + z__4.i; // , expr subst
-                        temp2.r = z__1.r;
-                        temp2.i = z__1.i; // , expr subst
+                        z__3.real = z__4.real * temp2.real - z__4.imag * temp2.imag;
+                        z__3.imag = z__4.real * temp2.imag + z__4.imag * temp2.real; // , expr subst
+                        z__1.real = z__2.real + z__3.real;
+                        z__1.imag = z__2.imag + z__3.imag; // , expr subst
+                        a[i__4].real = z__1.real;
+                        a[i__4].imag = z__1.imag; // , expr subst
+                        z__3.real = -s2.real;
+                        z__3.imag = -s2.imag; // , expr subst
+                        z__2.real = z__3.real * temp3.real - z__3.imag * temp3.imag;
+                        z__2.imag = z__3.real * temp3.imag + z__3.imag * temp3.real; // , expr subst
+                        z__4.real = c2.real * temp2.real - c2.imag * temp2.imag;
+                        z__4.imag = c2.real * temp2.imag + c2.imag * temp2.real; // , expr subst
+                        z__1.real = z__2.real + z__4.real;
+                        z__1.imag = z__2.imag + z__4.imag; // , expr subst
+                        temp2.real = z__1.real;
+                        temp2.imag = z__1.imag; // , expr subst
                         i__4 = k + (j + i__ + 2) * a_dim1;
-                        z__2.r = c1.r * temp2.r - c1.i * temp2.i;
-                        z__2.i = c1.r * temp2.i + c1.i * temp2.r; // , expr subst
+                        z__2.real = c1.real * temp2.real - c1.imag * temp2.imag;
+                        z__2.imag = c1.real * temp2.imag + c1.imag * temp2.real; // , expr subst
                         d_cnjg(&z__4, &s1);
-                        z__3.r = z__4.r * temp1.r - z__4.i * temp1.i;
-                        z__3.i = z__4.r * temp1.i + z__4.i * temp1.r; // , expr subst
-                        z__1.r = z__2.r + z__3.r;
-                        z__1.i = z__2.i + z__3.i; // , expr subst
-                        a[i__4].r = z__1.r;
-                        a[i__4].i = z__1.i; // , expr subst
-                        z__3.r = -s1.r;
-                        z__3.i = -s1.i; // , expr subst
-                        z__2.r = z__3.r * temp2.r - z__3.i * temp2.i;
-                        z__2.i = z__3.r * temp2.i + z__3.i * temp2.r; // , expr subst
-                        z__4.r = c1.r * temp1.r - c1.i * temp1.i;
-                        z__4.i = c1.r * temp1.i + c1.i * temp1.r; // , expr subst
-                        z__1.r = z__2.r + z__4.r;
-                        z__1.i = z__2.i + z__4.i; // , expr subst
-                        temp1.r = z__1.r;
-                        temp1.i = z__1.i; // , expr subst
+                        z__3.real = z__4.real * temp1.real - z__4.imag * temp1.imag;
+                        z__3.imag = z__4.real * temp1.imag + z__4.imag * temp1.real; // , expr subst
+                        z__1.real = z__2.real + z__3.real;
+                        z__1.imag = z__2.imag + z__3.imag; // , expr subst
+                        a[i__4].real = z__1.real;
+                        a[i__4].imag = z__1.imag; // , expr subst
+                        z__3.real = -s1.real;
+                        z__3.imag = -s1.imag; // , expr subst
+                        z__2.real = z__3.real * temp2.real - z__3.imag * temp2.imag;
+                        z__2.imag = z__3.real * temp2.imag + z__3.imag * temp2.real; // , expr subst
+                        z__4.real = c1.real * temp1.real - c1.imag * temp1.imag;
+                        z__4.imag = c1.real * temp1.imag + c1.imag * temp1.real; // , expr subst
+                        z__1.real = z__2.real + z__4.real;
+                        z__1.imag = z__2.imag + z__4.imag; // , expr subst
+                        temp1.real = z__1.real;
+                        temp1.imag = z__1.imag; // , expr subst
                         i__4 = k + (j + i__ + 1) * a_dim1;
-                        z__2.r = ctemp.r * temp1.r - ctemp.i * temp1.i;
-                        z__2.i = ctemp.r * temp1.i + ctemp.i * temp1.r; // , expr subst
+                        z__2.real = ctemp.real * temp1.real - ctemp.imag * temp1.imag;
+                        z__2.imag = ctemp.real * temp1.imag + ctemp.imag * temp1.real; // , expr subst
                         d_cnjg(&z__4, &s);
-                        z__3.r = z__4.r * temp.r - z__4.i * temp.i;
-                        z__3.i = z__4.r * temp.i + z__4.i * temp.r; // , expr subst
-                        z__1.r = z__2.r + z__3.r;
-                        z__1.i = z__2.i + z__3.i; // , expr subst
-                        a[i__4].r = z__1.r;
-                        a[i__4].i = z__1.i; // , expr subst
+                        z__3.real = z__4.real * temp.real - z__4.imag * temp.imag;
+                        z__3.imag = z__4.real * temp.imag + z__4.imag * temp.real; // , expr subst
+                        z__1.real = z__2.real + z__3.real;
+                        z__1.imag = z__2.imag + z__3.imag; // , expr subst
+                        a[i__4].real = z__1.real;
+                        a[i__4].imag = z__1.imag; // , expr subst
                         i__4 = k + (j + i__) * a_dim1;
-                        z__3.r = -s.r;
-                        z__3.i = -s.i; // , expr subst
-                        z__2.r = z__3.r * temp1.r - z__3.i * temp1.i;
-                        z__2.i = z__3.r * temp1.i + z__3.i * temp1.r; // , expr subst
-                        z__4.r = ctemp.r * temp.r - ctemp.i * temp.i;
-                        z__4.i = ctemp.r * temp.i + ctemp.i * temp.r; // , expr subst
-                        z__1.r = z__2.r + z__4.r;
-                        z__1.i = z__2.i + z__4.i; // , expr subst
-                        a[i__4].r = z__1.r;
-                        a[i__4].i = z__1.i; // , expr subst
+                        z__3.real = -s.real;
+                        z__3.imag = -s.imag; // , expr subst
+                        z__2.real = z__3.real * temp1.real - z__3.imag * temp1.imag;
+                        z__2.imag = z__3.real * temp1.imag + z__3.imag * temp1.real; // , expr subst
+                        z__4.real = ctemp.real * temp.real - ctemp.imag * temp.imag;
+                        z__4.imag = ctemp.real * temp.imag + ctemp.imag * temp.real; // , expr subst
+                        z__1.real = z__2.real + z__4.real;
+                        z__1.imag = z__2.imag + z__4.imag; // , expr subst
+                        a[i__4].real = z__1.real;
+                        a[i__4].imag = z__1.imag; // , expr subst
                     }
                 }
                 if(jj > 0)
@@ -808,11 +808,11 @@ void aocl_lapack_zgghd3(char *compq, char *compz, aocl_int64_t *n, aocl_int64_t 
                     for(i__ = jj; i__ >= 1; --i__)
                     {
                         i__5 = j + 1 + i__ + j * a_dim1;
-                        c__ = a[i__5].r;
+                        c__ = a[i__5].real;
                         i__5 = *ihi - top;
                         d_cnjg(&z__2, &b[j + 1 + i__ + j * b_dim1]);
-                        z__1.r = -z__2.r;
-                        z__1.i = -z__2.i; // , expr subst
+                        z__1.real = -z__2.real;
+                        z__1.imag = -z__2.imag; // , expr subst
                         aocl_lapack_zrot(&i__5, &a[top + 1 + (j + i__ + 1) * a_dim1], &c__1,
                                          &a[top + 1 + (j + i__) * a_dim1], &c__1, &c__, &z__1);
                     }
@@ -837,8 +837,8 @@ void aocl_lapack_zgghd3(char *compq, char *compz, aocl_int64_t *n, aocl_int64_t 
                     {
                         i__6 = ppw;
                         i__4 = i__ + (j + 1) * a_dim1;
-                        work[i__6].r = a[i__4].r;
-                        work[i__6].i = a[i__4].i; // , expr subst
+                        work[i__6].real = a[i__4].real;
+                        work[i__6].imag = a[i__4].imag; // , expr subst
                         ++ppw;
                     }
                     i__5 = nblst - len;
@@ -855,8 +855,8 @@ void aocl_lapack_zgghd3(char *compq, char *compz, aocl_int64_t *n, aocl_int64_t 
                     {
                         i__6 = i__ + (j + 1) * a_dim1;
                         i__4 = ppw;
-                        a[i__6].r = work[i__4].r;
-                        a[i__6].i = work[i__4].i; // , expr subst
+                        a[i__6].real = work[i__4].real;
+                        a[i__6].imag = work[i__4].imag; // , expr subst
                         ++ppw;
                     }
                     /* Multiply with the other accumulated unitary */
@@ -881,8 +881,8 @@ void aocl_lapack_zgghd3(char *compq, char *compz, aocl_int64_t *n, aocl_int64_t 
                         {
                             i__7 = ppw;
                             i__8 = i__ + (j + 1) * a_dim1;
-                            work[i__7].r = a[i__8].r;
-                            work[i__7].i = a[i__8].i; // , expr subst
+                            work[i__7].real = a[i__8].real;
+                            work[i__7].imag = a[i__8].imag; // , expr subst
                             ++ppw;
                         }
                         ppw = pw;
@@ -891,8 +891,8 @@ void aocl_lapack_zgghd3(char *compq, char *compz, aocl_int64_t *n, aocl_int64_t 
                         {
                             i__7 = ppw;
                             i__8 = i__ + (j + 1) * a_dim1;
-                            work[i__7].r = a[i__8].r;
-                            work[i__7].i = a[i__8].i; // , expr subst
+                            work[i__7].real = a[i__8].real;
+                            work[i__7].imag = a[i__8].imag; // , expr subst
                             ++ppw;
                         }
                         i__4 = nnb << 1;
@@ -917,8 +917,8 @@ void aocl_lapack_zgghd3(char *compq, char *compz, aocl_int64_t *n, aocl_int64_t 
                         {
                             i__7 = i__ + (j + 1) * a_dim1;
                             i__8 = ppw;
-                            a[i__7].r = work[i__8].r;
-                            a[i__7].i = work[i__8].i; // , expr subst
+                            a[i__7].real = work[i__8].real;
+                            a[i__7].imag = work[i__8].imag; // , expr subst
                             ++ppw;
                         }
                         ppwo += (nnb << 2) * nnb;
@@ -1058,45 +1058,45 @@ void aocl_lapack_zgghd3(char *compq, char *compz, aocl_int64_t *n, aocl_int64_t 
                     for(i__ = *ihi; i__ >= i__6; --i__)
                     {
                         i__5 = i__ + j * a_dim1;
-                        ctemp.r = a[i__5].r;
-                        ctemp.i = a[i__5].i; // , expr subst
+                        ctemp.real = a[i__5].real;
+                        ctemp.imag = a[i__5].imag; // , expr subst
                         i__5 = i__ + j * a_dim1;
-                        a[i__5].r = 0.;
-                        a[i__5].i = 0.; // , expr subst
+                        a[i__5].real = 0.;
+                        a[i__5].imag = 0.; // , expr subst
                         i__5 = i__ + j * b_dim1;
-                        s.r = b[i__5].r;
-                        s.i = b[i__5].i; // , expr subst
+                        s.real = b[i__5].real;
+                        s.imag = b[i__5].imag; // , expr subst
                         i__5 = i__ + j * b_dim1;
-                        b[i__5].r = 0.;
-                        b[i__5].i = 0.; // , expr subst
+                        b[i__5].real = 0.;
+                        b[i__5].imag = 0.; // , expr subst
                         i__5 = ppw + len - 1;
                         for(jj = ppw; jj <= i__5; ++jj)
                         {
                             i__4 = jj + nblst;
-                            temp.r = work[i__4].r;
-                            temp.i = work[i__4].i; // , expr subst
+                            temp.real = work[i__4].real;
+                            temp.imag = work[i__4].imag; // , expr subst
                             i__4 = jj + nblst;
-                            z__2.r = ctemp.r * temp.r - ctemp.i * temp.i;
-                            z__2.i = ctemp.r * temp.i + ctemp.i * temp.r; // , expr subst
+                            z__2.real = ctemp.real * temp.real - ctemp.imag * temp.imag;
+                            z__2.imag = ctemp.real * temp.imag + ctemp.imag * temp.real; // , expr subst
                             d_cnjg(&z__4, &s);
                             i__7 = jj;
-                            z__3.r = z__4.r * work[i__7].r - z__4.i * work[i__7].i;
-                            z__3.i = z__4.r * work[i__7].i + z__4.i * work[i__7].r; // , expr subst
-                            z__1.r = z__2.r - z__3.r;
-                            z__1.i = z__2.i - z__3.i; // , expr subst
-                            work[i__4].r = z__1.r;
-                            work[i__4].i = z__1.i; // , expr subst
+                            z__3.real = z__4.real * work[i__7].real - z__4.imag * work[i__7].imag;
+                            z__3.imag = z__4.real * work[i__7].imag + z__4.imag * work[i__7].real; // , expr subst
+                            z__1.real = z__2.real - z__3.real;
+                            z__1.imag = z__2.imag - z__3.imag; // , expr subst
+                            work[i__4].real = z__1.real;
+                            work[i__4].imag = z__1.imag; // , expr subst
                             i__4 = jj;
-                            z__2.r = s.r * temp.r - s.i * temp.i;
-                            z__2.i = s.r * temp.i + s.i * temp.r; // , expr subst
+                            z__2.real = s.real * temp.real - s.imag * temp.imag;
+                            z__2.imag = s.real * temp.imag + s.imag * temp.real; // , expr subst
                             i__7 = jj;
-                            z__3.r = ctemp.r * work[i__7].r - ctemp.i * work[i__7].i;
-                            z__3.i
-                                = ctemp.r * work[i__7].i + ctemp.i * work[i__7].r; // , expr subst
-                            z__1.r = z__2.r + z__3.r;
-                            z__1.i = z__2.i + z__3.i; // , expr subst
-                            work[i__4].r = z__1.r;
-                            work[i__4].i = z__1.i; // , expr subst
+                            z__3.real = ctemp.real * work[i__7].real - ctemp.imag * work[i__7].imag;
+                            z__3.imag
+                                = ctemp.real * work[i__7].imag + ctemp.imag * work[i__7].real; // , expr subst
+                            z__1.real = z__2.real + z__3.real;
+                            z__1.imag = z__2.imag + z__3.imag; // , expr subst
+                            work[i__4].real = z__1.real;
+                            work[i__4].imag = z__1.imag; // , expr subst
                         }
                         ++len;
                         ppw = ppw - nblst - 1;
@@ -1113,46 +1113,46 @@ void aocl_lapack_zgghd3(char *compq, char *compz, aocl_int64_t *n, aocl_int64_t 
                         for(i__ = jrow + nnb - 1; i__ >= i__4; --i__)
                         {
                             i__7 = i__ + j * a_dim1;
-                            ctemp.r = a[i__7].r;
-                            ctemp.i = a[i__7].i; // , expr subst
+                            ctemp.real = a[i__7].real;
+                            ctemp.imag = a[i__7].imag; // , expr subst
                             i__7 = i__ + j * a_dim1;
-                            a[i__7].r = 0.;
-                            a[i__7].i = 0.; // , expr subst
+                            a[i__7].real = 0.;
+                            a[i__7].imag = 0.; // , expr subst
                             i__7 = i__ + j * b_dim1;
-                            s.r = b[i__7].r;
-                            s.i = b[i__7].i; // , expr subst
+                            s.real = b[i__7].real;
+                            s.imag = b[i__7].imag; // , expr subst
                             i__7 = i__ + j * b_dim1;
-                            b[i__7].r = 0.;
-                            b[i__7].i = 0.; // , expr subst
+                            b[i__7].real = 0.;
+                            b[i__7].imag = 0.; // , expr subst
                             i__7 = ppw + len - 1;
                             for(jj = ppw; jj <= i__7; ++jj)
                             {
                                 i__8 = jj + (nnb << 1);
-                                temp.r = work[i__8].r;
-                                temp.i = work[i__8].i; // , expr subst
+                                temp.real = work[i__8].real;
+                                temp.imag = work[i__8].imag; // , expr subst
                                 i__8 = jj + (nnb << 1);
-                                z__2.r = ctemp.r * temp.r - ctemp.i * temp.i;
-                                z__2.i = ctemp.r * temp.i + ctemp.i * temp.r; // , expr subst
+                                z__2.real = ctemp.real * temp.real - ctemp.imag * temp.imag;
+                                z__2.imag = ctemp.real * temp.imag + ctemp.imag * temp.real; // , expr subst
                                 d_cnjg(&z__4, &s);
                                 i__9 = jj;
-                                z__3.r = z__4.r * work[i__9].r - z__4.i * work[i__9].i;
-                                z__3.i
-                                    = z__4.r * work[i__9].i + z__4.i * work[i__9].r; // , expr subst
-                                z__1.r = z__2.r - z__3.r;
-                                z__1.i = z__2.i - z__3.i; // , expr subst
-                                work[i__8].r = z__1.r;
-                                work[i__8].i = z__1.i; // , expr subst
+                                z__3.real = z__4.real * work[i__9].real - z__4.imag * work[i__9].imag;
+                                z__3.imag
+                                    = z__4.real * work[i__9].imag + z__4.imag * work[i__9].real; // , expr subst
+                                z__1.real = z__2.real - z__3.real;
+                                z__1.imag = z__2.imag - z__3.imag; // , expr subst
+                                work[i__8].real = z__1.real;
+                                work[i__8].imag = z__1.imag; // , expr subst
                                 i__8 = jj;
-                                z__2.r = s.r * temp.r - s.i * temp.i;
-                                z__2.i = s.r * temp.i + s.i * temp.r; // , expr subst
+                                z__2.real = s.real * temp.real - s.imag * temp.imag;
+                                z__2.imag = s.real * temp.imag + s.imag * temp.real; // , expr subst
                                 i__9 = jj;
-                                z__3.r = ctemp.r * work[i__9].r - ctemp.i * work[i__9].i;
-                                z__3.i = ctemp.r * work[i__9].i
-                                         + ctemp.i * work[i__9].r; // , expr subst
-                                z__1.r = z__2.r + z__3.r;
-                                z__1.i = z__2.i + z__3.i; // , expr subst
-                                work[i__8].r = z__1.r;
-                                work[i__8].i = z__1.i; // , expr subst
+                                z__3.real = ctemp.real * work[i__9].real - ctemp.imag * work[i__9].imag;
+                                z__3.imag = ctemp.real * work[i__9].imag
+                                         + ctemp.imag * work[i__9].real; // , expr subst
+                                z__1.real = z__2.real + z__3.real;
+                                z__1.imag = z__2.imag + z__3.imag; // , expr subst
+                                work[i__8].real = z__1.real;
+                                work[i__8].imag = z__1.imag; // , expr subst
                             }
                             ++len;
                             ppw = ppw - (nnb << 1) - 1;
@@ -1328,10 +1328,10 @@ void aocl_lapack_zgghd3(char *compq, char *compz, aocl_int64_t *n, aocl_int64_t 
         aocl_lapack_zgghrd(compq2, compz2, n, &jcol, ihi, &a[a_offset], lda, &b[b_offset], ldb,
                            &q[q_offset], ldq, &z__[z_offset], ldz, &ierr);
     }
-    z__1.r = (doublereal)lwkopt;
-    z__1.i = 0.; // , expr subst
-    work[1].r = z__1.r;
-    work[1].i = z__1.i; // , expr subst
+    z__1.real = (doublereal)lwkopt;
+    z__1.imag = 0.; // , expr subst
+    work[1].real = z__1.real;
+    work[1].imag = z__1.imag; // , expr subst
     AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of ZGGHD3 */

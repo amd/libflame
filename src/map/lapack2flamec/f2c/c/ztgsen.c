@@ -593,12 +593,12 @@ void aocl_lapack_ztgsen(aocl_int64_t *ijob, logical *wantq, logical *wantz, logi
         {
             i__2 = k;
             i__3 = k + k * a_dim1;
-            alpha[i__2].r = a[i__3].r;
-            alpha[i__2].i = a[i__3].i; // , expr subst
+            alpha[i__2].real = a[i__3].real;
+            alpha[i__2].imag = a[i__3].imag; // , expr subst
             i__2 = k;
             i__3 = k + k * b_dim1;
-            beta[i__2].r = b[i__3].r;
-            beta[i__2].i = b[i__3].i; // , expr subst
+            beta[i__2].real = b[i__3].real;
+            beta[i__2].imag = b[i__3].imag; // , expr subst
             if(k < *n)
             {
                 if(select[k])
@@ -644,8 +644,8 @@ void aocl_lapack_ztgsen(aocl_int64_t *ijob, logical *wantq, logical *wantz, logi
         lwmin = 1;
         liwmin = 1;
     }
-    work[1].r = (doublereal)lwmin;
-    work[1].i = 0.; // , expr subst
+    work[1].real = (doublereal)lwmin;
+    work[1].imag = 0.; // , expr subst
     iwork[1] = (aocl_int_t)(liwmin);
     if(*lwork < lwmin && !lquery)
     {
@@ -874,19 +874,19 @@ void aocl_lapack_ztgsen(aocl_int64_t *ijob, logical *wantq, logical *wantz, logi
         if(dscale > safmin)
         {
             i__2 = k + k * b_dim1;
-            z__2.r = b[i__2].r / dscale;
-            z__2.i = b[i__2].i / dscale; // , expr subst
+            z__2.real = b[i__2].real / dscale;
+            z__2.imag = b[i__2].imag / dscale; // , expr subst
             d_cnjg(&z__1, &z__2);
-            temp1.r = z__1.r;
-            temp1.i = z__1.i; // , expr subst
+            temp1.real = z__1.real;
+            temp1.imag = z__1.imag; // , expr subst
             i__2 = k + k * b_dim1;
-            z__1.r = b[i__2].r / dscale;
-            z__1.i = b[i__2].i / dscale; // , expr subst
-            temp2.r = z__1.r;
-            temp2.i = z__1.i; // , expr subst
+            z__1.real = b[i__2].real / dscale;
+            z__1.imag = b[i__2].imag / dscale; // , expr subst
+            temp2.real = z__1.real;
+            temp2.imag = z__1.imag; // , expr subst
             i__2 = k + k * b_dim1;
-            b[i__2].r = dscale;
-            b[i__2].i = 0.; // , expr subst
+            b[i__2].real = dscale;
+            b[i__2].imag = 0.; // , expr subst
             i__2 = *n - k;
             aocl_blas_zscal(&i__2, &temp1, &b[k + (k + 1) * b_dim1], ldb);
             i__2 = *n - k + 1;
@@ -899,22 +899,22 @@ void aocl_lapack_ztgsen(aocl_int64_t *ijob, logical *wantq, logical *wantz, logi
         else
         {
             i__2 = k + k * b_dim1;
-            b[i__2].r = 0.;
-            b[i__2].i = 0.; // , expr subst
+            b[i__2].real = 0.;
+            b[i__2].imag = 0.; // , expr subst
         }
         i__2 = k;
         i__3 = k + k * a_dim1;
-        alpha[i__2].r = a[i__3].r;
-        alpha[i__2].i = a[i__3].i; // , expr subst
+        alpha[i__2].real = a[i__3].real;
+        alpha[i__2].imag = a[i__3].imag; // , expr subst
         i__2 = k;
         i__3 = k + k * b_dim1;
-        beta[i__2].r = b[i__3].r;
-        beta[i__2].i = b[i__3].i; // , expr subst
+        beta[i__2].real = b[i__3].real;
+        beta[i__2].imag = b[i__3].imag; // , expr subst
         /* L60: */
     }
 L70:
-    work[1].r = (doublereal)lwmin;
-    work[1].i = 0.; // , expr subst
+    work[1].real = (doublereal)lwmin;
+    work[1].imag = 0.; // , expr subst
     iwork[1] = (aocl_int_t)(liwmin);
     AOCL_DTL_TRACE_LOG_EXIT
     return;

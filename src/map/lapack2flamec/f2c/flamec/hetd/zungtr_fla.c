@@ -210,8 +210,8 @@ void zungtr_fla(char *uplo, aocl_int64_t *n, dcomplex *a, aocl_int64_t *lda,
         i__1 = 1;
         i__2 = *n - 1; // , expr subst
         lwkopt = fla_max(i__1, i__2) * nb;
-        work[1].r = (doublereal)lwkopt;
-        work[1].i = 0.; // , expr subst
+        work[1].real = (doublereal)lwkopt;
+        work[1].imag = 0.; // , expr subst
     }
     if(*info != 0)
     {
@@ -226,8 +226,8 @@ void zungtr_fla(char *uplo, aocl_int64_t *n, dcomplex *a, aocl_int64_t *lda,
     /* Quick return if possible */
     if(*n == 0)
     {
-        work[1].r = 1.;
-        work[1].i = 0.; // , expr subst
+        work[1].real = 1.;
+        work[1].imag = 0.; // , expr subst
         return;
     }
     if(upper)
@@ -314,8 +314,8 @@ void zungtr_fla(char *uplo, aocl_int64_t *n, dcomplex *a, aocl_int64_t *lda,
                        &iinfo);
         }
     }
-    work[1].r = (doublereal)lwkopt;
-    work[1].i = 0.; // , expr subst
+    work[1].real = (doublereal)lwkopt;
+    work[1].imag = 0.; // , expr subst
     return;
     /* End of ZUNGTR */
 }

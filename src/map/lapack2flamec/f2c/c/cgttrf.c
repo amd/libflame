@@ -224,12 +224,12 @@ void aocl_lapack_cgttrf(aocl_int64_t *n, scomplex *dl, scomplex *d__, scomplex *
     {
         i__2 = i__;
         i__3 = i__;
-        if((r__1 = d__[i__2].r, f2c_abs(r__1)) + (r__2 = r_imag(&d__[i__]), f2c_abs(r__2))
-           >= (r__3 = dl[i__3].r, f2c_abs(r__3)) + (r__4 = r_imag(&dl[i__]), f2c_abs(r__4)))
+        if((r__1 = d__[i__2].real, f2c_abs(r__1)) + (r__2 = r_imag(&d__[i__]), f2c_abs(r__2))
+           >= (r__3 = dl[i__3].real, f2c_abs(r__3)) + (r__4 = r_imag(&dl[i__]), f2c_abs(r__4)))
         {
             /* No row interchange required, eliminate DL(I) */
             i__2 = i__;
-            if((r__1 = d__[i__2].r, f2c_abs(r__1)) + (r__2 = r_imag(&d__[i__]), f2c_abs(r__2))
+            if((r__1 = d__[i__2].real, f2c_abs(r__1)) + (r__2 = r_imag(&d__[i__]), f2c_abs(r__2))
                != 0.f)
             {
                 c_div(&q__1, &dl[i__], &d__[i__]);
@@ -285,10 +285,10 @@ void aocl_lapack_cgttrf(aocl_int64_t *n, scomplex *dl, scomplex *d__, scomplex *
             q__2.real = -fact.real;
             q__2.imag = -fact.imag; // , expr subst
             i__3 = i__ + 1;
-            q__1.r = q__2.r * du[i__3].r - q__2.i * du[i__3].i;
-            q__1.i = q__2.r * du[i__3].i + q__2.i * du[i__3].r; // , expr subst
-            du[i__2].r = q__1.r;
-            du[i__2].i = q__1.i; // , expr subst
+            q__1.real = q__2.real * du[i__3].real - q__2.imag * du[i__3].imag;
+            q__1.imag = q__2.real * du[i__3].imag + q__2.imag * du[i__3].real; // , expr subst
+            du[i__2].real = q__1.real;
+            du[i__2].imag = q__1.imag; // , expr subst
             ipiv[i__] = (aocl_int_t)(i__ + 1);
         }
         /* L30: */
@@ -298,11 +298,11 @@ void aocl_lapack_cgttrf(aocl_int64_t *n, scomplex *dl, scomplex *d__, scomplex *
         i__ = *n - 1;
         i__1 = i__;
         i__2 = i__;
-        if((r__1 = d__[i__1].r, f2c_abs(r__1)) + (r__2 = r_imag(&d__[i__]), f2c_abs(r__2))
-           >= (r__3 = dl[i__2].r, f2c_abs(r__3)) + (r__4 = r_imag(&dl[i__]), f2c_abs(r__4)))
+        if((r__1 = d__[i__1].real, f2c_abs(r__1)) + (r__2 = r_imag(&d__[i__]), f2c_abs(r__2))
+           >= (r__3 = dl[i__2].real, f2c_abs(r__3)) + (r__4 = r_imag(&dl[i__]), f2c_abs(r__4)))
         {
             i__1 = i__;
-            if((r__1 = d__[i__1].r, f2c_abs(r__1)) + (r__2 = r_imag(&d__[i__]), f2c_abs(r__2))
+            if((r__1 = d__[i__1].real, f2c_abs(r__1)) + (r__2 = r_imag(&d__[i__]), f2c_abs(r__2))
                != 0.f)
             {
                 c_div(&q__1, &dl[i__], &d__[i__]);
@@ -343,12 +343,12 @@ void aocl_lapack_cgttrf(aocl_int64_t *n, scomplex *dl, scomplex *d__, scomplex *
             du[i__1].imag = d__[i__2].imag; // , expr subst
             i__1 = i__ + 1;
             i__2 = i__ + 1;
-            q__2.r = fact.r * d__[i__2].r - fact.i * d__[i__2].i;
-            q__2.i = fact.r * d__[i__2].i + fact.i * d__[i__2].r; // , expr subst
-            q__1.r = temp.r - q__2.r;
-            q__1.i = temp.i - q__2.i; // , expr subst
-            d__[i__1].r = q__1.r;
-            d__[i__1].i = q__1.i; // , expr subst
+            q__2.real = fact.real * d__[i__2].real - fact.imag * d__[i__2].imag;
+            q__2.imag = fact.real * d__[i__2].imag + fact.imag * d__[i__2].real; // , expr subst
+            q__1.real = temp.real - q__2.real;
+            q__1.imag = temp.imag - q__2.imag; // , expr subst
+            d__[i__1].real = q__1.real;
+            d__[i__1].imag = q__1.imag; // , expr subst
             ipiv[i__] = (aocl_int_t)(i__ + 1);
         }
     }
@@ -357,7 +357,7 @@ void aocl_lapack_cgttrf(aocl_int64_t *n, scomplex *dl, scomplex *d__, scomplex *
     for(i__ = 1; i__ <= i__1; ++i__)
     {
         i__2 = i__;
-        if((r__1 = d__[i__2].r, f2c_abs(r__1)) + (r__2 = r_imag(&d__[i__]), f2c_abs(r__2)) == 0.f)
+        if((r__1 = d__[i__2].real, f2c_abs(r__1)) + (r__2 = r_imag(&d__[i__]), f2c_abs(r__2)) == 0.f)
         {
             *info = i__;
             goto L50;

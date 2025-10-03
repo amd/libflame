@@ -4,8 +4,8 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static scomplex c_b1 = {{1.f}, {0.f}};
-static scomplex c_b2 = {{0.f}, {0.f}};
+static scomplex c_b1 = {1.f, 0.f};
+static scomplex c_b2 = {0.f, 0.f};
 /* > \brief \b CTPRFB applies a real or scomplex "triangular-pentagonal" blocked reflector to a real
  * or scomplex matrix, which is composed of two blocks. */
 /* =========== DOCUMENTATION =========== */
@@ -427,8 +427,8 @@ void aocl_lapack_ctprfb(char *side, char *trans, char *direct, char *storev, aoc
             {
                 i__3 = i__ + j * work_dim1;
                 i__4 = *m - *l + i__ + j * b_dim1;
-                work[i__3].r = b[i__4].r;
-                work[i__3].i = b[i__4].i; // , expr subst
+                work[i__3].real = b[i__4].real;
+                work[i__3].imag = b[i__4].imag; // , expr subst
             }
         }
         aocl_blas_ctrmm("L", "U", "C", "N", l, n, &c_b1, &v[mp + v_dim1], ldv, &work[work_offset],
@@ -448,10 +448,10 @@ void aocl_lapack_ctprfb(char *side, char *trans, char *direct, char *storev, aoc
                 i__3 = i__ + j * work_dim1;
                 i__4 = i__ + j * work_dim1;
                 i__5 = i__ + j * a_dim1;
-                q__1.r = work[i__4].r + a[i__5].r;
-                q__1.i = work[i__4].i + a[i__5].i; // , expr subst
-                work[i__3].r = q__1.r;
-                work[i__3].i = q__1.i; // , expr subst
+                q__1.real = work[i__4].real + a[i__5].real;
+                q__1.imag = work[i__4].imag + a[i__5].imag; // , expr subst
+                work[i__3].real = q__1.real;
+                work[i__3].imag = q__1.imag; // , expr subst
             }
         }
         aocl_blas_ctrmm("L", "U", trans, "N", k, n, &c_b1, &t[t_offset], ldt, &work[work_offset],
@@ -465,20 +465,20 @@ void aocl_lapack_ctprfb(char *side, char *trans, char *direct, char *storev, aoc
                 i__3 = i__ + j * a_dim1;
                 i__4 = i__ + j * a_dim1;
                 i__5 = i__ + j * work_dim1;
-                q__1.r = a[i__4].r - work[i__5].r;
-                q__1.i = a[i__4].i - work[i__5].i; // , expr subst
-                a[i__3].r = q__1.r;
-                a[i__3].i = q__1.i; // , expr subst
+                q__1.real = a[i__4].real - work[i__5].real;
+                q__1.imag = a[i__4].imag - work[i__5].imag; // , expr subst
+                a[i__3].real = q__1.real;
+                a[i__3].imag = q__1.imag; // , expr subst
             }
         }
         i__1 = *m - *l;
-        q__1.r = -1.f;
-        q__1.i = -0.f; // , expr subst
+        q__1.real = -1.f;
+        q__1.imag = -0.f; // , expr subst
         aocl_blas_cgemm("N", "N", &i__1, n, k, &q__1, &v[v_offset], ldv, &work[work_offset], ldwork,
                         &c_b1, &b[b_offset], ldb);
         i__1 = *k - *l;
-        q__1.r = -1.f;
-        q__1.i = -0.f; // , expr subst
+        q__1.real = -1.f;
+        q__1.imag = -0.f; // , expr subst
         aocl_blas_cgemm("N", "N", l, n, &i__1, &q__1, &v[mp + kp * v_dim1], ldv,
                         &work[kp + work_dim1], ldwork, &c_b1, &b[mp + b_dim1], ldb);
         aocl_blas_ctrmm("L", "U", "N", "N", l, n, &c_b1, &v[mp + v_dim1], ldv, &work[work_offset],
@@ -492,10 +492,10 @@ void aocl_lapack_ctprfb(char *side, char *trans, char *direct, char *storev, aoc
                 i__3 = *m - *l + i__ + j * b_dim1;
                 i__4 = *m - *l + i__ + j * b_dim1;
                 i__5 = i__ + j * work_dim1;
-                q__1.r = b[i__4].r - work[i__5].r;
-                q__1.i = b[i__4].i - work[i__5].i; // , expr subst
-                b[i__3].r = q__1.r;
-                b[i__3].i = q__1.i; // , expr subst
+                q__1.real = b[i__4].real - work[i__5].real;
+                q__1.imag = b[i__4].imag - work[i__5].imag; // , expr subst
+                b[i__3].real = q__1.real;
+                b[i__3].imag = q__1.imag; // , expr subst
             }
         }
         /* --------------------------------------------------------------------------- */
@@ -524,8 +524,8 @@ void aocl_lapack_ctprfb(char *side, char *trans, char *direct, char *storev, aoc
             {
                 i__3 = i__ + j * work_dim1;
                 i__4 = i__ + (*n - *l + j) * b_dim1;
-                work[i__3].r = b[i__4].r;
-                work[i__3].i = b[i__4].i; // , expr subst
+                work[i__3].real = b[i__4].real;
+                work[i__3].imag = b[i__4].imag; // , expr subst
             }
         }
         aocl_blas_ctrmm("R", "U", "N", "N", m, l, &c_b1, &v[np + v_dim1], ldv, &work[work_offset],
@@ -545,10 +545,10 @@ void aocl_lapack_ctprfb(char *side, char *trans, char *direct, char *storev, aoc
                 i__3 = i__ + j * work_dim1;
                 i__4 = i__ + j * work_dim1;
                 i__5 = i__ + j * a_dim1;
-                q__1.r = work[i__4].r + a[i__5].r;
-                q__1.i = work[i__4].i + a[i__5].i; // , expr subst
-                work[i__3].r = q__1.r;
-                work[i__3].i = q__1.i; // , expr subst
+                q__1.real = work[i__4].real + a[i__5].real;
+                q__1.imag = work[i__4].imag + a[i__5].imag; // , expr subst
+                work[i__3].real = q__1.real;
+                work[i__3].imag = q__1.imag; // , expr subst
             }
         }
         aocl_blas_ctrmm("R", "U", trans, "N", m, k, &c_b1, &t[t_offset], ldt, &work[work_offset],
@@ -562,20 +562,20 @@ void aocl_lapack_ctprfb(char *side, char *trans, char *direct, char *storev, aoc
                 i__3 = i__ + j * a_dim1;
                 i__4 = i__ + j * a_dim1;
                 i__5 = i__ + j * work_dim1;
-                q__1.r = a[i__4].r - work[i__5].r;
-                q__1.i = a[i__4].i - work[i__5].i; // , expr subst
-                a[i__3].r = q__1.r;
-                a[i__3].i = q__1.i; // , expr subst
+                q__1.real = a[i__4].real - work[i__5].real;
+                q__1.imag = a[i__4].imag - work[i__5].imag; // , expr subst
+                a[i__3].real = q__1.real;
+                a[i__3].imag = q__1.imag; // , expr subst
             }
         }
         i__1 = *n - *l;
-        q__1.r = -1.f;
-        q__1.i = -0.f; // , expr subst
+        q__1.real = -1.f;
+        q__1.imag = -0.f; // , expr subst
         aocl_blas_cgemm("N", "C", m, &i__1, k, &q__1, &work[work_offset], ldwork, &v[v_offset], ldv,
                         &c_b1, &b[b_offset], ldb);
         i__1 = *k - *l;
-        q__1.r = -1.f;
-        q__1.i = -0.f; // , expr subst
+        q__1.real = -1.f;
+        q__1.imag = -0.f; // , expr subst
         aocl_blas_cgemm("N", "C", m, l, &i__1, &q__1, &work[kp * work_dim1 + 1], ldwork,
                         &v[np + kp * v_dim1], ldv, &c_b1, &b[np * b_dim1 + 1], ldb);
         aocl_blas_ctrmm("R", "U", "C", "N", m, l, &c_b1, &v[np + v_dim1], ldv, &work[work_offset],
@@ -589,10 +589,10 @@ void aocl_lapack_ctprfb(char *side, char *trans, char *direct, char *storev, aoc
                 i__3 = i__ + (*n - *l + j) * b_dim1;
                 i__4 = i__ + (*n - *l + j) * b_dim1;
                 i__5 = i__ + j * work_dim1;
-                q__1.r = b[i__4].r - work[i__5].r;
-                q__1.i = b[i__4].i - work[i__5].i; // , expr subst
-                b[i__3].r = q__1.r;
-                b[i__3].i = q__1.i; // , expr subst
+                q__1.real = b[i__4].real - work[i__5].real;
+                q__1.imag = b[i__4].imag - work[i__5].imag; // , expr subst
+                b[i__3].real = q__1.real;
+                b[i__3].imag = q__1.imag; // , expr subst
             }
         }
         /* --------------------------------------------------------------------------- */
@@ -622,8 +622,8 @@ void aocl_lapack_ctprfb(char *side, char *trans, char *direct, char *storev, aoc
             {
                 i__3 = *k - *l + i__ + j * work_dim1;
                 i__4 = i__ + j * b_dim1;
-                work[i__3].r = b[i__4].r;
-                work[i__3].i = b[i__4].i; // , expr subst
+                work[i__3].real = b[i__4].real;
+                work[i__3].imag = b[i__4].imag; // , expr subst
             }
         }
         aocl_blas_ctrmm("L", "L", "C", "N", l, n, &c_b1, &v[kp * v_dim1 + 1], ldv,
@@ -643,10 +643,10 @@ void aocl_lapack_ctprfb(char *side, char *trans, char *direct, char *storev, aoc
                 i__3 = i__ + j * work_dim1;
                 i__4 = i__ + j * work_dim1;
                 i__5 = i__ + j * a_dim1;
-                q__1.r = work[i__4].r + a[i__5].r;
-                q__1.i = work[i__4].i + a[i__5].i; // , expr subst
-                work[i__3].r = q__1.r;
-                work[i__3].i = q__1.i; // , expr subst
+                q__1.real = work[i__4].real + a[i__5].real;
+                q__1.imag = work[i__4].imag + a[i__5].imag; // , expr subst
+                work[i__3].real = q__1.real;
+                work[i__3].imag = q__1.imag; // , expr subst
             }
         }
         aocl_blas_ctrmm("L", "L", trans, "N", k, n, &c_b1, &t[t_offset], ldt, &work[work_offset],
@@ -660,20 +660,20 @@ void aocl_lapack_ctprfb(char *side, char *trans, char *direct, char *storev, aoc
                 i__3 = i__ + j * a_dim1;
                 i__4 = i__ + j * a_dim1;
                 i__5 = i__ + j * work_dim1;
-                q__1.r = a[i__4].r - work[i__5].r;
-                q__1.i = a[i__4].i - work[i__5].i; // , expr subst
-                a[i__3].r = q__1.r;
-                a[i__3].i = q__1.i; // , expr subst
+                q__1.real = a[i__4].real - work[i__5].real;
+                q__1.imag = a[i__4].imag - work[i__5].imag; // , expr subst
+                a[i__3].real = q__1.real;
+                a[i__3].imag = q__1.imag; // , expr subst
             }
         }
         i__1 = *m - *l;
-        q__1.r = -1.f;
-        q__1.i = -0.f; // , expr subst
+        q__1.real = -1.f;
+        q__1.imag = -0.f; // , expr subst
         aocl_blas_cgemm("N", "N", &i__1, n, k, &q__1, &v[mp + v_dim1], ldv, &work[work_offset],
                         ldwork, &c_b1, &b[mp + b_dim1], ldb);
         i__1 = *k - *l;
-        q__1.r = -1.f;
-        q__1.i = -0.f; // , expr subst
+        q__1.real = -1.f;
+        q__1.imag = -0.f; // , expr subst
         aocl_blas_cgemm("N", "N", l, n, &i__1, &q__1, &v[v_offset], ldv, &work[work_offset], ldwork,
                         &c_b1, &b[b_offset], ldb);
         aocl_blas_ctrmm("L", "L", "N", "N", l, n, &c_b1, &v[kp * v_dim1 + 1], ldv,
@@ -687,10 +687,10 @@ void aocl_lapack_ctprfb(char *side, char *trans, char *direct, char *storev, aoc
                 i__3 = i__ + j * b_dim1;
                 i__4 = i__ + j * b_dim1;
                 i__5 = *k - *l + i__ + j * work_dim1;
-                q__1.r = b[i__4].r - work[i__5].r;
-                q__1.i = b[i__4].i - work[i__5].i; // , expr subst
-                b[i__3].r = q__1.r;
-                b[i__3].i = q__1.i; // , expr subst
+                q__1.real = b[i__4].real - work[i__5].real;
+                q__1.imag = b[i__4].imag - work[i__5].imag; // , expr subst
+                b[i__3].real = q__1.real;
+                b[i__3].imag = q__1.imag; // , expr subst
             }
         }
         /* --------------------------------------------------------------------------- */
@@ -719,8 +719,8 @@ void aocl_lapack_ctprfb(char *side, char *trans, char *direct, char *storev, aoc
             {
                 i__3 = i__ + (*k - *l + j) * work_dim1;
                 i__4 = i__ + j * b_dim1;
-                work[i__3].r = b[i__4].r;
-                work[i__3].i = b[i__4].i; // , expr subst
+                work[i__3].real = b[i__4].real;
+                work[i__3].imag = b[i__4].imag; // , expr subst
             }
         }
         aocl_blas_ctrmm("R", "L", "N", "N", m, l, &c_b1, &v[kp * v_dim1 + 1], ldv,
@@ -740,10 +740,10 @@ void aocl_lapack_ctprfb(char *side, char *trans, char *direct, char *storev, aoc
                 i__3 = i__ + j * work_dim1;
                 i__4 = i__ + j * work_dim1;
                 i__5 = i__ + j * a_dim1;
-                q__1.r = work[i__4].r + a[i__5].r;
-                q__1.i = work[i__4].i + a[i__5].i; // , expr subst
-                work[i__3].r = q__1.r;
-                work[i__3].i = q__1.i; // , expr subst
+                q__1.real = work[i__4].real + a[i__5].real;
+                q__1.imag = work[i__4].imag + a[i__5].imag; // , expr subst
+                work[i__3].real = q__1.real;
+                work[i__3].imag = q__1.imag; // , expr subst
             }
         }
         aocl_blas_ctrmm("R", "L", trans, "N", m, k, &c_b1, &t[t_offset], ldt, &work[work_offset],
@@ -757,20 +757,20 @@ void aocl_lapack_ctprfb(char *side, char *trans, char *direct, char *storev, aoc
                 i__3 = i__ + j * a_dim1;
                 i__4 = i__ + j * a_dim1;
                 i__5 = i__ + j * work_dim1;
-                q__1.r = a[i__4].r - work[i__5].r;
-                q__1.i = a[i__4].i - work[i__5].i; // , expr subst
-                a[i__3].r = q__1.r;
-                a[i__3].i = q__1.i; // , expr subst
+                q__1.real = a[i__4].real - work[i__5].real;
+                q__1.imag = a[i__4].imag - work[i__5].imag; // , expr subst
+                a[i__3].real = q__1.real;
+                a[i__3].imag = q__1.imag; // , expr subst
             }
         }
         i__1 = *n - *l;
-        q__1.r = -1.f;
-        q__1.i = -0.f; // , expr subst
+        q__1.real = -1.f;
+        q__1.imag = -0.f; // , expr subst
         aocl_blas_cgemm("N", "C", m, &i__1, k, &q__1, &work[work_offset], ldwork, &v[np + v_dim1],
                         ldv, &c_b1, &b[np * b_dim1 + 1], ldb);
         i__1 = *k - *l;
-        q__1.r = -1.f;
-        q__1.i = -0.f; // , expr subst
+        q__1.real = -1.f;
+        q__1.imag = -0.f; // , expr subst
         aocl_blas_cgemm("N", "C", m, l, &i__1, &q__1, &work[work_offset], ldwork, &v[v_offset], ldv,
                         &c_b1, &b[b_offset], ldb);
         aocl_blas_ctrmm("R", "L", "C", "N", m, l, &c_b1, &v[kp * v_dim1 + 1], ldv,
@@ -784,10 +784,10 @@ void aocl_lapack_ctprfb(char *side, char *trans, char *direct, char *storev, aoc
                 i__3 = i__ + j * b_dim1;
                 i__4 = i__ + j * b_dim1;
                 i__5 = i__ + (*k - *l + j) * work_dim1;
-                q__1.r = b[i__4].r - work[i__5].r;
-                q__1.i = b[i__4].i - work[i__5].i; // , expr subst
-                b[i__3].r = q__1.r;
-                b[i__3].i = q__1.i; // , expr subst
+                q__1.real = b[i__4].real - work[i__5].real;
+                q__1.imag = b[i__4].imag - work[i__5].imag; // , expr subst
+                b[i__3].real = q__1.real;
+                b[i__3].imag = q__1.imag; // , expr subst
             }
         }
         /* --------------------------------------------------------------------------- */
@@ -816,8 +816,8 @@ void aocl_lapack_ctprfb(char *side, char *trans, char *direct, char *storev, aoc
             {
                 i__3 = i__ + j * work_dim1;
                 i__4 = *m - *l + i__ + j * b_dim1;
-                work[i__3].r = b[i__4].r;
-                work[i__3].i = b[i__4].i; // , expr subst
+                work[i__3].real = b[i__4].real;
+                work[i__3].imag = b[i__4].imag; // , expr subst
             }
         }
         aocl_blas_ctrmm("L", "L", "N", "N", l, n, &c_b1, &v[mp * v_dim1 + 1], ldv,
@@ -837,10 +837,10 @@ void aocl_lapack_ctprfb(char *side, char *trans, char *direct, char *storev, aoc
                 i__3 = i__ + j * work_dim1;
                 i__4 = i__ + j * work_dim1;
                 i__5 = i__ + j * a_dim1;
-                q__1.r = work[i__4].r + a[i__5].r;
-                q__1.i = work[i__4].i + a[i__5].i; // , expr subst
-                work[i__3].r = q__1.r;
-                work[i__3].i = q__1.i; // , expr subst
+                q__1.real = work[i__4].real + a[i__5].real;
+                q__1.imag = work[i__4].imag + a[i__5].imag; // , expr subst
+                work[i__3].real = q__1.real;
+                work[i__3].imag = q__1.imag; // , expr subst
             }
         }
         aocl_blas_ctrmm("L", "U", trans, "N", k, n, &c_b1, &t[t_offset], ldt, &work[work_offset],
@@ -854,20 +854,20 @@ void aocl_lapack_ctprfb(char *side, char *trans, char *direct, char *storev, aoc
                 i__3 = i__ + j * a_dim1;
                 i__4 = i__ + j * a_dim1;
                 i__5 = i__ + j * work_dim1;
-                q__1.r = a[i__4].r - work[i__5].r;
-                q__1.i = a[i__4].i - work[i__5].i; // , expr subst
-                a[i__3].r = q__1.r;
-                a[i__3].i = q__1.i; // , expr subst
+                q__1.real = a[i__4].real - work[i__5].real;
+                q__1.imag = a[i__4].imag - work[i__5].imag; // , expr subst
+                a[i__3].real = q__1.real;
+                a[i__3].imag = q__1.imag; // , expr subst
             }
         }
         i__1 = *m - *l;
-        q__1.r = -1.f;
-        q__1.i = -0.f; // , expr subst
+        q__1.real = -1.f;
+        q__1.imag = -0.f; // , expr subst
         aocl_blas_cgemm("C", "N", &i__1, n, k, &q__1, &v[v_offset], ldv, &work[work_offset], ldwork,
                         &c_b1, &b[b_offset], ldb);
         i__1 = *k - *l;
-        q__1.r = -1.f;
-        q__1.i = -0.f; // , expr subst
+        q__1.real = -1.f;
+        q__1.imag = -0.f; // , expr subst
         aocl_blas_cgemm("C", "N", l, n, &i__1, &q__1, &v[kp + mp * v_dim1], ldv,
                         &work[kp + work_dim1], ldwork, &c_b1, &b[mp + b_dim1], ldb);
         aocl_blas_ctrmm("L", "L", "C", "N", l, n, &c_b1, &v[mp * v_dim1 + 1], ldv,
@@ -881,10 +881,10 @@ void aocl_lapack_ctprfb(char *side, char *trans, char *direct, char *storev, aoc
                 i__3 = *m - *l + i__ + j * b_dim1;
                 i__4 = *m - *l + i__ + j * b_dim1;
                 i__5 = i__ + j * work_dim1;
-                q__1.r = b[i__4].r - work[i__5].r;
-                q__1.i = b[i__4].i - work[i__5].i; // , expr subst
-                b[i__3].r = q__1.r;
-                b[i__3].i = q__1.i; // , expr subst
+                q__1.real = b[i__4].real - work[i__5].real;
+                q__1.imag = b[i__4].imag - work[i__5].imag; // , expr subst
+                b[i__3].real = q__1.real;
+                b[i__3].imag = q__1.imag; // , expr subst
             }
         }
         /* --------------------------------------------------------------------------- */
@@ -912,8 +912,8 @@ void aocl_lapack_ctprfb(char *side, char *trans, char *direct, char *storev, aoc
             {
                 i__3 = i__ + j * work_dim1;
                 i__4 = i__ + (*n - *l + j) * b_dim1;
-                work[i__3].r = b[i__4].r;
-                work[i__3].i = b[i__4].i; // , expr subst
+                work[i__3].real = b[i__4].real;
+                work[i__3].imag = b[i__4].imag; // , expr subst
             }
         }
         aocl_blas_ctrmm("R", "L", "C", "N", m, l, &c_b1, &v[np * v_dim1 + 1], ldv,
@@ -933,10 +933,10 @@ void aocl_lapack_ctprfb(char *side, char *trans, char *direct, char *storev, aoc
                 i__3 = i__ + j * work_dim1;
                 i__4 = i__ + j * work_dim1;
                 i__5 = i__ + j * a_dim1;
-                q__1.r = work[i__4].r + a[i__5].r;
-                q__1.i = work[i__4].i + a[i__5].i; // , expr subst
-                work[i__3].r = q__1.r;
-                work[i__3].i = q__1.i; // , expr subst
+                q__1.real = work[i__4].real + a[i__5].real;
+                q__1.imag = work[i__4].imag + a[i__5].imag; // , expr subst
+                work[i__3].real = q__1.real;
+                work[i__3].imag = q__1.imag; // , expr subst
             }
         }
         aocl_blas_ctrmm("R", "U", trans, "N", m, k, &c_b1, &t[t_offset], ldt, &work[work_offset],
@@ -950,20 +950,20 @@ void aocl_lapack_ctprfb(char *side, char *trans, char *direct, char *storev, aoc
                 i__3 = i__ + j * a_dim1;
                 i__4 = i__ + j * a_dim1;
                 i__5 = i__ + j * work_dim1;
-                q__1.r = a[i__4].r - work[i__5].r;
-                q__1.i = a[i__4].i - work[i__5].i; // , expr subst
-                a[i__3].r = q__1.r;
-                a[i__3].i = q__1.i; // , expr subst
+                q__1.real = a[i__4].real - work[i__5].real;
+                q__1.imag = a[i__4].imag - work[i__5].imag; // , expr subst
+                a[i__3].real = q__1.real;
+                a[i__3].imag = q__1.imag; // , expr subst
             }
         }
         i__1 = *n - *l;
-        q__1.r = -1.f;
-        q__1.i = -0.f; // , expr subst
+        q__1.real = -1.f;
+        q__1.imag = -0.f; // , expr subst
         aocl_blas_cgemm("N", "N", m, &i__1, k, &q__1, &work[work_offset], ldwork, &v[v_offset], ldv,
                         &c_b1, &b[b_offset], ldb);
         i__1 = *k - *l;
-        q__1.r = -1.f;
-        q__1.i = -0.f; // , expr subst
+        q__1.real = -1.f;
+        q__1.imag = -0.f; // , expr subst
         aocl_blas_cgemm("N", "N", m, l, &i__1, &q__1, &work[kp * work_dim1 + 1], ldwork,
                         &v[kp + np * v_dim1], ldv, &c_b1, &b[np * b_dim1 + 1], ldb);
         aocl_blas_ctrmm("R", "L", "N", "N", m, l, &c_b1, &v[np * v_dim1 + 1], ldv,
@@ -977,10 +977,10 @@ void aocl_lapack_ctprfb(char *side, char *trans, char *direct, char *storev, aoc
                 i__3 = i__ + (*n - *l + j) * b_dim1;
                 i__4 = i__ + (*n - *l + j) * b_dim1;
                 i__5 = i__ + j * work_dim1;
-                q__1.r = b[i__4].r - work[i__5].r;
-                q__1.i = b[i__4].i - work[i__5].i; // , expr subst
-                b[i__3].r = q__1.r;
-                b[i__3].i = q__1.i; // , expr subst
+                q__1.real = b[i__4].real - work[i__5].real;
+                q__1.imag = b[i__4].imag - work[i__5].imag; // , expr subst
+                b[i__3].real = q__1.real;
+                b[i__3].imag = q__1.imag; // , expr subst
             }
         }
         /* --------------------------------------------------------------------------- */
@@ -1009,8 +1009,8 @@ void aocl_lapack_ctprfb(char *side, char *trans, char *direct, char *storev, aoc
             {
                 i__3 = *k - *l + i__ + j * work_dim1;
                 i__4 = i__ + j * b_dim1;
-                work[i__3].r = b[i__4].r;
-                work[i__3].i = b[i__4].i; // , expr subst
+                work[i__3].real = b[i__4].real;
+                work[i__3].imag = b[i__4].imag; // , expr subst
             }
         }
         aocl_blas_ctrmm("L", "U", "N", "N", l, n, &c_b1, &v[kp + v_dim1], ldv,
@@ -1030,10 +1030,10 @@ void aocl_lapack_ctprfb(char *side, char *trans, char *direct, char *storev, aoc
                 i__3 = i__ + j * work_dim1;
                 i__4 = i__ + j * work_dim1;
                 i__5 = i__ + j * a_dim1;
-                q__1.r = work[i__4].r + a[i__5].r;
-                q__1.i = work[i__4].i + a[i__5].i; // , expr subst
-                work[i__3].r = q__1.r;
-                work[i__3].i = q__1.i; // , expr subst
+                q__1.real = work[i__4].real + a[i__5].real;
+                q__1.imag = work[i__4].imag + a[i__5].imag; // , expr subst
+                work[i__3].real = q__1.real;
+                work[i__3].imag = q__1.imag; // , expr subst
             }
         }
         aocl_blas_ctrmm("L", "L ", trans, "N", k, n, &c_b1, &t[t_offset], ldt, &work[work_offset],
@@ -1047,20 +1047,20 @@ void aocl_lapack_ctprfb(char *side, char *trans, char *direct, char *storev, aoc
                 i__3 = i__ + j * a_dim1;
                 i__4 = i__ + j * a_dim1;
                 i__5 = i__ + j * work_dim1;
-                q__1.r = a[i__4].r - work[i__5].r;
-                q__1.i = a[i__4].i - work[i__5].i; // , expr subst
-                a[i__3].r = q__1.r;
-                a[i__3].i = q__1.i; // , expr subst
+                q__1.real = a[i__4].real - work[i__5].real;
+                q__1.imag = a[i__4].imag - work[i__5].imag; // , expr subst
+                a[i__3].real = q__1.real;
+                a[i__3].imag = q__1.imag; // , expr subst
             }
         }
         i__1 = *m - *l;
-        q__1.r = -1.f;
-        q__1.i = -0.f; // , expr subst
+        q__1.real = -1.f;
+        q__1.imag = -0.f; // , expr subst
         aocl_blas_cgemm("C", "N", &i__1, n, k, &q__1, &v[mp * v_dim1 + 1], ldv, &work[work_offset],
                         ldwork, &c_b1, &b[mp + b_dim1], ldb);
         i__1 = *k - *l;
-        q__1.r = -1.f;
-        q__1.i = -0.f; // , expr subst
+        q__1.real = -1.f;
+        q__1.imag = -0.f; // , expr subst
         aocl_blas_cgemm("C", "N", l, n, &i__1, &q__1, &v[v_offset], ldv, &work[work_offset], ldwork,
                         &c_b1, &b[b_offset], ldb);
         aocl_blas_ctrmm("L", "U", "C", "N", l, n, &c_b1, &v[kp + v_dim1], ldv,
@@ -1074,10 +1074,10 @@ void aocl_lapack_ctprfb(char *side, char *trans, char *direct, char *storev, aoc
                 i__3 = i__ + j * b_dim1;
                 i__4 = i__ + j * b_dim1;
                 i__5 = *k - *l + i__ + j * work_dim1;
-                q__1.r = b[i__4].r - work[i__5].r;
-                q__1.i = b[i__4].i - work[i__5].i; // , expr subst
-                b[i__3].r = q__1.r;
-                b[i__3].i = q__1.i; // , expr subst
+                q__1.real = b[i__4].real - work[i__5].real;
+                q__1.imag = b[i__4].imag - work[i__5].imag; // , expr subst
+                b[i__3].real = q__1.real;
+                b[i__3].imag = q__1.imag; // , expr subst
             }
         }
         /* --------------------------------------------------------------------------- */
@@ -1105,8 +1105,8 @@ void aocl_lapack_ctprfb(char *side, char *trans, char *direct, char *storev, aoc
             {
                 i__3 = i__ + (*k - *l + j) * work_dim1;
                 i__4 = i__ + j * b_dim1;
-                work[i__3].r = b[i__4].r;
-                work[i__3].i = b[i__4].i; // , expr subst
+                work[i__3].real = b[i__4].real;
+                work[i__3].imag = b[i__4].imag; // , expr subst
             }
         }
         aocl_blas_ctrmm("R", "U", "C", "N", m, l, &c_b1, &v[kp + v_dim1], ldv,
@@ -1126,10 +1126,10 @@ void aocl_lapack_ctprfb(char *side, char *trans, char *direct, char *storev, aoc
                 i__3 = i__ + j * work_dim1;
                 i__4 = i__ + j * work_dim1;
                 i__5 = i__ + j * a_dim1;
-                q__1.r = work[i__4].r + a[i__5].r;
-                q__1.i = work[i__4].i + a[i__5].i; // , expr subst
-                work[i__3].r = q__1.r;
-                work[i__3].i = q__1.i; // , expr subst
+                q__1.real = work[i__4].real + a[i__5].real;
+                q__1.imag = work[i__4].imag + a[i__5].imag; // , expr subst
+                work[i__3].real = q__1.real;
+                work[i__3].imag = q__1.imag; // , expr subst
             }
         }
         aocl_blas_ctrmm("R", "L", trans, "N", m, k, &c_b1, &t[t_offset], ldt, &work[work_offset],
@@ -1143,20 +1143,20 @@ void aocl_lapack_ctprfb(char *side, char *trans, char *direct, char *storev, aoc
                 i__3 = i__ + j * a_dim1;
                 i__4 = i__ + j * a_dim1;
                 i__5 = i__ + j * work_dim1;
-                q__1.r = a[i__4].r - work[i__5].r;
-                q__1.i = a[i__4].i - work[i__5].i; // , expr subst
-                a[i__3].r = q__1.r;
-                a[i__3].i = q__1.i; // , expr subst
+                q__1.real = a[i__4].real - work[i__5].real;
+                q__1.imag = a[i__4].imag - work[i__5].imag; // , expr subst
+                a[i__3].real = q__1.real;
+                a[i__3].imag = q__1.imag; // , expr subst
             }
         }
         i__1 = *n - *l;
-        q__1.r = -1.f;
-        q__1.i = -0.f; // , expr subst
+        q__1.real = -1.f;
+        q__1.imag = -0.f; // , expr subst
         aocl_blas_cgemm("N", "N", m, &i__1, k, &q__1, &work[work_offset], ldwork,
                         &v[np * v_dim1 + 1], ldv, &c_b1, &b[np * b_dim1 + 1], ldb);
         i__1 = *k - *l;
-        q__1.r = -1.f;
-        q__1.i = -0.f; // , expr subst
+        q__1.real = -1.f;
+        q__1.imag = -0.f; // , expr subst
         aocl_blas_cgemm("N", "N", m, l, &i__1, &q__1, &work[work_offset], ldwork, &v[v_offset], ldv,
                         &c_b1, &b[b_offset], ldb);
         aocl_blas_ctrmm("R", "U", "N", "N", m, l, &c_b1, &v[kp + v_dim1], ldv,
@@ -1170,10 +1170,10 @@ void aocl_lapack_ctprfb(char *side, char *trans, char *direct, char *storev, aoc
                 i__3 = i__ + j * b_dim1;
                 i__4 = i__ + j * b_dim1;
                 i__5 = i__ + (*k - *l + j) * work_dim1;
-                q__1.r = b[i__4].r - work[i__5].r;
-                q__1.i = b[i__4].i - work[i__5].i; // , expr subst
-                b[i__3].r = q__1.r;
-                b[i__3].i = q__1.i; // , expr subst
+                q__1.real = b[i__4].real - work[i__5].real;
+                q__1.imag = b[i__4].imag - work[i__5].imag; // , expr subst
+                b[i__3].real = q__1.real;
+                b[i__3].imag = q__1.imag; // , expr subst
             }
         }
     }

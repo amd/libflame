@@ -470,7 +470,7 @@ void aocl_lapack_zgeevx(char *balanc, char *jobvl, char *jobvr, char *sense, aoc
                 aocl_lapack_ztrevc3("L", "B", select, n, &a[a_offset], lda, &vl[vl_offset], ldvl,
                                     &vr[vr_offset], ldvr, n, &nout, &work[1], &c_n1, &rwork[1],
                                     &c_n1, &ierr);
-                lwork_trevc__ = (integer)work[1].r;
+                lwork_trevc__ = (integer)work[1].real;
                 maxwrk = fla_max(maxwrk, lwork_trevc__);
                 aocl_lapack_zhseqr("S", "V", n, &c__1, n, &a[a_offset], lda, &w[1], &vl[vl_offset],
                                    ldvl, &work[1], &c_n1, info);
@@ -480,7 +480,7 @@ void aocl_lapack_zgeevx(char *balanc, char *jobvl, char *jobvr, char *sense, aoc
                 aocl_lapack_ztrevc3("R", "B", select, n, &a[a_offset], lda, &vl[vl_offset], ldvl,
                                     &vr[vr_offset], ldvr, n, &nout, &work[1], &c_n1, &rwork[1],
                                     &c_n1, &ierr);
-                lwork_trevc__ = (integer)work[1].r;
+                lwork_trevc__ = (integer)work[1].real;
                 maxwrk = fla_max(maxwrk, lwork_trevc__);
                 aocl_lapack_zhseqr("S", "V", n, &c__1, n, &a[a_offset], lda, &w[1], &vr[vr_offset],
                                    ldvr, &work[1], &c_n1, info);
@@ -498,7 +498,7 @@ void aocl_lapack_zgeevx(char *balanc, char *jobvl, char *jobvr, char *sense, aoc
                                        &vr[vr_offset], ldvr, &work[1], &c_n1, info);
                 }
             }
-            hswork = (integer)work[1].r;
+            hswork = (integer)work[1].real;
             if(!wantvl && !wantvr)
             {
                 minwrk = *n << 1;
@@ -550,8 +550,8 @@ void aocl_lapack_zgeevx(char *balanc, char *jobvl, char *jobvr, char *sense, aoc
             }
             maxwrk = fla_max(maxwrk, minwrk);
         }
-        work[1].r = (doublereal)maxwrk;
-        work[1].i = 0.; // , expr subst
+        work[1].real = (doublereal)maxwrk;
+        work[1].imag = 0.; // , expr subst
         if(*lwork < minwrk && !lquery)
         {
             *info = -20;
@@ -720,7 +720,7 @@ void aocl_lapack_zgeevx(char *balanc, char *jobvl, char *jobvr, char *sense, aoc
             {
                 i__3 = k + i__ * vl_dim1;
                 /* Computing 2nd power */
-                d__1 = vl[i__3].r;
+                d__1 = vl[i__3].real;
                 /* Computing 2nd power */
                 d__2 = d_imag(&vl[k + i__ * vl_dim1]);
                 rwork[k] = d__1 * d__1 + d__2 * d__2;
@@ -729,18 +729,18 @@ void aocl_lapack_zgeevx(char *balanc, char *jobvl, char *jobvr, char *sense, aoc
             k = aocl_blas_idamax(n, &rwork[1], &c__1);
             d_cnjg(&z__2, &vl[k + i__ * vl_dim1]);
             d__1 = sqrt(rwork[k]);
-            z__1.r = z__2.r / d__1;
-            z__1.i = z__2.i / d__1; // , expr subst
-            tmp.r = z__1.r;
-            tmp.i = z__1.i; // , expr subst
+            z__1.real = z__2.real / d__1;
+            z__1.imag = z__2.imag / d__1; // , expr subst
+            tmp.real = z__1.real;
+            tmp.imag = z__1.imag; // , expr subst
             aocl_blas_zscal(n, &tmp, &vl[i__ * vl_dim1 + 1], &c__1);
             i__2 = k + i__ * vl_dim1;
             i__3 = k + i__ * vl_dim1;
-            d__1 = vl[i__3].r;
-            z__1.r = d__1;
-            z__1.i = 0.; // , expr subst
-            vl[i__2].r = z__1.r;
-            vl[i__2].i = z__1.i; // , expr subst
+            d__1 = vl[i__3].real;
+            z__1.real = d__1;
+            z__1.imag = 0.; // , expr subst
+            vl[i__2].real = z__1.real;
+            vl[i__2].imag = z__1.imag; // , expr subst
             /* L20: */
         }
     }
@@ -759,7 +759,7 @@ void aocl_lapack_zgeevx(char *balanc, char *jobvl, char *jobvr, char *sense, aoc
             {
                 i__3 = k + i__ * vr_dim1;
                 /* Computing 2nd power */
-                d__1 = vr[i__3].r;
+                d__1 = vr[i__3].real;
                 /* Computing 2nd power */
                 d__2 = d_imag(&vr[k + i__ * vr_dim1]);
                 rwork[k] = d__1 * d__1 + d__2 * d__2;
@@ -768,18 +768,18 @@ void aocl_lapack_zgeevx(char *balanc, char *jobvl, char *jobvr, char *sense, aoc
             k = aocl_blas_idamax(n, &rwork[1], &c__1);
             d_cnjg(&z__2, &vr[k + i__ * vr_dim1]);
             d__1 = sqrt(rwork[k]);
-            z__1.r = z__2.r / d__1;
-            z__1.i = z__2.i / d__1; // , expr subst
-            tmp.r = z__1.r;
-            tmp.i = z__1.i; // , expr subst
+            z__1.real = z__2.real / d__1;
+            z__1.imag = z__2.imag / d__1; // , expr subst
+            tmp.real = z__1.real;
+            tmp.imag = z__1.imag; // , expr subst
             aocl_blas_zscal(n, &tmp, &vr[i__ * vr_dim1 + 1], &c__1);
             i__2 = k + i__ * vr_dim1;
             i__3 = k + i__ * vr_dim1;
-            d__1 = vr[i__3].r;
-            z__1.r = d__1;
-            z__1.i = 0.; // , expr subst
-            vr[i__2].r = z__1.r;
-            vr[i__2].i = z__1.i; // , expr subst
+            d__1 = vr[i__3].real;
+            z__1.real = d__1;
+            z__1.imag = 0.; // , expr subst
+            vr[i__2].real = z__1.real;
+            vr[i__2].imag = z__1.imag; // , expr subst
             /* L40: */
         }
     }
@@ -807,8 +807,8 @@ L50:
             aocl_lapack_zlascl("G", &c__0, &c__0, &cscale, &anrm, &i__1, &c__1, &w[1], n, &ierr);
         }
     }
-    work[1].r = (doublereal)maxwrk;
-    work[1].i = 0.; // , expr subst
+    work[1].real = (doublereal)maxwrk;
+    work[1].imag = 0.; // , expr subst
     AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of ZGEEVX */

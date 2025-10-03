@@ -201,7 +201,7 @@ real aocl_lapack_clanhp(char *norm, char *uplo, aocl_int64_t *n, scomplex *ap, r
                 }
                 k += j;
                 i__2 = k;
-                sum = (r__1 = ap[i__2].r, f2c_abs(r__1));
+                sum = (r__1 = ap[i__2].real, f2c_abs(r__1));
                 if(value < sum || sisnan_(&sum))
                 {
                     value = sum;
@@ -216,7 +216,7 @@ real aocl_lapack_clanhp(char *norm, char *uplo, aocl_int64_t *n, scomplex *ap, r
             for(j = 1; j <= i__1; ++j)
             {
                 i__2 = k;
-                sum = (r__1 = ap[i__2].r, f2c_abs(r__1));
+                sum = (r__1 = ap[i__2].real, f2c_abs(r__1));
                 if(value < sum || sisnan_(&sum))
                 {
                     value = sum;
@@ -257,7 +257,7 @@ real aocl_lapack_clanhp(char *norm, char *uplo, aocl_int64_t *n, scomplex *ap, r
                     /* L50: */
                 }
                 i__2 = k;
-                work[j] = sum + (r__1 = ap[i__2].r, f2c_abs(r__1));
+                work[j] = sum + (r__1 = ap[i__2].real, f2c_abs(r__1));
                 ++k;
                 /* L60: */
             }
@@ -284,7 +284,7 @@ real aocl_lapack_clanhp(char *norm, char *uplo, aocl_int64_t *n, scomplex *ap, r
             for(j = 1; j <= i__1; ++j)
             {
                 i__2 = k;
-                sum = work[j] + (r__1 = ap[i__2].r, f2c_abs(r__1));
+                sum = work[j] + (r__1 = ap[i__2].real, f2c_abs(r__1));
                 ++k;
                 i__2 = *n;
                 for(i__ = j + 1; i__ <= i__2; ++i__)
@@ -337,10 +337,10 @@ real aocl_lapack_clanhp(char *norm, char *uplo, aocl_int64_t *n, scomplex *ap, r
         for(i__ = 1; i__ <= i__1; ++i__)
         {
             i__2 = k;
-            if(ap[i__2].r != 0.f)
+            if(ap[i__2].real != 0.f)
             {
                 i__2 = k;
-                absa = (r__1 = ap[i__2].r, f2c_abs(r__1));
+                absa = (r__1 = ap[i__2].real, f2c_abs(r__1));
                 if(scale < absa)
                 {
                     /* Computing 2nd power */

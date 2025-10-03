@@ -6,8 +6,8 @@
 #include "FLA_f2c.h" /* Table of constant values */
 static aocl_int64_t c__1 = 1;
 static aocl_int64_t c_n1 = -1;
-static scomplex c_b15 = {{1.f}, {0.f}};
-static scomplex c_b19 = {{-1.f}, {-0.f}};
+static scomplex c_b15 = {1.f, 0.f};
+static scomplex c_b19 = {-1.f, -0.f};
 /* > \brief \b CSYTRF_AA */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -226,8 +226,8 @@ void aocl_lapack_csytrf_aa(char *uplo, aocl_int64_t *n, scomplex *a, aocl_int64_
     {
         lwkopt = (nb + 1) * *n;
         r__1 = aocl_lapack_sroundup_lwork(&lwkopt);
-        work[1].r = r__1;
-        work[1].i = 0.f; // , expr subst
+        work[1].real = r__1;
+        work[1].imag = 0.f; // , expr subst
     }
     if(*info != 0)
     {
@@ -317,11 +317,11 @@ void aocl_lapack_csytrf_aa(char *uplo, aocl_int64_t *n, scomplex *a, aocl_int64_
             {
                 /* Merge rank-1 update with BLAS-3 update */
                 i__1 = j + (j + 1) * a_dim1;
-                alpha.r = a[i__1].r;
-                alpha.i = a[i__1].i; // , expr subst
+                alpha.real = a[i__1].real;
+                alpha.imag = a[i__1].imag; // , expr subst
                 i__1 = j + (j + 1) * a_dim1;
-                a[i__1].r = 1.f;
-                a[i__1].i = 0.f; // , expr subst
+                a[i__1].real = 1.f;
+                a[i__1].imag = 0.f; // , expr subst
                 i__1 = *n - j;
                 aocl_blas_ccopy(&i__1, &a[j - 1 + (j + 1) * a_dim1], lda,
                                 &work[j + 1 - j1 + 1 + jb * *n], &c__1);
@@ -369,8 +369,8 @@ void aocl_lapack_csytrf_aa(char *uplo, aocl_int64_t *n, scomplex *a, aocl_int64_
                 }
                 /* Recover T( J, J+1 ) */
                 i__2 = j + (j + 1) * a_dim1;
-                a[i__2].r = alpha.r;
-                a[i__2].i = alpha.i; // , expr subst
+                a[i__2].real = alpha.real;
+                a[i__2].imag = alpha.imag; // , expr subst
             }
             /* WORK(J+1, 1) stores H(J+1, 1) */
             i__2 = *n - j;
@@ -437,11 +437,11 @@ void aocl_lapack_csytrf_aa(char *uplo, aocl_int64_t *n, scomplex *a, aocl_int64_
             {
                 /* Merge rank-1 update with BLAS-3 update */
                 i__2 = j + 1 + j * a_dim1;
-                alpha.r = a[i__2].r;
-                alpha.i = a[i__2].i; // , expr subst
+                alpha.real = a[i__2].real;
+                alpha.imag = a[i__2].imag; // , expr subst
                 i__2 = j + 1 + j * a_dim1;
-                a[i__2].r = 1.f;
-                a[i__2].i = 0.f; // , expr subst
+                a[i__2].real = 1.f;
+                a[i__2].imag = 0.f; // , expr subst
                 i__2 = *n - j;
                 aocl_blas_ccopy(&i__2, &a[j + 1 + (j - 1) * a_dim1], &c__1,
                                 &work[j + 1 - j1 + 1 + jb * *n], &c__1);
@@ -489,8 +489,8 @@ void aocl_lapack_csytrf_aa(char *uplo, aocl_int64_t *n, scomplex *a, aocl_int64_
                 }
                 /* Recover T( J+1, J ) */
                 i__1 = j + 1 + j * a_dim1;
-                a[i__1].r = alpha.r;
-                a[i__1].i = alpha.i; // , expr subst
+                a[i__1].real = alpha.real;
+                a[i__1].imag = alpha.imag; // , expr subst
             }
             /* WORK(J+1, 1) stores H(J+1, 1) */
             i__1 = *n - j;
@@ -500,8 +500,8 @@ void aocl_lapack_csytrf_aa(char *uplo, aocl_int64_t *n, scomplex *a, aocl_int64_
     }
 L20:
     r__1 = aocl_lapack_sroundup_lwork(&lwkopt);
-    work[1].r = r__1;
-    work[1].i = 0.f; // , expr subst
+    work[1].real = r__1;
+    work[1].imag = 0.f; // , expr subst
     AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of CSYTRF_AA */

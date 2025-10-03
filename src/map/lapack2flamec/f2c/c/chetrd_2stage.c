@@ -340,10 +340,10 @@ void aocl_lapack_chetrd_2stage(char *vect, char *uplo, aocl_int64_t *n, scomplex
     }
     if(*info == 0)
     {
-        hous2[1].r = (real)lhmin;
-        hous2[1].i = 0.f; // , expr subst
-        work[1].r = (real)lwmin;
-        work[1].i = 0.f; // , expr subst
+        hous2[1].real = (real)lhmin;
+        hous2[1].imag = 0.f; // , expr subst
+        work[1].real = (real)lwmin;
+        work[1].imag = 0.f; // , expr subst
     }
     if(*info != 0)
     {
@@ -360,8 +360,8 @@ void aocl_lapack_chetrd_2stage(char *vect, char *uplo, aocl_int64_t *n, scomplex
     /* Quick return if possible */
     if(*n == 0)
     {
-        work[1].r = 1.f;
-        work[1].i = 0.f; // , expr subst
+        work[1].real = 1.f;
+        work[1].imag = 0.f; // , expr subst
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
@@ -388,10 +388,10 @@ void aocl_lapack_chetrd_2stage(char *vect, char *uplo, aocl_int64_t *n, scomplex
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
-    hous2[1].r = (real)lhmin;
-    hous2[1].i = 0.f; // , expr subst
-    work[1].r = (real)lwmin;
-    work[1].i = 0.f; // , expr subst
+    hous2[1].real = (real)lhmin;
+    hous2[1].imag = 0.f; // , expr subst
+    work[1].real = (real)lwmin;
+    work[1].imag = 0.f; // , expr subst
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
     return;
     /* End of CHETRD_2STAGE */

@@ -226,8 +226,8 @@ void aocl_lapack_zgerqf(aocl_int64_t *m, aocl_int64_t *n, dcomplex *a, aocl_int6
         {
             lwkopt = *m * nb;
         }
-        work[1].r = (doublereal)lwkopt;
-        work[1].i = 0.; // , expr subst
+        work[1].real = (doublereal)lwkopt;
+        work[1].imag = 0.; // , expr subst
         if(!lquery)
         {
             if(*lwork <= 0 || *n > 0 && *lwork < fla_max(1, *m))
@@ -331,8 +331,8 @@ void aocl_lapack_zgerqf(aocl_int64_t *m, aocl_int64_t *n, dcomplex *a, aocl_int6
     {
         aocl_lapack_zgerq2(&mu, &nu, &a[a_offset], lda, &tau[1], &work[1], &iinfo);
     }
-    work[1].r = (doublereal)iws;
-    work[1].i = 0.; // , expr subst
+    work[1].real = (doublereal)iws;
+    work[1].imag = 0.; // , expr subst
     AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of ZGERQF */

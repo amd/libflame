@@ -215,8 +215,8 @@ void zungl2_fla(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *k, dcomplex *a,
             }
             i__1 = *n - i__;
             i__2 = i__;
-            z__1.r = -tau[i__2].r;
-            z__1.i = -tau[i__2].i; // , expr subst
+            z__1.real = -tau[i__2].real;
+            z__1.imag = -tau[i__2].imag; // , expr subst
             aocl_blas_zscal(&i__1, &z__1, &a[i__ + (i__ + 1) * a_dim1], lda);
             i__1 = *n - i__;
             aocl_lapack_zlacgv(&i__1, &a[i__ + (i__ + 1) * a_dim1], lda);

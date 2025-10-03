@@ -261,16 +261,16 @@ void aocl_lapack_zgeqrf(aocl_int64_t *m, aocl_int64_t *n, dcomplex *a, aocl_int6
         {
             lwkopt = *n * nb;
         }
-        work[1].r = (doublereal)lwkopt;
-        work[1].i = 0.; // , expr subst
+        work[1].real = (doublereal)lwkopt;
+        work[1].imag = 0.; // , expr subst
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     /* Quick return if possible */
     if(k == 0)
     {
-        work[1].r = 1.;
-        work[1].i = 0.; // , expr subst
+        work[1].real = 1.;
+        work[1].imag = 0.; // , expr subst
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -344,8 +344,8 @@ void aocl_lapack_zgeqrf(aocl_int64_t *m, aocl_int64_t *n, dcomplex *a, aocl_int6
         i__1 = *n - i__ + 1;
         aocl_lapack_zgeqr2(&i__2, &i__1, &a[i__ + i__ * a_dim1], lda, &tau[i__], &work[1], &iinfo);
     }
-    work[1].r = (doublereal)iws;
-    work[1].i = 0.; // , expr subst
+    work[1].real = (doublereal)iws;
+    work[1].imag = 0.; // , expr subst
     AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of ZGEQRF */

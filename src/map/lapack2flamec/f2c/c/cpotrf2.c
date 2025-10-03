@@ -4,7 +4,7 @@
  -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for
  libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static scomplex c_b1 = {{1.f}, {0.f}};
+static scomplex c_b1 = {1.f, 0.f};
 static real c_b11 = -1.f;
 static real c_b12 = 1.f;
 /* > \brief \b CPOTRF2 */
@@ -200,7 +200,7 @@ void aocl_lapack_cpotrf2(char *uplo, aocl_int64_t *n, scomplex *a, aocl_int64_t 
     {
         /* Test for non-positive-definiteness */
         i__1 = a_dim1 + 1;
-        ajj = a[i__1].r;
+        ajj = a[i__1].real;
         if(ajj <= 0.f || sisnan_(&ajj))
         {
             *info = 1;
@@ -210,8 +210,8 @@ void aocl_lapack_cpotrf2(char *uplo, aocl_int64_t *n, scomplex *a, aocl_int64_t 
         /* Factor */
         i__1 = a_dim1 + 1;
         r__1 = sqrt(ajj);
-        a[i__1].r = r__1;
-        a[i__1].i = 0.f; // , expr subst
+        a[i__1].real = r__1;
+        a[i__1].imag = 0.f; // , expr subst
         /* Use recursive code */
     }
     else

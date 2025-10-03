@@ -211,7 +211,7 @@ void aocl_lapack_zsyr(char *uplo, aocl_int64_t *n, dcomplex *alpha, dcomplex *x,
         return;
     }
     /* Quick return if possible. */
-    if(*n == 0 || alpha->r == 0. && alpha->i == 0.)
+    if(*n == 0 || alpha->real == 0. && alpha->imag == 0.)
     {
         AOCL_DTL_TRACE_LOG_EXIT
         return;
@@ -237,13 +237,13 @@ void aocl_lapack_zsyr(char *uplo, aocl_int64_t *n, dcomplex *alpha, dcomplex *x,
             for(j = 1; j <= i__1; ++j)
             {
                 i__2 = j;
-                if(x[i__2].r != 0. || x[i__2].i != 0.)
+                if(x[i__2].real != 0. || x[i__2].imag != 0.)
                 {
                     i__2 = j;
-                    z__1.r = alpha->r * x[i__2].r - alpha->i * x[i__2].i;
-                    z__1.i = alpha->r * x[i__2].i + alpha->i * x[i__2].r; // , expr subst
-                    temp.r = z__1.r;
-                    temp.i = z__1.i; // , expr subst
+                    z__1.real = alpha->real * x[i__2].real - alpha->imag * x[i__2].imag;
+                    z__1.imag = alpha->real * x[i__2].imag + alpha->imag * x[i__2].real; // , expr subst
+                    temp.real = z__1.real;
+                    temp.imag = z__1.imag; // , expr subst
                     i__2 = j;
                     for(i__ = 1; i__ <= i__2; ++i__)
                     {
@@ -269,13 +269,13 @@ void aocl_lapack_zsyr(char *uplo, aocl_int64_t *n, dcomplex *alpha, dcomplex *x,
             for(j = 1; j <= i__1; ++j)
             {
                 i__2 = jx;
-                if(x[i__2].r != 0. || x[i__2].i != 0.)
+                if(x[i__2].real != 0. || x[i__2].imag != 0.)
                 {
                     i__2 = jx;
-                    z__1.r = alpha->r * x[i__2].r - alpha->i * x[i__2].i;
-                    z__1.i = alpha->r * x[i__2].i + alpha->i * x[i__2].r; // , expr subst
-                    temp.r = z__1.r;
-                    temp.i = z__1.i; // , expr subst
+                    z__1.real = alpha->real * x[i__2].real - alpha->imag * x[i__2].imag;
+                    z__1.imag = alpha->real * x[i__2].imag + alpha->imag * x[i__2].real; // , expr subst
+                    temp.real = z__1.real;
+                    temp.imag = z__1.imag; // , expr subst
                     ix = kx;
                     i__2 = j;
                     for(i__ = 1; i__ <= i__2; ++i__)
@@ -307,13 +307,13 @@ void aocl_lapack_zsyr(char *uplo, aocl_int64_t *n, dcomplex *alpha, dcomplex *x,
             for(j = 1; j <= i__1; ++j)
             {
                 i__2 = j;
-                if(x[i__2].r != 0. || x[i__2].i != 0.)
+                if(x[i__2].real != 0. || x[i__2].imag != 0.)
                 {
                     i__2 = j;
-                    z__1.r = alpha->r * x[i__2].r - alpha->i * x[i__2].i;
-                    z__1.i = alpha->r * x[i__2].i + alpha->i * x[i__2].r; // , expr subst
-                    temp.r = z__1.r;
-                    temp.i = z__1.i; // , expr subst
+                    z__1.real = alpha->real * x[i__2].real - alpha->imag * x[i__2].imag;
+                    z__1.imag = alpha->real * x[i__2].imag + alpha->imag * x[i__2].real; // , expr subst
+                    temp.real = z__1.real;
+                    temp.imag = z__1.imag; // , expr subst
                     i__2 = *n;
                     for(i__ = j; i__ <= i__2; ++i__)
                     {
@@ -339,13 +339,13 @@ void aocl_lapack_zsyr(char *uplo, aocl_int64_t *n, dcomplex *alpha, dcomplex *x,
             for(j = 1; j <= i__1; ++j)
             {
                 i__2 = jx;
-                if(x[i__2].r != 0. || x[i__2].i != 0.)
+                if(x[i__2].real != 0. || x[i__2].imag != 0.)
                 {
                     i__2 = jx;
-                    z__1.r = alpha->r * x[i__2].r - alpha->i * x[i__2].i;
-                    z__1.i = alpha->r * x[i__2].i + alpha->i * x[i__2].r; // , expr subst
-                    temp.r = z__1.r;
-                    temp.i = z__1.i; // , expr subst
+                    z__1.real = alpha->real * x[i__2].real - alpha->imag * x[i__2].imag;
+                    z__1.imag = alpha->real * x[i__2].imag + alpha->imag * x[i__2].real; // , expr subst
+                    temp.real = z__1.real;
+                    temp.imag = z__1.imag; // , expr subst
                     ix = jx;
                     i__2 = *n;
                     for(i__ = j; i__ <= i__2; ++i__)

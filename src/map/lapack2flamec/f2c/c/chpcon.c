@@ -221,7 +221,7 @@ void aocl_lapack_chpcon(char *uplo, aocl_int64_t *n, scomplex *ap, aocl_int_t *i
         for(i__ = *n; i__ >= 1; --i__)
         {
             i__1 = ip;
-            if(ipiv[i__] > 0 && (ap[i__1].r == 0.f && ap[i__1].i == 0.f))
+            if(ipiv[i__] > 0 && (ap[i__1].real == 0.f && ap[i__1].imag == 0.f))
             {
                 AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
                 return;
@@ -238,7 +238,7 @@ void aocl_lapack_chpcon(char *uplo, aocl_int64_t *n, scomplex *ap, aocl_int_t *i
         for(i__ = 1; i__ <= i__1; ++i__)
         {
             i__2 = ip;
-            if(ipiv[i__] > 0 && (ap[i__2].r == 0.f && ap[i__2].i == 0.f))
+            if(ipiv[i__] > 0 && (ap[i__2].real == 0.f && ap[i__2].imag == 0.f))
             {
                 AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
                 return;

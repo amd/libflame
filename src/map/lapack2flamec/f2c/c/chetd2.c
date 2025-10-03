@@ -4,7 +4,7 @@
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
  /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static scomplex c_b2 = {{0.f}, {0.f}};
+static scomplex c_b2 = {0.f, 0.f};
 static aocl_int64_t c__1 = 1;
 /* > \brief \b CHETD2 reduces a Hermitian matrix to real symmetric tridiagonal form by an unitary
  * similarity t ransformation (unblocked algorithm). */
@@ -268,19 +268,19 @@ void aocl_lapack_chetd2(char *uplo, aocl_int64_t *n, scomplex *a, aocl_int64_t *
         /* Reduce the upper triangle of A */
         i__1 = *n + *n * a_dim1;
         i__2 = *n + *n * a_dim1;
-        r__1 = a[i__2].r;
-        a[i__1].r = r__1;
-        a[i__1].i = 0.f; // , expr subst
+        r__1 = a[i__2].real;
+        a[i__1].real = r__1;
+        a[i__1].imag = 0.f; // , expr subst
         for(i__ = *n - 1; i__ >= 1; --i__)
         {
             /* Generate elementary reflector H(i) = I - tau * v * v**H */
             /* to annihilate A(1:i-1,i+1) */
             i__1 = i__ + (i__ + 1) * a_dim1;
-            alpha.r = a[i__1].r;
-            alpha.i = a[i__1].i; // , expr subst
+            alpha.real = a[i__1].real;
+            alpha.imag = a[i__1].imag; // , expr subst
             aocl_lapack_clarfg(&i__, &alpha, &a[(i__ + 1) * a_dim1 + 1], &c__1, &taui);
-            e[i__] = alpha.r;
-            if(taui.r != 0.f || taui.i != 0.f)
+            e[i__] = alpha.real;
+            if(taui.real != 0.f || taui.imag != 0.f)
             {
                 /* Apply H(i) from both sides to A(1:i,1:i) */
                 i__1 = i__ + (i__ + 1) * a_dim1;
@@ -290,20 +290,20 @@ void aocl_lapack_chetd2(char *uplo, aocl_int64_t *n, scomplex *a, aocl_int64_t *
                 aocl_blas_chemv(uplo, &i__, &taui, &a[a_offset], lda, &a[(i__ + 1) * a_dim1 + 1],
                                 &c__1, &c_b2, &tau[1], &c__1);
                 /* Compute w := x - 1/2 * tau * (x**H * v) * v */
-                q__3.r = -.5f;
-                q__3.i = -0.f; // , expr subst
-                q__2.r = q__3.r * taui.r - q__3.i * taui.i;
-                q__2.i = q__3.r * taui.i + q__3.i * taui.r; // , expr subst
+                q__3.real = -.5f;
+                q__3.imag = -0.f; // , expr subst
+                q__2.real = q__3.real * taui.real - q__3.imag * taui.imag;
+                q__2.imag = q__3.real * taui.imag + q__3.imag * taui.real; // , expr subst
                 aocl_lapack_cdotc_f2c(&q__4, &i__, &tau[1], &c__1, &a[(i__ + 1) * a_dim1 + 1], &c__1);
-                q__1.r = q__2.r * q__4.r - q__2.i * q__4.i;
-                q__1.i = q__2.r * q__4.i + q__2.i * q__4.r; // , expr subst
-                alpha.r = q__1.r;
-                alpha.i = q__1.i; // , expr subst
+                q__1.real = q__2.real * q__4.real - q__2.imag * q__4.imag;
+                q__1.imag = q__2.real * q__4.imag + q__2.imag * q__4.real; // , expr subst
+                alpha.real = q__1.real;
+                alpha.imag = q__1.imag; // , expr subst
                 aocl_blas_caxpy(&i__, &alpha, &a[(i__ + 1) * a_dim1 + 1], &c__1, &tau[1], &c__1);
                 /* Apply the transformation as a rank-2 update: */
                 /* A := A - v * w**H - w * v**H */
-                q__1.r = -1.f;
-                q__1.i = -0.f; // , expr subst
+                q__1.real = -1.f;
+                q__1.imag = -0.f; // , expr subst
                 aocl_blas_cher2(uplo, &i__, &q__1, &a[(i__ + 1) * a_dim1 + 1], &c__1, &tau[1],
                                 &c__1, &a[a_offset], lda);
             }
@@ -317,10 +317,10 @@ void aocl_lapack_chetd2(char *uplo, aocl_int64_t *n, scomplex *a, aocl_int64_t *
             }
             i__1 = i__ + (i__ + 1) * a_dim1;
             i__2 = i__;
-            a[i__1].r = e[i__2];
-            a[i__1].i = 0.f; // , expr subst
+            a[i__1].real = e[i__2];
+            a[i__1].imag = 0.f; // , expr subst
             i__1 = i__ + 1 + (i__ + 1) * a_dim1;
-            d__[i__ + 1] = a[i__1].r;
+            d__[i__ + 1] = a[i__1].real;
             i__1 = i__;
             tau[i__1].real = taui.real;
             tau[i__1].imag = taui.imag; // , expr subst
@@ -349,8 +349,8 @@ void aocl_lapack_chetd2(char *uplo, aocl_int64_t *n, scomplex *a, aocl_int64_t *
             /* Computing fla_min */
             i__3 = i__ + 2;
             aocl_lapack_clarfg(&i__2, &alpha, &a[fla_min(i__3, *n) + i__ * a_dim1], &c__1, &taui);
-            e[i__] = alpha.r;
-            if(taui.r != 0.f || taui.i != 0.f)
+            e[i__] = alpha.real;
+            if(taui.real != 0.f || taui.imag != 0.f)
             {
                 /* Apply H(i) from both sides to A(i+1:n,i+1:n) */
                 i__2 = i__ + 1 + i__ * a_dim1;
@@ -367,17 +367,17 @@ void aocl_lapack_chetd2(char *uplo, aocl_int64_t *n, scomplex *a, aocl_int64_t *
                 q__2.imag = q__3.real * taui.imag + q__3.imag * taui.real; // , expr subst
                 i__2 = *n - i__;
                 aocl_lapack_cdotc_f2c(&q__4, &i__2, &tau[i__], &c__1, &a[i__ + 1 + i__ * a_dim1], &c__1);
-                q__1.r = q__2.r * q__4.r - q__2.i * q__4.i;
-                q__1.i = q__2.r * q__4.i + q__2.i * q__4.r; // , expr subst
-                alpha.r = q__1.r;
-                alpha.i = q__1.i; // , expr subst
+                q__1.real = q__2.real * q__4.real - q__2.imag * q__4.imag;
+                q__1.imag = q__2.real * q__4.imag + q__2.imag * q__4.real; // , expr subst
+                alpha.real = q__1.real;
+                alpha.imag = q__1.imag; // , expr subst
                 i__2 = *n - i__;
                 aocl_blas_caxpy(&i__2, &alpha, &a[i__ + 1 + i__ * a_dim1], &c__1, &tau[i__], &c__1);
                 /* Apply the transformation as a rank-2 update: */
                 /* A := A - v * w**H - w * v**H */
                 i__2 = *n - i__;
-                q__1.r = -1.f;
-                q__1.i = -0.f; // , expr subst
+                q__1.real = -1.f;
+                q__1.imag = -0.f; // , expr subst
                 aocl_blas_cher2(uplo, &i__2, &q__1, &a[i__ + 1 + i__ * a_dim1], &c__1, &tau[i__],
                                 &c__1, &a[i__ + 1 + (i__ + 1) * a_dim1], lda);
             }
@@ -391,17 +391,17 @@ void aocl_lapack_chetd2(char *uplo, aocl_int64_t *n, scomplex *a, aocl_int64_t *
             }
             i__2 = i__ + 1 + i__ * a_dim1;
             i__3 = i__;
-            a[i__2].r = e[i__3];
-            a[i__2].i = 0.f; // , expr subst
+            a[i__2].real = e[i__3];
+            a[i__2].imag = 0.f; // , expr subst
             i__2 = i__ + i__ * a_dim1;
-            d__[i__] = a[i__2].r;
+            d__[i__] = a[i__2].real;
             i__2 = i__;
-            tau[i__2].r = taui.r;
-            tau[i__2].i = taui.i; // , expr subst
+            tau[i__2].real = taui.real;
+            tau[i__2].imag = taui.imag; // , expr subst
             /* L20: */
         }
         i__1 = *n + *n * a_dim1;
-        d__[*n] = a[i__1].r;
+        d__[*n] = a[i__1].real;
     }
     AOCL_DTL_TRACE_LOG_EXIT
     return;

@@ -73,7 +73,7 @@ void cspffrtx_fla(scomplex *ap, aocl_int64_t *n, aocl_int64_t *ncolm, scomplex *
     scomplex z__1;
     aocl_int64_t i__1, k, kc;
     scomplex r1;
-    scomplex c_b1 = {{1.}, {0.}};
+    scomplex c_b1 = {1., 0.};
     aocl_int64_t c__1 = 1;
 
     --ap;
@@ -87,17 +87,17 @@ void cspffrtx_fla(scomplex *ap, aocl_int64_t *n, aocl_int64_t *ncolm, scomplex *
         /* where L(k) is the k-th column of L */
 
         /* Skip trailing matrix update if zero diagonal element is encountered */
-        if(ap[kc].r == 0 && ap[kc].i == 0)
+        if(ap[kc].real == 0 && ap[kc].imag == 0)
         {
-            z__1.r = 0;
-            z__1.i = 0;
+            z__1.real = 0;
+            z__1.imag = 0;
         }
         else
         {
             c_div(&z__1, &c_b1, &ap[kc]);
         }
-        r1.r = -z__1.r;
-        r1.i = -z__1.i;
+        r1.real = -z__1.real;
+        r1.imag = -z__1.imag;
 
         /* Perform a rank-1 update of A(k+1:n,k+1:n) as */
         /* A := A - L(k)*D(k)*L(k)**T = A - W(k)*(1/D(k))*W(k)**T */

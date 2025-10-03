@@ -4,7 +4,7 @@
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
  /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static dcomplex c_b1 = {{1.}, {0.}};
+static dcomplex c_b1 = {1., 0.};
 static aocl_int64_t c__1 = 1;
 static aocl_int64_t c_n1 = -1;
 static doublereal c_b18 = 2.;
@@ -425,10 +425,10 @@ void aocl_lapack_ztrsyl3(char *trana, char *tranb, aocl_int64_t *isgn, aocl_int6
         }
     }
     sgn = (doublereal)(*isgn);
-    z__1.r = sgn;
-    z__1.i = 0.; // , expr subst
-    csgn.r = z__1.r;
-    csgn.i = z__1.i; // , expr subst
+    z__1.real = sgn;
+    z__1.imag = 0.; // , expr subst
+    csgn.real = z__1.real;
+    csgn.imag = z__1.imag; // , expr subst
     if(notrna && notrnb)
     {
         /* Solve A*X + ISGN*X*B = scale*C. */
@@ -583,8 +583,8 @@ void aocl_lapack_ztrsyl3(char *trana, char *tranb, aocl_int64_t *isgn, aocl_int6
                     i__2 = i2 - i1;
                     i__3 = l2 - l1;
                     i__4 = k2 - k1;
-                    z__1.r = -1.;
-                    z__1.i = -0.; // , expr subst
+                    z__1.real = -1.;
+                    z__1.imag = -0.; // , expr subst
                     aocl_blas_zgemm("N", "N", &i__2, &i__3, &i__4, &z__1, &a[i1 + k1 * a_dim1], lda,
                                     &c__[k1 + l1 * c_dim1], ldc, &c_b1, &c__[i1 + l1 * c_dim1],
                                     ldc);
@@ -668,8 +668,8 @@ void aocl_lapack_ztrsyl3(char *trana, char *tranb, aocl_int64_t *isgn, aocl_int6
                     i__3 = k2 - k1;
                     i__4 = j2 - j1;
                     i__5 = l2 - l1;
-                    z__1.r = -csgn.r;
-                    z__1.i = -csgn.i; // , expr subst
+                    z__1.real = -csgn.real;
+                    z__1.imag = -csgn.imag; // , expr subst
                     aocl_blas_zgemm("N", "N", &i__3, &i__4, &i__5, &z__1, &c__[k1 + l1 * c_dim1],
                                     ldc, &b[l1 + j1 * b_dim1], ldb, &c_b1, &c__[k1 + j1 * c_dim1],
                                     ldc);
@@ -834,8 +834,8 @@ void aocl_lapack_ztrsyl3(char *trana, char *tranb, aocl_int64_t *isgn, aocl_int6
                     i__4 = i2 - i1;
                     i__5 = l2 - l1;
                     i__6 = k2 - k1;
-                    z__1.r = -1.;
-                    z__1.i = -0.; // , expr subst
+                    z__1.real = -1.;
+                    z__1.imag = -0.; // , expr subst
                     aocl_blas_zgemm("C", "N", &i__4, &i__5, &i__6, &z__1, &a[k1 + i1 * a_dim1], lda,
                                     &c__[k1 + l1 * c_dim1], ldc, &c_b1, &c__[i1 + l1 * c_dim1],
                                     ldc);
@@ -919,8 +919,8 @@ void aocl_lapack_ztrsyl3(char *trana, char *tranb, aocl_int64_t *isgn, aocl_int6
                     i__4 = k2 - k1;
                     i__5 = j2 - j1;
                     i__6 = l2 - l1;
-                    z__1.r = -csgn.r;
-                    z__1.i = -csgn.i; // , expr subst
+                    z__1.real = -csgn.real;
+                    z__1.imag = -csgn.imag; // , expr subst
                     aocl_blas_zgemm("N", "N", &i__4, &i__5, &i__6, &z__1, &c__[k1 + l1 * c_dim1],
                                     ldc, &b[l1 + j1 * b_dim1], ldb, &c_b1, &c__[k1 + j1 * c_dim1],
                                     ldc);
@@ -1084,8 +1084,8 @@ void aocl_lapack_ztrsyl3(char *trana, char *tranb, aocl_int64_t *isgn, aocl_int6
                     i__3 = i2 - i1;
                     i__4 = l2 - l1;
                     i__5 = k2 - k1;
-                    z__1.r = -1.;
-                    z__1.i = -0.; // , expr subst
+                    z__1.real = -1.;
+                    z__1.imag = -0.; // , expr subst
                     aocl_blas_zgemm("C", "N", &i__3, &i__4, &i__5, &z__1, &a[k1 + i1 * a_dim1], lda,
                                     &c__[k1 + l1 * c_dim1], ldc, &c_b1, &c__[i1 + l1 * c_dim1],
                                     ldc);
@@ -1169,8 +1169,8 @@ void aocl_lapack_ztrsyl3(char *trana, char *tranb, aocl_int64_t *isgn, aocl_int6
                     i__3 = k2 - k1;
                     i__4 = j2 - j1;
                     i__5 = l2 - l1;
-                    z__1.r = -csgn.r;
-                    z__1.i = -csgn.i; // , expr subst
+                    z__1.real = -csgn.real;
+                    z__1.imag = -csgn.imag; // , expr subst
                     aocl_blas_zgemm("N", "C", &i__3, &i__4, &i__5, &z__1, &c__[k1 + l1 * c_dim1],
                                     ldc, &b[j1 + l1 * b_dim1], ldb, &c_b1, &c__[k1 + j1 * c_dim1],
                                     ldc);
@@ -1333,8 +1333,8 @@ void aocl_lapack_ztrsyl3(char *trana, char *tranb, aocl_int64_t *isgn, aocl_int6
                     i__2 = i2 - i1;
                     i__3 = l2 - l1;
                     i__4 = k2 - k1;
-                    z__1.r = -1.;
-                    z__1.i = -0.; // , expr subst
+                    z__1.real = -1.;
+                    z__1.imag = -0.; // , expr subst
                     aocl_blas_zgemm("N", "N", &i__2, &i__3, &i__4, &z__1, &a[i1 + k1 * a_dim1], lda,
                                     &c__[k1 + l1 * c_dim1], ldc, &c_b1, &c__[i1 + l1 * c_dim1],
                                     ldc);
@@ -1418,8 +1418,8 @@ void aocl_lapack_ztrsyl3(char *trana, char *tranb, aocl_int64_t *isgn, aocl_int6
                     i__2 = k2 - k1;
                     i__3 = j2 - j1;
                     i__4 = l2 - l1;
-                    z__1.r = -csgn.r;
-                    z__1.i = -csgn.i; // , expr subst
+                    z__1.real = -csgn.real;
+                    z__1.imag = -csgn.imag; // , expr subst
                     aocl_blas_zgemm("N", "C", &i__2, &i__3, &i__4, &z__1, &c__[k1 + l1 * c_dim1],
                                     ldc, &b[j1 + l1 * b_dim1], ldb, &c_b1, &c__[k1 + j1 * c_dim1],
                                     ldc);
@@ -1500,7 +1500,7 @@ void aocl_lapack_ztrsyl3(char *trana, char *tranb, aocl_int64_t *isgn, aocl_int6
         /* How much can the normwise largest entry be upscaled? */
         /* Computing fla_max */
         i__1 = c_dim1 + 1;
-        d__3 = (d__1 = c__[i__1].r, f2c_abs(d__1));
+        d__3 = (d__1 = c__[i__1].real, f2c_abs(d__1));
         d__4 = (d__2 = d_imag(&c__[c_dim1 + 1]), f2c_abs(d__2)); // , expr subst
         scal = fla_max(d__3, d__4);
         i__1 = *m;
@@ -1511,7 +1511,7 @@ void aocl_lapack_ztrsyl3(char *trana, char *tranb, aocl_int64_t *isgn, aocl_int6
             {
                 /* Computing fla_max */
                 i__3 = k + l * c_dim1;
-                d__3 = scal, d__4 = (d__1 = c__[i__3].r, f2c_abs(d__1));
+                d__3 = scal, d__4 = (d__1 = c__[i__3].real, f2c_abs(d__1));
                 d__3 = fla_max(d__3, d__4);
                 d__4 = (d__2 = d_imag(&c__[k + l * c_dim1]), f2c_abs(d__2)); // ; expr subst
                 scal = fla_max(d__3, d__4);

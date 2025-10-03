@@ -5,8 +5,8 @@
  /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static aocl_int64_t c__1 = 1;
-static dcomplex c_b19 = {{1.}, {0.}};
-static dcomplex c_b20 = {{0.}, {0.}};
+static dcomplex c_b19 = {1., 0.};
+static dcomplex c_b20 = {0., 0.};
 static logical c_false = FALSE_;
 static aocl_int64_t c__3 = 3;
 /* > \brief \b ZTGSNA */
@@ -488,8 +488,8 @@ void aocl_lapack_ztgsna(char *job, char *howmny, logical *select, aocl_int64_t *
         {
             lwmin = *n;
         }
-        work[1].r = (doublereal)lwmin;
-        work[1].i = 0.; // , expr subst
+        work[1].real = (doublereal)lwmin;
+        work[1].imag = 0.; // , expr subst
         if(*mm < *m)
         {
             *info = -15;
@@ -540,13 +540,13 @@ void aocl_lapack_ztgsna(char *job, char *howmny, logical *select, aocl_int64_t *
             aocl_blas_zgemv("N", n, n, &c_b19, &a[a_offset], lda, &vr[ks * vr_dim1 + 1], &c__1,
                             &c_b20, &work[1], &c__1);
             aocl_lapack_zdotc_f2c(&z__1, n, &work[1], &c__1, &vl[ks * vl_dim1 + 1], &c__1);
-            yhax.r = z__1.r;
-            yhax.i = z__1.i; // , expr subst
+            yhax.real = z__1.real;
+            yhax.imag = z__1.imag; // , expr subst
             aocl_blas_zgemv("N", n, n, &c_b19, &b[b_offset], ldb, &vr[ks * vr_dim1 + 1], &c__1,
                             &c_b20, &work[1], &c__1);
             aocl_lapack_zdotc_f2c(&z__1, n, &work[1], &c__1, &vl[ks * vl_dim1 + 1], &c__1);
-            yhbx.r = z__1.r;
-            yhbx.i = z__1.i; // , expr subst
+            yhbx.real = z__1.real;
+            yhbx.imag = z__1.imag; // , expr subst
             d__1 = z_abs(&yhax);
             d__2 = z_abs(&yhbx);
             cond = dlapy2_(&d__1, &d__2);
@@ -603,8 +603,8 @@ void aocl_lapack_ztgsna(char *job, char *howmny, logical *select, aocl_int64_t *
         }
     L20:;
     }
-    work[1].r = (doublereal)lwmin;
-    work[1].i = 0.; // , expr subst
+    work[1].real = (doublereal)lwmin;
+    work[1].imag = 0.; // , expr subst
     AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of ZTGSNA */

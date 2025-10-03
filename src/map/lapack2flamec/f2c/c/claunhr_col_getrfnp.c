@@ -4,7 +4,7 @@
  with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for
  libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static scomplex c_b1 = {{1.f}, {0.f}};
+static scomplex c_b1 = {1.f, 0.f};
 static aocl_int64_t c__1 = 1;
 static aocl_int64_t c_n1 = -1;
 /* > \brief \b CLAUNHR_COL_GETRFNP */
@@ -269,8 +269,8 @@ void aocl_lapack_claunhr_col_getrfnp(aocl_int64_t *m, aocl_int64_t *n, scomplex 
                     /* Update trailing submatrix. */
                     i__3 = *m - j - jb + 1;
                     i__4 = *n - j - jb + 1;
-                    q__1.r = -1.f;
-                    q__1.i = -0.f; // , expr subst
+                    q__1.real = -1.f;
+                    q__1.imag = -0.f; // , expr subst
                     aocl_blas_cgemm("No transpose", "No transpose", &i__3, &i__4, &jb, &q__1,
                                     &a[j + jb + j * a_dim1], lda, &a[j + (j + jb) * a_dim1], lda,
                                     &c_b1, &a[j + jb + (j + jb) * a_dim1], lda);

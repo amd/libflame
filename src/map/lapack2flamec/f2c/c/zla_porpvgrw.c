@@ -185,7 +185,7 @@ doublereal aocl_lapack_zla_porpvgrw(char *uplo, aocl_int64_t *ncols, dcomplex *a
             {
                 /* Computing MAX */
                 i__3 = i__ + j * a_dim1;
-                d__3 = (d__1 = a[i__3].r, f2c_abs(d__1))
+                d__3 = (d__1 = a[i__3].real, f2c_abs(d__1))
                        + (d__2 = d_imag(&a[i__ + j * a_dim1]), f2c_abs(d__2));
                 d__4 = work[*ncols + j]; // , expr subst
                 work[*ncols + j] = fla_max(d__3, d__4);
@@ -202,7 +202,7 @@ doublereal aocl_lapack_zla_porpvgrw(char *uplo, aocl_int64_t *ncols, dcomplex *a
             {
                 /* Computing MAX */
                 i__3 = i__ + j * a_dim1;
-                d__3 = (d__1 = a[i__3].r, f2c_abs(d__1))
+                d__3 = (d__1 = a[i__3].real, f2c_abs(d__1))
                        + (d__2 = d_imag(&a[i__ + j * a_dim1]), f2c_abs(d__2));
                 d__4 = work[*ncols + j]; // , expr subst
                 work[*ncols + j] = fla_max(d__3, d__4);
@@ -221,7 +221,7 @@ doublereal aocl_lapack_zla_porpvgrw(char *uplo, aocl_int64_t *ncols, dcomplex *a
             {
                 /* Computing MAX */
                 i__3 = i__ + j * af_dim1;
-                d__3 = (d__1 = af[i__3].r, f2c_abs(d__1))
+                d__3 = (d__1 = af[i__3].real, f2c_abs(d__1))
                        + (d__2 = d_imag(&af[i__ + j * af_dim1]), f2c_abs(d__2));
                 d__4 = work[j]; // , expr subst
                 work[j] = fla_max(d__3, d__4);
@@ -238,7 +238,7 @@ doublereal aocl_lapack_zla_porpvgrw(char *uplo, aocl_int64_t *ncols, dcomplex *a
             {
                 /* Computing MAX */
                 i__3 = i__ + j * af_dim1;
-                d__3 = (d__1 = af[i__3].r, f2c_abs(d__1))
+                d__3 = (d__1 = af[i__3].real, f2c_abs(d__1))
                        + (d__2 = d_imag(&af[i__ + j * af_dim1]), f2c_abs(d__2));
                 d__4 = work[j]; // , expr subst
                 work[j] = fla_max(d__3, d__4);

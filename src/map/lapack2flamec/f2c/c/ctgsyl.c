@@ -4,13 +4,13 @@
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
  /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static scomplex c_b1 = {{0.f}, {0.f}};
+static scomplex c_b1 = {0.f, 0.f};
 static aocl_int64_t c__2 = 2;
 static aocl_int64_t c_n1 = -1;
 static aocl_int64_t c__5 = 5;
 static aocl_int64_t c__1 = 1;
-static scomplex c_b44 = {{-1.f}, {0.f}};
-static scomplex c_b45 = {{1.f}, {0.f}};
+static scomplex c_b44 = {-1.f, 0.f};
+static scomplex c_b45 = {1.f, 0.f};
 /* > \brief \b CTGSYL */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -481,8 +481,8 @@ void aocl_lapack_ctgsyl(char *trans, aocl_int64_t *ijob, aocl_int64_t *m, aocl_i
             lwmin = 1;
         }
         r__1 = aocl_lapack_sroundup_lwork(&lwmin);
-        work[1].r = r__1;
-        work[1].i = 0.f; // , expr subst
+        work[1].real = r__1;
+        work[1].imag = 0.f; // , expr subst
         if(*lwork < lwmin && !lquery)
         {
             *info = -20;
@@ -662,11 +662,11 @@ L70:
                         i__3 = js - 1;
                         for(k = 1; k <= i__3; ++k)
                         {
-                            q__1.r = scaloc;
-                            q__1.i = 0.f; // , expr subst
+                            q__1.real = scaloc;
+                            q__1.imag = 0.f; // , expr subst
                             aocl_blas_cscal(m, &q__1, &c__[k * c_dim1 + 1], &c__1);
-                            q__1.r = scaloc;
-                            q__1.i = 0.f; // , expr subst
+                            q__1.real = scaloc;
+                            q__1.imag = 0.f; // , expr subst
                             aocl_blas_cscal(m, &q__1, &f[k * f_dim1 + 1], &c__1);
                             /* L80: */
                         }
@@ -674,12 +674,12 @@ L70:
                         for(k = js; k <= i__3; ++k)
                         {
                             i__4 = is - 1;
-                            q__1.r = scaloc;
-                            q__1.i = 0.f; // , expr subst
+                            q__1.real = scaloc;
+                            q__1.imag = 0.f; // , expr subst
                             aocl_blas_cscal(&i__4, &q__1, &c__[k * c_dim1 + 1], &c__1);
                             i__4 = is - 1;
-                            q__1.r = scaloc;
-                            q__1.i = 0.f; // , expr subst
+                            q__1.real = scaloc;
+                            q__1.imag = 0.f; // , expr subst
                             aocl_blas_cscal(&i__4, &q__1, &f[k * f_dim1 + 1], &c__1);
                             /* L90: */
                         }
@@ -687,23 +687,23 @@ L70:
                         for(k = js; k <= i__3; ++k)
                         {
                             i__4 = *m - ie;
-                            q__1.r = scaloc;
-                            q__1.i = 0.f; // , expr subst
+                            q__1.real = scaloc;
+                            q__1.imag = 0.f; // , expr subst
                             aocl_blas_cscal(&i__4, &q__1, &c__[ie + 1 + k * c_dim1], &c__1);
                             i__4 = *m - ie;
-                            q__1.r = scaloc;
-                            q__1.i = 0.f; // , expr subst
+                            q__1.real = scaloc;
+                            q__1.imag = 0.f; // , expr subst
                             aocl_blas_cscal(&i__4, &q__1, &f[ie + 1 + k * f_dim1], &c__1);
                             /* L100: */
                         }
                         i__3 = *n;
                         for(k = je + 1; k <= i__3; ++k)
                         {
-                            q__1.r = scaloc;
-                            q__1.i = 0.f; // , expr subst
+                            q__1.real = scaloc;
+                            q__1.imag = 0.f; // , expr subst
                             aocl_blas_cscal(m, &q__1, &c__[k * c_dim1 + 1], &c__1);
-                            q__1.r = scaloc;
-                            q__1.i = 0.f; // , expr subst
+                            q__1.real = scaloc;
+                            q__1.imag = 0.f; // , expr subst
                             aocl_blas_cscal(m, &q__1, &f[k * f_dim1 + 1], &c__1);
                             /* L110: */
                         }
@@ -801,11 +801,11 @@ L70:
                     i__3 = js - 1;
                     for(k = 1; k <= i__3; ++k)
                     {
-                        q__1.r = scaloc;
-                        q__1.i = 0.f; // , expr subst
+                        q__1.real = scaloc;
+                        q__1.imag = 0.f; // , expr subst
                         aocl_blas_cscal(m, &q__1, &c__[k * c_dim1 + 1], &c__1);
-                        q__1.r = scaloc;
-                        q__1.i = 0.f; // , expr subst
+                        q__1.real = scaloc;
+                        q__1.imag = 0.f; // , expr subst
                         aocl_blas_cscal(m, &q__1, &f[k * f_dim1 + 1], &c__1);
                         /* L160: */
                     }
@@ -813,12 +813,12 @@ L70:
                     for(k = js; k <= i__3; ++k)
                     {
                         i__4 = is - 1;
-                        q__1.r = scaloc;
-                        q__1.i = 0.f; // , expr subst
+                        q__1.real = scaloc;
+                        q__1.imag = 0.f; // , expr subst
                         aocl_blas_cscal(&i__4, &q__1, &c__[k * c_dim1 + 1], &c__1);
                         i__4 = is - 1;
-                        q__1.r = scaloc;
-                        q__1.i = 0.f; // , expr subst
+                        q__1.real = scaloc;
+                        q__1.imag = 0.f; // , expr subst
                         aocl_blas_cscal(&i__4, &q__1, &f[k * f_dim1 + 1], &c__1);
                         /* L170: */
                     }
@@ -826,23 +826,23 @@ L70:
                     for(k = js; k <= i__3; ++k)
                     {
                         i__4 = *m - ie;
-                        q__1.r = scaloc;
-                        q__1.i = 0.f; // , expr subst
+                        q__1.real = scaloc;
+                        q__1.imag = 0.f; // , expr subst
                         aocl_blas_cscal(&i__4, &q__1, &c__[ie + 1 + k * c_dim1], &c__1);
                         i__4 = *m - ie;
-                        q__1.r = scaloc;
-                        q__1.i = 0.f; // , expr subst
+                        q__1.real = scaloc;
+                        q__1.imag = 0.f; // , expr subst
                         aocl_blas_cscal(&i__4, &q__1, &f[ie + 1 + k * f_dim1], &c__1);
                         /* L180: */
                     }
                     i__3 = *n;
                     for(k = je + 1; k <= i__3; ++k)
                     {
-                        q__1.r = scaloc;
-                        q__1.i = 0.f; // , expr subst
+                        q__1.real = scaloc;
+                        q__1.imag = 0.f; // , expr subst
                         aocl_blas_cscal(m, &q__1, &c__[k * c_dim1 + 1], &c__1);
-                        q__1.r = scaloc;
-                        q__1.i = 0.f; // , expr subst
+                        q__1.real = scaloc;
+                        q__1.imag = 0.f; // , expr subst
                         aocl_blas_cscal(m, &q__1, &f[k * f_dim1 + 1], &c__1);
                         /* L190: */
                     }
@@ -875,8 +875,8 @@ L70:
         }
     }
     r__1 = aocl_lapack_sroundup_lwork(&lwmin);
-    work[1].r = r__1;
-    work[1].i = 0.f; // , expr subst
+    work[1].real = r__1;
+    work[1].imag = 0.f; // , expr subst
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
     return;
     /* End of CTGSYL */

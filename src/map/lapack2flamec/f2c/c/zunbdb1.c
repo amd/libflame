@@ -329,8 +329,8 @@ void aocl_lapack_zunbdb1(aocl_int64_t *m, aocl_int64_t *p, aocl_int64_t *q, dcom
         i__2 = iorbdb5 + lorbdb5 - 1; // , expr subst
         lworkopt = fla_max(i__1, i__2);
         lworkmin = lworkopt;
-        work[1].r = (doublereal)lworkopt;
-        work[1].i = 0.; // , expr subst
+        work[1].real = (doublereal)lworkopt;
+        work[1].imag = 0.; // , expr subst
         if(*lwork < lworkmin && !lquery)
         {
             *info = -14;
@@ -358,16 +358,16 @@ void aocl_lapack_zunbdb1(aocl_int64_t *m, aocl_int64_t *p, aocl_int64_t *q, dcom
         i__2 = *m - *p - i__ + 1;
         aocl_lapack_zlarfgp(&i__2, &x21[i__ + i__ * x21_dim1], &x21[i__ + 1 + i__ * x21_dim1],
                             &c__1, &taup2[i__]);
-        theta[i__] = atan2((doublereal)x21[i__ + i__ * x21_dim1].r,
-                           (doublereal)x11[i__ + i__ * x11_dim1].r);
+        theta[i__] = atan2((doublereal)x21[i__ + i__ * x21_dim1].real,
+                           (doublereal)x11[i__ + i__ * x11_dim1].real);
         c__ = cos(theta[i__]);
         s = sin(theta[i__]);
         i__2 = i__ + i__ * x11_dim1;
-        x11[i__2].r = 1.;
-        x11[i__2].i = 0.; // , expr subst
+        x11[i__2].real = 1.;
+        x11[i__2].imag = 0.; // , expr subst
         i__2 = i__ + i__ * x21_dim1;
-        x21[i__2].r = 1.;
-        x21[i__2].i = 0.; // , expr subst
+        x21[i__2].real = 1.;
+        x21[i__2].imag = 0.; // , expr subst
         i__2 = *p - i__ + 1;
         i__3 = *q - i__;
         d_cnjg(&z__1, &taup1[i__]);
@@ -389,10 +389,10 @@ void aocl_lapack_zunbdb1(aocl_int64_t *m, aocl_int64_t *p, aocl_int64_t *q, dcom
             aocl_lapack_zlarfgp(&i__2, &x21[i__ + (i__ + 1) * x21_dim1],
                                 &x21[i__ + (i__ + 2) * x21_dim1], ldx21, &tauq1[i__]);
             i__2 = i__ + (i__ + 1) * x21_dim1;
-            s = x21[i__2].r;
+            s = x21[i__2].real;
             i__2 = i__ + (i__ + 1) * x21_dim1;
-            x21[i__2].r = 1.;
-            x21[i__2].i = 0.; // , expr subst
+            x21[i__2].real = 1.;
+            x21[i__2].imag = 0.; // , expr subst
             i__2 = *p - i__;
             i__3 = *q - i__;
             aocl_lapack_zlarf("R", &i__2, &i__3, &x21[i__ + (i__ + 1) * x21_dim1], ldx21,

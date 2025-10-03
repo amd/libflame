@@ -4,7 +4,7 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static scomplex c_b1 = {{1.f}, {0.f}};
+static scomplex c_b1 = {1.f, 0.f};
 static aocl_int64_t c__1 = 1;
 /* > \brief \b CLARFT forms the triangular factor T of a block reflector H = I - vtvH */
 /* =========== DOCUMENTATION =========== */
@@ -243,15 +243,15 @@ void aocl_lapack_clarft(char *direct, char *storev, aocl_int64_t *n, aocl_int64_
         {
             prevlastv = fla_max(prevlastv, i__);
             i__2 = i__;
-            if(tau[i__2].r == 0.f && tau[i__2].i == 0.f)
+            if(tau[i__2].real == 0.f && tau[i__2].imag == 0.f)
             {
                 /* H(i) = I */
                 i__2 = i__;
                 for(j = 1; j <= i__2; ++j)
                 {
                     i__3 = j + i__ * t_dim1;
-                    t[i__3].r = 0.f;
-                    t[i__3].i = 0.f; // , expr subst
+                    t[i__3].real = 0.f;
+                    t[i__3].imag = 0.f; // , expr subst
                 }
             }
             else
@@ -264,7 +264,7 @@ void aocl_lapack_clarft(char *direct, char *storev, aocl_int64_t *n, aocl_int64_
                     for(lastv = *n; lastv >= i__2; --lastv)
                     {
                         i__3 = lastv + i__ * v_dim1;
-                        if(v[i__3].r != 0.f || v[i__3].i != 0.f)
+                        if(v[i__3].real != 0.f || v[i__3].imag != 0.f)
                         {
                             break;
                         }
@@ -274,22 +274,22 @@ void aocl_lapack_clarft(char *direct, char *storev, aocl_int64_t *n, aocl_int64_
                     {
                         i__3 = j + i__ * t_dim1;
                         i__4 = i__;
-                        q__2.r = -tau[i__4].r;
-                        q__2.i = -tau[i__4].i; // , expr subst
-                        q__3.r = v[i__ + j * v_dim1].r;
-                        q__3.i = -v[i__ + j * v_dim1].i;
-                        q__1.r = q__2.r * q__3.r - q__2.i * q__3.i;
-                        q__1.i = q__2.r * q__3.i + q__2.i * q__3.r; // , expr subst
-                        t[i__3].r = q__1.r;
-                        t[i__3].i = q__1.i; // , expr subst
+                        q__2.real = -tau[i__4].real;
+                        q__2.imag = -tau[i__4].imag; // , expr subst
+                        q__3.real = v[i__ + j * v_dim1].real;
+                        q__3.imag = -v[i__ + j * v_dim1].imag;
+                        q__1.real = q__2.real * q__3.real - q__2.imag * q__3.imag;
+                        q__1.imag = q__2.real * q__3.imag + q__2.imag * q__3.real; // , expr subst
+                        t[i__3].real = q__1.real;
+                        t[i__3].imag = q__1.imag; // , expr subst
                     }
                     j = fla_min(lastv, prevlastv);
                     /* T(1:i-1,i) := - tau(i) * V(i:j,1:i-1)**H * V(i:j,i) */
                     i__2 = j - i__;
                     i__3 = i__ - 1;
                     i__4 = i__;
-                    q__1.r = -tau[i__4].r;
-                    q__1.i = -tau[i__4].i; // , expr subst
+                    q__1.real = -tau[i__4].real;
+                    q__1.imag = -tau[i__4].imag; // , expr subst
                     aocl_blas_cgemv("Conjugate transpose", &i__2, &i__3, &q__1,
                                     &v[i__ + 1 + v_dim1], ldv, &v[i__ + 1 + i__ * v_dim1], &c__1,
                                     &c_b1, &t[i__ * t_dim1 + 1], &c__1);
@@ -301,7 +301,7 @@ void aocl_lapack_clarft(char *direct, char *storev, aocl_int64_t *n, aocl_int64_
                     for(lastv = *n; lastv >= i__2; --lastv)
                     {
                         i__3 = i__ + lastv * v_dim1;
-                        if(v[i__3].r != 0.f || v[i__3].i != 0.f)
+                        if(v[i__3].real != 0.f || v[i__3].imag != 0.f)
                         {
                             break;
                         }
@@ -311,21 +311,21 @@ void aocl_lapack_clarft(char *direct, char *storev, aocl_int64_t *n, aocl_int64_
                     {
                         i__3 = j + i__ * t_dim1;
                         i__4 = i__;
-                        q__2.r = -tau[i__4].r;
-                        q__2.i = -tau[i__4].i; // , expr subst
+                        q__2.real = -tau[i__4].real;
+                        q__2.imag = -tau[i__4].imag; // , expr subst
                         i__5 = j + i__ * v_dim1;
-                        q__1.r = q__2.r * v[i__5].r - q__2.i * v[i__5].i;
-                        q__1.i = q__2.r * v[i__5].i + q__2.i * v[i__5].r; // , expr subst
-                        t[i__3].r = q__1.r;
-                        t[i__3].i = q__1.i; // , expr subst
+                        q__1.real = q__2.real * v[i__5].real - q__2.imag * v[i__5].imag;
+                        q__1.imag = q__2.real * v[i__5].imag + q__2.imag * v[i__5].real; // , expr subst
+                        t[i__3].real = q__1.real;
+                        t[i__3].imag = q__1.imag; // , expr subst
                     }
                     j = fla_min(lastv, prevlastv);
                     /* T(1:i-1,i) := - tau(i) * V(1:i-1,i:j) * V(i,i:j)**H */
                     i__2 = i__ - 1;
                     i__3 = j - i__;
                     i__4 = i__;
-                    q__1.r = -tau[i__4].r;
-                    q__1.i = -tau[i__4].i; // , expr subst
+                    q__1.real = -tau[i__4].real;
+                    q__1.imag = -tau[i__4].imag; // , expr subst
                     aocl_blas_cgemm("N", "C", &i__2, &c__1, &i__3, &q__1,
                                     &v[(i__ + 1) * v_dim1 + 1], ldv, &v[i__ + (i__ + 1) * v_dim1],
                                     ldv, &c_b1, &t[i__ * t_dim1 + 1], ldt);
@@ -336,8 +336,8 @@ void aocl_lapack_clarft(char *direct, char *storev, aocl_int64_t *n, aocl_int64_
                                 &t[i__ * t_dim1 + 1], &c__1);
                 i__2 = i__ + i__ * t_dim1;
                 i__3 = i__;
-                t[i__2].r = tau[i__3].r;
-                t[i__2].i = tau[i__3].i; // , expr subst
+                t[i__2].real = tau[i__3].real;
+                t[i__2].imag = tau[i__3].imag; // , expr subst
                 if(i__ > 1)
                 {
                     prevlastv = fla_max(prevlastv, lastv);
@@ -355,15 +355,15 @@ void aocl_lapack_clarft(char *direct, char *storev, aocl_int64_t *n, aocl_int64_
         for(i__ = *k; i__ >= 1; --i__)
         {
             i__1 = i__;
-            if(tau[i__1].r == 0.f && tau[i__1].i == 0.f)
+            if(tau[i__1].real == 0.f && tau[i__1].imag == 0.f)
             {
                 /* H(i) = I */
                 i__1 = *k;
                 for(j = i__; j <= i__1; ++j)
                 {
                     i__2 = j + i__ * t_dim1;
-                    t[i__2].r = 0.f;
-                    t[i__2].i = 0.f; // , expr subst
+                    t[i__2].real = 0.f;
+                    t[i__2].imag = 0.f; // , expr subst
                 }
             }
             else
@@ -378,7 +378,7 @@ void aocl_lapack_clarft(char *direct, char *storev, aocl_int64_t *n, aocl_int64_
                         for(lastv = 1; lastv <= i__1; ++lastv)
                         {
                             i__2 = lastv + i__ * v_dim1;
-                            if(v[i__2].r != 0.f || v[i__2].i != 0.f)
+                            if(v[i__2].real != 0.f || v[i__2].imag != 0.f)
                             {
                                 break;
                             }
@@ -388,22 +388,22 @@ void aocl_lapack_clarft(char *direct, char *storev, aocl_int64_t *n, aocl_int64_
                         {
                             i__2 = j + i__ * t_dim1;
                             i__3 = i__;
-                            q__2.r = -tau[i__3].r;
-                            q__2.i = -tau[i__3].i; // , expr subst
-                            q__3.r = v[*n - *k + i__ + j * v_dim1].r;
-                            q__3.i = -v[*n - *k + i__ + j * v_dim1].i;
-                            q__1.r = q__2.r * q__3.r - q__2.i * q__3.i;
-                            q__1.i = q__2.r * q__3.i + q__2.i * q__3.r; // , expr subst
-                            t[i__2].r = q__1.r;
-                            t[i__2].i = q__1.i; // , expr subst
+                            q__2.real = -tau[i__3].real;
+                            q__2.imag = -tau[i__3].imag; // , expr subst
+                            q__3.real = v[*n - *k + i__ + j * v_dim1].real;
+                            q__3.imag = -v[*n - *k + i__ + j * v_dim1].imag;
+                            q__1.real = q__2.real * q__3.real - q__2.imag * q__3.imag;
+                            q__1.imag = q__2.real * q__3.imag + q__2.imag * q__3.real; // , expr subst
+                            t[i__2].real = q__1.real;
+                            t[i__2].imag = q__1.imag; // , expr subst
                         }
                         j = fla_max(lastv, prevlastv);
                         /* T(i+1:k,i) = -tau(i) * V(j:n-k+i,i+1:k)**H * V(j:n-k+i,i) */
                         i__1 = *n - *k + i__ - j;
                         i__2 = *k - i__;
                         i__3 = i__;
-                        q__1.r = -tau[i__3].r;
-                        q__1.i = -tau[i__3].i; // , expr subst
+                        q__1.real = -tau[i__3].real;
+                        q__1.imag = -tau[i__3].imag; // , expr subst
                         aocl_blas_cgemv("Conjugate transpose", &i__1, &i__2, &q__1,
                                         &v[j + (i__ + 1) * v_dim1], ldv, &v[j + i__ * v_dim1],
                                         &c__1, &c_b1, &t[i__ + 1 + i__ * t_dim1], &c__1);
@@ -415,7 +415,7 @@ void aocl_lapack_clarft(char *direct, char *storev, aocl_int64_t *n, aocl_int64_
                         for(lastv = 1; lastv <= i__1; ++lastv)
                         {
                             i__2 = i__ + lastv * v_dim1;
-                            if(v[i__2].r != 0.f || v[i__2].i != 0.f)
+                            if(v[i__2].real != 0.f || v[i__2].imag != 0.f)
                             {
                                 break;
                             }
@@ -425,21 +425,21 @@ void aocl_lapack_clarft(char *direct, char *storev, aocl_int64_t *n, aocl_int64_
                         {
                             i__2 = j + i__ * t_dim1;
                             i__3 = i__;
-                            q__2.r = -tau[i__3].r;
-                            q__2.i = -tau[i__3].i; // , expr subst
+                            q__2.real = -tau[i__3].real;
+                            q__2.imag = -tau[i__3].imag; // , expr subst
                             i__4 = j + (*n - *k + i__) * v_dim1;
-                            q__1.r = q__2.r * v[i__4].r - q__2.i * v[i__4].i;
-                            q__1.i = q__2.r * v[i__4].i + q__2.i * v[i__4].r; // , expr subst
-                            t[i__2].r = q__1.r;
-                            t[i__2].i = q__1.i; // , expr subst
+                            q__1.real = q__2.real * v[i__4].real - q__2.imag * v[i__4].imag;
+                            q__1.imag = q__2.real * v[i__4].imag + q__2.imag * v[i__4].real; // , expr subst
+                            t[i__2].real = q__1.real;
+                            t[i__2].imag = q__1.imag; // , expr subst
                         }
                         j = fla_max(lastv, prevlastv);
                         /* T(i+1:k,i) = -tau(i) * V(i+1:k,j:n-k+i) * V(i,j:n-k+i)**H */
                         i__1 = *k - i__;
                         i__2 = *n - *k + i__ - j;
                         i__3 = i__;
-                        q__1.r = -tau[i__3].r;
-                        q__1.i = -tau[i__3].i; // , expr subst
+                        q__1.real = -tau[i__3].real;
+                        q__1.imag = -tau[i__3].imag; // , expr subst
                         aocl_blas_cgemm("N", "C", &i__1, &c__1, &i__2, &q__1,
                                         &v[i__ + 1 + j * v_dim1], ldv, &v[i__ + j * v_dim1], ldv,
                                         &c_b1, &t[i__ + 1 + i__ * t_dim1], ldt);
@@ -460,8 +460,8 @@ void aocl_lapack_clarft(char *direct, char *storev, aocl_int64_t *n, aocl_int64_
                 }
                 i__1 = i__ + i__ * t_dim1;
                 i__2 = i__;
-                t[i__1].r = tau[i__2].r;
-                t[i__1].i = tau[i__2].i; // , expr subst
+                t[i__1].real = tau[i__2].real;
+                t[i__1].imag = tau[i__2].imag; // , expr subst
             }
         }
     }

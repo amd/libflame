@@ -4,7 +4,7 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static scomplex c_b2 = {{1.f}, {0.f}};
+static scomplex c_b2 = {1.f, 0.f};
 static aocl_int64_t c__1 = 1;
 static aocl_int64_t c_n1 = -1;
 /* > \brief \b CHETRF_AA */
@@ -220,8 +220,8 @@ void aocl_lapack_chetrf_aa(char *uplo, aocl_int64_t *n, scomplex *a, aocl_int64_
     {
         lwkopt = (nb + 1) * *n;
         r__1 = aocl_lapack_sroundup_lwork(&lwkopt);
-        work[1].r = r__1;
-        work[1].i = 0.f; // , expr subst
+        work[1].real = r__1;
+        work[1].imag = 0.f; // , expr subst
     }
     if(*info != 0)
     {
@@ -246,9 +246,9 @@ void aocl_lapack_chetrf_aa(char *uplo, aocl_int64_t *n, scomplex *a, aocl_int64_
     {
         i__1 = a_dim1 + 1;
         i__2 = a_dim1 + 1;
-        r__1 = a[i__2].r;
-        a[i__1].r = r__1;
-        a[i__1].i = 0.f; // , expr subst
+        r__1 = a[i__2].real;
+        a[i__1].real = r__1;
+        a[i__1].imag = 0.f; // , expr subst
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -316,11 +316,11 @@ void aocl_lapack_chetrf_aa(char *uplo, aocl_int64_t *n, scomplex *a, aocl_int64_
             {
                 /* Merge rank-1 update with BLAS-3 update */
                 r_cnjg(&q__1, &a[j + (j + 1) * a_dim1]);
-                alpha.r = q__1.r;
-                alpha.i = q__1.i; // , expr subst
+                alpha.real = q__1.real;
+                alpha.imag = q__1.imag; // , expr subst
                 i__1 = j + (j + 1) * a_dim1;
-                a[i__1].r = 1.f;
-                a[i__1].i = 0.f; // , expr subst
+                a[i__1].real = 1.f;
+                a[i__1].imag = 0.f; // , expr subst
                 i__1 = *n - j;
                 aocl_blas_ccopy(&i__1, &a[j - 1 + (j + 1) * a_dim1], lda,
                                 &work[j + 1 - j1 + 1 + jb * *n], &c__1);
@@ -354,8 +354,8 @@ void aocl_lapack_chetrf_aa(char *uplo, aocl_int64_t *n, scomplex *a, aocl_int64_
                     for(mj = nj - 1; mj >= 1; --mj)
                     {
                         i__3 = jb + 1;
-                        q__1.r = -1.f;
-                        q__1.i = -0.f; // , expr subst
+                        q__1.real = -1.f;
+                        q__1.imag = -0.f; // , expr subst
                         aocl_blas_cgemm("Conjugate transpose", "Transpose", &c__1, &mj, &i__3,
                                         &q__1, &a[j1 - k2 + j3 * a_dim1], lda,
                                         &work[j3 - j1 + 1 + k1 * *n], n, &c_b2,
@@ -365,8 +365,8 @@ void aocl_lapack_chetrf_aa(char *uplo, aocl_int64_t *n, scomplex *a, aocl_int64_
                     /* Update off-diagonal block of J2-th block row with CGEMM */
                     i__3 = *n - j3 + 1;
                     i__4 = jb + 1;
-                    q__1.r = -1.f;
-                    q__1.i = -0.f; // , expr subst
+                    q__1.real = -1.f;
+                    q__1.imag = -0.f; // , expr subst
                     aocl_blas_cgemm("Conjugate transpose", "Transpose", &nj, &i__3, &i__4, &q__1,
                                     &a[j1 - k2 + j2 * a_dim1], lda, &work[j3 - j1 + 1 + k1 * *n], n,
                                     &c_b2, &a[j2 + j3 * a_dim1], lda);
@@ -374,8 +374,8 @@ void aocl_lapack_chetrf_aa(char *uplo, aocl_int64_t *n, scomplex *a, aocl_int64_
                 /* Recover T( J, J+1 ) */
                 i__2 = j + (j + 1) * a_dim1;
                 r_cnjg(&q__1, &alpha);
-                a[i__2].r = q__1.r;
-                a[i__2].i = q__1.i; // , expr subst
+                a[i__2].real = q__1.real;
+                a[i__2].imag = q__1.imag; // , expr subst
             }
             /* WORK(J+1, 1) stores H(J+1, 1) */
             i__2 = *n - j;
@@ -442,11 +442,11 @@ void aocl_lapack_chetrf_aa(char *uplo, aocl_int64_t *n, scomplex *a, aocl_int64_
             {
                 /* Merge rank-1 update with BLAS-3 update */
                 r_cnjg(&q__1, &a[j + 1 + j * a_dim1]);
-                alpha.r = q__1.r;
-                alpha.i = q__1.i; // , expr subst
+                alpha.real = q__1.real;
+                alpha.imag = q__1.imag; // , expr subst
                 i__2 = j + 1 + j * a_dim1;
-                a[i__2].r = 1.f;
-                a[i__2].i = 0.f; // , expr subst
+                a[i__2].real = 1.f;
+                a[i__2].imag = 0.f; // , expr subst
                 i__2 = *n - j;
                 aocl_blas_ccopy(&i__2, &a[j + 1 + (j - 1) * a_dim1], &c__1,
                                 &work[j + 1 - j1 + 1 + jb * *n], &c__1);
@@ -480,8 +480,8 @@ void aocl_lapack_chetrf_aa(char *uplo, aocl_int64_t *n, scomplex *a, aocl_int64_
                     for(mj = nj - 1; mj >= 1; --mj)
                     {
                         i__3 = jb + 1;
-                        q__1.r = -1.f;
-                        q__1.i = -0.f; // , expr subst
+                        q__1.real = -1.f;
+                        q__1.imag = -0.f; // , expr subst
                         aocl_blas_cgemm("No transpose", "Conjugate transpose", &mj, &c__1, &i__3,
                                         &q__1, &work[j3 - j1 + 1 + k1 * *n], n,
                                         &a[j3 + (j1 - k2) * a_dim1], lda, &c_b2,
@@ -491,8 +491,8 @@ void aocl_lapack_chetrf_aa(char *uplo, aocl_int64_t *n, scomplex *a, aocl_int64_
                     /* Update off-diagonal block of J2-th block column with CGEMM */
                     i__3 = *n - j3 + 1;
                     i__4 = jb + 1;
-                    q__1.r = -1.f;
-                    q__1.i = -0.f; // , expr subst
+                    q__1.real = -1.f;
+                    q__1.imag = -0.f; // , expr subst
                     aocl_blas_cgemm("No transpose", "Conjugate transpose", &i__3, &nj, &i__4, &q__1,
                                     &work[j3 - j1 + 1 + k1 * *n], n, &a[j2 + (j1 - k2) * a_dim1],
                                     lda, &c_b2, &a[j3 + j2 * a_dim1], lda);
@@ -500,8 +500,8 @@ void aocl_lapack_chetrf_aa(char *uplo, aocl_int64_t *n, scomplex *a, aocl_int64_
                 /* Recover T( J+1, J ) */
                 i__1 = j + 1 + j * a_dim1;
                 r_cnjg(&q__1, &alpha);
-                a[i__1].r = q__1.r;
-                a[i__1].i = q__1.i; // , expr subst
+                a[i__1].real = q__1.real;
+                a[i__1].imag = q__1.imag; // , expr subst
             }
             /* WORK(J+1, 1) stores H(J+1, 1) */
             i__1 = *n - j;
@@ -511,8 +511,8 @@ void aocl_lapack_chetrf_aa(char *uplo, aocl_int64_t *n, scomplex *a, aocl_int64_
     }
 L20:
     r__1 = aocl_lapack_sroundup_lwork(&lwkopt);
-    work[1].r = r__1;
-    work[1].i = 0.f; // , expr subst
+    work[1].real = r__1;
+    work[1].imag = 0.f; // , expr subst
     AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of CHETRF_AA */

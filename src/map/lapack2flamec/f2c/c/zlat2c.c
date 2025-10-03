@@ -179,7 +179,7 @@ void aocl_lapack_zlat2c(char *uplo, aocl_int64_t *n, dcomplex *a, aocl_int64_t *
             {
                 i__3 = i__ + j * a_dim1;
                 i__4 = i__ + j * a_dim1;
-                if(a[i__3].r < -rmax || a[i__4].r > rmax || d_imag(&a[i__ + j * a_dim1]) < -rmax
+                if(a[i__3].real < -rmax || a[i__4].real > rmax || d_imag(&a[i__ + j * a_dim1]) < -rmax
                    || d_imag(&a[i__ + j * a_dim1]) > rmax)
                 {
                     *info = 1;
@@ -204,7 +204,7 @@ void aocl_lapack_zlat2c(char *uplo, aocl_int64_t *n, dcomplex *a, aocl_int64_t *
             {
                 i__3 = i__ + j * a_dim1;
                 i__4 = i__ + j * a_dim1;
-                if(a[i__3].r < -rmax || a[i__4].r > rmax || d_imag(&a[i__ + j * a_dim1]) < -rmax
+                if(a[i__3].real < -rmax || a[i__4].real > rmax || d_imag(&a[i__ + j * a_dim1]) < -rmax
                    || d_imag(&a[i__ + j * a_dim1]) > rmax)
                 {
                     *info = 1;

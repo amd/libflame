@@ -189,8 +189,8 @@ void fla_zrot_native(aocl_int64_t *n, dcomplex *cx, aocl_int64_t *incx, dcomplex
         return;
     }
     lc = *c__;
-    sr = s->r;
-    si = s->i;
+    sr = s->real;
+    si = s->imag;
 
     if(*incx == 1 && *incy == 1)
     {
@@ -213,22 +213,22 @@ void fla_zrot_native(aocl_int64_t *n, dcomplex *cx, aocl_int64_t *incx, dcomplex
     {
         for(i__ = 1; i__ <= i__1; ++i__)
         {
-            z__2.r = lc * cx[ix].r;
-            z__2.i = lc * cx[ix].i; // , expr subst
-            z__3.r = sr * cy[iy].r - si * cy[iy].i;
-            z__3.i = sr * cy[iy].i + si * cy[iy].r; // , expr subst
-            z__1.r = z__2.r + z__3.r;
-            z__1.i = z__2.i + z__3.i; // , expr subst
+            z__2.real = lc * cx[ix].real;
+            z__2.imag = lc * cx[ix].imag; // , expr subst
+            z__3.real = sr * cy[iy].real - si * cy[iy].imag;
+            z__3.imag = sr * cy[iy].imag + si * cy[iy].real; // , expr subst
+            z__1.real = z__2.real + z__3.real;
+            z__1.imag = z__2.imag + z__3.imag; // , expr subst
 
-            z__2.r = lc * cy[iy].r;
-            z__2.i = lc * cy[iy].i; // , expr subst
-            z__3.r = sr * cx[ix].r + si * cx[ix].i;
-            z__3.i = sr * cx[ix].i - si * cx[ix].r; // , expr subst
+            z__2.real = lc * cy[iy].real;
+            z__2.imag = lc * cy[iy].imag; // , expr subst
+            z__3.real = sr * cx[ix].real + si * cx[ix].imag;
+            z__3.imag = sr * cx[ix].imag - si * cx[ix].real; // , expr subst
 
-            cy[iy].r = z__2.r - z__3.r;
-            cy[iy].i = z__2.i - z__3.i; // , expr subst
-            cx[ix].r = z__1.r;
-            cx[ix].i = z__1.i; // , expr subst
+            cy[iy].real = z__2.real - z__3.real;
+            cy[iy].imag = z__2.imag - z__3.imag; // , expr subst
+            cx[ix].real = z__1.real;
+            cx[ix].imag = z__1.imag; // , expr subst
             ix += *incx;
             iy += *incy;
         }
@@ -237,22 +237,22 @@ void fla_zrot_native(aocl_int64_t *n, dcomplex *cx, aocl_int64_t *incx, dcomplex
     {
         for(i__ = 1; i__ <= i__1; ++i__)
         {
-            z__2.r = lc * cx[ix].r;
-            z__2.i = lc * cx[ix].i; // , expr subst
-            z__3.r = sr * cy[ix].r - si * cy[ix].i;
-            z__3.i = sr * cy[ix].i + si * cy[ix].r; // , expr subst
-            z__1.r = z__2.r + z__3.r;
-            z__1.i = z__2.i + z__3.i; // , expr subst
+            z__2.real = lc * cx[ix].real;
+            z__2.imag = lc * cx[ix].imag; // , expr subst
+            z__3.real = sr * cy[ix].real - si * cy[ix].imag;
+            z__3.imag = sr * cy[ix].imag + si * cy[ix].real; // , expr subst
+            z__1.real = z__2.real + z__3.real;
+            z__1.imag = z__2.imag + z__3.imag; // , expr subst
 
-            z__2.r = lc * cy[ix].r;
-            z__2.i = lc * cy[ix].i; // , expr subst
-            z__3.r = sr * cx[ix].r + si * cx[ix].i;
-            z__3.i = sr * cx[ix].i - si * cx[ix].r; // , expr subst
+            z__2.real = lc * cy[ix].real;
+            z__2.imag = lc * cy[ix].imag; // , expr subst
+            z__3.real = sr * cx[ix].real + si * cx[ix].imag;
+            z__3.imag = sr * cx[ix].imag - si * cx[ix].real; // , expr subst
 
-            cy[ix].r = z__2.r - z__3.r;
-            cy[ix].i = z__2.i - z__3.i; // , expr subst
-            cx[ix].r = z__1.r;
-            cx[ix].i = z__1.i; // , expr subst
+            cy[ix].real = z__2.real - z__3.real;
+            cy[ix].imag = z__2.imag - z__3.imag; // , expr subst
+            cx[ix].real = z__1.real;
+            cx[ix].imag = z__1.imag; // , expr subst
             ix += *incx;
         }
     }
@@ -262,22 +262,22 @@ L20:
     i__1 = *n;
     for(i__ = 1; i__ <= i__1; ++i__)
     {
-        z__2.r = lc * cx[i__].r;
-        z__2.i = lc * cx[i__].i; // , expr subst
-        z__3.r = sr * cy[i__].r - si * cy[i__].i;
-        z__3.i = sr * cy[i__].i + si * cy[i__].r; // , expr subst
-        z__1.r = z__2.r + z__3.r;
-        z__1.i = z__2.i + z__3.i; // , expr subst
+        z__2.real = lc * cx[i__].real;
+        z__2.imag = lc * cx[i__].imag; // , expr subst
+        z__3.real = sr * cy[i__].real - si * cy[i__].imag;
+        z__3.imag = sr * cy[i__].imag + si * cy[i__].real; // , expr subst
+        z__1.real = z__2.real + z__3.real;
+        z__1.imag = z__2.imag + z__3.imag; // , expr subst
 
-        z__2.r = lc * cy[i__].r;
-        z__2.i = lc * cy[i__].i; // , expr subst
-        z__3.r = sr * cx[i__].r + si * cx[i__].i;
-        z__3.i = sr * cx[i__].i - si * cx[i__].r; // , expr subst
+        z__2.real = lc * cy[i__].real;
+        z__2.imag = lc * cy[i__].imag; // , expr subst
+        z__3.real = sr * cx[i__].real + si * cx[i__].imag;
+        z__3.imag = sr * cx[i__].imag - si * cx[i__].real; // , expr subst
 
-        cy[i__].r = z__2.r - z__3.r;
-        cy[i__].i = z__2.i - z__3.i; // , expr subst
-        cx[i__].r = z__1.r;
-        cx[i__].i = z__1.i; // , expr subst
+        cy[i__].real = z__2.real - z__3.real;
+        cy[i__].imag = z__2.imag - z__3.imag; // , expr subst
+        cx[i__].real = z__1.real;
+        cx[i__].imag = z__1.imag; // , expr subst
     }
     return;
 }

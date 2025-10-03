@@ -332,8 +332,8 @@ void aocl_lapack_cstein(aocl_int64_t *n, real *d__, real *e, aocl_int64_t *m, re
     else if(*n == 1)
     {
         i__1 = z_dim1 + 1;
-        z__[i__1].r = 1.f;
-        z__[i__1].i = 0.f; // , expr subst
+        z__[i__1].real = 1.f;
+        z__[i__1].imag = 0.f; // , expr subst
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
@@ -474,14 +474,14 @@ void aocl_lapack_cstein(aocl_int64_t *n, real *d__, real *e, aocl_int64_t *m, re
                     for(jr = 1; jr <= i__4; ++jr)
                     {
                         i__5 = b1 - 1 + jr + i__ * z_dim1;
-                        ctr += work[indrv1 + jr] * z__[i__5].r;
+                        ctr += work[indrv1 + jr] * z__[i__5].real;
                         /* L80: */
                     }
                     i__4 = blksiz;
                     for(jr = 1; jr <= i__4; ++jr)
                     {
                         i__5 = b1 - 1 + jr + i__ * z_dim1;
-                        work[indrv1 + jr] -= ctr * z__[i__5].r;
+                        work[indrv1 + jr] -= ctr * z__[i__5].real;
                         /* L90: */
                     }
                     /* L100: */
@@ -522,8 +522,8 @@ void aocl_lapack_cstein(aocl_int64_t *n, real *d__, real *e, aocl_int64_t *m, re
             for(i__ = 1; i__ <= i__3; ++i__)
             {
                 i__4 = i__ + j * z_dim1;
-                z__[i__4].r = 0.f;
-                z__[i__4].i = 0.f; // , expr subst
+                z__[i__4].real = 0.f;
+                z__[i__4].imag = 0.f; // , expr subst
                 /* L150: */
             }
             i__3 = blksiz;
@@ -531,10 +531,10 @@ void aocl_lapack_cstein(aocl_int64_t *n, real *d__, real *e, aocl_int64_t *m, re
             {
                 i__4 = b1 + i__ - 1 + j * z_dim1;
                 i__5 = indrv1 + i__;
-                q__1.r = work[i__5];
-                q__1.i = 0.f; // , expr subst
-                z__[i__4].r = q__1.r;
-                z__[i__4].i = q__1.i; // , expr subst
+                q__1.real = work[i__5];
+                q__1.imag = 0.f; // , expr subst
+                z__[i__4].real = q__1.real;
+                z__[i__4].imag = q__1.imag; // , expr subst
                 /* L160: */
             }
             /* Save the shift to check eigenvalue spacing at next */

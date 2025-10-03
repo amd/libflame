@@ -5,7 +5,7 @@
  /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static aocl_int64_t c__1 = 1;
-static scomplex c_b10 = {{-1.f}, {-0.f}};
+static scomplex c_b10 = {-1.f, -0.f};
 /* > \brief \b CGETC2 computes the LU factorization with complete pivoting of the general n-by-n
  * matrix. */
 /* =========== DOCUMENTATION =========== */
@@ -203,10 +203,10 @@ void aocl_lapack_cgetc2(aocl_int64_t *n, scomplex *a, aocl_int64_t *lda, aocl_in
         {
             *info = 1;
             i__1 = a_dim1 + 1;
-            q__1.r = smlnum;
-            q__1.i = 0.f; // , expr subst
-            a[i__1].r = q__1.r;
-            a[i__1].i = q__1.i; // , expr subst
+            q__1.real = smlnum;
+            q__1.imag = 0.f; // , expr subst
+            a[i__1].real = q__1.real;
+            a[i__1].imag = q__1.imag; // , expr subst
         }
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
@@ -257,18 +257,18 @@ void aocl_lapack_cgetc2(aocl_int64_t *n, scomplex *a, aocl_int64_t *lda, aocl_in
         {
             *info = i__;
             i__2 = i__ + i__ * a_dim1;
-            q__1.r = smin;
-            q__1.i = 0.f; // , expr subst
-            a[i__2].r = q__1.r;
-            a[i__2].i = q__1.i; // , expr subst
+            q__1.real = smin;
+            q__1.imag = 0.f; // , expr subst
+            a[i__2].real = q__1.real;
+            a[i__2].imag = q__1.imag; // , expr subst
         }
         i__2 = *n;
         for(j = i__ + 1; j <= i__2; ++j)
         {
             i__3 = j + i__ * a_dim1;
             c_div(&q__1, &a[j + i__ * a_dim1], &a[i__ + i__ * a_dim1]);
-            a[i__3].r = q__1.r;
-            a[i__3].i = q__1.i; // , expr subst
+            a[i__3].real = q__1.real;
+            a[i__3].imag = q__1.imag; // , expr subst
             /* L30: */
         }
         i__2 = *n - i__;
@@ -281,10 +281,10 @@ void aocl_lapack_cgetc2(aocl_int64_t *n, scomplex *a, aocl_int64_t *lda, aocl_in
     {
         *info = *n;
         i__1 = *n + *n * a_dim1;
-        q__1.r = smin;
-        q__1.i = 0.f; // , expr subst
-        a[i__1].r = q__1.r;
-        a[i__1].i = q__1.i; // , expr subst
+        q__1.real = smin;
+        q__1.imag = 0.f; // , expr subst
+        a[i__1].real = q__1.real;
+        a[i__1].imag = q__1.imag; // , expr subst
     }
     /* Set last pivots to N */
     ipiv[*n] = (aocl_int_t)(*n);

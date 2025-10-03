@@ -312,8 +312,8 @@ void aocl_lapack_cunmql(char *side, char *trans, aocl_int64_t *m, aocl_int64_t *
             lwkopt = nw * nb + 4160;
         }
         r__1 = aocl_lapack_sroundup_lwork(&lwkopt);
-        work[1].r = r__1;
-        work[1].i = 0.f; // , expr subst
+        work[1].real = r__1;
+        work[1].imag = 0.f; // , expr subst
     }
     if(*info != 0)
     {
@@ -408,8 +408,8 @@ void aocl_lapack_cunmql(char *side, char *trans, aocl_int64_t *m, aocl_int64_t *
         }
     }
     r__1 = aocl_lapack_sroundup_lwork(&lwkopt);
-    work[1].r = r__1;
-    work[1].i = 0.f; // , expr subst
+    work[1].real = r__1;
+    work[1].imag = 0.f; // , expr subst
     AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of CUNMQL */

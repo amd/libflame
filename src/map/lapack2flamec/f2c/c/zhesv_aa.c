@@ -262,13 +262,13 @@ void aocl_lapack_zhesv_aa(char *uplo, aocl_int64_t *n, aocl_int64_t *nrhs, dcomp
     if(*info == 0)
     {
         aocl_lapack_zhetrf_aa(uplo, n, &a[a_offset], lda, &ipiv[1], &work[1], &c_n1, info);
-        lwkopt_hetrf__ = (integer)work[1].r;
+        lwkopt_hetrf__ = (integer)work[1].real;
         aocl_lapack_zhetrs_aa(uplo, n, nrhs, &a[a_offset], lda, &ipiv[1], &b[b_offset], ldb,
                               &work[1], &c_n1, info);
-        lwkopt_hetrs__ = (integer)work[1].r;
+        lwkopt_hetrs__ = (integer)work[1].real;
         lwkopt = fla_max(lwkopt_hetrf__, lwkopt_hetrs__);
-        work[1].r = (doublereal)lwkopt;
-        work[1].i = 0.; // , expr subst
+        work[1].real = (doublereal)lwkopt;
+        work[1].imag = 0.; // , expr subst
     }
     if(*info != 0)
     {
@@ -290,8 +290,8 @@ void aocl_lapack_zhesv_aa(char *uplo, aocl_int64_t *n, aocl_int64_t *nrhs, dcomp
         aocl_lapack_zhetrs_aa(uplo, n, nrhs, &a[a_offset], lda, &ipiv[1], &b[b_offset], ldb,
                               &work[1], lwork, info);
     }
-    work[1].r = (doublereal)lwkopt;
-    work[1].i = 0.; // , expr subst
+    work[1].real = (doublereal)lwkopt;
+    work[1].imag = 0.; // , expr subst
     AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of ZHESV_AA */

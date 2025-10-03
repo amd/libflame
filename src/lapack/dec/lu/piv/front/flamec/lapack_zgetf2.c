@@ -62,7 +62,7 @@
 
        Parameter adjustments */
     /* Table of constant values */
-    static TLS_CLASS_SPEC dcomplex c_b1 = {{1.},{0.}};
+    static TLS_CLASS_SPEC dcomplex c_b1 = {1.,0.};
     static TLS_CLASS_SPEC fla_dim_t c__1 = 1;
 
     /* System generated locals */

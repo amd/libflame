@@ -509,26 +509,26 @@ L60:
             i__2 = i__;
             i__3 = indlpl + i__;
             i__4 = i__ + 1;
-            q__2.r = work[i__3] * z__[i__4].r;
-            q__2.i = work[i__3] * z__[i__4].i; // , expr subst
-            q__1.r = -q__2.r;
-            q__1.i = -q__2.i; // , expr subst
-            z__[i__2].r = q__1.r;
-            z__[i__2].i = q__1.i; // , expr subst
+            q__2.real = work[i__3] * z__[i__4].real;
+            q__2.imag = work[i__3] * z__[i__4].imag; // , expr subst
+            q__1.real = -q__2.real;
+            q__1.imag = -q__2.imag; // , expr subst
+            z__[i__2].real = q__1.real;
+            z__[i__2].imag = q__1.imag; // , expr subst
             if((c_abs(&z__[i__]) + c_abs(&z__[i__ + 1])) * (r__1 = ld[i__], f2c_abs(r__1))
                < *gaptol)
             {
                 i__2 = i__;
-                z__[i__2].r = 0.f;
-                z__[i__2].i = 0.f; // , expr subst
+                z__[i__2].real = 0.f;
+                z__[i__2].imag = 0.f; // , expr subst
                 isuppz[1] = (aocl_int_t)(i__ + 1);
                 goto L220;
             }
             i__2 = i__;
             i__3 = i__;
-            q__1.r = z__[i__2].r * z__[i__3].r - z__[i__2].i * z__[i__3].i;
-            q__1.i = z__[i__2].r * z__[i__3].i + z__[i__2].i * z__[i__3].r; // , expr subst
-            *ztz += q__1.r;
+            q__1.real = z__[i__2].real * z__[i__3].real - z__[i__2].imag * z__[i__3].imag;
+            q__1.imag = z__[i__2].real * z__[i__3].imag + z__[i__2].imag * z__[i__3].real; // , expr subst
+            *ztz += q__1.real;
             /* L210: */
         }
     L220:;
@@ -540,7 +540,7 @@ L60:
         for(i__ = *r__ - 1; i__ >= i__1; --i__)
         {
             i__2 = i__ + 1;
-            if(z__[i__2].r == 0.f && z__[i__2].i == 0.f)
+            if(z__[i__2].real == 0.f && z__[i__2].imag == 0.f)
             {
                 i__2 = i__;
                 r__1 = -(ld[i__ + 1] / ld[i__]);
@@ -555,27 +555,27 @@ L60:
                 i__2 = i__;
                 i__3 = indlpl + i__;
                 i__4 = i__ + 1;
-                q__2.r = work[i__3] * z__[i__4].r;
-                q__2.i = work[i__3] * z__[i__4].i; // , expr subst
-                q__1.r = -q__2.r;
-                q__1.i = -q__2.i; // , expr subst
-                z__[i__2].r = q__1.r;
-                z__[i__2].i = q__1.i; // , expr subst
+                q__2.real = work[i__3] * z__[i__4].real;
+                q__2.imag = work[i__3] * z__[i__4].imag; // , expr subst
+                q__1.real = -q__2.real;
+                q__1.imag = -q__2.imag; // , expr subst
+                z__[i__2].real = q__1.real;
+                z__[i__2].imag = q__1.imag; // , expr subst
             }
             if((c_abs(&z__[i__]) + c_abs(&z__[i__ + 1])) * (r__1 = ld[i__], f2c_abs(r__1))
                < *gaptol)
             {
                 i__2 = i__;
-                z__[i__2].r = 0.f;
-                z__[i__2].i = 0.f; // , expr subst
+                z__[i__2].real = 0.f;
+                z__[i__2].imag = 0.f; // , expr subst
                 isuppz[1] = (aocl_int_t)(i__ + 1);
                 goto L240;
             }
             i__2 = i__;
             i__3 = i__;
-            q__1.r = z__[i__2].r * z__[i__3].r - z__[i__2].i * z__[i__3].i;
-            q__1.i = z__[i__2].r * z__[i__3].i + z__[i__2].i * z__[i__3].r; // , expr subst
-            *ztz += q__1.r;
+            q__1.real = z__[i__2].real * z__[i__3].real - z__[i__2].imag * z__[i__3].imag;
+            q__1.imag = z__[i__2].real * z__[i__3].imag + z__[i__2].imag * z__[i__3].real; // , expr subst
+            *ztz += q__1.real;
             /* L230: */
         }
     L240:;
@@ -589,26 +589,26 @@ L60:
             i__2 = i__ + 1;
             i__3 = indumn + i__;
             i__4 = i__;
-            q__2.r = work[i__3] * z__[i__4].r;
-            q__2.i = work[i__3] * z__[i__4].i; // , expr subst
-            q__1.r = -q__2.r;
-            q__1.i = -q__2.i; // , expr subst
-            z__[i__2].r = q__1.r;
-            z__[i__2].i = q__1.i; // , expr subst
+            q__2.real = work[i__3] * z__[i__4].real;
+            q__2.imag = work[i__3] * z__[i__4].imag; // , expr subst
+            q__1.real = -q__2.real;
+            q__1.imag = -q__2.imag; // , expr subst
+            z__[i__2].real = q__1.real;
+            z__[i__2].imag = q__1.imag; // , expr subst
             if((c_abs(&z__[i__]) + c_abs(&z__[i__ + 1])) * (r__1 = ld[i__], f2c_abs(r__1))
                < *gaptol)
             {
                 i__2 = i__ + 1;
-                z__[i__2].r = 0.f;
-                z__[i__2].i = 0.f; // , expr subst
+                z__[i__2].real = 0.f;
+                z__[i__2].imag = 0.f; // , expr subst
                 isuppz[2] = (aocl_int_t)(i__);
                 goto L260;
             }
             i__2 = i__ + 1;
             i__3 = i__ + 1;
-            q__1.r = z__[i__2].r * z__[i__3].r - z__[i__2].i * z__[i__3].i;
-            q__1.i = z__[i__2].r * z__[i__3].i + z__[i__2].i * z__[i__3].r; // , expr subst
-            *ztz += q__1.r;
+            q__1.real = z__[i__2].real * z__[i__3].real - z__[i__2].imag * z__[i__3].imag;
+            q__1.imag = z__[i__2].real * z__[i__3].imag + z__[i__2].imag * z__[i__3].real; // , expr subst
+            *ztz += q__1.real;
             /* L250: */
         }
     L260:;
@@ -620,7 +620,7 @@ L60:
         for(i__ = *r__; i__ <= i__1; ++i__)
         {
             i__2 = i__;
-            if(z__[i__2].r == 0.f && z__[i__2].i == 0.f)
+            if(z__[i__2].real == 0.f && z__[i__2].imag == 0.f)
             {
                 i__2 = i__ + 1;
                 r__1 = -(ld[i__ - 1] / ld[i__]);
@@ -635,27 +635,27 @@ L60:
                 i__2 = i__ + 1;
                 i__3 = indumn + i__;
                 i__4 = i__;
-                q__2.r = work[i__3] * z__[i__4].r;
-                q__2.i = work[i__3] * z__[i__4].i; // , expr subst
-                q__1.r = -q__2.r;
-                q__1.i = -q__2.i; // , expr subst
-                z__[i__2].r = q__1.r;
-                z__[i__2].i = q__1.i; // , expr subst
+                q__2.real = work[i__3] * z__[i__4].real;
+                q__2.imag = work[i__3] * z__[i__4].imag; // , expr subst
+                q__1.real = -q__2.real;
+                q__1.imag = -q__2.imag; // , expr subst
+                z__[i__2].real = q__1.real;
+                z__[i__2].imag = q__1.imag; // , expr subst
             }
             if((c_abs(&z__[i__]) + c_abs(&z__[i__ + 1])) * (r__1 = ld[i__], f2c_abs(r__1))
                < *gaptol)
             {
                 i__2 = i__ + 1;
-                z__[i__2].r = 0.f;
-                z__[i__2].i = 0.f; // , expr subst
+                z__[i__2].real = 0.f;
+                z__[i__2].imag = 0.f; // , expr subst
                 isuppz[2] = (aocl_int_t)(i__);
                 goto L280;
             }
             i__2 = i__ + 1;
             i__3 = i__ + 1;
-            q__1.r = z__[i__2].r * z__[i__3].r - z__[i__2].i * z__[i__3].i;
-            q__1.i = z__[i__2].r * z__[i__3].i + z__[i__2].i * z__[i__3].r; // , expr subst
-            *ztz += q__1.r;
+            q__1.real = z__[i__2].real * z__[i__3].real - z__[i__2].imag * z__[i__3].imag;
+            q__1.imag = z__[i__2].real * z__[i__3].imag + z__[i__2].imag * z__[i__3].real; // , expr subst
+            *ztz += q__1.real;
             /* L270: */
         }
     L280:;

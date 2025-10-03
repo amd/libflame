@@ -5,8 +5,8 @@
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static aocl_int64_t c__1 = 1;
-static dcomplex c_b7 = {{1.}, {0.}};
-static dcomplex c_b13 = {{0.}, {0.}};
+static dcomplex c_b7 = {1., 0.};
+static dcomplex c_b13 = {0., 0.};
 /* > \brief \b ZTPQRT2 computes a QR factorization of a real or scomplex "triangular-pentagonal"
  * matrix, which is composed of a triangular block and a pentagonal block, using the compact WY
  * representation for Q. */
@@ -298,30 +298,30 @@ void aocl_lapack_ztpqrt2(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *l, dcom
             {
                 i__3 = j + *n * t_dim1;
                 d_cnjg(&z__1, &a[i__ + (i__ + j) * a_dim1]);
-                t[i__3].r = z__1.r;
-                t[i__3].i = z__1.i; // , expr subst
+                t[i__3].real = z__1.real;
+                t[i__3].imag = z__1.imag; // , expr subst
             }
             i__2 = *n - i__;
             aocl_blas_zgemv("C", &p, &i__2, &c_b7, &b[(i__ + 1) * b_dim1 + 1], ldb,
                             &b[i__ * b_dim1 + 1], &c__1, &c_b7, &t[*n * t_dim1 + 1], &c__1);
             /* C(I:M,I+1:N) = C(I:m,I+1:N) + alpha*C(I:M,I)*W(1:N-1)**H */
             d_cnjg(&z__2, &t[i__ + t_dim1]);
-            z__1.r = -z__2.r;
-            z__1.i = -z__2.i; // , expr subst
-            alpha.r = z__1.r;
-            alpha.i = z__1.i; // , expr subst
+            z__1.real = -z__2.real;
+            z__1.imag = -z__2.imag; // , expr subst
+            alpha.real = z__1.real;
+            alpha.imag = z__1.imag; // , expr subst
             i__2 = *n - i__;
             for(j = 1; j <= i__2; ++j)
             {
                 i__3 = i__ + (i__ + j) * a_dim1;
                 i__4 = i__ + (i__ + j) * a_dim1;
                 d_cnjg(&z__3, &t[j + *n * t_dim1]);
-                z__2.r = alpha.r * z__3.r - alpha.i * z__3.i;
-                z__2.i = alpha.r * z__3.i + alpha.i * z__3.r; // , expr subst
-                z__1.r = a[i__4].r + z__2.r;
-                z__1.i = a[i__4].i + z__2.i; // , expr subst
-                a[i__3].r = z__1.r;
-                a[i__3].i = z__1.i; // , expr subst
+                z__2.real = alpha.real * z__3.real - alpha.imag * z__3.imag;
+                z__2.imag = alpha.real * z__3.imag + alpha.imag * z__3.real; // , expr subst
+                z__1.real = a[i__4].real + z__2.real;
+                z__1.imag = a[i__4].imag + z__2.imag; // , expr subst
+                a[i__3].real = z__1.real;
+                a[i__3].imag = z__1.imag; // , expr subst
             }
             i__2 = *n - i__;
             aocl_blas_zgerc(&p, &i__2, &alpha, &b[i__ * b_dim1 + 1], &c__1, &t[*n * t_dim1 + 1],
@@ -333,16 +333,16 @@ void aocl_lapack_ztpqrt2(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *l, dcom
     {
         /* T(1:I-1,I) := C(I:M,1:I-1)**H * (alpha * C(I:M,I)) */
         i__2 = i__ + t_dim1;
-        z__1.r = -t[i__2].r;
-        z__1.i = -t[i__2].i; // , expr subst
-        alpha.r = z__1.r;
-        alpha.i = z__1.i; // , expr subst
+        z__1.real = -t[i__2].real;
+        z__1.imag = -t[i__2].imag; // , expr subst
+        alpha.real = z__1.real;
+        alpha.imag = z__1.imag; // , expr subst
         i__2 = i__ - 1;
         for(j = 1; j <= i__2; ++j)
         {
             i__3 = j + i__ * t_dim1;
-            t[i__3].r = 0.;
-            t[i__3].i = 0.; // , expr subst
+            t[i__3].real = 0.;
+            t[i__3].imag = 0.; // , expr subst
         }
         /* Computing MIN */
         i__2 = i__ - 1;
@@ -359,10 +359,10 @@ void aocl_lapack_ztpqrt2(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *l, dcom
         {
             i__3 = j + i__ * t_dim1;
             i__4 = *m - *l + j + i__ * b_dim1;
-            z__1.r = alpha.r * b[i__4].r - alpha.i * b[i__4].i;
-            z__1.i = alpha.r * b[i__4].i + alpha.i * b[i__4].r; // , expr subst
-            t[i__3].r = z__1.r;
-            t[i__3].i = z__1.i; // , expr subst
+            z__1.real = alpha.real * b[i__4].real - alpha.imag * b[i__4].imag;
+            z__1.imag = alpha.real * b[i__4].imag + alpha.imag * b[i__4].real; // , expr subst
+            t[i__3].real = z__1.real;
+            t[i__3].imag = z__1.imag; // , expr subst
         }
         aocl_blas_ztrmv("U", "C", "N", &p, &b[mp + b_dim1], ldb, &t[i__ * t_dim1 + 1], &c__1);
         /* Rectangular part of B2 */
@@ -380,11 +380,11 @@ void aocl_lapack_ztpqrt2(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *l, dcom
         /* T(I,I) = tau(I) */
         i__2 = i__ + i__ * t_dim1;
         i__3 = i__ + t_dim1;
-        t[i__2].r = t[i__3].r;
-        t[i__2].i = t[i__3].i; // , expr subst
+        t[i__2].real = t[i__3].real;
+        t[i__2].imag = t[i__3].imag; // , expr subst
         i__2 = i__ + t_dim1;
-        t[i__2].r = 0.;
-        t[i__2].i = 0.; // , expr subst
+        t[i__2].real = 0.;
+        t[i__2].imag = 0.; // , expr subst
     }
     /* End of ZTPQRT2 */
     AOCL_DTL_TRACE_LOG_EXIT

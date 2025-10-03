@@ -4,7 +4,7 @@
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
  /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static scomplex c_b1 = {{-1.f}, {0.f}};
+static scomplex c_b1 = {-1.f, 0.f};
 static aocl_int64_t c__1 = 1;
 /* > \brief \b CUNBDB4 */
 /* =========== DOCUMENTATION =========== */
@@ -349,8 +349,8 @@ void aocl_lapack_cunbdb4(aocl_int64_t *m, aocl_int64_t *p, aocl_int64_t *q, scom
         lworkopt = fla_max(i__1, i__2);
         lworkmin = lworkopt;
         r__1 = aocl_lapack_sroundup_lwork(&lworkopt);
-        work[1].r = r__1;
-        work[1].i = 0.f; // , expr subst
+        work[1].real = r__1;
+        work[1].imag = 0.f; // , expr subst
         if(*lwork < lworkmin && !lquery)
         {
             *info = -14;
@@ -378,8 +378,8 @@ void aocl_lapack_cunbdb4(aocl_int64_t *m, aocl_int64_t *p, aocl_int64_t *q, scom
             for(j = 1; j <= i__2; ++j)
             {
                 i__3 = j;
-                phantom[i__3].r = 0.f;
-                phantom[i__3].i = 0.f; // , expr subst
+                phantom[i__3].real = 0.f;
+                phantom[i__3].imag = 0.f; // , expr subst
             }
             i__2 = *m - *p;
             aocl_lapack_cunbdb5(p, &i__2, q, &phantom[1], &c__1, &phantom[*p + 1], &c__1,
@@ -389,14 +389,14 @@ void aocl_lapack_cunbdb4(aocl_int64_t *m, aocl_int64_t *p, aocl_int64_t *q, scom
             aocl_lapack_clarfgp(p, &phantom[1], &phantom[2], &c__1, &taup1[1]);
             i__2 = *m - *p;
             aocl_lapack_clarfgp(&i__2, &phantom[*p + 1], &phantom[*p + 2], &c__1, &taup2[1]);
-            theta[i__] = atan2((real)phantom[1].r, (real)phantom[*p + 1].r);
+            theta[i__] = atan2((real)phantom[1].real, (real)phantom[*p + 1].real);
             c__ = cos(theta[i__]);
             s = sin(theta[i__]);
-            phantom[1].r = 1.f;
-            phantom[1].i = 0.f; // , expr subst
+            phantom[1].real = 1.f;
+            phantom[1].imag = 0.f; // , expr subst
             i__2 = *p + 1;
-            phantom[i__2].r = 1.f;
-            phantom[i__2].i = 0.f; // , expr subst
+            phantom[i__2].real = 1.f;
+            phantom[i__2].imag = 0.f; // , expr subst
             r_cnjg(&q__1, &taup1[1]);
             aocl_lapack_clarf("L", p, q, &phantom[1], &c__1, &q__1, &x11[x11_offset], ldx11,
                               &work[ilarf]);
@@ -422,16 +422,16 @@ void aocl_lapack_cunbdb4(aocl_int64_t *m, aocl_int64_t *p, aocl_int64_t *q, scom
             i__2 = *m - *p - i__ + 1;
             aocl_lapack_clarfgp(&i__2, &x21[i__ + (i__ - 1) * x21_dim1],
                                 &x21[i__ + 1 + (i__ - 1) * x21_dim1], &c__1, &taup2[i__]);
-            theta[i__] = atan2((real)x11[i__ + (i__ - 1) * x11_dim1].r,
-                               (real)x21[i__ + (i__ - 1) * x21_dim1].r);
+            theta[i__] = atan2((real)x11[i__ + (i__ - 1) * x11_dim1].real,
+                               (real)x21[i__ + (i__ - 1) * x21_dim1].real);
             c__ = cos(theta[i__]);
             s = sin(theta[i__]);
             i__2 = i__ + (i__ - 1) * x11_dim1;
-            x11[i__2].r = 1.f;
-            x11[i__2].i = 0.f; // , expr subst
+            x11[i__2].real = 1.f;
+            x11[i__2].imag = 0.f; // , expr subst
             i__2 = i__ + (i__ - 1) * x21_dim1;
-            x21[i__2].r = 1.f;
-            x21[i__2].i = 0.f; // , expr subst
+            x21[i__2].real = 1.f;
+            x21[i__2].imag = 0.f; // , expr subst
             i__2 = *p - i__ + 1;
             i__3 = *q - i__ + 1;
             r_cnjg(&q__1, &taup1[i__]);
@@ -453,10 +453,10 @@ void aocl_lapack_cunbdb4(aocl_int64_t *m, aocl_int64_t *p, aocl_int64_t *q, scom
         aocl_lapack_clarfgp(&i__2, &x21[i__ + i__ * x21_dim1], &x21[i__ + (i__ + 1) * x21_dim1],
                             ldx21, &tauq1[i__]);
         i__2 = i__ + i__ * x21_dim1;
-        c__ = x21[i__2].r;
+        c__ = x21[i__2].real;
         i__2 = i__ + i__ * x21_dim1;
-        x21[i__2].r = 1.f;
-        x21[i__2].i = 0.f; // , expr subst
+        x21[i__2].real = 1.f;
+        x21[i__2].imag = 0.f; // , expr subst
         i__2 = *p - i__;
         i__3 = *q - i__ + 1;
         aocl_lapack_clarf("R", &i__2, &i__3, &x21[i__ + i__ * x21_dim1], ldx21, &tauq1[i__],
@@ -489,8 +489,8 @@ void aocl_lapack_cunbdb4(aocl_int64_t *m, aocl_int64_t *p, aocl_int64_t *q, scom
         aocl_lapack_clarfgp(&i__2, &x11[i__ + i__ * x11_dim1], &x11[i__ + (i__ + 1) * x11_dim1],
                             ldx11, &tauq1[i__]);
         i__2 = i__ + i__ * x11_dim1;
-        x11[i__2].r = 1.f;
-        x11[i__2].i = 0.f; // , expr subst
+        x11[i__2].real = 1.f;
+        x11[i__2].imag = 0.f; // , expr subst
         i__2 = *p - i__;
         i__3 = *q - i__ + 1;
         aocl_lapack_clarf("R", &i__2, &i__3, &x11[i__ + i__ * x11_dim1], ldx11, &tauq1[i__],
@@ -512,8 +512,8 @@ void aocl_lapack_cunbdb4(aocl_int64_t *m, aocl_int64_t *p, aocl_int64_t *q, scom
         aocl_lapack_clarfgp(&i__2, &x21[*m - *q + i__ - *p + i__ * x21_dim1],
                             &x21[*m - *q + i__ - *p + (i__ + 1) * x21_dim1], ldx21, &tauq1[i__]);
         i__2 = *m - *q + i__ - *p + i__ * x21_dim1;
-        x21[i__2].r = 1.f;
-        x21[i__2].i = 0.f; // , expr subst
+        x21[i__2].real = 1.f;
+        x21[i__2].imag = 0.f; // , expr subst
         i__2 = *q - i__;
         i__3 = *q - i__ + 1;
         aocl_lapack_clarf("R", &i__2, &i__3, &x21[*m - *q + i__ - *p + i__ * x21_dim1], ldx21,

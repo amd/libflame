@@ -4,8 +4,8 @@
  with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c -lm Source for
  libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static dcomplex c_b1 = {{0.}, {0.}};
-static dcomplex c_b2 = {{1.}, {0.}};
+static dcomplex c_b1 = {0., 0.};
+static dcomplex c_b2 = {1., 0.};
 static aocl_int64_t c__4 = 4;
 static aocl_int64_t c_n1 = -1;
 static aocl_int64_t c__1 = 1;
@@ -365,8 +365,8 @@ void aocl_lapack_zhetrd_he2hb(char *uplo, aocl_int64_t *n, aocl_int64_t *kd, dco
     }
     else if(lquery)
     {
-        work[1].r = (doublereal)lwmin;
-        work[1].i = 0.; // , expr subst
+        work[1].real = (doublereal)lwmin;
+        work[1].imag = 0.; // , expr subst
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -400,8 +400,8 @@ void aocl_lapack_zhetrd_he2hb(char *uplo, aocl_int64_t *n, aocl_int64_t *kd, dco
                 /* L110: */
             }
         }
-        work[1].r = 1.;
-        work[1].i = 0.; // , expr subst
+        work[1].real = 1.;
+        work[1].imag = 0.; // , expr subst
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
@@ -467,14 +467,14 @@ void aocl_lapack_zhetrd_he2hb(char *uplo, aocl_int64_t *n, aocl_int64_t *kd, dco
                             lda, &work[s2pos], &lds2, &c_b1, &work[wpos], &ldw);
             aocl_blas_zgemm("No transpose", "Conjugate", &pk, &pk, &pn, &c_b2, &work[wpos], &ldw,
                             &work[s2pos], &lds2, &c_b1, &work[s1pos], &lds1);
-            z__1.r = -.5;
-            z__1.i = -0.; // , expr subst
+            z__1.real = -.5;
+            z__1.imag = -0.; // , expr subst
             aocl_blas_zgemm("No transpose", "No transpose", &pk, &pn, &pk, &z__1, &work[s1pos],
                             &lds1, &a[i__ + (i__ + *kd) * a_dim1], lda, &c_b2, &work[wpos], &ldw);
             /* Update the unreduced submatrix A(i+kd:n,i+kd:n), using */
             /* an update of the form: A := A - V'*W - W'*V */
-            z__1.r = -1.;
-            z__1.i = -0.; // , expr subst
+            z__1.real = -1.;
+            z__1.imag = -0.; // , expr subst
             aocl_blas_zher2k(uplo, "Conjugate", &pn, &pk, &z__1, &a[i__ + (i__ + *kd) * a_dim1],
                              lda, &work[wpos], &ldw, &c_b33, &a[i__ + *kd + (i__ + *kd) * a_dim1],
                              lda);
@@ -530,15 +530,15 @@ void aocl_lapack_zhetrd_he2hb(char *uplo, aocl_int64_t *n, aocl_int64_t *kd, dco
                             lda, &work[s2pos], &lds2, &c_b1, &work[wpos], &ldw);
             aocl_blas_zgemm("Conjugate", "No transpose", &pk, &pk, &pn, &c_b2, &work[s2pos], &lds2,
                             &work[wpos], &ldw, &c_b1, &work[s1pos], &lds1);
-            z__1.r = -.5;
-            z__1.i = -0.; // , expr subst
+            z__1.real = -.5;
+            z__1.imag = -0.; // , expr subst
             aocl_blas_zgemm("No transpose", "No transpose", &pn, &pk, &pk, &z__1,
                             &a[i__ + *kd + i__ * a_dim1], lda, &work[s1pos], &lds1, &c_b2,
                             &work[wpos], &ldw);
             /* Update the unreduced submatrix A(i+kd:n,i+kd:n), using */
             /* an update of the form: A := A - V*W' - W*V' */
-            z__1.r = -1.;
-            z__1.i = -0.; // , expr subst
+            z__1.real = -1.;
+            z__1.imag = -0.; // , expr subst
             aocl_blas_zher2k(uplo, "No transpose", &pn, &pk, &z__1, &a[i__ + *kd + i__ * a_dim1],
                              lda, &work[wpos], &ldw, &c_b33, &a[i__ + *kd + (i__ + *kd) * a_dim1],
                              lda);
@@ -563,8 +563,8 @@ void aocl_lapack_zhetrd_he2hb(char *uplo, aocl_int64_t *n, aocl_int64_t *kd, dco
             /* L60: */
         }
     }
-    work[1].r = (doublereal)lwmin;
-    work[1].i = 0.; // , expr subst
+    work[1].real = (doublereal)lwmin;
+    work[1].imag = 0.; // , expr subst
     AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of ZHETRD_HE2HB */

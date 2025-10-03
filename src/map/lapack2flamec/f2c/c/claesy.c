@@ -4,7 +4,7 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static scomplex c_b1 = {{1.f}, {0.f}};
+static scomplex c_b1 = {1.f, 0.f};
 static aocl_int64_t c__2 = 2;
 /* > \brief \b CLAESY computes the eigenvalues and eigenvectors of a 2-by-2 scomplex symmetric
  * matrix. */
@@ -149,8 +149,8 @@ void claesy_(scomplex *a, scomplex *b, scomplex *c__, scomplex *rt1, scomplex *r
     /* To avoid divide by zero later, we treat this case separately. */
     if(c_abs(b) == 0.f)
     {
-        rt1->r = a->r, rt1->i = a->i;
-        rt2->r = c__->r, rt2->i = c__->i;
+        rt1->real = a->real, rt1->imag = a->imag;
+        rt2->real = c__->real, rt2->imag = c__->imag;
         if(c_abs(rt1) < c_abs(rt2))
         {
             tmp.real = rt1->real;
@@ -206,12 +206,12 @@ void claesy_(scomplex *a, scomplex *b, scomplex *c__, scomplex *rt1, scomplex *r
         }
         /* Compute the two eigenvalues. RT1 and RT2 are exchanged */
         /* if necessary so that RT1 will have the greater magnitude. */
-        q__1.r = s.r + t.r;
-        q__1.i = s.i + t.i; // , expr subst
-        rt1->r = q__1.r, rt1->i = q__1.i;
-        q__1.r = s.r - t.r;
-        q__1.i = s.i - t.i; // , expr subst
-        rt2->r = q__1.r, rt2->i = q__1.i;
+        q__1.real = s.real + t.real;
+        q__1.imag = s.imag + t.imag; // , expr subst
+        rt1->real = q__1.real, rt1->imag = q__1.imag;
+        q__1.real = s.real - t.real;
+        q__1.imag = s.imag - t.imag; // , expr subst
+        rt2->real = q__1.real, rt2->imag = q__1.imag;
         if(c_abs(rt1) < c_abs(rt2))
         {
             tmp.real = rt1->real;
@@ -226,7 +226,7 @@ void claesy_(scomplex *a, scomplex *b, scomplex *c__, scomplex *rt1, scomplex *r
         q__2.real = rt1->real - a->real;
         q__2.imag = rt1->imag - a->imag; // , expr subst
         c_div(&q__1, &q__2, b);
-        sn1->r = q__1.r, sn1->i = q__1.i;
+        sn1->real = q__1.real, sn1->imag = q__1.imag;
         tabs = c_abs(sn1);
         if(tabs > 1.f)
         {

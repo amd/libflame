@@ -4,8 +4,8 @@
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
  /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static scomplex c_b1 = {{0.f}, {0.f}};
-static scomplex c_b2 = {{1.f}, {0.f}};
+static scomplex c_b1 = {0.f, 0.f};
+static scomplex c_b2 = {1.f, 0.f};
 static aocl_int64_t c_n1 = -1;
 static aocl_int64_t c__1 = 1;
 static aocl_int64_t c__0 = 0;
@@ -475,20 +475,20 @@ void aocl_lapack_cgges3(char *jobvsl, char *jobvsr, char *sort, L_fp2 selctg, ao
         aocl_lapack_cgeqrf(n, n, &b[b_offset], ldb, &work[1], &work[1], &c_n1, &ierr);
         /* Computing MAX */
         i__1 = 1;
-        i__2 = *n + (integer)work[1].r; // , expr subst
+        i__2 = *n + (integer)work[1].real; // , expr subst
         lwkopt = fla_max(i__1, i__2);
         aocl_lapack_cunmqr("L", "C", n, n, n, &b[b_offset], ldb, &work[1], &a[a_offset], lda,
                            &work[1], &c_n1, &ierr);
         /* Computing MAX */
         i__1 = lwkopt;
-        i__2 = *n + (integer)work[1].r; // , expr subst
+        i__2 = *n + (integer)work[1].real; // , expr subst
         lwkopt = fla_max(i__1, i__2);
         if(ilvsl)
         {
             aocl_lapack_cungqr(n, n, n, &vsl[vsl_offset], ldvsl, &work[1], &work[1], &c_n1, &ierr);
             /* Computing MAX */
             i__1 = lwkopt;
-            i__2 = *n + (integer)work[1].r; // , expr subst
+            i__2 = *n + (integer)work[1].real; // , expr subst
             lwkopt = fla_max(i__1, i__2);
         }
         aocl_lapack_cgghd3(jobvsl, jobvsr, n, &c__1, n, &a[a_offset], lda, &b[b_offset], ldb,
@@ -496,14 +496,14 @@ void aocl_lapack_cgges3(char *jobvsl, char *jobvsr, char *sort, L_fp2 selctg, ao
                            &ierr);
         /* Computing MAX */
         i__1 = lwkopt;
-        i__2 = *n + (integer)work[1].r; // , expr subst
+        i__2 = *n + (integer)work[1].real; // , expr subst
         lwkopt = fla_max(i__1, i__2);
         aocl_lapack_chgeqz("S", jobvsl, jobvsr, n, &c__1, n, &a[a_offset], lda, &b[b_offset], ldb,
                            &alpha[1], &beta[1], &vsl[vsl_offset], ldvsl, &vsr[vsr_offset], ldvsr,
                            &work[1], &c_n1, &rwork[1], &ierr);
         /* Computing MAX */
         i__1 = lwkopt;
-        i__2 = (integer)work[1].r; // , expr subst
+        i__2 = (integer)work[1].real; // , expr subst
         lwkopt = fla_max(i__1, i__2);
         if(wantst)
         {
@@ -512,13 +512,13 @@ void aocl_lapack_cgges3(char *jobvsl, char *jobvsr, char *sort, L_fp2 selctg, ao
                                ldvsr, sdim, &pvsl, &pvsr, dif, &work[1], &c_n1, idum, &c__1, &ierr);
             /* Computing MAX */
             i__1 = lwkopt;
-            i__2 = (integer)work[1].r; // , expr subst
+            i__2 = (integer)work[1].real; // , expr subst
             lwkopt = fla_max(i__1, i__2);
         }
-        q__1.r = (real)lwkopt;
-        q__1.i = 0.f; // , expr subst
-        work[1].r = q__1.r;
-        work[1].i = q__1.i; // , expr subst
+        q__1.real = (real)lwkopt;
+        q__1.imag = 0.f; // , expr subst
+        work[1].real = q__1.real;
+        work[1].imag = q__1.imag; // , expr subst
     }
     if(*info != 0)
     {
@@ -716,10 +716,10 @@ void aocl_lapack_cgges3(char *jobvsl, char *jobvsr, char *sort, L_fp2 selctg, ao
         }
     }
 L30:
-    q__1.r = (real)lwkopt;
-    q__1.i = 0.f; // , expr subst
-    work[1].r = q__1.r;
-    work[1].i = q__1.i; // , expr subst
+    q__1.real = (real)lwkopt;
+    q__1.imag = 0.f; // , expr subst
+    work[1].real = q__1.real;
+    work[1].imag = q__1.imag; // , expr subst
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
     return;
     /* End of CGGES3 */

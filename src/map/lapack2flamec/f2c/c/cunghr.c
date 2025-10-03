@@ -220,8 +220,8 @@ void aocl_lapack_cunghr(aocl_int64_t *n, aocl_int64_t *ilo, aocl_int64_t *ihi, s
         nb = aocl_lapack_ilaenv(&c__1, "CUNGQR", " ", &nh, &nh, &nh, &c_n1);
         lwkopt = fla_max(1, nh) * nb;
         r__1 = aocl_lapack_sroundup_lwork(&lwkopt);
-        work[1].r = r__1;
-        work[1].i = 0.f; // , expr subst
+        work[1].real = r__1;
+        work[1].imag = 0.f; // , expr subst
     }
     if(*info != 0)
     {
@@ -238,8 +238,8 @@ void aocl_lapack_cunghr(aocl_int64_t *n, aocl_int64_t *ilo, aocl_int64_t *ihi, s
     /* Quick return if possible */
     if(*n == 0)
     {
-        work[1].r = 1.f;
-        work[1].i = 0.f; // , expr subst
+        work[1].real = 1.f;
+        work[1].imag = 0.f; // , expr subst
         AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
         return;
     }
@@ -315,8 +315,8 @@ void aocl_lapack_cunghr(aocl_int64_t *n, aocl_int64_t *ilo, aocl_int64_t *ihi, s
                            &work[1], lwork, &iinfo);
     }
     r__1 = aocl_lapack_sroundup_lwork(&lwkopt);
-    work[1].r = r__1;
-    work[1].i = 0.f; // , expr subst
+    work[1].real = r__1;
+    work[1].imag = 0.f; // , expr subst
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
     return;
     /* End of CUNGHR */

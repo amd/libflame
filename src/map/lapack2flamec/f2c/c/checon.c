@@ -236,7 +236,7 @@ void aocl_lapack_checon(char *uplo, aocl_int64_t *n, scomplex *a, aocl_int64_t *
         for(i__ = *n; i__ >= 1; --i__)
         {
             i__1 = i__ + i__ * a_dim1;
-            if(ipiv[i__] > 0 && (a[i__1].r == 0.f && a[i__1].i == 0.f))
+            if(ipiv[i__] > 0 && (a[i__1].real == 0.f && a[i__1].imag == 0.f))
             {
                 AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
                 return;
@@ -251,7 +251,7 @@ void aocl_lapack_checon(char *uplo, aocl_int64_t *n, scomplex *a, aocl_int64_t *
         for(i__ = 1; i__ <= i__1; ++i__)
         {
             i__2 = i__ + i__ * a_dim1;
-            if(ipiv[i__] > 0 && (a[i__2].r == 0.f && a[i__2].i == 0.f))
+            if(ipiv[i__] > 0 && (a[i__2].real == 0.f && a[i__2].imag == 0.f))
             {
                 AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
                 return;

@@ -603,12 +603,12 @@ void aocl_lapack_ctgsen(aocl_int64_t *ijob, logical *wantq, logical *wantz, logi
         {
             i__2 = k;
             i__3 = k + k * a_dim1;
-            alpha[i__2].r = a[i__3].r;
-            alpha[i__2].i = a[i__3].i; // , expr subst
+            alpha[i__2].real = a[i__3].real;
+            alpha[i__2].imag = a[i__3].imag; // , expr subst
             i__2 = k;
             i__3 = k + k * b_dim1;
-            beta[i__2].r = b[i__3].r;
-            beta[i__2].i = b[i__3].i; // , expr subst
+            beta[i__2].real = b[i__3].real;
+            beta[i__2].imag = b[i__3].imag; // , expr subst
             if(k < *n)
             {
                 if(select[k])
@@ -655,8 +655,8 @@ void aocl_lapack_ctgsen(aocl_int64_t *ijob, logical *wantq, logical *wantz, logi
         liwmin = 1;
     }
     r__1 = aocl_lapack_sroundup_lwork(&lwmin);
-    work[1].r = r__1;
-    work[1].i = 0.f; // , expr subst
+    work[1].real = r__1;
+    work[1].imag = 0.f; // , expr subst
     iwork[1] = (aocl_int_t)(liwmin);
     if(*lwork < lwmin && !lquery)
     {
@@ -885,19 +885,19 @@ void aocl_lapack_ctgsen(aocl_int64_t *ijob, logical *wantq, logical *wantz, logi
         if(dscale > safmin)
         {
             i__2 = k + k * b_dim1;
-            q__2.r = b[i__2].r / dscale;
-            q__2.i = b[i__2].i / dscale; // , expr subst
+            q__2.real = b[i__2].real / dscale;
+            q__2.imag = b[i__2].imag / dscale; // , expr subst
             r_cnjg(&q__1, &q__2);
-            temp1.r = q__1.r;
-            temp1.i = q__1.i; // , expr subst
+            temp1.real = q__1.real;
+            temp1.imag = q__1.imag; // , expr subst
             i__2 = k + k * b_dim1;
-            q__1.r = b[i__2].r / dscale;
-            q__1.i = b[i__2].i / dscale; // , expr subst
-            temp2.r = q__1.r;
-            temp2.i = q__1.i; // , expr subst
+            q__1.real = b[i__2].real / dscale;
+            q__1.imag = b[i__2].imag / dscale; // , expr subst
+            temp2.real = q__1.real;
+            temp2.imag = q__1.imag; // , expr subst
             i__2 = k + k * b_dim1;
-            b[i__2].r = dscale;
-            b[i__2].i = 0.f; // , expr subst
+            b[i__2].real = dscale;
+            b[i__2].imag = 0.f; // , expr subst
             i__2 = *n - k;
             aocl_blas_cscal(&i__2, &temp1, &b[k + (k + 1) * b_dim1], ldb);
             i__2 = *n - k + 1;
@@ -910,23 +910,23 @@ void aocl_lapack_ctgsen(aocl_int64_t *ijob, logical *wantq, logical *wantz, logi
         else
         {
             i__2 = k + k * b_dim1;
-            b[i__2].r = 0.f;
-            b[i__2].i = 0.f; // , expr subst
+            b[i__2].real = 0.f;
+            b[i__2].imag = 0.f; // , expr subst
         }
         i__2 = k;
         i__3 = k + k * a_dim1;
-        alpha[i__2].r = a[i__3].r;
-        alpha[i__2].i = a[i__3].i; // , expr subst
+        alpha[i__2].real = a[i__3].real;
+        alpha[i__2].imag = a[i__3].imag; // , expr subst
         i__2 = k;
         i__3 = k + k * b_dim1;
-        beta[i__2].r = b[i__3].r;
-        beta[i__2].i = b[i__3].i; // , expr subst
+        beta[i__2].real = b[i__3].real;
+        beta[i__2].imag = b[i__3].imag; // , expr subst
         /* L60: */
     }
 L70:
     r__1 = aocl_lapack_sroundup_lwork(&lwmin);
-    work[1].r = r__1;
-    work[1].i = 0.f; // , expr subst
+    work[1].real = r__1;
+    work[1].imag = 0.f; // , expr subst
     iwork[1] = (aocl_int_t)(liwmin);
     AOCL_DTL_TRACE_EXIT(AOCL_DTL_LEVEL_TRACE_5);
     return;

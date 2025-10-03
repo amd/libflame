@@ -4,7 +4,7 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static dcomplex c_b1 = {{1.}, {0.}};
+static dcomplex c_b1 = {1., 0.};
 static aocl_int64_t c__1 = 1;
 /* > \brief \b ZTPTRI */
 /* =========== DOCUMENTATION =========== */
@@ -206,7 +206,7 @@ void aocl_lapack_ztptri(char *uplo, char *diag, aocl_int64_t *n, dcomplex *ap,
             {
                 jj += *info;
                 i__2 = jj;
-                if(ap[i__2].r == 0. && ap[i__2].i == 0.)
+                if(ap[i__2].real == 0. && ap[i__2].imag == 0.)
                 {
                     AOCL_DTL_TRACE_LOG_EXIT
                     return;
@@ -221,7 +221,7 @@ void aocl_lapack_ztptri(char *uplo, char *diag, aocl_int64_t *n, dcomplex *ap,
             for(*info = 1; *info <= i__1; ++(*info))
             {
                 i__2 = jj;
-                if(ap[i__2].r == 0. && ap[i__2].i == 0.)
+                if(ap[i__2].real == 0. && ap[i__2].imag == 0.)
                 {
                     AOCL_DTL_TRACE_LOG_EXIT
                     return;

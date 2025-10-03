@@ -225,9 +225,9 @@ void aocl_lapack_cpptrf(char *uplo, aocl_int64_t *n, scomplex *ap, aocl_int64_t 
             r__1 = ap[i__2].real;
             i__3 = j - 1;
             aocl_lapack_cdotc_f2c(&q__2, &i__3, &ap[jc], &c__1, &ap[jc], &c__1);
-            q__1.r = r__1 - q__2.r;
-            q__1.i = -q__2.i; // , expr subst
-            ajj = q__1.r;
+            q__1.real = r__1 - q__2.real;
+            q__1.imag = -q__2.imag; // , expr subst
+            ajj = q__1.real;
             if(ajj <= 0.f)
             {
                 i__2 = jj;
@@ -251,7 +251,7 @@ void aocl_lapack_cpptrf(char *uplo, aocl_int64_t *n, scomplex *ap, aocl_int64_t 
         {
             /* Compute L(J,J) and test for non-positive-definiteness. */
             i__2 = jj;
-            ajj = ap[i__2].r;
+            ajj = ap[i__2].real;
             if(ajj <= 0.f)
             {
                 i__2 = jj;

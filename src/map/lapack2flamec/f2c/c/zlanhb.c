@@ -214,7 +214,7 @@ doublereal aocl_lapack_zlanhb(char *norm, char *uplo, aocl_int64_t *n, aocl_int6
                     /* L10: */
                 }
                 i__3 = *k + 1 + j * ab_dim1;
-                sum = (d__1 = ab[i__3].r, f2c_abs(d__1));
+                sum = (d__1 = ab[i__3].real, f2c_abs(d__1));
                 if(value < sum || disnan_(&sum))
                 {
                     value = sum;
@@ -228,7 +228,7 @@ doublereal aocl_lapack_zlanhb(char *norm, char *uplo, aocl_int64_t *n, aocl_int6
             for(j = 1; j <= i__1; ++j)
             {
                 i__3 = j * ab_dim1 + 1;
-                sum = (d__1 = ab[i__3].r, f2c_abs(d__1));
+                sum = (d__1 = ab[i__3].real, f2c_abs(d__1));
                 if(value < sum || disnan_(&sum))
                 {
                     value = sum;
@@ -273,7 +273,7 @@ doublereal aocl_lapack_zlanhb(char *norm, char *uplo, aocl_int64_t *n, aocl_int6
                     /* L50: */
                 }
                 i__4 = *k + 1 + j * ab_dim1;
-                work[j] = sum + (d__1 = ab[i__4].r, f2c_abs(d__1));
+                work[j] = sum + (d__1 = ab[i__4].real, f2c_abs(d__1));
                 /* L60: */
             }
             i__1 = *n;
@@ -299,7 +299,7 @@ doublereal aocl_lapack_zlanhb(char *norm, char *uplo, aocl_int64_t *n, aocl_int6
             for(j = 1; j <= i__1; ++j)
             {
                 i__4 = j * ab_dim1 + 1;
-                sum = work[j] + (d__1 = ab[i__4].r, f2c_abs(d__1));
+                sum = work[j] + (d__1 = ab[i__4].real, f2c_abs(d__1));
                 l = 1 - j;
                 /* Computing MIN */
                 i__3 = *n;
@@ -365,10 +365,10 @@ doublereal aocl_lapack_zlanhb(char *norm, char *uplo, aocl_int64_t *n, aocl_int6
         for(j = 1; j <= i__1; ++j)
         {
             i__4 = l + j * ab_dim1;
-            if(ab[i__4].r != 0.)
+            if(ab[i__4].real != 0.)
             {
                 i__4 = l + j * ab_dim1;
-                absa = (d__1 = ab[i__4].r, f2c_abs(d__1));
+                absa = (d__1 = ab[i__4].real, f2c_abs(d__1));
                 if(scale < absa)
                 {
                     /* Computing 2nd power */

@@ -4,7 +4,7 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static dcomplex c_b1 = {{1.}, {0.}};
+static dcomplex c_b1 = {1., 0.};
 static doublereal c_b4 = 1.;
 static aocl_int64_t c__1 = 1;
 /* > \brief \b ZLAUNHR_COL_GETRFNP2 */
@@ -267,19 +267,19 @@ void aocl_lapack_zlaunhr_col_getrfnp2(aocl_int64_t *m, aocl_int64_t *n, dcomplex
         /* use unblocked code */
         /* Transfer the sign */
         i__1 = a_dim1 + 1;
-        d__2 = a[i__1].r;
+        d__2 = a[i__1].real;
         d__1 = -d_sign(&c_b4, &d__2);
-        z__1.r = d__1;
-        z__1.i = 0.; // , expr subst
-        d__[1].r = z__1.r;
-        d__[1].i = z__1.i; // , expr subst
+        z__1.real = d__1;
+        z__1.imag = 0.; // , expr subst
+        d__[1].real = z__1.real;
+        d__[1].imag = z__1.imag; // , expr subst
         /* Construct the row of U */
         i__1 = a_dim1 + 1;
         i__2 = a_dim1 + 1;
-        z__1.r = a[i__2].r - d__[1].r;
-        z__1.i = a[i__2].i - d__[1].i; // , expr subst
-        a[i__1].r = z__1.r;
-        a[i__1].i = z__1.i; // , expr subst
+        z__1.real = a[i__2].real - d__[1].real;
+        z__1.imag = a[i__2].imag - d__[1].imag; // , expr subst
+        a[i__1].real = z__1.real;
+        a[i__1].imag = z__1.imag; // , expr subst
     }
     else if(*n == 1)
     {
@@ -287,25 +287,25 @@ void aocl_lapack_zlaunhr_col_getrfnp2(aocl_int64_t *m, aocl_int64_t *n, dcomplex
         /* use unblocked code */
         /* Transfer the sign */
         i__1 = a_dim1 + 1;
-        d__2 = a[i__1].r;
+        d__2 = a[i__1].real;
         d__1 = -d_sign(&c_b4, &d__2);
-        z__1.r = d__1;
-        z__1.i = 0.; // , expr subst
-        d__[1].r = z__1.r;
-        d__[1].i = z__1.i; // , expr subst
+        z__1.real = d__1;
+        z__1.imag = 0.; // , expr subst
+        d__[1].real = z__1.real;
+        d__[1].imag = z__1.imag; // , expr subst
         /* Construct the row of U */
         i__1 = a_dim1 + 1;
         i__2 = a_dim1 + 1;
-        z__1.r = a[i__2].r - d__[1].r;
-        z__1.i = a[i__2].i - d__[1].i; // , expr subst
-        a[i__1].r = z__1.r;
-        a[i__1].i = z__1.i; // , expr subst
+        z__1.real = a[i__2].real - d__[1].real;
+        z__1.imag = a[i__2].imag - d__[1].imag; // , expr subst
+        a[i__1].real = z__1.real;
+        a[i__1].imag = z__1.imag; // , expr subst
         /* Scale the elements 2:M of the column */
         /* Determine machine safe minimum */
         sfmin = dlamch_("S");
         /* Construct the subdiagonal elements of L */
         i__1 = a_dim1 + 1;
-        if((d__1 = a[i__1].r, f2c_dabs(d__1)) + (d__2 = d_imag(&a[a_dim1 + 1]), f2c_dabs(d__2))
+        if((d__1 = a[i__1].real, f2c_dabs(d__1)) + (d__2 = d_imag(&a[a_dim1 + 1]), f2c_dabs(d__2))
            >= sfmin)
         {
             i__1 = *m - 1;
@@ -319,8 +319,8 @@ void aocl_lapack_zlaunhr_col_getrfnp2(aocl_int64_t *m, aocl_int64_t *n, dcomplex
             {
                 i__2 = i__ + a_dim1;
                 z_div(&z__1, &a[i__ + a_dim1], &a[a_dim1 + 1]);
-                a[i__2].r = z__1.r;
-                a[i__2].i = z__1.i; // , expr subst
+                a[i__2].real = z__1.real;
+                a[i__2].imag = z__1.imag; // , expr subst
             }
         }
     }
@@ -341,8 +341,8 @@ void aocl_lapack_zlaunhr_col_getrfnp2(aocl_int64_t *m, aocl_int64_t *n, dcomplex
         /* Update B22, i.e. compute the Schur complement */
         /* B22 := B22 - B21*B12 */
         i__1 = *m - n1;
-        z__1.r = -1.;
-        z__1.i = -0.; // , expr subst
+        z__1.real = -1.;
+        z__1.imag = -0.; // , expr subst
         aocl_blas_zgemm("N", "N", &i__1, &n2, &n1, &z__1, &a[n1 + 1 + a_dim1], lda,
                         &a[(n1 + 1) * a_dim1 + 1], lda, &c_b1, &a[n1 + 1 + (n1 + 1) * a_dim1], lda);
         /* Factor B22, recursive call */

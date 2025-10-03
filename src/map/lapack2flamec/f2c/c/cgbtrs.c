@@ -4,7 +4,7 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static scomplex c_b1 = {{1.f}, {0.f}};
+static scomplex c_b1 = {1.f, 0.f};
 static aocl_int64_t c__1 = 1;
 /* > \brief \b CGBTRS */
 /* =========== DOCUMENTATION =========== */
@@ -281,8 +281,8 @@ void aocl_lapack_cgbtrs(char *trans, aocl_int64_t *n, aocl_int64_t *kl, aocl_int
                 {
                     aocl_blas_cswap(nrhs, &b[l + b_dim1], ldb, &b[j + b_dim1], ldb);
                 }
-                q__1.r = -1.f;
-                q__1.i = -0.f; // , expr subst
+                q__1.real = -1.f;
+                q__1.imag = -0.f; // , expr subst
                 aocl_blas_cgeru(&lm, nrhs, &q__1, &ab[kd + 1 + j * ab_dim1], &c__1, &b[j + b_dim1],
                                 ldb, &b[j + 1 + b_dim1], ldb);
                 /* L10: */
@@ -319,8 +319,8 @@ void aocl_lapack_cgbtrs(char *trans, aocl_int64_t *n, aocl_int64_t *kl, aocl_int
                 i__1 = *kl;
                 i__2 = *n - j; // , expr subst
                 lm = fla_min(i__1, i__2);
-                q__1.r = -1.f;
-                q__1.i = -0.f; // , expr subst
+                q__1.real = -1.f;
+                q__1.imag = -0.f; // , expr subst
                 aocl_blas_cgemv("Transpose", &lm, nrhs, &q__1, &b[j + 1 + b_dim1], ldb,
                                 &ab[kd + 1 + j * ab_dim1], &c__1, &c_b1, &b[j + b_dim1], ldb);
                 l = ipiv[j];
@@ -354,8 +354,8 @@ void aocl_lapack_cgbtrs(char *trans, aocl_int64_t *n, aocl_int64_t *kl, aocl_int
                 i__2 = *n - j; // , expr subst
                 lm = fla_min(i__1, i__2);
                 aocl_lapack_clacgv(nrhs, &b[j + b_dim1], ldb);
-                q__1.r = -1.f;
-                q__1.i = -0.f; // , expr subst
+                q__1.real = -1.f;
+                q__1.imag = -0.f; // , expr subst
                 aocl_blas_cgemv("Conjugate transpose", &lm, nrhs, &q__1, &b[j + 1 + b_dim1], ldb,
                                 &ab[kd + 1 + j * ab_dim1], &c__1, &c_b1, &b[j + b_dim1], ldb);
                 aocl_lapack_clacgv(nrhs, &b[j + b_dim1], ldb);

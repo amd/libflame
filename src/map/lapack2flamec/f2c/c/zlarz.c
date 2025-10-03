@@ -4,7 +4,7 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static dcomplex c_b1 = {{1.}, {0.}};
+static dcomplex c_b1 = {1., 0.};
 static aocl_int64_t c__1 = 1;
 /* > \brief \b ZLARZ applies an elementary reflector (as returned by stzrzf) to a general matrix. */
 /* =========== DOCUMENTATION =========== */
@@ -202,7 +202,7 @@ void aocl_lapack_zlarz(char *side, aocl_int64_t *m, aocl_int64_t *n, aocl_int64_
     if(lsame_(side, "L", 1, 1))
     {
         /* Form H * C */
-        if(tau->r != 0. || tau->i != 0.)
+        if(tau->real != 0. || tau->imag != 0.)
         {
             /* w( 1:n ) = conjg( C( 1, 1:n ) ) */
             aocl_blas_zcopy(n, &c__[c_offset], ldc, &work[1], &c__1);
@@ -212,13 +212,13 @@ void aocl_lapack_zlarz(char *side, aocl_int64_t *m, aocl_int64_t *n, aocl_int64_
                             &v[1], incv, &c_b1, &work[1], &c__1);
             aocl_lapack_zlacgv(n, &work[1], &c__1);
             /* C( 1, 1:n ) = C( 1, 1:n ) - tau * w( 1:n ) */
-            z__1.r = -tau->r;
-            z__1.i = -tau->i; // , expr subst
+            z__1.real = -tau->real;
+            z__1.imag = -tau->imag; // , expr subst
             aocl_blas_zaxpy(n, &z__1, &work[1], &c__1, &c__[c_offset], ldc);
             /* C( m-l+1:m, 1:n ) = C( m-l+1:m, 1:n ) - ... */
             /* tau * v( 1:l ) * w( 1:n )**H */
-            z__1.r = -tau->r;
-            z__1.i = -tau->i; // , expr subst
+            z__1.real = -tau->real;
+            z__1.imag = -tau->imag; // , expr subst
             aocl_blas_zgeru(l, n, &z__1, &v[1], incv, &work[1], &c__1, &c__[*m - *l + 1 + c_dim1],
                             ldc);
         }
@@ -226,7 +226,7 @@ void aocl_lapack_zlarz(char *side, aocl_int64_t *m, aocl_int64_t *n, aocl_int64_
     else
     {
         /* Form C * H */
-        if(tau->r != 0. || tau->i != 0.)
+        if(tau->real != 0. || tau->imag != 0.)
         {
             /* w( 1:m ) = C( 1:m, 1 ) */
             aocl_blas_zcopy(m, &c__[c_offset], &c__1, &work[1], &c__1);
@@ -234,13 +234,13 @@ void aocl_lapack_zlarz(char *side, aocl_int64_t *m, aocl_int64_t *n, aocl_int64_
             aocl_blas_zgemv("No transpose", m, l, &c_b1, &c__[(*n - *l + 1) * c_dim1 + 1], ldc,
                             &v[1], incv, &c_b1, &work[1], &c__1);
             /* C( 1:m, 1 ) = C( 1:m, 1 ) - tau * w( 1:m ) */
-            z__1.r = -tau->r;
-            z__1.i = -tau->i; // , expr subst
+            z__1.real = -tau->real;
+            z__1.imag = -tau->imag; // , expr subst
             aocl_blas_zaxpy(m, &z__1, &work[1], &c__1, &c__[c_offset], &c__1);
             /* C( 1:m, n-l+1:n ) = C( 1:m, n-l+1:n ) - ... */
             /* tau * w( 1:m ) * v( 1:l )**H */
-            z__1.r = -tau->r;
-            z__1.i = -tau->i; // , expr subst
+            z__1.real = -tau->real;
+            z__1.imag = -tau->imag; // , expr subst
             aocl_blas_zgerc(m, l, &z__1, &work[1], &c__1, &v[1], incv,
                             &c__[(*n - *l + 1) * c_dim1 + 1], ldc);
         }

@@ -7,7 +7,7 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
-static dcomplex c_b5 = {{1.}, {0.}};
+static dcomplex c_b5 = {1., 0.};
 /* > \brief \b ZLARFG generates an elementary reflector (Householder matrix). */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -172,18 +172,18 @@ void aocl_lapack_zlarfg(aocl_int64_t *n, dcomplex *alpha, dcomplex *x, aocl_int6
     /* Function Body */
     if(*n <= 0)
     {
-        tau->r = 0., tau->i = 0.;
+        tau->real = 0., tau->imag = 0.;
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
     i__1 = *n - 1;
     xnorm = aocl_blas_dznrm2(&i__1, &x[1], incx);
-    alphr = alpha->r;
-    alphi = alpha->i;
+    alphr = alpha->real;
+    alphi = alpha->imag;
     if(xnorm == 0. && alphi == 0.)
     {
         /* H = I */
-        tau->r = 0., tau->i = 0.;
+        tau->real = 0., tau->imag = 0.;
     }
     else
     {
@@ -211,21 +211,21 @@ void aocl_lapack_zlarfg(aocl_int64_t *n, dcomplex *alpha, dcomplex *x, aocl_int6
             /* New BETA is at most 1, at least SAFMIN */
             i__1 = *n - 1;
             xnorm = aocl_blas_dznrm2(&i__1, &x[1], incx);
-            z__1.r = alphr;
-            z__1.i = alphi; // , expr subst
-            alpha->r = z__1.r, alpha->i = z__1.i;
+            z__1.real = alphr;
+            z__1.imag = alphi; // , expr subst
+            alpha->real = z__1.real, alpha->imag = z__1.imag;
             d__1 = dlapy3_(&alphr, &alphi, &xnorm);
             beta = -d_sign(&d__1, &alphr);
         }
         d__1 = (beta - alphr) / beta;
         d__2 = -alphi / beta;
-        z__1.r = d__1;
-        z__1.i = d__2; // , expr subst
-        tau->r = z__1.r, tau->i = z__1.i;
-        z__2.r = alpha->r - beta;
-        z__2.i = alpha->i; // , expr subst
+        z__1.real = d__1;
+        z__1.imag = d__2; // , expr subst
+        tau->real = z__1.real, tau->imag = z__1.imag;
+        z__2.real = alpha->real - beta;
+        z__2.imag = alpha->imag; // , expr subst
         zladiv_f2c_(&z__1, &c_b5, &z__2);
-        alpha->r = z__1.r, alpha->i = z__1.i;
+        alpha->real = z__1.real, alpha->imag = z__1.imag;
         i__1 = *n - 1;
 
 #ifdef FLA_ENABLE_AMD_OPT
@@ -241,7 +241,7 @@ void aocl_lapack_zlarfg(aocl_int64_t *n, dcomplex *alpha, dcomplex *x, aocl_int6
             beta *= safmin;
             /* L20: */
         }
-        alpha->r = beta, alpha->i = 0.;
+        alpha->real = beta, alpha->imag = 0.;
     }
     AOCL_DTL_TRACE_LOG_EXIT
     return;

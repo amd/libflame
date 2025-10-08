@@ -90,12 +90,12 @@ void dspffrt2_fla(doublereal *ap, aocl_int64_t *n, aocl_int64_t *ncolm, doublere
     }
     else if(ncolm_pc < FLA_SPFFRT2__NCOLFRAC_THRESH2)
     {
-        /* Unpacking/packing based variant for large ncolm values */
+        /* Unpacking/packing based variant for smaller ncolm values */
         dspffrt2_fla_unp_var1(ap, n, ncolm, work);
     }
     else
     {
-        /* Unpacking/packing based variant for smaller ncolm values */
+        /* Unpacking/packing based variant for large ncolm values */
         dspffrt2_fla_unp_var2(ap, n, ncolm, work);
     }
     return;
@@ -225,8 +225,15 @@ void dspffrt2_fla_unp_var1(doublereal *ap, aocl_int64_t *n, aocl_int64_t *ncolm,
     nb = (nb > *ncolm) ? *ncolm : nb;
 
     /* Allocate unpacked matrix and do the unpacking */
-    mau = (doublereal *)malloc(*n * *n * sizeof(doublereal));
-    mbt = (doublereal *)malloc(nb * (*n - nb) * sizeof(doublereal));
+    mau = NULL;
+    mau = (doublereal *) malloc(*n * *n * sizeof(doublereal) + nb * (*n - nb) * sizeof(doublereal));
+    if(mau == NULL)
+    {
+        /* call default version */
+        dspffrt2_fla_def(ap, n, ncolm, work);
+        return;
+    }
+    mbt = mau + *n * *n;
 
     dunpack_fla(ap, mau, *n, *n, *n);
 
@@ -279,7 +286,6 @@ void dspffrt2_fla_unp_var1(doublereal *ap, aocl_int64_t *n, aocl_int64_t *ncolm,
     dpack_fla(mau, &ap[1], *n, *n, *n);
 
     free(mau);
-    free(mbt);
     return;
 }
 
@@ -314,7 +320,14 @@ void dspffrt2_fla_unp_var2(doublereal *ap, aocl_int64_t *n, aocl_int64_t *ncolm,
     nb = (nb > *ncolm) ? *ncolm : nb;
 
     /* Allocate unpacked matrix and do the unpacking */
+    mau = NULL;
     mau = (doublereal *)malloc(*n * *n * sizeof(doublereal));
+    if(mau == NULL)
+    {
+        /* call default version */
+        dspffrt2_fla_def(ap, n, ncolm, work);
+        return;
+    }
 
     dunpack_fla(ap, mau, *n, *n, *n);
 
@@ -343,6 +356,8 @@ void dspffrt2_fla_unp_var2(doublereal *ap, aocl_int64_t *n, aocl_int64_t *ncolm,
 #else
         aocl_blas_dgemmt("L", "N", "N", &ni, &nb, &d__1, &au[kc + nb], n, &au[kc + nb * *n], n, &d__1,
                 &au[kc + nb * *n + nb], n);
+        aocl_blas_dgemm("N", "N", &mg, &ni, &nb, &d__1, &au[kc + ni + nb], n, &au[kc + nb * *n], n,
+                        &d__1, &au[kc + nb * *n + nb + ni], n);
 #endif
     }
 

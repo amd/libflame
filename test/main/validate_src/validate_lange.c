@@ -423,7 +423,6 @@ void validate_lange(char *tst_api, integer datatype, char norm_type, integer m, 
 
     free_vector(calculated_value);
 
-    tst_api[5] = norm_type;
     FLA_PRINT_TEST_STATUS(m, n, residual, err_thresh);
     FLA_PRINT_SUBTEST_STATUS(residual, err_thresh, "01");
 }

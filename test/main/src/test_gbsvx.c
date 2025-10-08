@@ -8,18 +8,32 @@ extern double perf;
 extern double time_min;
 
 /* Local prototypes */
-void fla_test_gbsvx_experiment(char *tst_api, test_params_t *params, integer datatype, integer p_cur,
-                               integer q_cur, integer pci, integer n_repeats, integer einfo);
+void fla_test_gbsvx_experiment(char *tst_api, test_params_t *params, integer datatype,
+                               integer p_cur, integer q_cur, integer pci, integer n_repeats,
+                               integer einfo);
 void prepare_gbsvx_run(char fact, char trans, integer n_A, integer kl, integer ku, integer nrhs,
                        void *AB, integer ldab, void *AFB, integer ldafb, integer *ipiv, char *equed,
                        void *R, void *C, void *B, integer ldb, void *X, integer ldx, void *rcond,
-                       void *ferr, void *berr, integer datatype, integer *info, test_params_t *params);
+                       void *ferr, void *berr, integer datatype, integer *info,
+                       test_params_t *params);
 void invoke_gbsvx(integer datatype, char *fact, char *trans, integer *n, integer *kl, integer *ku,
                   integer *nrhs, void *ab, integer *ldab, void *afb, integer *ldafb, integer *ipiv,
                   char *equed, void *r, void *c, void *b, integer *ldb, void *x, integer *ldx,
                   void *rcond, void *ferr, void *berr, void *work, void *rwork, integer *info);
 void invoke_gbtrf(integer datatype, integer *m, integer *n, integer *kl, integer *ku, void *ab,
                   integer *ldab, integer *ipiv, integer *info);
+
+#define VALIDATE_GBSVX                                     \
+    if(info == n + 1)                                      \
+    {                                                      \
+        residual = 0.0;                                    \
+        FLA_PRINT_TEST_STATUS(n, n, residual, err_thresh); \
+    }                                                      \
+    else                                                   \
+    {                                                      \
+        residual = 0.0;                                    \
+        FLA_PRINT_TEST_STATUS(n, n, residual, err_thresh); \
+    }
 
 void fla_test_gbsvx(integer argc, char **argv, test_params_t *params)
 {
@@ -62,7 +76,7 @@ void fla_test_gbsvx(integer argc, char **argv, test_params_t *params)
         params->lin_solver_paramslist[0].ldab = strtoimax(argv[9], &endptr, CLI_DECIMAL_BASE);
         params->lin_solver_paramslist[0].ldafb = strtoimax(argv[10], &endptr, CLI_DECIMAL_BASE);
         params->lin_solver_paramslist[0].ldb = strtoimax(argv[11], &endptr, CLI_DECIMAL_BASE);
-        
+
         /* Store KL and KU in the structure */
         params->lin_solver_paramslist[0].kl = KL;
         params->lin_solver_paramslist[0].ku = KU;
@@ -101,7 +115,8 @@ void fla_test_gbsvx(integer argc, char **argv, test_params_t *params)
     if(tests_not_run)
     {
         printf("\nIllegal arguments for gbsvx\n");
-        printf("./<EXE> gbsvx <precisions - sdcz> <FACT> <TRANS> <N> <KL> <KU> <NRHS> <LDAB> <LDAFB> <LDB> <repeats>\n");
+        printf("./<EXE> gbsvx <precisions - sdcz> <FACT> <TRANS> <N> <KL> <KU> <NRHS> <LDAB> "
+               "<LDAFB> <LDB> <repeats>\n");
     }
     if(invalid_dtype)
     {
@@ -116,8 +131,9 @@ void fla_test_gbsvx(integer argc, char **argv, test_params_t *params)
     return;
 }
 
-void fla_test_gbsvx_experiment(char *tst_api, test_params_t *params, integer datatype, integer p_cur,
-                               integer q_cur, integer pci, integer n_repeats, integer einfo)
+void fla_test_gbsvx_experiment(char *tst_api, test_params_t *params, integer datatype,
+                               integer p_cur, integer q_cur, integer pci, integer n_repeats,
+                               integer einfo)
 {
     integer n, kl, ku, ldab, ldafb, ldb, ldx, NRHS, info = 0;
     void *IPIV = NULL, *AB = NULL, *AB_save = NULL, *AFB = NULL, *B = NULL, *B_save = NULL;
@@ -126,6 +142,7 @@ void fla_test_gbsvx_experiment(char *tst_api, test_params_t *params, integer dat
     char fact, trans, equed = 'N';
     double residual, err_thresh;
     integer real_datatype; // Real datatype corresponding to the matrix datatype
+    void *filename = NULL;
 
     err_thresh = params->lin_solver_paramslist[pci].solver_threshold;
     NRHS = params->lin_solver_paramslist[pci].nrhs;
@@ -133,7 +150,7 @@ void fla_test_gbsvx_experiment(char *tst_api, test_params_t *params, integer dat
     ku = params->lin_solver_paramslist[pci].ku;
     fact = params->lin_solver_paramslist[pci].fact;
     trans = params->lin_solver_paramslist[pci].transr;
-    
+
     /* Determine the dimensions */
     n = p_cur;
     ldab = params->lin_solver_paramslist[pci].ldab;
@@ -177,14 +194,14 @@ void fla_test_gbsvx_experiment(char *tst_api, test_params_t *params, integer dat
     create_matrix(datatype, LAPACK_COL_MAJOR, n, NRHS, &B, ldb);
     create_matrix(datatype, LAPACK_COL_MAJOR, n, NRHS, &B_save, ldb);
     create_matrix(datatype, LAPACK_COL_MAJOR, n, NRHS, &X, ldx);
-    
+
     /* Create real arrays using the appropriate real datatype */
     create_vector(real_datatype, &R, n);
     create_vector(real_datatype, &C, n);
     create_vector(real_datatype, &RCOND, 1);
     create_vector(real_datatype, &FERR, NRHS);
     create_vector(real_datatype, &BERR, NRHS);
-    
+
     /* Create work arrays */
     if(datatype == COMPLEX || datatype == DOUBLE_COMPLEX)
     {
@@ -197,101 +214,106 @@ void fla_test_gbsvx_experiment(char *tst_api, test_params_t *params, integer dat
         RWORK = NULL;
     }
 
-    /* Initialize the test matrices */
-    if(g_ext_fptr != NULL)
+    if(!FLA_BRT_VERIFICATION_RUN)
     {
-        init_matrix(datatype, AB, ldab, n, ldab, g_ext_fptr, params->imatrix_char);
-        init_matrix(datatype, B, n, NRHS, ldb, g_ext_fptr, params->imatrix_char);
+        /* Initialize the test matrices */
+        if(g_ext_fptr != NULL)
+        {
+            init_matrix(datatype, AB, ldab, n, ldab, g_ext_fptr, params->imatrix_char);
+            init_matrix(datatype, B, n, NRHS, ldb, g_ext_fptr, params->imatrix_char);
+        }
+        else
+        {
+            /* Create a well-conditioned band matrix */
+            rand_band_storage_matrix(datatype, n, n, kl, ku, AB, ldab);
+
+            /* Make the matrix diagonally dominant to ensure non-singularity */
+            if(datatype == FLOAT)
+            {
+                float *ab_ptr = (float *)AB;
+                integer diag_offset = kl; // Diagonal is at row kl in band storage
+                for(integer j = 0; j < n; j++)
+                {
+                    float current_diag = ab_ptr[diag_offset + j * ldab];
+                    if(current_diag < 0.0f)
+                    {
+                        // If negative, subtract it (making it positive) and add large value
+                        ab_ptr[diag_offset + j * ldab] = -current_diag + (float)(n + 10.0);
+                    }
+                    else
+                    {
+                        // If positive or zero, just add large value
+                        ab_ptr[diag_offset + j * ldab] += (float)(n + 10.0);
+                    }
+                }
+            }
+            else if(datatype == DOUBLE)
+            {
+                double *ab_ptr = (double *)AB;
+                integer diag_offset = kl;
+                for(integer j = 0; j < n; j++)
+                {
+                    double current_diag = ab_ptr[diag_offset + j * ldab];
+                    if(current_diag < 0.0)
+                    {
+                        // If negative, subtract it (making it positive) and add large value
+                        ab_ptr[diag_offset + j * ldab] = -current_diag + (double)(n + 10.0);
+                    }
+                    else
+                    {
+                        // If positive or zero, just add large value
+                        ab_ptr[diag_offset + j * ldab] += (double)(n + 10.0);
+                    }
+                }
+            }
+            else if(datatype == COMPLEX)
+            {
+                float *ab_ptr = (float *)AB;
+                integer diag_offset = kl;
+                for(integer j = 0; j < n; j++)
+                {
+                    // Complex: handle real part at even index
+                    float current_real = ab_ptr[2 * (diag_offset + j * ldab)];
+                    if(current_real < 0.0f)
+                    {
+                        // If negative real part, make it positive and add large value
+                        ab_ptr[2 * (diag_offset + j * ldab)] = -current_real + (float)(n + 10.0);
+                    }
+                    else
+                    {
+                        // If positive or zero real part, just add large value
+                        ab_ptr[2 * (diag_offset + j * ldab)] += (float)(n + 10.0);
+                    }
+                    // Keep imaginary part as is
+                }
+            }
+            else if(datatype == DOUBLE_COMPLEX)
+            {
+                double *ab_ptr = (double *)AB;
+                integer diag_offset = kl;
+                for(integer j = 0; j < n; j++)
+                {
+                    // Complex: handle real part at even index
+                    double current_real = ab_ptr[2 * (diag_offset + j * ldab)];
+                    if(current_real < 0.0)
+                    {
+                        // If negative real part, make it positive and add large value
+                        ab_ptr[2 * (diag_offset + j * ldab)] = -current_real + (double)(n + 10.0);
+                    }
+                    else
+                    {
+                        // If positive or zero real part, just add large value
+                        ab_ptr[2 * (diag_offset + j * ldab)] += (double)(n + 10.0);
+                    }
+                    // Keep imaginary part as is
+                }
+            }
+
+            rand_matrix(datatype, B, n, NRHS, ldb);
+        }
     }
-    else
-    {
-        /* Create a well-conditioned band matrix */
-        rand_band_storage_matrix(datatype, n, n, kl, ku, AB, ldab);
-        
-        /* Make the matrix diagonally dominant to ensure non-singularity */
-        if(datatype == FLOAT)
-        {
-            float *ab_ptr = (float*)AB;
-            integer diag_offset = kl; // Diagonal is at row kl in band storage
-            for(integer j = 0; j < n; j++)
-            {
-                float current_diag = ab_ptr[diag_offset + j * ldab];
-                if(current_diag < 0.0f)
-                {
-                    // If negative, subtract it (making it positive) and add large value
-                    ab_ptr[diag_offset + j * ldab] = -current_diag + (float)(n + 10.0);
-                }
-                else
-                {
-                    // If positive or zero, just add large value
-                    ab_ptr[diag_offset + j * ldab] += (float)(n + 10.0);
-                }
-            }
-        }
-        else if(datatype == DOUBLE)
-        {
-            double *ab_ptr = (double*)AB;
-            integer diag_offset = kl;
-            for(integer j = 0; j < n; j++)
-            {
-                double current_diag = ab_ptr[diag_offset + j * ldab];
-                if(current_diag < 0.0)
-                {
-                    // If negative, subtract it (making it positive) and add large value
-                    ab_ptr[diag_offset + j * ldab] = -current_diag + (double)(n + 10.0);
-                }
-                else
-                {
-                    // If positive or zero, just add large value
-                    ab_ptr[diag_offset + j * ldab] += (double)(n + 10.0);
-                }
-            }
-        }
-        else if(datatype == COMPLEX)
-        {
-            float *ab_ptr = (float*)AB;
-            integer diag_offset = kl;
-            for(integer j = 0; j < n; j++)
-            {
-                // Complex: handle real part at even index
-                float current_real = ab_ptr[2 * (diag_offset + j * ldab)];
-                if(current_real < 0.0f)
-                {
-                    // If negative real part, make it positive and add large value
-                    ab_ptr[2 * (diag_offset + j * ldab)] = -current_real + (float)(n + 10.0);
-                }
-                else
-                {
-                    // If positive or zero real part, just add large value
-                    ab_ptr[2 * (diag_offset + j * ldab)] += (float)(n + 10.0);
-                }
-                // Keep imaginary part as is
-            }
-        }
-        else if(datatype == DOUBLE_COMPLEX)
-        {
-            double *ab_ptr = (double*)AB;
-            integer diag_offset = kl;
-            for(integer j = 0; j < n; j++)
-            {
-                // Complex: handle real part at even index
-                double current_real = ab_ptr[2 * (diag_offset + j * ldab)];
-                if(current_real < 0.0)
-                {
-                    // If negative real part, make it positive and add large value
-                    ab_ptr[2 * (diag_offset + j * ldab)] = -current_real + (double)(n + 10.0);
-                }
-                else
-                {
-                    // If positive or zero real part, just add large value
-                    ab_ptr[2 * (diag_offset + j * ldab)] += (double)(n + 10.0);
-                }
-                // Keep imaginary part as is
-            }
-        }
-        
-        rand_matrix(datatype, B, n, NRHS, ldb);
-    }
+    FLA_BRT_PROCESS_TWO_INPUT(datatype, ldab, n, AB, ldab, datatype, n, NRHS, B, ldb, "ccddddddd",
+                              fact, trans, n, kl, ku, NRHS, ldab, ldafb, ldb)
 
     /* Save the original matrices */
     copy_matrix(datatype, "full", ldab, n, AB, ldab, AB_save, ldab);
@@ -302,14 +324,14 @@ void fla_test_gbsvx_experiment(char *tst_api, test_params_t *params, integer dat
     {
         integer gbtrf_info = 0;
         void *AB_temp = NULL;
-        
+
         /* Create temporary matrix for factorization */
         create_matrix(datatype, LAPACK_COL_MAJOR, ldab, n, &AB_temp, ldab);
         copy_matrix(datatype, "full", ldab, n, AB, ldab, AB_temp, ldab);
-        
+
         /* Call the existing invoke_gbtrf function from test_gbtrf.c */
         invoke_gbtrf(datatype, &n, &n, &kl, &ku, AB_temp, &ldab, IPIV, &gbtrf_info);
-        
+
         if(gbtrf_info == 0)
         {
             /* Copy factorized matrix to AFB */
@@ -320,14 +342,14 @@ void fla_test_gbsvx_experiment(char *tst_api, test_params_t *params, integer dat
             /* If factorization fails, set info and skip the test */
             info = gbtrf_info;
         }
-        
+
         free_matrix(AB_temp);
-        
+
         /* Initialize scaling factors for FACT = 'F' */
         if(real_datatype == FLOAT)
         {
-            float *r_ptr = (float*)R;
-            float *c_ptr = (float*)C;
+            float *r_ptr = (float *)R;
+            float *c_ptr = (float *)C;
             for(integer i = 0; i < n; i++)
             {
                 r_ptr[i] = 1.0f;
@@ -336,8 +358,8 @@ void fla_test_gbsvx_experiment(char *tst_api, test_params_t *params, integer dat
         }
         else /* DOUBLE */
         {
-            double *r_ptr = (double*)R;
-            double *c_ptr = (double*)C;
+            double *r_ptr = (double *)R;
+            double *c_ptr = (double *)C;
             for(integer i = 0; i < n; i++)
             {
                 r_ptr[i] = 1.0;
@@ -348,15 +370,28 @@ void fla_test_gbsvx_experiment(char *tst_api, test_params_t *params, integer dat
     }
 
     /* call to API */
-    prepare_gbsvx_run(fact, trans, n, kl, ku, NRHS, AB_save, ldab, AFB, ldafb, IPIV, &equed,
-                      R, C, B_save, ldb, X, ldx, RCOND, FERR, BERR, datatype, &info, params);
+    prepare_gbsvx_run(fact, trans, n, kl, ku, NRHS, AB_save, ldab, AFB, ldafb, IPIV, &equed, R, C,
+                      B_save, ldb, X, ldx, RCOND, FERR, BERR, datatype, &info, params);
 
     /* performance computation */
     perf = (double)(n * kl * (kl + ku) + n * (2 * kl + ku) * NRHS) / time_min / FLOPS_PER_UNIT_PERF;
-    
+
+    IF_FLA_BRT_VALIDATION(
+        n, n,
+        store_outputs_base(filename, params, 4, 6, datatype, ldab, n, AB_save, ldab, datatype,
+                           ldafb, n, AFB, ldafb, datatype, n, NRHS, B_save, ldb, datatype, n, NRHS,
+                           X, ldx, INTEGER, n, IPIV, real_datatype, n, R, real_datatype, n, C,
+                           real_datatype, 1, RCOND, real_datatype, NRHS, FERR, real_datatype, NRHS,
+                           BERR),
+        VALIDATE_GBSVX,
+        check_reproducibility_base(filename, params, 4, 6, datatype, ldab, n, AB_save, ldab,
+                                   datatype, ldafb, n, AFB, ldafb, datatype, n, NRHS, B_save, ldb,
+                                   datatype, n, NRHS, X, ldx, INTEGER, n, IPIV, real_datatype, n, R,
+                                   real_datatype, n, C, real_datatype, 1, RCOND, real_datatype,
+                                   NRHS, FERR, real_datatype, NRHS, BERR))
     /* output validation - Special handling for GBSVX */
     /* For info = N+1, the matrix is singular to working precision but solution is computed */
-    if(info == n + 1)
+    else if(info == n + 1)
     {
         residual = 0.0;
         FLA_PRINT_TEST_STATUS(n, n, residual, err_thresh);
@@ -368,6 +403,8 @@ void fla_test_gbsvx_experiment(char *tst_api, test_params_t *params, integer dat
     }
 
     /* Free up the buffers */
+free_buffers:
+    FLA_FREE_FILENAME(filename)
     free_matrix(AB);
     free_matrix(AB_save);
     free_matrix(AFB);
@@ -388,7 +425,8 @@ void fla_test_gbsvx_experiment(char *tst_api, test_params_t *params, integer dat
 void prepare_gbsvx_run(char fact, char trans, integer n_A, integer kl, integer ku, integer nrhs,
                        void *AB, integer ldab, void *AFB, integer ldafb, integer *ipiv, char *equed,
                        void *R, void *C, void *B, integer ldb, void *X, integer ldx, void *rcond,
-                       void *ferr, void *berr, integer datatype, integer *info, test_params_t *params)
+                       void *ferr, void *berr, integer datatype, integer *info,
+                       test_params_t *params)
 {
     void *AB_test, *AFB_test, *B_test, *X_test, *R_test, *C_test;
     void *RCOND_test, *FERR_test, *BERR_test, *WORK, *RWORK = NULL;
@@ -413,14 +451,14 @@ void prepare_gbsvx_run(char fact, char trans, integer n_A, integer kl, integer k
     create_matrix(datatype, LAPACK_COL_MAJOR, n_A, nrhs, &B_test, ldb);
     create_matrix(datatype, LAPACK_COL_MAJOR, n_A, nrhs, &X_test, ldx);
     create_vector(INTEGER, &IPIV_test, n_A);
-    
+
     /* Use appropriate real datatype */
     create_vector(real_datatype, &R_test, n_A);
     create_vector(real_datatype, &C_test, n_A);
     create_vector(real_datatype, &RCOND_test, 1);
     create_vector(real_datatype, &FERR_test, nrhs);
     create_vector(real_datatype, &BERR_test, nrhs);
-    
+
     /* Create work arrays */
     if(datatype == COMPLEX || datatype == DOUBLE_COMPLEX)
     {
@@ -439,26 +477,27 @@ void prepare_gbsvx_run(char fact, char trans, integer n_A, integer kl, integer k
         copy_matrix(datatype, "full", ldab, n_A, AB, ldab, AB_test, ldab);
         copy_matrix(datatype, "full", n_A, nrhs, B, ldb, B_test, ldb);
         equed_test = *equed;
-        
+
         /* For FACT = 'F', copy the pre-factorized AFB and IPIV */
         if(fact == 'F')
         {
             copy_matrix(datatype, "full", ldafb, n_A, AFB, ldafb, AFB_test, ldafb);
             copy_vector(INTEGER, n_A, ipiv, 1, IPIV_test, 1);
         }
-        
+
         /* Copy scaling factors */
         copy_vector(real_datatype, n_A, R, 1, R_test, 1);
         copy_vector(real_datatype, n_A, C, 1, C_test, 1);
 
         exe_time = fla_test_clock();
         /* call LAPACK gbsvx API */
-        invoke_gbsvx(datatype, &fact, &trans, &n_A, &kl, &ku, &nrhs, AB_test, &ldab, AFB_test, &ldafb,
-                     IPIV_test, &equed_test, R_test, C_test, B_test, &ldb, X_test, &ldx, RCOND_test,
-                     FERR_test, BERR_test, WORK, RWORK, info);
+        invoke_gbsvx(datatype, &fact, &trans, &n_A, &kl, &ku, &nrhs, AB_test, &ldab, AFB_test,
+                     &ldafb, IPIV_test, &equed_test, R_test, C_test, B_test, &ldb, X_test, &ldx,
+                     RCOND_test, FERR_test, BERR_test, WORK, RWORK, info);
         exe_time = fla_test_clock() - exe_time;
 
-        /* For GBSVX, info = N+1 is acceptable (matrix singular to working precision but solution computed) */
+        /* For GBSVX, info = N+1 is acceptable (matrix singular to working precision but solution
+         * computed) */
         /* Only treat as error if info < 0 (illegal argument) or 0 < info <= N (exactly singular) */
         integer adjusted_info = *info;
         if(*info == n_A + 1)
@@ -475,7 +514,7 @@ void prepare_gbsvx_run(char fact, char trans, integer n_A, integer kl, integer k
 
     /* Save the final results - use correct real datatype */
     copy_matrix(datatype, "full", n_A, nrhs, X_test, ldx, X, ldx);
-    if(fact != 'F')  /* Don't overwrite AFB for FACT='F' as it was input */
+    if(fact != 'F') /* Don't overwrite AFB for FACT='F' as it was input */
     {
         copy_matrix(datatype, "full", ldafb, n_A, AFB_test, ldafb, AFB, ldafb);
     }
@@ -515,9 +554,9 @@ void invoke_gbsvx(integer datatype, char *fact, char *trans, integer *n, integer
         case FLOAT:
         {
             /* SGBSVX: Uses IWORK (integer array) */
-            integer *iwork = (integer*)malloc((*n) * sizeof(integer));
-            fla_lapack_sgbsvx(fact, trans, n, kl, ku, nrhs, ab, ldab, afb, ldafb, ipiv, equed,
-                              r, c, b, ldb, x, ldx, rcond, ferr, berr, work, iwork, info);
+            integer *iwork = (integer *)malloc((*n) * sizeof(integer));
+            fla_lapack_sgbsvx(fact, trans, n, kl, ku, nrhs, ab, ldab, afb, ldafb, ipiv, equed, r, c,
+                              b, ldb, x, ldx, rcond, ferr, berr, work, iwork, info);
             free(iwork);
             break;
         }
@@ -525,24 +564,24 @@ void invoke_gbsvx(integer datatype, char *fact, char *trans, integer *n, integer
         case DOUBLE:
         {
             /* DGBSVX: Uses IWORK (integer array) */
-            integer *iwork = (integer*)malloc((*n) * sizeof(integer));
-            fla_lapack_dgbsvx(fact, trans, n, kl, ku, nrhs, ab, ldab, afb, ldafb, ipiv, equed,
-                              r, c, b, ldb, x, ldx, rcond, ferr, berr, work, iwork, info);
+            integer *iwork = (integer *)malloc((*n) * sizeof(integer));
+            fla_lapack_dgbsvx(fact, trans, n, kl, ku, nrhs, ab, ldab, afb, ldafb, ipiv, equed, r, c,
+                              b, ldb, x, ldx, rcond, ferr, berr, work, iwork, info);
             free(iwork);
             break;
         }
 
         case COMPLEX:
         {
-            fla_lapack_cgbsvx(fact, trans, n, kl, ku, nrhs, ab, ldab, afb, ldafb, ipiv, equed,
-                              r, c, b, ldb, x, ldx, rcond, ferr, berr, work, rwork, info);
+            fla_lapack_cgbsvx(fact, trans, n, kl, ku, nrhs, ab, ldab, afb, ldafb, ipiv, equed, r, c,
+                              b, ldb, x, ldx, rcond, ferr, berr, work, rwork, info);
             break;
         }
 
         case DOUBLE_COMPLEX:
         {
-            fla_lapack_zgbsvx(fact, trans, n, kl, ku, nrhs, ab, ldab, afb, ldafb, ipiv, equed,
-                              r, c, b, ldb, x, ldx, rcond, ferr, berr, work, rwork, info);
+            fla_lapack_zgbsvx(fact, trans, n, kl, ku, nrhs, ab, ldab, afb, ldafb, ipiv, equed, r, c,
+                              b, ldb, x, ldx, rcond, ferr, berr, work, rwork, info);
             break;
         }
     }

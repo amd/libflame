@@ -123,6 +123,7 @@ void fla_test_trtri_experiment(char *tst_api, test_params_t *params, integer dat
     integer info = 0;
     void *A = NULL, *A_test = NULL;
     double residual, err_thresh;
+    void *filename = NULL;
     char uplo = params->lin_solver_paramslist[pci].Uplo;
     char diag = params->lin_solver_paramslist[pci].diag;
 
@@ -147,20 +148,35 @@ void fla_test_trtri_experiment(char *tst_api, test_params_t *params, integer dat
     /* Create input matrix parameters */
     create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &A, lda);
 
-    if(g_ext_fptr != NULL || (FLA_EXTREME_CASE_TEST))
+    /* This code path is run to generate the matrix to be passed to the API. This is the default
+     * input generation logic accessed both when BRT is run in Ground truth mode and for non BRT
+     * Test cases. For verification runs the input is loaded from the input generated during Ground
+     * truth run */
+    if(!FLA_BRT_VERIFICATION_RUN)
     {
-        init_matrix(datatype, A, n, n, lda, g_ext_fptr, params->imatrix_char);
-    }
-    else
-    {
-        get_non_singular_triangular_matrix(&uplo, datatype, n, n, A, lda,
-                                           (diag == 'U') ? UNIT_DIAG : NON_UNIT_DIAG);
+        if(g_ext_fptr != NULL || (FLA_EXTREME_CASE_TEST))
+        {
+            init_matrix(datatype, A, n, n, lda, g_ext_fptr, params->imatrix_char);
+        }
+        else
+        {
+            get_non_singular_triangular_matrix(&uplo, datatype, n, n, A, lda,
+                                               (diag == 'U') ? UNIT_DIAG : NON_UNIT_DIAG);
+        }
+
+        if(FLA_OVERFLOW_UNDERFLOW_TEST)
+        {
+            scale_matrix_underflow_overflow_trtri(datatype, diag, n, A, lda, params->imatrix_char);
+        }
     }
 
-    if(FLA_OVERFLOW_UNDERFLOW_TEST)
-    {
-        scale_matrix_underflow_overflow_trtri(datatype, diag, n, A, lda, params->imatrix_char);
-    }
+    /* This macro is used in the BRT test cases for the following purposes:
+     *    - In the Ground truth runs (BRT_char => G, F), the input is stored in a file for future
+     * reference
+     *    - In the verification runs (BRT_char => V, M), the input is loaded from the file and
+     * passed as input to the API
+     * */
+    FLA_BRT_PROCESS_SINGLE_INPUT(datatype, n, n, A, lda, "ccdd", uplo, diag, n, lda)
 
     /* Make a copy of input matrix A. This is required to validate the API functionality */
     create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &A_test, lda);
@@ -177,7 +193,12 @@ void fla_test_trtri_experiment(char *tst_api, test_params_t *params, integer dat
     /* output validation */
     FLA_TEST_CHECK_EINFO(residual, info, einfo);
 
-    if(!FLA_EXTREME_CASE_TEST)
+    IF_FLA_BRT_VALIDATION(
+        n, n, store_outputs_base(filename, params, 1, 0, datatype, n, n, A_test, lda),
+        validate_trtri(tst_api, uplo, diag, n, A, A_test, lda, datatype, residual,
+                       params->imatrix_char, params),
+        check_reproducibility_base(filename, params, 1, 0, datatype, n, n, A_test, lda))
+    else if(!FLA_EXTREME_CASE_TEST)
     {
         validate_trtri(tst_api, uplo, diag, n, A, A_test, lda, datatype, residual,
                        params->imatrix_char, params);
@@ -197,6 +218,8 @@ void fla_test_trtri_experiment(char *tst_api, test_params_t *params, integer dat
     }
 
     /* Free up the buffers */
+free_buffers:
+    FLA_FREE_FILENAME(filename);
     free_matrix(A);
     free_matrix(A_test);
 }

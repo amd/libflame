@@ -119,6 +119,8 @@ void fla_test_lartg_experiment(char *tst_api, test_params_t *params, integer dat
     void *f = NULL, *g = NULL, *r = NULL;
     double err_thresh;
     integer interfacetype = params->interfacetype;
+    void *filename = NULL;
+    double residual;
 
     integer realtype;
     realtype = get_realtype(datatype);
@@ -132,17 +134,20 @@ void fla_test_lartg_experiment(char *tst_api, test_params_t *params, integer dat
     create_vector(datatype, &g, 1);
     create_vector(datatype, &r, 1);
 
-    if(g_ext_fptr != NULL)
+    if(!FLA_BRT_VERIFICATION_RUN)
     {
-        init_vector_from_file(datatype, f, 1, 1, g_ext_fptr);
-        init_vector_from_file(datatype, g, 1, 1, g_ext_fptr);
+        if(g_ext_fptr != NULL)
+        {
+            init_vector_from_file(datatype, f, 1, 1, g_ext_fptr);
+            init_vector_from_file(datatype, g, 1, 1, g_ext_fptr);
+        }
+        else
+        {
+            rand_vector(datatype, 1, f, 1, d_zero, d_zero, 'R');
+            rand_vector(datatype, 1, g, 1, d_zero, d_zero, 'R');
+        }
     }
-    else
-    {
-        rand_vector(datatype, 1, f, 1, d_zero, d_zero, 'R');
-        rand_vector(datatype, 1, g, 1, d_zero, d_zero, 'R');
-    }
-
+    FLA_BRT_PROCESS_TWO_INPUT(datatype, 1, 1, f, 1, datatype, 1, 1, g, 1, "s", "no_args")
     /* call to API */
     prepare_lartg_run(datatype, f, g, r, c, s, interfacetype, params);
 
@@ -155,9 +160,17 @@ void fla_test_lartg_experiment(char *tst_api, test_params_t *params, integer dat
     perf = (double)(6.0) / time_min / FLOPS_PER_UNIT_PERF;
 
     /* output validation */
-    validate_lartg(tst_api, datatype, f, g, r, c, s, err_thresh, params);
+    IF_FLA_BRT_VALIDATION(
+        2, 1,
+        store_outputs_base(filename, params, 0, 3, realtype, 1, c, datatype, 1, s, datatype, 1, r),
+        validate_lartg(tst_api, datatype, f, g, r, c, s, err_thresh, params),
+        check_reproducibility_base(filename, params, 0, 3, realtype, 1, c, datatype, 1, s, datatype,
+                                   1, r))
+    else validate_lartg(tst_api, datatype, f, g, r, c, s, err_thresh, params);
 
     /* Free up the buffers */
+free_buffers:
+    FLA_FREE_FILENAME(filename)
     free_vector(c);
     free_vector(s);
     free_vector(f);

@@ -133,6 +133,7 @@ void fla_test_lange_experiment(char *tst_api, test_params_t *params, integer dat
     integer i;
     double residual, err_thresh;
     integer interfacetype = params->interfacetype;
+    void *filename = NULL;
 
     err_thresh = params->aux_paramslist[pci].aux_threshold;
     if(lda == -1)
@@ -154,8 +155,8 @@ void fla_test_lange_experiment(char *tst_api, test_params_t *params, integer dat
 
     for(i = 0; i < MAX_NUM_NORMTYPES; i++)
     {
-
         char test_norm_type = params->aux_paramslist[pci].norm_types_str[i];
+        tst_api[5] = test_norm_type;
         if(test_norm_type == '\0')
         {
             break;
@@ -164,22 +165,26 @@ void fla_test_lange_experiment(char *tst_api, test_params_t *params, integer dat
         residual = err_thresh;
         time_min = 1e9;
 
-        if(g_ext_fptr != NULL || FLA_EXTREME_CASE_TEST)
+        if(!FLA_BRT_VERIFICATION_RUN)
         {
-            /* Initialize input vectors with custom data */
-            init_matrix(datatype, A, m, n, lda, g_ext_fptr, params->imatrix_char);
-        }
-        else
-        {
-            /* Initialize input matrix with random numbers */
-            rand_matrix(datatype, A, m, n, lda);
-        }
+            if(g_ext_fptr != NULL || FLA_EXTREME_CASE_TEST)
+            {
+                /* Initialize input vectors with custom data */
+                init_matrix(datatype, A, m, n, lda, g_ext_fptr, params->imatrix_char);
+            }
+            else
+            {
+                /* Initialize input matrix with random numbers */
+                rand_matrix(datatype, A, m, n, lda);
+            }
 
-        if(FLA_OVERFLOW_UNDERFLOW_TEST)
-        {
-            scale_matrix_underflow_overflow_lange(datatype, m, n, A, lda, test_norm_type,
-                                                  params->imatrix_char, scal);
+            if(FLA_OVERFLOW_UNDERFLOW_TEST)
+            {
+                scale_matrix_underflow_overflow_lange(datatype, m, n, A, lda, test_norm_type,
+                                                      params->imatrix_char, scal);
+            }
         }
+        FLA_BRT_PROCESS_SINGLE_INPUT(datatype, m, n, A, lda, "cddd", test_norm_type, m, n, lda)
 
         prepare_lange_run(datatype, test_norm_type, A, m, n, lda, result, interfacetype, params);
 
@@ -196,7 +201,12 @@ void fla_test_lange_experiment(char *tst_api, test_params_t *params, integer dat
         }
 
         /* output validation */
-        if(!FLA_EXTREME_CASE_TEST)
+        IF_FLA_BRT_VALIDATION(
+            m, n, store_outputs_base(filename, params, 0, 1, get_realtype(datatype), 1, result),
+            validate_lange(tst_api, datatype, test_norm_type, m, n, lda, A, result, residual,
+                           params),
+            check_reproducibility_base(filename, params, 0, 1, get_realtype(datatype), 1, result))
+        else if(!FLA_EXTREME_CASE_TEST)
         {
             validate_lange(tst_api, datatype, test_norm_type, m, n, lda, A, result, residual,
                            params);
@@ -217,6 +227,8 @@ void fla_test_lange_experiment(char *tst_api, test_params_t *params, integer dat
     }
 
     /* Free up the buffers */
+free_buffers:
+    FLA_FREE_FILENAME(filename)
     free_matrix(A);
     free_vector(result);
     free_vector(scal);

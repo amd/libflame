@@ -15,8 +15,8 @@ void fla_test_getc2_experiment(char *tst_api, test_params_t *params, integer dat
                                integer einfo);
 void prepare_getc2_run(integer n_A, void *A, integer lda, integer *ipiv, integer *jpiv,
                        integer datatype, integer *info, test_params_t *params);
-void invoke_getc2(integer datatype, integer *n, void *a, integer *lda, 
-                  integer *ipiv, integer *jpiv, integer *info);
+void invoke_getc2(integer datatype, integer *n, void *a, integer *lda, integer *ipiv, integer *jpiv,
+                  integer *info);
 
 void fla_test_getc2(integer argc, char **argv, test_params_t *params)
 {
@@ -109,6 +109,7 @@ void fla_test_getc2_experiment(char *tst_api, test_params_t *params, integer dat
     void *IPIV = NULL, *JPIV = NULL, *A = NULL, *A_test = NULL, *s_test = NULL;
     char range = 'U';
     double residual, err_thresh;
+    void *filename = NULL;
 
     /* GETC2 only works with square matrices */
     n = p_cur;
@@ -127,22 +128,27 @@ void fla_test_getc2_experiment(char *tst_api, test_params_t *params, integer dat
 
     /* Create the matrices for the current operation*/
     create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &A, lda);
-    create_vector(INTEGER, &IPIV, n);      /* Row permutations */
-    create_vector(INTEGER, &JPIV, n);      /* Column permutations */
+    create_vector(INTEGER, &IPIV, n); /* Row permutations */
+    create_vector(INTEGER, &JPIV, n); /* Column permutations */
     create_realtype_vector(datatype, &s_test, n);
 
-    /* Initialize the test matrices*/
-    if(g_ext_fptr != NULL)
+    if(!FLA_BRT_VERIFICATION_RUN)
     {
-        init_matrix(datatype, A, n, n, lda, g_ext_fptr, params->imatrix_char);
+        /* Initialize the test matrices*/
+        if(g_ext_fptr != NULL)
+        {
+            init_matrix(datatype, A, n, n, lda, g_ext_fptr, params->imatrix_char);
+        }
+        else
+        {
+            /* Generate input matrix with condition number <= 100 */
+            create_svd_matrix(datatype, range, n, n, A, lda, s_test, GETC2_VL, GETC2_VU, i_zero,
+                              i_zero, info);
+        }
     }
-    else
-    {
-        /* Generate input matrix with condition number <= 100 */
-        create_svd_matrix(datatype, range, n, n, A, lda, s_test, GETC2_VL, GETC2_VU, i_zero, i_zero,
-                          info);
-    }
-    
+
+    FLA_BRT_PROCESS_SINGLE_INPUT(datatype, n, n, A, lda, "dd", n, lda)
+
     /* Save the original matrix*/
     create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &A_test, lda);
     copy_matrix(datatype, "full", n, n, A, lda, A_test, lda);
@@ -157,9 +163,20 @@ void fla_test_getc2_experiment(char *tst_api, test_params_t *params, integer dat
 
     /* output validation */
     FLA_TEST_CHECK_EINFO(residual, info, einfo);
-    FLA_PRINT_TEST_STATUS(n, n, residual, err_thresh);
+    IF_FLA_BRT_VALIDATION(n, n,
+                          store_outputs_base(filename, params, 1, 2, datatype, n, n, A_test, lda,
+                                             INTEGER, n, IPIV, INTEGER, n, JPIV),
+                          FLA_PRINT_TEST_STATUS(n, n, residual, err_thresh),
+                          check_reproducibility_base(filename, params, 1, 2, datatype, n, n, A_test,
+                                                     lda, INTEGER, n, IPIV, INTEGER, n, JPIV))
+    else
+    {
+        FLA_PRINT_TEST_STATUS(n, n, residual, err_thresh);
+    }
 
     /* Free up the buffers */
+free_buffers:
+    FLA_FREE_FILENAME(filename)
     free_matrix(A);
     free_matrix(A_test);
     free_vector(IPIV);
@@ -201,8 +218,8 @@ void prepare_getc2_run(integer n_A, void *A, integer lda, integer *IPIV, integer
  *  GETC2_API calls LAPACK interface of
  *  LU factorization with complete pivoting - getc2
  *  */
-void invoke_getc2(integer datatype, integer *n, void *a, integer *lda, 
-                  integer *ipiv, integer *jpiv, integer *info)
+void invoke_getc2(integer datatype, integer *n, void *a, integer *lda, integer *ipiv, integer *jpiv,
+                  integer *info)
 {
     switch(datatype)
     {

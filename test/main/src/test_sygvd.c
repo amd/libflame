@@ -26,6 +26,13 @@ double prepare_lapacke_sygvd_run(integer datatype, int itype, int layout, char *
                                  integer n, void *A, integer lda, void *B, integer ldb, void *w,
                                  integer *info);
 
+/* Helper functions for Bit reproducibility tests */
+void store_sygvd_outputs(void *filename, integer datatype, char jobz, integer n, void *A_test,
+                         integer lda, void *B_test, integer ldb, void *w, void *params);
+integer check_bit_reproducibility_sygvd(void *filename, integer datatype, char jobz, integer n,
+                                        void *A_test, integer lda, void *B_test, integer ldb,
+                                        void *w, void *params);
+
 void fla_test_sygvd(integer argc, char **argv, test_params_t *params)
 {
     char *op_str = "Eigen Decomposition";
@@ -129,6 +136,7 @@ void fla_test_sygvd_experiment(char *tst_api, test_params_t *params, integer dat
     void *B = NULL, *B_test = NULL, *U = NULL, *C = NULL;
     void *scal = NULL, *temp = NULL;
     double residual, err_thresh;
+    void *filename = NULL;
 
     integer interfacetype = params->interfacetype;
     int layout = params->matrix_major;
@@ -171,89 +179,107 @@ void fla_test_sygvd_experiment(char *tst_api, test_params_t *params, integer dat
             break;
     }
 
-    if(g_ext_fptr != NULL || (FLA_EXTREME_CASE_TEST))
+    /* This code path is run to generate the matrix to be passed to the API. This is the default
+     * input generation logic accessed both when BRT is run in Ground truth mode and for non BRT
+     * Test cases. For verification runs the input is loaded from the input generated during Ground
+     * truth run */
+    if(!FLA_BRT_VERIFICATION_RUN)
     {
-        /* Initialize input matrix with custom data */
-        init_matrix(datatype, A, n, n, lda, g_ext_fptr, params->imatrix_char);
-        init_matrix(datatype, B, n, n, lda, g_ext_fptr, params->imatrix_char);
-    }
-    else
-    {
-
-        create_realtype_vector(datatype, &EVals, n);
-        create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &U, lda);
-        create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &C, lda);
-        create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &temp, lda);
-
-        /* Genrating random spd matrix with known chol factor */
-        /* Evals is used here as temporary buffer */
-        generate_matrix_from_EVs(datatype, 'V', n, U, lda, EVals, 0.1, 1.0, USE_ABS_EIGEN_VALUES);
-        get_triangular_matrix("U", datatype, n, n, U, lda, 1, NON_UNIT_DIAG);
-
-        /* B = U**{T|C} U */
-        fla_invoke_gemm(datatype, GET_TRANS_STR(datatype), "N", &n, &n, &n, U, &lda, U, &lda, B,
-                        &lda);
-
-        /* Genarate matrix C such that C = Q * lambda * Q'
-           where L is a diagonal matrix with diagonal values as eigen values
-           and Q is orthogonal matrix denoting the eigen vectors
-         */
-        generate_matrix_from_EVs(datatype, range, n, C, lda, EVals, 0.0, 0.0, USE_ABS_EIGEN_VALUES);
-
-        switch(itype)
+        if(g_ext_fptr != NULL || (FLA_EXTREME_CASE_TEST))
         {
-            case 1:
-                /* For the first type A * X = B * X * lambda
-                   Also B = U'U
-                   A = U'U * X * lambda
-                   inv(U') * A * X = U * X * lambda
-                   (inv(U') * A * inv(U)) * (U * X) = (U * X) * lambda
+            /* Initialize input matrix with custom data */
+            init_matrix(datatype, A, n, n, lda, g_ext_fptr, params->imatrix_char);
+            init_matrix(datatype, B, n, n, lda, g_ext_fptr, params->imatrix_char);
+        }
+        else
+        {
 
-                   C is generated as C * Q = Q * lambda
-                   Comparing these two, A = U' * C * U
-                */
-                fla_invoke_trmm(datatype, "L", "U", GET_TRANS_STR(datatype), "N", &n, &n, U, &lda,
-                                C, &lda);
-                fla_invoke_trmm(datatype, "R", "U", "N", "N", &n, &n, U, &lda, C, &lda);
-                copy_matrix(datatype, "full", n, n, C, lda, A, lda);
-                break;
-            case 2:
-            case 3:
-                /* Type 2: A * B * X = X * lambda
-                   Type 3: B * A * X = X * lambda
+            create_realtype_vector(datatype, &EVals, n);
+            create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &U, lda);
+            create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &C, lda);
+            create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &temp, lda);
 
-                   Type 2:
-                   A * U' * U * X = X * lambda
-                   (U * A * U') * (U * X) = (U * X) * lambda
+            /* Genrating random spd matrix with known chol factor */
+            /* Evals is used here as temporary buffer */
+            generate_matrix_from_EVs(datatype, 'V', n, U, lda, EVals, 0.1, 1.0,
+                                     USE_ABS_EIGEN_VALUES);
+            get_triangular_matrix("U", datatype, n, n, U, lda, 1, NON_UNIT_DIAG);
 
-                   Type 3:
-                   U' * U * A * X = X * lambda
-                   U * A * X = inv(U') * X * lambda
-                   (U * A * U') * (inv(U') * X) = (inv(U') * X) * lambda
+            /* B = U**{T|C} U */
+            fla_invoke_gemm(datatype, GET_TRANS_STR(datatype), "N", &n, &n, &n, U, &lda, U, &lda, B,
+                            &lda);
 
-                   Comparing for both types, A = inv(U) * C * inv(U')
+            /* Genarate matrix C such that C = Q * lambda * Q'
+               where L is a diagonal matrix with diagonal values as eigen values
+               and Q is orthogonal matrix denoting the eigen vectors
+             */
+            generate_matrix_from_EVs(datatype, range, n, C, lda, EVals, 0.0, 0.0,
+                                     USE_ABS_EIGEN_VALUES);
 
-                 */
-                copy_matrix(datatype, "full", n, n, C, lda, temp, lda);
-                /* temp = inv(U) * C */
-                fla_invoke_trsm(datatype, "L", "U", "N", "N", &n, &n, U, &lda, temp, &lda);
-                copy_matrix(datatype, "full", n, n, temp, lda, A, lda);
-                /* A = inv(U) * C * inv(U') */
-                fla_invoke_trsm(datatype, "R", "U", GET_TRANS_STR(datatype), "N", &n, &n, U, &lda,
-                                A, &lda);
-                break;
+            switch(itype)
+            {
+                case 1:
+                    /* For the first type A * X = B * X * lambda
+                       Also B = U'U
+                       A = U'U * X * lambda
+                       inv(U') * A * X = U * X * lambda
+                       (inv(U') * A * inv(U)) * (U * X) = (U * X) * lambda
+
+                       C is generated as C * Q = Q * lambda
+                       Comparing these two, A = U' * C * U
+                    */
+                    fla_invoke_trmm(datatype, "L", "U", GET_TRANS_STR(datatype), "N", &n, &n, U,
+                                    &lda, C, &lda);
+                    fla_invoke_trmm(datatype, "R", "U", "N", "N", &n, &n, U, &lda, C, &lda);
+                    copy_matrix(datatype, "full", n, n, C, lda, A, lda);
+                    break;
+                case 2:
+                case 3:
+                    /* Type 2: A * B * X = X * lambda
+                       Type 3: B * A * X = X * lambda
+
+                       Type 2:
+                       A * U' * U * X = X * lambda
+                       (U * A * U') * (U * X) = (U * X) * lambda
+
+                       Type 3:
+                       U' * U * A * X = X * lambda
+                       U * A * X = inv(U') * X * lambda
+                       (U * A * U') * (inv(U') * X) = (inv(U') * X) * lambda
+
+                       Comparing for both types, A = inv(U) * C * inv(U')
+
+                     */
+                    copy_matrix(datatype, "full", n, n, C, lda, temp, lda);
+                    /* temp = inv(U) * C */
+                    fla_invoke_trsm(datatype, "L", "U", "N", "N", &n, &n, U, &lda, temp, &lda);
+                    copy_matrix(datatype, "full", n, n, temp, lda, A, lda);
+                    /* A = inv(U) * C * inv(U') */
+                    fla_invoke_trsm(datatype, "R", "U", GET_TRANS_STR(datatype), "N", &n, &n, U,
+                                    &lda, A, &lda);
+                    break;
+            }
+
+            free_matrix(U);
+            free_matrix(C);
+            free_matrix(temp);
         }
 
-        free_matrix(U);
-        free_matrix(C);
-        free_matrix(temp);
+        if(FLA_OVERFLOW_UNDERFLOW_TEST)
+        {
+            scale_matrix_underflow_overflow_sygvd(datatype, n, A, lda, B, lda, itype,
+                                                  params->imatrix_char, scal);
+        }
     }
 
-    if(FLA_OVERFLOW_UNDERFLOW_TEST)
-    {
-        scale_matrix_underflow_overflow_sygvd(datatype, n, A, lda, B, lda, itype,
-                                              params->imatrix_char, scal);
-    }
+    /* This macro is used in the BRT test cases for the following purposes:
+     *    - In the Ground truth runs (BRT_char => G, F), the input is stored in a file for future
+     * reference
+     *    - In the verification runs (BRT_char => V, M), the input is loaded from the file and
+     * passed as input to the API
+     * */
+    FLA_BRT_PROCESS_TWO_INPUT(datatype, n, n, A, lda, datatype, n, n, B, lda, "dccddddd", itype,
+                              jobz, uplo, n, lda, g_lwork, g_liwork, g_lrwork)
 
     /* Make a copy of input matrix A and B. This is required to validate the API functionality.*/
     create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &A_test, lda);
@@ -277,7 +303,13 @@ void fla_test_sygvd_experiment(char *tst_api, test_params_t *params, integer dat
 
     /* output validation */
     FLA_TEST_CHECK_EINFO(residual, info, einfo);
-    if(!FLA_EXTREME_CASE_TEST)
+    IF_FLA_BRT_VALIDATION(
+        n, n, store_sygvd_outputs(filename, datatype, jobz, n, A_test, lda, B_test, lda, w, params),
+        validate_sygvd(tst_api, itype, &jobz, &range, &uplo, n, A, A_test, lda, B, B_test, lda, 0,
+                       0, EVals, w, NULL, datatype, residual, params->imatrix_char, scal, params),
+        check_bit_reproducibility_sygvd(filename, datatype, jobz, n, A_test, lda, B_test, lda, w,
+                                        params))
+    else if(!FLA_EXTREME_CASE_TEST)
     {
         validate_sygvd(tst_api, itype, &jobz, &range, &uplo, n, A, A_test, lda, B, B_test, lda, 0,
                        0, EVals, w, NULL, datatype, residual, params->imatrix_char, scal, params);
@@ -297,6 +329,8 @@ void fla_test_sygvd_experiment(char *tst_api, test_params_t *params, integer dat
     }
 
     /* Free up the buffers */
+free_buffers:
+    FLA_FREE_FILENAME(filename);
     free_matrix(A);
     free_matrix(A_test);
     free_matrix(B);
@@ -497,4 +531,44 @@ void invoke_sygvd(integer datatype, integer *itype, char *jobz, char *uplo, inte
             break;
         }
     }
+}
+
+void store_sygvd_outputs(void *filename, integer datatype, char jobz, integer n, void *A_test,
+                         integer lda, void *B_test, integer ldb, void *w, void *params)
+{
+    /* Create and open a file for storing Ground truth*/
+    FLA_OPEN_GT_FILE_STORE
+
+    /* Always store eigenvalues */
+    FLA_STORE_BRT_VECTOR(get_realtype(datatype), n, w)
+
+    /* Only store eigenvectors if jobz = 'V' */
+    if(!same_char(jobz, 'N'))
+    {
+        FLA_STORE_BRT_MATRIX(datatype, n, n, A_test, lda)
+    }
+    FLA_STORE_BRT_MATRIX(datatype, n, n, B_test, ldb)
+
+    FLA_CLOSE_GT_FILE_STORE
+}
+
+integer check_bit_reproducibility_sygvd(void *filename, integer datatype, char jobz, integer n,
+                                        void *A_test, integer lda, void *B_test, integer ldb,
+                                        void *w, void *params)
+{
+    /* Open the file for reading Ground truth */
+    FLA_OPEN_GT_FILE_READ
+
+    /* Always verify eigenvalues */
+    FLA_VERIFY_BRT_VECTOR(get_realtype(datatype), n, w)
+
+    /* Only verify eigenvectors if jobz = 'V' */
+    if(!same_char(jobz, 'N'))
+    {
+        FLA_VERIFY_BRT_MATRIX(datatype, n, n, A_test, lda)
+    }
+    FLA_VERIFY_BRT_MATRIX(datatype, n, n, B_test, ldb)
+
+    fclose(gt_file);
+    return 1;
 }

@@ -125,7 +125,7 @@ extern void dgeqpf_fla(aocl_int64_t *m, aocl_int64_t *n, doublereal *a, aocl_int
     FLA_Obj A, t, T, w, p, jpiv;                                             \
     fla_dim_t min_m_n = fla_min(*m, *n);                                     \
     FLA_Error init_result;                                                   \
-    fla_dim_t buff_p64 = (fla_dim_t *) FLA_malloc( sizeof(fla_dim_t) * min_m_n ); \
+    fla_dim_t *buff_p64 = (fla_dim_t *) FLA_malloc( sizeof(fla_dim_t) * min_m_n ); \
     if(buff_p64 == NULL) { return; }                                         \
     for(aocl_int64_t i = 0; i < *n; i++)                                     \
         buff_p64[i] = (aocl_int64_t) buff_p[i];                               \

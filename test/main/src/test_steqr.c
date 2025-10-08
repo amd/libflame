@@ -24,6 +24,12 @@ void invoke_steqr(integer datatype, char *compz, integer *n, void *z, integer *l
 double prepare_lapacke_steqr_run(integer datatype, int matrix_layout, char *compz, integer n,
                                  void *Z, integer ldz, void *D, void *E, integer *info);
 
+void store_steqr_outputs(void *filename, integer datatype, char compz, integer n, integer ldz,
+                         void *D_test, void *E_test, void *Z_test, void *params);
+integer check_bit_reproducibility_steqr(void *filename, integer datatype, char compz, integer n,
+                                        integer ldz, void *D_test, void *E_test, void *Z_test,
+                                        void *params);
+
 #define STEQR_VL 0.1
 #define STEQR_VU 1000
 
@@ -128,6 +134,7 @@ void fla_test_steqr_experiment(char *tst_api, test_params_t *params, integer dat
     void *D = NULL, *D_test = NULL, *E = NULL, *E_test = NULL;
     void *L = NULL, *scal = NULL, *Z_test_save = NULL;
     double residual, err_thresh;
+    void *filename = NULL;
 
     integer interfacetype = params->interfacetype;
     int layout = params->matrix_major;
@@ -174,37 +181,43 @@ void fla_test_steqr_experiment(char *tst_api, test_params_t *params, integer dat
     create_vector(realtype, &D, n);
     create_vector(realtype, &E, n - 1);
 
-    if(g_ext_fptr != NULL)
+    if(!FLA_BRT_VERIFICATION_RUN)
     {
-        /* Initialize input matrix with custom data */
-        init_matrix(realtype, D, 1, n, 1, g_ext_fptr, params->imatrix_char);
-        init_matrix(realtype, E, 1, n - 1, 1, g_ext_fptr, params->imatrix_char);
-        if(same_char(compz, 'V'))
+        if(g_ext_fptr != NULL)
         {
-            init_matrix(datatype, A, n, n, lda, g_ext_fptr, params->imatrix_char);
+            /* Initialize input matrix with custom data */
+            init_matrix(realtype, D, 1, n, 1, g_ext_fptr, params->imatrix_char);
+            init_matrix(realtype, E, 1, n - 1, 1, g_ext_fptr, params->imatrix_char);
+            if(same_char(compz, 'V'))
+            {
+                init_matrix(datatype, A, n, n, lda, g_ext_fptr, params->imatrix_char);
+                copy_matrix(datatype, "full", n, n, A, lda, Q, lda);
+                /* Input matrix from file is assumed to be orthogonal.
+                 * So get the symmetric/hermitian matrix using:
+                 * A = Q * T * (Q**T)
+                 * Form tridiagonal matrix Z by copying from matrix.*/
+                copy_sym_tridiag_matrix(datatype, D, E, n, n, Z, ldz);
+                fla_invoke_gemm(datatype, "N", "N", &n, &n, &n, Q, &lda, Z, &ldz, Z_test, &ldz);
+                fla_invoke_gemm(datatype, "N", "T", &n, &n, &n, Z_test, &ldz, Q, &lda, A, &lda);
+            }
+        }
+        else
+        {
+            create_realtype_vector(datatype, &L, n);
+            generate_matrix_from_EVs(datatype, range, n, A, lda, L, STEQR_VL, STEQR_VU,
+                                     USE_ABS_EIGEN_VALUES);
+            if(FLA_OVERFLOW_UNDERFLOW_TEST)
+            {
+                create_realtype_vector(get_datatype(datatype), &scal, n);
+                scale_matrix_underflow_overflow_steqr(datatype, n, A, lda, &params->imatrix_char,
+                                                      scal);
+            }
             copy_matrix(datatype, "full", n, n, A, lda, Q, lda);
-            /* Input matrix from file is assumed to be orthogonal.
-             * So get the symmetric/hermitian matrix using:
-             * A = Q * T * (Q**T)
-             * Form tridiagonal matrix Z by copying from matrix.*/
-            copy_sym_tridiag_matrix(datatype, D, E, n, n, Z, ldz);
-            fla_invoke_gemm(datatype, "N", "N", &n, &n, &n, Q, &lda, Z, &ldz, Z_test, &ldz);
-            fla_invoke_gemm(datatype, "N", "T", &n, &n, &n, Z_test, &ldz, Q, &lda, A, &lda);
+            get_sym_tridiagonal_matrix(datatype, &uplo, n, Q, lda, D, E, &info);
         }
     }
-    else
-    {
-        create_realtype_vector(datatype, &L, n);
-        generate_matrix_from_EVs(datatype, range, n, A, lda, L, STEQR_VL, STEQR_VU,
-                                 USE_ABS_EIGEN_VALUES);
-        if(FLA_OVERFLOW_UNDERFLOW_TEST)
-        {
-            create_realtype_vector(get_datatype(datatype), &scal, n);
-            scale_matrix_underflow_overflow_steqr(datatype, n, A, lda, &params->imatrix_char, scal);
-        }
-        copy_matrix(datatype, "full", n, n, A, lda, Q, lda);
-        get_sym_tridiagonal_matrix(datatype, &uplo, n, Q, lda, D, E, &info);
-    }
+    FLA_BRT_PROCESS_FOUR_INPUT(datatype, n, n, A, lda, datatype, n, n, Q, lda, realtype, 1, n, D, 1,
+                               realtype, 1, n - 1, E, 1, "cdd", compz, n, ldz)
     if(same_char(compz, 'I'))
     {
         set_identity_matrix(datatype, n, n, Z_test, ldz);
@@ -241,7 +254,14 @@ void fla_test_steqr_experiment(char *tst_api, test_params_t *params, integer dat
 
     /* Output validation */
     FLA_TEST_CHECK_EINFO(residual, info, einfo);
-    if(!FLA_EXTREME_CASE_TEST)
+    IF_FLA_BRT_VALIDATION(
+        n, n,
+        store_steqr_outputs(filename, datatype, compz, n, ldz, D_test, E_test, Z_test, params),
+        validate_syev(tst_api, &compz, &range, n, Z, Z_test, lda, 0, 0, L, D_test, NULL, datatype,
+                      residual, params->imatrix_char, scal, params),
+        check_bit_reproducibility_steqr(filename, datatype, compz, n, ldz, D_test, E_test, Z_test,
+                                        params))
+    else if(!FLA_EXTREME_CASE_TEST)
     {
         validate_syev(tst_api, &compz, &range, n, Z, Z_test, lda, 0, 0, L, D_test, NULL, datatype,
                       residual, params->imatrix_char, scal, params);
@@ -252,6 +272,8 @@ void fla_test_steqr_experiment(char *tst_api, test_params_t *params, integer dat
     }
 
     /* Free up the buffers */
+free_buffers:
+    FLA_FREE_FILENAME(filename)
     free_matrix(Z_test_save);
     free_matrix(Z);
     free_vector(D);
@@ -407,4 +429,42 @@ void invoke_steqr(integer datatype, char *compz, integer *n, void *z, integer *l
             break;
         }
     }
+}
+
+void store_steqr_outputs(void *filename, integer datatype, char compz, integer n, integer ldz,
+                         void *D_test, void *E_test, void *Z_test, void *params)
+{
+    /* Open the file for writing Ground truth */
+    FLA_OPEN_GT_FILE_STORE
+
+    /* Store the API outputs for ground truth */
+    FLA_STORE_BRT_VECTOR(get_realtype(datatype), n, D_test)
+
+    /* Store eigenvectors only when compz != 'N' */
+    if(!same_char(compz, 'N'))
+    {
+        FLA_STORE_BRT_MATRIX(datatype, n, n, Z_test, ldz)
+    }
+
+    FLA_CLOSE_GT_FILE_STORE
+}
+
+integer check_bit_reproducibility_steqr(void *filename, integer datatype, char compz, integer n,
+                                        integer ldz, void *D_test, void *E_test, void *Z_test,
+                                        void *params)
+{
+    /* Open the file for reading Ground truth */
+    FLA_OPEN_GT_FILE_READ
+
+    /* Load stored GT and verify with current API outputs */
+    FLA_VERIFY_BRT_VECTOR(get_realtype(datatype), n, D_test)
+
+    /* Verify eigenvectors only when compz != 'N' */
+    if(!same_char(compz, 'N'))
+    {
+        FLA_VERIFY_BRT_MATRIX(datatype, n, n, Z_test, ldz)
+    }
+
+    fclose(gt_file);
+    return 1;
 }

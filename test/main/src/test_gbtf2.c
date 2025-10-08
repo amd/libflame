@@ -112,6 +112,7 @@ void fla_test_gbtf2_experiment(char *tst_api, test_params_t *params, integer dat
     void *IPIV;
     void *AB, *AB_test;
     double residual, err_thresh;
+    void *filename = NULL;
 
     /* Determine the dimensions*/
     m = p_cur;
@@ -137,17 +138,21 @@ void fla_test_gbtf2_experiment(char *tst_api, test_params_t *params, integer dat
     create_vector(INTEGER, &IPIV, fla_min(m, n));
     reset_vector(INTEGER, IPIV, fla_min(m, n), 1);
 
-    /* Initialize the test matrices*/
-    if(g_ext_fptr != NULL)
+    if(!FLA_BRT_VERIFICATION_RUN)
     {
-        /* Initialize input matrix with custom data from file */
-        init_matrix(datatype, AB, m, n, ldab, g_ext_fptr, params->imatrix_char);
+        /* Initialize the test matrices*/
+        if(g_ext_fptr != NULL)
+        {
+            /* Initialize input matrix with custom data from file */
+            init_matrix(datatype, AB, m, n, ldab, g_ext_fptr, params->imatrix_char);
+        }
+        else
+        {
+            /* Initialize & convert random band matrix into band storage as per API need */
+            rand_band_storage_matrix(datatype, m, n, kl, ku, AB, ldab);
+        }
     }
-    else
-    {
-        /* Initialize & convert random band matrix into band storage as per API need */
-        rand_band_storage_matrix(datatype, m, n, kl, ku, AB, ldab);
-    }
+    FLA_BRT_PROCESS_SINGLE_INPUT(datatype, m, n, AB, ldab, "ddddd", m, n, kl, ku, ldab);
 
     /* Save the original matrix*/
     copy_matrix(datatype, "full", ldab, n, AB, ldab, AB_test, ldab);
@@ -164,9 +169,20 @@ void fla_test_gbtf2_experiment(char *tst_api, test_params_t *params, integer dat
 
     /* output validation */
     FLA_TEST_CHECK_EINFO(residual, info, einfo);
-    FLA_PRINT_TEST_STATUS(n, n, residual, err_thresh);
+    IF_FLA_BRT_VALIDATION(m, n,
+                          store_outputs_base(filename, params, 1, 1, datatype, m, n, AB_test, ldab,
+                                             INTEGER, fla_min(m, n), IPIV),
+                          FLA_PRINT_TEST_STATUS(n, n, residual, err_thresh),
+                          check_reproducibility_base(filename, params, 1, 1, datatype, m, n,
+                                                     AB_test, ldab, INTEGER, fla_min(m, n), IPIV))
+    else
+    {
+        FLA_PRINT_TEST_STATUS(n, n, residual, err_thresh);
+    }
 
     /* Free up the buffers */
+free_buffers:
+    FLA_FREE_FILENAME(filename)
     free_matrix(AB);
     free_matrix(AB_test);
     free_vector(IPIV);

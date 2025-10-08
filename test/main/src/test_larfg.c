@@ -112,6 +112,7 @@ void fla_test_larfg_experiment(char *tst_api, test_params_t *params, integer dat
     double alpha_real, alpha_imag;
     double residual, err_thresh;
     integer interfacetype = params->interfacetype;
+    void *filename = NULL;
 
     incx = params->aux_paramslist[pci].incx_larfg;
     alpha_real = params->aux_paramslist[pci].alpha_real;
@@ -127,7 +128,12 @@ void fla_test_larfg_experiment(char *tst_api, test_params_t *params, integer dat
     create_vector(datatype, &tau, 1);
 
     /* Initializing input values for vector */
-    init_vector(datatype, x, n, inc_x, g_ext_fptr, params->imatrix_char);
+    if(!FLA_BRT_VERIFICATION_RUN)
+    {
+        init_vector(datatype, x, n, inc_x, g_ext_fptr, params->imatrix_char);
+    }
+    FLA_BRT_PROCESS_SINGLE_INPUT(datatype, x_length, 1, x, x_length, "dffd", n, alpha_real,
+                                 alpha_imag, inc_x)
     if(FLA_OVERFLOW_UNDERFLOW_TEST)
     {
         scale_matrix_underflow_overflow_larfg(datatype, n, 1, x, incx, params->imatrix_char);
@@ -161,7 +167,14 @@ void fla_test_larfg_experiment(char *tst_api, test_params_t *params, integer dat
 
     /* Output Validation */
     FLA_TEST_CHECK_EINFO(residual, info, einfo);
-    if(!FLA_EXTREME_CASE_TEST)
+    IF_FLA_BRT_VALIDATION(
+        n, n,
+        store_outputs_base(filename, params, 0, 2, datatype, x_length, x_test, datatype, 1, tau,
+                           "dffd", n, alpha_real, alpha_imag, inc_x),
+        validate_larfg(tst_api, datatype, n, incx, x_length, x, x_test, tau, residual, params),
+        check_reproducibility_base(filename, params, 0, 2, datatype, x_length, x_test, datatype, 1,
+                                   tau, "dffd", n, alpha_real, alpha_imag, inc_x))
+    else if(!FLA_EXTREME_CASE_TEST)
     {
         validate_larfg(tst_api, datatype, n, incx, x_length, x, x_test, tau, residual, params);
     }
@@ -179,6 +192,8 @@ void fla_test_larfg_experiment(char *tst_api, test_params_t *params, integer dat
         FLA_PRINT_TEST_STATUS(n, n, residual, err_thresh);
     }
     /* Free up the buffers */
+free_buffers:
+    FLA_FREE_FILENAME(filename)
     free_vector(x);
     free_vector(x_test);
     free_vector(tau);

@@ -235,7 +235,7 @@
     {                                                                  \
         uint32_t A_GT;                                                 \
         A_GT = generate_crc_vector(datatype, m, A);                    \
-        printf("Output: %dx%d matrix\tCRC:%" PRIu32 "\n", m, n, A_GT); \
+        printf("Output: %d matrix\tCRC:%" PRIu32 "\n", ++count, A_GT); \
     }
 
 /* Helper macro used in store_API_outputs function to store the CRC and binary data of a matrix
@@ -255,26 +255,26 @@
     {                                                                      \
         uint32_t A_GT;                                                     \
         A_GT = generate_crc_matrix_no_nb_diag(datatype, m, n, nb, A, lda); \
-        printf("Output: %dx%d matrix\tCRC:%" PRIu32 "\n", m, n, A_GT);     \
+        printf("Output: %d matrix\tCRC:%" PRIu32 "\n", ++count, A_GT);     \
     }
 
 /* Helper macro used in store_API_outputs function to store the CRC and binary data of a vector */
-#define FLA_STORE_BRT_VECTOR(datatype, m, A)                     \
-    if(same_char(((test_params_t *)params)->BRT_char, 'G'))      \
-    {                                                            \
-        uint32_t A_GT;                                           \
-        A_GT = generate_crc_vector(datatype, m, A);              \
-        fwrite(&A_GT, sizeof(uint32_t), 1, gt_file);             \
-    }                                                            \
-    else if(same_char(((test_params_t *)params)->BRT_char, 'F')) \
-    {                                                            \
-        FLA_STORE_VECTOR(datatype, m, A);                        \
-    }                                                            \
-    else if(same_char(((test_params_t *)params)->BRT_char, 'L')) \
-    {                                                            \
-        uint32_t A_GT;                                           \
-        A_GT = generate_crc_vector(datatype, m, A);              \
-        printf("Output: %d vector\tCRC:%" PRIu32 "\n", m, A_GT); \
+#define FLA_STORE_BRT_VECTOR(datatype, m, A)                           \
+    if(same_char(((test_params_t *)params)->BRT_char, 'G'))            \
+    {                                                                  \
+        uint32_t A_GT;                                                 \
+        A_GT = generate_crc_vector(datatype, m, A);                    \
+        fwrite(&A_GT, sizeof(uint32_t), 1, gt_file);                   \
+    }                                                                  \
+    else if(same_char(((test_params_t *)params)->BRT_char, 'F'))       \
+    {                                                                  \
+        FLA_STORE_VECTOR(datatype, m, A);                              \
+    }                                                                  \
+    else if(same_char(((test_params_t *)params)->BRT_char, 'L'))       \
+    {                                                                  \
+        uint32_t A_GT;                                                 \
+        A_GT = generate_crc_vector(datatype, m, A);                    \
+        printf("Output: %d vector\tCRC:%" PRIu32 "\n", ++count, A_GT); \
     }
 
 /* Helper macro used in check_bit_reproducibility_API function to verify the CRC and binary data of
@@ -502,6 +502,7 @@
 /* Macro for opening file for writing ground truth */
 #define FLA_OPEN_GT_FILE_STORE                                 \
     FILE *gt_file = NULL;                                      \
+    int count = 0;                                             \
     if(!same_char(((test_params_t *)params)->BRT_char, 'L'))   \
     {                                                          \
         update_filetype(&filename, "BRT/Ground-Truth/", TRUE); \

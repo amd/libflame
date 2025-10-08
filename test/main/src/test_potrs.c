@@ -131,6 +131,7 @@ void fla_test_potrs_experiment(char *tst_api, test_params_t *params, integer dat
     void *B_test = NULL;
     char uplo = params->lin_solver_paramslist[pci].Uplo;
     double residual, err_thresh;
+    void *filename = NULL;
 
     integer interfacetype = params->interfacetype;
     int layout = params->matrix_major;
@@ -163,27 +164,37 @@ void fla_test_potrs_experiment(char *tst_api, test_params_t *params, integer dat
     create_matrix(datatype, LAPACK_COL_MAJOR, n, nrhs, &X, ldb);
     create_matrix(datatype, LAPACK_COL_MAJOR, n, nrhs, &B_test, ldb);
 
-    /* Initialize input symmetric positive definite matrix A */
-    reset_matrix(datatype, n, n, A, lda);
-    if((!FLA_EXTREME_CASE_TEST) && (g_ext_fptr == NULL))
+    /* Initialize input matrices only when not in BRT verification run mode to avoid
+       expensive input generation since FLA_BRT_PROCESS_ macros load inputs from files */
+    if(!FLA_BRT_VERIFICATION_RUN)
     {
-        rand_spd_matrix(datatype, &uplo, A, n, lda);
-        /* Initialize input matrix with random numbers */
-        rand_matrix(datatype, B, n, nrhs, ldb);
-
-        /* Scaling matrix with values around overflow, underflow for POTRS */
-        if(FLA_OVERFLOW_UNDERFLOW_TEST)
+        /* Initialize input symmetric positive definite matrix A */
+        reset_matrix(datatype, n, n, A, lda);
+        if((!FLA_EXTREME_CASE_TEST) && (g_ext_fptr == NULL))
         {
-            create_realtype_vector(get_datatype(datatype), &scal, 1);
-            scale_matrix_underflow_overflow_potrs(datatype, n, A, lda, params->imatrix_char, scal);
+            rand_spd_matrix(datatype, &uplo, A, n, lda);
+            /* Initialize input matrix with random numbers */
+            rand_matrix(datatype, B, n, nrhs, ldb);
+
+            /* Scaling matrix with values around overflow, underflow for POTRS */
+            if(FLA_OVERFLOW_UNDERFLOW_TEST)
+            {
+                create_realtype_vector(get_datatype(datatype), &scal, 1);
+                scale_matrix_underflow_overflow_potrs(datatype, n, A, lda, params->imatrix_char,
+                                                      scal);
+            }
+        }
+        else
+        {
+            /* Initialize input matrix with custom data */
+            init_matrix(datatype, A, n, n, lda, g_ext_fptr, params->imatrix_char);
+            init_matrix(datatype, B, n, nrhs, ldb, g_ext_fptr, params->imatrix_char);
         }
     }
-    else
-    {
-        /* Initialize input matrix with custom data */
-        init_matrix(datatype, A, n, n, lda, g_ext_fptr, params->imatrix_char);
-        init_matrix(datatype, B, n, nrhs, ldb, g_ext_fptr, params->imatrix_char);
-    }
+
+    /* BRT macro for processing two input matrices (A and B) */
+    FLA_BRT_PROCESS_TWO_INPUT(datatype, n, n, A, lda, datatype, n, nrhs, B, ldb, "cdddd", uplo, n,
+                              nrhs, lda, ldb)
     copy_matrix(datatype, "full", n, n, A, lda, A_test, lda);
     /* cholesky factorisation of A as input to potrs */
     invoke_potrf(&uplo, datatype, &n, A, &lda, &info);
@@ -203,7 +214,11 @@ void fla_test_potrs_experiment(char *tst_api, test_params_t *params, integer dat
 
     /* Validate potrs call by computing Ax-b */
     FLA_TEST_CHECK_EINFO(residual, info, einfo);
-    if(FLA_RANDOM_INIT_MODE)
+    IF_FLA_BRT_VALIDATION(
+        n, nrhs, store_outputs_base(filename, params, 1, 0, datatype, n, nrhs, B_test, ldb),
+        FLA_PRINT_TEST_STATUS(n, n, residual, err_thresh),
+        check_reproducibility_base(filename, params, 1, 0, datatype, n, nrhs, B_test, ldb))
+    else if(FLA_RANDOM_INIT_MODE)
     {
         FLA_PRINT_TEST_STATUS(n, n, residual, err_thresh);
     }
@@ -227,6 +242,8 @@ void fla_test_potrs_experiment(char *tst_api, test_params_t *params, integer dat
     }
 
     /* Free up the buffers */
+free_buffers:
+    FLA_FREE_FILENAME(filename);
     free_matrix(A);
     free_matrix(A_test);
     free_matrix(B_test);

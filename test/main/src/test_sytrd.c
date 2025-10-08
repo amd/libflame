@@ -121,6 +121,7 @@ void fla_test_sytrd_experiment(char *tst_api, test_params_t *params, integer dat
     void *A = NULL, *A_test = NULL, *D = NULL, *E = NULL, *tau = NULL;
     char uplo;
     double residual, err_thresh;
+    void *filename = NULL;
 
     integer interfacetype = params->interfacetype;
     integer layout = params->matrix_major;
@@ -153,26 +154,41 @@ void fla_test_sytrd_experiment(char *tst_api, test_params_t *params, integer dat
     create_vector(realtype, &D, n);
     create_vector(realtype, &E, n - 1);
 
-    if(g_ext_fptr || FLA_EXTREME_CASE_TEST)
+    /* This code path is run to generate the matrix to be passed to the API. This is the default
+     * input generation logic accessed both when BRT is run in Ground truth mode and for non BRT
+     * Test cases. For verification runs the input is loaded from the input generated during Ground
+     * truth run */
+    if(!FLA_BRT_VERIFICATION_RUN)
     {
-        init_matrix(datatype, A, n, n, lda, g_ext_fptr, params->imatrix_char);
-        if(FLA_EXTREME_CASE_TEST)
+        if(g_ext_fptr || FLA_EXTREME_CASE_TEST)
         {
-            /* Get the symmetric/hermitian matrix.*/
+            init_matrix(datatype, A, n, n, lda, g_ext_fptr, params->imatrix_char);
+            if(FLA_EXTREME_CASE_TEST)
+            {
+                /* Get the symmetric/hermitian matrix.*/
+                form_symmetric_matrix(datatype, n, A, lda, "C", uplo);
+            }
+        }
+        else
+        {
+            /* TODO: changes to create A from known inputs Q, T */
+            init_matrix(datatype, A, n, n, lda, g_ext_fptr, params->imatrix_char);
             form_symmetric_matrix(datatype, n, A, lda, "C", uplo);
+            /* Scaling matrix with values around overflow, underflow for SYTRD/HETRD */
+            if(FLA_OVERFLOW_UNDERFLOW_TEST)
+            {
+                scale_matrix_underflow_overflow_sytrd(datatype, n, A, lda, params->imatrix_char);
+            }
         }
     }
-    else
-    {
-        /* TODO: changes to create A from known inputs Q, T */
-        init_matrix(datatype, A, n, n, lda, g_ext_fptr, params->imatrix_char);
-        form_symmetric_matrix(datatype, n, A, lda, "C", uplo);
-        /* Scaling matrix with values around overflow, underflow for SYTRD/HETRD */
-        if(FLA_OVERFLOW_UNDERFLOW_TEST)
-        {
-            scale_matrix_underflow_overflow_sytrd(datatype, n, A, lda, params->imatrix_char);
-        }
-    }
+
+    /* This macro is used in the BRT test cases for the following purposes:
+     *    - In the Ground truth runs (BRT_char => G, F), the input is stored in a file for future
+     * reference
+     *    - In the verification runs (BRT_char => V, M), the input is loaded from the file and
+     * passed as input to the API
+     * */
+    FLA_BRT_PROCESS_SINGLE_INPUT(datatype, n, n, A, lda, "cddd", uplo, n, lda, g_lwork)
 
     copy_matrix(datatype, "full", n, n, A, lda, A_test, lda);
     create_vector(datatype, &tau, n - 1);
@@ -185,7 +201,16 @@ void fla_test_sytrd_experiment(char *tst_api, test_params_t *params, integer dat
 
     /* Output validation. */
     FLA_TEST_CHECK_EINFO(residual, info, einfo);
-    if(!FLA_EXTREME_CASE_TEST)
+    IF_FLA_BRT_VALIDATION(
+        n, n,
+        store_outputs_base(filename, params, 1, 3, datatype, n, n, A_test, lda,
+                           get_realtype(datatype), n, D, get_realtype(datatype), n - 1, E, datatype,
+                           n - 1, tau),
+        validate_sytrd(tst_api, datatype, uplo, n, A_test, A, lda, D, E, tau, residual, params),
+        check_reproducibility_base(filename, params, 1, 3, datatype, n, n, A_test, lda,
+                                   get_realtype(datatype), n, D, get_realtype(datatype), n - 1, E,
+                                   datatype, n - 1, tau))
+    else if(!FLA_EXTREME_CASE_TEST)
     {
         validate_sytrd(tst_api, datatype, uplo, n, A_test, A, lda, D, E, tau, residual, params);
     }
@@ -201,6 +226,8 @@ void fla_test_sytrd_experiment(char *tst_api, test_params_t *params, integer dat
     }
 
     /* Free up buffers. */
+free_buffers:
+    FLA_FREE_FILENAME(filename);
     free_matrix(A);
     free_matrix(A_test);
     free_vector(D);

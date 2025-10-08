@@ -81,7 +81,7 @@ void zspffrt2_fla(dcomplex *ap, aocl_int64_t *n, aocl_int64_t *ncolm, dcomplex *
     aocl_int64_t ncolm_pc = (integer)((*ncolm * 100) / *n);
     if((*n > (FLA_SPFFRT2__NTHRESH1 - 1)) && (ncolm_pc >= FLA_SPFFRT2__NCOLFRAC_THRESH3))
     {
-        /* Unpacking/packing based variant for small n &  ncolm values */
+        /* Unpacking/packing based variant for small n & ncolm values */
         zspffrt2_fla_unp_var2(ap, n, ncolm, work);
     }
     else if(*n > FLA_SPFFRT2__NTHRESH3)
@@ -232,7 +232,14 @@ void zspffrt2_fla_unp_var2(dcomplex *ap, aocl_int64_t *n, aocl_int64_t *ncolm,
     nb = (nb > *ncolm) ? *ncolm : nb;
 
     /* Allocate unpacked matrix and do the unpacking */
-    mau = (dcomplex *)malloc(*n * *n * sizeof(dcomplex));
+    mau = NULL;
+    mau = (dcomplex *) malloc(*n * *n * sizeof(dcomplex));
+    if(mau == NULL)
+    {
+        /* call default version */
+        zspffrt2_fla_def(ap, n, ncolm, work);
+        return;
+    }
 
     zunpack_fla(ap, mau, *n, *n, *n);
 
@@ -262,6 +269,8 @@ void zspffrt2_fla_unp_var2(dcomplex *ap, aocl_int64_t *n, aocl_int64_t *ncolm,
 #else
         aocl_blas_zgemmt("L", "N", "N", &ni, &nb, &d__1, &au[kc + nb], n, &au[kc + nb * *n], n, &d__1,
                 &au[kc + nb * *n + nb], n);
+        aocl_blas_zgemm("N", "N", &mg, &ni, &nb, &d__1, &au[kc + ni + nb], n, &au[kc + nb * *n], n,
+                &d__1, &au[kc + nb * *n + nb + ni], n);
 #endif
     }
 

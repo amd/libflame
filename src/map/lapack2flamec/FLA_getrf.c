@@ -40,7 +40,7 @@
 
 extern void DTL_Trace(uint8 ui8LogLevel, uint8 ui8LogType, const int8 *pi8FileName,
                       const int8 *pi8FunctionName, uint32 ui32LineNumber, const int8 *pi8Message);
-
+int fla_thread_get_num_threads(void);
 /** Generated wrapper function */
 void sgetrf_(aocl_int_t *m, aocl_int_t *n, real *buff_A, aocl_int_t *ldim_A, aocl_int_t *buff_p, aocl_int_t *info)
 {
@@ -187,18 +187,18 @@ void zgetf2_(aocl_int_t *m, aocl_int_t *n, dcomplex *buff_A, aocl_int_t *ldim_A,
 /* FLA_ENABLE_AMD_OPT enables the code which selects algorithm variants based on size */
 #define LAPACK_getrf_body_d(prefix)                                                         \
     extern fla_context fla_global_context;                                                  \
-    aocl_int64_t i = 0;                                                                          \
+    aocl_int64_t i = 0;                                                                     \
     if(*m == 2 && *n == 2)                                                                  \
     {                                                                                       \
-        FLA_LU_PIV_SMALL_D_2x2(i, *n, buff_A, ldim_A, buff_p, *info);                         \
+        FLA_LU_PIV_SMALL_D_2x2(i, *n, buff_A, ldim_A, buff_p, *info);                       \
     }                                                                                       \
     else if(*m == 3 && *n == 3)                                                             \
     {                                                                                       \
-        FLA_LU_PIV_SMALL_D_3x3(i, *n, buff_A, ldim_A, buff_p, *info);                         \
+        FLA_LU_PIV_SMALL_D_3x3(i, *n, buff_A, ldim_A, buff_p, *info);                       \
     }                                                                                       \
     else if(*m == 4 && *n == 4)                                                             \
     {                                                                                       \
-        FLA_LU_PIV_SMALL_D_4x4(i, *n, buff_A, ldim_A, buff_p, *info);                         \
+        FLA_LU_PIV_SMALL_D_4x4(i, *n, buff_A, ldim_A, buff_p, *info);                       \
     }                                                                                       \
     else if(*m <= FLA_DGETRF_SMALL_THRESH0 && *n <= FLA_DGETRF_SMALL_THRESH0)               \
     {                                                                                       \
@@ -217,8 +217,15 @@ void zgetf2_(aocl_int_t *m, aocl_int_t *n, dcomplex *buff_A, aocl_int_t *ldim_A,
         else if(FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX512) && *m < FLA_DGETRF_SMALL_AVX512_THRESH0 \
                 && *n < FLA_DGETRF_SMALL_AVX512_THRESH0)                                    \
         {                                                                                   \
-            /* Calling vectorized code when avx512 supported architecture detected */       \
-            fla_dgetrf_small_avx512(m, n, buff_A, ldim_A, buff_p, info);                    \
+            if(fla_thread_get_num_threads() != 1 && *m < FLA_DGETRF_SMALL_AVX512_THRESH1    \
+               && *n < FLA_DGETRF_SMALL_AVX512_THRESH1)                                     \
+            {                                                                               \
+                fla_dgetrf_small_avx512(m, n, buff_A, ldim_A, buff_p, info);                \
+            }                                                                               \
+            else                                                                            \
+            {                                                                               \
+                aocl_lapack_dgetrf2(m, n, buff_A, ldim_A, buff_p, info);                    \
+            }                                                                               \
         }                                                                                   \
         else                                                                                \
         {                                                                                   \

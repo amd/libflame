@@ -57,7 +57,7 @@ void FLA_get_optimum_params_getrf(fla_dim_t m, fla_dim_t n, fla_dim_t *nb, int *
         *nb = nb_dyn < 16 ? 16 : (nb_dyn > 128 ? 128 : nb_dyn);
     }
 
-    // now override for special shapes / sizes if desired…
+    // now override for special shapes / sizes if desired
     if(*n_threads == 64)
     {
         if(ratio > TALL_RATIO_THRESHOLD)
@@ -92,18 +92,18 @@ void FLA_get_optimum_params_getrf(fla_dim_t m, fla_dim_t n, fla_dim_t *nb, int *
         {
             if(m > 8192)
             {
-                *nb = 96;
-                *n_threads = 32;
+                *nb = 128;
+                *n_threads = 64;
             }
             else if(m > 4096)
             {
                 *nb = 64;
-                *n_threads = 24;
+                *n_threads = 32;
             }
             else if(m > 2048)
             {
-                *nb = 32;
-                *n_threads = 16;
+                *nb = 64;
+                *n_threads = 24;
             }
             else
             {

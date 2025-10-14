@@ -4,6 +4,9 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
+#if FLA_ENABLE_AOCL_BLAS
+#include "blis.h"
+#endif
 static aocl_int64_t c__1 = 1;
 static doublereal c_b8 = -1.;
 static doublereal c_b9 = 1.;
@@ -261,6 +264,13 @@ void aocl_lapack_dlaqps(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *offset, 
     lsticc = 0;
     k = 0;
     tol3z = sqrt(dlamch_("Epsilon"));
+#if FLA_ENABLE_AOCL_BLAS
+    /* Set no. of threads to BLIS as 1 to run DGEMV in ST.
+     * This is to avoid isolated threading causing cache misses.
+     */
+    aocl_int64_t orig_blis_threads = bli_thread_get_num_threads();
+    bli_thread_set_num_threads(1);
+#endif
     /* Beginning of while loop. */
 L10:
     if(k < *nb && lsticc == 0)
@@ -375,6 +385,10 @@ L10:
         /* End of while loop. */
         goto L10;
     }
+#if FLA_ENABLE_AOCL_BLAS
+    /* reset no. of threads back to original for BLIS */
+    bli_thread_set_num_threads(orig_blis_threads);
+#endif
     *kb = k;
     rk = *offset + *kb;
     /* Apply the block reflector to the rest of the matrix: */

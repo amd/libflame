@@ -4,6 +4,9 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
+#if FLA_ENABLE_AOCL_BLAS
+#include "blis.h"
+#endif
 static integer c__1 = 1;
 static doublereal c_b8 = -1.;
 static doublereal c_b9 = 1.;
@@ -193,23 +196,25 @@ void dlaqps_(integer *m, integer *n, integer *offset, integer *nb, integer *kb, 
     doublereal akk;
     integer pvt;
     doublereal temp;
-    extern doublereal dnrm2_(integer *, doublereal *, integer *);
     doublereal temp2, tol3z;
+#if !FLA_ENABLE_AOCL_BLAS
+    extern doublereal dnrm2_(integer *, doublereal *, integer *);
     extern /* Subroutine */
         void
         dgemm_(char *, char *, integer *, integer *, integer *, doublereal *, doublereal *,
                integer *, doublereal *, integer *, doublereal *, doublereal *, integer *),
         dgemv_(char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *,
                integer *, doublereal *, doublereal *, integer *);
-    integer itemp;
     extern /* Subroutine */
         void
         dswap_(integer *, doublereal *, integer *, doublereal *, integer *);
+    extern integer idamax_(integer *, doublereal *, integer *);
+#endif
     extern doublereal dlamch_(char *);
+    integer itemp;
     extern /* Subroutine */
         void
         dlarfg_(integer *, doublereal *, doublereal *, integer *, doublereal *);
-    extern integer idamax_(integer *, doublereal *, integer *);
     integer lsticc, lastrk;
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -251,6 +256,13 @@ void dlaqps_(integer *m, integer *n, integer *offset, integer *nb, integer *kb, 
     lsticc = 0;
     k = 0;
     tol3z = sqrt(dlamch_("Epsilon"));
+#if FLA_ENABLE_AOCL_BLAS
+    /* Set no. of threads to BLIS as 1 to run DGEMV in ST.
+     * This is to avoid isolated threading causing cache misses.
+     */
+    integer orig_blis_threads = bli_thread_get_num_threads();
+    bli_thread_set_num_threads(1);
+#endif    
     /* Beginning of while loop. */
 L10:
     if(k < *nb && lsticc == 0)
@@ -365,6 +377,10 @@ L10:
         /* End of while loop. */
         goto L10;
     }
+#if FLA_ENABLE_AOCL_BLAS
+    /* reset no. of threads back to original for BLIS */
+    bli_thread_set_num_threads(orig_blis_threads);
+#endif
     *kb = k;
     rk = *offset + *kb;
     /* Apply the block reflector to the rest of the matrix: */

@@ -7,6 +7,9 @@
  *  Copyright (c) 2021-2025 Advanced Micro Devices, Inc.  All rights reserved.
  */
 #include "FLA_f2c.h" /* Table of constant values */
+#if FLA_ENABLE_AOCL_BLAS
+#include "blis.h"
+#endif
 
 static doublereal c_b4 = -1.;
 static doublereal c_b5 = 1.;
@@ -323,6 +326,13 @@ void fla_dlabrd(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *nb, doublereal *
 #ifdef FLA_OPENMP_MULTITHREADING
     /* Get optimum thread number for DLABRD*/
     actual_num_threads = get_opt_threads_dlabrd(*m, *n);
+#if FLA_ENABLE_AOCL_BLAS
+    /* Set no. of threads to BLIS as 1 to run DGEMV in ST.
+     * This is to avoid isolated threading causing cache misses.
+     */
+    aocl_int64_t orig_blis_threads = bli_thread_get_num_threads();
+    bli_thread_set_num_threads(1);
+#endif
 #endif
 
     if(*m >= *n)
@@ -615,6 +625,12 @@ void fla_dlabrd(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *nb, doublereal *
             }
         }
     }
+#ifdef FLA_OPENMP_MULTITHREADING
+#if FLA_ENABLE_AOCL_BLAS
+    /* reset no. of threads back to original for BLIS */
+    bli_thread_set_num_threads(orig_blis_threads);
+#endif
+#endif
     return;
     /* End of DLABRD */
 }

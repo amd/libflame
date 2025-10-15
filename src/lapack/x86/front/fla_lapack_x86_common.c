@@ -319,11 +319,7 @@ void fla_dgesvd_small6T(integer *m, integer *n, doublereal *a, integer *lda, dou
 int fla_dgetrs_small_notrans(char *trans, integer *n, integer *nrhs, doublereal *a, integer *lda,
                              integer *ipiv, doublereal *b, integer *ldb, integer *info)
 {
-    if(FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX2))
-    {
-        fla_dgetrs_small_trsm_ll_avx2(trans, n, nrhs, a, lda, ipiv, b, ldb, info);
-    }
-    return 0;
+    return fla_dgetrs_small_trsm_ll_avx2(trans, n, nrhs, a, lda, ipiv, b, ldb, info);
 }
 
 /* Find the maximum element from absolute values of a real vector */

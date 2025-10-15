@@ -1,4 +1,4 @@
-/*  Modifications Copyright (C) 2023, Advanced Micro Devices, Inc. All rights reserved. */
+/*  Modifications Copyright (C) 2023-2025, Advanced Micro Devices, Inc. All rights reserved. */
 /* ../netlib/dgetrs.f -- translated by f2c (version 20100827). You must link the resulting object
  file with libf2c: on Microsoft Windows system, link with libf2c.lib;
  on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
@@ -205,7 +205,7 @@ void dgetrs_(char *trans, integer *n, integer *nrhs, doublereal *a, integer *lda
 
 #ifdef FLA_ENABLE_AMD_OPT
     /* Take small DGETRS path (NOTRANS) for size between 3 to 8 and NRHS <= N */
-    if((*n) > 2 && (*n) <= 8 && ((*nrhs) <= (*n)) && lsame_(trans, "N", 1, 1)
+    if((*n) > 2 && (*n) <= 8 && ((*nrhs) <= (*n)) && notran
        && FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX2))
     {
         fla_dgetrs_small_notrans(trans, n, nrhs, a, lda, ipiv, b, ldb, info);
@@ -223,45 +223,47 @@ void dgetrs_(char *trans, integer *n, integer *nrhs, doublereal *a, integer *lda
     b_offset = 1 + b_dim1;
     b -= b_offset;
 
-    /* DGETRS (NOTRANS) for size <= 2 */
-    if(*n <= 2 && notran)
-    {
-        i__1 = *n;
-        i__2 = *nrhs;
-
-        // Apply row interchanges to the right-hand sides.
-        for(j = 1; j <= i__2; j++)
-        {
-            integer b_index = j * b_dim1;
-            for(i = 1; i <= i__1; i++)
-            {
-                integer ip = ipiv[i];
-                if(ip != i)
-                {
-                    doublereal temp = b[ip + b_index];
-                    b[ip + b_index] = b[i + b_index];
-                    b[i + b_index] = temp;
-                }
-            }
-        }
-        /* Solve L*X = B, overwriting B with X. */
-        dtrsm_LLNU_small(n, nrhs, &c_b12, &a[a_offset], lda, &b[b_offset], ldb);
-        /* Solve U*X = B, overwriting B with X. */
-        dtrsm_LUNN_small(n, nrhs, &c_b12, &a[a_offset], lda, &b[b_offset], ldb);
-        return;
-    }
-
     if(notran)
     {
-        /* Solve A * X = B. */
-        /* Apply row interchanges to the right hand sides. */
-        dlaswp_(nrhs, &b[b_offset], ldb, &c__1, n, &ipiv[1], &c__1);
-        /* Solve L*X = B, overwriting B with X. */
-        dtrsm_("Left", "Lower", "No transpose", "Unit", n, nrhs, &c_b12, &a[a_offset], lda,
-               &b[b_offset], ldb);
-        /* Solve U*X = B, overwriting B with X. */
-        dtrsm_("Left", "Upper", "No transpose", "Non-unit", n, nrhs, &c_b12, &a[a_offset], lda,
-               &b[b_offset], ldb);
+        /* DGETRS (NOTRANS) for size <= 2 */
+        if(*n <= 2)
+        {
+            i__1 = *n;
+            i__2 = *nrhs;
+
+            // Apply row interchanges to the right-hand sides.
+            for(j = 1; j <= i__2; j++)
+            {
+                integer b_index = j * b_dim1;
+                for(i = 1; i <= i__1; i++)
+                {
+                    integer ip = ipiv[i];
+                    if(ip != i)
+                    {
+                        doublereal temp = b[ip + b_index];
+                        b[ip + b_index] = b[i + b_index];
+                        b[i + b_index] = temp;
+                    }
+                }
+            }
+            /* Solve L*X = B, overwriting B with X. */
+            dtrsm_LLNU_small(n, nrhs, &c_b12, &a[a_offset], lda, &b[b_offset], ldb);
+            /* Solve U*X = B, overwriting B with X. */
+            dtrsm_LUNN_small(n, nrhs, &c_b12, &a[a_offset], lda, &b[b_offset], ldb);
+            return;
+        }
+        else
+        {
+            /* Solve A * X = B. */
+            /* Apply row interchanges to the right hand sides. */
+            dlaswp_(nrhs, &b[b_offset], ldb, &c__1, n, &ipiv[1], &c__1);
+            /* Solve L*X = B, overwriting B with X. */
+            dtrsm_("Left", "Lower", "No transpose", "Unit", n, nrhs, &c_b12, &a[a_offset], lda,
+                &b[b_offset], ldb);
+            /* Solve U*X = B, overwriting B with X. */
+            dtrsm_("Left", "Upper", "No transpose", "Non-unit", n, nrhs, &c_b12, &a[a_offset], lda,
+                &b[b_offset], ldb);
+        }
     }
     else
     {

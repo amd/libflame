@@ -188,7 +188,7 @@ void dgbtrf_(integer *m, integer *n, integer *kl, integer *ku, doublereal *ab, i
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, integer *, integer *);
     extern /* Subroutine */
         void
-        dlaswp_(integer *, doublereal *, integer *, integer *, integer *, integer *, integer *);
+        dlaswp_st(integer *, doublereal *, integer *, integer *, integer *, integer *, integer *);
     /* -- LAPACK computational routine (version 3.4.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -472,7 +472,7 @@ void dgbtrf_(integer *m, integer *n, integer *kl, integer *ku, doublereal *ab, i
                 /* Use DLASWP to apply the row interchanges to A12, A22, and */
                 /* A32. */
                 i__3 = *ldab - 1;
-                dlaswp_(&j2, &ab[kv + 1 - jb + (j + jb) * ab_dim1], &i__3, &c__1, &jb, &ipiv[j],
+                dlaswp_st(&j2, &ab[kv + 1 - jb + (j + jb) * ab_dim1], &i__3, &c__1, &jb, &ipiv[j],
                         &c__1);
                 /* Adjust the pivot indices. */
                 i__3 = j + jb - 1;
@@ -642,4 +642,117 @@ void dgbtrf_(integer *m, integer *n, integer *kl, integer *ku, doublereal *ab, i
     return;
     /* End of DGBTRF */
 }
+
+#define DLASWP_ST_TILE_SIZE_SMALL 32
+#define DLASWP_ST_TILE_MASK_SMALL 31  /* DLASWP_ST_TILE_SIZE_SMALL - 1 */
+
+/* 
+* dlaswp_st is a single-threaded variant of the standard LAPACK dlaswp_ function.
+*/
+void dlaswp_st(integer *n, doublereal *a, integer *lda, integer *k1, integer *k2, integer *ipiv,
+               integer *incx)
+{
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("dlaswp inputs: n %" FLA_IS ", lda %" FLA_IS ", k1 %" FLA_IS ", k2 %" FLA_IS
+                      ", incx %" FLA_IS "",
+                      *n, *lda, *k1, *k2, *incx);
+    /* System generated locals */
+    integer a_dim1, a_offset, i__4;
+    /* Local variables */
+    integer i__, j, k, i1, i2, n32, ip, ix, ix0, inc;
+    doublereal *colptr, temp;
+    /* -- LAPACK auxiliary routine (version 3.7.1) -- */
+    /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
+    /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
+    /* June 2017 */
+    /* .. Scalar Arguments .. */
+    /* .. */
+    /* .. Array Arguments .. */
+    /* .. */
+    /* ===================================================================== */
+    /* .. Local Scalars .. */
+    /* .. */
+    /* .. Executable Statements .. */
+    /* Interchange row I with row IPIV(K1+(I-K1)*f2c_abs(INCX)) for each of rows */
+    /* K1 through K2. */
+    /* Parameter adjustments */
+    a_dim1 = *lda;
+    a_offset = 1 + a_dim1;
+    a -= a_offset;
+    --ipiv;
+    /* Function Body */
+    if(*incx > 0)
+    {
+        ix0 = *k1;
+        i1 = *k1;
+        i2 = *k2;
+        inc = 1;
+    }
+    else if(*incx < 0)
+    {
+        ix0 = *k1 + (*k1 - *k2) * *incx;
+        i1 = *k2;
+        i2 = *k1;
+        inc = -1;
+    }
+    else
+    {
+        AOCL_DTL_TRACE_LOG_EXIT
+        return;
+    }
+
+    n32 = *n & ~DLASWP_ST_TILE_MASK_SMALL;  /* Equivalent to (*n / 32) * 32 but faster */
+    if(n32 != 0)
+    {
+        for(j = 1; j <= n32; j += DLASWP_ST_TILE_SIZE_SMALL)
+        {
+            ix = ix0;
+            for(i__ = i1; inc < 0 ? i__ >= i2 : i__ <= i2; i__ += inc)
+            {
+                ip = ipiv[ix];
+                if(ip != i__)
+                {
+                    i__4 = j + DLASWP_ST_TILE_MASK_SMALL;
+                    for(k = j; k <= i__4; ++k)
+                    {
+                        colptr = &a[k * a_dim1];
+                        temp = colptr[i__];
+                        colptr[i__] = colptr[ip];
+                        colptr[ip] = temp;
+                        /* L10: */
+                    }
+                }
+                ix += *incx;
+                /* L20: */
+            }
+            /* L30: */
+        }
+    }
+    if(n32 != *n)
+    {
+        ++n32;
+        ix = ix0;
+        for(i__ = i1; inc < 0 ? i__ >= i2 : i__ <= i2; i__ += inc)
+        {
+            ip = ipiv[ix];
+            if(ip != i__)
+            {
+                for(k = n32; k <= *n; ++k)
+                {
+                    colptr = &a[k * a_dim1];
+                    temp = colptr[i__];
+                    colptr[i__] = colptr[ip];
+                    colptr[ip] = temp;
+                    /* L40: */
+                }
+            }
+            ix += *incx;
+            /* L50: */
+        }
+    }
+    
+    AOCL_DTL_TRACE_LOG_EXIT
+    /* End of DLASWP */
+}
+
 /* dgbtrf_ */

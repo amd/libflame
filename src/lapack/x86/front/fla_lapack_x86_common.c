@@ -153,6 +153,10 @@ int fla_dgelqf_small(aocl_int64_t *m, aocl_int64_t *n, doublereal *a, aocl_int64
 
         /* Allocate transpose matrix */
         at = malloc(*n * *m * sizeof(doublereal));
+        if(at == NULL)
+        {
+            return -1;
+        }
 
         /* Do transpose and store it in at */
         fla_dtranspose(m, n, a, lda, at, n);

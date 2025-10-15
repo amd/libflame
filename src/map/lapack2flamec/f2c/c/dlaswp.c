@@ -3,6 +3,9 @@
  on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/*
+*     Modifications Copyright (c) 2025 Advanced Micro Devices, Inc.  All rights reserved.
+*/
 #include "FLA_f2c.h" /* > \brief \b DLASWP performs a series of row interchanges on a general rectangular matrix. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -127,6 +130,12 @@ void dlaswp_(aocl_int_t *n, doublereal *a, aocl_int_t *lda, aocl_int_t *k1, aocl
 #endif
 }
 
+#define DLASWP_LARGE_THRESHOLD_MIN 1024
+#define DLASWP_TILE_SIZE_SMALL 32
+#define DLASWP_TILE_SIZE_LARGE 64
+#define DLASWP_TILE_MASK_SMALL 31  /* DLASWP_TILE_SIZE_SMALL - 1 */
+#define DLASWP_TILE_MASK_LARGE 63  /* DLASWP_TILE_SIZE_LARGE - 1 */
+
 void aocl_lapack_dlaswp(aocl_int64_t *n, doublereal *a, aocl_int64_t *lda, aocl_int64_t *k1,
                         aocl_int64_t *k2, aocl_int_t *ipiv, aocl_int64_t *incx)
 {
@@ -135,9 +144,9 @@ void aocl_lapack_dlaswp(aocl_int64_t *n, doublereal *a, aocl_int64_t *lda, aocl_
                       ", incx %" FLA_IS "",
                       *n, *lda, *k1, *k2, *incx);
     /* System generated locals */
-    aocl_int64_t a_dim1, a_offset, i__1, i__2, i__3, i__4;
+    aocl_int64_t a_dim1, a_offset, i__4;
     /* Local variables */
-    aocl_int64_t i__, j, k, i1, i2, n32, ip, ix, ix0, inc;
+    aocl_int64_t i__, j, k, i1, i2, n32, n64, ip, ix, ix0, inc;
     doublereal *colptr, temp;
     /* -- LAPACK auxiliary routine (version 3.7.1) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -158,6 +167,7 @@ void aocl_lapack_dlaswp(aocl_int64_t *n, doublereal *a, aocl_int64_t *lda, aocl_
     a_offset = 1 + a_dim1;
     a -= a_offset;
     --ipiv;
+
     /* Function Body */
     if(*incx > 0)
     {
@@ -168,7 +178,7 @@ void aocl_lapack_dlaswp(aocl_int64_t *n, doublereal *a, aocl_int64_t *lda, aocl_
     }
     else if(*incx < 0)
     {
-        ix0 = *k1 + (*k1 - *k2) * *incx;
+        ix0 = *k1 + (*k1 - *k2) * (*incx);
         i1 = *k2;
         i2 = *k1;
         inc = -1;
@@ -178,34 +188,194 @@ void aocl_lapack_dlaswp(aocl_int64_t *n, doublereal *a, aocl_int64_t *lda, aocl_
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
-    /* Process columns in tiles to improve cache locality. Use a larger tile
-       size on modern CPUs. */
-    const aocl_int64_t dlaswp_tile = 64;
-    n32 = (*n / dlaswp_tile) * dlaswp_tile;
-    if(n32 != 0)
+    
+    /* Process in tiles if n < 1024 */
+    if(*n < DLASWP_LARGE_THRESHOLD_MIN)
     {
-        i__1 = n32;
-/*
- #pragma omp parallel for:
-    This is a combined directive that creates a team of threads and then divides the iterations of
- the following for loop among them. schedule(static): With static scheduling, the iterations are
- divided into approximately equal-sized contiguous blocks, and each block is assigned to a thread.
- if (condition):
-    If the condition true, it executed in parallel. If the condition is zero (false), the for loop
- will be executed sequentially by a single thread. */
-#pragma omp parallel for schedule(static) if(n32 >= (dlaswp_tile * 2)) private( \
-        ix, i__, ip, k, i__2, i__3, i__4, colptr, temp) firstprivate(ix0, i1, i2, inc, a_dim1)
-        for(j = 1; j <= i__1; j += dlaswp_tile)
+        n32 = *n & ~DLASWP_TILE_MASK_SMALL;  /* Equivalent to (*n / 32) * 32 but faster */
+        if(n32 != 0)
         {
+            for(j = 1; j <= n32; j += DLASWP_TILE_SIZE_SMALL)
+            {
+                ix = ix0;
+                for(i__ = i1; inc < 0 ? i__ >= i2 : i__ <= i2; i__ += inc)
+                {
+                    ip = ipiv[ix];
+                    if(ip != i__)
+                    {
+                        i__4 = j + DLASWP_TILE_MASK_SMALL;
+                        for(k = j; k <= i__4; ++k)
+                        {
+                            colptr = &a[k * a_dim1];
+                            temp = colptr[i__];
+                            colptr[i__] = colptr[ip];
+                            colptr[ip] = temp;
+                            /* L10: */
+                        }
+                    }
+                    ix += *incx;
+                    /* L20: */
+                }
+                /* L30: */
+            }
+        }
+        if(n32 != *n)
+        {
+            ++n32;
             ix = ix0;
-            i__2 = i2;
-            i__3 = inc;
-            for(i__ = i1; i__3 < 0 ? i__ >= i__2 : i__ <= i__2; i__ += i__3)
+            for(i__ = i1; inc < 0 ? i__ >= i2 : i__ <= i2; i__ += inc)
             {
                 ip = ipiv[ix];
                 if(ip != i__)
                 {
-                    i__4 = j + (dlaswp_tile - 1);
+                    for(k = n32; k <= *n; ++k)
+                    {
+                        colptr = &a[k * a_dim1];
+                        temp = colptr[i__];
+                        colptr[i__] = colptr[ip];
+                        colptr[ip] = temp;
+                        /* L40: */
+                    }
+                }
+                ix += *incx;
+                /* L50: */
+            }
+        }
+    }
+    else
+    {
+        /* Process columns in tiles to improve cache locality. Use a larger tile
+           size on modern CPUs. */
+        n64 = *n & ~DLASWP_TILE_MASK_LARGE;  /* Equivalent to (*n / 64) * 64 but faster */
+#ifdef FLA_OPENMP_MULTITHREADING
+        /*
+        #pragma omp parallel for:
+            This is a combined directive that creates a team of threads and then divides the iterations of
+        the following for loop among them. schedule(static): With static scheduling, the iterations are
+        divided into approximately equal-sized contiguous blocks, and each block is assigned to a thread.
+        if (condition):
+            If the condition true, it executed in parallel. If the condition is zero (false), the for loop
+        will be executed sequentially by a single thread. */
+        #pragma omp parallel for schedule(static) private(ix, i__, ip, k, i__4, colptr, temp) firstprivate(ix0, i1, i2, inc, a_dim1)
+#endif
+        for(j = 1; j <= n64; j += DLASWP_TILE_SIZE_LARGE)
+        {
+            ix = ix0;
+            for(i__ = i1; inc < 0 ? i__ >= i2 : i__ <= i2; i__ += inc)
+            {
+                ip = ipiv[ix];
+                if(ip != i__)
+                {
+                    i__4 = j + DLASWP_TILE_MASK_LARGE;
+                    for(k = j; k <= i__4; ++k)
+                    {
+                        colptr = &a[k * a_dim1];
+                        temp = colptr[i__];
+                        colptr[i__] = colptr[ip];
+                        colptr[ip] = temp;
+                        /* L10: */
+                    }
+                }
+                ix += *incx;
+                /* L20: */
+            }
+            /* L30: */
+        }
+        if (n64 < *n)
+        {
+            ix = ix0;
+            n64++;
+            for(i__ = i1; inc < 0 ? i__ >= i2 : i__ <= i2; i__ += inc)
+            {
+                ip = ipiv[ix];
+                if(ip != i__)
+                {
+                    for(k = n64; k <= *n; ++k)
+                    {
+                        colptr = &a[k * a_dim1];
+                        temp = colptr[i__];
+                        colptr[i__] = colptr[ip];
+                        colptr[ip] = temp;
+                        /* L40: */
+                    }
+                }
+                ix += *incx;
+                /* L50: */
+            }
+        }
+    }
+
+    AOCL_DTL_TRACE_LOG_EXIT
+    /* End of DLASWP */
+}
+
+/* dlaswp with single thread */
+void aocl_lapack_dlaswp_st(aocl_int64_t *n, doublereal *a, aocl_int64_t *lda, aocl_int64_t *k1,
+                        aocl_int64_t *k2, aocl_int_t *ipiv, aocl_int64_t *incx)
+{
+    AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("dlaswp inputs: n %" FLA_IS ", lda %" FLA_IS ", k1 %" FLA_IS ", k2 %" FLA_IS
+                      ", incx %" FLA_IS "",
+                      *n, *lda, *k1, *k2, *incx);
+    /* System generated locals */
+    aocl_int64_t a_dim1, a_offset, i__4;
+    /* Local variables */
+    aocl_int64_t i__, j, k, i1, i2, n32, n64, ip, ix, ix0, inc;
+    doublereal *colptr, temp;
+    /* -- LAPACK auxiliary routine (version 3.7.1) -- */
+    /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
+    /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
+    /* June 2017 */
+    /* .. Scalar Arguments .. */
+    /* .. */
+    /* .. Array Arguments .. */
+    /* .. */
+    /* ===================================================================== */
+    /* .. Local Scalars .. */
+    /* .. */
+    /* .. Executable Statements .. */
+    /* Interchange row I with row IPIV(K1+(I-K1)*f2c_abs(INCX)) for each of rows */
+    /* K1 through K2. */
+    /* Parameter adjustments */
+    a_dim1 = *lda;
+    a_offset = 1 + a_dim1;
+    a -= a_offset;
+    --ipiv;
+
+    /* Function Body */
+    if(*incx > 0)
+    {
+        ix0 = *k1;
+        i1 = *k1;
+        i2 = *k2;
+        inc = 1;
+    }
+    else if(*incx < 0)
+    {
+        ix0 = *k1 + (*k1 - *k2) * (*incx);
+        i1 = *k2;
+        i2 = *k1;
+        inc = -1;
+    }
+    else
+    {
+        AOCL_DTL_TRACE_LOG_EXIT
+        return;
+    }
+    
+    /* Process in tiles */
+    n32 = *n & ~DLASWP_TILE_MASK_SMALL;  /* Equivalent to (*n / 32) * 32 but faster */
+    if(n32 != 0)
+    {
+        for(j = 1; j <= n32; j += DLASWP_TILE_SIZE_SMALL)
+        {
+            ix = ix0;
+            for(i__ = i1; inc < 0 ? i__ >= i2 : i__ <= i2; i__ += inc)
+            {
+                ip = ipiv[ix];
+                if(ip != i__)
+                {
+                    i__4 = j + DLASWP_TILE_MASK_SMALL;
                     for(k = j; k <= i__4; ++k)
                     {
                         colptr = &a[k * a_dim1];
@@ -225,15 +395,12 @@ void aocl_lapack_dlaswp(aocl_int64_t *n, doublereal *a, aocl_int64_t *lda, aocl_
     {
         ++n32;
         ix = ix0;
-        i__1 = i2;
-        i__3 = inc;
-        for(i__ = i1; i__3 < 0 ? i__ >= i__1 : i__ <= i__1; i__ += i__3)
+        for(i__ = i1; inc < 0 ? i__ >= i2 : i__ <= i2; i__ += inc)
         {
             ip = ipiv[ix];
             if(ip != i__)
             {
-                i__2 = *n;
-                for(k = n32; k <= i__2; ++k)
+                for(k = n32; k <= *n; ++k)
                 {
                     colptr = &a[k * a_dim1];
                     temp = colptr[i__];
@@ -246,11 +413,10 @@ void aocl_lapack_dlaswp(aocl_int64_t *n, doublereal *a, aocl_int64_t *lda, aocl_
             /* L50: */
         }
     }
+    
     AOCL_DTL_TRACE_LOG_EXIT
-    return;
     /* End of DLASWP */
 }
-/* dlaswp_ */
 
 void aocl_lapack_dlaswp64(aocl_int64_t *n, doublereal *a, aocl_int64_t *lda, aocl_int64_t *k1,
                         aocl_int64_t *k2, aocl_int64_t *ipiv, aocl_int64_t *incx)
@@ -260,9 +426,9 @@ void aocl_lapack_dlaswp64(aocl_int64_t *n, doublereal *a, aocl_int64_t *lda, aoc
                       ", incx %" FLA_IS "",
                       *n, *lda, *k1, *k2, *incx);
     /* System generated locals */
-    aocl_int64_t a_dim1, a_offset, i__1, i__2, i__3, i__4;
+    aocl_int64_t a_dim1, a_offset, i__4;
     /* Local variables */
-    aocl_int64_t i__, j, k, i1, i2, n32, ip, ix, ix0, inc;
+    aocl_int64_t i__, j, k, i1, i2, n32, n64, ip, ix, ix0, inc;
     doublereal *colptr, temp;
     /* -- LAPACK auxiliary routine (version 3.7.1) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -283,6 +449,7 @@ void aocl_lapack_dlaswp64(aocl_int64_t *n, doublereal *a, aocl_int64_t *lda, aoc
     a_offset = 1 + a_dim1;
     a -= a_offset;
     --ipiv;
+
     /* Function Body */
     if(*incx > 0)
     {
@@ -303,34 +470,85 @@ void aocl_lapack_dlaswp64(aocl_int64_t *n, doublereal *a, aocl_int64_t *lda, aoc
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
-    /* Process columns in tiles to improve cache locality. Use a larger tile
-       size on modern CPUs. */
-    const aocl_int64_t dlaswp_tile = 64;
-    n32 = (*n / dlaswp_tile) * dlaswp_tile;
-    if(n32 != 0)
+
+    /* Process in tiles if n < 1024 */
+    if(*n < DLASWP_LARGE_THRESHOLD_MIN)
     {
-        i__1 = n32;
-/*
- #pragma omp parallel for:
-    This is a combined directive that creates a team of threads and then divides the iterations of
- the following for loop among them. schedule(static): With static scheduling, the iterations are
- divided into approximately equal-sized contiguous blocks, and each block is assigned to a thread.
- if (condition):
-    If the condition true, it executed in parallel. If the condition is zero (false), the for loop
- will be executed sequentially by a single thread. */
-#pragma omp parallel for schedule(static) if(n32 >= (dlaswp_tile * 2)) private( \
-        ix, i__, ip, k, i__2, i__3, i__4, colptr, temp) firstprivate(ix0, i1, i2, inc, a_dim1)
-        for(j = 1; j <= i__1; j += dlaswp_tile)
+        n32 = *n & ~DLASWP_TILE_MASK_SMALL;  /* Equivalent to (*n / 32) * 32 but faster */
+        if(n32 != 0)
         {
+            for(j = 1; j <= n32; j += DLASWP_TILE_SIZE_SMALL)
+            {
+                ix = ix0;
+                for(i__ = i1; inc < 0 ? i__ >= i2 : i__ <= i2; i__ += inc)
+                {
+                    ip = ipiv[ix];
+                    if(ip != i__)
+                    {
+                        i__4 = j + DLASWP_TILE_MASK_SMALL;
+                        for(k = j; k <= i__4; ++k)
+                        {
+                            colptr = &a[k * a_dim1];
+                            temp = colptr[i__];
+                            colptr[i__] = colptr[ip];
+                            colptr[ip] = temp;
+                            /* L10: */
+                        }
+                    }
+                    ix += *incx;
+                    /* L20: */
+                }
+                /* L30: */
+            }
+        }
+        if(n32 != *n)
+        {
+            ++n32;
             ix = ix0;
-            i__2 = i2;
-            i__3 = inc;
-            for(i__ = i1; i__3 < 0 ? i__ >= i__2 : i__ <= i__2; i__ += i__3)
+            for(i__ = i1; inc < 0 ? i__ >= i2 : i__ <= i2; i__ += inc)
             {
                 ip = ipiv[ix];
                 if(ip != i__)
                 {
-                    i__4 = j + (dlaswp_tile - 1);
+                    for(k = n32; k <= *n; ++k)
+                    {
+                        colptr = &a[k * a_dim1];
+                        temp = colptr[i__];
+                        colptr[i__] = colptr[ip];
+                        colptr[ip] = temp;
+                        /* L40: */
+                    }
+                }
+                ix += *incx;
+                /* L50: */
+            }
+        }
+    }
+    else
+    {
+        /* Process columns in tiles to improve cache locality. Use a larger tile
+           size on modern CPUs. */
+        n64 = *n & ~DLASWP_TILE_MASK_LARGE;  /* Equivalent to (*n / 64) * 64 but faster */
+#ifdef FLA_OPENMP_MULTITHREADING
+        /*
+        #pragma omp parallel for:
+            This is a combined directive that creates a team of threads and then divides the iterations of
+        the following for loop among them. schedule(static): With static scheduling, the iterations are
+        divided into approximately equal-sized contiguous blocks, and each block is assigned to a thread.
+        if (condition):
+            If the condition true, it executed in parallel. If the condition is zero (false), the for loop
+        will be executed sequentially by a single thread. */
+        #pragma omp parallel for schedule(static) private(ix, i__, ip, k, i__4, colptr, temp) firstprivate(ix0, i1, i2, inc, a_dim1)
+#endif
+        for(j = 1; j <= n64; j += DLASWP_TILE_SIZE_LARGE)
+        {
+            ix = ix0;
+            for(i__ = i1; inc < 0 ? i__ >= i2 : i__ <= i2; i__ += inc)
+            {
+                ip = ipiv[ix];
+                if(ip != i__)
+                {
+                    i__4 = j + DLASWP_TILE_MASK_LARGE;
                     for(k = j; k <= i__4; ++k)
                     {
                         colptr = &a[k * a_dim1];
@@ -345,34 +563,31 @@ void aocl_lapack_dlaswp64(aocl_int64_t *n, doublereal *a, aocl_int64_t *lda, aoc
             }
             /* L30: */
         }
-    }
-    if(n32 != *n)
-    {
-        ++n32;
-        ix = ix0;
-        i__1 = i2;
-        i__3 = inc;
-        for(i__ = i1; i__3 < 0 ? i__ >= i__1 : i__ <= i__1; i__ += i__3)
+        if (n64 < *n)
         {
-            ip = ipiv[ix];
-            if(ip != i__)
+            ix = ix0;
+            n64++;
+            for(i__ = i1; inc < 0 ? i__ >= i2 : i__ <= i2; i__ += inc)
             {
-                i__2 = *n;
-                for(k = n32; k <= i__2; ++k)
+                ip = ipiv[ix];
+                if(ip != i__)
                 {
-                    colptr = &a[k * a_dim1];
-                    temp = colptr[i__];
-                    colptr[i__] = colptr[ip];
-                    colptr[ip] = temp;
-                    /* L40: */
+                    for(k = n64; k <= *n; ++k)
+                    {
+                        colptr = &a[k * a_dim1];
+                        temp = colptr[i__];
+                        colptr[i__] = colptr[ip];
+                        colptr[ip] = temp;
+                        /* L40: */
+                    }
                 }
+                ix += *incx;
+                /* L50: */
             }
-            ix += *incx;
-            /* L50: */
         }
     }
+
     AOCL_DTL_TRACE_LOG_EXIT
-    return;
     /* End of DLASWP */
 }
 /* dlaswp_ */

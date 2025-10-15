@@ -171,23 +171,9 @@ void fla_dgesvd_xx_small10_avx2(aocl_int64_t wntu, aocl_int64_t wntv, aocl_int64
     }
     else
     {
-        if(ncvt == 0 && nru == 0)
-        {
-            /* Compute Singular Values excluding computation of Singular Vectors */
-            aocl_lapack_dlasq1(n, &s[1], &e[1], &work[itauq - 1], info);
-
-            /* Ensure singular values are positive */
-            if(*info == 0)
-            {
-                FLA_ENSURE_POSITIVE_SINGULAR_VALUES(*n);
-            }
-        }
-        else
-        {
-            /* Compute Singular Values and Vectors */
-            lapack_dbdsqr_small("U", n, &ncvt, &nru, &s[1], &e[1], &vt[1 + *ldvt], ldvt,
-                                &u[1 + *ldu], ldu, info);
-        }
+        /* Compute Singular Values and Vectors */
+        lapack_dbdsqr_small("U", n, &ncvt, &nru, &s[1], &e[1], &vt[1 + *ldvt], ldvt,
+                            &u[1 + *ldu], ldu, info);
     }
     return;
 }

@@ -332,9 +332,8 @@
 
 // DGESVD, DGESDD thresholds for small size optimization
 #define FLA_SVD_SMALL_SIZE_THRESH0    (16)
-#define FLA_SVD_SMALL_SIZE_THRESH1    (24)
-#define FLA_SVD_SMALL_SIZE_THRESH2    (40)
-#define FLA_SVD_SMALL_SIZE_THRESH3    (45)
+#define FLA_SVD_SMALL_SIZE_THRESH1    (128)
+#define FLA_SVD_SMALL_SIZE_THRESH2    (386)
 
 // TRTRI, threshold numbers to chose paths for performance
 #define FLA_TRTRI_SMALL_THRESH0      (60)

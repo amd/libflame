@@ -2286,6 +2286,8 @@ void aocl_lapack_dlaswlq(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *mb, aoc
                          doublereal *work, aocl_int64_t *lwork, aocl_int64_t *info);
 void aocl_lapack_dlaswp(aocl_int64_t *n, doublereal *a, aocl_int64_t *lda, aocl_int64_t *k1,
                         aocl_int64_t *k2, aocl_int_t *ipiv, aocl_int64_t *incx);
+void aocl_lapack_dlaswp_st(aocl_int64_t *n, doublereal *a, aocl_int64_t *lda, aocl_int64_t *k1,
+                        aocl_int64_t *k2, aocl_int_t *ipiv, aocl_int64_t *incx);
 void aocl_lapack_dlasy2(logical *ltranl, logical *ltranr, aocl_int64_t *isgn, aocl_int64_t *n1,
                         aocl_int64_t *n2, doublereal *tl, aocl_int64_t *ldtl, doublereal *tr,
                         aocl_int64_t *ldtr, doublereal *b, aocl_int64_t *ldb, doublereal *scale,

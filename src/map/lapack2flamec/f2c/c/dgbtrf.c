@@ -3,6 +3,9 @@
  on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/*
+*     Modifications Copyright (c) 2025 Advanced Micro Devices, Inc.  All rights reserved.
+*/
 #include "FLA_f2c.h" /* Table of constant values */
 static aocl_int64_t c__1 = 1;
 static aocl_int64_t c__65 = 65;
@@ -467,8 +470,8 @@ void aocl_lapack_dgbtrf(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *kl, aocl
                 /* Use DLASWP to apply the row interchanges to A12, A22, and */
                 /* A32. */
                 i__3 = *ldab - 1;
-                aocl_lapack_dlaswp(&j2, &ab[kv + 1 - jb + (j + jb) * ab_dim1], &i__3, &c__1, &jb,
-                                   &ipiv[j], &c__1);
+                aocl_lapack_dlaswp_st(&j2, &ab[kv + 1 - jb + (j + jb) * ab_dim1], &i__3, &c__1, &jb,
+                                      &ipiv[j], &c__1);
                 /* Adjust the pivot indices. */
                 i__3 = j + jb - 1;
                 for(i__ = j; i__ <= i__3; ++i__)

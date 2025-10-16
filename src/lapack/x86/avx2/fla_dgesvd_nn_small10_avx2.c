@@ -13,7 +13,6 @@
 
 
 extern void dlartg_(doublereal *da, doublereal *db, doublereal *c__, doublereal *s, doublereal *r);
-extern void dlasq1_(integer *, doublereal *, doublereal *, doublereal *, integer *);
 
 void fla_dgesvd_xx_small10_avx2(integer wntu, integer wntv, integer *m, integer *n, integer *ncu, doublereal *a,
                                 integer *lda, doublereal *s, doublereal *u, integer *ldu,
@@ -171,23 +170,9 @@ void fla_dgesvd_xx_small10_avx2(integer wntu, integer wntv, integer *m, integer 
     }
     else
     {
-        if(ncvt == 0 && nru == 0)
-        {
-            /* Compute Singular Values excluding computation of Singular Vectors */
-            dlasq1_(n, &s[1], &e[1], &work[itauq - 1], info);
-
-            /* Ensure singular values are positive */
-            if(*info == 0)
-            {
-                FLA_ENSURE_POSITIVE_SINGULAR_VALUES(*n);
-            }
-        }
-        else
-        {
-            /* Compute Singular Values and Vectors */
-            lapack_dbdsqr_small("U", n, &ncvt, &nru, &s[1], &e[1], &vt[1 + *ldvt], ldvt,
-                                &u[1 + *ldu], ldu, info);
-        }
+        /* Compute Singular Values and Vectors */
+        lapack_dbdsqr_small("U", n, &ncvt, &nru, &s[1], &e[1], &vt[1 + *ldvt], ldvt,
+                            &u[1 + *ldu], ldu, info);
     }
     return;
 }

@@ -129,23 +129,9 @@ void fla_dgesvd_small6_avx2(integer wntus, integer wntvs, integer *m, integer *n
     }
     else
     {
-        if(ncvt == 0 && nru == 0)
-        {
-            /* Compute Singular Values excluding computation of Singular Vectors */
-            dlasq1_(n, &s[1], &e[1], &work[itau - 1], info);
-
-            /* Ensure singular values are positive */
-            if(*info == 0)
-            {
-                FLA_ENSURE_POSITIVE_SINGULAR_VALUES(*n);
-            }
-        }
-        else
-        {
-            /* Compute Singular Values and Vectors */
-            lapack_dbdsqr_small("U", n, &ncvt, &nru, &s[1], &e[1], &vt[1 + *ldvt], ldvt, &u[1 + *ldu],
-                                ldu, info);
-        }
+        /* Compute Singular Values and Vectors */
+        lapack_dbdsqr_small("U", n, &ncvt, &nru, &s[1], &e[1], &vt[1 + *ldvt], ldvt, &u[1 + *ldu],
+                            ldu, info);
     }
 
     /* Compute U by updating U' by applying from the left the Q from QR */

@@ -40,7 +40,7 @@
 
 extern void DTL_Trace(uint8 ui8LogLevel, uint8 ui8LogType, const int8 *pi8FileName,
                       const int8 *pi8FunctionName, uint32 ui32LineNumber, const int8 *pi8Message);
-
+int fla_thread_get_num_threads(void);
 #define LAPACK_getrf(prefix)                                                                 \
     void F77_##prefix##getrf(integer *m, integer *n, PREFIX2LAPACK_TYPEDEF(prefix) * buff_A, \
                              integer * ldim_A, integer * buff_p, integer * info)
@@ -81,8 +81,16 @@ extern void DTL_Trace(uint8 ui8LogLevel, uint8 ui8LogType, const int8 *pi8FileNa
         else if(FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX512) && *m < FLA_DGETRF_SMALL_AVX512_THRESH0 \
                 && *n < FLA_DGETRF_SMALL_AVX512_THRESH0)                                    \
         {                                                                                   \
-            /* Calling vectorized code when avx512 supported architecture detected */       \
-            fla_dgetrf_small_avx512(m, n, buff_A, ldim_A, buff_p, info);                    \
+            if(fla_thread_get_num_threads() > 1 && *m < FLA_DGETRF_SMALL_AVX512_THRESH1    \
+               && *n < FLA_DGETRF_SMALL_AVX512_THRESH1)                                     \
+            {                                                                               \
+                /* Calling vectorized code when avx512 supported architecture detected */   \
+                fla_dgetrf_small_avx512(m, n, buff_A, ldim_A, buff_p, info);                \
+            }                                                                               \
+            else                                                                            \
+            {                                                                               \
+                dgetrf2_(m, n, buff_A, ldim_A, buff_p, info);                               \
+            }                                                                               \
         }                                                                                   \
         else                                                                                \
         {                                                                                   \

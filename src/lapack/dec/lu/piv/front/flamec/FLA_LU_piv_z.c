@@ -20,7 +20,7 @@ static dcomplex c_b1 = {1.,0.};
 static integer c__1 = 1;
 
 
-void FLA_get_optimum_params_zgetrf(fla_dim_t m, fla_dim_t n, fla_dim_t *nb, int *n_threads)
+void FLA_get_optimum_params_zgetrf(integer m, integer n, integer *nb, int *n_threads)
 {
     int available_n_threads;
     extern int fla_thread_get_num_threads(void);

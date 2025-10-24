@@ -20,6 +20,64 @@ static dcomplex c_b1 = {1., 0.};
 static fla_dim_t c__1 = 1;
 
 
+void FLA_get_optimum_params_zgetrf(fla_dim_t m, fla_dim_t n, fla_dim_t *nb, int *n_threads)
+{
+    int available_n_threads;
+    extern int fla_thread_get_num_threads(void);
+
+    /* Get maximum thread available*/
+    available_n_threads = fla_thread_get_num_threads();
+
+#ifdef FLA_OPENMP_MULTITHREADING
+
+    if(m <= 100 || n <= 100)
+    {
+        *nb = 15;
+        *n_threads = 4;
+    }
+    else if(m <= 512 || n <= 512)
+    {
+        *nb = 15;
+        *n_threads = 8;
+    }
+    else if(m <= 920 || n <= 920)
+    {
+        *nb = 15;
+        *n_threads = 16;
+    }
+    else if(m <= 2048 || n <= 2048)
+    {
+        *nb = 15;
+        *n_threads = 32;
+    }
+    else if(m <= 6144 || n <= 6144)
+    {
+        *nb = 15;
+        *n_threads = 96;
+    }
+    else if(m <= 12288 || n <= 12288)
+    {
+        *nb = 32;
+        *n_threads = 96;
+    }
+    else
+    {
+        *nb = 64;
+        *n_threads = 192;
+    }
+
+    if(*n_threads > available_n_threads)
+        *n_threads = available_n_threads;
+
+#else
+    *nb = 64;
+    *n_threads = 1;
+#endif
+
+    return;
+}
+
+
 /*
  * LU with partial pivoting for tiny matrices
  *
@@ -312,7 +370,7 @@ int FLA_LU_piv_z_var1_parallel( fla_dim_t *m, fla_dim_t *n, dcomplex *a, fla_dim
         return 0;
 
     // Determine optimum block and thread size for this environment
-    FLA_get_optimum_params_getrf(*m, *n, &nb, &n_threads);
+    FLA_get_optimum_params_zgetrf(*m, *n, &nb, &n_threads);
 
     /* call sequencial algorithm for single thread*/
     if(n_threads == 1)

@@ -356,18 +356,21 @@ void fla_test_gesvdx_experiment(char *tst_api, test_params_t *params, integer da
     }
 
     /* Free up the buffers */
+    free_matrix(A_test);
+    if(!FLA_BRT_VERIFICATION_RUN)
+    {
+        free_vector(s_test);
+        if(FLA_OVERFLOW_UNDERFLOW_TEST)
+            free_vector(scal);
+    }
 free_buffers:
     FLA_FREE_FILENAME(filename)
     free_matrix(A);
-    free_matrix(A_test);
     free_vector(s);
     free_vector(vl);
     free_vector(vu);
     free_matrix(U);
     free_matrix(V);
-    free_vector(s_test);
-    if(FLA_OVERFLOW_UNDERFLOW_TEST)
-        free_vector(scal);
 }
 
 void prepare_gesvdx_run(char *jobu, char *jobvt, char *range, integer m_A, integer n_A, void *A,

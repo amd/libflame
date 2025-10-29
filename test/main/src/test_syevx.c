@@ -341,23 +341,26 @@ void fla_test_syevx_experiment(char *tst_api, test_params_t *params, integer dat
     }
 
     /* Free up the buffers */
+    if(!FLA_BRT_VERIFICATION_RUN)
+    {
+        if((!FLA_EXTREME_CASE_TEST) && (g_ext_fptr == NULL))
+        {
+            free_vector(L);
+            if(FLA_OVERFLOW_UNDERFLOW_TEST)
+            {
+                free_vector(scal);
+            }
+        }
+    }
+    free_vector(ifail);
+    free_matrix(A_test);
 free_buffers:
     FLA_FREE_FILENAME(filename);
     free_vector(vl);
     free_vector(vu);
     free_vector(abstol);
-    free_vector(ifail);
     free_matrix(A);
-    free_matrix(A_test);
     free_vector(w);
-    if(g_ext_fptr == NULL)
-    {
-        free_vector(L);
-    }
-    if(FLA_OVERFLOW_UNDERFLOW_TEST)
-    {
-        free_vector(scal);
-    }
 }
 
 void prepare_syevx_run(char *jobz, char *range, char *uplo, integer n, void *A, integer lda,

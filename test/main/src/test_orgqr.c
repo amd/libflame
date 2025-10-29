@@ -209,6 +209,7 @@ void fla_test_orgqr_experiment(char *tst_api, test_params_t *params, integer dat
         copy_matrix(datatype, "Upper", n, n, A_test, lda, R, n);
 
         copy_matrix(datatype, "full", m, n, A_test, lda, Q, lda);
+        free_vector(work);
     }
     FLA_BRT_PROCESS_TWO_INPUT(datatype, m, n, Q, lda, datatype, 1, fla_min(m, n), T_test, 1, "dddd",
                               m, n, lda, g_lwork)
@@ -248,14 +249,16 @@ void fla_test_orgqr_experiment(char *tst_api, test_params_t *params, integer dat
     }
 
     /* Free up the buffers */
+    if(!FLA_BRT_VERIFICATION_RUN)
+    {
+        free_matrix(R);
+    }
 free_buffers:
     FLA_FREE_FILENAME(filename)
     free_matrix(A);
     free_matrix(A_test);
-    free_matrix(work);
     free_vector(T_test);
     free_matrix(Q);
-    free_matrix(R);
 }
 
 void prepare_orgqr_run(integer m, integer n, void *A, integer lda, void *T, integer datatype,

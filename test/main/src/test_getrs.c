@@ -191,6 +191,7 @@ void fla_test_getrs_experiment(char *tst_api, test_params_t *params, integer dat
             create_realtype_vector(datatype, &s_test, n);
             create_svd_matrix(datatype, range, n, n, A, lda, s_test, GETRS_VL, GETRS_VU, i_zero,
                               i_zero, info);
+            free_vector(s_test);
             if(FLA_OVERFLOW_UNDERFLOW_TEST)
             {
                 scale_matrix_underflow_overflow_getrs(datatype, &TRANS, n, n, A, lda,
@@ -267,6 +268,7 @@ void fla_test_getrs_experiment(char *tst_api, test_params_t *params, integer dat
     }
 
     /* Free up the buffers */
+    free_matrix(A_test_save);
 free_buffers:
     FLA_FREE_FILENAME(filename)
     free_matrix(A);
@@ -275,8 +277,6 @@ free_buffers:
     free_matrix(B);
     free_matrix(X);
     free_matrix(B_save);
-    free_vector(s_test);
-    free_matrix(A_test_save);
     if(FLA_OVERFLOW_UNDERFLOW_TEST)
     {
         free_vector(scal);

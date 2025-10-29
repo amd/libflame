@@ -284,6 +284,8 @@ void fla_test_hgeqz_experiment(char *tst_api, test_params_t *params, integer dat
                                                         scal_A);
                 scale_matrix_overflow_underflow_hgeqz_B(datatype, n, B, ldt, params->imatrix_char,
                                                         scal_B);
+                free_vector(scal_A);
+                free_vector(scal_B);
             }
             /* Decompose matrix B in to QR and store orthogonal matrix in Q and R in B */
             if(same_char(compq, 'N'))
@@ -501,25 +503,12 @@ void fla_test_hgeqz_experiment(char *tst_api, test_params_t *params, integer dat
     }
 
     /* Free up the buffers */
-free_buffers:
-    FLA_FREE_FILENAME(filename)
-    free_vector(beta);
-    free_matrix(H);
-    free_matrix(T);
-    free_matrix(Q);
-    free_matrix(Z);
     free_matrix(H_test);
     free_matrix(T_test);
     free_matrix(Q_test);
     free_matrix(Z_test);
-    free_matrix(A);
-    free_matrix(B);
-    free_matrix(Q_A);
-    free_matrix(Z_A);
     if(datatype == FLOAT || datatype == DOUBLE)
     {
-        free_vector(alphar);
-        free_vector(alphai);
         if(same_char(job, 'E'))
         {
             free_vector(alphaer);
@@ -534,18 +523,11 @@ free_buffers:
     }
     else
     {
-        free_vector(alpha);
         if(same_char(job, 'E'))
             free_vector(alphae);
         if(same_char(compq, 'N') || same_char(compz, 'N'))
             free_vector(alphan);
     }
-    if(FLA_OVERFLOW_UNDERFLOW_TEST)
-    {
-        free_vector(scal_A);
-        free_vector(scal_B);
-    }
-
     if(same_char(job, 'E'))
         free_vector(betae);
     if(same_char(compq, 'N') || same_char(compz, 'N'))
@@ -553,6 +535,26 @@ free_buffers:
         free_vector(betan);
         free_matrix(H_ntest);
         free_matrix(T_ntest);
+    }
+free_buffers:
+    FLA_FREE_FILENAME(filename)
+    free_vector(beta);
+    free_matrix(H);
+    free_matrix(T);
+    free_matrix(Q);
+    free_matrix(Z);
+    free_matrix(A);
+    free_matrix(B);
+    free_matrix(Q_A);
+    free_matrix(Z_A);
+    if(datatype == FLOAT || datatype == DOUBLE)
+    {
+        free_vector(alphar);
+        free_vector(alphai);
+    }
+    else
+    {
+        free_vector(alpha);
     }
 }
 

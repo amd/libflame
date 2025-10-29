@@ -325,6 +325,11 @@ void fla_test_gejsv_experiment(char *tst_api, test_params_t *params, integer dat
     }
 
     /* Free up the buffers */
+    if(!FLA_BRT_VERIFICATION_RUN)
+    {
+        if(FLA_OVERFLOW_UNDERFLOW_TEST)
+            free_vector(scal);
+    }
 free_buffers:
     FLA_FREE_FILENAME(filename);
     free_matrix(A);
@@ -333,7 +338,6 @@ free_buffers:
     free_vector(S_test);
     free_vector(stat);
     free_vector(istat);
-    free_vector(scal);
     if(!same_char(jobu, 'N'))
     {
         free_matrix(U);

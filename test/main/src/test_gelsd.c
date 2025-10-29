@@ -210,6 +210,7 @@ void fla_test_gelsd_experiment(char *tst_api, test_params_t *params, integer dat
                 scale_matrix_overflow_underflow_gelsd(datatype, m, n, NRHS, A, lda,
                                                       params->imatrix_char);
             }
+            free_vector(s_test);
         }
     }
 
@@ -290,7 +291,6 @@ free_buffers:
     free_matrix(B_save);
     free_vector(S);
     free_vector(rcond);
-    free_vector(s_test);
 }
 
 void prepare_gelsd_run(integer m_A, integer n_A, integer nrhs, void *A, integer lda, void *B,

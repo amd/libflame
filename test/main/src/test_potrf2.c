@@ -167,10 +167,10 @@ void fla_test_potrf2_experiment(char *tst_api, test_params_t *params, integer da
     }
 
     /* Free up the buffers */
+    free_matrix(A_test);
 free_buffers:
     FLA_FREE_FILENAME(filename)
     free_matrix(A);
-    free_matrix(A_test);
 }
 
 void prepare_potrf2_run(char *uplo, integer m, void *A, integer lda, integer datatype,

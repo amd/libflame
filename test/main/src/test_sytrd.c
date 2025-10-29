@@ -226,13 +226,13 @@ void fla_test_sytrd_experiment(char *tst_api, test_params_t *params, integer dat
     }
 
     /* Free up buffers. */
+    free_vector(tau);
 free_buffers:
     FLA_FREE_FILENAME(filename);
     free_matrix(A);
     free_matrix(A_test);
     free_vector(D);
     free_vector(E);
-    free_vector(tau);
 }
 
 void prepare_sytrd_run(integer datatype, char uplo, integer n, void *A, integer lda, void *D,

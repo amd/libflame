@@ -321,12 +321,16 @@ void fla_test_gesvd_experiment(char *tst_api, test_params_t *params, integer dat
     }
 
     /* Free up the buffers */
+    if(!FLA_BRT_VERIFICATION_RUN)
+    {
+        if(FLA_OVERFLOW_UNDERFLOW_TEST)
+        {
+            free_vector(scal);
+        }
+        free_vector(s_test);
+    }
 free_buffers:
     FLA_FREE_FILENAME(filename)
-    if(FLA_OVERFLOW_UNDERFLOW_TEST)
-    {
-        free_vector(scal);
-    }
     free_matrix(A);
     free_matrix(A_test);
     if(!same_char(jobu, 'N') && !same_char(jobu, 'O'))
@@ -338,7 +342,6 @@ free_buffers:
         free_matrix(V);
     }
     free_vector(s);
-    free_vector(s_test);
 }
 
 void prepare_gesvd_run(char *jobu, char *jobvt, integer m_A, integer n_A, void *A, integer lda,

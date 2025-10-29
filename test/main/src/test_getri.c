@@ -169,6 +169,7 @@ void fla_test_getri_experiment(char *tst_api, test_params_t *params, integer dat
             create_realtype_vector(datatype, &s_test, n);
             create_svd_matrix(datatype, range, n, n, A, lda, s_test, GETRI_VL, GETRI_VU, i_zero,
                               i_zero, info);
+            free_vector(s_test);
             if(FLA_OVERFLOW_UNDERFLOW_TEST)
             {
                 scale_matrix_underflow_overflow_getri(datatype, n, n, A, lda, params->imatrix_char);
@@ -239,7 +240,6 @@ free_buffers:
     free_matrix(A);
     free_matrix(A_test);
     free_vector(IPIV);
-    free_vector(s_test);
 }
 
 void prepare_getri_run(integer n_A, void *A, integer lda, integer *IPIV, integer datatype,

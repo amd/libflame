@@ -207,6 +207,7 @@ void fla_test_gels_experiment(char *tst_api, test_params_t *params, integer data
                 scale_matrix_underflow_overflow_gels(datatype, &trans, m, n, A, lda,
                                                      params->imatrix_char, 1);
             }
+            free_vector(s_test);
         }
     }
 
@@ -282,7 +283,6 @@ free_buffers:
     free_matrix(A_test);
     free_matrix(B);
     free_matrix(B_test);
-    free_vector(s_test);
 }
 
 void prepare_gels_run(integer datatype, char trans, integer m, integer n, integer m_b, integer nrhs,

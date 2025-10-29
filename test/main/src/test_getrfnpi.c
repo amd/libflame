@@ -162,6 +162,7 @@ void fla_test_getrfnpi_experiment(char *tst_api, test_params_t *params, integer 
             create_realtype_vector(datatype, &s_test, fla_min(m, n));
             create_svd_matrix(datatype, range, m, n, A, lda, s_test, GETRFNPI_VL, GETRFNPI_VU,
                               i_zero, i_zero, info);
+            free_vector(s_test);
             create_matrix(datatype, LAPACK_COL_MAJOR, m, n, &A_copy, lda);
             copy_matrix(datatype, "full", m, n, A, lda, A_copy, lda);
 
@@ -260,7 +261,6 @@ free_buffers:
     free_matrix(A);
     free_matrix(A_test);
     free_vector(IPIV);
-    free_vector(s_test);
 }
 
 void prepare_getrfnpi_run(integer m_A, integer n_A, integer nfact, void *A, integer lda,

@@ -182,6 +182,7 @@ void fla_test_potrs_experiment(char *tst_api, test_params_t *params, integer dat
                 create_realtype_vector(get_datatype(datatype), &scal, 1);
                 scale_matrix_underflow_overflow_potrs(datatype, n, A, lda, params->imatrix_char,
                                                       scal);
+                free_vector(scal);
             }
         }
         else
@@ -249,10 +250,6 @@ free_buffers:
     free_matrix(B_test);
     free_matrix(B);
     free_matrix(X);
-    if(FLA_OVERFLOW_UNDERFLOW_TEST)
-    {
-        free_vector(scal);
-    }
 }
 
 void prepare_potrs_run(char *uplo, integer n, integer nrhs, void *A, integer lda, integer datatype,

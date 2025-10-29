@@ -305,25 +305,28 @@ void fla_test_stedc_experiment(char *tst_api, test_params_t *params, integer dat
     }
 
     /* Free up buffers. */
-free_buffers:
-    FLA_FREE_FILENAME(filename)
+    if(!FLA_BRT_VERIFICATION_RUN)
+    {
+        if(!(g_ext_fptr || FLA_EXTREME_CASE_TEST))
+        {
+            free_vector(L);
+            if(FLA_OVERFLOW_UNDERFLOW_TEST)
+            {
+                free_vector(scal);
+            }
+        }
+    }
     free_matrix(Z_test_save);
-    free_matrix(Z);
-    free_matrix(Z_test);
     free_vector(D_test);
     free_vector(E_test);
+free_buffers:
+    FLA_FREE_FILENAME(filename)
+    free_matrix(Z_test);
+    free_matrix(Z);
     free_matrix(A);
     free_vector(D);
     free_vector(E);
-    if(L != NULL)
-    {
-        free_vector(L);
-    }
     free_matrix(Q);
-    if(FLA_OVERFLOW_UNDERFLOW_TEST)
-    {
-        free_vector(scal);
-    }
 }
 
 void prepare_stedc_run(char *compz, integer n, void *D, void *E, void *Z, integer ldz,

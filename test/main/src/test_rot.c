@@ -131,13 +131,13 @@ void fla_test_rot_experiment(char *tst_api, test_params_t *params, integer datat
     create_vector(realtype, &c, 1);
     create_vector(datatype, &s, 1);
 
-    create_vector(datatype, &f, 1);
-    create_vector(datatype, &g, 1);
-    create_vector(datatype, &r, 1);
-
     /* Initialize vectors only when not in BRT verification run mode */
     if(!FLA_BRT_VERIFICATION_RUN)
     {
+        create_vector(datatype, &f, 1);
+        create_vector(datatype, &g, 1);
+        create_vector(datatype, &r, 1);
+
         rand_vector(datatype, 1, f, 1, d_zero, d_zero, 'R');
         rand_vector(datatype, 1, g, 1, d_zero, d_zero, 'R');
 
@@ -156,6 +156,9 @@ void fla_test_rot_experiment(char *tst_api, test_params_t *params, integer datat
             rand_vector(datatype, 1 + (n - 1) * fla_i_abs(&incx), cx, 1, d_zero, d_zero, 'R');
             rand_vector(datatype, 1 + (n - 1) * fla_i_abs(&incy), cy, 1, d_zero, d_zero, 'R');
         }
+        free_vector(f);
+        free_vector(g);
+        free_vector(r);
     }
 
     /* BRT macro for processing two input vectors (cx and cy) */
@@ -202,9 +205,6 @@ free_buffers:
     free_vector(cy_test);
     free_vector(c);
     free_vector(s);
-    free_vector(f);
-    free_vector(g);
-    free_vector(r);
 }
 
 void prepare_rot_run(integer datatype, integer n_A, void *cx, integer incx, void *cy, integer incy,

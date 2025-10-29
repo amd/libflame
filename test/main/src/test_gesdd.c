@@ -237,7 +237,6 @@ void fla_test_gesdd_experiment(char *tst_api, test_params_t *params, integer dat
         }
         else
         {
-            create_realtype_vector(datatype, &s_in, fla_min(m, n));
             /* Generate matrix A from known singular values */
             create_realtype_vector(datatype, &s_in, fla_min(m, n));
             create_svd_matrix(datatype, 'A', m, n, A, lda, s_in, s_one, s_one, i_one, i_one, info);
@@ -312,6 +311,10 @@ void fla_test_gesdd_experiment(char *tst_api, test_params_t *params, integer dat
     }
 
     /* Free up the buffers */
+    if(!FLA_BRT_VERIFICATION_RUN)
+    {
+        free_vector(s_in);
+    }
 free_buffers:
     FLA_FREE_FILENAME(filename)
     free_matrix(A);
@@ -325,7 +328,6 @@ free_buffers:
         free_matrix(V);
     }
     free_vector(s);
-    free_vector(s_in);
     free_vector(scal);
 }
 

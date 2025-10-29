@@ -167,9 +167,9 @@ void fla_test_spffrt2_experiment(char *tst_api, test_params_t *params, integer d
     }
 
     /* Free up the buffers */
+    free_vector(AP_save);
 free_buffers:
     FLA_FREE_FILENAME(filename);
-    free_vector(AP_save);
     free_matrix(A);
     free_vector(AP);
 }

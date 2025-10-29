@@ -301,13 +301,24 @@ void fla_test_hseqr_experiment(char *tst_api, test_params_t *params, integer dat
     }
 
     /* Free up the buffers */
+    if(!FLA_BRT_VERIFICATION_RUN)
+    {
+        free_vector(wr_in);
+        if(!(datatype == COMPLEX || datatype == DOUBLE_COMPLEX))
+        {
+            free_vector(wi_in);
+        }
+        if(FLA_OVERFLOW_UNDERFLOW_TEST)
+        {
+            free_vector(scal_H);
+        }
+    }
+    free_matrix(H_test);
+    free_matrix(Z_Test);
 free_buffers:
     FLA_FREE_FILENAME(filename)
     free_matrix(H);
     free_matrix(Z);
-    free_matrix(H_test);
-    free_matrix(Z_Test);
-    free_vector(wr_in);
     if(datatype == COMPLEX || datatype == DOUBLE_COMPLEX)
     {
         free_vector(w);
@@ -316,11 +327,6 @@ free_buffers:
     {
         free_vector(wr);
         free_vector(wi);
-        free_vector(wi_in);
-    }
-    if(FLA_OVERFLOW_UNDERFLOW_TEST)
-    {
-        free_vector(scal_H);
     }
 }
 

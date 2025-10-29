@@ -192,10 +192,10 @@ void fla_test_larfg_experiment(char *tst_api, test_params_t *params, integer dat
         FLA_PRINT_TEST_STATUS(n, n, residual, err_thresh);
     }
     /* Free up the buffers */
+    free_vector(x_test);
 free_buffers:
     FLA_FREE_FILENAME(filename)
     free_vector(x);
-    free_vector(x_test);
     free_vector(tau);
 }
 

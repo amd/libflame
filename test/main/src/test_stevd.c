@@ -275,6 +275,20 @@ void fla_test_stevd_experiment(char *tst_api, test_params_t *params, integer dat
     }
 
     /* Free up the buffers */
+    free_vector(D_test);
+    free_vector(E_test);
+    if(!FLA_BRT_VERIFICATION_RUN)
+    {
+        if(!(g_ext_fptr))
+        {
+            free_vector(L);
+            if(FLA_OVERFLOW_UNDERFLOW_TEST)
+            {
+                free_vector(scal);
+            }
+        }
+    }
+    free_matrix(Z_test);
 free_buffers:
     FLA_FREE_FILENAME(filename);
     free_matrix(Q);
@@ -282,17 +296,6 @@ free_buffers:
     free_matrix(Z);
     free_vector(D);
     free_vector(E);
-    free_matrix(Z_test);
-    free_vector(D_test);
-    free_vector(E_test);
-    if(L != NULL)
-    {
-        free_vector(L);
-    }
-    if(FLA_OVERFLOW_UNDERFLOW_TEST)
-    {
-        free_vector(scal);
-    }
 }
 
 void prepare_stevd_run(char *jobz, integer n, void *Z, integer ldz, void *D, void *E,

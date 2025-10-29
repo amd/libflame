@@ -210,6 +210,7 @@ void fla_test_gtsv_experiment(char *tst_api, test_params_t *params, integer data
 
         /* Generating B matrix from xact & tridiagonal vectors */
         tridiag_matrix_multiply(datatype, n, NRHS, dl, d, du, xact, ldx, B, ldb);
+        free_matrix(A);
     }
 
     /* Make a copy of input buffers. This is required to validate the API functionality */
@@ -266,23 +267,25 @@ void fla_test_gtsv_experiment(char *tst_api, test_params_t *params, integer data
     }
 
     /* Free up the buffers */
+    free_vector(dl_save);
+    free_vector(d_save);
+    free_vector(du_save);
+    free_matrix(B_save);
+    if(!FLA_BRT_VERIFICATION_RUN)
+    {
+        if(g_ext_fptr == NULL || FLA_EXTREME_CASE_TEST)
+            free_matrix(xact);
+    }
+    if(FLA_OVERFLOW_UNDERFLOW_TEST)
+    {
+        free_vector(scal);
+    }
 free_buffers:
     FLA_FREE_FILENAME(filename)
     free_vector(dl);
     free_vector(d);
     free_vector(du);
     free_matrix(B);
-    free_vector(dl_save);
-    free_vector(d_save);
-    free_vector(du_save);
-    free_matrix(B_save);
-    if(g_ext_fptr == NULL || FLA_EXTREME_CASE_TEST)
-        free_matrix(xact);
-    if(FLA_OVERFLOW_UNDERFLOW_TEST)
-    {
-        free_matrix(A);
-        free_vector(scal);
-    }
 }
 
 void prepare_gtsv_run(integer n_A, integer nrhs, void *dl, void *d, void *du, void *B, integer ldb,

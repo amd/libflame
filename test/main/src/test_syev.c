@@ -227,19 +227,22 @@ void fla_test_syev_experiment(char *tst_api, test_params_t *params, integer data
     }
 
     /* Free up the buffers */
+    if(!FLA_BRT_VERIFICATION_RUN)
+    {
+        if(!(g_ext_fptr))
+        {
+            free_vector(L);
+            if(FLA_OVERFLOW_UNDERFLOW_TEST)
+            {
+                free_vector(scal);
+            }
+        }
+    }
+    free_matrix(A_test);
 free_buffers:
     FLA_FREE_FILENAME(filename);
     free_matrix(A);
-    free_matrix(A_test);
     free_vector(w);
-    if(g_ext_fptr == NULL)
-    {
-        free_vector(L);
-    }
-    if(FLA_OVERFLOW_UNDERFLOW_TEST)
-    {
-        free_vector(scal);
-    }
 }
 
 void prepare_syev_run(char *jobz, char *uplo, integer n, void *A, integer lda, void *w,

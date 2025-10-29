@@ -270,6 +270,7 @@ void fla_test_geevx_experiment(char *tst_api, test_params_t *params, integer dat
                 reset_vector(datatype, wi_in, m, 1);
                 get_subdiagonal(datatype, L, m, m, m, wi_in);
             }
+            free_matrix(L);
         }
     }
 
@@ -333,6 +334,17 @@ void fla_test_geevx_experiment(char *tst_api, test_params_t *params, integer dat
     }
 
     /* Free up the buffers */
+    if(!FLA_BRT_VERIFICATION_RUN)
+    {
+        if((g_ext_fptr == NULL) && !(FLA_EXTREME_CASE_TEST))
+        {
+            free_vector(wr_in);
+            if(datatype == FLOAT || datatype == DOUBLE)
+            {
+                free_vector(wi_in);
+            }
+        }
+    }
 free_buffers:
     FLA_FREE_FILENAME(filename);
     free_matrix(A);
@@ -351,16 +363,6 @@ free_buffers:
     {
         free_vector(wr);
         free_vector(wi);
-    }
-
-    if((g_ext_fptr == NULL) && !(FLA_EXTREME_CASE_TEST))
-    {
-        free_matrix(L);
-        free_vector(wr_in);
-        if(datatype == FLOAT || datatype == DOUBLE)
-        {
-            free_vector(wi_in);
-        }
     }
     if(FLA_OVERFLOW_UNDERFLOW_TEST)
         free_vector(scal);

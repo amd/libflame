@@ -151,7 +151,6 @@ void fla_test_larf_experiment(char *tst_api, test_params_t *params, integer data
 
     if(!FLA_BRT_VERIFICATION_RUN)
     {
-
         create_vector(datatype, &v_tmp, v_length);
         rand_vector(datatype, v_num_elements, v_tmp, incv_abs, d_zero, d_zero, 'R');
 
@@ -165,6 +164,7 @@ void fla_test_larf_experiment(char *tst_api, test_params_t *params, integer data
         copy_vector(datatype, v_num_elements, v_tmp, incv_abs, v, incv);
 
         init_matrix(datatype, c__, m, n, ldc, g_ext_fptr, params->imatrix_char);
+        free_vector(v_tmp);
     }
     FLA_BRT_PROCESS_THREE_INPUT(datatype, m, n, c__, ldc, datatype, v_length, 1, v, v_length,
                                 datatype, 1, 1, tau, 1, "cdddd", side, m, n, incv, ldc);
@@ -216,12 +216,11 @@ void fla_test_larf_experiment(char *tst_api, test_params_t *params, integer data
     }
 
     /* Free up the buffers */
+    free_matrix(c__out);
 free_buffers:
     FLA_FREE_FILENAME(filename)
     free_matrix(c__);
-    free_matrix(c__out);
     free_vector(v);
-    free_vector(v_tmp);
     free_vector(work);
     free_vector(tau);
 }

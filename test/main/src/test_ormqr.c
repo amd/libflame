@@ -213,10 +213,10 @@ void fla_test_ormqr_experiment(char *tst_api, test_params_t *params, integer dat
         create_matrix(datatype, LAPACK_COL_MAJOR, m, n, &C_test, ldc);
         copy_matrix(datatype, "full", m, n, C, ldc, C_test, ldc);
 
-        create_vector(datatype, &T_test, fla_min(m_A, k));
         if(g_ext_fptr == NULL && !(FLA_EXTREME_CASE_TEST))
         {
             lwork = -1;
+            create_vector(datatype, &T_test, fla_min(m_A, k));
             create_vector(datatype, &qwork, 1);
             invoke_geqrf(datatype, &m_A, &k, NULL, &lda, NULL, qwork, &lwork, &info);
             if(info == 0)
@@ -234,6 +234,10 @@ void fla_test_ormqr_experiment(char *tst_api, test_params_t *params, integer dat
             /* QR Factorisation on matrix A to generate Q and R */
             invoke_geqrf(datatype, &m_A, &k, A_test, &lda, T_test, work, &lwork, &info);
             copy_vector(datatype, fla_min(n_A, k), T_test, 1, tau, 1);
+            
+            free_vector(T_test);
+            free_vector(work);
+            free_vector(qwork);
         }
     }
     FLA_BRT_PROCESS_THREE_INPUT(datatype, m_A, k, A_test, lda, datatype, 1, fla_min(n_A, k), tau, 1,
@@ -279,16 +283,16 @@ void fla_test_ormqr_experiment(char *tst_api, test_params_t *params, integer dat
     }
 
     /* Free up the buffers */
+    if(!FLA_BRT_VERIFICATION_RUN)
+    {
+        free_matrix(C_test);
+    }
 free_buffers:
     FLA_FREE_FILENAME(filename)
     free_matrix(A);
     free_matrix(A_test);
-    free_vector(work);
-    free_vector(T_test);
-    free_vector(qwork);
     free_vector(tau);
     free_matrix(C);
-    free_matrix(C_test);
 }
 
 void prepare_ormqr_run(char side, char trans, integer m, integer n, integer k, integer m_A,

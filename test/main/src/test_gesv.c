@@ -176,6 +176,7 @@ void fla_test_gesv_experiment(char *tst_api, test_params_t *params, integer data
             create_realtype_vector(datatype, &s_test, n);
             create_svd_matrix(datatype, range, n, n, A, lda, s_test, GESV_VL, GESV_VU, i_zero,
                               i_zero, info);
+            free_vector(s_test);
         }
         else
         {
@@ -249,6 +250,10 @@ void fla_test_gesv_experiment(char *tst_api, test_params_t *params, integer data
     }
 
     /* Free up the buffers */
+    if(FLA_OVERFLOW_UNDERFLOW_TEST)
+    {
+        free_vector(scal);
+    }
 free_buffers:
     FLA_FREE_FILENAME(filename)
     free_matrix(A);
@@ -256,11 +261,6 @@ free_buffers:
     free_vector(IPIV);
     free_matrix(B);
     free_matrix(B_save);
-    free_vector(s_test);
-    if(FLA_OVERFLOW_UNDERFLOW_TEST)
-    {
-        free_vector(scal);
-    }
 }
 
 void prepare_gesv_run(integer n_A, integer nrhs, void *A, integer lda, void *B, integer ldb,

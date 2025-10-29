@@ -150,6 +150,7 @@ void fla_test_getrf2_experiment(char *tst_api, test_params_t *params, integer da
             create_realtype_vector(datatype, &s_test, fla_min(m, n));
             create_svd_matrix(datatype, range, m, n, A, lda, s_test, GETRF2_VL, GETRF2_VU, i_zero,
                               i_zero, info);
+            free_vector(s_test);
         }
     }
     /* This macro is used in the BRT test cases for the following purposes:
@@ -209,7 +210,6 @@ free_buffers:
     free_matrix(A);
     free_matrix(A_test);
     free_vector(IPIV);
-    free_vector(s_test);
 }
 
 void prepare_getrf2_run(integer m_A, integer n_A, void *A, integer lda, integer *IPIV,

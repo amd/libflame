@@ -272,25 +272,28 @@ void fla_test_steqr_experiment(char *tst_api, test_params_t *params, integer dat
     }
 
     /* Free up the buffers */
+    if(!FLA_BRT_VERIFICATION_RUN)
+    {
+        if(!(g_ext_fptr))
+        {
+            free_vector(L);
+            if(FLA_OVERFLOW_UNDERFLOW_TEST)
+            {
+                free_vector(scal);
+            }
+        }
+    }
+    free_matrix(Z_test_save);
+    free_vector(D_test);
+    free_vector(E_test);
 free_buffers:
     FLA_FREE_FILENAME(filename)
-    free_matrix(Z_test_save);
     free_matrix(Z);
     free_vector(D);
     free_vector(E);
     free_matrix(A);
     free_matrix(Q);
-    free_vector(D_test);
-    free_vector(E_test);
-    if(L != NULL)
-    {
-        free_vector(L);
-    }
     free_matrix(Z_test);
-    if(FLA_OVERFLOW_UNDERFLOW_TEST)
-    {
-        free_vector(scal);
-    }
 }
 
 void prepare_steqr_run(char *compz, integer n, void *Z, integer ldz, void *D, void *E,

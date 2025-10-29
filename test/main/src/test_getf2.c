@@ -186,10 +186,10 @@ void fla_test_getf2_experiment(char *tst_api, test_params_t *params, integer dat
     }
 
     /* Free up the buffers */
+    free_matrix(A_test);
 free_buffers:
     FLA_FREE_FILENAME(filename)
     free_matrix(A);
-    free_matrix(A_test);
     free_vector(IPIV);
     free_vector(s_test);
 }

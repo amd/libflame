@@ -175,6 +175,7 @@ void fla_test_gecon_experiment(char *tst_api, test_params_t *params, integer dat
             getrfinfo = 0;
             invoke_getrf(datatype, &n, &n, A, &lda, ipiv, &getrfinfo);
             copy_matrix(datatype, "Full", n, n, A, lda, A_save, lda);
+            free_vector(ipiv);
         }
     }
 
@@ -225,13 +226,15 @@ void fla_test_gecon_experiment(char *tst_api, test_params_t *params, integer dat
     }
 
     /* Free up buffers */
+    if(!FLA_BRT_VERIFICATION_RUN)
+    {
+        free_vector(s_test_in);
+    }
 free_buffers:
     FLA_FREE_FILENAME(filename);
     free_matrix(A);
     free_matrix(A_save);
-    free_vector(ipiv);
     free_vector(work);
-    free_vector(s_test_in);
     free_vector(anorm);
     free_vector(rcond);
     free_vector(lrwork);

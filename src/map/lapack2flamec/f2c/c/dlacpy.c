@@ -153,6 +153,13 @@ void aocl_lapack_dlacpy(char *uplo, aocl_int64_t *m, aocl_int64_t *n, doublereal
     b -= b_offset;
     /* Function Body */
 #ifdef FLA_ENABLE_AMD_OPT
+    /* Handling invalid cases */
+    if(*m <= 0 || *n <= 0 || a_dim1 < *m || b_dim1 < *m)
+    {
+        AOCL_DTL_TRACE_LOG_EXIT
+        return;
+    }
+
     if(lsame_(uplo, "U", 1, 1))
     {
         /* Upper triangular part */

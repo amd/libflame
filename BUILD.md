@@ -53,7 +53,7 @@ AOCL-LAPACK can be linked with any Netlib BLAS compliant library when compiled w
 
 The path of AOCL-BLAS library can be provided in one of the following methods
 1. Set "AOCL_ROOT" environment variable to the root path where AOCL-BLAS library `($AOCL_ROOT/lib)` and header files `("$AOCL_ROOT"/include)` are located. AOCL_ROOT must ideally be path where all AOCL libraries are installed including AOCL-Utils and AOCL-BLAS.
-`export AOCL_ROOT=<path to AOCL-BLAS>`
+`export AOCL_ROOT=<path to AOCL-libraries>`
 
 2. Specify root path of AOCL-BLAS library through cmake option "AOCL_ROOT"
 `cmake -DENABLE_AMD_AOCC_FLAGS=ON -DENABLE_AOCL_BLAS=ON -DAOCL_ROOT=<path to AOCL-BLAS> ...`
@@ -62,45 +62,24 @@ The path specified in AOCL_ROOT must have "include" directory and a "lib" direct
 
 Linking with AOCL Utilities library
 ------------------------------------
-AOCL-LAPACK depends on AOCL Utilities library, AOCL-Utils for certain functions including CPU architecture detection at runtime. The default build of AOCL-LAPACK requires path to AOCL-Utils header files to be set as follows
+AOCL-LAPACK depends on AOCL Utilities library, "AOCL-Utils", for certain functions including CPU architecture detection at runtime. The default build of AOCL-LAPACK requires path to AOCL-Utils header files and AOCL-Utils libraries to be set as follows
 
-- For CMake build, the path of AOCL-Utils library can be provided in one of the following methods 
+The path of AOCL-Utils library can be provided in one of the following methods 
+
 1. Set "AOCL_ROOT" environment variable to the root path where AOCL-Utils library  header files `("$AOCL_ROOT"/include)` are located. AOCL_ROOT must ideally be path where all AOCL libraries are installed including AOCL-Utils and AOCL-BLAS.
-`export AOCL_ROOT=<path to AOCL-Utils>`
+`export AOCL_ROOT=<path to AOCL-libraries>`
 
-2. Set LIBAOCLUTILS_INCLUDE_PATH option.
+2. Specify root path of AOCL-Utils library through cmake option "AOCL_ROOT"
+    `cmake -DENABLE_AMD_AOCC_FLAGS=ON -DENABLE_AOCL_BLAS=ON -DAOCL_ROOT=<path to AOCL-Utils> ...`
 
-        cmake ../ -DENABLE_AMD_FLAGS=ON -DLIBAOCLUTILS_INCLUDE_PATH=<path/to/libaoclutils/header/files>
-
-- For autoconfigure makefile based build, ensure header file path of  AOCL-Utils is set in CFLAGS before running make command.
-  
-        export CFLAGS="-I<path to libaoclutils include directory>"
-        configure --enable-amd-flags
-        make -j
-
-In the default build mode, applications using AOCL-LAPACK must link with AOCL-Utils explicitly.
-
-User has an option to merge the AOCL-Utils library with AOCL-LAPACK library. This can be done using "ENABLE_EMBED_AOCLUTILS" option for both CMake and autoconfigure tools build mode. With this option, AOCL-LAPACK can automatically link with libaoclutils library by downloading the source of libaoclutils from AMD GitHub, compiling it and linking/merging with AOCL-LAPACK library. Following is the sample command.
-
-CMake Build:  
-
-    cmake ../ -DENABLE_AMD_FLAGS=ON -DENABLE_EMBED_AOCLUTILS=ON
-
-Autoconfigure :   
-
-    configure --enable-amd-flags
-    make ENABLE_EMBED_AOCLUTILS=1 -j
-
-With embed AOCL-Utils build, if user provides an external path for libaoclutils binary and header files via separate flags, 'LIBAOCLUTILS_LIBRARY_PATH' and 'LIBAOCLUTILS_INCLUDE_PATH' respectively, user provided library is used instead of downloading from GitHub. Following is a sample command for the same
-
-CMake Build:  
+3. Use individual cmake flags to specify AOCL-Utils library and header paths separately:
+    - Use `-DLIBAOCLUTILS_LIBRARY_PATH=<path>` to specify the full path to the AOCL-Utils library file (including the library filename)
+    - Use `-DLIBAOCLUTILS_INCLUDE_PATH=<path>` to specify the path to the AOCL-Utils header files directory
     
-    cmake ../ -DENABLE_AMD_FLAGS=ON -DENABLE_EMBED_AOCLUTILS=ON -DLIBAOCLUTILS_LIBRARY_PATH=<path/to/libaoclutils/library> -DLIBAOCLUTILS_INCLUDE_PATH=<path/to/libaoclutils/header/files>
+    e.g.
+    `cmake -DENABLE_AMD_AOCC_FLAGS=ON -DLIBAOCLUTILS_LIBRARY_PATH=/path/to/libaoclutils.so -DLIBAOCLUTILS_INCLUDE_PATH=/path/to/aoclutils/include ...`
 
-Autoconfigure :   
-
-    configure --enable-amd-flags
-    make ENABLE_EMBED_AOCLUTILS=1 LIBAOCLUTILS_LIBRARY_PATH=<path/to/libaoclutils/library> LIBAOCLUTILS_INCLUDE_PATH=<path/to/libaoclutils/header/files> -j
+The path specified in AOCL_ROOT must have "include" directory and a "lib" directory that contains the necessary header files and AOCL-Utils binary respectively. When using individual flags, provide the exact paths to the library file and include directory.
 
 
 ## 2. Building main Test and AOCL_FLA_PROGRESS Test Suite

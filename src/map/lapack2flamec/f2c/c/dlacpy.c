@@ -3,7 +3,7 @@
  on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
- /******************************************************************************
+/******************************************************************************
  * Copyright (C) 2025, Advanced Micro Devices, Inc. All rights reserved.
  *******************************************************************************/
 #include "FLA_f2c.h" /* > \brief \b DLACPY copies all or part of one two-dimensional array to another. */
@@ -137,6 +137,13 @@ void dlacpy_(char *uplo, integer *m, integer *n, doublereal *a, integer *lda, do
     b -= b_offset;
     /* Function Body */
 #ifdef FLA_ENABLE_AMD_OPT
+    /* Handling invalid cases */
+    if(*m <= 0 || *n <= 0 || a_dim1 < *m || b_dim1 < *m)
+    {
+        AOCL_DTL_TRACE_LOG_EXIT
+        return;
+    }
+
     if(lsame_(uplo, "U", 1, 1))
     {
         /* Upper triangular part */

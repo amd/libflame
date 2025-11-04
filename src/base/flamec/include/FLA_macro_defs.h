@@ -331,9 +331,10 @@
 #define FLA_ZGEQP3_BLOCK_SMALL_THRESH    (32)
 
 // DGESVD, DGESDD thresholds for small size optimization
-#define FLA_SVD_SMALL_SIZE_THRESH0    (16)
-#define FLA_SVD_SMALL_SIZE_THRESH1    (128)
-#define FLA_SVD_SMALL_SIZE_THRESH2    (386)
+#define FLA_DGESVD_SMALL_SIZE_THRESH0    (16)
+#define FLA_DGESVD_SMALL_SIZE_THRESH1    (128)
+#define FLA_DGESVD_SMALL_SIZE_THRESH2    (386)
+#define FLA_DGESDD_SMALL_SIZE_THRESH     (40)
 
 // TRTRI, threshold numbers to chose paths for performance
 #define FLA_TRTRI_SMALL_THRESH0      (60)

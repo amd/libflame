@@ -402,7 +402,7 @@ int lapack_dgesvd(char *jobu, char *jobvt, integer *m, integer *n,
       if (*m >= mnthr) {
         if (wntun) {
           /* Path 1 (M much larger than N, JOBU='N') */
-          if((!wntvo) && (*m <= FLA_SVD_SMALL_SIZE_THRESH1)
+          if((!wntvo) && (*m <= FLA_DGESVD_SMALL_SIZE_THRESH1)
              && FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX2)) {
             i__2 = *n << 2;
             maxwrk = fla_max(i__2, bdspac);
@@ -565,7 +565,7 @@ int lapack_dgesvd(char *jobu, char *jobvt, integer *m, integer *n,
         } else if (wntus && wntvas) {
           /* Path 6 (M much larger than N, JOBU='S', JOBVT='S' or */
           /* 'A') */
-          if(*m <= FLA_SVD_SMALL_SIZE_THRESH1 && FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX2)) {
+          if(*m <= FLA_DGESVD_SMALL_SIZE_THRESH1 && FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX2)) {
             i__2 = *n * 3 + *m;
             maxwrk = fla_max(i__2, bdspac);
             minwrk = *n << 2;
@@ -704,7 +704,7 @@ int lapack_dgesvd(char *jobu, char *jobvt, integer *m, integer *n,
         }
       } else {
         /* Path 10 (M at least N, but not much larger) */
-        if(((wntun || wntus) && (wntvn || wntvs) && (*m < FLA_SVD_SMALL_SIZE_THRESH1))
+        if(((wntun || wntus) && (wntvn || wntvs) && (*m < FLA_DGESVD_SMALL_SIZE_THRESH1))
            && FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX2)) {
           i__2 = *n * 3 + *m;
           maxwrk = fla_max(i__2, bdspac);
@@ -753,7 +753,7 @@ int lapack_dgesvd(char *jobu, char *jobvt, integer *m, integer *n,
       if (*n >= mnthr) {
         if (wntvn) {
           /* Path 1t(N much larger than M, JOBVT='N') */
-          if((wntun && wntvn) && (*n <= FLA_SVD_SMALL_SIZE_THRESH2) && (*m < FLA_SVD_SMALL_SIZE_THRESH0)
+          if((wntun && wntvn) && (*n <= FLA_DGESVD_SMALL_SIZE_THRESH2) && (*m < FLA_DGESVD_SMALL_SIZE_THRESH0)
              && FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX2)) {
             i__2 = *m << 2;
             maxwrk = fla_max(i__2, bdspac);
@@ -915,7 +915,7 @@ int lapack_dgesvd(char *jobu, char *jobvt, integer *m, integer *n,
         } else if (wntvs && wntuas) {
           /* Path 6t(N much larger than M, JOBU='S' or 'A', */
           /* JOBVT='S') */
-          if(*n <= FLA_SVD_SMALL_SIZE_THRESH1 && FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX2)) {
+          if(*n <= FLA_DGESVD_SMALL_SIZE_THRESH1 && FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX2)) {
             i__2 = *m * 3 + *n;
             minwrk = fla_max(i__2, bdspac);
             maxwrk = *m * *m + fla_max(*m * 4, *m * 2 + *n);
@@ -1053,7 +1053,7 @@ int lapack_dgesvd(char *jobu, char *jobvt, integer *m, integer *n,
         }
       } else {
         /* Path 10t(N greater than M, but not much larger) */
-        if((wntuas & wntvs) && (*n < FLA_SVD_SMALL_SIZE_THRESH0)
+        if((wntuas & wntvs) && (*n < FLA_DGESVD_SMALL_SIZE_THRESH0)
            && FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX2)) {
           i__2 = *m * 3 + *n;
           maxwrk = fla_max(i__2, bdspac);
@@ -1678,7 +1678,7 @@ int lapack_dgesvd(char *jobu, char *jobvt, integer *m, integer *n,
         /* Path 1 (M much larger than N, JOBU='N') */
         /* No left singular vectors to be computed */
 #if FLA_ENABLE_AMD_OPT
-          if((!wntvo) && (*m <= FLA_SVD_SMALL_SIZE_THRESH1)
+          if((!wntvo) && (*m <= FLA_DGESVD_SMALL_SIZE_THRESH1)
              && FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX2)) {
             fla_dgesvd_small6(0, wntvas, m, n, &a[a_offset], lda, NULL, ldu,
                               &s[1], NULL, ldu, &vt[vt_offset], ldvt,
@@ -2222,7 +2222,7 @@ int lapack_dgesvd(char *jobu, char *jobvt, integer *m, integer *n,
           /* N right singular vectors to be computed in VT */
           /* Computing MAX */
 #if FLA_ENABLE_AMD_OPT
-          if(*m <= FLA_SVD_SMALL_SIZE_THRESH1 && FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX2)) {
+          if(*m <= FLA_DGESVD_SMALL_SIZE_THRESH1 && FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX2)) {
             fla_dgesvd_small6(wntus, wntvas, m, n, &a[a_offset], lda, &a[a_offset], lda,
                               &s[1], &u[u_offset], ldu, &vt[vt_offset], ldvt,
                               &work[1], info);
@@ -2732,7 +2732,7 @@ int lapack_dgesvd(char *jobu, char *jobvt, integer *m, integer *n,
       /* Path 10 (M at least N, but not much larger) */
       /* Reduce to bidiagonal form without QR decomposition */
 #if FLA_ENABLE_AMD_OPT
-      if(((wntun || wntus) && (wntvn || wntvs) && (*m < FLA_SVD_SMALL_SIZE_THRESH1))
+      if(((wntun || wntus) && (wntvn || wntvs) && (*m < FLA_DGESVD_SMALL_SIZE_THRESH1))
          && FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX2))
       {
         fla_dgesvd_xx_small10(wntuas, wntvas, m, n, n, &a[a_offset], lda, &s[1],
@@ -2841,7 +2841,7 @@ int lapack_dgesvd(char *jobu, char *jobvt, integer *m, integer *n,
         itau = 1;
         iwork = itau + *m;
 #if FLA_ENABLE_AMD_OPT
-        if((wntun && wntvn) && (*n <= FLA_SVD_SMALL_SIZE_THRESH2) && (*m < FLA_SVD_SMALL_SIZE_THRESH0)
+        if((wntun && wntvn) && (*n <= FLA_DGESVD_SMALL_SIZE_THRESH2) && (*m < FLA_DGESVD_SMALL_SIZE_THRESH0)
            && FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX2)) {
           /* Compute A=L*Q */
           i__2 = fla_dgelqf_small(m, n, &a[a_offset], lda, &work[itau], &work[itau]);
@@ -3399,7 +3399,7 @@ int lapack_dgesvd(char *jobu, char *jobvt, integer *m, integer *n,
           /* M right singular vectors to be computed in VT and */
           /* M left singular vectors to be computed in U */
 #if FLA_ENABLE_AMD_OPT
-          if(*n <= FLA_SVD_SMALL_SIZE_THRESH1 && FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX2)
+          if(*n <= FLA_DGESVD_SMALL_SIZE_THRESH1 && FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX2)
              && *lwork >= maxwrk) {
             iu = 1;
             ldwrku = *m;
@@ -3921,7 +3921,7 @@ int lapack_dgesvd(char *jobu, char *jobvt, integer *m, integer *n,
       /* Path 10t(N greater than M, but not much larger) */
       /* Reduce to bidiagonal form without LQ decomposition */
 #if FLA_ENABLE_AMD_OPT
-      if((wntuas & wntvs) && (*n < FLA_SVD_SMALL_SIZE_THRESH0)
+      if((wntuas & wntvs) && (*n < FLA_DGESVD_SMALL_SIZE_THRESH0)
          && FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX2)) {
         fla_dgesvd_xs_small10T(m, n, &a[a_offset], lda, &s[1],
                                &u[u_offset], ldu, &vt[vt_offset], ldvt,

@@ -202,7 +202,7 @@ LAPACK_gesdd_real(d)
                              aocl_int64_t *info);
 
 #if FLA_ENABLE_AMD_OPT
-    if(*m < FLA_SVD_SMALL_SIZE_THRESH2 && *n < FLA_SVD_SMALL_SIZE_THRESH2)
+    if(*m < FLA_DGESDD_SMALL_SIZE_THRESH && *n < FLA_DGESDD_SMALL_SIZE_THRESH)
     {
         /* Path for small sizes making use of optimized DGESVD */
         aocl_int64_t i__1;

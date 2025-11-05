@@ -168,6 +168,17 @@ void fla_test_syev_experiment(char *tst_api, test_params_t *params, integer data
             /* Initialize input matrix with custom data */
             init_matrix_from_file(datatype, A, n, n, lda, g_ext_fptr);
         }
+        else if(FLA_RANDOM_INIT_MODE)
+        {
+            /* Generate random matrix for random test mode */
+            rand_matrix(datatype, A, n, n, lda);
+            /* SYEV expects symmentric matrix as input
+               So make the matrix symmetric/Hermitian */
+            if(datatype == FLOAT || datatype == DOUBLE)
+                form_symmetric_matrix(datatype, n, A, lda, "S", uplo);
+            else
+                form_symmetric_matrix(datatype, n, A, lda, "C", uplo);
+        }
         else
         {
             /*  Creating input matrix A by generating random eigen values.
@@ -216,6 +227,11 @@ void fla_test_syev_experiment(char *tst_api, test_params_t *params, integer data
         validate_syev(tst_api, &jobz, &range, n, A, A_test, lda, 0, 0, L, w, NULL, datatype,
                       residual, params->imatrix_char, scal, params),
         check_bit_reproducibility_syev(filename, datatype, jobz, n, A_test, lda, w, params))
+    else if(FLA_SKIP_VALIDATION_MODE)
+    {
+        /* Skip validation for performance modes */
+        FLA_PRINT_TEST_STATUS(n, n, residual, err_thresh);
+    }
     else if(!FLA_EXTREME_CASE_TEST)
     {
         validate_syev(tst_api, &jobz, &range, n, A, A_test, lda, 0, 0, L, w, NULL, datatype,

@@ -297,8 +297,9 @@ void fla_test_gesvd_experiment(char *tst_api, test_params_t *params, integer dat
                                          params->imatrix_char, scal, params),
                           check_bit_reproducibility_gesvd(filename, datatype, jobu, jobvt, m, n, A,
                                                           lda, s, U, ldu, V, ldvt, params))
-    else if(FLA_RANDOM_INIT_MODE)
+    else if(FLA_SKIP_VALIDATION_MODE)
     {
+        /* Skip validation for performance modes */
         FLA_PRINT_TEST_STATUS(m, n, residual, err_thresh);
     }
     else if(!FLA_EXTREME_CASE_TEST)

@@ -129,12 +129,10 @@ void validate_gesvd(char *tst_api, char *jobu, char *jobvt, integer m, integer n
             /*
              * Test 5: To check the functionality: Calculate the difference between
              * the known singular value (sigma 's_test') from input generation and the
-             * output (s) from the API
+             * output (s) from the API.
              * */
-            if(g_ext_fptr == NULL)
+            if(s_test != NULL)
             {
-                /* Test 2: To check functionality compute (s_test - s) */
-
                 if(same_char(imatrix, 'O') || same_char(imatrix, 'U'))
                 {
                     *(float *)scal = 1.00 / *(float *)scal;
@@ -208,7 +206,7 @@ void validate_gesvd(char *tst_api, char *jobu, char *jobvt, integer m, integer n
              * the known singular value (sigma 's_test') from input generation and the
              * output (s) from the API
              * */
-            if(g_ext_fptr == NULL)
+            if(s_test != NULL)
             {
                 if(same_char(imatrix, 'O') || same_char(imatrix, 'U'))
                 {
@@ -283,7 +281,7 @@ void validate_gesvd(char *tst_api, char *jobu, char *jobvt, integer m, integer n
              * the known singular value (sigma 's_test') from input generation and the
              * output (s) from the API
              * */
-            if(g_ext_fptr == NULL)
+            if(s_test != NULL)
             {
                 /* To do : Validate for input generation for overflow and underflow. */
                 if(same_char(imatrix, 'O') || same_char(imatrix, 'U'))
@@ -358,7 +356,7 @@ void validate_gesvd(char *tst_api, char *jobu, char *jobvt, integer m, integer n
              * the known singular value (sigma 's_test') from input generation and the
              * output (s) from the API
              * */
-            if(g_ext_fptr == NULL)
+            if(s_test != NULL)
             {
                 /*To do : Validate for input generation for overflow and underflow.*/
 

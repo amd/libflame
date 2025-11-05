@@ -167,6 +167,8 @@ void fla_test_orgqr_experiment(char *tst_api, test_params_t *params, integer dat
     /* create tau vector */
     create_vector(datatype, &T_test, fla_min(m, n));
 
+    /* NOTE: ORGQR requires structured input;
+       Random matrix initialization is incompatible */
     if(!FLA_BRT_VERIFICATION_RUN)
     {
         init_matrix(datatype, A, m, n, lda, g_ext_fptr, params->imatrix_char);
@@ -229,6 +231,11 @@ void fla_test_orgqr_experiment(char *tst_api, test_params_t *params, integer dat
         validate_orgqr(tst_api, m, n, A, lda, Q, R, datatype, residual, params->imatrix_char,
                        params),
         check_reproducibility_base(filename, params, 1, 0, datatype, m, n, Q, lda))
+    else if(FLA_SKIP_VALIDATION_MODE)
+    {
+        /* Skip validation for performance modes */
+        FLA_PRINT_TEST_STATUS(m, n, residual, err_thresh);
+    }
     else if(!FLA_EXTREME_CASE_TEST)
     {
         validate_orgqr(tst_api, m, n, A, lda, Q, R, datatype, residual, params->imatrix_char,

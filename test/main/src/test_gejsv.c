@@ -254,7 +254,7 @@ void fla_test_gejsv_experiment(char *tst_api, test_params_t *params, integer dat
 
     if(!FLA_BRT_VERIFICATION_RUN)
     {
-        if(g_ext_fptr != NULL || (FLA_EXTREME_CASE_TEST))
+        if(g_ext_fptr != NULL || (FLA_EXTREME_CASE_TEST) || (FLA_RANDOM_INIT_MODE))
         {
             init_matrix(datatype, A, m, n, lda, g_ext_fptr, params->imatrix_char);
             init_matrix(get_realtype(datatype), S, n, 1, lda, g_ext_fptr, params->imatrix_char);
@@ -305,6 +305,11 @@ void fla_test_gejsv_experiment(char *tst_api, test_params_t *params, integer dat
         check_bit_reproducibility_gejsv(filename, datatype, joba, jobu, jobv, jobr, jobt, jobp, m,
                                         n, A, lda, S, U, ldu, V, ldv, g_lwork, g_lrwork, g_liwork,
                                         params))
+    else if(FLA_SKIP_VALIDATION_MODE)
+    {
+        /* Skip validation for performance modes */
+        FLA_PRINT_TEST_STATUS(n, n, residual, err_thresh);
+    }
     else if(!FLA_EXTREME_CASE_TEST)
     {
         validate_gejsv(tst_api, joba, jobu, jobv, jobr, jobt, jobp, m, n, A, lda, S, S_test, U, ldu,

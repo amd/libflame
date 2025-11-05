@@ -381,7 +381,15 @@
            || same_char(params->BRT_char, 'L'))                                        \
         {                                                                              \
             storeFunction;                                                             \
-            validateFunction;                                                          \
+            if(!FLA_SKIP_VALIDATION_MODE)                                              \
+            {                                                                          \
+                validateFunction;                                                      \
+            }                                                                          \
+            else                                                                       \
+            {                                                                          \
+                residual = err_thresh;                                                 \
+                FLA_PRINT_TEST_STATUS(m, n, residual, err_thresh);                     \
+            }                                                                          \
         }                                                                              \
         else if(same_char(params->BRT_char, 'V') || same_char(params->BRT_char, 'M'))  \
         {                                                                              \

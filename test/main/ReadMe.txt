@@ -430,16 +430,46 @@ NOTE:
    Note:
    It is important to specify the seed when running BR tests between different runs/builds.
 
-15. Random Initialization Mode
+15. Test Mode Control
 
-   The test suite supports random initialization mode for generating test matrices with
-   random values.
+   The test suite supports different test modes that control both input matrix
+   initialization and output validation behavior.
 
-   This option is available through command line execution using the --random_init parameter.
+   This option is available through command line execution using the --test-mode parameter.
 
-   Example:
-   ./test_lapack.x GETRF d 100 100 100 10 --random_init=1
+   Available modes:
+   - default     : API-specific initialization + output validation (default, no flag needed)
+   - perf        : API-specific initialization + skip output validation
+   - random      : Random initialization + output validation
+   - random-perf : Random initialization + skip output validation
+
+   Examples:
+   # Default mode - standard correctness testing
+   ./test_lapack.x GETRF d 100 100 100 10
+
+   # Performance mode - skip validation for benchmarking
+   ./test_lapack.x GETRF d 100 100 100 10 --test-mode=perf
+
+   # Random mode - test correctness with random input matrices
+   ./test_lapack.x GETRF d 100 100 100 10 --test-mode=random
+
+   # Random performance mode - random input matrices without validation
+   ./test_lapack.x GETRF d 100 100 100 10 --test-mode=random-perf
+
+   Mode Behaviors:
+   ┌─────────────┬─────────────────┬─────────────────┬─────────────────────┐
+   │    Mode     │ Initialization  │   Validation    │      Purpose        │
+   ├─────────────┼─────────────────┼─────────────────┼─────────────────────┤
+   │ default     │ API-specific    │ Full validation │ Standard testing    │
+   │ perf        │ API-specific    │ Skipped         │ Performance only    │
+   │ random      │ Random matrices │ Full validation │ Random correctness  │
+   │ random-perf │ Random matrices │ Skipped         │ Random performance  │
+   └─────────────┴─────────────────┴─────────────────┴─────────────────────┘
 
    Note:
    - This mode is particularly useful for debugging and performance analysis
    - Random initialization can be combined with other test options like benchmark mode
+   - The following APIs are compatible only with specific input matrices,
+     so random initialization cannot be applied.
+     - HGEQZ, HSEQR, ORGQR, POTRF, POTRI, POTRS, GBTRF, GEHRD, GGHRD, GETRI,
+       SPFFRTX, SPFFRT2

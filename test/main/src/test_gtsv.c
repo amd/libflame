@@ -153,7 +153,7 @@ void fla_test_gtsv_experiment(char *tst_api, test_params_t *params, integer data
 
     if(!FLA_BRT_VERIFICATION_RUN)
     {
-        if(g_ext_fptr != NULL || FLA_EXTREME_CASE_TEST)
+        if(g_ext_fptr != NULL || FLA_EXTREME_CASE_TEST || !(FLA_RANDOM_INIT_MODE))
         {
             /* Initializing tridiagonal vectors */
             init_vector(datatype, dl, n - 1, i_one, g_ext_fptr, params->imatrix_char);
@@ -244,6 +244,11 @@ void fla_test_gtsv_experiment(char *tst_api, test_params_t *params, integer data
                       d_save, du_save, scal, params->imatrix_char, residual, params),
         check_reproducibility_base(filename, params, 1, 3, datatype, n, NRHS, B_save, ldb, datatype,
                                    n - 1, dl_save, datatype, n, d_save, datatype, n - 1, du_save))
+    else if(FLA_SKIP_VALIDATION_MODE)
+    {
+        /* Skip validation for performance modes */
+        FLA_PRINT_TEST_STATUS(n, n, residual, err_thresh);
+    }
     else if(!FLA_EXTREME_CASE_TEST)
     {
         validate_gtsv(tst_api, datatype, n, NRHS, B, ldb, B_save, xact, ldb, dl, d, du, dl_save,

@@ -59,7 +59,7 @@ void validate_gehrd(char *tst_api, integer n, integer ilo, integer ihi, void *A,
             fla_lapack_sorghr(&n, &ilo, &ihi, Q, &lda, tau, work, &lwork, &info);
             if(info < 0)
                 break;
-            extract_upper_hessenberg_matrix(datatype, n, A_test, lda);
+            extract_upper_hessenberg_matrix(datatype, n, A_test, lda, ilo, ihi);
             sgemm_("N", "N", &n, &n, &n, &s_one, Q, &lda, A_test, &lda, &s_zero, lambda, &n);
             sgemm_("N", "T", &n, &n, &n, &s_one, lambda, &n, Q, &lda, &s_n_one, A, &lda);
             norm = fla_lapack_slange("1", &n, &n, A, &lda, work);
@@ -91,7 +91,7 @@ void validate_gehrd(char *tst_api, integer n, integer ilo, integer ihi, void *A,
             fla_lapack_dorghr(&n, &ilo, &ihi, Q, &lda, tau, work, &lwork, &info);
             if(info < 0)
                 break;
-            extract_upper_hessenberg_matrix(datatype, n, A_test, lda);
+            extract_upper_hessenberg_matrix(datatype, n, A_test, lda, ilo, ihi);
             dgemm_("N", "N", &n, &n, &n, &d_one, Q, &lda, A_test, &lda, &d_zero, lambda, &n);
             dgemm_("N", "T", &n, &n, &n, &d_one, lambda, &n, Q, &lda, &d_n_one, A, &lda);
             norm = fla_lapack_dlange("1", &n, &n, A, &lda, work);
@@ -123,7 +123,7 @@ void validate_gehrd(char *tst_api, integer n, integer ilo, integer ihi, void *A,
             fla_lapack_cunghr(&n, &ilo, &ihi, Q, &lda, tau, work, &lwork, &info);
             if(info < 0)
                 break;
-            extract_upper_hessenberg_matrix(datatype, n, A_test, lda);
+            extract_upper_hessenberg_matrix(datatype, n, A_test, lda, ilo, ihi);
             cgemm_("N", "N", &n, &n, &n, &c_one, Q, &lda, A_test, &lda, &c_zero, lambda, &n);
             cgemm_("N", "C", &n, &n, &n, &c_one, lambda, &n, Q, &lda, &c_n_one, A, &lda);
             norm = fla_lapack_clange("1", &n, &n, A, &lda, work);
@@ -155,7 +155,7 @@ void validate_gehrd(char *tst_api, integer n, integer ilo, integer ihi, void *A,
             fla_lapack_zunghr(&n, &ilo, &ihi, Q, &lda, tau, work, &lwork, &info);
             if(info < 0)
                 break;
-            extract_upper_hessenberg_matrix(datatype, n, A_test, lda);
+            extract_upper_hessenberg_matrix(datatype, n, A_test, lda, ilo, ihi);
             zgemm_("N", "N", &n, &n, &n, &z_one, Q, &lda, A_test, &lda, &z_zero, lambda, &n);
             zgemm_("N", "C", &n, &n, &n, &z_one, lambda, &n, Q, &lda, &z_n_one, A, &lda);
             norm = fla_lapack_zlange("1", &n, &n, A, &lda, work);

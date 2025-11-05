@@ -147,8 +147,11 @@ void fla_test_potrf_experiment(char *tst_api, test_params_t *params, integer dat
     /* Skip input generation for BRT verification runs */
     if(!FLA_BRT_VERIFICATION_RUN)
     {
+
         if(g_ext_fptr != NULL || (FLA_EXTREME_CASE_TEST && !FLA_OVERFLOW_UNDERFLOW_TEST))
         {
+            /* NOTE: POTRF requires structured input;
+               Random matrix initialization is incompatible */
             /* Initialize input matrix with custom data */
             init_matrix(datatype, A, m, m, lda, g_ext_fptr, params->imatrix_char);
             if(params->imatrix_char != '\0')
@@ -194,6 +197,11 @@ void fla_test_potrf_experiment(char *tst_api, test_params_t *params, integer dat
         m, m, store_outputs_base(filename, params, 1, 0, datatype, m, m, A_test, lda),
         validate_potrf(tst_api, &uplo, m, A, A_test, lda, datatype, residual, params),
         check_reproducibility_base(filename, params, 1, 0, datatype, m, m, A_test, lda))
+    else if(FLA_SKIP_VALIDATION_MODE)
+    {
+        /* Skip validation for performance modes */
+        FLA_PRINT_TEST_STATUS(m, m, residual, err_thresh);
+    }
     else if(!FLA_EXTREME_CASE_TEST)
     {
         validate_potrf(tst_api, &uplo, m, A, A_test, lda, datatype, residual, params);

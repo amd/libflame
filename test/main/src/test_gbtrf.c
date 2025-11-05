@@ -215,6 +215,11 @@ void fla_test_gbtrf_experiment(char *tst_api, test_params_t *params, integer dat
         validate_gbtrf(tst_api, m, n, kl, ku, AB, AB_test, ldab, IPIV, datatype, residual, params),
         check_reproducibility_base(filename, params, 1, 1, datatype, m, n, AB_test, ldab, INTEGER,
                                    fla_min(m, n), IPIV))
+    else if(FLA_SKIP_VALIDATION_MODE)
+    {
+        /* Skip validation for performance modes */
+        FLA_PRINT_TEST_STATUS(m, n, residual, err_thresh);
+    }
     else if(!FLA_EXTREME_CASE_TEST)
     {
         validate_gbtrf(tst_api, m, n, kl, ku, AB, AB_test, ldab, IPIV, datatype, residual, params);

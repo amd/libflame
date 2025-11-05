@@ -304,6 +304,11 @@ void fla_test_ggevx_experiment(char *tst_api, test_params_t *params, integer dat
         check_bit_reproducibility_ggevx(filename, datatype, BALANC, JOBVL, JOBVR, SENSE, n, A, lda,
                                         B, ldb, alpha, alphar, alphai, beta, VL, ldvl, VR, ldvr,
                                         lscale, rscale, abnrm, bbnrm, rconde, rcondv, params))
+    else if(FLA_SKIP_VALIDATION_MODE)
+    {
+        /* Skip validation for performance modes */
+        FLA_PRINT_TEST_STATUS(n, n, residual, err_thresh);
+    }
     else if(!FLA_EXTREME_CASE_TEST)
     {
         if(same_char(JOBVL, 'V') || same_char(JOBVR, 'V'))

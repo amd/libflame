@@ -168,6 +168,8 @@ void fla_test_potrs_experiment(char *tst_api, test_params_t *params, integer dat
        expensive input generation since FLA_BRT_PROCESS_ macros load inputs from files */
     if(!FLA_BRT_VERIFICATION_RUN)
     {
+        /* NOTE: POTRS requires structured input;
+           Random matrix initialization is incompatible */
         /* Initialize input symmetric positive definite matrix A */
         reset_matrix(datatype, n, n, A, lda);
         if((!FLA_EXTREME_CASE_TEST) && (g_ext_fptr == NULL))
@@ -219,8 +221,9 @@ void fla_test_potrs_experiment(char *tst_api, test_params_t *params, integer dat
         n, nrhs, store_outputs_base(filename, params, 1, 0, datatype, n, nrhs, B_test, ldb),
         FLA_PRINT_TEST_STATUS(n, n, residual, err_thresh),
         check_reproducibility_base(filename, params, 1, 0, datatype, n, nrhs, B_test, ldb))
-    else if(FLA_RANDOM_INIT_MODE)
+    else if(FLA_SKIP_VALIDATION_MODE)
     {
+        /* Skip validation for performance modes */
         FLA_PRINT_TEST_STATUS(n, n, residual, err_thresh);
     }
     else if(!FLA_EXTREME_CASE_TEST)

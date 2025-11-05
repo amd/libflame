@@ -242,7 +242,7 @@ void fla_test_geevx_experiment(char *tst_api, test_params_t *params, integer dat
 
     if(!FLA_BRT_VERIFICATION_RUN)
     {
-        if(g_ext_fptr != NULL || (FLA_EXTREME_CASE_TEST))
+        if(g_ext_fptr != NULL || (FLA_EXTREME_CASE_TEST) || (FLA_RANDOM_INIT_MODE))
         {
             init_matrix(datatype, A, m, m, lda, g_ext_fptr, params->imatrix_char);
         }
@@ -313,6 +313,11 @@ void fla_test_geevx_experiment(char *tst_api, test_params_t *params, integer dat
         check_bit_reproducibility_geevx(filename, datatype, balanc, jobvl, jobvr, sense, m, A_test,
                                         lda, VL, ldvl, VR, ldvr, w, wr, wi, scale, abnrm, rconde,
                                         rcondv, g_lwork, params))
+    else if(FLA_SKIP_VALIDATION_MODE)
+    {
+        /* Skip validation for performance modes */
+        FLA_PRINT_TEST_STATUS(m, m, residual, err_thresh);
+    }
     else if(!FLA_EXTREME_CASE_TEST)
     {
         validate_geevx(tst_api, &jobvl, &jobvr, &sense, &balanc, m, A, A_test, lda, VL, ldvl, VR,

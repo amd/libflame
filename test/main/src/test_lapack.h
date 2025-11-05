@@ -103,6 +103,15 @@ typedef enum
     FLA_TIME_UNIT_SEC
 } fla_time_unit;
 
+/* Test mode enumeration */
+typedef enum
+{
+    FLA_TEST_MODE_DEFAULT = 0,       /* API-specific init + validation */
+    FLA_TEST_MODE_PERF = 1,         /* API-specific init + no validation */
+    FLA_TEST_MODE_RANDOM = 2,       /* Random init + validation */
+    FLA_TEST_MODE_RANDOM_PERF = 3   /* Random init + no validation */
+} fla_test_mode_t;
+
 // API categories
 #define LIN (1)
 #define EIG_SYM (2)
@@ -229,7 +238,12 @@ extern char fla_test_binary_name[MAX_BINARY_NAME_LENGTH + 1];
     (same_char(params->BRT_char, 'V') || same_char(params->BRT_char, 'M'))
 
 #define FLA_RANDOM_INIT_MODE \
-    (params->random_init == 1)
+    (params->test_mode == FLA_TEST_MODE_RANDOM || \
+     params->test_mode == FLA_TEST_MODE_RANDOM_PERF)
+
+#define FLA_SKIP_VALIDATION_MODE \
+    (params->test_mode == FLA_TEST_MODE_PERF || \
+     params->test_mode == FLA_TEST_MODE_RANDOM_PERF)
 
 /* Macro to check if a LAPACK API have different names for its
    (precision)variants and modify API display string
@@ -713,9 +727,8 @@ typedef struct
     run.  The actual repeats are calculated as follows:
         max(ceil(bench_duration/time_per_call), n_repeats) */
     double bench_duration;
-    /* Enables random initialization mode, which populates input matrices
-       with random values and skips validation of the output matrices */
-    integer random_init;
+    /* Test mode that controls both initialization and validation behavior */
+    fla_test_mode_t test_mode;
     double warmup_repeats;
     fla_stat_t stats_out[MAX_NUM_STATS];
     /* Values greater then outlier_multiplier*stddev + mean are

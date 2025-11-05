@@ -122,7 +122,7 @@ int main(int argc, char **argv)
     params.time_unit = FLA_TIME_UNIT_AUTO;
     params.outlier_multiplier = 0.0;
     params.dump_runtimes_file_name = NULL;
-    params.random_init = 0;
+    params.test_mode = FLA_TEST_MODE_DEFAULT;
 
     status = fla_parse_cmdline_args(&arg_count, argv, &params);
 
@@ -2061,37 +2061,59 @@ integer fla_parse_dump_runtimes_arg(integer argc, char **argv, test_params_t *pa
 }
 
 /*
- * This function checks if the argument "--random_init=<k>" is present in the command line.
- * If the argument is present, it sets the random_init flag in params.
- * This is a special mode for benchmark testing with random matrix initialization.
+ * This function checks if the argument "--test-mode=<mode>" is present in the command line.
+ * Supported modes:
+ *   - default: API-specific initialization + validation (default)
+ *   - perf: API-specific initialization + no validation
+ *   - random: Random initialization + validation
+ *   - random-perf: Random initialization + no validation
  *
  * @return
  *      0 if the argument is not found,
  *      1 if the argument is found and valid,
  *     -1 if the argument is found but invalid value is provided.
  */
-integer fla_parse_random_init_arg(integer argc, char **argv, test_params_t *params)
+integer fla_parse_test_mode_arg(integer argc, char **argv, test_params_t *params)
 {
-    const char *arg_str = "--random_init=";
+    const char *arg_str = "--test-mode=";
     integer arg_len = strlen(arg_str);
+    char *mode_str = NULL;
 
     /* Check if the argument is present in the command line. */
     for(integer i = 1; i < argc; ++i)
     {
         if(strncmp(argv[i], arg_str, arg_len) == 0)
         {
-            errno = 0; /* Reset errno before strtol */
-            params->random_init = strtol(argv[i] + arg_len, NULL, 10);
-            /* Checking any error during parsing */
-            /* Checking if random_init value is 0 or 1 */
-            if(errno != 0 || (params->random_init != 0 && params->random_init != 1))
+            mode_str = argv[i] + arg_len;
+
+            /* Parse the mode string */
+            if(strcmp(mode_str, "default") == 0)
             {
-                /* Invalid random_init value */
-                printf("\nError: Invalid random_init argument: %s\n", argv[i]);
-                printf("       Please provide 0 (disable) or 1 (enable).\n");
+                params->test_mode = FLA_TEST_MODE_DEFAULT;
+            }
+            else if(strcmp(mode_str, "perf") == 0)
+            {
+                params->test_mode = FLA_TEST_MODE_PERF;
+            }
+            else if(strcmp(mode_str, "random") == 0)
+            {
+                params->test_mode = FLA_TEST_MODE_RANDOM;
+            }
+            else if(strcmp(mode_str, "random-perf") == 0)
+            {
+                params->test_mode = FLA_TEST_MODE_RANDOM_PERF;
+            }
+            else
+            {
+                printf("\nError: Invalid test-mode argument: %s\n", argv[i]);
+                printf("       Available modes are:\n");
+                printf("         default     : API-specific initialization + validation (default)\n");
+                printf("         perf        : API-specific initialization + no validation\n");
+                printf("         random      : Random initialization + validation\n");
+                printf("         random-perf : Random initialization + no validation\n");
                 return -1;
             }
-            /* random_init value is valid */
+
             return 1;
         }
     }
@@ -2134,7 +2156,7 @@ bool fla_parse_cmdline_args(integer *argc, char **argv, test_params_t *params)
     parse_status = fla_parse_warmup_arg(*argc, argv, params);
     FLA_ARGS_PARSE_RESULT_HANDLER;
 
-    parse_status = fla_parse_random_init_arg(*argc, argv, params);
+    parse_status = fla_parse_test_mode_arg(*argc, argv, params);
     FLA_ARGS_PARSE_RESULT_HANDLER;
 
     /* If warmup is not provided and benchmark mode then set

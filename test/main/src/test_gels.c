@@ -192,7 +192,7 @@ void fla_test_gels_experiment(char *tst_api, test_params_t *params, integer data
         /* initialize input matrix */
         init_matrix(datatype, B, m_b, nrhs, ldb, g_ext_fptr, params->imatrix_char);
 
-        if(g_ext_fptr != NULL || (FLA_EXTREME_CASE_TEST))
+        if(g_ext_fptr != NULL || (FLA_EXTREME_CASE_TEST) || (FLA_RANDOM_INIT_MODE))
         {
             init_matrix(datatype, A, m, n, lda, g_ext_fptr, params->imatrix_char);
         }
@@ -256,6 +256,11 @@ void fla_test_gels_experiment(char *tst_api, test_params_t *params, integer data
                                         datatype, residual, params->imatrix_char, params),
                           check_reproducibility_base(filename, params, 2, 0, datatype, m, n, A_test,
                                                      lda, datatype, m_b, nrhs, B_test, ldb))
+    else if(FLA_SKIP_VALIDATION_MODE)
+    {
+        /* Skip validation for performance modes */
+        FLA_PRINT_TEST_STATUS(m, n, residual, err_thresh);
+    }
     else if(!FLA_EXTREME_CASE_TEST)
     {
         validate_gels(tst_api, &trans, m, n, nrhs, A, lda, B, ldb, B_test, datatype, residual,

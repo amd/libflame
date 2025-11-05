@@ -237,6 +237,11 @@ void fla_test_gebrd_experiment(char *tst_api, test_params_t *params, integer dat
                                    (fla_min(m, n) - 1), e, datatype, fla_min(m, n), tauq, datatype,
                                    fla_min(m, n), taup))
     /* API functionality validation */
+    else if(FLA_SKIP_VALIDATION_MODE)
+    {
+        /* Skip validation for performance modes */
+        FLA_PRINT_TEST_STATUS(n, n, residual, err_thresh);
+    }
     else if(!FLA_EXTREME_CASE_TEST)
     {
         /* Validate the GEBRD result */

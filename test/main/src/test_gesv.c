@@ -225,8 +225,9 @@ void fla_test_gesv_experiment(char *tst_api, test_params_t *params, integer data
                           check_reproducibility_base(filename, params, 2, 1, datatype, n, n, A_save,
                                                      lda, datatype, n, NRHS, B_save, ldb, INTEGER,
                                                      n, IPIV))
-    else if(FLA_RANDOM_INIT_MODE)
+    else if(FLA_SKIP_VALIDATION_MODE)
     {
+        /* Skip validation for performance modes */
         FLA_PRINT_TEST_STATUS(n, n, residual, err_thresh);
     }
     else if(!FLA_EXTREME_CASE_TEST)

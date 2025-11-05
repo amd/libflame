@@ -2846,7 +2846,7 @@ void pack_matrix_lt(integer datatype, void *A, void *B, integer N, integer lda)
 }
 
 /* Convert matrix to upper hessenberg form */
-void extract_upper_hessenberg_matrix(integer datatype, integer n, void *A, integer lda)
+void extract_upper_hessenberg_matrix(integer datatype, integer n, void *A, integer lda, integer ilo, integer ihi)
 {
     aocl_int64_t i;
 
@@ -2856,45 +2856,65 @@ void extract_upper_hessenberg_matrix(integer datatype, integer n, void *A, integ
         return;
     }
 
+    /* Convert 1-indexed ilo, ihi to 0-indexed */
+    integer ilo_idx = ilo - 1;
+    integer ihi_idx = ihi - 1;
+
     switch(datatype)
     {
         case FLOAT:
         {
-            /* Making elements below sub diagonal to Zero */
-            for(i = 0; i < n; i++)
+            /* Making elements below sub diagonal to Zero within the ilo:ihi range */
+            for(i = ilo_idx; i < ihi_idx; i++)
             {
-                float *p = &((float *)A)[(i + 2) + i * lda];
-                reset_vector(datatype, (void *)p, n - i - 2, 1);
+                integer num_elements = ihi_idx - i - 1;
+                if(num_elements > 0)
+                {
+                    float *p = &((float *)A)[(i + 2) + i * lda];
+                    reset_vector(datatype, (void *)p, num_elements, 1);
+                }
             }
             break;
         }
         case DOUBLE:
         {
-            /* Making elements below sub diagonal to Zero */
-            for(i = 0; i < n; i++)
+            /* Making elements below sub diagonal to Zero within the ilo:ihi range */
+            for(i = ilo_idx; i < ihi_idx; i++)
             {
-                double *p = &((double *)A)[(i + 2) + i * lda];
-                reset_vector(datatype, (void *)p, n - i - 2, 1);
+                integer num_elements = ihi_idx - i - 1;
+                if(num_elements > 0)
+                {
+                    double *p = &((double *)A)[(i + 2) + i * lda];
+                    reset_vector(datatype, (void *)p, num_elements, 1);
+                }
             }
             break;
         }
         case COMPLEX:
         {
-            /* Making elements below sub diagonal to Zero */
-            for(i = 0; i < n; i++)
+            /* Making elements below sub diagonal to Zero within the ilo:ihi range */
+            for(i = ilo_idx; i < ihi_idx; i++)
             {
-                scomplex *p = &((scomplex *)A)[(i + 2) + i * lda];
-                reset_vector(datatype, (void *)p, n - i - 2, 1);
+                integer num_elements = ihi_idx - i - 1;
+                if(num_elements > 0)
+                {
+                    scomplex *p = &((scomplex *)A)[(i + 2) + i * lda];
+                    reset_vector(datatype, (void *)p, num_elements, 1);
+                }
             }
             break;
         }
         case DOUBLE_COMPLEX:
         {
-            /* Making elements below sub diagonal to Zero */
-            for(i = 0; i < n; i++)
+            /* Making elements below sub diagonal to Zero within the ilo:ihi range */
+            for(i = ilo_idx; i < ihi_idx; i++)
             {
-                dcomplex *p = &((dcomplex *)A)[(i + 2) + i * lda];
-                reset_vector(datatype, (void *)p, n - i - 2, 1);
+                integer num_elements = ihi_idx - i - 1;
+                if(num_elements > 0)
+                {
+                    dcomplex *p = &((dcomplex *)A)[(i + 2) + i * lda];
+                    reset_vector(datatype, (void *)p, num_elements, 1);
+                }
             }
             break;
         }

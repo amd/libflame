@@ -183,7 +183,7 @@ void fla_test_gbtrs_experiment(char *tst_api, test_params_t *params, integer dat
         }
         else
         {
-            if(FLA_EXTREME_CASE_TEST)
+            if((FLA_EXTREME_CASE_TEST) && !(FLA_RANDOM_INIT_MODE))
             {
                 create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &A, n);
                 if((params->imatrix_char == 'A') || (params->imatrix_char == 'F'))
@@ -203,6 +203,8 @@ void fla_test_gbtrs_experiment(char *tst_api, test_params_t *params, integer dat
             }
             else
             {
+                /* NOTE: Random matrices may be singular/ill-conditioned causing gbtrf to fail.
+                   Generating random band storage matrix when FLA_RANDOM_INIT_MODE is enabled */
                 /* Initialize & convert random band matrix into band storage as per API need */
                 rand_band_storage_matrix(datatype, n, n, kl, ku, AB, ldab);
                 /* Initialize random B matrix */
@@ -260,6 +262,11 @@ void fla_test_gbtrs_experiment(char *tst_api, test_params_t *params, integer dat
     IF_FLA_BRT_VALIDATION(
         n, n, store_outputs_base(filename, params, 1, 0, datatype, n, nrhs, X, ldb), VALIDATE_GBTRS,
         check_reproducibility_base(filename, params, 1, 0, datatype, n, nrhs, X, ldb))
+    else if(FLA_SKIP_VALIDATION_MODE)
+    {
+        /* Skip validation for performance modes */
+        FLA_PRINT_TEST_STATUS(n, n, residual, err_thresh);
+    }
     else if(!FLA_EXTREME_CASE_TEST)
     {
         VALIDATE_GBTRS

@@ -236,6 +236,11 @@ void fla_test_labrd_experiment(char *tst_api, test_params_t *params, integer dat
                           check_bit_reproducibility_labrd(filename, datatype, m, n, nb, A_test, lda,
                                                           d, e, tauq, taup, X, ldx, Y, ldy, params))
     /* API functionality validation */
+    else if(FLA_SKIP_VALIDATION_MODE)
+    {
+        /* Skip validation for performance modes */
+        FLA_PRINT_TEST_STATUS(n, n, err_thresh, err_thresh);
+    }
     else if(!FLA_EXTREME_CASE_TEST)
     {
         validate_labrd(tst_api, m, n, nb, A, A_test, lda, d, e, tauq, taup, X, ldx, Y, ldy,

@@ -206,6 +206,11 @@ void fla_test_gecon_experiment(char *tst_api, test_params_t *params, integer dat
         validate_gecon(tst_api, datatype, norm, n, A, A_save, lda, residual, params->imatrix_char,
                        params),
         check_reproducibility_base(filename, params, 0, 1, get_realtype(datatype), 1, rcond))
+    else if(FLA_SKIP_VALIDATION_MODE)
+    {
+        /* Skip validation for performance modes */
+        FLA_PRINT_TEST_STATUS(n, n, residual, err_thresh);
+    }
     else if(!FLA_EXTREME_CASE_TEST)
     {
         validate_gecon(tst_api, datatype, norm, n, A, A_save, lda, residual, params->imatrix_char,

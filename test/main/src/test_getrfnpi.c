@@ -230,8 +230,9 @@ void fla_test_getrfnpi_experiment(char *tst_api, test_params_t *params, integer 
         validate_getrfnpi(tst_api, m, n, nfact, A, A_test, lda, IPIV, datatype, residual,
                           params->imatrix_char, params),
         check_reproducibility_base(filename, params, 1, 0, datatype, m, n, A_test, lda))
-    else if(FLA_RANDOM_INIT_MODE)
+    else if(FLA_SKIP_VALIDATION_MODE)
     {
+        /* Skip validation for performance modes */
         FLA_PRINT_TEST_STATUS(m, n, residual, err_thresh);
     }
     /* API functionality validation */

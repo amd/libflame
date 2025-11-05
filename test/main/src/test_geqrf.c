@@ -198,6 +198,11 @@ void fla_test_geqrf_experiment(char *tst_api, test_params_t *params, integer dat
         validate_geqrf(tst_api, m, n, A, A_test, lda, T, datatype, residual, params),
         check_reproducibility_base(filename, params, 1, 1, datatype, m, n, A_test, lda, datatype,
                                    fla_min(m, n), T))
+    else if(FLA_SKIP_VALIDATION_MODE)
+    {
+        /* Skip validation for performance modes */
+        FLA_PRINT_TEST_STATUS(m, n, residual, err_thresh);
+    }
     else if(!FLA_EXTREME_CASE_TEST)
     {
         validate_geqrf(tst_api, m, n, A, A_test, lda, T, datatype, residual, params);

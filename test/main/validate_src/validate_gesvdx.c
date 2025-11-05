@@ -76,15 +76,15 @@ void validate_gesvdx(char *tst_api, char *jobu, char *jobvt, char range, integer
                     norm1 = fla_lapack_slange("F", &ns, &ns, sigma, &min_m_n, work);
                 resid1 = norm1 / (eps * norm_sigma * fla_max(m, n));
             }
-            /* In case of g_ext_fptr the svd matrix is not called*/
-            if(g_ext_fptr == NULL)
+            /* Test 2: Verify functionality by comparing the known singular value (s_test)
+               with the API output (s) */
+            if(s_test != NULL)
             {
                 if((same_char(imatrix, 'O') || same_char(imatrix, 'U')) && (!same_char(range, 'V')))
                 {
                     *(float *)scal = 1.00 / *(float *)scal;
                     sscal_(&ns, scal, s, &i_one);
                 }
-                /* Test 2: To check functionality compute (s_test - s) */
                 norm_s = fla_lapack_slange("F", &ns, &i_one, s_test, &i_one, work);
                 saxpy_(&ns, &s_n_one, s, &i_one, s_test, &i_one);
                 norm2 = fla_lapack_slange("F", &ns, &i_one, s_test, &i_one, work);
@@ -140,9 +140,10 @@ void validate_gesvdx(char *tst_api, char *jobu, char *jobvt, char range, integer
                     norm1 = fla_lapack_dlange("F", &ns, &ns, sigma, &min_m_n, work);
                 resid1 = norm1 / (eps * norm_sigma * fla_max(m, n));
             }
-            if(g_ext_fptr == NULL)
+            /* Test 2: Verify functionality by comparing the known singular value (s_test)
+               with the API output (s) */
+            if(s_test != NULL)
             {
-                /* Test 2: To check functionality compute (s_test - s) */
                 if(same_char(imatrix, 'O') || same_char(imatrix, 'U'))
                 {
                     *(double *)scal = 1.00 / *(double *)scal;
@@ -202,9 +203,10 @@ void validate_gesvdx(char *tst_api, char *jobu, char *jobvt, char range, integer
                     norm1 = fla_lapack_clange("1", &ns, &ns, sigma, &min_m_n, work);
                 resid1 = norm1 / (eps * norm_sigma * fla_max(m, n));
             }
-            if(g_ext_fptr == NULL)
+            /* Test 2: Verify functionality by comparing the known singular value (s_test)
+               with the API output (s) */
+            if(s_test != NULL)
             {
-                /* Test 2: To check functionality compute (s_test - s) */
                 if(same_char(imatrix, 'O') || same_char(imatrix, 'U'))
                 {
                     /* Scaledown the sigma during overflow */
@@ -264,10 +266,10 @@ void validate_gesvdx(char *tst_api, char *jobu, char *jobvt, char range, integer
                 norm1 = fla_lapack_zlange("F", &ns, &ns, sigma, &min_m_n, work);
                 resid1 = norm1 / (eps * norm_sigma * fla_max(m, n));
             }
-            if(g_ext_fptr == NULL)
+            /* Test 2: Verify functionality by comparing the known singular value (s_test)
+               with the API output (s) */
+            if(s_test != NULL)
             {
-
-                /* Test 2: To check functionality compute (s_test - s) */
                 if(same_char(imatrix, 'O') || same_char(imatrix, 'U'))
                 {
                     /* Scaledown the sigma during overflow and underflow */

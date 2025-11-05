@@ -224,8 +224,9 @@ void fla_test_getrf_experiment(char *tst_api, test_params_t *params, integer dat
                                          params->imatrix_char, params),
                           check_reproducibility_base(filename, params, 1, 1, datatype, m, n, A_test,
                                                      lda, INTEGER, fla_min(m, n), IPIV))
-    else if(FLA_RANDOM_INIT_MODE)
+    else if(FLA_SKIP_VALIDATION_MODE)
     {
+        /* Skip validation for performance modes */
         FLA_PRINT_TEST_STATUS(m, n, residual, err_thresh);
     }
     /* API functionality validation */

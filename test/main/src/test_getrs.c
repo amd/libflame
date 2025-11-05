@@ -244,8 +244,9 @@ void fla_test_getrs_experiment(char *tst_api, test_params_t *params, integer dat
         validate_getrs(tst_api, &TRANS, n, NRHS, A, lda, B_save, ldb, X, datatype, residual,
                        params->imatrix_char, scal, params),
         check_reproducibility_base(filename, params, 1, 0, datatype, n, NRHS, X, ldb))
-    else if(FLA_RANDOM_INIT_MODE)
+    else if(FLA_SKIP_VALIDATION_MODE)
     {
+        /* Skip validation for performance modes */
         FLA_PRINT_TEST_STATUS(n, n, residual, err_thresh);
     }
     else if(!FLA_EXTREME_CASE_TEST)

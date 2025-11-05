@@ -119,7 +119,7 @@ void fla_test_spffrtx_experiment(char *tst_api, test_params_t *params, integer d
     /* Initialize input matrix only when not in BRT verification run mode */
     if(!FLA_BRT_VERIFICATION_RUN)
     {
-        if(g_ext_fptr != NULL || (FLA_EXTREME_CASE_TEST) || (FLA_RANDOM_INIT_MODE))
+        if(g_ext_fptr != NULL || (FLA_EXTREME_CASE_TEST))
         {
             /* Initialize input matrix with custom data */
             init_matrix(datatype, A, n, n, n, g_ext_fptr, params->imatrix_char);
@@ -159,8 +159,9 @@ void fla_test_spffrtx_experiment(char *tst_api, test_params_t *params, integer d
         pn, 1, store_outputs_base(filename, params, 1, 0, datatype, pn, 1, AP, 1),
         validate_spffrtx(tst_api, n, ncolm, A, AP, datatype, err_thresh, params),
         check_reproducibility_base(filename, params, 1, 0, datatype, pn, 1, AP, 1))
-    else if(FLA_RANDOM_INIT_MODE)
+    else if(FLA_SKIP_VALIDATION_MODE)
     {
+        /* Skip validation for performance modes */
         FLA_PRINT_TEST_STATUS(n, n, err_thresh, err_thresh);
     }
     else if(ncolm <= n && n > 0 && ncolm > 0)

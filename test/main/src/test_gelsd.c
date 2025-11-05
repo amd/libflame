@@ -194,7 +194,7 @@ void fla_test_gelsd_experiment(char *tst_api, test_params_t *params, integer dat
     {
         /* Initialize the test matrices */
         init_matrix(datatype, B, m, NRHS, ldb, g_ext_fptr, params->imatrix_char);
-        if(FLA_EXTREME_CASE_TEST || (g_ext_fptr != NULL))
+        if(FLA_EXTREME_CASE_TEST || (g_ext_fptr != NULL) || (FLA_RANDOM_INIT_MODE))
         {
             init_matrix(datatype, A, m, n, lda, g_ext_fptr, params->imatrix_char);
         }
@@ -262,6 +262,11 @@ void fla_test_gelsd_experiment(char *tst_api, test_params_t *params, integer dat
                           check_reproducibility_base(filename, params, 1, 1, datatype, n, NRHS,
                                                      B_save, ldb, get_realtype(datatype),
                                                      fla_min(m, n), S))
+    else if(FLA_SKIP_VALIDATION_MODE)
+    {
+        /* Skip validation for performance modes */
+        FLA_PRINT_TEST_STATUS(m, n, residual, err_thresh);
+    }
     else if(!FLA_EXTREME_CASE_TEST)
     {
         validate_gelsd(tst_api, m, n, NRHS, A, lda, B, ldb, S, B_save, rcond, &rank, datatype,

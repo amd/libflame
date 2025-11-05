@@ -360,7 +360,8 @@ void convert_upper_hessenberg(integer datatype, integer n, void *A, integer lda)
 /* Pack a symmetric matrix in column first order */
 void pack_matrix_lt(integer datatype, void *A, void *B, integer N, integer lda);
 /* Convert matrix to upper hessenberg form */
-void extract_upper_hessenberg_matrix(integer datatype, integer n, void *A, integer lda);
+void extract_upper_hessenberg_matrix(integer datatype, integer n, void *A, integer lda,
+                                     integer ilo, integer ihi);
 /* Convert matrix according to ILO and IHI values */
 void get_generic_triangular_matrix(integer datatype, integer N, void *A, integer LDA, integer ilo,
                                    integer ihi, integer AInitialized);

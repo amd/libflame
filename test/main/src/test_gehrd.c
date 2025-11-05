@@ -207,6 +207,11 @@ void fla_test_gehrd_experiment(char *tst_api, test_params_t *params, integer dat
         validate_gehrd(tst_api, n, ilo, ihi, A, A_Test, lda, tau, datatype, residual, params),
         check_reproducibility_base(filename, params, 1, 1, datatype, n, n, A_Test, lda, datatype,
                                    n - 1, tau))
+    else if(FLA_SKIP_VALIDATION_MODE)
+    {
+        /* Skip validation for performance modes */
+        FLA_PRINT_TEST_STATUS(n, n, residual, err_thresh);
+    }
     else if(!FLA_EXTREME_CASE_TEST)
     {
         validate_gehrd(tst_api, n, ilo, ihi, A, A_Test, lda, tau, datatype, residual, params);

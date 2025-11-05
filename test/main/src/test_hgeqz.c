@@ -272,6 +272,8 @@ void fla_test_hgeqz_experiment(char *tst_api, test_params_t *params, integer dat
         }
         else
         {
+            /* NOTE: HGEQZ requires structured input;
+               Random matrix initialization is incompatible */
             /* Convert matrix according to ILO and IHI values */
             get_generic_triangular_matrix(datatype, n, A, ldh, ilo, ihi, false);
             /* Initialize matrix with random values */
@@ -474,6 +476,11 @@ void fla_test_hgeqz_experiment(char *tst_api, test_params_t *params, integer dat
         check_bit_reproducibility_hgeqz(filename, datatype, job, compq, compz, n, ilo, ihi, H_test,
                                         ldh, T_test, ldt, alpha, alphar, alphai, beta, Q_test, ldq,
                                         Z_test, ldz, params))
+    else if(FLA_SKIP_VALIDATION_MODE)
+    {
+        /* Skip validation for performance modes */
+        FLA_PRINT_TEST_STATUS(n, n, residual, err_thresh);
+    }
     else if(!FLA_EXTREME_CASE_TEST)
     {
         /* If job=E, validate eigen values from the first and second api calls */

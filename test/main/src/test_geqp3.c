@@ -210,6 +210,11 @@ void fla_test_geqp3_experiment(char *tst_api, test_params_t *params, integer dat
                           check_reproducibility_base(filename, params, 1, 2, datatype, m, n, A_test,
                                                      lda, datatype, fla_min(m, n), T, INTEGER, n,
                                                      jpvt))
+    else if(FLA_SKIP_VALIDATION_MODE)
+    {
+        /* Skip validation for performance modes */
+        FLA_PRINT_TEST_STATUS(m, n, residual, err_thresh);
+    }
     else if(!FLA_EXTREME_CASE_TEST)
     {
         validate_geqp3(tst_api, m, n, A, A_test, lda, jpvt, T, datatype, residual,

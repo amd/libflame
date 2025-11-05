@@ -415,6 +415,11 @@ void fla_test_gghrd_experiment(char *tst_api, test_params_t *params, integer dat
                           check_bit_reproducibility_gghrd(filename, datatype, compq, compz, n, ilo,
                                                           ihi, A, lda, B, ldb, Q, ldq, Z, ldz,
                                                           params))
+    else if(FLA_SKIP_VALIDATION_MODE)
+    {
+        /* Skip validation for performance modes */
+        FLA_PRINT_TEST_STATUS(n, n, residual, err_thresh);
+    }
     else if(!FLA_EXTREME_CASE_TEST)
     {
         VALIDATE_GGHRD

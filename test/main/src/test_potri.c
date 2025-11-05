@@ -154,6 +154,8 @@ void fla_test_potri_experiment(char *tst_api, test_params_t *params, integer dat
      * from files */
     if(!FLA_BRT_VERIFICATION_RUN)
     {
+        /* NOTE: POTRI requires structured input;
+           Random matrix initialization is incompatible */
         if(g_ext_fptr != NULL || (FLA_EXTREME_CASE_TEST && !FLA_OVERFLOW_UNDERFLOW_TEST))
         {
             /* Initialize input matrix with custom data */
@@ -197,8 +199,9 @@ void fla_test_potri_experiment(char *tst_api, test_params_t *params, integer dat
         n, n, store_outputs_base(filename, params, 1, 0, datatype, n, n, A_test, lda),
         VALIDATE_POTRI,
         check_reproducibility_base(filename, params, 1, 0, datatype, n, n, A_test, lda))
-    else if(FLA_RANDOM_INIT_MODE)
+    else if(FLA_SKIP_VALIDATION_MODE)
     {
+        /* Skip validation for performance modes */
         FLA_PRINT_TEST_STATUS(n, n, residual, err_thresh);
     }
     else if(!FLA_EXTREME_CASE_TEST)

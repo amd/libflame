@@ -246,6 +246,15 @@ LAPACK_gebrd(d)
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dgebrd inputs: m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS "", *m, *n,
                       *ldim_A);
+#if FLA_ENABLE_AMD_OPT
+    if(*m <= FLA_DGEBRD_SMALL_SIZE_THRESH && *n <= FLA_DGEBRD_SMALL_SIZE_THRESH)
+    {
+        lapack_dgebrd(m, n, buff_A, ldim_A, buff_d, buff_e, buff_tu, buff_tv, buff_w, lwork, info);
+        AOCL_DTL_TRACE_LOG_EXIT
+        return;
+    }
+    else
+#endif
     {
         LAPACK_RETURN_CHECK_VAR1(dgebrd_check(m, n, buff_A, ldim_A, buff_d, buff_e, buff_tu,
                                               buff_tv, buff_w, lwork, info),
@@ -341,6 +350,15 @@ LAPACK_gebd2(d)
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dgebd2 inputs: m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS "", *m, *n,
                       *ldim_A);
+#if FLA_ENABLE_AMD_OPT
+    if(*m <= FLA_DGEBD2_SMALL_SIZE_THRESH && *n <= FLA_DGEBD2_SMALL_SIZE_THRESH)
+    {
+        lapack_dgebd2(m, n, buff_A, ldim_A, buff_d, buff_e, buff_tu, buff_tv, buff_w, info);
+        AOCL_DTL_TRACE_LOG_EXIT
+        return;
+    }
+    else
+#endif
     {
         LAPACK_RETURN_CHECK_VAR1(
             dgebd2_check(m, n, buff_A, ldim_A, buff_d, buff_e, buff_tu, buff_tv, buff_w, info),

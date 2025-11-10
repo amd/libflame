@@ -247,6 +247,13 @@ LAPACK_orgbr(d, org)
     AOCL_DTL_SNPRINTF("dorgbr inputs: vect %c, m %" FLA_IS ", n %" FLA_IS ", k %" FLA_IS
                       ", lda %" FLA_IS "",
                       *vect, *m, *n, *k, *ldim_A);
+#if FLA_ENABLE_AMD_OPT
+    {
+        lapack_dorgbr(vect, m, n, k, buff_A, ldim_A, buff_t, buff_w, lwork, info);
+        AOCL_DTL_TRACE_LOG_EXIT
+        return;
+    }
+#else
     {
         LAPACK_RETURN_CHECK_VAR1(
             dorgbr_check(vect, m, n, k, buff_A, ldim_A, buff_t, buff_w, lwork, info), fla_error)
@@ -260,6 +267,7 @@ LAPACK_orgbr(d, org)
     }
     AOCL_DTL_TRACE_LOG_EXIT
     return;
+#endif
 }
 #ifdef FLA_LAPACK2FLAME_SUPPORT_COMPLEX
 LAPACK_orgbr(c, ung)

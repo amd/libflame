@@ -165,7 +165,7 @@ extern int matrix_layout;
 #define TRIANGULAR_DIAG_MIN 1.0
 #define TRIANGULAR_DIAG_MAX 2.0
 #define TRIANGULAR_OFFDIAG_MIN -0.01
-#define TRIANGULAR_OFFDIAG_MAX  0.01
+#define TRIANGULAR_OFFDIAG_MAX 0.01
 
 #if defined(FLA_ENABLE_ILP64)
 #ifdef _WIN32
@@ -599,4 +599,6 @@ void get_stddev_of_array(integer datatype, void *A, void *stddev, integer n);
 void get_non_singular_triangular_matrix(char *uplo, integer datatype, integer m, integer n, void *A,
                                         integer lda, enum TRIANGULAR_MATRIX_DIAG_TYPE diag_type);
 
+/* Case-insensitive string comparison of given two strings*/
+logical same_string(const char *str_a, const char *str_b);
 #endif // TEST_COMMON_H

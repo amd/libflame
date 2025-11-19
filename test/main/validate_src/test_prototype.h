@@ -428,6 +428,11 @@
 #define fla_lapack_dtrtrs DTRTRS_
 #define fla_lapack_ctrtrs CTRTRS_
 #define fla_lapack_ztrtrs ZTRTRS_
+
+#define fla_lapack_sgeqpf SGEQPF_
+#define fla_lapack_dgeqpf DGEQPF_
+#define fla_lapack_cgeqpf CGEQPF_
+#define fla_lapack_zgeqpf ZGEQPF_
 /* Benchmark only APIs */
 #define fla_lapack_sgbsv SGBSV_
 #define fla_lapack_dgbsv DGBSV_
@@ -831,6 +836,11 @@
 #define fla_lapack_dtrtrs DTRTRS
 #define fla_lapack_ctrtrs CTRTRS
 #define fla_lapack_ztrtrs ZTRTRS
+
+#define fla_lapack_sgeqpf SGEQPF
+#define fla_lapack_dgeqpf DGEQPF
+#define fla_lapack_cgeqpf CGEQPF
+#define fla_lapack_zgeqpf ZGEQPF
 
 /* Benchmark only APIs */
 #define fla_lapack_sgbsv SGBSV
@@ -1236,6 +1246,11 @@
 #define fla_lapack_ctrtrs ctrtrs
 #define fla_lapack_ztrtrs ztrtrs
 
+#define fla_lapack_sgeqpf sgeqpf
+#define fla_lapack_dgeqpf dgeqpf
+#define fla_lapack_cgeqpf cgeqpf
+#define fla_lapack_zgeqpf zgeqpf
+
 /* Benchmark only APIs */
 #define fla_lapack_sgbsv sgbsv
 #define fla_lapack_dgbsv dgbsv
@@ -1640,6 +1655,11 @@
 #define fla_lapack_dtrtrs dtrtrs_
 #define fla_lapack_ctrtrs ctrtrs_
 #define fla_lapack_ztrtrs ztrtrs_
+
+#define fla_lapack_sgeqpf sgeqpf_
+#define fla_lapack_dgeqpf dgeqpf_
+#define fla_lapack_cgeqpf cgeqpf_
+#define fla_lapack_zgeqpf zgeqpf_
 
 /* Benchmark only APIs */
 #define fla_lapack_sgbsv sgbsv_

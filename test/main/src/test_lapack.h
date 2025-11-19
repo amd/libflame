@@ -437,6 +437,10 @@ typedef struct Lin_solver_paramlist_t
     char equed_porfsx; // Must be 'N', 'Y'.
     char norm_gbcon; // norm param for gbcon API
     char side; // Left 'L' or Right 'R'
+
+    // GEQP3/GEQPF mode flag (per-test) ---
+    // 0 => GEQP3, 1 => GEQPF (deprecated)
+    int geqpf_mode;
 } Lin_solver_paramlist;
 
 /* struct to hold eigen parameters */

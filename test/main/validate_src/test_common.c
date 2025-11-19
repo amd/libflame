@@ -792,8 +792,8 @@ void copy_matrix(integer datatype, char *uplo, integer M, integer N, void *A, in
         {
             for(aocl_int64_t i = 0; i < N; i++)
             {
-                memcpy((char *)B + (i * (aocl_int64_t) LDB) * element_size, (char *)A + (i * LDA) * element_size,
-                       M * element_size);
+                memcpy((char *)B + (i * (aocl_int64_t)LDB) * element_size,
+                       (char *)A + (i * LDA) * element_size, M * element_size);
             }
         }
     }
@@ -8519,4 +8519,36 @@ void get_non_singular_triangular_matrix(char *uplo, integer datatype, integer m,
         default:
             break;
     }
+}
+
+/*
+ * The same_string function performs a case-insensitive comparison of
+ * two input strings and returns true (1) if they are equal.
+ * It utilizes the existing same_char function for character-by-character comparison.
+ *
+ * Parameters:
+ *   str_a - First string to compare (can be NULL)
+ *   str_b - Second string to compare (can be NULL)
+ *
+ * Returns:
+ *   1 if strings are equal (case-insensitive)
+ *   0 if strings are different or if either is NULL
+ */
+logical same_string(const char *str_a, const char *str_b)
+{
+    /* Handle NULL cases */
+    if(!str_a || !str_b)
+        return 0;
+
+    /* Compare characters using existing same_char function */
+    while(*str_a && *str_b)
+    {
+        if(!same_char(*str_a, *str_b))
+            return 0;
+        ++str_a;
+        ++str_b;
+    }
+
+    /* Both strings must end at the same position */
+    return (*str_a == '\0' && *str_b == '\0') ? 1 : 0;
 }

@@ -64,6 +64,7 @@ void fla_test_potri(integer argc, char **argv, test_params_t *params);
 void fla_test_gebrd(integer argc, char **argv, test_params_t *params);
 void fla_test_trtri(integer argc, char **argv, test_params_t *params);
 void fla_test_trtrs(integer argc, char **argv, test_params_t *params);
+void fla_test_geqpf(integer argc, char **argv, test_params_t *params);
 /* only performance benchmarking */
 void fla_test_gbsv(integer argc, char **argv, test_params_t *params);
 void fla_test_getrf2(integer argc, char **argv, test_params_t *params);
@@ -119,6 +120,7 @@ OPERATIONS API_test_functions[]
        {LIN_ID, "ormlq", fla_test_ormlq},     {LIN_ID, "unmlq", fla_test_ormlq},
        {LIN_ID, "potri", fla_test_potri},     {LIN_ID, "gebrd", fla_test_gebrd},
        {LIN_ID, "trtri", fla_test_trtri},     {LIN_ID, "trtrs", fla_test_trtrs},
+       {LIN_ID, "geqpf", fla_test_geqpf},
        /* only performance benchmarking */
        {LIN_ID, "gbsv", fla_test_gbsv},       {LIN_ID, "getrf2", fla_test_getrf2},
        {LIN_ID, "getf2", fla_test_getf2},     {LIN_ID, "gbtf2", fla_test_gbtf2},

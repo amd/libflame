@@ -54,4 +54,5 @@ ${CMAKE_CURRENT_SOURCE_DIR}/invoke_lapacke_potri.c
 ${CMAKE_CURRENT_SOURCE_DIR}/invoke_lapacke_gebrd.c
 ${CMAKE_CURRENT_SOURCE_DIR}/invoke_lapacke_trtri.c
 ${CMAKE_CURRENT_SOURCE_DIR}/invoke_lapacke_trtrs.c
+${CMAKE_CURRENT_SOURCE_DIR}/invoke_lapacke_geqpf.c
 )

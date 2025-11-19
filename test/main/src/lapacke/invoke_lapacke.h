@@ -130,4 +130,6 @@ integer invoke_lapacke_trtri(integer datatype, int layout, char uplo, char diag,
                              integer lda);
 integer invoke_lapacke_trtrs(integer datatype, int layout, char *uplo, char *trans,
      char *diag, integer n, integer nrhs, void *A, integer lda, void *b, integer ldb);
+integer invoke_lapacke_geqpf(integer datatype, int layout, integer m, integer n, void *a,
+                             integer lda, integer *jpvt, void *tau);
 #endif

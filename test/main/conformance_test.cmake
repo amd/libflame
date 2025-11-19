@@ -347,6 +347,9 @@ set(NEGATIVE_TEST_CASES
             "trtrs sdcz L T N 10 -1 1 10 1 --einfo=-5"
             "trtrs sdcz U T N 10 1 1 10 1 --einfo=-7"
             "trtrs sdcz L T N 10 1 10 1 1 --einfo=-9"
+            "geqpf sdcz -10 10 10 1 --einfo=-1"
+            "geqpf sdcz 10 -10 10 1 --einfo=-2"
+            "geqpf sdcz 10 10 -10 1 --einfo=-4"
             )
 
 set(CORNER_TEST_CASES
@@ -570,6 +573,9 @@ set(CORNER_TEST_CASES
             "trtri sdcz U N 0 10 1"
             "trtrs sdcz L T N 0 1 10 1 1"
             "trtrs sdcz L T N 20 0 20 20 1"
+            "geqpf sdcz 0 0 10 1 --einfo=0"
+            "geqpf sdcz 0 10 10 1 --einfo=0"
+            "geqpf sdcz 10 0 10 1 --einfo=0"
         )
 
 set(MIN_WORK_TEST_CASES "gehrd sdcz 10 1 5 10 10 1 --einfo=0"
@@ -1605,6 +1611,12 @@ set(EXTREMEVALUE_TEST_CASES
             "trtrs sdcz U N U 20 1 20 20 1 --imatrix=A"
             "trtrs sdcz U N U 20 1 20 20 1 --imatrix=F"
             "trtrs sdcz U N U 20 1 20 20 1 --imatrix=I"
+            "geqpf sdcz 17 27 17 1 --imatrix=A"
+            "geqpf sdcz 17 27 17 1 --imatrix=F"
+            "geqpf sdcz 210 210 210 1 --imatrix=A"
+            "geqpf sdcz 210 210 210 1 --imatrix=F"
+            "geqpf sdcz 58 80 58 1 --imatrix=I"
+            "geqpf sdcz 58 80 58 1 --imatrix=N"
             )
 
 set(TEST_NUM 1)

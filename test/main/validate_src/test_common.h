@@ -217,6 +217,10 @@ extern int matrix_layout;
 #define FLA_IS_LAPACKE_INTERFACE(interfacetype) \
     (interfacetype == LAPACKE_ROW_TEST || interfacetype == LAPACKE_COLUMN_TEST)
 
+#define FLA_COMPUTE_RESIDUAL(datatype, resid, norm, eps, norm_base, m) \
+        if((((datatype == FLOAT) || (datatype == COMPLEX)) && (norm_base > 0.f)) || (((datatype == DOUBLE) || (datatype == DOUBLE_COMPLEX)) && (norm_base > 0.))) \
+            resid = norm / (eps * norm_base * m);
+
 /* Max function with NAN checks */
 double fla_test_max(double v1, double v2);
 

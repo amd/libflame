@@ -70,7 +70,7 @@ void validate_geevx(char *tst_api, char *jobvl, char *jobvr, char *sense, char *
                 sgemm_("N", "N", &m, &m, &m, &s_one, VR, &ldvr, lambda, &m, &s_n_one, Vlambda, &m);
                 /* To handle large size values (3.40E+38) nrm2 is used */
                 compute_matrix_norm(datatype, NORM, m, m, Vlambda, m, &norm, imatrix, work);
-                resid1 = norm / (eps * norm_A * (float)m);
+                FLA_COMPUTE_RESIDUAL(datatype, resid1, norm, eps, norm_A, m);
             }
             if(same_char(*jobvl, 'V'))
             {
@@ -83,7 +83,7 @@ void validate_geevx(char *tst_api, char *jobvl, char *jobvr, char *sense, char *
                 sgemm_("N", "C", &m, &m, &m, &s_one, VL, &ldvl, lambda, &m, &s_n_one, Vlambda, &m);
                 /* To handle large size values (3.40E+38) nrm2 is used */
                 compute_matrix_norm(datatype, NORM, m, m, Vlambda, m, &norm, imatrix, work);
-                resid2 = norm / (eps * norm_A * (float)m);
+                FLA_COMPUTE_RESIDUAL(datatype, resid2, norm, eps, norm_A, m);
             }
             if(wr_in != NULL && wi_in != NULL)
             {
@@ -98,12 +98,12 @@ void validate_geevx(char *tst_api, char *jobvl, char *jobvr, char *sense, char *
                 compute_matrix_norm(datatype, NORM, m, i_one, wr_in, i_one, &norm_W, imatrix, work);
                 saxpy_(&m, &s_n_one, wr, &i_one, wr_in, &i_one);
                 compute_matrix_norm(datatype, NORM, m, i_one, wr_in, i_one, &norm, imatrix, work);
-                resid3 = norm / (eps * norm_W * m);
+                FLA_COMPUTE_RESIDUAL(datatype, resid3, norm, eps, norm_W, m);
 
                 compute_matrix_norm(datatype, NORM, m, i_one, wi_in, i_one, &norm_W, imatrix, work);
                 saxpy_(&m, &s_n_one, wi, &i_one, wi_in, &i_one);
                 compute_matrix_norm(datatype, NORM, m, i_one, wi_in, i_one, &norm, imatrix, work);
-                resid4 = norm / (eps * norm_W * m);
+                FLA_COMPUTE_RESIDUAL(datatype, resid4, norm, eps, norm_W, m);
             }
             break;
         }
@@ -124,7 +124,7 @@ void validate_geevx(char *tst_api, char *jobvl, char *jobvr, char *sense, char *
                 dgemm_("N", "N", &m, &m, &m, &d_one, VR, &ldvr, lambda, &m, &d_n_one, Vlambda, &m);
                 /* To handle large size values (1.79E+308) nrm2 is used */
                 compute_matrix_norm(datatype, NORM, m, m, Vlambda, m, &norm, imatrix, work);
-                resid1 = norm / (eps * norm_A * (double)m);
+                FLA_COMPUTE_RESIDUAL(datatype, resid1, norm, eps, norm_A, m);
             }
             if(same_char(*jobvl, 'V'))
             {
@@ -137,7 +137,7 @@ void validate_geevx(char *tst_api, char *jobvl, char *jobvr, char *sense, char *
                 dgemm_("N", "C", &m, &m, &m, &d_one, VL, &ldvl, lambda, &m, &d_n_one, Vlambda, &m);
                 /* To handle large size values (1.79E+308) nrm2 is used */
                 compute_matrix_norm(datatype, NORM, m, m, Vlambda, m, &norm, imatrix, work);
-                resid2 = norm / (eps * norm_A * (double)m);
+                FLA_COMPUTE_RESIDUAL(datatype, resid2, norm, eps, norm_A, m);
             }
             if(wr_in != NULL && wi_in != NULL)
             {
@@ -152,12 +152,12 @@ void validate_geevx(char *tst_api, char *jobvl, char *jobvr, char *sense, char *
                 compute_matrix_norm(datatype, NORM, m, i_one, wr_in, i_one, &norm_W, imatrix, work);
                 daxpy_(&m, &d_n_one, wr, &i_one, wr_in, &i_one);
                 compute_matrix_norm(datatype, NORM, m, i_one, wr_in, i_one, &norm, imatrix, work);
-                resid3 = norm / (eps * norm_W * m);
+                FLA_COMPUTE_RESIDUAL(datatype, resid3, norm, eps, norm_W, m);
 
                 compute_matrix_norm(datatype, NORM, m, i_one, wi_in, i_one, &norm_W, imatrix, work);
                 daxpy_(&m, &d_n_one, wi, &i_one, wi_in, &i_one);
                 compute_matrix_norm(datatype, NORM, m, i_one, wi_in, i_one, &norm, imatrix, work);
-                resid4 = norm / (eps * norm_W * m);
+                FLA_COMPUTE_RESIDUAL(datatype, resid4, norm, eps, norm_W, m);
             }
             break;
         }
@@ -183,7 +183,7 @@ void validate_geevx(char *tst_api, char *jobvl, char *jobvr, char *sense, char *
                 cgemm_("N", "N", &m, &m, &m, &c_one, VR, &ldvr, lambda, &m, &c_n_one, Vlambda, &m);
                 /* To handle large size values (3.40E+38) nrm2 is used */
                 compute_matrix_norm(datatype, NORM, m, m, Vlambda, m, &norm, imatrix, work);
-                resid1 = norm / (eps * norm_A * (float)m);
+                FLA_COMPUTE_RESIDUAL(datatype, resid1, norm, eps, norm_A, m);
             }
             if(same_char(*jobvl, 'V'))
             {
@@ -196,7 +196,7 @@ void validate_geevx(char *tst_api, char *jobvl, char *jobvr, char *sense, char *
                 cgemm_("N", "C", &m, &m, &m, &c_one, VL, &ldvl, lambda, &m, &c_n_one, Vlambda, &m);
                 /* To handle large size values (3.40E+38) nrm2 is used */
                 compute_matrix_norm(datatype, NORM, m, m, Vlambda, m, &norm, imatrix, work);
-                resid2 = norm / (eps * norm_A * (float)m);
+                FLA_COMPUTE_RESIDUAL(datatype, resid2, norm, eps, norm_A, m);
             }
             if(wr_in != NULL)
             {
@@ -211,7 +211,7 @@ void validate_geevx(char *tst_api, char *jobvl, char *jobvr, char *sense, char *
                 compute_matrix_norm(datatype, NORM, m, i_one, wr_in, i_one, &norm_W, imatrix, work);
                 caxpy_(&m, &c_n_one, w, &i_one, wr_in, &i_one);
                 compute_matrix_norm(datatype, NORM, m, i_one, wr_in, i_one, &norm, imatrix, work);
-                resid3 = norm / (eps * norm_W * m);
+                FLA_COMPUTE_RESIDUAL(datatype, resid3, norm, eps, norm_W, m);
             }
             break;
         }
@@ -236,7 +236,7 @@ void validate_geevx(char *tst_api, char *jobvl, char *jobvr, char *sense, char *
                 zgemm_("N", "N", &m, &m, &m, &z_one, VR, &ldvr, lambda, &m, &z_n_one, Vlambda, &m);
                 /* To handle large size values (1.79E+308) nrm2 is used */
                 compute_matrix_norm(datatype, NORM, m, m, Vlambda, m, &norm, imatrix, work);
-                resid1 = norm / (eps * norm_A * (double)m);
+                FLA_COMPUTE_RESIDUAL(datatype, resid1, norm, eps, norm_A, m);
             }
             if(same_char(*jobvl, 'V'))
             {
@@ -249,7 +249,7 @@ void validate_geevx(char *tst_api, char *jobvl, char *jobvr, char *sense, char *
                 zgemm_("N", "C", &m, &m, &m, &z_one, VL, &ldvl, lambda, &m, &z_n_one, Vlambda, &m);
                 /* To handle large size values (1.79E+308) nrm2 is used */
                 compute_matrix_norm(datatype, NORM, m, m, Vlambda, m, &norm, imatrix, work);
-                resid2 = norm / (eps * norm_A * (double)m);
+                FLA_COMPUTE_RESIDUAL(datatype, resid2, norm, eps, norm_A, m);
             }
             if(wr_in != NULL)
             {
@@ -264,7 +264,7 @@ void validate_geevx(char *tst_api, char *jobvl, char *jobvr, char *sense, char *
                 compute_matrix_norm(datatype, NORM, m, i_one, wr_in, i_one, &norm_W, imatrix, work);
                 zaxpy_(&m, &z_n_one, w, &i_one, wr_in, &i_one);
                 compute_matrix_norm(datatype, NORM, m, i_one, wr_in, i_one, &norm, imatrix, work);
-                resid3 = norm / (eps * norm_W * m);
+                FLA_COMPUTE_RESIDUAL(datatype, resid3, norm, eps, norm_W, m);
             }
             break;
         }

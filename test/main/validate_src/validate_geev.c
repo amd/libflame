@@ -85,7 +85,7 @@ void validate_geev(char *tst_api, char *jobvl, char *jobvr, integer m, void *A, 
                 }
                 else
                     norm = fla_lapack_slange("F", &m, &m, Vlambda, &m, work);
-                resid1 = norm / (eps * norm_A * (float)m);
+                FLA_COMPUTE_RESIDUAL(datatype, resid1, norm, eps, norm_A, m);
             }
             if(same_char(*jobvl, 'V'))
             {
@@ -118,7 +118,7 @@ void validate_geev(char *tst_api, char *jobvl, char *jobvr, integer m, void *A, 
                 }
                 else
                     norm = fla_lapack_slange("F", &m, &m, Vlambda, &m, work);
-                resid2 = norm / (eps * norm_A * (float)m);
+                FLA_COMPUTE_RESIDUAL(datatype, resid2, norm, eps, norm_A, m);
             }
             if(wr_in != NULL && wi_in != NULL)
             {
@@ -133,12 +133,12 @@ void validate_geev(char *tst_api, char *jobvl, char *jobvr, integer m, void *A, 
                 norm_W = fla_lapack_slange("1", &m, &i_one, wr_in, &i_one, work);
                 saxpy_(&m, &s_n_one, wr, &i_one, wr_in, &i_one);
                 norm = fla_lapack_slange("1", &m, &i_one, wr_in, &i_one, work);
-                resid3 = norm / (eps * norm_W * m);
+                FLA_COMPUTE_RESIDUAL(datatype, resid3, norm, eps, norm_W, m);
 
                 norm_W = fla_lapack_slange("1", &m, &i_one, wi_in, &i_one, work);
                 saxpy_(&m, &s_n_one, wi, &i_one, wi_in, &i_one);
                 norm = fla_lapack_slange("1", &m, &i_one, wi_in, &i_one, work);
-                resid4 = norm / (eps * norm_W * m);
+                FLA_COMPUTE_RESIDUAL(datatype, resid4, norm, eps, norm_W, m);
             }
             break;
         }
@@ -178,7 +178,7 @@ void validate_geev(char *tst_api, char *jobvl, char *jobvr, integer m, void *A, 
                 }
                 else
                     norm = fla_lapack_dlange("F", &m, &m, Vlambda, &m, work);
-                resid1 = norm / (eps * norm_A * (double)m);
+                FLA_COMPUTE_RESIDUAL(datatype, resid1, norm, eps, norm_A, m);
             }
             if(same_char(*jobvl, 'V'))
             {
@@ -211,7 +211,7 @@ void validate_geev(char *tst_api, char *jobvl, char *jobvr, integer m, void *A, 
                 }
                 else
                     norm = fla_lapack_dlange("F", &m, &m, Vlambda, &m, work);
-                resid2 = norm / (eps * norm_A * (double)m);
+                FLA_COMPUTE_RESIDUAL(datatype, resid2, norm, eps, norm_A, m);
             }
             if(wr_in != NULL && wi_in != NULL)
             {
@@ -226,12 +226,12 @@ void validate_geev(char *tst_api, char *jobvl, char *jobvr, integer m, void *A, 
                 norm_W = fla_lapack_dlange("1", &m, &i_one, wr_in, &i_one, work);
                 daxpy_(&m, &d_n_one, wr, &i_one, wr_in, &i_one);
                 norm = fla_lapack_dlange("1", &m, &i_one, wr_in, &i_one, work);
-                resid3 = norm / (eps * norm_W * m);
+                FLA_COMPUTE_RESIDUAL(datatype, resid3, norm, eps, norm_W, m);
 
                 norm_W = fla_lapack_dlange("1", &m, &i_one, wi_in, &i_one, work);
                 daxpy_(&m, &d_n_one, wi, &i_one, wi_in, &i_one);
                 norm = fla_lapack_dlange("1", &m, &i_one, wi_in, &i_one, work);
-                resid4 = norm / (eps * norm_W * m);
+                FLA_COMPUTE_RESIDUAL(datatype, resid4, norm, eps, norm_W, m);
             }
             break;
         }
@@ -277,7 +277,7 @@ void validate_geev(char *tst_api, char *jobvl, char *jobvr, integer m, void *A, 
                 }
                 else
                     norm = fla_lapack_clange("F", &m, &m, Vlambda, &m, work);
-                resid1 = norm / (eps * norm_A * (float)m);
+                FLA_COMPUTE_RESIDUAL(datatype, resid1, norm, eps, norm_A, m);
             }
             if(same_char(*jobvl, 'V'))
             {
@@ -310,7 +310,7 @@ void validate_geev(char *tst_api, char *jobvl, char *jobvr, integer m, void *A, 
                 }
                 else
                     norm = fla_lapack_clange("F", &m, &m, Vlambda, &m, work);
-                resid2 = norm / (eps * norm_A * (float)m);
+                FLA_COMPUTE_RESIDUAL(datatype, resid2, norm, eps, norm_A, m);
             }
             if(wr_in != NULL)
             {
@@ -325,7 +325,7 @@ void validate_geev(char *tst_api, char *jobvl, char *jobvr, integer m, void *A, 
                 norm_W = fla_lapack_clange("1", &m, &i_one, wr_in, &i_one, work);
                 caxpy_(&m, &c_n_one, w, &i_one, wr_in, &i_one);
                 norm = fla_lapack_clange("1", &m, &i_one, wr_in, &i_one, work);
-                resid3 = norm / (eps * norm_W * m);
+                FLA_COMPUTE_RESIDUAL(datatype, resid3, norm, eps, norm_W, m);
             }
             break;
         }
@@ -370,7 +370,7 @@ void validate_geev(char *tst_api, char *jobvl, char *jobvr, integer m, void *A, 
                 }
                 else
                     norm = fla_lapack_zlange("F", &m, &m, Vlambda, &m, work);
-                resid1 = norm / (eps * norm_A * (double)m);
+                FLA_COMPUTE_RESIDUAL(datatype, resid1, norm, eps, norm_A, m);
             }
             if(same_char(*jobvl, 'V'))
             {
@@ -403,7 +403,7 @@ void validate_geev(char *tst_api, char *jobvl, char *jobvr, integer m, void *A, 
                 }
                 else
                     norm = fla_lapack_zlange("F", &m, &m, Vlambda, &m, work);
-                resid2 = norm / (eps * norm_A * (double)m);
+                FLA_COMPUTE_RESIDUAL(datatype, resid2, norm, eps, norm_A, m);
             }
             if(wr_in != NULL)
             {
@@ -418,7 +418,7 @@ void validate_geev(char *tst_api, char *jobvl, char *jobvr, integer m, void *A, 
                 norm_W = fla_lapack_zlange("1", &m, &i_one, wr_in, &i_one, work);
                 zaxpy_(&m, &z_n_one, w, &i_one, wr_in, &i_one);
                 norm = fla_lapack_zlange("1", &m, &i_one, wr_in, &i_one, work);
-                resid3 = norm / (eps * norm_W * m);
+                FLA_COMPUTE_RESIDUAL(datatype, resid3, norm, eps, norm_W, m);
             }
             break;
         }

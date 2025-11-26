@@ -1,7 +1,7 @@
 {
   "csg": {
     "server": "http://jenkinserver.amd.com:8082",
-    "projects": ["AOCL_RELEASE", "AOCL_OPENSOURCE", "AOCL_INTERNAL"],
+    "projects": ["AOCL_RELEASE"],
     "default_branch": "amd-main",
     "default_issue_types": [],
     "formatting": {

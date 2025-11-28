@@ -260,7 +260,7 @@
 #define FLA_POTRF_BLOCK_SIZE          (256)
 
 // POTRI threshold numbers to chose paths for performance
-#define FLA_POTRI_DOUBLE_SMALL        (17)
+#define FLA_POTRI_DOUBLE_SMALL        (65)
 
 //GETRF , threshold numbers to chose paths for performance
 #define TALL_RATIO_THRESHOLD 1.5

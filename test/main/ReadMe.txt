@@ -473,3 +473,34 @@ NOTE:
      so random initialization cannot be applied.
      - HGEQZ, HSEQR, ORGQR, POTRF, POTRI, POTRS, GBTRF, GEHRD, GGHRD, GETRI,
        SPFFRTX, SPFFRT2
+
+16. YAML-Based Test Generation
+
+   The test suite includes a YAML-based test generation system that automatically creates
+   CMake CTest definitions for LAPACK API validation tests. This system provides automatic
+   size-based labeling and group label assignment, eliminating the need to manually edit
+   individual test definitions across multiple API files.
+
+   Location:
+   The validation_ctests directory (test/main/validation_ctests/) contains:
+   - YAML files (*.yaml): Test definitions for each API (e.g., getrf.yaml, syev.yaml)
+   - auto_generate_tests.py: Python script that generates CMake test files from YAML
+   - auto_generate_label_groups.yaml: Global configuration for label groups and size thresholds
+
+   Usage:
+   Tests are automatically generated during CMake configuration when BUILD_TEST=ON.
+   Generated files are in <build_dir>/test/main/validation_ctests/*_tests.cmake
+
+   For manual generation:
+     $ cd test/main/validation_ctests
+     $ python3 auto_generate_tests.py --api getrf /tmp/output
+     $ python3 auto_generate_tests.py --all /tmp/output
+
+   Running tests:
+     # Filter by label (case-insensitive for API name and group)
+     $ ctest -L GETRF        # Run all getrf tests
+     $ ctest -L short        # Run all tests with small or medium size
+     $ ctest -L GETRF -L small  # Run small GETRF tests (use multiple -L flags)
+     $ ctest -L precision_d  # Run all double precision tests
+
+   NOTE: For detailed documentation, see test/main/validation_ctests/README.md

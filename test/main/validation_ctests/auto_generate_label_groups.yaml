@@ -1,0 +1,25 @@
+# Global Label Groups Configuration
+# Define label groups here that can be used across all API YAML files
+# When a test uses a group label (e.g., "postsubmit"), it automatically includes
+# all labels defined in the group (e.g., [avx2, avx512])
+
+label_groups:
+  # Example: postsubmit group includes architecture-specific optimization labels
+  postsubmit: []
+
+# Size threshold definitions for automatic labeling
+# Tests are automatically assigned size labels (small, medium, large) based on
+# parameter values. The parameter to check is specified below.
+size_thresholds:
+  # Parameter to check: 'n', 'm', or 'max' (checks max of m and n)
+  parameter: max
+  # Threshold definitions: value < threshold
+  small: 16      # n < 16 or m < 16 or max(m,n) < 16
+  medium: 100   # 16 <= n < 100 or 16 <= m < 100 or 16 <= max(m,n) < 100
+  # large is automatically assigned if >= medium threshold
+
+# Auto-assign group labels based on size labels
+# Group labels are automatically added to tests that have matching size labels
+auto_assign_groups:
+  short: [small, medium]  # Automatically add "short" label to tests with small or medium size
+

@@ -1,0 +1,142 @@
+# SYEV/HEEV - Symmetric/Hermitian Eigenvalue Decomposition
+# Syntax: syev <precisions> <JOBZ> <UPLO> <N> <LDA> <LWORK> <repeats>
+
+syev:
+  description: "Symmetric/Hermitian eigenvalue decomposition"
+  api_group: "EIG"
+  labels: ["presubmit"]
+  precisions: [s, d, c, z]
+  param_order: [jobz, uplo, n, lda, lwork, repeats]
+
+  custom_paths:
+    # Single element eigenvalues path
+    - name: single_element
+      precisions: sdcz
+      labels: []
+      params: {jobz: N, uplo: U, n: 1, lda: 1, lwork: -1, repeats: 1}
+
+    # Single element eigenvectors path
+    - name: single_element_eigenvectors
+      precisions: sdcz
+      labels: []
+      params: {jobz: V, uplo: U, n: 1, lda: 1, lwork: -1, repeats: 1}
+
+    # Small unblocked eigenvalues path (n=2, nb=1)
+    - name: small_unblocked_eigenvalues_upper
+      precisions: sdcz
+      labels: []
+      params: {jobz: N, uplo: U, n: 2, lda: 2, lwork: -1, repeats: 1}
+
+    # Small unblocked eigenvalues path (n=2, nb=1) UPLO = L
+    - name: small_unblocked_eigenvalues_lower
+      precisions: sdcz
+      labels: []
+      params: {jobz: N, uplo: L, n: 2, lda: 2, lwork: -1, repeats: 1}
+
+    # Small unblocked eigenvectors path (n=2, nb=1)
+    - name: small_unblocked_eigenvectors_upper
+      precisions: sdcz
+      labels: []
+      params: {jobz: V, uplo: U, n: 2, lda: 2, lwork: -1, repeats: 1}
+
+    # Small unblocked eigenvectors path (n=2, nb=1) UPLO = L
+    - name: small_unblocked_eigenvectors_lower
+      precisions: sdcz
+      labels: []
+      params: {jobz: V, uplo: L, n: 2, lda: 2, lwork: -1, repeats: 1}
+
+    # Medium unblocked eigenvalues path (n=10, nb=1 or nb>=10)
+    - name: medium_unblocked_eigenvalues_upper
+      precisions: sdcz
+      labels: []
+      params: {jobz: N, uplo: U, n: 10, lda: 10, lwork: -1, repeats: 1}
+
+    # Medium unblocked eigenvalues path (n=10, nb=1 or nb>=10) UPLO = L
+    - name: medium_unblocked_eigenvalues_lower
+      precisions: sdcz
+      labels: []
+      params: {jobz: N, uplo: L, n: 10, lda: 10, lwork: -1, repeats: 1}
+
+    # Medium unblocked eigenvectors path (n=10, nb=1 or nb>=10)
+    - name: medium_unblocked_eigenvectors_upper
+      precisions: sdcz
+      labels: []
+      params: {jobz: V, uplo: U, n: 10, lda: 10, lwork: -1, repeats: 1}
+
+    # Medium unblocked eigenvectors path (n=10, nb=1 or nb>=10) UPLO = L
+    - name: medium_unblocked_eigenvectors_lower
+      precisions: sdcz
+      labels: []
+      params: {jobz: V, uplo: L, n: 10, lda: 10, lwork: -1, repeats: 1}
+
+    # Blocked eigenvalues path (n=32, nb>1 && nb<32)
+    - name: blocked_eigenvalues_32_upper
+      precisions: sdcz
+      labels: []
+      params: {jobz: N, uplo: U, n: 32, lda: 32, lwork: -1, repeats: 1}
+
+    # Blocked eigenvalues path (n=32, nb>1 && nb<32) UPLO = L
+    - name: blocked_eigenvalues_32_lower
+      precisions: sdcz
+      labels: []
+      params: {jobz: N, uplo: L, n: 32, lda: 32, lwork: -1, repeats: 1}
+
+    # Blocked eigenvectors path (n=32, nb>1 && nb<32)
+    - name: blocked_eigenvectors_32_upper
+      precisions: sdcz
+      labels: []
+      params: {jobz: V, uplo: U, n: 32, lda: 32, lwork: -1, repeats: 1}
+
+    # Blocked eigenvectors path (n=32, nb>1 && nb<32) UPLO = L
+    - name: blocked_eigenvectors_32_lower
+      precisions: sdcz
+      labels: []
+      params: {jobz: V, uplo: L, n: 32, lda: 32, lwork: -1, repeats: 1}
+
+    # Blocked eigenvalues path (n=64, nb>1 && nb<64)
+    - name: blocked_eigenvalues_64_upper
+      precisions: sdcz
+      labels: []
+      params: {jobz: N, uplo: U, n: 64, lda: 64, lwork: -1, repeats: 1}
+
+    # Blocked eigenvalues path (n=64, nb>1 && nb<64) UPLO = L
+    - name: blocked_eigenvalues_64_lower
+      precisions: sdcz
+      labels: []
+      params: {jobz: N, uplo: L, n: 64, lda: 64, lwork: -1, repeats: 1}
+
+    # Blocked eigenvectors path (n=64, nb>1 && nb<64)
+    - name: blocked_eigenvectors_64_upper
+      precisions: sdcz
+      labels: []
+      params: {jobz: V, uplo: U, n: 64, lda: 64, lwork: -1, repeats: 1}
+
+    # Blocked eigenvectors path (n=64, nb>1 && nb<64) UPLO = L
+    - name: blocked_eigenvectors_64_lower
+      precisions: sdcz
+      labels: []
+      params: {jobz: V, uplo: L, n: 64, lda: 64, lwork: -1, repeats: 1}
+
+    # Blocked eigenvalues path (n=128, nb>1 && nb<128)
+    - name: blocked_eigenvalues_128_upper
+      precisions: sdcz
+      labels: []
+      params: {jobz: N, uplo: U, n: 128, lda: 128, lwork: -1, repeats: 1}
+
+    # Blocked eigenvalues path (n=128, nb>1 && nb<128) UPLO = L
+    - name: blocked_eigenvalues_128_lower
+      precisions: sdcz
+      labels: []
+      params: {jobz: N, uplo: L, n: 128, lda: 128, lwork: -1, repeats: 1}
+
+    # Blocked eigenvectors path (n=128, nb>1 && nb<128)
+    - name: blocked_eigenvectors_128_upper
+      precisions: sdcz
+      labels: []
+      params: {jobz: V, uplo: U, n: 128, lda: 128, lwork: -1, repeats: 1}
+
+    # Blocked eigenvectors path (n=128, nb>1 && nb<128) UPLO = L
+    - name: blocked_eigenvectors_128_lower
+      precisions: sdcz
+      labels: []
+      params: {jobz: V, uplo: L, n: 128, lda: 128, lwork: -1, repeats: 1}

@@ -320,7 +320,7 @@ void aocl_lapack_dlaswp_st(aocl_int64_t *n, doublereal *a, aocl_int64_t *lda, ao
     /* System generated locals */
     aocl_int64_t a_dim1, a_offset, i__4;
     /* Local variables */
-    aocl_int64_t i__, j, k, i1, i2, n32, n64, ip, ix, ix0, inc;
+    aocl_int64_t i__, j, k, i1, i2, n32, ip, ix, ix0, inc;
     doublereal *colptr, temp;
     /* -- LAPACK auxiliary routine (version 3.7.1) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */

@@ -138,9 +138,9 @@ void libfla_test_apqut_experiment( test_params_t params,
 	}
 
 	// Determine the dimensions.
-	if ( m_input < 0 ) m = p_cur * abs(m_input);
+	if ( m_input < 0 ) m = p_cur * -m_input;
 	else               m = p_cur;
-	if ( n_input < 0 ) n = p_cur * abs(n_input);
+	if ( n_input < 0 ) n = p_cur * -n_input;
 	else               n = p_cur;
 
 	// Compute the minimum dimension.

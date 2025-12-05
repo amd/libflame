@@ -339,7 +339,6 @@ void aocl_lapack_zlarrv(aocl_int64_t *n, doublereal *vl, doublereal *vu, doubler
     doublereal ztz;
     aocl_int64_t iend, jblk;
     doublereal lgap;
-    aocl_int64_t done;
     doublereal rgap, left;
     aocl_int64_t wend, iter;
     doublereal bstw;
@@ -488,8 +487,6 @@ void aocl_lapack_zlarrv(aocl_int64_t *n, doublereal *vl, doublereal *vu, doubler
     /* entries is contained in the interval IBEGIN:IEND. */
     /* Remark that if k eigenpairs are desired, then the eigenvectors */
     /* are stored in k contiguous columns of Z. */
-    /* DONE is the number of eigenvectors already computed */
-    done = 0;
     ibegin = 1;
     wbegin = 1;
     i__1 = iblock[*m];
@@ -544,7 +541,6 @@ void aocl_lapack_zlarrv(aocl_int64_t *n, doublereal *vl, doublereal *vu, doubler
         /* This is for a 1x1 block */
         if(ibegin == iend)
         {
-            ++done;
             i__2 = ibegin + wbegin * z_dim1;
             z__[i__2].real = 1.;
             z__[i__2].imag = 0.; // , expr subst
@@ -925,7 +921,6 @@ void aocl_lapack_zlarrv(aocl_int64_t *n, doublereal *vl, doublereal *vu, doubler
                         i__4 = windex + 1;
                         windpl = fla_min(i__4, *m);
                         lambda = work[windex];
-                        ++done;
                         /* Check if eigenvector computation is to be skipped */
                         if(windex < *dol || windex > *dou)
                         {

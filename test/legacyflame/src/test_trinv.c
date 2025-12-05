@@ -139,9 +139,7 @@ void libfla_test_trinv_experiment( test_params_t params,
 	FLA_Obj      A_test, x_test, b_test;
 
 	// Determine the dimensions.
-	if ( m_input < 0 ) m = p_cur / abs(m_input);
-	else               m = p_cur;
-
+	m = ( m_input < 0 ) ? ( p_cur / -m_input ) : p_cur;
 	// Translate parameter characters to libflame constants.
 	FLA_Param_map_char_to_flame_uplo( &pc_str[pci][0], &uplo );
 	FLA_Param_map_char_to_flame_diag( &pc_str[pci][1], &diag );

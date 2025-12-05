@@ -150,9 +150,9 @@ void libfla_test_sylv_experiment( test_params_t params,
 	FLA_Obj      A_test, B_test, C_test;
 
 	// Determine the dimensions.
-	if ( m_input < 0 ) m = p_cur / abs(m_input);
+	if ( m_input < 0 ) m = p_cur / -m_input;
 	else               m = p_cur;
-	if ( n_input < 0 ) n = p_cur / abs(n_input);
+	if ( n_input < 0 ) n = p_cur / -n_input;
 	else               n = p_cur;
 
 	// Translate parameter characters to libflame constants.

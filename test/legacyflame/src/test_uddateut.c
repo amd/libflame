@@ -131,13 +131,13 @@ void libfla_test_uddateut_experiment( test_params_t params,
 	FLA_Obj      R_save, C_save, D_save;
 
 	// Determine the dimensions.
-	if ( mB_input < 0 ) mB = p_cur / abs(mB_input);
+	if ( mB_input < 0 ) mB = p_cur / -mB_input;
 	else                mB = p_cur;
-	if ( mC_input < 0 ) mC = p_cur / abs(mC_input);
+	if ( mC_input < 0 ) mC = p_cur / -mC_input;
 	else                mC = p_cur;
-	if ( mD_input < 0 ) mD = p_cur / abs(mD_input);
+	if ( mD_input < 0 ) mD = p_cur / -mD_input;
 	else                mD = p_cur;
-	if ( n_input  < 0 ) n  = p_cur / abs(n_input);
+	if ( n_input  < 0 ) n  = p_cur / -n_input;
 	else                n  = p_cur;
 
 	// Create the matrices for the current operation.

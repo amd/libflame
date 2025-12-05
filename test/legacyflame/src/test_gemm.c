@@ -151,11 +151,11 @@ void libfla_test_gemm_experiment( test_params_t params,
 	FLA_Obj      A_test, B_test, C_test;
 
 	// Determine the dimensions.
-	if ( m_input < 0 ) m = p_cur / abs(m_input);
+	if ( m_input < 0 ) m = p_cur / -m_input;
 	else               m = p_cur;
-	if ( k_input < 0 ) k = p_cur / abs(k_input);
+	if ( k_input < 0 ) k = p_cur / -k_input;
 	else               k = p_cur;
-	if ( n_input < 0 ) n = p_cur / abs(n_input);
+	if ( n_input < 0 ) n = p_cur / -n_input;
 	else               n = p_cur;
 
 	// Translate parameter characters to libflame constants.

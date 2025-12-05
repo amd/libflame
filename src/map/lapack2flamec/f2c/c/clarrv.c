@@ -336,7 +336,6 @@ void aocl_lapack_clarrv(aocl_int64_t *n, real *vl, real *vu, real *d__, real *l,
     real ztz;
     aocl_int64_t iend, jblk;
     real lgap;
-    aocl_int64_t done;
     real rgap, left;
     aocl_int64_t wend, iter;
     real bstw;
@@ -484,8 +483,6 @@ void aocl_lapack_clarrv(aocl_int64_t *n, real *vl, real *vu, real *d__, real *l,
     /* entries is contained in the interval IBEGIN:IEND. */
     /* Remark that if k eigenpairs are desired, then the eigenvectors */
     /* are stored in k contiguous columns of Z. */
-    /* DONE is the number of eigenvectors already computed */
-    done = 0;
     ibegin = 1;
     wbegin = 1;
     i__1 = iblock[*m];
@@ -540,7 +537,6 @@ void aocl_lapack_clarrv(aocl_int64_t *n, real *vl, real *vu, real *d__, real *l,
         /* This is for a 1x1 block */
         if(ibegin == iend)
         {
-            ++done;
             i__2 = ibegin + wbegin * z_dim1;
             z__[i__2].real = 1.f;
             z__[i__2].imag = 0.f; // , expr subst
@@ -921,7 +917,6 @@ void aocl_lapack_clarrv(aocl_int64_t *n, real *vl, real *vu, real *d__, real *l,
                         i__4 = windex + 1;
                         windpl = fla_min(i__4, *m);
                         lambda = work[windex];
-                        ++done;
                         /* Check if eigenvector computation is to be skipped */
                         if(windex < *dol || windex > *dou)
                         {

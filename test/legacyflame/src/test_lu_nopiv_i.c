@@ -87,9 +87,9 @@ void libfla_test_lu_nopiv_i_experiment( test_params_t params,
 	FLA_Obj      A_test;
 
 	// Determine the dimensions.
-	if ( m_input < 0 ) m = p_cur / abs(m_input);
+	if ( m_input < 0 ) m = p_cur / -m_input;
 	else               m = p_cur;
-	if ( n_input < 0 ) n = p_cur / abs(n_input);
+	if ( n_input < 0 ) n = p_cur / -n_input;
 	else               n = p_cur;
 
         // Create the matrices for the current operation.

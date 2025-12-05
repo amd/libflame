@@ -242,7 +242,6 @@ LAPACK_orgbr(s, org)
 }
 LAPACK_orgbr(d, org)
 {
-    int fla_error = LAPACK_SUCCESS;
     AOCL_DTL_TRACE_LOG_INIT
     AOCL_DTL_SNPRINTF("dorgbr inputs: vect %c, m %" FLA_IS ", n %" FLA_IS ", k %" FLA_IS
                       ", lda %" FLA_IS "",
@@ -255,6 +254,7 @@ LAPACK_orgbr(d, org)
     }
 #else
     {
+        int fla_error = LAPACK_SUCCESS;
         LAPACK_RETURN_CHECK_VAR1(
             dorgbr_check(vect, m, n, k, buff_A, ldim_A, buff_t, buff_w, lwork, info), fla_error)
     }

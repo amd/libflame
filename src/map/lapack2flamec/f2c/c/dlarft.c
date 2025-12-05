@@ -13,7 +13,6 @@
 
 static aocl_int64_t c__1 = 1;
 static doublereal c_b6 = 1.;
-static doublereal c_b0 = 0.;
 /* > \brief \b DLARFT forms the triangular factor T of a block reflector H = I - vtvH */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */

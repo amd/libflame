@@ -95,9 +95,9 @@ void libfla_test_apcaqutinc_experiment( test_params_t params,
 	double       time;
 	unsigned int i;
 	uinteger m, n;
-	uinteger p;
-	integer   m_input;
-	integer   n_input;
+	uinteger p = 4;  // Default panel size, will be set based on storev
+	integer   m_input;  // Will be set based on storev
+	integer   n_input;  // Will be set based on storev
 	FLA_Side     side;
 	FLA_Trans    trans;
 	FLA_Direct   direct;
@@ -138,10 +138,8 @@ void libfla_test_apcaqutinc_experiment( test_params_t params,
 	}
 
 	// Determine the dimensions.
-	if ( m_input < 0 ) m = p_cur * abs(m_input);
-	else               m = p_cur;
-	if ( n_input < 0 ) n = p_cur * abs(n_input);
-	else               n = p_cur;
+	if ( m_input < 0 ) m = p_cur * -m_input; else m = p_cur;
+	if ( n_input < 0 ) n = p_cur * -n_input; else n = p_cur;
 
 	// Create the matrices for the current operation.
 	libfla_test_obj_create( datatype, FLA_NO_TRANSPOSE, sc_str[0], m, n, &A );

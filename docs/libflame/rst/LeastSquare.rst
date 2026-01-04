@@ -1,4 +1,4 @@
-..  Copyright (C) 2024, Advanced Micro Devices. All rights reserved.
+..  Copyright (C) 2024-2025, Advanced Micro Devices. All rights reserved.
 
 ..  Redistribution and use in source and binary forms, with or without
 ..  modification, are permitted provided that the following conditions are met:
@@ -29,15 +29,113 @@
 Least Squares
 --------------
 
-* :ref:`Standard_Least_square`
-* :ref:`Constrained_least_squares`
-* :ref:`Auxiliary_routines_least_square`
+
+.. _gels:
+
+GELS
+^^^^^^
+
+.. doxygengroup:: gels
+   :project: lapack
+   :content-only:
 
 
-.. toctree::
-   :hidden:
-   :caption: Contents:
+.. _gelss:
 
-   Standard_Least_square
-   Constrained_least_squares
-   Auxiliary_routines_least_square
+GELSS
+^^^^^^
+
+.. doxygengroup:: gelss
+   :project: lapack
+   :content-only:
+
+
+.. _gelsd:
+
+GELSD
+^^^^^^
+
+.. doxygengroup:: gelsd
+   :project: lapack
+   :content-only:
+
+
+.. _gelsy:
+
+GELSY
+^^^^^^
+
+.. doxygengroup:: gelsy
+   :project: lapack
+   :content-only:
+
+
+.. _getsls:
+
+GETSLS
+^^^^^^
+
+.. doxygengroup:: getsls
+   :project: lapack
+   :content-only:
+
+
+.. _gglse:
+
+GGLSE
+^^^^^^
+
+.. doxygengroup:: gglse
+   :project: lapack
+   :content-only:
+
+
+.. _ggglm:
+
+GGGLM
+^^^^^^
+
+.. doxygengroup:: ggglm
+   :project: lapack
+   :content-only:
+
+
+.. _laic1:
+
+LAIC1
+^^^^^^
+
+.. doxygengroup:: laic1
+   :project: lapack
+   :content-only:
+
+
+.. _lals0:
+
+LALS0
+^^^^^^
+
+.. doxygengroup:: lals0
+   :project: lapack
+   :content-only:
+
+
+.. _lalsa:
+
+LALSA
+^^^^^^
+
+.. doxygengroup:: lalsa
+   :project: lapack
+   :content-only:
+
+
+.. _lalsd:
+
+LALSD
+^^^^^^
+
+.. doxygengroup:: lalsd
+   :project: lapack
+   :content-only:
+

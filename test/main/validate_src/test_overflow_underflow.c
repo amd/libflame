@@ -59,7 +59,7 @@ void calculate_svd_scale_value(integer datatype, integer m, integer n, void *A, 
     float flt_ratio;
     double dbl_ratio;
 
-    if(imatrix == 'O')
+    if(same_char(imatrix, 'O'))
     {
         /*Initialize the ratios with maximum of datatype value*/
         flt_ratio = FLT_MAX;
@@ -91,7 +91,7 @@ void calculate_svd_scale_value(integer datatype, integer m, integer n, void *A, 
         compute_ratio(get_realtype(datatype), scal, flt_ratio, dbl_ratio, max);
         free_vector(max);
     }
-    else if(imatrix == 'U')
+    else if(same_char(imatrix, 'U'))
     {
         void *min;
         create_vector(get_realtype(datatype), &min, 1);
@@ -121,7 +121,7 @@ void calculate_svdx_scale_value(integer datatype, integer m, integer n, void *A,
     float flt_ratio;
     double dbl_ratio;
 
-    if(imatrix == 'O')
+    if(same_char(imatrix, 'O'))
     {
         /*Intialize the ratios with maximum of datatype value*/
         flt_ratio = FLT_MAX;
@@ -153,7 +153,7 @@ void calculate_svdx_scale_value(integer datatype, integer m, integer n, void *A,
         compute_ratio(get_realtype(datatype), scal, flt_ratio, dbl_ratio, max);
         free_vector(max);
     }
-    else if(imatrix == 'U')
+    else if(same_char(imatrix, 'U'))
     {
         void *min;
         create_vector(get_realtype(datatype), &min, 1);
@@ -187,7 +187,7 @@ void calculate_asym_scale_value(integer datatype, integer m, integer n, void *A,
     {
         assign_value(datatype, A, d_one, d_one);
     }
-    if(imatrix == 'O')
+    if(same_char(imatrix, 'O'))
     {
         /*Initialize the ratios with maximum of datatype value*/
         flt_ratio = FLT_MAX;
@@ -224,7 +224,7 @@ void calculate_asym_scale_value(integer datatype, integer m, integer n, void *A,
         compute_ratio(get_realtype(datatype), scal, flt_ratio, dbl_ratio, max);
         free_vector(max);
     }
-    else if(imatrix == 'U')
+    else if(same_char(imatrix, 'U'))
     {
         void *min;
         create_vector(get_realtype(datatype), &min, 1);
@@ -259,7 +259,7 @@ void calculate_scale_value(integer datatype, void *scal, void *max_min, double t
 {
     float feasible_float = FLT_MAX;
     double feasible_double = DBL_MAX;
-    if(imatrix_char == 'U')
+    if(same_char(imatrix_char, 'U'))
     {
         feasible_float = FLT_MIN;
         feasible_double = DBL_MIN;
@@ -284,7 +284,7 @@ void scale_matrix_overflow_underflow_gerq2(integer datatype, integer m, integer 
     double tuning_val = 1.0;
     create_vector(get_realtype(datatype), &max_min, 1);
     create_vector(get_realtype(datatype), &scal, 1);
-    if(imatrix_char == 'O')
+    if(same_char(imatrix_char, 'O'))
     {
         get_max_from_matrix(datatype, A, max_min, m, n, lda);
         if(max_m_n < 100)
@@ -296,7 +296,7 @@ void scale_matrix_overflow_underflow_gerq2(integer datatype, integer m, integer 
             tuning_val = 10.0;
         }
     }
-    if(imatrix_char == 'U')
+    if(same_char(imatrix_char, 'U'))
     {
         get_min_from_matrix(datatype, A, max_min, m, n, lda);
         tuning_val = 1.0;
@@ -320,12 +320,12 @@ void scale_matrix_overflow_underflow_potrf(integer datatype, integer m, void *A,
     create_vector(get_realtype(datatype), &max_min, 1);
     create_vector(get_realtype(datatype), &scal, 1);
 
-    if(imatrix_char == 'U')
+    if(same_char(imatrix_char, 'U'))
     {
         get_min_from_matrix(datatype, A, max_min, m, m, lda);
         tuning_val = 1.0;
     }
-    else if(imatrix_char == 'O')
+    else if(same_char(imatrix_char, 'O'))
     {
         get_max_from_matrix(datatype, A, max_min, m, m, lda);
         if(m < 100)
@@ -359,7 +359,7 @@ void scale_matrix_underflow_overflow_gelqf(integer datatype, integer m, integer 
     double tuning_val = 1.0;
     create_vector(get_realtype(datatype), &max_min, 1);
     create_vector(get_realtype(datatype), &scal, 1);
-    if(imatrix_char == 'O')
+    if(same_char(imatrix_char, 'O'))
     {
         get_max_from_matrix(datatype, A, max_min, m, n, lda);
         if(m <= 25 && n <= 25)
@@ -371,7 +371,7 @@ void scale_matrix_underflow_overflow_gelqf(integer datatype, integer m, integer 
             tuning_val = 9.0;
         }
     }
-    if(imatrix_char == 'U')
+    if(same_char(imatrix_char, 'U'))
     {
         get_min_from_matrix(datatype, A, max_min, m, n, lda);
         tuning_val = 1.0;
@@ -394,7 +394,7 @@ void scale_matrix_underflow_overflow_getrf(integer datatype, integer m, integer 
     double tuning_val = 1.0;
     create_vector(get_realtype(datatype), &max_min, 1);
     create_vector(get_realtype(datatype), &scal, 1);
-    if(imatrix_char == 'O')
+    if(same_char(imatrix_char, 'O'))
     {
         get_max_from_matrix(datatype, A, max_min, m, n, lda);
         if((m == 1) && (n == 1))
@@ -462,7 +462,7 @@ void scale_matrix_underflow_overflow_getrf(integer datatype, integer m, integer 
             tuning_val = 80.0;
         }
     }
-    if(imatrix_char == 'U')
+    if(same_char(imatrix_char, 'U'))
     {
         get_min_from_matrix(datatype, A, max_min, m, n, lda);
         tuning_val = 1.0;
@@ -484,7 +484,7 @@ void scale_matrix_underflow_overflow_geqrf(integer datatype, integer m, integer 
     void *max_min = NULL, *scal = NULL;
     create_vector(get_realtype(datatype), &max_min, 1);
     create_vector(get_realtype(datatype), &scal, 1);
-    if(imatrix_char == 'O')
+    if(same_char(imatrix_char, 'O'))
     {
         get_max_from_matrix(datatype, A, max_min, m, n, lda);
         if(m <= 25 && n <= 25)
@@ -496,12 +496,75 @@ void scale_matrix_underflow_overflow_geqrf(integer datatype, integer m, integer 
             calculate_scale_value(datatype, scal, max_min, 12.0, imatrix_char);
         }
     }
-    if(imatrix_char == 'U')
+    if(same_char(imatrix_char, 'U'))
     {
         get_min_from_matrix(datatype, A, max_min, m, n, lda);
         calculate_scale_value(datatype, scal, max_min, 1.0, imatrix_char);
     }
 
+    /* Scaling the matrix A with scal */
+    scal_matrix(datatype, scal, A, m, n, lda, i_one);
+
+    /* free vectors */
+    free_vector(max_min);
+    free_vector(scal);
+}
+
+/* Scaling matrix with values around overflow underflow for labrd */
+void scale_matrix_underflow_overflow_labrd(integer datatype, integer m, integer n, void *A,
+                                           integer lda, char imatrix_char)
+{
+    void *max_min = NULL, *scal = NULL;
+    create_vector(get_realtype(datatype), &max_min, 1);
+    create_vector(get_realtype(datatype), &scal, 1);
+
+    if(imatrix_char == 'O')
+    {
+        get_max_from_matrix(datatype, A, max_min, m, n, lda);
+        if(m <= 50 && n <= 50)
+        {
+            calculate_scale_value(datatype, scal, max_min, 8.0, imatrix_char);
+        }
+        else if(m <= 225 && n <= 225)
+        {
+            calculate_scale_value(datatype, scal, max_min, 15.0, imatrix_char);
+        }
+        else
+        {
+            calculate_scale_value(datatype, scal, max_min, 30.0, imatrix_char);
+        }
+    }
+    else
+    {
+        get_min_from_matrix(datatype, A, max_min, m, n, lda);
+        calculate_scale_value(datatype, scal, max_min, 1.0, imatrix_char);
+    }
+    /* Scaling the matrix A with scal */
+    scal_matrix(datatype, scal, A, m, n, lda, i_one);
+
+    /* free vectors */
+    free_vector(max_min);
+    free_vector(scal);
+}
+
+/* Scaling matrix with values around overflow underflow for gebrd */
+void scale_matrix_underflow_overflow_gebrd(integer datatype, integer m, integer n, void *A,
+                                           integer lda, char imatrix_char)
+{
+    void *max_min = NULL, *scal = NULL;
+    create_vector(get_realtype(datatype), &max_min, 1);
+    create_vector(get_realtype(datatype), &scal, 1);
+
+    if(imatrix_char == 'O')
+    {
+        get_max_from_matrix(datatype, A, max_min, m, n, lda);
+        calculate_scale_value(datatype, scal, max_min, 8.0, imatrix_char);
+    }
+    else
+    {
+        get_min_from_matrix(datatype, A, max_min, m, n, lda);
+        calculate_scale_value(datatype, scal, max_min, 1.0, imatrix_char);
+    }
     /* Scaling the matrix A with scal */
     scal_matrix(datatype, scal, A, m, n, lda, i_one);
 
@@ -518,7 +581,7 @@ void scale_matrix_underflow_overflow_larf(integer datatype, integer m, integer n
     create_vector(get_realtype(datatype), &max_min, 1);
     create_vector(get_realtype(datatype), &scal, 1);
 
-    if(imatrix_char == 'O')
+    if(same_char(imatrix_char, 'O'))
     {
         get_max_from_matrix(datatype, A, max_min, m, n, lda);
         calculate_scale_value(datatype, scal, max_min, 8.0, imatrix_char);
@@ -542,7 +605,7 @@ void scale_matrix_underflow_overflow_larfg(integer datatype, integer m, integer 
     void *max_min = NULL, *scal = NULL;
     create_vector(get_realtype(datatype), &max_min, 1);
     create_vector(get_realtype(datatype), &scal, 1);
-    if(imatrix_char == 'O')
+    if(same_char(imatrix_char, 'O'))
     {
         get_max_from_matrix(datatype, A, max_min, m, n, lda);
         if(m <= 50)
@@ -558,7 +621,7 @@ void scale_matrix_underflow_overflow_larfg(integer datatype, integer m, integer 
             calculate_scale_value(datatype, scal, max_min, 25.0, imatrix_char);
         }
     }
-    if(imatrix_char == 'U')
+    if(same_char(imatrix_char, 'U'))
     {
         get_min_from_matrix(datatype, A, max_min, m, n, lda);
         calculate_scale_value(datatype, scal, max_min, 1.0, imatrix_char);
@@ -581,7 +644,7 @@ void scale_matrix_overflow_underflow_hetrf(integer datatype, integer m, void *A,
     create_vector(get_realtype(datatype), &max_min, 1);
     create_vector(get_realtype(datatype), &scal, 1);
 
-    if(imatrix_char == 'O')
+    if(same_char(imatrix_char, 'O'))
     {
         get_max_from_matrix(datatype, A, max_min, m, m, lda);
         if(m < 100)
@@ -590,14 +653,14 @@ void scale_matrix_overflow_underflow_hetrf(integer datatype, integer m, void *A,
         }
         else if(m < 200)
         {
-            tuning_val = 37.0;
+            tuning_val = 45.0;
         }
         else
         {
             tuning_val = 335.0;
         }
     }
-    if(imatrix_char == 'U')
+    if(same_char(imatrix_char, 'U'))
     {
         get_min_from_matrix(datatype, A, max_min, m, m, lda);
     }
@@ -618,12 +681,12 @@ void scale_matrix_overflow_underflow_hetrf_rook(integer datatype, integer m, voi
     create_vector(get_realtype(datatype), &max_min, 1);
     create_vector(get_realtype(datatype), &scal, 1);
 
-    if(imatrix_char == 'U')
+    if(same_char(imatrix_char, 'U'))
     {
         get_min_from_matrix(datatype, A, max_min, m, m, lda);
         calculate_scale_value(datatype, scal, max_min, 1.0, imatrix_char);
     }
-    else if(imatrix_char == 'O')
+    else if(same_char(imatrix_char, 'O'))
     {
         get_max_from_matrix(datatype, A, max_min, m, m, lda);
         calculate_scale_value(datatype, scal, max_min, 146.0, imatrix_char);
@@ -644,12 +707,12 @@ void scale_matrix_overflow_underflow_sytrf(integer datatype, integer m, void *A,
     create_vector(get_realtype(datatype), &max_min, 1);
     create_vector(get_realtype(datatype), &scal, 1);
 
-    if(imatrix_char == 'U')
+    if(same_char(imatrix_char, 'U'))
     {
         get_min_from_matrix(datatype, A, max_min, m, m, lda);
         calculate_scale_value(datatype, scal, max_min, 1.0, imatrix_char);
     }
-    else if(imatrix_char == 'O')
+    else if(same_char(imatrix_char, 'O'))
     {
         get_max_from_matrix(datatype, A, max_min, m, m, lda);
         if(m < 100)
@@ -680,7 +743,7 @@ void scale_matrix_underflow_overflow_org2r(integer datatype, integer m, integer 
     void *max_min = NULL, *scal = NULL;
     create_vector(get_realtype(datatype), &max_min, 1);
     create_vector(get_realtype(datatype), &scal, 1);
-    if(imatrix_char == 'O')
+    if(same_char(imatrix_char, 'O'))
     {
         get_max_from_matrix(datatype, A, max_min, m, n, lda);
         if(m <= 50 && n <= 50)
@@ -696,7 +759,7 @@ void scale_matrix_underflow_overflow_org2r(integer datatype, integer m, integer 
             calculate_scale_value(datatype, scal, max_min, 35.0, imatrix_char);
         }
     }
-    if(imatrix_char == 'U')
+    if(same_char(imatrix_char, 'U'))
     {
         get_min_from_matrix(datatype, A, max_min, m, n, lda);
         calculate_scale_value(datatype, scal, max_min, 1.0, imatrix_char);
@@ -717,7 +780,7 @@ void calculate_gtsvA_scale_value(integer datatype, integer m, integer n, void *A
     float flt_ratio;
     double dbl_ratio;
 
-    if(imatrix == 'O')
+    if(same_char(imatrix, 'O'))
     {
         /*Initialize the ratios with maximum of datatype value*/
         flt_ratio = FLT_MAX;
@@ -789,7 +852,7 @@ void calculate_gtsvA_scale_value(integer datatype, integer m, integer n, void *A
         compute_ratio(get_realtype(datatype), scal, flt_ratio, dbl_ratio, max);
         free_vector(max);
     }
-    else if(imatrix == 'U')
+    else if(same_char(imatrix, 'U'))
     {
         void *min;
         create_vector(get_realtype(datatype), &min, 1);
@@ -824,10 +887,10 @@ void scale_matrix_underflow_overflow_gels(integer datatype, char *trans, integer
     if(sysmat)
     {
         /* Tuning for A in AX=B */
-        if(imatrix_char == 'O')
+        if(same_char(imatrix_char, 'O'))
         {
             get_max_from_matrix(datatype, A, max_min, m, n, lda);
-            if((*trans == 'T' || *trans == 'C') && m >= n)
+            if((same_char(*trans, 'T') || same_char(*trans, 'C')) && m >= n)
             {
                 if(datatype > DOUBLE)
                 {
@@ -853,7 +916,7 @@ void scale_matrix_underflow_overflow_gels(integer datatype, char *trans, integer
                 }
             }
         }
-        if(imatrix_char == 'U')
+        if(same_char(imatrix_char, 'U'))
         {
             get_min_from_matrix(datatype, A, max_min, m, n, lda);
             tuning_val = 1.0;
@@ -862,12 +925,12 @@ void scale_matrix_underflow_overflow_gels(integer datatype, char *trans, integer
     else
     {
         /* Tuning for B in AX=B */
-        if(imatrix_char == 'O')
+        if(same_char(imatrix_char, 'O'))
         {
             get_max_from_matrix(datatype, A, max_min, m, n, lda);
             tuning_val = 3.4;
         }
-        if(imatrix_char == 'U')
+        if(same_char(imatrix_char, 'U'))
         {
             get_min_from_matrix(datatype, A, max_min, m, n, lda);
             tuning_val = 1.0;
@@ -890,7 +953,7 @@ void scale_matrix_overflow_underflow_gelsd(integer datatype, integer m, integer 
     double tuning_val;
     create_vector(get_realtype(datatype), &max_min, 1);
     create_vector(get_realtype(datatype), &scal, 1);
-    if(imatrix_char == 'O')
+    if(same_char(imatrix_char, 'O'))
     {
         get_max_from_matrix(datatype, A, max_min, m, n, lda);
 
@@ -932,7 +995,7 @@ void scale_matrix_overflow_underflow_gelsd(integer datatype, integer m, integer 
         }
         calculate_scale_value(datatype, scal, max_min, tuning_val, imatrix_char);
     }
-    if(imatrix_char == 'U')
+    if(same_char(imatrix_char, 'U'))
     {
         get_min_from_matrix(datatype, A, max_min, m, n, lda);
         calculate_scale_value(datatype, scal, max_min, 1.0, imatrix_char);
@@ -952,7 +1015,7 @@ void scale_matrix_underflow_overflow_gbtrf(integer datatype, integer m, integer 
     void *max_min = NULL, *scal = NULL;
     create_vector(get_realtype(datatype), &max_min, 1);
     create_vector(get_realtype(datatype), &scal, 1);
-    if(imatrix_char == 'O')
+    if(same_char(imatrix_char, 'O'))
     {
         get_max_from_matrix(datatype, A, max_min, m, n, lda);
         if(m <= 25 && n <= 25)
@@ -964,7 +1027,7 @@ void scale_matrix_underflow_overflow_gbtrf(integer datatype, integer m, integer 
             calculate_scale_value(datatype, scal, max_min, 10.0, imatrix_char);
         }
     }
-    if(imatrix_char == 'U')
+    if(same_char(imatrix_char, 'U'))
     {
         get_min_from_matrix(datatype, A, max_min, m, n, lda);
         calculate_scale_value(datatype, scal, max_min, 1.0, imatrix_char);
@@ -986,7 +1049,7 @@ void scale_matrix_underflow_overflow_gbtrs(integer datatype, integer m, integer 
     double tuning_val = 1.0;
     create_vector(get_realtype(datatype), &max_min, 1);
     create_vector(get_realtype(datatype), &scal, 1);
-    if(imatrix_char == 'O')
+    if(same_char(imatrix_char, 'O'))
     {
         get_max_from_matrix(datatype, A, max_min, m, nrhs, lda);
         if(m < 100)
@@ -1006,7 +1069,7 @@ void scale_matrix_underflow_overflow_gbtrs(integer datatype, integer m, integer 
             tuning_val = 1200.0;
         }
     }
-    if(imatrix_char == 'U')
+    if(same_char(imatrix_char, 'U'))
     {
         get_min_from_matrix(datatype, A, max_min, m, nrhs, lda);
         tuning_val = 1.0;
@@ -1029,7 +1092,7 @@ void scale_matrix_overflow_underflow_gelss(integer datatype, integer m, integer 
     double tuning_val;
     create_vector(get_realtype(datatype), &max_min, 1);
     create_vector(get_realtype(datatype), &scal, 1);
-    if(imatrix_char == 'O')
+    if(same_char(imatrix_char, 'O'))
     {
         get_max_from_matrix(datatype, A, max_min, m, n, lda);
 
@@ -1071,7 +1134,7 @@ void scale_matrix_overflow_underflow_gelss(integer datatype, integer m, integer 
         }
         calculate_scale_value(datatype, scal, max_min, tuning_val, imatrix_char);
     }
-    if(imatrix_char == 'U')
+    if(same_char(imatrix_char, 'U'))
     {
         get_min_from_matrix(datatype, A, max_min, m, n, lda);
         calculate_scale_value(datatype, scal, max_min, 1.0, imatrix_char);
@@ -1099,7 +1162,7 @@ void scale_matrix_underflow_overflow_stedc(integer datatype, integer n, void *A,
     {
         assign_value(datatype, A, d_one, d_one);
     }
-    if(*imatrix_char == 'O')
+    if(same_char(*imatrix_char, 'O'))
     {
         /*Initialize the ratios with maximum of datatype value*/
         flt_ratio = FLT_MAX;
@@ -1136,7 +1199,7 @@ void scale_matrix_underflow_overflow_stedc(integer datatype, integer n, void *A,
         compute_ratio(get_realtype(datatype), scal, flt_ratio, dbl_ratio, max);
         free_vector(max);
     }
-    else if(*imatrix_char == 'U')
+    else if(same_char(*imatrix_char, 'U'))
     {
         void *min;
         create_vector(get_realtype(datatype), &min, 1);
@@ -1167,7 +1230,7 @@ void scale_matrix_underflow_overflow_stevd(integer datatype, integer n, void *A,
     {
         assign_value(datatype, A, d_one, d_one);
     }
-    if(*imatrix_char == 'O')
+    if(same_char(*imatrix_char, 'O'))
     {
         /*Initialize the ratios with maximum of datatype value*/
         flt_ratio = FLT_MAX;
@@ -1204,7 +1267,7 @@ void scale_matrix_underflow_overflow_stevd(integer datatype, integer n, void *A,
         compute_ratio(get_realtype(datatype), scal, flt_ratio, dbl_ratio, max);
         free_vector(max);
     }
-    else if(*imatrix_char == 'U')
+    else if(same_char(*imatrix_char, 'U'))
     {
         void *min;
         create_vector(get_realtype(datatype), &min, 1);
@@ -1235,7 +1298,7 @@ void scale_matrix_underflow_overflow_syev(integer datatype, integer n, void *A, 
     {
         assign_value(datatype, A, d_one, d_one);
     }
-    if(*imatrix_char == 'O')
+    if(same_char(*imatrix_char, 'O'))
     {
         /*Initialize the ratios with maximum of datatype value*/
         flt_ratio = FLT_MAX;
@@ -1272,7 +1335,7 @@ void scale_matrix_underflow_overflow_syev(integer datatype, integer n, void *A, 
         compute_ratio(get_realtype(datatype), scal, flt_ratio, dbl_ratio, max);
         free_vector(max);
     }
-    else if(*imatrix_char == 'U')
+    else if(same_char(*imatrix_char, 'U'))
     {
         void *min;
         create_vector(get_realtype(datatype), &min, 1);
@@ -1303,7 +1366,7 @@ void scale_matrix_underflow_overflow_steqr(integer datatype, integer n, void *A,
     {
         assign_value(datatype, A, d_one, d_one);
     }
-    if(*imatrix_char == 'O')
+    if(same_char(*imatrix_char, 'O'))
     {
         /*Initialize the ratios with maximum of datatype value*/
         flt_ratio = FLT_MAX;
@@ -1340,7 +1403,7 @@ void scale_matrix_underflow_overflow_steqr(integer datatype, integer n, void *A,
         compute_ratio(get_realtype(datatype), scal, flt_ratio, dbl_ratio, max);
         free_vector(max);
     }
-    else if(*imatrix_char == 'U')
+    else if(same_char(*imatrix_char, 'U'))
     {
         void *min;
         create_vector(get_realtype(datatype), &min, 1);
@@ -1364,12 +1427,12 @@ void scale_matrix_overflow_underflow_ggev(integer datatype, integer m, void *A, 
     create_vector(get_realtype(datatype), &max_min, 1);
     create_vector(get_realtype(datatype), &scal, 1);
 
-    if(imatrix_char == 'U')
+    if(same_char(imatrix_char, 'U'))
     {
         get_min_from_matrix(datatype, A, max_min, m, m, lda);
         calculate_scale_value(datatype, scal, max_min, 1.0, imatrix_char);
     }
-    else if(imatrix_char == 'O')
+    else if(same_char(imatrix_char, 'O'))
     {
         get_max_from_matrix(datatype, A, max_min, m, m, lda);
         if(m < 10)
@@ -1400,7 +1463,7 @@ void scale_matrix_underflow_overflow_syevx(integer datatype, integer n, void *A,
     void *max_min = NULL;
     double tuning_val = 1.0;
     create_vector(get_realtype(datatype), &max_min, 1);
-    if(imatrix_char == 'O')
+    if(same_char(imatrix_char, 'O'))
     {
         get_max_from_matrix(datatype, A, max_min, n, n, lda);
         if(n < 10)
@@ -1432,7 +1495,7 @@ void scale_matrix_underflow_overflow_syevx(integer datatype, integer n, void *A,
             tuning_val = 30.0;
         }
     }
-    if(imatrix_char == 'U')
+    if(same_char(imatrix_char, 'U'))
     {
         get_min_from_matrix(datatype, A, max_min, n, n, lda);
 
@@ -1477,7 +1540,7 @@ void scale_matrix_underflow_overflow_gesv(integer datatype, integer n, void *A, 
     void *max_min = NULL;
     double tuning_val = 1.0;
     create_vector(get_realtype(datatype), &max_min, 1);
-    if(imatrix_char == 'O')
+    if(same_char(imatrix_char, 'O'))
     {
         get_max_from_matrix(datatype, A, max_min, n, n, lda);
         if(n < 100)
@@ -1489,7 +1552,7 @@ void scale_matrix_underflow_overflow_gesv(integer datatype, integer n, void *A, 
             tuning_val = 800.0;
         }
     }
-    if(imatrix_char == 'U')
+    if(same_char(imatrix_char, 'U'))
     {
         get_min_from_matrix(datatype, A, max_min, n, n, lda);
         calculate_scale_value(datatype, scal, max_min, 1.0, imatrix_char);
@@ -1510,7 +1573,7 @@ void scale_matrix_underflow_overflow_getrs(integer datatype, char *trans, intege
     void *max_min = NULL;
     double tuning_val = 1.0;
     create_vector(get_realtype(datatype), &max_min, 1);
-    if(imatrix_char == 'O')
+    if(same_char(imatrix_char, 'O'))
     {
         get_max_from_matrix(datatype, A, max_min, m, n, lda);
         if(n < 100)
@@ -1538,7 +1601,7 @@ void scale_matrix_underflow_overflow_getrs(integer datatype, char *trans, intege
             tuning_val = 85.0;
         }
     }
-    if(imatrix_char == 'U')
+    if(same_char(imatrix_char, 'U'))
     {
         get_min_from_matrix(datatype, A, max_min, m, n, lda);
         if(n == 2)
@@ -1567,12 +1630,12 @@ void scale_matrix_underflow_overflow_getri(integer datatype, integer m, integer 
     double tuning_val = 1.0;
     create_vector(get_realtype(datatype), &max_min, 1);
     create_vector(get_realtype(datatype), &scal, 1);
-    if(imatrix_char == 'O')
+    if(same_char(imatrix_char, 'O'))
     {
         get_max_from_matrix(datatype, A, max_min, m, n, lda);
         if(n < 100)
         {
-            tuning_val = 12.0;
+            tuning_val = 20.0;
         }
         else if(n < 200)
         {
@@ -1591,7 +1654,7 @@ void scale_matrix_underflow_overflow_getri(integer datatype, integer m, integer 
             tuning_val = 130.0;
         }
     }
-    if(imatrix_char == 'U')
+    if(same_char(imatrix_char, 'U'))
     {
         get_min_from_matrix(datatype, A, max_min, m, n, lda);
         if(n == 2)
@@ -1621,7 +1684,7 @@ void scale_matrix_underflow_overflow_geqp3(integer datatype, integer m, integer 
     double tuning_val = 1.0;
     create_vector(get_realtype(datatype), &max_min, 1);
     create_vector(get_realtype(datatype), &scal, 1);
-    if(imatrix_char == 'O')
+    if(same_char(imatrix_char, 'O'))
     {
         get_max_from_matrix(datatype, A, max_min, m, n, lda);
         if((m <= 100) && (n <= 100))
@@ -1641,7 +1704,7 @@ void scale_matrix_underflow_overflow_geqp3(integer datatype, integer m, integer 
             tuning_val = 45.0;
         }
     }
-    if(imatrix_char == 'U')
+    if(same_char(imatrix_char, 'U'))
     {
         get_min_from_matrix(datatype, A, max_min, m, n, lda);
     }
@@ -1662,7 +1725,7 @@ void scale_matrix_underflow_overflow_syevd(integer datatype, integer n, void *A,
     float flt_ratio;
     double dbl_ratio;
 
-    if(*imatrix_char == 'O')
+    if(same_char(*imatrix_char, 'O'))
     {
         /*Initialize the ratios with maximum of datatype value*/
         flt_ratio = FLT_MAX;
@@ -1699,7 +1762,7 @@ void scale_matrix_underflow_overflow_syevd(integer datatype, integer n, void *A,
         compute_ratio(get_realtype(datatype), scal, flt_ratio, dbl_ratio, max);
         free_vector(max);
     }
-    else if(*imatrix_char == 'U')
+    else if(same_char(*imatrix_char, 'U'))
     {
         void *min;
         create_vector(get_realtype(datatype), &min, 1);
@@ -1722,7 +1785,7 @@ void scale_matrix_underflow_overflow_gesdd(integer datatype, integer m, integer 
     void *max_min = NULL;
     double tuning_val = 1.0;
     create_vector(get_realtype(datatype), &max_min, 1);
-    if(imatrix_char == 'O')
+    if(same_char(imatrix_char, 'O'))
     {
         get_max_from_matrix(datatype, A, max_min, m, n, lda);
         if((m <= 50) && (n <= 50))
@@ -1734,7 +1797,7 @@ void scale_matrix_underflow_overflow_gesdd(integer datatype, integer m, integer 
             tuning_val = 800.0;
         }
     }
-    if(imatrix_char == 'U')
+    if(same_char(imatrix_char, 'U'))
     {
         get_min_from_matrix(datatype, A, max_min, m, n, lda);
     }
@@ -1754,7 +1817,7 @@ void scale_matrix_underflow_overflow_orgqr(integer datatype, integer m, integer 
     void *max_min = NULL, *scal = NULL;
     create_vector(get_realtype(datatype), &max_min, 1);
     create_vector(get_realtype(datatype), &scal, 1);
-    if(imatrix_char == 'O')
+    if(same_char(imatrix_char, 'O'))
     {
         get_max_from_matrix(datatype, A, max_min, m, n, lda);
         if(m <= 50 && n <= 50)
@@ -1770,7 +1833,7 @@ void scale_matrix_underflow_overflow_orgqr(integer datatype, integer m, integer 
             calculate_scale_value(datatype, scal, max_min, 35.0, imatrix_char);
         }
     }
-    if(imatrix_char == 'U')
+    if(same_char(imatrix_char, 'U'))
     {
         get_min_from_matrix(datatype, A, max_min, m, n, lda);
         calculate_scale_value(datatype, scal, max_min, 1.0, imatrix_char);
@@ -1791,7 +1854,7 @@ void scale_matrix_underflow_overflow_potrs(integer datatype, integer n, void *A,
     void *max_min = NULL;
     double tuning_val = 1.0;
     create_vector(get_realtype(datatype), &max_min, 1);
-    if(imatrix_char == 'O')
+    if(same_char(imatrix_char, 'O'))
     {
         get_max_from_matrix(datatype, A, max_min, n, n, lda);
         if(n < 1000)
@@ -1803,7 +1866,7 @@ void scale_matrix_underflow_overflow_potrs(integer datatype, integer n, void *A,
             tuning_val = 5.0;
         }
     }
-    if(imatrix_char == 'U')
+    if(same_char(imatrix_char, 'U'))
     {
         get_min_from_matrix(datatype, A, max_min, n, n, lda);
     }
@@ -1825,7 +1888,7 @@ void scale_matrix_overflow_underflow_hgeqz_A(integer datatype, integer n, void *
 
     create_vector(get_realtype(datatype), &max_min, 1);
 
-    if(imatrix_char == 'U')
+    if(same_char(imatrix_char, 'U'))
     {
         get_min_from_matrix(datatype, A, max_min, n, n, lda);
 
@@ -1864,7 +1927,7 @@ void scale_matrix_overflow_underflow_hgeqz_A(integer datatype, integer n, void *
             }
         }
     }
-    else if(imatrix_char == 'O')
+    else if(same_char(imatrix_char, 'O'))
     {
         get_max_from_matrix(datatype, A, max_min, n, n, lda);
         if(n < 10)
@@ -1901,7 +1964,7 @@ void scale_matrix_overflow_underflow_hgeqz_B(integer datatype, integer n, void *
 
     create_vector(get_realtype(datatype), &max_min, 1);
 
-    if(imatrix_char == 'U')
+    if(same_char(imatrix_char, 'U'))
     {
         get_min_from_matrix(datatype, A, max_min, n, n, lda);
 
@@ -1919,7 +1982,7 @@ void scale_matrix_overflow_underflow_hgeqz_B(integer datatype, integer n, void *
             tuning_val = 1.0e-1;
         }
     }
-    else if(imatrix_char == 'O')
+    else if(same_char(imatrix_char, 'O'))
     {
         get_max_from_matrix(datatype, A, max_min, n, n, lda);
         if(n < 10)
@@ -1956,7 +2019,7 @@ void scale_matrix_overflow_underflow_hseqr(integer datatype, integer n, void *A,
 
     create_vector(get_realtype(datatype), &max_min, 1);
 
-    if(imatrix_char == 'U')
+    if(same_char(imatrix_char, 'U'))
     {
         get_min_from_matrix(datatype, A, max_min, n, n, lda);
         if((datatype == FLOAT) || (datatype == COMPLEX))
@@ -1968,7 +2031,7 @@ void scale_matrix_overflow_underflow_hseqr(integer datatype, integer n, void *A,
             tuning_val = 10e-28;
         }
     }
-    else if(imatrix_char == 'O')
+    else if(same_char(imatrix_char, 'O'))
     {
         get_max_from_matrix(datatype, A, max_min, n, n, lda);
 
@@ -2027,7 +2090,7 @@ void scale_matrix_underflow_overflow_gehrd(integer datatype, integer n, void *A,
     double tuning_val = 1.0;
     create_vector(get_realtype(datatype), &max_min, 1);
     create_vector(get_realtype(datatype), &scal, 1);
-    if(imatrix_char == 'O')
+    if(same_char(imatrix_char, 'O'))
     {
         if(n < 50)
         {
@@ -2047,7 +2110,7 @@ void scale_matrix_underflow_overflow_gehrd(integer datatype, integer n, void *A,
         }
         get_max_from_matrix(datatype, A, max_min, n, n, lda);
     }
-    else if(imatrix_char == 'U')
+    else if(same_char(imatrix_char, 'U'))
     {
         get_min_from_matrix(datatype, A, max_min, n, n, lda);
     }
@@ -2069,7 +2132,7 @@ void scale_matrix_underflow_overflow_gghrd(integer datatype, integer n, void *A,
     double tuning_val = 1.0;
     create_vector(get_realtype(datatype), &max_min, 1);
     create_vector(get_realtype(datatype), &scal, 1);
-    if(imatrix_char == 'O')
+    if(same_char(imatrix_char, 'O'))
     {
         if(n < 50)
         {
@@ -2089,7 +2152,7 @@ void scale_matrix_underflow_overflow_gghrd(integer datatype, integer n, void *A,
         }
         get_max_from_matrix(datatype, A, max_min, n, n, lda);
     }
-    else if(imatrix_char == 'U')
+    else if(same_char(imatrix_char, 'U'))
     {
         get_min_from_matrix(datatype, A, max_min, n, n, lda);
     }
@@ -2113,7 +2176,7 @@ void scale_matrix_underflow_overflow_sygvd(integer datatype, integer n, void *A,
 
     create_vector(get_realtype(datatype), &max_min, 1);
 
-    if(imatrix_char == 'O')
+    if(same_char(imatrix_char, 'O'))
     {
         /*Initialize the ratios with maximum of datatype value*/
         void *maxA;
@@ -2144,7 +2207,7 @@ void scale_matrix_underflow_overflow_sygvd(integer datatype, integer n, void *A,
         free_vector(maxA);
         free_vector(maxB);
     }
-    else if(imatrix_char == 'U')
+    else if(same_char(imatrix_char, 'U'))
     {
         void *minA;
         void *minB;
@@ -2207,7 +2270,7 @@ void scale_matrix_underflow_overflow_lange(integer datatype, integer m, integer 
     create_vector(get_realtype(datatype), &max_min, 1);
 
     /* Deciding the scale factor for overflow case */
-    if(imatrix_char == 'O')
+    if(same_char(imatrix_char, 'O'))
     {
         get_max_from_matrix(datatype, A, max_min, m, n, lda);
         /* decide based on the norm_type */
@@ -2255,7 +2318,7 @@ void scale_matrix_underflow_overflow_lange(integer datatype, integer m, integer 
         }
     }
 
-    if(imatrix_char == 'U')
+    if(same_char(imatrix_char, 'U'))
     {
         get_min_from_matrix(datatype, A, max_min, m, n, lda);
     }
@@ -2277,7 +2340,7 @@ void scale_matrix_overflow_underflow_hetri_rook(integer datatype, integer n, voi
     create_vector(get_realtype(datatype), &max_min, 1);
     create_vector(get_realtype(datatype), &scal, 1);
 
-    if(imatrix_char == 'O')
+    if(same_char(imatrix_char, 'O'))
     {
         get_max_from_matrix(datatype, A, max_min, n, n, lda);
         if(n < 100)
@@ -2293,7 +2356,7 @@ void scale_matrix_overflow_underflow_hetri_rook(integer datatype, integer n, voi
             tuning_val = 130.0;
         }
     }
-    if(imatrix_char == 'U')
+    if(same_char(imatrix_char, 'U'))
     {
         get_min_from_matrix(datatype, A, max_min, n, n, lda);
     }
@@ -2302,6 +2365,483 @@ void scale_matrix_overflow_underflow_hetri_rook(integer datatype, integer n, voi
     scal_matrix(datatype, scal, A, n, n, lda, i_one);
 
     /* Free vectors */
+    free_vector(max_min);
+    free_vector(scal);
+}
+
+/* Scaling matrix with values around overflow, underflow for ormqr/unmqr */
+void scale_matrix_underflow_overflow_ormqr(integer datatype, integer m, integer n, void *A,
+                                           integer lda, char imatrix_char)
+{
+    void *max_min = NULL, *scal = NULL;
+    create_vector(get_realtype(datatype), &max_min, 1);
+    create_vector(get_realtype(datatype), &scal, 1);
+    if(same_char(imatrix_char, 'O'))
+    {
+        get_max_from_matrix(datatype, A, max_min, m, n, lda);
+        calculate_scale_value(datatype, scal, max_min, 1.0, imatrix_char);
+    }
+    if(same_char(imatrix_char, 'U'))
+    {
+        get_min_from_matrix(datatype, A, max_min, m, n, lda);
+        calculate_scale_value(datatype, scal, max_min, 1.0, imatrix_char);
+    }
+
+    /* Scaling the matrix A with scal */
+    scal_matrix(datatype, scal, A, m, n, lda, i_one);
+
+    /* free vectors */
+    free_vector(max_min);
+    free_vector(scal);
+}
+
+/* Scale matrix with values around overflow underflow for gejsv */
+void scale_matrix_overflow_underflow_gejsv(integer datatype, integer m, integer n, void *A,
+                                           integer lda, void *S, char imatrix_char, void *scal)
+{
+    void *max_min = NULL, *max_min_a = NULL, *max_min_s = NULL;
+    double tuning_val = 1.0;
+    create_vector(get_realtype(datatype), &max_min, 1);
+    create_vector(get_realtype(datatype), &max_min_a, 1);
+    create_vector(get_realtype(datatype), &max_min_s, 1);
+
+    if(imatrix_char == 'O')
+    {
+        get_max_from_matrix(datatype, A, max_min_a, m, n, lda);
+        get_max_from_matrix(get_realtype(datatype), S, max_min_s, n, i_one, n);
+        get_max_of_values(get_realtype(datatype), max_min_a, max_min_s, max_min);
+        tuning_val = 5.0;
+    }
+    else if(imatrix_char == 'U')
+    {
+        get_min_from_matrix(datatype, A, max_min_a, m, n, lda);
+        get_min_from_matrix(get_realtype(datatype), S, max_min_s, n, i_one, n);
+        get_min_of_values(get_realtype(datatype), max_min_a, max_min_s, max_min);
+    }
+    calculate_scale_value(datatype, scal, max_min, tuning_val, imatrix_char);
+
+    /* Scaling the matrix A with scal */
+    scal_matrix(datatype, scal, A, m, n, lda, i_one);
+    /* Scaling the vector S with scal */
+    scal_matrix(get_realtype(datatype), scal, S, n, i_one, n, i_one);
+
+    /* free vectors */
+    free_vector(max_min);
+    free_vector(max_min_a);
+    free_vector(max_min_s);
+}
+
+/* Scaling matrix with values around overflow, underflow for SYTRD/HETRD */
+void scale_matrix_underflow_overflow_sytrd(integer datatype, integer n, void *A, integer lda,
+                                           char imatrix_char)
+{
+    double tuning_val = 1.0;
+    void *max_min = NULL, *scal = NULL;
+
+    if(n == 1)
+    {
+        assign_value(datatype, A, d_one, d_one);
+    }
+    create_vector(get_realtype(datatype), &scal, 1);
+    create_vector(get_realtype(datatype), &max_min, 1);
+
+    if(same_char(imatrix_char, 'O'))
+    {
+        get_max_from_matrix(datatype, A, max_min, n, n, lda);
+        if(n < 100)
+        {
+            tuning_val = 11.0;
+        }
+        else if(n < 200)
+        {
+            tuning_val = 15.0;
+        }
+        else
+        {
+            tuning_val = 30.0;
+        }
+    }
+    if(same_char(imatrix_char, 'U'))
+    {
+        get_min_from_matrix(datatype, A, max_min, n, n, lda);
+    }
+    calculate_scale_value(datatype, scal, max_min, tuning_val, imatrix_char);
+
+    /* Scaling the matrix A with scal */
+    scal_matrix(datatype, scal, A, n, n, lda, i_one);
+
+    /* free vectors */
+    free_vector(max_min);
+    free_vector(scal);
+}
+
+/* Scaling matrix with values around overflow underflow for ormlq */
+void scale_matrix_underflow_overflow_ormlq(integer datatype, integer m, integer n, void *A,
+                                           integer lda, char imatrix_char)
+{
+    void *max_min = NULL, *scal = NULL;
+    double tuning_val = 1.0;
+    create_vector(get_realtype(datatype), &max_min, 1);
+    create_vector(get_realtype(datatype), &scal, 1);
+    if(same_char(imatrix_char, 'O'))
+    {
+        get_max_from_matrix(datatype, A, max_min, m, n, lda);
+        if(m <= 25 && n <= 25)
+        {
+            tuning_val = 10.0;
+        }
+        else
+        {
+            tuning_val = 15.0;
+        }
+    }
+    if(same_char(imatrix_char, 'U'))
+    {
+        get_min_from_matrix(datatype, A, max_min, m, n, lda);
+        tuning_val = 1.0;
+    }
+    calculate_scale_value(datatype, scal, max_min, tuning_val, imatrix_char);
+
+    /* Scaling the matrix A with scal */
+    scal_matrix(datatype, scal, A, m, n, lda, i_one);
+
+    /* free vectors */
+    free_vector(max_min);
+    free_vector(scal);
+}
+
+/* Scale matrix with values around overflow underflow for potri */
+void scale_matrix_overflow_underflow_potri(integer datatype, integer n, void *A, integer lda,
+                                           char imatrix_char)
+{
+    void *max_min = NULL, *scal = NULL;
+    double tuning_val = 1.0;
+    create_vector(get_realtype(datatype), &max_min, 1);
+    create_vector(get_realtype(datatype), &scal, 1);
+
+    if(same_char(imatrix_char, 'U'))
+    {
+        get_min_from_matrix(datatype, A, max_min, n, n, lda);
+    }
+    else if(same_char(imatrix_char, 'O'))
+    {
+        get_max_from_matrix(datatype, A, max_min, n, n, lda);
+        if (n < 100)
+        {
+            tuning_val = 2.0;
+        }
+    }
+    calculate_scale_value(datatype, scal, max_min, tuning_val, imatrix_char);
+
+    /* Scaling the matrix A with scal */
+    scal_matrix(datatype, scal, A, n, n, lda, i_one);
+
+    /* Free vectors */
+    free_vector(max_min);
+    free_vector(scal);
+}
+
+/* Scale matrix with values around overflow underflow for trtri */
+void scale_matrix_underflow_overflow_trtri(integer datatype, char diag_type, integer n, void *A,
+                                           integer lda, char imatrix_char)
+{
+    void *max_min = NULL, *scal = NULL;
+    double tuning_val = 1.0;
+    create_vector(get_realtype(datatype), &max_min, 1);
+    create_vector(get_realtype(datatype), &scal, 1);
+
+    if(same_char(imatrix_char, 'U'))
+    {
+        get_min_from_matrix(datatype, A, max_min, n, n, lda);
+        calculate_scale_value(datatype, scal, max_min, tuning_val, imatrix_char);
+    }
+    else if(same_char(imatrix_char, 'O'))
+    {
+        if(n > 60)
+        {
+            tuning_val = 5.0;
+        }
+        get_max_from_matrix(datatype, A, max_min, n, n, lda);
+        calculate_scale_value(datatype, scal, max_min, tuning_val, imatrix_char);
+    }
+
+    /* Adjust scaling factor for complex types to prevent overflow/underflow */
+    if(datatype == COMPLEX)
+    {
+        float scale_val = *(float *)scal;
+        float max_safe_scale = 1e+10f;
+        float min_safe_scale = 1e-10f;
+        if(scale_val > max_safe_scale)
+        {
+            *(float *)scal = max_safe_scale;
+        }
+        else if(scale_val < min_safe_scale)
+        {
+            *(float *)scal = min_safe_scale;
+        }
+    }
+    else if(datatype == DOUBLE_COMPLEX)
+    {
+        double scale_val = *(double *)scal;
+        double max_safe_scale = 1e+100;
+        double min_safe_scale = 1e-100;
+        if(scale_val > max_safe_scale)
+        {
+            *(double *)scal = max_safe_scale;
+        }
+        else if(scale_val < min_safe_scale)
+        {
+            *(double *)scal = min_safe_scale;
+        }
+    }
+
+    /* Scaling the matrix A with scal */
+    scal_matrix(datatype, scal, A, n, n, lda, i_one);
+
+    /* Restore unit diagonal if diag_type is 'U' */
+    if(same_char(diag_type, 'U'))
+    {
+        switch(datatype)
+        {
+            case FLOAT:
+            {
+                float *mat = (float *)A;
+                for(integer i = 0; i < n; ++i)
+                {
+                    mat[i * lda + i] = 1.0f;
+                }
+                break;
+            }
+            case DOUBLE:
+            {
+                double *mat = (double *)A;
+                for(integer i = 0; i < n; ++i)
+                {
+                    mat[i * lda + i] = 1.0;
+                }
+                break;
+            }
+            case COMPLEX:
+            {
+                scomplex *mat = (scomplex *)A;
+                for(integer i = 0; i < n; ++i)
+                {
+                    mat[i * lda + i].real = 1.0f;
+                    mat[i * lda + i].imag = 0.0f;
+                }
+                break;
+            }
+            case DOUBLE_COMPLEX:
+            {
+                dcomplex *mat = (dcomplex *)A;
+                for(integer i = 0; i < n; ++i)
+                {
+                    mat[i * lda + i].real = 1.0;
+                    mat[i * lda + i].imag = 0.0;
+                }
+                break;
+            }
+        }
+    }
+
+    /* Free vectors */
+    free_vector(max_min);
+    free_vector(scal);
+}
+
+/* Scaling matrix with values around overflow, underflow for TRTRS */
+void scale_matrix_overflow_underflow_trtrs(integer datatype, integer n, integer nrhs, void *A,
+                                           void *B, integer lda, integer ldb, char trans, char imatrix_char,
+                                           char diag, char uplo)
+{
+    void *max_min = NULL, *max_min_B = NULL, *scal = NULL, *scal_B = NULL;
+    double tuning_val = 5.0, tuning_val_B = 5.0;
+    create_vector(get_realtype(datatype), &max_min_B, 1);
+    create_vector(get_realtype(datatype), &max_min, 1);
+    create_vector(get_realtype(datatype), &scal, 1);
+    create_vector(get_realtype(datatype), &scal_B, 1);
+
+    if(same_char(imatrix_char, 'O'))
+    {
+        get_max_from_matrix(datatype, A, max_min, n, n, lda);
+        get_max_from_matrix(datatype, B, max_min_B, n, nrhs, ldb);
+    }
+    if(same_char(imatrix_char, 'U'))
+    {
+        get_min_from_matrix(datatype, A, max_min, n, n, lda);
+        get_min_from_matrix(datatype, B, max_min_B, n, nrhs, ldb);
+    }
+
+    calculate_scale_value(datatype, scal, max_min, tuning_val, imatrix_char);
+    calculate_scale_value(datatype, scal_B, max_min_B, tuning_val_B, imatrix_char);
+
+    if(same_char(diag, 'N'))
+    {
+        scal_matrix(datatype, scal, A, n, n, lda, i_one);
+    }
+    else if(same_char(uplo, 'L'))
+    {
+        scal_matrix(datatype, scal_B, B, n, nrhs, ldb, i_one);
+    }
+    else if(!same_char(diag, 'N') && !same_char(uplo, 'U'))
+    {
+        scal_matrix(datatype, scal_B, B, n, nrhs, ldb, i_one);
+        scal_matrix(datatype, scal, A, n, n, lda, i_one);
+    }
+    else
+    {
+        scal_matrix(datatype, scal_B, B, n, nrhs, ldb, i_one);
+    }
+
+    /* Scaling the matrix A with scal */
+    /* Restore unit diagonal if diag_type is 'U' */
+    if(same_char(diag, 'U'))
+    {
+        switch(datatype)
+        {
+            case FLOAT:
+            {
+                float *mat = (float *)A;
+                for(integer i = 0; i < n; ++i)
+                {
+                    mat[i * lda + i] = 1.0f;
+                }
+                break;
+            }
+            case DOUBLE:
+            {
+                double *mat = (double *)A;
+                for(integer i = 0; i < n; ++i)
+                {
+                    mat[i * lda + i] = 1.0;
+                }
+                break;
+            }
+            case COMPLEX:
+            {
+                scomplex *mat = (scomplex *)A;
+                for(integer i = 0; i < n; ++i)
+                {
+                    mat[i * lda + i].real = 1.0f;
+                    mat[i * lda + i].imag = 0.0f;
+                }
+                break;
+            }
+            case DOUBLE_COMPLEX:
+            {
+                dcomplex *mat = (dcomplex *)A;
+                for(integer i = 0; i < n; ++i)
+                {
+                    mat[i * lda + i].real = 1.0;
+                    mat[i * lda + i].imag = 0.0;
+                }
+                break;
+            }
+        }
+    }
+    /* Free vectors */
+    free_vector(max_min);
+    free_vector(scal);
+}
+
+/* Scaling matrix with values around overflow underflow for getrfnp and getrfnp */
+void scale_matrix_underflow_overflow_getrfnp(integer datatype, integer m, integer n, void *A,
+                                           integer lda, char imatrix_char)
+{
+    void *max_min = NULL, *scal = NULL;
+    double tuning_val = 1.0;
+    create_vector(get_realtype(datatype), &max_min, 1);
+    create_vector(get_realtype(datatype), &scal, 1);
+    if(same_char(imatrix_char, 'O'))
+    {
+        get_max_from_matrix(datatype, A, max_min, m, n, lda);
+        if((m == 1) && (n == 1))
+        {
+            tuning_val = 14.0;
+        }
+        else if((m == 1 && n < 10) || (n == 1 && m < 10))
+        {
+            tuning_val = 30.0;
+        }
+        else if((m == 1 && n < 60) || (n == 1 && m < 60))
+        {
+            tuning_val = 60.0;
+        }
+        else if((m == 1 && n < 500) || (n == 1 && m < 500))
+        {
+            tuning_val = 150.0;
+        }
+        else if(m == n && m < 30)
+        {
+            tuning_val = 5.0;
+        }
+        else if(m == n && m < 50)
+        {
+            tuning_val = 9.0;
+        }
+        else if(m == n && m < 100)
+        {
+            tuning_val = 15.0;
+        }
+        else if(m == n && m < 450)
+        {
+            tuning_val = 50.0;
+        }
+        else if(m == n && m < 800)
+        {
+            tuning_val = 80.0;
+        }
+        else if(m == n && m < 900)
+        {
+            tuning_val = 120.0;
+        }
+        else if(m == n && m < 1100)
+        {
+            tuning_val = 150.0;
+        }
+        else if(m == n)
+        {
+            tuning_val = 500.0;
+        }
+        else if(m <= 10 && n <= 10)
+        {
+            tuning_val = 3.5;
+        }
+        else if(m <= 300 && n <= 300)
+        {
+            tuning_val = 40.0;
+        }
+        else if(m <= 1000 && n <= 1000)
+        {
+            tuning_val = 80.0;
+        }
+        else
+        {
+            tuning_val = 95.0;
+        }
+        if ((m >= 500 || n >= 500) && datatype == DOUBLE_COMPLEX)
+        {
+            tuning_val = 10e200;
+        }
+    }
+    if(same_char(imatrix_char, 'U'))
+    {
+        get_min_from_matrix(datatype, A, max_min, m, n, lda);
+        if((m >= 500 || n >= 500) && datatype == DOUBLE_COMPLEX)
+        {
+            tuning_val = 1e-200;
+        }
+        else
+        {
+            tuning_val = 1.0;
+        }
+    }
+    calculate_scale_value(datatype, scal, max_min, tuning_val, imatrix_char);
+
+    /* Scaling the matrix A with scal */
+    scal_matrix(datatype, scal, A, m, n, lda, i_one);
+
+    /* free vectors */
     free_vector(max_min);
     free_vector(scal);
 }

@@ -6,6 +6,7 @@
 #if ENABLE_CPP_TEST
 #include <invoke_common.hh>
 #endif
+#include <invoke_lapacke.h>
 
 extern double perf;
 extern double time_min;
@@ -20,8 +21,8 @@ void fla_test_geevx_experiment(char *tst_api, test_params_t *params, integer dat
 void prepare_geevx_run(char *balanc, char *jobvl, char *jobvr, char *sense, integer n, void *a,
                        integer lda, void *wr, void *wi, void *w, void *vl, integer ldvl, void *vr,
                        integer ldvr, integer *ilo, integer *ihi, void *scale, void *abnrm,
-                       void *rconde, void *rcondv, integer datatype, integer n_repeats,
-                       double *time_min_, integer *info, integer interfacetype, int matrix_layout);
+                       void *rconde, void *rcondv, integer datatype, integer *info,
+                       integer interfacetype, int matrix_layout, test_params_t *params);
 void invoke_geevx(integer datatype, char *balanc, char *jobvl, char *jobvr, char *sense, integer *n,
                   void *a, integer *lda, void *wr, void *wi, void *w, void *vl, integer *ldvl,
                   void *vr, integer *ldvr, integer *ilo, integer *ihi, void *scale, void *abnrm,
@@ -32,11 +33,16 @@ double prepare_lapacke_geevx_run(integer datatype, int matrix_layout, char *bala
                                  void *wr, void *wi, void *w, void *vl, integer ldvl, void *vr,
                                  integer ldvr, integer *ilo, integer *ihi, void *scale, void *abnrm,
                                  void *rconde, void *rcondv, integer *info);
-integer invoke_lapacke_geevx(integer datatype, int matrix_layout, char balanc, char jobvl,
-                             char jobvr, char sense, integer n, void *a, integer lda, void *wr,
-                             void *wi, void *w, void *vl, integer ldvl, void *vr, integer ldvr,
-                             integer *ilo, integer *ihi, void *scale, void *abnrm, void *rconde,
-                             void *rcondv);
+
+void store_geevx_outputs(void *filename, integer datatype, char balanc, char jobvl, char jobvr,
+                         char sense, integer m, void *A, integer lda, void *VL, integer ldvl,
+                         void *VR, integer ldvr, void *w, void *wr, void *wi, void *scale,
+                         void *abnrm, void *rconde, void *rcondv, integer lwork, void *params);
+integer check_bit_reproducibility_geevx(void *filename, integer datatype, char balanc, char jobvl,
+                                        char jobvr, char sense, integer m, void *A, integer lda,
+                                        void *VL, integer ldvl, void *VR, integer ldvr, void *w,
+                                        void *wr, void *wi, void *scale, void *abnrm, void *rconde,
+                                        void *rcondv, integer lwork, void *params);
 
 void fla_test_geevx(integer argc, char **argv, test_params_t *params)
 {
@@ -49,7 +55,7 @@ void fla_test_geevx(integer argc, char **argv, test_params_t *params)
     if(argc == 1)
     {
         g_lwork = -1;
-        config_data = 1;
+        g_config_data = 1;
         fla_test_output_info("--- %s ---\n", op_str);
         fla_test_output_info("\n");
         fla_test_op_driver(front_str, SQUARE_INPUT, params, EIG_NSYM, fla_test_geevx_experiment);
@@ -92,6 +98,7 @@ void fla_test_geevx(integer argc, char **argv, test_params_t *params)
         }
         g_lwork = strtoimax(argv[11], &endptr, CLI_DECIMAL_BASE);
         n_repeats = strtoimax(argv[12], &endptr, CLI_DECIMAL_BASE);
+        params->n_repeats = n_repeats;
 
         if(n_repeats > 0)
         {
@@ -152,6 +159,7 @@ void fla_test_geevx_experiment(char *tst_api, test_params_t *params, integer dat
     void *A_test = NULL, *L = NULL, *wr_in = NULL, *wi_in = NULL, *scal = NULL;
     char balanc, jobvl, jobvr, sense;
     double residual, err_thresh;
+    void *filename = NULL;
 
     integer interfacetype = params->interfacetype;
     int layout = params->matrix_major;
@@ -167,14 +175,15 @@ void fla_test_geevx_experiment(char *tst_api, test_params_t *params, integer dat
     jobvl = params->eig_non_sym_paramslist[pci].jobvsl;
     jobvr = params->eig_non_sym_paramslist[pci].jobvsr;
     sense = params->eig_non_sym_paramslist[pci].sense_ggevx;
-    if(sense == 'B' || sense == 'E')
+
+    if(same_char(sense, 'B') || same_char(sense, 'E'))
     {
         jobvl = 'V';
         jobvr = 'V';
     }
     /* If leading dimensions = -1, set them to default value
        when inputs are from config files */
-    if(config_data)
+    if(g_config_data)
     {
         if(lda == -1)
         {
@@ -183,7 +192,7 @@ void fla_test_geevx_experiment(char *tst_api, test_params_t *params, integer dat
         /* LDVL >= 1; if JOBVL = 'V', LDVL >= M */
         if(ldvl == -1)
         {
-            if(jobvl == 'V')
+            if(same_char(jobvl, 'V'))
             {
                 ldvl = m;
             }
@@ -195,7 +204,7 @@ void fla_test_geevx_experiment(char *tst_api, test_params_t *params, integer dat
         /* LDVR >= 1; if JOBVR = 'V', LDVR >= M */
         if(ldvr == -1)
         {
-            if(jobvr == 'V')
+            if(same_char(jobvr, 'V'))
             {
                 ldvr = m;
             }
@@ -208,6 +217,7 @@ void fla_test_geevx_experiment(char *tst_api, test_params_t *params, integer dat
 
     /* Create input matrix parameters */
     create_matrix(datatype, LAPACK_COL_MAJOR, m, m, &A, lda);
+    create_matrix(datatype, LAPACK_COL_MAJOR, m, m, &A_test, lda);
 
     create_matrix(datatype, LAPACK_COL_MAJOR, m, m, &VL, ldvl);
     create_matrix(datatype, LAPACK_COL_MAJOR, m, m, &VR, ldvr);
@@ -225,49 +235,64 @@ void fla_test_geevx_experiment(char *tst_api, test_params_t *params, integer dat
         create_vector(datatype, &wr, m);
         create_vector(datatype, &wi, m);
     }
-
-    if(g_ext_fptr != NULL || (FLA_EXTREME_CASE_TEST))
+    if(FLA_OVERFLOW_UNDERFLOW_TEST)
     {
-        init_matrix(datatype, A, m, m, lda, g_ext_fptr, params->imatrix_char);
+        create_vector(get_realtype(datatype), &scal, 1);
     }
-    else
+
+    if(!FLA_BRT_VERIFICATION_RUN)
     {
-        /*  Creating input matrix A by generating random eigen values */
-        create_matrix(datatype, LAPACK_COL_MAJOR, m, m, &L, m);
-        generate_asym_matrix_from_EVs(datatype, m, A, lda, L);
-
-        /* Overflow/underflow initialization */
-        if(FLA_OVERFLOW_UNDERFLOW_TEST)
+        if(g_ext_fptr != NULL || (FLA_EXTREME_CASE_TEST))
         {
-            create_vector(get_realtype(datatype), &scal, 1);
-            init_matrix_overflow_underflow_asym(datatype, m, m, A, lda, params->imatrix_char, scal);
+            init_matrix(datatype, A, m, m, lda, g_ext_fptr, params->imatrix_char);
         }
-        /* Diagonal and sub-diagonals(upper and lower sub-diagonal together
-           contains imaginary parts) contain real and imaginary parts
-           of eigen values respectively. Storing them for valiation purpose */
-        create_vector(datatype, &wr_in, m);
-        get_diagonal(datatype, L, m, m, m, wr_in);
-
-        if(datatype == FLOAT || datatype == DOUBLE)
+        else
         {
-            create_vector(datatype, &wi_in, m);
-            reset_vector(datatype, wi_in, m, 1);
-            get_subdiagonal(datatype, L, m, m, m, wi_in);
+            /*  Creating input matrix A by generating random eigen values */
+            create_matrix(datatype, LAPACK_COL_MAJOR, m, m, &L, m);
+            generate_asym_matrix_from_EVs(datatype, m, A, lda, L);
+
+            /* Overflow/underflow initialization */
+            if(FLA_OVERFLOW_UNDERFLOW_TEST)
+            {
+                init_matrix_overflow_underflow_asym(datatype, m, m, A, lda, params->imatrix_char,
+                                                    scal);
+            }
+            /* Diagonal and sub-diagonals(upper and lower sub-diagonal together
+            contains imaginary parts) contain real and imaginary parts
+            of eigen values respectively. Storing them for valiation purpose */
+            create_vector(datatype, &wr_in, m);
+            get_diagonal(datatype, L, m, m, m, wr_in);
+
+            if(datatype == FLOAT || datatype == DOUBLE)
+            {
+                create_vector(datatype, &wi_in, m);
+                reset_vector(datatype, wi_in, m, 1);
+                get_subdiagonal(datatype, L, m, m, m, wi_in);
+            }
         }
     }
+
+    /* This macro is used in the BRT test cases for the following purposes:
+     *    - In the Ground truth runs (BRT_char => G, F), the output is stored in a file for future
+     * reference
+     *    - In the verification runs (BRT_char => V, M), the output is loaded from the file and
+     * passed as input to the API
+     * */
+    FLA_BRT_PROCESS_SINGLE_INPUT(datatype, m, m, A, lda, "ccccddddd", balanc, jobvl, jobvr, sense,
+                                 m, lda, ldvl, ldvr, g_lwork);
 
     /* Make a copy of input matrix A. This is required to validate the API functionality. */
-    create_matrix(datatype, LAPACK_COL_MAJOR, m, m, &A_test, lda);
     copy_matrix(datatype, "full", m, m, A, lda, A_test, lda);
 
     prepare_geevx_run(&balanc, &jobvl, &jobvr, &sense, m, A_test, lda, wr, wi, w, VL, ldvl, VR,
-                      ldvr, &ilo, &ihi, scale, abnrm, rconde, rcondv, datatype, n_repeats,
-                      &time_min, &info, interfacetype, layout);
+                      ldvr, &ilo, &ihi, scale, abnrm, rconde, rcondv, datatype, &info,
+                      interfacetype, layout, params);
 
     /* performance computation
-       4/3 m^3 flops if job = 'N'
-       8/3 m^3 + m^2 flops if job = 'V' */
-    if(jobvl == 'N' && jobvr == 'N')
+    4/3 m^3 flops if job = 'N'
+    8/3 m^3 + m^2 flops if job = 'V' */
+    if(same_char(jobvl, 'N') && same_char(jobvr, 'N'))
         perf = (double)((4.0 / 3.0) * m * m * m) / time_min / FLOPS_PER_UNIT_PERF;
     else
         perf = (double)(((8.0 / 3.0) * m * m * m) + (m * m)) / time_min / FLOPS_PER_UNIT_PERF;
@@ -276,11 +301,22 @@ void fla_test_geevx_experiment(char *tst_api, test_params_t *params, integer dat
 
     /* output validation */
     FLA_TEST_CHECK_EINFO(residual, info, einfo);
-    if(!FLA_EXTREME_CASE_TEST)
+    IF_FLA_BRT_VALIDATION(
+        m, m,
+        store_geevx_outputs(filename, datatype, balanc, jobvl, jobvr, sense, m, A_test, lda, VL,
+                            ldvl, VR, ldvr, w, wr, wi, scale, abnrm, rconde, rcondv, g_lwork,
+                            params),
+        validate_geevx(tst_api, &jobvl, &jobvr, &sense, &balanc, m, A, A_test, lda, VL, ldvl, VR,
+                       ldvr, w, wr, wi, scale, abnrm, rconde, rcondv, datatype,
+                       params->imatrix_char, scal, residual, wr_in, wi_in, params),
+        check_bit_reproducibility_geevx(filename, datatype, balanc, jobvl, jobvr, sense, m, A_test,
+                                        lda, VL, ldvl, VR, ldvr, w, wr, wi, scale, abnrm, rconde,
+                                        rcondv, g_lwork, params))
+    else if(!FLA_EXTREME_CASE_TEST)
     {
         validate_geevx(tst_api, &jobvl, &jobvr, &sense, &balanc, m, A, A_test, lda, VL, ldvl, VR,
                        ldvr, w, wr, wi, scale, abnrm, rconde, rcondv, datatype,
-                       params->imatrix_char, scal, residual, wr_in, wi_in);
+                       params->imatrix_char, scal, residual, wr_in, wi_in, params);
     }
     /* check for output matrix when inputs as extreme values */
     else
@@ -297,6 +333,8 @@ void fla_test_geevx_experiment(char *tst_api, test_params_t *params, integer dat
     }
 
     /* Free up the buffers */
+free_buffers:
+    FLA_FREE_FILENAME(filename);
     free_matrix(A);
     free_matrix(A_test);
     free_matrix(VL);
@@ -331,13 +369,12 @@ void fla_test_geevx_experiment(char *tst_api, test_params_t *params, integer dat
 void prepare_geevx_run(char *balanc, char *jobvl, char *jobvr, char *sense, integer m_A, void *A,
                        integer lda, void *wr, void *wi, void *w, void *VL, integer ldvl, void *VR,
                        integer ldvr, integer *ilo, integer *ihi, void *scale, void *abnrm,
-                       void *rconde, void *rcondv, integer datatype, integer n_repeats,
-                       double *time_min_, integer *info, integer interfacetype, int layout)
+                       void *rconde, void *rcondv, integer datatype, integer *info,
+                       integer interfacetype, int layout, test_params_t *params)
 {
     void *A_save = NULL, *rwork = NULL, *iwork = NULL, *work = NULL;
     integer lwork, liwork, lrwork;
-    integer i;
-    double t_min = 1e9, exe_time;
+    double exe_time;
 
     /* Make a copy of the input matrix A. Same input values will be passed in
        each itertaion.*/
@@ -398,7 +435,7 @@ void prepare_geevx_run(char *balanc, char *jobvl, char *jobvr, char *sense, inte
     }
 
     *info = 0;
-    for(i = 0; i < n_repeats && *info == 0; ++i)
+    FLA_EXEC_LOOP_BEGIN
     {
         /* Restore input matrix A value and allocate memory to output buffers
            for each iteration*/
@@ -440,8 +477,9 @@ void prepare_geevx_run(char *balanc, char *jobvl, char *jobvr, char *sense, inte
 
             exe_time = fla_test_clock() - exe_time;
         }
-        /* Get the best execution time */
-        t_min = fla_min(t_min, exe_time);
+
+        /* Update ctx and loop conditions */
+        FLA_EXEC_LOOP_UPDATE_WITH_INFO
 
         /* Free up the output buffers */
         free_vector(work);
@@ -454,7 +492,6 @@ void prepare_geevx_run(char *balanc, char *jobvl, char *jobvr, char *sense, inte
             free_vector(iwork);
         }
     }
-    *time_min_ = t_min;
 
     free_matrix(A_save);
 }
@@ -472,9 +509,9 @@ double prepare_lapacke_geevx_run(integer datatype, int layout, char *balanc, cha
     void *a_t = NULL, *vl_t = NULL, *vr_t = NULL;
 
     /* Configure leading dimensions as per the input matrix layout */
-    SELECT_LDA(g_ext_fptr, config_data, layout, n, row_major_geevx_lda, lda_t);
-    SELECT_LDA(g_ext_fptr, config_data, layout, n, row_major_geevx_ldvl, ldvl_t);
-    SELECT_LDA(g_ext_fptr, config_data, layout, n, row_major_geevx_ldvr, ldvr_t);
+    SELECT_LDA(g_ext_fptr, g_config_data, layout, n, row_major_geevx_lda, lda_t);
+    SELECT_LDA(g_ext_fptr, g_config_data, layout, n, row_major_geevx_ldvl, ldvl_t);
+    SELECT_LDA(g_ext_fptr, g_config_data, layout, n, row_major_geevx_ldvr, ldvr_t);
 
     a_t = a;
     vl_t = vl;
@@ -486,11 +523,11 @@ double prepare_lapacke_geevx_run(integer datatype, int layout, char *balanc, cha
     {
         /* Create temporary buffers for converting matrix layout */
         create_matrix(datatype, layout, n, n, &a_t, lda_t);
-        if(*jobvl == 'V')
+        if(same_char(*jobvl, 'V'))
         {
             create_matrix(datatype, layout, n, n, &vl_t, ldvl_t);
         }
-        if(*jobvr == 'V')
+        if(same_char(*jobvr, 'V'))
         {
             create_matrix(datatype, layout, n, n, &vr_t, ldvr_t);
         }
@@ -511,12 +548,12 @@ double prepare_lapacke_geevx_run(integer datatype, int layout, char *balanc, cha
     if(layout == LAPACK_ROW_MAJOR)
     {
         convert_matrix_layout(layout, datatype, n, n, a_t, lda_t, a, lda);
-        if(*jobvl == 'V')
+        if(same_char(*jobvl, 'V'))
         {
             convert_matrix_layout(layout, datatype, n, n, vl_t, ldvl_t, vl, ldvl);
             free_matrix(vl_t);
         }
-        if(*jobvr == 'V')
+        if(same_char(*jobvr, 'V'))
         {
             convert_matrix_layout(layout, datatype, n, n, vr_t, ldvr_t, vr, ldvr);
             free_matrix(vr_t);
@@ -564,42 +601,83 @@ void invoke_geevx(integer datatype, char *balanc, char *jobvl, char *jobvr, char
     }
 }
 
-/* API to invoke geevx LAPACKE interface */
-integer invoke_lapacke_geevx(integer datatype, int layout, char balanc, char jobvl, char jobvr,
-                             char sense, integer n, void *a, integer lda, void *wr, void *wi,
-                             void *w, void *vl, integer ldvl, void *vr, integer ldvr, integer *ilo,
-                             integer *ihi, void *scale, void *abnrm, void *rconde, void *rcondv)
+void store_geevx_outputs(void *filename, integer datatype, char balanc, char jobvl, char jobvr,
+                         char sense, integer m, void *A, integer lda, void *VL, integer ldvl,
+                         void *VR, integer ldvr, void *w, void *wr, void *wi, void *scale,
+                         void *abnrm, void *rconde, void *rcondv, integer lwork, void *params)
 {
-    integer info = 0;
-    switch(datatype)
+    /* Create and open a file for storing Ground truth*/
+    FLA_OPEN_GT_FILE_STORE
+
+    FLA_STORE_BRT_MATRIX(datatype, m, m, A, lda)
+    if(!same_char(jobvl, 'N'))
     {
-        case FLOAT:
-        {
-            info = LAPACKE_sgeevx(layout, balanc, jobvl, jobvr, sense, n, a, lda, wr, wi, vl, ldvl,
-                                  vr, ldvr, ilo, ihi, scale, abnrm, rconde, rcondv);
-            break;
-        }
-
-        case DOUBLE:
-        {
-            info = LAPACKE_dgeevx(layout, balanc, jobvl, jobvr, sense, n, a, lda, wr, wi, vl, ldvl,
-                                  vr, ldvr, ilo, ihi, scale, abnrm, rconde, rcondv);
-            break;
-        }
-
-        case COMPLEX:
-        {
-            info = LAPACKE_cgeevx(layout, balanc, jobvl, jobvr, sense, n, a, lda, w, vl, ldvl, vr,
-                                  ldvr, ilo, ihi, scale, abnrm, rconde, rcondv);
-            break;
-        }
-
-        case DOUBLE_COMPLEX:
-        {
-            info = LAPACKE_zgeevx(layout, balanc, jobvl, jobvr, sense, n, a, lda, w, vl, ldvl, vr,
-                                  ldvr, ilo, ihi, scale, abnrm, rconde, rcondv);
-            break;
-        }
+        FLA_STORE_BRT_MATRIX(datatype, m, m, VL, ldvl)
     }
-    return info;
+    if(!same_char(jobvr, 'N'))
+    {
+        FLA_STORE_BRT_MATRIX(datatype, m, m, VR, ldvr)
+    }
+    if(datatype == COMPLEX || datatype == DOUBLE_COMPLEX)
+    {
+        FLA_STORE_BRT_VECTOR(datatype, m, w)
+    }
+    else
+    {
+        FLA_STORE_BRT_VECTOR(datatype, m, wr)
+        FLA_STORE_BRT_VECTOR(datatype, m, wi)
+    }
+    FLA_STORE_BRT_VECTOR(get_realtype(datatype), m, scale)
+    FLA_STORE_BRT_VECTOR(get_realtype(datatype), 1, abnrm)
+    if(!same_char(sense, 'N') && !same_char(sense, 'V'))
+    {
+        FLA_STORE_BRT_VECTOR(get_realtype(datatype), m, rconde)
+    }
+    if(!same_char(sense, 'N') && !same_char(sense, 'E'))
+    {
+        FLA_STORE_BRT_VECTOR(get_realtype(datatype), m, rcondv)
+    }
+
+    fclose(gt_file);
+}
+integer check_bit_reproducibility_geevx(void *filename, integer datatype, char balanc, char jobvl,
+                                        char jobvr, char sense, integer m, void *A, integer lda,
+                                        void *VL, integer ldvl, void *VR, integer ldvr, void *w,
+                                        void *wr, void *wi, void *scale, void *abnrm, void *rconde,
+                                        void *rcondv, integer lwork, void *params)
+{
+    /* Open the file for reading Ground truth */
+    FLA_OPEN_GT_FILE_READ
+
+    FLA_VERIFY_BRT_MATRIX(datatype, m, m, A, lda)
+    if(!same_char(jobvl, 'N'))
+    {
+        FLA_VERIFY_BRT_MATRIX(datatype, m, m, VL, ldvl)
+    }
+    if(!same_char(jobvr, 'N'))
+    {
+        FLA_VERIFY_BRT_MATRIX(datatype, m, m, VR, ldvr)
+    }
+    if(datatype == COMPLEX || datatype == DOUBLE_COMPLEX)
+    {
+        FLA_VERIFY_BRT_VECTOR(datatype, m, w)
+    }
+    else
+    {
+        FLA_VERIFY_BRT_VECTOR(datatype, m, wr)
+        FLA_VERIFY_BRT_VECTOR(datatype, m, wi)
+    }
+    FLA_VERIFY_BRT_VECTOR(get_realtype(datatype), m, scale)
+    FLA_VERIFY_BRT_VECTOR(get_realtype(datatype), 1, abnrm)
+    if(!same_char(sense, 'N') && !same_char(sense, 'V'))
+    {
+        FLA_VERIFY_BRT_VECTOR(get_realtype(datatype), m, rconde)
+    }
+    if(!same_char(sense, 'N') && !same_char(sense, 'E'))
+    {
+        FLA_VERIFY_BRT_VECTOR(get_realtype(datatype), m, rcondv)
+    }
+
+    fclose(gt_file);
+    return 1;
 }

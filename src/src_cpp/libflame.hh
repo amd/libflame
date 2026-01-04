@@ -1,5 +1,5 @@
 /******************************************************************************
-* Copyright (C) 2021-2024, Advanced Micro Devices, Inc. All rights reserved.
+* Copyright (C) 2021-2025, Advanced Micro Devices, Inc. All rights reserved.
 *******************************************************************************/
 
 /*! @file libflame.hh
@@ -2345,21 +2345,6 @@ inline void slag2d(integer* m, integer* n, float* sa, integer* ldsa, double* a, 
   slag2d_(m, n, sa, ldsa, a, lda, info);
 }
 
-// --- converts a double precision matrix to a single precision matrix ---
-inline void dlag2s(integer*m, integer* n, double* a, integer*lda, float* sa, integer* ldsa, integer* info)
-{
-  dlag2s_(m, n, a, lda, sa, ldsa, info);
-}
-// --- converts a complex single precision matrix to a complex double precision matrix. ---
-inline void clag2z(integer*m, integer* n, scomplex* sa, integer*ldsa, dcomplex* a, integer* lda, integer* info)
-{
-  clag2z_(m, n, sa, ldsa, a, lda, info);
-} 
-// --- converts a single precision matrix to a double precision matrix ---
-inline void zlag2c(integer*m, integer* n, dcomplex* a, integer*lda, scomplex* sa, integer* ldsa, integer* info)
-{
-  zlag2c_(m, n, a, lda, sa, ldsa, info);
-}
 
 // --- returns sqrt(x2+y2) ---
 inline float lapy2(float* x, float* y)
@@ -9415,5 +9400,40 @@ inline void gtsqr_row(integer *m, integer *n, integer *mb, integer *nb, dcomplex
   zungtsqr_row_(m, n, mb, nb, a, lda, t, ldt, work, lwork, info);
 }
 
+inline void  gedmd(char *jobs, char *jobz, char *jobr, char *jobf, integer *whtsvd, integer *m, integer *n, float *x, integer *ldx, float *y, integer *ldy, integer *nrnk, float *tol, integer *k, float *reig, float *imeig, float *z__, integer *ldz, float *res, float *b, integer *ldb, float *w, integer *ldw, float *s, integer *lds, float *work, integer *lwork, integer *iwork, integer *liwork, integer *info)
+{
+  sgedmd_(jobs, jobz, jobr, jobf, whtsvd,  m,n,  x,  ldx, y, ldy,  nrnk, tol,k, reig, imeig, z__,  ldz, res, b,ldb, w,  ldw, s,  lds, work,  lwork,iwork,  liwork,  info);
+}
+
+inline void gedmd(char *jobs, char *jobz, char *jobr, char *jobf, integer *whtsvd, integer *m, integer *n, double *x, integer *ldx, double *y, integer *ldy, integer *nrnk, double *tol, integer *k, double *reig, double *imeig, double *z__, integer *ldz, double *res, double *b, integer *ldb, double *w, integer *ldw, double *s, integer *lds, double *work, integer *lwork, integer *iwork, integer *liwork, integer *info)
+{
+  dgedmd_(jobs, jobz, jobr, jobf, whtsvd, m, n, x, ldx, y, ldy, nrnk, tol, k, reig, imeig, z__, ldz, res, b, ldb, w, ldw, s, lds, work, lwork, iwork, liwork, info);
+}
+
+inline void gedmd(char *jobs, char *jobz, char *jobr, char *jobf, integer *whtsvd, integer *m, integer *n, scomplex *x, integer *ldx, scomplex *y, integer *ldy, integer *nrnk, real *tol, integer *k, scomplex *eigs, scomplex *z__, integer *ldz, real *res, scomplex *b, integer *ldb, scomplex *w, integer *ldw, scomplex *s, integer *lds, scomplex *zwork, integer *lzwork, real *rwork, integer *lrwork, integer *iwork, integer *liwork, integer *info)
+{
+  cgedmd_(jobs, jobz, jobr, jobf, whtsvd,  m,n,  x,  ldx, y, ldy,  nrnk, tol,k, eigs, z__,  ldz, res, b,ldb, w,  ldw, s,  lds, zwork,  lzwork, rwork, lrwork, iwork,  liwork,  info);
+}
+inline void gedmd(char *jobs, char *jobz, char *jobr, char *jobf, integer *whtsvd, integer *m, integer *n, dcomplex *x, integer *ldx, dcomplex *y, integer *ldy, integer *nrnk, double *tol, integer *k, dcomplex *eigs, dcomplex *z__, integer *ldz, double *res, dcomplex *b, integer *ldb, dcomplex *w, integer *ldw, dcomplex *s, integer *lds, dcomplex *zwork, integer *lzwork, double *rwork, integer *lrwork, integer *iwork, integer *liwork, integer *info)
+{
+  zgedmd_(jobs, jobz, jobr, jobf, whtsvd,  m,n,  x,  ldx, y, ldy,  nrnk, tol,k, eigs, z__, ldz, res, b,ldb, w,  ldw, s,  lds, zwork,  lzwork, rwork, lrwork, iwork,  liwork,  info);
+}
+inline void gedmdq(char *jobs, char *jobz, char *jobr, char *jobq, char *jobt, char *jobf, integer *whtsvd, integer *m, integer *n, float *f, integer *ldf, float *x, integer *ldx, float *y, integer *ldy, integer *nrnk, float *tol, integer *k, float *reig, float *imeig, float *z__, integer *ldz, float *res, float *b, integer *ldb, float *v, integer *ldv, float *s, integer *lds, float *work, integer *lwork, integer *iwork, integer *liwork, integer *info)
+{
+  sgedmdq_(jobs, jobz, jobr, jobq, jobt, jobf, whtsvd, m, n, f, ldf, x, ldx, y, ldy, nrnk, tol, k, reig, imeig, z__, ldz, res, b, ldb, v, ldv, s, lds, work, lwork, iwork, liwork, info);
+}
+
+inline void gedmdq(char *jobs, char *jobz, char *jobr, char *jobq, char *jobt, char *jobf, integer *whtsvd, integer *m, integer *n, double *f, integer *ldf, double *x, integer *ldx, double *y, integer *ldy, integer *nrnk, double *tol, integer *k, double *reig, double *imeig, double *z__, integer *ldz, double *res, double *b, integer *ldb, double *v, integer *ldv, double *s, integer *lds, double *work, integer *lwork, integer *iwork, integer *liwork, integer *info)
+{
+  dgedmdq_(jobs, jobz, jobr, jobq, jobt, jobf, whtsvd, m, n, f, ldf, x, ldx, y, ldy, nrnk, tol, k, reig, imeig, z__, ldz, res, b, ldb, v, ldv, s, lds, work, lwork, iwork, liwork, info);
+}
+inline void gedmdq(char *jobs, char *jobz, char *jobr, char *jobq, char *jobt, char *jobf, integer *whtsvd, integer *m, integer *n, scomplex *f, integer *ldf, scomplex *x, integer *ldx, scomplex *y, integer *ldy, integer *nrnk, float *tol, integer *k, scomplex *eigs, scomplex *z__, integer *ldz, float *res, scomplex *b, integer *ldb, scomplex *v, integer *ldv, scomplex *s, integer *lds, scomplex *zwork, integer *lzwork, float *work, integer *lwork, integer *iwork, integer *liwork, integer *info)
+{
+  cgedmdq_(jobs, jobz, jobr, jobq, jobt, jobf, whtsvd, m, n, f, ldf, x, ldx, y, ldy, nrnk, tol, k, eigs, z__, ldz, res, b, ldb, v, ldv, s, lds,zwork, lzwork, work, lwork, iwork, liwork, info);
+}
+inline void gedmdq(char *jobs, char *jobz, char *jobr, char *jobq, char *jobt, char *jobf, integer *whtsvd, integer *m, integer *n, dcomplex *f, integer *ldf, dcomplex *x, integer *ldx, dcomplex *y, integer *ldy, integer *nrnk, doublereal *tol, integer *k, dcomplex *eigs, dcomplex *z__, integer *ldz, doublereal *res, dcomplex *b, integer *ldb, dcomplex *v, integer *ldv, dcomplex *s, integer *lds, dcomplex *zwork, integer *lzwork, doublereal *work, integer *lwork, integer *iwork, integer *liwork, integer *info)
+{
+  zgedmdq_(jobs, jobz, jobr, jobq, jobt, jobf, whtsvd, m, n, f, ldf, x, ldx, y, ldy, nrnk, tol, k, eigs, z__, ldz, res, b, ldb, v, ldv, s, lds,zwork, lzwork, work, lwork, iwork, liwork, info);
+}
 } // namespace libflame
 #endif  //  #ifndef LIBFLAME_HH

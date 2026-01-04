@@ -14,12 +14,19 @@ option (ENABLE_MEM_UNALIGNED "Allocate unaligned memory" OFF)
 
 option (ENABLE_CPP_TEST "Enable CPP test support in test suite" ON)
 
+set (ENABLE_AOCL_EXTENSION_APIS "1" CACHE STRING "Enable AOCL extension APIs")
+
 if (${ENABLE_CPP_TEST} MATCHES "ON")
 add_definitions(-DENABLE_CPP_TEST=1)
 else()
 add_definitions(-DENABLE_CPP_TEST=0)
 endif()
 message(STATUS "Enabled ENABLE_CPP_TEST : ${ENABLE_CPP_TEST}")
+
+if (NOT ${ENABLE_AOCL_EXTENSION_APIS} EQUAL "0")
+    add_definitions(-DENABLE_AOCL_EXTENSION_APIS=${ENABLE_AOCL_EXTENSION_APIS})
+endif()
+message(STATUS "ENABLE_AOCL_EXTENSION_APIS : ${ENABLE_AOCL_EXTENSION_APIS}")
 
 set (CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}/bin")
 set (CMAKE_LIBRARY_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}/bin") 
@@ -133,6 +140,7 @@ target_include_directories("${PROJECT_NAME}" PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}
 if(ENABLE_CPP_TEST)
 target_include_directories("${PROJECT_NAME}" PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src/cpp)
 endif()
+target_include_directories("${PROJECT_NAME}" PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src/lapacke)
 
 add_subdirectory(src)
 add_subdirectory(validate_src)
@@ -140,3 +148,4 @@ add_subdirectory(validate_src)
 include(main_ctest.cmake)
 include(conformance_test.cmake)
 include(overflow_underflow_test.cmake)
+include(repeatability_test.cmake)

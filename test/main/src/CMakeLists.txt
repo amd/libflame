@@ -59,7 +59,28 @@ ${CMAKE_CURRENT_SOURCE_DIR}/test_lange.c
 ${CMAKE_CURRENT_SOURCE_DIR}/test_gecon.c
 ${CMAKE_CURRENT_SOURCE_DIR}/test_getrfnp.c
 ${CMAKE_CURRENT_SOURCE_DIR}/test_getrfnpi.c
-${CMAKE_CURRENT_SOURCE_DIR}/test_hetri_rook.c)
+${CMAKE_CURRENT_SOURCE_DIR}/test_hetri_rook.c
+${CMAKE_CURRENT_SOURCE_DIR}/test_ormqr.c
+${CMAKE_CURRENT_SOURCE_DIR}/test_gejsv.c
+${CMAKE_CURRENT_SOURCE_DIR}/test_gebrd.c
+${CMAKE_CURRENT_SOURCE_DIR}/test_labrd.c
+${CMAKE_CURRENT_SOURCE_DIR}/test_orgtr.c
+${CMAKE_CURRENT_SOURCE_DIR}/test_ormlq.c
+${CMAKE_CURRENT_SOURCE_DIR}/test_potri.c
+${CMAKE_CURRENT_SOURCE_DIR}/test_trtri.c
+${CMAKE_CURRENT_SOURCE_DIR}/test_trtrs.c
+# only performance benchmarking
+${CMAKE_CURRENT_SOURCE_DIR}/test_gbsv.c
+${CMAKE_CURRENT_SOURCE_DIR}/test_getrf2.c
+${CMAKE_CURRENT_SOURCE_DIR}/test_getf2.c
+${CMAKE_CURRENT_SOURCE_DIR}/test_gbtf2.c
+${CMAKE_CURRENT_SOURCE_DIR}/test_gbsvx.c
+${CMAKE_CURRENT_SOURCE_DIR}/test_getc2.c
+${CMAKE_CURRENT_SOURCE_DIR}/test_potf2.c
+${CMAKE_CURRENT_SOURCE_DIR}/test_potrf2.c
+)
+
+add_subdirectory(lapacke)
 
 if(ENABLE_CPP_TEST)
 add_subdirectory(cpp)

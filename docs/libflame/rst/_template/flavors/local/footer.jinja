@@ -27,6 +27,6 @@
 ##
 ## ##############################################################################
 
-{%
-set license_link = ("2020-2025, Advanced Micro Devices, Inc", "")
-%}
+{% macro license_link() -%}
+    <li><a>2020-2025, Advanced Micro Devices, Inc</a></li>
+{%- endmacro -%}

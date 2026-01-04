@@ -6,6 +6,7 @@
 #define TEST_LAPACK_H
 
 #include <ctype.h>
+#include <errno.h>
 #include <float.h>
 #include <string.h>
 #include <sys/stat.h>
@@ -22,6 +23,7 @@
 #include <unistd.h>
 #endif
 #include "test_common.h"
+#include "test_prototype.h"
 
 #define LAPACK_OPERATIONS_FILENAME "input.global.operations"
 #define LAPACKE_OPERATIONS_FILENAME "input.global.operations.lapacke"
@@ -53,6 +55,54 @@
 
 #define NUM_SUB_TESTS (4)
 
+/* MACROS for stats output */
+
+#define MAX_STAT_STRING_LENGTH 16
+#define MAX_NUM_STATS 8
+
+typedef enum
+{
+    FLA_MIN_STAT = 0,
+    FLA_MAX_STAT = 1,
+    FLA_AVG_STAT = 2,
+    FLA_PERCENTILE_STAT = 3,
+    FLA_VARIANCE_STAT = 4,
+    FLA_STDDEV_STAT = 5,
+    FLA_NUM_STATS
+} fla_stat_type;
+
+typedef struct
+{
+    fla_stat_type stat_type;
+    char arg_str[MAX_STAT_STRING_LENGTH];
+    char out_str[MAX_STAT_STRING_LENGTH];
+} fla_stat_info_t;
+
+extern fla_stat_info_t AVAILABLE_STATS[FLA_NUM_STATS];
+
+typedef struct
+{
+    fla_stat_type stat_type;
+    /* Only used when stat_type is FLA_PERCENTILE_STAT */
+    integer percentile_num;
+} fla_stat_t;
+
+#define FLA_BENCH_DEFAULT_WARMUP 0.1
+
+#define FLA_OUTLIERS_MULTIPLIER_DEFAULT 3.0
+
+#define FLA_CTX_DEFAULT_RUNTIMES_SIZE 128
+
+typedef enum
+{
+    FLA_TIME_UNIT_AUTO,
+    FLA_TIME_UNIT_PICOSEC,
+    FLA_TIME_UNIT_NANOSEC,
+    FLA_TIME_UNIT_MICROSEC,
+    FLA_TIME_UNIT_MILLISEC,
+    FLA_TIME_UNIT_SEC
+} fla_time_unit;
+
 // API categories
 #define LIN (1)
 #define EIG_SYM (2)
@@ -80,55 +130,67 @@ extern integer g_lrwork;
  * = 0 - Inputs are from command line
  * = 1 - Inputs are from config file
  * */
-extern integer config_data;
+extern integer g_config_data;
 /* File pointer for external file which is used
  * to pass the input matrix values
  * */
 extern FILE *g_ext_fptr;
 
-#define FLA_TEST_PARSE_LAST_ARG(argv)                                                             \
-    integer i;                                                                                    \
-    char *info;                                                                                   \
-    char info_value[2][MAX_PASS_STRING_LENGTH];                                                   \
-                                                                                                  \
-    i = 0;                                                                                        \
-    if(strstr(argv, "--einfo") != NULL)                                                           \
-    {                                                                                             \
-        info = strtok(argv, "=");                                                                 \
-        while(info != NULL && i < 2)                                                              \
-        {                                                                                         \
-            strcpy(info_value[i], info);                                                          \
-            i++;                                                                                  \
-            info = strtok(NULL, "=");                                                             \
-        }                                                                                         \
-        einfo = atoi(info_value[1]);                                                              \
-    }                                                                                             \
-    else if(strstr(argv, "--imatrix") != NULL)                                                    \
-    {                                                                                             \
-        info = strtok(argv, "=");                                                                 \
-        while(info != NULL && i < 2)                                                              \
-        {                                                                                         \
-            strcpy(info_value[i], info);                                                          \
-            i++;                                                                                  \
-            info = strtok(NULL, "=");                                                             \
-        }                                                                                         \
-        if(strlen(info_value[1]) != 1                                                             \
-           || (info_value[1][0] != 'I' && info_value[1][0] != 'N' && info_value[1][0] != 'A'      \
-               && info_value[1][0] != 'F' && info_value[1][0] != 'U' && info_value[1][0] != 'O')) \
-        {                                                                                         \
-            printf("\n Invalid input for imatrix \n");                                            \
-            return;                                                                               \
-        }                                                                                         \
-        params->imatrix_char = info_value[1][0];                                                  \
-    }                                                                                             \
-    else                                                                                          \
-    {                                                                                             \
-        g_ext_fptr = fopen(argv, "r");                                                            \
-        if(g_ext_fptr == NULL)                                                                    \
-        {                                                                                         \
-            printf("\n Invalid input file argument \n");                                          \
-            return;                                                                               \
-        }                                                                                         \
+/* Global variables for test summary */
+extern integer g_total_tests;
+extern integer g_total_failed_tests;
+extern integer g_total_incomplete_tests;
+extern integer g_tests_passed[4];
+extern integer g_tests_failed[4];
+extern integer g_tests_incomplete[4];
+
+/* Store name of the test binary */
+extern char fla_test_binary_name[MAX_BINARY_NAME_LENGTH + 1];
+
+#define FLA_TEST_PARSE_LAST_ARG(argv)                                                      \
+    integer i;                                                                             \
+    char *info;                                                                            \
+    char info_value[2][MAX_PASS_STRING_LENGTH];                                            \
+                                                                                           \
+    i = 0;                                                                                 \
+    if(strstr(argv, "--einfo") != NULL)                                                    \
+    {                                                                                      \
+        info = strtok(argv, "=");                                                          \
+        while(info != NULL && i < 2)                                                       \
+        {                                                                                  \
+            strcpy(info_value[i], info);                                                   \
+            i++;                                                                           \
+            info = strtok(NULL, "=");                                                      \
+        }                                                                                  \
+        einfo = atoi(info_value[1]);                                                       \
+    }                                                                                      \
+    else if(strstr(argv, "--imatrix") != NULL)                                             \
+    {                                                                                      \
+        info = strtok(argv, "=");                                                          \
+        while(info != NULL && i < 2)                                                       \
+        {                                                                                  \
+            strcpy(info_value[i], info);                                                   \
+            i++;                                                                           \
+            info = strtok(NULL, "=");                                                      \
+        }                                                                                  \
+        if(strlen(info_value[1]) != 1                                                      \
+           || (!same_char(info_value[1][0], 'I') && !same_char(info_value[1][0], 'N')      \
+               && !same_char(info_value[1][0], 'A') && !same_char(info_value[1][0], 'F')   \
+               && !same_char(info_value[1][0], 'U') && !same_char(info_value[1][0], 'O'))) \
+        {                                                                                  \
+            printf("\n Invalid input for imatrix \n");                                     \
+            return;                                                                        \
+        }                                                                                  \
+        params->imatrix_char = info_value[1][0];                                           \
+    }                                                                                      \
+    else                                                                                   \
+    {                                                                                      \
+        g_ext_fptr = fopen(argv, "r");                                                     \
+        if(g_ext_fptr == NULL)                                                             \
+        {                                                                                  \
+            printf("\n Invalid input file argument \n");                                   \
+            return;                                                                        \
+        }                                                                                  \
     }
 
 #define FLA_TEST_CHECK_EINFO(residual, info, einfo) \
@@ -151,11 +213,19 @@ extern FILE *g_ext_fptr;
         }                                           \
     }
 
-#define FLA_EXTREME_CASE_TEST                                                                  \
-    (params->imatrix_char == 'A' || params->imatrix_char == 'F' || params->imatrix_char == 'N' \
-     || params->imatrix_char == 'I')
+#define FLA_EXTREME_CASE_TEST                                                     \
+    (same_char(params->imatrix_char, 'A') || same_char(params->imatrix_char, 'F') \
+     || same_char(params->imatrix_char, 'N') || same_char(params->imatrix_char, 'I'))
 
-#define FLA_OVERFLOW_UNDERFLOW_TEST (params->imatrix_char == 'O' || params->imatrix_char == 'U')
+#define FLA_OVERFLOW_UNDERFLOW_TEST \
+    (same_char(params->imatrix_char, 'O') || same_char(params->imatrix_char, 'U'))
+
+#define FLA_BIT_REPRODUCIBILITY_TEST                                      \
+    (same_char(params->BRT_char, 'G') || same_char(params->BRT_char, 'V') \
+     || same_char(params->BRT_char, 'M') || same_char(params->BRT_char, 'F'))
+
+#define FLA_BRT_VERIFICATION_RUN \
+    (same_char(params->BRT_char, 'V') || same_char(params->BRT_char, 'M'))
 
 /* Macro to check if a LAPACK API have different names for its
    (precision)variants and modify API display string
@@ -180,15 +250,22 @@ extern FILE *g_ext_fptr;
             func_str = "UNG2R";                               \
         else if(strcmp(func_str, "SYGVD") == 0)               \
             func_str = "HEGVD";                               \
+        else if(strcmp(func_str, "ORMQR") == 0)               \
+            func_str = "UNMQR";                               \
+        else if(strcmp(func_str, "SYTRD") == 0)               \
+            func_str = "HETRD";                               \
+        else if(strcmp(func_str, "ORMLQ") == 0)               \
+            func_str = "UNMLQ";                               \
     }
 
 /* Macro to skip complex and double complex tests of not supported APIs */
-#define FLA_SKIP_TEST(datatype_char, func_str)                                           \
-    ((((datatype_char == 'c' || datatype_char == 'z') && strcmp(func_str, "STEVD") == 0) \
-      || ((datatype_char == 's' || datatype_char == 'd')                                 \
-          && (strcmp(func_str, "HETRF") == 0 || strcmp(func_str, "HETRF_ROOK") == 0    \
-        || strcmp(func_str, "HETRI_ROOK") == 0)))   \
-         ? TRUE                                                                          \
+#define FLA_SKIP_TEST(datatype_char, func_str)                                      \
+    ((((same_char(datatype_char, 'c') || same_char(datatype_char, 'z'))             \
+       && strcmp(func_str, "STEVD") == 0)                                           \
+      || ((same_char(datatype_char, 's') || same_char(datatype_char, 'd'))          \
+          && (strcmp(func_str, "HETRF") == 0 || strcmp(func_str, "HETRF_ROOK") == 0 \
+              || strcmp(func_str, "HETRI_ROOK") == 0)))                             \
+         ? TRUE                                                                     \
          : FALSE)
 
 /* Assign leading dimension value based on matrix layout and cmdline/config inputs */
@@ -204,6 +281,92 @@ extern FILE *g_ext_fptr;
             lda_t = rm_lda;                                           \
         }                                                             \
     }
+
+#define FLA_EXEC_LOOP_BEGIN                                                                      \
+    integer warmup_active = 0, warmup_counter = 0, run_loop, warmup_repeats = 0;                 \
+    double warmup_total_time = 0., warmup_time_req = 0.;                                         \
+    if(params != NULL)                                                                           \
+    {                                                                                            \
+        fla_test_runtime_ctx_reset(params);                                                      \
+        warmup_total_time = 0.;                                                                  \
+        warmup_counter = 0;                                                                      \
+        warmup_repeats = (params->warmup_repeats > 0. && params->warmup_repeats < 1.0)           \
+                             ? (integer)ceil(params->warmup_repeats * params->n_repeats)         \
+                             : (integer)params->warmup_repeats;                                  \
+        warmup_time_req = (params->warmup_repeats > 0. && params->warmup_repeats < 1.0)          \
+                              ? (params->bench_duration * params->warmup_repeats)                \
+                              : 0.;                                                              \
+        warmup_active = warmup_repeats > 0 || warmup_time_req > 0.;                              \
+        run_loop = warmup_active || (params->n_repeats > 0) || (params->bench_duration > 0.);    \
+        if(params->runtime_ctx.need_runtimes_array && params->runtime_ctx.run_times_arr == NULL) \
+        {                                                                                        \
+            params->runtime_ctx.run_times_arr_size                                               \
+                = fla_max(params->n_repeats, FLA_CTX_DEFAULT_RUNTIMES_SIZE);                     \
+            params->runtime_ctx.run_times_arr                                                    \
+                = (double *)malloc(params->runtime_ctx.run_times_arr_size * sizeof(double));     \
+        }                                                                                        \
+    }                                                                                            \
+    else                                                                                         \
+    {                                                                                            \
+        /* When params is NULL then the function would be executed only once */                  \
+        run_loop = 1;                                                                            \
+    }                                                                                            \
+    while(run_loop)
+
+/* Use this MACRO if the API does not return info */
+#define FLA_EXEC_LOOP_UPDATE_NO_INFO                                                          \
+    if(params != NULL)                                                                        \
+    {                                                                                         \
+        if(!warmup_active)                                                                    \
+        {                                                                                     \
+            params->runtime_ctx.total_time += exe_time;                                       \
+            params->runtime_ctx.max_time = fla_max(params->runtime_ctx.max_time, exe_time);   \
+            params->runtime_ctx.min_time = fla_min(params->runtime_ctx.min_time, exe_time);   \
+            if(params->runtime_ctx.run_times_arr != NULL)                                     \
+            {                                                                                 \
+                if(params->runtime_ctx.run_times_counter                                      \
+                   >= params->runtime_ctx.run_times_arr_size)                                 \
+                {                                                                             \
+                    params->runtime_ctx.run_times_arr_size *= 2;                              \
+                    params->runtime_ctx.run_times_arr = (double *)realloc(                    \
+                        params->runtime_ctx.run_times_arr,                                    \
+                        params->runtime_ctx.run_times_arr_size * sizeof(double));             \
+                }                                                                             \
+                params->runtime_ctx.run_times_arr[params->runtime_ctx.run_times_counter]      \
+                    = exe_time;                                                               \
+            }                                                                                 \
+            /* Update global time_min */                                                      \
+            time_min = params->runtime_ctx.min_time;                                          \
+            /* Update counter */                                                              \
+            params->runtime_ctx.run_times_counter++;                                          \
+        }                                                                                     \
+        else                                                                                  \
+        {                                                                                     \
+            warmup_total_time += exe_time;                                                    \
+            warmup_counter++;                                                                 \
+            warmup_active                                                                     \
+                = warmup_counter < warmup_repeats || warmup_total_time < warmup_time_req;     \
+        }                                                                                     \
+        run_loop = warmup_active || params->runtime_ctx.run_times_counter < params->n_repeats \
+                   || params->runtime_ctx.total_time < params->bench_duration;                \
+    }                                                                                         \
+    else                                                                                      \
+    {                                                                                         \
+        /* When params is NULL then the function would be executed only once */               \
+        run_loop = 0;                                                                         \
+    }
+
+/* Use this MACRO if the API returns info and the info should be 0 to continue the loop */
+#define FLA_EXEC_LOOP_UPDATE_WITH_INFO                  \
+    FLA_EXEC_LOOP_UPDATE_NO_INFO                        \
+    /* If the info is not 0, then the API has failed */ \
+    run_loop = run_loop && (*info == 0);
+
+/* Use this MACRO if the API returns info and the info should be >= 0 to continue the loop */
+#define FLA_EXEC_LOOP_UPDATE_WITH_POS_INFO              \
+    FLA_EXEC_LOOP_UPDATE_NO_INFO                        \
+    /* If the info is not 0, then the API has failed */ \
+    run_loop = run_loop && (*info >= 0);
 
 typedef struct Lin_solver_paramlist_t
 {
@@ -234,7 +397,9 @@ typedef struct Lin_solver_paramlist_t
     integer ldb; //  leading dimension of the array b
     integer ldq; //  leading dimension of the array q
     integer ldz; //  leading dimension of the array z
+    integer ldc; //  leading dimension of the array c
     integer ldab; //  leading dimension of the array ab. For GBTRF, GBTRS, LDAB >= 2*KL+KU+1
+    integer ldafb; //  leading dimension of the array afb. For GBSVX
     integer kl; // number of subdiagonals
     integer ku; // number of superdiagonals
     integer kd; // number of super or sub diagonals
@@ -246,12 +411,14 @@ typedef struct Lin_solver_paramlist_t
     char transr; // Must be 'N' or 'T' or 'C'.
     char compq_gghrd;
     char compz_gghrd;
+
     // below params are used only by Lin solver driver APIs.
     char fact; // Must be 'F', 'N', or 'E'.
     char equed; // Must be 'N', 'R'. 'C', 'B'
     char symm; // if symmetric 'S' or Hermitian 'H'
     char equed_porfsx; // Must be 'N', 'Y'.
     char norm_gbcon; // norm param for gbcon API
+    char side; // Left 'L' or Right 'R'
 } Lin_solver_paramlist;
 
 /* struct to hold eigen parameters */
@@ -464,9 +631,12 @@ typedef struct AUX_paramlist_t
     float aux_threshold; // threshold for the aux API
 
     /* Parameter for 'larfg' API */
+    integer nb; // The number of leading rows and columns of A to be reduced.
     integer incx_larfg; // The increment between successive values of X in larfg(incx > 0)
     integer incv; // The increment between elements of V for larf
     integer ldc; // The leading dimension of the array C for larf
+    integer ldx; // The leading dimension of the array X. LDX >= max(1,M).
+    integer ldy; // The leading dimension of the array Y. LDY >= max(1,N).
     integer num_repeats;
     integer num_tests;
     integer num_data_types;
@@ -504,6 +674,19 @@ typedef enum
 
 typedef struct
 {
+    size_t run_times_counter;
+    double *run_times_arr;
+    size_t run_times_arr_size;
+    size_t warmup_counter;
+    double min_time;
+    double total_time;
+    double max_time;
+    size_t filtered_run_times_size;
+    integer need_runtimes_array;
+} test_runtime_ctx_t;
+
+typedef struct
+{
     char *datatype_char;
     integer *datatype;
     integer n_repeats;
@@ -512,16 +695,48 @@ typedef struct
     integer p_max;
     integer p_inc;
     integer p_nfact;
-    integer test_lapacke_interface;
     test_interface interfacetype;
     int matrix_major;
     char imatrix_char;
+    /* Flag to check whether test suite is invoked in
+    benchmark mode. In benchmark mode instead of repeat
+    the user povides the time duration for the test
+    and the test is repeated for the duration.
+    Benchmark mode also includes more detailed stats
+    output.*/
+    integer benchmark_mode;
+    /* This is the lower bound time in seconds for which benchmark should
+    run.  The actual repeats are calculated as follows:
+        max(ceil(bench_duration/time_per_call), n_repeats) */
+    double bench_duration;
+    double warmup_repeats;
+    fla_stat_t stats_out[MAX_NUM_STATS];
+    /* Values greater then outlier_multiplier*stddev + mean are
+       considered as outliers and are not included in the stats
+       calculation. If fla_outlier_multiplier is 0 then no outliers
+       are filtered out.
+    */
+    double outlier_multiplier;
+    /* If dump_runtimes_file_name is non NULL
+       then the runtimes are dumped to the file
+       Only dumped if the test is exected from the command line
+       and not from the config file.
+    */
+    char *dump_runtimes_file_name;
+    integer num_stats;
+    integer cli_print_header;
+    fla_time_unit time_unit;
+    test_runtime_ctx_t runtime_ctx;
 
     struct SVD_paramlist_t svd_paramslist[NUM_SUB_TESTS];
     struct EIG_Non_symmetric_paramlist_t eig_non_sym_paramslist[NUM_SUB_TESTS];
     struct EIG_paramlist_t eig_sym_paramslist[NUM_SUB_TESTS];
     struct Lin_solver_paramlist_t lin_solver_paramslist[NUM_SUB_TESTS];
     struct AUX_paramlist_t aux_paramslist[NUM_SUB_TESTS];
+
+    /* Reproducibility and repeatability tests */
+    char BRT_char;
+    int seed;
 
 } test_params_t;
 
@@ -582,12 +797,24 @@ void fla_test_op_driver(char *func_str, integer square_inp, test_params_t *param
                                       integer, // pci (param combo counter)
                                       integer, // n_repeats
                                       integer));
-void fla_test_print_summary();
 void fla_test_build_function_string(char *func_base_str, char *impl_var_str, char *func_str);
 void fill_string_with_n_spaces(char *str, integer n_spaces);
 double fla_test_clock(void);
-void fla_test_get_time_unit(char *scale, double *time);
 integer fla_test_get_group_id(char *buffer);
-void fla_check_lapacke_interface(integer *arg_count, char **argv, test_params_t *params);
-bool fla_check_interface(integer *arg_count, char **argv, test_params_t *params);
+integer fla_check_lapacke_interface(integer arg_count, char **argv, test_params_t *params);
+integer fla_check_interface(integer arg_count, char **argv, test_params_t *params);
+integer fla_parse_bench_arg(integer argc, char **argv, test_params_t *params);
+integer fla_parse_warmup_arg(integer argc, char **argv, test_params_t *params);
+integer fla_parse_stats_arg(integer argc, char **argv, test_params_t *params);
+integer fla_parse_print_header_arg(integer argc, char **argv, test_params_t *params);
+void fla_print_help(char *exe_name);
+integer fla_check_help_arg(integer argc, char **argv);
+bool fla_parse_cmdline_args(integer *argc, char **argv, test_params_t *params);
+integer fla_parse_time_unit_arg(integer argc, char **argv, test_params_t *params);
+integer fla_parse_filter_outliers_args(integer argc, char **argv, test_params_t *params);
+integer fla_need_runtimes_array(test_params_t *params);
+double fla_stat_get_val(test_params_t *test_params, fla_stat_t *stat_desc);
+void fla_test_runtime_ctx_init(test_params_t *params);
+void fla_test_runtime_ctx_reset(test_params_t *params);
+void fla_test_runtime_ctx_free(test_params_t *params);
 #endif // TEST_LAPACK_H

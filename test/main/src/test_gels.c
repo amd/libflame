@@ -6,6 +6,7 @@
 #if ENABLE_CPP_TEST
 #include <invoke_common.hh>
 #endif
+#include <invoke_lapacke.h>
 
 #define GELS_VL 0.1
 #define GELS_VU 10
@@ -21,13 +22,18 @@ void fla_test_gels_experiment(char *tst_api, test_params_t *params, integer data
                               integer q_cur, integer pci, integer n_repeats, integer einfo);
 void prepare_gels_run(integer datatype, char trans, integer m, integer n, integer m_b, integer nrhs,
                       void *A, integer lda, void *B, integer ldb, void *work, integer lwork,
-                      integer n_repeats, double *time_min_, integer *info, integer interfacetype,
-                      integer layout);
-integer invoke_lapacke_gels(integer datatype, integer layout, char trans, integer m, integer n,
-                            integer nrhs, void *A, integer lda, void *B, integer ldb);
+                      integer *info, integer interfacetype, integer layout, test_params_t *params);
 double prepare_lapacke_gels_run(integer datatype, integer layout, char trans, integer m, integer n,
                                 integer nrhs, integer m_b, void *A, integer lda, void *B,
                                 integer ldb, integer *info);
+
+/* Helper functions for Bit reproducibility tests */
+void store_gels_outputs(void *filename, integer datatype, char trans, integer m, integer n,
+                        integer nrhs, void *A_test, integer lda, void *B_test, integer ldb,
+                        integer g_lwork, void *params);
+integer check_bit_reproducibility_gels(void *filename, integer datatype, char trans, integer m,
+                                       integer n, integer nrhs, void *A_test, integer lda,
+                                       void *B_test, integer ldb, integer g_lwork, void *params);
 
 void fla_test_gels(integer argc, char **argv, test_params_t *params)
 {
@@ -39,7 +45,7 @@ void fla_test_gels(integer argc, char **argv, test_params_t *params)
 
     if(argc == 1)
     {
-        config_data = 1;
+        g_config_data = 1;
         g_lwork = -1;
         fla_test_output_info("--- %s ---\n", op_str);
         fla_test_output_info("\n");
@@ -77,6 +83,7 @@ void fla_test_gels(integer argc, char **argv, test_params_t *params)
         }
         g_lwork = strtoimax(argv[9], &endptr, CLI_DECIMAL_BASE);
         n_repeats = strtoimax(argv[10], &endptr, CLI_DECIMAL_BASE);
+        params->n_repeats = n_repeats;
 
         if(n_repeats > 0)
         {
@@ -133,6 +140,7 @@ void fla_test_gels_experiment(char *tst_api, test_params_t *params, integer data
     integer interfacetype = params->interfacetype;
     integer layout = params->matrix_major;
     double residual, err_thresh;
+    void *filename = NULL;
 
     /* Determine the dimensions */
     m = p_cur;
@@ -145,7 +153,7 @@ void fla_test_gels_experiment(char *tst_api, test_params_t *params, integer data
 
     /* If leading dimensions = -1, set them to default value
        when inputs are from config files */
-    if(config_data)
+    if(g_config_data)
     {
         if(lda == -1)
         {
@@ -162,19 +170,15 @@ void fla_test_gels_experiment(char *tst_api, test_params_t *params, integer data
      * Dimension of B is (n, nrhs) if TRANS = "T" */
 
     m_b = n;
-    if(trans == 'N' || trans == 'n')
+    if(same_char(trans, 'N'))
     {
         trans = 'N';
         m_b = m;
     }
-    if(trans == 'T' || trans == 't')
-    {
-        trans = 'T';
-    }
 
     /* trans for complex number should be equal to 'C' (or 'c') while passing to the GEL api
      */
-    if((datatype == COMPLEX || datatype == DOUBLE_COMPLEX) && (trans == 'T'))
+    if((datatype == COMPLEX || datatype == DOUBLE_COMPLEX) && (same_char(trans, 'T')))
     {
         trans = 'C';
     }
@@ -188,51 +192,81 @@ void fla_test_gels_experiment(char *tst_api, test_params_t *params, integer data
     reset_matrix(datatype, ldb, nrhs, B_test, ldb);
     create_realtype_vector(datatype, &s_test, fla_min(m, n));
 
-    /* Initialize the test matrices */
-    init_matrix(datatype, B, m_b, nrhs, ldb, g_ext_fptr, params->imatrix_char);
+    /* This code path is run to generate the matrix to be passed to the API. This is the default
+     * input generation logic accessed both when BRT is run in Ground truth mode and for non BRT
+     * Test cases. For verification runs the input is loaded from the input generated during Ground
+     * truth run */
+    if(!FLA_BRT_VERIFICATION_RUN)
+    {
+        /* initialize input matrix */
+        init_matrix(datatype, B, m_b, nrhs, ldb, g_ext_fptr, params->imatrix_char);
 
-    if(g_ext_fptr != NULL || (FLA_EXTREME_CASE_TEST))
-    {
-        init_matrix(datatype, A, m, n, lda, g_ext_fptr, params->imatrix_char);
-    }
-    else
-    {
-        /* Generate input matrix with condition number <= 100 */
-        create_svd_matrix(datatype, range, m, n, A, lda, s_test, GELS_VL, GELS_VU, i_zero, i_zero,
-                          info);
-        if(FLA_OVERFLOW_UNDERFLOW_TEST)
+        if(g_ext_fptr != NULL || (FLA_EXTREME_CASE_TEST))
         {
-            scale_matrix_underflow_overflow_gels(datatype, &trans, m, n, A, lda,
-                                                 params->imatrix_char, 1);
+            init_matrix(datatype, A, m, n, lda, g_ext_fptr, params->imatrix_char);
+        }
+        else
+        {
+            /* Generate input matrix with condition number <= 100 */
+            create_svd_matrix(datatype, range, m, n, A, lda, s_test, GELS_VL, GELS_VU, i_zero,
+                              i_zero, info);
+            if(FLA_OVERFLOW_UNDERFLOW_TEST)
+            {
+                scale_matrix_underflow_overflow_gels(datatype, &trans, m, n, A, lda,
+                                                     params->imatrix_char, 1);
+            }
         }
     }
+
+    /* This macro is used in the BRT test cases for the following purposes:
+     *    - In the Ground truth runs (BRT_char => G, F), the output is stored in a file for future
+     * reference
+     *    - In the verification runs (BRT_char => V, M), the output is loaded from the file and
+     * passed as input to the API
+     * */
+    FLA_BRT_PROCESS_TWO_INPUT(datatype, m, n, A, lda, datatype, m_b, nrhs, B, ldb, "cdddddd", trans,
+                              m, n, nrhs, lda, ldb, g_lwork)
 
     /* Save the original matrix */
     copy_matrix(datatype, "full", lda, n, A, lda, A_test, lda);
     copy_matrix(datatype, "full", ldb, nrhs, B, ldb, B_test, ldb);
 
     /* call to API */
-    prepare_gels_run(datatype, trans, m, n, m_b, nrhs, A_test, lda, B_test, ldb, work, lwork,
-                     n_repeats, &time_min, &info, interfacetype, layout);
+    prepare_gels_run(datatype, trans, m, n, m_b, nrhs, A_test, lda, B_test, ldb, work, lwork, &info,
+                     interfacetype, layout, params);
 
     /* Performance computation */
     if(m >= n)
     {
-        perf = (double)((n * n) * (2.0 / 3.0) * ((3 * m) - n)) / time_min / FLOPS_PER_UNIT_PERF;
+        perf = (double)((2.0 / 3.0) * (n * n) * ((3 * m) - n)) / time_min / FLOPS_PER_UNIT_PERF;
     }
     else
     {
-        perf = (double)((m * m) * (2.0 / 3.0) * ((3 * n) - m)) / time_min / FLOPS_PER_UNIT_PERF;
+        perf = (double)((2.0 / 3.0) * (m * m) * ((3 * n) - m)) / time_min / FLOPS_PER_UNIT_PERF;
     }
     if(datatype == COMPLEX || datatype == DOUBLE_COMPLEX)
         perf *= 4.0;
 
     /* Output validataion */
     FLA_TEST_CHECK_EINFO(residual, info, einfo);
-    if(!FLA_EXTREME_CASE_TEST)
+    /* Bit reproducibility tests path
+     * This path is taken when BRT is enabled.
+     *     - In the Ground truth runs (BRT_char => G, F), the output is stored in a file and the
+     * default validation function is called
+     *     - In the verification runs (BRT_char => V, M), the output is loaded from the file and
+     * compared with the generated output
+     *  */
+    IF_FLA_BRT_VALIDATION(m, n,
+                          store_gels_outputs(filename, datatype, trans, m, n, nrhs, A_test, lda,
+                                             B_test, ldb, g_lwork, params),
+                          validate_gels(tst_api, &trans, m, n, nrhs, A, lda, B, ldb, B_test,
+                                        datatype, residual, params->imatrix_char, params),
+                          check_bit_reproducibility_gels(filename, datatype, trans, m, n, nrhs,
+                                                         A_test, lda, B_test, ldb, g_lwork, params))
+    else if(!FLA_EXTREME_CASE_TEST)
     {
         validate_gels(tst_api, &trans, m, n, nrhs, A, lda, B, ldb, B_test, datatype, residual,
-                      params->imatrix_char);
+                      params->imatrix_char, params);
     }
     /* check for output matrix when inputs as extreme values */
     else
@@ -250,6 +284,8 @@ void fla_test_gels_experiment(char *tst_api, test_params_t *params, integer data
     }
 
     /* Free up buffers */
+free_buffers:
+    FLA_FREE_FILENAME(filename)
     free_matrix(A);
     free_matrix(A_test);
     free_matrix(B);
@@ -259,12 +295,10 @@ void fla_test_gels_experiment(char *tst_api, test_params_t *params, integer data
 
 void prepare_gels_run(integer datatype, char trans, integer m, integer n, integer m_b, integer nrhs,
                       void *A, integer lda, void *B, integer ldb, void *work, integer lwork,
-                      integer n_repeats, double *time_min_, integer *info, integer interfacetype,
-                      integer layout)
+                      integer *info, integer interfacetype, integer layout, test_params_t *params)
 {
-    integer i;
     void *A_save = NULL, *B_save = NULL;
-    double t_min = 1e9, exe_time;
+    double exe_time;
 
     create_matrix(datatype, LAPACK_COL_MAJOR, m, n, &A_save, lda);
     create_matrix(datatype, LAPACK_COL_MAJOR, m_b, nrhs, &B_save, ldb);
@@ -303,7 +337,7 @@ void prepare_gels_run(integer datatype, char trans, integer m, integer n, intege
     }
 
     *info = 0;
-    for(i = 0; i < n_repeats && *info == 0; i++)
+    FLA_EXEC_LOOP_BEGIN
     {
         /* Copy original input */
         copy_matrix(datatype, "full", lda, n, A, lda, A_save, lda);
@@ -335,12 +369,11 @@ void prepare_gels_run(integer datatype, char trans, integer m, integer n, intege
             exe_time = fla_test_clock() - exe_time;
         }
 
-        /* Get the best execution time */
-        t_min = fla_min(t_min, exe_time);
+        /* Update ctx and loop conditions */
+        FLA_EXEC_LOOP_UPDATE_WITH_INFO
 
         free_vector(work);
     }
-    *time_min_ = t_min;
 
     /* Save the output to vector A */
     copy_matrix(datatype, "full", lda, n, A_save, lda, A, lda);
@@ -361,14 +394,14 @@ double prepare_lapacke_gels_run(integer datatype, integer layout, char trans, in
     A_t = A;
     B_t = B;
 
-    if(trans == 'N')
+    if(same_char(trans, 'N'))
     {
         m_x = n;
     }
 
     /* Configure leading dimensions as per the input matrix layout */
-    SELECT_LDA(g_ext_fptr, config_data, layout, n, row_major_gels_lda, lda_t);
-    SELECT_LDA(g_ext_fptr, config_data, layout, nrhs, row_major_gels_ldb, ldb_t);
+    SELECT_LDA(g_ext_fptr, g_config_data, layout, n, row_major_gels_lda, lda_t);
+    SELECT_LDA(g_ext_fptr, g_config_data, layout, nrhs, row_major_gels_ldb, ldb_t);
 
     /* In case of row_major matrix layout,
        convert input matrix to row_major */
@@ -435,38 +468,49 @@ void invoke_gels(integer datatype, char *trans, integer *m, integer *n, integer 
     }
 }
 
-/*
-LAPACKE GELS API invoke function
-*/
-integer invoke_lapacke_gels(integer datatype, integer layout, char trans, integer m, integer n,
-                            integer nrhs, void *A, integer lda, void *B, integer ldb)
+void store_gels_outputs(void *filename, integer datatype, char trans, integer m, integer n,
+                        integer nrhs, void *A_test, integer lda, void *B_test, integer ldb,
+                        integer g_lwork, void *params)
 {
-    integer info = 0;
-    switch(datatype)
+    /* Create and open a file for storing Ground truth*/
+    FLA_OPEN_GT_FILE_STORE
+
+    /* Based on the value of TRANS the dimension of B changes.
+     * Dimension of B is (m, nrhs) if TRANS = "N"
+     * Dimension of B is (n, nrhs) if TRANS = "T" */
+    integer m_b = n;
+    if(same_char(trans, 'N'))
     {
-        case FLOAT:
-        {
-            info = LAPACKE_sgels(layout, trans, m, n, nrhs, A, lda, B, ldb);
-            break;
-        }
-
-        case DOUBLE:
-        {
-            info = LAPACKE_dgels(layout, trans, m, n, nrhs, A, lda, B, ldb);
-            break;
-        }
-
-        case COMPLEX:
-        {
-            info = LAPACKE_cgels(layout, trans, m, n, nrhs, A, lda, B, ldb);
-            break;
-        }
-
-        case DOUBLE_COMPLEX:
-        {
-            info = LAPACKE_zgels(layout, trans, m, n, nrhs, A, lda, B, ldb);
-            break;
-        }
+        trans = 'N';
+        m_b = m;
     }
-    return info;
+
+    FLA_STORE_BRT_MATRIX(datatype, m, n, A_test, lda)
+    FLA_STORE_BRT_MATRIX(datatype, m_b, nrhs, B_test, ldb)
+
+    fclose(gt_file);
+}
+
+integer check_bit_reproducibility_gels(void *filename, integer datatype, char trans, integer m,
+                                       integer n, integer nrhs, void *A_test, integer lda,
+                                       void *B_test, integer ldb, integer g_lwork, void *params)
+{
+    /* Open the file for reading Ground truth */
+    FLA_OPEN_GT_FILE_READ
+
+    /* Based on the value of TRANS the dimension of B changes.
+     * Dimension of B is (m, nrhs) if TRANS = "N"
+     * Dimension of B is (n, nrhs) if TRANS = "T" */
+    integer m_b = n;
+    if(same_char(trans, 'N'))
+    {
+        trans = 'N';
+        m_b = m;
+    }
+
+    FLA_VERIFY_BRT_MATRIX(datatype, m, n, A_test, lda)
+    FLA_VERIFY_BRT_MATRIX(datatype, m_b, nrhs, B_test, ldb)
+
+    fclose(gt_file);
+    return 1;
 }

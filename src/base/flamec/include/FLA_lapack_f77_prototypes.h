@@ -2107,6 +2107,16 @@
 #define F77_sormhr F77_FUNC( sormhr, SORMHR )
 #define F77_dormhr F77_FUNC( dormhr, DORMHR )
 
+#define F77_sgedmd F77_FUNC( sgedmd, SGEDMD )
+#define F77_dgedmd F77_FUNC( dgedmd, DGEDMD )
+#define F77_cgedmd F77_FUNC( cgedmd, CGEDMD )
+#define F77_zgedmd F77_FUNC( zgedmd, ZGEDMD )
+
+#define F77_sgedmdq F77_FUNC( sgedmdq, SGEDMDQ )
+#define F77_dgedmdq F77_FUNC( dgedmdq, DGEDMDQ )
+#define F77_cgedmdq F77_FUNC( cgedmdq, CGEDMDQ )
+#define F77_zgedmdq F77_FUNC( zgedmdq, ZGEDMDQ )
+
 // Function Prototypes declaration
 void F77_cgelst(char *trans, integer *m, integer *n, integer * nrhs, scomplex *a, integer *lda, scomplex *b, integer *ldb, scomplex * work, integer *lwork, integer *info);
 void F77_clatrs3(char *uplo, char *trans, char *diag, char * normin, integer *n, integer *nrhs, scomplex *a, integer *lda, scomplex * x, integer *ldx, real *scale, real *cnorm, real *work, integer *lwork, integer *info);
@@ -4203,3 +4213,11 @@ void F77_sorghr(integer *n, integer *ilo, integer *ihi, float *a, integer *lda, 
 void F77_dorghr(integer *n, integer *ilo, integer *ihi, double *a, integer *lda, double *tau, double *work, integer *lwork, integer *info);
 void F77_sormhr(char *side, char *trans, integer *m, integer *n, integer *ilo, integer *ihi, float *a, integer *lda, float *tau, float * c__, integer *ldc, float *work, integer *lwork, integer *info);
 void F77_dormhr(char *side, char *trans, integer *m, integer *n, integer *ilo, integer *ihi, double *a, integer *lda, double * tau, double *c__, integer *ldc, double *work, integer *lwork, integer *info);
+void F77_sgedmd(char *jobs, char *jobz, char *jobr, char *jobf, integer *whtsvd, integer *m, integer *n, real *x, integer *ldx, real *y, integer *ldy, integer *nrnk, real *tol, integer *k, real *reig, real *imeig, real *z__, integer *ldz, real *res, real *b, integer *ldb, real *w, integer *ldw, real *s, integer *lds, real *work, integer *lwork, integer *iwork, integer *liwork, integer *info);
+void F77_dgedmd(char *jobs, char *jobz, char *jobr, char *jobf, integer *whtsvd, integer *m, integer *n, doublereal *x, integer *ldx, doublereal *y, integer *ldy, integer *nrnk, doublereal *tol, integer *k, doublereal *reig, doublereal *imeig, doublereal *z__, integer *ldz, doublereal *res, doublereal *b, integer *ldb, doublereal *w, integer *ldw, doublereal *s, integer *lds, doublereal *work, integer *lwork, integer *iwork, integer *liwork, integer *info);
+void F77_cgedmd(char *jobs, char *jobz, char *jobr, char *jobf, integer *whtsvd, integer *m, integer *n, scomplex *x, integer *ldx, scomplex *y, integer *ldy, integer *nrnk, real *tol, integer *k, scomplex *eigs, scomplex *z__, integer *ldz, real *res, scomplex *b, integer *ldb, scomplex *w, integer *ldw, scomplex *s, integer *lds, scomplex *zwork, integer *lzwork, real *rwork, integer *lrwork, integer *iwork, integer *liwork, integer *info);
+void F77_zgedmd(char *jobs, char *jobz, char *jobr, char *jobf, integer *whtsvd, integer *m, integer *n, dcomplex *x, integer *ldx, dcomplex *y, integer *ldy, integer *nrnk, doublereal *tol, integer *k, dcomplex *eigs, dcomplex *z__, integer *ldz, doublereal *res, dcomplex *b, integer *ldb, dcomplex *w, integer *ldw, dcomplex *s, integer *lds, dcomplex *zwork, integer *lzwork, doublereal *rwork, integer *lrwork, integer *iwork, integer *liwork, integer *info);
+void F77_sgedmdq(char *jobs, char *jobz, char *jobr, char *jobq, char *jobt, char *jobf, integer *whtsvd, integer *m, integer *n, real *f, integer *ldf, real *x, integer *ldx, real *y, integer *ldy, integer *nrnk, real *tol, integer *k, real *reig, real *imeig, real *z__, integer *ldz, real *res, real *b, integer *ldb, real *v, integer *ldv, real *s, integer *lds, real *work, integer *lwork, integer *iwork, integer *liwork, integer *info);
+void F77_dgedmdq(char *jobs, char *jobz, char *jobr, char *jobq, char *jobt, char *jobf, integer *whtsvd, integer *m, integer *n, doublereal *f, integer *ldf, doublereal *x, integer *ldx, doublereal *y, integer *ldy, integer *nrnk, doublereal *tol, integer *k, doublereal *reig, doublereal *imeig, doublereal *z__, integer *ldz, doublereal *res, doublereal *b, integer *ldb, doublereal *v, integer *ldv, doublereal *s, integer *lds, doublereal *work, integer *lwork, integer *iwork, integer *liwork, integer *info);
+void F77_cgedmdq(char *jobs, char *jobz, char *jobr, char *jobq, char *jobt, char *jobf, integer *whtsvd, integer *m, integer *n, scomplex *f, integer *ldf, scomplex *x, integer *ldx, scomplex *y, integer *ldy, integer *nrnk, real *tol, integer *k, scomplex *eigs, scomplex *z__, integer *ldz, real *res, scomplex *b, integer *ldb, scomplex *v, integer *ldv, scomplex *s, integer *lds, scomplex *zwork, integer *lzwork, real *work, integer *lwork, integer *iwork, integer *liwork, integer *info);
+void F77_zgedmdq(char *jobs, char *jobz, char *jobr, char *jobq, char *jobt, char *jobf, integer *whtsvd, integer *m, integer *n, dcomplex *f, integer *ldf, dcomplex *x, integer *ldx, dcomplex *y, integer *ldy, integer *nrnk, doublereal *tol, integer *k, dcomplex *eigs, dcomplex *z__, integer *ldz, doublereal *res, dcomplex *b, integer *ldb, dcomplex *v, integer *ldv, dcomplex *s, integer *lds, dcomplex *zwork, integer *lzwork, doublereal *work, integer *lwork, integer *iwork, integer *liwork, integer *info);

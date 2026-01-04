@@ -7,13 +7,14 @@
  *  */
 
 #include "test_common.h"
+#include "test_prototype.h"
 
 extern double perf;
 extern double time_min;
 
 void validate_gesv(char *tst_api, integer n, integer nrhs, void *A, integer lda, void *B,
                    integer ldb, void *X, integer datatype, double err_thresh, char imatrix,
-                   void *scal)
+                   void *scal, void *params)
 {
     void *work = NULL;
     char NORM = '1';
@@ -40,7 +41,7 @@ void validate_gesv(char *tst_api, integer n, integer nrhs, void *A, integer lda,
             /* Test 1 */
             /* Compute AX-B */
             sgemm_("N", "N", &n, &nrhs, &n, &s_one, A, &lda, X, &ldx, &s_n_one, B, &ldb);
-            if((imatrix == 'O' || imatrix == 'U') && (scal != NULL))
+            if((same_char(imatrix, 'O') || same_char(imatrix, 'U')) && (scal != NULL))
             {
                 sscal_(&n, scal, X, &i_one);
             }
@@ -58,7 +59,7 @@ void validate_gesv(char *tst_api, integer n, integer nrhs, void *A, integer lda,
             /* Test 1 */
             /* Compute AX-B */
             dgemm_("N", "N", &n, &nrhs, &n, &d_one, A, &lda, X, &ldx, &d_n_one, B, &ldb);
-            if((imatrix == 'O' || imatrix == 'U') && (scal != NULL))
+            if((same_char(imatrix, 'O') || same_char(imatrix, 'U')) && (scal != NULL))
             {
                 dscal_(&n, scal, X, &i_one);
             }
@@ -76,7 +77,7 @@ void validate_gesv(char *tst_api, integer n, integer nrhs, void *A, integer lda,
             /* Test 1 */
             /* Compute AX-B */
             cgemm_("N", "N", &n, &nrhs, &n, &c_one, A, &lda, X, &ldx, &c_n_one, B, &ldb);
-            if((imatrix == 'O' || imatrix == 'U') && (scal != NULL))
+            if((same_char(imatrix, 'O') || same_char(imatrix, 'U')) && (scal != NULL))
             {
                 cscal_(&n, scal, X, &i_one);
             }
@@ -94,7 +95,7 @@ void validate_gesv(char *tst_api, integer n, integer nrhs, void *A, integer lda,
             /* Test 1 */
             /* Compute AX-B */
             zgemm_("N", "N", &n, &nrhs, &n, &z_one, A, &lda, X, &ldx, &z_n_one, B, &ldb);
-            if((imatrix == 'O' || imatrix == 'U') && (scal != NULL))
+            if((same_char(imatrix, 'O') || same_char(imatrix, 'U')) && (scal != NULL))
             {
                 zscal_(&n, scal, X, &i_one);
             }

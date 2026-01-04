@@ -6,6 +6,7 @@
 #if ENABLE_CPP_TEST
 #include <invoke_common.hh>
 #endif
+#include <invoke_lapacke.h>
 
 #define GETRS_VL 0.1
 #define GETRS_VU 10
@@ -20,16 +21,13 @@ void fla_test_getrs_experiment(char *tst_api, test_params_t *params, integer dat
                                integer p_cur, integer q_cur, integer pci, integer n_repeats,
                                integer einfo);
 void prepare_getrs_run(char *trans, integer m_A, integer n_A, void *A, integer lda, void *B,
-                       integer ldb, integer *ipiv, integer datatype, integer n_repeats,
-                       double *time_min_, integer *info, integer interfacetype, int matrix_layout);
+                       integer ldb, integer *ipiv, integer datatype, integer *info,
+                       integer interfacetype, int matrix_layout, test_params_t *params);
 void invoke_getrs(integer datatype, char *trans, integer *nrhs, integer *n, void *a, integer *lda,
                   integer *ipiv, void *b, integer *ldb, integer *info);
 double prepare_lapacke_getrs_run(integer datatype, int matrix_layout, char *trans, integer n,
                                  integer nrhs, void *A, integer lda, void *B, integer ldb,
                                  integer *ipiv, integer *info);
-integer invoke_lapacke_getrs(integer datatype, int matrix_layout, char trans, integer n,
-                             integer nrhs, const void *a, integer lda, const integer *ipiv, void *b,
-                             integer ldb);
 
 void fla_test_getrs(integer argc, char **argv, test_params_t *params)
 {
@@ -40,7 +38,7 @@ void fla_test_getrs(integer argc, char **argv, test_params_t *params)
 
     if(argc == 1)
     {
-        config_data = 1;
+        g_config_data = 1;
         fla_test_output_info("--- %s ---\n", op_str);
         fla_test_output_info("\n");
         fla_test_op_driver(front_str, SQUARE_INPUT, params, LIN, fla_test_getrs_experiment);
@@ -78,6 +76,7 @@ void fla_test_getrs(integer argc, char **argv, test_params_t *params)
         }
 
         n_repeats = strtoimax(argv[8], &endptr, CLI_DECIMAL_BASE);
+        params->n_repeats = n_repeats;
 
         if(n_repeats > 0)
         {
@@ -132,7 +131,7 @@ void fla_test_getrs_experiment(char *tst_api, test_params_t *params, integer dat
     integer info = 0;
     void *IPIV, *s_test = NULL;
     char range = 'U';
-    void *A, *A_test, *B, *B_save, *X, *scal = NULL;
+    void *A, *A_test, *B, *B_save, *X, *scal = NULL, *A_test_save = NULL;
     char TRANS = params->lin_solver_paramslist[pci].transr;
     double residual, err_thresh;
 
@@ -149,7 +148,7 @@ void fla_test_getrs_experiment(char *tst_api, test_params_t *params, integer dat
 
     /* If leading dimensions = -1, set them to default value
        when inputs are from config files */
-    if(config_data)
+    if(g_config_data)
     {
         if(lda == -1)
         {
@@ -196,10 +195,12 @@ void fla_test_getrs_experiment(char *tst_api, test_params_t *params, integer dat
 
     /*  call to API getrf to get AFACT */
     invoke_getrf(datatype, &n, &n, A_test, &lda, IPIV, &info);
+    create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &A_test_save, lda);
+    copy_matrix(datatype, "full", n, n, A_test, lda, A_test_save, lda);
 
     /* call to API */
-    prepare_getrs_run(&TRANS, n, NRHS, A_test, lda, B, ldb, IPIV, datatype, n_repeats, &time_min,
-                      &info, interfacetype, layout);
+    prepare_getrs_run(&TRANS, n, NRHS, A_test, lda, B, ldb, IPIV, datatype, &info, interfacetype,
+                      layout, params);
     copy_matrix(datatype, "full", n, NRHS, B, ldb, X, ldb);
 
     /* performance computation */
@@ -213,7 +214,7 @@ void fla_test_getrs_experiment(char *tst_api, test_params_t *params, integer dat
     if(!FLA_EXTREME_CASE_TEST)
     {
         validate_getrs(tst_api, &TRANS, n, NRHS, A, lda, B_save, ldb, X, datatype, residual,
-                       params->imatrix_char, scal);
+                       params->imatrix_char, scal, params);
     }
     /* check for output matrix when inputs as extreme values */
     else
@@ -237,6 +238,7 @@ void fla_test_getrs_experiment(char *tst_api, test_params_t *params, integer dat
     free_matrix(X);
     free_matrix(B_save);
     free_vector(s_test);
+    free_matrix(A_test_save);
     if(FLA_OVERFLOW_UNDERFLOW_TEST)
     {
         free_vector(scal);
@@ -244,12 +246,11 @@ void fla_test_getrs_experiment(char *tst_api, test_params_t *params, integer dat
 }
 
 void prepare_getrs_run(char *TRANS, integer n_A, integer nrhs, void *A, integer lda, void *B,
-                       integer ldb, integer *IPIV, integer datatype, integer n_repeats,
-                       double *time_min_, integer *info, integer interfacetype, int layout)
+                       integer ldb, integer *IPIV, integer datatype, integer *info,
+                       integer interfacetype, int layout, test_params_t *params)
 {
-    integer i;
     void *A_save, *B_test;
-    double t_min = 1e9, exe_time;
+    double exe_time;
 
     /* Save the original matrix */
     create_matrix(datatype, LAPACK_COL_MAJOR, n_A, n_A, &A_save, lda);
@@ -257,7 +258,7 @@ void prepare_getrs_run(char *TRANS, integer n_A, integer nrhs, void *A, integer 
     create_matrix(datatype, LAPACK_COL_MAJOR, n_A, nrhs, &B_test, ldb);
 
     *info = 0;
-    for(i = 0; i < n_repeats && *info == 0; ++i)
+    FLA_EXEC_LOOP_BEGIN
     {
         /* Copy original input data */
         copy_matrix(datatype, "full", n_A, n_A, A, lda, A_save, lda);
@@ -286,11 +287,10 @@ void prepare_getrs_run(char *TRANS, integer n_A, integer nrhs, void *A, integer 
             exe_time = fla_test_clock() - exe_time;
         }
 
-        /* Get the best execution time */
-        t_min = fla_min(t_min, exe_time);
+        /* Update ctx and loop conditions */
+        FLA_EXEC_LOOP_UPDATE_WITH_INFO
     }
 
-    *time_min_ = t_min;
     /*  Save the final result to B matrix*/
     copy_matrix(datatype, "full", n_A, nrhs, B_test, ldb, B, ldb);
 
@@ -308,8 +308,8 @@ double prepare_lapacke_getrs_run(integer datatype, int layout, char *trans, inte
     void *A_t = NULL, *B_t = NULL;
 
     /* Configure leading dimensions as per the input matrix layout */
-    SELECT_LDA(g_ext_fptr, config_data, layout, n_A, row_major_getrs_lda, lda_t);
-    SELECT_LDA(g_ext_fptr, config_data, layout, nrhs, row_major_getrs_ldb, ldb_t);
+    SELECT_LDA(g_ext_fptr, g_config_data, layout, n_A, row_major_getrs_lda, lda_t);
+    SELECT_LDA(g_ext_fptr, g_config_data, layout, nrhs, row_major_getrs_ldb, ldb_t);
 
     A_t = A;
     B_t = B;
@@ -345,8 +345,9 @@ double prepare_lapacke_getrs_run(integer datatype, int layout, char *trans, inte
 }
 
 /*
- *  GETRS_API calls LAPACK interface of
- *  Singular value decomposition - gesvd
+ *  Call to LAPACK interface of
+ *  GETRS to solve the system of linear equations
+ *  A * X = B, where A is a square matrix.
  *  */
 void invoke_getrs(integer datatype, char *trans, integer *n, integer *nrhs, void *a, integer *lda,
                   integer *ipiv, void *b, integer *ldb, integer *info)
@@ -377,37 +378,4 @@ void invoke_getrs(integer datatype, char *trans, integer *n, integer *nrhs, void
             break;
         }
     }
-}
-
-integer invoke_lapacke_getrs(integer datatype, int layout, char trans, integer n, integer nrhs,
-                             const void *a, integer lda, const integer *ipiv, void *b, integer ldb)
-{
-    integer info = 0;
-    switch(datatype)
-    {
-        case FLOAT:
-        {
-            info = LAPACKE_sgetrs(layout, trans, n, nrhs, a, lda, ipiv, b, ldb);
-            break;
-        }
-
-        case DOUBLE:
-        {
-            info = LAPACKE_dgetrs(layout, trans, n, nrhs, a, lda, ipiv, b, ldb);
-            break;
-        }
-
-        case COMPLEX:
-        {
-            info = LAPACKE_cgetrs(layout, trans, n, nrhs, a, lda, ipiv, b, ldb);
-            break;
-        }
-
-        case DOUBLE_COMPLEX:
-        {
-            info = LAPACKE_zgetrs(layout, trans, n, nrhs, a, lda, ipiv, b, ldb);
-            break;
-        }
-    }
-    return info;
 }

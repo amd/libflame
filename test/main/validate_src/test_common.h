@@ -10,9 +10,10 @@
 #define TEST_COMMON_H
 
 #include "blis.h"
-#include "test_prototype.h"
 #include "validate_common.h"
+#include "test_output_routines.h"
 #include "test_overflow_underflow.h"
+#include "test_bit_reproducibility.h"
 
 #include <limits.h>
 #include <stdint.h>
@@ -24,6 +25,75 @@
 
 #define USE_ABS_EIGEN_VALUES 1
 #define USE_SIGNED_EIGEN_VALUES 0
+// --- Complex type definitions -----------------------------------------------
+
+#ifndef _DEFINED_SCOMPLEX
+#define _DEFINED_SCOMPLEX
+
+typedef struct scomplex
+{
+    float real, imag;
+} scomplex;
+#endif
+
+#ifndef _DEFINED_DCOMPLEX
+#define _DEFINED_DCOMPLEX
+typedef struct dcomplex
+{
+    double real, imag;
+} dcomplex;
+#endif
+
+#if defined(FLA_ENABLE_ILP64)
+typedef int64_t integer;
+typedef uint64_t uinteger;
+#else
+typedef int integer;
+typedef unsigned long uinteger;
+#endif
+#ifdef __cplusplus
+// For C++, include stdint.h.
+#include <stdint.h> // skipped
+#elif __STDC_VERSION__ >= 199901L
+// For C99 (or later), include stdint.h.
+#include <stdint.h> // skipped
+#else
+// When stdint.h is not available, manually typedef the types we will use.
+#ifdef _WIN32
+typedef __int32 int32_t;
+typedef unsigned __int32 uint32_t;
+typedef __int64 int64_t;
+typedef unsigned __int64 uint64_t;
+#else
+#error "Attempting to compile on pre-C99 system without stdint.h."
+#endif
+#endif
+
+typedef integer logical;
+
+#define fla_min(x, y)           \
+    ({                          \
+        __typeof__(x) _x = (x); \
+        __typeof__(y) _y = (y); \
+        _x < _y ? _x : _y;      \
+    })
+
+#define fla_max(x, y)           \
+    ({                          \
+        __typeof__(x) _x = (x); \
+        __typeof__(y) _y = (y); \
+        _x > _y ? _x : _y;      \
+    })
+
+#define FP_FSCANF(fp, format_str, x)                          \
+    {                                                         \
+        int f_error = fscanf(fp, format_str, (x));            \
+        if(f_error == 0)                                      \
+        {                                                     \
+            printf("Error reading from file %s\n", __FILE__); \
+            exit(-1);                                         \
+        }                                                     \
+    }
 
 /* Enum value for the type of diagonal
    elements of a diagnoal matrix.
@@ -34,6 +104,12 @@ enum TRIANGULAR_MATRIX_DIAG_TYPE
 {
     NON_UNIT_DIAG = 0,
     UNIT_DIAG = 1
+};
+
+enum VECTOR_TYPE
+{
+    VECTOR_TYPE_REAL = 0,
+    VECTOR_TYPE_COMPLEX = 1
 };
 
 /* The macros below are used for deciding which position of the off-diagonal
@@ -77,6 +153,15 @@ extern int matrix_layout;
 #define MAX_FLT_DIFF 0.00001 // Maximum allowed difference for float comparision
 #define MAX_DBL_DIFF 0.0000000001 // Maximum allowed difference for double comparision
 
+#define LOWER_BIDIAG 0
+#define UPPER_BIDIAG 1
+
+/* Macros for triangular matrix generation */
+#define TRIANGULAR_DIAG_MIN 1.0
+#define TRIANGULAR_DIAG_MAX 2.0
+#define TRIANGULAR_OFFDIAG_MIN -0.01
+#define TRIANGULAR_OFFDIAG_MAX  0.01
+
 #if defined(FLA_ENABLE_ILP64)
 #ifdef _WIN32
 #define FT_IS "lld"
@@ -87,14 +172,11 @@ extern int matrix_layout;
 #define FT_IS "d"
 #endif
 
-/* function call for status print */
-void fla_test_print_status(char *func_str, char datatype_char, integer sqr_inp, integer p_cur,
-                           integer q_cur, double residual, double thresh, double time, double perf);
-
 /* print overall test status */
-#define FLA_PRINT_TEST_STATUS(p, q, residual, err_thresh) \
-    char dtype = get_datatype_char(datatype);             \
-    fla_test_print_status(tst_api, dtype, RECT_INPUT, p, q, residual, err_thresh, time_min, perf);
+#define FLA_PRINT_TEST_STATUS(p, q, residual, err_thresh)    \
+    char dtype = get_datatype_char(datatype);                \
+    fla_dump_runtimes_to_file(params, tst_api, dtype, p, q); \
+    fla_test_print_status(tst_api, dtype, RECT_INPUT, p, q, residual, err_thresh, perf, params);
 
 /* print sub-test details in case of failure */
 #define FLA_PRINT_SUBTEST_STATUS(residual, err_thresh, idx)           \
@@ -122,6 +204,13 @@ void fla_test_print_status(char *func_str, char datatype_char, integer sqr_inp, 
         FLA_PRINT_TEST_STATUS(p, q, err_thresh, err_thresh * 2); \
         return;                                                  \
     }
+
+#define FLA_IS_REALTYPE(datatype) (datatype == FLOAT || datatype == DOUBLE)
+
+#define FLA_IS_COMPLEXTYPE(datatype) (datatype == COMPLEX || datatype == DOUBLE_COMPLEX)
+
+#define FLA_IS_LAPACKE_INTERFACE(interfacetype) \
+    (interfacetype == LAPACKE_ROW_TEST || interfacetype == LAPACKE_COLUMN_TEST)
 
 /* Max function with NAN checks */
 double fla_test_max(double v1, double v2);
@@ -194,8 +283,6 @@ void get_diagonal(integer datatype, void *A, integer m, integer n, integer lda, 
 void get_subdiagonal(integer datatype, void *A, integer m, integer n, integer lda, void *Subdiag);
 /*Tridiagonal matrix functions*/
 void rand_sym_tridiag_matrix(integer datatype, void *A, integer M, integer N, integer LDA);
-void copy_sym_tridiag_matrix(integer datatype, void *D, void *E, integer M, integer N, void *A,
-                             integer LDA);
 void copy_tridiag_matrix(integer datatype, void *dl, void *d, void *du, integer M, integer N,
                          void *A, integer LDA);
 void copy_tridiag_vector(integer datatype, void *dl, void *d, void *du, integer M, integer N,
@@ -204,6 +291,9 @@ void tridiag_matrix_multiply(integer datatype, integer n, integer nrhs, void *dl
                              void *B, integer ldb, void *C, integer ldc);
 void copy_sym_tridiag_matrix(integer datatype, void *D, void *E, integer M, integer N, void *B,
                              integer LDA);
+/* Decompose symmetric matrix A into trdiagonal matrix in D, E and store orthogonal matrix in Q*/
+void get_sym_tridiagonal_matrix(integer datatype, char *uplo, integer n, void *A, integer lda,
+                                void *D, void *E, integer *info);
 
 /* Division of complex types */
 void c_div_t(scomplex *cp, scomplex *ap, scomplex *bp);
@@ -318,8 +408,8 @@ void init_vector_spec_in(integer datatype, void *A, integer M, integer incx, cha
 /* Checks whether the value is zero or not */
 double is_value_zero(integer datatype, void *value, double residual);
 /* Multiply general m * n matrix with diagonal vector (of an n * n diagonal matrix) of size n */
-void multiply_matrix_diag_vector(integer datatype, integer m, integer n, void *A, integer lda,
-                                 void *X, integer incx);
+void multiply_matrix_diag_vector(integer datatype, char side, enum VECTOR_TYPE vectype, integer m,
+                                 integer n, void *A, integer lda, void *X, integer incx);
 /* Generate square matrix of size n x n using Eigen decomposition(ED) */
 void generate_matrix_from_ED(integer datatype, integer n, void *A, integer lda, void *Q,
                              void *lambda);
@@ -445,4 +535,62 @@ integer compare_matrix(integer datatype, char *uplo, integer m, integer n, void 
 /* Swap rows of the matrix as per permutation vector */
 void swap_rows_with_pivot(integer datatype, integer m, integer n, void *A, integer lda,
                           integer *ipiv);
+/* Case-insensitive comparision of given two chars */
+logical same_char(char ca, char cb);
+/* Return pointer at required offset for the given datatype */
+void *get_ptr_at_offset(integer datatype, void *A, integer offset);
+void build_bidiagonal_matrix(integer datatype, integer m, integer n, integer k, void *d, void *e,
+                             void *B, integer ldb, integer type);
+
+/* Uses qsort to sort the given vector of real type
+ *  in ascending or descending order based on the order parameter
+ * datatype: FLOAT, DOUBLE
+ * order: 'A' for ascending, 'D' for descending
+ * vect_len: length of the vector
+ * w: pointer to the vector (vector should have increment of 1)
+ */
+void qsort_realtype_vector(integer datatype, char *order, integer vect_len, void *w);
+
+/*
+ * Gets the sum of the elements of the array
+ * datatype: FLOAT, DOUBLE, INTEGER, COMPLEX, DOUBLE_COMPLEX
+ * A: pointer to the array
+ * sum: pointer to the sum
+ * n: number of elements in the array
+ */
+void get_sum_of_array(integer datatype, void *A, void *sum, integer n);
+
+/* Gets the average of the elements of the array
+ * datatype: FLOAT, DOUBLE, INTEGER, COMPLEX, DOUBLE_COMPLEX
+ * A: pointer to the array
+ * avg: pointer to the average
+ * n: number of elements in the array
+ *
+ * If the datatype is INTEGER, the average is returned as a double
+ */
+void get_avg_of_array(integer datatype, void *A, void *avg, integer n);
+
+/* Gets the variance of the elements of the array
+ * datatype: FLOAT, DOUBLE, INTEGER, COMPLEX, DOUBLE_COMPLEX
+ * A: pointer to the array
+ * variance: pointer to the variance
+ * n: number of elements in the array
+ *
+ * If the datatype is INTEGER, the variance is returned as a double
+ */
+void get_variance_of_array(integer datatype, void *A, void *variance, integer n);
+
+/* Gets the standard deviation of the elements of the array
+ * datatype: FLOAT, DOUBLE, INTEGER, COMPLEX, DOUBLE_COMPLEX
+ * A: pointer to the array
+ * stddev: pointer to the standard deviation
+ * n: number of elements in the array
+ *
+ * If the datatype is INTEGER, the standard deviation is returned as a double
+ */
+void get_stddev_of_array(integer datatype, void *A, void *stddev, integer n);
+
+void get_non_singular_triangular_matrix(char *uplo, integer datatype, integer m, integer n, void *A,
+                                        integer lda, enum TRIANGULAR_MATRIX_DIAG_TYPE diag_type);
+
 #endif // TEST_COMMON_H

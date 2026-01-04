@@ -14,7 +14,7 @@ void fla_test_larf_experiment(char *tst_api, test_params_t *params, integer data
                               integer q_cur, integer pci, integer n_repeats, integer einfo);
 void prepare_larf_run(integer datatype, char side, integer m, integer n, void *v, integer incv,
                       void *tau, void *c__, integer ldc__, void *c__out, integer ldc__out,
-                      void *work, integer n_repeats, double *time_min_, integer interfacetype);
+                      void *work, integer interfacetype, test_params_t *params);
 void invoke_larf(integer datatype, char *side, integer *m, integer *n, void *v, integer *incv,
                  void *tau, void *c__, integer *ldc, void *work);
 void invoke_larfg(integer datatype, integer *n, void *x, integer *incx, integer *abs_incx,
@@ -53,6 +53,7 @@ void fla_test_larf(integer argc, char **argv, test_params_t *params)
         params->aux_paramslist[0].incv = strtoimax(argv[6], &endptr, CLI_DECIMAL_BASE);
         params->aux_paramslist[0].ldc = strtoimax(argv[7], &endptr, CLI_DECIMAL_BASE);
         n_repeats = strtoimax(argv[8], &endptr, CLI_DECIMAL_BASE);
+        params->n_repeats = n_repeats;
 
         if(n_repeats > 0)
         {
@@ -130,7 +131,7 @@ void fla_test_larf_experiment(char *tst_api, test_params_t *params, integer data
     integer v_num_elements;
     integer work_num_elements;
 
-    if(side == 'L')
+    if(same_char(side, 'L'))
     {
         v_num_elements = m;
         work_num_elements = n;
@@ -171,8 +172,9 @@ void fla_test_larf_experiment(char *tst_api, test_params_t *params, integer data
     create_matrix(datatype, LAPACK_COL_MAJOR, m, n, &c__out, ldc);
 
     /* call to API */
-    prepare_larf_run(datatype, side, m, n, v, incv, tau, c__, ldc, c__out, ldc, work, n_repeats,
-                     &time_min, interfacetype);
+    prepare_larf_run(datatype, side, m, n, v, incv, tau, c__, ldc, c__out, ldc, work, interfacetype,
+                     params);
+
     /* execution time */
     if(time_min == d_zero)
     {
@@ -188,7 +190,7 @@ void fla_test_larf_experiment(char *tst_api, test_params_t *params, integer data
     if(!FLA_EXTREME_CASE_TEST)
     {
         validate_larf(tst_api, datatype, side, m, n, v, incv, c__, ldc, c__out, ldc, tau,
-                      err_thresh);
+                      err_thresh, params);
     }
     else
     {
@@ -214,12 +216,11 @@ void fla_test_larf_experiment(char *tst_api, test_params_t *params, integer data
 
 void prepare_larf_run(integer datatype, char side, integer m, integer n, void *v, integer incv,
                       void *tau, void *c__, integer ldc__, void *c__out, integer ldc__out,
-                      void *work, integer n_repeats, double *time_min_, integer interfacetype)
+                      void *work, integer interfacetype, test_params_t *params)
 {
-    integer i;
-    double t_min = 1e9, exe_time;
+    double exe_time;
 
-    for(i = 0; i < n_repeats; ++i)
+    FLA_EXEC_LOOP_BEGIN
     {
         copy_matrix(datatype, "full", m, n, c__, ldc__, c__out, ldc__out);
 
@@ -240,11 +241,9 @@ void prepare_larf_run(integer datatype, char side, integer m, integer n, void *v
             exe_time = fla_test_clock() - exe_time;
         }
 
-        /* Get the best execution time */
-        t_min = fla_min(t_min, exe_time);
+        /* Update ctx and loop conditions */
+        FLA_EXEC_LOOP_UPDATE_NO_INFO
     }
-
-    *time_min_ = t_min;
 }
 
 /* larf API call interface */

@@ -30618,3 +30618,101 @@ doublereal DLADIV2_(doublereal *a, doublereal *b, doublereal *c__, doublereal *d
 	return dladiv2_( a, b, c__, d__, r__, t);
 }
 
+void SGEDMD(char *jobs, char *jobz, char *jobr, char *jobf, integer *whtsvd, integer *m, integer *n, real *x, integer *ldx, real *y, integer *ldy, integer *nrnk, real *tol, integer *k, real *reig, real *imeig, real *z__, integer *ldz, real *res, real *b, integer *ldb, real *w, integer *ldw, real *s, integer *lds, real *work, integer *lwork, integer *iwork, integer *liwork, integer *info)
+{
+	return sgedmd_(jobs, jobz, jobr, jobf, whtsvd, m, n, x, ldx, y, ldy, nrnk, tol, k, reig, imeig, z__, ldz, res, b, ldb, w, ldw, s, lds, work, lwork, iwork,liwork, info);
+}
+
+void SGEDMD_(char *jobs, char *jobz, char *jobr, char *jobf, integer *whtsvd, integer *m, integer *n, real *x, integer *ldx, real *y, integer *ldy, integer *nrnk, real *tol, integer *k, real *reig, real *imeig, real *z__, integer *ldz, real *res, real *b, integer *ldb, real *w, integer *ldw, real *s, integer *lds, real *work, integer *lwork, integer *iwork, integer *liwork, integer *info)
+{
+	return sgedmd_(jobs, jobz, jobr, jobf, whtsvd, m, n, x, ldx, y, ldy, nrnk, tol, k, reig, imeig, z__, ldz, res, b, ldb, w, ldw, s, lds, work, lwork, iwork,liwork, info);
+}
+
+void sgedmd(char *jobs, char *jobz, char *jobr, char *jobf, integer *whtsvd, integer *m, integer *n, real *x, integer *ldx, real *y, integer *ldy, integer *nrnk, real *tol, integer *k, real *reig, real *imeig, real *z__, integer *ldz, real *res, real *b, integer *ldb, real *w, integer *ldw, real *s, integer *lds, real *work, integer *lwork, integer *iwork, integer *liwork, integer *info)
+{
+	return sgedmd_(jobs, jobz, jobr, jobf, whtsvd, m, n, x, ldx, y, ldy, nrnk, tol, k, reig, imeig, z__, ldz, res, b, ldb, w, ldw, s, lds, work, lwork, iwork,liwork, info);
+}
+void DGEDMD(char *jobs, char *jobz, char *jobr, char *jobf, integer *whtsvd, integer *m, integer *n, doublereal *x, integer *ldx, doublereal *y, integer *ldy, integer *nrnk, doublereal *tol, integer *k, doublereal *reig, doublereal *imeig, doublereal *z__, integer *ldz, doublereal *res, doublereal *b, integer *ldb, doublereal *w, integer *ldw, doublereal *s, integer *lds, doublereal *work, integer *lwork, integer *iwork, integer *liwork, integer *info)
+{
+	return dgedmd_(jobs,  jobz,  jobr,  jobf, whtsvd, m, n, x, ldx, y, ldy, nrnk, tol, k, reig, imeig, z__, ldz, res, b, ldb, w, ldw, s, lds, work, lwork, iwork, liwork, info);
+}
+void DGEDMD_(char *jobs, char *jobz, char *jobr, char *jobf, integer *whtsvd, integer *m, integer *n, doublereal *x, integer *ldx, doublereal *y, integer *ldy, integer *nrnk, doublereal *tol, integer *k, doublereal *reig, doublereal *imeig, doublereal *z__, integer *ldz, doublereal *res, doublereal *b, integer *ldb, doublereal *w, integer *ldw, doublereal *s, integer *lds, doublereal *work, integer *lwork, integer *iwork, integer *liwork, integer *info)
+{
+	return dgedmd_(jobs,  jobz,  jobr,  jobf, whtsvd, m, n, x, ldx, y, ldy, nrnk, tol, k, reig, imeig, z__, ldz, res, b, ldb, w, ldw, s, lds, work, lwork, iwork, liwork, info);
+}
+void dgedmd(char *jobs, char *jobz, char *jobr, char *jobf, integer *whtsvd, integer *m, integer *n, doublereal *x, integer *ldx, doublereal *y, integer *ldy, integer *nrnk, doublereal *tol, integer *k, doublereal *reig, doublereal *imeig, doublereal *z__, integer *ldz, doublereal *res, doublereal *b, integer *ldb, doublereal *w, integer *ldw, doublereal *s, integer *lds, doublereal *work, integer *lwork, integer *iwork, integer *liwork, integer *info)
+{
+	return dgedmd_(jobs,  jobz,  jobr,  jobf, whtsvd, m, n, x, ldx, y, ldy, nrnk, tol, k, reig, imeig, z__, ldz, res, b, ldb, w, ldw, s, lds, work, lwork, iwork, liwork, info);
+}
+void CGEDMD(char *jobs, char *jobz, char *jobr, char *jobf, integer *whtsvd, integer *m, integer *n, scomplex *x, integer *ldx, scomplex *y, integer *ldy, integer *nrnk, real *tol, integer *k, scomplex *eigs, scomplex *z__, integer *ldz, real *res, scomplex *b, integer *ldb, scomplex *w, integer *ldw, scomplex *s, integer *lds, scomplex *zwork, integer *lzwork, real *rwork, integer *lrwork, integer *iwork, integer *liwork, integer *info)
+{
+	return cgedmd_(jobs, jobz, jobr, jobf, whtsvd, m, n, x, ldx, y, ldy, nrnk, tol, k, eigs, z__, ldz, res, b, ldb, w, ldw, s, lds, zwork, lzwork, rwork, lrwork, iwork, liwork, info);
+}
+void CGEDMD_(char *jobs, char *jobz, char *jobr, char *jobf, integer *whtsvd, integer *m, integer *n, scomplex *x, integer *ldx, scomplex *y, integer *ldy, integer *nrnk, real *tol, integer *k, scomplex *eigs, scomplex *z__, integer *ldz, real *res, scomplex *b, integer *ldb, scomplex *w, integer *ldw, scomplex *s, integer *lds, scomplex *zwork, integer *lzwork, real *rwork, integer *lrwork, integer *iwork, integer *liwork, integer *info)
+{
+	return cgedmd_(jobs, jobz, jobr, jobf, whtsvd, m, n, x, ldx, y, ldy, nrnk, tol, k, eigs, z__, ldz, res, b, ldb, w, ldw, s, lds, zwork, lzwork, rwork, lrwork, iwork, liwork, info);
+}
+void cgedmd(char *jobs, char *jobz, char *jobr, char *jobf, integer *whtsvd, integer *m, integer *n, scomplex *x, integer *ldx, scomplex *y, integer *ldy, integer *nrnk, real *tol, integer *k, scomplex *eigs, scomplex *z__, integer *ldz, real *res, scomplex *b, integer *ldb, scomplex *w, integer *ldw, scomplex *s, integer *lds, scomplex *zwork, integer *lzwork, real *rwork, integer *lrwork, integer *iwork, integer *liwork, integer *info)
+{
+	return cgedmd_(jobs, jobz, jobr, jobf, whtsvd, m, n, x, ldx, y, ldy, nrnk, tol, k, eigs, z__, ldz, res, b, ldb, w, ldw, s, lds, zwork, lzwork, rwork, lrwork, iwork, liwork, info);
+}
+void ZGEDMD(char *jobs, char *jobz, char *jobr, char *jobf, integer *whtsvd, integer *m, integer *n, dcomplex *x, integer *ldx, dcomplex *y, integer *ldy, integer *nrnk, doublereal *tol, integer *k, dcomplex *eigs, dcomplex *z__, integer *ldz, doublereal *res, dcomplex *b, integer *ldb, dcomplex *w, integer *ldw, dcomplex *s, integer *lds, dcomplex *zwork, integer *lzwork, doublereal *rwork, integer *lrwork, integer *iwork, integer *liwork, integer *info)
+{
+	return zgedmd_(jobs, jobz, jobr, jobf, whtsvd, m, n, x, ldx, y, ldy, nrnk, tol, k, eigs, z__, ldz, res, b, ldb, w, ldw, s, lds, zwork, lzwork, rwork, lrwork, iwork, liwork, info);
+}
+void ZGEDMD_(char *jobs, char *jobz, char *jobr, char *jobf, integer *whtsvd, integer *m, integer *n, dcomplex *x, integer *ldx, dcomplex *y, integer *ldy, integer *nrnk, doublereal *tol, integer *k, dcomplex *eigs, dcomplex *z__, integer *ldz, doublereal *res, dcomplex *b, integer *ldb, dcomplex *w, integer *ldw, dcomplex *s, integer *lds, dcomplex *zwork, integer *lzwork, doublereal *rwork, integer *lrwork, integer *iwork, integer *liwork, integer *info)
+{
+	return zgedmd_(jobs, jobz, jobr, jobf, whtsvd, m, n, x, ldx, y, ldy, nrnk, tol, k, eigs, z__, ldz, res, b, ldb, w, ldw, s, lds, zwork, lzwork, rwork, lrwork, iwork, liwork, info);
+}
+void zgedmd(char *jobs, char *jobz, char *jobr, char *jobf, integer *whtsvd, integer *m, integer *n, dcomplex *x, integer *ldx, dcomplex *y, integer *ldy, integer *nrnk, doublereal *tol, integer *k, dcomplex *eigs, dcomplex *z__, integer *ldz, doublereal *res, dcomplex *b, integer *ldb, dcomplex *w, integer *ldw, dcomplex *s, integer *lds, dcomplex *zwork, integer *lzwork, doublereal *rwork, integer *lrwork, integer *iwork, integer *liwork, integer *info)
+{
+	return zgedmd_(jobs, jobz, jobr, jobf, whtsvd, m, n, x, ldx, y, ldy, nrnk, tol, k, eigs, z__, ldz, res, b, ldb, w, ldw, s, lds, zwork, lzwork, rwork, lrwork, iwork, liwork, info);
+}
+void SGEDMDQ(char *jobs, char *jobz, char *jobr, char *jobq, char *jobt, char *jobf, integer *whtsvd, integer *m, integer *n, real *f, integer *ldf, real *x, integer *ldx, real *y, integer *ldy, integer *nrnk, real *tol, integer *k, real *reig, real *imeig, real *z__, integer *ldz, real *res, real *b, integer *ldb, real *v, integer *ldv, real *s, integer *lds, real *work, integer *lwork, integer *iwork, integer *liwork, integer *info)
+{
+	return sgedmdq_(jobs, jobz, jobr, jobq, jobt, jobf, whtsvd, m, n, f, ldf, x, ldx, y, ldy, nrnk, tol, k, reig, imeig, z__, ldz, res, b, ldb, v, ldv, s, lds, work, lwork, iwork, liwork, info);
+}
+void SGEDMDQ_(char *jobs, char *jobz, char *jobr, char *jobq, char *jobt, char *jobf, integer *whtsvd, integer *m, integer *n, real *f, integer *ldf, real *x, integer *ldx, real *y, integer *ldy, integer *nrnk, real *tol, integer *k, real *reig, real *imeig, real *z__, integer *ldz, real *res, real *b, integer *ldb, real *v, integer *ldv, real *s, integer *lds, real *work, integer *lwork, integer *iwork, integer *liwork, integer *info)
+{
+	return sgedmdq_(jobs, jobz, jobr, jobq, jobt, jobf, whtsvd, m, n, f, ldf, x, ldx, y, ldy, nrnk, tol, k, reig, imeig, z__, ldz, res, b, ldb, v, ldv, s, lds, work, lwork, iwork, liwork, info);
+}
+void sgedmdq(char *jobs, char *jobz, char *jobr, char *jobq, char *jobt, char *jobf, integer *whtsvd, integer *m, integer *n, real *f, integer *ldf, real *x, integer *ldx, real *y, integer *ldy, integer *nrnk, real *tol, integer *k, real *reig, real *imeig, real *z__, integer *ldz, real *res, real *b, integer *ldb, real *v, integer *ldv, real *s, integer *lds, real *work, integer *lwork, integer *iwork, integer *liwork, integer *info)
+{
+	return sgedmdq_(jobs, jobz, jobr, jobq, jobt, jobf, whtsvd, m, n, f, ldf, x, ldx, y, ldy, nrnk, tol, k, reig, imeig, z__, ldz, res, b, ldb, v, ldv, s, lds, work, lwork, iwork, liwork, info);
+}
+void DGEDMDQ(char *jobs, char *jobz, char *jobr, char *jobq, char *jobt, char *jobf, integer *whtsvd, integer *m, integer *n, doublereal *f, integer *ldf, doublereal *x, integer *ldx, doublereal *y, integer *ldy, integer *nrnk, doublereal *tol, integer *k, doublereal *reig, doublereal *imeig, doublereal *z__, integer *ldz, doublereal *res, doublereal *b, integer *ldb, doublereal *v, integer *ldv, doublereal *s, integer *lds, doublereal *work, integer *lwork, integer *iwork, integer *liwork, integer *info)
+{
+	return dgedmdq_(jobs, jobz, jobr, jobq, jobt, jobf, whtsvd, m, n, f, ldf, x, ldx, y, ldy, nrnk, tol, k, reig, imeig, z__, ldz, res, b, ldb, v, ldv, s, lds, work, lwork, iwork, liwork, info);
+}
+void DGEDMDQ_(char *jobs, char *jobz, char *jobr, char *jobq, char *jobt, char *jobf, integer *whtsvd, integer *m, integer *n, doublereal *f, integer *ldf, doublereal *x, integer *ldx, doublereal *y, integer *ldy, integer *nrnk, doublereal *tol, integer *k, doublereal *reig, doublereal *imeig, doublereal *z__, integer *ldz, doublereal *res, doublereal *b, integer *ldb, doublereal *v, integer *ldv, doublereal *s, integer *lds, doublereal *work, integer *lwork, integer *iwork, integer *liwork, integer *info)
+{
+	return dgedmdq_(jobs, jobz, jobr, jobq, jobt, jobf, whtsvd, m, n, f, ldf, x, ldx, y, ldy, nrnk, tol, k, reig, imeig, z__, ldz, res, b, ldb, v, ldv, s, lds, work, lwork, iwork, liwork, info);
+}
+void dgedmdq(char *jobs, char *jobz, char *jobr, char *jobq, char *jobt, char *jobf, integer *whtsvd, integer *m, integer *n, doublereal *f, integer *ldf, doublereal *x, integer *ldx, doublereal *y, integer *ldy, integer *nrnk, doublereal *tol, integer *k, doublereal *reig, doublereal *imeig, doublereal *z__, integer *ldz, doublereal *res, doublereal *b, integer *ldb, doublereal *v, integer *ldv, doublereal *s, integer *lds, doublereal *work, integer *lwork, integer *iwork, integer *liwork, integer *info)
+{
+	return dgedmdq_(jobs, jobz, jobr, jobq, jobt, jobf, whtsvd, m, n, f, ldf, x, ldx, y, ldy, nrnk, tol, k, reig, imeig, z__, ldz, res, b, ldb, v, ldv, s, lds, work, lwork, iwork, liwork, info);
+}
+void CGEDMDQ(char *jobs, char *jobz, char *jobr, char *jobq, char *jobt, char *jobf, integer *whtsvd, integer *m, integer *n, scomplex *f, integer *ldf, scomplex *x, integer *ldx, scomplex *y, integer *ldy, integer *nrnk, real *tol, integer *k, scomplex *eigs, scomplex *z__, integer *ldz, real *res, scomplex *b, integer *ldb, scomplex *v, integer *ldv, scomplex *s, integer *lds, scomplex *zwork, integer *lzwork, real *work, integer *lwork, integer *iwork, integer *liwork, integer *info)
+{
+	return cgedmdq_(jobs, jobz, jobr, jobq, jobt, jobf, whtsvd, m, n, f, ldf, x, ldx, y, ldy, nrnk, tol, k, eigs, z__, ldz, res, b, ldb, v, ldv, s, lds, zwork, lzwork, work, lwork, iwork, liwork, info);
+}
+void CGEDMDQ_(char *jobs, char *jobz, char *jobr, char *jobq, char *jobt, char *jobf, integer *whtsvd, integer *m, integer *n, scomplex *f, integer *ldf, scomplex *x, integer *ldx, scomplex *y, integer *ldy, integer *nrnk, real *tol, integer *k, scomplex *eigs, scomplex *z__, integer *ldz, real *res, scomplex *b, integer *ldb, scomplex *v, integer *ldv, scomplex *s, integer *lds, scomplex *zwork, integer *lzwork, real *work, integer *lwork, integer *iwork, integer *liwork, integer *info)
+{
+	return cgedmdq_(jobs, jobz, jobr, jobq, jobt, jobf, whtsvd, m, n, f, ldf, x, ldx, y, ldy, nrnk, tol, k, eigs, z__, ldz, res, b, ldb, v, ldv, s, lds, zwork, lzwork, work, lwork, iwork, liwork, info);
+}
+void cgedmdq(char *jobs, char *jobz, char *jobr, char *jobq, char *jobt, char *jobf, integer *whtsvd, integer *m, integer *n, scomplex *f, integer *ldf, scomplex *x, integer *ldx, scomplex *y, integer *ldy, integer *nrnk, real *tol, integer *k, scomplex *eigs, scomplex *z__, integer *ldz, real *res, scomplex *b, integer *ldb, scomplex *v, integer *ldv, scomplex *s, integer *lds, scomplex *zwork, integer *lzwork, real *work, integer *lwork, integer *iwork, integer *liwork, integer *info)
+{
+	return cgedmdq_(jobs, jobz, jobr, jobq, jobt, jobf, whtsvd, m, n, f, ldf, x, ldx, y, ldy, nrnk, tol, k, eigs, z__, ldz, res, b, ldb, v, ldv, s, lds, zwork, lzwork, work, lwork, iwork, liwork, info);
+}
+void ZGEDMDQ(char *jobs, char *jobz, char *jobr, char *jobq, char *jobt, char *jobf, integer *whtsvd, integer *m, integer *n, dcomplex *f, integer *ldf, dcomplex *x, integer *ldx, dcomplex *y, integer *ldy, integer *nrnk, doublereal *tol, integer *k, dcomplex *eigs, dcomplex *z__, integer *ldz, doublereal *res, dcomplex *b, integer *ldb, dcomplex *v, integer *ldv, dcomplex *s, integer *lds, dcomplex *zwork, integer *lzwork, doublereal *work, integer *lwork, integer *iwork, integer *liwork, integer *info)
+{
+	return zgedmdq_(jobs, jobz, jobr, jobq, jobt, jobf, whtsvd, m, n, f, ldf, x, ldx, y, ldy, nrnk, tol, k, eigs, z__, ldz, res, b, ldb, v, ldv, s, lds, zwork, lzwork, work, lwork, iwork, liwork, info);
+}
+void ZGEDMDQ_(char *jobs, char *jobz, char *jobr, char *jobq, char *jobt, char *jobf, integer *whtsvd, integer *m, integer *n, dcomplex *f, integer *ldf, dcomplex *x, integer *ldx, dcomplex *y, integer *ldy, integer *nrnk, doublereal *tol, integer *k, dcomplex *eigs, dcomplex *z__, integer *ldz, doublereal *res, dcomplex *b, integer *ldb, dcomplex *v, integer *ldv, dcomplex *s, integer *lds, dcomplex *zwork, integer *lzwork, doublereal *work, integer *lwork, integer *iwork, integer *liwork, integer *info)
+{
+	return zgedmdq_(jobs, jobz, jobr, jobq, jobt, jobf, whtsvd, m, n, f, ldf, x, ldx, y, ldy, nrnk, tol, k, eigs, z__, ldz, res, b, ldb, v, ldv, s, lds, zwork, lzwork, work, lwork, iwork, liwork, info);
+}
+void zgedmdq(char *jobs, char *jobz, char *jobr, char *jobq, char *jobt, char *jobf, integer *whtsvd, integer *m, integer *n, dcomplex *f, integer *ldf, dcomplex *x, integer *ldx, dcomplex *y, integer *ldy, integer *nrnk, doublereal *tol, integer *k, dcomplex *eigs, dcomplex *z__, integer *ldz, doublereal *res, dcomplex *b, integer *ldb, dcomplex *v, integer *ldv, dcomplex *s, integer *lds, dcomplex *zwork, integer *lzwork, doublereal *work, integer *lwork, integer *iwork, integer *liwork, integer *info)
+{
+	return zgedmdq_(jobs, jobz, jobr, jobq, jobt, jobf, whtsvd, m, n, f, ldf, x, ldx, y, ldy, nrnk, tol, k, eigs, z__, ldz, res, b, ldb, v, ldv, s, lds, zwork, lzwork, work, lwork, iwork, liwork, info);
+}

@@ -204,19 +204,19 @@ NOTE:
 
 6. Tests with invalid input parameters using --einfo option:
 
-   Tests to check proper functioning of APIs while sending invalid value for any of the input parameters
-   can be done using --einfo option. This option is available only through command-line execution.
+ ï¿½ Tests to check proper functioning of APIs while sending invalid value for any of the input parameters
+ ï¿½ can be done using --einfo option. This option is available only through command-line execution.
 
-   Example:
-    ./test_lapack.x GGEVX d P N N E -10 10 10 10 10 -1 100 --einfo=-5
+ ï¿½ Example:
+ ï¿½ï¿½ ./test_lapack.x GGEVX d P N N E -10 10 10 10 10 -1 100 --einfo=-5
 
-   In the above example, the value of the M has been given -10 which is an invalid value.
-   The --einfo parameter states the expected value of 'info' coming out of GGEVX API given the invalid input.
-   The test-suite checks the actual value of 'info' against this expected value and reurns PASS if they match
-   and FAIL if they don't.
+ ï¿½ In the above example, the value of the M has been given -10 which is an invalid value.
+ ï¿½ The --einfo parameter states the expected value of 'info' coming out of GGEVX API given the invalid input.
+ ï¿½ The test-suite checks the actual value of 'info' against this expected value and reurns PASS if they match
+ ï¿½ and FAIL if they don't.
 
-   All parameter related testing commands are compiled in test/main/scripts run_negative_test_cases.py which
-   can be used for this purpose.
+ ï¿½ All parameter related testing commands are compiled in test/main/scripts run_negative_test_cases.py which
+ ï¿½ can be used for this purpose.
 
 7. Tests with special inputs using --imatrix option for extreme values test:
 
@@ -294,26 +294,7 @@ NOTE:
    In AOCL Progress thread  2, at API  DGETRF, progress 24 total threads= 4
    In AOCL Progress thread  0, at API  DGETRF, progress 8 total threads= 4
 
-11. LAPACKE interface support:
-    Test suite supports testing of LAPACKE interface. LAPACKE API testing
-    can be enabled by passing "--lapacke=<matrix layout>" option along with
-    test executable.
-
-   Example: ./test_lapack.x --lapacke=row_major    --> for Row major layout
-            ./test_lapack.x --lapacke=column_major --> for column major layout
-
-   ### `input.global.operations.lapacke`
-
-      For LAPACKE API testing, `input.global.operations.lapacke` file should be used
-      instead of input.global.operations file for enabling/disabling single or
-      a group of APIs.
-
-   Note :
-   1) Default layout is set to Column_major. In case user specifies
-      anything other than row_major/column_major, matrix layout is
-      considered to be column_major.
-
-12. Common interface support:
+11. Common interface support:
    Test suite supports the interfaces as follows:
    a. "--interface=lapack" : Uses LAPACK interface for testing.
    b. "--interface=lapacke_row" : Uses LAPACKE interface with row major for testing.
@@ -322,11 +303,129 @@ NOTE:
 
    Note :
    1) In case user specifies anything incorrect, returns error and prints all interfaces.
-   2) Above "--lapacke" option will be removed once all test cases supports common interface.
-   3) ENABLE_CPP_TEST flag is used to enable/disable CPP interface, it is enabled by default.
-   4) If ENABLE_CPP_TEST is disabled & "--interface=cpp" is used, then returns error to enable
+   2) ENABLE_CPP_TEST flag is used to enable/disable CPP interface, it is enabled by default.
+   3) If ENABLE_CPP_TEST is disabled & "--interface=cpp" is used, then returns error to enable
       ENABLE_CPP_TEST flag. Also the test cases which are not yet implemented in cpp,
       uses LAPACK interface.
 
    Example: ./test_lapack.x --interface=cpp    --> for CPP interface
             ./test_lapack.x --interface=lapacke_column --> for column major layout of lapacke interface
+
+12. Benchmark and Statistics Options
+
+   The test suite supports various options for benchmarking and collecting statistics:
+
+   a. Benchmark Mode
+      --bench=<k>: Execute tests in benchmark mode for a minimum duration of <k> seconds.
+      The test will run for at least <k> seconds, but will always complete the specified
+      number of <repeats> iterations. The total number of iterations will be the maximum
+      of <repeats> and the iterations needed to reach <k> seconds.
+
+      Examples:
+         i. With repeats=10, k=2, and 1 second per iteration:
+            The test runs 10 iterations (repeats takes precedence)
+        ii. With repeats=10, k=30, and 1 second per iteration:
+            The test runs 30 iterations (duration takes precedence)
+
+      Note: By default, 10% of iterations are dedicated to warmup in benchmark mode.
+
+   b. Warmup Options
+      --warmup=<k>: Configure the number of warmup invocations where <k> can be:
+        - 0: Disable warmup
+        - Decimal k in range (0,1): Use ceil(k * repeat) invocations as warmup
+        - Integer k >= 1: Use k invocations as warmup
+
+   c. Statistics Collection
+      --stats=<stats_list>: Specify comma-separated list of statistics to print.
+      Available statistics include:
+        - min: Minimum runtime
+        - max: Maximum runtime
+        - avg: Average runtime
+        - var: Variance
+        - stddev: Standard deviation
+        - p<1-99>: Percentiles (e.g., p95 for 95th percentile)
+      
+      Example: --stats=min,avg,p95,var
+      Default statistics in benchmark mode: min, avg, p95
+      Default statistics in normal mode: min only
+
+   d. Output Formatting
+      --print-header: Print the header for test output in CLI mode
+      --time-unit=<unit>: Specify time unit for output (s, ms, us, ns, ps, auto)
+      Default unit is 'auto' which automatically selects based on test duration
+
+   e. Data Analysis
+      --filter-outliers[=<multiplier>]: Filter outliers from test results
+      Default multiplier is 2.0
+      Filters values greater than (multiplier * stddev + mean)
+      
+      --dump-runtimes=<file_path>: Save runtime data to specified file
+      Only valid in CLI mode
+
+   Example usage:
+   $ ./test_lapack.x --bench=60 --warmup=0.1 --stats=min,avg,p95 --time-unit=ms
+   $ ./test_lapack.x --filter-outliers=2.5 --dump-runtimes=results.txt
+
+   Note: 
+   - These options are particularly useful for performance testing and analysis.
+   - The benchmark mode ensures consistent test duration while the statistics options
+     provide detailed performance metrics for analysis.
+   - These options can be used along with special matrix (--imatrix) and 
+     interface (--interface) options. However these options should
+     be provided after special matrix and interface options.
+
+13. APIs with only Benchmark test without output Validation
+   Test suite provides support to run only performance benchmark tests for
+   few APIs. Support for more APIs in this mode is being added.
+   These tests are available only through command line mode (config mode
+   is not supported) and only for LAPACK interfaces.
+   Refer to input.global.operations file for APIs with only Benchmark test without
+   Validation. All these APIs will be listed after appropriate comment in that file. 
+
+14. Bit Reproducibility Test options
+
+   The test suite contains options for checking bitwise matching outputs for LAPACK APIs.
+   This test is run with a ground truth and verification concept, 
+   with the output of one run being used as a reference to compare all successive outputs.
+   
+   This option is available only through command line execution.
+
+   Example:
+   Ground truth runs
+   (CRC - checksum)
+   ./test_lapack.x labrd scdz 75 110 50 150 150 150 10 --seed=10 --BRT=G 
+   ./test_lapack.x gelqf sdcz 4 4 4 -1 10 --seed=10 --BRT=G 
+   (Complete binary data)
+   ./test_lapack.x labrd scdz 75 110 50 150 150 150 10 --seed=10 --BRT=F 
+   ./test_lapack.x gelqf sdcz 4 4 4 -1 10 --seed=10 --BRT=F 
+
+   Verification runs
+   (CRC - checksum)
+   ./test_lapack.x labrd scdz 75 110 50 150 150 150 10 --seed=10 --BRT=V 
+   ./test_lapack.x gelqf sdcz 4 4 4 -1 10 --seed=10 --BRT=V 
+   (Complete binary data)
+   ./test_lapack.x labrd scdz 75 110 50 150 150 150 10 --seed=10 --BRT=M 
+   ./test_lapack.x gelqf sdcz 4 4 4 -1 10 --seed=10 --BRT=M 
+
+   CTEST integration:
+   The CRC variant of ground truth and verification test cases have been added to the ctest.
+   By default, the "ctest" command will skip both GT and V runs.
+
+   For running Repeatability test, from within the build folder run the command 
+      command : "REPEATABILITY_TEST=TRUE ctest -L "repeatability_tests""
+   This will run both the Ground truth run and the verification run in the same environment setup.
+
+   For running Bit Reproducibility test,
+   First run,
+      Command : "RUN_BRT_GT=TRUE ctest -L "brt_gt_tests"" 
+      This will generate the binary files containing GT outputs inside the build folder.
+   Then after making changes to the environment run 
+      command : "RUN_BRT_V=TRUE ctest -L "brt_v_tests""
+      This will verify the outputs using the ground truth run as reference
+
+   Incase of a need for testing between different builds,
+      The binary files containing the GT outputs can be found under : <Build_folder>/test/main/BRT
+      This BRT folder can be stored and moved across different machines for testing.
+
+   Note: 
+   It is important to specify the seed when running BR tests between different runs/builds.

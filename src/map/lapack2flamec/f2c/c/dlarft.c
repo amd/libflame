@@ -3,9 +3,17 @@
  on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/******************************************************************************
+ * Copyright (C) 2025, Advanced Micro Devices, Inc. All rights reserved.
+ *******************************************************************************/
 #include "FLA_f2c.h" /* Table of constant values */
+#if FLA_ENABLE_AOCL_BLAS
+#include "blis.h"
+#endif
+
 static integer c__1 = 1;
 static doublereal c_b6 = 1.;
+static doublereal c_b0 = 0.;
 /* > \brief \b DLARFT forms the triangular factor T of a block reflector H = I - vtvH */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -176,16 +184,24 @@ void dlarft_(char *direct, char *storev, integer *n, integer *k, doublereal *v, 
     doublereal d__1;
     /* Local variables */
     integer i__, j, prevlastv;
+    integer lastv;
+#if !FLA_ENABLE_AOCL_BLAS
     extern logical lsame_(char *, char *, integer, integer);
     extern /* Subroutine */
         void
         dgemv_(char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *,
                integer *, doublereal *, doublereal *, integer *);
-    integer lastv;
     extern /* Subroutine */
         void
-        dtrmv_(char *, char *, char *, integer *, doublereal *, integer *, doublereal *, integer *),
-        f90_exit_(void);
+        dtrmv_(char *, char *, char *, integer *, doublereal *, integer *, doublereal *, integer *);
+#ifdef FLA_ENABLE_AMD_OPT
+    extern void dtrmm_(char *, char *, char *, char *, integer *, integer *, doublereal *,
+                       doublereal *, integer *, doublereal *, integer *);
+    extern void dgemm_(char *, char *, integer *, integer *, integer *, doublereal *, doublereal *,
+                       integer *, doublereal *, integer *, doublereal *, doublereal *, integer *);
+#endif
+#endif
+
     /* -- LAPACK auxiliary routine (version 3.7.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -219,6 +235,9 @@ void dlarft_(char *direct, char *storev, integer *n, integer *k, doublereal *v, 
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }
+#ifdef FLA_ENABLE_AMD_OPT
+    aocl_fla_init();
+#endif
     if(lsame_(direct, "F", 1, 1))
     {
         prevlastv = *n;
@@ -259,8 +278,21 @@ void dlarft_(char *direct, char *storev, integer *n, integer *k, doublereal *v, 
                     i__2 = j - i__;
                     i__3 = i__ - 1;
                     d__1 = -tau[i__];
-                    dgemv_("Transpose", &i__2, &i__3, &d__1, &v[i__ + 1 + v_dim1], ldv,
-                           &v[i__ + 1 + i__ * v_dim1], &c__1, &c_b6, &t[i__ * t_dim1 + 1], &c__1);
+#if FLA_ENABLE_AOCL_BLAS
+                    if(FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX512))
+                    {
+                        bli_dgemv_t_zen4_int(BLIS_CONJUGATE, BLIS_NO_CONJUGATE, i__2, i__3, &d__1,
+                                             &v[i__ + 1 + v_dim1], 1, *ldv,
+                                             &v[i__ + 1 + i__ * v_dim1], c__1, &c_b6,
+                                             &t[i__ * t_dim1 + 1], c__1, NULL);
+                    }
+                    else
+#endif
+                    {
+                        dgemv_("Transpose", &i__2, &i__3, &d__1, &v[i__ + 1 + v_dim1], ldv,
+                               &v[i__ + 1 + i__ * v_dim1], &c__1, &c_b6, &t[i__ * t_dim1 + 1],
+                               &c__1);
+                    }
                 }
                 else
                 {
@@ -283,8 +315,21 @@ void dlarft_(char *direct, char *storev, integer *n, integer *k, doublereal *v, 
                     i__2 = i__ - 1;
                     i__3 = j - i__;
                     d__1 = -tau[i__];
-                    dgemv_("No transpose", &i__2, &i__3, &d__1, &v[(i__ + 1) * v_dim1 + 1], ldv,
-                           &v[i__ + (i__ + 1) * v_dim1], ldv, &c_b6, &t[i__ * t_dim1 + 1], &c__1);
+#if FLA_ENABLE_AOCL_BLAS
+                    if(FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX512) && *ldv > 0)
+                    {
+                        bli_dgemv_n_zen4_int_40x2_st(BLIS_NO_TRANSPOSE, BLIS_NO_CONJUGATE, i__2,
+                                                     i__3, &d__1, &v[(i__ + 1) * v_dim1 + 1], 1,
+                                                     *ldv, &v[i__ + (i__ + 1) * v_dim1], *ldv,
+                                                     &c_b6, &t[i__ * t_dim1 + 1], c__1, NULL);
+                    }
+                    else
+#endif
+                    {
+                        dgemv_("No transpose", &i__2, &i__3, &d__1, &v[(i__ + 1) * v_dim1 + 1], ldv,
+                               &v[i__ + (i__ + 1) * v_dim1], ldv, &c_b6, &t[i__ * t_dim1 + 1],
+                               &c__1);
+                    }
                 }
                 /* T(1:i-1,i) := T(1:i-1,1:i-1) * T(1:i-1,i) */
                 i__2 = i__ - 1;
@@ -342,9 +387,21 @@ void dlarft_(char *direct, char *storev, integer *n, integer *k, doublereal *v, 
                         i__1 = *n - *k + i__ - j;
                         i__2 = *k - i__;
                         d__1 = -tau[i__];
-                        dgemv_("Transpose", &i__1, &i__2, &d__1, &v[j + (i__ + 1) * v_dim1], ldv,
-                               &v[j + i__ * v_dim1], &c__1, &c_b6, &t[i__ + 1 + i__ * t_dim1],
-                               &c__1);
+#if FLA_ENABLE_AOCL_BLAS
+                        if(FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX512))
+                        {
+                            bli_dgemv_t_zen4_int(BLIS_CONJUGATE, BLIS_NO_CONJUGATE, i__1, i__2,
+                                                 &d__1, &v[j + (i__ + 1) * v_dim1], 1, *ldv,
+                                                 &v[j + i__ * v_dim1], c__1, &c_b6,
+                                                 &t[i__ + 1 + i__ * t_dim1], c__1, NULL);
+                        }
+                        else
+#endif
+                        {
+                            dgemv_("Transpose", &i__1, &i__2, &d__1, &v[j + (i__ + 1) * v_dim1],
+                                   ldv, &v[j + i__ * v_dim1], &c__1, &c_b6,
+                                   &t[i__ + 1 + i__ * t_dim1], &c__1);
+                        }
                     }
                     else
                     {
@@ -367,8 +424,21 @@ void dlarft_(char *direct, char *storev, integer *n, integer *k, doublereal *v, 
                         i__1 = *k - i__;
                         i__2 = *n - *k + i__ - j;
                         d__1 = -tau[i__];
-                        dgemv_("No transpose", &i__1, &i__2, &d__1, &v[i__ + 1 + j * v_dim1], ldv,
-                               &v[i__ + j * v_dim1], ldv, &c_b6, &t[i__ + 1 + i__ * t_dim1], &c__1);
+#if FLA_ENABLE_AOCL_BLAS
+                        if(FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX512) && *ldv > 0)
+                        {
+                            bli_dgemv_n_zen4_int_40x2_st(BLIS_NO_TRANSPOSE, BLIS_NO_CONJUGATE, i__1,
+                                                         i__2, &d__1, &v[i__ + 1 + j * v_dim1], 1,
+                                                         *ldv, &v[i__ + j * v_dim1], *ldv, &c_b6,
+                                                         &t[i__ + 1 + i__ * t_dim1], c__1, NULL);
+                        }
+                        else
+#endif
+                        {
+                            dgemv_("No transpose", &i__1, &i__2, &d__1, &v[i__ + 1 + j * v_dim1],
+                                   ldv, &v[i__ + j * v_dim1], ldv, &c_b6,
+                                   &t[i__ + 1 + i__ * t_dim1], &c__1);
+                        }
                     }
                     /* T(i+1:k,i) := T(i+1:k,i+1:k) * T(i+1:k,i) */
                     i__1 = *k - i__;

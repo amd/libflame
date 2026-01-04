@@ -7,12 +7,13 @@
  *  */
 
 #include "test_common.h"
+#include "test_prototype.h"
 
 extern double perf;
 extern double time_min;
 
 void validate_syevd(char *tst_api, char *jobz, integer n, void *A, void *A_test, integer lda,
-                    void *w, integer datatype, double err_thresh)
+                    void *w, integer datatype, double err_thresh, void *params)
 {
     double residual, resid1 = 0., resid2 = 0.;
 
@@ -26,7 +27,7 @@ void validate_syevd(char *tst_api, char *jobz, integer n, void *A, void *A_test,
      * unexpected info value */
     FLA_TEST_PRINT_INVALID_STATUS(n, n, err_thresh);
 
-    if(*jobz != 'N')
+    if(!same_char(*jobz, 'N'))
     {
         void *lambda = NULL, *zlambda = NULL, *Z = NULL;
         void *work = NULL;

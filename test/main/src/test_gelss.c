@@ -6,6 +6,7 @@
 #if ENABLE_CPP_TEST
 #include <invoke_common.hh>
 #endif
+#include <invoke_lapacke.h>
 
 #define GELSS_VL 0.1
 #define GELSS_VU 10
@@ -23,17 +24,23 @@ void fla_test_gelss_experiment(char *tst_api, test_params_t *params, integer dat
                                integer einfo);
 void prepare_gelss_run(integer datatype, integer m, integer n, integer nrhs, void *A, integer lda,
                        void *B, integer ldb, void *s, void *rcond, integer *rank, void *work,
-                       integer lwork, void *rwork, integer n_repeats, double *time_min_,
-                       integer *info, integer interfacetype, integer layout);
-integer invoke_lapacke_gelss(integer datatype, integer layout, integer m, integer n, integer nrhs,
-                             void *A, integer lda, void *B, integer ldb, void *s, void *rcond,
-                             integer *rank);
+                       integer lwork, void *rwork, integer *info, integer interfacetype,
+                       integer layout, test_params_t *params);
 double prepare_lapacke_gelss_run(integer datatype, integer layout, integer m, integer n,
                                  integer nrhs, void *A, integer lda, void *B, integer ldb, void *s,
                                  void *rcond, integer *rank, integer *info);
+
+/* Helper functions for Bit reproducibility tests */
+void store_gelss_outputs(void *filename, integer datatype, integer m, integer n, integer nrhs,
+                         void *A_test, integer lda, void *s, void *B_test, integer ldb, void *rcond,
+                         integer g_lwork, void *params);
+integer check_bit_reproducibility_gelss(void *filename, integer datatype, integer m, integer n,
+                                        integer nrhs, void *A_test, integer lda, void *s,
+                                        void *B_test, integer ldb, void *rcond, integer g_lwork,
+                                        void *params);
+
 void fla_test_gelss(integer argc, char **argv, test_params_t *params)
 {
-    srand(55);
     char *op_str = "Solves overdetermined or underdetermined systems for GE matrices";
     char *front_str = "GELSS";
     integer tests_not_run = 1, invalid_dtype = 0, einfo = 0;
@@ -41,7 +48,7 @@ void fla_test_gelss(integer argc, char **argv, test_params_t *params)
 
     if(argc == 1)
     {
-        config_data = 1;
+        g_config_data = 1;
         g_lwork = -1;
         fla_test_output_info("--- %s ---\n", op_str);
         fla_test_output_info("\n");
@@ -79,6 +86,7 @@ void fla_test_gelss(integer argc, char **argv, test_params_t *params)
         }
         g_lwork = strtoimax(argv[9], &endptr, CLI_DECIMAL_BASE);
         n_repeats = strtoimax(argv[10], &endptr, CLI_DECIMAL_BASE);
+        params->n_repeats = n_repeats;
 
         if(n_repeats > 0)
         {
@@ -135,6 +143,7 @@ void fla_test_gelss_experiment(char *tst_api, test_params_t *params, integer dat
          *rwork = NULL, *rcond = NULL, *s_test = NULL;
     char range = 'U';
     double residual, err_thresh;
+    void *filename = NULL;
 
     integer interfacetype = params->interfacetype;
     integer layout = params->matrix_major;
@@ -161,7 +170,7 @@ void fla_test_gelss_experiment(char *tst_api, test_params_t *params, integer dat
 
     /* If leading dimensions = -1, set them to default value
        when inputs are from config files */
-    if(config_data)
+    if(g_config_data)
     {
         if(lda == -1)
         {
@@ -184,23 +193,47 @@ void fla_test_gelss_experiment(char *tst_api, test_params_t *params, integer dat
     create_realtype_vector(datatype, &rwork, 5 * fla_min(m, n));
     create_realtype_vector(datatype, &s_test, fla_min(m, n));
 
-    /* Initialize the test matrices */
-    init_matrix(datatype, B, m, nrhs, ldb, g_ext_fptr, params->imatrix_char);
-    if(FLA_EXTREME_CASE_TEST || (g_ext_fptr != NULL))
+    /* This code path is run to generate the matrix to be passed to the API. This is the default
+     * input generation logic accessed both when BRT is run in Ground truth mode and for non BRT
+     * Test cases. For verification runs the input is loaded from the input generated during Ground
+     * truth run */
+    if(!FLA_BRT_VERIFICATION_RUN)
     {
-        init_matrix(datatype, A, m, n, lda, g_ext_fptr, params->imatrix_char);
+        /* Initialize the test matrices */
+        init_matrix(datatype, B, m, nrhs, ldb, g_ext_fptr, params->imatrix_char);
+        if(FLA_EXTREME_CASE_TEST || (g_ext_fptr != NULL))
+        {
+            init_matrix(datatype, A, m, n, lda, g_ext_fptr, params->imatrix_char);
+        }
+        else
+        {
+            /* Generate input matrix with condition number <= 100 */
+            create_svd_matrix(datatype, range, m, n, A, lda, s_test, GELSS_VL, GELSS_VU, i_zero,
+                              i_zero, info);
+            /* Overflow or underflow test initialization */
+            if(FLA_OVERFLOW_UNDERFLOW_TEST)
+            {
+                scale_matrix_overflow_underflow_gelss(datatype, m, n, nrhs, A, lda,
+                                                      params->imatrix_char);
+            }
+        }
+    }
+
+    /* This macro is used in the BRT test cases for the following purposes:
+     *    - In the Ground truth runs (BRT_char => G, F), the output is stored in a file for future
+     * reference
+     *    - In the verification runs (BRT_char => V, M), the output is loaded from the file and
+     * passed as input to the API
+     * */
+    if(datatype == FLOAT || datatype == COMPLEX)
+    {
+        FLA_BRT_PROCESS_TWO_INPUT(datatype, m, n, A, lda, datatype, fla_max(m, n), nrhs, B, ldb,
+                                  "dddddfd", m, n, nrhs, lda, ldb, *(real *)rcond, g_lwork)
     }
     else
     {
-        /* Generate input matrix with condition number <= 100 */
-        create_svd_matrix(datatype, range, m, n, A, lda, s_test, GELSS_VL, GELSS_VU, i_zero, i_zero,
-                          info);
-        /* Overflow or underflow test initialization */
-        if(FLA_OVERFLOW_UNDERFLOW_TEST)
-        {
-            scale_matrix_overflow_underflow_gelss(datatype, m, n, nrhs, A, lda,
-                                                  params->imatrix_char);
-        }
+        FLA_BRT_PROCESS_TWO_INPUT(datatype, m, n, A, lda, datatype, fla_max(m, n), nrhs, B, ldb,
+                                  "dddddfd", m, n, nrhs, lda, ldb, *(doublereal *)rcond, g_lwork)
     }
 
     /* Save the original matrix */
@@ -209,7 +242,7 @@ void fla_test_gelss_experiment(char *tst_api, test_params_t *params, integer dat
 
     /* call to API */
     prepare_gelss_run(datatype, m, n, nrhs, A_test, lda, B_test, ldb, s, rcond, &rank, work, lwork,
-                      rwork, n_repeats, &time_min, &info, interfacetype, layout);
+                      rwork, &info, interfacetype, layout, params);
 
     /* performance computation */
     if(m >= n)
@@ -226,10 +259,18 @@ void fla_test_gelss_experiment(char *tst_api, test_params_t *params, integer dat
 
     /* Output validataion */
     FLA_TEST_CHECK_EINFO(residual, info, einfo);
-    if(!FLA_EXTREME_CASE_TEST)
+    IF_FLA_BRT_VALIDATION(m, n,
+                          store_gelss_outputs(filename, datatype, m, n, nrhs, A_test, lda, s,
+                                              B_test, ldb, rcond, g_lwork, params),
+                          validate_gelsd(tst_api, m, n, nrhs, A, lda, B, ldb, s, B_test, rcond,
+                                         &rank, datatype, residual, params->imatrix_char, params),
+                          check_bit_reproducibility_gelss(filename, datatype, m, n, nrhs, A_test,
+                                                          lda, s, B_test, ldb, rcond, g_lwork,
+                                                          params))
+    else if(!FLA_EXTREME_CASE_TEST)
     {
         validate_gelsd(tst_api, m, n, nrhs, A, lda, B, ldb, s, B_test, rcond, &rank, datatype,
-                       residual, params->imatrix_char);
+                       residual, params->imatrix_char, params);
     }
     /* check for output matrix when inputs as extreme values */
     else
@@ -247,6 +288,8 @@ void fla_test_gelss_experiment(char *tst_api, test_params_t *params, integer dat
     }
 
     /* Free up buffers */
+free_buffers:
+    FLA_FREE_FILENAME(filename)
     free_matrix(A);
     free_matrix(A_test);
     free_matrix(B);
@@ -259,12 +302,11 @@ void fla_test_gelss_experiment(char *tst_api, test_params_t *params, integer dat
 
 void prepare_gelss_run(integer datatype, integer m, integer n, integer nrhs, void *A, integer lda,
                        void *B, integer ldb, void *s, void *rcond, integer *rank, void *work,
-                       integer lwork, void *rwork, integer n_repeats, double *time_min_,
-                       integer *info, integer interfacetype, integer layout)
+                       integer lwork, void *rwork, integer *info, integer interfacetype,
+                       integer layout, test_params_t *params)
 {
-    integer i;
     void *A_save = NULL, *B_save = NULL;
-    double t_min = 1e9, exe_time;
+    double exe_time;
 
     create_matrix(datatype, LAPACK_COL_MAJOR, m, n, &A_save, lda);
     create_matrix(datatype, LAPACK_COL_MAJOR, fla_max(m, n), nrhs, &B_save, ldb);
@@ -304,7 +346,7 @@ void prepare_gelss_run(integer datatype, integer m, integer n, integer nrhs, voi
     }
 
     *info = 0;
-    for(i = 0; i < n_repeats && *info == 0; i++)
+    FLA_EXEC_LOOP_BEGIN
     {
         /* Copy original input */
         copy_matrix(datatype, "full", lda, n, A, lda, A_save, lda);
@@ -337,12 +379,12 @@ void prepare_gelss_run(integer datatype, integer m, integer n, integer nrhs, voi
 
             exe_time = fla_test_clock() - exe_time;
         }
-        /* Get the best execution time */
-        t_min = fla_min(t_min, exe_time);
+
+        /* Update ctx and loop condition */
+        FLA_EXEC_LOOP_UPDATE_WITH_INFO
 
         free_vector(work);
     }
-    *time_min_ = t_min;
 
     /* Save the output to vector A */
     copy_matrix(datatype, "full", lda, n, A_save, lda, A, lda);
@@ -362,8 +404,8 @@ double prepare_lapacke_gelss_run(integer datatype, integer layout, integer m, in
     B_t = B;
 
     /* Configure leading dimensions as per the input matrix layout */
-    SELECT_LDA(g_ext_fptr, config_data, layout, n, row_major_gelss_lda, lda_t);
-    SELECT_LDA(g_ext_fptr, config_data, layout, nrhs, row_major_gelss_ldb, ldb_t);
+    SELECT_LDA(g_ext_fptr, g_config_data, layout, n, row_major_gelss_lda, lda_t);
+    SELECT_LDA(g_ext_fptr, g_config_data, layout, nrhs, row_major_gelss_ldb, ldb_t);
 
     /* In case of row_major matrix layout,
        convert input matrix to row_major */
@@ -429,39 +471,32 @@ void invoke_gelss(integer datatype, integer *m, integer *n, integer *nrhs, void 
     }
 }
 
-/*
-LAPACKE GELSS API invoke function
-*/
-integer invoke_lapacke_gelss(integer datatype, integer layout, integer m, integer n, integer nrhs,
-                             void *A, integer lda, void *B, integer ldb, void *s, void *rcond,
-                             integer *rank)
+void store_gelss_outputs(void *filename, integer datatype, integer m, integer n, integer nrhs,
+                         void *A_test, integer lda, void *s, void *B_test, integer ldb, void *rcond,
+                         integer g_lwork, void *params)
 {
-    integer info = 0;
-    switch(datatype)
-    {
-        case FLOAT:
-        {
-            info = LAPACKE_sgelss(layout, m, n, nrhs, A, lda, B, ldb, s, *(float *)rcond, rank);
-            break;
-        }
+    /* Create and open a file for storing Ground truth*/
+    FLA_OPEN_GT_FILE_STORE
 
-        case DOUBLE:
-        {
-            info = LAPACKE_dgelss(layout, m, n, nrhs, A, lda, B, ldb, s, *(double *)rcond, rank);
-            break;
-        }
+    FLA_STORE_BRT_MATRIX(datatype, m, n, A_test, lda)
+    FLA_STORE_BRT_MATRIX(datatype, n, nrhs, B_test, ldb)
+    FLA_STORE_BRT_VECTOR(get_realtype(datatype), fla_min(m, n), s)
 
-        case COMPLEX:
-        {
-            info = LAPACKE_cgelss(layout, m, n, nrhs, A, lda, B, ldb, s, *(float *)rcond, rank);
-            break;
-        }
+    fclose(gt_file);
+}
 
-        case DOUBLE_COMPLEX:
-        {
-            info = LAPACKE_zgelss(layout, m, n, nrhs, A, lda, B, ldb, s, *(double *)rcond, rank);
-            break;
-        }
-    }
-    return info;
+integer check_bit_reproducibility_gelss(void *filename, integer datatype, integer m, integer n,
+                                        integer nrhs, void *A_test, integer lda, void *s,
+                                        void *B_test, integer ldb, void *rcond, integer g_lwork,
+                                        void *params)
+{
+    /* Open the file for reading Ground truth */
+    FLA_OPEN_GT_FILE_READ
+
+    FLA_VERIFY_BRT_MATRIX(datatype, m, n, A_test, lda)
+    FLA_VERIFY_BRT_MATRIX(datatype, n, nrhs, B_test, ldb)
+    FLA_VERIFY_BRT_VECTOR(get_realtype(datatype), fla_min(m, n), s)
+
+    fclose(gt_file);
+    return 1;
 }

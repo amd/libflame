@@ -6,6 +6,7 @@
 #if ENABLE_CPP_TEST
 #include <invoke_common.hh>
 #endif
+#include <invoke_lapacke.h>
 
 extern double perf;
 extern double time_min;
@@ -15,12 +16,10 @@ integer row_major_gtsv_ldb;
 void fla_test_gtsv_experiment(char *tst_api, test_params_t *params, integer datatype, integer p_cur,
                               integer q_cur, integer pci, integer n_repeats, integer einfo);
 void prepare_gtsv_run(integer n_A, integer nrhs, void *dl, void *d, void *du, void *B, integer ldb,
-                      integer datatype, integer n_repeats, double *time_min_, integer *info,
-                      integer interfacetype, integer layout);
+                      integer datatype, integer *info, integer interfacetype, integer layout,
+                      test_params_t *params);
 void invoke_gtsv(integer datatype, integer *nrhs, integer *n, void *dl, void *d, void *du, void *b,
                  integer *ldb, integer *info);
-integer invoke_lapacke_gtsv(integer datatype, integer layout, integer n, integer nrhs, void *dl,
-                            void *d, void *du, void *B, integer ldb);
 double prepare_lapacke_gtsv_run(integer datatype, integer layout, integer n, integer nrhs, void *dl,
                                 void *d, void *du, void *B, integer ldb, integer *info);
 
@@ -34,7 +33,7 @@ void fla_test_gtsv(integer argc, char **argv, test_params_t *params)
 
     if(argc == 1)
     {
-        config_data = 1;
+        g_config_data = 1;
         fla_test_output_info("--- %s ---\n", op_str);
         fla_test_output_info("\n");
         fla_test_op_driver(front_str, SQUARE_INPUT, params, LIN, fla_test_gtsv_experiment);
@@ -66,6 +65,7 @@ void fla_test_gtsv(integer argc, char **argv, test_params_t *params)
             params->lin_solver_paramslist[0].ldb = strtoimax(argv[5], &endptr, CLI_DECIMAL_BASE);
         }
         n_repeats = strtoimax(argv[6], &endptr, CLI_DECIMAL_BASE);
+        params->n_repeats = n_repeats;
 
         if(n_repeats > 0)
         {
@@ -135,7 +135,7 @@ void fla_test_gtsv_experiment(char *tst_api, test_params_t *params, integer data
 
     /* If leading dimensions = -1, set them to default value
        when inputs are from config files */
-    if(config_data)
+    if(g_config_data)
     {
         if(ldb == -1)
         {
@@ -218,8 +218,8 @@ void fla_test_gtsv_experiment(char *tst_api, test_params_t *params, integer data
     create_matrix(datatype, LAPACK_COL_MAJOR, n, NRHS, &B_save, ldb);
     copy_matrix(datatype, "full", n, NRHS, B, ldb, B_save, ldb);
 
-    prepare_gtsv_run(n, NRHS, dl_save, d_save, du_save, B_save, ldb, datatype, n_repeats, &time_min,
-                     &info, interfacetype, layout);
+    prepare_gtsv_run(n, NRHS, dl_save, d_save, du_save, B_save, ldb, datatype, &info, interfacetype,
+                     layout, params);
 
     /* Performance computation */
     perf = (double)(4.0 * (n - 1) * NRHS) / time_min / FLOPS_PER_UNIT_PERF;
@@ -231,7 +231,7 @@ void fla_test_gtsv_experiment(char *tst_api, test_params_t *params, integer data
     if(!FLA_EXTREME_CASE_TEST)
     {
         validate_gtsv(tst_api, datatype, n, NRHS, B, ldb, B_save, xact, ldb, dl, d, du, dl_save,
-                      d_save, du_save, scal, params->imatrix_char, residual);
+                      d_save, du_save, scal, params->imatrix_char, residual, params);
     }
     /* check for output matrix when inputs as extreme values */
     else
@@ -269,12 +269,11 @@ void fla_test_gtsv_experiment(char *tst_api, test_params_t *params, integer data
 }
 
 void prepare_gtsv_run(integer n_A, integer nrhs, void *dl, void *d, void *du, void *B, integer ldb,
-                      integer datatype, integer n_repeats, double *time_min_, integer *info,
-                      integer interfacetype, integer layout)
+                      integer datatype, integer *info, integer interfacetype, integer layout,
+                      test_params_t *params)
 {
-    integer i;
     void *dl_test, *d_test, *du_test, *B_test;
-    double t_min = 1e9, exe_time;
+    double exe_time;
 
     /* Make a copy of the input tridiagonal vectors and matrix. Same input values will be passed in
      * each itertaion.*/
@@ -284,7 +283,7 @@ void prepare_gtsv_run(integer n_A, integer nrhs, void *dl, void *d, void *du, vo
     create_matrix(datatype, LAPACK_COL_MAJOR, n_A, nrhs, &B_test, ldb);
 
     *info = 0;
-    for(i = 0; i < n_repeats && *info == 0; ++i)
+    FLA_EXEC_LOOP_BEGIN
     {
 
         /* Restore input matrix and vector */
@@ -317,11 +316,10 @@ void prepare_gtsv_run(integer n_A, integer nrhs, void *dl, void *d, void *du, vo
             exe_time = fla_test_clock() - exe_time;
         }
 
-        /* Get the best execution time */
-        t_min = fla_min(t_min, exe_time);
+        /* Update ctx and loop conditions */
+        FLA_EXEC_LOOP_UPDATE_WITH_INFO
     }
 
-    *time_min_ = t_min;
     /* Make a copy of output buffers. This is required to validate the API functionality */
     copy_vector(datatype, n_A - 1, dl_test, i_one, dl, i_one);
     copy_vector(datatype, n_A, d_test, i_one, d, i_one);
@@ -347,7 +345,7 @@ double prepare_lapacke_gtsv_run(integer datatype, integer layout, integer n, int
     B_t = B;
 
     /* Configure leading dimensions as per the input matrix layout */
-    SELECT_LDA(g_ext_fptr, config_data, layout, n, row_major_gtsv_ldb, ldb_t);
+    SELECT_LDA(g_ext_fptr, g_config_data, layout, n, row_major_gtsv_ldb, ldb_t);
 
     /* In case of row_major matrix layout,
        convert input matrix to row_major */
@@ -423,40 +421,4 @@ void invoke_gtsv(integer datatype, integer *n, integer *nrhs, void *dl, void *d,
             break;
         }
     }
-}
-
-/*
-LAPACKE GTSV API invoke function
-*/
-integer invoke_lapacke_gtsv(integer datatype, integer layout, integer n, integer nrhs, void *dl,
-                            void *d, void *du, void *B, integer ldb)
-{
-    integer info = 0;
-    switch(datatype)
-    {
-        case FLOAT:
-        {
-            info = LAPACKE_sgtsv(layout, n, nrhs, dl, d, du, B, ldb);
-            break;
-        }
-
-        case DOUBLE:
-        {
-            info = LAPACKE_dgtsv(layout, n, nrhs, dl, d, du, B, ldb);
-            break;
-        }
-
-        case COMPLEX:
-        {
-            info = LAPACKE_cgtsv(layout, n, nrhs, dl, d, du, B, ldb);
-            break;
-        }
-
-        case DOUBLE_COMPLEX:
-        {
-            info = LAPACKE_zgtsv(layout, n, nrhs, dl, d, du, B, ldb);
-            break;
-        }
-    }
-    return info;
 }

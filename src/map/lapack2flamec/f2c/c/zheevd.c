@@ -1,8 +1,8 @@
-/* ../netlib/zheevd.f -- translated by f2c (version 20100827). You must link the resulting object
- file with libf2c: on Microsoft Windows system, link with libf2c.lib;
- on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
- standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
- -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/* ./zheevd.f -- translated by f2c (version 20190311). You must link the resulting object file with
+ libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
+ .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
+ order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
+ /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static integer c__1 = 1;
 static integer c_n1 = -1;
@@ -50,12 +50,6 @@ static doublereal c_b18 = 1.;
 /* > complex Hermitian matrix A. If eigenvectors are desired, it uses a */
 /* > divide and conquer algorithm. */
 /* > */
-/* > The divide and conquer algorithm makes very mild assumptions about */
-/* > floating point arithmetic. It will work on machines with a guard */
-/* > digit in add/subtract, or on those binary machines without guard */
-/* > digits which subtract like the Cray X-MP, Cray Y-MP, Cray C-90, or */
-/* > Cray-2. It could conceivably fail on hexadecimal or decimal machines */
-/* > without guard digits, but we know of none. */
 /* > \endverbatim */
 /* Arguments: */
 /* ========== */
@@ -197,8 +191,7 @@ i off-diagonal elements of an intermediate */
 /* > \author Univ. of California Berkeley */
 /* > \author Univ. of Colorado Denver */
 /* > \author NAG Ltd. */
-/* > \date November 2011 */
-/* > \ingroup complex16HEeigen */
+/* > \ingroup heevd */
 /* > \par Further Details: */
 /* ===================== */
 /* > */
@@ -273,10 +266,9 @@ void zheevd_(char *jobz, char *uplo, integer *n, doublecomplex *a, integer *lda,
         void
         zunmtr_(char *, char *, char *, integer *, integer *, doublecomplex *, integer *,
                 doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, integer *);
-    /* -- LAPACK driver routine (version 3.4.0) -- */
+    /* -- LAPACK driver routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
-    /* November 2011 */
     /* .. Scalar Arguments .. */
     /* .. */
     /* .. Array Arguments .. */
@@ -352,7 +344,7 @@ void zheevd_(char *jobz, char *uplo, integer *n, doublecomplex *a, integer *lda,
             }
             /* Computing MAX */
             i__1 = lwmin;
-            i__2 = *n + ilaenv_(&c__1, "ZHETRD", uplo, n, &c_n1, &c_n1, &c_n1); // , expr subst
+            i__2 = *n + *n * ilaenv_(&c__1, "ZHETRD", uplo, n, &c_n1, &c_n1, &c_n1); // , expr subst
             lopt = fla_max(i__1, i__2);
             lropt = lrwmin;
             liopt = liwmin;

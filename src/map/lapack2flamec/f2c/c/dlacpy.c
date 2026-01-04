@@ -3,6 +3,9 @@
  on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/******************************************************************************
+ * Copyright (C) 2025, Advanced Micro Devices, Inc. All rights reserved.
+ *******************************************************************************/
 #include "FLA_f2c.h" /* > \brief \b DLACPY copies all or part of one two-dimensional array to another. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -107,9 +110,7 @@ void dlacpy_(char *uplo, integer *m, integer *n, doublereal *a, integer *lda, do
                       ", ldb %" FLA_IS "",
                       *uplo, *m, *n, *lda, *ldb);
     /* System generated locals */
-    integer a_dim1, a_offset, b_dim1, b_offset, i__1, i__2;
-    /* Local variables */
-    integer i__, j;
+    integer a_dim1, a_offset, b_dim1, b_offset;
     extern logical lsame_(char *, char *, integer, integer);
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -135,6 +136,50 @@ void dlacpy_(char *uplo, integer *m, integer *n, doublereal *a, integer *lda, do
     b_offset = 1 + b_dim1;
     b -= b_offset;
     /* Function Body */
+#ifdef FLA_ENABLE_AMD_OPT
+    /* Handling invalid cases */
+    if(*m <= 0 || *n <= 0 || a_dim1 < *m || b_dim1 < *m)
+    {
+        AOCL_DTL_TRACE_LOG_EXIT
+        return;
+    }
+
+    if(lsame_(uplo, "U", 1, 1))
+    {
+        /* Upper triangular part */
+        for(integer i = 1; i <= *n; i++)
+        {
+            memcpy(b + (i * b_dim1) + 1, a + (i * a_dim1) + 1, fla_min(i, *m) * sizeof(double));
+        }
+    }
+    else if(lsame_(uplo, "L", 1, 1))
+    {
+        /* Lower triangular part */
+        for(integer i = 1; i <= *n && i <= *m; i++)
+        {
+            memcpy(b + (i * b_dim1 + i), a + (i * a_dim1 + i), (*m - i + 1) * sizeof(double));
+        }
+    }
+    else
+    {
+        /* All of the matrix A */
+        /* If the leading dimension of A and B are the same, and the number of rows of A and B are
+         * the same, then we can use memcpy to copy the entire matrix. */
+        if(a_dim1 == b_dim1 && a_dim1 == *m)
+        {
+            memcpy(b + b_offset, a + a_offset, a_dim1 * *n * sizeof(double));
+        }
+        else
+        {
+            /* Otherwise, we need to copy the matrix column by column. */
+            for(integer i = 1; i <= *n; i++)
+            {
+                memcpy(b + (i * b_dim1) + 1, a + (i * a_dim1) + 1, *m * sizeof(double));
+            }
+        }
+    }
+#else
+    integer i__1, i__2, i__, j;
     if(lsame_(uplo, "U", 1, 1))
     {
         i__1 = *n;
@@ -177,6 +222,7 @@ void dlacpy_(char *uplo, integer *m, integer *n, doublereal *a, integer *lda, do
             /* L60: */
         }
     }
+#endif
     AOCL_DTL_TRACE_LOG_EXIT
     return;
     /* End of DLACPY */

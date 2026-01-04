@@ -7,12 +7,14 @@
  *  */
 
 #include "test_common.h"
+#include "test_prototype.h"
 
 extern double perf;
 extern double time_min;
 
 void validate_getrf(char *tst_api, integer m_A, integer n_A, void *A, void *A_test, /*AFACT*/
-                    integer lda, integer *IPIV, integer datatype, double err_thresh, char imatrix)
+                    integer lda, integer *IPIV, integer datatype, double err_thresh, char imatrix,
+                    void *params)
 {
     double residual, resid1 = 0., resid2 = 0.;
 
@@ -26,7 +28,8 @@ void validate_getrf(char *tst_api, integer m_A, integer n_A, void *A, void *A_te
      * unexpected info value */
     FLA_TEST_PRINT_INVALID_STATUS(m_A, n_A, err_thresh);
 
-    validate_getrf_internal(m_A, n_A, A, A_test, lda, IPIV, datatype, imatrix, &resid1, &resid2);
+    validate_getrf_internal(m_A, n_A, A, A_test, lda, IPIV, datatype, imatrix, &resid1, &resid2,
+                            params);
 
     residual = fla_test_max(resid1, resid2);
     FLA_PRINT_TEST_STATUS(m_A, n_A, residual, err_thresh);
@@ -36,7 +39,7 @@ void validate_getrf(char *tst_api, integer m_A, integer n_A, void *A, void *A_te
 
 void validate_getrf_internal(integer m_A, integer n_A, void *A, void *A_test, /*AFACT*/
                              integer lda, integer *IPIV, integer datatype, char imatrix,
-                             double *resid1, double *resid2)
+                             double *resid1, double *resid2, void *params)
 {
     integer m_n_vector, min_A;
     integer m_L, n_L, m_U, n_U, k;
@@ -107,7 +110,7 @@ void validate_getrf_internal(integer m_A, integer n_A, void *A, void *A_test, /*
             /* Test 2 */
             /* Unity diagonal elements to Lower triangular matrix */
             fla_lapack_slaset("U", &m_L, &n_L, &s_zero, &s_one, L, &m_L);
-            if(imatrix == 'O')
+            if(same_char(imatrix, 'O'))
             {
                 for(int i = 0; i < n_A; i++)
                 {
@@ -128,7 +131,7 @@ void validate_getrf_internal(integer m_A, integer n_A, void *A, void *A_test, /*
             /* T - A --> L*U - A */
             saxpy_(&m_n_vector, &s_n_one, A_save, &i_one, T, &i_one);
             /* Compute norm( L*U - A ) / ( N * norm(A) * EPS ) */
-            if(imatrix == 'O')
+            if(same_char(imatrix, 'O'))
             {
                 for(int i = 0; i < n_A; i++)
                 {
@@ -172,7 +175,7 @@ void validate_getrf_internal(integer m_A, integer n_A, void *A, void *A_test, /*
             /* Test 2 */
             /* Unity diagonal elements to Lower triangular matrix */
             fla_lapack_dlaset("U", &m_L, &n_L, &d_zero, &d_one, L, &m_L);
-            if(imatrix == 'O')
+            if(same_char(imatrix, 'O'))
             {
                 for(int i = 0; i < n_A; i++)
                 {
@@ -192,7 +195,7 @@ void validate_getrf_internal(integer m_A, integer n_A, void *A, void *A_test, /*
             /* T - A --> L*U - A */
             daxpy_(&m_n_vector, &d_n_one, A_save, &i_one, T, &i_one);
             /* Compute norm( L*U - A ) / ( N * norm(A) * EPS ) */
-            if(imatrix == 'O')
+            if(same_char(imatrix, 'O'))
             {
                 for(int i = 0; i < n_A; i++)
                 {
@@ -236,7 +239,7 @@ void validate_getrf_internal(integer m_A, integer n_A, void *A, void *A_test, /*
             /* Test 2 */
             /* Unity diagonal elements to Lower triangular matrix */
             fla_lapack_claset("U", &m_L, &n_L, &c_zero, &c_one, L, &m_L);
-            if(imatrix == 'O')
+            if(same_char(imatrix, 'O'))
             {
                 for(int i = 0; i < n_A; i++)
                 {
@@ -256,7 +259,7 @@ void validate_getrf_internal(integer m_A, integer n_A, void *A, void *A_test, /*
             /* T - A --> L*U - A */
             caxpy_(&m_n_vector, &c_n_one, A_save, &i_one, T, &i_one);
             /* Compute norm( L*U - A ) / ( N * norm(A) * EPS ) */
-            if(imatrix == 'O')
+            if(same_char(imatrix, 'O'))
             {
                 for(int i = 0; i < n_A; i++)
                 {
@@ -300,7 +303,7 @@ void validate_getrf_internal(integer m_A, integer n_A, void *A, void *A_test, /*
             /* Test 2 */
             /* Unity diagonal elements to Lower triangular matrix */
             fla_lapack_zlaset("U", &m_L, &n_L, &z_zero, &z_one, L, &m_L);
-            if(imatrix == 'O')
+            if(same_char(imatrix, 'O'))
             {
                 for(int i = 0; i < n_A; i++)
                 {
@@ -320,7 +323,7 @@ void validate_getrf_internal(integer m_A, integer n_A, void *A, void *A_test, /*
             /* T - A --> L*U - A */
             zaxpy_(&m_n_vector, &z_n_one, A_save, &i_one, T, &i_one);
             /* Compute norm( L*U - A ) / ( N * norm(A) * EPS ) */
-            if(imatrix == 'O')
+            if(same_char(imatrix, 'O'))
             {
                 for(int i = 0; i < n_A; i++)
                 {

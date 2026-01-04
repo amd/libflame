@@ -39,13 +39,17 @@
 #endif
 
 #if ENABLE_THREAD_LOCAL_STORAGE
-#ifdef FLA_ENABLE_WINDOWS_BUILD
-#define TLS_CLASS_SPEC __declspec(thread)
+   #if _WIN32
+      #if defined(FLA_ENABLE_WINDOWS_BUILD)
+         #define TLS_CLASS_SPEC __declspec(thread)
+      #else
+         #define TLS_CLASS_SPEC
+      #endif
+   #else
+     #define TLS_CLASS_SPEC __thread 
+   #endif
 #else
-#define TLS_CLASS_SPEC __thread
-#endif
-#else
-#define TLS_CLASS_SPEC
+   #define TLS_CLASS_SPEC
 #endif
 
 // --- Type-related macro definitions ------------------------------------------
@@ -146,7 +150,7 @@
 #define FLA_REAL_DOMAIN      1200
 #define FLA_COMPLEX_DOMAIN   1201
 
-// FLA_Inv    
+// FLA_Inv
 #define FLA_NO_INVERSE       1300
 #define FLA_INVERSE          1301
 
@@ -237,14 +241,30 @@
 // small matrices
 #define FLA_GEQRF_STHRESH (32)
 #define FLA_GEQRF_BLOCK_SIZE (32)
-// Matrix size thresholds for choosing transposed QR for LQ 
+
+// Matrix size thresholds for choosing multithreaded QR for large matrices
+#define FLA_DGEQRF_MT_LARGE_M_THRESH (128)
+#define FLA_DGEQRF_MT_LARGE_N_THRESH (128)
+#define FLA_DGEQRF_MT_LARGE_PANEL_SIZE (16)
+#define FLA_DGEQRF_MT_THRESHOLD_8_THREADS (15848840)
+
+// Matrix size thresholds for choosing transposed QR for LQ
 #define FLA_DELQF_TRAN_THRESH (1280)
 
 //POTRF, threshold numbers to chose paths for performance
 #define FLA_POTRF_FLOAT_SMALL         (70)
 #define FLA_POTRF_DOUBLE_SMALL        (75)
+#define FLA_DPOTRF_LOWER_SMALL        (18)
+#define FLA_DPOTRF_LOWER_MEDIUM       (75)
+#define FLA_DPOTRF_UPPER_MEDIUM       (50)
+#define FLA_POTRF_BLOCK_SIZE          (256)
+
+// POTRI threshold numbers to chose paths for performance
+#define FLA_POTRI_DOUBLE_SMALL        (17)
 
 //GETRF , threshold numbers to chose paths for performance
+#define TALL_RATIO_THRESHOLD 1.5
+#define WIDE_RATIO_THRESHOLD 0.67
 #define FLA_GETRF_SMALL               (85)
 #define FLA_GETRF_FLOAT               (1440)
 #define FLA_GETRF_COMPLEX             (670)
@@ -260,6 +280,7 @@
 #define FLA_DGETRF_SMALL_THRESH0      (8)
 #define FLA_DGETRF_SMALL_AVX2_THRESH0      (81)
 #define FLA_DGETRF_SMALL_AVX512_THRESH0    (160)
+#define FLA_DGETRF_SMALL_AVX512_THRESH1    (128)
 
 #define FLA_ZGETRF_SMALL_THRESH      (100)
 
@@ -282,6 +303,21 @@
 #define FLA_ZSCAL_INLINE_SMALL          (128)
 #define FLA_ZUNGQR_BLOCK_SMALL_THRESH   (32)
 
+/* DLARF , threshold numbers to choose paths for performance */
+#define FLA_DLARF_L_ST_BLOCKED_THRESH_M (1000)
+#define FLA_DLARF_L_ST_BLOCKED_THRESH_N (100)
+#define FLA_DLARF_L_THRESH_UNBLOCKED (213760)
+#define FLA_DLARF_L_THRESH_THREAD_8 (1048576)
+#define FLA_DLARF_L_THRESH_THREAD_64 (45198729)
+
+#define FLA_DLARF_R_THRESH_UNBLOCKED (15000)
+#define FLA_DLARF_R_THRESH_THREAD_8 (6553600)
+#define FLA_DLARF_R_THRESH_THREAD_64 (45198729)
+#define FLA_DLARF_R_BLOCK_SIZE (16)
+
+/* DLARFT , threshold numbers to chose paths for performance */
+#define FLA_DLARFT_BLOCK_NB (16)
+
 
 #define FLA_ZLANGEM_SIMD_AVX512_THRESH_M (15)
 #define FLA_CLANGEM_SIMD_AVX512_THRESH_M (15)
@@ -293,6 +329,15 @@
 #define FLA_IDAMAX_INLINE_SMALL_THRESH   (128)
 #define FLA_DGEQP3_BLOCK_SMALL_THRESH    (32)
 #define FLA_ZGEQP3_BLOCK_SMALL_THRESH    (32)
+
+// DGESVD, DGESDD thresholds for small size optimization
+#define FLA_DGESVD_SMALL_SIZE_THRESH0    (16)
+#define FLA_DGESVD_SMALL_SIZE_THRESH1    (128)
+#define FLA_DGESVD_SMALL_SIZE_THRESH2    (386)
+#define FLA_DGESDD_SMALL_SIZE_THRESH     (40)
+
+// TRTRI, threshold numbers to chose paths for performance
+#define FLA_TRTRI_SMALL_THRESH0      (60)
 
 // --- Error-related macro definitions -----------------------------------------
 

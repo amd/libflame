@@ -7,13 +7,14 @@
  *  */
 
 #include "test_common.h"
+#include "test_prototype.h"
 
 extern double perf;
 extern double time_min;
 
 void validate_gels(char *tst_api, char *trans, integer m, integer n, integer nrhs, void *A,
                    integer lda, void *B, integer ldb, void *x, integer datatype, double err_thresh,
-                   char imatrix)
+                   char imatrix, void *params)
 {
     integer m1 = m, n1 = n, ldc = fla_max(m, fla_max(n, nrhs));
     char NORM = '1';
@@ -33,7 +34,7 @@ void validate_gels(char *tst_api, char *trans, integer m, integer n, integer nrh
      * unexpected info value */
     FLA_TEST_PRINT_INVALID_STATUS(m, n, err_thresh);
 
-    if(*trans == 'T' || *trans == 'C')
+    if(same_char(*trans, 'T') || same_char(*trans, 'C'))
     {
         m1 = n;
         n1 = m;
@@ -49,7 +50,7 @@ void validate_gels(char *tst_api, char *trans, integer m, integer n, integer nrh
         {
             float eps, norm = 0, norm_a = 0, norm_b = 0, norm_x = 0;
             eps = fla_lapack_slamch("E");
-            if((*trans == 'N' && m > n) || (*trans == 'T' && m < n))
+            if((same_char(*trans, 'N') && m > n) || (same_char(*trans, 'T') && m < n))
             {
                 /* Test - 1
                  * If m > n and Trans == 'N' or m < n and Trans = 'T'
@@ -94,7 +95,7 @@ void validate_gels(char *tst_api, char *trans, integer m, integer n, integer nrh
         {
             double eps, norm = 0, norm_a = 0, norm_b = 0, norm_x = 0;
             eps = fla_lapack_dlamch("E");
-            if((*trans == 'N' && m > n) || (*trans == 'T' && m < n))
+            if((same_char(*trans, 'N') && m > n) || (same_char(*trans, 'T') && m < n))
             {
                 /* Test - 1
                  * If m > n and Trans == 'N' or m < n and Trans = 'T'
@@ -139,7 +140,7 @@ void validate_gels(char *tst_api, char *trans, integer m, integer n, integer nrh
         {
             float eps, norm = 0, norm_a = 0, norm_b = 0, norm_x = 0;
             eps = fla_lapack_slamch("E");
-            if((*trans == 'N' && m > n) || (*trans == 'C' && m < n))
+            if((same_char(*trans, 'N') && m > n) || (same_char(*trans, 'C') && m < n))
             {
                 /* Test - 1
                  * If m > n and Trans == 'N' or m < n and Trans = 'T'
@@ -184,7 +185,7 @@ void validate_gels(char *tst_api, char *trans, integer m, integer n, integer nrh
         {
             double eps, norm = 0, norm_a = 0, norm_b = 0, norm_x = 0;
             eps = fla_lapack_dlamch("E");
-            if((*trans == 'N' && m > n) || (*trans == 'C' && m < n))
+            if((same_char(*trans, 'N') && m > n) || (same_char(*trans, 'C') && m < n))
             {
                 /* Test - 1
                  * If m > n and Trans == 'N' or m < n and Trans = 'T'

@@ -6,6 +6,7 @@
 #if ENABLE_CPP_TEST
 #include <invoke_common.hh>
 #endif
+#include <invoke_lapacke.h>
 
 extern double perf;
 extern double time_min;
@@ -14,15 +15,20 @@ void fla_test_gbtrf_experiment(char *tst_api, test_params_t *params, integer dat
                                integer p_cur, integer q_cur, integer pci, integer n_repeats,
                                integer einfo);
 void prepare_gbtrf_run(integer m_A, integer n_A, integer kl, integer ku, void *ab, integer ldab,
-                       integer *ipiv, integer datatype, integer n_repeats, double *time_min_,
-                       integer *info, integer interfacetype, integer matrix_layout);
+                       integer *ipiv, integer datatype, integer *info, integer interfacetype,
+                       integer matrix_layout, test_params_t *params);
 void invoke_gbtrf(integer datatype, integer *m, integer *n, integer *kl, integer *ku, void *ab,
                   integer *ldab, integer *ipiv, integer *info);
 double prepare_lapacke_gbtrf_run(integer datatype, integer matrix_layout, integer m_A, integer n_A,
                                  integer kl, integer ku, void *ab, integer ldab, integer *ipiv,
                                  integer *info);
-integer invoke_lapacke_gbtrf(integer datatype, int matrix_layout, integer m, integer n, integer kl,
-                             integer ku, void *ab, integer ldab, integer *ipiv);
+
+/* Helper functions for Bit reproducibility tests */
+void store_gbtrf_outputs(void *filename, integer datatype, integer m, integer n, integer kl,
+                         integer ku, void *AB_test, integer ldab, void *IPIV, void *params);
+integer check_bit_reproducibility_gbtrf(void *filename, integer datatype, integer m, integer n,
+                                        integer kl, integer ku, void *AB, integer ldab, void *IPIV,
+                                        void *params);
 
 void fla_test_gbtrf(integer argc, char **argv, test_params_t *params)
 {
@@ -33,7 +39,7 @@ void fla_test_gbtrf(integer argc, char **argv, test_params_t *params)
 
     if(argc == 1)
     {
-        config_data = 1;
+        g_config_data = 1;
         fla_test_output_info("--- %s ---\n", op_str);
         fla_test_output_info("\n");
         fla_test_op_driver(front_str, RECT_INPUT, params, LIN, fla_test_gbtrf_experiment);
@@ -59,6 +65,7 @@ void fla_test_gbtrf(integer argc, char **argv, test_params_t *params)
         params->lin_solver_paramslist[0].ldab = strtoimax(argv[7], &endptr, CLI_DECIMAL_BASE);
 
         n_repeats = strtoimax(argv[8], &endptr, CLI_DECIMAL_BASE);
+        params->n_repeats = n_repeats;
 
         if(n_repeats > 0)
         {
@@ -116,6 +123,7 @@ void fla_test_gbtrf_experiment(char *tst_api, test_params_t *params, integer dat
     void *IPIV;
     void *AB, *AB_test, *A;
     double residual, err_thresh;
+    void *filename = NULL;
 
     integer interfacetype = params->interfacetype;
     integer layout = params->matrix_major;
@@ -130,7 +138,7 @@ void fla_test_gbtrf_experiment(char *tst_api, test_params_t *params, integer dat
 
     /* If leading dimensions = -1, set them to default value
        when inputs are from config files */
-    if(config_data)
+    if(g_config_data)
     {
         if(ldab == -1)
         {
@@ -138,51 +146,65 @@ void fla_test_gbtrf_experiment(char *tst_api, test_params_t *params, integer dat
         }
     }
 
-    /* Create the matrices for the current operation*/
+    /* Create the input matrix*/
     create_matrix(datatype, LAPACK_COL_MAJOR, m, n, &AB, ldab);
+
+    /* Create the matrices for the test operation*/
     create_matrix(datatype, LAPACK_COL_MAJOR, m, n, &AB_test, ldab);
     create_vector(INTEGER, &IPIV, fla_min(m, n));
     reset_vector(INTEGER, IPIV, fla_min(m, n), 1);
 
-    /* Initialize the test matrices*/
-    if(g_ext_fptr != NULL)
+    if(!FLA_BRT_VERIFICATION_RUN)
     {
-        /* Initialize input matrix with custom data from file or extreme values */
-        init_matrix(datatype, AB, m, n, ldab, g_ext_fptr, params->imatrix_char);
-    }
-    else if(FLA_EXTREME_CASE_TEST)
-    {
-        create_matrix(datatype, LAPACK_COL_MAJOR, m, n, &A, m);
-        if((params->imatrix_char == 'A') || (params->imatrix_char == 'F'))
+        /* Initialize the test matrices*/
+        if(g_ext_fptr != NULL)
         {
-            init_matrix_spec_rand_band_matrix_in(datatype, A, m, n, m, kl, ku,
-                                                 params->imatrix_char);
+            /* Initialize input matrix with custom data from file or extreme values */
+            init_matrix(datatype, AB, m, n, ldab, g_ext_fptr, params->imatrix_char);
+        }
+        else if(FLA_EXTREME_CASE_TEST)
+        {
+            create_matrix(datatype, LAPACK_COL_MAJOR, m, n, &A, m);
+            if((params->imatrix_char == 'A') || (params->imatrix_char == 'F'))
+            {
+                init_matrix_spec_rand_band_matrix_in(datatype, A, m, n, m, kl, ku,
+                                                     params->imatrix_char);
+            }
+            else
+            {
+                init_matrix_spec_in(datatype, A, m, n, m, params->imatrix_char);
+            }
+
+            get_band_storage_matrix(datatype, m, n, kl, ku, A, m, AB, ldab);
+            free_matrix(A);
         }
         else
         {
-            init_matrix_spec_in(datatype, A, m, n, m, params->imatrix_char);
+            /* Initialize & convert random band matrix into band storage as per API need */
+            rand_band_storage_matrix(datatype, m, n, kl, ku, AB, ldab);
+            /* Oveflow or underflow test initialization */
+            if(FLA_OVERFLOW_UNDERFLOW_TEST)
+            {
+                scale_matrix_underflow_overflow_gbtrf(datatype, m, n, AB, ldab,
+                                                      params->imatrix_char);
+            }
         }
+    }
 
-        get_band_storage_matrix(datatype, m, n, kl, ku, A, m, AB, ldab);
-        free_matrix(A);
-    }
-    else
-    {
-        /* Initialize & convert random band matrix into band storage as per API need */
-        rand_band_storage_matrix(datatype, m, n, kl, ku, AB, ldab);
-        /* Oveflow or underflow test initialization */
-        if(FLA_OVERFLOW_UNDERFLOW_TEST)
-        {
-            scale_matrix_underflow_overflow_gbtrf(datatype, m, n, AB, ldab, params->imatrix_char);
-        }
-    }
+    /* This macro is used in the BRT test cases for the following purposes:
+     *    - In the Ground truth runs (BRT_char => G, F), the output is stored in a file for future
+     * reference
+     *    - In the verification runs (BRT_char => V, M), the output is loaded from the file and
+     * passed as input to the API
+     * */
+    FLA_BRT_PROCESS_SINGLE_INPUT(datatype, m, n, AB, ldab, "ddddd", m, n, kl, ku, ldab)
 
     /* Save the original matrix*/
     copy_matrix(datatype, "full", ldab, n, AB, ldab, AB_test, ldab);
 
     /* call to API */
-    prepare_gbtrf_run(m, n, kl, ku, AB_test, ldab, IPIV, datatype, n_repeats, &time_min, &info,
-                      interfacetype, layout);
+    prepare_gbtrf_run(m, n, kl, ku, AB_test, ldab, IPIV, datatype, &info, interfacetype, layout,
+                      params);
 
     /* performance computation */
     perf = (2.0 * n * (kl + ku + 1) * kl) / time_min / FLOPS_PER_UNIT_PERF;
@@ -193,9 +215,14 @@ void fla_test_gbtrf_experiment(char *tst_api, test_params_t *params, integer dat
 
     /* output validation */
     FLA_TEST_CHECK_EINFO(residual, info, einfo);
-    if(!FLA_EXTREME_CASE_TEST)
+    IF_FLA_BRT_VALIDATION(
+        m, n, store_gbtrf_outputs(filename, datatype, m, n, kl, ku, AB_test, ldab, IPIV, params),
+        validate_gbtrf(tst_api, m, n, kl, ku, AB, AB_test, ldab, IPIV, datatype, residual, params),
+        check_bit_reproducibility_gbtrf(filename, datatype, m, n, kl, ku, AB_test, ldab, IPIV,
+                                        params))
+    else if(!FLA_EXTREME_CASE_TEST)
     {
-        validate_gbtrf(tst_api, m, n, kl, ku, AB, AB_test, ldab, IPIV, datatype, residual);
+        validate_gbtrf(tst_api, m, n, kl, ku, AB, AB_test, ldab, IPIV, datatype, residual, params);
     }
     /* check for output matrix when inputs as extreme values */
     else
@@ -212,25 +239,26 @@ void fla_test_gbtrf_experiment(char *tst_api, test_params_t *params, integer dat
     }
 
     /* Free up the buffers */
+free_buffers:
+    FLA_FREE_FILENAME(filename);
     free_matrix(AB);
     free_matrix(AB_test);
     free_vector(IPIV);
 }
 
 void prepare_gbtrf_run(integer m_A, integer n_A, integer kl, integer ku, void *AB, integer ldab,
-                       integer *IPIV, integer datatype, integer n_repeats, double *time_min_,
-                       integer *info, integer interfacetype, integer layout)
+                       integer *IPIV, integer datatype, integer *info, integer interfacetype,
+                       integer layout, test_params_t *params)
 {
-    integer i;
     void *AB_save;
-    double t_min = 1e9, exe_time;
+    double exe_time;
 
     /* Save the original matrix */
     create_matrix(datatype, LAPACK_COL_MAJOR, m_A, n_A, &AB_save, ldab);
     copy_matrix(datatype, "full", ldab, n_A, AB, ldab, AB_save, ldab);
 
     *info = 0;
-    for(i = 0; i < n_repeats && *info == 0; ++i)
+    FLA_EXEC_LOOP_BEGIN
     {
         /* Copy original input data */
         copy_matrix(datatype, "full", ldab, n_A, AB, ldab, AB_save, ldab);
@@ -257,11 +285,10 @@ void prepare_gbtrf_run(integer m_A, integer n_A, integer kl, integer ku, void *A
             exe_time = fla_test_clock() - exe_time;
         }
 
-        /* Get the best execution time */
-        t_min = fla_min(t_min, exe_time);
+        /* Update ctx and loop condition */
+        FLA_EXEC_LOOP_UPDATE_WITH_INFO
     }
 
-    *time_min_ = t_min;
     /*  Save the ABFACT to matrix AB */
     copy_matrix(datatype, "full", ldab, n_A, AB_save, ldab, AB, ldab);
     free_matrix(AB_save);
@@ -342,35 +369,28 @@ void invoke_gbtrf(integer datatype, integer *m, integer *n, integer *kl, integer
     }
 }
 
-integer invoke_lapacke_gbtrf(integer datatype, int layout, integer m, integer n, integer kl,
-                             integer ku, void *ab, integer ldab, integer *ipiv)
+void store_gbtrf_outputs(void *filename, integer datatype, integer m, integer n, integer kl,
+                         integer ku, void *AB_test, integer ldab, void *IPIV, void *params)
 {
-    integer info = 0;
-    switch(datatype)
-    {
-        case FLOAT:
-        {
-            info = LAPACKE_sgbtrf(layout, m, n, kl, ku, ab, ldab, ipiv);
-            break;
-        }
+    /* Create and open a file for storing Ground truth*/
+    FLA_OPEN_GT_FILE_STORE
 
-        case DOUBLE:
-        {
-            info = LAPACKE_dgbtrf(layout, m, n, kl, ku, ab, ldab, ipiv);
-            break;
-        }
+    FLA_STORE_BRT_MATRIX(datatype, m, n, AB_test, ldab)
+    FLA_STORE_BRT_VECTOR(INTEGER, fla_min(m, n), IPIV)
 
-        case COMPLEX:
-        {
-            info = LAPACKE_cgbtrf(layout, m, n, kl, ku, ab, ldab, ipiv);
-            break;
-        }
+    fclose(gt_file);
+}
 
-        case DOUBLE_COMPLEX:
-        {
-            info = LAPACKE_zgbtrf(layout, m, n, kl, ku, ab, ldab, ipiv);
-            break;
-        }
-    }
-    return info;
+integer check_bit_reproducibility_gbtrf(void *filename, integer datatype, integer m, integer n,
+                                        integer kl, integer ku, void *AB, integer ldab, void *IPIV,
+                                        void *params)
+{
+    /* Open the file for reading Ground truth */
+    FLA_OPEN_GT_FILE_READ
+
+    FLA_VERIFY_BRT_MATRIX(datatype, m, n, AB, ldab)
+    FLA_VERIFY_BRT_VECTOR(INTEGER, fla_min(m, n), IPIV)
+
+    fclose(gt_file);
+    return 1;
 }

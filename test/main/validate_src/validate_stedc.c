@@ -7,6 +7,7 @@
  *  */
 
 #include "test_common.h"
+#include "test_prototype.h"
 
 extern double perf;
 extern double time_min;
@@ -15,7 +16,7 @@ extern double time_min;
    matrices only if compz != N, as output will not be generated
    if compz = N.*/
 void validate_stedc(char *tst_api, char compz, integer n, void *D_test, void *Z_input, void *Z,
-                    integer ldz, integer datatype, double err_thresh)
+                    integer ldz, integer datatype, double err_thresh, void *params)
 {
     void *lambda = NULL, *zlambda = NULL;
     void *work = NULL;
@@ -26,7 +27,7 @@ void validate_stedc(char *tst_api, char compz, integer n, void *D_test, void *Z_
     {
         FLA_TEST_PRINT_STATUS_AND_RETURN(n, n, err_thresh);
     }
-    if(compz == 'N')
+    if(same_char(compz, 'N'))
         return;
     /* print overall status if incoming threshold is
      * an extreme value indicating that API returned

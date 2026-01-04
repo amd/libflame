@@ -5,7 +5,7 @@
  the command line, as in cc *.o -lf2c -lm Source for libf2c is in
  /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 /*
- * Modifications Copyright (c) 2021-2024 Advanced Micro Devices, Inc.  All
+ * Modifications Copyright (c) 2021-2025 Advanced Micro Devices, Inc.  All
  * rights reserved.
  */
 #include "FLAME.h"
@@ -402,7 +402,8 @@ int lapack_dgesvd(char *jobu, char *jobvt, integer *m, integer *n,
       if (*m >= mnthr) {
         if (wntun) {
           /* Path 1 (M much larger than N, JOBU='N') */
-          if ((!wntvo) && (*m < 128) && FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX2)) {
+          if((!wntvo) && (*m <= FLA_DGESVD_SMALL_SIZE_THRESH1)
+             && FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX2)) {
             i__2 = *n << 2;
             maxwrk = fla_max(i__2, bdspac);
             minwrk = i__2;
@@ -564,7 +565,7 @@ int lapack_dgesvd(char *jobu, char *jobvt, integer *m, integer *n,
         } else if (wntus && wntvas) {
           /* Path 6 (M much larger than N, JOBU='S', JOBVT='S' or */
           /* 'A') */
-          if (*m < 128 && FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX2)) {
+          if(*m <= FLA_DGESVD_SMALL_SIZE_THRESH1 && FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX2)) {
             i__2 = *n * 3 + *m;
             maxwrk = fla_max(i__2, bdspac);
             minwrk = *n << 2;
@@ -703,7 +704,8 @@ int lapack_dgesvd(char *jobu, char *jobvt, integer *m, integer *n,
         }
       } else {
         /* Path 10 (M at least N, but not much larger) */
-        if ((wntun || wntus) && (wntvn || wntvs) && (*m < 128) && FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX2)) {
+        if(((wntun || wntus) && (wntvn || wntvs) && (*m < FLA_DGESVD_SMALL_SIZE_THRESH1))
+           && FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX2)) {
           i__2 = *n * 3 + *m;
           maxwrk = fla_max(i__2, bdspac);
           minwrk = *n * 3;
@@ -751,7 +753,8 @@ int lapack_dgesvd(char *jobu, char *jobvt, integer *m, integer *n,
       if (*n >= mnthr) {
         if (wntvn) {
           /* Path 1t(N much larger than M, JOBVT='N') */
-          if ((wntun && wntvn) && (*n < 128) && FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX2)) {
+          if((wntun && wntvn) && (*n <= FLA_DGESVD_SMALL_SIZE_THRESH2) && (*m < FLA_DGESVD_SMALL_SIZE_THRESH0)
+             && FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX2)) {
             i__2 = *m << 2;
             maxwrk = fla_max(i__2, bdspac);
             minwrk = i__2;
@@ -912,7 +915,7 @@ int lapack_dgesvd(char *jobu, char *jobvt, integer *m, integer *n,
         } else if (wntvs && wntuas) {
           /* Path 6t(N much larger than M, JOBU='S' or 'A', */
           /* JOBVT='S') */
-          if (*n < 128 && FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX2)) {
+          if(*n <= FLA_DGESVD_SMALL_SIZE_THRESH1 && FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX2)) {
             i__2 = *m * 3 + *n;
             minwrk = fla_max(i__2, bdspac);
             maxwrk = *m * *m + fla_max(*m * 4, *m * 2 + *n);
@@ -1050,7 +1053,8 @@ int lapack_dgesvd(char *jobu, char *jobvt, integer *m, integer *n,
         }
       } else {
         /* Path 10t(N greater than M, but not much larger) */
-        if ((wntuas & wntvs) && (*n < 16) && FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX2)) {
+        if((wntuas & wntvs) && (*n < FLA_DGESVD_SMALL_SIZE_THRESH0)
+           && FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX2)) {
           i__2 = *m * 3 + *n;
           maxwrk = fla_max(i__2, bdspac);
           minwrk = 3 * *m;
@@ -1637,8 +1641,6 @@ int lapack_dgesvd(char *jobu, char *jobvt, integer *m, integer *n,
   }
 #endif
   if (*info != 0) {
-    i__2 = -(*info);
-    xerbla_("DGESVD", &i__2, (ftnlen)6);
     return 0;
   } else if (lquery) {
     return 0;
@@ -1676,17 +1678,11 @@ int lapack_dgesvd(char *jobu, char *jobvt, integer *m, integer *n,
         /* Path 1 (M much larger than N, JOBU='N') */
         /* No left singular vectors to be computed */
 #if FLA_ENABLE_AMD_OPT
-          if ((!wntvo) && (*m < 128) && FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX2)) {
-            if (wntvn) {
-              fla_dgesvd_small6(0, 0, m, n, &a[a_offset], lda, NULL, ldu,
-                                &s[1], NULL, ldu, NULL, ldvt,
-                                &work[1], info);
-            }
-            else {
-              fla_dgesvd_small6(0, wntvas, m, n, &a[a_offset], lda, NULL, ldu,
-                                &s[1], NULL, ldu, &vt[vt_offset], ldvt,
-                                &work[1], info);
-            }
+          if((!wntvo) && (*m <= FLA_DGESVD_SMALL_SIZE_THRESH1)
+             && FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX2)) {
+            fla_dgesvd_small6(0, wntvas, m, n, &a[a_offset], lda, NULL, ldu,
+                              &s[1], NULL, ldu, &vt[vt_offset], ldvt,
+                              &work[1], info);
         } else
 #endif
         {
@@ -2226,7 +2222,7 @@ int lapack_dgesvd(char *jobu, char *jobvt, integer *m, integer *n,
           /* N right singular vectors to be computed in VT */
           /* Computing MAX */
 #if FLA_ENABLE_AMD_OPT
-          if (*m < 128 && FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX2)) {
+          if(*m <= FLA_DGESVD_SMALL_SIZE_THRESH1 && FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX2)) {
             fla_dgesvd_small6(wntus, wntvas, m, n, &a[a_offset], lda, &a[a_offset], lda,
                               &s[1], &u[u_offset], ldu, &vt[vt_offset], ldvt,
                               &work[1], info);
@@ -2736,8 +2732,12 @@ int lapack_dgesvd(char *jobu, char *jobvt, integer *m, integer *n,
       /* Path 10 (M at least N, but not much larger) */
       /* Reduce to bidiagonal form without QR decomposition */
 #if FLA_ENABLE_AMD_OPT
-      if ((wntun || wntus) && (wntvn || wntvs) && (*m < 128) && FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX2)) {
-        fla_dgesvd_xx_small10(wntus, wntvs, m, n, &a[a_offset], lda, &s[1], &u[u_offset], ldu, &vt[vt_offset], ldvt, &work[1], info);
+      if(((wntun || wntus) && (wntvn || wntvs) && (*m < FLA_DGESVD_SMALL_SIZE_THRESH1))
+         && FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX2))
+      {
+        fla_dgesvd_xx_small10(wntuas, wntvas, m, n, n, &a[a_offset], lda, &s[1],
+                              &u[u_offset], ldu, &vt[vt_offset], ldvt,
+                              &work[1], info);
       } else
 #endif
       {
@@ -2841,9 +2841,15 @@ int lapack_dgesvd(char *jobu, char *jobvt, integer *m, integer *n,
         itau = 1;
         iwork = itau + *m;
 #if FLA_ENABLE_AMD_OPT
-        if ((wntun && wntvn) && (*m < 128) && FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX2)) {
+        if((wntun && wntvn) && (*n <= FLA_DGESVD_SMALL_SIZE_THRESH2) && (*m < FLA_DGESVD_SMALL_SIZE_THRESH0)
+           && FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX2)) {
           /* Compute A=L*Q */
-          fla_dgelqf_small(m, n, &a[a_offset], lda, &work[itau], &work[itau]);
+          i__2 = fla_dgelqf_small(m, n, &a[a_offset], lda, &work[itau], &work[itau]);
+          if(i__2 != 0) {
+            i__2 = *lwork - iwork + 1;
+            lapack_dgelqf(m, n, &a[a_offset], lda, &work[itau], &work[iwork], &i__2,
+                          &ierr);
+          }
           /* Zero out above L */
           i__2 = *m - 1;
           i__3 = *m - 1;
@@ -3393,7 +3399,8 @@ int lapack_dgesvd(char *jobu, char *jobvt, integer *m, integer *n,
           /* M right singular vectors to be computed in VT and */
           /* M left singular vectors to be computed in U */
 #if FLA_ENABLE_AMD_OPT
-          if (*n < 128 && FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX2) && *lwork >= maxwrk) {
+          if(*n <= FLA_DGESVD_SMALL_SIZE_THRESH1 && FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX2)
+             && *lwork >= maxwrk) {
             iu = 1;
             ldwrku = *m;
             itau = iu + ldwrku * *m;
@@ -3914,7 +3921,8 @@ int lapack_dgesvd(char *jobu, char *jobvt, integer *m, integer *n,
       /* Path 10t(N greater than M, but not much larger) */
       /* Reduce to bidiagonal form without LQ decomposition */
 #if FLA_ENABLE_AMD_OPT
-      if ((wntuas & wntvs) && (*n < 16) && FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX2)) {
+      if((wntuas & wntvs) && (*n < FLA_DGESVD_SMALL_SIZE_THRESH0)
+         && FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX2)) {
         fla_dgesvd_xs_small10T(m, n, &a[a_offset], lda, &s[1],
                                &u[u_offset], ldu, &vt[vt_offset], ldvt,
                                &work[1], info);

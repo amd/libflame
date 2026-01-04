@@ -6,6 +6,7 @@
 #if ENABLE_CPP_TEST
 #include <invoke_common.hh>
 #endif
+#include <invoke_lapacke.h>
 
 extern double perf;
 extern double time_min;
@@ -14,11 +15,9 @@ void fla_test_larfg_experiment(char *tst_api, test_params_t *params, integer dat
                                integer p_cur, integer q_cur, integer pci, integer n_repeats,
                                integer einfo);
 void prepare_larfg_run(integer datatype, integer n_A, integer incx, void *x, void *tau,
-                       integer n_repeats, double *time_min_, integer interfacetype);
+                       integer interfacetype, test_params_t *params);
 void invoke_larfg(integer datatype, integer *n, void *x, integer *incx, integer *abs_incx,
                   void *tau);
-integer invoke_lapacke_larfg(integer datatype, integer *n, void *x, integer *incx,
-                             integer *abs_incx, void *tau);
 
 void fla_test_larfg(integer argc, char **argv, test_params_t *params)
 {
@@ -28,7 +27,7 @@ void fla_test_larfg(integer argc, char **argv, test_params_t *params)
 
     if(argc == 1)
     {
-        config_data = 1;
+        g_config_data = 1;
         fla_test_output_info("--- %s ---\n", op_str);
         fla_test_output_info("\n");
         fla_test_op_driver(front_str, SQUARE_INPUT, params, AUX, fla_test_larfg_experiment);
@@ -54,6 +53,7 @@ void fla_test_larfg(integer argc, char **argv, test_params_t *params)
         params->aux_paramslist[0].alpha_imag = strtod(argv[5], &endptr);
         params->aux_paramslist[0].incx_larfg = strtoimax(argv[6], &endptr, CLI_DECIMAL_BASE);
         n_repeats = strtoimax(argv[7], &endptr, CLI_DECIMAL_BASE);
+        params->n_repeats = n_repeats;
 
         if(n_repeats > 0)
         {
@@ -138,14 +138,15 @@ void fla_test_larfg_experiment(char *tst_api, test_params_t *params, integer dat
 
     /* Assigning alpha value gto X vector in case of command line.
      * In case of config the x[0] is treated as alpha */
-    if(!config_data)
+    if(!g_config_data)
         assign_value(datatype, x, alpha_real, alpha_imag);
 
     /* Make a copy of inputs. This is required to validate the API functionality. */
     copy_vector(datatype, n, x, inc_x, x_test, inc_x);
 
     /* call to API */
-    prepare_larfg_run(datatype, n, incx, x_test, tau, n_repeats, &time_min, interfacetype);
+    prepare_larfg_run(datatype, n, incx, x_test, tau, interfacetype, params);
+
     /* execution time */
     if(time_min == d_zero)
     {
@@ -162,7 +163,7 @@ void fla_test_larfg_experiment(char *tst_api, test_params_t *params, integer dat
     FLA_TEST_CHECK_EINFO(residual, info, einfo);
     if(!FLA_EXTREME_CASE_TEST)
     {
-        validate_larfg(tst_api, datatype, n, incx, x_length, x, x_test, tau, residual);
+        validate_larfg(tst_api, datatype, n, incx, x_length, x, x_test, tau, residual, params);
     }
     /* check for output matrix when inputs as extreme values */
     else
@@ -184,16 +185,16 @@ void fla_test_larfg_experiment(char *tst_api, test_params_t *params, integer dat
 }
 
 void prepare_larfg_run(integer datatype, integer n_A, integer incx, void *x, void *tau,
-                       integer n_repeats, double *time_min_, integer interfacetype)
+                       integer interfacetype, test_params_t *params)
 {
-    integer i, x_length;
-    double t_min = 1e9, exe_time;
+    integer x_length;
+    double exe_time;
     integer inc_x = fla_i_abs(&incx);
     x_length = (1 + (n_A - 2) * inc_x) + inc_x;
     void *x_save;
     create_vector(datatype, &x_save, x_length);
 
-    for(i = 0; i < n_repeats; ++i)
+    FLA_EXEC_LOOP_BEGIN
     {
         /* Make a copy of the input vector x. Same input values will be passed in each itertaion. */
         copy_vector(datatype, x_length, x, 1, x_save, 1);
@@ -224,11 +225,9 @@ void prepare_larfg_run(integer datatype, integer n_A, integer incx, void *x, voi
             exe_time = fla_test_clock() - exe_time;
         }
 
-        /* Get the best execution time */
-        t_min = fla_min(t_min, exe_time);
+        /* Update ctx and loop conditions */
+        FLA_EXEC_LOOP_UPDATE_NO_INFO
     }
-
-    *time_min_ = t_min;
 
     /* Save the final result to x vector */
     copy_vector(datatype, x_length, x_save, 1, x, 1);
@@ -272,42 +271,4 @@ void invoke_larfg(integer datatype, integer *n, void *x, integer *incx, integer 
             break;
         }
     }
-}
-
-integer invoke_lapacke_larfg(integer datatype, integer *n, void *x, integer *incx,
-                             integer *abs_incx, void *tau)
-{
-    integer info = 0;
-    switch(datatype)
-    {
-        case FLOAT:
-        {
-            /* First value of the x vector is treated as Alpha -> x[0] */
-            float *x_ptr = x;
-            info = LAPACKE_slarfg(*n, x, &x_ptr[*abs_incx], *incx, tau);
-            break;
-        }
-        case DOUBLE:
-        {
-            /* First value of the x vector is treated as Alpha -> x[0] */
-            double *x_ptr = x;
-            info = LAPACKE_dlarfg(*n, x, &x_ptr[*abs_incx], *incx, tau);
-            break;
-        }
-        case COMPLEX:
-        {
-            /* First value of the x vector is treated as Alpha -> x[0] */
-            scomplex *x_ptr = x;
-            info = LAPACKE_clarfg(*n, x, (void *)(&x_ptr[*abs_incx]), *incx, tau);
-            break;
-        }
-        case DOUBLE_COMPLEX:
-        {
-            /* First value of the x vector is treated as Alpha -> x[0] */
-            dcomplex *x_ptr = x;
-            info = LAPACKE_zlarfg(*n, x, (void *)(&x_ptr[*abs_incx]), *incx, tau);
-            break;
-        }
-    }
-    return info;
 }

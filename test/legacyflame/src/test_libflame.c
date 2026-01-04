@@ -5,13 +5,18 @@
     This file is part of libflame and is available under the 3-Clause
     BSD license, which can be found in the LICENSE file at the top-level
     directory, or at http://opensource.org/licenses/BSD-3-Clause
-
 */
 
+/*
+ *  Modifications Copyright (c) 2025 Advanced Micro Devices, Inc.  All rights reserved.
+ */
+
+#ifndef _WIN32
+#include <unistd.h>
+#endif
+
 #include "FLAME.h"
-
 #include "test_libflame.h"
-
 // Operation modules.
 #include "test_gemm.h"
 #include "test_hemm.h"
@@ -1168,7 +1173,7 @@ void libfla_test_init_strings( void )
 	sprintf( libfla_test_pass_string, "PASS" );
 	sprintf( libfla_test_warn_string, "MARGINAL" );
 	sprintf( libfla_test_fail_string, "FAILURE" );
-	sprintf( libfla_test_storage_format_string, "Row(r) and General(g) storage format is not supported\n \ 
+	sprintf( libfla_test_storage_format_string, "Row(r) and General(g) storage format is not supported\n \
 							\t\t  by External LAPACK interface" );
 
 	sprintf( libfla_test_stor_chars, STORAGE_SCHEME_CHARS );

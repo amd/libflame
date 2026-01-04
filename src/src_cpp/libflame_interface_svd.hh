@@ -9,7 +9,6 @@
 #ifndef LIBFLAME_INTERFACE_SVD_HH
 #define LIBFLAME_INTERFACE_SVD_HH
 
-#include "libflame.hh"
 
 namespace libflame
 {

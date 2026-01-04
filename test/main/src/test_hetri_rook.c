@@ -1,10 +1,8 @@
 /******************************************************************************
- * Copyright (C) 2024, Advanced Micro Devices, Inc. All rights reserved.
+ * Copyright (C) 2024-2025, Advanced Micro Devices, Inc. All rights reserved.
  *******************************************************************************/
 
-#include "test_common.h"
 #include "test_lapack.h"
-#include "test_prototype.h"
 #if ENABLE_CPP_TEST
 #include <invoke_common.hh>
 #endif
@@ -18,11 +16,12 @@ integer row_major_hetri_rook_lda;
 
 void invoke_hetri_rook(integer datatype, char *uplo, integer *n, void *a, integer *lda,
                        integer *ipiv, void *work, integer *info);
-void fla_test_hetri_rook_experiment(char *tst_api, test_params_t *params, integer datatype, integer p_cur,
-                                    integer q_cur, integer pci, integer n_repeats, integer einfo);
+void fla_test_hetri_rook_experiment(char *tst_api, test_params_t *params, integer datatype,
+                                    integer p_cur, integer q_cur, integer pci, integer n_repeats,
+                                    integer einfo);
 void prepare_hetri_rook_run(integer datatype, integer n, void *A, char uplo, integer lda,
-                            integer *ipiv, void *work, integer n_repeats, double *time_min_,
-                            integer *info, integer interfacetype, integer mlayout);
+                            integer *ipiv, void *work, integer *info, integer interfacetype,
+                            integer mlayout, test_params_t *params);
 
 void fla_test_hetri_rook(integer argc, char **argv, test_params_t *params)
 {
@@ -32,7 +31,7 @@ void fla_test_hetri_rook(integer argc, char **argv, test_params_t *params)
     params->imatrix_char = '\0';
     if(argc == 1)
     {
-        config_data = 1;
+        g_config_data = 1;
         fla_test_output_info("--- %s ---\n", op_str);
         fla_test_output_info("\n");
         fla_test_op_driver(front_str, SQUARE_INPUT, params, LIN, fla_test_hetri_rook_experiment);
@@ -64,6 +63,7 @@ void fla_test_hetri_rook(integer argc, char **argv, test_params_t *params)
             params->lin_solver_paramslist[0].lda = strtoimax(argv[5], &endptr, CLI_DECIMAL_BASE);
         }
         n_repeats = strtoimax(argv[6], &endptr, CLI_DECIMAL_BASE);
+        params->n_repeats = n_repeats;
 
         if(n_repeats > 0)
         {
@@ -87,7 +87,8 @@ void fla_test_hetri_rook(integer argc, char **argv, test_params_t *params)
                 type_flag[datatype - FLOAT] = 1;
 
                 /* Call the test code */
-                fla_test_hetri_rook_experiment(front_str, params, datatype, N, N, 0, n_repeats, einfo);
+                fla_test_hetri_rook_experiment(front_str, params, datatype, N, N, 0, n_repeats,
+                                               einfo);
                 tests_not_run = 0;
             }
         }
@@ -109,8 +110,9 @@ void fla_test_hetri_rook(integer argc, char **argv, test_params_t *params)
     }
 }
 
-void fla_test_hetri_rook_experiment(char *tst_api, test_params_t *params, integer datatype, integer p_cur,
-                                    integer q_cur, integer pci, integer n_repeats, integer einfo)
+void fla_test_hetri_rook_experiment(char *tst_api, test_params_t *params, integer datatype,
+                                    integer p_cur, integer q_cur, integer pci, integer n_repeats,
+                                    integer einfo)
 {
     integer n, lda, info = 0;
     void *A = NULL, *A_test = NULL, *A_original = NULL, *ipiv = NULL, *work = NULL, *L = NULL;
@@ -127,7 +129,7 @@ void fla_test_hetri_rook_experiment(char *tst_api, test_params_t *params, intege
 
     /* If leading dimensions = -1, set them to default value
        when inputs are from config files */
-    if(config_data)
+    if(g_config_data)
     {
         if(lda == -1)
         {
@@ -147,9 +149,9 @@ void fla_test_hetri_rook_experiment(char *tst_api, test_params_t *params, intege
         init_matrix(datatype, A, n, n, lda, g_ext_fptr, params->imatrix_char);
         for(integer i = 0; i < n; i++)
         {
-            ((integer*)ipiv)[i] = i + 1;
+            ((integer *)ipiv)[i] = i + 1;
         }
-        if(params->imatrix_char != NULL)
+        if(params->imatrix_char != '\0')
         {
             form_symmetric_matrix(datatype, n, A, lda, "C", 'U');
         }
@@ -185,19 +187,19 @@ void fla_test_hetri_rook_experiment(char *tst_api, test_params_t *params, intege
     copy_matrix(datatype, "full", lda, n, A, lda, A_test, lda);
 
     /* call to API */
-    prepare_hetri_rook_run(datatype, n, A_test, uplo, lda, ipiv, work, n_repeats, &time_min, &info,
-                           interfacetype, layout);
+    prepare_hetri_rook_run(datatype, n, A_test, uplo, lda, ipiv, work, &info, interfacetype, layout,
+                           params);
 
     /* Performance computation */
-    perf = (double)(n * n * n) * (1.0 / 3.0) / time_min / FLOPS_PER_UNIT_PERF;
+    perf = (double)((1.0 / 3.0) * n * n * n) / time_min / FLOPS_PER_UNIT_PERF;
     perf *= 4.0;
 
     /* Output validataion */
-        FLA_TEST_CHECK_EINFO(residual, info, einfo);
+    FLA_TEST_CHECK_EINFO(residual, info, einfo);
     if(!FLA_EXTREME_CASE_TEST)
     {
         validate_hetri_rook(tst_api, uplo, n, A_original, A_test, lda, ipiv, datatype, residual,
-                            params->imatrix_char);
+                            params->imatrix_char, params);
     }
     else
     {
@@ -220,12 +222,12 @@ void fla_test_hetri_rook_experiment(char *tst_api, test_params_t *params, intege
 }
 
 void prepare_hetri_rook_run(integer datatype, integer n, void *A, char uplo, integer lda,
-                            integer *ipiv, void *work, integer n_repeats, double *time_min_,
-                            integer *info, integer interfacetype, integer layout)
+                            integer *ipiv, void *work, integer *info, integer interfacetype,
+                            integer layout, test_params_t *params)
 {
-    integer i, lwork;
+    integer lwork;
     void *A_save = NULL;
-    double t_min = 1e9, exe_time;
+    double exe_time;
 
     create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &A_save, lda);
 
@@ -233,7 +235,7 @@ void prepare_hetri_rook_run(integer datatype, integer n, void *A, char uplo, int
     lwork = fla_max(1, n);
 
     *info = 0;
-    for(i = 0; i < n_repeats && *info == 0; i++)
+    FLA_EXEC_LOOP_BEGIN
     {
         /* Copy original input */
         copy_matrix(datatype, "full", n, n, A, lda, A_save, lda);
@@ -263,12 +265,9 @@ void prepare_hetri_rook_run(integer datatype, integer n, void *A, char uplo, int
 #if ENABLE_CPP_TEST
         }
 #endif
-        /* Get the best execution time */
-        t_min = fla_min(t_min, exe_time);
+        FLA_EXEC_LOOP_UPDATE_WITH_INFO
         free_vector(work);
     }
-
-    *time_min_ = t_min;
 
     /* Save the output to vector A */
     copy_matrix(datatype, "full", n, n, A_save, lda, A, lda);

@@ -2,7 +2,6 @@
 # Copyright (C) 2024-2025, Advanced Micro Devices, Inc. All rights reserved.
 ###############################################################################
 
-target_include_directories("${PROJECT_NAME}" PRIVATE ${CMAKE_SOURCE_DIR}/src/src_cpp)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-comment -Wno-unused-function")
 
 if(WIN32)
@@ -52,5 +51,23 @@ ${CMAKE_CURRENT_SOURCE_DIR}/invoke_stedc.cc
 ${CMAKE_CURRENT_SOURCE_DIR}/invoke_gecon.cc
 ${CMAKE_CURRENT_SOURCE_DIR}/invoke_hetrf.cc
 ${CMAKE_CURRENT_SOURCE_DIR}/invoke_hetri_rook.cc
+${CMAKE_CURRENT_SOURCE_DIR}/invoke_ormqr.cc
+${CMAKE_CURRENT_SOURCE_DIR}/invoke_gejsv.cc
+${CMAKE_CURRENT_SOURCE_DIR}/invoke_labrd.cc
+${CMAKE_CURRENT_SOURCE_DIR}/invoke_sytrd.cc
+${CMAKE_CURRENT_SOURCE_DIR}/invoke_lange.cc
+${CMAKE_CURRENT_SOURCE_DIR}/invoke_steqr.cc
+${CMAKE_CURRENT_SOURCE_DIR}/invoke_stevd.cc
+${CMAKE_CURRENT_SOURCE_DIR}/invoke_syev.cc
+${CMAKE_CURRENT_SOURCE_DIR}/invoke_syevd.cc
+${CMAKE_CURRENT_SOURCE_DIR}/invoke_syevx.cc
+${CMAKE_CURRENT_SOURCE_DIR}/invoke_sygvd.cc
+${CMAKE_CURRENT_SOURCE_DIR}/invoke_sytrf_rook.cc
+${CMAKE_CURRENT_SOURCE_DIR}/invoke_sytrf.cc
+${CMAKE_CURRENT_SOURCE_DIR}/invoke_ormlq.cc
+${CMAKE_CURRENT_SOURCE_DIR}/invoke_potri.cc
+${CMAKE_CURRENT_SOURCE_DIR}/invoke_gebrd.cc
+${CMAKE_CURRENT_SOURCE_DIR}/invoke_trtri.cc
+${CMAKE_CURRENT_SOURCE_DIR}/invoke_trtrs.cc
 ${CMAKE_CURRENT_SOURCE_DIR}/invoke_common.hh
 )

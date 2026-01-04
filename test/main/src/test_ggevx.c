@@ -6,6 +6,7 @@
 #if ENABLE_CPP_TEST
 #include <invoke_common.hh>
 #endif
+#include <invoke_lapacke.h>
 
 extern double perf;
 extern double time_min;
@@ -22,8 +23,8 @@ void prepare_ggevx_run(char *balanc, char *jobvl, char *jobvr, char *sense, inte
                        integer lda, void *B, integer ldb, void *alpha, void *alphar, void *alphai,
                        void *beta, void *VL, integer ldvl, void *VR, integer ldvr, integer *ilo,
                        integer *ihi, void *lscale, void *rscale, void *abnrm, void *bbnrm,
-                       void *rconde, void *rcondv, integer datatype, integer n_repeats,
-                       double *time_min_, integer *info, integer interfacetype, int matrix_layout);
+                       void *rconde, void *rcondv, integer datatype, integer *info,
+                       integer interfacetype, int matrix_layout, test_params_t *params);
 void invoke_ggevx(integer datatype, char *balanc, char *jobvl, char *jobvr, char *sense, integer *n,
                   void *a, integer *lda, void *b, integer *ldb, void *alpha, void *alphar,
                   void *alphai, void *beta, void *vl, integer *ldvl, void *vr, integer *ldvr,
@@ -37,12 +38,6 @@ double prepare_lapacke_ggevx_run(integer datatype, int matrix_layout, char *bala
                                  integer *ilo, integer *ihi, void *lscale, void *rscale,
                                  void *abnrm, void *bbnrm, void *rconde, void *rcondv,
                                  integer *info);
-integer invoke_lapacke_ggevx(integer datatype, int matrix_layout, char balanc, char jobvl,
-                             char jobvr, char sense, integer n, void *a, integer lda, void *b,
-                             integer ldb, void *alpha, void *alphar, void *alphai, void *beta,
-                             void *vl, integer ldvl, void *vr, integer ldvr, integer *ilo,
-                             integer *ihi, void *lscale, void *rscale, void *abnrm, void *bbnrm,
-                             void *rconde, void *rcondv);
 
 void fla_test_ggevx(integer argc, char **argv, test_params_t *params)
 {
@@ -54,7 +49,7 @@ void fla_test_ggevx(integer argc, char **argv, test_params_t *params)
     {
         /* Test with parameters from config */
         g_lwork = -1;
-        config_data = 1;
+        g_config_data = 1;
         fla_test_output_info("--- %s ---\n", op_str);
         fla_test_output_info("\n");
         fla_test_op_driver(front_str, SQUARE_INPUT, params, EIG_NSYM, fla_test_ggevx_experiment);
@@ -100,6 +95,7 @@ void fla_test_ggevx(integer argc, char **argv, test_params_t *params)
         }
         g_lwork = strtoimax(argv[12], &endptr, CLI_DECIMAL_BASE);
         n_repeats = strtoimax(argv[13], &endptr, CLI_DECIMAL_BASE);
+        params->n_repeats = n_repeats;
 
         if(n_repeats > 0)
         {
@@ -179,7 +175,7 @@ void fla_test_ggevx_experiment(char *tst_api, test_params_t *params, integer dat
 
     /* If leading dimensions = -1, set them to default value
        when inputs are from config files */
-    if(config_data)
+    if(g_config_data)
     {
         if(lda == -1)
         {
@@ -193,7 +189,7 @@ void fla_test_ggevx_experiment(char *tst_api, test_params_t *params, integer dat
            if JOBVL = 'V', LDVL >= N */
         if(ldvl == -1)
         {
-            if(JOBVL == 'V')
+            if(same_char(JOBVL, 'V'))
             {
                 ldvl = n;
             }
@@ -206,7 +202,7 @@ void fla_test_ggevx_experiment(char *tst_api, test_params_t *params, integer dat
            if JOBVR = 'V', LDVR >= N */
         if(ldvr == -1)
         {
-            if(JOBVR == 'V')
+            if(same_char(JOBVR, 'V'))
             {
                 ldvr = n;
             }
@@ -252,7 +248,7 @@ void fla_test_ggevx_experiment(char *tst_api, test_params_t *params, integer dat
 
     prepare_ggevx_run(&BALANC, &JOBVL, &JOBVR, &SENSE, n, A, lda, B, ldb, alpha, alphar, alphai,
                       beta, VL, ldvl, VR, ldvr, &ilo, &ihi, lscale, rscale, abnrm, bbnrm, rconde,
-                      rcondv, datatype, n_repeats, &time_min, &info, interfacetype, layout);
+                      rcondv, datatype, &info, interfacetype, layout, params);
 
     /* performance computation */
     /* 2mn^2 - (2/3)n^3 flops */
@@ -264,10 +260,15 @@ void fla_test_ggevx_experiment(char *tst_api, test_params_t *params, integer dat
     FLA_TEST_CHECK_EINFO(residual, info, einfo);
     if(!FLA_EXTREME_CASE_TEST)
     {
-        if(JOBVL == 'V' || JOBVR == 'V')
+        if(same_char(JOBVL, 'V') || same_char(JOBVR, 'V'))
         {
             validate_ggevx(tst_api, &BALANC, &JOBVL, &JOBVR, &SENSE, n, A_test, lda, B_test, ldb,
-                           alpha, alphar, alphai, beta, VL, ldvl, VR, ldvr, datatype, residual);
+                           alpha, alphar, alphai, beta, VL, ldvl, VR, ldvr, datatype, residual,
+                           params);
+        }
+        else
+        {
+            FLA_PRINT_TEST_STATUS(n, n, residual, err_thresh);
         }
     }
     else
@@ -305,14 +306,12 @@ void prepare_ggevx_run(char *balanc, char *jobvl, char *jobvr, char *sense, inte
                        integer lda, void *B, integer ldb, void *alpha, void *alphar, void *alphai,
                        void *beta, void *VL, integer ldvl, void *VR, integer ldvr, integer *ilo,
                        integer *ihi, void *lscale, void *rscale, void *abnrm, void *bbnrm,
-                       void *rconde, void *rcondv, integer datatype, integer n_repeats,
-                       double *time_min_, integer *info, integer interfacetype, int layout)
+                       void *rconde, void *rcondv, integer datatype, integer *info,
+                       integer interfacetype, int layout, test_params_t *params)
 {
     void *A_save = NULL, *B_save = NULL, *work = NULL, *rwork = NULL, *iwork = NULL, *bwork = NULL;
-    ;
-    integer i;
     integer lwork;
-    double t_min = 1e9, exe_time;
+    double exe_time;
 
     /* Make a copy of the input matrix A. Same input values will be passed in
        each itertaion.*/
@@ -321,11 +320,11 @@ void prepare_ggevx_run(char *balanc, char *jobvl, char *jobvr, char *sense, inte
     copy_matrix(datatype, "full", n_A, n_A, A, lda, A_save, lda);
     copy_matrix(datatype, "full", n_A, n_A, B, ldb, B_save, ldb);
 
-    if(*sense != 'E')
+    if(!same_char(*sense, 'E'))
     {
         create_vector(INTEGER, &iwork, 6 + n_A);
     }
-    if(*sense != 'N')
+    if(!same_char(*sense, 'N'))
     {
         create_vector(INTEGER, &bwork, n_A);
     }
@@ -372,7 +371,7 @@ void prepare_ggevx_run(char *balanc, char *jobvl, char *jobvr, char *sense, inte
     create_realtype_vector(datatype, &rwork, 8 * n_A);
 
     *info = 0;
-    for(i = 0; i < n_repeats && *info == 0; ++i)
+    FLA_EXEC_LOOP_BEGIN
     {
         /* Restore input matrix A value and allocate memory to output buffers for each iteration */
         copy_matrix(datatype, "full", n_A, n_A, A_save, lda, A, lda);
@@ -409,22 +408,20 @@ void prepare_ggevx_run(char *balanc, char *jobvl, char *jobvr, char *sense, inte
             exe_time = fla_test_clock() - exe_time;
         }
 
-        /* Get the best execution time */
-        t_min = fla_min(t_min, exe_time);
+        /* Update ctx and loop conditions */
+        FLA_EXEC_LOOP_UPDATE_WITH_INFO
 
         /* Free up the output buffers */
         free_vector(work);
     }
 
-    *time_min_ = t_min;
-
     free_matrix(A_save);
     free_matrix(B_save);
-    if(*sense != 'E')
+    if(!same_char(*sense, 'E'))
     {
         free_vector(iwork);
     }
-    if(*sense != 'N')
+    if(!same_char(*sense, 'N'))
     {
         free_vector(bwork);
     }
@@ -447,10 +444,10 @@ double prepare_lapacke_ggevx_run(integer datatype, int layout, char *balanc, cha
     void *A_t = NULL, *B_t = NULL, *VL_t = NULL, *VR_t = NULL;
 
     /* Configure leading dimensions as per the input matrix layout */
-    SELECT_LDA(g_ext_fptr, config_data, layout, n_A, row_major_ggevx_lda, lda_t);
-    SELECT_LDA(g_ext_fptr, config_data, layout, n_A, row_major_ggevx_ldb, ldb_t);
-    SELECT_LDA(g_ext_fptr, config_data, layout, n_A, row_major_ggevx_ldvl, ldvl_t);
-    SELECT_LDA(g_ext_fptr, config_data, layout, n_A, row_major_ggevx_ldvr, ldvr_t);
+    SELECT_LDA(g_ext_fptr, g_config_data, layout, n_A, row_major_ggevx_lda, lda_t);
+    SELECT_LDA(g_ext_fptr, g_config_data, layout, n_A, row_major_ggevx_ldb, ldb_t);
+    SELECT_LDA(g_ext_fptr, g_config_data, layout, n_A, row_major_ggevx_ldvl, ldvl_t);
+    SELECT_LDA(g_ext_fptr, g_config_data, layout, n_A, row_major_ggevx_ldvr, ldvr_t);
 
     A_t = A;
     B_t = B;
@@ -463,11 +460,11 @@ double prepare_lapacke_ggevx_run(integer datatype, int layout, char *balanc, cha
         /* Create temporary buffers for converting matrix layout */
         create_matrix(datatype, layout, n_A, n_A, &A_t, fla_max(n_A, lda_t));
         create_matrix(datatype, layout, n_A, n_A, &B_t, fla_max(n_A, ldb_t));
-        if(*jobvl == 'V')
+        if(same_char(*jobvl, 'V'))
         {
             create_matrix(datatype, layout, n_A, n_A, &VL_t, fla_max(n_A, ldvl_t));
         }
-        if(*jobvr == 'V')
+        if(same_char(*jobvr, 'V'))
         {
             create_matrix(datatype, layout, n_A, n_A, &VR_t, fla_max(n_A, ldvr_t));
         }
@@ -491,12 +488,12 @@ double prepare_lapacke_ggevx_run(integer datatype, int layout, char *balanc, cha
         convert_matrix_layout(layout, datatype, n_A, n_A, A_t, lda_t, A, lda);
         convert_matrix_layout(layout, datatype, n_A, n_A, B_t, ldb_t, B, ldb);
 
-        if(*jobvl == 'V')
+        if(same_char(*jobvl, 'V'))
         {
             convert_matrix_layout(layout, datatype, n_A, n_A, VL_t, ldvl_t, VL, ldvl);
             free_matrix(VL_t);
         }
-        if(*jobvr == 'V')
+        if(same_char(*jobvr, 'V'))
         {
             convert_matrix_layout(layout, datatype, n_A, n_A, VR_t, ldvr_t, VR, ldvr);
             free_matrix(VR_t);
@@ -549,49 +546,4 @@ void invoke_ggevx(integer datatype, char *balanc, char *jobvl, char *jobvr, char
             break;
         }
     }
-}
-
-integer invoke_lapacke_ggevx(integer datatype, int layout, char balanc, char jobvl, char jobvr,
-                             char sense, integer n, void *a, integer lda, void *b, integer ldb,
-                             void *alpha, void *alphar, void *alphai, void *beta, void *vl,
-                             integer ldvl, void *vr, integer ldvr, integer *ilo, integer *ihi,
-                             void *lscale, void *rscale, void *abnrm, void *bbnrm, void *rconde,
-                             void *rcondv)
-{
-    integer info = 0;
-    switch(datatype)
-    {
-        case FLOAT:
-        {
-            info = LAPACKE_sggevx(layout, balanc, jobvl, jobvr, sense, n, a, lda, b, ldb, alphar,
-                                  alphai, beta, vl, ldvl, vr, ldvr, ilo, ihi, lscale, rscale, abnrm,
-                                  bbnrm, rconde, rcondv);
-            break;
-        }
-
-        case DOUBLE:
-        {
-            info = LAPACKE_dggevx(layout, balanc, jobvl, jobvr, sense, n, a, lda, b, ldb, alphar,
-                                  alphai, beta, vl, ldvl, vr, ldvr, ilo, ihi, lscale, rscale, abnrm,
-                                  bbnrm, rconde, rcondv);
-            break;
-        }
-
-        case COMPLEX:
-        {
-            info = LAPACKE_cggevx(layout, balanc, jobvl, jobvr, sense, n, a, lda, b, ldb, alpha,
-                                  beta, vl, ldvl, vr, ldvr, ilo, ihi, lscale, rscale, abnrm, bbnrm,
-                                  rconde, rcondv);
-            break;
-        }
-
-        case DOUBLE_COMPLEX:
-        {
-            info = LAPACKE_zggevx(layout, balanc, jobvl, jobvr, sense, n, a, lda, b, ldb, alpha,
-                                  beta, vl, ldvl, vr, ldvr, ilo, ihi, lscale, rscale, abnrm, bbnrm,
-                                  rconde, rcondv);
-            break;
-        }
-    }
-    return info;
 }

@@ -6,6 +6,7 @@
 #if ENABLE_CPP_TEST
 #include <invoke_common.hh>
 #endif
+#include <invoke_lapacke.h>
 
 extern double perf;
 extern double time_min;
@@ -18,17 +19,23 @@ void fla_test_gesdd_experiment(char *tst_api, test_params_t *params, integer dat
                                integer p_cur, integer q_cur, integer pci, integer n_repeats,
                                integer einfo);
 void prepare_gesdd_run(char *jobz, integer m_A, integer n_A, void *A, integer lda, void *s, void *U,
-                       integer ldu, void *V, integer ldvt, integer datatype, integer n_repeats,
-                       double *time_min_, integer *info, integer interfacetype, int matrix_layout);
+                       integer ldu, void *V, integer ldvt, integer datatype, integer *info,
+                       integer interfacetype, int matrix_layout, test_params_t *params);
 void invoke_gesdd(integer datatype, char *jobz, integer *m, integer *n, void *a, integer *lda,
                   void *s, void *u, integer *ldu, void *vt, integer *ldvt, void *work,
                   integer *lwork, void *rwork, integer *iwork, integer *info);
 double prepare_lapacke_gesdd_run(integer datatype, int matrix_layout, char *jobz, integer m_A,
                                  integer n_A, void *A, integer lda, void *s, void *U, integer ldu,
                                  void *V, integer ldvt, integer *info);
-integer invoke_lapacke_gesdd(integer datatype, int matrix_layout, char jobz, integer m, integer n,
-                             void *a, integer lda, void *s, void *u, integer ldu, void *vt,
-                             integer ldvt);
+
+/* Helper functions for Bit reproducibility tests */
+void store_gesdd_outputs(void *filename, integer datatype, char jobz, integer m, integer n, void *A,
+                         integer lda, void *s, void *U, integer ldu, void *V, integer ldvt,
+                         integer g_lwork, void *params);
+integer check_bit_reproducibility_gesdd(void *filename, integer datatype, char jobz, integer m,
+                                        integer n, void *A, integer lda, void *s, void *U,
+                                        integer ldu, void *V, integer ldvt, integer g_lwork,
+                                        void *params);
 
 void fla_test_gesdd(integer argc, char **argv, test_params_t *params)
 {
@@ -40,7 +47,7 @@ void fla_test_gesdd(integer argc, char **argv, test_params_t *params)
     if(argc == 1)
     {
         g_lwork = -1;
-        config_data = 1;
+        g_config_data = 1;
         fla_test_output_info("--- %s ---\n", op_str);
         fla_test_output_info("\n");
         fla_test_op_driver(front_str, RECT_INPUT, params, SVD, fla_test_gesdd_experiment);
@@ -82,6 +89,7 @@ void fla_test_gesdd(integer argc, char **argv, test_params_t *params)
         g_lwork = strtoimax(argv[9], &endptr, CLI_DECIMAL_BASE);
 
         n_repeats = strtoimax(argv[10], &endptr, CLI_DECIMAL_BASE);
+        params->n_repeats = n_repeats;
 
         if(n_repeats > 0)
         {
@@ -139,6 +147,7 @@ void fla_test_gesdd_experiment(char *tst_api, test_params_t *params, integer dat
     char jobz;
     void *A = NULL, *U = NULL, *V = NULL, *s = NULL, *A_test = NULL, *s_in = NULL, *scal = NULL;
     double residual, err_thresh;
+    void *filename = NULL;
 
     integer interfacetype = params->interfacetype;
     int layout = params->matrix_major;
@@ -156,7 +165,7 @@ void fla_test_gesdd_experiment(char *tst_api, test_params_t *params, integer dat
 
     /* If leading dimensions = -1, set them to default value
        when inputs are from config files */
-    if(config_data)
+    if(g_config_data)
     {
         if(lda == -1)
         {
@@ -166,7 +175,7 @@ void fla_test_gesdd_experiment(char *tst_api, test_params_t *params, integer dat
            if JOBZ = 'S' or 'A' or JOBZ = 'O' and M < N, LDU >= M. */
         if(ldu == -1)
         {
-            if(((jobz == 'S') || (jobz == 'A')) || ((jobz == 'O') && (m < n)))
+            if(same_char(jobz, 'S') || same_char(jobz, 'A') || (same_char(jobz, 'O') && (m < n)))
             {
                 ldu = m;
             }
@@ -180,11 +189,11 @@ void fla_test_gesdd_experiment(char *tst_api, test_params_t *params, integer dat
            if JOBZ = 'S', LDVT >= min(M,N). */
         if(ldvt == -1)
         {
-            if((jobz == 'A') || ((jobz == 'O') && (m >= n)))
+            if(same_char(jobz, 'A') || (same_char(jobz, 'O') && (m >= n)))
             {
                 ldvt = n;
             }
-            else if(jobz == 'S')
+            else if(same_char(jobz, 'S'))
             {
                 ldvt = ns;
             }
@@ -195,19 +204,19 @@ void fla_test_gesdd_experiment(char *tst_api, test_params_t *params, integer dat
         }
     }
 
-    n_U = (jobz == 'S') ? ns : m;
-    m_V = (jobz == 'S') ? ns : n;
+    n_U = (same_char(jobz, 'S')) ? ns : m;
+    m_V = (same_char(jobz, 'S')) ? ns : n;
 
     /* Create input matrix parameters */
     create_matrix(datatype, LAPACK_COL_MAJOR, m, n, &A, lda);
-    if(jobz != 'N')
+    if(!same_char(jobz, 'N'))
     {
-        if(jobz == 'A' || jobz == 'S')
+        if(same_char(jobz, 'A') || same_char(jobz, 'S'))
         {
             create_matrix(datatype, LAPACK_COL_MAJOR, m, n_U, &U, ldu);
             create_matrix(datatype, LAPACK_COL_MAJOR, m_V, n, &V, ldvt);
         }
-        else if(jobz == 'O' && m >= n)
+        else if(same_char(jobz, 'O') && m >= n)
         {
             create_matrix(datatype, LAPACK_COL_MAJOR, m_V, n, &V, ldvt);
         }
@@ -216,48 +225,72 @@ void fla_test_gesdd_experiment(char *tst_api, test_params_t *params, integer dat
             create_matrix(datatype, LAPACK_COL_MAJOR, m, n_U, &U, ldu);
         }
     }
-
     create_realtype_vector(datatype, &s, fla_min(m, n));
+    create_matrix(datatype, LAPACK_COL_MAJOR, m, n, &A_test, lda);
+    create_vector(get_realtype(datatype), &scal, 1);
 
-    if(g_ext_fptr != NULL || (FLA_EXTREME_CASE_TEST))
+    if(!FLA_BRT_VERIFICATION_RUN)
     {
-        init_matrix(datatype, A, m, n, lda, g_ext_fptr, params->imatrix_char);
-    }
-    else
-    {
-        create_realtype_vector(datatype, &s_in, fla_min(m, n));
-        /* Generate matrix A from known singular values */
-        create_svd_matrix(datatype, 'A', m, n, A, lda, s_in, s_one, s_one, i_one, i_one, info);
-        if(FLA_OVERFLOW_UNDERFLOW_TEST)
+        if(g_ext_fptr != NULL || (FLA_EXTREME_CASE_TEST))
         {
-            create_vector(get_realtype(datatype), &scal, 1);
-            scale_matrix_underflow_overflow_gesdd(datatype, m, n, A, lda, params->imatrix_char,
-                                                  scal);
+            init_matrix(datatype, A, m, n, lda, g_ext_fptr, params->imatrix_char);
+        }
+        else
+        {
+            create_realtype_vector(datatype, &s_in, fla_min(m, n));
+            /* Generate matrix A from known singular values */
+            create_svd_matrix(datatype, 'A', m, n, A, lda, s_in, s_one, s_one, i_one, i_one, info);
+            if(FLA_OVERFLOW_UNDERFLOW_TEST)
+            {
+                scale_matrix_underflow_overflow_gesdd(datatype, m, n, A, lda, params->imatrix_char,
+                                                      scal);
+            }
         }
     }
+    /* This macro is used in the BRT test cases for the following purposes:
+     *    - In the Ground truth runs (BRT_char => G, F), the output is stored in a file for future
+     * reference
+     *    - In the verification runs (BRT_char => V, M), the output is loaded from the file and
+     * passed as input to the API
+     * */
+    FLA_BRT_PROCESS_SINGLE_INPUT(datatype, m, n, A, lda, "cdddddd", jobz, m, n, lda, ldu, ldvt,
+                                 g_lwork)
 
     /* Make a copy of input matrix A. This is required to validate the API functionality.*/
-    create_matrix(datatype, LAPACK_COL_MAJOR, m, n, &A_test, lda);
     copy_matrix(datatype, "full", m, n, A, lda, A_test, lda);
 
-    prepare_gesdd_run(&jobz, m, n, A_test, lda, s, U, ldu, V, ldvt, datatype, n_repeats, &time_min,
-                      &info, interfacetype, layout);
+    prepare_gesdd_run(&jobz, m, n, A_test, lda, s, U, ldu, V, ldvt, datatype, &info, interfacetype,
+                      layout, params);
 
-    /* performance computation
-       6mn^2 + 8n^3 flops */
+    /* performance computation 6mn^2 + 8n^3 flops */
     if(m >= n)
         perf = (double)((6.0 * m * n * n) + (8.0 * n * n * n)) / time_min / FLOPS_PER_UNIT_PERF;
     else
-        perf = (double)((6.0 * n * m * m) + ((8.0) * m * m * m)) / time_min / FLOPS_PER_UNIT_PERF;
+        perf = (double)((6.0 * n * m * m) + (8.0 * m * m * m)) / time_min / FLOPS_PER_UNIT_PERF;
     if(datatype == COMPLEX || datatype == DOUBLE_COMPLEX)
         perf *= 4.0;
 
     /* output validation */
     FLA_TEST_CHECK_EINFO(residual, info, einfo);
-    if(!FLA_EXTREME_CASE_TEST)
+    /* Bit reproducibility tests path
+     * This path is taken when BRT is enabled.
+     *     - In the Ground truth runs (BRT_char => G, F), the output is stored in a file and the
+     * default validation function is called
+     *     - In the verification runs (BRT_char => V, M), the output is loaded from the file and
+     * compared with the generated output
+     *  */
+    IF_FLA_BRT_VALIDATION(m, n,
+                          store_gesdd_outputs(filename, datatype, jobz, m, n, A, lda, s, U, ldu, V,
+                                              ldvt, g_lwork, params),
+                          validate_gesdd(tst_api, &jobz, m, n, A, A_test, lda, s, s_in, U, ldu, V,
+                                         ldvt, datatype, residual, params->imatrix_char, scal,
+                                         params),
+                          check_bit_reproducibility_gesdd(filename, datatype, jobz, m, n, A, lda, s,
+                                                          U, ldu, V, ldvt, g_lwork, params))
+    else if(!FLA_EXTREME_CASE_TEST)
     {
         validate_gesdd(tst_api, &jobz, m, n, A, A_test, lda, s, s_in, U, ldu, V, ldvt, datatype,
-                       residual, params->imatrix_char, scal);
+                       residual, params->imatrix_char, scal, params);
     }
     /* check for output matrix when inputs as extreme values */
     else
@@ -274,42 +307,37 @@ void fla_test_gesdd_experiment(char *tst_api, test_params_t *params, integer dat
     }
 
     /* Free up the buffers */
+free_buffers:
+    FLA_FREE_FILENAME(filename)
     free_matrix(A);
     free_matrix(A_test);
-    if(jobz == 'A' || jobz == 'S' || (jobz == 'O' && m < n))
+    if(same_char(jobz, 'A') || same_char(jobz, 'S') || (same_char(jobz, 'O') && m < n))
     {
         free_matrix(U);
     }
-    if(jobz == 'A' || jobz == 'S' || (jobz == 'O' && m >= n))
+    if(same_char(jobz, 'A') || same_char(jobz, 'S') || (same_char(jobz, 'O') && m >= n))
     {
         free_matrix(V);
     }
     free_vector(s);
-    if((g_ext_fptr == NULL) && !(params->imatrix_char))
-    {
-        free_vector(s_in);
-    }
-    if(FLA_OVERFLOW_UNDERFLOW_TEST)
-    {
-        free_vector(scal);
-    }
+    free_vector(s_in);
+    free_vector(scal);
 }
 
 void prepare_gesdd_run(char *jobz, integer m_A, integer n_A, void *A, integer lda, void *s, void *U,
-                       integer ldu, void *V, integer ldvt, integer datatype, integer n_repeats,
-                       double *time_min_, integer *info, integer interfacetype, int layout)
+                       integer ldu, void *V, integer ldvt, integer datatype, integer *info,
+                       integer interfacetype, int layout, test_params_t *params)
 {
     integer min_m_n, max_m_n, n_U, m_V;
     void *A_save, *s_test, *work, *iwork, *rwork;
     void *U_test, *V_test;
     integer lwork, liwork, lrwork;
-    integer i;
-    double t_min = 1e9, exe_time;
+    double exe_time;
 
     min_m_n = fla_min(m_A, n_A);
     max_m_n = fla_max(m_A, n_A);
-    n_U = (*jobz == 'S') ? min_m_n : m_A;
-    m_V = (*jobz == 'S') ? min_m_n : n_A;
+    n_U = (same_char(*jobz, 'S')) ? min_m_n : m_A;
+    m_V = (same_char(*jobz, 'S')) ? min_m_n : n_A;
 
     /* Make a copy of the input matrix A. Same input values will be passed in
        each itertaion.*/
@@ -359,19 +387,19 @@ void prepare_gesdd_run(char *jobz, integer m_A, integer n_A, void *A, integer ld
     }
 
     *info = 0;
-    for(i = 0; i < n_repeats && *info == 0; ++i)
+    FLA_EXEC_LOOP_BEGIN
     {
         /* Restore input matrix A value and allocate memory to output buffers
            for each iteration*/
         copy_matrix(datatype, "full", m_A, n_A, A_save, lda, A, lda);
-        if(*jobz != 'N')
+        if(!same_char(*jobz, 'N'))
         {
-            if(*jobz == 'A' || *jobz == 'S')
+            if(same_char(*jobz, 'A') || same_char(*jobz, 'S'))
             {
                 create_matrix(datatype, LAPACK_COL_MAJOR, m_A, n_U, &U_test, ldu);
                 create_matrix(datatype, LAPACK_COL_MAJOR, m_V, n_A, &V_test, ldvt);
             }
-            else if(*jobz == 'O' && m_A >= n_A)
+            else if(same_char(*jobz, 'O') && m_A >= n_A)
             {
                 create_matrix(datatype, LAPACK_COL_MAJOR, m_V, n_A, &V_test, ldvt);
             }
@@ -413,18 +441,18 @@ void prepare_gesdd_run(char *jobz, integer m_A, integer n_A, void *A, integer ld
             exe_time = fla_test_clock() - exe_time;
         }
 
-        /* Get the best execution time */
-        t_min = fla_min(t_min, exe_time);
+        /* Update ctx and loop conditions */
+        FLA_EXEC_LOOP_UPDATE_WITH_INFO
 
         /* Make a copy of the output buffers. This is required to validate the API functionality.*/
-        if(*jobz != 'N')
+        if(!same_char(*jobz, 'N'))
         {
-            if(*jobz == 'A' || *jobz == 'S')
+            if(same_char(*jobz, 'A') || same_char(*jobz, 'S'))
             {
                 copy_matrix(datatype, "full", m_A, n_U, U_test, ldu, U, ldu);
                 copy_matrix(datatype, "full", m_V, n_A, V_test, ldvt, V, ldvt);
             }
-            else if(*jobz == 'O' && m_A >= n_A)
+            else if(same_char(*jobz, 'O') && m_A >= n_A)
             {
                 copy_matrix(datatype, "full", m_V, n_A, V_test, ldvt, V, ldvt);
             }
@@ -442,18 +470,16 @@ void prepare_gesdd_run(char *jobz, integer m_A, integer n_A, void *A, integer ld
         {
             free_vector(rwork);
         }
-        if(*jobz == 'A' || *jobz == 'S' || (*jobz == 'O' && m_A < n_A))
+        if(same_char(*jobz, 'A') || same_char(*jobz, 'S') || (same_char(*jobz, 'O') && m_A < n_A))
         {
             free_matrix(U_test);
         }
-        if(*jobz == 'A' || *jobz == 'S' || (*jobz == 'O' && m_A >= n_A))
+        if(same_char(*jobz, 'A') || same_char(*jobz, 'S') || (same_char(*jobz, 'O') && m_A >= n_A))
         {
             free_matrix(V_test);
         }
         free_vector(s_test);
     }
-
-    *time_min_ = t_min;
 
     free_matrix(A_save);
 }
@@ -469,9 +495,9 @@ double prepare_lapacke_gesdd_run(integer datatype, int layout, char *jobz, integ
     void *A_t = NULL, *U_t = NULL, *V_t = NULL;
 
     /* Configure leading dimensions as per the input matrix layout */
-    SELECT_LDA(g_ext_fptr, config_data, layout, n_A, row_major_gesdd_lda, lda_t);
-    SELECT_LDA(g_ext_fptr, config_data, layout, m_A, row_major_gesdd_ldu, ldu_t);
-    SELECT_LDA(g_ext_fptr, config_data, layout, n_A, row_major_gesdd_ldvt, ldvt_t);
+    SELECT_LDA(g_ext_fptr, g_config_data, layout, n_A, row_major_gesdd_lda, lda_t);
+    SELECT_LDA(g_ext_fptr, g_config_data, layout, m_A, row_major_gesdd_ldu, ldu_t);
+    SELECT_LDA(g_ext_fptr, g_config_data, layout, n_A, row_major_gesdd_ldvt, ldvt_t);
 
     A_t = A;
     U_t = U;
@@ -606,35 +632,77 @@ void invoke_gesdd(integer datatype, char *jobz, integer *m, integer *n, void *a,
     }
 }
 
-integer invoke_lapacke_gesdd(integer datatype, int layout, char jobz, integer m, integer n, void *a,
-                             integer lda, void *s, void *u, integer ldu, void *vt, integer ldvt)
+void store_gesdd_outputs(void *filename, integer datatype, char jobz, integer m, integer n, void *A,
+                         integer lda, void *s, void *U, integer ldu, void *V, integer ldvt,
+                         integer g_lwork, void *params)
 {
-    integer info = 0;
-    switch(datatype)
+    /* Create and open a file for storing Ground truth*/
+    FLA_OPEN_GT_FILE_STORE
+
+    integer ns = fla_min(m, n);
+    integer n_U = (same_char(jobz, 'S')) ? ns : m;
+    integer m_V = (same_char(jobz, 'S')) ? ns : n;
+
+    /* Store the ground truth data */
+    if(same_char(jobz, 'O'))
     {
-        case FLOAT:
+        FLA_STORE_BRT_MATRIX(datatype, m, n, A, lda)
+    }
+    FLA_STORE_BRT_VECTOR(get_realtype(datatype), ns, s)
+    if(!same_char(jobz, 'N'))
+    {
+        if(same_char(jobz, 'A') || same_char(jobz, 'S'))
         {
-            info = LAPACKE_sgesdd(layout, jobz, m, n, a, lda, s, u, ldu, vt, ldvt);
-            break;
+            FLA_STORE_BRT_MATRIX(datatype, m, n_U, U, ldu)
+            FLA_STORE_BRT_MATRIX(datatype, m_V, n, V, ldvt)
         }
-
-        case DOUBLE:
+        else if(same_char(jobz, 'O') && m >= n)
         {
-            info = LAPACKE_dgesdd(layout, jobz, m, n, a, lda, s, u, ldu, vt, ldvt);
-            break;
+            FLA_STORE_BRT_MATRIX(datatype, m_V, n, V, ldvt)
         }
-
-        case COMPLEX:
+        else
         {
-            info = LAPACKE_cgesdd(layout, jobz, m, n, a, lda, s, u, ldu, vt, ldvt);
-            break;
-        }
-
-        case DOUBLE_COMPLEX:
-        {
-            info = LAPACKE_zgesdd(layout, jobz, m, n, a, lda, s, u, ldu, vt, ldvt);
-            break;
+            FLA_STORE_BRT_MATRIX(datatype, m, n_U, U, ldu)
         }
     }
-    return info;
+
+    fclose(gt_file);
+}
+integer check_bit_reproducibility_gesdd(void *filename, integer datatype, char jobz, integer m,
+                                        integer n, void *A, integer lda, void *s, void *U,
+                                        integer ldu, void *V, integer ldvt, integer g_lwork,
+                                        void *params)
+{
+    /* Open the file for reading Ground truth */
+    FLA_OPEN_GT_FILE_READ
+
+    integer ns = fla_min(m, n);
+    integer n_U = (same_char(jobz, 'S')) ? ns : m;
+    integer m_V = (same_char(jobz, 'S')) ? ns : n;
+
+    /* Load stored GT and verify with current API outputs */
+    if(same_char(jobz, 'O'))
+    {
+        FLA_VERIFY_BRT_MATRIX(datatype, m, n, A, lda)
+    }
+    FLA_VERIFY_BRT_VECTOR(get_realtype(datatype), ns, s)
+    if(!same_char(jobz, 'N'))
+    {
+        if(same_char(jobz, 'A') || same_char(jobz, 'S'))
+        {
+            FLA_VERIFY_BRT_MATRIX(datatype, m, n_U, U, ldu)
+            FLA_VERIFY_BRT_MATRIX(datatype, m_V, n, V, ldvt)
+        }
+        else if(same_char(jobz, 'O') && m >= n)
+        {
+            FLA_VERIFY_BRT_MATRIX(datatype, m_V, n, V, ldvt)
+        }
+        else
+        {
+            FLA_VERIFY_BRT_MATRIX(datatype, m, n_U, U, ldu)
+        }
+    }
+
+    fclose(gt_file);
+    return 1;
 }

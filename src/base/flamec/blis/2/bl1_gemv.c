@@ -12,6 +12,7 @@
 *     Modifications Copyright (c) 2023 Advanced Micro Devices, Inc.  All rights reserved.
 */
 #include "blis1.h"
+#include "FLA_f2c.h"
 #if FLA_ENABLE_AOCL_BLAS
 #include "blis.h"
 #endif
@@ -441,18 +442,61 @@ void bl1_dgemv_blas( trans1_t transa, integer m, integer n, double* alpha, doubl
 	             *beta,
 	             y, incy );
 #else
-	char blas_transa;
+#if FLA_ENABLE_AOCL_BLAS
+    /* Use direct single threaded BLIS kernel */
+	aocl_fla_init();
+    if ( FLA_IS_MIN_ARCH_ID( FLA_ARCH_AVX512 ) && incx > 0 && incy > 0 )
+	{
+		if ( bl1_is_notrans( transa ) || bl1_is_conjnotrans( transa ) )
+		{
+			bli_dgemv_n_zen4_int_40x2_st( BLIS_NO_TRANSPOSE,
+				                          BLIS_NO_CONJUGATE,
+										  m,
+										  n,
+										  alpha,
+										  a,
+										  1,
+										  lda,
+										  x,
+										  incx,
+										  beta,
+										  y,
+										  incy,
+										  NULL );
+		}
+		else
+		{
+			bli_dgemv_t_zen4_int( BLIS_CONJUGATE,
+								  BLIS_NO_CONJUGATE,
+								  m,
+								  n,
+								  alpha,
+                                  a,
+								  1,
+								  lda,
+								  x,
+								  incx,
+								  beta,
+								  y,
+								  incy,
+								  NULL );
+		}
+	}
+	else
+#endif
+	{
+		char blas_transa;
 
-	bl1_param_map_to_netlib_trans( transa, &blas_transa );
-
-	F77_dgemv( &blas_transa,
-	           &m,
-	           &n,
-	           alpha,
-	           a, &lda,
-	           x, &incx,
-	           beta,
-	           y, &incy );
+		bl1_param_map_to_netlib_trans( transa, &blas_transa );
+		F77_dgemv( &blas_transa,
+		           &m,
+		           &n,
+		           alpha,
+		           a, &lda,
+		           x, &incx,
+		           beta,
+		           y, &incy );
+	}
 #endif
 }
 

@@ -18,6 +18,12 @@ ifndef $(ENABLE_CPP_TEST)
 ENABLE_CPP_TEST := 1
 endif
 
+ifndef $(ENABLE_AOCL_EXTENSION_APIS)
+# Flag to enable testing for extension LAPACK APIs not present in 
+# the standard LAPACK library
+ENABLE_AOCL_EXTENSION_APIS := 1
+endif
+
 #
 # --- LIBFLAME \ LAPACK library ------------------------------------------------
 #
@@ -38,20 +44,28 @@ BLAS_HEADER_PATH  :=
 LIBAOCLUTILS_LIBRARY_PATH :=
 
 #
-# --- Uncomment the four lines below and set MKLROOT & LDFLAGS -----------------
+# --- Uncomment five lines below and set MKLROOT & LDFLAGS ---------------------
 #     appropriately to link to MKL libs
+#     To enable MKL counterparts of AOCL extension APIs, set 
+#     ENABLE_AOCL_EXTENSION_APIS to 2 and define API prototypes in 
+#     validate_src/test_prototype.h
 #
 #LIBFLAME       :=
 #LIBBLAS        :=
 #MKLROOT        :=
 #LDFLAGS        := -Wl,--start-group ${MKLROOT}/intel64/libmkl_intel_lp64.a \
-                   ${MKLROOT}/intel64/libmkl_sequential.a \
+                   ${MKLROOT}/intel64/libmkl_gnu_thread.a \
                    ${MKLROOT}/intel64/libmkl_core.a -Wl,--end-group \
                    -lpthread -lm -fopenmp -ldl -lstdc++
+#ENABLE_AOCL_EXTENSION_APIS := 0
 
 #
 # --- ILP64 --- Set to 1 to enable ILP64 ---------------------------------------
 #
+ifndef $(ILP64)
+ILP64 = 0
+endif
+
 ifeq ($(ILP64),1)
 ifeq ($(ENABLE_CPP_TEST), 1)
     CXXFLAGS    += -DFLA_ENABLE_ILP64=1
@@ -106,11 +120,22 @@ ifeq ($(ENABLE_CPP_TEST), 1)
 endif
     CFLAGS     += -DFLA_MEM_UNALIGNED=1
 endif
+
+# --- Enable AOCL Extension APIs  ---------------------------------------------
+ifneq ($(ENABLE_AOCL_EXTENSION_APIS), 0)
+ifeq ($(ENABLE_CPP_TEST), 1)
+    CXXFLAGS   += -DENABLE_AOCL_EXTENSION_APIS=$(ENABLE_AOCL_EXTENSION_APIS)
+endif
+    CFLAGS     += -DENABLE_AOCL_EXTENSION_APIS=$(ENABLE_AOCL_EXTENSION_APIS)
+endif
+
 #
 # --- General build definitions ------------------------------------------------
 #
 TEST_SRC_PATH  := src
 TEST_OBJ_PATH  := src/obj
+TEST_LAPACKE_INVOKE_PATH := src/lapacke
+TEST_LAPACKE_OBJ_PATH := src/obj/lapacke
 TEST_VALIDATE_SRC_PATH := validate_src
 TEST_VALIDATE_OBJ_PATH := validate_src/obj
 
@@ -119,10 +144,9 @@ CXX                 := g++
 CXXFLAGS            += -std=c++17 -Wall ${OMP_LIB}
 TEST_CPP_PATH       := src/cpp
 TEST_CPP_OBJ_PATH   := src/obj/cpp
-SRC_CPP_PATH        := ../../src/src_cpp
 
-CFLAGS         += -DENABLE_CPP_TEST=1 -I$(BLAS_HEADER_PATH) -I$(LAPACK_INC_PATH) -I$(TEST_SRC_PATH) -I$(TEST_VALIDATE_SRC_PATH) -I$(TEST_CPP_PATH) -I$(SRC_CPP_PATH)
-CXXFLAGS       += -DENABLE_CPP_TEST=1 -I$(BLAS_HEADER_PATH) -I$(LAPACK_INC_PATH) -I$(TEST_SRC_PATH) -I$(TEST_VALIDATE_SRC_PATH) -I$(TEST_CPP_PATH) -I$(SRC_CPP_PATH)
+CFLAGS         += -DENABLE_CPP_TEST=1 -I$(BLAS_HEADER_PATH) -I$(LAPACK_INC_PATH) -I$(TEST_SRC_PATH) -I$(TEST_VALIDATE_SRC_PATH) -I$(TEST_CPP_PATH) -I$(TEST_LAPACKE_INVOKE_PATH)
+CXXFLAGS       += -DENABLE_CPP_TEST=1 -I$(BLAS_HEADER_PATH) -I$(LAPACK_INC_PATH) -I$(TEST_SRC_PATH) -I$(TEST_VALIDATE_SRC_PATH) -I$(TEST_CPP_PATH) -I$(TEST_LAPACKE_INVOKE_PATH)
 
 else
 CFLAGS         += -I$(BLAS_HEADER_PATH) -I$(LAPACK_INC_PATH) -I$(TEST_SRC_PATH) -I$(TEST_VALIDATE_SRC_PATH)
@@ -133,7 +157,9 @@ FNAME          := lapack
 TEST_VALIDATE_OBJS  := $(patsubst $(TEST_VALIDATE_SRC_PATH)/%.c, \
                        $(TEST_VALIDATE_OBJ_PATH)/%.o, \
                        $(wildcard $(TEST_VALIDATE_SRC_PATH)/*.c))
-
+TEST_LAPACKE_OBJS   := $(patsubst $(TEST_LAPACKE_INVOKE_PATH)/%.c, \
+                       $(TEST_LAPACKE_OBJ_PATH)/%.o, \
+                       $(wildcard $(TEST_LAPACKE_INVOKE_PATH)/*.c))
 ifeq ($(ENABLE_CPP_TEST), 1)
 TEST_CPP_OBJS       := $(patsubst $(TEST_CPP_PATH)/%.cc, \
                        $(TEST_CPP_OBJ_PATH)/%.o, \
@@ -159,13 +185,17 @@ $(TEST_OBJ_PATH)/%.o: $(TEST_SRC_PATH)/%.c
 	mkdir -p $(TEST_OBJ_PATH)
 	$(CC) $(CFLAGS) -c $< -o $@
 
+$(TEST_LAPACKE_OBJ_PATH)/%.o: $(TEST_LAPACKE_INVOKE_PATH)/%.c
+	mkdir -p $(TEST_LAPACKE_OBJ_PATH)
+	$(CC) $(CFLAGS) -c $< -o $@
+
 ifeq ($(ENABLE_CPP_TEST), 1)
-test_$(FNAME): $(TEST_VALIDATE_OBJS) $(TEST_CPP_OBJS) $(TEST_SRC_OBJS)
-	$(CLINKER) $(TEST_VALIDATE_OBJS) $(TEST_CPP_OBJS) $(TEST_SRC_OBJS) $(LIBFLAME) $(LIBBLAS) $(LIBAOCLUTILS_LIBRARY_PATH) \
+test_$(FNAME): $(TEST_VALIDATE_OBJS) $(TEST_CPP_OBJS) $(TEST_SRC_OBJS) $(TEST_LAPACKE_OBJS)
+	$(CLINKER) $(TEST_VALIDATE_OBJS) $(TEST_CPP_OBJS) $(TEST_SRC_OBJS) $(TEST_LAPACKE_OBJS) $(LIBFLAME) $(LIBBLAS) $(LIBAOCLUTILS_LIBRARY_PATH) \
 	$(LDFLAGS) -o $(TEST_BIN)
 else
-test_$(FNAME): $(TEST_VALIDATE_OBJS) $(TEST_SRC_OBJS)
-	$(CLINKER) $(TEST_VALIDATE_OBJS) $(TEST_SRC_OBJS) $(LIBFLAME) $(LIBBLAS) $(LIBAOCLUTILS_LIBRARY_PATH) \
+test_$(FNAME): $(TEST_VALIDATE_OBJS) $(TEST_SRC_OBJS) $(TEST_LAPACKE_OBJS)
+	$(CLINKER) $(TEST_VALIDATE_OBJS) $(TEST_SRC_OBJS) $(TEST_LAPACKE_OBJS) $(LIBFLAME) $(LIBBLAS) $(LIBAOCLUTILS_LIBRARY_PATH) \
 	$(LDFLAGS) -o $(TEST_BIN)
 endif
 

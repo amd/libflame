@@ -6,6 +6,7 @@
 #if ENABLE_CPP_TEST
 #include <invoke_common.hh>
 #endif
+#include <invoke_lapacke.h>
 
 #define GETRF_VL 0.1
 #define GETRF_VU 10
@@ -19,14 +20,12 @@ void fla_test_getrf_experiment(char *tst_api, test_params_t *params, integer dat
                                integer p_cur, integer q_cur, integer pci, integer n_repeats,
                                integer einfo);
 void prepare_getrf_run(integer m_A, integer n_A, void *A, integer lda, integer *ipiv,
-                       integer datatype, integer n_repeats, double *time_min_, integer *info,
-                       integer interfacetype, int matrix_layout);
+                       integer datatype, integer *info, integer interfacetype, int matrix_layout,
+                       test_params_t *params);
 void invoke_getrf(integer datatype, integer *m, integer *n, void *a, integer *lda, integer *ipiv,
                   integer *info);
 double prepare_lapacke_getrf_run(integer datatype, int matrix_layout, integer m_A, integer n_A,
                                  void *A, integer lda, integer *ipiv, integer *info);
-integer invoke_lapacke_getrf(integer datatype, int matrix_layout, integer m, integer n, void *a,
-                             integer lda, integer *ipiv);
 
 void fla_test_getrf(integer argc, char **argv, test_params_t *params)
 {
@@ -38,7 +37,7 @@ void fla_test_getrf(integer argc, char **argv, test_params_t *params)
     /* Config mode */
     if(argc == 1)
     {
-        config_data = 1;
+        g_config_data = 1;
         fla_test_output_info("--- %s ---\n", op_str);
         fla_test_output_info("\n");
         fla_test_op_driver(front_str, RECT_INPUT, params, LIN, fla_test_getrf_experiment);
@@ -72,6 +71,7 @@ void fla_test_getrf(integer argc, char **argv, test_params_t *params)
             params->lin_solver_paramslist[0].lda = strtoimax(argv[5], &endptr, CLI_DECIMAL_BASE);
         }
         n_repeats = strtoimax(argv[6], &endptr, CLI_DECIMAL_BASE);
+        params->n_repeats = n_repeats;
 
         if(n_repeats > 0)
         {
@@ -140,7 +140,7 @@ void fla_test_getrf_experiment(char *tst_api, test_params_t *params, integer dat
 
     /* If leading dimensions = -1, set them to default value
        when inputs are from config files */
-    if(config_data)
+    if(g_config_data)
     {
         if(lda == -1)
         {
@@ -173,8 +173,7 @@ void fla_test_getrf_experiment(char *tst_api, test_params_t *params, integer dat
     copy_matrix(datatype, "full", m, n, A, lda, A_test, lda);
 
     /* call to API */
-    prepare_getrf_run(m, n, A_test, lda, IPIV, datatype, n_repeats, &time_min, &info, interfacetype,
-                      layout);
+    prepare_getrf_run(m, n, A_test, lda, IPIV, datatype, &info, interfacetype, layout, params);
 
     /* performance computation */
     if(m == n)
@@ -183,11 +182,11 @@ void fla_test_getrf_experiment(char *tst_api, test_params_t *params, integer dat
     }
     else if(m > n)
     {
-        perf = (1.0 / 3.0) * n * n * (3 * m - n) / time_min / FLOPS_PER_UNIT_PERF;
+        perf = (1.0 / 3.0) * n * n * (3.0 * m - n) / time_min / FLOPS_PER_UNIT_PERF;
     }
     else
     {
-        perf = (1.0 / 3.0) * m * m * (3 * n - m) / time_min / FLOPS_PER_UNIT_PERF;
+        perf = (1.0 / 3.0) * m * m * (3.0 * n - m) / time_min / FLOPS_PER_UNIT_PERF;
     }
     if(datatype == COMPLEX || datatype == DOUBLE_COMPLEX)
         perf *= 4.0;
@@ -197,7 +196,7 @@ void fla_test_getrf_experiment(char *tst_api, test_params_t *params, integer dat
     if(!FLA_EXTREME_CASE_TEST)
     {
         validate_getrf(tst_api, m, n, A, A_test, lda, IPIV, datatype, residual,
-                       params->imatrix_char);
+                       params->imatrix_char, params);
     }
     /* check for output matrix when inputs as extreme values */
     else
@@ -221,19 +220,18 @@ void fla_test_getrf_experiment(char *tst_api, test_params_t *params, integer dat
 }
 
 void prepare_getrf_run(integer m_A, integer n_A, void *A, integer lda, integer *IPIV,
-                       integer datatype, integer n_repeats, double *time_min_, integer *info,
-                       integer interfacetype, int layout)
+                       integer datatype, integer *info, integer interfacetype, int layout,
+                       test_params_t *params)
 {
-    integer i;
     void *A_save;
-    double t_min = 1e9, exe_time;
+    double exe_time;
 
     /* Save the original matrix */
     create_matrix(datatype, LAPACK_COL_MAJOR, m_A, n_A, &A_save, lda);
     copy_matrix(datatype, "full", m_A, n_A, A, lda, A_save, lda);
 
     *info = 0;
-    for(i = 0; i < n_repeats && *info == 0; ++i)
+    FLA_EXEC_LOOP_BEGIN
     {
 
         /* Copy original input data */
@@ -261,11 +259,10 @@ void prepare_getrf_run(integer m_A, integer n_A, void *A, integer lda, integer *
             exe_time = fla_test_clock() - exe_time;
         }
 
-        /* Get the best execution time */
-        t_min = fla_min(t_min, exe_time);
+        /* Update ctx and loop conditions */
+        FLA_EXEC_LOOP_UPDATE_WITH_INFO
     }
 
-    *time_min_ = t_min;
     /*  Save the AFACT to matrix A */
     copy_matrix(datatype, "full", m_A, n_A, A_save, lda, A, lda);
     free_matrix(A_save);
@@ -279,7 +276,7 @@ double prepare_lapacke_getrf_run(integer datatype, int layout, integer m_A, inte
     void *A_t = NULL;
 
     /* Configure leading dimensions as per the input matrix layout */
-    SELECT_LDA(g_ext_fptr, config_data, layout, n_A, row_major_getrf_lda, lda_t);
+    SELECT_LDA(g_ext_fptr, g_config_data, layout, n_A, row_major_getrf_lda, lda_t);
 
     A_t = A;
 
@@ -311,8 +308,8 @@ double prepare_lapacke_getrf_run(integer datatype, int layout, integer m_A, inte
 }
 
 /*
- *  GETRF_API calls LAPACK interface of
- *  Singular value decomposition - gesvd
+ *  Call to LAPACK interface of
+ *  getrf to perform LU factorization.
  *  */
 void invoke_getrf(integer datatype, integer *m, integer *n, void *a, integer *lda, integer *ipiv,
                   integer *info)
@@ -343,37 +340,4 @@ void invoke_getrf(integer datatype, integer *m, integer *n, void *a, integer *ld
             break;
         }
     }
-}
-
-integer invoke_lapacke_getrf(integer datatype, int layout, integer m, integer n, void *a,
-                             integer lda, integer *ipiv)
-{
-    integer info = 0;
-    switch(datatype)
-    {
-        case FLOAT:
-        {
-            info = LAPACKE_sgetrf(layout, m, n, a, lda, ipiv);
-            break;
-        }
-
-        case DOUBLE:
-        {
-            info = LAPACKE_dgetrf(layout, m, n, a, lda, ipiv);
-            break;
-        }
-
-        case COMPLEX:
-        {
-            info = LAPACKE_cgetrf(layout, m, n, a, lda, ipiv);
-            break;
-        }
-
-        case DOUBLE_COMPLEX:
-        {
-            info = LAPACKE_zgetrf(layout, m, n, a, lda, ipiv);
-            break;
-        }
-    }
-    return info;
 }

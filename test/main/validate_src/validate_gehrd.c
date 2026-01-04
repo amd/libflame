@@ -7,12 +7,13 @@
  *  */
 
 #include "test_common.h"
+#include "test_prototype.h"
 
 extern double perf;
 extern double time_min;
 
 void validate_gehrd(char *tst_api, integer n, integer ilo, integer ihi, void *A, void *A_test,
-                    integer lda, void *tau, integer datatype, double err_thresh)
+                    integer lda, void *tau, integer datatype, double err_thresh, void *params)
 {
     void *Q = NULL, *work = NULL, *lambda = NULL;
     integer lwork = -1;

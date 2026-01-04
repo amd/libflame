@@ -7,6 +7,7 @@
  *  */
 
 #include "test_common.h"
+#include "test_prototype.h"
 
 extern double perf;
 extern double time_min;
@@ -14,7 +15,7 @@ extern double time_min;
 void validate_gesvd(char *tst_api, char *jobu, char *jobvt, integer m, integer n, void *A,
                     void *A_test, integer lda, void *s, void *s_test, void *U, integer ldu, void *V,
                     integer ldvt, integer datatype, double err_thresh, FILE *g_ext_fptr,
-                    char imatrix, void *scal)
+                    char imatrix, void *scal, void *params)
 {
     void *sigma = NULL, *Usigma = NULL;
     void *work = NULL, *U_temp = NULL, *V_temp = NULL;
@@ -32,8 +33,8 @@ void validate_gesvd(char *tst_api, char *jobu, char *jobvt, integer m, integer n
      * unexpected info value */
     FLA_TEST_PRINT_INVALID_STATUS(m, n, err_thresh);
 
-    n_U = (*jobu != 'A') ? ns : m;
-    m_V = (*jobvt != 'A') ? ns : n;
+    n_U = (!same_char(*jobu, 'A')) ? ns : m;
+    m_V = (!same_char(*jobvt, 'A')) ? ns : n;
 
     create_matrix(datatype, LAPACK_COL_MAJOR, m, n, &sigma, m);
     create_matrix(datatype, LAPACK_COL_MAJOR, m, n, &Usigma, m);
@@ -42,11 +43,11 @@ void validate_gesvd(char *tst_api, char *jobu, char *jobvt, integer m, integer n
     diagonalize_realtype_vector(datatype, s, sigma, m, n, m);
     /* In case of JOBU/JOBVT = O, modify ldu, ldvt to make use of the same U,V
        buffers for further validation similar to JOBZ=A/S */
-    if(*jobu == 'O')
+    if(same_char(*jobu, 'O'))
     {
         ldu = m;
     }
-    else if(*jobvt == 'O')
+    else if(same_char(*jobvt, 'O'))
     {
         ldvt = n;
     }
@@ -55,19 +56,19 @@ void validate_gesvd(char *tst_api, char *jobu, char *jobvt, integer m, integer n
     create_matrix(datatype, LAPACK_COL_MAJOR, m, m, &U_temp, ldu);
     create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &V_temp, ldvt);
 
-    if(*jobu == 'A' || *jobu == 'S')
+    if(same_char(*jobu, 'A') || same_char(*jobu, 'S'))
     {
         copy_matrix(datatype, "FULL", m, n_U, U, ldu_t, U_temp, ldu);
     }
-    if(*jobvt == 'A' || *jobvt == 'S')
+    if(same_char(*jobvt, 'A') || same_char(*jobvt, 'S'))
     {
         copy_matrix(datatype, "FULL", m_V, n, V, ldvt_t, V_temp, ldvt);
     }
     /* If jobu or jobvt is 'O' .The first min(m,n) columns/rows of singular vectors
        are overwritten on A output matrix (A_test).*/
-    if(*jobu == 'O')
+    if(same_char(*jobu, 'O'))
         copy_matrix(datatype, "FULL", m, n_U, A_test, lda, U_temp, ldu);
-    else if(*jobvt == 'O')
+    else if(same_char(*jobvt, 'O'))
         copy_matrix(datatype, "FULL", m_V, n, A_test, lda, V_temp, ldvt);
 
     switch(datatype)
@@ -80,9 +81,9 @@ void validate_gesvd(char *tst_api, char *jobu, char *jobvt, integer m, integer n
 
             /* Test 1
                compute norm(A - (U*sigma*Vt)) / (V * norm(A) * EPS)*/
-            if((*jobu != 'N' && *jobvt != 'N'))
+            if(!same_char(*jobu, 'N') && !same_char(*jobvt, 'N'))
             {
-                if(imatrix == 'O')
+                if(same_char(imatrix, 'O'))
                 {
                     for(int i = 0; i < n; i++)
                     {
@@ -97,7 +98,7 @@ void validate_gesvd(char *tst_api, char *jobu, char *jobvt, integer m, integer n
                        &m);
                 sgemm_("N", "N", &m, &n, &m_V, &s_one, Usigma, &m, V_temp, &ldvt, &s_n_one, A,
                        &lda);
-                if(imatrix == 'O')
+                if(same_char(imatrix, 'O'))
                 {
                     for(int i = 0; i < n; i++)
                     {
@@ -113,12 +114,12 @@ void validate_gesvd(char *tst_api, char *jobu, char *jobvt, integer m, integer n
 
             /* Test 2
                compute norm(I - U'*U) / (N * EPS)*/
-            if(*jobu != 'N')
+            if(!same_char(*jobu, 'N'))
                 resid2 = (float)check_orthogonal_matrix('T', datatype, U_temp, ns, m, ns, ldu);
 
             /* Test 3
                compute norm(I - V*V') / (N * EPS)*/
-            if(*jobvt != 'N')
+            if(!same_char(*jobvt, 'N'))
                 resid3 = (float)check_orthogonal_matrix('N', datatype, V_temp, ns, n, ns, ldvt);
 
             /* Test 4
@@ -134,7 +135,7 @@ void validate_gesvd(char *tst_api, char *jobu, char *jobvt, integer m, integer n
             {
                 /* Test 2: To check functionality compute (s_test - s) */
 
-                if(imatrix == 'O' || imatrix == 'U')
+                if(same_char(imatrix, 'O') || same_char(imatrix, 'U'))
                 {
                     *(float *)scal = 1.00 / *(float *)scal;
                     sscal_(&ns, scal, s, &i_one);
@@ -155,9 +156,9 @@ void validate_gesvd(char *tst_api, char *jobu, char *jobvt, integer m, integer n
 
             /* Test 1
                compute norm(A - (U*sigma*Vt)) / (V * norm(A) * EPS)*/
-            if((*jobu != 'N' && *jobvt != 'N'))
+            if(!same_char(*jobu, 'N') && !same_char(*jobvt, 'N'))
             {
-                if(imatrix == 'O')
+                if(same_char(imatrix, 'O'))
                 {
                     for(int i = 0; i < n; i++)
                     {
@@ -173,7 +174,7 @@ void validate_gesvd(char *tst_api, char *jobu, char *jobvt, integer m, integer n
                 dgemm_("N", "N", &m, &n, &m_V, &d_one, Usigma, &m, V_temp, &ldvt, &d_n_one, A,
                        &lda);
                 norm = fla_lapack_dlange("F", &m, &n, A, &lda, work);
-                if(imatrix == 'O')
+                if(same_char(imatrix, 'O'))
                 {
                     for(int i = 0; i < n; i++)
                     {
@@ -190,12 +191,12 @@ void validate_gesvd(char *tst_api, char *jobu, char *jobvt, integer m, integer n
 
             /* Test 2
                compute norm(I - U'*U) / (N * EPS)*/
-            if(*jobu != 'N')
+            if(!same_char(*jobu, 'N'))
                 resid2 = check_orthogonal_matrix('T', datatype, U_temp, ns, m, ns, ldu);
 
             /* Test 3
                compute norm(I - V*V') / (N * EPS)*/
-            if(*jobvt != 'N')
+            if(!same_char(*jobvt, 'N'))
                 resid3 = check_orthogonal_matrix('N', datatype, V_temp, ns, n, ns, ldvt);
 
             /* Test 4
@@ -209,7 +210,7 @@ void validate_gesvd(char *tst_api, char *jobu, char *jobvt, integer m, integer n
              * */
             if(g_ext_fptr == NULL)
             {
-                if(imatrix == 'O' || imatrix == 'U')
+                if(same_char(imatrix, 'O') || same_char(imatrix, 'U'))
                 {
                     *(double *)scal = 1.00 / *(double *)scal;
                     dscal_(&ns, scal, s, &i_one);
@@ -231,9 +232,9 @@ void validate_gesvd(char *tst_api, char *jobu, char *jobvt, integer m, integer n
 
             /* Test 1
                compute norm(A - (U*sigma*Vt)) / (V * norm(A) * EPS)*/
-            if((*jobu != 'N' && *jobvt != 'N'))
+            if(!same_char(*jobu, 'N') && !same_char(*jobvt, 'N'))
             {
-                if(imatrix == 'O')
+                if(same_char(imatrix, 'O'))
                 {
                     for(int i = 0; i < n; i++)
                     {
@@ -249,7 +250,7 @@ void validate_gesvd(char *tst_api, char *jobu, char *jobvt, integer m, integer n
                 cgemm_("N", "N", &m, &n, &m_V, &c_one, Usigma, &m, V_temp, &ldvt, &c_n_one, A,
                        &lda);
 
-                if(imatrix == 'O')
+                if(same_char(imatrix, 'O'))
                 {
                     for(int i = 0; i < n; i++)
                     {
@@ -265,12 +266,12 @@ void validate_gesvd(char *tst_api, char *jobu, char *jobvt, integer m, integer n
 
             /* Test 2
                compute norm(I - U'*U) / (N * EPS)*/
-            if(*jobu != 'N')
+            if(!same_char(*jobu, 'N'))
                 resid2 = (float)check_orthogonal_matrix('C', datatype, U_temp, ns, m, ns, ldu);
 
             /* Test 3
                compute norm(I - V*V') / (N * EPS)*/
-            if(*jobvt != 'N')
+            if(!same_char(*jobvt, 'N'))
                 resid3 = (float)check_orthogonal_matrix('N', datatype, V_temp, ns, n, ns, ldvt);
 
             /* Test 4
@@ -285,7 +286,7 @@ void validate_gesvd(char *tst_api, char *jobu, char *jobvt, integer m, integer n
             if(g_ext_fptr == NULL)
             {
                 /* To do : Validate for input generation for overflow and underflow. */
-                if(imatrix == 'O' || imatrix == 'U')
+                if(same_char(imatrix, 'O') || same_char(imatrix, 'U'))
                 {
                     /* Scaledown the sigma during overflow */
                     *(float *)scal = s_one / *(float *)scal;
@@ -307,9 +308,9 @@ void validate_gesvd(char *tst_api, char *jobu, char *jobvt, integer m, integer n
 
             /* Test 1
                compute norm(A - (U*sigma*Vt)) / (V * norm(A) * EPS)*/
-            if((*jobu != 'N' && *jobvt != 'N'))
+            if(!same_char(*jobu, 'N') && !same_char(*jobvt, 'N'))
             {
-                if(imatrix == 'O')
+                if(same_char(imatrix, 'O'))
                 {
                     for(int i = 0; i < n; i++)
                     {
@@ -324,7 +325,7 @@ void validate_gesvd(char *tst_api, char *jobu, char *jobvt, integer m, integer n
                        &m);
                 zgemm_("N", "N", &m, &n, &m_V, &z_one, Usigma, &m, V_temp, &ldvt, &z_n_one, A,
                        &lda);
-                if(imatrix == 'O')
+                if(same_char(imatrix, 'O'))
                 {
                     for(int i = 0; i < n; i++)
                     {
@@ -341,11 +342,11 @@ void validate_gesvd(char *tst_api, char *jobu, char *jobvt, integer m, integer n
 
             /* Test 2
                compute norm(I - U'*U) / (N * EPS)*/
-            if(*jobu != 'N')
+            if(!same_char(*jobu, 'N'))
                 resid2 = check_orthogonal_matrix('C', datatype, U_temp, ns, m, ns, ldu);
             /* Test 3
                compute norm(I - V*V') / (N * EPS)*/
-            if(*jobvt != 'N')
+            if(!same_char(*jobvt, 'N'))
                 resid3 = check_orthogonal_matrix('N', datatype, V_temp, ns, n, ns, ldvt);
 
             /* Test 4
@@ -361,7 +362,7 @@ void validate_gesvd(char *tst_api, char *jobu, char *jobvt, integer m, integer n
             {
                 /*To do : Validate for input generation for overflow and underflow.*/
 
-                if(imatrix == 'O' || imatrix == 'U')
+                if(same_char(imatrix, 'O') || same_char(imatrix, 'U'))
                 {
                     /* Scaledown the sigma during overflow */
                     *(double *)scal = d_one / *(double *)scal;

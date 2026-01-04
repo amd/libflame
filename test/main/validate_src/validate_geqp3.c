@@ -7,12 +7,14 @@
  *  */
 
 #include "test_common.h"
+#include "test_prototype.h"
 
 extern double perf;
 extern double time_min;
 
 void validate_geqp3(char *tst_api, integer m_A, integer n_A, void *A, void *A_test, integer lda,
-                    integer *jpvt, void *T_test, integer datatype, double err_thresh, char imatrix)
+                    integer *jpvt, void *T_test, integer datatype, double err_thresh, char imatrix,
+                    void *params)
 {
     void *Q = NULL, *R = NULL, *work = NULL;
     char NORM = '1';

@@ -6,6 +6,7 @@
 #if ENABLE_CPP_TEST
 #include <invoke_common.hh>
 #endif
+#include <invoke_lapacke.h>
 
 extern double perf;
 extern double time_min;
@@ -16,14 +17,19 @@ void fla_test_gehrd_experiment(char *tst_api, test_params_t *params, integer dat
                                integer p_cur, integer q_cur, integer pci, integer n_repeats,
                                integer einfo);
 void prepare_gehrd_run(integer n, integer *ilo, integer *ihi, void *A, integer lda, void *tau,
-                       integer datatype, integer n_repeats, double *time_min_, integer *info,
-                       integer interfacetype, int matrix_layout);
+                       integer datatype, integer *info, integer interfacetype, int matrix_layout,
+                       test_params_t *params);
 void invoke_gehrd(integer datatype, integer *n, integer *ilo, integer *ihi, void *a, integer *lda,
                   void *tau, void *work, integer *lwork, integer *info);
 double prepare_lapacke_gehrd_run(integer datatype, int layout, integer n, integer *ilo,
                                  integer *ihi, void *A, integer lda, void *tau, integer *info);
-integer invoke_lapacke_gehrd(integer datatype, int matrix_layout, integer n, integer ilo,
-                             integer ihi, void *a, integer lda, void *tau);
+
+/* Helper functions for Bit reproducibility tests */
+void store_gehrd_outputs(void *filename, integer datatype, integer n, integer ilo, integer ihi,
+                         void *A_Test, integer lda, void *tau, integer g_lwork, void *params);
+integer check_bit_reproducibility_gehrd(void *filename, integer datatype, integer n, integer ilo,
+                                        integer ihi, void *A_Test, integer lda, void *tau,
+                                        integer g_lwork, void *params);
 
 void fla_test_gehrd(integer argc, char **argv, test_params_t *params)
 {
@@ -32,7 +38,7 @@ void fla_test_gehrd(integer argc, char **argv, test_params_t *params)
     integer tests_not_run = 1, invalid_dtype = 0, einfo = 0;
     if(argc == 1)
     {
-        config_data = 1;
+        g_config_data = 1;
         fla_test_output_info("--- %s ---\n", op_str);
         fla_test_output_info("\n");
         fla_test_op_driver(front_str, SQUARE_INPUT, params, LIN, fla_test_gehrd_experiment);
@@ -66,6 +72,7 @@ void fla_test_gehrd(integer argc, char **argv, test_params_t *params)
         }
         g_lwork = strtoimax(argv[7], &endptr, CLI_DECIMAL_BASE);
         n_repeats = strtoimax(argv[8], &endptr, CLI_DECIMAL_BASE);
+        params->n_repeats = n_repeats;
 
         if(n_repeats > 0)
         {
@@ -120,6 +127,7 @@ void fla_test_gehrd_experiment(char *tst_api, test_params_t *params, integer dat
     integer ilo, ihi, info = 0;
     void *A = NULL, *A_Test = NULL, *tau = NULL;
     double residual, err_thresh;
+    void *filename = NULL;
 
     integer interfacetype = params->interfacetype;
     int layout = params->matrix_major;
@@ -130,7 +138,7 @@ void fla_test_gehrd_experiment(char *tst_api, test_params_t *params, integer dat
 
     /* If leading dimensions = -1, set them to default value
        when inputs are from config files */
-    if(config_data)
+    if(g_config_data)
     {
         if(lda == -1)
         {
@@ -145,40 +153,51 @@ void fla_test_gehrd_experiment(char *tst_api, test_params_t *params, integer dat
 
     /* Create input matrix parameters*/
     create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &A, lda);
+    create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &A_Test, lda);
     create_vector(datatype, &tau, n - 1);
 
-    if(g_ext_fptr != NULL)
+    if(!FLA_BRT_VERIFICATION_RUN)
     {
-        init_matrix_from_file(datatype, A, n, n, lda, g_ext_fptr);
-    }
-    else
-    {
-        if(FLA_EXTREME_CASE_TEST)
+        if(g_ext_fptr != NULL)
         {
-            init_matrix(datatype, A, n, n, lda, g_ext_fptr, params->imatrix_char);
-            AInitialized = 1;
+            init_matrix_from_file(datatype, A, n, n, lda, g_ext_fptr);
         }
-        else if(FLA_OVERFLOW_UNDERFLOW_TEST)
+        else
         {
-            rand_matrix(datatype, A, n, n, lda);
-            scale_matrix_underflow_overflow_gehrd(datatype, n, A, lda, params->imatrix_char);
-            AInitialized = 1;
+            if(FLA_EXTREME_CASE_TEST)
+            {
+                init_matrix(datatype, A, n, n, lda, g_ext_fptr, params->imatrix_char);
+                AInitialized = 1;
+            }
+            else if(FLA_OVERFLOW_UNDERFLOW_TEST)
+            {
+                rand_matrix(datatype, A, n, n, lda);
+                scale_matrix_underflow_overflow_gehrd(datatype, n, A, lda, params->imatrix_char);
+                AInitialized = 1;
+            }
+            /* Initialize matrix H with ILO and IHI conditions to generate hessenberg matrix */
+            get_generic_triangular_matrix(datatype, n, A, lda, ilo, ihi, AInitialized);
         }
-        /* Initialize matrix H with ILO and IHI conditions to generate hessenberg matrix */
-        get_generic_triangular_matrix(datatype, n, A, lda, ilo, ihi, AInitialized);
     }
+
+    /* This macro is used in the BRT test cases for the following purposes:
+     *    - In the Ground truth runs (BRT_char => G, F), the output is stored in a file for future
+     * reference
+     *    - In the verification runs (BRT_char => V, M), the output is loaded from the file and
+     * passed as input to the API
+     * */
+    FLA_BRT_PROCESS_SINGLE_INPUT(datatype, n, n, A, lda, "ddddd", n, ilo, ihi, lda, g_lwork)
 
     /* Make copy of matrix A. This is required to validate the API functionality */
-    create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &A_Test, lda);
     copy_matrix(datatype, "full", n, n, A, lda, A_Test, lda);
 
-    prepare_gehrd_run(n, &ilo, &ihi, A_Test, lda, tau, datatype, n_repeats, &time_min, &info,
-                      interfacetype, layout);
+    prepare_gehrd_run(n, &ilo, &ihi, A_Test, lda, tau, datatype, &info, interfacetype, layout,
+                      params);
 
+    /* Get the minimum time */
     /* Performance computation
-       (2/3)*(ihi - ilo)^2(2ihi + 2ilo + 3n) flops for real values
-       4*((2/3)*(ihi - ilo)^2(2ihi + 2ilo + 3n)) flops for complex values */
-
+    (2/3)*(ihi - ilo)^2(2ihi + 2ilo + 3n) flops for real values
+    4*((2/3)*(ihi - ilo)^2(2ihi + 2ilo + 3n)) flops for complex values */
     if(datatype == FLOAT || datatype == DOUBLE)
         perf = (double)((2.0 / 3.0) * pow((ihi - ilo), 2) * (2 * ihi + 2 * ilo + 3 * n)) / time_min
                / FLOPS_PER_UNIT_PERF;
@@ -188,9 +207,15 @@ void fla_test_gehrd_experiment(char *tst_api, test_params_t *params, integer dat
 
     /* Output Validation */
     FLA_TEST_CHECK_EINFO(residual, info, einfo);
-    if(!FLA_EXTREME_CASE_TEST)
+    IF_FLA_BRT_VALIDATION(
+        n, n,
+        store_gehrd_outputs(filename, datatype, n, ilo, ihi, A_Test, lda, tau, g_lwork, params),
+        validate_gehrd(tst_api, n, ilo, ihi, A, A_Test, lda, tau, datatype, residual, params),
+        check_bit_reproducibility_gehrd(filename, datatype, n, ilo, ihi, A_Test, lda, tau, g_lwork,
+                                        params))
+    else if(!FLA_EXTREME_CASE_TEST)
     {
-        validate_gehrd(tst_api, n, ilo, ihi, A, A_Test, lda, tau, datatype, residual);
+        validate_gehrd(tst_api, n, ilo, ihi, A, A_Test, lda, tau, datatype, residual, params);
     }
     else
     {
@@ -206,18 +231,20 @@ void fla_test_gehrd_experiment(char *tst_api, test_params_t *params, integer dat
     }
 
     /* Free up the buffers */
+free_buffers:
+    FLA_FREE_FILENAME(filename);
     free_matrix(A);
     free_matrix(A_Test);
     free_vector(tau);
 }
 
 void prepare_gehrd_run(integer n, integer *ilo, integer *ihi, void *A, integer lda, void *tau,
-                       integer datatype, integer n_repeats, double *time_min_, integer *info,
-                       integer interfacetype, int layout)
+                       integer datatype, integer *info, integer interfacetype, int layout,
+                       test_params_t *params)
 {
     void *A_save = NULL, *work = NULL, *tau_test = NULL;
-    integer i, lwork;
-    double t_min = 1e9, exe_time;
+    integer lwork;
+    double exe_time;
 
     /* Make a copy of the input matrix A. Same input values will be passed in each itertaion.*/
     create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &A_save, lda);
@@ -260,7 +287,7 @@ void prepare_gehrd_run(integer n, integer *ilo, integer *ihi, void *A, integer l
     }
 
     *info = 0;
-    for(i = 0; i < n_repeats && *info == 0; ++i)
+    FLA_EXEC_LOOP_BEGIN
     {
         /* Restore input matrix H and Z value and allocate memory to output buffers
            for each iteration*/
@@ -291,8 +318,8 @@ void prepare_gehrd_run(integer n, integer *ilo, integer *ihi, void *A, integer l
             exe_time = fla_test_clock() - exe_time;
         }
 
-        /* Get the best execution time */
-        t_min = fla_min(t_min, exe_time);
+        /* Update ctx and loop conditions */
+        FLA_EXEC_LOOP_UPDATE_WITH_INFO
 
         copy_vector(datatype, n - 1, tau_test, 1, tau, 1);
 
@@ -300,7 +327,6 @@ void prepare_gehrd_run(integer n, integer *ilo, integer *ihi, void *A, integer l
         free_vector(work);
         free_vector(tau_test);
     }
-    *time_min_ = t_min;
 
     free_matrix(A_save);
 }
@@ -313,7 +339,7 @@ double prepare_lapacke_gehrd_run(integer datatype, int layout, integer n, intege
     void *A_t = NULL;
 
     /* Configure leading dimensions as per the input matrix layout */
-    SELECT_LDA(g_ext_fptr, config_data, layout, n, row_major_gehrd_lda, lda_t);
+    SELECT_LDA(g_ext_fptr, g_config_data, layout, n, row_major_gehrd_lda, lda_t);
 
     A_t = A;
 
@@ -374,35 +400,27 @@ void invoke_gehrd(integer datatype, integer *n, integer *ilo, integer *ihi, void
     }
 }
 
-integer invoke_lapacke_gehrd(integer datatype, int layout, integer n, integer ilo, integer ihi,
-                             void *a, integer lda, void *tau)
+void store_gehrd_outputs(void *filename, integer datatype, integer n, integer ilo, integer ihi,
+                         void *A_Test, integer lda, void *tau, integer g_lwork, void *params)
 {
-    integer info = 0;
-    switch(datatype)
-    {
-        case FLOAT:
-        {
-            info = LAPACKE_sgehrd(layout, n, ilo, ihi, a, lda, tau);
-            break;
-        }
+    /* Create and open a file for storing Ground truth*/
+    FLA_OPEN_GT_FILE_STORE
 
-        case DOUBLE:
-        {
-            info = LAPACKE_dgehrd(layout, n, ilo, ihi, a, lda, tau);
-            break;
-        }
+    FLA_STORE_BRT_MATRIX(datatype, n, n, A_Test, lda)
+    FLA_STORE_BRT_VECTOR(datatype, n - 1, tau)
 
-        case COMPLEX:
-        {
-            info = LAPACKE_cgehrd(layout, n, ilo, ihi, a, lda, tau);
-            break;
-        }
+    fclose(gt_file);
+}
+integer check_bit_reproducibility_gehrd(void *filename, integer datatype, integer n, integer ilo,
+                                        integer ihi, void *A_Test, integer lda, void *tau,
+                                        integer g_lwork, void *params)
+{
+    /* Open the file for reading Ground truth */
+    FLA_OPEN_GT_FILE_READ
 
-        case DOUBLE_COMPLEX:
-        {
-            info = LAPACKE_zgehrd(layout, n, ilo, ihi, a, lda, tau);
-            break;
-        }
-    }
-    return info;
+    FLA_VERIFY_BRT_MATRIX(datatype, n, n, A_Test, lda)
+    FLA_VERIFY_BRT_VECTOR(datatype, n - 1, tau)
+
+    fclose(gt_file);
+    return 1;
 }

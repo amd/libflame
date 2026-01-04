@@ -8,6 +8,10 @@
 
 */
 
+/*
+ *     Modifications Copyright (c) 2025 Advanced Micro Devices, Inc.  All rights reserved.
+ */
+
 #include "FLAME.h"
 
 FLA_Error FLA_Chol_unb_external( FLA_Uplo uplo, FLA_Obj A )
@@ -24,6 +28,7 @@ FLA_Error FLA_Chol_unb_external( FLA_Uplo uplo, FLA_Obj A )
 
   if ( FLA_Obj_has_zero_dim( A ) ) return FLA_SUCCESS;
 
+  info = 0;
   datatype = FLA_Obj_datatype( A );
 
   m_A      = FLA_Obj_length( A );

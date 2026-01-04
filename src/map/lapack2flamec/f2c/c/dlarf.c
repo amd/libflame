@@ -7,6 +7,9 @@
  *     Modifications Copyright (c) 2024-2025 Advanced Micro Devices, Inc.  All rights reserved.
  */
 #include "FLA_f2c.h" /* Table of constant values */
+#if FLA_ENABLE_AOCL_BLAS
+#include "blis.h"
+#endif
 
 static doublereal c_b4 = 1.;
 static doublereal c_b5 = 0.;
@@ -143,7 +146,16 @@ void dlarf_(char *side, integer *m, integer *n, doublereal *v, integer *incv, do
 #ifdef FLA_ENABLE_AMD_OPT
     extern void fla_dlarf_small_incv1_simd(integer lastv, integer lastc, double *c__, integer ldc,
                                            double *v, double tau, double *work);
+#if !FLA_ENABLE_AOCL_BLAS
+    extern doublereal ddot_(integer *, doublereal *, integer *, doublereal *, integer *);
+    extern void daxpy_(integer *, doublereal *, doublereal *, integer *, doublereal *, integer *);
 #endif
+    void fla_dlarf_left_tuning_params(integer m, integer n, FLA_Bool * use_blocked_flag,
+                                      integer * nthreads);
+    void fla_dlarf_right_tuning_params(integer m, integer n, integer * block_size,
+                                       integer * nthreads);
+#endif
+#if !FLA_ENABLE_AOCL_BLAS
     extern /* Subroutine */
         void
         dger_(integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *,
@@ -153,6 +165,7 @@ void dlarf_(char *side, integer *m, integer *n, doublereal *v, integer *incv, do
         void
         dgemv_(char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *,
                integer *, doublereal *, doublereal *, integer *);
+#endif
     integer lastc, lastv;
     extern integer iladlc_(integer *, integer *, doublereal *, integer *),
         iladlr_(integer *, integer *, doublereal *, integer *);
@@ -244,6 +257,9 @@ void dlarf_(char *side, integer *m, integer *n, doublereal *v, integer *incv, do
                                        && (lastv >= FLA_DGEMV_DGER_SIMD_SMALL_THRESH_M
                                            && lastv <= FLA_DGEMV_DGER_SIMD_SMALL_THRESH);
 
+            /* Initialize global context data */
+            aocl_fla_init();
+
             /* If the size of the matrix is small and incv =1, use the optimized path */
             if(min_lastc_lastv && *incv == c__1 && FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX2))
             {
@@ -252,14 +268,60 @@ void dlarf_(char *side, integer *m, integer *n, doublereal *v, integer *incv, do
             }
             else
             {
-                /* w(1:lastc,1) := C(1:lastv,1:lastc)**T * v(1:lastv,1) */
-                dgemv_("Transpose", &lastv, &lastc, &c_b4, &c__[c_offset], ldc, &v[1], incv, &c_b5,
-                       &work[1], &c__1);
 
-                /* C(1:lastv,1:lastc) := C(...) - v(1:lastv,1) * w(1:lastc,1)**T*/
-                dger_(&lastv, &lastc, &d__1, &v[1], incv, &work[1], &c__1, &c__[c_offset], ldc);
-            }
+                FLA_Bool use_blocked = 0;
+                integer opt_nthreads = 1;
+
+                fla_dlarf_left_tuning_params(lastv, lastc, &use_blocked, &opt_nthreads);
+
+                /* If use_blocked is 1, process in blocks */
+                if(use_blocked)
+                {
+                    /* Process in blocks */
+#ifdef FLA_OPENMP_MULTITHREADING
+#pragma omp parallel for num_threads(opt_nthreads) private(i__)
 #endif
+                    /* Loop for each column of C */
+                    for(i__ = 1; i__ <= lastc; ++i__)
+                    {
+                        /* W(i) =  C(1:lastv,i)**T * v(1:lastv,1)  */
+                        work[i__] = ddot_(&lastv, &v[1], incv, &c__[i__ * *ldc + 1], &c__1);
+                        /* C(1:lastv,i) = C(1:lastv,i) - v(1:lastv,1) * -tau * W(i) */
+                        doublereal d__2 = -(*tau) * work[i__];
+                        daxpy_(&lastv, &d__2, &v[1], incv, &c__[i__ * *ldc + 1], &c__1);
+                    }
+                }
+                else
+                {
+                    /* Process in a single call */
+                    /* w(1:lastc,1) := C(1:lastv,1:lastc)**T * v(1:lastv,1) */
+#if FLA_ENABLE_AOCL_BLAS
+                    if(FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX512) && *incv > 0)
+                    {
+                        /* Use direct single threaded BLIS kernel */
+                        bli_dgemv_t_zen4_int(BLIS_CONJUGATE, BLIS_NO_CONJUGATE, lastv, lastc, &c_b4,
+                                             &c__[c_offset], 1, *ldc, &v[1], *incv, &c_b5, &work[1],
+                                             c__1, NULL);
+                    }
+                    else
+                    {
+#ifdef FLA_OPENMP_MULTITHREADING
+#pragma omp teams num_teams(1) thread_limit(1)
+#endif
+                        {
+                            dgemv_("Transpose", &lastv, &lastc, &c_b4, &c__[c_offset], ldc, &v[1],
+                                   incv, &c_b5, &work[1], &c__1);
+                        }
+                    }
+#else
+                    dgemv_("Transpose", &lastv, &lastc, &c_b4, &c__[c_offset], ldc, &v[1], incv,
+                           &c_b5, &work[1], &c__1);
+#endif
+                    /* C(1:lastv,1:lastc) := C(...) - v(1:lastv,1) * w(1:lastc,1)**T*/
+                    dger_(&lastv, &lastc, &d__1, &v[1], incv, &work[1], &c__1, &c__[c_offset], ldc);
+                }
+            }
+#endif /* FLA_ENABLE_AMD_OPT */
         }
     }
     else
@@ -267,12 +329,75 @@ void dlarf_(char *side, integer *m, integer *n, doublereal *v, integer *incv, do
         /* Form C * H */
         if(lastv > 0)
         {
+#ifndef FLA_ENABLE_AMD_OPT
             /* w(1:lastc,1) := C(1:lastc,1:lastv) * v(1:lastv,1) */
             dgemv_("No transpose", &lastc, &lastv, &c_b4, &c__[c_offset], ldc, &v[1], incv, &c_b5,
                    &work[1], &c__1);
             /* C(1:lastc,1:lastv) := C(...) - w(1:lastc,1) * v(1:lastv,1)**T */
             d__1 = -(*tau);
             dger_(&lastc, &lastv, &d__1, &work[1], &c__1, &v[1], incv, &c__[c_offset], ldc);
+#else
+            integer opt_nthreads = 1;
+            integer nb = 0;
+
+            fla_dlarf_right_tuning_params(lastc, lastv, &nb, &opt_nthreads);
+
+            d__1 = -(*tau);
+
+            /* If nb is non zero, process in blocks */
+            if(nb && opt_nthreads > 1)
+            {
+                /* The first panel will process starting unaligned elements
+                 * to ensure that all other panels aligned memory addresses
+                 */
+                uint64_t unaligned_bytes
+                    = ((uint64_t)(c__ + c_offset)) % ((nb * sizeof(doublereal)));
+                integer first_thread_rows
+                    = fla_min((nb - (unaligned_bytes / sizeof(doublereal))), lastc);
+                integer panels
+                    = (!!first_thread_rows) + (((lastc - first_thread_rows) + (nb - 1)) / nb);
+
+#ifdef FLA_OPENMP_MULTITHREADING
+#pragma omp parallel for num_threads(opt_nthreads) private(i__)
+#endif
+                for(i__ = 1; i__ <= panels; i__ += 1)
+                {
+                    integer completed_rows = i__ == 1 ? 0 : (i__ - 2) * nb + first_thread_rows;
+                    integer current_block_size
+                        = i__ == 1 ? first_thread_rows : fla_min(nb, lastc - completed_rows);
+                    integer cur_idx = completed_rows + 1;
+                    /* w(1:lastc,1) := C(1:lastc,1:lastv) * v(1:lastv,1) */
+                    dgemv_("No transpose", &current_block_size, &lastv, &c_b4,
+                           &c__[c_dim1 + cur_idx], ldc, &v[1], incv, &c_b5, &work[cur_idx], &c__1);
+                    dger_(&current_block_size, &lastv, &d__1, &work[cur_idx], &c__1, &v[1], incv,
+                          &c__[c_dim1 + cur_idx], ldc);
+                }
+            }
+            else
+            {
+                /* w(1:lastc,1) := C(1:lastc,1:lastv) * v(1:lastv,1) */
+#if FLA_ENABLE_AOCL_BLAS
+                aocl_fla_init();
+                if(FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX512) && *incv > 0)
+                {
+                    bli_dgemv_n_zen4_int_40x2_st(BLIS_NO_TRANSPOSE, BLIS_NO_CONJUGATE, lastc, lastv,
+                                                 &c_b4, &c__[c_offset], c__1, c_dim1, &v[1], *incv,
+                                                 &c_b5, &work[1], c__1, NULL);
+                }
+                else
+                {
+                    dgemv_("No transpose", &lastc, &lastv, &c_b4, &c__[c_offset], ldc, &v[1], incv,
+                           &c_b5, &work[1], &c__1);
+                }
+#else
+                dgemv_("No transpose", &lastc, &lastv, &c_b4, &c__[c_offset], ldc, &v[1], incv,
+                       &c_b5, &work[1], &c__1);
+#endif
+                /* C(1:lastc,1:lastv) := C(...) - w(1:lastc,1) * v(1:lastv,1)**T */
+                d__1 = -(*tau);
+                dger_(&lastc, &lastv, &d__1, &work[1], &c__1, &v[1], incv, &c__[c_offset], ldc);
+            }
+#endif /* FLA_ENABLE_AMD_OPT */
         }
     }
     AOCL_DTL_TRACE_LOG_EXIT
@@ -280,3 +405,87 @@ void dlarf_(char *side, integer *m, integer *n, doublereal *v, integer *incv, do
     /* End of DLARF */
 }
 /* dlarf_ */
+
+#ifdef FLA_ENABLE_AMD_OPT
+void fla_dlarf_left_tuning_params(integer m, integer n, FLA_Bool *use_blocked_flag,
+                                  integer *nthreads)
+{
+    extern int fla_thread_get_num_threads(void);
+    integer num_elems = m * n;
+    if(num_elems < FLA_DLARF_L_THRESH_UNBLOCKED)
+    {
+        *use_blocked_flag = 0;
+        return;
+    }
+
+    integer max_available_threads = fla_thread_get_num_threads();
+
+    /* Special case for 1 thread */
+    if(max_available_threads == 1)
+    {
+        *nthreads = 1;
+        /* Use blocked code for large sizes as it is more cache friendly */
+        if(m > FLA_DLARF_L_ST_BLOCKED_THRESH_M && n > FLA_DLARF_L_ST_BLOCKED_THRESH_N)
+        {
+            *use_blocked_flag = 1;
+        }
+        else
+        {
+            *use_blocked_flag = 0;
+        }
+        return;
+    }
+
+    /* General case */
+
+    integer opt_n_threads = 1;
+
+    if(num_elems < FLA_DLARF_L_THRESH_THREAD_8)
+    {
+        opt_n_threads = fla_min(8, n / 2);
+    }
+    else if(num_elems < FLA_DLARF_L_THRESH_THREAD_64)
+    {
+        opt_n_threads = fla_min(64, n / 2);
+    }
+    else
+    {
+        opt_n_threads = fla_min(128, n / 2);
+    }
+
+    *use_blocked_flag = 1;
+    *nthreads = fla_min(opt_n_threads, max_available_threads);
+}
+
+void fla_dlarf_right_tuning_params(integer m, integer n, integer *block_size, integer *nthreads)
+{
+    extern int fla_thread_get_num_threads(void);
+    integer num_elems = m * n;
+
+    if(num_elems < FLA_DLARF_R_THRESH_UNBLOCKED)
+    {
+        *block_size = 0;
+        return;
+    }
+
+    integer max_available_threads = fla_thread_get_num_threads();
+    integer opt_n_threads = 1;
+
+    if(num_elems < FLA_DLARF_R_THRESH_THREAD_8)
+    {
+        opt_n_threads = fla_min(8, m / 2);
+    }
+    else if(num_elems < FLA_DLARF_R_THRESH_THREAD_64)
+    {
+        opt_n_threads = fla_min(64, m / 2);
+    }
+    else
+    {
+        opt_n_threads = fla_min(128, m / 2);
+    }
+
+    *block_size = FLA_DLARF_R_BLOCK_SIZE;
+    *nthreads = fla_min(opt_n_threads, max_available_threads);
+}
+
+#endif /* FLA_ENABLE_AMD_OPT */

@@ -7,12 +7,14 @@
  *  */
 
 #include "test_common.h"
+#include "test_prototype.h"
 
 extern double perf;
 extern double time_min;
 
 void validate_gbtrf(char *tst_api, integer m_A, integer n_A, integer kl, integer ku, void *AB,
-                    void *AB_test, integer ldab, integer *IPIV, integer datatype, double err_thresh)
+                    void *AB_test, integer ldab, integer *IPIV, integer datatype, double err_thresh,
+                    void *params)
 {
     void *work = NULL;
     double residual;

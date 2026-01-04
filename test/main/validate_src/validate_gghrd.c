@@ -7,6 +7,7 @@
  *  */
 
 #include "test_common.h"
+#include "test_prototype.h"
 
 extern double perf;
 extern double time_min;
@@ -14,12 +15,12 @@ extern double time_min;
 void validate_gghrd_int(char *tst_api, char *compq, char *compz, integer n, void *A, void *A_test,
                         integer lda, void *B, void *B_test, integer ldb, void *Q, void *Q_test,
                         integer ldq, void *Z, void *Z_test, integer ldz, integer datatype,
-                        double *resid)
+                        double *resid, void *params)
 {
     void *work = NULL, *lambda = NULL, *alambda = NULL, *Q_tmp = NULL, *Z_tmp = NULL;
 
     /* If compq=N or/and compz=N, just compare A/A_test and B/B_test matrices and return */
-    if(*compq == 'N' || *compz == 'N')
+    if(same_char(*compq, 'N') || same_char(*compz, 'N'))
     {
         switch(datatype)
         {
@@ -121,7 +122,7 @@ void validate_gghrd_int(char *tst_api, char *compq, char *compz, integer n, void
                 | A - Q**T * Q_test * H  * Z_test**T * Z  | / ( |A| n ulp ) */
             norm_A = fla_lapack_slange("1", &n, &n, A, &lda, work);
 
-            if(*compq == 'V')
+            if(same_char(*compq, 'V'))
             {
                 /* Compute Q_tmp = Q**T * Q_test
                    Compute lambda = Q**T * Q_test * H */
@@ -134,7 +135,7 @@ void validate_gghrd_int(char *tst_api, char *compq, char *compz, integer n, void
                 sgemm_("N", "N", &n, &n, &n, &s_one, Q_test, &ldq, A_test, &lda, &s_zero, lambda,
                        &n);
             }
-            if(*compz == 'V')
+            if(same_char(*compz, 'V'))
             {
                 /* Compute Z_tmp = Z_test**T * Z
                    Compute A = A - lambda * Z_test**T * Z */
@@ -152,7 +153,7 @@ void validate_gghrd_int(char *tst_api, char *compq, char *compz, integer n, void
             /* Test 2
                 | B - Q**T * Q_test *  T * Z_test**T * Z  | / ( |B| n ulp ) */
             norm_T = fla_lapack_slange("1", &n, &n, B, &ldb, work);
-            if(*compq == 'V')
+            if(same_char(*compq, 'V'))
             {
                 /* Compute lambda = Q_tmp * T */
                 sgemm_("N", "N", &n, &n, &n, &s_one, Q_tmp, &n, B_test, &ldb, &s_zero, lambda, &n);
@@ -163,7 +164,7 @@ void validate_gghrd_int(char *tst_api, char *compq, char *compz, integer n, void
                 sgemm_("N", "N", &n, &n, &n, &s_one, Q_test, &ldq, B_test, &ldb, &s_zero, lambda,
                        &n);
             }
-            if(*compz == 'V')
+            if(same_char(*compz, 'V'))
             {
                 /* Compute B = B - lambda * Z_tmp */
                 sgemm_("N", "N", &n, &n, &n, &s_one, lambda, &n, Z_tmp, &n, &s_n_one, B, &ldb);
@@ -195,7 +196,7 @@ void validate_gghrd_int(char *tst_api, char *compq, char *compz, integer n, void
                 | A - Q**T * Q_test * H  * Z_test**T * Z  | / ( |A| n ulp ) */
             norm_A = fla_lapack_dlange("1", &n, &n, A, &lda, work);
 
-            if(*compq == 'V')
+            if(same_char(*compq, 'V'))
             {
                 /* Compute Q_tmp = Q**T * Q_test
                    Compute lambda = Q**T * Q_test * H */
@@ -208,7 +209,7 @@ void validate_gghrd_int(char *tst_api, char *compq, char *compz, integer n, void
                 dgemm_("N", "N", &n, &n, &n, &d_one, Q_test, &ldq, A_test, &lda, &d_zero, lambda,
                        &n);
             }
-            if(*compz == 'V')
+            if(same_char(*compz, 'V'))
             {
                 /* Compute Z_tmp = Z_test**T * Z
                    Compute A = A - lambda * Z_test**T * Z */
@@ -226,7 +227,7 @@ void validate_gghrd_int(char *tst_api, char *compq, char *compz, integer n, void
             /* Test 2
                 | B - Q**H * Q_test *  T * Z_test**H * Z  | / ( |B| n ulp ) */
             norm_B = fla_lapack_dlange("1", &n, &n, B, &ldb, work);
-            if(*compq == 'V')
+            if(same_char(*compq, 'V'))
             {
                 /* Compute lambda = Q_tmp * T */
                 dgemm_("N", "N", &n, &n, &n, &d_one, Q_tmp, &n, B_test, &ldb, &d_zero, lambda, &n);
@@ -237,7 +238,7 @@ void validate_gghrd_int(char *tst_api, char *compq, char *compz, integer n, void
                 dgemm_("N", "N", &n, &n, &n, &d_one, Q_test, &ldq, B_test, &ldb, &d_zero, lambda,
                        &n);
             }
-            if(*compz == 'V')
+            if(same_char(*compz, 'V'))
             {
                 /* Compute B = B - lambda * Z_tmp */
                 dgemm_("N", "N", &n, &n, &n, &d_one, lambda, &n, Z_tmp, &n, &d_n_one, B, &ldb);
@@ -268,7 +269,7 @@ void validate_gghrd_int(char *tst_api, char *compq, char *compz, integer n, void
             /* Test 1
                 | A - Q**H * Q_test * H  * Z_test**H * Z  | / ( |A| n ulp ) */
             norm_A = fla_lapack_clange("1", &n, &n, A, &lda, work);
-            if(*compq == 'V')
+            if(same_char(*compq, 'V'))
             {
                 /* Compute Q_tmp = Q**H * Q_test
                    Compute lambda = Q**H * Q_test * H */
@@ -281,7 +282,7 @@ void validate_gghrd_int(char *tst_api, char *compq, char *compz, integer n, void
                 cgemm_("N", "N", &n, &n, &n, &c_one, Q_test, &ldq, A_test, &lda, &c_zero, lambda,
                        &n);
             }
-            if(*compz == 'V')
+            if(same_char(*compz, 'V'))
             {
                 /* Compute Z_tmp = Z_test**H * Z
                    Compute A = A - lambda * Z_test**H * Z */
@@ -299,7 +300,7 @@ void validate_gghrd_int(char *tst_api, char *compq, char *compz, integer n, void
             /* Test 2
                 | B - Q**H * Q_test *  T * Z_test**H * Z  | / ( |B| n ulp ) */
             norm_B = fla_lapack_clange("1", &n, &n, B, &ldb, work);
-            if(*compq == 'V')
+            if(same_char(*compq, 'V'))
             {
                 /* Compute lambda = Q_tmp * T */
                 cgemm_("N", "N", &n, &n, &n, &c_one, Q_tmp, &n, B_test, &ldb, &c_zero, lambda, &n);
@@ -310,7 +311,7 @@ void validate_gghrd_int(char *tst_api, char *compq, char *compz, integer n, void
                 cgemm_("N", "N", &n, &n, &n, &c_one, Q_test, &ldq, B_test, &ldb, &c_zero, lambda,
                        &n);
             }
-            if(*compz == 'V')
+            if(same_char(*compz, 'V'))
             {
                 /* Compute B = B - lambda * Z_tmp */
                 cgemm_("N", "N", &n, &n, &n, &c_one, lambda, &n, Z_tmp, &n, &c_n_one, B, &ldb);
@@ -341,7 +342,7 @@ void validate_gghrd_int(char *tst_api, char *compq, char *compz, integer n, void
             /* Test 1
                 | A - Q**H * Q_test * H  * Z_test**H * Z  | / ( |A| n ulp ) */
             norm_A = fla_lapack_zlange("1", &n, &n, A, &lda, work);
-            if(*compq == 'V')
+            if(same_char(*compq, 'V'))
             {
                 /* Compute Q_tmp = Q**H * Q_test
                    Compute lambda = Q**H * Q_test * H */
@@ -354,7 +355,7 @@ void validate_gghrd_int(char *tst_api, char *compq, char *compz, integer n, void
                 zgemm_("N", "N", &n, &n, &n, &z_one, Q_test, &ldq, A_test, &lda, &z_zero, lambda,
                        &n);
             }
-            if(*compz == 'V')
+            if(same_char(*compz, 'V'))
             {
                 /* Compute Z_tmp = Z_test**H * Z
                    Compute A = A - lambda * Z_test**H * Z */
@@ -372,7 +373,7 @@ void validate_gghrd_int(char *tst_api, char *compq, char *compz, integer n, void
             /* Test 2
                 | B - Q**H * Q_test *  T * Z_test**H * Z  | / ( |B| n ulp ) */
             norm_B = fla_lapack_zlange("1", &n, &n, B, &ldb, work);
-            if(*compq == 'V')
+            if(same_char(*compq, 'V'))
             {
                 /* Compute lambda = Q_tmp * T */
                 zgemm_("N", "N", &n, &n, &n, &z_one, Q_tmp, &n, B_test, &ldb, &z_zero, lambda, &n);
@@ -383,7 +384,7 @@ void validate_gghrd_int(char *tst_api, char *compq, char *compz, integer n, void
                 zgemm_("N", "N", &n, &n, &n, &z_one, Q_test, &ldq, B_test, &ldb, &z_zero, lambda,
                        &n);
             }
-            if(*compz == 'V')
+            if(same_char(*compz, 'V'))
             {
                 /* Compute B = B - lambda * Z_tmp */
                 zgemm_("N", "N", &n, &n, &n, &z_one, lambda, &n, Z_tmp, &n, &z_n_one, B, &ldb);
@@ -417,7 +418,7 @@ void validate_gghrd_int(char *tst_api, char *compq, char *compz, integer n, void
 void validate_gghrd(char *tst_api, char *compq, char *compz, integer n, void *A, void *A_test,
                     integer lda, void *B, void *B_test, integer ldb, void *Q, void *Q_test,
                     integer ldq, void *Z, void *Z_test, integer ldz, integer datatype,
-                    double err_thresh)
+                    double err_thresh, void *params)
 {
     double residual, resid[6];
 
@@ -434,7 +435,7 @@ void validate_gghrd(char *tst_api, char *compq, char *compz, integer n, void *A,
     resid[0] = resid[1] = resid[2] = 0.;
     resid[3] = resid[4] = resid[5] = 0.;
     validate_gghrd_int(tst_api, compq, compz, n, A, A_test, lda, B, B_test, ldb, Q, Q_test, ldq, Z,
-                       Z_test, ldz, datatype, resid);
+                       Z_test, ldz, datatype, resid, params);
 
     residual = fla_test_max(resid[0], resid[1]);
     residual = fla_test_max(residual, resid[2]);

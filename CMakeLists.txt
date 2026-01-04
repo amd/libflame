@@ -49,10 +49,20 @@ find_package(Python3 REQUIRED COMPONENTS Interpreter)
 ### Making LF_ISA_CONFIG case insensitive ###
 string(TOLOWER "${LF_ISA_CONFIG}" lf_isa_config_lower)
 
-if ("${lf_isa_config_lower}" STREQUAL "none" OR "${lf_isa_config_lower}" STREQUAL "avx" OR "${lf_isa_config_lower}" STREQUAL "avx2" OR "${lf_isa_config_lower}" STREQUAL "avx512" OR "${lf_isa_config_lower}" STREQUAL "auto")
-   message("Machine ISA configuration set to ${LF_ISA_CONFIG}")
+if (
+	"${lf_isa_config_lower}" STREQUAL "none"
+	OR "${lf_isa_config_lower}" STREQUAL "avx"
+	OR "${lf_isa_config_lower}" STREQUAL "avx2"
+	OR "${lf_isa_config_lower}" STREQUAL "avx2-strict"
+	OR "${lf_isa_config_lower}" STREQUAL "avx512"
+	OR "${lf_isa_config_lower}" STREQUAL "avx512-strict"
+	OR "${lf_isa_config_lower}" STREQUAL "auto"
+)
+	message(STATUS "Machine ISA configuration set to ${LF_ISA_CONFIG}")
 else()
-   message(FATAL_ERROR "Machine ISA configuration error, valid values are AVX, AVX2, AVX512 and auto")
+	message(FATAL_ERROR
+		"Machine ISA configuration error, valid values are "
+		"AVX, AVX2, AVX2-STRICT, AVX512, AVX512-STRICT and auto")
 endif()
 
 if (${lf_isa_config_lower} STREQUAL "auto")
@@ -146,6 +156,19 @@ set_property(CACHE ENABLE_AOCL_DTL PROPERTY STRINGS TRACE_AND_LOG TRACE LOG OFF 
 option (ENABLE_EMBED_AOCLUTILS "Enables embedding aocl-utils library in AOCL-LAPACK" OFF)
 option (ENABLE_LAPACKE_LSAME_FORTRAN_STRLEN " For LAPACKE interface enables lsame arguments length based on Fortran interface " OFF)
 option (ENABLE_ASAN "Enable Address Sanitizer (Debug build)" OFF)
+# By default build LAPACKE Index-32 API library
+option(BUILD_INDEX64 "Build LAPACKE Index-64 API libraries" OFF)
+if(BUILD_INDEX64)
+  set(LAPACKELIB "lapacke64")
+else()
+  set(LAPACKELIB "lapacke")
+endif()
+
+# By default build LAPACKE Index-64 API as extended API for supported compilers only.
+#TODO : Require lapack_64.h to build LAPACKE Index-64 API.
+option(BUILD_INDEX64_EXT_API
+  "Build LAPACKE Index-64 API as extended API with _64 suffix" OFF)
+message(STATUS "Build LAPACKE Index-64 API as extended API with _64 suffix: ${BUILD_INDEX64_EXT_API}")
 
 message(STATUS "CMAKE_BUILD_TYPE : ${CMAKE_BUILD_TYPE}")
 if(WIN32)
@@ -162,6 +185,20 @@ set(AOCL_ROOT "" CACHE STRING "AOCL-BLAS installation path")
 
 
 message(STATUS "checking SIMD  ")
+
+# Accept fixed/forced variants and map them to a compile-time definition
+if("${lf_isa_config_lower}" STREQUAL "avx2-strict" )
+    message(STATUS "LF_ISA_CONFIG requests a compile-time forced AVX2 ISA")
+    # define compile-time forced ISA macro for C code (FLA_Context.c expects FLA_STRICT_ARCH)
+    add_definitions(-DFLA_STRICT_ARCH=FLA_ARCH_AVX2)
+    # normalize to base token so later compiler flag logic still applies
+    set(lf_isa_config_lower "avx2")
+elseif("${lf_isa_config_lower}" STREQUAL "avx512-strict" )
+    message(STATUS "LF_ISA_CONFIG requests a compile-time forced AVX512 ISA")
+    add_definitions(-DFLA_STRICT_ARCH=FLA_ARCH_AVX512)
+    set(lf_isa_config_lower "avx512")
+endif()
+
 if(WIN32)
 	if(${lf_isa_config_lower} STREQUAL "avx512")
 	add_definitions(/arch:AVX512)
@@ -179,7 +216,12 @@ elseif(UNIX)
 	else()
 		message(STATUS "No ISA flag set")
 	endif()
-	set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${COMPILER_OPTIMIZATION_FLAGS}")
+	set(COMPILE_FLAGS "-fstack-protector-strong -fpie -Wformat -Wformat-security")
+	set(LINKER_FLAGS "-pie -Wl,-z,relro -Wl,-z,now")
+	set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${COMPILER_OPTIMIZATION_FLAGS} ${COMPILE_FLAGS}")
+	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${COMPILER_OPTIMIZATION_FLAGS} ${COMPILE_FLAGS}")
+	set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${LINKER_FLAGS}")
+	set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} ${LINKER_FLAGS}")
 else()
 	message(STATUS "OS UNKNOWN CANNOT SET SIMD")
 endif()
@@ -213,6 +255,8 @@ if(UNIX)
 	set(COMPILER_LANGUAGE_FLAGS " -std=c11 -D_GNU_SOURCE -Wno-unused-function -Wno-parentheses -Wfatal-errors")
 	set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${COMPILER_DEBUG_FLAG} ${GCC_WARNING_FLAGS} ${COMPILER_LANGUAGE_FLAGS}")
 	add_compile_options(-fPIC -fmacro-prefix-map=${CMAKE_SOURCE_DIR}=.)
+	set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -D_FORTIFY_SOURCE=2")
+	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D_FORTIFY_SOURCE=2")
 endif()
 
 if (CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
@@ -382,7 +426,7 @@ if (ENABLE_BLAS3_FRNTEND_CNTL_TREES)
 endif ()
 
 if (ENABLE_WINDOWS_BUILD)
-	set(FLA_ENABLE_WINDOWS_BUILD TRUE)
+	add_definitions(-DFLA_ENABLE_WINDOWS_BUILD)
 endif ()
 
 if (ENABLE_PORTABLE_TIMER)
@@ -514,6 +558,8 @@ endif()
 
 if(ENABLE_ILP64)
 	set(FLA_ENABLE_ILP64 TRUE)
+	#BUILD_INDEX64_EXT_API is disabled until _64 suffix APIs is supported from dependent libraries.
+	set(BUILD_INDEX64_EXT_API OFF)
 	add_definitions(-DFLA_ENABLE_ILP64=1)
 	message(STATUS "Enabled FLA_ENABLE_ILP64 : ${ENABLE_ILP64} ")
 endif()
@@ -872,10 +918,10 @@ file(MAKE_DIRECTORY ${BASE_INC_PATH})
 # this will generate  blis1.h file in windows/include
 set (BLIS1_TARGET_PATH "${CMAKE_SOURCE_DIR}/${BASE_INC_PATH}/blis1.h")
 set (BLIS1__H_SRC_PATH "${CMAKE_SOURCE_DIR}/src/base/flamec/blis/include/blis1.h" )
-set (BLIS_FLATTEN_HEADER "${CMAKE_SOURCE_DIR}/build/flatten-headers.py")
+set (FLA_FLATTEN_HEADER "${CMAKE_SOURCE_DIR}/build/flatten-headers.py")
 
 execute_process(
-    COMMAND ${Python3_EXECUTABLE} ${BLIS_FLATTEN_HEADER} "${C_COMMENT}" "${VERBOSE}"
+    COMMAND ${Python3_EXECUTABLE} ${FLA_FLATTEN_HEADER} "${C_COMMENT}" "${VERBOSE}"
 	"${BLIS1__H_SRC_PATH}" "${BLIS1_TARGET_PATH}" "${BASE_INC_PATH}" "${MK_HEADER_DIR_PATHS}"
 	RESULT_VARIABLE CMD_RESULT
     OUTPUT_VARIABLE CMD_OUTPUT
@@ -887,7 +933,7 @@ set (FLAME_TARGET_PATH "${CMAKE_SOURCE_DIR}/${BASE_INC_PATH}/FLA_f2c.h")
 set (FLAME_H_SRC_PATH  "${CMAKE_SOURCE_DIR}/src/base/flamec/include/FLA_f2c.h" )
 
 execute_process(
-    COMMAND ${Python3_EXECUTABLE} ${BLIS_FLATTEN_HEADER} "${C_COMMENT}" "${VERBOSE}"
+    COMMAND ${Python3_EXECUTABLE} ${FLA_FLATTEN_HEADER} "${C_COMMENT}" "${VERBOSE}"
 	"${FLAME_H_SRC_PATH}" "${FLAME_TARGET_PATH}" "${BASE_INC_PATH}" "${MK_HEADER_DIR_PATHS}"
 	RESULT_VARIABLE CMD_RESULT
     OUTPUT_VARIABLE CMD_OUTPUT
@@ -898,7 +944,7 @@ execute_process(
 set (FLAME_TARGET_PATH "${CMAKE_SOURCE_DIR}/${BASE_INC_PATH}/FLAME.h")
 set (FLAME_H_SRC_PATH  "${CMAKE_SOURCE_DIR}/src/base/flamec/include/FLAME.h" )
 execute_process(
-    COMMAND ${Python3_EXECUTABLE} ${BLIS_FLATTEN_HEADER} "${C_COMMENT}" "${VERBOSE}"
+    COMMAND ${Python3_EXECUTABLE} ${FLA_FLATTEN_HEADER} "${C_COMMENT}" "${VERBOSE}"
 	"${FLAME_H_SRC_PATH}" "${FLAME_TARGET_PATH}" "${BASE_INC_PATH}" "${MK_HEADER_DIR_PATHS}"
 	RESULT_VARIABLE CMD_RESULT
     OUTPUT_VARIABLE CMD_OUTPUT
@@ -908,9 +954,20 @@ execute_process(
 set (INTERFACE_HEADER_DIR_PATHS "${CMAKE_SOURCE_DIR}/src/src_cpp")
 set (INTERFACE_TARGET_PATH "${CMAKE_SOURCE_DIR}/${BASE_INC_PATH}/libflame_interface.hh")
 execute_process(
-	COMMAND ${Python3_EXECUTABLE} ${BLIS_FLATTEN_HEADER}  "${VERBOSE}"
+	COMMAND ${Python3_EXECUTABLE} ${FLA_FLATTEN_HEADER}  "${VERBOSE}"
 	"${INTERFACE_HEADER_DIR_PATHS}/libflame_interface.hh" "${INTERFACE_TARGET_PATH}"
 	"${BASE_INC_PATH}" "${INTERFACE_HEADER_DIR_PATHS}"
+	RESULT_VARIABLE CMD_RESULT
+    OUTPUT_VARIABLE CMD_OUTPUT
+	)
+
+# Run python script to generate libflame_interface header at configuration time
+set (LAPACKE_HEADER_SRC_PATH "${CMAKE_SOURCE_DIR}/src/lapacke/LAPACKE/include/")
+set (LAPACKE_HEADER_TARGET_PATH "${CMAKE_SOURCE_DIR}/${BASE_INC_PATH}/lapacke.h")
+execute_process(
+	COMMAND ${Python3_EXECUTABLE} ${FLA_FLATTEN_HEADER}  "${VERBOSE}"
+	"${LAPACKE_HEADER_SRC_PATH}/lapacke.h" "${LAPACKE_HEADER_TARGET_PATH}"
+	"${BASE_INC_PATH}" "${LAPACKE_HEADER_SRC_PATH}"
 	RESULT_VARIABLE CMD_RESULT
     OUTPUT_VARIABLE CMD_OUTPUT
 	)
@@ -967,6 +1024,8 @@ endif()
 set(OBJECT_LIBRARIES
     $<TARGET_OBJECTS:FLA_LAPACK_AVX512>
     $<TARGET_OBJECTS:FLA_LAPACK_AVX2>
+    $<TARGET_OBJECTS:${LAPACKELIB}_obj>
+    $<$<BOOL:${BUILD_INDEX64_EXT_API}>: $<TARGET_OBJECTS:${LAPACKELIB}_64_obj>>
 )
 
 if (BUILD_SHARED_LIBS)
@@ -998,11 +1057,8 @@ endif()
 message(STATUS "CMAKE_INSTALL_PREFIX : ${CMAKE_INSTALL_PREFIX}")
 
 set(LIBFLAME_PUBLIC_HEADERS	"include/FLAME.h"
-				"src/lapacke/LAPACKE/include/lapacke_mangling.h"
-				"src/lapacke/LAPACKE/include/lapacke.h"
-				"src/lapacke/LAPACKE/include/lapack.h"
-				"${CMAKE_SOURCE_DIR}/${BASE_INC_PATH}/libflame_interface.hh"
-				"src/src_cpp/libflame.hh")
+				"${CMAKE_SOURCE_DIR}/${BASE_INC_PATH}/lapacke.h"
+				"${CMAKE_SOURCE_DIR}/${BASE_INC_PATH}/libflame_interface.hh")
 
 set_target_properties(${PROJECT_NAME} PROPERTIES PUBLIC_HEADER "${LIBFLAME_PUBLIC_HEADERS}")
 

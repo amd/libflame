@@ -6,6 +6,7 @@
 #if ENABLE_CPP_TEST
 #include <invoke_common.hh>
 #endif
+#include <invoke_lapacke.h>
 
 #define GELSD_VL 0.1
 #define GELSD_VU 10
@@ -21,17 +22,23 @@ void fla_test_gelsd_experiment(char *tst_api, test_params_t *params, integer dat
                                integer einfo);
 void prepare_gelsd_run(integer m_A, integer n_A, integer nrhs, void *A, integer lda, void *B,
                        integer ldb, void *s, void *rcond, integer *rank, integer datatype,
-                       integer n_repeats, double *time_min_, integer *info, integer interfacetype,
-                       integer layout);
+                       integer *info, integer interfacetype, integer layout, test_params_t *params);
 void invoke_gelsd(integer datatype, integer *m, integer *n, integer *nrhs, void *a, integer *lda,
                   void *b, integer *ldb, void *s, void *rcond, integer *rank, void *work,
                   integer *lwork, void *rwork, integer *iwork, integer *info);
-integer invoke_lapacke_gelsd(integer datatype, integer layout, integer m, integer n, integer nrhs,
-                             void *A, integer lda, void *B, integer ldb, void *s, void *rcond,
-                             integer *rank);
 double prepare_lapacke_gelsd_run(integer datatype, integer layout, integer m, integer n,
                                  integer nrhs, void *A, integer lda, void *B, integer ldb, void *s,
                                  void *rcond, integer *rank, integer *info);
+
+/* Helper functions for Bit reproducibility tests */
+void store_gelsd_outputs(void *filename, integer datatype, integer m, integer n, integer NRHS,
+                         void *A_save, integer lda, void *S, void *B_save, integer ldb, void *rcond,
+                         integer g_lwork, void *params);
+integer check_bit_reproducibility_gelsd(void *filename, integer datatype, integer m, integer n,
+                                        integer NRHS, void *A_save, integer lda, void *S,
+                                        void *B_save, integer ldb, void *rcond, integer g_lwork,
+                                        void *params);
+
 void fla_test_gelsd(integer argc, char **argv, test_params_t *params)
 {
     srand(1);
@@ -43,7 +50,7 @@ void fla_test_gelsd(integer argc, char **argv, test_params_t *params)
     if(argc == 1)
     {
         g_lwork = -1;
-        config_data = 1;
+        g_config_data = 1;
         fla_test_output_info("--- %s ---\n", op_str);
         fla_test_output_info("\n");
         fla_test_op_driver(front_str, RECT_INPUT, params, LIN, fla_test_gelsd_experiment);
@@ -81,6 +88,7 @@ void fla_test_gelsd(integer argc, char **argv, test_params_t *params)
         params->lin_solver_paramslist[0].rcond = atof(argv[8]);
         g_lwork = strtoimax(argv[9], &endptr, CLI_DECIMAL_BASE);
         n_repeats = strtoimax(argv[10], &endptr, CLI_DECIMAL_BASE);
+        params->n_repeats = n_repeats;
 
         if(n_repeats > 0)
         {
@@ -138,6 +146,7 @@ void fla_test_gelsd_experiment(char *tst_api, test_params_t *params, integer dat
     void *A = NULL, *A_save = NULL, *B = NULL, *B_save = NULL;
     void *S = NULL, *rcond = NULL, *s_test = NULL;
     double residual, err_thresh;
+    void *filename = NULL;
 
     char range = 'U';
     integer interfacetype = params->interfacetype;
@@ -165,7 +174,7 @@ void fla_test_gelsd_experiment(char *tst_api, test_params_t *params, integer dat
 
     /* If leading dimensions = -1, set them to default value
        when inputs are from config files */
-    if(config_data)
+    if(g_config_data)
     {
         if(lda == -1)
         {
@@ -184,35 +193,59 @@ void fla_test_gelsd_experiment(char *tst_api, test_params_t *params, integer dat
     create_matrix(datatype, LAPACK_COL_MAJOR, fla_max(m, n), NRHS, &B_save, ldb);
     reset_matrix(datatype, ldb, NRHS, B, ldb);
     reset_matrix(datatype, ldb, NRHS, B_save, ldb);
+    create_realtype_vector(datatype, &S, fla_min(m, n));
     create_realtype_vector(datatype, &s_test, fla_min(m, n));
 
-    /* Initialize the test matrices */
-    init_matrix(datatype, B, m, NRHS, ldb, g_ext_fptr, params->imatrix_char);
-    if(FLA_EXTREME_CASE_TEST || (g_ext_fptr != NULL))
+    /* This code path is run to generate the matrix to be passed to the API. This is the default
+     * input generation logic accessed both when BRT is run in Ground truth mode and for non BRT
+     * Test cases. For verification runs the input is loaded from the input generated during Ground
+     * truth run */
+    if(!FLA_BRT_VERIFICATION_RUN)
     {
-        init_matrix(datatype, A, m, n, lda, g_ext_fptr, params->imatrix_char);
+        /* Initialize the test matrices */
+        init_matrix(datatype, B, m, NRHS, ldb, g_ext_fptr, params->imatrix_char);
+        if(FLA_EXTREME_CASE_TEST || (g_ext_fptr != NULL))
+        {
+            init_matrix(datatype, A, m, n, lda, g_ext_fptr, params->imatrix_char);
+        }
+        else
+        {
+            /* Generate input matrix with condition number <= 100 */
+            create_svd_matrix(datatype, range, m, n, A, lda, s_test, GELSD_VL, GELSD_VU, i_zero,
+                              i_zero, info);
+            /* Overflow or underflow test initialization */
+            if(FLA_OVERFLOW_UNDERFLOW_TEST)
+            {
+                scale_matrix_overflow_underflow_gelsd(datatype, m, n, NRHS, A, lda,
+                                                      params->imatrix_char);
+            }
+        }
+    }
+
+    /* This macro is used in the BRT test cases for the following purposes:
+     *    - In the Ground truth runs (BRT_char => G, F), the output is stored in a file for future
+     * reference
+     *    - In the verification runs (BRT_char => V, M), the output is loaded from the file and
+     * passed as input to the API
+     * */
+    if(datatype == FLOAT || datatype == COMPLEX)
+    {
+        FLA_BRT_PROCESS_TWO_INPUT(datatype, m, n, A, lda, datatype, m, NRHS, B, ldb, "dddddfd", m,
+                                  n, NRHS, lda, ldb, *(real *)rcond, g_lwork)
     }
     else
     {
-        /* Generate input matrix with condition number <= 100 */
-        create_svd_matrix(datatype, range, m, n, A, lda, s_test, GELSD_VL, GELSD_VU, i_zero, i_zero,
-                          info);
-        /* Overflow or underflow test initialization */
-        if(FLA_OVERFLOW_UNDERFLOW_TEST)
-        {
-            scale_matrix_overflow_underflow_gelsd(datatype, m, n, NRHS, A, lda,
-                                                  params->imatrix_char);
-        }
+        FLA_BRT_PROCESS_TWO_INPUT(datatype, m, n, A, lda, datatype, m, NRHS, B, ldb, "dddddfd", m,
+                                  n, NRHS, lda, ldb, *(doublereal *)rcond, g_lwork)
     }
 
     /* Save the original matrix*/
     copy_matrix(datatype, "full", m, n, A, lda, A_save, lda);
     copy_matrix(datatype, "full", m, NRHS, B, ldb, B_save, ldb);
-    create_realtype_vector(datatype, &S, fla_min(m, n));
 
     /* call to API */
-    prepare_gelsd_run(m, n, NRHS, A_save, lda, B_save, ldb, S, rcond, &rank, datatype, n_repeats,
-                      &time_min, &info, interfacetype, layout);
+    prepare_gelsd_run(m, n, NRHS, A_save, lda, B_save, ldb, S, rcond, &rank, datatype, &info,
+                      interfacetype, layout, params);
 
     /* performance computation */
     if(m >= n)
@@ -229,10 +262,18 @@ void fla_test_gelsd_experiment(char *tst_api, test_params_t *params, integer dat
 
     /* Output validation, accuracy test */
     FLA_TEST_CHECK_EINFO(residual, info, einfo);
-    if(!FLA_EXTREME_CASE_TEST)
+    IF_FLA_BRT_VALIDATION(m, n,
+                          store_gelsd_outputs(filename, datatype, m, n, NRHS, A_save, lda, S,
+                                              B_save, ldb, rcond, g_lwork, params),
+                          validate_gelsd(tst_api, m, n, NRHS, A, lda, B, ldb, S, B_save, rcond,
+                                         &rank, datatype, residual, params->imatrix_char, params),
+                          check_bit_reproducibility_gelsd(filename, datatype, m, n, NRHS, A_save,
+                                                          lda, S, B_save, ldb, rcond, g_lwork,
+                                                          params))
+    else if(!FLA_EXTREME_CASE_TEST)
     {
         validate_gelsd(tst_api, m, n, NRHS, A, lda, B, ldb, S, B_save, rcond, &rank, datatype,
-                       residual, params->imatrix_char);
+                       residual, params->imatrix_char, params);
     }
     /* check for output matrix when inputs as extreme values */
     else
@@ -250,6 +291,8 @@ void fla_test_gelsd_experiment(char *tst_api, test_params_t *params, integer dat
     }
 
     /* Free up the buffers */
+free_buffers:
+    FLA_FREE_FILENAME(filename)
     free_matrix(A);
     free_matrix(A_save);
     free_matrix(B);
@@ -261,13 +304,12 @@ void fla_test_gelsd_experiment(char *tst_api, test_params_t *params, integer dat
 
 void prepare_gelsd_run(integer m_A, integer n_A, integer nrhs, void *A, integer lda, void *B,
                        integer ldb, void *s, void *rcond, integer *rank, integer datatype,
-                       integer n_repeats, double *time_min_, integer *info, integer interfacetype,
-                       integer layout)
+                       integer *info, integer interfacetype, integer layout, test_params_t *params)
 {
-    integer i, lwork, liwork = 1, lrwork = 1, realtype;
+    integer lwork, liwork = 1, lrwork = 1, realtype;
     void *A_test, *B_test;
     void *work = NULL, *rwork = NULL, *iwork = NULL;
-    double t_min = 1e9, exe_time;
+    double exe_time;
 
     /* Save the original matrix */
     create_matrix(datatype, LAPACK_COL_MAJOR, m_A, n_A, &A_test, lda);
@@ -316,7 +358,7 @@ void prepare_gelsd_run(integer m_A, integer n_A, integer nrhs, void *A, integer 
     }
 
     *info = 0;
-    for(i = 0; i < n_repeats && *info == 0; ++i)
+    FLA_EXEC_LOOP_BEGIN
     {
         /* Restore input matrix A value and allocate memory to output buffers
            for each iteration*/
@@ -354,8 +396,9 @@ void prepare_gelsd_run(integer m_A, integer n_A, integer nrhs, void *A, integer 
                          work, &lwork, rwork, iwork, info);
             exe_time = fla_test_clock() - exe_time;
         }
-        /* Get the best execution time */
-        t_min = fla_min(t_min, exe_time);
+
+        /* Update ctx and loop conditions */
+        FLA_EXEC_LOOP_UPDATE_WITH_INFO
 
         /* Free up the output buffers */
         free_vector(work);
@@ -363,8 +406,6 @@ void prepare_gelsd_run(integer m_A, integer n_A, integer nrhs, void *A, integer 
         if(datatype == COMPLEX || datatype == DOUBLE_COMPLEX)
             free_vector(rwork);
     }
-
-    *time_min_ = t_min;
 
     /*  Save the final result to B matrix*/
     copy_matrix(datatype, "full", n_A, nrhs, B_test, ldb, B, ldb);
@@ -383,8 +424,8 @@ double prepare_lapacke_gelsd_run(integer datatype, integer layout, integer m, in
     B_t = B;
 
     /* Configure leading dimensions as per the input matrix layout */
-    SELECT_LDA(g_ext_fptr, config_data, layout, n, row_major_gelsd_lda, lda_t);
-    SELECT_LDA(g_ext_fptr, config_data, layout, nrhs, row_major_gelsd_ldb, ldb_t);
+    SELECT_LDA(g_ext_fptr, g_config_data, layout, n, row_major_gelsd_lda, lda_t);
+    SELECT_LDA(g_ext_fptr, g_config_data, layout, nrhs, row_major_gelsd_ldb, ldb_t);
 
     /* In case of row_major matrix layout,
        convert input matrix to row_major */
@@ -458,39 +499,30 @@ void invoke_gelsd(integer datatype, integer *m, integer *n, integer *nrhs, void 
     }
 }
 
-/*
-LAPACKE GELSD API invoke function
-*/
-integer invoke_lapacke_gelsd(integer datatype, integer layout, integer m, integer n, integer nrhs,
-                             void *A, integer lda, void *B, integer ldb, void *s, void *rcond,
-                             integer *rank)
+void store_gelsd_outputs(void *filename, integer datatype, integer m, integer n, integer NRHS,
+                         void *A_save, integer lda, void *S, void *B_save, integer ldb, void *rcond,
+                         integer g_lwork, void *params)
 {
-    integer info = 0;
-    switch(datatype)
-    {
-        case FLOAT:
-        {
-            info = LAPACKE_sgelsd(layout, m, n, nrhs, A, lda, B, ldb, s, *(float *)rcond, rank);
-            break;
-        }
+    /* Create and open a file for storing Ground truth*/
+    FLA_OPEN_GT_FILE_STORE
 
-        case DOUBLE:
-        {
-            info = LAPACKE_dgelsd(layout, m, n, nrhs, A, lda, B, ldb, s, *(double *)rcond, rank);
-            break;
-        }
+    FLA_STORE_BRT_MATRIX(datatype, n, NRHS, B_save, ldb)
+    FLA_STORE_BRT_VECTOR(get_realtype(datatype), fla_min(m, n), S)
 
-        case COMPLEX:
-        {
-            info = LAPACKE_cgelsd(layout, m, n, nrhs, A, lda, B, ldb, s, *(float *)rcond, rank);
-            break;
-        }
+    fclose(gt_file);
+}
 
-        case DOUBLE_COMPLEX:
-        {
-            info = LAPACKE_zgelsd(layout, m, n, nrhs, A, lda, B, ldb, s, *(double *)rcond, rank);
-            break;
-        }
-    }
-    return info;
+integer check_bit_reproducibility_gelsd(void *filename, integer datatype, integer m, integer n,
+                                        integer NRHS, void *A_save, integer lda, void *S,
+                                        void *B_save, integer ldb, void *rcond, integer g_lwork,
+                                        void *params)
+{
+    /* Open the file for reading Ground truth */
+    FLA_OPEN_GT_FILE_READ
+
+    FLA_VERIFY_BRT_MATRIX(datatype, n, NRHS, B_save, ldb)
+    FLA_VERIFY_BRT_VECTOR(get_realtype(datatype), fla_min(m, n), S)
+
+    fclose(gt_file);
+    return 1;
 }

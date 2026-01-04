@@ -51,7 +51,7 @@ void fla_dgesvd_small6_avx2(integer wntus, integer wntvs, integer *m, integer *n
 void fla_dgesvd_small6T_avx2(integer *m, integer *n, doublereal *a, integer *lda, doublereal *ql,
                              integer *ldql, doublereal *s, doublereal *u, integer *ldu,
                              doublereal *vt, integer *ldvt, doublereal *work, integer *info);
-void fla_dgesvd_xx_small10_avx2(integer wntus, integer wntvs, integer *m, integer *n, doublereal *a,
+void fla_dgesvd_xx_small10_avx2(integer wntu, integer wntv, integer *m, integer *n, integer *ncu, doublereal *a,
                                 integer *lda, doublereal *s, doublereal *u, integer *ldu,
                                 doublereal *vt, integer *ldvt, doublereal *work, integer *info);
 void fla_dgesvd_xs_small10T_avx2(integer *m, integer *n, doublereal *a, integer *lda, doublereal *s,
@@ -66,5 +66,7 @@ void fla_dlarf_left_apply_incv1_avx2(integer m, integer n, doublereal *a_buff, i
 doublereal fla_dnrm2_blas_avx2(integer *sd, doublereal *a, integer *inc);
 void fla_zlarf_left_apply_incv1_avx2(integer m, integer n, doublecomplex *a_buff, integer ldr,
                                      doublecomplex *v, doublecomplex *ntau, doublecomplex *work);
+int fla_dpotrf_small_avx2(char *uplo, integer *n, doublereal *a, integer *lda, integer *info);
+void fla_dpotri_small_avx2(char *uplo, integer *n, double *A, integer *lda, integer *info);
 #endif /* FLA_ENABLE_AMD_OPT */
 #endif /* FLA_LAPACK_AVX2_KERNELS_DEFS_H */

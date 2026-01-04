@@ -160,6 +160,7 @@ void fla_dgesvd_xs_small10T_avx2(integer *m, integer *n, doublereal *a, integer 
         u[1 + (i + 1) * *ldu] = 0.;
     }
 
+    /* Compute Singular Values and Vetcors */
     lapack_dbdsqr_small("L", m, n, m, &s[1], &e[1], &vt[1 + *ldvt], ldvt, &u[1 + *ldu], ldu, info);
 
     return;

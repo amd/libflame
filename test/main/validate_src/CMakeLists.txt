@@ -6,6 +6,8 @@ target_sources(${PROJECT_NAME}
      PRIVATE
 ${CMAKE_CURRENT_SOURCE_DIR}/test_common.c
 ${CMAKE_CURRENT_SOURCE_DIR}/test_overflow_underflow.c
+${CMAKE_CURRENT_SOURCE_DIR}/test_output_routines.c
+${CMAKE_CURRENT_SOURCE_DIR}/test_bit_reproducibility.c
 ${CMAKE_CURRENT_SOURCE_DIR}/validate_gbtrf.c
 ${CMAKE_CURRENT_SOURCE_DIR}/validate_geqrf.c
 ${CMAKE_CURRENT_SOURCE_DIR}/validate_gerq2.c
@@ -49,5 +51,11 @@ ${CMAKE_CURRENT_SOURCE_DIR}/validate_lange.c
 ${CMAKE_CURRENT_SOURCE_DIR}/validate_gecon.c
 ${CMAKE_CURRENT_SOURCE_DIR}/validate_getrfnpi.c
 ${CMAKE_CURRENT_SOURCE_DIR}/validate_hetri_rook.c
+${CMAKE_CURRENT_SOURCE_DIR}/validate_ormqr.c
+${CMAKE_CURRENT_SOURCE_DIR}/validate_gejsv.c
+${CMAKE_CURRENT_SOURCE_DIR}/validate_labrd.c
+${CMAKE_CURRENT_SOURCE_DIR}/validate_gebrd.c
+${CMAKE_CURRENT_SOURCE_DIR}/validate_sytrd.c
+${CMAKE_CURRENT_SOURCE_DIR}/validate_trtri.c
+${CMAKE_CURRENT_SOURCE_DIR}/validate_trtrs.c
 )
-

@@ -6,6 +6,7 @@
 #if ENABLE_CPP_TEST
 #include <invoke_common.hh>
 #endif
+#include <invoke_lapacke.h>
 
 extern double perf;
 extern double time_min;
@@ -16,25 +17,29 @@ void fla_test_gelqf_experiment(char *tst_api, test_params_t *params, integer dat
                                integer p_cur, integer q_cur, integer pci, integer n_repeats,
                                integer einfo);
 void prepare_gelqf_run(integer m_A, integer n_A, void *A, integer lda, void *T, integer datatype,
-                       integer n_repeats, double *time_min_, integer *info, integer interfacetype,
-                       int matrix_layout);
+                       integer *info, integer interfacetype, int matrix_layout,
+                       test_params_t *params);
 void invoke_gelqf(integer datatype, integer *m, integer *n, void *a, integer *lda, void *tau,
                   void *work, integer *lwork, integer *info);
 double prepare_lapacke_gelqf_run(integer datatype, int matrix_layout, integer m_A, integer n_A,
                                  void *A, integer lda, void *T, integer *info);
-integer invoke_lapacke_gelqf(integer datatype, int matrix_layout, integer m, integer n, void *a,
-                             integer lda, void *tau);
+
+/* Helper functions for Bit reproducibility tests */
+void store_gelqf_outputs(void *filename, integer datatype, integer m, integer n, void *A,
+                         integer lda, void *T, integer lwork, void *params);
+integer check_bit_reproducibility_gelqf(void *filename, integer datatype, integer m, integer n,
+                                        void *A, integer lda, void *T, integer lwork, void *params);
 
 void fla_test_gelqf(integer argc, char **argv, test_params_t *params)
 {
     char *op_str = "LQ factorization";
-    char *front_str = "GEQLF";
+    char *front_str = "GELQF";
     integer tests_not_run = 1, invalid_dtype = 0, einfo = 0;
     params->imatrix_char = '\0';
     if(argc == 1)
     {
         g_lwork = -1;
-        config_data = 1;
+        g_config_data = 1;
         fla_test_output_info("--- %s ---\n", op_str);
         fla_test_output_info("\n");
         fla_test_op_driver(front_str, RECT_INPUT, params, LIN, fla_test_gelqf_experiment);
@@ -68,6 +73,7 @@ void fla_test_gelqf(integer argc, char **argv, test_params_t *params)
         g_lwork = strtoimax(argv[6], &endptr, CLI_DECIMAL_BASE);
 
         n_repeats = strtoimax(argv[7], &endptr, CLI_DECIMAL_BASE);
+        params->n_repeats = n_repeats;
 
         if(n_repeats > 0)
         {
@@ -124,6 +130,7 @@ void fla_test_gelqf_experiment(char *tst_api, test_params_t *params, integer dat
     integer info = 0;
     void *A = NULL, *A_test = NULL, *T = NULL;
     double residual, err_thresh;
+    void *filename = NULL;
 
     integer interfacetype = params->interfacetype;
     int layout = params->matrix_major;
@@ -136,7 +143,7 @@ void fla_test_gelqf_experiment(char *tst_api, test_params_t *params, integer dat
 
     /* If leading dimensions = -1, set them to default value
        when inputs are from config files */
-    if(config_data)
+    if(g_config_data)
     {
         if(lda == -1)
         {
@@ -146,19 +153,32 @@ void fla_test_gelqf_experiment(char *tst_api, test_params_t *params, integer dat
 
     /* Create input matrix parameters */
     create_matrix(datatype, LAPACK_COL_MAJOR, m, n, &A, lda);
+    create_matrix(datatype, LAPACK_COL_MAJOR, m, n, &A_test, lda);
+
+    /* Create output vector */
     create_vector(datatype, &T, fla_min(m, n));
 
-    init_matrix(datatype, A, m, n, lda, g_ext_fptr, params->imatrix_char);
+    if(!FLA_BRT_VERIFICATION_RUN)
+    {
+        init_matrix(datatype, A, m, n, lda, g_ext_fptr, params->imatrix_char);
+    }
+
+    /* This macro is used in the BRT test cases for the following purposes:
+     *    - In the Ground truth runs (BRT_char => G, F), the output is stored in a file for future
+     * reference
+     *    - In the verification runs (BRT_char => V, M), the output is loaded from the file and
+     * passed as input to the API
+     * */
+    FLA_BRT_PROCESS_SINGLE_INPUT(datatype, m, n, A, lda, "dddd", m, n, lda, g_lwork)
+
     if(FLA_OVERFLOW_UNDERFLOW_TEST)
     {
         scale_matrix_underflow_overflow_gelqf(datatype, m, n, A, lda, params->imatrix_char);
     }
     /* Make a copy of input matrix A. This is required to validate the API functionality. */
-    create_matrix(datatype, LAPACK_COL_MAJOR, m, n, &A_test, lda);
     copy_matrix(datatype, "full", m, n, A, lda, A_test, lda);
 
-    prepare_gelqf_run(m, n, A_test, lda, T, datatype, n_repeats, &time_min, &info, interfacetype,
-                      layout);
+    prepare_gelqf_run(m, n, A_test, lda, T, datatype, &info, interfacetype, layout, params);
 
     /* performance computation
      * 2mn^2 - (2/3)n^3 flops
@@ -174,9 +194,13 @@ void fla_test_gelqf_experiment(char *tst_api, test_params_t *params, integer dat
 
     /* output validation */
     FLA_TEST_CHECK_EINFO(residual, info, einfo);
-    if(!FLA_EXTREME_CASE_TEST)
+    IF_FLA_BRT_VALIDATION(
+        m, n, store_gelqf_outputs(filename, datatype, m, n, A, lda, T, g_lwork, params),
+        validate_gelqf(tst_api, m, n, A, A_test, lda, T, datatype, residual, params),
+        check_bit_reproducibility_gelqf(filename, datatype, m, n, A, lda, T, g_lwork, params))
+    else if(!FLA_EXTREME_CASE_TEST)
     {
-        validate_gelqf(tst_api, m, n, A, A_test, lda, T, datatype, residual);
+        validate_gelqf(tst_api, m, n, A, A_test, lda, T, datatype, residual, params);
     }
     else
     {
@@ -192,19 +216,20 @@ void fla_test_gelqf_experiment(char *tst_api, test_params_t *params, integer dat
     }
 
     /* Free up the buffers */
+free_buffers:
+    FLA_FREE_FILENAME(filename);
     free_matrix(A);
     free_matrix(A_test);
     free_vector(T);
 }
 
 void prepare_gelqf_run(integer m_A, integer n_A, void *A, integer lda, void *T, integer datatype,
-                       integer n_repeats, double *time_min_, integer *info, integer interfacetype,
-                       int layout)
+                       integer *info, integer interfacetype, int layout, test_params_t *params)
 {
-    integer min_A, i;
+    integer min_A;
     void *A_save = NULL, *T_test = NULL, *work = NULL;
     integer lwork = -1;
-    double t_min = 1e9, exe_time;
+    double exe_time;
 
     min_A = fla_min(m_A, n_A);
 
@@ -248,7 +273,7 @@ void prepare_gelqf_run(integer m_A, integer n_A, void *A, integer lda, void *T, 
     }
 
     *info = 0;
-    for(i = 0; i < n_repeats && *info == 0; ++i)
+    FLA_EXEC_LOOP_BEGIN
     {
         /* Restore input matrix A value and allocate memory to output buffers
            for each iteration */
@@ -282,8 +307,8 @@ void prepare_gelqf_run(integer m_A, integer n_A, void *A, integer lda, void *T, 
             exe_time = fla_test_clock() - exe_time;
         }
 
-        /* Get the best execution time */
-        t_min = fla_min(t_min, exe_time);
+        /* Update ctx and loop conditions */
+        FLA_EXEC_LOOP_UPDATE_WITH_INFO
 
         /* Make a copy of the output buffers.
         This is required to validate the API functionality. */
@@ -293,8 +318,6 @@ void prepare_gelqf_run(integer m_A, integer n_A, void *A, integer lda, void *T, 
         free_vector(work);
         free_vector(T_test);
     }
-
-    *time_min_ = t_min;
 
     free_matrix(A_save);
 }
@@ -307,7 +330,7 @@ double prepare_lapacke_gelqf_run(integer datatype, int layout, integer m_A, inte
     void *A_t = NULL;
 
     /* Configure leading dimensions as per the input matrix layout */
-    SELECT_LDA(g_ext_fptr, config_data, layout, n_A, row_major_gelqf_lda, lda_t);
+    SELECT_LDA(g_ext_fptr, g_config_data, layout, n_A, row_major_gelqf_lda, lda_t);
 
     A_t = A;
 
@@ -368,35 +391,27 @@ void invoke_gelqf(integer datatype, integer *m, integer *n, void *a, integer *ld
     }
 }
 
-integer invoke_lapacke_gelqf(integer datatype, int layout, integer m, integer n, void *a,
-                             integer lda, void *tau)
+void store_gelqf_outputs(void *filename, integer datatype, integer m, integer n, void *A,
+                         integer lda, void *T, integer lwork, void *params)
 {
-    integer info = 0;
-    switch(datatype)
-    {
-        case FLOAT:
-        {
-            info = LAPACKE_sgelqf(layout, m, n, a, lda, tau);
-            break;
-        }
+    /* Create and open a file for storing Ground truth*/
+    FLA_OPEN_GT_FILE_STORE
 
-        case DOUBLE:
-        {
-            info = LAPACKE_dgelqf(layout, m, n, a, lda, tau);
-            break;
-        }
+    FLA_STORE_BRT_MATRIX(datatype, m, n, A, lda)
+    FLA_STORE_BRT_VECTOR(datatype, fla_min(m, n), T)
 
-        case COMPLEX:
-        {
-            info = LAPACKE_cgelqf(layout, m, n, a, lda, tau);
-            break;
-        }
+    fclose(gt_file);
+}
 
-        case DOUBLE_COMPLEX:
-        {
-            info = LAPACKE_zgelqf(layout, m, n, a, lda, tau);
-            break;
-        }
-    }
-    return info;
+integer check_bit_reproducibility_gelqf(void *filename, integer datatype, integer m, integer n,
+                                        void *A, integer lda, void *T, integer lwork, void *params)
+{
+    /* Open the file for reading Ground truth */
+    FLA_OPEN_GT_FILE_READ
+
+    FLA_VERIFY_BRT_MATRIX(datatype, m, n, A, lda)
+    FLA_VERIFY_BRT_VECTOR(datatype, fla_min(m, n), T)
+
+    fclose(gt_file);
+    return 1;
 }

@@ -2,9 +2,11 @@
     Copyright (C) 2023-2025, Advanced Micro Devices, Inc. All rights reserved.
 */
 
-#include "test_common.h"
 #include "test_lapack.h"
-#include "test_prototype.h"
+#if ENABLE_CPP_TEST
+#include <invoke_common.hh>
+#endif
+#include <invoke_lapacke.h>
 
 extern double perf;
 extern double time_min;
@@ -14,14 +16,12 @@ integer row_major_syev_lda;
 void fla_test_syev_experiment(char *tst_api, test_params_t *params, integer datatype, integer p_cur,
                               integer q_cur, integer pci, integer n_repeats, integer einfo);
 void prepare_syev_run(char *jobz, char *uplo, integer n, void *A, integer lda, void *w,
-                      integer datatype, integer n_repeats, double *time_min_, integer *info,
-                      integer test_lapacke_interface, int matrix_layout);
+                      integer datatype, integer *info, integer interfacetype, int matrix_layout,
+                      test_params_t *params);
 void invoke_syev(integer datatype, char *jobz, char *uplo, integer *n, void *a, integer *lda,
                  void *w, void *work, integer *lwork, void *rwork, integer *info);
 double prepare_lapacke_syev_run(integer datatype, int matrix_layout, char *jobz, char *uplo,
                                 integer n, void *A, integer lda, void *w, integer *info);
-integer invoke_lapacke_syev(integer datatype, int matrix_layout, char jobz, char uplo, integer n,
-                            void *a, integer lda, void *w);
 
 #define SYEV_VL 1
 #define SYEV_VU 5
@@ -35,7 +35,7 @@ void fla_test_syev(integer argc, char **argv, test_params_t *params)
     if(argc == 1)
     {
         g_lwork = -1;
-        config_data = 1;
+        g_config_data = 1;
         fla_test_output_info("--- %s ---\n", op_str);
         fla_test_output_info("\n");
         fla_test_op_driver(front_str, SQUARE_INPUT, params, EIG_SYM, fla_test_syev_experiment);
@@ -58,8 +58,7 @@ void fla_test_syev(integer argc, char **argv, test_params_t *params)
         params->eig_sym_paramslist[0].uplo = argv[4][0];
         N = strtoimax(argv[5], &endptr, CLI_DECIMAL_BASE);
         /* In case of command line inputs for LAPACKE row_major layout save leading dimensions */
-        if((g_ext_fptr == NULL) && params->test_lapacke_interface
-           && (params->matrix_major == LAPACK_ROW_MAJOR))
+        if((g_ext_fptr == NULL) && (params->interfacetype == LAPACKE_ROW_TEST))
         {
             row_major_syev_lda = strtoimax(argv[6], &endptr, CLI_DECIMAL_BASE);
             params->eig_sym_paramslist[0].lda = N;
@@ -70,6 +69,7 @@ void fla_test_syev(integer argc, char **argv, test_params_t *params)
         }
         g_lwork = strtoimax(argv[7], &endptr, CLI_DECIMAL_BASE);
         n_repeats = strtoimax(argv[8], &endptr, CLI_DECIMAL_BASE);
+        params->n_repeats = n_repeats;
 
         if(n_repeats > 0)
         {
@@ -125,7 +125,7 @@ void fla_test_syev_experiment(char *tst_api, test_params_t *params, integer data
     void *A = NULL, *w = NULL, *A_test = NULL, *L = NULL, *scal = NULL;
     double residual, err_thresh;
 
-    integer test_lapacke_interface = params->test_lapacke_interface;
+    integer interfacetype = params->interfacetype;
     int layout = params->matrix_major;
 
     /* Get input matrix dimensions.*/
@@ -138,7 +138,7 @@ void fla_test_syev_experiment(char *tst_api, test_params_t *params, integer data
 
     /* If leading dimensions = -1, set them to default value
        when inputs are from config files */
-    if(config_data)
+    if(g_config_data)
     {
         if(lda == -1)
         {
@@ -171,13 +171,13 @@ void fla_test_syev_experiment(char *tst_api, test_params_t *params, integer data
     create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &A_test, lda);
     copy_matrix(datatype, "full", n, n, A, lda, A_test, lda);
 
-    prepare_syev_run(&jobz, &uplo, n, A_test, lda, w, datatype, n_repeats, &time_min, &info,
-                     test_lapacke_interface, layout);
+    prepare_syev_run(&jobz, &uplo, n, A_test, lda, w, datatype, &info, interfacetype, layout,
+                     params);
 
     /* performance computation
-       (8/3)n^3 flops for eigen vectors
-       (4/3)n^3 flops for eigen values */
-    if(jobz == 'V')
+    (8/3)n^3 flops for eigen vectors
+    (4/3)n^3 flops for eigen values */
+    if(same_char(jobz, 'V'))
         perf = (double)((8.0 / 3.0) * n * n * n) / time_min / FLOPS_PER_UNIT_PERF;
     else
         perf = (double)((4.0 / 3.0) * n * n * n) / time_min / FLOPS_PER_UNIT_PERF;
@@ -189,7 +189,7 @@ void fla_test_syev_experiment(char *tst_api, test_params_t *params, integer data
     if(!FLA_EXTREME_CASE_TEST)
     {
         validate_syev(tst_api, &jobz, &range, n, A, A_test, lda, 0, 0, L, w, NULL, datatype,
-                      residual, params->imatrix_char, scal);
+                      residual, params->imatrix_char, scal, params);
     }
     else
     {
@@ -211,12 +211,12 @@ void fla_test_syev_experiment(char *tst_api, test_params_t *params, integer data
 }
 
 void prepare_syev_run(char *jobz, char *uplo, integer n, void *A, integer lda, void *w,
-                      integer datatype, integer n_repeats, double *time_min_, integer *info,
-                      integer test_lapacke_interface, int layout)
+                      integer datatype, integer *info, integer interfacetype, int layout,
+                      test_params_t *params)
 {
     void *A_save = NULL, *work = NULL, *rwork = NULL, *w_test = NULL;
-    integer i, lwork;
-    double t_min = 1e9, exe_time;
+    integer lwork;
+    double exe_time;
 
     /* Make a copy of the input matrix A. Same input values will be passed in
        each itertaion.*/
@@ -226,12 +226,22 @@ void prepare_syev_run(char *jobz, char *uplo, integer n, void *A, integer lda, v
     /* Make a workspace query the first time through. This will provide us with
        and ideal workspace size based on an internal block size.
        NOTE: LAPACKE interface handles workspace query internally */
-    if((test_lapacke_interface == 0) && (g_lwork <= 0))
+    if((interfacetype != LAPACKE_ROW_TEST) && (interfacetype != LAPACKE_COLUMN_TEST)
+       && (g_lwork <= 0))
     {
         lwork = -1;
         create_vector(datatype, &work, 1);
-        /* call to  syev API */
-        invoke_syev(datatype, jobz, uplo, &n, NULL, &lda, NULL, work, &lwork, rwork, info);
+#if ENABLE_CPP_TEST
+        if(interfacetype == LAPACK_CPP_TEST)
+        {
+            invoke_cpp_syev(datatype, jobz, uplo, &n, NULL, &lda, NULL, work, &lwork, rwork, info);
+        }
+        else
+#endif
+        {
+            /* call to  syev API */
+            invoke_syev(datatype, jobz, uplo, &n, NULL, &lda, NULL, work, &lwork, rwork, info);
+        }
         /* Get work size */
         if(*info == 0)
         {
@@ -246,7 +256,7 @@ void prepare_syev_run(char *jobz, char *uplo, integer n, void *A, integer lda, v
     }
 
     *info = 0;
-    for(i = 0; i < n_repeats && *info == 0; ++i)
+    FLA_EXEC_LOOP_BEGIN
     {
         /* Restore input matrix A value and allocate memory to output buffers
            for each iteration*/
@@ -260,11 +270,19 @@ void prepare_syev_run(char *jobz, char *uplo, integer n, void *A, integer lda, v
             rwork = NULL;
 
         /* Check if LAPACKE interface is enabled */
-        if(test_lapacke_interface == 1)
+        if((interfacetype == LAPACKE_ROW_TEST) || (interfacetype == LAPACKE_COLUMN_TEST))
         {
             exe_time
                 = prepare_lapacke_syev_run(datatype, layout, jobz, uplo, n, A, lda, w_test, info);
         }
+#if ENABLE_CPP_TEST
+        else if(interfacetype == LAPACK_CPP_TEST) /* Call CPP SYEV API */
+        {
+            exe_time = fla_test_clock();
+            invoke_cpp_syev(datatype, jobz, uplo, &n, A, &lda, w_test, work, &lwork, rwork, info);
+            exe_time = fla_test_clock() - exe_time;
+        }
+#endif
         else
         {
             exe_time = fla_test_clock();
@@ -274,8 +292,8 @@ void prepare_syev_run(char *jobz, char *uplo, integer n, void *A, integer lda, v
             exe_time = fla_test_clock() - exe_time;
         }
 
-        /* Get the best execution time */
-        t_min = fla_min(t_min, exe_time);
+        /* Update ctx and loop conditions */
+        FLA_EXEC_LOOP_UPDATE_WITH_INFO
 
         /* Make a copy of the output buffers. This is required to validate the API functionality.*/
         copy_realtype_vector(datatype, n, w_test, 1, w, 1);
@@ -289,8 +307,6 @@ void prepare_syev_run(char *jobz, char *uplo, integer n, void *A, integer lda, v
         free_vector(w_test);
     }
 
-    *time_min_ = t_min;
-
     free_matrix(A_save);
 }
 
@@ -302,7 +318,7 @@ double prepare_lapacke_syev_run(integer datatype, int layout, char *jobz, char *
     void *A_t = NULL;
 
     /* Configure leading dimensions as per the input matrix layout */
-    SELECT_LDA(g_ext_fptr, config_data, layout, n, row_major_syev_lda, lda_t);
+    SELECT_LDA(g_ext_fptr, g_config_data, layout, n, row_major_syev_lda, lda_t);
 
     A_t = A;
 
@@ -358,34 +374,4 @@ void invoke_syev(integer datatype, char *jobz, char *uplo, integer *n, void *a, 
             break;
         }
     }
-}
-
-integer invoke_lapacke_syev(integer datatype, int layout, char jobz, char uplo, integer n, void *a,
-                            integer lda, void *w)
-{
-    integer info = 0;
-    switch(datatype)
-    {
-        case FLOAT:
-        {
-            info = LAPACKE_ssyev(layout, jobz, uplo, n, a, lda, w);
-            break;
-        }
-        case DOUBLE:
-        {
-            info = LAPACKE_dsyev(layout, jobz, uplo, n, a, lda, w);
-            break;
-        }
-        case COMPLEX:
-        {
-            info = LAPACKE_cheev(layout, jobz, uplo, n, a, lda, w);
-            break;
-        }
-        case DOUBLE_COMPLEX:
-        {
-            info = LAPACKE_zheev(layout, jobz, uplo, n, a, lda, w);
-            break;
-        }
-    }
-    return info;
 }

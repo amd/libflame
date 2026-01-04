@@ -155,6 +155,10 @@ int fla_dgelqf_small(integer *m, integer *n, doublereal *a, integer *lda, double
 
         /* Allocate transpose matrix */
         at = malloc(*n * *m * sizeof(doublereal));
+        if(at == NULL)
+        {
+            return -1;
+        }
 
         /* Do transpose and store it in at */
         fla_dtranspose(m, n, a, lda, at, n);
@@ -250,13 +254,13 @@ int fla_zgetrf_small_simd(integer *m, integer *n, dcomplex *a, integer *lda, int
 
 /* SVD for small tall-matrices in DGESVD
  */
-void fla_dgesvd_xx_small10(integer wntus, integer wntvs, integer *m, integer *n, doublereal *a,
+void fla_dgesvd_xx_small10(integer wntus, integer wntvs, integer *m, integer *n, integer *ncu, doublereal *a,
                            integer *lda, doublereal *s, doublereal *u, integer *ldu, doublereal *vt,
                            integer *ldvt, doublereal *work, integer *info)
 {
     if(FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX2))
     {
-        fla_dgesvd_xx_small10_avx2(wntus, wntvs, m, n, a, lda, s, u, ldu, vt, ldvt, work, info);
+        fla_dgesvd_xx_small10_avx2(wntus, wntvs, m, n, ncu, a, lda, s, u, ldu, vt, ldvt, work, info);
     }
     return;
 }
@@ -319,11 +323,7 @@ void fla_dgesvd_small6T(integer *m, integer *n, doublereal *a, integer *lda, dou
 int fla_dgetrs_small_notrans(char *trans, integer *n, integer *nrhs, doublereal *a, integer *lda,
                              integer *ipiv, doublereal *b, integer *ldb, integer *info)
 {
-    if(FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX2))
-    {
-        fla_dgetrs_small_trsm_ll_avx2(trans, n, nrhs, a, lda, ipiv, b, ldb, info);
-    }
-    return 0;
+    return fla_dgetrs_small_trsm_ll_avx2(trans, n, nrhs, a, lda, ipiv, b, ldb, info);
 }
 
 /* Find the maximum element from absolute values of a real vector */

@@ -38,6 +38,14 @@
   At this moment, this routine is redirected to GESVD.
 */
 
+extern void xerbla_(const char *srname, const integer *info, ftnlen srname_len);
+extern int lapack_sgesvd(char *jobu, char *jobvt, integer *m, integer *n, real *a, integer *lda,
+                         real *s, real *u, integer *ldu, real *vt, integer *ldvt, real *work,
+                         integer *lwork, integer *info);
+extern int lapack_dgesvd(char *jobu, char *jobvt, integer *m, integer *n, doublereal *a,
+                         integer *lda, doublereal *s, doublereal *u, integer *ldu, doublereal *vt,
+                         integer *ldvt, doublereal *work, integer *lwork, integer *info);
+
 #define LAPACK_gesdd_real(prefix)                                                   \
     void F77_##prefix##gesdd(                                                       \
         char *jobz, integer *m, integer *n, PREFIX2LAPACK_TYPEDEF(prefix) * buff_A, \
@@ -55,10 +63,10 @@
         PREFIX2LAPACK_TYPEDEF(prefix) * buff_w, integer * lwork,                    \
         PREFIX2LAPACK_REALDEF(prefix) * buff_r, integer * buff_i, integer * info)
 
-#define LAPACK_gesdd_real_body(prefix)                                                     \
-                                                                                           \
-    F77_##prefix##gesvd(jobu, jobv, m, n, buff_A, ldim_A, buff_s, buff_U, ldim_U, buff_Vh, \
-                        ldim_Vh, buff_w, lwork, info);
+#define LAPACK_gesdd_real_body(prefix)                                                        \
+                                                                                              \
+    lapack_##prefix##gesvd(jobu, jobv, m, n, buff_A, ldim_A, buff_s, buff_U, ldim_U, buff_Vh, \
+                           ldim_Vh, buff_w, lwork, info);
 
 #define LAPACK_gesdd_complex_body(prefix)                                                  \
     char jobu[1], jobv[1];                                                                 \
@@ -155,6 +163,99 @@ LAPACK_gesdd_real(d)
                              integer *info);
 
 #if FLA_ENABLE_AMD_OPT
+    if(*m < FLA_DGESDD_SMALL_SIZE_THRESH && *n < FLA_DGESDD_SMALL_SIZE_THRESH)
+    {
+        /* Path for small sizes making use of optimized DGESVD */
+        integer i__1;
+        char jobu[1], jobv[1];
+        doublereal anrm;
+        extern doublereal dlange_(char *norm, integer *m, integer *n,
+                                  doublereal *a, integer *lda, doublereal *work);
+
+        *info = 0;
+        if(lsame_(jobz, "O", 1, 1))
+        {
+            if(*m >= *n)
+            {
+                jobu[0] = 'O';
+                jobv[0] = 'A';
+            }
+            else
+            {
+                jobu[0] = 'A';
+                jobv[0] = 'O';
+            }
+        }
+        else
+        {
+            jobu[0] = *jobz;
+            jobv[0] = *jobz;
+        }
+
+        /* Check input dimensions */
+        if(*m < 0)
+        {
+            *info = -2;
+        }
+        else if(*n < 0)
+        {
+            *info = -3;
+        }
+        else if(*ldim_A < fla_max(1, *m))
+        {
+            *info = -5;
+        }
+
+        /* Check for NAN values in input */
+        if(*lwork != -1 && *info == 0)
+        {
+            /* DLANGE call with "M" to get max absolute value */
+            anrm = dlange_("M", m, n, buff_A, ldim_A, NULL);
+            if(anrm != anrm)
+            {
+                *info = -4;
+            }
+        }
+
+        if(*info < 0)
+        {
+            /* If the info is set to a negative value, it means that the
+             * input parameters are invalid, so return. */
+            i__1 = -(*info);
+            xerbla_("DGESDD", &i__1, (ftnlen)6);
+            AOCL_DTL_TRACE_LOG_EXIT
+            return;
+        }
+
+        /* Calling DGESVD */
+        LAPACK_gesdd_real_body(d)
+
+        /* Map info values of DGESVD to DGESDD */
+        if(*info < 0)
+        {
+            if(*info >= -2)
+            {
+                /* Common job parameter 1 in DGESDD vs two split job parameters in DGESVD (1 & 2) */
+                *info = -1;
+            }
+            else
+            {
+                /* Reduce by 1 to match info values of DGESVD to DGESDD */
+                *info += 1;
+            }
+        }
+
+        if(*info < 0)
+        {
+            /* If the info is set to a negative value, it means that the
+             * input parameters are invalid, so return. */
+            i__1 = -(*info);
+            xerbla_("DGESDD", &i__1, (ftnlen)6);
+            AOCL_DTL_TRACE_LOG_EXIT
+            return;
+        }
+    }
+    else
     {
         /* Initialize global context data */
         aocl_fla_init();

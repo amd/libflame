@@ -7,14 +7,15 @@
  *  */
 
 #include "test_common.h"
+#include "test_prototype.h"
 
 void validate_gecon(char *tst_api, integer datatype, char norm, integer n, void *A, void *A_save,
-                    integer lda, double err_thresh, char imatrix_char)
+                    integer lda, double err_thresh, char imatrix_char, void *params)
 {
     double residual;
 
     /* Early return conditions */
-    if(n == 0 || n == 0)
+    if(n == 0)
     {
         FLA_TEST_PRINT_STATUS_AND_RETURN(n, n, err_thresh);
     }

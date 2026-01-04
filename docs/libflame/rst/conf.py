@@ -31,16 +31,15 @@
 import os
 
 project = 'AOCL-LAPACK'
-copyright = '2025, AMD'
+copyright = '2024-2025, AMD'
 author = 'AMD'
-release = '5.1'
+release = '5.2'
 
 # Integrating doxygen generated xml files
 extensions = ['breathe']
 pwd = os.path.dirname(os.path.abspath(__file__))
 pwd = os.path.join(pwd, './../doxygen/xml/')
-breathe_projects = { "aocl-lapack": pwd }
-breathe_default_project = "aocl-lapack"
+breathe_projects = { "lapack": pwd }
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_template']

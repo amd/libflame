@@ -6,6 +6,7 @@
 #if ENABLE_CPP_TEST
 #include <invoke_common.hh>
 #endif
+#include <invoke_lapacke.h>
 
 extern double perf;
 extern double time_min;
@@ -17,15 +18,13 @@ void fla_test_potrs_experiment(char *tst_api, test_params_t *params, integer dat
                                integer p_cur, integer q_cur, integer pci, integer n_repeats,
                                integer einfo);
 void prepare_potrs_run(char *uplo, integer m, integer nrhs, void *A, integer lda, integer datatype,
-                       void *b, integer ldb, integer n_repeats, double *time_min_, integer *info,
-                       integer interfacetype, int matrix_layout);
+                       void *b, integer ldb, integer *info, integer interfacetype,
+                       int matrix_layout, test_params_t *params);
 void invoke_potrs(char *uplo, integer datatype, integer *m, void *A, integer *lda, integer *nrhs,
                   void *b, integer *ldb, integer *info);
 double prepare_lapacke_potrs_run(integer datatype, int matrix_layout, char *uplo, integer m,
                                  integer nrhs, void *A, integer lda, void *b, integer ldb,
                                  integer *info);
-integer invoke_lapacke_potrs(integer datatype, int matrix_layout, char uplo, integer n,
-                             integer nrhs, const void *a, integer lda, void *b, integer ldb);
 
 void fla_test_potrs(integer argc, char **argv, test_params_t *params)
 {
@@ -36,7 +35,7 @@ void fla_test_potrs(integer argc, char **argv, test_params_t *params)
 
     if(argc == 1)
     {
-        config_data = 1;
+        g_config_data = 1;
         fla_test_output_info("--- %s ---\n", op_str);
         fla_test_output_info("\n");
         fla_test_op_driver(front_str, SQUARE_INPUT, params, LIN, fla_test_potrs_experiment);
@@ -74,6 +73,7 @@ void fla_test_potrs(integer argc, char **argv, test_params_t *params)
         }
 
         n_repeats = strtoimax(argv[8], &endptr, CLI_DECIMAL_BASE);
+        params->n_repeats = n_repeats;
 
         if(n_repeats > 0)
         {
@@ -144,7 +144,7 @@ void fla_test_potrs_experiment(char *tst_api, test_params_t *params, integer dat
 
     /* If leading dimensions = -1, set them to default value
        when inputs are from config files */
-    if(config_data)
+    if(g_config_data)
     {
         if(lda == -1)
         {
@@ -191,8 +191,8 @@ void fla_test_potrs_experiment(char *tst_api, test_params_t *params, integer dat
     copy_matrix(datatype, "full", n, nrhs, B, ldb, B_test, ldb);
 
     /* Invoke potrs API to find x using Ax-b */
-    prepare_potrs_run(&uplo, n, nrhs, A, lda, datatype, B_test, ldb, n_repeats, &time_min, &info,
-                      interfacetype, layout);
+    prepare_potrs_run(&uplo, n, nrhs, A, lda, datatype, B_test, ldb, &info, interfacetype, layout,
+                      params);
     copy_matrix(datatype, "full", n, nrhs, B_test, ldb, X, n);
 
     /* Compute the performance of the best experiment repeat. */
@@ -206,7 +206,7 @@ void fla_test_potrs_experiment(char *tst_api, test_params_t *params, integer dat
     if(!FLA_EXTREME_CASE_TEST)
     {
         validate_potrs(tst_api, n, nrhs, A_test, lda, X, B, ldb, datatype, residual,
-                       params->imatrix_char);
+                       params->imatrix_char, params);
     }
     /* check for output matrix when inputs as extreme values */
     else if(FLA_EXTREME_CASE_TEST)
@@ -222,6 +222,7 @@ void fla_test_potrs_experiment(char *tst_api, test_params_t *params, integer dat
         FLA_PRINT_TEST_STATUS(n, n, residual, err_thresh);
     }
 
+    /* Free up the buffers */
     free_matrix(A);
     free_matrix(A_test);
     free_matrix(B_test);
@@ -234,12 +235,11 @@ void fla_test_potrs_experiment(char *tst_api, test_params_t *params, integer dat
 }
 
 void prepare_potrs_run(char *uplo, integer n, integer nrhs, void *A, integer lda, integer datatype,
-                       void *B, integer ldb, integer n_repeats, double *time_min_, integer *info,
-                       integer interfacetype, int layout)
+                       void *B, integer ldb, integer *info, integer interfacetype, int layout,
+                       test_params_t *params)
 {
     void *A_save = NULL, *B_test = NULL;
-    double t_min = 1e9, exe_time;
-    integer i;
+    double exe_time;
 
     /* Make a copy of the input matrix A. Same input values will be passed in
        each itertaion.*/
@@ -247,7 +247,7 @@ void prepare_potrs_run(char *uplo, integer n, integer nrhs, void *A, integer lda
     create_matrix(datatype, LAPACK_COL_MAJOR, n, nrhs, &B_test, ldb);
 
     *info = 0;
-    for(i = 0; i < n_repeats && *info == 0; ++i)
+    FLA_EXEC_LOOP_BEGIN
     {
         /* Restore input matrix A value and allocate memory to output buffers
         for each iteration */
@@ -276,11 +276,11 @@ void prepare_potrs_run(char *uplo, integer n, integer nrhs, void *A, integer lda
 
             exe_time = fla_test_clock() - exe_time;
         }
-        /* Get the best execution time */
-        t_min = fla_min(t_min, exe_time);
+
+        /* Update ctx and loop conditions */
+        FLA_EXEC_LOOP_UPDATE_WITH_INFO
     }
     copy_matrix(datatype, "full", n, nrhs, B_test, ldb, B, ldb);
-    *time_min_ = t_min;
     free_matrix(A_save);
     free_vector(B_test);
 }
@@ -295,8 +295,8 @@ double prepare_lapacke_potrs_run(integer datatype, int layout, char *uplo, integ
     void *A_t = NULL, *B_t = NULL;
 
     /* Configure leading dimensions as per the input matrix layout */
-    SELECT_LDA(g_ext_fptr, config_data, layout, n, row_major_potrs_lda, lda_t);
-    SELECT_LDA(g_ext_fptr, config_data, layout, nrhs, row_major_potrs_ldb, ldb_t);
+    SELECT_LDA(g_ext_fptr, g_config_data, layout, n, row_major_potrs_lda, lda_t);
+    SELECT_LDA(g_ext_fptr, g_config_data, layout, nrhs, row_major_potrs_ldb, ldb_t);
 
     A_t = A_save;
     B_t = B_test;
@@ -355,34 +355,4 @@ void invoke_potrs(char *uplo, integer datatype, integer *n, void *A, integer *ld
             break;
         }
     }
-}
-
-integer invoke_lapacke_potrs(integer datatype, int layout, char uplo, integer n, integer nrhs,
-                             const void *A, integer lda, void *B, integer ldb)
-{
-    integer info = 0;
-    switch(datatype)
-    {
-        case FLOAT:
-        {
-            info = LAPACKE_spotrs(layout, uplo, n, nrhs, A, lda, B, ldb);
-            break;
-        }
-        case DOUBLE:
-        {
-            info = LAPACKE_dpotrs(layout, uplo, n, nrhs, A, lda, B, ldb);
-            break;
-        }
-        case COMPLEX:
-        {
-            info = LAPACKE_cpotrs(layout, uplo, n, nrhs, A, lda, B, ldb);
-            break;
-        }
-        case DOUBLE_COMPLEX:
-        {
-            info = LAPACKE_zpotrs(layout, uplo, n, nrhs, A, lda, B, ldb);
-            break;
-        }
-    }
-    return info;
 }

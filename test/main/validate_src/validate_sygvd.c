@@ -44,6 +44,7 @@
 /* ========================================================================= */
 
 #include "test_common.h"
+#include "test_prototype.h"
 
 extern double perf;
 extern double time_min;
@@ -69,14 +70,14 @@ extern double time_min;
         /* Test 1 */                                                                               \
         copy_matrix(datatype, "full", n, n, X, lda, X_scaled, lda);                                \
         /* If test is underflow/overflow then scale X accordingly */                               \
-        if(imatrix == 'O')                                                                         \
+        if(same_char(imatrix, 'O'))                                                                \
         {                                                                                          \
             /* Scale such that all elements are <= 10^-2 */                                        \
             get_max_from_matrix(datatype, X_scaled, &x_scale, n, n, lda);                          \
             x_scale = 0.01 / x_scale;                                                              \
             scal_matrix(datatype, &x_scale, X_scaled, n, n, lda, 1);                               \
         }                                                                                          \
-        else if(imatrix == 'U')                                                                    \
+        else if(same_char(imatrix, 'U'))                                                           \
         {                                                                                          \
             /* Scale such that all elements are >= 1 */                                            \
             get_min_from_matrix(datatype, X_scaled, &x_scale, n, n, lda);                          \
@@ -107,7 +108,8 @@ extern double time_min;
             norm_orig = ufmin;                                                                     \
         }                                                                                          \
         /* F = X * lambda */                                                                       \
-        multiply_matrix_diag_vector(datatype, n, n, X_scaled, lda, lambda_out, 1);                 \
+        multiply_matrix_diag_vector(datatype, 'R', VECTOR_TYPE_REAL, n, n, X_scaled, lda,          \
+                                    lambda_out, 1);                                                \
         switch(itype)                                                                              \
         {                                                                                          \
             case 1:                                                                                \
@@ -181,7 +183,7 @@ extern double time_min;
 void validate_sygvd(char *tst_api, integer itype, char *jobz, char *range, char *uplo, integer n,
                     void *A, void *A_test, integer lda, void *B, void *B_test, integer ldb,
                     integer il, integer iu, void *lambda_orig, void *lambda_out, void *ifail,
-                    integer datatype, double err_thresh, char imatrix, void *scal)
+                    integer datatype, double err_thresh, char imatrix, void *scal, void *params)
 {
     double residual, resid1 = 0., resid2 = 0., resid3 = 0.;
     double resid4 = 0., resid5 = 0., resid6 = 0.;
@@ -200,7 +202,7 @@ void validate_sygvd(char *tst_api, integer itype, char *jobz, char *range, char 
         sort_realtype_vector(datatype, "A", n, lambda_orig, 1);
     }
 
-    if((*range == 'I') || (*range == 'i'))
+    if(same_char(*range, 'I'))
     {
         /* Test I range
            check if output EVs matches the input EVs in given index range */
@@ -212,7 +214,7 @@ void validate_sygvd(char *tst_api, integer itype, char *jobz, char *range, char 
     }
     else /* range A or V */
     {
-        if(*jobz != 'N')
+        if(!same_char(*jobz, 'N'))
         {
             void *Z = NULL, *work = NULL, *X = NULL, *X_inv = NULL, *P = NULL, *L = NULL, *U = NULL,
                  *X_scaled = NULL;
@@ -243,7 +245,7 @@ void validate_sygvd(char *tst_api, integer itype, char *jobz, char *range, char 
             reset_matrix(datatype, n, n, X_scaled, lda);
 
             /* B = U'U = LL' = LU */
-            if(*uplo == 'U')
+            if(same_char(*uplo, 'U'))
             {
                 /* B_test contains the upper triangular cholesky factor
                    Set L = U' */

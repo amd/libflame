@@ -1204,6 +1204,18 @@ void fla_test_read_svd_params(const char *file_name, test_params_t *params)
     /* svd_threshold */
     READ_CONFIG_PARAM_FLT(params->svd_paramslist[i].svd_threshold);
 
+    /* Parameters for 'bdsqr' API */
+    /* uplo */
+    READ_CONFIG_PARAM_STR(params->svd_paramslist[i].uplo);
+    /* ncvt_bdsqr */
+    READ_CONFIG_PARAM_INT(params->svd_paramslist[i].ncvt_bdsqr);
+    /* nru_bdsqr */
+    READ_CONFIG_PARAM_INT(params->svd_paramslist[i].nru_bdsqr);
+    /* ncc_bdsqr */
+    READ_CONFIG_PARAM_INT(params->svd_paramslist[i].ncc_bdsqr);
+    /* ldc_bdsqr */
+    READ_CONFIG_PARAM_INT(params->svd_paramslist[i].ldc);
+
     fclose(fp);
 }
 

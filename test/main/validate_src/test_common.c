@@ -2846,7 +2846,8 @@ void pack_matrix_lt(integer datatype, void *A, void *B, integer N, integer lda)
 }
 
 /* Convert matrix to upper hessenberg form */
-void extract_upper_hessenberg_matrix(integer datatype, integer n, void *A, integer lda, integer ilo, integer ihi)
+void extract_upper_hessenberg_matrix(integer datatype, integer n, void *A, integer lda, integer ilo,
+                                     integer ihi)
 {
     aocl_int64_t i;
 
@@ -8551,4 +8552,58 @@ logical same_string(const char *str_a, const char *str_b)
 
     /* Both strings must end at the same position */
     return (*str_a == '\0' && *str_b == '\0') ? 1 : 0;
+}
+
+/*===========================================================================
+ * compute_matrix_inverse
+ *
+ * Computes the inverse of a square matrix using GETRF (LU factorization)
+ * followed by GETRI (inverse from LU factors).
+ *
+ * Parameters:
+ *   datatype  - Data type (FLOAT, DOUBLE, COMPLEX, DOUBLE_COMPLEX)
+ *   n         - Matrix dimension (n x n)
+ *   A         - Input matrix (n x n), will be OVERWRITTEN with A^{-1}
+ *   lda       - Leading dimension of A
+ *
+ * Returns:
+ *   0 on success, non-zero on failure (singular matrix or error)
+ *===========================================================================*/
+integer compute_matrix_inverse(integer datatype, integer n, void *A, integer lda)
+{
+    void *work = NULL;
+    void *ipiv = NULL;
+    integer lwork = -1;
+    integer info_getrf = 0, info_getri = 0;
+
+    if(A == NULL || n <= 0 || lda < n)
+        return -1;
+
+    create_vector(INTEGER, &ipiv, n);
+
+    /* Step 1: LU factorization using GETRF */
+    invoke_getrf(datatype, &n, &n, A, &lda, ipiv, &info_getrf);
+
+    if(info_getrf != 0)
+    {
+        free_vector(ipiv);
+        return info_getrf; /* Matrix is singular or error occurred */
+    }
+
+    /* Step 2: Workspace query for GETRI */
+    create_vector(datatype, &work, 1);
+    invoke_getri(datatype, &n, A, &lda, ipiv, work, &lwork, &info_getri);
+    lwork = get_work_value(datatype, work);
+    if(lwork < n)
+        lwork = n;
+    free_vector(work);
+
+    /* Step 3: Allocate workspace and compute inverse using GETRI */
+    create_vector(datatype, &work, lwork);
+    invoke_getri(datatype, &n, A, &lda, ipiv, work, &lwork, &info_getri);
+
+    free_vector(work);
+    free_vector(ipiv);
+
+    return info_getri;
 }

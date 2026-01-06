@@ -35,3 +35,8 @@ vu 0.5  3.0  4.9  0.8
 joba_gesvdq A H M E
 jobu_gesvdq A S R N
 jobv_gesvdq A V R N
+uplo L U U L
+ncvt_bdsqr 10  30  100  160
+nru_bdsqr 15  40  110  200
+ncc_bdsqr 12  40  100  150
+ldc -1 1000 2000 5000

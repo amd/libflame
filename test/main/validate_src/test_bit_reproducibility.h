@@ -546,6 +546,32 @@
         return 0;                                          \
     }
 
+/* Macro for the BRT path in the pre processing of API inputs in the test driver
+ * This macro generates the unique filename and stores the API input in GT case and loads API input
+ * in V case */
+#define FLA_BRT_PROCESS_FIVE_INPUT(datatype, m, n, A, lda, datatypeB, mB, nB, B, ldb, datatypeC, \
+                                   mC, nC, C, ldc, datatypeD, mD, nD, D, ldd, datatypeE, mE, nE,   \
+                                   E, lde, format, ...)                                             \
+    if(FLA_BIT_REPRODUCIBILITY_TEST)                                                               \
+    {                                                                                              \
+        generate_filename(&filename, tst_api, params->seed, get_datatype_char(datatype),           \
+                          params->imatrix_char, format, __VA_ARGS__);                              \
+        if(!same_char(((test_params_t *)params)->BRT_char, 'L'))                                   \
+        {                                                                                          \
+            update_filetype(&filename, "BRT/Input-Matrix/", FALSE);                                \
+            if(!store_load_input_matrices(params->BRT_char, filename, 5, datatype, m, n, A, lda,   \
+                                          datatypeB, mB, nB, B, ldb, datatypeC, mC, nC, C, ldc,    \
+                                          datatypeD, mD, nD, D, ldd, datatypeE, mE, nE, E, lde))   \
+            {                                                                                      \
+                goto free_buffers;                                                                 \
+            }                                                                                      \
+        }                                                                                          \
+        else                                                                                       \
+        {                                                                                          \
+            ((char *)filename)[strlen(filename) - 5] = '\0';                                       \
+        }                                                                                          \
+    }
+
 /* Given a file path, create all constituent directories if missing */
 void create_file_path_dirs(char *file_path);
 

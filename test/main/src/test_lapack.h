@@ -612,6 +612,13 @@ typedef struct SVD_paramlist_t
     /* Parameters for 'gesvdx' API  */
     integer il, iu; // the indices of the smallest and largest singular values.
 
+    /* Parameters for 'bdsqr' API  */
+    integer ncvt_bdsqr; // The number of columns of the matrix VT. NCVT >= 0.
+    integer nru_bdsqr; // The number of rows of the matrix U. NRU >= 0.
+    integer ncc_bdsqr; // The number of columns of the matrix C. NCC >= 0.
+    integer ldc; // The leading dimension of the array C. LDC >= max(1,N) if NCC > 0; LDC >=1
+                       // if NCC = 0.
+
     char data_types_char[MAX_NUM_DATATYPES];
     char jobu; // Must be 'U' or 'N'.
     char jobv; // Must be 'V' or 'N'.
@@ -640,6 +647,9 @@ typedef struct SVD_paramlist_t
     char joba_gesvdq; //  Must be 'A', 'H', 'M' , 'E'
     char jobu_gesvdq; // Must be 'A', 'S', 'R' , 'N'
     char jobv_gesvdq; // Must be 'A', 'V', 'R' , 'N'.
+
+    /* Parameters for 'bdsqr' API  */
+    char uplo; // Must be 'U' or 'L'.
 } SVD_paramlist;
 
 /* struct to hold AUX parameters */

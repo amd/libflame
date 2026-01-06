@@ -2526,7 +2526,7 @@ void scale_matrix_overflow_underflow_potri(integer datatype, integer n, void *A,
     else if(same_char(imatrix_char, 'O'))
     {
         get_max_from_matrix(datatype, A, max_min, n, n, lda);
-        if (n < 100)
+        if(n < 100)
         {
             tuning_val = 2.0;
         }
@@ -2651,8 +2651,8 @@ void scale_matrix_underflow_overflow_trtri(integer datatype, char diag_type, int
 
 /* Scaling matrix with values around overflow, underflow for TRTRS */
 void scale_matrix_overflow_underflow_trtrs(integer datatype, integer n, integer nrhs, void *A,
-                                           void *B, integer lda, integer ldb, char trans, char imatrix_char,
-                                           char diag, char uplo)
+                                           void *B, integer lda, integer ldb, char trans,
+                                           char imatrix_char, char diag, char uplo)
 {
     void *max_min = NULL, *max_min_B = NULL, *scal = NULL, *scal_B = NULL;
     double tuning_val = 5.0, tuning_val_B = 5.0;
@@ -2746,7 +2746,7 @@ void scale_matrix_overflow_underflow_trtrs(integer datatype, integer n, integer 
 
 /* Scaling matrix with values around overflow underflow for getrfnp and getrfnp */
 void scale_matrix_underflow_overflow_getrfnp(integer datatype, integer m, integer n, void *A,
-                                           integer lda, char imatrix_char)
+                                             integer lda, char imatrix_char)
 {
     void *max_min = NULL, *scal = NULL;
     double tuning_val = 1.0;
@@ -2819,7 +2819,7 @@ void scale_matrix_underflow_overflow_getrfnp(integer datatype, integer m, intege
         {
             tuning_val = 95.0;
         }
-        if ((m >= 500 || n >= 500) && datatype == DOUBLE_COMPLEX)
+        if((m >= 500 || n >= 500) && datatype == DOUBLE_COMPLEX)
         {
             tuning_val = 10e200;
         }
@@ -2844,4 +2844,98 @@ void scale_matrix_underflow_overflow_getrfnp(integer datatype, integer m, intege
     /* free vectors */
     free_vector(max_min);
     free_vector(scal);
+}
+
+/* Scaling matrix with values around overflow underflow for BDSQR */
+void scale_matrix_overflow_underflow_bdsqr(integer datatype, integer n, void *d, void *e,
+                                           char imatrix_char)
+{
+    float flt_ratio;
+    double dbl_ratio;
+    integer rt = get_realtype(datatype);
+
+    if(same_char(imatrix_char, 'O'))
+    {
+        flt_ratio = FLT_MAX;
+        dbl_ratio = DBL_MAX;
+
+        /* Find global max across d and e (treat as (len x 1) matrices) */
+        void *max;
+        create_vector(rt, &max, 1);
+        get_max_from_matrix(rt, d, max, n, 1, n);
+        if(n > 1)
+        {
+            void *e_max;
+            create_vector(rt, &e_max, 1);
+            get_max_from_matrix(rt, e, e_max, n - 1, 1, n - 1);
+            if(get_realtype_value(rt, e_max) > get_realtype_value(rt, max))
+                copy_vector(rt, 1, e_max, 1, max, 1);
+            free_vector(e_max);
+        }
+        /* Adjust the ratio based on n to avoid overflow/underflow in scaling */
+        if(n <= 50)
+        {
+            flt_ratio = flt_ratio / 25.00;
+            dbl_ratio = dbl_ratio / 25.00;
+        }
+        else if(n <= 500)
+        {
+            flt_ratio = flt_ratio / 15.00;
+            dbl_ratio = dbl_ratio / 13.00;
+        }
+        else if(n <= 1000)
+        {
+            flt_ratio = flt_ratio / 15.00;
+            dbl_ratio = dbl_ratio / 17.00;
+        }
+        else
+        {
+            flt_ratio = flt_ratio / 50.00;
+            dbl_ratio = dbl_ratio / 50.00;
+        }
+
+        /* Compute scale and apply to both vectors (SVD pattern) */
+        void *scal;
+        create_vector(rt, &scal, 1);
+        compute_ratio(rt, scal, flt_ratio, dbl_ratio, max);
+
+        scal_matrix(rt, scal, d, n, 1, n, i_one);
+        if(n > 1)
+            scal_matrix(rt, scal, e, n - 1, 1, n - 1, i_one);
+
+        free_vector(scal);
+        free_vector(max);
+    }
+    else if(same_char(imatrix_char, 'U'))
+    {
+        /* Initialize the ratios with datatype MIN (SVD pattern) */
+        flt_ratio = FLT_MIN;
+        dbl_ratio = DBL_MIN;
+
+        /* Find global min across d and e */
+        void *min;
+        create_vector(rt, &min, 1);
+        get_min_from_matrix(rt, d, min, n, 1, n);
+        if(n > 1)
+        {
+            void *e_min;
+            create_vector(rt, &e_min, 1);
+            get_min_from_matrix(rt, e, e_min, n - 1, 1, n - 1);
+            if(get_realtype_value(rt, e_min) < get_realtype_value(rt, min))
+                copy_vector(rt, 1, e_min, 1, min, 1);
+            free_vector(e_min);
+        }
+
+        /* Compute scale and apply to both vectors */
+        void *scal;
+        create_vector(rt, &scal, 1);
+        compute_ratio(rt, scal, flt_ratio, dbl_ratio, min);
+
+        scal_matrix(rt, scal, d, n, 1, n, i_one);
+        if(n > 1)
+            scal_matrix(rt, scal, e, n - 1, 1, n - 1, i_one);
+
+        free_vector(scal);
+        free_vector(min);
+    }
 }

@@ -195,5 +195,8 @@ void scale_matrix_overflow_underflow_trtrs(integer datatype, integer n, integer 
                                            char imatrix_char, char diag, char uplo);
 /* Scaling matrix with values around overflow underflow for getrfnp and getrfnp */
 void scale_matrix_underflow_overflow_getrfnp(integer datatype, integer m, integer n, void *A,
-                                           integer lda, char imatrix_char);
+                                             integer lda, char imatrix_char);
+/* Scaling matrix with values around overflow underflow for BDSQR */
+void scale_matrix_overflow_underflow_bdsqr(integer datatype, integer n, void *d, void *e,
+                                           char imatrix_char);
 #endif // TEST_OVERFLOW_UNDERFLOW_H

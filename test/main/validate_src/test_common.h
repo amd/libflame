@@ -217,9 +217,10 @@ extern int matrix_layout;
 #define FLA_IS_LAPACKE_INTERFACE(interfacetype) \
     (interfacetype == LAPACKE_ROW_TEST || interfacetype == LAPACKE_COLUMN_TEST)
 
-#define FLA_COMPUTE_RESIDUAL(datatype, resid, norm, eps, norm_base, m) \
-        if((((datatype == FLOAT) || (datatype == COMPLEX)) && (norm_base > 0.f)) || (((datatype == DOUBLE) || (datatype == DOUBLE_COMPLEX)) && (norm_base > 0.))) \
-            resid = norm / (eps * norm_base * m);
+#define FLA_COMPUTE_RESIDUAL(datatype, resid, norm, eps, norm_base, m)                  \
+    if((((datatype == FLOAT) || (datatype == COMPLEX)) && (norm_base > 0.f))            \
+       || (((datatype == DOUBLE) || (datatype == DOUBLE_COMPLEX)) && (norm_base > 0.))) \
+        resid = norm / (eps * norm_base * m);
 
 /* Max function with NAN checks */
 double fla_test_max(double v1, double v2);
@@ -364,8 +365,8 @@ void convert_upper_hessenberg(integer datatype, integer n, void *A, integer lda)
 /* Pack a symmetric matrix in column first order */
 void pack_matrix_lt(integer datatype, void *A, void *B, integer N, integer lda);
 /* Convert matrix to upper hessenberg form */
-void extract_upper_hessenberg_matrix(integer datatype, integer n, void *A, integer lda,
-                                     integer ilo, integer ihi);
+void extract_upper_hessenberg_matrix(integer datatype, integer n, void *A, integer lda, integer ilo,
+                                     integer ihi);
 /* Convert matrix according to ILO and IHI values */
 void get_generic_triangular_matrix(integer datatype, integer N, void *A, integer LDA, integer ilo,
                                    integer ihi, integer AInitialized);
@@ -605,4 +606,7 @@ void get_non_singular_triangular_matrix(char *uplo, integer datatype, integer m,
 
 /* Case-insensitive string comparison of given two strings*/
 logical same_string(const char *str_a, const char *str_b);
+
+/* Compute the inverse of a square matrix using GETRF + GETRI */
+integer compute_matrix_inverse(integer datatype, integer n, void *A, integer lda);
 #endif // TEST_COMMON_H

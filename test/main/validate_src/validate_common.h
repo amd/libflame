@@ -228,8 +228,15 @@ void validate_gebrd(integer datatype, char *tst_api, integer m, integer n, void 
                     void *A_test, integer ldat, void *d, void *e, void *tauq, void *taup,
                     double err_thresh, void *params);
 void validate_trtri(char *tst_api, char uplo, char diag, integer n, void *A, void *A_inv,
-                     integer lda, integer datatype, double err_thresh, char imatrix, void *params);
-void validate_trtrs(char *tst_api, integer datatype, char *uplo, char *trans, char *diag, integer n, integer nrhs,
-                    void *A, integer lda, void *X, void *B, integer ldb, double err_thresh, char imatrix, void *params);
+                    integer lda, integer datatype, double err_thresh, char imatrix, void *params);
+void validate_trtrs(char *tst_api, integer datatype, char *uplo, char *trans, char *diag, integer n,
+                    integer nrhs, void *A, integer lda, void *X, void *B, integer ldb,
+                    double err_thresh, char imatrix, void *params);
+void validate_bdsqr(char *tst_api, integer n, void *d_out, void *d_in, void *e_in,
+                    void *U_out, integer ldu, void *VT_out, integer ldvt,
+                    void *U_in, void *VT_in, integer ncvt, integer nru, integer ncc,
+                    void *C_out, integer ldc, void *C_in, char uplo,
+                    integer datatype, double residual_in, double err_thresh, FILE *g_ext_fptr,
+                    char imatrix_char, void *params);
 
 #endif // VALIDATE_COMMON_H

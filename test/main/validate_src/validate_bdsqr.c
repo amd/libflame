@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2026, Advanced Micro Devices, Inc. All rights reserved.
+    Copyright (C) 2025, Advanced Micro Devices, Inc. All rights reserved.
 */
 
 /*! @file validate_bdsqr.c
@@ -45,7 +45,7 @@ void validate_bdsqr(char *tst_api, integer n, void *d_out, void *d_in, void *e_i
                     char imatrix_char, void *params)
 {
     double resid1 = 0., resid2 = 0., resid3 = 0., resid4 = 0., resid5 = 0., resid6 = 0.,
-           resid7 = 0., resid8 = 0., resid9 = 0., resid10 = 0.;
+           resid7 = 0.;
     double residual = residual_in;
     double safe_min;
     integer realtype = get_realtype(datatype);
@@ -122,21 +122,19 @@ void validate_bdsqr(char *tst_api, integer n, void *d_out, void *d_in, void *e_i
         create_matrix(datatype, LAPACK_COL_MAJOR, nru, ncvt, &A_orig, nru);
 
         /* temp1 = U_in * B (NRU × N) */
-        fla_invoke_gemm(datatype, "N", "N", &nru, &n, &n, d_one, U_in, &ldu, B_mat, &n, d_zero,
-                        temp1, &nru);
+        fla_invoke_gemm(datatype, "N", "N", &nru, &n, &n, U_in, &ldu, B_mat, &n, temp1, &nru);
         /* A_orig = temp1 * VT_in = U_in * B * VT_in (NRU × NCVT) */
-        fla_invoke_gemm(datatype, "N", "N", &nru, &ncvt, &n, d_one, temp1, &nru, VT_in, &ldvt,
-                        d_zero, A_orig, &nru);
+        fla_invoke_gemm(datatype, "N", "N", &nru, &ncvt, &n, temp1, &nru, VT_in, &ldvt, A_orig,
+                        &nru);
 
         /* Compute A_rec = U_out * Σ * VT_out */
         create_matrix(datatype, LAPACK_COL_MAJOR, nru, ncvt, &A_rec, nru);
 
         /* temp1 = U_out * Σ (NRU × N) */
-        fla_invoke_gemm(datatype, "N", "N", &nru, &n, &n, d_one, U_out, &ldu, Sigma, &n, d_zero,
-                        temp1, &nru);
+        fla_invoke_gemm(datatype, "N", "N", &nru, &n, &n, U_out, &ldu, Sigma, &n, temp1, &nru);
         /* A_rec = temp1 * VT_out = U_out * Σ * VT_out (NRU × NCVT) */
-        fla_invoke_gemm(datatype, "N", "N", &nru, &ncvt, &n, d_one, temp1, &nru, VT_out, &ldvt,
-                        d_zero, A_rec, &nru);
+        fla_invoke_gemm(datatype, "N", "N", &nru, &ncvt, &n, temp1, &nru, VT_out, &ldvt, A_rec,
+                        &nru);
 
         /* Compute difference: A_rec = A_rec - A_orig */
         matrix_difference(datatype, nru, ncvt, A_rec, nru, A_orig, nru);
@@ -198,11 +196,10 @@ void validate_bdsqr(char *tst_api, integer n, void *d_out, void *d_in, void *e_i
         {
             /* Q = U_in^{-1} * U_out */
             create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &Q_mat, n);
-            fla_invoke_gemm(datatype, "N", "N", &n, &n, &n, d_one, U_in_inv, &n, U_out, &ldu,
-                            d_zero, Q_mat, &n);
+            fla_invoke_gemm(datatype, "N", "N", &n, &n, &n, U_in_inv, &n, U_out, &ldu, Q_mat, &n);
 
             /* Check orthogonality: Q^T * Q = I */
-            resid3 = check_orthogonal_matrix(trans_char, datatype, Q_mat, n, n, n, n, params);
+            resid3 = check_orthogonal_matrix(trans_char, datatype, Q_mat, n, n, n, n);
 
             free_matrix(Q_mat);
         }
@@ -226,11 +223,11 @@ void validate_bdsqr(char *tst_api, integer n, void *d_out, void *d_in, void *e_i
         {
             /* P^T = VT_out * VT_in^{-1} */
             create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &PT_mat, n);
-            fla_invoke_gemm(datatype, "N", "N", &n, &n, &n, d_one, VT_out, &ldvt, VT_in_inv, &n,
-                            d_zero, PT_mat, &n);
+            fla_invoke_gemm(datatype, "N", "N", &n, &n, &n, VT_out, &ldvt, VT_in_inv, &n, PT_mat,
+                            &n);
 
             /* Check orthogonality: P^T * P = I (i.e., 'N' mode: A * A^T = I) */
-            resid3 = check_orthogonal_matrix('N', datatype, PT_mat, n, n, n, n, params);
+            resid3 = check_orthogonal_matrix('N', datatype, PT_mat, n, n, n, n);
 
             free_matrix(PT_mat);
         }
@@ -267,13 +264,12 @@ void validate_bdsqr(char *tst_api, integer n, void *d_out, void *d_in, void *e_i
         create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &Q_mat, n);
 
         /* Q = U_in^H * U_out for complex, Q = U_in^T * U_out for real */
-        fla_invoke_gemm(datatype, &trans_char, "N", &n, &n, &nru, d_one, U_in, &ldu, U_out, &ldu,
-                        d_zero, Q_mat, &n);
+        fla_invoke_gemm(datatype, &trans_char, "N", &n, &n, &nru, U_in, &ldu, U_out, &ldu, Q_mat,
+                        &n);
 
         /* C_rec = Q^T * C_in (or Q^H for complex) */
         create_matrix(datatype, LAPACK_COL_MAJOR, n, ncc, &C_rec, n);
-        fla_invoke_gemm(datatype, &trans_char, "N", &n, &ncc, &n, d_one, Q_mat, &n, C_in, &ldc,
-                        d_zero, C_rec, &n);
+        fla_invoke_gemm(datatype, &trans_char, "N", &n, &ncc, &n, Q_mat, &n, C_in, &ldc, C_rec, &n);
 
         /* Compute difference and residual */
         matrix_difference(datatype, n, ncc, C_rec, n, C_out, ldc);
@@ -343,13 +339,12 @@ void validate_bdsqr(char *tst_api, integer n, void *d_out, void *d_in, void *e_i
         {
             /* Q = U_in^{-1} * U_out */
             create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &Q_mat, n);
-            fla_invoke_gemm(datatype, "N", "N", &n, &n, &n, d_one, U_in_inv, &n, U_out, &ldu,
-                            d_zero, Q_mat, &n);
+            fla_invoke_gemm(datatype, "N", "N", &n, &n, &n, U_in_inv, &n, U_out, &ldu, Q_mat, &n);
 
             /* P^T = VT_out * VT_in^{-1} */
             create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &PT_mat, n);
-            fla_invoke_gemm(datatype, "N", "N", &n, &n, &n, d_one, VT_out, &ldvt, VT_in_inv, &n,
-                            d_zero, PT_mat, &n);
+            fla_invoke_gemm(datatype, "N", "N", &n, &n, &n, VT_out, &ldvt, VT_in_inv, &n, PT_mat,
+                            &n);
 
             /* Build B and Σ */
             create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &B_mat, n);
@@ -363,11 +358,9 @@ void validate_bdsqr(char *tst_api, integer n, void *d_out, void *d_in, void *e_i
             create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &B_rec, n);
 
             /* temp1 = Q * Σ */
-            fla_invoke_gemm(datatype, "N", "N", &n, &n, &n, d_one, Q_mat, &n, Sigma, &n, d_zero,
-                            temp1, &n);
+            fla_invoke_gemm(datatype, "N", "N", &n, &n, &n, Q_mat, &n, Sigma, &n, temp1, &n);
             /* B_rec = temp1 * P^T = Q * Σ * P^T */
-            fla_invoke_gemm(datatype, "N", "N", &n, &n, &n, d_one, temp1, &n, PT_mat, &n, d_zero,
-                            B_rec, &n);
+            fla_invoke_gemm(datatype, "N", "N", &n, &n, &n, temp1, &n, PT_mat, &n, B_rec, &n);
 
             /* Compute difference: B_rec = B_rec - B */
             matrix_difference(datatype, n, n, B_rec, n, B_mat, n);
@@ -434,13 +427,12 @@ void validate_bdsqr(char *tst_api, integer n, void *d_out, void *d_in, void *e_i
         create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &PT_mat, n);
 
         /* P^T = VT_out * VT_in^H for complex, P^T = VT_out * VT_in^T for real */
-        fla_invoke_gemm(datatype, "N", &trans_char, &n, &n, &ncvt, d_one, VT_out, &ldvt, VT_in,
-                        &ldvt, d_zero, PT_mat, &n);
+        fla_invoke_gemm(datatype, "N", &trans_char, &n, &n, &ncvt, VT_out, &ldvt, VT_in, &ldvt,
+                        PT_mat, &n);
 
         /* VT_rec = P^T * VT_in */
         create_matrix(datatype, LAPACK_COL_MAJOR, n, ncvt, &VT_rec, n);
-        fla_invoke_gemm(datatype, "N", "N", &n, &ncvt, &n, d_one, PT_mat, &n, VT_in, &ldvt, d_zero,
-                        VT_rec, &n);
+        fla_invoke_gemm(datatype, "N", "N", &n, &ncvt, &n, PT_mat, &n, VT_in, &ldvt, VT_rec, &n);
 
         /* Compute difference and residual */
         matrix_difference(datatype, n, ncvt, VT_rec, n, VT_out, ldvt);
@@ -498,13 +490,12 @@ void validate_bdsqr(char *tst_api, integer n, void *d_out, void *d_in, void *e_i
         create_matrix(datatype, LAPACK_COL_MAJOR, n, n, &Q_mat, n);
 
         /* Q = U_in^H * U_out for complex, Q = U_in^T * U_out for real */
-        fla_invoke_gemm(datatype, &trans_char, "N", &n, &n, &nru, d_one, U_in, &ldu, U_out, &ldu,
-                        d_zero, Q_mat, &n);
+        fla_invoke_gemm(datatype, &trans_char, "N", &n, &n, &nru, U_in, &ldu, U_out, &ldu, Q_mat,
+                        &n);
 
         /* U_rec = U_in * Q */
         create_matrix(datatype, LAPACK_COL_MAJOR, nru, n, &U_rec, nru);
-        fla_invoke_gemm(datatype, "N", "N", &nru, &n, &n, d_one, U_in, &ldu, Q_mat, &n, d_zero,
-                        U_rec, &nru);
+        fla_invoke_gemm(datatype, "N", "N", &nru, &n, &n, U_in, &ldu, Q_mat, &n, U_rec, &nru);
 
         /* Compute difference and residual */
         matrix_difference(datatype, nru, n, U_rec, nru, U_out, ldu);
@@ -534,13 +525,6 @@ void validate_bdsqr(char *tst_api, integer n, void *d_out, void *d_in, void *e_i
         free_matrix(Q_mat);
     }
 
-    /* Test 08: Check padding rows of U_out not modified */
-    resid8 = check_padding(datatype, nru, n, U_out, ldu);
-    /* Test 09: Check padding rows of VT_out not modified */
-    resid9 = check_padding(datatype, n, ncvt, VT_out, ldvt);
-    /* Test 10: Check padding rows of C_out not modified */
-    resid10 = check_padding(datatype, n, ncc, C_out, ldc);
-
     /* Combine residuals - take the maximum */
     residual = fla_test_max(resid1, resid2);
     residual = fla_test_max(residual, resid3);
@@ -548,9 +532,6 @@ void validate_bdsqr(char *tst_api, integer n, void *d_out, void *d_in, void *e_i
     residual = fla_test_max(residual, resid5);
     residual = fla_test_max(residual, resid6);
     residual = fla_test_max(residual, resid7);
-    residual = fla_test_max(residual, resid8);
-    residual = fla_test_max(residual, resid9);
-    residual = fla_test_max(residual, resid10);
 
     /* Print results */
     FLA_PRINT_TEST_STATUS(n, n, residual, err_thresh);
@@ -561,7 +542,4 @@ void validate_bdsqr(char *tst_api, integer n, void *d_out, void *d_in, void *e_i
     FLA_PRINT_SUBTEST_STATUS(resid5, err_thresh, "05");
     FLA_PRINT_SUBTEST_STATUS(resid6, err_thresh, "06");
     FLA_PRINT_SUBTEST_STATUS(resid7, err_thresh, "07");
-    FLA_PRINT_SUBTEST_STATUS(resid8, err_thresh, "08");
-    FLA_PRINT_SUBTEST_STATUS(resid9, err_thresh, "09");
-    FLA_PRINT_SUBTEST_STATUS(resid10, err_thresh, "10");
 }

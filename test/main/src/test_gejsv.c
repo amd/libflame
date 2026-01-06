@@ -75,6 +75,12 @@ void fla_test_gejsv(integer argc, char **argv, test_params_t *params)
     integer tests_not_run = 1, invalid_dtype = 0, einfo = 0;
     integer num_ranges, i;
 
+    /* Arrays to save original range values */
+    integer *orig_m_range_start = NULL;
+    integer *orig_m_range_end = NULL;
+    integer *orig_n_range_start = NULL;
+    integer *orig_n_range_end = NULL;
+
     if(argc == 1)
     {
         /* Test with parameters from config */
@@ -87,8 +93,41 @@ void fla_test_gejsv(integer argc, char **argv, test_params_t *params)
            Need to map these special sizes to the standard size
            variables used by test op driver. */
         num_ranges = params->svd_paramslist[0].num_ranges;
+
+        /* Save original range values before modifying them */
+        orig_m_range_start = (integer *)fla_mem_alloc(num_ranges * sizeof(integer));
+        orig_m_range_end = (integer *)fla_mem_alloc(num_ranges * sizeof(integer));
+        orig_n_range_start = (integer *)fla_mem_alloc(num_ranges * sizeof(integer));
+        orig_n_range_end = (integer *)fla_mem_alloc(num_ranges * sizeof(integer));
+
+        /* Check for allocation failures */
+        if(orig_m_range_start == NULL || orig_m_range_end == NULL || orig_n_range_start == NULL
+           || orig_n_range_end == NULL)
+        {
+            printf("\nError: Memory allocation failed for range arrays in GEJSV test\n");
+
+            /* Clean up any successfully allocated memory */
+            if(orig_m_range_start != NULL)
+                free(orig_m_range_start);
+            if(orig_m_range_end != NULL)
+                free(orig_m_range_end);
+            if(orig_n_range_start != NULL)
+                free(orig_n_range_start);
+            if(orig_n_range_end != NULL)
+                free(orig_n_range_end);
+
+            return;
+        }
+
         for(i = 0; i < num_ranges; i++)
         {
+            /* Save original values */
+            orig_m_range_start[i] = params->svd_paramslist[i].m_range_start;
+            orig_m_range_end[i] = params->svd_paramslist[i].m_range_end;
+            orig_n_range_start[i] = params->svd_paramslist[i].n_range_start;
+            orig_n_range_end[i] = params->svd_paramslist[i].n_range_end;
+
+            /* Set GEJSV-specific values */
             params->svd_paramslist[i].m_range_start = params->svd_paramslist[i].m_gejsv;
             params->svd_paramslist[i].m_range_end = params->svd_paramslist[i].m_gejsv;
             params->svd_paramslist[i].n_range_start = params->svd_paramslist[i].n_gejsv;
@@ -99,6 +138,21 @@ void fla_test_gejsv(integer argc, char **argv, test_params_t *params)
         fla_test_output_info("\n");
         fla_test_op_driver(front_str, RECT_INPUT, params, SVD, fla_test_gejsv_experiment);
         tests_not_run = 0;
+
+        /* Restore original range values after GEJSV completes */
+        for(i = 0; i < num_ranges; i++)
+        {
+            params->svd_paramslist[i].m_range_start = orig_m_range_start[i];
+            params->svd_paramslist[i].m_range_end = orig_m_range_end[i];
+            params->svd_paramslist[i].n_range_start = orig_n_range_start[i];
+            params->svd_paramslist[i].n_range_end = orig_n_range_end[i];
+        }
+
+        /* Free temporary storage */
+        free(orig_m_range_start);
+        free(orig_m_range_end);
+        free(orig_n_range_start);
+        free(orig_n_range_end);
     }
     if(argc == 19)
     {

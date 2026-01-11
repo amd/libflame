@@ -13,6 +13,7 @@
 
 static aocl_int64_t c__1 = 1;
 /* QR for small sizes */
+__attribute__((aligned(512)))
 int fla_dgeqrf_small_avx2(aocl_int64_t *m, aocl_int64_t *n, doublereal *a, aocl_int64_t *lda, doublereal *tau,
                           doublereal *work)
 {

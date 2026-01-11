@@ -350,6 +350,7 @@
     max_value = invoke_sqrtx(d, max_value);
 
 /* Find maxmimum absoute value of given doublereal vector using avx512 intrinsics*/
+__attribute__((aligned(256)))
 doublereal fla_get_max_dabs_element_vector_avx512(aocl_int64_t m, doublereal *a, aocl_int64_t a_dim)
 {
     fla_get_max_xabs_element_real_avx512(d, doublereal, m, a, a_dim, 8, 4, 16);

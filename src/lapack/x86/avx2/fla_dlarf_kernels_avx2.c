@@ -7,6 +7,7 @@
 #include "fla_lapack_avx2_kernels.h"
 
 #if FLA_ENABLE_AMD_OPT
+__attribute__((aligned(512)))
 void fla_dlarf_left_apply_incv1_avx2(aocl_int64_t m, aocl_int64_t n, doublereal *a_buff, aocl_int64_t ldr,
                                      doublereal *v, doublereal ntau, doublereal *work)
 {

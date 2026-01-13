@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2022-2025, Advanced Micro Devices, Inc. All rights reserved.
+    Copyright (C) 2022-2026, Advanced Micro Devices, Inc. All rights reserved.
 */
 
 /*! @file validate_getrf.c
@@ -85,8 +85,7 @@ void validate_getrf_internal(integer m_A, integer n_A, void *A, void *A_test, /*
     {
         case FLOAT:
         {
-            float norm = 0, norm_A = 0, norm_X = 0, eps;
-            eps = fla_lapack_slamch("Epsilon");
+            float norm = 0, norm_A = 0, norm_X = 0;
             /* Test 1 */
             if(m_A == n_A)
             {
@@ -100,7 +99,7 @@ void validate_getrf_internal(integer m_A, integer n_A, void *A, void *A_test, /*
                 /* Compute X - X' */
                 saxpy_(&m_A, &s_n_one, B, &i_one, X, &i_one);
                 norm = snrm2_(&m_A, X, &i_one);
-                *resid1 = (norm / norm_X) / (m_A * eps);
+                *resid1 = fla_compute_residual(datatype, 'E', norm, norm_X, m_A, params);
             }
             else
             {
@@ -144,14 +143,13 @@ void validate_getrf_internal(integer m_A, integer n_A, void *A, void *A_test, /*
             {
                 norm = fla_lapack_slange("F", &m_A, &n_A, T, &m_A, work);
             }
-            *resid2 = (norm / norm_A) / (n_A * eps);
+            *resid2 = fla_compute_residual(datatype, 'E', norm, norm_A, n_A, params);
             break;
         }
         case DOUBLE:
         {
-            double norm = 0, norm_A = 0, norm_X, eps;
+            double norm = 0, norm_A = 0, norm_X;
 
-            eps = fla_lapack_dlamch("Epsilon");
             /* Test 1 */
             if(m_A == n_A)
             {
@@ -165,7 +163,7 @@ void validate_getrf_internal(integer m_A, integer n_A, void *A, void *A_test, /*
                 /* Compute X - X' */
                 daxpy_(&m_A, &d_n_one, B, &i_one, X, &i_one);
                 norm = dnrm2_(&m_A, X, &i_one);
-                *resid1 = (norm / norm_X) / (m_A * eps);
+                *resid1 = fla_compute_residual(datatype, 'E', norm, norm_X, m_A, params);
             }
             else
             {
@@ -208,14 +206,13 @@ void validate_getrf_internal(integer m_A, integer n_A, void *A, void *A_test, /*
             {
                 norm = fla_lapack_dlange("F", &m_A, &n_A, T, &m_A, work);
             }
-            *resid2 = (norm / norm_A) / (n_A * eps);
+            *resid2 = fla_compute_residual(datatype, 'E', norm, norm_A, n_A, params);
             break;
         }
         case COMPLEX:
         {
-            float norm = 0, norm_A = 0, norm_X = 0, eps;
+            float norm = 0, norm_A = 0, norm_X = 0;
 
-            eps = fla_lapack_slamch("Epsilon");
             /* Test 1 */
             if(m_A == n_A)
             {
@@ -229,7 +226,7 @@ void validate_getrf_internal(integer m_A, integer n_A, void *A, void *A_test, /*
                 /* Compute X - X' */
                 caxpy_(&m_A, &c_n_one, B, &i_one, X, &i_one);
                 norm = scnrm2_(&m_A, X, &i_one);
-                *resid1 = (norm / norm_X) / (m_A * eps);
+                *resid1 = fla_compute_residual(datatype, 'E', norm, norm_X, m_A, params);
             }
             else
             {
@@ -272,14 +269,13 @@ void validate_getrf_internal(integer m_A, integer n_A, void *A, void *A_test, /*
             {
                 norm = fla_lapack_clange("F", &m_A, &n_A, T, &m_A, work);
             }
-            *resid2 = (norm / norm_A) / (n_A * eps);
+            *resid2 = fla_compute_residual(datatype, 'E', norm, norm_A, n_A, params);
             break;
         }
         case DOUBLE_COMPLEX:
         {
-            double norm = 0, norm_A = 0, norm_X = 0, eps;
+            double norm = 0, norm_A = 0, norm_X = 0;
 
-            eps = fla_lapack_dlamch("Epsilon");
             /* Test 1 */
             if(m_A == n_A)
             {
@@ -293,7 +289,7 @@ void validate_getrf_internal(integer m_A, integer n_A, void *A, void *A_test, /*
                 /* Compute X - X' */
                 zaxpy_(&m_A, &z_n_one, B, &i_one, X, &i_one);
                 norm = dznrm2_(&m_A, X, &i_one);
-                *resid1 = (norm / norm_X) / (m_A * eps);
+                *resid1 = fla_compute_residual(datatype, 'E', norm, norm_X, m_A, params);
             }
             else
             {
@@ -336,7 +332,7 @@ void validate_getrf_internal(integer m_A, integer n_A, void *A, void *A_test, /*
             {
                 norm = fla_lapack_zlange("F", &m_A, &n_A, T, &m_A, work);
             }
-            *resid2 = (norm / norm_A) / (n_A * eps);
+            *resid2 = fla_compute_residual(datatype, 'E', norm, norm_A, n_A, params);
             break;
         }
         default:

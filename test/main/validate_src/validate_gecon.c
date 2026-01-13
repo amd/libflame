@@ -1,5 +1,5 @@
 /******************************************************************************
- * Copyright (C) 2025, Advanced Micro Devices, Inc. All rights reserved.
+ * Copyright (C) 2025-2026, Advanced Micro Devices, Inc. All rights reserved.
  *******************************************************************************/
 
 /*! @file validate_gels.c
@@ -12,7 +12,7 @@
 void validate_gecon(char *tst_api, integer datatype, char norm, integer n, void *A, void *A_save,
                     integer lda, double err_thresh, char imatrix_char, void *params)
 {
-    double residual;
+    double residual = 0.;
 
     /* Early return conditions */
     if(n == 0)
@@ -29,10 +29,6 @@ void validate_gecon(char *tst_api, integer datatype, char norm, integer n, void 
     if(compare_matrix(datatype, "Full", n, n, A, lda, A_save, lda) == 0)
     {
         residual = DBL_MAX;
-    }
-    else
-    {
-        residual = 0;
     }
 
     FLA_PRINT_TEST_STATUS(n, n, residual, err_thresh);

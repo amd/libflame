@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2022-2025, Advanced Micro Devices, Inc. All rights reserved.
+    Copyright (C) 2022-2026, Advanced Micro Devices, Inc. All rights reserved.
 */
 
 /*! @file validate_potrs.c
@@ -19,7 +19,7 @@ void validate_potrs(char *tst_api, integer n, integer nrhs, void *A, integer lda
     integer ldx;
     ldx = n;
     char NORM = '1';
-    double residual;
+    double residual = 0.;
 
     /* Early return conditions */
     if(n == 0 || nrhs == 0)
@@ -35,70 +35,66 @@ void validate_potrs(char *tst_api, integer n, integer nrhs, void *A, integer lda
     {
         case FLOAT:
         {
-            float norm_a, norm_b, norm_x, norm, eps;
+            float norm_a, norm_b, norm_x, norm;
 
             /* Test 1 */
             compute_matrix_norm(datatype, NORM, n, n, A, lda, &norm_a, imatrix, work);
             compute_matrix_norm(datatype, NORM, n, nrhs, B, ldb, &norm_b, imatrix, work);
             compute_matrix_norm(datatype, NORM, n, nrhs, X, ldx, &norm_x, imatrix, work);
-            eps = fla_lapack_slamch("E");
 
             /* Compute AX-B */
             sgemm_("N", "N", &n, &nrhs, &n, &s_one, A, &lda, X, &ldx, &s_n_one, B, &ldb);
             compute_matrix_norm(datatype, NORM, n, nrhs, B, ldb, &norm, imatrix, work);
 
-            residual = (double)((norm / (norm_a * norm_x + norm_b)) / ((float)n * eps));
+            residual = fla_compute_residual(datatype, 'E', norm, (norm_a * norm_x + norm_b), n, params);
             break;
         }
         case DOUBLE:
         {
-            double norm_a, norm_b, norm_x, norm, eps;
+            double norm_a, norm_b, norm_x, norm;
 
             /* Test 1 */
             compute_matrix_norm(datatype, NORM, n, n, A, lda, &norm_a, imatrix, work);
             compute_matrix_norm(datatype, NORM, n, nrhs, B, ldb, &norm_b, imatrix, work);
             compute_matrix_norm(datatype, NORM, n, nrhs, X, ldx, &norm_x, imatrix, work);
-            eps = fla_lapack_dlamch("E");
 
             /* Compute AX-B */
             dgemm_("N", "N", &n, &nrhs, &n, &d_one, A, &lda, X, &ldx, &d_n_one, B, &ldb);
             compute_matrix_norm(datatype, NORM, n, nrhs, B, ldb, &norm, imatrix, work);
 
-            residual = (norm / (norm_a * norm_x + norm_b)) / ((float)n * eps);
+            residual = fla_compute_residual(datatype, 'E', norm, (norm_a * norm_x + norm_b), n, params);
             break;
         }
         case COMPLEX:
         {
-            float norm_a, norm_b, norm_x, norm, eps;
+            float norm_a, norm_b, norm_x, norm;
 
             /* Test 1 */
             compute_matrix_norm(datatype, NORM, n, n, A, lda, &norm_a, imatrix, work);
             compute_matrix_norm(datatype, NORM, n, nrhs, B, ldb, &norm_b, imatrix, work);
             compute_matrix_norm(datatype, NORM, n, nrhs, X, ldx, &norm_x, imatrix, work);
-            eps = fla_lapack_slamch("E");
 
             /* Compute AX-B */
             cgemm_("N", "N", &n, &nrhs, &n, &c_one, A, &lda, X, &ldx, &c_n_one, B, &ldb);
             compute_matrix_norm(datatype, NORM, n, nrhs, B, ldb, &norm, imatrix, work);
 
-            residual = (double)((norm / (norm_a * norm_x + norm_b)) / ((float)n * eps));
+            residual = fla_compute_residual(datatype, 'E', norm, (norm_a * norm_x + norm_b), n, params);
             break;
         }
         case DOUBLE_COMPLEX:
         {
-            double norm_a, norm_b, norm_x, norm, eps;
+            double norm_a, norm_b, norm_x, norm;
 
             /* Test 1 */
             compute_matrix_norm(datatype, NORM, n, n, A, lda, &norm_a, imatrix, work);
             compute_matrix_norm(datatype, NORM, n, nrhs, B, ldb, &norm_b, imatrix, work);
             compute_matrix_norm(datatype, NORM, n, nrhs, X, ldx, &norm_x, imatrix, work);
-            eps = fla_lapack_dlamch("E");
 
             /* Compute AX-B */
             zgemm_("N", "N", &n, &nrhs, &n, &z_one, A, &lda, X, &ldx, &z_n_one, B, &ldb);
             compute_matrix_norm(datatype, NORM, n, nrhs, B, ldb, &norm, imatrix, work);
 
-            residual = (norm / (norm_a * norm_x + norm_b)) / ((float)n * eps);
+            residual = fla_compute_residual(datatype, 'E', norm, (norm_a * norm_x + norm_b), n, params);
             break;
         }
         default:

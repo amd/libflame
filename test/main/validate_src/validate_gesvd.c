@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2022-2025, Advanced Micro Devices, Inc. All rights reserved.
+    Copyright (C) 2022-2026, Advanced Micro Devices, Inc. All rights reserved.
 */
 
 /*! @file validate_gesvd.c
@@ -75,9 +75,8 @@ void validate_gesvd(char *tst_api, char *jobu, char *jobvt, integer m, integer n
     {
         case FLOAT:
         {
-            float norm, norm_A, eps;
+            float norm, norm_A;
             norm = norm_A = 0.f;
-            eps = fla_lapack_slamch("P");
 
             /* Test 1
                compute norm(A - (U*sigma*Vt)) / (V * norm(A) * EPS)*/
@@ -109,18 +108,18 @@ void validate_gesvd(char *tst_api, char *jobu, char *jobvt, integer m, integer n
                 }
                 else
                     norm = fla_lapack_slange("F", &m, &n, A, &lda, work);
-                resid1 = norm / (eps * norm_A * fla_max(m, n));
+                resid1 = fla_compute_residual(datatype, 'P', norm, norm_A, fla_max(m, n), params);
             }
 
             /* Test 2
                compute norm(I - U'*U) / (N * EPS)*/
             if(!same_char(*jobu, 'N'))
-                resid2 = (float)check_orthogonal_matrix('T', datatype, U_temp, ns, m, ns, ldu);
+                resid2 = (float)check_orthogonal_matrix('T', datatype, U_temp, ns, m, ns, ldu, params);
 
             /* Test 3
                compute norm(I - V*V') / (N * EPS)*/
             if(!same_char(*jobvt, 'N'))
-                resid3 = (float)check_orthogonal_matrix('N', datatype, V_temp, ns, n, ns, ldvt);
+                resid3 = (float)check_orthogonal_matrix('N', datatype, V_temp, ns, n, ns, ldvt, params);
 
             /* Test 4
                Test to Check order of Singular SVD values (positive and non-decreasing) */
@@ -141,16 +140,15 @@ void validate_gesvd(char *tst_api, char *jobu, char *jobvt, integer m, integer n
                 norm_A = fla_lapack_slange("F", &ns, &i_one, s_test, &i_one, work);
                 saxpy_(&ns, &s_n_one, s, &i_one, s_test, &i_one);
                 norm = fla_lapack_slange("F", &ns, &i_one, s_test, &i_one, work);
-                resid5 = norm / (eps * norm_A * ns);
+                resid5 = fla_compute_residual(datatype, 'P', norm, norm_A, ns, params);
             }
             break;
         }
 
         case DOUBLE:
         {
-            double norm, norm_A, eps;
+            double norm, norm_A;
             norm = norm_A = 0.;
-            eps = fla_lapack_dlamch("P");
 
             /* Test 1
                compute norm(A - (U*sigma*Vt)) / (V * norm(A) * EPS)*/
@@ -184,18 +182,18 @@ void validate_gesvd(char *tst_api, char *jobu, char *jobvt, integer m, integer n
                 else
                     norm = fla_lapack_dlange("F", &m, &n, A, &lda, work);
 
-                resid1 = norm / (eps * norm_A * fla_max(m, n));
+                resid1 = fla_compute_residual(datatype, 'P', norm, norm_A, fla_max(m, n), params);
             }
 
             /* Test 2
                compute norm(I - U'*U) / (N * EPS)*/
             if(!same_char(*jobu, 'N'))
-                resid2 = check_orthogonal_matrix('T', datatype, U_temp, ns, m, ns, ldu);
+                resid2 = check_orthogonal_matrix('T', datatype, U_temp, ns, m, ns, ldu, params);
 
             /* Test 3
                compute norm(I - V*V') / (N * EPS)*/
             if(!same_char(*jobvt, 'N'))
-                resid3 = check_orthogonal_matrix('N', datatype, V_temp, ns, n, ns, ldvt);
+                resid3 = check_orthogonal_matrix('N', datatype, V_temp, ns, n, ns, ldvt, params);
 
             /* Test 4
                Test to Check order of Singular SVD values (positive and non-decreasing) */
@@ -216,17 +214,15 @@ void validate_gesvd(char *tst_api, char *jobu, char *jobvt, integer m, integer n
                 norm_A = fla_lapack_dlange("F", &ns, &i_one, s_test, &i_one, work);
                 daxpy_(&ns, &d_n_one, s, &i_one, s_test, &i_one);
                 norm = fla_lapack_dlange("F", &ns, &i_one, s_test, &i_one, work);
-                resid5 = norm / (eps * norm_A * ns);
+                resid5 = fla_compute_residual(datatype, 'P', norm, norm_A, ns, params);
             }
             break;
         }
 
         case COMPLEX:
         {
-            float norm, norm_A, eps;
+            float norm, norm_A;
             norm = norm_A = 0.f;
-
-            eps = fla_lapack_slamch("P");
 
             /* Test 1
                compute norm(A - (U*sigma*Vt)) / (V * norm(A) * EPS)*/
@@ -259,18 +255,18 @@ void validate_gesvd(char *tst_api, char *jobu, char *jobvt, integer m, integer n
                 }
                 else
                     norm = fla_lapack_clange("F", &m, &n, A, &lda, work);
-                resid1 = norm / (eps * norm_A * fla_max(m, n));
+                resid1 = fla_compute_residual(datatype, 'P', norm, norm_A, fla_max(m, n), params);
             }
 
             /* Test 2
                compute norm(I - U'*U) / (N * EPS)*/
             if(!same_char(*jobu, 'N'))
-                resid2 = (float)check_orthogonal_matrix('C', datatype, U_temp, ns, m, ns, ldu);
+                resid2 = (float)check_orthogonal_matrix('C', datatype, U_temp, ns, m, ns, ldu, params);
 
             /* Test 3
                compute norm(I - V*V') / (N * EPS)*/
             if(!same_char(*jobvt, 'N'))
-                resid3 = (float)check_orthogonal_matrix('N', datatype, V_temp, ns, n, ns, ldvt);
+                resid3 = (float)check_orthogonal_matrix('N', datatype, V_temp, ns, n, ns, ldvt, params);
 
             /* Test 4
                Test to Check order of Singular SVD values (positive and non-decreasing) */
@@ -293,16 +289,15 @@ void validate_gesvd(char *tst_api, char *jobu, char *jobvt, integer m, integer n
                 norm_A = fla_lapack_slange("F", &ns, &i_one, s_test, &i_one, work);
                 saxpy_(&ns, &s_n_one, s, &i_one, s_test, &i_one);
                 norm = fla_lapack_slange("F", &ns, &i_one, s_test, &i_one, work);
-                resid5 = norm / (eps * norm_A * ns);
+                resid5 = fla_compute_residual(datatype, 'P', norm, norm_A, ns, params);
             }
             break;
         }
 
         case DOUBLE_COMPLEX:
         {
-            double norm, norm_A, eps;
+            double norm, norm_A;
             norm = norm_A = 0.;
-            eps = fla_lapack_dlamch("P");
 
             /* Test 1
                compute norm(A - (U*sigma*Vt)) / (V * norm(A) * EPS)*/
@@ -335,17 +330,17 @@ void validate_gesvd(char *tst_api, char *jobu, char *jobvt, integer m, integer n
                 else
                     norm = fla_lapack_zlange("F", &m, &n, A, &lda, work);
 
-                resid1 = norm / (eps * norm_A * fla_max(m, n));
+                resid1 = fla_compute_residual(datatype, 'P', norm, norm_A, fla_max(m, n), params);
             }
 
             /* Test 2
                compute norm(I - U'*U) / (N * EPS)*/
             if(!same_char(*jobu, 'N'))
-                resid2 = check_orthogonal_matrix('C', datatype, U_temp, ns, m, ns, ldu);
+                resid2 = check_orthogonal_matrix('C', datatype, U_temp, ns, m, ns, ldu, params);
             /* Test 3
                compute norm(I - V*V') / (N * EPS)*/
             if(!same_char(*jobvt, 'N'))
-                resid3 = check_orthogonal_matrix('N', datatype, V_temp, ns, n, ns, ldvt);
+                resid3 = check_orthogonal_matrix('N', datatype, V_temp, ns, n, ns, ldvt, params);
 
             /* Test 4
                Test to Check order of Singular SVD values (positive and non-decreasing) */
@@ -369,7 +364,7 @@ void validate_gesvd(char *tst_api, char *jobu, char *jobvt, integer m, integer n
                 norm_A = fla_lapack_dlange("F", &ns, &i_one, s_test, &i_one, work);
                 daxpy_(&ns, &d_n_one, s, &i_one, s_test, &i_one);
                 norm = fla_lapack_dlange("F", &ns, &i_one, s_test, &i_one, work);
-                resid5 = norm / (eps * norm_A * ns);
+                resid5 = fla_compute_residual(datatype, 'P', norm, norm_A, ns, params);
             }
             break;
         }

@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2022-2025, Advanced Micro Devices, Inc. All rights reserved.
+    Copyright (C) 2022-2026, Advanced Micro Devices, Inc. All rights reserved.
 */
 
 #ifndef TEST_LAPACK_H
@@ -772,6 +772,14 @@ typedef struct
     char BRT_char;
     int seed;
 
+    /* Safe min and eps for residual calculation */
+    double sf_min_s;
+    double sf_min_d;
+    double eps_s;
+    double eps_d;
+    /* eps*base */
+    double eps_p_s;
+    double eps_p_d;
 } test_params_t;
 
 typedef struct
@@ -851,4 +859,5 @@ double fla_stat_get_val(test_params_t *test_params, fla_stat_t *stat_desc);
 void fla_test_runtime_ctx_init(test_params_t *params);
 void fla_test_runtime_ctx_reset(test_params_t *params);
 void fla_test_runtime_ctx_free(test_params_t *params);
+double fla_compute_residual(integer datatype, char eps_type, double norm, double norm_base, integer m, void *params);
 #endif // TEST_LAPACK_H

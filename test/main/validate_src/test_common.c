@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2022-2025, Advanced Micro Devices, Inc. All rights reserved.
+    Copyright (C) 2022-2026, Advanced Micro Devices, Inc. All rights reserved.
 */
 
 #include "test_common.h"
@@ -1324,7 +1324,7 @@ void create_block_diagonal_matrix(integer datatype, void *wr, void *wi, void *la
    If trn == 'T' => checks whether A**T * A == I*/
 
 double check_orthogonal_matrix(char trn, integer datatype, void *A, integer m, integer n, integer k,
-                               integer lda)
+                               integer lda, void *params)
 {
     void *a_temp = NULL, *work = NULL;
     double resid = 0.;
@@ -1342,8 +1342,7 @@ double check_orthogonal_matrix(char trn, integer datatype, void *A, integer m, i
     {
         case FLOAT:
         {
-            float eps, norm;
-            eps = fla_lapack_slamch("P");
+            float norm;
 
             fla_lapack_slaset("full", &k, &k, &s_zero, &s_one, a_temp, &k);
             if(same_char(trn, 'N'))
@@ -1355,13 +1354,12 @@ double check_orthogonal_matrix(char trn, integer datatype, void *A, integer m, i
                 sgemm_("T", "N", &m, &m, &n, &s_one, A, &lda, A, &lda, &s_n_one, a_temp, &k);
             }
             norm = fla_lapack_slange("1", &k, &k, a_temp, &k, work);
-            resid = (double)(norm / (eps * fla_max(m, n)));
+            resid = fla_compute_residual(datatype, 'P', norm, 1.0, fla_max(m, n), params);
             break;
         }
         case DOUBLE:
         {
-            double eps, norm;
-            eps = fla_lapack_dlamch("P");
+            double norm;
 
             fla_lapack_dlaset("full", &k, &k, &d_zero, &d_one, a_temp, &k);
             if(same_char(trn, 'N'))
@@ -1373,13 +1371,12 @@ double check_orthogonal_matrix(char trn, integer datatype, void *A, integer m, i
                 dgemm_("T", "N", &m, &m, &n, &d_one, A, &lda, A, &lda, &d_n_one, a_temp, &k);
             }
             norm = fla_lapack_dlange("1", &k, &k, a_temp, &k, work);
-            resid = (double)(norm / (eps * fla_max(m, n)));
+            resid = fla_compute_residual(datatype, 'P', norm, 1.0, fla_max(m, n), params);
             break;
         }
         case COMPLEX:
         {
-            float eps, norm;
-            eps = fla_lapack_slamch("P");
+            float norm;
             fla_lapack_claset("full", &k, &k, &c_zero, &c_one, a_temp, &k);
             if(same_char(trn, 'N'))
             {
@@ -1390,13 +1387,12 @@ double check_orthogonal_matrix(char trn, integer datatype, void *A, integer m, i
                 cgemm_("C", "N", &m, &m, &n, &c_one, A, &lda, A, &lda, &c_n_one, a_temp, &k);
             }
             norm = fla_lapack_clange("1", &k, &k, a_temp, &k, work);
-            resid = (double)(norm / (eps * fla_max(m, n)));
+            resid = fla_compute_residual(datatype, 'P', norm, 1.0, fla_max(m, n), params);
             break;
         }
         case DOUBLE_COMPLEX:
         {
-            double eps, norm;
-            eps = fla_lapack_dlamch("P");
+            double norm;
             fla_lapack_zlaset("full", &k, &k, &z_zero, &z_one, a_temp, &k);
             if(same_char(trn, 'N'))
             {
@@ -1407,7 +1403,7 @@ double check_orthogonal_matrix(char trn, integer datatype, void *A, integer m, i
                 zgemm_("C", "N", &m, &m, &n, &z_one, A, &lda, A, &lda, &z_n_one, a_temp, &k);
             }
             norm = fla_lapack_zlange("1", &k, &k, a_temp, &k, work);
-            resid = (double)(norm / (eps * fla_max(m, n)));
+            resid = fla_compute_residual(datatype, 'P', norm, 1.0, fla_max(m, n), params);
             break;
         }
     }
@@ -1416,7 +1412,7 @@ double check_orthogonal_matrix(char trn, integer datatype, void *A, integer m, i
 }
 
 /* Checks whether A**T * A == I */
-double check_orthogonality(integer datatype, void *A, integer m, integer n, integer lda)
+double check_orthogonality(integer datatype, void *A, integer m, integer n, integer lda, void *params)
 {
     void *a_temp = NULL, *work = NULL;
     double resid = 0.;
@@ -1443,46 +1439,42 @@ double check_orthogonality(integer datatype, void *A, integer m, integer n, inte
     {
         case FLOAT:
         {
-            float eps, norm;
-            eps = fla_lapack_slamch("P");
+            float norm;
 
             fla_lapack_slaset("full", &k, &k, &s_zero, &s_one, a_temp, &k);
             sgemm_("T", "N", &k, &k, &m, &s_one, A, &lda, A, &lda, &s_n_one, a_temp, &k);
             norm = fla_lapack_slange("1", &k, &k, a_temp, &k, work);
-            resid = (double)(norm / (eps * (float)k));
+            resid = fla_compute_residual(datatype, 'P', norm, 1.0, k, params);
             break;
         }
         case DOUBLE:
         {
-            double eps, norm;
-            eps = fla_lapack_dlamch("P");
+            double norm;
 
             fla_lapack_dlaset("full", &k, &k, &d_zero, &d_one, a_temp, &k);
             dgemm_("T", "N", &k, &k, &m, &d_one, A, &lda, A, &lda, &d_n_one, a_temp, &k);
             norm = fla_lapack_dlange("1", &k, &k, a_temp, &k, work);
-            resid = (double)(norm / (eps * (float)k));
+            resid = fla_compute_residual(datatype, 'P', norm, 1.0, k, params);
             break;
         }
         case COMPLEX:
         {
-            float eps, norm;
-            eps = fla_lapack_slamch("P");
+            float norm;
 
             fla_lapack_claset("full", &k, &k, &c_zero, &c_one, a_temp, &k);
             cgemm_("C", "N", &k, &k, &m, &c_one, A, &lda, A, &lda, &c_n_one, a_temp, &k);
             norm = fla_lapack_clange("1", &k, &k, a_temp, &k, work);
-            resid = (double)(norm / (eps * (float)k));
+            resid = fla_compute_residual(datatype, 'P', norm, 1.0, k, params);
             break;
         }
         case DOUBLE_COMPLEX:
         {
-            double eps, norm;
-            eps = fla_lapack_dlamch("P");
+            double norm;
 
             fla_lapack_zlaset("full", &k, &k, &z_zero, &z_one, a_temp, &k);
             zgemm_("C", "N", &k, &k, &m, &z_one, A, &lda, A, &lda, &z_n_one, a_temp, &k);
             norm = fla_lapack_zlange("1", &k, &k, a_temp, &k, work);
-            resid = (double)(norm / (eps * (float)k));
+            resid = fla_compute_residual(datatype, 'P', norm, 1.0, k, params);
             break;
         }
     }

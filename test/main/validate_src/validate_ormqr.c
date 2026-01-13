@@ -1,5 +1,5 @@
 /******************************************************************************
- * Copyright (C) 2025, Advanced Micro Devices, Inc. All rights reserved.
+ * Copyright (C) 2025-2026, Advanced Micro Devices, Inc. All rights reserved.
  *******************************************************************************/
 
 /*! @file validate_ormqr.c
@@ -69,8 +69,7 @@ void validate_ormqr(char *tst_api, char side, char trans, integer m, integer n, 
     {
         case FLOAT:
         {
-            float eps, norm_C, norm_diff, twork;
-            eps = fla_lapack_slamch("P");
+            float norm_C, norm_diff, twork;
 
             /* Generating the Q martrix using the elementary reflectors and scalar
                factor values */
@@ -114,14 +113,13 @@ void validate_ormqr(char *tst_api, char side, char trans, integer m, integer n, 
             /* Compute error in the difference */
             norm_C = fla_lapack_slange(&norm, &m, &n, C, &ldc, work);
             norm_diff = fla_lapack_slange(&norm, &m, &n, CC, &ldc, work);
-            residual = (double)((norm_diff / norm_C) / (eps * (float)m));
+            residual = fla_compute_residual(datatype, 'P', norm_diff, norm_C, m, params);
 
             break;
         }
         case DOUBLE:
         {
-            double eps, norm_C, norm_diff, twork;
-            eps = fla_lapack_dlamch("P");
+            double norm_C, norm_diff, twork;
 
             /* Generating the Q martrix using the elementary reflectors and scalar
                factor values */
@@ -165,15 +163,14 @@ void validate_ormqr(char *tst_api, char side, char trans, integer m, integer n, 
             /* Compute error in the difference */
             norm_C = fla_lapack_dlange(&norm, &m, &n, C, &ldc, work);
             norm_diff = fla_lapack_dlange(&norm, &m, &n, CC, &ldc, work);
-            residual = (norm_diff / norm_C) / (eps * (double)m);
+            residual = fla_compute_residual(datatype, 'P', norm_diff, norm_C, m, params);
 
             break;
         }
         case COMPLEX:
         {
-            float eps, norm_C, norm_diff;
+            float norm_C, norm_diff;
             scomplex twork;
-            eps = fla_lapack_slamch("P");
 
             /* Generating the Q martrix using the elementary reflectors and scalar
                factor values */
@@ -217,15 +214,14 @@ void validate_ormqr(char *tst_api, char side, char trans, integer m, integer n, 
             /* Compute error in the difference */
             norm_C = fla_lapack_clange(&norm, &m, &n, C, &ldc, work);
             norm_diff = fla_lapack_clange(&norm, &m, &n, CC, &ldc, work);
-            residual = (double)((norm_diff / norm_C) / (eps * (float)m));
+            residual = fla_compute_residual(datatype, 'P', norm_diff, norm_C, m, params);
 
             break;
         }
         case DOUBLE_COMPLEX:
         {
-            double eps, norm_C, norm_diff;
+            double norm_C, norm_diff;
             dcomplex twork;
-            eps = fla_lapack_dlamch("P");
 
             /* Generating the Q martrix using the elementary reflectors and scalar
                factor values */
@@ -269,7 +265,7 @@ void validate_ormqr(char *tst_api, char side, char trans, integer m, integer n, 
             /* Compute error in the difference */
             norm_C = fla_lapack_zlange(&norm, &m, &n, C, &ldc, work);
             norm_diff = fla_lapack_zlange(&norm, &m, &n, CC, &ldc, work);
-            residual = (norm_diff / norm_C) / (eps * (double)m);
+            residual = fla_compute_residual(datatype, 'P', norm_diff, norm_C, m, params);
 
             break;
         }

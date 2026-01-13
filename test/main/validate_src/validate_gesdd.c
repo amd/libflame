@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2022-2025, Advanced Micro Devices, Inc. All rights reserved.
+    Copyright (C) 2022-2026, Advanced Micro Devices, Inc. All rights reserved.
 */
 
 /*! @file validate_gesdd.c
@@ -88,9 +88,8 @@ void validate_gesdd(char *tst_api, char *jobz, integer m, integer n, void *A, vo
     {
         case FLOAT:
         {
-            float norm, norm_A, eps;
+            float norm, norm_A;
             norm = norm_A = 0.f;
-            eps = fla_lapack_slamch("P");
 
             /* Test 1
                compute norm(A - (U*sigma*Vt)) / (V * norm(A) * EPS)*/
@@ -102,14 +101,14 @@ void validate_gesdd(char *tst_api, char *jobz, integer m, integer n, void *A, vo
                 sgemm_("N", "N", &m, &n, &m_V, &s_one, Usigma, &m, V_temp, &ldvt, &s_n_one, A,
                        &lda);
                 norm = fla_lapack_slange("1", &m, &n, A, &lda, work);
-                resid1 = norm / (eps * norm_A * (float)fla_max(m, n));
+                resid1 = fla_compute_residual(datatype, 'P', norm, norm_A, (double)fla_max(m, n), params);
 
                 /* Test 2
                    compute norm(I - U'*U) / (N * EPS)*/
-                resid2 = (float)check_orthogonal_matrix('T', datatype, U_temp, ns, m, ns, ldu);
+                resid2 = (float)check_orthogonal_matrix('T', datatype, U_temp, ns, m, ns, ldu, params);
                 /* Test 3
                    compute norm(I - V*V') / (N * EPS)*/
-                resid3 = (float)check_orthogonal_matrix('N', datatype, V_temp, ns, n, ns, ldvt);
+                resid3 = (float)check_orthogonal_matrix('N', datatype, V_temp, ns, n, ns, ldvt, params);
             }
 
             /* Test 4
@@ -127,16 +126,15 @@ void validate_gesdd(char *tst_api, char *jobz, integer m, integer n, void *A, vo
                 norm_A = fla_lapack_slange("1", &ns, &i_one, s_in, &i_one, work);
                 saxpy_(&ns, &s_n_one, s, &i_one, s_in, &i_one);
                 norm = fla_lapack_slange("1", &ns, &i_one, s_in, &i_one, work);
-                resid5 = norm / (eps * norm_A * ns);
+                resid5 = fla_compute_residual(datatype, 'P', norm, norm_A, ns, params);
             }
             break;
         }
 
         case DOUBLE:
         {
-            double norm, norm_A, eps;
+            double norm, norm_A;
             norm = norm_A = 0.;
-            eps = fla_lapack_dlamch("P");
 
             /* Test 1
                compute norm(A - (U*sigma*Vt)) / (V * norm(A) * EPS)*/
@@ -148,14 +146,14 @@ void validate_gesdd(char *tst_api, char *jobz, integer m, integer n, void *A, vo
                 dgemm_("N", "N", &m, &n, &m_V, &d_one, Usigma, &m, V_temp, &ldvt, &d_n_one, A,
                        &lda);
                 norm = fla_lapack_dlange("1", &m, &n, A, &lda, work);
-                resid1 = norm / (eps * norm_A * (double)fla_max(m, n));
+                resid1 = fla_compute_residual(datatype, 'P', norm, norm_A, (double)fla_max(m, n), params);
 
                 /* Test 2
                    compute norm(I - U'*U) / (N * EPS)*/
-                resid2 = check_orthogonal_matrix('T', datatype, U_temp, ns, m, ns, ldu);
+                resid2 = check_orthogonal_matrix('T', datatype, U_temp, ns, m, ns, ldu, params);
                 /* Test 3
                    compute norm(I - V*V') / (N * EPS)*/
-                resid3 = check_orthogonal_matrix('N', datatype, V_temp, ns, n, ns, ldvt);
+                resid3 = check_orthogonal_matrix('N', datatype, V_temp, ns, n, ns, ldvt, params);
             }
 
             /* Test 4
@@ -173,16 +171,15 @@ void validate_gesdd(char *tst_api, char *jobz, integer m, integer n, void *A, vo
                 norm_A = fla_lapack_dlange("1", &ns, &i_one, s_in, &i_one, work);
                 daxpy_(&ns, &d_n_one, s, &i_one, s_in, &i_one);
                 norm = fla_lapack_dlange("1", &ns, &i_one, s_in, &i_one, work);
-                resid5 = norm / (eps * norm_A * ns);
+                resid5 = fla_compute_residual(datatype, 'P', norm, norm_A, ns, params);
             }
             break;
         }
 
         case COMPLEX:
         {
-            float norm, norm_A, eps;
+            float norm, norm_A;
             norm = norm_A = 0.f;
-            eps = fla_lapack_slamch("P");
 
             /* Test 1
                compute norm(A - (U*sigma*Vt)) / (V * norm(A) * EPS)*/
@@ -194,15 +191,15 @@ void validate_gesdd(char *tst_api, char *jobz, integer m, integer n, void *A, vo
                 cgemm_("N", "N", &m, &n, &m_V, &c_one, Usigma, &m, V_temp, &ldvt, &c_n_one, A,
                        &lda);
                 norm = fla_lapack_clange("1", &m, &n, A, &lda, work);
-                resid1 = norm / (eps * norm_A * (float)fla_max(m, n));
+                resid1 = fla_compute_residual(datatype, 'P', norm, norm_A, fla_max(m, n), params);
 
                 /* Test 2
                    compute norm(I - U'*U) / (N * EPS)*/
-                resid2 = (float)check_orthogonal_matrix('C', datatype, U_temp, ns, m, ns, ldu);
+                resid2 = (float)check_orthogonal_matrix('C', datatype, U_temp, ns, m, ns, ldu, params);
 
                 /* Test 3
                    compute norm(I - V*V') / (N * EPS)*/
-                resid3 = (float)check_orthogonal_matrix('N', datatype, V_temp, ns, n, ns, ldvt);
+                resid3 = (float)check_orthogonal_matrix('N', datatype, V_temp, ns, n, ns, ldvt, params);
             }
 
             /* Test 4
@@ -220,16 +217,15 @@ void validate_gesdd(char *tst_api, char *jobz, integer m, integer n, void *A, vo
                 norm_A = fla_lapack_slange("1", &ns, &i_one, s_in, &i_one, work);
                 saxpy_(&ns, &s_n_one, s, &i_one, s_in, &i_one);
                 norm = fla_lapack_slange("1", &ns, &i_one, s_in, &i_one, work);
-                resid5 = norm / (eps * norm_A * ns);
+                resid5 = fla_compute_residual(datatype, 'P', norm, norm_A, ns, params);
             }
             break;
         }
 
         case DOUBLE_COMPLEX:
         {
-            double norm, norm_A, eps;
+            double norm, norm_A;
             norm = norm_A = 0.;
-            eps = fla_lapack_dlamch("P");
 
             /* Test 1
                compute norm(A - (U*sigma*Vt)) / (V * norm(A) * EPS)*/
@@ -241,14 +237,14 @@ void validate_gesdd(char *tst_api, char *jobz, integer m, integer n, void *A, vo
                 zgemm_("N", "N", &m, &n, &m_V, &z_one, Usigma, &m, V_temp, &ldvt, &z_n_one, A,
                        &lda);
                 norm = fla_lapack_zlange("1", &m, &n, A, &lda, work);
-                resid1 = norm / (eps * norm_A * (double)fla_max(m, n));
+                resid1 = fla_compute_residual(datatype, 'P', norm, norm_A, fla_max(m, n), params);
 
                 /* Test 2
                    compute norm(I - U'*U) / (N * EPS)*/
-                resid2 = check_orthogonal_matrix('C', datatype, U_temp, ns, m, ns, ldu);
+                resid2 = check_orthogonal_matrix('C', datatype, U_temp, ns, m, ns, ldu, params);
                 /* Test 3
                    compute norm(I - V*V') / (N * EPS)*/
-                resid3 = check_orthogonal_matrix('N', datatype, V_temp, ns, n, ns, ldvt);
+                resid3 = check_orthogonal_matrix('N', datatype, V_temp, ns, n, ns, ldvt, params);
             }
 
             /* Test 4
@@ -266,7 +262,7 @@ void validate_gesdd(char *tst_api, char *jobz, integer m, integer n, void *A, vo
                 norm_A = fla_lapack_dlange("1", &ns, &i_one, s_in, &i_one, work);
                 daxpy_(&ns, &d_n_one, s, &i_one, s_in, &i_one);
                 norm = fla_lapack_dlange("1", &ns, &i_one, s_in, &i_one, work);
-                resid5 = norm / (eps * norm_A * ns);
+                resid5 = fla_compute_residual(datatype, 'P', norm, norm_A, ns, params);
             }
             break;
         }

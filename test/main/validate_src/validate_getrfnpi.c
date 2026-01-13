@@ -1,5 +1,5 @@
 /******************************************************************************
- * Copyright (C) 2025, Advanced Micro Devices, Inc. All rights reserved.
+ * Copyright (C) 2025-2026, Advanced Micro Devices, Inc. All rights reserved.
  *******************************************************************************/
 
 /*! @file validate_getrfnpi.c
@@ -44,7 +44,7 @@
     {                                                                                      \
         norm = fla_lapack_##x##lange("F", &m_BL, &n_BL, L_BL, &m_BL, NULL);                \
     }                                                                                      \
-    resid3 = (norm / norm_A_BL) / (n_BL * eps);
+	resid3 = fla_compute_residual(datatype, 'E', norm, norm_A_BL, n_BL, params);
 
 /* Validates top right submatrix of array A */
 #define validate_getrfnpi_test_U_TR_block(x, nrm_prefix, mat_type, realtype)                    \
@@ -81,7 +81,7 @@
     {                                                                                           \
         norm = fla_lapack_##x##lange("F", &m_TR, &n_TR, U_TR, &m_TR, NULL);                     \
     }                                                                                           \
-    resid4 = (norm / norm_A_TR) / (n_TR * eps);
+	resid4 = fla_compute_residual(datatype, 'E', norm, norm_A_TR, n_TR, params);
 
 /* Validates if the bottom right submatrix has been correctly updated by
    getrfnpi */
@@ -122,7 +122,7 @@
     {                                                                                             \
         norm = fla_lapack_##x##lange("F", &m_BR, &n_BR, A_BR, &m_BR, NULL);                       \
     }                                                                                             \
-    resid5 = (norm / norm_A_BR) / (n_BR * eps);
+	resid5 = fla_compute_residual(datatype, 'E', norm, norm_A_BR, n_BR, params);
 
 #define validate_getrfnpi_run_tests(x, nrm_prefix, mat_type, realtype)        \
     /* If the size of bottom left submatrix is non zero, then validate        \
@@ -185,25 +185,21 @@ void validate_getrfnpi(char *tst_api, integer m_A, integer n_A, integer nfact, v
     {
         case FLOAT:
         {
-            float eps = fla_lapack_slamch("Epsilon");
             validate_getrfnpi_run_tests(s, s, real, real);
             break;
         }
         case DOUBLE:
         {
-            double eps = fla_lapack_dlamch("Epsilon");
             validate_getrfnpi_run_tests(d, d, doublereal, doublereal);
             break;
         }
         case COMPLEX:
         {
-            float eps = fla_lapack_slamch("Epsilon");
             validate_getrfnpi_run_tests(c, sc, scomplex, real);
             break;
         }
         case DOUBLE_COMPLEX:
         {
-            double eps = fla_lapack_dlamch("Epsilon");
             validate_getrfnpi_run_tests(z, dz, dcomplex, doublereal);
             break;
         }

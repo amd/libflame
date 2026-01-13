@@ -1,5 +1,5 @@
 /******************************************************************************
-* Copyright (C) 2021-2025, Advanced Micro Devices, Inc. All rights reserved.
+* Copyright (C) 2021-2026, Advanced Micro Devices, Inc. All rights reserved.
 *******************************************************************************/
 
 /*! @file libflame.hh
@@ -125,22 +125,18 @@ inline void geqr2(integer* m, integer* n, dcomplex* a, integer* lda, dcomplex* t
 //--- QR factorization with column pivoting of a real m-by-n matrix a ---  
 inline void geqpf(integer* m, integer* n, float* a, integer* lda, integer* jpvt, float* tau, float* work, integer* info)
 {
-  printf(" Function sgeqpf() has been deprecated. Please use sgep3() instead.\n");
   sgeqpf_(m, n, a, lda, jpvt, tau, work, info);
 }
 inline void geqpf(integer* m, integer* n, double* a, integer* lda, integer* jpvt, double* tau, double* work, integer* info)
 {
-  printf(" Function dgeqpf() has been deprecated. Please use dgep3() instead.\n");
   dgeqpf_(m, n, a, lda, jpvt, tau, work, info);
 }
 inline void geqpf(integer* m, integer* n, scomplex* a, integer* lda, integer* jpvt, scomplex* tau, scomplex* work, float* rwork, integer* info)
 {
-  printf(" Function cgeqpf() has been deprecated. Please use cgep3() instead.\n");
   cgeqpf_(m, n, a, lda, jpvt, tau, work, rwork, info);
 }
 inline void geqpf(integer* m, integer* n, dcomplex* a, integer* lda, integer* jpvt, dcomplex* tau, dcomplex* work, double* rwork, integer* info)
 {
-  printf(" Function zgeqpf() has been deprecated. Please use zgep3() instead.\n");
   zgeqpf_(m, n, a, lda, jpvt, tau, work, rwork, info);
 }
 
@@ -1403,22 +1399,18 @@ inline void gelsy(integer* m, integer* n, integer* nrhs, dcomplex* a, integer* l
 
 inline void gelsx(integer* m, integer* n, integer* nrhs, float* a, integer* lda, float* b, integer* ldb, integer* jpvt, float* rcond, integer* rank, float* work, integer* info)
 {
-  printf(" Function sgelsx() has been deprecated. Please use sgelsy() instead.\n"); 
   sgelsx_(m, n, nrhs, a, lda, b, ldb, jpvt, rcond, rank, work, info);
 }
 inline void gelsx(integer* m, integer* n, integer* nrhs, double* a, integer* lda, double* b, integer* ldb, integer* jpvt, double* rcond, integer* rank, double* work, integer* info)
 {
-  printf(" Function dgelsx() has been deprecated. Please use dgelsy() instead.\n"); 
   dgelsx_(m, n, nrhs, a, lda, b, ldb, jpvt, rcond, rank, work, info);
 }
 inline void gelsx(integer* m, integer* n, integer* nrhs, scomplex* a, integer* lda, scomplex* b, integer* ldb, integer* jpvt, float* rcond, integer* rank, scomplex* work, float* rwork, integer* info)
 {
-  printf(" Function cgelsx() has been deprecated. Please use cgelsy() instead.\n"); 
   cgelsx_(m, n, nrhs, a, lda, b, ldb, jpvt, rcond, rank, work, rwork, info);
 }
 inline void gelsx(integer* m, integer* n, integer* nrhs, dcomplex* a, integer* lda, dcomplex* b, integer* ldb, integer* jpvt, double* rcond, integer* rank, dcomplex* work, double* rwork, integer* info)
 {
-  printf(" Function zgelsx() has been deprecated. Please use zgelsy() instead.\n"); 
   zgelsx_(m, n, nrhs, a, lda, b, ldb, jpvt, rcond, rank, work, rwork, info);
 }
 
@@ -1878,22 +1870,18 @@ inline void gges(char* jobvsl, char* jobvsr, char* sort, void *selctg, integer* 
 
 inline void gegs(char* jobvsl, char* jobvsr, integer* n, float* a, integer* lda, float* b, integer* ldb, float* alphar, float* alphai, float* beta, float* vsl, integer* ldvsl, float* vsr, integer* ldvsr, float* work, integer* lwork, integer* info)
 {
-  printf(" Function sgegs() has been deprecated. Please use sgges() instead.\n");  
   sgegs_(jobvsl, jobvsr, n, a, lda, b, ldb, alphar, alphai, beta, vsl, ldvsl, vsr, ldvsr, work, lwork, info);
 }
 inline void gegs(char* jobvsl, char* jobvsr, integer* n, double* a, integer* lda, double* b, integer* ldb, double* alphar, double* alphai, double* beta, double* vsl, integer* ldvsl, double* vsr, integer* ldvsr, double* work, integer* lwork, integer* info)
 {
-  printf(" Function dgegs() has been deprecated. Please use dgges() instead.\n");  
   dgegs_(jobvsl, jobvsr, n, a, lda, b, ldb, alphar, alphai, beta, vsl, ldvsl, vsr, ldvsr, work, lwork, info);
 }
 inline void gegs(char* jobvsl, char* jobvsr, integer* n, scomplex* a, integer* lda, scomplex* b, integer* ldb, scomplex* alpha, scomplex* beta, scomplex* vsl, integer* ldvsl, scomplex* vsr, integer* ldvsr, scomplex* work, integer* lwork, float* rwork, integer* info)
 {
-  printf(" Function cgegs() has been deprecated. Please use cgges() instead.\n");  
   cgegs_(jobvsl, jobvsr, n, a, lda, b, ldb, alpha, beta, vsl, ldvsl, vsr, ldvsr, work, lwork, rwork, info);
 }
 inline void gegs(char* jobvsl, char* jobvsr, integer* n, dcomplex* a, integer* lda, dcomplex* b, integer* ldb, dcomplex* alpha, dcomplex* beta, dcomplex* vsl, integer* ldvsl, dcomplex* vsr, integer* ldvsr, dcomplex* work, integer* lwork, double* rwork, integer* info)
 {
-  printf(" Function zgegs() has been deprecated. Please use zgges() instead.\n"); 
   zgegs_(jobvsl, jobvsr, n, a, lda, b, ldb, alpha, beta, vsl, ldvsl, vsr, ldvsr, work, lwork, rwork, info);
 }
 
@@ -1953,22 +1941,18 @@ inline void ggev(char* jobvl, char* jobvr, integer* n, dcomplex* a, integer* lda
 
 inline void gegv(char* jobvl, char* jobvr, integer* n, float* a, integer* lda, float* b, integer* ldb, float* alphar, float* alphai, float* beta, float* vl, integer* ldvl, float* vr, integer* ldvr, float* work, integer* lwork, integer* info)
 {
-  printf(" Function sgegv() has been deprecated. Please use sggev() instead.\n"); 
   sgegv_(jobvl, jobvr, n, a, lda, b, ldb, alphar, alphai, beta, vl, ldvl, vr, ldvr, work, lwork, info);
 }
 inline void gegv(char* jobvl, char* jobvr, integer* n, double* a, integer* lda, double* b, integer* ldb, double* alphar, double* alphai, double* beta, double* vl, integer* ldvl, double* vr, integer* ldvr, double* work, integer* lwork, integer* info)
 {
-  printf(" Function dgegv() has been deprecated. Please use dggev() instead.\n");  
   dgegv_(jobvl, jobvr, n, a, lda, b, ldb, alphar, alphai, beta, vl, ldvl, vr, ldvr, work, lwork, info);
 }
 inline void gegv(char* jobvl, char* jobvr, integer* n, scomplex* a, integer* lda, scomplex* b, integer* ldb, scomplex* alpha, scomplex* beta, scomplex* vl, integer* ldvl, scomplex* vr, integer* ldvr, scomplex* work, integer* lwork, float* rwork, integer* info)
 {
-  printf(" Function cgegv() has been deprecated. Please use cggev() instead.\n");  
   cgegv_(jobvl, jobvr, n, a, lda, b, ldb, alpha, beta, vl, ldvl, vr, ldvr, work, lwork, rwork, info);
 }
 inline void gegv(char* jobvl, char* jobvr, integer* n, dcomplex* a, integer* lda, dcomplex* b, integer* ldb, dcomplex* alpha, dcomplex* beta, dcomplex* vl, integer* ldvl, dcomplex* vr, integer* ldvr, dcomplex* work, integer* lwork, double* rwork, integer* info)
 {
-  printf(" Function zgegv() has been deprecated. Please use zggev() instead.\n");  
   zgegv_(jobvl, jobvr, n, a, lda, b, ldb, alpha, beta, vl, ldvl, vr, ldvr, work, lwork, rwork, info);
 }
 
@@ -2137,22 +2121,18 @@ inline void ggsvd3(char* jobu, char* jobv, char* jobq, integer* m, integer* n, i
 // --- computes the singular value decomposition ---
 inline void ggsvd(char* jobu, char* jobv, char* jobq, integer* m, integer* n, integer* p, integer* k, integer* l, float* a, integer* lda, float* b, integer* ldb, float* alpha, float* beta, float* u, integer* ldu, float* v, integer* ldv, float* q, integer* ldq, float* work, integer* iwork, integer* info)
 {
-  printf(" Function sggsvd() has been deprecated. Please use sggsvd3() instead.\n"); 
   sggsvd_(jobu, jobv, jobq, m, n, p, k, l, a, lda, b, ldb, alpha, beta, u, ldu, v, ldv, q, ldq, work, iwork, info);
 }
 inline void ggsvd(char* jobu, char* jobv, char* jobq, integer* m, integer* n, integer* p, integer* k, integer* l, double* a, integer* lda, double* b, integer* ldb, double* alpha, double* beta, double* u, integer* ldu, double* v, integer* ldv, double* q, integer* ldq, double* work, integer* iwork, integer* info)
 {
-  printf(" Function dggsvd() has been deprecated. Please use dggsvd3() instead.\n");  
   dggsvd_(jobu, jobv, jobq, m, n, p, k, l, a, lda, b, ldb, alpha, beta, u, ldu, v, ldv, q, ldq, work, iwork, info);
 }
 inline void ggsvd(char* jobu, char* jobv, char* jobq, integer* m, integer* n, integer* p, integer* k, integer* l, scomplex* a, integer* lda, scomplex* b, integer* ldb, float* alpha, float* beta, scomplex* u, integer* ldu, scomplex* v, integer* ldv, scomplex* q, integer* ldq, scomplex* work, float* rwork, integer* iwork, integer* info)
 {
-  printf(" Function cggsvd() has been deprecated. Please use cggsvd3() instead.\n");  
   cggsvd_(jobu, jobv, jobq, m, n, p, k, l, a, lda, b, ldb, alpha, beta, u, ldu, v, ldv, q, ldq, work, rwork, iwork, info);
 }
 inline void ggsvd(char* jobu, char* jobv, char* jobq, integer* m, integer* n, integer* p, integer* k, integer* l, dcomplex* a, integer* lda, dcomplex* b, integer* ldb, double* alpha, double* beta, dcomplex* u, integer* ldu, dcomplex* v, integer* ldv, dcomplex* q, integer* ldq, dcomplex* work, double* rwork, integer* iwork, integer* info)
 {
-  printf(" Function dggsvd() has been deprecated. Please use dggsvd3() instead.\n");  
   zggsvd_(jobu, jobv, jobq, m, n, p, k, l, a, lda, b, ldb, alpha, beta, u, ldu, v, ldv, q, ldq, work, rwork, iwork, info);
 }
 
@@ -2177,22 +2157,18 @@ inline void ggsvp3(char* jobu, char* jobv, char* jobq, integer* m, integer* p, i
 // --- computes orthogonal matrices U, V and Q ---
 inline void ggsvp(char* jobu, char* jobv, char* jobq, integer* m, integer* p, integer* n, float* a, integer* lda, float* b, integer* ldb, float* tola, float* tolb, integer* k, integer* l, float* u, integer* ldu, float* v, integer* ldv, float* q, integer* ldq, integer* iwork, float* tau, float* work, integer* info)
 {
-  printf(" Function sggsvp() has been deprecated. Please use sggsvp3() instead.\n");  
   sggsvp_(jobu, jobv, jobq, m, p, n, a, lda, b, ldb, tola, tolb, k, l, u, ldu, v, ldv, q, ldq, iwork, tau, work, info);
 }
 inline void ggsvp(char* jobu, char* jobv, char* jobq, integer* m, integer* p, integer* n, double* a, integer* lda, double* b, integer* ldb, double* tola, double* tolb, integer* k, integer* l, double* u, integer* ldu, double* v, integer* ldv, double* q, integer* ldq, integer* iwork, double* tau, double* work, integer* info)
 {
-  printf(" Function dggsvp() has been deprecated. Please use dggsvp3() instead.\n");  
   dggsvp_(jobu, jobv, jobq, m, p, n, a, lda, b, ldb, tola, tolb, k, l, u, ldu, v, ldv, q, ldq, iwork, tau, work, info);
 }
 inline void ggsvp(char* jobu, char* jobv, char* jobq, integer* m, integer* p, integer* n, scomplex* a, integer* lda, scomplex* b, integer* ldb, float* tola, float* tolb, integer* k, integer* l, scomplex* u, integer* ldu, scomplex* v, integer* ldv, scomplex* q, integer* ldq, integer* iwork, float* rwork, scomplex* tau, scomplex* work, integer* info)
 {
-  printf(" Function cggsvp() has been deprecated. Please use cggsvp3() instead.\n");  
   cggsvp_(jobu, jobv, jobq, m, p, n, a, lda, b, ldb, tola, tolb, k, l, u, ldu, v, ldv, q, ldq, iwork, rwork, tau, work, info);
 }
 inline void ggsvp(char* jobu, char* jobv, char* jobq, integer* m, integer* p, integer* n, dcomplex* a, integer* lda, dcomplex* b, integer* ldb, double* tola, double* tolb, integer* k, integer* l, dcomplex* u, integer* ldu, dcomplex* v, integer* ldv, dcomplex* q, integer* ldq, integer* iwork, double* rwork, dcomplex* tau, dcomplex* work, integer* info)
 {
-  printf(" Function zggsvp() has been deprecated. Please use zggsvp3() instead.\n"); 
   zggsvp_(jobu, jobv, jobq, m, p, n, a, lda, b, ldb, tola, tolb, k, l, u, ldu, v, ldv, q, ldq, iwork, rwork, tau, work, info);
 }
 
@@ -2767,12 +2743,10 @@ inline void latzm(char* side, integer* m, integer* n, double* v, integer* incv, 
 }
 inline void latzm(char* side, integer* m, integer* n, scomplex* v, integer* incv, scomplex* tau, scomplex* c1, scomplex* c2, integer* ldc, scomplex* work)
 {
-  printf(" Function clatzm() has been deprecated. Please use cunmrz() instead.\n"); 
   clatzm_(side, m, n, v, incv, tau, c1, c2, ldc, work);
 }
 inline void latzm(char* side, integer* m, integer* n, dcomplex* v, integer* incv, dcomplex* tau, dcomplex* c1, dcomplex* c2, integer* ldc, dcomplex* work)
 {
-  printf(" Function zlatzm() has been deprecated. Please use zunmrz() instead.\n"); 
   zlatzm_(side, m, n, v, incv, tau, c1, c2, ldc, work);
 }
 
@@ -5334,22 +5308,18 @@ inline void tzrzf(integer* m, integer* n, dcomplex* a, integer* lda, dcomplex* t
 
 inline void tzrqf(integer* m, integer* n, float* a, integer* lda, float* tau, integer* info)
 {
-  printf(" Function stzrqf() has been deprecated. Please use stzrzf() instead.\n"); 
   stzrqf_(m, n, a, lda, tau, info);
 }
 inline void tzrqf(integer* m, integer* n, double* a, integer* lda, double* tau, integer* info)
 {
-  printf(" Function dtzrqf() has been deprecated. Please use dtzrzf() instead.\n"); 
   dtzrqf_(m, n, a, lda, tau, info);
 }
 inline void tzrqf(integer* m, integer* n, scomplex* a, integer* lda, scomplex* tau, integer* info)
 {
-  printf(" Function ctzrqf() has been deprecated. Please use ctzrzf() instead.\n"); 
   ctzrqf_(m, n, a, lda, tau, info);
 }
 inline void tzrqf(integer* m, integer* n, dcomplex* a, integer* lda, dcomplex* tau, integer* info)
 {
-  printf(" Function ztzrqf() has been deprecated. Please use ztzrzf() instead.\n"); 
   ztzrqf_(m, n, a, lda, tau, info);
 }
 
@@ -7679,22 +7649,18 @@ inline void lahr2(integer *n, integer *k, integer *nb, dcomplex *a, integer *lda
 // --- reduces the first nb columns of a general rectangular matrix A ---
 inline void lahrd(integer *n, integer *k, integer *nb, float *a, integer *lda, float *tau, float *t, integer *ldt, float *y, integer *ldy)
 {
-  printf(" Function slahrd() has been deprecated. Please use slahr2_() instead.\n"); 
   slahrd_(n, k, nb, a, lda, tau, t, ldt, y, ldy);
 }
 inline void lahrd(integer *n, integer *k, integer *nb, double *a, integer *lda, double *tau, double *t, integer *ldt, double *y, integer *ldy)
 {
-  printf(" Function dlahrd() has been deprecated. Please use dlahr2_() instead.\n"); 
   dlahrd_(n, k, nb, a, lda, tau, t, ldt, y, ldy);
 }
 inline void lahrd(integer *n, integer *k, integer *nb, scomplex *a, integer *lda, scomplex *tau, scomplex *t, integer *ldt, scomplex *y, integer *ldy)
 {
-  printf(" Function clahrd() has been deprecated. Please use clahr2_() instead.\n"); 
   clahrd_(n, k, nb, a, lda, tau, t, ldt, y, ldy);
 }
 inline void lahrd(integer *n, integer *k, integer *nb, dcomplex *a, integer *lda, dcomplex *tau, dcomplex *t, integer *ldt, dcomplex *y, integer *ldy)
 {
-  printf(" Function zlahrd() has been deprecated. Please use zlahr2_() instead.\n"); 
   zlahrd_(n, k, nb, a, lda, tau, t, ldt, y, ldy);
 }
 

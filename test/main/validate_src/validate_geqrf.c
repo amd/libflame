@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2022-2025, Advanced Micro Devices, Inc. All rights reserved.
+    Copyright (C) 2022-2026, Advanced Micro Devices, Inc. All rights reserved.
 */
 
 /*! @file validate_geqrf.c
@@ -49,7 +49,7 @@ void validate_geqrf(char *tst_api, integer m_A, integer n_A, void *A, void *A_te
         case FLOAT:
         {
             float twork;
-            float norm, norm_A, eps;
+            float norm, norm_A;
 
             /* sorgrq api generates the Q martrix using the elementary reflectors and scalar
                factor values*/
@@ -71,19 +71,17 @@ void validate_geqrf(char *tst_api, integer m_A, integer n_A, void *A, void *A_te
             norm_A = fla_lapack_slange("1", &m_A, &n_A, A, &lda, work);
             norm = fla_lapack_slange("1", &m_A, &n_A, R, &m_A, work);
 
-            eps = fla_lapack_slamch("P");
-
-            resid1 = norm / (eps * norm_A * (float)n_A);
+            resid1 = fla_compute_residual(datatype, 'P', norm, norm_A, n_A, params);
 
             /* Test 2
                compute norm(I - Q*Q') / (N * EPS)*/
-            resid2 = (float)check_orthogonality(datatype, Q, m_A, m_A, m_A);
+            resid2 = (float)check_orthogonality(datatype, Q, m_A, m_A, m_A, params);
             break;
         }
         case DOUBLE:
         {
             double twork;
-            double norm, norm_A, eps;
+            double norm, norm_A;
 
             /* dorgrq api generates the Q martrix using the elementary reflectors and scalar
                factor values*/
@@ -105,19 +103,17 @@ void validate_geqrf(char *tst_api, integer m_A, integer n_A, void *A, void *A_te
             norm_A = fla_lapack_dlange("1", &m_A, &n_A, A, &lda, work);
             norm = fla_lapack_dlange("1", &m_A, &n_A, R, &m_A, work);
 
-            eps = fla_lapack_dlamch("P");
-
-            resid1 = norm / (eps * norm_A * (double)n_A);
+            resid1 = fla_compute_residual(datatype, 'P', norm, norm_A, n_A, params);
 
             /* Test 2
                compute norm(I - Q*Q') / (N * EPS)*/
-            resid2 = check_orthogonality(datatype, Q, m_A, m_A, m_A);
+            resid2 = check_orthogonality(datatype, Q, m_A, m_A, m_A, params);
             break;
         }
         case COMPLEX:
         {
             scomplex twork;
-            float norm, norm_A, eps;
+            float norm, norm_A;
 
             /* corgrq api generates the Q martrix using the elementary reflectors and scalar
                factor values*/
@@ -139,19 +135,17 @@ void validate_geqrf(char *tst_api, integer m_A, integer n_A, void *A, void *A_te
             norm_A = fla_lapack_clange("1", &m_A, &n_A, A, &lda, work);
             norm = fla_lapack_clange("1", &m_A, &n_A, R, &m_A, work);
 
-            eps = fla_lapack_slamch("P");
-
-            resid1 = norm / (eps * norm_A * (float)n_A);
+            resid1 = fla_compute_residual(datatype, 'P', norm, norm_A, n_A, params);
 
             /* Test 2
                compute norm(I - Q*Q') / (N * EPS)*/
-            resid2 = (float)check_orthogonality(datatype, Q, m_A, m_A, m_A);
+            resid2 = (float)check_orthogonality(datatype, Q, m_A, m_A, m_A, params);
             break;
         }
         case DOUBLE_COMPLEX:
         {
             dcomplex twork;
-            double norm, norm_A, eps;
+            double norm, norm_A;
 
             /* zorgrq api generates the Q martrix using the elementary reflectors and scalar
                factor values*/
@@ -173,13 +167,11 @@ void validate_geqrf(char *tst_api, integer m_A, integer n_A, void *A, void *A_te
             norm_A = fla_lapack_zlange("1", &m_A, &n_A, A, &lda, work);
             norm = fla_lapack_zlange("1", &m_A, &n_A, R, &m_A, work);
 
-            eps = fla_lapack_dlamch("P");
-
-            resid1 = norm / (eps * norm_A * (double)n_A);
+            resid1 = fla_compute_residual(datatype, 'P', norm, norm_A, n_A, params);
 
             /* Test 2
                compute norm(I - Q*Q') / (N * EPS)*/
-            resid2 = check_orthogonality(datatype, Q, m_A, m_A, m_A);
+            resid2 = check_orthogonality(datatype, Q, m_A, m_A, m_A, params);
             break;
         }
     }

@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2025, Advanced Micro Devices, Inc. All rights reserved.
+    Copyright (C) 2025-2026, Advanced Micro Devices, Inc. All rights reserved.
 */
 
 /*! @file validate_sytrd.c
@@ -61,66 +61,62 @@ void validate_sytrd(char *tst_api, integer datatype, char uplo, integer n, void 
     {
         case FLOAT:
         {
-            float norm, norm_A, eps;
-            eps = fla_lapack_slamch("P");
+            float norm, norm_A;
 
             /* Test 1: Generating symmetric matrix A using  T - Q**T * A * Q | / ( |T| n ulp ) */
             norm_A = fla_lapack_slange("1", &n, &n, A_save, &n, NULL);
             sgemm_("T", "N", &n, &n, &n, &s_one, Q, &n, A_in, &lda, &s_zero, Q_temp, &n);
             sgemm_("N", "N", &n, &n, &n, &s_one, Q_temp, &n, Q, &n, &s_n_one, A_save, &n);
             norm = fla_lapack_slange("1", &n, &n, A_save, &n, NULL);
-            resid1 = norm / (eps * norm_A * (float)n);
+            resid1 = fla_compute_residual(datatype, 'P', norm, norm_A, n, params);
 
             /* Test 2: Compute norm(I - Q*Q') / (N * EPS)*/
-            resid2 = check_orthogonality(datatype, Q, n, n, n);
+            resid2 = check_orthogonality(datatype, Q, n, n, n, params);
             break;
         }
         case DOUBLE:
         {
-            double norm, norm_A, eps;
-            eps = fla_lapack_dlamch("P");
+            double norm, norm_A;
 
             /* Test 1: Generating symmetric matrix A using  T - Q**T * A * Q | / ( |T| n ulp ) */
             norm_A = fla_lapack_dlange("1", &n, &n, A_save, &n, NULL);
             dgemm_("T", "N", &n, &n, &n, &d_one, Q, &n, A_in, &lda, &d_zero, Q_temp, &n);
             dgemm_("N", "N", &n, &n, &n, &d_one, Q_temp, &n, Q, &n, &d_n_one, A_save, &n);
             norm = fla_lapack_dlange("1", &n, &n, A_save, &n, NULL);
-            resid1 = norm / (eps * norm_A * (float)n);
+            resid1 = fla_compute_residual(datatype, 'P', norm, norm_A, n, params);
 
             /* Test 2: Compute norm(I - Q*Q') / (N * EPS)*/
-            resid2 = check_orthogonality(datatype, Q, n, n, n);
+            resid2 = check_orthogonality(datatype, Q, n, n, n, params);
             break;
         }
         case COMPLEX:
         {
-            float norm, norm_A, eps;
-            eps = fla_lapack_slamch("P");
+            float norm, norm_A;
 
             /* Test 1: Generating symmetric matrix A using  T - Q**T * A * Q | / ( |T| n ulp ) */
             norm_A = fla_lapack_clange("1", &n, &n, A_save, &n, work);
             cgemm_("C", "N", &n, &n, &n, &c_one, Q, &n, A_in, &lda, &c_zero, Q_temp, &n);
             cgemm_("N", "N", &n, &n, &n, &c_one, Q_temp, &n, Q, &n, &c_n_one, A_save, &n);
             norm = fla_lapack_clange("1", &n, &n, A_save, &n, work);
-            resid1 = norm / (eps * norm_A * (float)n);
+            resid1 = fla_compute_residual(datatype, 'P', norm, norm_A, n, params);
 
             /* Test 2: Compute norm(I - Q*Q') / (N * EPS)*/
-            resid2 = check_orthogonality(datatype, Q, n, n, n);
+            resid2 = check_orthogonality(datatype, Q, n, n, n, params);
             break;
         }
         case DOUBLE_COMPLEX:
         {
-            double norm, norm_A, eps;
-            eps = fla_lapack_dlamch("P");
+            double norm, norm_A;
 
             /* Test 1: Generating symmetric matrix A using  T - Q**T * A * Q | / ( |T| n ulp ) */
             norm_A = fla_lapack_zlange("1", &n, &n, A_save, &n, work);
             zgemm_("C", "N", &n, &n, &n, &z_one, Q, &n, A_in, &lda, &z_zero, Q_temp, &n);
             zgemm_("N", "N", &n, &n, &n, &z_one, Q_temp, &n, Q, &n, &z_n_one, A_save, &n);
             norm = fla_lapack_zlange("1", &n, &n, A_save, &n, work);
-            resid1 = norm / (eps * norm_A * (float)n);
+            resid1 = fla_compute_residual(datatype, 'P', norm, norm_A, n, params);
 
             /* Test 2: Compute norm(I - Q*Q') / (N * EPS)*/
-            resid2 = check_orthogonality(datatype, Q, n, n, n);
+            resid2 = check_orthogonality(datatype, Q, n, n, n, params);
             break;
         }
     }

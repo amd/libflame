@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2022-2025, Advanced Micro Devices, Inc. All rights reserved.
+    Copyright (C) 2022-2026, Advanced Micro Devices, Inc. All rights reserved.
 */
 
 #include "ctype.h"
@@ -123,6 +123,13 @@ int main(int argc, char **argv)
     params.outlier_multiplier = 0.0;
     params.dump_runtimes_file_name = NULL;
     params.test_mode = FLA_TEST_MODE_DEFAULT;
+
+    params.sf_min_s = fla_lapack_slamch("S");
+    params.sf_min_d = fla_lapack_dlamch("S");
+    params.eps_s = fla_lapack_slamch("E");
+    params.eps_d = fla_lapack_dlamch("E");
+    params.eps_p_s = fla_lapack_slamch("P");
+    params.eps_p_d = fla_lapack_dlamch("P");
 
     status = fla_parse_cmdline_args(&arg_count, argv, &params);
 
@@ -2353,4 +2360,69 @@ void fla_test_runtime_ctx_free(test_params_t *params)
         params->runtime_ctx.run_times_arr = NULL;
         params->runtime_ctx.run_times_arr_size = 0;
     }
+}
+
+/**
+ * @brief Compute residual for numerical accuracy validation.
+ *
+ * This function computes the normalized residual used in LAPACK-style accuracy tests.
+ * The residual is calculated as: norm / (norm_base * eps * m)
+ * If norm_base <= 0, then residual is 0.
+ *
+ * @param[in] datatype    Data type of the computation (FLOAT, DOUBLE, COMPLEX, or DOUBLE_COMPLEX)
+ * @param[in] eps_type    Type of epsilon to use ('P' or 'p' for precision epsilon, otherwise standard epsilon ('E' or 'e'))
+ * @param[in] norm        The computed norm (e.g., norm of difference between expected and actual)
+ * @param[in] norm_base   The base norm (e.g., norm of original matrix)
+ * @param[in] m           Problem dimension (used as scaling factor)
+ * @param[in] params      Pointer to test parameters structure containing eps and safe_min values
+ *
+ * @return The normalized residual value. Returns 0.0 if m <= 0 or norm_base <= safe_min
+ *
+ * @note This function selects appropriate epsilon and safe minimum values based on datatype
+ * @note For FLOAT/COMPLEX types, uses single precision constants; for DOUBLE/DOUBLE_COMPLEX, uses double precision
+ */
+double fla_compute_residual(integer datatype, char eps_type, double norm, double norm_base, integer m, void *params)
+{
+    double safe_min, eps;
+
+    /* Early return for invalid dimension */
+    if (m <= 0)
+    {
+        return 0.;
+    }
+
+    if(get_realtype(datatype) == FLOAT)
+    {
+        safe_min = ((test_params_t *)params)->sf_min_s;
+
+        if(eps_type == 'P' || eps_type == 'p')
+        {
+            eps = ((test_params_t *)params)->eps_p_s;
+        }
+        else
+        {
+            eps = ((test_params_t *)params)->eps_s;
+        }
+    }
+    else
+    {
+        safe_min = ((test_params_t *)params)->sf_min_d;
+        if(eps_type == 'P' || eps_type == 'p')
+        {
+            eps = ((test_params_t *)params)->eps_p_d;
+        }
+        else
+        {
+            eps = ((test_params_t *)params)->eps_d;
+        }
+    }
+
+    /* Check if norm_base is valid for division */
+    if (norm_base <= safe_min)
+    {
+        return 0.;
+    }
+    
+    /* Compute residual = norm / (norm_base * eps * m) */
+    return (norm / norm_base) / (eps * m);
 }

@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2025, Advanced Micro Devices, Inc. All rights reserved.
+    Copyright (C) 2025-2026, Advanced Micro Devices, Inc. All rights reserved.
 */
 
 /*! @file validate_gejsv.c
@@ -43,7 +43,7 @@ extern double time_min;
         copy_vector(get_realtype(datatype), n, S_scaled, 1, S_copy, 1);                  \
         realtype_prefix##axpy_(&n, &realtype_prefix##_n_one, S, &i_one, S_copy, &i_one); \
         realtype norm = realtype_prefix##nrm2_(&n, S_copy, &i_one);                      \
-        resid2 = norm / (eps * norm_orig * n);                                           \
+        resid2 = fla_compute_residual(datatype, 'P', norm, norm_orig, n, params);             \
         free_vector(S_copy);                                                             \
     }
 
@@ -60,7 +60,7 @@ extern double time_min;
         fla_invoke_gemm(datatype, "N", "C", &m, &n, &n, U_copy, &ldu, V, &ldv, A_copy, &lda);     \
         matrix_difference(datatype, m, n, A_copy, lda, A, lda);                                   \
         realtype norm = type_prefix##lange_("1", &m, &n, A_copy, &lda, NULL);                     \
-        resid3 = norm / (eps * norm_orig * n);                                                    \
+        resid3 = fla_compute_residual(datatype, 'P', norm, norm_orig, n, params);                      \
         free_matrix(A_copy);                                                                      \
         free_matrix(U_copy);                                                                      \
     }
@@ -78,7 +78,6 @@ extern double time_min;
 
 #define gejsv_run_validations(type_prefix, realtype_prefix, realtype)                      \
     {                                                                                      \
-        realtype eps = realtype_prefix##lamch_("P");                                       \
         gejsv_validate_num_singular_values(realtype);                                      \
         if(validate_singular_values)                                                       \
         {                                                                                  \
@@ -90,11 +89,11 @@ extern double time_min;
         }                                                                                  \
         if(same_char(jobu, 'U') || same_char(jobu, 'F'))                                   \
         {                                                                                  \
-            resid4 = check_orthogonality(datatype, U, m, svd_len, ldu);                    \
+            resid4 = check_orthogonality(datatype, U, m, svd_len, ldu, params);            \
         }                                                                                  \
         if(same_char(jobv, 'V') || same_char(jobv, 'J'))                                   \
         {                                                                                  \
-            resid5 = check_orthogonality(datatype, V, n, n, ldv);                          \
+            resid5 = check_orthogonality(datatype, V, n, n, ldv, params);                  \
         }                                                                                  \
         /* If joba is A then validate that smaller singular values have been eliminated */ \
         if(test_eliminated_svds)                                                           \

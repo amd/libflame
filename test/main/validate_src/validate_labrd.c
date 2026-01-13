@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2022-2025, Advanced Micro Devices, Inc. All rights reserved.
+    Copyright (C) 2022-2026, Advanced Micro Devices, Inc. All rights reserved.
 */
 
 /*! @file validate_labrd.c
@@ -155,12 +155,11 @@ void validate_labrd(char *tst_api, integer m, integer n, integer nb, void *A, vo
                 free_vector(work);
             }
             /* Get difference between the 2 bidiagonal forms of A */
-            float norm, norm_A, eps;
-            eps = fla_lapack_slamch("P");
+            float norm, norm_A;
             norm_A = fla_lapack_slange("1", &m, &n, A, &lda, NULL);
             matrix_difference(datatype, m, n, A, lda, A_BD, lda);
             norm = fla_lapack_slange("1", &m, &n, A, &lda, NULL);
-            residual = (double)(norm / (eps * norm_A * n));
+            residual = fla_compute_residual(datatype, 'P', norm, norm_A, n, params);
             break;
         }
 
@@ -206,12 +205,11 @@ void validate_labrd(char *tst_api, integer m, integer n, integer nb, void *A, vo
                 free_vector(work);
             }
             /* Get difference between the 2 bidiagonal forms of A */
-            double norm, norm_A, eps;
-            eps = fla_lapack_dlamch("P");
+            double norm, norm_A;
             norm_A = fla_lapack_dlange("1", &m, &n, A, &lda, NULL);
             matrix_difference(datatype, m, n, A, lda, A_BD, lda);
             norm = fla_lapack_dlange("1", &m, &n, A, &lda, NULL);
-            residual = (double)(norm / (eps * norm_A * n));
+            residual = fla_compute_residual(datatype, 'P', norm, norm_A, n, params);
             break;
         }
 
@@ -266,12 +264,11 @@ void validate_labrd(char *tst_api, integer m, integer n, integer nb, void *A, vo
                 free_vector(work);
             }
             /* Get difference between the 2 bidiagonal forms of A */
-            float norm, norm_A, eps;
-            eps = fla_lapack_slamch("P");
+            float norm, norm_A;
             norm_A = fla_lapack_clange("1", &m, &n, A, &lda, NULL);
             matrix_difference(datatype, m, n, A, lda, A_BD, lda);
             norm = fla_lapack_clange("1", &m, &n, A, &lda, NULL);
-            residual = (double)(norm / (eps * norm_A * n));
+            residual = fla_compute_residual(datatype, 'P', norm, norm_A, n, params);
             break;
         }
 
@@ -326,12 +323,11 @@ void validate_labrd(char *tst_api, integer m, integer n, integer nb, void *A, vo
                 free_vector(work);
             }
             /* Get difference between the 2 bidiagonal forms of A */
-            double norm, norm_A, eps;
-            eps = fla_lapack_dlamch("P");
+            double norm, norm_A;
             norm_A = fla_lapack_zlange("1", &m, &n, A, &lda, NULL);
             matrix_difference(datatype, m, n, A, lda, A_BD, lda);
             norm = fla_lapack_zlange("1", &m, &n, A, &lda, NULL);
-            residual = (double)(norm / (eps * norm_A * n));
+            residual = fla_compute_residual(datatype, 'P', norm, norm_A, n, params);
             break;
         }
     }

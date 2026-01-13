@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2024-2025, Advanced Micro Devices, Inc. All rights reserved.
+    Copyright (C) 2024-2026, Advanced Micro Devices, Inc. All rights reserved.
 */
 
 /*! @file validate_gels.c
@@ -48,8 +48,8 @@ void validate_gels(char *tst_api, char *trans, integer m, integer n, integer nrh
     {
         case FLOAT:
         {
-            float eps, norm = 0, norm_a = 0, norm_b = 0, norm_x = 0;
-            eps = fla_lapack_slamch("E");
+            float norm = 0, norm_a = 0, norm_b = 0, norm_x = 0;
+
             if((same_char(*trans, 'N') && m > n) || (same_char(*trans, 'T') && m < n))
             {
                 /* Test - 1
@@ -69,14 +69,14 @@ void validate_gels(char *tst_api, char *trans, integer m, integer n, integer nrh
                 compute_matrix_norm(datatype, NORM, n1, nrhs, x, i_one, &norm_x, imatrix, work);
                 sgemm_(trans, "N", &m1, &nrhs, &n1, &s_n_one, A, &lda, x, &ldb, &s_one, B, &ldb);
                 compute_matrix_norm(datatype, NORM, m1, i_one, B, ldb, &norm, imatrix, work);
-                resid2 = (norm / norm_a) / (fla_max(m1, n1) * norm_x * eps);
+                resid2 = fla_compute_residual(datatype, 'E', norm, norm_a, (fla_max(m1, n1) * norm_x), params);
 
                 /* Test - 3
                  * Compute norm(B - A*x)**T * A / (max(m, n, nrhs) * norm(A) * norm(B) * eps)
                  */
                 sgemm_("T", trans, &nrhs, &n1, &m1, &s_one, B, &ldb, A, &lda, &s_zero, C, &ldc);
                 compute_matrix_norm(datatype, NORM, nrhs, n1, C, ldc, &norm, imatrix, work);
-                resid3 = (norm / norm_a) / (fla_max(m1, fla_max(n1, nrhs)) * norm_b * eps);
+                resid3 = fla_compute_residual(datatype, 'E', norm, norm_a, (fla_max(m1, fla_max(n1, nrhs)) * norm_b), params);
 
                 /* Test - 4
                  * checks whether X is in the row space of A or A'.  It does so
@@ -93,8 +93,8 @@ void validate_gels(char *tst_api, char *trans, integer m, integer n, integer nrh
         }
         case DOUBLE:
         {
-            double eps, norm = 0, norm_a = 0, norm_b = 0, norm_x = 0;
-            eps = fla_lapack_dlamch("E");
+            double norm = 0, norm_a = 0, norm_b = 0, norm_x = 0;
+
             if((same_char(*trans, 'N') && m > n) || (same_char(*trans, 'T') && m < n))
             {
                 /* Test - 1
@@ -114,14 +114,14 @@ void validate_gels(char *tst_api, char *trans, integer m, integer n, integer nrh
                 compute_matrix_norm(datatype, NORM, n1, nrhs, x, i_one, &norm_x, imatrix, work);
                 dgemm_(trans, "N", &m1, &nrhs, &n1, &d_n_one, A, &lda, x, &ldb, &d_one, B, &ldb);
                 compute_matrix_norm(datatype, NORM, m1, i_one, B, ldb, &norm, imatrix, work);
-                resid2 = (norm / norm_a) / (fla_max(m1, n1) * norm_x * eps);
+                resid2 = fla_compute_residual(datatype, 'E', norm, norm_a, (fla_max(m1, n1) * norm_x), params);
 
                 /* Test - 3
                  * Compute norm(B - A*x)**T * A / (max(m, n, nrhs) * norm(A) * norm(B) * eps)
                  */
                 dgemm_("T", trans, &nrhs, &n1, &m1, &d_one, B, &ldb, A, &lda, &d_zero, C, &ldc);
                 compute_matrix_norm(datatype, NORM, nrhs, n1, C, ldc, &norm, imatrix, work);
-                resid3 = (norm / norm_a) / (fla_max(m1, fla_max(n1, nrhs)) * norm_b * eps);
+                resid3 = fla_compute_residual(datatype, 'E', norm, norm_a, (fla_max(m1, fla_max(n1, nrhs)) * norm_b), params);
 
                 /* Test - 4
                  * checks whether X is in the row space of A or A'.  It does so
@@ -138,8 +138,8 @@ void validate_gels(char *tst_api, char *trans, integer m, integer n, integer nrh
         }
         case COMPLEX:
         {
-            float eps, norm = 0, norm_a = 0, norm_b = 0, norm_x = 0;
-            eps = fla_lapack_slamch("E");
+            float norm = 0, norm_a = 0, norm_b = 0, norm_x = 0;
+            
             if((same_char(*trans, 'N') && m > n) || (same_char(*trans, 'C') && m < n))
             {
                 /* Test - 1
@@ -159,14 +159,14 @@ void validate_gels(char *tst_api, char *trans, integer m, integer n, integer nrh
                 compute_matrix_norm(datatype, NORM, n1, nrhs, x, i_one, &norm_x, imatrix, work);
                 cgemm_(trans, "N", &m1, &nrhs, &n1, &c_n_one, A, &lda, x, &ldb, &c_one, B, &ldb);
                 compute_matrix_norm(datatype, NORM, m1, i_one, B, ldb, &norm, imatrix, work);
-                resid2 = (norm / norm_a) / (fla_max(m1, n1) * norm_x * eps);
+                resid2 = fla_compute_residual(datatype, 'E', norm, norm_a, (fla_max(m1, n1) * norm_x), params);
 
                 /* Test - 3
                  * Compute norm(B - A*x)**T * A / (max(m, n, nrhs) * norm(A) * norm(B) * eps)
                  */
                 cgemm_("T", trans, &nrhs, &n1, &m1, &c_one, B, &ldb, A, &lda, &c_zero, C, &ldc);
                 compute_matrix_norm(datatype, NORM, nrhs, n1, C, ldc, &norm, imatrix, work);
-                resid3 = (norm / norm_a) / (fla_max(m1, fla_max(n1, nrhs)) * norm_b * eps);
+                resid3 = fla_compute_residual(datatype, 'E', norm, norm_a, (fla_max(m1, fla_max(n1, nrhs)) * norm_b), params);
 
                 /* Test - 4
                  * checks whether X is in the row space of A or A'.  It does so
@@ -183,8 +183,8 @@ void validate_gels(char *tst_api, char *trans, integer m, integer n, integer nrh
         }
         case DOUBLE_COMPLEX:
         {
-            double eps, norm = 0, norm_a = 0, norm_b = 0, norm_x = 0;
-            eps = fla_lapack_dlamch("E");
+            double norm = 0, norm_a = 0, norm_b = 0, norm_x = 0;
+            
             if((same_char(*trans, 'N') && m > n) || (same_char(*trans, 'C') && m < n))
             {
                 /* Test - 1
@@ -205,14 +205,14 @@ void validate_gels(char *tst_api, char *trans, integer m, integer n, integer nrh
                 compute_matrix_norm(datatype, NORM, n1, nrhs, x, i_one, &norm_x, imatrix, work);
                 zgemm_(trans, "N", &m1, &nrhs, &n1, &z_n_one, A, &lda, x, &ldb, &z_one, B, &ldb);
                 compute_matrix_norm(datatype, NORM, m1, i_one, B, ldb, &norm, imatrix, work);
-                resid2 = (norm / norm_a) / (fla_max(m1, n1) * norm_x * eps);
+                resid2 = fla_compute_residual(datatype, 'E', norm, norm_a, (fla_max(m1, n1) * norm_x), params);
 
                 /* Test - 3
                  * Compute norm(B - A*x)**T * A / (max(m, n, nrhs) * norm(A) * norm(B) * eps)
                  */
                 zgemm_("T", trans, &nrhs, &n1, &m1, &z_one, B, &ldb, A, &lda, &z_zero, C, &ldc);
                 compute_matrix_norm(datatype, NORM, nrhs, n1, C, ldc, &norm, imatrix, work);
-                resid3 = (norm / norm_a) / (fla_max(m1, fla_max(n1, nrhs)) * norm_b * eps);
+                resid3 = fla_compute_residual(datatype, 'E', norm, norm_a, (fla_max(m1, fla_max(n1, nrhs)) * norm_b), params);
 
                 /* Test - 4
                  * checks whether X is in the row space of A or A'.  It does so

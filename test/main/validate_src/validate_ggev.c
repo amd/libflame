@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2022-2025, Advanced Micro Devices, Inc. All rights reserved.
+    Copyright (C) 2022-2026, Advanced Micro Devices, Inc. All rights reserved.
 */
 
 /*! @file validate_ggev.c
@@ -19,7 +19,7 @@ void validate_ggev(char *tst_api, char *jobvl, char *jobvr, integer n, void *A, 
 {
     integer i, j;
     void *work = NULL;
-    double residual;
+    double residual = 0.;
 
     /* Early return conditions */
     if(n == 0)
@@ -35,13 +35,12 @@ void validate_ggev(char *tst_api, char *jobvl, char *jobvr, integer n, void *A, 
     {
         case FLOAT:
         {
-            float eps, norm_A, alphar_t, max_val = 0.0;
+            float norm_A, alphar_t, max_val = 0.0;
             void *YC = NULL, *Y = NULL, *VRTemp = NULL, *VLTemp = NULL, *VRC = NULL, *VLC = NULL;
             scomplex alphac;
 
             create_vector(datatype, &Y, n);
             create_vector(COMPLEX, &YC, n);
-            eps = fla_lapack_slamch("P");
             norm_A = fla_lapack_slange("1", &n, &n, A, &lda, work);
             /* Test 1 */
             /* Validation for 'V' 'V' combination */
@@ -170,20 +169,19 @@ void validate_ggev(char *tst_api, char *jobvl, char *jobvr, integer n, void *A, 
                 free_vector(VLTemp);
             }
 
-            residual = (double)max_val / (eps * norm_A * (float)n);
+            residual = fla_compute_residual(datatype, 'P', max_val, norm_A, n, params);
             free_vector(Y);
             free_vector(YC);
             break;
         }
         case DOUBLE:
         {
-            double norm_A, eps, alphar_t, max_val = 0.0;
+            double norm_A, alphar_t, max_val = 0.0;
             void *YC = NULL, *Y = NULL, *VRTemp = NULL, *VLTemp = NULL, *VRC = NULL, *VLC = NULL;
             dcomplex alphac;
 
             create_vector(datatype, &Y, n);
             create_vector(DOUBLE_COMPLEX, &YC, n);
-            eps = fla_lapack_dlamch("P");
             norm_A = fla_lapack_dlange("1", &n, &n, A, &lda, work);
             /* Test 1 */
             /* Validation for 'V' 'V' combination */
@@ -321,18 +319,17 @@ void validate_ggev(char *tst_api, char *jobvl, char *jobvr, integer n, void *A, 
                 free_vector(VLTemp);
             }
 
-            residual = (double)max_val / (eps * norm_A * (double)n);
+            residual = fla_compute_residual(datatype, 'P', max_val, norm_A, n, params);
             free_vector(Y);
             free_vector(YC);
             break;
         }
         case COMPLEX:
         {
-            float eps, norm_A, max_val = 0.0;
+            float norm_A, max_val = 0.0;
             void *VRTemp = NULL, *VLTemp = NULL;
             void *Y = NULL;
             scomplex alphar_t;
-            eps = fla_lapack_slamch("P");
             norm_A = fla_lapack_clange("1", &n, &n, A, &lda, work);
             /* Test 1 */
             /* Validation for 'V' 'V' combination */
@@ -381,7 +378,7 @@ void validate_ggev(char *tst_api, char *jobvl, char *jobvr, integer n, void *A, 
                 }
             }
 
-            residual = (double)max_val / (eps * norm_A * (float)n);
+            residual = fla_compute_residual(datatype, 'P', max_val, norm_A, n, params);
             free_vector(VLTemp);
             free_vector(Y);
             free_vector(VRTemp);
@@ -389,11 +386,10 @@ void validate_ggev(char *tst_api, char *jobvl, char *jobvr, integer n, void *A, 
         }
         case DOUBLE_COMPLEX:
         {
-            double eps, norm_A, max_val = 0.0;
+            double norm_A, max_val = 0.0;
             void *VRTemp = NULL, *VLTemp = NULL;
             void *Y = NULL;
             dcomplex alphar_t;
-            eps = fla_lapack_dlamch("P");
             norm_A = fla_lapack_zlange("1", &n, &n, A, &lda, work);
             /* Test 1 */
             /* Validation for 'V' 'V' combination */
@@ -445,7 +441,7 @@ void validate_ggev(char *tst_api, char *jobvl, char *jobvr, integer n, void *A, 
                 }
             }
 
-            residual = (double)max_val / (eps * norm_A * (double)n);
+            residual = fla_compute_residual(datatype, 'P', max_val, norm_A, n, params);
             free_vector(VLTemp);
             free_vector(Y);
             free_vector(VRTemp);
@@ -483,76 +479,72 @@ void validate_ggev_EVs(char *tst_api, integer m, void *alpha, void *alphar, void
     {
         case FLOAT:
         {
-            float norm, norm_a, norm_b, eps;
-            eps = fla_lapack_slamch("P");
+            float norm, norm_a, norm_b;
 
             norm_a = fla_lapack_slange("1", &m, &i_one, alphar_copy, &i_one, work);
             saxpy_(&m, &s_n_one, alphar, &i_one, alphar_copy, &i_one);
             norm = fla_lapack_slange("1", &m, &i_one, alphar_copy, &i_one, work);
-            resid1 = norm / (eps * norm_a * m);
+            resid1 = fla_compute_residual(datatype, 'P', norm, norm_a, m, params);
 
             norm_a = fla_lapack_slange("1", &m, &i_one, alphai_copy, &i_one, work);
             saxpy_(&m, &s_n_one, alphai, &i_one, alphai_copy, &i_one);
             norm = fla_lapack_slange("1", &m, &i_one, alphai_copy, &i_one, work);
-            resid2 = norm / (eps * norm_a * m);
+            resid2 = fla_compute_residual(datatype, 'P', norm, norm_a, m, params);
 
             norm_b = fla_lapack_slange("1", &m, &i_one, beta_copy, &i_one, work);
             saxpy_(&m, &s_n_one, beta, &i_one, beta_copy, &i_one);
             norm = fla_lapack_slange("1", &m, &i_one, beta_copy, &i_one, work);
-            resid3 = norm / (eps * norm_b * m);
+            resid3 = fla_compute_residual(datatype, 'P', norm, norm_b, m, params);
             break;
         }
         case DOUBLE:
         {
-            double norm, norm_a, norm_b, eps;
-            eps = fla_lapack_dlamch("P");
+            double norm, norm_a, norm_b;
 
             norm_a = fla_lapack_dlange("1", &m, &i_one, alphar_copy, &i_one, work);
             daxpy_(&m, &d_n_one, alphar, &i_one, alphar_copy, &i_one);
             norm = fla_lapack_dlange("1", &m, &i_one, alphar_copy, &i_one, work);
-            resid1 = norm / (eps * norm_a * m);
+            resid1 = fla_compute_residual(datatype, 'P', norm, norm_a, m, params);
 
             norm_a = fla_lapack_dlange("1", &m, &i_one, alphai_copy, &i_one, work);
             daxpy_(&m, &d_n_one, alphai, &i_one, alphai_copy, &i_one);
             norm = fla_lapack_dlange("1", &m, &i_one, alphai_copy, &i_one, work);
-            resid2 = norm / (eps * norm_a * m);
+            resid2 = fla_compute_residual(datatype, 'P', norm, norm_a, m, params);
 
             norm_b = fla_lapack_dlange("1", &m, &i_one, beta_copy, &i_one, work);
             daxpy_(&m, &d_n_one, beta, &i_one, beta_copy, &i_one);
             norm = fla_lapack_dlange("1", &m, &i_one, beta_copy, &i_one, work);
-            resid3 = norm / (eps * norm_b * m);
+            resid3 = fla_compute_residual(datatype, 'P', norm, norm_b, m, params);
             break;
         }
         case COMPLEX:
         {
-            float norm, norm_a, norm_b, eps;
-            eps = fla_lapack_slamch("P");
+            float norm, norm_a, norm_b;
 
             norm_a = fla_lapack_slange("1", &m, &i_one, alpha_copy, &i_one, work);
             saxpy_(&m, &s_n_one, alpha, &i_one, alpha_copy, &i_one);
             norm = fla_lapack_slange("1", &m, &i_one, alpha_copy, &i_one, work);
-            resid1 = norm / (eps * norm_a * m);
+            resid1 = fla_compute_residual(datatype, 'P', norm, norm_a, m, params);
 
             norm_b = fla_lapack_slange("1", &m, &i_one, beta_copy, &i_one, work);
             saxpy_(&m, &s_n_one, beta, &i_one, beta_copy, &i_one);
             norm = fla_lapack_slange("1", &m, &i_one, beta_copy, &i_one, work);
-            resid2 = norm / (eps * norm_b * m);
+            resid2 = fla_compute_residual(datatype, 'P', norm, norm_b, m, params);
             break;
         }
         case DOUBLE_COMPLEX:
         {
-            double norm, norm_a, norm_b, eps;
-            eps = fla_lapack_dlamch("P");
+            double norm, norm_a, norm_b;
 
             norm_a = fla_lapack_dlange("1", &m, &i_one, alpha_copy, &i_one, work);
             daxpy_(&m, &d_n_one, alpha, &i_one, alpha_copy, &i_one);
             norm = fla_lapack_dlange("1", &m, &i_one, alpha_copy, &i_one, work);
-            resid1 = norm / (eps * norm_a * m);
+            resid1 = fla_compute_residual(datatype, 'P', norm, norm_a, m, params);
 
             norm_b = fla_lapack_dlange("1", &m, &i_one, beta_copy, &i_one, work);
             daxpy_(&m, &d_n_one, beta, &i_one, beta_copy, &i_one);
             norm = fla_lapack_dlange("1", &m, &i_one, beta_copy, &i_one, work);
-            resid2 = norm / (eps * norm_b * m);
+            resid2 = fla_compute_residual(datatype, 'P', norm, norm_b, m, params);
             break;
         }
     }

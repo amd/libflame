@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2024-2025, Advanced Micro Devices, Inc. All rights reserved.
+    Copyright (C) 2024-2026, Advanced Micro Devices, Inc. All rights reserved.
 */
 
 /*! @file validate_larfg.c
@@ -49,13 +49,12 @@ void validate_larfg(char *tst_api, integer datatype, integer n, integer incx, in
     {
         case FLOAT:
         {
-            float norm, norm_beta, eps;
+            float norm, norm_beta;
             ((float *)v)[0] = s_one;
             /* v_temp consists of [1, v(output)] elements */
             copy_vector(datatype, n, v, incx, v_temp, 1);
 
             /* Test1 : Compute norm(beta - (H * x_temp)) / (EPS * norm(beta) * n) */
-            eps = fla_lapack_slamch("P");
             norm_beta = fla_lapack_slange("1", &n, &i_one, beta, &i_one, work);
 
             /* By using larf API we apply elemntary reflector H to x_temp
@@ -66,18 +65,17 @@ void validate_larfg(char *tst_api, integer datatype, integer n, integer incx, in
             slarf_("L", &n, &i_one, v_temp, &i_one, tau, x_temp, &n, work);
             saxpy_(&n, &s_n_one, x_temp, &i_one, beta, &i_one);
             norm = fla_lapack_slange("1", &n, &i_one, beta, &i_one, work);
-            residual = (double)(norm / (eps * norm_beta * n));
+            residual = fla_compute_residual(datatype, 'P', norm, norm_beta, n, params);
             break;
         }
         case DOUBLE:
         {
-            double norm, norm_beta, eps;
+            double norm, norm_beta;
             ((double *)v)[0] = d_one;
             /* v_temp consists of [1, v(output)] elements */
             copy_vector(datatype, n, v, incx, v_temp, 1);
 
             /* Test1 : Compute norm(beta - (H * x_temp)) / (EPS * norm(beta) * n) */
-            eps = fla_lapack_dlamch("P");
             norm_beta = fla_lapack_dlange("1", &n, &i_one, beta, &i_one, work);
 
             /* By using larf API we apply elemntary reflector H to x_temp
@@ -88,12 +86,12 @@ void validate_larfg(char *tst_api, integer datatype, integer n, integer incx, in
             dlarf_("L", &n, &i_one, v_temp, &i_one, tau, x_temp, &n, work);
             daxpy_(&n, &d_n_one, x_temp, &i_one, beta, &i_one);
             norm = fla_lapack_dlange("1", &n, &i_one, beta, &i_one, work);
-            residual = norm / (eps * norm_beta * n);
+            residual = fla_compute_residual(datatype, 'P', norm, norm_beta, n, params);
             break;
         }
         case COMPLEX:
         {
-            float norm, norm_beta, eps;
+            float norm, norm_beta;
             ((scomplex *)v)[0] = c_one;
             /* v_temp consists of [1, v(output)] elements */
             copy_vector(datatype, n, v, incx, v_temp, 1);
@@ -102,7 +100,6 @@ void validate_larfg(char *tst_api, integer datatype, integer n, integer incx, in
             ((scomplex *)tau)[0].imag = (-1.0) * ((scomplex *)tau)[0].imag;
 
             /* Test1 : Compute norm(beta - (H * x_temp)) / (EPS * norm(beta) * n) */
-            eps = fla_lapack_slamch("P");
             norm_beta = fla_lapack_clange("1", &n, &i_one, beta, &i_one, work);
 
             /* By using larf API we apply elemntary reflector H to x_temp
@@ -113,12 +110,12 @@ void validate_larfg(char *tst_api, integer datatype, integer n, integer incx, in
             clarf_("L", &n, &i_one, v_temp, &i_one, tau, x_temp, &n, work);
             caxpy_(&n, &c_n_one, x_temp, &i_one, beta, &i_one);
             norm = fla_lapack_clange("1", &n, &i_one, beta, &i_one, work);
-            residual = (double)(norm / (eps * norm_beta * n));
+            residual = fla_compute_residual(datatype, 'P', norm, norm_beta, n, params);
             break;
         }
         case DOUBLE_COMPLEX:
         {
-            double norm, norm_beta, eps;
+            double norm, norm_beta;
             ((dcomplex *)v)[0] = z_one;
             /* v_temp consists of [1, v(output)] elements */
             copy_vector(datatype, n, v, incx, v_temp, 1);
@@ -127,7 +124,6 @@ void validate_larfg(char *tst_api, integer datatype, integer n, integer incx, in
             ((dcomplex *)tau)[0].imag = (-1.0) * ((dcomplex *)tau)[0].imag;
 
             /* Test1 : Compute norm(beta - (H_matrix * x_temp)) / (EPS * norm(Beta) * n) */
-            eps = fla_lapack_dlamch("P");
             norm_beta = fla_lapack_zlange("1", &n, &i_one, beta, &i_one, work);
 
             /* By using larf API we apply elemntary reflector H to x_temp
@@ -138,7 +134,7 @@ void validate_larfg(char *tst_api, integer datatype, integer n, integer incx, in
             zlarf_("L", &n, &i_one, v_temp, &i_one, tau, x_temp, &n, work);
             zaxpy_(&n, &z_n_one, x_temp, &i_one, beta, &i_one);
             norm = fla_lapack_zlange("1", &n, &i_one, beta, &i_one, work);
-            residual = norm / (eps * norm_beta * n);
+            residual = fla_compute_residual(datatype, 'P', norm, norm_beta, n, params);
             break;
         }
         default:

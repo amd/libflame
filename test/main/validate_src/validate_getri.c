@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2022-2025, Advanced Micro Devices, Inc. All rights reserved.
+    Copyright (C) 2022-2026, Advanced Micro Devices, Inc. All rights reserved.
 */
 
 /*! @file validate_getri.c
@@ -17,7 +17,7 @@ void validate_getri(char *tst_api, integer m_A, integer n_A, void *A, void *A_in
 {
     void *a_temp, *work;
     char NORM = '1';
-    double residual;
+    double residual = 0.;
 
     /* Early return conditions */
     if(m_A == 0 || n_A == 0)
@@ -37,9 +37,8 @@ void validate_getri(char *tst_api, integer m_A, integer n_A, void *A, void *A_in
     {
         case FLOAT:
         {
-            float norm, norm_I, eps;
+            float norm, norm_I;
 
-            eps = fla_lapack_slamch("Epsilon");
             /* compute I - A' * A */
             fla_lapack_slaset("full", &m_A, &m_A, &s_zero, &s_one, a_temp, &m_A);
             norm_I = sqrt(m_A);
@@ -49,15 +48,14 @@ void validate_getri(char *tst_api, integer m_A, integer n_A, void *A, void *A_in
 
             compute_matrix_norm(datatype, NORM, m_A, m_A, a_temp, m_A, &norm, imatrix, work);
             /* Compute norm(I - A'*A) / (N * norm(A) * norm(AINV) * EPS)*/
-            residual = (double)(norm / (norm_I * eps * n_A));
+            residual = fla_compute_residual(datatype, 'E', norm, norm_I, n_A, params);
             break;
         }
 
         case DOUBLE:
         {
-            double norm_I, norm, eps;
+            double norm_I, norm;
 
-            eps = fla_lapack_dlamch("Epsilon");
             /* compute I - A' * A */
             fla_lapack_dlaset("full", &m_A, &m_A, &d_zero, &d_one, a_temp, &m_A);
             norm_I = sqrt(m_A);
@@ -67,14 +65,13 @@ void validate_getri(char *tst_api, integer m_A, integer n_A, void *A, void *A_in
 
             compute_matrix_norm(datatype, NORM, m_A, m_A, a_temp, m_A, &norm, imatrix, work);
             /* Compute norm(I - A'*A) / (N * norm(A) * norm(AINV) * EPS)*/
-            residual = (double)(norm / (norm_I * eps * n_A));
+            residual = fla_compute_residual(datatype, 'E', norm, norm_I, n_A, params);
             break;
         }
         case COMPLEX:
         {
-            float norm, norm_I, eps;
+            float norm, norm_I;
 
-            eps = fla_lapack_slamch("Epsilon");
             /* compute I - A' * A */
             fla_lapack_claset("full", &m_A, &m_A, &c_zero, &c_one, a_temp, &m_A);
             norm_I = sqrt(m_A);
@@ -83,14 +80,13 @@ void validate_getri(char *tst_api, integer m_A, integer n_A, void *A, void *A_in
                    &m_A);
             compute_matrix_norm(datatype, NORM, m_A, m_A, a_temp, m_A, &norm, imatrix, work);
             /* Compute norm(I - A'*A) / (N * norm(A) * norm(AINV) * EPS)*/
-            residual = (double)(norm / (norm_I * eps * n_A));
+            residual = fla_compute_residual(datatype, 'E', norm, norm_I, n_A, params);
             break;
         }
         case DOUBLE_COMPLEX:
         {
-            double norm, norm_I, eps;
+            double norm, norm_I;
 
-            eps = fla_lapack_dlamch("Epsilon");
             /* compute I - A' * A */
             fla_lapack_zlaset("full", &m_A, &m_A, &z_zero, &z_one, a_temp, &m_A);
             norm_I = sqrt(m_A);
@@ -100,7 +96,7 @@ void validate_getri(char *tst_api, integer m_A, integer n_A, void *A, void *A_in
 
             compute_matrix_norm(datatype, NORM, m_A, m_A, a_temp, m_A, &norm, imatrix, work);
             /* Compute norm(I - A'*A) / (N * norm(A) * norm(AINV) * EPS)*/
-            residual = (double)(norm / (norm_I * eps * n_A));
+            residual = fla_compute_residual(datatype, 'E', norm, norm_I, n_A, params);
             break;
         }
         default:

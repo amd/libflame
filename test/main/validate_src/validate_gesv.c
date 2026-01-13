@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2022-2025, Advanced Micro Devices, Inc. All rights reserved.
+    Copyright (C) 2022-2026, Advanced Micro Devices, Inc. All rights reserved.
 */
 
 /*! @file validate_gesv.c
@@ -20,7 +20,7 @@ void validate_gesv(char *tst_api, integer n, integer nrhs, void *A, integer lda,
     char NORM = '1';
     integer ldx;
     ldx = ldb;
-    double residual;
+    double residual = 0.;
 
     /* Early return conditions */
     if(n == 0 || nrhs == 0)
@@ -36,7 +36,7 @@ void validate_gesv(char *tst_api, integer n, integer nrhs, void *A, integer lda,
     {
         case FLOAT:
         {
-            float norm_x, norm, eps;
+            float norm_x, norm;
 
             /* Test 1 */
             /* Compute AX-B */
@@ -47,14 +47,13 @@ void validate_gesv(char *tst_api, integer n, integer nrhs, void *A, integer lda,
             }
             compute_matrix_norm(datatype, NORM, n, nrhs, B, ldb, &norm, imatrix, work);
             compute_matrix_norm(datatype, NORM, n, nrhs, X, ldx, &norm_x, imatrix, work);
-            eps = fla_lapack_slamch("E");
 
-            residual = norm / (norm_x * n * eps);
+            residual = fla_compute_residual(datatype, 'E', norm, norm_x, n, params);
             break;
         }
         case DOUBLE:
         {
-            double norm_x, norm, eps;
+            double norm_x, norm;
 
             /* Test 1 */
             /* Compute AX-B */
@@ -64,15 +63,14 @@ void validate_gesv(char *tst_api, integer n, integer nrhs, void *A, integer lda,
                 dscal_(&n, scal, X, &i_one);
             }
             compute_matrix_norm(datatype, NORM, n, nrhs, X, ldx, &norm_x, imatrix, work);
-            eps = fla_lapack_dlamch("E");
             compute_matrix_norm(datatype, NORM, n, nrhs, B, ldb, &norm, imatrix, work);
 
-            residual = norm / (norm_x * n * eps);
+            residual = fla_compute_residual(datatype, 'E', norm, norm_x, n, params);
             break;
         }
         case COMPLEX:
         {
-            float norm_x, norm, eps;
+            float norm_x, norm;
 
             /* Test 1 */
             /* Compute AX-B */
@@ -82,15 +80,14 @@ void validate_gesv(char *tst_api, integer n, integer nrhs, void *A, integer lda,
                 cscal_(&n, scal, X, &i_one);
             }
             compute_matrix_norm(datatype, NORM, n, nrhs, X, ldx, &norm_x, imatrix, work);
-            eps = fla_lapack_slamch("E");
             compute_matrix_norm(datatype, NORM, n, nrhs, B, ldb, &norm, imatrix, work);
 
-            residual = norm / (norm_x * n * eps);
+            residual = fla_compute_residual(datatype, 'E', norm, norm_x, n, params);
             break;
         }
         case DOUBLE_COMPLEX:
         {
-            double norm_x, norm, eps;
+            double norm_x, norm;
 
             /* Test 1 */
             /* Compute AX-B */
@@ -100,10 +97,9 @@ void validate_gesv(char *tst_api, integer n, integer nrhs, void *A, integer lda,
                 zscal_(&n, scal, X, &i_one);
             }
             compute_matrix_norm(datatype, NORM, n, nrhs, X, ldx, &norm_x, imatrix, work);
-            eps = fla_lapack_dlamch("E");
             compute_matrix_norm(datatype, NORM, n, nrhs, B, ldb, &norm, imatrix, work);
 
-            residual = norm / (norm_x * n * eps);
+            residual = fla_compute_residual(datatype, 'E', norm, norm_x, n, params);
             break;
         }
         default:

@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2022-2025, Advanced Micro Devices, Inc. All rights reserved.
+    Copyright (C) 2022-2026, Advanced Micro Devices, Inc. All rights reserved.
 */
 
 /*! @file validate_potrf.c
@@ -68,7 +68,7 @@ void validate_potrf(char *tst_api, char *uplo, integer m, void *A, void *A_test,
     {
         case FLOAT:
         {
-            float norm_b, norm, eps;
+            float norm_b, norm;
             float norm_A;
 
             /* Test 1 */
@@ -79,9 +79,8 @@ void validate_potrf(char *tst_api, char *uplo, integer m, void *A, void *A_test,
                    &lda);
 
             norm = fla_lapack_slange("1", &m, &m, A, &lda, work);
-            eps = fla_lapack_slamch("P");
 
-            resid1 = norm / (eps * norm_A * (float)m);
+            resid1 = fla_compute_residual(datatype, 'P', norm, norm_A, (float)m, params);
 
             /* Test 2 */
             copy_matrix(datatype, "full", m, m, A_save, lda, A, lda);
@@ -98,12 +97,12 @@ void validate_potrf(char *tst_api, char *uplo, integer m, void *A, void *A_test,
             sgemv_("N", &m, &m, &s_one, A, &lda, x, &incx, &s_n_one, b, &incy);
             norm = snrm2_(&m, b, &incx);
 
-            resid2 = norm / (eps * norm_b * (float)m);
+            resid2 = fla_compute_residual(datatype, 'P', norm, norm_b, (float)m, params);
             break;
         }
         case DOUBLE:
         {
-            double norm_b, norm, eps;
+            double norm_b, norm;
             double norm_A;
 
             /* Test 1 */
@@ -114,9 +113,8 @@ void validate_potrf(char *tst_api, char *uplo, integer m, void *A, void *A_test,
                    &lda);
 
             norm = fla_lapack_dlange("1", &m, &m, A, &lda, work);
-            eps = fla_lapack_dlamch("P");
 
-            resid1 = norm / (eps * norm_A * (double)m);
+            resid1 = fla_compute_residual(datatype, 'P', norm, norm_A, (double)m, params);
 
             /* Test 2 */
             copy_matrix(datatype, "full", m, m, A_save, lda, A, lda);
@@ -133,12 +131,12 @@ void validate_potrf(char *tst_api, char *uplo, integer m, void *A, void *A_test,
             dgemv_("N", &m, &m, &d_one, A, &lda, x, &incx, &d_n_one, b, &incy);
             norm = dnrm2_(&m, b, &incx);
 
-            resid2 = norm / (eps * norm_b * (double)m);
+            resid2 = fla_compute_residual(datatype, 'P', norm, norm_b, (double)m, params);
             break;
         }
         case COMPLEX:
         {
-            float norm_b, norm, eps;
+            float norm_b, norm;
             float norm_A;
 
             /* Test 1 */
@@ -149,9 +147,8 @@ void validate_potrf(char *tst_api, char *uplo, integer m, void *A, void *A_test,
                    &lda);
 
             norm = fla_lapack_clange("1", &m, &m, A, &lda, work);
-            eps = fla_lapack_slamch("P");
 
-            resid1 = norm / (eps * norm_A * (float)m);
+            resid1 = fla_compute_residual(datatype, 'P', norm, norm_A, m, params);
 
             /* Test 2 */
             copy_matrix(datatype, "full", m, m, A_save, lda, A, lda);
@@ -168,12 +165,12 @@ void validate_potrf(char *tst_api, char *uplo, integer m, void *A, void *A_test,
             cgemv_("N", &m, &m, &c_one, A, &lda, x, &incx, &c_n_one, b, &incy);
             norm = scnrm2_(&m, b, &incx);
 
-            resid2 = norm / (eps * norm_b * (float)m);
+            resid2 = fla_compute_residual(datatype, 'P', norm, norm_b, m, params);
             break;
         }
         case DOUBLE_COMPLEX:
         {
-            double norm_b, norm, eps;
+            double norm_b, norm;
             double norm_A;
 
             /* Test 1 */
@@ -184,9 +181,8 @@ void validate_potrf(char *tst_api, char *uplo, integer m, void *A, void *A_test,
                    &lda);
 
             norm = fla_lapack_zlange("1", &m, &m, A, &lda, work);
-            eps = fla_lapack_dlamch("P");
 
-            resid1 = norm / (eps * norm_A * (double)m);
+            resid1 = fla_compute_residual(datatype, 'P', norm, norm_A, (double)m, params);
 
             /* Test 2 */
             copy_matrix(datatype, "full", m, m, A_save, lda, A, lda);
@@ -203,9 +199,8 @@ void validate_potrf(char *tst_api, char *uplo, integer m, void *A, void *A_test,
             zgemv_("N", &m, &m, &z_one, A, &lda, x, &incx, &z_n_one, b, &incy);
 
             norm = dznrm2_(&m, b, &incx);
-            eps = fla_lapack_dlamch("P");
 
-            resid2 = norm / (eps * norm_b * (double)m);
+            resid2 = fla_compute_residual(datatype, 'P', norm, norm_b, m, params);
             break;
         }
     }

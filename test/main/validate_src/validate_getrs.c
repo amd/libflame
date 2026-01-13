@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2022-2025, Advanced Micro Devices, Inc. All rights reserved.
+    Copyright (C) 2022-2026, Advanced Micro Devices, Inc. All rights reserved.
 */
 
 /*! @file validate_getrs.c
@@ -18,7 +18,7 @@ void validate_getrs(char *tst_api, char *trans, integer n, integer nrhs, void *A
 {
     void *work = NULL, *Y = NULL;
     char NORM = '1';
-    double residual;
+    double residual = 0.;
 
     /* Early return conditions */
     if(n == 0 || nrhs == 0)
@@ -39,7 +39,7 @@ void validate_getrs(char *tst_api, char *trans, integer n, integer nrhs, void *A
     {
         case FLOAT:
         {
-            float norm_x, norm, eps;
+            float norm_x, norm;
 
             /* Test 1 */
             /* Compute AX-B */
@@ -58,16 +58,15 @@ void validate_getrs(char *tst_api, char *trans, integer n, integer nrhs, void *A
             }
 
             compute_matrix_norm(datatype, NORM, n, nrhs, X, ldb, &norm_x, imatrix, work);
-            eps = fla_lapack_slamch("E");
 
             compute_matrix_norm(datatype, NORM, n, nrhs, B, ldb, &norm, imatrix, work);
 
-            residual = ((norm / norm_x) / (n * eps));
+            residual = fla_compute_residual(datatype, 'E', norm, norm_x, n, params);
             break;
         }
         case DOUBLE:
         {
-            double norm_x, norm, eps;
+            double norm_x, norm;
 
             /* Test 1 */
             /* Compute AX-B */
@@ -86,16 +85,15 @@ void validate_getrs(char *tst_api, char *trans, integer n, integer nrhs, void *A
             }
 
             compute_matrix_norm(datatype, NORM, n, nrhs, X, ldb, &norm_x, imatrix, work);
-            eps = fla_lapack_dlamch("E");
 
             compute_matrix_norm(datatype, NORM, n, nrhs, B, ldb, &norm, imatrix, work);
 
-            residual = ((norm / norm_x) / (n * eps));
+            residual = fla_compute_residual(datatype, 'E', norm, norm_x, n, params);
             break;
         }
         case COMPLEX:
         {
-            float norm_x, norm, eps;
+            float norm_x, norm;
 
             /* Test 1 */
             /* Compute AX-B */
@@ -114,16 +112,15 @@ void validate_getrs(char *tst_api, char *trans, integer n, integer nrhs, void *A
             }
 
             compute_matrix_norm(datatype, NORM, n, nrhs, X, ldb, &norm_x, imatrix, work);
-            eps = fla_lapack_slamch("E");
 
             compute_matrix_norm(datatype, NORM, n, nrhs, B, ldb, &norm, imatrix, work);
 
-            residual = ((norm / norm_x) / (n * eps));
+            residual = fla_compute_residual(datatype, 'E', norm, norm_x, n, params);
             break;
         }
         case DOUBLE_COMPLEX:
         {
-            double norm_x, norm, eps;
+            double norm_x, norm;
 
             /* Test 1 */
             /* Compute AX-B */
@@ -142,11 +139,10 @@ void validate_getrs(char *tst_api, char *trans, integer n, integer nrhs, void *A
             }
 
             compute_matrix_norm(datatype, NORM, n, nrhs, X, ldb, &norm_x, imatrix, work);
-            eps = fla_lapack_dlamch("E");
 
             compute_matrix_norm(datatype, NORM, n, nrhs, B, ldb, &norm, imatrix, work);
 
-            residual = ((norm / norm_x) / (n * eps));
+            residual = fla_compute_residual(datatype, 'E', norm, norm_x, n, params);
             break;
         }
         default:

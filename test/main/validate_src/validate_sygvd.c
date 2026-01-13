@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2024-2025, Advanced Micro Devices, Inc. All rights reserved.
+    Copyright (C) 2024-2026, Advanced Micro Devices, Inc. All rights reserved.
 */
 
 /* > \brief \b validate_sygvd.c                                              */
@@ -125,7 +125,7 @@ extern double time_min;
                 break;                                                                             \
         }                                                                                          \
         norm = invoke_lange(type_prefix, "1", &n, &n, Z, &lda, work);                              \
-        resid2 = norm / (eps * norm_orig * (realtype)n);                                           \
+        resid2 = fla_compute_residual(datatype, 'P', norm, norm_orig, n, params);                       \
     }
 
 #define test_2_body(realtype, realtype_prefix, type_prefix)                                 \
@@ -140,7 +140,7 @@ extern double time_min;
         /* Z = X * inv(X) - Z = X * inv(X) - I */                                           \
         invoke_gemm_diff(type_prefix, "N", "N", &n, &n, &n, X_inv, &lda, X, &lda, Z, &lda); \
         norm = invoke_lange(type_prefix, "1", &n, &n, Z, &lda, work);                       \
-        resid3 = norm / (eps * (realtype)n);                                                \
+        resid3 = fla_compute_residual(datatype, 'P', norm, 1.0, n, params);                   \
     }
 
 #define test_3_body(realtype, realtype_prefix, type_prefix)                             \
@@ -153,13 +153,12 @@ extern double time_min;
         realtype normB = invoke_lange(type_prefix, "1", &n, &n, B, &lda, work);         \
         invoke_gemm_diff(type_prefix, "N", "N", &n, &n, &n, L, &lda, U, &lda, Z, &lda); \
         norm = invoke_lange(type_prefix, "1", &n, &n, Z, &lda, work);                   \
-        resid4 = norm / (eps * normB * (realtype)n);                                    \
+        resid4 = fla_compute_residual(datatype, 'P', norm, normB, n, params);             \
     }
 
 #define test_eigenvalues(realtype, realtype_prefix)                                         \
     {                                                                                       \
-        realtype norm, norm_L, eps;                                                         \
-        eps = invoke_lamch(realtype_prefix, "P");                                           \
+        realtype norm, norm_L;                                                              \
         if(itype == 2 || itype == 3)                                                        \
         {                                                                                   \
             invoke_scal(realtype_prefix, &n, scal, lambda_orig, &i_one);                    \
@@ -168,12 +167,11 @@ extern double time_min;
         invoke_axpy(realtype_prefix, &n, &realtype_prefix##_n_one, lambda_out, &i_one,      \
                     lambda_orig, &i_one);                                                   \
         norm = invoke_lange(realtype_prefix, "1", &n, &i_one, lambda_orig, &i_one, work);   \
-        resid5 = norm / (eps * norm_L * n);                                                 \
+        resid5 = fla_compute_residual(datatype, 'P', norm, norm_L, n, params);                   \
     }
 
 #define invoke_tests(realtype, realtype_prefix, type_prefix) \
     {                                                        \
-        realtype eps = invoke_lamch(realtype_prefix, "P");   \
         realtype ufmin = invoke_lamch(realtype_prefix, "U"); \
         test_1_body(realtype, realtype_prefix, type_prefix); \
         test_2_body(realtype, realtype_prefix, type_prefix); \

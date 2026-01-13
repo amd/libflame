@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2024-2025, Advanced Micro Devices, Inc. All rights reserved.
+    Copyright (C) 2024-2026, Advanced Micro Devices, Inc. All rights reserved.
 */
 
 /* > \brief \b validate_gelsd.c                                              */
@@ -68,8 +68,7 @@ void validate_gelsd(char *tst_api, integer m, integer n, integer nrhs, void *A, 
     {
         case FLOAT:
         {
-            float norm_a, norm_b, norm_x, eps, norm = 0;
-            eps = fla_lapack_slamch("E");
+            float norm_a, norm_b, norm_x, norm = 0;
 
             /* Test 1 */
             /* If m >= n and RANK = n, the residual
@@ -91,8 +90,7 @@ void validate_gelsd(char *tst_api, integer m, integer n, integer nrhs, void *A, 
                 sgemm_("N", "N", &m, &nrhs, &n, &s_n_one, A, &lda, X, &ldx, &s_one, B, &ldb);
                 compute_matrix_norm(datatype, NORM, m, nrhs, B, ldb, &norm, imatrix, work);
 
-                resid3 = (double)(norm / norm_a)
-                         / (norm_x * fla_max(m, fla_max(n, nrhs)) * norm_b * eps);
+                resid3 = fla_compute_residual(datatype, 'E', norm, norm_a, (norm_x * fla_max(m, fla_max(n, nrhs)) * norm_b), params);
 
                 /* Test 3
                  * checks whether X is in the row space of A or A'
@@ -112,8 +110,7 @@ void validate_gelsd(char *tst_api, integer m, integer n, integer nrhs, void *A, 
         }
         case DOUBLE:
         {
-            double norm_a, norm_b, norm_x, eps, norm = 0;
-            eps = fla_lapack_dlamch("E");
+            double norm_a, norm_b, norm_x, norm = 0;
 
             /* Test 1 */
             /* If m >= n and RANK = n, the residual
@@ -134,8 +131,7 @@ void validate_gelsd(char *tst_api, integer m, integer n, integer nrhs, void *A, 
                 dgemm_("N", "N", &m, &nrhs, &n, &d_n_one, A, &lda, X, &ldx, &d_one, B, &ldb);
                 compute_matrix_norm(datatype, NORM, m, nrhs, B, ldb, &norm, imatrix, work);
 
-                resid3 = (double)(norm / norm_a)
-                         / (norm_x * fla_max(m, fla_max(n, nrhs)) * norm_b * eps);
+                resid3 = fla_compute_residual(datatype, 'E', norm, norm_a, (norm_x * fla_max(m, fla_max(n, nrhs)) * norm_b), params);
 
                 /* Test 3
                  * checks whether X is in the row space of A or A'
@@ -154,8 +150,7 @@ void validate_gelsd(char *tst_api, integer m, integer n, integer nrhs, void *A, 
         }
         case COMPLEX:
         {
-            float norm_a, norm_b, norm_x, eps, norm = 0;
-            eps = fla_lapack_slamch("E");
+            float norm_a, norm_b, norm_x, norm = 0;
 
             /* Test 1 */
             /* If m >= n and RANK = n, the residual
@@ -171,14 +166,12 @@ void validate_gelsd(char *tst_api, integer m, integer n, integer nrhs, void *A, 
                 compute_matrix_norm(datatype, NORM, m, n, A, lda, &norm_a, imatrix, work);
                 compute_matrix_norm(datatype, NORM, m, nrhs, B, ldb, &norm_b, imatrix, work);
                 compute_matrix_norm(datatype, NORM, n, nrhs, X, ldx, &norm_x, imatrix, work);
-                eps = fla_lapack_slamch("E");
 
                 /* Compute B-AX */
                 cgemm_("N", "N", &m, &nrhs, &n, &c_n_one, A, &lda, X, &ldx, &c_one, B, &ldb);
                 compute_matrix_norm(datatype, NORM, m, nrhs, B, ldb, &norm, imatrix, work);
 
-                resid3 = (double)(norm / norm_a)
-                         / (norm_x * fla_max(m, fla_max(n, nrhs)) * norm_b * eps);
+                resid3 = fla_compute_residual(datatype, 'E', norm, norm_a, (norm_x * fla_max(m, fla_max(n, nrhs)) * norm_b), params);
 
                 /* Test 3
                  * checks whether X is in the row space of A or A'
@@ -197,8 +190,7 @@ void validate_gelsd(char *tst_api, integer m, integer n, integer nrhs, void *A, 
         }
         case DOUBLE_COMPLEX:
         {
-            double norm_a, norm_b, norm_x, eps, norm = 0;
-            eps = fla_lapack_dlamch("E");
+            double norm_a, norm_b, norm_x, norm = 0;
 
             /* Test 1 */
             /* If m >= n and RANK = n, the residual
@@ -214,14 +206,12 @@ void validate_gelsd(char *tst_api, integer m, integer n, integer nrhs, void *A, 
                 compute_matrix_norm(datatype, NORM, m, n, A, lda, &norm_a, imatrix, work);
                 compute_matrix_norm(datatype, NORM, m, nrhs, B, ldb, &norm_b, imatrix, work);
                 compute_matrix_norm(datatype, NORM, n, nrhs, X, ldx, &norm_x, imatrix, work);
-                eps = fla_lapack_dlamch("E");
 
                 /* Compute B-AX */
                 zgemm_("N", "N", &m, &nrhs, &n, &z_n_one, A, &lda, X, &ldx, &z_one, B, &ldb);
                 compute_matrix_norm(datatype, NORM, m, nrhs, B, ldb, &norm, imatrix, work);
 
-                resid3 = (double)(norm / norm_a)
-                         / (norm_x * fla_max(m, fla_max(n, nrhs)) * norm_b * eps);
+                resid3 = fla_compute_residual(datatype, 'E', norm, norm_a, (norm_x * fla_max(m, fla_max(n, nrhs)) * norm_b), params);
 
                 /* Test 3
                  * checks whether X is in the row space of A or A'

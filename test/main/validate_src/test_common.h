@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2022-2025, Advanced Micro Devices, Inc. All rights reserved.
+    Copyright (C) 2022-2026, Advanced Micro Devices, Inc. All rights reserved.
 */
 
 /*! @file test_common.h
@@ -217,11 +217,6 @@ extern int matrix_layout;
 #define FLA_IS_LAPACKE_INTERFACE(interfacetype) \
     (interfacetype == LAPACKE_ROW_TEST || interfacetype == LAPACKE_COLUMN_TEST)
 
-#define FLA_COMPUTE_RESIDUAL(datatype, resid, norm, eps, norm_base, m)                  \
-    if((((datatype == FLOAT) || (datatype == COMPLEX)) && (norm_base > 0.f))            \
-       || (((datatype == DOUBLE) || (datatype == DOUBLE_COMPLEX)) && (norm_base > 0.))) \
-        resid = norm / (eps * norm_base * m);
-
 /* Max function with NAN checks */
 double fla_test_max(double v1, double v2);
 
@@ -287,8 +282,8 @@ void fla_invoke_gemm(integer datatype, char *transA, char *transB, integer *m, i
                      integer *ldc);
 /* orthgonality property of matrix */
 double check_orthogonal_matrix(char trn, integer datatype, void *A, integer m, integer n, integer k,
-                               integer lda);
-double check_orthogonality(integer datatype, void *A, integer m, integer n, integer lda);
+                               integer lda, void *params);
+double check_orthogonality(integer datatype, void *A, integer m, integer n, integer lda, void *params);
 void get_diagonal(integer datatype, void *A, integer m, integer n, integer lda, void *Diag);
 void get_subdiagonal(integer datatype, void *A, integer m, integer n, integer lda, void *Subdiag);
 /*Tridiagonal matrix functions*/
@@ -609,4 +604,8 @@ logical same_string(const char *str_a, const char *str_b);
 
 /* Compute the inverse of a square matrix using GETRF + GETRI */
 integer compute_matrix_inverse(integer datatype, integer n, void *A, integer lda);
+
+/* Computes residual value based on input norms & size given.
+   If norm_base <= 0, then residual is 0*/
+double fla_compute_residual(integer datatype, char eps_type, double norm, double norm_base, integer m, void *params);
 #endif // TEST_COMMON_H

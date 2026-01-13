@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2023-2025, Advanced Micro Devices, Inc. All rights reserved.
+    Copyright (C) 2023-2026, Advanced Micro Devices, Inc. All rights reserved.
 */
 
 /*! @file validate_gghrd.c
@@ -27,76 +27,72 @@ void validate_gghrd_int(char *tst_api, char *compq, char *compz, integer n, void
             case FLOAT:
             {
                 /* Compare A and A_test matrices */
-                float eps, norm_H, norm, norm_T;
-                eps = fla_lapack_slamch("P");
+                float norm_H, norm, norm_T;
                 create_vector(datatype, &work, n);
                 norm_H = fla_lapack_slange("1", &n, &n, A, &lda, work);
                 matrix_difference(datatype, n, n, A, lda, A_test, lda);
                 norm = fla_lapack_slange("1", &n, &n, A, &lda, work);
-                resid[0] = norm / (float)n / norm_H / eps;
+                resid[0] = fla_compute_residual(datatype, 'P', norm, norm_H, n, params);
 
                 /* Compare B and B_test matrices */
                 norm_T = fla_lapack_slange("1", &n, &n, B, &ldb, work);
                 matrix_difference(datatype, n, n, B, lda, B_test, lda);
                 norm = fla_lapack_slange("1", &n, &n, B, &ldb, work);
-                resid[1] = norm / (float)n / norm_T / eps;
+                resid[1] = fla_compute_residual(datatype, 'P', norm, norm_T, n, params);
 
                 break;
             }
             case DOUBLE:
             {
                 /* Compare A and A_test matrices */
-                double eps, norm_H, norm, norm_T;
-                eps = fla_lapack_dlamch("P");
+                double norm_H, norm, norm_T;
                 create_vector(datatype, &work, n);
                 norm_H = fla_lapack_dlange("1", &n, &n, A, &lda, work);
                 matrix_difference(datatype, n, n, A, lda, A_test, lda);
                 norm = fla_lapack_dlange("1", &n, &n, A, &lda, work);
-                resid[0] = norm / (double)n / norm_H / eps;
+                resid[0] = fla_compute_residual(datatype, 'P', norm, norm_H, n, params);
 
                 /* Compare B and B_test matrices */
                 norm_T = fla_lapack_dlange("1", &n, &n, B, &ldb, work);
                 matrix_difference(datatype, n, n, B, lda, B_test, lda);
                 norm = fla_lapack_dlange("1", &n, &n, B, &ldb, work);
-                resid[1] = norm / (double)n / norm_T / eps;
+                resid[1] = fla_compute_residual(datatype, 'P', norm, norm_T, n, params);
 
                 break;
             }
             case COMPLEX:
             {
                 /* Compare A and A_test matrices */
-                float eps, norm_H, norm, norm_T;
-                eps = fla_lapack_slamch("P");
+                float norm_H, norm, norm_T;
                 create_vector(datatype, &work, n);
                 norm_H = fla_lapack_clange("1", &n, &n, A, &lda, work);
                 matrix_difference(datatype, n, n, A, lda, A_test, lda);
                 norm = fla_lapack_clange("1", &n, &n, A, &lda, work);
-                resid[0] = norm / (float)n / norm_H / eps;
+                resid[0] = fla_compute_residual(datatype, 'P', norm, norm_H, n, params);
 
                 /* Compare B and B_test matrices */
                 norm_T = fla_lapack_clange("1", &n, &n, B, &ldb, work);
                 matrix_difference(datatype, n, n, B, lda, B_test, lda);
                 norm = fla_lapack_clange("1", &n, &n, B, &ldb, work);
-                resid[1] = norm / (float)n / norm_T / eps;
+                resid[1] = fla_compute_residual(datatype, 'P', norm, norm_T, n, params);
 
                 break;
             }
             case DOUBLE_COMPLEX:
             {
                 /* Compare A and A_test matrices */
-                double eps, norm_H, norm, norm_T;
-                eps = fla_lapack_dlamch("P");
+                double norm_H, norm, norm_T;
                 create_vector(datatype, &work, n);
                 norm_H = fla_lapack_zlange("1", &n, &n, A, &lda, work);
                 matrix_difference(datatype, n, n, A, lda, A_test, lda);
                 norm = fla_lapack_zlange("1", &n, &n, A, &lda, work);
-                resid[0] = norm / (double)n / norm_H / eps;
+                resid[0] = fla_compute_residual(datatype, 'P', norm, norm_H, n, params);
 
                 /* Compare B and B_test matrices */
                 norm_T = fla_lapack_zlange("1", &n, &n, B, &ldb, work);
                 matrix_difference(datatype, n, n, B, lda, B_test, lda);
                 norm = fla_lapack_zlange("1", &n, &n, B, &ldb, work);
-                resid[1] = norm / (double)n / norm_T / eps;
+                resid[1] = fla_compute_residual(datatype, 'P', norm, norm_T, n, params);
 
                 break;
             }
@@ -115,8 +111,7 @@ void validate_gghrd_int(char *tst_api, char *compq, char *compz, integer n, void
     {
         case FLOAT:
         {
-            float norm, norm_A, norm_T, eps;
-            eps = fla_lapack_slamch("P");
+            float norm, norm_A, norm_T;
 
             /* Test 1
                 | A - Q**T * Q_test * H  * Z_test**T * Z  | / ( |A| n ulp ) */
@@ -148,7 +143,7 @@ void validate_gghrd_int(char *tst_api, char *compq, char *compz, integer n, void
                 sgemm_("N", "T", &n, &n, &n, &s_one, lambda, &n, Z_test, &ldz, &s_n_one, A, &lda);
             }
             norm = fla_lapack_slange("1", &n, &n, A, &lda, work);
-            resid[2] = norm / (eps * norm_A * (float)n);
+            resid[2] = fla_compute_residual(datatype, 'P', norm, norm_A, n, params);
 
             /* Test 2
                 | B - Q**T * Q_test *  T * Z_test**T * Z  | / ( |B| n ulp ) */
@@ -175,22 +170,21 @@ void validate_gghrd_int(char *tst_api, char *compq, char *compz, integer n, void
                 sgemm_("N", "T", &n, &n, &n, &s_one, lambda, &n, Z_test, &ldz, &s_n_one, B, &ldb);
             }
             norm = fla_lapack_slange("1", &n, &n, B, &ldb, work);
-            resid[3] = norm / (eps * norm_T * (float)n);
+            resid[3] = fla_compute_residual(datatype, 'P', norm, norm_T, n, params);
 
             /* Test 3
                 compute norm(I - Z_test'*Z_test) / (N * EPS)*/
-            resid[4] = (float)check_orthogonality(datatype, Z_test, n, n, ldz);
+            resid[4] = (float)check_orthogonality(datatype, Z_test, n, n, ldz, params);
 
             /* Test 4
                 compute norm(I - Q_test'*Q_test) / (N * EPS)*/
-            resid[5] = (float)check_orthogonality(datatype, Q_test, n, n, ldq);
+            resid[5] = (float)check_orthogonality(datatype, Q_test, n, n, ldq, params);
 
             break;
         }
         case DOUBLE:
         {
-            double norm, norm_A, norm_B, eps;
-            eps = fla_lapack_dlamch("P");
+            double norm, norm_A, norm_B;
 
             /* Test 1
                 | A - Q**T * Q_test * H  * Z_test**T * Z  | / ( |A| n ulp ) */
@@ -222,7 +216,7 @@ void validate_gghrd_int(char *tst_api, char *compq, char *compz, integer n, void
                 dgemm_("N", "T", &n, &n, &n, &d_one, lambda, &n, Z_test, &ldz, &d_n_one, A, &lda);
             }
             norm = fla_lapack_dlange("1", &n, &n, A, &lda, work);
-            resid[2] = norm / (eps * norm_A * (float)n);
+            resid[2] = fla_compute_residual(datatype, 'P', norm, norm_A, n, params);
 
             /* Test 2
                 | B - Q**H * Q_test *  T * Z_test**H * Z  | / ( |B| n ulp ) */
@@ -249,22 +243,21 @@ void validate_gghrd_int(char *tst_api, char *compq, char *compz, integer n, void
                 dgemm_("N", "T", &n, &n, &n, &d_one, lambda, &n, Z_test, &ldz, &d_n_one, B, &ldb);
             }
             norm = fla_lapack_dlange("1", &n, &n, B, &ldb, work);
-            resid[3] = norm / (eps * norm_B * (float)n);
+            resid[3] = fla_compute_residual(datatype, 'P', norm, norm_B, n, params);
 
             /* Test 3
                 compute norm(I - Z_test'*Z_test) / (N * EPS)*/
-            resid[4] = check_orthogonality(datatype, Z_test, n, n, ldz);
+            resid[4] = check_orthogonality(datatype, Z_test, n, n, ldz, params);
 
             /* Test 4
                 compute norm(I - Q_test'*Q_test) / (N * EPS)*/
-            resid[5] = check_orthogonality(datatype, Q_test, n, n, ldq);
+            resid[5] = check_orthogonality(datatype, Q_test, n, n, ldq, params);
 
             break;
         }
         case COMPLEX:
         {
-            float norm, norm_A, norm_B, eps;
-            eps = fla_lapack_slamch("P");
+            float norm, norm_A, norm_B;
 
             /* Test 1
                 | A - Q**H * Q_test * H  * Z_test**H * Z  | / ( |A| n ulp ) */
@@ -295,7 +288,7 @@ void validate_gghrd_int(char *tst_api, char *compq, char *compz, integer n, void
                 cgemm_("N", "C", &n, &n, &n, &c_one, lambda, &n, Z_test, &ldz, &c_n_one, A, &lda);
             }
             norm = fla_lapack_clange("1", &n, &n, A, &lda, work);
-            resid[2] = norm / (eps * norm_A * (float)n);
+            resid[2] = fla_compute_residual(datatype, 'P', norm, norm_A, n, params);
 
             /* Test 2
                 | B - Q**H * Q_test *  T * Z_test**H * Z  | / ( |B| n ulp ) */
@@ -322,22 +315,21 @@ void validate_gghrd_int(char *tst_api, char *compq, char *compz, integer n, void
                 cgemm_("N", "C", &n, &n, &n, &c_one, lambda, &n, Z_test, &ldz, &c_n_one, B, &ldb);
             }
             norm = fla_lapack_clange("1", &n, &n, B, &ldb, work);
-            resid[3] = norm / (eps * norm_B * (float)n);
+            resid[3] = fla_compute_residual(datatype, 'P', norm, norm_B, n, params);
 
             /* Test 3
                 compute norm(I - Z_test'*Z_test) / (N * EPS)*/
-            resid[4] = (float)check_orthogonality(datatype, Z_test, n, n, ldz);
+            resid[4] = (float)check_orthogonality(datatype, Z_test, n, n, ldz, params);
 
             /* Test 4
                 compute norm(I - Q_test'*Q_test) / (N * EPS)*/
-            resid[5] = (float)check_orthogonality(datatype, Q_test, n, n, ldq);
+            resid[5] = (float)check_orthogonality(datatype, Q_test, n, n, ldq, params);
 
             break;
         }
         case DOUBLE_COMPLEX:
         {
-            double norm, norm_A, norm_B, eps;
-            eps = fla_lapack_dlamch("P");
+            double norm, norm_A, norm_B;
 
             /* Test 1
                 | A - Q**H * Q_test * H  * Z_test**H * Z  | / ( |A| n ulp ) */
@@ -368,7 +360,7 @@ void validate_gghrd_int(char *tst_api, char *compq, char *compz, integer n, void
                 zgemm_("N", "C", &n, &n, &n, &z_one, lambda, &n, Z_test, &ldz, &z_n_one, A, &lda);
             }
             norm = fla_lapack_zlange("1", &n, &n, A, &lda, work);
-            resid[2] = norm / (eps * norm_A * (float)n);
+            resid[2] = fla_compute_residual(datatype, 'P', norm, norm_A, n, params);
 
             /* Test 2
                 | B - Q**H * Q_test *  T * Z_test**H * Z  | / ( |B| n ulp ) */
@@ -395,15 +387,15 @@ void validate_gghrd_int(char *tst_api, char *compq, char *compz, integer n, void
                 zgemm_("N", "C", &n, &n, &n, &z_one, lambda, &n, Z_test, &ldz, &z_n_one, B, &ldb);
             }
             norm = fla_lapack_zlange("1", &n, &n, B, &ldb, work);
-            resid[3] = norm / (eps * norm_B * (float)n);
+            resid[3] = fla_compute_residual(datatype, 'P', norm, norm_B, n, params);
 
             /* Test 3
                 compute norm(I - Z_test'*Z_test) / (N * EPS)*/
-            resid[4] = check_orthogonality(datatype, Z_test, n, n, ldz);
+            resid[4] = check_orthogonality(datatype, Z_test, n, n, ldz, params);
 
             /* Test 4
                 compute norm(I - Q_test'*Q_test) / (N * EPS)*/
-            resid[5] = check_orthogonality(datatype, Q_test, n, n, ldq);
+            resid[5] = check_orthogonality(datatype, Q_test, n, n, ldq, params);
 
             break;
         }

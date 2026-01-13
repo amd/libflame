@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2022-2025, Advanced Micro Devices, Inc. All rights reserved.
+    Copyright (C) 2022-2026, Advanced Micro Devices, Inc. All rights reserved.
 */
 
 #include "test_lapack.h"
@@ -122,7 +122,7 @@ void fla_test_gesvd(integer argc, char **argv, test_params_t *params)
     /* Print error messages */
     if(tests_not_run)
     {
-        printf("\nIllegal arguments for gesdd\n");
+        printf("\nIllegal arguments for gesvd\n");
         printf("./<EXE> gesvd <precisions - sdcz> <JOBU> <JOBVT> <M> <N> <LDA> <LDU> <LDVT> "
                "<LWORK> <repeats>\n");
     }

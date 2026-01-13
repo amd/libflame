@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2022-2025, Advanced Micro Devices, Inc. All rights reserved.
+    Copyright (C) 2022-2026, Advanced Micro Devices, Inc. All rights reserved.
 */
 
 /*! @file validate_orgqr.c
@@ -36,8 +36,7 @@ void validate_orgqr(char *tst_api, integer m, integer n, void *A, integer lda, v
     {
         case FLOAT:
         {
-            float norm, norm_A, eps;
-            eps = fla_lapack_slamch("P");
+            float norm, norm_A;
 
             /* Test 1
                compute norm(R - Q'*A) / (N * norm(A) * EPS)*/
@@ -45,17 +44,16 @@ void validate_orgqr(char *tst_api, integer m, integer n, void *A, integer lda, v
             sgemm_("T", "N", &n, &n, &k, &s_n_one, Q, &lda, A, &lda, &s_one, R, &n);
 
             compute_matrix_norm(datatype, NORM, n, n, R, n, &norm, imatrix, work);
-            resid1 = (norm / norm_A) / (eps * (float)k);
+            resid1 = fla_compute_residual(datatype, 'P', norm, norm_A, (float)k, params);
 
             /* Test 2
                compute norm(I - Q*Q') / (N * EPS)*/
-            resid2 = (float)check_orthogonality(datatype, Q, m, n, lda);
+            resid2 = (float)check_orthogonality(datatype, Q, m, n, lda, params);
             break;
         }
         case DOUBLE:
         {
-            double norm, norm_A, eps;
-            eps = fla_lapack_dlamch("P");
+            double norm, norm_A;
 
             /* Test 1
                compute norm(R - Q'*A) / (N * norm(A) * EPS)*/
@@ -63,17 +61,16 @@ void validate_orgqr(char *tst_api, integer m, integer n, void *A, integer lda, v
             dgemm_("T", "N", &n, &n, &k, &d_n_one, Q, &lda, A, &lda, &d_one, R, &n);
 
             compute_matrix_norm(datatype, NORM, n, n, R, n, &norm, imatrix, work);
-            resid1 = (norm / norm_A) / (eps * (float)k);
+            resid1 = fla_compute_residual(datatype, 'P', norm, norm_A, (float)k, params);
 
             /* Test 2
                compute norm(I - Q*Q') / (N * EPS)*/
-            resid2 = check_orthogonality(datatype, Q, m, n, lda);
+            resid2 = check_orthogonality(datatype, Q, m, n, lda, params);
             break;
         }
         case COMPLEX:
         {
-            float norm, norm_A, eps;
-            eps = fla_lapack_slamch("P");
+            float norm, norm_A;
 
             /* Test 1
                compute norm(R - Q'*A) / (N * norm(A) * EPS)*/
@@ -81,17 +78,16 @@ void validate_orgqr(char *tst_api, integer m, integer n, void *A, integer lda, v
             cgemm_("C", "N", &n, &n, &k, &c_n_one, Q, &lda, A, &lda, &c_one, R, &n);
 
             compute_matrix_norm(datatype, NORM, n, n, R, n, &norm, imatrix, work);
-            resid1 = (norm / norm_A) / (eps * (float)k);
+            resid1 = fla_compute_residual(datatype, 'P', norm, norm_A, (float)k, params);
 
             /* Test 2
                compute norm(I - Q*Q') / (N * EPS)*/
-            resid2 = (float)check_orthogonality(datatype, Q, m, n, lda);
+            resid2 = (float)check_orthogonality(datatype, Q, m, n, lda, params);
             break;
         }
         case DOUBLE_COMPLEX:
         {
-            double norm, norm_A, eps;
-            eps = fla_lapack_dlamch("P");
+            double norm, norm_A;
 
             /* Test 1
                compute norm(R - Q'*A) / (N * norm(A) * EPS)*/
@@ -99,11 +95,11 @@ void validate_orgqr(char *tst_api, integer m, integer n, void *A, integer lda, v
             zgemm_("C", "N", &n, &n, &k, &z_n_one, Q, &lda, A, &lda, &z_one, R, &n);
 
             compute_matrix_norm(datatype, NORM, n, n, R, n, &norm, imatrix, work);
-            resid1 = (norm / norm_A) / (eps * (float)k);
+            resid1 = fla_compute_residual(datatype, 'P', norm, norm_A, (float)k, params);
 
             /* Test 2
                compute norm(I - Q*Q') / (N * EPS)*/
-            resid2 = check_orthogonality(datatype, Q, m, n, lda);
+            resid2 = check_orthogonality(datatype, Q, m, n, lda, params);
             break;
         }
     }

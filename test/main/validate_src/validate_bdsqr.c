@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2025, Advanced Micro Devices, Inc. All rights reserved.
+    Copyright (C) 2026, Advanced Micro Devices, Inc. All rights reserved.
 */
 
 /*! @file validate_bdsqr.c
@@ -199,7 +199,7 @@ void validate_bdsqr(char *tst_api, integer n, void *d_out, void *d_in, void *e_i
             fla_invoke_gemm(datatype, "N", "N", &n, &n, &n, U_in_inv, &n, U_out, &ldu, Q_mat, &n);
 
             /* Check orthogonality: Q^T * Q = I */
-            resid3 = check_orthogonal_matrix(trans_char, datatype, Q_mat, n, n, n, n);
+            resid3 = check_orthogonal_matrix(trans_char, datatype, Q_mat, n, n, n, n, params);
 
             free_matrix(Q_mat);
         }
@@ -227,7 +227,7 @@ void validate_bdsqr(char *tst_api, integer n, void *d_out, void *d_in, void *e_i
                             &n);
 
             /* Check orthogonality: P^T * P = I (i.e., 'N' mode: A * A^T = I) */
-            resid3 = check_orthogonal_matrix('N', datatype, PT_mat, n, n, n, n);
+            resid3 = check_orthogonal_matrix('N', datatype, PT_mat, n, n, n, n, params);
 
             free_matrix(PT_mat);
         }

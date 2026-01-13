@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2024-2025, Advanced Micro Devices, Inc. All rights reserved.
+    Copyright (C) 2024-2026, Advanced Micro Devices, Inc. All rights reserved.
 */
 
 /* > \brief \b validate_syev.c                                              */
@@ -94,8 +94,7 @@ void validate_syev(char *tst_api, char *jobz, char *range, integer n, void *A, v
             {
                 case FLOAT:
                 {
-                    float norm, norm_A, eps;
-                    eps = fla_lapack_slamch("P");
+                    float norm, norm_A;
 
                     /* Test 2
                        compute norm(A - ((Q * lambda) * Q')) /
@@ -103,18 +102,17 @@ void validate_syev(char *tst_api, char *jobz, char *range, integer n, void *A, v
                     norm_A = fla_lapack_slange("1", &n, &n, A, &lda, work);
                     sgemm_("N", "T", &n, &n, &n, &s_one, Q, &lda, Z, &lda, &s_n_one, A, &lda);
                     norm = fla_lapack_slange("1", &n, &n, A, &lda, work);
-                    resid2 = norm / (eps * norm_A * (float)n);
+                    resid2 = fla_compute_residual(datatype, 'P', norm, norm_A, n, params);
 
                     /* Test 3
                        compute norm(I - Z'*Z) / (N * EPS)  */
-                    resid3 = (float)check_orthogonality(datatype, Z, n, n, lda);
+                    resid3 = (float)check_orthogonality(datatype, Z, n, n, lda, params);
                     break;
                 }
 
                 case DOUBLE:
                 {
-                    double norm, norm_A, eps;
-                    eps = fla_lapack_dlamch("P");
+                    double norm, norm_A;
 
                     /* Test 2
                        compute norm(A - (Q * lambda * Q')) /
@@ -122,18 +120,17 @@ void validate_syev(char *tst_api, char *jobz, char *range, integer n, void *A, v
                     norm_A = fla_lapack_dlange("1", &n, &n, A, &lda, work);
                     dgemm_("N", "T", &n, &n, &n, &d_one, Q, &lda, Z, &lda, &d_n_one, A, &lda);
                     norm = fla_lapack_dlange("1", &n, &n, A, &lda, work);
-                    resid2 = norm / (eps * norm_A * (double)n);
+                    resid2 = fla_compute_residual(datatype, 'P', norm, norm_A, n, params);
 
                     /* Test 3
                        compute norm(I - Z'*Z) / (N * EPS)*/
-                    resid3 = check_orthogonality(datatype, Z, n, n, lda);
+                    resid3 = check_orthogonality(datatype, Z, n, n, lda, params);
                     break;
                 }
 
                 case COMPLEX:
                 {
-                    float norm, norm_A, eps;
-                    eps = fla_lapack_slamch("P");
+                    float norm, norm_A;
 
                     /* Test 2
                        compute norm(A - (Q * lambda * Q')) /
@@ -141,18 +138,17 @@ void validate_syev(char *tst_api, char *jobz, char *range, integer n, void *A, v
                     norm_A = fla_lapack_clange("1", &n, &n, A, &lda, work);
                     cgemm_("N", "C", &n, &n, &n, &c_one, Q, &lda, Z, &lda, &c_n_one, A, &lda);
                     norm = fla_lapack_clange("1", &n, &n, A, &lda, work);
-                    resid2 = norm / (eps * norm_A * (float)n);
+                    resid2 = fla_compute_residual(datatype, 'P', norm, norm_A, n, params);
 
                     /* Test 3
                        compute norm(I - Z'*Z) / (N * EPS)*/
-                    resid3 = (float)check_orthogonality(datatype, Z, n, n, lda);
+                    resid3 = (float)check_orthogonality(datatype, Z, n, n, lda, params);
                     break;
                 }
 
                 case DOUBLE_COMPLEX:
                 {
-                    double norm, norm_A, eps;
-                    eps = fla_lapack_dlamch("P");
+                    double norm, norm_A;
 
                     /* Test 2
                        compute norm(A - (Q * lambda * Q')) /
@@ -160,11 +156,11 @@ void validate_syev(char *tst_api, char *jobz, char *range, integer n, void *A, v
                     norm_A = fla_lapack_zlange("1", &n, &n, A, &lda, work);
                     zgemm_("N", "C", &n, &n, &n, &z_one, Q, &lda, Z, &lda, &z_n_one, A, &lda);
                     norm = fla_lapack_zlange("1", &n, &n, A, &lda, work);
-                    resid2 = norm / (eps * norm_A * (double)n);
+                    resid2 = fla_compute_residual(datatype, 'P', norm, norm_A, n, params);
 
                     /* Test 3
                        compute norm(I - Z'*Z) / (N * EPS)*/
-                    resid3 = check_orthogonality(datatype, Z, n, n, lda);
+                    resid3 = check_orthogonality(datatype, Z, n, n, lda, params);
                     break;
                 }
             }
@@ -191,8 +187,7 @@ void validate_syev(char *tst_api, char *jobz, char *range, integer n, void *A, v
             void *work = NULL;
             if(get_realtype(datatype) == FLOAT)
             {
-                float norm, norm_L, eps;
-                eps = fla_lapack_slamch("P");
+                float norm, norm_L;
 
                 if((same_char(imatrix, 'O') || same_char(imatrix, 'U')) && (scal != NULL))
                 {
@@ -202,12 +197,11 @@ void validate_syev(char *tst_api, char *jobz, char *range, integer n, void *A, v
                 norm_L = fla_lapack_slange("1", &n, &i_one, L, &i_one, work);
                 saxpy_(&n, &s_n_one, lambda, &i_one, L, &i_one);
                 norm = fla_lapack_slange("1", &n, &i_one, L, &i_one, work);
-                resid5 = norm / (eps * norm_L * n);
+                resid5 = fla_compute_residual(datatype, 'P', norm, norm_L, n, params);
             }
             else
             {
-                double norm, norm_L, eps;
-                eps = fla_lapack_dlamch("P");
+                double norm, norm_L;
 
                 if((same_char(imatrix, 'O') || same_char(imatrix, 'U')) && (scal != NULL))
                 {
@@ -216,7 +210,7 @@ void validate_syev(char *tst_api, char *jobz, char *range, integer n, void *A, v
                 norm_L = fla_lapack_dlange("1", &n, &i_one, L, &i_one, work);
                 daxpy_(&n, &d_n_one, lambda, &i_one, L, &i_one);
                 norm = fla_lapack_dlange("1", &n, &i_one, L, &i_one, work);
-                resid5 = norm / (eps * norm_L * n);
+                resid5 = fla_compute_residual(datatype, 'P', norm, norm_L, n, params);
             }
         }
     }

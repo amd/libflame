@@ -4,7 +4,7 @@
  standard place, with -lf2c -lm -- in that order, at the end of the command line, as in cc *.o -lf2c
  -lm Source for libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 /******************************************************************************
- * Copyright (C) 2025, Advanced Micro Devices, Inc. All rights reserved.
+ * Copyright (C) 2025-2026, Advanced Micro Devices, Inc. All rights reserved.
  *******************************************************************************/
 #include "FLA_f2c.h" /* Table of constant values */
 #if FLA_ENABLE_AOCL_BLAS
@@ -246,111 +246,110 @@ void aocl_lapack_dlarft(char *direct, char *storev, aocl_int64_t *n, aocl_int64_
     {
         prevlastv = *n;
         i__1 = *k;
-            for(i__ = 1; i__ <= i__1; ++i__)
+        for(i__ = 1; i__ <= i__1; ++i__)
+        {
+            prevlastv = fla_max(i__, prevlastv);
+            if(tau[i__] == 0.)
             {
-                prevlastv = fla_max(i__, prevlastv);
-                if(tau[i__] == 0.)
+                /* H(i) = I */
+                i__2 = i__;
+                for(j = 1; j <= i__2; ++j)
                 {
-                    /* H(i) = I */
-                    i__2 = i__;
+                    t[j + i__ * t_dim1] = 0.;
+                }
+            }
+            else
+            {
+                /* general case */
+                if(lsame_(storev, "C", 1, 1))
+                {
+                    /* Skip any trailing zeros. */
+                    i__2 = i__ + 1;
+                    for(lastv = *n; lastv >= i__2; --lastv)
+                    {
+                        if(v[lastv + i__ * v_dim1] != 0.)
+                        {
+                            break;
+                        }
+                    }
+                    i__2 = i__ - 1;
                     for(j = 1; j <= i__2; ++j)
                     {
-                        t[j + i__ * t_dim1] = 0.;
+                        t[j + i__ * t_dim1] = -tau[i__] * v[i__ + j * v_dim1];
+                    }
+                    j = fla_min(lastv, prevlastv);
+                    /* T(1:i-1,i) := - tau(i) * V(i:j,1:i-1)**T * V(i:j,i) */
+                    i__2 = j - i__;
+                    i__3 = i__ - 1;
+                    d__1 = -tau[i__];
+#if FLA_ENABLE_AOCL_BLAS && defined(BLIS_KERNELS_ZEN4)
+                    if(FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX512))
+                    {
+                        bli_dgemv_t_zen4_int(BLIS_CONJUGATE, BLIS_NO_CONJUGATE, i__2, i__3, &d__1,
+                                             &v[i__ + 1 + v_dim1], 1, *ldv,
+                                             &v[i__ + 1 + i__ * v_dim1], c__1, &c_b6,
+                                             &t[i__ * t_dim1 + 1], c__1, NULL);
+                    }
+                    else
+#endif
+                    {
+                        aocl_blas_dgemv("Transpose", &i__2, &i__3, &d__1, &v[i__ + 1 + v_dim1], ldv,
+                                        &v[i__ + 1 + i__ * v_dim1], &c__1, &c_b6,
+                                        &t[i__ * t_dim1 + 1], &c__1);
                     }
                 }
                 else
                 {
-                    /* general case */
-                    if(lsame_(storev, "C", 1, 1))
+                    /* Skip any trailing zeros. */
+                    i__2 = i__ + 1;
+                    for(lastv = *n; lastv >= i__2; --lastv)
                     {
-                        /* Skip any trailing zeros. */
-                        i__2 = i__ + 1;
-                        for(lastv = *n; lastv >= i__2; --lastv)
+                        if(v[i__ + lastv * v_dim1] != 0.)
                         {
-                            if(v[lastv + i__ * v_dim1] != 0.)
-                            {
-                                break;
-                            }
-                        }
-                        i__2 = i__ - 1;
-                        for(j = 1; j <= i__2; ++j)
-                        {
-                            t[j + i__ * t_dim1] = -tau[i__] * v[i__ + j * v_dim1];
-                        }
-                        j = fla_min(lastv, prevlastv);
-                        /* T(1:i-1,i) := - tau(i) * V(i:j,1:i-1)**T * V(i:j,i) */
-                        i__2 = j - i__;
-                        i__3 = i__ - 1;
-                        d__1 = -tau[i__];
-#if FLA_ENABLE_AOCL_BLAS
-                        if(FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX512))
-                        {
-                            bli_dgemv_t_zen4_int(BLIS_CONJUGATE, BLIS_NO_CONJUGATE, i__2, i__3,
-                                                 &d__1, &v[i__ + 1 + v_dim1], 1, *ldv,
-                                                 &v[i__ + 1 + i__ * v_dim1], c__1, &c_b6,
-                                                 &t[i__ * t_dim1 + 1], c__1, NULL);
-                        }
-                        else
-#endif
-                        {
-                            aocl_blas_dgemv("Transpose", &i__2, &i__3, &d__1, &v[i__ + 1 + v_dim1],
-                                            ldv, &v[i__ + 1 + i__ * v_dim1], &c__1, &c_b6,
-                                            &t[i__ * t_dim1 + 1], &c__1);
+                            break;
                         }
                     }
-                    else
-                    {
-                        /* Skip any trailing zeros. */
-                        i__2 = i__ + 1;
-                        for(lastv = *n; lastv >= i__2; --lastv)
-                        {
-                            if(v[i__ + lastv * v_dim1] != 0.)
-                            {
-                                break;
-                            }
-                        }
-                        i__2 = i__ - 1;
-                        for(j = 1; j <= i__2; ++j)
-                        {
-                            t[j + i__ * t_dim1] = -tau[i__] * v[j + i__ * v_dim1];
-                        }
-                        j = fla_min(lastv, prevlastv);
-                        /* T(1:i-1,i) := - tau(i) * V(1:i-1,i:j) * V(i,i:j)**T */
-                        i__2 = i__ - 1;
-                        i__3 = j - i__;
-                        d__1 = -tau[i__];
-#if FLA_ENABLE_AOCL_BLAS
-                        if(FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX512) && *ldv > 0)
-                        {
-                            bli_dgemv_n_zen4_int_40x2_st(BLIS_NO_TRANSPOSE, BLIS_NO_CONJUGATE, i__2,
-                                                         i__3, &d__1, &v[(i__ + 1) * v_dim1 + 1], 1,
-                                                         *ldv, &v[i__ + (i__ + 1) * v_dim1], *ldv,
-                                                         &c_b6, &t[i__ * t_dim1 + 1], c__1, NULL);
-                        }
-                        else
-#endif
-                        {
-                            aocl_blas_dgemv("No transpose", &i__2, &i__3, &d__1,
-                                            &v[(i__ + 1) * v_dim1 + 1], ldv,
-                                            &v[i__ + (i__ + 1) * v_dim1], ldv, &c_b6,
-                                            &t[i__ * t_dim1 + 1], &c__1);
-                        }
-                    }
-                    /* T(1:i-1,i) := T(1:i-1,1:i-1) * T(1:i-1,i) */
                     i__2 = i__ - 1;
-                    aocl_blas_dtrmv("Upper", "No transpose", "Non-unit", &i__2, &t[t_offset], ldt,
-                                    &t[i__ * t_dim1 + 1], &c__1);
-                    t[i__ + i__ * t_dim1] = tau[i__];
-                    if(i__ > 1)
+                    for(j = 1; j <= i__2; ++j)
                     {
-                        prevlastv = fla_max(prevlastv, lastv);
+                        t[j + i__ * t_dim1] = -tau[i__] * v[j + i__ * v_dim1];
+                    }
+                    j = fla_min(lastv, prevlastv);
+                    /* T(1:i-1,i) := - tau(i) * V(1:i-1,i:j) * V(i,i:j)**T */
+                    i__2 = i__ - 1;
+                    i__3 = j - i__;
+                    d__1 = -tau[i__];
+#if FLA_ENABLE_AOCL_BLAS && defined(BLIS_KERNELS_ZEN4)
+                    if(FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX512) && *ldv > 0)
+                    {
+                        bli_dgemv_n_zen4_int_40x2_st(BLIS_NO_TRANSPOSE, BLIS_NO_CONJUGATE, i__2,
+                                                     i__3, &d__1, &v[(i__ + 1) * v_dim1 + 1], 1,
+                                                     *ldv, &v[i__ + (i__ + 1) * v_dim1], *ldv,
+                                                     &c_b6, &t[i__ * t_dim1 + 1], c__1, NULL);
                     }
                     else
+#endif
                     {
-                        prevlastv = lastv;
+                        aocl_blas_dgemv(
+                            "No transpose", &i__2, &i__3, &d__1, &v[(i__ + 1) * v_dim1 + 1], ldv,
+                            &v[i__ + (i__ + 1) * v_dim1], ldv, &c_b6, &t[i__ * t_dim1 + 1], &c__1);
                     }
                 }
+                /* T(1:i-1,i) := T(1:i-1,1:i-1) * T(1:i-1,i) */
+                i__2 = i__ - 1;
+                aocl_blas_dtrmv("Upper", "No transpose", "Non-unit", &i__2, &t[t_offset], ldt,
+                                &t[i__ * t_dim1 + 1], &c__1);
+                t[i__ + i__ * t_dim1] = tau[i__];
+                if(i__ > 1)
+                {
+                    prevlastv = fla_max(prevlastv, lastv);
+                }
+                else
+                {
+                    prevlastv = lastv;
+                }
             }
+        }
     }
     else
     {
@@ -392,7 +391,7 @@ void aocl_lapack_dlarft(char *direct, char *storev, aocl_int64_t *n, aocl_int64_
                         i__1 = *n - *k + i__ - j;
                         i__2 = *k - i__;
                         d__1 = -tau[i__];
-#if FLA_ENABLE_AOCL_BLAS
+#if FLA_ENABLE_AOCL_BLAS && defined(BLIS_KERNELS_ZEN4)
                         if(FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX512))
                         {
                             bli_dgemv_t_zen4_int(BLIS_CONJUGATE, BLIS_NO_CONJUGATE, i__1, i__2,
@@ -429,7 +428,7 @@ void aocl_lapack_dlarft(char *direct, char *storev, aocl_int64_t *n, aocl_int64_
                         i__1 = *k - i__;
                         i__2 = *n - *k + i__ - j;
                         d__1 = -tau[i__];
-#if FLA_ENABLE_AOCL_BLAS
+#if FLA_ENABLE_AOCL_BLAS && defined(BLIS_KERNELS_ZEN4)
                         if(FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX512) && *ldv > 0)
                         {
                             bli_dgemv_n_zen4_int_40x2_st(BLIS_NO_TRANSPOSE, BLIS_NO_CONJUGATE, i__1,

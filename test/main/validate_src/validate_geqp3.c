@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2022-2025, Advanced Micro Devices, Inc. All rights reserved.
+    Copyright (C) 2022-2026, Advanced Micro Devices, Inc. All rights reserved.
 */
 
 /*! @file validate_geqp3.c
@@ -51,8 +51,7 @@ void validate_geqp3(char *tst_api, integer m_A, integer n_A, void *A, void *A_te
         case FLOAT:
         {
             float twork;
-            float norm, norm_A, eps;
-            eps = fla_lapack_slamch("P");
+            float norm, norm_A;
 
             /* permute A using the permuted vector jpvt to get (A * P) */
             fla_lapack_slapmt(&FLA_TRUE, &m_A, &n_A, A, &lda, jpvt);
@@ -74,19 +73,18 @@ void validate_geqp3(char *tst_api, integer m_A, integer n_A, void *A, void *A_te
             sgemm_("N", "N", &m_A, &n_A, &m_A, &s_one, Q, &m_A, R, &m_A, &s_n_one, A, &lda);
             compute_matrix_norm(datatype, NORM, m_A, n_A, A, lda, &norm, imatrix, work);
 
-            resid1 = norm / (eps * norm_A * (float)n_A);
+            resid1 = fla_compute_residual(datatype, 'P', norm, norm_A, n_A, params);
 
             /* Test 2
                compute norm(I - Q*Q') / (N * EPS)*/
-            resid2 = (double)check_orthogonality(datatype, Q, m_A, m_A, m_A);
+            resid2 = (double)check_orthogonality(datatype, Q, m_A, m_A, m_A, params);
             break;
         }
         case DOUBLE:
         {
             double twork;
-            double norm, norm_A, eps;
+            double norm, norm_A;
 
-            eps = fla_lapack_dlamch("P");
             /* permute A using the permuted vector jpvt to get (A * P) */
             fla_lapack_dlapmt(&FLA_TRUE, &m_A, &n_A, A, &lda, jpvt);
             compute_matrix_norm(datatype, NORM, m_A, n_A, A, lda, &norm_A, imatrix, work);
@@ -108,19 +106,18 @@ void validate_geqp3(char *tst_api, integer m_A, integer n_A, void *A, void *A_te
             dgemm_("N", "N", &m_A, &n_A, &m_A, &d_one, Q, &m_A, R, &m_A, &d_n_one, A, &lda);
 
             compute_matrix_norm(datatype, NORM, m_A, n_A, A, lda, &norm, imatrix, work);
-            resid1 = norm / (eps * norm_A * (double)n_A);
+            resid1 = fla_compute_residual(datatype, 'P', norm, norm_A, n_A, params);
 
             /* Test 2
                compute norm(I - Q*Q') / (N * EPS)*/
-            resid2 = check_orthogonality(datatype, Q, m_A, m_A, m_A);
+            resid2 = check_orthogonality(datatype, Q, m_A, m_A, m_A, params);
             break;
         }
         case COMPLEX:
         {
             scomplex twork;
-            float norm, norm_A, eps;
+            float norm, norm_A;
 
-            eps = fla_lapack_slamch("P");
             /* permute A using the permuted vector jpvt to get (A * P) */
             fla_lapack_clapmt(&FLA_TRUE, &m_A, &n_A, A, &lda, jpvt);
             compute_matrix_norm(datatype, NORM, m_A, n_A, A, lda, &norm_A, imatrix, work);
@@ -143,19 +140,18 @@ void validate_geqp3(char *tst_api, integer m_A, integer n_A, void *A, void *A_te
             cgemm_("N", "N", &m_A, &n_A, &m_A, &c_one, Q, &m_A, R, &m_A, &c_n_one, A, &lda);
 
             compute_matrix_norm(datatype, NORM, m_A, n_A, A, lda, &norm, imatrix, work);
-            resid1 = norm / (eps * norm_A * (float)n_A);
+            resid1 = fla_compute_residual(datatype, 'P', norm, norm_A, n_A, params);
 
             /* Test 2
                compute norm(I - Q*Q') / (N * EPS)*/
-            resid2 = (float)check_orthogonality(datatype, Q, m_A, m_A, m_A);
+            resid2 = (float)check_orthogonality(datatype, Q, m_A, m_A, m_A, params);
             break;
         }
         case DOUBLE_COMPLEX:
         {
             dcomplex twork;
-            double norm, norm_A, eps;
+            double norm, norm_A;
 
-            eps = fla_lapack_dlamch("P");
             /* permute A using the permuted vector jpvt to get (A * P) */
             fla_lapack_zlapmt(&FLA_TRUE, &m_A, &n_A, A, &lda, jpvt);
             compute_matrix_norm(datatype, NORM, m_A, n_A, A, lda, &norm_A, imatrix, work);
@@ -178,11 +174,11 @@ void validate_geqp3(char *tst_api, integer m_A, integer n_A, void *A, void *A_te
             zgemm_("N", "N", &m_A, &n_A, &m_A, &z_n_one, Q, &m_A, R, &m_A, &z_one, A, &lda);
 
             compute_matrix_norm(datatype, NORM, m_A, n_A, A, lda, &norm, imatrix, work);
-            resid1 = norm / (eps * norm_A * (double)n_A);
+            resid1 = fla_compute_residual(datatype, 'P', norm, norm_A, n_A, params);
 
             /* Test 2
                compute norm(I - Q*Q') / (N * EPS)*/
-            resid2 = check_orthogonality(datatype, Q, m_A, m_A, m_A);
+            resid2 = check_orthogonality(datatype, Q, m_A, m_A, m_A, params);
             break;
         }
     }

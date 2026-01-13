@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2024-2025, Advanced Micro Devices, Inc. All rights reserved.
+    Copyright (C) 2024-2026, Advanced Micro Devices, Inc. All rights reserved.
 */
 
 /*! @file validate_gbtrf.c
@@ -33,9 +33,7 @@ void validate_gbtrf(char *tst_api, integer m_A, integer n_A, integer kl, integer
     {
         case FLOAT:
         {
-            float norm, norm_B, eps;
-
-            eps = fla_lapack_slamch("Epsilon");
+            float norm, norm_B;
 
             /* Test 1 - Check for input AB. */
             norm_B = fla_lapack_slange("1", &ldab, &n_A, AB, &ldab, work);
@@ -43,14 +41,12 @@ void validate_gbtrf(char *tst_api, integer m_A, integer n_A, integer kl, integer
             reconstruct_band_storage_matrix(datatype, m_A, n_A, kl, ku, AB_test, ldab, IPIV);
             matrix_difference(datatype, ldab, n_A, AB_test, ldab, AB, ldab);
             norm = fla_lapack_slange("1", &ldab, &n_A, AB_test, &ldab, work);
-            residual = norm / (float)m_A / norm_B / eps;
+            residual = fla_compute_residual(datatype, 'E', norm, norm_B, m_A, params);
             break;
         }
         case DOUBLE:
         {
-            double norm, norm_B, eps;
-
-            eps = fla_lapack_dlamch("Epsilon");
+            double norm, norm_B;
 
             /* Test 1 - Check for input AB. */
             norm_B = fla_lapack_dlange("1", &ldab, &n_A, AB, &ldab, work);
@@ -58,14 +54,12 @@ void validate_gbtrf(char *tst_api, integer m_A, integer n_A, integer kl, integer
             reconstruct_band_storage_matrix(datatype, m_A, n_A, kl, ku, AB_test, ldab, IPIV);
             matrix_difference(datatype, ldab, n_A, AB_test, ldab, AB, ldab);
             norm = fla_lapack_dlange("1", &ldab, &n_A, AB_test, &ldab, work);
-            residual = norm / (double)m_A / norm_B / eps;
+            residual = fla_compute_residual(datatype, 'E', norm, norm_B, m_A, params);
             break;
         }
         case COMPLEX:
         {
-            float norm, norm_B, eps;
-
-            eps = fla_lapack_slamch("Epsilon");
+            float norm, norm_B;
 
             /* Test 1 - Check for input AB. */
             norm_B = fla_lapack_clange("1", &ldab, &n_A, AB, &ldab, work);
@@ -73,14 +67,12 @@ void validate_gbtrf(char *tst_api, integer m_A, integer n_A, integer kl, integer
             reconstruct_band_storage_matrix(datatype, m_A, n_A, kl, ku, AB_test, ldab, IPIV);
             matrix_difference(datatype, ldab, n_A, AB_test, ldab, AB, ldab);
             norm = fla_lapack_clange("1", &ldab, &n_A, AB_test, &ldab, work);
-            residual = norm / (float)m_A / norm_B / eps;
+            residual = fla_compute_residual(datatype, 'E', norm, norm_B, m_A, params);
             break;
         }
         case DOUBLE_COMPLEX:
         {
-            double norm, norm_B, eps;
-
-            eps = fla_lapack_dlamch("Epsilon");
+            double norm, norm_B;
 
             /* Test 1 - Check for input AB. */
             norm_B = fla_lapack_zlange("1", &ldab, &n_A, AB, &ldab, work);
@@ -88,7 +80,7 @@ void validate_gbtrf(char *tst_api, integer m_A, integer n_A, integer kl, integer
             reconstruct_band_storage_matrix(datatype, m_A, n_A, kl, ku, AB_test, ldab, IPIV);
             matrix_difference(datatype, ldab, n_A, AB_test, ldab, AB, ldab);
             norm = fla_lapack_zlange("1", &ldab, &n_A, AB_test, &ldab, work);
-            residual = norm / (double)m_A / norm_B / eps;
+            residual = fla_compute_residual(datatype, 'E', norm, norm_B, m_A, params);
             break;
         }
         default:

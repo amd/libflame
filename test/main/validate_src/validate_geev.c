@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2022-2025, Advanced Micro Devices, Inc. All rights reserved.
+    Copyright (C) 2022-2026, Advanced Micro Devices, Inc. All rights reserved.
 */
 
 /*! @file validate_geev.c
@@ -54,9 +54,8 @@ void validate_geev(char *tst_api, char *jobvl, char *jobvr, integer m, void *A, 
     {
         case FLOAT:
         {
-            float norm, norm_A, norm_W, eps;
+            float norm, norm_A, norm_W;
             norm = norm_A = norm_W = 0.f;
-            eps = fla_lapack_slamch("P");
             if(same_char(*jobvr, 'V'))
             {
                 /* Test 1
@@ -85,7 +84,7 @@ void validate_geev(char *tst_api, char *jobvl, char *jobvr, integer m, void *A, 
                 }
                 else
                     norm = fla_lapack_slange("F", &m, &m, Vlambda, &m, work);
-                FLA_COMPUTE_RESIDUAL(datatype, resid1, norm, eps, norm_A, m);
+                resid1 = fla_compute_residual(datatype, 'P', norm, norm_A, m, params);
             }
             if(same_char(*jobvl, 'V'))
             {
@@ -118,7 +117,7 @@ void validate_geev(char *tst_api, char *jobvl, char *jobvr, integer m, void *A, 
                 }
                 else
                     norm = fla_lapack_slange("F", &m, &m, Vlambda, &m, work);
-                FLA_COMPUTE_RESIDUAL(datatype, resid2, norm, eps, norm_A, m);
+                resid2 = fla_compute_residual(datatype, 'P', norm, norm_A, m, params);
             }
             if(wr_in != NULL && wi_in != NULL)
             {
@@ -133,20 +132,19 @@ void validate_geev(char *tst_api, char *jobvl, char *jobvr, integer m, void *A, 
                 norm_W = fla_lapack_slange("1", &m, &i_one, wr_in, &i_one, work);
                 saxpy_(&m, &s_n_one, wr, &i_one, wr_in, &i_one);
                 norm = fla_lapack_slange("1", &m, &i_one, wr_in, &i_one, work);
-                FLA_COMPUTE_RESIDUAL(datatype, resid3, norm, eps, norm_W, m);
+                resid3 = fla_compute_residual(datatype, 'P', norm, norm_W, m, params);
 
                 norm_W = fla_lapack_slange("1", &m, &i_one, wi_in, &i_one, work);
                 saxpy_(&m, &s_n_one, wi, &i_one, wi_in, &i_one);
                 norm = fla_lapack_slange("1", &m, &i_one, wi_in, &i_one, work);
-                FLA_COMPUTE_RESIDUAL(datatype, resid4, norm, eps, norm_W, m);
+                resid4 = fla_compute_residual(datatype, 'P', norm, norm_W, m, params);
             }
             break;
         }
         case DOUBLE:
         {
-            double norm, norm_A, norm_W, eps;
+            double norm, norm_A, norm_W;
             norm = norm_A = norm_W = 0.;
-            eps = fla_lapack_dlamch("P");
 
             if(same_char(*jobvr, 'V'))
             {
@@ -178,7 +176,7 @@ void validate_geev(char *tst_api, char *jobvl, char *jobvr, integer m, void *A, 
                 }
                 else
                     norm = fla_lapack_dlange("F", &m, &m, Vlambda, &m, work);
-                FLA_COMPUTE_RESIDUAL(datatype, resid1, norm, eps, norm_A, m);
+                resid1 = fla_compute_residual(datatype, 'P', norm, norm_A, m, params);
             }
             if(same_char(*jobvl, 'V'))
             {
@@ -211,7 +209,7 @@ void validate_geev(char *tst_api, char *jobvl, char *jobvr, integer m, void *A, 
                 }
                 else
                     norm = fla_lapack_dlange("F", &m, &m, Vlambda, &m, work);
-                FLA_COMPUTE_RESIDUAL(datatype, resid2, norm, eps, norm_A, m);
+                resid2 = fla_compute_residual(datatype, 'P', norm, norm_A, m, params);
             }
             if(wr_in != NULL && wi_in != NULL)
             {
@@ -226,20 +224,19 @@ void validate_geev(char *tst_api, char *jobvl, char *jobvr, integer m, void *A, 
                 norm_W = fla_lapack_dlange("1", &m, &i_one, wr_in, &i_one, work);
                 daxpy_(&m, &d_n_one, wr, &i_one, wr_in, &i_one);
                 norm = fla_lapack_dlange("1", &m, &i_one, wr_in, &i_one, work);
-                FLA_COMPUTE_RESIDUAL(datatype, resid3, norm, eps, norm_W, m);
+                resid3 = fla_compute_residual(datatype, 'P', norm, norm_W, m, params);
 
                 norm_W = fla_lapack_dlange("1", &m, &i_one, wi_in, &i_one, work);
                 daxpy_(&m, &d_n_one, wi, &i_one, wi_in, &i_one);
                 norm = fla_lapack_dlange("1", &m, &i_one, wi_in, &i_one, work);
-                FLA_COMPUTE_RESIDUAL(datatype, resid4, norm, eps, norm_W, m);
+                resid4 = fla_compute_residual(datatype, 'P', norm, norm_W, m, params);
             }
             break;
         }
         case COMPLEX:
         {
-            float norm, norm_A, norm_W, eps;
+            float norm, norm_A, norm_W;
             norm = norm_A = norm_W = 0.f;
-            eps = fla_lapack_slamch("P");
             /* Scaleup the output during underflow to avoid
              the very least values during validation*/
 
@@ -277,7 +274,7 @@ void validate_geev(char *tst_api, char *jobvl, char *jobvr, integer m, void *A, 
                 }
                 else
                     norm = fla_lapack_clange("F", &m, &m, Vlambda, &m, work);
-                FLA_COMPUTE_RESIDUAL(datatype, resid1, norm, eps, norm_A, m);
+                resid1 = fla_compute_residual(datatype, 'P', norm, norm_A, m, params);
             }
             if(same_char(*jobvl, 'V'))
             {
@@ -310,7 +307,7 @@ void validate_geev(char *tst_api, char *jobvl, char *jobvr, integer m, void *A, 
                 }
                 else
                     norm = fla_lapack_clange("F", &m, &m, Vlambda, &m, work);
-                FLA_COMPUTE_RESIDUAL(datatype, resid2, norm, eps, norm_A, m);
+                resid2 = fla_compute_residual(datatype, 'P', norm, norm_A, m, params);
             }
             if(wr_in != NULL)
             {
@@ -325,15 +322,14 @@ void validate_geev(char *tst_api, char *jobvl, char *jobvr, integer m, void *A, 
                 norm_W = fla_lapack_clange("1", &m, &i_one, wr_in, &i_one, work);
                 caxpy_(&m, &c_n_one, w, &i_one, wr_in, &i_one);
                 norm = fla_lapack_clange("1", &m, &i_one, wr_in, &i_one, work);
-                FLA_COMPUTE_RESIDUAL(datatype, resid3, norm, eps, norm_W, m);
+                resid3 = fla_compute_residual(datatype, 'P', norm, norm_W, m, params);
             }
             break;
         }
         case DOUBLE_COMPLEX:
         {
-            double norm, norm_A, norm_W, eps;
+            double norm, norm_A, norm_W;
             norm = norm_A = norm_W = 0.;
-            eps = fla_lapack_dlamch("P");
             /* Scaleup the output during underflow to avoid
              the very least values during validation*/
 
@@ -370,7 +366,7 @@ void validate_geev(char *tst_api, char *jobvl, char *jobvr, integer m, void *A, 
                 }
                 else
                     norm = fla_lapack_zlange("F", &m, &m, Vlambda, &m, work);
-                FLA_COMPUTE_RESIDUAL(datatype, resid1, norm, eps, norm_A, m);
+                resid1 = fla_compute_residual(datatype, 'P', norm, norm_A, m, params);
             }
             if(same_char(*jobvl, 'V'))
             {
@@ -403,7 +399,7 @@ void validate_geev(char *tst_api, char *jobvl, char *jobvr, integer m, void *A, 
                 }
                 else
                     norm = fla_lapack_zlange("F", &m, &m, Vlambda, &m, work);
-                FLA_COMPUTE_RESIDUAL(datatype, resid2, norm, eps, norm_A, m);
+                resid2 = fla_compute_residual(datatype, 'P', norm, norm_A, m, params);
             }
             if(wr_in != NULL)
             {
@@ -418,7 +414,7 @@ void validate_geev(char *tst_api, char *jobvl, char *jobvr, integer m, void *A, 
                 norm_W = fla_lapack_zlange("1", &m, &i_one, wr_in, &i_one, work);
                 zaxpy_(&m, &z_n_one, w, &i_one, wr_in, &i_one);
                 norm = fla_lapack_zlange("1", &m, &i_one, wr_in, &i_one, work);
-                FLA_COMPUTE_RESIDUAL(datatype, resid3, norm, eps, norm_W, m);
+                resid3 = fla_compute_residual(datatype, 'P', norm, norm_W, m, params);
             }
             break;
         }
@@ -434,5 +430,5 @@ void validate_geev(char *tst_api, char *jobvl, char *jobvr, integer m, void *A, 
     FLA_PRINT_SUBTEST_STATUS(resid1, err_thresh, "01");
     FLA_PRINT_SUBTEST_STATUS(resid2, err_thresh, "02");
     FLA_PRINT_SUBTEST_STATUS(resid3, err_thresh, "03");
-    FLA_PRINT_SUBTEST_STATUS(resid3, err_thresh, "04");
+    FLA_PRINT_SUBTEST_STATUS(resid4, err_thresh, "04");
 }

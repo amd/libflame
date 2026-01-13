@@ -1,5 +1,5 @@
 /******************************************************************************
- * Copyright (C) 2021-2025, Advanced Micro Devices, Inc. All rights reserved.
+ * Copyright (C) 2021-2026, Advanced Micro Devices, Inc. All rights reserved.
  *******************************************************************************/
 
 /*! @file libflame_interface.hh
@@ -35,13 +35,13 @@ namespace libflame
 {  
    // Missing API interfaces added without doxygen documentation
 
+	 /* Function geqpf() has been deprecated. Please use geqp3() instead. */
 	 template<typename T>
 	 void geqpf(integer* m, integer* n, T* a, integer* lda, 
                integer* jpvt, T* tau, T* work, integer* info)
 	 {
 	   geqpf(m, n, a, lda, jpvt, tau, work, info);
 	 }
-	 
 	 template<typename T, typename Ta>
 	 void geqpf(integer* m, integer* n, T* a, integer* lda, integer* jpvt, 
                T* tau, T* work, Ta* rwork, integer* info)
@@ -79,6 +79,7 @@ namespace libflame
 	   zlag2c_(m, n, a, lda, sa, ldsa, info);
 	 }
 
+	 /* Function gelsx() has been deprecated. Please use gelsy() instead. */
 	 template< typename T >
 	 void gelsx(integer* m, integer* n, integer* nrhs, T* a, integer* lda, T* b, 
                integer* ldb, integer* jpvt, T rcond, integer* rank, T* work, integer* info)
@@ -106,6 +107,7 @@ namespace libflame
 	   zcgesv_(n, nrhs, a, lda, ipiv, b, ldb, x, ldx, work, swork, rwork, iter, info);
 	 }
 
+	 /* Function ggsvd() has been deprecated. Please use ggsvd3() instead. */
 	 template< typename T >
 	 void ggsvd(char* jobu, char* jobv, char* jobq, integer* m, integer* n, integer* p, integer* k,
                integer* l, T* a, integer* lda, T* b, integer* ldb, T* alpha, T* beta, T* u, integer* ldu,
@@ -123,6 +125,7 @@ namespace libflame
       rwork, iwork, info);
 	 }
 
+	 /* Function ggsvp() has been deprecated. Please use ggsvp3() instead. */
 	 template< typename T >
 	 void ggsvp(char* jobu, char* jobv, char* jobq, integer* m, integer* p, integer* n, T* a, integer* lda,
                T* b, integer* ldb, T* tola, T* tolb, integer* k, integer* l, T* u, integer* ldu, T* v, 
@@ -811,6 +814,7 @@ namespace libflame
 	   lahef_rook(uplo, n, nb, kb, a, lda, ipiv, w, ldw, info); 
 	 }
 
+	 /* Function lahrd() has been deprecated. Please use lahr2() instead. */
 	 template< typename T >
 	 void lahrd(integer *n, integer *k, integer *nb, T *a, integer *lda, T *tau, T *t, integer *ldt, T *y, 
                integer *ldy)
@@ -895,6 +899,7 @@ namespace libflame
 	   zlat2c_(uplo, n, a, lda, sa, ldsa, info);
 	 }
 
+	 /* Function gegs() has been deprecated. Please use gges() instead. */
 	 template< typename T >
 	 void gegs(char* jobvsl, char* jobvsr, integer* n, T* a, integer* lda, T* b, integer* ldb, T* alphar, 
               T* alphai, T* beta, T* vsl, integer* ldvsl, T* vsr, integer* ldvsr, T* work, integer* lwork,
@@ -909,6 +914,7 @@ namespace libflame
 	   gegs(jobvsl, jobvsr, n, a, lda, b, ldb, alpha, beta, vsl, ldvsl, vsr, ldvsr, work, lwork, rwork, info);
 	 }
 
+	 /* Function gegv() has been deprecated. Please use ggev() instead. */
 	 template< typename T >
 	 void gegv(char* jobvl, char* jobvr, integer* n, T* a, integer* lda, T* b, integer* ldb, T* alphar, 
               T* alphai, T* beta, T* vl, integer* ldvl, T* vr, integer* ldvr, T* work, integer* lwork, 
@@ -923,6 +929,7 @@ namespace libflame
 	   gegv(jobvl, jobvr, n, a, lda, b, ldb, alpha, beta, vl, ldvl, vr, ldvr, work, lwork, rwork, info);
 	 }
 
+	 /* Function latzm() has been deprecated for complex, double complex. Please use unmrz() instead. */
 	 template< typename T >
 	 void latzm(char* side, integer* m, integer* n, T* v, integer* incv, T* tau, T* c1, T* c2, integer* ldc, 
                T* work)
@@ -964,6 +971,13 @@ namespace libflame
 	 void spffrtx(T *ap, integer *n, integer * ncolm, T *work, T *work2)
 	 {
 	   spffrtx(ap, n, ncolm, work, work2);
+	 }
+
+	 /* Function tzrqf() has been deprecated. Please use tzrzf() instead. */
+	 template< typename T >
+	 void tzrqf(integer* m, integer* n, T* a, integer* lda, T* tau, integer* info)
+	 {
+		tzrqf(m, n, a, lda, tau, info);
 	 }
 }
 #endif

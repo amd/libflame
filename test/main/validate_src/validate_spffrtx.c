@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2022-2025, Advanced Micro Devices, Inc. All rights reserved.
+    Copyright (C) 2022-2026, Advanced Micro Devices, Inc. All rights reserved.
 */
 
 /*! @file validate_spffrtx.c
@@ -43,7 +43,7 @@ void validate_spffrtx(char *tst_api, integer n, integer ncolm, void *A, void *AP
     {
         case FLOAT:
         {
-            float norma, norm, eps;
+            float norma, norm;
             /* Test 1 */
             /* Unpack L, D and L' */
             di = 0;
@@ -72,18 +72,17 @@ void validate_spffrtx(char *tst_api, integer n, integer ncolm, void *A, void *AP
             }
 
             norma = slange_("1", &n, &n, A, &n, work);
-            eps = slamch_("P");
             /* Compute L * D */
             sgemm_("N", "N", &n, &n, &n, &s_one, L, &n, D, &n, &s_zero, T, &n);
             /* Compute (L * D * L') - A */
             sgemm_("N", "T", &n, &n, &n, &s_n_one, T, &n, L, &n, &s_one, A, &n);
             norm = slange_("1", &n, &n, A, &n, work);
-            residual = norm / (eps * norma * (float)n);
+            residual = fla_compute_residual(datatype, 'P', norm, norma, n, params);
             break;
         }
         case DOUBLE:
         {
-            double norma, norm, eps;
+            double norma, norm;
             /* Test 1 */
             /* Unpack L, D and L' */
             di = 0;
@@ -111,18 +110,17 @@ void validate_spffrtx(char *tst_api, integer n, integer ncolm, void *A, void *AP
                 di += n - i;
             }
             norma = dlange_("1", &n, &n, A, &n, work);
-            eps = dlamch_("P");
             /* Compute L * D */
             dgemm_("N", "N", &n, &n, &n, &d_one, L, &n, D, &n, &d_zero, T, &n);
             /* Compute (L * D * L') - A */
             dgemm_("N", "T", &n, &n, &n, &d_one, T, &n, L, &n, &d_n_one, A, &n);
             norm = dlange_("1", &n, &n, A, &n, work);
-            residual = norm / (eps * norma * (double)n);
+            residual = fla_compute_residual(datatype, 'P', norm, norma, n, params);
             break;
         }
         case COMPLEX:
         {
-            float norma, norm, eps;
+            float norma, norm;
             /* Test 1 */
             /* Unpack L, D and L' */
             di = 0;
@@ -154,18 +152,17 @@ void validate_spffrtx(char *tst_api, integer n, integer ncolm, void *A, void *AP
                 di += n - i;
             }
             norma = clange_("1", &n, &n, A, &n, work);
-            eps = slamch_("P");
             /* Compute L * D */
             cgemm_("N", "N", &n, &n, &n, &c_one, L, &n, D, &n, &c_zero, T, &n);
             /* Compute (L * D * L') - A */
             cgemm_("N", "T", &n, &n, &n, &c_one, T, &n, L, &n, &c_n_one, A, &n);
             norm = clange_("1", &n, &n, A, &n, work);
-            residual = norm / (eps * norma * (float)n);
+            residual = fla_compute_residual(datatype, 'P', norm, norma, n, params);
             break;
         }
         case DOUBLE_COMPLEX:
         {
-            double norma, norm, eps;
+            double norma, norm;
             /* Test 1 */
             /* Unpack L, D and L' */
             di = 0;
@@ -197,13 +194,12 @@ void validate_spffrtx(char *tst_api, integer n, integer ncolm, void *A, void *AP
                 di += n - i;
             }
             norma = zlange_("1", &n, &n, A, &n, work);
-            eps = dlamch_("P");
             /* Compute L * D */
             zgemm_("N", "N", &n, &n, &n, &z_one, L, &n, D, &n, &z_zero, T, &n);
             /* Compute (L * D * L') -A */
             zgemm_("N", "T", &n, &n, &n, &z_one, T, &n, L, &n, &z_n_one, A, &n);
             norm = zlange_("1", &n, &n, A, &n, work);
-            residual = norm / (eps * norma * (double)n);
+            residual = fla_compute_residual(datatype, 'P', norm, norma, n, params);
             break;
         }
         default:

@@ -860,4 +860,5 @@ void fla_test_runtime_ctx_init(test_params_t *params);
 void fla_test_runtime_ctx_reset(test_params_t *params);
 void fla_test_runtime_ctx_free(test_params_t *params);
 double fla_compute_residual(integer datatype, char eps_type, double norm, double norm_base, integer m, void *params);
+double fla_compute_norm_based_residual(integer datatype, double norm, double norm_a, void *params);
 #endif // TEST_LAPACK_H

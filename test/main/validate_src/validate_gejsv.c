@@ -57,7 +57,8 @@ extern double time_min;
         copy_matrix(datatype, "full", m, n, U, ldu, U_copy, ldu);                                 \
         multiply_matrix_diag_vector(datatype, 'R', VECTOR_TYPE_REAL, m, n, U_copy, ldu, S_scaled, \
                                     1);                                                           \
-        fla_invoke_gemm(datatype, "N", "C", &m, &n, &n, U_copy, &ldu, V, &ldv, A_copy, &lda);     \
+        fla_invoke_gemm(datatype, "N", "C", &m, &n, &n, d_one, U_copy, &ldu,                      \
+             V, &ldv, d_zero, A_copy, &lda);                                                      \
         matrix_difference(datatype, m, n, A_copy, lda, A, lda);                                   \
         realtype norm = type_prefix##lange_("1", &m, &n, A_copy, &lda, NULL);                     \
         resid3 = fla_compute_residual(datatype, 'P', norm, norm_orig, n, params);                      \

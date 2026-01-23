@@ -1412,7 +1412,8 @@ double check_orthogonal_matrix(char trn, integer datatype, void *A, integer m, i
 }
 
 /* Checks whether A**T * A == I */
-double check_orthogonality(integer datatype, void *A, integer m, integer n, integer lda, void *params)
+double check_orthogonality(integer datatype, void *A, integer m, integer n, integer lda,
+                           void *params)
 {
     void *a_temp = NULL, *work = NULL;
     double resid = 0.;
@@ -3931,7 +3932,7 @@ void init_vector_spec_rand_in(integer datatype, void *A, integer M, integer incx
     */
     if(M > 10)
     {
-        span = (M)*0.2;
+        span = (M) * 0.2;
     }
     else
     {
@@ -6112,12 +6113,12 @@ void swap_row_col(integer datatype, integer *m, void *A, integer lda, integer *i
     }
 }
 
-/* GEMM implementation for  C := op( A )*op( B )
- * Where alpha = 1, beta = 0
+/* General matrix multiplication: C := alpha*op(A)*op(B) + beta*C
+ * Wrapper function that calls the appropriate BLAS gemm routine based on datatype.
  */
 void fla_invoke_gemm(integer datatype, char *transA, char *transB, integer *m, integer *n,
-                     integer *k, void *A, integer *lda, void *B, integer *ldb, void *C,
-                     integer *ldc)
+                     integer *k, double alpha, void *A, integer *lda, void *B, integer *ldb,
+                     double beta, void *C, integer *ldc)
 {
     /* check for NULL pointers */
     if((transA == NULL) || (transB == NULL) || (m == NULL) || (n == NULL) || (k == NULL)
@@ -6131,22 +6132,28 @@ void fla_invoke_gemm(integer datatype, char *transA, char *transB, integer *m, i
     {
         case FLOAT:
         {
-            sgemm_(transA, transB, m, n, k, &s_one, A, lda, B, ldb, &s_zero, C, ldc);
+            float gemm_alpha = (float)alpha;
+            float gemm_beta = (float)beta;
+            sgemm_(transA, transB, m, n, k, &gemm_alpha, A, lda, B, ldb, &gemm_beta, C, ldc);
             break;
         }
         case DOUBLE:
         {
-            dgemm_(transA, transB, m, n, k, &d_one, A, lda, B, ldb, &d_zero, C, ldc);
+            dgemm_(transA, transB, m, n, k, &alpha, A, lda, B, ldb, &beta, C, ldc);
             break;
         }
         case COMPLEX:
         {
-            cgemm_(transA, transB, m, n, k, &c_one, A, lda, B, ldb, &c_zero, C, ldc);
+            scomplex gemm_alpha = {(float)alpha, 0.0f};
+            scomplex gemm_beta = {(float)beta, 0.0f};
+            cgemm_(transA, transB, m, n, k, &gemm_alpha, A, lda, B, ldb, &gemm_beta, C, ldc);
             break;
         }
         case DOUBLE_COMPLEX:
         {
-            zgemm_(transA, transB, m, n, k, &z_one, A, lda, B, ldb, &z_zero, C, ldc);
+            dcomplex gemm_alpha = {alpha, 0.0};
+            dcomplex gemm_beta = {beta, 0.0};
+            zgemm_(transA, transB, m, n, k, &gemm_alpha, A, lda, B, ldb, &gemm_beta, C, ldc);
             break;
         }
     }

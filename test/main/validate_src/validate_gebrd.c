@@ -132,8 +132,8 @@ void validate_gebrd(integer datatype, char *tst_api, integer m, integer n, void 
     void *temp1 = NULL;
     create_matrix(datatype, LAPACK_COL_MAJOR, m, n, &A_recon, m);
     create_matrix(datatype, LAPACK_COL_MAJOR, m, k, &temp1, m);
-    fla_invoke_gemm(datatype, "N", "N", &m, &k, &k, Q, &m, B, &k, temp1, &m);
-    fla_invoke_gemm(datatype, "N", "N", &m, &n, &k, temp1, &m, P, &k, A_recon, &m);
+    fla_invoke_gemm(datatype, "N", "N", &m, &k, &k, d_one, Q, &m, B, &k, d_zero, temp1, &m);
+    fla_invoke_gemm(datatype, "N", "N", &m, &n, &k, d_one, temp1, &m, P, &k, d_zero, A_recon, &m);
     free_matrix(temp1);
 
     /* Compute residual: norm(A_recon - A) / (eps * norm(A) * n) */
@@ -190,4 +190,3 @@ void validate_gebrd(integer datatype, char *tst_api, integer m, integer n, void 
     free_matrix(B);
     free_matrix(A_recon);
 }
-

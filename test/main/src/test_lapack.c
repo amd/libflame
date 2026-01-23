@@ -2426,3 +2426,44 @@ double fla_compute_residual(integer datatype, char eps_type, double norm, double
     /* Compute residual = norm / (norm_base * eps * m) */
     return (norm / norm_base) / (eps * m);
 }
+
+
+/**
+ * @brief Compute residual normalized by matrix norm.
+ *
+ * This function computes the residual normalized by the matrix norm.
+ * If the matrix norm is less than or equal to the safe minimum, the residual is set to 0.
+ * Otherwise, the residual is computed as norm / norm_a.
+ *
+ * @param[in] datatype   Data type of the computation (FLOAT, DOUBLE, COMPLEX, or DOUBLE_COMPLEX)
+ * @param[in] norm       The computed norm (e.g., norm of difference)
+ * @param[in] norm_a     The matrix norm (e.g., norm of matrix A)
+ * @param[in] params     Pointer to test parameters structure containing safe_min values
+ *
+ * @return The normalized residual value. Returns 0.0 if norm_a <= safe_min
+ *
+ * @note This function selects appropriate safe minimum value based on datatype
+ * @note For FLOAT/COMPLEX types, uses single precision safe_min; for DOUBLE/DOUBLE_COMPLEX, uses double precision
+ */
+double fla_compute_norm_based_residual(integer datatype, double norm, double norm_a, void *params)
+{
+    double safe_min;
+
+    if(get_realtype(datatype) == FLOAT)
+    {
+        safe_min = ((test_params_t *)params)->sf_min_s;
+    }
+    else
+    {
+        safe_min = ((test_params_t *)params)->sf_min_d;
+    }
+
+    /* Check if norm_a is valid for division */
+    if(norm_a <= safe_min)
+    {
+        return 0.0;
+    }
+
+    /* Compute residual = norm / norm_a */
+    return (norm / norm_a);
+}

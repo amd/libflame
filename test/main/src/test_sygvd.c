@@ -206,8 +206,8 @@ void fla_test_sygvd_experiment(char *tst_api, test_params_t *params, integer dat
             get_triangular_matrix("U", datatype, n, n, U, lda, 1, NON_UNIT_DIAG);
 
             /* B = U**{T|C} U */
-            fla_invoke_gemm(datatype, GET_TRANS_STR(datatype), "N", &n, &n, &n, U, &lda, U, &lda, B,
-                            &lda);
+            fla_invoke_gemm(datatype, GET_TRANS_STR(datatype), "N", &n, &n, &n, d_one, U, &lda, U,
+                            &lda, d_zero, B, &lda);
 
             /* Genarate matrix C such that C = Q * lambda * Q'
                where L is a diagonal matrix with diagonal values as eigen values

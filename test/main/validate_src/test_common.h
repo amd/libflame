@@ -274,12 +274,12 @@ void assign_value(integer datatype, void *x, double data_real, double data_imag)
 void matrix_difference(integer datatype, integer m, integer n, void *A, integer lda, void *B,
                        integer ldb);
 
-/* GEMM implementation for  C := alpha*op( A )*op( B ) + beta*C
- * Where alpha = 1, beta = 0
+/* General matrix multiplication: C := alpha*op(A)*op(B) + beta*C
+ * Wrapper function that calls the appropriate BLAS gemm routine based on datatype.
  */
 void fla_invoke_gemm(integer datatype, char *transA, char *transB, integer *m, integer *n,
-                     integer *k, void *A, integer *lda, void *B, integer *ldb, void *C,
-                     integer *ldc);
+                     integer *k, double alpha, void *A, integer *lda, void *B, integer *ldb,
+                     double beta, void *C, integer *ldc);
 /* orthgonality property of matrix */
 double check_orthogonal_matrix(char trn, integer datatype, void *A, integer m, integer n, integer k,
                                integer lda, void *params);
@@ -608,4 +608,10 @@ integer compute_matrix_inverse(integer datatype, integer n, void *A, integer lda
 /* Computes residual value based on input norms & size given.
    If norm_base <= 0, then residual is 0*/
 double fla_compute_residual(integer datatype, char eps_type, double norm, double norm_base, integer m, void *params);
+
+/* This function computes the residual normalized by the matrix norm.
+ * If the matrix norm is less than or equal to the safe minimum, the residual is set to 0.
+ * Otherwise, the residual is computed as norm / norm_a.
+ */
+double fla_compute_norm_based_residual(integer datatype, double norm, double norm_a, void *params);
 #endif // TEST_COMMON_H

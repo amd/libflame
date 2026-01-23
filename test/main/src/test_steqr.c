@@ -197,8 +197,10 @@ void fla_test_steqr_experiment(char *tst_api, test_params_t *params, integer dat
                  * A = Q * T * (Q**T)
                  * Form tridiagonal matrix Z by copying from matrix.*/
                 copy_sym_tridiag_matrix(datatype, D, E, n, n, Z, ldz);
-                fla_invoke_gemm(datatype, "N", "N", &n, &n, &n, Q, &lda, Z, &ldz, Z_test, &ldz);
-                fla_invoke_gemm(datatype, "N", "T", &n, &n, &n, Z_test, &ldz, Q, &lda, A, &lda);
+                fla_invoke_gemm(datatype, "N", "N", &n, &n, &n, d_one, Q, &lda, Z, &ldz, d_zero,
+                                Z_test, &ldz);
+                fla_invoke_gemm(datatype, "N", "T", &n, &n, &n, d_one, Z_test, &ldz, Q, &lda,
+                                d_zero, A, &lda);
             }
         }
         else

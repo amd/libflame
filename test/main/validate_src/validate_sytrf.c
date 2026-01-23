@@ -94,7 +94,8 @@ void validate_sytrf(char *tst_api, char *uplo, integer n, integer lda, void *A_r
             }
             copy_matrix(datatype, "full", n, n, temp, n, work, n);
             /* Forming triagluar matrix U from U(k) * U(k-1) * U(k-2) ... */
-            fla_invoke_gemm(datatype, "N", "N", &n, &n, &n, work, &n, A_val, &n, temp, &n);
+            fla_invoke_gemm(datatype, "N", "N", &n, &n, &n, d_one, work, &n, A_val, &n, d_zero,
+                            temp, &n);
         }
     }
     else if(same_char(*uplo, 'L'))
@@ -144,7 +145,8 @@ void validate_sytrf(char *tst_api, char *uplo, integer n, integer lda, void *A_r
             copy_matrix(datatype, "full", n, n, temp, n, work, n);
 
             /* Forming triagluar matrix L from L(1) * L(2) * L(3) ... */
-            fla_invoke_gemm(datatype, "N", "N", &n, &n, &n, work, &n, A_val, &n, temp, &n);
+            fla_invoke_gemm(datatype, "N", "N", &n, &n, &n, d_one, work, &n, A_val, &n, d_zero,
+                            temp, &n);
         }
     }
     switch(datatype)

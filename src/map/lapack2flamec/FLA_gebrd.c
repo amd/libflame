@@ -247,6 +247,8 @@ LAPACK_gebrd(d)
     AOCL_DTL_SNPRINTF("dgebrd inputs: m %" FLA_IS ", n %" FLA_IS ", lda %" FLA_IS "", *m, *n,
                       *ldim_A);
 #if FLA_ENABLE_AMD_OPT
+    /* Initialize global context data */
+    aocl_fla_init();
     if(*m <= FLA_DGEBRD_SMALL_SIZE_THRESH && *n <= FLA_DGEBRD_SMALL_SIZE_THRESH)
     {
         lapack_dgebrd(m, n, buff_A, ldim_A, buff_d, buff_e, buff_tu, buff_tv, buff_w, lwork, info);

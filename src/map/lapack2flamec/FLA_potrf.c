@@ -191,31 +191,35 @@ void zpotf2_(char *uplo, aocl_int_t *n, dcomplex *buff_A, aocl_int_t *ldim_A, ao
         lapack_spotrf(uplo, n, buff_A, ldim_A, info);
 
 #ifdef FLA_OPENMP_MULTITHREADING
-#define LAPACK_potrf_body_d(prefix)                                           \
-{                                                                             \
-    if(*n < FLA_POTRF_DOUBLE_SMALL && FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX512))    \
-        fla_dpotrf_small_avx512(uplo, n, buff_A, ldim_A, info);               \
-    else if(*n < FLA_POTRF_DOUBLE_SMALL && FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX2)) \
-        fla_dpotrf_small_avx2(uplo, n, buff_A, ldim_A, info);                 \
-    else if((*n >= FLA_POTRF_BLOCK_SIZE))                                     \
-        lapack_dpotrf_var1(uplo, n, buff_A, ldim_A, info);                    \
-    else if(*n < FLA_POTRF_DOUBLE_SMALL)                                      \
-        lapack_dpotf2(uplo, n, buff_A, ldim_A, info);                         \
-    else                                                                      \
-        lapack_dpotrf(uplo, n, buff_A, ldim_A, info);                         \
-}
+#define LAPACK_potrf_body_d(prefix)                                               \
+    {                                                                             \
+        /* Initialize global context data */                                      \
+        aocl_fla_init();                                                          \
+        if(*n < FLA_POTRF_DOUBLE_SMALL && FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX512))    \
+            fla_dpotrf_small_avx512(uplo, n, buff_A, ldim_A, info);               \
+        else if(*n < FLA_POTRF_DOUBLE_SMALL && FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX2)) \
+            fla_dpotrf_small_avx2(uplo, n, buff_A, ldim_A, info);                 \
+        else if((*n >= FLA_POTRF_BLOCK_SIZE))                                     \
+            lapack_dpotrf_var1(uplo, n, buff_A, ldim_A, info);                    \
+        else if(*n < FLA_POTRF_DOUBLE_SMALL)                                      \
+            lapack_dpotf2(uplo, n, buff_A, ldim_A, info);                         \
+        else                                                                      \
+            lapack_dpotrf(uplo, n, buff_A, ldim_A, info);                         \
+    }
 #else
-#define LAPACK_potrf_body_d(prefix)                                        \
-{                                                                             \
-    if(*n < FLA_POTRF_DOUBLE_SMALL && FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX512))    \
-        fla_dpotrf_small_avx512(uplo, n, buff_A, ldim_A, info);               \
-    else if(*n < FLA_POTRF_DOUBLE_SMALL && FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX2)) \
-        fla_dpotrf_small_avx2(uplo, n, buff_A, ldim_A, info);                 \
-    else if(*n < FLA_POTRF_DOUBLE_SMALL)                                      \
-        lapack_dpotf2(uplo, n, buff_A, ldim_A, info);                         \
-    else                                                                      \
-        lapack_dpotrf(uplo, n, buff_A, ldim_A, info);                         \
-}
+#define LAPACK_potrf_body_d(prefix)                                               \
+    {                                                                             \
+        /* Initialize global context data */                                      \
+        aocl_fla_init();                                                          \
+        if(*n < FLA_POTRF_DOUBLE_SMALL && FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX512))    \
+            fla_dpotrf_small_avx512(uplo, n, buff_A, ldim_A, info);               \
+        else if(*n < FLA_POTRF_DOUBLE_SMALL && FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX2)) \
+            fla_dpotrf_small_avx2(uplo, n, buff_A, ldim_A, info);                 \
+        else if(*n < FLA_POTRF_DOUBLE_SMALL)                                      \
+            lapack_dpotf2(uplo, n, buff_A, ldim_A, info);                         \
+        else                                                                      \
+            lapack_dpotrf(uplo, n, buff_A, ldim_A, info);                         \
+    }
 #endif
 #endif
 

@@ -154,6 +154,8 @@ LAPACK_potri(d)
     if(fla_error == LAPACK_SUCCESS)
     {
 #if FLA_ENABLE_AMD_OPT
+        /* Initialize global context data */
+        aocl_fla_init();
         if(*n == 1)
         {
             FLA_POTRI_SMALL_1X1(uplo, n, buff_A, ldim_A, info);

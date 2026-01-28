@@ -64,7 +64,7 @@ def config_check():                                                             
         zen2_model = [0, 255]
         zen3_model = [(0, 15), (32, 95)]
         zen4_model = [(16, 31), (96, 175)]
-        zen5_model = [(0, 15), (16, 31)]
+        zen5_model = [(0, 79), (96, 119)]
         excavator_model = [96, 127]
         steamroller_model = [48, 63]
         piledriver_model = [2, 16, 31]

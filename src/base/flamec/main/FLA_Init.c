@@ -8,6 +8,10 @@
 
 */
 
+/*
+*     Modifications Copyright (C) 2026, Advanced Micro Devices, Inc. All rights reserved.
+*/
+
 #include "FLAME.h"
 
 
@@ -246,7 +250,7 @@ char*     FLA_Get_AOCL_Version( void )
      static TLS_CLASS_SPEC LF_VERSION lflibversion;
      if (lflibversion.once)
      {
-	    return lflibversion.version;
+	     return lflibversion.version;
      }
      aocl_int_t vers_major, vers_minor, vers_patch;
      ilaver_(&vers_major, &vers_minor, &vers_patch);
@@ -254,36 +258,36 @@ char*     FLA_Get_AOCL_Version( void )
      char lfmainversion[] = "AOCL-LAPACK ";
      char* lfversion = lflibversion.version;
      char lapackversion[30];
-     snprintf(lapackversion, sizeof(lapackversion), ", supports LAPACK %"FLA_ISL".%"FLA_ISL".%"FLA_ISL"",
+     snprintf(lapackversion, sizeof(lapackversion), ", supports LAPACK %"FLA_IS".%"FLA_IS".%"FLA_IS"",
               vers_major, vers_minor, vers_patch);
      int length, i;
 
      length = 0;
      for (i = 0; lfmainversion[length] != '\0'; ++i, ++length) 
      {
-	 lfversion[length] = lfmainversion[i];
+	     lfversion[length] = lfmainversion[i];
      }
 
 #ifdef FLA_LIBFLAME_VERSION
 #ifdef FLA_ENABLE_WINDOWS_BUILD
-     char configlfversion[] = VERSION_MAKE_STR(FLA_LIBFLAME_VERSION); //Quotions in CMake are a problem. Hence strinifying
+  char configlfversion[] = VERSION_MAKE_STR(FLA_LIBFLAME_VERSION); //Quotions in CMake are a problem. Hence strinifying
 #else
-     char configlfversion[] = FLA_LIBFLAME_VERSION;
+  char configlfversion[] = FLA_LIBFLAME_VERSION;
 #endif
-     for (i = 0; configlfversion[i] != '\0'; ++i, ++length) 
-     {
-	 lfversion[length] = configlfversion[i];
-     }
+  for (i = 0; configlfversion[i] != '\0'; ++i, ++length) 
+  {
+	  lfversion[length] = configlfversion[i];
+  }
 #endif
 
-     for (i = 0; lapackversion[i] != '\0'; ++i, ++length) 
-     {
-	 lfversion[length] = lapackversion[i];
-     }
+  for (i = 0; lapackversion[i] != '\0'; ++i, ++length) 
+  {   
+	  lfversion[length] = lapackversion[i];
+  }
 
-     lfversion[length] = '\0';
+  lfversion[length] = '\0';
 
-     lflibversion.once = 1;
+  lflibversion.once = 1;
 
-     return lflibversion.version;
+  return lflibversion.version;
 }

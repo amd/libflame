@@ -442,7 +442,7 @@ void bl1_dgemv_blas( trans1_t transa, fla_dim_t m, fla_dim_t n, double* alpha, d
 	             *beta,
 	             y, incy );
 #else
-#if FLA_ENABLE_AOCL_BLAS
+#if FLA_ENABLE_AOCL_BLAS && defined(BLIS_KERNELS_ZEN4)
     /* Use direct single threaded BLIS kernel */
 	aocl_fla_init();
     if ( FLA_IS_MIN_ARCH_ID( FLA_ARCH_AVX512 ) && incx > 0 && incy > 0 )

@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2024-2025, Advanced Micro Devices, Inc. All rights reserved.
+    Copyright (C) 2024-2026, Advanced Micro Devices, Inc. All rights reserved.
 */
 
 #ifdef __cplusplus
@@ -155,7 +155,7 @@ void invoke_cpp_trtri(integer datatype, char *uplo, char *diag, integer *n, void
 void invoke_cpp_trtrs(char *uplo, char *trans, char *diag, integer datatype, integer *n, void *a,
                       integer *lda, integer *nrhs, void *b, integer *ldb, integer *info);
 void invoke_cpp_geqpf(integer datatype, integer *m, integer *n, void *a, integer *lda,
-                      integer *jpvt, void *tau, void *work, integer *info);
+                      integer *jpvt, void *tau, void *work, void *rwork, integer *info);
 void invoke_cpp_bdsqr(integer datatype, char *uplo, integer *n, integer *ncvt, integer *nru,
                       integer *ncc, void *d, void *e, void *vt, integer *ldvt, void *u,
                       integer *ldu, void *c, integer *ldc, void *work, integer *info);

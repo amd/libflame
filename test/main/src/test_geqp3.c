@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2022-2025, Advanced Micro Devices, Inc. All rights reserved.
+    Copyright (C) 2022-2026, Advanced Micro Devices, Inc. All rights reserved.
 */
 
 #include "test_lapack.h"
@@ -429,7 +429,8 @@ void prepare_geqp3_run(integer m_A, integer n_A, void *A, integer lda, integer *
             exe_time = fla_test_clock();
             if(is_geqpf)
                 /* Call CPP geqpf API */
-                invoke_cpp_geqpf(datatype, &m_A, &n_A, A, &lda, jpvt, T_test, work, info);
+                invoke_cpp_geqpf(datatype, &m_A, &n_A, A, &lda, jpvt, T_test, work, rwork_iter,
+                                 info);
             else
                 /* Call CPP geqp3 API */
                 invoke_cpp_geqp3(datatype, &m_A, &n_A, A, &lda, jpvt, T_test, work, &lwork,

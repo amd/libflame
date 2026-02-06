@@ -302,7 +302,7 @@ void aocl_lapack_dlarf(char *side, aocl_int64_t *m, aocl_int64_t *n, doublereal 
                 {
                     /* Process in a single call */
                     /* w(1:lastc,1) := C(1:lastv,1:lastc)**T * v(1:lastv,1) */
-#if FLA_ENABLE_AOCL_BLAS
+#if FLA_ENABLE_AOCL_BLAS && defined(BLIS_KERNELS_ZEN4)
                     if(FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX512) && *incv > 0)
                     {
                         /* Use direct single threaded BLIS kernel */
@@ -386,7 +386,7 @@ void aocl_lapack_dlarf(char *side, aocl_int64_t *m, aocl_int64_t *n, doublereal 
             else
             {
                 /* w(1:lastc,1) := C(1:lastc,1:lastv) * v(1:lastv,1) */
-#if FLA_ENABLE_AOCL_BLAS
+#if FLA_ENABLE_AOCL_BLAS && defined(BLIS_KERNELS_ZEN4)
                 aocl_fla_init();
                 if(FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX512) && *incv > 0)
                 {

@@ -283,7 +283,7 @@ void aocl_lapack_dlarft(char *direct, char *storev, aocl_int64_t *n, aocl_int64_
                         i__2 = j - i__;
                         i__3 = i__ - 1;
                         d__1 = -tau[i__];
-#if FLA_ENABLE_AOCL_BLAS
+#if FLA_ENABLE_AOCL_BLAS && defined(BLIS_KERNELS_ZEN4)
                         if(FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX512))
                         {
                             bli_dgemv_t_zen4_int(BLIS_CONJUGATE, BLIS_NO_CONJUGATE, i__2, i__3,
@@ -320,7 +320,7 @@ void aocl_lapack_dlarft(char *direct, char *storev, aocl_int64_t *n, aocl_int64_
                         i__2 = i__ - 1;
                         i__3 = j - i__;
                         d__1 = -tau[i__];
-#if FLA_ENABLE_AOCL_BLAS
+#if FLA_ENABLE_AOCL_BLAS && defined(BLIS_KERNELS_ZEN4)
                         if(FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX512) && *ldv > 0)
                         {
                             bli_dgemv_n_zen4_int_40x2_st(BLIS_NO_TRANSPOSE, BLIS_NO_CONJUGATE, i__2,
@@ -393,7 +393,7 @@ void aocl_lapack_dlarft(char *direct, char *storev, aocl_int64_t *n, aocl_int64_
                         i__1 = *n - *k + i__ - j;
                         i__2 = *k - i__;
                         d__1 = -tau[i__];
-#if FLA_ENABLE_AOCL_BLAS
+#if FLA_ENABLE_AOCL_BLAS && defined(BLIS_KERNELS_ZEN4)
                         if(FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX512))
                         {
                             bli_dgemv_t_zen4_int(BLIS_CONJUGATE, BLIS_NO_CONJUGATE, i__1, i__2,
@@ -430,7 +430,7 @@ void aocl_lapack_dlarft(char *direct, char *storev, aocl_int64_t *n, aocl_int64_
                         i__1 = *k - i__;
                         i__2 = *n - *k + i__ - j;
                         d__1 = -tau[i__];
-#if FLA_ENABLE_AOCL_BLAS
+#if FLA_ENABLE_AOCL_BLAS && defined(BLIS_KERNELS_ZEN4)
                         if(FLA_IS_MIN_ARCH_ID(FLA_ARCH_AVX512) && *ldv > 0)
                         {
                             bli_dgemv_n_zen4_int_40x2_st(BLIS_NO_TRANSPOSE, BLIS_NO_CONJUGATE, i__1,

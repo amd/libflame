@@ -4,7 +4,7 @@
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
  /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 /*
- *     Modifications Copyright (c) 2021-2023 Advanced Micro Devices, Inc.  All rights reserved.
+ *     Modifications Copyright (C) 2021-2026, Advanced Micro Devices, Inc. All rights reserved.
  */
 #include "FLAME.h"
 #if FLA_ENABLE_AOCL_BLAS
@@ -207,7 +207,11 @@ int lapack_dorg2r(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *k, doublereal 
         {
             i__1 = *m - i__;
             d__1 = -tau[i__];
+#if FLA_ENABLE_AMD_OPT
+            fla_dscal(&i__1, &d__1, &a[i__ + 1 + i__ * a_dim1], &c__1);
+#else
             aocl_blas_dscal(&i__1, &d__1, &a[i__ + 1 + i__ * a_dim1], &c__1);
+#endif
         }
         a[i__ + i__ * a_dim1] = 1. - tau[i__];
         /* Set A(1:i-1,i) to zero */

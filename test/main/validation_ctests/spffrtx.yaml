@@ -1,0 +1,24 @@
+# Copyright (C) 2026, Advanced Micro Devices, Inc. All rights reserved.
+
+spffrtx:
+  description: "Extended partial LDLT factorization"
+  api_group: "LIN"
+  labels: []
+  precisions: [s, d, c, z]
+  param_order: [n, ncolm, repeats]
+
+  custom_paths:
+    - name: single_element
+      precisions: sdcz
+      labels: []
+      params: {n: 1, ncolm: 1, repeats: 1}
+
+    - name: kernel_sizes_2_16
+      precisions: sdcz
+      labels: []
+      params: {ncolm: 1, repeats: 1, square: {range: [2, 16]}}
+
+    - name: boundary_127_63
+      precisions: sdcz
+      labels: ['boundary']
+      params: {n: 127, ncolm: 63, repeats: 1}

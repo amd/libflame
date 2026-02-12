@@ -1,0 +1,84 @@
+# Copyright (C) 2026, Advanced Micro Devices, Inc. All rights reserved.
+
+syevx:
+  description: "Symmetric/Hermitian eigenvalue decomposition"
+  api_group: "EIG"
+  labels: []
+  precisions: [s, d, c, z]
+  param_order: [jobz, range, uplo, n, lda, vl, vu, il, iu, abstol, ldz, lwork, repeats]
+
+  custom_paths:
+    - name: single_element
+      precisions: sdcz
+      labels: []
+      params: {jobz: N, range: A, uplo: U, n: 1, lda: 1, ldz: 1, lwork: -1, repeats: 1, vl: 0.0, vu: 0.0, il: 1, iu: 1, abstol: 0.0}
+
+    - name: kernel_sizes_2_16
+      precisions: sdcz
+      labels: []
+      params: {jobz: N, range: A, uplo: U, lwork: -1, repeats: 1, vl: 0.0, vu: 0.0, il: 1, iu: 1, abstol: 0.0, square: {range: [2, 16]}}
+
+    - name: no_vectors_all_eigenvalues
+      precisions: sdcz
+      labels: []
+      params: {jobz: N, range: A, uplo: U, n: 50, lda: 50, vl: 0.0, vu: 0.0, il: 1, iu: 1, abstol: 0.0, ldz: 50, lwork: -1, repeats: 1}
+
+    - name: compute_vectors_all_eigenvalues
+      precisions: sdcz
+      labels: []
+      params: {jobz: V, range: A, uplo: U, n: 50, lda: 50, vl: 0.0, vu: 0.0, il: 1, iu: 1, abstol: 0.0, ldz: 50, lwork: -1, repeats: 1}
+
+    - name: compute_vectors_value_range
+      precisions: sdcz
+      labels: []
+      params: {jobz: V, range: V, uplo: U, n: 50, lda: 50, vl: -10.0, vu: 10.0, il: 1, iu: 1, abstol: 0.0, ldz: 50, lwork: -1, repeats: 1}
+
+    - name: compute_vectors_index_range
+      precisions: sdcz
+      labels: []
+      params: {jobz: V, range: I, uplo: U, n: 50, lda: 50, vl: 0.0, vu: 0.0, il: 10, iu: 20, abstol: 0.0, ldz: 50, lwork: -1, repeats: 1}
+
+    - name: lower_triangular
+      precisions: sdcz
+      labels: []
+      params: {jobz: V, range: A, uplo: L, n: 50, lda: 50, vl: 0.0, vu: 0.0, il: 1, iu: 1, abstol: 0.0, ldz: 50, lwork: -1, repeats: 1}
+
+    - name: medium_square
+      precisions: sdcz
+      labels: []
+      params: {jobz: V, range: A, uplo: U, n: 128, lda: 128, vl: 0.0, vu: 0.0, il: 1, iu: 1, abstol: 0.0, ldz: 128, lwork: -1, repeats: 1}
+
+    - name: large_square
+      precisions: sdcz
+      labels: []
+      params: {jobz: V, range: A, uplo: U, n: 256, lda: 256, vl: 0.0, vu: 0.0, il: 1, iu: 1, abstol: 0.0, ldz: 256, lwork: -1, repeats: 1}
+
+    - name: no_vectors_value_range_upper
+      precisions: sdcz
+      labels: []
+      params: {jobz: N, range: V, uplo: U, n: 50, lda: 50, vl: -10.0, vu: 10.0, il: 1, iu: 1, abstol: 0.0, ldz: 50, lwork: -1, repeats: 1}
+
+    - name: no_vectors_index_range_upper
+      precisions: sdcz
+      labels: []
+      params: {jobz: N, range: I, uplo: U, n: 50, lda: 50, vl: 0.0, vu: 0.0, il: 10, iu: 20, abstol: 0.0, ldz: 50, lwork: -1, repeats: 1}
+
+    - name: no_vectors_value_range_lower
+      precisions: sdcz
+      labels: []
+      params: {jobz: N, range: V, uplo: L, n: 50, lda: 50, vl: -10.0, vu: 10.0, il: 1, iu: 1, abstol: 0.0, ldz: 50, lwork: -1, repeats: 1}
+
+    - name: no_vectors_index_range_lower
+      precisions: sdcz
+      labels: []
+      params: {jobz: N, range: I, uplo: L, n: 50, lda: 50, vl: 0.0, vu: 0.0, il: 10, iu: 20, abstol: 0.0, ldz: 50, lwork: -1, repeats: 1}
+
+    - name: compute_vectors_value_range_lower
+      precisions: sdcz
+      labels: []
+      params: {jobz: V, range: V, uplo: L, n: 50, lda: 50, vl: -10.0, vu: 10.0, il: 1, iu: 1, abstol: 0.0, ldz: 50, lwork: -1, repeats: 1}
+
+    - name: compute_vectors_index_range_lower
+      precisions: sdcz
+      labels: []
+      params: {jobz: V, range: I, uplo: L, n: 50, lda: 50, vl: 0.0, vu: 0.0, il: 10, iu: 20, abstol: 0.0, ldz: 50, lwork: -1, repeats: 1}

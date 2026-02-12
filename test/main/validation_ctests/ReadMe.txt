@@ -1,3 +1,5 @@
+# Copyright (C) 2026, Advanced Micro Devices, Inc. All rights reserved.
+
 ##########################################################################################
 Validation CTests - YAML-Based Test Generation
 ##########################################################################################
@@ -10,7 +12,7 @@ to define test cases in YAML format, which are then automatically converted to C
 test files during the build process.
 
 The validation_ctests directory has the following contents:
-   1. README.md - This file
+   1. ReadMe.txt - This file
    2. auto_generate_tests.py - Python script that generates CMake test files from YAML
    3. auto_generate_label_groups.yaml - Global label group definitions and size threshold configuration
    4. <API>.yaml - Test definitions for each API. Each API has its own YAML file.
@@ -25,6 +27,11 @@ The test generation workflow follows this pattern:
 2. Generator Script (auto_generate_tests.py): Reads YAML files and generates CMake test files
 3. CMake Integration: Tests are generated at configure time in the build directory
 4. CTest Execution: Generated tests are executed via CMake's CTest framework
+
+## Dependency
+
+   YAML‑based CTest generation depends on the PyYAML package for YAML parsing.
+   Ensure that PyYAML is installed on your system.
 
 ## YAML File Format
 
@@ -62,8 +69,8 @@ Filter tests:
    $ ctest -L getrf        # Lowercase also works (both cases supported)
 
    # Multiple labels (use multiple -L flags, not semicolon)
-   $ ctest -L GETRF -L small    # Tests with both GETRF and small labels
-   $ ctest -L avx2 -L precision_d  # AVX2 tests with double precision
+   $ ctest -L GETRF -L small_size    # Tests with both GETRF and small_size labels
+   $ ctest -L LIN -L precision_d  # LIN tests with double precision
 
 ### Label Groups
 
@@ -72,16 +79,16 @@ all API files. This avoids manually adding multiple labels to each test.
 
 Example in auto_generate_label_groups.yaml:
    label_groups:
-     postsubmit: [avx2, avx512]
+     postsubmit: [small_size, medium_size, large_size]
 
 When any test uses the "postsubmit" label, it automatically includes both "postsubmit"
-and its constituent labels (avx2, avx512). This allows managing labels centrally for
+and its constituent labels (small_size, medium_size, large_size). This allows managing labels centrally for
 multiple API files without editing each file individually. API-specific label_groups can
 override global groups if needed.
 
 ### Automatic Size-Based Labeling
 
-Tests are automatically assigned size labels (small, medium, large) based on parameter
+Tests are automatically assigned size labels (small_size, medium_size, large_size) based on parameter
 values defined in auto_generate_label_groups.yaml. Group labels (e.g., "short") are then automatically
 assigned to tests matching certain size criteria.
 
@@ -89,19 +96,13 @@ Configuration in auto_generate_label_groups.yaml:
    size_thresholds:
      parameter: max  # Check 'n', 'm', or 'max' (max of m and n)
      small: 16      # n < 16 or max(m,n) < 16
-     medium: 100    # 16 <= n < 100 or 16 <= max(m,n) < 100
-     # large is automatically assigned if >= medium threshold
+     medium: 256    # 16 <= n < 256 or 16 <= max(m,n) < 256
+     # large_size is automatically assigned if >= medium threshold
 
    auto_assign_groups:
-     short: [small, medium]  # Automatically add "short" label to tests with small or medium size
+     short: [small_size]  # Automatically add "short" label to tests with small_size
 
-Benefits:
-- Zero manual edits: Tests automatically get size and group labels based on parameters
-- Centralized configuration: All thresholds in auto_generate_label_groups.yaml
-- Works across all API files automatically
-- Flexible: Can define different thresholds for different parameters
-
-Example: A test with m=16, n=16 automatically gets "medium" and "short" labels without
+Example: A test with m=16, n=16 automatically gets "medium_size" and "short" labels without
 any manual editing in the API YAML file.
 
 
@@ -116,7 +117,7 @@ To add tests for a new API, follow these steps:
    Check test/main/src/test_<api>.c to determine the correct parameter order.
 
 3. Define Test Paths
-   Add test cases covering different code paths: single element, small/large sizes,
+   Add test cases covering different code paths: single element, small_size/large_size sizes,
    architecture-specific optimizations (AVX2, AVX512), and edge cases.
 
 4. Verify Generation
@@ -148,10 +149,13 @@ For manual generation:
    $ python3 auto_generate_tests.py --all /tmp/output
 
 Run tests:
+   # Run all the tests generated from yaml files
+   $ ctest -L yaml_generated
+
    # Filter by label (case-insensitive for API name and group)
    $ ctest -L GETRF        # Matches tests with GETRF label
    $ ctest -L getrf        # Also matches (both cases supported)
-   $ ctest -L GETRF -L small  # Multiple labels (use multiple -L flags)
+   $ ctest -L GETRF -L small_size  # Multiple labels (use multiple -L flags)
    $ ctest -L avx2         # Architecture-specific tests
 
    # Filter by test name regex (uppercase API name)
@@ -161,7 +165,7 @@ Run tests:
    # Combined filtering
    $ ctest -L GETRF -R ".*kernel.*"  # GETRF tests with "kernel" in name
 
-## Example
+## Example of generated ctests
 
 Generated CMake test files are in
 <build_dir>/test/main/validation_ctests/getrf_tests.cmake after configuration.

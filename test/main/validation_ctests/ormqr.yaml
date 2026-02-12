@@ -1,0 +1,44 @@
+# Copyright (C) 2026, Advanced Micro Devices, Inc. All rights reserved.
+
+ormqr:
+  description: "Apply Q from QR factorization"
+  api_group: "LIN"
+  labels: []
+  precisions: [s, d, c, z]
+  param_order: [side, trans, m, n, k, lda, ldc, lwork, repeats]
+
+  custom_paths:
+    - name: single_element
+      precisions: sdcz
+      labels: []
+      params: {side: L, trans: N, m: 1, n: 1, k: 1, lda: 1, ldc: 1, lwork: -1, repeats: 1}
+
+    - name: kernel_sizes_2_16
+      precisions: sdcz
+      labels: []
+      params: {side: L, trans: N, lwork: -1, repeats: 1, square: {range: [2, 16]}}
+
+    - name: side_l_trans_n
+      precisions: sdcz
+      labels: []
+      params: {side: L, trans: N, m: 50, n: 50, k: 50, lda: 50, ldc: 50, lwork: -1, repeats: 1}
+
+    - name: side_r_trans_n
+      precisions: sdcz
+      labels: []
+      params: {side: R, trans: N, m: 50, n: 50, k: 50, lda: 50, ldc: 50, lwork: -1, repeats: 1}
+
+    - name: side_l_trans_t
+      precisions: sdcz
+      labels: []
+      params: {side: L, trans: T, m: 50, n: 50, k: 50, lda: 50, ldc: 50, lwork: -1, repeats: 1}
+
+    - name: rectangular
+      precisions: sdcz
+      labels: []
+      params: {side: L, trans: N, m: 100, n: 50, k: 50, lda: 100, ldc: 100, lwork: -1, repeats: 1}
+
+    - name: large_square
+      precisions: sdcz
+      labels: []
+      params: {side: L, trans: N, m: 256, n: 256, k: 256, lda: 256, ldc: 256, lwork: -1, repeats: 1}

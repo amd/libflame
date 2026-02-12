@@ -1,0 +1,59 @@
+# Copyright (C) 2026, Advanced Micro Devices, Inc. All rights reserved.
+
+gghrd:
+  description: "Generalized Hessenberg reduction"
+  api_group: "EIG"
+  labels: []
+  precisions: [s, d, c, z]
+  param_order: [compq, compz, n, ilo, ihi, lda, ldb, ldq, ldz, repeats]
+
+  custom_paths:
+    - name: single_element
+      precisions: sdcz
+      labels: []
+      params: {n: 1, lda: 1, ldb: 1, ldq: 1, ldz: 1, repeats: 1, compq: N, compz: N, ilo: 1, ihi: 1}
+
+    - name: kernel_sizes_2_16
+      precisions: sdcz
+      labels: []
+      params: {repeats: 1, square: {range: [2, 16]}, compq: N, compz: N, ilo: 1}
+
+    - name: compq_n_compz_n
+      precisions: sdcz
+      labels: []
+      params: {compq: N, compz: N, n: 50, ilo: 1, ihi: 50, lda: 50, ldb: 50, ldq: 50, ldz: 50, repeats: 1}
+
+    - name: compq_i_compz_n
+      precisions: sdcz
+      labels: []
+      params: {compq: I, compz: N, n: 50, ilo: 1, ihi: 50, lda: 50, ldb: 50, ldq: 50, ldz: 50, repeats: 1}
+
+    - name: compq_n_compz_i
+      precisions: sdcz
+      labels: []
+      params: {compq: N, compz: I, n: 50, ilo: 1, ihi: 50, lda: 50, ldb: 50, ldq: 50, ldz: 50, repeats: 1}
+
+    - name: compq_i_compz_i
+      precisions: sdcz
+      labels: []
+      params: {compq: I, compz: I, n: 50, ilo: 1, ihi: 50, lda: 50, ldb: 50, ldq: 50, ldz: 50, repeats: 1}
+
+    - name: compq_v_compz_v
+      precisions: sdcz
+      labels: []
+      params: {compq: V, compz: V, n: 50, ilo: 1, ihi: 50, lda: 50, ldb: 50, ldq: 50, ldz: 50, repeats: 1}
+
+    - name: partial_reduction
+      precisions: sdcz
+      labels: []
+      params: {compq: V, compz: V, n: 50, ilo: 10, ihi: 40, lda: 50, ldb: 50, ldq: 50, ldz: 50, repeats: 1}
+
+    - name: medium_square
+      precisions: sdcz
+      labels: []
+      params: {compq: V, compz: V, n: 128, ilo: 1, ihi: 128, lda: 128, ldb: 128, ldq: 128, ldz: 128, repeats: 1}
+
+    - name: large_square
+      precisions: sdcz
+      labels: []
+      params: {compq: V, compz: V, n: 256, ilo: 1, ihi: 256, lda: 256, ldb: 256, ldq: 256, ldz: 256, repeats: 1}

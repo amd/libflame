@@ -1,0 +1,139 @@
+# Copyright (C) 2026, Advanced Micro Devices, Inc. All rights reserved.
+
+lange:
+  description: "Matrix norm"
+  api_group: "AUX"
+  labels: []
+  precisions: [s, d, c, z]
+  param_order: [norm, m, n, lda, repeats]
+
+  custom_paths:
+    - name: single_element
+      precisions: sdcz
+      labels: []
+      params: {norm: 1, m: 1, n: 1, lda: 1, repeats: 1}
+
+    - name: kernel_sizes_2_16
+      precisions: sdcz
+      labels: []
+      params: {norm: 1, repeats: 1, square: {range: [2, 16]}}
+
+    - name: norm_1
+      precisions: sdcz
+      labels: []
+      params: {norm: 1, m: 50, n: 50, lda: 50, repeats: 1}
+
+    - name: norm_i
+      precisions: sdcz
+      labels: []
+      params: {norm: I, m: 50, n: 50, lda: 50, repeats: 1}
+
+    - name: norm_f
+      precisions: sdcz
+      labels: []
+      params: {norm: F, m: 50, n: 50, lda: 50, repeats: 1}
+
+    - name: norm_m
+      precisions: sdcz
+      labels: []
+      params: {norm: M, m: 50, n: 50, lda: 50, repeats: 1}
+
+    - name: rectangular_tall
+      precisions: sdcz
+      labels: []
+      params: {norm: 1, m: 100, n: 50, lda: 100, repeats: 1}
+
+    - name: rectangular_wide
+      precisions: sdcz
+      labels: []
+      params: {norm: 1, m: 50, n: 100, lda: 50, repeats: 1}
+
+    - name: medium_square
+      precisions: sdcz
+      labels: []
+      params: {norm: 1, m: 128, n: 128, lda: 128, repeats: 1}
+
+    - name: large_square
+      precisions: sdcz
+      labels: []
+      params: {norm: 1, m: 256, n: 256, lda: 256, repeats: 1}
+
+    - name: kernel_sizes_2_16_norm_i
+      precisions: sdcz
+      labels: []
+      params: {norm: I, repeats: 1, square: {range: [2, 16]}}
+
+    - name: kernel_sizes_2_16_norm_f
+      precisions: sdcz
+      labels: []
+      params: {norm: F, repeats: 1, square: {range: [2, 16]}}
+
+    - name: kernel_sizes_2_16_norm_m
+      precisions: sdcz
+      labels: []
+      params: {norm: M, repeats: 1, square: {range: [2, 16]}}
+
+    - name: medium_square_norm_i
+      precisions: sdcz
+      labels: []
+      params: {norm: I, m: 128, n: 128, lda: 128, repeats: 1}
+
+    - name: medium_square_norm_f
+      precisions: sdcz
+      labels: []
+      params: {norm: F, m: 128, n: 128, lda: 128, repeats: 1}
+
+    - name: large_square_norm_i
+      precisions: sdcz
+      labels: []
+      params: {norm: I, m: 256, n: 256, lda: 256, repeats: 1}
+
+    - name: norm_1_small_10x5
+      precisions: sdcz
+      labels: []
+      params: {norm: 1, m: 10, n: 5, lda: 10, repeats: 1}
+
+    - name: norm_i_small_10x5
+      precisions: sdcz
+      labels: []
+      params: {norm: I, m: 10, n: 5, lda: 10, repeats: 1}
+
+    - name: norm_f_small_10x5
+      precisions: sdcz
+      labels: []
+      params: {norm: F, m: 10, n: 5, lda: 10, repeats: 1}
+
+    - name: norm_m_small_10x5
+      precisions: sdcz
+      labels: []
+      params: {norm: M, m: 10, n: 5, lda: 10, repeats: 1}
+
+    - name: norm_1_small_20x20
+      precisions: sdcz
+      labels: []
+      params: {norm: 1, m: 20, n: 20, lda: 20, repeats: 1}
+
+    - name: norm_i_small_20x20
+      precisions: sdcz
+      labels: []
+      params: {norm: I, m: 20, n: 20, lda: 20, repeats: 1}
+
+    - name: norm_f_small_20x20
+      precisions: sdcz
+      labels: []
+      params: {norm: F, m: 20, n: 20, lda: 20, repeats: 1}
+
+    - name: norm_m_small_20x20
+      precisions: sdcz
+      labels: []
+      params: {norm: M, m: 20, n: 20, lda: 20, repeats: 1}
+
+    - name: all_norms_medium_100x100
+      precisions: sdcz
+      labels: []
+      params: {norm: 1, m: 100, n: 100, lda: 100, repeats: 1}
+
+    - name: all_norms_large_500x500
+      precisions: sdcz
+      labels: []
+      params: {norm: F, m: 500, n: 500, lda: 500, repeats: 1}

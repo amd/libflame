@@ -1,0 +1,44 @@
+# Copyright (C) 2026, Advanced Micro Devices, Inc. All rights reserved.
+
+potrs:
+  description: "Cholesky solve"
+  api_group: "LIN"
+  labels: []
+  precisions: [s, d, c, z]
+  param_order: [uplo, n, nrhs, lda, ldb, repeats]
+
+  custom_paths:
+    - name: single_element
+      precisions: sdcz
+      labels: []
+      params: {uplo: U, n: 1, nrhs: 1, lda: 1, ldb: 1, repeats: 1}
+
+    - name: kernel_sizes_2_16
+      precisions: sdcz
+      labels: []
+      params: {uplo: U, nrhs: 1, repeats: 1, square: {range: [2, 16]}}
+
+    - name: upper_triangular
+      precisions: sdcz
+      labels: []
+      params: {uplo: U, n: 50, nrhs: 1, lda: 50, ldb: 50, repeats: 1}
+
+    - name: lower_triangular
+      precisions: sdcz
+      labels: []
+      params: {uplo: L, n: 50, nrhs: 1, lda: 50, ldb: 50, repeats: 1}
+
+    - name: medium_square
+      precisions: sdcz
+      labels: []
+      params: {uplo: U, n: 128, nrhs: 1, lda: 128, ldb: 128, repeats: 1}
+
+    - name: large_square
+      precisions: sdcz
+      labels: []
+      params: {uplo: U, n: 256, nrhs: 1, lda: 256, ldb: 256, repeats: 1}
+
+    - name: kernel_sizes_2_16_lower
+      precisions: sdcz
+      labels: []
+      params: {uplo: L, nrhs: 1, repeats: 1, square: {range: [2, 16]}}

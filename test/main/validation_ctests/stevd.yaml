@@ -1,0 +1,44 @@
+# Copyright (C) 2026, Advanced Micro Devices, Inc. All rights reserved.
+
+stevd:
+  description: "Symmetric tridiagonal eigenvalue decomposition using divide and conquer"
+  api_group: "EIG"
+  labels: []
+  precisions: [s, d]
+  param_order: [jobz, n, ldz, lwork, liwork, repeats]
+
+  custom_paths:
+    - name: single_element
+      precisions: sd
+      labels: []
+      params: {jobz: N, n: 1, ldz: 1, lwork: -1, repeats: 1, liwork: -1}
+
+    - name: kernel_sizes_2_16
+      precisions: sd
+      labels: []
+      params: {jobz: N, lwork: -1, repeats: 1, liwork: -1, square: {range: [2, 16]}}
+
+    - name: no_vectors
+      precisions: sd
+      labels: []
+      params: {jobz: N, n: 50, ldz: 50, lwork: -1, liwork: -1, repeats: 1}
+
+    - name: compute_vectors
+      precisions: sd
+      labels: []
+      params: {jobz: V, n: 50, ldz: 50, lwork: -1, liwork: -1, repeats: 1}
+
+    - name: medium_square
+      precisions: sd
+      labels: []
+      params: {jobz: V, n: 128, ldz: 128, lwork: -1, liwork: -1, repeats: 1}
+
+    - name: large_square
+      precisions: sd
+      labels: []
+      params: {jobz: V, n: 256, ldz: 256, lwork: -1, liwork: -1, repeats: 1}
+
+    - name: kernel_sizes_2_16_with_vectors
+      precisions: sd
+      labels: []
+      params: {jobz: V, lwork: -1, liwork: -1, repeats: 1, square: {range: [2, 16]}}

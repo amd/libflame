@@ -1,0 +1,104 @@
+# Copyright (C) 2026, Advanced Micro Devices, Inc. All rights reserved.
+
+trtrs:
+  description: "Triangular solve"
+  api_group: "LIN"
+  labels: []
+  precisions: [s, d, c, z]
+  param_order: [uplo, trans, diag, n, nrhs, lda, ldb, repeats]
+
+  custom_paths:
+    - name: single_element
+      precisions: sdcz
+      labels: []
+      params: {uplo: U, trans: N, diag: N, n: 1, nrhs: 1, lda: 1, ldb: 1, repeats: 1}
+
+    - name: kernel_sizes_2_16
+      precisions: sdcz
+      labels: []
+      params: {uplo: U, trans: N, diag: N, nrhs: 1, repeats: 1, square: {range: [2, 16]}}
+
+    - name: upper_triangular_trans_n_non_unit_diag
+      precisions: sdcz
+      labels: []
+      params: {uplo: U, trans: N, diag: N, n: 50, nrhs: 1, lda: 50, ldb: 50, repeats: 1}
+
+    - name: lower_triangular_trans_n_non_unit_diag
+      precisions: sdcz
+      labels: []
+      params: {uplo: L, trans: N, diag: N, n: 50, nrhs: 1, lda: 50, ldb: 50, repeats: 1}
+
+    - name: upper_triangular_trans_t_non_unit_diag
+      precisions: sdcz
+      labels: []
+      params: {uplo: U, trans: T, diag: N, n: 50, nrhs: 1, lda: 50, ldb: 50, repeats: 1}
+
+    - name: upper_triangular_trans_c_non_unit_diag
+      precisions: cz
+      labels: []
+      params: {uplo: U, trans: C, diag: N, n: 50, nrhs: 1, lda: 50, ldb: 50, repeats: 1}
+
+    - name: upper_triangular_trans_n_unit_diag
+      precisions: sdcz
+      labels: []
+      params: {uplo: U, trans: N, diag: U, n: 50, nrhs: 1, lda: 50, ldb: 50, repeats: 1}
+
+    - name: multiple_rhs
+      precisions: sdcz
+      labels: []
+      params: {uplo: U, trans: N, diag: N, n: 64, nrhs: 10, lda: 64, ldb: 64, repeats: 1}
+
+    - name: medium_square
+      precisions: sdcz
+      labels: []
+      params: {uplo: U, trans: N, diag: N, n: 128, nrhs: 1, lda: 128, ldb: 128, repeats: 1}
+
+    - name: large_square
+      precisions: sdcz
+      labels: []
+      params: {uplo: U, trans: N, diag: N, n: 256, nrhs: 1, lda: 256, ldb: 256, repeats: 1}
+
+    - name: lower_triangular_trans_t_non_unit_diag
+      precisions: sdcz
+      labels: []
+      params: {uplo: L, trans: T, diag: N, n: 50, nrhs: 1, lda: 50, ldb: 50, repeats: 1}
+
+    - name: lower_triangular_trans_c_non_unit_diag
+      precisions: cz
+      labels: []
+      params: {uplo: L, trans: C, diag: N, n: 50, nrhs: 1, lda: 50, ldb: 50, repeats: 1}
+
+    - name: lower_triangular_trans_n_unit_diag
+      precisions: sdcz
+      labels: []
+      params: {uplo: L, trans: N, diag: U, n: 50, nrhs: 1, lda: 50, ldb: 50, repeats: 1}
+
+    - name: lower_triangular_trans_t_unit_diag
+      precisions: sdcz
+      labels: []
+      params: {uplo: L, trans: T, diag: U, n: 50, nrhs: 1, lda: 50, ldb: 50, repeats: 1}
+
+    - name: lower_triangular_trans_c_unit_diag
+      precisions: cz
+      labels: []
+      params: {uplo: L, trans: C, diag: U, n: 50, nrhs: 1, lda: 50, ldb: 50, repeats: 1}
+
+    - name: upper_triangular_trans_t_unit_diag
+      precisions: sdcz
+      labels: []
+      params: {uplo: U, trans: T, diag: U, n: 50, nrhs: 1, lda: 50, ldb: 50, repeats: 1}
+
+    - name: upper_triangular_trans_c_unit_diag
+      precisions: cz
+      labels: []
+      params: {uplo: U, trans: C, diag: U, n: 50, nrhs: 1, lda: 50, ldb: 50, repeats: 1}
+
+    - name: medium_square_lower
+      precisions: sdcz
+      labels: []
+      params: {uplo: L, trans: N, diag: N, n: 128, nrhs: 1, lda: 128, ldb: 128, repeats: 1}
+
+    - name: large_square_lower
+      precisions: sdcz
+      labels: []
+      params: {uplo: L, trans: N, diag: N, n: 256, nrhs: 1, lda: 256, ldb: 256, repeats: 1}

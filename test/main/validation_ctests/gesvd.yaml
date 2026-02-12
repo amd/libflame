@@ -1,0 +1,69 @@
+# Copyright (C) 2026, Advanced Micro Devices, Inc. All rights reserved.
+
+gesvd:
+  description: "Singular value decomposition"
+  api_group: "SVD"
+  labels: []
+  precisions: [s, d, c, z]
+  param_order: [jobu, jobvt, m, n, lda, ldu, ldvt, lwork, repeats]
+
+  custom_paths:
+    - name: single_element
+      precisions: sdcz
+      labels: []
+      params: {jobu: A, jobvt: A, m: 1, n: 1, lda: 1, ldu: 1, ldvt: 1, lwork: -1, repeats: 1}
+
+    - name: kernel_sizes_2_16
+      precisions: sdcz
+      labels: []
+      params: {jobu: A, jobvt: A, lwork: -1, repeats: 1, square: {range: [2, 16]}}
+
+    - name: jobu_n_jobvt_n
+      precisions: sdcz
+      labels: []
+      params: {jobu: N, jobvt: N, m: 50, n: 50, lda: 50, ldu: 1, ldvt: 1, lwork: -1, repeats: 1}
+
+    - name: jobu_a_jobvt_n
+      precisions: sdcz
+      labels: []
+      params: {jobu: A, jobvt: N, m: 50, n: 50, lda: 50, ldu: 50, ldvt: 1, lwork: -1, repeats: 1}
+
+    - name: jobu_n_jobvt_a
+      precisions: sdcz
+      labels: []
+      params: {jobu: N, jobvt: A, m: 50, n: 50, lda: 50, ldu: 1, ldvt: 50, lwork: -1, repeats: 1}
+
+    - name: jobu_s_jobvt_s
+      precisions: sdcz
+      labels: []
+      params: {jobu: S, jobvt: S, m: 50, n: 50, lda: 50, ldu: 50, ldvt: 50, lwork: -1, repeats: 1}
+
+    - name: rectangular_tall
+      precisions: sdcz
+      labels: []
+      params: {jobu: A, jobvt: A, m: 100, n: 50, lda: 100, ldu: 100, ldvt: 50, lwork: -1, repeats: 1}
+
+    - name: rectangular_wide
+      precisions: sdcz
+      labels: []
+      params: {jobu: A, jobvt: A, m: 50, n: 100, lda: 50, ldu: 50, ldvt: 100, lwork: -1, repeats: 1}
+
+    - name: large_square
+      precisions: sdcz
+      labels: []
+      params: {jobu: A, jobvt: A, m: 256, n: 256, lda: 256, ldu: 256, ldvt: 256, lwork: -1, repeats: 1}
+
+    - name: small_nonsquare
+      precisions: sdcz
+      labels: []
+      params: {jobu: A, jobvt: A, m: 10, n: 5, lda: 10, ldu: 10, ldvt: 5, lwork: -1, repeats: 1}
+
+    - name: jobu_o_jobvt_n
+      precisions: sdcz
+      labels: []
+      params: {jobu: O, jobvt: N, m: 50, n: 50, lda: 50, ldu: 50, ldvt: 1, lwork: -1, repeats: 1}
+
+    - name: jobu_n_jobvt_o
+      precisions: sdcz
+      labels: []
+      params: {jobu: N, jobvt: O, m: 50, n: 50, lda: 50, ldu: 1, ldvt: 50, lwork: -1, repeats: 1}

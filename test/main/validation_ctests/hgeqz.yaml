@@ -1,0 +1,64 @@
+# Copyright (C) 2026, Advanced Micro Devices, Inc. All rights reserved.
+
+hgeqz:
+  description: "Generalized eigenvalue decomposition using QZ algorithm"
+  api_group: "EIG"
+  labels: []
+  precisions: [s, d, c, z]
+  param_order: [job, compq, compz, n, ilo, ihi, ldh, ldt, ldq, ldz, lwork, repeats]
+
+  custom_paths:
+    - name: single_element
+      precisions: sdcz
+      labels: []
+      params: {n: 1, ldh: 1, ldt: 1, ldq: 1, ldz: 1, lwork: -1, repeats: 1, job: E, compq: N, compz: N, ilo: 1, ihi: 1}
+
+    - name: kernel_sizes_2_16
+      precisions: sdcz
+      labels: []
+      params: {lwork: -1, repeats: 1, square: {range: [2, 16]}, job: E, compq: N, compz: N, ilo: 1}
+
+    - name: job_e_compq_n_compz_n
+      precisions: sdcz
+      labels: []
+      params: {job: E, compq: N, compz: N, n: 50, ilo: 1, ihi: 50, ldh: 50, ldt: 50, ldq: 50, ldz: 50, lwork: -1, repeats: 1}
+
+    - name: job_s_compq_n_compz_n
+      precisions: sdcz
+      labels: []
+      params: {job: S, compq: N, compz: N, n: 50, ilo: 1, ihi: 50, ldh: 50, ldt: 50, ldq: 50, ldz: 50, lwork: -1, repeats: 1}
+
+    - name: job_e_compq_i_compz_i
+      precisions: sdcz
+      labels: []
+      params: {job: E, compq: I, compz: I, n: 50, ilo: 1, ihi: 50, ldh: 50, ldt: 50, ldq: 50, ldz: 50, lwork: -1, repeats: 1}
+
+    - name: job_s_compq_i_compz_i
+      precisions: sdcz
+      labels: []
+      params: {job: S, compq: I, compz: I, n: 50, ilo: 1, ihi: 50, ldh: 50, ldt: 50, ldq: 50, ldz: 50, lwork: -1, repeats: 1}
+
+    - name: job_e_compq_v_compz_v
+      precisions: sdcz
+      labels: []
+      params: {job: E, compq: V, compz: V, n: 50, ilo: 1, ihi: 50, ldh: 50, ldt: 50, ldq: 50, ldz: 50, lwork: -1, repeats: 1}
+
+    - name: job_s_compq_v_compz_v
+      precisions: sdcz
+      labels: []
+      params: {job: S, compq: V, compz: V, n: 50, ilo: 1, ihi: 50, ldh: 50, ldt: 50, ldq: 50, ldz: 50, lwork: -1, repeats: 1}
+
+    - name: partial_reduction
+      precisions: sdcz
+      labels: []
+      params: {job: S, compq: V, compz: V, n: 50, ilo: 10, ihi: 40, ldh: 50, ldt: 50, ldq: 50, ldz: 50, lwork: -1, repeats: 1}
+
+    - name: medium_square
+      precisions: sdcz
+      labels: []
+      params: {job: S, compq: V, compz: V, n: 128, ilo: 1, ihi: 128, ldh: 128, ldt: 128, ldq: 128, ldz: 128, lwork: -1, repeats: 1}
+
+    - name: large_square
+      precisions: sdcz
+      labels: []
+      params: {job: S, compq: V, compz: V, n: 256, ilo: 1, ihi: 256, ldh: 256, ldt: 256, ldq: 256, ldz: 256, lwork: -1, repeats: 1}

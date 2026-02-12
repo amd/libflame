@@ -1,0 +1,74 @@
+# Copyright (C) 2026, Advanced Micro Devices, Inc. All rights reserved.
+
+bdsqr:
+  description: "SVD of bidiagonal matrix using QR iteration"
+  api_group: "SVD"
+  labels: []
+  precisions: [s, d, c, z]
+  param_order: [uplo, n, ncvt, nru, ncc, ldvt, ldu, ldc, repeats]
+
+  custom_paths:
+    - name: single_element
+      precisions: sdcz
+      labels: []
+      params: {uplo: U, n: 1, ncvt: 0, nru: 0, ncc: 0, ldvt: 1, ldu: 1, ldc: 1, repeats: 1}
+
+    - name: kernel_sizes_2_16
+      precisions: sdcz
+      labels: []
+      params: {uplo: U, ncvt: 0, nru: 0, ncc: 0, repeats: 1, square: {range: [2, 16]}}
+
+    - name: upper_triangular_no_vectors
+      precisions: sdcz
+      labels: []
+      params: {uplo: U, n: 50, ncvt: 0, nru: 0, ncc: 0, ldvt: 1, ldu: 1, ldc: 1, repeats: 1}
+
+    - name: lower_triangular_no_vectors
+      precisions: sdcz
+      labels: []
+      params: {uplo: L, n: 50, ncvt: 0, nru: 0, ncc: 0, ldvt: 1, ldu: 1, ldc: 1, repeats: 1}
+
+    - name: upper_triangular_with_vt
+      precisions: sdcz
+      labels: []
+      params: {uplo: U, n: 50, ncvt: 50, nru: 0, ncc: 0, ldvt: 50, ldu: 1, ldc: 1, repeats: 1}
+
+    - name: upper_triangular_with_u
+      precisions: sdcz
+      labels: []
+      params: {uplo: U, n: 50, ncvt: 0, nru: 50, ncc: 0, ldvt: 1, ldu: 50, ldc: 1, repeats: 1}
+
+    - name: upper_triangular_with_c
+      precisions: sdcz
+      labels: []
+      params: {uplo: U, n: 50, ncvt: 0, nru: 0, ncc: 50, ldvt: 1, ldu: 1, ldc: 50, repeats: 1}
+
+    - name: upper_triangular_all_vectors
+      precisions: sdcz
+      labels: []
+      params: {uplo: U, n: 50, ncvt: 50, nru: 50, ncc: 50, ldvt: 50, ldu: 50, ldc: 50, repeats: 1}
+
+    - name: small_10x10_withvectors
+      precisions: sdcz
+      labels: []
+      params: {uplo: U, n: 10, ncvt: 10, nru: 10, ncc: 10, ldvt: 10, ldu: 10, ldc: 10, repeats: 1}
+
+    - name: lower_triangular_variations
+      precisions: sdcz
+      labels: []
+      params: {uplo: L, n: 50, ncvt: 25, nru: 25, ncc: 25, ldvt: 25, ldu: 25, ldc: 25, repeats: 1}
+
+    - name: medium_200x200
+      precisions: sdcz
+      labels: []
+      params: {uplo: U, n: 200, ncvt: 100, nru: 100, ncc: 100, ldvt: 100, ldu: 100, ldc: 100, repeats: 1}
+
+    - name: algorithm_threshold_32
+      precisions: sdcz
+      labels: ['algorithm_selection']
+      params: {uplo: U, n: 32, ncvt: 16, nru: 16, ncc: 16, ldvt: 16, ldu: 16, ldc: 16, repeats: 1}
+
+    - name: algorithm_threshold_128
+      precisions: sdcz
+      labels: ['algorithm_selection']
+      params: {uplo: U, n: 128, ncvt: 64, nru: 64, ncc: 64, ldvt: 64, ldu: 64, ldc: 64, repeats: 1}

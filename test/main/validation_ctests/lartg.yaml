@@ -1,0 +1,19 @@
+# Copyright (C) 2026, Advanced Micro Devices, Inc. All rights reserved.
+
+lartg:
+  description: "Givens rotation generation"
+  api_group: "AUX"
+  labels: []
+  precisions: [s, d, c, z]
+  param_order: [repeats]
+
+  custom_paths:
+    - name: single_element
+      precisions: sdcz
+      labels: []
+      params: {repeats: 1}
+
+    - name: multiple_repeats
+      precisions: sdcz
+      labels: []
+      params: {repeats: 10}

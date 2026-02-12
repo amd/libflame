@@ -1,0 +1,69 @@
+# Copyright (C) 2026, Advanced Micro Devices, Inc. All rights reserved.
+
+gesdd:
+  description: "Singular value decomposition using divide and conquer"
+  api_group: "SVD"
+  labels: []
+  precisions: [s, d, c, z]
+  param_order: [jobz, m, n, lda, ldu, ldvt, lwork, repeats]
+
+  custom_paths:
+    - name: single_element
+      precisions: sdcz
+      labels: []
+      params: {jobz: N, m: 1, n: 1, lda: 1, ldu: 1, ldvt: 1, lwork: -1, repeats: 1}
+
+    - name: kernel_sizes_2_16
+      precisions: sdcz
+      labels: []
+      params: {jobz: N, lwork: -1, repeats: 1, square: {range: [2, 16]}}
+
+    - name: no_vectors
+      precisions: sdcz
+      labels: []
+      params: {jobz: N, m: 50, n: 50, lda: 50, ldu: 1, ldvt: 1, lwork: -1, repeats: 1}
+
+    - name: rectangular_tall
+      precisions: sdcz
+      labels: []
+      params: {jobz: A, m: 100, n: 50, lda: 100, ldu: 100, ldvt: 50, lwork: -1, repeats: 1}
+
+    - name: rectangular_wide
+      precisions: sdcz
+      labels: []
+      params: {jobz: A, m: 50, n: 100, lda: 50, ldu: 50, ldvt: 100, lwork: -1, repeats: 1}
+
+    - name: jobz_s_tall
+      precisions: sdcz
+      labels: []
+      params: {jobz: S, m: 100, n: 50, lda: 100, ldu: 100, ldvt: 50, lwork: -1, repeats: 1}
+
+    - name: jobz_s_wide
+      precisions: sdcz
+      labels: []
+      params: {jobz: S, m: 50, n: 100, lda: 50, ldu: 50, ldvt: 50, lwork: -1, repeats: 1}
+
+    - name: jobz_o_tall
+      precisions: sdcz
+      labels: []
+      params: {jobz: O, m: 100, n: 50, lda: 100, ldu: 100, ldvt: 50, lwork: -1, repeats: 1}
+
+    - name: jobz_o_wide
+      precisions: sdcz
+      labels: []
+      params: {jobz: O, m: 50, n: 100, lda: 50, ldu: 50, ldvt: 100, lwork: -1, repeats: 1}
+
+    - name: medium_square
+      precisions: sdcz
+      labels: []
+      params: {jobz: A, m: 128, n: 128, lda: 128, ldu: 128, ldvt: 128, lwork: -1, repeats: 1}
+
+    - name: large_square
+      precisions: sdcz
+      labels: []
+      params: {jobz: A, m: 256, n: 256, lda: 256, ldu: 256, ldvt: 256, lwork: -1, repeats: 1}
+
+    - name: very_large
+      precisions: sdcz
+      labels: []
+      params: {jobz: A, m: 512, n: 512, lda: 512, ldu: 512, ldvt: 512, lwork: -1, repeats: 1}

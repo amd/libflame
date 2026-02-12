@@ -1,0 +1,39 @@
+# Copyright (C) 2026, Advanced Micro Devices, Inc. All rights reserved.
+
+org2r:
+  description: "Generate Q from QR factorization with level 2 BLAS"
+  api_group: "LIN"
+  labels: []
+  precisions: [s, d, c, z]
+  param_order: [m, n, lda, repeats]
+
+  custom_paths:
+    - name: single_element
+      precisions: sdcz
+      labels: []
+      params: {m: 1, n: 1, lda: 1, repeats: 1}
+
+    - name: kernel_sizes_2_16
+      precisions: sdcz
+      labels: []
+      params: {repeats: 1, square: {range: [2, 16]}}
+
+    - name: rectangular_tall
+      precisions: sdcz
+      labels: []
+      params: {m: 50, n: 30, lda: 50, repeats: 1}
+
+    - name: rectangular_wide
+      precisions: sdcz
+      labels: []
+      params: {m: 30, n: 50, lda: 30, repeats: 1}
+
+    - name: medium_square
+      precisions: sdcz
+      labels: []
+      params: {m: 64, n: 64, lda: 64, repeats: 1}
+
+    - name: large_square
+      precisions: sdcz
+      labels: []
+      params: {m: 128, n: 128, lda: 128, repeats: 1}

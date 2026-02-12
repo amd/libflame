@@ -1,0 +1,39 @@
+# Copyright (C) 2026, Advanced Micro Devices, Inc. All rights reserved.
+
+gehrd:
+  description: "Reduces matrix to upper Hessenberg form"
+  api_group: "LIN"
+  labels: []
+  precisions: [s, d, c, z]
+  param_order: [n, ilo, ihi, lda, lwork, repeats]
+
+  custom_paths:
+    - name: single_element
+      precisions: sdcz
+      labels: []
+      params: {n: 1, lda: 1, lwork: -1, repeats: 1, ilo: 1, ihi: 1}
+
+    - name: kernel_sizes_2_16
+      precisions: sdcz
+      labels: []
+      params: {lwork: -1, repeats: 1, ilo: 1, square: {range: [2, 16]}}
+
+    - name: full_matrix
+      precisions: sdcz
+      labels: []
+      params: {n: 50, ilo: 1, ihi: 50, lda: 50, lwork: -1, repeats: 1}
+
+    - name: small_range
+      precisions: sdcz
+      labels: []
+      params: {n: 50, ilo: 20, ihi: 30, lda: 50, lwork: -1, repeats: 1}
+
+    - name: large_square
+      precisions: sdcz
+      labels: []
+      params: {n: 128, ilo: 1, ihi: 128, lda: 128, lwork: -1, repeats: 1}
+
+    - name: very_large
+      precisions: sdcz
+      labels: []
+      params: {n: 256, ilo: 1, ihi: 256, lda: 256, lwork: -1, repeats: 1}

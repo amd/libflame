@@ -1,0 +1,164 @@
+# Copyright (C) 2026, Advanced Micro Devices, Inc. All rights reserved.
+
+spffrt2:
+  description: "Partial LDLT factorization"
+  api_group: "LIN"
+  labels: []
+  precisions: [s, d, c, z]
+  param_order: [n, ncolm, repeats]
+
+  custom_paths:
+    - name: single_element
+      precisions: sdcz
+      labels: []
+      params: {n: 1, ncolm: 1, repeats: 1}
+
+    - name: kernel_sizes_2_16
+      precisions: sdcz
+      labels: []
+      params: {ncolm: 1, repeats: 1, square: {range: [2, 16]}}
+
+    - name: small_full_factorization_5x5
+      precisions: sdcz
+      labels: []
+      params: {n: 5, ncolm: 5, repeats: 1}
+
+    - name: small_full_factorization_8x8
+      precisions: sdcz
+      labels: []
+      params: {n: 8, ncolm: 8, repeats: 1}
+
+    - name: small_full_factorization_10x10
+      precisions: sdcz
+      labels: []
+      params: {n: 10, ncolm: 10, repeats: 1}
+
+    - name: small_full_factorization_16x16
+      precisions: sdcz
+      labels: []
+      params: {n: 16, ncolm: 16, repeats: 1}
+
+    - name: small_partial_factorization_10_5
+      precisions: sdcz
+      labels: []
+      params: {n: 10, ncolm: 5, repeats: 1}
+
+    - name: small_partial_factorization_16_8
+      precisions: sdcz
+      labels: []
+      params: {n: 16, ncolm: 8, repeats: 1}
+
+    - name: small_partial_factorization_20_10
+      precisions: sdcz
+      labels: []
+      params: {n: 20, ncolm: 10, repeats: 1}
+
+    - name: small_partial_factorization_32_16
+      precisions: sdcz
+      labels: []
+      params: {n: 32, ncolm: 16, repeats: 1}
+
+    - name: medium_matrices_50_25
+      precisions: sdcz
+      labels: []
+      params: {n: 50, ncolm: 25, repeats: 1}
+
+    - name: medium_matrices_70_35
+      precisions: sdcz
+      labels: []
+      params: {n: 70, ncolm: 35, repeats: 1}
+
+    - name: medium_matrices_100_50
+      precisions: sdcz
+      labels: []
+      params: {n: 100, ncolm: 50, repeats: 1}
+
+    - name: large_matrices_200_50
+      precisions: sdcz
+      labels: []
+      params: {n: 200, ncolm: 50, repeats: 1}
+
+    - name: large_matrices_300_100
+      precisions: sdcz
+      labels: []
+      params: {n: 300, ncolm: 100, repeats: 1}
+
+    - name: large_matrices_500_150
+      precisions: sdcz
+      labels: []
+      params: {n: 500, ncolm: 150, repeats: 1}
+
+    - name: factorization_ratios_16
+      precisions: sdcz
+      labels: [algorithm_selection]
+      params: {n: 64, ncolm: 16, repeats: 1}
+
+    - name: factorization_ratios_32
+      precisions: sdcz
+      labels: [algorithm_selection]
+      params: {n: 64, ncolm: 32, repeats: 1}
+
+    - name: factorization_ratios_48
+      precisions: sdcz
+      labels: [algorithm_selection]
+      params: {n: 64, ncolm: 48, repeats: 1}
+
+    - name: factorization_ratios_64
+      precisions: sdcz
+      labels: [algorithm_selection]
+      params: {n: 64, ncolm: 64, repeats: 1}
+
+    - name: boundary_2_1
+      precisions: sdcz
+      labels: [boundary]
+      params: {n: 2, ncolm: 1, repeats: 1}
+
+    - name: boundary_3_2
+      precisions: sdcz
+      labels: [boundary]
+      params: {n: 3, ncolm: 2, repeats: 1}
+
+    - name: boundary_4_2
+      precisions: sdcz
+      labels: [boundary]
+      params: {n: 4, ncolm: 2, repeats: 1}
+
+    - name: boundary_31_15
+      precisions: sdcz
+      labels: [boundary]
+      params: {n: 31, ncolm: 15, repeats: 1}
+
+    - name: boundary_33_16
+      precisions: sdcz
+      labels: [boundary]
+      params: {n: 33, ncolm: 16, repeats: 1}
+
+    - name: boundary_63_31
+      precisions: sdcz
+      labels: [boundary]
+      params: {n: 63, ncolm: 31, repeats: 1}
+
+    - name: boundary_65_32
+      precisions: sdcz
+      labels: [boundary]
+      params: {n: 65, ncolm: 32, repeats: 1}
+
+    - name: performance_128_64
+      precisions: sd
+      labels: [performance]
+      params: {n: 128, ncolm: 64, repeats: 1}
+
+    - name: performance_256_128
+      precisions: sd
+      labels: [performance]
+      params: {n: 256, ncolm: 128, repeats: 1}
+
+    - name: performance_512_256
+      precisions: sd
+      labels: [performance]
+      params: {n: 512, ncolm: 256, repeats: 1}
+
+    - name: performance_1024_512
+      precisions: sd
+      labels: [performance]
+      params: {n: 1024, ncolm: 512, repeats: 1}

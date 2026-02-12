@@ -1,0 +1,49 @@
+# Copyright (C) 2026, Advanced Micro Devices, Inc. All rights reserved.
+
+gejsv:
+  description: "Singular Value Decomposition using Jacobi method"
+  api_group: "SVD"
+  labels: []
+  precisions: [s, d, c, z]
+  param_order: [joba, jobu, jobv, jobr, jobt, jobp, m, n, lda, ldu, ldv, lwork, lrwork, liwork, repeats]
+
+  custom_paths:
+    - name: single_element
+      precisions: sdcz
+      labels: []
+      params: {jobu: A, m: 1, n: 1, lda: 1, ldu: 1, ldv: 1, lwork: -1, repeats: 1, joba: A, jobv: A, jobr: R, jobt: N, jobp: N, lrwork: -1, liwork: -1}
+
+    - name: kernel_sizes_2_16
+      precisions: sdcz
+      labels: []
+      params: {jobu: A, lwork: -1, repeats: 1, joba: A, jobv: A, jobr: R, jobt: N, jobp: N, lrwork: -1, liwork: -1, square: {range: [2, 16]}}
+
+    - name: joba_c_jobu_n_jobv_n
+      precisions: sdcz
+      labels: []
+      params: {joba: C, jobu: N, jobv: N, jobr: R, jobt: N, jobp: N, m: 50, n: 50, lda: 50, ldu: 50, ldv: 50, lwork: -1, lrwork: -1, liwork: -1, repeats: 1}
+
+    - name: joba_c_jobu_n_jobv_v
+      precisions: sdcz
+      labels: []
+      params: {joba: C, jobu: N, jobv: V, jobr: R, jobt: N, jobp: N, m: 50, n: 50, lda: 50, ldu: 50, ldv: 50, lwork: -1, lrwork: -1, liwork: -1, repeats: 1}
+
+    - name: joba_c_jobu_a_jobv_v
+      precisions: sdcz
+      labels: []
+      params: {joba: C, jobu: A, jobv: V, jobr: R, jobt: N, jobp: N, m: 50, n: 50, lda: 50, ldu: 50, ldv: 50, lwork: -1, lrwork: -1, liwork: -1, repeats: 1}
+
+    - name: joba_f_jobu_a_jobv_v
+      precisions: sdcz
+      labels: []
+      params: {joba: F, jobu: A, jobv: V, jobr: R, jobt: N, jobp: N, m: 50, n: 50, lda: 50, ldu: 50, ldv: 50, lwork: -1, lrwork: -1, liwork: -1, repeats: 1}
+
+    - name: medium_square
+      precisions: sdcz
+      labels: []
+      params: {joba: C, jobu: A, jobv: V, jobr: R, jobt: N, jobp: N, m: 128, n: 128, lda: 128, ldu: 128, ldv: 128, lwork: -1, lrwork: -1, liwork: -1, repeats: 1}
+
+    - name: large_square
+      precisions: sdcz
+      labels: []
+      params: {joba: C, jobu: A, jobv: V, jobr: R, jobt: N, jobp: N, m: 256, n: 256, lda: 256, ldu: 256, ldv: 256, lwork: -1, lrwork: -1, liwork: -1, repeats: 1}

@@ -1,0 +1,114 @@
+# Copyright (C) 2026, Advanced Micro Devices, Inc. All rights reserved.
+
+gbtrf:
+  description: "Band matrix LU factorization"
+  api_group: "LIN"
+  labels: []
+  precisions: [s, d, c, z]
+  param_order: [m, n, kl, ku, ldab, repeats]
+
+  custom_paths:
+    - name: single_element
+      precisions: sdcz
+      labels: []
+      params: {m: 1, n: 1, kl: 0, ku: 0, ldab: 1, repeats: 1}
+
+    - name: kernel_sizes_2_16
+      precisions: sdcz
+      labels: []
+      params: {kl: 0, ku: 0, repeats: 1, square: {range: [2, 16]}}
+
+    - name: tridiagonal_small
+      precisions: sdcz
+      labels: []
+      params: {m: 10, n: 10, kl: 1, ku: 1, ldab: 3, repeats: 1}
+
+    - name: tridiagonal_medium
+      precisions: sdcz
+      labels: []
+      params: {m: 50, n: 50, kl: 1, ku: 1, ldab: 3, repeats: 1}
+
+    - name: tridiagonal_large
+      precisions: sdcz
+      labels: []
+      params: {m: 128, n: 128, kl: 1, ku: 1, ldab: 3, repeats: 1}
+
+    - name: pentadiagonal_medium
+      precisions: sdcz
+      labels: []
+      params: {m: 50, n: 50, kl: 2, ku: 2, ldab: 5, repeats: 1}
+
+    - name: pentadiagonal_large
+      precisions: sdcz
+      labels: []
+      params: {m: 100, n: 100, kl: 2, ku: 2, ldab: 5, repeats: 1}
+
+    - name: band_kl3_ku3
+      precisions: sdcz
+      labels: []
+      params: {m: 64, n: 64, kl: 3, ku: 3, ldab: 7, repeats: 1}
+
+    - name: band_kl5_ku5
+      precisions: sdcz
+      labels: []
+      params: {m: 100, n: 100, kl: 5, ku: 5, ldab: 11, repeats: 1}
+
+    - name: wide_band_kl8_ku8
+      precisions: sdcz
+      labels: []
+      params: {m: 128, n: 128, kl: 8, ku: 8, ldab: 17, repeats: 1}
+
+    - name: asymmetric_kl1_ku3
+      precisions: sdcz
+      labels: []
+      params: {m: 50, n: 50, kl: 1, ku: 3, ldab: 5, repeats: 1}
+
+    - name: asymmetric_kl3_ku1
+      precisions: sdcz
+      labels: []
+      params: {m: 50, n: 50, kl: 3, ku: 1, ldab: 5, repeats: 1}
+
+    - name: asymmetric_kl2_ku5
+      precisions: sdcz
+      labels: []
+      params: {m: 80, n: 80, kl: 2, ku: 5, ldab: 8, repeats: 1}
+
+    - name: rectangular_tall_band
+      precisions: sdcz
+      labels: []
+      params: {m: 80, n: 60, kl: 2, ku: 2, ldab: 5, repeats: 1}
+
+    - name: rectangular_wide_band
+      precisions: sdcz
+      labels: []
+      params: {m: 60, n: 80, kl: 2, ku: 2, ldab: 5, repeats: 1}
+
+    - name: narrow_band_kl1_ku0
+      precisions: sdcz
+      labels: []
+      params: {m: 64, n: 64, kl: 1, ku: 0, ldab: 2, repeats: 1}
+
+    - name: narrow_band_kl0_ku1
+      precisions: sdcz
+      labels: []
+      params: {m: 64, n: 64, kl: 0, ku: 1, ldab: 2, repeats: 1}
+
+    - name: large_asymmetric_band
+      precisions: sdcz
+      labels: []
+      params: {m: 200, n: 200, kl: 4, ku: 7, ldab: 12, repeats: 1}
+
+    - name: single_diagonal_kl0_ku1
+      precisions: sdcz
+      labels: []
+      params: {m: 32, n: 32, kl: 0, ku: 1, ldab: 2, repeats: 1}
+
+    - name: single_diagonal_kl1_ku0
+      precisions: sdcz
+      labels: []
+      params: {m: 32, n: 32, kl: 1, ku: 0, ldab: 2, repeats: 1}
+
+    - name: very_wide_band_kl16_ku16
+      precisions: sdcz
+      labels: []
+      params: {m: 200, n: 200, kl: 16, ku: 16, ldab: 33, repeats: 1}

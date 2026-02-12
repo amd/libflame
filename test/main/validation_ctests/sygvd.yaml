@@ -1,0 +1,119 @@
+# Copyright (C) 2026, Advanced Micro Devices, Inc. All rights reserved.
+
+sygvd:
+  description: "Generalized symmetric/Hermitian eigenvalue decomposition"
+  api_group: "EIG"
+  labels: []
+  precisions: [s, d, c, z]
+  param_order: [itype, jobz, uplo, n, lda, ldb, lwork, liwork, repeats]
+
+  custom_paths:
+    - name: single_element
+      precisions: sdcz
+      labels: []
+      params: {itype: 1, jobz: N, uplo: U, n: 1, lda: 1, ldb: 1, lwork: -1, repeats: 1, liwork: -1}
+
+    - name: kernel_sizes_2_16
+      precisions: sdcz
+      labels: []
+      params: {itype: 1, jobz: N, uplo: U, lwork: -1, repeats: 1, square: {range: [2, 16]}, liwork: -1}
+
+    - name: itype_1_no_vectors_upper
+      precisions: sdcz
+      labels: []
+      params: {itype: 1, jobz: N, uplo: U, n: 50, lda: 50, ldb: 50, lwork: -1, liwork: -1, repeats: 1}
+
+    - name: itype_1_with_vectors_upper
+      precisions: sdcz
+      labels: []
+      params: {itype: 1, jobz: V, uplo: U, n: 50, lda: 50, ldb: 50, lwork: -1, liwork: -1, repeats: 1}
+
+    - name: itype_2_with_vectors_upper
+      precisions: sdcz
+      labels: []
+      params: {itype: 2, jobz: V, uplo: U, n: 50, lda: 50, ldb: 50, lwork: -1, liwork: -1, repeats: 1}
+
+    - name: itype_3_with_vectors_upper
+      precisions: sdcz
+      labels: []
+      params: {itype: 3, jobz: V, uplo: U, n: 50, lda: 50, ldb: 50, lwork: -1, liwork: -1, repeats: 1}
+
+    - name: itype_1_with_vectors_lower
+      precisions: sdcz
+      labels: []
+      params: {itype: 1, jobz: V, uplo: L, n: 50, lda: 50, ldb: 50, lwork: -1, liwork: -1, repeats: 1}
+
+    - name: medium_square
+      precisions: sdcz
+      labels: []
+      params: {itype: 1, jobz: V, uplo: U, n: 128, lda: 128, ldb: 128, lwork: -1, liwork: -1, repeats: 1}
+
+    - name: large_square
+      precisions: sdcz
+      labels: []
+      params: {itype: 1, jobz: V, uplo: U, n: 256, lda: 256, ldb: 256, lwork: -1, liwork: -1, repeats: 1}
+
+    - name: itype_1_no_vectors_lower
+      precisions: sdcz
+      labels: []
+      params: {itype: 1, jobz: N, uplo: L, n: 50, lda: 50, ldb: 50, lwork: -1, liwork: -1, repeats: 1}
+
+    - name: itype_2_no_vectors_upper
+      precisions: sdcz
+      labels: []
+      params: {itype: 2, jobz: N, uplo: U, n: 50, lda: 50, ldb: 50, lwork: -1, liwork: -1, repeats: 1}
+
+    - name: itype_2_no_vectors_lower
+      precisions: sdcz
+      labels: []
+      params: {itype: 2, jobz: N, uplo: L, n: 50, lda: 50, ldb: 50, lwork: -1, liwork: -1, repeats: 1}
+
+    - name: itype_2_with_vectors_lower
+      precisions: sdcz
+      labels: []
+      params: {itype: 2, jobz: V, uplo: L, n: 50, lda: 50, ldb: 50, lwork: -1, liwork: -1, repeats: 1}
+
+    - name: itype_3_no_vectors_upper
+      precisions: sdcz
+      labels: []
+      params: {itype: 3, jobz: N, uplo: U, n: 50, lda: 50, ldb: 50, lwork: -1, liwork: -1, repeats: 1}
+
+    - name: itype_3_no_vectors_lower
+      precisions: sdcz
+      labels: []
+      params: {itype: 3, jobz: N, uplo: L, n: 50, lda: 50, ldb: 50, lwork: -1, liwork: -1, repeats: 1}
+
+    - name: itype_3_with_vectors_lower
+      precisions: sdcz
+      labels: []
+      params: {itype: 3, jobz: V, uplo: L, n: 50, lda: 50, ldb: 50, lwork: -1, liwork: -1, repeats: 1}
+
+    - name: medium_square_itype_2
+      precisions: sdcz
+      labels: []
+      params: {itype: 2, jobz: V, uplo: U, n: 128, lda: 128, ldb: 128, lwork: -1, liwork: -1, repeats: 1}
+
+    - name: medium_square_itype_3
+      precisions: sdcz
+      labels: []
+      params: {itype: 3, jobz: V, uplo: U, n: 128, lda: 128, ldb: 128, lwork: -1, liwork: -1, repeats: 1}
+
+    - name: medium_square_itype_1_lower
+      precisions: sdcz
+      labels: []
+      params: {itype: 1, jobz: V, uplo: L, n: 128, lda: 128, ldb: 128, lwork: -1, liwork: -1, repeats: 1}
+
+    - name: large_square_itype_2
+      precisions: sdcz
+      labels: []
+      params: {itype: 2, jobz: V, uplo: U, n: 256, lda: 256, ldb: 256, lwork: -1, liwork: -1, repeats: 1}
+
+    - name: large_square_itype_3
+      precisions: sdcz
+      labels: []
+      params: {itype: 3, jobz: V, uplo: U, n: 256, lda: 256, ldb: 256, lwork: -1, liwork: -1, repeats: 1}
+
+    - name: large_square_itype_1_lower
+      precisions: sdcz
+      labels: []
+      params: {itype: 1, jobz: V, uplo: L, n: 256, lda: 256, ldb: 256, lwork: -1, liwork: -1, repeats: 1}

@@ -1,0 +1,64 @@
+# Copyright (C) 2026, Advanced Micro Devices, Inc. All rights reserved.
+
+getrfnpi:
+  description: "LU factorization without pivoting with partial factorization"
+  api_group: "LIN"
+  labels: []
+  precisions: [s, d, c, z]
+  param_order: [m, n, nfact, lda, repeats]
+
+  custom_paths:
+    - name: single_element
+      precisions: sdcz
+      labels: []
+      params: {m: 1, n: 1, nfact: 1, lda: 1, repeats: 1}
+
+    - name: kernel_sizes_2_16
+      precisions: sdcz
+      labels: []
+      params: {nfact: 1, repeats: 1, square: {range: [2, 16]}}
+
+    - name: small_square_full_factorization_5x5
+      precisions: sdcz
+      labels: []
+      params: {m: 5, n: 5, nfact: 5, lda: 5, repeats: 1}
+
+    - name: small_square_full_factorization_8x8
+      precisions: sdcz
+      labels: []
+      params: {m: 8, n: 8, nfact: 8, lda: 8, repeats: 1}
+
+    - name: small_square_full_factorization_10x10
+      precisions: sdcz
+      labels: []
+      params: {m: 10, n: 10, nfact: 10, lda: 10, repeats: 1}
+
+    - name: small_square_partial_factorization_20x20
+      precisions: sdcz
+      labels: []
+      params: {m: 20, n: 20, nfact: 10, lda: 20, repeats: 1}
+
+    - name: partial_rectangular_factorization_20x15
+      precisions: sdcz
+      labels: []
+      params: {m: 20, n: 15, nfact: 10, lda: 20, repeats: 1}
+
+    - name: partial_rectangular_factorization_30x25
+      precisions: sdcz
+      labels: []
+      params: {m: 30, n: 25, nfact: 15, lda: 30, repeats: 1}
+
+    - name: medium_square_50x50
+      precisions: sdcz
+      labels: []
+      params: {m: 50, n: 50, nfact: 25, lda: 50, repeats: 1}
+
+    - name: medium_square_100x100
+      precisions: sdcz
+      labels: []
+      params: {m: 100, n: 100, nfact: 50, lda: 100, repeats: 1}
+
+    - name: large_partial_200x200
+      precisions: sdcz
+      labels: []
+      params: {m: 200, n: 200, nfact: 50, lda: 200, repeats: 1}

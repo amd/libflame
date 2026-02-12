@@ -1,0 +1,84 @@
+# Copyright (C) 2026, Advanced Micro Devices, Inc. All rights reserved.
+
+getrs:
+  description: "LU solve"
+  api_group: "LIN"
+  labels: []
+  precisions: [s, d, c, z]
+  param_order: [trans, n, nrhs, lda, ldb, repeats]
+
+  custom_paths:
+    - name: single_element
+      precisions: sdcz
+      labels: []
+      params: {trans: N, n: 1, nrhs: 1, lda: 1, ldb: 1, repeats: 1}
+
+    - name: kernel_sizes_2_16
+      precisions: sdcz
+      labels: []
+      params: {trans: N, nrhs: 1, repeats: 1, square: {'range': [2, 16]}}
+
+    - name: trans_n
+      precisions: sdcz
+      labels: []
+      params: {trans: N, n: 50, nrhs: 1, lda: 50, ldb: 50, repeats: 1}
+
+    - name: trans_t
+      precisions: sdcz
+      labels: []
+      params: {trans: T, n: 50, nrhs: 1, lda: 50, ldb: 50, repeats: 1}
+
+    - name: trans_c
+      precisions: cz
+      labels: []
+      params: {trans: C, n: 50, nrhs: 1, lda: 50, ldb: 50, repeats: 1}
+
+    - name: zero_size_matrix
+      precisions: sdcz
+      labels: ['edge_case', 'coverage_enhancement']
+      params: {trans: N, n: 0, nrhs: 1, lda: 1, ldb: 1, repeats: 1}
+
+    - name: zero_rhs
+      precisions: sdcz
+      labels: ['edge_case', 'coverage_enhancement']
+      params: {trans: N, n: 5, nrhs: 0, lda: 5, ldb: 5, repeats: 1}
+
+    - name: very_small_n2_notrans
+      precisions: sdcz
+      labels: ['small_matrix', 'coverage_enhancement']
+      params: {trans: N, n: 2, nrhs: 1, lda: 2, ldb: 2, repeats: 1}
+
+    - name: very_small_n2_trans
+      precisions: sdcz
+      labels: ['small_matrix', 'transpose', 'coverage_enhancement']
+      params: {trans: T, n: 2, nrhs: 1, lda: 2, ldb: 2, repeats: 1}
+
+    - name: very_small_n2_conjugate
+      precisions: cz
+      labels: ['small_matrix', 'conjugate', 'coverage_enhancement']
+      params: {trans: C, n: 2, nrhs: 1, lda: 2, ldb: 2, repeats: 1}
+
+    - name: avx2_boundary_nrhs_exceeds_n
+      precisions: sdcz
+      labels: ['avx2_boundary', 'coverage_enhancement']
+      params: {trans: N, n: 4, nrhs: 8, lda: 4, ldb: 4, repeats: 1}
+
+    - name: avx2_min_boundary
+      precisions: sdcz
+      labels: ['avx2_boundary', 'coverage_enhancement']
+      params: {trans: N, n: 3, nrhs: 1, lda: 3, ldb: 3, repeats: 1}
+
+    - name: just_above_avx2_threshold
+      precisions: sdcz
+      labels: ['avx2_boundary', 'coverage_enhancement']
+      params: {trans: N, n: 9, nrhs: 1, lda: 9, ldb: 9, repeats: 1}
+
+    - name: complex_conjugate_medium
+      precisions: cz
+      labels: ['conjugate', 'coverage_enhancement']
+      params: {trans: C, n: 20, nrhs: 1, lda: 20, ldb: 20, repeats: 1}
+
+    - name: pivot_intensive_small
+      precisions: sdcz
+      labels: ['pivot_test', 'coverage_enhancement']
+      params: {trans: N, n: 3, nrhs: 2, lda: 3, ldb: 3, repeats: 1}

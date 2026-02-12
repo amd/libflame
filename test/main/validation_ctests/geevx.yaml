@@ -1,0 +1,69 @@
+# Copyright (C) 2026, Advanced Micro Devices, Inc. All rights reserved.
+
+geevx:
+  description: "Non-symmetric eigenvalue decomposition with error bounds"
+  api_group: "EIG"
+  labels: []
+  precisions: [s, d, c, z]
+  param_order: [balanc, jobvl, jobvr, sense, n, lda, ldvl, ldvr, lwork, repeats]
+
+  custom_paths:
+    - name: single_element
+      precisions: sdcz
+      labels: []
+      params: {n: 1, lda: 1, ldvl: 1, ldvr: 1, lwork: -1, repeats: 1, balanc: N, jobvl: N, jobvr: N, sense: N}
+
+    - name: kernel_sizes_2_16
+      precisions: sdcz
+      labels: []
+      params: {lwork: -1, repeats: 1, square: {range: [2, 16]}, balanc: N, jobvl: N, jobvr: N, sense: N}
+
+    - name: balanc_n_jobvl_n_jobvr_n_sense_n
+      precisions: sdcz
+      labels: []
+      params: {balanc: N, jobvl: N, jobvr: N, sense: N, n: 50, lda: 50, ldvl: 50, ldvr: 50, lwork: -1, repeats: 1}
+
+    - name: balanc_p_jobvl_n_jobvr_n_sense_n
+      precisions: sdcz
+      labels: []
+      params: {balanc: P, jobvl: N, jobvr: N, sense: N, n: 50, lda: 50, ldvl: 50, ldvr: 50, lwork: -1, repeats: 1}
+
+    - name: balanc_s_jobvl_n_jobvr_n_sense_n
+      precisions: sdcz
+      labels: []
+      params: {balanc: S, jobvl: N, jobvr: N, sense: N, n: 50, lda: 50, ldvl: 50, ldvr: 50, lwork: -1, repeats: 1}
+
+    - name: balanc_b_jobvl_n_jobvr_n_sense_n
+      precisions: sdcz
+      labels: []
+      params: {balanc: B, jobvl: N, jobvr: N, sense: N, n: 50, lda: 50, ldvl: 50, ldvr: 50, lwork: -1, repeats: 1}
+
+    - name: balanc_n_jobvl_v_jobvr_v_sense_n
+      precisions: sdcz
+      labels: []
+      params: {balanc: N, jobvl: V, jobvr: V, sense: N, n: 50, lda: 50, ldvl: 50, ldvr: 50, lwork: -1, repeats: 1}
+
+    - name: balanc_n_jobvl_n_jobvr_n_sense_e
+      precisions: sdcz
+      labels: []
+      params: {balanc: N, jobvl: N, jobvr: N, sense: E, n: 50, lda: 50, ldvl: 50, ldvr: 50, lwork: -1, repeats: 1}
+
+    - name: balanc_n_jobvl_n_jobvr_n_sense_v
+      precisions: sdcz
+      labels: []
+      params: {balanc: N, jobvl: N, jobvr: N, sense: V, n: 50, lda: 50, ldvl: 50, ldvr: 50, lwork: -1, repeats: 1}
+
+    - name: balanc_n_jobvl_n_jobvr_n_sense_b
+      precisions: sdcz
+      labels: []
+      params: {balanc: N, jobvl: N, jobvr: N, sense: B, n: 50, lda: 50, ldvl: 50, ldvr: 50, lwork: -1, repeats: 1}
+
+    - name: medium_square
+      precisions: sdcz
+      labels: []
+      params: {balanc: N, jobvl: V, jobvr: V, sense: B, n: 100, lda: 100, ldvl: 100, ldvr: 100, lwork: -1, repeats: 1}
+
+    - name: large_square
+      precisions: sdcz
+      labels: []
+      params: {balanc: N, jobvl: V, jobvr: V, sense: B, n: 128, lda: 128, ldvl: 128, ldvr: 128, lwork: -1, repeats: 1}

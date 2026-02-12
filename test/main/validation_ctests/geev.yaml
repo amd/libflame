@@ -1,0 +1,49 @@
+# Copyright (C) 2026, Advanced Micro Devices, Inc. All rights reserved.
+
+geev:
+  description: "Non-symmetric eigenvalue decomposition"
+  api_group: "EIG"
+  labels: []
+  precisions: [s, d, c, z]
+  param_order: [jobvl, jobvr, n, lda, ldvl, ldvr, lwork, repeats]
+
+  custom_paths:
+    - name: single_element
+      precisions: sdcz
+      labels: []
+      params: {n: 1, lda: 1, ldvl: 1, ldvr: 1, lwork: -1, repeats: 1, jobvl: N, jobvr: N}
+
+    - name: kernel_sizes_2_16
+      precisions: sdcz
+      labels: []
+      params: {lwork: -1, repeats: 1, square: {range: [2, 16]}, jobvl: N, jobvr: N}
+
+    - name: jobvl_n_jobvr_n
+      precisions: sdcz
+      labels: []
+      params: {jobvl: N, jobvr: N, n: 50, lda: 50, ldvl: 50, ldvr: 50, lwork: -1, repeats: 1}
+
+    - name: jobvl_v_jobvr_n
+      precisions: sdcz
+      labels: []
+      params: {jobvl: V, jobvr: N, n: 50, lda: 50, ldvl: 50, ldvr: 50, lwork: -1, repeats: 1}
+
+    - name: jobvl_n_jobvr_v
+      precisions: sdcz
+      labels: []
+      params: {jobvl: N, jobvr: V, n: 50, lda: 50, ldvl: 50, ldvr: 50, lwork: -1, repeats: 1}
+
+    - name: jobvl_v_jobvr_v
+      precisions: sdcz
+      labels: []
+      params: {jobvl: V, jobvr: V, n: 50, lda: 50, ldvl: 50, ldvr: 50, lwork: -1, repeats: 1}
+
+    - name: medium_square
+      precisions: sdcz
+      labels: []
+      params: {jobvl: V, jobvr: V, n: 100, lda: 100, ldvl: 100, ldvr: 100, lwork: -1, repeats: 1}
+
+    - name: large_square
+      precisions: sdcz
+      labels: []
+      params: {jobvl: V, jobvr: V, n: 128, lda: 128, ldvl: 128, ldvr: 128, lwork: -1, repeats: 1}

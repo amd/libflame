@@ -1,0 +1,24 @@
+# Copyright (C) 2026, Advanced Micro Devices, Inc. All rights reserved.
+
+gbtrs:
+  description: "Band matrix solve using factored form"
+  api_group: "LIN"
+  labels: []
+  precisions: [s, d, c, z]
+  param_order: [trans, n, kl, ku, nrhs, ldab, ldb, repeats]
+
+  custom_paths:
+    - name: single_element
+      precisions: sdcz
+      labels: []
+      params: {trans: N, n: 1, kl: 0, ku: 0, nrhs: 1, ldab: 1, ldb: 1, repeats: 1}
+
+    - name: kernel_sizes_2_16
+      precisions: sdcz
+      labels: []
+      params: {trans: N, kl: 0, ku: 0, nrhs: 1, repeats: 1, square: {range: [2, 16]}}
+
+    - name: trans_n
+      precisions: sdcz
+      labels: []
+      params: {trans: N, n: 50, kl: 2, ku: 2, nrhs: 1, ldab: 5, ldb: 50, repeats: 1}

@@ -1,0 +1,59 @@
+# Copyright (C) 2026, Advanced Micro Devices, Inc. All rights reserved.
+
+hseqr:
+  description: "Hessenberg-Schur reduction"
+  api_group: "EIG"
+  labels: []
+  precisions: [s, d, c, z]
+  param_order: [job, compz, n, ilo, ihi, ldh, ldz, lwork, repeats]
+
+  custom_paths:
+    - name: single_element
+      precisions: sdcz
+      labels: []
+      params: {n: 1, ldh: 1, ldz: 1, lwork: -1, repeats: 1, job: E, compz: N, ilo: 1, ihi: 1}
+
+    - name: kernel_sizes_2_16
+      precisions: sdcz
+      labels: []
+      params: {lwork: -1, repeats: 1, job: E, compz: N, ilo: 1, square: {range: [2, 16]}}
+
+    - name: job_e_compz_n
+      precisions: sdcz
+      labels: []
+      params: {job: E, compz: N, n: 50, ilo: 1, ihi: 50, ldh: 50, ldz: 50, lwork: -1, repeats: 1}
+
+    - name: job_s_compz_n
+      precisions: sdcz
+      labels: []
+      params: {job: S, compz: N, n: 50, ilo: 1, ihi: 50, ldh: 50, ldz: 50, lwork: -1, repeats: 1}
+
+    - name: job_e_compz_i
+      precisions: sdcz
+      labels: []
+      params: {job: E, compz: I, n: 50, ilo: 1, ihi: 50, ldh: 50, ldz: 50, lwork: -1, repeats: 1}
+
+    - name: job_s_compz_i
+      precisions: sdcz
+      labels: []
+      params: {job: S, compz: I, n: 50, ilo: 1, ihi: 50, ldh: 50, ldz: 50, lwork: -1, repeats: 1}
+
+    - name: job_e_compz_v
+      precisions: sdcz
+      labels: []
+      params: {job: E, compz: V, n: 50, ilo: 1, ihi: 50, ldh: 50, ldz: 50, lwork: -1, repeats: 1}
+
+    - name: partial_reduction
+      precisions: sdcz
+      labels: []
+      params: {job: S, compz: V, n: 50, ilo: 10, ihi: 40, ldh: 50, ldz: 50, lwork: -1, repeats: 1}
+
+    - name: medium_square
+      precisions: sdcz
+      labels: []
+      params: {job: S, compz: V, n: 128, ilo: 1, ihi: 128, ldh: 128, ldz: 128, lwork: -1, repeats: 1}
+
+    - name: large_square
+      precisions: sdcz
+      labels: []
+      params: {job: S, compz: V, n: 256, ilo: 1, ihi: 256, ldh: 256, ldz: 256, lwork: -1, repeats: 1}

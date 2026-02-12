@@ -1,0 +1,49 @@
+# Copyright (C) 2026, Advanced Micro Devices, Inc. All rights reserved.
+
+gecon:
+  description: "Condition number estimation"
+  api_group: "LIN"
+  labels: []
+  precisions: [s, d, c, z]
+  param_order: [norm, n, lda, repeats]
+
+  custom_paths:
+    - name: single_element
+      precisions: sdcz
+      labels: []
+      params: {norm: 1, n: 1, lda: 1, repeats: 1}
+
+    - name: kernel_sizes_2_16
+      precisions: sdcz
+      labels: []
+      params: {norm: 1, repeats: 1, square: {range: [2, 16]}}
+
+    - name: norm_1
+      precisions: sdcz
+      labels: []
+      params: {norm: 1, n: 50, lda: 50, repeats: 1}
+
+    - name: norm_i
+      precisions: sdcz
+      labels: []
+      params: {norm: I, n: 50, lda: 50, repeats: 1}
+
+    - name: large_square
+      precisions: sdcz
+      labels: []
+      params: {norm: 1, n: 200, lda: 200, repeats: 1}
+
+    - name: norm_f
+      precisions: sdcz
+      labels: []
+      params: {norm: F, n: 50, lda: 50, repeats: 1}
+
+    - name: kernel_sizes_2_16_norm_i
+      precisions: sdcz
+      labels: []
+      params: {norm: I, repeats: 1, square: {range: [2, 16]}}
+
+    - name: kernel_sizes_2_16_norm_o
+      precisions: sdcz
+      labels: []
+      params: {norm: O, repeats: 1, square: {range: [2, 16]}}

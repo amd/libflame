@@ -1,0 +1,24 @@
+# Copyright (C) 2026, Advanced Micro Devices, Inc. All rights reserved.
+
+larf:
+  description: "Apply elementary reflector"
+  api_group: "AUX"
+  labels: []
+  precisions: [s, d, c, z]
+  param_order: [side, m, n, incv, ldc, repeats]
+
+  custom_paths:
+    - name: single_element
+      precisions: sdcz
+      labels: []
+      params: {side: L, m: 1, n: 1, ldc: 1, repeats: 1, incv: 1}
+
+    - name: kernel_sizes_2_16
+      precisions: sdcz
+      labels: []
+      params: {side: L, repeats: 1, square: {range: [2, 16]}, incv: 1}
+
+    - name: kernel_sizes_2_16_side_r
+      precisions: sdcz
+      labels: []
+      params: {side: R, incv: 1, ldc: 1, repeats: 1, square: {range: [2, 16]}}

@@ -1,5 +1,5 @@
 ###############################################################################
-# Copyright (C) 2022-2025, Advanced Micro Devices, Inc. All rights reserved.
+# Copyright (C) 2022-2026, Advanced Micro Devices, Inc. All rights reserved.
 ###############################################################################
 if(WIN32)
     project(test_libFLAME_main)
@@ -179,7 +179,6 @@ if(BUILD_TEST)
         message(WARNING "Test generation failed: ${GEN_ERROR}")
     else()
         message(STATUS "Generated API validation tests in ${TEST_OUTPUT_DIR}")
-        message(STATUS "Test generation output:\n${GEN_OUTPUT}")
     endif()
     # Include generated test files from build directory
     file(GLOB YAML_TEST_FILES "${TEST_OUTPUT_DIR}/*_tests.cmake")
@@ -188,7 +187,6 @@ if(BUILD_TEST)
             get_filename_component(API_NAME ${TEST_FILE} NAME_WE)
             string(REPLACE "_tests" "" API_NAME ${API_NAME})
             include(${TEST_FILE})
-            message(STATUS "Included API validation tests for ${API_NAME}")
         endforeach()
     else()
         message(WARNING "No API validation test files generated")

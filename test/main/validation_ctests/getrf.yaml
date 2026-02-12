@@ -1,100 +1,99 @@
-# GETRF - LU Factorization
-# Syntax: getrf <precisions> <M> <N> <LDA> <repeats>
+# Copyright (C) 2025-2026, Advanced Micro Devices, Inc. All rights reserved.
 
 getrf:
   description: "LU factorization with pivoting"
   api_group: "LIN"
-  labels: ["presubmit"]
+  labels: []
   precisions: [s, d, c, z]
   param_order: [m, n, lda, repeats]
 
   custom_paths:
-    # Single element path
     - name: single_element
       precisions: sdcz
       labels: []
       params: {m: 1, n: 1, lda: 1, repeats: 1}
 
-    # 2x2 kernel path
-    - name: kernel_2x2
-      precisions: sd
+    - name: kernel_sizes_2_16
+      precisions: sdcz
       labels: []
-      params: {m: 2, n: 2, lda: 2, repeats: 1}
+      params: {repeats: 1, square: {range: [2, 16]}}
 
-    # 3x3 kernel path
-    - name: kernel_3x3
+    - name: sd_avx512_optimized
       precisions: sd
-      labels: []
-      params: {m: 3, n: 3, lda: 3, repeats: 1}
-
-    # 4x4 kernel path
-    - name: kernel_4x4
-      precisions: sd
-      labels: []
-      params: {m: 4, n: 4, lda: 4, repeats: 1}
-
-    # Small unblocked path
-    - name: small_unblocked
-      precisions: sd
-      labels: []
-      params: {m: 15, n: 15, lda: 15, repeats: 1}
-
-    # AVX2 optimized path
-    - name: avx2_optimized
-      precisions: dsz
-      labels: [avx2]
-      params: {m: 30, n: 30, lda: 30, repeats: 1}
-
-    # AVX512 optimized path
-    - name: avx512_optimized
-      precisions: dsz
       labels: [avx512]
       params: {m: 32, n: 32, lda: 32, repeats: 1}
 
-    # Parallel blocked path
-    - name: getrf2_recursive
-      precisions: sd
-      labels: []
-      params: {m: 81, n: 81, lda: 81, repeats: 1}
-
-    # Blocked recursive path
-    - name: blocked_recursive
-      precisions: sdcz
-      labels: []
-      params: {m: 16, n: 16, lda: 16, repeats: 1}
-
-    # Complex blocked path
-    - name: complex_small
+    - name: cz_small_lapack
       precisions: cz
       labels: []
       params: {m: 64, n: 64, lda: 64, repeats: 1}
 
-    # Double complex parallel path
-    - name: z_parallel
-      precisions: z
+    - name: sd_rectangular_tall
+      precisions: sd
       labels: []
-      params: {m: 101, n: 101, lda: 101, repeats: 1}
+      params: {m: 50, n: 30, lda: 50, repeats: 1}
 
-    # Complex generic path
-    - name: complex_generic
+    - name: sd_rectangular_wide
+      precisions: sd
+      labels: []
+      params: {m: 30, n: 50, lda: 30, repeats: 1}
+
+    - name: cz_rectangular_tall
       precisions: cz
       labels: []
-      params: {m: 8, n: 8, lda: 8, repeats: 1}
+      params: {m: 100, n: 50, lda: 100, repeats: 1}
 
-    # Double complex unblocked path
-    - name: z_small_unblocked
-      precisions: z
+    - name: boundary_96x96
+      precisions: sdcz
       labels: []
-      params: {m: 100, n: 100, lda: 100, repeats: 1}
+      params: {m: 96, n: 96, lda: 96, repeats: 1}
 
-    # Large Complex GETF2 path
-    - name: generic_getf2_c
+    - name: memory_padded_33x33
+      precisions: sdcz
+      labels: []
+      params: {m: 33, n: 33, lda: 40, repeats: 1}
+
+    - name: memory_padded_65x65
+      precisions: sdcz
+      labels: []
+      params: {m: 65, n: 65, lda: 72, repeats: 1}
+
+    - name: sgetrf_avx2_boundary
+      precisions: s
+      labels: [avx2]
+      params: {m: 31, n: 31, lda: 31, repeats: 1}
+
+    - name: sgetrf_avx512_small
+      precisions: s
+      labels: [avx512]
+      params: {m: 155, n: 155, lda: 155, repeats: 1}
+
+    - name: sgetrf_avx512_boundary
+      precisions: s
+      labels: [avx512]
+      params: {m: 156, n: 156, lda: 156, repeats: 1}
+
+    - name: sgetrf_large
+      precisions: s
+      labels: []
+      params: {m: 200, n: 200, lda: 200, repeats: 1}
+
+    - name: dgetrf_avx2_boundary
+      precisions: d
+      labels: [avx2]
+      params: {m: 81, n: 81, lda: 81, repeats: 1}
+
+    - name: dgetrf_avx512_multithread
+      precisions: d
+      labels: [avx512]
+      params: {m: 127, n: 127, lda: 127, repeats: 1}
+
+    - name: cgetrf_small_boundary
       precisions: c
       labels: []
-      params: {m: 670, n: 670, lda: 670, repeats: 1}
+      params: {m: 85, n: 85, lda: 85, repeats: 1}
 
-    # Large Double complex GETF2 path
-    - name: generic_getf2_z
+    - name: zgetrf_large_amd_opt
       precisions: z
       labels: []
-      params: {m: 1630, n: 1630, lda: 1630, repeats: 1}
+      params: {m: 150, n: 150, lda: 150, repeats: 1}

@@ -52,6 +52,8 @@ After `make` is complete, an executable named `test_lapack.x` is created.
 There are different ways to use the executable to perform different tests as given
 below.
 
+NOTE: PyYAML is required for YAML parsing and YAML‑based test generation.
+
 1. Config file based tests
 
    In this method, input parameters to APIs are taken from config files present in
@@ -491,6 +493,10 @@ NOTE:
    Tests are automatically generated during CMake configuration when BUILD_TEST=ON.
    Generated files are in <build_dir>/test/main/validation_ctests/*_tests.cmake
 
+   Dependency:
+   YAML‑based CTest generation depends on the PyYAML package for YAML parsing.
+   Ensure that PyYAML is installed on your system.
+
    For manual generation:
      $ cd test/main/validation_ctests
      $ python3 auto_generate_tests.py --api getrf /tmp/output
@@ -498,9 +504,10 @@ NOTE:
 
    Running tests:
      # Filter by label (case-insensitive for API name and group)
-     $ ctest -L GETRF        # Run all getrf tests
-     $ ctest -L short        # Run all tests with small or medium size
-     $ ctest -L GETRF -L small  # Run small GETRF tests (use multiple -L flags)
-     $ ctest -L precision_d  # Run all double precision tests
+     $ ctest -L yaml_generated  # Run all the ctests generated from yaml files
+     $ ctest -L GETRF           # Run all getrf tests
+     $ ctest -L medium          # Run all tests with small_size or medium_size (medium group)
+     $ ctest -L precision_d     # Run all double precision tests
+     $ ctest -L getrf -R medium # Run all GETRF medium size tests
 
-   NOTE: For detailed documentation, see test/main/validation_ctests/README.md
+   NOTE: For detailed documentation, see test/main/validation_ctests/ReadMe.txt

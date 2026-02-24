@@ -1,12 +1,17 @@
-/* dlanv2.f -- translated by f2c (version 20190311). You must link the resulting object file with
- libf2c: on Microsoft Windows system, link with libf2c.lib; on Linux or Unix systems, link with
- .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
- order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
+/******************************************************************************
+  Copyright (C) 2026, Advanced Micro Devices, Inc. All rights reserved.
+ * ***************************************************************************/
+/* ./dlanv2.f -- translated by f2c (version 20190311). You must link the
+ resulting object file with libf2c: on Microsoft Windows system, link with
+ libf2c.lib;
+ on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install
+ libf2c.a in a standard place, with -lf2c -lm -- in that order, at the end of
+ the command line, as in cc *.o -lf2c -lm Source for libf2c is in
  /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 #include "FLA_f2c.h" /* Table of constant values */
 static doublereal c_b6 = 1.;
-/* > \brief \b DLANV2 computes the Schur factorization of a real 2-by-2 nonsymmetric matrix in
- * standard form. */
+/* > \brief \b DLANV2 computes the Schur factorization of a real 2-by-2
+ * nonsymmetric matrix in standard form. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
 /* http://www.netlib.org/lapack/explore-html/ */
@@ -44,7 +49,7 @@ static doublereal c_b6 = 1.;
 /* > */
 /* > where either */
 /* > 1) CC = 0 so that AA and DD are real eigenvalues of the matrix, or */
-/* > 2) AA = DD and BB*CC < 0, so that AA + or - sqrt(BB*CC) are scomplex */
+/* > 2) AA = DD and BB*CC < 0, so that AA + or - sqrt(BB*CC) are complex */
 /* > conjugate eigenvalues. */
 /* > \endverbatim */
 /* Arguments: */
@@ -91,7 +96,7 @@ static doublereal c_b6 = 1.;
 /* > \verbatim */
 /* > RT2I is DOUBLE PRECISION */
 /* > The real and imaginary parts of the eigenvalues. If the */
-/* > eigenvalues are a scomplex conjugate pair, RT1I > 0. */
+/* > eigenvalues are a complex conjugate pair, RT1I > 0. */
 /* > \endverbatim */
 /* > */
 /* > \param[out] CS */
@@ -110,7 +115,7 @@ static doublereal c_b6 = 1.;
 /* > \author Univ. of California Berkeley */
 /* > \author Univ. of Colorado Denver */
 /* > \author NAG Ltd. */
-/* > \ingroup doubleOTHERauxiliary */
+/* > \ingroup lanv2 */
 /* > \par Further Details: */
 /* ===================== */
 /* > */
@@ -136,7 +141,7 @@ void dlanv2_(doublereal *a, doublereal *b, doublereal *c__, doublereal *d__, dou
     doublereal p, z__, aa, bb, cc, dd, cs1, sn1, sab, sac, eps, tau, temp, scale, bcmax, bcmis,
         sigma;
     aocl_int64_t count, i__1;
-    doublereal safmn2;
+    doublereal safmn2, t1, t2;
     extern doublereal dlapy2_(doublereal *, doublereal *);
     doublereal safmx2;
     extern doublereal dlamch_(char *);
@@ -251,16 +256,36 @@ void dlanv2_(doublereal *a, doublereal *b, doublereal *c__, doublereal *d__, dou
             *sn = -(p / (tau * *cs)) * d_sign(&c_b6, &sigma);
             /* Compute [ AA BB ] = [ A B ] [ CS -SN ] */
             /* [ CC DD ] [ C D ] [ SN CS ] */
-            aa = *a * *cs + *b * *sn;
-            bb = -(*a) * *sn + *b * *cs;
-            cc = *c__ * *cs + *d__ * *sn;
-            dd = -(*c__) * *sn + *d__ * *cs;
+            /* Separate multiply operations, Each multiply result is rounded once
+              Addition happens only after the two rounded intermediates exist
+              This prevents the compiler from doing:
+              FMA contraction (fused multiply add) */
+            t1 = *a * *cs;
+            t2 = *b * *sn;
+            aa = t1 + t2;
+            t1 = *b * *cs;
+            t2 = *a * *sn;
+            bb = t1 - t2;
+            t1 = *c__ * *cs;
+            t2 = *d__ * *sn;
+            cc = t1 + t2;
+            t1 = *d__ * *cs;
+            t2 = *c__ * *sn;
+            dd = t1 - t2;
             /* Compute [ A B ] = [ CS SN ] [ AA BB ] */
             /* [ C D ] [-SN CS ] [ CC DD ] */
-            *a = aa * *cs + cc * *sn;
-            *b = bb * *cs + dd * *sn;
-            *c__ = -aa * *sn + cc * *cs;
-            *d__ = -bb * *sn + dd * *cs;
+            t1 = aa * *cs;
+            t2 = cc * *sn;
+            *a = t1 + t2;
+            t1 = bb * *cs;
+            t2 = dd * *sn;
+            *b = t1 + t2;
+            t1 = cc * *cs;
+            t2 = aa * *sn;
+            *c__ = t1 - t2;
+            t1 = dd * *cs;
+            t2 = bb * *sn;
+            *d__ = t1 - t2;
             temp = (*a + *d__) * .5;
             *a = temp;
             *d__ = temp;

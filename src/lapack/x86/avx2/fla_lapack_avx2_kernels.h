@@ -1,5 +1,5 @@
 /******************************************************************************
- * Copyright (C) 2023-2025, Advanced Micro Devices, Inc. All rights reserved.
+ * Copyright (C) 2023-2026, Advanced Micro Devices, Inc. All rights reserved.
  *******************************************************************************/
 #ifndef FLA_LAPACK_AVX2_KERNELS_DEFS_H
 #define FLA_LAPACK_AVX2_KERNELS_DEFS_H
@@ -32,9 +32,9 @@ aocl_int64_t fla_dgetrf_small_avx2(aocl_int64_t *m, aocl_int64_t *n, doublereal 
 aocl_int64_t fla_sgetrf_small_avx2(aocl_int64_t *m, aocl_int64_t *n, real *a, aocl_int64_t *lda, aocl_int_t *ipiv,
                               aocl_int64_t *info);
 void fla_lu_piv_small_d_update_tr_matrix_avx2(aocl_int64_t i_1, aocl_int64_t mi, aocl_int64_t ni, doublereal *acur,
-                                              aocl_int64_t lda_t);
+                                              aocl_int64_t lda_t, doublereal safemin);
 void fla_lu_piv_small_s_update_tr_matrix_avx2(aocl_int64_t i_1, aocl_int64_t mi, aocl_int64_t ni, real *acur,
-                                              aocl_int64_t lda_t);
+                                              aocl_int64_t lda_t, real safemin);
 int fla_dgetrs_small_trsm_ll_avx2(char *trans, aocl_int64_t *n, aocl_int64_t *nrhs, doublereal *a,
                                   aocl_int64_t *lda, aocl_int_t *ipiv, doublereal *b, aocl_int64_t *ldb,
                                   aocl_int64_t *info);

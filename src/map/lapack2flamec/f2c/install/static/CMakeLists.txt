@@ -1,4 +1,4 @@
-##Copyright (C) 2020, Advanced Micro Devices, Inc.## 
+##Copyright (C) 2020-2026, Advanced Micro Devices, Inc. All rights reserved.## 
 target_sources("${PROJECT_NAME}" 
      PRIVATE
 ${CMAKE_CURRENT_SOURCE_DIR}/dlamch.c
@@ -7,9 +7,7 @@ ${CMAKE_CURRENT_SOURCE_DIR}/dotu.c
 ${CMAKE_CURRENT_SOURCE_DIR}/dsecnd.c
 ${CMAKE_CURRENT_SOURCE_DIR}/ieeeck.c
 ${CMAKE_CURRENT_SOURCE_DIR}/ilaenv.c
-${CMAKE_CURRENT_SOURCE_DIR}/ilaenv_internal.c
 ${CMAKE_CURRENT_SOURCE_DIR}/iparmq.c
-${CMAKE_CURRENT_SOURCE_DIR}/iparmq_internal.c
 ${CMAKE_CURRENT_SOURCE_DIR}/lsamen.c
 ${CMAKE_CURRENT_SOURCE_DIR}/maxloc.c
 ${CMAKE_CURRENT_SOURCE_DIR}/second.c

@@ -1,3 +1,7 @@
+/**
+ * Modifications Copyright (C) 2026, Advanced Micro Devices, Inc. All rights reserved.
+ */
+
 /* ./cgeqp3rk.f -- translated by f2c (version 20190311). You must link the resulting object file
  with libf2c: on Microsoft Windows system, link with libf2c.lib;
  on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
@@ -606,8 +610,8 @@ P(K) is represented by JPIV, */
 /** Generated wrapper function */
 void cgeqp3rk_(aocl_int_t *m, aocl_int_t *n, aocl_int_t *nrhs, aocl_int_t *kmax, real *abstol,
                real *reltol, scomplex *a, aocl_int_t *lda, aocl_int_t *k, real *maxc2nrmk,
-               real *relmaxc2nrmk, aocl_int_t *jpiv, scomplex *tau, scomplex *work, aocl_int_t *lwork,
-               real *rwork, aocl_int_t *iwork, aocl_int_t *info)
+               real *relmaxc2nrmk, aocl_int_t *jpiv, scomplex *tau, scomplex *work,
+               aocl_int_t *lwork, real *rwork, aocl_int_t *iwork, aocl_int_t *info)
 {
 #if FLA_ENABLE_ILP64
     aocl_lapack_cgeqp3rk(m, n, nrhs, kmax, abstol, reltol, a, lda, k, maxc2nrmk, relmaxc2nrmk, jpiv,
@@ -827,6 +831,7 @@ void aocl_lapack_cgeqp3rk(aocl_int64_t *m, aocl_int64_t *n, aocl_int64_t *nrhs, 
     /* Compute the pivot column index and the maximum column 2-norm */
     /* for the whole original matrix stored in A(1:M,1:N). */
     kp1 = aocl_blas_isamax(n, &rwork[1], &c__1);
+    maxc2nrm = rwork[kp1];
     /* ==================================================================. */
     if(sisnan_(&maxc2nrm))
     {

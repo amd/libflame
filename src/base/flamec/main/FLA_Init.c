@@ -8,9 +8,9 @@
 
 */
 
-/*
-*     Modifications Copyright (C) 2026, Advanced Micro Devices, Inc. All rights reserved.
-*/
+/**
+ * Modifications Copyright (C) 2026, Advanced Micro Devices, Inc. All rights reserved.
+ */
 
 #include "FLAME.h"
 
@@ -252,8 +252,8 @@ char*     FLA_Get_AOCL_Version( void )
      {
 	     return lflibversion.version;
      }
-     aocl_int_t vers_major, vers_minor, vers_patch;
-     ilaver_(&vers_major, &vers_minor, &vers_patch);
+     aocl_int64_t vers_major, vers_minor, vers_patch;
+     aocl_lapack_ilaver(&vers_major, &vers_minor, &vers_patch);
 
      char lfmainversion[] = "AOCL-LAPACK ";
      char* lfversion = lflibversion.version;

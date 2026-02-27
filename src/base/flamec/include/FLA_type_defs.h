@@ -8,9 +8,9 @@
 
 */
 
-/*
-*     Modifications Copyright (c) 2024 Advanced Micro Devices, Inc.  All rights reserved.
-*/
+/**
+ * Modifications Copyright (C) 2024-2026, Advanced Micro Devices, Inc. All rights reserved.
+ */
 
 #ifndef FLA_TYPE_DEFS_H
 #define FLA_TYPE_DEFS_H

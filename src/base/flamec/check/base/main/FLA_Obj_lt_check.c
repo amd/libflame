@@ -8,9 +8,13 @@
 
 */
 
+/**
+ * Modifications Copyright (C) 2026, Advanced Micro Devices, Inc. All rights reserved.
+ */
+
 #include "FLAME.h"
 
-FLA_Error FLA_Obj_lt_check( FLA_Obj A, FLA_Obj B )
+FLA_Bool FLA_Obj_lt_check( FLA_Obj A, FLA_Obj B )
 {
   FLA_Error e_val;
 

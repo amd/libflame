@@ -8,9 +8,9 @@
 
 */
 
-/*
-*     Modifications Copyright (c) 2024 Advanced Micro Devices, Inc.  All rights reserved.
-*/
+/**
+ * Modifications Copyright (C) 2024-2026, Advanced Micro Devices, Inc. All rights reserved.
+ */
 
 #ifndef FLA_TYPE_DEFS_H
 #define FLA_TYPE_DEFS_H
@@ -155,7 +155,7 @@ typedef doublereal E_f;	/* real function with -R not specified */
 // --- Parameter and return type definitions ----------------------------------
 
 typedef int FLA_Bool;
-typedef int FLA_Error;
+typedef int64_t FLA_Error;
 typedef int FLA_Quadrant;
 typedef int FLA_Datatype;
 typedef int FLA_Elemtype;
@@ -164,7 +164,7 @@ typedef int FLA_Uplo;
 typedef int FLA_Trans;
 typedef int FLA_Conj;
 typedef int FLA_Diag;
-typedef int FLA_Dimension;
+typedef int64_t FLA_Dimension;
 typedef int FLA_Pivot_type;
 typedef int FLA_Direct;
 typedef int FLA_Store;

@@ -43,7 +43,7 @@ AEIGTST = \
    xerbla.o \
    xlaenv.o \
    chkxer.o \
-   aocl_lapack_ilaenv.o
+   aocl_lapack_ilaenv.o 
 
 SCIGTST = slafts.o slahd2.o slasum.o slatb9.o sstech.o sstect.o \
    ssvdch.o ssvdct.o ssxt1.o
@@ -63,7 +63,7 @@ SEIGTST = schkee.o \
    sget54.o sglmts.o sgqrts.o sgrqts.o sgsvts3.o \
    shst01.o slarfy.o slarhs.o slatm4.o slctes.o slctsx.o slsets.o sort01.o \
    sort03.o ssbt21.o ssgt01.o sslect.o sspt21.o sstt21.o \
-   sstt22.o ssyl01.o ssyt21.o ssyt22.o
+   sstt22.o ssyl01.o ssyt21.o ssyt22.o aocl_lapack_slarfy.o
 
 SDMDEIGTST = schkdmd.o
 
@@ -82,7 +82,7 @@ CEIGTST = cchkee.o \
    chbt21.o chet21.o chet22.o chpt21.o chst01.o \
    clarfy.o clarhs.o clatm4.o clctes.o clctsx.o clsets.o csbmv.o \
    csgt01.o cslect.o csyl01.o\
-   cstt21.o cstt22.o cunt01.o cunt03.o
+   cstt21.o cstt22.o cunt01.o cunt03.o aocl_lapack_clarfy.o
 
 CDMDEIGTST = cchkdmd.o
 
@@ -104,7 +104,7 @@ DEIGTST = dchkee.o \
    dget54.o dglmts.o dgqrts.o dgrqts.o dgsvts3.o \
    dhst01.o dlarfy.o dlarhs.o dlatm4.o dlctes.o dlctsx.o dlsets.o dort01.o \
    dort03.o dsbt21.o dsgt01.o dslect.o dspt21.o dstt21.o \
-   dstt22.o dsyl01.o dsyt21.o dsyt22.o
+   dstt22.o dsyl01.o dsyt21.o dsyt22.o aocl_lapack_dlarfy.o
 
 DDMDEIGTST = dchkdmd.o
 
@@ -123,7 +123,7 @@ ZEIGTST = zchkee.o \
    zhbt21.o zhet21.o zhet22.o zhpt21.o zhst01.o \
    zlarfy.o zlarhs.o zlatm4.o zlctes.o zlctsx.o zlsets.o zsbmv.o \
    zsgt01.o zslect.o zsyl01.o\
-   zstt21.o zstt22.o zunt01.o zunt03.o
+   zstt21.o zstt22.o zunt01.o zunt03.o aocl_lapack_zlarfy.o
 
 ZDMDEIGTST = zchkdmd.o
 

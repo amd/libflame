@@ -1,6 +1,6 @@
 /*
 
-   Copyright (C) 2021-2022, Advanced Micro Devices, Inc. All rights reserved.
+   Copyright (C) 2021-2026, Advanced Micro Devices, Inc. All rights reserved.
 
    Redistribution and use in source and binary forms, with or without
    modification, are permitted provided that the following conditions are
@@ -16737,14 +16737,29 @@ void SLARF(char* side, aocl_int_t* m, aocl_int_t* n, float* v, aocl_int_t* incv,
 	return slarf_( side, m, n, v, incv, tau, c, ldc, work);
 }
 
+void SLARF1F(char* side, aocl_int_t* m, aocl_int_t* n, float* v, aocl_int_t* incv, float* tau, float* c, aocl_int_t* ldc, float* work)
+{
+	return slarf1f_( side, m, n, v, incv, tau, c, ldc, work);
+}
+
 void slarf(char* side, aocl_int_t* m, aocl_int_t* n, float* v, aocl_int_t* incv, float* tau, float* c, aocl_int_t* ldc, float* work)
 {
 	return slarf_( side, m, n, v, incv, tau, c, ldc, work);
 }
 
+void slarf1f(char* side, aocl_int_t* m, aocl_int_t* n, float* v, aocl_int_t* incv, float* tau, float* c, aocl_int_t* ldc, float* work)
+{
+	return slarf1f_( side, m, n, v, incv, tau, c, ldc, work);
+}
+
 void SLARF_(char* side, aocl_int_t* m, aocl_int_t* n, float* v, aocl_int_t* incv, float* tau, float* c, aocl_int_t* ldc, float* work)
 {
 	return slarf_( side, m, n, v, incv, tau, c, ldc, work);
+}
+
+void SLARF1F_(char* side, aocl_int_t* m, aocl_int_t* n, float* v, aocl_int_t* incv, float* tau, float* c, aocl_int_t* ldc, float* work)
+{
+	return slarf1f_( side, m, n, v, incv, tau, c, ldc, work);
 }
 
 void SLARFG(aocl_int_t* n, float* alpha, float* x, aocl_int_t* incx, float* tau)

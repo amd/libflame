@@ -1,5 +1,8 @@
 /* ../netlib/sgebd2.f -- translated by f2c (version 20000121). You must link the resulting object
  * file with the libraries: -lf2c -lm (in that order) */
+/**
+ * Modifications Copyright (C) 2026, Advanced Micro Devices, Inc. All rights reserved.
+ */
 #include "FLA_f2c.h" /* Table of constant values */
 static aocl_int64_t c__1 = 1;
 /* > \brief \b SGEBD2 reduces a general matrix to bidiagonal form using an unblocked algorithm. */
@@ -266,7 +269,7 @@ int lapack_sgebd2(aocl_int64_t *m, aocl_int64_t *n, real *a, aocl_int64_t *lda, 
             {
                 i__2 = *m - i__ + 1;
                 i__3 = *n - i__;
-                aocl_lapack_slarf("Left", &i__2, &i__3, &a[i__ + i__ * a_dim1], &c__1, &tauq[i__],
+                aocl_lapack_slarf1f("Left", &i__2, &i__3, &a[i__ + i__ * a_dim1], &c__1, &tauq[i__],
                                   &a[i__ + (i__ + 1) * a_dim1], lda, &work[1]);
             }
             a[i__ + i__ * a_dim1] = d__[i__];
@@ -284,7 +287,7 @@ int lapack_sgebd2(aocl_int64_t *m, aocl_int64_t *n, real *a, aocl_int64_t *lda, 
                 /* Apply G(i) to A(i+1:m,i+1:n) from the right */
                 i__2 = *m - i__;
                 i__3 = *n - i__;
-                aocl_lapack_slarf("Right", &i__2, &i__3, &a[i__ + (i__ + 1) * a_dim1], lda,
+                aocl_lapack_slarf1f("Right", &i__2, &i__3, &a[i__ + (i__ + 1) * a_dim1], lda,
                                   &taup[i__], &a[i__ + 1 + (i__ + 1) * a_dim1], lda, &work[1]);
                 a[i__ + (i__ + 1) * a_dim1] = e[i__];
             }
@@ -314,7 +317,7 @@ int lapack_sgebd2(aocl_int64_t *m, aocl_int64_t *n, real *a, aocl_int64_t *lda, 
             {
                 i__2 = *m - i__;
                 i__3 = *n - i__ + 1;
-                aocl_lapack_slarf("Right", &i__2, &i__3, &a[i__ + i__ * a_dim1], lda, &taup[i__],
+                aocl_lapack_slarf1f("Right", &i__2, &i__3, &a[i__ + i__ * a_dim1], lda, &taup[i__],
                                   &a[i__ + 1 + i__ * a_dim1], lda, &work[1]);
             }
             a[i__ + i__ * a_dim1] = d__[i__];
@@ -332,7 +335,7 @@ int lapack_sgebd2(aocl_int64_t *m, aocl_int64_t *n, real *a, aocl_int64_t *lda, 
                 /* Apply H(i) to A(i+1:m,i+1:n) from the left */
                 i__2 = *m - i__;
                 i__3 = *n - i__;
-                aocl_lapack_slarf("Left", &i__2, &i__3, &a[i__ + 1 + i__ * a_dim1], &c__1,
+                aocl_lapack_slarf1f("Left", &i__2, &i__3, &a[i__ + 1 + i__ * a_dim1], &c__1,
                                   &tauq[i__], &a[i__ + 1 + (i__ + 1) * a_dim1], lda, &work[1]);
                 a[i__ + 1 + i__ * a_dim1] = e[i__];
             }

@@ -998,6 +998,7 @@ void slaqtr_(logical *ltran, logical *lreal, integer *n, real *t, integer *ldt, 
 void slar1v_(integer *n, integer *b1, integer *bn, real * lambda, real *d__, real *l, real *ld, real *lld, real *pivmin, real * gaptol, real *z__, logical *wantnc, integer *negcnt, real *ztz, real * mingma, integer *r__, integer *isuppz, real *nrminv, real *resid, real *rqcorr, real *work);
 void slar2v_(integer *n, real *x, real *y, real *z__, integer *incx, real *c__, real *s, integer *incc);
 void slarf_(char *side, integer *m, integer *n, real *v, integer *incv, real *tau, real *c__, integer *ldc, real *work);
+void slarf1f_(char *side, integer *m, integer *n, real *v, integer *incv, real *tau, real *c__, integer *ldc, real *work);
 void slarfb_(char *side, char *trans, char *direct, char * storev, integer *m, integer *n, integer *k, real *v, integer *ldv, real *t, integer *ldt, real *c__, integer *ldc, real *work, integer * ldwork);
 void slarfg_(integer *n, real *alpha, real *x, integer *incx, real *tau);
 void slarfgp_(integer *n, real *alpha, real *x, integer *incx, real *tau);

@@ -1,5 +1,8 @@
 /* ../netlib/sgebrd.f -- translated by f2c (version 20000121). You must link the resulting object
  * file with the libraries: -lf2c -lm (in that order) */
+/**
+ * Modifications Copyright (C) 2026, Advanced Micro Devices, Inc. All rights reserved.
+ */
 #include "FLA_f2c.h" /* Table of constant values */
 static aocl_int64_t c__1 = 1;
 static aocl_int64_t c_n1 = -1;
@@ -228,6 +231,11 @@ int lapack_sgebrd(aocl_int64_t *m, aocl_int64_t *n, real *a, aocl_int64_t *lda, 
     aocl_int64_t ws;
     aocl_int64_t lwkopt;
     logical lquery;
+    aocl_int64_t ldwrkx, ldwrky, j, i__4, i__3;
+    static real c_b22 = 1.f;
+    static real c_b21 = -1.f;
+    ldwrkx = *m;
+    ldwrky = *n;
     /* -- LAPACK computational routine -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -315,7 +323,7 @@ int lapack_sgebrd(aocl_int64_t *m, aocl_int64_t *n, real *a, aocl_int64_t *lda, 
         /* Determine when to switch from blocked to unblocked code. */
         if(nx < minmn)
         {
-            ws = (*m + *n) * nb;
+            ws = lwkopt;
             if(*lwork < ws)
             {
                 /* Not enough work space for the optimal NB, consider using */
@@ -340,16 +348,6 @@ int lapack_sgebrd(aocl_int64_t *m, aocl_int64_t *n, real *a, aocl_int64_t *lda, 
     i__1 = minmn - nx;
     i__2 = nb;
     i__ = 1;
-
-/* Current blocked algorithm has accuracy issue, so unblocked algorithm is enabled by default
-Todo: This is a temporary workaround until the issue in the blocked algorithm is fixed.
-*/
-#if !FLA_ENABLE_AMD_OPT
-    aocl_int64_t ldwrkx, ldwrky, j, i__4, i__3;
-    static real c_b22 = 1.f;
-    static real c_b21 = -1.f;
-    ldwrkx = *m;
-    ldwrky = *n;
 
     for(i__ = 1; i__2 < 0 ? i__ >= i__1 : i__ <= i__1; i__ += i__2)
     {
@@ -396,13 +394,13 @@ Todo: This is a temporary workaround until the issue in the blocked algorithm is
         }
         /* L30: */
     }
-#else
+
     /* Use unblocked code to reduce the remainder of the matrix */
     i__2 = *m - i__ + 1;
     i__1 = *n - i__ + 1;
     lapack_sgebd2(&i__2, &i__1, &a[i__ + i__ * a_dim1], lda, &d__[i__], &e[i__], &tauq[i__],
                   &taup[i__], &work[1], info);
-#endif
+
     work[1] = aocl_lapack_sroundup_lwork(&ws);
     return 0;
     /* End of SGEBRD */

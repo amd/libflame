@@ -7,7 +7,9 @@
     directory, or at http://opensource.org/licenses/BSD-3-Clause
 
 */
-
+/**
+ * Modifications Copyright (C) 2026, Advanced Micro Devices, Inc. All rights reserved.
+ */
 // --- Name-mangling macro definitions -----------------------------------------
 
 // --- Define Fortran name-mangling macro --------------------------
@@ -1288,6 +1290,7 @@
 #define F77_slar2v AOCL_LAPACK_FUNC( slar2v , SLAR2V )
 #define F77_slarfb AOCL_LAPACK_FUNC( slarfb , SLARFB )
 #define F77_slarf AOCL_LAPACK_FUNC( slarf , SLARF )
+#define F77_slarf1f AOCL_LAPACK_FUNC( slarf1f , SLARF1F )
 #define F77_slarfg AOCL_LAPACK_FUNC( slarfg , SLARFG )
 #define F77_slarfgp AOCL_LAPACK_FUNC( slarfgp , SLARFGP )
 #define F77_slarft AOCL_LAPACK_FUNC( slarft , SLARFT )
@@ -3396,6 +3399,7 @@
 #define LAPACK_EXPORT_slar2v F77_FUNC( slar2v , SLAR2V )
 #define LAPACK_EXPORT_slarfb F77_FUNC( slarfb , SLARFB )
 #define LAPACK_EXPORT_slarf F77_FUNC( slarf , SLARF )
+#define LAPACK_EXPORT_slarf1f F77_FUNC( slarf1f , SLARF1F )
 #define LAPACK_EXPORT_slarfg F77_FUNC( slarfg , SLARFG )
 #define LAPACK_EXPORT_slarfgp F77_FUNC( slarfgp , SLARFGP )
 #define LAPACK_EXPORT_slarft F77_FUNC( slarft , SLARFT )
@@ -5532,6 +5536,7 @@ void LAPACK_EXPORT_slar1v(aocl_int_t* n, aocl_int_t* b1, aocl_int_t* bn, float* 
 void LAPACK_EXPORT_slar2v(aocl_int_t* n, float* x, float* y, float* z, aocl_int_t* incx, float* c, float* s, aocl_int_t* incc);
 void LAPACK_EXPORT_slarfb(char* side, char* trans, char* direct, char* storev, aocl_int_t* m, aocl_int_t* n, aocl_int_t* k, float* v, aocl_int_t* ldv, float* t, aocl_int_t* ldt, float* c, aocl_int_t* ldc, float* work, aocl_int_t* ldwork);
 void LAPACK_EXPORT_slarf(char* side, aocl_int_t* m, aocl_int_t* n, float* v, aocl_int_t* incv, float* tau, float* c, aocl_int_t* ldc, float* work);
+void LAPACK_EXPORT_slarf1f(char* side, aocl_int_t* m, aocl_int_t* n, float* v, aocl_int_t* incv, float* tau, float* c, aocl_int_t* ldc, float* work);
 void LAPACK_EXPORT_slarfg(aocl_int_t* n, float* alpha, float* x, aocl_int_t* incx, float* tau);
 void LAPACK_EXPORT_slarfgp(aocl_int_t* n, float* alpha, float* x, aocl_int_t* incx, float* tau);
 void LAPACK_EXPORT_slarft(char* direct, char* storev, aocl_int_t* n, aocl_int_t* k, float* v, aocl_int_t* ldv, float* tau, float* t, aocl_int_t* ldt);

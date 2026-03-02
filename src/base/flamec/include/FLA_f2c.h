@@ -7,6 +7,9 @@
     directory, or at http://opensource.org/licenses/BSD-3-Clause
 
 */
+/**
+ * Modifications Copyright (C) 2026, Advanced Micro Devices, Inc. All rights reserved.
+ */
 // f2c.h  --  Standard Fortran to C header file
 //  barf  [ba:rf]  2.  "He suggested using FORTRAN, and everybody barfed."
 //  - From The Shogakukan DICTIONARY OF NEW ENGLISH (Second edition)
@@ -1743,6 +1746,7 @@ typedef struct Namelist Namelist;
 #define slar1v_                  SLAR1V 
 #define slar2v_                  SLAR2V 
 #define slarf_                   SLARF 
+#define slarf1f_                 SLARF1F
 #define slarfb_                  SLARFB 
 #define slarfg_                  SLARFG 
 #define slarfgp_                 SLARFGP 
@@ -3932,6 +3936,7 @@ typedef struct Namelist Namelist;
 #define slar1v_                  slar1v 
 #define slar2v_                  slar2v 
 #define slarf_                   slarf 
+#define slarf1f_                 slarf1f
 #define slarfb_                  slarfb 
 #define slarfg_                  slarfg 
 #define slarfgp_                 slarfgp 

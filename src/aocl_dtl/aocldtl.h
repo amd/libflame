@@ -5,9 +5,16 @@
  *               It provides defination for all macros to be
  *               used by user to add debug/trace information.
  *
- * Copyright (C) 2020, Advanced Micro Devices, Inc
+ * Copyright (C) 2020-2026, Advanced Micro Devices, Inc. All rights reserved.
  *
  *==================================================================*/
+
+// Allow C++ users to include this header file in their source code. However,
+// we make the extern "C" conditional on whether we're using a C++ compiler,
+// since regular C compilers don't understand the extern "C" construct.
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 #ifndef _AOCLDTL_H_
 #define _AOCLDTL_H_
@@ -116,3 +123,8 @@ void DTL_DumpData(uint8 ui8LogLevel, void *pvBuffer, uint32 ui32BufferSize, uint
 #endif /* _AOCLDTL_H_ */
 
 /* --------------- End of aocldtl.h ----------------- */
+
+// End extern "C" construct block.
+#ifdef __cplusplus
+}
+#endif

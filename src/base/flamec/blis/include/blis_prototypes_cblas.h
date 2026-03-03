@@ -8,7 +8,18 @@
 
 */
 
+/**
+ * Modifications Copyright (C) 2026, Advanced Micro Devices, Inc. All rights reserved.
+ */
+
 #include <stddef.h>
+
+// Allow C++ users to include this header file in their source code. However,
+// we make the extern "C" conditional on whether we're using a C++ compiler,
+// since regular C compilers don't understand the extern "C" construct.
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 /*
  * Enumerated and derived types
@@ -569,3 +580,8 @@ void cblas_zher2k(const enum CBLAS_ORDER Order, const enum CBLAS_UPLO Uplo,
                   const void *alpha, const void *A, const aocl_int_t lda,
                   const void *B, const aocl_int_t ldb, const double beta,
                   void *C, const aocl_int_t ldc);
+
+// End extern "C" construct block.
+#ifdef __cplusplus
+}
+#endif

@@ -8,15 +8,13 @@
 
 */
 
+/**
+ * Modifications Copyright (C) 2026, Advanced Micro Devices, Inc. All rights reserved.
+ */
+
 #ifndef BLIS1_H
 #define BLIS1_H
 
-// Allow C++ users to include this header file in their source code. However,
-// we make the extern "C" conditional on whether we're using a C++ compiler,
-// since regular C compilers don't understand the extern "C" construct.
-#ifdef __cplusplus
-extern "C" {
-#endif
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -72,9 +70,5 @@ extern "C" {
   #include "aocl_blas.h"
 #endif
 
-// End extern "C" construct block.
-#ifdef __cplusplus
-}
-#endif
 
 #endif

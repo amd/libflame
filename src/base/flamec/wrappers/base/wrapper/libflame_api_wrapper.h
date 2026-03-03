@@ -1,6 +1,6 @@
 /*
 
-   Copyright (C) 2021-2022, Advanced Micro Devices, Inc. All rights reserved.
+   Copyright (C) 2021-2026, Advanced Micro Devices, Inc. All rights reserved.
 
    Redistribution and use in source and binary forms, with or without
    modification, are permitted provided that the following conditions are
@@ -28,6 +28,12 @@
 
 */
 
+// Allow C++ users to include this header file in their source code. However,
+// we make the extern "C" conditional on whether we're using a C++ compiler,
+// since regular C compilers don't understand the extern "C" construct.
+#ifdef __cplusplus
+extern "C" {
+#endif 
 
 extern double DLAMCH( char   *cmach);
 extern double dlamch( char   *cmach);
@@ -8187,3 +8193,9 @@ extern void DLADIV1_(doublereal *a, doublereal *b, doublereal *c__, doublereal *
 extern doublereal DLADIV2(doublereal *a, doublereal *b, doublereal *c__, doublereal *d__, doublereal *r__, doublereal *t);
 extern doublereal dladiv2(doublereal *a, doublereal *b, doublereal *c__, doublereal *d__, doublereal *r__, doublereal *t);
 extern doublereal DLADIV2_(doublereal *a, doublereal *b, doublereal *c__, doublereal *d__, doublereal *r__, doublereal *t);
+
+
+// End extern "C" construct block.
+#ifdef __cplusplus
+}
+#endif 

@@ -8,6 +8,17 @@
 
 */
 
+/**
+ * Modifications Copyright (C) 2026, Advanced Micro Devices, Inc. All rights reserved.
+ */
+
+// Allow C++ users to include this header file in their source code. However,
+// we make the extern "C" conditional on whether we're using a C++ compiler,
+// since regular C compilers don't understand the extern "C" construct.
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #ifndef FLA_EXTERN_DEFS_H
 #define FLA_EXTERN_DEFS_H
 
@@ -31,10 +42,14 @@ extern LIBFLAME_IMPORT TLS_CLASS_SPEC FLA_Obj FLA_OVERFLOW_THRES;
 extern LIBFLAME_IMPORT TLS_CLASS_SPEC FLA_Obj FLA_UNDERFLOW_SQUARE_THRES;
 extern LIBFLAME_IMPORT TLS_CLASS_SPEC FLA_Obj FLA_OVERFLOW_SQUARE_THRES;
 
-extern LIBFLAME_IMPORT TLS_CLASS_SPEC const float    fzero;
-extern LIBFLAME_IMPORT TLS_CLASS_SPEC const double   dzero;
+extern LIBFLAME_IMPORT TLS_CLASS_SPEC const float fzero;
+extern LIBFLAME_IMPORT TLS_CLASS_SPEC const double dzero;
 extern LIBFLAME_IMPORT TLS_CLASS_SPEC const scomplex czero;
 extern LIBFLAME_IMPORT TLS_CLASS_SPEC const dcomplex zzero;
 
 #endif
 
+// End extern "C" construct block.
+#ifdef __cplusplus
+}
+#endif

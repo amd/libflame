@@ -8,9 +8,20 @@
 
 */
 
+/**
+ * Modifications Copyright (C) 2026, Advanced Micro Devices, Inc. All rights reserved.
+ */
+
 // --- Name-mangling macro definitions -----------------------------------------
 
 // --- Name-mangle level-1 BLAS routines ---------------------------
+
+// Allow C++ users to include this header file in their source code. However,
+// we make the extern "C" conditional on whether we're using a C++ compiler,
+// since regular C compilers don't understand the extern "C" construct.
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 // #define F77_isamax F77_FUNC( isamax , ISAMAX )
 #define F77_isamax aocl_blas_isamax
@@ -358,3 +369,9 @@ void     BL1_EXPORT_ctrsm  ( char* side, char* uplo, char* transa, char* diag, a
 void     BL1_EXPORT_ztrsm  ( char* side, char* uplo, char* transa, char* diag, aocl_int_t* m, aocl_int_t* n, dcomplex* alpha, dcomplex* a, aocl_int_t* lda, dcomplex* b, aocl_int_t* ldb );
 
 #endif
+
+// End extern "C" construct block.
+#ifdef __cplusplus
+}
+#endif
+

@@ -5,8 +5,7 @@
  the command line, as in cc *.o -lf2c -lm Source for libf2c is in
  /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 /*
- * Modifications Copyright (c) 2021-2025 Advanced Micro Devices, Inc.  All
- * rights reserved.
+ * Copyright (C) 2021-2026, Advanced Micro Devices, Inc. All rights reserved.
  */
 #include "FLAME.h"
 #if FLA_ENABLE_AOCL_BLAS
@@ -385,6 +384,10 @@ int lapack_dgesvd(char *jobu, char *jobvt, aocl_int64_t *m, aocl_int64_t *n, dou
     /* NB refers to the optimal block size for the immediately */
     /* following subroutine, as returned by ILAENV.) */
 #if FLA_ENABLE_AMD_OPT
+
+    /* Initialize global context data */
+    aocl_fla_init();
+    
     if(*info == 0)
     {
         minwrk = 1;

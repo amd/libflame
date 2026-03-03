@@ -3,6 +3,9 @@
  .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
  /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/**
+ * Modifications Copyright (C) 2014-2026, Advanced Micro Devices, Inc. All rights reserved.
+ */
 #include "FLA_f2c.h" /* Table of constant values */
 /* > \brief \b DLARTG generates a plane rotation with real cosine and real sine. */
 /*  =========== DOCUMENTATION =========== */
@@ -108,7 +111,7 @@ void dlartg_(doublereal *f, doublereal *g, doublereal *c__, doublereal *s, doubl
     double sqrt(doublereal), d_sign(doublereal *, doublereal *);
     /* Local variables */
     doublereal d__, u, f1, g1, fs, gs, rtmin, rtmax, safmin, safmax;
-    doublereal d__1, d__2, d__3, g__t;
+    doublereal d__1, d__2, d__3, f__t, g__t;
     /* ...Translated by Pacific-Sierra Research vf90 Personal 3.4N3 05:19:29 1/25/23 */
     /*  -- LAPACK auxiliary routine -- */
     /*  -- LAPACK is a software package provided by Univ. of Tennessee,    -- */
@@ -122,26 +125,27 @@ void dlartg_(doublereal *f, doublereal *g, doublereal *c__, doublereal *s, doubl
     rtmax = sqrt(safmax / 2);
     /* .. */
     /* .. Executable Statements .. */
-    f1 = f2c_dabs(*f);
-    g1 = f2c_dabs(*g);
+    f__t = *f;
     g__t = *g;
-    if(*g == 0.)
+    f1 = f2c_dabs(f__t);
+    g1 = f2c_dabs(g__t);
+    if(g__t == 0.)
     {
         *c__ = 1.;
         *s = 0.;
-        *r__ = *f;
+        *r__ = f__t;
     }
-    else if(*f == 0.)
+    else if(f__t == 0.)
     {
         *c__ = 0.;
-        *s = d_sign(&c_b2, g);
+        *s = d_sign(&c_b2, &g__t);
         *r__ = g1;
     }
     else if(f1 > rtmin && f1 < rtmax && g1 > rtmin && g1 < rtmax)
     {
-        d__ = sqrt(*f * *f + *g * *g);
+        d__ = sqrt(f__t * f__t + g__t * g__t);
         *c__ = f1 / d__;
-        *r__ = d_sign(&d__, f);
+        *r__ = d_sign(&d__, &f__t);
         *s = g__t / *r__;
     }
     else
@@ -152,11 +156,11 @@ void dlartg_(doublereal *f, doublereal *g, doublereal *c__, doublereal *s, doubl
         d__1 = safmax;
         d__2 = fla_max(d__3, g1); // , expr subst
         u = fla_min(d__1, d__2);
-        fs = *f / u;
-        gs = *g / u;
+        fs = f__t / u;
+        gs = g__t / u;
         d__ = sqrt(fs * fs + gs * gs);
         *c__ = f2c_dabs(fs) / d__;
-        *r__ = d_sign(&d__, f);
+        *r__ = d_sign(&d__, &f__t);
         *s = gs / *r__;
         *r__ *= u;
     }

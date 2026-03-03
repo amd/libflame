@@ -3,6 +3,9 @@
  .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
  /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/**
+ * Modifications Copyright (C) 2014-2026, Advanced Micro Devices, Inc. All rights reserved.
+ */
 #include "FLA_f2c.h" /* Table of constant values */
 /* > \brief \b SLARTG generates a plane rotation with real cosine and real sine. */
 /*  =========== DOCUMENTATION =========== */
@@ -103,12 +106,13 @@ static real c_b2 = 1.f;
 void slartg_(real *f, real *g, real *c__, real *s, real *r__)
 {
     AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("slartg inputs : f %f, g %f", *f, *g);
     /* Builtin functions */
     double sqrt(doublereal), r_sign(real *, real *);
     /* System generated locals */
     real r__1, r__2, r__3;
     /* Local variables */
-    real d__, u, f1, g1, fs, gs, rtmin, rtmax, safmin, safmax;
+    real d__, u, f1, g1, fs, gs, rtmin, rtmax, safmin, safmax, f__t, g__t;
     /* ...Translated by Pacific-Sierra Research vf90 Personal 3.4N3 05:33:20 1/24/23 */
     /*  -- LAPACK auxiliary routine -- */
     /*  -- LAPACK is a software package provided by Univ. of Tennessee,    -- */
@@ -121,26 +125,28 @@ void slartg_(real *f, real *g, real *c__, real *s, real *r__)
     rtmax = sqrt(safmax / 2);
     /* .. */
     /* .. Executable Statements .. */
-    f1 = f2c_abs(*f);
-    g1 = f2c_abs(*g);
-    if(*g == 0.f)
+    f__t = *f;
+    g__t = *g;
+    f1 = f2c_abs(f__t);
+    g1 = f2c_abs(g__t);
+    if(g__t == 0.f)
     {
         *c__ = 1.f;
         *s = 0.f;
-        *r__ = *f;
+        *r__ = f__t;
     }
-    else if(*f == 0.f)
+    else if(f__t == 0.f)
     {
         *c__ = 0.f;
-        *s = r_sign(&c_b2, g);
+        *s = r_sign(&c_b2, &g__t);
         *r__ = g1;
     }
     else if(f1 > rtmin && f1 < rtmax && g1 > rtmin && g1 < rtmax)
     {
-        d__ = sqrt(*f * *f + *g * *g);
+        d__ = sqrt(f__t * f__t + g__t * g__t);
         *c__ = f1 / d__;
-        *r__ = r_sign(&d__, f);
-        *s = *g / *r__;
+        *r__ = r_sign(&d__, &f__t);
+        *s = g__t / *r__;
     }
     else
     {
@@ -150,11 +156,11 @@ void slartg_(real *f, real *g, real *c__, real *s, real *r__)
         r__1 = safmax;
         r__2 = fla_max(r__3, g1); // , expr subst
         u = fla_min(r__1, r__2);
-        fs = *f / u;
-        gs = *g / u;
+        fs = f__t / u;
+        gs = g__t / u;
         d__ = sqrt(fs * fs + gs * gs);
         *c__ = f2c_abs(fs) / d__;
-        *r__ = r_sign(&d__, f);
+        *r__ = r_sign(&d__, &f__t);
         *s = gs / *r__;
         *r__ *= u;
     }

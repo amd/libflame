@@ -3,6 +3,9 @@
  .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
  /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+/**
+ * Modifications Copyright (C) 2014-2026, Advanced Micro Devices, Inc. All rights reserved.
+ */
 #include "FLA_f2c.h" /* > \brief \b CLARTG generates a plane rotation with real cosine and scomplex sine. */
 /* =========== DOCUMENTATION =========== */
 /* Online html documentation available at */
@@ -109,6 +112,7 @@ x / |x|, x != 0 */
 void clartg_(scomplex *f, scomplex *g, real *c__, scomplex *s, scomplex *r__)
 {
     AOCL_DTL_TRACE_LOG_INIT
+    AOCL_DTL_SNPRINTF("clartg inputs : f (%f,%f), g (%f,%f)", f->real, f->imag, g->real, g->imag);
     /* System generated locals */
     real r__1, r__2, r__3, r__4;
     scomplex q__1, q__2, q__3;
@@ -117,7 +121,7 @@ void clartg_(scomplex *f, scomplex *g, real *c__, scomplex *s, scomplex *r__)
     void r_cnjg(scomplex *, scomplex *), c_div(scomplex *, scomplex *, scomplex *);
     /* Local variables */
     real d__, u, v, w, f1, f2, g1, g2, h2;
-    scomplex fs, gs;
+    scomplex fs, gs, f__t, g__t;
     real rtmin, rtmax, safmin, safmax;
     /* ...Translated by Pacific-Sierra Research vf90 Personal 3.4N3 00:33:35 2/21/25 */
     /* ...Switches: */
@@ -136,36 +140,38 @@ void clartg_(scomplex *f, scomplex *g, real *c__, scomplex *s, scomplex *r__)
     rtmin = sqrt(safmin);
     /* .. */
     /* .. Executable Statements .. */
-    if(g->real == 0.f && g->imag == 0.f)
+    f__t = *f;
+    g__t = *g;
+    if(g__t.real == 0.f && g__t.imag == 0.f)
     {
         *c__ = 1.f;
         s->real = 0.f, s->imag = 0.f;
-        r__->real = f->real, r__->imag = f->imag;
+        r__->real = f__t.real, r__->imag = f__t.imag;
     }
-    else if(f->real == 0.f && f->imag == 0.f)
+    else if(f__t.real == 0.f && f__t.imag == 0.f)
     {
         *c__ = 0.f;
-        if(g->real == 0.f)
+        if(g__t.real == 0.f)
         {
-            r__2 = (r__1 = r_imag(g), f2c_abs(r__1));
+            r__2 = (r__1 = r_imag(&g__t), f2c_abs(r__1));
             r__->real = r__2, r__->imag = 0.f;
-            r_cnjg(&q__2, g);
+            r_cnjg(&q__2, &g__t);
             c_div(&q__1, &q__2, r__);
             s->real = q__1.real, s->imag = q__1.imag;
         }
-        else if(r_imag(g) == 0.f)
+        else if(r_imag(&g__t) == 0.f)
         {
-            r__2 = (r__1 = g->real, f2c_abs(r__1));
+            r__2 = (r__1 = g__t.real, f2c_abs(r__1));
             r__->real = r__2, r__->imag = 0.f;
-            r_cnjg(&q__2, g);
+            r_cnjg(&q__2, &g__t);
             c_div(&q__1, &q__2, r__);
             s->real = q__1.real, s->imag = q__1.imag;
         }
         else
         {
             /* Computing MAX */
-            r__3 = (r__1 = g->real, f2c_abs(r__1));
-            r__4 = (r__2 = r_imag(g), f2c_abs(r__2)); // , expr subst
+            r__3 = (r__1 = g__t.real, f2c_abs(r__1));
+            r__4 = (r__2 = r_imag(&g__t), f2c_abs(r__2)); // , expr subst
             g1 = fla_max(r__3, r__4);
             rtmax = sqrt(safmax / 2);
             if(g1 > rtmin && g1 < rtmax)
@@ -174,12 +180,12 @@ void clartg_(scomplex *f, scomplex *g, real *c__, scomplex *s, scomplex *r__)
                 /* The following two lines can be replaced by `d = f2c_abs( g )`. */
                 /* This algorithm do not use the intrinsic scomplex abs. */
                 /* Computing 2nd power */
-                r__1 = g->real;
+                r__1 = g__t.real;
                 /* Computing 2nd power */
-                r__2 = r_imag(g);
+                r__2 = r_imag(&g__t);
                 g2 = r__1 * r__1 + r__2 * r__2;
                 d__ = sqrt(g2);
-                r_cnjg(&q__2, g);
+                r_cnjg(&q__2, &g__t);
                 q__1.real = q__2.real / d__;
                 q__1.imag = q__2.imag / d__; // , expr subst
                 s->real = q__1.real, s->imag = q__1.imag;
@@ -192,8 +198,8 @@ void clartg_(scomplex *f, scomplex *g, real *c__, scomplex *s, scomplex *r__)
                 r__1 = safmax;
                 r__2 = fla_max(safmin, g1); // , expr subst
                 u = fla_min(r__1, r__2);
-                q__1.real = g->real / u;
-                q__1.imag = g->imag / u; // , expr subst
+                q__1.real = g__t.real / u;
+                q__1.imag = g__t.imag / u; // , expr subst
                 gs.real = q__1.real;
                 gs.imag = q__1.imag; // , expr subst
                 /* The following two lines can be replaced by `d = f2c_abs( gs )`. */
@@ -216,26 +222,26 @@ void clartg_(scomplex *f, scomplex *g, real *c__, scomplex *s, scomplex *r__)
     else
     {
         /* Computing MAX */
-        r__3 = (r__1 = f->real, f2c_abs(r__1));
-        r__4 = (r__2 = r_imag(f), f2c_abs(r__2)); // , expr subst
+        r__3 = (r__1 = f__t.real, f2c_abs(r__1));
+        r__4 = (r__2 = r_imag(&f__t), f2c_abs(r__2)); // , expr subst
         f1 = fla_max(r__3, r__4);
         /* Computing MAX */
-        r__3 = (r__1 = g->real, f2c_abs(r__1));
-        r__4 = (r__2 = r_imag(g), f2c_abs(r__2)); // , expr subst
+        r__3 = (r__1 = g__t.real, f2c_abs(r__1));
+        r__4 = (r__2 = r_imag(&g__t), f2c_abs(r__2)); // , expr subst
         g1 = fla_max(r__3, r__4);
         rtmax = sqrt(safmax / 4);
         if(f1 > rtmin && f1 < rtmax && g1 > rtmin && g1 < rtmax)
         {
             /* Use unscaled algorithm */
             /* Computing 2nd power */
-            r__1 = f->real;
+            r__1 = f__t.real;
             /* Computing 2nd power */
-            r__2 = r_imag(f);
+            r__2 = r_imag(&f__t);
             f2 = r__1 * r__1 + r__2 * r__2;
             /* Computing 2nd power */
-            r__1 = g->real;
+            r__1 = g__t.real;
             /* Computing 2nd power */
-            r__2 = r_imag(g);
+            r__2 = r_imag(&g__t);
             g2 = r__1 * r__1 + r__2 * r__2;
             h2 = f2 + g2;
             /* safmin <= f2 <= h2 <= safmax */
@@ -243,24 +249,24 @@ void clartg_(scomplex *f, scomplex *g, real *c__, scomplex *s, scomplex *r__)
             {
                 /* safmin <= f2/h2 <= 1, and h2/f2 is finite */
                 *c__ = sqrt(f2 / h2);
-                q__1.real = f->real / *c__;
-                q__1.imag = f->imag / *c__; // , expr subst
+                q__1.real = f__t.real / *c__;
+                q__1.imag = f__t.imag / *c__; // , expr subst
                 r__->real = q__1.real, r__->imag = q__1.imag;
                 rtmax *= 2;
                 if(f2 > rtmin && h2 < rtmax)
                 {
                     /* safmin <= sqrt( f2*h2 ) <= safmax */
-                    r_cnjg(&q__2, g);
+                    r_cnjg(&q__2, &g__t);
                     r__1 = sqrt(f2 * h2);
-                    q__3.real = f->real / r__1;
-                    q__3.imag = f->imag / r__1; // , expr subst
+                    q__3.real = f__t.real / r__1;
+                    q__3.imag = f__t.imag / r__1; // , expr subst
                     q__1.real = q__2.real * q__3.real - q__2.imag * q__3.imag;
                     q__1.imag = q__2.real * q__3.imag + q__2.imag * q__3.real; // , expr subst
                     s->real = q__1.real, s->imag = q__1.imag;
                 }
                 else
                 {
-                    r_cnjg(&q__2, g);
+                    r_cnjg(&q__2, &g__t);
                     q__3.real = r__->real / h2;
                     q__3.imag = r__->imag / h2; // , expr subst
                     q__1.real = q__2.real * q__3.real - q__2.imag * q__3.imag;
@@ -280,8 +286,8 @@ void clartg_(scomplex *f, scomplex *g, real *c__, scomplex *s, scomplex *r__)
                 *c__ = f2 / d__;
                 if(*c__ >= safmin)
                 {
-                    q__1.real = f->real / *c__;
-                    q__1.imag = f->imag / *c__; // , expr subst
+                    q__1.real = f__t.real / *c__;
+                    q__1.imag = f__t.imag / *c__; // , expr subst
                     r__->real = q__1.real, r__->imag = q__1.imag;
                 }
                 else
@@ -289,13 +295,13 @@ void clartg_(scomplex *f, scomplex *g, real *c__, scomplex *s, scomplex *r__)
                     /* f2 / sqrt(f2 * h2) < safmin, then */
                     /* sqrt(safmin) <= f2 * sqrt(safmax) <= h2 / sqrt(f2 * h2 */
                     r__1 = h2 / d__;
-                    q__1.real = r__1 * f->real;
-                    q__1.imag = r__1 * f->imag; // , expr subst
+                    q__1.real = r__1 * f__t.real;
+                    q__1.imag = r__1 * f__t.imag; // , expr subst
                     r__->real = q__1.real, r__->imag = q__1.imag;
                 }
-                r_cnjg(&q__2, g);
-                q__3.real = f->real / d__;
-                q__3.imag = f->imag / d__; // , expr subst
+                r_cnjg(&q__2, &g__t);
+                q__3.real = f__t.real / d__;
+                q__3.imag = f__t.imag / d__; // , expr subst
                 q__1.real = q__2.real * q__3.real - q__2.imag * q__3.imag;
                 q__1.imag = q__2.real * q__3.imag + q__2.imag * q__3.real; // , expr subst
                 s->real = q__1.real, s->imag = q__1.imag;
@@ -310,8 +316,8 @@ void clartg_(scomplex *f, scomplex *g, real *c__, scomplex *s, scomplex *r__)
             r__1 = safmax;
             r__2 = fla_max(r__3, g1); // , expr subst
             u = fla_min(r__1, r__2);
-            q__1.real = g->real / u;
-            q__1.imag = g->imag / u; // , expr subst
+            q__1.real = g__t.real / u;
+            q__1.imag = g__t.imag / u; // , expr subst
             gs.real = q__1.real;
             gs.imag = q__1.imag; // , expr subst
             /* Computing 2nd power */
@@ -328,8 +334,8 @@ void clartg_(scomplex *f, scomplex *g, real *c__, scomplex *s, scomplex *r__)
                 r__2 = fla_max(safmin, f1); // , expr subst
                 v = fla_min(r__1, r__2);
                 w = v / u;
-                q__1.real = f->real / v;
-                q__1.imag = f->imag / v; // , expr subst
+                q__1.real = f__t.real / v;
+                q__1.imag = f__t.imag / v; // , expr subst
                 fs.real = q__1.real;
                 fs.imag = q__1.imag; // , expr subst
                 /* Computing 2nd power */
@@ -345,8 +351,8 @@ void clartg_(scomplex *f, scomplex *g, real *c__, scomplex *s, scomplex *r__)
             {
                 /* Otherwise use the same scaling for f and g. */
                 w = 1.f;
-                q__1.real = f->real / u;
-                q__1.imag = f->imag / u; // , expr subst
+                q__1.real = f__t.real / u;
+                q__1.imag = f__t.imag / u; // , expr subst
                 fs.real = q__1.real;
                 fs.imag = q__1.imag; // , expr subst
                 /* Computing 2nd power */

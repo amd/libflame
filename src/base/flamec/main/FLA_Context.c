@@ -1,5 +1,5 @@
 /* ************************************************************************
- * Copyright (c) 2022-2023 Advanced Micro Devices, Inc. All rights reserved.
+ * Copyright (C) 2022-2026, Advanced Micro Devices, Inc. All rights reserved.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -436,10 +436,19 @@ void fla_context_finalize(void) {}
 // separate one for finalization.
 static fla_pthread_once_t once_init = FLA_PTHREAD_ONCE_INIT;
 static fla_pthread_once_t once_finalize = FLA_PTHREAD_ONCE_INIT;
+static FLA_Bool fla_context_initialized = FALSE;
 
 void aocl_fla_init(void)
-{
+{    
+    // Fast path: if already initialized, return immediately
+    if (fla_context_initialized == TRUE)
+        return;
+    
+    // Thread-safe initialization using pthread_once
     fla_pthread_once(&once_init, fla_context_init);
+
+    // Mark as initialized
+    fla_context_initialized = TRUE;
 }
 
 void aocl_fla_finalize(void)

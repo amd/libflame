@@ -3,6 +3,10 @@
  .../path/to/libf2c.a -lm or, if you install libf2c.a in a standard place, with -lf2c -lm -- in that
  order, at the end of the command line, as in cc *.o -lf2c -lm Source for libf2c is in
  /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
+
+ /* Copyright (C) 2026, Advanced Micro Devices, Inc. All rights reserved.
+  */
+ 
 #include "FLA_f2c.h" /* Table of constant values */
 static aocl_int64_t c__1 = 1;
 static aocl_int64_t c_n1 = -1;
@@ -165,6 +169,8 @@ void dgeqp3_fla(aocl_int64_t *m, aocl_int64_t *n, doublereal *a, aocl_int64_t *l
     aocl_int64_t minws;
     aocl_int64_t topbmn, sminmn;
 #if FLA_ENABLE_AMD_OPT
+    /* Initialize global context data */
+    aocl_fla_init();
     extern doublereal fla_dnrm2_blas_kernel(aocl_int64_t *, doublereal *, aocl_int64_t *);
 #else
 #endif

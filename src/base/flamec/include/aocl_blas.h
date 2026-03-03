@@ -1,3 +1,14 @@
+/**
+ * Copyright (C) 2026, Advanced Micro Devices, Inc. All rights reserved.
+ */
+
+// Allow C++ users to include this header file in their source code. However,
+// we make the extern "C" conditional on whether we're using a C++ compiler,
+// since regular C compilers don't understand the extern "C" construct.
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #ifndef AOCL_BLAS_H
 #define AOCL_BLAS_H
 
@@ -7,10 +18,10 @@ void aocl_blas_caxpy(const aocl_int64_t *n, const scomplex *ca, const scomplex *
                      const aocl_int64_t *incx, scomplex *cy, const aocl_int64_t *incy);
 void aocl_blas_ccopy(const aocl_int64_t *n, const scomplex *cx, const aocl_int64_t *incx,
                      scomplex *cy, const aocl_int64_t *incy);
-void aocl_blas_cdotc(scomplex *r, const aocl_int64_t *n, const scomplex *cx, const aocl_int64_t *incx,
-                        const scomplex *cy, const aocl_int64_t *incy);
-void aocl_blas_cdotu(scomplex *r, const aocl_int64_t *n, const scomplex *cx, const aocl_int64_t *incx,
-                        const scomplex *cy, const aocl_int64_t *incy);
+void aocl_blas_cdotc(scomplex *r, const aocl_int64_t *n, const scomplex *cx,
+                     const aocl_int64_t *incx, const scomplex *cy, const aocl_int64_t *incy);
+void aocl_blas_cdotu(scomplex *r, const aocl_int64_t *n, const scomplex *cx,
+                     const aocl_int64_t *incx, const scomplex *cy, const aocl_int64_t *incy);
 void aocl_blas_cgbmv(const char *trans, const aocl_int64_t *m, const aocl_int64_t *n,
                      const aocl_int64_t *kl, const aocl_int64_t *ku, const scomplex *alpha,
                      const scomplex *a, const aocl_int64_t *lda, const scomplex *x,
@@ -73,7 +84,8 @@ void aocl_blas_cscal(const aocl_int64_t *n, const scomplex *ca, scomplex *cx,
                      const aocl_int64_t *incx);
 void aocl_blas_csrot(const aocl_int64_t *n, scomplex *cx, const aocl_int64_t *incx, scomplex *cy,
                      const aocl_int64_t *incy, const real *c, const real *s);
-void aocl_blas_csscal(const aocl_int64_t *n, const real *sa, scomplex *cx, const aocl_int64_t *incx);
+void aocl_blas_csscal(const aocl_int64_t *n, const real *sa, scomplex *cx,
+                      const aocl_int64_t *incx);
 void aocl_blas_cswap(const aocl_int64_t *n, scomplex *cx, const aocl_int64_t *incx, scomplex *cy,
                      const aocl_int64_t *incy);
 void aocl_blas_csymm(const char *side, const char *uplo, const aocl_int64_t *m,
@@ -211,14 +223,12 @@ void aocl_blas_dtrsv(const char *uplo, const char *trans, const char *diag, cons
                      const doublereal *a, const aocl_int64_t *lda, doublereal *x,
                      const aocl_int64_t *incx);
 doublereal aocl_blas_dzasum(const aocl_int64_t *n, dcomplex *zx, const aocl_int64_t *incx);
-doublereal aocl_blas_dznrm2(const aocl_int64_t *n, const dcomplex *x,
-                            const aocl_int64_t *incx);
+doublereal aocl_blas_dznrm2(const aocl_int64_t *n, const dcomplex *x, const aocl_int64_t *incx);
 aocl_int64_t aocl_blas_icamax(const aocl_int64_t *n, const scomplex *x, const aocl_int64_t *incx);
 aocl_int64_t aocl_blas_idamax(const aocl_int64_t *n, const doublereal *dx,
                               const aocl_int64_t *incx);
 aocl_int64_t aocl_blas_isamax(const aocl_int64_t *n, const real *sx, const aocl_int64_t *incx);
-aocl_int64_t aocl_blas_izamax(const aocl_int64_t *n, const dcomplex *x,
-                              const aocl_int64_t *incx);
+aocl_int64_t aocl_blas_izamax(const aocl_int64_t *n, const dcomplex *x, const aocl_int64_t *incx);
 real aocl_blas_sasum(const aocl_int64_t *n, const real *sx, const aocl_int64_t *incx);
 void aocl_blas_saxpy(const aocl_int64_t *n, const real *sa, const real *sx,
                      const aocl_int64_t *incx, real *sy, const aocl_int64_t *incy);
@@ -313,14 +323,11 @@ void aocl_blas_zaxpy(const aocl_int64_t *n, const dcomplex *za, const dcomplex *
 void aocl_blas_zcopy(const aocl_int64_t *n, const dcomplex *zx, const aocl_int64_t *incx,
                      dcomplex *zy, const aocl_int64_t *incy);
 void aocl_blas_zdotc(dcomplex *r, const aocl_int64_t *n, const dcomplex *zx,
-                              const aocl_int64_t *incx, const dcomplex *zy,
-                              const aocl_int64_t *incy);
+                     const aocl_int64_t *incx, const dcomplex *zy, const aocl_int64_t *incy);
 void aocl_blas_zdotu(dcomplex *r, const aocl_int64_t *n, const dcomplex *zx,
-                              const aocl_int64_t *incx, const dcomplex *zy,
-                              const aocl_int64_t *incy);
-void aocl_blas_zdrot(const aocl_int64_t *n, dcomplex *zx, const aocl_int64_t *incx,
-                     dcomplex *zy, const aocl_int64_t *incy, const doublereal *c,
-                     const doublereal *s);
+                     const aocl_int64_t *incx, const dcomplex *zy, const aocl_int64_t *incy);
+void aocl_blas_zdrot(const aocl_int64_t *n, dcomplex *zx, const aocl_int64_t *incx, dcomplex *zy,
+                     const aocl_int64_t *incy, const doublereal *c, const doublereal *s);
 void aocl_blas_zdscal(const aocl_int64_t *n, const doublereal *da, dcomplex *zx,
                       const aocl_int64_t *incx);
 void aocl_blas_zgbmv(const char *trans, const aocl_int64_t *m, const aocl_int64_t *n,
@@ -340,8 +347,8 @@ void aocl_blas_zgemmtr(const char *uplo, const char *transa, const char *transb,
                        const aocl_int64_t *ldc);
 void aocl_blas_zgemv(const char *trans, const aocl_int64_t *m, const aocl_int64_t *n,
                      const dcomplex *alpha, const dcomplex *a, const aocl_int64_t *lda,
-                     const dcomplex *x, const aocl_int64_t *incx, const dcomplex *beta,
-                     dcomplex *y, const aocl_int64_t *incy);
+                     const dcomplex *x, const aocl_int64_t *incx, const dcomplex *beta, dcomplex *y,
+                     const aocl_int64_t *incy);
 void aocl_blas_zgerc(const aocl_int64_t *m, const aocl_int64_t *n, const dcomplex *alpha,
                      const dcomplex *x, const aocl_int64_t *incx, const dcomplex *y,
                      const aocl_int64_t *incy, dcomplex *a, const aocl_int64_t *lda);
@@ -350,8 +357,8 @@ void aocl_blas_zgeru(const aocl_int64_t *m, const aocl_int64_t *n, const dcomple
                      const aocl_int64_t *incy, dcomplex *a, const aocl_int64_t *lda);
 void aocl_blas_zhbmv(const char *uplo, const aocl_int64_t *n, const aocl_int64_t *k,
                      const dcomplex *alpha, const dcomplex *a, const aocl_int64_t *lda,
-                     const dcomplex *x, const aocl_int64_t *incx, const dcomplex *beta,
-                     dcomplex *y, const aocl_int64_t *incy);
+                     const dcomplex *x, const aocl_int64_t *incx, const dcomplex *beta, dcomplex *y,
+                     const aocl_int64_t *incy);
 void aocl_blas_zhemm(const char *side, const char *uplo, const aocl_int64_t *m,
                      const aocl_int64_t *n, const dcomplex *alpha, const dcomplex *a,
                      const aocl_int64_t *lda, const dcomplex *b, const aocl_int64_t *ldb,
@@ -384,8 +391,8 @@ void aocl_blas_zhpr2(const char *uplo, const aocl_int64_t *n, const dcomplex *al
                      const aocl_int64_t *incy, dcomplex *ap);
 void aocl_blas_zscal(const aocl_int64_t *n, const dcomplex *za, dcomplex *zx,
                      const aocl_int64_t *incx);
-void aocl_blas_zswap(const aocl_int64_t *n, dcomplex *zx, const aocl_int64_t *incx,
-                     dcomplex *zy, const aocl_int64_t *incy);
+void aocl_blas_zswap(const aocl_int64_t *n, dcomplex *zx, const aocl_int64_t *incx, dcomplex *zy,
+                     const aocl_int64_t *incy);
 void aocl_blas_zsymm(const char *side, const char *uplo, const aocl_int64_t *m,
                      const aocl_int64_t *n, const dcomplex *alpha, const dcomplex *a,
                      const aocl_int64_t *lda, const dcomplex *b, const aocl_int64_t *ldb,
@@ -399,11 +406,11 @@ void aocl_blas_zsyrk(const char *uplo, const char *trans, const aocl_int64_t *n,
                      const aocl_int64_t *lda, const dcomplex *beta, dcomplex *c,
                      const aocl_int64_t *ldc);
 void aocl_blas_ztbmv(const char *uplo, const char *trans, const char *diag, const aocl_int64_t *n,
-                     const aocl_int64_t *k, const dcomplex *a, const aocl_int64_t *lda,
-                     dcomplex *x, const aocl_int64_t *incx);
+                     const aocl_int64_t *k, const dcomplex *a, const aocl_int64_t *lda, dcomplex *x,
+                     const aocl_int64_t *incx);
 void aocl_blas_ztbsv(const char *uplo, const char *trans, const char *diag, const aocl_int64_t *n,
-                     const aocl_int64_t *k, const dcomplex *a, const aocl_int64_t *lda,
-                     dcomplex *x, const aocl_int64_t *incx);
+                     const aocl_int64_t *k, const dcomplex *a, const aocl_int64_t *lda, dcomplex *x,
+                     const aocl_int64_t *incx);
 void aocl_blas_ztpmv(const char *uplo, const char *trans, const char *diag, const aocl_int64_t *n,
                      const dcomplex *ap, dcomplex *x, const aocl_int64_t *incx);
 void aocl_blas_ztpsv(const char *uplo, const char *trans, const char *diag, const aocl_int64_t *n,
@@ -423,26 +430,30 @@ void aocl_blas_ztrsv(const char *uplo, const char *trans, const char *diag, cons
                      const dcomplex *a, const aocl_int64_t *lda, dcomplex *x,
                      const aocl_int64_t *incx);
 #ifdef FLA_ENABLE_BLAS_EXT_GEMMT
-void aocl_blas_cgemmt(const char* uplo, const char *transa, const char *transb,
-                     const aocl_int64_t *n, const aocl_int64_t *k, const scomplex *alpha,
-                     const scomplex *a, const aocl_int64_t *lda, const scomplex *b,
-                     const aocl_int64_t *ldb, const scomplex *beta, scomplex *c,
-                     const aocl_int64_t *ldc);
-void aocl_blas_dgemmt(const char* uplo, const char *transa, const char *transb,
-                     const aocl_int64_t *n, const aocl_int64_t *k, const doublereal *alpha,
-                     const doublereal *a, const aocl_int64_t *lda, const doublereal *b,
-                     const aocl_int64_t *ldb, const doublereal *beta, doublereal *c,
-                     const aocl_int64_t *ldc);
-void aocl_blas_sgemmt(const char* uplo, const char *transa, const char *transb,
-                     const aocl_int64_t *n, const aocl_int64_t *k, const real *alpha,
-                     const real *a, const aocl_int64_t *lda, const real *b,
-                     const aocl_int64_t *ldb, const real *beta, real *c,
-                     const aocl_int64_t *ldc);
-void aocl_blas_zgemmt(const char* uplo, const char *transa, const char *transb,
-                     const aocl_int64_t *n, const aocl_int64_t *k, const dcomplex *alpha,
-                     const dcomplex *a, const aocl_int64_t *lda, const dcomplex *b,
-                     const aocl_int64_t *ldb, const dcomplex *beta, dcomplex *c,
-                     const aocl_int64_t *ldc);                                                              
+void aocl_blas_cgemmt(const char *uplo, const char *transa, const char *transb,
+                      const aocl_int64_t *n, const aocl_int64_t *k, const scomplex *alpha,
+                      const scomplex *a, const aocl_int64_t *lda, const scomplex *b,
+                      const aocl_int64_t *ldb, const scomplex *beta, scomplex *c,
+                      const aocl_int64_t *ldc);
+void aocl_blas_dgemmt(const char *uplo, const char *transa, const char *transb,
+                      const aocl_int64_t *n, const aocl_int64_t *k, const doublereal *alpha,
+                      const doublereal *a, const aocl_int64_t *lda, const doublereal *b,
+                      const aocl_int64_t *ldb, const doublereal *beta, doublereal *c,
+                      const aocl_int64_t *ldc);
+void aocl_blas_sgemmt(const char *uplo, const char *transa, const char *transb,
+                      const aocl_int64_t *n, const aocl_int64_t *k, const real *alpha,
+                      const real *a, const aocl_int64_t *lda, const real *b,
+                      const aocl_int64_t *ldb, const real *beta, real *c, const aocl_int64_t *ldc);
+void aocl_blas_zgemmt(const char *uplo, const char *transa, const char *transb,
+                      const aocl_int64_t *n, const aocl_int64_t *k, const dcomplex *alpha,
+                      const dcomplex *a, const aocl_int64_t *lda, const dcomplex *b,
+                      const aocl_int64_t *ldb, const dcomplex *beta, dcomplex *c,
+                      const aocl_int64_t *ldc);
 #endif /* FLA_ENABLE_BLAS_EXT_GEMMT */
 
 #endif /* AOCL_BLAS_H */
+
+// End extern "C" construct block.
+#ifdef __cplusplus
+}
+#endif

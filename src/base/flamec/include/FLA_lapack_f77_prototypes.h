@@ -7,9 +7,18 @@
     directory, or at http://opensource.org/licenses/BSD-3-Clause
 
 */
+
 /**
  * Modifications Copyright (C) 2026, Advanced Micro Devices, Inc. All rights reserved.
  */
+
+// Allow C++ users to include this header file in their source code. However,
+// we make the extern "C" conditional on whether we're using a C++ compiler,
+// since regular C compilers don't understand the extern "C" construct.
+#ifdef __cplusplus
+extern "C" {
+#endif 
+
 // --- Name-mangling macro definitions -----------------------------------------
 
 // --- Define Fortran name-mangling macro --------------------------
@@ -6344,3 +6353,8 @@ void LAPACK_EXPORT_sgedmdq(char *jobs, char *jobz, char *jobr, char *jobq, char 
 void LAPACK_EXPORT_dgedmdq(char *jobs, char *jobz, char *jobr, char *jobq, char *jobt, char *jobf, aocl_int_t *whtsvd, aocl_int_t *m, aocl_int_t *n, doublereal *f, aocl_int_t *ldf, doublereal *x, aocl_int_t *ldx, doublereal *y, aocl_int_t *ldy, aocl_int_t *nrnk, doublereal *tol, aocl_int_t *k, doublereal *reig, doublereal *imeig, doublereal *z__, aocl_int_t *ldz, doublereal *res, doublereal *b, aocl_int_t *ldb, doublereal *v, aocl_int_t *ldv, doublereal *s, aocl_int_t *lds, doublereal *work, aocl_int_t *lwork, aocl_int_t *iwork, aocl_int_t *liwork, aocl_int_t *info);
 void LAPACK_EXPORT_cgedmdq(char *jobs, char *jobz, char *jobr, char *jobq, char *jobt, char *jobf, aocl_int_t *whtsvd, aocl_int_t *m, aocl_int_t *n, scomplex *f, aocl_int_t *ldf, scomplex *x, aocl_int_t *ldx, scomplex *y, aocl_int_t *ldy, aocl_int_t *nrnk, real *tol, aocl_int_t *k, scomplex *eigs, scomplex *z__, aocl_int_t *ldz, real *res, scomplex *b, aocl_int_t *ldb, scomplex *v, aocl_int_t *ldv, scomplex *s, aocl_int_t *lds, scomplex *zwork, aocl_int_t *lzwork, real *work, aocl_int_t *lwork, aocl_int_t *iwork, aocl_int_t *liwork, aocl_int_t *info);
 void LAPACK_EXPORT_zgedmdq(char *jobs, char *jobz, char *jobr, char *jobq, char *jobt, char *jobf, aocl_int_t *whtsvd, aocl_int_t *m, aocl_int_t *n, dcomplex *f, aocl_int_t *ldf, dcomplex *x, aocl_int_t *ldx, dcomplex *y, aocl_int_t *ldy, aocl_int_t *nrnk, doublereal *tol, aocl_int_t *k, dcomplex *eigs, dcomplex *z__, aocl_int_t *ldz, doublereal *res, dcomplex *b, aocl_int_t *ldb, dcomplex *v, aocl_int_t *ldv, dcomplex *s, aocl_int_t *lds, dcomplex *zwork, aocl_int_t *lzwork, doublereal *work, aocl_int_t *lwork, aocl_int_t *iwork, aocl_int_t *liwork, aocl_int_t *info);
+
+// End extern "C" construct block.
+#ifdef __cplusplus
+}
+#endif 

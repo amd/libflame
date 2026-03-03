@@ -580,3 +580,8 @@ void cblas_zher2k(const enum CBLAS_ORDER Order, const enum CBLAS_UPLO Uplo,
                   const void *alpha, const void *A, const aocl_int_t lda,
                   const void *B, const aocl_int_t ldb, const double beta,
                   void *C, const aocl_int_t ldc);
+
+// End extern "C" construct block.
+#ifdef __cplusplus
+}
+#endif

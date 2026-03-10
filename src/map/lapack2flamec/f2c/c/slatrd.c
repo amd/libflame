@@ -1,3 +1,6 @@
+/******************************************************************************
+  Copyright (C) 2026, Advanced Micro Devices, Inc. All rights reserved.
+ * ***************************************************************************/
 /* ../netlib/slatrd.f -- translated by f2c (version 20100827). You must link the resulting object
  file with libf2c: on Microsoft Windows system, link with libf2c.lib;
  on Linux or Unix systems, link with .../path/to/libf2c.a -lm or, if you install libf2c.a in a
@@ -233,7 +236,7 @@ void aocl_lapack_slatrd(char *uplo, aocl_int64_t *n, aocl_int64_t *nb, real *a, 
     aocl_int64_t a_dim1, a_offset, w_dim1, w_offset, i__1, i__2, i__3;
     /* Local variables */
     aocl_int64_t i__, iw;
-    real alpha;
+    real alpha, dotv;
     extern logical lsame_(char *, char *, aocl_int64_t, aocl_int64_t);
     /* -- LAPACK auxiliary routine (version 3.4.2) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
@@ -329,9 +332,10 @@ void aocl_lapack_slatrd(char *uplo, aocl_int64_t *n, aocl_int64_t *nb, real *a, 
                 i__2 = i__ - 1;
                 aocl_blas_sscal(&i__2, &tau[i__ - 1], &w[iw * w_dim1 + 1], &c__1);
                 i__2 = i__ - 1;
-                alpha = tau[i__ - 1] * -.5f
-                        * aocl_blas_sdot(&i__2, &w[iw * w_dim1 + 1], &c__1, &a[i__ * a_dim1 + 1],
-                                         &c__1);
+                dotv = 0.f;
+                aocl_blas_sgemv("Transpose", &i__2, &c__1, &c_b6, &w[iw * w_dim1 + 1], ldw,
+                                &a[i__ * a_dim1 + 1], &c__1, &c_b16, &dotv, &c__1);
+                alpha = tau[i__ - 1] * -.5f * dotv;
                 i__2 = i__ - 1;
                 aocl_blas_saxpy(&i__2, &alpha, &a[i__ * a_dim1 + 1], &c__1, &w[iw * w_dim1 + 1],
                                 &c__1);
@@ -393,9 +397,10 @@ void aocl_lapack_slatrd(char *uplo, aocl_int64_t *n, aocl_int64_t *nb, real *a, 
                 i__2 = *n - i__;
                 aocl_blas_sscal(&i__2, &tau[i__], &w[i__ + 1 + i__ * w_dim1], &c__1);
                 i__2 = *n - i__;
-                alpha = tau[i__] * -.5f
-                        * aocl_blas_sdot(&i__2, &w[i__ + 1 + i__ * w_dim1], &c__1,
-                                         &a[i__ + 1 + i__ * a_dim1], &c__1);
+                dotv = 0.f;
+                aocl_blas_sgemv("Transpose", &i__2, &c__1, &c_b6, &w[i__ + 1 + i__ * w_dim1], ldw,
+                                &a[i__ + 1 + i__ * a_dim1], &c__1, &c_b16, &dotv, &c__1);
+                alpha = tau[i__] * -.5f * dotv;
                 i__2 = *n - i__;
                 aocl_blas_saxpy(&i__2, &alpha, &a[i__ + 1 + i__ * a_dim1], &c__1,
                                 &w[i__ + 1 + i__ * w_dim1], &c__1);

@@ -1,3 +1,6 @@
+/******************************************************************************
+  Copyright (C) 2026, Advanced Micro Devices, Inc. All rights reserved.
+ * ***************************************************************************/
 /*
 
     Copyright (C) 2014, The University of Texas at Austin
@@ -229,7 +232,27 @@ LAPACK_hetrd(s, sy)
                       *ldim_A);
 #if FLA_ENABLE_AMD_OPT
     {
-        ssytrd_fla(uplo, m, buff_A, ldim_A, buff_d, buff_e, buff_t, buff_w, lwork, info);
+        // Workspace query (lwork < 1): ssytd2_fla needs no workspace,
+        // but delegate to ssytrd_fla so work[0] gets a consistent optimal size.
+        if(*m <= FLA_SSYTD2_SMALL_THRESH)
+        {
+            if(*lwork < 1)
+            {
+                ssytrd_fla(uplo, m, buff_A, ldim_A, buff_d, buff_e, buff_t, buff_w, lwork, info);
+                AOCL_DTL_TRACE_LOG_EXIT
+                return;
+            }
+            // For small input problems, prefer unblocked reduction for better numeric
+            // fidelity.
+            else
+            {
+                ssytd2_fla(uplo, m, buff_A, ldim_A, buff_d, buff_e, buff_t, info);
+            }
+        }
+        else
+        {
+            ssytrd_fla(uplo, m, buff_A, ldim_A, buff_d, buff_e, buff_t, buff_w, lwork, info);
+        }
         AOCL_DTL_TRACE_LOG_EXIT
         return;
     }

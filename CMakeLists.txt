@@ -1,4 +1,4 @@
-##Copyright (C) 2023-2025, Advanced Micro Devices, Inc. All rights reserved.##
+# Copyright (C) 2023-2026, Advanced Micro Devices, Inc. All rights reserved.
 
 cmake_minimum_required(VERSION 3.26.0)
 
@@ -46,43 +46,9 @@ set(CMAKE_VERBOSE_MAKEFILE OFF)
 # getting python3 interpreter
 find_package(Python3 REQUIRED COMPONENTS Interpreter)
 
-### Making LF_ISA_CONFIG case insensitive ###
-string(TOLOWER "${LF_ISA_CONFIG}" lf_isa_config_lower)
+# Note: ISA validation and configuration is now handled by cmake/CompilerFlags.cmake
+# via the configure_compiler_flags() macro called below
 
-if (
-	"${lf_isa_config_lower}" STREQUAL "none"
-	OR "${lf_isa_config_lower}" STREQUAL "avx"
-	OR "${lf_isa_config_lower}" STREQUAL "avx2"
-	OR "${lf_isa_config_lower}" STREQUAL "avx2-strict"
-	OR "${lf_isa_config_lower}" STREQUAL "avx512"
-	OR "${lf_isa_config_lower}" STREQUAL "avx512-strict"
-	OR "${lf_isa_config_lower}" STREQUAL "auto"
-)
-	message(STATUS "Machine ISA configuration set to ${LF_ISA_CONFIG}")
-else()
-	message(FATAL_ERROR
-		"Machine ISA configuration error, valid values are "
-		"AVX, AVX2, AVX2-STRICT, AVX512, AVX512-STRICT and auto")
-endif()
-
-if (${lf_isa_config_lower} STREQUAL "auto")
-    set(AUTO_CONFIG_PY "${CMAKE_SOURCE_DIR}/build/auto_config.py")
-    # Run python script to find the architecture family name
-    execute_process(
-          COMMAND ${Python3_EXECUTABLE} ${AUTO_CONFIG_PY}
-          RESULT_VARIABLE CMD_RESULT
-          OUTPUT_VARIABLE CMD_OUTPUT
-          OUTPUT_STRIP_TRAILING_WHITESPACE)
-    message( STATUS "Auto configuring the family :" ${CMD_OUTPUT})
-    if(${CMD_OUTPUT} STREQUAL "zen" OR ${CMD_OUTPUT} STREQUAL "zen2" OR ${CMD_OUTPUT} STREQUAL "zen3")
-      set(lf_isa_config_lower "avx2")
-    elseif(${CMD_OUTPUT} STREQUAL "zen4" OR ${CMD_OUTPUT} STREQUAL "zen5")
-      set(lf_isa_config_lower "avx512")
-    else()
-      set(lf_isa_config_lower "none")
-    endif()
-endif ()
-message("LF_ISA_CONFIG selected:${LF_ISA_CONFIG}")
 #set AOCL Utilities library path values
 set(LIBAOCLUTILS_PROJECT "libaoclutils")
 set(LIBAOCLUTILS_INSTALL_DIR_NAME "install-aoclutils")
@@ -183,91 +149,15 @@ if(WIN32)
 endif()
 set(AOCL_ROOT "" CACHE STRING "AOCL-BLAS installation path")
 
+# ============================================================================
+# Include CMake modules for better organization
+# ============================================================================
+include(cmake/CompilerFlags.cmake)
 
-message(STATUS "checking SIMD  ")
+# Configure all compiler flags using the modular approach
+configure_compiler_flags()
 
-# Accept fixed/forced variants and map them to a compile-time definition
-if("${lf_isa_config_lower}" STREQUAL "avx2-strict" )
-    message(STATUS "LF_ISA_CONFIG requests a compile-time forced AVX2 ISA")
-    # define compile-time forced ISA macro for C code (FLA_Context.c expects FLA_STRICT_ARCH)
-    add_definitions(-DFLA_STRICT_ARCH=FLA_ARCH_AVX2)
-    # normalize to base token so later compiler flag logic still applies
-    set(lf_isa_config_lower "avx2")
-elseif("${lf_isa_config_lower}" STREQUAL "avx512-strict" )
-    message(STATUS "LF_ISA_CONFIG requests a compile-time forced AVX512 ISA")
-    add_definitions(-DFLA_STRICT_ARCH=FLA_ARCH_AVX512)
-    set(lf_isa_config_lower "avx512")
-endif()
-
-if(WIN32)
-	if(${lf_isa_config_lower} STREQUAL "avx512")
-	add_definitions(/arch:AVX512)
-	elseif(${lf_isa_config_lower} STREQUAL "avx2" OR ${lf_isa_config_lower} STREQUAL "avx")
-	add_definitions(/arch:AVX2)
-	else()
-	message(STATUS "No ISA flag set")
-	endif()
-elseif(UNIX)
-	set(COMPILER_OPTIMIZATION_FLAGS	"-mtune=native -O3")
-	if(${lf_isa_config_lower} STREQUAL "avx512")
-		set(COMPILER_OPTIMIZATION_FLAGS	"${COMPILER_OPTIMIZATION_FLAGS} -mavx512f -mavx512dq -mfma")
-	elseif(${lf_isa_config_lower} STREQUAL "avx2" OR ${lf_isa_config_lower} STREQUAL "avx")
-		set(COMPILER_OPTIMIZATION_FLAGS	"${COMPILER_OPTIMIZATION_FLAGS} -mavx2 -mfma")
-	else()
-		message(STATUS "No ISA flag set")
-	endif()
-	set(COMPILE_FLAGS "-fstack-protector-strong -fpie -Wformat -Wformat-security")
-	# Exclude -pie linker flag for AOCC/Clang compilers to avoid unused argument warning
-	if(CMAKE_C_COMPILER_ID STREQUAL "Clang")
-		set(LINKER_FLAGS "-Wl,-z,relro -Wl,-z,now")
-		message(STATUS "Excluding -pie linker flag for Clang compiler to avoid unused argument warning")
-	else()
-		set(LINKER_FLAGS "-pie -Wl,-z,relro -Wl,-z,now")
-	endif()
-	set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${COMPILER_OPTIMIZATION_FLAGS} ${COMPILE_FLAGS}")
-	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${COMPILER_OPTIMIZATION_FLAGS} ${COMPILE_FLAGS}")
-	set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${LINKER_FLAGS}")
-	set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} ${LINKER_FLAGS}")
-else()
-	message(STATUS "OS UNKNOWN CANNOT SET SIMD")
-endif()
-
-
-if(ENABLE_GCOV)
-	set(CMAKE_CXX_OUTPUT_EXTENSION_REPLACE ON)
-	add_definitions(--coverage)
-	set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} --coverage")
-	set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fprofile-arcs -ftest-coverage")
-endif()
-
-# Address Sanitizer
-if(WIN32)
-    if(ENABLE_ASAN)
-       message(STATUS "Address Sanitizer is not supported")
-    endif()
-elseif(UNIX)
-    if(ENABLE_ASAN)
-        message(STATUS "Enabled ENABLE_ASAN : ${ENABLE_ASAN}")
-        set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -g -fsanitize=address")
-    else()
-        message(STATUS "Enabled ENABLE_ASAN : ${ENABLE_ASAN}")
-    endif()
-endif()
-
-#Adding PIC flag and other flags
-if(UNIX)
-	SET(COMPILER_DEBUG_FLAG "-g0")
-	set(GCC_WARNING_FLAGS "-Wall -Wno-comment")
-	set(COMPILER_LANGUAGE_FLAGS " -std=c11 -D_GNU_SOURCE -Wno-unused-function -Wno-parentheses -Wfatal-errors")
-	set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${COMPILER_DEBUG_FLAG} ${GCC_WARNING_FLAGS} ${COMPILER_LANGUAGE_FLAGS}")
-	add_compile_options(-fPIC -fmacro-prefix-map=${CMAKE_SOURCE_DIR}=.)
-	set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -D_FORTIFY_SOURCE=2")
-	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D_FORTIFY_SOURCE=2")
-endif()
-
-if (CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
-	set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wno-parentheses -Wno-deprecated-declarations -Wno-macro-redefined")
-endif ()
+message(STATUS "Compiler flags configured")
 
 # Adding missing Macros
 if(UNIX)

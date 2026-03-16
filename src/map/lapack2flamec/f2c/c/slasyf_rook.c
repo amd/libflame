@@ -5,7 +5,7 @@
  libf2c is in /netlib/f2c/libf2c.zip, e.g., http://www.netlib.org/f2c/libf2c.zip */
 
 /*
- *     Modifications Copyright (c) 2024 Advanced Micro Devices, Inc.  All rights reserved.
+ *     Modifications Copyright (C) 2024-2026, Advanced Micro Devices, Inc. All rights reserved.
  */
 
 #include "FLA_f2c.h" /* Table of constant values */
@@ -217,14 +217,14 @@ void aocl_lapack_slasyf_rook(char *uplo, aocl_int64_t *n, aocl_int64_t *nb, aocl
                       ",ldw %" FLA_IS "",
                       *uplo, *n, *nb, *lda, *ldw);
     /* System generated locals */
-    aocl_int64_t a_dim1, a_offset, w_dim1, w_offset, i__1, i__2, i__3, i__4, i__5;
+    aocl_int64_t a_dim1, a_offset, w_dim1, w_offset, i__1, i__2;
     real r__1;
     /* Builtin functions */
     double sqrt(doublereal);
     /* Local variables */
     aocl_int64_t j, k, p;
     real t, r1, d11, d12, d21, d22;
-    aocl_int64_t jb, ii, jj, kk, kp, kw, jp1, jp2, kkw;
+    aocl_int64_t ii, jj, kk, kp, kw, jp1, jp2, kkw;
     logical done;
     aocl_int64_t imax, jmax;
     real alpha;
@@ -236,6 +236,9 @@ void aocl_lapack_slasyf_rook(char *uplo, aocl_int64_t *n, aocl_int64_t *nb, aocl
     real absakk;
     extern real slamch_(char *);
     real colmax, rowmax;
+#if !FLA_ENABLE_AOCL_BLAS
+    aocl_int64_t jb, i__3, i__4, i__5;
+#endif
     /* -- LAPACK computational routine (version 3.5.0) -- */
     /* -- LAPACK is a software package provided by Univ. of Tennessee, -- */
     /* -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..-- */
@@ -519,6 +522,12 @@ void aocl_lapack_slasyf_rook(char *uplo, aocl_int64_t *n, aocl_int64_t *nb, aocl
         goto L10;
     L30: /* Update the upper triangle of A11 (= A(1:k,1:k)) as */
         /* A11 := A11 - U12*D*U12**T = A11 - U12*W**T */
+#if FLA_ENABLE_AOCL_BLAS
+        i__1 = *n - k;
+        aocl_blas_sgemmtr("Upper", "No transpose", "Transpose", &k, &i__1, &c_b9,
+                          &a[(k + 1) * a_dim1 + 1], lda, &w[(kw + 1) * w_dim1 + 1], ldw, &c_b10,
+                          &a[a_dim1 + 1], lda);
+#else
         /* computing blocks of NB columns at a time */
         i__1 = -(*nb);
         for(j = (k - 1) / *nb * *nb + 1; i__1 < 0 ? j >= 1 : j <= 1; j += i__1)
@@ -549,6 +558,7 @@ void aocl_lapack_slasyf_rook(char *uplo, aocl_int64_t *n, aocl_int64_t *nb, aocl
             }
             /* L50: */
         }
+#endif
         /* Put U12 in standard form by partially undoing the interchanges */
         /* in columns k+1:n */
         j = k + 1;
@@ -828,6 +838,12 @@ void aocl_lapack_slasyf_rook(char *uplo, aocl_int64_t *n, aocl_int64_t *nb, aocl
         goto L70;
     L90: /* Update the lower triangle of A22 (= A(k:n,k:n)) as */
         /* A22 := A22 - L21*D*L21**T = A22 - L21*W**T */
+#if FLA_ENABLE_AOCL_BLAS
+        i__1 = *n - k + 1;
+        i__2 = k - 1;
+        aocl_blas_sgemmtr("Lower", "No transpose", "Transpose", &i__1, &i__2, &c_b9, &a[k + a_dim1],
+                          lda, &w[k + w_dim1], ldw, &c_b10, &a[k + k * a_dim1], lda);
+#else
         /* computing blocks of NB columns at a time */
         i__1 = *n;
         i__2 = *nb;
@@ -858,6 +874,7 @@ void aocl_lapack_slasyf_rook(char *uplo, aocl_int64_t *n, aocl_int64_t *nb, aocl
             }
             /* L110: */
         }
+#endif
         /* Put L21 in standard form by partially undoing the interchanges */
         /* in columns 1:k-1 */
         j = k - 1;
